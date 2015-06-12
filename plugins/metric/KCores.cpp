@@ -115,11 +115,12 @@ bool KCores::run() {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", metric);
   }
+
   unsigned int degree_type = degreeTypes.getCurrent();
 
   string errMsg="";
   graph->applyPropertyAlgorithm("Degree", result, errMsg,
-				pluginProgress, dataSet);
+                                pluginProgress, dataSet);
 
   // keep track of deleted nodes
   MutableContainer<bool> deleted;
@@ -137,46 +138,57 @@ bool KCores::run() {
       modify = false;
       node n;
       forEach(n, graph->getNodes()) {
-	// nothing to do if the node
-	// has been already deleted
-	if (deleted.get(n.id))
-	  continue;
-	double val = result->getNodeValue(n);
-	if (val <= k) {
-	  result->setNodeValue(n, k);
-	  Iterator<edge>* ite;
-	  switch(degree_type) {
-	  case INOUT:
-	    ite = graph->getInOutEdges(n);
-	    break;
-	  case IN:
-	    ite = graph->getOutEdges(n);
-	    break;
-	  case OUT:
-	  default:
-	    ite = graph->getInEdges(n);
-	  }
-	  // decrease neighbours weighted degree
-	  while(ite->hasNext()) {
-	    edge ee = ite->next();
-	    node m = graph->opposite(ee, n);
-	    if (deleted.get(m.id))
-	      continue;
-	    result->setNodeValue(m, result->getNodeValue(m) -
-				 (metric ? metric->getEdgeDoubleValue(ee) : 1));
-	  }
-	  // mark node as deleted
-	  deleted.set(n.id, true);
-	  --nbNodes;
-	  modify = true;
-	}
-	else if (val < next_k)
-	  // update next k value
-	  next_k = val;
+        // nothing to do if the node
+        // has been already deleted
+        if (deleted.get(n.id))
+          continue;
+
+        double val = result->getNodeValue(n);
+
+        if (val <= k) {
+          result->setNodeValue(n, k);
+          Iterator<edge>* ite;
+
+          switch(degree_type) {
+          case INOUT:
+            ite = graph->getInOutEdges(n);
+            break;
+
+          case IN:
+            ite = graph->getOutEdges(n);
+            break;
+
+          case OUT:
+          default:
+            ite = graph->getInEdges(n);
+          }
+
+          // decrease neighbours weighted degree
+          while(ite->hasNext()) {
+            edge ee = ite->next();
+            node m = graph->opposite(ee, n);
+
+            if (deleted.get(m.id))
+              continue;
+
+            result->setNodeValue(m, result->getNodeValue(m) -
+                                 (metric ? metric->getEdgeDoubleValue(ee) : 1));
+          }
+
+          // mark node as deleted
+          deleted.set(n.id, true);
+          --nbNodes;
+          modify = true;
+        }
+        else if (val < next_k)
+          // update next k value
+          next_k = val;
       }
     }
+
     k = next_k;
   }
+
   return true;
 }
 //========================================================================================
