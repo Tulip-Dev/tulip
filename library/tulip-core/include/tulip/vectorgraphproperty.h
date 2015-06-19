@@ -73,6 +73,7 @@ template <typename TYPE>
 class VectorGraphProperty {
   friend class VectorGraph;
 public:
+  virtual ~VectorGraphProperty(){}
   /**
     * @brief read/write accessor
     *
