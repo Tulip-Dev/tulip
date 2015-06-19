@@ -47,7 +47,6 @@ public :
   void setUniformBackgroundColor(const Color &backgroundColor);
   void mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor, const Color &zeroColor, const Color &oneColor);
   void setForegroundColor(const Color &foregroundColor);
-  void setSizeProperty(SizeProperty *sizeProperty);
 
   const Color &getBackgroundColor() const {
     return backgroundColor;
@@ -139,6 +138,11 @@ public :
   virtual void addEdge(Graph *, const edge );
   virtual void delNode(Graph *,const node );
   virtual void delEdge(Graph *,const edge );
+
+  // return the id of the corresponding graph elt
+  // see ScatterPlot2DMouseShowElementInfos
+  // in ScatterPlot2DInteractors.cpp
+  unsigned int getMappedId(unsigned int id);
 
 private :
 

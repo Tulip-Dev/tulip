@@ -967,4 +967,10 @@ void Histogram::setTextureUpdateNeeded() {
   textureUpdateNeeded = true;
 }
 
+unsigned int Histogram::getMappedId(unsigned int id) {
+  if (dataLocation == EDGE)
+    return nodeToEdge[node(id)].id;
+  return id;
+}
+
 }

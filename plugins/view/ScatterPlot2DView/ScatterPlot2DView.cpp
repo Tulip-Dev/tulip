@@ -491,8 +491,6 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
         }
 
         matrixComposite->addGlEntity(scatterOverview, selectedGraphProperties[i] + "_" + selectedGraphProperties[j]);
-        scatterOverview->setSizeProperty(scatterPlotSize);
-
 
         // add some feedback
         /*if ((i + 1) * (j + 1) % 10 == 0)
@@ -778,7 +776,7 @@ void ScatterPlot2DView::generateScatterPlots() {
   }
   else {
     mainLayer->addGlEntity(axisComposite, "axis composite");
-    mainLayer->addGlEntity(glGraphComposite, "graph");
+    //mainLayer->addGlEntity(glGraphComposite, "graph");
 
     if (coeffLabel != NULL) {
       mainLayer->addGlEntity(coeffLabel, "coeffLabel");
