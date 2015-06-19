@@ -34,6 +34,7 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/StringProperty.h>
+#include <tulip/NumericProperty.h>
 #include <tulip/TlpTools.h>
 
 TLP_PYTHON_SCOPE void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename, const bool transferTo=false);
