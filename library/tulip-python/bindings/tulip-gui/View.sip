@@ -21,8 +21,6 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlMainView.h>
 #include <tulip/View.h>
-#include <tulip/PythonIncludes.h>
-#include <tulip/PythonInterpreter.h>
 #include <QPixmap>
 #include <QImage>
 #include <QGraphicsView>
@@ -69,77 +67,6 @@ public:
 // =========================================================================================================================
 
    virtual ~View();
-
-// =========================================================================================================================
-
-   PyObject* viewQFrame() const;
-%Docstring
-tlpgui.View.viewQFrame()
-
-Dynamically wraps the QFrame enclosing the view into a :class:`PyQt4.QtGui.QFrame` instance.
-The purpose of that method is for developers that want to integrate a Tulip view in their PyQt4 application.
-You need to have PyQt4 install for that feature to work linked against the same version
-of Qt used to build Tulip and using the same version of SIP used to build the Tulip Python bindings
-(meaning, you will surely have to compile Tulip and PyQt4 yourself, otherwise you are lucky).
-
-:rtype: :class:`PyQt4.QtGui.QFrame`
-%End
-
-%MethodCode
-   QString wrapViewQFrameFunc = ""
-           "import sip\n"
-           "import PyQt4.QtGui\n"
-
-           "def wrapQFrame(address):\n"
-           "    wrap = sip.wrapinstance(address, PyQt4.QtGui.QFrame)\n"
-           "    sip.transferto(wrap, wrap)\n"
-           "    return wrap\n"
-           ;
-   sipRes = NULL;
-   if (tlp::PythonInterpreter::getInstance()->runString(wrapViewQFrameFunc)) {
-       PyObject *wrapper = NULL;
-       if (tlp::PythonInterpreter::getInstance()->callFunctionOneParamAndGetReturnValue(QString("__main__"), QString("wrapQFrame"), reinterpret_cast<uintptr_t>(sipCpp->graphicsView()->parent()), wrapper)) {
-           sipRes = wrapper;
-           Py_INCREF(sipRes);
-           sipTransferTo(sipRes, NULL);
-       }
-   }
-%End
-
-// =========================================================================================================================
-
-   PyObject* viewQGraphicsView() const;
-%Docstring
-tlpgui.View.viewQFrame()
-
-Dynamically wraps the QGraphicsView used to display the view content into a :class:`PyQt4.QtGui.QGraphicsView` instance.
-The purpose of that method is for developers that want to integrate a Tulip view in their PyQt4 application.
-You need to have PyQt4 install for that feature to work linked against the same version
-of Qt used to build Tulip and using the same version of SIP used to build the Tulip Python bindings
-(meaning, you will surely have to compile Tulip and PyQt4 yourself, otherwise you are lucky).
-
-:rtype: :class:`PyQt4.QtGui.QGraphicsView`
-%End
-
-%MethodCode
-    QString wrapViewQGraphicsViewFunc = ""
-        "import sip\n"
-        "import PyQt4.QtGui\n"
-        "def wrapQGraphicsView(address):\n"
-        "    wrap = sip.wrapinstance(address, PyQt4.QtGui.QGraphicsView)\n"
-        "    sip.transferto(wrap, wrap)\n"
-        "    return wrap\n"
-        ;
-    sipRes = NULL;
-    if (tlp::PythonInterpreter::getInstance()->runString(wrapViewQGraphicsViewFunc)) {
-        PyObject *wrapper = NULL;
-        if (tlp::PythonInterpreter::getInstance()->callFunctionOneParamAndGetReturnValue(QString("__main__"), QString("wrapQGraphicsView"), reinterpret_cast<uintptr_t>(sipCpp->graphicsView()), wrapper)) {
-            sipRes = wrapper;
-            Py_INCREF(sipRes);
-            sipTransferTo(sipRes, NULL);
-        }
-    }
-%End
 
 // =========================================================================================================================
 
