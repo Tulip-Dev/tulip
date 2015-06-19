@@ -88,7 +88,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
 #else
 void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 
-  QString qmsg(msg);
+  QString qmsg(QString::fromUtf8(msg));
 
   // on some windows systems
   // "No errors." messages may be logged coming from QGLShader::link
