@@ -32,7 +32,7 @@ DISABLE_COMPILER_WARNINGS()
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDE_DIR} ${QT_INCLUDE_DIR}/QtOpenGL ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${TulipGUIBuildInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDE_DIR} ${QT_INCLUDE_DIR}/QtOpenGL ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${TulipGUIBuildInclude} ${TulipCoreBuildInclude})
 
 ADD_LIBRARY(${LibTulipGUIPythonBindingsName} SHARED ${TULIP_GUI_PYTHON_BINDINGS_SRC})
 
@@ -51,7 +51,7 @@ SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
                       PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipPythonName} ${PYTHON_LIBRARY} ${QT_LIBRARIES} )
+TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${PYTHON_LIBRARY} ${QT_LIBRARIES} )
 
 
 IF(NOT PYTHON_DIST_PACKAGE)
