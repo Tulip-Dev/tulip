@@ -131,6 +131,7 @@ protected:
       elementId = scp2DView->getDetailedScatterPlot()->getMappedId(elementId);
       return new GraphEdgeElementModel(scp2DView->graph(), elementId, parent);
     }
+
     return MouseShowElementInfos::buildModel(elementType, elementId, parent);
   }
 
@@ -145,19 +146,20 @@ protected:
       elementId = scp2DView->getDetailedScatterPlot()->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);
     }
+
     return MouseShowElementInfos::elementName(elementType, elementId);
   }
 };
 
 ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Display node or edge properties") {
-    setPriority(StandardInteractorPriority::GetInformation);
-    setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>")+
-                               "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
-  }
+  setPriority(StandardInteractorPriority::GetInformation);
+  setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>")+
+                             "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
+}
 
 void ScatterPlot2DInteractorGetInformation::construct() {
-    push_back(new MousePanNZoomNavigator);
-    push_back(new ScatterPlot2DMouseShowElementInfos);
+  push_back(new MousePanNZoomNavigator);
+  push_back(new ScatterPlot2DMouseShowElementInfos);
 }
 
 bool ScatterPlot2DInteractorGetInformation::isCompatible(const std::string &viewName) const {

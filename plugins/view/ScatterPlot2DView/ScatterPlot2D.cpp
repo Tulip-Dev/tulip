@@ -558,6 +558,7 @@ void ScatterPlot2D::delEdge(Graph *,const edge e) {
 unsigned int ScatterPlot2D::getMappedId(unsigned int id) {
   if (dataLocation == EDGE)
     return nodeToEdge[node(id)].id;
+
   return id;
 }
 
