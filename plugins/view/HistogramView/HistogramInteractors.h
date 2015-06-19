@@ -82,6 +82,25 @@ private :
   HistogramStatistics *histoStatistics;
 };
 
+/**
+ *  \brief interactor to get information about an element of the graph
+ */
+class HistogramInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+public:
+  PLUGININFORMATION("HistogramInteractorGetInformation", "Tulip Team", "18/06/2015", "Get Information Interactor", "1.0", "Information")
+  /**
+   * Default constructor
+   */
+  HistogramInteractorGetInformation(const tlp::PluginContext*);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  bool isCompatible(const std::string &viewName) const;
+};
+
 }
 
 
