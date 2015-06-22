@@ -18,6 +18,8 @@
 */
 
 #include <tulip/MouseInteractors.h>
+#include <tulip/MouseShowElementInfos.h>
+#include <tulip/GraphElementModel.h>
 
 #include "HistogramMetricMapping.h"
 #include "HistogramStatistics.h"
@@ -40,6 +42,7 @@ bool HistogramInteractor::isCompatible(const std::string &viewName) const {
 PLUGIN(HistogramInteractorNavigation)
 PLUGIN(HistogramInteractorMetricMapping)
 PLUGIN(HistogramInteractorStatistics)
+PLUGIN(HistogramInteractorGetInformation)
 
 HistogramInteractorNavigation::HistogramInteractorNavigation(const PluginContext *) : HistogramInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
   setConfigurationWidgetText(QString("<html><head><title></title></head><body><h3>View navigation interactor</h3>")
@@ -135,6 +138,70 @@ void HistogramInteractorStatistics::install(QObject *target) {
   if(target!=NULL) {
     histoStatistics->computeInteractor();
   }
+}
+
+/**
+ * We define a specific interactor to show element graph infos
+ */
+class HistogramMouseShowElementInfos : public MouseShowElementInfos {
+  HistogramView* hView;
+public:
+  HistogramMouseShowElementInfos()
+    :MouseShowElementInfos(), hView(NULL) {}
+  ~HistogramMouseShowElementInfos() {}
+
+
+  void viewChanged(View *v) {
+    hView = (HistogramView *) v;
+    MouseShowElementInfos::viewChanged(v);
+  }
+
+protected:
+  /**
+   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId elementId the id of the element
+   * @param parent the parent for the model creation.
+   * @return
+   */
+  virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent) const {
+    if (hView->getDataLocation() == EDGE) {
+      elementId = hView->getDetailedHistogram()->getMappedId(elementId);
+      return new GraphEdgeElementModel(hView->graph(), elementId, parent);
+    }
+
+    return MouseShowElementInfos::buildModel(elementType, elementId, parent);
+  }
+
+  /**
+   * @brief elementName returns the title of the element.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId the id of the element
+   * @return
+   */
+  virtual QString elementName(ElementType elementType, unsigned int elementId) const {
+    if (hView->getDataLocation() == EDGE) {
+      elementId = hView->getDetailedHistogram()->getMappedId(elementId);
+      return QString("Edge") + " #" + QString::number(elementId);
+    }
+
+    return MouseShowElementInfos::elementName(elementType, elementId);
+  }
+};
+
+HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Display node or edge properties") {
+  setPriority(StandardInteractorPriority::GetInformation);
+  setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>")+
+                             "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
+}
+
+void HistogramInteractorGetInformation::construct() {
+  push_back(new MousePanNZoomNavigator);
+  push_back(new HistogramMouseShowElementInfos);
+}
+
+bool HistogramInteractorGetInformation::isCompatible(const std::string &viewName) const {
+  return (viewName==ViewName::HistogramViewName);
 }
 
 }

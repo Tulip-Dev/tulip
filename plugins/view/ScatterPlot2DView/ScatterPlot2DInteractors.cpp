@@ -18,12 +18,15 @@
  */
 
 #include <tulip/MouseInteractors.h>
+#include <tulip/MouseShowElementInfos.h>
+#include <tulip/GraphElementModel.h>
 
 #include "ScatterPlot2DInteractors.h"
 #include "ScatterPlot2DViewNavigator.h"
 #include "ScatterPlotTrendLine.h"
 #include "ScatterPlotCorrelCoeffSelector.h"
 #include "ScatterPlot2DView.h"
+#include "ScatterPlot2D.h"
 #include "ScatterPlotCorrelCoeffSelectorOptionsWidget.h"
 
 #include "../../utils/StandardInteractorPriority.h"
@@ -42,6 +45,8 @@ bool ScatterPlot2DInteractor::isCompatible(const std::string &viewName) const {
 PLUGIN(ScatterPlot2DInteractorNavigation)
 PLUGIN(ScatterPlot2DInteractorTrendLine)
 PLUGIN(ScatterPlot2DInteractorCorrelCoeffSelector)
+PLUGIN(ScatterPlot2DInteractorGetInformation)
+
 
 ScatterPlot2DInteractorNavigation::ScatterPlot2DInteractorNavigation(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
   setConfigurationWidgetText(QString("<html><head>")
@@ -97,4 +102,69 @@ QWidget *ScatterPlot2DInteractorCorrelCoeffSelector::configurationWidget() const
   return optionsWidget;
 }
 
+/**
+ * We define a specific interactor to show element graph infos
+ */
+class ScatterPlot2DMouseShowElementInfos : public MouseShowElementInfos {
+  ScatterPlot2DView* scp2DView;
+public:
+  ScatterPlot2DMouseShowElementInfos()
+    :MouseShowElementInfos(), scp2DView(NULL) {}
+  ~ScatterPlot2DMouseShowElementInfos() {}
+
+
+  void viewChanged(View *v) {
+    scp2DView = (ScatterPlot2DView *) v;
+    MouseShowElementInfos::viewChanged(v);
+  }
+
+protected:
+  /**
+   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId elementId the id of the element
+   * @param parent the parent for the model creation.
+   * @return
+   */
+  virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent) const {
+    if (scp2DView->getDataLocation() == EDGE) {
+      elementId = scp2DView->getDetailedScatterPlot()->getMappedId(elementId);
+      return new GraphEdgeElementModel(scp2DView->graph(), elementId, parent);
+    }
+
+    return MouseShowElementInfos::buildModel(elementType, elementId, parent);
+  }
+
+  /**
+   * @brief elementName returns the title of the element.
+   * @param elementType the type of the element can be NODE or EDGE
+   * @param elementId the id of the element
+   * @return
+   */
+  virtual QString elementName(ElementType elementType, unsigned int elementId) const {
+    if (scp2DView->getDataLocation() == EDGE) {
+      elementId = scp2DView->getDetailedScatterPlot()->getMappedId(elementId);
+      return QString("Edge") + " #" + QString::number(elementId);
+    }
+
+    return MouseShowElementInfos::elementName(elementType, elementId);
+  }
+};
+
+ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Display node or edge properties") {
+  setPriority(StandardInteractorPriority::GetInformation);
+  setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>")+
+                             "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");
 }
+
+void ScatterPlot2DInteractorGetInformation::construct() {
+  push_back(new MousePanNZoomNavigator);
+  push_back(new ScatterPlot2DMouseShowElementInfos);
+}
+
+bool ScatterPlot2DInteractorGetInformation::isCompatible(const std::string &viewName) const {
+  return (viewName==ViewName::ScatterPlot2DViewName);
+}
+
+}
+

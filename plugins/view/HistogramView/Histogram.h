@@ -192,6 +192,11 @@ public :
   virtual void delNode(Graph *,const node );
   virtual void delEdge(Graph *,const edge );
 
+  // return the id of the corresponding graph elt
+  // see ScatterPlot2DMouseShowElementInfos
+  // in ScatterPlot2DInteractors.cpp
+  unsigned int getMappedId(unsigned int id);
+
 private :
 
   void computeBoundingBox() {

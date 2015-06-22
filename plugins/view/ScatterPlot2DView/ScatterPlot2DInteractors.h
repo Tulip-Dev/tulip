@@ -79,6 +79,25 @@ private :
 
 };
 
+/**
+ *  \brief interactor to get information about an element of the graph
+ */
+class ScatterPlot2DInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+public:
+  PLUGININFORMATION("ScatterPlot2DInteractorGetInformation", "Tulip Team", "18/06/2015", "Get Information Interactor", "1.0", "Information")
+  /**
+   * Default constructor
+   */
+  ScatterPlot2DInteractorGetInformation(const tlp::PluginContext*);
+
+  /**
+   * Construct chain of responsibility
+   */
+  void construct();
+
+  bool isCompatible(const std::string &viewName) const;
+};
+
 }
 
 #endif /* SCATTERPLOT2DINTERACTORS_H_ */
