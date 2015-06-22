@@ -124,6 +124,22 @@ public :
   void draw();
   void refresh();
 
+  void treatEvent(const Event &message);
+
+  void afterSetNodeValue(PropertyInterface*, const node);
+  void afterSetEdgeValue(PropertyInterface*, const edge);
+  void afterSetAllNodeValue(PropertyInterface*);
+  void afterSetAllEdgeValue(PropertyInterface*);
+
+  virtual void addEdge(Graph *, const edge );
+  virtual void delNode(Graph *,const node );
+  virtual void delEdge(Graph *,const edge );
+
+  // return the id of the corresponding graph elt
+  // see ScatterPlot2DMouseShowElementInfos
+  // in ScatterPlot2DInteractors.cpp
+  unsigned int getMappedId(unsigned int id);
+
 public slots :
 
   void init();
@@ -177,6 +193,9 @@ private :
   static unsigned int scatterplotViewInstancesCount;
 
   ElementType dataLocation;
+  Graph *edgeAsNodeGraph;
+  std::map<edge, node> edgeToNode;
+  std::map<node, edge> nodeToEdge;
 };
 
 }

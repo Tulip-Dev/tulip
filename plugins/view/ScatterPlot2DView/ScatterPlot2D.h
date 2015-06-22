@@ -36,11 +36,14 @@ class GlLabel;
 class GlProgressBar;
 class Graph;
 
-class ScatterPlot2D : public GlComposite, public Observable {
+class ScatterPlot2D : public GlComposite {
 
 public :
 
-  ScatterPlot2D(Graph *graph, const std::string& xDim, const std::string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
+  ScatterPlot2D(Graph *graph, Graph* edgeGraph,
+		std::map<edge, node>& edgeMap, std::map<node, edge>& nodeMap,
+		const std::string& xDim, const std::string& yDim,
+		const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
   ~ScatterPlot2D();
 
   void setBLCorner(const Coord &blCorner);
@@ -127,23 +130,6 @@ public :
   }
   void setDataLocation(const ElementType &dataLocation);
 
-  void treatEvent(const Event &message);
-
-  void afterSetNodeValue(PropertyInterface*, const node);
-  void afterSetEdgeValue(PropertyInterface*, const edge);
-  void afterSetAllNodeValue(PropertyInterface*);
-  void afterSetAllEdgeValue(PropertyInterface*);
-
-  virtual void addNode(Graph *, const node );
-  virtual void addEdge(Graph *, const edge );
-  virtual void delNode(Graph *,const node );
-  virtual void delEdge(Graph *,const edge );
-
-  // return the id of the corresponding graph elt
-  // see ScatterPlot2DMouseShowElementInfos
-  // in ScatterPlot2DInteractors.cpp
-  unsigned int getMappedId(unsigned int id);
-
 private :
 
   void computeBoundingBox() {
@@ -162,7 +148,7 @@ private :
   unsigned int size;
   Graph *graph;
   GlGraphComposite *glGraphComposite;
-  LayoutProperty *scatterLayout;
+  LayoutProperty *scatterLayout, *scatterEdgeLayout;
   GlQuantitativeAxis *xAxis, *yAxis;
   std::string textureName;
   GlProgressBar *glProgressBar;
@@ -178,8 +164,8 @@ private :
   Color minusOneColor, zeroColor, oneColor;
 
   Graph *edgeAsNodeGraph;
-  std::map<edge, node> edgeToNode;
-  std::map<node, edge> nodeToEdge;
+  std::map<edge, node>& edgeToNode;
+  std::map<node, edge>& nodeToEdge;
   ElementType dataLocation;
   bool xAxisScaleDefined, yAxisScaleDefined;
   std::pair<double, double> xAxisScale, yAxisScale;
