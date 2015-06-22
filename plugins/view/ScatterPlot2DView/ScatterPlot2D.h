@@ -41,9 +41,9 @@ class ScatterPlot2D : public GlComposite {
 public :
 
   ScatterPlot2D(Graph *graph, Graph* edgeGraph,
-		std::map<edge, node>& edgeMap, std::map<node, edge>& nodeMap,
-		const std::string& xDim, const std::string& yDim,
-		const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
+                std::map<edge, node>& edgeMap, std::map<node, edge>& nodeMap,
+                const std::string& xDim, const std::string& yDim,
+                const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor);
   ~ScatterPlot2D();
 
   void setBLCorner(const Coord &blCorner);

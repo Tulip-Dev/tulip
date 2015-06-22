@@ -192,6 +192,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   if (lastGraph == NULL || lastGraph != scatterPlotGraph) {
     newGraphSet = true;
+
     if (lastGraph) {
       lastGraph->removeListener(this);
       lastGraph->getProperty<ColorProperty>("viewColor")->removeListener(this);
@@ -201,9 +202,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       lastGraph->getProperty<ColorProperty>("viewShape")->removeListener(this);
       lastGraph->getProperty<ColorProperty>("viewTexture")->removeListener(this);
     }
+
     if (edgeAsNodeGraph) {
       delete edgeAsNodeGraph;
     }
+
     if (scatterPlotGraph) {
       edgeAsNodeGraph = tlp::newGraph();
       ColorProperty* edgeAsNodeGraphColor = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
@@ -216,11 +219,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       nodeToEdge.clear();
       edge e;
       forEach(e, scatterPlotGraph->getEdges()) {
-	node n = edgeToNode[e] = edgeAsNodeGraph->addNode();
-	nodeToEdge[n] = e;
-	edgeAsNodeGraphColor->setNodeValue(n, graphColor->getEdgeValue(e));
-	edgeAsNodeGraphSelection->setNodeValue(n, graphSelection->getEdgeValue(e));
-	edgeAsNodeGraphLabel->setNodeValue(n, graphLabel->getEdgeValue(e));
+        node n = edgeToNode[e] = edgeAsNodeGraph->addNode();
+        nodeToEdge[n] = e;
+        edgeAsNodeGraphColor->setNodeValue(n, graphColor->getEdgeValue(e));
+        edgeAsNodeGraphSelection->setNodeValue(n, graphSelection->getEdgeValue(e));
+        edgeAsNodeGraphLabel->setNodeValue(n, graphLabel->getEdgeValue(e));
       }
       scatterPlotGraph->addListener(this);
       graphColor->addListener(this);
@@ -523,11 +526,11 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
         }
         else {
           scatterOverview =
-	    new ScatterPlot2D(scatterPlotGraph, edgeAsNodeGraph,
-			      edgeToNode, nodeToEdge,
-			      selectedGraphProperties[i], selectedGraphProperties[j],
-			      dataLocation, overviewBlCorner, OVERVIEWS_SIZE,
-			      backgroundColor, foregroundColor);
+            new ScatterPlot2D(scatterPlotGraph, edgeAsNodeGraph,
+                              edgeToNode, nodeToEdge,
+                              selectedGraphProperties[i], selectedGraphProperties[j],
+                              dataLocation, overviewBlCorner, OVERVIEWS_SIZE,
+                              backgroundColor, foregroundColor);
           scatterPlotsMap[overviewsMapKey] = scatterOverview;
 
           if (scatterPlotsGenMap.find(overviewsMapKey) == scatterPlotsGenMap.end()) {
@@ -1113,6 +1116,7 @@ void ScatterPlot2DView::delEdge(Graph *,const edge e) {
 unsigned int ScatterPlot2DView::getMappedId(unsigned int id) {
   if (dataLocation == EDGE)
     return nodeToEdge[node(id)].id;
+
   return id;
 }
 
