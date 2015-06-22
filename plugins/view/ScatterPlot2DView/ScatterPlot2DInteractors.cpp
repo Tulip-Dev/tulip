@@ -128,7 +128,7 @@ protected:
    */
   virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent) const {
     if (scp2DView->getDataLocation() == EDGE) {
-      elementId = scp2DView->getDetailedScatterPlot()->getMappedId(elementId);
+      elementId = scp2DView->getMappedId(elementId);
       return new GraphEdgeElementModel(scp2DView->graph(), elementId, parent);
     }
 
@@ -143,7 +143,7 @@ protected:
    */
   virtual QString elementName(ElementType elementType, unsigned int elementId) const {
     if (scp2DView->getDataLocation() == EDGE) {
-      elementId = scp2DView->getDetailedScatterPlot()->getMappedId(elementId);
+      elementId = scp2DView->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);
     }
 
