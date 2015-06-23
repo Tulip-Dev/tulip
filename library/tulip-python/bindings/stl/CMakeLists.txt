@@ -14,10 +14,10 @@ SET(STL_SIP_FILES
 )
 
 SET(STL_PYTHON_BINDINGS_SRC
-    sipstlpart0.cpp
-    sipstlpart1.cpp
-    sipstlpart2.cpp
-    sipstlpart3.cpp
+    sip_stlpart0.cpp
+    sip_stlpart1.cpp
+    sip_stlpart2.cpp
+    sip_stlpart3.cpp
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${STL_PYTHON_BINDINGS_SRC}
@@ -39,7 +39,7 @@ ADD_DEPENDENCIES(${LibStlPythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
 
 SET_TARGET_PROPERTIES(${LibStlPythonBindingsName}
-		      PROPERTIES OUTPUT_NAME stl PREFIX "")
+              PROPERTIES OUTPUT_NAME stl PREFIX "_")
 
 IF(WIN32)
 SET_TARGET_PROPERTIES(${LibStlPythonBindingsName}
@@ -53,17 +53,17 @@ TARGET_LINK_LIBRARIES(${LibStlPythonBindingsName} ${PYTHON_LIBRARY})
 
 IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibStlPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/python/tulip/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python)
 ELSE(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibStlPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python)
 ENDIF(NOT PYTHON_DIST_PACKAGE)
 
-SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "sipAPIstl.h")
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "sipAPI_stl.h")
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

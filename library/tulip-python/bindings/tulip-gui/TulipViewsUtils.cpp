@@ -17,7 +17,7 @@
  *
  */
 
-#include <sipAPItulipgui.h>
+#include <sipAPI_tulipgui.h>
 
 #include <QApplication>
 

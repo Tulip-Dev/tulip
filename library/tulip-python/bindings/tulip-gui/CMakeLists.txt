@@ -12,9 +12,9 @@ SET(TULIP_GUI_SIP_FILES
 )
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC
-    siptulipguipart0.cpp
-    siptulipguipart1.cpp
-    siptulipguipart2.cpp
+    sip_tulipguipart0.cpp
+    sip_tulipguipart1.cpp
+    sip_tulipguipart2.cpp
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_GUI_PYTHON_BINDINGS_SRC}
@@ -41,7 +41,7 @@ ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
 
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
-                      PROPERTIES OUTPUT_NAME tulipgui PREFIX "")
+                      PROPERTIES OUTPUT_NAME tulipgui PREFIX "_")
 
 IF(WIN32)
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName}
@@ -56,14 +56,20 @@ TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${Lib
 
 IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipGUIPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/python/tulipgui/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python/tulipgui/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python/tulipgui/native COMPONENT tulip_python)
+IF(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipBinInstallDir}/python/tulipgui COMPONENT tulip_python)
+ELSE(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python/tulipgui COMPONENT tulip_python)
+ENDIF(WIN32)
 ELSE(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipGUIPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages/tulipgui/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulipgui/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulipgui/native COMPONENT tulip_python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulipgui COMPONENT tulip_python)
 ENDIF(NOT PYTHON_DIST_PACKAGE)
 
 ADD_CUSTOM_COMMAND(
@@ -75,7 +81,7 @@ ADD_CUSTOM_COMMAND(
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulipgui.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
-SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulipgui.api;sipAPItulipgui.h")
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulipgui.api;sipAPI_tulipgui.h")
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
