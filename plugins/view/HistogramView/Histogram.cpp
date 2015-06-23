@@ -67,27 +67,15 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
 
 int Histogram::overviewCpt(0);
 
-Histogram::Histogram(Graph *graph, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size,
+  Histogram::Histogram(Graph *graph, Graph* edgeGraph,
+		       std::map<node, edge>& nodeMap, std::map<edge, node>& edgeMap,
+		       const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size,
                      const Color &backgroundColor, const Color &textColor) :
   graph(graph), propertyName(propertyName), blCorner(blCorner), size(size), nbHistogramBins(100), xAxis(NULL), yAxis(NULL),
-  xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()), uniformQuantification(false),
-  cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(newGraph()), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
+  xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)), histogramEdgeLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()), uniformQuantification(false),
+  cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), nodeToEdge(nodeMap), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
   dataLocation(dataLocation), displayEdges(false), layoutUpdateNeeded(true),sizesUpdateNeeded(true), textureUpdateNeeded(true), xAxisScaleDefined(false), yAxisScaleDefined(false),
-  xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)) {
-
-  edge e;
-  forEach(e, graph->getEdges()) {
-    edgeToNode[e] = edgeAsNodeGraph->addNode();
-    nodeToEdge[edgeToNode[e]] = e;
-    edgeAsNodeGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(edgeToNode[e],
-        graph->getProperty<ColorProperty>("viewColor")->getEdgeValue(e));
-    edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->setNodeValue(edgeToNode[e],
-        graph->getProperty<BooleanProperty>("viewSelection")->getEdgeValue(e));
-    edgeAsNodeGraph->getProperty<StringProperty>("viewLabel")->setNodeValue(edgeToNode[e],
-        graph->getProperty<StringProperty>("viewLabel")->getEdgeValue(e));
-  }
-  edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->addListener(this);
-  edgeAsNodeGraph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(NodeShape::Circle);
+    xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)) {
 
   if (dataLocation == NODE) {
     graphComposite = new GlGraphComposite(graph);
@@ -97,31 +85,23 @@ Histogram::Histogram(Graph *graph, const std::string& propertyName, const Elemen
   }
   else {
     graphComposite = new GlGraphComposite(edgeAsNodeGraph);
+    GlGraphInputData *glGraphInputData = graphComposite->getInputData();
+    glGraphInputData->setElementLayout(histogramEdgeLayout);
   }
 
   setGraphView(graphComposite, (dataLocation == NODE) ? displayEdges : false);
   overviewId = overviewCpt++;
   textureName = propertyName + " histo texture " + getStringFromNumber(overviewId);
-
-  graph->addListener(this);
-  graph->getProperty(propertyName)->addListener(this);
-  graph->getProperty("viewColor")->addListener(this);
-  graph->getProperty("viewLabel")->addListener(this);
-  graph->getProperty("viewSize")->addListener(this);
-  graph->getProperty("viewShape")->addListener(this);
-  graph->getProperty("viewSelection")->addListener(this);
-  graph->getProperty("viewTexture")->addListener(this);
   update();
-
 }
 
 Histogram::~Histogram() {
   GlTextureManager::getInst().deleteTexture(textureName);
   delete histogramLayout;
+  delete histogramEdgeLayout;
   delete histogramSize;
   delete histoBinsComposite;
   delete graphComposite;
-  delete edgeAsNodeGraph;
 }
 
 void Histogram::setDataLocation(const ElementType &dataLocation) {
@@ -138,6 +118,8 @@ void Histogram::setDataLocation(const ElementType &dataLocation) {
     }
     else {
       graphComposite = new GlGraphComposite(edgeAsNodeGraph);
+      GlGraphInputData *glGraphInputData = graphComposite->getInputData();
+      glGraphInputData->setElementLayout(histogramEdgeLayout);
     }
   }
 
@@ -532,7 +514,7 @@ void Histogram::updateLayout() {
   computeHistogram();
   createAxis();
 
-  LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
+  //LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
   unsigned int cumulativeSize = 0;
 
   for (unsigned int i = 0 ; i < nbHistogramBins ; ++i) {
@@ -569,7 +551,7 @@ void Histogram::updateLayout() {
       }
       else {
         node n = edgeToNode[edge(histogramBins[i][j])];
-        edgeAsNodeGraphLayout->setNodeValue(n, nodeCoord);
+        histogramEdgeLayout->setNodeValue(n, nodeCoord);
 
         vector<Coord> edgeHistoPointCoord;
         edgeHistoPointCoord.push_back(nodeCoord);
@@ -796,6 +778,7 @@ void Histogram::setTextColor(const Color &color) {
   textColor = color;
 }
 
+  /*
 void Histogram::treatEvent(const Event &message) {
   if (typeid(message) == typeid(GraphEvent)) {
     const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
@@ -952,7 +935,7 @@ void Histogram::delEdge(Graph *,const edge e) {
   setLayoutUpdateNeeded();
   setSizesUpdateNeeded();
 }
-
+  */
 void Histogram::setLayoutUpdateNeeded() {
   layoutUpdateNeeded = true;
   textureUpdateNeeded = true;
@@ -965,13 +948,6 @@ void Histogram::setSizesUpdateNeeded() {
 
 void Histogram::setTextureUpdateNeeded() {
   textureUpdateNeeded = true;
-}
-
-unsigned int Histogram::getMappedId(unsigned int id) {
-  if (dataLocation == EDGE)
-    return nodeToEdge[node(id)].id;
-
-  return id;
 }
 
 }

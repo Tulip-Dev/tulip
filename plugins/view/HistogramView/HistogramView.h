@@ -116,6 +116,23 @@ public :
 
   void updateHistograms(Histogram *detailOverview = NULL);
 
+  void treatEvent(const Event &message);
+
+  void afterSetNodeValue(PropertyInterface*, const node);
+  void afterSetEdgeValue(PropertyInterface*, const edge);
+  void afterSetAllNodeValue(PropertyInterface*);
+  void afterSetAllEdgeValue(PropertyInterface*);
+
+  virtual void addNode(Graph *, const node );
+  virtual void addEdge(Graph *, const edge );
+  virtual void delNode(Graph *, const node );
+  virtual void delEdge(Graph *, const edge );
+
+  // return the id of the corresponding graph elt
+  // see ScatterPlot2DMouseShowElementInfos
+  // in ScatterPlot2DInteractors.cpp
+  unsigned int getMappedId(unsigned int id);
+
 public slots :
 
   void viewConfigurationChanged();
@@ -137,6 +154,21 @@ private :
   void cleanupGlScene();
   void addEmptyViewLabel();
   void removeEmptyViewLabel();
+
+  void setLayoutUpdateNeeded() {
+    if (detailedHistogram)
+      detailedHistogram->setLayoutUpdateNeeded();
+  }
+
+  void setSizesUpdateNeeded() {
+    if (detailedHistogram)
+      detailedHistogram->setSizesUpdateNeeded();
+  }
+
+  void setTextureUpdateNeeded() {
+    if (detailedHistogram)
+      detailedHistogram->setTextureUpdateNeeded();
+  }
 
 
   ViewGraphPropertiesSelectionWidget *propertiesSelectionWidget;
@@ -177,6 +209,10 @@ private :
 
   ElementType dataLocation;
   bool needUpdateHistogram;
+
+  Graph *edgeAsNodeGraph;
+  std::map<edge, node> edgeToNode;
+  std::map<node, edge> nodeToEdge;
 };
 
 }
