@@ -23,7 +23,7 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
-%Module tulip
+%Module _tulip
 
 // Plus set up type aliases for tlp.Coord and tlp.Size
 %PreInitialisationCode
@@ -41,102 +41,6 @@
     PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
     PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
     PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
-
-    std::string pluginLoaderFuncs =
-    "import os\n"
-    "import sys\n"
-    "import traceback\n"
-    "from tulip import *\n"
-
-    "tlpPythonPluginsPath = tlp.TulipLibDir + '/tulip/python'\n"
-    "tlpPythonPluginsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion + '/plugins/python'\n"
-
-    "def loadTulipPythonPlugin(pluginFilePath):\n"
-    "  if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith('.py'):\n"
-    "    return False\n"
-
-    "  try:\n"
-    "    pluginFile = open(pluginFilePath)\n"
-    "    pluginFileContent = pluginFile.read()\n"
-    "  except:\n"
-    "    return False\n"
-
-    "  if not 'tulipplugins.register' in pluginFileContent:\n"
-    "    return False\n"
-
-    "  modulePath = os.path.dirname(pluginFilePath)\n"
-    "  moduleName = os.path.basename(pluginFilePath)[:-3]\n"
-
-    "  if not modulePath in sys.path:\n"
-    "    sys.path.append(modulePath)\n"
-
-    "  try:\n"
-    "    mod = __import__(moduleName)\n"
-    "  except ImportError:\n"
-    "    sys.stdout.write('There was an error when trying to load the Tulip Python plugin from the file ' + pluginFilePath + '. See stack trace below.\\n')\n"
-    "    traceback.print_exc()\n"
-    "    return False\n"
-
-    "  return True\n"
-
-    "def loadTulipPluginsFromDir(pluginsDirPath, loadCppPlugin=True, pluginLoader=None):\n"
-    "  if not os.path.exists(pluginsDirPath):\n"
-    "    return False\n"
-
-    "  if loadCppPlugin:\n"
-    "    tlp.loadPluginsFromDir(pluginsDirPath, pluginLoader, False)\n"
-
-    "  files = os.listdir(pluginsDirPath)\n"
-
-    "  for file in files:\n"
-    "    filePath = pluginsDirPath+'/'+file\n"
-    "    if not os.path.isdir(filePath):\n"
-    "      loadTulipPythonPlugin(filePath)\n"
-
-    "  for file in files:\n"
-    "    filePath = pluginsDirPath+'/'+file\n"
-    "    if os.path.isdir(filePath):\n"
-    "      loadTulipPluginsFromDir(filePath, loadCppPlugin, pluginLoader)\n"
-
-    "  return True\n"
-
-    "loadTulipPluginsFromDir(tlpPythonPluginsPath, False)\n"
-    "loadTulipPluginsFromDir(tlpPythonPluginsHomePath, False)\n"
-    ;
-
-    std::string startupScriptsRunner =
-    "import os\n"
-    "from tulip import *\n"
-
-    "tulipVersion = tlp.getTulipRelease()\n"
-    "tulipVersion = tulipVersion[:tulipVersion.rfind('.')]\n"
-
-    "startupScriptsPath = tlp.TulipLibDir + '/tulip/python/startup'\n"
-    "startupScriptsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion + '/python/startup'\n"
-
-    "def runStartupScripts(scriptsPath):\n"
-    "  if not os.path.exists(scriptsPath):\n"
-    "    return\n"
-
-    "  files = os.listdir(scriptsPath)\n"
-
-    "  for file in files:\n"
-    "    filePath = scriptsPath+'/'+file\n"
-    "    if os.path.isfile(filePath) and filePath.endswith('.py'):\n"
-    "      exec(compile(open(filePath).read(), filePath, 'exec'), globals(), locals())\n"
-
-    "runStartupScripts(startupScriptsPath)\n"
-    "runStartupScripts(startupScriptsHomePath)\n"
-
-    ;
-
-    // hack to avoid recursive import of the module
-    // when executing possible startup scripts
-    PyObject *sysModulesDict = PyImport_GetModuleDict();
-    PyDict_SetItemString(sysModulesDict, "tulip", sipModule);
-
-    PyRun_SimpleString(startupScriptsRunner.c_str());
-    PyRun_SimpleString(pluginLoaderFuncs.c_str());
 %End
 
 %ModuleHeaderCode

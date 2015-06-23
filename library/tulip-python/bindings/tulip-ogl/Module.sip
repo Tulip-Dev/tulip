@@ -17,7 +17,7 @@
  *
  */
 
-%Module tulipogl
+%Module _tulipogl
 
 %ModuleHeaderCode
 #include <tulip/GlSceneObserver.h>

@@ -17,7 +17,7 @@
  *
  */
 
-%Module stl
+%Module _stl
 
 %ModuleHeaderCode
 #include <string>

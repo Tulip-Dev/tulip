@@ -17,7 +17,7 @@
  *
  */
 
-%Module tulipgui
+%Module _tulipgui
 
 %PreInitialisationCode
 

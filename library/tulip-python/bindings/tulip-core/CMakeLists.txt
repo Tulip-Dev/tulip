@@ -63,14 +63,14 @@ SET(TULIP_SIP_FILES
 )
 
 SET(TULIP_PYTHON_BINDINGS_SRC
-    siptulippart0.cpp
-    siptulippart1.cpp
-    siptulippart2.cpp
-    siptulippart3.cpp
-    siptulippart4.cpp
-    siptulippart5.cpp
-    siptulippart6.cpp
-    siptulippart7.cpp
+    sip_tulippart0.cpp
+    sip_tulippart1.cpp
+    sip_tulippart2.cpp
+    sip_tulippart3.cpp
+    sip_tulippart4.cpp
+    sip_tulippart5.cpp
+    sip_tulippart6.cpp
+    sip_tulippart7.cpp
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
@@ -98,7 +98,7 @@ ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
 
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
-                      PROPERTIES OUTPUT_NAME tulip PREFIX "")
+                      PROPERTIES OUTPUT_NAME tulip PREFIX "_")
 
 IF(WIN32)
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName}
@@ -113,14 +113,20 @@ TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
 
 IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/python/tulip/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python/tulip/native COMPONENT tulip_python)
+IF(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipBinInstallDir}/python/tulip COMPONENT tulip_python)
+ELSE(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python/tulip COMPONENT tulip_python)
+ENDIF(WIN32)
 ELSE(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip/native COMPONENT tulip_python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip COMPONENT tulip_python)
 ENDIF(NOT PYTHON_DIST_PACKAGE)
 
 ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
@@ -131,7 +137,7 @@ ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
 				   
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
-SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.api;sipAPItulip.h;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.api;sipAPI_tulip.h;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)

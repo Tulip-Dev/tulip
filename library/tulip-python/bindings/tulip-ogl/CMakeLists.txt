@@ -26,9 +26,9 @@ SET(TULIP_OGL_SIP_FILES
 )
 
 SET(TULIP_OGL_PYTHON_BINDINGS_SRC
-    siptulipoglpart0.cpp
-    siptulipoglpart1.cpp
-    siptulipoglpart2.cpp
+    sip_tulipoglpart0.cpp
+    sip_tulipoglpart1.cpp
+    sip_tulipoglpart2.cpp
 )
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_OGL_PYTHON_BINDINGS_SRC}
@@ -50,7 +50,7 @@ IF(NOT SYSTEM_SIP)
 ADD_DEPENDENCIES(${LibTulipOGLPythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)
 
-SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES OUTPUT_NAME tulipogl PREFIX "")
+SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES OUTPUT_NAME tulipogl PREFIX "_")
 
 IF(WIN32)
   SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES SUFFIX ".pyd")
@@ -62,14 +62,20 @@ TARGET_LINK_LIBRARIES(${LibTulipOGLPythonBindingsName} ${LibTulipCoreName} ${Lib
 
 IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipOGLPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/python/tulipogl/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python/tulipogl/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python/tulipogl/native COMPONENT tulip_python)
+IF(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipBinInstallDir}/python/tulipogl COMPONENT tulip_python)
+ELSE(WIN32)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python/tulipogl COMPONENT tulip_python)
+ENDIF(WIN32)
 ELSE(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibTulipOGLPythonBindingsName}
-        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python
-        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages COMPONENT tulip_python)
+        RUNTIME DESTINATION ${TulipBinInstallDir}/../lib/python${PYTHON_VERSION}/dist-packages/tulipogl/native COMPONENT tulip_python
+        LIBRARY DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulipogl/native COMPONENT tulip_python
+        ARCHIVE DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulipogl/native COMPONENT tulip_python)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulipogl COMPONENT tulip_python)
 ENDIF(NOT PYTHON_DIST_PACKAGE)
 
 ADD_CUSTOM_COMMAND(
@@ -81,7 +87,7 @@ ADD_CUSTOM_COMMAND(
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulipogl.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
 
-SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulipogl.api;sipAPItulipogl.h")
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulipogl.api;sipAPI_tulipogl.h")
 
 ENDIF(SIP_OK)
 ENDIF(PYTHONLIBS_FOUND)
