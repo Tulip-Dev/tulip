@@ -94,6 +94,7 @@ HistogramView::~HistogramView() {
     delete labelsComposite;
     delete emptyGraph;
     delete axisComposite;
+
     if (edgeAsNodeGraph)
       delete edgeAsNodeGraph;
   }
@@ -192,23 +193,26 @@ void HistogramView::setState(const DataSet &dataSet) {
       lastGraph->getProperty("viewSelection")->removeListener(this);
       lastGraph->getProperty("viewTexture")->removeListener(this);
     }
+
     initGlWidget(graph());
     detailedHistogram = NULL;
+
     if (edgeAsNodeGraph)
       delete edgeAsNodeGraph;
-    if (_histoGraph) { 
+
+    if (_histoGraph) {
       edgeAsNodeGraph = tlp::newGraph();
       edgeToNode.clear();
       nodeToEdge.clear();
       edge e;
       forEach(e, _histoGraph->getEdges()) {
-	nodeToEdge[edgeToNode[e] = edgeAsNodeGraph->addNode()] = e;
-	edgeAsNodeGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(edgeToNode[e],
-									       _histoGraph->getProperty<ColorProperty>("viewColor")->getEdgeValue(e));
-	edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->setNodeValue(edgeToNode[e],
-										     _histoGraph->getProperty<BooleanProperty>("viewSelection")->getEdgeValue(e));
-	edgeAsNodeGraph->getProperty<StringProperty>("viewLabel")->setNodeValue(edgeToNode[e],
-										_histoGraph->getProperty<StringProperty>("viewLabel")->getEdgeValue(e));
+        nodeToEdge[edgeToNode[e] = edgeAsNodeGraph->addNode()] = e;
+        edgeAsNodeGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(edgeToNode[e],
+            _histoGraph->getProperty<ColorProperty>("viewColor")->getEdgeValue(e));
+        edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->setNodeValue(edgeToNode[e],
+            _histoGraph->getProperty<BooleanProperty>("viewSelection")->getEdgeValue(e));
+        edgeAsNodeGraph->getProperty<StringProperty>("viewLabel")->setNodeValue(edgeToNode[e],
+            _histoGraph->getProperty<StringProperty>("viewLabel")->getEdgeValue(e));
       }
       edgeAsNodeGraph->getProperty<IntegerProperty>("viewShape")->setAllNodeValue(NodeShape::Circle);
       edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection")->addListener(this);
@@ -689,6 +693,7 @@ void HistogramView::switchFromSmallMultiplesToDetailedView(Histogram *histogramT
 
   if (detailedHistogram)
     _histoGraph->getProperty(detailedHistogram->getPropertyName())->removeListener(this);
+
   detailedHistogram = histogramToDetail;
   detailedHistogramPropertyName = detailedHistogram->getPropertyName();
   _histoGraph->getProperty(detailedHistogramPropertyName)->addListener(this);
@@ -913,6 +918,7 @@ void HistogramView::afterSetNodeValue(PropertyInterface *p, const node n) {
     setTextureUpdateNeeded();
     return;
   }
+
   afterSetAllNodeValue(p);
 }
 
@@ -957,9 +963,9 @@ void HistogramView::afterSetAllNodeValue(PropertyInterface *p) {
   else if (p->getName() == "viewSelection") {
     if (p->getGraph() == edgeAsNodeGraph) {
       BooleanProperty *edgeAsNodeGraphSelection =
-	static_cast<BooleanProperty*>(p);
+        static_cast<BooleanProperty*>(p);
       BooleanProperty *viewSelection =
-	_histoGraph->getProperty<BooleanProperty>("viewSelection");
+        _histoGraph->getProperty<BooleanProperty>("viewSelection");
       viewSelection->setAllEdgeValue(edgeAsNodeGraphSelection->getNodeValue(edgeAsNodeGraph->getOneNode()));
     }
 
