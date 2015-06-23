@@ -32,14 +32,14 @@ namespace tlp {
 
 const std::string BIN_RECT_TEXTURE = "histo_texture";
 
-class Histogram : public GlComposite, public Observable {
+class Histogram : public GlComposite {
 
 public :
 
-  Histogram(Graph *graph, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
+  Histogram(Graph *graph, Graph* edgeGraph, std::map<node, edge>& nodeMap, std::map<edge, node>& edgeMap, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
   ~Histogram();
 
-  std::string getPropertyName() const {
+  const std::string& getPropertyName() const {
     return propertyName;
   }
   GlQuantitativeAxis *getXAxis() const {
@@ -180,23 +180,6 @@ public :
     return displayEdges;
   }
 
-  void treatEvent(const Event &message);
-
-  void afterSetNodeValue(PropertyInterface*, const node);
-  void afterSetEdgeValue(PropertyInterface*, const edge);
-  void afterSetAllNodeValue(PropertyInterface*);
-  void afterSetAllEdgeValue(PropertyInterface*);
-
-  virtual void addNode(Graph *, const node );
-  virtual void addEdge(Graph *, const edge );
-  virtual void delNode(Graph *,const node );
-  virtual void delEdge(Graph *,const edge );
-
-  // return the id of the corresponding graph elt
-  // see ScatterPlot2DMouseShowElementInfos
-  // in ScatterPlot2DInteractors.cpp
-  unsigned int getMappedId(unsigned int id);
-
 private :
 
   void computeBoundingBox() {
@@ -222,7 +205,7 @@ private :
   bool xAxisLogScale, yAxisLogScale;
   unsigned int nbXGraduations;
   unsigned int yAxisIncrementStep;
-  LayoutProperty *histogramLayout;
+  LayoutProperty *histogramLayout, *histogramEdgeLayout;
   SizeProperty *histogramSize;
   GlComposite *histoBinsComposite;
   double min, max;
@@ -234,8 +217,8 @@ private :
   std::string textureName;
   GlGraphComposite *graphComposite;
   Graph *edgeAsNodeGraph;
-  std::map<edge, node> edgeToNode;
-  std::map<node, edge> nodeToEdge;
+  std::map<edge, node>& edgeToNode;
+  std::map<node, edge>& nodeToEdge;
   Color backgroundColor;
   Color textColor;
   bool integerScale;

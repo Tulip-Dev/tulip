@@ -166,7 +166,7 @@ protected:
    */
   virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent) const {
     if (hView->getDataLocation() == EDGE) {
-      elementId = hView->getDetailedHistogram()->getMappedId(elementId);
+      elementId = hView->getMappedId(elementId);
       return new GraphEdgeElementModel(hView->graph(), elementId, parent);
     }
 
@@ -181,7 +181,7 @@ protected:
    */
   virtual QString elementName(ElementType elementType, unsigned int elementId) const {
     if (hView->getDataLocation() == EDGE) {
-      elementId = hView->getDetailedHistogram()->getMappedId(elementId);
+      elementId = hView->getMappedId(elementId);
       return QString("Edge") + " #" + QString::number(elementId);
     }
 
