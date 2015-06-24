@@ -25,10 +25,9 @@ ENDIF(WIN32)
 
 # Add the paths of the tulip Python modules in the PYTHONPATH environement variable
 # in order for the interpreter to import them
-SET(PYTHON_PATHS "${BIN_DIR}/../../library/tulip-python/bindings/stl"
-                 "${BIN_DIR}/../../library/tulip-python/bindings/tulip-core"
-                 "${BIN_DIR}/../../library/tulip-python/bindings/tulip-ogl"
-                 "${BIN_DIR}/../../library/tulip-python/bindings/tulip-gui"
+SET(PYTHON_PATHS "${BIN_DIR}/../../library/tulip-python/bindings/tulip-core/tulip_module"
+                 "${BIN_DIR}/../../library/tulip-python/bindings/tulip-ogl/tulipogl_module"
+                 "${BIN_DIR}/../../library/tulip-python/bindings/tulip-gui/tulipgui_module"
                  "${SRC_DIR}/../../library/tulip-python/modules")
 
 # Add the path of the sip Python module if we compile it from thirdparty as
