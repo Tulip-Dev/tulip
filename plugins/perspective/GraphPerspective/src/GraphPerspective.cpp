@@ -814,8 +814,14 @@ void GraphPerspective::cancelSelection() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  selection->setAllEdgeValue(false);
-  selection->setAllNodeValue(false);
+  node n;
+  forEach(n, selection->getNodesEqualTo(true)) {
+      selection->setNodeValue(n, false);
+  }
+  edge e;
+  forEach(e, selection->getEdgesEqualTo(true)) {
+      selection->setEdgeValue(e, false);
+  }
   Observable::unholdObservers();
 }
 
@@ -824,20 +830,13 @@ void GraphPerspective::selectAll() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-
-  if (graph == graph->getRoot()) {
-    selection->setAllEdgeValue(true);
-    selection->setAllNodeValue(true);
-  }
-  else {
-    node n;
-    forEach(n, graph->getNodes()) {
+  node n;
+  forEach(n, graph->getNodes()) {
       selection->setNodeValue(n,true);
-    }
-    edge e;
-    forEach(e, graph->getEdges()) {
+  }
+  edge e;
+  forEach(e, graph->getEdges()) {
       selection->setEdgeValue(e,true);
-    }
   }
 
   Observable::unholdObservers();
