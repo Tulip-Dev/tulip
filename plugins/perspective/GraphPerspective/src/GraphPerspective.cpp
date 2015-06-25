@@ -816,11 +816,11 @@ void GraphPerspective::cancelSelection() {
   graph->push();
   node n;
   forEach(n, selection->getNodesEqualTo(true)) {
-      selection->setNodeValue(n, false);
+    selection->setNodeValue(n, false);
   }
   edge e;
   forEach(e, selection->getEdgesEqualTo(true)) {
-      selection->setEdgeValue(e, false);
+    selection->setEdgeValue(e, false);
   }
   Observable::unholdObservers();
 }
@@ -832,11 +832,11 @@ void GraphPerspective::selectAll() {
   graph->push();
   node n;
   forEach(n, graph->getNodes()) {
-      selection->setNodeValue(n,true);
+    selection->setNodeValue(n,true);
   }
   edge e;
   forEach(e, graph->getEdges()) {
-      selection->setEdgeValue(e,true);
+    selection->setEdgeValue(e,true);
   }
 
   Observable::unholdObservers();
