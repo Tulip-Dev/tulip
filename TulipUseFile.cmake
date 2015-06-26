@@ -194,6 +194,15 @@ IF(WIN32)
     ENDIF(NOT results)
   ENDMACRO(INSTALL_EXTERNAL_LIB)
 
+  MACRO(COPY_EXTERNAL_LIB pattern destination)
+    FIND_EXTERNAL_LIB(${pattern} results)
+    IF(results)
+      FOREACH(F ${results})
+        FILE(COPY ${F} DESTINATION ${destination})
+      ENDFOREACH(F ${results})
+    ENDIF(results)
+  ENDMACRO(COPY_EXTERNAL_LIB)
+
   MACRO(GET_DLL_NAME_FROM_IMPORT_LIBRARY import_library dll_name)
     UNSET(${dll_name})
     IF(MINGW)
@@ -271,6 +280,37 @@ IF(WIN32)
 
   ENDMACRO(INSTALL_EXTERNAL_LIB_IF_NEEDED)
 
+  MACRO(COPY_EXTERNAL_LIB_IF_NEEDED library destination)
+
+    IF(MINGW)
+      STRING(REGEX MATCH ".*dll\\.a" IMPORT_LIBRARY ${library})
+      STRING(REGEX MATCH ".*dll" DLL_LIBRARY ${library})
+      # If an import library is used, we can easily retrieve the dll name with the dlltool utility
+      IF(IMPORT_LIBRARY)
+         GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+         IF(DLL_NAME)
+           COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
+         ENDIF(DLL_NAME)
+      # If a dll is directly used, just extract its name from its path
+      ELSEIF(DLL_LIBRARY)
+        GET_FILE_DIRECTORY(${library} DLL_DIRECTORY)
+        GET_FILENAME_COMPONENT(DLL_NAME ${library} NAME)
+        SET(CMAKE_LIBRARY_PATH "${DLL_DIRECTORY} ${CMAKE_LIBRARY_PATH}")
+        COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
+      ENDIF()
+    ENDIF(MINGW)
+
+    IF(MSVC)
+      GET_DLL_NAME_FROM_IMPORT_LIBRARY(${library} DLL_NAME)
+      # If we found a dll name, we need to install that dll
+      IF(DLL_NAME)
+        COPY_EXTERNAL_LIB(${DLL_NAME} ${destination})
+      ENDIF(DLL_NAME)
+    ENDIF(MSVC)
+
+  ENDMACRO(COPY_EXTERNAL_LIB_IF_NEEDED)
+
+
 ENDIF(WIN32)
 
 # Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
@@ -281,4 +321,39 @@ INSTALL(TARGETS ${plugin_target}
         RUNTIME DESTINATION ${destination}
         LIBRARY DESTINATION ${destination}
         COMPONENT ${COMPONENT_NAME})
+
+# When building a Python wheel, copy Tulip plugins in wheel build folder
+# in order to package them with the Tulip Python bindings
+IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+SET(TULIP_PLUGIN_WHEEL_INSTALL_DIR "${TULIP_PYTHON_NATIVE_FOLDER}/plugins")
+SET(TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR "${TULIPOGL_PYTHON_NATIVE_FOLDER}/plugins")
+SET(TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR "${TULIPGUI_PYTHON_NATIVE_FOLDER}/plugins")
+
+# Default install folder : tulip-core plugins
+SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIP_PLUGIN_WHEEL_INSTALL_DIR})
+# Copy interactor and view plugins in tulipgui wheel folder
+IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
+SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
+ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
+# Copy glyph plugins in tulipogl wheel folder
+IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
+SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR})
+ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
+
+# Those plugins depend on Qt, copy them in tulipgui wheel folder
+IF("${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
+   "${plugin_target}" MATCHES "^.*ColorMapping.*$" OR
+   "${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
+   "${plugin_target}" MATCHES "^.*FileSystem.*$" OR
+   "${plugin_target}" MATCHES "^.*GEXFImport.*$" OR
+   "${plugin_target}" MATCHES "^.*WebImport.*$" OR
+   "${plugin_target}" MATCHES "^.*SVGExport.*$")
+SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
+ENDIF()
+
+ADD_CUSTOM_COMMAND(TARGET ${plugin_target}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${plugin_target}> ${PLUGIN_WHEEL_INSTALL_DIR}/$<TARGET_FILE_NAME:${plugin_target}>
+                   VERBATIM)
+ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)
 ENDMACRO(INSTALL_TULIP_PLUGIN)

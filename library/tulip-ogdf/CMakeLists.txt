@@ -27,3 +27,10 @@ INSTALL(FILES
   tulip2ogdf/TulipToOGDF.h
 DESTINATION ${TulipIncludeInstallDir}/tulip2ogdf/
 COMPONENT tulip_ogdf_dev)
+
+IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+ADD_CUSTOM_COMMAND(TARGET ${LibTulipOGDFName}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${LibTulipOGDFName}> ${TULIP_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${LibTulipOGDFName}>
+                   VERBATIM)
+ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)

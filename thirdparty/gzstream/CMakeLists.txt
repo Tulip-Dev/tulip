@@ -20,3 +20,10 @@ INSTALL(TARGETS ${GZStreamLibrary}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT gzstream
        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT gzstream
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT gzstream)
+
+IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+ADD_CUSTOM_COMMAND(TARGET ${GZStreamLibrary}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${GZStreamLibrary}> ${TULIP_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${GZStreamLibrary}>
+                   VERBATIM)
+ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)

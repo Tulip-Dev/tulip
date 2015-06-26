@@ -87,3 +87,11 @@ INCLUDE_DIRECTORIES(${incDir}/..)
 INSTALL(TARGETS ${YajlLibrary}
         RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT yajl
         LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT yajl)
+
+
+IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+ADD_CUSTOM_COMMAND(TARGET ${YajlLibrary}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${YajlLibrary}> ${TULIP_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${YajlLibrary}>
+                   VERBATIM)
+ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)

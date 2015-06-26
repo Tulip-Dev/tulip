@@ -179,6 +179,17 @@ ELSE()
 ENDIF()
 
 SET(BUILD_PYTHON_COMPONENTS ON CACHE BOOL "Do you want to build Tulip Python components ? [ON|OFF]")
+IF(BUILD_PYTHON_COMPONENTS)
+SET(TULIP_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-core/tulip_module/tulip)
+SET(TULIPOGL_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-ogl/tulipogl_module/tulipogl)
+SET(TULIPGUI_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module/tulipgui)
+SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
+SET(TULIPOGL_PYTHON_NATIVE_FOLDER ${TULIPOGL_PYTHON_FOLDER}/native)
+SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
+IF(WIN32 OR APPLE)
+SET(ACTIVATE_PYTHON_WHEEL_TARGET OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
+ENDIF(WIN32 OR APPLE)
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 ## ========================================================
 ## Required packages

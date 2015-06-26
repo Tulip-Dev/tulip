@@ -17,3 +17,10 @@ INSTALL(TARGETS ${QuazipLibrary}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT quazip
        LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT quazip
        ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT quazip)
+
+IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+ADD_CUSTOM_COMMAND(TARGET ${QuazipLibrary}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${QuazipLibrary}> ${TULIPGUI_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${QuazipLibrary}>
+                   VERBATIM)
+ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)

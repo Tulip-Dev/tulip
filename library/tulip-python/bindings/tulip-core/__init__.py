@@ -3,9 +3,15 @@
 import os
 import sys
 import traceback
+import platform
 
 _tulipNativeLibsPath = os.path.dirname(__file__) + '/native/'
 sys.path.append(_tulipNativeLibsPath)
+
+if platform.system() == 'Windows':
+	os.environ['PATH'] += ';' + _tulipNativeLibsPath
+elif platform.system() == 'Darwin':
+	os.environ['DYLD_LIBRARY_PATH'] += ':' + _tulipNativeLibsPath
 
 import _tulip
 
@@ -86,5 +92,7 @@ tlpPythonPluginsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion +
 
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsPath, False)
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsHomePath, False)
+
+tlp.loadTulipPluginsFromDir(_tulipNativeLibsPath + 'plugins')
 
 __all__ = ['tlp']
