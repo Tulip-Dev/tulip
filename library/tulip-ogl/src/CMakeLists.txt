@@ -86,3 +86,10 @@ INSTALL(TARGETS ${LibTulipOglName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_ogl
   LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_ogl
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_ogl)
+
+IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+ADD_CUSTOM_COMMAND(TARGET ${LibTulipOglName}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${LibTulipOglName}> ${TULIPOGL_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${LibTulipOglName}>
+                   VERBATIM)
+ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)
