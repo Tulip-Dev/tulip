@@ -68,15 +68,22 @@
 
 static const sipAPIDef *getSipAPI() {
 #if defined(SIP_USE_PYCAPSULE)
+#ifdef TULIP_SIP
+  return (const sipAPIDef *)PyCapsule_Import("tulipsip._C_API", 0);
+#else
   return (const sipAPIDef *)PyCapsule_Import("sip._C_API", 0);
+#endif
 #else
   PyObject *sip_module;
   PyObject *sip_module_dict;
   PyObject *c_api;
 
   /* Import the SIP module. */
+#ifdef TULIP_SIP
+  sip_module = PyImport_ImportModule("tulipsip");
+#else
   sip_module = PyImport_ImportModule("sip");
-
+#endif
   if (sip_module == NULL)
     return NULL;
 
