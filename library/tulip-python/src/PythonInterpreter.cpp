@@ -352,7 +352,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3
       runString("site.main()");
 #endif
-      runString("import sip");
       runString("from tulip import *");
       runString("from tulipogl import *");
       runString("from tulipgui import *");
@@ -421,7 +420,11 @@ PythonInterpreter::~PythonInterpreter() {
       // So reset the sipQtSupport pointer to NULL, this way the problematic function will no
       // more be called when the Python interpreter is finalized.
       setOutputEnabled(false);
+#ifdef TULIP_SIP
+      runString("import tulipsip; sys.stdout.write(tulipsip.__file__)");
+#else
       runString("import sip; sys.stdout.write(sip.__file__)");
+#endif
       QString sipModulePath = consoleOuputString;
       sipQtAPI **sipQtSupport = reinterpret_cast<sipQtAPI **>(QLibrary::resolve(sipModulePath, "sipQtSupport"));
 
