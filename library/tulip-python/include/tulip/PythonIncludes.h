@@ -84,6 +84,7 @@ static const sipAPIDef *getSipAPI() {
 #else
   sip_module = PyImport_ImportModule("sip");
 #endif
+
   if (sip_module == NULL)
     return NULL;
 
