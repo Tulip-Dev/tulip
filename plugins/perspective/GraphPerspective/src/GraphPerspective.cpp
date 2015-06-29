@@ -144,7 +144,21 @@ void GraphPerspective::addRecentDocument(const QString& path) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
 void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
-  std::cerr << msg.toStdString() << std::endl;
+  if (msg.startsWith("[Python")) {
+    // remove quotes around message added by Qt
+    QString msgClean = msg.mid(14).mid(2, msg.length()-17);
+
+    if (msg.startsWith("[PythonStdOut]")) {
+      std::cout << msgClean.toStdString() << std::endl;
+    }
+    else {
+      std::cerr << msgClean.toStdString() << std::endl;
+    }
+  }
+  else {
+    std::cerr << msg.toStdString() << std::endl;
+  }
+
   static_cast<GraphPerspective*>(Perspective::instance())->log(type, context, msg);
 }
 
@@ -157,6 +171,23 @@ void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, co
 #else
 
 void graphPerspectiveLogger(QtMsgType type, const char* msg) {
+  QString qmsg = msg;
+
+  if (qmsg.startsWith("[Python")) {
+    // remove quotes around message added by Qt
+    QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
+
+    if (qmsg.startsWith("[PythonStdOut]")) {
+      std::cout << msgClean.toStdString() << std::endl;
+    }
+    else {
+      std::cerr << msgClean.toStdString() << std::endl;
+    }
+  }
+  else {
+    std::cerr << qmsg.toStdString() << std::endl;
+  }
+
   static_cast<GraphPerspective*>(Perspective::instance())->log(type,msg);
 }
 
@@ -208,7 +239,7 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
 
   if(obj == _mainWindow && ev->type() == QEvent::Close) {
     if(_graphs->needsSaving()) {
-      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified, do you want to save your changes ?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you want to save your changes?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
       if ((answer == QMessageBox::Yes && !save()) ||
           (answer == QMessageBox::Cancel)) {
@@ -376,9 +407,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   _pythonPanel->setModel(_graphs);
   _developFrame->setProject(_project);
-  _pythonPanel->setPanelButton(_ui->pythonButton);
   tlp::PluginLister::instance()->addListener(this);
-  PythonInterpreter::getInstance()->setDefaultConsoleWidget(_pythonPanel->consoleWidget());
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
@@ -725,8 +754,10 @@ void GraphPerspective::open(QString fileName) {
         DataSet params;
         params.set("file::filename", std::string(fileName.toUtf8().data()));
         addRecentDocument(fileName);
-        importGraph(modules[extension], params);
+	// set current directory to the directory of the graph file to load
+	// to ensure a correct loading of the associated texture files if any
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
+        importGraph(modules[extension], params);
         break;
       }
     }
@@ -785,14 +816,14 @@ void GraphPerspective::cancelSelection() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-    node n;
-    forEach(n, graph->getNodes()) {
-      selection->setNodeValue(n,true);
-    }
-    edge e;
-    forEach(e, graph->getEdges()) {
-      selection->setEdgeValue(e,true);
-    }
+  node n;
+  forEach(n, selection->getNodesEqualTo(true)) {
+    selection->setNodeValue(n, false);
+  }
+  edge e;
+  forEach(e, selection->getEdgesEqualTo(true)) {
+    selection->setEdgeValue(e, false);
+  }
   Observable::unholdObservers();
 }
 
@@ -801,14 +832,14 @@ void GraphPerspective::selectAll() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-    node n;
-    forEach(n, graph->getNodes()) {
-      selection->setNodeValue(n,true);
-    }
-    edge e;
-    forEach(e, graph->getEdges()) {
-      selection->setEdgeValue(e,true);
-    }
+  node n;
+  forEach(n, graph->getNodes()) {
+    selection->setNodeValue(n,true);
+  }
+  edge e;
+  forEach(e, graph->getEdges()) {
+    selection->setEdgeValue(e,true);
+  }
 
   Observable::unholdObservers();
 }
