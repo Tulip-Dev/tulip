@@ -754,8 +754,8 @@ void GraphPerspective::open(QString fileName) {
         DataSet params;
         params.set("file::filename", std::string(fileName.toUtf8().data()));
         addRecentDocument(fileName);
-	// set current directory to the directory of the graph file to load
-	// to ensure a correct loading of the associated texture files if any
+        // set current directory to the directory of the graph file to load
+        // to ensure a correct loading of the associated texture files if any
         QDir::setCurrent(QFileInfo(fileName.toUtf8().data()).absolutePath());
         importGraph(modules[extension], params);
         break;
