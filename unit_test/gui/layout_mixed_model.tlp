@@ -53,7 +53,7 @@
 (default "0" "0")
 )
 (property  0 bool "viewSelection"
-(default "true" "true")
+(default "false" "false")
 )
 (property  0 int "viewShape"
 (default "14" "0")
