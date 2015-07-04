@@ -378,10 +378,12 @@ bool EdgeBundling::run() {
             if (i++ > 0) {
               workGraph->delNode(n);
             }
+
             nodes.push_back(n);
           }
           samePositionNodes.push_back(nodes);
         }
+
         workGraph->delSubGraph(sg);
       }
 
@@ -442,6 +444,7 @@ bool EdgeBundling::run() {
   // in order for the shortest path computation to work
   for (size_t i = 0 ; i < samePositionNodes.size() ; ++i) {
     tlp::node rep;
+
     // get the nodes that has been connected to the voronoi cell vertices
     for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
       if (gridGraph->deg(samePositionNodes[i][j]) > 0) {
@@ -449,11 +452,13 @@ bool EdgeBundling::run() {
         break;
       }
     }
+
     // connect the other nodes to the enclosing voronoi cell vertices
     tlp::node n;
     forEach(n, gridGraph->getOutNodes(rep)) {
       for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
         if (samePositionNodes[i][j] == rep) continue;
+
         tlp::edge e = gridGraph->addEdge(samePositionNodes[i][j], n);
         ntype->setEdgeValue(e, 2);
       }

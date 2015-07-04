@@ -53,6 +53,7 @@ void IdManager::free(const unsigned int id) {
 
       state.freeIds.erase(it);
     }
+
     // At that point, it means that all ids have been freed.
     // So we can safely reset the first and next id to 0.
     if (state.firstId == state.nextId) {

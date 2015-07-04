@@ -160,11 +160,11 @@ void HistoOptionsWidget::setBinWidth(const double width) {
 }
 
 Color HistoOptionsWidget::getBackgroundColor() const {
-    return _ui->backColorButton->tulipColor();
+  return _ui->backColorButton->tulipColor();
 }
 
 void HistoOptionsWidget::setBackgroundColor(const Color &color) {
-    _ui->backColorButton->setTulipColor(color);
+  _ui->backColorButton->setTulipColor(color);
 }
 
 bool HistoOptionsWidget::showGraphEdges() const {

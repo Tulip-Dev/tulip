@@ -25,14 +25,14 @@ PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
 namespace {
-  const char * paramHelp[] = {
-    // selectedNodes
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Selection" ) \
-    HTML_HELP_BODY() \
-    "Set of nodes for which the induced sub-graph is computed." \
-    HTML_HELP_CLOSE(),
-  };
+const char * paramHelp[] = {
+  // selectedNodes
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Selection" ) \
+  HTML_HELP_BODY() \
+  "Set of nodes for which the induced sub-graph is computed." \
+  HTML_HELP_CLOSE(),
+};
 }
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* context):
@@ -53,8 +53,8 @@ bool InducedSubGraphSelection::run() {
   // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
   // of the result property are reseted to false below
   Iterator<node>* itN = (result == entrySelection) ?
-                          new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) :
-                          entrySelection->getNodesEqualTo(true);
+                        new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) :
+                        entrySelection->getNodesEqualTo(true);
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
