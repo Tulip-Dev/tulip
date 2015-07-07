@@ -102,6 +102,16 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPU
 
 ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${CMAKE_CURRENT_BINARY_DIR}/tulip_module/tulip/__init__.py)
 
+IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
+ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIP_PYTHON_FOLDER}/../setup.cfg
+                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/Manifest.in ${TULIP_PYTHON_FOLDER}/../Manifest.in
+                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
+                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/DESCRIPTION.rst ${TULIP_PYTHON_FOLDER}/../DESCRIPTION.rst
+)
+ADD_DEPENDENCIES(tulip-core-wheel copyTulipPythonPackagingFiles)
+ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+
 IF(NOT SYSTEM_SIP)
 ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} ${SIP_LIB})
 ENDIF(NOT SYSTEM_SIP)

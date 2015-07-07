@@ -214,9 +214,9 @@ INSTALL(TARGETS ${LibTulipGUIName}
 INSTALL(FILES ../resources/icons/tulip.ico DESTINATION ${TulipBitmapInstallDir})
 INSTALL(FILES ../resources/icons/tulip-file-icon.ico DESTINATION ${TulipBitmapInstallDir})
 
-IF(ACTIVATE_PYTHON_WHEEL_TARGET)
+IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_CUSTOM_COMMAND(TARGET ${LibTulipGUIName}
                    POST_BUILD
                    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${LibTulipGUIName}> ${TULIPGUI_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${LibTulipGUIName}>
                    VERBATIM)
-ENDIF(ACTIVATE_PYTHON_WHEEL_TARGET)
+ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
