@@ -187,7 +187,7 @@ SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
 SET(TULIPOGL_PYTHON_NATIVE_FOLDER ${TULIPOGL_PYTHON_FOLDER}/native)
 SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
 IF(WIN32 OR APPLE)
-SET(ACTIVATE_PYTHON_WHEEL_TARGET OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
+SET(ACTIVATE_PYTHON_WHEELS_TARGETS OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
 ENDIF(WIN32 OR APPLE)
 ENDIF(BUILD_PYTHON_COMPONENTS)
 
@@ -304,6 +304,7 @@ IF(PYTHONINTERP_FOUND)
   # in case the value of PYTHON_EXECUTABLE CMake variable changed
   UNSET(PYTHON_LIBRARY CACHE)
   UNSET(PYTHON_INCLUDE_DIR CACHE)
+  UNSET(SPHINX_EXECUTABLE CACHE)
 
   # Find the Python library with the same version as the interpreter
   # Python 3.2 library is suffixed by mu on some systems, also handle that case
@@ -354,6 +355,56 @@ IF(PYTHONINTERP_FOUND)
         SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
       ENDIF(SIP_OK)
     ENDIF(SIP_OK)
+
+    IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
+        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
+        IF(NOT WHEEL_OK EQUAL 0)
+            MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
+            MESSAGE("You can install it trough the 'pip' tool ($ pip install wheel)")
+        ENDIF(NOT WHEEL_OK EQUAL 0)
+        IF(NOT TWINE_OK EQUAL 0)
+            MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
+            MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
+        ENDIF(NOT TWINE_OK EQUAL 0)
+
+        ADD_CUSTOM_TARGET(tulip-core-wheel
+                          COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+                          WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+
+        # In order to upload the generated wheels, an account must be created on PyPi
+        # and the following configuration must be stored in the ~/.pypirc file
+        ##############################################################
+        # [distutils]
+        # index-servers=
+        #     pypi
+        #     pypitest
+        #
+        # [pypitest]
+        # repository = https://testpypi.python.org/pypi
+        # username = <your user name goes here>
+        # password = <your password goes here>
+        #
+        # [pypi]
+        # repository = https://pypi.python.org/pypi
+        # username = <your user name goes here>
+        # password = <your password goes here>
+        ###############################################################
+
+
+        SET(TWINE twine)
+        IF(WIN32)
+            SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
+        ENDIF(WIN32)
+        ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
+                          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
+                          COMMAND ${PYTHON_EXECUTABLE} ${TWINE} upload -r pypitest dist/*
+                          DEPENDS tulip-core-wheel
+                          WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+
+        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel)
+        ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test)
+    ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
   ENDIF(PYTHONLIBS_FOUND)
 ENDIF(PYTHONINTERP_FOUND)
@@ -439,6 +490,9 @@ FUNCTION(ADD_LIBRARY name)
       ENDIF("${ARGV1}" STREQUAL "SHARED")
     ENDIF(MSVC)
   ENDIF(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
+  IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+    ADD_DEPENDENCIES(tulip-core-wheel ${name})
+  ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDFUNCTION()
 
 FUNCTION(ADD_EXECUTABLE name)
