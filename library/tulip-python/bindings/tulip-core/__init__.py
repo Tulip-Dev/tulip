@@ -9,9 +9,9 @@ _tulipNativeLibsPath = os.path.dirname(__file__) + '/native/'
 sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
-	os.environ['PATH'] += ';' + _tulipNativeLibsPath
+        os.environ['PATH'] = _tulipNativeLibsPath + ';' + os.environ['PATH']
 elif platform.system() == 'Darwin':
-	os.environ['DYLD_LIBRARY_PATH'] += ':' + _tulipNativeLibsPath
+        os.environ['DYLD_LIBRARY_PATH'] = _tulipNativeLibsPath + ':' + os.environ['DYLD_LIBRARY_PATH']
 
 import _tulip
 
