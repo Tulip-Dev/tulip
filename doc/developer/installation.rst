@@ -15,12 +15,12 @@ How to proceed ?
 The installation process is not complicated, it can however take some time depending on your computer. Before starting the Tulip set-up, as a developer, you must be aware of some of the Tulip intern behaviours. 
 
 
-Foreword: Debug and Release mods
+Foreword: Debug and Release modes
 --------------------------------
 
-Tulip can be compiled and thus executed in two different modes. The first one, called *Release*, is the classic Tulip execution mode. The application should be executed this way when you are only using the originaly integrated tool of Tulip or the add-ons included with the plug-in library. Most of the user will only be interested of this mod.
+Tulip can be compiled and thus executed in two different modes. The first one, called *Release*, is the classic Tulip execution mode. The application should be executed this way when you are only using the originaly integrated tool of Tulip or the add-ons included with the plug-in library. Most users will only be interested in this mode.
 
-Nevertheless, because Tulip is a research tool, the users testing their algorithms or plug-ins may not be sure of their code source reliability. These persons should be more concerned with the second mode available, the *Debug* mode. With it, the whole program will be slightly slower as the execution is monitored with sanity assertions. If an unexpected behaviour happens and one of the assertion detect it, Tulip will pop an error message expliciting the problem encounter. 
+Nevertheless, because Tulip is a research tool, the users testing their algorithms or plug-ins may not be sure of their code source reliability. These people should be more concerned with the second mode available, the *Debug* mode. With it, the whole program will be slightly slower as the execution is monitored with sanity assertions. If an unexpected behaviour happens and one of the assertion detect it, Tulip will pop an error message expliciting the problem encounter. 
 
 These modes must be separated as their behaviour are entirely different. A program instance compiled in *Debug* mod can not be used to launch a *Release* version of Tulip and vice versa. For instance, a few functionalities will need assertions only checked in debug mode to run correctly, some of these cases are presented in the :ref:`Tulip library tutorial section <tulip_library_tutorial>`.
 
@@ -121,7 +121,7 @@ Then press on the *Configure* button, select the project generator (*Unix Makefi
 .. image:: _images/install_cmakegui_build_generate.png
     :width: 600
 
-The two important fields to fill are the *CMAKE_BUILD_TYPE* and the *CMAKE_INSTALL_PREFIX*. The build type value must be set to *Release* or *Debug* (with capitals) and the install prefix indicates where the program will be installed. We do not want to use the default */user/local/* path as we may wish to exploit different versions of the application. In our case, the install directory will be in *[...]/Tulip-4.3/install-release*.
+The two important fields to fill are the *CMAKE_BUILD_TYPE* and the *CMAKE_INSTALL_PREFIX*. The build type value must be set to *Release* or *Debug* (with capitals) and the install prefix indicates where the program will be installed. We do not want to use the default */user/local/* path as we may wish to exploit different versions of the application. In our case, the install directory will be in *[...]/Tulip-4.X/install-release*.
 
 Click again on the *Configure* button to turn the red colour of the fields off. If this operation failed, ensure you have installed all the needed dependencies, filled appropriatly the fields, then try again.
 
@@ -160,7 +160,7 @@ Once the make instruction is finished, you can install Tulip by using the comman
 
 This operation can take a little time too. At the end, your installation path specified to *cmake-gui* will contained the binaries and the libraries of the application. You can now launch Tulip in its *Release* version by using the commands::
 
-  cd [...]/Tulip-4.3
+  cd [...]/Tulip-4.X
 
   install-release/bin/tulip
 
