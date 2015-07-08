@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
 #include <algorithm>
 #include <tulip/TreeTest.h>
 #include <tulip/TulipViewSettings.h>

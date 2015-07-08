@@ -17,9 +17,6 @@
  *
  */
 
-#include <cmath>
-#include <cstdio>
-
 #include <tulip/StringProperty.h>
 #include <tulip/StringCollection.h>
 

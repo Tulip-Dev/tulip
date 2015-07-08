@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <ctime>
 #include <tulip/TulipPluginHeaders.h>
-#include <cmath>
 
 using namespace std;
 using namespace tlp;

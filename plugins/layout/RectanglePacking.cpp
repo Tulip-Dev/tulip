@@ -17,7 +17,6 @@
  *
  */
 #include "RectanglePacking.h"
-#include <cstring>
 #include <float.h> //FLT_MAX
 #include <climits> //INT_MAX
 

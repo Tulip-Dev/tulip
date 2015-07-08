@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
-
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/GlDisplayListManager.h>
