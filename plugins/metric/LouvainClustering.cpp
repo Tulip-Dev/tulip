@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <ctime>
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 

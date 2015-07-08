@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <math.h>
 #include <stack>
 #include <tulip/TulipPluginHeaders.h>
 #include "DatasetTools.h"

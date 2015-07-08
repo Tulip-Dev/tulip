@@ -18,7 +18,7 @@
  */
 #ifndef _TutteLAYOUT_H
 #define _TutteLAYOUT_H
-#include <cmath>
+
 #include <tulip/TulipPluginHeaders.h>
 
 /** \addtogroup layout */

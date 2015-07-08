@@ -16,11 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
-#include <string>
-#include <ctime>
-#include <math.h>
-
 #include "LinLogLayout.h"
 
 LinLogLayout::LinLogLayout (tlp::Graph* _graph,

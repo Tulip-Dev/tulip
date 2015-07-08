@@ -20,14 +20,10 @@
 #include "MISFiltering.h"
 #include "Distances.h"
 
-#include <string>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/ForEach.h>
 #include <tulip/TreeTest.h>
 #include <tulip/Graph.h>
-
-#include <math.h>
-
 
 using namespace std;
 using namespace tlp;

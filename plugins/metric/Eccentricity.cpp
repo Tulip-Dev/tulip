@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <deque>
 #ifdef _OPENMP
 #include <omp.h>
 #endif

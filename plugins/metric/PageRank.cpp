@@ -17,9 +17,7 @@
  *
  */
 #include <tulip/ForEach.h>
-#include <tulip/tulipconf.h>
 #include <tulip/TulipPluginHeaders.h>
-#include <math.h>
 
 using namespace std;
 using namespace tlp;

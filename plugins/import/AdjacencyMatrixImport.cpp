@@ -20,9 +20,7 @@
 #include <cerrno>
 #include <fstream>
 #include <sstream>
-#include <cmath>
 #include <vector>
-#include <cstring>
 
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/TlpTools.h>

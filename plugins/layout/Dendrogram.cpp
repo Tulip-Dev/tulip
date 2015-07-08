@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
-#include <algorithm>
 #include <tulip/GraphTools.h>
 #include "TreeTools.h"
 #include "Orientation.h"
