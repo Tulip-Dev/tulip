@@ -24,8 +24,6 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 
-#include <algorithm>
-
 using namespace std;
 
 template <typename T>

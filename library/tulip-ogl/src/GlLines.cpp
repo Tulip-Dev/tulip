@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
-
 #include <tulip/GlLines.h>
 #include <tulip/GlTools.h>
 

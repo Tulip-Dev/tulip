@@ -28,8 +28,6 @@
 #include <QFileInfo>
 #include <QDateTime>
 
-#include <algorithm>
-
 using namespace tlp;
 
 static const char * paramHelp[] = {

@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
-#include <algorithm>
-
 #include <tulip/SizeProperty.h>
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>

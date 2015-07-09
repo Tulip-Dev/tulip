@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
-#include <iostream>
-#include <cmath>
 #include <climits>
 
 #include "SquareLayout.h"

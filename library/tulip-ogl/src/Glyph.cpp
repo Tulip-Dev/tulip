@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
 #include <tulip/Size.h>
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
