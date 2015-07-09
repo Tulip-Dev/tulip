@@ -19,10 +19,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <cctype>
 #include <cstdlib>
-#include <algorithm>
 #include <cstring>
 #include <tulip/TulipPluginHeaders.h>
 

@@ -32,10 +32,6 @@
 #include <QApplication>
 #include <QMenu>
 
-#include <algorithm>
-#include <cmath>
-#include <limits>
-
 #include "HistogramView.h"
 #include "HistogramInteractors.h"
 #include "../utils/ViewGraphPropertiesSelectionWidget.h"

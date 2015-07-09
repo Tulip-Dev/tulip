@@ -21,10 +21,7 @@
 #define DIKJSTRA_H
 #include <vector>
 #include <set>
-#include <map>
-#include <cmath>
-#include <cstdlib>
-#include <limits.h>
+#include <climits>
 #include <tulip/Graph.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/Vector.h>

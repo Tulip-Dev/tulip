@@ -28,8 +28,6 @@
 #include "SOMViewInteractor.h"
 #include "SOMPropertiesWidget.h"
 
-#include <cmath>
-
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/DoubleProperty.h>
 #include <tulip/ColorProperty.h>

@@ -23,8 +23,6 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
 
-#include <algorithm>
-
 #include <QEvent>
 
 #include "HistoStatsConfigWidget.h"

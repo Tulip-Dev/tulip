@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
-#include <algorithm>
-
 #include <tulip/GlLines.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlEdge.h>
