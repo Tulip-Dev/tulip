@@ -554,7 +554,7 @@ protected:
 
 class TlpJsonImport : public ImportModule, YajlProxy {
 public:
-  PLUGININFORMATION("JSON Import", "Charles Huet", "18/05/2011", "Tulip JSON format", "1.0", "File")
+  PLUGININFORMATION("JSON Import", "Charles Huet", "18/05/2011", "Imports a graph recorded in a file using the Tulip JSON format", "1.0", "File")
 
   virtual std::list<std::string> fileExtensions() const {
     std::list<std::string> l;

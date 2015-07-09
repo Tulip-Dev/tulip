@@ -23,8 +23,6 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/DoubleProperty.h>
 
-#include <cmath>
-
 using namespace tlp;
 using namespace std;
 

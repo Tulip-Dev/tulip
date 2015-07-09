@@ -16,9 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-
-#include <typeinfo>
-
 #include <QGraphicsView>
 #include <QAction>
 #include <QMenu>

@@ -29,7 +29,6 @@
  */
 #include <vector>
 #include <set>
-#include <cmath>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Vector.h>
 #include <tulip/BoundingBox.h>

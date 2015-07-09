@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <time.h>
-#include <math.h>
 #include <climits>
 #include <tulip/TulipPluginHeaders.h>
 

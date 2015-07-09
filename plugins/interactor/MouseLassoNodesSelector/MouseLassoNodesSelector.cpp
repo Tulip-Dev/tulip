@@ -31,8 +31,6 @@
 #include <tulip/GlNode.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 
-#include <algorithm>
-
 using namespace std;
 using namespace tlp;
 

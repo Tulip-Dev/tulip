@@ -23,14 +23,12 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/Camera.h>
 
-#include <algorithm>
-
 #include <QEvent>
 
 #include "HistoStatsConfigWidget.h"
 #include "HistogramView.h"
 
-#if defined(_MSC_VER) || (defined(__clang_major__) && __clang_major__ > 4)
+#if defined(_MSC_VER) || (defined(__clang_major__) && __clang_major__ >= 4)
 
 #include <functional>
 

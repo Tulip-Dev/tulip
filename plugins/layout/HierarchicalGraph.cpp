@@ -16,9 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <string>
 #include <cassert>
-#include <cmath>
 #include <stack>
 
 #include <tulip/SortIterator.h>

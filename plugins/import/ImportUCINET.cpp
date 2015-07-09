@@ -19,10 +19,8 @@
 
 #include <iostream>
 #include <fstream>
-#include <string>
 #include <cctype>
 #include <cstdlib>
-#include <algorithm>
 #include <cstring>
 #include <tulip/TulipPluginHeaders.h>
 
@@ -218,7 +216,9 @@ bool tokenize(const string& str, vector<string>& tokens,
 class ImportUCINET : public ImportModule {
 
 public :
-  PLUGININFORMATION("UCINET","Patrick Mary","12/09/2011","Imports a new graph from a text file (.txt) in UCINET DL input format.","1.0","File")
+  PLUGININFORMATION("UCINET","Patrick Mary","12/09/2011",
+                    "Imports a new graph from a text file (.txt) in UCINET DL input format<br/>as it is described in the UCINET reference manual (<b>http://www.analytictech.com/ucinet/documentation/reference.rtf</b>)",
+                    "1.0","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("txt");

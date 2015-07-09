@@ -33,10 +33,8 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/GraphHierarchiesModel.h>
 
-#include <cmath>
 #include <iostream>
 #include <sstream>
-#include <string>
 
 #include "ui_Workspace.h"
 

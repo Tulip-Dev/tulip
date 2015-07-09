@@ -116,7 +116,9 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
 class ImportPajek : public ImportModule {
 
 public :
-  PLUGININFORMATION("Pajek","Patrick Mary","09/05/2011","Imports a new graph from a file (.net) in Pajek input format.","1.0","File")
+  PLUGININFORMATION("Pajek","Patrick Mary","09/05/2011",
+                    "Imports a new graph from a file (.net) in Pajek input format<br/>as it is described in the Pajek manual (<b>http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf</b>)<br/>from the Pajek wiki page <b>http://pajek.imfm.si/doku.php?id=download</b>.<br/>Warning: the description of the edges with Matrix (adjacency lists)<br/>is not yet supported.",
+                    "1.0","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("net");

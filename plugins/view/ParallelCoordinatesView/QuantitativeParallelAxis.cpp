@@ -24,8 +24,6 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/ForEach.h>
 
-#include <cmath>
-
 using namespace std;
 
 namespace tlp {
