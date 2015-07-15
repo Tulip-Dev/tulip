@@ -66,7 +66,7 @@ Returns a list of interactors names compatible with a specific view.
 %MethodCode
     if (tlp::PluginLister::instance()->pluginExists<tlp::View>(*a0)) {
         QList<std::string> ret = tlp::InteractorLister::compatibleInteractors(*a0);
-        sipRes = new std::list<std::string>(ret.begin(), ret.end());
+        sipRes = new std::list<std::string>(ret.toStdList());
     } else {
         sipIsErr = 1;
         std::ostringstream oss;

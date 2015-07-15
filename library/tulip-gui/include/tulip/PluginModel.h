@@ -96,7 +96,7 @@ class PluginModel : public tlp::TulipModel {
           groupItem = catItem->addChild(group);
 
         // sort in case insensitive alphabetic order
-        std::sort(pluginTree[cat][group].begin(),
+        qSort(pluginTree[cat][group].begin(),
                   pluginTree[cat][group].end(), QStringCaseCmp);
 
         foreach(QString alg, pluginTree[cat][group]) {
