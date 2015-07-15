@@ -70,7 +70,7 @@ std::vector<tlp::View *> TulipViewsManager::getOpenedViews() {
 
   if (workspace) {
     QList<tlp::View*> views = workspace->panels();
-    return std::vector<tlp::View *>(views.begin(), views.end());
+    return views.toVector().toStdVector();
   }
   else {
     return openedViews;
