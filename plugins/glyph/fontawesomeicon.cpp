@@ -16,12 +16,11 @@ static GlLabel label;
 
 void drawFontAwesomeIcon(const std::string &iconName, const Color &color, const Color &outlineColor,
                          const float outlineSize, const std::string &texture) {
-  label.setFontName(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation());
+  label.setFontNameSizeAndColor(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), 18, color);
   label.setPosition(Coord(0,0,0));
   label.setSize(Size(1,1,0));
   label.setUseLODOptimisation(false);
   label.setScaleToSize(true);
-  label.setColor(color);
   label.setOutlineColor(outlineColor);
   label.setOutlineSize(outlineSize);
   label.setTextureName(texture);
