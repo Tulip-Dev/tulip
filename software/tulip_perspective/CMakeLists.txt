@@ -38,14 +38,6 @@ ENDIF(WIN32)
 
 ADD_EXECUTABLE(tulip_perspective ${SRCS} ${MOC_SRCS})
 
-IF(LINUX)
-  SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-ELSEIF(APPLE)
-  SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-ELSE()
-  SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN")
-ENDIF()
-
 TARGET_LINK_LIBRARIES(tulip_perspective crash_handling)
 
 TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
