@@ -6,4 +6,5 @@ ENDIF()
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_CUSTOM_TARGET(copyTulipPluginsPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py ${TULIP_PYTHON_FOLDER}/../tulipplugins/__init__.py)
+ADD_DEPENDENCIES(tulip-core-wheel copyTulipPluginsPy)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
