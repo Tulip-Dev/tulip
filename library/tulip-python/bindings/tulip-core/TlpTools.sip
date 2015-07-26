@@ -28,6 +28,44 @@
 #include <tulip/PluginLister.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/TlpTools.h>
+
+namespace tlp {
+  void setTulipGlobalVar(const std::string &varName, const std::string &value);
+  std::string getTulipGlobalVar(const std::string &varName);
+}
+
+%End
+
+%ModuleCode
+std::map<std::string, std::string*> tulipGlobalVars;
+
+void initTulipGlobalVars() {
+  if (tulipGlobalVars.empty()) {
+    tulipGlobalVars["TulipLibDir"] = &tlp::TulipLibDir;
+    tulipGlobalVars["TulipPluginsPath"] = &tlp::TulipPluginsPath;
+    tulipGlobalVars["TulipBitmapDir"] = &tlp::TulipBitmapDir;
+    tulipGlobalVars["TulipShareDir"] = &tlp::TulipShareDir;
+  }
+}
+
+namespace tlp {
+  void setTulipGlobalVar(const std::string &varName, const std::string &value) {
+    initTulipGlobalVars();
+    if (tulipGlobalVars.find(varName) != tulipGlobalVars.end()) {
+      *tulipGlobalVars[varName] = value;
+    }
+  }
+
+  std::string getTulipGlobalVar(const std::string &varName) {
+    initTulipGlobalVars();
+    if (tulipGlobalVars.find(varName) != tulipGlobalVars.end()) {
+      return *tulipGlobalVars[varName];
+    } else {
+      return "";
+    }
+  }
+}
+
 %End
 
 namespace tlp {
@@ -36,6 +74,9 @@ std::string TulipLibDir;
 std::string TulipPluginsPath;
 std::string TulipBitmapDir;
 std::string TulipShareDir;
+
+void setTulipGlobalVar(const std::string &varName, const std::string &value);
+void getTulipGlobalVar(const std::string &varName);
 
 //=====================================================================
 

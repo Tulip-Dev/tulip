@@ -13,7 +13,34 @@ if platform.system() == 'Windows':
 
 import _tulip
 
-class tlp(_tulip.tlp):
+sys.path.pop()
+
+class tlpType(_tulip.tlp.__class__):
+
+  def __getattr__(cls, name):
+    if hasattr(_tulip.tlp, name):
+      return _tulip.tlp.getTulipGlobalVar(name)
+    else:
+      raise AttributeError(name)
+
+  def __setattr__(cls, name, value):
+    if hasattr(_tulip.tlp, name):
+      _tulip.tlp.setTulipGlobalVar(name, value)
+    else:
+      super(tlpType, cls).__setattr__(name, value)
+
+# utility function from the 'six' module
+def with_metaclass(meta, *bases):
+    """Create a base class with a metaclass."""
+    # This requires a bit of explanation: the basic idea is to make a dummy
+    # metaclass for one level of class instantiation that replaces itself with
+    # the actual metaclass.
+    class metaclass(meta):
+        def __new__(cls, name, this_bases, d):
+            return meta(name, bases, d)
+    return type.__new__(metaclass, 'temporary_class', (), {})
+
+class tlp(with_metaclass(tlpType, _tulip.tlp)):
   @staticmethod
   def loadTulipPythonPlugin(pluginFilePath):
     if not os.path.isfile(pluginFilePath) or not pluginFilePath.endswith('.py'):
