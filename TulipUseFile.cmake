@@ -313,6 +313,20 @@ IF(WIN32)
 
 ENDIF(WIN32)
 
+MACRO(COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
+IF(WIN32)
+ADD_CUSTOM_COMMAND(TARGET ${target_name}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${target_name}> ${destination}/$<TARGET_FILE_NAME:${target_name}>
+                   VERBATIM)
+ELSE(WIN32)
+ADD_CUSTOM_COMMAND(TARGET ${target_name}
+                   POST_BUILD
+                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_SONAME_FILE:${target_name}> ${destination}/$<TARGET_SONAME_FILE_NAME:${target_name}>
+                   VERBATIM)
+ENDIF(WIN32)
+ENDMACRO(COPY_TARGET_LIBRARY_POST_BUILD)
+
 # Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
 MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
 SET(COMPONENT_NAME ${plugin_target})
@@ -351,9 +365,7 @@ IF("${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
 SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
 ENDIF()
 
-ADD_CUSTOM_COMMAND(TARGET ${plugin_target}
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${plugin_target}> ${PLUGIN_WHEEL_INSTALL_DIR}/$<TARGET_FILE_NAME:${plugin_target}>
-                   VERBATIM)
+COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${PLUGIN_WHEEL_INSTALL_DIR})
+
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDMACRO(INSTALL_TULIP_PLUGIN)
