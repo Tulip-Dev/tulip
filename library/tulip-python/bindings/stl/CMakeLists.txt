@@ -57,7 +57,15 @@ SET_TARGET_PROPERTIES(${LibStlPythonBindingsName}
 		      PROPERTIES SUFFIX ".so")		      
 ENDIF(WIN32)
 
-TARGET_LINK_LIBRARIES(${LibStlPythonBindingsName} ${PYTHON_LIBRARY})
+# When building Python wheel for MacOS, don't link the C extension module with the Python library
+# and use dynamic lookup for retrieving its symbols.
+# That way, we can produce a C extension module that can be imported through the Python interpreter
+# provided by Apple with the System and the one provided by Python.org
+IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
+  SET_TARGET_PROPERTIES(${LibStlPythonBindingsName} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+ELSE(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
+  TARGET_LINK_LIBRARIES(${LibStlPythonBindingsName} ${PYTHON_LIBRARY})
+ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(NOT PYTHON_DIST_PACKAGE)
 INSTALL(TARGETS ${LibStlPythonBindingsName}

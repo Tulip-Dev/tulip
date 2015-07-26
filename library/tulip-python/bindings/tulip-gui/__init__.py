@@ -24,8 +24,6 @@ sys.path.append(_tulipGuiNativeLibsPath)
 
 if platform.system() == 'Windows':
     os.environ['PATH'] = _tulipGuiNativeLibsPath + ';' + os.environ['PATH']
-elif platform.system() == 'Darwin':
-    os.environ['DYLD_LIBRARY_PATH'] = _tulipGuiNativeLibsPath + ':' + os.environ['DYLD_LIBRARY_PATH']
 
 import _tulipgui
 

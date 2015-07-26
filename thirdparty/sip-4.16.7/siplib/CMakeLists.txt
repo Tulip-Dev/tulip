@@ -43,7 +43,15 @@ SET_TARGET_PROPERTIES(${SIP_LIB}
 		      PROPERTIES SUFFIX ".so")		      
 ENDIF(WIN32)
 
+# When building Python wheel for MacOS, don't link the C extension module with the Python library
+# and use dynamic lookup for retrieving its symbols.
+# That way, we can produce a C extension module that can be imported through the Python interpreter
+# provided by Apple with the System and the one provided by Python.org
+IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
+SET_TARGET_PROPERTIES(${SIP_LIB} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
+ELSE(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
 TARGET_LINK_LIBRARIES(${SIP_LIB} ${PYTHON_LIBRARY})
+ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 INSTALL(TARGETS ${SIP_LIB}
         RUNTIME DESTINATION ${TulipBinInstallDir}/python COMPONENT ${SIP_LIB}
@@ -51,10 +59,7 @@ INSTALL(TARGETS ${SIP_LIB}
         ARCHIVE DESTINATION ${TulipLibInstallDir}/python COMPONENT ${SIP_LIB})
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
-ADD_CUSTOM_COMMAND(TARGET ${SIP_LIB}
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${SIP_LIB}> ${TULIP_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${SIP_LIB}>
-                   VERBATIM)
+COPY_TARGET_LIBRARY_POST_BUILD(${SIP_LIB} ${TULIP_PYTHON_NATIVE_FOLDER})
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 ENDIF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)   					

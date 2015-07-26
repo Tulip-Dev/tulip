@@ -46,11 +46,11 @@ SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
                       VERSION ${YAJL_MAJOR}.${YAJL_MINOR}.${YAJL_MICRO})
 
 #### ensure a .dylib has correct absolute installation paths upon installation
-IF(APPLE)
-  MESSAGE("INSTALL_NAME_DIR: ${CMAKE_INSTALL_PREFIX}/lib")
-  SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
-                        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
-ENDIF(APPLE)
+#IF(APPLE)
+#  MESSAGE("INSTALL_NAME_DIR: ${CMAKE_INSTALL_PREFIX}/lib")
+#  SET_TARGET_PROPERTIES(${YajlLibrary} PROPERTIES
+#                        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib")
+#ENDIF(APPLE)
 
 #### build up an sdk as a post build step
 
@@ -90,8 +90,5 @@ INSTALL(TARGETS ${YajlLibrary}
 
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
-ADD_CUSTOM_COMMAND(TARGET ${YajlLibrary}
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${YajlLibrary}> ${TULIP_PYTHON_NATIVE_FOLDER}/$<TARGET_FILE_NAME:${YajlLibrary}>
-                   VERBATIM)
+COPY_TARGET_LIBRARY_POST_BUILD(${YajlLibrary} ${TULIP_PYTHON_NATIVE_FOLDER})
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
