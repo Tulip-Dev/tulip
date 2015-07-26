@@ -10,18 +10,9 @@ ENDIF(USE_QT5)
 
 ADD_EXECUTABLE(tulip_update ${SRCS})
 
-IF(LINUX)
-  SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-ELSEIF(APPLE)
-  SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN/../Frameworks")
-ELSE()
-  SET_TARGET_PROPERTIES(tulip_perspective PROPERTIES INSTALL_RPATH "$ORIGIN")
-ENDIF()
-
 TARGET_LINK_LIBRARIES(tulip_updater ${QT_LIBRARIES})
 
 TARGET_LINK_LIBRARIES(tulip_perspective crash_handling)
-
 
 INSTALL(TARGETS tulip_perspective
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app

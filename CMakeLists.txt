@@ -1,6 +1,8 @@
 IF(WIN32)
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
-ELSE(WIN32)
+ELSEIF(APPLE)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
+ELSE()
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
 ENDIF(WIN32)
 
@@ -8,6 +10,11 @@ ENDIF(WIN32)
 IF(POLICY CMP0020)
    CMAKE_POLICY(SET CMP0020 NEW)
 ENDIF(POLICY CMP0020)
+
+# Remove CMake warnings related to rpath on MacOS
+IF(POLICY CMP0042)
+   CMAKE_POLICY(SET CMP0042 NEW)
+ENDIF(POLICY CMP0042)
 
 PROJECT(tulip)
 
@@ -188,6 +195,13 @@ SET(TULIPOGL_PYTHON_NATIVE_FOLDER ${TULIPOGL_PYTHON_FOLDER}/native)
 SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
 IF(WIN32 OR APPLE)
 SET(ACTIVATE_PYTHON_WHEELS_TARGETS OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
+IF(ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
+# build universal binaries when generating Tulip Python wheels for MacOs
+SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+# build binaries with install rpath when generating Tulip Python wheels for MacOs
+# as we don't install the project in that case
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
 ENDIF(WIN32 OR APPLE)
 ENDIF(BUILD_PYTHON_COMPONENTS)
 
@@ -302,13 +316,24 @@ IF(PYTHONINTERP_FOUND)
 
   # Unset the previous values of the CMake cache variables related to Python libraries
   # in case the value of PYTHON_EXECUTABLE CMake variable changed
+  UNSET(PYTHONLIBS_FOUND CACHE)
   UNSET(PYTHON_LIBRARY CACHE)
   UNSET(PYTHON_INCLUDE_DIR CACHE)
-  UNSET(SPHINX_EXECUTABLE CACHE)
+  UNSET(PYTHON_INCLUDE_PATH CACHE)
 
   # Find the Python library with the same version as the interpreter
-  # Python 3.2 library is suffixed by mu on some systems, also handle that case
-  SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION})
+  # Python 3.2 library is suffixed by mu and Python >= 3.3 by m on some systems, also handle these cases
+  SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION}m ${PYTHON_VERSION})
+
+  # Ensure the detection of Python library installed trough a bundle downloaded from Python.org
+  IF(APPLE)
+    IF(NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$" AND NOT "${PYTHON_EXECUTABLE}" MATCHES "^/System/Library/Frameworks/Python.framework/.*/python.*$")
+      SET(CMAKE_PREFIX_PATH /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
+    ELSE()
+      SET(CMAKE_PREFIX_PATH /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
+    ENDIF()
+  ENDIF(APPLE)
+
   FIND_PACKAGE(PythonLibs REQUIRED)
 
   IF(PYTHONLIBS_FOUND)
@@ -329,6 +354,15 @@ IF(PYTHONINTERP_FOUND)
         ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
     ENDIF(MINGW AND X64)
 
+    # Ensure headers correspond to the ones associated to the detected Python library on MacOS
+    IF(APPLE)
+      IF("${PYTHON_LIBRARY}" MATCHES "^/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
+        SET(PYTHON_INCLUDE_DIR /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
+      ENDIF()
+      IF("${PYTHON_LIBRARY}" MATCHES "^/System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
+        SET(PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
+      ENDIF()
+    ENDIF(APPLE)
 
     SET(SIP_OK FALSE CACHE INTERNAL "")
     FIND_PACKAGE(SIP)
@@ -398,7 +432,7 @@ IF(PYTHONINTERP_FOUND)
         ENDIF(WIN32)
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
                           COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
-                          COMMAND ${PYTHON_EXECUTABLE} ${TWINE} upload -r pypitest dist/*
+                          COMMAND ${TWINE} upload -r pypitest dist/*
                           DEPENDS tulip-core-wheel
                           WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
 
@@ -466,30 +500,39 @@ SET(TulipBitmapInstallDir ${TulipShareInstallDir}/bitmaps/)
 ## ========================================================
 ## Point RPATH to lib folder
 ## ========================================================
+# On MacOS, use rpaths (i.e. the “install_name” field of shared libraries will be @rpath)
+# This is already enabled by default for CMake >= 3.0 (see http://www.cmake.org/cmake/help/v3.0/prop_tgt/MACOSX_RPATH.html)
+SET(CMAKE_MACOSX_RPATH ON)
 FUNCTION(ADD_LIBRARY name)
   _ADD_LIBRARY(${name} ${ARGN})
   IF(APPLE)
-    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@executable_path/../lib")
+    # relative locations of Tulip dylibs dependencies are not the sames when generating Python wheels
+    IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+      SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "@loader_path/;@loader_path/../")
+    ELSE(ACTIVATE_PYTHON_WHEELS_TARGETS)
+      SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "@loader_path/../lib;@loader_path/../Frameworks")
+    ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+  ELSE(APPLE)
+    # CMake >= 3.1.0 does not allow to set the INSTALL_RPATH property on INTERFACE_LIBRARY target type
+    GET_TARGET_PROPERTY(TARGET_TYPE ${name} TYPE)
+    IF(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
+      SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN")
+      IF(MSVC)
+        SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
+        SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
+        SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${CMAKE_CURRENT_BINARY_DIR}")
+        SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_CURRENT_BINARY_DIR}")
+        # MSVC linker PDB files are only generated for shared libraries
+        IF("${ARGV1}" STREQUAL "SHARED")
+          SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_NAME_DEBUG "${name}")
+          SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_NAME_RELWITHDEBINFO "${name}")
+          SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
+          SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_CURRENT_BINARY_DIR}")
+          INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${name}.pdb DESTINATION ${TulipShareInstallDir}/pdb CONFIGURATIONS Debug|RelWithDebInfo)
+        ENDIF("${ARGV1}" STREQUAL "SHARED")
+      ENDIF(MSVC)
+    ENDIF(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
   ENDIF(APPLE)
-  # CMake >= 3.1.0 does not allow to set the INSTALL_RPATH property on INTERFACE_LIBRARY target type
-  GET_TARGET_PROPERTY(TARGET_TYPE ${name} TYPE)
-  IF(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
-    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN")
-    IF(MSVC)
-      SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
-      SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
-      SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_MINSIZEREL "${CMAKE_CURRENT_BINARY_DIR}")
-      SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_CURRENT_BINARY_DIR}")
-      # MSVC linker PDB files are only generated for shared libraries
-      IF("${ARGV1}" STREQUAL "SHARED")
-        SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_NAME_DEBUG "${name}")
-        SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_NAME_RELWITHDEBINFO "${name}")
-        SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
-        SET_TARGET_PROPERTIES(${name} PROPERTIES PDB_OUTPUT_DIRECTORY_RELWITHDEBINFO "${CMAKE_CURRENT_BINARY_DIR}")
-        INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${name}.pdb DESTINATION ${TulipShareInstallDir}/pdb CONFIGURATIONS Debug|RelWithDebInfo)
-      ENDIF("${ARGV1}" STREQUAL "SHARED")
-    ENDIF(MSVC)
-  ENDIF(NOT "${TARGET_TYPE}" STREQUAL "INTERFACE_LIBRARY")
   IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
     ADD_DEPENDENCIES(tulip-core-wheel ${name})
   ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
@@ -498,13 +541,12 @@ ENDFUNCTION()
 FUNCTION(ADD_EXECUTABLE name)
   _ADD_EXECUTABLE(${name} ${ARGN})
   IF(APPLE)
-    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_NAME_DIR "@executable_path/../lib")
-  ENDIF(APPLE)
-  IF(LINUX OR APPLE)
+    SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "@loader_path/../lib;@loader_path/../Frameworks")
+  ELSEIF(LINUX)
     SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN/../lib")
-  ELSE(LINUX OR APPLE)
+  ELSE()
     SET_TARGET_PROPERTIES(${name} PROPERTIES INSTALL_RPATH "$ORIGIN")
-  ENDIF(LINUX OR APPLE)
+  ENDIF()
   IF(MSVC)
     SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_CURRENT_BINARY_DIR}")
     SET_TARGET_PROPERTIES(${name} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_CURRENT_BINARY_DIR}")
@@ -553,10 +595,12 @@ ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(doc)
-ADD_SUBDIRECTORY(software)
 ADD_SUBDIRECTORY(textures)
+IF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_SUBDIRECTORY(externalplugins)
 ADD_SUBDIRECTORY(demos)
+ADD_SUBDIRECTORY(software)
+ENDIF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(plugins)
 ADD_SUBDIRECTORY(tlpscripten)
@@ -699,3 +743,4 @@ echo archive \${TAR_FILE} successfully generated" OUTPUT_FILE ${make_tar_file})
 
 message(STATUS "${make_tar_file} successfully generated")
 ENDIF(NOT BUILD_CORE_ONLY)
+
