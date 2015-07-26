@@ -1,0 +1,135 @@
+# Always prefer setuptools over distutils
+from setuptools import setup, find_packages
+from setuptools.dist import Distribution
+# To use a consistent encoding
+from codecs import open
+from os import path
+import platform
+
+class BinaryDistribution(Distribution):
+    def is_pure(self):
+        return False
+
+tulip_native_libs = []
+if platform.system() == 'Windows':
+    tulip_native_libs = ['native/*.pyd', 'native/*.dll', 'native/plugins/*.dll']
+elif platform.system() == 'Darwin':
+    tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/plugins/*.dylib']
+
+here = path.abspath(path.dirname(__file__))
+
+# Python wheels generated with the Python.org MacOS bundles are also compatible
+# with the Python interpreter provided by Apple on its systems.
+# That hack renames the wheel file depending on the macos api it was build against.
+try:
+    from wheel.bdist_wheel import bdist_wheel
+
+    class _bdist_wheel(bdist_wheel):
+        def get_tag(self):
+            tag = bdist_wheel.get_tag(self)
+            repl = 'macosx_10_6_intel.macosx_10_9_intel.macosx_10_9_x86_64.macosx_10_10_intel.macosx_10_10_x86_64'
+            if tag[2] == 'macosx_10_6_intel':
+                tag = (tag[0], tag[1], repl)
+            return tag
+
+    cmdclass = {'bdist_wheel': _bdist_wheel}
+except ImportError:
+    cmdclass = {}
+
+# Get the long description from the relevant file
+with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
+    long_description = f.read()
+
+setup(
+    name='tulipgui-python',
+
+    # Versions should comply with PEP440.  For a discussion on single-sourcing
+    # the version across setup.py and the project code, see
+    # https://packaging.python.org/en/latest/single_source_version.html
+    version='${TulipVersion}${PythonWheelVersionSuffix}',
+
+    description='Tulip GUI Python bindings',
+    long_description=long_description,
+
+    # The project's main homepage.
+    url='http://tulip.labri.fr/',
+
+    # Author details
+    author='David Auber and the Tulip development team',
+    author_email='tulipdev@labri.fr',
+
+    # Choose your license
+    license='LGPLv2+',
+
+    # See https://pypi.python.org/pypi?%3Aaction=list_classifiers
+    classifiers=[
+        # How mature is this project? Common values are
+        #   3 - Alpha
+        #   4 - Beta
+        #   5 - Production/Stable
+        'Development Status :: 5 - Production/Stable',
+
+        # Indicate who your project is intended for
+        'Intended Audience :: Developers',
+        'Intended Audience :: Education',
+        'Intended Audience :: Science/Research',
+        'Topic :: Scientific/Engineering',
+        'Topic :: Scientific/Engineering :: Information Analysis',
+        'Topic :: Scientific/Engineering :: Mathematics',
+        'Topic :: Scientific/Engineering :: Visualization',
+
+        # Pick your license as you wish (should match "license" above)
+        'License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)',
+
+        # Specify the Python versions you support here. In particular, ensure
+        # that you indicate whether you support Python 2, Python 3 or both.
+        'Programming Language :: Python :: Implementation :: CPython',
+        'Programming Language :: Python :: 2',
+        'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+    ],
+
+    # What does your project relate to?
+    keywords='graph theory algorithms visualization',
+
+    # You can just specify the packages manually here if your project is
+    # simple. Or you can use find_packages().
+    packages=['tulipogl', 'tulipgui'],
+
+    # List run-time dependencies here.  These will be installed by pip when
+    # your project is installed. For an analysis of "install_requires" vs pip's
+    # requirements files see:
+    # https://packaging.python.org/en/latest/requirements.html
+    install_requires=['tulip-python'],
+
+    # List additional groups of dependencies here (e.g. development
+    # dependencies). You can install these using the following syntax,
+    # for example:
+    # $ pip install -e .[dev,test]
+    extras_require={},
+
+    # If there are data files included in your packages that need to be
+    # installed, specify them here.  If using Python 2.6 or less, then these
+    # have to be included in MANIFEST.in as well.
+    package_data={
+        'tulipogl': tulip_native_libs,
+        'tulipgui': tulip_native_libs + ['share/bitmaps/*'],
+    },
+
+    # Although 'package_data' is the preferred approach, in some case you may
+    # need to place data files outside of your packages. See:
+    # http://docs.python.org/3.4/distutils/setupscript.html#installing-additional-files # noqa
+    # In this case, 'data_file' will be installed into '<sys.prefix>/my_data'
+    data_files=[],
+
+    # To provide executable scripts, use entry points in preference to the
+    # "scripts" keyword. Entry points provide cross-platform support and allow
+    # pip to create the appropriate form of executable for the target platform.
+    entry_points={},
+	
+    include_package_data=True,
+    distclass=BinaryDistribution,
+    cmdclass=cmdclass,
+)
