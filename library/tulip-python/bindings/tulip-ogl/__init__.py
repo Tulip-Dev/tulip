@@ -15,6 +15,8 @@ if platform.system() == 'Windows':
 
 import _tulipogl
 
+sys.path.pop()
+
 class tlpogl(_tulipogl.tlpogl):
   pass
 

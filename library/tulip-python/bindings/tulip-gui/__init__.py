@@ -27,6 +27,8 @@ if platform.system() == 'Windows':
 
 import _tulipgui
 
+sys.path.pop()
+
 class tlpgui(_tulipgui.tlpgui):
     pass
 
@@ -39,11 +41,16 @@ tlp.loadTulipPluginsFromDir(_tulipGuiNativeLibsPath + 'plugins')
 # Check if we are in script execution mode (sys.ps1 is not defined in that case)
 # If so, register an exit callback that will run the Qt event loop if some widgets are
 # still in a visible state
-if hasattr(sys, 'ps1') and not sys.flags.interactive:
+if not hasattr(sys, 'ps1') and not sys.flags.interactive:
     import atexit
     atexit.register(tulipguiExitFunc)
 
 import signal
 signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+if not sys.argv[0] == 'tulip':
+    tlpgui.initInteractorsDependencies()
+    tlp.TulipBitmapDir = os.path.dirname(__file__) + '/share/bitmaps/'
+    tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
 
 __all__ = ['tlpgui']

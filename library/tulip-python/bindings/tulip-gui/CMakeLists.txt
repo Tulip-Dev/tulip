@@ -29,6 +29,16 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUti
            
 DISABLE_COMPILER_WARNINGS()
 
+IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
+ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
+                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/Manifest.in ${TULIPGUI_PYTHON_FOLDER}/../Manifest.in
+                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
+                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/DESCRIPTION.rst ${TULIPGUI_PYTHON_FOLDER}/../DESCRIPTION.rst
+)
+ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
+ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
@@ -43,7 +53,10 @@ SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 
-ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${CMAKE_CURRENT_BINARY_DIR}/tulipgui_module/tulipgui/__init__.py)
+ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
+IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiInitPy)
+ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(NOT SYSTEM_SIP)
 ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})

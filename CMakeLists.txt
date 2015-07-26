@@ -190,7 +190,7 @@ ENDIF()
 SET(BUILD_PYTHON_COMPONENTS ON CACHE BOOL "Do you want to build Tulip Python components ? [ON|OFF]")
 IF(BUILD_PYTHON_COMPONENTS)
 SET(TULIP_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-core/tulip_module/tulip)
-SET(TULIPOGL_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-ogl/tulipogl_module/tulipogl)
+SET(TULIPOGL_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module/tulipogl)
 SET(TULIPGUI_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module/tulipgui)
 SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
 SET(TULIPOGL_PYTHON_NATIVE_FOLDER ${TULIPOGL_PYTHON_FOLDER}/native)
@@ -412,6 +412,10 @@ IF(PYTHONINTERP_FOUND)
                           COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
                           WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
 
+        ADD_CUSTOM_TARGET(tulip-gui-wheel
+                          COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+                          WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+
         # In order to upload the generated wheels, an account must be created on PyPi
         # and the following configuration must be stored in the ~/.pypirc file
         ##############################################################
@@ -441,9 +445,14 @@ IF(PYTHONINTERP_FOUND)
                           COMMAND ${TWINE} upload -r pypitest dist/*
                           DEPENDS tulip-core-wheel
                           WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+        ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
+                          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
+                          COMMAND ${TWINE} upload -r pypitest dist/*
+                          DEPENDS tulip-gui-wheel
+                          WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
 
-        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel)
-        ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test)
+        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
+        ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test tulip-gui-wheel-upload-test)
     ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
   ENDIF(PYTHONLIBS_FOUND)
@@ -541,6 +550,7 @@ FUNCTION(ADD_LIBRARY name)
   ENDIF(APPLE)
   IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
     ADD_DEPENDENCIES(tulip-core-wheel ${name})
+    ADD_DEPENDENCIES(tulip-gui-wheel ${name})
   ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDFUNCTION()
 

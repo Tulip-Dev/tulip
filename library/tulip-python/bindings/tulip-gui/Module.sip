@@ -74,6 +74,11 @@ extern void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td);
 
 extern void installQtInputHook();
 extern void removeQtInputHook();
+
+namespace tlp {
+extern void initInteractorsDependencies();
+}
+
 %End
 
 %ModuleCode
@@ -95,10 +100,18 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
     }
 }
 
+namespace tlp {
+
+void initInteractorsDependencies() {
+  tlp::InteractorLister::initInteractorsDependencies();
+}
+
+}
+
 #include <QCoreApplication>
 #include <QThread>
 
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN)
 #include <conio.h>
 #include <QTimer>
 #else
@@ -106,22 +119,22 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
 #endif
 
 // This is the input hook that will process events while the interpreter is
-// waiting for interactive input (from PyQt4).
+// waiting for interactive input (from PyQt).
 extern "C" {static int qtInputHook();}
 
 static int qtInputHook() {
     QCoreApplication *app = QCoreApplication::instance();
 
     if (app && app->thread() == QThread::currentThread()) {
-#if defined(Q_OS_WIN32)
+#if defined(Q_OS_WIN32) || defined(Q_OS_WIN)
         QTimer timer;
         QObject::connect(&timer, SIGNAL(timeout()), app, SLOT(quit()));
 
-        do {
-            timer.start(100);
+        while (!_kbhit()) {
+            timer.start(35);
             QCoreApplication::exec();
             timer.stop();
-        } while (!_kbhit());
+        }
 
         QObject::disconnect(&timer, SIGNAL(timeout()), app, SLOT(quit()));
 #else
@@ -145,6 +158,9 @@ void removeQtInputHook() {
 
 %End
 
+namespace tlp {
+  void initInteractorsDependencies();
+};
 
 %Include Interactor.sip
 %Include View.sip
