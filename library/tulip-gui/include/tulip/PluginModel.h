@@ -97,7 +97,7 @@ class PluginModel : public tlp::TulipModel {
 
         // sort in case insensitive alphabetic order
         qSort(pluginTree[cat][group].begin(),
-                  pluginTree[cat][group].end(), QStringCaseCmp);
+              pluginTree[cat][group].end(), QStringCaseCmp);
 
         foreach(QString alg, pluginTree[cat][group]) {
           const Plugin& plugin =
