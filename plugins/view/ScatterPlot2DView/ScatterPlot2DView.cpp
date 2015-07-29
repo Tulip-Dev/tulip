@@ -527,7 +527,7 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
         else {
           scatterOverview =
             new ScatterPlot2D(scatterPlotGraph, edgeAsNodeGraph,
-                              edgeToNode, nodeToEdge,
+                              nodeToEdge,
                               selectedGraphProperties[i], selectedGraphProperties[j],
                               dataLocation, overviewBlCorner, OVERVIEWS_SIZE,
                               backgroundColor, foregroundColor);

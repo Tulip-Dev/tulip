@@ -36,7 +36,7 @@ class Histogram : public GlComposite {
 
 public :
 
-  Histogram(Graph *graph, Graph* edgeGraph, std::map<node, edge>& nodeMap, std::map<edge, node>& edgeMap, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
+  Histogram(Graph *graph, Graph* edgeGraph, std::map<edge, node>& edgeMap, const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size, const Color &backgroundColor, const Color &textColor);
   ~Histogram();
 
   const std::string& getPropertyName() const {
@@ -218,7 +218,6 @@ private :
   GlGraphComposite *graphComposite;
   Graph *edgeAsNodeGraph;
   std::map<edge, node>& edgeToNode;
-  std::map<node, edge>& nodeToEdge;
   Color backgroundColor;
   Color textColor;
   bool integerScale;

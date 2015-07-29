@@ -580,7 +580,7 @@ void HistogramView::buildHistograms() {
     oss << "histogram overview for property " << selectedProperties[i];
 
     if (histogramsMap.find(selectedProperties[i]) == histogramsMap.end()) {
-      Histogram *histoOverview = new Histogram(_histoGraph, edgeAsNodeGraph, nodeToEdge, edgeToNode, selectedProperties[i], dataLocation, overviewBLCorner, OVERVIEW_SIZE, backgroundColor, foregroundColor);
+      Histogram *histoOverview = new Histogram(_histoGraph, edgeAsNodeGraph, edgeToNode, selectedProperties[i], dataLocation, overviewBLCorner, OVERVIEW_SIZE, backgroundColor, foregroundColor);
       histogramsMap[selectedProperties[i]] = histoOverview;
     }
     else {
