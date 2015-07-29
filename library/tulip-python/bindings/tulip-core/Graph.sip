@@ -1196,9 +1196,22 @@ and the target becomes the source.
 %Docstring
 tlp.Graph.getOneNode()
 
-Returns an existing node of the graph.
+Returns the first node in the graph.
 
 :rtype: :class:`tlp.node`  
+%End
+
+//===========================================================================================
+
+  tlp::node getRandomNode() const ;
+%Docstring
+tlp.Graph.getRandomNode()
+
+.. versionadded:: 4.8
+
+Returns a random node in the graph.
+
+:rtype: :class:`tlp.node`
 %End
 
 //===========================================================================================
@@ -1463,9 +1476,22 @@ Returns an iterator on the edges.
 %Docstring
 tlp.Graph.getOneEdge()
 
-Returns an existing edge of the graph.
+Returns the first edge in the graph.
 
 :rtype: :class:`tlp.edge`  
+%End
+
+//===========================================================================================
+
+  tlp::edge getRandomEdge() const ;
+%Docstring
+tlp.Graph.getRandomEdge()
+
+.. versionadded:: 4.8
+
+Returns a random edge in the graph.
+
+:rtype: :class:`tlp.edge`
 %End
 
 //===========================================================================================

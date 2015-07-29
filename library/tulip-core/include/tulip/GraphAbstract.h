@@ -86,9 +86,11 @@ public:
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false);
   //=======================================
   virtual node getOneNode() const;
+  virtual node getRandomNode() const;
   virtual node getInNode(const node,unsigned int ) const;
   virtual node getOutNode(const node,unsigned int ) const;
   virtual edge getOneEdge() const;
+  virtual edge getRandomEdge() const;
   virtual unsigned int numberOfNodes() const;
   virtual unsigned int numberOfEdges() const;
   //========================================

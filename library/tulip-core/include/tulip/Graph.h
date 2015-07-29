@@ -713,10 +713,18 @@ public:
   virtual tlp::node getSource() const;
 
   /**
-   * @brief Gets a node on the graph.
-   * @return Any node of the graph.
+   * @brief Returns the first node in the graph.
+   *
    */
   virtual node getOneNode() const =0;
+
+  /**
+   * @brief Returns a random node in the graph.
+   *
+   * @since Tulip 4.8
+   *
+   */
+  virtual node getRandomNode() const =0;
 
   /**
    * @brief Gets an iterator over this graph's nodes.
@@ -837,10 +845,18 @@ public:
   virtual Iterator<edge>* getEdges() const =0;
 
   /**
-   * @brief Gets an edge of the graph.
-   * @return Any one of the graph's edges.
+   * @brief Returns the first edge in the graph.
+   *
    */
   virtual edge getOneEdge() const =0;
+
+  /**
+   * @brief Returns a random edge in the graph.
+   *
+   * @since Tulip 4.8
+   *
+   */
+  virtual edge getRandomEdge() const =0;
 
   /**
    * @brief Gets an iterator over the output edges of a node.

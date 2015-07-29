@@ -226,6 +226,11 @@ node GraphDecorator::getOneNode() const {
 }
 
 //============================================================
+node GraphDecorator::getRandomNode() const {
+  return graph_component->getRandomNode();
+}
+
+//============================================================
 node GraphDecorator::getInNode(const node n,unsigned int i)const {
   return graph_component->getInNode(n,i);
 }
@@ -235,8 +240,14 @@ node GraphDecorator::getOutNode(const node n,unsigned int i) const {
   return graph_component->getOutNode(n,i);
 }
 
+//============================================================
 edge GraphDecorator::getOneEdge() const {
   return graph_component->getOneEdge();
+}
+
+//============================================================
+edge GraphDecorator::getRandomEdge() const {
+  return graph_component->getRandomEdge();
 }
 
 //============================================================
