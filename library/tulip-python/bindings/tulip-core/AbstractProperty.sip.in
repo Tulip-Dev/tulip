@@ -31,7 +31,7 @@ class @PROPERTY_TYPE@Property : tlp::@BASE_CLASS@ /NoDefaultCtors/ {
 %End
 
 %Docstring
-Bases: :class:tlp.`@BASE_CLASS`
+Bases: :class:`tlp.@BASE_CLASS@`
 %End
 
 public :

@@ -40,6 +40,10 @@ class NumericProperty : tlp::PropertyInterface /Abstract/ {
     }
 %End
 
+%Docstring
+Bases: :class:`tlp.PropertyInterface`
+%End
+
 public:
  
 //===========================================================================================	
