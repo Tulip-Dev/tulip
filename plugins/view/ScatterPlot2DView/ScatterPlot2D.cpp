@@ -66,10 +66,10 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
 }
 
 ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph* edgeGraph,
-                             std::map<edge, node>& edgeMap, std::map<node, edge>& nodeMap,
+                             std::map<node, edge>& nodeMap,
                              const string& xDim, const string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
   : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), scatterLayout(new LayoutProperty(graph)), scatterEdgeLayout(new LayoutProperty(graph)), xAxis(NULL), yAxis(NULL), overviewGen(false), backgroundColor(backgroundColor),
-    foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), nodeToEdge(nodeMap), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
+    foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(edgeGraph), nodeToEdge(nodeMap), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
     xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
   edge e;
 

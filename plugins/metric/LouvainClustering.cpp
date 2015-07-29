@@ -85,10 +85,6 @@ private:
   // used to compute the modularity participation of each community
   std::vector<double> in,tot;
 
-  // number of pass for one level computation
-  // if -1, compute as many pass as needed to increase modularity
-  int nb_pass;
-
   // a new pass is computed if the last one has generated an increase
   // greater than min_modularity
   // if 0. even a minor increase is enough to go for one more pass
@@ -253,21 +249,17 @@ private:
   bool one_level() {
     bool improvement=false ;
     int nb_moves;
-    int nb_pass_done = 0;
     double new_mod   = modularity();
     double cur_mod   = new_mod;
 
     quotient->shuffleNodes();
 
     // repeat while
-    //   there is an improvement of modularity
-    //   or there is an improvement of modularity greater than a given epsilon
-    //   or a predefined number of pass have been done
+    // there is an improvement of modularity
+    // or there is an improvement of modularity greater than a given epsilon
     do {
       cur_mod = new_mod;
       nb_moves = 0;
-      nb_pass_done++;
-
       // for each node:
       // remove the node from its community
       // and insert it in the best community
