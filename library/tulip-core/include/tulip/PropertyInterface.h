@@ -308,10 +308,11 @@ public:
 
   /**
    * @brief Returns the number of nodes with a non default value.
+   * When given a Graph as parameter, only the number of nodes with a non default value belonging to this graph is returned.
    * @return the number of nodes with a non default value.
    *
    */
-  virtual unsigned int numberOfNonDefaultValuatedNodes() const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
 
   /**
    * @brief Gets an Iterator on all non-default valuated edges.
@@ -327,7 +328,7 @@ public:
    * @return the number of edges with a non default value.
    *
    */
-  virtual unsigned int numberOfNonDefaultValuatedEdges() const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
 
   /**
    * @brief Returns the size in bytes of a node's value.
