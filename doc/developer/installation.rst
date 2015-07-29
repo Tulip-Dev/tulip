@@ -16,7 +16,7 @@ The installation process is not complicated, it can however take some time depen
 
 
 Foreword: Debug and Release modes
---------------------------------
+---------------------------------
 
 Tulip can be compiled and thus executed in two different modes. The first one, called *Release*, is the classic Tulip execution mode. The application should be executed this way when you are only using the originaly integrated tool of Tulip or the add-ons included with the plug-in library. Most users will only be interested in this mode.
 
