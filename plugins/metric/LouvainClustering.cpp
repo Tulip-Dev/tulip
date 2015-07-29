@@ -260,6 +260,7 @@ private:
     do {
       cur_mod = new_mod;
       nb_moves = 0;
+
       // for each node:
       // remove the node from its community
       // and insert it in the best community
