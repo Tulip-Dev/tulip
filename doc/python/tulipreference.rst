@@ -237,6 +237,8 @@ from the graph while iterating on its nodes/edges/subgraphs.
 
 .. automethod:: tulip::tlp.Graph.getOneNode
 
+.. automethod:: tulip::tlp.Graph.getRandomNode
+
 .. automethod:: tulip::tlp.Graph.getNodes
 
 .. automethod:: tulip::tlp.Graph.getInNode
@@ -256,6 +258,8 @@ from the graph while iterating on its nodes/edges/subgraphs.
 .. automethod:: tulip::tlp.Graph.getNodeMetaInfo
 
 .. automethod:: tulip::tlp.Graph.getOneEdge
+
+.. automethod:: tulip::tlp.Graph.getRandomEdge
 
 .. automethod:: tulip::tlp.Graph.getEdges
 

@@ -76,9 +76,11 @@ public:
 
   //============================================================
   virtual node getOneNode() const;
+  virtual node getRandomNode() const;
   virtual node getInNode(const node n,unsigned int i)const;
   virtual node getOutNode(const node n,unsigned int i) const;
   virtual edge getOneEdge() const;
+  virtual edge getRandomEdge() const;
 
   virtual unsigned int numberOfNodes()const;
   virtual unsigned int numberOfEdges()const;
