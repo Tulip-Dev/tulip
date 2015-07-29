@@ -284,8 +284,16 @@ Sets the value of a particular edge.
 	
 //===========================================================================================
 
+    virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const ;
+
+//===========================================================================================
+
     virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const ;
-	
+
+//===========================================================================================
+
+    virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
+
 //===========================================================================================
 
     virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;

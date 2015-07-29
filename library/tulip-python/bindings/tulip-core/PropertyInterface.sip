@@ -80,6 +80,22 @@ Returns the graph on which the property has been defined.
              that the one used to get that property.
 %End  
 
+ //===========================================================================================
+
+   virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+ %Docstring
+ tlp.PropertyInterface.numberOfNonDefaultValuatedNodes([subgraph = None])
+
+.. versionadded:: 4.8
+
+ Returns the number of nodes whose value is different
+ from the default value.
+
+ :param subgraph: a sub-graph can be given in parameter. In that case, only the number of nodes in this sub-graph whose value is different from the default one is returned.
+ :type subgraph: :class:`tlp.Graph`
+ :rtype: integer
+ %End
+
 //===========================================================================================
 
 	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
@@ -93,6 +109,22 @@ from the default value.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorNode`
 %End	
+
+ //===========================================================================================
+
+   virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+ %Docstring
+ tlp.PropertyInterface.numberOfNonDefaultValuatedEdges([subgraph = None])
+
+.. versionadded:: 4.8
+
+ Returns the number of edges whose value is different
+ from the default value.
+
+ :param subgraph: a sub-graph can be given in parameter. In that case, only the number of edges in this sub-graph whose value is different from the default one is returned.
+ :type subgraph: :class:`tlp.Graph`
+ :rtype: integer
+ %End
 
 //===========================================================================================
 	
