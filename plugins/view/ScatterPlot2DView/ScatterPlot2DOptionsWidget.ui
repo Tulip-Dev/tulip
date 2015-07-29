@@ -470,7 +470,6 @@ correlation coefficient value</string>
       </item>
      </layout>
      <zorder>useXScaleCheckBox</zorder>
-     <zorder></zorder>
     </widget>
    </item>
    <item>
