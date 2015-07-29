@@ -245,6 +245,7 @@ Graph* ImportExportTest::createSimpleGraph() const {
 }
 
 void ImportExportTest::importExportGraph(tlp::Graph* original) {
+
   const string exportFilename = "graph_export";
   ofstream os(exportFilename.c_str());
   DataSet set;
@@ -440,6 +441,10 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
 CPPUNIT_TEST_SUITE_REGISTRATION(TlpImportExportTest);
 
 TlpImportExportTest::TlpImportExportTest() : ImportExportTest("TLP Import", "TLP Export") {}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TlpBImportExportTest);
+
+TlpBImportExportTest::TlpBImportExportTest() : ImportExportTest("TLPB Import", "TLPB Export") {}
 
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonImportExportTest);
 

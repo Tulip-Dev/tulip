@@ -57,6 +57,16 @@ public:
   TlpImportExportTest();
 };
 
+class TlpBImportExportTest : public ImportExportTest {
+  CPPUNIT_TEST_SUITE(TlpBImportExportTest);
+  CPPUNIT_TEST(testgridImportExport);
+  CPPUNIT_TEST(testAttributes);
+  CPPUNIT_TEST(testSubGraphsImportExport);
+  CPPUNIT_TEST_SUITE_END();
+public:
+  TlpBImportExportTest();
+};
+
 class JsonImportExportTest : public ImportExportTest {
   CPPUNIT_TEST_SUITE(JsonImportExportTest);
   CPPUNIT_TEST(testgridImportExport);
