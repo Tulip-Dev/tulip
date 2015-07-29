@@ -71,7 +71,7 @@ void TLPBExport::writeAttributes(ostream &os, Graph *g) {
     }
   }
 
-  unsigned int id = g->getId();
+  unsigned int id = g->getSuperGraph() == g ? 0 : g->getId();
   // write graph id
   os.write((char *) &id, sizeof(id));
   // write graph attributes
@@ -86,7 +86,12 @@ void TLPBExport::writeAttributes(ostream &os, Graph *g) {
 }
 //================================================================================
 bool TLPBExport::exportGraph(std::ostream &os) {
-  graph=graph->getRoot();
+
+  // change graph parent in hierarchy temporarily to itself as
+  // it will be the new root of the exported hierarchy
+  Graph *superGraph = graph->getSuperGraph();
+  graph->setSuperGraph(graph);
+
   // header
   TLPBHeader header(graph->numberOfNodes(), graph->numberOfEdges());
   // write header
@@ -152,7 +157,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     for(unsigned int i = 0; i < numSubGraphs; ++i) {
       Graph* sg = vSubGraphs[i];
       std::pair<unsigned int, unsigned int> ids(sg->getId(),
-          sg->getSuperGraph()->getId());
+          sg->getSuperGraph()->getSuperGraph() == sg->getSuperGraph() ? 0 : sg->getSuperGraph()->getId());
       // write ids
       os.write((char *) &ids, sizeof(ids));
       // loop to write sg nodes ranges
@@ -278,10 +283,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     pluginProgress->setComment("writing properties...");
     unsigned int numProperties = 0;
     std::vector<PropertyInterface*> props;
+    std::set<PropertyInterface*> rootProps;
     PropertyInterface* prop;
     // get local properties in a vector
-    forEach(prop, graph->getLocalObjectProperties()) {
+    forEach(prop, graph->getObjectProperties()) {
       props.push_back(prop);
+      rootProps.insert(prop);
       ++numProperties;
     }
 
@@ -306,7 +313,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       os.write((char *) &size, sizeof(size));
       os.write((char *) nameOrType.data(), size);
       // write graph id
-      size = prop->getGraph()->getId();
+      size = rootProps.find(prop) != rootProps.end() ? 0 : prop->getGraph()->getId();
       os.write((char *) &size, sizeof(size));
       // special treament for pathnames view properties
       bool pnViewProp = (nameOrType == string("viewFont") ||
@@ -344,7 +351,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write nodes values
       {
         // write nb of non default values
-        size = prop->numberOfNonDefaultValuatedNodes();
+        size = prop->numberOfNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : NULL);
         os.write((char *) &size, sizeof(size));
         // prepare ouput stream
         stringstream vs;
@@ -362,7 +369,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // loop on nodes
         node n;
         unsigned int nbValues = 0;
-        forEach(n, prop->getNonDefaultValuatedNodes()) {
+        forEach(n, prop->getNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : NULL)) {
           size = getNode(n).id;
           vs.write((char *) &size, sizeof(size));
 
@@ -414,7 +421,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write edges values
       {
         // write nb of non default values
-        size = prop->numberOfNonDefaultValuatedEdges();
+        size = prop->numberOfNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : NULL);
         os.write((char *) &size, sizeof(size));
         // prepare ouput stream
         stringstream vs;
@@ -437,7 +444,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         // loop on edges
         edge e;
         unsigned int nbValues = 0;
-        forEach(e, prop->getNonDefaultValuatedEdges()) {
+        forEach(e, prop->getNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : NULL)) {
           size = getEdge(e).id;
           vs.write((char *) &size, sizeof(size));
 
@@ -507,5 +514,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   }
   // write graph attributes
   writeAttributes(os, graph);
+
+  graph->setSuperGraph(superGraph);
   return true;
 }
