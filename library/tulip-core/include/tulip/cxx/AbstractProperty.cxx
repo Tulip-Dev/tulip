@@ -157,7 +157,8 @@ template <class Tnode, class Tedge, class Tprop>
 unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuatedNodes(const Graph *g) const {
   if (g == NULL) {
     return nodeProperties.numberOfNonDefaultValues();
-  } else {
+  }
+  else {
     unsigned int ret = 0;
     node n;
     forEach(n, getNonDefaultValuatedNodes(g)) {
@@ -225,7 +226,8 @@ template <class Tnode, class Tedge, class Tprop>
 unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuatedEdges(const Graph* g) const {
   if (g == NULL) {
     return edgeProperties.numberOfNonDefaultValues();
-  } else {
+  }
+  else {
     unsigned int ret = 0;
     edge e;
     forEach(e, getNonDefaultValuatedEdges(g)) {
