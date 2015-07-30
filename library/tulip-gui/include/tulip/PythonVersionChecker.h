@@ -27,7 +27,7 @@
 #include <tulip/tulipconf.h>
 
 namespace tlp {
-class TLP_QT_SCOPE PythonVersionChecker {
+class PythonVersionChecker {
 public:
   static QStringList installedVersions();
   static QString compiledVersion();
