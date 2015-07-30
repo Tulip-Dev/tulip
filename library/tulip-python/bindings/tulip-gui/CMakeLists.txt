@@ -34,7 +34,7 @@ CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
 ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/Manifest.in ${TULIPGUI_PYTHON_FOLDER}/../Manifest.in
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
-                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/DESCRIPTION.rst ${TULIPGUI_PYTHON_FOLDER}/../DESCRIPTION.rst
+                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/DESCRIPTION.rst ${TULIPGUI_PYTHON_FOLDER}/../DESCRIPTION.rst    
 )
 ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)

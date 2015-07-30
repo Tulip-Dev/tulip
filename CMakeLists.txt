@@ -443,12 +443,10 @@ IF(PYTHONINTERP_FOUND)
         ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
                           COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
                           COMMAND ${TWINE} upload -r pypitest dist/*
-                          DEPENDS tulip-core-wheel
                           WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
         ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
                           COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
                           COMMAND ${TWINE} upload -r pypitest dist/*
-                          DEPENDS tulip-gui-wheel
                           WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
 
         ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)

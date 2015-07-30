@@ -50,7 +50,5 @@ signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 if not sys.argv[0] == 'tulip':
     tlpgui.initInteractorsDependencies()
-    tlp.TulipBitmapDir = os.path.dirname(__file__) + '/share/bitmaps/'
-    tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
 
 __all__ = ['tlpgui']
