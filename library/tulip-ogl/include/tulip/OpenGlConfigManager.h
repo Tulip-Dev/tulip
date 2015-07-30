@@ -125,7 +125,6 @@ private:
   static OpenGlConfigManager* inst;
 
   bool glewIsInit;
-  bool driversAreChecked;
   bool antialiased;
 
   std::map<std::string, bool> checkedExtensions;

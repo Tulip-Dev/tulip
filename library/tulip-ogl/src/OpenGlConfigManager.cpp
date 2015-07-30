@@ -39,8 +39,7 @@ OpenGlConfigManager& OpenGlConfigManager::getInst() {
 }
 
 OpenGlConfigManager::OpenGlConfigManager():
-  glewIsInit(false),
-  driversAreChecked(false), antialiased(true) {
+  glewIsInit(false), antialiased(true) {
 }
 
 void OpenGlConfigManager::initExtensions() {

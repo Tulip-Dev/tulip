@@ -68,12 +68,12 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
 int Histogram::overviewCpt(0);
 
 Histogram::Histogram(Graph *graph, Graph* edgeGraph,
-                     std::map<node, edge>& nodeMap, std::map<edge, node>& edgeMap,
+                     std::map<edge, node>& edgeMap,
                      const std::string& propertyName, const ElementType &dataLocation, const Coord &blCorner, unsigned int size,
                      const Color &backgroundColor, const Color &textColor) :
   graph(graph), propertyName(propertyName), blCorner(blCorner), size(size), nbHistogramBins(100), xAxis(NULL), yAxis(NULL),
   xAxisLogScale(false), yAxisLogScale(false), nbXGraduations(15), yAxisIncrementStep(0), histogramLayout(new LayoutProperty(graph)), histogramEdgeLayout(new LayoutProperty(graph)), histogramSize(new SizeProperty(graph)), histoBinsComposite(new GlComposite()), uniformQuantification(false),
-  cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), nodeToEdge(nodeMap), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
+  cumulativeFreqHisto(false), lastCumulHisto(false), edgeAsNodeGraph(edgeGraph), edgeToNode(edgeMap), backgroundColor(backgroundColor), textColor(textColor), integerScale(false),
   dataLocation(dataLocation), displayEdges(false), layoutUpdateNeeded(true),sizesUpdateNeeded(true), textureUpdateNeeded(true), xAxisScaleDefined(false), yAxisScaleDefined(false),
   xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)) {
 
@@ -514,7 +514,6 @@ void Histogram::updateLayout() {
   computeHistogram();
   createAxis();
 
-  //LayoutProperty *edgeAsNodeGraphLayout = edgeAsNodeGraph->getProperty<LayoutProperty>("viewLayout");
   unsigned int cumulativeSize = 0;
 
   for (unsigned int i = 0 ; i < nbHistogramBins ; ++i) {
@@ -778,164 +777,6 @@ void Histogram::setTextColor(const Color &color) {
   textColor = color;
 }
 
-/*
-void Histogram::treatEvent(const Event &message) {
-if (typeid(message) == typeid(GraphEvent)) {
-  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&message);
-
-  if(graphEvent) {
-    if(graphEvent->getType()==GraphEvent::TLP_ADD_NODE)
-      addNode(graphEvent->getGraph(),graphEvent->getNode());
-
-    if(graphEvent->getType()==GraphEvent::TLP_ADD_EDGE)
-      addEdge(graphEvent->getGraph(),graphEvent->getEdge());
-
-    if(graphEvent->getType()==GraphEvent::TLP_DEL_NODE)
-      delNode(graphEvent->getGraph(),graphEvent->getNode());
-
-    if(graphEvent->getType()==GraphEvent::TLP_DEL_EDGE)
-      delEdge(graphEvent->getGraph(),graphEvent->getEdge());
-  }
-}
-
-if(typeid(message) == typeid(PropertyEvent)) {
-  const PropertyEvent* propertyEvent = dynamic_cast<const PropertyEvent*>(&message);
-
-  if(propertyEvent) {
-    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_NODE_VALUE)
-      afterSetNodeValue(propertyEvent->getProperty(),propertyEvent->getNode());
-
-    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_EDGE_VALUE)
-      afterSetEdgeValue(propertyEvent->getProperty(),propertyEvent->getEdge());
-
-    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE)
-      afterSetAllNodeValue(propertyEvent->getProperty());
-
-    if(propertyEvent->getType()==PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE)
-      afterSetAllEdgeValue(propertyEvent->getProperty());
-
-  }
-}
-}
-
-void Histogram::afterSetNodeValue(PropertyInterface *p, const node n) {
-if (p->getGraph() == edgeAsNodeGraph && p->getName() == "viewSelection") {
-  BooleanProperty *edgeAsNodeGraphSelection = static_cast<BooleanProperty*>(p);
-  BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
-  viewSelection->removeListener(this);
-  viewSelection->setEdgeValue(nodeToEdge[n], edgeAsNodeGraphSelection->getNodeValue(n));
-  viewSelection->addListener(this);
-  setTextureUpdateNeeded();
-  return;
-}
-
-afterSetAllNodeValue(p);
-}
-
-void Histogram::afterSetEdgeValue(PropertyInterface *p, const edge e) {
-if (edgeToNode.find(e) == edgeToNode.end())
-  return;
-
-if (p->getName() == "viewColor") {
-  ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
-  ColorProperty *viewColor = static_cast<ColorProperty*>(p);
-  edgeAsNodeGraphColors->setNodeValue(edgeToNode[e], viewColor->getEdgeValue(e));
-  setTextureUpdateNeeded();
-}
-else if (p->getName() == "viewLabel") {
-  StringProperty *edgeAsNodeGraphLabels = edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
-  StringProperty *viewLabel = static_cast<StringProperty*>(p);
-  edgeAsNodeGraphLabels->setNodeValue(edgeToNode[e], viewLabel->getEdgeValue(e));
-}
-else if (p->getName() == "viewSelection") {
-  BooleanProperty *edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
-  BooleanProperty *viewSelection = static_cast<BooleanProperty*>(p);
-  edgeAsNodeGraphSelection->removeListener(this);
-
-  if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e))
-    edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
-
-  edgeAsNodeGraphSelection->addListener(this);
-  setTextureUpdateNeeded();
-}
-}
-
-void Histogram::afterSetAllNodeValue(PropertyInterface *p) {
-if (p->getName() == propertyName) {
-  setLayoutUpdateNeeded();
-}
-else if (p->getName() == "viewSize") {
-  setSizesUpdateNeeded();
-}
-else if (p->getName() == "viewSelection") {
-  if (p->getGraph() == edgeAsNodeGraph) {
-    BooleanProperty *edgeAsNodeGraphSelection = static_cast<BooleanProperty*>(p);
-    BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
-    viewSelection->setAllEdgeValue(edgeAsNodeGraphSelection->getNodeValue(edgeAsNodeGraph->getOneNode()));
-  }
-
-  setTextureUpdateNeeded();
-}
-else if (p->getName() == "viewColor"|| p->getName() == "viewShape" ||
-         p->getName() == "viewTexture") {
-  setTextureUpdateNeeded();
-}
-}
-
-void Histogram::afterSetAllEdgeValue(PropertyInterface *p) {
-
-if (p->getName() == propertyName) {
-  setLayoutUpdateNeeded();
-}
-
-if (p->getName() == "viewColor") {
-  ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
-  ColorProperty *viewColor = static_cast<ColorProperty*>(p);
-  edgeAsNodeGraphColors->setAllNodeValue(viewColor->getEdgeValue(graph->getOneEdge()));
-  setTextureUpdateNeeded();
-}
-else if (p->getName() == "viewLabel") {
-  StringProperty *edgeAsNodeGraphLabels = edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
-  StringProperty *viewLabel = static_cast<StringProperty*>(p);
-  edgeAsNodeGraphLabels->setAllNodeValue(viewLabel->getEdgeValue(graph->getOneEdge()));
-}
-else if (p->getName() == "viewSelection") {
-  BooleanProperty *edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
-  BooleanProperty *viewSelection = static_cast<BooleanProperty*>(p);
-  edge e;
-  forEach(e, graph->getEdges()) {
-    if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
-      edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
-    }
-  }
-
-  setTextureUpdateNeeded();
-}
-}
-
-void Histogram::addNode(Graph *, const node ) {
-setLayoutUpdateNeeded();
-setSizesUpdateNeeded();
-}
-
-void Histogram::addEdge(Graph *, const edge e) {
-edgeToNode[e] = edgeAsNodeGraph->addNode();
-setLayoutUpdateNeeded();
-setSizesUpdateNeeded();
-}
-
-void Histogram::delNode(Graph *,const node ) {
-setLayoutUpdateNeeded();
-setSizesUpdateNeeded();
-}
-
-void Histogram::delEdge(Graph *,const edge e) {
-edgeAsNodeGraph->delNode(edgeToNode[e]);
-edgeToNode.erase(e);
-setLayoutUpdateNeeded();
-setSizesUpdateNeeded();
-}
-*/
 void Histogram::setLayoutUpdateNeeded() {
   layoutUpdateNeeded = true;
   textureUpdateNeeded = true;
