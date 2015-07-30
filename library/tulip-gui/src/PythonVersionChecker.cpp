@@ -18,7 +18,6 @@
  */
 
 #include <tulip/PythonVersionChecker.h>
-#include <tulip/TlpQtTools.h>
 
 #include <QProcess>
 #include <QSettings>
