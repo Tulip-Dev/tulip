@@ -20,6 +20,10 @@ sys.path.pop()
 class tlpogl(_tulipogl.tlpogl):
   pass
 
+if not sys.argv[0] == 'tulip':
+    tlp.TulipBitmapDir = os.path.dirname(__file__) + '/share/bitmaps/'
+    tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
+
 tlp.loadTulipPluginsFromDir(_tulipOglNativeLibsPath + 'plugins')
 
 __all__ = ['tlpogl']

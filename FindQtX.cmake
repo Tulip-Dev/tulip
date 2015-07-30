@@ -11,7 +11,9 @@ SET(Qt5WebKitWidgets_FOUND false)
 # If requested, use Qt5 to build the project
 # In order for CMake to find and configure a Qt5 build, the root directory
 # of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable
-IF(USE_QT5_IF_INSTALLED)
+
+# Also, when building Tulip Python wheels, force the use of Qt4 (more lightweight, easier to deploy)
+IF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
     # Unset related CMake variables in order to change the Qt5 version (by modifying the root Qt5 directory through the CMAKE_PREFIX_PATH variable)
     # without having to delete the current CMake cache
@@ -57,7 +59,7 @@ IF(USE_QT5_IF_INSTALLED)
     FIND_PACKAGE(Qt5WebKit)
     FIND_PACKAGE(Qt5WebKitWidgets)
 
-ENDIF(USE_QT5_IF_INSTALLED)
+ENDIF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
  # Qt5 and all the required modules are present, do global setup
 IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
@@ -112,10 +114,10 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
      ${Qt5Xml_FOUND} AND ${Qt5XmlPatterns_FOUND} AND ${Qt5Network_FOUND} AND
      ${Qt5WebKit_FOUND} AND ${Qt5WebKitWidgets_FOUND})
 
-    IF(USE_QT5_IF_INSTALLED)
+    IF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
       MESSAGE("Qt 5 required components or the CMake modules to locate them have not been found.")
       MESSAGE("Falling back to Qt 4.")
-    ENDIF(USE_QT5_IF_INSTALLED)
+    ENDIF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
     FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
     SET(USE_QT4 true)
@@ -130,6 +132,12 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
 
     SET(QT_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
 	
+    IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
+        MESSAGE(SEND_ERROR "When building Tulip python wheels on MacOS, Qt version must be less than 4.8."
+                           "Indeed we need universal binaries (i386;x86_64) to build a binary wheel and Qt 4.7 "
+                           "is the last Qt version to provide bundles with universal binaries.")
+    ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
+
      # define aliases for Qt macros
     MACRO(QTX_WRAP_CPP outfiles )
       QT4_WRAP_CPP(${outfiles} ${ARGN})

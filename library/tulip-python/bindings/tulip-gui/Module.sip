@@ -37,6 +37,12 @@ initQt = (display != NULL);
 // is waiting for input.
 if (!QApplication::instance() && initQt) {
   installQtInputHook();
+#ifdef __APPLE__
+  // Hack for MacOS to avoid importing the qt_menu.nib file as it is
+  // not needed for our purpose and it forbids the tulipgui module to
+  // be imported when it has been installed through pip
+  QApplication::setAttribute(Qt::AA_MacPluginApplication);
+#endif
   new QApplication(argc, argv);
 
   tlp::initTulipSoftware();

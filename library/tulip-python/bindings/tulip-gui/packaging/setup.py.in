@@ -1,10 +1,78 @@
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 from setuptools.dist import Distribution
+
 # To use a consistent encoding
 from codecs import open
+
 from os import path
 import platform
+
+import os
+import subprocess
+import sys
+
+# On MacOS, we need to relink dylibs and set correct rpaths in
+# order for the modules to be imported in a portable way when
+# distributed through pip
+if platform.system() == 'Darwin':
+
+    def getDyLibDependencies(dylib):
+        otool = subprocess.check_output('otool -L %s' % dylib, shell=True)
+        if sys.version_info[0] == 3:
+            otool = otool.decode('utf-8')
+        L = otool.split('\n')[1:-1]
+        L = map(lambda d: d[1:].split(' ')[0], L)
+        L = filter(lambda d: '/usr/lib' not in d and
+                             '/System' not in d and
+                             'Python' not in d and
+                             '@rpath' not in d, L)
+        return set(L)
+
+    def relinkDyLibAndSetRpaths(dylib, rpaths=[]):
+        libs = getDyLibDependencies(dylib)
+        for L in libs:
+            # prefer system libs for libz and libbz
+            if 'libz.1.dylib' in L:
+                subprocess.call(
+                   'install_name_tool -change %s /usr/lib/libz.1.dylib %s 2>/dev/null' %
+                    (L, dylib),
+                    shell=True)
+            elif 'libbz2.1.0.dylib' in L:
+                subprocess.call(
+                    'install_name_tool -change %s /usr/lib/libbz2.1.0.dylib %s 2>/dev/null' %
+                    (L, dylib),
+                    shell=True)
+            # change not system libraries path to @rpath/libname
+            else:
+                subprocess.call(
+                    'install_name_tool -change %s @rpath/%s %s 2>/dev/null' %
+                    (L, os.path.basename(L), dylib),
+                    shell=True)
+        # add rpaths in dylib
+        for rpath in rpaths:
+            subprocess.call(
+                'install_name_tool -add_rpath %s %s 2>/dev/null' %
+                 (rpath, dylib),
+                 shell=True)
+
+    def relinkDyLibsInDirAndSetRpaths(dirPath, rpaths):
+        for lib in os.listdir(dirPath):
+            libPath = dirPath + lib
+            if not os.path.isdir(libPath):
+                deps = getDyLibDependencies(libPath)
+                relinkDyLibAndSetRpaths(libPath, rpaths)
+
+    tulipOglNativeLibsPath = os.getcwd() + '/tulipogl/native/'
+    tulipOglNativePluginsLibsPath = os.getcwd() + '/tulipogl/native/plugins/'
+    tulipGuiNativeLibsPath = os.getcwd() + '/tulipgui/native/'
+    tulipGuiNativePluginsLibsPath = os.getcwd() + '/tulipgui/native/plugins/'
+
+    print("Relinking dylibs and setting rpaths ...")
+    relinkDyLibsInDirAndSetRpaths(tulipOglNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/'])
+    relinkDyLibsInDirAndSetRpaths(tulipOglNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/'])
+    relinkDyLibsInDirAndSetRpaths(tulipGuiNativeLibsPath, ['@loader_path/', '@loader_path/../../tulip/native/', '@loader_path/../../tulipogl/native/'])
+    relinkDyLibsInDirAndSetRpaths(tulipGuiNativePluginsLibsPath, ['@loader_path/..', '@loader_path/../../../tulip/native/', '@loader_path/../../../tulipogl/native/'])
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
@@ -14,7 +82,7 @@ tulip_native_libs = []
 if platform.system() == 'Windows':
     tulip_native_libs = ['native/*.pyd', 'native/*.dll', 'native/plugins/*.dll']
 elif platform.system() == 'Darwin':
-    tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/plugins/*.dylib']
+    tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/Qt*', 'native/phonon', 'native/plugins/*.dylib']
 
 here = path.abspath(path.dirname(__file__))
 
@@ -114,8 +182,8 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'tulipogl': tulip_native_libs,
-        'tulipgui': tulip_native_libs + ['share/bitmaps/*'],
+        'tulipogl': tulip_native_libs + ['share/bitmaps/*'],
+        'tulipgui': tulip_native_libs,
     },
 
     # Although 'package_data' is the preferred approach, in some case you may
