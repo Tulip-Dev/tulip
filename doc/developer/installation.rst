@@ -16,7 +16,7 @@ The installation process is not complicated, it can however take some time depen
 
 
 Foreword: Debug and Release modes
---------------------------------
+---------------------------------
 
 Tulip can be compiled and thus executed in two different modes. The first one, called *Release*, is the classic Tulip execution mode. The application should be executed this way when you are only using the originaly integrated tool of Tulip or the add-ons included with the plug-in library. Most users will only be interested in this mode.
 
@@ -35,10 +35,10 @@ First, select the directory in which you want to set the application (you must h
 Into that folder, create five subdirectories: 
 
 * *tulip-src* : the source files will be kept here
-* *build-debug* : where we stock the generated build file (with the mod *Debug*)
-* *build-release* : where we stock the generated build file (with the mod *Release*)
-* *install-debug* : the program will be installed here (with the mod *Debug*)
-* *install-release* : the program will be installed here (with the mod *Release*)
+* *build-debug* : where we stock the generated build file (with the mode *Debug*)
+* *build-release* : where we stock the generated build file (with the mode *Release*)
+* *install-debug* : the program will be installed here (with the mode *Debug*)
+* *install-release* : the program will be installed here (with the mode *Release*)
 
 You should obtain a directory hierarchy similar to this one:
 
@@ -221,7 +221,7 @@ The installation described on this page can be run on both 32 and 64-bits system
 
 First install **Python**, **CMake** and **NSIS** (use default options). For the last one, you will need to add its root directory to the *PATH* environment variable. This can be achieved in the *System Properties*, tab *Advanced System Parameters*. You will need to click on the *Environment Variables* button and create or modify the user variable named *PATH* by adding the value ::
 
-  C:\Program FIles (x86)\NSIS
+  C:\Program Files (x86)\NSIS
 
 in it (if you have used the default installation path).
 
