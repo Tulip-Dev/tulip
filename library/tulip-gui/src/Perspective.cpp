@@ -68,6 +68,8 @@ Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(NULL), _max
 
 Perspective::~Perspective() {
   delete _project;
+  if (this == _instance)
+    _instance = NULL;
 }
 
 PluginProgress* Perspective::progress(ProgressOptions options)  {
