@@ -107,6 +107,8 @@ void SceneConfigWidget::resetChanges() {
   else
     _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters->getElementOrderingProperty()));
 
+  _ui->descendingCB->setChecked(renderingParameters->isElementOrderedDescending());
+
   _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
   _ui->labelsBillboardedCheck->setChecked(renderingParameters->getLabelsAreBillboarded());
   _ui->fixedFontSizeRB->setChecked(renderingParameters->isLabelFixedFontSize());
@@ -175,6 +177,8 @@ void SceneConfigWidget::applySettings() {
     GraphPropertiesModel<NumericProperty>* model = static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
     renderingParameters->setElementOrderingProperty(dynamic_cast<NumericProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
   }
+
+  renderingParameters->setElementOrderedDescending(_ui->descendingCB->isChecked());
 
   renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters->setLabelsAreBillboarded(_ui->labelsBillboardedCheck->isChecked());

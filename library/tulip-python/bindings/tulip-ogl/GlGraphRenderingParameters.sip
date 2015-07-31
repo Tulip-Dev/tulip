@@ -562,7 +562,7 @@ Returns the stencil value for edges labels.
 tlpogl.GlGraphRenderingParameters.setElementOrdered(elementOrdered)
 
 Activates / desactivates the ordered rendering of graph elements according
-to the values in the "viewMetric" double property.
+to the values in the element ordering property.
 
 :param elementsOrdered: the state of the ordered rendering
 :type elementOrdered: boolean
@@ -575,6 +575,33 @@ to the values in the "viewMetric" double property.
 tlpogl.GlGraphRenderingParameters.isElementOrdered()
 
 Returns the state of the ordered rendering of graph elements.
+
+:rtype: boolean
+%End
+
+// =============================================================================================
+
+  void setElementOrderedDescending(const bool state);
+%Docstring
+tlpogl.GlGraphRenderingParameters.setElementOrderedDescending(elementOrderedDescending)
+
+.. versionadded:: 4.8
+
+Defines if the graph elements are sorted in descending order when the element ordering is activated.
+
+:param elementsOrderedDescending: whether graph elements have to be sorted in descending order
+:type elementOrdered: boolean
+%End
+
+// =============================================================================================
+
+  bool isElementOrderedDescending() const;
+%Docstring
+tlpogl.GlGraphRenderingParameters.isElementOrderedDescending()
+
+.. versionadded:: 4.8
+
+Returns if the graph elements are sorted in descending order when the element ordering is activated
 
 :rtype: boolean
 %End
