@@ -21,6 +21,7 @@
 #ifndef PLUGINMANAGER_H
 #define PLUGINMANAGER_H
 
+#include <QObject>
 #include <QStringList>
 
 #include <tulip/tulipconf.h>
