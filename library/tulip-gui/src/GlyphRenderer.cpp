@@ -24,6 +24,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/Camera.h>
 
 using namespace tlp;
 using namespace std;
@@ -77,7 +78,9 @@ QPixmap GlyphRenderer::render(unsigned int pluginId) {
     renderer->setViewPortSize(16,16);
     renderer->clearScene();
     renderer->addGraphToScene(_graph);
-    renderer->renderScene(true);
+    renderer->getScene()->centerScene();
+    renderer->getScene()->getGraphCamera().setZoomFactor(0.9);
+    renderer->renderScene(false, true);
     QImage preview = renderer->getImage();
     _previews[pluginId] = QPixmap::fromImage(preview);
   }
