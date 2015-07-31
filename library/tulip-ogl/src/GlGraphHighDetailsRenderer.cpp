@@ -315,6 +315,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       GreatThanNode ltn;
       ltn.metric=metric;
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
+      if (!inputData->renderingParameters()->isElementOrderedDescending()) {
+        std::reverse(nodesMetricOrdered.begin(), nodesMetricOrdered.end());
+      }
 
       for(vector<pair<node,float> >::iterator it=nodesMetricOrdered.begin(); it!=nodesMetricOrdered.end(); ++it) {
         if(selectionDrawActivate) {
@@ -368,6 +371,9 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         GreatThanEdge lte;
         lte.metric=metric;
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
+        if (!inputData->renderingParameters()->isElementOrderedDescending()) {
+          reverse(edgesMetricOrdered.begin(), edgesMetricOrdered.end());
+        }
 
         for(vector<pair<edge,float> >::iterator it=edgesMetricOrdered.begin(); it!=edgesMetricOrdered.end(); ++it) {
           if(selectionDrawActivate) {

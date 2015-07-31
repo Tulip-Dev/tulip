@@ -81,7 +81,16 @@ padding-top: 5px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>10</number>
+   </property>
+   <property name="bottomMargin">
     <number>10</number>
    </property>
    <item>
@@ -135,8 +144,8 @@ padding-top: 5px;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>346</width>
-        <height>719</height>
+        <width>341</width>
+        <height>685</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -179,7 +188,16 @@ padding-top: 5px;
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <item>
@@ -266,7 +284,16 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <item>
@@ -376,14 +403,14 @@ background-color: rgb(160, 160, 160);</string>
           <item>
            <widget class="QRadioButton" name="fixedFontSizeRB">
             <property name="text">
-             <string>Use fixed font size</string>
+             <string>Use fixed font si&amp;ze</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QRadioButton" name="dynamicFontSizeRB">
             <property name="text">
-             <string>Use dynamic font size</string>
+             <string>Use d&amp;ynamic font size</string>
             </property>
             <property name="checked">
              <bool>true</bool>
@@ -504,7 +531,16 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <item>
@@ -583,7 +619,16 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <item>
@@ -635,6 +680,13 @@ background-color: rgb(160, 160, 160);</string>
               </property>
              </spacer>
             </item>
+            <item>
+             <widget class="QCheckBox" name="descendingCB">
+              <property name="text">
+               <string>descending</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
          </layout>
@@ -661,7 +713,16 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <item>
@@ -695,7 +756,7 @@ background-color: rgb(160, 160, 160);</string>
                <string>Parallel lines are preserved.</string>
               </property>
               <property name="text">
-               <string>Orthogonal (no shape distorsion)</string>
+               <string>O&amp;rthogonal (no shape distorsion)</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>
@@ -708,7 +769,7 @@ background-color: rgb(160, 160, 160);</string>
                <string>As in the human view perception,&lt;br/&gt;parallel lines are not necessarily represented as parallel&lt;br/&gt;and closer the nodes are, the bigger they are represented.</string>
               </property>
               <property name="text">
-               <string>Central perspective (shape distorsion)</string>
+               <string>Central perspecti&amp;ve (shape distorsion)</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup</string>
@@ -741,7 +802,16 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="margin">
+          <property name="leftMargin">
+           <number>5</number>
+          </property>
+          <property name="topMargin">
+           <number>5</number>
+          </property>
+          <property name="rightMargin">
+           <number>5</number>
+          </property>
+          <property name="bottomMargin">
            <number>5</number>
           </property>
           <item>
@@ -776,7 +846,7 @@ background-color: rgb(160, 160, 160);</string>
 to draw the graph in the center of the panel.</string>
               </property>
               <property name="text">
-               <string>Always center scene when changing graph</string>
+               <string>Always center scene when changing &amp;graph</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup1</string>
@@ -791,7 +861,7 @@ of the previously displayed graph, the point of view
 of the scene remains unchanged.</string>
               </property>
               <property name="text">
-               <string>Keep same point of view for subgraphs</string>
+               <string>&amp;Keep same point of view for subgraphs</string>
               </property>
               <attribute name="buttonGroup">
                <string notr="true">buttonGroup1</string>
@@ -1035,6 +1105,22 @@ of the scene remains unchanged.</string>
     <hint type="destinationlabel">
      <x>189</x>
      <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>descendingCB</sender>
+   <signal>stateChanged(int)</signal>
+   <receiver>SceneConfigWidget</receiver>
+   <slot>applySettings()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>272</x>
+     <y>559</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>187</x>
+     <y>355</y>
     </hint>
    </hints>
   </connection>

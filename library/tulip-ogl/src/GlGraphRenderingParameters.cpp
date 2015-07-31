@@ -32,6 +32,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _viewMetaLabel(false),
   _viewOutScreenLabel(false),
   _elementOrdered(false),
+  _elementOrderedDescending(true),
   _edgeColorInterpolate(true),
   _edge3D(false),
   _edgeSizeInterpolate(true),
@@ -294,6 +295,13 @@ bool GlGraphRenderingParameters::isElementOrdered() const {
 }
 void GlGraphRenderingParameters::setElementOrdered(const bool b) {
   _elementOrdered = b;
+}
+//====================================================
+bool GlGraphRenderingParameters::isElementOrderedDescending() const {
+  return (_elementOrderedDescending);
+}
+void GlGraphRenderingParameters::setElementOrderedDescending(const bool b) {
+  _elementOrderedDescending = b;
 }
 //====================================================
 bool GlGraphRenderingParameters::isElementZOrdered() const {

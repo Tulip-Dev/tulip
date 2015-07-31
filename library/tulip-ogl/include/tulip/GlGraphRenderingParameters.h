@@ -304,20 +304,34 @@ public:
   int getEdgesLabelStencil() const;
 
   /**
-   * @brief If true node and edges are ordered according to the viewMetric property
+   * @brief If true node and edges are ordered according to the element ordering property (default to viewMetric)
    */
   void setElementOrdered(const bool state);
 
   /**
-   * @brief return true if element ordering is activated
+   * @brief Returns true if element ordering is activated
    */
   bool isElementOrdered() const;
+
+  /**
+   * @brief If true (default value) nodes and edges are sorted in descending order according to the element ordering property (default to viewMetric)
+   *
+   * @since Tulip 4.8
+   */
+  void setElementOrderedDescending(const bool state);
+
+  /**
+   * @brief Returns true if the nodes and edges are sorted in descending order when the element ordering is activated
+   *
+   * @since Tulip 4.8
+   */
+  bool isElementOrderedDescending() const;
 
   /**
    * @brief Defines which property is used for the element ordering.
    *
    * @param property The property to use to order the elements.
-   * @return void
+   *
    **/
   void setElementOrderingProperty(tlp::NumericProperty* property);
 
@@ -495,6 +509,7 @@ private:
   bool _viewMetaLabel;
   bool _viewOutScreenLabel;
   bool _elementOrdered;
+  bool _elementOrderedDescending;
   bool _edgeColorInterpolate;
   bool _edge3D;
   bool _edgeSizeInterpolate;
