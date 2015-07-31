@@ -315,6 +315,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       GreatThanNode ltn;
       ltn.metric=metric;
       sort(nodesMetricOrdered.begin(),nodesMetricOrdered.end(),ltn);
+
       if (!inputData->renderingParameters()->isElementOrderedDescending()) {
         std::reverse(nodesMetricOrdered.begin(), nodesMetricOrdered.end());
       }
@@ -371,6 +372,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         GreatThanEdge lte;
         lte.metric=metric;
         sort(edgesMetricOrdered.begin(),edgesMetricOrdered.end(),lte);
+
         if (!inputData->renderingParameters()->isElementOrderedDescending()) {
           reverse(edgesMetricOrdered.begin(), edgesMetricOrdered.end());
         }
