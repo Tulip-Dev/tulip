@@ -184,7 +184,7 @@ void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color& col
 }
 
 Color TulipSettings::defaultLabelColor() {
-  QString val = value(DefaultLabelColorConfigEntry,"(54, 54, 54)").toString();
+  QString val = value(DefaultLabelColorConfigEntry,"(0, 0, 0)").toString();
   Color result;
   ColorType::fromString(result,val.toStdString());
   return result;

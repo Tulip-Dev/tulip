@@ -13,7 +13,7 @@ TulipViewSettings::TulipViewSettings() :
   _defaultLabelColor(Color::Black),
   _defaultLabelBorderColor(Color::Black),
   _defaultNodeBorderWidth(0),
-  _defaultEdgeBorderWidth(1),
+  _defaultEdgeBorderWidth(0),
   _defaultLabelBorderWidth(1),
   _defaultLabelPosition(LabelPosition::Center),
   _defaultNodeSize(Size(1,1,1)),
