@@ -35,7 +35,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
   connect(_ui->randomSeedCheck, SIGNAL(stateChanged(int)), this, SLOT(randomSeedCheckChanged(int)));
 
   // disable edition for title items (in column 0)
-  for (int i = 0; i < 4; ++i)
+  for (int i = 0; i < _ui->graphDefaultsTable->rowCount() ; ++i)
     _ui->graphDefaultsTable->item(i, 0)->setFlags(Qt::ItemIsEnabled);
 }
 
@@ -82,7 +82,7 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setDefaultShape(tlp::NODE,model->data(model->index(2,1)).value<NodeShape::NodeShapes>());
   TulipSettings::instance().setDefaultShape(tlp::EDGE,(int)(model->data(model->index(2,2)).value<EdgeShape::EdgeShapes>()));
   TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,1)).value<tlp::Color>());
-  TulipSettings::instance().setDefaultSelectionColor(model->data(model->index(3,2)).value<tlp::Color>());
+  TulipSettings::instance().setDefaultLabelColor(model->data(model->index(4,1)).value<tlp::Color>());
 
   TulipSettings::instance().applyProxySettings();
 
@@ -155,6 +155,8 @@ void PreferencesDialog::readSettings() {
   model->setData(model->index(2,2),QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(TulipSettings::instance().defaultShape(tlp::EDGE))));
   model->setData(model->index(3,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
   model->setData(model->index(3,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultSelectionColor()));
+  model->setData(model->index(4,1),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor()));
+  model->setData(model->index(4,2),QVariant::fromValue<tlp::Color>(TulipSettings::instance().defaultLabelColor()));
   // edges selection color is not editable
   //_ui->graphDefaultsTable->item(3,2)->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
 
@@ -176,10 +178,10 @@ void PreferencesDialog::readSettings() {
 }
 
 void PreferencesDialog::cellChanged(int row, int column) {
-  if (row == 3) {
+  if (row >= 3) {
     // force selection color to be the same for nodes & edges
     QAbstractItemModel* model = _ui->graphDefaultsTable->model();
-    model->setData(model->index(3, column == 1 ? 2 : 1), model->data(model->index(3,column)));
+    model->setData(model->index(row, column == 1 ? 2 : 1), model->data(model->index(row, column)));
   }
 }
 
