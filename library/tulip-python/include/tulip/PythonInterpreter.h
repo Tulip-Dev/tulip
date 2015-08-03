@@ -184,7 +184,7 @@ public :
 
   PyObject* callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
 
-  PyObject* evalPythonStatement(const QString &pythonStatement);
+  PyObject* evalPythonStatement(const QString &pythonStatement, bool singleInput = false);
 
   void clearTracebacks();
 

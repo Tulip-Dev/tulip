@@ -235,10 +235,14 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
 }
 
 void PythonShellWidget::executeCurrentLines() {
+  if (_currentCodeLines.isEmpty()) return;
   tlp::Observable::holdObservers();
   PythonInterpreter::getInstance()->setConsoleWidget(this);
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(true);
-  PythonInterpreter::getInstance()->runString(_currentCodeLines);
+  // eval the input statement in 'single input mode'
+  PythonInterpreter::getInstance()->evalPythonStatement(_currentCodeLines, true);
+  // flush stdout as every input that does not eval to 'None' is printed to it
+  PythonInterpreter::getInstance()->runString("sys.stdout.flush()");
   _currentCodeLines = "";
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(false);
   PythonInterpreter::getInstance()->resetConsoleWidget();
