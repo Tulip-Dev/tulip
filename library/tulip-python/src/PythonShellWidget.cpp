@@ -236,6 +236,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
 
 void PythonShellWidget::executeCurrentLines() {
   if (_currentCodeLines.isEmpty()) return;
+
   tlp::Observable::holdObservers();
   PythonInterpreter::getInstance()->setConsoleWidget(this);
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(true);
