@@ -99,7 +99,7 @@ static const QString printObjectClassFunction =
   ;
 
 #if PY_MAJOR_VERSION >= 3
-static QString convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
+static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
   PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
   QString ret = QString::fromUtf8(PyBytes_AsString(utf8Str));
   decrefPyObject(utf8Str);
@@ -278,7 +278,7 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
   PyObject *pVersion = PyRun_String("str(sys.version_info[0])+\".\"+str(sys.version_info[1])", Py_eval_input, pMainDict, pMainDict);
 
 #if PY_MAJOR_VERSION >= 3
-  _pythonVersion = convertPythonUnicodeObjectToStdString(pVersion);
+  _pythonVersion = convertPythonUnicodeObjectToQString(pVersion);
 #else
   _pythonVersion = QString(PyString_AsString(pVersion));
 #endif
@@ -534,7 +534,7 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
   return ret != -1;
 }
 
-PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement) {
+PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement, bool singleInput) {
   holdGIL();
 #if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
@@ -545,7 +545,7 @@ PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement)
   decrefPyObject(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
 
-  PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), Py_eval_input, pMainDict, pMainDict);
+  PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), singleInput ? Py_single_input : Py_eval_input, pMainDict, pMainDict);
 
   if (PyErr_Occurred()) {
     PyErr_Print();

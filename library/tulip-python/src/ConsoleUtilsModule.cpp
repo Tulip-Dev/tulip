@@ -128,7 +128,11 @@ consoleutils_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
 }
 
 static PyObject *
-consoleutils_ConsoleOutput_flush(PyObject *, PyObject *) {
+consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
+  if (!currentConcatOutput.isEmpty()) {
+    PythonInterpreter::getInstance()->sendOutputToConsole(currentConcatOutput, reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
+    currentConcatOutput = "";
+  }
   Py_RETURN_NONE;
 }
 
