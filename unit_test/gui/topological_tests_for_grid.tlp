@@ -220,7 +220,7 @@
 (default "(0,0,0,255)" "(0,0,0,255)")
 )
 (property  0 double "viewBorderWidth"
-(default "0" "1")
+(default "0" "0")
 )
 (property  0 color "viewColor"
 (default "(255,95,95,255)" "(180,180,180,255)")
