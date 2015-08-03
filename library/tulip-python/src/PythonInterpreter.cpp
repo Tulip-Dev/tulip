@@ -85,7 +85,7 @@ static const QString printObjectClassFunction =
   "	if obj and hasattr(obj, \"__class__\"):\n"
   "		if hasattr(obj.__class__, \"__module__\"):\n"
   "			mod = obj.__class__.__module__\n"
-  "			if mod == \"tulip\":"
+  "			if mod == \"_tulip\":"
   "				mod = \"tlp\"\n"
   "			type = mod + \".\"\n"
   "		if hasattr(obj.__class__, \"__name__\"):\n"

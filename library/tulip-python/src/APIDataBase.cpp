@@ -79,7 +79,7 @@ void APIDataBase::loadApiFile(const QString &apiFilePath) {
     QString line = in.readLine();
     addApiEntry(line);
 
-    if (line.startsWith("tulip.tlp.Vec3f.")) {
+    if (line.startsWith("_tulip.tlp.Vec3f.")) {
       addApiEntry(line.replace("Vec3f", "Coord"));
       addApiEntry(line.replace("Coord", "Size"));
     }
@@ -90,15 +90,15 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
   QString apiEntry(apiEnt);
   int pos = apiEntry.indexOf('.');
 
-  if (apiEntry.contains(QRegExp("^tulipogl.*\\..+"))) {
+  if (apiEntry.contains(QRegExp("^_tulipogl.*\\..+"))) {
     apiEntry = apiEntry.mid(pos+1);
   }
 
-  if (apiEntry.contains(QRegExp("^tulipgui.*\\..+"))) {
+  if (apiEntry.contains(QRegExp("^_tulipgui.*\\..+"))) {
     apiEntry = apiEntry.mid(pos+1);
   }
 
-  if (apiEntry.contains(QRegExp("^tulip.*\\..+"))) {
+  if (apiEntry.contains(QRegExp("^_tulip.*\\..+"))) {
     apiEntry = apiEntry.mid(pos+1);
   }
 
