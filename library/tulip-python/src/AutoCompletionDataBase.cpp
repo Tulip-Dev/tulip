@@ -868,6 +868,11 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
 
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
+
+    sgName = "'" + QString::fromUtf8(sg->getName().c_str()) + "'";
+
+    if (sgName.startsWith(prefix))
+      ret.insert(sgName);
   }
   forEach(sg, root->getSubGraphs()) {
     ret += getAllSubGraphsNamesFromRoot(sg, prefix);
@@ -881,6 +886,12 @@ static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix,
   foreach(PropertyInterface* prop, properties) {
     if (type == "" || prop->getTypename() == type.toStdString()) {
       QString qProp = "\"" + QString::fromUtf8(prop->getName().c_str()) + "\"";
+
+      if (qProp.startsWith(prefix)) {
+        ret.insert(qProp);
+      }
+
+      qProp = "'" + QString::fromUtf8(prop->getName().c_str()) + "'";
 
       if (qProp.startsWith(prefix)) {
         ret.insert(qProp);
@@ -969,7 +980,12 @@ static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QStr
   tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = rootGraph->getAttributes().getValues();
 
   while (it->hasNext()) {
-    ret.insert("\"" + QString::fromUtf8(it->next().first.c_str()) + "\"");
+    QString attrName = "\"" + QString::fromUtf8(it->next().first.c_str()) + "\"";
+    if (attrName.startsWith(prefix))
+      ret.insert(attrName);
+    attrName = "'" + QString::fromUtf8(it->next().first.c_str()) + "'";
+    if (attrName.startsWith(prefix))
+      ret.insert(attrName);
   }
 
   delete it;
@@ -1130,6 +1146,13 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
         if (pluginName.startsWith(prefix)) {
           ret.insert(pluginName);
         }
+
+        pluginName = "'" + QString::fromUtf8((*it).c_str()) + "'";
+
+        if (pluginName.startsWith(prefix)) {
+          ret.insert(pluginName);
+        }
+
       }
     }
 
