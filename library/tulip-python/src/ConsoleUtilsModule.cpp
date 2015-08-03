@@ -133,6 +133,7 @@ consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
     PythonInterpreter::getInstance()->sendOutputToConsole(currentConcatOutput, reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
     currentConcatOutput = "";
   }
+
   Py_RETURN_NONE;
 }
 
