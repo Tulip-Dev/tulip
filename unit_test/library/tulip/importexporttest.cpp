@@ -26,6 +26,7 @@
 #include <tulip/ExportModule.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -247,11 +248,17 @@ Graph* ImportExportTest::createSimpleGraph() const {
 void ImportExportTest::importExportGraph(tlp::Graph* original) {
 
   const string exportFilename = "graph_export";
-  ofstream os(exportFilename.c_str());
-  DataSet set;
-  tlp::exportGraph(original, os, exportAlgorithm, set);
 
-  os.close();
+  std::ostream *os = NULL;
+  if (exportAlgorithm != "TLPB Export")
+    os = tlp::getOutputFileStream(exportFilename);
+  else
+    os = tlp::getOutputFileStream(exportFilename, ios::out | ios::binary);
+
+  DataSet set;
+  tlp::exportGraph(original, *os, exportAlgorithm, set);
+
+  delete os;
 
   DataSet input;
   input.set<string>("file::filename", exportFilename);
