@@ -207,10 +207,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         os.write((char *) &numRanges, sizeof(numRanges));
         // write already buffered ranges
         int numRangesV = numRanges / MAX_RANGES_TO_WRITE;
+
         for (int j = 0 ; j < numRangesV ; ++j) {
-            os.write((char *) vRangesVec[j].data(),
-                     MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
+          os.write((char *) vRangesVec[j].data(),
+                   MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
         }
+
         // write last buffered ranges
         os.write((char *) vRanges.data(),
                  rangesToWrite * sizeof(vRanges[0]));
@@ -262,10 +264,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         os.write((char *) &numRanges, sizeof(numRanges));
         // write already buffered ranges
         int numRangesV = numRanges / MAX_RANGES_TO_WRITE;
+
         for (int j = 0 ; j < numRangesV ; ++j) {
-            os.write((char *) vRangesVec[j].data(),
-                     MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
+          os.write((char *) vRangesVec[j].data(),
+                   MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
         }
+
         // write last buffered ranges
         os.write((char *) vRanges.data(),
                  rangesToWrite * sizeof(vRanges[0]));
