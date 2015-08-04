@@ -52,27 +52,43 @@ enum ElementType {
 
 /**
  * @ingroup Graph
- * @brief Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
- * This function uses the "TLP Import" import plugin, and will fail if it is not loaded (By default this plugin is linked into the library and should be loaded).
+ * @brief Loads a graph from a file (extension can be any of the Tulip supported input graph file format).
+ *
+ * This function loads a graph serialized in a file trough the available Tulip import plugins.
+ * Since Tulip 4.7.1, the selection of the import plugin is based on the provided filename extension.
+ * The import will fail if the selected import plugin is not loaded.
+ * The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz), TLP Binary (*.tlpb, *.tlpb.gz), TLP JSON (*.json),
+ * Gephi (*.gexf), Pajek (*.net, *.paj), GML (*.gml), Graphviz (*.dot) and UCINET (*.txt)
+ *
+ * Before Tulip 4.7.1 and as a fallback, the function uses the "TLP Import" import plugin
+ * (always loaded as it is linked into the tulip-core library).
  *
  * If the import fails (no such file, parse error, ...) NULL is returned.
  *
- * @param filename The file in tlp format to parse.
- * @return :Graph* The imported Graph, NULL if the import failed.
+ * @param filename the file in one of the supported formats to parse.
+ * @return Graph* the imported Graph, NULL if the import failed.
  **/
 TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* progress = NULL);
 
 /**
  * @ingroup Graph
- * @brief Saves the corresponding graph and all its subgraphs to a file using the tlp format. Extension of the file can be either .tlp (human-readable text file) or .tlp.gz (gzipped text file).
+ * @brief Saves the corresponding graph to a file (extension can be any of the Tulip supported ouput graph file format)..
  *
- * This function checks the file name for the '.gz' extension and uses a compressed output if found.
+ * This function serializes the corresponding graph and all its subgraphs (depending on the format) to a file
+ * through the available Tulip export plugins.
+ * Since Tulip 4.7.1, the selection of the export plugin is based on the provided filename extension.
+ * The export will fail if the selected export plugin is not loaded.
+ * The file formats the graph can be exported to are : TLP (*.tlp, *.tlp.gz), TLP Binary (*.tlpb, *.tlpb.gz),
+ * TLP JSON (*.json) and GML (*.gml)
  *
- * This function uses the "TLP Export" export plugin, and will fail if it is not loaded (by default this plugin is linked into the library and should be loaded).
+ * This function checks the file name for the '.gz' extension and uses a compressed output if supported (TLP and TLP Binary only).
+ *
+ * Before Tulip 4.7.1 and as a fallback, this function uses the "TLP Export" export plugin
+ * (always loaded as it is linked into the tulip-core library).
  *
  * @param graph the graph to save.
  * @param filename the file to save the graph to.
- * @return bool Whether the export was successfull or not.
+ * @return bool whether the export was successfull or not.
  **/
 TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL);
 

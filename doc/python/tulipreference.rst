@@ -13,6 +13,10 @@ Graph management
 
 .. autofunction:: tulip::tlp.loadGraph
 
+.. autofunction:: tulip::tlp.loadGraph
+
+.. autofunction:: tulip::tlp.saveGraph
+
 .. autofunction:: tulip::tlp.saveGraph
 
 .. autofunction:: tulip::tlp.importGraph
@@ -421,6 +425,8 @@ Application of algorithms
 .. automethod:: tulip::tlp.Graph.applyDoubleAlgorithm
 
 .. automethod:: tulip::tlp.Graph.applyIntegerAlgorithm
+
+.. automethod:: tulip::tlp.Graph.applyLayoutAlgorithm
 
 .. automethod:: tulip::tlp.Graph.applyLayoutAlgorithm
 

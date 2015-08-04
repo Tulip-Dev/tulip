@@ -3617,95 +3617,112 @@ Creates and returns a new empty graph.
 :rtype: :class:`tlp.Graph`
 %End
 
-//===========================================================================================
+ //===========================================================================================
 
-tlp::Graph *loadGraph(const std::string &filename, tlp::Graph *newGraph);
-%Docstring
-tlp.loadGraph(filename[, graph = None])
+ tlp::Graph *loadGraph(const std::string &filename, tlp::Graph *newGraph);
+ %Docstring
+ tlp.loadGraph(filename[, graph = None])
 
-Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
-Returns the graph (a new graph if none is provided) or :const:`None` if the import fails.
+ Loads a graph in the TLP format from a file (extension can be .tlp or .tlp.gz).
+ Returns the graph (a new graph if none is provided) or :const:`None` if the import fails.
 
-:param filename: the path to the tlp file
-:type filename: string
-:param graph: if provided, import new graph elements in that already existing graph
-:type newGraph: :class:`tlp.Graph`
-:rtype: :class:`tlp.Graph`
-%End
-%MethodCode
-	tlp::DataSet dataSet;
-	dataSet.set<std::string>("file::filename", *a0);
-	sipRes = tlp::importGraph("TLP Import", dataSet, 0, a1);
-%End
+ :param filename: the path to the tlp file
+ :type filename: string
+ :param graph: if provided, import new graph elements in that already existing graph
+ :type newGraph: :class:`tlp.Graph`
+ :rtype: :class:`tlp.Graph`
+ %End
+ %MethodCode
+         tlp::DataSet dataSet;
+         dataSet.set<std::string>("file::filename", *a0);
+         sipRes = tlp::importGraph("TLP Import", dataSet, 0, a1);
+ %End
 
-//===========================================================================================
+ //===========================================================================================
 
-tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
-%Docstring
-tlp.loadGraph(filename)
+ tlp::Graph *loadGraph(const std::string &filename) /TransferBack/;
+ %Docstring
+ tlp.loadGraph(fileName)
 
-Loads a graph in the tlp format from a file (extension can be .tlp or .tlp.gz).
-Returns a new graph or :const:`None` if the import fails.
+ Loads a graph serialized in a file trough the available Tulip import plugins.
 
-:param filename: the path to the tlp file
-:type filename: string
-:rtype: :class:`tlp.Graph`
-%End
+ Since Tulip 4.7.1, the selection of the import plugin is based on the provided filename extension.
+ The import will fail if the selected import plugin is not loaded.
+ The graph file formats that can currently be imported are : TLP (*.tlp, *.tlp.gz), TLP Binary (*.tlpb, *.tlpb.gz), TLP JSON (*.json),
+ Gephi (*.gexf), Pajek (*.net, *.paj), GML (*.gml), Graphviz (*.dot) and UCINET (*.txt)
 
-//===========================================================================================
+ Before Tulip 4.7.1 and as a fallback, the function uses the "TLP Import" import plugin
+ (always loaded as it is linked into the tulip-core library).
 
-bool saveGraph(tlp::Graph *graph, const std::string &filename);
-%Docstring
-tlp.saveGraph(graph, filename)
+ Returns a new graph or :const:`None` if the import fails.
 
-Saves a graph to a file in the tlp format. Extension of the destination file can be either 
-.tlp (raw export) or .tlp.gz (compressed export). Returns :const:`True` if the graph has been 
-successfully saved.
+ :param filename: the path to the file in one of the supported formats to parse.
+ :type filename: string
+ :rtype: :class:`tlp.Graph`
+ %End
 
-:param graph: the graph to export
-:type graph: :class:`tlp.Graph`
-:param filename: the path to the destination file
-:type filename: string
-:rtype: boolean
-%End
+ //===========================================================================================
 
-//===========================================================================================
+ bool saveGraph(tlp::Graph *graph, const std::string &filename);
+ %Docstring
+ tlp.saveGraph(graph, filename)
 
-bool saveGraph(tlp::Graph *graph);
-%Docstring
-tlp.saveGraph(graph)
+ Serializes the corresponding graph and all its subgraphs (depending on the format) to a file
+ through the available Tulip export plugins.
 
-.. versionadded:: 4.5
+ Since Tulip 4.7.1, the selection of the export plugin is based on the provided filename extension.
+ The export will fail if the selected export plugin is not loaded.
+ The file formats the graph can be exported to are : TLP (*.tlp, *.tlp.gz), TLP Binary (*.tlpb, *.tlpb.gz),
+ TLP JSON (*.json) and GML (*.gml)
 
-Saves a graph in the tlp or tlp.gz format to the same file from which it has been loaded.
-Returns :const:`True` if the graph has been successfully saved.
+ This function checks the file name for the '.gz' extension and uses a compressed output if supported (TLP and TLP Binary only).
 
-:param graph: the graph to export
-:type graph: :class:`tlp.Graph`
-:rtype: boolean
-:throws: an exception if there is no tlp (or tlp.gz) file attached to the graph
-%End
+ Before Tulip 4.7.1 and as a fallback, this function uses the "TLP Export" export plugin
+ (always loaded as it is linked into the tulip-core library).
 
-%MethodCode
-    bool ok = false;
-    std::string tlpFilePath;
-    if (a0->attributeExist("file")) {
-      a0->getAttribute("file", tlpFilePath);
-      std::string ext = tlpFilePath.substr(tlpFilePath.rfind("tlp"));
-      if (ext == "tlp" || ext == "tlp.gz") {
-         ok = true;
-      }
-    }
-    if (ok) {
-      sipRes = tlp::saveGraph(a0, tlpFilePath);
-    } else {
-      sipIsErr = -1;
-      std::string msg = "No tlp (or tlp.gz) file attached to the graph \"";
-      msg += a0->getName();
-      msg += "\".";
-      PyErr_SetString(PyExc_Exception, msg.c_str());
-    }
-%End
+ Returns whether the export was successfull or not.
+
+ :param graph: the graph to export
+ :type graph: :class:`tlp.Graph`
+ :param filename: the path to the destination file
+ :type filename: string
+ :rtype: boolean
+ %End
+
+ //===========================================================================================
+
+ bool saveGraph(tlp::Graph *graph);
+ %Docstring
+ tlp.saveGraph(graph)
+
+ .. versionadded:: 4.5
+
+ Saves a graph to the same file from which it has been loaded (if the ouput format is supported).
+ Returns :const:`True` if the graph has been successfully saved.
+
+ :param graph: the graph to export
+ :type graph: :class:`tlp.Graph`
+ :rtype: boolean
+ :throws: an exception if there is no file attached to the graph
+ %End
+
+ %MethodCode
+     bool ok = false;
+     std::string tlpFilePath;
+     if (a0->attributeExist("file")) {
+       a0->getAttribute("file", tlpFilePath);
+       ok = true;
+     }
+     if (ok) {
+       sipRes = tlp::saveGraph(a0, tlpFilePath);
+     } else {
+       sipIsErr = -1;
+       std::string msg = "No file attached to the graph \"";
+       msg += a0->getName();
+       msg += "\".";
+       PyErr_SetString(PyExc_Exception, msg.c_str());
+     }
+ %End
 
 //===========================================================================================
 
