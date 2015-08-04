@@ -35,9 +35,11 @@ public:
   void testSubGraphsImportExport();
   void testAttributes();
 
-private:
+protected :
   tlp::Graph* createSimpleGraph() const;
   void importExportGraph(tlp::Graph* original);
+  void exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename);
+  tlp::Graph *importGraph(const std::string &importPluginName, const std::string &filename);
 
   void testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second);
   void testGraphPropertiesAreEqual(tlp::Graph* first, tlp::Graph* second);
@@ -77,5 +79,15 @@ public:
   JsonImportExportTest();
 };
 
+class TulipSaveLoadGraphFunctionsTest : public ImportExportTest {
+  CPPUNIT_TEST_SUITE(TulipSaveLoadGraphFunctionsTest);
+  CPPUNIT_TEST(testTulipSaveLoadGraphFunctions);
+  CPPUNIT_TEST_SUITE_END();
+public:
+  TulipSaveLoadGraphFunctionsTest();
+
+  void setUp();
+  void testTulipSaveLoadGraphFunctions();
+};
 
 #endif // IMPORTEXPORTTEST_H

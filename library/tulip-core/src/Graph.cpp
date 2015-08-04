@@ -219,28 +219,74 @@ Graph * tlp::newGraph() {
 //=========================================================
 Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   DataSet dataSet;
-  std::string algName = "TLP Import";
+  std::string importPluginName = "TLP Import";
 
-  /*if (filename.rfind(".json") == (filename.length() - 5))
-    algName = "JSON Import";*/
+  bool gzip = false;
+  if (filename.rfind(".gz") == (filename.length() - 3)) {
+    gzip = true;
+  }
+
+  list<string> importPlugins = PluginLister::instance()->availablePlugins<ImportModule>();
+  for (list<string>::iterator it = importPlugins.begin() ; it != importPlugins.end() ; ++it) {
+    const ImportModule &importPlugin = static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(*it));
+    list<string> extensions = importPlugin.fileExtensions();
+    for (list<string>::iterator itE = extensions.begin() ; itE != extensions.end() ; ++itE)
+    if (filename.rfind(*itE) == (filename.size() - (*itE).size())) {
+      importPluginName = importPlugin.name();
+      break;
+    }
+  }
+
+  if (gzip && importPluginName != "TLP Import" && importPluginName != "TLPB Import") {
+    tlp::error() << "GZip compression is only supported for TLP and TLPB formats." << endl;
+    return NULL;
+  }
 
   dataSet.set("file::filename", filename);
-  Graph *graph = tlp::importGraph(algName, dataSet,progress);
+  Graph *graph = tlp::importGraph(importPluginName, dataSet, progress);
   return graph;
 }
 //=========================================================
 bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *progress) {
   ostream *os;
 
-  if (filename.rfind(".gz") == (filename.length() - 3))
+  string filenameCp = filename;
+  bool gzip = false;
+  if (filename.rfind(".gz") == (filename.length() - 3)) {
+    gzip = true;
+    filenameCp = filenameCp.substr(0, filenameCp.size() - 3);
+  }
+
+  string exportPluginName = "TLP Export";
+  list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
+  for (list<string>::iterator it = exportPlugins.begin() ; it != exportPlugins.end() ; ++it) {
+    const ExportModule &exportPlugin = static_cast<const ExportModule &>(PluginLister::instance()->pluginInformation(*it));
+    string ext = exportPlugin.fileExtension();
+    if (filenameCp.rfind(ext) == (filenameCp.size() - ext.size())) {
+      exportPluginName = exportPlugin.name();
+      break;
+    }
+  }
+
+  if (gzip && exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
+    tlp::error() << "GZip compression is only supported for TLP and TLPB formats." << endl;
+    return false;
+  }
+
+  if (gzip) {
     os =  tlp::getOgzstream(filename);
-  else
-    os = tlp::getOutputFileStream(filename);
+  } else {
+    std::ios_base::openmode openMode = ios::out;
+    if (exportPluginName == "TLPB Export") {
+      openMode |= ios::binary;
+    }
+    os = tlp::getOutputFileStream(filename, openMode);
+  }
 
   bool result;
   DataSet data;
   data.set("file", filename);
-  result=tlp::exportGraph(graph, *os, "TLP Export", data, progress);
+  result=tlp::exportGraph(graph, *os, exportPluginName, data, progress);
   delete os;
   return result;
 }
