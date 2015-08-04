@@ -81,20 +81,20 @@ public:
   }
 };
 class NumericSearchOperator: public SearchOperator {
-  tlp::DoubleProperty* _numericA;
-  tlp::DoubleProperty* _numericB;
+  tlp::NumericProperty* _numericA;
+  tlp::NumericProperty* _numericB;
 public:
   virtual void setProperties(PropertyInterface *a, PropertyInterface *b) {
     SearchOperator::setProperties(a,b);
-    _numericA = static_cast<DoubleProperty*>(_a);
-    _numericB = static_cast<DoubleProperty*>(_b);
+    _numericA = static_cast<NumericProperty*>(_a);
+    _numericB = static_cast<NumericProperty*>(_b);
   }
   virtual bool compareDoubles(double a, double b)=0;
   bool compare(tlp::node n) {
-    return compareDoubles(_numericA->getNodeValue(n),_numericB->getNodeValue(n));
+    return compareDoubles(_numericA->getNodeDoubleValue(n),_numericB->getNodeDoubleValue(n));
   }
   bool compare(tlp::edge e) {
-    return compareDoubles(_numericA->getEdgeValue(e),_numericB->getEdgeValue(e));
+    return compareDoubles(_numericA->getEdgeDoubleValue(e),_numericB->getEdgeDoubleValue(e));
   }
 };
 
@@ -433,7 +433,7 @@ void SearchWidget::termBChanged() {
 }
 
 void SearchWidget::updateOperators(tlp::PropertyInterface *a, tlp::PropertyInterface *b) {
-  setNumericOperatorsEnabled(dynamic_cast<tlp::DoubleProperty*>(a) != NULL && dynamic_cast<tlp::DoubleProperty*>(b) != NULL);
+  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty*>(a) != NULL && dynamic_cast<tlp::NumericProperty*>(b) != NULL);
 }
 
 void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
@@ -444,7 +444,7 @@ void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
   else
     b.toDouble(&isCustomValueDouble);
 
-  setNumericOperatorsEnabled(dynamic_cast<tlp::DoubleProperty*>(a) != NULL && isCustomValueDouble);
+  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty*>(a) != NULL && isCustomValueDouble);
 }
 
 void SearchWidget::setNumericOperatorsEnabled(bool e) {
