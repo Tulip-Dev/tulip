@@ -222,19 +222,22 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
   std::string importPluginName = "TLP Import";
 
   bool gzip = false;
+
   if (filename.rfind(".gz") == (filename.length() - 3)) {
     gzip = true;
   }
 
   list<string> importPlugins = PluginLister::instance()->availablePlugins<ImportModule>();
+
   for (list<string>::iterator it = importPlugins.begin() ; it != importPlugins.end() ; ++it) {
     const ImportModule &importPlugin = static_cast<const ImportModule &>(PluginLister::instance()->pluginInformation(*it));
     list<string> extensions = importPlugin.fileExtensions();
+
     for (list<string>::iterator itE = extensions.begin() ; itE != extensions.end() ; ++itE)
-    if (filename.rfind(*itE) == (filename.size() - (*itE).size())) {
-      importPluginName = importPlugin.name();
-      break;
-    }
+      if (filename.rfind(*itE) == (filename.size() - (*itE).size())) {
+        importPluginName = importPlugin.name();
+        break;
+      }
   }
 
   if (gzip && importPluginName != "TLP Import" && importPluginName != "TLPB Import") {
@@ -252,6 +255,7 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
 
   string filenameCp = filename;
   bool gzip = false;
+
   if (filename.rfind(".gz") == (filename.length() - 3)) {
     gzip = true;
     filenameCp = filenameCp.substr(0, filenameCp.size() - 3);
@@ -259,9 +263,11 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
 
   string exportPluginName = "TLP Export";
   list<string> exportPlugins = PluginLister::instance()->availablePlugins<ExportModule>();
+
   for (list<string>::iterator it = exportPlugins.begin() ; it != exportPlugins.end() ; ++it) {
     const ExportModule &exportPlugin = static_cast<const ExportModule &>(PluginLister::instance()->pluginInformation(*it));
     string ext = exportPlugin.fileExtension();
+
     if (filenameCp.rfind(ext) == (filenameCp.size() - ext.size())) {
       exportPluginName = exportPlugin.name();
       break;
@@ -275,11 +281,14 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
 
   if (gzip) {
     os =  tlp::getOgzstream(filename);
-  } else {
+  }
+  else {
     std::ios_base::openmode openMode = ios::out;
+
     if (exportPluginName == "TLPB Export") {
       openMode |= ios::binary;
     }
+
     os = tlp::getOutputFileStream(filename, openMode);
   }
 
