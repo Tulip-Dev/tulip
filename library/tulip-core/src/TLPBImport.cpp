@@ -365,10 +365,17 @@ bool TLPBImport::importGraph() {
         if (!bool(is->read((char *) &numValues, sizeof(numValues))))
           return (delete is, errorTrap());
 
+        // seems there is a bug in emscripten that prevents to use the stringstream buffer optimization,
+        // so fallback  reading directly from the input stream in that case
+        bool emscripten = false;
+#ifdef __EMSCRIPTEN__
+        emscripten = true;
+#endif
+
         // loop on nodes values
         size = prop->nodeValueSize();
 
-        if (size) {
+        if (size && !emscripten) {
           // as the size of any value is fixed
           // we can use a buffer to limit the number of disk reads
           char *vBuf;
@@ -445,7 +452,7 @@ bool TLPBImport::importGraph() {
         // loop on edges values
         size = prop->edgeValueSize();
 
-        if (size) {
+        if (size && !emscripten) {
           // as the size of any value is fixed
           // we can use a buffer to limit the number of disk reads
           char *vBuf;
