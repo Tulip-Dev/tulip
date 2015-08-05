@@ -357,10 +357,20 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         os.write((char *) &size, sizeof(size));
         // prepare ouput stream
         stringstream vs;
+
+        // seems there is a bug in emscripten that prevents to use the stringstream buffer optimization,
+        // so fallback  writing directly to the output stream in that case
+        bool emscripten = false;
+#ifdef __EMSCRIPTEN__
+        emscripten = true;
+        std::ostream &s = os;
+#else
+        std::ostream &s = vs;
+#endif
         char* vBuf = NULL;
         unsigned int valueSize = prop->nodeValueSize();
 
-        if (valueSize) {
+        if (valueSize && !emscripten) {
           // allocate a special buffer for values
           // this will ease the write of a bunch of values
           vBuf = (char *) malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -373,7 +383,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         unsigned int nbValues = 0;
         forEach(n, prop->getNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : NULL)) {
           size = getNode(n).id;
-          vs.write((char *) &size, sizeof(size));
+          s.write((char *) &size, sizeof(size));
 
           if (pnViewProp && !TulipBitmapDir.empty()) { // viewFont || viewTexture
             string sVal = prop->getNodeStringValue(n);
@@ -382,14 +392,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (pos != string::npos)
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
-            StringType::write(vs, sVal);
+            StringType::write(s, sVal);
           }
           else
-            prop->writeNodeValue(vs, n);
+            prop->writeNodeValue(s, n);
 
           ++nbValues;
 
-          if (nbValues == MAX_VALUES_TO_WRITE) {
+          if (nbValues == MAX_VALUES_TO_WRITE && !emscripten) {
             // write already buffered values
             if (vBuf)
               os.write(vBuf, MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -406,7 +416,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           }
         }
 
-        if (nbValues) {
+        if (nbValues && !emscripten) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
@@ -427,11 +437,21 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         os.write((char *) &size, sizeof(size));
         // prepare ouput stream
         stringstream vs;
+
+        // seems there is a bug in emscripten that prevents to use the stringstream buffer optimization,
+        // so fallback  writing directly to the output stream in that case
+        bool emscripten = false;
+#ifdef __EMSCRIPTEN__
+        emscripten = true;
+        ostream &s = os;
+#else
+        ostream &s = vs;
+#endif
         char* vBuf = NULL;
         unsigned int valueSize = prop->edgeValueSize();
         bool isGraphProperty = false;
 
-        if (valueSize) {
+        if (valueSize && !emscripten) {
           // allocate a special buffer for values
           // this will ease the write of a bunch of values
           vBuf = (char *) malloc(MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -448,7 +468,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         unsigned int nbValues = 0;
         forEach(e, prop->getNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : NULL)) {
           size = getEdge(e).id;
-          vs.write((char *) &size, sizeof(size));
+          s.write((char *) &size, sizeof(size));
 
           if (isGraphProperty) {
             // re-index embedded edges
@@ -461,7 +481,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             }
 
             // finally save set
-            EdgeSetType::writeb(vs, rEdges);
+            EdgeSetType::writeb(s, rEdges);
           }
           else if (pnViewProp && !TulipBitmapDir.empty()) {   // viewFont || viewTexture
             string sVal = prop->getEdgeStringValue(e);
@@ -470,14 +490,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (pos != string::npos)
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
-            StringType::write(vs, sVal);
+            StringType::write(s, sVal);
           }
           else
-            prop->writeEdgeValue(vs, e);
+            prop->writeEdgeValue(s, e);
 
           ++nbValues;
 
-          if (nbValues == MAX_VALUES_TO_WRITE) {
+          if (nbValues == MAX_VALUES_TO_WRITE && !emscripten) {
             // write already buffered values
             if (vBuf)
               os.write(vBuf, MAX_VALUES_TO_WRITE * (sizeof(unsigned int) + valueSize));
@@ -494,7 +514,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           }
         }
 
-        if (nbValues) {
+        if (nbValues && !emscripten) {
           // write last buffered values
           if (vBuf) {
             os.write(vBuf, nbValues * (sizeof(unsigned int) + valueSize));
