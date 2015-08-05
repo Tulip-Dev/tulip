@@ -115,11 +115,8 @@ bool TLPBImport::importGraph() {
 
   // add nodes
   {
-    // we have to pass a vector to get the newly created nodes
-    // but as we do not need them, we use a null ref which is
-    // supported by the underlying GraphStorage class
-    std::vector<node>* vptr = NULL;
-    graph->addNodes(header.numNodes, *vptr);
+    std::vector<node> v;
+    graph->addNodes(header.numNodes, v);
   }
   // loop to read edges
   {
@@ -142,12 +139,9 @@ bool TLPBImport::importGraph() {
                                    header.numEdges) !=TLP_CONTINUE)
         return pluginProgress->state()!=TLP_CANCEL;
 
-      // we have to pass a vector to get the newly created edges
-      // but as we do not need them, we use a null ref which is
-      // supported by the underlying GraphStorage class
-      vector<edge>* vptr = NULL;
+      vector<edge> v;
       // add edges in the graph
-      graph->addEdges(vEdges, *vptr);
+      graph->addEdges(vEdges, v);
       // decrement nbEdges
       nbEdges -= edgesToRead;
     }
