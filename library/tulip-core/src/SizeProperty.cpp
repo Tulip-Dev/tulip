@@ -17,9 +17,13 @@
  *
  */
 
-#include <float.h>
+#include <cfloat>
 #include <tulip/SizeProperty.h>
 #include <tulip/Observable.h>
+#include <tulip/BoundingBox.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/LayoutProperty.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -42,10 +46,13 @@ public:
       return;
     }
 
-    // between the min and max computed values
-    prop->setNodeValue(mN,
-                       (((SizeProperty *)prop)->getMax(sg) +
-                        ((SizeProperty *)prop)->getMin(sg)) / 2.0f);
+    // set meta node size as the enclosed subgraph bounding box
+    BoundingBox box = tlp::computeBoundingBox(sg, sg->getProperty<LayoutProperty>("viewLayout"),
+                                                  sg->getProperty<SizeProperty>("viewSize"),
+                                                  sg->getProperty<DoubleProperty>("viewRotation"));
+
+
+    prop->setNodeValue(mN, Size(box.width(), box.height(), box.depth()));
   }
 };
 
