@@ -428,8 +428,6 @@ Application of algorithms
 
 .. automethod:: tulip::tlp.Graph.applyLayoutAlgorithm
 
-.. automethod:: tulip::tlp.Graph.applyLayoutAlgorithm
-
 .. automethod:: tulip::tlp.Graph.applySizeAlgorithm
 
 .. automethod:: tulip::tlp.Graph.applyStringAlgorithm

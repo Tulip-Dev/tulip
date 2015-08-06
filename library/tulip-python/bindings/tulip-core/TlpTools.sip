@@ -34,6 +34,7 @@ namespace tlp {
   std::string getTulipGlobalVar(const std::string &varName);
 }
 
+extern tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
 %End
 
 %ModuleCode
@@ -66,6 +67,12 @@ namespace tlp {
   }
 }
 
+tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph) {
+  tlp::DataSet result;
+  const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(pluginName);
+  parameters.buildDefaultDataSet(result, graph);
+  return result;
+}
 %End
 
 namespace tlp {
@@ -239,21 +246,18 @@ tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Grap
 %Docstring
 tlp.getDefaultPluginParameters(pluginName[, graph = None])
 
-Returns a dataset filled with default parameters (if any) for a given plugin (algorithm, import, property algorithm, ...).
+Returns a Python dictionnary with string keys filled with default parameters (if any) for a given plugin (algorithm, import, property algorithm, ...).
 
 :param pluginName: the name of the plugin on which to retrieve its default parameters
 :type pluginName: string
 :param graph: if provided, property parameters will be retrieved from the graph if they exist
 :type graph: :class:`tlp.Graph`
-:rtype: :class:`tlp.DataSet`
+:rtype: dictionnary with string keys (parameters names) and parameters values
 %End
 
 %MethodCode
     if (tlp::PluginLister::pluginExists(*a0)) {
-        tlp::DataSet result;
-        const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(*a0);
-        parameters.buildDefaultDataSet(result, a1);
-        sipRes = new tlp::DataSet(result);
+        sipRes = new tlp::DataSet(::getDefaultPluginParameters(*a0, a1));
     } else {
         sipIsErr = 1;
         std::string msg = "No plugin named  ";

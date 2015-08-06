@@ -27,6 +27,7 @@ Contents
    :maxdepth: 3
 
    gettingstarted
+   apichanges
    manual
    pythonplugins 
    tulipreference

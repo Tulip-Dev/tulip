@@ -107,17 +107,10 @@ features have been included to ease the use of the Tulip Python API:
 
    Figure 5: Using the autocompletion list to get the algorithm names.
 
-    * **Autocompletion for algorithm parameters** Parameters can be passed to Tulip algorithms through a :class:`tlp.DataSet` object. The parameters are
-      identified by their names. The autocompletion list can be used to get the names of these parameters. For that feature to work, the following context
-      must be present in the source code::
-
-        # Replace by the name of the algorithm you want to call, note that the autocompletion
-        # also works for the following context : tlp.getDefaultPluginParameters(
-        dataSet = tlp.getDefaultPluginParameters("algorithm name")
-        # Hit Ctrl-Space after the bracket to see the magic
-        dataSet[
-
-      :ref:`Figure 6<fig6>` shows an example of the autocompletion list contents when requesting the parameters of the layout algorithm : "FM^3 (OGDF)".
+    * **Autocompletion for algorithm parameters** Parameters can be passed to Tulip algorithms through a dictionnary. The parameters are
+      identified by their names. The autocompletion list can be used to get the names of these parameters.
+      :ref:`Figure 6<fig6>` shows an example of the autocompletion list contents when requesting the parameters
+      of the layout algorithm : "FM^3 (OGDF)".
 
 .. _fig6:
 .. figure:: autocompletion_algosparams.png
@@ -125,28 +118,41 @@ features have been included to ease the use of the Tulip Python API:
 
    Figure 6: Using the autocompletion list to get the algorithm parameters names.
 
+    * **Autocompletion for string collection parameters** Some algorithms parameters are internally
+      based on a :class:`tlp.StringCollection` instance. It allows to select a string from a defined set.
+      The direct use of that class is now deprecated but the autocompletion list can be helpfull to get the names of the
+      available values that can be transmitted to the algorithm.
+      :ref:`Figure 7<fig7>` shows an example of the autocompletion list contents when requesting the string collection values
+      for the "Allowed Positions" parameter of the layout algorithm : "FM^3 (OGDF)".
+
+.. _fig7:
+.. figure:: autocompletion_stringcollection.png
+   :align: center
+
+   Figure 7: Using the autocompletion list to get the algorithm parameters names.
+
     * **Autocompletion for graph properties** Tulip stores the data associated to graph elements in objects called properties. To get a reference
       on those type of objects, you can either use specific methods (for instance : :meth:`tlp.Graph.getLayoutProperty`, :meth:`tlp.Graph.getSizeProperty`)
       that take the name of the property to retrieve as parameter or the following syntax : *graph["property name"]*. When requesting the autocompletion list
       for the following context : *graph.get*Property(* or *graph[*, the list will be filled with the names of the corresponding and existing properties.
-      :ref:`Figure 7<fig7>` show an example of the contents of the autocompletion list for the following context : *graph[*.
+      :ref:`Figure 8<fig8>` show an example of the contents of the autocompletion list for the following context : *graph[*.
 
-.. _fig7:
+.. _fig8:
 .. figure:: autocompletion_properties.png
    :align: center
 
-   Figure 7: Using the autocompletion list to get the graph properties names.
+   Figure 8: Using the autocompletion list to get the graph properties names.
 
     * **Autocompletion list for sub-graphs** Tulip allows to manipulate a large hierarchy of sub-graphs. References to those sub-graphs can be retrieved
       with their names through the use of the dedicated method :meth:`tlp.Graph.getSubGraph`. When requesting the autocompletion list for the
-      following context : *graph.getSubGraph(*, the list will be filled with all the names of the graphs present in the hierarchy. :ref:`Figure 8<fig8>` shows
+      following context : *graph.getSubGraph(*, the list will be filled with all the names of the graphs present in the hierarchy. :ref:`Figure 9<fig9>` shows
       an example of that use case.
 
-.. _fig8:
+.. _fig9:
 .. figure:: autocompletion_subgraphs.png
    :align: center
 
-   Figure 8: Using the autocompletion list to get the sub-graphs names.
+   Figure 9: Using the autocompletion list to get the sub-graphs names.
 
 .. _usingBindingsInShell:
 

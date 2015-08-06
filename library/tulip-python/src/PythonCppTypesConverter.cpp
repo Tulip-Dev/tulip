@@ -94,14 +94,14 @@ void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTyp
   PyObject *pyObject = sipWrapper;
   const sipTypeDef* kTypeDef = sipFindType(cppTypename.c_str());
 
-  if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, SIP_NOT_NONE)) {
+  if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, transferTo ? 0 : SIP_NOT_NONE)) {
     int state=0, err=0;
 
     if (!transferTo) {
       return sipConvertToType(pyObject, kTypeDef, Py_None, SIP_NOT_NONE, &state, &err);
     }
     else {
-      void *p = sipConvertToType(pyObject, kTypeDef, NULL, SIP_NOT_NONE, &state, &err);
+      void *p = sipConvertToType(pyObject, kTypeDef, NULL, 0, &state, &err);
       sipTransferTo(pyObject, pyObject);
       return p;
     }
@@ -109,14 +109,14 @@ void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTyp
   else if (cppTypenameToSipTypename.find(cppTypename) != cppTypenameToSipTypename.end()) {
     kTypeDef = sipFindType(cppTypenameToSipTypename[cppTypename].c_str());
 
-    if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, SIP_NOT_NONE)) {
+    if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, transferTo ? 0 : SIP_NOT_NONE)) {
       int state=0, err=0;
 
       if (!transferTo) {
         return sipConvertToType(pyObject, kTypeDef, Py_None, SIP_NOT_NONE, &state, &err);
       }
       else {
-        void *p = sipConvertToType(pyObject, kTypeDef, NULL, SIP_NOT_NONE, &state, &err);
+        void *p = sipConvertToType(pyObject, kTypeDef, NULL, 0, &state, &err);
         sipTransferTo(pyObject, pyObject);
         return p;
       }
@@ -380,14 +380,18 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
 
 #define CHECK_SIP_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\
     if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), SIP_NOT_NONE)) {\
+      if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE).name())) {\
         valSetter.setValue(getCppObjectFromPyObject<CPP_TYPE>(pyObj));\
-    return true;\
+        return true;\
+      }\
     }
 
 #define CHECK_SIP_POINTER_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\
-    if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), SIP_NOT_NONE)) {\
+    if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), 0)) {\
+      if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE*).name())) {\
         valSetter.setValue(getCppPointerFromPyObject<CPP_TYPE>(pyObj));\
-    return true;\
+        return true;\
+      }\
     }
 
 #define CHECK_SIP_VECTOR_LIST_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\

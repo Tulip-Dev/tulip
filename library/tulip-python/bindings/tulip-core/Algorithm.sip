@@ -47,7 +47,7 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 
 .. py:attribute:: dataSet
 
-	A :class:`tlp.DataSet` containing parameters for this algorithm, if any.
+	A dictionnary containing parameters for this algorithm, if any.
 	
 .. py:attribute:: pluginProgress
 

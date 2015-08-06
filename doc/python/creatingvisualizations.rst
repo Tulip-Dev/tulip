@@ -212,7 +212,7 @@ visual attributes on graph elements and finally it creates a node link diagram v
     viewBorderWidth.setAllEdgeValue(1)
 
     # Create a Node Link Diagram view without displaying it
-    nodeLinkView = tlpgui.createView("Node Link Diagram view", graph, tlp.DataSet(), False)
+    nodeLinkView = tlpgui.createView("Node Link Diagram view", graph, {}, False)
 
     renderingParams = nodeLinkView.getRenderingParameters()
 
