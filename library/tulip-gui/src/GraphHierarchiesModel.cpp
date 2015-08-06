@@ -107,40 +107,9 @@ public:
   }
 };
 
-// viewLayout
-class ViewLayoutCalculator :public AbstractLayoutProperty::MetaValueCalculator {
-public:
-  void computeMetaValue(AbstractLayoutProperty* layout,
-                        node mN, Graph* sg, Graph* mg) {
-    SizeProperty* size = mg->getProperty<SizeProperty>("viewSize");
-    DoubleProperty* rot = mg->getProperty<DoubleProperty>("viewRotation");
-    BoundingBox box =
-      tlp::computeBoundingBox(sg, static_cast<LayoutProperty *>(layout), size, rot);
-    Coord maxL(box[1]);
-    Coord minL(box[0]);
-    layout->setNodeValue(mN, (maxL + minL) / 2.f );
-    Coord v(maxL - minL);
-
-    if (v[2] < 0.0001) v[2] = 0.1f;
-
-    mg->getProperty<SizeProperty>("viewSize")->
-    setNodeValue(mN, Size(v[0],v[1],v[2]));
-  }
-};
-
-class ViewSizeCalculator
-    :public AbstractSizeProperty::MetaValueCalculator {
-public:
-  void computeMetaValue(AbstractSizeProperty*, node, Graph*, Graph*) {
-    // do nothing
-  }
-};
-
 // corresponding static instances
 static ViewColorCalculator vColorCalc;
 static ViewLabelCalculator vLabelCalc;
-static ViewLayoutCalculator vLayoutCalc;
-static ViewSizeCalculator vSizeCalc;
 static ViewBorderWidthCalculator vWidthCalc;
 
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {}
@@ -496,8 +465,6 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   _graphs.push_back(g);
   g->getProperty<ColorProperty>("viewColor")->setMetaValueCalculator(&vColorCalc);
   g->getProperty<StringProperty>("viewLabel")->setMetaValueCalculator(&vLabelCalc);
-  g->getProperty<LayoutProperty>("viewLayout")->setMetaValueCalculator(&vLayoutCalc);
-  g->getProperty<SizeProperty>("viewSize")->setMetaValueCalculator(&vSizeCalc);
   g->getProperty<DoubleProperty>("viewBorderWidth")->setMetaValueCalculator(&vWidthCalc);
 
   // listen events on the whole hierarchy
