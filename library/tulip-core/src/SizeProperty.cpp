@@ -48,8 +48,8 @@ public:
 
     // set meta node size as the enclosed subgraph bounding box
     BoundingBox box = tlp::computeBoundingBox(sg, sg->getProperty<LayoutProperty>("viewLayout"),
-                                                  sg->getProperty<SizeProperty>("viewSize"),
-                                                  sg->getProperty<DoubleProperty>("viewRotation"));
+                      sg->getProperty<SizeProperty>("viewSize"),
+                      sg->getProperty<DoubleProperty>("viewRotation"));
 
 
     prop->setNodeValue(mN, Size(box.width(), box.height(), box.depth()));

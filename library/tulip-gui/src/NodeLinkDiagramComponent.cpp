@@ -307,6 +307,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
     rp.setParameters(renderingParameters);
 
     string s;
+
     if (renderingParameters.get("elementsOrderingPropertyName", s)) {
       rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty*>(graph->getProperty(s)));
     }
