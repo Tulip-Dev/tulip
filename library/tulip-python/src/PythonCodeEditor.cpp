@@ -173,9 +173,11 @@ void AutoCompletionList::insertSelectedItem() {
 
     QString textToInsert = currentItem()->text();
     int pos = textToInsert.indexOf("\" (");
+    int pos2 = textToInsert.indexOf("' (");
 
-    if (pos != -1) {
-      textToInsert = textToInsert.mid(0, pos+1);
+    if (pos != -1 || pos2 != -1) {
+      textToInsert = textToInsert.mid(0, pos > 0 ? pos+1 : pos2 + 1);
+      textToInsert += "] = ";
     }
 
     cursor.insertText(textToInsert);
