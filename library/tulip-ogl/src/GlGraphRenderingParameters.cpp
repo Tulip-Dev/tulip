@@ -20,11 +20,11 @@
 #include <tulip/Vector.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TlpTools.h>
+#include <tulip/NumericProperty.h>
 
 using namespace tlp;
 
 GlGraphRenderingParameters::GlGraphRenderingParameters() :
-  //_graph(0),
   _antialiased(true),
   _viewArrow(false),
   _viewNodeLabel(true),
@@ -98,7 +98,11 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   data.set("selectionColor",_selectionColor);
   data.set("labelsDensity", _labelsDensity);
   data.set("labelsAreBillboarded", _labelsAreBillboarded);
-  //data.set("SupergraphId", _graph->getId());
+  // ordering
+  data.set("elementsOrdered", _elementOrdered);
+  data.set("elementsOrderedDescending", _elementOrderedDescending);
+  data.set("elementsOrderingPropertyName", _elementOrderingProperty ? _elementOrderingProperty->getName() : "");
+
   return data;
 }
 
@@ -209,6 +213,13 @@ void GlGraphRenderingParameters::setParameters(const DataSet &data) {
 
   if(data.get<Color>("selectionColor", c))
     setSelectionColor(c);
+
+  if (data.get<bool>("elementsOrdered", b))
+    setElementOrdered(b);
+
+  if (data.get<bool>("elementsOrderedDescending", b))
+    setElementOrderedDescending(b);
+
 }
 //====================================================
 unsigned int GlGraphRenderingParameters::getLabelsBorder() const {

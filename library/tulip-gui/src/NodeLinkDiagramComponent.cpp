@@ -46,6 +46,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GraphModel.h>
+#include <tulip/NumericProperty.h>
 
 using namespace tlp;
 using namespace std;
@@ -304,6 +305,12 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
     dataSet.get("Display",renderingParameters);
     GlGraphRenderingParameters rp=scene->getGlGraphComposite()->getRenderingParameters();
     rp.setParameters(renderingParameters);
+
+    string s;
+    if (renderingParameters.get("elementsOrderingPropertyName", s)) {
+      rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty*>(graph->getProperty(s)));
+    }
+
     scene->getGlGraphComposite()->setRenderingParameters(rp);
   }
 
