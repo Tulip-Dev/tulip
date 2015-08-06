@@ -47,6 +47,7 @@
 #include <tulip/Graph.h>
 #include <tulip/PluginLister.h>
 #include <tulip/PropertyAlgorithm.h>
+#include <tulip/PythonCppTypesConverter.h>
 #include <tulip/Vector.h>
 #include <tulip/Color.h>
 #include <string>
@@ -131,7 +132,9 @@ extern PyObject* evalPythonStatement(const std::string &pythonStatement);
 #if PY_MAJOR_VERSION >= 3
 extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj);
 #endif
+
 %End
+
 
 %ModuleCode
 

@@ -32,6 +32,12 @@ class StringCollection {
 public:
 
 %Docstring
+
+.. deprecated:: 4.8
+   You should never have to use that class directly from now on.
+   Algorithm parameters of that type are now internally handled for commodity of use
+   (see :ref:`Deprecation of direct use of the tlp.StringCollection class <deprecatedStringCollection>`).
+
 This class represents a list of selectable string entries that can be used as plugin parameter.
 The list will appear as a combo box in the Plugin Parameter Dialog from the Tulip GUI.
 %End
@@ -149,17 +155,17 @@ Returns the number of strings in the collection.
   
   std::string operator[](const unsigned int i) const;
 %MethodCode
-    if (a0 < sipCpp->size()) {
-      sipRes = new std::string((*sipCpp)[a0]);
-    } else {
-      sipIsErr = -1;
-      PyErr_SetNone(PyExc_IndexError);
-    }
+  if (a0 < sipCpp->size()) {
+    sipRes = new std::string((*sipCpp)[a0]);
+  } else {
+    sipIsErr = -1;
+    PyErr_SetNone(PyExc_IndexError);
+  }
 %End
   
   void __setitem__(int i, const std::string &value);
 %MethodCode
-		(*sipCpp)[a0] = *a1;
+  (*sipCpp)[a0] = *a1;
 %End
 
 };

@@ -23,6 +23,118 @@
 // | (http://booggie.org/)                                                   |
 // +-------------------------------------------------------------------------+
 
+%ModuleHeaderCode
+extern PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict = NULL);
+extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *refDataSet=NULL, const std::string &algoName = "");
+extern bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &entry, PyObject *value, tlp::DataType *refDataType = NULL, const std::string &algoName = "");
+%End
+
+%ModuleCode
+PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict) {
+  if (!dict) dict = PyDict_New();
+  std::pair<std::string, tlp::DataType*> entry;
+  forEach(entry, dataSet.getValues()) {
+    PyObject *key = sipConvertFromNewType(new std::string(entry.first), sipFindType("std::string"), NULL);
+    PyObject *val = NULL;
+    if (entry.second->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
+      tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(entry.second->value);
+      val = sipConvertFromNewType(new std::string(sc->getCurrentString()), sipFindType("std::string"), NULL);
+    } else {
+      val = getPyObjectFromDataType(entry.second);
+    }
+    PyDict_SetItem(dict, key, val);
+  }
+  return dict;
+}
+
+extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *refDataSet, const std::string &algoName) {
+  PyObject *key = NULL;
+  PyObject *val = NULL;
+  Py_ssize_t pos = 0;
+  int state=0, err=0;
+  tlp::DataSet *ret = new tlp::DataSet();
+  if (refDataSet) {
+    *ret = *refDataSet;
+  }
+  while (PyDict_Next(dict, &pos, &key, &val)) {
+    std::string *keyStr = reinterpret_cast<std::string*>(sipConvertToType(key, sipFindType("std::string"), Py_None, SIP_NOT_NONE, &state, &err));
+    tlp::DataType *dataType = NULL;
+    if (refDataSet) {
+      dataType = refDataSet->getData(*keyStr);
+    }
+    if (!setDataSetEntryFromPyObject(ret, *keyStr, val, dataType, algoName)) {
+      delete ret;
+      ret = NULL;
+      break;
+    }
+  }
+
+  return ret;
+}
+
+bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, PyObject *value, tlp::DataType *refDataType, const std::string &algoName) {
+  bool ret = true;
+  tlp::DataType* dataType = NULL;
+  if (refDataType) {
+    dataType = refDataType;
+  }
+  if (dataType && dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name()) &&
+#if PY_MAJOR_VERSION >= 3
+  PyUnicode_Check(value)) {
+#else
+  PyString_Check(value)) {
+#endif
+      tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(dataType->value);
+#if PY_MAJOR_VERSION >= 3
+      std::string entry(convertPythonUnicodeObjectToStdString(value));
+#else
+      std::string entry(PyString_AS_STRING(value));
+#endif
+
+      std::vector<std::string> values = sc->getValues();
+      if (std::find(values.begin(), values.end(), entry) != values.end()) {
+          sc->setCurrent(entry);
+          dataSet->set(key, *sc);
+      } else {
+          std::string msg = "Invalid value provided (\"" + entry + "\") to string parameter '" + key +
+                            "' of algorithm '" + algoName + "'.\n";
+
+          msg += "Possible values are : ";
+          for (size_t i = 0 ; i < values.size() ; ++i) {
+              replaceAll(values[i], "\n", "\\n");
+              msg += values[i];
+              if (i != values.size() -1) {
+                  msg += ", ";
+              }
+          }
+          PyErr_SetString(PyExc_Exception, msg.c_str());
+          ret = false;
+      }
+
+  } else {
+      ValueSetter valSetter(dataSet, key);
+      if (!setCppValueFromPyObject(value, valSetter, dataType)) {
+          std::string msg;
+          if (!dataType) {
+            msg = "Object of type ";
+            msg += std::string(value->ob_type->tp_name);
+            msg += " can not be stored in a Tulip dataset.";
+          } else {
+            msg = "Invalid type for the value provided to parameter '" + key + "' ";
+            msg += "for algorithm '" + algoName + "'\n";
+            msg += "Provided Python type is '" + std::string(value->ob_type->tp_name) + "'\n";
+            msg += "Expected C++ type is '" + tlp::demangleClassName(dataType->getTypeName().c_str()) + "'";
+          }
+          PyErr_SetString(PyExc_Exception, msg.c_str());
+          ret = false;
+      }
+  }
+  delete dataType;
+  return ret;
+}
+
+%End
+
 namespace tlp {
 
 struct DataSet {
@@ -31,28 +143,73 @@ struct DataSet {
 #include <tulip/PythonCppTypesConverter.h>
 %End
 
+%ConvertToTypeCode
+
+  PyObject *key = NULL;
+  PyObject *val = NULL;
+  Py_ssize_t pos = 0;
+
+  if (sipIsErr == NULL) {
+    if (sipCanConvertToType(sipPy, sipFindType("tlp::DataSet"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
+      return 1;
+    } else if (PyDict_Check(sipPy)) {
+      while (PyDict_Next(sipPy, &pos, &key, &val)) {
+        if (!sipCanConvertToType(key, sipFindType("std::string"), SIP_NOT_NONE)) {
+          return 0;
+        }
+      }
+      return 1;
+    }
+    return 0;
+  }
+
+  int state=0, err=0;
+
+  if (PyDict_Check(sipPy)) {
+    *sipCppPtr = convertPyDictToTlpDataSet(sipPy);
+  } else {
+    *sipCppPtr = new tlp::DataSet(*reinterpret_cast<tlp::DataSet*>(sipConvertToType(sipPy, sipFindType("tlp::DataSet"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
+  }
+
+  return sipGetState(sipTransferObj);
+
+%End
+
+%ConvertFromTypeCode
+  return convertTlpDataSetToPyDict(*sipCpp);
+%End
+
 %Docstring
+
+.. deprecated:: 4.8
+   The direct use of that class is now deprecated as it is now mapped to a Python dictionnary
+   for commodity of use (see :ref:`Deprecation of direct use of the tlp.DataSet class <deprecatedDataSet>`).
+
 This class is used to store a set of parameters to transmit to a Tulip algorithm.
 Below is an exhaustive list of data types that can be stored in a Tulip data set:
 
-	* boolean
-	* integer 
-	* float
-	* string
-	* :class:`tlp.Coord`
-	* :class:`tlp.Color`
-	* :class:`tlp.Size`
-	* :class:`tlp.DataSet`
-	* :class:`tlp.ColorScale`
-	* :class:`tlp.StringCollection`
-	* :class:`tlp.BooleanProperty`
-	* :class:`tlp.ColorProperty`
-	* :class:`tlp.DoubleProperty`
-	* :class:`tlp.IntegerProperty`
-	* :class:`tlp.LayoutProperty`
-	* :class:`tlp.SizeProperty`
-	* :class:`tlp.StringProperty`
-	* :class:`tlp.PropertyInterface`
+  * boolean
+  * integer
+  * float
+  * string
+  * :class:`tlp.node`
+  * :class:`tlp.edge`
+  * :class:`tlp.Graph`
+  * :class:`tlp.Coord`
+  * :class:`tlp.Color`
+  * :class:`tlp.Size`
+  * :class:`tlp.DataSet`
+  * :class:`tlp.ColorScale`
+  * :class:`tlp.StringCollection`
+  * :class:`tlp.BooleanProperty`
+  * :class:`tlp.ColorProperty`
+  * :class:`tlp.DoubleProperty`
+  * :class:`tlp.IntegerProperty`
+  * :class:`tlp.LayoutProperty`
+  * :class:`tlp.SizeProperty`
+  * :class:`tlp.StringProperty`
+  * :class:`tlp.PropertyInterface`
+  * list of those types
 
 If you try to store an unsupported data type, an exception will be thrown.	
 Each value stored in a data set is associated to a string key. Reading / Writing a value in 
@@ -127,52 +284,7 @@ Returns the list of keys associated to the values stored in the data set.
 	
 	void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
 %MethodCode
-        tlp::DataType* dataType = sipCpp->getData(*a0);
-        if (dataType && dataType->getTypeName() == std::string(typeid(tlp::StringCollection).name()) &&
-#if PY_MAJOR_VERSION >= 3
-        PyUnicode_Check(a1)) {
-#else
-        PyString_Check(a1)) {
-#endif
-            tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(dataType->value);
-#if PY_MAJOR_VERSION >= 3
-            std::string entry(convertPythonUnicodeObjectToStdString(a1));
-#else
-            std::string entry(PyString_AS_STRING(a1));
-#endif
-
-            std::vector<std::string> values = sc->getValues();
-            if (std::find(values.begin(), values.end(), entry) != values.end()) {
-                sc->setCurrent(entry);
-                sipCpp->set(*a0, *sc);
-            } else {
-                sipIsErr = 1;
-                std::string msg = "Value \"";
-                msg += entry;
-                msg += "\" does not exist in the strings collection stored in the \"";
-                msg += ((*a0) + "\" entry in the dataset.\n");
-                msg += "Possible values are : ";
-                for (size_t i = 0 ; i < values.size() ; ++i) {
-                    replaceAll(values[i], "\n", "\\n");
-                    msg += values[i];
-                    if (i != values.size() -1) {
-                        msg += ", ";
-                    }
-                }
-                PyErr_SetString(PyExc_Exception, msg.c_str());
-            }
-
-        } else {
-            ValueSetter valSetter(sipCpp, *a0);
-            if (!setCppValueFromPyObject(a1, valSetter, dataType)) {
-                sipIsErr = 1;
-                std::string msg = "Object of type ";
-                msg += std::string(a1->ob_type->tp_name);
-                msg += " can not be store in a Tulip dataset.";
-                PyErr_SetString(PyExc_Exception, msg.c_str());
-            }
-        }
-        delete dataType;
+	sipIsErr = setDataSetEntryFromPyObject(sipCpp, *a0, a1) ? 0 : 1;
 %End
 	
 	
@@ -198,6 +310,18 @@ Returns the list of keys associated to the values stored in the data set.
         PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
     }
 %End	
+
+    SIP_PYOBJECT toDict();
+%Docstring
+tlp.DataSet.toDict()
+
+Converts that data set to a Python dictionnary.
+
+:rtype: a dictionnary reflecting the data set content
+%End
+%MethodCode
+    sipRes = convertTlpDataSetToPyDict(*sipCpp);
+%End
 
 };
 };

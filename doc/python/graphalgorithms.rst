@@ -3,6 +3,7 @@
 .. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
              able to call algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 
+.. _applyGraphAlgorithm:
 
 Applying an algorithm on a graph
 ================================ 
@@ -50,25 +51,23 @@ Below is a description of each parameter :
 The sample code below illustrates how to call this algorithm from Python. We assume that a Tulip graph
 is bound to a "graph" variable and this graph contains a double property called "myMetric"::
 	
-	# get the input property from which to generate the partition
-	myMetric = graph.getDoubleProperty("myMetric")
-	
-	# get a data set filled with default parameters for the algorithm
-	dataSet = tlp.getDefaultPluginParameters("Equal Value", graph)
+  # get the input property from which to generate the partition
+  myMetric = graph.getDoubleProperty("myMetric")
 
-	# set the input property
-	dataSet["Property"] = myMetric
-	
-	# if you want to partition edges instead of nodes
-	# dataSet["Type"].setCurrent(1) # use string collection index
-	# or alternatively
-	# dataSet["Type"].setCurrent("edges") # use string collection value
-	
-	# if you want connected sub-graphs
-	# dataSet["Connected"] = True
-	
-	# now we call the algorithm
-	graph.applyAlgorithm("Equal Value", dataSet)
+  # get a dictionnary filled with default parameters for the algorithm
+  params = tlp.getDefaultPluginParameters("Equal Value", graph)
+
+  # set the input property
+  params["Property"] = myMetric
+
+  # if you want to partition edges instead of nodes
+  # params["Type"] = "edges"
+
+  # if you want connected sub-graphs
+  # params["Connected"] = True
+
+  # now we call the algorithm
+  graph.applyAlgorithm("Equal Value", params)
 	
 Calling a property algorithm on a graph
 --------------------------------------- 
@@ -94,19 +93,19 @@ Below is a description of each parameter :
 The sample code below illustrates how to call this layout algorithm from Python. We assume that a Tulip graph
 is bound to a "graph" variable::
 
-	# get a data set filled with default parameters for the algorithm
-	dataSet = tlp.getDefaultPluginParameters("Hierarchical Graph", graph)
+  # get a data set filled with default parameters for the algorithm
+  params = tlp.getDefaultPluginParameters("Hierarchical Graph", graph)
 
-	# set the orientation to vertical
-	dataSet["orientation"].setCurrent("vertical")
-	
-	# set custom spacing
-	dataSet["layer spacing"] = 100.0
-	dataSet["node spacing"] = 50.0
-	
-	# get a reference to the default layout property
-	viewLayout = graph.getLayoutProperty("viewLayout")
-	
-	# call the layout algorithm and store the result in viewLayout
-        graph.applyLayoutAlgorithm("Hierarchical Graph", viewLayout, dataSet)
+  # set the orientation to vertical
+  params["orientation"] = "vertical"
+
+  # set custom spacing
+  params["layer spacing"] = 100.0
+  params["node spacing"] = 50.0
+
+  # get a reference to the default layout property
+  viewLayout = graph.getLayoutProperty("viewLayout")
+
+  # call the layout algorithm and store the result in viewLayout
+  graph.applyLayoutAlgorithm("Hierarchical Graph", viewLayout, params)
 

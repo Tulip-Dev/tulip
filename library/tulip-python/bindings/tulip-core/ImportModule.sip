@@ -51,7 +51,7 @@ This abstract class describes an import plugin.
 
 .. py:attribute:: dataSet
 
-	A :class:`tlp.DataSet` containing parameters for this import plugin, if any
+	A dictionnary containing parameters for this import plugin, if any
 	
 .. py:attribute:: pluginProgress
 
