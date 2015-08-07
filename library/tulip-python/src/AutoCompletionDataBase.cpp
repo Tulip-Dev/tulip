@@ -375,6 +375,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
       if (pos != -1) {
         pos += pattern.length();
+
         if (line.length() > pos && (line.at(pos) == '"' || line.at(pos) == '\'')) {
           QChar stringDelim = line.at(pos++);
           int pos2 = line.indexOf(stringDelim, pos);
