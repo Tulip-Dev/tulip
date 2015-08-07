@@ -580,17 +580,15 @@ node GraphStorage::addNode() {
  * @brief Add nb new nodes in the structure
  * and return them in addedNodes
  */
-void GraphStorage::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
-  bool addedIsNonNullRef = &addedNodes != NULL;
-
-  if (addedIsNonNullRef)
-    addedNodes.clear();
+void GraphStorage::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
+  if (addedNodes)
+    addedNodes->clear();
 
   if (nb == 0)
     return;
 
-  if (addedIsNonNullRef)
-    addedNodes.reserve(nb);
+  if (addedNodes)
+    addedNodes->reserve(nb);
 
   unsigned int first = nodeIds.getFirstOfRange(nb);
   unsigned int last = first + nb - 1;
@@ -612,8 +610,8 @@ void GraphStorage::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
       ctnr.outDegree = 0;
     }
 
-    if (addedIsNonNullRef)
-      addedNodes.push_back(node(first));
+    if (addedNodes)
+      addedNodes->push_back(node(first));
   }
 
   nbNodes += nb;
@@ -714,19 +712,18 @@ edge GraphStorage::addEdge(node src, node tgt) {
  * in the addedEdges vector
  */
 void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
-                            std::vector<edge>& addedEdges) {
-  bool addedIsNonNullRef = &addedEdges != NULL;
+                            std::vector<edge>* addedEdges) {
 
-  if (addedIsNonNullRef)
-    addedEdges.clear();
+  if (addedEdges)
+    addedEdges->clear();
 
   unsigned int nb = ends.size();
 
   if (nb == 0)
     return;
 
-  if (addedIsNonNullRef)
-    addedEdges.reserve(nb);
+  if (addedEdges)
+    addedEdges->reserve(nb);
 
   unsigned int first = edgeIds.getFirstOfRange(nb);
   edges.reserve(first + nb);
@@ -755,8 +752,8 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
     ctnr.edges.push_back(e);
     nodes[tgt.id].edges.push_back(e);
 
-    if (addedIsNonNullRef)
-      addedEdges.push_back(e);
+    if (addedEdges)
+      addedEdges->push_back(e);
   }
 
   nbEdges += nb;
