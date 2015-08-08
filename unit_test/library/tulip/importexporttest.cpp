@@ -26,6 +26,7 @@
 #include <tulip/ExportModule.h>
 #include <tulip/PluginLoaderTxt.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
@@ -247,17 +248,33 @@ Graph* ImportExportTest::createSimpleGraph() const {
 void ImportExportTest::importExportGraph(tlp::Graph* original) {
 
   const string exportFilename = "graph_export";
-  ofstream os(exportFilename.c_str());
-  DataSet set;
-  tlp::exportGraph(original, os, exportAlgorithm, set);
 
-  os.close();
+  exportGraph(original, exportAlgorithm, exportFilename);
 
-  DataSet input;
-  input.set<string>("file::filename", exportFilename);
-  Graph* imported = tlp::importGraph(importAlgorithm, input);
+  Graph* imported = importGraph(importAlgorithm, exportFilename);
 
   testGraphsAreEqual(original, imported);
+
+  delete imported;
+}
+
+void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename) {
+  std::ostream *os = NULL;
+  if (exportPluginName != "TLPB Export")
+    os = tlp::getOutputFileStream(filename);
+  else
+    os = tlp::getOutputFileStream(filename, ios::out | ios::binary);
+
+  DataSet set;
+  tlp::exportGraph(graph, *os, exportPluginName, set);
+
+  delete os;
+}
+
+tlp::Graph *ImportExportTest::importGraph(const std::string &importPluginName, const std::string &filename) {
+  DataSet input;
+  input.set<string>("file::filename", filename);
+  return tlp::importGraph(importPluginName, input);
 }
 
 void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
