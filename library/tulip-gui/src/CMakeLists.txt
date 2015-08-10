@@ -99,10 +99,15 @@ SET(SRCS
 )
 
 IF(BUILD_PYTHON_COMPONENTS)
-  SET(SRCS ${SRCS} PythonVersionChecker.cpp)
+  SET(PYTHON_PART_SRCS PythonVersionChecker.cpp)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_PYTHON_COMPONENTS")
   SET_SOURCE_FILES_PROPERTIES(PythonVersionChecker.cpp
                               PROPERTIES COMPILE_DEFINITIONS TLP_PYTHON="${PYTHON_VERSION}")
+  ADD_LIBRARY(tulip-gui-python STATIC ${PYTHON_PART_SRCS})
+  IF(UNIX)
+    SET_TARGET_PROPERTIES(tulip-gui-python
+                          PROPERTIES COMPILE_OPTIONS "-fPIC")
+  ENDIF(UNIX)
 ENDIF(BUILD_PYTHON_COMPONENTS)
 
 QTX_WRAP_UI(UI_HEADERS
@@ -205,6 +210,10 @@ ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QxtInclude} ${QtAwesomeInclude})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglName} ${QuazipLibrary} ${QxtLibrary} ${QtAwesomeLibrary})
+
+IF(BUILD_PYTHON_COMPONENTS)
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-gui-python)
+ENDIF(BUILD_PYTHON_COMPONENTS)
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui
