@@ -25,12 +25,16 @@
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
+#include <QStringList>
+
 using namespace tlp;
 
 QString consoleOuputString = "";
 QString consoleErrorOuputString = "";
 QString mainScriptFileName = "";
 bool outputActivated = true;
+
+QString currentConcatOutput = "";
 
 typedef struct {
   PyObject_HEAD
@@ -94,7 +98,16 @@ consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
   if (outputActivated) {
 
     if (buf != NULL && reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole) {
-      PythonInterpreter::getInstance()->sendOutputToConsole(output, reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
+
+      currentConcatOutput += output;
+
+      QStringList lines = currentConcatOutput.split('\n');
+
+      for (int i = 0 ; i < lines.count() - 1 ; ++i) {
+        PythonInterpreter::getInstance()->sendOutputToConsole(lines[i], reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
+      }
+
+      currentConcatOutput = lines[lines.size() - 1];
     }
 
   }
@@ -115,7 +128,12 @@ consoleutils_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
 }
 
 static PyObject *
-consoleutils_ConsoleOutput_flush(PyObject *, PyObject *) {
+consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
+  if (!currentConcatOutput.isEmpty()) {
+    PythonInterpreter::getInstance()->sendOutputToConsole(currentConcatOutput, reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
+    currentConcatOutput = "";
+  }
+
   Py_RETURN_NONE;
 }
 

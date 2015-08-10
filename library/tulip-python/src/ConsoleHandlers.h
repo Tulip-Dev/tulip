@@ -78,7 +78,7 @@ public slots :
       cursor = textBrowser->textCursor();
     }
 
-    cursor.insertText(output, formt);
+    cursor.insertText(output+'\n', formt);
 
     if (textBrowser) {
       QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");

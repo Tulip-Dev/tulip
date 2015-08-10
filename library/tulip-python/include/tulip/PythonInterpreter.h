@@ -191,6 +191,9 @@ public :
   PyObject* callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
 
   PyObject* evalPythonStatement(const QString &pythonStatement);
+  // merged in Tulip 4.8 to 'PyObject* evalPythonStatement(const QString &pythonStatement, bool singleInput = false);'
+  // forced to declare the method with the new parameter to maintain binaty compatibility
+  PyObject* evalPythonStatement(const QString &pythonStatement, bool singleInput);
 
   void clearTracebacks();
 
