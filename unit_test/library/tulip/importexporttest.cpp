@@ -260,7 +260,10 @@ void ImportExportTest::importExportGraph(tlp::Graph* original) {
 
 void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename) {
   std::ostream *os = NULL;
-  if (exportPluginName != "TLPB Export")
+
+  if (filename.rfind(".gz") == (filename.length() - 3))
+    os = tlp::getOgzstream(filename);
+  else if (exportPluginName != "TLPB Export")
     os = tlp::getOutputFileStream(filename);
   else
     os = tlp::getOutputFileStream(filename, ios::out | ios::binary);
