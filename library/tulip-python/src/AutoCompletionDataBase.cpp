@@ -992,9 +992,12 @@ static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QStr
 
   while (it->hasNext()) {
     QString attrName = "\"" + QString::fromUtf8(it->next().first.c_str()) + "\"";
+
     if (attrName.startsWith(prefix))
       ret.insert(attrName);
+
     attrName = "'" + QString::fromUtf8(it->next().first.c_str()) + "'";
+
     if (attrName.startsWith(prefix))
       ret.insert(attrName);
   }

@@ -497,6 +497,7 @@ void GraphPerspective::exportGraph(Graph* g) {
       QMessageBox::critical(_mainWindow,trUtf8("Format error"),trUtf8("GZip compression is only supported for TLP and TLPB formats."));
       return;
     }
+
     os = tlp::getOgzstream(filename);
   }
   else {
