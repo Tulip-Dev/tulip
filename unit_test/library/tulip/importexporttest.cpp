@@ -260,7 +260,10 @@ void ImportExportTest::importExportGraph(tlp::Graph* original) {
 
 void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename) {
   std::ostream *os = NULL;
-  if (exportPluginName != "TLPB Export")
+
+  if (filename.rfind(".gz") == (filename.length() - 3))
+    os = tlp::getOgzstream(filename);
+  else if (exportPluginName != "TLPB Export")
     os = tlp::getOutputFileStream(filename);
   else
     os = tlp::getOutputFileStream(filename, ios::out | ios::binary);
@@ -455,6 +458,66 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Grap
   delete secondEdgeIt;
 }
 
+void TulipSaveLoadGraphFunctionsTest::setUp() {}
+
+void TulipSaveLoadGraphFunctionsTest::testTulipSaveLoadGraphFunctions() {
+  tlp::Graph *graph = createSimpleGraph();
+  tlp::Graph *loadedGraph = NULL;
+  string exportFilename;
+
+  exportFilename = "test_tlp_export_import.tlp";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("TLP Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "TLP Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
+  exportFilename = "test_tlp_gz_export_import.tlp.gz";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("TLP Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "TLP Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
+  exportFilename = "test_tlpb_export_import.tlpb";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("TLPB Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "TLPB Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
+  exportFilename = "test_tlpb_gz_export_import.tlpb.gz";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("TLPB Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "TLPB Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
+  exportFilename = "test_json_export_import.json";
+  tlp::saveGraph(graph, exportFilename);
+  loadedGraph = importGraph("JSON Import", exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+  exportGraph(graph, "JSON Export", exportFilename);
+  loadedGraph = tlp::loadGraph(exportFilename);
+  testGraphsAreEqual(graph, loadedGraph);
+  delete loadedGraph;
+
+  delete graph;
+}
+
 CPPUNIT_TEST_SUITE_REGISTRATION(TlpImportExportTest);
 
 TlpImportExportTest::TlpImportExportTest() : ImportExportTest("TLP Import", "TLP Export") {}
@@ -466,3 +529,7 @@ TlpBImportExportTest::TlpBImportExportTest() : ImportExportTest("TLPB Import", "
 CPPUNIT_TEST_SUITE_REGISTRATION(JsonImportExportTest);
 
 JsonImportExportTest::JsonImportExportTest() : ImportExportTest("JSON Import", "JSON Export") {}
+
+CPPUNIT_TEST_SUITE_REGISTRATION(TulipSaveLoadGraphFunctionsTest);
+
+TulipSaveLoadGraphFunctionsTest::TulipSaveLoadGraphFunctionsTest() : ImportExportTest("", "") {}

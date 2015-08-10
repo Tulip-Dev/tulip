@@ -79,5 +79,16 @@ public:
   JsonImportExportTest();
 };
 
+class TulipSaveLoadGraphFunctionsTest : public ImportExportTest {
+  CPPUNIT_TEST_SUITE(TulipSaveLoadGraphFunctionsTest);
+  CPPUNIT_TEST(testTulipSaveLoadGraphFunctions);
+  CPPUNIT_TEST_SUITE_END();
+public:
+  TulipSaveLoadGraphFunctionsTest();
+
+  void setUp();
+  void testTulipSaveLoadGraphFunctions();
+};
+
 
 #endif // IMPORTEXPORTTEST_H

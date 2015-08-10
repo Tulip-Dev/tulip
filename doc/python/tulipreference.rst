@@ -13,6 +13,10 @@ Graph management
 
 .. autofunction:: tulip::tlp.loadGraph
 
+.. autofunction:: tulip::tlp.loadGraph
+
+.. autofunction:: tulip::tlp.saveGraph
+
 .. autofunction:: tulip::tlp.saveGraph
 
 .. autofunction:: tulip::tlp.importGraph
