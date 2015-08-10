@@ -87,6 +87,12 @@ static QSet<QString> getParametersListForPlugin(const QString &pluginName, const
 
       if (paramName.startsWith(prefix))
         ret.insert(paramName);
+
+      paramName = "\"" + QString::fromUtf8(pd.getName().c_str()) + "\" (" + getPythonTypeName(pd.getTypeName().c_str()) + ")";
+      paramName.replace("\n", "\\n");
+
+      if (paramName.startsWith(prefix))
+        ret.insert(paramName);
     }
 
     delete it;
@@ -364,34 +370,38 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
     if (ln < currentLine && pluginDataSetRegexp.indexIn(line) != -1) {
       QString varName = line.mid(0, line.indexOf('=')).trimmed();
-      QString pattern = "getDefaultPluginParameters(\"";
+      QString pattern = "getDefaultPluginParameters(";
       int pos = line.indexOf(pattern);
 
       if (pos != -1) {
         pos += pattern.length();
-        int pos2 = line.indexOf("\"", pos);
 
-        if (pos2 != -1) {
-          QString pluginName = line.mid(pos, pos2-pos);
+        if (line.length() > pos && (line.at(pos) == '"' || line.at(pos) == '\'')) {
+          QChar stringDelim = line.at(pos++);
+          int pos2 = line.indexOf(stringDelim, pos);
 
-          if (tlpPluginExists(pluginName)) {
-            if (_pluginParametersDataSet.find(fullName) == _pluginParametersDataSet.end()) {
-              _pluginParametersDataSet[fullName] = QHash<QString, QSet<QString> >();
-              _varToPluginName[fullName] = QHash<QString, QString>();
-            }
+          if (pos2 != -1) {
+            QString pluginName = line.mid(pos, pos2-pos);
 
-            _varToPluginName[fullName][varName] = pluginName;
-            _pluginParametersDataSet[fullName][varName] = getParametersListForPlugin(pluginName);
-            foreach(QString param, _pluginParametersDataSet[fullName][varName]) {
-              QString name = param.mid(0, param.indexOf("(") - 1);
-              QString type = param.mid(param.indexOf("(")+1, param.indexOf(")") - param.indexOf("(") - 1);
-              QString dataSetVarName = varName + "[" + name + "]";
-
-              if (_varToType.find(fullName) == _varToType.end()) {
-                _varToType[fullName] = QHash<QString, QString>();
+            if (tlpPluginExists(pluginName)) {
+              if (_pluginParametersDataSet.find(fullName) == _pluginParametersDataSet.end()) {
+                _pluginParametersDataSet[fullName] = QHash<QString, QSet<QString> >();
+                _varToPluginName[fullName] = QHash<QString, QString>();
               }
 
-              _varToType[fullName][dataSetVarName] = type;
+              _varToPluginName[fullName][varName] = pluginName;
+              _pluginParametersDataSet[fullName][varName] = getParametersListForPlugin(pluginName);
+              foreach(QString param, _pluginParametersDataSet[fullName][varName]) {
+                QString name = param.mid(0, param.indexOf("(") - 1);
+                QString type = param.mid(param.indexOf("(")+1, param.indexOf(")") - param.indexOf("(") - 1);
+                QString dataSetVarName = varName + "[" + name + "]";
+
+                if (_varToType.find(fullName) == _varToType.end()) {
+                  _varToType[fullName] = QHash<QString, QString>();
+                }
+
+                _varToType[fullName][dataSetVarName] = type;
+              }
             }
           }
         }
