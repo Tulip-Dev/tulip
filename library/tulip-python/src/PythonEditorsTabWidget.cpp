@@ -118,8 +118,21 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
 
     if (keyEvt->modifiers() == modifier && keyEvt->key() == Qt::Key_S) {
       if (obj == getCurrentEditor()) {
-        saveCurrentEditorContentToFile();
-        return true;
+        QString moduleFile = tabText(currentIndex());
+
+        if (!moduleFile.contains("no file")) {
+          saveCurrentEditorContentToFile();
+          return true;
+        }
+        else {
+          // when there is no file associated to the Python module, its content will then be saved
+          // in the project file (.tlpx) currenty loaded in Tulip
+          if (moduleFile[moduleFile.size() - 1] == '*')
+            moduleFile = moduleFile.mid(0, moduleFile.size() - 1);
+
+          setTabText(currentIndex(), moduleFile);
+          return false;
+        }
       }
     }
   }
