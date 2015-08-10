@@ -16,119 +16,31 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <cmath>
-
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Color.h>
 #include <tulip/Vector.h>
 #include <tulip/ColorScale.h>
 #include <tulip/StringCollection.h>
-#include <tulip/GlComposite.h>
-#include <tulip/GlRect.h>
-#include <tulip/GlLabel.h>
 
+#ifndef BUILD_CORE_ONLY
 #include "DoubleStringsListRelationDialog.h"
+#endif
 
 using namespace std;
 using namespace tlp;
 
 namespace {
 
-/*
-void RGBtoHSV( float r, float g, float b, float *h, float *s, float *v ) {
-  float theMin, theMax, delta;
-  theMin = std::min(std::min(r, g), b); //MIN( MIN( r, g) , b );
-  theMax = std::max(std::max(r, g), b); //MAX( MAX( r, g) , b );
-  *v = theMax;                               // v
-  delta = theMax - theMin;
-
-  if( theMax != 0 )
-    *s = delta / theMax;               // s
-  else {
-    // r = g = b = 0                // s = 0, v is undefined
-    *s = 0;
-    *h = -1;
-    return;
-  }
-
-  if( r == theMax )
-    *h = ( g - b ) / delta;         // between yellow & magenta
-  else if( g == theMax )
-    *h = 2 + ( b - r ) / delta;     // between cyan & yellow
-  else
-    *h = 4 + ( r - g ) / delta;     // between magenta & cyan
-
-  *h *= 60;                               // degreesxk
-
-  if( *h < 0 )
-    *h += 360;
-}
-
-void HSVtoRGB( float *r, float *g, float *b, float h, float s, float v ) {
-  int i;
-  float f, p, q, t;
-
-  if( s == 0 ) { // achromatic (grey)
-    *r = *g = *b = v;
-    return;
-  }
-
-  h /= 60;               // sector 0 to 5
-  i = (int)floor( h );
-  f = h - (float)i;      // factorial part of h
-  p = v * ( 1 - s );
-  q = v * ( 1 - s * f );
-  t = v * ( 1 - s * ( 1 - f ) );
-
-  switch( i ) {
-  case 0:
-    *r = v;
-    *g = t;
-    *b = p;
-    break;
-
-  case 1:
-    *r = q;
-    *g = v;
-    *b = p;
-    break;
-
-  case 2:
-    *r = p;
-    *g = v;
-    *b = t;
-    break;
-
-  case 3:
-    *r = p;
-    *g = q;
-    *b = v;
-    break;
-
-  case 4:
-    *r = t;
-    *g = p;
-    *b = v;
-    break;
-
-  default:                // case 5:
-    *r = v;
-    *g = p;
-    *b = q;
-    break;
-  }
-}
-*/
-
 const char * paramHelp[] = {
   // type
   HTML_HELP_OPEN()         \
   HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated") \
+  HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated <BR> logarithmic") \
   HTML_HELP_DEF( "default", "linear" )   \
   HTML_HELP_BODY() \
-  "If linear, the input property must be a <b>numeric</b> property. The minimum value is mapped to one end of the color scale," \
-  "the maximum value is mapped to the other end, and a linear interpolation is used between both.<BR>"          \
+  "If linear or logarithmic, the input property must be a <b>numeric</b> property. For the linear case, the minimum value is mapped to one end of the color scale, " \
+  "the maximum value is mapped to the other end, and a linear interpolation is used between both to compute the associated color. For the logarithmic case, graph elements values are first mapped in the [1, +inf[ range. " \
+  "Then the log of each mapped value is computed and used to compute the associated color of the graph element trough a linear interpolation between 0 and the log of the mapped maximum value of graph elements.<BR>" \
   "If uniform, this is the same except for the interpolation: the values are sorted, numbered, and a linear interpolation is used on those numbers" \
   "(in other words, only the order is taken into account, not the actual values).<BR>" \
   "Finally, if enumerated, the input property can be of <b>any type</b>. Each possible value is mapped to a distinct color without specific any order." \
@@ -155,13 +67,15 @@ const char * paramHelp[] = {
   HTML_HELP_CLOSE(),
 
 };
+
 }
 
 #define ELT_TYPE "type"
-#define ELT_TYPES "linear;uniform;enumerated"
+#define ELT_TYPES "linear;uniform;enumerated;logarithmic"
 #define LINEAR_ELT 0
 #define UNIFORM_ELT 1
 #define ENUMERATED_ELT 2
+#define LOGARITHMIC_ELT 3
 
 #define TARGET_TYPE "target"
 #define TARGET_TYPES "nodes;edges"
@@ -180,7 +94,7 @@ private:
 
 
 public:
-  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorizes the nodes or edges of a graph according to the values of a given property.","2.1", "Color")
+  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorizes the nodes or edges of a graph according to the values of a given property.","2.2", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
@@ -203,7 +117,7 @@ public:
   }
   //=========================================================
   bool run() {
-    //    qWarning() << __PRETTY_FUNCTION__ << endl;
+
     eltTypes.setCurrent(LINEAR_ELT);
     targetType.setCurrent(NODES_TARGET);
     NumericProperty* metricS = NULL;
@@ -222,7 +136,7 @@ public:
       metricS = dynamic_cast<NumericProperty*>(metric);
 
     if (eltTypes.getCurrent()!=ENUMERATED_ELT) {
-      if (eltTypes.getCurrent()==LINEAR_ELT) {
+      if (eltTypes.getCurrent()==LINEAR_ELT || eltTypes.getCurrent()==LOGARITHMIC_ELT) {
         entryMetric = metricS;
       }
       else {
@@ -235,56 +149,66 @@ public:
       if(targetType.getCurrent()==NODES_TARGET && graph->numberOfNodes()!=0) {
         unsigned int maxIter = graph->numberOfNodes();
         unsigned int iter = 0;
-        double minN,maxN;
-        minN=entryMetric->getNodeDoubleMin(graph);
-        maxN=entryMetric->getNodeDoubleMax(graph);
-        Iterator<node> *itN=graph->getNodes();
+        double minN = entryMetric->getNodeDoubleMin(graph);
+        double maxN = entryMetric->getNodeDoubleMax(graph);
 
-        while(itN->hasNext()) {
-          node itn=itN->next();
-          double dd=entryMetric->getNodeDoubleValue(itn)-minN;
-          result->setNodeValue(itn, getColor(dd,maxN-minN));
+        if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
+          maxN = log(1+maxN-minN);
+        }
+
+        node n;
+        forEach(n, graph->getNodes()) {
+          double dd=entryMetric->getNodeDoubleValue(n);
+
+          if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
+            result->setNodeValue(n, getColor(log(dd+(1-minN)), maxN));
+          }
+          else {
+            result->setNodeValue(n, getColor(dd-minN, maxN-minN));
+          }
 
           if ((iter % 100 == 0) &&
               (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
             if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
 
-            delete itN;
             return pluginProgress->state()!=TLP_CANCEL;
           }
 
           ++iter;
         }
-
-        delete itN;
       }
 
       // loop on edges
       if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0) {
         unsigned int maxIter = graph->numberOfEdges();
         unsigned int iter = 0;
-        double minE,maxE;
-        minE = entryMetric->getEdgeDoubleMin(graph);
-        maxE = entryMetric->getEdgeDoubleMax(graph);
-        Iterator<edge> *itE=graph->getEdges();
+        double minE = entryMetric->getEdgeDoubleMin(graph);
+        double maxE = entryMetric->getEdgeDoubleMax(graph);
 
-        while(itE->hasNext()) {
-          edge ite=itE->next();
-          double dd=entryMetric->getEdgeDoubleValue(ite)-minE;
-          result->setEdgeValue(ite, getColor(dd,maxE-minE));
+        if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
+          maxE = log(1+maxE-minE);
+        }
+
+        edge e;
+        forEach(e, graph->getEdges()) {
+          double dd=entryMetric->getEdgeDoubleValue(e);
+
+          if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
+            result->setEdgeValue(e, getColor(log(dd+(1-minE)), maxE));
+          }
+          else {
+            result->setEdgeValue(e, getColor(dd-minE, maxE-minE));
+          }
 
           if ((iter % 100 == 0) &&
               (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
             if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
 
-            delete itE;
             return pluginProgress->state()!=TLP_CANCEL;
           }
 
           ++iter;
         }
-
-        delete itE;
       }
 
       if (eltTypes.getCurrent()==UNIFORM_ELT) delete entryMetric;
@@ -319,7 +243,7 @@ public:
   }
   //=========================================================
   bool check(string &errorMsg) {
-    //    cerr << __PRETTY_FUNCTION__ << endl;
+
     PropertyInterface *metric = NULL;
 
     if (dataSet!=NULL) {
@@ -332,12 +256,13 @@ public:
     if (metric == NULL)
       metric = graph->getProperty<DoubleProperty>("viewMetric");
 
+#ifndef BUILD_CORE_ONLY
+
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if(targetType.getCurrent()==NODES_TARGET) {
-        StableIterator<node> itN(graph->getNodes());
 
-        while (itN.hasNext()) {
-          node n=itN.next();
+        node n;
+        stableForEach(n, graph->getNodes()) {
           string tmp = metric->getNodeStringValue(n);
 
           if(mapMetricElements.count(tmp)==0)
@@ -347,10 +272,9 @@ public:
         }
       }
       else {
-        StableIterator<edge> itE(graph->getEdges());
 
-        while (itE.hasNext()) {
-          edge e=itE.next();
+        edge e;
+        stableForEach(e, graph->getEdges()) {
           string tmp = metric->getEdgeStringValue(e);
 
           if(mapMetricElements.count(tmp)==0)
@@ -385,13 +309,19 @@ public:
       dialog.getResult(enumeratedMappingResultVector);
     }
     else {
+
+#endif
+
       // check if input property is a NumericProperty
       if (! dynamic_cast<NumericProperty*>(metric)) {
         errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
         return false;
       }
+
+#ifndef BUILD_CORE_ONLY
     }
 
+#endif
     return true;
   }
 };
