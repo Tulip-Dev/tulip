@@ -30,6 +30,10 @@ class NumericProperty : tlp::PropertyInterface /Abstract/ {
 #include <tulip/NumericProperty.h>
 %End
 
+%Docstring
+Bases: :class:`tlp.PropertyInterface`
+%End
+
 %ConvertToSubClassCode
     if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
         sipType = sipFindType("tlp::DoubleProperty");
