@@ -96,6 +96,8 @@ SET(TulipLibs ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTul
 ## ========================================================
 IF (WIN32)
   EXECUTE_PROCESS(COMMAND "cmd.exe" "/c" "echo" "%DATE:~6,4%" OUTPUT_VARIABLE CurrentYear OUTPUT_STRIP_TRAILING_WHITESPACE)
+  # CMake variable to check if we run cmake on a 64 bits Windows
+  STRING(COMPARE EQUAL "${CMAKE_SYSTEM_PROCESSOR}" "AMD64" WIN_AMD64)
 ELSEIF(UNIX)
   EXECUTE_PROCESS(COMMAND "date" "+%Y" OUTPUT_VARIABLE CurrentYear OUTPUT_STRIP_TRAILING_WHITESPACE)
 ENDIF()
@@ -322,7 +324,7 @@ IF(PYTHONINTERP_FOUND)
     # Python 64bits does not provide a dll import library for MinGW.
     # Fortunately, we can directly link to the Python dll with that compiler.
     # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
-    IF(MINGW AND X64)
+    IF(MINGW)
         STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
         GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
         STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
@@ -331,9 +333,13 @@ IF(PYTHONINTERP_FOUND)
             SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
         # If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
         ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-            SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            IF(NOT WIN_AMD64 OR X64)
+              SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            ELSE(NOT WIN_AMD64 OR X64)
+              SET(PYTHON_LIBRARY ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            ENDIF(NOT WIN_AMD64 OR X64)
         ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-    ENDIF(MINGW AND X64)
+    ENDIF(MINGW)
 
     # Ensure headers correspond to the ones associated to the detected Python library on MacOS
     IF(APPLE)
