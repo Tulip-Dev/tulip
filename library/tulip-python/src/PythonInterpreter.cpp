@@ -212,11 +212,13 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 
     int argc=1;
 #if PY_MAJOR_VERSION >= 3
+    static const std::wstring argv0 = L"tulip";
     wchar_t *argv[1];
-    argv[0] = const_cast<wchar_t *>(std::wstring(L"").c_str());
+    argv[0] = const_cast<wchar_t *>(argv0.c_str());
 #else
+    static const std::string argv0 = "tulip";
     char *argv[1];
-    argv[0] = const_cast<char *>("");
+    argv[0] = const_cast<char *>(argv0.c_str());
 #endif
 
     Py_OptimizeFlag = 1;
