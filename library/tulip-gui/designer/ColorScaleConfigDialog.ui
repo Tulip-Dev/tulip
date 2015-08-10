@@ -331,22 +331,9 @@ color scale</string>
          <item>
           <layout class="QHBoxLayout" name="horizontalLayout_2">
            <item>
-            <spacer name="horizontalSpacer_5">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item>
             <widget class="QPushButton" name="deleteColorScaleButton">
              <property name="text">
-              <string>Delete color scale</string>
+              <string>Delete current</string>
              </property>
             </widget>
            </item>
@@ -364,6 +351,18 @@ color scale</string>
             </spacer>
            </item>
           </layout>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="font">
+            <font>
+             <pointsize>8</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Most color scales are based on color schemes&lt;br/&gt;from www.ColorBrewer.org by Cynthia A. Brewer, Penn State.</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
