@@ -162,17 +162,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // loop to write sg nodes ranges
       {
         // use a vector as buffer
-        std::vector<std::pair<node, node> > vRanges(MAX_RANGES_TO_WRITE);
+
+        std::vector<std::vector<std::pair<node, node> > > vRangesVec;
+        vRangesVec.push_back(std::vector<std::pair<node, node> >(MAX_RANGES_TO_WRITE));
+        std::vector<std::pair<node, node> > &vRanges = vRangesVec.back();
+
         unsigned int rangesToWrite = 0;
         unsigned int numRanges = 0;
-        // get nb nodes ranges position
-        long numRangesPos = os.tellp();
 
-        if (numRangesPos == -1)
-          return false;
-
-        // mark nb ranges
-        os.write((char *) &numRanges, sizeof(numRanges));
         bool pendingWrite = false;
         node beginNode, lastNode, current;
         forEach(current, sg->getNodes()) {
@@ -185,16 +182,15 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (current.id == lastNode.id + 1)
               lastNode = current;
             else {
-              vRanges[rangesToWrite] = std::pair<node, node>(beginNode, lastNode);
-              ++rangesToWrite;
+              vRanges[rangesToWrite++] = std::pair<node, node>(beginNode, lastNode);
               ++numRanges;
               beginNode = lastNode = current;
 
               if (rangesToWrite == MAX_RANGES_TO_WRITE) {
-                // write already buffered ranges
-                os.write((char *) vRanges.data(),
-                         MAX_RANGES_TO_WRITE * sizeof(vRanges[0]));
+                vRangesVec.push_back(std::vector<std::pair<node, node> >(MAX_RANGES_TO_WRITE));
+                vRanges = vRangesVec.back();
                 rangesToWrite = 0;
+                pendingWrite = false;
               }
             }
           }
@@ -204,31 +200,33 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           // insert last range in buffer
           vRanges[rangesToWrite++] = std::pair<node, node>(beginNode, lastNode);
           ++numRanges;
-          // write last buffered ranges
-          os.write((char *) vRanges.data(),
-                   rangesToWrite * sizeof(vRanges[0]));
-          // return to numRangesPos
-          os.seekp(numRangesPos);
-          // write numRanges
-          os.write((char *) &numRanges, sizeof(numRanges));
-          // return to the end of file
-          os.seekp(0, ios_base::end);
         }
+
+        // mark nb ranges
+        os.write((char *) &numRanges, sizeof(numRanges));
+        // write already buffered ranges
+        int numRangesV = numRanges / MAX_RANGES_TO_WRITE;
+
+        for (int j = 0 ; j < numRangesV ; ++j) {
+          os.write((char *) vRangesVec[j].data(),
+                   MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
+        }
+
+        // write last buffered ranges
+        os.write((char *) vRanges.data(),
+                 rangesToWrite * sizeof(vRanges[0]));
+
       }
       // loop to write sg edges ranges
       {
         // use a vector as buffer
-        std::vector<std::pair<edge, edge> > vRanges(MAX_RANGES_TO_WRITE);
+        std::vector<std::vector<std::pair<edge, edge> > > vRangesVec;
+        vRangesVec.push_back(std::vector<std::pair<edge, edge> >(MAX_RANGES_TO_WRITE));
+        std::vector<std::pair<edge, edge> > &vRanges = vRangesVec.back();
+
         unsigned int rangesToWrite = 0;
         unsigned int numRanges = 0;
-        // get nb edges ranges position
-        long numRangesPos = os.tellp();
 
-        if (numRangesPos == -1)
-          return false;
-
-        // mark nb ranges
-        os.write((char *) &numRanges, sizeof(numRanges));
         bool pendingWrite = false;
         edge beginEdge, lastEdge, current;
         forEach(current, sg->getEdges()) {
@@ -241,16 +239,15 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (current.id == lastEdge.id + 1)
               lastEdge = current;
             else {
-              vRanges[rangesToWrite] = std::pair<edge, edge>(beginEdge, lastEdge);
-              ++rangesToWrite;
+              vRanges[rangesToWrite++] = std::pair<edge, edge>(beginEdge, lastEdge);
               ++numRanges;
               beginEdge = lastEdge = current;
 
               if (rangesToWrite == MAX_RANGES_TO_WRITE) {
-                // write already buffered ranges
-                os.write((char *) vRanges.data(),
-                         MAX_RANGES_TO_WRITE * sizeof(vRanges[0]));
+                vRangesVec.push_back(std::vector<std::pair<edge, edge> >(MAX_RANGES_TO_WRITE));
+                vRanges = vRangesVec.back();
                 rangesToWrite = 0;
+                pendingWrite = false;
               }
             }
           }
@@ -260,16 +257,21 @@ bool TLPBExport::exportGraph(std::ostream &os) {
           // insert last range in buffer
           vRanges[rangesToWrite++] = std::pair<edge, edge>(beginEdge, lastEdge);
           ++numRanges;
-          // write last buffered ranges
-          os.write((char *) vRanges.data(),
-                   rangesToWrite * sizeof(vRanges[0]));
-          // return to numRangesPos
-          os.seekp(numRangesPos);
-          // write numRanges
-          os.write((char *) &numRanges, sizeof(numRanges));
-          // return to the end of file
-          os.seekp(0, ios_base::end);
         }
+
+        // mark nb ranges
+        os.write((char *) &numRanges, sizeof(numRanges));
+        // write already buffered ranges
+        int numRangesV = numRanges / MAX_RANGES_TO_WRITE;
+
+        for (int j = 0 ; j < numRangesV ; ++j) {
+          os.write((char *) vRangesVec[j].data(),
+                   MAX_RANGES_TO_WRITE * sizeof(vRangesVec[j][0]));
+        }
+
+        // write last buffered ranges
+        os.write((char *) vRanges.data(),
+                 rangesToWrite * sizeof(vRanges[0]));
       }
 
       if (pluginProgress->progress(i, numSubGraphs)
