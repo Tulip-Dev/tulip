@@ -83,6 +83,11 @@ protected slots:
   void showGridControl();
   void fillContextMenu(QMenu *menu,const QPointF &point);
   void displayToolTips(bool display);
+  void addRemoveInNodesToSelection();
+  void addRemoveOutNodesToSelection();
+  void addRemoveInEdgesToSelection();
+  void addRemoveOutEdgesToSelection();
+  void addRemoveExtremitiesToSelection();
 
 protected:
   bool isNode;
