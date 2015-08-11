@@ -442,6 +442,9 @@ void TableView::selectHighlightedRows() {
     g->getProperty<BooleanProperty>("viewSelection");
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
+  selection->setAllNodeValue(false);
+  selection->setAllEdgeValue(false);
+
   for (QList<QModelIndex>::const_iterator itIdx = rows.begin();
        itIdx != rows.end(); ++itIdx) {
     if (NODES_DISPLAYED)
