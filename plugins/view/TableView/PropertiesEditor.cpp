@@ -77,7 +77,7 @@ void PropertiesEditor::setGraph(tlp::Graph *g) {
 
 void PropertiesEditor::setPropertiesFilter(QString filter) {
   filteringProperties = true;
-  static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString(filter);
+  static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp(filter);
   filteringProperties = false;
 }
 
