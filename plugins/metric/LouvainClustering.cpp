@@ -67,7 +67,7 @@ private:
 
   // the mapping between the nodes of the original graph
   // and the quotient nodes
-  std::vector<unsigned int> clusters;
+  TLP_HASH_MAP<unsigned int, unsigned int> clusters;
 
   // quotient graph edge weights
   EdgeProperty<double>* weights;
@@ -188,8 +188,9 @@ private:
         renumber[i]=final++;
 
     // update clustering
-    for(unsigned int i = 0; i < nb_nodes; ++i) {
-      clusters[i] = renumber[n2c[clusters[i]]];
+    node n;
+    forEach(n, graph->getNodes()) {
+      clusters[n.id] = renumber[n2c[clusters[n.id]]];
     }
 
     // Compute weighted graph
@@ -382,12 +383,13 @@ bool LouvainClustering::run() {
   tlp::initRandomSequence();
 
   nb_nodes = graph->numberOfNodes();
-  // init clusters
-  clusters.resize(nb_nodes);
+
   quotient = new VectorGraph();
 
-  for(unsigned int i = 0; i < nb_nodes; ++i) {
-    clusters[i] = i;
+  tlp::node n;
+  unsigned int i = 0;
+  forEach(n, graph->getNodes()) {
+    clusters[n.id] = i++;
     quotient->addNode();
   }
 
@@ -469,11 +471,9 @@ bool LouvainClustering::run() {
           renumber[i]=final++;
 
       // then set measure values
-      unsigned int i = 0;
       node n;
       forEach(n, graph->getNodes()) {
-        result->setNodeValue(n, renumber[n2c[clusters[i]]]);
-        ++i;
+        result->setNodeValue(n, renumber[n2c[clusters[n.id]]]);
       }
       delete quotient;
       delete weights;
