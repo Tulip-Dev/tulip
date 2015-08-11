@@ -469,10 +469,12 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
         menu->addAction(tr("Go inside"),this,SLOT(goInsideItem()));
         menu->addAction(tr("Ungroup"),this,SLOT(ungroupItem()));
       }
-    } else {
+    }
+    else {
       menu->addAction(tr("Toggle extremities selection"),this,SLOT(addRemoveExtremitiesToSelection()));
     }
-  } else {
+  }
+  else {
     GlMainView::fillContextMenu(menu,point);
 
     QAction *actionTooltips=menu->addAction("Tooltips");
@@ -556,6 +558,7 @@ void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection() {
   node src = graph()->source(edge(itemId));
   node tgt = graph()->target(edge(itemId));
   elementSelected->setNodeValue(src, !elementSelected->getNodeValue(src));
+
   if (src != tgt) {
     elementSelected->setNodeValue(tgt, !elementSelected->getNodeValue(tgt));
   }
