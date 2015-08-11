@@ -99,6 +99,9 @@ QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & opti
     width = std::max(width, textBB.width());
   }
 
+  // restrict column width in case of really large string to display
+  width = std::min(width, 500);
+
   return QSize(width+15, height+5);
 }
 
