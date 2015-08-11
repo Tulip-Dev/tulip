@@ -313,6 +313,21 @@ def process_signature(app, what, name, obj, opts, sig, ann):
 
   return (sig, ann)
 
+# icon role taken from the sphinx-trap theme (https://github.com/jfardello/Sphinxtrap)
+
+from sphinx import addnodes
+from docutils.nodes import emphasis, reference, Text
+from docutils.parsers.rst.roles import set_classes
+
+def faicon_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
+
+    options.update({'classes': ["fa"] + ["fa-" + x for x in text.split(",")]})
+    options['classes'].append('icon-holder')
+    set_classes(options)
+    node = emphasis(**options)
+    return [node], []
+
 def setup(app):
   app.connect('autodoc-process-signature', process_signature)
   app.connect('autodoc-process-docstring', process_docstring)
+  app.add_role('faicon', faicon_role)

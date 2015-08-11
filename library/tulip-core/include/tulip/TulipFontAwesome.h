@@ -88,7 +88,7 @@ public:
    */
   static std::string getFontAwesomeIconUtf8String(const std::string& iconName);
 
-  // static constants for the Font Awesome icons names
+  // static constants for the Font Awesome 4.3 icons names
   static const char* Adjust;
   static const char* Adn;
   static const char* AlignCenter;
@@ -682,6 +682,87 @@ public:
   static const char* Youtube;
   static const char* YoutubePlay;
   static const char* YoutubeSquare;
+
+  // static constants for the new icons added in Font Awesome 4.4
+  static const char* Yc;
+  static const char* YCombinator;
+  static const char* OptinMonster;
+  static const char* Opencart;
+  static const char* Expeditedssl;
+  static const char* Battery4;
+  static const char* BatteryFull;
+  static const char* Battery3;
+  static const char* BatteryThreeQuarters;
+  static const char* Battery2;
+  static const char* BatteryHalf;
+  static const char* Battery1;
+  static const char* BatteryQuarter;
+  static const char* Battery0;
+  static const char* BatteryEmpty;
+  static const char* MousePointer;
+  static const char* ICursor;
+  static const char* ObjectGroup;
+  static const char* ObjectUngroup;
+  static const char* StickyNote;
+  static const char* StickyNoteO;
+  static const char* CcJcb;
+  static const char* CcDinersClub;
+  static const char* Clone;
+  static const char* BalanceScale;
+  static const char* HourglassO;
+  static const char* Hourglass1;
+  static const char* HourglassStart;
+  static const char* Hourglass2;
+  static const char* HourglassHalf;
+  static const char* Hourglass3;
+  static const char* HourglassEnd;
+  static const char* Hourglass;
+  static const char* HandGrabO;
+  static const char* HandRockO;
+  static const char* HandStopO;
+  static const char* HandPaperO;
+  static const char* HandScissorsO;
+  static const char* HandLizardO;
+  static const char* HandSpockO;
+  static const char* HandPointerO;
+  static const char* HandPeaceO;
+  static const char* Trademark;
+  static const char* Registered;
+  static const char* CreativeCommons;
+  static const char* Gg;
+  static const char* GgCircle;
+  static const char* Tripadvisor;
+  static const char* Odnoklassniki;
+  static const char* OdnoklassnikiSquare;
+  static const char* GetPocket;
+  static const char* WikipediaW;
+  static const char* Safari;
+  static const char* Chrome;
+  static const char* Firefox;
+  static const char* Opera;
+  static const char* InternetExplorer;
+  static const char* Tv;
+  static const char* Television;
+  static const char* Contao;
+  static const char* Px500;
+  static const char* Amazon;
+  static const char* CalendarPlusO;
+  static const char* CalendarMinusO;
+  static const char* CalendarTimesO;
+  static const char* CalendarCheckO;
+  static const char* Industry;
+  static const char* MapPin;
+  static const char* MapSigns;
+  static const char* MapO;
+  static const char* Map;
+  static const char* Commenting;
+  static const char* CommentingO;
+  static const char* Houzz;
+  static const char* Vimeo;
+  static const char* BlackTie;
+  static const char* Fonticons;
+
+
 
 };
 
