@@ -49,7 +49,7 @@ class SizeProperty;
 class TLP_OGDF_SCOPE TulipToOGDF {
 public:
 
-  TulipToOGDF(tlp::Graph *g);
+  TulipToOGDF(tlp::Graph *g, bool importEdgeBends=true);
   ~TulipToOGDF();
 
   void saveToGML(const char * fileName);

@@ -28,7 +28,7 @@ OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext* context, og
   tlp::LayoutAlgorithm(context), tlpToOGDF(NULL), ogdfLayoutAlgo(ogdfLayoutAlgo) {
   // convert Tulip Graph to OGDF Graph including attributes
   if (graph)
-    tlpToOGDF = new TulipToOGDF(graph);
+    tlpToOGDF = new TulipToOGDF(graph, false);
 }
 
 OGDFLayoutPluginBase::~OGDFLayoutPluginBase() {
