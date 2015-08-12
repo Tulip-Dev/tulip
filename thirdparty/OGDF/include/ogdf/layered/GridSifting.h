@@ -68,7 +68,7 @@ namespace ogdf {
  *
  *
  */
-class OGDF_EXPORT GlobalSifting : public LayeredCrossMinModule {
+class GlobalSifting : public LayeredCrossMinModule {
 
 
 public:
@@ -115,7 +115,7 @@ private:
  *
  *
  */
-class OGDF_EXPORT GridSifting : public LayeredCrossMinModule {
+class GridSifting : public LayeredCrossMinModule {
 
 public:
 	//! Creates a new instance of the global sifting heuristic.
