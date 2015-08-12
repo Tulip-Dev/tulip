@@ -30,6 +30,8 @@
 #include <ogdf/layered/GreedySwitchHeuristic.h>
 #include <ogdf/layered/OptimalHierarchyLayout.h>
 #include <ogdf/layered/FastSimpleHierarchyLayout.h>
+#include <ogdf/layered/GridSifting.h>
+#include <ogdf/layered/OptimalHierarchyLayout.h>
 
 #include <tulip/StringCollection.h>
 
@@ -42,18 +44,22 @@
 #define ELT_COFFMANGRAHAMRANKING 2
 
 #define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
-#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;GreedySwitchHeuristic"
+#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;GreedySwitchHeuristic;GlobalSiftingHeuristic;GridSiftingHeuristic"
 #define ELT_BARYCENTER 0
 #define ELT_MEDIAN 1
 #define ELT_SPLIT 2
 #define ELT_SIFTING 3
 #define ELT_GREEDYINSERT 4
 #define ELT_GREEDYSWITCH 5
+#define ELT_GLOBALSIFTING 6
+#define ELT_GRIDSIFTING 7
 
 #define ELT_HIERARCHYLAYOUT "Layout"
-#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout"
+#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout;OptimalHierarchyLayout"
 #define ELT_FASTHIERARCHY 0
 #define ELT_FASTSIMPLEHIERARCHY 1
+#define ELT_OPTIMALHIERARCHY 2
+
 
 // comments below have been extracted from OGDF/src/layered/sugiyama.cpp
 /** \addtogroup layout */
@@ -186,8 +192,10 @@ public:
     addInParameter<StringCollection>(ELT_RANKING,
                                      HTML_HELP_OPEN()
                                      HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br/>- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
-                                     HTML_HELP_DEF( "default", "LongestPathRanking " )
+                                     HTML_HELP_DEF("values", "- CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br/>"
+                                                             "- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>"
+                                                             "- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
+                                     HTML_HELP_DEF( "default", "LongestPathRanking" )
                                      HTML_HELP_BODY()
                                      "Sets the option for the node ranking (layer assignment)."
                                      HTML_HELP_CLOSE(),
@@ -195,8 +203,15 @@ public:
     addInParameter<StringCollection>(ELT_TWOLAYERCROSS,
                                      HTML_HELP_OPEN()
                                      HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br/>- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization</i><br/>- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i>")
-                                     HTML_HELP_DEF( "default", "BarycenterHeuristic " )
+                                     HTML_HELP_DEF("values", "- BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br/>"
+                                                             "- GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing minimization)</i>")
+                                     HTML_HELP_DEF( "default", "BarycenterHeuristic" )
                                      HTML_HELP_BODY()
                                      "Sets the module option for the two-layer crossing minimization."
                                      HTML_HELP_CLOSE(),
@@ -204,7 +219,9 @@ public:
     addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT,
                                      HTML_HELP_OPEN()
                                      HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br/>- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i>")
+                                     HTML_HELP_DEF("values", "- FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br/>"
+                                                             "- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i><br/>"
+                                                             "- OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>")
                                      HTML_HELP_DEF( "default", "FastHierarchyLayout" )
                                      HTML_HELP_BODY()
                                      "The hierarchy layout module that computes the final layout."
@@ -215,7 +232,7 @@ public:
   ~OGDFSugiyama() {}
 
   PLUGININFORMATION("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007",
-                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.5","Hierarchical")
+                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.6","Hierarchical")
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
@@ -265,17 +282,23 @@ public:
         else if (sc.getCurrent() == ELT_MEDIAN) {
           sugiyama->setCrossMin(new ogdf::MedianHeuristic());
         }
-        else if(sc.getCurrent()==ELT_SPLIT) {
+        else if (sc.getCurrent()==ELT_SPLIT) {
           sugiyama->setCrossMin(new ogdf::SplitHeuristic());
         }
-        else if(sc.getCurrent()==ELT_SIFTING) {
+        else if (sc.getCurrent()==ELT_SIFTING) {
           sugiyama->setCrossMin(new ogdf::SiftingHeuristic());
         }
-        else if(sc.getCurrent()==ELT_GREEDYINSERT) {
+        else if (sc.getCurrent()==ELT_GREEDYINSERT) {
           sugiyama->setCrossMin(new ogdf::GreedyInsertHeuristic());
         }
-        else
+        else if (sc.getCurrent()==ELT_GREEDYSWITCH) {
           sugiyama->setCrossMin(new ogdf::GreedySwitchHeuristic());
+        }
+        else if (sc.getCurrent()==ELT_GLOBALSIFTING) {
+          sugiyama->setCrossMin(new ogdf::GlobalSifting());
+        } else {
+          sugiyama->setCrossMin(new ogdf::GridSifting());
+        }
       }
 
       if(dataSet->get(ELT_HIERARCHYLAYOUT, sc)) {
@@ -286,15 +309,23 @@ public:
         dataSet->get("layer distance", layerDistance);
         dataSet->get("fixed layer distance", fixedLayerDistance);
 
-        if(sc.getCurrent()==ELT_FASTHIERARCHY) {
+        if (sc.getCurrent()==ELT_FASTHIERARCHY) {
           ogdf::FastHierarchyLayout *fhl = new FastHierarchyLayout();
           fhl->nodeDistance(nodeDistance);
           fhl->layerDistance(layerDistance);
           fhl->fixedLayerDistance(fixedLayerDistance);
           sugiyama->setLayout(fhl);
         }
-        else {
-          sugiyama->setLayout(new ogdf::FastSimpleHierarchyLayout(static_cast<int>(nodeDistance), static_cast<int>(layerDistance)));
+        else if (sc.getCurrent()==ELT_FASTSIMPLEHIERARCHY){
+          ogdf::FastSimpleHierarchyLayout *fshl = new ogdf::FastSimpleHierarchyLayout();
+          fshl->nodeDistance(nodeDistance);
+          fshl->layerDistance(layerDistance);
+          sugiyama->setLayout(fshl);
+        } else {
+          ogdf::OptimalHierarchyLayout *ohl = new ogdf::OptimalHierarchyLayout();
+          ohl->nodeDistance(nodeDistance);
+          ohl->layerDistance(layerDistance);
+          sugiyama->setLayout(ohl);
         }
       }
     }

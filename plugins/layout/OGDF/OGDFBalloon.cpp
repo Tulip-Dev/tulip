@@ -17,6 +17,7 @@
  *
  */
 #include <ogdf/misclayout/BalloonLayout.h>
+#include <ogdf/packing/ComponentSplitterLayout.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
@@ -70,8 +71,8 @@ class OGDFBalloon : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Balloon (OGDF)","Karsten Klein","13/11/2007",
-                    "Computes a radial (balloon) layout based on a spanning tree.<br/>The algorithm is partially based on the paper <b>On Balloon Drawings of Rooted Trees</b> by Lin and Yen and on <b>Interacting with Huge Hierarchies: Beyond Cone Trees</b> by Carriere and Kazman. ","1.3","Hierarchical")
-  OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BalloonLayout()) {
+                    "Computes a radial (balloon) layout based on a spanning tree.<br/>The algorithm is partially based on the paper <b>On Balloon Drawings of Rooted Trees</b> by Lin and Yen and on <b>Interacting with Huge Hierarchies: Beyond Cone Trees</b> by Carriere and Kazman. ","1.4","Hierarchical")
+  OGDFBalloon(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), balloon(new ogdf::BalloonLayout()) {
     addInParameter<bool> ("Even angles",
                           HTML_HELP_OPEN()
                           HTML_HELP_DEF( "type", "bool" )
@@ -79,11 +80,13 @@ public:
                           "Subtrees may be assigned even angles or angles depending on their size."
                           HTML_HELP_CLOSE(),
                           "false", false);
+    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the BalloonLayout instance
+    csl->setLayoutModule(balloon);
   }
   ~OGDFBalloon() {}
 
   void beforeCall() {
-    ogdf::BalloonLayout *balloon = static_cast<ogdf::BalloonLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       bool val = false;
@@ -93,14 +96,8 @@ public:
     }
   }
 
-  bool check(string& error) {
-    if (!tlp::ConnectedTest::isConnected(graph)) {
-      error += "graph is not connected";
-      return false;
-    }
-
-    return true;
-  }
+private:
+  ogdf::BalloonLayout *balloon;
 
 };
 

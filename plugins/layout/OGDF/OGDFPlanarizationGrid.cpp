@@ -92,23 +92,7 @@ public:
                            HTML_HELP_BODY()
                            "Sets the option pageRatio."
                            HTML_HELP_CLOSE(),
-                           "1.0");
-    addInParameter<StringCollection>(ELT_PLANARSUBGRAPH,
-                                     HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- FastPlanarSubgraph <i>(Computation of a planar subgraph using PQ-trees)</i><br/>- MaximalPlanarSubgraphSimple")
-                                     HTML_HELP_DEF( "default", "FastPlanarSubgraph " )
-                                     HTML_HELP_BODY()
-                                     "Indicates the computation type for the planar subgraph."
-                                     HTML_HELP_CLOSE(),
-                                     ELT_PLANARSUBGRAPHLIST);
-    addInParameter<StringCollection>(ELT_EDGEINSERTION,
-                                     HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- FixedEmbeddingInserter <i>(Edge insertion module that inserts each edge optimally into a fixed embedding)</i><br/>- VariableEmbeddingInserter <i>(Optimal edge insertion algorithm, which inserts a single edge with a minum number of crossings into a planar graph)</i><br/>- VariableEmbeddingInserter2")
-                                     HTML_HELP_DEF( "default", "FixedEmbeddingInserter " )
-                                     HTML_HELP_BODY()
-                                     "Indicates the type of edge insertion."
-                                     HTML_HELP_CLOSE(),
-                                     ELT_EDGEINSERTIONLIST);
+                           "1.1");
   }
 
   ~OGDFPlanarizationGrid() {}
@@ -118,28 +102,9 @@ public:
 
     if (dataSet != NULL) {
       double dval = 0;
-      StringCollection sc;
 
       if (dataSet->get("page ratio", dval))
         pgl->pageRatio(dval);
-
-      if (dataSet->get(ELT_PLANARSUBGRAPH, sc)) {
-        if (sc.getCurrent() == ELT_FASTPLANAR) {
-          pgl->setSubgraph(new ogdf::FastPlanarSubgraph());
-        }
-        else {
-          pgl->setSubgraph(new ogdf::MaximalPlanarSubgraphSimple());
-        }
-      }
-
-      if (dataSet->get(ELT_EDGEINSERTION, sc)) {
-        if (sc.getCurrent() == ELT_FIXEDEMBEDDING) {
-          pgl->setInserter(new ogdf::FixedEmbeddingInserter());
-        }
-        else {
-          pgl->setInserter(new ogdf::VariableEmbeddingInserter);
-        }
-      }
     }
   }
 

@@ -17,6 +17,8 @@
  *
  */
 #include <ogdf/upward/VisibilityLayout.h>
+#include <ogdf/packing/ComponentSplitterLayout.h>
+
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
 // comments below have been extracted from OGDF/src/upward/VisibilityLayout.cpp
@@ -68,8 +70,8 @@ class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007",
-                    "Implements a simple upward drawing algorithm based on visibility representations (horizontal segments for nodes, vectical segments for edges).","1.0","Hierarchical")
-  OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::VisibilityLayout()) {
+                    "Implements a simple upward drawing algorithm based on visibility representations (horizontal segments for nodes, vectical segments for edges).","1.1","Hierarchical")
+  OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), visibility(new ogdf::VisibilityLayout()) {
     addInParameter<int>("minimum grid distance",
                         HTML_HELP_OPEN()
                         HTML_HELP_DEF( "type", "int" )
@@ -84,21 +86,14 @@ public:
                          "The parameter for transposing the layout vertically ."
                          HTML_HELP_CLOSE(),
                          "false");
+    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the VisibilityLayout instance
+    csl->setLayoutModule(visibility);
   }
 
   ~OGDFVisibility() {}
 
-  bool check(string& error) {
-    if (!tlp::ConnectedTest::isConnected(graph)) {
-      error += "graph is not connected";
-      return false;
-    }
-
-    return true;
-  }
-
   void beforeCall() {
-    ogdf::VisibilityLayout *visibility = static_cast<ogdf::VisibilityLayout*>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       int ival = 0;
@@ -119,6 +114,10 @@ public:
       }
     }
   }
+
+private:
+
+  ogdf::VisibilityLayout *visibility;
 
 };
 
