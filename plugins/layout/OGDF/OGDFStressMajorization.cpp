@@ -17,9 +17,12 @@
  *
  */
 
-#include <ogdf/energybased/StressMajorizationSimple.h>
+#include <ogdf/energybased/StressMinimization.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
+
+#include <tulip/StringCollection.h>
+#include <tulip/NumericProperty.h>
 
 // comments below have been extracted from OGDF/src/energybased/StressMajorizationSimple.cpp
 /** \addtogroup layout */
@@ -68,98 +71,140 @@ class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Stress Majorization (OGDF)","Karsten Klein","12/11/2007",
-                    "Implements an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","1.0","Force Directed")
-  OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMajorization()) {
-    addInParameter<int>("iterations",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "Sets a fixed number of iterations for stress majorization in main step."
-                        HTML_HELP_CLOSE(),
-                        "300");
-    addInParameter<double>("stop tolerance",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "The value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
-                           HTML_HELP_CLOSE(),
-                           "0.001");
-    addInParameter<bool>("used layout",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true, the given layout is used for the initial positions."
-                         HTML_HELP_CLOSE(),
-                         "false");
-    addInParameter<bool>("compute max iterations",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true, number of iterations is computed depending on G."
-                         HTML_HELP_CLOSE(),
-                         "true");
-    addInParameter<int>("global iterations",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of global iterations."
-                        HTML_HELP_CLOSE(),
-                        "50");
-    addInParameter<int>("local iterations",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of local iterations."
-                        HTML_HELP_CLOSE(),
-                        "50");
-    addInParameter<bool>("radial",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true, radial constraints are added."
-                         HTML_HELP_CLOSE(),
-                         "false");
-    addInParameter<bool>("upward",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true, upward constraints are added. "
-                         HTML_HELP_CLOSE(),
-                         "false");
+                    "Implements an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","2.0","Force Directed")
+  OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
+    addInParameter<StringCollection>("terminationCriterion",
+                                      HTML_HELP_OPEN()
+                                      HTML_HELP_DEF( "type", "StringCollection" )
+                                      HTML_HELP_DEF("values", "- None <br/>"
+                                                              "- PositionDifference <br/>"
+                                                              "- Stress </i>")
+                                      HTML_HELP_DEF( "default", "None" )
+                                      HTML_HELP_BODY()
+                                      "Tells which TERMINATION_CRITERIA should be used."
+                                      HTML_HELP_CLOSE(),
+                                      "None;PositionDifference;Stress");
+    addInParameter<bool>("fixXCoordinates",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "bool" )
+                          HTML_HELP_DEF( "default", "false" )
+                          HTML_HELP_BODY()
+                          "Tells whether the x coordinates are allowed to be modified or not."
+                          HTML_HELP_CLOSE(),
+                          "false");
+    addInParameter<bool>("fixYCoordinates",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "bool" )
+                          HTML_HELP_DEF( "default", "false" )
+                          HTML_HELP_BODY()
+                          "Tells whether the y coordinates are allowed to be modified or not."
+                          HTML_HELP_CLOSE(),
+                          "false");
+    addInParameter<bool>("hasInitialLayout",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "bool" )
+                          HTML_HELP_DEF( "default", "false" )
+                          HTML_HELP_BODY()
+                          "Tells whether the current layout should be used or the initial layout needs to be computed."
+                          HTML_HELP_CLOSE(),
+                          "false");
+    addInParameter<bool>("layoutComponentsSeparately",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "bool" )
+                          HTML_HELP_DEF( "default", "false" )
+                          HTML_HELP_BODY()
+                          "Sets whether the graph's components should be layouted separately or a dummy distance should be used for nodes within different components."
+                          HTML_HELP_CLOSE(),
+                          "false");
+    addInParameter<int>("numberOfIterations",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "int" )
+                          HTML_HELP_DEF( "default", "200" )
+                          HTML_HELP_BODY()
+                          "Sets a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used."
+                          HTML_HELP_CLOSE(),
+                          "200");
+    addInParameter<double>("edgeCosts",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "double" )
+                          HTML_HELP_DEF( "default", "100" )
+                          HTML_HELP_BODY()
+                          "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
+                          HTML_HELP_CLOSE(),
+                          "100");
+    addInParameter<bool>("useEdgeCostsProperty",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "bool" )
+                          HTML_HELP_DEF( "default", "false" )
+                          HTML_HELP_BODY()
+                          "Tells whether the edge costs are uniform or defined in an edge costs property."
+                          HTML_HELP_CLOSE(),
+                          "false");
+    addInParameter<tlp::NumericProperty*>("edgeCostsProperty",
+                          HTML_HELP_OPEN()
+                          HTML_HELP_DEF( "type", "NumericProperty" )
+                          HTML_HELP_DEF( "default", "viewMetric" )
+                          HTML_HELP_BODY()
+                          "The numeric property that holds the desired cost for each edge."
+                          HTML_HELP_CLOSE(),
+                          "viewMetric");
+
   }
+
   ~OGDFStressMajorization() {}
 
   void beforeCall() {
-    ogdf::StressMajorization *stressm = static_cast<ogdf::StressMajorization*>(ogdfLayoutAlgo);
+    ogdf::StressMinimization *stressm = static_cast<ogdf::StressMinimization*>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       double dval = 0;
       int ival = 0;
       bool bval = false;
+      StringCollection sc;
+      tlp::NumericProperty *edgeCosts = graph->getProperty<tlp::DoubleProperty>("viewMetric");
 
-      if (dataSet->get("iterations", ival))
+      if (dataSet->get("terminationCriterion", sc)) {
+        if (sc.getCurrentString() == "PositionDifference") {
+          stressm->convergenceCriterion(ogdf::StressMinimization::POSITION_DIFFERENCE);
+        } else if (sc.getCurrentString() == "Stress") {
+          stressm->convergenceCriterion(ogdf::StressMinimization::STRESS);
+        } else {
+          stressm->convergenceCriterion(ogdf::StressMinimization::NONE);
+        }
+      }
+
+      if (dataSet->get("fixXCoordinates", bval)) {
+        stressm->fixXCoordinates(bval);
+      }
+
+      if (dataSet->get("fixYCoordinates", bval)) {
+        stressm->fixXCoordinates(bval);
+      }
+
+      if (dataSet->get("hasInitialLayout", bval)) {
+        stressm->hasInitialLayout(bval);
+      }
+
+      if (dataSet->get("layoutComponentsSeparately", bval)) {
+        stressm->layoutComponentsSeparately(bval);
+      }
+
+      if (dataSet->get("numberOfIterations", ival)) {
         stressm->setIterations(ival);
+      }
 
-      if (dataSet->get("stop tolerance", dval))
-        stressm->setStopTolerance(dval);
+      if (dataSet->get("edgeCosts", dval)) {
+        stressm->setEdgeCosts(dval);
+      }
 
-      if (dataSet->get("use layout", bval))
-        stressm->setUseLayout(bval);
+      if (dataSet->get("useEdgeCostsProperty", bval)) {
+        stressm->useEdgeCostsAttribute(bval);
+        if (bval) {
+          dataSet->get("edgeCostsProperty", edgeCosts);
+          tlpToOGDF->copyTlpNumericPropertyToOGDFEdgeLength(edgeCosts);
+        }
+      }
 
-      if (dataSet->get("compute max iterations", bval))
-        stressm->computeMaxIterations(bval);
-
-      if (dataSet->get("global iterations", ival))
-        stressm->setMaxGlobalIterations(ival);
-
-      if (dataSet->get("local iterations", ival))
-        stressm->setMaxLocalIterations(ival);
-
-      if (dataSet->get("radial", bval))
-        stressm->radial(bval);
-
-      if (dataSet->get("upward", bval))
-        stressm->upward(bval);
     }
   }
 

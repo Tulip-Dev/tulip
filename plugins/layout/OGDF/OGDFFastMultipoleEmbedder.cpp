@@ -103,7 +103,7 @@ public:
                            HTML_HELP_BODY()
                            "The default edge length. "
                            HTML_HELP_CLOSE(),
-                           "40.0");
+                           "1.0");
     addInParameter<int>("number of threads",
                         HTML_HELP_OPEN()
                         HTML_HELP_DEF( "type", "int" )

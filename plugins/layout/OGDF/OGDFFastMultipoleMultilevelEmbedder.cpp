@@ -17,6 +17,7 @@
  *
  */
 #include <ogdf/energybased/FastMultipoleEmbedder.h>
+#include <ogdf/packing/ComponentSplitterLayout.h>
 
 #include <tulip/ConnectedTest.h>
 
@@ -68,8 +69,9 @@
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","The FMME layout algorithm is a variant of multilevel, force-directed layout, which utilizes various tools to speed up the computation.","1.0","Multilevel")
-  OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleMultilevelEmbedder()) {
+  PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","The FMME layout algorithm is a variant of multilevel, force-directed layout, which utilizes various tools to speed up the computation.","1.1","Multilevel")
+  OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :
+    OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), fmme(new ogdf::FastMultipoleMultilevelEmbedder()) {
     addInParameter<int>("number of threads",
                         HTML_HELP_OPEN()
                         HTML_HELP_DEF( "type", "int" )
@@ -77,32 +79,36 @@ public:
                         "The number of threads to use during the computation of the layout."
                         HTML_HELP_CLOSE(),
                         "2");
+    addInParameter<int>("multilevel nodes bound",
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_BODY()
+                        "The bound for the number of nodes for multilevel step."
+                        HTML_HELP_CLOSE(),
+                        "10");
+
+    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance
+    csl->setLayoutModule(fmme);
+
   }
 
   ~OGDFFastMultipoleMultiLevelEmbedder() {}
 
-  virtual bool check(std::string &errMsg) {
-    bool connected = ConnectedTest::isConnected(graph);
-
-    if (!connected) {
-      errMsg = "The graph must be connected.";
-    }
-
-    return connected;
-  }
-
   void beforeCall() {
-    ogdf::FastMultipoleMultilevelEmbedder *fmme = static_cast<ogdf::FastMultipoleMultilevelEmbedder*>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       int ival = 0;
 
       if (dataSet->get("number of threads", ival))
         fmme->maxNumThreads(ival);
-
+      if (dataSet->get("multilevel nodes bound", ival))
+        fmme->multilevelUntilNumNodesAreLess(ival);
     }
   }
 
+private:
+  ogdf::FastMultipoleMultilevelEmbedder *fmme;
 };
 
 

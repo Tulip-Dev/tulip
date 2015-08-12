@@ -20,6 +20,10 @@ OGDFSugiyama.cpp
 OGDFDominance.cpp
 OGDFMMMExampleNiceLayout.cpp
 OGDFPlanarizationGrid.cpp
+OGDFBertaultLayout.cpp
+OGDFPivotMDS.cpp
+OGDFTileToRowsPacking.cpp
+OGDFPlanarizationLayout.cpp
 )
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DOGDF_DLL")
