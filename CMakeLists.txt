@@ -479,7 +479,7 @@ SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
 ENDIF(NOT BUILD_CORE_ONLY)
 
-SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF)
+SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
 SET(OGDFLibrary OGDF-tulip-${TulipMMVersion})
 SET(QHULLInclude ${PROJECT_SOURCE_DIR}/thirdparty)
 SET(UTF8CppInclude ${PROJECT_SOURCE_DIR}/thirdparty/utf8-cpp/source)
