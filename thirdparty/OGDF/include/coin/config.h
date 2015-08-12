@@ -227,13 +227,25 @@
 #define COIN_C_ISNAN std::isnan
 
 /* Define to 64bit integer type */
-#define COIN_INT64_T int64_t
-
 /* Define to integer type capturing pointer */
-#define COIN_INTPTR_T intptr_t
-
 /* Define to 64bit unsigned integer type */
+#ifndef WIN32
+#define COIN_INT64_T int64_t
+#define COIN_INTPTR_T intptr_t
 #define COIN_UINT64_T int64_t
+#else
+/* Use 64-bit integer type provided by Microsoft */
+#ifdef _MSC_VER
+# define COIN_INT64_T __int64
+# define COIN_UINT64_T unsigned __int64
+  /* Define to integer type capturing pointer */
+# define COIN_INTPTR_T intptr_t
+#else
+# define COIN_INT64_T long long
+# define COIN_UINT64_T unsigned long long
+# define COIN_INTPTR_T int*
+#endif
+#endif
 
 /* Define to a macro mangling the given C identifier (in lower and upper
    case), which must not contain underscores, for linking with Fortran. */

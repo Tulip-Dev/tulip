@@ -64,13 +64,17 @@
 #endif
 #endif
 
-#ifdef _MSC_VER
-#include <intrin.h>
+#if defined(__MINGW32__)
+#include <malloc.h>
+#endif
 
-#elif defined(OGDF_SYSTEM_UNIX) || (defined(__MINGW32__) && !defined(__MINGW64__))
+#if defined(_MSC_VER)
+#include <intrin.h>
+#elif defined(OGDF_SYSTEM_UNIX) || defined(__MINGW32__)
 #include <unistd.h>
 #include <fcntl.h>
 #include <sys/time.h>
+#include <stdint.h>
 
 static void __cpuid(int CPUInfo[4], int infoType)
 {

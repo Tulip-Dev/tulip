@@ -64,7 +64,7 @@ namespace ogdf {
 
 
 
-class OGDF_EXPORT UpwardPlanarizationLayout : public LayoutModule
+class UpwardPlanarizationLayout : public LayoutModule
 {
 public:
 
