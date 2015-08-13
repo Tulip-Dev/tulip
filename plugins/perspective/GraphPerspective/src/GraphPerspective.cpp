@@ -417,9 +417,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   PythonInterpreter::getInstance()->setOutputEnabled(false);
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
+
   if (PythonInterpreter::getInstance()->runString("import PyQt4")) {
     APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
   }
+
 #endif
 
   PythonInterpreter::getInstance()->setOutputEnabled(true);
