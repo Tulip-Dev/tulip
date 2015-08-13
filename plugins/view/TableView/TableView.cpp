@@ -380,7 +380,7 @@ void TableView::filterChanged() {
       g->getProperty(QStringToTlpString(_ui->matchPropertyButton->text()));
 
   sortModel->setProperties(props);
-  sortModel->setFilterFixedString(filter);
+  sortModel->setFilterRegExp(filter);
 }
 
 void TableView::mapToGraphSelection() {
