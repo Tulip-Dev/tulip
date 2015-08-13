@@ -46,6 +46,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GraphModel.h>
+#include <tulip/NumericProperty.h>
 
 using namespace tlp;
 using namespace std;
@@ -423,18 +424,6 @@ void NodeLinkDiagramComponent::displayToolTips(bool display) {
 }
 
 void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point) {
-  GlMainView::fillContextMenu(menu,point);
-
-  QAction *actionTooltips=menu->addAction("Tooltips");
-  actionTooltips->setCheckable(true);
-  actionTooltips->setChecked(_tooltips);
-  connect(actionTooltips,SIGNAL(triggered(bool)),this,SLOT(displayToolTips(bool)));
-
-  QAction* zOrdering = menu->addAction(trUtf8("Use Z ordering"));
-  zOrdering->setCheckable(true);
-  zOrdering->setChecked(getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isElementZOrdered());
-  connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
-  menu->addAction(trUtf8("Grid display parameters"),this,SLOT(showGridControl()));
 
   //Check if a node/edge is under the mouse pointer
   bool result;
@@ -462,6 +451,11 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     updateMenu->addAction("Size", this, SLOT(editSize()));
 
     if (isNode) {
+      menu->addAction(tr("Toggle predecessor nodes selection"),this,SLOT(addRemoveInNodesToSelection()));
+      menu->addAction(tr("Toggle successor nodes selection"),this,SLOT(addRemoveOutNodesToSelection()));
+      menu->addAction(tr("Toggle input edges selection"),this,SLOT(addRemoveInEdgesToSelection()));
+      menu->addAction(tr("Toggle output edges selection"),this,SLOT(addRemoveOutEdgesToSelection()));
+
       Graph *metaGraph=graph()->getNodeMetaInfo(node(entity.getComplexEntityId()));
 
       if (metaGraph) {
@@ -469,6 +463,23 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
         menu->addAction(tr("Ungroup"),this,SLOT(ungroupItem()));
       }
     }
+    else {
+      menu->addAction(tr("Toggle extremities selection"),this,SLOT(addRemoveExtremitiesToSelection()));
+    }
+  }
+  else {
+    GlMainView::fillContextMenu(menu,point);
+
+    QAction *actionTooltips=menu->addAction("Tooltips");
+    actionTooltips->setCheckable(true);
+    actionTooltips->setChecked(_tooltips);
+    connect(actionTooltips,SIGNAL(triggered(bool)),this,SLOT(displayToolTips(bool)));
+
+    QAction* zOrdering = menu->addAction(trUtf8("Use Z ordering"));
+    zOrdering->setCheckable(true);
+    zOrdering->setChecked(getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->isElementZOrdered());
+    connect(zOrdering,SIGNAL(triggered(bool)),this,SLOT(setZOrdering(bool)));
+    menu->addAction(trUtf8("Grid display parameters"),this,SLOT(showGridControl()));
   }
 }
 
@@ -496,6 +507,54 @@ void NodeLinkDiagramComponent::selectItem() {
     elementSelected->setNodeValue(node(itemId), true);
   else
     elementSelected->setEdgeValue(edge(itemId), true);
+}
+
+void NodeLinkDiagramComponent::addRemoveInNodesToSelection() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+  node neigh;
+  forEach(neigh, graph()->getInNodes(node(itemId))) {
+    elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+  }
+}
+
+void NodeLinkDiagramComponent::addRemoveOutNodesToSelection() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+  node neigh;
+  forEach(neigh, graph()->getOutNodes(node(itemId))) {
+    elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+  }
+}
+
+void NodeLinkDiagramComponent::addRemoveInEdgesToSelection() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+  edge e;
+  forEach(e, graph()->getInEdges(node(itemId))) {
+    elementSelected->setEdgeValue(e, !elementSelected->getEdgeValue(e));
+  }
+}
+
+void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+  edge e;
+  forEach(e, graph()->getOutEdges(node(itemId))) {
+    elementSelected->setEdgeValue(e, !elementSelected->getEdgeValue(e));
+  }
+}
+
+void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection() {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  graph()->push();
+  node src = graph()->source(edge(itemId));
+  node tgt = graph()->target(edge(itemId));
+  elementSelected->setNodeValue(src, !elementSelected->getNodeValue(src));
+
+  if (src != tgt) {
+    elementSelected->setNodeValue(tgt, !elementSelected->getNodeValue(tgt));
+  }
 }
 
 void NodeLinkDiagramComponent::deleteItem() {
