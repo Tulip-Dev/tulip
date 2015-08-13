@@ -73,6 +73,7 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
     msg += ".";
     PyErr_SetString(PyExc_Exception, msg.c_str());
   }
+  return ret;
 }
 
 %End
