@@ -116,7 +116,9 @@ public:
 private:
 	void initOptions();
 
+#ifndef __EMSCRIPTEN__
 	void runMultipole();
+#endif
 
 	void runSingle();
 
@@ -133,7 +135,9 @@ private:
 
 	ArrayGraph* m_pGraph;
 
+#ifndef __EMSCRIPTEN__
 	FMEThreadPool* m_threadPool;
+#endif
 
 	FMEGlobalOptions* m_pOptions;
 
