@@ -40,7 +40,7 @@ To set a node glyph as a Font Awesome icon, the Font Awesome glyph must be assoc
 to the node through the modification of the "viewShape" integer property attached to the graph.
 The name of the icon to use must then be set in the "viewFontAwesomeIcon" string property.
 As an example, the following code snippet activates the Font Awesome glyph for all nodes
-and sets the "user" icon::
+and sets the "user" icon (:faicon:`user`)::
 
    # graph is a pointer to a tlp.Graph object
    viewShape = graph.getIntegerProperty("viewShape")
@@ -53,599 +53,680 @@ and sets the "user" icon::
 
 The following string constants representing the supported icons are available :
 
-      * :const:`tlp.TulipFontAwesome.Adjust`
-      * :const:`tlp.TulipFontAwesome.Adn`
-      * :const:`tlp.TulipFontAwesome.AlignCenter`
-      * :const:`tlp.TulipFontAwesome.AlignJustify`
-      * :const:`tlp.TulipFontAwesome.AlignLeft`
-      * :const:`tlp.TulipFontAwesome.AlignRight`
-      * :const:`tlp.TulipFontAwesome.Ambulance`
-      * :const:`tlp.TulipFontAwesome.Anchor`
-      * :const:`tlp.TulipFontAwesome.Android`
-      * :const:`tlp.TulipFontAwesome.Angellist`
-      * :const:`tlp.TulipFontAwesome.AngleDoubleDown`
-      * :const:`tlp.TulipFontAwesome.AngleDoubleLeft`
-      * :const:`tlp.TulipFontAwesome.AngleDoubleRight`
-      * :const:`tlp.TulipFontAwesome.AngleDoubleUp`
-      * :const:`tlp.TulipFontAwesome.AngleDown`
-      * :const:`tlp.TulipFontAwesome.AngleLeft`
-      * :const:`tlp.TulipFontAwesome.AngleRight`
-      * :const:`tlp.TulipFontAwesome.AngleUp`
-      * :const:`tlp.TulipFontAwesome.Apple`
-      * :const:`tlp.TulipFontAwesome.Archive`
-      * :const:`tlp.TulipFontAwesome.AreaChart`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleDown`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleLeft`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleODown`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleOLeft`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleORight`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleOUp`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleRight`
-      * :const:`tlp.TulipFontAwesome.ArrowCircleUp`
-      * :const:`tlp.TulipFontAwesome.ArrowDown`
-      * :const:`tlp.TulipFontAwesome.ArrowLeft`
-      * :const:`tlp.TulipFontAwesome.ArrowRight`
-      * :const:`tlp.TulipFontAwesome.ArrowUp`
-      * :const:`tlp.TulipFontAwesome.Arrows`
-      * :const:`tlp.TulipFontAwesome.ArrowsAlt`
-      * :const:`tlp.TulipFontAwesome.ArrowsH`
-      * :const:`tlp.TulipFontAwesome.ArrowsV`
-      * :const:`tlp.TulipFontAwesome.Asterisk`
-      * :const:`tlp.TulipFontAwesome.At`
-      * :const:`tlp.TulipFontAwesome.Automobile`
-      * :const:`tlp.TulipFontAwesome.Backward`
-      * :const:`tlp.TulipFontAwesome.Ban`
-      * :const:`tlp.TulipFontAwesome.Bank`
-      * :const:`tlp.TulipFontAwesome.BarChart`
-      * :const:`tlp.TulipFontAwesome.BarChartO`
-      * :const:`tlp.TulipFontAwesome.Barcode`
-      * :const:`tlp.TulipFontAwesome.Bars`
-      * :const:`tlp.TulipFontAwesome.Bed`
-      * :const:`tlp.TulipFontAwesome.Beer`
-      * :const:`tlp.TulipFontAwesome.Behance`
-      * :const:`tlp.TulipFontAwesome.BehanceSquare`
-      * :const:`tlp.TulipFontAwesome.Bell`
-      * :const:`tlp.TulipFontAwesome.BellO`
-      * :const:`tlp.TulipFontAwesome.BellSlash`
-      * :const:`tlp.TulipFontAwesome.BellSlashO`
-      * :const:`tlp.TulipFontAwesome.Bicycle`
-      * :const:`tlp.TulipFontAwesome.Binoculars`
-      * :const:`tlp.TulipFontAwesome.BirthdayCake`
-      * :const:`tlp.TulipFontAwesome.Bitbucket`
-      * :const:`tlp.TulipFontAwesome.BitbucketSquare`
-      * :const:`tlp.TulipFontAwesome.Bitcoin`
-      * :const:`tlp.TulipFontAwesome.Bold`
-      * :const:`tlp.TulipFontAwesome.Bolt`
-      * :const:`tlp.TulipFontAwesome.Bomb`
-      * :const:`tlp.TulipFontAwesome.Book`
-      * :const:`tlp.TulipFontAwesome.Bookmark`
-      * :const:`tlp.TulipFontAwesome.BookmarkO`
-      * :const:`tlp.TulipFontAwesome.Briefcase`
-      * :const:`tlp.TulipFontAwesome.Btc`
-      * :const:`tlp.TulipFontAwesome.Bug`
-      * :const:`tlp.TulipFontAwesome.Building`
-      * :const:`tlp.TulipFontAwesome.BuildingO`
-      * :const:`tlp.TulipFontAwesome.Bullhorn`
-      * :const:`tlp.TulipFontAwesome.Bullseye`
-      * :const:`tlp.TulipFontAwesome.Bus`
-      * :const:`tlp.TulipFontAwesome.Buysellads`
-      * :const:`tlp.TulipFontAwesome.Cab`
-      * :const:`tlp.TulipFontAwesome.Calculator`
-      * :const:`tlp.TulipFontAwesome.Calendar`
-      * :const:`tlp.TulipFontAwesome.CalendarO`
-      * :const:`tlp.TulipFontAwesome.Camera`
-      * :const:`tlp.TulipFontAwesome.CameraRetro`
-      * :const:`tlp.TulipFontAwesome.Car`
-      * :const:`tlp.TulipFontAwesome.CaretDown`
-      * :const:`tlp.TulipFontAwesome.CaretLeft`
-      * :const:`tlp.TulipFontAwesome.CaretRight`
-      * :const:`tlp.TulipFontAwesome.CaretSquareODown`
-      * :const:`tlp.TulipFontAwesome.CaretSquareOLeft`
-      * :const:`tlp.TulipFontAwesome.CaretSquareORight`
-      * :const:`tlp.TulipFontAwesome.CaretSquareOUp`
-      * :const:`tlp.TulipFontAwesome.CaretUp`
-      * :const:`tlp.TulipFontAwesome.CartArrowDown`
-      * :const:`tlp.TulipFontAwesome.CartPlus`
-      * :const:`tlp.TulipFontAwesome.Cc`
-      * :const:`tlp.TulipFontAwesome.CcAmex`
-      * :const:`tlp.TulipFontAwesome.CcDiscover`
-      * :const:`tlp.TulipFontAwesome.CcMastercard`
-      * :const:`tlp.TulipFontAwesome.CcPaypal`
-      * :const:`tlp.TulipFontAwesome.CcStripe`
-      * :const:`tlp.TulipFontAwesome.CcVisa`
-      * :const:`tlp.TulipFontAwesome.Certificate`
-      * :const:`tlp.TulipFontAwesome.Chain`
-      * :const:`tlp.TulipFontAwesome.ChainBroken`
-      * :const:`tlp.TulipFontAwesome.Check`
-      * :const:`tlp.TulipFontAwesome.CheckCircle`
-      * :const:`tlp.TulipFontAwesome.CheckCircleO`
-      * :const:`tlp.TulipFontAwesome.CheckSquare`
-      * :const:`tlp.TulipFontAwesome.CheckSquareO`
-      * :const:`tlp.TulipFontAwesome.ChevronCircleDown`
-      * :const:`tlp.TulipFontAwesome.ChevronCircleLeft`
-      * :const:`tlp.TulipFontAwesome.ChevronCircleRight`
-      * :const:`tlp.TulipFontAwesome.ChevronCircleUp`
-      * :const:`tlp.TulipFontAwesome.ChevronDown`
-      * :const:`tlp.TulipFontAwesome.ChevronLeft`
-      * :const:`tlp.TulipFontAwesome.ChevronRight`
-      * :const:`tlp.TulipFontAwesome.ChevronUp`
-      * :const:`tlp.TulipFontAwesome.Child`
-      * :const:`tlp.TulipFontAwesome.Circle`
-      * :const:`tlp.TulipFontAwesome.CircleO`
-      * :const:`tlp.TulipFontAwesome.CircleONotch`
-      * :const:`tlp.TulipFontAwesome.CircleThin`
-      * :const:`tlp.TulipFontAwesome.Clipboard`
-      * :const:`tlp.TulipFontAwesome.ClockO`
-      * :const:`tlp.TulipFontAwesome.Close`
-      * :const:`tlp.TulipFontAwesome.Cloud`
-      * :const:`tlp.TulipFontAwesome.CloudDownload`
-      * :const:`tlp.TulipFontAwesome.CloudUpload`
-      * :const:`tlp.TulipFontAwesome.Cny`
-      * :const:`tlp.TulipFontAwesome.Code`
-      * :const:`tlp.TulipFontAwesome.CodeFork`
-      * :const:`tlp.TulipFontAwesome.Codepen`
-      * :const:`tlp.TulipFontAwesome.Coffee`
-      * :const:`tlp.TulipFontAwesome.Cog`
-      * :const:`tlp.TulipFontAwesome.Cogs`
-      * :const:`tlp.TulipFontAwesome.Columns`
-      * :const:`tlp.TulipFontAwesome.Comment`
-      * :const:`tlp.TulipFontAwesome.CommentO`
-      * :const:`tlp.TulipFontAwesome.Comments`
-      * :const:`tlp.TulipFontAwesome.CommentsO`
-      * :const:`tlp.TulipFontAwesome.Compass`
-      * :const:`tlp.TulipFontAwesome.Compress`
-      * :const:`tlp.TulipFontAwesome.Connectdevelop`
-      * :const:`tlp.TulipFontAwesome.Copy`
-      * :const:`tlp.TulipFontAwesome.Copyright`
-      * :const:`tlp.TulipFontAwesome.CreditCard`
-      * :const:`tlp.TulipFontAwesome.Crop`
-      * :const:`tlp.TulipFontAwesome.Crosshairs`
-      * :const:`tlp.TulipFontAwesome.Css3`
-      * :const:`tlp.TulipFontAwesome.Cube`
-      * :const:`tlp.TulipFontAwesome.Cubes`
-      * :const:`tlp.TulipFontAwesome.Cut`
-      * :const:`tlp.TulipFontAwesome.Cutlery`
-      * :const:`tlp.TulipFontAwesome.Dashboard`
-      * :const:`tlp.TulipFontAwesome.Dashcube`
-      * :const:`tlp.TulipFontAwesome.Database`
-      * :const:`tlp.TulipFontAwesome.Dedent`
-      * :const:`tlp.TulipFontAwesome.Delicious`
-      * :const:`tlp.TulipFontAwesome.Desktop`
-      * :const:`tlp.TulipFontAwesome.Deviantart`
-      * :const:`tlp.TulipFontAwesome.Diamond`
-      * :const:`tlp.TulipFontAwesome.Digg`
-      * :const:`tlp.TulipFontAwesome.Dollar`
-      * :const:`tlp.TulipFontAwesome.DotCircleO`
-      * :const:`tlp.TulipFontAwesome.Download`
-      * :const:`tlp.TulipFontAwesome.Dribbble`
-      * :const:`tlp.TulipFontAwesome.Dropbox`
-      * :const:`tlp.TulipFontAwesome.Drupal`
-      * :const:`tlp.TulipFontAwesome.Edit`
-      * :const:`tlp.TulipFontAwesome.Eject`
-      * :const:`tlp.TulipFontAwesome.EllipsisH`
-      * :const:`tlp.TulipFontAwesome.EllipsisV`
-      * :const:`tlp.TulipFontAwesome.Empire`
-      * :const:`tlp.TulipFontAwesome.Envelope`
-      * :const:`tlp.TulipFontAwesome.EnvelopeO`
-      * :const:`tlp.TulipFontAwesome.EnvelopeSquare`
-      * :const:`tlp.TulipFontAwesome.Eraser`
-      * :const:`tlp.TulipFontAwesome.Eur`
-      * :const:`tlp.TulipFontAwesome.Euro`
-      * :const:`tlp.TulipFontAwesome.Exchange`
-      * :const:`tlp.TulipFontAwesome.Exclamation`
-      * :const:`tlp.TulipFontAwesome.ExclamationCircle`
-      * :const:`tlp.TulipFontAwesome.ExclamationTriangle`
-      * :const:`tlp.TulipFontAwesome.Expand`
-      * :const:`tlp.TulipFontAwesome.ExternalLink`
-      * :const:`tlp.TulipFontAwesome.ExternalLinkSquare`
-      * :const:`tlp.TulipFontAwesome.Eye`
-      * :const:`tlp.TulipFontAwesome.EyeSlash`
-      * :const:`tlp.TulipFontAwesome.Eyedropper`
-      * :const:`tlp.TulipFontAwesome.Facebook`
-      * :const:`tlp.TulipFontAwesome.FacebookF`
-      * :const:`tlp.TulipFontAwesome.FacebookOfficial`
-      * :const:`tlp.TulipFontAwesome.FacebookSquare`
-      * :const:`tlp.TulipFontAwesome.FastBackward`
-      * :const:`tlp.TulipFontAwesome.FastForward`
-      * :const:`tlp.TulipFontAwesome.Fax`
-      * :const:`tlp.TulipFontAwesome.Female`
-      * :const:`tlp.TulipFontAwesome.FighterJet`
-      * :const:`tlp.TulipFontAwesome.File`
-      * :const:`tlp.TulipFontAwesome.FileArchiveO`
-      * :const:`tlp.TulipFontAwesome.FileAudioO`
-      * :const:`tlp.TulipFontAwesome.FileCodeO`
-      * :const:`tlp.TulipFontAwesome.FileExcelO`
-      * :const:`tlp.TulipFontAwesome.FileImageO`
-      * :const:`tlp.TulipFontAwesome.FileMovieO`
-      * :const:`tlp.TulipFontAwesome.FileO`
-      * :const:`tlp.TulipFontAwesome.FilePdfO`
-      * :const:`tlp.TulipFontAwesome.FilePhotoO`
-      * :const:`tlp.TulipFontAwesome.FilePictureO`
-      * :const:`tlp.TulipFontAwesome.FilePowerpointO`
-      * :const:`tlp.TulipFontAwesome.FileSoundO`
-      * :const:`tlp.TulipFontAwesome.FileText`
-      * :const:`tlp.TulipFontAwesome.FileTextO`
-      * :const:`tlp.TulipFontAwesome.FileVideoO`
-      * :const:`tlp.TulipFontAwesome.FileWordO`
-      * :const:`tlp.TulipFontAwesome.FileZipO`
-      * :const:`tlp.TulipFontAwesome.FilesO`
-      * :const:`tlp.TulipFontAwesome.Film`
-      * :const:`tlp.TulipFontAwesome.Filter`
-      * :const:`tlp.TulipFontAwesome.Fire`
-      * :const:`tlp.TulipFontAwesome.FireExtinguisher`
-      * :const:`tlp.TulipFontAwesome.Flag`
-      * :const:`tlp.TulipFontAwesome.FlagCheckered`
-      * :const:`tlp.TulipFontAwesome.FlagO`
-      * :const:`tlp.TulipFontAwesome.Flash`
-      * :const:`tlp.TulipFontAwesome.Flask`
-      * :const:`tlp.TulipFontAwesome.Flickr`
-      * :const:`tlp.TulipFontAwesome.FloppyO`
-      * :const:`tlp.TulipFontAwesome.Folder`
-      * :const:`tlp.TulipFontAwesome.FolderO`
-      * :const:`tlp.TulipFontAwesome.FolderOpen`
-      * :const:`tlp.TulipFontAwesome.FolderOpenO`
-      * :const:`tlp.TulipFontAwesome.Font`
-      * :const:`tlp.TulipFontAwesome.Forumbee`
-      * :const:`tlp.TulipFontAwesome.Forward`
-      * :const:`tlp.TulipFontAwesome.Foursquare`
-      * :const:`tlp.TulipFontAwesome.FrownO`
-      * :const:`tlp.TulipFontAwesome.FutbolO`
-      * :const:`tlp.TulipFontAwesome.Gamepad`
-      * :const:`tlp.TulipFontAwesome.Gavel`
-      * :const:`tlp.TulipFontAwesome.Gbp`
-      * :const:`tlp.TulipFontAwesome.Ge`
-      * :const:`tlp.TulipFontAwesome.Gear`
-      * :const:`tlp.TulipFontAwesome.Gears`
-      * :const:`tlp.TulipFontAwesome.Genderless`
-      * :const:`tlp.TulipFontAwesome.Gift`
-      * :const:`tlp.TulipFontAwesome.Git`
-      * :const:`tlp.TulipFontAwesome.GitSquare`
-      * :const:`tlp.TulipFontAwesome.Github`
-      * :const:`tlp.TulipFontAwesome.GithubAlt`
-      * :const:`tlp.TulipFontAwesome.GithubSquare`
-      * :const:`tlp.TulipFontAwesome.Gittip`
-      * :const:`tlp.TulipFontAwesome.Glass`
-      * :const:`tlp.TulipFontAwesome.Globe`
-      * :const:`tlp.TulipFontAwesome.Google`
-      * :const:`tlp.TulipFontAwesome.GooglePlus`
-      * :const:`tlp.TulipFontAwesome.GooglePlusSquare`
-      * :const:`tlp.TulipFontAwesome.GoogleWallet`
-      * :const:`tlp.TulipFontAwesome.GraduationCap`
-      * :const:`tlp.TulipFontAwesome.Gratipay`
-      * :const:`tlp.TulipFontAwesome.Group`
-      * :const:`tlp.TulipFontAwesome.HSquare`
-      * :const:`tlp.TulipFontAwesome.HackerNews`
-      * :const:`tlp.TulipFontAwesome.HandODown`
-      * :const:`tlp.TulipFontAwesome.HandOLeft`
-      * :const:`tlp.TulipFontAwesome.HandORight`
-      * :const:`tlp.TulipFontAwesome.HandOUp`
-      * :const:`tlp.TulipFontAwesome.HddO`
-      * :const:`tlp.TulipFontAwesome.Header`
-      * :const:`tlp.TulipFontAwesome.Headphones`
-      * :const:`tlp.TulipFontAwesome.Heart`
-      * :const:`tlp.TulipFontAwesome.HeartO`
-      * :const:`tlp.TulipFontAwesome.Heartbeat`
-      * :const:`tlp.TulipFontAwesome.History`
-      * :const:`tlp.TulipFontAwesome.Home`
-      * :const:`tlp.TulipFontAwesome.HospitalO`
-      * :const:`tlp.TulipFontAwesome.Hotel`
-      * :const:`tlp.TulipFontAwesome.Html5`
-      * :const:`tlp.TulipFontAwesome.Ils`
-      * :const:`tlp.TulipFontAwesome.Image`
-      * :const:`tlp.TulipFontAwesome.Inbox`
-      * :const:`tlp.TulipFontAwesome.Indent`
-      * :const:`tlp.TulipFontAwesome.Info`
-      * :const:`tlp.TulipFontAwesome.InfoCircle`
-      * :const:`tlp.TulipFontAwesome.Inr`
-      * :const:`tlp.TulipFontAwesome.Instagram`
-      * :const:`tlp.TulipFontAwesome.Institution`
-      * :const:`tlp.TulipFontAwesome.Ioxhost`
-      * :const:`tlp.TulipFontAwesome.Italic`
-      * :const:`tlp.TulipFontAwesome.Joomla`
-      * :const:`tlp.TulipFontAwesome.Jpy`
-      * :const:`tlp.TulipFontAwesome.Jsfiddle`
-      * :const:`tlp.TulipFontAwesome.Key`
-      * :const:`tlp.TulipFontAwesome.KeyboardO`
-      * :const:`tlp.TulipFontAwesome.Krw`
-      * :const:`tlp.TulipFontAwesome.Language`
-      * :const:`tlp.TulipFontAwesome.Laptop`
-      * :const:`tlp.TulipFontAwesome.Lastfm`
-      * :const:`tlp.TulipFontAwesome.LastfmSquare`
-      * :const:`tlp.TulipFontAwesome.Leaf`
-      * :const:`tlp.TulipFontAwesome.Leanpub`
-      * :const:`tlp.TulipFontAwesome.Legal`
-      * :const:`tlp.TulipFontAwesome.LemonO`
-      * :const:`tlp.TulipFontAwesome.LevelDown`
-      * :const:`tlp.TulipFontAwesome.LevelUp`
-      * :const:`tlp.TulipFontAwesome.LifeBouy`
-      * :const:`tlp.TulipFontAwesome.LifeBuoy`
-      * :const:`tlp.TulipFontAwesome.LifeRing`
-      * :const:`tlp.TulipFontAwesome.LifeSaver`
-      * :const:`tlp.TulipFontAwesome.LightbulbO`
-      * :const:`tlp.TulipFontAwesome.LineChart`
-      * :const:`tlp.TulipFontAwesome.Link`
-      * :const:`tlp.TulipFontAwesome.Linkedin`
-      * :const:`tlp.TulipFontAwesome.LinkedinSquare`
-      * :const:`tlp.TulipFontAwesome.Linux`
-      * :const:`tlp.TulipFontAwesome.List`
-      * :const:`tlp.TulipFontAwesome.ListAlt`
-      * :const:`tlp.TulipFontAwesome.ListOl`
-      * :const:`tlp.TulipFontAwesome.ListUl`
-      * :const:`tlp.TulipFontAwesome.LocationArrow`
-      * :const:`tlp.TulipFontAwesome.Lock`
-      * :const:`tlp.TulipFontAwesome.LongArrowDown`
-      * :const:`tlp.TulipFontAwesome.LongArrowLeft`
-      * :const:`tlp.TulipFontAwesome.LongArrowRight`
-      * :const:`tlp.TulipFontAwesome.LongArrowUp`
-      * :const:`tlp.TulipFontAwesome.Magic`
-      * :const:`tlp.TulipFontAwesome.Magnet`
-      * :const:`tlp.TulipFontAwesome.MailForward`
-      * :const:`tlp.TulipFontAwesome.MailReply`
-      * :const:`tlp.TulipFontAwesome.MailReplyAll`
-      * :const:`tlp.TulipFontAwesome.Male`
-      * :const:`tlp.TulipFontAwesome.MapMarker`
-      * :const:`tlp.TulipFontAwesome.Mars`
-      * :const:`tlp.TulipFontAwesome.MarsDouble`
-      * :const:`tlp.TulipFontAwesome.MarsStroke`
-      * :const:`tlp.TulipFontAwesome.MarsStrokeH`
-      * :const:`tlp.TulipFontAwesome.MarsStrokeV`
-      * :const:`tlp.TulipFontAwesome.Maxcdn`
-      * :const:`tlp.TulipFontAwesome.Meanpath`
-      * :const:`tlp.TulipFontAwesome.Medium`
-      * :const:`tlp.TulipFontAwesome.Medkit`
-      * :const:`tlp.TulipFontAwesome.MehO`
-      * :const:`tlp.TulipFontAwesome.Mercury`
-      * :const:`tlp.TulipFontAwesome.Microphone`
-      * :const:`tlp.TulipFontAwesome.MicrophoneSlash`
-      * :const:`tlp.TulipFontAwesome.Minus`
-      * :const:`tlp.TulipFontAwesome.MinusCircle`
-      * :const:`tlp.TulipFontAwesome.MinusSquare`
-      * :const:`tlp.TulipFontAwesome.MinusSquareO`
-      * :const:`tlp.TulipFontAwesome.Mobile`
-      * :const:`tlp.TulipFontAwesome.MobilePhone`
-      * :const:`tlp.TulipFontAwesome.Money`
-      * :const:`tlp.TulipFontAwesome.MoonO`
-      * :const:`tlp.TulipFontAwesome.MortarBoard`
-      * :const:`tlp.TulipFontAwesome.Motorcycle`
-      * :const:`tlp.TulipFontAwesome.Music`
-      * :const:`tlp.TulipFontAwesome.Navicon`
-      * :const:`tlp.TulipFontAwesome.Neuter`
-      * :const:`tlp.TulipFontAwesome.NewspaperO`
-      * :const:`tlp.TulipFontAwesome.Openid`
-      * :const:`tlp.TulipFontAwesome.Outdent`
-      * :const:`tlp.TulipFontAwesome.Pagelines`
-      * :const:`tlp.TulipFontAwesome.PaintBrush`
-      * :const:`tlp.TulipFontAwesome.PaperPlane`
-      * :const:`tlp.TulipFontAwesome.PaperPlaneO`
-      * :const:`tlp.TulipFontAwesome.Paperclip`
-      * :const:`tlp.TulipFontAwesome.Paragraph`
-      * :const:`tlp.TulipFontAwesome.Paste`
-      * :const:`tlp.TulipFontAwesome.Pause`
-      * :const:`tlp.TulipFontAwesome.Paw`
-      * :const:`tlp.TulipFontAwesome.Paypal`
-      * :const:`tlp.TulipFontAwesome.Pencil`
-      * :const:`tlp.TulipFontAwesome.PencilSquare`
-      * :const:`tlp.TulipFontAwesome.PencilSquareO`
-      * :const:`tlp.TulipFontAwesome.Phone`
-      * :const:`tlp.TulipFontAwesome.PhoneSquare`
-      * :const:`tlp.TulipFontAwesome.Photo`
-      * :const:`tlp.TulipFontAwesome.PictureO`
-      * :const:`tlp.TulipFontAwesome.PieChart`
-      * :const:`tlp.TulipFontAwesome.PiedPiper`
-      * :const:`tlp.TulipFontAwesome.PiedPiperAlt`
-      * :const:`tlp.TulipFontAwesome.Pinterest`
-      * :const:`tlp.TulipFontAwesome.PinterestP`
-      * :const:`tlp.TulipFontAwesome.PinterestSquare`
-      * :const:`tlp.TulipFontAwesome.Plane`
-      * :const:`tlp.TulipFontAwesome.Play`
-      * :const:`tlp.TulipFontAwesome.PlayCircle`
-      * :const:`tlp.TulipFontAwesome.PlayCircleO`
-      * :const:`tlp.TulipFontAwesome.Plug`
-      * :const:`tlp.TulipFontAwesome.Plus`
-      * :const:`tlp.TulipFontAwesome.PlusCircle`
-      * :const:`tlp.TulipFontAwesome.PlusSquare`
-      * :const:`tlp.TulipFontAwesome.PlusSquareO`
-      * :const:`tlp.TulipFontAwesome.PowerOff`
-      * :const:`tlp.TulipFontAwesome.Print`
-      * :const:`tlp.TulipFontAwesome.PuzzlePiece`
-      * :const:`tlp.TulipFontAwesome.Qq`
-      * :const:`tlp.TulipFontAwesome.Qrcode`
-      * :const:`tlp.TulipFontAwesome.Question`
-      * :const:`tlp.TulipFontAwesome.QuestionCircle`
-      * :const:`tlp.TulipFontAwesome.QuoteLeft`
-      * :const:`tlp.TulipFontAwesome.QuoteRight`
-      * :const:`tlp.TulipFontAwesome.Ra`
-      * :const:`tlp.TulipFontAwesome.Random`
-      * :const:`tlp.TulipFontAwesome.Rebel`
-      * :const:`tlp.TulipFontAwesome.Recycle`
-      * :const:`tlp.TulipFontAwesome.Reddit`
-      * :const:`tlp.TulipFontAwesome.RedditSquare`
-      * :const:`tlp.TulipFontAwesome.Refresh`
-      * :const:`tlp.TulipFontAwesome.Remove`
-      * :const:`tlp.TulipFontAwesome.Renren`
-      * :const:`tlp.TulipFontAwesome.Reorder`
-      * :const:`tlp.TulipFontAwesome.Repeat`
-      * :const:`tlp.TulipFontAwesome.Reply`
-      * :const:`tlp.TulipFontAwesome.ReplyAll`
-      * :const:`tlp.TulipFontAwesome.Retweet`
-      * :const:`tlp.TulipFontAwesome.Rmb`
-      * :const:`tlp.TulipFontAwesome.Road`
-      * :const:`tlp.TulipFontAwesome.Rocket`
-      * :const:`tlp.TulipFontAwesome.RotateLeft`
-      * :const:`tlp.TulipFontAwesome.RotateRight`
-      * :const:`tlp.TulipFontAwesome.Rouble`
-      * :const:`tlp.TulipFontAwesome.Rss`
-      * :const:`tlp.TulipFontAwesome.RssSquare`
-      * :const:`tlp.TulipFontAwesome.Rub`
-      * :const:`tlp.TulipFontAwesome.Ruble`
-      * :const:`tlp.TulipFontAwesome.Rupee`
-      * :const:`tlp.TulipFontAwesome.Save`
-      * :const:`tlp.TulipFontAwesome.Scissors`
-      * :const:`tlp.TulipFontAwesome.Search`
-      * :const:`tlp.TulipFontAwesome.SearchMinus`
-      * :const:`tlp.TulipFontAwesome.SearchPlus`
-      * :const:`tlp.TulipFontAwesome.Sellsy`
-      * :const:`tlp.TulipFontAwesome.Send`
-      * :const:`tlp.TulipFontAwesome.SendO`
-      * :const:`tlp.TulipFontAwesome.Server`
-      * :const:`tlp.TulipFontAwesome.Share`
-      * :const:`tlp.TulipFontAwesome.ShareAlt`
-      * :const:`tlp.TulipFontAwesome.ShareAltSquare`
-      * :const:`tlp.TulipFontAwesome.ShareSquare`
-      * :const:`tlp.TulipFontAwesome.ShareSquareO`
-      * :const:`tlp.TulipFontAwesome.Shekel`
-      * :const:`tlp.TulipFontAwesome.Sheqel`
-      * :const:`tlp.TulipFontAwesome.Shield`
-      * :const:`tlp.TulipFontAwesome.Ship`
-      * :const:`tlp.TulipFontAwesome.Shirtsinbulk`
-      * :const:`tlp.TulipFontAwesome.ShoppingCart`
-      * :const:`tlp.TulipFontAwesome.SignIn`
-      * :const:`tlp.TulipFontAwesome.SignOut`
-      * :const:`tlp.TulipFontAwesome.Signal`
-      * :const:`tlp.TulipFontAwesome.Simplybuilt`
-      * :const:`tlp.TulipFontAwesome.Sitemap`
-      * :const:`tlp.TulipFontAwesome.Skyatlas`
-      * :const:`tlp.TulipFontAwesome.Skype`
-      * :const:`tlp.TulipFontAwesome.Slack`
-      * :const:`tlp.TulipFontAwesome.Sliders`
-      * :const:`tlp.TulipFontAwesome.Slideshare`
-      * :const:`tlp.TulipFontAwesome.SmileO`
-      * :const:`tlp.TulipFontAwesome.SoccerBallO`
-      * :const:`tlp.TulipFontAwesome.Sort`
-      * :const:`tlp.TulipFontAwesome.SortAlphaAsc`
-      * :const:`tlp.TulipFontAwesome.SortAlphaDesc`
-      * :const:`tlp.TulipFontAwesome.SortAmountAsc`
-      * :const:`tlp.TulipFontAwesome.SortAmountDesc`
-      * :const:`tlp.TulipFontAwesome.SortAsc`
-      * :const:`tlp.TulipFontAwesome.SortDesc`
-      * :const:`tlp.TulipFontAwesome.SortDown`
-      * :const:`tlp.TulipFontAwesome.SortNumericAsc`
-      * :const:`tlp.TulipFontAwesome.SortNumericDesc`
-      * :const:`tlp.TulipFontAwesome.SortUp`
-      * :const:`tlp.TulipFontAwesome.Soundcloud`
-      * :const:`tlp.TulipFontAwesome.SpaceShuttle`
-      * :const:`tlp.TulipFontAwesome.Spinner`
-      * :const:`tlp.TulipFontAwesome.Spoon`
-      * :const:`tlp.TulipFontAwesome.Spotify`
-      * :const:`tlp.TulipFontAwesome.Square`
-      * :const:`tlp.TulipFontAwesome.SquareO`
-      * :const:`tlp.TulipFontAwesome.StackExchange`
-      * :const:`tlp.TulipFontAwesome.StackOverflow`
-      * :const:`tlp.TulipFontAwesome.Star`
-      * :const:`tlp.TulipFontAwesome.StarHalf`
-      * :const:`tlp.TulipFontAwesome.StarHalfEmpty`
-      * :const:`tlp.TulipFontAwesome.StarHalfFull`
-      * :const:`tlp.TulipFontAwesome.StarHalfO`
-      * :const:`tlp.TulipFontAwesome.StarO`
-      * :const:`tlp.TulipFontAwesome.Steam`
-      * :const:`tlp.TulipFontAwesome.SteamSquare`
-      * :const:`tlp.TulipFontAwesome.StepBackward`
-      * :const:`tlp.TulipFontAwesome.StepForward`
-      * :const:`tlp.TulipFontAwesome.Stethoscope`
-      * :const:`tlp.TulipFontAwesome.Stop`
-      * :const:`tlp.TulipFontAwesome.StreetView`
-      * :const:`tlp.TulipFontAwesome.Strikethrough`
-      * :const:`tlp.TulipFontAwesome.Stumbleupon`
-      * :const:`tlp.TulipFontAwesome.StumbleuponCircle`
-      * :const:`tlp.TulipFontAwesome.Subscript`
-      * :const:`tlp.TulipFontAwesome.Subway`
-      * :const:`tlp.TulipFontAwesome.Suitcase`
-      * :const:`tlp.TulipFontAwesome.SunO`
-      * :const:`tlp.TulipFontAwesome.Superscript`
-      * :const:`tlp.TulipFontAwesome.Support`
-      * :const:`tlp.TulipFontAwesome.Table`
-      * :const:`tlp.TulipFontAwesome.Tablet`
-      * :const:`tlp.TulipFontAwesome.Tachometer`
-      * :const:`tlp.TulipFontAwesome.Tag`
-      * :const:`tlp.TulipFontAwesome.Tags`
-      * :const:`tlp.TulipFontAwesome.Tasks`
-      * :const:`tlp.TulipFontAwesome.Taxi`
-      * :const:`tlp.TulipFontAwesome.TencentWeibo`
-      * :const:`tlp.TulipFontAwesome.Terminal`
-      * :const:`tlp.TulipFontAwesome.TextHeight`
-      * :const:`tlp.TulipFontAwesome.TextWidth`
-      * :const:`tlp.TulipFontAwesome.Th`
-      * :const:`tlp.TulipFontAwesome.ThLarge`
-      * :const:`tlp.TulipFontAwesome.ThList`
-      * :const:`tlp.TulipFontAwesome.ThumbTack`
-      * :const:`tlp.TulipFontAwesome.ThumbsDown`
-      * :const:`tlp.TulipFontAwesome.ThumbsODown`
-      * :const:`tlp.TulipFontAwesome.ThumbsOUp`
-      * :const:`tlp.TulipFontAwesome.ThumbsUp`
-      * :const:`tlp.TulipFontAwesome.Ticket`
-      * :const:`tlp.TulipFontAwesome.Times`
-      * :const:`tlp.TulipFontAwesome.TimesCircle`
-      * :const:`tlp.TulipFontAwesome.TimesCircleO`
-      * :const:`tlp.TulipFontAwesome.Tint`
-      * :const:`tlp.TulipFontAwesome.ToggleDown`
-      * :const:`tlp.TulipFontAwesome.ToggleLeft`
-      * :const:`tlp.TulipFontAwesome.ToggleOff`
-      * :const:`tlp.TulipFontAwesome.ToggleOn`
-      * :const:`tlp.TulipFontAwesome.ToggleRight`
-      * :const:`tlp.TulipFontAwesome.ToggleUp`
-      * :const:`tlp.TulipFontAwesome.Train`
-      * :const:`tlp.TulipFontAwesome.Transgender`
-      * :const:`tlp.TulipFontAwesome.TransgenderAlt`
-      * :const:`tlp.TulipFontAwesome.Trash`
-      * :const:`tlp.TulipFontAwesome.TrashO`
-      * :const:`tlp.TulipFontAwesome.Tree`
-      * :const:`tlp.TulipFontAwesome.Trello`
-      * :const:`tlp.TulipFontAwesome.Trophy`
-      * :const:`tlp.TulipFontAwesome.Truck`
-      * :const:`tlp.TulipFontAwesome.Try`
-      * :const:`tlp.TulipFontAwesome.Tty`
-      * :const:`tlp.TulipFontAwesome.Tumblr`
-      * :const:`tlp.TulipFontAwesome.TumblrSquare`
-      * :const:`tlp.TulipFontAwesome.TurkishLira`
-      * :const:`tlp.TulipFontAwesome.Twitch`
-      * :const:`tlp.TulipFontAwesome.Twitter`
-      * :const:`tlp.TulipFontAwesome.TwitterSquare`
-      * :const:`tlp.TulipFontAwesome.Umbrella`
-      * :const:`tlp.TulipFontAwesome.Underline`
-      * :const:`tlp.TulipFontAwesome.Undo`
-      * :const:`tlp.TulipFontAwesome.University`
-      * :const:`tlp.TulipFontAwesome.Unlink`
-      * :const:`tlp.TulipFontAwesome.Unlock`
-      * :const:`tlp.TulipFontAwesome.UnlockAlt`
-      * :const:`tlp.TulipFontAwesome.Unsorted`
-      * :const:`tlp.TulipFontAwesome.Upload`
-      * :const:`tlp.TulipFontAwesome.Usd`
-      * :const:`tlp.TulipFontAwesome.User`
-      * :const:`tlp.TulipFontAwesome.UserMd`
-      * :const:`tlp.TulipFontAwesome.UserPlus`
-      * :const:`tlp.TulipFontAwesome.UserSecret`
-      * :const:`tlp.TulipFontAwesome.UserTimes`
-      * :const:`tlp.TulipFontAwesome.Users`
-      * :const:`tlp.TulipFontAwesome.Venus`
-      * :const:`tlp.TulipFontAwesome.VenusDouble`
-      * :const:`tlp.TulipFontAwesome.VenusMars`
-      * :const:`tlp.TulipFontAwesome.Viacoin`
-      * :const:`tlp.TulipFontAwesome.VideoCamera`
-      * :const:`tlp.TulipFontAwesome.VimeoSquare`
-      * :const:`tlp.TulipFontAwesome.Vine`
-      * :const:`tlp.TulipFontAwesome.Vk`
-      * :const:`tlp.TulipFontAwesome.VolumeDown`
-      * :const:`tlp.TulipFontAwesome.VolumeOff`
-      * :const:`tlp.TulipFontAwesome.VolumeUp`
-      * :const:`tlp.TulipFontAwesome.Warning`
-      * :const:`tlp.TulipFontAwesome.Wechat`
-      * :const:`tlp.TulipFontAwesome.Weibo`
-      * :const:`tlp.TulipFontAwesome.Weixin`
-      * :const:`tlp.TulipFontAwesome.Whatsapp`
-      * :const:`tlp.TulipFontAwesome.Wheelchair`
-      * :const:`tlp.TulipFontAwesome.Wifi`
-      * :const:`tlp.TulipFontAwesome.Windows`
-      * :const:`tlp.TulipFontAwesome.Won`
-      * :const:`tlp.TulipFontAwesome.Wordpress`
-      * :const:`tlp.TulipFontAwesome.Wrench`
-      * :const:`tlp.TulipFontAwesome.Xing`
-      * :const:`tlp.TulipFontAwesome.XingSquare`
-      * :const:`tlp.TulipFontAwesome.Yahoo`
-      * :const:`tlp.TulipFontAwesome.Yelp`
-      * :const:`tlp.TulipFontAwesome.Yen`
-      * :const:`tlp.TulipFontAwesome.Youtube`
-      * :const:`tlp.TulipFontAwesome.YoutubePlay`
-      * :const:`tlp.TulipFontAwesome.YoutubeSquare`
+      * :const:`tlp.TulipFontAwesome.Px500` (:faicon:`500px`)
+      * :const:`tlp.TulipFontAwesome.Adjust` (:faicon:`adjust`)
+      * :const:`tlp.TulipFontAwesome.Adn` (:faicon:`adn`)
+      * :const:`tlp.TulipFontAwesome.AlignCenter` (:faicon:`align-center`)
+      * :const:`tlp.TulipFontAwesome.AlignJustify` (:faicon:`align-justify`)
+      * :const:`tlp.TulipFontAwesome.AlignLeft` (:faicon:`align-left`)
+      * :const:`tlp.TulipFontAwesome.AlignRight` (:faicon:`align-right`)
+      * :const:`tlp.TulipFontAwesome.Amazon` (:faicon:`amazon`)
+      * :const:`tlp.TulipFontAwesome.Ambulance` (:faicon:`ambulance`)
+      * :const:`tlp.TulipFontAwesome.Anchor` (:faicon:`anchor`)
+      * :const:`tlp.TulipFontAwesome.Android` (:faicon:`android`)
+      * :const:`tlp.TulipFontAwesome.Angellist` (:faicon:`angellist`)
+      * :const:`tlp.TulipFontAwesome.AngleDoubleDown` (:faicon:`angle-double-down`)
+      * :const:`tlp.TulipFontAwesome.AngleDoubleLeft` (:faicon:`angle-double-left`)
+      * :const:`tlp.TulipFontAwesome.AngleDoubleRight` (:faicon:`angle-double-right`)
+      * :const:`tlp.TulipFontAwesome.AngleDoubleUp` (:faicon:`angle-double-up`)
+      * :const:`tlp.TulipFontAwesome.AngleDown` (:faicon:`angle-down`)
+      * :const:`tlp.TulipFontAwesome.AngleLeft` (:faicon:`angle-left`)
+      * :const:`tlp.TulipFontAwesome.AngleRight` (:faicon:`angle-right`)
+      * :const:`tlp.TulipFontAwesome.AngleUp` (:faicon:`angle-up`)
+      * :const:`tlp.TulipFontAwesome.Apple` (:faicon:`apple`)
+      * :const:`tlp.TulipFontAwesome.Archive` (:faicon:`archive`)
+      * :const:`tlp.TulipFontAwesome.AreaChart` (:faicon:`area-chart`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleDown` (:faicon:`arrow-circle-down`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleLeft` (:faicon:`arrow-circle-left`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleODown` (:faicon:`arrow-circle-o-down`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleOLeft` (:faicon:`arrow-circle-o-left`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleORight` (:faicon:`arrow-circle-o-right`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleOUp` (:faicon:`arrow-circle-o-up`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleRight` (:faicon:`arrow-circle-right`)
+      * :const:`tlp.TulipFontAwesome.ArrowCircleUp` (:faicon:`arrow-circle-up`)
+      * :const:`tlp.TulipFontAwesome.ArrowDown` (:faicon:`arrow-down`)
+      * :const:`tlp.TulipFontAwesome.ArrowLeft` (:faicon:`arrow-left`)
+      * :const:`tlp.TulipFontAwesome.ArrowRight` (:faicon:`arrow-right`)
+      * :const:`tlp.TulipFontAwesome.ArrowUp` (:faicon:`arrow-up`)
+      * :const:`tlp.TulipFontAwesome.Arrows` (:faicon:`arrows`)
+      * :const:`tlp.TulipFontAwesome.ArrowsAlt` (:faicon:`arrows-alt`)
+      * :const:`tlp.TulipFontAwesome.ArrowsH` (:faicon:`arrows-h`)
+      * :const:`tlp.TulipFontAwesome.ArrowsV` (:faicon:`arrows-v`)
+      * :const:`tlp.TulipFontAwesome.Asterisk` (:faicon:`asterisk`)
+      * :const:`tlp.TulipFontAwesome.At` (:faicon:`at`)
+      * :const:`tlp.TulipFontAwesome.Automobile` (:faicon:`automobile`)
+      * :const:`tlp.TulipFontAwesome.Backward` (:faicon:`backward`)
+      * :const:`tlp.TulipFontAwesome.BalanceScale` (:faicon:`balance-scale`)
+      * :const:`tlp.TulipFontAwesome.Ban` (:faicon:`ban`)
+      * :const:`tlp.TulipFontAwesome.Bank` (:faicon:`bank`)
+      * :const:`tlp.TulipFontAwesome.BarChart` (:faicon:`bar-chart`)
+      * :const:`tlp.TulipFontAwesome.BarChartO` (:faicon:`bar-chart-o`)
+      * :const:`tlp.TulipFontAwesome.Barcode` (:faicon:`barcode`)
+      * :const:`tlp.TulipFontAwesome.Bars` (:faicon:`bars`)
+      * :const:`tlp.TulipFontAwesome.Battery0` (:faicon:`battery-0`)
+      * :const:`tlp.TulipFontAwesome.Battery1` (:faicon:`battery-1`)
+      * :const:`tlp.TulipFontAwesome.Battery2` (:faicon:`battery-2`)
+      * :const:`tlp.TulipFontAwesome.Battery3` (:faicon:`battery-3`)
+      * :const:`tlp.TulipFontAwesome.Battery4` (:faicon:`battery-4`)
+      * :const:`tlp.TulipFontAwesome.BatteryEmpty` (:faicon:`battery-empty`)
+      * :const:`tlp.TulipFontAwesome.BatteryFull` (:faicon:`battery-full`)
+      * :const:`tlp.TulipFontAwesome.BatteryHalf` (:faicon:`battery-half`)
+      * :const:`tlp.TulipFontAwesome.BatteryQuarter` (:faicon:`battery-quarter`)
+      * :const:`tlp.TulipFontAwesome.BatteryThreeQuarters` (:faicon:`battery-three-quarters`)
+      * :const:`tlp.TulipFontAwesome.Bed` (:faicon:`bed`)
+      * :const:`tlp.TulipFontAwesome.Beer` (:faicon:`beer`)
+      * :const:`tlp.TulipFontAwesome.Behance` (:faicon:`behance`)
+      * :const:`tlp.TulipFontAwesome.BehanceSquare` (:faicon:`behance-square`)
+      * :const:`tlp.TulipFontAwesome.Bell` (:faicon:`bell`)
+      * :const:`tlp.TulipFontAwesome.BellO` (:faicon:`bell-o`)
+      * :const:`tlp.TulipFontAwesome.BellSlash` (:faicon:`bell-slash`)
+      * :const:`tlp.TulipFontAwesome.BellSlashO` (:faicon:`bell-slash-o`)
+      * :const:`tlp.TulipFontAwesome.Bicycle` (:faicon:`bicycle`)
+      * :const:`tlp.TulipFontAwesome.Binoculars` (:faicon:`binoculars`)
+      * :const:`tlp.TulipFontAwesome.BirthdayCake` (:faicon:`birthday-cake`)
+      * :const:`tlp.TulipFontAwesome.Bitbucket` (:faicon:`bitbucket`)
+      * :const:`tlp.TulipFontAwesome.BitbucketSquare` (:faicon:`bitbucket-square`)
+      * :const:`tlp.TulipFontAwesome.Bitcoin` (:faicon:`bitcoin`)
+      * :const:`tlp.TulipFontAwesome.BlackTie` (:faicon:`black-tie`)
+      * :const:`tlp.TulipFontAwesome.Bold` (:faicon:`bold`)
+      * :const:`tlp.TulipFontAwesome.Bolt` (:faicon:`bolt`)
+      * :const:`tlp.TulipFontAwesome.Bomb` (:faicon:`bomb`)
+      * :const:`tlp.TulipFontAwesome.Book` (:faicon:`book`)
+      * :const:`tlp.TulipFontAwesome.Bookmark` (:faicon:`bookmark`)
+      * :const:`tlp.TulipFontAwesome.BookmarkO` (:faicon:`bookmark-o`)
+      * :const:`tlp.TulipFontAwesome.Briefcase` (:faicon:`briefcase`)
+      * :const:`tlp.TulipFontAwesome.Btc` (:faicon:`btc`)
+      * :const:`tlp.TulipFontAwesome.Bug` (:faicon:`bug`)
+      * :const:`tlp.TulipFontAwesome.Building` (:faicon:`building`)
+      * :const:`tlp.TulipFontAwesome.BuildingO` (:faicon:`building-o`)
+      * :const:`tlp.TulipFontAwesome.Bullhorn` (:faicon:`bullhorn`)
+      * :const:`tlp.TulipFontAwesome.Bullseye` (:faicon:`bullseye`)
+      * :const:`tlp.TulipFontAwesome.Bus` (:faicon:`bus`)
+      * :const:`tlp.TulipFontAwesome.Buysellads` (:faicon:`buysellads`)
+      * :const:`tlp.TulipFontAwesome.Cab` (:faicon:`cab`)
+      * :const:`tlp.TulipFontAwesome.Calculator` (:faicon:`calculator`)
+      * :const:`tlp.TulipFontAwesome.Calendar` (:faicon:`calendar`)
+      * :const:`tlp.TulipFontAwesome.CalendarCheckO` (:faicon:`calendar-check-o`)
+      * :const:`tlp.TulipFontAwesome.CalendarMinusO` (:faicon:`calendar-minus-o`)
+      * :const:`tlp.TulipFontAwesome.CalendarO` (:faicon:`calendar-o`)
+      * :const:`tlp.TulipFontAwesome.CalendarPlusO` (:faicon:`calendar-plus-o`)
+      * :const:`tlp.TulipFontAwesome.CalendarTimesO` (:faicon:`calendar-times-o`)
+      * :const:`tlp.TulipFontAwesome.Camera` (:faicon:`camera`)
+      * :const:`tlp.TulipFontAwesome.CameraRetro` (:faicon:`camera-retro`)
+      * :const:`tlp.TulipFontAwesome.Car` (:faicon:`car`)
+      * :const:`tlp.TulipFontAwesome.CaretDown` (:faicon:`caret-down`)
+      * :const:`tlp.TulipFontAwesome.CaretLeft` (:faicon:`caret-left`)
+      * :const:`tlp.TulipFontAwesome.CaretRight` (:faicon:`caret-right`)
+      * :const:`tlp.TulipFontAwesome.CaretSquareODown` (:faicon:`caret-square-o-down`)
+      * :const:`tlp.TulipFontAwesome.CaretSquareOLeft` (:faicon:`caret-square-o-left`)
+      * :const:`tlp.TulipFontAwesome.CaretSquareORight` (:faicon:`caret-square-o-right`)
+      * :const:`tlp.TulipFontAwesome.CaretSquareOUp` (:faicon:`caret-square-o-up`)
+      * :const:`tlp.TulipFontAwesome.CaretUp` (:faicon:`caret-up`)
+      * :const:`tlp.TulipFontAwesome.CartArrowDown` (:faicon:`cart-arrow-down`)
+      * :const:`tlp.TulipFontAwesome.CartPlus` (:faicon:`cart-plus`)
+      * :const:`tlp.TulipFontAwesome.Cc` (:faicon:`cc`)
+      * :const:`tlp.TulipFontAwesome.CcAmex` (:faicon:`cc-amex`)
+      * :const:`tlp.TulipFontAwesome.CcDinersClub` (:faicon:`cc-diners-club`)
+      * :const:`tlp.TulipFontAwesome.CcDiscover` (:faicon:`cc-discover`)
+      * :const:`tlp.TulipFontAwesome.CcJcb` (:faicon:`cc-jcb`)
+      * :const:`tlp.TulipFontAwesome.CcMastercard` (:faicon:`cc-mastercard`)
+      * :const:`tlp.TulipFontAwesome.CcPaypal` (:faicon:`cc-paypal`)
+      * :const:`tlp.TulipFontAwesome.CcStripe` (:faicon:`cc-stripe`)
+      * :const:`tlp.TulipFontAwesome.CcVisa` (:faicon:`cc-visa`)
+      * :const:`tlp.TulipFontAwesome.Certificate` (:faicon:`certificate`)
+      * :const:`tlp.TulipFontAwesome.Chain` (:faicon:`chain`)
+      * :const:`tlp.TulipFontAwesome.ChainBroken` (:faicon:`chain-broken`)
+      * :const:`tlp.TulipFontAwesome.Check` (:faicon:`check`)
+      * :const:`tlp.TulipFontAwesome.CheckCircle` (:faicon:`check-circle`)
+      * :const:`tlp.TulipFontAwesome.CheckCircleO` (:faicon:`check-circle-o`)
+      * :const:`tlp.TulipFontAwesome.CheckSquare` (:faicon:`check-square`)
+      * :const:`tlp.TulipFontAwesome.CheckSquareO` (:faicon:`check-square-o`)
+      * :const:`tlp.TulipFontAwesome.ChevronCircleDown` (:faicon:`chevron-circle-down`)
+      * :const:`tlp.TulipFontAwesome.ChevronCircleLeft` (:faicon:`chevron-circle-left`)
+      * :const:`tlp.TulipFontAwesome.ChevronCircleRight` (:faicon:`chevron-circle-right`)
+      * :const:`tlp.TulipFontAwesome.ChevronCircleUp` (:faicon:`chevron-circle-up`)
+      * :const:`tlp.TulipFontAwesome.ChevronDown` (:faicon:`chevron-down`)
+      * :const:`tlp.TulipFontAwesome.ChevronLeft` (:faicon:`chevron-left`)
+      * :const:`tlp.TulipFontAwesome.ChevronRight` (:faicon:`chevron-right`)
+      * :const:`tlp.TulipFontAwesome.ChevronUp` (:faicon:`chevron-up`)
+      * :const:`tlp.TulipFontAwesome.Child` (:faicon:`child`)
+      * :const:`tlp.TulipFontAwesome.Chrome` (:faicon:`chrome`)
+      * :const:`tlp.TulipFontAwesome.Circle` (:faicon:`circle`)
+      * :const:`tlp.TulipFontAwesome.CircleO` (:faicon:`circle-o`)
+      * :const:`tlp.TulipFontAwesome.CircleONotch` (:faicon:`circle-o-notch`)
+      * :const:`tlp.TulipFontAwesome.CircleThin` (:faicon:`circle-thin`)
+      * :const:`tlp.TulipFontAwesome.Clipboard` (:faicon:`clipboard`)
+      * :const:`tlp.TulipFontAwesome.ClockO` (:faicon:`clock-o`)
+      * :const:`tlp.TulipFontAwesome.Clone` (:faicon:`clone`)
+      * :const:`tlp.TulipFontAwesome.Close` (:faicon:`close`)
+      * :const:`tlp.TulipFontAwesome.Cloud` (:faicon:`cloud`)
+      * :const:`tlp.TulipFontAwesome.CloudDownload` (:faicon:`cloud-download`)
+      * :const:`tlp.TulipFontAwesome.CloudUpload` (:faicon:`cloud-upload`)
+      * :const:`tlp.TulipFontAwesome.Cny` (:faicon:`cny`)
+      * :const:`tlp.TulipFontAwesome.Code` (:faicon:`code`)
+      * :const:`tlp.TulipFontAwesome.CodeFork` (:faicon:`code-fork`)
+      * :const:`tlp.TulipFontAwesome.Codepen` (:faicon:`codepen`)
+      * :const:`tlp.TulipFontAwesome.Coffee` (:faicon:`coffee`)
+      * :const:`tlp.TulipFontAwesome.Cog` (:faicon:`cog`)
+      * :const:`tlp.TulipFontAwesome.Cogs` (:faicon:`cogs`)
+      * :const:`tlp.TulipFontAwesome.Columns` (:faicon:`columns`)
+      * :const:`tlp.TulipFontAwesome.Comment` (:faicon:`comment`)
+      * :const:`tlp.TulipFontAwesome.CommentO` (:faicon:`comment-o`)
+      * :const:`tlp.TulipFontAwesome.Commenting` (:faicon:`commenting`)
+      * :const:`tlp.TulipFontAwesome.CommentingO` (:faicon:`commenting-o`)
+      * :const:`tlp.TulipFontAwesome.Comments` (:faicon:`comments`)
+      * :const:`tlp.TulipFontAwesome.CommentsO` (:faicon:`comments-o`)
+      * :const:`tlp.TulipFontAwesome.Compass` (:faicon:`compass`)
+      * :const:`tlp.TulipFontAwesome.Compress` (:faicon:`compress`)
+      * :const:`tlp.TulipFontAwesome.Connectdevelop` (:faicon:`connectdevelop`)
+      * :const:`tlp.TulipFontAwesome.Contao` (:faicon:`contao`)
+      * :const:`tlp.TulipFontAwesome.Copy` (:faicon:`copy`)
+      * :const:`tlp.TulipFontAwesome.Copyright` (:faicon:`copyright`)
+      * :const:`tlp.TulipFontAwesome.CreativeCommons` (:faicon:`creative-commons`)
+      * :const:`tlp.TulipFontAwesome.CreditCard` (:faicon:`credit-card`)
+      * :const:`tlp.TulipFontAwesome.Crop` (:faicon:`crop`)
+      * :const:`tlp.TulipFontAwesome.Crosshairs` (:faicon:`crosshairs`)
+      * :const:`tlp.TulipFontAwesome.Css3` (:faicon:`css3`)
+      * :const:`tlp.TulipFontAwesome.Cube` (:faicon:`cube`)
+      * :const:`tlp.TulipFontAwesome.Cubes` (:faicon:`cubes`)
+      * :const:`tlp.TulipFontAwesome.Cut` (:faicon:`cut`)
+      * :const:`tlp.TulipFontAwesome.Cutlery` (:faicon:`cutlery`)
+      * :const:`tlp.TulipFontAwesome.Dashboard` (:faicon:`dashboard`)
+      * :const:`tlp.TulipFontAwesome.Dashcube` (:faicon:`dashcube`)
+      * :const:`tlp.TulipFontAwesome.Database` (:faicon:`database`)
+      * :const:`tlp.TulipFontAwesome.Dedent` (:faicon:`dedent`)
+      * :const:`tlp.TulipFontAwesome.Delicious` (:faicon:`delicious`)
+      * :const:`tlp.TulipFontAwesome.Desktop` (:faicon:`desktop`)
+      * :const:`tlp.TulipFontAwesome.Deviantart` (:faicon:`deviantart`)
+      * :const:`tlp.TulipFontAwesome.Diamond` (:faicon:`diamond`)
+      * :const:`tlp.TulipFontAwesome.Digg` (:faicon:`digg`)
+      * :const:`tlp.TulipFontAwesome.Dollar` (:faicon:`dollar`)
+      * :const:`tlp.TulipFontAwesome.DotCircleO` (:faicon:`dot-circle-o`)
+      * :const:`tlp.TulipFontAwesome.Download` (:faicon:`download`)
+      * :const:`tlp.TulipFontAwesome.Dribbble` (:faicon:`dribbble`)
+      * :const:`tlp.TulipFontAwesome.Dropbox` (:faicon:`dropbox`)
+      * :const:`tlp.TulipFontAwesome.Drupal` (:faicon:`drupal`)
+      * :const:`tlp.TulipFontAwesome.Edit` (:faicon:`edit`)
+      * :const:`tlp.TulipFontAwesome.Eject` (:faicon:`eject`)
+      * :const:`tlp.TulipFontAwesome.EllipsisH` (:faicon:`ellipsis-h`)
+      * :const:`tlp.TulipFontAwesome.EllipsisV` (:faicon:`ellipsis-v`)
+      * :const:`tlp.TulipFontAwesome.Empire` (:faicon:`empire`)
+      * :const:`tlp.TulipFontAwesome.Envelope` (:faicon:`envelope`)
+      * :const:`tlp.TulipFontAwesome.EnvelopeO` (:faicon:`envelope-o`)
+      * :const:`tlp.TulipFontAwesome.EnvelopeSquare` (:faicon:`envelope-square`)
+      * :const:`tlp.TulipFontAwesome.Eraser` (:faicon:`eraser`)
+      * :const:`tlp.TulipFontAwesome.Eur` (:faicon:`eur`)
+      * :const:`tlp.TulipFontAwesome.Euro` (:faicon:`euro`)
+      * :const:`tlp.TulipFontAwesome.Exchange` (:faicon:`exchange`)
+      * :const:`tlp.TulipFontAwesome.Exclamation` (:faicon:`exclamation`)
+      * :const:`tlp.TulipFontAwesome.ExclamationCircle` (:faicon:`exclamation-circle`)
+      * :const:`tlp.TulipFontAwesome.ExclamationTriangle` (:faicon:`exclamation-triangle`)
+      * :const:`tlp.TulipFontAwesome.Expand` (:faicon:`expand`)
+      * :const:`tlp.TulipFontAwesome.Expeditedssl` (:faicon:`expeditedssl`)
+      * :const:`tlp.TulipFontAwesome.ExternalLink` (:faicon:`external-link`)
+      * :const:`tlp.TulipFontAwesome.ExternalLinkSquare` (:faicon:`external-link-square`)
+      * :const:`tlp.TulipFontAwesome.Eye` (:faicon:`eye`)
+      * :const:`tlp.TulipFontAwesome.EyeSlash` (:faicon:`eye-slash`)
+      * :const:`tlp.TulipFontAwesome.Eyedropper` (:faicon:`eyedropper`)
+      * :const:`tlp.TulipFontAwesome.Facebook` (:faicon:`facebook`)
+      * :const:`tlp.TulipFontAwesome.FacebookF` (:faicon:`facebook-f`)
+      * :const:`tlp.TulipFontAwesome.FacebookOfficial` (:faicon:`facebook-official`)
+      * :const:`tlp.TulipFontAwesome.FacebookSquare` (:faicon:`facebook-square`)
+      * :const:`tlp.TulipFontAwesome.FastBackward` (:faicon:`fast-backward`)
+      * :const:`tlp.TulipFontAwesome.FastForward` (:faicon:`fast-forward`)
+      * :const:`tlp.TulipFontAwesome.Fax` (:faicon:`fax`)
+      * :const:`tlp.TulipFontAwesome.Feed` (:faicon:`feed`)
+      * :const:`tlp.TulipFontAwesome.Female` (:faicon:`female`)
+      * :const:`tlp.TulipFontAwesome.FighterJet` (:faicon:`fighter-jet`)
+      * :const:`tlp.TulipFontAwesome.File` (:faicon:`file`)
+      * :const:`tlp.TulipFontAwesome.FileArchiveO` (:faicon:`file-archive-o`)
+      * :const:`tlp.TulipFontAwesome.FileAudioO` (:faicon:`file-audio-o`)
+      * :const:`tlp.TulipFontAwesome.FileCodeO` (:faicon:`file-code-o`)
+      * :const:`tlp.TulipFontAwesome.FileExcelO` (:faicon:`file-excel-o`)
+      * :const:`tlp.TulipFontAwesome.FileImageO` (:faicon:`file-image-o`)
+      * :const:`tlp.TulipFontAwesome.FileMovieO` (:faicon:`file-movie-o`)
+      * :const:`tlp.TulipFontAwesome.FileO` (:faicon:`file-o`)
+      * :const:`tlp.TulipFontAwesome.FilePdfO` (:faicon:`file-pdf-o`)
+      * :const:`tlp.TulipFontAwesome.FilePhotoO` (:faicon:`file-photo-o`)
+      * :const:`tlp.TulipFontAwesome.FilePictureO` (:faicon:`file-picture-o`)
+      * :const:`tlp.TulipFontAwesome.FilePowerpointO` (:faicon:`file-powerpoint-o`)
+      * :const:`tlp.TulipFontAwesome.FileSoundO` (:faicon:`file-sound-o`)
+      * :const:`tlp.TulipFontAwesome.FileText` (:faicon:`file-text`)
+      * :const:`tlp.TulipFontAwesome.FileTextO` (:faicon:`file-text-o`)
+      * :const:`tlp.TulipFontAwesome.FileVideoO` (:faicon:`file-video-o`)
+      * :const:`tlp.TulipFontAwesome.FileWordO` (:faicon:`file-word-o`)
+      * :const:`tlp.TulipFontAwesome.FileZipO` (:faicon:`file-zip-o`)
+      * :const:`tlp.TulipFontAwesome.FilesO` (:faicon:`files-o`)
+      * :const:`tlp.TulipFontAwesome.Film` (:faicon:`film`)
+      * :const:`tlp.TulipFontAwesome.Filter` (:faicon:`filter`)
+      * :const:`tlp.TulipFontAwesome.Fire` (:faicon:`fire`)
+      * :const:`tlp.TulipFontAwesome.FireExtinguisher` (:faicon:`fire-extinguisher`)
+      * :const:`tlp.TulipFontAwesome.Firefox` (:faicon:`firefox`)
+      * :const:`tlp.TulipFontAwesome.Flag` (:faicon:`flag`)
+      * :const:`tlp.TulipFontAwesome.FlagCheckered` (:faicon:`flag-checkered`)
+      * :const:`tlp.TulipFontAwesome.FlagO` (:faicon:`flag-o`)
+      * :const:`tlp.TulipFontAwesome.Flash` (:faicon:`flash`)
+      * :const:`tlp.TulipFontAwesome.Flask` (:faicon:`flask`)
+      * :const:`tlp.TulipFontAwesome.Flickr` (:faicon:`flickr`)
+      * :const:`tlp.TulipFontAwesome.FloppyO` (:faicon:`floppy-o`)
+      * :const:`tlp.TulipFontAwesome.Folder` (:faicon:`folder`)
+      * :const:`tlp.TulipFontAwesome.FolderO` (:faicon:`folder-o`)
+      * :const:`tlp.TulipFontAwesome.FolderOpen` (:faicon:`folder-open`)
+      * :const:`tlp.TulipFontAwesome.FolderOpenO` (:faicon:`folder-open-o`)
+      * :const:`tlp.TulipFontAwesome.Font` (:faicon:`font`)
+      * :const:`tlp.TulipFontAwesome.Fonticons` (:faicon:`fonticons`)
+      * :const:`tlp.TulipFontAwesome.Forumbee` (:faicon:`forumbee`)
+      * :const:`tlp.TulipFontAwesome.Forward` (:faicon:`forward`)
+      * :const:`tlp.TulipFontAwesome.Foursquare` (:faicon:`foursquare`)
+      * :const:`tlp.TulipFontAwesome.FrownO` (:faicon:`frown-o`)
+      * :const:`tlp.TulipFontAwesome.FutbolO` (:faicon:`futbol-o`)
+      * :const:`tlp.TulipFontAwesome.Gamepad` (:faicon:`gamepad`)
+      * :const:`tlp.TulipFontAwesome.Gavel` (:faicon:`gavel`)
+      * :const:`tlp.TulipFontAwesome.Gbp` (:faicon:`gbp`)
+      * :const:`tlp.TulipFontAwesome.Ge` (:faicon:`ge`)
+      * :const:`tlp.TulipFontAwesome.Gear` (:faicon:`gear`)
+      * :const:`tlp.TulipFontAwesome.Gears` (:faicon:`gears`)
+      * :const:`tlp.TulipFontAwesome.Genderless` (:faicon:`genderless`)
+      * :const:`tlp.TulipFontAwesome.GetPocket` (:faicon:`get-pocket`)
+      * :const:`tlp.TulipFontAwesome.Gg` (:faicon:`gg`)
+      * :const:`tlp.TulipFontAwesome.GgCircle` (:faicon:`gg-circle`)
+      * :const:`tlp.TulipFontAwesome.Gift` (:faicon:`gift`)
+      * :const:`tlp.TulipFontAwesome.Git` (:faicon:`git`)
+      * :const:`tlp.TulipFontAwesome.GitSquare` (:faicon:`git-square`)
+      * :const:`tlp.TulipFontAwesome.Github` (:faicon:`github`)
+      * :const:`tlp.TulipFontAwesome.GithubAlt` (:faicon:`github-alt`)
+      * :const:`tlp.TulipFontAwesome.GithubSquare` (:faicon:`github-square`)
+      * :const:`tlp.TulipFontAwesome.Gittip` (:faicon:`gittip`)
+      * :const:`tlp.TulipFontAwesome.Glass` (:faicon:`glass`)
+      * :const:`tlp.TulipFontAwesome.Globe` (:faicon:`globe`)
+      * :const:`tlp.TulipFontAwesome.Google` (:faicon:`google`)
+      * :const:`tlp.TulipFontAwesome.GooglePlus` (:faicon:`google-plus`)
+      * :const:`tlp.TulipFontAwesome.GooglePlusSquare` (:faicon:`google-plus-square`)
+      * :const:`tlp.TulipFontAwesome.GoogleWallet` (:faicon:`google-wallet`)
+      * :const:`tlp.TulipFontAwesome.GraduationCap` (:faicon:`graduation-cap`)
+      * :const:`tlp.TulipFontAwesome.Gratipay` (:faicon:`gratipay`)
+      * :const:`tlp.TulipFontAwesome.Group` (:faicon:`group`)
+      * :const:`tlp.TulipFontAwesome.HSquare` (:faicon:`h-square`)
+      * :const:`tlp.TulipFontAwesome.HackerNews` (:faicon:`hacker-news`)
+      * :const:`tlp.TulipFontAwesome.HandGrabO` (:faicon:`hand-grab-o`)
+      * :const:`tlp.TulipFontAwesome.HandLizardO` (:faicon:`hand-lizard-o`)
+      * :const:`tlp.TulipFontAwesome.HandODown` (:faicon:`hand-o-down`)
+      * :const:`tlp.TulipFontAwesome.HandOLeft` (:faicon:`hand-o-left`)
+      * :const:`tlp.TulipFontAwesome.HandORight` (:faicon:`hand-o-right`)
+      * :const:`tlp.TulipFontAwesome.HandOUp` (:faicon:`hand-o-up`)
+      * :const:`tlp.TulipFontAwesome.HandPaperO` (:faicon:`hand-paper-o`)
+      * :const:`tlp.TulipFontAwesome.HandPeaceO` (:faicon:`hand-peace-o`)
+      * :const:`tlp.TulipFontAwesome.HandPointerO` (:faicon:`hand-pointer-o`)
+      * :const:`tlp.TulipFontAwesome.HandRockO` (:faicon:`hand-rock-o`)
+      * :const:`tlp.TulipFontAwesome.HandScissorsO` (:faicon:`hand-scissors-o`)
+      * :const:`tlp.TulipFontAwesome.HandSpockO` (:faicon:`hand-spock-o`)
+      * :const:`tlp.TulipFontAwesome.HandStopO` (:faicon:`hand-stop-o`)
+      * :const:`tlp.TulipFontAwesome.HddO` (:faicon:`hdd-o`)
+      * :const:`tlp.TulipFontAwesome.Header` (:faicon:`header`)
+      * :const:`tlp.TulipFontAwesome.Headphones` (:faicon:`headphones`)
+      * :const:`tlp.TulipFontAwesome.Heart` (:faicon:`heart`)
+      * :const:`tlp.TulipFontAwesome.HeartO` (:faicon:`heart-o`)
+      * :const:`tlp.TulipFontAwesome.Heartbeat` (:faicon:`heartbeat`)
+      * :const:`tlp.TulipFontAwesome.History` (:faicon:`history`)
+      * :const:`tlp.TulipFontAwesome.Home` (:faicon:`home`)
+      * :const:`tlp.TulipFontAwesome.HospitalO` (:faicon:`hospital-o`)
+      * :const:`tlp.TulipFontAwesome.Hotel` (:faicon:`hotel`)
+      * :const:`tlp.TulipFontAwesome.Hourglass` (:faicon:`hourglass`)
+      * :const:`tlp.TulipFontAwesome.Hourglass1` (:faicon:`hourglass-1`)
+      * :const:`tlp.TulipFontAwesome.Hourglass2` (:faicon:`hourglass-2`)
+      * :const:`tlp.TulipFontAwesome.Hourglass3` (:faicon:`hourglass-3`)
+      * :const:`tlp.TulipFontAwesome.HourglassEnd` (:faicon:`hourglass-end`)
+      * :const:`tlp.TulipFontAwesome.HourglassHalf` (:faicon:`hourglass-half`)
+      * :const:`tlp.TulipFontAwesome.HourglassO` (:faicon:`hourglass-o`)
+      * :const:`tlp.TulipFontAwesome.HourglassStart` (:faicon:`hourglass-start`)
+      * :const:`tlp.TulipFontAwesome.Houzz` (:faicon:`houzz`)
+      * :const:`tlp.TulipFontAwesome.Html5` (:faicon:`html5`)
+      * :const:`tlp.TulipFontAwesome.ICursor` (:faicon:`i-cursor`)
+      * :const:`tlp.TulipFontAwesome.Ils` (:faicon:`ils`)
+      * :const:`tlp.TulipFontAwesome.Image` (:faicon:`image`)
+      * :const:`tlp.TulipFontAwesome.Inbox` (:faicon:`inbox`)
+      * :const:`tlp.TulipFontAwesome.Indent` (:faicon:`indent`)
+      * :const:`tlp.TulipFontAwesome.Industry` (:faicon:`industry`)
+      * :const:`tlp.TulipFontAwesome.Info` (:faicon:`info`)
+      * :const:`tlp.TulipFontAwesome.InfoCircle` (:faicon:`info-circle`)
+      * :const:`tlp.TulipFontAwesome.Inr` (:faicon:`inr`)
+      * :const:`tlp.TulipFontAwesome.Instagram` (:faicon:`instagram`)
+      * :const:`tlp.TulipFontAwesome.Institution` (:faicon:`institution`)
+      * :const:`tlp.TulipFontAwesome.InternetExplorer` (:faicon:`internet-explorer`)
+      * :const:`tlp.TulipFontAwesome.Intersex` (:faicon:`intersex`)
+      * :const:`tlp.TulipFontAwesome.Ioxhost` (:faicon:`ioxhost`)
+      * :const:`tlp.TulipFontAwesome.Italic` (:faicon:`italic`)
+      * :const:`tlp.TulipFontAwesome.Joomla` (:faicon:`joomla`)
+      * :const:`tlp.TulipFontAwesome.Jpy` (:faicon:`jpy`)
+      * :const:`tlp.TulipFontAwesome.Jsfiddle` (:faicon:`jsfiddle`)
+      * :const:`tlp.TulipFontAwesome.Key` (:faicon:`key`)
+      * :const:`tlp.TulipFontAwesome.KeyboardO` (:faicon:`keyboard-o`)
+      * :const:`tlp.TulipFontAwesome.Krw` (:faicon:`krw`)
+      * :const:`tlp.TulipFontAwesome.Language` (:faicon:`language`)
+      * :const:`tlp.TulipFontAwesome.Laptop` (:faicon:`laptop`)
+      * :const:`tlp.TulipFontAwesome.Lastfm` (:faicon:`lastfm`)
+      * :const:`tlp.TulipFontAwesome.LastfmSquare` (:faicon:`lastfm-square`)
+      * :const:`tlp.TulipFontAwesome.Leaf` (:faicon:`leaf`)
+      * :const:`tlp.TulipFontAwesome.Leanpub` (:faicon:`leanpub`)
+      * :const:`tlp.TulipFontAwesome.Legal` (:faicon:`legal`)
+      * :const:`tlp.TulipFontAwesome.LemonO` (:faicon:`lemon-o`)
+      * :const:`tlp.TulipFontAwesome.LevelDown` (:faicon:`level-down`)
+      * :const:`tlp.TulipFontAwesome.LevelUp` (:faicon:`level-up`)
+      * :const:`tlp.TulipFontAwesome.LifeBouy` (:faicon:`life-bouy`)
+      * :const:`tlp.TulipFontAwesome.LifeBuoy` (:faicon:`life-buoy`)
+      * :const:`tlp.TulipFontAwesome.LifeRing` (:faicon:`life-ring`)
+      * :const:`tlp.TulipFontAwesome.LifeSaver` (:faicon:`life-saver`)
+      * :const:`tlp.TulipFontAwesome.LightbulbO` (:faicon:`lightbulb-o`)
+      * :const:`tlp.TulipFontAwesome.LineChart` (:faicon:`line-chart`)
+      * :const:`tlp.TulipFontAwesome.Link` (:faicon:`link`)
+      * :const:`tlp.TulipFontAwesome.Linkedin` (:faicon:`linkedin`)
+      * :const:`tlp.TulipFontAwesome.LinkedinSquare` (:faicon:`linkedin-square`)
+      * :const:`tlp.TulipFontAwesome.Linux` (:faicon:`linux`)
+      * :const:`tlp.TulipFontAwesome.List` (:faicon:`list`)
+      * :const:`tlp.TulipFontAwesome.ListAlt` (:faicon:`list-alt`)
+      * :const:`tlp.TulipFontAwesome.ListOl` (:faicon:`list-ol`)
+      * :const:`tlp.TulipFontAwesome.ListUl` (:faicon:`list-ul`)
+      * :const:`tlp.TulipFontAwesome.LocationArrow` (:faicon:`location-arrow`)
+      * :const:`tlp.TulipFontAwesome.Lock` (:faicon:`lock`)
+      * :const:`tlp.TulipFontAwesome.LongArrowDown` (:faicon:`long-arrow-down`)
+      * :const:`tlp.TulipFontAwesome.LongArrowLeft` (:faicon:`long-arrow-left`)
+      * :const:`tlp.TulipFontAwesome.LongArrowRight` (:faicon:`long-arrow-right`)
+      * :const:`tlp.TulipFontAwesome.LongArrowUp` (:faicon:`long-arrow-up`)
+      * :const:`tlp.TulipFontAwesome.Magic` (:faicon:`magic`)
+      * :const:`tlp.TulipFontAwesome.Magnet` (:faicon:`magnet`)
+      * :const:`tlp.TulipFontAwesome.MailForward` (:faicon:`mail-forward`)
+      * :const:`tlp.TulipFontAwesome.MailReply` (:faicon:`mail-reply`)
+      * :const:`tlp.TulipFontAwesome.MailReplyAll` (:faicon:`mail-reply-all`)
+      * :const:`tlp.TulipFontAwesome.Male` (:faicon:`male`)
+      * :const:`tlp.TulipFontAwesome.Map` (:faicon:`map`)
+      * :const:`tlp.TulipFontAwesome.MapMarker` (:faicon:`map-marker`)
+      * :const:`tlp.TulipFontAwesome.MapO` (:faicon:`map-o`)
+      * :const:`tlp.TulipFontAwesome.MapPin` (:faicon:`map-pin`)
+      * :const:`tlp.TulipFontAwesome.MapSigns` (:faicon:`map-signs`)
+      * :const:`tlp.TulipFontAwesome.Mars` (:faicon:`mars`)
+      * :const:`tlp.TulipFontAwesome.MarsDouble` (:faicon:`mars-double`)
+      * :const:`tlp.TulipFontAwesome.MarsStroke` (:faicon:`mars-stroke`)
+      * :const:`tlp.TulipFontAwesome.MarsStrokeH` (:faicon:`mars-stroke-h`)
+      * :const:`tlp.TulipFontAwesome.MarsStrokeV` (:faicon:`mars-stroke-v`)
+      * :const:`tlp.TulipFontAwesome.Maxcdn` (:faicon:`maxcdn`)
+      * :const:`tlp.TulipFontAwesome.Meanpath` (:faicon:`meanpath`)
+      * :const:`tlp.TulipFontAwesome.Medium` (:faicon:`medium`)
+      * :const:`tlp.TulipFontAwesome.Medkit` (:faicon:`medkit`)
+      * :const:`tlp.TulipFontAwesome.MehO` (:faicon:`meh-o`)
+      * :const:`tlp.TulipFontAwesome.Mercury` (:faicon:`mercury`)
+      * :const:`tlp.TulipFontAwesome.Microphone` (:faicon:`microphone`)
+      * :const:`tlp.TulipFontAwesome.MicrophoneSlash` (:faicon:`microphone-slash`)
+      * :const:`tlp.TulipFontAwesome.Minus` (:faicon:`minus`)
+      * :const:`tlp.TulipFontAwesome.MinusCircle` (:faicon:`minus-circle`)
+      * :const:`tlp.TulipFontAwesome.MinusSquare` (:faicon:`minus-square`)
+      * :const:`tlp.TulipFontAwesome.MinusSquareO` (:faicon:`minus-square-o`)
+      * :const:`tlp.TulipFontAwesome.Mobile` (:faicon:`mobile`)
+      * :const:`tlp.TulipFontAwesome.MobilePhone` (:faicon:`mobile-phone`)
+      * :const:`tlp.TulipFontAwesome.Money` (:faicon:`money`)
+      * :const:`tlp.TulipFontAwesome.MoonO` (:faicon:`moon-o`)
+      * :const:`tlp.TulipFontAwesome.MortarBoard` (:faicon:`mortar-board`)
+      * :const:`tlp.TulipFontAwesome.Motorcycle` (:faicon:`motorcycle`)
+      * :const:`tlp.TulipFontAwesome.MousePointer` (:faicon:`mouse-pointer`)
+      * :const:`tlp.TulipFontAwesome.Music` (:faicon:`music`)
+      * :const:`tlp.TulipFontAwesome.Navicon` (:faicon:`navicon`)
+      * :const:`tlp.TulipFontAwesome.Neuter` (:faicon:`neuter`)
+      * :const:`tlp.TulipFontAwesome.NewspaperO` (:faicon:`newspaper-o`)
+      * :const:`tlp.TulipFontAwesome.ObjectGroup` (:faicon:`object-group`)
+      * :const:`tlp.TulipFontAwesome.ObjectUngroup` (:faicon:`object-ungroup`)
+      * :const:`tlp.TulipFontAwesome.Odnoklassniki` (:faicon:`odnoklassniki`)
+      * :const:`tlp.TulipFontAwesome.OdnoklassnikiSquare` (:faicon:`odnoklassniki-square`)
+      * :const:`tlp.TulipFontAwesome.Opencart` (:faicon:`opencart`)
+      * :const:`tlp.TulipFontAwesome.Openid` (:faicon:`openid`)
+      * :const:`tlp.TulipFontAwesome.Opera` (:faicon:`opera`)
+      * :const:`tlp.TulipFontAwesome.OptinMonster` (:faicon:`optin-monster`)
+      * :const:`tlp.TulipFontAwesome.Outdent` (:faicon:`outdent`)
+      * :const:`tlp.TulipFontAwesome.Pagelines` (:faicon:`pagelines`)
+      * :const:`tlp.TulipFontAwesome.PaintBrush` (:faicon:`paint-brush`)
+      * :const:`tlp.TulipFontAwesome.PaperPlane` (:faicon:`paper-plane`)
+      * :const:`tlp.TulipFontAwesome.PaperPlaneO` (:faicon:`paper-plane-o`)
+      * :const:`tlp.TulipFontAwesome.Paperclip` (:faicon:`paperclip`)
+      * :const:`tlp.TulipFontAwesome.Paragraph` (:faicon:`paragraph`)
+      * :const:`tlp.TulipFontAwesome.Paste` (:faicon:`paste`)
+      * :const:`tlp.TulipFontAwesome.Pause` (:faicon:`pause`)
+      * :const:`tlp.TulipFontAwesome.Paw` (:faicon:`paw`)
+      * :const:`tlp.TulipFontAwesome.Paypal` (:faicon:`paypal`)
+      * :const:`tlp.TulipFontAwesome.Pencil` (:faicon:`pencil`)
+      * :const:`tlp.TulipFontAwesome.PencilSquare` (:faicon:`pencil-square`)
+      * :const:`tlp.TulipFontAwesome.PencilSquareO` (:faicon:`pencil-square-o`)
+      * :const:`tlp.TulipFontAwesome.Phone` (:faicon:`phone`)
+      * :const:`tlp.TulipFontAwesome.PhoneSquare` (:faicon:`phone-square`)
+      * :const:`tlp.TulipFontAwesome.Photo` (:faicon:`photo`)
+      * :const:`tlp.TulipFontAwesome.PictureO` (:faicon:`picture-o`)
+      * :const:`tlp.TulipFontAwesome.PieChart` (:faicon:`pie-chart`)
+      * :const:`tlp.TulipFontAwesome.PiedPiper` (:faicon:`pied-piper`)
+      * :const:`tlp.TulipFontAwesome.PiedPiperAlt` (:faicon:`pied-piper-alt`)
+      * :const:`tlp.TulipFontAwesome.Pinterest` (:faicon:`pinterest`)
+      * :const:`tlp.TulipFontAwesome.PinterestP` (:faicon:`pinterest-p`)
+      * :const:`tlp.TulipFontAwesome.PinterestSquare` (:faicon:`pinterest-square`)
+      * :const:`tlp.TulipFontAwesome.Plane` (:faicon:`plane`)
+      * :const:`tlp.TulipFontAwesome.Play` (:faicon:`play`)
+      * :const:`tlp.TulipFontAwesome.PlayCircle` (:faicon:`play-circle`)
+      * :const:`tlp.TulipFontAwesome.PlayCircleO` (:faicon:`play-circle-o`)
+      * :const:`tlp.TulipFontAwesome.Plug` (:faicon:`plug`)
+      * :const:`tlp.TulipFontAwesome.Plus` (:faicon:`plus`)
+      * :const:`tlp.TulipFontAwesome.PlusCircle` (:faicon:`plus-circle`)
+      * :const:`tlp.TulipFontAwesome.PlusSquare` (:faicon:`plus-square`)
+      * :const:`tlp.TulipFontAwesome.PlusSquareO` (:faicon:`plus-square-o`)
+      * :const:`tlp.TulipFontAwesome.PowerOff` (:faicon:`power-off`)
+      * :const:`tlp.TulipFontAwesome.Print` (:faicon:`print`)
+      * :const:`tlp.TulipFontAwesome.PuzzlePiece` (:faicon:`puzzle-piece`)
+      * :const:`tlp.TulipFontAwesome.Qq` (:faicon:`qq`)
+      * :const:`tlp.TulipFontAwesome.Qrcode` (:faicon:`qrcode`)
+      * :const:`tlp.TulipFontAwesome.Question` (:faicon:`question`)
+      * :const:`tlp.TulipFontAwesome.QuestionCircle` (:faicon:`question-circle`)
+      * :const:`tlp.TulipFontAwesome.QuoteLeft` (:faicon:`quote-left`)
+      * :const:`tlp.TulipFontAwesome.QuoteRight` (:faicon:`quote-right`)
+      * :const:`tlp.TulipFontAwesome.Ra` (:faicon:`ra`)
+      * :const:`tlp.TulipFontAwesome.Random` (:faicon:`random`)
+      * :const:`tlp.TulipFontAwesome.Rebel` (:faicon:`rebel`)
+      * :const:`tlp.TulipFontAwesome.Recycle` (:faicon:`recycle`)
+      * :const:`tlp.TulipFontAwesome.Reddit` (:faicon:`reddit`)
+      * :const:`tlp.TulipFontAwesome.RedditSquare` (:faicon:`reddit-square`)
+      * :const:`tlp.TulipFontAwesome.Refresh` (:faicon:`refresh`)
+      * :const:`tlp.TulipFontAwesome.Registered` (:faicon:`registered`)
+      * :const:`tlp.TulipFontAwesome.Remove` (:faicon:`remove`)
+      * :const:`tlp.TulipFontAwesome.Renren` (:faicon:`renren`)
+      * :const:`tlp.TulipFontAwesome.Reorder` (:faicon:`reorder`)
+      * :const:`tlp.TulipFontAwesome.Repeat` (:faicon:`repeat`)
+      * :const:`tlp.TulipFontAwesome.Reply` (:faicon:`reply`)
+      * :const:`tlp.TulipFontAwesome.ReplyAll` (:faicon:`reply-all`)
+      * :const:`tlp.TulipFontAwesome.Retweet` (:faicon:`retweet`)
+      * :const:`tlp.TulipFontAwesome.Rmb` (:faicon:`rmb`)
+      * :const:`tlp.TulipFontAwesome.Road` (:faicon:`road`)
+      * :const:`tlp.TulipFontAwesome.Rocket` (:faicon:`rocket`)
+      * :const:`tlp.TulipFontAwesome.RotateLeft` (:faicon:`rotate-left`)
+      * :const:`tlp.TulipFontAwesome.RotateRight` (:faicon:`rotate-right`)
+      * :const:`tlp.TulipFontAwesome.Rouble` (:faicon:`rouble`)
+      * :const:`tlp.TulipFontAwesome.Rss` (:faicon:`rss`)
+      * :const:`tlp.TulipFontAwesome.RssSquare` (:faicon:`rss-square`)
+      * :const:`tlp.TulipFontAwesome.Rub` (:faicon:`rub`)
+      * :const:`tlp.TulipFontAwesome.Ruble` (:faicon:`ruble`)
+      * :const:`tlp.TulipFontAwesome.Rupee` (:faicon:`rupee`)
+      * :const:`tlp.TulipFontAwesome.Safari` (:faicon:`safari`)
+      * :const:`tlp.TulipFontAwesome.Save` (:faicon:`save`)
+      * :const:`tlp.TulipFontAwesome.Scissors` (:faicon:`scissors`)
+      * :const:`tlp.TulipFontAwesome.Search` (:faicon:`search`)
+      * :const:`tlp.TulipFontAwesome.SearchMinus` (:faicon:`search-minus`)
+      * :const:`tlp.TulipFontAwesome.SearchPlus` (:faicon:`search-plus`)
+      * :const:`tlp.TulipFontAwesome.Sellsy` (:faicon:`sellsy`)
+      * :const:`tlp.TulipFontAwesome.Send` (:faicon:`send`)
+      * :const:`tlp.TulipFontAwesome.SendO` (:faicon:`send-o`)
+      * :const:`tlp.TulipFontAwesome.Server` (:faicon:`server`)
+      * :const:`tlp.TulipFontAwesome.Share` (:faicon:`share`)
+      * :const:`tlp.TulipFontAwesome.ShareAlt` (:faicon:`share-alt`)
+      * :const:`tlp.TulipFontAwesome.ShareAltSquare` (:faicon:`share-alt-square`)
+      * :const:`tlp.TulipFontAwesome.ShareSquare` (:faicon:`share-square`)
+      * :const:`tlp.TulipFontAwesome.ShareSquareO` (:faicon:`share-square-o`)
+      * :const:`tlp.TulipFontAwesome.Shekel` (:faicon:`shekel`)
+      * :const:`tlp.TulipFontAwesome.Sheqel` (:faicon:`sheqel`)
+      * :const:`tlp.TulipFontAwesome.Shield` (:faicon:`shield`)
+      * :const:`tlp.TulipFontAwesome.Ship` (:faicon:`ship`)
+      * :const:`tlp.TulipFontAwesome.Shirtsinbulk` (:faicon:`shirtsinbulk`)
+      * :const:`tlp.TulipFontAwesome.ShoppingCart` (:faicon:`shopping-cart`)
+      * :const:`tlp.TulipFontAwesome.SignIn` (:faicon:`sign-in`)
+      * :const:`tlp.TulipFontAwesome.SignOut` (:faicon:`sign-out`)
+      * :const:`tlp.TulipFontAwesome.Signal` (:faicon:`signal`)
+      * :const:`tlp.TulipFontAwesome.Simplybuilt` (:faicon:`simplybuilt`)
+      * :const:`tlp.TulipFontAwesome.Sitemap` (:faicon:`sitemap`)
+      * :const:`tlp.TulipFontAwesome.Skyatlas` (:faicon:`skyatlas`)
+      * :const:`tlp.TulipFontAwesome.Skype` (:faicon:`skype`)
+      * :const:`tlp.TulipFontAwesome.Slack` (:faicon:`slack`)
+      * :const:`tlp.TulipFontAwesome.Sliders` (:faicon:`sliders`)
+      * :const:`tlp.TulipFontAwesome.Slideshare` (:faicon:`slideshare`)
+      * :const:`tlp.TulipFontAwesome.SmileO` (:faicon:`smile-o`)
+      * :const:`tlp.TulipFontAwesome.SoccerBallO` (:faicon:`soccer-ball-o`)
+      * :const:`tlp.TulipFontAwesome.Sort` (:faicon:`sort`)
+      * :const:`tlp.TulipFontAwesome.SortAlphaAsc` (:faicon:`sort-alpha-asc`)
+      * :const:`tlp.TulipFontAwesome.SortAlphaDesc` (:faicon:`sort-alpha-desc`)
+      * :const:`tlp.TulipFontAwesome.SortAmountAsc` (:faicon:`sort-amount-asc`)
+      * :const:`tlp.TulipFontAwesome.SortAmountDesc` (:faicon:`sort-amount-desc`)
+      * :const:`tlp.TulipFontAwesome.SortAsc` (:faicon:`sort-asc`)
+      * :const:`tlp.TulipFontAwesome.SortDesc` (:faicon:`sort-desc`)
+      * :const:`tlp.TulipFontAwesome.SortDown` (:faicon:`sort-down`)
+      * :const:`tlp.TulipFontAwesome.SortNumericAsc` (:faicon:`sort-numeric-asc`)
+      * :const:`tlp.TulipFontAwesome.SortNumericDesc` (:faicon:`sort-numeric-desc`)
+      * :const:`tlp.TulipFontAwesome.SortUp` (:faicon:`sort-up`)
+      * :const:`tlp.TulipFontAwesome.Soundcloud` (:faicon:`soundcloud`)
+      * :const:`tlp.TulipFontAwesome.SpaceShuttle` (:faicon:`space-shuttle`)
+      * :const:`tlp.TulipFontAwesome.Spinner` (:faicon:`spinner`)
+      * :const:`tlp.TulipFontAwesome.Spoon` (:faicon:`spoon`)
+      * :const:`tlp.TulipFontAwesome.Spotify` (:faicon:`spotify`)
+      * :const:`tlp.TulipFontAwesome.Square` (:faicon:`square`)
+      * :const:`tlp.TulipFontAwesome.SquareO` (:faicon:`square-o`)
+      * :const:`tlp.TulipFontAwesome.StackExchange` (:faicon:`stack-exchange`)
+      * :const:`tlp.TulipFontAwesome.StackOverflow` (:faicon:`stack-overflow`)
+      * :const:`tlp.TulipFontAwesome.Star` (:faicon:`star`)
+      * :const:`tlp.TulipFontAwesome.StarHalf` (:faicon:`star-half`)
+      * :const:`tlp.TulipFontAwesome.StarHalfEmpty` (:faicon:`star-half-empty`)
+      * :const:`tlp.TulipFontAwesome.StarHalfFull` (:faicon:`star-half-full`)
+      * :const:`tlp.TulipFontAwesome.StarHalfO` (:faicon:`star-half-o`)
+      * :const:`tlp.TulipFontAwesome.StarO` (:faicon:`star-o`)
+      * :const:`tlp.TulipFontAwesome.Steam` (:faicon:`steam`)
+      * :const:`tlp.TulipFontAwesome.SteamSquare` (:faicon:`steam-square`)
+      * :const:`tlp.TulipFontAwesome.StepBackward` (:faicon:`step-backward`)
+      * :const:`tlp.TulipFontAwesome.StepForward` (:faicon:`step-forward`)
+      * :const:`tlp.TulipFontAwesome.Stethoscope` (:faicon:`stethoscope`)
+      * :const:`tlp.TulipFontAwesome.StickyNote` (:faicon:`sticky-note`)
+      * :const:`tlp.TulipFontAwesome.StickyNoteO` (:faicon:`sticky-note-o`)
+      * :const:`tlp.TulipFontAwesome.Stop` (:faicon:`stop`)
+      * :const:`tlp.TulipFontAwesome.StreetView` (:faicon:`street-view`)
+      * :const:`tlp.TulipFontAwesome.Strikethrough` (:faicon:`strikethrough`)
+      * :const:`tlp.TulipFontAwesome.Stumbleupon` (:faicon:`stumbleupon`)
+      * :const:`tlp.TulipFontAwesome.StumbleuponCircle` (:faicon:`stumbleupon-circle`)
+      * :const:`tlp.TulipFontAwesome.Subscript` (:faicon:`subscript`)
+      * :const:`tlp.TulipFontAwesome.Subway` (:faicon:`subway`)
+      * :const:`tlp.TulipFontAwesome.Suitcase` (:faicon:`suitcase`)
+      * :const:`tlp.TulipFontAwesome.SunO` (:faicon:`sun-o`)
+      * :const:`tlp.TulipFontAwesome.Superscript` (:faicon:`superscript`)
+      * :const:`tlp.TulipFontAwesome.Support` (:faicon:`support`)
+      * :const:`tlp.TulipFontAwesome.Table` (:faicon:`table`)
+      * :const:`tlp.TulipFontAwesome.Tablet` (:faicon:`tablet`)
+      * :const:`tlp.TulipFontAwesome.Tachometer` (:faicon:`tachometer`)
+      * :const:`tlp.TulipFontAwesome.Tag` (:faicon:`tag`)
+      * :const:`tlp.TulipFontAwesome.Tags` (:faicon:`tags`)
+      * :const:`tlp.TulipFontAwesome.Tasks` (:faicon:`tasks`)
+      * :const:`tlp.TulipFontAwesome.Taxi` (:faicon:`taxi`)
+      * :const:`tlp.TulipFontAwesome.Television` (:faicon:`television`)
+      * :const:`tlp.TulipFontAwesome.TencentWeibo` (:faicon:`tencent-weibo`)
+      * :const:`tlp.TulipFontAwesome.Terminal` (:faicon:`terminal`)
+      * :const:`tlp.TulipFontAwesome.TextHeight` (:faicon:`text-height`)
+      * :const:`tlp.TulipFontAwesome.TextWidth` (:faicon:`text-width`)
+      * :const:`tlp.TulipFontAwesome.Th` (:faicon:`th`)
+      * :const:`tlp.TulipFontAwesome.ThLarge` (:faicon:`th-large`)
+      * :const:`tlp.TulipFontAwesome.ThList` (:faicon:`th-list`)
+      * :const:`tlp.TulipFontAwesome.ThumbTack` (:faicon:`thumb-tack`)
+      * :const:`tlp.TulipFontAwesome.ThumbsDown` (:faicon:`thumbs-down`)
+      * :const:`tlp.TulipFontAwesome.ThumbsODown` (:faicon:`thumbs-o-down`)
+      * :const:`tlp.TulipFontAwesome.ThumbsOUp` (:faicon:`thumbs-o-up`)
+      * :const:`tlp.TulipFontAwesome.ThumbsUp` (:faicon:`thumbs-up`)
+      * :const:`tlp.TulipFontAwesome.Ticket` (:faicon:`ticket`)
+      * :const:`tlp.TulipFontAwesome.Times` (:faicon:`times`)
+      * :const:`tlp.TulipFontAwesome.TimesCircle` (:faicon:`times-circle`)
+      * :const:`tlp.TulipFontAwesome.TimesCircleO` (:faicon:`times-circle-o`)
+      * :const:`tlp.TulipFontAwesome.Tint` (:faicon:`tint`)
+      * :const:`tlp.TulipFontAwesome.ToggleDown` (:faicon:`toggle-down`)
+      * :const:`tlp.TulipFontAwesome.ToggleLeft` (:faicon:`toggle-left`)
+      * :const:`tlp.TulipFontAwesome.ToggleOff` (:faicon:`toggle-off`)
+      * :const:`tlp.TulipFontAwesome.ToggleOn` (:faicon:`toggle-on`)
+      * :const:`tlp.TulipFontAwesome.ToggleRight` (:faicon:`toggle-right`)
+      * :const:`tlp.TulipFontAwesome.ToggleUp` (:faicon:`toggle-up`)
+      * :const:`tlp.TulipFontAwesome.Trademark` (:faicon:`trademark`)
+      * :const:`tlp.TulipFontAwesome.Train` (:faicon:`train`)
+      * :const:`tlp.TulipFontAwesome.Transgender` (:faicon:`transgender`)
+      * :const:`tlp.TulipFontAwesome.TransgenderAlt` (:faicon:`transgender-alt`)
+      * :const:`tlp.TulipFontAwesome.Trash` (:faicon:`trash`)
+      * :const:`tlp.TulipFontAwesome.TrashO` (:faicon:`trash-o`)
+      * :const:`tlp.TulipFontAwesome.Tree` (:faicon:`tree`)
+      * :const:`tlp.TulipFontAwesome.Trello` (:faicon:`trello`)
+      * :const:`tlp.TulipFontAwesome.Tripadvisor` (:faicon:`tripadvisor`)
+      * :const:`tlp.TulipFontAwesome.Trophy` (:faicon:`trophy`)
+      * :const:`tlp.TulipFontAwesome.Truck` (:faicon:`truck`)
+      * :const:`tlp.TulipFontAwesome.Try` (:faicon:`try`)
+      * :const:`tlp.TulipFontAwesome.Tty` (:faicon:`tty`)
+      * :const:`tlp.TulipFontAwesome.Tumblr` (:faicon:`tumblr`)
+      * :const:`tlp.TulipFontAwesome.TumblrSquare` (:faicon:`tumblr-square`)
+      * :const:`tlp.TulipFontAwesome.TurkishLira` (:faicon:`turkish-lira`)
+      * :const:`tlp.TulipFontAwesome.Tv` (:faicon:`tv`)
+      * :const:`tlp.TulipFontAwesome.Twitch` (:faicon:`twitch`)
+      * :const:`tlp.TulipFontAwesome.Twitter` (:faicon:`twitter`)
+      * :const:`tlp.TulipFontAwesome.TwitterSquare` (:faicon:`twitter-square`)
+      * :const:`tlp.TulipFontAwesome.Umbrella` (:faicon:`umbrella`)
+      * :const:`tlp.TulipFontAwesome.Underline` (:faicon:`underline`)
+      * :const:`tlp.TulipFontAwesome.Undo` (:faicon:`undo`)
+      * :const:`tlp.TulipFontAwesome.University` (:faicon:`university`)
+      * :const:`tlp.TulipFontAwesome.Unlink` (:faicon:`unlink`)
+      * :const:`tlp.TulipFontAwesome.Unlock` (:faicon:`unlock`)
+      * :const:`tlp.TulipFontAwesome.UnlockAlt` (:faicon:`unlock-alt`)
+      * :const:`tlp.TulipFontAwesome.Unsorted` (:faicon:`unsorted`)
+      * :const:`tlp.TulipFontAwesome.Upload` (:faicon:`upload`)
+      * :const:`tlp.TulipFontAwesome.Usd` (:faicon:`usd`)
+      * :const:`tlp.TulipFontAwesome.User` (:faicon:`user`)
+      * :const:`tlp.TulipFontAwesome.UserMd` (:faicon:`user-md`)
+      * :const:`tlp.TulipFontAwesome.UserPlus` (:faicon:`user-plus`)
+      * :const:`tlp.TulipFontAwesome.UserSecret` (:faicon:`user-secret`)
+      * :const:`tlp.TulipFontAwesome.UserTimes` (:faicon:`user-times`)
+      * :const:`tlp.TulipFontAwesome.Users` (:faicon:`users`)
+      * :const:`tlp.TulipFontAwesome.Venus` (:faicon:`venus`)
+      * :const:`tlp.TulipFontAwesome.VenusDouble` (:faicon:`venus-double`)
+      * :const:`tlp.TulipFontAwesome.VenusMars` (:faicon:`venus-mars`)
+      * :const:`tlp.TulipFontAwesome.Viacoin` (:faicon:`viacoin`)
+      * :const:`tlp.TulipFontAwesome.VideoCamera` (:faicon:`video-camera`)
+      * :const:`tlp.TulipFontAwesome.Vimeo` (:faicon:`vimeo`)
+      * :const:`tlp.TulipFontAwesome.VimeoSquare` (:faicon:`vimeo-square`)
+      * :const:`tlp.TulipFontAwesome.Vine` (:faicon:`vine`)
+      * :const:`tlp.TulipFontAwesome.Vk` (:faicon:`vk`)
+      * :const:`tlp.TulipFontAwesome.VolumeDown` (:faicon:`volume-down`)
+      * :const:`tlp.TulipFontAwesome.VolumeOff` (:faicon:`volume-off`)
+      * :const:`tlp.TulipFontAwesome.VolumeUp` (:faicon:`volume-up`)
+      * :const:`tlp.TulipFontAwesome.Warning` (:faicon:`warning`)
+      * :const:`tlp.TulipFontAwesome.Wechat` (:faicon:`wechat`)
+      * :const:`tlp.TulipFontAwesome.Weibo` (:faicon:`weibo`)
+      * :const:`tlp.TulipFontAwesome.Weixin` (:faicon:`weixin`)
+      * :const:`tlp.TulipFontAwesome.Whatsapp` (:faicon:`whatsapp`)
+      * :const:`tlp.TulipFontAwesome.Wheelchair` (:faicon:`wheelchair`)
+      * :const:`tlp.TulipFontAwesome.Wifi` (:faicon:`wifi`)
+      * :const:`tlp.TulipFontAwesome.WikipediaW` (:faicon:`wikipedia-w`)
+      * :const:`tlp.TulipFontAwesome.Windows` (:faicon:`windows`)
+      * :const:`tlp.TulipFontAwesome.Won` (:faicon:`won`)
+      * :const:`tlp.TulipFontAwesome.Wordpress` (:faicon:`wordpress`)
+      * :const:`tlp.TulipFontAwesome.Wrench` (:faicon:`wrench`)
+      * :const:`tlp.TulipFontAwesome.Xing` (:faicon:`xing`)
+      * :const:`tlp.TulipFontAwesome.XingSquare` (:faicon:`xing-square`)
+      * :const:`tlp.TulipFontAwesome.YCombinator` (:faicon:`y-combinator`)
+      * :const:`tlp.TulipFontAwesome.YCombinatorSquare` (:faicon:`y-combinator-square`)
+      * :const:`tlp.TulipFontAwesome.Yahoo` (:faicon:`yahoo`)
+      * :const:`tlp.TulipFontAwesome.Yc` (:faicon:`yc`)
+      * :const:`tlp.TulipFontAwesome.YcSquare` (:faicon:`yc-square`)
+      * :const:`tlp.TulipFontAwesome.Yelp` (:faicon:`yelp`)
+      * :const:`tlp.TulipFontAwesome.Yen` (:faicon:`yen`)
+      * :const:`tlp.TulipFontAwesome.Youtube` (:faicon:`youtube`)
+      * :const:`tlp.TulipFontAwesome.YoutubePlay` (:faicon:`youtube-play`)
+      * :const:`tlp.TulipFontAwesome.YoutubeSquare` (:faicon:`youtube-square`)
 
 %End
 
@@ -1296,6 +1377,84 @@ Returns an UTF-8 encoded string of a Font Awesome icon.
   static const std::string Youtube;
   static const std::string YoutubePlay;
   static const std::string YoutubeSquare;
+
+  static const std::string Yc;
+  static const std::string YCombinator;
+  static const std::string OptinMonster;
+  static const std::string Opencart;
+  static const std::string Expeditedssl;
+  static const std::string Battery4;
+  static const std::string BatteryFull;
+  static const std::string Battery3;
+  static const std::string BatteryThreeQuarters;
+  static const std::string Battery2;
+  static const std::string BatteryHalf;
+  static const std::string Battery1;
+  static const std::string BatteryQuarter;
+  static const std::string Battery0;
+  static const std::string BatteryEmpty;
+  static const std::string MousePointer;
+  static const std::string ICursor;
+  static const std::string ObjectGroup;
+  static const std::string ObjectUngroup;
+  static const std::string StickyNote;
+  static const std::string StickyNoteO;
+  static const std::string CcJcb;
+  static const std::string CcDinersClub;
+  static const std::string Clone;
+  static const std::string BalanceScale;
+  static const std::string HourglassO;
+  static const std::string Hourglass1;
+  static const std::string HourglassStart;
+  static const std::string Hourglass2;
+  static const std::string HourglassHalf;
+  static const std::string Hourglass3;
+  static const std::string HourglassEnd;
+  static const std::string Hourglass;
+  static const std::string HandGrabO;
+  static const std::string HandRockO;
+  static const std::string HandStopO;
+  static const std::string HandPaperO;
+  static const std::string HandScissorsO;
+  static const std::string HandLizardO;
+  static const std::string HandSpockO;
+  static const std::string HandPointerO;
+  static const std::string HandPeaceO;
+  static const std::string Trademark;
+  static const std::string Registered;
+  static const std::string CreativeCommons;
+  static const std::string Gg;
+  static const std::string GgCircle;
+  static const std::string Tripadvisor;
+  static const std::string Odnoklassniki;
+  static const std::string OdnoklassnikiSquare;
+  static const std::string GetPocket;
+  static const std::string WikipediaW;
+  static const std::string Safari;
+  static const std::string Chrome;
+  static const std::string Firefox;
+  static const std::string Opera;
+  static const std::string InternetExplorer;
+  static const std::string Tv;
+  static const std::string Television;
+  static const std::string Contao;
+  static const std::string Px500;
+  static const std::string Amazon;
+  static const std::string CalendarPlusO;
+  static const std::string CalendarMinusO;
+  static const std::string CalendarTimesO;
+  static const std::string CalendarCheckO;
+  static const std::string Industry;
+  static const std::string MapPin;
+  static const std::string MapSigns;
+  static const std::string MapO;
+  static const std::string Map;
+  static const std::string Commenting;
+  static const std::string CommentingO;
+  static const std::string Houzz;
+  static const std::string Vimeo;
+  static const std::string BlackTie;
+  static const std::string Fonticons;
 
 };
 
