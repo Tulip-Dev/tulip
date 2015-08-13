@@ -137,6 +137,7 @@ vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeI
 
 void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *metric) {
   if (!metric) return;
+
   tlp::edge eTlp;
   forEach(eTlp, tulipGraph->getEdges()) {
     ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = metric->getEdgeDoubleValue(eTlp);
@@ -145,6 +146,7 @@ void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *m
 
 void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
   if (!size) return;
+
   tlp::edge eTlp;
   forEach(eTlp, tulipGraph->getEdges()) {
     tlp::node srcTlp = tulipGraph->source(eTlp);
@@ -164,6 +166,7 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
 
 void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *metric) {
   if (!metric) return;
+
   tlp::node nTlp;
   forEach(nTlp, tulipGraph->getNodes()) {
     ogdfAttributes.weight(ogdfNodes.get(nTlp.id)) = static_cast<int>(metric->getNodeDoubleValue(nTlp));
