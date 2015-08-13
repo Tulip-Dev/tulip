@@ -74,80 +74,80 @@ public:
                     "Implements an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","2.0","Force Directed")
   OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
     addInParameter<StringCollection>("terminationCriterion",
-                                      HTML_HELP_OPEN()
-                                      HTML_HELP_DEF( "type", "StringCollection" )
-                                      HTML_HELP_DEF("values", "- None <br/>"
-                                                              "- PositionDifference <br/>"
-                                                              "- Stress </i>")
-                                      HTML_HELP_DEF( "default", "None" )
-                                      HTML_HELP_BODY()
-                                      "Tells which TERMINATION_CRITERIA should be used."
-                                      HTML_HELP_CLOSE(),
-                                      "None;PositionDifference;Stress");
+                                     HTML_HELP_OPEN()
+                                     HTML_HELP_DEF( "type", "StringCollection" )
+                                     HTML_HELP_DEF("values", "- None <br/>"
+                                         "- PositionDifference <br/>"
+                                         "- Stress </i>")
+                                     HTML_HELP_DEF( "default", "None" )
+                                     HTML_HELP_BODY()
+                                     "Tells which TERMINATION_CRITERIA should be used."
+                                     HTML_HELP_CLOSE(),
+                                     "None;PositionDifference;Stress");
     addInParameter<bool>("fixXCoordinates",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "bool" )
-                          HTML_HELP_DEF( "default", "false" )
-                          HTML_HELP_BODY()
-                          "Tells whether the x coordinates are allowed to be modified or not."
-                          HTML_HELP_CLOSE(),
-                          "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_DEF( "default", "false" )
+                         HTML_HELP_BODY()
+                         "Tells whether the x coordinates are allowed to be modified or not."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<bool>("fixYCoordinates",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "bool" )
-                          HTML_HELP_DEF( "default", "false" )
-                          HTML_HELP_BODY()
-                          "Tells whether the y coordinates are allowed to be modified or not."
-                          HTML_HELP_CLOSE(),
-                          "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_DEF( "default", "false" )
+                         HTML_HELP_BODY()
+                         "Tells whether the y coordinates are allowed to be modified or not."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<bool>("hasInitialLayout",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "bool" )
-                          HTML_HELP_DEF( "default", "false" )
-                          HTML_HELP_BODY()
-                          "Tells whether the current layout should be used or the initial layout needs to be computed."
-                          HTML_HELP_CLOSE(),
-                          "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_DEF( "default", "false" )
+                         HTML_HELP_BODY()
+                         "Tells whether the current layout should be used or the initial layout needs to be computed."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<bool>("layoutComponentsSeparately",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "bool" )
-                          HTML_HELP_DEF( "default", "false" )
-                          HTML_HELP_BODY()
-                          "Sets whether the graph's components should be layouted separately or a dummy distance should be used for nodes within different components."
-                          HTML_HELP_CLOSE(),
-                          "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_DEF( "default", "false" )
+                         HTML_HELP_BODY()
+                         "Sets whether the graph's components should be layouted separately or a dummy distance should be used for nodes within different components."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<int>("numberOfIterations",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "int" )
-                          HTML_HELP_DEF( "default", "200" )
-                          HTML_HELP_BODY()
-                          "Sets a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used."
-                          HTML_HELP_CLOSE(),
-                          "200");
+                        HTML_HELP_OPEN()
+                        HTML_HELP_DEF( "type", "int" )
+                        HTML_HELP_DEF( "default", "200" )
+                        HTML_HELP_BODY()
+                        "Sets a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used."
+                        HTML_HELP_CLOSE(),
+                        "200");
     addInParameter<double>("edgeCosts",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "double" )
-                          HTML_HELP_DEF( "default", "100" )
-                          HTML_HELP_BODY()
-                          "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
-                          HTML_HELP_CLOSE(),
-                          "100");
+                           HTML_HELP_OPEN()
+                           HTML_HELP_DEF( "type", "double" )
+                           HTML_HELP_DEF( "default", "100" )
+                           HTML_HELP_BODY()
+                           "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
+                           HTML_HELP_CLOSE(),
+                           "100");
     addInParameter<bool>("useEdgeCostsProperty",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "bool" )
-                          HTML_HELP_DEF( "default", "false" )
-                          HTML_HELP_BODY()
-                          "Tells whether the edge costs are uniform or defined in an edge costs property."
-                          HTML_HELP_CLOSE(),
-                          "false");
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "bool" )
+                         HTML_HELP_DEF( "default", "false" )
+                         HTML_HELP_BODY()
+                         "Tells whether the edge costs are uniform or defined in an edge costs property."
+                         HTML_HELP_CLOSE(),
+                         "false");
     addInParameter<tlp::NumericProperty*>("edgeCostsProperty",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "NumericProperty" )
-                          HTML_HELP_DEF( "default", "viewMetric" )
-                          HTML_HELP_BODY()
-                          "The numeric property that holds the desired cost for each edge."
-                          HTML_HELP_CLOSE(),
-                          "viewMetric");
+                                          HTML_HELP_OPEN()
+                                          HTML_HELP_DEF( "type", "NumericProperty" )
+                                          HTML_HELP_DEF( "default", "viewMetric" )
+                                          HTML_HELP_BODY()
+                                          "The numeric property that holds the desired cost for each edge."
+                                          HTML_HELP_CLOSE(),
+                                          "viewMetric");
 
   }
 
@@ -166,9 +166,11 @@ public:
       if (dataSet->get("terminationCriterion", sc)) {
         if (sc.getCurrentString() == "PositionDifference") {
           stressm->convergenceCriterion(ogdf::StressMinimization::POSITION_DIFFERENCE);
-        } else if (sc.getCurrentString() == "Stress") {
+        }
+        else if (sc.getCurrentString() == "Stress") {
           stressm->convergenceCriterion(ogdf::StressMinimization::STRESS);
-        } else {
+        }
+        else {
           stressm->convergenceCriterion(ogdf::StressMinimization::NONE);
         }
       }
@@ -199,6 +201,7 @@ public:
 
       if (dataSet->get("useEdgeCostsProperty", bval)) {
         stressm->useEdgeCostsAttribute(bval);
+
         if (bval) {
           dataSet->get("edgeCostsProperty", edgeCosts);
           tlpToOGDF->copyTlpNumericPropertyToOGDFEdgeLength(edgeCosts);

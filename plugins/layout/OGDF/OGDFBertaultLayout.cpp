@@ -73,19 +73,19 @@ public:
                           HTML_HELP_CLOSE(),
                           "false", false);
     addInParameter<int> ("iterno",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "integer" )
-                          HTML_HELP_BODY()
-                          "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes."
-                          HTML_HELP_CLOSE(),
-                          "0", false);
+                         HTML_HELP_OPEN()
+                         HTML_HELP_DEF( "type", "integer" )
+                         HTML_HELP_BODY()
+                         "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes."
+                         HTML_HELP_CLOSE(),
+                         "0", false);
     addInParameter<double> ("reqlength",
-                             HTML_HELP_OPEN()
-                             HTML_HELP_DEF( "type", "double" )
-                             HTML_HELP_BODY()
-                             "The required edge length."
-                             HTML_HELP_CLOSE(),
-                             "0.0", false);
+                            HTML_HELP_OPEN()
+                            HTML_HELP_DEF( "type", "double" )
+                            HTML_HELP_BODY()
+                            "The required edge length."
+                            HTML_HELP_CLOSE(),
+                            "0.0", false);
   }
   ~OGDFBertaultLayout() {}
 

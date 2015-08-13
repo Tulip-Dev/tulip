@@ -193,8 +193,8 @@ public:
                                      HTML_HELP_OPEN()
                                      HTML_HELP_DEF( "type", "StringCollection")
                                      HTML_HELP_DEF("values", "- CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br/>"
-                                                             "- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>"
-                                                             "- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
+                                         "- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>"
+                                         "- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
                                      HTML_HELP_DEF( "default", "LongestPathRanking" )
                                      HTML_HELP_BODY()
                                      "Sets the option for the node ranking (layer assignment)."
@@ -204,13 +204,13 @@ public:
                                      HTML_HELP_OPEN()
                                      HTML_HELP_DEF( "type", "StringCollection")
                                      HTML_HELP_DEF("values", "- BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br/>"
-                                                             "- GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing minimization)</i>")
+                                         "- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>"
+                                         "- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization)</i><br/>"
+                                         "- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>"
+                                         "- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>"
+                                         "- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i><br/>"
+                                         "- GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br/>"
+                                         "- GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing minimization)</i>")
                                      HTML_HELP_DEF( "default", "BarycenterHeuristic" )
                                      HTML_HELP_BODY()
                                      "Sets the module option for the two-layer crossing minimization."
@@ -220,8 +220,8 @@ public:
                                      HTML_HELP_OPEN()
                                      HTML_HELP_DEF( "type", "StringCollection")
                                      HTML_HELP_DEF("values", "- FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br/>"
-                                                             "- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i><br/>"
-                                                             "- OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>")
+                                         "- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i><br/>"
+                                         "- OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>")
                                      HTML_HELP_DEF( "default", "FastHierarchyLayout" )
                                      HTML_HELP_BODY()
                                      "The hierarchy layout module that computes the final layout."
@@ -296,7 +296,8 @@ public:
         }
         else if (sc.getCurrent()==ELT_GLOBALSIFTING) {
           sugiyama->setCrossMin(new ogdf::GlobalSifting());
-        } else {
+        }
+        else {
           sugiyama->setCrossMin(new ogdf::GridSifting());
         }
       }
@@ -316,12 +317,13 @@ public:
           fhl->fixedLayerDistance(fixedLayerDistance);
           sugiyama->setLayout(fhl);
         }
-        else if (sc.getCurrent()==ELT_FASTSIMPLEHIERARCHY){
+        else if (sc.getCurrent()==ELT_FASTSIMPLEHIERARCHY) {
           ogdf::FastSimpleHierarchyLayout *fshl = new ogdf::FastSimpleHierarchyLayout();
           fshl->nodeDistance(nodeDistance);
           fshl->layerDistance(layerDistance);
           sugiyama->setLayout(fshl);
-        } else {
+        }
+        else {
           ogdf::OptimalHierarchyLayout *ohl = new ogdf::OptimalHierarchyLayout();
           ohl->nodeDistance(nodeDistance);
           ohl->layerDistance(layerDistance);
