@@ -18,6 +18,7 @@
  */
 #include <ogdf/energybased/FastMultipoleEmbedder.h>
 #include <ogdf/packing/ComponentSplitterLayout.h>
+#include <ogdf/basic/simple_graph_alg.h>
 
 #include <tulip/ConnectedTest.h>
 
@@ -106,6 +107,10 @@ public:
       if (dataSet->get("multilevel nodes bound", ival))
         fmme->multilevelUntilNumNodesAreLess(ival);
     }
+
+    // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
+    ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
+
   }
 
 private:
