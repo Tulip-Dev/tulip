@@ -17,6 +17,7 @@
  *
  */
 #include <ogdf/energybased/FastMultipoleEmbedder.h>
+#include <ogdf/basic/simple_graph_alg.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
@@ -141,6 +142,10 @@ public:
       if (dataSet->get("randomize layout", bval))
         fme->setRandomize(bval);
     }
+
+    // ensure the input graph is simple as the layout failed in non multi-threaded mode otherwise
+    ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
+
   }
 
 };
