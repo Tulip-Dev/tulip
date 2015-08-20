@@ -47,7 +47,6 @@ echo 'Creating base directories'
 cd "${DEST_DIR}/application"
 mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
-cp "${SRC_DIR}/Info.plist" .
 cp "${SRC_DIR}/tulip.icns" Resources/
 
 echo 'Copying binaries & libraries'
@@ -55,6 +54,10 @@ cd "${DEST_DIR}/application/Tulip.app/Contents/"
 cp -r "${TULIP_DIR}"/* .
 mv lib/*.dylib Frameworks/
 rm -rf include
+rm lib/python/*.pyc lib/python/*.pyo 2>/dev/null
+rm lib/python/tulip/*.pyc lib/python/tulip/*.pyo 2>/dev/null
+rm lib/python/tulipogl/*.pyc lib/python/tulipogl/*.pyo 2>/dev/null
+rm lib/python/tulipgui/*.pyc lib/python/tulipgui/*.pyo 2>/dev/null
 
 chmod +x MacOS/tulip_launcher
 
@@ -65,8 +68,8 @@ cp "${SRC_DIR}/../../COPYING" .
 QT_LIB_DIR="@QT_QTCORE_LIBRARY@/.."
 echo 'Copying Resources'
 cd "${DEST_DIR}/application/Tulip.app/Contents/Frameworks/"
-cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources
-cp "@QT_QTCLUCENE_LIBRARY@" .
+cp -r "${QT_LIB_DIR}/QtGui.framework/Resources/qt_menu.nib" ../Resources 2>/dev/null
+cp "@QT_QTCLUCENE_LIBRARY@" . 2>/dev/null
 
 if [ "$PYTHON_BUILD" = "ON" ]
 then
@@ -88,27 +91,20 @@ fi
 fi
 
 echo 'Copying more libraries'
-for lib in libGLEW libfreetype libz libstdc++; do
-  for search_path in /usr/lib /opt/local/lib ; do
-    [ "$(ls $search_path/$lib.*.dylib 2> /dev/null)" != "" ] && cp $search_path/$lib.*.dylib .
-  done
-done
 
 # use macdeployqt to configure exe & libraries
 cd ..
-cp bin/tulip MacOS
 # configure tulip
-${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -no-plugins
-mv MacOS/tulip bin/tulip
-# configure tulip_perpective
-cp bin/tulip_perspective MacOS/tulip
+cp bin/tulip MacOS
+cat "${SRC_DIR}/Info.plist" | sed 's/<string>tulip_launcher<\/string>/<string>tulip<\/string>/' > Info.plist
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app
-# copy exe and libraries
-mv MacOS/tulip bin/tulip_perspective
-cp Frameworks/*.dylib lib
-mv Plugins/imageformats .
-# remove unneeded stuff
-rm -rf Plugins Resources/qt.conf
+mv MacOS/tulip bin/tulip
+# configure tulip_perspective
+cp bin/tulip_perspective MacOS
+cat "${SRC_DIR}/Info.plist" | sed 's/<string>tulip_launcher<\/string>/<string>tulip_perspective<\/string>/' > Info.plist
+${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -no-plugins 2>/dev/null
+mv MacOS/tulip_perspective bin/tulip_perspective
+cp "${SRC_DIR}/Info.plist" .
 # rename
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
 

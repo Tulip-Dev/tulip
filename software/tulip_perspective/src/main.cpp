@@ -151,11 +151,6 @@ int main(int argc,char **argv) {
   // tulip/main.cpp
   tulip_perspective.setApplicationName(appName);
 
-#if defined(__APPLE__)
-  // allows to load qt imageformats plugin
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
-#endif
-
   // Check arguments
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;

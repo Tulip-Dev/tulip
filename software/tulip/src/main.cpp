@@ -140,11 +140,6 @@ int main(int argc, char **argv) {
   // tulip_perspective/main.cpp
   tulip_agent.setApplicationName(name);
 
-#if defined(__APPLE__)
-  // allows to load qt imageformats plugin
-  QApplication::addLibraryPath(QApplication::applicationDirPath() + "/..");
-#endif
-
   // Parse arguments
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
   QString perspName;
