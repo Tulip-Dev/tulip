@@ -2974,6 +2974,26 @@ which can contain an error message.
 
 //===========================================================================================
 
+       bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+%Docstring
+tlp.Graph.applyDoubleAlgorithm(algoName[, params = None])
+
+.. versionadded:: 4.8
+
+Convenient method that computes a double property on the current graph and stores the result
+in the default double property "viewMetric".
+This is equivalent to call::
+
+  graph.applyDoubleAlgorithm(algoName, graph.getDoubleProperty("viewMetric"), params)
+
+%End
+
+%MethodCode
+  sipRes = callGraphPropertyAlgorithm<tlp::DoubleAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::DoubleProperty>("viewMetric"), a2, a2Wrapper, *a1, sipIsErr, "double");
+%End
+
+//===========================================================================================
+
         bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName, result[, params = None])
@@ -3020,6 +3040,26 @@ which can contain an error message.
 	
 %MethodCode
    sipRes = callGraphPropertyAlgorithm<tlp::LayoutAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "layout");
+%End
+
+//===========================================================================================
+
+       bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+%Docstring
+tlp.Graph.applyLayoutAlgorithm(algoName[, params = None])
+
+.. versionadded:: 4.8
+
+Convenient method that computes a layout property on the current graph and stores the result
+in the default layout property "viewLayout".
+This is equivalent to call::
+
+  graph.applyLayoutAlgorithm(algoName, graph.getLayoutProperty("viewLayout"), params)
+
+%End
+
+%MethodCode
+  sipRes = callGraphPropertyAlgorithm<tlp::LayoutAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::LayoutProperty>("viewLayout"), a2, a2Wrapper, *a1, sipIsErr, "layout");
 %End
 
 //===========================================================================================
@@ -3075,6 +3115,26 @@ which can contain an error message.
 
 //===========================================================================================
 
+       bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+%Docstring
+tlp.Graph.applyBooleanAlgorithm(algoName[, params = None])
+
+.. versionadded:: 4.8
+
+Convenient method that computes a boolean property on the current graph and stores the result
+in the default boolean property "viewSelection".
+This is equivalent to call::
+
+  graph.applyBooleanAlgorithm(algoName, graph.getBooleanProperty("viewSelection"), params)
+
+%End
+
+%MethodCode
+  sipRes = callGraphPropertyAlgorithm<tlp::BooleanAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::BooleanProperty>("viewSelection"), a2, a2Wrapper, *a1, sipIsErr, "boolean");
+%End
+
+//===========================================================================================
+
         bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName, result[, params = None])
@@ -3123,6 +3183,25 @@ which can contain an error message.
   sipRes = callGraphPropertyAlgorithm<tlp::SizeAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "size");
 %End
 
+//===========================================================================================
+
+       bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+%Docstring
+tlp.Graph.applySizeAlgorithm(algoName[, params = None])
+
+.. versionadded:: 4.8
+
+Convenient method that computes a size property on the current graph and stores the result
+in the default size property "viewSize".
+This is equivalent to call::
+
+  graph.applySizeAlgorithm(algoName, graph.getSizeProperty("viewSize"), params)
+
+%End
+
+%MethodCode
+  sipRes = callGraphPropertyAlgorithm<tlp::SizeAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::SizeProperty>("viewSize"), a2, a2Wrapper, *a1, sipIsErr, "size");
+%End
 
 //===========================================================================================
 
@@ -3176,6 +3255,26 @@ which can contain an error message.
 
 //===========================================================================================
 
+       bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+%Docstring
+tlp.Graph.applyColorAlgorithm(algoName[, params = None])
+
+.. versionadded:: 4.8
+
+Convenient method that computes a color property on the current graph and stores the result
+in the default color property "viewColor".
+This is equivalent to call::
+
+  graph.applyColorAlgorithm(algoName, graph.getColorProperty("viewColor"), params)
+
+%End
+
+%MethodCode
+  sipRes = callGraphPropertyAlgorithm<tlp::ColorAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::ColorProperty>("viewLayout"), a2, a2Wrapper, *a1, sipIsErr, "color");
+%End
+
+//===========================================================================================
+
 bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName, result[, params = None])
@@ -3221,6 +3320,26 @@ which can contain an error message.
 
 %MethodCode
   sipRes = callGraphPropertyAlgorithm<tlp::StringAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "string");
+%End
+
+//===========================================================================================
+
+       bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+%Docstring
+tlp.Graph.applyStringAlgorithm(algoName[, params = None])
+
+.. versionadded:: 4.8
+
+Convenient method that computes a string property on the current graph and stores the result
+in the default string property "viewLabel".
+This is equivalent to call::
+
+  graph.applyStringAlgorithm(algoName, graph.getStringProperty("viewLabel"), params)
+
+%End
+
+%MethodCode
+  sipRes = callGraphPropertyAlgorithm<tlp::StringAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::StringProperty>("viewLabel"), a2, a2Wrapper, *a1, sipIsErr, "string");
 %End
 
  //===========================================================================================
@@ -3661,7 +3780,7 @@ Loads a graph serialized in a file trough the available Tulip import plugins.
 Since Tulip 4.7.1, the selection of the import plugin is based on the provided filename extension.
 The import will fail if the selected import plugin is not loaded.
 The graph file formats that can currently be imported are : TLP (.tlp or .tlp.gz), TLP Binary (.tlpb or .tlpb.gz), TLP JSON (.json),
-Gephi (.gexf), Pajek (.net, .paj), GML (.gml), Graphviz (.dot) and UCINET (.txt)
+Gephi (.gexf), Pajek (.net, .paj), GML (.gml), Graphviz (.dot) and UCINET (.txt).
 
 Before Tulip 4.7.1 and as a fallback, the function uses the "TLP Import" import plugin
 (always loaded as it is linked into the tulip-core library).
@@ -3685,7 +3804,7 @@ through the available Tulip export plugins.
 Since Tulip 4.7.1, the selection of the export plugin is based on the provided filename extension.
 The export will fail if the selected export plugin is not loaded.
 The file formats the graph can be exported to are : TLP (.tlp or .tlp.gz), TLP Binary (.tlpb or .tlpb.gz),
-TLP JSON (.json) and GML (.gml)
+TLP JSON (.json) and GML (.gml).
 
 This function checks the file name for the '.gz' extension and uses a compressed output if supported (TLP and TLP Binary only).
 
