@@ -313,7 +313,7 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
 %Include BoundingBox.sip
 %Include StringCollection.sip
 %Include ColorScale.sip
-%Include Reflect.sip
+%Include DataSet.sip
 
 %Include PluginContext.sip
 %Include Plugin.sip

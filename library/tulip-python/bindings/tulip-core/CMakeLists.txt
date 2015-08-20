@@ -17,6 +17,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/ConnectedTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/ConvexHull.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Coord.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/DataSet.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Delaunay.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DoublePropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/DrawingTools.sip
@@ -46,7 +47,6 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyEvent.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyInterface.sip
-    ${CMAKE_CURRENT_SOURCE_DIR}/Reflect.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SizePropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Size.sip
