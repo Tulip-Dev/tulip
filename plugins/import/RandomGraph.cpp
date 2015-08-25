@@ -41,7 +41,7 @@ const char * paramHelp[] = {
   // nodes
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "5" ) \
+  HTML_HELP_DEF( "default", "500" ) \
   HTML_HELP_BODY() \
   "Number of nodes in the final graph." \
   HTML_HELP_CLOSE(),
@@ -49,7 +49,7 @@ const char * paramHelp[] = {
   // edges
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "9" ) \
+  HTML_HELP_DEF( "default", "1000" ) \
   HTML_HELP_BODY() \
   "Number of edges in the final graph." \
   HTML_HELP_CLOSE(),
@@ -67,8 +67,8 @@ class RandomGraph:public ImportModule {
 public:
   PLUGININFORMATION("Random General Graph","Auber","16/06/2002","Imports a new randomly generated graph.","1.0","Graph")
   RandomGraph(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"5");
-    addInParameter<unsigned int>("edges",paramHelp[1],"9");
+    addInParameter<unsigned int>("nodes",paramHelp[0],"500");
+    addInParameter<unsigned int>("edges",paramHelp[1],"1000");
   }
   ~RandomGraph() {
   }
