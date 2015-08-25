@@ -34,11 +34,6 @@
 #include "FTVector.h"
 
 
-#ifndef CALLBACK
-#define CALLBACK
-#endif
-
-
 /**
  * FTTesselation captures points that are output by OpenGL's gluTesselator.
  */

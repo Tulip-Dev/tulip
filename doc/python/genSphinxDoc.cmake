@@ -15,6 +15,7 @@ IF(WIN32)
                          "${BIN_DIR}/../../thirdparty/ftgl"
                          "${BIN_DIR}/../../thirdparty/OGDF"
                          "${BIN_DIR}/../../thirdparty/yajl/src"
+                         "${BIN_DIR}/../../thirdparty/libtess2"
                          "${CMAKE_LIBRARY_PATH}"
                          "${QT_BIN_DIR}")
 

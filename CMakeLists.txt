@@ -477,6 +477,8 @@ SET(QxtInclude ${PROJECT_SOURCE_DIR}/thirdparty/qxt/src)
 SET(QxtLibrary qxt-tulip-${TulipMMVersion})
 SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
 SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
+SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
+SET(Tess2Library tess2-tulip-${TulipMMVersion})
 ENDIF(NOT BUILD_CORE_ONLY)
 
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
