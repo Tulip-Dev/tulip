@@ -19,6 +19,9 @@
 
 #include <GL/glew.h>
 
+// libtess2
+#include <tesselator.h>
+
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlTextureManager.h>
@@ -26,273 +29,213 @@
 #include <tulip/GlShaderProgram.h>
 #include <tulip/GlXMLTools.h>
 
-#ifdef __APPLE_CC__
-#if __APPLE_CC__ < 5400 && ( !defined(__GNUC__) || __GNUC_MINOR__ <= 2)
-// Tiger
-typedef GLvoid (*GLUTesselatorFunction)(...);
-#else
-// Leopard and higher
-typedef GLvoid (*GLUTesselatorFunction)();
-#endif
-#elif defined( __mips ) || defined( __unix__ ) || defined( __FreeBSD_kernel__) || defined( __FreeBSD__ ) || defined( __OpenBSD__ ) || defined( __sun ) || defined (__CYGWIN__)
-typedef GLvoid (*GLUTesselatorFunction)();
-#elif defined (WIN32)
-typedef void (CALLBACK*GLUTesselatorFunction)(void);
-#else
-#error "Error - need to define type GLUTesselatorFunction for this platform/compiler"
-#endif
-
-
 using namespace std;
 
 static const string outlineExtrusionVertexShaderSrc =
-  "#version 120\n"
-  "attribute float indice;"
+    "#version 120\n"
+    "attribute float indice;"
 
-  "void main() {"
-  "	gl_Position = vec4(gl_Vertex.xyz, indice);"
-  "	gl_FrontColor = gl_Color;"
-  "}"
-  ;
+    "void main() {"
+    "	gl_Position = vec4(gl_Vertex.xyz, indice);"
+    "	gl_FrontColor = gl_Color;"
+    "}"
+    ;
 
 static const string outlineExtrusionGeometryShaderSrc =
-  "#version 120\n"
-  "#extension GL_EXT_geometry_shader4 : enable\n"
+    "#version 120\n"
+    "#extension GL_EXT_geometry_shader4 : enable\n"
 
-  "#define M_PI 3.141592653589793238462643\n"
+    "#define M_PI 3.141592653589793238462643\n"
 
-  "uniform vec3 firstPoint;"
-  "uniform vec3 secondPoint;"
-  "uniform vec3 lastPoint;"
+    "uniform vec3 firstPoint;"
+    "uniform vec3 secondPoint;"
+    "uniform vec3 lastPoint;"
 
-  "uniform float size;"
-  "uniform int nbVertices;"
-  "uniform int outlinePos;"
-  "uniform float texFactor;"
+    "uniform float size;"
+    "uniform int nbVertices;"
+    "uniform int outlinePos;"
+    "uniform float texFactor;"
 
 
-  "float computeExtrusionAndEmitVertices(vec3 pBefore, vec3 pCurrent, vec3 pAfter, float s, float d) {"
-  "	vec3 u = pBefore - pCurrent;"
-  "	vec3 v = pAfter - pCurrent;"
-  "	vec3 xu = normalize(u);"
-  "	vec3 xv = normalize(v);"
-  "	vec3 bi_xu_xv = normalize(xu+xv);"
-  "	float angle = M_PI - acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(length(u)*length(v)));"
-  // Nan check
-  "	if(angle != angle)"
-  "		angle=0.0;"
-  "	float newSize = size/cos(angle/2.0);"
-  "	float dec = 0.0;"
+    "float computeExtrusionAndEmitVertices(vec3 pBefore, vec3 pCurrent, vec3 pAfter, float s, float d) {"
+    "	vec3 u = pBefore - pCurrent;"
+    "	vec3 v = pAfter - pCurrent;"
+    "	vec3 xu = normalize(u);"
+    "	vec3 xv = normalize(v);"
+    "	vec3 bi_xu_xv = normalize(xu+xv);"
+    "	float angle = M_PI - acos((u[0]*v[0]+u[1]*v[1]+u[2]*v[2])/(length(u)*length(v)));"
+    // Nan check
+    "	if(angle != angle)"
+    "		angle=0.0;"
+    "	float newSize = size/cos(angle/2.0);"
+    "	float dec = 0.0;"
 
-  "	gl_FrontColor = gl_FrontColorIn[1];"
+    "	gl_FrontColor = gl_FrontColorIn[1];"
 
-  "	if (angle < M_PI/2+M_PI/4) {"
-  "		if (cross(xu, xv)[2] > 0) {"
-  "			if (outlinePos <= 1) {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
-  "			} else {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "			}"
-  "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
-  "			EmitVertex();"
-  "			if (outlinePos == 0) {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "			} else {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - bi_xu_xv * newSize, 1.0);"
-  "			}"
-  "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
-  "			EmitVertex();"
-  "		} else {"
-  "			if (outlinePos <= 1) {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - bi_xu_xv * newSize, 1.0);"
-  "			} else {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "			}"
-  "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
-  "			EmitVertex();"
-  "			if (outlinePos == 0) {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "			} else {"
-  "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
-  "			}"
-  "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
-  "			EmitVertex();"
-  "		}"
-  "	} else {"
-  "		vec3 vectUnit = vec3(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);"
-  "		if (!(newSize > length(u) || newSize> length(v) || abs(angle-M_PI)<1E-5)) {"
-  "			if (cross(xu,xv)[2] > 0) {"
-  "				if (outlinePos <= 1) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
-  "				EmitVertex();"
-  "				if (outlinePos == 0) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
-  "				EmitVertex();"
-  "				if (outlinePos <= 1) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 0.0);"
-  "				EmitVertex();"
-  "				if (outlinePos == 0) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 1.0);"
-  "				EmitVertex();"
-  "				dec = 1.0;"
-  "			} else {"
-  "				if (outlinePos <= 1) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
-  "				EmitVertex();"
-  "				if (outlinePos == 0) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
-  "				EmitVertex();"
-  "				if (outlinePos <= 1) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 0.0);"
-  "				EmitVertex();"
-  "				if (outlinePos == 0) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 1.0);"
-  "				EmitVertex();"
-  "				dec = 1.0;"
-  "			}"
-  "		} else {"
-  "			if (cross(xu,xv)[2] > 0) {"
-  "				if (outlinePos <= 1) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
-  "				EmitVertex();"
-  "				if (outlinePos == 0) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
-  "				EmitVertex();"
-  "			} else {"
-  "				if (outlinePos <= 1) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				}"
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
-  "				EmitVertex();"
-  "				if (outlinePos == 0) {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
-  "				} else {"
-  "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
-  "				}"
+    "	if (angle < M_PI/2+M_PI/4) {"
+    "		if (cross(xu, xv)[2] > 0) {"
+    "			if (outlinePos <= 1) {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+    "			} else {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "			}"
+    "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
+    "			EmitVertex();"
+    "			if (outlinePos == 0) {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "			} else {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - bi_xu_xv * newSize, 1.0);"
+    "			}"
+    "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
+    "			EmitVertex();"
+    "		} else {"
+    "			if (outlinePos <= 1) {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - bi_xu_xv * newSize, 1.0);"
+    "			} else {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "			}"
+    "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
+    "			EmitVertex();"
+    "			if (outlinePos == 0) {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "			} else {"
+    "				gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+    "			}"
+    "			gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
+    "			EmitVertex();"
+    "		}"
+    "	} else {"
+    "		vec3 vectUnit = vec3(-bi_xu_xv[1],bi_xu_xv[0],bi_xu_xv[2]);"
+    "		if (!(newSize > length(u) || newSize> length(v) || abs(angle-M_PI)<1E-5)) {"
+    "			if (cross(xu,xv)[2] > 0) {"
+    "				if (outlinePos <= 1) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
+    "				EmitVertex();"
+    "				if (outlinePos == 0) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
+    "				EmitVertex();"
+    "				if (outlinePos <= 1) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 0.0);"
+    "				EmitVertex();"
+    "				if (outlinePos == 0) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 1.0);"
+    "				EmitVertex();"
+    "				dec = 1.0;"
+    "			} else {"
+    "				if (outlinePos <= 1) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
+    "				EmitVertex();"
+    "				if (outlinePos == 0) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
+    "				EmitVertex();"
+    "				if (outlinePos <= 1) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + bi_xu_xv * newSize, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 0.0);"
+    "				EmitVertex();"
+    "				if (outlinePos == 0) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d+1.0)*texFactor, 1.0);"
+    "				EmitVertex();"
+    "				dec = 1.0;"
+    "			}"
+    "		} else {"
+    "			if (cross(xu,xv)[2] > 0) {"
+    "				if (outlinePos <= 1) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
+    "				EmitVertex();"
+    "				if (outlinePos == 0) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
+    "				EmitVertex();"
+    "			} else {"
+    "				if (outlinePos <= 1) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent - vectUnit * size, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 1.0);"
+    "				EmitVertex();"
+    "				if (outlinePos == 0) {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent, 1.0);"
+    "				} else {"
+    "					gl_Position = gl_ModelViewProjectionMatrix * vec4(pCurrent + vectUnit * size, 1.0);"
+    "				}"
 
-  "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
-  "				EmitVertex();"
-  "			}"
-  "		}"
-  "	}"
-  "	return dec;"
-  "}"
+    "				gl_TexCoord[0].st = vec2((s+d)*texFactor, 0.0);"
+    "				EmitVertex();"
+    "			}"
+    "		}"
+    "	}"
+    "	return dec;"
+    "}"
 
-  "void main() {"
-  "	vec3 tangent, normal;"
+    "void main() {"
+    "	vec3 tangent, normal;"
 
-  "	gl_TexCoord[0].z = 0.0;"
-  "	gl_TexCoord[0].w = 1.0;"
+    "	gl_TexCoord[0].z = 0.0;"
+    "	gl_TexCoord[0].w = 1.0;"
 
-  "	float dec = 0.0;"
+    "	float dec = 0.0;"
 
-  "	if (int(gl_PositionIn[0].w) == 0) {"
-  "		gl_FrontColor = gl_FrontColorIn[0];"
-  "		dec = computeExtrusionAndEmitVertices(lastPoint, gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[0].w, dec);"
-  "	}"
+    "	if (int(gl_PositionIn[0].w) == 0) {"
+    "		gl_FrontColor = gl_FrontColorIn[0];"
+    "		dec = computeExtrusionAndEmitVertices(lastPoint, gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[0].w, dec);"
+    "	}"
 
-  "	dec = computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[1].w, 0.0);"
-  "	dec = computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[2].w, dec);"
+    "	dec = computeExtrusionAndEmitVertices(gl_PositionIn[0].xyz, gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[1].w, 0.0);"
+    "	dec = computeExtrusionAndEmitVertices(gl_PositionIn[1].xyz, gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, gl_PositionIn[2].w, dec);"
 
-  "	if (int(gl_PositionIn[3].w) == (nbVertices - 1)) {"
-  "		gl_FrontColor = gl_FrontColorIn[3];"
-  "		dec = computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, firstPoint, gl_PositionIn[3].w, dec);"
-  "		dec = computeExtrusionAndEmitVertices(gl_PositionIn[3].xyz, firstPoint, secondPoint, gl_PositionIn[3].w+1, dec);"
+    "	if (int(gl_PositionIn[3].w) == (nbVertices - 1)) {"
+    "		gl_FrontColor = gl_FrontColorIn[3];"
+    "		dec = computeExtrusionAndEmitVertices(gl_PositionIn[2].xyz, gl_PositionIn[3].xyz, firstPoint, gl_PositionIn[3].w, dec);"
+    "		dec = computeExtrusionAndEmitVertices(gl_PositionIn[3].xyz, firstPoint, secondPoint, gl_PositionIn[3].w+1, dec);"
 
-  "	}"
-  "	EndPrimitive();"
-  "}"
+    "	}"
+    "	EndPrimitive();"
+    "}"
 
-  ;
+    ;
+
+const int nbFloatPerVertex = 5;
 
 namespace tlp {
-
-void CALLBACK beginCallback(GLenum which, GLvoid *polygonData) {
-  GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
-  complexPolygon->startPrimitive(which);
-}
-
-void CALLBACK errorCallback(GLenum errorCode) {
-  const GLubyte *estring = gluErrorString(errorCode);
-  tlp::error() << "Tessellation Error: " << estring << endl;
-}
-
-void CALLBACK endCallback(GLvoid *polygonData) {
-  GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
-  complexPolygon->endPrimitive();
-}
-
-void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData) {
-  const GLdouble *pointer = static_cast<GLdouble *>(vertex);
-  GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
-  Coord v(pointer[0], pointer[1], pointer[2]);
-  Vec2f texCoord;
-  texCoord[0] = pointer[0] / complexPolygon->getTextureZoom();
-  texCoord[1] = pointer[1] / complexPolygon->getTextureZoom();
-  complexPolygon->addVertex(v, texCoord);
-}
-
-void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData) {
-  GlComplexPolygon *complexPolygon = static_cast<GlComplexPolygon *>(polygonData);
-  VERTEX *vertex = complexPolygon->allocateNewVertex();
-  vertex->x = coords[0];
-  vertex->y = coords[1];
-  vertex->z = coords[2];
-  vertex->r = vertex->g = vertex->b = vertex->a = 0;
-
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
-    if (d[i]) {
-      vertex->r += w[i]*d[i]->r;
-      vertex->g += w[i]*d[i]->g;
-      vertex->b += w[i]*d[i]->b;
-      vertex->a += w[i]*d[i]->a;
-    }
-  }
-
-  *dataOut = vertex;
-}
 
 GlComplexPolygon::GlComplexPolygon(const vector<Coord> &coords,Color fcolor,int polygonEdgesType,const string &textureName):
   currentVector(-1),
@@ -420,83 +363,55 @@ void GlComplexPolygon::beginNewHole() {
   quadBorderPosition.push_back(1);
   quadBorderTexFactor.push_back(1.f);
 }
+//=====================================================
 void GlComplexPolygon::runTesselation() {
-
-  primitivesSet.clear();
-  startIndicesMap.clear();
-  verticesCountMap.clear();
-  verticesMap.clear();
-  texCoordsMap.clear();
-
-  GLUtesselator *tobj;
-  tobj = gluNewTess();
-
-  gluTessCallback(tobj, GLU_TESS_BEGIN_DATA, reinterpret_cast<GLUTesselatorFunction>(&beginCallback));
-  gluTessCallback(tobj, GLU_TESS_VERTEX_DATA, reinterpret_cast<GLUTesselatorFunction>(&vertexCallback));
-  gluTessCallback(tobj, GLU_TESS_END_DATA, reinterpret_cast<GLUTesselatorFunction>(&endCallback));
-  gluTessCallback(tobj, GLU_TESS_COMBINE_DATA, reinterpret_cast<GLUTesselatorFunction>(&combineCallback));
-  gluTessCallback(tobj, GLU_TESS_ERROR, reinterpret_cast<GLUTesselatorFunction>(&errorCallback));
-
-  //Compute number of points to compute and create a big tab to store points' information
-  unsigned int numberOfPoints = 0;
-
-  for(size_t v = 0 ; v < points.size() ; ++v) {
-    numberOfPoints += points[v].size();
+  verticesData.clear();
+  verticesIndices.clear();
+  // instantiate the tesselator from libtess2
+  TESStesselator* tess = tessNewTess(NULL);
+  // add contours
+  for (size_t i = 0 ; i < points.size() ; ++i) {
+    tessAddContour(tess, 3, &points[i][0], sizeof(float)*3, points[i].size());
   }
-
-  GLdouble *pointsData = new GLdouble[7*numberOfPoints];
-  memset(pointsData, 0, 7*numberOfPoints*sizeof(GLdouble));
-
-  unsigned int pointNumber=0;
-  gluTessBeginPolygon(tobj, static_cast<void *>(this));
-
-  for(size_t v = 0 ; v < points.size() ; ++v) {
-    gluTessBeginContour(tobj);
-
-    for(size_t i = 0 ; i < points[v].size() ; ++i) {
-      pointsData[pointNumber*7]=points[v][i][0];
-      pointsData[pointNumber*7+1]=points[v][i][1];
-      pointsData[pointNumber*7+2]=points[v][i][2];
-      gluTessVertex(tobj,&pointsData[pointNumber*7],&pointsData[pointNumber*7]);
-      pointNumber++;
+  // the tesselation will generate a set of polygons with maximum nvp vertices
+  const int nvp = 6;
+  // run tesselation with the same default winding rule as in the GLU tesselator
+  if (tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, nvp, 3, 0)) {
+    const float* verts = tessGetVertices(tess);
+    const int* elems = tessGetElements(tess);
+    const int nelems = tessGetElementCount(tess);
+    std::map<Coord, unsigned int> vidx;
+    // iterate over polygons computed by tesselation
+    for (int i = 0; i < nelems; ++i) {
+      std::vector<tlp::Coord> verticesTmp;
+      const int* p = &elems[i*nvp];
+      for (int j = 0; j < nvp && p[j] != TESS_UNDEF; ++j) {
+        int idxx = p[j]*3;
+        int idxy = p[j]*3+1;
+        int idxz = p[j]*3+2;
+        Coord p(verts[idxx], verts[idxy], verts[idxz]);
+        verticesTmp.push_back(p);
+        // if we did not encounter the vertex so far, add it in the verticesData vector
+        if (vidx.find(p) == vidx.end()) {
+          vidx[p] = verticesData.size() / nbFloatPerVertex;
+          verticesData.push_back(p[0]); // x
+          verticesData.push_back(p[1]); // y
+          verticesData.push_back(p[2]); // z
+          verticesData.push_back(((p[0] - boundingBox[0][0]) / boundingBox.width()) / textureZoom); // s
+          verticesData.push_back(((p[1] - boundingBox[0][1]) / boundingBox.height()) / textureZoom); // t
+        }
+      }
+      // transform the polygon to a list of triangles
+      Coord centerPoint = verticesTmp[0];
+      for (size_t j = 1 ; j < verticesTmp.size() - 1 ; ++j) {
+        verticesIndices.push_back(vidx[centerPoint]);
+        verticesIndices.push_back(vidx[verticesTmp[j]]);
+        verticesIndices.push_back(vidx[verticesTmp[j+1]]);
+      }
     }
-
-    gluTessEndContour(tobj);
   }
-
-  gluTessEndPolygon(tobj);
-  gluDeleteTess(tobj);
-  delete [] pointsData;
-
-  for (size_t i = 0 ; i < allocatedVertices.size() ; ++i) {
-    delete allocatedVertices[i];
-  }
-
-  allocatedVertices.clear();
-
-}
-//=====================================================
-void GlComplexPolygon::startPrimitive(GLenum primitive) {
-  currentPrimitive = primitive;
-  nbPrimitiveVertices = 0;
-  startIndicesMap[primitive].push_back(verticesMap[primitive].size());
-  primitivesSet.insert(primitive);
-}
-//=====================================================
-void GlComplexPolygon::endPrimitive() {
-  verticesCountMap[currentPrimitive].push_back(nbPrimitiveVertices);
-}
-//=====================================================
-void GlComplexPolygon::addVertex(const Coord &vertexCoord, const Vec2f &vertexTexCoord) {
-  verticesMap[currentPrimitive].push_back(vertexCoord);
-  texCoordsMap[currentPrimitive].push_back(vertexTexCoord);
-  ++nbPrimitiveVertices;
-}
-//=====================================================
-VERTEX *GlComplexPolygon::allocateNewVertex() {
-  VERTEX *vertex = new VERTEX();
-  allocatedVertices.push_back(vertex);
-  return vertex;
+  // free memory allocated by the tesselator from libtess2
+  tessDeleteTess(tess);
 }
 //=====================================================
 void GlComplexPolygon::activateQuadBorder(const float borderWidth, const Color &color, const string &texture, const int position, const float texCoordFactor, const int polygonId) {
@@ -540,14 +455,9 @@ void GlComplexPolygon::draw(float,Camera *) {
 
   setMaterial(fillColor);
 
-  for (set<GLenum>::iterator it = primitivesSet.begin() ; it != primitivesSet.end() ; ++it) {
-    glVertexPointer(3, GL_FLOAT, 3*sizeof(GLfloat), &verticesMap[*it][0][0]);
-    glTexCoordPointer(2, GL_FLOAT, 2*sizeof(GLfloat), &texCoordsMap[*it][0]);
-
-    for (size_t i = 0 ; i < verticesCountMap[*it].size() ; ++i) {
-      glDrawArrays(*it, startIndicesMap[*it][i], verticesCountMap[*it][i]);
-    }
-  }
+  glVertexPointer(3, GL_FLOAT, nbFloatPerVertex*sizeof(GLfloat), &verticesData[0]);
+  glTexCoordPointer(2, GL_FLOAT, nbFloatPerVertex*sizeof(GLfloat), &verticesData[3]);
+  glDrawElements(GL_TRIANGLES, verticesIndices.size(), GL_UNSIGNED_INT, &verticesIndices[0]);
 
   glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 

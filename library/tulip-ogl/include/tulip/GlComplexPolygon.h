@@ -19,22 +19,6 @@
 #ifndef GLCOMPLEXPOLYGON_H
 #define GLCOMPLEXPOLYGON_H
 
-#ifdef WIN32
-#include <windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
-#ifndef CALLBACK
-#define CALLBACK
-#endif
-
 #include <vector>
 #include <map>
 #include <set>
@@ -45,16 +29,6 @@
 #include <tulip/GlSimpleEntity.h>
 
 namespace tlp {
-
-typedef struct {
-  GLdouble x, y, z, r, g, b, a;
-} VERTEX;
-
-void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
-void CALLBACK errorCallback(GLenum errorCode);
-void CALLBACK endCallback(GLvoid *polygonData);
-void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
-void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
 
 /**
  * @ingroup OpenGL
@@ -102,12 +76,6 @@ void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VE
  * And you can specify the texture zoom : see setTextureZoom(...) function
  */
 class TLP_GL_SCOPE GlComplexPolygon : public GlSimpleEntity {
-
-  friend void CALLBACK beginCallback(GLenum which, GLvoid *polygonData);
-  friend void CALLBACK errorCallback(GLenum errorCode);
-  friend void CALLBACK endCallback(GLvoid *polygonData);
-  friend void CALLBACK vertexCallback(GLvoid *vertex, GLvoid *polygonData);
-  friend void CALLBACK combineCallback(GLdouble coords[3], VERTEX *d[4], GLfloat w[4], VERTEX** dataOut, GLvoid *polygonData);
 
 public:
   /**
@@ -264,21 +232,11 @@ protected:
 
   void runTesselation();
   void createPolygon(const std::vector<Coord> &coords,int polygonEdgesType);
-  void startPrimitive(GLenum primitive);
-  void endPrimitive();
-  void addVertex(const Coord &vertexCoord, const Vec2f &vertexTexCoord);
-  VERTEX *allocateNewVertex();
 
   std::vector<std::vector<Coord> > points;
-  std::vector<std::vector<GLfloat> > pointsIdx;
-  std::set<GLenum> primitivesSet;
-  std::map<GLenum, std::vector<Coord> > verticesMap;
-  std::map<GLenum, std::vector<Vec2f> > texCoordsMap;
-  std::map<GLenum, std::vector<int> >startIndicesMap;
-  std::map<GLenum, std::vector<int> >verticesCountMap;
-  std::vector<VERTEX *> allocatedVertices;
-  GLenum currentPrimitive;
-  int nbPrimitiveVertices;
+  std::vector<std::vector<float> > pointsIdx;
+  std::vector<float> verticesData;
+  std::vector<unsigned int> verticesIndices;
   int currentVector;
   bool outlined;
   Color fillColor;
