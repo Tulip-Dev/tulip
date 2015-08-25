@@ -16,23 +16,14 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/GlSphere.h>
 
+#include <GL/glew.h>
+
+#include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlSphere.h>
 #include <tulip/GlXMLTools.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
-
-#if defined(_MSC_VER)
-#include <Windows.h>
-#endif
-
-#if defined(__APPLE__)
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
 
 using namespace std;
 
@@ -41,11 +32,102 @@ namespace tlp {
 GlSphere::GlSphere(const Coord &position, float radius,const Color& color,float rotX,float rotY,float rotZ):position(position),radius(radius),color(color),rot(rotX,rotY,rotZ) {
   boundingBox[0]  = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
   boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
+  generateBuffers(9);
 }
 
 GlSphere::GlSphere(const Coord &position, float radius,const string& textureFile,int alpha,float rotX,float rotY,float rotZ):position(position),radius(radius),color(255,255,255,alpha),textureFile(textureFile),rot(rotX,rotY,rotZ) {
   boundingBox[0] = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
   boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
+  generateBuffers(9);
+}
+
+GlSphere::~GlSphere() {
+  glDeleteBuffers(3, &buffers[0]);
+}
+
+void GlSphere::generateBuffers(int space) {
+  verticesCount = (90 / space) * (360 / space) * 4;
+
+  buffers.resize(3);
+
+  glGenBuffers(3, &buffers[0]);
+
+  double PI = 3.1415926535897;
+  vertices.resize(verticesCount * 3* 2 );
+  texturesCoord.resize(verticesCount*2*2);
+  indices.resize(verticesCount*2*2);
+
+  int n = 0;
+
+  for(float j = 0; j <= 90 - space; j+=space) {
+    for(float i = 0; i <= 360 - space; i+=space) {
+      indices[n]=n;
+      indices[n+1]=n+1;
+      indices[n+2]=n+2;
+      indices[n+3]=n+3;
+      indices[verticesCount*2-n]=n+verticesCount;
+      indices[verticesCount*2-n-1]=n+verticesCount+1;
+      indices[verticesCount*2-n-2]=n+verticesCount+2;
+      indices[verticesCount*2-n-3]=n+verticesCount+3;
+
+      vertices[n*3] = sin((i) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
+      vertices[n*3+1] = cos((i) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
+      vertices[n*3+2] = -cos((j) / 180 * PI) /2. * radius;
+      vertices[(verticesCount+n)*3]=vertices[n*3];
+      vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
+      vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
+      texturesCoord[n*2] = 1-((i) / 360);
+      texturesCoord[n*2+1] = (2 * j) / 360;
+      texturesCoord[(verticesCount+n)*2] = texturesCoord[n*2];
+      texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
+      n++;
+
+      vertices[n*3] = sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
+      vertices[n*3+1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
+      vertices[n*3+2] = -cos((j + space) / 180 * PI) /2. * radius;
+      vertices[(verticesCount+n)*3]=vertices[n*3];
+      vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
+      vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
+      texturesCoord[n*2] = 1-(i) / 360;
+      texturesCoord[n*2+1] = (2 * (j + space)) / 360;
+      texturesCoord[(verticesCount+n)*2] = texturesCoord[n*2];
+      texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
+      n++;
+
+      vertices[n*3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
+      vertices[n*3+1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
+      vertices[n*3+2] = -cos((j) / 180 * PI) /2. * radius;
+      vertices[(verticesCount+n)*3]=vertices[n*3];
+      vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
+      vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
+      texturesCoord[n*2] = 1-(i + space) / 360;
+      texturesCoord[n*2+1] = (2 * j) / 360;
+      texturesCoord[(verticesCount+n)*2] = texturesCoord[n*2];
+      texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
+      n++;
+
+      vertices[n*3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
+      vertices[n*3+1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
+      vertices[n*3+2] = -cos((j + space) / 180 * PI) /2. * radius;
+      vertices[(verticesCount+n)*3]=vertices[n*3];
+      vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
+      vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
+      texturesCoord[n*2] = 1-(i + space) / 360;
+      texturesCoord[n*2+1] = (2 * (j + space)) / 360;
+      texturesCoord[(verticesCount+n)*2] = texturesCoord[n*2];
+      texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
+      n++;
+    }
+  }
+
+  indices[verticesCount]=verticesCount*2-1;
+
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+  glBufferData(GL_ARRAY_BUFFER, verticesCount*3*2*sizeof(float),&vertices[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+  glBufferData(GL_ARRAY_BUFFER, verticesCount*2*2*sizeof(float),&texturesCoord[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, verticesCount*2*sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
 }
 
 void GlSphere::draw(float, Camera *) {
@@ -65,12 +147,31 @@ void GlSphere::draw(float, Camera *) {
 
   setMaterial(color);
 
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  gluSphere(quadratic, radius , 30, 30);
-  gluDeleteQuadric(quadratic);
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_NORMAL_ARRAY);
+
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+  glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+  glNormalPointer(GL_FLOAT, 0, BUFFER_OFFSET(0));
+
+  if (textureFile != "") {
+    glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
+  }
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+  glDrawElements(GL_TRIANGLE_STRIP, verticesCount, GL_UNSIGNED_SHORT,BUFFER_OFFSET(0));
+  glDrawElements(GL_TRIANGLE_STRIP, verticesCount, GL_UNSIGNED_SHORT,BUFFER_OFFSET(verticesCount*sizeof(unsigned short)));
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_NORMAL_ARRAY);
+
+  if (textureFile != "")
+    glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
   GlTextureManager::getInst().desactivateTexture();
   glPopMatrix();
