@@ -70,9 +70,9 @@ void GlSphere::generateBuffers(int space) {
       indices[verticesCount*2-n-2]=n+verticesCount+2;
       indices[verticesCount*2-n-3]=n+verticesCount+3;
 
-      vertices[n*3] = sin((i) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
-      vertices[n*3+1] = cos((i) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
-      vertices[n*3+2] = -cos((j) / 180 * PI) /2. * radius;
+      vertices[n*3] = sin((i) / 180 * PI) * sin((j) / 180 * PI) * radius;
+      vertices[n*3+1] = cos((i) / 180 * PI) * sin((j) / 180 * PI) * radius;
+      vertices[n*3+2] = -cos((j) / 180 * PI) * radius;
       vertices[(verticesCount+n)*3]=vertices[n*3];
       vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
       vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
@@ -82,9 +82,9 @@ void GlSphere::generateBuffers(int space) {
       texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
       n++;
 
-      vertices[n*3] = sin((i) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
-      vertices[n*3+1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
-      vertices[n*3+2] = -cos((j + space) / 180 * PI) /2. * radius;
+      vertices[n*3] = sin((i) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n*3+1] = cos((i) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n*3+2] = -cos((j + space) / 180 * PI) * radius;
       vertices[(verticesCount+n)*3]=vertices[n*3];
       vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
       vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
@@ -94,9 +94,9 @@ void GlSphere::generateBuffers(int space) {
       texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
       n++;
 
-      vertices[n*3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
-      vertices[n*3+1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) /2. * radius;
-      vertices[n*3+2] = -cos((j) / 180 * PI) /2. * radius;
+      vertices[n*3] = sin((i + space) / 180 * PI) * sin((j) / 180 * PI) * radius;
+      vertices[n*3+1] = cos((i + space) / 180 * PI) * sin((j) / 180 * PI) * radius;
+      vertices[n*3+2] = -cos((j) / 180 * PI) * radius;
       vertices[(verticesCount+n)*3]=vertices[n*3];
       vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
       vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
@@ -106,9 +106,9 @@ void GlSphere::generateBuffers(int space) {
       texturesCoord[(verticesCount+n)*2+1] = -texturesCoord[n*2+1];
       n++;
 
-      vertices[n*3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
-      vertices[n*3+1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) /2. * radius;
-      vertices[n*3+2] = -cos((j + space) / 180 * PI) /2. * radius;
+      vertices[n*3] = sin((i + space) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n*3+1] = cos((i + space) / 180 * PI) * sin((j + space) / 180 * PI) * radius;
+      vertices[n*3+2] = -cos((j + space) / 180 * PI) * radius;
       vertices[(verticesCount+n)*3]=vertices[n*3];
       vertices[(verticesCount+n)*3+1]=vertices[n*3+1];
       vertices[(verticesCount+n)*3+2]=-vertices[n*3+2];
