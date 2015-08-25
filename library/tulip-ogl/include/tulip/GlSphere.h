@@ -44,6 +44,8 @@ public:
    */
   GlSphere() {}
 
+  ~GlSphere();
+
   /**
    * @brief Create a sphere with a position, a radius a fill color and multiple rotation (if you want)
    */
@@ -111,11 +113,19 @@ public:
 
 private:
 
+  void generateBuffers(int space);
+
   Coord position;
   float radius;
   Color color;
   std::string textureFile;
   Coord rot;
+
+  std::vector<unsigned int > buffers;
+  std::vector<float> vertices;
+  std::vector<float> texturesCoord;
+  std::vector<unsigned short> indices;
+  unsigned int verticesCount;
 
 };
 
