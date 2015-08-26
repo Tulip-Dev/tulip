@@ -1,3 +1,7 @@
+IF(WIN32)
+SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DDLL_TESS2")
+ENDIF(WIN32)
+
 SET(LibTess2_SRCS
     Source/bucketalloc.c
     Source/dict.c

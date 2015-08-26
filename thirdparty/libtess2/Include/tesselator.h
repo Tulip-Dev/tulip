@@ -32,6 +32,17 @@
 #ifndef TESSELATOR_H
 #define TESSELATOR_H
 
+#ifdef WIN32
+#  ifdef DLL_TESS2
+#    define TESS2_SCOPE       __declspec(dllexport)
+#  else
+#    define TESS2_SCOPE       __declspec(dllimport)
+#  endif
+#endif
+#ifndef TESS2_SCOPE
+#  define TESS2_SCOPE
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -40,11 +51,11 @@ extern "C" {
 // http://www.glprogramming.com/red/chapter11.html
 enum TessWindingRule
 {
-	TESS_WINDING_ODD,
-	TESS_WINDING_NONZERO,
-	TESS_WINDING_POSITIVE,
-	TESS_WINDING_NEGATIVE,
-	TESS_WINDING_ABS_GEQ_TWO,
+    TESS_WINDING_ODD,
+    TESS_WINDING_NONZERO,
+    TESS_WINDING_POSITIVE,
+    TESS_WINDING_NEGATIVE,
+    TESS_WINDING_ABS_GEQ_TWO
 };
 
 // The contents of the tessGetElements() depends on element type being passed to tessTesselate().
@@ -109,9 +120,9 @@ enum TessWindingRule
 //
 enum TessElementType
 {
-	TESS_POLYGONS,
-	TESS_CONNECTED_POLYGONS,
-	TESS_BOUNDARY_CONTOURS,
+    TESS_POLYGONS,
+    TESS_CONNECTED_POLYGONS,
+    TESS_BOUNDARY_CONTOURS
 };
 
 typedef float TESSreal;
@@ -167,12 +178,12 @@ struct TESSalloc
 //   alloc - pointer to a filled TESSalloc struct or NULL to use default malloc based allocator.
 // Returns:
 //   new tesselator object.
-TESStesselator* tessNewTess( TESSalloc* alloc );
+TESS2_SCOPE TESStesselator* tessNewTess( TESSalloc* alloc );
 
 // tessDeleteTess() - Deletes a tesselator.
 // Parameters:
 //   tess - pointer to tesselator object to be deleted.
-void tessDeleteTess( TESStesselator *tess );
+TESS2_SCOPE void tessDeleteTess( TESStesselator *tess );
 
 // tessAddContour() - Adds a contour to be tesselated.
 // The type of the vertex coordinates is assumed to be TESSreal.
@@ -182,7 +193,7 @@ void tessDeleteTess( TESStesselator *tess );
 //   pointer - pointer to the first coordinate of the first vertex in the array.
 //   stride - defines offset in bytes between consecutive vertices.
 //   count - number of vertices in contour.
-void tessAddContour( TESStesselator *tess, int size, const void* pointer, int stride, int count );
+TESS2_SCOPE void tessAddContour( TESStesselator *tess, int size, const void* pointer, int stride, int count );
 
 // tessTesselate() - tesselate contours.
 // Parameters:
@@ -194,28 +205,28 @@ void tessAddContour( TESStesselator *tess, int size, const void* pointer, int st
 //   normal - defines the normal of the input contours, of null the normal is calculated automatically.
 // Returns:
 //   1 if succeed, 0 if failed.
-int tessTesselate( TESStesselator *tess, int windingRule, int elementType, int polySize, int vertexSize, const TESSreal* normal );
+TESS2_SCOPE int tessTesselate( TESStesselator *tess, int windingRule, int elementType, int polySize, int vertexSize, const TESSreal* normal );
 
 // tessGetVertexCount() - Returns number of vertices in the tesselated output.
-int tessGetVertexCount( TESStesselator *tess );
+TESS2_SCOPE int tessGetVertexCount( TESStesselator *tess );
 
 // tessGetVertices() - Returns pointer to first coordinate of first vertex.
-const TESSreal* tessGetVertices( TESStesselator *tess );
+TESS2_SCOPE const TESSreal* tessGetVertices( TESStesselator *tess );
 
 // tessGetVertexIndices() - Returns pointer to first vertex index.
 // Vertex indices can be used to map the generated vertices to the original vertices.
 // Every point added using tessAddContour() will get a new index starting at 0.
 // New vertices generated at the intersections of segments are assigned value TESS_UNDEF.
-const TESSindex* tessGetVertexIndices( TESStesselator *tess );
+TESS2_SCOPE const TESSindex* tessGetVertexIndices( TESStesselator *tess );
 	
 // tessGetElementCount() - Returns number of elements in the the tesselated output.
-int tessGetElementCount( TESStesselator *tess );
+TESS2_SCOPE int tessGetElementCount( TESStesselator *tess );
 
 // tessGetElements() - Returns pointer to the first element.
-const TESSindex* tessGetElements( TESStesselator *tess );
+TESS2_SCOPE const TESSindex* tessGetElements( TESStesselator *tess );
 
 #ifdef __cplusplus
-};
+}
 #endif
 
 #endif // TESSELATOR_H
