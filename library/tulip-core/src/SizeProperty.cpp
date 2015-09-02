@@ -49,8 +49,8 @@ public:
     if (prop->getName() == "viewSize") {
       // set meta node size as the enclosed subgraph bounding box
       BoundingBox box = tlp::computeBoundingBox(sg, sg->getProperty<LayoutProperty>("viewLayout"),
-						sg->getProperty<SizeProperty>("viewSize"),
-						sg->getProperty<DoubleProperty>("viewRotation"));
+                        sg->getProperty<SizeProperty>("viewSize"),
+                        sg->getProperty<DoubleProperty>("viewRotation"));
 
 
       prop->setNodeValue(mN, Size(box.width(), box.height(), box.depth()));
@@ -58,8 +58,8 @@ public:
     else
       // between the min and max computed values for other size properties
       prop->setNodeValue(mN,
-			 (((SizeProperty *)prop)->getMax(sg) +
-			  ((SizeProperty *)prop)->getMin(sg)) / 2.0f);
+                         (((SizeProperty *)prop)->getMax(sg) +
+                          ((SizeProperty *)prop)->getMin(sg)) / 2.0f);
   }
 };
 
