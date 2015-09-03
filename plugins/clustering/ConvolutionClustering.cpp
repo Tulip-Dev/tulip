@@ -276,7 +276,11 @@ bool ConvolutionClustering::run() {
 
 
 bool ConvolutionClustering::check(std::string& errorMsg) {
-  metric=graph->getProperty<DoubleProperty>("viewMetric");
+  if (dataSet != NULL)
+    dataSet->get("metric", metric);
+
+  if (metric == NULL)
+    metric=graph->getProperty<DoubleProperty>("viewMetric");
 
   if (metric->getNodeDoubleMax() == metric->getNodeDoubleMin()) {
     errorMsg = "All metric values are the same";
