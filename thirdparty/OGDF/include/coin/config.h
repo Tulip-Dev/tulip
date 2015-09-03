@@ -228,7 +228,11 @@
 #endif
 
 /* Define to be the name of C-function for NaN check */
+#if defined(_MSC_VER) && !defined(NAN)
+#define COIN_C_ISNAN _isnan
+#else
 #define COIN_C_ISNAN std::isnan
+#endif
 
 /* Define to 64bit integer type */
 /* Define to integer type capturing pointer */
