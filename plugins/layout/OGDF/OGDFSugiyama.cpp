@@ -116,56 +116,56 @@ public:
                         HTML_HELP_OPEN()
                         HTML_HELP_DEF( "type", "int" )
                         HTML_HELP_BODY()
-                        "Sets the option fails to nFails."
+                        "The number of times that the number of crossings may not decrease after a complete top-down bottom-up traversal, before a run is terminated."
                         HTML_HELP_CLOSE(),
                         "4");
     addInParameter<int>("runs",
                         HTML_HELP_OPEN()
                         HTML_HELP_DEF( "type", "int" )
                         HTML_HELP_BODY()
-                        "Sets the option runs to nRuns."
+                        "Determines, how many times the crossing minimization is repeated. Each repetition (except for the first) starts with randomly permuted nodes on each layer. Deterministic behaviour can be achieved by setting runs to 1."
                         HTML_HELP_CLOSE(),
                         "15");
     addInParameter<double>("node distance",
                            HTML_HELP_OPEN()
                            HTML_HELP_DEF( "type", "double" )
                            HTML_HELP_BODY()
-                           "The minimal distance between two nodes on the same layer."
+                           "the minimal horizontal distance between two nodes on the same layer."
                            HTML_HELP_CLOSE(),
                            "3");
     addInParameter<double>("layer distance",
                            HTML_HELP_OPEN()
                            HTML_HELP_DEF( "type", "double" )
                            HTML_HELP_BODY()
-                           "The minimal distance between two layers."
+                           "the minimal vertical distance between two nodes on neighboring layers."
                            HTML_HELP_CLOSE(),
                            "3");
     addInParameter<bool>("fixed layer distance",
                          HTML_HELP_OPEN()
                          HTML_HELP_DEF( "type", "bool" )
                          HTML_HELP_BODY()
-                         "If false, adjust the distance of each layer to the longest edge (only for FastHierarchyLayout)."
+                         "if true, the distance between neighboring layers is fixed, otherwise variable (only for FastHierarchyLayout)."
                          HTML_HELP_CLOSE(),
-                         "true");
+                         "false");
     addInParameter<bool>("transpose",
                          HTML_HELP_OPEN()
                          HTML_HELP_DEF( "type", "bool" )
                          HTML_HELP_BODY()
-                         "Sets the option for transposing layout vertically ."
+                         "Determines whether the transpose step is performed after each 2-layer crossing minimization; this step tries to reduce the number of crossings by switching neighbored nodes on a layer."
                          HTML_HELP_CLOSE(),
                          "true");
     addInParameter<bool>("arrangeCCs",
                          HTML_HELP_OPEN()
                          HTML_HELP_DEF( "type", "bool" )
                          HTML_HELP_BODY()
-                         "Sets the options arrangeCCs."
+                         "If set to true connected components are laid out separately and the resulting layouts are arranged afterwards using the packer module."
                          HTML_HELP_CLOSE(),
                          "true");
     addInParameter<double>("minDistCC",
                            HTML_HELP_OPEN()
                            HTML_HELP_DEF( "type", "double" )
                            HTML_HELP_BODY()
-                           "The minimal distance between connected components."
+                           "Specifies the spacing between connected components of the graph.."
                            HTML_HELP_CLOSE(),
                            "20");
     addInParameter<double>("pageRatio",
@@ -179,7 +179,7 @@ public:
                          HTML_HELP_OPEN()
                          HTML_HELP_DEF( "type", "bool" )
                          HTML_HELP_BODY()
-                         "Sets the option alignBaseClasses."
+                         "Determines if base classes of inheritance hierarchies shall be aligned."
                          HTML_HELP_CLOSE(),
                          "false");
     addInParameter<bool>("alignSiblings",
@@ -331,6 +331,14 @@ public:
         }
       }
     }
+  }
+
+  void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
+    ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
+    if (sugiyama->alignBaseClasses() || sugiyama->alignSiblings())
+      sugiyama->callUML(gAttributes);
+    else
+      ogdfLayoutAlgo->call(gAttributes);
   }
 
   void afterCall() {
