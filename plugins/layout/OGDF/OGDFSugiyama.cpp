@@ -335,6 +335,7 @@ public:
 
   void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
+
     if (sugiyama->alignBaseClasses() || sugiyama->alignSiblings())
       sugiyama->callUML(gAttributes);
     else
