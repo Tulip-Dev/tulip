@@ -1212,10 +1212,10 @@ NEW-WINDOW:762,392:56623384,56623384,21012418,0,0,0:1x28+278+273:0,0:Set nodes v
 7,6,980,559,0,0,0,9472431,12,'AlpsPS/2 ALPS DualPoint TouchPad'
 7,6,981,559,0,0,0,9472440,12,'AlpsPS/2 ALPS DualPoint TouchPad'
 7,6,983,559,0,0,0,9472450,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-7,6,984,579,0,0,0,9472460,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-7,6,985,599,0,0,0,9472469,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-7,6,985,609,0,0,0,9472489,12,'AlpsPS/2 ALPS DualPoint TouchPad'
-7,6,985,622,0,0,0,9472498,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,984,559,0,0,0,9472460,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,985,559,0,0,0,9472469,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,985,559,0,0,0,9472489,12,'AlpsPS/2 ALPS DualPoint TouchPad'
+7,6,985,559,0,0,0,9472498,12,'AlpsPS/2 ALPS DualPoint TouchPad'
 7,4,0,0,1,0,0,9472780,12,AlpsPS/2 ALPS DualPoint TouchPad
 6,4,0,0,1,0,0,9472780,2,Virtual core pointer
 7,5,0,0,1,0,0,9472792,12,AlpsPS/2 ALPS DualPoint TouchPad
