@@ -448,6 +448,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     menu->addSeparator();
 
     QMenu* toggleMenu = menu->addMenu("Toggle selection");
+
     if (isNode) {
       toggleMenu->addAction(tr("of node"),this,SLOT(addRemoveItemToSelection()));
       toggleMenu->addAction(tr("of predecessor nodes"),this,SLOT(addRemoveInNodesToSelection()));
