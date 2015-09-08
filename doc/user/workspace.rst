@@ -147,9 +147,7 @@ Main window
     :width: 40
 
 .. |i_workspace_rclick_edge| image:: _images/i_workspace_rclick_edge.png
-    :width: 297
 .. |i_workspace_rclick_node| image:: _images/i_workspace_rclick_node.png
-    :width: 297
 
 This part of the panel shows the graph. From here, the user can exploit two elements to interact with it.
 
@@ -233,7 +231,7 @@ This part of the panel shows the graph. From here, the user can exploit two elem
 
   * *Grid display parameters*: open the grid setup wizard.
 
-  When right clicking on an edge or a node, an other part appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to update (*Edit*) one of the main draw properties (color, label, shape or size)
+  When right clicking on an edge or a node, a different menu appears, displaying the object name and offering to select the node/edge (*Select*), to add/remove it or its neighboring nodes or adjacent edges to/from the current selection (*Toggle selection*), to delete it (*Delete*) or to update (*Edit*) one of the main draw properties (color, label, shape or size)
 
 
   |i_workspace_rclick_edge|    |i_workspace_rclick_node|

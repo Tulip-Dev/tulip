@@ -447,7 +447,20 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
     menu->addSeparator();
 
-    menu->addAction(tr("Toggle selection"),this,SLOT(addRemoveItemToSelection()));
+    QMenu* toggleMenu = menu->addMenu("Toggle selection");
+    if (isNode) {
+      toggleMenu->addAction(tr("of node"),this,SLOT(addRemoveItemToSelection()));
+      toggleMenu->addAction(tr("of predecessor nodes"),this,SLOT(addRemoveInNodesToSelection()));
+      toggleMenu->addAction(tr("of successor nodes"),this,SLOT(addRemoveOutNodesToSelection()));
+      toggleMenu->addAction(tr("of input edges"),this,SLOT(addRemoveInEdgesToSelection()));
+      toggleMenu->addAction(tr("of output edges"),this,SLOT(addRemoveOutEdgesToSelection()));
+    }
+    else {
+      toggleMenu->addAction(tr("of edge"),this,SLOT(addRemoveItemToSelection()));
+      toggleMenu->addAction(tr("of edge extremities"),this,SLOT(addRemoveExtremitiesToSelection()));
+    }
+
+
     menu->addAction(tr("Select"),this,SLOT(selectItem()));
     menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
 
@@ -458,20 +471,12 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
     updateMenu->addAction("Size", this, SLOT(editSize()));
 
     if (isNode) {
-      menu->addAction(tr("Toggle predecessor nodes selection"),this,SLOT(addRemoveInNodesToSelection()));
-      menu->addAction(tr("Toggle successor nodes selection"),this,SLOT(addRemoveOutNodesToSelection()));
-      menu->addAction(tr("Toggle input edges selection"),this,SLOT(addRemoveInEdgesToSelection()));
-      menu->addAction(tr("Toggle output edges selection"),this,SLOT(addRemoveOutEdgesToSelection()));
-
       Graph *metaGraph=graph()->getNodeMetaInfo(node(entity.getComplexEntityId()));
 
       if (metaGraph) {
         menu->addAction(tr("Go inside"),this,SLOT(goInsideItem()));
         menu->addAction(tr("Ungroup"),this,SLOT(ungroupItem()));
       }
-    }
-    else {
-      menu->addAction(tr("Toggle extremities selection"),this,SLOT(addRemoveExtremitiesToSelection()));
     }
   }
   else {
