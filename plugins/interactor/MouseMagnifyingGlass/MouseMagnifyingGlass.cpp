@@ -250,6 +250,7 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
 
   Color outlineColor;
   int bgV = glWidget->getScene()->getBackgroundColor().getV();
+
   if (bgV < 128) {
     outlineColor = Color(255,255,255);
   }

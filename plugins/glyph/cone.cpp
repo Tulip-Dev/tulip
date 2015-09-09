@@ -69,6 +69,7 @@ static void drawCone() {
       coneIndices.push_back(i+1);
       coneIndices.push_back(numberOfSides+1);
     }
+
     coneIndices.push_back(numberOfSides-1);
     coneIndices.push_back(0);
     coneIndices.push_back(numberOfSides+1);

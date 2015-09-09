@@ -351,7 +351,7 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
 //======================================================================================================
 
 std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center,
-                                              const tlp::Size &size, float startAngle) {
+    const tlp::Size &size, float startAngle) {
 
   assert(numberOfSides > 2);
 
