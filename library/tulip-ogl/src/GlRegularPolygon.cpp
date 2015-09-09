@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/GlRegularPolygon.h>
+#include <tulip/DrawingTools.h>
 
 
 
@@ -72,27 +73,10 @@ void GlRegularPolygon::resizePoints(const unsigned int number) {
 //=====================================================
 void GlRegularPolygon::computePolygon() {
   boundingBox = BoundingBox();
-
-  BoundingBox box;
-  vector<Coord> points;
-  float delta = (2.0f * M_PI) / (float)numberOfSides;
-
-  for (unsigned int i=0; i < numberOfSides; ++i) {
-    float deltaX = cos(i * delta + startAngle);
-    float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX,deltaY,position[2]));
-    box.expand(points.back());
-  }
-
-  for(vector<Coord>::iterator it=points.begin(); it!=points.end(); ++it) {
-    (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.))/((box[1][0]-box[0][0])/2.))*size[0];
-    (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
-  }
-
   boundingBox.expand(position+size/2.f);
   boundingBox.expand(position-size/2.f);
 
-  setPoints(points);
+  setPoints(computeRegularPolygon(numberOfSides, position, size, startAngle));
 
   clearGenerated();
 }
