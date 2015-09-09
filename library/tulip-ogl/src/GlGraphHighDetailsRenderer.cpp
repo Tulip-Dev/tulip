@@ -84,7 +84,7 @@ struct entityWithDistanceCompare {
       }
 
       if (e1Color[3] == 255 && e2Color[3] == 255) {
-        return e1.distance < e2.distance;
+        return e1.distance > e2.distance;
       }
 
       if (e1Color[3] == 255 && e2Color[3] < 255) {
