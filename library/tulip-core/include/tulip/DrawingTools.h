@@ -27,6 +27,7 @@
 #include <tulip/Coord.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/Matrix.h>
+#include <tulip/Size.h>
 
 namespace tlp {
 
@@ -146,6 +147,25 @@ TLP_SCOPE tlp::Coord computePolygonCentroid(const std::vector<tlp::Coord> &point
  *
  */
 TLP_SCOPE bool isLayoutCoPlanar(const std::vector<Coord> &points, Mat3f &invTransformMatrix);
+
+//======================================================================================================
+
+/**
+ * Computes the vertices of a regular polygon.
+ * A regular polygon is a polygon that is equiangular (all angles are equal in measure)
+ * and equilateral (all sides have the same length).
+ *
+ * @since Tulip 4.8
+ *
+ * @param numberOfSides the number of sides of the polygon (minimum value is 3)
+ * @param center the center point of the polygon
+ * @param size the size of the rectangle enclosing the polygon in the form (width/2, height/2)
+ * @param startAngle the start angle when computing the polygon vertices
+ * @return a vector filled with the numberOfSides polygon vertices
+ *
+ */
+TLP_SCOPE std::vector<tlp::Coord> computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center,
+                                                        const tlp::Size &size, float startAngle = 0);
 
 }
 

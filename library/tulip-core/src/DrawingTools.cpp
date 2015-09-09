@@ -347,3 +347,29 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
 
   return true;
 }
+
+//======================================================================================================
+
+std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center,
+                                              const tlp::Size &size, float startAngle) {
+
+  assert(numberOfSides > 2);
+
+  BoundingBox box;
+  vector<Coord> points;
+  float delta = (2.0f * M_PI) / static_cast<float>(numberOfSides);
+
+  for (unsigned int i = 0 ; i < numberOfSides ; ++i) {
+    float deltaX = cos(i * delta + startAngle);
+    float deltaY = sin(i * delta + startAngle);
+    points.push_back(Coord(deltaX,deltaY,center[2]));
+    box.expand(points.back());
+  }
+
+  for(vector<Coord>::iterator it = points.begin() ; it != points.end() ; ++it) {
+    (*it)[0]=center[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.))/((box[1][0]-box[0][0])/2.))*size[0];
+    (*it)[1]=center[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
+  }
+
+  return points;
+}
