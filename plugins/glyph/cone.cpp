@@ -16,9 +16,11 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <GL/glew.h>
+
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
@@ -27,23 +29,89 @@
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
 
 namespace tlp {
 
+static vector<Coord> coneVertices;
+static vector<Coord> coneNormals;
+static vector<Vec2f> coneTexCoords;
+static vector<unsigned short> coneIndices;
+static vector<unsigned int> buffers;
+
 static void drawCone() {
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  glTranslatef(0.0f, 0.0f, -0.5f);
-  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-  gluCylinder(quadratic, 0.5f, 0.0f, 1.0f, 10, 10);
-  gluQuadricOrientation(quadratic, GLU_INSIDE);
-  gluDisk(quadratic, 0.0f, 0.5f, 10, 10);
-  gluDeleteQuadric(quadratic);
+  if (coneVertices.empty()) {
+    const unsigned int numberOfSides = 30;
+    coneVertices = computeRegularPolygon(numberOfSides, Coord(0,0,-0.5), Size(0.5, 0.5));
+    coneVertices.push_back(Coord(0,0,-0.5));
+    coneVertices.push_back(Coord(0,0,0.5));
+
+    for (size_t i = 0 ; i < coneVertices.size() ; ++i) {
+      coneTexCoords.push_back(Vec2f(coneVertices[i][0]+0.5, coneVertices[i][1]+0.5));
+    }
+
+    for (unsigned int i = 0 ; i < numberOfSides -1 ; ++i) {
+      coneIndices.push_back(numberOfSides);
+      coneIndices.push_back(i+1);
+      coneIndices.push_back(i);
+    }
+
+    coneIndices.push_back(numberOfSides);
+    coneIndices.push_back(0);
+    coneIndices.push_back(numberOfSides-1);
+
+    for (unsigned int i = 0 ; i < numberOfSides -1 ; ++i) {
+      coneIndices.push_back(i);
+      coneIndices.push_back(i+1);
+      coneIndices.push_back(numberOfSides+1);
+    }
+    coneIndices.push_back(numberOfSides-1);
+    coneIndices.push_back(0);
+    coneIndices.push_back(numberOfSides+1);
+
+    coneNormals = computeNormals(coneVertices, coneIndices);
+
+    buffers.resize(4);
+    glGenBuffers(4, &buffers[0]);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, coneVertices.size() * 3 * sizeof(float), &coneVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, coneNormals.size() * 3 * sizeof(float), &coneNormals[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+    glBufferData(GL_ARRAY_BUFFER, coneTexCoords.size() * 2 * sizeof(float), &coneTexCoords[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, coneIndices.size() * 3 * sizeof(unsigned short), &coneIndices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+  }
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+  glEnableClientState(GL_NORMAL_ARRAY);
+
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+  glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+  glNormalPointer(GL_FLOAT, 0, BUFFER_OFFSET(0));
+
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
+  glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+  glDrawElements(GL_TRIANGLES, coneIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_NORMAL_ARRAY);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
 }
 
 /** \addtogroup glyph */
@@ -75,10 +143,6 @@ void Cone::getIncludeBoundingBox(BoundingBox& boundingBox,node) {
   boundingBox[1] = Coord(0.25, 0.25, 0.5);
 }
 void Cone::draw(node n, float) {
-  if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
-    drawCone();
-    GlDisplayListManager::getInst().endNewDisplayList();
-  }
 
   setMaterial(glGraphInputData->getElementColor()->getNodeValue(n));
   string texFile = glGraphInputData->getElementTexture()->getNodeValue(n);
@@ -88,7 +152,7 @@ void Cone::draw(node n, float) {
     GlTextureManager::getInst().activateTexture(texturePath + texFile);
   }
 
-  GlDisplayListManager::getInst().callDisplayList("Cone_cone");
+  drawCone();
 
   GlTextureManager::getInst().desactivateTexture();
 }
@@ -138,12 +202,6 @@ public:
   virtual void draw(edge e, node /*n*/, const Color& glyphColor,const Color &/*borderColor*/, float /*lod*/) {
     glEnable(GL_LIGHTING);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
-
-    if (GlDisplayListManager::getInst().beginNewDisplayList("Cone_cone")) {
-      drawCone();
-      GlDisplayListManager::getInst().endNewDisplayList();
-    }
-
     setMaterial(glyphColor);
     string texFile = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
 
@@ -153,7 +211,7 @@ public:
       GlTextureManager::getInst().activateTexture(texturePath + texFile);
     }
 
-    GlDisplayListManager::getInst().callDisplayList("Cone_cone");
+    drawCone();
     GlTextureManager::getInst().desactivateTexture();
   }
 };
