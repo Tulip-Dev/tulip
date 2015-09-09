@@ -255,76 +255,88 @@ void HistogramView::setState(const DataSet &dataSet) {
     for (size_t j = 0 ; j < selectedProperties.size() ; ++j) {
       unsigned int nbHistogramBins = 0;
 
+      Histogram *histo = histogramsMap[selectedProperties[j]];
       if (histogramParametersMap[selectedProperties[j]].get("nb histogram bins", nbHistogramBins)) {
-        histogramsMap[selectedProperties[j]]->setNbHistogramBins(nbHistogramBins);
+	histo->setLayoutUpdateNeeded();
+        histo->setNbHistogramBins(nbHistogramBins);
       }
 
       unsigned int nbXGraduations = 0;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis nb graduations", nbXGraduations)) {
-        histogramsMap[selectedProperties[j]]->setNbXGraduations(nbXGraduations);
+	histo->setLayoutUpdateNeeded();
+        histo->setNbXGraduations(nbXGraduations);
       }
 
       unsigned int yAxisIncrementStep = 0;
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis increment step", yAxisIncrementStep)) {
-        histogramsMap[selectedProperties[j]]->setYAxisIncrementStep(yAxisIncrementStep);
+	histo->setLayoutUpdateNeeded();
+	histo->setYAxisIncrementStep(yAxisIncrementStep);
       }
 
       bool cumulativeFrequenciesHisto = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("cumulative frequencies histogram", cumulativeFrequenciesHisto)) {
-        histogramsMap[selectedProperties[j]]->setCumulativeHistogram(cumulativeFrequenciesHisto);
-        histogramsMap[selectedProperties[j]]->setLastCumulativeHistogram(cumulativeFrequenciesHisto);
+	histo->setLayoutUpdateNeeded();
+        histo->setCumulativeHistogram(cumulativeFrequenciesHisto);
+        histo->setLastCumulativeHistogram(cumulativeFrequenciesHisto);
       }
 
       bool uniformQuantification = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("uniform quantification", uniformQuantification)) {
-        histogramsMap[selectedProperties[j]]->setUniformQuantification(uniformQuantification);
+	histo->setLayoutUpdateNeeded();
+        histo->setUniformQuantification(uniformQuantification);
       }
 
       bool xAxisLogScale = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis logscale", xAxisLogScale)) {
-        histogramsMap[selectedProperties[j]]->setXAxisLogScale(xAxisLogScale);
+	histo->setLayoutUpdateNeeded();
+        histo->setXAxisLogScale(xAxisLogScale);
       }
 
       bool yAxisLogScale = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis logscale", yAxisLogScale)) {
-        histogramsMap[selectedProperties[j]]->setYAxisLogScale(yAxisLogScale);
+	histo->setLayoutUpdateNeeded();
+        histo->setYAxisLogScale(yAxisLogScale);
       }
 
       bool useCustomAxisScale = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis custom scale", useCustomAxisScale)) {
-        histogramsMap[selectedProperties[j]]->setXAxisScaleDefined(useCustomAxisScale);
+	histo->setLayoutUpdateNeeded();
+        histo->setXAxisScaleDefined(useCustomAxisScale);
       }
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis custom scale", useCustomAxisScale)) {
-        histogramsMap[selectedProperties[j]]->setYAxisScaleDefined(useCustomAxisScale);
+	histo->setLayoutUpdateNeeded();
+        histo->setYAxisScaleDefined(useCustomAxisScale);
       }
 
       std::pair<double, double> axisScale;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis scale", axisScale)) {
-        histogramsMap[selectedProperties[j]]->setXAxisScale(axisScale);
+	histo->setLayoutUpdateNeeded();
+        histo->setXAxisScale(axisScale);
       }
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis scale", axisScale)) {
-        histogramsMap[selectedProperties[j]]->setYAxisScale(axisScale);
+	histo->setLayoutUpdateNeeded();
+        histo->setYAxisScale(axisScale);
       }
     }
-
   }
 
   draw();
   registerTriggers();
 
   if (detailedHistogramPropertyName != "") {
-    histogramsMap[detailedHistogramPropertyName]->update();
-    switchFromSmallMultiplesToDetailedView(histogramsMap[detailedHistogramPropertyName]);
+    Histogram *histo = histogramsMap[detailedHistogramPropertyName];
+    histo->update();
+    switchFromSmallMultiplesToDetailedView(histo);
   }
 }
 
