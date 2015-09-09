@@ -256,29 +256,30 @@ void HistogramView::setState(const DataSet &dataSet) {
       unsigned int nbHistogramBins = 0;
 
       Histogram *histo = histogramsMap[selectedProperties[j]];
+
       if (histogramParametersMap[selectedProperties[j]].get("nb histogram bins", nbHistogramBins)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setNbHistogramBins(nbHistogramBins);
       }
 
       unsigned int nbXGraduations = 0;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis nb graduations", nbXGraduations)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setNbXGraduations(nbXGraduations);
       }
 
       unsigned int yAxisIncrementStep = 0;
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis increment step", yAxisIncrementStep)) {
-	histo->setLayoutUpdateNeeded();
-	histo->setYAxisIncrementStep(yAxisIncrementStep);
+        histo->setLayoutUpdateNeeded();
+        histo->setYAxisIncrementStep(yAxisIncrementStep);
       }
 
       bool cumulativeFrequenciesHisto = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("cumulative frequencies histogram", cumulativeFrequenciesHisto)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setCumulativeHistogram(cumulativeFrequenciesHisto);
         histo->setLastCumulativeHistogram(cumulativeFrequenciesHisto);
       }
@@ -286,45 +287,45 @@ void HistogramView::setState(const DataSet &dataSet) {
       bool uniformQuantification = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("uniform quantification", uniformQuantification)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setUniformQuantification(uniformQuantification);
       }
 
       bool xAxisLogScale = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis logscale", xAxisLogScale)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setXAxisLogScale(xAxisLogScale);
       }
 
       bool yAxisLogScale = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis logscale", yAxisLogScale)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setYAxisLogScale(yAxisLogScale);
       }
 
       bool useCustomAxisScale = false;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis custom scale", useCustomAxisScale)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setXAxisScaleDefined(useCustomAxisScale);
       }
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis custom scale", useCustomAxisScale)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setYAxisScaleDefined(useCustomAxisScale);
       }
 
       std::pair<double, double> axisScale;
 
       if (histogramParametersMap[selectedProperties[j]].get("x axis scale", axisScale)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setXAxisScale(axisScale);
       }
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis scale", axisScale)) {
-	histo->setLayoutUpdateNeeded();
+        histo->setLayoutUpdateNeeded();
         histo->setYAxisScale(axisScale);
       }
     }

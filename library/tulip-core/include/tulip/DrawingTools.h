@@ -165,7 +165,7 @@ TLP_SCOPE bool isLayoutCoPlanar(const std::vector<Coord> &points, Mat3f &invTran
  *
  */
 TLP_SCOPE std::vector<tlp::Coord> computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center,
-                                                        const tlp::Size &size, float startAngle = 0);
+    const tlp::Size &size, float startAngle = 0);
 
 }
 

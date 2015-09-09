@@ -74,6 +74,7 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
   if (!sphere) {
     sphere = new GlSphere(Coord(0,0,0), 0.5);
   }
+
   sphere->setColor(glyphColor);
   sphere->setTexture(texturePath+texture);
   sphere->draw(0,0);
@@ -84,6 +85,7 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
     rect = new GlRect(Coord(0,0,0), 2., 2, Color(0,0,0,255),Color(0,0,0,255));
     rect->setOutlineMode(false);
   }
+
   Color ringColor(glyphColor);
   // semi transparent
   ringColor.setA(128);
