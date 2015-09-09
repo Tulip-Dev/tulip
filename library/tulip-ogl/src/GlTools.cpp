@@ -397,4 +397,34 @@ float calculateAABBSize(const BoundingBox& bb,const Coord& eye,const Matrix<floa
 float calculate2DLod(const BoundingBox& bb,const Vector<int, 4>&,const Vector<int, 4>&) {
   return (bb[1][0] - bb[0][0]) * (bb[1][1] - bb[0][1]);
 }
+//====================================================
+
+std::vector<Coord> computeNormals(const std::vector<Coord> &vertices, const std::vector<unsigned short> &facesIndices) {
+  return computeNormals(vertices, std::vector<unsigned int>(facesIndices.begin(), facesIndices.end()));
+}
+
+std::vector<Coord> computeNormals(const std::vector<Coord> &vertices, const std::vector<unsigned int> &facesIndices) {
+  assert(vertices.size() >= 3);
+  assert(facesIndices.size() >= 3 && facesIndices.size() % 3 == 0);
+  std::vector<Coord> normals;
+  normals.resize(vertices.size(), Coord(0,0,0));
+  for (size_t i = 0 ; i < facesIndices.size() ; i += 3) {
+    Coord v1 = vertices[facesIndices[i]], v2 = vertices[facesIndices[i+1]], v3 = vertices[facesIndices[i+2]];
+    Coord normal = (v2 - v1) ^ (v3 - v1);
+    if (normal.norm() != 0) {
+      normal /= normal.norm();
+    }
+    normals[facesIndices[i]] += normal;
+    normals[facesIndices[i+1]] += normal;
+    normals[facesIndices[i+2]] += normal;
+  }
+  for (size_t i = 0 ; i < normals.size() ; ++i) {
+    if (normals[i].norm() != 0) {
+      normals[i] /= normals[i].norm();
+    }
+  }
+
+  return normals;
+}
+
 }
