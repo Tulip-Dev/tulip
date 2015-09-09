@@ -24,7 +24,6 @@
 
 #include <tulip/StringProperty.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
