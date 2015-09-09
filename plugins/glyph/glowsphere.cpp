@@ -22,17 +22,21 @@
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/SizeProperty.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/GlSphere.h>
+#include <tulip/GlRect.h>
 
 using namespace std;
 using namespace tlp;
 
 namespace tlp {
+
+static GlSphere *sphere = NULL;
+static GlRect *rect = NULL;
 
 /** \addtogroup glyph */
 /*@{*/
@@ -52,8 +56,6 @@ public:
   static void drawGlyph(const Color& glyphColor, const Size& glyphSize,
                         const string& texture,
                         const string& texturePath);
-  static void drawSphere();
-  static void drawGlowRing();
 };
 
 PLUGIN(GlowSphere)
@@ -63,48 +65,31 @@ void GlowSphere::getIncludeBoundingBox(BoundingBox &boundingBox,node) {
   boundingBox[1] = Coord(0.35f, 0.35f, 0.35f);
 }
 
-void GlowSphere::drawSphere() {
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  gluSphere(quadratic, 0.5f, 30, 30);
-  gluDeleteQuadric(quadratic);
-}
-
-void GlowSphere::drawGlowRing() {
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  gluDisk(quadratic, 0.5f, 0.9f, 30, 30);
-  gluDeleteQuadric(quadratic);
-}
-
 void GlowSphere::drawGlyph(const Color& glyphColor,
                            const Size& glyphSize,
                            const string& texture,
                            const string& texturePath) {
-  // add sphere display list
-  if (GlDisplayListManager::getInst().beginNewDisplayList("glow_sphere")) {
-    drawSphere();
-    GlDisplayListManager::getInst().endNewDisplayList();
-  }
 
-  // add glow ring display list
-  if (GlDisplayListManager::getInst().beginNewDisplayList("glow_ring")) {
-    drawGlowRing();
-    GlDisplayListManager::getInst().endNewDisplayList();
+  // draw a sphere
+  if (!sphere) {
+    sphere = new GlSphere(Coord(0,0,0), 0.5);
   }
+  sphere->setColor(glyphColor);
+  sphere->setTexture(texturePath+texture);
+  sphere->draw(0,0);
 
-  if (texture != "") {
-    GlTextureManager::getInst().activateTexture(texturePath + texture);
-  }
-
-  tlp::setMaterial(glyphColor);
-  GlDisplayListManager::getInst().callDisplayList("glow_sphere");
   // draw a glow ring around
   // setup its orientation to ensure it is drawn is the screen's plane
+  if (!rect) {
+    rect = new GlRect(Coord(0,0,0), 2., 2, Color(0,0,0,255),Color(0,0,0,255));
+    rect->setOutlineMode(false);
+  }
+  Color ringColor(glyphColor);
+  // semi transparent
+  ringColor.setA(128);
+  rect->setFillColor(ringColor);
+  rect->setTextureName(TulipBitmapDir + "radialGradientTexture.png");
+
   float mdlM[16];
   glGetFloatv( GL_MODELVIEW_MATRIX, mdlM );
   glMatrixMode( GL_MODELVIEW );
@@ -119,13 +104,11 @@ void GlowSphere::drawGlyph(const Color& glyphColor,
   mdlM[4] = mdlM[6] = 0.0f;
   mdlM[8] = mdlM[9] = 0.0f;
   glLoadMatrixf( mdlM );
-  Color ringColor(glyphColor);
-  // semi transparent
-  ringColor.setA(128);
-  tlp::setMaterial(ringColor);
-  GlTextureManager::getInst().activateTexture(texturePath + TulipBitmapDir + "radialGradientTexture.png");
-  GlDisplayListManager::getInst().callDisplayList("glow_ring");
-  GlTextureManager::getInst().desactivateTexture();
+  glStencilMask(0x00);
+  glDepthMask(GL_FALSE);
+  rect->draw(0, 0);
+  glStencilMask(0xFF);
+  glDepthMask(GL_TRUE);
   glPopMatrix();
 }
 
