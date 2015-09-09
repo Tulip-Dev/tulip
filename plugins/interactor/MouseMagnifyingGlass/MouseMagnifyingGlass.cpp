@@ -28,6 +28,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/GlTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/GlCircle.h>
 
 #include <QGLFramebufferObject>
 #include <QEvent>
@@ -246,21 +247,9 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
   glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
   glPushMatrix();
   glTranslatef(boxCenterScr.getX(), boxCenterScr.getY(), 0);
-  setMaterial(Color(255, 255, 255));
-  GlTextureManager::getInst().activateTexture(textureName);
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-  gluDisk(quadratic, 0.0f, radius, 60, 1);
-  gluQuadricOrientation(quadratic, GLU_INSIDE);
-  gluDisk(quadratic, 0.0f, radius, 60, 1);
-  gluDeleteQuadric(quadratic);
-  GlTextureManager::getInst().desactivateTexture();
+
   Color outlineColor;
   int bgV = glWidget->getScene()->getBackgroundColor().getV();
-
   if (bgV < 128) {
     outlineColor = Color(255,255,255);
   }
@@ -268,21 +257,14 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
     outlineColor = Color(0,0,0);
   }
 
-  setMaterial(outlineColor);
   glEnable(GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  glLineWidth(3);
-  glBegin(GL_LINE_LOOP);
-  double alpha = M_PI / 2.;
-  double delta = 2. * M_PI/60.;
 
-  for (unsigned int i = 0; i < 60; ++i) {
-    glVertex3f(radius*cos(alpha), radius*sin(alpha), 0.0);
-    alpha += delta;
-  }
+  GlCircle circle(Coord(0,0,0), radius, outlineColor, Color::White, true, true, 0.0, 60);
+  circle.setOutlineSize(3);
+  circle.setTextureName(textureName);
+  circle.draw(0,0);
 
-  glEnd();
-  glLineWidth(1);
   glPopMatrix();
   drawInteractor = false;
   return true;
