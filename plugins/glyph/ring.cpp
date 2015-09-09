@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+
+#include <GL/glew.h>
+
 #include <string>
 
 #include <tulip/StringProperty.h>
@@ -25,82 +28,134 @@
 #include <tulip/Coord.h>
 #include <tulip/Glyph.h>
 #include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/Graph.h>
 #include <tulip/GlTools.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/DrawingTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 using namespace std;
 using namespace tlp;
 
 namespace tlp {
 
+static vector<Coord> ringVertices;
+static vector<Vec2f> ringTexCoords;
+static vector<unsigned short> ringIndices;
+static vector<unsigned short> ringOutlineIndices;
+static vector<unsigned int> buffers;
+
 static void drawRing() {
-  GLUquadricObj *quadratic;
-  quadratic = gluNewQuadric();
-  gluQuadricNormals(quadratic, GLU_SMOOTH);
-  gluQuadricTexture(quadratic, GL_TRUE);
-  gluQuadricOrientation(quadratic, GLU_OUTSIDE);
-  gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
-  gluQuadricOrientation(quadratic, GLU_INSIDE);
-  gluDisk(quadratic, 0.2f, 0.5f, 30, 1);
-  gluDeleteQuadric(quadratic);
+  if (ringVertices.empty()) {
+    const unsigned int numberOfSides = 30;
+    ringVertices = computeRegularPolygon(30, Coord(0,0,0), Size(0.5, 0.5));
+    vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0,0,0), Size(0.25, 0.25));
+    ringVertices.insert(ringVertices.end(), tmp.begin(), tmp.end());
+
+    for (unsigned int i = 0 ; i < numberOfSides - 1 ; ++i) {
+      ringIndices.push_back(i);
+      ringIndices.push_back(i+1);
+      ringIndices.push_back(numberOfSides+i);
+
+      ringIndices.push_back(numberOfSides+i);
+      ringIndices.push_back(i+1);
+      ringIndices.push_back(numberOfSides+i+1);
+
+      ringOutlineIndices.push_back(i);
+      ringOutlineIndices.push_back(i+1);
+
+      ringOutlineIndices.push_back(numberOfSides+i);
+      ringOutlineIndices.push_back(numberOfSides+i+1);
+    }
+
+    ringIndices.push_back(numberOfSides-1);
+    ringIndices.push_back(0);
+    ringIndices.push_back(numberOfSides+numberOfSides-1);
+
+    ringIndices.push_back(numberOfSides);
+    ringIndices.push_back(0);
+    ringIndices.push_back(numberOfSides+numberOfSides-1);
+
+    ringOutlineIndices.push_back(numberOfSides-1);
+    ringOutlineIndices.push_back(0);
+
+    ringOutlineIndices.push_back(numberOfSides+numberOfSides-1);
+    ringOutlineIndices.push_back(numberOfSides);
+
+    for (size_t i = 0 ; i < ringVertices.size() ; ++i) {
+      ringTexCoords.push_back(Vec2f(ringVertices[i][0]+0.5, ringVertices[i][1]+0.5));
+    }
+
+    buffers.resize(4);
+    glGenBuffers(4, &buffers[0]);
+
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+    glBufferData(GL_ARRAY_BUFFER, ringVertices.size() * 3 * sizeof(float), &ringVertices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+    glBufferData(GL_ARRAY_BUFFER, ringTexCoords.size() * 2 * sizeof(float), &ringTexCoords[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ringIndices.size() * sizeof(unsigned short), &ringIndices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, ringOutlineIndices.size() * sizeof(unsigned short), &ringOutlineIndices[0], GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+  }
+
+  glEnableClientState(GL_VERTEX_ARRAY);
+
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+  glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
+
+  glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
+  glTexCoordPointer(2, GL_FLOAT, 0, BUFFER_OFFSET(0));
+
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
+  glDrawElements(GL_TRIANGLES, ringIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+
+  glDisableClientState(GL_VERTEX_ARRAY);
+  glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
+
 static void drawRingBorder() {
-  glBegin(GL_LINE_LOOP);
-  double alpha = M_PI / 2.;
-  double delta = 2. * M_PI / 30.0;
+  glEnableClientState(GL_VERTEX_ARRAY);
 
-  for (unsigned int i = 0; i < 30; ++i) {
-    glVertex3f(0.5 * cos(alpha), 0.5 * sin(alpha), 0.0);
-    alpha += delta;
-  }
+  glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
+  glVertexPointer(3, GL_FLOAT, 0, BUFFER_OFFSET(0));
 
-  glEnd();
-  glBegin(GL_LINE_LOOP);
-  alpha = M_PI / 2.;
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
+  glDrawElements(GL_LINES, ringOutlineIndices.size(), GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
 
-  for (unsigned int i = 0; i < 30; ++i) {
-    glVertex3f(0.2 * cos(alpha), 0.2 * sin(alpha), 0.0);
-    alpha += delta;
-  }
+  glDisableClientState(GL_VERTEX_ARRAY);
 
-  glEnd();
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
-static void drawGlyph(const Color& glyohColor, const string& texture,
+
+static void drawGlyph(const Color& glyphColor, const string& texture,
                       const string& texturePath, double borderWidth,
                       const Color& borderColor, float lod) {
 
-  if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ring")) {
-    drawRing();
-    GlDisplayListManager::getInst().endNewDisplayList();
-  }
-
-  if (GlDisplayListManager::getInst().beginNewDisplayList("Ring_ringborder")) {
-    drawRingBorder();
-    GlDisplayListManager::getInst().endNewDisplayList();
-  }
-
-  setMaterial(glyohColor);
+  setMaterial(glyphColor);
 
   if (texture != "") {
     GlTextureManager::getInst().activateTexture(texturePath + texture);
   }
 
-  GlDisplayListManager::getInst().callDisplayList("Ring_ring");
+  drawRing();
 
   GlTextureManager::getInst().desactivateTexture();
 
   if (lod > 20 && borderWidth > 0) {
-
     glLineWidth(borderWidth);
-
     glDisable(GL_LIGHTING);
     setColor(borderColor);
-    GlDisplayListManager::getInst().callDisplayList("Ring_ringborder");
+    drawRingBorder();
     glEnable(GL_LIGHTING);
   }
 }
