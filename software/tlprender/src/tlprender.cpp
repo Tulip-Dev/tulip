@@ -32,10 +32,8 @@
 #if defined(__APPLE__)
 #include <libgen.h>
 #include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
 #else
 #include <GL/gl.h>
-#include <GL/glu.h>
 #endif
 
 #include <string.h>

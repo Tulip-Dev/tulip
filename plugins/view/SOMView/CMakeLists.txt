@@ -37,6 +37,6 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 )
 
 ADD_LIBRARY(SOMView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(SOMView-${TulipVersion} som ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY})
+TARGET_LINK_LIBRARIES(SOMView-${TulipVersion} som ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY})
 
 INSTALL_TULIP_PLUGIN(SOMView-${TulipVersion} ${TulipViewPluginsInstallDir})

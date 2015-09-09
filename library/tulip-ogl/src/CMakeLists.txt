@@ -81,7 +81,7 @@ INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${JPEG_INCLUDE_DIR
 
 ADD_LIBRARY (${LibTulipOglName} SHARED ${tulip-ogl_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOglName} ${FTGLLibrary} ${GLEW_LIBRARY}
-                      ${LibTulipCoreName} ${OPENGL_glu_LIBRARY} ${OPENGL_gl_LIBRARY}
+                      ${LibTulipCoreName} ${OPENGL_gl_LIBRARY}
                       ${FREETYPE_LIBRARY} ${JPEG_LIBRARY} ${PNG_LIBRARY}
                       ${Tess2Library})
 

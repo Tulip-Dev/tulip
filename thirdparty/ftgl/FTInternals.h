@@ -59,7 +59,6 @@
 
     #ifndef __gl_h_
         #include <GL/gl.h>
-        #include <GL/glu.h>
     #endif
 
 #else
@@ -70,14 +69,8 @@
             #include "SDL_opengl.h"
         #elif __APPLE_CC__
             #include <OpenGL/gl.h>
-            #include <OpenGL/glu.h>
         #else
             #include <GL/gl.h>
-            #if defined (__sun__) && !defined (__sparc__)
-                #include <mesa/glu.h>
-            #else
-                #include <GL/glu.h>
-            #endif
         #endif
 
     #endif
