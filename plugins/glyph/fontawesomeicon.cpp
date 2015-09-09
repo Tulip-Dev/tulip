@@ -24,6 +24,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/TulipFontAwesome.h>
+#include <tulip/GlGraphRenderingParameters.h>
 
 using namespace std;
 using namespace tlp;
@@ -67,7 +68,7 @@ public:
     const tlp::Color &nodeColor = glGraphInputData->getElementColor()->getNodeValue(n);
     const tlp::Color &nodeBorderColor = glGraphInputData->getElementBorderColor()->getNodeValue(n);
     float nodeBorderWidth = glGraphInputData->getElementBorderWidth()->getNodeValue(n);
-    const std::string &nodeTexture = glGraphInputData->getElementTexture()->getNodeValue(n);
+    const std::string &nodeTexture = glGraphInputData->parameters->getTexturePath() + glGraphInputData->getElementTexture()->getNodeValue(n);
 
     drawFontAwesomeIcon(iconName, nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
   }
@@ -92,7 +93,7 @@ public:
       iconName = defaultIcon;
     }
 
-    string edgeTexture = edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
+    string edgeTexture = edgeExtGlGraphInputData->parameters->getTexturePath() + edgeExtGlGraphInputData->getElementTexture()->getEdgeValue(e);
     float borderWidth = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
