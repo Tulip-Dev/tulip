@@ -167,10 +167,13 @@ public:
 
       if (dataSet->get(ELT_ORIENTATION, sc)) {
         if (sc.getCurrent() == ELT_TOPTOBOTTOM) {
-          tree->orientation(ogdf::topToBottom);
+	  // because of an ununderstanding fix
+	  // in thirdparty/OGDF/src/ogdf/tree/TreeLayout.cpp
+          tree->orientation(ogdf::bottomToTop);
         }
         else if (sc.getCurrent() == ELT_BOTTOMTOTOP) {
-          tree->orientation(ogdf::bottomToTop);
+	  // same as above
+          tree->orientation(ogdf::topToBottom);
         }
         else if (sc.getCurrent() == ELT_LEFTTORIGHT) {
           tree->orientation(ogdf::leftToRight);
