@@ -526,8 +526,12 @@ void NodeLinkDiagramComponent::addRemoveInNodesToSelection() {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
   graph()->push();
   node neigh;
+  MutableContainer<bool> inNodes;
   forEach(neigh, graph()->getInNodes(node(itemId))) {
-    elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+    if (inNodes.get(neigh.id) == false) {
+      elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+      inNodes.set(neigh.id, true);
+    }
   }
 }
 
@@ -535,8 +539,12 @@ void NodeLinkDiagramComponent::addRemoveOutNodesToSelection() {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
   graph()->push();
   node neigh;
+  MutableContainer<bool> outNodes;
   forEach(neigh, graph()->getOutNodes(node(itemId))) {
-    elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+    if (outNodes.get(neigh.id) == false) {
+      elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+      outNodes.set(neigh.id, true);
+    }     
   }
 }
 
