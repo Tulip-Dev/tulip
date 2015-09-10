@@ -544,7 +544,7 @@ void NodeLinkDiagramComponent::addRemoveOutNodesToSelection() {
     if (outNodes.get(neigh.id) == false) {
       elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
       outNodes.set(neigh.id, true);
-    }     
+    }
   }
 }
 
