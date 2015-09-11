@@ -181,8 +181,8 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
   }
 
   if (backgroundTextureId == 0) {
-    getGlMainWidget()->makeCurrent();
-    backgroundTextureId = getGlMainWidget()->bindTexture(QPixmap(":/background_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
+    getGlMainWidget()->getFirstQGLWidget()->makeCurrent();
+    backgroundTextureId = getGlMainWidget()->getFirstQGLWidget()->bindTexture(QPixmap(":/background_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
     GlTextureManager::getInst().registerExternalTexture("gaussian_tex_back", backgroundTextureId);
   }
 
