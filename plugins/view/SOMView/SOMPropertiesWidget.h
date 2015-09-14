@@ -27,6 +27,7 @@
 #include <QList>
 
 #include "GradientManager.h"
+#include "ComputeSOMWidget.h"
 
 namespace Ui {
 class SOMPropertiesWidget;
@@ -123,6 +124,7 @@ protected:
   GradientManager gradientManager;
   ColorScale *defaultScale;
   SOMView *view;
+  ComputeSOMWidget *dimensionConfigurationWidget;
 
 protected slots:
   void diffusionMethodChange();

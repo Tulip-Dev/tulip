@@ -38,7 +38,7 @@ using namespace tlp;
 SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
   QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
   _ui->setupUi(this);
-  setAutoFillBackground(true);
+  dimensionConfigurationWidget = new tlp::ComputeSOMWidget(parent);
 
   defaultScale = new ColorScale();
 
@@ -53,6 +53,7 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
   QVBoxLayout *sizeMappingLayout = new QVBoxLayout(_ui->nodeSizeMappingGroupBox);
   sizeMappingLayout->setMargin(0);
   sizeMappingLayout->setSpacing(0);
+  sizeMappingLayout->setContentsMargins(0, 5, 0, 0);
   sizeMappingButtonGroup = new QButtonGroup();
   noNodeSizeMappingRadioButton = new QRadioButton("No size mapping");
   sizeMappingButtonGroup->addButton(noNodeSizeMappingRadioButton);
@@ -65,20 +66,15 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
   //Display multiple properties at same time
   multiplePropertiesRepresentation = false;
 
-  _ui->dimensionConfigurationWidget->setWindowTitle("Dimensions");
-  _ui->learningRatePropertiesGroupBox->setWindowTitle("Learning");
-  _ui->diffusionRatePropertiesGroupBox->setWindowTitle("Diffusion");
-  _ui->representationGroupBox->setWindowTitle("Representation");
-  _ui->animationGroupBox->setWindowTitle("Animation");
-
+  dimensionConfigurationWidget->setWindowTitle("Dimensions");
+  setWindowTitle("Options");
 }
 
 QList<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
 
   QList<QWidget *> widgets;
 
-  widgets << _ui->dimensionConfigurationWidget << _ui->learningRatePropertiesGroupBox;
-  widgets << _ui->diffusionRatePropertiesGroupBox << _ui->representationGroupBox << _ui->animationGroupBox;
+  widgets << dimensionConfigurationWidget << (QWidget *) this;
 
   return widgets;
 }
@@ -135,19 +131,19 @@ unsigned int SOMPropertiesWidget::getAnimationDuration() const {
 }
 
 unsigned SOMPropertiesWidget::getIterationNumber() const {
-  return _ui->dimensionConfigurationWidget->number();
+  return dimensionConfigurationWidget->number();
 }
 
 void SOMPropertiesWidget::clearpropertiesConfigurationWidget() {
-  _ui->dimensionConfigurationWidget->clearLists();
+  dimensionConfigurationWidget->clearLists();
 }
 
 void SOMPropertiesWidget::addfilter(Graph *g, vector<string> &propertyFilterType) {
-  _ui->dimensionConfigurationWidget->setWidgetParameters(g, propertyFilterType);
+  dimensionConfigurationWidget->setWidgetParameters(g, propertyFilterType);
 }
 
 vector<string> SOMPropertiesWidget::getSelectedProperties() const {
-  return _ui->dimensionConfigurationWidget->getSelectedProperties();
+  return dimensionConfigurationWidget->getSelectedProperties();
 }
 
 SOMPropertiesWidget::~SOMPropertiesWidget() {
@@ -230,7 +226,7 @@ DataSet SOMPropertiesWidget::getData() const {
   data.set("animationDuration", getAnimationDuration());
 
   //Save current properties.
-  vector<string> properties = _ui->dimensionConfigurationWidget->getSelectedProperties();
+  vector<string> properties = dimensionConfigurationWidget->getSelectedProperties();
 
   if (!properties.empty()) {
     //Use QStringList class to store a list in a string
@@ -244,7 +240,7 @@ DataSet SOMPropertiesWidget::getData() const {
   }
 
   //Save iteration number
-  data.set("iterationNumber", _ui->dimensionConfigurationWidget->number());
+  data.set("iterationNumber", dimensionConfigurationWidget->number());
 
   //Save color scale
   DataSet colorScaleDataSet;
@@ -325,11 +321,11 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
       properties.push_back(s.toUtf8().data());
     }
 
-    _ui->dimensionConfigurationWidget->setOutputPropertiesList(properties);
+    dimensionConfigurationWidget->setOutputPropertiesList(properties);
   }
 
   data.get("iterationNumber", uintValue);
-  _ui->dimensionConfigurationWidget->setNumber(uintValue);
+  dimensionConfigurationWidget->setNumber(uintValue);
 
   //Reload color scale
 
