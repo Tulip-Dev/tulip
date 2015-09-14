@@ -178,9 +178,13 @@ node GraphImpl::addNode() {
   return newNode;
 }
 //----------------------------------------------------------------
+void GraphImpl::addNodes(unsigned int nb) {
+  storage.addNodes(nb);
+}
+//----------------------------------------------------------------
 void GraphImpl::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
   if (nb) {
-    storage.addNodes(nb, addedNodes);
+    storage.addNodes(nb, &addedNodes);
 
     if (hasOnlookers())
       sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, addedNodes));
@@ -219,11 +223,15 @@ edge GraphImpl::addEdge(const node src, const node tgt) {
 void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges,
                          std::vector<edge>& addedEdges) {
   if (!edges.empty()) {
-    storage.addEdges(edges, addedEdges);
+    storage.addEdges(edges, &addedEdges);
 
     if (hasOnlookers())
       sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, addedEdges));
   }
+}
+//----------------------------------------------------------------
+void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges) {
+  storage.addEdges(edges);
 }
 //----------------------------------------------------------------
 void GraphImpl::restoreEdges(const std::vector<edge>& edges,

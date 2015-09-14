@@ -53,10 +53,12 @@ public:
   edge existEdge(const node source, const node target,
                  bool directed = true) const;
   node addNode();
+  void addNodes(unsigned int nb);
   void addNodes(unsigned int nb, std::vector<node>& addedNodes);
   void addNode(const node);
   void addNodes(Iterator<node>* nodes);
   edge addEdge(const node ,const node);
+  void addEdges(const std::vector<std::pair<node, node> >& edges);
   void addEdges(const std::vector<std::pair<node, node> >& edges,
                 std::vector<edge>& addedEdges);
   void addEdge(const edge);
