@@ -23,6 +23,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphProperty.h>
+#include <tulip/GraphImpl.h>
 
 PLUGIN(TLPBImport)
 
@@ -114,10 +115,8 @@ bool TLPBImport::importGraph() {
   }
 
   // add nodes
-  {
-    std::vector<node> v;
-    graph->addNodes(header.numNodes, v);
-  }
+  ((GraphImpl *)graph)->addNodes(header.numNodes);
+
   // loop to read edges
   {
     // we can use a buffer to limit the disk reads
@@ -139,9 +138,8 @@ bool TLPBImport::importGraph() {
                                    header.numEdges) !=TLP_CONTINUE)
         return pluginProgress->state()!=TLP_CANCEL;
 
-      vector<edge> v;
       // add edges in the graph
-      graph->addEdges(vEdges, v);
+      ((GraphImpl *)graph)->addEdges(vEdges);
       // decrement nbEdges
       nbEdges -= edgesToRead;
     }
