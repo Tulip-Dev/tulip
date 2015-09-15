@@ -367,7 +367,7 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
 
             if (slider) {
               //finalSelectedEntities.insert(slider);
-	      mouvingSlider = slider;
+              mouvingSlider = slider;
             }
 
             break;
@@ -378,7 +378,7 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
 
               if (slider) {
                 //finalSelectedEntities.insert(slider);
-		mouvingSlider = slider;
+                mouvingSlider = slider;
               }
             }
           }
@@ -391,7 +391,7 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
         glMainWidget->setMouseTracking(true);
         startDrag = true;
         //mouvingSlider = *finalSelectedEntities.begin();
-	assert(mouvingSlider);
+        assert(mouvingSlider);
         mouvingSlider->beginShift();
         XPosCursor = e->x();
         glMainWidget->getScene()->getGraphCamera().initGl();
