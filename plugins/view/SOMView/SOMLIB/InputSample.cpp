@@ -86,9 +86,9 @@ void InputSample::buildPropertyVector(
       property = rootGraph->getProperty((*it));
       string type = property->getTypename();
 
-      if (type.compare("double") == 0) {
+      if (type.compare("double") == 0 || type.compare("int") == 0) {
         propertiesNameList.push_back(*it);
-        propertiesList.push_back((DoubleProperty*) property);
+        propertiesList.push_back((NumericProperty*) property);
       }
       else {
         cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
@@ -164,12 +164,12 @@ void InputSample::buildNodeVector(node n) {
 
   if(usingNormalizedValues) {
     for (; propNum < propertiesList.size(); ++propNum) {
-      nodeVec[propNum] = normalize(propertiesList[propNum]->getNodeValue(n),propNum);
+      nodeVec[propNum] = normalize(propertiesList[propNum]->getNodeDoubleValue(n),propNum);
     }
   }
   else {
     for (; propNum < propertiesList.size(); ++propNum) {
-      nodeVec[propNum] = propertiesList[propNum]->getNodeValue(n);
+      nodeVec[propNum] = propertiesList[propNum]->getNodeDoubleValue(n);
     }
   }
 
@@ -221,13 +221,13 @@ void InputSample::clearGraphObs() {
 }
 
 void InputSample::initPropertiesObs() {
-  for (vector<DoubleProperty*>::iterator it = propertiesList.begin(); it
+  for (vector<NumericProperty*>::iterator it = propertiesList.begin(); it
        != propertiesList.end(); ++it) {
     (*it)->addObserver(this);
   }
 }
 void InputSample::clearPropertiesObs() {
-  for (vector<DoubleProperty*>::iterator it = propertiesList.begin(); it
+  for (vector<NumericProperty*>::iterator it = propertiesList.begin(); it
        != propertiesList.end(); ++it) {
     (*it)->removeObserver(this);
   }
@@ -241,7 +241,7 @@ void InputSample::update(std::set<Observable *>::iterator begin, std::set<
   for (std::set<Observable *>::iterator it = begin; it != end; ++it) {
     unsigned int propNum=0;
 
-    for (std::vector<tlp::DoubleProperty*>::iterator itP =
+    for (std::vector<tlp::NumericProperty*>::iterator itP =
            propertiesList.begin(); itP != propertiesList.end(); ++itP) {
       if ((*it) == (*itP)) {
         //mWeightTab.setAll(DynamicVector<double> ());
@@ -273,7 +273,7 @@ void InputSample::update(std::set<Observable *>::iterator begin, std::set<
 void InputSample::addNode(Graph*, const node n) {
   if(usingNormalizedValues) {
     for(unsigned int i=0; i<propertiesList.size(); ++i) {
-      meanProperties[i]=(double(rootGraph->numberOfNodes()-1)*meanProperties[i]+propertiesList[i]->getNodeValue(n))/double(rootGraph->numberOfNodes());
+      meanProperties[i]=(double(rootGraph->numberOfNodes()-1)*meanProperties[i]+propertiesList[i]->getNodeDoubleValue(n))/double(rootGraph->numberOfNodes());
       updateSDValue(i);
     }
   }
@@ -285,7 +285,7 @@ void InputSample::addNode(Graph*, const node n) {
 void InputSample::delNode(Graph*, const node n) {
   if(usingNormalizedValues) {
     for(unsigned int i=0; i<propertiesList.size(); ++i) {
-      meanProperties[i]=(double(rootGraph->numberOfNodes()+1)*meanProperties[i]-propertiesList[i]->getNodeValue(n))/double(rootGraph->numberOfNodes());
+      meanProperties[i]=(double(rootGraph->numberOfNodes()+1)*meanProperties[i]-propertiesList[i]->getNodeDoubleValue(n))/double(rootGraph->numberOfNodes());
       updateSDValue(i);
     }
   }
@@ -345,11 +345,11 @@ tlp::Iterator<tlp::node>* InputSample::getRandomNodeOrder() {
 
 void InputSample::updateMeanValue(unsigned int propNum) {
   assert(propNum<propertiesList.size());
-  DoubleProperty* property = propertiesList[propNum];
+  NumericProperty* property = propertiesList[propNum];
   double mean=0.0;
   node n;
   forEach(n,rootGraph->getNodes()) {
-    mean+=property->getNodeValue(n);
+    mean+=property->getNodeDoubleValue(n);
   }
   meanProperties[propNum]=mean/double(rootGraph->numberOfNodes());
 
@@ -363,11 +363,11 @@ void InputSample::updateSDValue(unsigned int propNum) {
     return;
   }
 
-  DoubleProperty* property = propertiesList[propNum];
+  NumericProperty* property = propertiesList[propNum];
   double sd=0.0;
   node n;
   forEach(n,rootGraph->getNodes())
-  sd+=pow(property->getNodeValue(n)-meanProperties[propNum],2.0);
+  sd+=pow(property->getNodeDoubleValue(n)-meanProperties[propNum],2.0);
 
   if(sd<=0.0) {
     sdProperties[propNum]=1.0;

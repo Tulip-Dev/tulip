@@ -29,7 +29,7 @@
 #include "SOMPropertiesWidget.h"
 
 #include <tulip/GlGraphRenderingParameters.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/NumericProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ForEach.h>
@@ -215,6 +215,7 @@ void SOMView::setState(const DataSet &dataSet) {
   //update drawing dialog
   vector<string> propertyFilterType;
   propertyFilterType.push_back("double");
+  propertyFilterType.push_back("int");
   properties->clearpropertiesConfigurationWidget();
   properties->addfilter(graph(), propertyFilterType);
 
@@ -459,11 +460,11 @@ ColorProperty* SOMView::computePropertyColor(const string& propertyName, double&
   assert(propColor);
 
   //Original value
-  DoubleProperty *property = dynamic_cast<DoubleProperty*> (som->getProperty(propertyName));
+  NumericProperty *property = dynamic_cast<NumericProperty*> (som->getProperty(propertyName));
   assert(property);
 
-  minValue = property->getNodeMin(som);
-  maxValue = property->getNodeMax(som);
+  minValue = property->getNodeDoubleMin(som);
+  maxValue = property->getNodeDoubleMax(som);
   ColorScale* cs = properties->getPropertyColorScale(propertyName);
   assert(cs);
   computeColor(som, property, *cs, propColor);
@@ -732,9 +733,9 @@ void SOMView::clearSelection() {
   mapWidget->draw();
 }
 
-DoubleProperty* SOMView::getSelectedPropertyValues() {
+NumericProperty* SOMView::getSelectedPropertyValues() {
   if (som && !selection.empty() && som->existProperty(selection)) {
-    return static_cast<DoubleProperty*>(som->getProperty(selection));
+    return static_cast<NumericProperty*>(som->getProperty(selection));
   }
   else
     return NULL;
@@ -772,14 +773,14 @@ void SOMView::getPreviewsAtScreenCoord(int x, int y, std::vector<SOMPreviewCompo
   }
 }
 
-void SOMView::computeColor(SOMMap* som, tlp::DoubleProperty* property, tlp::ColorScale& colorScale, tlp::ColorProperty* result) {
+void SOMView::computeColor(SOMMap* som, tlp::NumericProperty* property, tlp::ColorScale& colorScale, tlp::ColorProperty* result) {
 
-  double min = property->getNodeMin(som);
-  double max = property->getNodeMax(som);
+  double min = property->getNodeDoubleMin(som);
+  double max = property->getNodeDoubleMax(som);
 
   node n;
   forEach(n,som->getNodes()) {
-    double curentValue = property->getNodeValue(n);
+    double curentValue = property->getNodeDoubleValue(n);
     float pos = 0;
 
     if (max - min != 0)

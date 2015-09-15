@@ -122,7 +122,7 @@ bool EditColorScaleInteractor::draw(GlMainWidget *glMainWidget) {
   assert(somView != NULL);
 
   if (colorScale) {
-    DoubleProperty *newProperty = somView->getSelectedPropertyValues();
+    NumericProperty *newProperty = somView->getSelectedPropertyValues();
 
     if (currentProperty != newProperty) {
       propertyChanged(somView,somView->getSelectedProperty(), newProperty);
@@ -162,12 +162,12 @@ void EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
   }
 }
 
-void EditColorScaleInteractor::propertyChanged(SOMView* somView,const string& propertyName, DoubleProperty *propertyValues) {
+void EditColorScaleInteractor::propertyChanged(SOMView* somView,const string& propertyName, NumericProperty *propertyValues) {
   if (propertyValues) {
     colorScale->setVisible(true);
     //If the input samples are normalized we need to translate it to unormalized values before displaying it.
-    double minValue = propertyValues->getNodeMin(somView->getSOM());
-    double maxValue = propertyValues->getNodeMax(somView->getSOM());
+    double minValue = propertyValues->getNodeDoubleMin(somView->getSOM());
+    double maxValue = propertyValues->getNodeDoubleMax(somView->getSOM());
     InputSample& inputSample = somView->getInputSample();
     colorScale->setMinValue(inputSample.isUsingNormalizedValues()?inputSample.unnormalize(minValue,propertyName):minValue);
     colorScale->setMaxValue(inputSample.isUsingNormalizedValues()?inputSample.unnormalize(maxValue,propertyName):maxValue);

@@ -31,7 +31,7 @@
 namespace tlp {
 class SOMPreviewComposite;
 class SOMMap;
-class DoubleProperty;
+class NumericProperty;
 class ColorProperty;
 class ColorScale;
 class BooleanProperty;
@@ -106,7 +106,7 @@ public:
    * Get the DoubleProperty pointer on the the current selected property. Return NULL if no properties are selected.
    * @return
    */
-  DoubleProperty* getSelectedPropertyValues();
+  NumericProperty* getSelectedPropertyValues();
 
   /**
    * Return the ColorProperty pointer for the selected property. Return NULL if no properties are selected.
@@ -288,7 +288,7 @@ private:
   void clearSOMMapView();
 
   /**
-   * Function used to create and fill a ColorProperty corresponding to a DoubleProperty in the SOM.
+   * Function used to create and fill a ColorProperty corresponding to a NumericProperty in the SOM.
    * @param propertyName the name of the property to compute.
    * @param minValue the smallest value in the double property.
    * @param maxValue the greatest value in the double property.
@@ -304,7 +304,7 @@ private:
    * @param colorScale the ColorScale used to compute the color.
    * @param result the color property containing the final color.
    */
-  void computeColor(SOMMap* som, tlp::DoubleProperty* property, tlp::ColorScale& colorScale,
+  void computeColor(SOMMap* som, tlp::NumericProperty* property, tlp::ColorScale& colorScale,
                     tlp::ColorProperty* result);
 
   void internalSwitchToDetailledMode(SOMPreviewComposite* preview, bool animation);

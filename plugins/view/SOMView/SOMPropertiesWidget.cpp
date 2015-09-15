@@ -30,6 +30,7 @@
 
 #include <tulip/GraphPropertiesSelectionWidget.h>
 #include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/PropertyTypes.h>
 
 
 using namespace std;
