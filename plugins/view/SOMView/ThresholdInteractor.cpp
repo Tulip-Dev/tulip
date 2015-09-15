@@ -342,7 +342,7 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
 
     QMouseEvent *e = static_cast<QMouseEvent*>(event);
     vector<SelectedEntity> selectedEntities;
-    set<Slider*> finalSelectedEntities;
+    //set<Slider*> finalSelectedEntities;
 
     //Update Camera for selection
     layer->set2DMode();
@@ -366,7 +366,8 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
             Slider *slider = dynamic_cast<Slider*> (composite);
 
             if (slider) {
-              finalSelectedEntities.insert(slider);
+              //finalSelectedEntities.insert(slider);
+	      mouvingSlider = slider;
             }
 
             break;
@@ -376,19 +377,21 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
               Slider *slider = dynamic_cast<Slider*> (itDisplay->second);
 
               if (slider) {
-                finalSelectedEntities.insert(slider);
+                //finalSelectedEntities.insert(slider);
+		mouvingSlider = slider;
               }
             }
           }
         }
       }
 
-      assert(!finalSelectedEntities.empty());
+      //assert(!finalSelectedEntities.empty());
 
       if (!startDrag) {
         glMainWidget->setMouseTracking(true);
         startDrag = true;
-        mouvingSlider = *finalSelectedEntities.begin();
+        //mouvingSlider = *finalSelectedEntities.begin();
+	assert(mouvingSlider);
         mouvingSlider->beginShift();
         XPosCursor = e->x();
         glMainWidget->getScene()->getGraphCamera().initGl();
@@ -468,7 +471,7 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
 
   node n;
   forEach(n,it) {
-    double nodeValue = currentProperty->getNodeValue(n);
+    double nodeValue = currentProperty->getNodeDoubleValue(n);
 
     if (nodeValue <=  rightSliderRealValue && nodeValue >= leftSliderRealValue) {
       if (mappingTab.find(n) != mappingTab.end()) {
@@ -492,7 +495,7 @@ void ThresholdInteractor::screenSizeChanged(SOMView* somView) {
     buildSliders(somView);
 }
 
-void ThresholdInteractor::propertyChanged(SOMView* somView,const string& propertyName, DoubleProperty *newProperty) {
+void ThresholdInteractor::propertyChanged(SOMView* somView,const string& propertyName, NumericProperty *newProperty) {
   EditColorScaleInteractor::propertyChanged(somView,propertyName, newProperty);
 
   if (newProperty) {
@@ -512,15 +515,15 @@ void ThresholdInteractor::buildSliders(SOMView* somView) {
 
   double minValue, maxValue, intervalMinValue, intervalMaxValue;
   //Get the minimum and the maximum values.
-  minValue = currentProperty->getNodeMin(somView->getSOM());
-  maxValue = currentProperty->getNodeMax(somView->getSOM());
+  minValue = currentProperty->getNodeDoubleMin(somView->getSOM());
+  maxValue = currentProperty->getNodeDoubleMax(somView->getSOM());
 
   if (mask) {
     intervalMinValue = maxValue;
     intervalMaxValue = minValue;
     node n;
     forEach (n,mask->getNodesEqualTo(true,som)) {
-      double nodeValue = currentProperty->getNodeValue(n);
+      double nodeValue = currentProperty->getNodeDoubleValue(n);
 
       if (nodeValue < intervalMinValue)
         intervalMinValue = nodeValue;
@@ -563,7 +566,7 @@ void ThresholdInteractor::buildSliders(SOMView* somView) {
   lSlider->setLinkedSlider(rSlider);
   rSlider->setLinkedSlider(lSlider);
 
-  SliderBar *bar = new SliderBar(lSlider, rSlider, textureName);
+  bar = new SliderBar(lSlider, rSlider, textureName);
   layer->addGlEntity(bar, "sliderBar");
 }
 void ThresholdInteractor::clearSliders() {
@@ -572,6 +575,7 @@ void ThresholdInteractor::clearSliders() {
 
   rSlider = NULL;
   lSlider = NULL;
+  bar = NULL;
 }
 
 void ThresholdInteractor::generateSliderTexture(GlMainWidget* widget) {

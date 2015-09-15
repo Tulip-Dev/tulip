@@ -24,11 +24,11 @@
 #include <vector>
 #include <tulip/Graph.h>
 #include <tulip/Observable.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/NumericProperty.h>
 #include "DynamicVector.h"
 
 /**
-  * Handle all the the samples data used to train the SOM. Take a graph and a vector of DoubleProperties to use it as sample data.
+  * Handle all the the samples data used to train the SOM. Take a graph and a vector of NumericProperties to use it as sample data.
   * This object can handle standard or normalized values.
   **/
 namespace tlp {
@@ -133,7 +133,7 @@ protected:
 
   //The number of properties to listen
   std::vector<std::string> propertiesNameList;
-  std::vector<tlp::DoubleProperty*> propertiesList;
+  std::vector<tlp::NumericProperty*> propertiesList;
 
 
   //The mean of each property

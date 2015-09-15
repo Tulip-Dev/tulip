@@ -31,7 +31,7 @@ class GlLayer;
 class View;
 class GlMainWidget;
 class GlLabelledColorScale;
-class DoubleProperty;
+class NumericProperty;
 class SOMView;
 
 class EditColorScaleInteractor: public GLInteractorComponent {
@@ -45,9 +45,9 @@ public:
   bool draw(GlMainWidget *glMainWidget);
 
 protected:
-  virtual void propertyChanged(SOMView* somView,const std::string& propertyName, DoubleProperty *newProperty);
+  virtual void propertyChanged(SOMView* somView,const std::string& propertyName, NumericProperty *newProperty);
   virtual void screenSizeChanged(SOMView* somView);
-  DoubleProperty *currentProperty;
+  NumericProperty *currentProperty;
   GlLabelledColorScale *colorScale;
   float widthPercent;
   float heightPercent;

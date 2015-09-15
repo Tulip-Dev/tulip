@@ -148,7 +148,7 @@ public:
   void setView(View *view);
 protected:
   void screenSizeChanged(SOMView* somView);
-  void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::DoubleProperty *newProperty);
+  void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::NumericProperty *newProperty);
   void performSelection(SOMView *somView, Iterator<node> *it);
   void buildSliders(SOMView* somView);
   void clearSliders();
@@ -159,6 +159,7 @@ protected:
   Slider *mouvingSlider;
   ColorScaleSlider *rSlider;
   ColorScaleSlider *lSlider;
+  SliderBar* bar;
   bool startDrag;
   int XPosCursor;
 
