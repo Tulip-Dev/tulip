@@ -983,51 +983,15 @@ Dimensions
 ----------
 
 .. image:: _images/i_som_dimensions.png
-    :width: 395
 
 In a similar way to what we have already performed with the pixel oriented tool or with the scatterplot 2D view, the panel called *Dimensions* can allow you to select the properties to use for building the self organizing maps.
 
-.. _workspace_selforganizing_learning:
+Options
+-------
 
-Learning
---------
+.. image:: _images/i_som_options.png
 
-.. image:: _images/i_som_learning.png
-    :width: 395
-
-Beside offering the capability to work on high-dimensionnal data, the self organizing maps are able to use competitive learning. This panel offers to the user to specify the learning coefficient.
-
-.. _workspace_selforganizing_diffusion:
-
-Diffusion
----------
-
-.. image:: _images/i_som_diffusion.png
-    :width: 395
-
-
-
-
-.. _workspace_selforganizing_representation:
-
-Representation
---------------
-
-.. image:: _images/i_som_representation.png
-    :width: 395
-
-This panel 
-
-BMU = Best Matching Unit
-
-.. _workspace_selforganizing_animation:
-
-Animation
----------
-
-.. image:: _images/i_som_animation.png
-    :width: 395
-
+Beside offering the capability to work on high-dimensionnal data, the self organizing maps are able to use competitive learning.
 
 .. _workspace_spreadsheet_example:
 
