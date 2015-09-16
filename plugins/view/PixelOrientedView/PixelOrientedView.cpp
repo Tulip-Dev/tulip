@@ -267,10 +267,6 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
   string detailOverviewName;
   dataSet.get("detail overview  name", detailOverviewName);
 
-  if (detailOverviewName != "") {
-    switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
-  }
-
   center = true;
 
   if(haveSelectedGraphProperties) {
@@ -280,6 +276,10 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
 
   draw();
   center = false;
+
+  if (detailOverviewName != "") {
+    switchFromSmallMultiplesToDetailView(overviewsMap[detailOverviewName]);
+  }
 
   drawOverview(true);
   registerTriggers();
