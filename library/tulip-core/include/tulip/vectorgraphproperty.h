@@ -21,6 +21,7 @@
 #ifndef VECTORGRAPHPROPERTY_H
 #define VECTORGRAPHPROPERTY_H
 #include <algorithm>
+#include <cassert>
 
 namespace tlp {
 class VectorGraph;
