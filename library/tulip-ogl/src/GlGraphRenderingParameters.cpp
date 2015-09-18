@@ -101,8 +101,9 @@ DataSet GlGraphRenderingParameters::getParameters() const {
   // ordering
   data.set("elementsOrdered", _elementOrdered);
   data.set("elementsOrderedDescending", _elementOrderedDescending);
+
   if (_elementOrderingProperty)
-  data.set("elementsOrderingPropertyName", _elementOrderingProperty->getName());
+    data.set("elementsOrderingPropertyName", _elementOrderingProperty->getName());
 
   return data;
 }
