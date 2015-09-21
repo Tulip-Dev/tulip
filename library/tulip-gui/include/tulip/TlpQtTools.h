@@ -67,7 +67,6 @@ inline bool QStringCaseCmp(const QString& s1, const QString& s2) {
 /**
     * @brief Convert the property type string to a label to display in the GUI.
     * The property type label is the string to display in the GUI instead of the basic property type string.
-    * By example for a property of type "double" the label displayed in the GUI will be "Metric".
     **/
 TLP_QT_SCOPE QString propertyTypeToPropertyTypeLabel(const std::string& typeName);
 

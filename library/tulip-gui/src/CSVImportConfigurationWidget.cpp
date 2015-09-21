@@ -68,11 +68,11 @@ PropertyConfigurationWidget::PropertyConfigurationWidget(unsigned int propertyNu
 
 void PropertyConfigurationWidget::fillPropertyTypeComboBox() {
   propertyTypeComboBox->clear();
+  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename),QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
+  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename),QVariant(QString::fromStdString(DoubleProperty::propertyTypename)));
   propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(ColorProperty::propertyTypename),QVariant(QString::fromStdString(ColorProperty::propertyTypename)));
   propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(IntegerProperty::propertyTypename),QVariant(QString::fromStdString(IntegerProperty::propertyTypename)));
   propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(LayoutProperty::propertyTypename),QVariant(QString::fromStdString(LayoutProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(DoubleProperty::propertyTypename),QVariant(QString::fromStdString(DoubleProperty::propertyTypename)));
-  propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(BooleanProperty::propertyTypename),QVariant(QString::fromStdString(BooleanProperty::propertyTypename)));
   propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(SizeProperty::propertyTypename),QVariant(QString::fromStdString(SizeProperty::propertyTypename)));
   propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(StringProperty::propertyTypename),QVariant(QString::fromStdString(StringProperty::propertyTypename)));
   propertyTypeComboBox->addItem(propertyTypeToPropertyTypeLabel(BooleanVectorProperty::propertyTypename),QVariant(QString::fromStdString(BooleanVectorProperty::propertyTypename)));
