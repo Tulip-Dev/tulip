@@ -51,11 +51,11 @@ void PropertyCreationDialog::initGui() {
   ui->setupUi(this);
   QStringList labels;
   //Init properties list
+  labels<<propertyTypeToPropertyTypeLabel("bool");
   labels<<propertyTypeToPropertyTypeLabel("color");
+  labels<<propertyTypeToPropertyTypeLabel("double");
   labels<<propertyTypeToPropertyTypeLabel("int");
   labels<<propertyTypeToPropertyTypeLabel("layout");
-  labels<<propertyTypeToPropertyTypeLabel("double");
-  labels<<propertyTypeToPropertyTypeLabel("bool");
   labels<<propertyTypeToPropertyTypeLabel("size");
   labels<<propertyTypeToPropertyTypeLabel("string");
   labels<<propertyTypeToPropertyTypeLabel("vector<bool>");

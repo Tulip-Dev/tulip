@@ -76,9 +76,9 @@ using namespace tlp;
   **/
 static map<string,QString> buildPropertyTypeToPropertyTypeLabelMap() {
   map<string,QString> propertyTypeToPropertyTypeLabel;
-  propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename]=QString("Selection");
+  propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename]=QString("Boolean");
   propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename]=QString("Color");
-  propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename]=QString("Metric");
+  propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename]=QString("Double");
   propertyTypeToPropertyTypeLabel[GraphProperty::propertyTypename]=QString("Graph");
   propertyTypeToPropertyTypeLabel[IntegerProperty::propertyTypename]=QString("Integer");
   propertyTypeToPropertyTypeLabel[LayoutProperty::propertyTypename]=QString("Layout");
