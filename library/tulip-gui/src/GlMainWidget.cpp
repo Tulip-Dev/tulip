@@ -147,6 +147,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
 //==================================================
 GlMainWidget::~GlMainWidget() {
   delete glFrameBuf;
+  delete glFrameBuf2;
   delete [] renderingStore;
 }
 //==================================================
