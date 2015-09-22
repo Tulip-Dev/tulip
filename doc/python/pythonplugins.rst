@@ -14,7 +14,7 @@ Below is the list of plugins that can be implemented in Python :
 	* General algorithms
 	* Selection algorithms
 	* Color algorithms
-	* Metric algorithms
+	* Measure algorithms
 	* Integer algorithms
 	* Layout algorithms
 	* Size algorithms
@@ -163,15 +163,15 @@ A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as il
   # and updates the GUI to make it accessible through the menus.
   tulipplugins.registerPluginOfGroup("ColorAlgorithmExample", "Color Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 	
-Writing a metric algorithm in Python
+Writing a measure algorithm in Python
 ----------------------------------------	
 		
-A metric algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as illustrated below::
+A measure algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as illustrated below::
 
   from tulip import *
   import tulipplugins
 
-  class MetricAlgorithmExample(tlp.DoubleAlgorithm):
+  class MeasureAlgorithmExample(tlp.DoubleAlgorithm):
       def __init__(self, context):
           tlp.DoubleAlgorithm.__init__(self, context)
           # you can add parameters to the plugin here through the following syntax
@@ -207,7 +207,7 @@ A metric algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as 
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
-  tulipplugins.registerPluginOfGroup("MetricAlgorithmExample", "Metric Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
+  tulipplugins.registerPluginOfGroup("MeasureAlgorithmExample", "Measure Algorithm Demo", "author", "27/07/2011", "infos", "1.0", "Python")
 
 Writing an integer algorithm in Python
 ----------------------------------------	
