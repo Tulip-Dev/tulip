@@ -268,13 +268,13 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   _classAttributeToType["tlp.Algorithm"]["self.graph"] = "tlp.Graph";
   _classAttributeToType["tlp.Algorithm"]["self.dataSet"] = "tlp.DataSet";
   _classAttributeToType["tlp.Algorithm"]["self.pluginProgress"] = "tlp.PluginProgress";
-  _classAttributeToType["tlp.BooleanAlgorithm"]["self.booleanResult"] = "tlp.BooleanProperty";
-  _classAttributeToType["tlp.ColorAlgorithm"]["self.colorResult"] = "tlp.ColorProperty";
-  _classAttributeToType["tlp.DoubleAlgorithm"]["self.doubleResult"] = "tlp.DoubleProperty";
-  _classAttributeToType["tlp.IntegerAlgorithm"]["self.integerResult"] = "tlp.IntegerProperty";
-  _classAttributeToType["tlp.LayoutAlgorithm"]["self.layoutResult"] = "tlp.LayoutProperty";
-  _classAttributeToType["tlp.SizeAlgorithm"]["self.sizeResult"] = "tlp.SizeProperty";
-  _classAttributeToType["tlp.StringAlgorithm"]["self.stringResult"] = "tlp.StringProperty";
+  _classAttributeToType["tlp.BooleanAlgorithm"]["self.result"] = "tlp.BooleanProperty";
+  _classAttributeToType["tlp.ColorAlgorithm"]["self.result"] = "tlp.ColorProperty";
+  _classAttributeToType["tlp.DoubleAlgorithm"]["self.result"] = "tlp.DoubleProperty";
+  _classAttributeToType["tlp.IntegerAlgorithm"]["self.result"] = "tlp.IntegerProperty";
+  _classAttributeToType["tlp.LayoutAlgorithm"]["self.result"] = "tlp.LayoutProperty";
+  _classAttributeToType["tlp.SizeAlgorithm"]["self.result"] = "tlp.SizeProperty";
+  _classAttributeToType["tlp.StringAlgorithm"]["self.result"] = "tlp.StringProperty";
 
   QSet<QString> types = _apiDb->getTypesList();
   foreach(QString type, types) {
