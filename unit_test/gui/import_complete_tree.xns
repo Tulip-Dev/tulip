@@ -1285,30 +1285,6 @@ NEW-WINDOW:740,366:56623404,56623404,21006048,0,0,0:1x28+323+120:0,0:Create new 
 7,6,980,382,0,0,0,8641621,10,'USB Optical Mouse'
 7,6,980,383,0,0,0,8641637,10,'USB Optical Mouse'
 7,6,980,384,0,0,0,8641661,10,'USB Optical Mouse'
-7,4,0,0,1,0,0,8641965,10,USB Optical Mouse
-6,4,0,0,1,0,0,8641965,2,Virtual core pointer
-7,5,0,0,1,0,0,8642109,10,USB Optical Mouse
-6,5,0,0,1,0,0,8642109,2,Virtual core pointer
-7,2,0,0,0,116,0,8643758,11,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,8643758,3,Virtual core keyboard
-7,3,0,0,0,116,0,8643837,11,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,8643837,3,Virtual core keyboard
-7,2,0,0,0,116,0,8643994,11,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,8643994,3,Virtual core keyboard
-7,3,0,0,0,116,0,8644082,11,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,8644082,3,Virtual core keyboard
-7,2,0,0,0,116,0,8644268,11,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,8644268,3,Virtual core keyboard
-7,3,0,0,0,116,0,8644405,11,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,8644405,3,Virtual core keyboard
-7,2,0,0,0,116,0,8644611,11,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,8644611,3,Virtual core keyboard
-7,3,0,0,0,116,0,8644728,11,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,8644728,3,Virtual core keyboard
-7,2,0,0,0,36,0,8645424,11,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,8645424,3,Virtual core keyboard
-7,3,0,0,0,36,0,8645552,11,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,8645552,3,Virtual core keyboard
 7,6,979,385,0,0,0,8646597,10,'USB Optical Mouse'
 7,6,979,386,0,0,0,8646605,10,'USB Optical Mouse'
 7,6,978,387,0,0,0,8646613,10,'USB Optical Mouse'
