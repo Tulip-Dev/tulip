@@ -100,9 +100,9 @@ static const map<string,QString> propertyTypeToPropertyTypeLabelMap = buildPrope
   **/
 static map<QString,string> buildPropertyTypeLabelToPropertyTypeMap() {
   map<QString,string> propertyTypeLabelToPropertyType;
-  propertyTypeLabelToPropertyType[QString("Selection")]=BooleanProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Boolean")]=BooleanProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("Color")]=ColorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Metric")]=DoubleProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Double")]=DoubleProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("Graph")]=GraphProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("Integer")]=IntegerProperty::propertyTypename;
   propertyTypeLabelToPropertyType[QString("Layout")]=LayoutProperty::propertyTypename;
