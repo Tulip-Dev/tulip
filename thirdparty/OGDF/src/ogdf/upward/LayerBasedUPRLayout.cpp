@@ -606,9 +606,12 @@ void LayerBasedUPRLayout::postProcessing_sourceReorder(HierarchyLevels &levels, 
 			comp.H = &H;
 			nodes.quicksort(comp);
 
-			//postion of the median
-			node v = *nodes.get(nodes.size()/2);
-			wantedPos = levels.pos(v);
+			//position of the median
+			// in not a single node
+			if (nodes.size()) {
+			  node v = *nodes.get(nodes.size()/2);
+			  wantedPos = levels.pos(v);
+			}
 		}
 
 		//move s to front of the array
@@ -619,37 +622,39 @@ void LayerBasedUPRLayout::postProcessing_sourceReorder(HierarchyLevels &levels, 
 		}
 
 		// compute the position of s, which cause min. crossing
-		int minPos = pos;
-		int oldCr = levels.calculateCrossings(l.index());;
-		while(pos != l.size()-1) {
-			l.swap(pos, pos+1);
-			int newCr = levels.calculateCrossings(l.index());
-			if (newCr <= oldCr) {
-				if (newCr < oldCr) {
-					minPos = levels.pos(s);
-					oldCr = newCr;
-				}
-				else {
-					if (abs(minPos - wantedPos) > abs(pos+1 - wantedPos)) {
-						minPos = levels.pos(s);
-						oldCr = newCr;
-					}
+		if (levels.size() > 1) {
+		  int minPos = pos;
+		  int oldCr = levels.calculateCrossings(l.index());;
+		  while(pos != l.size()-1) {
+		    l.swap(pos, pos+1);
+		    int newCr = levels.calculateCrossings(l.index());
+		    if (newCr <= oldCr) {
+		      if (newCr < oldCr) {
+			minPos = levels.pos(s);
+			oldCr = newCr;
+		      }
+		      else {
+			if (abs(minPos - wantedPos) > abs(pos+1 - wantedPos)) {
+			  minPos = levels.pos(s);
+			  oldCr = newCr;
+			}
 
-				}
-			}
-			pos++;
-		}
+		      }
+		    }
+		    pos++;
+		  }
 
-		//move s to minPos
-		while (pos != minPos) {
-			if (minPos > pos) {
-				l.swap(pos, pos+1);
-				pos++;
-			}
-			if (minPos < pos) {
-				l.swap(pos, pos-1);
-				pos--;
-			}
+		  //move s to minPos
+		  while (pos != minPos) {
+		    if (minPos > pos) {
+		      l.swap(pos, pos+1);
+		      pos++;
+		    }
+		    if (minPos < pos) {
+		      l.swap(pos, pos-1);
+		      pos--;
+		    }
+		  }
 		}
 	}
 }
