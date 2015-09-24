@@ -446,6 +446,7 @@ static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) 
     addListenerToWholeGraphHierarchy(sg, listener);
   }
   root->addListener(listener);
+  root->addObserver(listener);
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
@@ -529,39 +530,9 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
       return;
 
     if (_graphs.contains(ge->getGraph()->getRoot())) {
-      static bool removeOnAdd = false;
 
-      if (ge->getType() == GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH) {
-        // that event must only be treated on a root graph
-        if (ge->getGraph() != ge->getGraph()->getRoot()) {
-          return;
-        }
 
-        const Graph* sg = ge->getSubGraph();
-
-        Graph* parentGraph = sg->getSuperGraph();
-
-        QModelIndex parentIndex = indexOf(parentGraph);
-
-        assert(parentIndex.isValid());
-
-        if (hasIndex(parentIndex.row(), parentIndex.column(), parentIndex.parent())) {
-          // undo/redo case : a sub-graph is readded in the hierarchy
-          // its sub-graphs were moved to its parent so we may need to remove
-          // rows in the parent index as these sub-graphs
-          // will be restored to the readded sub-graph
-          int nbRowsToRemove = sg->numberOfSubGraphs()-1;
-
-          if (nbRowsToRemove > 0 && parentGraph->isSubGraph(sg->getNthSubGraph(0))) {
-            beginRemoveRows(parentIndex, parentGraph->numberOfSubGraphs() - nbRowsToRemove, parentGraph->numberOfSubGraphs()-1);
-            removeOnAdd = true;
-          }
-          else  {
-            beginInsertRows(parentIndex, parentGraph->numberOfSubGraphs(), parentGraph->numberOfSubGraphs());
-          }
-        }
-      }
-      else if (ge->getType() == GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH) {
+      if (ge->getType() == GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH) {
         // that event must only be treated on a root graph
         if (ge->getGraph() != ge->getGraph()->getRoot()) {
           return;
@@ -587,52 +558,14 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
 
         }
-        emit layoutAboutToBeChanged();
-
-        if (hasIndex(parentIndex.row(), parentIndex.column(), parentIndex.parent())) {
-          if (removeOnAdd) {
-            endRemoveRows();
-          }
-          else {
-            endInsertRows();
-          }
-        }
-
-        removeOnAdd = false;
 
         sg->addListener(this);
+        sg->addObserver(this);
 
-        emit layoutChanged();
-
-      }
-      else if (ge->getType() == GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH) {
-        // that event must only be treated on a root graph
-        if (ge->getGraph() != ge->getGraph()->getRoot()) {
-          return;
-        }
-
-        const Graph* sg = ge->getSubGraph();
-
-        Graph* parentGraph = sg->getSuperGraph();
-
-        QModelIndex index = indexOf(sg);
-
-        assert(index.isValid());
-
-        QModelIndex parentIndex = indexOf(parentGraph);
-
-        assert(parentIndex.isValid());
-
-        int nbRowsToAdd = sg->numberOfSubGraphs() - 1;
-
-        // when a sub-graph is deleted, its sub-graphs are reparented to its ancestor
-        // we may need to add rows in the model
-        if (nbRowsToAdd > 0) {
-          beginInsertRows(parentIndex, parentGraph->numberOfSubGraphs(), parentGraph->numberOfSubGraphs()+nbRowsToAdd-1);
-        }
-        else if (nbRowsToAdd < 0) {
-          beginRemoveRows(parentIndex, index.row(), index.row());
-        }
+        // insert the parent graph in the graphs changed set
+        // in order to update associated tree views, displaying the graphs hierarchies,
+        // when the treatEvents method is called
+        _graphsChanged.insert(parentGraph);
 
       }
       else if (ge->getType() == GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH) {
@@ -656,8 +589,6 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
 #endif
 
-        emit layoutAboutToBeChanged();
-
         // update index cache for subgraphs of parent graph
         Graph* sg2 = NULL;
 
@@ -671,33 +602,36 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         _indexCache.remove(sg);
         changePersistentIndex(index, QModelIndex());
 
-        int nbRowsToAdd = sg->numberOfSubGraphs() - 1;
-
-        if (nbRowsToAdd > 0) {
-          endInsertRows();
-        }
-        else if (nbRowsToAdd < 0) {
-          endRemoveRows();
-        }
-
         sg->removeListener(this);
+        sg->removeObserver(this);
 
-        emit layoutChanged();
+        // insert the parent graph in the graphs changed set
+        // in order to update associated tree views, displaying the graphs hierarchies,
+        // when the treatEvents method is called
+        _graphsChanged.insert(parentGraph);
+
+        // remove the subgraph from the graphs changed set
+        // as no update will be required for it in the associated tree views
+        _graphsChanged.remove(sg);
+
+        if (currentGraph() == sg) {
+          setCurrentGraph(parentGraph);
+          setCurrentGraph(parentGraph);
+        }
+
       }
       else if (ge->getType() == GraphEvent::TLP_ADD_NODE || ge->getType() == GraphEvent::TLP_ADD_NODES ||
                ge->getType() == GraphEvent::TLP_DEL_NODE) {
         const Graph *graph = ge->getGraph();
-        QModelIndex graphIndex = indexOf(graph);
-        QModelIndex graphNodesIndex = graphIndex.sibling(graphIndex.row(), NODES_SECTION);
-        emit dataChanged(graphNodesIndex, graphNodesIndex);
+        // row representing the graph in the associated tree views has to be updated
+        _graphsChanged.insert(graph);
 
       }
       else if (ge->getType() == GraphEvent::TLP_ADD_EDGE || ge->getType() == GraphEvent::TLP_ADD_EDGES ||
                ge->getType() == GraphEvent::TLP_DEL_EDGE) {
         const Graph *graph = ge->getGraph();
-        QModelIndex graphIndex = indexOf(graph);
-        QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
-        emit dataChanged(graphEdgesIndex, graphEdgesIndex);
+        // row representing the graph in the associated tree views has to be updated
+        _graphsChanged.insert(graph);
       }
     }
   }
@@ -709,9 +643,32 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
     if (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE && ge->getAttributeName() == "name") {
       const Graph *graph = ge->getGraph();
-      QModelIndex graphIndex = indexOf(graph);
-      emit dataChanged(graphIndex, graphIndex);
+      // row representing the graph in the associated tree views has to be updated
+      _graphsChanged.insert(graph);
     }
 
   }
+}
+
+void GraphHierarchiesModel::treatEvents(const std::vector<tlp::Event> &) {
+
+  if (_graphsChanged.isEmpty()) {
+    return;
+  }
+
+  // update the rows associated to modified graphs (number of subgraphs/nodes/edges has changed)
+  // in the associated tree views
+
+  emit layoutAboutToBeChanged();
+
+  const Graph *graph = NULL;
+  foreach (graph, _graphsChanged) {
+    QModelIndex graphIndex = indexOf(graph);
+    QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
+    emit dataChanged(graphIndex, graphEdgesIndex);
+  }
+
+  emit layoutChanged();
+
+  _graphsChanged.clear();
 }

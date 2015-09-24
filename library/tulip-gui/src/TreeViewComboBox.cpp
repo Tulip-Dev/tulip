@@ -25,19 +25,6 @@
 #include <QStyleOptionViewItem>
 #include <QMouseEvent>
 #include <QTreeView>
-#include <QTimer>
-#include <QSortFilterProxyModel>
-
-class TreeViewUpdateTimer : public QTimer {
-
-public:
-
-  TreeViewUpdateTimer(const QModelIndex &topLeft, const QModelIndex &bottomRight) :
-    topLeft(topLeft), bottomRight(bottomRight) {}
-
-  QModelIndex topLeft, bottomRight;
-
-};
 
 class TreeViewDelegate: public QStyledItemDelegate {
 public:
@@ -51,75 +38,8 @@ public:
   }
 };
 
-DeferredUpdateTreeView::DeferredUpdateTreeView(QWidget *parent) : QTreeView(parent) {}
-
-DeferredUpdateTreeView::~DeferredUpdateTreeView() {
-  QMap<QPair<QModelIndex, QModelIndex>, QTimer *>::iterator it = _updateTimers.begin();
-
-  for( ; it != _updateTimers.end() ; ++it) {
-    delete it.value();
-  }
-}
-
-void DeferredUpdateTreeView::dataChanged(const QModelIndex &topLeft, const QModelIndex &bottomRight) {
-  QPair<QModelIndex, QModelIndex> p = qMakePair(topLeft, bottomRight);
-
-  if (_updateTimers.find(p) == _updateTimers.end()) {
-    _updateTimers[p] = new TreeViewUpdateTimer(topLeft, bottomRight);
-    _updateTimers[p]->setSingleShot(true);
-    connect(_updateTimers[p], SIGNAL(timeout()), this, SLOT(callDataChanged()));
-  }
-
-  _updateTimers[p]->start(50);
-}
-
-void DeferredUpdateTreeView::callDataChanged() {
-  // As the view update is asynchronous, if the original model is wrapped by a QSortFilterProxyModel
-  // it needs to be invalidate in order to rebuild the index mapping and prevent sefgault
-  QSortFilterProxyModel *qsfpm = dynamic_cast<QSortFilterProxyModel*>(model());
-
-  if (qsfpm) {
-    qsfpm->invalidate();
-  }
-
-  TreeViewUpdateTimer *tvut = static_cast<TreeViewUpdateTimer*>(sender());
-  QTreeView::dataChanged(tvut->topLeft, tvut->bottomRight);
-  QPair<QModelIndex, QModelIndex> p = qMakePair(tvut->topLeft, tvut->bottomRight);
-  delete _updateTimers[p];
-  _updateTimers.remove(p);
-}
-
-void DeferredUpdateTreeView::rowsAboutToBeRemoved(const QModelIndex &parent, int start, int end) {
-  // Cancel all deferred updates for child indices of parent index to prevent segfault
-  // as the data they point to can be deleted before the call to QTreeView::dataChanged
-  cancelUpdates(parent);
-  QTreeView::rowsAboutToBeRemoved(parent, start, end);
-}
-
-void DeferredUpdateTreeView::rowsInserted(const QModelIndex &parent, int start, int end) {
-  // Cancel all deferred updates for child indices of parent index to prevent segfault
-  // as the data they point to can be deleted before the call to QTreeView::dataChanged
-  cancelUpdates(parent);
-  QTreeView::rowsInserted(parent, start, end);
-}
-
-void DeferredUpdateTreeView::cancelUpdates(const QModelIndex &parent) {
-  _updateTimers.clear();
-  QMap<QPair<QModelIndex, QModelIndex>, QTimer *>::iterator it = _updateTimers.begin();
-
-  while (it != _updateTimers.end()) {
-    if (it.key().first.parent() == parent || it.key().second.parent() == parent) {
-      delete it.value();
-      it = _updateTimers.erase(it);
-    }
-    else {
-      ++it;
-    }
-  }
-}
-
 TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _skipNextHide(false), _popupVisible(false) {
-  _treeView = new DeferredUpdateTreeView(this);
+  _treeView = new QTreeView(this);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);
   _treeView->setAlternatingRowColors(true);
   _treeView->setSelectionBehavior(QTreeView::SelectRows);

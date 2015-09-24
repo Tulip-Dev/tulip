@@ -35,7 +35,7 @@ namespace Ui {
 class GraphHierarchiesEditorData;
 }
 
-class CustomTreeView : public DeferredUpdateTreeView {
+class CustomTreeView : public QTreeView {
 
   Q_OBJECT
 

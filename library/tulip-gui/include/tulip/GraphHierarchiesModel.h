@@ -26,6 +26,7 @@
 #include <tulip/Observable.h>
 
 #include <QList>
+#include <QSet>
 
 namespace tlp {
 class Graph;
@@ -101,6 +102,8 @@ public:
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event &);
 
+  void treatEvents(const std::vector<tlp::Event> &);
+
   // active graph handling
   void setCurrentGraph(tlp::Graph *);
   tlp::Graph *currentGraph() const;
@@ -114,6 +117,11 @@ public slots:
 
   QMap<QString,tlp::Graph*> readProject(tlp::TulipProject *,tlp::PluginProgress *);
   QMap<tlp::Graph*,QString> writeProject(tlp::TulipProject *, tlp::PluginProgress *);
+
+private:
+
+  QSet<const Graph *> _graphsChanged;
+
 
 };
 

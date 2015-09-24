@@ -24,40 +24,8 @@
 
 #include <QComboBox>
 #include <QTreeView>
-#include <QMap>
-#include <QPair>
 
 #include <tulip/tulipconf.h>
-
-class QTimer;
-
-class TLP_QT_SCOPE DeferredUpdateTreeView : public QTreeView {
-
-  Q_OBJECT
-
-public:
-
-  DeferredUpdateTreeView(QWidget *parent = 0);
-
-  ~DeferredUpdateTreeView();
-
-protected slots:
-
-  void dataChanged(const QModelIndex & topLeft, const QModelIndex & bottomRight);
-
-  void callDataChanged();
-
-  void rowsAboutToBeRemoved(const QModelIndex & parent, int start, int end);
-
-  void rowsInserted(const QModelIndex & parent, int start, int end);
-
-private:
-
-  void cancelUpdates(const QModelIndex &parent);
-
-  QMap<QPair<QModelIndex, QModelIndex>, QTimer *> _updateTimers;
-
-};
 
 class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
 
