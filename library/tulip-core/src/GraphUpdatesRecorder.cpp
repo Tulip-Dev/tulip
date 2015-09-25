@@ -1345,8 +1345,7 @@ void GraphUpdatesRecorder::addSubGraph(Graph* g, Graph* sg) {
   // last added sub-graph will be deleted first during undo/redo
   addedSubGraphs.push_front(std::make_pair(g, sg));
 
-  if (restartAllowed)
-    sg->addListener(this);
+  sg->addListener(this);
 }
 
 void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
