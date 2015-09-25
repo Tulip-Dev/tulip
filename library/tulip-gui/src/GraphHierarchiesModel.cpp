@@ -542,7 +542,11 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
         Graph* parentGraph = sg->getSuperGraph();
 
+#ifndef NDEBUG
         QModelIndex parentIndex = indexOf(parentGraph);
+
+        assert(parentIndex.isValid());
+#endif
 
         // update index cache for subgraphs of parent graph and added sub-graphs
         Graph* sg2 = NULL;
@@ -586,7 +590,6 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         QModelIndex parentIndex = indexOf(parentGraph);
 
         assert(parentIndex.isValid());
-
 #endif
 
         // update index cache for subgraphs of parent graph
@@ -643,8 +646,11 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
     if (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE && ge->getAttributeName() == "name") {
       const Graph *graph = ge->getGraph();
-      // row representing the graph in the associated tree views has to be updated
-      _graphsChanged.insert(graph);
+      // TLP_INFORMATION events are only sent to listeners so we are forced to emit the dataChanged signal
+      // here as the treatEvents method will not be called afterwards in that particular case
+      QModelIndex graphIndex = indexOf(graph);
+      QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
+      emit dataChanged(graphIndex, graphEdgesIndex);
     }
 
   }
