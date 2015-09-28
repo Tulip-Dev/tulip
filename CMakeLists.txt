@@ -632,7 +632,7 @@ IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF(BUILD_TESTS)
 
-INSTALL(FILES FindTULIP.cmake FindGLEW.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
+INSTALL(FILES FindTULIP.cmake FindGLEW.cmake FindQtX.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
 
 IF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(bundlers)
