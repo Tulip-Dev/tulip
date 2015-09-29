@@ -70,7 +70,7 @@ public:
     addInParameter<tlp::LayoutProperty>("layout", "the input layout of the graph", "viewLayout");
     addInParameter<float>("curve roundness", "parameter for tweaking the curve roundness. The value range is from 0 to 1 with a maximum roundness at 0.5.", "0.5");
     addInParameter<tlp::StringCollection>("curve type", "the type of curve to compute (12 available : 6 quadratic ones and 6 cubic ones)", CURVE_TYPE_LIST);
-    addInParameter<bool>("bézier edges", "if activated, set all edges shapes to Bézier curves", "true");
+    addInParameter<bool>("bezier edges", "if activated, set all edges shapes to Bezier curves", "true");
   }
 
   std::vector<tlp::Coord> computeCubicBezierControlPoints(tlp::edge e) {
@@ -311,7 +311,7 @@ public:
 
       dataSet->get("curve roundness", curveRoundness);
       dataSet->get("layout", layout);
-      dataSet->get("bézier edges", bezierEdges);
+      dataSet->get("bezier edges", bezierEdges);
     }
 
     tlp::edge e;
