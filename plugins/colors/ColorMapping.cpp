@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <cmath>
+#include <limits>
+
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Color.h>
 #include <tulip/Vector.h>
@@ -65,7 +68,34 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "Color scale used to transform a scalar into a color." \
   HTML_HELP_CLOSE(),
-
+  // override min
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "Set true to override minimum value of input property to keep coloring consistent across datasets." \
+  HTML_HELP_CLOSE(),
+  // min
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "double" ) \
+  HTML_HELP_DEF( "default", "" ) \
+  HTML_HELP_BODY() \
+  "Value to set minimum value of input property." \
+  HTML_HELP_CLOSE(),
+  // override max
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "Set true to override maximum value of input property to keep coloring consistent across datasets." \
+  HTML_HELP_CLOSE(),
+  // max
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "double" ) \
+  HTML_HELP_DEF( "default", "" ) \
+  HTML_HELP_BODY() \
+  "Value to set maximum value of input property." \
+  HTML_HELP_CLOSE(),
 };
 
 }
@@ -91,15 +121,27 @@ private:
   Vector<float,4> deltaRGBA;
   vector<pair<string,Color> > enumeratedMappingResultVector;
   map<string, vector<unsigned int> > mapMetricElements;
+  double maxInput;
+  double minInput;
+  bool overrideMaxInput;
+  bool overrideMinInput;
 
 
 public:
   PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorizes the nodes or edges of a graph according to the values of a given property.","2.2", "Color")
-  ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES) {
+  ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES),
+    maxInput(std::numeric_limits<double>::quiet_NaN()), minInput(std::numeric_limits<double>::quiet_NaN()),
+    overrideMaxInput(false), overrideMinInput(false)
+  {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES);
     addInParameter<ColorScale>("colorScale",paramHelp[3],"((75, 75, 255, 200), (156, 161, 255, 200), (255, 255, 127, 200), (255, 170, 0, 200), (229, 40, 0, 200))");
+    addInParameter<bool>("override minimum value",paramHelp[4],"false", false);
+    addInParameter<double>("minimum value",paramHelp[5],"", false);
+    addInParameter<bool>("override maximum value",paramHelp[6],"false", false);
+    addInParameter<double>("maximum value",paramHelp[7],"", false);
+
     // result needs to be an inout parameter
     // in order to preserve the original values of non targetted elements
     // i.e if "target" = "nodes", the values of edges must be preserved
@@ -112,6 +154,8 @@ public:
   //=========================================================
   Color getColor(double value, double range) {
     if (range==0) range = 1;
+    if(value < 0) value = 0;
+    if(value > range) value = range;
 
     return colorScale.getColorAtPos(value/range);
   }
@@ -127,7 +171,24 @@ public:
       dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->get("colorScale", colorScale);
+      dataSet->get("override minimum value", overrideMinInput);
+      dataSet->get("minimum value", minInput);
+      dataSet->get("override maximum value", overrideMaxInput);
+      dataSet->get("maximum value", maxInput);
+
+      ///Dont allow NaN input
+      if(overrideMaxInput && std::isnan(minInput))
+        minInput = 0;
+      if(overrideMinInput && std::isnan(maxInput))
+        maxInput = 0;
+
+      if(overrideMinInput && overrideMaxInput)
+      { ///check for impossible values
+        if(minInput > maxInput)
+          minInput = maxInput;
+        if(maxInput < minInput)
+          maxInput = minInput;
+      }
     }
 
     if (metric == NULL)
@@ -149,8 +210,8 @@ public:
       if(targetType.getCurrent()==NODES_TARGET && graph->numberOfNodes()!=0) {
         unsigned int maxIter = graph->numberOfNodes();
         unsigned int iter = 0;
-        double minN = entryMetric->getNodeDoubleMin(graph);
-        double maxN = entryMetric->getNodeDoubleMax(graph);
+        double minN = overrideMinInput ? minInput : entryMetric->getNodeDoubleMin(graph);
+        double maxN = overrideMaxInput ? maxInput : entryMetric->getNodeDoubleMax(graph);
 
         if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
           maxN = log(1+maxN-minN);
@@ -182,8 +243,9 @@ public:
       if(targetType.getCurrent()==EDGES_TARGET && graph->numberOfEdges()!=0) {
         unsigned int maxIter = graph->numberOfEdges();
         unsigned int iter = 0;
-        double minE = entryMetric->getEdgeDoubleMin(graph);
-        double maxE = entryMetric->getEdgeDoubleMax(graph);
+
+        double minE = overrideMinInput ? minInput : entryMetric->getEdgeDoubleMin(graph);
+        double maxE = overrideMaxInput ? maxInput : entryMetric->getEdgeDoubleMax(graph);
 
         if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
           maxE = log(1+maxE-minE);
@@ -251,6 +313,8 @@ public:
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
       dataSet->get("colorScale", colorScale);
+      dataSet->get("maximum value", maxInput);
+      dataSet->get("minimum value", minInput);
     }
 
     if (metric == NULL)
