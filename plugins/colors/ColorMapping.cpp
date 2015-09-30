@@ -131,8 +131,7 @@ public:
   PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorizes the nodes or edges of a graph according to the values of a given property.","2.2", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES),
     maxInput(std::numeric_limits<double>::quiet_NaN()), minInput(std::numeric_limits<double>::quiet_NaN()),
-    overrideMaxInput(false), overrideMinInput(false)
-  {
+    overrideMaxInput(false), overrideMinInput(false) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES);
@@ -154,7 +153,9 @@ public:
   //=========================================================
   Color getColor(double value, double range) {
     if (range==0) range = 1;
+
     if(value < 0) value = 0;
+
     if(value > range) value = range;
 
     return colorScale.getColorAtPos(value/range);
@@ -179,13 +180,15 @@ public:
       ///Dont allow NaN input
       if(overrideMaxInput && std::isnan(minInput))
         minInput = 0;
+
       if(overrideMinInput && std::isnan(maxInput))
         maxInput = 0;
 
-      if(overrideMinInput && overrideMaxInput)
-      { ///check for impossible values
+      if(overrideMinInput && overrideMaxInput) {
+        ///check for impossible values
         if(minInput > maxInput)
           minInput = maxInput;
+
         if(maxInput < minInput)
           maxInput = minInput;
       }
