@@ -140,12 +140,7 @@ by calling the :func:`tlp.initTulipLib` function.
 %End
 
 %MethodCode
-    if (a0) {
-        tlp::PluginLibraryLoader::loadPlugins(a0);
-    } else {
-        tlp::PluginLoaderTxt pluginLoader;
-        tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
-    }
+  tlp::PluginLibraryLoader::loadPlugins(a0);
 %End
 
 //=====================================================================
@@ -169,20 +164,12 @@ each subdirectory will be visited to search for plugins to load.
 %MethodCode
     std::string oldTlpPluginsPath = tlp::TulipPluginsPath;
     tlp::TulipPluginsPath = *a0;
-    std::string pythonPluginLoader;
-    if (a1) {
-      tlp::PluginLibraryLoader::loadPlugins(a1);
-      // TODO : wrap the plugin loader C++ instance and pass it over to Python
-      pythonPluginLoader = "None";
-    } else {
-      tlp::PluginLoaderTxt pluginLoader;
-      tlp::PluginLibraryLoader::loadPlugins(&pluginLoader);
-      pythonPluginLoader = "tlp.PluginLoaderTxt()";
-    }
+    tlp::PluginLibraryLoader::loadPlugins(a1);
     tlp::TulipPluginsPath = oldTlpPluginsPath;
     if (a2) {
+      // TODO : wrap the plugin loader C++ instance and pass it over to Python
       std::string importPythonPlugins = "tlp.loadTulipPluginsFromDir(\"";
-      importPythonPlugins += (*a0 + "\", False, " + pythonPluginLoader + ")");
+      importPythonPlugins += (*a0 + "\", False)");
       PyObject *pyRet = evalPythonStatement(importPythonPlugins);
       Py_XDECREF(pyRet);
     }
@@ -205,18 +192,14 @@ Returns :const:`True` if the plugin was correctly loaded.
 %MethodCode
     std::string ext = a0->substr(a0->length()-3);
     if (ext != ".py") {
-      if (a1) {
-          sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
-      } else {
-          tlp::PluginLoaderTxt pluginLoader;
-          sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, &pluginLoader);
-      }
+      sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
     } else {
-        std::string importPythonPlugin = "tlp.loadTulipPythonPlugin(\"";
-        importPythonPlugin += (*a0 + "\")");
-        PyObject *pyRet = evalPythonStatement(importPythonPlugin);
-        sipRes = (pyRet == Py_True);
-        Py_XDECREF(pyRet);
+      // TODO : wrap the plugin loader C++ instance and pass it over to Python
+      std::string importPythonPlugin = "tlp.loadTulipPythonPlugin(\"";
+      importPythonPlugin += (*a0 + "\")");
+      PyObject *pyRet = evalPythonStatement(importPythonPlugin);
+      sipRes = (pyRet == Py_True);
+      Py_XDECREF(pyRet);
     }
 %End
 
@@ -232,12 +215,7 @@ it is unloaded and removed from the current plugins database.
 %End
 
 %MethodCode
-    if (a0) {
-        tlp::PluginLister::checkLoadedPluginsDependencies(a0);
-    } else {
-        tlp::PluginLoaderTxt pluginLoader;
-        tlp::PluginLister::checkLoadedPluginsDependencies(&pluginLoader);
-    }
+    tlp::PluginLister::checkLoadedPluginsDependencies(a0);
 %End
 
 //=====================================================================
