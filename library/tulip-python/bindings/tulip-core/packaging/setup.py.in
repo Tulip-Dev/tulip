@@ -37,7 +37,7 @@ except ImportError:
     cmdclass = {}
 
 # Get the long description from the relevant file
-with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
@@ -48,7 +48,7 @@ setup(
     # https://packaging.python.org/en/latest/single_source_version.html
     version='${TulipVersion}${PythonWheelVersionSuffix}',
 
-    description='Tulip-core Python bindings',
+    description='Large graphs analysis and drawing',
     long_description=long_description,
 
     # The project's main homepage.
@@ -89,6 +89,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
 
     # What does your project relate to?
