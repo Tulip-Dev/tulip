@@ -307,7 +307,13 @@ void RoundedBox::draw(node n, float lod) {
   static GlShaderProgram *roundedBoxShader = NULL;
   static GlShaderProgram *roundedBoxOutlineShader = NULL;
 
-  if (roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
+  // don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
+  bool apple = false;
+#ifdef __APPLE__
+  apple = true;
+#endif
+
+  if (!apple && roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
     roundedBoxShader = new GlShaderProgram();
     roundedBoxShader->addShaderFromSourceCode(Fragment, roundedBoxFragmentShaderSrc);
     roundedBoxShader->link();
