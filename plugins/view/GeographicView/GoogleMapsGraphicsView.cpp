@@ -733,16 +733,19 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
 
         if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
           nodeLatLng[n] = addressesLatLngMap[addr];
+
           if (createLatAndLngProps) {
             latitudeProperty->setNodeValue(n, nodeLatLng[n].first);
             longitudeProperty->setNodeValue(n, nodeLatLng[n].second);
           }
-        } else {
+        }
+        else {
           string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng, true);
 
           if (geocodingRequestStatus == "OK") {
             nodeLatLng[n] = latLng;
             addressesLatLngMap[addr] = latLng;
+
             if (createLatAndLngProps) {
               latitudeProperty->setNodeValue(n, latLng.first);
               longitudeProperty->setNodeValue(n, latLng.second);
