@@ -16,7 +16,7 @@ MACRO(UNIT_TEST)
   ADD_EXECUTABLE(${TEST_NAME} ${TEST_SRCS})
   ADD_DEPENDENCIES(runTests ${TEST_NAME})
   TARGET_LINK_LIBRARIES(${TEST_NAME} ${LibTulipCoreName} ${CppUnit_LIBRARIES})
-  ADD_TEST(NAME ${TEST_NAME} COMMAND ${TEST_NAME})
+  ADD_TEST(NAME ${TEST_NAME} COMMAND ${TEST_NAME} ${TEST_NAME})
   # In order to run the tests on windows, we need to add the paths of the dll depencencies (cppunit, tulip, gzstream, yajl)
   # in the PATH environment variable
   IF(WIN32)
