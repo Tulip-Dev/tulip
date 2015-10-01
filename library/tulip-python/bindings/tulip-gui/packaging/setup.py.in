@@ -105,7 +105,7 @@ except ImportError:
     cmdclass = {}
 
 # Get the long description from the relevant file
-with open(path.join(here, 'DESCRIPTION.rst'), encoding='utf-8') as f:
+with open(path.join(here, 'README.rst'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
@@ -157,6 +157,7 @@ setup(
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
     ],
 
     # What does your project relate to?

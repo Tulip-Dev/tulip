@@ -110,7 +110,6 @@ CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
 ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIP_PYTHON_FOLDER}/../setup.cfg
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/Manifest.in ${TULIP_PYTHON_FOLDER}/../Manifest.in
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
-                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/DESCRIPTION.rst ${TULIP_PYTHON_FOLDER}/../DESCRIPTION.rst
 )
 ADD_DEPENDENCIES(tulip-core-wheel copyTulipPythonPackagingFiles)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
