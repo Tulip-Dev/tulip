@@ -178,10 +178,10 @@ public:
       dataSet->get("maximum value", maxInput);
 
       ///Dont allow NaN input
-      if(overrideMaxInput && std::isnan(minInput))
+      if(overrideMaxInput && isnan(minInput))
         minInput = 0;
 
-      if(overrideMinInput && std::isnan(maxInput))
+      if(overrideMinInput && isnan(maxInput))
         maxInput = 0;
 
       if(overrideMinInput && overrideMaxInput) {
