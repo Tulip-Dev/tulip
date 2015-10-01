@@ -91,7 +91,15 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "[true, false]" ) \
   HTML_HELP_DEF( "default", "false" ) \
   HTML_HELP_BODY() \
-  "If true, a layout is computed for each quotient graphs." \
+  "If true, a force directed layout is computed for each quotient graphs." \
+  HTML_HELP_CLOSE(),
+  // layout clusters graphs
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "values", "[true, false]" ) \
+  HTML_HELP_DEF( "default", "false" ) \
+  HTML_HELP_BODY() \
+  "If true, a force directed layout is computed for each clusters graphs." \
   HTML_HELP_CLOSE(),
 };
 }
@@ -138,11 +146,10 @@ public:
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 class QuotientClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Computes a quotient sub-graph<br/>(meta-nodes pointing on sub-graphs)<br/>using an already existing sub-graphs hierarchy.","1.3", "Clustering")
+  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Computes a quotient sub-graph<br/>(meta-nodes pointing on sub-graphs)<br/>using an already existing sub-graphs hierarchy.","1.4", "Clustering")
 //================================================================================
   QuotientClustering(PluginContext* context):Algorithm(context) {
-    addDependency("Circular", "1.1");
-    addDependency("GEM (Frick)", "1.2");
+    addDependency("FM^3 (OGDF)", "1.2");
     addDependency("Auto Sizing", "1.0");
     addInParameter<bool>("oriented", paramHelp[0], "true");
     addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
@@ -151,12 +158,13 @@ public:
     addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
     addInParameter<bool>("recursive", paramHelp[1], "false");
     addInParameter<bool>("layout quotient graph(s)", paramHelp[7], "false");
+    addInParameter<bool>("layout clusters", paramHelp[8], "false");
     addInParameter<bool>("edge cardinality", paramHelp[6], "false");
   }
 
   //===============================================================================
   bool run() {
-    bool oriented = true, edgeCardinality = true;
+    bool oriented = true, edgeCardinality = true, clustersLayout = false;
     bool recursive = false, quotientLayout = true, useSubGraphName = false;
     StringProperty *metaLabel = NULL;
     StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
@@ -173,6 +181,7 @@ public:
       dataSet->get("meta-node label", metaLabel);
       dataSet->get("use name of subgraph", useSubGraphName);
       dataSet->get("layout quotient graph(s)", quotientLayout);
+      dataSet->get("layout clusters", clustersLayout);
     }
 
     Iterator<Graph *> *itS= graph->getSubGraphs();
@@ -184,6 +193,16 @@ public:
     }
 
     delete itS;
+
+    string layoutName = "FM^3 (OGDF)";
+    string errMsg;
+
+    if (clustersLayout) {
+      tlp::Graph *cluster = NULL;
+      forEach(cluster, graph->getSubGraphs()) {
+        cluster->applyPropertyAlgorithm(layoutName, cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
+      }
+    }
 
     IntegerProperty *opProp = NULL, *cardProp = NULL;
     Graph *quotientGraph = graph->getRoot()->addSubGraph();
@@ -381,20 +400,9 @@ public:
 
     // layouting if needed
     if (quotientLayout) {
-      string errMsg;
-      string layoutName;
-
-      if (mNodes.size() > 300  ||
-          quotientGraph->numberOfEdges() == 0)
-        layoutName = "Circular";
-      else
-        layoutName = "GEM (Frick)";
-
-      string sizesName="Auto Sizing";
+      string sizesName = "Auto Sizing";
       quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
-
-      if (mNodes.size() < 300)
-        quotientGraph->applyPropertyAlgorithm(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
+      quotientGraph->applyPropertyAlgorithm(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
     }
 
     // recursive call if needed
@@ -414,8 +422,7 @@ public:
         node mn = *itn;
         Graph* sg = quotientGraph->getNodeMetaInfo(mn);
         string eMsg;
-        sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet,
-                           pluginProgress);
+        sg->applyAlgorithm("Quotient Clustering", eMsg, &dSet, pluginProgress);
 
         // if a quotient graph has been computed
         // update metaInfo of current meta node
