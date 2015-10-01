@@ -730,44 +730,54 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
       progressWidget->setComment("Retrieving latitude and longitude for address : \n" + QString::fromUtf8(addr.c_str()));
 
       if (nodeLatLng.find(n) == nodeLatLng.end()) {
-        string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng, true);
 
-        if (geocodingRequestStatus == "OK") {
-          nodeLatLng[n] = latLng;
-
+        if (addressesLatLngMap.find(addr) != addressesLatLngMap.end()) {
+          nodeLatLng[n] = addressesLatLngMap[addr];
           if (createLatAndLngProps) {
-            latitudeProperty->setNodeValue(n, latLng.first);
-            longitudeProperty->setNodeValue(n, latLng.second);
+            latitudeProperty->setNodeValue(n, nodeLatLng[n].first);
+            longitudeProperty->setNodeValue(n, nodeLatLng[n].second);
           }
-        }
-        else if (geocodingRequestStatus == "MULTIPLE_RESULTS") {
-          multipleResultsAddresses.push_back(make_pair(n, addr));
-        }
-        else if (geocodingRequestStatus != "ZERO_RESULTS") {
-          // the number of geocoding requests to the google servers in a short period of time is limited
-          // So wait 3,5 seconds before sending a new request to avoid errors
-          progressWidget->setFrameColor(Qt::red);
-          progressWidget->setComment("Geocoding requests limit reached. \n Waiting 3,5 seconds ...");
-          draw();
-          QTimeLine timeLine(3500);
-          timeLine.start();
+        } else {
+          string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng, true);
 
-          while (timeLine.state() != QTimeLine::NotRunning) {
-            QApplication::processEvents();
+          if (geocodingRequestStatus == "OK") {
+            nodeLatLng[n] = latLng;
+            addressesLatLngMap[addr] = latLng;
+            if (createLatAndLngProps) {
+              latitudeProperty->setNodeValue(n, latLng.first);
+              longitudeProperty->setNodeValue(n, latLng.second);
+            }
           }
 
-          progressWidget->setFrameColor(Qt::green);
-          grabNextNode = false;
-        }
-        else {
-          progressWidget->hide();
-          QMessageBox::warning(NULL, "Geolocation failed", "No results were found for address : \n" + QString::fromUtf8(addr.c_str()));
-          progressWidget->show();
+          else if (geocodingRequestStatus == "MULTIPLE_RESULTS") {
+            multipleResultsAddresses.push_back(make_pair(n, addr));
+          }
+          else if (geocodingRequestStatus != "ZERO_RESULTS") {
+            // the number of geocoding requests to the google servers in a short period of time is limited
+            // So wait 3,5 seconds before sending a new request to avoid errors
+            progressWidget->setFrameColor(Qt::red);
+            progressWidget->setComment("Geocoding requests limit reached. \n Waiting 3,5 seconds ...");
+            draw();
+            QTimeLine timeLine(3500);
+            timeLine.start();
+
+            while (timeLine.state() != QTimeLine::NotRunning) {
+              QApplication::processEvents();
+            }
+
+            progressWidget->setFrameColor(Qt::green);
+            grabNextNode = false;
+          }
+          else {
+            progressWidget->hide();
+            QMessageBox::warning(NULL, "Geolocation failed", "No results were found for address : \n" + QString::fromUtf8(addr.c_str()));
+            progressWidget->show();
+          }
+
         }
 
+        QApplication::processEvents();
       }
-
-      QApplication::processEvents();
     }
 
     delete nodesIt;
