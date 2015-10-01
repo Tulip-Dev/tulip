@@ -159,11 +159,35 @@ features have been included to ease the use of the Tulip Python API:
 Using the bindings from the Python Interpreter
 ----------------------------------------------
 
-Setting up the environment
-^^^^^^^^^^^^^^^^^^^^^^^^^^
-The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell. But some setup has to be done
-before importing the :mod:`tulip` module. 
+The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell. 
 
+Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_ 
+for Windows and MacOS users.
+
+The modules are also located within the Tulip software installation, but some setup has to be done before being able to import them. 
+
+Installing the Tulip-Python modules from the Python Packaging Index
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Windows and MacOS users can easily obtain the Tulip-Python modules by using the pip tool.
+
+To install the :mod:`tulip` module, issue the following command from a terminal prompt:
+
+.. code:: shell
+	
+	$ pip install tulip-python
+
+To install the :mod:`tulipogl` and :mod:`tulipgui` modules, issue the following command from a terminal prompt:	
+	
+.. code:: shell
+	
+	$ pip install tulipgui-python
+
+And you're done, you can now import the modules in your Python session.
+	
+Setting up the environment from the Tulip software installation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
 First, the path to the :mod:`tulip` module must be provided to Python.
 In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
 The Tulip Python module is installed in the following directory according to your system :
