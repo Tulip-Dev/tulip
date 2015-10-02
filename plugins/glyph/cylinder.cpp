@@ -41,14 +41,14 @@ class CylinderBase {
 
 public:
 
-  void drawCylinder(float cylinderHeight = 1.0) {
+  void drawCylinder(float cylinderHeight = 1.0, float dz = 0) {
     if (cylinderVertices.empty()) {
       const unsigned int numberOfSides = 30;
-      cylinderVertices = computeRegularPolygon(numberOfSides, Coord(0,0,-cylinderHeight/2), Size(0.5, 0.5));
-      cylinderVertices.push_back(Coord(0,0,-cylinderHeight/2));
-      vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0,0,cylinderHeight/2), Size(0.5, 0.5));
+      cylinderVertices = computeRegularPolygon(numberOfSides, Coord(0,0,-cylinderHeight/2+dz), Size(0.5, 0.5));
+      cylinderVertices.push_back(Coord(0,0,-cylinderHeight/2+dz));
+      vector<Coord> tmp = computeRegularPolygon(numberOfSides, Coord(0,0,cylinderHeight/2+dz), Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
-      cylinderVertices.push_back(Coord(0,0,cylinderHeight/2));
+      cylinderVertices.push_back(Coord(0,0,cylinderHeight/2+dz));
 
       for (size_t i = 0 ; i < cylinderVertices.size() ; ++i) {
         cylinderTexCoords.push_back(Vec2f(cylinderVertices[i][0]+0.5, cylinderVertices[i][1]+0.5));
@@ -56,9 +56,9 @@ public:
 
       size_t startIdx = cylinderVertices.size();
 
-      tmp = computeRegularPolygon(numberOfSides, Coord(0,0,-cylinderHeight/2), Size(0.5, 0.5));
+      tmp = computeRegularPolygon(numberOfSides, Coord(0,0,-cylinderHeight/2+dz), Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
-      tmp = computeRegularPolygon(numberOfSides, Coord(0,0,cylinderHeight/2), Size(0.5, 0.5));
+      tmp = computeRegularPolygon(numberOfSides, Coord(0,0,cylinderHeight/2+dz), Size(0.5, 0.5));
       cylinderVertices.insert(cylinderVertices.end(), tmp.begin(), tmp.end());
 
       for (size_t i = startIdx ; i < cylinderVertices.size() ; ++i) {
@@ -267,7 +267,7 @@ void HalfCylinder::draw(node n,float) {
     GlTextureManager::getInst().activateTexture(texturePath+texFile);
   }
 
-  drawCylinder(0.5);
+  drawCylinder(0.5, 0.25);
 
   GlTextureManager::getInst().desactivateTexture();
 }
