@@ -10,6 +10,9 @@ class BinaryDistribution(Distribution):
     def is_pure(self):
         return False
 
+    def has_ext_modules(self):
+        return True
+
 tulip_native_libs = []
 if platform.system() == 'Windows':
     tulip_native_libs = ['native/*.pyd', 'native/*.dll', 'native/plugins/*.dll']
