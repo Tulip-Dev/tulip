@@ -29,7 +29,6 @@
 #include "DoubleStringsListRelationDialog.h"
 #endif
 
-using namespace std;
 using namespace tlp;
 
 namespace {
@@ -119,8 +118,8 @@ private:
   StringCollection targetType;
   ColorScale colorScale;
   Vector<float,4> deltaRGBA;
-  vector<pair<string,Color> > enumeratedMappingResultVector;
-  map<string, vector<unsigned int> > mapMetricElements;
+  std::vector<std::pair<std::string,Color> > enumeratedMappingResultVector;
+  std::map<std::string, std::vector<unsigned int> > mapMetricElements;
   double maxInput;
   double minInput;
   bool overrideMaxInput;
@@ -283,12 +282,12 @@ public:
                              graph->numberOfNodes() : graph->numberOfEdges();
       unsigned int iter = 0;
 
-      for(vector<pair<string,Color> >::iterator it =
+      for(std::vector<std::pair<std::string,Color> >::iterator it =
             enumeratedMappingResultVector.begin();
           it!=enumeratedMappingResultVector.end(); ++it) {
-        vector<unsigned int> *elements=&mapMetricElements[(*it).first];
+        std::vector<unsigned int> *elements=&mapMetricElements[(*it).first];
 
-        for(vector<unsigned>::iterator itE=elements->begin(); itE!=elements->end(); ++itE) {
+        for(std::vector<unsigned>::iterator itE=elements->begin(); itE!=elements->end(); ++itE) {
           if(targetType.getCurrent()==NODES_TARGET)
             result->setNodeValue(node(*itE),(*it).second);
           else
@@ -307,7 +306,7 @@ public:
     return true;
   }
   //=========================================================
-  bool check(string &errorMsg) {
+  bool check(std::string &errorMsg) {
 
     PropertyInterface *metric = NULL;
 
@@ -330,10 +329,10 @@ public:
 
         node n;
         stableForEach(n, graph->getNodes()) {
-          string tmp = metric->getNodeStringValue(n);
+          std::string tmp = metric->getNodeStringValue(n);
 
           if(mapMetricElements.count(tmp)==0)
-            mapMetricElements[tmp]=vector<unsigned int>();
+            mapMetricElements[tmp]=std::vector<unsigned int>();
 
           mapMetricElements[tmp].push_back(n.id);
         }
@@ -342,24 +341,24 @@ public:
 
         edge e;
         stableForEach(e, graph->getEdges()) {
-          string tmp = metric->getEdgeStringValue(e);
+          std::string tmp = metric->getEdgeStringValue(e);
 
           if(mapMetricElements.count(tmp)==0)
-            mapMetricElements[tmp]=vector<unsigned int>();
+            mapMetricElements[tmp]=std::vector<unsigned int>();
 
           mapMetricElements[tmp].push_back(e.id);
         }
       }
 
-      vector<string> enumeratedValues;
+      std::vector<std::string> enumeratedValues;
 
-      for(map<string, vector<unsigned int> >::iterator it=mapMetricElements.begin(); it!=mapMetricElements.end(); ++it) {
-        enumeratedValues.push_back((*it).first);
+      for(std::map<std::string, std::vector<unsigned int> >::iterator it=mapMetricElements.begin(); it!=mapMetricElements.end(); ++it) {
+        enumeratedValues.push_back(it->first);
       }
 
       std::map<float, Color> colorMap = colorScale.getColorMap();
 
-      vector<Color> enumeratedColors;
+      std::vector<Color> enumeratedColors;
 
       for(std::map<float, Color>::iterator it = colorMap.begin() ; it != colorMap.end() ; ++it) {
         if (enumeratedColors.empty() || it->second != enumeratedColors.back())
