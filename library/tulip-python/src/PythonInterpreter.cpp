@@ -287,7 +287,7 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 
   // checking if a QApplication is instanced before instancing any QWidget
   // allow to avoid segfaults when trying to instantiate the plugin outside the Tulip GUI (for instance, with tulip_check_pl)
-  if (QApplication::instance()) {
+  if (QApplication::instance() && !_wasInit) {
 
 #if PY_MAJOR_VERSION < 3
     reloadModule("sys");
