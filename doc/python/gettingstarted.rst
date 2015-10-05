@@ -196,25 +196,29 @@ The Tulip Python module is installed in the following directory according to you
 
         * Windows : <tulip_install_dir>/bin/python (if you installed Tulip from a bundle, <tulip_install_dir> should be C:/Program Files (x86)/Tulip/)
 
-        * Mac OS : <tulip_install_dir>/Contents/Frameworks/python (if you installed Tulip from a bundle, <tulip_install_dir> should be /Applications/Tulip-4.X.Y.app/)
+        * Mac OS : <tulip_install_dir>/Contents/Frameworks/python if you installed Tulip from a bundle (<tulip_install_dir> should be /Applications/Tulip-4.X.Y.app/) or
+                   <tulip_install_dir>/lib/python if you compiled and installed Tulip yourself.
 
 This path has to be added to the list of Python module search path. To do so, you can add it in the **PYTHONPATH**
 environment variable or add it to the :data:`sys.path` list.	
 
-Second, your system must be able to find the Tulip C++ libraries in order to use the bindings. These libraries are
-installed in the following directory according to your system :
+Since Tulip 4.8, the second step is no longer necessary for MacOS users.
+
+Second, your system must be able to find the Tulip C++ libraries in order to use the bindings.
+These libraries are installed in the following directory according to your system :
 
         * Linux : <tulip_install_dir>/lib/ (if you compiled Tulip yourself, <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
 
         * Windows : <tulip_install_dir>/bin/ (if you installed Tulip from a bundle, <tulip_install_dir> should be C:/Program Files (x86)/Tulip/)
 
-        * Mac OS : <tulip_install_dir>/Contents/Frameworks/ (if you installed Tulip from a bundle, <tulip_install_dir> should be /Applications/Tulip-4.X.Y.app/)
+        * Mac OS : <tulip_install_dir>/Contents/Frameworks/ if you installed Tulip from a bundle (<tulip_install_dir> should be /Applications/Tulip-4.X.Y.app/) or
+                   <tulip_install_dir>/lib if you compiled and installed Tulip yourself.
 
 You have to add this path to :
 	
 	* the **LD_LIBRARY_PATH** environment variable on Linux
 
-	* the **DYLD_LIBRARY_PATH** environment variable on Mac OS
+        * the **DYLD_LIBRARY_PATH** environment variable on Mac OS
 
 	* the **PATH** environment variable on Windows.
 

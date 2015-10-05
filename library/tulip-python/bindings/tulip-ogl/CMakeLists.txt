@@ -70,6 +70,14 @@ ELSE(WIN32)
   SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
+# On MacOS, add the paths of dependencies dylibs in install rpaths of the _tulipogl.so binary
+# That way, the tulipogl module can be imported in a classical Python shell without having to
+# modify the content of the DYLD_LIBRARY_PATH environment variable
+IF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+  GET_TARGET_PROPERTY(CURRENT_INSTALL_RPATHS ${LibTulipOGLPythonBindingsName} INSTALL_RPATH)
+  SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/../../../;@loader_path/../../../../Frameworks")
+ENDIF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+
 TARGET_LINK_LIBRARIES(${LibTulipOGLPythonBindingsName} ${LibTulipCoreName} ${LibTulipOglName})
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
 # and use dynamic lookup for retrieving its symbols.
