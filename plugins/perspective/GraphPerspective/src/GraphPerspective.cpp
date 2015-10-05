@@ -613,6 +613,7 @@ void GraphPerspective::importGraph(const std::string& module,
 
   _graphs->addGraph(g);
   std::string fileName;
+
   if (data.get("file::filename", fileName))
     // set current directory to the directory of the loaded file
     // to ensure a correct loading of the associated texture files if any
