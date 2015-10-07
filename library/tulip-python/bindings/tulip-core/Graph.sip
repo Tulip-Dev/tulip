@@ -3270,7 +3270,7 @@ This is equivalent to call::
 %End
 
 %MethodCode
-  sipRes = callGraphPropertyAlgorithm<tlp::ColorAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::ColorProperty>("viewLayout"), a2, a2Wrapper, *a1, sipIsErr, "color");
+  sipRes = callGraphPropertyAlgorithm<tlp::ColorAlgorithm>(sipCpp, *a0, sipCpp->getProperty<tlp::ColorProperty>("viewColor"), a2, a2Wrapper, *a1, sipIsErr, "color");
 %End
 
 //===========================================================================================
