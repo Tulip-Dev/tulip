@@ -447,9 +447,18 @@ IF(NOT BUILD_CORE_ONLY)
                             COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
                             COMMAND ${TWINE} upload -r pypitest dist/*
                             WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+          ADD_CUSTOM_TARGET(tulip-core-wheel-upload
+                            COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
+                            COMMAND ${TWINE} upload -r pypi dist/*
+                            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+          ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
+                            COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
+                            COMMAND ${TWINE} upload -r pypi dist/*
+                            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
 
           ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
           ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test tulip-gui-wheel-upload-test)
+          ADD_CUSTOM_TARGET(wheels-upload DEPENDS tulip-core-wheel-upload tulip-gui-wheel-upload)
         ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
       ENDIF(PYTHONLIBS_FOUND)
