@@ -17,11 +17,6 @@
  *
  */
 
-#if defined(__GNUC__) && __GNUC__ >= 4 && ((__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >= 1) || (__GNUC_MINOR__ >= 3))
-#pragma GCC diagnostic ignored "-Wmissing-field-initializers"
-#pragma GCC diagnostic ignored "-Wstrict-aliasing"
-#endif
-
 #include "tulip/PythonIncludes.h"
 #include "tulip/PythonInterpreter.h"
 
@@ -146,7 +141,7 @@ consoleutils_ConsoleOutput_flush(PyObject *self, PyObject *) {
 static PyMemberDef consoleutils_ConsoleOutput_members[] = {
   {const_cast<char*>("stderrflag"), T_BOOL, offsetof(consoleutils_ConsoleOutput, stderrflag), 0, const_cast<char *>("flag for stderr")},
   {const_cast<char*>("writeToConsole"), T_BOOL, offsetof(consoleutils_ConsoleOutput, writeToConsole), 0, const_cast<char *>("flag for enabling/disabling console output")},
-  {NULL}  /* Sentinel */
+  {0, 0, 0, 0, 0}  /* Sentinel */
 };
 
 
@@ -210,6 +205,18 @@ static PyTypeObject consoleutils_ConsoleOutputType = {
   (initproc)consoleutils_ConsoleOutput_init,      /* tp_init */
   0,                         /* tp_alloc */
   consoleutils_ConsoleOutput_new,                 /* tp_new */
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
+  ,0
+#endif
 };
 
 
@@ -251,7 +258,7 @@ consoleutils_ConsoleInput_readline(PyObject *, PyObject *) {
 }
 
 static PyMemberDef consoleutils_ConsoleInput_members[] = {
-  {NULL}  /* Sentinel */
+  {0, 0, 0, 0, 0}  /* Sentinel */
 };
 
 
@@ -307,6 +314,18 @@ static PyTypeObject consoleutils_ConsoleInputType = {
   (initproc)consoleutils_ConsoleInput_init,      /* tp_init */
   0,                         /* tp_alloc */
   consoleutils_ConsoleInput_new,                 /* tp_new */
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0,
+  0
+#if PY_MAJOR_VERSION >= 3 && PY_MINOR_VERSION >= 4
+  ,0
+#endif
 };
 
 #if PY_MAJOR_VERSION >= 3
@@ -343,8 +362,10 @@ initconsoleutils(void) {
   m = Py_InitModule3("consoleutils", NULL,"");
   _PyImport_FixupExtension(const_cast<char *>("consoleutils"), const_cast<char *>("consoleutils"));
 #endif
-  Py_INCREF(&consoleutils_ConsoleOutputType);
-  PyModule_AddObject(m, "ConsoleOutput", (PyObject *)&consoleutils_ConsoleOutputType);
-  Py_INCREF(&consoleutils_ConsoleInputType);
-  PyModule_AddObject(m, "ConsoleInput", (PyObject *)&consoleutils_ConsoleInputType);
+  PyObject *cot = reinterpret_cast<PyObject*>(&consoleutils_ConsoleOutputType);
+  Py_INCREF(cot);
+  PyModule_AddObject(m, "ConsoleOutput", cot);
+  PyObject *cit = reinterpret_cast<PyObject*>(&consoleutils_ConsoleInputType);
+  Py_INCREF(cit);
+  PyModule_AddObject(m, "ConsoleInput", cit);
 }
