@@ -26,6 +26,10 @@
 #include <QProcess>
 #include <QDir>
 #include <QScrollArea>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QGuiApplication>
+#include <QScreen>
+#endif
 
 #include <tulip/TulipRelease.h>
 #include <tulip/PythonVersionChecker.h>
@@ -63,7 +67,13 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   _pageChoosers.push_back(_ui->pluginsPageChooser);
   _pageChoosers.push_back(_ui->aboutPageChooser);
 
-  _ui->mainLogo->setPixmap(QPixmap((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str()));
+  QPixmap logo((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str());
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  // take care of the devicePixelRatio
+  // before setting the logo
+  logo.setDevicePixelRatio(QGuiApplication::primaryScreen()->devicePixelRatio());
+#endif
+  _ui->mainLogo->setPixmap(logo);
   // set title
   QString title("Tulip ");
 
