@@ -148,6 +148,31 @@
 
 
 //---------------------------------------------------------
+// common includes
+//---------------------------------------------------------
+
+// stdlib
+#include <cmath>
+#include <ctime>
+#include <fstream>
+#include <algorithm>
+#include <limits>
+
+using std::ifstream;		// from <fstream>
+using std::ofstream;		// from <fstream>
+using std::min;				// from <algorithm>
+using std::max;				// from <algorithm>
+using std::numeric_limits;	// from <limits>
+
+#ifdef OGDF_SYSTEM_UNIX
+#include <stdint.h>
+#endif
+// make sure that SIZE_MAX gets defined
+#ifndef SIZE_MAX
+#define SIZE_MAX ((size_t)-1)
+#endif
+
+//---------------------------------------------------------
 // define data types with known size
 //---------------------------------------------------------
 
@@ -174,33 +199,6 @@ typedef unsigned short     __uint16;
 typedef unsigned int       __uint32;
 typedef unsigned long long __uint64;
 #endif
-
-
-//---------------------------------------------------------
-// common includes
-//---------------------------------------------------------
-
-// stdlib
-#include <cmath>
-#include <ctime>
-#include <fstream>
-#include <algorithm>
-#include <limits>
-
-using std::ifstream;		// from <fstream>
-using std::ofstream;		// from <fstream>
-using std::min;				// from <algorithm>
-using std::max;				// from <algorithm>
-using std::numeric_limits;	// from <limits>
-
-#ifdef OGDF_SYSTEM_UNIX
-#include <stdint.h>
-#endif
-// make sure that SIZE_MAX gets defined
-#ifndef SIZE_MAX
-#define SIZE_MAX ((size_t)-1)
-#endif
-
 
 // ogdf
 #include <ogdf/basic/Logger.h>
