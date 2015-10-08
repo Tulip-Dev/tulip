@@ -335,6 +335,13 @@ IF(NOT BUILD_CORE_ONLY)
         ENDIF()
       ENDIF(APPLE)
 
+      GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+
+      # Ensure that correct Python include path is selected by CMake on Windows
+      IF(WIN32)
+        SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/include ${CMAKE_INCLUDE_PATH})
+      ENDIF(WIN32)
+
       FIND_PACKAGE(PythonLibs REQUIRED)
 
       IF(PYTHONLIBS_FOUND)
@@ -344,7 +351,7 @@ IF(NOT BUILD_CORE_ONLY)
         # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
         IF(MINGW)
           STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
-          GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+
           STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
           # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
           IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
