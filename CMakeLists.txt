@@ -219,8 +219,13 @@ IF(MINGW)
   FIND_LIBRARY(LIBINTL_FOUND intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
 ENDIF(MINGW)
 
-# ZLIB
-FIND_PACKAGE(ZLIB REQUIRED)
+# Don't need to find zlib when compiling with emscripten as there is an available emscripten port of it
+IF(NOT EMSCRIPTEN)
+
+  # ZLIB
+  FIND_PACKAGE(ZLIB REQUIRED)
+
+ENDIF(NOT EMSCRIPTEN)
 
 # Yajl
 SET(YAJL_INCLUDE_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/yajl/src/api ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/yajl/yajl-2.1.0/include)
