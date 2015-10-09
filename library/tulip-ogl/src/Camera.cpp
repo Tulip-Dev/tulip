@@ -74,8 +74,8 @@ void Camera::setScene(GlScene* scene) {
 //===================================================
 BoundingBox Camera::getBoundingBox() const {
   BoundingBox bb;
-  bb.expand(screenTo3DWorld(Coord(scene->getViewport()[0],scene->getViewport()[1],0)));
-  bb.expand(screenTo3DWorld(Coord(scene->getViewport()[0]+scene->getViewport()[2],scene->getViewport()[1]+scene->getViewport()[3],0)));
+  bb.expand(viewportTo3DWorld(Coord(scene->getViewport()[0],scene->getViewport()[1],0)));
+  bb.expand(viewportTo3DWorld(Coord(scene->getViewport()[0]+scene->getViewport()[2],scene->getViewport()[1]+scene->getViewport()[3],0)));
   return bb;
 }
 //====================================================
@@ -437,7 +437,7 @@ void Camera::getTransformMatrix(const Vector<int, 4>& viewport,Matrix<float, 4> 
   glPopMatrix();
 }
 //====================================================
-Coord Camera::screenTo3DWorld(const Coord &point) const {
+Coord Camera::viewportTo3DWorld(const Coord &point) const {
   // We have a cast to remove const on this
   ((Camera *)this)->initProjection();
   ((Camera *)this)->initModelView();
@@ -455,7 +455,7 @@ Coord Camera::screenTo3DWorld(const Coord &point) const {
   return unprojectPoint(pScr, tmp, viewport);
 }
 //====================================================
-Coord Camera::worldTo2DScreen(const Coord &obj) const {
+Coord Camera::worldTo2DViewport(const Coord &obj) const {
   // We have a cast to remove const on this
   ((Camera *)this)->initProjection();
   ((Camera *)this)->initModelView();

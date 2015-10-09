@@ -290,9 +290,9 @@ void GlLabel::draw(float, Camera *camera) {
     glPushMatrix();
     glMatrixMode(GL_PROJECTION);
     glPushMatrix();
-    Coord test=camera->screenTo3DWorld(Coord(1,1,1))-camera->screenTo3DWorld(Coord(0,0,0));
+    Coord test=camera->viewportTo3DWorld(Coord(1,1,1))-camera->viewportTo3DWorld(Coord(0,0,0));
     test/=test.norm();
-    lod=(camera->worldTo2DScreen(test)-camera->worldTo2DScreen(Coord(0,0,0))).norm();
+    lod=(camera->worldTo2DViewport(test)-camera->worldTo2DViewport(Coord(0,0,0))).norm();
     oldLod=lod;
     oldCamera=*camera;
     oldViewport = camera->getViewport();
@@ -322,15 +322,15 @@ void GlLabel::draw(float, Camera *camera) {
   div_w = size[0]/w;
   div_h = size[1]/h;
 
-  float screenH;
+  float viewportH;
   float multiLineH=h;
 
   //Here the 4.5 magic number is the size of space between two lines
   if(textVector.size()>1)
     multiLineH=(h-(textVector.size()-1)*4.5)/textVector.size();
 
-  //We compute the size of the text on the screen
-  screenH=(multiLineH*lod)/2.f;
+  //We compute the size of the text on the viewport
+  viewportH=(multiLineH*lod)/2.f;
 
   //Scale of the text
   float scaleToApply=1.;
@@ -347,14 +347,14 @@ void GlLabel::draw(float, Camera *camera) {
     scaleToApply=0.05f;
 
     if(useMinMaxSize) {
-      float tmpScreenH=screenH*0.05f;
+      float tmpViewportH=viewportH*0.05f;
 
-      if(tmpScreenH<minSize) {
-        scaleToApply*=minSize/tmpScreenH;
+      if(tmpViewportH<minSize) {
+        scaleToApply*=minSize/tmpViewportH;
       }
 
-      if(tmpScreenH>maxSize) {
-        scaleToApply*=maxSize/tmpScreenH;
+      if(tmpViewportH>maxSize) {
+        scaleToApply*=maxSize/tmpViewportH;
       }
     }
   }
@@ -567,16 +567,16 @@ void GlLabel::draw(float, Camera *camera) {
   }
 
   glScalef(scaleToApply,scaleToApply,1);
-  screenH*=scaleToApply;
+  viewportH*=scaleToApply;
 
-  if(screenH<0)
-    screenH=-screenH;
+  if(viewportH<0)
+    viewportH=-viewportH;
 
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
   //The label is too small to be readed, draw a line
-  if(screenH < 2 && useLOD) {
+  if(viewportH < 2 && useLOD) {
     float wAlign=0;
     float hAlign=0;
 
@@ -601,7 +601,7 @@ void GlLabel::draw(float, Camera *camera) {
       break;
     }
 
-    glLineWidth(screenH);
+    glLineWidth(viewportH);
 
     if (outlineColor.getA()==0 || outlineSize == 0)
       setMaterial(Color(color[0],color[1],color[2],color[3]));
@@ -684,7 +684,7 @@ void GlLabel::draw(float, Camera *camera) {
         GlTextureManager::getInst().desactivateTexture();
 
       if (outlineSize > 0) {
-        if (!useLOD || screenH > 25) {
+        if (!useLOD || viewportH > 25) {
           glLineWidth(outlineSize);
         }
         else {

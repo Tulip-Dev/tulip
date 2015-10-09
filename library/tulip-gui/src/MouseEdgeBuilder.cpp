@@ -77,7 +77,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
         }
         else {
           Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
-          _bends.push_back(glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point));
+          _bends.push_back(glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(glMainWidget->screenToViewport(point)));
           glMainWidget->redraw();
         }
       }
@@ -121,7 +121,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
       }
 
       Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
-      point = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point);
+      point = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(glMainWidget->screenToViewport(point));
       _curPos.set(point[0], point[1], point[2]);
       glMainWidget->redraw();
     }

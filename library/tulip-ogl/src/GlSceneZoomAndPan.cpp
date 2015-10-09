@@ -33,8 +33,8 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 
   camCenterEnd[2] = camCenterStart[2];
 
-  Coord blScene(camera.screenTo3DWorld(Coord(0, 0, 0)));
-  Coord trScene(camera.screenTo3DWorld(Coord(viewport[2], viewport[3], 0)));
+  Coord blScene(camera.viewportTo3DWorld(Coord(0, 0, 0)));
+  Coord trScene(camera.viewportTo3DWorld(Coord(viewport[2], viewport[3], 0)));
 
   BoundingBox sceneBB;
   sceneBB.expand(blScene);
@@ -140,19 +140,19 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
     camera.setEyes(camera.getEyes() + camera.getCenter());
     camera.setUp(Coord(0, 1., 0));
 
-    Coord bbScreenFirst = camera.worldTo2DScreen(camera.getCenter() - Coord(w/2, w/2, 0));
-    Coord bbScreenSecond = camera.worldTo2DScreen(camera.getCenter() + Coord(w/2, w/2, 0));
-    float bbWidthScreen = abs(bbScreenSecond.getX() - bbScreenFirst.getX());
-    float bbHeightScreen = abs(bbScreenSecond.getY() - bbScreenFirst.getY());
+    Coord bbViewportFirst = camera.worldTo2DViewport(camera.getCenter() - Coord(w/2, w/2, 0));
+    Coord bbViewportSecond = camera.worldTo2DViewport(camera.getCenter() + Coord(w/2, w/2, 0));
+    float bbWidthViewport = abs(bbViewportSecond.getX() - bbViewportFirst.getX());
+    float bbHeightViewport = abs(bbViewportSecond.getY() - bbViewportFirst.getY());
     double newZoomFactor = 0.0;
 
     float aspectRatio = viewport[2] / static_cast<float>(viewport[3]);
 
     if (zoomAreaWidth > (zoomAreaHeight * aspectRatio)) {
-      newZoomFactor = viewport[2] / bbWidthScreen;
+      newZoomFactor = viewport[2] / bbWidthViewport;
     }
     else {
-      newZoomFactor = viewport[3] / bbHeightScreen;
+      newZoomFactor = viewport[3] / bbHeightViewport;
     }
 
     camera.setZoomFactor(camera.getZoomFactor() * newZoomFactor);

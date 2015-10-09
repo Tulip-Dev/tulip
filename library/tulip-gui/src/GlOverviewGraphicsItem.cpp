@@ -135,13 +135,13 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
   Camera &baseCamera=baseScene.getGraphCamera();
 
   vector<Coord> cameraBoundingBox;
-  cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1],0)));
-  cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1],0)));
-  cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1]+backupViewport[3],0)));
-  cameraBoundingBox.push_back(baseCamera.screenTo3DWorld(Coord(backupViewport[0],backupViewport[1]+backupViewport[3],0)));
+  cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(Coord(backupViewport[0],backupViewport[1],0)));
+  cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1],0)));
+  cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(Coord(backupViewport[0]+backupViewport[2],backupViewport[1]+backupViewport[3],0)));
+  cameraBoundingBox.push_back(baseCamera.viewportTo3DWorld(Coord(backupViewport[0],backupViewport[1]+backupViewport[3],0)));
 
   // This code modify cameraBoundingBox coords to have coords with (x,y,0)
-  // If we don't do this we will have invalid polygon when we do worldTo2DScreen transformations
+  // If we don't do this we will have invalid polygon when we do worldTo2DViewport transformations
   Coord eyesVector=baseCamera.getEyes()-baseCamera.getCenter();
 
   eyesVector=eyesVector*(1.f/eyesVector[2]);
@@ -172,10 +172,10 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   // Project camera bounding box
   Camera &overviewCamera=baseScene.getGraphCamera();
-  Coord p0=overviewCamera.worldTo2DScreen(cameraBoundingBox[0]);
-  Coord p1=overviewCamera.worldTo2DScreen(cameraBoundingBox[1]);
-  Coord p2=overviewCamera.worldTo2DScreen(cameraBoundingBox[2]);
-  Coord p3=overviewCamera.worldTo2DScreen(cameraBoundingBox[3]);
+  Coord p0=overviewCamera.worldTo2DViewport(cameraBoundingBox[0]);
+  Coord p1=overviewCamera.worldTo2DViewport(cameraBoundingBox[1]);
+  Coord p2=overviewCamera.worldTo2DViewport(cameraBoundingBox[2]);
+  Coord p3=overviewCamera.worldTo2DViewport(cameraBoundingBox[3]);
 
   // Rotation of the coordinates to have no crossing lines
   while(p1[0]>p3[0]) {
@@ -337,7 +337,7 @@ void GlOverviewGraphicsItem::setScenePosition(QPointF pos) {
   vector<Coord> centerPos;
 
   for(vector<pair<string, GlLayer*> >::const_iterator it=layerList.begin(); it!=layerList.end(); ++it) {
-    centerPos.push_back(it->second->getCamera().screenTo3DWorld(position));
+    centerPos.push_back(it->second->getCamera().viewportTo3DWorld(position));
   }
 
   unsigned int i=0;

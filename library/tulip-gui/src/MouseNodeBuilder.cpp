@@ -65,7 +65,7 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
         node newNode;
         newNode = _graph->addNode();
         Coord point((double) glMainWidget->width() - (double) qMouseEv->x(),(double) qMouseEv->y(),0);
-        point = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(point);
+        point = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(glMainWidget->screenToViewport(point));
 
         // This code is here to block z coordinate to 0 when we are in "2D mode"
         Coord cameraDirection=glMainWidget->getScene()->getGraphCamera().getEyes()-glMainWidget->getScene()->getGraphCamera().getCenter();
