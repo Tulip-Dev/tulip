@@ -144,7 +144,7 @@ public:
                             tlp::node &n,tlp::edge &e,
                             tlp::GlLayer* layer=NULL);
 
-  
+
   /**
    * @brief convert a screen measure into a viewport measure
    * @param a measure in screen coordinates specified as an integer
@@ -184,7 +184,7 @@ public:
 #endif
     return point;
   }
-    
+
   /**
    * @brief convert a viewport measure into a screen measure
    * @param a measure in viewport coordinates specified as a double
