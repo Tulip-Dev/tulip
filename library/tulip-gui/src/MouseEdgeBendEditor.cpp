@@ -372,8 +372,8 @@ void MouseEdgeBendEditor::mMouseDelete() {
 //========================================================================================
 void MouseEdgeBendEditor::mMouseCreate(int x, int y, GlMainWidget *glMainWidget) {
   Coord viewportClick(glMainWidget->screenToViewport(glMainWidget->width() - x),
-		      glMainWidget->screenToViewport(y), 0);
-  
+                      glMainWidget->screenToViewport(y), 0);
+
   Coord worldLocation= glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(viewportClick);
 
   if(coordinates.empty())
