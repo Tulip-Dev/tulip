@@ -22,6 +22,9 @@
 
 
 #include <QGLWidget>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <QWindow>
+#endif
 
 #include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
@@ -112,7 +115,7 @@ public:
                       std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
                       tlp::GlLayer* layer=NULL, bool pickNodes=true, bool pickEdges=true);
 
-  /** @brief Select a node or edge at a point
+  /** @brief Select a node or edge at a screen point
    *  Try to select at point (x,y) a node in the first place then if no result try to select an edge
    *  @param type tells what has been found: NODE, EDGE
    *  @param layer specify the layer in which to perform the picking
@@ -140,6 +143,74 @@ public:
                             tlp::ElementType &type,
                             tlp::node &n,tlp::edge &e,
                             tlp::GlLayer* layer=NULL);
+
+  
+  /**
+   * @brief convert a screen measure into a viewport measure
+   * @param a measure in screen coordinates specified as an integer
+   * @return the converted measure in viewport coordinates as an integer
+   */
+  int screenToViewport(int l) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    return l * windowHandle()->devicePixelRatio();
+#else
+    return l;
+#endif
+  }
+
+  /**
+   * @brief convert a screen measure into a viewport measure
+   * @param a measure in screen coordinates specified as a double
+   * @return the converted measure in viewport coordinates as a double
+   */
+  double screenToViewport(double l) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    return l * windowHandle()->devicePixelRatio();
+#else
+    return l;
+#endif
+  }
+
+  /**
+   * @brief convert a screen point into a viewport point
+   * @param a point in screen coordinates
+   * @return the converted point in viewport coordinates
+   */
+  Coord screenToViewport(Coord point) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    qreal dpr = windowHandle()->devicePixelRatio();
+    point.setX(point.x() * dpr);
+    point.setY(point.y() * dpr);
+#endif
+    return point;
+  }
+    
+  /**
+   * @brief convert a viewport measure into a screen measure
+   * @param a measure in viewport coordinates specified as a double
+   * @return the converted measure in screen coordinates as a double
+   */
+  double viewportToScreen(double l) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    return l / windowHandle()->devicePixelRatio();
+#else
+    return l;
+#endif
+  }
+
+  /**
+   * @brief convert a viewport point into a screen point
+   * @param a point in viewport coordinates
+   * @return the converted point in screen coordinates
+   */
+  Coord viewportToScreen(Coord point) {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    qreal dpr = windowHandle()->devicePixelRatio();
+    point.setX(point.x() / dpr);
+    point.setY(point.y() / dpr);
+#endif
+    return point;
+  }
 
   /**
    * @brief EPS output of the GlMainWidget
@@ -181,7 +252,7 @@ public:
   QImage createPicture(int width, int height, bool center=true);
 
   /**
-   * @brief Function to do picking on entities.
+   * @brief Function to do picking on entities in a screen region
    * It just calls selectEntities on the GlScene instance.
    * @param x screen coordinates
    * @param y screen coordinates

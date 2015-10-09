@@ -130,9 +130,9 @@ private:
   bool haveSelection(GlMainWidget *);
   void computeSrcTgtEntities(GlMainWidget *);
   bool computeBendsCircles(GlMainWidget*);
-  void mMouseTranslate(double, double, GlMainWidget*);
+  void mMouseTranslate(int, int, GlMainWidget*);
   void mMouseDelete();
-  void mMouseCreate(double, double, GlMainWidget*);
+  void mMouseCreate(int, int, GlMainWidget*);
 };
 
 }

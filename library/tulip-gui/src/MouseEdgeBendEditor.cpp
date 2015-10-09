@@ -288,12 +288,12 @@ void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
 //========================================================================================
 //Does the point p belong to the segment [u,v]?
 bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlMainWidget *glMainWidget) {
-  int W = glMainWidget->width();
-  int H = glMainWidget->height();
-  Coord m=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(u);
+  int W = glMainWidget->screenToViewport(glMainWidget->width());
+  int H = glMainWidget->screenToViewport(glMainWidget->height());
+  Coord m=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(u);
   m[0] = W - m[0];
   m[1] = H - m[1];
-  Coord n=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(v);
+  Coord n=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(v);
   n[0] = W - n[0];
   n[1] = H - n[1];
   double mnDist = m.dist(n);
@@ -302,21 +302,21 @@ bool MouseEdgeBendEditor::belong(Coord u, Coord v, Coord p, GlMainWidget *glMain
   return ((mpDist + pnDist) - mnDist)/mnDist < 1E-3;
 }
 //========================================================================================
-void MouseEdgeBendEditor::mMouseTranslate(double newX, double newY, GlMainWidget *glMainWidget) {
+void MouseEdgeBendEditor::mMouseTranslate(int newX, int newY, GlMainWidget *glMainWidget) {
   initProxies(glMainWidget);
 
   Coord v0(0,0,0);
   Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
-  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().screenTo3DWorld(v0);
-  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().screenTo3DWorld(v1);
+  v0 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v0));
+  v1 = glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v1));
   v1 -= v0;
 
   if(selectedEntity=="targetTriangle") {
-    targetTriangle.translate(Coord(-(double)(editPosition[0] - newX), (double)(editPosition[1] - newY),0));
+    targetTriangle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX), glMainWidget->screenToViewport(editPosition[1] - newY),0));
     glMainWidget->draw(false);
   }
   else if(selectedEntity=="sourceCircle") {
-    sourceCircle.translate(Coord(-(double)(editPosition[0] - newX), (double)(editPosition[1] - newY),0));
+    sourceCircle.translate(Coord(-glMainWidget->screenToViewport(editPosition[0] - newX), glMainWidget->screenToViewport(editPosition[1] - newY),0));
     glMainWidget->draw(false);
   }
   else {
@@ -370,21 +370,23 @@ void MouseEdgeBendEditor::mMouseDelete() {
   }
 }
 //========================================================================================
-void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainWidget) {
-  Coord screenClick(glMainWidget->width() - (double) x, (double) y, 0);
-  Coord worldLocation= glMainWidget->getScene()->getLayer("Main")->getCamera().screenTo3DWorld(screenClick);
+void MouseEdgeBendEditor::mMouseCreate(int x, int y, GlMainWidget *glMainWidget) {
+  Coord viewportClick(glMainWidget->screenToViewport(glMainWidget->width() - x),
+		      glMainWidget->screenToViewport(y), 0);
+  
+  Coord worldLocation= glMainWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(viewportClick);
 
   if(coordinates.empty())
     coordinates.push_back(worldLocation);
   else {
     Coord first=coordinates[0];
     Coord last=coordinates[coordinates.size() - 1];
-    bool firstSeg=belong(start, first, screenClick, glMainWidget);
-    bool lastSeg=belong(end, last, screenClick, glMainWidget);
+    bool firstSeg=belong(start, first, viewportClick, glMainWidget);
+    bool lastSeg=belong(end, last, viewportClick, glMainWidget);
     bool firstLastSeg=false;
 
     if(!edgeSelected)
-      firstLastSeg=belong(first,last,screenClick,glMainWidget);
+      firstLastSeg=belong(first,last,viewportClick,glMainWidget);
 
     if(firstSeg)
       coordinates.insert(coordinates.begin(),worldLocation);
@@ -400,7 +402,7 @@ void MouseEdgeBendEditor::mMouseCreate(double x, double y, GlMainWidget *glMainW
       while(CoordIt!=coordinates.end()) {
         first=last;
         last=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-        bool midSeg=belong(first, last, screenClick, glMainWidget);
+        bool midSeg=belong(first, last, viewportClick, glMainWidget);
 
         if(midSeg) {
           coordinates.insert(CoordIt, worldLocation);
@@ -499,14 +501,14 @@ void MouseEdgeBendEditor::computeSrcTgtEntities(GlMainWidget *glMainWidget) {
   }
 
   if(selectedEntity!="targetTriangle") {
-    Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(end));
+    Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(end));
     targetTriangle=GlTriangle(tmp,Size(7,7,0),Color(255, 102, 255, 200),Color(128, 20, 20, 200));
     targetTriangle.setStartAngle(M_PI+endAngle);
     targetTriangle.setStencil(0);
   }
 
   if(selectedEntity!="sourceCircle") {
-    Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(start));
+    Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(start));
     sourceCircle=GlCircle(tmp,6,Color(128, 20, 20, 200),Color(255, 102, 255, 200),true,true);
     sourceCircle.setStencil(0);
   }
@@ -546,7 +548,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
 
     while(CoordIt!=coordinates.end()) {
       tmp=Coord(CoordIt->getX(), CoordIt->getY(), CoordIt->getZ());
-      tmp=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(tmp);
+      tmp=glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(tmp);
       basicCircle.set(tmp, 5, 0.);
       circles.push_back(basicCircle);
       ++CoordIt;
@@ -596,7 +598,7 @@ bool MouseEdgeBendEditor::computeBendsCircles(GlMainWidget *glMainWidget) {
         vector<Coord>::iterator coordIt=coordinatesWithRotation.begin();
 
         while(coordIt!=coordinatesWithRotation.end()) {
-          Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DScreen(*coordIt));
+          Coord tmp(glMainWidget->getScene()->getLayer("Main")->getCamera().worldTo2DViewport(*coordIt));
           basicCircle.set(tmp, 5, 0.);
           circles.push_back(basicCircle);
           ++coordIt;

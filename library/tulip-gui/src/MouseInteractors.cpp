@@ -50,7 +50,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
     QWheelEvent *we = static_cast<QWheelEvent*>(e);
 
     if (we->orientation() == Qt::Vertical && we->modifiers() == Qt::NoModifier) {
-      g->getScene()->zoomXY(we->delta() / WHEEL_DELTA, we->x(), we->y());
+      g->getScene()->zoomXY(g->screenToViewport(we->delta()) / WHEEL_DELTA, g->screenToViewport(we->x()), g->screenToViewport(we->y()));
       g->draw(false);
       return true;
     }
@@ -117,7 +117,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
         }
 
         center = pan->delta();
-        g->getScene()->translateCamera(pan->delta().x(), -pan->delta().y(), 0);
+        g->getScene()->translateCamera(g->screenToViewport(pan->delta().x()), -g->screenToViewport(pan->delta().y()), 0);
       }
     }
 
@@ -209,9 +209,9 @@ bool MouseRotXRotY::eventFilter(QObject *widget, QEvent *e) {
     else
       deltaX=0;
 
-    if (deltaY!=0) glMainWidget->getScene()->rotateScene(deltaY,0,0);
+    if (deltaY!=0) glMainWidget->getScene()->rotateScene(glMainWidget->screenToViewport(deltaY),0,0);
 
-    if (deltaX!=0) glMainWidget->getScene()->rotateScene(0,deltaX,0);
+    if (deltaX!=0) glMainWidget->getScene()->rotateScene(0,glMainWidget->screenToViewport(deltaX),0);
 
     x=qMouseEv->x();
     y=qMouseEv->y();
@@ -269,14 +269,14 @@ bool MouseZoomRotZ::eventFilter(QObject *widget, QEvent *e) {
     if (inZoom) {
       // Zoom
       deltaY = qMouseEv->y() - y;
-      glMainWidget->getScene()->zoom(-deltaY/2);
+      glMainWidget->getScene()->zoom(-glMainWidget->screenToViewport(deltaY/2));
       y = qMouseEv->y();
     }
 
     if(inRotation) {
       // Rotation
       deltaX = qMouseEv->x() - x;
-      glMainWidget->getScene()->rotateScene(0,0,deltaX);
+      glMainWidget->getScene()->rotateScene(0,0,glMainWidget->screenToViewport(deltaX));
       x = qMouseEv->x();
     }
 
@@ -308,10 +308,10 @@ bool MouseMove::eventFilter(QObject *widget, QEvent *e) {
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
     if (qMouseEv->x() != x)
-      glMainWidget->getScene()->translateCamera(qMouseEv->x()-x,0,0);
+      glMainWidget->getScene()->translateCamera(glMainWidget->screenToViewport(qMouseEv->x()-x),0,0);
 
     if (qMouseEv->y() != y)
-      glMainWidget->getScene()->translateCamera(0,y-qMouseEv->y(),0);
+      glMainWidget->getScene()->translateCamera(0,glMainWidget->screenToViewport(y-qMouseEv->y()),0);
 
     x = qMouseEv->x();
     y = qMouseEv->y();
@@ -491,43 +491,43 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     switch(ke->key()) {
     case Qt::Key_Left:
-      glmainwidget->getScene()->translateCamera(delta * 2,0,0);
+      glmainwidget->getScene()->translateCamera(glmainwidget->screenToViewport(delta * 2),0,0);
       break;
 
     case Qt::Key_Right:
-      glmainwidget->getScene()->translateCamera(-1 * delta * 2,0,0);
+      glmainwidget->getScene()->translateCamera(glmainwidget->screenToViewport(-1 * delta * 2),0,0);
       break;
 
     case Qt::Key_Up:
-      glmainwidget->getScene()->translateCamera(0,-1 * delta * 2,0);
+      glmainwidget->getScene()->translateCamera(0,glmainwidget->screenToViewport(-1 * delta * 2),0);
       break;
 
     case Qt::Key_Down:
-      glmainwidget->getScene()->translateCamera(0,delta * 2,0);
+      glmainwidget->getScene()->translateCamera(0,glmainwidget->screenToViewport(delta * 2),0);
       break;
 
     case Qt::Key_PageUp:
-      glmainwidget->getScene()->zoom(delta);
+      glmainwidget->getScene()->zoom(glmainwidget->screenToViewport(delta));
       break;
 
     case Qt::Key_PageDown:
-      glmainwidget->getScene()->zoom(-1 * delta);
+      glmainwidget->getScene()->zoom(glmainwidget->screenToViewport(-1 * delta));
       break;
 
     case Qt::Key_Home:
-      glmainwidget->getScene()->translateCamera(0,0,-1 * delta * 2);
+      glmainwidget->getScene()->translateCamera(0,0,glmainwidget->screenToViewport(-1 * delta * 2));
       break;
 
     case Qt::Key_End:
-      glmainwidget->getScene()->translateCamera(0,0,delta * 2);
+      glmainwidget->getScene()->translateCamera(0,0,glmainwidget->screenToViewport(delta * 2));
       break;
 
     case Qt::Key_Insert:
-      glmainwidget->getScene()->rotateScene(0,0,-1 * delta * 2);
+      glmainwidget->getScene()->rotateScene(0,0,glmainwidget->screenToViewport(-1 * delta * 2));
       break;
 
     case Qt::Key_Delete :
-      glmainwidget->getScene()->rotateScene(0,0,delta * 2);
+      glmainwidget->getScene()->rotateScene(0,0,glmainwidget->screenToViewport(delta * 2));
       break;
 
     default:

@@ -625,8 +625,8 @@ void GlScene::translateCamera(const int x, const int y, const int z) {
     if(it->second->getCamera().is3D() && (!it->second->useSharedCamera())) {
       Coord v1(0, 0, 0);
       Coord v2(static_cast<float>(x), static_cast<float>(y), static_cast<float>(z));
-      v1 = it->second->getCamera().screenTo3DWorld(v1);
-      v2 = it->second->getCamera().screenTo3DWorld(v2);
+      v1 = it->second->getCamera().viewportTo3DWorld(v1);
+      v2 = it->second->getCamera().viewportTo3DWorld(v2);
       Coord move = v2 - v1;
       it->second->getCamera().setEyes(it->second->getCamera().getEyes() + move);
       it->second->getCamera().setCenter(it->second->getCamera().getCenter() + move);

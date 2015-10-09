@@ -180,7 +180,7 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     H = glMainWidget->height();
     editCenter = centerRect.getCenter();
     editCenter[2] = 0;
-    editCenter[1]= H- editCenter[1];
+    editCenter[1]= glMainWidget->screenToViewport(H) - editCenter[1];
     //editCenter[0] = W - editCenter[0];
     editPosition[0] = qMouseEv->x();
     editPosition[1] = qMouseEv->y();
@@ -526,8 +526,8 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidge
   initProxies(glMainWidget);
   Coord v0(0,0,0);
   Coord v1((double)(editPosition[0] - newX), -(double)(editPosition[1] - newY),0);
-  v0 = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(v0);
-  v1 = glMainWidget->getScene()->getGraphCamera().screenTo3DWorld(v1);
+  v0 = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(v0);
+  v1 = glMainWidget->getScene()->getGraphCamera().viewportTo3DWorld(glMainWidget->screenToViewport(v1));
   v1 -= v0;
   Iterator<node> *itN = _selection->getNodesEqualTo(true, _graph);
   Iterator<edge> *itE = _selection->getEdgesEqualTo(true, _graph);
@@ -539,18 +539,18 @@ void MouseSelectionEditor::mMouseTranslate(double newX, double newY, GlMainWidge
   Observable::unholdObservers();
 }
 //========================================================================================
-void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWidget* ) {
+void MouseSelectionEditor::mMouseStretchAxis(double newX, double newY, GlMainWidget* glMainWidget) {
   //  qWarning() << __PRETTY_FUNCTION__ << "/op=" << operation << ", mod:" << mode << endl;
-  Coord curPos(newX, newY, 0);
+  Coord curPos(glMainWidget->screenToViewport(newX), glMainWidget->screenToViewport(newY), 0);
   Coord stretch(1,1,1);
 
   //  qWarning() << "cur : << " << curPos << " center : " << editCenter << endl;
   if (operation == STRETCH_X || operation == STRETCH_XY) {
-    stretch[0] =  (curPos[0] - editCenter[0]) / (editPosition[0] - editCenter[0]);
+    stretch[0] =  (curPos[0] - editCenter[0]) / (glMainWidget->screenToViewport(editPosition[0]) - editCenter[0]);
   }
 
   if (operation == STRETCH_Y || operation == STRETCH_XY) {
-    stretch[1] = (curPos[1] - editCenter[1]) / (editPosition[1] - editCenter[1]);
+    stretch[1] = (curPos[1] - editCenter[1]) / (glMainWidget->screenToViewport(editPosition[1]) - editCenter[1]);
   }
 
   //  qWarning() << "stretch : << "<< stretch << endl;
@@ -604,9 +604,9 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
   if (operation == ROTATE_Z) {
     Coord curPos(newX, newY, 0);
 
-    Coord vCS = editPosition - editCenter;
+    Coord vCS = glMainWidget->screenToViewport(editPosition) - editCenter;
     vCS /= vCS.norm();
-    Coord vCP =  curPos - editCenter;
+    Coord vCP =  glMainWidget->screenToViewport(curPos) - editCenter;
     vCP /= vCP.norm();
 
     float sign = (vCS ^ vCP)[2];
@@ -663,10 +663,10 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
     double xAngle = 0, yAngle = 0;
     double nbPI = 0;
 
-    delta = abs(newX - editPosition[0]);
+    delta = abs(glMainWidget->screenToViewport(newX - editPosition[0]));
 
-    if (delta > abs(newY - editPosition[1])) {
-      initDelta = abs(editCenter[0] - editPosition[0]);
+    if (delta > abs(glMainWidget->screenToViewport(newY - editPosition[1]))) {
+      initDelta = abs(editCenter[0] - glMainWidget->screenToViewport(editPosition[0]));
       nbPI = floor(delta / (2. * initDelta));
       delta -= nbPI * 2. * initDelta;
       cosa = (initDelta - delta)/initDelta;
@@ -674,8 +674,8 @@ void MouseSelectionEditor::mMouseRotate(double newX, double newY, GlMainWidget *
       yAngle = (acos(cosa) + (nbPI * M_PI)) * 180.0 / M_PI;
     }
     else {
-      delta = abs(newY - editPosition[1]);
-      initDelta = abs(editCenter[1] - editPosition[1]);
+      delta = abs(glMainWidget->screenToViewport(newY - editPosition[1]));
+      initDelta = abs(editCenter[1] - glMainWidget->screenToViewport(editPosition[1]));
       nbPI = floor(delta / (2. * initDelta));
       delta -= nbPI * 2. * initDelta;
       cosa = (initDelta - delta)/initDelta;
@@ -899,7 +899,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   Coord bbsize(boundingBox[1] - boundingBox[0]);
   //v1
   Coord tmp(boundingBox[0]);
-  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(tmp);
+  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(tmp);
   min2D = tmp;
   max2D = tmp;
 
@@ -907,7 +907,7 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   for (unsigned int i=0; i<3; ++i) {
     tmp = Coord(boundingBox[0]);
     tmp[i] += bbsize[i];
-    tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(tmp);
+    tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(tmp);
     min2D = minCoord(tmp, min2D);
     max2D = maxCoord(tmp, max2D);
   }
@@ -916,33 +916,33 @@ bool MouseSelectionEditor::computeFFD(GlMainWidget *glMainWidget) {
   tmp = Coord(boundingBox[0]);
   tmp[0] += bbsize[0];
   tmp[1] += bbsize[1];
-  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(tmp);
+  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v6
   tmp = Coord(boundingBox[0]);
   tmp[0] += bbsize[0];
   tmp[2] += bbsize[2];
-  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(tmp);
+  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v7
   tmp = Coord(boundingBox[0]);
   tmp[1] += bbsize[1];
   tmp[2] += bbsize[2];
-  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(tmp);
+  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
   //v8
   tmp = Coord(boundingBox[0]);
   tmp += bbsize;
-  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(tmp);
+  tmp = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(tmp);
   min2D = minCoord(tmp, min2D);
   max2D = maxCoord(tmp, max2D);
 
   ffdCenter = Coord(boundingBox.center());
 
-  Coord tmpCenter = glMainWidget->getScene()->getGraphCamera().worldTo2DScreen(ffdCenter);
+  Coord tmpCenter = glMainWidget->getScene()->getGraphCamera().worldTo2DViewport(ffdCenter);
 
   //  qWarning() << tmpCenter << endl;
 

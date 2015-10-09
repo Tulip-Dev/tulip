@@ -356,14 +356,10 @@ void GlMainWidget::resizeGL(int w, int h) {
 
   int width = contentsRect().width();
   int height = contentsRect().height();
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-  width *= this->windowHandle()->devicePixelRatio();
-  height *= this->windowHandle()->devicePixelRatio();
-#endif
 
   deleteRenderingStore();
 
-  scene.setViewport(0,0,width,height);
+  scene.setViewport(0,0,screenToViewport(width), screenToViewport(height));
 
   emit glResized(w,h);
 }
@@ -373,8 +369,9 @@ void GlMainWidget::makeCurrent() {
     QGLWidget::makeCurrent();
     GlDisplayListManager::getInst().changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
     GlTextureManager::getInst().changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
-    QRect rect=contentsRect();
-    scene.setViewport(0,0,rect.width(),rect.height());
+    int width = contentsRect().width();
+    int height = contentsRect().height();
+    scene.setViewport(0,0,screenToViewport(width),screenToViewport(height));
   }
 }
 //==================================================
@@ -383,8 +380,8 @@ bool GlMainWidget::pickGlEntities(const int x, const int y,
                                   std::vector<SelectedEntity> &pickedEntities,
                                   GlLayer* layer) {
   makeCurrent();
-  return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),x, y,
-                              width, height,
+  return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),screenToViewport(x), screenToViewport(y),
+                              screenToViewport(width), screenToViewport(height),
                               layer,
                               pickedEntities);
 }
@@ -402,11 +399,11 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
   makeCurrent();
 
   if (pickNodes) {
-    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x, y, width, height, layer, selectedNodes);
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), layer, selectedNodes);
   }
 
   if (pickEdges) {
-    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x, y, width, height, layer, selectedEdges);
+    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), layer, selectedEdges);
   }
 }
 //=====================================================
@@ -414,12 +411,12 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
-  if(pickNodes && scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
+  if(pickNodes && scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
-  if(pickEdges && scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), x-1, y-1, 3, 3, layer, selectedEntities)) {
+  if(pickEdges && scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), layer, selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }

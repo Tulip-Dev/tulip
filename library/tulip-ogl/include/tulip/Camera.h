@@ -37,7 +37,7 @@ class GlScene;
  * After setup you can do some basic operation :
  *  - Move, rotate, strafeLeftRight and strafeUpDown to modify poitn of view
  *  - You can directly modify camera parameters with setSceneRadius, setZoomFactor, setEyes, setCenter and setUp
- *  - You can transform screen coordinates to 3D world coordinates with screenTo3DWorld() function and 3D world coordinates to screen coordinates with worldTo2DScreen() function
+ *  - You can transform viewport coordinates to 3D world coordinates with viewportTo3DWorld() function and 3D world coordinates to viewport coordinates with worldTo2DViewport() function
  * A camera is a main component of GlLayer and GlScene
  * @see GlLayer
  * @see GlScene
@@ -193,16 +193,32 @@ public:
   }
 
   /**
-   * @brief Return the 3D world coordinate for the given screen point
+   * @brief Return the 3D world coordinate for the given viewport point
    * \warning This function set up the projection and modelview matrix
    */
-  Coord screenTo3DWorld(const Coord &point) const;
+  Coord viewportTo3DWorld(const Coord &point) const;
 
   /**
-   * @brief Return the screen position for the given 3D coordinate
+   * @brief Return the 3D world coordinate for the given viewport point
    * \warning This function set up the projection and modelview matrix
    */
-  Coord worldTo2DScreen(const Coord &obj) const;
+  Coord screenTo3DWorld(const Coord &point) const {
+    return viewportTo3DWorld(point);
+  }
+
+  /**
+   * @brief Return the viewport position for the given 3D coordinate
+   * \warning This function set up the projection and modelview matrix
+   */
+  Coord worldTo2DViewport(const Coord &obj) const;
+
+  /**
+   * @brief Return the viewport position for the given 3D coordinate
+   * \warning This function set up the projection and modelview matrix
+   */
+  Coord worldTo2DScreen(const Coord &obj) const {
+    return worldTo2DViewport(obj);
+  }
 
   /**
    * @brief Function to export data in outString (in XML format)

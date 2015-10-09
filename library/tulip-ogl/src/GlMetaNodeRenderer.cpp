@@ -114,10 +114,10 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
   newCamera2.setEyes(newCamera2.getCenter()+Coord(0,0,1)*(newCamera2.getEyes()-newCamera2.getCenter()).norm());
   newCamera2.setUp(Coord(0,1,0));
 
-  Coord first=newCamera2.worldTo2DScreen((Coord)(bb[0]));
-  Coord second=newCamera2.worldTo2DScreen((Coord)(bb[1]));
+  Coord first=newCamera2.worldTo2DViewport((Coord)(bb[0]));
+  Coord second=newCamera2.worldTo2DViewport((Coord)(bb[1]));
 
-  Coord center=camera->worldTo2DScreen((Coord)(bb[0]+bb[1])/2.f);
+  Coord center=camera->worldTo2DViewport((Coord)(bb[0]+bb[1])/2.f);
   Coord size=second-first;
 
   Vector<int,4> viewport;
