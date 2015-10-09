@@ -13,8 +13,11 @@ MACRO(SET_COMPILER_OPTIONS)
   ENDIF(NOT MSVC)
 
   IF(EMSCRIPTEN)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-warn-absolute-paths")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -Wno-warn-absolute-paths")
+    # Ensure emscripten port of zlib is compiled before compiling Tulip
+    FIND_PACKAGE(PythonInterp REQUIRED)
+    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} embuilder.py build zlib WORKING_DIRECTORY ${EMSCRIPTEN_ROOT_PATH})
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -s USE_ZLIB=1 -Wno-warn-absolute-paths")
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -s USE_ZLIB=1 -std=c++11 -Wno-warn-absolute-paths")
   ENDIF(EMSCRIPTEN)
 
   IF(WIN32)
