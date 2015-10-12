@@ -108,6 +108,7 @@ protected:
   bool handleDropEvent(const QMimeData* mimedata);
 
   void showEvent(QShowEvent *event);
+  void closeEvent(QCloseEvent *event);
 
 };
 

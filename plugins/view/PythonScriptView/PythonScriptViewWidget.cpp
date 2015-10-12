@@ -49,7 +49,7 @@ public :
 
 static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
-PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view) {
+PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view), checkEditors(false) {
   _ui->setupUi(this);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
@@ -95,12 +95,14 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 }
 
 PythonScriptViewWidget::~PythonScriptViewWidget() {
-  // ensure all updated scripts have been saved
-  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i)
-    closeScriptTabRequested(i);
+  if (checkEditors) {
+    // ensure all updated scripts have been saved
+    for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i)
+      closeScriptTabRequested(i);
 
-  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i)
-    closeModuleTabRequested(i);
+    for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i)
+      closeModuleTabRequested(i);
+  }
 
   delete _ui;
 }
@@ -113,6 +115,27 @@ void PythonScriptViewWidget::resizeEvent(QResizeEvent *e) {
 void PythonScriptViewWidget::showEvent(QShowEvent *e) {
   QWidget::showEvent(e);
   resizeToolBars();
+}
+
+bool PythonScriptViewWidget::checkOnClose() {
+  // ensure all updated scripts have been saved
+  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
+    if (!closeEditorTabRequested(_ui->mainScriptsTabWidget, i, true)) {
+      return false;
+    }
+  }
+
+  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
+    if (!closeEditorTabRequested(_ui->modulesTabWidget, i, true)) {
+      return false;
+    }
+  }
+  // avoid more messages
+  checkEditors = false;
+  disconnect(_ui->modulesTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeModuleTabRequested(int)));
+  disconnect(_ui->mainScriptsTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeScriptTabRequested(int)));
+
+  return true;
 }
 
 tlp::PythonEditorsTabWidget *PythonScriptViewWidget::getScriptsTabWidget() const {
@@ -286,33 +309,36 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
   lastTabIndex = index;
 }
 
-void PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tabWidget, int idx) {
+bool PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tabWidget, int idx, bool mayCancel) {
   QString curTabText = tabWidget->tabText(idx);
 
   if (curTabText == "")
-    return;
+    return true;
 
   if (curTabText[curTabText.size() -1] == '*') {
     PythonCodeEditor* editor = tabWidget->getEditor(idx);
     QString fileName = editor->getFileName();
 
-    if (QMessageBox::question(QApplication::activeWindow(),
-                              QString("Save edited Python code"),
-                              QString("The code of ") +
-                              // if the editor has not yet a file name
-                              // show the tab text instead
-                              (fileName.isEmpty() ? curTabText : fileName) +
-                              QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
-                              QMessageBox::Save | QMessageBox::Discard,
-                              QMessageBox::Save) ==
-        QMessageBox::Save) {
+    QMessageBox::StandardButton button =
+      QMessageBox::question(QApplication::activeWindow(),
+			    QString("Save edited Python code"),
+			    QString("The code of ") +
+			    // if the editor has not yet a file name
+			    // show the tab text instead
+			    (fileName.isEmpty() ? curTabText : fileName) +
+			    QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
+			    QMessageBox::Save | QMessageBox::Discard | (mayCancel ? QMessageBox::Cancel : QMessageBox::Save),
+			    QMessageBox::Save);
+    if (button == QMessageBox::Save) {
       if (fileName.isEmpty())
         // user must choose a file
         _pythonScriptView->saveScript(idx, false);
       else
         editor->saveCodeToFile();
     }
+    return button != QMessageBox::Cancel;
   }
+  return true;
 }
 
 void PythonScriptViewWidget::closeModuleTabRequested(int idx) {

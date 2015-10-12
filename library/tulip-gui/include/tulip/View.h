@@ -286,6 +286,14 @@ public slots:
     */
   void emitDrawNeededSignal();
 
+  /**
+    @brief allow to add some check when a user want to close a view.
+    @return true if the view can be closed, false if not
+    */
+  virtual bool checkOnClose() {
+    return true;
+  }
+
 signals:
   /**
     @brief Inform the overlying subsystem that this view needs to be drawn.

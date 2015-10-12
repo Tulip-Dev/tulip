@@ -35,7 +35,6 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
 
-#include <QMessageBox>
 #include <QFileDialog>
 #include <QTextStream>
 #include <QRegExp>
@@ -953,4 +952,10 @@ bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {
   }
 
   return false;
+}
+
+// redefined from View class
+bool PythonScriptView::checkOnClose() {
+  // delegate to the PythonScriptViewWidget
+  return _viewWidget->checkOnClose();
 }
