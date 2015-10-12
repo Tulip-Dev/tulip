@@ -47,6 +47,7 @@ class PythonScriptViewWidget : public QWidget {
 
   Ui::PythonScriptViewWidget *_ui;
   PythonScriptView *_pythonScriptView;
+  bool checkEditors;
   QToolBar *_mainScriptToolBar;
   QToolBar *_modulesToolBar;
   QAction *_newMainScriptAction;
@@ -64,6 +65,7 @@ public :
   ~PythonScriptViewWidget();
   void showEvent(QShowEvent *);
   void resizeEvent(QResizeEvent *);
+  bool checkOnClose();
 
   void setMainTabWidgetIndex(int idx);
 
@@ -113,7 +115,8 @@ public slots :
   void increaseFontSize();
   void resizeToolBars();
   void currentTabChanged(int index);
-  void closeEditorTabRequested(tlp::PythonEditorsTabWidget* tabWidget, int index);
+  bool closeEditorTabRequested(tlp::PythonEditorsTabWidget* tabWidget,
+			       int index, bool mayCancel = false);
   void closeModuleTabRequested(int index);
   void closeScriptTabRequested(int index);
   void scrollToEditorLine(const QUrl & link);

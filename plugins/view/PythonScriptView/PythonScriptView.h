@@ -93,6 +93,9 @@ public :
     ViewWidget::graphDeleted(parent);
   }
 
+  // redefined from View class
+  virtual bool checkOnClose();
+
 public slots:
 
   void pauseCurrentScript();

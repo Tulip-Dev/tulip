@@ -271,6 +271,13 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 #endif
 }
 
+void WorkspacePanel::closeEvent(QCloseEvent* event) {
+  if (_view->checkOnClose())
+    event->accept();
+  else
+    event->ignore();
+}
+
 bool WorkspacePanel::eventFilter(QObject* obj, QEvent* ev) {
   if (_viewConfigurationWidgets != NULL && _view != NULL) {
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
