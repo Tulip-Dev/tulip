@@ -130,6 +130,7 @@ bool PythonScriptViewWidget::checkOnClose() {
       return false;
     }
   }
+
   // avoid more messages
   checkEditors = false;
   disconnect(_ui->modulesTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeModuleTabRequested(int)));
@@ -321,14 +322,15 @@ bool PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tab
 
     QMessageBox::StandardButton button =
       QMessageBox::question(QApplication::activeWindow(),
-			    QString("Save edited Python code"),
-			    QString("The code of ") +
-			    // if the editor has not yet a file name
-			    // show the tab text instead
-			    (fileName.isEmpty() ? curTabText : fileName) +
-			    QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
-			    QMessageBox::Save | QMessageBox::Discard | (mayCancel ? QMessageBox::Cancel : QMessageBox::Save),
-			    QMessageBox::Save);
+                            QString("Save edited Python code"),
+                            QString("The code of ") +
+                            // if the editor has not yet a file name
+                            // show the tab text instead
+                            (fileName.isEmpty() ? curTabText : fileName) +
+                            QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
+                            QMessageBox::Save | QMessageBox::Discard | (mayCancel ? QMessageBox::Cancel : QMessageBox::Save),
+                            QMessageBox::Save);
+
     if (button == QMessageBox::Save) {
       if (fileName.isEmpty())
         // user must choose a file
@@ -336,8 +338,10 @@ bool PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tab
       else
         editor->saveCodeToFile();
     }
+
     return button != QMessageBox::Cancel;
   }
+
   return true;
 }
 
