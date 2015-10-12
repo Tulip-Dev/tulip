@@ -180,10 +180,10 @@ at distance less or equal to a maximum one.
 %End 
 
 %MethodCode
-	if (a0->isElement(*a1)) {
-		tlp::reachableNodes(a0, *a1, *a2, a3);
-	} else {
-		sipIsErr = throwInvalidNodeException(a0, *a1);
-	}
+  if (a0->isElement(*a1)) {
+    tlp::reachableNodes(a0, *a1, *a2, a3, a4);
+  } else {
+    sipIsErr = throwInvalidNodeException(a0, *a1);
+  }
 %End  	 	
 };
