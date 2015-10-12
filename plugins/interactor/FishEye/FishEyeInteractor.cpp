@@ -149,7 +149,7 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
     float x = glWidget->width() - me->x();
     float y = me->y();
     Coord screenCoords(x, y, 0);
-    fisheyeCenter = camera->screenTo3DWorld(screenCoords);
+    fisheyeCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     glWidget->redraw();
     return true;
   }

@@ -84,7 +84,7 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
     float x = glWidget->width() - me->x();
     float y = me->y();
     screenCoords = Coord(x, y, 0);
-    boxCenter = camera->screenTo3DWorld(screenCoords);
+    boxCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
 
     updateMagnifyingGlass = true;
   }
@@ -93,7 +93,7 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
     float x = glWidget->width() - wheelEvent->x();
     float y = wheelEvent->y();
     screenCoords = Coord(x, y, 0);
-    boxCenter = camera->screenTo3DWorld(screenCoords);
+    boxCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     int numDegrees = wheelEvent->delta() / 8;
     int numSteps = numDegrees / 15;
 
@@ -173,7 +173,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
   // compute the zoom factor to apply to scene's camera to get the area under the magnifying glass displayed entirely in the viewport
   float bbWidthScreen = boundingBox[1][0] - boundingBox[0][0];
   float bbHeightScreen = boundingBox[1][1] - boundingBox[0][1];
-  float startSize = min(glWidget->width(), glWidget->height());
+  float startSize = glWidget->screenToViewport(min(glWidget->width(), glWidget->height()));
   float endSize = max(bbHeightScreen, bbWidthScreen);
   float zoomFactor = startSize / endSize;
 
@@ -238,7 +238,7 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
   }
 
   camera->initGl();
-  Coord boxCenterScr = camera->worldTo2DScreen(boxCenter);
+  Coord boxCenterScr = camera->worldTo2DViewport(boxCenter);
   Camera camera2D(camera->getScene(), false);
   camera2D.setScene(camera->getScene());
   camera2D.initGl();
@@ -276,7 +276,7 @@ void MouseMagnifyingGlassInteractorComponent::viewChanged(View *view) {
 
   GlMainView *glView = dynamic_cast<GlMainView *>(view);
   glWidget = glView->getGlMainWidget();
-  radius = glWidget->width() / 4;
+  radius = glWidget->screenToViewport(glWidget->width()) / 4;
   camera = &glWidget->getScene()->getLayer("Main")->getCamera();
 
   if (!glWidget->hasMouseTracking()) {

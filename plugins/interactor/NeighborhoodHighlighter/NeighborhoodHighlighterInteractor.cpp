@@ -418,7 +418,7 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
   node n;
   glWidget->makeCurrent();
   vector<SelectedEntity> selectedElements;
-  glWidget->getScene()->selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), x-1, y-1, 3, 3, NULL, selectedElements);
+  glWidget->getScene()->selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), glWidget->screenToViewport(x-1), glWidget->screenToViewport(y-1), glWidget->screenToViewport(3), glWidget->screenToViewport(3), NULL, selectedElements);
 
   if(!selectedElements.empty()) {
     n=node(selectedElements[0].getComplexEntityId());
