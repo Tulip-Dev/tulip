@@ -316,6 +316,9 @@ void GlLabel::draw(float, Camera *camera) {
   //Store width and height of the text
   float w=textBoundingBox[1][0]-textBoundingBox[0][0];
   float h=textBoundingBox[1][1]-textBoundingBox[0][1];
+  // avoid a division by zero for strings with only space chars
+  if (h == 0)
+    h = 1;
 
   //Compute scale of the text if text is scaled to a size
   float div_w, div_h;
