@@ -61,20 +61,20 @@ static const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "This parameter indicates the color used to display other files." \
   HTML_HELP_CLOSE(),
-    // hidden files
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "boolean" ) \
-    HTML_HELP_DEF( "default", "true" ) \
-    HTML_HELP_BODY() \
-    "If true, also include hidden files." \
-    HTML_HELP_CLOSE(),
-    // symlinks
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "boolean" ) \
-    HTML_HELP_DEF( "default", "true" ) \
-    HTML_HELP_BODY() \
-    "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows." \
-    HTML_HELP_CLOSE(),
+  // hidden files
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "boolean" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "If true, also include hidden files." \
+  HTML_HELP_CLOSE(),
+  // symlinks
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "boolean" ) \
+  HTML_HELP_DEF( "default", "true" ) \
+  HTML_HELP_BODY() \
+  "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows." \
+  HTML_HELP_CLOSE(),
 };
 
 static const char* commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json",
@@ -210,8 +210,10 @@ public:
 
       tlp::node parentNode(elem.second);
       QFlags<QDir::Filter> filter = QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::AllDirs | QDir::Files;
+
       if(hiddenFiles)
-          filter |= QDir::Hidden;
+        filter |= QDir::Hidden;
+
       QFileInfoList entries(currentDir.entryInfoList(filter, QDir::DirsFirst));
 
       int i = 0;
@@ -225,7 +227,7 @@ public:
         graph->addEdge(parentNode,fileNode);
 
         if (fileInfos.isDir()&&(!fileInfos.isSymLink()||symlinks))
-                fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
+          fsStack.push_back(QPair<QString,tlp::node>(fileInfos.absoluteFilePath(),fileNode));
 
         if ((++i % 100) == 0)
           pluginProgress->progress(i, entries.count());
