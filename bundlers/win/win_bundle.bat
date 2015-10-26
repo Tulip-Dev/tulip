@@ -2,7 +2,13 @@
 set NSIS_PATH=%1
 set TULIP_DIR=%2
 set DEST_DIR=%3
-set DEBUG_MODE=%4
+if [%4] NEQ [] (
+  if "%4" == "TRUE" (
+    set DEBUG_MODE=%4
+  ) else (
+    set OUT_FILE=%4
+  )
+)
 set SRC_DIR=%cd%
 
 echo 'Wiping destination directory'
@@ -27,13 +33,18 @@ del /Q /F /S "%DEST_DIR%\\files\\bin\\platforms\\q*d.pdb" >nul 2>&1
 )
 
 echo 'Copying NSIS script and licence'
+
 copy "%SRC_DIR%\\Tulip.nsi" "%DEST_DIR%\\"
 copy "%SRC_DIR%\\COPYING" "%DEST_DIR%\\"
 
 echo 'Running NSIS installer generator'
 cd "%DEST_DIR%"
 set PATH=%NSIS_PATH%;%PATH%
-makensis Tulip.nsi
+if "%OUT_FILE%" == "" (
+  makensis Tulip.nsi
+) else (
+  makensis /DOUT_FILE=%OUT_FILE% Tulip.nsi
+)
 
 echo 'NSIS installer generator completed !'
 
