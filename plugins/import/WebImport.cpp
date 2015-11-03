@@ -120,6 +120,7 @@ void HttpContext::finished() {
   // set status of the request
   if ((status = (reply->error() == QNetworkReply::NoError)))
     data = reply->readAll().data();
+
   reply->close();
   reply->deleteLater();
   reply = NULL;
@@ -150,9 +151,10 @@ void HttpContext::headerReceived() {
           data = redirectionTarget.toUrl().toString().toStdString();
         else
           data = "";
-	reply->close();
-	reply->deleteLater();
-	reply = NULL;
+
+        reply->close();
+        reply->deleteLater();
+        reply = NULL;
       }
 
       return;
@@ -700,17 +702,18 @@ struct WebImport:public ImportModule {
 
     while (nextUrl(url)) {
       if (url.isHtmlPage()) {
-	unsigned int nbNodes = graph->numberOfNodes();
-	if (pluginProgress && ((nbNodes % step) == 0)) {
-	  pluginProgress->setComment(string("Visiting ") +
-				     urlDecode(url.server + url.url));
+        unsigned int nbNodes = graph->numberOfNodes();
 
-	  if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
-	    return pluginProgress->state()!= TLP_CANCEL;
-	}
-	
+        if (pluginProgress && ((nbNodes % step) == 0)) {
+          pluginProgress->setComment(string("Visiting ") +
+                                     urlDecode(url.server + url.url));
+
+          if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
+            return pluginProgress->state()!= TLP_CANCEL;
+        }
+
 #ifndef NDEBUG
-	tlp::warning() << "Visiting: " << url.server << url.url << " ..."  << std::endl << flush;
+        tlp::warning() << "Visiting: " << url.server << url.url << " ..."  << std::endl << flush;
 #endif
 
         if (url.isRedirected()) {
