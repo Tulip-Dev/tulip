@@ -132,26 +132,26 @@ public :
   void setYAxisScaleDefined(const bool value) {
     yAxisScaleDefined = value;
   }
-  std::pair<double,double> getXAxisScale() const {
+  const std::pair<double,double>& getXAxisScale() const {
     return xAxisScale;
   }
   void setXAxisScale(const std::pair<double, double>& value) {
     xAxisScale = value;
   }
-  std::pair<double, double> getYAxisScale() const {
+  const std::pair<double, double>& getYAxisScale() const {
     return yAxisScale;
   }
   void setYAxisScale(const std::pair<double, double>& value) {
     yAxisScale = value;
   }
 
-  std::pair<double, double> getInitXAxisScale() const {
+  const std::pair<double, double>& getInitXAxisScale() const {
     return initXAxisScale;
   }
   void setInitXAxisScale(const std::pair<double, double>& value) {
     initXAxisScale = value;
   }
-  std::pair<double, double> getInitYAxisScale() const {
+  const std::pair<double, double>& getInitYAxisScale() const {
     return initYAxisScale;
   }
   void setInitYAxisScale(const std::pair<double, double>& value) {
