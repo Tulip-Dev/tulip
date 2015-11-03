@@ -310,23 +310,27 @@ void HistogramView::setState(const DataSet &dataSet) {
       if (histogramParametersMap[selectedProperties[j]].get("x axis custom scale", useCustomAxisScale)) {
         histo->setLayoutUpdateNeeded();
         histo->setXAxisScaleDefined(useCustomAxisScale);
+	if (useCustomAxisScale) {
+	  std::pair<double, double> axisScale(0, 0);
+	  histogramParametersMap[selectedProperties[j]].get("x axis scale min",
+							    axisScale.first);
+	  histogramParametersMap[selectedProperties[j]].get("x axis scale max",
+							    axisScale.second);
+	  histo->setXAxisScale(axisScale);
+	}
       }
 
       if (histogramParametersMap[selectedProperties[j]].get("y axis custom scale", useCustomAxisScale)) {
         histo->setLayoutUpdateNeeded();
         histo->setYAxisScaleDefined(useCustomAxisScale);
-      }
-
-      std::pair<double, double> axisScale;
-
-      if (histogramParametersMap[selectedProperties[j]].get("x axis scale", axisScale)) {
-        histo->setLayoutUpdateNeeded();
-        histo->setXAxisScale(axisScale);
-      }
-
-      if (histogramParametersMap[selectedProperties[j]].get("y axis scale", axisScale)) {
-        histo->setLayoutUpdateNeeded();
-        histo->setYAxisScale(axisScale);
+	if (useCustomAxisScale) {
+	  std::pair<double, double> axisScale(0, 0);
+	  histogramParametersMap[selectedProperties[j]].get("y axis scale min",
+							    axisScale.first);
+	  histogramParametersMap[selectedProperties[j]].get("y axis scale max",
+							    axisScale.second);
+	  histo->setXAxisScale(axisScale);
+	}
       }
     }
   }
@@ -359,10 +363,20 @@ DataSet HistogramView::state() const {
     histogramParameters.set("uniform quantification", histogramsMapTmp[selectedPropertiesTmp[i]]->uniformQuantificationHistogram());
     histogramParameters.set("x axis logscale", histogramsMapTmp[selectedPropertiesTmp[i]]->xAxisLogScaleSet());
     histogramParameters.set("y axis logscale", histogramsMapTmp[selectedPropertiesTmp[i]]->yAxisLogScaleSet());
-    histogramParameters.set("x axis custom scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScaleDefined());
-    histogramParameters.set("x axis scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScale());
-    histogramParameters.set("y axis custom scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScaleDefined());
-    histogramParameters.set("y axis scale", histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScale());
+    bool customScale = histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScaleDefined();
+    histogramParameters.set("x axis custom scale", customScale);
+    if (customScale) {
+      const std::pair<double, double>& scale = histogramsMapTmp[selectedPropertiesTmp[i]]->getXAxisScale();
+      histogramParameters.set("x axis scale min", scale.first);
+      histogramParameters.set("x axis scale max", scale.second);
+    }
+    customScale = histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScaleDefined();
+    histogramParameters.set("y axis custom scale", customScale);
+    if (customScale) {
+      const std::pair<double, double>& scale = histogramsMapTmp[selectedPropertiesTmp[i]]->getYAxisScale();
+      histogramParameters.set("y axis scale min", scale.first);
+      histogramParameters.set("y axis scale max", scale.second);
+    }
     dataSet.set("histo"+ss.str(), histogramParameters);
   }
 
