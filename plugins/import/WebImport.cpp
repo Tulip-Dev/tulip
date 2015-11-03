@@ -92,17 +92,10 @@ HttpContext::~HttpContext() {
   if (reply)  {
     reply->close();
     reply->deleteLater();
-    reply = NULL;
   }
 }
 
 void HttpContext::request(const std::string& url, bool head) {
-  if (reply)  {
-    reply->close();
-    reply->deleteLater();
-    reply = NULL;
-  }
-
   processed = isHtml = redirected = false;
   QNetworkRequest request(QUrl(url.c_str()));
 
@@ -127,6 +120,9 @@ void HttpContext::finished() {
   // set status of the request
   if ((status = (reply->error() == QNetworkReply::NoError)))
     data = reply->readAll().data();
+  reply->close();
+  reply->deleteLater();
+  reply = NULL;
 }
 
 void HttpContext::headerReceived() {
@@ -154,6 +150,9 @@ void HttpContext::headerReceived() {
           data = redirectionTarget.toUrl().toString().toStdString();
         else
           data = "";
+	reply->close();
+	reply->deleteLater();
+	reply = NULL;
       }
 
       return;
@@ -164,6 +163,8 @@ void HttpContext::headerReceived() {
     status = isHtml = (value.canConvert<QString>() &&
                        value.toString().contains(QString("text/html")));
     reply->close();
+    reply->deleteLater();
+    reply = NULL;
   }
 }
 
@@ -468,7 +469,7 @@ const char * paramHelp[] = {
 }
 
 struct WebImport:public ImportModule {
-  PLUGININFORMATION("Web Site","Auber","15/11/2004","Imports a new graph from Web site structure (one node per page).","1.0","Misc")
+  PLUGININFORMATION("Web Site","Auber","15/11/2004","Imports a new graph from Web site structure (one node per page).","1.1","Misc")
 
   std::deque<UrlElement> toVisit;
   std::set<UrlElement> visited;
@@ -477,11 +478,11 @@ struct WebImport:public ImportModule {
   tlp::StringProperty *urls;
   tlp::ColorProperty *colors;
   tlp::Color *redirectionColor;
-  unsigned int maxSize, nbNodes;
+  unsigned int maxSize;
   bool visitOther;
   bool extractNonHttp;
 
-  WebImport(tlp::PluginContext* context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), nbNodes(0), visitOther(false), extractNonHttp(true) {
+  WebImport(tlp::PluginContext* context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), visitOther(false), extractNonHttp(true) {
     addInParameter<string>("server",paramHelp[0],"www.labri.fr");
     addInParameter<string>("web page",paramHelp[1], "");
     addInParameter<int>("max size",paramHelp[2], "1000");
@@ -539,13 +540,12 @@ struct WebImport:public ImportModule {
   bool addNode(const UrlElement &url, node& n) {
     if (nodes.find(url)==nodes.end()) {
       // no more added node after maxSize
-      if (nbNodes == maxSize) {
+      if (graph->numberOfNodes() == maxSize) {
         n = node();
         return false;
       }
 
       n=graph->addNode();
-      ++nbNodes;
       stringstream str;
       str << url.server;
 
@@ -577,7 +577,7 @@ struct WebImport:public ImportModule {
     bool sAdded = addNode(source, sNode);
     bool tAdded = addNode(target, tNode);
 
-    // if new nodes can node be added (nbNodes > maxSize)
+    // if new nodes can not be added (numberOfNodes() == maxSize)
     // stop adding edge
     if (!sNode.isValid() || !tNode.isValid())
       return false;
@@ -700,16 +700,17 @@ struct WebImport:public ImportModule {
 
     while (nextUrl(url)) {
       if (url.isHtmlPage()) {
-        if (pluginProgress && ((nbNodes % step) == 0)) {
-          pluginProgress->setComment(string("Visiting ") +
-                                     urlDecode(url.server + url.url));
+	unsigned int nbNodes = graph->numberOfNodes();
+	if (pluginProgress && ((nbNodes % step) == 0)) {
+	  pluginProgress->setComment(string("Visiting ") +
+				     urlDecode(url.server + url.url));
 
-          if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
-            return pluginProgress->state()!= TLP_CANCEL;
-        }
-
+	  if (pluginProgress->progress(nbNodes, maxSize) !=TLP_CONTINUE)
+	    return pluginProgress->state()!= TLP_CANCEL;
+	}
+	
 #ifndef NDEBUG
-        tlp::warning() << "Visiting: " << url.server << url.url << " ..."  << std::endl << flush;
+	tlp::warning() << "Visiting: " << url.server << url.url << " ..."  << std::endl << flush;
 #endif
 
         if (url.isRedirected()) {
@@ -756,7 +757,6 @@ struct WebImport:public ImportModule {
     Color lColor(0,0,255,128);
     Color rColor(255,255,0,128);
     maxSize = 1000;
-    nbNodes = 0;
     visitOther = false;
     extractNonHttp = true;
 
