@@ -59,7 +59,7 @@ bool ScatterPlot2DViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0.0f);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
     selectedScatterPlotOverview = getOverviewUnderPointer(sceneCoords);
     return true;
   }
