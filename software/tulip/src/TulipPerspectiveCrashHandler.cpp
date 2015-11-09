@@ -38,6 +38,14 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
   //connect(_ui->saveButton,SIGNAL(clicked()),this,SLOT(saveData()));
   _ui->saveButton->hide();
   _ui->commentsEdit->moveCursor(QTextCursor::End);
+  QPixmap px(QString::fromUtf8(":/tulip/gui/icons/logo32x32.png"));
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  // take care of the devicePixelRatio
+  // before setting the label pixmap
+  px.setDevicePixelRatio(QGuiApplication::primaryScreen()->devicePixelRatio());
+#endif
+  _ui->icon->setPixmap(px);
+
 }
 
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {
