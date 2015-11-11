@@ -24,6 +24,8 @@
 #include <QFileDialog>
 #include <QNetworkReply>
 #include <QFile>
+#include <QScreen>
+
 #include "FormPost.h"
 #include <tulip/TulipProject.h>
 
