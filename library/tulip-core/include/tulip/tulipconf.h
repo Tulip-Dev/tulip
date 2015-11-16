@@ -236,6 +236,13 @@ extern TLP_SCOPE std::ostream& error();
  * @brief set the ostream used for the output of error messages
  */
 extern TLP_SCOPE void setErrorOutput(std::ostream& os);
+
+/**
+ *
+ * @brief return the TULIP_VERSION value
+ */
+extern TLP_SCOPE std::string getTulipVersion();
+
 }
 
 #endif //TULIPCONF_H

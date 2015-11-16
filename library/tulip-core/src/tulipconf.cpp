@@ -18,6 +18,7 @@
  */
 
 #include <tulip/tulipconf.h>
+#include <tulip/TulipRelease.h>
 
 #include <iostream>
 
@@ -45,4 +46,8 @@ std::ostream& tlp::error() {
 }
 void tlp::setErrorOutput(std::ostream& os) {
   errorStream = &os;
+}
+
+std::string tlp::getTulipVersion() {
+  return TULIP_VERSION;
 }
