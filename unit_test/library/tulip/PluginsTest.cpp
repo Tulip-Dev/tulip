@@ -22,6 +22,7 @@
 #include "PluginsTest.h"
 
 #include <tulip/TulipRelease.h>
+#include <tulip/tulipconf.h>
 #include <tulip/ForEach.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
@@ -167,5 +168,8 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("1.0"), factory.release());
   CPPUNIT_ASSERT_EQUAL(tlp::getMajor(TULIP_VERSION), factory.tulipMajor());
   CPPUNIT_ASSERT_EQUAL(tlp::getMinor(TULIP_VERSION), factory.tulipMinor());
-  CPPUNIT_ASSERT_EQUAL(string(TULIP_MM_VERSION), factory.tulipRelease());
+  CPPUNIT_ASSERT_EQUAL(string(TULIP_VERSION), factory.tulipRelease());
+  CPPUNIT_ASSERT_EQUAL(getTulipVersion(), factory.tulipRelease());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMajor(getTulipVersion()), factory.tulipMajor());
+  CPPUNIT_ASSERT_EQUAL(tlp::getMinor(getTulipVersion()), factory.tulipMinor());
 }

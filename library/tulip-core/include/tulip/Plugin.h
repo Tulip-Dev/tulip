@@ -138,7 +138,7 @@ public:
 
   /**
    * @brief The version of Tulip this plug-in was built with.
-   * Tulip versions are X.Y.Z, X eing the major, Y the minor, and Z the patch.
+   * Tulip versions are X.Y.Z, X being the major, Y the minor, and Z the patch.
    *
    * @return The Tulip version the plug-in was built with.
    */
@@ -206,7 +206,7 @@ std::string author() const { return AUTHOR; }\
 std::string date() const { return DATE; }  \
 std::string info() const { return INFO; }  \
 std::string release() const { return RELEASE; }\
-std::string tulipRelease() const { return TULIP_MM_VERSION; }\
+std::string tulipRelease() const { return TULIP_VERSION; }\
 std::string group() const { return GROUP; }
 
 #define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
