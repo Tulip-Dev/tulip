@@ -131,6 +131,10 @@ TLP_QT_SCOPE bool inGuiTestingMode();
 
 TLP_QT_SCOPE void setGuiTestingMode(bool);
 
+TLP_QT_SCOPE void disableQtUserInput();
+
+TLP_QT_SCOPE void enableQtUserInput();
+
 }
 
 // QDebug extension

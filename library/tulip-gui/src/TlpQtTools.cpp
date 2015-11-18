@@ -545,4 +545,49 @@ void setGuiTestingMode(bool enabled) {
   GuiTestingMode = enabled;
 }
 
+class NoQtUserInputFilter :public QObject {
+protected:
+    bool eventFilter( QObject *obj, QEvent *event );
+};
+
+bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event)
+{
+  switch (event->type()) {
+  case QEvent::KeyPress:
+  case QEvent::KeyRelease:
+  case QEvent::MouseButtonPress:
+  case QEvent::MouseButtonDblClick:
+  case QEvent::MouseMove:
+  case QEvent::HoverEnter:
+  case QEvent::HoverLeave:
+  case QEvent::HoverMove:
+  case QEvent::DragEnter:
+  case QEvent::DragLeave:
+  case QEvent::DragMove:
+  case QEvent::Drop:
+    return true;
+  default:
+    return false;
+  }
+}
+
+static NoQtUserInputFilter* disableQtUserInputFilter = NULL;
+
+void disableQtUserInput() {
+  if (disableQtUserInputFilter)
+    return;
+  disableQtUserInputFilter = new NoQtUserInputFilter();
+  QCoreApplication::instance()->installEventFilter(disableQtUserInputFilter);
+  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
+}
+
+void enableQtUserInput() {
+  if (!disableQtUserInputFilter)
+    return;
+  QCoreApplication::instance()->removeEventFilter(disableQtUserInputFilter);
+  delete disableQtUserInputFilter;
+  disableQtUserInputFilter = NULL;
+  QApplication::restoreOverrideCursor();
+}
+
 } // namespace tlp
