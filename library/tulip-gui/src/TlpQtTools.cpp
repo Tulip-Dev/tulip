@@ -547,11 +547,10 @@ void setGuiTestingMode(bool enabled) {
 
 class NoQtUserInputFilter :public QObject {
 protected:
-    bool eventFilter( QObject *obj, QEvent *event );
+  bool eventFilter( QObject *obj, QEvent *event );
 };
 
-bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event)
-{
+bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event) {
   switch (event->type()) {
   case QEvent::KeyPress:
   case QEvent::KeyRelease:
@@ -566,6 +565,7 @@ bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event)
   case QEvent::DragMove:
   case QEvent::Drop:
     return true;
+
   default:
     return false;
   }
@@ -576,6 +576,7 @@ static NoQtUserInputFilter* disableQtUserInputFilter = NULL;
 void disableQtUserInput() {
   if (disableQtUserInputFilter)
     return;
+
   disableQtUserInputFilter = new NoQtUserInputFilter();
   QCoreApplication::instance()->installEventFilter(disableQtUserInputFilter);
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
@@ -584,6 +585,7 @@ void disableQtUserInput() {
 void enableQtUserInput() {
   if (!disableQtUserInputFilter)
     return;
+
   QCoreApplication::instance()->removeEventFilter(disableQtUserInputFilter);
   delete disableQtUserInputFilter;
   disableQtUserInputFilter = NULL;

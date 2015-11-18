@@ -651,6 +651,7 @@ void HistogramView::buildHistograms() {
     if (i % 10 == 0)
       QApplication::processEvents();
   }
+
   // reenable user input
   tlp::enableQtUserInput();
 

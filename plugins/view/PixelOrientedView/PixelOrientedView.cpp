@@ -640,6 +640,7 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
       QApplication::processEvents();
     }
   }
+
   // reenable user input
   tlp::enableQtUserInput();
 
