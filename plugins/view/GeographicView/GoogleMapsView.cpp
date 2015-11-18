@@ -146,9 +146,11 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   // disable user input
   // before allowing some display feedback
   tlp::disableQtUserInput();
+
   while (timeLine.state() == QTimeLine::Running) {
     QApplication::processEvents();
   }
+
   // reenable user input
   tlp::enableQtUserInput();
 

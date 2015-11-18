@@ -436,9 +436,11 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   // disable user input
   // before allowing some display feedback
   tlp::disableQtUserInput();
+
   while (!googleMaps->pageInit()) {
     QApplication::processEvents();
   }
+
   // reenable user input
   tlp::enableQtUserInput();
 
@@ -491,9 +493,11 @@ GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
     // disable user input
     // before allowing some display feedback
     tlp::disableQtUserInput();
+
     while (geocodingActive) {
       QApplication::processEvents();
     }
+
     // reenable user input
     tlp::enableQtUserInput();
   }
@@ -730,6 +734,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
     // disable user input
     // before allowing some display feedback
     tlp::disableQtUserInput();
+
     while (nodesIt->hasNext() && !progressWidget->cancelRequested() && !cancelGeocoding) {
       if (grabNextNode) {
         n = nodesIt->next();
@@ -778,14 +783,16 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
             QTimeLine timeLine(3500);
             timeLine.start();
 
-	    // disable user input
-	    // before allowing some display feedback
-	    tlp::disableQtUserInput();
+            // disable user input
+            // before allowing some display feedback
+            tlp::disableQtUserInput();
+
             while (timeLine.state() != QTimeLine::NotRunning) {
               QApplication::processEvents();
             }
-	    // reenable user input
-	    tlp::enableQtUserInput();
+
+            // reenable user input
+            tlp::enableQtUserInput();
 
             progressWidget->setFrameColor(Qt::green);
             grabNextNode = false;
@@ -801,6 +808,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
         QApplication::processEvents();
       }
     }
+
     // reenable user input
     tlp::enableQtUserInput();
 
@@ -827,14 +835,16 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
           QTimeLine timeLine(3500);
           timeLine.start();
 
-	  // disable user input
-	  // before allowing some display feedback
-	  tlp::disableQtUserInput();
+          // disable user input
+          // before allowing some display feedback
+          tlp::disableQtUserInput();
+
           while (timeLine.state() != QTimeLine::NotRunning) {
             QApplication::processEvents();
           }
-	  // reenable user input
-	  tlp::enableQtUserInput();
+
+          // reenable user input
+          tlp::enableQtUserInput();
 
           --i;
         }

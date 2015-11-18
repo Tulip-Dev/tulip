@@ -241,10 +241,12 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
   // disable user input
   // before allowing some display feedback
   tlp::disableQtUserInput();
+
   while (!ret.toBool()) {
     QApplication::processEvents();
     ret = frame->evaluateJavaScript(code);
   }
+
   // reenable user input
   tlp::enableQtUserInput();
 
