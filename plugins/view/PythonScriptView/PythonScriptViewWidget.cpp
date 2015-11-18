@@ -49,7 +49,7 @@ public :
 
 static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
-PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view), checkEditors(false) {
+PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view), checkEditors(true) {
   _ui->setupUi(this);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
