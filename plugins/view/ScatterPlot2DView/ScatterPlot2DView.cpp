@@ -24,6 +24,7 @@
 #include <tulip/GlLabel.h>
 #include <tulip/GlLine.h>
 #include <tulip/GlProgressBar.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QTime>
 #include <QMenu>
@@ -801,6 +802,8 @@ void ScatterPlot2DView::generateScatterPlots() {
   centerView();
   getGlMainWidget()->draw();
 
+  // disable user input
+  tlp::disableQtUserInput();
   for (size_t i = 0 ; i < selectedGraphProperties.size() - 1 ; ++i) {
     for (size_t j = 0 ; j < selectedGraphProperties.size() ; ++j) {
       ScatterPlot2D *overview = scatterPlotsMap[make_pair(selectedGraphProperties[i], selectedGraphProperties[j])];
@@ -821,6 +824,7 @@ void ScatterPlot2DView::generateScatterPlots() {
       QApplication::processEvents();
     }
   }
+  tlp::enableQtUserInput();
 
   mainLayer->deleteGlEntity(progressBar);
   delete progressBar;
