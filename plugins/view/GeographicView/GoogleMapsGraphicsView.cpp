@@ -28,6 +28,7 @@
 #include <tulip/GlyphManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QPushButton>
 #include <QTextStream>
@@ -432,9 +433,14 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   glWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, 512, 512);
   glWidgetItem->setPos(0,0);
 
+  // disable user input
+  // before allowing some display feedback
+  tlp::disableQtUserInput();
   while (!googleMaps->pageInit()) {
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    QApplication::processEvents();
   }
+  // reenable user input
+  tlp::enableQtUserInput();
 
   scene()->addItem(glWidgetItem);
   glWidgetItem->setParentItem(_placeholderItem);
@@ -482,9 +488,14 @@ GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
 
     cancelGeocoding = true;
 
+    // disable user input
+    // before allowing some display feedback
+    tlp::disableQtUserInput();
     while (geocodingActive) {
       QApplication::processEvents();
     }
+    // reenable user input
+    tlp::enableQtUserInput();
   }
 
   cleanup();
@@ -716,6 +727,9 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
     node n;
     bool grabNextNode = true;
 
+    // disable user input
+    // before allowing some display feedback
+    tlp::disableQtUserInput();
     while (nodesIt->hasNext() && !progressWidget->cancelRequested() && !cancelGeocoding) {
       if (grabNextNode) {
         n = nodesIt->next();
@@ -764,9 +778,14 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
             QTimeLine timeLine(3500);
             timeLine.start();
 
+	    // disable user input
+	    // before allowing some display feedback
+	    tlp::disableQtUserInput();
             while (timeLine.state() != QTimeLine::NotRunning) {
               QApplication::processEvents();
             }
+	    // reenable user input
+	    tlp::enableQtUserInput();
 
             progressWidget->setFrameColor(Qt::green);
             grabNextNode = false;
@@ -782,6 +801,8 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
         QApplication::processEvents();
       }
     }
+    // reenable user input
+    tlp::enableQtUserInput();
 
     delete nodesIt;
     progressWidget->hide();
@@ -806,9 +827,14 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
           QTimeLine timeLine(3500);
           timeLine.start();
 
+	  // disable user input
+	  // before allowing some display feedback
+	  tlp::disableQtUserInput();
           while (timeLine.state() != QTimeLine::NotRunning) {
             QApplication::processEvents();
           }
+	  // reenable user input
+	  tlp::enableQtUserInput();
 
           --i;
         }

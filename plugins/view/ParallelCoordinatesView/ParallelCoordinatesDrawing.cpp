@@ -38,6 +38,7 @@
 #include <tulip/GlGraphComposite.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ParallelCoordinatesDrawing.h"
 #include "NominalParallelAxis.h"
@@ -531,6 +532,10 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
   GlProgressBar *progressBar = NULL;
 
   if (!updateWithoutProgressBar) {
+    // disable user input
+    // before allowing progressBar display
+    tlp::disableQtUserInput();
+
     progressBar =
       new GlProgressBar(Coord(0.0f, 0.0f, 0.0f), 600, 100,
                         // use same green color as the highlighting one
@@ -555,6 +560,8 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
   if (progressBar != NULL) {
     deleteGlEntity(progressBar);
     delete progressBar;
+    // reenable user input
+    tlp::enableQtUserInput();
   }
 
   createAxisFlag = true;

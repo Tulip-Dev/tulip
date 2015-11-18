@@ -36,6 +36,7 @@
 #include <tulip/SizeProperty.h>
 #include <tulip/ForEach.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TlpQtTools.h>
 
 #include "PixelOrientedInteractors.h"
 #include "PixelOrientedView.h"
@@ -620,7 +621,10 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   progressBar->progress(currentStep, nbOverviews);
   mainLayer->addGlEntity(progressBar, "progress bar");
   getGlMainWidget()->draw();
-  // needed to display progressBar
+
+  // disable user input
+  tlp::disableQtUserInput();
+  // before allowing the progressBar display
   QApplication::processEvents();
 
   for (map<string, PixelOrientedOverview *>::iterator it = overviewsMap.begin() ; it != overviewsMap.end() ; ++it) {
@@ -636,6 +640,8 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
       QApplication::processEvents();
     }
   }
+  // reenable user input
+  tlp::enableQtUserInput();
 
   mainLayer->deleteGlEntity(progressBar);
   delete progressBar;
