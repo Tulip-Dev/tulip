@@ -21,6 +21,7 @@
 
 #include <QTimer>
 #include <QApplication>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 
@@ -237,10 +238,15 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
   code = "geocodingDone()";
   ret = frame->evaluateJavaScript(code);
 
+  // disable user input
+  // before allowing some display feedback
+  tlp::disableQtUserInput();
   while (!ret.toBool()) {
-    QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+    QApplication::processEvents();
     ret = frame->evaluateJavaScript(code);
   }
+  // reenable user input
+  tlp::enableQtUserInput();
 
   code = "getGeocodingNumberOfResults()";
   ret = frame->evaluateJavaScript(code);

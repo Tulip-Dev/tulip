@@ -29,6 +29,7 @@
 #include <tulip/GlVertexArrayManager.h>
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/SnapshotDialog.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QMenu>
 #include <QWebFrame>
@@ -142,9 +143,14 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   QTimeLine timeLine(500);
   timeLine.start();
 
+  // disable user input
+  // before allowing some display feedback
+  tlp::disableQtUserInput();
   while (timeLine.state() == QTimeLine::Running) {
     QApplication::processEvents();
   }
+  // reenable user input
+  tlp::enableQtUserInput();
 
   if(dataSet.exist("configurationWidget")) {
     DataSet conf;

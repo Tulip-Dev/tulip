@@ -603,6 +603,10 @@ void HistogramView::buildHistograms() {
   vector<GlLabel *> propertiesLabels;
   float minSize = FLT_MIN;
 
+  // disable user input
+  // before allowing some display feedback
+  tlp::disableQtUserInput();
+
   for (size_t i = 0 ; i < selectedProperties.size() ; ++i) {
 
     unsigned int row = i / N;
@@ -647,6 +651,9 @@ void HistogramView::buildHistograms() {
     if (i % 10 == 0)
       QApplication::processEvents();
   }
+  // reenable user input
+  tlp::enableQtUserInput();
+
 
   for(vector<GlLabel *>::iterator it=propertiesLabels.begin(); it!=propertiesLabels.end(); ++it) {
     (*it)->setSize(Size((*it)->getSize()[0],minSize));
