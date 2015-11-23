@@ -46,3 +46,16 @@ INSTALL(TARGETS tulip_perspective
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
   LIBRARY DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app)
+
+IF(WIN32)
+  # That simple install command does the magic of gathering all required dll dependencies
+  # in order to run Tulip and copy them to the bin install folder (thanks to the CMake module named BundleUtilities)
+  # In the case where a dll dependency is not automatically found, you must add its path to the CMAKE_LIBRARY_PATH variable.
+  SET(APP "${CMAKE_INSTALL_PREFIX}/bin/tulip_perspective.exe")
+  SET(LIB_DIRS ${QT_BINARY_DIR} ${CMAKE_LIBRARY_PATH})
+  STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
+  INSTALL(CODE
+    "INCLUDE(BundleUtilities)
+     FIXUP_BUNDLE(\"${APP}\"   \"\"   \"${LIB_DIRS}\")"
+  )
+ENDIF(WIN32)
