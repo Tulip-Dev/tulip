@@ -32,9 +32,9 @@
 //MSVC and GCC in c++11 mode use decltype instead of typeof
 #if !defined(_MSC_VER)
 #  if defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L
-#    define TYPEOF decltype
+#    define TLP_TYPEOF decltype
 #  else
-#    define TYPEOF typeof
+#    define TLP_TYPEOF typeof
 #  endif
 #endif
 
@@ -59,11 +59,11 @@
 #  if _MSC_VER >= 1600
 #    define _DEPRECATED __declspec(deprecated)
 #    define _DEPRECATED_TYPEDEF(type, deprecated_type) typedef _DEPRECATED type deprecated_type
-#    define TYPEOF decltype
+#    define TLP_TYPEOF decltype
 #  else
 //MSVC 2008 must use Boost's typeof
 #    include "boost/typeof/typeof.hpp"
-#    define TYPEOF BOOST_TYPEOF
+#    define TLP_TYPEOF BOOST_TYPEOF
 #  endif
 
 #  define __PRETTY_FUNCTION__ __FUNCTION__ //MSVC has a different name for pretty_function
