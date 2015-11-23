@@ -216,7 +216,7 @@ IF(MINGW)
   SET(CMAKE_INCLUDE_PATH "${MINGW_INCLUDE_PATH};${MINGW_INCLUDE_PATH}/freetype2;${MINGW_INCLUDE_PATH}/libpng*;${CMAKE_INCLUDE_PATH}")
 
   # Check if libintl is present in the MinGW build environment
-  FIND_LIBRARY(LIBINTL_FOUND intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
+  FIND_LIBRARY(INTL_LIBRARY intl PATHS ${MINGW_LIB_PATH} ${MINGW_LIB64_PATH} NO_DEFAULT_PATH)
 ENDIF(MINGW)
 
 # Don't need to find zlib when compiling with emscripten as there is an available emscripten port of it

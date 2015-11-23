@@ -80,7 +80,13 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
         GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION)
         GET_FILENAME_COMPONENT(QT_BINARY_DIR ${QtCore_location} PATH)
         SET(QT_BINARY_DIR ${QT_BINARY_DIR}/../bin)
-        SET(QT_PLUGINS_DIR ${QT_BINARY_DIR}/../plugins)
+        # Standard Qt5 installation
+        IF(EXISTS ${QT_BINARY_DIR}/../plugins)
+          SET(QT_PLUGINS_DIR ${QT_BINARY_DIR}/../plugins)
+        # MSYS2 special case
+        ELSEIF(EXISTS ${QT_BINARY_DIR}/../share/qt5/plugins)
+          SET(QT_PLUGINS_DIR ${QT_BINARY_DIR}/../share/qt5/plugins)
+        ENDIF()
     ELSEIF(APPLE)
         GET_TARGET_PROPERTY(QtCore_location Qt5::Core LOCATION)
         GET_FILENAME_COMPONENT(QT_FRAMEWORKS_DIR ${QtCore_location} PATH)
