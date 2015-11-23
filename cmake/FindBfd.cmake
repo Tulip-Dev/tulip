@@ -2,6 +2,7 @@
 # This module finds libbfd.
 #
 # It sets the following variables:
+#  BFD_INCLUDE_DIR
 #  BFD_LIBRARY
 
 FIND_PATH(BFD_INCLUDE_DIR NAMES bfd.h)

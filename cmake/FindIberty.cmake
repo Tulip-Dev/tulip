@@ -2,6 +2,7 @@
 # This module finds libiberty.
 #
 # It sets the following variables:
+#  IBERTY_INCLUDE_DIR
 #  IBERTY_LIBRARY
 
 FIND_PATH(IBERTY_INCLUDE_DIR NAMES libiberty.h)
