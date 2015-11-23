@@ -18,7 +18,7 @@ ENDIF(POLICY CMP0042)
 
 PROJECT(tulip)
 
-SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR})
+SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
 ## ========================================================
 ## Build type detection
@@ -105,13 +105,13 @@ ENDIF()
 ## ========================================================
 ## Configure file for uninstall target
 ## ========================================================
-CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
 
 ## ========================================================
 ## Additional macros
 ## ========================================================
-INCLUDE(TulipUseFile.cmake)
+INCLUDE(cmake/TulipUseFile.cmake)
 
 ## ========================================================
 ## Profiling
@@ -137,7 +137,7 @@ ENDIF()
 ## this used to have a minimal build of Tulip without
 ## any of the opengl, qt or python components
 ## ========================================================
-IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/FindQtX.cmake OR EMSCRIPTEN)
+IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/cmake/FindQtX.cmake OR EMSCRIPTEN)
   SET(BUILD_CORE_ONLY ON)
   MESSAGE("You can only configure a core build of Tulip.")
 ELSE()
@@ -159,11 +159,11 @@ IF(BUILD_CORE_ONLY AND LINUX)
       SET(ENV{CORE_FILES} "$ENV{CORE_FILES} \$(find ${CURRENT_SOURCE_DIR} -path \"*/.svn\" -prune -o -type f -print)")
     ELSE()
       FOREACH(core_file ${ARGV})
-	SET(ENV{CORE_FILES} "$ENV{CORE_FILES} ${CURRENT_SOURCE_DIR}/${core_file}")
+          SET(ENV{CORE_FILES} "$ENV{CORE_FILES} ${CURRENT_SOURCE_DIR}/${core_file}")
       ENDFOREACH()
     ENDIF()
   ENDMACRO()
-  ADD_CORE_FILES(CMakeLists.txt cmake_uninstall.cmake.in TulipUseFile.cmake)
+  ADD_CORE_FILES(CMakeLists.txt cmake/cmake_uninstall.cmake.in cmake/TulipUseFile.cmake cmake/FindCppUnit.cmake)
 # the macro ADD_CORE_DIRECTORY_EXCEPT will be used
 # to exclude the files not needed to build a minimal Tulip
 # in the directory pointed by CMAKE_CURRENT_SOURCE_DIR
@@ -651,7 +651,7 @@ IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF(BUILD_TESTS)
 
-INSTALL(FILES FindTULIP.cmake FindGLEW.cmake FindQtX.cmake TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
+INSTALL(FILES cmake/FindTULIP.cmake cmake/FindGLEW.cmake cmake/FindQtX.cmake cmake/TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
 
 IF(NOT BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(bundlers)

@@ -5,8 +5,6 @@ IF(BUILD_DOC)
   # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
   # in case the value of PYTHON_EXECUTABLE CMake variable changed
   UNSET(SPHINX_EXECUTABLE CACHE)
-  SET(Sphinx_DIR ${CMAKE_CURRENT_SOURCE_DIR}/python)
-  MARK_AS_ADVANCED(Sphinx_DIR)
   FIND_PACKAGE(Sphinx)
   IF(SPHINX_FOUND)
     IF(BUILD_PYTHON_COMPONENTS)
