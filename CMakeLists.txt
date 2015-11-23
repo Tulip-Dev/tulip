@@ -159,7 +159,7 @@ IF(BUILD_CORE_ONLY AND LINUX)
       SET(ENV{CORE_FILES} "$ENV{CORE_FILES} \$(find ${CURRENT_SOURCE_DIR} -path \"*/.svn\" -prune -o -type f -print)")
     ELSE()
       FOREACH(core_file ${ARGV})
-          SET(ENV{CORE_FILES} "$ENV{CORE_FILES} ${CURRENT_SOURCE_DIR}/${core_file}")
+        SET(ENV{CORE_FILES} "$ENV{CORE_FILES} ${CURRENT_SOURCE_DIR}/${core_file}")
       ENDFOREACH()
     ENDIF()
   ENDMACRO()
@@ -762,6 +762,8 @@ IF(NOT BUILD_CORE_ONLY)
                       WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/bundlers/mac)
 
   ENDIF(APPLE)
+
+ELSE(NOT BUILD_CORE_ONLY)
 
   IF(LINUX)
   # generate script to make a tar archive of minimal set of tulip core files

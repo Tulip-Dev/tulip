@@ -1,3 +1,5 @@
+ADD_CORE_FILES(CMakeLists.txt ColorMapping.cpp)
+
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} .)
 
 ##----------------------------------------------------------------------------------------------------------------------------
