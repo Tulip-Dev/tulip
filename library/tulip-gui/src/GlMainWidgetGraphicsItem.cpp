@@ -208,10 +208,12 @@ bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
 // As a workaround to fix that annoying behaviour, catch that resize event, discard it
 // and restore the correct size that was previously set.
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) && defined(WIN32)
+
   if (evt->type() == QEvent::Resize) {
     glMainWidget->resize(width, height);
     return true;
   }
+
 #endif
   return false;
 }
