@@ -81,7 +81,6 @@ void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
   update();
 }
 
-
 void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
   if(_redrawNeeded) {
@@ -201,6 +200,19 @@ bool GlMainWidgetGraphicsItem::eventFilter(QObject *, QEvent *evt) {
   if (evt->type() == QEvent::CursorChange)
     setCursor(glMainWidget->cursor());
 
+// There is a bug with Qt5 on windows that leads to an incorrect viewport size of 160x160
+// when initializing a Tulip OpenGL view.
+// Seems that a delayed resize event is sent to the GlMainWidget, don't really know why ...
+// In the context of a GlMainWidgetGraphicsItem, the internally used GlMainWidget is hidden,
+// so it should not receive that event but it does once after it has been created.
+// As a workaround to fix that annoying behaviour, catch that resize event, discard it
+// and restore the correct size that was previously set.
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) && defined(WIN32)
+  if (evt->type() == QEvent::Resize) {
+    glMainWidget->resize(width, height);
+    return true;
+  }
+#endif
   return false;
 }
 
