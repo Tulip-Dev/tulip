@@ -62,7 +62,6 @@ IF(MINGW)
     # ensure correct iberty header file is selected with MSYS2
     SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
     FIND_PACKAGE(Iberty REQUIRED)
-    INCLUDE_DIRECTORIES(BEFORE ${IBERTY_INCLUDE_DIR})
     TARGET_LINK_LIBRARIES(crash_handling ${IBERTY_LIBRARY})
 
     # MinGW build environments may differ about the need to link against the intl library
