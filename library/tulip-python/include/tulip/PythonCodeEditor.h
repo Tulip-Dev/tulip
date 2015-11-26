@@ -141,6 +141,7 @@ public :
 
   void commentSelectedCode();
   void uncommentSelectedCode();
+  bool selectedLinesCommented() const;
 
   void indentSelectedCode();
   void unindentSelectedCode();

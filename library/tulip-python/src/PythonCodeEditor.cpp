@@ -999,10 +999,17 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   else if (commentShortcutsActivated() &&  e->modifiers() == (modifier | Qt::ShiftModifier) && e->key() == Qt::Key_D) {
     uncommentSelectedCode();
   }
-  else if (indentShortcutsActivated() && e->modifiers() == modifier && e->key() == Qt::Key_I) {
+  else if (commentShortcutsActivated() &&  e->modifiers() == modifier && (e->key() == Qt::Key_Slash || e->key() == Qt::Key_Colon)) {
+    if (selectedLinesCommented()) {
+      uncommentSelectedCode();
+    } else {
+      commentSelectedCode();
+    }
+  }
+  else if (indentShortcutsActivated() && ((e->modifiers() == modifier && e->key() == Qt::Key_I) || e->key() == Qt::Key_Tab)) {
     indentSelectedCode();
   }
-  else if (indentShortcutsActivated() &&  e->modifiers() == (modifier | Qt::ShiftModifier) && e->key() == Qt::Key_I) {
+  else if (indentShortcutsActivated() &&  ((e->modifiers() == (modifier | Qt::ShiftModifier) && e->key() == Qt::Key_I) || e->key() == Qt::Key_Backtab)) {
     unindentSelectedCode();
   }
   else if (findReplaceActivated() && e->modifiers() == modifier && e->key() == Qt::Key_F) {
@@ -1412,6 +1419,23 @@ bool PythonCodeEditor::isTooltipActive() const {
   return _tooltipActive;
 }
 
+bool PythonCodeEditor::selectedLinesCommented() const {
+  int lineFrom = 0;
+  int indexFrom = 0;
+  int lineTo = 0;
+  int indexTo = 0;
+  getSelection(lineFrom, indexFrom, lineTo, indexTo);
+  bool linesCommented = true;
+  for (int i = lineFrom ; i <= lineTo ; ++i) {
+    QString lineTxt = document()->findBlockByNumber(i).text().trimmed();
+    if (lineTxt.isEmpty() || lineTxt[0] != '#') {
+      linesCommented = false;
+      break;
+    }
+  }
+  return linesCommented;
+}
+
 void PythonCodeEditor::commentSelectedCode() {
   if (hasSelectedText()) {
     int lineFrom = 0;
@@ -1419,6 +1443,20 @@ void PythonCodeEditor::commentSelectedCode() {
     int lineTo = 0;
     int indexTo = 0;
     getSelection(lineFrom, indexFrom, lineTo, indexTo);
+
+    bool canComment = false;
+
+    for (int i = lineFrom ; i <= lineTo ; ++i) {
+      QString lineTxt = document()->findBlockByNumber(i).text().trimmed();
+      if (!lineTxt.isEmpty() && lineTxt[0] != '#') {
+        canComment = true;
+        break;
+      }
+    }
+
+    if (!canComment) {
+      return;
+    }
 
     for (int i = lineFrom ; i <= lineTo ; ++i) {
       insertAt("#", i, 0);
