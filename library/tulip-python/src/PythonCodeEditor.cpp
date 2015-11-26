@@ -1002,7 +1002,8 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   else if (commentShortcutsActivated() &&  e->modifiers() == modifier && (e->key() == Qt::Key_Slash || e->key() == Qt::Key_Colon)) {
     if (selectedLinesCommented()) {
       uncommentSelectedCode();
-    } else {
+    }
+    else {
       commentSelectedCode();
     }
   }
@@ -1426,13 +1427,16 @@ bool PythonCodeEditor::selectedLinesCommented() const {
   int indexTo = 0;
   getSelection(lineFrom, indexFrom, lineTo, indexTo);
   bool linesCommented = true;
+
   for (int i = lineFrom ; i <= lineTo ; ++i) {
     QString lineTxt = document()->findBlockByNumber(i).text().trimmed();
+
     if (lineTxt.isEmpty() || lineTxt[0] != '#') {
       linesCommented = false;
       break;
     }
   }
+
   return linesCommented;
 }
 
@@ -1448,6 +1452,7 @@ void PythonCodeEditor::commentSelectedCode() {
 
     for (int i = lineFrom ; i <= lineTo ; ++i) {
       QString lineTxt = document()->findBlockByNumber(i).text().trimmed();
+
       if (!lineTxt.isEmpty() && lineTxt[0] != '#') {
         canComment = true;
         break;
