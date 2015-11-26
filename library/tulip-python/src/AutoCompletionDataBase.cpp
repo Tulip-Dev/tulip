@@ -588,18 +588,22 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
       if (params.indexOf(",") == -1) {
         QString paramClean = params;
+
         if (params.indexOf("=") != -1) {
           paramClean = params.mid(0, params.indexOf("="));
         }
+
         _functionAutoCompletionList[fullName].insert(paramClean.trimmed());
       }
       else {
         QStringList pList = params.split(",");
         foreach(QString param, pList) {
           QString paramClean = param;
+
           if (param.indexOf("=") != -1) {
             paramClean = param.mid(0, param.indexOf("="));
           }
+
           _functionAutoCompletionList[fullName].insert(paramClean.trimmed());
         }
       }
