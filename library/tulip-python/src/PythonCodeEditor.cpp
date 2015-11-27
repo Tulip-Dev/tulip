@@ -1570,9 +1570,7 @@ void PythonCodeEditor::unindentSelectedCode() {
       if (selectedText() == "\t" || selectedText() == " ") {
         removeSelectedText();
       }
-      else {
-        break;
-      }
+
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
