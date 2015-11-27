@@ -259,15 +259,19 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   _classBases.clear();
 
   _varToType.clear();
-  _varToType["global"] = QHash<QString, QString>();
   _varToType["global"]["graph"] = "tlp.Graph";
   _varToType["global"]["tlp"] = "tlp";
 
   _classAttributeToType.clear();
-  _classAttributeToType["tlp.Algorithm"] = QHash<QString, QString>();
   _classAttributeToType["tlp.Algorithm"]["self.graph"] = "tlp.Graph";
   _classAttributeToType["tlp.Algorithm"]["self.dataSet"] = "tlp.DataSet";
   _classAttributeToType["tlp.Algorithm"]["self.pluginProgress"] = "tlp.PluginProgress";
+  _classAttributeToType["tlp.ImportModule"]["self.graph"] = "tlp.Graph";
+  _classAttributeToType["tlp.ImportModule"]["self.dataSet"] = "tlp.DataSet";
+  _classAttributeToType["tlp.ImportModule"]["self.pluginProgress"] = "tlp.PluginProgress";
+  _classAttributeToType["tlp.ExportModule"]["self.graph"] = "tlp.Graph";
+  _classAttributeToType["tlp.ExportModule"]["self.dataSet"] = "tlp.DataSet";
+  _classAttributeToType["tlp.ExportModule"]["self.pluginProgress"] = "tlp.PluginProgress";
   _classAttributeToType["tlp.BooleanAlgorithm"]["self.result"] = "tlp.BooleanProperty";
   _classAttributeToType["tlp.ColorAlgorithm"]["self.result"] = "tlp.ColorProperty";
   _classAttributeToType["tlp.DoubleAlgorithm"]["self.result"] = "tlp.DoubleProperty";

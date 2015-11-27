@@ -1335,7 +1335,11 @@ QString PythonCodeEditor::getEditedFunctionName() const {
       }
 
       if (!(currentLine.startsWith("\t") || currentLine.startsWith(" "))) {
-        break;
+        if (!(block.previous().text().trimmed().right(1) == "\\") &&
+            !(currentLine.indexOf("\"\"\"") != -1 && block.previous().text().indexOf("\"\"\"") != -1) &&
+            !(currentLine.indexOf("'''") != -1 && block.previous().text().indexOf("'''") != -1)) {
+          break;
+        }
       }
     }
   }
