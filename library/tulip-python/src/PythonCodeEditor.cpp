@@ -323,7 +323,6 @@ bool FindReplaceDialog::doFind() {
   if (text == "")
     return false;
 
-
   QTextDocument::FindFlags findFlags;
 
   if (!_ui->forwardRB->isChecked()) {
@@ -1046,6 +1045,13 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
   }
   else {
     QPlainTextEdit::keyPressEvent(e);
+
+    // fix char format when inserting a new first line
+    if (textCursor().block().blockNumber() == 0 && textCursor().position() == 0) {
+      QTextCharFormat format = currentCharFormat();
+      format.setFont(_currentFont);
+      setCurrentCharFormat(format);
+    }
 
     // Auto indentation
     if (autoIndentation() && e->key() == Qt::Key_Return) {
