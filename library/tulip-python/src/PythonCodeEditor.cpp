@@ -1369,9 +1369,9 @@ void PythonCodeEditor::getCursorPosition(int &line, int &col) const {
 }
 
 void PythonCodeEditor::setSelection(int startLine, int startCol, int endLine, int endCol) {
-  setCursorPosition(startLine, startCol);
+  setCursorPosition(endLine, endCol);
   QTextCursor cursor = textCursor();
-  cursor.setPosition(document()->findBlockByNumber(endLine).position()+endCol, QTextCursor::KeepAnchor);
+  cursor.setPosition(document()->findBlockByNumber(startLine).position()+startCol, QTextCursor::KeepAnchor);
   setTextCursor(cursor);
 }
 
@@ -1567,7 +1567,7 @@ void PythonCodeEditor::unindentSelectedCode() {
     for (int i = lineFrom ; i <= lineTo ; ++i) {
       setSelection(i, 0, i, 1);
 
-      if (selectedText() == "\t") {
+      if (selectedText() == "\t" || selectedText() == " ") {
         removeSelectedText();
       }
       else {
@@ -1582,7 +1582,7 @@ void PythonCodeEditor::unindentSelectedCode() {
 
     setSelection(currentCursor.blockNumber(), 0, currentCursor.blockNumber(), 1);
 
-    if (selectedText() == "\t") {
+    if (selectedText() == "\t" || selectedText() == " ") {
       removeSelectedText();
     }
 
