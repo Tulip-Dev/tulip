@@ -1,7 +1,7 @@
 .. py:currentmodule:: tulip
 
-Import API changes
-===================
+Important API changes
+======================
 
 Since Tulip 4.8
 -----------------
