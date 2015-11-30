@@ -997,4 +997,5 @@ void PythonPluginsIDE::moduleSaved(int idx) {
   QString fileName = getModuleEditor(idx)->getFileName();
   QFileInfo fileInfo(fileName);
   writeModuleFileToProject(fileInfo.fileName(), getModuleEditor(idx)->getCleanCode());
+  saveModule(idx, true);
 }
