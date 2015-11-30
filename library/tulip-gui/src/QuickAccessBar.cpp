@@ -335,7 +335,7 @@ void QuickAccessBar::setAllValues(unsigned int eltType,
     TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
                                         prop, _mainView->graph(),
                                         delegate, Perspective::instance() ? static_cast<QWidget*>(Perspective::instance()->mainWindow()) :
-                                                                            static_cast<QWidget*>(_mainView->graphicsView()));
+                                        static_cast<QWidget*>(_mainView->graphicsView()));
 
   // Check if edition has been cancelled
   if (!val.isValid())
