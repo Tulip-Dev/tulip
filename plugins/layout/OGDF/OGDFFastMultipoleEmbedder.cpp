@@ -17,6 +17,7 @@
  *
  */
 #include <ogdf/energybased/FastMultipoleEmbedder.h>
+#include <ogdf/packing/ComponentSplitterLayout.h>
 #include <ogdf/basic/simple_graph_alg.h>
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
@@ -69,7 +70,7 @@ class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 public:
 
   PLUGININFORMATION("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Implements the fast multipole embedder layout algorithm of Martin Gronemann.","1.0","Force Directed")
-  OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::FastMultipoleEmbedder()) {
+  OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), fme(new ogdf::FastMultipoleEmbedder()) {
     addInParameter<int>("number of iterations",
                         HTML_HELP_OPEN()
                         HTML_HELP_DEF( "type", "int" )
@@ -112,12 +113,14 @@ public:
                         "The number of threads to use during the computation of the layout."
                         HTML_HELP_CLOSE(),
                         "3");
+    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
+    // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
+    csl->setLayoutModule(fme);
   }
 
   ~OGDFFastMultipoleEmbedder() {}
 
   void beforeCall() {
-    ogdf::FastMultipoleEmbedder *fme = static_cast<ogdf::FastMultipoleEmbedder*>(ogdfLayoutAlgo);
 
     if (dataSet != NULL) {
       double dval = 0;
@@ -147,6 +150,10 @@ public:
     ogdf::makeSimple(tlpToOGDF->getOGDFGraph());
 
   }
+
+private:
+
+  ogdf::FastMultipoleEmbedder *fme;
 
 };
 
