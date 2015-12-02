@@ -5,12 +5,20 @@ MACRO(SET_COMPILER_OPTIONS)
 
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
+  STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
+
   IF(NOT MSVC) #visual studio does not recognize these options
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long")
     IF(NOT APPLE)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
     ENDIF(NOT APPLE)
   ENDIF(NOT MSVC)
+  
+  # use legacy libstdc++ with clang on MacOS (no c++11 support but Tulip does not use any of its feature)
+  # OGDF need to be linked against to work properly, so does Tulip in order to be able to use the OGDF layouts (crash otherwise)
+  IF(APPLE AND CLANG)
+    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+  ENDIF(APPLE AND CLANG)
 
   IF(EMSCRIPTEN)
     # Ensure emscripten port of zlib is compiled before compiling Tulip

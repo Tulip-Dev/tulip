@@ -121,7 +121,6 @@ SET(BUILD_CODE_COVERAGE OFF CACHE BOOL "Do you want to build for code coverage ?
 ## ========================================================
 ## Compiler-specific options
 ## ========================================================
-STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
 
 SET_COMPILER_OPTIONS()
 
