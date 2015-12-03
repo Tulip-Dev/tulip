@@ -27,6 +27,18 @@ The main features provided by the bindings are the following ones:
 	  implemented as C++ plugins. All these algorithms can be called from Python.
 	  As Tulip is dedicated to graph visualization, it is provided with numerous state of the art
 	  graph layout algorithms but also a bridge to the Open Graph Drawing Framework (http://www.ogdf.net) [4]_
+
+Release notes
+==============
+
+Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
+
+    * **4.8.0.post1** :
+
+        * Fix crash on MacOS when calling OGDF layout algorithms
+        * minor fixes
+
+    * **4.8.0** : Initial release based on Tulip 4.8
 	  
 Example
 =======
