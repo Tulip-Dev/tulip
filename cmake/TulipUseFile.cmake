@@ -17,7 +17,11 @@ MACRO(SET_COMPILER_OPTIONS)
   # use legacy libstdc++ with clang on MacOS (no c++11 support but Tulip does not use any of its feature)
   # OGDF need to be linked against to work properly, so does Tulip in order to be able to use the OGDF layouts (crash otherwise)
   IF(APPLE AND CLANG)
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+    # set -stdlib=libstdc++ only if -stdlib flag is not already bound
+    STRING(FIND "${CMAKE_CXX_FLAGS}" "-stdlib=lib" STDLIB_POS)
+    IF (${STDLIB_POS} EQUAL -1)
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
+    ENDIF()
   ENDIF(APPLE AND CLANG)
 
   IF(EMSCRIPTEN)
