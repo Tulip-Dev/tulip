@@ -84,7 +84,7 @@ for(tlp::_TLP_IT<TLP_TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreac
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
  */
 #define stableForEach(A, B)  \
-  for(tlp::_TLP_IT<TLP_TYPEOF(A) > _it_foreach(new StableIterator<TLP_TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
+  for(tlp::_TLP_IT<TLP_TYPEOF(A) > _it_foreach(new tlp::StableIterator<TLP_TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
 
 #if defined(__GXX_EXPERIMENTAL_CXX0X__)
 namespace tlp {
