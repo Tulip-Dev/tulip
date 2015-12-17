@@ -392,7 +392,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (pos != string::npos)
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
-            StringType::write(s, sVal);
+            StringType::writeb(s, sVal);
           }
           else
             prop->writeNodeValue(s, n);
@@ -490,7 +490,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
             if (pos != string::npos)
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
-            StringType::write(s, sVal);
+            StringType::writeb(s, sVal);
           }
           else
             prop->writeEdgeValue(s, e);
