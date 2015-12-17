@@ -427,7 +427,12 @@ bool TLPBImport::importGraph() {
 
             if (pnViewProp) {
               std::string value;
-              StringType::readb(*is, value);
+	      // must ensure ascendant compatibility
+	      // after clang bug fix in commit #11142
+	      if (header.major == 1 && header.minor == 0)
+		StringType::read(*is, value);
+	      else
+		StringType::readb(*is, value);
 
               // if needed replace symbolic path by real path
               size_t pos = value.find("TulipBitmapDir/");
@@ -485,7 +490,12 @@ bool TLPBImport::importGraph() {
 
               if (pnViewProp) {
                 std::string value;
-                StringType::readb(*is, value);
+		// must ensure ascendant compatibility
+		// after clang bug fix in commit #11142
+		if (header.major == 1 && header.minor == 0)
+		  StringType::read(*is, value);
+		else
+		  StringType::readb(*is, value);
                 // if needed replace symbolic path by real path
                 size_t pos = value.find("TulipBitmapDir/");
 

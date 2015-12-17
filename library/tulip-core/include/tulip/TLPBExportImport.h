@@ -71,7 +71,7 @@ public:
 
   PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary","13/07/2012",
                     "Exports a graph in a file using the Tulip binary format",
-                    "1.0","File")
+                    "1.1","File")
 
   std::string fileExtension() const {
     return "tlpb";
@@ -111,7 +111,7 @@ public:
 class TLPBImport:public tlp::ImportModule {
 public:
   PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
-                    "Imports a graph recorded in a file using the Tulip binary format", "1.0", "File")
+                    "Imports a graph recorded in a file using the Tulip binary format", "1.1", "File")
 
   TLPBImport(tlp::PluginContext* context);
   ~TLPBImport() {}
@@ -135,7 +135,7 @@ public:
 //Don't ask why it is David favorite 9 digit number.
 #define TLPB_MAGIC_NUMBER 578374683
 #define TLPB_MAJOR 1
-#define TLPB_MINOR 0
+#define TLPB_MINOR 1
 
 // structures used in both tlpb import/export plugins
 struct TLPBHeader {
