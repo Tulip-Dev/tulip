@@ -259,6 +259,7 @@ bool TLPBImport::importGraph() {
         return (delete is, errorTrap());
 
       propName.resize(size);
+
       // special treament for pathnames view properties
       bool pnViewProp = (propName == string("viewFont") ||
                          propName == string("viewTexture"));
@@ -426,7 +427,8 @@ bool TLPBImport::importGraph() {
 
             if (pnViewProp) {
               std::string value;
-              StringType::read(*is, value);
+              StringType::readb(*is, value);
+
               // if needed replace symbolic path by real path
               size_t pos = value.find("TulipBitmapDir/");
 
@@ -483,7 +485,7 @@ bool TLPBImport::importGraph() {
 
               if (pnViewProp) {
                 std::string value;
-                StringType::read(*is, value);
+                StringType::readb(*is, value);
                 // if needed replace symbolic path by real path
                 size_t pos = value.find("TulipBitmapDir/");
 
