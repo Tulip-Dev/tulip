@@ -702,7 +702,26 @@ const char* TulipFontAwesome::Vimeo = "vimeo";
 const char* TulipFontAwesome::BlackTie = "black-tie";
 const char* TulipFontAwesome::Fonticons = "fonticons";
 
-
+const char * TulipFontAwesome::Bluetooth = "bluetooth";
+const char * TulipFontAwesome::BluetoothB = "bluetooth-b";
+const char * TulipFontAwesome::Codiepie = "codiepie";
+const char * TulipFontAwesome::CreditCardAlt = "credit-card-alt";
+const char * TulipFontAwesome::Edge = "edge";
+const char * TulipFontAwesome::FortAwesome = "fort-awesome";
+const char * TulipFontAwesome::Hashtag = "hashtag";
+const char * TulipFontAwesome::Mixcloud = "mixcloud";
+const char * TulipFontAwesome::Modx = "modx";
+const char * TulipFontAwesome::PauseCircle = "pause-circle";
+const char * TulipFontAwesome::PauseCircleO = "pause-circle-o";
+const char * TulipFontAwesome::Percent = "percent";
+const char * TulipFontAwesome::ProductHunt = "product-hunt";
+const char * TulipFontAwesome::RedditAlien = "reddit-alien";
+const char * TulipFontAwesome::Scribd = "scribd";
+const char * TulipFontAwesome::ShoppingBag = "shopping-bag";
+const char * TulipFontAwesome::ShoppingBasket = "shopping-basket";
+const char * TulipFontAwesome::StopCircle = "stop-circle";
+const char * TulipFontAwesome::StopCircleO = "stop-circle-o";
+const char * TulipFontAwesome::Usb = "usb";
 
 struct cmpCharPtr {
   bool operator()(const char *s1, const char *s2) const {
@@ -1389,6 +1408,26 @@ static void initFontAwesomeIconCodePoints() {
   addIconCodePoint(TulipFontAwesome::BlackTie, 0xf27e);
   addIconCodePoint(TulipFontAwesome::Fonticons, 0xf280);
 
+  addIconCodePoint(TulipFontAwesome::Bluetooth, 0xf293);
+  addIconCodePoint(TulipFontAwesome::BluetoothB, 0xf294);
+  addIconCodePoint(TulipFontAwesome::Codiepie, 0xf284);
+  addIconCodePoint(TulipFontAwesome::CreditCardAlt, 0xf283);
+  addIconCodePoint(TulipFontAwesome::Edge, 0xf282);
+  addIconCodePoint(TulipFontAwesome::FortAwesome, 0xf286);
+  addIconCodePoint(TulipFontAwesome::Hashtag, 0xf292);
+  addIconCodePoint(TulipFontAwesome::Mixcloud, 0xf289);
+  addIconCodePoint(TulipFontAwesome::Modx, 0xf285);
+  addIconCodePoint(TulipFontAwesome::PauseCircle, 0xf28b);
+  addIconCodePoint(TulipFontAwesome::PauseCircleO, 0xf28c);
+  addIconCodePoint(TulipFontAwesome::Percent, 0xf295);
+  addIconCodePoint(TulipFontAwesome::ProductHunt, 0xf288);
+  addIconCodePoint(TulipFontAwesome::RedditAlien, 0xf281);
+  addIconCodePoint(TulipFontAwesome::Scribd, 0xf28a);
+  addIconCodePoint(TulipFontAwesome::ShoppingBag, 0xf290);
+  addIconCodePoint(TulipFontAwesome::ShoppingBasket, 0xf291);
+  addIconCodePoint(TulipFontAwesome::StopCircle, 0xf28d);
+  addIconCodePoint(TulipFontAwesome::StopCircleO, 0xf28e);
+  addIconCodePoint(TulipFontAwesome::Usb, 0xf287);
 
   map<const char*, vector<unsigned int>, cmpCharPtr>::iterator it = fontAwesomeIconCodePoint.begin();
 
