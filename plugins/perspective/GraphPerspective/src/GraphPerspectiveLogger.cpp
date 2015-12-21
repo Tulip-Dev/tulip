@@ -147,13 +147,15 @@ void GraphPerspectiveLogger::clear() {
 // (only the text of the current item is copied otherwise)
 bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
   QKeyEvent *ke = dynamic_cast<QKeyEvent*>(event);
+
   if (ke && ke->matches(QKeySequence::Copy)) {
     QStringList strings;
     foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
-      strings << item->text();
+    strings << item->text();
 
     QApplication::clipboard()->setText(strings.join("\n"));
     return true;
   }
+
   return false;
 }
