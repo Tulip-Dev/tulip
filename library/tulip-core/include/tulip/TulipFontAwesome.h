@@ -762,6 +762,28 @@ public:
   static const char* BlackTie;
   static const char* Fonticons;
 
+  // static constants for the new icons added in Font Awesome 4.5
+  static const char * Bluetooth;
+  static const char * BluetoothB;
+  static const char * Codiepie;
+  static const char * CreditCardAlt;
+  static const char * Edge;
+  static const char * FortAwesome;
+  static const char * Hashtag;
+  static const char * Mixcloud;
+  static const char * Modx;
+  static const char * PauseCircle;
+  static const char * PauseCircleO;
+  static const char * Percent;
+  static const char * ProductHunt;
+  static const char * RedditAlien;
+  static const char * Scribd;
+  static const char * ShoppingBag;
+  static const char * ShoppingBasket;
+  static const char * StopCircle;
+  static const char * StopCircleO;
+  static const char * Usb;
+
 
 
 };
