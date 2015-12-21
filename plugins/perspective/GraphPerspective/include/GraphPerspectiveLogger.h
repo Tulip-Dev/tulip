@@ -47,6 +47,8 @@ public:
   void log(QtMsgType, const char*);
 #endif
 
+  bool eventFilter(QObject *, QEvent *);
+
 public slots:
   void clear();
 
