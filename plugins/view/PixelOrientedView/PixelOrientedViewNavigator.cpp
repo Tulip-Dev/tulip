@@ -62,8 +62,8 @@ bool PixelOrientedViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     QMouseEvent *me = (QMouseEvent *) e;
     int x = glWidget->width() - me->x();
     int y = me->y();
-    Coord screenCoords((double) x, (double) y, 0);
-    Coord sceneCoords = glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords);
+    Coord screenCoords(x, y, 0);
+    Coord sceneCoords = glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
     PixelOrientedOverview *overviewUnderPointer = getOverviewUnderPointer(sceneCoords);
 
     if (overviewUnderPointer != NULL && overviewUnderPointer != selectedOverview) {
