@@ -533,7 +533,7 @@ void PythonScriptView::executeCurrentScript() {
 
   }
   else {
-    QMessageBox::information(_viewWidget->getCurrentMainScriptEditor(), "Script execution not allowed", "The Python interpreter already execute a script. You must wait for its termination or stop its execution before running a new script.");
+    QMessageBox::information(_viewWidget->getCurrentMainScriptEditor(), "Script execution not allowed", "The Python interpreter is executing a script. You must wait for its termination or stop its execution before running a new script.");
   }
 }
 
