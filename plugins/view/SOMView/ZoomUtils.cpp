@@ -34,8 +34,8 @@ void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox, 
 
 void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBox &boundingBox) {
   Camera &camera = glWidget->getScene()->getGraphCamera();
-  Coord bbScreenFirst = camera.worldTo2DScreen(Coord(boundingBox[0]));
-  Coord bbScreenSecond = camera.worldTo2DScreen(Coord(boundingBox[1]));
+  Coord bbScreenFirst = camera.worldTo2DViewport(Coord(boundingBox[0]));
+  Coord bbScreenSecond = camera.worldTo2DViewport(Coord(boundingBox[1]));
   float bbWidthScreen = bbScreenSecond.getX() - bbScreenFirst.getX();
   float bbHeightScreen = bbScreenSecond.getY() - bbScreenFirst.getY();
 

@@ -760,7 +760,7 @@ vector<SOMPreviewComposite*> SOMView::getPreviews() {
   return previews;
 }
 
-void SOMView::getPreviewsAtScreenCoord(int x, int y, std::vector<SOMPreviewComposite*>& result) {
+void SOMView::getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewComposite*>& result) {
   vector<SelectedEntity> selectedEntities;
   previewWidget->getScene()->selectEntities(RenderingSimpleEntities, x, y, 0, 0, NULL, selectedEntities);
 
@@ -798,7 +798,10 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
 
       if (me->button() == Qt::LeftButton) {
         vector<SOMPreviewComposite*> properties;
-        getPreviewsAtScreenCoord(me->x(), me->y(), properties);
+	Coord screenCoords(me->x(), me->y(), 0.0f);
+	Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
+        getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(),
+				   properties);
 
         if (!properties.empty()) {
           addPropertyToSelection(properties.front()->getPropertyName());
@@ -811,7 +814,10 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
     if (event->type() == QMouseEvent::ToolTip) {
       QHelpEvent *he = (QHelpEvent*) event;
       vector<SOMPreviewComposite*> properties;
-      getPreviewsAtScreenCoord(he->x(), he->y(), properties);
+      Coord screenCoords(he->x(), he->y(), 0.0f);
+      Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
+      getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(),
+				 properties);
 
       if (!properties.empty()) {
         QToolTip::showText(he->globalPos(), QString::fromStdString(properties.front()->getPropertyName()));

@@ -256,12 +256,12 @@ private:
   void updateInputSample();
 
   /**
-   * Get the previews composite at the screen coord.
+   * Get the previews composite at the viewport coord.
    * @param x the x value.
    * @param y the y value.
    * @param result The vector with the previews at the current pos.
    */
-  void getPreviewsAtScreenCoord(int x, int y, std::vector<SOMPreviewComposite*>& result);
+  void getPreviewsAtViewportCoord(int x, int y, std::vector<SOMPreviewComposite*>& result);
 
   /**
    * Draw the previews.
