@@ -798,10 +798,10 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
 
       if (me->button() == Qt::LeftButton) {
         vector<SOMPreviewComposite*> properties;
-	Coord screenCoords(me->x(), me->y(), 0.0f);
-	Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
+        Coord screenCoords(me->x(), me->y(), 0.0f);
+        Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
         getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(),
-				   properties);
+                                   properties);
 
         if (!properties.empty()) {
           addPropertyToSelection(properties.front()->getPropertyName());
@@ -817,7 +817,7 @@ bool SOMView::eventFilter(QObject *obj, QEvent *event) {
       Coord screenCoords(he->x(), he->y(), 0.0f);
       Coord viewportCoords = getGlMainWidget()->screenToViewport(screenCoords);
       getPreviewsAtViewportCoord(viewportCoords.x(), viewportCoords.y(),
-				 properties);
+                                 properties);
 
       if (!properties.empty()) {
         QToolTip::showText(he->globalPos(), QString::fromStdString(properties.front()->getPropertyName()));
