@@ -1119,8 +1119,8 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   if(switchToGoogleMap) {
     BoundingBox bb;
-    bb.expand(layer->getCamera().screenTo3DWorld(Coord(0,0,0)));
-    bb.expand(layer->getCamera().screenTo3DWorld(Coord(width(),height(),0)));
+    bb.expand(layer->getCamera().viewportTo3DWorld(Coord(0,0,0)));
+    bb.expand(layer->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(Coord(width(),height(),0))));
 
     bb[0][1]=mercatorToLatitude(bb[0][1]);
     bb[1][1]=mercatorToLatitude(bb[1][1]);
