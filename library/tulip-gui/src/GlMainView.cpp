@@ -205,6 +205,11 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
   else if (!quickAccessBarVisible()) {
     _quickAccessBarItem = new QGraphicsProxyWidget();
     _quickAccessBar = new QuickAccessBar(_quickAccessBarItem);
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// see https://bugreports.qt.io/browse/QTBUG-32639 
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+    _quickAccessBar->setWindowOpacity(0.99);
+#endif
     connect(_quickAccessBar,SIGNAL(settingsChanged()),_sceneConfigurationWidget,SLOT(resetChanges()));
     connect(_sceneConfigurationWidget,SIGNAL(settingsApplied()),_quickAccessBar,SLOT(reset()));
 

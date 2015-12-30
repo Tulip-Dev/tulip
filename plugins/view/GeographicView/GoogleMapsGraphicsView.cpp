@@ -398,12 +398,22 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
   googleMaps = new GoogleMaps();
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// see https://bugreports.qt.io/browse/QTBUG-32639
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  googleMaps->setWindowOpacity(0.99);
+#endif
   googleMaps->setMouseTracking(false);
   googleMaps->resize(512,512);
   progressWidget = new ProgressWidgetGraphicsProxy();
   progressWidget->hide();
   progressWidget->setZValue(2);
   addressSelectionDialog = new AddressSelectionDialog(googleMaps);
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// see https://bugreports.qt.io/browse/QTBUG-32639
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  addressSelectionDialog->setWindowOpacity(0.99);
+#endif
   scene()->addItem(progressWidget);
   addresseSelectionProxy = scene()->addWidget(addressSelectionDialog, Qt::Dialog);
   addresseSelectionProxy->hide();
@@ -449,6 +459,11 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
 
   // combo box to choose the map type
   viewTypeComboBox=new QComboBox;
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// see https://bugreports.qt.io/browse/QTBUG-32639
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  viewTypeComboBox->setWindowOpacity(0.99);
+#endif
   viewTypeComboBox->addItems(QStringList()<<"RoadMap"<<"RoadMap"<<"Satellite" << "Terrain" << "Hybrid" <<"Polygon" << "Globe");
   viewTypeComboBox->insertSeparator(1);
 
@@ -462,6 +477,11 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   // 2 push buttons
   // zoom +
   zoomInButton = new QPushButton(QIcon(":/zoom+.png"), "");
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// see https://bugreports.qt.io/browse/QTBUG-32639
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  zoomInButton->setWindowOpacity(0.99);
+#endif
   zoomInButton->setFixedSize(29, 27);
   zoomInButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomInButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomIn()));
@@ -471,6 +491,11 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
 
   // zoom -
   zoomOutButton = new QPushButton(QIcon(":/zoom-.png"), "");
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
+// see https://bugreports.qt.io/browse/QTBUG-32639
+#if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+  zoomOutButton->setWindowOpacity(0.99);
+#endif
   zoomOutButton->setFixedSize(29, 27);
   zoomOutButton->setContentsMargins(0, 0, 0, 0);
   connect(zoomOutButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomOut()));
