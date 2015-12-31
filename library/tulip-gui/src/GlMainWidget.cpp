@@ -72,7 +72,16 @@ static QGLFormat GlInit() {
   tmpFormat.setOverlay(false);
   tmpFormat.setStereo(false);
   tmpFormat.setSampleBuffers(true);
-  tmpFormat.setSamples(8);
+
+  static int maxSamples = -1;
+  if (maxSamples < 0) {
+    maxSamples = 0;
+    GlMainWidget::getFirstQGLWidget()->makeCurrent();
+    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+  }
+  if (maxSamples >= 0) {
+    tmpFormat.setSamples(maxSamples/4);
+  }
   return tmpFormat;
 }
 

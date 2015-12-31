@@ -126,7 +126,12 @@ void GlOffscreenRenderer::clearScene() {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+  static int maxSamples = -1;
+  if (maxSamples < 0) {
+    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+  }
+
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
@@ -139,12 +144,12 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
 
   if (glFrameBuf == NULL) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiasedFbo)
-      fboFmt.setSamples(8);
+      fboFmt.setSamples(maxSamples/4);
 
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
@@ -205,7 +210,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   scene.draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
 
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
@@ -246,7 +251,7 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
   scene->draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && defined(QT_MAC_USE_COCOA)))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION > QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
 
   if (antialiasedFbo)
     QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));

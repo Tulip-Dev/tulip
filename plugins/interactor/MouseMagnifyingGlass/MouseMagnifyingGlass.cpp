@@ -146,7 +146,11 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
     fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiased) {
-      fboFormat.setSamples(8);
+      static int maxSamples = -1;
+      if (maxSamples < 0) {
+        glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+      }
+      fboFormat.setSamples(maxSamples/4);
     }
 
     fbo = new QGLFramebufferObject(fboSize, fboSize, fboFormat);
