@@ -44,21 +44,6 @@ using namespace std;
 
 namespace tlp {
 
-static QGLFormat GlInit() {
-  QGLFormat tmpFormat;
-  tmpFormat.setDirectRendering(true);
-  tmpFormat.setDoubleBuffer(true);
-  tmpFormat.setAccum(false);
-  tmpFormat.setStencil(true);
-  tmpFormat.setOverlay(false);
-  tmpFormat.setDepth(true);
-  tmpFormat.setRgba(true);
-  tmpFormat.setAlpha(true);
-  tmpFormat.setStereo(false);
-  tmpFormat.setSampleBuffers(true);
-  return tmpFormat;
-}
-
 GlComposite *readPolyFile(QString fileName) {
   GlComposite *composite=new GlComposite;
 
@@ -391,7 +376,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
   polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
-  glWidget = new QGLWidget(GlInit(), this, GlMainWidget::getFirstQGLWidget());
+  glWidget = new GlMainWidget();
   setViewport(glWidget);
   setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
   setFrameStyle(QFrame::NoFrame);
