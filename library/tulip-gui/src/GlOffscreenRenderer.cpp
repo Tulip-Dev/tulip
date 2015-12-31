@@ -127,6 +127,7 @@ void GlOffscreenRenderer::clearScene() {
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
   static int maxSamples = -1;
+
   if (maxSamples < 0) {
     glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
   }
