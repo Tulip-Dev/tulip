@@ -17,6 +17,8 @@
  *
  */
 
+#include <GL/glew.h>
+
 #include <tulip/GlMainWidget.h>
 
 #include <QGLPixelBuffer>
