@@ -399,11 +399,12 @@ DataSet HistogramView::state() const {
 
 bool HistogramView::eventFilter(QObject *object, QEvent *event) {
   if (xAxisDetail != NULL && event->type() == QEvent::ToolTip && !detailedHistogram->uniformQuantificationHistogram()) {
+    GlMainWidget* glw = getGlMainWidget();
     QHelpEvent *he = static_cast<QHelpEvent *>(event);
-    int x = getGlMainWidget()->width() - he->x();
+    int x = glw->width() - he->x();
     int y = he->y();
     Coord screenCoords((double) x, (double) y, 0);
-    Coord sceneCoords(getGlMainWidget()->getScene()->getLayer("Main")->getCamera().screenTo3DWorld(screenCoords));
+    Coord sceneCoords(glw->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glw->screenToViewport(screenCoords)));
     BoundingBox xAxisBB = xAxisDetail->getBoundingBox();
 
     if (sceneCoords.getX() > xAxisBB[0][0] && sceneCoords.getX() < xAxisBB[1][0] &&

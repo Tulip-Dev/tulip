@@ -61,8 +61,9 @@ bool HistogramViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
     selectedHistoOverview = getOverviewUnderPointer(sceneCoords);
+    return true;
   }
   else if (e->type() == QEvent::MouseButtonDblClick) {
     if (selectedHistoOverview != NULL && histoView->smallMultiplesViewSet()) {

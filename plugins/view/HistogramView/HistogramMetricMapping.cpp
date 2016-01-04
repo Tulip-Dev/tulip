@@ -197,7 +197,7 @@ void GlEditableCurve::draw(float lod,Camera* camera) {
   for (it = curvePointsCp.begin() ; it != curvePointsCp.end() ; ++it) {
     Coord anchor(*it);
     camera->initGl();
-    Coord tmp(camera->worldTo2DScreen(anchor));
+    Coord tmp(camera->worldTo2DViewport(anchor));
     tmp[2] = 0;
     camera2D.initGl();
     basicCircle.set(tmp, CIRCLE_RADIUS, 0.);
@@ -259,7 +259,7 @@ Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point, Camera *c
   camera->initGl();
 
   for (it = curvePointsCp.begin() ; it != curvePointsCp.end() ; ++it) {
-    Coord anchorCenter(camera->worldTo2DScreen(*it));
+    Coord anchorCenter(camera->worldTo2DViewport(*it));
 
     if (point.getX() > (anchorCenter.getX() - CIRCLE_RADIUS) && point.getX() < (anchorCenter.getX() + CIRCLE_RADIUS) &&
         point.getY() > (anchorCenter.getY() - CIRCLE_RADIUS) && point.getY() < (anchorCenter.getY() + CIRCLE_RADIUS)) {
@@ -804,10 +804,10 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords((double) x, (double) y, 0);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+    Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
     if (!curveDragStarted) {
-      Coord *anchor = curve->getCurveAnchorAtPointIfAny(Coord(me->x(), glWidget->height() - me->y(), 0), &glWidget->getScene()->getLayer("Main")->getCamera());
+      Coord *anchor = curve->getCurveAnchorAtPointIfAny(glWidget->screenToViewport(Coord(me->x(), glWidget->height() - me->y(), 0)), &glWidget->getScene()->getLayer("Main")->getCamera());
       bool pointerColorScale = pointerUnderScale(sceneCoords);
 
       if (selectedAnchor != NULL) {
@@ -849,7 +849,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords((double) x, (double) y, 0);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
       if (curve->pointBelong(sceneCoords)) {
         curve->addCurveAnchor(sceneCoords);
@@ -889,7 +889,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       int x = glWidget->width() - me->x();
       int y = me->y();
       Coord screenCoords((double) x, (double) y, 0);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+      Coord sceneCoords(glWidget->getScene()->getGraphCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
       if (pointerUnderScale(sceneCoords)) {
         if (mappingType == VIEWCOLOR_MAPPING) {
