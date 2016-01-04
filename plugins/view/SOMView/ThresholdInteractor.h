@@ -147,7 +147,7 @@ public:
   bool eventFilter(QObject *, QEvent *);
   void setView(View *view);
 protected:
-  void screenSizeChanged(SOMView* somView);
+  bool screenSizeChanged(SOMView* somView);
   void propertyChanged(SOMView* somView,const std::string& propertyName, tlp::NumericProperty *newProperty);
   void performSelection(SOMView *somView, Iterator<node> *it);
   void buildSliders(SOMView* somView);

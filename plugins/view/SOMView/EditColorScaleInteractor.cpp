@@ -145,7 +145,7 @@ bool EditColorScaleInteractor::draw(GlMainWidget *glMainWidget) {
   return true;
 }
 
-void EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
+bool EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
   GlMainWidget* glMainWidget = somView->getMapWidget();
 
   if(glMainWidget->width()!=glMainWidgetWidth || glMainWidget->height()!=glMainWidgetHeight) {
@@ -159,7 +159,9 @@ void EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
       glMainWidgetWidth=glMainWidget->width();
       glMainWidgetHeight=glMainWidget->height();
     }
+    return true;
   }
+  return false;
 }
 
 void EditColorScaleInteractor::propertyChanged(SOMView* somView,const string& propertyName, NumericProperty *propertyValues) {
