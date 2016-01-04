@@ -33,9 +33,9 @@ using namespace std;
 
 namespace tlp {
 
-static Color axisHighlight(14,241,212,0);
+static Color axisHighlight(14,241,212,127);
 
-static Color axisToSwapHighlight(0,255,0,0);
+static Color axisToSwapHighlight(0,255,0,127);
 
 ParallelCoordsAxisSwapper::ParallelCoordsAxisSwapper() : parallelView(NULL), selectedAxis(NULL), otherAxisToSwap(NULL), initialSelectedAxisRotAngle(0), dragStarted(false), x(0), y(0), mouseMove(false), axisSwapStarted(false) {}
 
