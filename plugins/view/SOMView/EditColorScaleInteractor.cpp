@@ -159,8 +159,10 @@ bool EditColorScaleInteractor::screenSizeChanged(SOMView* somView) {
       glMainWidgetWidth=glMainWidget->width();
       glMainWidgetHeight=glMainWidget->height();
     }
+
     return true;
   }
+
   return false;
 }
 

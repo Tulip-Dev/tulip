@@ -493,8 +493,10 @@ bool ThresholdInteractor::screenSizeChanged(SOMView* somView) {
 
     if (currentProperty)
       buildSliders(somView);
+
     return true;
   }
+
   return false;
 }
 
