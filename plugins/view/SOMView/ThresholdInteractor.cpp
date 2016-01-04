@@ -487,12 +487,15 @@ void ThresholdInteractor::performSelection(SOMView *view, tlp::Iterator<node> *i
   Observable::unholdObservers();
 }
 
-void ThresholdInteractor::screenSizeChanged(SOMView* somView) {
-  EditColorScaleInteractor::screenSizeChanged(somView);
-  clearSliders();
+bool ThresholdInteractor::screenSizeChanged(SOMView* somView) {
+  if (EditColorScaleInteractor::screenSizeChanged(somView)) {
+    clearSliders();
 
-  if (currentProperty)
-    buildSliders(somView);
+    if (currentProperty)
+      buildSliders(somView);
+    return true;
+  }
+  return false;
 }
 
 void ThresholdInteractor::propertyChanged(SOMView* somView,const string& propertyName, NumericProperty *newProperty) {

@@ -46,7 +46,7 @@ public:
 
 protected:
   virtual void propertyChanged(SOMView* somView,const std::string& propertyName, NumericProperty *newProperty);
-  virtual void screenSizeChanged(SOMView* somView);
+  virtual bool screenSizeChanged(SOMView* somView);
   NumericProperty *currentProperty;
   GlLabelledColorScale *colorScale;
   float widthPercent;
