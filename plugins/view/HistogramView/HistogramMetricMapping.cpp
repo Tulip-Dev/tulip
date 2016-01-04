@@ -817,7 +817,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       selectedAnchor = anchor;
 
       if (selectedAnchor != NULL) {
-        glWidget->setCursor(QCursor(Qt::SizeAllCursor));
+        glWidget->setCursor(QCursor(Qt::OpenHandCursor));
       }
       else if (pointerColorScale) {
         glWidget->setCursor(QCursor(Qt::WhatsThisCursor));
@@ -884,6 +884,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 
     if (me->buttons() == Qt::LeftButton && selectedAnchor != NULL) {
       curveDragStarted = true;
+      glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
     }
     else if (me->buttons() == Qt::RightButton) {
       int x = glWidget->width() - me->x();
