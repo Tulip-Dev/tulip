@@ -252,7 +252,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     int x = glWidget->width() - me->x();
     int y = me->y();
     Coord screenCoords(x, y, 0.0f);
-    Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+    Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
     if (!axisSliderDragStarted && !slidersRangeDragStarted) {
       selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
