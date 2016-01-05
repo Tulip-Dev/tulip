@@ -190,6 +190,8 @@ private :
   int prevMapZoom;
   QGraphicsRectItem* _placeholderItem;
 
+  static unsigned int planisphereTextureId;
+
 };
 
 }
