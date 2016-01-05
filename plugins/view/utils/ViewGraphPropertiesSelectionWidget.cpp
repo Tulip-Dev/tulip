@@ -26,7 +26,7 @@ using namespace std;
 
 namespace tlp {
 
-  ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(NULL), lastDataLocation(NODE) {
+ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(NULL), lastDataLocation(NODE) {
   _ui->setupUi(this);
 }
 

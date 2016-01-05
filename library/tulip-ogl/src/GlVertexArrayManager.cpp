@@ -1176,6 +1176,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       if (shapeProperty==property) {
         edgesModified = true;
       }
+
       propertyValueChanged(property);
       break;
 
