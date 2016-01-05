@@ -115,6 +115,13 @@ void OpenGlConfigManager::desactivatePolygonAntiAliasing() {
   }
 }
 
+int OpenGlConfigManager::maxNumberOfSamples() const {
+  static int maxSamples = -1;
+  if (maxSamples < 0)
+    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+  return maxSamples / 4;
+}
+
 }
 
 

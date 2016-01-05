@@ -126,12 +126,6 @@ void GlOffscreenRenderer::clearScene() {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-  static int maxSamples = -1;
-
-  if (maxSamples < 0) {
-    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
-  }
-
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
@@ -150,7 +144,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiasedFbo)
-      fboFmt.setSamples(maxSamples/4);
+      fboFmt.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
 
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }

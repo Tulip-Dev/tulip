@@ -17,8 +17,6 @@
  *
  */
 
-#include <GL/glew.h>
-
 #include <tulip/GlMainWidget.h>
 
 #include <QGLPixelBuffer>
@@ -80,12 +78,10 @@ static QGLFormat GlInit() {
   if (maxSamples < 0) {
     maxSamples = 0;
     GlMainWidget::getFirstQGLWidget()->makeCurrent();
-    glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
+    maxSamples = OpenGlConfigManager::getInst().maxNumberOfSamples();
   }
 
-  if (maxSamples >= 0) {
-    tmpFormat.setSamples(maxSamples/4);
-  }
+  tmpFormat.setSamples(maxSamples);
 
   return tmpFormat;
 }
@@ -200,7 +196,7 @@ void GlMainWidget::createRenderingStore(int width, int height) {
     deleteRenderingStore();
     QGLFramebufferObjectFormat fboFormat;
     fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-    fboFormat.setSamples(8);
+    fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
     glFrameBuf=new QGLFramebufferObject(width,height, fboFormat);
     glFrameBuf2=new QGLFramebufferObject(width,height);
     useFramebufferObject=glFrameBuf->isValid();
@@ -527,7 +523,7 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   QGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(8);
+  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
   frameBuf=new QGLFramebufferObject(width,height, fboFormat);
   frameBuf2=new QGLFramebufferObject(width,height);
 
