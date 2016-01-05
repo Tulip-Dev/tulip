@@ -534,6 +534,9 @@ void GoogleMapsGraphicsView::setGraph(Graph *graph) {
 
     if (this->graph) {
       rp = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    } else {
+      rp.setNodesLabelStencil(1);
+      rp.setLabelsAreBillboarded(true);
     }
 
     cleanup();
@@ -1312,6 +1315,8 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   if (planisphereEntity)
     planisphereEntity->setVisible(enablePlanisphere);
+
+  glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setEdge3D(viewType==GoogleMapsView::Globe);
 
   Observable::unholdObservers();
 
