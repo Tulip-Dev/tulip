@@ -22,6 +22,7 @@
 #include <QGLFramebufferObject>
 
 #include <tulip/GlMainWidget.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <iostream>
 
@@ -68,7 +69,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
   QGLFormat format=QGLFormat::defaultFormat();
   format.setAlpha(true);
   format.setSampleBuffers(true);
-  format.setSamples(8);
+  format.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
   QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
 
   if(!glPixelBuffer->isValid()) {

@@ -30,6 +30,7 @@
 #include <tulip/GlComplexPolygon.h>
 #include <tulip/SnapshotDialog.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <QMenu>
 #include <QWebFrame>
@@ -391,7 +392,7 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
 
   QGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(8);
+  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
 
   int width = googleMapsGraphicsView->width();
   int height = googleMapsGraphicsView->height();

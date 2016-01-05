@@ -29,6 +29,7 @@
 #include <tulip/GlTools.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlCircle.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include <QGLFramebufferObject>
 #include <QEvent>
@@ -132,7 +133,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
 
   bool antialiased = false;
 
-  static bool canUseMultisampleFbo = glewIsSupported("GL_EXT_framebuffer_multisample");
+  bool canUseMultisampleFbo = OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_multisample");
 
   if (QGLFramebufferObject::hasOpenGLFramebufferBlit() && canUseMultisampleFbo) {
     antialiased = true;
@@ -146,13 +147,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
     fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiased) {
-      static int maxSamples = -1;
-
-      if (maxSamples < 0) {
-        glGetIntegerv(GL_MAX_SAMPLES, &maxSamples);
-      }
-
-      fboFormat.setSamples(maxSamples/4);
+      fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
     }
 
     fbo = new QGLFramebufferObject(fboSize, fboSize, fboFormat);

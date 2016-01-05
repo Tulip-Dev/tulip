@@ -93,6 +93,12 @@ public:
   void desactivateAntiAliasing();
 
   /**
+   * Returns a maximum number of samples for anti-aliasing based on graphics hardware capability
+   *
+   */
+  int maxNumberOfSamples() const;
+
+  /**
    * Activates the anti-aliasing of lines and points primitives.
    * This method has no effect if anti-aliasing has been disabled by a call to setAntiAliasing(false).
    */
