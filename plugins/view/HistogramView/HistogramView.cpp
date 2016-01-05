@@ -170,8 +170,8 @@ void HistogramView::setState(const DataSet &dataSet) {
   }
 
   if (binTextureId == 0) {
-    gl->makeCurrent();
-    binTextureId = gl->bindTexture(QPixmap(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
+    gl->getFirstQGLWidget()->makeCurrent();
+    binTextureId = gl->getFirstQGLWidget()->bindTexture(QImage(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
     GlTextureManager::getInst().registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
   }
 
