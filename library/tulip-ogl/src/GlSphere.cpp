@@ -32,17 +32,16 @@ namespace tlp {
 GlSphere::GlSphere(const Coord &position, float radius,const Color& color,float rotX,float rotY,float rotZ):position(position),radius(radius),color(color),rot(rotX,rotY,rotZ) {
   boundingBox[0]  = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
   boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
-  generateBuffers(9);
 }
 
 GlSphere::GlSphere(const Coord &position, float radius,const string& textureFile,int alpha,float rotX,float rotY,float rotZ):position(position),radius(radius),color(255,255,255,alpha),textureFile(textureFile),rot(rotX,rotY,rotZ) {
   boundingBox[0] = Coord(position[0]-radius,position[1]-radius,position[2]-radius);
   boundingBox[1] = Coord(position[0]+radius,position[1]+radius,position[2]+radius);
-  generateBuffers(9);
 }
 
 GlSphere::~GlSphere() {
-  glDeleteBuffers(3, &buffers[0]);
+  if (!buffers.empty())
+    glDeleteBuffers(3, &buffers[0]);
 }
 
 void GlSphere::generateBuffers(int space) {
@@ -53,9 +52,9 @@ void GlSphere::generateBuffers(int space) {
   glGenBuffers(3, &buffers[0]);
 
   double PI = 3.1415926535897;
-  vertices.resize(verticesCount * 3* 2 );
+  vertices.resize(verticesCount*3*2);
   texturesCoord.resize(verticesCount*2*2);
-  indices.resize(verticesCount*2*2);
+  indices.resize(verticesCount*2);
 
   int n = 0;
 
@@ -123,14 +122,20 @@ void GlSphere::generateBuffers(int space) {
   indices[verticesCount]=verticesCount*2-1;
 
   glBindBuffer(GL_ARRAY_BUFFER, buffers[0]);
-  glBufferData(GL_ARRAY_BUFFER, verticesCount*3*2*sizeof(float),&vertices[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, vertices.size()*sizeof(float),&vertices[0], GL_STATIC_DRAW);
   glBindBuffer(GL_ARRAY_BUFFER, buffers[1]);
-  glBufferData(GL_ARRAY_BUFFER, verticesCount*2*2*sizeof(float),&texturesCoord[0], GL_STATIC_DRAW);
+  glBufferData(GL_ARRAY_BUFFER, texturesCoord.size()*sizeof(float),&texturesCoord[0], GL_STATIC_DRAW);
   glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[2]);
-  glBufferData(GL_ELEMENT_ARRAY_BUFFER, verticesCount*2*sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
+  glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size()*sizeof(unsigned short), &indices[0], GL_STATIC_DRAW);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
 void GlSphere::draw(float, Camera *) {
+
+  if (buffers.empty()) {
+    generateBuffers(9);
+  }
 
   glEnable(GL_LIGHTING);
   glDisable(GL_COLOR_MATERIAL);
