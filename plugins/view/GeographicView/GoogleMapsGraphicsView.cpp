@@ -534,7 +534,8 @@ void GoogleMapsGraphicsView::setGraph(Graph *graph) {
 
     if (this->graph) {
       rp = glMainWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
-    } else {
+    }
+    else {
       rp.setNodesLabelStencil(1);
       rp.setLabelsAreBillboarded(true);
     }
