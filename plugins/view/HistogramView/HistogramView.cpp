@@ -455,14 +455,16 @@ void HistogramView::addEmptyViewLabel() {
 }
 
 void HistogramView::removeEmptyViewLabel() {
-  GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
-  GlSimpleEntity *noDimsLabel1 = mainLayer->findGlEntity("no dimensions label 1");
-  GlSimpleEntity *noDimsLabel2 = mainLayer->findGlEntity("no dimensions label 2");
-
   if (noDimsLabel != NULL) {
     mainLayer->deleteGlEntity(noDimsLabel);
+    delete noDimsLabel;
+    noDimsLabel = NULL;
     mainLayer->deleteGlEntity(noDimsLabel1);
+    delete noDimsLabel1;
+    noDimsLabel1 = NULL;
     mainLayer->deleteGlEntity(noDimsLabel2);
+    delete noDimsLabel2;
+    noDimsLabel2 = NULL;
   }
 }
 
