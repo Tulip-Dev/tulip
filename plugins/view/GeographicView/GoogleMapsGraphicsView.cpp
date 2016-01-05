@@ -342,14 +342,6 @@ void simplifyPolyFile(QString fileName,float definition) {
   }
 }
 
-GlSimpleEntity *buildPlanisphereEntity(GlMainWidget *mainWidget) {
-  GlMainWidget::getFirstQGLWidget()->makeCurrent();
-  GLuint planisphereTextureId = mainWidget->bindTexture(QPixmap(":/planisphere.jpg").transformed(QTransform().scale(1,-1)), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
-  GlTextureManager::getInst().registerExternalTexture("Planisphere", planisphereTextureId);
-
-  return new GlSphere(Coord(0.,0.,0.),50.,"Planisphere",255,0,0,90);
-}
-
 double latitudeToMercator(double latitude) {
   double mercatorLatitude=latitude*M_PI/360.;
   mercatorLatitude=sin(abs(mercatorLatitude));
@@ -367,6 +359,8 @@ double mercatorToLatitude(double mercator) {
 
 
 QGraphicsProxyWidget *proxyGM = NULL;
+
+unsigned int GoogleMapsGraphicsView::planisphereTextureId = 0;
 
 GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) :
   QGraphicsView(graphicsScene, parent),
@@ -549,8 +543,6 @@ void GoogleMapsGraphicsView::setGraph(Graph *graph) {
     GlGraphComposite *graphComposite=new GlGraphComposite(graph);
     graphComposite->setRenderingParameters(rp);
     GlLayer *layer=scene->createLayer("Main");
-    planisphereEntity = buildPlanisphereEntity(glMainWidget);
-    layer->addGlEntity(planisphereEntity,"globeMap");
 
     layer->addGlEntity(graphComposite,"Graph");
 
@@ -1110,10 +1102,6 @@ void GoogleMapsGraphicsView::switchViewType() {
   if(googleMaps->isVisible()!=enableGoogleMap && viewType!=GoogleMapsView::Polygon && viewType!=GoogleMapsView::Globe)
     switchToGoogleMap=true;
 
-  if(planisphereEntity->isVisible()) {
-    globeCameraBackup=glMainWidget->getScene()->getGraphCamera();
-  }
-
   if(geoLayoutBackup!=NULL) {
     *geoLayout=*geoLayoutBackup;
     delete geoLayoutBackup;
@@ -1146,8 +1134,6 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   if(polygonEntity)
     polygonEntity->setVisible(enablePolygon);
-
-  planisphereEntity->setVisible(enablePlanisphere);
 
   layer->setCamera(new Camera(glMainWidget->getScene()));
 
@@ -1197,6 +1183,22 @@ void GoogleMapsGraphicsView::switchViewType() {
     }
   }
   else {
+
+    if (!planisphereEntity) {
+      if (planisphereTextureId == 0) {
+        GlMainWidget::getFirstQGLWidget()->makeCurrent();
+        planisphereTextureId = GlMainWidget::getFirstQGLWidget()->bindTexture(QPixmap(":/planisphere.jpg").transformed(QTransform().scale(1,-1)), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
+        GlTextureManager::getInst().registerExternalTexture("Planisphere", planisphereTextureId);
+      }
+
+      planisphereEntity = new GlSphere(Coord(0.,0.,0.),50.,"Planisphere",255,0,0,90);
+      glMainWidget->getScene()->getLayer("Main")->addGlEntity(planisphereEntity,"globeMap");
+    }
+
+    if(planisphereEntity->isVisible()) {
+      globeCameraBackup=glMainWidget->getScene()->getGraphCamera();
+    }
+
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
     edge e;
@@ -1307,6 +1309,9 @@ void GoogleMapsGraphicsView::switchViewType() {
       camera.setSceneRadius(globeCameraBackup.getSceneRadius());
     }
   }
+
+  if (planisphereEntity)
+    planisphereEntity->setVisible(enablePlanisphere);
 
   Observable::unholdObservers();
 
