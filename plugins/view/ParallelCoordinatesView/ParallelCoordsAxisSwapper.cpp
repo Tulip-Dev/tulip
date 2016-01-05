@@ -62,7 +62,7 @@ bool ParallelCoordsAxisSwapper::eventFilter(QObject *widget, QEvent *e) {
       x = glWidget->width() - me->x();
       y = me->y();
       Coord screenCoords(x, y, 0);
-      Coord sceneCoords(glWidget->getScene()->getGraphCamera().screenTo3DWorld(screenCoords));
+      Coord sceneCoords(glWidget->getScene()->getLayer("Main")->getCamera().viewportTo3DWorld(glWidget->screenToViewport(screenCoords)));
 
       if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
         float rotAngle = computeABACAngleWithAlKashi(Coord(0.0f, 0.0f, 0.0f), Coord(0.0f, 50.0f, 0.0f), sceneCoords);
