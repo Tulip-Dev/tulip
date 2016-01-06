@@ -365,10 +365,10 @@ unsigned int GoogleMapsGraphicsView::planisphereTextureId = 0;
 GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) :
   QGraphicsView(graphicsScene, parent),
   _googleMapsView(googleMapsView), graph(NULL), googleMaps(NULL),
-  currentMapZoom(0),globeCameraBackup(NULL,true),geoLayout(NULL),
+  currentMapZoom(0),globeCameraBackup(NULL,true),mapCameraBackup(NULL,true),geoLayout(NULL),
   geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
   mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
-  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true) {
+  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true), firstMapSwitch(true) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
   setViewport(glWidget);
@@ -1101,10 +1101,11 @@ void GoogleMapsGraphicsView::switchViewType() {
     break;
   }
 
-  bool switchToGoogleMap=false;
-
-  if(googleMaps->isVisible()!=enableGoogleMap && viewType!=GoogleMapsView::Polygon && viewType!=GoogleMapsView::Globe)
-    switchToGoogleMap=true;
+  if(planisphereEntity && planisphereEntity->isVisible()) {
+    globeCameraBackup=glMainWidget->getScene()->getGraphCamera();
+  } else {
+    mapCameraBackup=glMainWidget->getScene()->getGraphCamera();
+  }
 
   if(geoLayoutBackup!=NULL) {
     *geoLayout=*geoLayoutBackup;
@@ -1118,21 +1119,6 @@ void GoogleMapsGraphicsView::switchViewType() {
     graph->push();
 
   Observable::holdObservers();
-
-  if(switchToGoogleMap) {
-    BoundingBox bb;
-    bb.expand(layer->getCamera().viewportTo3DWorld(Coord(0,0,0)));
-    bb.expand(layer->getCamera().viewportTo3DWorld(glMainWidget->screenToViewport(Coord(width(),height(),0))));
-
-    bb[0][1]=mercatorToLatitude(bb[0][1]);
-    bb[1][1]=mercatorToLatitude(bb[1][1]);
-
-    bb[0]=bb[0]/2.f;
-    bb[1]=bb[1]/2.f;
-
-    googleMaps->setMapBounds(bb[0],bb[1]);
-    googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom()+1);
-  }
 
   googleMaps->setVisible(enableGoogleMap);
 
@@ -1173,19 +1159,31 @@ void GoogleMapsGraphicsView::switchViewType() {
       }
     }
 
-    BoundingBox bb;
-    Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
-    Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
 
-    if (rightCoord[0] - leftCoord[0]) {
-      float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
-      float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
-      bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
-      bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
-      GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
-      sceneZoomAndPan.zoomAndPanAnimationStep(1);
+
+    if (firstMapSwitch) {
+      BoundingBox bb;
+      Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
+      Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
+      if (rightCoord[0] - leftCoord[0]) {
+        float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
+        float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
+        bb.expand(Coord(middleLng-mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(0,0).first*2.),0));
+        bb.expand(Coord(middleLng+mapWidth/2.,latitudeToMercator(googleMaps->getLatLngForPixelPosOnScreen(width(),height()).first*2.),0));
+        GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
+        sceneZoomAndPan.zoomAndPanAnimationStep(1);
+      }
+      firstMapSwitch = false;
+    } else {
+      Camera &camera=glMainWidget->getScene()->getGraphCamera();
+      camera.setEyes(mapCameraBackup.getEyes());
+      camera.setCenter(mapCameraBackup.getCenter());
+      camera.setUp(mapCameraBackup.getUp());
+      camera.setZoomFactor(mapCameraBackup.getZoomFactor());
+      camera.setSceneRadius(mapCameraBackup.getSceneRadius());
     }
   }
+
   else {
 
     if (!planisphereEntity) {
@@ -1197,10 +1195,6 @@ void GoogleMapsGraphicsView::switchViewType() {
 
       planisphereEntity = new GlSphere(Coord(0.,0.,0.),50.,"Planisphere",255,0,0,90);
       glMainWidget->getScene()->getLayer("Main")->addGlEntity(planisphereEntity,"globeMap");
-    }
-
-    if(planisphereEntity->isVisible()) {
-      globeCameraBackup=glMainWidget->getScene()->getGraphCamera();
     }
 
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");

@@ -159,6 +159,7 @@ private :
   std::pair<double, double> currentMapCenter;
   unsigned int currentMapZoom;
   Camera globeCameraBackup;
+  Camera mapCameraBackup;
   QRectF lastSceneRect;
 
   LayoutProperty *geoLayout;
@@ -185,6 +186,7 @@ private :
   ProgressWidgetGraphicsProxy *progressWidget;
 
   bool firstGlobeSwitch;
+  bool firstMapSwitch;
 
   std::pair<double, double> prevMapCenter;
   int prevMapZoom;
