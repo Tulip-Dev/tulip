@@ -320,8 +320,10 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
     pos=0;
   else {
     host=true;
+
     if (lowercase[pos - 1] == 's')
       newUrl.http_prefix = "https://";
+
     pos+=3;
   }
 
@@ -631,9 +633,10 @@ struct WebImport:public ImportModule {
         size_t start = len + balise.length();
         len--;
         char c = '=';
+
         for (; start < llen; start++) {
           if (lowercase[start] == c ||
-	      ((c == '"') && lowercase[start] == '\'')) {
+              ((c == '"') && lowercase[start] == '\'')) {
             // found =
             if (c == '=') {
               // now looking for "
@@ -641,10 +644,10 @@ struct WebImport:public ImportModule {
               continue;
             }
             else {
-	      c = lowercase[start];
+              c = lowercase[start];
               break;
-	    }
-	  }
+            }
+          }
 
           // only space chars allowed between balise and '='
           // and between '=' and the first '"' too
