@@ -1332,7 +1332,9 @@ static void initFontAwesomeIconCodePoints() {
 
   addIconCodePoint(TulipFontAwesome::Yc, 0xf23b);
   addIconCodePoint(TulipFontAwesome::YCombinator, 0xf23b);
-  addIconCodePoint(TulipFontAwesome::OptinMonster, 0xf23c);
+  // don't put that icon in the supported icons set as it makes libtess2 segfaults
+  // when tesselating the glyph
+  // addIconCodePoint(TulipFontAwesome::OptinMonster, 0xf23c);
   addIconCodePoint(TulipFontAwesome::Opencart, 0xf23d);
   addIconCodePoint(TulipFontAwesome::Expeditedssl, 0xf23e);
   addIconCodePoint(TulipFontAwesome::Battery4, 0xf240);
