@@ -28,7 +28,7 @@ using namespace tlp;
 
 class UrlElement {
 public:
-  bool is_http;
+  std::string http_prefix;
   std::string data;
   std::string server;
   std::string url;
@@ -39,6 +39,9 @@ public:
   bool load();
   void clear();
   bool isHtmlPage();
+  bool is_http() const {
+    return !http_prefix.empty();
+  }
   UrlElement parseUrl(const std::string &href);
   void setUrl(const std::string&);
   std::string getUrl() const {
@@ -183,10 +186,10 @@ void HttpContext::setTimer(QTimer *timer) {
   connect(timer, SIGNAL(timeout()), SLOT(timeout()));
 }
 
-UrlElement::UrlElement():is_http(true),data(""),context(0)  {
+UrlElement::UrlElement():http_prefix("http://"),data(""),context(0)  {
 }
 UrlElement::UrlElement(const UrlElement &c):
-  is_http(c.is_http),
+  http_prefix(c.http_prefix),
   data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(NULL) {
 }
 
@@ -283,7 +286,7 @@ bool UrlElement::siteconnect(const std::string &server, const std::string &path,
 } /* end, siteconnect */
 
 static const char * rejected_protocols[] = {
-  "https:", "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:",
+  "ftp:", "gopher:", "sftp:", "javascript:", "mms:", "mailto:",
   0 /* must be the last */
 };
 
@@ -301,7 +304,7 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
   }
 
   if (rejected_protocols[i]) {
-    newUrl.is_http = false;
+    newUrl.http_prefix.clear();
 
     if (i != 3 /* no javascript */)
       newUrl.server = href;
@@ -311,13 +314,15 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
 
   size_t pos=0;
   bool host = false;
-  pos = lowercase.rfind("http://", len);
+  pos = lowercase.rfind("://", len);
 
   if (pos == string::npos)
     pos=0;
   else {
     host=true;
-    pos+=7;
+    if (lowercase[pos - 1] == 's')
+      newUrl.http_prefix = "https://";
+    pos+=3;
   }
 
   if (host) {
@@ -558,8 +563,8 @@ struct WebImport:public ImportModule {
       labels->setNodeValue(n, urlDecode(str.str()));
       ostringstream oss;
 
-      if(url.is_http) {
-        oss<<"http://";
+      if(url.is_http()) {
+        oss<<url.http_prefix.c_str();
       }
 
       oss << str.str();
@@ -626,18 +631,20 @@ struct WebImport:public ImportModule {
         size_t start = len + balise.length();
         len--;
         char c = '=';
-
         for (; start < llen; start++) {
-          if (lowercase[start] == c) {
+          if (lowercase[start] == c ||
+	      ((c == '"') && lowercase[start] == '\'')) {
             // found =
             if (c == '=') {
               // now looking for "
               c = '"';
               continue;
             }
-            else
+            else {
+	      c = lowercase[start];
               break;
-          }
+	    }
+	  }
 
           // only space chars allowed between balise and '='
           // and between '=' and the first '"' too
@@ -653,7 +660,7 @@ struct WebImport:public ImportModule {
 
           // find the end of the string
           for (; end < llen; end++) {
-            if (lowercase[end] == '"')
+            if (lowercase[end] == c)
               break;
           }
 
@@ -684,14 +691,14 @@ struct WebImport:public ImportModule {
     if (visited.find(url)!=visited.end())
       return;
 
-    if (_toVisit && url.is_http)
+    if (_toVisit && url.is_http())
       toVisit.push_back(url);
   }
   //========================================================
   void parseUrl (const string &href, UrlElement &starturl) {
     UrlElement newUrl = starturl.parseUrl(href);
 
-    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http) &&
+    if (newUrl.isValid() && (extractNonHttp || newUrl.is_http()) &&
         addEdge(starturl, newUrl, 0, 0))
       addUrl(newUrl, visitOther || (newUrl.server == starturl.server));
   }
