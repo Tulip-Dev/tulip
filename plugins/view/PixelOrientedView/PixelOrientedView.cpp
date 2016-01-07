@@ -440,17 +440,42 @@ void PixelOrientedView::destroyData() {
 }
 
 void PixelOrientedView::addEmptyViewLabel() {
+  // it would have be better to center the scene
+  // before computing the position and size of empty labels
+  // but the call below causes a crash
+  //getGlMainWidget()->getScene()->centerScene();
+  // so we first get scene center and width from the graph camera
+  Coord center = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
+  float width =
+    getGlMainWidget()->getScene()->getGraphCamera().getBoundingBox().width();
   Color textColor = getTextColor();
-  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,200), textColor);
+  // then create the labels
+  GlLabel *noDimsLabel =
+    new GlLabel(center + Coord(0, width/14, 0), Size(2 * width/7, 2 * width/7),	textColor);
   noDimsLabel->setText(ViewName::PixelOrientedViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 = new GlLabel(Coord(0,-50, 0), Size(400,200), textColor);
+  GlLabel *noDimsLabel1 =
+    new GlLabel(center, Size(4 * width/7, 2 * width/7), textColor);
   noDimsLabel1->setText("No graph properties selected.");
   mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  GlLabel *noDimsLabel2 = new GlLabel(Coord(0,-100,0), Size(700,200), textColor);
+  GlLabel *noDimsLabel2 =
+    new GlLabel(center - Coord(0, width/14, 0), Size(width, 2 * width/7), textColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
-}
+  // finally center the scene
+  getGlMainWidget()->getScene()->centerScene();
+  // and recompute position and size of the empty labels
+  center = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
+  width =
+    getGlMainWidget()->getScene()->getGraphCamera().getBoundingBox().width();
+  noDimsLabel->setPosition(center + Coord(0, width/14, 0));
+  noDimsLabel->setSize(Size(2 * width/7, 2 * width/7));
+  noDimsLabel1->setPosition(center);
+  noDimsLabel1->setSize(Size(4 * width/7, 2 * width/7));
+  noDimsLabel2->setPosition(center - Coord(0, width/14, 0));
+  noDimsLabel2->setSize(Size(width, 2 * width/7));
+
+ }
 
 void PixelOrientedView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
@@ -586,10 +611,10 @@ void PixelOrientedView::centerView(bool) {
     getGlMainWidget()->getScene()->ajustSceneToSize(getGlMainWidget()->width(), getGlMainWidget()->height());
   }
 
-  // we apply a zoom factor to preserve a 50 px margin width
+  // we apply a zoom factor to preserve a 50 px margin height
   // to ensure the scene will not be drawn under the configuration tabs title
-  float glWidth = (float) graphicsView()->width();
-  getGlMainWidget()->getScene()->zoomFactor((glWidth - 50)/ glWidth);
+  float glHeight = (float) graphicsView()->height();
+  getGlMainWidget()->getScene()->zoomFactor((glHeight - 50)/ glHeight);
   getGlMainWidget()->draw();
 }
 
@@ -611,9 +636,13 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
   Coord eyesBak = getGlMainWidget()->getScene()->getGraphCamera().getEyes();
   Coord centerBak = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
   Coord upBak = getGlMainWidget()->getScene()->getGraphCamera().getUp();
+  float width =
+    getGlMainWidget()->getScene()->getGraphCamera().getBoundingBox().width();
 
   GlProgressBar *progressBar =
-    new GlProgressBar(Coord(0, 0, 0), 600, 100,
+    new GlProgressBar(centerBak + Coord(0, width/70, 0),
+		      width - width/10,
+		      width/12,
                       // use same green color as the highlighting one
                       // in workspace panel
                       Color(0xCB, 0xDE, 0x5D));
