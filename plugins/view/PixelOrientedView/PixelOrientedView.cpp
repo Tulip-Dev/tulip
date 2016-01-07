@@ -451,7 +451,7 @@ void PixelOrientedView::addEmptyViewLabel() {
   Color textColor = getTextColor();
   // then create the labels
   GlLabel *noDimsLabel =
-    new GlLabel(center + Coord(0, width/14, 0), Size(2 * width/7, 2 * width/7),	textColor);
+    new GlLabel(center + Coord(0, width/14, 0), Size(2 * width/7, 2 * width/7), textColor);
   noDimsLabel->setText(ViewName::PixelOrientedViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
   GlLabel *noDimsLabel1 =
@@ -475,7 +475,7 @@ void PixelOrientedView::addEmptyViewLabel() {
   noDimsLabel2->setPosition(center - Coord(0, width/14, 0));
   noDimsLabel2->setSize(Size(width, 2 * width/7));
 
- }
+}
 
 void PixelOrientedView::removeEmptyViewLabel() {
   GlSimpleEntity *noDimsLabel = mainLayer->findGlEntity("no dimensions label");
@@ -641,8 +641,8 @@ void PixelOrientedView::updateOverviews(const bool updateAll) {
 
   GlProgressBar *progressBar =
     new GlProgressBar(centerBak + Coord(0, width/70, 0),
-		      width - width/10,
-		      width/12,
+                      width - width/10,
+                      width/12,
                       // use same green color as the highlighting one
                       // in workspace panel
                       Color(0xCB, 0xDE, 0x5D));
