@@ -273,6 +273,7 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
       addressSelectionDialog->addResultToList(ret.toString());
     }
 
+    addresseSelectionProxy->setPos(width() / 2 - addresseSelectionProxy->sceneBoundingRect().width() / 2, height() / 2 - addresseSelectionProxy->sceneBoundingRect().height() / 2);
     addresseSelectionProxy->show();
 
     if (addressSelectionDialog->exec() == QDialog::Accepted) {
