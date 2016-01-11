@@ -131,6 +131,8 @@ public :
     return polygonEntity;
   }
 
+  void setGeoLayoutComputed();
+
 public slots :
 
   void mapToPolygon();
@@ -184,6 +186,7 @@ private :
   AddressSelectionDialog *addressSelectionDialog;
   QGraphicsProxyWidget *addresseSelectionProxy;
   ProgressWidgetGraphicsProxy *progressWidget;
+  QGraphicsProxyWidget *noLayoutMsgBox;
 
   bool firstGlobeSwitch;
   bool firstMapSwitch;
@@ -191,6 +194,8 @@ private :
   std::pair<double, double> prevMapCenter;
   int prevMapZoom;
   QGraphicsRectItem* _placeholderItem;
+
+  bool geoLayoutComputed;
 
   static unsigned int planisphereTextureId;
 

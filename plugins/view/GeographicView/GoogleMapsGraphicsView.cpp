@@ -33,12 +33,12 @@
 #include <QPushButton>
 #include <QTextStream>
 #include <QTimeLine>
-#include <QMessageBox>
 #include <QFile>
 #include <QApplication>
 #include <QImage>
 #include <QPainter>
 #include <QTimer>
+#include <QMessageBox>
 
 using namespace std;
 
@@ -368,7 +368,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   currentMapZoom(0),globeCameraBackup(NULL,true),mapCameraBackup(NULL,true),geoLayout(NULL),
   geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
   mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
-  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true), firstMapSwitch(true) {
+  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
   setViewport(glWidget);
@@ -482,6 +482,18 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   buttonProxy->setParentItem(_placeholderItem);
   buttonProxy->setPos(20, 76);
 
+
+  QMessageBox *msgBox = new QMessageBox(QMessageBox::Warning, "Geolocated layout not initialized",
+                                        "Warning : the geolocated layout\n"
+                                        "has not been initialized yet.\n"
+                                        "The graph will not be displayed until\n"
+                                        "that operation has been performed.\n\n"
+                                        "Open the Geolocation configuration tab\n"
+                                        "to proceed.");
+  msgBox->setModal(false);
+  noLayoutMsgBox = scene()->addWidget(msgBox);
+  noLayoutMsgBox->setParentItem(_placeholderItem);
+
   setAcceptDrops(false);
 
 }
@@ -545,6 +557,7 @@ void GoogleMapsGraphicsView::setGraph(Graph *graph) {
 
     GlScene *scene=glMainWidget->getScene();
     GlGraphComposite *graphComposite=new GlGraphComposite(graph);
+    graphComposite->setVisible(false);
     graphComposite->setRenderingParameters(rp);
     GlLayer *layer=scene->createLayer("Main");
 
@@ -900,6 +913,14 @@ void GoogleMapsGraphicsView::resizeEvent(QResizeEvent *event) {
     progressWidget->setPos(width() / 2 - progressWidget->sceneBoundingRect().width() / 2, height() / 2 - progressWidget->sceneBoundingRect().height() / 2);
   }
 
+  if (noLayoutMsgBox->isVisible()) {
+    noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2, height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
+  }
+
+  if (addresseSelectionProxy->isVisible()) {
+    addresseSelectionProxy->setPos(width() / 2 - addresseSelectionProxy->sceneBoundingRect().width() / 2, height() / 2 - addresseSelectionProxy->sceneBoundingRect().height() / 2);
+  }
+
   if (scene())
     scene()->update();
 
@@ -1103,12 +1124,11 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   if(planisphereEntity && planisphereEntity->isVisible()) {
     globeCameraBackup=glMainWidget->getScene()->getGraphCamera();
-  }
-  else {
+  } else {
     mapCameraBackup=glMainWidget->getScene()->getGraphCamera();
   }
 
-  if(geoLayoutBackup!=NULL) {
+  if(geoLayoutBackup!=NULL && geoLayoutComputed) {
     *geoLayout=*geoLayoutBackup;
     delete geoLayoutBackup;
     geoLayoutBackup=NULL;
@@ -1116,7 +1136,7 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   GlLayer *layer=glMainWidget->getScene()->getLayer("Main");
 
-  if (geoLayout == graph->getProperty<LayoutProperty>("viewLayout"))
+  if (geoLayout == graph->getProperty<LayoutProperty>("viewLayout") && geoLayoutComputed)
     graph->push();
 
   Observable::holdObservers();
@@ -1128,7 +1148,7 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   layer->setCamera(new Camera(glMainWidget->getScene()));
 
-  if(viewType!=GoogleMapsView::Globe) {
+  if(viewType!=GoogleMapsView::Globe && geoLayoutComputed) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
 
@@ -1166,7 +1186,6 @@ void GoogleMapsGraphicsView::switchViewType() {
       BoundingBox bb;
       Coord rightCoord = googleMaps->getPixelPosOnScreenForLatLng(180,180);
       Coord leftCoord = googleMaps->getPixelPosOnScreenForLatLng(0,0);
-
       if (rightCoord[0] - leftCoord[0]) {
         float mapWidth=(width()/(rightCoord - leftCoord)[0])*180.;
         float middleLng=googleMaps->getLatLngForPixelPosOnScreen(width()/2.,height()/2.).second*2.;
@@ -1175,10 +1194,8 @@ void GoogleMapsGraphicsView::switchViewType() {
         GlSceneZoomAndPan sceneZoomAndPan(glMainWidget->getScene(),bb,"Main",1);
         sceneZoomAndPan.zoomAndPanAnimationStep(1);
       }
-
       firstMapSwitch = false;
-    }
-    else {
+    } else {
       Camera &camera=glMainWidget->getScene()->getGraphCamera();
       camera.setEyes(mapCameraBackup.getEyes());
       camera.setCenter(mapCameraBackup.getCenter());
@@ -1201,90 +1218,93 @@ void GoogleMapsGraphicsView::switchViewType() {
       glMainWidget->getScene()->getLayer("Main")->addGlEntity(planisphereEntity,"globeMap");
     }
 
-    SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
-    node n;
-    edge e;
+    if (geoLayoutComputed) {
 
-    assert(geoLayoutBackup==NULL);
-    geoLayoutBackup = new LayoutProperty(graph);
-    *geoLayoutBackup=*geoLayout;
-
-    geoViewShape->setAllNodeValue(NodeShape::Sphere);
-    geoViewShape->setAllEdgeValue(EdgeShape::CubicBSplineCurve);
-
-    forEach(n, graph->getNodes()) {
-      if (viewSize != geoViewSize) {
-        const Size &nodeSize = viewSize->getNodeValue(n);
-        geoViewSize->setNodeValue(n, nodeSize);
-      }
-
-      if (nodeLatLng.find(n) != nodeLatLng.end()) {
-        Coord tmp(nodeLatLng[n].first*2./360.*M_PI,nodeLatLng[n].second*2./360.*M_PI,0);
-
-        float lambda = tmp[1];
-        float theta;
-
-        if ( lambda <= M_PI)
-          theta = lambda;
-        else
-          theta = lambda + 2. * M_PI;
-
-        float phi = M_PI / 2.0 - tmp[0];
-
-        tmp=Coord(50. * sin(phi) * cos(theta),
-                  50. * sin(phi) * sin(theta),
-                  50. * cos(phi));
-        geoLayout->setNodeValue(n, tmp);
-      }
-
-      /*else {
-        geoLayout->setNodeValue(n, Coord(0,0,0));
-      }*/
-    }
-
-    forEach(e, graph->getEdges()) {
-      const std::pair<node, node>& eEnds = graph->ends(e);
-      node src = eEnds.first;
-      node tgt = eEnds.second;
-      Coord srcC(nodeLatLng[src].first*2./360.*M_PI,nodeLatLng[src].second*2./360.*M_PI,0);
-      Coord tgtC(nodeLatLng[tgt].first*2./360.*M_PI,nodeLatLng[tgt].second*2./360.*M_PI,0);
-
-      unsigned int bendsNumber=2;
-      vector<Coord> bends;
-
-      for(unsigned int i=0; i<bendsNumber; ++i) {
-        Coord tmp=srcC+((tgtC-srcC)/(bendsNumber+1.f))*((float)i+1);
-        float lambda = tmp[1];
-        float theta;
-
-        if ( lambda <= M_PI)
-          theta = lambda;
-        else
-          theta = lambda + 2. * M_PI;
-
-        float phi = M_PI / 2.0 - tmp[0];
-
-        Coord tmp1(75. * sin(phi) * cos(theta),
-                   75. * sin(phi) * sin(theta),
-                   75. * cos(phi));
-
-
-        bends.push_back(tmp1);
-      }
-
-      geoLayout->setEdgeValue(e, bends);
-    }
-
-    if (!edgeBendsLatLng.empty()) {
+      SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
+      node n;
       edge e;
-      forEach(e, graph->getEdges()) {
-        vector<Coord> edgeBendsCoords;
 
-        for (unsigned int i = 0 ; i < edgeBendsLatLng[e].size() ; ++i) {
-          edgeBendsCoords.push_back(Coord(edgeBendsLatLng[e][i].second*2., latitudeToMercator(edgeBendsLatLng[e][i].first*2.),0));
+      assert(geoLayoutBackup==NULL);
+      geoLayoutBackup = new LayoutProperty(graph);
+      *geoLayoutBackup=*geoLayout;
+
+      geoViewShape->setAllNodeValue(NodeShape::Sphere);
+      geoViewShape->setAllEdgeValue(EdgeShape::CubicBSplineCurve);
+
+      forEach(n, graph->getNodes()) {
+        if (viewSize != geoViewSize) {
+          const Size &nodeSize = viewSize->getNodeValue(n);
+          geoViewSize->setNodeValue(n, nodeSize);
         }
 
-        geoLayout->setEdgeValue(e, edgeBendsCoords);
+        if (nodeLatLng.find(n) != nodeLatLng.end()) {
+          Coord tmp(nodeLatLng[n].first*2./360.*M_PI,nodeLatLng[n].second*2./360.*M_PI,0);
+
+          float lambda = tmp[1];
+          float theta;
+
+          if ( lambda <= M_PI)
+            theta = lambda;
+          else
+            theta = lambda + 2. * M_PI;
+
+          float phi = M_PI / 2.0 - tmp[0];
+
+          tmp=Coord(50. * sin(phi) * cos(theta),
+                    50. * sin(phi) * sin(theta),
+                    50. * cos(phi));
+          geoLayout->setNodeValue(n, tmp);
+        }
+
+        /*else {
+          geoLayout->setNodeValue(n, Coord(0,0,0));
+        }*/
+      }
+
+      forEach(e, graph->getEdges()) {
+        const std::pair<node, node>& eEnds = graph->ends(e);
+        node src = eEnds.first;
+        node tgt = eEnds.second;
+        Coord srcC(nodeLatLng[src].first*2./360.*M_PI,nodeLatLng[src].second*2./360.*M_PI,0);
+        Coord tgtC(nodeLatLng[tgt].first*2./360.*M_PI,nodeLatLng[tgt].second*2./360.*M_PI,0);
+
+        unsigned int bendsNumber=2;
+        vector<Coord> bends;
+
+        for(unsigned int i=0; i<bendsNumber; ++i) {
+          Coord tmp=srcC+((tgtC-srcC)/(bendsNumber+1.f))*((float)i+1);
+          float lambda = tmp[1];
+          float theta;
+
+          if ( lambda <= M_PI)
+            theta = lambda;
+          else
+            theta = lambda + 2. * M_PI;
+
+          float phi = M_PI / 2.0 - tmp[0];
+
+          Coord tmp1(75. * sin(phi) * cos(theta),
+                     75. * sin(phi) * sin(theta),
+                     75. * cos(phi));
+
+
+          bends.push_back(tmp1);
+        }
+
+        geoLayout->setEdgeValue(e, bends);
+      }
+
+      if (!edgeBendsLatLng.empty()) {
+        edge e;
+        forEach(e, graph->getEdges()) {
+          vector<Coord> edgeBendsCoords;
+
+          for (unsigned int i = 0 ; i < edgeBendsLatLng[e].size() ; ++i) {
+            edgeBendsCoords.push_back(Coord(edgeBendsLatLng[e][i].second*2., latitudeToMercator(edgeBendsLatLng[e][i].first*2.),0));
+          }
+
+          geoLayout->setEdgeValue(e, edgeBendsCoords);
+        }
       }
     }
 
@@ -1300,7 +1320,6 @@ void GoogleMapsGraphicsView::switchViewType() {
 
       globeCameraBackup=camera;
 
-      draw();
     }
     else {
       Camera &camera=glMainWidget->getScene()->getGraphCamera();
@@ -1319,6 +1338,14 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   Observable::unholdObservers();
 
+  draw();
+
+}
+
+void GoogleMapsGraphicsView::setGeoLayoutComputed() {
+  geoLayoutComputed = true;
+  noLayoutMsgBox->setVisible(false);
+  glMainWidget->getScene()->getGlGraphComposite()->setVisible(true);
 }
 
 }

@@ -41,6 +41,7 @@
 #include <QTimeLine>
 #include <QApplication>
 #include <QGLFramebufferObject>
+#include <QMessageBox>
 
 #include <iostream>
 
@@ -136,25 +137,6 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 
   updatePoly(true);
 
-  if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
-    geolocalisationConfigWidget->setLatLngGeoLocMethod();
-    computeGeoLayout();
-  }
-
-  QTimeLine timeLine(500);
-  timeLine.start();
-
-  // disable user input
-  // before allowing some display feedback
-  tlp::disableQtUserInput();
-
-  while (timeLine.state() == QTimeLine::Running) {
-    QApplication::processEvents();
-  }
-
-  // reenable user input
-  tlp::enableQtUserInput();
-
   if(dataSet.exist("configurationWidget")) {
     DataSet conf;
     dataSet.get("configurationWidget",conf);
@@ -197,6 +179,11 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 
   registerTriggers();
 
+  if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
+    geolocalisationConfigWidget->setLatLngGeoLocMethod();
+    computeGeoLayout();
+  }
+
 }
 
 DataSet GoogleMapsView::state() const {
@@ -222,6 +209,10 @@ void GoogleMapsView::refresh() {
 void GoogleMapsView::computeGeoLayout() {
   if (geolocalisationConfigWidget->geolocateByAddress()) {
     googleMapsGraphicsView->createLayoutWithAddresses(geolocalisationConfigWidget->getAddressGraphPropertyName(), geolocalisationConfigWidget->createLatAndLngProperties());
+    if (geolocalisationConfigWidget->createLatAndLngProperties()) {
+      geolocalisationConfigWidget->setGraph(graph());
+      geolocalisationConfigWidget->setLatLngGeoLocMethod();
+    }
   }
   else {
     string latProp = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
@@ -236,6 +227,7 @@ void GoogleMapsView::computeGeoLayout() {
   // check for shared properties
   // before computing view layout
   updateSharedProperties();
+  googleMapsGraphicsView->setGeoLayoutComputed();
   // compute view layout
   googleMapsGraphicsView->switchViewType();
 }
