@@ -67,7 +67,7 @@ public:
 class GeographicViewInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
 
 public:
-  PLUGININFORMATION("GoogleMapsInteractorGetInformation", "Tulip Team", "06/2012", "Google Map Get Information Interactor", "1.0", "Information")
+  PLUGININFORMATION("GeographicViewInteractorGetInformation", "Tulip Team", "06/2012", "Geographic View Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
