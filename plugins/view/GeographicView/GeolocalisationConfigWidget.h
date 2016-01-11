@@ -42,7 +42,7 @@ public :
 
   void setGraph(Graph *graph);
 
-  void setLatLngGeoLocMethod();
+  void setLatLngGeoLocMethod(const std::string &latitudePropertyName, const std::string &longitudePropertyName);
 
   bool geolocateByAddress() const;
 
