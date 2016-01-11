@@ -1,4 +1,4 @@
-/**
+﻿/**
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -82,10 +82,14 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   }
 }
 
-void GeolocalisationConfigWidget::setLatLngGeoLocMethod() {
+void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latitudePropertyName, const std::string &longitudePropertyName) {
   _ui->latLngRB->setChecked(true);
-  _ui->latPropCB->setCurrentIndex(_ui->latPropCB->findText("latitude"));
-  _ui->lngPropCB->setCurrentIndex(_ui->lngPropCB->findText("longitude"));
+  int latPropIndex = _ui->latPropCB->findText(QString::fromUtf8(latitudePropertyName.c_str()));
+  int lngPropIndex = _ui->lngPropCB->findText(QString::fromUtf8(longitudePropertyName.c_str()));
+  if (latPropIndex != -1 && lngPropIndex != -1) {
+    _ui->latPropCB->setCurrentIndex(latPropIndex);
+    _ui->lngPropCB->setCurrentIndex(lngPropIndex);
+  }
 }
 
 bool GeolocalisationConfigWidget::geolocateByAddress() const {

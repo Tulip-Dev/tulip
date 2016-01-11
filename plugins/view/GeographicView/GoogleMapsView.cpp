@@ -179,8 +179,14 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 
   registerTriggers();
 
-  if (graph()->existProperty("latitude") && graph()->existProperty("longitude")) {
-    geolocalisationConfigWidget->setLatLngGeoLocMethod();
+  string latitudePropName = "latitude";
+  string longitudePropName = "longitude";
+
+  dataSet.get("latitudePropertyName", latitudePropName);
+  dataSet.get("longitudePropertyName", longitudePropName);
+
+  if (graph()->existProperty(latitudePropName) && graph()->existProperty(longitudePropName)) {
+    geolocalisationConfigWidget->setLatLngGeoLocMethod(latitudePropName, longitudePropName);
     computeGeoLayout();
   }
 
@@ -195,6 +201,13 @@ DataSet GoogleMapsView::state() const {
   string cameras;
   googleMapsGraphicsView->getGlMainWidget()->getScene()->getXMLOnlyForCameras(cameras);
   dataSet.set("cameras",cameras);
+  std::string latitudePropName = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
+  std::string longitudePropName = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
+  if (latitudePropName != longitudePropName &&
+      graph()->existProperty(latitudePropName) && graph()->existProperty(longitudePropName)) {
+    dataSet.set("latitudePropertyName", latitudePropName);
+    dataSet.set("longitudePropertyName", longitudePropName);
+  }
   return dataSet;
 }
 
@@ -211,7 +224,7 @@ void GoogleMapsView::computeGeoLayout() {
     googleMapsGraphicsView->createLayoutWithAddresses(geolocalisationConfigWidget->getAddressGraphPropertyName(), geolocalisationConfigWidget->createLatAndLngProperties());
     if (geolocalisationConfigWidget->createLatAndLngProperties()) {
       geolocalisationConfigWidget->setGraph(graph());
-      geolocalisationConfigWidget->setLatLngGeoLocMethod();
+      geolocalisationConfigWidget->setLatLngGeoLocMethod("latitude", "longitude");
     }
   }
   else {
