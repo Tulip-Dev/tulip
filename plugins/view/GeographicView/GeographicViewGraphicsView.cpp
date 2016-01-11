@@ -17,8 +17,8 @@
  *
  */
 
-#include "GoogleMapsGraphicsView.h"
-#include "GoogleMapsView.h"
+#include "GeographicViewGraphicsView.h"
+#include "GeographicView.h"
 
 #include <tulip/GlCPULODCalculator.h>
 #include <tulip/GlComplexPolygon.h>
@@ -360,11 +360,11 @@ double mercatorToLatitude(double mercator) {
 
 QGraphicsProxyWidget *proxyGM = NULL;
 
-unsigned int GoogleMapsGraphicsView::planisphereTextureId = 0;
+unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 
-GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent) :
+GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView, QGraphicsScene *graphicsScene, QWidget *parent) :
   QGraphicsView(graphicsScene, parent),
-  _googleMapsView(googleMapsView), graph(NULL), googleMaps(NULL),
+  _geoView(geoView), graph(NULL), googleMaps(NULL),
   currentMapZoom(0),globeCameraBackup(NULL,true),mapCameraBackup(NULL,true),geoLayout(NULL),
   geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
   mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
@@ -401,7 +401,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   googleMaps->setProgressWidget(progressWidget);
   googleMaps->setAdresseSelectionDialog(addressSelectionDialog,addresseSelectionProxy);
 
-  connect(googleMaps, SIGNAL(currentZoomChanged()), _googleMapsView, SLOT(currentZoomChanged()));
+  connect(googleMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
   connect(googleMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
 
 
@@ -414,7 +414,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   proxyGM->setPos(0,0);
   proxyGM->setParentItem(_placeholderItem);
 
-  glMainWidget = new GlMainWidget(0, googleMapsView);
+  glMainWidget = new GlMainWidget(0, geoView);
   glMainWidget->getScene()->setCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setBackgroundColor(Color(255,255,255,0));
   glMainWidget->getScene()->setClearBufferAtDraw(false);
@@ -451,7 +451,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
   comboBoxProxy->setPos(20,20);
   comboBoxProxy->setZValue(1);
 
-  connect(viewTypeComboBox,SIGNAL(currentIndexChanged(QString)),_googleMapsView,SLOT(viewTypeChanged(QString)));
+  connect(viewTypeComboBox,SIGNAL(currentIndexChanged(QString)),_geoView,SLOT(viewTypeChanged(QString)));
 
   // 2 push buttons
   // zoom +
@@ -463,7 +463,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
 #endif
   zoomInButton->setFixedSize(29, 27);
   zoomInButton->setContentsMargins(0, 0, 0, 0);
-  connect(zoomInButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomIn()));
+  connect(zoomInButton, SIGNAL(pressed()), _geoView, SLOT(zoomIn()));
   QGraphicsProxyWidget *buttonProxy = scene()->addWidget(zoomInButton);
   buttonProxy->setParentItem(_placeholderItem);
   buttonProxy->setPos(20, 50);
@@ -477,7 +477,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
 #endif
   zoomOutButton->setFixedSize(29, 27);
   zoomOutButton->setContentsMargins(0, 0, 0, 0);
-  connect(zoomOutButton, SIGNAL(pressed()), _googleMapsView, SLOT(zoomOut()));
+  connect(zoomOutButton, SIGNAL(pressed()), _geoView, SLOT(zoomOut()));
   buttonProxy = scene()->addWidget(zoomOutButton);
   buttonProxy->setParentItem(_placeholderItem);
   buttonProxy->setPos(20, 76);
@@ -498,7 +498,7 @@ GoogleMapsGraphicsView::GoogleMapsGraphicsView(GoogleMapsView *googleMapsView, Q
 
 }
 
-GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
+GeographicViewGraphicsView::~GeographicViewGraphicsView() {
   if (geocodingActive) {
     if (addressSelectionDialog->isVisible()) {
       addressSelectionDialog->accept();
@@ -522,7 +522,7 @@ GoogleMapsGraphicsView::~GoogleMapsGraphicsView() {
   delete glMainWidget;
 }
 
-void GoogleMapsGraphicsView::cleanup() {
+void GeographicViewGraphicsView::cleanup() {
   if(graph) {
 
     GlScene *scene=glMainWidget->getScene();
@@ -539,7 +539,7 @@ void GoogleMapsGraphicsView::cleanup() {
   }
 }
 
-void GoogleMapsGraphicsView::setGraph(Graph *graph) {
+void GeographicViewGraphicsView::setGraph(Graph *graph) {
   if (this->graph != graph) {
 
     GlGraphRenderingParameters rp;
@@ -582,7 +582,7 @@ static string removeQuotesIfAny(const string &s) {
   }
 }
 
-void GoogleMapsGraphicsView::loadDefaultMap() {
+void GeographicViewGraphicsView::loadDefaultMap() {
   bool oldPolyVisible=false;
 
   if(polygonEntity!=NULL) {
@@ -598,7 +598,7 @@ void GoogleMapsGraphicsView::loadDefaultMap() {
   layer->addGlEntity(polygonEntity,"polygonMap");
 }
 
-void GoogleMapsGraphicsView::loadCsvFile(QString fileName) {
+void GeographicViewGraphicsView::loadCsvFile(QString fileName) {
   bool oldPolyVisible=false;
 
   if(polygonEntity!=NULL) {
@@ -620,7 +620,7 @@ void GoogleMapsGraphicsView::loadCsvFile(QString fileName) {
   layer->addGlEntity(polygonEntity,"polygonMap");
 }
 
-void GoogleMapsGraphicsView::loadPolyFile(QString fileName) {
+void GeographicViewGraphicsView::loadPolyFile(QString fileName) {
   bool oldPolyVisible=false;
 
   if(polygonEntity!=NULL) {
@@ -644,7 +644,7 @@ void GoogleMapsGraphicsView::loadPolyFile(QString fileName) {
   layer->addGlEntity(polygonEntity,"polygonMap");
 }
 
-void GoogleMapsGraphicsView::mapToPolygon() {
+void GeographicViewGraphicsView::mapToPolygon() {
   GlComposite *composite=dynamic_cast<GlComposite*>(polygonEntity);
 
   if(!composite)
@@ -702,25 +702,25 @@ void GoogleMapsGraphicsView::mapToPolygon() {
   delete nodesIt;
 }
 
-void GoogleMapsGraphicsView::zoomIn() {
+void GeographicViewGraphicsView::zoomIn() {
   googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom()+1);
 }
 
-void GoogleMapsGraphicsView::zoomOut() {
+void GeographicViewGraphicsView::zoomOut() {
   googleMaps->setCurrentZoom(googleMaps->getCurrentMapZoom()-1);
 }
 
-void GoogleMapsGraphicsView::currentZoomChanged() {
+void GeographicViewGraphicsView::currentZoomChanged() {
   zoomInButton->setEnabled(googleMaps->getCurrentMapZoom() != 20);
   zoomOutButton->setEnabled(googleMaps->getCurrentMapZoom() != 0);
 }
 
-GlGraphComposite *GoogleMapsGraphicsView::getGlGraphComposite() const {
+GlGraphComposite *GeographicViewGraphicsView::getGlGraphComposite() const {
   return glMainWidget->getScene()->getGlGraphComposite();
 
 }
 
-void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressPropertyName, bool createLatAndLngProps) {
+void GeographicViewGraphicsView::createLayoutWithAddresses(const string& addressPropertyName, bool createLatAndLngProps) {
   geocodingActive = true;
   nodeLatLng.clear();
   Observable::holdObservers();
@@ -887,7 +887,7 @@ void GoogleMapsGraphicsView::createLayoutWithAddresses(const string& addressProp
   geocodingActive = false;
 }
 
-void GoogleMapsGraphicsView::createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName) {
+void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName) {
   nodeLatLng.clear();
   pair<double, double> latLng;
 
@@ -903,7 +903,7 @@ void GoogleMapsGraphicsView::createLayoutWithLatLngs(const std::string& latitude
   }
 }
 
-void GoogleMapsGraphicsView::resizeEvent(QResizeEvent *event) {
+void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
   QGraphicsView::resizeEvent(event);
   scene()->setSceneRect(QRect(QPoint(0, 0), size()));
   googleMaps->resize(width(), height());
@@ -929,7 +929,7 @@ void GoogleMapsGraphicsView::resizeEvent(QResizeEvent *event) {
   QApplication::sendEvent(this, eventModif);
 }
 
-void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
+void GeographicViewGraphicsView::paintEvent (QPaintEvent * event) {
 
   Observable::holdObservers();
 
@@ -979,20 +979,20 @@ void GoogleMapsGraphicsView::paintEvent (QPaintEvent * event) {
   QGraphicsView::paintEvent(event);
 }
 
-void GoogleMapsGraphicsView::queueMapRefresh() {
+void GeographicViewGraphicsView::queueMapRefresh() {
   QTimer::singleShot(500, this, SLOT(refreshMap()));
 }
 
-void GoogleMapsGraphicsView::refreshMap() {
+void GeographicViewGraphicsView::refreshMap() {
   glWidgetItem->setRedrawNeeded(true);
   scene()->update();
 }
 
-void GoogleMapsGraphicsView::setMapTranslationBlocked(const bool translationBlocked) {
+void GeographicViewGraphicsView::setMapTranslationBlocked(const bool translationBlocked) {
   mapTranslationBlocked = translationBlocked;
 }
 
-void GoogleMapsGraphicsView::centerView() {
+void GeographicViewGraphicsView::centerView() {
   if(googleMaps->isVisible()) {
     googleMaps->setMapBounds(graph, nodeLatLng);
   }
@@ -1000,31 +1000,31 @@ void GoogleMapsGraphicsView::centerView() {
     glMainWidget->centerScene();
   }
 }
-void GoogleMapsGraphicsView::centerMapOnNode(const node n) {
+void GeographicViewGraphicsView::centerMapOnNode(const node n) {
   if (nodeLatLng.find(n) != nodeLatLng.end()) {
     googleMaps->setMapCenter(nodeLatLng[n].first, nodeLatLng[n].second);
   }
 }
 
-void GoogleMapsGraphicsView::setGeoLayout(LayoutProperty *property) {
+void GeographicViewGraphicsView::setGeoLayout(LayoutProperty *property) {
   *property=*geoLayout;
   geoLayout=property;
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementLayout(geoLayout);
 }
 
-void GoogleMapsGraphicsView::setGeoSizes(SizeProperty *property) {
+void GeographicViewGraphicsView::setGeoSizes(SizeProperty *property) {
   *property=*geoViewSize;
   geoViewSize=property;
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementSize(geoViewSize);
 }
 
-void GoogleMapsGraphicsView::setGeoShape(IntegerProperty *property) {
+void GeographicViewGraphicsView::setGeoShape(IntegerProperty *property) {
   *property=*geoViewShape;
   geoViewShape=property;
   glMainWidget->getScene()->getGlGraphComposite()->getInputData()->setElementShape(geoViewShape);
 }
 
-void GoogleMapsGraphicsView::afterSetNodeValue(PropertyInterface *prop, const node n) {
+void GeographicViewGraphicsView::afterSetNodeValue(PropertyInterface *prop, const node n) {
   if (geoViewSize != NULL) {
     SizeProperty *viewSize = (SizeProperty *) prop;
     const Size &nodeSize = viewSize->getNodeValue(n);
@@ -1033,7 +1033,7 @@ void GoogleMapsGraphicsView::afterSetNodeValue(PropertyInterface *prop, const no
   }
 }
 
-void GoogleMapsGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
+void GeographicViewGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
   if (geoViewSize != NULL) {
     SizeProperty *viewSize = (SizeProperty *) prop;
     const Size &nodeSize = viewSize->getNodeValue(graph->getOneNode());
@@ -1042,7 +1042,7 @@ void GoogleMapsGraphicsView::afterSetAllNodeValue(PropertyInterface *prop) {
   }
 }
 
-void GoogleMapsGraphicsView::treatEvent(const Event& ev) {
+void GeographicViewGraphicsView::treatEvent(const Event& ev) {
   const PropertyEvent* propEvt = dynamic_cast<const PropertyEvent*>(&ev);
 
   if (propEvt) {
@@ -1075,45 +1075,45 @@ void getAngle(const Coord& coord,float &theta, float &phi) {
   phi = M_PI / 2.0 - tmp[0];
 }
 
-void GoogleMapsGraphicsView::switchViewType() {
-  GoogleMapsView::ViewType viewType=_googleMapsView->viewType();
+void GeographicViewGraphicsView::switchViewType() {
+  GeographicView::ViewType viewType=_geoView->viewType();
 
   bool enableGoogleMap=false;
   bool enablePolygon=false;
   bool enablePlanisphere = false;
 
   switch(viewType) {
-  case GoogleMapsView::GoogleRoadMap: {
+  case GeographicView::GoogleRoadMap: {
     enableGoogleMap=true;
     googleMaps->switchToRoadMapView();
     break;
   }
 
-  case GoogleMapsView::GoogleSatellite: {
+  case GeographicView::GoogleSatellite: {
     enableGoogleMap=true;
     googleMaps->switchToSatelliteView();
     break;
   }
 
-  case GoogleMapsView::GoogleTerrain: {
+  case GeographicView::GoogleTerrain: {
     enableGoogleMap=true;
     googleMaps->switchToTerrainView();
     break;
   }
 
-  case GoogleMapsView::GoogleHybrid: {
+  case GeographicView::GoogleHybrid: {
     enableGoogleMap=true;
     googleMaps->switchToHybridView();
     break;
   }
 
-  case GoogleMapsView::Polygon: {
+  case GeographicView::Polygon: {
     enablePolygon=true;
     glWidgetItem->setRedrawNeeded(true);
     break;
   }
 
-  case GoogleMapsView::Globe: {
+  case GeographicView::Globe: {
     enablePlanisphere=true;
     break;
   }
@@ -1149,7 +1149,7 @@ void GoogleMapsGraphicsView::switchViewType() {
 
   layer->setCamera(new Camera(glMainWidget->getScene()));
 
-  if(viewType!=GoogleMapsView::Globe && geoLayoutComputed) {
+  if(viewType!=GeographicView::Globe && geoLayoutComputed) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
     node n;
 
@@ -1317,7 +1317,7 @@ void GoogleMapsGraphicsView::switchViewType() {
   if (planisphereEntity)
     planisphereEntity->setVisible(enablePlanisphere);
 
-  glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setEdge3D(viewType==GoogleMapsView::Globe);
+  glMainWidget->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setEdge3D(viewType==GeographicView::Globe);
 
   Observable::unholdObservers();
 
@@ -1325,7 +1325,7 @@ void GoogleMapsGraphicsView::switchViewType() {
 
 }
 
-void GoogleMapsGraphicsView::setGeoLayoutComputed() {
+void GeographicViewGraphicsView::setGeoLayoutComputed() {
   geoLayoutComputed = true;
   noLayoutMsgBox->setVisible(false);
   glMainWidget->getScene()->getGlGraphComposite()->setVisible(true);

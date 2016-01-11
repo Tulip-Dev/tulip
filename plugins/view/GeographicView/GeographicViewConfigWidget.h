@@ -25,15 +25,15 @@
 #include <tulip/DataSet.h>
 
 namespace Ui {
-class GoogleMapsViewConfigWidgetData;
+class GeographicViewConfigWidgetData;
 }
 
 namespace tlp {
-class GoogleMapsViewConfigWidget : public QWidget {
+class GeographicViewConfigWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::GoogleMapsViewConfigWidgetData* _ui;
+  Ui::GeographicViewConfigWidgetData* _ui;
 
 public :
 
@@ -44,8 +44,8 @@ public :
     PolyFile
   };
 
-  GoogleMapsViewConfigWidget(QWidget *parent = 0);
-  ~GoogleMapsViewConfigWidget();
+  GeographicViewConfigWidget(QWidget *parent = 0);
+  ~GeographicViewConfigWidget();
 
   bool useSharedLayoutProperty() const;
   bool useSharedSizeProperty() const;

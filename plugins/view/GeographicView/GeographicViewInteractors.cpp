@@ -19,40 +19,40 @@
 
 #include <QApplication>
 
-#include "GoogleMapsViewInteractors.h"
+#include "GeographicViewInteractors.h"
 
 #include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/ViewNames.h"
 
 using namespace std;
 
-GoogleMapViewInteractor::GoogleMapViewInteractor(const QString &iconPath, const QString &text) : GLInteractorComposite(QIcon(iconPath), text) {}
+GeographicViewInteractor::GeographicViewInteractor(const QString &iconPath, const QString &text) : GLInteractorComposite(QIcon(iconPath), text) {}
 
-bool GoogleMapViewInteractor::isCompatible(const std::string &viewName) const {
-  return (viewName == ViewName::GoogleMapsViewName);
+bool GeographicViewInteractor::isCompatible(const std::string &viewName) const {
+  return (viewName == ViewName::GeographicViewName);
 }
 
-GoogleMapViewInteractorNavigation::GoogleMapViewInteractorNavigation(const PluginContext *) : GoogleMapViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
+GeographicViewInteractorNavigation::GeographicViewInteractorNavigation(const PluginContext *) : GeographicViewInteractor(":/tulip/gui/icons/i_navigation.png", "Navigate in view") {
 
 }
 
-unsigned int GoogleMapViewInteractorNavigation::priority() const {
+unsigned int GeographicViewInteractorNavigation::priority() const {
   return StandardInteractorPriority::Navigation;
 }
 
-void GoogleMapViewInteractorNavigation::construct() {
-  push_back(new GoogleMapViewNavigator);
+void GeographicViewInteractorNavigation::construct() {
+  push_back(new GeographicViewNavigator);
 }
 
-QWidget *GoogleMapViewInteractorNavigation::configurationWidget() const {
+QWidget *GeographicViewInteractorNavigation::configurationWidget() const {
   return NULL;
 }
 
-GoogleMapViewNavigator::GoogleMapViewNavigator(): x(0), y(0), inRotation(false) {}
+GeographicViewNavigator::GeographicViewNavigator(): x(0), y(0), inRotation(false) {}
 
-GoogleMapViewNavigator::~GoogleMapViewNavigator() {}
+GeographicViewNavigator::~GeographicViewNavigator() {}
 
-void GoogleMapViewNavigator::viewChanged(View *) {
+void GeographicViewNavigator::viewChanged(View *) {
 }
 
 void trans(Coord &c1,Coord &c2,float angle1, float angle2) {
@@ -99,24 +99,24 @@ void trans(Coord &c1,Coord &c2,float angle1, float angle2) {
   c2[2]=rho2*cos(theta2);
 }
 
-bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
-  GoogleMapsView *googleMapsView=static_cast<GoogleMapsView*>(view());
+bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
+  GeographicView *geoView=static_cast<GeographicView*>(view());
 
-  if(googleMapsView->viewType()==GoogleMapsView::GoogleRoadMap ||
-      googleMapsView->viewType()==GoogleMapsView::GoogleSatellite ||
-      googleMapsView->viewType()==GoogleMapsView::GoogleTerrain ||
-      googleMapsView->viewType()==GoogleMapsView::GoogleHybrid) {
+  if(geoView->viewType()==GeographicView::GoogleRoadMap ||
+      geoView->viewType()==GeographicView::GoogleSatellite ||
+      geoView->viewType()==GeographicView::GoogleTerrain ||
+      geoView->viewType()==GeographicView::GoogleHybrid) {
     QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
     QWheelEvent *qWheelEv = dynamic_cast<QWheelEvent *>(e);
 
     if(qMouseEv || qWheelEv) {
-      GoogleMapsView* googleMapsView=static_cast<GoogleMapsView*>(view());
-      QApplication::sendEvent(googleMapsView->getGoogleMap(), e);
+      GeographicView* geoView=static_cast<GeographicView*>(view());
+      QApplication::sendEvent(geoView->getGoogleMap(), e);
     }
 
     return false;
   }
-  else if (googleMapsView->viewType()==GoogleMapsView::Globe) {
+  else if (geoView->viewType()==GeographicView::Globe) {
     if (e->type() == QEvent::Wheel &&
         (((QWheelEvent *) e)->orientation() == Qt::Vertical)) {
 #define WHEEL_DELTA 120
@@ -204,4 +204,4 @@ bool GoogleMapViewNavigator::eventFilter(QObject *widget, QEvent *e) {
   }
 }
 
-PLUGIN(GoogleMapViewInteractorNavigation)
+PLUGIN(GeographicViewInteractorNavigation)

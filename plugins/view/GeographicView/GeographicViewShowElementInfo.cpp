@@ -17,11 +17,11 @@
  *
  */
 
-#include "GoogleMapsShowElementInfo.h"
+#include "GeographicViewShowElementInfo.h"
 
 
 #include "ui_ElementInformationsWidget.h"
-#include "GoogleMapsViewInteractors.h"
+#include "GeographicViewInteractors.h"
 #include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/ViewNames.h"
 
@@ -64,14 +64,14 @@ public:
   }
 };
 
-class GoogleMapsInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
+class GeographicViewInteractorGetInformation  : public NodeLinkDiagramComponentInteractor {
 
 public:
   PLUGININFORMATION("GoogleMapsInteractorGetInformation", "Tulip Team", "06/2012", "Google Map Get Information Interactor", "1.0", "Information")
   /**
    * Default constructor
    */
-  GoogleMapsInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
+  GeographicViewInteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Get information on nodes/edges") {
     setConfigurationWidgetText(QString("<h3>Get information interactor</h3>")+
                                "<b>Mouse left</b> click on an element to display its properties");
     setPriority(StandardInteractorPriority::GetInformation);
@@ -81,19 +81,19 @@ public:
    * Construct chain of responsibility
    */
   void construct() {
-    push_back(new GoogleMapViewNavigator);
-    push_back(new GoogleMapsShowElementInfo);
+    push_back(new GeographicViewNavigator);
+    push_back(new GeographicViewShowElementInfo);
   }
 
   bool isCompatible(const string &viewName) const {
-    return (viewName==ViewName::GoogleMapsViewName);
+    return (viewName==ViewName::GeographicViewName);
   }
 
 };
 
-PLUGIN(GoogleMapsInteractorGetInformation)
+PLUGIN(GeographicViewInteractorGetInformation)
 
-GoogleMapsShowElementInfo::GoogleMapsShowElementInfo(): _editor(NULL) {
+GeographicViewShowElementInfo::GeographicViewShowElementInfo(): _editor(NULL) {
   Ui::ElementInformationsWidget* ui = new Ui::ElementInformationsWidget;
   _informationsWidget=new QWidget();
   _informationsWidget->installEventFilter(this);
@@ -104,16 +104,16 @@ GoogleMapsShowElementInfo::GoogleMapsShowElementInfo(): _editor(NULL) {
   _informationsWidgetItem->setVisible(false);
 }
 
-void GoogleMapsShowElementInfo::clear() {
-  dynamic_cast<GoogleMapsView*>(view())->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
+void GeographicViewShowElementInfo::clear() {
+  dynamic_cast<GeographicView*>(view())->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
   _informationsWidgetItem->setVisible(false);
 }
 
-QTableView* GoogleMapsShowElementInfo::tableView() const {
+QTableView* GeographicViewShowElementInfo::tableView() const {
   return _informationsWidget->findChild<QTableView*>();
 }
 
-bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
+bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   if (widget == _informationsWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
     return true;
 
@@ -125,15 +125,15 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
   if(qMouseEv != NULL) {
-    GoogleMapsView *googleMapsView=dynamic_cast<GoogleMapsView*>(view());
+    GeographicView *geoView=dynamic_cast<GeographicView*>(view());
     SelectedEntity selectedEntity;
 
     if(e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
-        googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
+        geoView->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
       }
       else {
-        googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
+        geoView->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
       }
 
       return false;
@@ -228,15 +228,15 @@ bool GoogleMapsShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
   return false;
 }
 
-bool GoogleMapsShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
-  GoogleMapsView *googleMapsView=dynamic_cast<GoogleMapsView*>(view());
+bool GeographicViewShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
+  GeographicView *geoView=dynamic_cast<GeographicView*>(view());
 
-  if(googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity))
+  if(geoView->getGoogleMapGraphicsView()->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity))
     return true;
 
   vector<SelectedEntity> selectedEntities;
 
-  if(googleMapsView->getGoogleMapGraphicsView()->getGlMainWidget()->pickGlEntities(x,y,selectedEntities)) {
+  if(geoView->getGoogleMapGraphicsView()->getGlMainWidget()->pickGlEntities(x,y,selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
@@ -244,14 +244,14 @@ bool GoogleMapsShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntit
   return false;
 }
 
-void GoogleMapsShowElementInfo::viewChanged(View * view) {
+void GeographicViewShowElementInfo::viewChanged(View * view) {
   if (view == NULL) {
     _view = NULL;
     return;
   }
 
-  GoogleMapsView *googleMapsView=dynamic_cast<GoogleMapsView*>(view);
-  _view=googleMapsView;
+  GeographicView *geoView=dynamic_cast<GeographicView*>(view);
+  _view=geoView;
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationsWidgetItem,SLOT(close()));
   _view->getGoogleMapGraphicsView()->scene()->addItem(_informationsWidgetItem);
 }

@@ -34,10 +34,10 @@
 
 #include <map>
 
-#include "GoogleMapsViewConfigWidget.h"
+#include "GeographicViewConfigWidget.h"
 #include "GeolocalisationConfigWidget.h"
 #include "GoogleMaps.h"
-#include "GoogleMapsGraphicsView.h"
+#include "GeographicViewGraphicsView.h"
 
 #include "../../utils/ViewNames.h"
 
@@ -56,11 +56,11 @@ namespace tlp {
  *
  *
  */
-class GoogleMapsView : public View {
+class GeographicView : public View {
 
   Q_OBJECT
 
-  PLUGININFORMATION(ViewName::GoogleMapsViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
+  PLUGININFORMATION(ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
                     "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of Google Maps.</p>"
                     "<p>If geographic properties are attached to graph nodes (address or latitude/longitude), they are used to layout the nodes on the map.</p>"
                     "<p>An interactor for performing selection on graph elements is also bundled with the view.</p>", "2.2","View")
@@ -76,8 +76,8 @@ public :
     Globe
   };
 
-  GoogleMapsView(PluginContext *);
-  ~GoogleMapsView();
+  GeographicView(PluginContext *);
+  ~GeographicView();
 
   std::string icon() const {
     return ":/geographic_view.png";
@@ -91,7 +91,7 @@ public :
   DataSet state() const;
 
   QGraphicsView *graphicsView() const {
-    return googleMapsGraphicsView;
+    return geoViewGraphicsView;
   }
 
   QList<QWidget *> configurationWidgets() const;
@@ -99,11 +99,11 @@ public :
   QGraphicsItem* centralItem() const;
 
   GoogleMaps *getGoogleMap() {
-    return googleMapsGraphicsView->getGoogleMapsPage();
+    return geoViewGraphicsView->getGoogleMapsPage();
   }
 
-  GoogleMapsGraphicsView *getGoogleMapGraphicsView() {
-    return googleMapsGraphicsView;
+  GeographicViewGraphicsView *getGoogleMapGraphicsView() {
+    return geoViewGraphicsView;
   }
 
   void registerTriggers();
@@ -117,6 +117,9 @@ public :
     // call the Qt slot declared below
     centerView();
   }
+
+  GeographicViewGraphicsView *getGoogleMapsGraphicsView() const;
+  void setGoogleMapsGraphicsView(GeographicViewGraphicsView *value);
 
 public slots :
 
@@ -137,11 +140,11 @@ public slots :
   void updateSharedProperties();
 
   void currentInteractorChanged(tlp::Interactor *i) {
-    i->install(googleMapsGraphicsView->getGlMainWidget());
+    i->install(geoViewGraphicsView->getGlMainWidget());
   }
 
   void mapToPolygon() {
-    googleMapsGraphicsView->mapToPolygon();
+    geoViewGraphicsView->mapToPolygon();
   }
 
   void centerView();
@@ -166,8 +169,8 @@ private :
 
   void saveStoredPolyInformations(DataSet &dataset) const;
 
-  GoogleMapsGraphicsView *googleMapsGraphicsView;
-  GoogleMapsViewConfigWidget *googleMapsViewConfigWidget;
+  GeographicViewGraphicsView *geoViewGraphicsView;
+  GeographicViewConfigWidget *geoViewConfigWidget;
   GeolocalisationConfigWidget *geolocalisationConfigWidget;
   SceneConfigWidget* sceneConfigurationWidget;
   SceneLayersConfigWidget* sceneLayersConfigurationWidget;
