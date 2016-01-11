@@ -548,14 +548,15 @@ PropertyInterface *CSVImportColumnToGraphPropertyMappingProxy::getPropertyInterf
 CSVGraphImport::CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToGraphPropertyMapping* properties,const CSVImportParameters& importParameters):mapping(mapping),propertiesManager(properties),importParameters(importParameters) {
 }
 CSVGraphImport::~CSVGraphImport() {}
-void CSVGraphImport::begin() {
+bool CSVGraphImport::begin() {
   mapping->init(importParameters.getLastLineIndex()-importParameters.getFirstLineIndex()+1);
+  return true;
 }
 
-void CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
+bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
   //Check if user wants to import the line.
   if(!importParameters.importRow(row) ) {
-    return;
+    return true;
   }
 
   vector<PropertyInterface *> props(lineTokens.size(), NULL);
@@ -615,8 +616,10 @@ void CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
       }
     }
   }
+  return true;
 }
 
-void CSVGraphImport::end(unsigned int , unsigned int ) {
+bool CSVGraphImport::end(unsigned int , unsigned int ) {
+  return true;
 }
 
