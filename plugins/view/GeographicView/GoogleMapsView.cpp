@@ -203,11 +203,13 @@ DataSet GoogleMapsView::state() const {
   dataSet.set("cameras",cameras);
   std::string latitudePropName = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
   std::string longitudePropName = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
+
   if (latitudePropName != longitudePropName &&
       graph()->existProperty(latitudePropName) && graph()->existProperty(longitudePropName)) {
     dataSet.set("latitudePropertyName", latitudePropName);
     dataSet.set("longitudePropertyName", longitudePropName);
   }
+
   return dataSet;
 }
 
@@ -222,6 +224,7 @@ void GoogleMapsView::refresh() {
 void GoogleMapsView::computeGeoLayout() {
   if (geolocalisationConfigWidget->geolocateByAddress()) {
     googleMapsGraphicsView->createLayoutWithAddresses(geolocalisationConfigWidget->getAddressGraphPropertyName(), geolocalisationConfigWidget->createLatAndLngProperties());
+
     if (geolocalisationConfigWidget->createLatAndLngProperties()) {
       geolocalisationConfigWidget->setGraph(graph());
       geolocalisationConfigWidget->setLatLngGeoLocMethod("latitude", "longitude");

@@ -166,6 +166,7 @@ bool CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens) {
     //Fill the table
     setItem(currentRow,column,new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
   }
+
   return true;
 }
 
@@ -240,15 +241,16 @@ bool CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
   if(row >= getFirstLineIndex()) {
     if(useFirstLineAsPropertyName()) {
       if (row == getFirstLineIndex())
-	headerColumnCount = columnCount();
+        headerColumnCount = columnCount();
       else if (lineTokens.size() > headerColumnCount) {
-	if (QMessageBox::warning(this, "Invalid number of row fields",
-				 QString("row %1: the number of fields (%2) is greater than the number of columns (%3)").arg(row  + 1).arg(columnCount()).arg(headerColumnCount),
-				 QMessageBox::Ok | QMessageBox::Cancel,
-				 QMessageBox::Ok) == QMessageBox::Cancel)
-	  return false;
+        if (QMessageBox::warning(this, "Invalid number of row fields",
+                                 QString("row %1: the number of fields (%2) is greater than the number of columns (%3)").arg(row  + 1).arg(columnCount()).arg(headerColumnCount),
+                                 QMessageBox::Ok | QMessageBox::Cancel,
+                                 QMessageBox::Ok) == QMessageBox::Cancel)
+          return false;
       }
     }
+
     for(size_t column = 0 ; column < lineTokens.size() ; ++column) {
       //A new column was created set its label and it's configuration widget.
       if(propertyWidgets.size()<=column) {
@@ -270,6 +272,7 @@ bool CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
       }
     }
   }
+
   return true;
 }
 
