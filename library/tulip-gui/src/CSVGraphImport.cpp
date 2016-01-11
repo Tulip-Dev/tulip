@@ -616,6 +616,7 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
       }
     }
   }
+
   return true;
 }
 

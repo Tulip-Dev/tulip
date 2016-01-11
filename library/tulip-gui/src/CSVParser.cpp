@@ -48,6 +48,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
   }
 
   bool result = handler->begin();
+
   if (!result)
     return result;
 
@@ -108,8 +109,10 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
         }
 
         result = handler->line(row,tokens);
-	if (!result)
-	  break;
+
+        if (!result)
+          break;
+
         columnMax = max(columnMax, column);
 
         //If user want to stop break the import process.
@@ -122,6 +125,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
 
       ++row;
     }
+
     delete csvFile;
     return result ? handler->end(row, columnMax) : false;
   }
@@ -319,6 +323,7 @@ bool CSVInvertMatrixParser::line(unsigned int ,const std::vector<std::string>& l
 bool CSVInvertMatrixParser::end(unsigned int , unsigned int ) {
   if (!handler->begin())
     return false;
+
   vector<string> tokens(columns.size());
 
   //Fill the line with

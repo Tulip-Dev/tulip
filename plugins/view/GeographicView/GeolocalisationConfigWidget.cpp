@@ -86,6 +86,7 @@ void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latit
   _ui->latLngRB->setChecked(true);
   int latPropIndex = _ui->latPropCB->findText(QString::fromUtf8(latitudePropertyName.c_str()));
   int lngPropIndex = _ui->lngPropCB->findText(QString::fromUtf8(longitudePropertyName.c_str()));
+
   if (latPropIndex != -1 && lngPropIndex != -1) {
     _ui->latPropCB->setCurrentIndex(latPropIndex);
     _ui->lngPropCB->setCurrentIndex(lngPropIndex);
