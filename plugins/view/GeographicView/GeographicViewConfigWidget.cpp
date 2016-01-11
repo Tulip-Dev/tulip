@@ -17,9 +17,9 @@
  *
  */
 
-#include "GoogleMapsViewConfigWidget.h"
-#include "ui_GoogleMapsViewConfigWidget.h"
-#include "GoogleMapsView.h"
+#include "GeographicViewConfigWidget.h"
+#include "ui_GeographicViewConfigWidget.h"
+#include "GeographicView.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -27,39 +27,39 @@
 using namespace std;
 using namespace tlp;
 
-GoogleMapsViewConfigWidget::GoogleMapsViewConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::GoogleMapsViewConfigWidgetData), _oldPolyFileType(None),_oldFileLoaded("") {
+GeographicViewConfigWidget::GeographicViewConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::GeographicViewConfigWidgetData), _oldPolyFileType(None),_oldFileLoaded("") {
   _ui->setupUi(this);
 }
 
-GoogleMapsViewConfigWidget::~GoogleMapsViewConfigWidget() {
+GeographicViewConfigWidget::~GeographicViewConfigWidget() {
   delete _ui;
 }
 
-void GoogleMapsViewConfigWidget::openCsvFileBrowser() {
+void GeographicViewConfigWidget::openCsvFileBrowser() {
   _ui->csvFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open csv file"), "./", tr("cvs file (*.*)")));
 }
 
-void GoogleMapsViewConfigWidget::openPolyFileBrowser() {
+void GeographicViewConfigWidget::openPolyFileBrowser() {
   _ui->polyFile->setText(QFileDialog::getOpenFileName(NULL,tr("Open .poly file"), "./", tr("Poly file (*.poly)")));
 }
 
-void GoogleMapsViewConfigWidget::openCsvHelp() {
+void GeographicViewConfigWidget::openCsvHelp() {
   QMessageBox::about(NULL,"Map csv file format","If you want to import a csv file into this view, your file must be in the format :\nid\tlng\tlat\nid\tlng\tlat\n...\nwith id : id of the polygon");
 }
 
-void GoogleMapsViewConfigWidget::openPolyHelp() {
+void GeographicViewConfigWidget::openPolyHelp() {
   QMessageBox::about(NULL,"Map poly files",".poly files format are an open street map format.\nYou can donwload .poly file on :\nhttp://downloads.cloudmade.com/");
 }
 
-bool GoogleMapsViewConfigWidget::useSharedLayoutProperty() const {
+bool GeographicViewConfigWidget::useSharedLayoutProperty() const {
   return _ui->layoutCheckBox->isChecked();
 }
 
-bool GoogleMapsViewConfigWidget::useSharedSizeProperty() const {
+bool GeographicViewConfigWidget::useSharedSizeProperty() const {
   return _ui->sizeCheckBox->isChecked();
 }
 
-GoogleMapsViewConfigWidget::PolyFileType GoogleMapsViewConfigWidget::polyFileType() const {
+GeographicViewConfigWidget::PolyFileType GeographicViewConfigWidget::polyFileType() const {
   _ui->mapToPolygon->setEnabled(false);
 
   if(_ui->useDefaultShape->isChecked())
@@ -76,7 +76,7 @@ GoogleMapsViewConfigWidget::PolyFileType GoogleMapsViewConfigWidget::polyFileTyp
   return Default;
 }
 
-void GoogleMapsViewConfigWidget::setPolyFileType(PolyFileType &fileType) {
+void GeographicViewConfigWidget::setPolyFileType(PolyFileType &fileType) {
   _ui->mapToPolygon->setEnabled(false);
 
   if(fileType==Default)
@@ -91,19 +91,19 @@ void GoogleMapsViewConfigWidget::setPolyFileType(PolyFileType &fileType) {
   }
 }
 
-QString GoogleMapsViewConfigWidget::getCsvFile() const {
+QString GeographicViewConfigWidget::getCsvFile() const {
   return _ui->csvFile->text();
 }
 
-QString GoogleMapsViewConfigWidget::getPolyFile() const {
+QString GeographicViewConfigWidget::getPolyFile() const {
   return _ui->polyFile->text();
 }
 
-bool GoogleMapsViewConfigWidget::useSharedShapeProperty() const {
+bool GeographicViewConfigWidget::useSharedShapeProperty() const {
   return _ui->layoutCheckBox->isChecked();
 }
 
-bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
+bool GeographicViewConfigWidget::polyOptionsChanged() {
   if(polyFileType()!=_oldPolyFileType) {
     _oldPolyFileType=polyFileType();
 
@@ -157,7 +157,7 @@ bool GoogleMapsViewConfigWidget::polyOptionsChanged() {
   return false;
 }
 
-void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
+void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
   {
     PolyFileType polyFileType;
     int type = 0;
@@ -192,7 +192,7 @@ void GoogleMapsViewConfigWidget::setState(const DataSet &dataSet) {
     _ui->shapeCheckBox->setChecked(useShared);
 }
 
-DataSet GoogleMapsViewConfigWidget::state() const {
+DataSet GeographicViewConfigWidget::state() const {
   DataSet data;
   data.set("polyFileType",(int)polyFileType());
   data.set("csvFileName",std::string(_ui->csvFile->text().toUtf8().data()));

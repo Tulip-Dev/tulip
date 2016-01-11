@@ -22,7 +22,7 @@
 
 #include <tulip/InteractorComposite.h>
 
-#include "GoogleMapsView.h"
+#include "GeographicView.h"
 
 class QTableView;
 
@@ -34,9 +34,9 @@ class GlComplexPolygonItemEditor;
 /**
  * We define a specific interactor to show element graph infos in eltProperties
  */
-class GoogleMapsShowElementInfo : public InteractorComponent {
+class GeographicViewShowElementInfo : public InteractorComponent {
 public:
-  GoogleMapsShowElementInfo();
+  GeographicViewShowElementInfo();
   virtual bool eventFilter(QObject* widget, QEvent* e);
 
   void viewChanged(View *);
@@ -47,7 +47,7 @@ public:
 
 protected:
 
-  GoogleMapsView *_view;
+  GeographicView *_view;
   QWidget *_informationsWidget;
   QGraphicsProxyWidget *_informationsWidgetItem;
   GlComplexPolygonItemEditor *_editor;

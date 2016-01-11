@@ -45,45 +45,45 @@
 
 #include <iostream>
 
-#include "GoogleMapsView.h"
+#include "GeographicView.h"
 
 using namespace std;
 using namespace tlp;
 
-GoogleMapsView::GoogleMapsView(PluginContext *) : googleMapsViewConfigWidget(NULL),geolocalisationConfigWidget(NULL),sceneConfigurationWidget(NULL),
+GeographicView::GeographicView(PluginContext *) : geoViewConfigWidget(NULL),geolocalisationConfigWidget(NULL),sceneConfigurationWidget(NULL),
   sceneLayersConfigurationWidget(NULL),useSharedLayoutProperty(true),useSharedSizeProperty(true),useSharedShapeProperty(true) {
   _viewType=GoogleRoadMap;
 }
 
-GoogleMapsView::~GoogleMapsView() {
+GeographicView::~GeographicView() {
   delete geolocalisationConfigWidget;
-  delete googleMapsViewConfigWidget;
+  delete geoViewConfigWidget;
   delete sceneConfigurationWidget;
   delete sceneLayersConfigurationWidget;
 }
 
-void GoogleMapsView::setupUi() {
-  googleMapsGraphicsView = new GoogleMapsGraphicsView(this, new QGraphicsScene());
+void GeographicView::setupUi() {
+  geoViewGraphicsView = new GeographicViewGraphicsView(this, new QGraphicsScene());
 
-  googleMapsViewConfigWidget = new GoogleMapsViewConfigWidget();
-  connect(googleMapsViewConfigWidget,SIGNAL(mapToPolygonSignal()),this,SLOT(mapToPolygon()));
+  geoViewConfigWidget = new GeographicViewConfigWidget();
+  connect(geoViewConfigWidget,SIGNAL(mapToPolygonSignal()),this,SLOT(mapToPolygon()));
 
   geolocalisationConfigWidget = new GeolocalisationConfigWidget();
   connect(geolocalisationConfigWidget, SIGNAL(computeGeoLayout()), this, SLOT(computeGeoLayout()));
 
   sceneConfigurationWidget=new SceneConfigWidget();
-  sceneConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
+  sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
 
   sceneLayersConfigurationWidget=new SceneLayersConfigWidget();
-  sceneLayersConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
+  sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
 
   centerViewAction = new QAction("Center view", this);
   connect(centerViewAction,SIGNAL(triggered()),this,SLOT(centerView()));
 
 }
 
-void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
-  QComboBox *comboBox=googleMapsGraphicsView->getViewTypeComboBox();
+void GeographicView::viewTypeChanged(QString viewTypeName) {
+  QComboBox *comboBox=geoViewGraphicsView->getViewTypeComboBox();
 
   if (comboBox == NULL)
     return;
@@ -109,7 +109,7 @@ void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
     _viewType=Globe;
   }
 
-  googleMapsGraphicsView->switchViewType();
+  geoViewGraphicsView->switchViewType();
 
   comboBox->removeItem(0);
   comboBox->insertItem(0,viewTypeName);
@@ -118,7 +118,7 @@ void GoogleMapsView::viewTypeChanged(QString viewTypeName) {
   connect(comboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(viewTypeChanged(QString)));
 }
 
-void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &) {
+void GeographicView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(centerViewAction);
   QAction* action = new QAction("Zoom +", this);
   connect(action,SIGNAL(triggered()), this, SLOT(zoomIn()));
@@ -131,16 +131,16 @@ void GoogleMapsView::fillContextMenu(QMenu *menu, const QPointF &) {
   menu->addAction(action);
 }
 
-void GoogleMapsView::setState(const DataSet &dataSet) {
+void GeographicView::setState(const DataSet &dataSet) {
   geolocalisationConfigWidget->setGraph(graph());
-  googleMapsGraphicsView->setGraph(graph());
+  geoViewGraphicsView->setGraph(graph());
 
   updatePoly(true);
 
   if(dataSet.exist("configurationWidget")) {
     DataSet conf;
     dataSet.get("configurationWidget",conf);
-    googleMapsViewConfigWidget->setState(conf);
+    geoViewConfigWidget->setState(conf);
     updatePoly();
     updateSharedProperties();
   }
@@ -171,11 +171,11 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
   if(dataSet.exist("cameras")) {
     string cameras;
     dataSet.get("cameras",cameras);
-    googleMapsGraphicsView->getGlMainWidget()->getScene()->setWithXML(cameras,graph());
+    geoViewGraphicsView->getGlMainWidget()->getScene()->setWithXML(cameras,graph());
   }
 
-  sceneLayersConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
-  sceneConfigurationWidget->setGlMainWidget(googleMapsGraphicsView->getGlMainWidget());
+  sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
+  sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
 
   registerTriggers();
 
@@ -192,14 +192,14 @@ void GoogleMapsView::setState(const DataSet &dataSet) {
 
 }
 
-DataSet GoogleMapsView::state() const {
+DataSet GeographicView::state() const {
   DataSet dataSet;
-  DataSet configurationWidget=googleMapsViewConfigWidget->state();
+  DataSet configurationWidget=geoViewConfigWidget->state();
   dataSet.set("configurationWidget",configurationWidget);
   dataSet.set("viewType",(int)_viewType);
   saveStoredPolyInformations(dataSet);
   string cameras;
-  googleMapsGraphicsView->getGlMainWidget()->getScene()->getXMLOnlyForCameras(cameras);
+  geoViewGraphicsView->getGlMainWidget()->getScene()->getXMLOnlyForCameras(cameras);
   dataSet.set("cameras",cameras);
   std::string latitudePropName = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
   std::string longitudePropName = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
@@ -213,17 +213,17 @@ DataSet GoogleMapsView::state() const {
   return dataSet;
 }
 
-void GoogleMapsView::draw() {
-  googleMapsGraphicsView->draw();
+void GeographicView::draw() {
+  geoViewGraphicsView->draw();
 }
 
-void GoogleMapsView::refresh() {
-  googleMapsGraphicsView->draw();
+void GeographicView::refresh() {
+  geoViewGraphicsView->draw();
 }
 
-void GoogleMapsView::computeGeoLayout() {
+void GeographicView::computeGeoLayout() {
   if (geolocalisationConfigWidget->geolocateByAddress()) {
-    googleMapsGraphicsView->createLayoutWithAddresses(geolocalisationConfigWidget->getAddressGraphPropertyName(), geolocalisationConfigWidget->createLatAndLngProperties());
+    geoViewGraphicsView->createLayoutWithAddresses(geolocalisationConfigWidget->getAddressGraphPropertyName(), geolocalisationConfigWidget->createLatAndLngProperties());
 
     if (geolocalisationConfigWidget->createLatAndLngProperties()) {
       geolocalisationConfigWidget->setGraph(graph());
@@ -235,103 +235,103 @@ void GoogleMapsView::computeGeoLayout() {
     string lngProp = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
 
     if (latProp != lngProp) {
-      googleMapsGraphicsView->createLayoutWithLatLngs(latProp, lngProp);
+      geoViewGraphicsView->createLayoutWithLatLngs(latProp, lngProp);
     }
   }
 
-  googleMapsGraphicsView->centerView();
+  geoViewGraphicsView->centerView();
   // check for shared properties
   // before computing view layout
   updateSharedProperties();
-  googleMapsGraphicsView->setGeoLayoutComputed();
+  geoViewGraphicsView->setGeoLayoutComputed();
   // compute view layout
-  googleMapsGraphicsView->switchViewType();
+  geoViewGraphicsView->switchViewType();
 }
 
-void GoogleMapsView::centerView() {
-  googleMapsGraphicsView->centerView();
+void GeographicView::centerView() {
+  geoViewGraphicsView->centerView();
 }
 
-void GoogleMapsView::zoomIn() {
-  googleMapsGraphicsView->zoomIn();
+void GeographicView::zoomIn() {
+  geoViewGraphicsView->zoomIn();
 }
 
-void GoogleMapsView::zoomOut() {
-  googleMapsGraphicsView->zoomOut();
+void GeographicView::zoomOut() {
+  geoViewGraphicsView->zoomOut();
 }
 
-void GoogleMapsView::currentZoomChanged() {
-  googleMapsGraphicsView->currentZoomChanged();
+void GeographicView::currentZoomChanged() {
+  geoViewGraphicsView->currentZoomChanged();
 }
 
-QList<QWidget*> GoogleMapsView::configurationWidgets() const {
-  return QList<QWidget*>() << geolocalisationConfigWidget << googleMapsViewConfigWidget << sceneConfigurationWidget << sceneLayersConfigurationWidget;
+QList<QWidget*> GeographicView::configurationWidgets() const {
+  return QList<QWidget*>() << geolocalisationConfigWidget << geoViewConfigWidget << sceneConfigurationWidget << sceneLayersConfigurationWidget;
 }
 
-void GoogleMapsView::applySettings() {
+void GeographicView::applySettings() {
   updateSharedProperties();
   updatePoly();
 }
 
-void GoogleMapsView::updateSharedProperties() {
-  GlGraphInputData *inputData=googleMapsGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
+void GeographicView::updateSharedProperties() {
+  GlGraphInputData *inputData=geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
 
-  if(useSharedLayoutProperty!=googleMapsViewConfigWidget->useSharedLayoutProperty()) {
-    useSharedLayoutProperty=googleMapsViewConfigWidget->useSharedLayoutProperty();
+  if(useSharedLayoutProperty!=geoViewConfigWidget->useSharedLayoutProperty()) {
+    useSharedLayoutProperty=geoViewConfigWidget->useSharedLayoutProperty();
 
     if(useSharedLayoutProperty)
-      googleMapsGraphicsView->setGeoLayout(graph()->getProperty<LayoutProperty>("viewLayout"));
+      geoViewGraphicsView->setGeoLayout(graph()->getProperty<LayoutProperty>("viewLayout"));
     else
-      googleMapsGraphicsView->setGeoLayout(new LayoutProperty(graph()));
+      geoViewGraphicsView->setGeoLayout(new LayoutProperty(graph()));
   }
 
-  if(useSharedShapeProperty!=googleMapsViewConfigWidget->useSharedShapeProperty()) {
-    useSharedShapeProperty=googleMapsViewConfigWidget->useSharedShapeProperty();
+  if(useSharedShapeProperty!=geoViewConfigWidget->useSharedShapeProperty()) {
+    useSharedShapeProperty=geoViewConfigWidget->useSharedShapeProperty();
 
     if(useSharedShapeProperty)
-      googleMapsGraphicsView->setGeoShape(graph()->getProperty<IntegerProperty>("viewShape"));
+      geoViewGraphicsView->setGeoShape(graph()->getProperty<IntegerProperty>("viewShape"));
     else
-      googleMapsGraphicsView->setGeoShape(new IntegerProperty(graph()));
+      geoViewGraphicsView->setGeoShape(new IntegerProperty(graph()));
   }
 
-  if(useSharedSizeProperty!=googleMapsViewConfigWidget->useSharedSizeProperty()) {
-    useSharedSizeProperty=googleMapsViewConfigWidget->useSharedSizeProperty();
+  if(useSharedSizeProperty!=geoViewConfigWidget->useSharedSizeProperty()) {
+    useSharedSizeProperty=geoViewConfigWidget->useSharedSizeProperty();
 
     if(useSharedSizeProperty)
-      googleMapsGraphicsView->setGeoSizes(graph()->getProperty<SizeProperty>("viewSize"));
+      geoViewGraphicsView->setGeoSizes(graph()->getProperty<SizeProperty>("viewSize"));
     else
-      googleMapsGraphicsView->setGeoSizes(new SizeProperty(graph()));
+      geoViewGraphicsView->setGeoSizes(new SizeProperty(graph()));
   }
 
   inputData->getGlVertexArrayManager()->setHaveToComputeAll(true);
 }
 
-void GoogleMapsView::updatePoly(bool force) {
-  if(googleMapsViewConfigWidget->polyOptionsChanged() || force) {
-    switch(googleMapsViewConfigWidget->polyFileType()) {
-    case GoogleMapsViewConfigWidget::CsvFile: {
-      googleMapsGraphicsView->loadCsvFile(googleMapsViewConfigWidget->getCsvFile());
+void GeographicView::updatePoly(bool force) {
+  if(geoViewConfigWidget->polyOptionsChanged() || force) {
+    switch(geoViewConfigWidget->polyFileType()) {
+    case GeographicViewConfigWidget::CsvFile: {
+      geoViewGraphicsView->loadCsvFile(geoViewConfigWidget->getCsvFile());
       break;
     }
 
-    case GoogleMapsViewConfigWidget::PolyFile: {
-      googleMapsGraphicsView->loadPolyFile(googleMapsViewConfigWidget->getPolyFile());
+    case GeographicViewConfigWidget::PolyFile: {
+      geoViewGraphicsView->loadPolyFile(geoViewConfigWidget->getPolyFile());
       break;
     }
 
     default : {
-      googleMapsGraphicsView->loadDefaultMap();
+      geoViewGraphicsView->loadDefaultMap();
       break;
     }
     }
   }
 }
 
-void GoogleMapsView::loadStoredPolyInformations(const DataSet &dataset) {
+void GeographicView::loadStoredPolyInformations(const DataSet &dataset) {
   if(dataset.exist("polygons")) {
     DataSet polyConf;
     dataset.get("polygons",polyConf);
-    GlComposite *composite=googleMapsGraphicsView->getPolygon();
+    GlComposite *composite=geoViewGraphicsView->getPolygon();
     const map<string, GlSimpleEntity*> &entities=composite->getGlEntities();
 
     for(map<string,GlSimpleEntity*>::const_iterator it=entities.begin(); it!=entities.end(); ++it) {
@@ -349,8 +349,8 @@ void GoogleMapsView::loadStoredPolyInformations(const DataSet &dataset) {
   }
 }
 
-void GoogleMapsView::saveStoredPolyInformations(DataSet &dataset) const {
-  GlComposite *composite=googleMapsGraphicsView->getPolygon();
+void GeographicView::saveStoredPolyInformations(DataSet &dataset) const {
+  GlComposite *composite=geoViewGraphicsView->getPolygon();
   DataSet polyConf;
   const map<string, GlSimpleEntity*> &entities=composite->getGlEntities();
 
@@ -364,30 +364,40 @@ void GoogleMapsView::saveStoredPolyInformations(DataSet &dataset) const {
   dataset.set("polygons",polyConf);
 }
 
-QGraphicsItem *GoogleMapsView::centralItem() const {
-  return googleMapsGraphicsView->getPlaceHolderItem();
+GeographicViewGraphicsView *GeographicView::getGoogleMapsGraphicsView() const
+{
+  return geoViewGraphicsView;
 }
 
-void GoogleMapsView::registerTriggers() {
+void GeographicView::setGoogleMapsGraphicsView(GeographicViewGraphicsView *value)
+{
+  geoViewGraphicsView = value;
+}
+
+QGraphicsItem *GeographicView::centralItem() const {
+  return geoViewGraphicsView->getPlaceHolderItem();
+}
+
+void GeographicView::registerTriggers() {
   clearRedrawTriggers();
 
   if (graph() == NULL)
     return;
 
-  addRedrawTrigger(googleMapsGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
-  std::set<tlp::PropertyInterface*> properties = googleMapsGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
+  addRedrawTrigger(geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
+  std::set<tlp::PropertyInterface*> properties = geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
 
   for(std::set<tlp::PropertyInterface*>::iterator it = properties.begin(); it != properties.end(); ++it) {
     addRedrawTrigger(*it);
   }
 }
 
-QPixmap GoogleMapsView::snapshot(const QSize &size) const {
+QPixmap GeographicView::snapshot(const QSize &size) const {
 
   // hide the graphics widget used to configure the view
   // before taking a snapshot
   QList<QGraphicsProxyWidget*> gWidgetsToRestore;
-  QList<QGraphicsItem*> sceneItems = googleMapsGraphicsView->scene()->items();
+  QList<QGraphicsItem*> sceneItems = geoViewGraphicsView->scene()->items();
 
   for (int i = 0 ; i < sceneItems.size() ; ++i) {
     QGraphicsProxyWidget *gWidget = dynamic_cast<QGraphicsProxyWidget*>(sceneItems.at(i));
@@ -402,8 +412,8 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
   fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
   fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
 
-  int width = googleMapsGraphicsView->width();
-  int height = googleMapsGraphicsView->height();
+  int width = geoViewGraphicsView->width();
+  int height = geoViewGraphicsView->height();
 
   QGLFramebufferObject renderFbo(width, height, fboFormat);
   QGLFramebufferObject renderFbo2(width, height);
@@ -411,7 +421,7 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
   QPainter fboPainter(&renderFbo);
   fboPainter.setRenderHint(QPainter::Antialiasing);
   fboPainter.setRenderHint(QPainter::HighQualityAntialiasing);
-  googleMapsGraphicsView->scene()->render(&fboPainter);
+  geoViewGraphicsView->scene()->render(&fboPainter);
   fboPainter.end();
 
   QGLFramebufferObject::blitFramebuffer(&renderFbo2, QRect(0,0,width, height), &renderFbo, QRect(0,0,width, height));
@@ -428,10 +438,10 @@ QPixmap GoogleMapsView::snapshot(const QSize &size) const {
 
 }
 
-void GoogleMapsView::openSnapshotDialog() {
+void GeographicView::openSnapshotDialog() {
   SnapshotDialog dlg(this);
   dlg.setSnapshotHasViewSizeRatio(true);
   dlg.exec();
 }
 
-PLUGIN(GoogleMapsView)
+PLUGIN(GeographicView)

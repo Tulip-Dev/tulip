@@ -1,36 +1,36 @@
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR} ${GLEW_INCLUDE_DIR})
 
 SET(LIB_SRCS
-    GoogleMapsView.cpp
-    GoogleMapsViewConfigWidget.cpp
+    GeographicView.cpp
+    GeographicViewConfigWidget.cpp
     GeolocalisationConfigWidget.cpp
     ProgressWidgetGraphicsProxy.cpp
-    GoogleMapsViewInteractors.cpp
+    GeographicViewInteractors.cpp
     AddressSelectionDialog.cpp
     GoogleMaps.cpp
-    GoogleMapsGraphicsView.cpp
-    GoogleMapsShowElementInfo.cpp
+    GeographicViewGraphicsView.cpp
+    GeographicViewShowElementInfo.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
     GeolocalisationConfigWidget.ui
-    GoogleMapsViewConfigWidget.ui
+    GeographicViewConfigWidget.ui
     ProgressWidget.ui
     AddressSelectionDialog.ui
     ElementInformationsWidget.ui
 )
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
-    GoogleMapsView.h
-    GoogleMapsGraphicsView.h
+    GeographicView.h
+    GeographicViewGraphicsView.h
     ProgressWidgetGraphicsProxy.h
-    GoogleMapsViewConfigWidget.h
+    GeographicViewConfigWidget.h
     GeolocalisationConfigWidget.h
     GoogleMaps.h
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS
-    GoogleMapViewResource.qrc
+    GeographicViewResource.qrc
 )
 
 ADD_LIBRARY(GeographicView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})

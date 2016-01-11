@@ -33,16 +33,16 @@
 
 namespace tlp {
 
-class GoogleMapsView;
+class GeographicView;
 
-class GoogleMapsGraphicsView : public QGraphicsView, public Observable {
+class GeographicViewGraphicsView : public QGraphicsView, public Observable {
 
   Q_OBJECT
 
 public :
 
-  GoogleMapsGraphicsView(GoogleMapsView *_googleMapsView, QGraphicsScene *graphicsScene, QWidget *parent = 0);
-  ~GoogleMapsGraphicsView();
+  GeographicViewGraphicsView(GeographicView *_geoView, QGraphicsScene *graphicsScene, QWidget *parent = 0);
+  ~GeographicViewGraphicsView();
 
   void setGraph(Graph *graph);
   void createLayoutWithAddresses(const std::string& addressPropertyName, bool createLatAndLngProps);
@@ -151,7 +151,7 @@ protected :
 
 private :
 
-  GoogleMapsView *_googleMapsView;
+  GeographicView *_geoView;
   QGLWidget *glWidget;
   Graph *graph;
   GoogleMaps *googleMaps;

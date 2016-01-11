@@ -22,7 +22,7 @@
 
 namespace ViewName {
 
-const static char GoogleMapsViewName[]="Geographic view";
+const static char GeographicViewName[]="Geographic view";
 const static char HistogramViewName[]="Histogram view";
 const static char MatrixViewName[]="Adjacency Matrix view";
 const static char ParallelCoordinatesViewName[]="Parallel Coordinates view";

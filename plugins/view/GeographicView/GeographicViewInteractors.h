@@ -22,26 +22,26 @@
 
 #include <tulip/GLInteractor.h>
 #include <tulip/MouseInteractors.h>
-#include "GoogleMapsView.h"
+#include "GeographicView.h"
 
 using namespace tlp;
 
-class GoogleMapViewInteractor : public GLInteractorComposite {
+class GeographicViewInteractor : public GLInteractorComposite {
 
 public :
 
-  GoogleMapViewInteractor(const QString &iconPath, const QString &text);
+  GeographicViewInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
 
 };
 
-class GoogleMapViewNavigator : public MouseNKeysNavigator {
+class GeographicViewNavigator : public MouseNKeysNavigator {
 
 public :
 
-  GoogleMapViewNavigator();
-  ~GoogleMapViewNavigator();
+  GeographicViewNavigator();
+  ~GeographicViewNavigator();
 
   bool eventFilter(QObject *, QEvent *);
   bool draw(GlMainWidget *) {
@@ -60,13 +60,13 @@ protected :
 
 };
 
-class GoogleMapViewInteractorNavigation : public GoogleMapViewInteractor {
+class GeographicViewInteractorNavigation : public GeographicViewInteractor {
 
 public :
 
   PLUGININFORMATION("InteractorNavigationGMV", "Tulip Team", "01/04/2009", " GMV Navigation Interactor", "1.0","Navigation")
 
-  GoogleMapViewInteractorNavigation(const PluginContext *);
+  GeographicViewInteractorNavigation(const PluginContext *);
 
   void construct();
 

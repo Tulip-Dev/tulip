@@ -63,7 +63,7 @@ public:
 
   bool isCompatible(const std::string &viewName) const {
     return ((viewName==NodeLinkDiagramComponent::viewName)
-            ||(viewName==ViewName::GoogleMapsViewName)
+            ||(viewName==ViewName::GeographicViewName)
             ||(viewName==ViewName::HistogramViewName)
             ||(viewName==ViewName::MatrixViewName)
             ||(viewName==ViewName::PixelOrientedViewName)
