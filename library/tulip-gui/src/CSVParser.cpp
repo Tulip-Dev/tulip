@@ -47,7 +47,10 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     return false;
   }
 
-  handler->begin();
+  bool result = handler->begin();
+  if (!result)
+    return result;
+
   istream *csvFile = tlp::getInputFileStream(_fileName.c_str(),ifstream::in|ifstream::binary);
 
   if (*csvFile) {
@@ -104,7 +107,9 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
           tokens[column]= treatToken(tokens[column], row, column);
         }
 
-        handler->line(row,tokens);
+        result = handler->line(row,tokens);
+	if (!result)
+	  break;
         columnMax = max(columnMax, column);
 
         //If user want to stop break the import process.
@@ -117,10 +122,8 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
 
       ++row;
     }
-
-    handler->end(row, columnMax);
     delete csvFile;
-    return true;
+    return result ? handler->end(row, columnMax) : false;
   }
   else {
     delete csvFile;
@@ -302,28 +305,32 @@ bool CSVInvertMatrixParser::parse(CSVContentHandler *handler, PluginProgress *pr
   return parser->parse(this,progress);
 }
 
-void CSVInvertMatrixParser::begin() {
+bool CSVInvertMatrixParser::begin() {
   maxLineSize = 0;
+  return true;
 }
 
-void CSVInvertMatrixParser::line(unsigned int ,const std::vector<std::string>& lineTokens) {
+bool CSVInvertMatrixParser::line(unsigned int ,const std::vector<std::string>& lineTokens) {
   maxLineSize = max(maxLineSize,static_cast<unsigned int>(lineTokens.size()));
   columns.push_back(lineTokens);
+  return true;
 }
 
-void CSVInvertMatrixParser::end(unsigned int , unsigned int ) {
-  handler->begin();
+bool CSVInvertMatrixParser::end(unsigned int , unsigned int ) {
+  if (!handler->begin())
+    return false;
   vector<string> tokens(columns.size());
 
-  //Fill the line wiht
+  //Fill the line with
   for(unsigned int line = 0 ; line < maxLineSize ; ++line) {
     for(unsigned int i = 0 ; i < columns.size() ; ++i ) {
       //Check if the column is large enough
       tokens[i]=columns[i].size() > line ? columns[i][line] : string();
     }
 
-    handler->line(line,tokens);
+    if (!handler->line(line,tokens))
+      return false;
   }
 
-  handler->end(maxLineSize,columns.size());
+  return handler->end(maxLineSize,columns.size());
 }

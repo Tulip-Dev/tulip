@@ -122,9 +122,9 @@ private:
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:
   CSVTableWidget(QWidget* parent=NULL);
-  void begin();
-  void line(unsigned int row,const std::vector<std::string>& lineTokens);
-  void end(unsigned int rowNumber, unsigned int columnNumber);
+  bool begin();
+  bool line(unsigned int row,const std::vector<std::string>& lineTokens);
+  bool end(unsigned int rowNumber, unsigned int columnNumber);
   /**
     * @brief Limit the line number of the preview. Need to parse the file again to take this limit in account.
     **/
@@ -163,9 +163,9 @@ class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public CSVCont
 public:
   CSVImportConfigurationWidget(QWidget *parent = NULL);
   ~CSVImportConfigurationWidget();
-  void begin();
-  void line(unsigned int row,const std::vector<std::string>& lineTokens);
-  void end(unsigned int rowNumber, unsigned int columnNumber);
+  bool begin();
+  bool line(unsigned int row,const std::vector<std::string>& lineTokens);
+  bool end(unsigned int rowNumber, unsigned int columnNumber);
 
   /**
     * @brief Update the widget contents with the new file parser.
@@ -290,6 +290,7 @@ private:
   Ui::CSVImportConifgurationWidget *ui;
   PropertyNameValidator* validator;
   unsigned int maxLineNumber;
+  unsigned int headerColumnCount;
   tlp::CSVParser* parser;
 };
 

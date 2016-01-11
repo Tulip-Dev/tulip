@@ -37,21 +37,21 @@ public:
   /**
    * Function called at the beginning of the file parsing.
    */
-  virtual void begin() = 0;
+  virtual bool begin() = 0;
 
   /**
    * Function called for each line in the file.
    * @param row The number of the row.
    * @param lineTokens The tokens.
    */
-  virtual void line(unsigned int row,const std::vector<std::string>& lineTokens) = 0;
+  virtual bool line(unsigned int row,const std::vector<std::string>& lineTokens) = 0;
 
   /**
    * Function called at the end of the parsing.
    * @param rowNumber the number of row read in the file.
    * @param columnNumber The column number for the line with the greatest column number.
    */
-  virtual void end(unsigned int rowNumber, unsigned int columnNumber) = 0;
+  virtual bool end(unsigned int rowNumber, unsigned int columnNumber) = 0;
 };
 }
 #endif /* CSVCONTENTHANDLER_H_ */

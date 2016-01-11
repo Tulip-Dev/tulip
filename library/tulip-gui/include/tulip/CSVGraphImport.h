@@ -306,9 +306,9 @@ class TLP_QT_SCOPE CSVGraphImport : public tlp::CSVContentHandler {
 public:
   CSVGraphImport(CSVToGraphDataMapping* mapping,CSVImportColumnToGraphPropertyMapping* propertiesManager,const CSVImportParameters& importParameters);
   virtual ~CSVGraphImport();
-  void begin();
-  void line(unsigned int row,const std::vector<std::string>& lineTokens);
-  void end(unsigned int rowNumber, unsigned int columnNumber);
+  bool begin();
+  bool line(unsigned int row,const std::vector<std::string>& lineTokens);
+  bool end(unsigned int rowNumber, unsigned int columnNumber);
 protected:
 
   CSVToGraphDataMapping* mapping;

@@ -132,24 +132,25 @@ CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumb
 
 }
 
-void CSVTableWidget::begin() {
+bool CSVTableWidget::begin() {
   clear();
   setColumnCount(0);
   setRowCount(0);
   //Force the table view to redraw
   QApplication::processEvents();
+  return true;
 }
 
-void CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens) {
+bool CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens) {
 
   //Wait for the first line index
   if(row < firstLineIndex) {
-    return;
+    return true;
   }
 
   //If the maximum line number is reach ignore the token.
   if(static_cast<unsigned>(rowCount()) >= maxLineNumber) {
-    return;
+    return true;
   }
 
   //Add a new row in the table
@@ -165,11 +166,12 @@ void CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens) {
     //Fill the table
     setItem(currentRow,column,new QTableWidgetItem(tlpStringToQString(lineTokens[column])));
   }
+  return true;
 }
 
 
-void CSVTableWidget::end(unsigned int, unsigned int) {
-
+bool CSVTableWidget::end(unsigned int, unsigned int) {
+  return true;
 }
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
@@ -220,21 +222,33 @@ void CSVImportConfigurationWidget::updateWidget() {
   }
 }
 
-void CSVImportConfigurationWidget::begin() {
+bool CSVImportConfigurationWidget::begin() {
   ui->previewTableWidget->begin();
   ui->previewTableWidget->setFirstLineIndex(getFirstLineIndex());
   clearPropertiesTypeList();
   //Clear initialized columns
   columnHeaderType.clear();
   columnType.clear();
+  return true;
 }
 
-void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& lineTokens) {
+bool CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& lineTokens) {
 
   ui->previewTableWidget->line(row,lineTokens);
 
   //Wait for the first row
   if(row >= getFirstLineIndex()) {
+    if(useFirstLineAsPropertyName()) {
+      if (row == getFirstLineIndex())
+	headerColumnCount = columnCount();
+      else if (lineTokens.size() > headerColumnCount) {
+	if (QMessageBox::warning(this, "Invalid number of row fields",
+				 QString("row %1: the number of fields (%2) is greater than the number of columns (%3)").arg(row  + 1).arg(columnCount()).arg(headerColumnCount),
+				 QMessageBox::Ok | QMessageBox::Cancel,
+				 QMessageBox::Ok) == QMessageBox::Cancel)
+	  return false;
+      }
+    }
     for(size_t column = 0 ; column < lineTokens.size() ; ++column) {
       //A new column was created set its label and it's configuration widget.
       if(propertyWidgets.size()<=column) {
@@ -256,9 +270,10 @@ void CSVImportConfigurationWidget::line(unsigned int row,const vector<string>& l
       }
     }
   }
+  return true;
 }
 
-void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
+bool CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
   maxLineNumber = rowNumber;
 
   /*bool firstLineIsHeader = false;
@@ -279,6 +294,7 @@ void CSVImportConfigurationWidget::end(unsigned int rowNumber, unsigned int) {
   ui->previewLineNumberSpinBox->blockSignals(true);
   ui->previewLineNumberSpinBox->setMaximum(rowNumber);
   ui->previewLineNumberSpinBox->blockSignals(false);
+  return true;
 }
 
 void CSVImportConfigurationWidget::filterPreviewLineNumber(bool checked) {
