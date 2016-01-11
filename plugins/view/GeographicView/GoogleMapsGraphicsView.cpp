@@ -1289,19 +1289,6 @@ void GoogleMapsGraphicsView::switchViewType() {
 
         geoLayout->setEdgeValue(e, bends);
       }
-
-      if (!edgeBendsLatLng.empty()) {
-        edge e;
-        forEach(e, graph->getEdges()) {
-          vector<Coord> edgeBendsCoords;
-
-          for (unsigned int i = 0 ; i < edgeBendsLatLng[e].size() ; ++i) {
-            edgeBendsCoords.push_back(Coord(edgeBendsLatLng[e][i].second*2., latitudeToMercator(edgeBendsLatLng[e][i].first*2.),0));
-          }
-
-          geoLayout->setEdgeValue(e, edgeBendsCoords);
-        }
-      }
     }
 
     if(firstGlobeSwitch) {
