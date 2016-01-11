@@ -64,7 +64,7 @@ class GeographicViewInteractorNavigation : public GeographicViewInteractor {
 
 public :
 
-  PLUGININFORMATION("InteractorNavigationGMV", "Tulip Team", "01/04/2009", " GMV Navigation Interactor", "1.0","Navigation")
+  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009", " Geographic View Navigation Interactor", "1.0","Navigation")
 
   GeographicViewInteractorNavigation(const PluginContext *);
 

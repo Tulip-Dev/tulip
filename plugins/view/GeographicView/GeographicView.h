@@ -118,7 +118,7 @@ public :
     centerView();
   }
 
-  GeographicViewGraphicsView *getGoogleMapsGraphicsView() const;
+  GeographicViewGraphicsView *getGeographicViewGraphicsView() const;
   void setGoogleMapsGraphicsView(GeographicViewGraphicsView *value);
 
 public slots :
