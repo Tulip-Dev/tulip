@@ -67,7 +67,7 @@ CSVParser * CSVParserConfigurationWidget::buildParser(unsigned int firstLine, un
   CSVParser *parser = NULL;
 
   if(isValid()) {
-    parser = new CSVSimpleParser(getFile(),getSeparator(),getMergeSeparator(),getTextSeparator(),getEncoding(),firstLine,lastLine);
+    parser = new CSVSimpleParser(getFile(),getSeparator(),getMergeSeparator(),getTextSeparator(),getDecimalMark(),getEncoding(),firstLine,lastLine);
 
     if(invertMatrix()) {
       parser = new CSVInvertMatrixParser(parser);
@@ -191,7 +191,9 @@ string CSVParserConfigurationWidget::getEncoding()const {
 char CSVParserConfigurationWidget::getTextSeparator() const {
   return ui->textDelimiterComboBox->currentText().at(0).toLatin1();
 }
-
+char CSVParserConfigurationWidget::getDecimalMark() const {
+  return ui->decimalMarkComboBox->currentText().at(0).toLatin1();
+}
 bool CSVParserConfigurationWidget::getMergeSeparator() const {
   return ui->mergesep->isChecked();
 }

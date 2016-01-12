@@ -30,7 +30,7 @@
     <string>Source file settings</string>
    </property>
    <property name="subTitle">
-    <string>Specify parsing options: source file location, separator, file encoding.</string>
+    <string>Specify parsing options: source file location, delimiters, file encoding.</string>
    </property>
   </widget>
   <widget class="tlp::CSVImportConfigurationQWizardPage" name="importConfigurationWizardPage">
