@@ -12,10 +12,13 @@ IF(NOT MSVC)
       SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/binutils ${CMAKE_INCLUDE_PATH})
       # ensure correct binutils libraries are selected with MSYS2
       SET(CMAKE_LIBRARY_PATH ${MINGW_LIB_PATH}/binutils ${CMAKE_LIBRARY_PATH})
+      # ensure correct iberty header file is selected with MSYS2
+      SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
 
     ENDIF(MINGW)
 
     FIND_PACKAGE(Bfd)
+    FIND_PACKAGE(Iberty)
 
     IF(BFD_FOUND)
 
@@ -53,16 +56,17 @@ IF(BFD_FOUND)
 
 ENDIF(BFD_FOUND)
 
+IF(IBERTY_FOUND)
+
+  TARGET_LINK_LIBRARIES(crash_handling ${IBERTY_LIBRARY})
+
+ENDIF(IBERTY_FOUND)
+
 IF(MINGW)
 
   TARGET_LINK_LIBRARIES(crash_handling imagehlp)
 
   IF(BFD_FOUND)
-
-    # ensure correct iberty header file is selected with MSYS2
-    SET(CMAKE_INCLUDE_PATH ${MINGW_INCLUDE_PATH}/libiberty ${CMAKE_INCLUDE_PATH})
-    FIND_PACKAGE(Iberty REQUIRED)
-    TARGET_LINK_LIBRARIES(crash_handling ${IBERTY_LIBRARY})
 
     # MinGW build environments may differ about the need to link against the intl library
     IF(INTL_LIBRARY)
