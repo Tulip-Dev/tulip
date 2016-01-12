@@ -605,17 +605,21 @@ string CSVImportConfigurationWidget::guessDataType(const string& data) const {
   }
 
   char* prevLocale = setlocale(LC_NUMERIC, NULL);
+
   if (parser->decimalMark() == ',')
     setlocale(LC_NUMERIC, "fr_FR");
+
   char* endptr;
   char *ptr = (char *) data.c_str();
+
   while(isspace(*ptr))
     ++ptr;
+
   strtod(ptr, &endptr);
   bool isDouble =
     ((size_t)(endptr - ptr) == data.size() ||
      isspace(*endptr));
-  
+
   setlocale(LC_NUMERIC, prevLocale);
 
   //The type is double

@@ -43,7 +43,7 @@ class PluginProgress;
 class TLP_QT_SCOPE CSVParser {
 public:
   virtual ~CSVParser() {}
-  
+
   char decimalMark() const {
     return '.';
   }
