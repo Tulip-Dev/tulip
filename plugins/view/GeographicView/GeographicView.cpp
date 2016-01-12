@@ -364,13 +364,11 @@ void GeographicView::saveStoredPolyInformations(DataSet &dataset) const {
   dataset.set("polygons",polyConf);
 }
 
-GeographicViewGraphicsView *GeographicView::getGeographicViewGraphicsView() const
-{
+GeographicViewGraphicsView *GeographicView::getGeographicViewGraphicsView() const {
   return geoViewGraphicsView;
 }
 
-void GeographicView::setGoogleMapsGraphicsView(GeographicViewGraphicsView *value)
-{
+void GeographicView::setGoogleMapsGraphicsView(GeographicViewGraphicsView *value) {
   geoViewGraphicsView = value;
 }
 

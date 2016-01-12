@@ -83,6 +83,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
 
     // change locale if needed
     char* prevLocale = setlocale(LC_NUMERIC, NULL);
+
     if (decimalMark() == ',')
       setlocale(LC_NUMERIC, "fr_FR");
 
@@ -134,7 +135,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     delete csvFile;
     // reset locale
     setlocale(LC_NUMERIC, prevLocale);
-    
+
     return result ? handler->end(row, columnMax) : false;
   }
   else {
