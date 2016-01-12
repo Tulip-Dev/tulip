@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>397</width>
-    <height>146</height>
+    <height>170</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -80,7 +80,7 @@
           <bool>true</bool>
          </property>
          <attribute name="buttonGroup">
-          <string>buttonGroup</string>
+          <string notr="true">buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -90,7 +90,7 @@
           <string>Local property</string>
          </property>
          <attribute name="buttonGroup">
-          <string>buttonGroup</string>
+          <string notr="true">buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -100,7 +100,7 @@
           <string>Inherited property</string>
          </property>
          <attribute name="buttonGroup">
-          <string>buttonGroup</string>
+          <string notr="true">buttonGroup</string>
          </attribute>
         </widget>
        </item>
@@ -163,7 +163,7 @@
            </sizepolicy>
           </property>
           <property name="text">
-           <string/>
+           <string>cannot create a property with an empty name</string>
           </property>
          </widget>
         </item>
