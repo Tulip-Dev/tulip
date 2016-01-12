@@ -31,18 +31,19 @@ extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj)
 %ModuleCode
 #include <string>
 void printErrorMessage(const std::string &errMsg) {
-    std::string pythonCode = "import sys\n"
-                             "sys.stderr.write(\"";
-    pythonCode += errMsg;
-    pythonCode += "\\n\")";
-    PyRun_SimpleString(pythonCode.c_str());
+  std::string pythonCode = 
+  "import sys\n"
+  "sys.stderr.write(\"";
+  pythonCode += errMsg;
+  pythonCode += "\\n\")";
+  PyRun_SimpleString(pythonCode.c_str());
 }
 
 std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
-    PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
-    std::string ret(PyBytes_AsString(utf8Str));
-    Py_DECREF(utf8Str);
-    return ret;
+  PyObject *utf8Str = PyUnicode_AsUTF8String(pyUnicodeObj);
+  std::string ret(PyBytes_AsString(utf8Str));
+  Py_DECREF(utf8Str);
+  return ret;
 }
 %End
 
@@ -61,4 +62,3 @@ std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj) {
 typedef std::vector<std::string> vectorStringType;
 typedef std::list<std::string> listStringType;
 typedef std::set<std::string> setStringType;
-
