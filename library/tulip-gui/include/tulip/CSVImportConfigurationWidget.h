@@ -184,7 +184,7 @@ public:
 
 protected:
 
-  void updateWidget();
+  void updateWidget(const std::string& title = "Generating preview");
 
   std::vector<CSVColumn> getPropertiesToImport()const;
 
