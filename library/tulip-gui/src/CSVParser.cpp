@@ -32,7 +32,7 @@ using namespace tlp;
 
 const string defaultRejectedChars = " \r\n";
 const string spaceChars = " \t";
-CSVSimpleParser::CSVSimpleParser(const string& fileName,const QString& separator, const bool mergesep, char textDelimiter,const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine),_mergesep(mergesep) {
+CSVSimpleParser::CSVSimpleParser(const string& fileName,const QString& separator, const bool mergesep, char textDelimiter, char decimalMark, const string& fileEncoding,unsigned int firstLine,unsigned int lastLine):_fileName(fileName),_separator(separator),_textDelimiter(textDelimiter),_decimalMark(decimalMark),_fileEncoding(fileEncoding),_firstLine(firstLine),_lastLine(lastLine),_mergesep(mergesep) {
 }
 
 CSVSimpleParser::~CSVSimpleParser() {
@@ -81,6 +81,11 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
       progress->progress(0, 100);
     }
 
+    // change locale if needed
+    char* prevLocale = setlocale(LC_NUMERIC, NULL);
+    if (decimalMark() == ',')
+      setlocale(LC_NUMERIC, "fr_FR");
+
     while (multiplatformgetline(*csvFile, line) && row <=_lastLine) {
 
       if (progress) {
@@ -127,6 +132,9 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     }
 
     delete csvFile;
+    // reset locale
+    setlocale(LC_NUMERIC, prevLocale);
+    
     return result ? handler->end(row, columnMax) : false;
   }
   else {

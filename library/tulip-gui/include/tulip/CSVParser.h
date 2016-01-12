@@ -43,7 +43,10 @@ class PluginProgress;
 class TLP_QT_SCOPE CSVParser {
 public:
   virtual ~CSVParser() {}
-
+  
+  char decimalMark() const {
+    return '.';
+  }
   /**
     * @brief Parse the data and send the tokens found to the CSVContentHandler.
     *
@@ -74,7 +77,7 @@ public:
     * @param firstLine The number of the first line to read. The first line is 0.
     * @param lastLine The number of the last line to read.
     **/
-  CSVSimpleParser(const std::string& fileName,const QString &separator=";", const bool mergesep=false, char textDelimiter='"',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
+  CSVSimpleParser(const std::string& fileName,const QString &separator=";", const bool mergesep=false, char textDelimiter='"', char delimiterMark='.',const std::string& fileEncoding=std::string("UTF-8"),unsigned int firstLine = 0,unsigned int lastLine = UINT_MAX);
 
   virtual ~CSVSimpleParser();
 
@@ -87,6 +90,10 @@ public:
 
   inline char textDelimiter()const {
     return _textDelimiter;
+  }
+
+  char decimalMark()const {
+    return _decimalMark;
   }
 
   inline void setTextDelimiter(char delimiter) {
@@ -120,6 +127,7 @@ private:
   std::string _fileName;
   QString _separator;
   char _textDelimiter;
+  char _decimalMark;
   std::string _fileEncoding;
   unsigned int _firstLine;
   unsigned int _lastLine;
@@ -134,6 +142,10 @@ class TLP_QT_SCOPE CSVInvertMatrixParser : public tlp::CSVParser , public tlp::C
 public:
   CSVInvertMatrixParser(CSVParser* parser);
   virtual ~CSVInvertMatrixParser();
+
+  char decimalMark()const {
+    return parser->decimalMark();
+  }
 
   bool parse(CSVContentHandler *handler, tlp::PluginProgress *progress=NULL);
 
