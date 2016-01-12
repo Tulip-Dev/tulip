@@ -302,7 +302,7 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
       B = points[i];
       BSet = true;
     }
-    else {
+    else if (BSet) {
       // pick a third point non aligned with the two others
       C = points[i];
 
@@ -310,8 +310,6 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
         break;
       }
     }
-
-    ++i;
   }
 
   Coord a = B -A;
