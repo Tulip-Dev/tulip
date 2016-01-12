@@ -25,36 +25,36 @@
 %End
 
 %ConvertToTypeCode
-	if (sipIsErr == NULL) {
+  if (sipIsErr == NULL) {
 #if PY_MAJOR_VERSION >= 3
-        return PyUnicode_Check(sipPy);
+    return PyUnicode_Check(sipPy);
 #else
-        return PyString_Check(sipPy) || PyUnicode_Check(sipPy);
+    return PyString_Check(sipPy) || PyUnicode_Check(sipPy);
 #endif
-	}
+  }
 
-	if (sipPy == Py_None) {
-		*sipCppPtr = new std::string;
-		return 1;
-	}
+  if (sipPy == Py_None) {
+    *sipCppPtr = new std::string;
+    return 1;
+  }
 #if PY_MAJOR_VERSION >= 3
-    *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
+  *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
 #else
-    if (PyString_Check(sipPy)) {
-        *sipCppPtr = new std::string(PyString_AS_STRING(sipPy));
-    } else {
-        *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
-    }
+  if (PyString_Check(sipPy)) {
+    *sipCppPtr = new std::string(PyString_AS_STRING(sipPy));
+  } else {
+    *sipCppPtr = new std::string(convertPythonUnicodeObjectToStdString(sipPy));
+  }
 #endif
-	return 1;
+  return 1;
 %End
 
 %ConvertFromTypeCode
 #if PY_MAJOR_VERSION >= 3
-    PyObject *obj = PyUnicode_FromString(sipCpp->c_str());
+  PyObject *obj = PyUnicode_FromString(sipCpp->c_str());
 #else
-    PyObject *obj = PyString_FromString(sipCpp->c_str());
+  PyObject *obj = PyString_FromString(sipCpp->c_str());
 #endif
-	return obj;
+  return obj;
 %End
 };
