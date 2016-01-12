@@ -204,17 +204,17 @@ CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser) {
   delete parser;
   parser = newParser;
-  updateWidget();
+  updateWidget("Parsing file to guess the column types");
   //Reset import range
   updateLineNumbers(true);
 }
 
-void CSVImportConfigurationWidget::updateWidget() {
+void CSVImportConfigurationWidget::updateWidget(const std::string& title) {
   if(parser) {
     setEnabled(true);
     SimplePluginProgressDialog progress(this);
     progress.showPreview(false);
-    progress.setWindowTitle("Generating preview");
+    progress.setWindowTitle(QString(title.c_str()));
     progress.show();
     parser->parse(this,&progress);
   }
