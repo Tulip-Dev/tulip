@@ -53,8 +53,8 @@ TulipPerspectiveCrashHandler::TulipPerspectiveCrashHandler(QWidget *parent)
 void TulipPerspectiveCrashHandler::setDetailedView(bool f) {
   _isDetailedView = f;
   _ui->detailsLink->setText(f ? "<a href=\"Hide details\">Hide details</a>" :
-                            "<a href=\"Show details\">View details</a> <span style=\"font-size:small\"><i>(sent with to your comments)</i></span>");
-  _ui->detailsFrame->setVisible(f);
+                            "<a href=\"Show details\">View details</a> <span style=\"font-size:small\"><i>(sent with your comments)</i></span>");
+  _ui->stackedWidget->setCurrentIndex(static_cast<int>(f));
 }
 
 void TulipPerspectiveCrashHandler::toggleDetailedView() {
