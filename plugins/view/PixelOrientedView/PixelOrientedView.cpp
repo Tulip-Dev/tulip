@@ -440,11 +440,13 @@ void PixelOrientedView::destroyData() {
 }
 
 void PixelOrientedView::addEmptyViewLabel() {
-  // it would have be better to center the scene
+  // we have to center the scene
   // before computing the position and size of empty labels
-  // but the call below causes a crash
-  //getGlMainWidget()->getScene()->centerScene();
-  // so we first get scene center and width from the graph camera
+  // but the call below causes a crash on some Linux computers
+#ifndef _LINUX
+  getGlMainWidget()->getScene()->centerScene();
+#endif
+  // so we can get scene center and width from the graph camera
   Coord center = getGlMainWidget()->getScene()->getGraphCamera().getCenter();
   float width =
     getGlMainWidget()->getScene()->getGraphCamera().getBoundingBox().width();
@@ -462,6 +464,7 @@ void PixelOrientedView::addEmptyViewLabel() {
     new GlLabel(center - Coord(0, width/14, 0), Size(width, 2 * width/7), textColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
+#ifdef _LINUX
   // finally center the scene
   getGlMainWidget()->getScene()->centerScene();
   // and recompute position and size of the empty labels
@@ -474,6 +477,7 @@ void PixelOrientedView::addEmptyViewLabel() {
   noDimsLabel1->setSize(Size(4 * width/7, 2 * width/7));
   noDimsLabel2->setPosition(center - Coord(0, width/14, 0));
   noDimsLabel2->setSize(Size(width, 2 * width/7));
+#endif
 
 }
 
