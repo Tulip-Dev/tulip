@@ -32,6 +32,7 @@
 #include <tulip/TulipProject.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/GraphHierarchiesModel.h>
+#include <tulip/TlpQtTools.h>
 
 #include <iostream>
 #include <sstream>
@@ -566,17 +567,17 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     QIODevice* viewDescFile = project->fileStream(path + "/view.xml");
     QDomDocument doc;
     QDomElement root = doc.createElement("view");
-    root.setAttribute("name",v->name().c_str());
+    root.setAttribute("name",tlpStringToQString(v->name()));
     root.setAttribute("root",rootIds[g->getRoot()]);
     root.setAttribute("id",QString::number(g->getId()));
     QDomElement data = doc.createElement("data");
     std::stringstream dataStr;
     DataSet::write(dataStr,v->state());
-    QDomText dataText = doc.createTextNode(dataStr.str().c_str());
+    QDomText dataText = doc.createTextNode(tlpStringToQString(dataStr.str()));
     data.appendChild(dataText);
     root.appendChild(data);
     doc.appendChild(root);
-    viewDescFile->write(doc.toString().toLatin1());
+    viewDescFile->write(doc.toString().toUtf8());
     viewDescFile->close();
     delete viewDescFile;
     i++;
@@ -605,7 +606,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
   doc.appendChild(root);
   project->removeFile("/workspace.xml");
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
-  workspaceXml->write(doc.toString().toLatin1());
+  workspaceXml->write(doc.toString().toUtf8());
   workspaceXml->close();
   delete workspaceXml;
 }
