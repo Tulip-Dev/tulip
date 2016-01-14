@@ -280,7 +280,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
       oss << "module" << i;
 
       while (modulesDataSet.get(oss.str(), module)) {
-        bool moduleLoaded = loadModule(QString::fromUtf8(module.c_str()), false);
+        bool moduleLoaded = loadModule(tlpStringToQString(module), false);
 
         if (!moduleLoaded) {
           string moduleSrc;
@@ -289,8 +289,8 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
 
           if (modulesDataSet.get(oss.str(), moduleSrc)) {
             replaceAll(moduleSrc, "    ", "\t");
-            QFileInfo fileInfo(QString::fromUtf8(module.c_str()));
-            loadModuleFromSrcCode(fileInfo.fileName(), moduleSrc.c_str());
+            QFileInfo fileInfo(tlpStringToQString(module));
+            loadModuleFromSrcCode(fileInfo.fileName(), tlpStringToQString(moduleSrc));
           }
         }
 
@@ -313,13 +313,13 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
       oss << "main_script" << i;
 
       while (mainScriptsDataSet.get(oss.str(), mainScript)) {
-        mainScriptLoaded = loadScript(QString::fromUtf8(mainScript.c_str()), false);
+        mainScriptLoaded = loadScript(tlpStringToQString(mainScript), false);
 
         if (!mainScriptLoaded) {
           string mainScriptSrc;
           oss.str("");
           oss << "main_script_src" << i;
-          QFileInfo fileInfo(QString::fromUtf8(mainScript.c_str()));
+          QFileInfo fileInfo(tlpStringToQString(mainScript));
 
           if (mainScriptsDataSet.get(oss.str(), mainScriptSrc)) {
             int mainScriptId = _viewWidget->addMainScriptEditor();
@@ -327,7 +327,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
             // TLPParser seems to replace the tab character with four white spaces when reading the content of the TLP file, don't know why
             // Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
             replaceAll(mainScriptSrc, "    ", "\t");
-            codeEditor->setPlainText(QString::fromUtf8(mainScriptSrc.c_str()));
+            codeEditor->setPlainText(tlpStringToQString(mainScriptSrc));
 
             if (mainScript != "")
               _viewWidget->setScriptEditorTabText(mainScriptId, fileInfo.fileName());
@@ -351,18 +351,19 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
     else {
 
       if (dataSet.get("main script file", filename)) {
-        mainScriptLoaded = loadScript(QString::fromUtf8(filename.c_str()), false);
+        mainScriptLoaded = loadScript(tlpStringToQString(filename), false);
       }
 
       if (!mainScriptLoaded) {
         int editorId = _viewWidget->addMainScriptEditor();
         PythonCodeEditor *codeEditor = _viewWidget->getMainScriptEditor(editorId);
         codeEditor->setFileName("");
-        QFileInfo fileInfo(QString::fromUtf8(filename.c_str()));
+        QFileInfo fileInfo(tlpStringToQString(filename));
 
         if (dataSet.get("script code", scriptCode)) {
           replaceAll(scriptCode, "    ", "\t");
-          codeEditor->setPlainText(QString::fromStdString(scriptCode));
+          codeEditor->setPlainText(tlpStringToQString(scriptCode));
+
 
           if (filename != "")
             _viewWidget->setScriptEditorTabText(0, fileInfo.fileName());
@@ -389,17 +390,15 @@ DataSet PythonScriptView::state() const {
   PythonCodeEditor *codeEditor = _viewWidget->getCurrentMainScriptEditor();
 
   if (codeEditor) {
-    dataSet->set("main script file",
-                 codeEditor->getFileName().toUtf8().data());
-    string scriptCode = _viewWidget->getCurrentMainScriptEditor()->getCleanCode().toStdString();
+    dataSet->set("main script file", QStringToTlpString(codeEditor->getFileName()));
+    string scriptCode = QStringToTlpString(_viewWidget->getCurrentMainScriptEditor()->getCleanCode());
     dataSet->set("script code", scriptCode);
   }
 
   DataSet mainScriptsDataSet;
 
   for (int i = 0 ; i < _viewWidget->numberOfScriptEditors() ; ++i) {
-    string scriptFile =
-      _viewWidget->getMainScriptEditor(i)->getFileName().toUtf8().data();
+    string scriptFile = QStringToTlpString(_viewWidget->getMainScriptEditor(i)->getFileName());
 
     if (scriptFile != "")
       const_cast<PythonScriptView*>(this)->saveScript(i);
@@ -409,7 +408,7 @@ DataSet PythonScriptView::state() const {
     mainScriptsDataSet.set(oss.str(), scriptFile);
     oss.str("");
     oss << "main_script_src" << i;
-    mainScriptsDataSet.set(oss.str(), _viewWidget->getMainScriptEditor(i)->getCleanCode().toStdString());
+    mainScriptsDataSet.set(oss.str(), QStringToTlpString(_viewWidget->getMainScriptEditor(i)->getCleanCode()));
   }
 
   mainScriptsDataSet.set("main_script_id", _viewWidget->getCurrentMainScriptEditorIndex());
@@ -419,8 +418,7 @@ DataSet PythonScriptView::state() const {
   DataSet modulesDataSet;
 
   for (int i = 0 ; i < _viewWidget->numberOfModulesEditors() ; ++i) {
-    string moduleFile =
-      _viewWidget->getModuleEditor(i)->getFileName().toUtf8().data();
+    string moduleFile = QStringToTlpString(_viewWidget->getModuleEditor(i)->getFileName());
 
     if (moduleFile != "")
       const_cast<PythonScriptView*>(this)->saveModule(i);
@@ -430,7 +428,7 @@ DataSet PythonScriptView::state() const {
     modulesDataSet.set(oss.str(), moduleFile);
     oss.str("");
     oss << "module_src" << i;
-    modulesDataSet.set(oss.str(), _viewWidget->getModuleEditor(i)->getCleanCode().toStdString());
+    modulesDataSet.set(oss.str(), QStringToTlpString(_viewWidget->getModuleEditor(i)->getCleanCode()));
   }
 
   dataSet->set("modules", modulesDataSet);
@@ -728,7 +726,7 @@ QString PythonScriptView::findFile(const QString &filePath) {
     std::string tlpFile;
 
     if (_graph->getRoot()->getAttribute("file", tlpFile)) {
-      QFileInfo fileInfoTlp(QString::fromUtf8(tlpFile.c_str()));
+      QFileInfo fileInfoTlp(tlpStringToQString(tlpFile));
       QString newfilepath = fileInfoTlp.absolutePath() + "/" + filename;
       fileInfo = QFileInfo(newfilepath);
 
