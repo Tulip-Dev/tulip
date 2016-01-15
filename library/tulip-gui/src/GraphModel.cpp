@@ -760,14 +760,14 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
     }
     else {
       // get model index of the element to remove
-      unsigned int index = _elements.indexOf(id);
+      unsigned int index = qBinaryFind(_elements.begin(), _elements.end(), id) - _elements.begin();
       // if the index to remove is not contiguous with the last one stored in the current sequence of indices to remove,
       // flush that sequence to remove the elements from the model
       if (!rowsSequence.isEmpty() && index != rowsSequence.back() + 1) {
         addRemoveRowsSequence(rowsSequence, add);
         rowsSequence.clear();
         // get updated index of the element to remove
-        index = _elements.indexOf(id);
+        index = qBinaryFind(_elements.begin(), _elements.end(), id) - _elements.begin();
       }
       // add the index to remove to the sequence
       rowsSequence.push_back(index);
