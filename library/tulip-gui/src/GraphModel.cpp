@@ -565,7 +565,7 @@ void NodesGraphModel::setGraph(Graph* g) {
   int i=0;
   node n;
   forEach(n,graph()->getNodes())
-    _elements[i++] = n.id;
+  _elements[i++] = n.id;
   // we ensure the ids are ascendingly sorted
   // to ease the display of nodes/edges
   qSort(_elements);
@@ -607,7 +607,7 @@ void EdgesGraphModel::setGraph(Graph* g) {
   int i=0;
   edge e;
   forEach(e,graph()->getEdges())
-    _elements[i++] = e.id;
+  _elements[i++] = e.id;
   //reset();
 }
 
@@ -701,7 +701,8 @@ void GraphModel::addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence
       _elements.push_back(id);
     }
     endInsertRows();
-  } else {
+  }
+  else {
     beginRemoveRows(QModelIndex(), rowsSequence.front(), rowsSequence.front()+rowsSequence.size()-1);
     _elements.remove(rowsSequence.front(), rowsSequence.size());
     endRemoveRows();
@@ -761,6 +762,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
     else {
       // get model index of the element to remove
       unsigned int index = qBinaryFind(_elements.begin(), _elements.end(), id) - _elements.begin();
+
       // if the index to remove is not contiguous with the last one stored in the current sequence of indices to remove,
       // flush that sequence to remove the elements from the model
       if (!rowsSequence.isEmpty() && index != rowsSequence.back() + 1) {
@@ -769,9 +771,11 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
         // get updated index of the element to remove
         index = qBinaryFind(_elements.begin(), _elements.end(), id) - _elements.begin();
       }
+
       // add the index to remove to the sequence
       rowsSequence.push_back(index);
     }
+
     // backup last operation (add or remove)
     lastAdded = add;
   }
@@ -805,6 +809,7 @@ void NodesGraphModel::treatEvent(const Event& ev) {
     }
     else if (graphEv->getType() == GraphEvent::TLP_ADD_NODES) {
       _nodesAdded = true;
+
       for (std::vector<tlp::node>::const_iterator it = graphEv->getNodes().begin(); it != graphEv->getNodes().end(); ++it) {
         // if the node was removed then readded before the call to Observable::unholdObservers(), remove
         // it from the elementsToModify list as no update has to be performed in the model for that element
@@ -861,6 +866,7 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
     }
     else if (graphEv->getType() == GraphEvent::TLP_ADD_EDGES) {
       _edgesAdded = true;
+
       for (std::vector<tlp::edge>::const_iterator it = graphEv->getEdges().begin(); it != graphEv->getEdges().end(); ++it) {
         // if the edge was removed then readded before the call to Observable::unholdObservers(), remove
         // it from the elementsToModify list as no update has to be performed in the model for that element
