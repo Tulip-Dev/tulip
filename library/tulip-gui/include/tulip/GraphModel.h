@@ -77,6 +77,7 @@ protected:
   QVector<PropertyInterface*> _properties;
 
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const = 0;
+  void addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add);
 };
 
 class TLP_QT_SCOPE GraphSortFilterProxyModel: public QSortFilterProxyModel, public Observable {
@@ -104,6 +105,7 @@ public:
   void setGraph(Graph *);
 
   void treatEvent(const tlp::Event &);
+  void treatEvents(const std::vector<tlp::Event> &);
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
@@ -113,6 +115,9 @@ public:
 
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
+private:
+  bool _nodesAdded;
+  bool _nodesRemoved;
 };
 
 class TLP_QT_SCOPE EdgesGraphModel: public GraphModel {
@@ -120,6 +125,7 @@ public:
   EdgesGraphModel(QObject* parent = NULL);
   void setGraph(Graph *);
   void treatEvent(const tlp::Event &);
+  void treatEvents(const std::vector<tlp::Event> &);
   virtual bool lessThan(unsigned int,unsigned int,tlp::PropertyInterface*) const;
   virtual QString stringValue(unsigned int,tlp::PropertyInterface*) const;
   virtual QVariant value(unsigned int,tlp::PropertyInterface*) const;
@@ -129,6 +135,9 @@ public:
   }
 protected:
   virtual bool setValue(unsigned int,tlp::PropertyInterface*,QVariant) const;
+private:
+  bool _edgesAdded;
+  bool _edgesRemoved;
 };
 
 }
