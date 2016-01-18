@@ -418,7 +418,7 @@ double LinkCommunities::getAverageDensity(vector<set<node> >& partition) {
 }
 //==============================================================================================================
 void LinkCommunities::computeNodePartition(double threshold,
-					   vector<set<node> >& result) {
+    vector<set<node> >& result) {
   tlp::MutableContainer<bool> visited;
   visited.setAll(false);
 
@@ -501,8 +501,8 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
 #endif
     {
       if ( d > maxD) {
-	threshold=step;
-	maxD=d;
+        threshold=step;
+        maxD=d;
       }
     }
   }
