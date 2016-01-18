@@ -418,7 +418,7 @@ double LinkCommunities::getAverageDensity(vector<set<node> >& partition) {
 }
 //==============================================================================================================
 void LinkCommunities::computeNodePartition(double threshold,
-    vector<set<node> >& result) {
+					   vector<set<node> >& result) {
   tlp::MutableContainer<bool> visited;
   visited.setAll(false);
 
@@ -485,13 +485,13 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
   }
 
   double deltaThreshold = (max-min)/double(numberOfSteps);
-  double step = min;
 
 #ifdef _OPENMP
   #pragma omp parallel for
 #endif
 
   for (int i=0; i<(int)numberOfSteps; i++) {    //use int for msvs2010 compilation
+    double step = min + i * deltaThreshold;
     vector<set<node> > tmp;
     computeNodePartition(step, tmp);
     double d = getAverageDensity(tmp);
@@ -499,13 +499,12 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
 #ifdef _OPENMP
     #pragma omp critical
 #endif
-
-    if ( d > maxD) {
-      threshold=step;
-      maxD=d;
+    {
+      if ( d > maxD) {
+	threshold=step;
+	maxD=d;
+      }
     }
-
-    step += deltaThreshold;
   }
 
   return threshold;
