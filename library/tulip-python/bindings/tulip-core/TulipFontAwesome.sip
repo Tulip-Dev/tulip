@@ -299,7 +299,6 @@ The following string constants representing the supported icons are available :
       * :const:`tlp.TulipFontAwesome.FilesO` (:faicon:`files-o`)
       * :const:`tlp.TulipFontAwesome.Film` (:faicon:`film`)
       * :const:`tlp.TulipFontAwesome.Filter` (:faicon:`filter`)
-      * :const:`tlp.TulipFontAwesome.Fire` (:faicon:`fire`)
       * :const:`tlp.TulipFontAwesome.FireExtinguisher` (:faicon:`fire-extinguisher`)
       * :const:`tlp.TulipFontAwesome.Firefox` (:faicon:`firefox`)
       * :const:`tlp.TulipFontAwesome.Flag` (:faicon:`flag`)
@@ -478,7 +477,6 @@ The following string constants representing the supported icons are available :
       * :const:`tlp.TulipFontAwesome.Opencart` (:faicon:`opencart`)
       * :const:`tlp.TulipFontAwesome.Openid` (:faicon:`openid`)
       * :const:`tlp.TulipFontAwesome.Opera` (:faicon:`opera`)
-      * :const:`tlp.TulipFontAwesome.OptinMonster` (:faicon:`optin-monster`)
       * :const:`tlp.TulipFontAwesome.Outdent` (:faicon:`outdent`)
       * :const:`tlp.TulipFontAwesome.Pagelines` (:faicon:`pagelines`)
       * :const:`tlp.TulipFontAwesome.PaintBrush` (:faicon:`paint-brush`)
@@ -1002,7 +1000,7 @@ Returns an UTF-8 encoded string of a Font Awesome icon.
   static const std::string FilesO;
   static const std::string Film;
   static const std::string Filter;
-  static const std::string Fire;
+  //static const std::string Fire;
   static const std::string FireExtinguisher;
   static const std::string Flag;
   static const std::string FlagCheckered;
@@ -1380,7 +1378,7 @@ Returns an UTF-8 encoded string of a Font Awesome icon.
 
   static const std::string Yc;
   static const std::string YCombinator;
-  static const std::string OptinMonster;
+  //static const std::string OptinMonster;
   static const std::string Opencart;
   static const std::string Expeditedssl;
   static const std::string Battery4;

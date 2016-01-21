@@ -954,7 +954,9 @@ static void initFontAwesomeIconCodePoints() {
   addIconCodePoint(TulipFontAwesome::FilesO, 0xf0c5);
   addIconCodePoint(TulipFontAwesome::Film, 0xf008);
   addIconCodePoint(TulipFontAwesome::Filter, 0xf0b0);
-  addIconCodePoint(TulipFontAwesome::Fire, 0xf06d);
+  // don't put that icon in the supported icons set as it makes libtess2 segfaults
+  // when tesselating the glyph
+  //addIconCodePoint(TulipFontAwesome::Fire, 0xf06d);
   addIconCodePoint(TulipFontAwesome::FireExtinguisher, 0xf134);
   addIconCodePoint(TulipFontAwesome::Flag, 0xf024);
   addIconCodePoint(TulipFontAwesome::FlagCheckered, 0xf11e);
