@@ -171,6 +171,10 @@ struct DataSet {
     *sipCppPtr = new tlp::DataSet(*reinterpret_cast<tlp::DataSet*>(sipConvertToType(sipPy, sipFindType("tlp::DataSet"), Py_None, SIP_NOT_NONE|SIP_NO_CONVERTORS, &state, &err)));
   }
 
+  if (!*sipCppPtr) {
+    *sipIsErr = 1;
+  }
+
   return sipGetState(sipTransferObj);
 
 %End
