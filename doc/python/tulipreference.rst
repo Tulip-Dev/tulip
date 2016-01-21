@@ -413,6 +413,14 @@ Create/Access graph properties
 
 .. automethod:: tulip::tlp.Graph.getObjectProperties
 
+.. automethod:: tulip::tlp.Graph.getNodePropertiesValues
+
+.. automethod:: tulip::tlp.Graph.getEdgePropertiesValues
+
+.. automethod:: tulip::tlp.Graph.setNodePropertiesValues
+
+.. automethod:: tulip::tlp.Graph.setEdgePropertiesValues
+
 Application of algorithms
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
