@@ -3,6 +3,46 @@
 Important API changes
 ======================
 
+Since Tulip 4.8.1
+------------------
+
+New methods for getting / setting graph properties values for nodes and edges added
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Convenient methods that relies on the use of a dictionnary for setting and getting
+properties values for nodes and edges have been added to the :class:`tlp.Graph` class :
+
+  * :meth:`tlp.Graph.getNodePropertiesValues` : returns a dictionnary filled with all graph properties values for a given node
+  * :meth:`tlp.Graph.getEdgePropertiesValues` : returns a dictionnary filled with all graph properties values for a given edge
+  * :meth:`tlp.Graph.setNodePropertiesValues` : sets multiple properties values stored in a dictionnary for a given node
+  * :meth:`tlp.Graph.setEdgePropertiesValues` : sets multiple properties values stored in a dictionnary for a given edge
+
+For instance, the sample code below sets multiple graph view properties values for each node of a graph::
+
+  def getRandomFontAwesomeIcon():
+    iconKeys = vars(tlp.TulipFontAwesome).keys()
+    while 1:
+      attName = random.choice(list(iconKeys))
+      attr = getattr(tlp.TulipFontAwesome, attName)
+      if not attName.startswith('_') and type(attr) == str:
+        return attr
+
+  def getRandomColor():
+    r = int(random.random()*255)
+    g = int(random.random()*255)
+    b = int(random.random()*255)
+    return tlp.Color(r, g, b)
+
+  def getRandomSize(minSize, maxSize):
+    return minSize + random.random() * (maxSize - minSize)
+
+  for n in graph.getNodes():
+      values = {'viewShape': tlp.NodeShape.FontAwesomeIcon,
+                'viewColor' : getRandomColor(),
+                'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
+                'viewFontAwesomeIcon' : getRandomFontAwesomeIcon()}
+      graph.setNodePropertiesValues(n, d)
+
 Since Tulip 4.8
 -----------------
 

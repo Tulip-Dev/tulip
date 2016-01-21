@@ -76,6 +76,36 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
   return ret;
 }
 
+tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned int eltId, bool nodeValues);
+
+bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataSet, unsigned int eltId, bool nodeValues);
+
+template <class Tnode, class Tedge, class Tprop>
+bool tryToSetPropertyValue(const tlp::DataSet *dataSet, const std::pair<std::string, tlp::DataType*> &entry,
+                           tlp::AbstractProperty<Tnode, Tedge, Tprop> *prop, unsigned int eltId,
+                           bool nodeValue, std::string &errMsg, const std::string &nodeTypename, const std::string &edgeTypename) {
+  if (nodeValue) {
+    if (entry.second->getTypeName() == std::string(typeid(typename Tnode::RealType).name())) {
+      typename Tnode::RealType val;
+      dataSet->get(entry.first, val);
+      prop->setNodeValue(tlp::node(eltId), val);
+    } else {
+      errMsg = "Type error when trying to setting node value for the " + prop->getTypename() + " property named \"" + entry.first + "\"\n" +
+               "Value must strictly be of type : " + nodeTypename;
+    }
+  } else {
+    if (entry.second->getTypeName() == std::string(typeid(typename Tedge::RealType).name())) {
+      typename Tedge::RealType val;
+      dataSet->get(entry.first, val);
+      prop->setEdgeValue(tlp::edge(eltId), val);
+    } else {
+      errMsg = "Type error when trying to setting edge value for the " + prop->getTypename() + " property named \"" + entry.first + "\"\n" +
+               "Value must strictly be of type : " + edgeTypename;
+    }
+  }
+  return errMsg.empty();
+}
+
 %End
 
 %ModuleCode
@@ -118,6 +148,154 @@ void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset
       wrappedDs->setData(entry.first, entry.second);
     }
   }
+}
+
+tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned int eltId, bool nodeValues) {
+  tlp::DataSet *ret = new tlp::DataSet();
+  tlp::PropertyInterface *prop = NULL;
+  forEach(prop, graph->getObjectProperties()) {
+    tlp::BooleanProperty *booleanProp = dynamic_cast<tlp::BooleanProperty*>(prop);
+    tlp::ColorProperty *colorProp = dynamic_cast<tlp::ColorProperty*>(prop);
+    tlp::DoubleProperty *doubleProp = dynamic_cast<tlp::DoubleProperty*>(prop);
+    tlp::IntegerProperty *integerProp = dynamic_cast<tlp::IntegerProperty*>(prop);
+    tlp::LayoutProperty *layoutProp = dynamic_cast<tlp::LayoutProperty*>(prop);
+    tlp::SizeProperty *sizeProp = dynamic_cast<tlp::SizeProperty*>(prop);
+    tlp::StringProperty *stringProp = dynamic_cast<tlp::StringProperty*>(prop);
+    tlp::BooleanVectorProperty *booleanVecProp = dynamic_cast<tlp::BooleanVectorProperty*>(prop);
+    tlp::ColorVectorProperty *colorVecProp = dynamic_cast<tlp::ColorVectorProperty*>(prop);
+    tlp::DoubleVectorProperty *doubleVecProp = dynamic_cast<tlp::DoubleVectorProperty*>(prop);
+    tlp::IntegerVectorProperty *integerVecProp = dynamic_cast<tlp::IntegerVectorProperty*>(prop);
+    tlp::CoordVectorProperty *coordVecProp = dynamic_cast<tlp::CoordVectorProperty*>(prop);
+    tlp::SizeVectorProperty *sizeVecProp = dynamic_cast<tlp::SizeVectorProperty*>(prop);
+    tlp::StringVectorProperty *stringVecProp = dynamic_cast<tlp::StringVectorProperty*>(prop);
+
+    if (booleanProp) {
+      ret->set(prop->getName(), nodeValues ? booleanProp->getNodeValue(tlp::node(eltId)) : booleanProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (colorProp) {
+      ret->set(prop->getName(), nodeValues ? colorProp->getNodeValue(tlp::node(eltId)) : colorProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (doubleProp) {
+      ret->set(prop->getName(), nodeValues ? doubleProp->getNodeValue(tlp::node(eltId)) : doubleProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (integerProp) {
+      ret->set(prop->getName(), nodeValues ? integerProp->getNodeValue(tlp::node(eltId)) : integerProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (layoutProp) {
+      if (nodeValues) {
+        ret->set(prop->getName(), layoutProp->getNodeValue(tlp::node(eltId)));
+      } else {
+        ret->set(prop->getName(), layoutProp->getEdgeValue(tlp::edge(eltId)));
+      }
+    } else if (sizeProp) {
+      ret->set(prop->getName(), nodeValues ? sizeProp->getNodeValue(tlp::node(eltId)) : sizeProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (stringProp) {
+      ret->set(prop->getName(), nodeValues ? stringProp->getNodeValue(tlp::node(eltId)) : stringProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (booleanVecProp) {
+      ret->set(prop->getName(), nodeValues ? booleanVecProp->getNodeValue(tlp::node(eltId)) : booleanVecProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (colorVecProp) {
+      ret->set(prop->getName(), nodeValues ? colorVecProp->getNodeValue(tlp::node(eltId)) : colorVecProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (doubleVecProp) {
+      ret->set(prop->getName(), nodeValues ? doubleVecProp->getNodeValue(tlp::node(eltId)) : doubleVecProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (integerVecProp) {
+      ret->set(prop->getName(), nodeValues ? integerVecProp->getNodeValue(tlp::node(eltId)) : integerVecProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (coordVecProp) {
+      ret->set(prop->getName(), nodeValues ? coordVecProp->getNodeValue(tlp::node(eltId)) : coordVecProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (sizeVecProp) {
+      ret->set(prop->getName(), nodeValues ? sizeVecProp->getNodeValue(tlp::node(eltId)) : sizeVecProp->getEdgeValue(tlp::edge(eltId)));
+    } else if (stringVecProp) {
+      ret->set(prop->getName(), nodeValues ? stringVecProp->getNodeValue(tlp::node(eltId)) : stringVecProp->getEdgeValue(tlp::edge(eltId)));
+    }
+  }
+  return ret;
+}
+
+bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataSet, unsigned int eltId, bool nodeValues) {
+  tlp::Observable::holdObservers();
+  std::string errMsg;
+  std::pair<std::string, tlp::DataType*> entry;
+  forEach(entry, dataSet->getValues()) {
+    tlp::PropertyInterface *prop = graph->getProperty(entry.first);
+    if (prop) {
+      tlp::BooleanProperty *booleanProp = dynamic_cast<tlp::BooleanProperty*>(prop);
+      tlp::ColorProperty *colorProp = dynamic_cast<tlp::ColorProperty*>(prop);
+      tlp::DoubleProperty *doubleProp = dynamic_cast<tlp::DoubleProperty*>(prop);
+      tlp::IntegerProperty *integerProp = dynamic_cast<tlp::IntegerProperty*>(prop);
+      tlp::LayoutProperty *layoutProp = dynamic_cast<tlp::LayoutProperty*>(prop);
+      tlp::SizeProperty *sizeProp = dynamic_cast<tlp::SizeProperty*>(prop);
+      tlp::StringProperty *stringProp = dynamic_cast<tlp::StringProperty*>(prop);
+      tlp::BooleanVectorProperty *booleanVecProp = dynamic_cast<tlp::BooleanVectorProperty*>(prop);
+      tlp::ColorVectorProperty *colorVecProp = dynamic_cast<tlp::ColorVectorProperty*>(prop);
+      tlp::DoubleVectorProperty *doubleVecProp = dynamic_cast<tlp::DoubleVectorProperty*>(prop);
+      tlp::IntegerVectorProperty *integerVecProp = dynamic_cast<tlp::IntegerVectorProperty*>(prop);
+      tlp::CoordVectorProperty *coordVecProp = dynamic_cast<tlp::CoordVectorProperty*>(prop);
+      tlp::SizeVectorProperty *sizeVecProp = dynamic_cast<tlp::SizeVectorProperty*>(prop);
+      tlp::StringVectorProperty *stringVecProp = dynamic_cast<tlp::StringVectorProperty*>(prop);
+
+      if (booleanProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, booleanProp, eltId, nodeValues, errMsg, "bool", "bool")) {
+          break;
+        }
+      } else if (colorProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, colorProp, eltId, nodeValues, errMsg, "tlp.Color", "tlp.Color")) {
+          break;
+        }
+      } else if (doubleProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, doubleProp, eltId, nodeValues, errMsg, "float", "float")) {
+          break;
+        }
+      } else if (integerProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, integerProp, eltId, nodeValues, errMsg, "int", "int")) {
+          break;
+        }
+      } else if (layoutProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, layoutProp, eltId, nodeValues, errMsg, "tlp.Coord", "list of tlp.Coord")) {
+          break;
+        }
+      } else if (sizeProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, sizeProp, eltId, nodeValues, errMsg, "tlp.Size", "tlp.Size")) {
+          break;
+        }
+      } else if (stringProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, stringProp, eltId, nodeValues, errMsg, "str", "str")) {
+          break;
+        }
+      } else if (booleanVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, booleanVecProp, eltId, nodeValues, errMsg, "list of bool", "list of bool")) {
+          break;
+        }
+      } else if (colorVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, colorVecProp, eltId, nodeValues, errMsg, "list of tlp.Color", "list of tlp.Color")) {
+          break;
+        }
+      } else if (doubleVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, doubleVecProp, eltId, nodeValues, errMsg, "list of float", "list of float")) {
+          break;
+        }
+      } else if (integerVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, integerVecProp, eltId, nodeValues, errMsg, "list of int", "list of int")) {
+          break;
+        }
+      } else if (coordVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, coordVecProp, eltId, nodeValues, errMsg, "list of tlp.Coord", "list of tlp.Coord")) {
+          break;
+        }
+      } else if (sizeVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, sizeVecProp, eltId, nodeValues, errMsg, "list of tlp.Size", "list of tlp.Size")) {
+          break;
+        }
+      } else if (stringVecProp) {
+        if (!tryToSetPropertyValue(dataSet, entry, stringVecProp, eltId, nodeValues, errMsg, "list of str", "list of str")) {
+          break;
+        }
+      }
+
+    } else {
+      errMsg = "Error : no graph property named \"" + entry.first + "\".";
+      break;
+    }
+  }
+  if (!errMsg.empty()) {
+    PyErr_SetString(PyExc_Exception, errMsg.c_str());
+  }
+  tlp::Observable::unholdObservers();
+  return errMsg.empty();
 }
 
 %End
@@ -3706,6 +3884,116 @@ tlp.Graph.getAttributes()
 Returns all the attributes of the graph.
 
 :rtype: a dictionnary with string keys filled with graph attributes values
+%End
+
+//===========================================================================================
+
+    tlp::DataSet getNodePropertiesValues(const tlp::node n);
+%Docstring
+tlp.Graph.getNodePropertiesValues(node)
+
+.. versionadded:: 4.8.1
+
+Returns a dictionnary containing the attached graph properties values for a given node.
+The keys of that dictionnary are of string type and corresponds to the graph properties names
+while the values are typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
+:class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
+
+:param node: a node of the graph
+:type node: :class:`tlp.node`
+:rtype: a dictionnary filled with the node properties values
+:throws: an exception if the provided node does not belong to the graph
+%End
+
+%MethodCode
+    if (sipCpp->isElement(*a0)) {
+      sipRes = getDataSetFilledWithPropertiesValues(sipCpp, a0->id, true);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+    }
+%End
+
+//===========================================================================================
+
+    tlp::DataSet getEdgePropertiesValues(const tlp::edge e);
+%Docstring
+tlp.Graph.getEdgePropertiesValues(edge)
+
+.. versionadded:: 4.8.1
+
+Returns a dictionnary containing the attached graph properties values for a given edge.
+The keys of that dictionnary are of string type and corresponds to the graph properties names
+while the values are typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
+:class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
+
+:param edge: an edge of the graph
+:type edge: :class:`tlp.edge`
+:rtype: a dictionnary filled with the edge properties values
+ :throws: an exception if the provided node does not belong to the graph
+%End
+
+%MethodCode
+    if (sipCpp->isElement(*a0)) {
+      sipRes = getDataSetFilledWithPropertiesValues(sipCpp, a0->id, false);
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+    }
+%End
+
+//===========================================================================================
+
+    void setNodePropertiesValues(const tlp::node n, const tlp::DataSet &dataSet);
+%Docstring
+tlp.Graph.setNodePropertiesValues(node, propertiesValues)
+
+.. versionadded:: 4.8.1
+
+Sets the values of multiple graph properties for a given node through the use of a dictionnary.
+The keys of that dictionnary must be of string type and must correspond to existing graph properties names
+while the values must be typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
+:class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
+
+:param node: a node of the graph
+:type node: :class:`tlp.node`
+:param propertiesValues: the properties values for the node
+:type propertiesValues: a dictionnary
+:throws: an exception if the provided node does not belong to the graph, if one of the string key of the dictionnary does not correspond to an existing property name of if there is a type error for a property value
+%End
+
+%MethodCode
+    if (sipCpp->isElement(*a0)) {
+      sipIsErr = setPropertiesValuesFromDataSet(sipCpp, a1, a0->id, true) ? 0 : 1;
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+    }
+%End
+
+//===========================================================================================
+
+    void setEdgePropertiesValues(const tlp::edge e, const tlp::DataSet &dataSet);
+%Docstring
+tlp.Graph.setEdgePropertiesValues(edge, propertiesValues)
+
+.. versionadded:: 4.8.1
+
+Sets the values of multiple graph properties for a given edge through the use of a dictionnary.
+The keys of that dictionnary must be of string type and must correspond to existing graph properties names
+while the values must be typed according to those of the properties (bool, int, float, str, :class:`tlp.Color`,
+:class:`tlp.Coord`, :class:`tlp.Size`, list of those types).
+
+:param edge: an edge of the graph
+:type edge: :class:`tlp.edge`
+:param propertiesValues: the properties values for the edge
+:type propertiesValues: a dictionnary
+:throws: an exception if the provided edge does not belong to the graph, if one of the string key of the dictionnary does not correspond to an existing property name of if there is a type error for a property value
+%End
+
+%MethodCode
+  if (sipCpp->isElement(*a0)) {
+    sipIsErr = setPropertiesValuesFromDataSet(sipCpp, a1, a0->id, false) ? 0 : 1;
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
