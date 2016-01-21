@@ -401,7 +401,7 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
      valSetter.setValue(static_cast<int>(PyLong_AsLong(pyObj)));\
       return true;\
     }\
-
+ 
 #define CHECK_SIP_POINTER_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\
     if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), 0)) {\
       if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE*).name())) {\
