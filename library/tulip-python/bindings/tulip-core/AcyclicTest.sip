@@ -36,24 +36,25 @@ The method :meth:`tlp.AcyclicTest.makeAcyclic` returns a list of this type.
  
 It contains the following variables :
 
-* old (:class:`tlp.edge`) : the self loop edge that has been replaced
-* n1 (:class:`tlp.node`) : the first node added
-* n2 (:class:`tlp.node`) : the second node added
-* e1 (:class:`tlp.edge`) : the edge added between the node at the extremity of the loop and n1
-* e2 (:class:`tlp.edge`) : the edge added between n1 and n2
-* e3 (:class:`tlp.edge`) : the edge added between the node at the extremity of the loop and n2
+  * old (:class:`tlp.edge`) : the self loop edge that has been replaced
+  * n1 (:class:`tlp.node`) : the first node added
+  * n2 (:class:`tlp.node`) : the second node added
+  * e1 (:class:`tlp.edge`) : the edge added between the node at the extremity of the loop and n1
+  * e2 (:class:`tlp.edge`) : the edge added between n1 and n2
+  * e3 (:class:`tlp.edge`) : the edge added between the node at the extremity of the loop and n2
 
 %End
 
-  public:
-    SelfLoops(tlp::node n1, tlp::node n2, tlp::edge e1, tlp::edge e2, tlp::edge e3, tlp::edge old);
+public:
+  
+  SelfLoops(tlp::node n1, tlp::node n2, tlp::edge e1, tlp::edge e2, tlp::edge e3, tlp::edge old);
     
-    tlp::node n1;
-    tlp::node n2;
-    tlp::edge e1;
-    tlp::edge e2; 
-    tlp::edge e3; 
-    tlp::edge old;  
+  tlp::node n1;
+  tlp::node n2;
+  tlp::edge e1;
+  tlp::edge e2; 
+  tlp::edge e3; 
+  tlp::edge old;  
 };
 
 class AcyclicTest {
@@ -106,7 +107,7 @@ and second member is a list of edges that create cycle (when the graph is not ac
   
 private : 
 
-	AcyclicTest();
+  AcyclicTest();
 };
 
 };

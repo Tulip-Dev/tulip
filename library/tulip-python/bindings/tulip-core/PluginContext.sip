@@ -29,25 +29,29 @@ class PluginContext {
 %TypeHeaderCode
 #include <tulip/PluginContext.h>
 %End
+
 public:
+  
   virtual ~PluginContext();
+  
 };
 
 class AlgorithmContext : tlp::PluginContext {
 %TypeHeaderCode
 #include <tulip/PluginContext.h>
 %End
+
 public :
 
-    AlgorithmContext (tlp::Graph* graph = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL);
+  AlgorithmContext (tlp::Graph* graph = NULL, tlp::DataSet* dataSet = NULL, tlp::PluginProgress* progress = NULL);
 
-    ~AlgorithmContext ();
+  ~AlgorithmContext ();
 
-    tlp::Graph *graph;
+  tlp::Graph *graph;
 
-    tlp::PluginProgress *pluginProgress;
+  tlp::PluginProgress *pluginProgress;
 
-    tlp::DataSet *dataSet;
+  tlp::DataSet *dataSet;
 };
 
 };

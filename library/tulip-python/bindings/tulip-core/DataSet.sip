@@ -68,7 +68,6 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
       break;
     }
   }
-
   return ret;
 }
 
@@ -84,50 +83,49 @@ bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, 
 #else
   PyString_Check(value)) {
 #endif
-      tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(dataType->value);
+    tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(dataType->value);
 #if PY_MAJOR_VERSION >= 3
-      std::string entry(convertPythonUnicodeObjectToStdString(value));
+    std::string entry(convertPythonUnicodeObjectToStdString(value));
 #else
-      std::string entry(PyString_AS_STRING(value));
+    std::string entry(PyString_AS_STRING(value));
 #endif
 
-      std::vector<std::string> values = sc->getValues();
-      if (std::find(values.begin(), values.end(), entry) != values.end()) {
-          sc->setCurrent(entry);
-          dataSet->set(key, *sc);
-      } else {
-          std::string msg = "Invalid value provided (\"" + entry + "\") to string parameter '" + key +
-                            "' of algorithm '" + algoName + "'.\n";
+    std::vector<std::string> values = sc->getValues();
+    if (std::find(values.begin(), values.end(), entry) != values.end()) {
+      sc->setCurrent(entry);
+      dataSet->set(key, *sc);
+    } else {
+      std::string msg = "Invalid value provided (\"" + entry + "\") to string parameter '" + key +
+                        "' of algorithm '" + algoName + "'.\n";
 
-          msg += "Possible values are : ";
-          for (size_t i = 0 ; i < values.size() ; ++i) {
-              replaceAll(values[i], "\n", "\\n");
-              msg += values[i];
-              if (i != values.size() -1) {
-                  msg += ", ";
-              }
-          }
-          PyErr_SetString(PyExc_Exception, msg.c_str());
-          ret = false;
+      msg += "Possible values are : ";
+      for (size_t i = 0 ; i < values.size() ; ++i) {
+        replaceAll(values[i], "\n", "\\n");
+        msg += values[i];
+        if (i != values.size() -1) {
+          msg += ", ";
+        }
       }
-
+      PyErr_SetString(PyExc_Exception, msg.c_str());
+      ret = false;
+    }
   } else {
-      ValueSetter valSetter(dataSet, key);
-      if (!setCppValueFromPyObject(value, valSetter, dataType)) {
-          std::string msg;
-          if (!dataType) {
-            msg = "Object of type ";
-            msg += std::string(value->ob_type->tp_name);
-            msg += " can not be stored in a Tulip dataset.";
-          } else {
-            msg = "Invalid type for the value provided to parameter '" + key + "' ";
-            msg += "for algorithm '" + algoName + "'\n";
-            msg += "Provided Python type is '" + std::string(value->ob_type->tp_name) + "'\n";
-            msg += "Expected C++ type is '" + tlp::demangleClassName(dataType->getTypeName().c_str()) + "'";
-          }
-          PyErr_SetString(PyExc_Exception, msg.c_str());
-          ret = false;
+    ValueSetter valSetter(dataSet, key);
+    if (!setCppValueFromPyObject(value, valSetter, dataType)) {
+      std::string msg;
+      if (!dataType) {
+        msg = "Object of type ";
+        msg += std::string(value->ob_type->tp_name);
+        msg += " can not be stored in a Tulip dataset.";
+      } else {
+        msg = "Invalid type for the value provided to parameter '" + key + "' ";
+        msg += "for algorithm '" + algoName + "'\n";
+        msg += "Provided Python type is '" + std::string(value->ob_type->tp_name) + "'\n";
+        msg += "Expected C++ type is '" + tlp::demangleClassName(dataType->getTypeName().c_str()) + "'";
       }
+      PyErr_SetString(PyExc_Exception, msg.c_str());
+      ret = false;
+    }
   }
   delete dataType;
   return ret;
@@ -215,29 +213,29 @@ Below is an exhaustive list of data types that can be stored in a Tulip data set
   * :class:`tlp.PropertyInterface`
   * list of those types
 
-If you try to store an unsupported data type, an exception will be thrown.	
+If you try to store an unsupported data type, an exception will be thrown.
 Each value stored in a data set is associated to a string key. Reading / Writing a value in 
 a data set is done through the [] operator as illustrated below::
 
-	# data set creation
-	dataSet = tlp.DataSet()
-	
-	# writing integer values
-	dataSet["height"] = 100
-	dataSet["width"] = 300
-	
-	# reading integer values
-	area = dataSet["height"] * dataSet["width"] 
+  # data set creation
+  dataSet = tlp.DataSet()
+  
+  # writing integer values
+  dataSet["height"] = 100
+  dataSet["width"] = 300
+  
+  # reading integer values
+  area = dataSet["height"] * dataSet["width"] 
 
 When reading a data set value, a reference is returned not a copy.
 
 %End
 
-	DataSet();
-	
-	DataSet(const tlp::DataSet &set);
+  DataSet();
+  
+  DataSet(const tlp::DataSet &set);
 
-	bool exist(const std::string &str) const;
+  bool exist(const std::string &str) const;
 %Docstring
 tlp.DataSet.exist(key)
 
@@ -248,7 +246,7 @@ Checks if the data set contains a value associated to a particular key.
 :rtype: boolean
 %End
 
-	void remove(const std::string &str);
+  void remove(const std::string &str);
 %Docstring
 tlp.DataSet.remove(key)
 
@@ -257,8 +255,8 @@ Remove the value associated to a particular key from the data set if it exists.
 :param key: the key of the value to remove.
 :type key: string
 %End
-	
-	unsigned int size() const;
+
+  unsigned int size() const;
 %Docstring
 tlp.DataSet.size()
 
@@ -266,56 +264,55 @@ Returns the number of values stored in the data set.
 
 :rtype: integer
 %End
-	
-	std::vector<std::string> getKeys() const;
+
+  std::vector<std::string> getKeys() const;
 %Docstring
 tlp.DataSet.getKeys()
 
 Returns the list of keys associated to the values stored in the data set.
 
 :rtype: list of string
-%End	
-	
-%MethodCode
-	std::vector<std::string> ret;
-	tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
-	while (it->hasNext()) {
-		ret.push_back(it->next().first);
-	}
-	delete it;
-	sipRes = new std::vector<std::string>(ret);
-%End	
-	
-	void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
-%MethodCode
-	sipIsErr = setDataSetEntryFromPyObject(sipCpp, *a0, a1) ? 0 : 1;
 %End
-	
-	
-	SIP_PYOBJECT __getitem__(const std::string &attributeName);
-%MethodCode
-    sipRes = NULL;
-    tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
-    tlp::DataType* dataType = NULL;
-    while (it->hasNext()) {
-        std::pair<std::string, tlp::DataType*> p = it->next();
-        if (p.first == *a0) {
-            dataType = p.second;
-        }
-    }
-    delete it;
-	
-    sipRes = getPyObjectFromDataType(dataType, true);
-	
-    if (!sipRes) {
-        std::ostringstream oss;
-        oss << "Dataset entry \"" << *a0 << "\" does not exist.";
-        sipIsErr = 1;
-        PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
-    }
-%End	
 
-    SIP_PYOBJECT toDict();
+%MethodCode
+  std::vector<std::string> ret;
+  tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
+  while (it->hasNext()) {
+    ret.push_back(it->next().first);
+  }
+  delete it;
+  sipRes = new std::vector<std::string>(ret);
+%End
+
+  void __setitem__(const std::string &attributeName, SIP_PYOBJECT po);
+%MethodCode
+  sipIsErr = setDataSetEntryFromPyObject(sipCpp, *a0, a1) ? 0 : 1;
+%End
+
+  SIP_PYOBJECT __getitem__(const std::string &attributeName);
+%MethodCode
+  sipRes = NULL;
+  tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
+  tlp::DataType* dataType = NULL;
+  while (it->hasNext()) {
+    std::pair<std::string, tlp::DataType*> p = it->next();
+    if (p.first == *a0) {
+      dataType = p.second;
+    }
+  }
+  delete it;
+
+  sipRes = getPyObjectFromDataType(dataType, true);
+
+  if (!sipRes) {
+    std::ostringstream oss;
+    oss << "Dataset entry \"" << *a0 << "\" does not exist.";
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+  }
+%End
+
+  SIP_PYOBJECT toDict();
 %Docstring
 tlp.DataSet.toDict()
 
@@ -324,9 +321,8 @@ Converts that data set to a Python dictionnary.
 :rtype: a dictionnary reflecting the data set content
 %End
 %MethodCode
-    sipRes = convertTlpDataSetToPyDict(*sipCpp);
+  sipRes = convertTlpDataSetToPyDict(*sipCpp);
 %End
 
 };
 };
-

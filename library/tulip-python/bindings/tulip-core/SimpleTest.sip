@@ -60,7 +60,7 @@ Returns a list of removed edges.
  
 //===========================================================================================  
  
- static bool simpleTest(tlp::Graph *graph, std::vector<tlp::edge> *multipleEdges /Out/, std::vector<tlp::edge> *loops /Out/);
+  static bool simpleTest(tlp::Graph *graph, std::vector<tlp::edge> *multipleEdges /Out/, std::vector<tlp::edge> *loops /Out/);
 %Docstring
 tlp.SimpleTest.simpleTest(graph)
 
@@ -72,7 +72,7 @@ found self loops.
 :type graph: :class:`tlp.Graph`
 :rtype: (boolean, list of :class:`tlp.edge`, list of :class:`tlp.edge`)
 %End
-  	
+
 private:
 
   SimpleTest();

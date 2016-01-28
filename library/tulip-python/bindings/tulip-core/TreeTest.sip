@@ -29,6 +29,7 @@ class TreeTest {
 %TypeHeaderCode
 #include <tulip/TreeTest.h>
 %End
+
 public:
   
   static bool isTree(tlp::Graph *graph);
@@ -58,7 +59,6 @@ Returns :const:`True` if the graph is a topological tree
 :rtype: boolean
 %End  
   
-  
 //====================================================================================  
   
   static void makeRootedTree(tlp::Graph *freeTree, tlp::node root);
@@ -72,7 +72,6 @@ Turns a free tree into a rooted tree.
 :param root: the node to designate as the root of the tree
 :type root: :class:`tlp.node`
 %End  
-  
   
 //====================================================================================  
   
@@ -108,7 +107,7 @@ Cleans the graph from a tree previously computed with the :meth:`tlp.TreeTest.co
   
 private :
 
-	TreeTest();  
+  TreeTest();  
 
 };
 

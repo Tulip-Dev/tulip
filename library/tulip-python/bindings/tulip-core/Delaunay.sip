@@ -49,13 +49,13 @@ Edges and simplices are defined using indexes into the original list of points.
 %End
 
 %MethodCode
-    std::vector<std::pair<unsigned int, unsigned int> > edges;
-    std::vector<std::vector<unsigned int> > simplices;
-    if (tlp::delaunayTriangulation(*a0, edges, simplices)) {
-        sipRes = new std::pair<std::vector<std::pair<unsigned int, unsigned int> >, std::vector<std::vector<unsigned int> > >(edges, simplices);
-    } else {
-        sipRes = NULL;
-    }
+  std::vector<std::pair<unsigned int, unsigned int> > edges;
+  std::vector<std::vector<unsigned int> > simplices;
+  if (tlp::delaunayTriangulation(*a0, edges, simplices)) {
+    sipRes = new std::pair<std::vector<std::pair<unsigned int, unsigned int> >, std::vector<std::vector<unsigned int> > >(edges, simplices);
+  } else {
+    sipRes = NULL;
+  }
 %End
 
 class VoronoiDiagram /Abstract/ {
@@ -195,12 +195,12 @@ for each input site.
 %End
 
 %MethodCode
-    tlp::VoronoiDiagram voronoiDiagram;
-    if (tlp::voronoiDiagram(*a0, voronoiDiagram)) {
-        sipRes = new tlp::VoronoiDiagram(voronoiDiagram);
-    } else {
-        sipRes = NULL;
-    }
+  tlp::VoronoiDiagram voronoiDiagram;
+  if (tlp::voronoiDiagram(*a0, voronoiDiagram)) {
+    sipRes = new tlp::VoronoiDiagram(voronoiDiagram);
+  } else {
+    sipRes = NULL;
+  }
 %End
 
 };

@@ -44,7 +44,8 @@ results in a graph that is still connected), :const:`False` otherwise.
   
 private :
 
-   TriconnectedTest();  
+  TriconnectedTest();
+  
 };
 
 };

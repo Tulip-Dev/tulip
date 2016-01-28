@@ -31,44 +31,44 @@ class PropertyInterface : tlp::Observable /Abstract/ {
 %End
 
 %ConvertToSubClassCode
-    if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::BooleanProperty");
-    } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::ColorProperty");
-    } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::DoubleProperty");
-    } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::GraphProperty");
-    } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::IntegerProperty");
-    } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::LayoutProperty");
-    } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::SizeProperty");
-    } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::StringProperty");
-    } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::BooleanVectorProperty");
-    } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::ColorVectorProperty");
-    } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::DoubleVectorProperty");
-    } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::IntegerVectorProperty");
-    } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::CoordVectorProperty");
-    } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::SizeVectorProperty");
-    } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::StringVectorProperty");
-    } else {
-        sipType = NULL;
-    }
+  if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::BooleanProperty");
+  } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::ColorProperty");
+  } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::DoubleProperty");
+  } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::GraphProperty");
+  } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::IntegerProperty");
+  } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::LayoutProperty");
+  } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::SizeProperty");
+  } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::StringProperty");
+  } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::BooleanVectorProperty");
+  } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::ColorVectorProperty");
+  } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::DoubleVectorProperty");
+  } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::IntegerVectorProperty");
+  } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::CoordVectorProperty");
+  } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::SizeVectorProperty");
+  } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::StringVectorProperty");
+  } else {
+    sipType = NULL;
+  }
 %End
 
 public:
  
- 	tlp::Graph * getGraph();
+  tlp::Graph * getGraph();
 %Docstring
 tlp.PropertyInterface.getGraph()
 
@@ -82,7 +82,7 @@ Returns the graph on which the property has been defined.
 
  //===========================================================================================
 
-   virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
  %Docstring
  tlp.PropertyInterface.numberOfNonDefaultValuatedNodes([subgraph = None])
 
@@ -98,7 +98,7 @@ Returns the graph on which the property has been defined.
 
 //===========================================================================================
 
-	virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedNodes([subgraph = None])
 
@@ -108,11 +108,11 @@ from the default value.
 :param subgraph: a sub-graph can be given in parameter. In that case, only the nodes owned by this sub-graph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorNode`
-%End	
+%End
 
  //===========================================================================================
 
-   virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
  %Docstring
  tlp.PropertyInterface.numberOfNonDefaultValuatedEdges([subgraph = None])
 
@@ -127,8 +127,8 @@ from the default value.
  %End
 
 //===========================================================================================
-	
-	virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedEdges([subgraph = None])
 
@@ -138,11 +138,11 @@ from the default value.
 :param subgraph: a sub-graph can be given in parameter. In that case, only the edges owned by this sub-graph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorEdge`
-%End	
-	
-//===========================================================================================	
-	
-	virtual const std::string& getTypename() const = 0;
+%End
+
+//===========================================================================================
+
+  virtual const std::string& getTypename() const = 0;
 %Docstring
 tlp.PropertyInterface.getTypename()
 
@@ -154,7 +154,7 @@ i.e. "graph", "double", "layout", "string", "integer", "color", "size", ...
 
 //===========================================================================================
 
-	const std::string& getName() const = 0;
+  const std::string& getName() const = 0;
 %Docstring
 tlp.PropertyInterface.getName()
 
@@ -165,7 +165,7 @@ Returns the name of the property.
 
 //===========================================================================================
 
-	virtual std::string getNodeDefaultStringValue() const = 0;
+  virtual std::string getNodeDefaultStringValue() const = 0;
 %Docstring
 tlp.PropertyInterface.getNodeDefaultStringValue()
 
@@ -173,20 +173,20 @@ Returns a string representation of the node default value.
 
 :rtype: string
 %End
-	
-//===========================================================================================	
-	
-	virtual std::string getEdgeDefaultStringValue() const = 0;
+
+//===========================================================================================
+
+  virtual std::string getEdgeDefaultStringValue() const = 0;
 %Docstring
 tlp.PropertyInterface.getEdgeDefaultStringValue()
 
 Returns a string representation of the edge default value.
 
 :rtype: string
-%End	
-//===========================================================================================	
-	
-	virtual bool setAllNodeStringValue( const std::string & strVal ) = 0;
+%End
+//===========================================================================================
+
+  virtual bool setAllNodeStringValue( const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllNodeStringValue(str)
 
@@ -198,10 +198,10 @@ Returns :const:`True` if the given string representation has been successfully c
 :type str: string
 :rtype: boolean
 %End
-	
-//===========================================================================================	
-	
-	virtual bool setAllEdgeStringValue( const std::string & strVal ) = 0;
+
+//===========================================================================================
+
+  virtual bool setAllEdgeStringValue( const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllEdgeStringValue(str)
 
@@ -215,7 +215,7 @@ Returns :const:`True` if the given string representation has been successfully c
 %End
 //===========================================================================================
 
-	virtual void erase(const tlp::node node) = 0;
+  virtual void erase(const tlp::node node) = 0;
 %Docstring
 tlp.PropertyInterface.erase(node)
 
@@ -225,19 +225,19 @@ The new value for the node is the default one.
 :param node: an existing node
 :type node: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph attached to the property
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->erase(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
-%End	
-	
-//===========================================================================================	
-	
-	virtual void erase(const tlp::edge edge) = 0;
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipCpp->erase(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+  }
+%End
+
+//===========================================================================================
+
+  virtual void erase(const tlp::edge edge) = 0;
 %Docstring
 tlp.PropertyInterface.erase(edge)
 
@@ -247,19 +247,19 @@ The new value for the edge is the default one.
 :param edge: an existing edge
 :type edge: :class:`tlp.edge`
 :throws: an exception if the edge does not belong to the graph attached to the property
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->erase(*a0);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipCpp->erase(*a0);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+  }
 %End
 
 //===========================================================================================
 
-    virtual std::string getNodeStringValue( const tlp::node node )  = 0;
+  virtual std::string getNodeStringValue( const tlp::node node )  = 0;
 %Docstring
 tlp.PropertyInterface.getNodeStringValue(node)
 
@@ -269,19 +269,19 @@ Returns a string conversion of the value registered for the given node.
 :type node: :class:`tlp.node`
 :rtype: string
 :throws: an exception if the node does not belong to the graph attached to the property
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = new std::string(sipCpp->getNodeStringValue(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
-%End	
-	
-//===========================================================================================	
-	
-    virtual std::string getEdgeStringValue( const tlp::edge edge )  = 0;
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipRes = new std::string(sipCpp->getNodeStringValue(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+  }
+%End
+
+//===========================================================================================
+
+  virtual std::string getEdgeStringValue( const tlp::edge edge )  = 0;
 %Docstring
 tlp.PropertyInterface.getEdgeStringValue(edge)
 
@@ -291,19 +291,19 @@ Returns a string conversion of the value registered for the given edge.
 :type edge: :class:`tlp.edge`
 :rtype: string
 :throws: an exception if the edge does not belong to the graph attached to the property
-%End	
-	
-%MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = new std::string(sipCpp->getEdgeStringValue(*a0));
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
 %End
-	
-//===========================================================================================	
-	
-	virtual bool setNodeStringValue( const tlp::node node, const std::string & strVal ) = 0;
+
+%MethodCode
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipRes = new std::string(sipCpp->getEdgeStringValue(*a0));
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+  }
+%End
+
+//===========================================================================================
+
+  virtual bool setNodeStringValue( const tlp::node node, const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setNodeStringValue(node, str)
 
@@ -317,19 +317,19 @@ Returns :const:`True` if the given string representation has been successfully c
 :type str: string
 :rtype: boolean
 :throws: an exception if the node does not belong to the graph attached to the property
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->setNodeStringValue(*a0, *a1);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
-%End	
-	
-//===========================================================================================	
-	
-	virtual bool setEdgeStringValue( const tlp::edge edge, const std::string & strVal) = 0;
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipCpp->setNodeStringValue(*a0, *a1);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+  }
+%End
+
+//===========================================================================================
+
+  virtual bool setEdgeStringValue( const tlp::edge edge, const std::string & strVal) = 0;
 %Docstring
 tlp.PropertyInterface.setEdgeStringValue(edge, str)
 
@@ -343,61 +343,61 @@ Returns :const:`True` if the given string representation has been successfully c
 :type str: string
 :rtype: boolean
 :throws: an exception if the edge does not belong to the graph attached to the property
-%End	
-	
-%MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->setEdgeStringValue(*a0, *a1);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
 %End
-	
-//===========================================================================================
 
-    std::string __getitem__(const tlp::node node) ;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = new std::string(sipCpp->getNodeStringValue(*a0));     	
-    } else {
-    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-    }
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipCpp->setEdgeStringValue(*a0, *a1);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+  }
 %End
 
 //===========================================================================================
 
-    void __setitem__(const tlp::node node, const std::string &strVal) ;
+  std::string __getitem__(const tlp::node node) ;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->setNodeStringValue(*a0, *a1);     	
-    } else {
-    	sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-    }
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipRes = new std::string(sipCpp->getNodeStringValue(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+  }
 %End
 
-//===========================================================================================	
-		
-    std::string __getitem__(const tlp::edge edge) ;
+//===========================================================================================
+
+  void __setitem__(const tlp::node node, const std::string &strVal) ;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = new std::string(sipCpp->getEdgeStringValue(*a0));     	
-    } else {
-    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-    }
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipCpp->setNodeStringValue(*a0, *a1);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+  }
+%End
+
+//===========================================================================================
+
+  std::string __getitem__(const tlp::edge edge) ;
+%MethodCode
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipRes = new std::string(sipCpp->getEdgeStringValue(*a0));
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+  }
 %End
 
 
 //===========================================================================================
 
-    void __setitem__(const tlp::edge edge, const std::string &strVal) ;
+  void __setitem__(const tlp::edge edge, const std::string &strVal) ;
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipCpp->setEdgeStringValue(*a0, *a1);     	
-    } else {
-    	sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-    }
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipCpp->setEdgeStringValue(*a0, *a1);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+  }
 %End 
-  	
+  
 };
 
 };

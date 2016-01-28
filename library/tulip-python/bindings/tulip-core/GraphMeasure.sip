@@ -23,9 +23,9 @@
 
 namespace tlp {
 
-  	enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
+  enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
 
-	double averagePathLength(const tlp::Graph* g, tlp::PluginProgress *pluginProgress= 0);
+  double averagePathLength(const tlp::Graph* g, tlp::PluginProgress *pluginProgress= 0);
 %Docstring
 tlp.averagePathLength(graph)
 
@@ -38,11 +38,11 @@ the shorted distance is set to 0.
 :type graph: :class:`tlp.Graph`
 :rtype: float
 %End
-	
-  	double averageClusteringCoefficient(const tlp::Graph *graph, tlp::PluginProgress *pluginProgress= 0);
+
+  double averageClusteringCoefficient(const tlp::Graph *graph, tlp::PluginProgress *pluginProgress= 0);
 %Docstring
 tlp.averageClusteringCoefficient(graph)
-  	
+
 Returns the clustering coefficient of a graph
 as the average of the local clustering coefficients
 (see :func:`tlp.clusteringCoefficient`) of all the nodes.
@@ -51,9 +51,8 @@ as the average of the local clustering coefficients
 :type graph: :class:`tlp.Graph`
 :rtype: float
 %End
-
   
-  	void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = NULL);
+  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = NULL);
 %Docstring 
 tlp.clusteringCoefficient(graph, result[, maxDepth = 1])
 
@@ -67,20 +66,18 @@ This quantifies how close its neighbors are to being a clique.
 :param result: a graph property in which the results will be stored
 :type result: :class:`tlp.DoubleProperty`
 :param maxDepth: the maximum distance between each node and its neighbours.
-:type maxDepth: integer  	
+:type maxDepth: integer
 %End 
-  	
-%MethodCode
-	tlp::MutableContainer<double> result;
-	tlp::clusteringCoefficient(a0, result, a2, a3);
-	tlp::node n;
-	forEach(n, a0->getNodes()) {
-		a1->setNodeValue(n, result.get(n));
-	}
-%End  	
- 
- 	
 
+%MethodCode
+  tlp::MutableContainer<double> result;
+  tlp::clusteringCoefficient(a0, result, a2, a3);
+  tlp::node n;
+  forEach(n, a0->getNodes()) {
+    a1->setNodeValue(n, result.get(n));
+  }
+%End
+ 
   void dagLevel(const tlp::Graph *graph, tlp::IntegerProperty* result, tlp::PluginProgress* = 0);
 %Docstring
 tlp.dagLevel(graph, result)
@@ -96,18 +93,18 @@ The algorithm ensures that the number of level used is minimal.
 
 .. warning:: The graph must be acyclic (no self loops).
 
-%End  
-  
+%End
+
 %MethodCode
-	tlp::MutableContainer<unsigned int> result;
-	tlp::dagLevel(a0, result, a2);
-	tlp::node n;
-	forEach(n, a0->getNodes()) {
-		a1->setNodeValue(n, static_cast<int>(result.get(n)));
-	}
+  tlp::MutableContainer<unsigned int> result;
+  tlp::dagLevel(a0, result, a2);
+  tlp::node n;
+  forEach(n, a0->getNodes()) {
+    a1->setNodeValue(n, static_cast<int>(result.get(n)));
+  }
 %End  
   
-	unsigned int maxDegree(const tlp::Graph *graph);
+  unsigned int maxDegree(const tlp::Graph *graph);
 %Docstring
 tlp.maxDegree(graph)
 
@@ -118,7 +115,7 @@ Returns the maximum degree of the graph's nodes.
 :rtype: integer
 %End  
   
-	unsigned int minDegree(const tlp::Graph *graph);
+  unsigned int minDegree(const tlp::Graph *graph);
 %Docstring
 tlp.minDegree(graph)
 
@@ -129,7 +126,7 @@ Returns the minimum degree of the graph's nodes.
 :rtype: integer
 %End
   
-  	unsigned int maxDistance(const tlp::Graph *graph, const tlp::node node, tlp::IntegerProperty *result, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
+  unsigned int maxDistance(const tlp::Graph *graph, const tlp::node node, tlp::IntegerProperty *result, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
 %Docstring
 tlp.maxDistance(graph, node, result, direction)
   
@@ -145,22 +142,22 @@ Computes the distances from a node to all the other nodes of a graph and return 
 :type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
 :rtype: integer
 :throws: an exception if the node does not belong to the graph
-%End  	
-  	
-%MethodCode
-	if (a0->isElement(*a1)) {
-		tlp::MutableContainer<unsigned int> result;
-		tlp::maxDistance(a0, *a1, result, a3);
-		tlp::node n;
-		forEach(n, a0->getNodes()) {
-			a2->setNodeValue(n, static_cast<int>(result.get(n)));
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(a0, *a1);
-	}
-%End  	
+%End
 
-  	void reachableNodes(const tlp::Graph *graph, const tlp::node startNode, std::set<tlp::node> &result /Out/, unsigned int maxDistance, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
+%MethodCode
+  if (a0->isElement(*a1)) {
+    tlp::MutableContainer<unsigned int> result;
+    tlp::maxDistance(a0, *a1, result, a3);
+    tlp::node n;
+    forEach(n, a0->getNodes()) {
+      a2->setNodeValue(n, static_cast<int>(result.get(n)));
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(a0, *a1);
+  }
+%End
+
+  void reachableNodes(const tlp::Graph *graph, const tlp::node startNode, std::set<tlp::node> &result /Out/, unsigned int maxDistance, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
 %Docstring
 tlp.reachableNodes(graph, startNode, maxDistance, direction)
 
@@ -185,5 +182,5 @@ at distance less or equal to a maximum one.
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }
-%End  	 	
+%End
 };

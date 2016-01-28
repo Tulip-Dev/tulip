@@ -29,6 +29,7 @@ class BiconnectedTest {
 %TypeHeaderCode
 #include <tulip/BiconnectedTest.h>
 %End
+
 public:
 
   static bool isBiconnected(tlp::Graph *graph);
@@ -59,7 +60,7 @@ biconnected. Returns a list of added edges.
   
 private :
 
-	BiconnectedTest(); 
+  BiconnectedTest(); 
 };
 
 };

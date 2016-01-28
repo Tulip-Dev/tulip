@@ -27,20 +27,20 @@
 
 // Plus set up type aliases for tlp.Coord and tlp.Size
 %PreInitialisationCode
-    // Try to load plugins when importing the module from the Python shell
-    if (tlp::TulipPluginsPath.empty()) {
-      tlp::initTulipLib();
-      tlp::PluginLibraryLoader::loadPlugins();
-    }
+  // Try to load plugins when importing the module from the Python shell
+  if (tlp::TulipPluginsPath.empty()) {
+    tlp::initTulipLib();
+    tlp::PluginLibraryLoader::loadPlugins();
+  }
 %End
 
 %PostInitialisationCode
-    // Set up some type aliases
-    PyObject *moduleDict = PyModule_GetDict(sipModule);
-    PyObject *tlpClass = PyDict_GetItemString(moduleDict, "tlp");
-    PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
-    PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
-    PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
+  // Set up some type aliases
+  PyObject *moduleDict = PyModule_GetDict(sipModule);
+  PyObject *tlpClass = PyDict_GetItemString(moduleDict, "tlp");
+  PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
+  PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
+  PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
 %End
 
 %ModuleHeaderCode
@@ -304,7 +304,7 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
 %Include Iterator.sip
 %Include MapIterator.sip
 %Include Node.sip
-%Include Edge.sip	
+%Include Edge.sip
 %Include Vector.sip
 %Include Color.sip
 %Include Coord.sip

@@ -31,13 +31,13 @@ class NumericProperty : tlp::PropertyInterface /Abstract/ {
 %End
 
 %ConvertToSubClassCode
-    if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::DoubleProperty");
-    } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
-        sipType = sipFindType("tlp::IntegerProperty");
-    } else {
-        sipType = NULL;
-    }
+  if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::DoubleProperty");
+  } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::IntegerProperty");
+  } else {
+    sipType = NULL;
+  }
 %End
 
 %Docstring
@@ -46,20 +46,20 @@ Bases: :class:`tlp.PropertyInterface`
 
 public:
  
-//===========================================================================================	
-	
-	double getNodeDoubleDefaultValue();
+//===========================================================================================
+
+  double getNodeDoubleDefaultValue();
 %Docstring
 tlp.NumericProperty.getNodeDoubleDefaultValue()
 
 Returns the default value associated to the nodes.
 
 :rtype: float
-%End	
-	
-//===========================================================================================	
-	
-	double getEdgeDoubleDefaultValue();
+%End
+
+//===========================================================================================
+
+  double getEdgeDoubleDefaultValue();
 %Docstring
 tlp.NumericProperty.getEdgeDoubleDefaultValue()
 
@@ -70,7 +70,7 @@ Returns the default value associated to the edges.
 
 //===========================================================================================
 
-	const double getNodeDoubleValue(const tlp::node node);
+  const double getNodeDoubleValue(const tlp::node node);
 %Docstring
 tlp.NumericProperty.getNodeDoubleValue(node)
 
@@ -81,18 +81,18 @@ Returns the value associated to a particular node.
 :rtype: float
 :throws: an exception if the node does not belong to the graph attached to the property
 %End
-	
+
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = sipCpp->getNodeDoubleValue(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-	}
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipRes = sipCpp->getNodeDoubleValue(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
+  }
 %End
 
 //===========================================================================================
 
-	const double getEdgeDoubleValue(const tlp::edge edge);
+  const double getEdgeDoubleValue(const tlp::edge edge);
 %Docstring
 tlp.NumericProperty.getEdgeDoubleValue(edge) 
 
@@ -103,18 +103,18 @@ Returns the value associated to a particular edge.
 :rtype: float
 :throws: an exception if the edge does not belong to the graph attached to the property
 %End
-	
+
 %MethodCode
-	if (sipCpp->getGraph()->isElement(*a0)) {
-		sipRes = sipCpp->getEdgeDoubleValue(*a0);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-	}
+  if (sipCpp->getGraph()->isElement(*a0)) {
+    sipRes = sipCpp->getEdgeDoubleValue(*a0);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
+  }
 %End
 
 //===========================================================================================
 
-double  getNodeDoubleMin(tlp::Graph *subgraph=0);
+  double  getNodeDoubleMin(tlp::Graph *subgraph=0);
 %Docstring
 tlp.NumericProperty.getNodeDoubleMin([subgraph = None])
 
@@ -123,12 +123,12 @@ Returns the minimum value on the nodes for that property.
 :param subgraph: a sub-graph can be given in parameter, in that case return the minimum value on the nodes belonging to that sub-graph.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
-%End	
-	
-	
-//===========================================================================================	
-	
-	double  getNodeDoubleMax(tlp::Graph *subgraph=0);
+%End
+
+
+//===========================================================================================
+
+  double  getNodeDoubleMax(tlp::Graph *subgraph=0);
 %Docstring
 tlp.NumericProperty.getNodeDoubleMax([subgraph = None])
 
@@ -138,10 +138,10 @@ Returns the maximum value on the nodes for that property.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End
-		
-//===========================================================================================	
-	
-	double  getEdgeDoubleMin(tlp::Graph *subgraph=0);
+
+//===========================================================================================
+
+  double  getEdgeDoubleMin(tlp::Graph *subgraph=0);
 %Docstring
 tlp.NumericProperty.getEdgeDoubleMin([subgraph = None])
 
@@ -151,10 +151,10 @@ Returns the minimum value on the edges for that property.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End
-	
-//===========================================================================================	
-	
-	double  getEdgeDoubleMax(tlp::Graph *subgraph=0);
+
+//===========================================================================================
+
+  double  getEdgeDoubleMax(tlp::Graph *subgraph=0);
 %Docstring
 tlp.NumericProperty.getEdgeDoubleMax([subgraph = None])
 
@@ -164,10 +164,10 @@ Returns the maximum value on the edges for that double property.
 :type subgraph: :class:`tlp.Graph`
 :rtype: float 
 %End
-	
-//===========================================================================================	
-	
-	void uniformQuantification(unsigned int n);
+
+//===========================================================================================
+
+  void uniformQuantification(unsigned int n);
 %Docstring
 tlp.NumericProperty.uniformQuantification(n)
 
@@ -178,11 +178,11 @@ An uniform quantification tries to separate the nodes and edges in n classes of 
 :type n: integer
 
 .. warning:: All previous values on nodes and edges will be erased and replaced by the id of the class they belong to.
-%End	
-	
-//===========================================================================================	
-	
-	void nodesUniformQuantification(unsigned int n);
+%End
+
+//===========================================================================================
+
+  void nodesUniformQuantification(unsigned int n);
 %Docstring
 tlp.NumericProperty.nodesUniformQuantification(n)
 
@@ -194,10 +194,10 @@ An uniform quantification tries to separate the nodes in n classes of equivalent
 
 .. warning:: All previous values on nodes will be erased and replaced by the id of the class they belong to.
 %End
-	
-//===========================================================================================	
-	
-	void edgesUniformQuantification(unsigned int n);
+
+//===========================================================================================
+
+  void edgesUniformQuantification(unsigned int n);
 %Docstring
 tlp.NumericProperty.edgesUniformQuantification(n)
 
@@ -213,7 +213,7 @@ An uniform quantification tries to separate the edges in n classes of equivalent
 
 //===========================================================================================
 
- tlp::Iterator<tlp::node>* getSortedNodes(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::node>* getSortedNodes(tlp::Graph *sg = NULL, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedNodes([subgraph=None, ascendingOrder=True])
 
@@ -230,7 +230,7 @@ Gets an iterator sorting nodes according to their values in that numeric propert
 
 //===========================================================================================
 
- tlp::Iterator<tlp::edge>* getSortedEdges(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdges(tlp::Graph *sg = NULL, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdges([subgraph=None, ascendingOrder=True])
 
@@ -247,7 +247,7 @@ Gets an iterator sorting edges according to their values in that numeric propert
 
 //===========================================================================================
 
- tlp::Iterator<tlp::edge>* getSortedEdgesBySourceValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdgesBySourceValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdgesBySourceValue([subgraph=None, ascendingOrder=True])
 
@@ -264,7 +264,7 @@ Gets an iterator sorting edges according to the values of their source nodes in 
 
 //===========================================================================================
 
- tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdgesByTargetValue([subgraph=None, ascendingOrder=True])
 
@@ -281,7 +281,7 @@ Gets an iterator sorting edges according to the values of their target nodes in 
 
 //===========================================================================================
 
- tlp::Iterator<tlp::edge>* getSortedEdgesByExtremitiesValues(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdgesByExtremitiesValues(tlp::Graph *sg = NULL, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdgesByExtremitiesValues([subgraph=None, ascendingOrder=True])
 

@@ -35,48 +35,48 @@ This class is the base one for representing an event in Tulip.
 Events are objects sent by objects whose classes derives from the :class:`tlp.Observable` one.
 An event is characterized by its type. The base :class:`tlp.Event` class only carries information as to the type of event, nothing specific :
 
-    * :const:`tlp.Event.TLP_DELETE` : send directly to all observers/listeners, not affected by :meth:`tlp.Observable.holdObservers`.
+  * :const:`tlp.Event.TLP_DELETE` : send directly to all observers/listeners, not affected by :meth:`tlp.Observable.holdObservers`.
 
-    * :const:`tlp.Event.TLP_MODIFICATION` : sent to all observers/listeners. That type of event is first sent to observers then to listeners.
+  * :const:`tlp.Event.TLP_MODIFICATION` : sent to all observers/listeners. That type of event is first sent to observers then to listeners.
 
-    * :const:`tlp.Event.TLP_INFORMATION` : sent only to listeners.
+  * :const:`tlp.Event.TLP_INFORMATION` : sent only to listeners.
 
-    * :const:`tlp.Event.TLP_INVALID` : never sent, used internally for delaying events.
+  * :const:`tlp.Event.TLP_INVALID` : never sent, used internally for delaying events.
 
 Implement a class derived from :class:`tlp.Event` to add custom events.
 Here is a sample code below::
 
-    class MyEvent(tlp.Event):
+  class MyEvent(tlp.Event):
 
-      # sender must be an instance deriving from tlp.Observable
-      def __init__(self, sender, data):
-        tlp.Event.__init__(self, sender, tlp.Event.TLP_MODIFICATION)
-        self.data = data
+    # sender must be an instance deriving from tlp.Observable
+    def __init__(self, sender, data):
+      tlp.Event.__init__(self, sender, tlp.Event.TLP_MODIFICATION)
+      self.data = data
 
-      def getData(self):
-        return self.data
+    def getData(self):
+      return self.data
 
 
 %End
 
 %ConvertToSubClassCode
-   sipType = NULL;
+  sipType = NULL;
 %End
 
 
 // =======================================================================================================
 
-	public:
-	
-        enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
-        
-        Event(const tlp::Observable &sender, tlp::Event::EventType type);
+public:
 
-        virtual ~Event();
+  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
+  
+  Event(const tlp::Observable &sender, tlp::Event::EventType type);
+
+  virtual ~Event();
   
 // =======================================================================================================
 
-        tlp::Observable* sender() const;
+  tlp::Observable* sender() const;
 %Docstring
 tlp.Event.sender()
 
@@ -87,7 +87,7 @@ Returns the object that sent the event.
 
 // =======================================================================================================
 
-        EventType type() const;    
+  EventType type() const;    
 %Docstring
 tlp.Event.type()
 
@@ -148,49 +148,48 @@ To attach to an object for receiving events, call its :meth:`tlp.Observable.addO
 %End
 
 %ConvertToSubClassCode
-        if (dynamic_cast<tlp::Graph *>(sipCpp)) {
-            sipType = sipFindType("tlp::Graph");
-        } else if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::BooleanProperty");
-        } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::ColorProperty");
-        } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::DoubleProperty");
-        } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::GraphProperty");
-        } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::IntegerProperty");
-        } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::LayoutProperty");
-        } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::SizeProperty");
-        } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::StringProperty");
-
-        } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::BooleanVectorProperty");
-        } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::ColorVectorProperty");
-        } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::DoubleVectorProperty");
-        } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::IntegerVectorProperty");
-        } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::CoordVectorProperty");
-        } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::SizeVectorProperty");
-        } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
-            sipType = sipFindType("tlp::StringVectorProperty");
-        } else {
-            sipType = NULL;
-        }
+  if (dynamic_cast<tlp::Graph *>(sipCpp)) {
+    sipType = sipFindType("tlp::Graph");
+  } else if (dynamic_cast<tlp::BooleanProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::BooleanProperty");
+  } else if (dynamic_cast<tlp::ColorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::ColorProperty");
+  } else if (dynamic_cast<tlp::DoubleProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::DoubleProperty");
+  } else if (dynamic_cast<tlp::GraphProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::GraphProperty");
+  } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::IntegerProperty");
+  } else if (dynamic_cast<tlp::LayoutProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::LayoutProperty");
+  } else if (dynamic_cast<tlp::SizeProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::SizeProperty");
+  } else if (dynamic_cast<tlp::StringProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::StringProperty");
+  } else if (dynamic_cast<tlp::BooleanVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::BooleanVectorProperty");
+  } else if (dynamic_cast<tlp::ColorVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::ColorVectorProperty");
+  } else if (dynamic_cast<tlp::DoubleVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::DoubleVectorProperty");
+  } else if (dynamic_cast<tlp::IntegerVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::IntegerVectorProperty");
+  } else if (dynamic_cast<tlp::CoordVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::CoordVectorProperty");
+  } else if (dynamic_cast<tlp::SizeVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::SizeVectorProperty");
+  } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
+    sipType = sipFindType("tlp::StringVectorProperty");
+  } else {
+    sipType = NULL;
+  }
 %End
 
 public:
 
 // =======================================================================================================
 
-      static void unholdObservers();
+  static void unholdObservers();
 %Docstring
 tlp.Observable.unholdObservers()
 
@@ -201,7 +200,7 @@ Listeners are not affected by this function.
 
 // =======================================================================================================
 
-      static void holdObservers();
+  static void holdObservers();
 %Docstring
 tlp.Observable.holdObservers()
 
@@ -217,7 +216,7 @@ It is possible to check whether the events are being help by checking the :meth:
 
 // =======================================================================================================
 
-      static unsigned int observersHoldCounter();
+  static unsigned int observersHoldCounter();
 %Docstring
 tlp.Observable.observableHoldCounters()
 
@@ -228,7 +227,7 @@ Static method to get the number of times :meth:`tlp.Observable.holdObservers` ha
 
 // =======================================================================================================
 
-      void addObserver(tlp::Observable *obs) const;
+  void addObserver(tlp::Observable *obs) const;
 %Docstring
 tlp.Observable.addObserver(observer)
 
@@ -241,7 +240,7 @@ The Observer will receive events sent by this object, if there is no hold applie
 
 // =======================================================================================================
 
-      void addListener(tlp::Observable *obs) const;
+  void addListener(tlp::Observable *obs) const;
 %Docstring
 tlp.Observable.addListener(listener)
 
@@ -254,7 +253,7 @@ The Listener will receive events regardless of the state of :meth:`tlp.Observabl
 
 // =======================================================================================================
 
-      void  removeObserver(tlp::Observable *obs) const;
+  void removeObserver(tlp::Observable *obs) const;
 %Docstring
 tlp.Observable.removeObserver(observer)
 
@@ -267,7 +266,7 @@ The Observer will no longer receive events from this object.
 
 // =======================================================================================================
 
-      void  removeListener(tlp::Observable *obs) const;
+  void removeListener(tlp::Observable *obs) const;
 %Docstring
 tlp.Observable.removeListener(listener)
 
@@ -280,7 +279,7 @@ The Listener will no longer receive events from this object.
 
 // =======================================================================================================
 
-      unsigned int getSent() const;
+  unsigned int getSent() const;
 %Docstring
 tlp.Observable.getSent()
 
@@ -291,7 +290,7 @@ Gets the number of sent events.
 
 // =======================================================================================================
 
-      unsigned int getReceived() const;
+  unsigned int getReceived() const;
 %Docstring
 tlp.Observable.getReceived()
 
@@ -302,7 +301,7 @@ Gets the number of received events.
 
 // =======================================================================================================
 
-      unsigned int countListeners() const;
+  unsigned int countListeners() const;
 %Docstring
 tlp.Observable.countListeners()
 
@@ -313,7 +312,7 @@ Gets the number of Listeners attached to this object.
 
 // =======================================================================================================
 
-      unsigned int countObservers() const;
+  unsigned int countObservers() const;
 %Docstring
 tlp.Observable.countObservers()
 
@@ -326,13 +325,13 @@ Gets the number of Observers attached to this object.
 
 protected:
 
-      Observable();
-      Observable(const tlp::Observable &);
-      virtual ~Observable();
+  Observable();
+  Observable(const tlp::Observable &);
+  virtual ~Observable();
 
 // =======================================================================================================
 
-      void sendEvent(const tlp::Event &);
+  void sendEvent(const tlp::Event &);
 %Docstring
 tlp.Observable.sendEvent(event)
 
@@ -344,7 +343,7 @@ Sends an event to all the Observers/Listeners.
 
 // =======================================================================================================
 
-      virtual void treatEvents(const std::vector<tlp::Event> &events);
+  virtual void treatEvents(const std::vector<tlp::Event> &events);
 %Docstring
 tlp.Observable.treatEvents(events)
 
@@ -364,7 +363,7 @@ for that sender.
 
 // =======================================================================================================
 
-      virtual void treatEvent(const tlp::Event & /NoCopy/);
+  virtual void treatEvent(const tlp::Event & /NoCopy/);
 %Docstring
 tlp.Observable.treatEvent(event)
 
@@ -378,7 +377,7 @@ to catch events with custom types (like for instance :class:`tlp.GraphEvent` or 
 
 // =======================================================================================================
 
-      bool hasOnlookers() const;
+  bool hasOnlookers() const;
 %Docstring
 tlp.Observable.hasOnlookers()
 

@@ -29,6 +29,7 @@ class StringCollection {
 %TypeHeaderCode
 #include <tulip/StringCollection.h>
 %End
+
 public:
 
 %Docstring
@@ -95,7 +96,7 @@ Returns :const:`True` if the string value exists in the collection.
   
 // ===========================================================================  
   
-  int  getCurrent();
+  int getCurrent();
 %Docstring
 tlp.StringCollection.getCurrent()
 

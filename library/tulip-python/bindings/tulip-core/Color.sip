@@ -32,21 +32,21 @@ class Color {
 
 %Docstring
 This class represents a color using the RGBA color space. It can be instantiated the following way::
-	
-	# Each component must be in the range [0, 255]
-	redOpaque = tlp.Color(255, 0, 0)
-	
-	blueTranslucent = tlp.Color(0, 0, 255, 100)
 
-The value of each component can be read / written using the [] operator.	
+  # Each component must be in the range [0, 255]
+  redOpaque = tlp.Color(255, 0, 0)
+  
+  blueTranslucent = tlp.Color(0, 0, 255, 100)
+
+The value of each component can be read / written using the [] operator.
 
 %End
 
 public:
 
-	Color(const unsigned short red=0 ,const unsigned short green=0 ,const unsigned short blue=0, const unsigned short alpha=255);
+  Color(const unsigned short red=0 ,const unsigned short green=0 ,const unsigned short blue=0, const unsigned short alpha=255);
 
-	void set(const unsigned short red=0,const unsigned short green=0 ,const unsigned short blue=0, const unsigned short alpha=255);
+  void set(const unsigned short red=0,const unsigned short green=0 ,const unsigned short blue=0, const unsigned short alpha=255);
 %Docstring
 tlp.Color.set(red, green, blue, alpha)
 
@@ -62,7 +62,7 @@ Sets each component of the color. Each component must be in the range [0, 255].
 :type alpha: integer
 %End
 
-	float getRGL() const;
+  float getRGL() const;
 %Docstring
 tlp.Color.getRGL()
 
@@ -71,7 +71,7 @@ Returns the red component of the color in the OpenGL format (a float value betwe
 :rtype: float
 %End
 
-	float getGGL() const;
+  float getGGL() const;
 %Docstring
 tlp.Color.getGGL()
 
@@ -80,7 +80,7 @@ Returns the green component of the color in the OpenGL format (a float value bet
 :rtype: float
 %End
 
-	float getBGL() const;
+  float getBGL() const;
 %Docstring
 tlp.Color.getBGL()
 
@@ -89,7 +89,7 @@ Returns the blue component of the color in the OpenGL format (a float value betw
 :rtype: float
 %End
 
-	float getAGL() const;
+  float getAGL() const;
 %Docstring
 tlp.Color.getAGL()
 
@@ -98,7 +98,7 @@ Returns the alpha component of the color in the OpenGL format (a float value bet
 :rtype: float
 %End
 
-	unsigned short getR() const;
+  unsigned short getR() const;
 %Docstring
 tlp.Color.getR()
 
@@ -107,7 +107,7 @@ Returns the red component of the color.
 :rtype: integer
 %End
 
-	unsigned short getG() const;
+  unsigned short getG() const;
 %Docstring
 tlp.Color.getG()
 
@@ -116,7 +116,7 @@ Returns the green component of the color.
 :rtype: integer
 %End
 
-	unsigned short getB() const;
+  unsigned short getB() const;
 %Docstring
 tlp.Color.getB()
 
@@ -125,7 +125,7 @@ Returns the blue component of the color.
 :rtype: integer
 %End
 
-	unsigned short getA() const;
+  unsigned short getA() const;
 %Docstring
 tlp.Color.getA()
 
@@ -134,7 +134,7 @@ Returns the alpha component of the color.
 :rtype: integer
 %End
 
-	void setR(const unsigned short red);
+  void setR(const unsigned short red);
 %Docstring
 tlp.Color.setR(red)
 
@@ -144,7 +144,7 @@ Sets the red component of the color (must be in the range [0, 255]).
 :type red: integer
 %End
 
-	void setG(const unsigned short green);
+  void setG(const unsigned short green);
 %Docstring
 tlp.Color.setG(green)
 
@@ -154,7 +154,7 @@ Sets the green component of the color (must be in the range [0, 255]).
 :type green: integer
 %End
 
-	void setB(const unsigned short blue);
+  void setB(const unsigned short blue);
 %Docstring
 tlp.Color.setB(blue)
 
@@ -164,7 +164,7 @@ Sets the blue component of the color (must be in the range [0, 255]).
 :type blue: integer
 %End
 
-	void setA(const unsigned short alpha);
+  void setA(const unsigned short alpha);
 %Docstring
 tlp.Color.setA(alpha)
 
@@ -174,7 +174,7 @@ Sets the alpha component of the color (must be in the range [0, 255]).
 :type alpha: integer
 %End
 
-	int getH() const;
+  int getH() const;
 %Docstring
 tlp.Color.getH()
 
@@ -183,7 +183,7 @@ Returns the hue component (in the range [0, 360]) of the color in the HSV color 
 :rtype: integer
 %End
 
-	int getS() const;
+  int getS() const;
 %Docstring
 tlp.Color.getS()
 
@@ -192,7 +192,7 @@ Returns the saturation component (in the range [0, 255]) of the color in the HSV
 :rtype: integer
 %End
 
-	int getV() const;
+  int getV() const;
 %Docstring
 tlp.Color.getH()
 
@@ -201,7 +201,7 @@ Returns the value component (in the range [0, 255]) of the color in the HSV colo
 :rtype: integer
 %End
 
-	void setH(int hue);
+  void setH(int hue);
 %Docstring
 tlp.Color.setH(hue)
 
@@ -212,7 +212,7 @@ Sets the hue component of the color in the HSV color space (must be in the range
 
 %End
 
-	void setS(int saturation);
+  void setS(int saturation);
 %Docstring
 tlp.Color.setS(saturation)
 
@@ -223,7 +223,7 @@ Sets the saturation component of the color in the HSV color space (must be in th
 
 %End
 
-	void setV(int value);
+  void setV(int value);
 %Docstring
 tlp.Color.setV(value)
 
@@ -233,8 +233,8 @@ Sets the value component of the color in the HSV color space (must be in the ran
 :type value: integer
 
 %End
-	
-	unsigned short operator[](const unsigned int i) const;
+
+  unsigned short operator[](const unsigned int i) const;
 %MethodCode
   if (a0 < 4) {
     sipRes = (*sipCpp)[a0];
@@ -244,20 +244,20 @@ Sets the value component of the color in the HSV color space (must be in the ran
   }
 %End
 
-	void __setitem__(int i, const unsigned short &value);
+  void __setitem__(int i, const unsigned short &value);
 %MethodCode
   if (a0 < 4) {
-		(*sipCpp)[a0] = a1;
+    (*sipCpp)[a0] = a1;
   } else {
     sipIsErr = -1;
     PyErr_SetNone(PyExc_IndexError);
   }
 %End
 
-	bool operator!=(const tlp::Color &) const;
+  bool operator!=(const tlp::Color &) const;
   bool operator==(const tlp::Color &) const;
 
-	SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;

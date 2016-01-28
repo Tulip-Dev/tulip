@@ -37,17 +37,17 @@ the second being the highest (top-right corner).
 
 A bounding box can be instantiated and manipulated the following ways::
 
-	# Initialize a non-valid bounding box.
-	# The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
-	bb = tlp.BoundingBox()
-	
-	# Initialize a bounding box by specifying the lowest and highest point.
-	# The validity of the bounding box is checked in debug mode (an assertion is raised if it is not valid). 
-	bb2 = tlp.BoundingBox(tlp.Vec3f(0,0,0), tlp.Vec3f(10,10,10))
-	
-	# Reading / writing the bounding box components can be done through the [] operator
-	min = bb2[0]
-	max = bb2[1]
+  # Initialize a non-valid bounding box.
+  # The minimum is (1, 1, 1) and the maximum is (-1, -1, -1).
+  bb = tlp.BoundingBox()
+  
+  # Initialize a bounding box by specifying the lowest and highest point.
+  # The validity of the bounding box is checked in debug mode (an assertion is raised if it is not valid). 
+  bb2 = tlp.BoundingBox(tlp.Vec3f(0,0,0), tlp.Vec3f(10,10,10))
+  
+  # Reading / writing the bounding box components can be done through the [] operator
+  min = bb2[0]
+  max = bb2[1]
 %End
 
   BoundingBox();
@@ -70,8 +70,8 @@ tlp.BoundingBox.width()
 Returns the width of the bounding box.
 
 :rtype: float
-%End	  
-	  
+%End  
+  
   float height() const;
 %Docstring
 tlp.BoundingBox.height()
@@ -100,7 +100,6 @@ If the vector is inside the bounding box, it remains unchanged.
 :param point: A point in the 3D space we want the bounding box to encompass.
 :type point: :class:`tlp.Vec3f`
 %End
-
 
   void translate(const tlp::Vec3f& displacement);
 %Docstring
@@ -191,14 +190,14 @@ If the bounding box is invalid the result is always :const:`False`.
   void __setitem__(int i, const tlp::Vec3f &value);
 %MethodCode
   if (a0 < 2) {
-		(*sipCpp)[a0] = *a1;
+    (*sipCpp)[a0] = *a1;
   } else {
     sipIsErr = -1;
     PyErr_SetNone(PyExc_IndexError);
   }
 %End
 
-	SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
@@ -218,5 +217,5 @@ If the bounding box is invalid the result is always :const:`False`.
 %End
 
 };
-  
+
 };

@@ -30,30 +30,31 @@ class NodeShape /NoDefaultCtors/ {
 
 public:
 
-    enum NodeShapes {
-        Billboard=7,
-        ChristmasTree=28,
-        Circle=14,
-        Cone=3,
-        Cross=8,
-        Cube=0,
-        CubeOutlined=1,
-        CubeOutlinedTransparent=9,
-        Cylinder=6,
-        Diamond=5,
-        GlowSphere=16,
-        HalfCylinder=10,
-        Hexagon=13,
-        Pentagon=12,
-        Ring=15,
-        RoundedBox=18,
-        Sphere=2 ,
-        Square=4,
-        Triangle=11,
-        Window=17,
-        Star=19,
-        FontAwesomeIcon=20
-    };
+  enum NodeShapes {
+    Billboard=7,
+    ChristmasTree=28,
+    Circle=14,
+    Cone=3,
+    Cross=8,
+    Cube=0,
+    CubeOutlined=1,
+    CubeOutlinedTransparent=9,
+    Cylinder=6,
+    Diamond=5,
+    GlowSphere=16,
+    HalfCylinder=10,
+    Hexagon=13,
+    Pentagon=12,
+    Ring=15,
+    RoundedBox=18,
+    Sphere=2 ,
+    Square=4,
+    Triangle=11,
+    Window=17,
+    Star=19,
+    FontAwesomeIcon=20
+  };
+  
 };
 
 class EdgeShape /NoDefaultCtors/ {
@@ -63,12 +64,13 @@ class EdgeShape /NoDefaultCtors/ {
 
 public:
 
-    enum EdgeShapes {
-        Polyline=0,
-        BezierCurve=4,
-        CatmullRomCurve=8,
-        CubicBSplineCurve=16
-    };
+  enum EdgeShapes {
+    Polyline=0,
+    BezierCurve=4,
+    CatmullRomCurve=8,
+    CubicBSplineCurve=16
+  };
+  
 };
 
 class EdgeExtremityShape /NoDefaultCtors/ {
@@ -78,25 +80,26 @@ class EdgeExtremityShape /NoDefaultCtors/ {
 
 public:
 
-    enum EdgeExtremityShapes {
-        None=-1,
-        Arrow=50,
-        Circle=14,
-        Cone=3,
-        Cross=8,
-        Cube=0,
-        CubeOutlinedTransparent=9,
-        Cylinder=6,
-        Diamond=5,
-        GlowSphere=16,
-        Hexagon=13,
-        Pentagon=12,
-        Ring=15,
-        Sphere=2 ,
-        Square=4,
-        Star=19,
-        FontAwesomeIcon=20
-    };
+  enum EdgeExtremityShapes {
+    None=-1,
+    Arrow=50,
+    Circle=14,
+    Cone=3,
+    Cross=8,
+    Cube=0,
+    CubeOutlinedTransparent=9,
+    Cylinder=6,
+    Diamond=5,
+    GlowSphere=16,
+    Hexagon=13,
+    Pentagon=12,
+    Ring=15,
+    Sphere=2 ,
+    Square=4,
+    Star=19,
+    FontAwesomeIcon=20
+  };
+  
 };
 
 class LabelPosition /NoDefaultCtors/ {
@@ -106,13 +109,14 @@ class LabelPosition /NoDefaultCtors/ {
 
 public:
 
-    enum LabelPositions {
-        Center=0,
-        Top,
-        Bottom,
-        Left,
-        Right
-    };
+  enum LabelPositions {
+    Center=0,
+    Top,
+    Bottom,
+    Left,
+    Right
+  };
+  
 };
 
 class TulipViewSettings : tlp::Observable {
@@ -122,71 +126,72 @@ class TulipViewSettings : tlp::Observable {
 
 public:
 
-    static tlp::TulipViewSettings &instance();
+  static tlp::TulipViewSettings &instance();
 
-    tlp::Color defaultColor(tlp::ElementType elem) const;
+  tlp::Color defaultColor(tlp::ElementType elem) const;
 
-    void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
+  void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
 
-    tlp::Color defaultBorderColor(tlp::ElementType elem) const;
+  tlp::Color defaultBorderColor(tlp::ElementType elem) const;
 
-    void setDefaultBorderColor(tlp::ElementType elem, const tlp::Color& color);
+  void setDefaultBorderColor(tlp::ElementType elem, const tlp::Color& color);
 
-    float defaultBorderWidth(tlp::ElementType elem) const;
+  float defaultBorderWidth(tlp::ElementType elem) const;
 
-    void setdefaultBorderWidth(tlp::ElementType elem, float borderWidth);
+  void setdefaultBorderWidth(tlp::ElementType elem, float borderWidth);
 
-    tlp::Color defaultLabelColor() const;
+  tlp::Color defaultLabelColor() const;
 
-    void setDefaultLabelColor(const tlp::Color& color);
+  void setDefaultLabelColor(const tlp::Color& color);
 
-    tlp::Color defaultLabelBorderColor() const;
+  tlp::Color defaultLabelBorderColor() const;
 
-    void setDefaultLabelBorderColor(const tlp::Color& color);
+  void setDefaultLabelBorderColor(const tlp::Color& color);
 
-    float defaultLabelBorderWidth() const;
+  float defaultLabelBorderWidth() const;
 
-    void setDefaultLabelBorderWidth(float borderWidth);
+  void setDefaultLabelBorderWidth(float borderWidth);
 
-    int defaultLabelPosition() const;
+  int defaultLabelPosition() const;
 
-    void setDefaultLabelPosition(int position);
+  void setDefaultLabelPosition(int position);
 
-    tlp::Size defaultSize(tlp::ElementType elem) const;
+  tlp::Size defaultSize(tlp::ElementType elem) const;
 
-    void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
+  void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
 
-    int defaultShape(tlp::ElementType elem) const;
+  int defaultShape(tlp::ElementType elem) const;
 
-    void setDefaultShape(tlp::ElementType elem, int shape);
+  void setDefaultShape(tlp::ElementType elem, int shape);
 
-    int defaultEdgeExtremitySrcShape() const;
+  int defaultEdgeExtremitySrcShape() const;
 
-    void setDefaultEdgeExtremitySrcShape(int shape);
+  void setDefaultEdgeExtremitySrcShape(int shape);
 
-    int defaultEdgeExtremityTgtShape() const;
+  int defaultEdgeExtremityTgtShape() const;
 
-    void setDefaultEdgeExtremityTgtShape(int shape);
+  void setDefaultEdgeExtremityTgtShape(int shape);
 
-    tlp::Size defaultEdgeExtremitySrcSize() const;
+  tlp::Size defaultEdgeExtremitySrcSize() const;
 
-    void setDefaultEdgeExtremitySrcSize(const tlp::Size &size);
+  void setDefaultEdgeExtremitySrcSize(const tlp::Size &size);
 
-    tlp::Size defaultEdgeExtremityTgtSize() const;
+  tlp::Size defaultEdgeExtremityTgtSize() const;
 
-    void setDefaultEdgeExtremityTgtSize(const tlp::Size &size);
+  void setDefaultEdgeExtremityTgtSize(const tlp::Size &size);
 
-    std::string defaultFontFile() const;
+  std::string defaultFontFile() const;
 
-    void setDefaultFontFile(const std::string &fontFile);
+  void setDefaultFontFile(const std::string &fontFile);
 
-    int defaultFontSize() const;
+  int defaultFontSize() const;
 
-    void setDefaultFontSize(int fontSize);
+  void setDefaultFontSize(int fontSize);
 
 private:
 
-    TulipViewSettings();
+  TulipViewSettings();
+  
 };
 
 class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
@@ -204,22 +209,22 @@ class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
 
 public:
 
-    enum ViewSettingsEventType {
-        TLP_DEFAULT_COLOR_MODIFIED,
-        TLP_DEFAULT_SHAPE_MODIFIED,
-        TLP_DEFAULT_SIZE_MODIFIED,
-        TLP_DEFAULT_LABEL_COLOR_MODIFIED
-    };
+  enum ViewSettingsEventType {
+    TLP_DEFAULT_COLOR_MODIFIED,
+    TLP_DEFAULT_SHAPE_MODIFIED,
+    TLP_DEFAULT_SIZE_MODIFIED,
+    TLP_DEFAULT_LABEL_COLOR_MODIFIED
+  };
 
-    ViewSettingsEventType getType() const;
+  ViewSettingsEventType getType() const;
 
-    tlp::ElementType getElementType() const;
+  tlp::ElementType getElementType() const;
 
-    tlp::Color getColor() const;
+  tlp::Color getColor() const;
 
-    tlp::Size getSize() const;
+  tlp::Size getSize() const;
 
-    int getShape() const;
+  int getShape() const;
 
 };
 };

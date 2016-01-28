@@ -33,6 +33,7 @@ class ExportModule: tlp::Plugin {
 %TypeHeaderCode
 #include <tulip/ExportModule.h>
 %End
+
 public:
   
 %Docstring
@@ -44,15 +45,15 @@ This abstract class describes an export plugin.
 
 .. py:attribute:: graph
 
-	The :class:`tlp.Graph` to export
+  The :class:`tlp.Graph` to export
 
 .. py:attribute:: dataSet
 
-	A dictionnary containing parameters for this export plugin, if any
-	
+  A dictionnary containing parameters for this export plugin, if any
+
 .. py:attribute:: pluginProgress
 
-	A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution	 
+  A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution 
 
 .. rubric:: class methods
 
@@ -77,9 +78,9 @@ The os parameter is an output file stream (initialized by the Tulip GUI
 or by the :func:`tlp.exportGraph` function.). To write data to the file,
 you have to use the following syntax::
 
-	# write the number of nodes and edges to the file
-	os << self.graph.numberOfNodes() << "\n"
-	os << self.graph.numberOfEdges() << "\n"
+  # write the number of nodes and edges to the file
+  os << self.graph.numberOfNodes() << "\n"
+  os << self.graph.numberOfEdges() << "\n"
 
 A boolean must also be returned
 to indicate if the export was successful.
@@ -88,7 +89,7 @@ to indicate if the export was successful.
 :type os: std.ostream 
 :rtype: boolean
 %End 
-  
+
   tlp::Graph *graph;
   tlp::PluginProgress *pluginProgress;
   tlp::DataSet *dataSet;

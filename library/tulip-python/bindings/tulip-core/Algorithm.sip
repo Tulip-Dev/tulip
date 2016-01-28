@@ -28,6 +28,7 @@ class Algorithm : tlp::Plugin {
 %TypeHeaderCode
 #include <tulip/Algorithm.h>
 %End
+
 public:
 
 %Docstring
@@ -43,25 +44,25 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 
 .. py:attribute:: graph
 
-	The :class:`tlp.Graph` this algorithm will be run on.
+   The :class:`tlp.Graph` this algorithm will be run on.
 
 .. py:attribute:: dataSet
 
-	A dictionnary containing parameters for this algorithm, if any.
-	
+   A dictionnary containing parameters for this algorithm, if any.
+
 .. py:attribute:: pluginProgress
 
-	A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution.	 
+   A :class:`tlp.PluginProgress` to give feedback to the user. It can be :const:`None`, so use with caution. 
 
 .. rubric:: class methods
 
 %End
 
-    Algorithm(const tlp::PluginContext* context);
+  Algorithm(const tlp::PluginContext* context);
 
-	virtual ~Algorithm();
+  virtual ~Algorithm();
 
-	virtual bool run() = 0;
+  virtual bool run() = 0;
 %Docstring
 tlp.Algorithm.run()
 
@@ -70,10 +71,10 @@ Derived classes must implement it. It is a good practice to report progress thro
 The PluginProgress should also be used to report errors, if any. A boolean must also be returned
 to indicate if the algorithm was successful.
 
-:rtype: boolean	
+:rtype: boolean
 %End
 
-	virtual bool check(std::string & /Out/);
+  virtual bool check(std::string & /Out/);
 %Docstring
 tlp.Algorithm.check()
 
@@ -85,12 +86,12 @@ and the second one can be used to provide an error message
 :rtype: (boolean, string)
 %End
 
-    virtual std::string category() const;
+  virtual std::string category() const;
 
-	tlp::Graph *graph;
- 	tlp::PluginProgress *pluginProgress;
-  	tlp::DataSet *dataSet;
-	
+  tlp::Graph *graph;
+  tlp::PluginProgress *pluginProgress;
+  tlp::DataSet *dataSet;
+
 };
 };
 
