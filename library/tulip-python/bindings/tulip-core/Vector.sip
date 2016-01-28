@@ -442,18 +442,14 @@ Computes and returns the dot product (scalar product) of the vector with another
 :rtype: float
 %End
    
-  SIP_PYOBJECT __repr__() const;
+  std::string __repr__() const;
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
   std::string s = oss.str();
   s[0] = '[';
   s[s.size() - 1] = ']';
-#if PY_MAJOR_VERSION >= 3
-  sipRes = PyUnicode_FromString(s.c_str());
-#else
-  sipRes = PyString_FromString(s.c_str());
-#endif
+  sipRes = new std::string(s);
 %End
 
 };
@@ -638,18 +634,14 @@ Convenient method. Returns the fourth component of the vector.
   
   float dotProduct(const tlp::Vec4f &) const;
    
-  SIP_PYOBJECT __repr__() const;
+  std::string __repr__() const;
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
   std::string s = oss.str();
   s[0] = '[';
   s[s.size() - 1] = ']';
-#if PY_MAJOR_VERSION >= 3
-  sipRes = PyUnicode_FromString(s.c_str());
-#else
-  sipRes = PyString_FromString(s.c_str());
-#endif
+  sipRes = new std::string(s);
 %End
 
 };
@@ -743,18 +735,14 @@ public:
     
   tlp::Vec4i & fill(const int &obj);
     
-  SIP_PYOBJECT __repr__() const;
+  std::string __repr__() const;
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
   std::string s = oss.str();
   s[0] = '[';
   s[s.size() - 1] = ']';
-#if PY_MAJOR_VERSION >= 3
-  sipRes = PyUnicode_FromString(s.c_str());
-#else
-  sipRes = PyString_FromString(s.c_str());
-#endif
+  sipRes = new std::string(s);
 %End
 
 };

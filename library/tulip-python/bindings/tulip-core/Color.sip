@@ -257,18 +257,14 @@ Sets the value component of the color in the HSV color space (must be in the ran
   bool operator!=(const tlp::Color &) const;
   bool operator==(const tlp::Color &) const;
 
-  SIP_PYOBJECT __repr__() const;
+  std::string __repr__() const;
 %MethodCode
   std::ostringstream oss;
   oss << *sipCpp;
   std::string s = oss.str();
   s[0] = '[';
   s[s.size() - 1] = ']';
-#if PY_MAJOR_VERSION >= 3
-  sipRes = PyUnicode_FromString(s.c_str());
-#else
-  sipRes = PyString_FromString(s.c_str());
-#endif
+  sipRes = new std::string(s);
 %End
 
   static const tlp::Color Amaranth;
