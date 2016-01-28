@@ -31,6 +31,7 @@ class PluginProgress /Abstract/ {
 %TypeHeaderCode
 #include <tulip/PluginProgress.h>
 %End
+
 public:
 
 %Docstring
@@ -45,9 +46,9 @@ This interface allows to notify and control the progression of a process.
   }
 %End
 
-	PluginProgress();
+  PluginProgress();
 
-	virtual tlp::ProgressState progress(int step, int max_step) = 0;
+  virtual tlp::ProgressState progress(int step, int max_step) = 0;
 %Docstring
 tlp.PluginProgress.progress(step, maxStep)
 
@@ -61,7 +62,7 @@ Use this method to notify the progression of the process.
 %End
 
 
-	virtual void cancel() = 0;
+  virtual void cancel() = 0;
 %Docstring
 tlp.PluginProgress.cancel()
 
@@ -69,7 +70,7 @@ Sets the state flag to cancel, notifying to the process that the user wants to c
 Canceling a process must stop it and revert all the changes performed since its start.
 %End
 
-	virtual void stop() = 0;
+  virtual void stop() = 0;
 %Docstring
 tlp.PluginProgress.stop()
 
@@ -77,7 +78,7 @@ Sets the state flag to stop, notifying to the process that the user wants to sto
 Stopping a process does not revert changes.
 %End
 
-	virtual bool isPreviewMode() const = 0;
+  virtual bool isPreviewMode() const = 0;
 %Docstring
 tlp.PluginProgress.isPreviewMode()
 
@@ -87,7 +88,7 @@ The preview mode redraws the graph while applying the algorithm, making it slowe
 :rtype: boolean
 %End
 
-	virtual void setPreviewMode(bool) = 0;
+  virtual void setPreviewMode(bool) = 0;
 %Docstring
 tlp.PluginProgress.setPreviewMode(preview)
 
@@ -98,7 +99,7 @@ The preview mode redraws the graph while applying the algorithm, making it slowe
 :type preview: boolean
 %End
 
-	virtual void showPreview(bool) = 0;
+  virtual void showPreview(bool) = 0;
 %Docstring
 tlp.PluginProgress.showPreview(showPreview)
 
@@ -109,7 +110,7 @@ allowing the user to decide if the algorithm should draw a preview or not.
 :type showPreview: boolean
 %End
 
-	virtual tlp::ProgressState state() const = 0;
+  virtual tlp::ProgressState state() const = 0;
 %Docstring
 tlp.PluginProgress.state()
 
@@ -118,7 +119,7 @@ Gets the current internal state of the PluginProgress.
 :rtype: a value indicating whether the progress has been stopped (:const:`tlp.TLP_STOP`), cancelled (:const:`tlp.TLP_CANCEL`), or will continue (:const:`tlp.TLP_CONTINUE`).
 %End
 
-	virtual std::string getError() = 0;
+  virtual std::string getError() = 0;
 %Docstring
 tlp.PluginProgress.getError()
 
@@ -128,7 +129,7 @@ If no error has been encountered, an empty string is returned.
 :rtype: string
 %End
 
-	virtual void setError(std::string error) = 0;
+  virtual void setError(std::string error) = 0;
 %Docstring
 tlp.PluginProgress.setError(errorMsg)
 
@@ -138,7 +139,7 @@ Sets the message describing the error encountered during the process.
 :type errorMsg: string
 %End
 
-	virtual void setComment(std::string msg) = 0;
+  virtual void setComment(std::string msg) = 0;
 %Docstring
 tlp.PluginProgress.setComment(msg)
 
@@ -146,7 +147,7 @@ Changes the comment about the process progression.
 
 :param msg: A description of what the process is currently doing, displayed to inform the user.
 :type msg: string
-%End	
+%End
 
 };
 
@@ -156,17 +157,30 @@ class SimplePluginProgress : tlp::PluginProgress {
 %End
 
   public:
-    SimplePluginProgress();
-    virtual tlp::ProgressState progress(int step, int max_step);
-    virtual void cancel();
-    virtual void stop();
-    virtual bool isPreviewMode() const ;
-    virtual void setPreviewMode(bool);
-    virtual void showPreview(bool);
-    virtual tlp::ProgressState state() const;
-    virtual std::string getError();
-    virtual void setError(const std::string& error);
-    virtual void setComment(const std::string&);
-    virtual void setTitle(const std::string&);
+    
+  SimplePluginProgress();
+  
+  virtual tlp::ProgressState progress(int step, int max_step);
+  
+  virtual void cancel();
+  
+  virtual void stop();
+  
+  virtual bool isPreviewMode() const;
+  
+  virtual void setPreviewMode(bool);
+  
+  virtual void showPreview(bool);
+  
+  virtual tlp::ProgressState state() const;
+  
+  virtual std::string getError();
+  
+  virtual void setError(const std::string& error);
+  
+  virtual void setComment(const std::string&);
+  
+  virtual void setTitle(const std::string&);
+  
 };
 };

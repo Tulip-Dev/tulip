@@ -41,15 +41,15 @@ nodes z-rotations defined in the default double property "viewRotation" and size
 %End
 
 %MethodCode
-    if (a1 && !(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
-        sipIsErr = 1;
-        PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
-    } else {
-        sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
-                                                              a0->getProperty<tlp::SizeProperty>("viewSize"),
-                                                              a0->getProperty<tlp::DoubleProperty>("viewRotation"),
-                                                              a1));
-    }
+  if (a1 && !(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
+  } else {
+    sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
+                                                          a0->getProperty<tlp::SizeProperty>("viewSize"),
+                                                          a0->getProperty<tlp::DoubleProperty>("viewRotation"),
+                                                          a1));
+  }
 %End
 
 // ================================================================================================
@@ -80,21 +80,21 @@ nodes z-rotations and sizes of elements.
 %End
 
 %MethodCode
-	if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided layout property is not attached to the graph on which to compute its bounding box.");
-	} else if (!(a0 == a2->getGraph() || a2->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided size property is not attached to the graph on which to compute its bounding box.");
-	} else if (!(a0 == a3->getGraph() || a3->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its bounding box.");
-	} else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
-	} else {
-		sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a1, a2, a3, a4));
-	}
+  if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided layout property is not attached to the graph on which to compute its bounding box.");
+  } else if (!(a0 == a2->getGraph() || a2->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided size property is not attached to the graph on which to compute its bounding box.");
+  } else if (!(a0 == a3->getGraph() || a3->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its bounding box.");
+  } else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding box.");
+  } else {
+    sipRes = new tlp::BoundingBox(tlp::computeBoundingBox(a0, a1, a2, a3, a4));
+  }
 %End
 
 // ================================================================================================                             
@@ -124,15 +124,15 @@ To get the bounding radius, you have to compute the distance between the two mem
 %End
 
 %MethodCode
-    if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
-        sipIsErr = 1;
-        PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
-    } else {
-        sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
-                                                                                  a0->getProperty<tlp::SizeProperty>("viewSize"),
-                                                                                  a0->getProperty<tlp::DoubleProperty>("viewRotation"),
-                                                                                  a1));
-    }
+  if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
+  } else {
+    sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
+                                                                              a0->getProperty<tlp::SizeProperty>("viewSize"),
+                                                                              a0->getProperty<tlp::DoubleProperty>("viewRotation"),
+                                                                              a1));
+  }
 %End
 
 // ================================================================================================                             
@@ -169,21 +169,21 @@ To get the bounding radius, you have to compute the distance between the two mem
 %End
 
 %MethodCode
-	if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided layout property is not attached to the graph on which to compute its bounding sphere.");
-	} else if (!(a0 == a2->getGraph() || a2->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided size property is not attached to the graph on which to compute its bounding sphere.");
-	} else if (!(a0 == a3->getGraph() || a3->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its bounding sphere.");
-	} else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
-	} else {
-		sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a1, a2, a3, a4));
-	}
+  if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided layout property is not attached to the graph on which to compute its bounding sphere.");
+  } else if (!(a0 == a2->getGraph() || a2->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided size property is not attached to the graph on which to compute its bounding sphere.");
+  } else if (!(a0 == a3->getGraph() || a3->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its bounding sphere.");
+  } else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its bounding sphere.");
+  } else {
+    sipRes = new std::pair<tlp::Coord, tlp::Coord>(tlp::computeBoundingRadius(a0, a1, a2, a3, a4));
+  }
 %End
 
 // ================================================================================================
@@ -224,15 +224,15 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
 %End
 
 %MethodCode
-    if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
-        sipIsErr = 1;
-        PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
-    } else {
-        sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
-                                                                    a0->getProperty<tlp::SizeProperty>("viewSize"),
-                                                                    a0->getProperty<tlp::DoubleProperty>("viewRotation"),
-                                                                    a1));
-    }
+  if (a1 && (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0)))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
+  } else {
+    sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a0->getProperty<tlp::LayoutProperty>("viewLayout"),
+                                                                a0->getProperty<tlp::SizeProperty>("viewSize"),
+                                                                a0->getProperty<tlp::DoubleProperty>("viewRotation"),
+                                                                a1));
+  }
 %End
 
 // ================================================================================================
@@ -241,7 +241,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
                                            tlp::LayoutProperty *layout,
                                            tlp::SizeProperty *size,
                                            tlp::DoubleProperty *rotation,
-                                           tlp::BooleanProperty *selection = 0);	
+                                           tlp::BooleanProperty *selection = 0);
 %Docstring
 tlp.computeConvexHull(graph, layout, size, rotation[, selection = None])
 
@@ -264,21 +264,21 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
 %End
 
 %MethodCode
-	if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided layout property is not attached to the graph on which to compute its convex hull.");
-	} else if (!(a0 == a2->getGraph() || a2->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided size property is not attached to the graph on which to compute its convex hull.");
-	} else if (!(a0 == a3->getGraph() || a3->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its convex hull.");
-	} else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
-		sipIsErr = 1;
-		PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
-	} else {
-		sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a1, a2, a3, a4));
-	}
+  if (!(a0 == a1->getGraph() || a1->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided layout property is not attached to the graph on which to compute its convex hull.");
+  } else if (!(a0 == a2->getGraph() || a2->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided size property is not attached to the graph on which to compute its convex hull.");
+  } else if (!(a0 == a3->getGraph() || a3->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided double property is not attached to the graph on which to compute its convex hull.");
+  } else if (a4 && !(a0 == a4->getGraph() || a4->getGraph()->isDescendantGraph(a0))) {
+    sipIsErr = 1;
+    PyErr_SetString(PyExc_Exception, "The provided boolean property is not attached to the graph on which to compute its convex hull.");
+  } else {
+    sipRes = new std::vector<tlp::Coord>(tlp::computeConvexHull(a0, a1, a2, a3, a4));
+  }
 %End
 
 // ================================================================================================
@@ -319,6 +319,5 @@ Computes the centroid of a polygon.
 :type points: list of :class:`tlp.Coord`
 :rtype: :class:`tlp.Coord`
 %End
-
 
 };

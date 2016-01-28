@@ -1,13 +1,13 @@
 
 MACRO(GEN_PROPERTY_BINDINGS GEN_FILE 
                             BASE_CLASS
-			    PROPERTY_TYPE
-			    VEC_PROPERTY_TYPE
-			    CPP_NODE_TYPE 
-			    PYTHON_NODE_TYPE 
-			    CPP_EDGE_TYPE 
-			    PYTHON_EDGE_TYPE
-			    PROPERTY_SPECIFIC_METHODS_FILE)
+                            PROPERTY_TYPE
+                            VEC_PROPERTY_TYPE
+                            CPP_NODE_TYPE 
+                            PYTHON_NODE_TYPE 
+                            CPP_EDGE_TYPE 
+                            PYTHON_EDGE_TYPE
+                            PROPERTY_SPECIFIC_METHODS_FILE)
 
   FILE(READ ${SOURCE_DIR}/AbstractProperty.sip.in input)
   STRING(REPLACE "@BASE_CLASS@" "${BASE_CLASS}" input "${input}")

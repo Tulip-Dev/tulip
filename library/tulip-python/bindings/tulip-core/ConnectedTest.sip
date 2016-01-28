@@ -93,7 +93,7 @@ Computes the sets of connected components. Returns a list of connected component
   
 private : 
 
-	ConnectedTest();
+  ConnectedTest();
 };
 
 };

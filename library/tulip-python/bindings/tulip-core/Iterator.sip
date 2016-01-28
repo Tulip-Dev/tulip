@@ -45,21 +45,21 @@ public:
   }
 %End
 
-    bool hasNext();
+  bool hasNext();
 
-    Iterator * __iter__();
+  Iterator * __iter__();
 %MethodCode
-    sipRes = sipCpp;
+  sipRes = sipCpp;
 %End
 
-    TYPE __next__();
+  TYPE __next__();
 %MethodCode
-    if (sipCpp->hasNext()) {
-      sipRes = copyValue(sipCpp->next());
-    } else {
-      PyErr_SetNone(PyExc_StopIteration);
-      return NULL;
-    }
+  if (sipCpp->hasNext()) {
+    sipRes = copyValue(sipCpp->next());
+  } else {
+    PyErr_SetNone(PyExc_StopIteration);
+    return NULL;
+  }
 %End
 
 };

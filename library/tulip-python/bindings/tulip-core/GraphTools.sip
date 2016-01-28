@@ -23,7 +23,7 @@
 
 namespace tlp {
 
-    std::vector<tlp::node> bfs(tlp::Graph *graph, tlp::node root = tlp::node());
+std::vector<tlp::node> bfs(tlp::Graph *graph, tlp::node root = tlp::node());
 %Docstring
 tlp.bfs(graph[, root])
 
@@ -41,16 +41,16 @@ containing the nodes of the graph in the order they have been visited.
 %End
 
 %MethodCode
-    if (!a1->isValid() || a0->isElement(*a1)) {
-        sipRes = new std::vector<tlp::node>(tlp::bfs(a0, *a1));
-    } else {
-        sipIsErr = throwInvalidNodeException(a0, *a1);
-    }
+  if (!a1->isValid() || a0->isElement(*a1)) {
+    sipRes = new std::vector<tlp::node>(tlp::bfs(a0, *a1));
+  } else {
+    sipIsErr = throwInvalidNodeException(a0, *a1);
+  }
 %End
 
 //========================================================================================
 
-    std::vector<tlp::node> dfs(tlp::Graph *graph, tlp::node root = tlp::node());
+  std::vector<tlp::node> dfs(tlp::Graph *graph, tlp::node root = tlp::node());
 %Docstring
 tlp.dfs(graph[, root])
 
@@ -68,11 +68,11 @@ containing the nodes of the graph in the order they have been visited.
 %End
 
 %MethodCode
-    if (!a1->isValid() || a0->isElement(*a1)) {
-        sipRes = new std::vector<tlp::node>(tlp::dfs(a0, *a1));
-    } else {
-        sipIsErr = throwInvalidNodeException(a0, *a1);
-    }
+  if (!a1->isValid() || a0->isElement(*a1)) {
+    sipRes = new std::vector<tlp::node>(tlp::dfs(a0, *a1));
+  } else {
+    sipIsErr = throwInvalidNodeException(a0, *a1);
+  }
 %End
 
 };

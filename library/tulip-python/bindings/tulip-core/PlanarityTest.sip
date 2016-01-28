@@ -29,6 +29,7 @@ class PlanarityTest {
 %TypeHeaderCode
 #include <tulip/PlanarityTest.h>
 %End
+
 public:
 
   static bool isPlanar(tlp::Graph *graph);
@@ -87,7 +88,7 @@ Returns a list of edges that prevents to make the graph planar
     
 private :
 
-   PlanarityTest();  
+  PlanarityTest();  
 };
 
 };

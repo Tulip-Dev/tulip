@@ -110,15 +110,15 @@ bool tryToSetPropertyValue(const tlp::DataSet *dataSet, const std::pair<std::str
 
 %ModuleCode
 void releaseGraphWrapper(tlp::Graph *graph) {
-    releaseSIPWrapper(graph, sipFindType("tlp::Graph"));
+  releaseSIPWrapper(graph, sipFindType("tlp::Graph"));
 }
 
 void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
-    tlp::Graph *sg = NULL;
-    forEach(sg, graph->getSubGraphs()) {
-        releaseGraphHierarchyWrappers(sg);
-    }
-    releaseGraphWrapper(graph);
+  tlp::Graph *sg = NULL;
+  forEach(sg, graph->getSubGraphs()) {
+    releaseGraphHierarchyWrappers(sg);
+  }
+  releaseGraphWrapper(graph);
 }
 
 tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph, tlp::DataSet *inputParams, PyObject *inputParamsWrapper) {
@@ -285,7 +285,6 @@ bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataS
           break;
         }
       }
-
     } else {
       errMsg = "Error : no graph property named \"" + entry.first + "\".";
       break;
@@ -323,27 +322,27 @@ class Graph : tlp::Observable /Abstract/ {
 %Docstring
 This is the main Tulip class. It enables to :
 
-	* create a directed graph
-	* create and manipulate a sub-graphs hierarchy
-	* get semantic iterators on graph elements
-	* create and retrieve properties of different types to get/set data on the graph
-	
+  * create a directed graph
+  * create and manipulate a sub-graphs hierarchy
+  * get semantic iterators on graph elements
+  * create and retrieve properties of different types to get/set data on the graph
+
 This class can not be instanced directly. Use :func:`tlp.newGraph()` to create a new
-empty graph.	
+empty graph.
 %End
 
 public:
 
-	Graph();
-	
-//===========================================================================================	
-	
-    bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL);
+  Graph();
+
+//===========================================================================================
+
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL);
 %Docstring
-    tlp.Graph.applyAlgorithm(algoName[, params])
+tlp.Graph.applyAlgorithm(algoName[, params])
 
 .. versionadded:: 3.7
-	
+
 Applies an algorithm plugin, identified by its name.
 Algorithm plugins are objects implementing the tlp::Algorithm interface 
 in C++ or the :class:`tlp.Algorithm` interface in Python.
@@ -354,8 +353,8 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information.
 To determine a plugin's parameters, you can either:
 
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -366,30 +365,30 @@ which can contain an error message.
 :param params: The parameters to the algorithm.
 :type params: a dictionnary with string keys (parameters names) and parameters values
 :rtype: (boolean, string)
-%End  	
+%End
 
 %MethodCode
-    if (pluginExists<tlp::Algorithm>(*a0)) {
-        tlp::DataSet *params = prepareAlgorithmParameters(*a0, sipCpp, a2, a2Wrapper);
-        if (params) {
-          sipRes = sipCpp->applyAlgorithm(*a0, *a1, params);
-          updateWrappedDataSetAfterAlgorithmCall(params, a2, a2Wrapper);
-          delete params;
-        } else {
-          sipIsErr = 1;
-        }
+  if (pluginExists<tlp::Algorithm>(*a0)) {
+    tlp::DataSet *params = prepareAlgorithmParameters(*a0, sipCpp, a2, a2Wrapper);
+    if (params) {
+      sipRes = sipCpp->applyAlgorithm(*a0, *a1, params);
+      updateWrappedDataSetAfterAlgorithmCall(params, a2, a2Wrapper);
+      delete params;
     } else {
-        sipIsErr = 1;
-        std::string msg = "No Tulip algorithm plugin named ";
-        msg += *a0;
-        msg += ".";
-        PyErr_SetString(PyExc_Exception, msg.c_str());
+      sipIsErr = 1;
     }
+  } else {
+    sipIsErr = 1;
+    std::string msg = "No Tulip algorithm plugin named ";
+    msg += *a0;
+    msg += ".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
 %End
 
 //===========================================================================================
 
-	void clear();
+  void clear();
 %Docstring
 tlp.Graph.clear()
 
@@ -398,7 +397,7 @@ Remove all nodes, edges and subgraphs from the graph .
 
 //===========================================================================================
 
-	tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0, const std::string& name = "unnamed");
+  tlp::Graph *addSubGraph(tlp::BooleanProperty *selection=0, const std::string& name = "unnamed");
 %Docstring
 tlp.Graph.addSubGraph([selection = None, name = "unnamed"])
 
@@ -413,21 +412,21 @@ selected in the selection. If there is no selection an empty sub-graph is return
 %End
 
 %MethodCode
-    if (!a0 || isValidGraphSelection(sipCpp, a0)) {
-        sipRes = sipCpp->addSubGraph(a0, *a1);
-    } else {
-        sipIsErr = -1;
-        std::ostringstream oss;
-        oss << "The selection provided as parameter to the tlp.Graph.addSubGraph([selection, name]) method is not valid." << std::endl;
-        oss << "It means that some edges extremities are not in the selection." << std::endl;
-        PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    }
+  if (!a0 || isValidGraphSelection(sipCpp, a0)) {
+    sipRes = sipCpp->addSubGraph(a0, *a1);
+  } else {
+    sipIsErr = -1;
+    std::ostringstream oss;
+    oss << "The selection provided as parameter to the tlp.Graph.addSubGraph([selection, name]) method is not valid." << std::endl;
+    oss << "It means that some edges extremities are not in the selection." << std::endl;
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  }
 %End
 
 
 //===========================================================================================
 
-	tlp::Graph *addSubGraph(const std::string& name);
+  tlp::Graph *addSubGraph(const std::string& name);
 %Docstring
 tlp.Graph.addSubGraph(name)
 
@@ -438,11 +437,11 @@ Creates and returns a new named sub-graph of this graph.
 :param name: The name of the newly created subgraph.
 :type name: string
 :rtype: :class:`tlp.Graph`
-%End	
+%End
 
 //===========================================================================================
 
- 	tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false);
+  tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false);
 %Docstring
 tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false)
 
@@ -455,11 +454,11 @@ Creates and returns a subgraph of this graph (or the parent of this graph) that 
 :param addSibling: if true a sibling of this graph will be created; a subgraph of this graph if not. Defaults to false
 :type addSibling: bool
 :rtype: :class:`tlp.Graph`
-%End 	
- 
+%End
+
 //=========================================================================================== 
 
-	tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet);
+  tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet);
 %Docstring
 tlp.Graph.inducedSubGraph(nodeSet)
 
@@ -473,15 +472,14 @@ between two nodes of the set including self-loops.
 %End
 
 // For code compatibility with Tulip-Python 3.X
-   tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet);
+  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet);
 %MethodCode
-    sipRes = sipCpp->inducedSubGraph(std::set<tlp::node>(a0->begin(), a0->end()));
+  sipRes = sipCpp->inducedSubGraph(std::set<tlp::node>(a0->begin(), a0->end()));
 %End
-
 
 //===========================================================================================
 
-    void delSubGraph(tlp::Graph *subgraph);
+  void delSubGraph(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delSubGraph(subgraph)
 
@@ -492,29 +490,29 @@ Delete a sub-graph of this graph. The sub-graph's sub-graphs become sub-graphs o
 %End
 
 %MethodCode
-    if (!a0) {
-        PyErr_SetString(PyExc_TypeError, "Graph.delSubGraph(): argument 1 has unexpected type 'NoneType'");
-        sipIsErr = 1;
+  if (!a0) {
+    PyErr_SetString(PyExc_TypeError, "Graph.delSubGraph(): argument 1 has unexpected type 'NoneType'");
+    sipIsErr = 1;
+  } else {
+    if (a0->getSuperGraph() != sipCpp) {
+      sipIsErr = throwInvalidSgException(sipCpp, a0);
     } else {
-        if (a0->getSuperGraph() != sipCpp) {
-            sipIsErr = throwInvalidSgException(sipCpp, a0);
-        } else {
-            // the sub-graph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
-            // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
-            // Python code raises a segmentation fault :
-            // sg = graph.addSubGraph()
-            // graph.delSubGraph(sg)
-            // print sg # or any operation on sg
-            // An exception is now thrown claiming that the underlying C++ object has been deleted
-            releaseGraphWrapper(a0);
-            sipCpp->delSubGraph(a0);
-        }
+      // the sub-graph will be deleted after the call to tlp::Graph::delSubGraph(tlp::Graph *)
+      // we need to release the SIP wrapper associated to the C++ pointer otherwise the following
+      // Python code raises a segmentation fault :
+      // sg = graph.addSubGraph()
+      // graph.delSubGraph(sg)
+      // print sg # or any operation on sg
+      // An exception is now thrown claiming that the underlying C++ object has been deleted
+      releaseGraphWrapper(a0);
+      sipCpp->delSubGraph(a0);
     }
+  }
 %End
 
 //===========================================================================================
 
-    void delAllSubGraphs(tlp::Graph *subgraph);
+  void delAllSubGraphs(tlp::Graph *subgraph);
 %Docstring
 tlp.Graph.delAllSubGraphs(subgraph)
 
@@ -525,42 +523,41 @@ Delete a sub-graph of this graph and all its sub-graphs.
 %End
 
 %MethodCode
-
-    if (!a0) {
-        PyErr_SetString(PyExc_TypeError, "Graph.delAllSubGraphs(): argument 1 has unexpected type 'NoneType'");
-        sipIsErr = 1;
+  if (!a0) {
+    PyErr_SetString(PyExc_TypeError, "Graph.delAllSubGraphs(): argument 1 has unexpected type 'NoneType'");
+    sipIsErr = 1;
+  } else {
+    if (a0->getSuperGraph() != sipCpp) {
+      sipIsErr = throwInvalidSgException(sipCpp, a0);
     } else {
-        if (a0->getSuperGraph() != sipCpp) {
-            sipIsErr = throwInvalidSgException(sipCpp, a0);
-        } else {
-            // the sub-graphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
-            // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
-            // Python code raises a segmentation fault :
-            // sg = graph.addSubGraph()
-            // sg2 = sg.addSubGraph()
-            // graph.delAllSubGraphs(sg2)
-            // print sg2 # or any operation on sg2
-            // An exception is now thrown claiming that the underlying C++ object has been deleted
-            releaseGraphHierarchyWrappers(a0);
-            sipCpp->delAllSubGraphs(a0);
-        }
+      // the sub-graphs will be deleted after the call to tlp::Graph::delAllSubGraphs(tlp::Graph *)
+      // we need to release the possible SIP wrappers associated to the C++ pointers otherwise the following
+      // Python code raises a segmentation fault :
+      // sg = graph.addSubGraph()
+      // sg2 = sg.addSubGraph()
+      // graph.delAllSubGraphs(sg2)
+      // print sg2 # or any operation on sg2
+      // An exception is now thrown claiming that the underlying C++ object has been deleted
+      releaseGraphHierarchyWrappers(a0);
+      sipCpp->delAllSubGraphs(a0);
     }
+  }
 %End
 
 //===========================================================================================
 
-	tlp::Graph* getSuperGraph() const ;
+  tlp::Graph* getSuperGraph() const;
 %Docstring
 tlp.Graph.getSuperGraph()
 
 Returns the parent of the graph, if it has no parent (is the root graph), it returns itself.
 
 :rtype: :class:`tlp.Graph` 
-%End	
-	
-//===========================================================================================	
-	
-	tlp::Graph* getRoot() const;
+%End
+
+//===========================================================================================
+
+  tlp::Graph* getRoot() const;
 %Docstring
 tlp.Graph.getRoot()
 
@@ -571,7 +568,7 @@ Returns the root graph of the graph hierarchy.
 
 //===========================================================================================
 
-	void setSuperGraph(tlp::Graph *superGraph);
+  void setSuperGraph(tlp::Graph *superGraph);
 %Docstring
 tlp.Graph.setSuperGraph(superGraph)
 
@@ -579,12 +576,11 @@ Sets the parent of the graph (use very carefully). Standard users should never u
 
 :param superGraph: the new parent for the graph in the hierarchy.
 :type superGraph: :class:`tlp.Graph`
-
 %End
 
 //===========================================================================================
-	
-	tlp::IteratorGraph *getSubGraphs() const /TransferBack/;
+
+  tlp::IteratorGraph *getSubGraphs() const /TransferBack/;
 %Docstring
 tlp.Graph.getSubGraphs()
 
@@ -592,14 +588,14 @@ Returns an iterator on all the sub-graphs of the graph.
 
 :rtype: a Tulip iterator on :class:`tlp.Graph` objects
 %End
-	
+
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::Graph *>(sipCpp->getSubGraphs());
-%End		
+  sipRes = new tlp::StableIterator<tlp::Graph *>(sipCpp->getSubGraphs());
+%End
 
 //===========================================================================================
 
-    bool isSubGraph(tlp::Graph* graph) const;
+  bool isSubGraph(tlp::Graph* graph) const;
 %Docstring
 tlp.Graph.isSubGraph(graph)
 
@@ -612,7 +608,7 @@ Returns :const:`True` if the graph argument is a direct sub-graph of the graph.
 
 //===========================================================================================
 
-    bool isDescendantGraph(tlp::Graph* graph) const;
+  bool isDescendantGraph(tlp::Graph* graph) const;
 %Docstring
 tlp.Graph.isDescendantGraph(graph)
 
@@ -625,7 +621,7 @@ Returns :const:`True` if the graph argument is a descendant of this graph.
 
 //===========================================================================================
 
-	tlp::Graph* getSubGraph(unsigned int id) const;
+  tlp::Graph* getSubGraph(unsigned int id) const;
 %Docstring
 tlp.Graph.getSubGraph(id)
 
@@ -638,7 +634,7 @@ Returns the sub-graph with the corresponding id or :const:`None` if there is no 
 
 //===========================================================================================
 
-tlp::Graph* getSubGraph(const std::string &name) const;
+  tlp::Graph* getSubGraph(const std::string &name) const;
 %Docstring
 tlp.Graph.getSubGraph(name)
 
@@ -653,7 +649,7 @@ Returns the sub-graph with the corresponding name or :const:`None` if there is n
 
 //===========================================================================================
 
-	tlp::Graph* getDescendantGraph(unsigned int id) const;
+  tlp::Graph* getDescendantGraph(unsigned int id) const;
 %Docstring
 tlp.Graph.getDescendantGraph(id)
 
@@ -680,8 +676,8 @@ Returns the descendant with the corresponding name or :const:`None` if there is 
 %End
 
 //===========================================================================================
-	
-	tlp::Graph *getNthSubGraph(unsigned int n) const;
+
+  tlp::Graph *getNthSubGraph(unsigned int n) const;
 %Docstring
 tlp.Graph.getNthSubGraph(n)
 
@@ -690,25 +686,25 @@ tlp.Graph.getNthSubGraph(n)
 Returns the nth subgraph or :const:`None` if there is no such sub-graph.
 Since order cannot be ensured in every implementation, this method should be equivalent to::
 
-    i = 0
-    for sg in graph.getSubGraphs():
-      if i++ == n:
-        return sg
-    return None    
-       
+  i = 0
+  for sg in graph.getSubGraphs():
+    if i++ == n:
+      return sg
+  return None    
+
 :param n: the index of the sub-graph to return
 :type n: integer
 :rtype: :class:`tlp.Graph` or :const:`None`
-%End	
-	
-//===========================================================================================	
-	
-  	unsigned  int numberOfSubGraphs() const;
+%End
+
+//===========================================================================================
+
+  unsigned  int numberOfSubGraphs() const;
 %Docstring
 tlp.Graph.numberOfSubGraphs()
 
 .. versionadded:: 3.7
-	
+
 Returns the number of direct sub-graphs.
 
 :rtype: integer
@@ -716,20 +712,20 @@ Returns the number of direct sub-graphs.
   
 //===========================================================================================  
   
-  	unsigned int numberOfDescendantGraphs() const;
+  unsigned int numberOfDescendantGraphs() const;
 %Docstring
-tlp.Graph.numberOfDescendantGraphs()	
+tlp.Graph.numberOfDescendantGraphs()
 
 .. versionadded:: 3.7
-	
+
 Returns the number of descendant graphs.
 
-:rtype: integer	
-%End  	
+:rtype: integer
+%End
 
 //===========================================================================================
-	
-	tlp::IteratorGraph *getDescendantGraphs() const /TransferBack/;
+
+  tlp::IteratorGraph *getDescendantGraphs() const /TransferBack/;
 %Docstring
 tlp.Graph.getDescendantGraphs()
 
@@ -737,14 +733,14 @@ Returns an iterator over all the descendant graphs of the graph.
 
 :rtype: a Tulip iterator on :class:`tlp.Graph` objects
 %End
-	
+
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::Graph *>(sipCpp->getDescendantGraphs());
-%End		
+  sipRes = new tlp::StableIterator<tlp::Graph *>(sipCpp->getDescendantGraphs());
+%End
 
 //===========================================================================================
 
-	tlp::node addNode();
+  tlp::node addNode();
 %Docstring
 tlp.Graph.addNode()
 
@@ -756,7 +752,7 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-        void addNodes(unsigned int nbNodes, std::vector<tlp::node>& addedNodes /Out/);
+  void addNodes(unsigned int nbNodes, std::vector<tlp::node>& addedNodes /Out/);
 %Docstring
 tlp.Graph.addNodes(nbNodes)
 
@@ -775,7 +771,7 @@ The new nodes are also added in all the graph ancestors to maintain the sub-grap
 
 //===========================================================================================
 
-	void addNode(const tlp::node node);
+  void addNode(const tlp::node node);
 %Docstring
 tlp.Graph.addNode(node)
 
@@ -792,18 +788,17 @@ to maintain the sub-graph relation between graphs.
 
 %End
 
-		
 %MethodCode
-	if (sipCpp->getRoot()->isElement(*a0)) {
-		sipCpp->addNode(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), *a0);
-	}
-%End	
+  if (sipCpp->getRoot()->isElement(*a0)) {
+    sipCpp->addNode(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), *a0);
+  }
+%End
 
 //===========================================================================================
 
-        void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer/);
+  void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer/);
 %Docstring
 tlp.Graph.addNodes(itNodes)
 
@@ -823,25 +818,24 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %End
 
 %MethodCode
-    tlp::StableIterator<tlp::node> sItNodes(a0);
-    tlp::node n;
-    while (sItNodes.hasNext()) {
-	  n = sItNodes.next();
-          if (!sipCpp->getRoot()->isElement(n)) {
-              sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), n);
-              break;
-          }
+  tlp::StableIterator<tlp::node> sItNodes(a0);
+  tlp::node n;
+  while (sItNodes.hasNext()) {
+    n = sItNodes.next();
+    if (!sipCpp->getRoot()->isElement(n)) {
+      sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), n);
+      break;
     }
-
-    if (sipIsErr == 0) {
-        sItNodes.restart();
-        sipCpp->addNodes(&sItNodes);
-    }
+  }
+  if (sipIsErr == 0) {
+    sItNodes.restart();
+    sipCpp->addNodes(&sItNodes);
+  }
 %End
 
 //===========================================================================================
 
-        void addNodes(const std::vector<tlp::node>& nodes);
+  void addNodes(const std::vector<tlp::node>& nodes);
 %Docstring
 tlp.Graph.addNodes(nodes)
 
@@ -861,20 +855,20 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %End
 
 %MethodCode
-      for (size_t i = 0 ; i < a0->size() ; ++i) {
-	if (!sipCpp->getRoot()->isElement((*a0)[i])) {
-          sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), (*a0)[i]);
-          break;
-        }
-      }
-      if (sipIsErr == 0) {
-        sipCpp->addNodes(*a0);
-      }
+  for (size_t i = 0 ; i < a0->size() ; ++i) {
+    if (!sipCpp->getRoot()->isElement((*a0)[i])) {
+      sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), (*a0)[i]);
+      break;
+    }
+  }
+  if (sipIsErr == 0) {
+    sipCpp->addNodes(*a0);
+  }
 %End
 
 //===========================================================================================
 
-	void delNode(const tlp::node node, bool deleteInAllGraphs = false);
+  void delNode(const tlp::node node, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNode(node[, deleteInAllGraphs = False])
 
@@ -886,19 +880,19 @@ to maintain the sub-graph relation between graphs.
 :param deleteInAllGraphs: if :const:`True`, remove the node in all the hierarchy of graphs
 :type deleteInAllGraphs: boolean
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipCpp->delNode(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipCpp->delNode(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-        void delNodes(tlp::Iterator<tlp::node>* itN /Transfer/, bool deleteInAllGraphs = false);
+  void delNodes(tlp::Iterator<tlp::node>* itN /Transfer/, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
 
@@ -917,25 +911,24 @@ the sub-graph relation between graphs.
 %End
 
 %MethodCode
-    tlp::StableIterator<tlp::node> sItNodes(a0);
-    tlp::node n;
-    while (sItNodes.hasNext()) {
-	n = sItNodes.next();
-        if (!sipCpp->isElement(n)) {
-            sipIsErr = throwInvalidNodeException(sipCpp, n);
-            break;
-        }
+  tlp::StableIterator<tlp::node> sItNodes(a0);
+  tlp::node n;
+  while (sItNodes.hasNext()) {
+    n = sItNodes.next();
+    if (!sipCpp->isElement(n)) {
+      sipIsErr = throwInvalidNodeException(sipCpp, n);
+      break;
     }
-
-    if (sipIsErr == 0) {
-        sItNodes.restart();
-        sipCpp->delNodes(&sItNodes, a1);
-    }
+  }
+  if (sipIsErr == 0) {
+    sItNodes.restart();
+    sipCpp->delNodes(&sItNodes, a1);
+  }
 %End
 
 //===========================================================================================
 
-        void delNodes(const std::vector<tlp::node>& nodes, bool deleteInAllGraphs = false);
+  void delNodes(const std::vector<tlp::node>& nodes, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNodes(nodes[, deleteInAllGraphs=False])
 
@@ -955,20 +948,20 @@ the sub-graph relation between graphs.
 %End
 
 %MethodCode
-      for (size_t i = 0 ; i < a0->size() ; ++i) {
-	if (!sipCpp->isElement((*a0)[i])) {
-          sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), (*a0)[i]);
-          break;
-        }
-      }
-      if (sipIsErr == 0) {
-        sipCpp->delNodes(*a0, a1);
-      }
+  for (size_t i = 0 ; i < a0->size() ; ++i) {
+    if (!sipCpp->isElement((*a0)[i])) {
+      sipIsErr = throwInvalidNodeException(sipCpp->getRoot(), (*a0)[i]);
+      break;
+    }
+  }
+  if (sipIsErr == 0) {
+    sipCpp->delNodes(*a0, a1);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::edge addEdge(const tlp::node src, const tlp::node tgt);
+  tlp::edge addEdge(const tlp::node src, const tlp::node tgt);
 %Docstring
 tlp.Graph.addEdge(src, tgt)
 
@@ -981,23 +974,23 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 :type tgt: :class:`tlp.node`
 :rtype: :class:`tlp.edge`
 :throws: an exception if the provided source or target node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			sipRes = new tlp::edge(sipCpp->addEdge(*a0, *a1));
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      sipRes = new tlp::edge(sipCpp->addEdge(*a0, *a1));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-        void addEdges(const std::vector<pairNodeNode>& edges, std::vector<tlp::edge>& addedEdges /Out/);
+  void addEdges(const std::vector<pairNodeNode>& edges, std::vector<tlp::edge>& addedEdges /Out/);
 %Docstring
 tlp.Graph.addEdges(edges)
 
@@ -1013,25 +1006,24 @@ The new edges are also added in all the graph ancestors to maintain the sub-grap
 %End
 
 %MethodCode
-      for (size_t i = 0 ; i < a0->size() ; ++i) {
-        if (!sipCpp->isElement((*a0)[i].first)) {
-            sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].first);
-            break;
-	}
-        if (!sipCpp->isElement((*a0)[i].second)) {
-            sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].second);
-            break;
-        }
-      }
-      if (sipIsErr == 0) {
-        sipCpp->addEdges(*a0, *a1);
-      }
+  for (size_t i = 0 ; i < a0->size() ; ++i) {
+    if (!sipCpp->isElement((*a0)[i].first)) {
+      sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].first);
+      break;
+    }
+    if (!sipCpp->isElement((*a0)[i].second)) {
+      sipIsErr = throwInvalidNodeException(sipCpp, (*a0)[i].second);
+      break;
+    }
+  }
+  if (sipIsErr == 0) {
+    sipCpp->addEdges(*a0, *a1);
+  }
 %End
-
 
 //===========================================================================================
 
-	void addEdge(const tlp::edge edge);
+  void addEdge(const tlp::edge edge);
 %Docstring
 tlp.Graph.addEdge(edge)
 
@@ -1049,32 +1041,32 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 %End
 
 %MethodCode
-	if (sipCpp->getRoot()->isElement(*a0)) {
-            if (sipCpp->isElement(sipCpp->getRoot()->source(*a0))) {
-                if (sipCpp->isElement(sipCpp->getRoot()->target(*a0))) {
-                    sipCpp->addEdge(*a0);
-                } else {
-                    std::ostringstream oss;
-                    oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
-                        << "because the graph does not contain its target node.";
-                    printErrorMessage(oss.str());
-                    sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(*a0));
-                }
-            } else {
-                std::ostringstream oss;
-                oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
-                    << "because the graph does not contain its source node.";
-                printErrorMessage(oss.str());
-                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(*a0));
-            }
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), *a0);
-	}
+  if (sipCpp->getRoot()->isElement(*a0)) {
+    if (sipCpp->isElement(sipCpp->getRoot()->source(*a0))) {
+      if (sipCpp->isElement(sipCpp->getRoot()->target(*a0))) {
+        sipCpp->addEdge(*a0);
+      } else {
+        std::ostringstream oss;
+        oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+            << "because the graph does not contain its target node.";
+        printErrorMessage(oss.str());
+        sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(*a0));
+      }
+    } else {
+      std::ostringstream oss;
+      oss << "Error : edge " << a0->id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+          << "because the graph does not contain its source node.";
+      printErrorMessage(oss.str());
+      sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(*a0));
+    }
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), *a0);
+  }
 %End
 
 //===========================================================================================
 
-        void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer/);
+  void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer/);
 %Docstring
 tlp.Graph.addEdges(itEdges)
 
@@ -1093,41 +1085,40 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %End
 
 %MethodCode
-    tlp::StableIterator<tlp::edge> sItEdges(a0);
-    tlp::edge e;
-    while (sItEdges.hasNext()) {
-	e = sItEdges.next();
-        if (!sipCpp->getRoot()->isElement(e)) {
-                sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
-                break;
-        } else {
-            if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
-                std::ostringstream oss;
-                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
-                    << "because the graph does not contain its source node.";
-                printErrorMessage(oss.str());
-                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
-                break;
-            }
-            if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
-                std::ostringstream oss;
-                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
-                    << "because the graph does not contain its target node.";
-                printErrorMessage(oss.str());
-                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
-                break;
-            }
-        }
+  tlp::StableIterator<tlp::edge> sItEdges(a0);
+  tlp::edge e;
+  while (sItEdges.hasNext()) {
+    e = sItEdges.next();
+    if (!sipCpp->getRoot()->isElement(e)) {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
+      break;
+    } else {
+      if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
+        std::ostringstream oss;
+        oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+            << "because the graph does not contain its source node.";
+        printErrorMessage(oss.str());
+        sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
+        break;
+      }
+      if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
+        std::ostringstream oss;
+        oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+            << "because the graph does not contain its target node.";
+        printErrorMessage(oss.str());
+        sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
+        break;
+      }
     }
-
-    if (sipIsErr == 0) {
-        sItEdges.restart();
-        sipCpp->addEdges(&sItEdges);
-    }
+  }
+  if (sipIsErr == 0) {
+    sItEdges.restart();
+    sipCpp->addEdges(&sItEdges);
+  }
 %End
 //===========================================================================================
 
-        void addEdges(const std::vector<tlp::edge>& edges);
+  void addEdges(const std::vector<tlp::edge>& edges);
 %Docstring
 tlp.Graph.addEdges(edges)
 
@@ -1147,38 +1138,38 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %End
 
 %MethodCode
-      for (size_t i = 0 ; i < a0->size() ; ++i) {
-        tlp::edge e = (*a0)[i];
-	if (!sipCpp->getRoot()->isElement(e)) {
-                sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
-                break;
-        } else {
-            if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
-                std::ostringstream oss;
-                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
-                    << "because the graph does not contain its source node.";
-                printErrorMessage(oss.str());
-                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
-                break;
-            }
-            if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
-                std::ostringstream oss;
-                oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
-                    << "because the graph does not contain its target node.";
-                printErrorMessage(oss.str());
-                sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
-                break;
-            }
-        }
+  for (size_t i = 0 ; i < a0->size() ; ++i) {
+    tlp::edge e = (*a0)[i];
+    if (!sipCpp->getRoot()->isElement(e)) {
+      sipIsErr = throwInvalidEdgeException(sipCpp->getRoot(), e);
+      break;
+    } else {
+      if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
+          std::ostringstream oss;
+          oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+              << "because the graph does not contain its source node.";
+          printErrorMessage(oss.str());
+          sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
+          break;
       }
-      if (sipIsErr == 0) {
-        sipCpp->addEdges(*a0);
+      if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
+          std::ostringstream oss;
+          oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+              << "because the graph does not contain its target node.";
+          printErrorMessage(oss.str());
+          sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
+          break;
       }
+    }
+  }
+  if (sipIsErr == 0) {
+    sipCpp->addEdges(*a0);
+  }
 %End
 
 //===========================================================================================
 
-	 void delEdge(const tlp::edge edge, bool deleteInAllGraphs = false);
+  void delEdge(const tlp::edge edge, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delEdge(edge[, deleteInAllGraphs = False])
 
@@ -1190,19 +1181,19 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 :param deleteInAllGraphs: if :const:`True`, remove the edge in all the hierarchy of graphs
 :type deleteInAllGraphs: boolean
 :throws: an exception if the edge does not belong to the graph
-%End	 
-	 
+%End 
+ 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipCpp->delEdge(*a0);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipCpp->delEdge(*a0);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-        void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer/, bool deleteInAllGraphs = false)=0;
+  void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer/, bool deleteInAllGraphs = false)=0;
 %Docstring
 tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
 
@@ -1221,24 +1212,24 @@ The ordering of remaining edges is preserved.
 %End
 
 %MethodCode
-    tlp::StableIterator<tlp::edge> sItEdges(a0);
-    tlp::edge e;
-    while (sItEdges.hasNext()) {
-	e = sItEdges.next();
-        if (!sipCpp->isElement(e)) {
-            sipIsErr = throwInvalidEdgeException(sipCpp, e);
-            break;
-        }
+  tlp::StableIterator<tlp::edge> sItEdges(a0);
+  tlp::edge e;
+  while (sItEdges.hasNext()) {
+    e = sItEdges.next();
+    if (!sipCpp->isElement(e)) {
+      sipIsErr = throwInvalidEdgeException(sipCpp, e);
+      break;
     }
-    if (sipIsErr == 0) {
-        sItEdges.restart();
-        sipCpp->delEdges(&sItEdges, a1);
-    }
+  }
+  if (sipIsErr == 0) {
+    sItEdges.restart();
+    sipCpp->delEdges(&sItEdges, a1);
+  }
 %End
 
 //===========================================================================================
 
-        void delEdges(const std::vector<tlp::edge>& edges, bool deleteInAllGraphs = false);
+  void delEdges(const std::vector<tlp::edge>& edges, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delEdges(edges[, deleteInAllGraphs=False])
 
@@ -1257,20 +1248,20 @@ the sub-graph relation between graphs.
 %End
 
 %MethodCode
-    for (size_t i = 0 ; i < a0->size() ; ++i) {
-       if (!sipCpp->isElement((*a0)[i])) {
-          sipIsErr = throwInvalidEdgeException(sipCpp, (*a0)[i]);
-          break;
-       }
+  for (size_t i = 0 ; i < a0->size() ; ++i) {
+    if (!sipCpp->isElement((*a0)[i])) {
+      sipIsErr = throwInvalidEdgeException(sipCpp, (*a0)[i]);
+      break;
     }
-    if (sipIsErr == 0) {
-        sipCpp->delEdges(*a0, a1);
-    }
+  }
+  if (sipIsErr == 0) {
+    sipCpp->delEdges(*a0, a1);
+  }
 %End
 
 //===========================================================================================
 
-	void setEdgeOrder(const tlp::node node, const std::vector<tlp::edge> & edges);
+  void setEdgeOrder(const tlp::node node, const std::vector<tlp::edge> & edges);
 %Docstring
 tlp.Graph.setEdgeOrder(node, edges)
 
@@ -1283,18 +1274,18 @@ of a node will be ordered as they are in the list of edges given in parameter.
 :type edges: list of :class:`tlp.edge`
 :throws: an exception if the node does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipCpp->setEdgeOrder(*a0, *a1);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipCpp->setEdgeOrder(*a0, *a1);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
-	
+
 //===========================================================================================
 
-	void swapEdgeOrder(const tlp::node node, const tlp::edge edge1, const tlp::edge edge2);
+  void swapEdgeOrder(const tlp::node node, const tlp::edge edge1, const tlp::edge edge2);
 %Docstring
 tlp.Graph.swapEdgeOrder(node, edge1, edge2)
 
@@ -1307,22 +1298,22 @@ Swaps two edges in the adjacency list of a node.
 :type edge1: :class:`tlp.edge`
 :type edge2: :class:`tlp.edge`
 :throws: an exception if the node or one of the edges does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			if (sipCpp->isElement(*a2)) {
-				sipCpp->swapEdgeOrder(*a0, *a1, *a2);
-			} else {
-				sipIsErr = throwInvalidEdgeException(sipCpp, *a2);
-			}
-		} else {
-			sipIsErr = throwInvalidEdgeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      if (sipCpp->isElement(*a2)) {
+        sipCpp->swapEdgeOrder(*a0, *a1, *a2);
+      } else {
+        sipIsErr = throwInvalidEdgeException(sipCpp, *a2);
+      }
+    } else {
+      sipIsErr = throwInvalidEdgeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
@@ -1341,15 +1332,15 @@ Sets the source of an existing edge.
 %End
 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			sipCpp->setSource(*a0, *a1);
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      sipCpp->setSource(*a0, *a1);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
   
 //===========================================================================================  
@@ -1368,15 +1359,15 @@ Sets the target of an existing edge.
 %End
 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			sipCpp->setTarget(*a0, *a1);
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      sipCpp->setTarget(*a0, *a1);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
   
@@ -1398,24 +1389,24 @@ Sets both the source and target of an existing edge.
 %End
 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			if (sipCpp->isElement(*a2)) {
-				sipCpp->setEnds(*a0, *a1, *a2);
-			} else {
-				sipIsErr = throwInvalidNodeException(sipCpp, *a2);
-			}
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      if (sipCpp->isElement(*a2)) {
+        sipCpp->setEnds(*a0, *a1, *a2);
+      } else {
+        sipIsErr = throwInvalidNodeException(sipCpp, *a2);
+      }
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	void reverse(const tlp::edge edge);
+  void reverse(const tlp::edge edge);
 %Docstring
 tlp.Graph.reverse(edge)
 
@@ -1431,16 +1422,16 @@ and the target becomes the source.
 %End
 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipCpp->reverse(*a0);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipCpp->reverse(*a0);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::node getOneNode() const ;
+  tlp::node getOneNode() const;
 %Docstring
 tlp.Graph.getOneNode()
 
@@ -1451,7 +1442,7 @@ Returns the first node in the graph.
 
 //===========================================================================================
 
-  tlp::node getRandomNode() const ;
+  tlp::node getRandomNode() const;
 %Docstring
 tlp.Graph.getRandomNode()
 
@@ -1464,7 +1455,7 @@ Returns a random node in the graph.
 
 //===========================================================================================
 
-	tlp::node getSource() const ;
+  tlp::node getSource() const;
 %Docstring
 tlp.Graph.getSource()
 
@@ -1478,22 +1469,22 @@ Returns the found node (invalid if there is no source);
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getNodes() const /TransferBack/;
+  tlp::Iterator<tlp::node>* getNodes() const /TransferBack/;
 %Docstring
 tlp.Graph.getNodes()
 
 Returns an iterator on the nodes.
 
 :rtype: a Tulip iterator on :class:`tlp.node` objects
-%End	
-	
+%End
+
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNodes());
-%End	
+  sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNodes());
+%End
 
 //===========================================================================================
 
-	tlp::node getInNode(const tlp::node node, unsigned int i) const;
+  tlp::node getInNode(const tlp::node node, unsigned int i) const;
 %Docstring
 tlp.Graph.getInNode(node, i)
 
@@ -1505,32 +1496,32 @@ Returns the ith predecessor of a node.
 :type i: integer
 :rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of predecessor nodes
-%End	
-	
-	 
+%End
+
+ 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (a1 == 0) {
-			PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getInNode is 1 not 0");
-			sipIsErr = -1;
-		} else if (a1 <= sipCpp->indeg(*a0)) {
-			sipRes = new tlp::node(sipCpp->getInNode(*a0, a1));
-		} else {
-			std::ostringstream oss;
-			std::string graphName;
-			sipCpp->getAttribute("name", graphName);
-			oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->indeg(*a0) << " predecessor nodes and the requested index is " << a1; 
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (a1 == 0) {
+      PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getInNode is 1 not 0");
+      sipIsErr = -1;
+    } else if (a1 <= sipCpp->indeg(*a0)) {
+      sipRes = new tlp::node(sipCpp->getInNode(*a0, a1));
+    } else {
+      std::ostringstream oss;
+      std::string graphName;
+      sipCpp->getAttribute("name", graphName);
+      oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->indeg(*a0) << " predecessor nodes and the requested index is " << a1; 
+      PyErr_SetString(PyExc_Exception, oss.str().c_str());
+      sipIsErr = -1;
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInNodes(node)
 
@@ -1540,19 +1531,19 @@ Return an iterator on the predecessors of a node.
 :type node: :class:`tlp.node`
 :rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInNodes(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
-%End		
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInNodes(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	tlp::node getOutNode(const tlp::node node, unsigned int i) const ;
+  tlp::node getOutNode(const tlp::node node, unsigned int i) const;
 %Docstring
 tlp.Graph.getOutNode(node, i)
 
@@ -1564,32 +1555,32 @@ Returns the ith successor of a node.
 :type i: integer
 :rtype: :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of successor nodes
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (a1 == 0) {
-			PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getOutNode is 1 not 0");
-			sipIsErr = -1;
-		}else if (a1 <= sipCpp->outdeg(*a0)) {
-			sipRes = new tlp::node(sipCpp->getOutNode(*a0, a1));
-		} else {
-			std::ostringstream oss;
-			std::string graphName;
-			sipCpp->getAttribute("name", graphName);
-			oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->outdeg(*a0) << " successor nodes and the requested index is " << a1; 
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
-	
+  if (sipCpp->isElement(*a0)) {
+    if (a1 == 0) {
+      PyErr_SetString(PyExc_Exception, "Error : first index for tlp.Graph.getOutNode is 1 not 0");
+      sipIsErr = -1;
+    }else if (a1 <= sipCpp->outdeg(*a0)) {
+      sipRes = new tlp::node(sipCpp->getOutNode(*a0, a1));
+    } else {
+      std::ostringstream oss;
+      std::string graphName;
+      sipCpp->getAttribute("name", graphName);
+      oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->outdeg(*a0) << " successor nodes and the requested index is " << a1; 
+      PyErr_SetString(PyExc_Exception, oss.str().c_str());
+      sipIsErr = -1;
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+
 %End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getOutNodes(node)
 
@@ -1600,18 +1591,18 @@ Returns an iterator on the successors of a node.
 :rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getOutNodes(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
-%End			
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getOutNodes(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInOutNodes(node)
 
@@ -1622,18 +1613,18 @@ Returns an iterator on the neighbours of a node.
 :rtype: a Tulip iterator on :class:`tlp.node` objects
 :throws: an exception if the node does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInOutNodes(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}	
-%End			
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getInOutNodes(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-    tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack/;
+  tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack/;
 %Docstring
 tlp.Graph.bfs([root])
 
@@ -1648,17 +1639,17 @@ Returns an iterator performing a breadth-first search on the graph.
 %End
 
 %MethodCode
-    if (!a0->isValid() || sipCpp->isElement(*a0)) {
-        // tlp::Graph::bfs returns a StableIterator
-        sipRes = sipCpp->bfs(*a0);
-    } else {
-        sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-    }
+  if (!a0->isValid() || sipCpp->isElement(*a0)) {
+    // tlp::Graph::bfs returns a StableIterator
+    sipRes = sipCpp->bfs(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-    tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack/;
+  tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack/;
 %Docstring
 tlp.Graph.dfs([root])
 
@@ -1673,17 +1664,17 @@ Returns an iterator performing a depth-first search on the graph.
 %End
 
 %MethodCode
-    if (!a0->isValid() || sipCpp->isElement(*a0)) {
-        // tlp::Graph::dfs returns a StableIterator
-        sipRes = sipCpp->dfs(*a0);
-    } else {
-        sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-    }
+  if (!a0->isValid() || sipCpp->isElement(*a0)) {
+    // tlp::Graph::dfs returns a StableIterator
+    sipRes = sipCpp->dfs(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::Graph* getNodeMetaInfo(const tlp::node node) const;
+  tlp::Graph* getNodeMetaInfo(const tlp::node node) const;
 %Docstring
 tlp.Graph.getNodeMetaInfo(node)
 
@@ -1693,19 +1684,19 @@ Returns the underlying graph of a meta node.
 :type node: :class:`tlp.node`
 :rtype: :class:`tlp.Graph`
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = sipCpp->getNodeMetaInfo(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}	
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->getNodeMetaInfo(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getEdges() const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getEdges() const /TransferBack/;
 %Docstring
 tlp.Graph.getEdges()
 
@@ -1713,14 +1704,14 @@ Returns an iterator on the edges.
 
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 %End
-	
+
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdges());
-%End		
+  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdges());
+%End
 
 //===========================================================================================
 
-	tlp::edge getOneEdge() const ;
+  tlp::edge getOneEdge() const;
 %Docstring
 tlp.Graph.getOneEdge()
 
@@ -1731,7 +1722,7 @@ Returns the first edge in the graph.
 
 //===========================================================================================
 
-  tlp::edge getRandomEdge() const ;
+  tlp::edge getRandomEdge() const;
 %Docstring
 tlp.Graph.getRandomEdge()
 
@@ -1744,7 +1735,7 @@ Returns a random edge in the graph.
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getOutEdges(node)
 
@@ -1754,19 +1745,19 @@ Returns a Tulip iterator on the outgoing edges of a node.
 :type node: :class:`tlp.node`
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getOutEdges(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
-%End		
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getOutEdges(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInOutEdges(node)
 
@@ -1777,18 +1768,18 @@ Returns an iterator on the incoming and outgoing edges of a node.
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInOutEdges(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
-%End			
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInOutEdges(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack/;
 %Docstring
 tlp.Graph.getInEdges(node)
 
@@ -1799,18 +1790,18 @@ Returns an iterator on the incoming edges of a node.
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the node does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInEdges(*a0));
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
-%End		
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getInEdges(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack/;
 %Docstring
 tlp.Graph.getEdgeMetaInfo(edge)
 
@@ -1820,30 +1811,30 @@ Returns an iterator on the underlying edges of a meta edge.
 :type edge: :class:`tlp.edge`
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 :throws: an exception if the edge does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdgeMetaInfo(*a0));
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
-%End		
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdgeMetaInfo(*a0));
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	unsigned int getId() const;
+  unsigned int getId() const;
 %Docstring
 tlp.Graph.getId()
 
 Returns the graph's id. This id is unique.
 
 :rtype: integer
-%End	
+%End
 
 //===========================================================================================
 
-	unsigned int numberOfNodes() const ;
+  unsigned int numberOfNodes() const;
 %Docstring
 tlp.Graph.numberOfNodes()
 
@@ -1854,7 +1845,7 @@ Returns the number of nodes in the graph.
 
 //===========================================================================================
 
-	unsigned int numberOfEdges() const ;
+  unsigned int numberOfEdges() const;
 %Docstring
 tlp.Graph.numberOfEdges()
 
@@ -1863,10 +1854,9 @@ Returns the number of edges in the graph.
 :rtype: integer
 %End
 
-
 //===========================================================================================
 
-	unsigned int deg(const tlp::node node) const ;
+  unsigned int deg(const tlp::node node) const;
 %Docstring
 tlp.Graph.deg(node)
 
@@ -1876,19 +1866,19 @@ Returns the degree of a node.
 :type node: :class:`tlp.node`
 :rtype: integer
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = sipCpp->deg(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->deg(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	unsigned int indeg(const tlp::node node) const ;
+  unsigned int indeg(const tlp::node node) const;
 %Docstring
 tlp.Graph.indeg(node)
 
@@ -1898,19 +1888,19 @@ Returns the incoming degree of a node.
 :type node: :class:`tlp.node`
 :rtype: integer
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = sipCpp->indeg(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->indeg(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	unsigned int outdeg(const tlp::node node) const ;
+  unsigned int outdeg(const tlp::node node) const;
 %Docstring
 tlp.Graph.outdeg(node)
 
@@ -1920,19 +1910,19 @@ Returns the outgoing degree of a node.
 :type node: :class:`tlp.node`
 :rtype: integer
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = sipCpp->outdeg(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->outdeg(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::node source(const tlp::edge edge) const ;
+  tlp::node source(const tlp::edge edge) const;
 %Docstring
 tlp.Graph.source(edge)
 
@@ -1943,18 +1933,18 @@ Returns the source of the edge.
 :rtype: :class:`tlp.node`
 :throws: an exception if the edge does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::node(sipCpp->source(*a0));
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::node(sipCpp->source(*a0));
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::node target(const tlp::edge edge) const ;
+  tlp::node target(const tlp::edge edge) const;
 %Docstring
 tlp.Graph.target(edge)
 
@@ -1965,19 +1955,18 @@ Returns the target of the edge.
 :rtype: :class:`tlp.node`
 :throws: an exception if the edge does not belong to the graph
 %End
-	
-%MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new tlp::node(sipCpp->target(*a0));
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
-%End
 
+%MethodCode
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new tlp::node(sipCpp->target(*a0));
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
+%End
 
 //===========================================================================================
 
-	const std::pair<tlp::node, tlp::node>& ends(const tlp::edge edge) const;
+  const std::pair<tlp::node, tlp::node>& ends(const tlp::edge edge) const;
 %Docstring
 tlp.Graph.ends(edge)
 
@@ -1990,16 +1979,16 @@ Returns a tuple containing the two end nodes of an edge
 %End
 
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = new std::pair<tlp::node, tlp::node>(sipCpp->ends(*a0));
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new std::pair<tlp::node, tlp::node>(sipCpp->ends(*a0));
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::node opposite(const tlp::edge edge, const tlp::node node) const ;
+  tlp::node opposite(const tlp::edge edge, const tlp::node node) const;
 %Docstring
 tlp.Graph.opposite(edge, node)
 
@@ -2009,26 +1998,26 @@ Returns the opposite node of the edge for the given node.
 :type edge: :class:`tlp.edge`
 :rtype: :class:`tlp.node`
 :throws: an exception if the edge does not belong to the graph or if the given node is not linked by the edge
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->source(*a0) == *a1 || sipCpp->target(*a0) == *a1) {  
-			sipRes = new tlp::node(sipCpp->opposite(*a0, *a1));
-		} else {
-			std::ostringstream oss;
-			oss << "node with id " << a1->id << " is not linked by the edge with id " << a0->id,
-			PyErr_SetString(PyExc_Exception, oss.str().c_str());
-			sipIsErr = -1;
-		}
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->source(*a0) == *a1 || sipCpp->target(*a0) == *a1) {  
+      sipRes = new tlp::node(sipCpp->opposite(*a0, *a1));
+    } else {
+      std::ostringstream oss;
+      oss << "node with id " << a1->id << " is not linked by the edge with id " << a0->id,
+      PyErr_SetString(PyExc_Exception, oss.str().c_str());
+      sipIsErr = -1;
+    }
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	bool isElement(const tlp::node node) const ;
+  bool isElement(const tlp::node node) const;
 %Docstring
 tlp.Graph.isElement(node)
 
@@ -2041,7 +2030,7 @@ Returns :const:`True` if the node is an element of the graph.
 
 //===========================================================================================
 
-	bool isElement(const tlp::edge edge) const ;
+  bool isElement(const tlp::edge edge) const;
 %Docstring
 tlp.Graph.isElement(edge)
 
@@ -2054,7 +2043,7 @@ Returns :const:`True` if the edge is an element of the graph.
 
 //===========================================================================================
 
-	bool isMetaNode(const tlp::node node) const ;
+  bool isMetaNode(const tlp::node node) const;
 %Docstring
 tlp.Graph.isMetaNode(node)
 
@@ -2064,19 +2053,19 @@ Returns :const:`True` if the node is a meta-node.
 :type node: :class:`tlp.edge`
 :rtype: boolean
 :throws: an exception if the node does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = sipCpp->isMetaNode(*a0);
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->isMetaNode(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	bool isMetaEdge(const tlp::edge edge) const ;
+  bool isMetaEdge(const tlp::edge edge) const;
 %Docstring
 tlp.Graph.isMetaEdge(edge)
 
@@ -2087,18 +2076,18 @@ Returns :const:`True` if the edge is a meta-edge.
 :rtype: boolean
 :throws: an exception if the edge does not belong to the graph
 %End
-	
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		sipRes = sipCpp->isMetaEdge(*a0);
-	} else {
-		sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->isMetaEdge(*a0);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::edge existEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
+  tlp::edge existEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const;
 %Docstring
 tlp.Graph.existEdge(node1, node2[, directed=True])
 
@@ -2113,23 +2102,23 @@ If no edge is found, returns an invalid edge.
 :type directed: boolean
 :rtype: :class:`tlp.edge`
 :throws: an exception if one of the nodes does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			sipRes = new tlp::edge(sipCpp->existEdge(*a0, *a1, a2));
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      sipRes = new tlp::edge(sipCpp->existEdge(*a0, *a1, a2));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	bool hasEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
+  bool hasEdge(const tlp::node node1, const tlp::node node2, bool directed=true) const;
 %Docstring
 tlp.Graph.hasEdge(node1, node2[, directed=True])
 
@@ -2146,23 +2135,23 @@ If no edge is found, returns false.
 :type directed: boolean
 :rtype: boolean
 :throws: an exception if one of the nodes does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			sipRes = sipCpp->hasEdge(*a0, *a1, a2);
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      sipRes = sipCpp->hasEdge(*a0, *a1, a2);
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	std::vector<tlp::edge> getEdges(const tlp::node node1, const tlp::node node2, bool directed=true) const ;
+  std::vector<tlp::edge> getEdges(const tlp::node node1, const tlp::node node2, bool directed=true) const;
 %Docstring
 tlp.Graph.getEdges(node1, node2[, directed=True])
 
@@ -2179,23 +2168,23 @@ If no edge is found, returns edges is empty.
 :type directed: boolean
 :rtype: boolean
 :throws: an exception if one of the nodes does not belong to the graph
-%End	
-	
+%End
+
 %MethodCode
-	if (sipCpp->isElement(*a0)) {
-		if (sipCpp->isElement(*a1)) {
-			sipRes = new std::vector<tlp::edge>(sipCpp->getEdges(*a0, *a1, a2));
-		} else {
-			sipIsErr = throwInvalidNodeException(sipCpp, *a1);
-		}
-	} else {
-		sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-	}
+  if (sipCpp->isElement(*a0)) {
+    if (sipCpp->isElement(*a1)) {
+      sipRes = new std::vector<tlp::edge>(sipCpp->getEdges(*a0, *a1, a2));
+    } else {
+      sipIsErr = throwInvalidNodeException(sipCpp, *a1);
+    }
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::BooleanProperty *getBooleanProperty(const std::string &name);
+  tlp::BooleanProperty *getBooleanProperty(const std::string &name);
 %Docstring
 tlp.Graph.getBooleanProperty(name)
 
@@ -2207,18 +2196,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.BooleanProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::BooleanProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::BooleanProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::BooleanProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::BooleanProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::BooleanProperty *getLocalBooleanProperty(const std::string &name);
+  tlp::BooleanProperty *getLocalBooleanProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalBooleanProperty(name)
 
@@ -2232,16 +2221,16 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::BooleanProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::BooleanProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::BooleanProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::BooleanProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::BooleanVectorProperty *getBooleanVectorProperty(const std::string &name);
+  tlp::BooleanVectorProperty *getBooleanVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getBooleanVectorProperty(name)
 
@@ -2253,18 +2242,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.BooleanVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::BooleanVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::BooleanVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::BooleanVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::BooleanVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::BooleanVectorProperty *getLocalBooleanVectorProperty(const std::string &name);
+  tlp::BooleanVectorProperty *getLocalBooleanVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalBooleanVectorProperty(name)
 
@@ -2272,23 +2261,22 @@ Returns the boolean vector property associated to name in the graph properties p
 If the property is not registered in the pool, it creates a new one and returns it. 
 Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
 
-:param name: the name of the boolean vector property to return or for n in graph.getNodes():
-          print nto create
+:param name: the name of the boolean vector property to return or to create
 :type name: string
 :rtype: :class:`tlp.BooleanVectorProperty`
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::BooleanVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::BooleanVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::BooleanVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::BooleanVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::LayoutProperty *getLayoutProperty(const std::string &name);
+  tlp::LayoutProperty *getLayoutProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLayoutProperty(name)
 
@@ -2300,18 +2288,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.LayoutProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::LayoutProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::LayoutProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::LayoutProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::LayoutProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::LayoutProperty *getLocalLayoutProperty(const std::string &name);
+  tlp::LayoutProperty *getLocalLayoutProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalLayoutProperty(name)
 
@@ -2323,18 +2311,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.LayoutProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::LayoutProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::LayoutProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::LayoutProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::LayoutProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-tlp::CoordVectorProperty *getCoordVectorProperty(const std::string &name);
+  tlp::CoordVectorProperty *getCoordVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getCoordVectorProperty(name)
 
@@ -2348,16 +2336,16 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::CoordVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::CoordVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::CoordVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::CoordVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::CoordVectorProperty *getLocalCoordVectorProperty(const std::string &name);
+  tlp::CoordVectorProperty *getLocalCoordVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalCoordVectorProperty(name)
 
@@ -2369,18 +2357,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.CoordVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::CoordVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::CoordVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::CoordVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::CoordVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::ColorProperty *getColorProperty(const std::string &name);
+  tlp::ColorProperty *getColorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getColorProperty(name)
 
@@ -2394,16 +2382,16 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::ColorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::ColorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::ColorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::ColorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::ColorProperty *getLocalColorProperty(const std::string &name);
+  tlp::ColorProperty *getLocalColorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalColorProperty(name)
 
@@ -2415,18 +2403,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.ColorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::ColorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::ColorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::ColorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::ColorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::ColorVectorProperty *getColorVectorProperty(const std::string &name);
+  tlp::ColorVectorProperty *getColorVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getColorVectorProperty(name)
 
@@ -2440,16 +2428,16 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::ColorVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::ColorVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::ColorVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::ColorVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::ColorVectorProperty *getLocalColorVectorProperty(const std::string &name);
+  tlp::ColorVectorProperty *getLocalColorVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalColorVectorProperty(name)
 
@@ -2461,18 +2449,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.ColorVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::ColorVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::ColorVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::ColorVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::ColorVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::DoubleProperty *getDoubleProperty(const std::string &name);
+  tlp::DoubleProperty *getDoubleProperty(const std::string &name);
 %Docstring
 tlp.Graph.getDoubleProperty(name)
 
@@ -2484,18 +2472,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.DoubleProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::DoubleProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::DoubleProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::DoubleProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::DoubleProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::DoubleProperty *getLocalDoubleProperty(const std::string &name);
+  tlp::DoubleProperty *getLocalDoubleProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalDoubleProperty(name)
 
@@ -2507,18 +2495,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.DoubleProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::DoubleProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::DoubleProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::DoubleProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::DoubleProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+}
 %End
 
 //===========================================================================================
 
-	tlp::DoubleVectorProperty *getDoubleVectorProperty(const std::string &name);
+  tlp::DoubleVectorProperty *getDoubleVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getDoubleVectorProperty(name)
 
@@ -2530,18 +2518,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.DoubleVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::DoubleVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::DoubleVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::DoubleVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::DoubleVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::DoubleVectorProperty *getLocalDoubleVectorProperty(const std::string &name);
+  tlp::DoubleVectorProperty *getLocalDoubleVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalDoubleVectorProperty(name)
 
@@ -2555,16 +2543,16 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::DoubleVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::DoubleVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::DoubleVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::DoubleVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::StringProperty *getStringProperty(const std::string &name);
+  tlp::StringProperty *getStringProperty(const std::string &name);
 %Docstring
 tlp.Graph.getStringProperty(name)
 
@@ -2576,18 +2564,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.StringProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::StringProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::StringProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::StringProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::StringProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::StringProperty *getLocalStringProperty(const std::string &name);
+  tlp::StringProperty *getLocalStringProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalStringProperty(name)
 
@@ -2599,18 +2587,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.StringProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::StringProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::StringProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::StringProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::StringProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::StringVectorProperty *getStringVectorProperty(const std::string &name);
+  tlp::StringVectorProperty *getStringVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getStringVectorProperty(name)
 
@@ -2622,18 +2610,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.StringVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::StringVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::StringVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::StringVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::StringVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::StringVectorProperty *getLocalStringVectorProperty(const std::string &name);
+  tlp::StringVectorProperty *getLocalStringVectorProperty(const std::string &name);
 %Docstring
 tlp.Graph.getLocalStringVectorProperty(name)
 
@@ -2645,19 +2633,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.StringVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::StringVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::StringVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::StringVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::StringVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::SizeProperty *getSizeProperty(const std::string &name);
-%Docstring	
+  tlp::SizeProperty *getSizeProperty(const std::string &name);
+%Docstring
 tlp.Graph.getSizeProperty(name)
 
 Returns the size property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
@@ -2668,19 +2656,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.SizeProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::SizeProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::SizeProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::SizeProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::SizeProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::SizeProperty *getLocalSizeProperty(const std::string &name);
-%Docstring	
+  tlp::SizeProperty *getLocalSizeProperty(const std::string &name);
+%Docstring
 tlp.Graph.getLocalSizeProperty(name)
 
 Returns the size property associated to name in the graph properties pool.
@@ -2691,19 +2679,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.SizeProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::SizeProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::SizeProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::SizeProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::SizeProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::SizeVectorProperty *getSizeVectorProperty(const std::string &name);
-%Docstring	
+  tlp::SizeVectorProperty *getSizeVectorProperty(const std::string &name);
+%Docstring
 tlp.Graph.getSizeVectorProperty(name)
 
 Returns the size vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
@@ -2714,19 +2702,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.SizeVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::SizeVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::SizeVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::SizeVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::SizeVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::SizeVectorProperty *getLocalSizeVectorProperty(const std::string &name);
-%Docstring	
+  tlp::SizeVectorProperty *getLocalSizeVectorProperty(const std::string &name);
+%Docstring
 tlp.Graph.getLocalSizeVectorProperty(name)
 
 Returns the size vector property associated to name in the graph properties pool.
@@ -2737,19 +2725,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.SizeVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::SizeVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::SizeVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::SizeVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::SizeVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::IntegerProperty *getIntegerProperty(const std::string &name);
-%Docstring	
+  tlp::IntegerProperty *getIntegerProperty(const std::string &name);
+%Docstring
 tlp.Graph.getIntegerProperty(name)
 
 Returns the integer property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
@@ -2760,19 +2748,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.IntegerProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::IntegerProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::IntegerProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::IntegerProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::IntegerProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::IntegerProperty *getLocalIntegerProperty(const std::string &name);
-%Docstring	
+  tlp::IntegerProperty *getLocalIntegerProperty(const std::string &name);
+%Docstring
 tlp.Graph.getLocalIntegerProperty(name)
 
 Returns the integer property associated to name in the graph properties pool.
@@ -2783,19 +2771,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.IntegerProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::IntegerProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::IntegerProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::IntegerProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::IntegerProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::IntegerVectorProperty *getIntegerVectorProperty(const std::string &name);	
-%Docstring	
+  tlp::IntegerVectorProperty *getIntegerVectorProperty(const std::string &name);
+%Docstring
 tlp.Graph.getIntegerVectorProperty(name)
 
 Returns the integer vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
@@ -2806,19 +2794,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.IntegerVectorProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::IntegerVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::IntegerVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::IntegerVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::IntegerVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::IntegerVectorProperty *getLocalIntegerVectorProperty(const std::string &name);
-%Docstring	
+  tlp::IntegerVectorProperty *getLocalIntegerVectorProperty(const std::string &name);
+%Docstring
 tlp.Graph.getLocalIntegerVectorProperty(name)
 
 Returns the integer vector property associated to name in the graph properties pool.
@@ -2831,17 +2819,17 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 %End
 
 %MethodCode
-    if (canGetProperty<tlp::IntegerVectorProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::IntegerVectorProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::IntegerVectorProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::IntegerVectorProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::GraphProperty *getGraphProperty(const std::string &name);
-%Docstring	
+  tlp::GraphProperty *getGraphProperty(const std::string &name);
+%Docstring
 tlp.Graph.getGraphProperty(name)
 
 Returns the meta-graph property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
@@ -2852,19 +2840,19 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.GraphProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::GraphProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getProperty<tlp::GraphProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::GraphProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getProperty<tlp::GraphProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::GraphProperty *getLocalGraphProperty(const std::string &name);
-%Docstring	
+  tlp::GraphProperty *getLocalGraphProperty(const std::string &name);
+%Docstring
 tlp.Graph.getLocalGraphProperty(name)
 
 Returns the meta-graph property associated to name in the graph properties pool.
@@ -2875,18 +2863,18 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 :type name: string
 :rtype: :class:`tlp.GraphProperty`
 %End
-	
+
 %MethodCode
-    if (canGetProperty<tlp::GraphProperty>(sipCpp, *a0)) {
-        sipRes = sipCpp->getLocalProperty<tlp::GraphProperty>(*a0);
-    } else {
-        sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
-    }
+  if (canGetProperty<tlp::GraphProperty>(sipCpp, *a0)) {
+    sipRes = sipCpp->getLocalProperty<tlp::GraphProperty>(*a0);
+  } else {
+    sipIsErr = throwPropertyNameExistsException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-	tlp::PropertyInterface* getProperty(const std::string& name);
+  tlp::PropertyInterface* getProperty(const std::string& name);
 %Docstring
 tlp.Graph.getProperty(name)
 
@@ -2898,12 +2886,12 @@ If the property does not exist it returns :const:`None`.
 :param name: the name of the property to return
 :type name: string
 :rtype: :class:`tlp.PropertyInterface`
-%End	
+%End
  
 
 //===========================================================================================
 
-	bool existProperty(const std::string& name);
+  bool existProperty(const std::string& name);
 %Docstring
 tlp.Graph.existProperty(name)
 
@@ -2916,7 +2904,7 @@ Returns :const:`True` if a property of that name exists in the graph properties 
 
 //===========================================================================================
 
-	bool existLocalProperty(const std::string& name);
+  bool existLocalProperty(const std::string& name);
 %Docstring
 tlp.Graph.existLocalProperty(name)
 
@@ -2929,7 +2917,7 @@ Returns :const:`True` if a property of that name exists in the graph properties 
 
 //===========================================================================================
 
-	void delLocalProperty(const std::string& name);
+  void delLocalProperty(const std::string& name);
 %Docstring
 tlp.Graph.delLocalProperty(name)
 
@@ -2940,36 +2928,37 @@ Removes and deletes the property associated to name in the graph properties pool
 %End
 
 %MethodCode
-    if (sipCpp->existLocalProperty(*a0)) {
-        tlp::PropertyInterface *prop = sipCpp->getProperty(*a0);
-        releaseSIPWrapper(prop, sipFindType("tlp::PropertyInterface"));
-        sipCpp->delLocalProperty(*a0);
-    } else {
-        sipIsErr = -1;
-        std::string msg = "No local graph property named  ";
-        msg += *a0;
-        msg += ".";
-        PyErr_SetString(PyExc_Exception, msg.c_str());
-    }
+  if (sipCpp->existLocalProperty(*a0)) {
+    tlp::PropertyInterface *prop = sipCpp->getProperty(*a0);
+    releaseSIPWrapper(prop, sipFindType("tlp::PropertyInterface"));
+    sipCpp->delLocalProperty(*a0);
+  } else {
+    sipIsErr = -1;
+    std::string msg = "No local graph property named  ";
+    msg += *a0;
+    msg += ".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
 %End
 
 //===========================================================================================
 
-	tlp::Iterator<std::string>* getLocalProperties() /TransferBack/;
+  tlp::Iterator<std::string>* getLocalProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getLocalProperties()
 
 Returns an iterator on the names of the properties local to the graph.
 
 :rtype: a Tulip iterator on string objects
-%End	
+%End
+
 %MethodCode
-	sipRes = new tlp::StableIterator<std::string>(sipCpp->getLocalProperties());
-%End		
+  sipRes = new tlp::StableIterator<std::string>(sipCpp->getLocalProperties());
+%End
 
 //===========================================================================================
 
-	tlp::Iterator<std::string>* getInheritedProperties() /TransferBack/;
+  tlp::Iterator<std::string>* getInheritedProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -2977,14 +2966,14 @@ Returns an iterator on the names of the properties inherited from the graph's an
 
 :rtype: a Tulip iterator on string objects
 %End
-	
+
 %MethodCode
-	sipRes = new tlp::StableIterator<std::string>(sipCpp->getInheritedProperties());
-%End		
+  sipRes = new tlp::StableIterator<std::string>(sipCpp->getInheritedProperties());
+%End
 
 //===========================================================================================
 
-	tlp::Iterator<std::string>* getProperties() /TransferBack/;
+  tlp::Iterator<std::string>* getProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -2992,14 +2981,14 @@ Returns an iterator on the names of all the properties attached to the graph.
 
 :rtype: a Tulip iterator on string objects
 %End
-	
+
 %MethodCode
-	sipRes = new tlp::StableIterator<std::string>(sipCpp->getProperties());
-%End			
+  sipRes = new tlp::StableIterator<std::string>(sipCpp->getProperties());
+%End
 
 //===========================================================================================
 
-	tlp::IteratorProperty* getObjectProperties() /TransferBack/;
+  tlp::IteratorProperty* getObjectProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getObjectProperties()
 
@@ -3012,12 +3001,12 @@ whether they are local or inherited.
 %End
 
 %MethodCode
-        sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getObjectProperties());
+  sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getObjectProperties());
 %End
 
 //===========================================================================================
 
-        tlp::IteratorProperty* getLocalObjectProperties() /TransferBack/;
+  tlp::IteratorProperty* getLocalObjectProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getLocalObjectProperties()
 
@@ -3029,12 +3018,12 @@ Returns an iterator over the local properties attached to the graph.
 %End
 
 %MethodCode
-        sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getLocalObjectProperties());
+  sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getLocalObjectProperties());
 %End
 
 //===========================================================================================
 
-        tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack/;
+  tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack/;
 %Docstring
 tlp.Graph.getInheritedObjectProperties()
 
@@ -3046,12 +3035,12 @@ Returns an iterator over the inherited properties attached to the graph.
 %End
 
 %MethodCode
-	sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getInheritedObjectProperties());
+  sipRes = new tlp::StableIterator<tlp::PropertyInterface*>(sipCpp->getInheritedObjectProperties());
 %End
 
-//===========================================================================================	
-	
-	bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+//===========================================================================================
+
+  bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyIntegerAlgorithm(algoName, result[, params = None])
 
@@ -3073,8 +3062,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3094,15 +3083,15 @@ which can contain an error message.
 .. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
              able to call integer algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 
-%End	
+%End
 
 %MethodCode
-   sipRes = callGraphPropertyAlgorithm<tlp::IntegerAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "integer");
+  sipRes = callGraphPropertyAlgorithm<tlp::IntegerAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "integer");
 %End
 
 //===========================================================================================
 
-        bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName, result[, params = None])
 
@@ -3124,8 +3113,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3145,14 +3134,14 @@ which can contain an error message.
 .. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
              able to call double algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
-	
+
 %MethodCode
   sipRes = callGraphPropertyAlgorithm<tlp::DoubleAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "double");
 %End
 
 //===========================================================================================
 
-       bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName[, params = None])
 
@@ -3172,7 +3161,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-        bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName, result[, params = None])
 
@@ -3194,8 +3183,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3215,14 +3204,14 @@ which can contain an error message.
 .. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
              able to call layout algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
-	
+
 %MethodCode
-   sipRes = callGraphPropertyAlgorithm<tlp::LayoutAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "layout");
+  sipRes = callGraphPropertyAlgorithm<tlp::LayoutAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "layout");
 %End
 
 //===========================================================================================
 
-       bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName[, params = None])
 
@@ -3242,7 +3231,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-        bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName, result[, params = None])
 
@@ -3264,8 +3253,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3286,14 +3275,14 @@ which can contain an error message.
              able to call boolean algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 
 %End
-	
+
 %MethodCode
   sipRes = callGraphPropertyAlgorithm<tlp::BooleanAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "boolean");
 %End
 
 //===========================================================================================
 
-       bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName[, params = None])
 
@@ -3313,7 +3302,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-        bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName, result[, params = None])
 
@@ -3335,8 +3324,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3356,14 +3345,14 @@ which can contain an error message.
 .. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
              able to call size algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
-	
+
 %MethodCode
   sipRes = callGraphPropertyAlgorithm<tlp::SizeAlgorithm>(sipCpp, *a0, a1, a3, a3Wrapper, *a2, sipIsErr, "size");
 %End
 
 //===========================================================================================
 
-       bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName[, params = None])
 
@@ -3383,7 +3372,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName, result[, params = None])
 
@@ -3405,8 +3394,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3433,7 +3422,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-       bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName[, params = None])
 
@@ -3453,7 +3442,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName, result[, params = None])
 
@@ -3474,8 +3463,8 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-	* refer to its documentation
-	* call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
+  * refer to its documentation
+  * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
 algorithm terminates successfully and second member is a string 
@@ -3502,7 +3491,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-       bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName[, params = None])
 
@@ -3521,7 +3510,7 @@ This is equivalent to call::
 %End
 
  //===========================================================================================
-    void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
+  void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
 %Docstring
 tlp.Graph.push([unpopAllowed=True])
 
@@ -3532,11 +3521,11 @@ the updates are undone except those who affect the ordering of edges.
 
 :param unpopAllowed: If set to :const:`False`, the next updates could not be replayed after undone. If some previously undonevupdates exist they could no longer be replayed.
 :type unpopAllowed: boolean
-%End	
-	
+%End
+
 //===========================================================================================
-	
-	void pop(bool unpopAllowed = true);
+
+  void pop(bool unpopAllowed = true);
 %Docstring
 tlp.Graph.pop([unpopAllowed=True])
 
@@ -3548,18 +3537,18 @@ in the hierarchy. The restored state does not remain marked.
 %End
 
 //===========================================================================================
-	
-	void unpop();
+
+  void unpop();
 %Docstring
 tlp.Graph.unpop()
 
 Marks again the current state of the root graph hierarchy
 and replays the last updates previously undone.
 %End
-	
-//===========================================================================================	
-	
-	bool canPop();
+
+//===========================================================================================
+
+  bool canPop();
 %Docstring
 tlp.Graph.canPop()
 
@@ -3567,10 +3556,10 @@ Returns :const:`True` if a previously marked state can be restored.
 
 :rtype: boolean
 %End
-	
+
 //===========================================================================================
-	
-	bool canUnpop();
+
+  bool canUnpop();
 %Docstring
 tlp.Graph.canUnpop()
 
@@ -3580,19 +3569,19 @@ Returns :const:`True` if some previously undone updates can be replayed.
 %End
 
 //===========================================================================================
-	
-	bool canPopThenUnpop();
+
+  bool canPopThenUnpop();
 %Docstring
 tlp.Graph.canUnpop()
 
 Returns :const:`True` if the current state updates can be undone then replayed.
 
 :rtype: boolean
-%End	
+%End
 
 //===========================================================================================
 
-	tlp::node createMetaNode(const std::set<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  tlp::node createMetaNode(const std::set<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
 tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
 
@@ -3614,36 +3603,36 @@ edges from the metanode to the other nodes.
 %End
 
 %MethodCode
-    std::set<tlp::node>::iterator it = a0->begin();
-    for (; it != a0->end() ; ++it) {
-            if (!sipCpp->isElement(*it)) {
-                sipIsErr = throwInvalidNodeException(sipCpp, *it);
-                break;
-            }
+  std::set<tlp::node>::iterator it = a0->begin();
+  for (; it != a0->end() ; ++it) {
+    if (!sipCpp->isElement(*it)) {
+      sipIsErr = throwInvalidNodeException(sipCpp, *it);
+      break;
     }
-    if (sipIsErr != -1) {
-        sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
-    }
+  }
+  if (sipIsErr != -1) {
+    sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
+  }
 %End
 
 // For code-compatibility with Tulip 3.X
-       tlp::node createMetaNode(const std::vector<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  tlp::node createMetaNode(const std::vector<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 %MethodCode
-    std::vector<tlp::node>::const_iterator it = a0->begin();
-    for (; it != a0->end() ; ++it) {
-      if (!sipCpp->isElement(*it)) {
-          sipIsErr = throwInvalidNodeException(sipCpp, *it);
-          break;
-       }
+  std::vector<tlp::node>::const_iterator it = a0->begin();
+  for (; it != a0->end() ; ++it) {
+    if (!sipCpp->isElement(*it)) {
+      sipIsErr = throwInvalidNodeException(sipCpp, *it);
+      break;
     }
-    if (sipIsErr != -1) {
-       sipRes = new tlp::node(sipCpp->createMetaNode(std::set<tlp::node>(a0->begin(), a0->end()), a1, a2));
-    }
+  }
+  if (sipIsErr != -1) {
+    sipRes = new tlp::node(sipCpp->createMetaNode(std::set<tlp::node>(a0->begin(), a0->end()), a1, a2));
+  }
 %End
 
-//===========================================================================================	
-		
-	tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true);
+//===========================================================================================
+
+  tlp::node createMetaNode(tlp::Graph* subgraph, bool multiEdges = true, bool delAllEdge = true);
 %Docstring
 tlp.Graph.createMetaNode(subgraph[, multiEdges=True, delAllEdge=True])
 
@@ -3672,40 +3661,40 @@ point to an empty subgraph.
 %End
 
 %MethodCode
-    if (sipCpp->isDescendantGraph(a0)) {
-        sipIsErr = -1;
-        std::ostringstream oss;
-        oss << "Can not create a metanode from subgraph ";
-        oss << "\"" << a0->getName() << "\" (id " << a0->getId() << ")";
-        oss << " because it is a descendant of graph ";
-        oss << "\"" << sipCpp->getName() << "\" (id " << sipCpp->getId() << ")";
-        PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    } else {
-        tlp::node n;
-        forEach(n, a0->getNodes()) {
-            if (!sipCpp->isElement(n)) {
-                sipIsErr = throwInvalidNodeException(sipCpp, n);
-                break;
-            }
-        }
-        if (sipIsErr != -1) {
-            tlp::edge e;
-            forEach(e, a0->getEdges()) {
-                if (!sipCpp->isElement(e)) {
-                    sipIsErr = throwInvalidEdgeException(sipCpp, e);
-                    break;
-                }
-            }
-        }
-        if (sipIsErr != -1) {
-            sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2));
-        }
+  if (sipCpp->isDescendantGraph(a0)) {
+    sipIsErr = -1;
+    std::ostringstream oss;
+    oss << "Can not create a metanode from subgraph ";
+    oss << "\"" << a0->getName() << "\" (id " << a0->getId() << ")";
+    oss << " because it is a descendant of graph ";
+    oss << "\"" << sipCpp->getName() << "\" (id " << sipCpp->getId() << ")";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  } else {
+    tlp::node n;
+    forEach(n, a0->getNodes()) {
+      if (!sipCpp->isElement(n)) {
+        sipIsErr = throwInvalidNodeException(sipCpp, n);
+        break;
+      }
     }
+    if (sipIsErr != -1) {
+      tlp::edge e;
+      forEach(e, a0->getEdges()) {
+        if (!sipCpp->isElement(e)) {
+          sipIsErr = throwInvalidEdgeException(sipCpp, e);
+          break;
+        }
+      }
+    }
+    if (sipIsErr != -1) {
+      sipRes = new tlp::node(sipCpp->createMetaNode(a0, a1, a2));
+    }
+  }
 %End
 
 //===========================================================================================;
 
-	void createMetaNodes(tlp::IteratorGraph *itGraph, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
+  void createMetaNodes(tlp::IteratorGraph *itGraph, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
 %Docstring
 tlp.Graph.createMetaNodes(itGraph, quotientGraph)
 
@@ -3718,10 +3707,10 @@ Returns a list of created meta-nodes.
 :type quotientGraph: :class:`tlp.Graph`
 :rtype: list of :class:`tlp.node`
 %End
-	
+
 //===========================================================================================
 
-	void openMetaNode(tlp::node metaNode, bool updateProperties = true);
+  void openMetaNode(tlp::node metaNode, bool updateProperties = true);
 %Docstring
 tlp.Graph.openMetaNode(metaNode[, updateProperties=True])
 
@@ -3736,24 +3725,24 @@ meta node and other nodes in the graph.
 .. warning:: This method will fail when called on the root graph.
 
 %End
-	
+
 //===========================================================================================
-	
-    tlp::PropertyInterface* __getitem__(const std::string &attributeName) const;
+
+  tlp::PropertyInterface* __getitem__(const std::string &attributeName) const;
 %MethodCode
-        if (!sipCpp->existProperty(*a0)) {
-        	std::ostringstream oss;
-        	oss << "graph property named \"" << *a0 << "\" does not exist.";
-			sipIsErr = -1;    
-        	PyErr_SetString(PyExc_Exception, oss.str().c_str());
-        } else {
-            sipRes = sipCpp->getProperty(*a0);
-        }
+  if (!sipCpp->existProperty(*a0)) {
+    std::ostringstream oss;
+    oss << "graph property named \"" << *a0 << "\" does not exist.";
+    sipIsErr = -1;    
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  } else {
+    sipRes = sipCpp->getProperty(*a0);
+  }
 %End
 
 //===========================================================================================
-	
-	std::string getName() const;
+
+  std::string getName() const;
 %Docstring
 tlp.Graph.getName()
 
@@ -3761,10 +3750,10 @@ Returns the name of the graph.
 
 :rtype: string
 %End
-	
+
 //===========================================================================================
 
-    void setName(const std::string &name);
+  void setName(const std::string &name);
 %Docstring
 tlp.Graph.setName(name)
 
@@ -3773,10 +3762,10 @@ Sets the name of the graph.
 :param name: the new name of the graph
 :type name: string
 %End
-	
+
 //===========================================================================================
 
-    void setAttribute(const std::string &name, SIP_PYOBJECT val);
+  void setAttribute(const std::string &name, SIP_PYOBJECT val);
 %Docstring
 tlp.Graph.setAttribute(name, val)
 
@@ -3789,21 +3778,21 @@ Sets an attribute of the graph.
 %End
 
 %MethodCode
-    tlp::DataType* dataType = sipCpp->getAttribute(*a0);
-    ValueSetter valSetter(sipCpp, *a0);
-    if (!setCppValueFromPyObject(a1, valSetter, dataType)) {
-        sipIsErr = -1;
-        std::string msg = "Object of type ";
-        msg += std::string(a1->ob_type->tp_name);
-        msg += " can not be store as graph attribute.";
-        PyErr_SetString(PyExc_Exception, msg.c_str());
-    }
-    delete dataType;
+  tlp::DataType* dataType = sipCpp->getAttribute(*a0);
+  ValueSetter valSetter(sipCpp, *a0);
+  if (!setCppValueFromPyObject(a1, valSetter, dataType)) {
+    sipIsErr = -1;
+    std::string msg = "Object of type ";
+    msg += std::string(a1->ob_type->tp_name);
+    msg += " can not be store as graph attribute.";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
+  delete dataType;
 %End 
 
 //===========================================================================================
 
-    SIP_PYOBJECT getAttribute(const std::string& name);
+  SIP_PYOBJECT getAttribute(const std::string& name);
 %Docstring
 tlp.Graph.getAttribute(name)
 
@@ -3816,24 +3805,24 @@ Returns a reference on an attribute of the graph or :const:`None` if it does not
 %End
 
 %MethodCode
-    sipRes = NULL;
-    if (sipCpp->attributeExist(*a0)) {
-        tlp::DataType* dataType = sipCpp->getAttribute(*a0);
-        sipRes = getPyObjectFromDataType(dataType);
-        delete dataType;
-    }
+  sipRes = NULL;
+  if (sipCpp->attributeExist(*a0)) {
+    tlp::DataType* dataType = sipCpp->getAttribute(*a0);
+    sipRes = getPyObjectFromDataType(dataType);
+    delete dataType;
+  }
 
-    if (!sipRes) {
-        std::ostringstream oss;
-        oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
-        sipIsErr = -1;
-        PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
-    }
+  if (!sipRes) {
+    std::ostringstream oss;
+    oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+  }
 %End  
 
 //===========================================================================================
 
-    void removeAttribute(const std::string& name);
+  void removeAttribute(const std::string& name);
 %Docstring
 tlp.Graph.removeAttribute(name)
 
@@ -3848,19 +3837,19 @@ Removes an attribute of the graph.
 %End
 
 %MethodCode
-    if (sipCpp->attributeExist(*a0)) {
-        sipCpp->removeAttribute(*a0);
-    } else {
-        std::ostringstream oss;
-        oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
-        sipIsErr = -1;
-        PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
-    }
+  if (sipCpp->attributeExist(*a0)) {
+    sipCpp->removeAttribute(*a0);
+  } else {
+    std::ostringstream oss;
+    oss << "Graph attribute named \"" << *a0 << "\" does not exist.";
+    sipIsErr = -1;
+    PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
+  }
 %End
 
 //===========================================================================================
 
-    bool attributeExist(const std::string &name);
+  bool attributeExist(const std::string &name);
 %Docstring
 tlp.Graph.attributeExist(name)
 
@@ -3875,7 +3864,7 @@ Checks if an attribute with a specific name exists in the graph.
 
 //===========================================================================================
 
-    const tlp::DataSet & getAttributes() const;
+  const tlp::DataSet & getAttributes() const;
 %Docstring
 tlp.Graph.getAttributes()
 
@@ -3888,7 +3877,7 @@ Returns all the attributes of the graph.
 
 //===========================================================================================
 
-    tlp::DataSet getNodePropertiesValues(const tlp::node n);
+  tlp::DataSet getNodePropertiesValues(const tlp::node n);
 %Docstring
 tlp.Graph.getNodePropertiesValues(node)
 
@@ -3906,16 +3895,16 @@ while the values are typed according to those of the properties (bool, int, floa
 %End
 
 %MethodCode
-    if (sipCpp->isElement(*a0)) {
-      sipRes = getDataSetFilledWithPropertiesValues(sipCpp, a0->id, true);
-    } else {
-      sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-    }
+  if (sipCpp->isElement(*a0)) {
+    sipRes = getDataSetFilledWithPropertiesValues(sipCpp, a0->id, true);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-    tlp::DataSet getEdgePropertiesValues(const tlp::edge e);
+  tlp::DataSet getEdgePropertiesValues(const tlp::edge e);
 %Docstring
 tlp.Graph.getEdgePropertiesValues(edge)
 
@@ -3933,16 +3922,16 @@ while the values are typed according to those of the properties (bool, int, floa
 %End
 
 %MethodCode
-    if (sipCpp->isElement(*a0)) {
-      sipRes = getDataSetFilledWithPropertiesValues(sipCpp, a0->id, false);
-    } else {
-      sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
-    }
+  if (sipCpp->isElement(*a0)) {
+    sipRes = getDataSetFilledWithPropertiesValues(sipCpp, a0->id, false);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-    void setNodePropertiesValues(const tlp::node n, const tlp::DataSet &dataSet);
+  void setNodePropertiesValues(const tlp::node n, const tlp::DataSet &dataSet);
 %Docstring
 tlp.Graph.setNodePropertiesValues(node, propertiesValues)
 
@@ -3961,16 +3950,16 @@ while the values must be typed according to those of the properties (bool, int, 
 %End
 
 %MethodCode
-    if (sipCpp->isElement(*a0)) {
-      sipIsErr = setPropertiesValuesFromDataSet(sipCpp, a1, a0->id, true) ? 0 : 1;
-    } else {
-      sipIsErr = throwInvalidNodeException(sipCpp, *a0);
-    }
+  if (sipCpp->isElement(*a0)) {
+    sipIsErr = setPropertiesValuesFromDataSet(sipCpp, a1, a0->id, true) ? 0 : 1;
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
 %End
 
 //===========================================================================================
 
-    void setEdgePropertiesValues(const tlp::edge e, const tlp::DataSet &dataSet);
+  void setEdgePropertiesValues(const tlp::edge e, const tlp::DataSet &dataSet);
 %Docstring
 tlp.Graph.setEdgePropertiesValues(edge, propertiesValues)
 
@@ -3998,25 +3987,25 @@ while the values must be typed according to those of the properties (bool, int, 
 
 //===========================================================================================
 
-	SIP_PYOBJECT __repr__() const;
+  SIP_PYOBJECT __repr__() const;
 %MethodCode
-    std::string graphName;
-    sipCpp->getAttribute("name", graphName);
-    std::ostringstream oss;
-    oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
-    std::string s = oss.str();
+  std::string graphName;
+  sipCpp->getAttribute("name", graphName);
+  std::ostringstream oss;
+  oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
+  std::string s = oss.str();
 #if PY_MAJOR_VERSION >= 3
-    sipRes = PyUnicode_FromString(s.c_str());
+  sipRes = PyUnicode_FromString(s.c_str());
 #else
-    sipRes = PyString_FromString(s.c_str());
+  sipRes = PyString_FromString(s.c_str());
 #endif
 %End
 
 //===========================================================================================
 
-	long __hash__() const;
+  long __hash__() const;
 %MethodCode
-        return static_cast<long>(sipCpp->getId());
+  return static_cast<long>(sipCpp->getId());
 %End
 
 };
@@ -4052,9 +4041,9 @@ Returns the graph (a new graph if none is provided) or :const:`None` if the impo
 :rtype: :class:`tlp.Graph`
 %End
 %MethodCode
-	tlp::DataSet dataSet;
-	dataSet.set<std::string>("file::filename", *a0);
-	sipRes = tlp::importGraph("TLP Import", dataSet, 0, a1);
+  tlp::DataSet dataSet;
+  dataSet.set<std::string>("file::filename", *a0);
+  sipRes = tlp::importGraph("TLP Import", dataSet, 0, a1);
 %End
 
 //===========================================================================================
@@ -4126,21 +4115,21 @@ Returns :const:`True` if the graph has been successfully saved.
 %End
 
 %MethodCode
-    bool ok = false;
-    std::string tlpFilePath;
-    if (a0->attributeExist("file")) {
-      a0->getAttribute("file", tlpFilePath);
-      ok = true;
-    }
-    if (ok) {
-      sipRes = tlp::saveGraph(a0, tlpFilePath);
-    } else {
-      sipIsErr = -1;
-      std::string msg = "No file attached to the graph \"";
-      msg += a0->getName();
-      msg += "\".";
-      PyErr_SetString(PyExc_Exception, msg.c_str());
-    }
+  bool ok = false;
+  std::string tlpFilePath;
+  if (a0->attributeExist("file")) {
+    a0->getAttribute("file", tlpFilePath);
+    ok = true;
+  }
+  if (ok) {
+    sipRes = tlp::saveGraph(a0, tlpFilePath);
+  } else {
+    sipIsErr = -1;
+    std::string msg = "No file attached to the graph \"";
+    msg += a0->getName();
+    msg += "\".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
 %End
 
 //===========================================================================================
@@ -4163,15 +4152,15 @@ Returns a new graph or None if the import fails.
 %End
 
 %MethodCode
-	if (pluginExists<tlp::ImportModule>(*a0)) {
-		sipRes = tlp::importGraph(*a0, *a1, 0);
-	} else {
-		sipIsErr = -1;
-		std::string msg = "No Tulip import plugin named  ";
-		msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
+  if (pluginExists<tlp::ImportModule>(*a0)) {
+    sipRes = tlp::importGraph(*a0, *a1, 0);
+  } else {
+    sipIsErr = -1;
+    std::string msg = "No Tulip import plugin named  ";
+    msg += *a0;
+    msg += ".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
 %End
 
 //===========================================================================================
@@ -4201,20 +4190,20 @@ Returns a new graph or None if the import fails.
 %End
 
 %MethodCode
-    if (pluginExists<tlp::ImportModule>(*a0)) {
-        sipRes = tlp::importGraph(*a0, *a1, 0, a2);
-    } else {
-        sipIsErr = -1;
-        std::string msg = "No Tulip import plugin named  ";
-        msg += *a0;
-        msg += ".";
-        PyErr_SetString(PyExc_Exception, msg.c_str());
-    }
+  if (pluginExists<tlp::ImportModule>(*a0)) {
+    sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+  } else {
+    sipIsErr = -1;
+    std::string msg = "No Tulip import plugin named  ";
+    msg += *a0;
+    msg += ".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
 %End
 
 //===========================================================================================
 
-    bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const std::string &outputFilePath, tlp::DataSet dataSet = tlp::DataSet());
+bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const std::string &outputFilePath, tlp::DataSet dataSet = tlp::DataSet());
 %Docstring
 tlp.exportGraph(exportPluginName, graph, outputFilePath[, params])
 
@@ -4236,30 +4225,30 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 %End
 
 %MethodCode
-    if (pluginExists<tlp::ExportModule>(*a0)) {
-        std::ostream *ofs = tlp::getOutputFileStream((*a2).c_str());
-        if (ofs->good()) {
-            sipRes = tlp::exportGraph(a1, *ofs, *a0, *a3);
-		} else {
-			std::string msg = "Export error : The specified file path (";
-            msg += *a2;
-			msg += ") is not valid.";  
-			printErrorMessage(msg);
-			sipRes = false;
-		}
-        delete ofs;
-	} else {
-        sipIsErr = -1;
-		std::string msg = "No Tulip export plugin named  ";
-        msg += *a0;
-		msg += ".";
-		PyErr_SetString(PyExc_Exception, msg.c_str());
-	}	
+  if (pluginExists<tlp::ExportModule>(*a0)) {
+    std::ostream *ofs = tlp::getOutputFileStream((*a2).c_str());
+    if (ofs->good()) {
+      sipRes = tlp::exportGraph(a1, *ofs, *a0, *a3);
+    } else {
+      std::string msg = "Export error : The specified file path (";
+      msg += *a2;
+      msg += ") is not valid.";  
+      printErrorMessage(msg);
+      sipRes = false;
+    }
+    delete ofs;
+  } else {
+    sipIsErr = -1;
+    std::string msg = "No Tulip export plugin named  ";
+    msg += *a0;
+    msg += ".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
 %End
 
 //===========================================================================================
 
-void copyToGraph(tlp::Graph *outGraph, tlp::Graph *inGraph, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0 );
+void copyToGraph(tlp::Graph *outGraph, tlp::Graph *inGraph, tlp::BooleanProperty* inSelection=0, tlp::BooleanProperty* outSelection=0);
 %Docstring
 tlp.copyToGraph(outGraph, inGraph[, inSelection = None, outSelection = None])
 

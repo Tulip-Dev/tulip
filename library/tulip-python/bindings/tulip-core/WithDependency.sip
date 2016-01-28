@@ -27,22 +27,24 @@ namespace tlp {
 %TypeHeaderCode
 #include <tulip/WithDependency.h>
 %End
-struct Dependency {
-	std::string pluginName;
-	std::string pluginRelease;
 
-  Dependency(std::string pName,
-			std::string pRelease);
+struct Dependency {
+  std::string pluginName;
+  std::string pluginRelease;
+
+  Dependency(std::string pName, std::string pRelease);
 };
 
 class WithDependency {
+  
 public:
-	///
-    const std::list<tlp::Dependency>& dependencies();
+
+  const std::list<tlp::Dependency>& dependencies();
 %Docstring
 tlp.WithDependency.getDependencies() -> list of tlp.Dependency
 %End
-    void addDependency(const std::string & algorithm,const std::string & release );
+
+  void addDependency(const std::string &algorithm,const std::string &release );
 %Docstring
 tlp.WithParameter.addBooleanAlgorithmDependency(algorithm, release )
 
@@ -55,7 +57,7 @@ Add a dependency on a boolean algorithm.
 %End
 
 %MethodCode
-    sipCpp->addDependency((*a0).c_str(), (*a1).c_str());
+  sipCpp->addDependency((*a0).c_str(), (*a1).c_str());
 %End
 };
 };

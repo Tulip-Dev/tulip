@@ -29,6 +29,7 @@ class OuterPlanarTest {
 %TypeHeaderCode
 #include <tulip/OuterPlanarTest.h>
 %End
+
 public:
 
   static bool isOuterPlanar(tlp::Graph *graph);
@@ -46,7 +47,7 @@ in the plane such that all vertices belong to the unbounded face of the embeddin
   
 private:
 
-	OuterPlanarTest();  
+  OuterPlanarTest();  
   
 };
 

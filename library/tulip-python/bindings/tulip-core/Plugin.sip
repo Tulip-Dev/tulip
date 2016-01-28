@@ -36,9 +36,10 @@ This is the base class for all Tulip plugins.
 %End
 
 public:
-        virtual ~Plugin();
+  
+  virtual ~Plugin();
 
-        virtual std::string category() const=0;
+  virtual std::string category() const = 0;
 %Docstring
 tlp.Plugin.category()
 
@@ -47,7 +48,7 @@ Returns the category of the plugin.
 :rtype: string
 %End
 
-        virtual std::string name() const=0;
+  virtual std::string name() const = 0;
 %Docstring
 tlp.Plugin.name()
 
@@ -56,7 +57,7 @@ Returns the name of the plugin.
 :rtype: string
 %End
 
-        virtual std::string group() const=0;
+  virtual std::string group() const = 0;
 %Docstring
 tlp.Plugin.group()
 
@@ -64,7 +65,8 @@ Returns the group of the plugin.
 
 :rtype: string
 %End
-        virtual std::string author() const=0;
+
+  virtual std::string author() const = 0;
 %Docstring
 tlp.Plugin.author()
 
@@ -73,7 +75,7 @@ Returns the author of the plugin.
 :rtype: string
 %End
 
-        virtual std::string date() const=0;
+  virtual std::string date() const = 0;
 %Docstring
 tlp.Plugin.category()
 
@@ -82,7 +84,7 @@ Returns the creation date of the plugin.
 :rtype: string
 %End
 
-        virtual std::string info() const=0;
+  virtual std::string info() const = 0;
 %Docstring
 tlp.Plugin.category()
 
@@ -91,7 +93,7 @@ Returns some information about the plugin.
 :rtype: string
 %End
 
-        virtual std::string release() const=0;
+  virtual std::string release() const = 0;
 %Docstring
 tlp.Plugin.category()
 
@@ -100,7 +102,7 @@ Returns the release number of the plugin.
 :rtype: string
 %End
 
-        virtual std::string tulipRelease() const=0;
+  virtual std::string tulipRelease() const = 0;
 %Docstring
 tlp.Plugin.category()
 
@@ -109,18 +111,17 @@ Returns the Tulip release number.
 :rtype: string
 %End
 
-        virtual std::string major() const;
+  virtual std::string major() const;
 
-        virtual std::string minor() const;
+  virtual std::string minor() const;
 
-        virtual std::string tulipMajor() const;
+  virtual std::string tulipMajor() const;
 
-        virtual std::string tulipMinor() const;
+  virtual std::string tulipMinor() const;
 
-        virtual int id() const;
+  virtual int id() const;
 
-        virtual std::string programmingLanguage() const;
-
+  virtual std::string programmingLanguage() const;
 
 };
 
@@ -128,13 +129,14 @@ class FactoryInterface {
 %TypeHeaderCode
 #include <tulip/Plugin.h>
 %End
+
 public:
 
   virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0 /Factory/;
 
   void registerPlugin();
 %MethodCode
-    tlp::PluginLister::registerPlugin(sipCpp);
+  tlp::PluginLister::registerPlugin(sipCpp);
 %End
 
 };

@@ -61,14 +61,14 @@ This abstract class describes an import plugin.
 
 %End
 
-    ImportModule (const tlp::PluginContext* context);
-    virtual ~ImportModule();
+  ImportModule (const tlp::PluginContext* context);
+  virtual ~ImportModule();
 
-    virtual std::string getGroup() const;
+  virtual std::string getGroup() const;
 
-    virtual std::string category() const;
+  virtual std::string category() const;
 
-    virtual bool importGraph() = 0;
+  virtual bool importGraph() = 0;
 %Docstring
 tlp.ImportModule.importGraph()
 

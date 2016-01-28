@@ -23,6 +23,7 @@ class PropertyAlgorithm : tlp::Algorithm {
 %TypeHeaderCode
 #include <tulip/PropertyAlgorithm.h>
 %End
+
 public :
 
   PropertyAlgorithm(const tlp::PluginContext* context);
@@ -49,10 +50,15 @@ This class is the base interface for selection plugins.
 %End
 
 public:
-    tlp::BooleanProperty *result;
-    virtual std::string category() const;
+  
+  tlp::BooleanProperty *result;
+    
+  virtual std::string category() const;
+    
 protected:
-    BooleanAlgorithm (const tlp::PluginContext*);
+  
+  BooleanAlgorithm (const tlp::PluginContext*);
+  
 };
 
 
@@ -74,10 +80,15 @@ This class is the base interface for color plugins.
 %End
 
 public:
-    tlp::ColorProperty *result;
-    virtual std::string category() const;
+  
+  tlp::ColorProperty *result;
+  
+  virtual std::string category() const;
+  
 protected:
-    ColorAlgorithm (const tlp::PluginContext*);
+  
+  ColorAlgorithm (const tlp::PluginContext*);
+  
 };
 
 class DoubleAlgorithm : tlp::PropertyAlgorithm {
@@ -98,10 +109,15 @@ This class is the base interface for metric plugins.
 %End
 
 public:
-    tlp::DoubleProperty *result;
-    virtual std::string category() const;
+  
+  tlp::DoubleProperty *result;
+  
+  virtual std::string category() const;
+  
 protected:
-    DoubleAlgorithm (const tlp::PluginContext*);
+  
+  DoubleAlgorithm (const tlp::PluginContext*);
+  
 };
 
 class IntegerAlgorithm : tlp::PropertyAlgorithm {
@@ -122,10 +138,14 @@ This class is the base interface for integer plugins.
 %End
 
 public:
-    tlp::IntegerProperty *result;
-    virtual std::string category() const;
+  
+  tlp::IntegerProperty *result;
+  
+  virtual std::string category() const;
+  
 protected:
-    IntegerAlgorithm (const tlp::PluginContext*);
+  
+  IntegerAlgorithm (const tlp::PluginContext*);
 };
 
 class LayoutAlgorithm : tlp::PropertyAlgorithm {
@@ -146,10 +166,15 @@ This class is the base interface for layout plugins.
 %End
 
 public:
-    tlp::LayoutProperty *result;
-    virtual std::string category() const;
+  
+  tlp::LayoutProperty *result;
+  
+  virtual std::string category() const;
+  
 protected:
-    LayoutAlgorithm (const tlp::PluginContext*);
+  
+  LayoutAlgorithm (const tlp::PluginContext*);
+    
 };
 
 class SizeAlgorithm : tlp::PropertyAlgorithm {
@@ -170,10 +195,15 @@ The result of the algorithm must be stored in this :class:`tlp.SizeProperty`.
 %End
 
 public:
-    tlp::SizeProperty *result;
-    virtual std::string category() const;
+  
+  tlp::SizeProperty *result;
+  
+  virtual std::string category() const;
+  
 protected:
-    SizeAlgorithm (const tlp::PluginContext*);
+  
+  SizeAlgorithm (const tlp::PluginContext*);
+
 };
 
 class StringAlgorithm : tlp::PropertyAlgorithm {
@@ -194,10 +224,14 @@ This class is the base interface for string plugins.
 %End
 
 public:
-    tlp::StringProperty *result;
-    virtual std::string category() const;
+  
+  tlp::StringProperty *result;
+  
+  virtual std::string category() const;
+  
 protected:
-    StringAlgorithm (const tlp::PluginContext*);
+  
+  StringAlgorithm (const tlp::PluginContext*);
 };
 
 };

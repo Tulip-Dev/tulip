@@ -40,7 +40,8 @@ class Mat4f {
 %TypeHeaderCode
 #include <tulip/Matrix.h>
 %End
-  public:
+
+public:
   
   Mat4f();
 
@@ -100,18 +101,18 @@ class Mat4f {
   }
 %End
 
-	void __setitem__(int i, const tlp::Vec4f &value);
+  void __setitem__(int i, const tlp::Vec4f &value);
 %MethodCode
   if (a0 < 4) {
-		(*sipCpp)[a0] = *a1;
+    (*sipCpp)[a0] = *a1;
   } else {
     sipIsErr = -1;
     PyErr_SetNone(PyExc_IndexError);
   }
 %End
 
-	SIP_PYOBJECT __repr__() const;
-%MethodCode	
+  SIP_PYOBJECT __repr__() const;
+%MethodCode
   std::string repr = "";
   for (int i = 0 ; i < 4 ; ++i) {
     std::ostringstream oss;
