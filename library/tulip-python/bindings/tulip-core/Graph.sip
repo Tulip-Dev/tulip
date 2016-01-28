@@ -3987,18 +3987,13 @@ while the values must be typed according to those of the properties (bool, int, 
 
 //===========================================================================================
 
-  SIP_PYOBJECT __repr__() const;
+  std::string __repr__() const;
 %MethodCode
   std::string graphName;
   sipCpp->getAttribute("name", graphName);
   std::ostringstream oss;
   oss << "<graph \"" << graphName << "\" (id " << sipCpp->getId() << ") >";
-  std::string s = oss.str();
-#if PY_MAJOR_VERSION >= 3
-  sipRes = PyUnicode_FromString(s.c_str());
-#else
-  sipRes = PyString_FromString(s.c_str());
-#endif
+  sipRes = new std::string(oss.str());
 %End
 
 //===========================================================================================

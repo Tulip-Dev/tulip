@@ -111,7 +111,7 @@ public:
   }
 %End
 
-  SIP_PYOBJECT __repr__() const;
+  std::string __repr__() const;
 %MethodCode
   std::string repr = "";
   for (int i = 0 ; i < 4 ; ++i) {
@@ -122,11 +122,7 @@ public:
     s[s.size() - 1] = ']';
     repr += (s + "\n");
   }
-#if PY_MAJOR_VERSION >= 3
-  sipRes = PyUnicode_FromString(repr.c_str());
-#else
-  sipRes = PyString_FromString(repr.c_str());
-#endif
+  sipRes = new std::string(repr);
 %End
 
 };
