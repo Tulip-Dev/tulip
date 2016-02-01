@@ -590,7 +590,7 @@ void PythonPluginsIDE::writePluginFileToProject(const QString &fileName, const Q
     _project->touch(projectFile);
   }
 
-  QIODevice *fs = _project->fileStream(projectFile);
+  QIODevice *fs = _project->fileStream(projectFile, QIODevice::WriteOnly | QIODevice::Text);
   fs->write(fileContent.toUtf8());
   fs->close();
   delete fs;
@@ -608,7 +608,7 @@ void PythonPluginsIDE::writeModuleFileToProject(const QString &fileName, const Q
     _project->touch(projectFile);
   }
 
-  QIODevice *fs = _project->fileStream(projectFile);
+  QIODevice *fs = _project->fileStream(projectFile, QIODevice::WriteOnly | QIODevice::Text);
   fs->write(fileContent.toUtf8());
   fs->close();
   delete fs;
@@ -868,7 +868,7 @@ void PythonPluginsIDE::increaseFontSize() {
 }
 
 QString PythonPluginsIDE::readProjectFile(const QString &filePath) {
-  QIODevice *fs = _project->fileStream(filePath);
+  QIODevice *fs = _project->fileStream(filePath, QIODevice::ReadOnly | QIODevice::Text);
   QString content;
   QString currentLine = fs->readLine();
 
@@ -898,7 +898,7 @@ void PythonPluginsIDE::setProject(tlp::TulipProject *project) {
   }
 
   if (_project->exists(PYTHON_MODULES_FILES)) {
-    QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES);
+    QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::ReadOnly | QIODevice::Text);
     QString file = fs->readLine();
 
     while (!file.isEmpty()) {
@@ -929,7 +929,7 @@ void PythonPluginsIDE::setProject(tlp::TulipProject *project) {
   }
 
   if (_project->exists(PYTHON_PLUGINS_FILES)) {
-    QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES);
+    QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::ReadOnly | QIODevice::Text);
     QString file = fs->readLine();
 
     while (!file.isEmpty()) {
@@ -959,7 +959,7 @@ void PythonPluginsIDE::writePluginsFilesList(int deleted) {
   }
 
   _project->touch(PYTHON_PLUGINS_FILES);
-  QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES);
+  QIODevice *fs = _project->fileStream(PYTHON_PLUGINS_FILES, QIODevice::WriteOnly | QIODevice::Text);
 
   for (int i = 0 ; i < _ui->pluginsTabWidget->count() ; ++i) {
     if (deleted == -1 || i != deleted)
@@ -976,7 +976,7 @@ void PythonPluginsIDE::writeModulesFilesList(int deleted) {
   }
 
   _project->touch(PYTHON_MODULES_FILES);
-  QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES);
+  QIODevice *fs = _project->fileStream(PYTHON_MODULES_FILES, QIODevice::WriteOnly | QIODevice::Text);
 
   for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
     if (deleted == -1 || i != deleted)
