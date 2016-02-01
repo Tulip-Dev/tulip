@@ -51,7 +51,7 @@ and sets the "user" icon (:faicon:`user`)::
   # sets the "user" glyph for all nodes
   viewFontAwesomeIcon.setAllNodeValue(tlp.TulipFontAwesome.User)
 
-The following string constants representing the supported icons are available :
+The following string constants representing the supported icons are available from Tulip 4.8.0 (based on Font Awesome 4.4):
 
   * :const:`tlp.TulipFontAwesome.Px500` (:faicon:`500px`)
   * :const:`tlp.TulipFontAwesome.Adjust` (:faicon:`adjust`)
@@ -725,6 +725,29 @@ The following string constants representing the supported icons are available :
   * :const:`tlp.TulipFontAwesome.Youtube` (:faicon:`youtube`)
   * :const:`tlp.TulipFontAwesome.YoutubePlay` (:faicon:`youtube-play`)
   * :const:`tlp.TulipFontAwesome.YoutubeSquare` (:faicon:`youtube-square`)
+
+Since the release of Tulip 4.8.1, the following icons are also available (based on Font Awesome 4.5):
+
+  * :const:`tlp.TulipFontAwesome.Bluetooth` (:faicon:`bluetooth`)
+  * :const:`tlp.TulipFontAwesome.BluetoothB` (:faicon:`bluetooth-b`)
+  * :const:`tlp.TulipFontAwesome.Codiepie` (:faicon:`codiepie`)
+  * :const:`tlp.TulipFontAwesome.CreditCardAlt` (:faicon:`credit-card-alt`)
+  * :const:`tlp.TulipFontAwesome.Edge` (:faicon:`edge`)
+  * :const:`tlp.TulipFontAwesome.FortAwesome` (:faicon:`fort-awesome`)
+  * :const:`tlp.TulipFontAwesome.Hashtag` (:faicon:`hashtag`)
+  * :const:`tlp.TulipFontAwesome.Mixcloud` (:faicon:`mixcloud`)
+  * :const:`tlp.TulipFontAwesome.Modx` (:faicon:`modx`)
+  * :const:`tlp.TulipFontAwesome.PauseCircle` (:faicon:`pause-circle`)
+  * :const:`tlp.TulipFontAwesome.PauseCircleO` (:faicon:`pause-circle-o`)
+  * :const:`tlp.TulipFontAwesome.Percent` (:faicon:`percent`)
+  * :const:`tlp.TulipFontAwesome.ProductHunt` (:faicon:`product-hunt`)
+  * :const:`tlp.TulipFontAwesome.RedditAlien` (:faicon:`reddit-alien`)
+  * :const:`tlp.TulipFontAwesome.Scribd` (:faicon:`scribd`)
+  * :const:`tlp.TulipFontAwesome.ShoppingBag` (:faicon:`shopping-bag`)
+  * :const:`tlp.TulipFontAwesome.ShoppingBasket` (:faicon:`shopping-basket`)
+  * :const:`tlp.TulipFontAwesome.StopCircle` (:faicon:`stop-circle`)
+  * :const:`tlp.TulipFontAwesome.StopCircleO` (:faicon:`stop-circle-o`)
+  * :const:`tlp.TulipFontAwesome.Usb` (:faicon:`usb`)
 
 %End
 
