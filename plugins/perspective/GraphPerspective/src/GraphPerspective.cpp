@@ -408,8 +408,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   _pythonPanel->setModel(_graphs);
-  _developFrame->setProject(_project);
   tlp::PluginLister::instance()->addListener(this);
+  _developFrame->setProject(_project);
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
