@@ -41,7 +41,7 @@ For instance, the sample code below sets multiple graph view properties values f
                 'viewColor' : getRandomColor(),
                 'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
                 'viewFontAwesomeIcon' : getRandomFontAwesomeIcon()}
-      graph.setNodePropertiesValues(n, d)
+      graph.setNodePropertiesValues(n, values)
 
 Since Tulip 4.8
 -----------------
