@@ -78,7 +78,7 @@ public:
                          HTML_HELP_BODY()
                          "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes."
                          HTML_HELP_CLOSE(),
-                         "0", false);
+                         "20", false);
     addInParameter<double> ("reqlength",
                             HTML_HELP_OPEN()
                             HTML_HELP_DEF( "type", "double" )
@@ -94,7 +94,7 @@ public:
 
     if (dataSet != NULL) {
       bool bval = false;
-      int ival = 0;
+      int ival = 20;
       double val = 0;
 
       if (dataSet->get("impred", bval))
