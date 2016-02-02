@@ -85,7 +85,7 @@ void TulipPerspectiveCrashHandler::sendReport() {
   _poster->addField("os_build",_ui->archValue->text());
   _poster->addField("steps_to_reproduce",_ui->commentsEdit->toPlainText());
 
-  connect(_poster->postData("http://tulip.labri.fr/crash_report/mantis.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
+  connect(_poster->postData("http://tulip.labri.fr/devel/tulip_crash_report.php"),SIGNAL(finished()),this,SLOT(reportPosted()));
 
   _ui->sendReportButton->setText(trUtf8("Sending report..."));
   _ui->detailsFrame->setEnabled(false);
