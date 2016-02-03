@@ -105,11 +105,11 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 
             QPoint position=qMouseEv->pos();
 
-            if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
-              position.setX(qMouseEv->pos().x()-_informationsWidgetItem->rect().width());
+            if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width() - 5)
+              position.setX(_view->graphicsView()->sceneRect().width()-_informationsWidgetItem->rect().width() - 5);
 
-            if(position.y()+_informationsWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
-              position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
+            if(position.y()+_informationsWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height() - 5)
+              position.setY(_view->graphicsView()->sceneRect().height()-_informationsWidgetItem->rect().height() - 5);
 
             _informationsWidgetItem->setPos(position);
             _informationsWidgetItem->setVisible(true);
