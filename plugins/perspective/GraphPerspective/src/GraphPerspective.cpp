@@ -1277,12 +1277,14 @@ void GraphPerspective::treatEvent(const tlp::Event &ev) {
 void GraphPerspective::setWorkspaceMode() {
   _ui->workspaceButton->setChecked(true);
   _ui->developButton->setChecked(false);
+  _ui->centralWidget->widget(1)->setVisible(false);
   _ui->centralWidget->setCurrentIndex(0);
 }
 
 void GraphPerspective::setDevelopMode() {
   _ui->workspaceButton->setChecked(false);
   _ui->developButton->setChecked(true);
+  _ui->centralWidget->widget(1)->setVisible(true);
   _ui->centralWidget->setCurrentIndex(1);
 }
 
