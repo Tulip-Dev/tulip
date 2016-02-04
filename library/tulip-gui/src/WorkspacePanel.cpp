@@ -121,6 +121,7 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
   connect(_ui->closeButton,SIGNAL(clicked()),this,SLOT(close()));
   setView(view);
   setAttribute(Qt::WA_DeleteOnClose);
+  setAutoFillBackground(true);
 }
 
 WorkspacePanel::~WorkspacePanel() {
