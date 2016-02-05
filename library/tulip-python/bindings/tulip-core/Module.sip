@@ -41,6 +41,9 @@
   PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
   PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
   PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
+  // ensure that 'tulip' is in globals() to avoid exception when calling methods defined
+  // in the tulip module (tulip/__init__.py) from a startup script(executed the first time the module is imported)
+  PyRun_SimpleString("import sys;globals()['tulip'] = sys.modules['tulip']");
 %End
 
 %ModuleHeaderCode
