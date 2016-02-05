@@ -78,6 +78,8 @@ int TulipFontDialog::fontSize() const {
 void TulipFontDialog::selectFont(const TulipFont& f) {
   QList<QListWidgetItem*> items = _ui->nameList->findItems(f.fontName(),Qt::MatchExactly);
 
+  previousFont = f;
+
   if (items.empty())
     return;
 
@@ -93,8 +95,6 @@ void TulipFontDialog::selectFont(const TulipFont& f) {
     _ui->styleList->setCurrentRow(2);
   else
     _ui->styleList->setCurrentRow(0);
-
-  previousFont = f;
 }
 
 TulipFont TulipFontDialog::getFont(QWidget* /*parent*/ ,const TulipFont& selectedFont) {
