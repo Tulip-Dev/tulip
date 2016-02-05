@@ -77,11 +77,12 @@ background-color: white;</string>
          <string notr="true">QTableView {
 background-color: white;
 border: 0px;
+font: 10pt;
 }
 QHeaderView::section {
 background-color: white;
 width: 150px;
-font: bold 10px;
+font: bold 10pt;
 color: black;
 }</string>
         </property>

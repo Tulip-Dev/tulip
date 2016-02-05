@@ -205,13 +205,14 @@ padding-right: 4px;
 margin-bottom: -1px;
 border: 1px solid #C9C9C9;
 border-bottom: 0px;
-font: bold;
+font: bold 10pt;
 }
 QHeaderView {
 background-color: white;
 }
 QTableView {
 background-color: white;
+font: 10pt;
 }</string>
                </property>
                <property name="frameShape">

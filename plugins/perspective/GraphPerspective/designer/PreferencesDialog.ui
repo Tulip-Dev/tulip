@@ -418,10 +418,14 @@ border: 0px;
 QHeaderView::section {
 background-color: white;
 height: 30px;
-font: bold 10px;
+font: bold 10pt;
 color: black;
 border: 0px;
-}</string>
+}
+QTableView {
+font: 10pt;
+}
+</string>
           </property>
           <property name="frameShape">
            <enum>QFrame::NoFrame</enum>
