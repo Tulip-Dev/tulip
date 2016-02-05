@@ -51,6 +51,10 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string& f
     paths.push_back(item);
   }
 
+  // backup current plugin path as the pluginPath variable can be modified as a side effect
+  // while loading a plugin that loads plugins
+  std::string currentPluginPath = getInstance()->pluginPath;
+
   //load the plugins in 'folder' for each path in TulipPluginsPath (TulipPluginsPath/folder)
   for(std::vector<std::string>::const_iterator it = paths.begin(); it != paths.end(); ++it) {
     std::string dir = (*it) + "/" + folder;
@@ -77,6 +81,10 @@ void PluginLibraryLoader::loadPlugins(PluginLoader *loader, const std::string& f
 
     PluginLister::currentLoader = NULL;
   }
+
+  // restore original pluginPath value
+  getInstance()->pluginPath = currentPluginPath;
+
 }
 
 #ifdef _WIN32
