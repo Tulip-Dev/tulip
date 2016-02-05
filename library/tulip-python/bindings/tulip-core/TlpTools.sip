@@ -170,7 +170,7 @@ each subdirectory will be visited to search for plugins to load.
   tlp::TulipPluginsPath = oldTlpPluginsPath;
   if (a2) {
     // TODO : wrap the plugin loader C++ instance and pass it over to Python
-    std::string importPythonPlugins = "tlp.loadTulipPluginsFromDir(\"";
+    std::string importPythonPlugins = "tulip.tlp.loadTulipPluginsFromDir(\"";
     importPythonPlugins += (*a0 + "\", False)");
     PyObject *pyRet = evalPythonStatement(importPythonPlugins);
     Py_XDECREF(pyRet);
@@ -197,7 +197,7 @@ Returns :const:`True` if the plugin was correctly loaded.
     sipRes = tlp::PluginLibraryLoader::loadPluginLibrary(*a0, a1);
   } else {
     // TODO : wrap the plugin loader C++ instance and pass it over to Python
-    std::string importPythonPlugin = "tlp.loadTulipPythonPlugin(\"";
+    std::string importPythonPlugin = "tulip.tlp.loadTulipPythonPlugin(\"";
     importPythonPlugin += (*a0 + "\")");
     PyObject *pyRet = evalPythonStatement(importPythonPlugin);
     sipRes = (pyRet == Py_True);
