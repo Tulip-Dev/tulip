@@ -196,9 +196,11 @@ font: bold;
 }
 QHeaderView {
 background-color: white;
+font: bold 10pt;
 }
 QTableView {
 background-color: white;
+font: 10pt;
 }
 QToolTip {
 background-color: white;
