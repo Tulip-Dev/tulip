@@ -64,7 +64,7 @@ void TulipPerspectiveCrashHandler::toggleDetailedView() {
 void TulipPerspectiveCrashHandler::sendReport() {
   _poster = new FormPost;
 
-  _poster->addField("summary","[ Tulip " + _ui->versionValue->text() + " ] Crash report from perspective: " + _ui->perspectiveNameValue->text() + " " + _ui->perspectiveArgumentsValue->text());
+  _poster->addField("summary","[ Tulip " + _ui->versionValue->text() + " (" + _ui->plateformValue->text() + ") ] Crash report from perspective: " + _ui->perspectiveNameValue->text() + " " + _ui->perspectiveArgumentsValue->text());
 
   QString description = + "System:\n\n";
   description += "Plateform: " + _ui->plateformValue->text() + "\n";
