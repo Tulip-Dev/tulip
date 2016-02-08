@@ -98,7 +98,7 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo(): _editor(NULL) {
   _informationsWidget=new QWidget();
   _informationsWidget->installEventFilter(this);
   ui->setupUi(_informationsWidget);
-  tableView()->setItemDelegate(new TulipItemDelegate);
+  tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationsWidgetItem=new QGraphicsProxyWidget();
   _informationsWidgetItem->setWidget(_informationsWidget);
   _informationsWidgetItem->setVisible(false);

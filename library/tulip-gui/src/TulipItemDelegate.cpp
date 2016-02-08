@@ -25,6 +25,7 @@
 #include <QDialogButtonBox>
 #include <QMainWindow>
 #include <QLabel>
+#include <QTableView>
 
 #include <tulip/TulipModel.h>
 #include <tulip/TulipMetaTypes.h>
@@ -152,15 +153,20 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
 
   if (bgColor.isValid() && bgColor.type() == QVariant::Color)
     painter->setBrush(bgColor.value<QColor>());
-  else
-    painter->setBrush(Qt::transparent);
+  else {
+    QTableView* tv = dynamic_cast<QTableView*>(parent());
+    painter->setBrush((tv && tv->alternatingRowColors() && (index.row() % 2))
+		      ? option.palette.alternateBase()
+		      : option.palette.base());
+  }
 
   if (fgColor.isValid() && fgColor.type() == QVariant::Color)
     painter->setPen(fgColor.value<QColor>());
   else
-    painter->setPen(Qt::transparent);
+    painter->setPen(option.palette.windowText().color());
+    
 
-  painter->drawRect(option.rect);
+  painter->fillRect(option.rect, painter->brush());
 
   QVariant v = index.data();
 
@@ -176,10 +182,8 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   if (c == NULL)
     return;
 
-  if (c != NULL && c->paint(painter,option,v))
-    return;
-
-  QStyledItemDelegate::paint(painter,option,index);
+  if (c->paint(painter,option,v) == false)
+    QStyledItemDelegate::paint(painter,option,index);
 }
 
 void TulipItemDelegate::setEditorData(QWidget *editor, const QModelIndex &index) const {

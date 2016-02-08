@@ -38,7 +38,7 @@ using namespace tlp;
 MouseShowElementInfos::MouseShowElementInfos():_ui(new Ui::ElementInformationsWidget),_informationsWidget(new QWidget()),_informationsWidgetItem(new QGraphicsProxyWidget()) {
   _informationsWidget->installEventFilter(this);
   _ui->setupUi(_informationsWidget);
-  tableView()->setItemDelegate(new TulipItemDelegate);
+  tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
   _informationsWidgetItem->setWidget(_informationsWidget);
   _informationsWidgetItem->setVisible(false);
 }
@@ -116,7 +116,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
             QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
             animation->setDuration(100);
             animation->setStartValue(0.);
-            animation->setEndValue(0.99);
+            animation->setEndValue(1);
             animation->start();
 
             return true;
