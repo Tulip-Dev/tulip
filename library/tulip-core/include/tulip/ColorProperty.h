@@ -35,7 +35,7 @@ typedef AbstractProperty<tlp::ColorType, tlp::ColorType> AbstractColorProperty;
  */
 class TLP_SCOPE ColorProperty:public AbstractColorProperty {
 public :
-  ColorProperty (Graph *g, const std::string& n="") :AbstractColorProperty(g, n) {}
+  ColorProperty (Graph *g, const std::string& n="");
   // PropertyInterface inherited methods
   PropertyInterface* clonePrototype(Graph *, const std::string&);
   static const std::string propertyTypename;

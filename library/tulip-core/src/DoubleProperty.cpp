@@ -216,12 +216,28 @@ public:
 // default calculator
 static DoublePropertyPredefinedCalculator avgCalculator;
 
+class ViewBorderWidthCalculator :public DoubleMinMaxProperty::MetaValueCalculator {
+public:
+  virtual void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty>* width, node mN,
+                                Graph*, Graph*) {
+    // meta node border width is 1
+    width->setNodeValue(mN, 1);
+  }
+};
+
+// meta value calculator for viewBorderWidth
+static ViewBorderWidthCalculator vWidthCalc;
+
 //==============================
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *g, const std::string& n) : DoubleMinMaxProperty(g, n, -DBL_MAX, DBL_MAX, -DBL_MAX, DBL_MAX) {
   assert(g!=NULL);
   // the computed meta value will be the average value
-  setMetaValueCalculator(&avgCalculator);
+  if (n != "viewBorderWidth") {
+    setMetaValueCalculator(&avgCalculator);
+  } else {
+    setMetaValueCalculator(&vWidthCalc);
+  }
 }
 
 //===============================================================
