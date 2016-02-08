@@ -48,70 +48,6 @@ using namespace tlp;
 #define NODES_SECTION 2
 #define EDGES_SECTION 3
 
-// define some specific MetaValueCalculator classes
-// viewColor
-class ViewColorCalculator :public AbstractColorProperty::MetaValueCalculator {
-public:
-  virtual void computeMetaValue(AbstractColorProperty* color, node mN,
-                                Graph*, Graph*) {
-    // meta node color is half opaque white
-    color->setNodeValue(mN, Color(255, 255, 255, 127));
-  }
-
-  virtual void computeMetaValue(AbstractColorProperty* color, edge mE,
-                                Iterator<edge>*itE, Graph*) {
-    // meta edge color is the color of the first underlying edge
-    color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
-  }
-};
-
-// viewBorderWidth
-class ViewBorderWidthCalculator :public DoubleMinMaxProperty::MetaValueCalculator {
-public:
-  virtual void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty>* width, node mN,
-                                Graph*, Graph*) {
-    // meta node border width is 1
-    width->setNodeValue(mN, 1);
-  }
-};
-
-// viewLabel
-class ViewLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
-public:
-  // set the meta node label to label of viewMetric max corresponding node
-  void computeMetaValue(AbstractStringProperty* label,
-                        node mN, Graph* sg, Graph*) {
-    // nothing to do if viewMetric does not exist
-    if (!sg->existProperty("viewMetric"))
-      return;
-
-    node viewMetricMaxNode;
-    double vMax = -DBL_MAX;
-    DoubleProperty *metric = sg->getProperty<DoubleProperty>("viewMetric");
-    Iterator<node> *itN= sg->getNodes();
-
-    while (itN->hasNext()) {
-      node itn = itN->next();
-      const double& value = metric->getNodeValue(itn);
-
-      if (value > vMax) {
-        vMax = value;
-        viewMetricMaxNode = itn;
-      }
-    }
-
-    delete itN;
-
-    if (viewMetricMaxNode.isValid())
-      label->setNodeValue(mN, label->getNodeValue(viewMetricMaxNode));
-  }
-};
-
-// corresponding static instances
-static ViewColorCalculator vColorCalc;
-static ViewLabelCalculator vLabelCalc;
-static ViewBorderWidthCalculator vWidthCalc;
-
 GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {}
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
@@ -464,9 +400,6 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   _saveNeeded[g] = new GraphNeedsSavingObserver(g);
 
   _graphs.push_back(g);
-  g->getProperty<ColorProperty>("viewColor")->setMetaValueCalculator(&vColorCalc);
-  g->getProperty<StringProperty>("viewLabel")->setMetaValueCalculator(&vLabelCalc);
-  g->getProperty<DoubleProperty>("viewBorderWidth")->setMetaValueCalculator(&vWidthCalc);
 
   // listen events on the whole hierarchy
   // in order to keep track of subgraphs names, number of nodes and edges

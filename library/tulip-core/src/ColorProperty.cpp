@@ -24,10 +24,34 @@ using namespace tlp;
 const string ColorProperty::propertyTypename = "color";
 const string ColorVectorProperty::propertyTypename = "vector<color>";
 
+class ViewColorCalculator :public AbstractColorProperty::MetaValueCalculator {
+public:
+  virtual void computeMetaValue(AbstractColorProperty* color, node mN,
+                                Graph*, Graph*) {
+    // meta node color is half opaque white
+    color->setNodeValue(mN, Color(255, 255, 255, 127));
+  }
+
+  virtual void computeMetaValue(AbstractColorProperty* color, edge mE,
+                                Iterator<edge>*itE, Graph*) {
+    // meta edge color is the color of the first underlying edge
+    color->setEdgeValue(mE, color->getEdgeValue(itE->next()));
+  }
+};
+
+// meta value calculator for viewColor
+static ViewColorCalculator vColorCalc;
+
 //Comparison of colors using hsv color space
 //Return 0 if the colors are equal otherwise return -1 if the first object is lower than the second and 1 if the first object is greater than the second.
 static int compareHSVValues(const Color& c1,const Color& c2);
 
+//=================================================================================
+ColorProperty::ColorProperty(Graph *g, const std::string& n) : AbstractColorProperty(g, n) {
+  if (n == "viewColor") {
+    setMetaValueCalculator(&vColorCalc);
+  }
+}
 //=================================================================================
 PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )

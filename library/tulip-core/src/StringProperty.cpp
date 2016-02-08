@@ -19,6 +19,7 @@
 
 #include <tulip/Graph.h>
 #include <tulip/StringProperty.h>
+#include <tulip/DoubleProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -26,6 +27,47 @@ using namespace tlp;
 const string StringProperty::propertyTypename="string";
 const string StringVectorProperty::propertyTypename="vector<string>";
 
+// viewLabel
+class ViewLabelCalculator :public AbstractStringProperty::MetaValueCalculator {
+public:
+  // set the meta node label to label of viewMetric max corresponding node
+  void computeMetaValue(AbstractStringProperty* label,
+                        node mN, Graph* sg, Graph*) {
+    // nothing to do if viewMetric does not exist
+    if (!sg->existProperty("viewMetric"))
+      return;
+
+    node viewMetricMaxNode;
+    double vMax = -DBL_MAX;
+    DoubleProperty *metric = sg->getProperty<DoubleProperty>("viewMetric");
+    Iterator<node> *itN= sg->getNodes();
+
+    while (itN->hasNext()) {
+      node itn = itN->next();
+      const double& value = metric->getNodeValue(itn);
+
+      if (value > vMax) {
+        vMax = value;
+        viewMetricMaxNode = itn;
+      }
+    }
+
+    delete itN;
+
+    if (viewMetricMaxNode.isValid())
+      label->setNodeValue(mN, label->getNodeValue(viewMetricMaxNode));
+  }
+};
+
+// meta value calculator for viewLabel
+static ViewLabelCalculator vLabelCalc;
+
+//=================================================================================
+StringProperty::StringProperty(Graph *g, const std::string& n) : AbstractStringProperty(g, n) {
+  if (n == "viewLabel") {
+    setMetaValueCalculator(&vLabelCalc);
+  }
+}
 //=================================================================================
 PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
