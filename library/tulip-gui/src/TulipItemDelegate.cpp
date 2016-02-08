@@ -156,15 +156,15 @@ void TulipItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt
   else {
     QTableView* tv = dynamic_cast<QTableView*>(parent());
     painter->setBrush((tv && tv->alternatingRowColors() && (index.row() % 2))
-		      ? option.palette.alternateBase()
-		      : option.palette.base());
+                      ? option.palette.alternateBase()
+                      : option.palette.base());
   }
 
   if (fgColor.isValid() && fgColor.type() == QVariant::Color)
     painter->setPen(fgColor.value<QColor>());
   else
     painter->setPen(option.palette.windowText().color());
-    
+
 
   painter->fillRect(option.rect, painter->brush());
 
