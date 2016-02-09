@@ -278,6 +278,7 @@ public:
     delete itS;
 
     IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
+
     for (size_t i = 0 ; i < mNodes.size() ; ++i) {
       viewShape->setNodeValue(mNodes[i], NodeShape::Square);
     }
