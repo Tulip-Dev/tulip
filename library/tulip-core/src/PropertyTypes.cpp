@@ -192,16 +192,16 @@ bool DoubleType::read(istream& iss, double& v) {
     if (c == 'n') {
       // should be nan
       if (!(iss >> c) || (c != 'a') ||
-	  !(iss >> c) || (c != 'n'))
-	return false;
+          !(iss >> c) || (c != 'n'))
+        return false;
 
       v = NAN;
-    } 
+    }
     else {
       iss.unget();
 
       if (sign)
-	iss.unget();
+        iss.unget();
     }
   }
 
@@ -249,17 +249,17 @@ bool FloatType::read(istream& iss, float& v) {
     if (c == 'n') {
       // should be nan
       if (!(iss >> c) || (c != 'a') ||
-	  !(iss >> c) || (c != 'n'))
-	return false;
+          !(iss >> c) || (c != 'n'))
+        return false;
 
       v = NAN;
       return true;
-    } 
+    }
     else {
       iss.unget();
 
       if (sign)
-	iss.unget();
+        iss.unget();
     }
   }
 
@@ -581,13 +581,15 @@ bool PointType::read(istream& is, RealType & v) {
       while((ok = bool(is >> c)) && isspace(c)) {}
 
       if (!ok || c != ',')
-	return false;
+        return false;
     }
 
     // skip spaces
     while((ok = bool(is >> c)) && isspace(c)) {}
+
     if (!ok)
       return false;
+
     is.unget();
 
     bool done = FloatType::read(is, v[i]);

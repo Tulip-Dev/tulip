@@ -395,6 +395,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   if(!_project->projectFile().isEmpty()) {
     rootIds = _graphs->readProject(_project,progress);
+
     if (rootIds.empty())
       QMessageBox::critical(_mainWindow, QString("Error while loading project ").append(_project->projectFile()), progress->getError().c_str());
   }
@@ -403,8 +404,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // in case of a call to showStartPanels in the open method
   _ui->graphHierarchiesEditor->setModel(_graphs);
   _ui->workspace->setModel(_graphs);
+
   if (!rootIds.empty())
     _ui->workspace->readProject(_project,rootIds,progress);
+
   _ui->searchPanel->setModel(_graphs);
 
 #ifdef BUILD_PYTHON_COMPONENTS
