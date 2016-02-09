@@ -160,7 +160,7 @@ double DoubleType::defaultValue() {
   return 0;
 }
 
-// add support for inf and -inf
+// add support for inf, -inf and nan
 bool DoubleType::read(istream& iss, double& v) {
   char c;
   char sign = 0;
@@ -189,10 +189,20 @@ bool DoubleType::read(istream& iss, double& v) {
     return true;
   }
   else {
-    iss.unget();
+    if (c == 'n') {
+      // should be nan
+      if (!(iss >> c) || (c != 'a') ||
+	  !(iss >> c) || (c != 'n'))
+	return false;
 
-    if (sign)
+      v = NAN;
+    } 
+    else {
       iss.unget();
+
+      if (sign)
+	iss.unget();
+    }
   }
 
   return bool(iss >> v);
@@ -205,6 +215,55 @@ float FloatType::undefinedValue() {
 
 float FloatType::defaultValue() {
   return 0;
+}
+
+// add support for inf, -inf and nan
+bool FloatType::read(istream& iss, float& v) {
+  char c;
+  char sign = 0;
+
+  // go to first non space char
+  while((iss >> c) && isspace(c)) {}
+
+  if (c == '-' || c == '+') {
+    sign = c;
+
+    if (!(iss >> c))
+      return false;
+  }
+
+  if (c == 'i') {
+    // should be inf
+    if (!(iss >> c) || (c != 'n') ||
+        !(iss >> c) || (c != 'f'))
+      return false;
+
+    if (sign == '-')
+      v = -numeric_limits<float>::infinity();
+    else
+      v = numeric_limits<float>::infinity();
+
+    return true;
+  }
+  else {
+    if (c == 'n') {
+      // should be nan
+      if (!(iss >> c) || (c != 'a') ||
+	  !(iss >> c) || (c != 'n'))
+	return false;
+
+      v = NAN;
+      return true;
+    } 
+    else {
+      iss.unget();
+
+      if (sign)
+	iss.unget();
+    }
+  }
+
+  return bool(iss >> v);
 }
 
 // IntegerType
@@ -499,6 +558,9 @@ bool PointType::read(istream& is, RealType & v) {
   // skip spaces
   while((ok = bool(is >> c)) && isspace(c)) {}
 
+  if (!ok)
+    return false;
+
   bool dbqFound = false;
 
   if (c == '"')
@@ -507,9 +569,40 @@ bool PointType::read(istream& is, RealType & v) {
   else
     is.unget();
 
-  ok = bool(is >> v);
+  // skip spaces
+  while(bool(is >> c) && isspace(c)) {}
 
-  if (ok && dbqFound) {
+  if (c != '(')
+    return false;
+
+  for(unsigned int i=0; i<3; ++i) {
+    if (i>0 ) {
+      // skip spaces
+      while((ok = bool(is >> c)) && isspace(c)) {}
+
+      if (!ok || c != ',')
+	return false;
+    }
+
+    // skip spaces
+    while((ok = bool(is >> c)) && isspace(c)) {}
+    if (!ok)
+      return false;
+    is.unget();
+
+    bool done = FloatType::read(is, v[i]);
+
+    if (!done)
+      return false;
+  }
+
+  // skip spaces
+  while(bool(is >> c) && isspace(c)) {}
+
+  if (c != ')' )
+    return false;
+
+  if (dbqFound) {
     // look for the close double quote
     ok = bool(is >> c);
 
@@ -517,12 +610,12 @@ bool PointType::read(istream& is, RealType & v) {
       return false;
   }
 
-  return ok;
+  return true;
 }
 
 bool PointType::fromString( RealType & v, const string & s ) {
   istringstream iss(s);
-  return bool(iss >> v);
+  return read(iss, v);
 }
 
 //
