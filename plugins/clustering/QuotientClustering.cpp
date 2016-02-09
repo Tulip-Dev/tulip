@@ -25,6 +25,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/LayoutProperty.h>
 #include <tulip/SizeProperty.h>
+#include <tulip/TulipViewSettings.h>
 
 using namespace std;
 using namespace tlp;
@@ -146,11 +147,11 @@ public:
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 class QuotientClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Computes a quotient sub-graph<br/>(meta-nodes pointing on sub-graphs)<br/>using an already existing sub-graphs hierarchy.","1.4", "Clustering")
+  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Computes a quotient sub-graph<br/>(meta-nodes pointing on sub-graphs)<br/>using an already existing sub-graphs hierarchy.","1.5", "Clustering")
 //================================================================================
   QuotientClustering(PluginContext* context):Algorithm(context) {
     addDependency("FM^3 (OGDF)", "1.2");
-    addDependency("Auto Sizing", "1.0");
+    addDependency("Fast Overlap Removal", "1.3");
     addInParameter<bool>("oriented", paramHelp[0], "true");
     addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
     addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
@@ -197,10 +198,20 @@ public:
     string layoutName = "FM^3 (OGDF)";
     string errMsg;
 
+    DataSet layoutParams;
+
     if (clustersLayout) {
       tlp::Graph *cluster = NULL;
       forEach(cluster, graph->getSubGraphs()) {
-        cluster->applyPropertyAlgorithm(layoutName, cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
+        SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
+        Size minSize = viewSize->getMin(cluster);
+        Size maxSize = viewSize->getMax(cluster);
+        layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1])*5.0);
+        cluster->applyPropertyAlgorithm(layoutName, cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
+        double border = std::min(minSize[0], minSize[1]);
+        layoutParams.set("x border", border);
+        layoutParams.set("y border", border);
+        cluster->applyPropertyAlgorithm("Fast Overlap Removal", cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
       }
     }
 
@@ -265,6 +276,11 @@ public:
     vector<node> mNodes;
     graph->createMetaNodes(itS, quotientGraph, mNodes);
     delete itS;
+
+    IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
+    for (size_t i = 0 ; i < mNodes.size() ; ++i) {
+      viewShape->setNodeValue(mNodes[i], NodeShape::Square);
+    }
 
     // restore previous calculators
     TLP_HASH_MAP<PropertyInterface*, PropertyInterface::MetaValueCalculator *>::iterator itC =
@@ -400,9 +416,15 @@ public:
 
     // layouting if needed
     if (quotientLayout) {
-      string sizesName = "Auto Sizing";
-      quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg);
-      quotientGraph->applyPropertyAlgorithm(sizesName, quotientGraph->getLocalProperty<SizeProperty>("viewSize"),errMsg);
+      SizeProperty *viewSize = quotientGraph->getProperty<SizeProperty>("viewSize");
+      Size minSize = viewSize->getMin(quotientGraph);
+      Size maxSize = viewSize->getMax(quotientGraph);
+      layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1])*2.0);
+      quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
+      double border = std::min(minSize[0], minSize[1]);
+      layoutParams.set("x border", border);
+      layoutParams.set("y border", border);
+      quotientGraph->applyPropertyAlgorithm("Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
     }
 
     // recursive call if needed
