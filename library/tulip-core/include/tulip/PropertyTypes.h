@@ -78,6 +78,8 @@ class TLP_SCOPE FloatType: public SerializableType<float> {
 public:
   static float undefinedValue();
   static float defaultValue();
+  static bool read(std::istream& iss, RealType& v);
+  FORWARD_STRING_METHODS(FloatType)
 };
 
 typedef SerializableVectorType<double,false> DoubleVectorType;
