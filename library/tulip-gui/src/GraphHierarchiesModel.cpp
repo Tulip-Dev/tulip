@@ -127,9 +127,21 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
 
     QString absolutePath = project->toAbsolutePath(file);
     Graph* g = loadGraph(std::string(absolutePath.toUtf8().data()),progress);
-    rootIds[entry] = g;
-
-    addGraph(g);
+    if (g) {
+      rootIds[entry] = g;
+      addGraph(g);
+    }
+    else { 
+      // failure when loading a graph
+      // so delete already loaded graphs
+      for(QMap<QString,tlp::Graph*>::iterator it = rootIds.begin();
+	  it != rootIds.end(); ++it) {
+	delete it.value();
+      }
+      // and clear rootIds
+      rootIds.clear();
+      break;
+    }
   }
 
   QDir::setCurrent(QFileInfo(project->projectFile()).absolutePath());
