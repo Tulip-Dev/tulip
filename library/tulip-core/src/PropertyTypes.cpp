@@ -22,6 +22,7 @@
 #include <tulip/StringCollection.h>
 
 #include <stdint.h>
+#include <limits>
 
 using namespace std;
 using namespace tlp;
@@ -195,7 +196,7 @@ bool DoubleType::read(istream& iss, double& v) {
           !(iss >> c) || (c != 'n'))
         return false;
 
-      v = NAN;
+      v = std::numeric_limits<double>::quiet_NaN();
     }
     else {
       iss.unget();
@@ -252,7 +253,7 @@ bool FloatType::read(istream& iss, float& v) {
           !(iss >> c) || (c != 'n'))
         return false;
 
-      v = NAN;
+      v = std::numeric_limits<float>::quiet_NaN();
       return true;
     }
     else {
