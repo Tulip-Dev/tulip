@@ -222,7 +222,7 @@
 
 /* Define to be the name of C-function for Inf check */
 #ifndef _MSC_VER
-#define COIN_C_FINITE finite
+#define COIN_C_FINITE std::isfinite
 #else
 #define COIN_C_FINITE _finite
 #endif
