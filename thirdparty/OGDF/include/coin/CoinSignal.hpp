@@ -41,6 +41,7 @@
 typedef decltype(SIG_DFL) CoinSighandler_t;
 #else
 typedef typeof(SIG_DFL) CoinSighandler_t;
+#endif
 #  define CoinSighandler_t_defined
 #endif
 
