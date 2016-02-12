@@ -37,7 +37,10 @@
 //-----------------------------------------------------------------------------
 
 #if defined(__MINGW32__) && defined(__GNUC__)
-   typedef typeof(SIG_DFL) CoinSighandler_t;
+#ifdef OGDF_HAVE_CPP11
+typedef decltype(SIG_DFL) CoinSighandler_t;
+#else
+typedef typeof(SIG_DFL) CoinSighandler_t;
 #  define CoinSighandler_t_defined
 #endif
 
