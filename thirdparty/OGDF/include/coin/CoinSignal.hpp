@@ -15,6 +15,27 @@
 
 //#############################################################################
 
+//taken in basic/config.h
+//---------------------------------------------------------
+// C++ standard
+//---------------------------------------------------------
+
+#if __cplusplus >= 201103
+#define OGDF_HAVE_CPP11
+
+#elif defined(_MSC_VER)
+#if _MSC_VER >= 1600
+#define OGDF_HAVE_CPP11
+#endif
+
+#elif defined(__GNUC__)
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#define OGDF_HAVE_CPP11
+#endif
+
+#endif
+//////////////////////////
+
 #if defined(_MSC_VER)
    typedef void (__cdecl *CoinSighandler_t) (int);
 #  define CoinSighandler_t_defined
