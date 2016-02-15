@@ -1091,6 +1091,8 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
   const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
 
   if (graphEvent) {
+
+
     switch(graphEvent->getType()) {
     case GraphEvent::TLP_ADD_NODE:
     case GraphEvent::TLP_ADD_EDGE:
@@ -1100,6 +1102,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       clearObservers();
       break;
 
+    case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY: {
       const PropertyInterface *property=graph->getProperty(graphEvent->getPropertyName());
@@ -1110,19 +1113,19 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       }
       else if(property==layoutProperty) {
         layoutProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==sizeProperty) {
         sizeProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==shapeProperty) {
         shapeProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==rotationProperty) {
         rotationProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==borderColorProperty) {
         borderColorProperty = NULL;
@@ -1134,19 +1137,19 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
       }
       else if(property==srcAnchorShapeProperty) {
         srcAnchorShapeProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==tgtAnchorShapeProperty) {
         tgtAnchorShapeProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==srcAnchorSizeProperty) {
         srcAnchorSizeProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
       else if(property==tgtAnchorSizeProperty) {
         tgtAnchorSizeProperty = NULL;
-        clearLayoutData();
+        clearData();
       }
 
       break;
@@ -1173,7 +1176,7 @@ void GlVertexArrayManager::treatEvent(const Event &evt) {
     switch(propertyEvent->getType()) {
     case PropertyEvent::TLP_BEFORE_SET_ALL_NODE_VALUE:
     case PropertyEvent::TLP_BEFORE_SET_NODE_VALUE:
-      if (shapeProperty==property) {
+      if (shapeProperty==property || sizeProperty==property) {
         edgesModified = true;
       }
 
