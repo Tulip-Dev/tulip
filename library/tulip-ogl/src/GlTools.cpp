@@ -17,7 +17,7 @@
  *
  */
 
-#ifdef WIN32
+#ifdef (_WIN32) || (__MINGW__)
 #include <windows.h>
 #ifndef GL_TABLE_TOO_LARGE
 #ifdef GL_TABLE_TOO_LARGE_EXT
