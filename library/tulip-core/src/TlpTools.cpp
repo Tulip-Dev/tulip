@@ -343,7 +343,7 @@ void tlp::initRandomSequence() {
 //=========================================================
 
 int tlp::statPath(const std::string &pathname, tlp_stat_t *buf) {
-#ifndef WIN32
+#ifndef _MSC_VER
   return stat(pathname.c_str(), buf);
 #else
   std::wstring utf16pathname;
