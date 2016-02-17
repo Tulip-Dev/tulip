@@ -20,6 +20,12 @@
 #ifndef PYTHONINCLUDES_H_
 #define PYTHONINCLUDES_H_
 
+// Need to include cmath before Python.h when compiling with MinGW and C++11 standard
+// to avoid a compilation error (see http://stackoverflow.com/questions/28683358/)
+#if defined(__MINGW32__) && __cplusplus >= 201103
+#include <cmath>
+#endif
+
 // thanks to the VTK project for this patch for Visual Studio in debug mode
 #if defined(_MSC_VER) && defined(_DEBUG)
 // Include these low level headers before undefing _DEBUG. Otherwise when doing

@@ -26,7 +26,7 @@
 #include <sys/stat.h>
 #include <tulip/tulipconf.h>
 
-#ifdef _MSC_VER
+#ifdef WIN32
 typedef struct _stat tlp_stat_t;
 #else
 typedef struct stat tlp_stat_t;
