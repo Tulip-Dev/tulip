@@ -263,6 +263,16 @@ unsigned long getCppObjectFromPyObject(PyObject *pyObj) {
   return v;
 }
 
+// specialized the previous template for long
+// to fix a GCC warning about v being uninitialized
+template <>
+long getCppObjectFromPyObject(PyObject *pyObj) {
+  long v = 0;
+  PyObjectToCppObjectConvertor<long> convertor;
+  convertor.convert(pyObj, v);
+  return v;
+}
+
 template <typename T>
 T *getCppPointerFromPyObject(PyObject *pyObj) {
   T *v=NULL;
