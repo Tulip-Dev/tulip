@@ -129,6 +129,11 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
       QT5_ADD_RESOURCES(${outfiles} ${ARGN})
     ENDMACRO()
 
+    # with MinGW, remove the -fPIC compiler option as it is not needed and generates a lot of warnings
+    IF(MINGW)
+      STRING(REPLACE "-fPIC" "" Qt5Widgets_EXECUTABLE_COMPILE_FLAGS ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS})
+    ENDIF(MINGW)
+
 # Use Qt4 otherwise
 ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
      ${Qt5Xml_FOUND} AND ${Qt5XmlPatterns_FOUND} AND ${Qt5Network_FOUND} AND
