@@ -44,7 +44,6 @@
 using namespace tlp;
 using namespace std;
 
-static Coord basePos[4] = { Coord(0, 0, 0), Coord(0, 0, 0), Coord(0, 0, 0), Coord(0, 0, 0) };
 void drawComposite(GlComposite *composite, float lod, Camera *camera) {
 
   map<string, GlSimpleEntity*> glEntities = composite->getGlEntities();
