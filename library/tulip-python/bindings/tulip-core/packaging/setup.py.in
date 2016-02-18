@@ -3,8 +3,10 @@ from setuptools import setup, find_packages
 from setuptools.dist import Distribution
 # To use a consistent encoding
 from codecs import open
+import os
 from os import path
 import platform
+import subprocess
 
 class BinaryDistribution(Distribution):
     def is_pure(self):
@@ -16,6 +18,9 @@ class BinaryDistribution(Distribution):
 tulip_native_libs = []
 if platform.system() == 'Windows':
     tulip_native_libs = ['native/*.pyd', 'native/*.dll', 'native/plugins/*.dll']
+    # on Windows, call a CMake script that will gather all the required DLLs to import the modules and copy them to the wheel native folder
+    command='"${CMAKE_COMMAND}" -DCWD=' + os.getcwd() + ' -DLIBRARY_PATHS=${CMAKE_LIBRARY_PATH} -P copyTulipCoreDllDependencies.cmake'
+    p = subprocess.call(command, shell=True)
 elif platform.system() == 'Darwin':
     tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/plugins/*.dylib']
 
