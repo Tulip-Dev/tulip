@@ -330,63 +330,71 @@ IF(WIN32)
 ENDIF(WIN32)
 
 MACRO(COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
-IF(WIN32)
-ADD_CUSTOM_COMMAND(TARGET ${target_name}
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${target_name}> ${destination}/$<TARGET_FILE_NAME:${target_name}>
-                   VERBATIM)
-ELSE(WIN32)
-ADD_CUSTOM_COMMAND(TARGET ${target_name}
-                   POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_SONAME_FILE:${target_name}> ${destination}/$<TARGET_SONAME_FILE_NAME:${target_name}>
-                   VERBATIM)
-ENDIF(WIN32)
+  SET(COPY_TARGET_NAME copy-${target_name}-to-python-wheel-native-folder)
+
+  IF(WIN32)
+    ADD_CUSTOM_TARGET(${COPY_TARGET_NAME} ALL
+                      COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:${target_name}> ${destination}/$<TARGET_FILE_NAME:${target_name}>
+                      DEPENDS ${target_name}
+                      VERBATIM)
+  ELSE(WIN32)
+    ADD_CUSTOM_TARGET(${COPY_TARGET_NAME} ALL
+                      COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_SONAME_FILE:${target_name}> ${destination}/$<TARGET_SONAME_FILE_NAME:${target_name}>
+                      DEPENDS ${target_name}
+                      VERBATIM)
+  ENDIF(WIN32)
+
+  # optionnal parameters of the macro corresponds to targets that depend on the above created custom target
+  SET(DEPENDENCIES_TARGETS ${ARGN})
+
+  FOREACH(DEPENDENCY_TARGET ${DEPENDENCIES_TARGETS})
+    ADD_DEPENDENCIES(${DEPENDENCY_TARGET} ${COPY_TARGET_NAME})
+  ENDFOREACH()
 ENDMACRO(COPY_TARGET_LIBRARY_POST_BUILD)
 
 # Tulip Plugin install macro (its purpose is to disable the installation of MinGW import libraries)
 MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
-SET(COMPONENT_NAME ${plugin_target})
-STRING(REPLACE "-${TulipVersion}" "" COMPONENT_NAME "${COMPONENT_NAME}")
-INSTALL(TARGETS ${plugin_target}
-        RUNTIME DESTINATION ${destination}
-        LIBRARY DESTINATION ${destination}
-        COMPONENT ${COMPONENT_NAME})
+  SET(COMPONENT_NAME ${plugin_target})
+  STRING(REPLACE "-${TulipVersion}" "" COMPONENT_NAME "${COMPONENT_NAME}")
+  INSTALL(TARGETS ${plugin_target}
+          RUNTIME DESTINATION ${destination}
+          LIBRARY DESTINATION ${destination}
+          COMPONENT ${COMPONENT_NAME})
 
-# When building a Python wheel, copy Tulip plugins in wheel build folder
-# in order to package them with the Tulip Python bindings
-IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
-SET(TULIP_PLUGIN_WHEEL_INSTALL_DIR "${TULIP_PYTHON_NATIVE_FOLDER}/plugins")
-SET(TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR "${TULIPOGL_PYTHON_NATIVE_FOLDER}/plugins")
-SET(TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR "${TULIPGUI_PYTHON_NATIVE_FOLDER}/plugins")
+  # When building a Python wheel, copy Tulip plugins in wheel build folder
+  # in order to package them with the Tulip Python bindings
+  IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+    SET(TULIP_PLUGIN_WHEEL_INSTALL_DIR "${TULIP_PYTHON_NATIVE_FOLDER}/plugins")
+    SET(TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR "${TULIPOGL_PYTHON_NATIVE_FOLDER}/plugins")
+    SET(TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR "${TULIPGUI_PYTHON_NATIVE_FOLDER}/plugins")
 
-# Default install folder : tulip-core plugins
-SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIP_PLUGIN_WHEEL_INSTALL_DIR})
-# Copy interactor and view plugins in tulipgui wheel folder
-IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
-SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
-ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
-# Copy glyph plugins in tulipogl wheel folder
-IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
-SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR})
-ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
+    # Default install folder : tulip-core plugins
+    SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIP_PLUGIN_WHEEL_INSTALL_DIR})
+    # Copy interactor and view plugins in tulipgui wheel folder
+    IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
+      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
+    ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*view.*$" OR CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*interactor.*$")
+    # Copy glyph plugins in tulipogl wheel folder
+    IF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
+      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPOGL_PLUGIN_WHEEL_INSTALL_DIR})
+    ENDIF(CMAKE_CURRENT_SOURCE_DIR MATCHES "^.*glyph.*$")
 
-# Those plugins depend on Qt, copy them in tulipgui wheel folder
-IF("${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
-   "${plugin_target}" MATCHES "^.*ColorMapping.*$" OR
-   "${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
-   "${plugin_target}" MATCHES "^.*FileSystem.*$" OR
-   "${plugin_target}" MATCHES "^.*GEXFImport.*$" OR
-   "${plugin_target}" MATCHES "^.*WebImport.*$" OR
-   "${plugin_target}" MATCHES "^.*SVGExport.*$")
-SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
-ENDIF()
+    # Those plugins depend on Qt, copy them in tulipgui wheel folder
+    IF("${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
+       "${plugin_target}" MATCHES "^.*ColorMapping.*$" OR
+       "${plugin_target}" MATCHES "^.*ConvolutionClustering.*$" OR
+       "${plugin_target}" MATCHES "^.*FileSystem.*$" OR
+       "${plugin_target}" MATCHES "^.*GEXFImport.*$" OR
+       "${plugin_target}" MATCHES "^.*WebImport.*$" OR
+       "${plugin_target}" MATCHES "^.*SVGExport.*$")
+      SET(PLUGIN_WHEEL_INSTALL_DIR ${TULIPGUI_PLUGIN_WHEEL_INSTALL_DIR})
+    ENDIF()
 
-COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${PLUGIN_WHEEL_INSTALL_DIR})
-
-ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+    COPY_TARGET_LIBRARY_POST_BUILD(${plugin_target} ${PLUGIN_WHEEL_INSTALL_DIR} wheels)
+  ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDMACRO(INSTALL_TULIP_PLUGIN)
 
 MACRO(COPY_REAL_LIB symlink destination)
-GET_FILENAME_COMPONENT(REAL_LIB ${symlink} REALPATH)
-FILE(COPY ${REAL_LIB} DESTINATION ${destination})
+  GET_FILENAME_COMPONENT(REAL_LIB ${symlink} REALPATH)
+  FILE(COPY ${REAL_LIB} DESTINATION ${destination})
 ENDMACRO(COPY_REAL_LIB)

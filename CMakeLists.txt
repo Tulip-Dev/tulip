@@ -435,7 +435,8 @@ IF(NOT BUILD_CORE_ONLY)
 
           ADD_CUSTOM_TARGET(tulip-gui-wheel
                             COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+                            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+                            DEPENDS tulip-core-wheel)
 
           # In order to upload the generated wheels, an account must be created on PyPi
           # and the following configuration must be stored in the ~/.pypirc file
