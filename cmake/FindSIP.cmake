@@ -29,7 +29,7 @@ FIND_FILE(_find_sip_py FindSIP.py PATHS ${CMAKE_MODULE_PATH})
 
 MARK_AS_ADVANCED(FORCE _find_sip_py)
 
-EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config)
+EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} ${_find_sip_py} OUTPUT_VARIABLE sip_config ERROR_QUIET)
 IF(sip_config)
   STRING(REGEX REPLACE "^sip_version:([^\n]+).*$" "\\1" SIP_VERSION ${sip_config})
   STRING(REGEX REPLACE ".*\nsip_version_str:([^\n]+).*$" "\\1" SIP_VERSION_STR ${sip_config})
