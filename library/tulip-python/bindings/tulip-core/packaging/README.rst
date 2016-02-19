@@ -33,6 +33,13 @@ Release notes
 
 Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **4.8.1** : based on Tulip 4.8.1 released on 16/02/2016
+
+        * add new convenient methods for getting / setting multiple properties values of nodes and edges,
+          trough the use of a dictionnary, in the tlp.Graph class (see updated documentation)
+
+        * some bugs fixes
+
     * **4.8.0.post1** :
 
         * Fix crash on MacOS when calling OGDF layout algorithms

@@ -25,6 +25,8 @@ Release notes
 
 Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **4.8.1** : based on Tulip 4.8.1 released on 16/02/2016
+
     * **4.8.0.post1** :
 
         * Fix crash on MacOS when calling OGDF layout algorithms
