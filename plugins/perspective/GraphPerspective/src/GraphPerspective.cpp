@@ -380,7 +380,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutPage()));
 
   if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-	    "doc/tulip-user/html/index.html").exists()) {
+            "doc/tulip-user/html/index.html").exists()) {
     connect(_ui->actionShowUserDocumentation,SIGNAL(triggered()),this,SLOT(showUserDocumentation()));
     connect(_ui->actionShowDevelDocumentation,SIGNAL(triggered()),this,SLOT(showDevelDocumentation()));
     connect(_ui->actionShowPythonDocumentation,SIGNAL(triggered()),this,SLOT(showPythonDocumentation()));
@@ -390,6 +390,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     _ui->actionShowDevelDocumentation->setVisible(false);
     _ui->actionShowPythonDocumentation->setVisible(false);
   }
+
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
   _ui->mainSplitter->setStretchFactor(0,0);
