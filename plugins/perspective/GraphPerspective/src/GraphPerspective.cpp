@@ -28,6 +28,7 @@
 #include "GraphPerspective.h"
 
 #include <QMessageBox>
+#include <QDesktopServices>
 #include <QFileDialog>
 #include <QCloseEvent>
 #include <QMessageBox>
@@ -45,7 +46,6 @@
 #include <tulip/SimplePluginProgressWidget.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/CSVImportWizard.h>
-#include <tulip/DocumentationNavigator.h>
 #include <tulip/GraphModel.h>
 #include <tulip/GraphTableItemDelegate.h>
 #include <tulip/GraphPropertiesModel.h>
@@ -379,11 +379,17 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutPage()));
 
-  if (DocumentationNavigator::hasDocumentation())
-    connect(_ui->actionShowDocumentation,SIGNAL(triggered()),this,SLOT(showDocumentation()));
-  else
-    _ui->actionShowDocumentation->setVisible(false);
-
+  if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
+	    "doc/tulip-user/html/index.html").exists()) {
+    connect(_ui->actionShowUserDocumentation,SIGNAL(triggered()),this,SLOT(showUserDocumentation()));
+    connect(_ui->actionShowDevelDocumentation,SIGNAL(triggered()),this,SLOT(showDevelDocumentation()));
+    connect(_ui->actionShowPythonDocumentation,SIGNAL(triggered()),this,SLOT(showPythonDocumentation()));
+  }
+  else {
+    _ui->actionShowUserDocumentation->setVisible(false);
+    _ui->actionShowDevelDocumentation->setVisible(false);
+    _ui->actionShowPythonDocumentation->setVisible(false);
+  }
   // Setting initial sizes for splitters
   _ui->mainSplitter->setSizes(QList<int>() << 350 << 850);
   _ui->mainSplitter->setStretchFactor(0,0);
@@ -1294,8 +1300,17 @@ void GraphPerspective::setDevelopMode() {
   _ui->centralWidget->setCurrentIndex(1);
 }
 
-void GraphPerspective::showDocumentation() {
-  DocumentationNavigator::showDocumentation();
+void GraphPerspective::showUserDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html"));
 }
+
+void GraphPerspective::showDevelDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-dev/html/index.html"));
+}
+
+void GraphPerspective::showPythonDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html"));
+}
+
 
 PLUGIN(GraphPerspective)

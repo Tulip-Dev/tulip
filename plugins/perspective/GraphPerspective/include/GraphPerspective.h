@@ -94,7 +94,9 @@ public slots:
   virtual void openProjectFile(const QString &path);
 
   void showLogger();
-  void showDocumentation();
+  void showUserDocumentation();
+  void showDevelDocumentation();
+  void showPythonDocumentation();
 
   virtual void redrawPanels(bool center=false);
   void centerPanelsForGraph(tlp::Graph*, bool graphChanged, bool onlyGlMainView);
