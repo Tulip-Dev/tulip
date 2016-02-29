@@ -9,7 +9,6 @@ SET(SRCS
   CSVImportWizard.cpp
   CSVParserConfigurationWidget.cpp
   CSVParser.cpp
-  DocumentationNavigator.cpp
   DoubleStringsListSelectionWidget.cpp
   DownloadManager.cpp
   DragHandle.cpp
@@ -145,7 +144,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/CSVImportConfigurationWidget.h
   ../include/tulip/CSVImportWizard.h
   ../include/tulip/CSVParserConfigurationWidget.h
-  ../include/tulip/DocumentationNavigator.h
   ../include/tulip/DoubleStringsListSelectionWidget.h
   ../include/tulip/DownloadManager.h
   ../include/tulip/GlMainView.h
