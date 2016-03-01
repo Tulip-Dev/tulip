@@ -79,6 +79,7 @@ static QGLFormat GlInit() {
     maxSamples = 0;
     GlMainWidget::getFirstQGLWidget()->makeCurrent();
     maxSamples = OpenGlConfigManager::getInst().maxNumberOfSamples();
+    GlMainWidget::getFirstQGLWidget()->doneCurrent();
   }
 
   tmpFormat.setSamples(maxSamples);
