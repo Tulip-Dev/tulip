@@ -1156,12 +1156,12 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>21</height>
+     <height>35</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
     <property name="title">
-     <string>Edit</string>
+     <string>E&amp;dit</string>
     </property>
     <addaction name="actionUndo"/>
     <addaction name="actionRedo"/>
@@ -1194,7 +1194,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
-     <string>Help</string>
+     <string>&amp;Help</string>
     </property>
     <addaction name="actionShowUserDocumentation"/>
     <addaction name="actionShowDevelDocumentation"/>
@@ -1204,11 +1204,11 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </widget>
    <widget class="QMenu" name="menuFile">
     <property name="title">
-     <string>File</string>
+     <string>Fi&amp;le</string>
     </property>
     <widget class="QMenu" name="menuOpen_recent_file">
      <property name="title">
-      <string>Open recent</string>
+      <string>Open &amp;recent</string>
      </property>
      <property name="icon">
       <iconset>
@@ -1238,7 +1238,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
    </property>
    <property name="text">
-    <string>New project</string>
+    <string>&amp;New project</string>
    </property>
    <property name="toolTip">
     <string>New project</string>
@@ -1268,7 +1268,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</normaloff>:/tulip/graphperspective/icons/16/document-save-as.png</iconset>
    </property>
    <property name="text">
-    <string>Save as</string>
+    <string>Sa&amp;ve as</string>
    </property>
    <property name="toolTip">
     <string>Save Project as a new file name</string>
@@ -1295,7 +1295,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
    </property>
    <property name="text">
-    <string>Exit</string>
+    <string>&amp;Exit</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Q</string>
@@ -1310,7 +1310,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</normaloff>:/tulip/graphperspective/icons/16/edit-undo.png</iconset>
    </property>
    <property name="text">
-    <string>Undo</string>
+    <string>&amp;Undo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Z</string>
@@ -1325,7 +1325,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</normaloff>:/tulip/graphperspective/icons/16/edit-redo.png</iconset>
    </property>
    <property name="text">
-    <string>Redo</string>
+    <string>&amp;Redo</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Y</string>
@@ -1336,7 +1336,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Cut</string>
+    <string>&amp;Cut</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+X</string>
@@ -1347,7 +1347,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Copy</string>
+    <string>C&amp;opy</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+C</string>
@@ -1358,7 +1358,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Paste</string>
+    <string>&amp;Paste</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+V</string>
@@ -1373,7 +1373,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
    </property>
    <property name="text">
-    <string>Delete</string>
+    <string>&amp;Delete</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -1384,7 +1384,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Select All</string>
+    <string>&amp;Select All</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+A</string>
@@ -1395,7 +1395,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Invert selection</string>
+    <string>&amp;Invert selection</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+I</string>
@@ -1406,7 +1406,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="text">
-    <string>Cancel selection</string>
+    <string>Ca&amp;ncel selection</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+A</string>
@@ -1421,7 +1421,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/group.png</normaloff>:/tulip/graphperspective/icons/16/group.png</iconset>
    </property>
    <property name="text">
-    <string>Group elements</string>
+    <string>&amp;Group elements</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+G</string>
@@ -1436,7 +1436,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
    </property>
    <property name="text">
-    <string>Create sub-graph from selection</string>
+    <string>Create sub-graph &amp;from selection</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
@@ -1467,7 +1467,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionShowUserDocumentation">
    <property name="text">
-    <string>User HandBook</string>
+    <string>&amp;User HandBook</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+?</string>
@@ -1475,7 +1475,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionShowDevelDocumentation">
    <property name="text">
-    <string>Developer HandBook</string>
+    <string>&amp;Developer HandBook</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+?</string>
@@ -1483,7 +1483,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionShowPythonDocumentation">
    <property name="text">
-    <string>Python Documentation</string>
+    <string>&amp;Python Documentation</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+?</string>
@@ -1495,7 +1495,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/help-about.png</normaloff>:/tulip/graphperspective/icons/16/help-about.png</iconset>
    </property>
    <property name="text">
-    <string>About us</string>
+    <string>&amp;About us</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -1503,7 +1503,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="actionPlugins_Center">
    <property name="text">
-    <string>Plugins Center</string>
+    <string>Plugin &amp;Center</string>
+   </property>
+   <property name="toolTip">
+    <string>Plugin Center</string>
    </property>
   </action>
   <action name="actionImport_CSV">
@@ -1512,7 +1515,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</normaloff>:/tulip/graphperspective/icons/32/spreadsheet.png</iconset>
    </property>
    <property name="text">
-    <string>Import CSV</string>
+    <string>&amp;Import CSV</string>
    </property>
   </action>
   <action name="actionMessages_log">
@@ -1521,10 +1524,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/logger-info.png</normaloff>:/tulip/graphperspective/icons/16/logger-info.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Messages log</string>
+    <string>&amp;Message log</string>
    </property>
    <property name="toolTip">
-    <string>Show the messages log</string>
+    <string>Show the message log</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Alt+L</string>
@@ -1580,17 +1583,17 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>Save graph to file</string>
    </property>
    <property name="toolTip">
-    <string>Writes the graph into a file</string>
+    <string>Write the graph into a file</string>
    </property>
   </action>
   <action name="actionCreate_empty_sub_graph">
    <property name="text">
-    <string>Create empty sub-graph</string>
+    <string>Create &amp;empty sub-graph</string>
    </property>
   </action>
   <action name="actionClone_sub_graph">
    <property name="text">
-    <string>Create clone sub-graph</string>
+    <string>Create c&amp;lone sub-graph</string>
    </property>
   </action>
   <action name="actionNew_graph">
@@ -1599,7 +1602,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
    </property>
    <property name="text">
-    <string>New graph</string>
+    <string>New &amp;graph</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+N</string>

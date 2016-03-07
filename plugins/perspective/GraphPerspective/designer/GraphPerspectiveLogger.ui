@@ -11,20 +11,61 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">#GraphPerspectiveLogger {
-background-color: white;
-border: 1px solid #C9C9C9;
-}</string>
+   <string notr="true">QLabel, QPushButton, .QWidget {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #939393,
+stop: 0.4 #808080,
+stop: 0.401 #737373,
+stop: 1 #5a5a5a);
+border: 0px;
+color: white;
+}
+
+QPushButton:hover {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #8F8F8F,
+stop: 0.4 #7C7C7C,
+stop: 0.401 #6F6F6F,
+stop: 1 #565656);
+border: 0px;
+color: white;
+}
+
+QPushButton:pressed {
+border-image:none;
+background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
+stop: 0 #777777,
+stop: 0.4 #646464,
+stop: 0.401 #575757,
+stop: 1 #3e3e3e);
+border: 0px;
+color: white;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
      <item>
       <widget class="QLabel" name="label">
        <property name="sizePolicy">
@@ -33,12 +74,8 @@ border: 1px solid #C9C9C9;
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
-       <property name="styleSheet">
-        <string notr="true">font: bold 10px;
-color: black;</string>
-       </property>
        <property name="text">
-        <string>Messages log</string>
+        <string>Message Log</string>
        </property>
        <property name="alignment">
         <set>Qt::AlignCenter</set>
@@ -47,6 +84,12 @@ color: black;</string>
      </item>
      <item>
       <widget class="QPushButton" name="clearButton">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
          <width>28</width>
@@ -59,9 +102,17 @@ color: black;</string>
          <height>28</height>
         </size>
        </property>
-       <property name="icon">
-        <iconset resource="../resources/GraphPerspective.qrc">
-         <normaloff>:/tulip/graphperspective/icons/16/edit-clear.png</normaloff>:/tulip/graphperspective/icons/16/edit-clear.png</iconset>
+       <property name="toolTip">
+        <string>Clear and close message log</string>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QPushButton {
+border-image: url(:/tulip/graphperspective/icons/16/edit-clear.png);
+border: none;
+margin: 0px;
+padding: 0px;
+
+}</string>
        </property>
        <property name="flat">
         <bool>true</bool>
@@ -72,15 +123,17 @@ color: black;</string>
    </item>
    <item>
     <widget class="QFrame" name="frame">
-     <property name="styleSheet">
-      <string notr="true">#frame {
-background-color: white;
-border: 0px;
-border-top: 1px solid #C9C9C9;
-}</string>
-     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -101,8 +154,6 @@ border-top: 1px solid #C9C9C9;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/GraphPerspective.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
