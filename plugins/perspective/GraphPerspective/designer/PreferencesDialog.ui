@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>780</width>
-    <height>707</height>
+    <width>836</width>
+    <height>765</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="minimumSize">
    <size>
@@ -365,6 +371,12 @@ color: #595959;</string>
    </item>
    <item>
     <widget class="QFrame" name="renderingFrame">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="section" stdset="0">
       <bool>true</bool>
      </property>
@@ -410,6 +422,12 @@ color: #595959;</string>
         </property>
         <item>
          <widget class="QTableWidget" name="graphDefaultsTable">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
           <property name="styleSheet">
            <string notr="true">QAbstractItemView {
 background-color: white;
@@ -583,6 +601,9 @@ font: 10pt;
         </property>
         <property name="text">
          <string>Automatic actions</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
         </property>
        </widget>
       </item>

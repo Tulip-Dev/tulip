@@ -37,6 +37,8 @@ PreferencesDialog::PreferencesDialog(QWidget *parent): QDialog(parent), _ui(new 
   // disable edition for title items (in column 0)
   for (int i = 0; i < _ui->graphDefaultsTable->rowCount() ; ++i)
     _ui->graphDefaultsTable->item(i, 0)->setFlags(Qt::ItemIsEnabled);
+
+  _ui->graphDefaultsTable->horizontalHeader()->setResizeMode(0, QHeaderView::Stretch);
 }
 
 PreferencesDialog::~PreferencesDialog() {
