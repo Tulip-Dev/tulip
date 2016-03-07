@@ -74,8 +74,8 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "values", "true / false" ) \
   HTML_HELP_DEF( "default", "true" ) \
   HTML_HELP_BODY() \
-  "If true the algorithm will compute the size of nodes else it will compute the size of edges :" \
-  "<ul><li>true : node size</li><li>false: edge size</li></ul>" \
+  "If true the algorithm will compute the size of nodes else it will compute the size of edges:" \
+  "<ul><li>true: node size</li><li>false: edge size</li></ul>" \
   HTML_HELP_CLOSE(),
 
   //proportional mapping
