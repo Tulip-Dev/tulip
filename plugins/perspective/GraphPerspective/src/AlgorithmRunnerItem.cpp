@@ -260,19 +260,52 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   DataSet dataSet(originalDataSet);
 
+  // ensure each input property
+  // is a local one when it exits 
+  std::string algorithm = _pluginName.toStdString();
+  ParameterDescriptionList paramList =
+    PluginLister::getPluginParameters(algorithm);
+  ParameterDescription desc;
+  forEach(desc, paramList.getParameters()) {
+    if (desc.getDirection() == IN_PARAM) {
+      std::string typeName(desc.getTypeName());
+      if (typeName == TN(PropertyInterface*)
+	  || typeName == TN(NumericProperty*)
+	  || typeName == TN(BooleanProperty)
+	  || typeName == TN(DoubleProperty)
+	  || typeName == TN(LayoutProperty)
+	  || typeName == TN(StringProperty)
+	  || typeName == TN(IntegerProperty)
+	  || typeName == TN(SizeProperty)
+	  || typeName == TN(ColorProperty)
+	  || typeName == TN(BooleanVectorProperty)
+	  || typeName == TN(DoubleVectorProperty)
+	  || typeName == TN(CoordVectorProperty)
+	  || typeName == TN(StringVectorProperty)
+	  || typeName == TN(IntegerVectorProperty)
+	  || typeName == TN(SizeVectorProperty)
+	  || typeName == TN(ColorVectorProperty)) {
+	PropertyInterface* prop = NULL;
+	dataSet.get(desc.getName(), prop);
+	if (prop != NULL) {
+	  PropertyInterface* localProp = g->getProperty(prop->getName());
+	  if (prop != localProp)
+	    dataSet.set(desc.getName(), localProp);
+	}
+      }
+    }
+  }
+
   g->push();
 
   if (_storeResultAsLocal)
     copyToLocal(dataSet, g);
 
-  std::string algorithm = _pluginName.toStdString();
   std::string algoAndParams = algorithm + " - " + dataSet.toString();
   std::vector<std::string> outNonPropertyParams;
   // use temporary output properties
   // to ease the undo in case of failure
   std::vector<OutPropertyParam> outPropertyParams;
-  ParameterDescriptionList paramList = PluginLister::getPluginParameters(algorithm);
-  ParameterDescription desc;
   forEach(desc, paramList.getParameters()) {
     std::string typeName(desc.getTypeName());
 
