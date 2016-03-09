@@ -112,7 +112,7 @@ Returns the value associated to a particular node.
 
   const @PROPERTY_EDGE_TYPE@ getEdgeValue(const tlp::edge edge);
 %Docstring
-tlp.@PROPERTY_TYPE@Property.getEdgeValue(edge) 
+tlp.@PROPERTY_TYPE@Property.getEdgeValue(edge)
 
 Returns the value associated to a particular edge.
 
