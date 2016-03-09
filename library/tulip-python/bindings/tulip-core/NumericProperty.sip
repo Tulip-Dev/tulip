@@ -94,7 +94,7 @@ Returns the value associated to a particular node.
 
   const double getEdgeDoubleValue(const tlp::edge edge);
 %Docstring
-tlp.NumericProperty.getEdgeDoubleValue(edge) 
+tlp.NumericProperty.getEdgeDoubleValue(edge)
 
 Returns the value associated to a particular edge.
 
