@@ -20,9 +20,14 @@
 #ifndef GOOGLEMAPS_H
 #define GOOGLEMAPS_H
 
+#ifdef QT_HAS_WEBKIT
 #include <QWebView>
 #include <QWebFrame>
-
+#else
+#include <QWebEngineView>
+#include <QWebFrame>
+#include <QEventLoop>
+#endif
 #include <tulip/Coord.h>
 #include <tulip/Graph.h>
 
@@ -31,7 +36,29 @@
 
 namespace tlp {
 
+#ifdef QT_HAS_WEBENGINE
+
+class MapRefresher : public QObject {
+
+  Q_OBJECT
+
+public slots:
+
+  void refreshMap();
+
+signals:
+
+  void refreshMapSignal();
+
+};
+
+#endif
+
+#ifdef QT_HAS_WEBKIT
 class GoogleMaps : public QWebView {
+#else
+class GoogleMaps : public QWebEngineView {
+#endif
 
   Q_OBJECT
 
@@ -71,10 +98,6 @@ public :
 
   int getWorldWidth();
 
-  QWebFrame *getMainFrame() const {
-    return frame;
-  }
-
   void wheelEvent(QWheelEvent * ev);
 
   void mouseMoveEvent(QMouseEvent * ev);
@@ -105,14 +128,69 @@ private slots :
 
 private :
 
+  QVariant executeJavascript(const QString &jsCode);
+
   bool init;
+#ifdef QT_HAS_WEBKIT
   QWebFrame *frame;
+#else
+  QWebEnginePage *frame;
+#endif
   int x, y;
 
   AddressSelectionDialog *addressSelectionDialog;
   QGraphicsProxyWidget *addresseSelectionProxy;
   ProgressWidgetGraphicsProxy *progressWidget;
+
+#ifdef QT_HAS_WEBENGINE
+  MapRefresher *mapRefresher;
+#endif
+
 };
+
+#ifdef QT_HAS_WEBENGINE
+
+// Use this class as a hack to simulate synchronous javascript callbacks
+// as QtWebEngine is asynchronous while QtWebKit was not
+class JsCallback : public QObject {
+
+  Q_OBJECT
+
+public:
+
+  JsCallback(QVariant *ret) : _ret(ret) {
+    _lastCreatedInstance = this;
+  }
+
+  JsCallback(const JsCallback &jscb) : QObject() {
+    _ret = jscb._ret;
+    _lastCreatedInstance = this;
+  }
+
+  void operator()(const QVariant &result) {
+    *_ret = result;
+    emit called();
+  }
+
+  static void waitForCallback() {
+    QEventLoop loop;
+    connect(_lastCreatedInstance, SIGNAL(called()), &loop, SLOT(quit()));
+    loop.exec();
+  }
+
+signals:
+
+    void called();
+
+private:
+
+  QVariant *_ret;
+
+  static JsCallback *_lastCreatedInstance;
+
+};
+
+#endif
 
 }
 
