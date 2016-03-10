@@ -33,7 +33,6 @@
 #include <tulip/OpenGlConfigManager.h>
 
 #include <QMenu>
-#include <QWebFrame>
 #include <QThread>
 #include <QComboBox>
 #include <QDomDocument>

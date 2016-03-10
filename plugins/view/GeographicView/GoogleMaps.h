@@ -25,7 +25,6 @@
 #include <QWebFrame>
 #else
 #include <QWebEngineView>
-#include <QWebFrame>
 #include <QEventLoop>
 #endif
 #include <tulip/Coord.h>
