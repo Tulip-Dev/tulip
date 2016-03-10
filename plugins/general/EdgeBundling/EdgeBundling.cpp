@@ -147,7 +147,7 @@ class SortNodes {
 public:
   static Graph *g;
   static DoubleProperty *dist;
-  bool operator()(const node a, const node b) { //sort in deceresing order;
+  bool operator()(const node a, const node b) const { //sort in deceresing order;
     if (dist->getNodeValue(a) == dist->getNodeValue(b))
       return a.id > b.id;
 
