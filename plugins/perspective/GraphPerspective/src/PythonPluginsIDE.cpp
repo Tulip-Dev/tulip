@@ -24,7 +24,6 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QTextBlock>
-#include <QWebView>
 
 #include <tulip/PythonCodeEditor.h>
 #include <tulip/PluginLister.h>

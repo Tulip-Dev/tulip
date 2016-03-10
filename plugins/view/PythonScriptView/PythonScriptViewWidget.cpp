@@ -25,9 +25,6 @@
 #include <QIcon>
 #include <QMessageBox>
 #include <QTextBlock>
-#include <QWebView>
-
-
 
 #include "PythonScriptViewWidget.h"
 #include "PythonScriptView.h"
