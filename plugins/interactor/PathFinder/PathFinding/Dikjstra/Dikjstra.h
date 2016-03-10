@@ -70,7 +70,7 @@ private:
   };
 
   struct LessDikjstraElement {
-    bool operator()(const DikjstraElement * const a, const DikjstraElement * const b ) {
+    bool operator()(const DikjstraElement * const a, const DikjstraElement * const b ) const {
       if (fabs(a->dist - b->dist) > 1.E-9) {
         return (a->dist < b->dist);
       }

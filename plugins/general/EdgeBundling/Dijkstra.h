@@ -128,7 +128,7 @@ private:
   };
 
   struct LessDijkstraElement {
-    bool operator()(const DijkstraElement * const a, const DijkstraElement * const b ) {
+    bool operator()(const DijkstraElement * const a, const DijkstraElement * const b ) const {
       if (fabs(a->dist - b->dist) > 1.E-9) {
         return (a->dist < b->dist);
       }
