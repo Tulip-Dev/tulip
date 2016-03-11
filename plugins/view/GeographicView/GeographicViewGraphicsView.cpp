@@ -368,7 +368,9 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView, 
   currentMapZoom(0),globeCameraBackup(NULL,true),mapCameraBackup(NULL,true),geoLayout(NULL),
   geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
   mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
-  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false) {
+  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false),
+  noLayoutMsgBox(NULL)
+{
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
   setViewport(glWidget);
@@ -913,7 +915,7 @@ void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {
     progressWidget->setPos(width() / 2 - progressWidget->sceneBoundingRect().width() / 2, height() / 2 - progressWidget->sceneBoundingRect().height() / 2);
   }
 
-  if (noLayoutMsgBox->isVisible()) {
+  if (noLayoutMsgBox && noLayoutMsgBox->isVisible()) {
     noLayoutMsgBox->setPos(width() / 2 - noLayoutMsgBox->sceneBoundingRect().width() / 2, height() / 2 - noLayoutMsgBox->sceneBoundingRect().height() / 2);
   }
 
