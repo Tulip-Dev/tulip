@@ -368,8 +368,7 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView, 
   currentMapZoom(0),globeCameraBackup(NULL,true),mapCameraBackup(NULL,true),geoLayout(NULL),
   geoViewSize(NULL), geoViewShape(NULL), geoLayoutBackup(NULL),
   mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false),
-  polygonEntity(NULL), planisphereEntity(NULL), firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false),
-  noLayoutMsgBox(NULL)
+  polygonEntity(NULL), planisphereEntity(NULL), noLayoutMsgBox(NULL), firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false)  
 {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
