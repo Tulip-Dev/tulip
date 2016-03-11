@@ -130,6 +130,11 @@ void GlMainView::setupWidget() {
   _centerViewAction->setShortcut(tr("Ctrl+Shift+C"));
   _centerViewAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
+  _snapshotAction=new QAction(trUtf8("Take a snapshot"),this);
+  connect(_snapshotAction,SIGNAL(triggered()),this,SLOT(openSnapshotDialog()));
+  _snapshotAction->setShortcut(tr("Ctrl+Shift+P"));
+  _snapshotAction->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
   _advAntiAliasingAction = new QAction(trUtf8("Advanced anti-aliasing"), this);
   _advAntiAliasingAction->setCheckable(true);
   _advAntiAliasingAction->setChecked(_glMainWidget->advancedAntiAliasingActivated());
@@ -138,6 +143,7 @@ void GlMainView::setupWidget() {
   graphicsView()->addAction(_centerViewAction);
   graphicsView()->addAction(_forceRedrawAction);
   graphicsView()->addAction(_advAntiAliasingAction);
+  graphicsView()->addAction(_snapshotAction);
 }
 
 GlMainWidget* GlMainView::getGlMainWidget() const {
@@ -297,9 +303,7 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   connect(antiAliasing,SIGNAL(triggered(bool)),this,SLOT(setAntiAliasing(bool)));
 
   menu->addAction(_advAntiAliasingAction);
-
-  menu->addAction(trUtf8("Take snapshot"),this,SLOT(openSnapshotDialog()));
-
+  menu->addAction(_snapshotAction);
   menu->addSeparator();
   menu->addAction(trUtf8("Augmented display"))->setEnabled(false);
   menu->addSeparator();
