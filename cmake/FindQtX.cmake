@@ -104,7 +104,7 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
   SET(QT_LIBRARIES ${Qt5Widgets_LIBRARIES} ${Qt5OpenGL_LIBRARIES} ${Qt5Xml_LIBRARIES}
                    ${Qt5XmlPatterns_LIBRARIES} ${Qt5Network_LIBRARIES})
 
-  GET_FILENAME_COMPONENT(QT_CMAKE_DIR ${Qt5Core_DIR} DIRECTORY)
+  GET_FILENAME_COMPONENT(QT_CMAKE_DIR "${Qt5Core_DIR}" DIRECTORY)
 
   # On Apple platform, we need to link against Qt5DBus and Qt5PrintSupport
   # when using the official Qt5 bundle provided by qt.io (dylibs dependencies side effect).
