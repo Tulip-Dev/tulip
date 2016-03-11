@@ -70,6 +70,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
   QAction *_centerViewAction;
   QAction *_forceRedrawAction;
   QAction* _advAntiAliasingAction;
+  QAction* _snapshotAction;
 
 protected :
 
