@@ -179,7 +179,7 @@ public:
 
 signals:
 
-    void called();
+  void called();
 
 private:
 
