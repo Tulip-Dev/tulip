@@ -51,7 +51,7 @@ const char * paramHelp[] = {
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "int" ) \
   HTML_HELP_DEF( "values", "[0,1000000]" ) \
-  HTML_HELP_DEF( "default", "10" ) \
+  HTML_HELP_DEF( "default", "5" ) \
   HTML_HELP_BODY() \
   "This parameter defines the maximal distance of reachable nodes." \
   HTML_HELP_CLOSE(),
@@ -68,7 +68,7 @@ std::string edgesDirectionLabels[] = {
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context):BooleanAlgorithm(context) {
   addInParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
-  addInParameter<BooleanProperty> ("startingnodes",paramHelp[1],"viewSelection");
+  addInParameter<BooleanProperty> ("starting nodes",paramHelp[1],"viewSelection");
   addInParameter<int> ("distance",paramHelp[2],"5");
 }
 
@@ -116,7 +116,11 @@ bool ReachableSubGraphSelection::run() {
       }
     }
 
-    dataSet->get("startingnodes", startNodes);
+    //keep startingnodes for compatibility
+    if(dataSet->exist("startingnodes"))
+        dataSet->get("startingnodes", startNodes);
+    else
+        dataSet->get("starting nodes", startNodes);
   }
 
   if (startNodes) {
