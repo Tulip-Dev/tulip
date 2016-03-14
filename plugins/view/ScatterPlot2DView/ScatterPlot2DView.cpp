@@ -25,6 +25,7 @@
 #include <tulip/GlLine.h>
 #include <tulip/GlProgressBar.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/GraphProperty.h>
 
 #include <QTime>
 #include <QMenu>
@@ -226,6 +227,10 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
         edgeAsNodeGraphSelection->setNodeValue(n, graphSelection->getEdgeValue(e));
         edgeAsNodeGraphLabel->setNodeValue(n, graphLabel->getEdgeValue(e));
       }
+      // This is quite ugly but before listening to the graph we must
+      // ensure that its viewMetaGraph property already exist to avoid
+      // an event loop when building the Scatterplot2D
+      scatterPlotGraph->getRoot()->getProperty<GraphProperty>("viewMetaGraph");
       scatterPlotGraph->addListener(this);
       graphColor->addListener(this);
       graphLabel->addListener(this);
