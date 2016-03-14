@@ -118,9 +118,9 @@ bool ReachableSubGraphSelection::run() {
 
     //keep startingnodes for compatibility
     if(dataSet->exist("startingnodes"))
-        dataSet->get("startingnodes", startNodes);
+      dataSet->get("startingnodes", startNodes);
     else
-        dataSet->get("starting nodes", startNodes);
+      dataSet->get("starting nodes", startNodes);
   }
 
   if (startNodes) {
