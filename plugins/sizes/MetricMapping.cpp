@@ -116,6 +116,12 @@ public:
     addInParameter<bool>("type", paramHelp[5],"true");
     addInParameter<bool>("node/edge", paramHelp[6],"true");
     addInParameter<StringCollection>("area proportional", paramHelp[7], "Area Proportional;Quadratic/Cubic");
+
+    // result needs to be an inout parameter
+    // in order to preserve the original values of non targetted elements
+    // i.e if "target" = "nodes", the values of edges must be preserved
+    // and if "target" = "edges", the values of nodes must be preserved
+    parameters.setDirection("result", INOUT_PARAM);
   }
 
   bool check(std::string &errorMsg) {
@@ -229,18 +235,6 @@ public:
       }
 
       delete itN;
-
-      edge e;
-      forEach(e, graph->getEdges()) {
-        result->setEdgeValue(e, entrySize->getEdgeValue(e));
-
-        if ((++iter % 500 == 0) &&
-            (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-          if (!mappingType) delete tmp;
-
-          return false;
-        }
-      }
     }
     else {
       shift = entryMetric->getEdgeDoubleMin(graph);
@@ -267,18 +261,6 @@ public:
       }
 
       delete itE;
-
-      node n;
-      forEach(n, graph->getNodes()) {
-        result->setNodeValue(n, entrySize->getNodeValue(n));
-
-        if ((++iter % 500 == 0) &&
-            (pluginProgress->progress(iter, maxIter)!=TLP_CONTINUE)) {
-          if (!mappingType) delete tmp;
-
-          return pluginProgress->state()!=TLP_CANCEL;
-        }
-      }
     }
 
     if (!mappingType) delete tmp;
