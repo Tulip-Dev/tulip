@@ -59,7 +59,7 @@ ADD_LIBRARY(StrahlerMetric-${TulipVersion} SHARED StrahlerMetric.cpp StrahlerMet
 TARGET_LINK_LIBRARIES(StrahlerMetric-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
-ADD_LIBRARY(RandomMetric-${TulipVersion} SHARED Random.cpp  Random.h)
+ADD_LIBRARY(RandomMetric-${TulipVersion} SHARED Random.cpp)
 TARGET_LINK_LIBRARIES(RandomMetric-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
