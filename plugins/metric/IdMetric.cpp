@@ -25,14 +25,14 @@ using namespace tlp;
 
 namespace {
 const char * paramHelp[] = {
-    // target
-    HTML_HELP_OPEN()         \
-    HTML_HELP_DEF( "type", "String Collection" ) \
-    HTML_HELP_DEF("values", "nodes <BR> edges") \
-    HTML_HELP_DEF( "default", "nodes" )  \
-    HTML_HELP_BODY() \
-    "Whether the id is copied only for nodes, only for edges, or for both."  \
-    HTML_HELP_CLOSE(),
+  // target
+  HTML_HELP_OPEN()         \
+  HTML_HELP_DEF( "type", "String Collection" ) \
+  HTML_HELP_DEF("values", "nodes <BR> edges") \
+  HTML_HELP_DEF( "default", "nodes" )  \
+  HTML_HELP_BODY() \
+  "Whether the id is copied only for nodes, only for edges, or for both."  \
+  HTML_HELP_CLOSE(),
 };
 }
 
@@ -46,43 +46,48 @@ PLUGIN(IdMetric)
 
 //==================================================================
 IdMetric::IdMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES);
+  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES);
 
-    // result needs to be an inout parameter
-    // in order to preserve the original values of non targetted elements
-    // i.e if "target" = "nodes", the values of edges must be preserved
-    // and if "target" = "edges", the values of nodes must be preserved
-    parameters.setDirection("result", INOUT_PARAM);
+  // result needs to be an inout parameter
+  // in order to preserve the original values of non targetted elements
+  // i.e if "target" = "nodes", the values of edges must be preserved
+  // and if "target" = "edges", the values of nodes must be preserved
+  parameters.setDirection("result", INOUT_PARAM);
 }
 //==================================================================
 bool IdMetric::run() {
-    bool nodes(true), edges(true);
-    if ( dataSet!=NULL ) {
-        StringCollection targetType;
-        dataSet->get(TARGET_TYPE, targetType);
-        if(targetType.getCurrent()==NODES_TARGET) {
-            edges=false;
-            nodes=true;
-        }
-        else if (targetType.getCurrent()==EDGES_TARGET) {
-            edges=true;
-            nodes=false;
-        }
-        else {
-            edges=true;
-            nodes=true;
-        }
+  bool nodes(true), edges(true);
+
+  if ( dataSet!=NULL ) {
+    StringCollection targetType;
+    dataSet->get(TARGET_TYPE, targetType);
+
+    if(targetType.getCurrent()==NODES_TARGET) {
+      edges=false;
+      nodes=true;
     }
-    if(nodes) {
-        node n;
-        forEach(n, graph->getNodes())
-                result->setNodeValue(n, n.id);
+    else if (targetType.getCurrent()==EDGES_TARGET) {
+      edges=true;
+      nodes=false;
     }
-    if(edges) {
-        edge e;
-        forEach(e, graph->getEdges())
-                result->setEdgeValue(e, e.id);
+    else {
+      edges=true;
+      nodes=true;
     }
-    return true;
+  }
+
+  if(nodes) {
+    node n;
+    forEach(n, graph->getNodes())
+    result->setNodeValue(n, n.id);
+  }
+
+  if(edges) {
+    edge e;
+    forEach(e, graph->getEdges())
+    result->setEdgeValue(e, e.id);
+  }
+
+  return true;
 }
 //=================================================================
