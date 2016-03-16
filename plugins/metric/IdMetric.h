@@ -20,16 +20,16 @@
 #ifndef _IDMETRIC_H
 #define _IDMETRIC_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/DoubleProperty.h>
 
 /** \addtogroup metric */
 
-/** This plugins assigns id to nodes and edges. The ids are those used by tulip.
+/** This plugins assigns id to nodes/edges or both. The ids are those used internally by Tulip.
  *
  */
 class IdMetric:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Id","David Auber","06/04/2000","Assigns their Tulip id to nodes and edges.","1.0","Misc")
+  PLUGININFORMATION("Id","David Auber","06/04/2000","Assigns their Tulip id to nodes and edges.","1.1","Misc")
   IdMetric(const tlp::PluginContext* context);
   bool run();
 };
