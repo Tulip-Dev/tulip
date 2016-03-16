@@ -16,7 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/DoubleProperty.h>
+#include "Random.h"
+
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>
 
@@ -24,14 +25,14 @@ using namespace tlp;
 
 namespace {
 const char * paramHelp[] = {
-// target
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "nodes <BR> edges") \
-  HTML_HELP_DEF( "default", "nodes" )  \
-  HTML_HELP_BODY() \
-  "Whether metric is computed only for nodes, only for edges, or for both."  \
-  HTML_HELP_CLOSE(),
+    // target
+    HTML_HELP_OPEN()         \
+    HTML_HELP_DEF( "type", "String Collection" ) \
+    HTML_HELP_DEF("values", "nodes <BR> edges") \
+    HTML_HELP_DEF( "default", "nodes" )  \
+    HTML_HELP_BODY() \
+    "Whether metric is computed only for nodes, only for edges, or for both."  \
+    HTML_HELP_CLOSE(),
 };
 }
 
@@ -41,11 +42,7 @@ const char * paramHelp[] = {
 #define EDGES_TARGET 2
 #define BOTH_TARGET 0
 
-class RandomMetric: public DoubleAlgorithm {
-  //===========================================
-public:
-  PLUGININFORMATION("Random metric","David Auber","04/10/2001","Assigns random values to nodes and edges.","1.1","Misc")
-  RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
+RandomMetric::RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES);
 
     // result needs to be an inout parameter
@@ -53,31 +50,30 @@ public:
     // i.e if "target" = "nodes", the values of edges must be preserved
     // and if "target" = "edges", the values of nodes must be preserved
     parameters.setDirection("result", INOUT_PARAM);
-  }
+}
 
 //===========================================
-  bool run() {
+bool RandomMetric::run() {
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
     bool nodes(true), edges(true);
 
     if ( dataSet!=NULL ) {
-      StringCollection targetType;
-      dataSet->get(TARGET_TYPE, targetType);
-
-      if(targetType.getCurrent()==NODES_TARGET) {
-        edges=false;
-        nodes=true;
-      }
-      else if (targetType.getCurrent()==NODES_TARGET) {
-        edges=true;
-        nodes=false;
-      }
-      else {
-        edges=true;
-        nodes=true;
-      }
+        StringCollection targetType;
+        dataSet->get(TARGET_TYPE, targetType);
+        if(targetType.getCurrent()==NODES_TARGET) {
+            edges=false;
+            nodes=true;
+        }
+        else if (targetType.getCurrent()==EDGES_TARGET) {
+            edges=true;
+            nodes=false;
+        }
+        else {
+            edges=true;
+            nodes=true;
+        }
     }
 
     if(nodes) {
@@ -94,6 +90,5 @@ public:
 
     return true;
   }
-//===========================================
-};
+
 PLUGIN(RandomMetric)
