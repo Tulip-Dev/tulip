@@ -170,7 +170,7 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
 
   # with MinGW, remove the -fPIC compiler option as it is not needed and generates a lot of warnings
   IF(MINGW)
-    STRING(REPLACE "-fPIC" "" Qt5Widgets_EXECUTABLE_COMPILE_FLAGS ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS})
+    STRING(REPLACE "-fPIC" "" Qt5Widgets_EXECUTABLE_COMPILE_FLAGS "${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
   ENDIF(MINGW)
 
 # Use Qt4 otherwise
