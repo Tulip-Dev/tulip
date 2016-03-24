@@ -209,17 +209,21 @@ public:
     if (qFilename.startsWith("http")) {
       FileDownloader fileDownloader;
       QByteArray imageData = fileDownloader.download(QUrl(qFilename));
+
       if (imageData.isEmpty()) {
         tlp::error() << "Error when donwloading texture from url " << filename.c_str() << std::endl;
         return false;
-      } else {
+      }
+      else {
         bool imageLoaded = image.loadFromData(imageData);
+
         if (!imageLoaded) {
           tlp::error() << "Error when loading texture from url " << filename.c_str() << std::endl;
           return false;
         }
       }
-    } else {
+    }
+    else {
 
       image.load(qFilename);
 
