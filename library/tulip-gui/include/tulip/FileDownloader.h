@@ -17,28 +17,28 @@ namespace tlp {
   **/
 class TLP_QT_SCOPE FileDownloader : public QObject {
 
- Q_OBJECT
+  Q_OBJECT
 
- public:
+public:
 
   FileDownloader();
 
-/**
-  * Synchronously download the content of a file referenced by an url
-  * and returns it as a raw byte array.
-  *
-  */
+  /**
+    * Synchronously download the content of a file referenced by an url
+    * and returns it as a raw byte array.
+    *
+    */
   const QByteArray &download(const QUrl &url);
 
- signals:
+signals:
 
   void downloaded();
 
- private slots:
+private slots:
 
   void fileDownloaded(QNetworkReply* pReply);
 
- private:
+private:
 
   QNetworkAccessManager _webCtrl;
   QByteArray _downloadedData;
