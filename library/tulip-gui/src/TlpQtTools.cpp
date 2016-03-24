@@ -32,6 +32,7 @@
 #include <QGLWidget>
 #include <QEvent>
 #include <QMetaEnum>
+#include <QApplication>
 
 
 #include <QDir>
@@ -64,6 +65,7 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PythonVersionChecker.h>
+#include <tulip/FileDownloader.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -199,15 +201,37 @@ class GlTextureFromQImageLoader :public GlTextureLoader {
 public:
   // redefine the inherited method
   bool loadTexture(const std::string& filename, GlTexture& glTexture) {
-    QImage image(QString::fromUtf8(filename.c_str()));
 
-    if (image.isNull()) {
-      if (!QFile(QString::fromUtf8(filename.c_str())).exists())
-        tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
-      else
-        tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+    QImage image;
 
-      return false;
+    QString qFilename = QString::fromUtf8(filename.c_str());
+
+    if (qFilename.startsWith("http")) {
+      FileDownloader fileDownloader;
+      QByteArray imageData = fileDownloader.download(QUrl(qFilename));
+      if (imageData.isEmpty()) {
+        tlp::error() << "Error when donwloading texture from url " << filename.c_str() << std::endl;
+        return false;
+      } else {
+        bool imageLoaded = image.loadFromData(imageData);
+        if (!imageLoaded) {
+          tlp::error() << "Error when loading texture from url " << filename.c_str() << std::endl;
+          return false;
+        }
+      }
+    } else {
+
+      image.load(qFilename);
+
+      if (image.isNull()) {
+        if (!QFile(QString::fromUtf8(filename.c_str())).exists())
+          tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
+        else
+          tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+
+        return false;
+      }
+
     }
 
     bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
