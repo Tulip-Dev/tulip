@@ -258,7 +258,7 @@ void GraphPerspective::showLogger() {
 
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
   pos.setX(pos.x()+_ui->loggerFrame->width());
-  pos.setY(std::min<int>(_mainWindow->mapToGlobal(_mainWindow->pos()).y()+mainWindow()->height()-_logger->height(),pos.y()));
+  pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0,0)).y()+mainWindow()->height()-_logger->height(),pos.y()));
   _logger->move(pos);
   // extend the logger frame width until reaching the right side of the main window
   _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x()+mainWindow()->width()-_mainWindow->mapToGlobal(_logger->pos()).x(), _logger->height());
