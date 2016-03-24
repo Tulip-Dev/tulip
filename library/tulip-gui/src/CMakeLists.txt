@@ -95,6 +95,7 @@ SET(SRCS
   GlSimpleEntityItemModel.cpp
   PluginModel.cpp
   GraphNeedsSavingObserver.cpp
+  FileDownloader.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)
@@ -199,6 +200,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/TreeViewComboBox.h
   ../include/tulip/TulipItemDelegate.h
   ../include/tulip/GlSimpleEntityItemModel.h
+  ../include/tulip/FileDownloader.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
