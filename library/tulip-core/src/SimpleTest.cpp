@@ -59,9 +59,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
   bool result = true;
   bool computeAll = (loops != NULL) || (multipleEdges != NULL);
   Iterator<node> *itNode = graph->getNodes();
-  MutableContainer<bool> inserted;
   MutableContainer<bool> visited;
-  inserted.setAll(false);
   visited.setAll(false);
 
   while (itNode->hasNext ()) {
@@ -89,10 +87,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
         }
 
         if (loops!=NULL) {
-          if (!inserted.get(e.id)) {
-            loops->push_back(e);
-            inserted.set(e.id, true);
-          }
+	  loops->push_back(e);
         }
       }
 
@@ -103,10 +98,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
         }
 
         if (multipleEdges != NULL)  {
-          if (!inserted.get(e.id)) {
-            multipleEdges->push_back(e);
-            inserted.set(e.id, true);
-          }
+	  multipleEdges->push_back(e);
         }
       }
       else
