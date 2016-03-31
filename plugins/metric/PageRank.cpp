@@ -86,64 +86,51 @@ struct PageRank : public DoubleAlgorithm {
     double nbNodes = graph->numberOfNodes();
 
     // Initialize the PageRank
-    MutableContainer<double> R;
-    MutableContainer<double> R2;
-    R.setAll( 1. / nbNodes);
-
+    MutableContainer<double>* R = new MutableContainer<double>();
+    MutableContainer<double>* R2 = new MutableContainer<double>();
+    R->setAll(1./nbNodes);
+    const double one_minus_d = (1-d)/nbNodes;
 
     for(unsigned int k=0; k < 15*log(nbNodes); ++k) {
-
-      //cout<<"[PageRank iteration "<<k<<" ] "<<endl;
-      R2.setAll(0.);
-
-      edge e;
-      forEach(e, graph->getEdges()) {
-        const std::pair<node, node> eEnds = graph->ends(e);
-        node src = eEnds.first;
-
-        if(directed) {
-          node tgt = eEnds.second;
-          double prev = R2.get(tgt);
-          R2.set(tgt, prev + R.get(src) / double(graph->outdeg(src)));
-        }
-        else {
-          node tgt = eEnds.second;
-          double prev = R2.get(tgt);
-          R2.set(tgt, prev + R.get(src) / double(graph->deg(src)));
-
-          prev = R2.get(src);
-          R2.set(src, prev + R.get(tgt) / double(graph->deg(tgt)));
-        }
+      if (directed) {
+	node tgt;
+	forEach(tgt, graph->getNodes()) {
+	  double r2Val = 0;
+	  node src;
+	  forEach(src, graph->getInNodes(tgt)) {
+	    r2Val += R->get(src)/graph->outdeg(src);
+	  }
+	  R2->set(tgt, one_minus_d + d * r2Val);
+	}
+	// swap R and R2
+	MutableContainer<double>*tmp = R;
+	R = R2;
+	R2 = tmp;
       }
-
-      node n;
-      forEach(n, graph->getNodes())
-      R2.set(n, d * R2.get(n));
-
-      double mu = 0.0;
-      forEach(n, graph->getNodes())
-      mu += R.get(n) - R2.get(n);
-
-      forEach(n, graph->getNodes())
-      R2.set(n, R2.get(n) + mu*1.0/nbNodes);
-
-      /*double delta = 0.0;
-      forEach(n, graph->getNodes())
-
-      if (R.get(n) > R2.get(n))
-        delta += R.get(n) - R2.get(n);
-      else
-      delta += R2.get(n) - R.get(n);*/
-
-      forEach(n, graph->getNodes())
-      R.set(n, R2.get(n));
-
+      else {
+	R2->setAll(0.);
+	edge e;
+	forEach(e, graph->getEdges()) {
+	  const std::pair<node, node> eEnds = graph->ends(e);
+          node src = eEnds.first;
+	  node tgt = eEnds.second;
+          double prev = R2->get(tgt);
+          R2->set(tgt, prev + R->get(src) / double(graph->deg(src)));
+          prev = R2->get(src);
+          R2->set(src, prev + R->get(tgt) / double(graph->deg(tgt)));
+        }
+	node n;
+	forEach(n, graph->getNodes())
+	  R->set(n, one_minus_d + d * R2->get(n));
+      }
     }
 
     node n;
-    forEach(n, graph->getNodes()) {
-      result->setNodeValue(n, R.get(n));
-    }
+    forEach(n, graph->getNodes())
+      result->setNodeValue(n, R->get(n));
+
+    delete R;
+    delete R2;
 
     return true;
   }
