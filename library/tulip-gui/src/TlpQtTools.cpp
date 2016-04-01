@@ -225,10 +225,13 @@ public:
     }
     else {
 
-      image.load(qFilename);
+      QFile imageFile(qFilename);
+      if (imageFile.open(QIODevice::ReadOnly)) {
+        image.loadFromData(imageFile.readAll());
+      }
 
       if (image.isNull()) {
-        if (!QFile(QString::fromUtf8(filename.c_str())).exists())
+        if (!imageFile.exists())
           tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
         else
           tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
