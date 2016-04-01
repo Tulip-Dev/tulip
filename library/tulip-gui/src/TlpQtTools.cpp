@@ -226,6 +226,7 @@ public:
     else {
 
       QFile imageFile(qFilename);
+
       if (imageFile.open(QIODevice::ReadOnly)) {
         image.loadFromData(imageFile.readAll());
       }

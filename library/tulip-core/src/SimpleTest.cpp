@@ -87,7 +87,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
         }
 
         if (loops!=NULL) {
-	  loops->push_back(e);
+          loops->push_back(e);
         }
       }
 
@@ -98,7 +98,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
         }
 
         if (multipleEdges != NULL)  {
-	  multipleEdges->push_back(e);
+          multipleEdges->push_back(e);
         }
       }
       else
