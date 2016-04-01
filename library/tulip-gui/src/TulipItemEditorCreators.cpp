@@ -419,10 +419,16 @@ public:
       return iconPool[file];
     }
     else {
-      QImage imageFile(file);
+      QImage image;
 
-      if (!imageFile.isNull()) {
-        iconPool[file] = QPixmap::fromImage(imageFile.scaled(32,32));
+      QFile imageFile(file);
+
+      if (imageFile.open(QIODevice::ReadOnly)) {
+        image.loadFromData(imageFile.readAll());
+      }
+
+      if (!image.isNull()) {
+        iconPool[file] = QPixmap::fromImage(image.scaled(32,32));
         return iconPool[file];
       }
     }
@@ -451,10 +457,12 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
   QRect rect = option.rect;
   TulipFileDescriptor fileDesc = v.value<TulipFileDescriptor>();
   QFileInfo fileInfo(fileDesc.absolutePath);
+  QString imageFilePath = fileInfo.absoluteFilePath();
+
   QIcon icon;
   QString text;
 
-  const QIcon &imageIcon = imageIconPool.getIconForImageFile(fileInfo.absoluteFilePath());
+  const QIcon &imageIcon = imageIconPool.getIconForImageFile(imageFilePath);
 
   if (!imageIcon.isNull()) {
     icon = imageIcon;
@@ -472,7 +480,9 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
   }
 
   int iconSize = rect.height()-4;
+
   painter->drawPixmap(rect.x() + 2, rect.y() + 2, iconSize, iconSize, icon.pixmap(iconSize));
+
   int textXPos = rect.x() + iconSize + 5;
 
   if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
