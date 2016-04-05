@@ -9,7 +9,7 @@ Since Tulip 4.8.1
 New methods for getting / setting graph properties values for nodes and edges added
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Convenient methods that relies on the use of a dictionnary for setting and getting
+Convenient methods that rely on the use of a dictionnary for setting and getting
 properties values for nodes and edges have been added to the :class:`tlp.Graph` class :
 
   * :meth:`tlp.Graph.getNodePropertiesValues` : returns a dictionnary filled with all graph properties values for a given node
