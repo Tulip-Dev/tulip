@@ -295,6 +295,7 @@ void SearchWidget::search() {
       if(tulipData == NULL) {
         qCritical() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
 #ifdef NDEBUG
+	delete stringProp;
         return;
 #endif
       }
@@ -304,6 +305,7 @@ void SearchWidget::search() {
       if(serializer == NULL) {
         qCritical() << QString::fromUtf8("no type serializer found for ") << tlp::tlpStringToQString(tulipData->getTypeName()) << ", please report this as a bug";
 #ifdef NDEBUG
+	delete stringProp;
         return;
 #endif
       }
@@ -317,8 +319,8 @@ void SearchWidget::search() {
         serializedValue = serializedValue.mid(1, serializedValue.length()-2);
       }
 
-      stringProp->setAllNodeValue(serializedValue.toStdString());
-      stringProp->setAllEdgeValue(serializedValue.toStdString());
+      stringProp->setAllNodeValue(QStringToTlpString(serializedValue));
+      stringProp->setAllEdgeValue(QStringToTlpString(serializedValue));
       b = stringProp;
     }
   }
