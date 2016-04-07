@@ -27,6 +27,8 @@
 #include <tulip/LayoutProperty.h>
 #include <tulip/ConnectedTest.h>
 
+#include <tulip/StringProperty.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -443,6 +445,21 @@ void PushPopTest::testVectorValue() {
 
   edge e0 = graph->addEdge(n0, n1);
 
+  StringVectorProperty* sprop =
+    graph->getProperty<StringVectorProperty>("sprop");
+  vector<std::string> svv;
+  svv.push_back("a");
+  svv.push_back("b");
+
+  sprop->setNodeValue(n1, svv);
+  sprop->setEdgeValue(e0, svv);
+  sprop->pushBackNodeEltValue(n1, "c");
+  sprop->pushBackEdgeEltValue(e0, "c");
+
+  // check the added elts
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 2) == "c");
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e0, 2) == "c");
+
   DoubleVectorProperty* prop =
     graph->getProperty<DoubleVectorProperty>("prop");
 
@@ -459,15 +476,25 @@ void PushPopTest::testVectorValue() {
 
   prop->setNodeValue(n2, vv);
   prop->setEdgeValue(e1, vv);
+  sprop->setNodeValue(n2, svv);
+  sprop->setEdgeValue(e1, svv);
   CPPUNIT_ASSERT(prop->getNodeValue(n0).empty());
+  CPPUNIT_ASSERT(sprop->getNodeValue(n0).empty());
   CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e0, 0));
   CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 0));
   CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e0, 0) == "a");
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n2, 0) == "a");
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e1, 1) == "b");
 
   prop->setNodeEltValue(n1, 1, 2.0);
   prop->setEdgeEltValue(e0, 1, 2.0);
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getEdgeEltValue(e0, 1));
+  sprop->setNodeEltValue(n1, 1, "bb");
+  sprop->setEdgeEltValue(e0, 1, "bb");
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 1) == "bb");
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e0, 1) == "bb");
 
   graph->push();
   prop->resizeNodeValue(n1, 2);
@@ -480,6 +507,18 @@ void PushPopTest::testVectorValue() {
   CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getEdgeValue(e1).size());
   CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 2));
 
+  sprop->resizeNodeValue(n1, 2);
+  sprop->resizeNodeValue(n2, 4, "d");
+  sprop->setNodeEltValue(n2, 2, "cc");
+  sprop->resizeEdgeValue(e1, 4, "d");
+  sprop->setEdgeEltValue(e1, 2, "cc");
+  CPPUNIT_ASSERT(sprop->getNodeValue(n1).size() == 2);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 1) == "bb");
+  CPPUNIT_ASSERT(sprop->getNodeValue(n2).size() == 4);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n2, 3) == "d");
+  CPPUNIT_ASSERT(sprop->getEdgeValue(e1).size() == 4);
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e1, 3) == "d");
+
   graph->pop();
   CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
@@ -488,6 +527,13 @@ void PushPopTest::testVectorValue() {
   CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getEdgeValue(e1).size());
   CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
 
+  CPPUNIT_ASSERT(sprop->getNodeValue(n1).size() == 3);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 1) == "bb");
+  CPPUNIT_ASSERT(sprop->getNodeValue(n2).size() == 2);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n2, 1) == "b");
+  CPPUNIT_ASSERT(sprop->getEdgeValue(e1).size() == 2);
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e1, 1) == "b");
+
   graph->unpop();
   CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getNodeValue(n1).size());
   CPPUNIT_ASSERT_EQUAL(2.0, prop->getNodeEltValue(n1, 1));
@@ -495,6 +541,13 @@ void PushPopTest::testVectorValue() {
   CPPUNIT_ASSERT_EQUAL(3.0, prop->getNodeEltValue(n2, 2));
   CPPUNIT_ASSERT_EQUAL(size_t(3), prop->getEdgeValue(e1).size());
   CPPUNIT_ASSERT_EQUAL(3.0, prop->getEdgeEltValue(e1, 2));
+
+  CPPUNIT_ASSERT(sprop->getNodeValue(n1).size() == 2);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 1) == "bb");
+  CPPUNIT_ASSERT(sprop->getNodeValue(n2).size() == 4);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n2, 3) == "d");
+  CPPUNIT_ASSERT(sprop->getEdgeValue(e1).size() == 4);
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e1, 3) == "d");
 
   prop->popBackNodeEltValue(n1);
   prop->popBackNodeEltValue(n2);
@@ -505,6 +558,16 @@ void PushPopTest::testVectorValue() {
   CPPUNIT_ASSERT_EQUAL(1.0, prop->getNodeEltValue(n2, 1));
   CPPUNIT_ASSERT_EQUAL(size_t(2), prop->getEdgeValue(e1).size());
   CPPUNIT_ASSERT_EQUAL(1.0, prop->getEdgeEltValue(e1, 1));
+
+  sprop->popBackNodeEltValue(n1);
+  sprop->popBackNodeEltValue(n2);
+  sprop->popBackEdgeEltValue(e1);
+  CPPUNIT_ASSERT(sprop->getNodeValue(n1).size() == 1);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 0) == "a");
+  CPPUNIT_ASSERT(sprop->getNodeValue(n2).size() == 3);
+  CPPUNIT_ASSERT(sprop->getNodeEltValue(n2, 2) == "cc");
+  CPPUNIT_ASSERT(sprop->getEdgeValue(e1).size() == 3);
+  CPPUNIT_ASSERT(sprop->getEdgeEltValue(e1, 2) == "cc");
 }
 
 //==========================================================
