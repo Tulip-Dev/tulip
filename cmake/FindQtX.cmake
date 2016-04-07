@@ -1,4 +1,4 @@
-SET(USE_QT5_IF_INSTALLED OFF CACHE BOOL "Use Qt5 to build the project if it is installed.")
+SET(USE_QT5 ON CACHE BOOL "Use Qt5 to build the project.")
 
 SET(Qt5Widgets_FOUND false)
 SET(Qt5OpenGL_FOUND false)
@@ -11,7 +11,7 @@ SET(Qt5Network_FOUND false)
 # of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable.
 
 # Also, when building Tulip Python wheels, force the use of Qt4 (more lightweight, easier to deploy)
-IF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(USE_QT5 AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
   # Unset related CMake variables in order to change the Qt5 version (by modifying the root Qt5 directory through the CMAKE_PREFIX_PATH variable)
   # without having to delete the current CMake cache
@@ -61,13 +61,12 @@ IF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
   FIND_PACKAGE(Qt5XmlPatterns)
   FIND_PACKAGE(Qt5Network)
 
-ENDIF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(USE_QT5 AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
  # Qt5 and all the required modules are present, do global setup
 IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
    ${Qt5Xml_FOUND} AND ${Qt5XmlPatterns_FOUND} AND ${Qt5Network_FOUND})
 
-  SET(USE_QT5 true)
   SET(QT_VERSION ${Qt5Widgets_VERSION_STRING})
   STRING(REGEX MATCH "[0-9]\\.[0-9]" QT_VERSION "${QT_VERSION}")
 
@@ -183,7 +182,6 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
   ENDIF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
   FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
-  SET(USE_QT4 true)
   SET(QT_USE_QTOPENGL true)
   SET(QT_USE_QTXML true)
   SET(QT_USE_QTXMLPATTERNS true)
