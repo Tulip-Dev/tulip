@@ -3,6 +3,11 @@
 ## -----------------------------------------------------------------------------------------------
 MACRO(SET_COMPILER_OPTIONS)
 
+  # Force the use of C++11 standard
+  SET(CMAKE_CXX_STANDARD 11)
+  # Set C++11 standard support as a requirement for the compiler
+  SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
   STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
@@ -14,16 +19,6 @@ MACRO(SET_COMPILER_OPTIONS)
     ENDIF(NOT APPLE)
   ENDIF(NOT MSVC)
   
-  # use legacy libstdc++ with clang on MacOS (no c++11 support but Tulip does not use any of its feature)
-  # OGDF need to be linked against to work properly, so does Tulip in order to be able to use the OGDF layouts (crash otherwise)
-  IF(APPLE AND CLANG)
-    # set -stdlib=libstdc++ only if -stdlib flag is not already bound
-    STRING(FIND "${CMAKE_CXX_FLAGS}" "-stdlib=lib" STDLIB_POS)
-    IF (${STDLIB_POS} EQUAL -1)
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -stdlib=libstdc++")
-    ENDIF()
-  ENDIF(APPLE AND CLANG)
-
   IF(EMSCRIPTEN)
     # Ensure emscripten port of zlib is compiled before compiling Tulip
     FIND_PACKAGE(PythonInterp REQUIRED)
@@ -40,36 +35,16 @@ MACRO(SET_COMPILER_OPTIONS)
         EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
                 OUTPUT_VARIABLE GCXX_VERSION)
 
-        IF(GCXX_VERSION VERSION_GREATER 4.0)
-          SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--subsystem,windows")
-          #GCC 4.4 use double dashes and gcc 4.6 single dashes for this option
-          IF(GCXX_VERSION VERSION_LESS 4.6)
-            SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} --shared-libgcc -Wl,--allow-multiple-definition")
-            SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
-            SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} --shared-libgcc  -Wl,--allow-multiple-definition")
-          ELSE()
-            SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -shared-libgcc -Wl,--allow-multiple-definition")
-            SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
-            SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
-          ENDIF()
-
-        ENDIF()
-
-        IF(GCXX_VERSION VERSION_EQUAL 4.4)
-          SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++_s")
-        ELSEIF(GCXX_VERSION VERSION_GREATER 4.5 OR GCXX_VERSION VERSION_EQUAL 4.5)
-          #mingw 4.4.0 cannot link the tulip core library as it does not have exceptions symbols correctly defined (MinGW bug #2836185)
-          SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
-          SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
-        ENDIF()
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--subsystem,windows")
+        SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -shared-libgcc -Wl,--allow-multiple-definition")
+        SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
+        SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -shared-libgcc  -Wl,--allow-multiple-definition")
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_DLL")
+        SET(CMAKE_CXX_STANDARD_LIBRARIES "${CMAKE_CXX_STANDARD_LIBRARIES} -lstdc++")
       ENDIF()
     ENDIF(NOT MSVC)
 
     IF(MSVC)
-      IF(${CMAKE_GENERATOR} MATCHES "Visual Studio 9") # Visual studio 2008 needs boost
-        FIND_PACKAGE(BOOST REQUIRED)
-        INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS}/boost/tr1)
-      ENDIF()
 
       # Tells VS to use multiple threads to compile
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /MP")
