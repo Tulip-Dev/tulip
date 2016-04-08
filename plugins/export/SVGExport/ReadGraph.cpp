@@ -141,7 +141,6 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
   pp->setComment("Exporting edges...");
   r->groupEdge();
 
-  edge e;
   unsigned int id_src_shape = 0;
   unsigned int id_tgt_shape = 0;
   unsigned int id_src_grad = 0;
@@ -151,7 +150,7 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
   tlp::GlGraphRenderingParameters rp;
   tlp::GlGraphInputData inputData(graph, &rp);
   GlEdge glEdge(0);
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     if ((++i % 100) == 0)
       pp->progress(i,nb_elements);
 
@@ -238,9 +237,8 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
 void ReadGraph::treatNodes(Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices) {
   pp->setComment("Exporting nodes...");
   r->groupNode();
-  node n;
 
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     if(graph->isMetaNode(n))
       metanodeVertices.push_back(n);
 

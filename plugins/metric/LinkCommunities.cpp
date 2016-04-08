@@ -193,11 +193,9 @@ bool LinkCommunities::run() {
   dual.free(similarity);
   dual.clear();
 
-  node n;
-  forEach(n,graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     set<double> around;
-    edge e;
-    forEach(e,graph->getInOutEdges(n)) {
+    for(edge e : graph->getInOutEdges(n)) {
       if(around.find(result->getEdgeValue(e))==around.end() && result->getEdgeValue(e)!=0) {
         around.insert(result->getEdgeValue(e));
       }
@@ -210,16 +208,14 @@ bool LinkCommunities::run() {
 void LinkCommunities::createDualGraph() {
   tlp::MutableContainer<node> mapEtoN;
   mapEtoN.setAll(node());
-  edge e;
-  forEach(e,graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     node dn = dual.addNode();
     mapDNtoE.set(dn.id,e);
     mapEtoN.set(e.id,dn);
     const std::pair<node, node>& eEnds = graph->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
-    edge ee;
-    forEach(ee,graph->getInOutEdges(src)) {
+    for(edge ee : graph->getInOutEdges(src)) {
       if(ee!=e) {
         if(mapEtoN.get(ee.id).isValid()) {
           if(!dual.existEdge(dn,mapEtoN.get(ee.id),false).isValid()) {
@@ -229,7 +225,7 @@ void LinkCommunities::createDualGraph() {
         }
       }
     }
-    forEach(ee,graph->getInOutEdges(tgt)) {
+    for(edge ee : graph->getInOutEdges(tgt)) {
       if(ee!=e) {
         if(mapEtoN.get(ee.id).isValid()) {
           if(!dual.existEdge(dn,mapEtoN.get(ee.id),false).isValid()) {
@@ -273,8 +269,7 @@ double LinkCommunities::getSimilarity(edge ee) {
   const std::pair<node, node>& e2Ends = graph->ends(e2);
   node n2 = (e2Ends.first != key) ? e2Ends.first : e2Ends.second;
   double wuv=0.0,m=0.0;
-  node n;
-  forEach(n,graph->getOutNodes(n1)) {
+  for(node n : graph->getOutNodes(n1)) {
     if(graph->existEdge(n2,n,true).isValid())
       wuv+=1.0;
 
@@ -283,7 +278,7 @@ double LinkCommunities::getSimilarity(edge ee) {
 
     m+=1.0;
   }
-  forEach(n,graph->getInNodes(n1)) {
+  for(node n : graph->getInNodes(n1)) {
     if(graph->existEdge(n2,n,true).isValid())
       wuv+=1.0;
 
@@ -293,7 +288,7 @@ double LinkCommunities::getSimilarity(edge ee) {
     m+=1.0;
   }
 
-  forEach(n,graph->getInOutNodes(n2)) {
+  for(node n : graph->getInOutNodes(n2)) {
     if(!graph->existEdge(n1,n,false).isValid())
       m+=1.0;
   }
@@ -325,8 +320,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
   double a1a2=0.0;
   double a1=0.0,a2=0.0;
   double a11=0.0,a22=0.0;
-  edge e;
-  forEach(e,graph->getInEdges(n1)) {
+  for(edge e : graph->getInEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
     node n=graph->source(e);
     edge me = graph->existEdge(n2,n,true);
@@ -343,7 +337,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
     a11+=val*val;
   }
 
-  forEach(e,graph->getOutEdges(n1)) {
+  for(edge e : graph->getOutEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
     node n=graph->target(e);
     edge me = graph->existEdge(n2,n,true);
@@ -360,7 +354,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
     a11+=val*val;
   }
 
-  forEach(e,graph->getInOutEdges(n2)) {
+  for(edge e : graph->getInOutEdges(n2)) {
     double val = metric->getEdgeDoubleValue(e);
     a2+=val;
     a22+=val*val;
@@ -370,7 +364,7 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
   a2/=graph->deg(n2);
   a22+=a2*a2;
 
-  e = graph->existEdge(n1,n2,false);
+  edge e = graph->existEdge(n1,n2,false);
 
   if(e.isValid())
     a1a2+=metric->getEdgeDoubleValue(e)*(a1+a2);

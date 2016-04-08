@@ -200,8 +200,8 @@ void HistogramView::setState(const DataSet &dataSet) {
       edgeAsNodeGraph = tlp::newGraph();
       edgeToNode.clear();
       nodeToEdge.clear();
-      edge e;
-      forEach(e, _histoGraph->getEdges()) {
+
+      for(edge e : _histoGraph->getEdges()) {
         nodeToEdge[edgeToNode[e] = edgeAsNodeGraph->addNode()] = e;
         edgeAsNodeGraph->getProperty<ColorProperty>("viewColor")->setNodeValue(edgeToNode[e],
             _histoGraph->getProperty<ColorProperty>("viewColor")->getEdgeValue(e));
@@ -1040,8 +1040,8 @@ void HistogramView::afterSetAllEdgeValue(PropertyInterface *p) {
   else if (p->getName() == "viewSelection") {
     BooleanProperty *edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty*>(p);
-    edge e;
-    forEach(e, _histoGraph->getEdges()) {
+
+    for(edge e : _histoGraph->getEdges()) {
       if (edgeAsNodeGraphSelection->getNodeValue(edgeToNode[e]) != viewSelection->getEdgeValue(e)) {
         edgeAsNodeGraphSelection->setNodeValue(edgeToNode[e], viewSelection->getEdgeValue(e));
       }

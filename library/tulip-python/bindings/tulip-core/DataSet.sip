@@ -32,8 +32,7 @@ extern bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string
 %ModuleCode
 PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict) {
   if (!dict) dict = PyDict_New();
-  std::pair<std::string, tlp::DataType*> entry;
-  forEach(entry, dataSet.getValues()) {
+  for(const std::pair<std::string, tlp::DataType*> &entry : dataSet.getValues()) {
     PyObject *key = sipConvertFromNewType(new std::string(entry.first), sipFindType("std::string"), NULL);
     PyObject *val = NULL;
     if (entry.second->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {

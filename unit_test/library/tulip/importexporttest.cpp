@@ -79,17 +79,16 @@ void ImportExportTest::testAttributes() {
   set<edge> setEdge;
   vector<edge> vectorEdge;
   vector<node> vectorNode;
-  node n;
-  edge e;
-  forEach(n, original->getNodes()) {
+
+  for(node n : original->getNodes()) {
     vectorNode.push_back(n);
   }
-  forEach(e, original->getEdges()) {
+  for(edge e : original->getEdges()) {
     vectorEdge.push_back(e);
     setEdge.insert(e);
   }
-  n = original->getOneNode();
-  e = original->getOneEdge();
+  node n = original->getOneNode();
+  edge e = original->getOneEdge();
   StringCollection sc;
   sc.push_back("foo");
   sc.push_back("bar");
@@ -158,8 +157,8 @@ void ImportExportTest::testSubGraphsImportExport() {
   int subsublowerBound = 75;
   int subsubhigherBound = 125;
   int i = 0;
-  node n;
-  forEach(n, original->getNodes()) {
+
+  for(node n : original->getNodes()) {
     if(i >= sub1lowerBound && i <= sub1higherBound) {
       sub1nodes.insert(n);
     }
@@ -186,19 +185,19 @@ void ImportExportTest::testSubGraphsImportExport() {
 
   i = 0;
   DoubleProperty* sub1id = sub1->getLocalProperty<DoubleProperty>("sub1id");
-  forEach(n, sub1->getNodes()) {
+  for(node n : sub1->getNodes()) {
     sub1id->setNodeValue(n, i++);
   }
 
   i = 0;
   DoubleProperty* sub2id = sub2->getLocalProperty<DoubleProperty>("sub2id");
-  forEach(n, sub2->getNodes()) {
+  for(node n : sub2->getNodes()) {
     sub2id->setNodeValue(n, i++);
   }
 
   i = 0;
   DoubleProperty* subsubid = subsub->getLocalProperty<DoubleProperty>("subsubid");
-  forEach(n, subsub->getNodes()) {
+  for(node n : subsub->getNodes()) {
     subsubid->setNodeValue(n, i++);
   }
 
@@ -233,12 +232,10 @@ Graph* ImportExportTest::createSimpleGraph() const {
   }
 
   DoubleProperty* id = original->getProperty<DoubleProperty>("id");
-  node n;
-  forEach(n, original->getNodes()) {
+  for(node n : original->getNodes()) {
     id->setNodeValue(n, n.id);
   }
-  edge e;
-  forEach(e, original->getEdges()) {
+  for(edge e : original->getEdges()) {
     id->setEdgeValue(e, e.id);
   }
 
@@ -303,8 +300,7 @@ void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
 }
 
 void ImportExportTest::testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph* second) {
-  std::pair<std::string, tlp::DataType*> attribute;
-  forEach(attribute, first->getAttributes().getValues()) {
+  for(const std::pair<std::string, tlp::DataType*> &attribute : first->getAttributes().getValues()) {
     stringstream attributeNameMessage;
 
     attributeNameMessage << "attribute \"" << attribute.first << "\" does not exists on imported graph.";
@@ -330,12 +326,12 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
   unsigned int firstPropertiesCount = 0;
   unsigned int secondPropertiesCount = 0;
 
-  PropertyInterface* firstProperty;
-  PropertyInterface* secondProperty;
-  forEach(firstProperty, first->getObjectProperties()) {
+  for(PropertyInterface* firstProperty : first->getObjectProperties()) {
+    (void) firstProperty;
     ++firstPropertiesCount;
   }
-  forEach(secondProperty, second->getObjectProperties()) {
+  for(PropertyInterface* secondProperty : second->getObjectProperties()) {
+    (void) secondProperty;
     ++secondPropertiesCount;
   }
 
@@ -345,13 +341,13 @@ void ImportExportTest::testGraphPropertiesAreEqual(Graph* first, Graph* second) 
 
   while(firstPropIt->hasNext()) {
     string firstPropertyName = firstPropIt->next();
-    firstProperty = first->getProperty(firstPropertyName);
+    PropertyInterface *firstProperty = first->getProperty(firstPropertyName);
 
     stringstream message;
     message << "the property " << firstPropertyName << " does not exist in the second graph !";
     CPPUNIT_ASSERT_MESSAGE(message.str(), second->existProperty(firstPropertyName));
 
-    secondProperty = second->getProperty(firstPropertyName);
+    PropertyInterface *secondProperty = second->getProperty(firstPropertyName);
 
     message.str("");
     message << "a node value for property " << firstPropertyName << " in the first graph is not equal to the one in the second graph";

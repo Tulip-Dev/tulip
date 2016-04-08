@@ -114,8 +114,7 @@ void releaseGraphWrapper(tlp::Graph *graph) {
 }
 
 void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
-  tlp::Graph *sg = NULL;
-  forEach(sg, graph->getSubGraphs()) {
+  for(tlp::Graph* sg : graph->getSubGraphs()) {
     releaseGraphHierarchyWrappers(sg);
   }
   releaseGraphWrapper(graph);
@@ -129,8 +128,7 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
   } else {
     params = new tlp::DataSet(algoParams);
     if (inputParams) {
-      std::pair<std::string, tlp::DataType*> entry;
-      forEach(entry, inputParams->getValues()) {
+      for(const std::pair<std::string, tlp::DataType*> &entry : inputParams->getValues()) {
         params->setData(entry.first, entry.second);
       }
     }
@@ -143,8 +141,7 @@ void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset
     convertTlpDataSetToPyDict(*algorithmOutputDataset, inputDataSetWrapper);
   } else if (inputDataSet) {
     tlp::DataSet *wrappedDs = reinterpret_cast<tlp::DataSet*>(sipGetAddress(reinterpret_cast<sipSimpleWrapper *>(inputDataSetWrapper)));
-    std::pair<std::string, tlp::DataType*> entry;
-    forEach(entry, algorithmOutputDataset->getValues()) {
+    for(const std::pair<std::string, tlp::DataType*> &entry : algorithmOutputDataset->getValues()) {
       wrappedDs->setData(entry.first, entry.second);
     }
   }
@@ -152,8 +149,7 @@ void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset
 
 tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned int eltId, bool nodeValues) {
   tlp::DataSet *ret = new tlp::DataSet();
-  tlp::PropertyInterface *prop = NULL;
-  forEach(prop, graph->getObjectProperties()) {
+  for(tlp::PropertyInterface *prop : graph->getObjectProperties()) {
     tlp::BooleanProperty *booleanProp = dynamic_cast<tlp::BooleanProperty*>(prop);
     tlp::ColorProperty *colorProp = dynamic_cast<tlp::ColorProperty*>(prop);
     tlp::DoubleProperty *doubleProp = dynamic_cast<tlp::DoubleProperty*>(prop);
@@ -209,8 +205,7 @@ tlp::DataSet *getDataSetFilledWithPropertiesValues(tlp::Graph *graph, unsigned i
 bool setPropertiesValuesFromDataSet(tlp::Graph *graph, const tlp::DataSet *dataSet, unsigned int eltId, bool nodeValues) {
   tlp::Observable::holdObservers();
   std::string errMsg;
-  std::pair<std::string, tlp::DataType*> entry;
-  forEach(entry, dataSet->getValues()) {
+  for(const std::pair<std::string, tlp::DataType*> &entry : dataSet->getValues()) {
     tlp::PropertyInterface *prop = graph->getProperty(entry.first);
     if (prop) {
       tlp::BooleanProperty *booleanProp = dynamic_cast<tlp::BooleanProperty*>(prop);
@@ -3670,16 +3665,14 @@ point to an empty subgraph.
     oss << "\"" << sipCpp->getName() << "\" (id " << sipCpp->getId() << ")";
     PyErr_SetString(PyExc_Exception, oss.str().c_str());
   } else {
-    tlp::node n;
-    forEach(n, a0->getNodes()) {
+    for(tlp::node n : a0->getNodes()) {
       if (!sipCpp->isElement(n)) {
         sipIsErr = throwInvalidNodeException(sipCpp, n);
         break;
       }
     }
     if (sipIsErr != -1) {
-      tlp::edge e;
-      forEach(e, a0->getEdges()) {
+      for(tlp::edge e : a0->getEdges()) {
         if (!sipCpp->isElement(e)) {
           sipIsErr = throwInvalidEdgeException(sipCpp, e);
           break;

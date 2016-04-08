@@ -448,8 +448,7 @@ public:
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
-      pair<string, DataType*> attribute;
-      forEach(attribute, attributes.getValues()) {
+      for(const pair<string, DataType*> &attribute : attributes.getValues()) {
         if (attribute.second->getTypeName() == string(typeid(node).name())) {
           node *n = reinterpret_cast<node*>(attribute.second->value);
           n->id = getNode(*n).id;
@@ -511,14 +510,12 @@ public:
 
     // reindex nodes/edges
     unsigned int i = 0;
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       nodeIndex.set(n.id, node(i));
       ++i;
     }
     i = 0;
-    edge e;
-    forEach(e, graph->getEdges()) {
+    for(edge e : graph->getEdges()) {
       edgeIndex.set(e.id, edge(i));
       ++i;
     }

@@ -68,7 +68,6 @@ public:
 };
 //================================================================================
 void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
-  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
   string erreurMsg;
   DoubleProperty dagLevel(sg);
 
@@ -77,8 +76,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
     return;
   }
 
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     unsigned int level=(unsigned int)dagLevel.getNodeValue(n);
 
     while (level>=grid.size()) grid.push_back(vector<node>());
@@ -86,7 +84,6 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
     embedding->setNodeValue(n, grid[level].size());
     grid[level].push_back(n);
   }
-  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
 unsigned int HierarchicalGraph::degree(tlp::Graph *sg, tlp::node n,bool sense) {
@@ -105,54 +102,12 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg,unsigned int freeL
   for (it = grid[freeLayer].begin(); it!=grid[freeLayer].end(); ++it) {
     node n = *it;
     double sum = embedding->getNodeValue(n);
-    node it;
-    forEach(it, sg->getInOutNodes(n))
-    sum += embedding->getNodeValue(it);
+    for(node it : sg->getInOutNodes(n))
+      sum += embedding->getNodeValue(it);
     embedding->setNodeValue(n, sum / (double(sg->deg(n)) + 1.0 ) );
   }
-
-  /*
-  stable_sort(grid[freeLayer].begin(), grid[freeLayer].end(), lessNode);
-  unsigned int j = 0;
-  for (it=grid[freeLayer].begin();it!=grid[freeLayer].end();++it) {
-    embedding->setNodeValue(*it,j);
-    j++;
-  }
-  */
 }
 
-/*
-void HierarchicalGraph::twoLayerCrossReduction(Graph *sg,unsigned int freeLayer,bool sense){
-  vector<node>::const_iterator it;
-  for (it = grid[freeLayer].begin(); it!=grid[freeLayer].end(); ++it) {
-    node n = *it;
-    if (degree(sg,  n, sense)>0) {
-      double sum = embedding->getNodeValue(n);
-      Iterator<node>*itN;
-      if (sense)
-  itN=sg->getOutNodes(n);
-      else
-  itN=sg->getInNodes(n);
-      while(itN->hasNext()) {
-  node itn=itN->next();
-  sum += embedding->getNodeValue(itn);
-      } delete itN;
-      embedding->setNodeValue(n,sum/((double)degree(sg,n,sense) + 1.0));
-    }
-    else {
-      //      embedding->setNodeValue(n, 10000);
-    }
-  }
-
-  stable_sort(grid[freeLayer].begin(),grid[freeLayer].end(),lessNode);
-  unsigned int j=0;
-  for (it=grid[freeLayer].begin();it!=grid[freeLayer].end(); ++it) {
-    embedding->setNodeValue(*it, j);
-    j++;
-  }
-
-}
-*/
 //================================================================================
 //Set initial position using a DFS
 void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableContainer<bool> &visited, int id) {
@@ -160,8 +115,7 @@ void HierarchicalGraph::initCross(tlp::Graph *sg, tlp::node n, tlp::MutableConta
 
   visited.set(n.id, true);
   embedding->setNodeValue(n, id);
-  node it;
-  forEach(it, sg->getOutNodes(n)) {
+  for(node it : sg->getOutNodes(n)) {
     initCross(sg, it, visited, id + 1);
   }
 }
@@ -171,14 +125,13 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
 
   node tmp = sg->addNode();
   embedding->setNodeValue(tmp, 0);
-  node it;
-  forEach(it, sg->getNodes()) {
+  for(node it : sg->getNodes()) {
     if (sg->outdeg(it) == 0)
       sg->addEdge(it, tmp);
   }
   grid.push_back(vector<node>());
   grid[grid.size()-1].push_back(tmp);
-  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
+
   MutableContainer<bool> visited;
   visited.setAll(false);
   node root = sg->getSource();
@@ -222,22 +175,18 @@ void HierarchicalGraph::crossReduction(tlp::Graph *sg) {
   }
 
   sg->delNode(tmp, true);
-  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================
 void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty *embedding) {
-  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
   assert(AcyclicTest::isAcyclic(sg));
   LessThanEdge tmpL;
   tmpL.metric = embedding;
   tmpL.sg = sg;
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     if (sg->indeg(n) > 1) {
       vector<edge> tmpVect;
-      edge e;
-      forEach(e, sg->getInEdges(n))
-      tmpVect.push_back(e);
+      for(edge e : sg->getInEdges(n))
+        tmpVect.push_back(e);
       sort(tmpVect.begin(), tmpVect.end(), tmpL);
       int toKeep = tmpVect.size()/2;
       vector<edge>::const_iterator it;
@@ -249,12 +198,10 @@ void HierarchicalGraph::DagLevelSpanningTree(tlp::Graph* sg, tlp::DoubleProperty
     }
   }
   assert(TreeTest::isTree(sg));
-  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
 }
 //==============================================================================================================
 void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout,
     const TLP_HASH_MAP<tlp::edge,tlp::edge> &replacedEdges, const std::vector<tlp::edge> &reversedEdges) {
-  //  tlp::warning() << "we compute bends on splitted edges" << endl;
   MutableContainer<bool> isReversed;
   isReversed.setAll(false);
 
@@ -305,7 +252,6 @@ void HierarchicalGraph::computeEdgeBends(const tlp::Graph *mySGraph, tlp::Layout
 }
 //=======================================================================
 void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProperty &tmpLayout, std::vector<tlp::SelfLoops> &listSelfLoops) {
-  //tlp::warning() << "We compute self loops" << endl;
   while (!listSelfLoops.empty()) {
     tlp::SelfLoops tmp = listSelfLoops.back();
     listSelfLoops.pop_back();
@@ -332,50 +278,11 @@ void HierarchicalGraph::computeSelfLoops(tlp::Graph *mySGraph, tlp::LayoutProper
     mySGraph->delNode(tmp.n1, true);
     mySGraph->delNode(tmp.n2, true);
   }
-
-  //  tlp::warning() << "we clean every added nodes and edges" << endl;
 }
 
-//============================================================================
-/*static void dfsRecCall(Graph *sg, vector<node> &vec, MutableContainer<bool> &nodeVisited, node n) {
-  nodeVisited.set(n.id, true);
-  vec.push_back(n);
-  node dest;
-  forEach(dest, sg->getInOutNodes(n)) {
-    if (!nodeVisited.get(dest.id)) {
-      dfsRecCall(sg, vec, nodeVisited, dest);
-    }
-  }
-  }*/
-//============================================================================
-/*static void buildDfsOrdering(Graph *sg, vector<node> &vec) {
-  MutableContainer<bool> nodeVisited;
-  nodeVisited.setAll(false);
-  node n;
-  forEach(n, sg->getNodes()) {
-    if (!nodeVisited.get(n.id)) {
-      dfsRecCall(sg, vec, nodeVisited, n);
-    }
-  }
-  }*/
 //=======================================================================
 bool HierarchicalGraph::run() {
-  //make acyclic
-  /*
-  vector<node> order;
-  buildDfsOrdering(graph, order);
-  MutableContainer<int> orderid;
-  for(unsigned int i=0; i< order.size(); ++i)
-    orderid.set(order[i].id, i);
-  edge e;
-  forEach(e, graph->getEdges()) {
-    node src = graph->source(e);
-    node tgt = graph->target(e);
-    if(orderid.get(src.id) > orderid.get(tgt.id))
-      graph->reverse(e);
-  }
-  */
-  //=======================================================================
+
   orientation = "horizontal";
   spacing = 64.0;
   nodeSpacing = 18;
@@ -400,8 +307,7 @@ bool HierarchicalGraph::run() {
     SizeProperty* tmpSize = new SizeProperty(graph);
 
     tmpSize->copy(nodeSize);
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       const Size& tmp = tmpSize->getNodeValue(n);
       tmpSize->setNodeValue(n, Size(tmp[1], tmp[0], tmp[2]));
     }
@@ -440,11 +346,10 @@ bool HierarchicalGraph::run() {
     lessNode.metric = embedding;
     buildGrid(mySGraph);
     crossReduction(mySGraph);
-    node n;
-    forEach(n, graph->getNodes()) {
+
+    for(node n : graph->getNodes()) {
       vector<edge> order;
-      edge e;
-      forEach(e, new SortTargetEdgeIterator(mySGraph->getOutEdges(n),mySGraph, embedding)) {
+      for(edge e : new SortTargetEdgeIterator(mySGraph->getOutEdges(n),mySGraph, embedding)) {
         order.push_back(e);
       }
       mySGraph->setEdgeOrder(n, order);
@@ -486,9 +391,7 @@ bool HierarchicalGraph::run() {
 
   assert(resultBool);
 
-
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     result->setNodeValue(n, tmpLayout.getNodeValue(n));
   }
 
@@ -517,8 +420,7 @@ bool HierarchicalGraph::run() {
     }
   }
 
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     std::pair<node, node> eEnds(graph->ends(e));
     node src = eEnds.first;
     node tgt = eEnds.second;
@@ -553,12 +455,7 @@ bool HierarchicalGraph::run() {
       Coord tgt2Pos = old.back();
       src2Pos[1] = srcPos[1] + rev*spacing/2.f;
       tgt2Pos[1] = tgtPos[1] - rev*spacing/2.f;
-      /*
-        Coord src2Pos = old.front();
-        Coord tgt2Pos = old.back();
-        src2Pos[1] += rev*(levelMaxSize[nodeLevel.get(src.id) + 1]/2.0 + spacing/4.);
-        tgt2Pos[1] -= rev*(levelMaxSize[nodeLevel.get(tgt.id) - 1]/2.0 + spacing/4.);
-      */
+
       pos[0] = srcPos;
       pos[1] = src2Pos;
       pos[2] = tgt2Pos;
@@ -568,7 +465,7 @@ bool HierarchicalGraph::run() {
   }
 
   //post processing align nodes
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     Coord tmp = result->getNodeValue(n);
     const Size& tmpS = nodeSize->getNodeValue(n);
     tmp[1] -= (levelMaxSize[nodeLevel.get(n.id)] - tmpS[1]) / 2.f;
@@ -579,13 +476,12 @@ bool HierarchicalGraph::run() {
   if (orientation == "horizontal") {
     // delete the temporary allocated SizeProperty (see above)
     delete nodeSize;
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       const Coord& tmpC = result->getNodeValue(n);
       result->setNodeValue(n, Coord(-tmpC[1], tmpC[0], tmpC[2]));
     }
-    edge e;
-    forEach(e, graph->getEdges()) {
+
+    for(edge e : graph->getEdges()) {
       LineType::RealType tmp = result->getEdgeValue(e);
       LineType::RealType tmp2;
       LineType::RealType::iterator it;

@@ -67,21 +67,17 @@ public:
   WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {}
 
   bool hasNeighbourColoredWith(const node n, const int color) {
-    node u;
-    forEach(u, graph->getInOutNodes(n))
-
-    if (result->getNodeValue(u) == color)
-      return true;
-
+    for(node u : graph->getInOutNodes(n))
+      if (result->getNodeValue(u) == color)
+        return true;
     return false;
   }
 
   void colorize() {
     vector<node> toSort(graph->numberOfNodes());
-    node n;
     unsigned int i = 0;
-    forEach(n,graph->getNodes())
-    toSort[i++]=n;
+    for(node n : graph->getNodes())
+      toSort[i++]=n;
     CompNodes cmp(graph);
     sort(toSort.begin(),toSort.end(),cmp);
 

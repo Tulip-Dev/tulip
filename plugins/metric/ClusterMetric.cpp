@@ -61,12 +61,12 @@ bool ClusterMetric::run() {
 
   MutableContainer<double> clusters;
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
-  node n;
-  forEach(n, graph->getNodes())
-  result->setNodeValue(n, clusters.get(n.id));
-  edge e;
-  forEach(e, graph->getEdges())
-  result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+
+  for(node n : graph->getNodes())
+    result->setNodeValue(n, clusters.get(n.id));
+
+  for(edge e : graph->getEdges())
+    result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   return true;
 }
 

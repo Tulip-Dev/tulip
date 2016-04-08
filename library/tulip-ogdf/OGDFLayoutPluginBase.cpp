@@ -155,15 +155,13 @@ bool OGDFLayoutPluginBase::run() {
 
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
   // and store it in the Tulip Layout Property
-  tlp::node nodeTlp;
-  forEach(nodeTlp, graph->getNodes()) {
+  for(tlp::node nodeTlp : graph->getNodes()) {
     tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(nodeTlp.id);
     result->setNodeValue(nodeTlp, nodeCoord);
   }
 
   // same operation as above but with edges
-  tlp::edge tlpEdge;
-  forEach(tlpEdge, graph->getEdges()) {
+  for(tlp::edge tlpEdge : graph->getEdges()) {
     vector<tlp::Coord> edgeCoord =
       tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(tlpEdge.id);
     result->setEdgeValue(tlpEdge, edgeCoord);
@@ -181,14 +179,12 @@ void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttri
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
   tlp::BoundingBox graphBB = tlp::computeBoundingBox(graph, result, graph->getProperty<SizeProperty>("viewSize"), graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
-  tlp::node n;
-  forEach(n, graph->getNodes()) {
+  for(tlp::node n : graph->getNodes()) {
     tlp::Coord nodeCoord = result->getNodeValue(n);
     nodeCoord[1] = midY - (nodeCoord[1] - midY);
     result->setNodeValue(n, nodeCoord);
   }
-  tlp::edge e;
-  forEach(e, graph->getEdges()) {
+  for(tlp::edge e : graph->getEdges()) {
     std::vector<tlp::Coord> bends = result->getEdgeValue(e);
 
     for (size_t i = 0 ; i < bends.size() ; ++i) {

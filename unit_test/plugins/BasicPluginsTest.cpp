@@ -341,8 +341,7 @@ void BasicPluginsTest::testLoopSelection() {
                 "Planar Graph",
                 &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
   }
 }
@@ -353,8 +352,7 @@ void BasicPluginsTest::testMultipleEdgeSelection() {
                 "Planar Graph",
                 &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
   }
 }
@@ -370,8 +368,7 @@ void BasicPluginsTest::testSpanningDagSelection() {
                 "Planar Graph",
                 &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n));
   }
 }
@@ -382,8 +379,7 @@ void BasicPluginsTest::testSpanningTreeSelection() {
                 "Planar Graph",
                 &selection);
   CPPUNIT_ASSERT(result);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n));
   }
 }

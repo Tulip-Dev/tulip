@@ -47,8 +47,7 @@ void visitNode(Graph *sg, node n, vector<node> &vec,
                std::list<node> &toVisit) {
   nodeVisited.set(n.id, true);
   vec.push_back(n);
-  node neighbour;
-  forEach(neighbour, sg->getInOutNodes(n)) {
+  for(node neighbour : sg->getInOutNodes(n)) {
     if (!nodeVisited.get(neighbour.id))
       toVisit.push_back(neighbour);
   }
@@ -58,8 +57,7 @@ void visitNode(Graph *sg, node n, vector<node> &vec,
 void buildDfsOrdering(Graph *sg, vector<node> &vec) {
   MutableContainer<bool> nodeVisited;
   nodeVisited.setAll(false);
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     std::list<node> toVisit;
 
     if (!nodeVisited.get(n.id)) {
@@ -80,7 +78,6 @@ void buildDfsOrdering(Graph *sg, vector<node> &vec) {
 }
 //===============================================================================
 vector<node> extractCycle(node n, deque<node> &st) {
-  // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   vector<node> result;
   deque<node>::const_reverse_iterator it = st.rbegin();
 
@@ -118,8 +115,7 @@ void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, Muta
 
   st.push_back(n);
   flag.set(n.id,true);
-  node n2;
-  forEach(n2, sg->getInOutNodes(n)) {
+  for(node n2 : sg->getInOutNodes(n)) {
     dfs(n2, sg, st, maxCycle, flag, nbCalls, pluginProgress);
   }
   flag.set(n.id, false);
@@ -130,7 +126,6 @@ void dfs(node n, const Graph * sg, deque<node> &st,vector<node> & maxCycle, Muta
 //=======================================================================
 vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
   Graph * g = sg->addCloneSubGraph();
-  tlp::warning() << __PRETTY_FUNCTION__ << endl;
 
   // compute the connected components's subgraphs
   std::vector<std::set<node> > components;
@@ -140,14 +135,12 @@ vector<node> findMaxCycle(Graph * sg, PluginProgress *pluginProgress) {
     g->inducedSubGraph(components[i]);
   }
 
-  Graph * g_tmp;
-
   MutableContainer<bool> flag;
   deque<node> st;
   vector<node> res;
   vector<node> max;
   unsigned int nbCalls = 0;
-  forEach(g_tmp,g->getSubGraphs()) {
+  for(Graph* g_tmp : g->getSubGraphs()) {
     if(g_tmp->numberOfNodes() == 1)
       continue;
 
@@ -190,8 +183,7 @@ bool Circular::run() {
   double sumOfRad = 0;
   double maxRad = 0;
   node maxRadNode;
-  node itn;
-  forEach(itn, graph->getNodes()) {
+  for(node itn : graph->getNodes()) {
     double rad = computeRadius(nodeSize->getNodeValue(itn));
     sumOfRad += rad;
 
@@ -205,8 +197,8 @@ bool Circular::run() {
   if (graph->numberOfNodes() <= 2) {
     //set the (max 2) nodes maxRad appart
     double xcoord = maxRad/2.0;
-    node itn;
-    forEach(itn, graph->getNodes()) {
+
+    for(node itn : graph->getNodes()) {
       result->setNodeValue (itn, Coord (xcoord, 0, 0));
       xcoord *= -1;
     }
@@ -221,8 +213,6 @@ bool Circular::run() {
       sumOfRad -= maxRad;
       angleAdjust = true;
     }//end if
-
-    //tlp::warning() << "*************************" << endl;
 
     vector<node> cycleOrdering;
 

@@ -150,8 +150,8 @@ void SOMMap::registerModification(const vector<string>&propertiesToListen) {
   }
 
   //Store all the value from the DynamicVectors in the properties
-  tlp::node n;
-  forEach(n,getNodes()) {
+
+  for(node n : getNodes()) {
     assert(propertiesToListen.size()== nodeToNodeVec[n].getSize());
 
     for (unsigned int propertyNumber = 0; propertyNumber < properties.size(); ++propertyNumber) {

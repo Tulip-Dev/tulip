@@ -72,8 +72,7 @@ This quantifies how close its neighbors are to being a clique.
 %MethodCode
   tlp::MutableContainer<double> result;
   tlp::clusteringCoefficient(a0, result, a2, a3);
-  tlp::node n;
-  forEach(n, a0->getNodes()) {
+  for(tlp::node n : a0->getNodes()) {
     a1->setNodeValue(n, result.get(n));
   }
 %End
@@ -98,8 +97,7 @@ The algorithm ensures that the number of level used is minimal.
 %MethodCode
   tlp::MutableContainer<unsigned int> result;
   tlp::dagLevel(a0, result, a2);
-  tlp::node n;
-  forEach(n, a0->getNodes()) {
+  for(tlp::node n : a0->getNodes()) {
     a1->setNodeValue(n, static_cast<int>(result.get(n)));
   }
 %End  
@@ -148,8 +146,7 @@ Computes the distances from a node to all the other nodes of a graph and return 
   if (a0->isElement(*a1)) {
     tlp::MutableContainer<unsigned int> result;
     tlp::maxDistance(a0, *a1, result, a3);
-    tlp::node n;
-    forEach(n, a0->getNodes()) {
+    for(tlp::node n : a0->getNodes()) {
       a2->setNodeValue(n, static_cast<int>(result.get(n)));
     }
   } else {

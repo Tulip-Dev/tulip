@@ -36,12 +36,12 @@ public:
   AutoSize(const tlp::PluginContext* context):SizeAlgorithm(context) {}
 
   bool run() {
-    node n;
-    forEach(n,graph->getNodes())
-    result->setNodeValue(n, getNodeValue(n));
-    edge e;
-    forEach(e,graph->getEdges())
-    result->setEdgeValue(e, getEdgeValue(e));
+    for(node n : graph->getNodes())
+      result->setNodeValue(n, getNodeValue(n));
+
+    for(edge e : graph->getEdges())
+      result->setEdgeValue(e, getEdgeValue(e));
+
     return true;
   }
 

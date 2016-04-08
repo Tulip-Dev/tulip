@@ -125,9 +125,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     bool deducedFromChilds,
     Graph *root,
     unsigned int depth) {
-  //vector<GlConvexHull *> convexHulls;
-  Graph *sg;
-  //vector<GlConvexHull *> sgConvexHulls;
+
   ConvexHullItem *convexHullItem=new ConvexHullItem;
   convexHullItem->_graph = graph;
   graph->getAttributes().get("name",convexHullItem->name);
@@ -156,32 +154,15 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     oColors.push_back(Color(100, 100, 100, 120));
   }
 
-
-
   // build convex hulls from subgraphs
-  forEach(sg, graph->getSubGraphs()) {
-    ////
-    //if(sg->numberOfNodes() <= 1) continue;
+  for(Graph* sg : graph->getSubGraphs()) {
 
-    ////
     ConvexHullItem *child=
       buildConvexHullsFromHierarchy(sg, fColors, oColors,
                                     deducedFromChilds, root, depth + 1);
-    ///vector<GlConvexHull *>::const_iterator it = sgAllConvexHulls.begin();
 
-    // first one (if any) is the direct subgraph convex hull
-    // (others are for subgraphs of this subgraph)
-    // and it will be used if needed to find this graph convex hull
-    /*if (deducedFromChilds) {
-      if (it != sgAllConvexHulls.end())
-      sgConvexHulls.push_back(*it);
-      }*/
     // add all
     convexHullItem->children.push_back(child);
-    /*for (;it != sgAllConvexHulls.end(); it++) {
-      convexHulls.push_back(*it);
-      }*/
-
   }
 
   // filled and outline colors determination
@@ -212,53 +193,16 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
     // compute this graph convex hull
     vector<Coord> gConvexHull;
 
-    /*if (sgConvexHulls.size() > 0) {
-      vector<GlConvexHull *>::const_iterator it = sgConvexHulls.begin();
-
-      // initialize convex hull with the first one
-      gConvexHull = (*it)->_points;
-
-      // merge loop
-      for (++it; it != sgConvexHulls.end(); it++) {
-
-      // add points from current sg convex hull
-      // to computed graph convex hull
-      vector<Coord>::const_iterator itCoord = (*it)->_points.begin();
-
-      for (; itCoord != (*it)->_points.end(); itCoord++)
-    gConvexHull.push_back(*itCoord);
-
-      vector<unsigned int> gConvexHullIdxs;
-      // compute convex hull with new set of points
-      convexHull(gConvexHull, gConvexHullIdxs);
-
-      // build new points
-      vector<Coord> points;
-      vector<unsigned int>::const_iterator it = gConvexHullIdxs.begin();
-
-      for (;it != gConvexHullIdxs.end(); ++it) {
-    points.push_back(gConvexHull[*it]);
-      }
-      gConvexHull = points;
-      }
-      // add a GlConvexHull for this graph in front of gConvexHulls
-      convexHulls.insert(convexHulls.begin(), 1,
-       new GlConvexHull(gConvexHull, filledColors, outColors, true, true,graph->getAttribute<string>("name"),
-                        // convex hull is already computed
-            false));
-    } else {*/
-    // no subgraphs
     // the convex hull will be build directly with the graph nodes and edges
     // if there is some
     if (graph->numberOfNodes()) {
       LayoutProperty *layout = root->getProperty<LayoutProperty>("viewLayout");
       SizeProperty *size = root->getProperty<SizeProperty>("viewSize");
       DoubleProperty *rot = root->getProperty<DoubleProperty>("viewRotation");
-      node n;
       // the variable below will be used to compute
       // the box around the bends of edges
       float bendsl = FLT_MAX;
-      forEach(n, graph->getNodes()) {
+      for(node n : graph->getNodes()) {
         // get node coordinates
         const Coord& point = layout->getNodeValue(n);
         // get size of bounding box
@@ -303,8 +247,7 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
         gConvexHull.push_back(point + vect);
       }
       // add bends of edges
-      edge e;
-      forEach(e, graph->getEdges()) {
+      for(edge e : graph->getEdges()) {
         // get bends of the edge
         std::vector<Coord> bends = layout->getEdgeValue(e);
         unsigned int nbBends = bends.size();
@@ -330,7 +273,6 @@ ConvexHullItem* GlConvexHull::buildConvexHullsFromHierarchy(Graph *graph,
       convexHullItem->hull->_graph = graph;
     }
 
-    //}
   }
 
   return convexHullItem;

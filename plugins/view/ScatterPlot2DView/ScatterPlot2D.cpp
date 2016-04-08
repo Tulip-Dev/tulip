@@ -305,7 +305,6 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
   double sumxiyi = 0.0, sumxi = 0.0, sumyi = 0.0, sumxi2 = 0.0, sumyi2 = 0.0;
   unsigned int nbGraphNodes = _graph->numberOfNodes();
 
-  node n;
   currentStep = 0;
   maxStep = nbGraphNodes;
   drawStep = maxStep / 20;
@@ -318,7 +317,7 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
   NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
   NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
 
-  forEach(n, _graph->getNodes()) {
+  for(node n : _graph->getNodes()) {
     Coord nodeCoord;
     double xValue, yValue;
 

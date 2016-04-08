@@ -68,12 +68,10 @@ void TlpImportExportTest::testSave() {
   graph = (Graph *) NULL;
   graph = loadGraph("save_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT((n == n1) || (n == n2));
   }
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     CPPUNIT_ASSERT(e == e1);
   }
   delete graph;
@@ -97,12 +95,10 @@ void TlpImportExportTest::testExport() {
   graph = (Graph *) NULL;
   graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT((n == node(n1.id)) || (n == node(n2.id)));
   }
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     CPPUNIT_ASSERT_EQUAL(e1, e);
   }
   delete graph;
@@ -126,20 +122,17 @@ void TlpImportExportTest::testExportCluster() {
   graph = (Graph *) NULL;
   graph = tlp_loadGraph("export_test.tlp");
   CPPUNIT_ASSERT(graph != NULL);
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     CPPUNIT_ASSERT((n == n1) || (n == n2));
   }
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     CPPUNIT_ASSERT_EQUAL(e1, e);
   }
-  Graph* g;
-  forEach(g, graph->getSubGraphs()) {
+  for(Graph* g : graph->getSubGraphs()) {
     string name;
     g->getAttribute(string("name"), name);
     CPPUNIT_ASSERT_EQUAL(string("\"name with double quotes \""), name);
-    forEach(n, g->getNodes()) {
+    for(node n : g->getNodes()) {
       CPPUNIT_ASSERT((n == n1) || (n == n2));
     }
   }

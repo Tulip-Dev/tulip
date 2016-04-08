@@ -74,8 +74,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
   MutableContainer<bool> visited;
   visited.setAll(false);
   // do a bfs traversal for each node
-  node curNode;
-  forEach(curNode, graph->getNodes()) {
+  for(node curNode : graph->getNodes()) {
     // check if curNode has been already visited
     if (!visited.get(curNode.id)) {
       // add a new component

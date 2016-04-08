@@ -29,9 +29,8 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
   nodes.reserve(graph->numberOfNodes());
   vector<tlp::Coord> points;
   points.reserve(graph->numberOfNodes());
-  tlp::node n;
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-  forEach(n, graph->getNodes()) {
+  for(tlp::node n : graph->getNodes()) {
     nodes.push_back(n);
     points.push_back(layout->getNodeValue(n));
   }

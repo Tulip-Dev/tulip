@@ -267,10 +267,9 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
   Graph *tree = rGraph->addSubGraph();
   node root = tree->addNode();
   rGraph->setAttribute(CLONE_ROOT, root);
-  Graph *gConn;
 
   // connected components subgraphs loop
-  forEach(gConn, rGraph->getSubGraphs()) {
+  for(Graph* gConn : rGraph->getSubGraphs()) {
     if (gConn == tree)
       continue;
 
@@ -285,16 +284,14 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
     if (pluginProgress && pluginProgress->state() !=TLP_CONTINUE)
       return 0;
 
-    node n;
-    forEach(n, sTree->getNodes()) {
+    for(node n : sTree->getNodes()) {
       tree->addNode(n);
 
       if (sTree->indeg(n) == 0)
         tree->addEdge(root, n);
     }
-    edge e;
-    forEach(e, sTree->getEdges())
-    tree->addEdge(e);
+    for(edge e : sTree->getEdges())
+      tree->addEdge(e);
   }
   assert (TreeTest::isTree(tree));
   return tree;

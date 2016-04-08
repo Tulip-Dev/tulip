@@ -442,8 +442,7 @@ void GraphImpl::reverse(const edge e) {
   notifyReverseEdge(e);
 
   // propagate edge reversal on subgraphs
-  Graph* sg;
-  forEach(sg, getSubGraphs()) {
+  for(Graph* sg : getSubGraphs()) {
     ((GraphView*) sg)->reverseInternal(e, eEnds.first, eEnds.second);
   }
 }
@@ -476,12 +475,11 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   notifyAfterSetEnds(e);
 
   // propagate edge reversal on subgraphs
-  Graph* sg;
   eEnds = storage.ends(e);
   node nSrc = eEnds.first;
   node nTgt = eEnds.second;
 
-  forEach(sg, getSubGraphs()) {
+  for(Graph* sg : getSubGraphs()) {
     ((GraphView*) sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
 }
@@ -542,15 +540,13 @@ void GraphImpl::observeUpdates(Graph *g) {
   observedGraphs.push_front(g);
 
   // loop on local properties
-  PropertyInterface* prop;
-  forEach(prop, g->getLocalObjectProperties()) {
+  for(PropertyInterface* prop : g->getLocalObjectProperties()) {
     prop->addObserver(this);
     observedProps.push_front(prop);
   }
 
   // loop on subgraphs
-  Graph* sg;
-  forEach(sg, g->getSubGraphs()) {
+  for(Graph* sg : g->getSubGraphs()) {
     observeUpdates(sg);
   }
 }

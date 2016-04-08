@@ -40,8 +40,8 @@ void GraphModel::setGraph(Graph* g) {
   if (_graph != NULL) {
     _graph->removeListener(this);
     _graph->removeObserver(this);
-    PropertyInterface* pi;
-    forEach(pi, _graph->getObjectProperties()) pi->removeListener(this);
+    for(PropertyInterface* pi : _graph->getObjectProperties())
+      pi->removeListener(this);
   }
 
   _graph = g;
@@ -51,8 +51,7 @@ void GraphModel::setGraph(Graph* g) {
   if (_graph != NULL) {
     _graph->addListener(this);
     _graph->addObserver(this);
-    PropertyInterface* pi;
-    forEach(pi, _graph->getObjectProperties()) {
+    for(PropertyInterface* pi : _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
       if (pi->getName() == "viewMetaGraph")
@@ -563,9 +562,8 @@ void NodesGraphModel::setGraph(Graph* g) {
 
   _elements.resize(graph()->numberOfNodes());
   int i=0;
-  node n;
-  forEach(n,graph()->getNodes())
-  _elements[i++] = n.id;
+  for(node n : graph()->getNodes())
+    _elements[i++] = n.id;
   // we ensure the ids are ascendingly sorted
   // to ease the display of nodes/edges
   qSort(_elements);
@@ -605,10 +603,8 @@ void EdgesGraphModel::setGraph(Graph* g) {
 
   _elements.resize(graph()->numberOfEdges());
   int i=0;
-  edge e;
-  forEach(e,graph()->getEdges())
-  _elements[i++] = e.id;
-  //reset();
+  for(edge e : graph()->getEdges())
+    _elements[i++] = e.id;
 }
 
 QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface* prop) const {

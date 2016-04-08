@@ -105,8 +105,7 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
   fillTitle(combo,trUtf8("Properties"));
 
   if (_graph != NULL) {
-    string s;
-    forEach(s,_graph->getProperties()) {
+    for(const string &s :_graph->getProperties()) {
 #ifdef NDEBUG
 
       if (s == "viewMetaGraph")
@@ -327,13 +326,13 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
   if (NUMERIC_OPERATOR_INDEXES.contains(_ui->operatorCombo->currentIndex())) { // Numeric
     DoublePropertyFacade* facade1 = new DoublePropertyFacade(comparisonProperties[0]);
     DoublePropertyFacade* facade2 = new DoublePropertyFacade(comparisonProperties[1]);
-    node n;
-    forEach(n, _graph->getNodes()) {
+
+    for(node n : _graph->getNodes()) {
       bool res = cmp->compare(facade1->getNodeValue(n),facade2->getNodeValue(n));
       out->setNodeValue(n,trans->tr(out->getNodeValue(n),res));
     }
-    edge e;
-    forEach(e, _graph->getEdges()) {
+
+    for(edge e : _graph->getEdges()) {
       bool res = cmp->compare(facade1->getEdgeValue(e),facade2->getEdgeValue(e));
       out->setEdgeValue(e,trans->tr(out->getEdgeValue(e),res));
     }
@@ -341,13 +340,13 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
   else {
     PropertyInterface* pi1 = comparisonProperties[0];
     PropertyInterface* pi2 = comparisonProperties[1];
-    node n;
-    forEach(n, _graph->getNodes()) {
+
+    for(node n : _graph->getNodes()) {
       bool res = cmp->compare(pi1->getNodeStringValue(n),pi2->getNodeStringValue(n));
       out->setNodeValue(n,trans->tr(out->getNodeValue(n),res));
     }
-    edge e;
-    forEach(e, _graph->getEdges()) {
+
+    for(edge e : _graph->getEdges()) {
       bool res = cmp->compare(pi1->getEdgeStringValue(e),pi2->getEdgeStringValue(e));
       out->setEdgeValue(e,trans->tr(out->getEdgeValue(e),res));
     }

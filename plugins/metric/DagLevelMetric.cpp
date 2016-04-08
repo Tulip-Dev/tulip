@@ -30,9 +30,8 @@ DagLevelMetric::~DagLevelMetric() {}
 bool DagLevelMetric::run() {
   MutableContainer<unsigned int> level;
   dagLevel(graph, level, pluginProgress);
-  node n;
-  forEach(n, graph->getNodes())
-  result->setNodeValue(n, level.get(n.id));
+  for(node n : graph->getNodes())
+    result->setNodeValue(n, level.get(n.id));
   return true;
 }
 //======================================================

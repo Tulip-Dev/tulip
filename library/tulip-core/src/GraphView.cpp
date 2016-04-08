@@ -143,8 +143,7 @@ void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
     notifyReverseEdge(e);
 
     // propagate edge reversal on subgraphs
-    Graph* sg;
-    forEach(sg, getSubGraphs()) {
+    for(Graph* sg : getSubGraphs()) {
       ((GraphView*) sg)->reverseInternal(e, src, tgt);
     }
   }
@@ -170,8 +169,7 @@ void GraphView::setEndsInternal(const edge e, const node src, const node tgt,
       notifyAfterSetEnds(e);
 
       // propagate edge ends update on subgraphs
-      Graph* sg;
-      forEach(sg, getSubGraphs()) {
+      for(Graph* sg : getSubGraphs()) {
         ((GraphView*) sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
     }

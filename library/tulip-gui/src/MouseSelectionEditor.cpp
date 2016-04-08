@@ -193,15 +193,15 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     case Qt::LeftButton : {
       // first ensure that something is selected
       bool hasSelection = false;
-      node no;
-      forEach(no, _selection->getNodesEqualTo(true, _graph)) {
+      for(node no : _selection->getNodesEqualTo(true, _graph)) {
+        (void) no;
         hasSelection = true;
         break;
       }
 
       if (!hasSelection) {
-        edge ed;
-        forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
+        for(edge ed : _selection->getEdgesEqualTo(true, _graph)) {
+          (void) ed;
           hasSelection = true;
           break;
         }
@@ -335,15 +335,15 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
   if(e->type() == QEvent::KeyPress) {
     // first ensure that something is selected
     bool hasSelection = false;
-    node no;
-    forEach(no, _selection->getNodesEqualTo(true, _graph)) {
+    for(node no : _selection->getNodesEqualTo(true, _graph)) {
+      (void) no;
       hasSelection = true;
       break;
     }
 
     if (!hasSelection) {
-      edge ed;
-      forEach(ed, _selection->getEdgesEqualTo(true, _graph)) {
+      for(edge ed : _selection->getEdgesEqualTo(true, _graph)) {
+        (void) ed;
         hasSelection = true;
         break;
       }

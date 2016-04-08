@@ -28,8 +28,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
   if (_graph == NULL)
     return;
 
-  std::string propName;
-  forEach(propName,_graph->getInheritedProperties()) {
+  for(const std::string &propName :_graph->getInheritedProperties()) {
 #ifdef NDEBUG
 
     if (propName == "viewMetaGraph")
@@ -42,7 +41,7 @@ void tlp::GraphPropertiesModel<PROPTYPE>::rebuildCache() {
       _properties+=prop;
     }
   }
-  forEach(propName,_graph->getLocalProperties()) {
+  for(const std::string &propName :_graph->getLocalProperties()) {
 #ifdef NDEBUG
 
     if (propName == "viewMetaGraph")

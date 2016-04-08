@@ -78,15 +78,13 @@ bool RandomMetric::run() {
   }
 
   if(nodes) {
-    node n;
-    forEach(n, graph->getNodes())
-    result->setNodeValue(n, (double)rand() / double(RAND_MAX));
+    for(node n : graph->getNodes())
+      result->setNodeValue(n, (double)rand() / double(RAND_MAX));
   }
 
   if(edges) {
-    edge e;
-    forEach(e, graph->getEdges())
-    result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
+    for(edge e : graph->getEdges())
+      result->setEdgeValue(e, (double)rand() / double(RAND_MAX));
   }
 
   return true;

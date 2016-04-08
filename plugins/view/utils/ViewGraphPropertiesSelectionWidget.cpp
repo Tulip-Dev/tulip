@@ -75,8 +75,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
     _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
     stringList.clear();
-    string propertyName;
-    forEach(propertyName, graph->getProperties()) {
+    for(const string &propertyName : graph->getProperties()) {
       if (graph->existProperty(propertyName) && std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) == lastSelectedProperties.end()) {
         stringList.push_back(propertyName);
       }

@@ -137,8 +137,8 @@ void MCLClustering::prune(node n) {
   // - avoid a costly stableForEach when deleting edges
   std::vector<pair<double, edge> > pvect;
   pvect.reserve(outdeg);
-  edge e;
-  forEach(e, g.getOutEdges(n)) {
+
+  for(edge e : g.getOutEdges(n)) {
     pvect.push_back(pair<double, edge>(outW[e], e));
   }
 
@@ -164,9 +164,8 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   std::vector<pair<double, edge> > pvect;
   pvect.reserve(sz);
 
-  edge e;
   double sum  = 0.;
-  forEach(e, g.getOutEdges(n)) {
+  for(edge e : g.getOutEdges(n)) {
     double outVal = outW[e];
     sum += pow(outVal, r);
     pvect.push_back(pair<double, edge>(outVal, e));
@@ -198,7 +197,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
       }
     }
     else if (p.first < t) {
-      e = p.second;
+      edge e = p.second;
       inW[e]  = 0.;
       outW[e] = 0.;
       g.delEdge(e);
@@ -223,7 +222,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   if (sum > 0.) {
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
-      e = p.second;
+      edge e = p.second;
 
       if (e.isValid()) {
         double outVal = outW[e] = p.first / sum;
@@ -237,7 +236,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   else {
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
-      e = p.second;
+      edge e = p.second;
 
       if (e.isValid()) {
         double outVal = outW[e] = 1. / double(outdeg);
@@ -281,16 +280,15 @@ MCLClustering::~MCLClustering() {
 }
 //================================================================================
 void MCLClustering::init() {
-  node n;
+
   node newNode;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     newNode = g.addNode();
     nodeMapping.set(n.id, newNode);
     tlpNodes[newNode] = n;
   }
 
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     std::pair<node, node> eEnds = graph->ends(e);
     node src = eEnds.first = nodeMapping.get(eEnds.first.id);
     node tgt = eEnds.second = nodeMapping.get(eEnds.second.id);
@@ -310,7 +308,7 @@ void MCLClustering::init() {
   unsigned int nbNodes = g.numberOfNodes();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    n = g[i];
+    node n = g[i];
     edge tmp = g.addEdge(n, n);
     edge e;
     double sum = 0.;
@@ -318,7 +316,7 @@ void MCLClustering::init() {
 
     if(weights!=0) {
       double tmpVal = inW[tmp]=0.;
-      forEach(e, g.getOutEdges(n)) {
+      for(edge e : g.getOutEdges(n)) {
         double eVal = inW[e];
         sum += eVal;
 
@@ -332,8 +330,8 @@ void MCLClustering::init() {
       sum=double(g.outdeg(n));
     }
 
-    forEach(e, g.getOutEdges(n))
-    inW[e] /= sum;
+    for(edge e : g.getOutEdges(n))
+      inW[e] /= sum;
   }
 }
 //================================================================================
@@ -370,14 +368,6 @@ bool MCLClustering::run() {
   init();
   unsigned int nbNodes = g.numberOfNodes();
 
-  edge e;
-  //output for mcl
-  /*
-  forEach(e, graph->getEdges()) {
-      cout << graph->source(e).id << "\t" << graph->target(e).id << endl;
-  }
-  */
-
   int iteration = 15. * log(g.numberOfNodes() + 1);
 
   while(iteration-- > 0) {
@@ -399,7 +389,7 @@ bool MCLClustering::run() {
     */
     //uncomment that block to have correct MCL
 
-//        forEach(n, g.getNodes()) {
+//        for(node n : g.getNodes()) {
 //            inflate(_r, _k,  n, false);
 //        }
 

@@ -580,8 +580,7 @@ PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QSt
     PyObject *argTup = PyTuple_New(parameters.size());
     int idx = 0;
     bool paramError = false;
-    std::pair<std::string, DataType*> param;
-    forEach(param, parameters.getValues()) {
+    for(const std::pair<std::string, DataType*> &param : parameters.getValues()) {
       PyObject *pyParam = getPyObjectFromDataType(param.second);
 
       if (!pyParam) {

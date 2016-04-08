@@ -35,14 +35,14 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
   if (_graph == NULL || parent.isValid())
     return 0;
 
-  PropertyInterface* prop;
   int result=0;
-  forEach(prop,_graph->getObjectProperties()) {
+  for(PropertyInterface* prop :_graph->getObjectProperties()) {
 #ifdef NDEBUG
 
     if (prop->getName() == "viewMetaGraph")
       continue;
-
+#else
+  (void) prop;
 #endif
     ++result;
   }
@@ -68,9 +68,8 @@ QVariant GraphElementModel::headerData(int section, Qt::Orientation orientation,
       return Qt::AlignCenter;
   }
   else if(role==Qt::DisplayRole) {
-    string propertyName;
     int result=0;
-    forEach(propertyName,_graph->getProperties()) {
+    for(const string &propertyName : _graph->getProperties()) {
 #ifdef NDEBUG
 
       if (propertyName == "viewMetaGraph")
@@ -94,16 +93,18 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
 
   PropertyInterface* prop=NULL;
   int result=0;
-  forEach(prop, _graph->getObjectProperties()) {
+  for(PropertyInterface* p : _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
-    if (prop->getName() == "viewMetaGraph")
+    if (p->getName() == "viewMetaGraph")
       continue;
 
 #endif
 
-    if(result==row)
+    if(result==row) {
+      prop = p;
       break;
+    }
 
     ++result;
   }
@@ -136,16 +137,18 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
   if(role==Qt::EditRole) {
     PropertyInterface* prop=NULL;
     int result=0;
-    forEach(prop,_graph->getObjectProperties()) {
+    for(PropertyInterface* p : _graph->getObjectProperties()) {
 #ifdef NDEBUG
 
-      if (prop->getName() == "viewMetaGraph")
+      if (p->getName() == "viewMetaGraph")
         continue;
 
 #endif
 
-      if(result==index.row())
+      if(result==index.row()) {
+        prop = p;
         break;
+      }
 
       ++result;
     }
@@ -161,16 +164,18 @@ bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &va
   if(role==Qt::EditRole) {
     PropertyInterface* prop=NULL;
     int result=0;
-    forEach(prop,_graph->getObjectProperties()) {
+    for(PropertyInterface* p :_graph->getObjectProperties()) {
 #ifdef NDEBUG
 
-      if (prop->getName() == "viewMetaGraph")
+      if (p->getName() == "viewMetaGraph")
         continue;
 
 #endif
 
-      if(result==index.row())
+      if(result==index.row()) {
+        prop = p;
         break;
+      }
 
       ++result;
     }

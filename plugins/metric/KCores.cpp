@@ -136,8 +136,7 @@ bool KCores::run() {
 
     while (modify) {
       modify = false;
-      node n;
-      forEach(n, graph->getNodes()) {
+      for(node n : graph->getNodes()) {
         // nothing to do if the node
         // has been already deleted
         if (deleted.get(n.id))

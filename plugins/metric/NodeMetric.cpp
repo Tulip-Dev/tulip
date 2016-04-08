@@ -38,18 +38,6 @@ struct dfsStruct {
     current(n), outNodes(nodes), res(1.0) {}
 };
 //=======================================================================
-// original recursive algorithm
-/*double NodeMetric::getNodeValue(const tlp::node n) {
-  if (result->getNodeValue(n)!=0)
-    return result->getNodeValue(n);
-  double res = 1;
-  node _n;
-  forEach(_n, graph->getOutNodes(n))
-    res += getNodeValue(_n);
-  result->setNodeValue(n, res);
-  return res;
-  }*/
-//=======================================================================
 double NodeMetric::getNodeValue(tlp::node current) {
   double value = result->getNodeValue(current);
 
@@ -112,9 +100,8 @@ double NodeMetric::getNodeValue(tlp::node current) {
 bool NodeMetric::run() {
   result->setAllEdgeValue(0);
   result->setAllNodeValue(0);
-  node _n;
-  forEach(_n, graph->getNodes())
-  result->setNodeValue(_n,getNodeValue(_n));
+  for(node n : graph->getNodes())
+    result->setNodeValue(n, getNodeValue(n));
   return true;
 }
 //====================================================================

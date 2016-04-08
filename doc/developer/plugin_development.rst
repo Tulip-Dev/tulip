@@ -280,8 +280,7 @@ In the following small example, we will iterate all the nodes and notify the use
   unsigned int i=0;
   unsigned int nbNodes = graph->numberOfNodes ();
   const unsigned int STEP = 10;
-  node n; 
-  forEach(n, graph->getNodes(n)) {
+  for(node n : graph->getNodes(n)) {
     ...
     ... // Do what you want
     ...

@@ -314,8 +314,7 @@ DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
 
 string DataSet::toString() const {
   stringstream ss;
-  pair<string, DataType*> p;
-  forEach(p, getValues()) {
+  for(const pair<string, DataType*> &p : getValues()) {
     DataTypeSerializer *serializer = DataSet::typenameToSerializer(p.second->getTypeName());
 
     if (serializer) {

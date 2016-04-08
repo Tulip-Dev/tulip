@@ -106,12 +106,11 @@ public:
     }
 
     //initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
-    node n;
     int i = 0;
     // the export only works for the root graph
     Graph *superGraph = graph->getSuperGraph();
     graph->setSuperGraph(graph);
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       _newNodeId.set(n.id, i++);
     }
 
@@ -165,8 +164,6 @@ public:
    * @return void
    **/
   void saveGraph_V4(Graph* graph) {
-    node n;
-    edge e;
 
     _writer.writeString(GraphIDToken);
 
@@ -191,7 +188,7 @@ public:
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
       unsigned int i = 0;
-      forEach(e, graph->getEdges()) {
+      for(edge e : graph->getEdges()) {
         _newEdgeId.set(e.id, i++);
 
         unsigned int source = _newNodeId.get(graph->source(e).id);
@@ -222,8 +219,7 @@ public:
       itP = graph->getLocalObjectProperties();
     }
 
-    PropertyInterface* property;
-    forEach(property, itP) {
+    for(PropertyInterface* property : itP) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
@@ -261,7 +257,7 @@ public:
       if(property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        forEach(n, property->getNonDefaultValuatedNodes(graph)) {
+        for(node n : property->getNonDefaultValuatedNodes(graph)) {
           stringstream temp;
           temp << _newNodeId.get(n.id);
           _writer.writeString(temp.str());
@@ -282,7 +278,7 @@ public:
       if(property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        forEach(e, property->getNonDefaultValuatedEdges(graph)) {
+        for(edge e : property->getNonDefaultValuatedEdges(graph)) {
           stringstream temp;
           temp << _newEdgeId.get(e.id);
           _writer.writeString(temp.str());
@@ -308,8 +304,7 @@ public:
     _writer.writeMapOpen();
     //saving attributes
     DataSet attributes = graph->getAttributes();
-    pair<string, DataType*> attribute;
-    forEach(attribute, attributes.getValues()) {
+    for(const pair<string, DataType*> &attribute : attributes.getValues()) {
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
@@ -351,8 +346,7 @@ public:
     //saving subgraphs
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
-    Graph* sub;
-    forEach(sub, graph->getSubGraphs()) {
+    for(Graph* sub : graph->getSubGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
       _writer.writeMapClose();
@@ -375,9 +369,8 @@ public:
     unsigned int intervalBegin = UINT_MAX;
     unsigned int intervalEnd = UINT_MAX;
     unsigned int previousId = UINT_MAX;
-    unsigned int currentId = UINT_MAX;
     unsigned int nbIdsIterated = 0;
-    forEach(currentId, iterator) {
+    for(unsigned int currentId : iterator) {
       //we don't need/want to do all this on the first time we loop
       if(previousId != UINT_MAX) {
 
@@ -406,7 +399,7 @@ public:
           }
         }
 
-        if(!_it_foreach._it->hasNext()) {
+        if(!iterator->hasNext()) {
           if(intervalBegin != UINT_MAX) {
             _writer.writeArrayOpen();
             _writer.writeInteger(intervalBegin);
@@ -425,7 +418,7 @@ public:
 
     // handle the case where there is only one id to write
     if (nbIdsIterated == 1) {
-      _writer.writeInteger(currentId);
+      _writer.writeInteger(previousId);
     }
 
     _writer.writeArrayClose();

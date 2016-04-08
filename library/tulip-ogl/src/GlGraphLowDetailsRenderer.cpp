@@ -53,8 +53,7 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t nbEdges = graph->numberOfEdges();
   size_t nbBends = 0;
   {
-    edge e;
-    forEach(e, graph->getEdges()) {
+    for(edge e : graph->getEdges()) {
       nbBends += layout->getEdgeValue(e).size();
     }
   }
@@ -65,8 +64,8 @@ void GlGraphLowDetailsRenderer::initEdgesArray() {
   size_t i_point  = 0;
   size_t i_indices = 0;
   size_t i_col = 0;
-  edge e;
-  forEach(e, graph->getEdges()) {
+
+  for(edge e : graph->getEdges()) {
     const pair<node, node> &ends = graph->ends(e);
     Color a = color->getEdgeValue(e);
     Color b = color->getEdgeValue(e);
@@ -124,8 +123,7 @@ void GlGraphLowDetailsRenderer::initNodesArray() {
   size_t i_col = 0;
   size_t i_indices = 0;
 
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     Coord p ( layout->getNodeValue(n));
     Size  s ( size->getNodeValue(n) / 2.f);
     Color c ( color->getNodeValue(n));

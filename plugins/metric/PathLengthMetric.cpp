@@ -39,21 +39,6 @@ struct dfsStruct {
   dfsStruct(node n, Iterator<node>* nodes):
     current(n), outNodes(nodes), res(0.0) {}
 };
-//=======================================
-// original recursive algorithm
-/*double PathLengthMetric::getNodeValue(const tlp::node n) {
-  if (graph->outdeg(n)==0) return 0.0;
-  if (result->getNodeValue(n) > 0.1)
-    return result->getNodeValue(n);
-  double res=0;
-  node child;
-  forEach(child, graph->getOutNodes(n)) {
-    res += getNodeValue(child);
-  }
-  res += leafMetric->getNodeValue(n);
-  result->setNodeValue(n, res);
-  return res;
-  }*/
 //=======================================================================
 double PathLengthMetric::getNodeValue(tlp::node current,
                                       tlp::DoubleProperty* leafMetric) {
@@ -137,9 +122,8 @@ bool PathLengthMetric::run() {
     return false;
   }
 
-  node _n;
-  forEach(_n, graph->getNodes())
-  getNodeValue(_n, &leafMetric);
+  for(node n : graph->getNodes())
+    getNodeValue(n, &leafMetric);
   return true;
 }
 //=======================================

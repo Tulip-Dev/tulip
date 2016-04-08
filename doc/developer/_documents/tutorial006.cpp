@@ -15,8 +15,7 @@ using namespace std;
 using namespace tlp;
 
 void displayAdjacency(node n, Graph *graph) {
-  edge e;
-	forEach(e,graph->getInOutEdges(n))
+  for(edge e : graph->getInOutEdges(n))
     cout << e.id << " ";
   cout << endl;
 }

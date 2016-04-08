@@ -372,8 +372,7 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
       disp[currNode] = Coord(0,0,0);
 
       // attractive force calculation
-      node n;
-      forEach(n,currentGraph->getInOutNodes(currNode)) {
+      for(node n : currentGraph->getInOutNodes(currNode)) {
         Coord c_n = result->getNodeValue(n);
         Coord c_tmp = c_n - curCoord;
         float euclidian_dist_sqr = c_tmp[0] * c_tmp[0] + c_tmp[1] * c_tmp[1];
@@ -466,8 +465,7 @@ void Grip::init() {
   level = 0;
 
   double diam = sqrt(currentGraph->numberOfNodes());
-  node n;
-  forEach(n,currentGraph->getNodes()) {
+  for(node n : currentGraph->getNodes()) {
     Coord  alea  = Coord(diam - (2. * diam * (double)(rand()%2)), diam - (2. * diam * double(rand()%2)), diam - (2. * diam * double(rand()%2)));
 
     if(_dim == 2) alea[2] = 0.;
@@ -491,8 +489,7 @@ void Grip::set_nbr_size() {
   int initCxty = 10000;
   unsigned int maxLevel = 0;
 
-  node n;
-  forEach(n,currentGraph->getNodes())
+  for(node n : currentGraph->getNodes())
   maxCxty += currentGraph->deg(n);
 
   if(maxCxty < (unsigned int)initCxty)

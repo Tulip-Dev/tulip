@@ -197,8 +197,7 @@ bool PolyominoPacking::run() {
   viewRotation = graphCp->getProperty<DoubleProperty>("viewRotation");
 
   if (layoutNeedCopy || sizeNeedCopy || rotationNeedCopy) {
-    node n;
-    forEach(n, graphCp->getNodes()) {
+    for(tlp::node n : graphCp->getNodes()) {
       if (layoutNeedCopy) {
         viewLayout->setNodeValue(n, layout->getNodeValue(nodesMapping[n]));
       }
@@ -211,8 +210,7 @@ bool PolyominoPacking::run() {
         viewRotation->setNodeValue(n, rotation->getNodeValue(nodesMapping[n]));
       }
     }
-    edge e;
-    forEach(e, graphCp->getEdges()) {
+    for(tlp::edge e : graphCp->getEdges()) {
       if (layoutNeedCopy) {
         viewLayout->setEdgeValue(e, layout->getEdgeValue(edgesMapping[e]));
       }
@@ -235,12 +233,10 @@ bool PolyominoPacking::run() {
   tlp::ConnectedTest::computeConnectedComponents(graphCp, connectedComponents);
 
   if (connectedComponents.size() <= 1) {
-    node n;
-    forEach(n, graphCp->getNodes()) {
+    for(tlp::node n : graphCp->getNodes()) {
       result->setNodeValue(nodesMapping[n], viewLayout->getNodeValue(n));
     }
-    edge e;
-    forEach(e, graphCp->getEdges()) {
+    for(tlp::edge e : graphCp->getEdges()) {
       result->setEdgeValue(edgesMapping[e], viewLayout->getEdgeValue(e));
     }
     delete graphCp;
@@ -302,12 +298,10 @@ bool PolyominoPacking::run() {
 
   for (size_t i = 0 ; i < polyominos.size() ; ++i) {
     Coord move = Coord(newPlaces[polyominos[i].cc][0], newPlaces[polyominos[i].cc][1]);
-    node n;
-    forEach(n, (polyominos[i].cc)->getNodes()) {
+    for(tlp::node n : (polyominos[i].cc)->getNodes()) {
       result->setNodeValue(nodesMapping[n], viewLayout->getNodeValue(n) + move);
     }
-    edge e;
-    forEach(e, (polyominos[i].cc)->getEdges()) {
+    for(tlp::edge e : (polyominos[i].cc)->getEdges()) {
       vector<Coord> bends = viewLayout->getEdgeValue(e);
 
       for (size_t j = 0 ; j < bends.size() ; ++j) {
@@ -384,8 +378,7 @@ void PolyominoPacking::genPolyomino(Polyomino &poly) {
   int dx = - rint(ccBB[0][0]);
   int dy = - rint(ccBB[0][1]);
 
-  node n;
-  forEach(n, (poly.cc)->getNodes()) {
+  for(tlp::node n : (poly.cc)->getNodes()) {
     const Coord &nodeCoord = viewLayout->getNodeValue(n);
     const Size &nodeSize = viewSize->getNodeValue(n);
     Vec2i point = vec3fToVec2i(nodeCoord);
@@ -409,8 +402,7 @@ void PolyominoPacking::genPolyomino(Polyomino &poly) {
     }
 
     point = cell(point, gridStepSize);
-    edge e;
-    forEach(e, (poly.cc)->getOutEdges(n)) {
+    for(tlp::edge e : (poly.cc)->getOutEdges(n)) {
       fillEdge(e, point, poly.cells, dx, dy);
     }
   }

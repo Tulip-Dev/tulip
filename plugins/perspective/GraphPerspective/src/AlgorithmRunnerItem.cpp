@@ -265,8 +265,8 @@ void AlgorithmRunnerItem::run(Graph *g) {
   std::string algorithm = _pluginName.toStdString();
   ParameterDescriptionList paramList =
     PluginLister::getPluginParameters(algorithm);
-  ParameterDescription desc;
-  forEach(desc, paramList.getParameters()) {
+
+  for(const ParameterDescription &desc : paramList.getParameters()) {
     if (desc.getDirection() == IN_PARAM) {
       std::string typeName(desc.getTypeName());
 
@@ -309,7 +309,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   // use temporary output properties
   // to ease the undo in case of failure
   std::vector<OutPropertyParam> outPropertyParams;
-  forEach(desc, paramList.getParameters()) {
+  for(const ParameterDescription &desc : paramList.getParameters()) {
     std::string typeName(desc.getTypeName());
 
     // forget non property out param
@@ -607,8 +607,7 @@ void AlgorithmRunnerItem::initModel() {
 
   if (!_initData.empty()) {
     DataSet dataSet = model->parametersValues();
-    std::pair<std::string,tlp::DataType*> it;
-    forEach(it,_initData.getValues()) {
+    for(const std::pair<std::string,tlp::DataType*> &it :_initData.getValues()) {
       dataSet.setData(it.first,it.second);
     }
     model->setParametersValues(dataSet);

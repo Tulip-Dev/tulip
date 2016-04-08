@@ -137,9 +137,9 @@ void SOMMapElement::buildMainComposite(tlp::Coord basePos, tlp::Size gridSize,
 }
 
 void SOMMapElement::updateColors(ColorProperty *newColor) {
-  node n;
+
   SOMMap::SOMMapConnectivity connect = som->getConnectivity();
-  forEach(n,som->getNodes()) {
+  for(node n : som->getNodes()) {
     if (connect == SOMMap::six) {
       GlCircle *hex = (GlCircle*) nodesMap[n];
       hex->setFillColor(newColor->getNodeValue(n));

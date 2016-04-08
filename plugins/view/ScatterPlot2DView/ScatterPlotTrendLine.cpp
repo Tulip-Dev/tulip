@@ -140,8 +140,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
   else {
     IntegerProperty *xDimInt = graph->getProperty<IntegerProperty>(xDimName);
     xDim = new DoubleProperty(graph);
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       xDim->setNodeValue(n, static_cast<double>(xDimInt->getNodeValue(n)));
     }
   }
@@ -152,8 +151,7 @@ bool ScatterPlotTrendLine::compute(GlMainWidget*) {
   else {
     IntegerProperty *yDimInt = graph->getProperty<IntegerProperty>(yDimName);
     yDim = new DoubleProperty(graph);
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       yDim->setNodeValue(n, static_cast<double>(yDimInt->getNodeValue(n)));
     }
   }

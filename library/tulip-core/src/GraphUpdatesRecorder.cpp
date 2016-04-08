@@ -649,8 +649,7 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
   const set<PropertyInterface*>* newProps =
     (itp == addedProperties.end()) ? NULL : &(itp->second);
 
-  PropertyInterface* prop;
-  forEach(prop, g->getLocalObjectProperties()) {
+  for(PropertyInterface* prop : g->getLocalObjectProperties()) {
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
 
@@ -673,8 +672,7 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
     newSubGraphs = &sgSet;
   }
 
-  Graph* sg;
-  forEach(sg, g->getSubGraphs()) {
+  for(Graph* sg : g->getSubGraphs()) {
     if (!newSubGraphs || newSubGraphs->find(sg) == newSubGraphs->end())
       restartRecording(sg);
   }
@@ -690,12 +688,10 @@ void GraphUpdatesRecorder::stopRecording(Graph* g) {
 
 #endif
   g->removeListener(this);
-  PropertyInterface* prop;
-  forEach(prop, g->getLocalObjectProperties())
-  prop->removeListener(this);
-  Graph* sg;
-  forEach(sg, g->getSubGraphs())
-  stopRecording(sg);
+  for(PropertyInterface* prop : g->getLocalObjectProperties())
+    prop->removeListener(this);
+  for(Graph* sg : g->getSubGraphs())
+    stopRecording(sg);
 }
 
 void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
@@ -1164,13 +1160,6 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
 
   gnr->elts.set(n, true);
 
-  // no need of the loop below because properties are observed too
-  // loop on properties to save the node's associated values
-
-  /*PropertyInterface* prop;
-  forEach(prop, g->getLocalObjectProperties()) {
-  beforeSetNodeValue(prop, n);
-  }*/
   if (g == g->getSuperGraph())
     recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
 }
@@ -1181,11 +1170,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   // remove e from addedEdges if it is a newly added edge
   if (ger != NULL && ger->elts.get(e)) {
     ger->elts.set(e, false);
-    // do not remove from addedEdgesEnds
-    // to ensure further erasal from property will not
-    // record a value as if it was a preexisting edge
-    /* if (graphs.empty())
-    addedEdges.erase(it); */
+
     // remove from revertedEdges if needed
     set<edge>::iterator itR = revertedEdges.find(e);
 
@@ -1246,14 +1231,6 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 
   ger->elts.set(e, true);
 
-  // no need of the loop below because properties are observed too
-  // loop on properties
-
-  /*PropertyInterface* prop;
-  // loop on properties to save the edge's associated values
-  forEach(prop, g->getLocalObjectProperties()) {
-  beforeSetEdgeValue(prop, e);
-  }*/
   if (g == g->getSuperGraph()) {
     // record source & target old containers
     const pair<node, node> &eEnds = g->ends(e);
@@ -1387,8 +1364,7 @@ void GraphUpdatesRecorder::delSubGraph(Graph* g, Graph* sg) {
 }
 
 void GraphUpdatesRecorder::removeGraphData(Graph *g) {
-  Graph *sg = NULL;
-  forEach(sg, g->getSubGraphs()) {
+  for(Graph *sg : g->getSubGraphs()) {
     std::pair<Graph*, Graph*> p = std::make_pair(g, sg);
     std::list<std::pair<Graph*, Graph*> >::iterator it = std::find(addedSubGraphs.begin(), addedSubGraphs.end(), p);
 
@@ -1520,9 +1496,8 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
 void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
   if  (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()) {
     // first save the already existing value for all non default valuated nodes
-    node n;
-    forEach(n, p->getNonDefaultValuatedNodes())
-    beforeSetNodeValue(p, n);
+    for(node n : p->getNonDefaultValuatedNodes())
+      beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
     oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
@@ -1578,9 +1553,8 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
   if (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()) {
     // first save the already existing value for all non default valuated edges
-    edge e;
-    forEach(e, p->getNonDefaultValuatedEdges())
-    beforeSetEdgeValue(p, e);
+    for(edge e : p->getNonDefaultValuatedEdges())
+      beforeSetEdgeValue(p, e);
     // then record the old default value
     // because beforeSetEdgeValue does nothing if it has already been changed
     oldEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();

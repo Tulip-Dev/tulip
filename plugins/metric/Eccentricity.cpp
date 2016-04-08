@@ -114,11 +114,10 @@ bool EccentricityMetric::run() {
     dataSet->get("directed", directed);
   }
 
-  node n;
   size_t i = 0;
   vector<node> vecNodes(graph->numberOfNodes());
   vector<double> res(graph->numberOfNodes());
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     vecNodes[i] = n;
     ++i;
   }

@@ -231,8 +231,7 @@ public:
           maxN = log(1+maxN-minN);
         }
 
-        node n;
-        forEach(n, graph->getNodes()) {
+        for(node n : graph->getNodes()) {
           double dd=entryMetric->getNodeDoubleValue(n);
 
           if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {
@@ -265,8 +264,7 @@ public:
           maxE = log(1+maxE-minE);
         }
 
-        edge e;
-        forEach(e, graph->getEdges()) {
+        for(edge e : graph->getEdges()) {
           double dd=entryMetric->getEdgeDoubleValue(e);
 
           if (eltTypes.getCurrent()==LOGARITHMIC_ELT) {

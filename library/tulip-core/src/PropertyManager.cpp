@@ -139,8 +139,7 @@ void PropertyManager::setLocalProperty(const string &str,
   }
 
   // loop on subgraphs
-  Graph* sg;
-  forEach(sg, graph->getSubGraphs()) {
+  for(Graph* sg : graph->getSubGraphs()) {
     // to set p as inherited property
     (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(str, p);
   }
@@ -180,8 +179,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
   }
 
   //Warn subgraphs for deletion.
-  Graph* sg;
-  forEach(sg, graph->getSubGraphs()) {
+  for(Graph *sg : graph->getSubGraphs()) {
     (((GraphAbstract *) sg)->propertyContainer)->notifyBeforeDelInheritedProperty(propName);
   }
 
@@ -210,7 +208,7 @@ bool PropertyManager::renameLocalProperty(PropertyInterface *prop,
   }
 
   // loop on subgraphs
-  forEach(sg, graph->getSubGraphs()) {
+  for(Graph* sg : graph->getSubGraphs()) {
     // to set p as inherited property
     (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(newName, prop);
   }
@@ -253,8 +251,7 @@ void PropertyManager::setInheritedProperty(const string &str,
     }
 
     // loop on subgraphs
-    Graph* sg;
-    forEach(sg, graph->getSubGraphs()) {
+    for(Graph* sg : graph->getSubGraphs()) {
       // to set p as inherited property
       (((GraphAbstract *) sg)->propertyContainer)->setInheritedProperty(str, p);
     }
@@ -306,8 +303,7 @@ void PropertyManager::delLocalProperty(const string &str) {
     }
 
     //Warn subgraphs.
-    Graph* sg;
-    forEach(sg, graph->getSubGraphs()) {
+    for(Graph* sg : graph->getSubGraphs()) {
       (((GraphAbstract *) sg)->propertyContainer)->notifyBeforeDelInheritedProperty(str);
     }
 
@@ -335,8 +331,7 @@ void PropertyManager::notifyBeforeDelInheritedProperty(const string& str) {
     // graph observers notification
     ((GraphAbstract *) graph)->notifyBeforeDelInheritedProperty(str);
     // loop on subgraphs
-    Graph* sg;
-    forEach(sg, graph->getSubGraphs()) {
+    for(Graph *sg : graph->getSubGraphs()) {
       // to remove as inherited property
       (((GraphAbstract *) sg)->propertyContainer)->notifyBeforeDelInheritedProperty(str);
     }

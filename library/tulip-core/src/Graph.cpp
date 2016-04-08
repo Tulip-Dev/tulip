@@ -562,8 +562,7 @@ public:
     const VectorGraph& ovg = tlp::Observable::getObservableGraph();
 
     // we iterate the observable graph nodes
-    node n;
-    forEach(n, ovg.getNodes()) {
+    for(node n : ovg.getNodes()) {
       Graph* g;
 
       if (tlp::Observable::isAlive(n) &&
@@ -739,8 +738,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 }
 
 tlp::node Graph::getSource() const {
-  node source;
-  forEach(source, getNodes()) {
+  for(node source : getNodes()) {
     if (indeg(source) == 0)
       return source;
   }
@@ -1100,8 +1098,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   delete itE;
 
   // propagate all cluster local properties
-  PropertyInterface* property;
-  forEach(property, cluster->getLocalObjectProperties()) {
+  for(PropertyInterface* property : cluster->getLocalObjectProperties()) {
     if (property == graphLayout ||
         property == graphSize ||
         property == graphRot)
@@ -1202,8 +1199,7 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
   Graph *subGraph = inducedSubGraph(nodeSet, getSuperGraph());
   // all local properties
   // must be cloned in subgraph
-  PropertyInterface *prop;
-  forEach(prop, getLocalObjectProperties()) {
+  for(PropertyInterface *prop : getLocalObjectProperties()) {
     PropertyInterface* sgProp =
       prop->clonePrototype(subGraph, prop->getName());
     set<node>::const_iterator itNodeSet = nodeSet.begin();
@@ -1237,8 +1233,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   Observable::holdObservers();
   //updateGroupLayout(this, subGraph, metaNode);
   // compute meta node values
-  PropertyInterface *property;
-  forEach(property, getObjectProperties()) {
+  for(PropertyInterface *property : getObjectProperties()) {
     property->computeMetaValue(metaNode, subGraph, this);
   }
 
@@ -1347,7 +1342,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     edge mE = (*it).first;
     metaInfo->setEdgeValue(mE, (*it).second);
     // compute meta edge values
-    forEach(property, getObjectProperties()) {
+    for(PropertyInterface *property : getObjectProperties()) {
       Iterator<edge> *itE = getEdgeMetaInfo(mE);
       assert(itE->hasNext());
       property->computeMetaValue(mE, itE, this);
@@ -1364,8 +1359,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 static void mapSubGraphNodes(Graph* sg, node metaNode,
                              MutableContainer<node>& mappingM,
                              GraphProperty* metaInfo) {
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     mappingM.set(n.id, metaNode);
     Graph* ssg = metaInfo->getNodeValue(n);
 
@@ -1430,10 +1424,9 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     getProperty<ColorProperty>(colorProperty);
 
   if (hasSubEdges) {
-    node mn;
     // compute mapping for neighbour nodes
     // and their sub nodes
-    forEach(mn, super->getInOutNodes(metaNode)) {
+    for(node mn : super->getInOutNodes(metaNode)) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
@@ -1513,8 +1506,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           edge mE = graph->addEdge(src, tgt);
           metaInfo->setEdgeValue(mE, itnme->second);
           // compute meta edge values
-          PropertyInterface *property;
-          forEach(property, graph->getObjectProperties()) {
+          for(PropertyInterface *property : graph->getObjectProperties()) {
             Iterator<edge> *itE = getEdgeMetaInfo(mE);
             assert(itE->hasNext());
             property->computeMetaValue(mE, itE, graph);
@@ -1645,12 +1637,10 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
         metaNodes.push_back(metaN);
         metaInfo->setNodeValue(metaN, its);
         // compute meta node values
-        PropertyInterface *property;
-        forEach(property, quotientGraph->getObjectProperties()) {
+        for(PropertyInterface *property : quotientGraph->getObjectProperties()) {
           property->computeMetaValue(metaN, its, quotientGraph);
         }
-        node n;
-        forEach(n, its->getNodes()) {
+        for(node n : its->getNodes()) {
           // map each subgraph's node to a set of meta nodes
           // in order to deal consistently with overlapping clusters
           if (nMapping.find(n) == nMapping.end())
@@ -1709,8 +1699,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
     edge mE = (*itm).first;
     metaInfo->setEdgeValue(mE, (*itm).second);
     // compute meta edge values
-    string pName;
-    forEach(pName, quotientGraph->getProperties()) {
+    for(const string &pName : quotientGraph->getProperties()) {
       Iterator<edge> *itE = getRoot()->getEdgeMetaInfo(mE);
       PropertyInterface *property = quotientGraph->getProperty(pName);
       property->computeMetaValue(mE, itE, quotientGraph);

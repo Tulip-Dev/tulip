@@ -102,20 +102,6 @@ node OctreeBundle::addNode(const tlp::Coord& pos) {
   return itn->second;
 }
 //=====================================
-//static int iii = 0;
-void OctreeBundle::cleanNode(const tlp::node) {
-  /*    double dir[6];
-      edge   best[6];
-      edge e;
-      forEach(e, graph->getInOutEdges(n)) {
-          node tgt = graph->opposite(e, n);
-          Coord vecU = layout->getNodeValue(tgt) - layout->getNodeValue(n);
-          vecU /= vecu.norm();
-          if(fabs)
-      }
-      */
-}
-
 void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4], const vector<node> &input) {
 
   node frN[4];
@@ -234,21 +220,6 @@ void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4], const vector<no
       recQuad(middleFace[i], backFace[i], out);
   }
 
-//
-//    //split elements in each cell
-//    vector<node> in, out, out2;
-//    elmentSplitting(cA, cE, input, in, out);
-//
-//    ++iii;
-//    recQuad(a,f,e,i, in);
-//    //-----------
-//    elmentSplitting(cF, cG, out, in, out2);
-//    recQuad(f,b,g,e, in );
-//    //-----------
-//    elmentSplitting(cE, cC, out2, in, out);
-//    recQuad(e,g,c,h, in);
-//    //-----------
-//    recQuad(i,e,h,d, out);
 }
 //========================================================
 void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::SizeProperty *siz) {
@@ -266,10 +237,7 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
     size = siz;
 
   this->graph = graph;
-//
-//  size->scale(Coord(1000.,1000.,1000.));
-//  layout->scale(Coord(1000.,1000.,1000.));
-//  layout->center();
+
   BoundingBox bb = tlp::computeBoundingBox(graph, layout, size, rot);
 
   //change the bbbox to have a aspect ratio of 1
@@ -287,24 +255,10 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
   bb[1][2] += depth / 10.;
 
   minSize = (bb[1] - bb[0]).norm();
-  /*
-    if (width > height) {
-        double ratio = width / height;
-        double center = (bb[1][1] + bb[0][1]) / 2.;
-        bb[1][1] = (bb[1][1] - center) * ratio + center;
-        bb[0][1]  = (bb[0][1] - center) * ratio + center;
-    }
-    if (width < height) {
-        double ratio = height / width;
-        double center = (bb[1][0] + bb[0][0]) / 2.;
-        bb[1][0] = (bb[1][0] - center) * ratio + center;
-        bb[0][0]  = (bb[0][0] - center) * ratio + center;
-    }
 
-  */
   vector<node> input;
-  node k;
-  forEach(k, graph->getNodes()) {
+
+  for(node k : graph->getNodes()) {
     input.push_back(k);
   }
 
@@ -337,11 +291,5 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
 
   vector<edge> tmpE;
   SimpleTest::makeSimple(graph, tmpE);
-  /*
-    for(size_t i = 0; i<resultNode.size(); ++i) {
-        if (!graph->isElement(resultNode[i]))
-            cout << "bugossss" << endl;
-        graph->delAllNode(resultNode[i]);
-    }
-    */
+
 }

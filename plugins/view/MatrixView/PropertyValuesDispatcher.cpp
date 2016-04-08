@@ -48,12 +48,12 @@ PropertyValuesDispatcher::PropertyValuesDispatcher(tlp::Graph *source, tlp::Grap
   assert(displayedNodesToGraphEntities);
 
   Observable::holdObservers();
-  string s;
-  forEach (s, source->getProperties())
-  addLocalProperty(source, s);
 
-  forEach (s, target->getProperties())
-  addLocalProperty(target, s);
+  for(const string &s : source->getProperties())
+    addLocalProperty(source, s);
+
+  for(const string &s : target->getProperties())
+    addLocalProperty(target, s);
 
   Observable::unholdObservers();
 
@@ -149,9 +149,8 @@ void PropertyValuesDispatcher::afterSetAllNodeValue(tlp::PropertyInterface *sour
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     string val = sourceProp->getNodeDefaultStringValue();
-    node n;
-    forEach(n, _displayedNodesAreNodes->getNodesEqualTo(true))
-    targetProp->setNodeStringValue(n, val);
+    for(node n : _displayedNodesAreNodes->getNodesEqualTo(true))
+      targetProp->setNodeStringValue(n, val);
   }
   else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
@@ -164,9 +163,8 @@ void PropertyValuesDispatcher::afterSetAllEdgeValue(tlp::PropertyInterface *sour
   if (sourceProp->getGraph()->getRoot() == _source->getRoot()) {
     PropertyInterface *targetProp = _target->getProperty(sourceProp->getName());
     string val = sourceProp->getEdgeDefaultStringValue();
-    node n;
-    forEach(n, _displayedNodesAreNodes->getNodesEqualTo(false))
-    targetProp->setNodeStringValue(n, val);
+    for(node n : _displayedNodesAreNodes->getNodesEqualTo(false))
+      targetProp->setNodeStringValue(n, val);
   }
   else if (sourceProp->getGraph()->getRoot() == _target->getRoot()) {
     PropertyInterface *targetProp = _source->getProperty(sourceProp->getName());
@@ -181,13 +179,12 @@ void PropertyValuesDispatcher::addLocalProperty(tlp::Graph *g, const std::string
     PropertyInterface *sourceProp = g->getProperty(name);
     afterSetAllNodeValue(sourceProp);
     afterSetAllEdgeValue(sourceProp);
-    node n;
-    forEach(n, sourceProp->getNonDefaultValuatedNodes())
-    afterSetNodeValue(sourceProp,n);
 
-    edge e;
-    forEach(e, sourceProp->getNonDefaultValuatedEdges())
-    afterSetEdgeValue(sourceProp, e);
+    for(node n : sourceProp->getNonDefaultValuatedNodes())
+      afterSetNodeValue(sourceProp,n);
+
+    for(edge e : sourceProp->getNonDefaultValuatedEdges())
+      afterSetEdgeValue(sourceProp, e);
     Observable::unholdObservers();
 
     sourceProp->addListener(this);

@@ -228,8 +228,7 @@ void CSVGraphMappingConfigurationWidget::createNewProperty() {
 
 void CSVGraphMappingConfigurationWidget::selectProperties(const QString& title, std::vector<std::string>& selProperties, QPushButton* button) {
   vector<string> graphProperties;
-  string propertyName;
-  forEach(propertyName, graph->getProperties()) {
+  for(const string &propertyName : graph->getProperties()) {
     graphProperties.push_back(propertyName);
   }
 

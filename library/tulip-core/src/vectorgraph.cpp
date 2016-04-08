@@ -647,20 +647,17 @@ const vector<edge>& VectorGraph::edges() const {
 //=======================================================
 void VectorGraph::dump() const {
   tlp::debug() << "nodes : ";
-  node n;
-  forEach(n, getNodes())
-  tlp::debug() << n.id << " ";
+  for(node n : getNodes())
+    tlp::debug() << n.id << " ";
   tlp::debug() << endl;
   tlp::debug() << "edges: ";
-  edge e;
-  forEach(e, getEdges())
-  tlp::debug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
+  for(edge e : getEdges())
+    tlp::debug() << "e_" << e.id << "(" << source(e).id << "," << target(e).id << ") ";
   tlp::debug() << endl;
 
-  forEach(n, getNodes()) {
+  for(node n : getNodes()) {
     tlp::debug() << "n_" << n << "{";
-    edge e;
-    forEach(e, getInOutEdges(n)) {
+    for(edge e : getInOutEdges(n)) {
       tlp::debug() << "e_" << e.id << " ";
     }
     tlp::debug() << "}";

@@ -188,8 +188,7 @@ private:
         renumber[i]=final++;
 
     // update clustering
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       clusters[n.id] = renumber[n2c[clusters[n.id]]];
     }
 
@@ -386,18 +385,17 @@ bool LouvainClustering::run() {
 
   quotient = new VectorGraph();
 
-  tlp::node n;
   unsigned int i = 0;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     clusters[n.id] = i++;
     quotient->addNode();
   }
 
   weights = new EdgeProperty<double>();
   quotient->alloc(*weights);
-  edge e;
+
   // init total_weight, weights and quotient edges
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     double weight = metric ? metric->getEdgeDoubleValue(e) : 1;
     std::pair<node, node> ends = graph->ends(e);
     node q_src = node(clusters[ends.first.id]);
@@ -471,8 +469,7 @@ bool LouvainClustering::run() {
           renumber[i]=final++;
 
       // then set measure values
-      node n;
-      forEach(n, graph->getNodes()) {
+      for(node n : graph->getNodes()) {
         result->setNodeValue(n, renumber[n2c[clusters[n.id]]]);
       }
       delete quotient;

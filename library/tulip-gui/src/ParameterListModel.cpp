@@ -28,10 +28,9 @@ namespace tlp {
 
 ParameterListModel::ParameterListModel(const tlp::ParameterDescriptionList &params, tlp::Graph *graph, QObject *parent)
   : TulipModel(parent), _graph(graph) {
-  ParameterDescription param;
   QVector<ParameterDescription> outParams;
   // first add in parameters
-  forEach(param,params.getParameters()) {
+  for(const ParameterDescription &param : params.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
       _params.push_back(param);
     else

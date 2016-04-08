@@ -52,9 +52,8 @@ void setTreeVisualProperties(Graph *tree) {
 
     // Labels the node with their id
     StringProperty *viewLabel = tree->getProperty<StringProperty>("viewLabel");
-    node n;
-    forEach(n, tree->getNodes()) {
-        viewLabel->setNodeValue(n, QString::number(n.id).toStdString());
+    for(node n : tree->getNodes()) {
+      viewLabel->setNodeValue(n, QString::number(n.id).toStdString());
     }
 
     // Add a border to the nodes, keep the default color who is black
@@ -86,7 +85,7 @@ void setTreeVisualProperties(Graph *tree) {
     // Sets different shapes and colors for each layer of the tree
     IntegerProperty *viewShape = tree->getProperty<IntegerProperty>("viewShape");
     ColorProperty *viewColor = tree->getProperty<ColorProperty>("viewColor");
-    forEach(n, tree->getNodes()) {
+    for(node n : tree->getNodes()) {
         viewShape->setNodeValue(n, glyphsMap[int(dagLevel.getNodeValue(n))]);
         viewColor->setNodeValue(n, colorsMap[int(dagLevel.getNodeValue(n))]);
     }

@@ -195,8 +195,7 @@ vector<double> *ConvolutionClustering::getHistogram() {
   double minVal = metric->getNodeDoubleMin();
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
 
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     int tmp=(int)((metric->getNodeDoubleValue(n) - minVal) * (double)histosize /
                   maxMinRange);
 
@@ -230,10 +229,9 @@ vector<double> *ConvolutionClustering::getHistogram() {
 }
 //================================================================================
 void ConvolutionClustering::getClusters(const std::vector<int> &ranges) {
-  node n;
   double minVal = metric->getNodeDoubleMin();
   double maxMinRange = metric->getNodeDoubleMax() - minVal;
-  forEach(n,graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     int tmp = getInterval((int)((metric->getNodeDoubleValue(n) - minVal)*(double)histosize / maxMinRange), ranges);
     result->setNodeValue(n,tmp);
   }

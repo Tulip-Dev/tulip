@@ -71,14 +71,13 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
   ui->newPropertyRadioButton->setChecked(true);
 
   if(_graph != NULL) {
-    PropertyInterface* property;
     Graph *parent = _graph->getSuperGraph();
 
     if (parent == graph) {
       parent = 0;
     }
 
-    forEach(property,_graph->getObjectProperties()) {
+    for(PropertyInterface* property :_graph->getObjectProperties()) {
       // type must be the same
       if (property->getTypename() == source->getTypename()) {
         // Check if name is different

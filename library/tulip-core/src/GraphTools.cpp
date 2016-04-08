@@ -134,9 +134,8 @@ vector<vector<node> > computeCanonicalOrdering(PlanarConMap *carte, std::vector<
 std::vector<node> computeGraphCenters(Graph * graph) {
   assert(ConnectedTest::isConnected(graph));
   MutableContainer<unsigned int> _dist;
-  node n;
   unsigned minD = UINT_MAX;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     MutableContainer<unsigned int> tmp;
     unsigned int maxD = maxDistance(graph, n, tmp, UNDIRECTED);
     _dist.set(n.id, maxD);
@@ -144,7 +143,7 @@ std::vector<node> computeGraphCenters(Graph * graph) {
   }
 
   vector<node> result;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     if (_dist.get(n.id) == minD)
       result.push_back(n);
   }
@@ -187,8 +186,7 @@ node graphCenterHeuristic(Graph * graph,
       }
       else {
         unsigned int delta = di - cDist;
-        node v;
-        forEach(v, graph->getNodes()) {
+        for(node v : graph->getNodes()) {
           if (dist.get(v.id) < delta) { //all the nodes at distance less than delta can't be center
             toTreat.set(v.id, false);
           }
@@ -196,8 +194,7 @@ node graphCenterHeuristic(Graph * graph,
       }
 
       unsigned int nextMax = 0;
-      node v;
-      forEach(v, graph->getNodes()) {
+      for(node v : graph->getNodes()) {
         if (dist.get(v.id) > (di/2 + di%2) )
           toTreat.set(v.id, false);
         else {
@@ -501,8 +498,7 @@ vector<node> bfs(const Graph *graph, node root) {
       node curNode = nodesToVisit.front();
       nodesToVisit.pop();
       ret.push_back(curNode);
-      node neigh;
-      forEach(neigh, graph->getInOutNodes(curNode)) {
+      for(node neigh : graph->getInOutNodes(curNode)) {
         if (!markedNodes.get(neigh)) {
           markedNodes.set(neigh, true);
           nodesToVisit.push(neigh);
@@ -540,8 +536,7 @@ vector<node> dfs(const Graph *graph, node root) {
       nodesToVisit.pop();
       ret.push_back(curNode);
       std::vector<tlp::node> neighs;
-      node neigh;
-      forEach(neigh, graph->getInOutNodes(curNode)) {
+      for(node neigh : graph->getInOutNodes(curNode)) {
         neighs.push_back(neigh);
       }
 

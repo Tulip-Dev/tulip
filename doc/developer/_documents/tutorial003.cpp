@@ -70,9 +70,8 @@ int main() {
   meta->setAllNodeValue(graph); //an existing graph
 
 	//iterating over properties
-	string p;
   cout << "List of the properties present in the graph:" << endl;
-  forEach (p, graph->getLocalProperties()) {
+  for(const string &p : graph->getLocalProperties()) {
     cout << p << endl;
   } 
 

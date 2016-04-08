@@ -62,28 +62,27 @@ int main() {
   subgraph2->getLocalProperty<DoubleProperty>("thirdMetric");
 
   cout << "List of the local properties present in the subgraph1:" << endl;
-  string s;
-	forEach(s, subgraph1->getLocalProperties()) {
+  for(const string &s : subgraph1->getLocalProperties()) {
     cout << s << endl;
   }
 
   cout << endl << "List of inherited properties present in the subgraph1:" << endl;
-  forEach(s,subgraph1->getInheritedProperties()) {
+  for(const string &s : subgraph1->getInheritedProperties()) {
     cout << s << endl;
   }
 
   cout << endl << "List of properties present in the subgraph1:" << endl;
-  forEach(s,subgraph1->getProperties()) {
+  for(const string &s : subgraph1->getProperties()) {
     cout << s << endl;
   }
 
   cout << endl << "List of the local properties present in the subgraph2:" << endl;
-  forEach(s,subgraph2->getLocalProperties()) {
+  for(const string &s : subgraph2->getLocalProperties()) {
     cout << s << endl;
   }
 
   cout << endl << "List of inherited properties present in the subgraph2:" << endl;
-  forEach(s,subgraph2->getInheritedProperties()) {
+  for(const string &s : subgraph2->getInheritedProperties()) {
     cout << s << endl;
   }
 

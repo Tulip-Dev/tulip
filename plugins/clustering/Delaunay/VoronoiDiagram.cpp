@@ -27,14 +27,13 @@ using namespace std;
 static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool connectNodeToCellBorder) {
   vector<tlp::node> nodes;
   vector<tlp::Coord> sites;
-  tlp::node n;
   tlp::VoronoiDiagram voronoiDiag;
 
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
 
   nodes.reserve(graph->numberOfNodes());
   sites.reserve(graph->numberOfNodes());
-  forEach(n, graph->getNodes()) {
+  for(tlp::node n : graph->getNodes()) {
     nodes.push_back(n);
     sites.push_back(layout->getNodeValue(n));
   }

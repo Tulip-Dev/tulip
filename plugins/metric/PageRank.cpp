@@ -82,7 +82,6 @@ struct PageRank : public DoubleAlgorithm {
 
     if(d <= 0 || d >= 1) return false;
 
-
     double nbNodes = graph->numberOfNodes();
 
     // Initialize the PageRank
@@ -93,41 +92,38 @@ struct PageRank : public DoubleAlgorithm {
 
     for(unsigned int k=0; k < 15*log(nbNodes); ++k) {
       if (directed) {
-	node tgt;
-	forEach(tgt, graph->getNodes()) {
-	  double r2Val = 0;
-	  node src;
-	  forEach(src, graph->getInNodes(tgt)) {
-	    r2Val += R->get(src)/graph->outdeg(src);
-	  }
-	  R2->set(tgt, one_minus_d + d * r2Val);
-	}
-	// swap R and R2
-	MutableContainer<double>*tmp = R;
-	R = R2;
-	R2 = tmp;
+
+        for(node tgt : graph->getNodes()) {
+          double r2Val = 0;
+          for(node src : graph->getInNodes(tgt)) {
+            r2Val += R->get(src)/graph->outdeg(src);
+          }
+          R2->set(tgt, one_minus_d + d * r2Val);
+        }
+        // swap R and R2
+        MutableContainer<double>*tmp = R;
+        R = R2;
+        R2 = tmp;
       }
       else {
-	R2->setAll(0.);
-	edge e;
-	forEach(e, graph->getEdges()) {
-	  const std::pair<node, node> eEnds = graph->ends(e);
+        R2->setAll(0.);
+        for(edge e : graph->getEdges()) {
+          const std::pair<node, node> eEnds = graph->ends(e);
           node src = eEnds.first;
-	  node tgt = eEnds.second;
+          node tgt = eEnds.second;
           double prev = R2->get(tgt);
           R2->set(tgt, prev + R->get(src) / double(graph->deg(src)));
           prev = R2->get(src);
           R2->set(src, prev + R->get(tgt) / double(graph->deg(tgt)));
         }
-	node n;
-	forEach(n, graph->getNodes())
-	  R->set(n, one_minus_d + d * R2->get(n));
+
+        for(node n : graph->getNodes())
+          R->set(n, one_minus_d + d * R2->get(n));
       }
     }
 
-    node n;
-    forEach(n, graph->getNodes())
-      result->setNodeValue(n, R->get(n));
+    for(node n : graph->getNodes())
+        result->setNodeValue(n, R->get(n));
 
     delete R;
     delete R2;

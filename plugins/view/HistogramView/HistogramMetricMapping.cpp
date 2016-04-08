@@ -560,15 +560,14 @@ void GlGlyphScale::draw(float lod, Camera* camera) {
   glEnable(GL_LIGHTING);
   glEnable(GL_BLEND);
   glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  forEach(n, glyphGraph->getNodes()) {
+  for(node n : glyphGraph->getNodes()) {
     glNode.id = n.id;
     glNode.draw(30, glyphGraphInputData, camera);
   }
 }
 
 void GlGlyphScale::translate(const Coord &move) {
-  node n;
-  forEach(n, glyphGraph->getNodes()) {
+  for(node n : glyphGraph->getNodes()) {
     Coord currentNodeCoord(glyphGraphLayout->getNodeValue(n));
     glyphGraphLayout->setNodeValue(n, currentNodeCoord + move);
   }
@@ -1008,8 +1007,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
     else {
       glGlyphScale->draw(0, &camera);
       GlNode glNode(0);
-      node n;
-      forEach(n, glyphMappingGraph->getNodes()) {
+      for(node n : glyphMappingGraph->getNodes()) {
         glNode.id = n.id;
         glNode.draw(30, glyphMappingGraphInputData, &camera);
       }

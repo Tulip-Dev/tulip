@@ -108,15 +108,13 @@ public :
     graph(graph), srcLayout(srcLayout), destLayout(destLayout), viewLayout(viewLayout) {}
 
   void animationStep(int animationStep) {
-    node n;
-    forEach(n, graph->getNodes()) {
+    for(node n : graph->getNodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
       const Coord &endPos = destLayout->getNodeValue(n);
       viewLayout->setNodeValue(n, startPos + (animationStep / (float) nbAnimationSteps) * (endPos - startPos));
     }
 
-    edge e;
-    forEach(e, graph->getEdges()) {
+    for(edge e : graph->getEdges()) {
       const vector<Coord> &srcBends = srcLayout->getEdgeValue(e);
       const vector<Coord> &destBends = destLayout->getEdgeValue(e);
       vector<Coord> newBends;
@@ -501,14 +499,12 @@ void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
     LayoutProperty *origGraphLayout = originalInputData->getElementLayout();
     ColorProperty *origGraphColors = originalInputData->getElementColor();
 
-    node n2;
-    forEach(n2, neighborhoodGraph->getNodes()) {
-      neighborhoodGraphOriginalLayout->setNodeValue(n2, origGraphLayout->getNodeValue(n2));
-      neighborhoodGraphBackupColors->setNodeValue(n2, origGraphColors->getNodeValue(n2));
+    for(node n : neighborhoodGraph->getNodes()) {
+      neighborhoodGraphOriginalLayout->setNodeValue(n, origGraphLayout->getNodeValue(n));
+      neighborhoodGraphBackupColors->setNodeValue(n, origGraphColors->getNodeValue(n));
     }
 
-    edge e;
-    forEach(e, neighborhoodGraph->getEdges()) {
+    for(edge e : neighborhoodGraph->getEdges()) {
       neighborhoodGraphOriginalLayout->setEdgeValue(e, origGraphLayout->getEdgeValue(e));
       neighborhoodGraphBackupColors->setEdgeValue(e, origGraphColors->getEdgeValue(e));
     }
@@ -572,8 +568,7 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
   neighborhoodGraphCircleLayout->setNodeValue(neighborhoodGraphCentralNode, centralNodeCoord);
 
   vector<node> neighborsNodes;
-  node n;
-  forEach(n, neighborhoodGraph->getNodes()) {
+  for(node n : neighborhoodGraph->getNodes()) {
     if (n != neighborhoodGraphCentralNode) {
       neighborsNodes.push_back(n);
     }
@@ -614,8 +609,7 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
     }
   }
 
-  edge e;
-  forEach(e, neighborhoodGraph->getEdges()) {
+  for(edge e : neighborhoodGraph->getEdges()) {
     const std::pair<node, node>& eEnds = neighborhoodGraph->ends(e);
     node srcNode = eEnds.first;
     node tgtNode = eEnds.second;
@@ -662,9 +656,8 @@ void NeighborhoodHighlighter::morphCircleAlphaAnimStep(int animStep) {
 
 float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp) {
   float radius = 0;
-  node n;
   Coord centralNodeCoord = neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
-  forEach(n, neighborhoodGraph->getNodes()) {
+  for(node n : neighborhoodGraph->getNodes()) {
     Coord nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
     Size nodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();

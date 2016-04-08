@@ -92,28 +92,11 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
                              const vector<node> &input
                             ) {
 
-
   const Coord& cA = layout->getNodeValue(a);
   const Coord& cC = layout->getNodeValue(c);
 
-//  if (input.size() == 0) { // && (cA - cC).norm() < (minSize/splitRatio)) {
-//    //node n = graph->addNode();
-//    //      resultNode.push_back(n);
-//    //layout->setNodeValue(n, (cA + cC) / 2.0);
-//    return;
-//  }
-//
-//  if (input.size() == 1) { // && (cA - cC).norm() < (minSize/(splitRatio * 2.)) ) {
-//    graph->addEdge(input[0], a);
-//    graph->addEdge(input[0], b);
-//    graph->addEdge(input[0], c);
-//    graph->addEdge(input[0], d);
-//    return;
-//  }
-
   if ((input.size() == 0) && (cA - cC).norm() < (minSize/splitRatio)) {
     node n = graph->addNode();
-    //    resultNode.push_back(n);
     layout->setNodeValue(n, (cA + cC) / 2.0f);
     return;
   }
@@ -126,8 +109,6 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
   node g = splitEdge( b, c );
   node h = splitEdge( d, c );
   node i = splitEdge( a, d );
-
-
 
   const Coord& cF = layout->getNodeValue(f);
   const Coord& cG = layout->getNodeValue(g);
@@ -164,20 +145,6 @@ void QuadTreeBundle::recQuad(const node a, const node b, const node c, const nod
       d---------c          d----h----c
    */
 
-
-//  graph->addEdge(a, f);
-//  graph->addEdge(f, b);
-//  graph->addEdge(b, g);
-//  graph->addEdge(g, c);
-//  graph->addEdge(c, h);
-//  graph->addEdge(h, d);
-//  graph->addEdge(d, i);
-//  graph->addEdge(i, a);
-//  graph->addEdge(i, e);
-//  graph->addEdge(e, g);
-//  graph->addEdge(f, e);
-//  graph->addEdge(e, h);
-
   //split elements in each cell
   vector<node> in, out, out2;
 
@@ -212,10 +179,7 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay, tlp:
   rot = graph->getProperty<DoubleProperty>("viewRotation");
   ntype = graph->getProperty<DoubleProperty>("nodetype");
   this->graph = graph;
-  //
-  //  size->scale(Coord(1000.,1000.,1000.));
-  //  layout->scale(Coord(1000.,1000.,1000.));
-  //  layout->center();
+
   BoundingBox bb = tlp::computeBoundingBox(graph, layout, size, rot);
 
   //change the bbbox to have a aspect ratio of 1
@@ -243,30 +207,16 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay, tlp:
     bb[0][0]  = (bb[0][0] - center) * ratio + center;
   }
 
-
   vector<node> input;
-  node k;
-  forEach(k, graph->getNodes()) {
+  for(node k : graph->getNodes()) {
     input.push_back(k);
   }
-
 
   node a = graph->addNode();
   node b = graph->addNode();
   node c = graph->addNode();
   node d = graph->addNode();
 
-//  graph->addEdge(a, b);
-//  graph->addEdge(b, c);
-//  graph->addEdge(c, d);
-//  graph->addEdge(d, a);
-
-  /*
-  resultNode.push_back(a);
-  resultNode.push_back(b);
-  resultNode.push_back(c);
-  resultNode.push_back(d);
-   */
   assert(bb[0][0] < bb[1][0]);
   assert(bb[0][1] < bb[1][1]);
 
@@ -281,11 +231,8 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay, tlp:
 
   recQuad(a, b, c, d, input);
 
-
-
   for(size_t i = 0; i<resultNode.size(); ++i) {
     graph->delNode(resultNode[i], true);
   }
-
 
 }

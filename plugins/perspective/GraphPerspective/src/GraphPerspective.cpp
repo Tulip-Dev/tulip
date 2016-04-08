@@ -830,12 +830,12 @@ void GraphPerspective::cancelSelection() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  node n;
-  forEach(n, selection->getNodesEqualTo(true)) {
+
+  for(node n : selection->getNodesEqualTo(true)) {
     selection->setNodeValue(n, false);
   }
-  edge e;
-  forEach(e, selection->getEdgesEqualTo(true)) {
+
+  for(edge e : selection->getEdgesEqualTo(true)) {
     selection->setEdgeValue(e, false);
   }
   Observable::unholdObservers();
@@ -846,12 +846,12 @@ void GraphPerspective::selectAll() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  node n;
-  forEach(n, graph->getNodes()) {
+
+  for(node n : graph->getNodes()) {
     selection->setNodeValue(n,true);
   }
-  edge e;
-  forEach(e, graph->getEdges()) {
+
+  for(edge e : graph->getEdges()) {
     selection->setEdgeValue(e,true);
   }
 
@@ -949,8 +949,8 @@ void GraphPerspective::group() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::set<node> groupedNodes;
-  node n;
-  forEach(n, selection->getNodesEqualTo(true)) {
+
+  for(node n : selection->getNodesEqualTo(true)) {
     if(graph->isElement(n))
       groupedNodes.insert(n);
   }
@@ -996,8 +996,8 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
   Observable::holdObservers();
 
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
-  edge e;
-  forEach(e,selection->getEdgesEqualTo(true)) {
+
+  for(edge e : selection->getEdgesEqualTo(true)) {
     const pair<node, node> &ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {

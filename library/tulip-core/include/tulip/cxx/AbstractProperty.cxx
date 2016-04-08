@@ -160,8 +160,8 @@ unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuate
   }
   else {
     unsigned int ret = 0;
-    node n;
-    forEach(n, getNonDefaultValuatedNodes(g)) {
+    for(node n : getNonDefaultValuatedNodes(g)) {
+      (void) n;
       ++ret;
     }
     return ret;
@@ -229,8 +229,8 @@ unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuate
   }
   else {
     unsigned int ret = 0;
-    edge e;
-    forEach(e, getNonDefaultValuatedEdges(g)) {
+    for(edge e : getNonDefaultValuatedEdges(g)) {
+      (void) e;
       ++ret;
     }
     return ret;

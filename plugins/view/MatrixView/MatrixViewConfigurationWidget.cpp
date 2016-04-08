@@ -80,8 +80,8 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   _ui->orderingMetricCombo->addItem(firstString);
   int currentIndex = 0;
   int i=0;
-  string s;
-  forEach (s, g->getProperties()) {
+
+  for(const string &s : g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
     if (type != "double" && type != "int" && type != "string")

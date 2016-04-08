@@ -291,14 +291,12 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
       _graph->getProperty<BooleanProperty>("viewSelection");
 
     if (nodes) {
-      node n;
-      forEach(n, selection->getNonDefaultValuatedNodes(_graph)) {
+      for(node n : selection->getNonDefaultValuatedNodes(_graph)) {
         GraphModel::setNodeValue(n.id, prop, val);
       }
     }
     else {
-      edge e;
-      forEach(e, selection->getNonDefaultValuatedEdges(_graph)) {
+      for(edge e : selection->getNonDefaultValuatedEdges(_graph)) {
         GraphModel::setEdgeValue(e.id, prop, val);
       }
     }

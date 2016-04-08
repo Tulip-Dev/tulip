@@ -49,9 +49,8 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
   tlp::SizeProperty *sizeProp = tulipGraph->getProperty<tlp::SizeProperty> ("viewSize");
   tlp::LayoutProperty *layoutProp = tulipGraph->getProperty<tlp::LayoutProperty> ("viewLayout");
 
-  tlp::node nTlp;
   ogdf::node nOGDF;
-  forEach(nTlp, tulipGraph->getNodes()) {
+  for(tlp::node nTlp : tulipGraph->getNodes()) {
     ogdfNodes.set(nTlp.id, nOGDF = ogdfGraph.newNode(nTlp.id));
     const tlp::Coord &c = layoutProp->getNodeValue(nTlp);
     ogdfAttributes.x(nOGDF) = c.getX();
@@ -62,8 +61,7 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
     ogdfAttributes.height(nOGDF) = s.getH();
   }
 
-  tlp::edge eTlp;
-  forEach(eTlp, tulipGraph->getEdges()) {
+  for(tlp::edge eTlp : tulipGraph->getEdges()) {
     tlp::node srcTlp = tulipGraph->source(eTlp);
     tlp::node tgtTlp = tulipGraph->target(eTlp);
     ogdf::edge eogdf = ogdfGraph.newEdge(ogdfNodes.get(srcTlp.id), ogdfNodes.get(tgtTlp.id));
@@ -138,8 +136,7 @@ vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeI
 void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *metric) {
   if (!metric) return;
 
-  tlp::edge eTlp;
-  forEach(eTlp, tulipGraph->getEdges()) {
+  for(tlp::edge eTlp : tulipGraph->getEdges()) {
     ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = metric->getEdgeDoubleValue(eTlp);
   }
 }
@@ -147,8 +144,7 @@ void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *m
 void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
   if (!size) return;
 
-  tlp::edge eTlp;
-  forEach(eTlp, tulipGraph->getEdges()) {
+  for(tlp::edge eTlp : tulipGraph->getEdges()) {
     tlp::node srcTlp = tulipGraph->source(eTlp);
     tlp::node tgtTlp = tulipGraph->target(eTlp);
     tlp::Size s = size->getNodeValue(srcTlp);
@@ -167,8 +163,7 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
 void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *metric) {
   if (!metric) return;
 
-  tlp::node nTlp;
-  forEach(nTlp, tulipGraph->getNodes()) {
+  for(tlp::node nTlp : tulipGraph->getNodes()) {
     ogdfAttributes.weight(ogdfNodes.get(nTlp.id)) = static_cast<int>(metric->getNodeDoubleValue(nTlp));
   }
 }

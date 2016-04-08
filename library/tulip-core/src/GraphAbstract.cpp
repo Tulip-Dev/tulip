@@ -308,13 +308,14 @@ node GraphAbstract::getOneNode() const {
 node GraphAbstract::getRandomNode() const {
   unsigned int nodeIdx = static_cast<unsigned int>((rand() / static_cast<double>(RAND_MAX)) * numberOfNodes());
   unsigned int i = 0;
-  node n;
-  forEach(n, getNodes()) {
+  node ret;
+  for(node n : getNodes()) {
     if (i++ == nodeIdx) {
+      ret = n;
       break;
     }
   }
-  return n;
+  return ret;
 }
 //=========================================================================
 edge GraphAbstract::getOneEdge() const {
@@ -331,13 +332,14 @@ edge GraphAbstract::getOneEdge() const {
 edge GraphAbstract::getRandomEdge() const {
   unsigned int edgeIdx = static_cast<unsigned int>((rand() / static_cast<double>(RAND_MAX)) * numberOfEdges());
   unsigned int i = 0;
-  edge e;
-  forEach(e, getEdges()) {
+  edge ret;
+  for(edge e : getEdges()) {
     if (i++ == edgeIdx) {
+      ret = e;
       break;
     }
   }
-  return e;
+  return ret;
 }
 //=========================================================================
 node GraphAbstract::getInNode(const node n,unsigned int i)const {

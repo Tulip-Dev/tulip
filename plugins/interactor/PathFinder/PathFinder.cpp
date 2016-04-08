@@ -76,10 +76,9 @@ void PathFinder::construct() {
   _configurationWidget = new PathFinderConfigurationWidget();
 
   Graph *g = view()->graph();
-  string s;
 
   _configurationWidget->addweightComboItem(NO_METRIC);
-  forEach (s, g->getProperties()) {
+  for (const string &s : g->getProperties()) {
     if (g->getProperty(s)->getTypename().compare("double") == 0)
       _configurationWidget->addweightComboItem(s.c_str());
   }

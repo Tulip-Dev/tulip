@@ -62,14 +62,12 @@ void GraphNeedsSavingObserver::addObserver() {
     toObserve.pop_front();
 
     //Listen properties.
-    PropertyInterface* property;
-    forEach(property,current->getLocalObjectProperties()) {
+    for(PropertyInterface* property : current->getLocalObjectProperties()) {
       property->addObserver(this);
     }
 
     //Fetch subgraphs
-    Graph* subgraphs;
-    forEach(subgraphs,current->getSubGraphs()) {
+    for(Graph* subgraphs : current->getSubGraphs()) {
       toObserve.push_back(subgraphs);
     }
   }
@@ -90,14 +88,12 @@ void GraphNeedsSavingObserver::removeObservers() {
     current->removeObserver(this);
 
     //Stop listening properties.
-    PropertyInterface* property;
-    forEach(property,current->getLocalObjectProperties()) {
+    for(PropertyInterface* property : current->getLocalObjectProperties()) {
       property->removeObserver(this);
     }
 
     //Fetch subgraphs
-    Graph* subgraphs;
-    forEach(subgraphs,current->getSubGraphs()) {
+    for(Graph* subgraphs : current->getSubGraphs()) {
       toUnobserve.push_back(subgraphs);
     }
   }

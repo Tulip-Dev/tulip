@@ -526,9 +526,8 @@ void NodeLinkDiagramComponent::selectItem() {
 void NodeLinkDiagramComponent::addRemoveInNodesToSelection() {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
   graph()->push();
-  node neigh;
   MutableContainer<bool> inNodes;
-  forEach(neigh, graph()->getInNodes(node(itemId))) {
+  for(node neigh : graph()->getInNodes(node(itemId))) {
     if (inNodes.get(neigh.id) == false) {
       elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
       inNodes.set(neigh.id, true);
@@ -539,9 +538,8 @@ void NodeLinkDiagramComponent::addRemoveInNodesToSelection() {
 void NodeLinkDiagramComponent::addRemoveOutNodesToSelection() {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
   graph()->push();
-  node neigh;
   MutableContainer<bool> outNodes;
-  forEach(neigh, graph()->getOutNodes(node(itemId))) {
+  for(node neigh : graph()->getOutNodes(node(itemId))) {
     if (outNodes.get(neigh.id) == false) {
       elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
       outNodes.set(neigh.id, true);
@@ -552,8 +550,7 @@ void NodeLinkDiagramComponent::addRemoveOutNodesToSelection() {
 void NodeLinkDiagramComponent::addRemoveInEdgesToSelection() {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
   graph()->push();
-  edge e;
-  forEach(e, graph()->getInEdges(node(itemId))) {
+  for(edge e : graph()->getInEdges(node(itemId))) {
     elementSelected->setEdgeValue(e, !elementSelected->getEdgeValue(e));
   }
 }
@@ -561,8 +558,7 @@ void NodeLinkDiagramComponent::addRemoveInEdgesToSelection() {
 void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection() {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
   graph()->push();
-  edge e;
-  forEach(e, graph()->getOutEdges(node(itemId))) {
+  for(edge e : graph()->getOutEdges(node(itemId))) {
     elementSelected->setEdgeValue(e, !elementSelected->getEdgeValue(e));
   }
 }

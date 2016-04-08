@@ -111,8 +111,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // Compute the cycle around v
   vector<edge> v_order(deg(v));
   unsigned int cpt = 0;
-  edge e_order;
-  forEach(e_order,getInOutEdges(v)) {
+  for(edge e_order : getInOutEdges(v)) {
     if(e_order == e)
       continue;
 
@@ -130,7 +129,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   // Compute the cycle around w
   vector<edge> v_order2(deg(w));
   cpt = 0;
-  forEach(e_order,getInOutEdges(w)) {
+  for(edge e_order : getInOutEdges(w)) {
     if(e_order == e)
       continue;
 
@@ -557,8 +556,7 @@ void PlanarConMap::computeFaces() {
     v_faces.push_back(f);
 
     // Compute the list of adjacent faces of each edge
-    edge e;
-    forEach(e,getEdges()) {
+    for(edge e : getEdges()) {
       edgesFaces.insert(edgeMapEntry(e,v_faces));
       faceMap::iterator itf = facesEdges.find(f);
 
@@ -572,9 +570,8 @@ void PlanarConMap::computeFaces() {
     }
 
     // Compute the list of adjacent faces of each node
-    node n;
-    forEach(n,getNodes())
-    nodesFaces.insert(nodeMapEntry(n,v_faces));
+    for(node n : getNodes())
+      nodesFaces.insert(nodeMapEntry(n,v_faces));
 
     if(facesEdges.size() == 0) {
       vector<edge> v;
@@ -593,8 +590,7 @@ void PlanarConMap::computeFaces() {
     // Each edge must be considered two times
     for(int k=0; k<2; k++) {
       vector<edge> edges;
-      edge e;
-      forEach(e,getEdges()) {
+      for(edge e : getEdges()) {
         edges.clear();
 
         if (considered.get(e.id)<2) {
@@ -976,8 +972,7 @@ Face PlanarConMap::getFaceContaining(node v, node w) {
 
 //=================================================================
 Face PlanarConMap::sameFace(node v, node n) {
-  Face f;
-  forEach(f, getFacesAdj(v)) {
+  for(const Face &f : getFacesAdj(v)) {
     if(containNode(f,n))
       return f;
   }

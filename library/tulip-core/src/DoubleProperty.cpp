@@ -49,8 +49,7 @@ static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 
   double value = 0;
   unsigned int nbNodes = 0;
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     ++nbNodes;
     value += metric->getNodeValue(n);
   }
@@ -84,8 +83,7 @@ static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   }
 
   double value = 0;
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     value += metric->getNodeValue(n);
   }
   metric->setNodeValue(mN, value);
@@ -113,8 +111,7 @@ static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   }
 
   double value = -DBL_MAX;
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     const double& nVal = metric->getNodeValue(n);
 
     if (nVal > value)
@@ -147,8 +144,7 @@ static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   }
 
   double value = DBL_MAX;
-  node n;
-  forEach(n, sg->getNodes()) {
+  for(node n : sg->getNodes()) {
     const double& nVal = metric->getNodeValue(n);
 
     if (nVal < value)

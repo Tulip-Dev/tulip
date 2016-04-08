@@ -41,12 +41,11 @@ void Dijkstra::initDijkstra(
 
   assert(srcTlp.isValid());
   src = ntlp2dik.get(srcTlp);
-  node n;
 
   forbiddenNodes.setAll(false);
 
   if (forbidden) {
-    forEach(n, forbidden->getNodes()) {
+    for(node n : forbidden->getNodes()) {
       node ndik = ntlp2dik.get(n);
       forbiddenNodes[ndik] = true;
     }
@@ -64,11 +63,10 @@ void Dijkstra::initDijkstra(
   for (; it!= fous.end(); ++it)
     focus[ntlp2dik.get(*it)] = true;
 
-
   const vector<node> &bNodes = graph.nodes();
 
   for (size_t i = 0 ; i < bNodes.size() ; ++i) {
-    n = bNodes[i];
+    node n = bNodes[i];
 
     if (n != src) { //init all nodes to +inf
       DijkstraElement *tmp = new DijkstraElement(DBL_MAX / 2. + 10., node(), n);
@@ -104,10 +102,8 @@ void Dijkstra::initDijkstra(
       }
     }
 
-
     if (forbiddenNodes[u.n] && u.n != src)
       continue;
-
 
     edge e;
     const vector<edge> &adjEdges = graph.star(u.n);
@@ -116,9 +112,6 @@ void Dijkstra::initDijkstra(
       e = adjEdges[i];
       node v = graph.opposite(e, u.n);
       DijkstraElement & dEle = *mapDik[v];
-      //assert(weights.get(edik2tlp[e]) > 0);
-
-
 
       if ( fabs((u.dist + weights.get(edik2tlp[e])) - dEle.dist) < 1E-9) //path of the same length
         dEle.usedEdge.push_back(e);
@@ -145,7 +138,6 @@ void Dijkstra::initDijkstra(
         }
     }
   }
-
 
   node tmpN;
 

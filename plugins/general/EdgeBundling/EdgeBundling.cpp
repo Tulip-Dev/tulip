@@ -159,8 +159,7 @@ Graph *SortNodes::g = 0;
 //============================================
 DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     const pair<node, node>& ends = graph->ends(e);
     const Coord& a = layout->getNodeValue(ends.first);
     const Coord& b = layout->getNodeValue(ends.second);
@@ -214,10 +213,8 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
 //============================================
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
 void EdgeBundling::fixEdgeType() {
-  node n;
   ntype->setAllEdgeValue(0);
-  edge e;
-  forEach(e, graph->getEdges()) {
+  for(edge e : graph->getEdges()) {
     if(oriGraph->isElement(e)) {
       ntype->setEdgeValue(e, 1);
       continue;
@@ -247,9 +244,8 @@ void computeDik(Dijkstra &dijkstra, const Graph * const vertexCoverGraph, const 
     #pragma omp critical(FOCUS)
 #endif
     {
-      node ni;
-      forEach(ni, vertexCoverGraph->getInOutNodes(n))
-      focus.insert(ni);
+      for(node ni : vertexCoverGraph->getInOutNodes(n))
+        focus.insert(ni);
     }
   }
 
@@ -257,8 +253,7 @@ void computeDik(Dijkstra &dijkstra, const Graph * const vertexCoverGraph, const 
 }
 //==========================================================================
 void EdgeBundling::computeDistances() {
-  node n;
-  forEach(n, oriGraph->getNodes()) {
+  for(node n : oriGraph->getNodes()) {
     computeDistance(n);
   }
 }
@@ -266,8 +261,7 @@ void EdgeBundling::computeDistances() {
 void EdgeBundling::computeDistance(node n) {
   double maxDist = 0;
   Coord nPos = layout->getNodeValue(n);
-  node n2;
-  forEach(n2, vertexCoverGraph->getInOutNodes(n)) {
+  for(node n2 : vertexCoverGraph->getInOutNodes(n)) {
     const Coord &n2Pos = layout->getNodeValue(n2);
     double dist = (nPos - n2Pos).norm();
     maxDist += dist;
@@ -443,7 +437,7 @@ bool EdgeBundling::run() {
   // So connect the other ones to the enclosing cell vertices too
   // in order for the shortest path computation to work
   for (size_t i = 0 ; i < samePositionNodes.size() ; ++i) {
-    tlp::node rep;
+    node rep;
 
     // get the nodes that has been connected to the voronoi cell vertices
     for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
@@ -454,8 +448,7 @@ bool EdgeBundling::run() {
     }
 
     // connect the other nodes to the enclosing voronoi cell vertices
-    tlp::node n;
-    forEach(n, gridGraph->getOutNodes(rep)) {
+    for(node n : gridGraph->getOutNodes(rep)) {
       for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
         if (samePositionNodes[i][j] == rep) continue;
 
@@ -470,8 +463,7 @@ bool EdgeBundling::run() {
   MutableContainer<double> mWeights;
   MutableContainer<double> mWeightsInit;
   {
-    edge e;
-    forEach(e, graph->getEdges()) {
+    for(edge e : graph->getEdges()) {
       pair<node, node> ends = graph->ends(e);
       const Coord &a = layout->getNodeValue(ends.first);
       const Coord &b = layout->getNodeValue(ends.second);
@@ -514,9 +506,8 @@ bool EdgeBundling::run() {
     set<node, SortNodes> orderedNodes;
     computeDistances();
     {
-      node n;
-      forEach(n, vertexCoverGraph->getNodes())
-      orderedNodes.insert(n);
+      for(node n : vertexCoverGraph->getNodes())
+        orderedNodes.insert(n);
 
     }
 
@@ -558,9 +549,8 @@ bool EdgeBundling::run() {
             toTreatByThreads.push_back(n);
 
             if ((optimizationLevel==3) && (toTreatByThreads.size() < MAX_THREADS)) {
-              node tmp;
-              forEach(tmp, vertexCoverGraph->getInOutNodes(n))
-              blockNodes.insert(tmp);
+              for(node tmp : vertexCoverGraph->getInOutNodes(n))
+                blockNodes.insert(tmp);
             }
           }
         }
@@ -599,8 +589,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           //for each edge of n compute the shortest paths in the grid
-          edge e;
-          forEach(e, vertexCoverGraph->getInOutEdges(n)) {
+          for(edge e : vertexCoverGraph->getInOutEdges(n)) {
             node n2 = graph->opposite(e, n);
 
             if (optimizationLevel < 3  || forceEdgeTest) {
@@ -643,8 +632,7 @@ bool EdgeBundling::run() {
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
           //for each edge of n compute the shortest paths in the grid
-          edge e;
-          forEach(e, vertexCoverGraph->getInOutEdges(n)) {
+          for(edge e : vertexCoverGraph->getInOutEdges(n)) {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
 #ifdef _OPENMP
@@ -691,8 +679,7 @@ bool EdgeBundling::run() {
       for (size_t j = 0; j < toTreatByThreads.size(); ++j) {
         node n = toTreatByThreads[j];
         vector<node> neigbors;
-        node n2;
-        forEach(n2, vertexCoverGraph->getInOutNodes(n)) {
+        for(node n2 : vertexCoverGraph->getInOutNodes(n)) {
           neigbors.push_back(n2);
           orderedNodes.erase(n2);
         }
@@ -710,7 +697,7 @@ bool EdgeBundling::run() {
 
     //Adjust weights of routing grid.
     if (iteration < MAX_ITER - 1) {
-      forEach(e, gridGraph->getEdges()) {
+      for(edge e : gridGraph->getEdges()) {
         mWeights.set(e.id, mWeightsInit.get(e.id));
 
         if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap) {

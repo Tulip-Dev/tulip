@@ -90,11 +90,10 @@ double tlp::averagePathLength(const Graph *graph,
 
   if (nbNodes < 2) return result;
 
-  node n;
   int steps = 0;
   vector<node> nodes(nbNodes);
   int i = 0;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     nodes[i] = n;
     ++i;
   }
@@ -158,26 +157,23 @@ double tlp::averageClusteringCoefficient(const Graph *graph,
   double sum=0;
   MutableContainer<double> clusters;
   tlp::clusteringCoefficient(graph, clusters, UINT_MAX, pluginProgress);
-  node n;
-  forEach(n, graph->getNodes())
-  sum += clusters.get(n.id);
+  for(node n : graph->getNodes())
+    sum += clusters.get(n.id);
   return sum / double(graph->numberOfNodes());
 }
 //================================================================
 unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
-  node n;
-  forEach(n, graph->getNodes())
-  maxdeg = std::max(maxdeg, graph->deg(n));
+  for(node n : graph->getNodes())
+    maxdeg = std::max(maxdeg, graph->deg(n));
 
   return maxdeg;
 }
 //================================================================
 unsigned int tlp::minDegree(const Graph *graph) {
   unsigned int mindeg = graph->numberOfNodes();
-  node n;
-  forEach(n, graph->getNodes())
-  mindeg = std::min(mindeg, graph->deg(n));
+  for(node n : graph->getNodes())
+    mindeg = std::min(mindeg, graph->deg(n));
 
   return mindeg;
 }
@@ -220,8 +216,7 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
 void tlp::clusteringCoefficient(const Graph *graph,
                                 MutableContainer<double>& clusters,
                                 unsigned int maxDepth, PluginProgress *) {
-  node n;
-  forEach(n, graph->getNodes()) {
+  for(node n : graph->getNodes()) {
     set<node> reachables;
     reachableNodes(graph, n, reachables, maxDepth);
     double nbEdge=0; //e(N_v)*2$
@@ -259,8 +254,7 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
   MutableContainer<unsigned int> totreat;
   deque<node> fifo;
   //===============================================
-  node itn;
-  forEach(itn, graph->getNodes()) {
+  for(node itn : graph->getNodes()) {
     unsigned int indegree = graph->indeg(itn);
 
     if (indegree==0) {
@@ -275,9 +269,8 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
   while (!fifo.empty()) {
     node current = fifo.front();
     fifo.pop_front();
-    node child;
     unsigned int curLevel = level.get(current.id) + 1;
-    forEach(child, graph->getOutNodes(current)) {
+    for(node child : graph->getOutNodes(current)) {
       if (totreat.get(child.id) > 0)
         totreat.set(child.id, totreat.get(child.id)-1);
       else {

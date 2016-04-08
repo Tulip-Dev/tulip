@@ -382,17 +382,15 @@ Graph *GraphHierarchiesModel::currentGraph() const {
 }
 
 void GraphHierarchiesModel::initIndexCache(tlp::Graph *root) {
-  Graph *sg = NULL;
   int i = 0;
-  forEach(sg, root->getSubGraphs()) {
+  for(Graph *sg : root->getSubGraphs()) {
     _indexCache[sg] = createIndex(i++, 0, sg);
     initIndexCache(sg);
   }
 }
 
 static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) {
-  Graph *sg = NULL;
-  forEach(sg, root->getSubGraphs()) {
+  for(Graph* sg : root->getSubGraphs()) {
     addListenerToWholeGraphHierarchy(sg, listener);
   }
   root->addListener(listener);
@@ -496,16 +494,14 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 #endif
 
         // update index cache for subgraphs of parent graph and added sub-graphs
-        Graph* sg2 = NULL;
 
         int i = 0;
-
-        forEach(sg2, parentGraph->getSubGraphs()) {
+        for(Graph *sg2 : parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 
         i = 0;
-        forEach(sg2, sg->getSubGraphs()) {
+        for(Graph* sg2 : sg->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
 
         }
@@ -540,11 +536,8 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 #endif
 
         // update index cache for subgraphs of parent graph
-        Graph* sg2 = NULL;
-
         int i = 0;
-
-        forEach(sg2, parentGraph->getSubGraphs()) {
+        for(Graph* sg2 : parentGraph->getSubGraphs()) {
           _indexCache[sg2] = createIndex(i++, 0, sg2);
         }
 

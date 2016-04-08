@@ -398,8 +398,7 @@ void SOMView::setColorToMap(tlp::ColorProperty* newColor) {
   if (mask) {
     cp = new ColorProperty(som);
     deleteAfter = true;
-    node n;
-    forEach (n,som->getNodes()) {
+    for(node n : som->getNodes()) {
       if (mask->getNodeValue(n))
         cp->setNodeValue(n, newColor->getNodeValue(n));
       else
@@ -778,8 +777,7 @@ void SOMView::computeColor(SOMMap* som, tlp::NumericProperty* property, tlp::Col
   double min = property->getNodeDoubleMin(som);
   double max = property->getNodeDoubleMax(som);
 
-  node n;
-  forEach(n,som->getNodes()) {
+  for(node n : som->getNodes()) {
     double curentValue = property->getNodeDoubleValue(n);
     float pos = 0;
 
@@ -865,8 +863,8 @@ void SOMView::updateNodeColorMapping(tlp::ColorProperty* cp) {
       if (mask) {
         somColorProperty = new ColorProperty(som);
         deleteAfter = true;
-        node n;
-        forEach (n,som->getNodes()) {
+
+        for(node n : som->getNodes()) {
           if (mask->getNodeValue(n))
             somColorProperty->setNodeValue(n, origColor->getNodeValue(n));
           else
@@ -927,8 +925,7 @@ void SOMView::refreshPreviews() {
     ColorProperty *color = propertyToColorProperty[itPC->first];
 
     if (mask) {
-      node n;
-      forEach(n,som->getNodes()) {
+      for(node n : som->getNodes()) {
         if (mask->getNodeValue(n))
           maskedColor->setNodeValue(n, color->getNodeValue(n));
         else
@@ -981,8 +978,8 @@ void SOMView::copySelectionToMask() {
   if (graph()) {
     set<node> somNodes;
     BooleanProperty *selection = graph()->getProperty<BooleanProperty> ("viewSelection");
-    node n;
-    forEach(n,selection->getNodesEqualTo(true,graph())) {
+
+    for(node n : selection->getNodesEqualTo(true,graph())) {
       for (map<tlp::node, std::set<tlp::node> >::iterator it = mappingTab.begin(); it != mappingTab.end(); ++it) {
         if (it->second.find(n) != it->second.end())
           somNodes.insert(it->first);
@@ -998,9 +995,8 @@ void SOMView::copySelectionToMask() {
 
 void SOMView::invertMask() {
   if (mask) {
-    node n;
     set<node> somNodes;
-    forEach(n,som->getNodes()) {
+    for(node n : som->getNodes()) {
       if (!mask->getNodeValue(n))
         somNodes.insert(n);
     }
@@ -1015,10 +1011,9 @@ void SOMView::invertMask() {
 void SOMView::selectAllNodesInMask() {
   if (mask) {
     BooleanProperty *selection = graph()->getProperty<BooleanProperty> ("viewSelection");
-    node n;
     Observable::holdObservers();
     selection->setAllNodeValue(false);
-    forEach(n,mask->getNodesEqualTo(true,som)) {
+    for(node n : mask->getNodesEqualTo(true,som)) {
       if (mappingTab.find(n) != mappingTab.end()) {
         for (set<node>::iterator it = mappingTab[n].begin(); it != mappingTab[n].end(); ++it) {
           selection->setNodeValue(*it, true);

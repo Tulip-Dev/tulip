@@ -177,8 +177,7 @@ Coord GEMLayout::computeForces(unsigned int v,
   }
 
   //attractive forces
-  edge e;
-  forEach(e,  graph->getInOutEdges(vNode)) {
+  for(edge e :  graph->getInOutEdges(vNode)) {
     node uNode = graph->opposite(e, vNode);
 
     if (uNode == vNode)
@@ -246,9 +245,8 @@ void GEMLayout::insert() {
     if (fixedNodes && fixedNodes->getNodeValue(vNode))
       continue;
 
-    node uNode;
     //remove one to non-visited nodes
-    forEach(uNode, graph->getInOutNodes(vNode)) {
+    for(node uNode : graph->getInOutNodes(vNode)) {
       if (uNode == vNode)
         // nothing to do if it is a self loop
         continue;
@@ -262,8 +260,7 @@ void GEMLayout::insert() {
 
     if (startNode >= 0) {
       int d = 0;
-      node uNode;
-      forEach(uNode, graph->getInOutNodes(vNode)) {
+      for(node uNode : graph->getInOutNodes(vNode)) {
         if (uNode == vNode)
           // nothing to do if it a self loop
           continue;
@@ -425,9 +422,8 @@ bool GEMLayout::run() {
 
   _particules.resize(_nbNodes);
   /* Max Edge to scale actual edges lentgh to preferres lentgh */
-  node n;
   unsigned int i = 0;
-  forEach(n, graph->getNodes()) {
+  for(node n :  graph->getNodes()) {
     _particules[i] = GEMparticule(static_cast<float>(graph->deg(n)));
     _particules[i].n = n;
     _particules[i].id = i;

@@ -56,15 +56,13 @@ public:
     tlp::BooleanProperty* prop = new BooleanProperty(g);
 
     if (onNodes) {
-      node n;
-      forEach(n,g->getNodes())
-      prop->setNodeValue(n,compare(n));
+      for(node n : g->getNodes())
+        prop->setNodeValue(n,compare(n));
     }
 
     if (onEdges) {
-      edge e;
-      forEach(e,g->getEdges())
-      prop->setEdgeValue(e,compare(e));
+      for(edge e : g->getEdges())
+        prop->setEdgeValue(e,compare(e));
     }
 
     return prop;
@@ -337,9 +335,6 @@ void SearchWidget::search() {
   PropertyInterface* outputInterface = _ui->resultsStorageCombo->model()->data(_ui->resultsStorageCombo->model()->index(_ui->resultsStorageCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
   BooleanProperty* output = static_cast<BooleanProperty*>(outputInterface);
 
-  node n;
-  edge e;
-
   QString searchOpDescription;
 
   if (_ui->selectionModeCombo->currentIndex() == 0) {// replace current selection
@@ -348,13 +343,13 @@ void SearchWidget::search() {
   }
   else if (_ui->selectionModeCombo->currentIndex() == 1) {   // add to current selection
     if (onNodes) {
-      forEach(n,result->getNodesEqualTo(true)) {
+      for(node n : result->getNodesEqualTo(true)) {
         output->setNodeValue(n,true);
       }
     }
 
     if (onEdges) {
-      forEach(e,result->getEdgesEqualTo(true)) {
+      for(edge e : result->getEdgesEqualTo(true)) {
         output->setEdgeValue(e,true);
       }
     }
@@ -363,13 +358,13 @@ void SearchWidget::search() {
   }
   else if (_ui->selectionModeCombo->currentIndex() == 2) { // remove from current selection
     if (onNodes) {
-      forEach(n,result->getNodesEqualTo(true)) {
+      for(node n : result->getNodesEqualTo(true)) {
         output->setNodeValue(n,false);
       }
     }
 
     if (onEdges) {
-      forEach(e,result->getEdgesEqualTo(true)) {
+      for(edge e : result->getEdgesEqualTo(true)) {
         output->setEdgeValue(e,false);
       }
     }
@@ -385,10 +380,12 @@ void SearchWidget::search() {
     delete b;
 
   unsigned int resultsCountNodes = 0, resultsCountEdges=0;
-  forEach(n, result->getNodesEqualTo(true)) {
+  for(node n : result->getNodesEqualTo(true)) {
+    (void) n;
     resultsCountNodes++;
   }
-  forEach(e, result->getEdgesEqualTo(true)) {
+  for(edge e : result->getEdgesEqualTo(true)) {
+    (void) e;
     resultsCountEdges++;
   }
   delete result;

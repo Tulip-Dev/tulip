@@ -83,8 +83,7 @@ if (type.compare(typeid(T).name()) == 0) {\
 }\
  
 void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
-  ParameterDescription param;
-  forEach(param, getParameters()) {
+  for(const ParameterDescription &param : getParameters()) {
     const string& name = param.getName();
     const string& type = param.getTypeName();
     const string& defaultValue = param.getDefaultValue();
@@ -156,8 +155,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 }
 
 bool WithParameter::inputRequired() const {
-  ParameterDescription param;
-  forEach(param, parameters.getParameters()) {
+  for(const ParameterDescription &param : parameters.getParameters()) {
     if (param.getDirection() != OUT_PARAM)
       return true;
 

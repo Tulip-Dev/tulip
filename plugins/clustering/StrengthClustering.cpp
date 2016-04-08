@@ -321,38 +321,14 @@ const char * paramHelp[] = {
   HTML_HELP_BODY()              \
   "Metric used in order to multiply strength metric computed values."\
   "If one is given, the complexity is O(n log(n)), O(n) neither." \
-  HTML_HELP_CLOSE(),
-// do you mean "else it will be O(n)" instead of "O(n) neither"?
-  /*// layout subgraphs
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true the layout of the newly created subgraphs is computed." \
-  HTML_HELP_CLOSE(),
-  // layout quotient graph
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true the layout of the quotient graph is computed." \
-  HTML_HELP_CLOSE(),*/
+  HTML_HELP_CLOSE()
 };
 }
 
 //================================================================================
 StrengthClustering::StrengthClustering(PluginContext* context):DoubleAlgorithm(context) {
   addInParameter<NumericProperty*>("metric", paramHelp[0], "", false);
-//  addInParameter<bool>("layout subgraphs", paramHelp[1], "true");
-//  addInParameter<bool>("layout quotient graph", paramHelp[2], "true");
-//  addDependency("Quotient Clustering", "1.3");
-//  addDependency("Connected Component", "1.0");
   addDependency("Strength", "1.0");
-//  addDependency("Circular", "1.1");
-//  addDependency("GEM (Frick)", "1.1");
-//  addDependency("Auto Sizing", "1.0");
 }
 
 //==============================================================================
@@ -365,12 +341,8 @@ bool StrengthClustering::run() {
 
   NumericProperty *metric = NULL;
 
-//  subgraphsLayout = true;
-//  quotientLayout = true;
   if (dataSet) {
     dataSet->get("metric", metric);
-//    dataSet->get("layout subgraphs", subgraphsLayout);
-//    dataSet->get("layout quotient graph", quotientLayout);
   }
 
   if (metric) {
@@ -380,13 +352,12 @@ bool StrengthClustering::run() {
       pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
 
     mult->uniformQuantification(100);
-    edge e;
     unsigned int steps = 0, maxSteps = graph->numberOfEdges();
 
     if (maxSteps < 10)
       maxSteps = 10;
 
-    forEach (e, graph->getEdges()) {
+    for(edge e : graph->getEdges()) {
       values->setEdgeValue(e, values->getEdgeValue(e)*(mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {
@@ -423,34 +394,6 @@ bool StrengthClustering::run() {
     }
   }
 
-//  if (tmp.size()==1) {
-//    if (quotientLayout)
-//      drawGraph(graph);
-//    if (dataSet!=0) {
-//      dataSet->set("strengthGraph",graph);
-//    }
-//    return true;
-//  }
-
-
-//  Graph *tmpGraph, *quotientGraph;
-
-//  if (pluginProgress)
-//    pluginProgress->setComment("Building subgraphs...");
-//  tmpGraph = buildSubGraphs(tmp);
-//  if (!tmpGraph)
-//    return pluginProgress->state()!= TLP_CANCEL;
-//  if (!recursiveCall(tmpGraph))
-//    return pluginProgress->state()!= TLP_CANCEL;
-//  if (pluginProgress)
-//    pluginProgress->setComment("Building quotient graph...");
-//  quotientGraph = buildQuotientGraph(tmpGraph);
-//  if (!quotientGraph)
-//    return pluginProgress->state()!= TLP_CANCEL;
-
-//  if (dataSet!=0) {
-//    dataSet->set("strengthGraph", quotientGraph);
-//  }
   delete values;
   return true;
 }
@@ -461,9 +404,5 @@ bool StrengthClustering::check(string &erreurMsg) {
     return false;
   }
 
-//  if (!ConnectedTest::isConnected(graph)) {
-//    erreurMsg ="The graph must be connected";
-//    return false;
-//  }
   return true;
 }
