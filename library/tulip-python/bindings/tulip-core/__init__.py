@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import os.path
 import sys
 import traceback
 import platform
@@ -10,6 +11,10 @@ sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
   os.environ['PATH'] = _tulipNativeLibsPath + ';' + os.environ['PATH']
+elif platform.system() == 'Linux' and os.path.exists(_tulipNativeLibsPath):
+  # fix loading of Tulip plugins when the tulip module has been installed through pip
+  import DLFCN
+  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
 
 import _tulip
 

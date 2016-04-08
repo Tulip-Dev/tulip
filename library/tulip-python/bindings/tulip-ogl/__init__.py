@@ -12,6 +12,10 @@ sys.path.append(_tulipOglNativeLibsPath)
 
 if platform.system() == 'Windows':
   os.environ['PATH'] = _tulipOglNativeLibsPath + ';' + os.environ['PATH']
+elif platform.system() == 'Linux' and os.path.exists(_tulipOglNativeLibsPath):
+  # fix loading of Tulip plugins when the tulipogl module has been installed through pip
+  import DLFCN
+  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
 
 import _tulipogl
 
