@@ -337,8 +337,7 @@ public:
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if(targetType.getCurrent()==NODES_TARGET) {
 
-        node n;
-        stableForEach(n, graph->getNodes()) {
+        for(node n : graph->getNodes()) {
           std::string tmp = metric->getNodeStringValue(n);
 
           if(mapMetricElements.count(tmp)==0)
@@ -349,8 +348,7 @@ public:
       }
       else {
 
-        edge e;
-        stableForEach(e, graph->getEdges()) {
+        for(edge e : graph->getEdges()) {
           std::string tmp = metric->getEdgeStringValue(e);
 
           if(mapMetricElements.count(tmp)==0)
