@@ -90,6 +90,8 @@ if platform.system() == 'Windows':
     p = subprocess.call(command, shell=True)
 elif platform.system() == 'Darwin':
     tulip_native_libs = ['native/*.so', 'native/*.dylib', 'native/Qt*', 'native/phonon', 'native/plugins/*.dylib']
+elif platform.system() == 'Linux':
+    tulip_native_libs = ['native/*.so*', 'native/plugins/*.so']
 
 here = path.abspath(path.dirname(__file__))
 

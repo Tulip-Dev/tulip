@@ -32,7 +32,7 @@ DISABLE_COMPILER_WARNINGS()
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
 ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
-                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/Manifest.in ${TULIPGUI_PYTHON_FOLDER}/../Manifest.in
+                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipGuiDllDependencies.cmake ${TULIPGUI_PYTHON_FOLDER}/../copyTulipGuiDllDependencies.cmake
 )
@@ -89,7 +89,9 @@ TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${Lib
 IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
 ELSE(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
-  TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${PYTHON_LIBRARY})
+  IF(NOT LINUX OR NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+    TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${PYTHON_LIBRARY})
+  ENDIF(NOT LINUX OR NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 
