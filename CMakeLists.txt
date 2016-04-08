@@ -192,16 +192,22 @@ IF(BUILD_PYTHON_COMPONENTS)
   SET(TULIP_PYTHON_NATIVE_FOLDER ${TULIP_PYTHON_FOLDER}/native)
   SET(TULIPOGL_PYTHON_NATIVE_FOLDER ${TULIPOGL_PYTHON_FOLDER}/native)
   SET(TULIPGUI_PYTHON_NATIVE_FOLDER ${TULIPGUI_PYTHON_FOLDER}/native)
-  IF(WIN32 OR APPLE)
-    SET(ACTIVATE_PYTHON_WHEELS_TARGETS OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
-    IF(ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
-      # build universal binaries when generating Tulip Python wheels for MacOs
-      SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
-      # build binaries with install rpath when generating Tulip Python wheels for MacOs
-      # as we don't install the project in that case
-      SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
-    ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
-  ENDIF(WIN32 OR APPLE)
+  SET(ACTIVATE_PYTHON_WHEELS_TARGETS OFF CACHE BOOL "Add a wheel make target for generating Tulip Python modules wheels ? [ON|OFF]")
+  IF(ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
+    # build universal binaries when generating Tulip Python wheels for MacOs
+    SET(CMAKE_OSX_ARCHITECTURES "i386;x86_64")
+    # build binaries with install rpath when generating Tulip Python wheels for MacOs
+    # as we don't install the project in that case
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+  ELSEIF(ACTIVATE_PYTHON_WHEELS_TARGETS AND LINUX)
+    FILE(READ /etc/issue LINUX_ISSUE)
+    IF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT IS_DIRECTORY /opt/python)
+      MESSAGE(FATAL_ERROR "Python binary wheels for Linux platform must be compiled using the CentOS 5.11 docker image provided by the manylinux project from the Python Packaging Authority.\nSee https://github.com/pypa/manylinux for more details.")
+    ENDIF(NOT "${LINUX_ISSUE}" MATCHES ".*CentOS release 5\\.11 \\(Final\\).*" OR NOT IS_DIRECTORY /opt/python)
+    # build binaries with install rpath when generating Tulip Python wheels for Linux
+    # as we don't install the project in that case
+    SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
+  ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
 ENDIF(BUILD_PYTHON_COMPONENTS)
 
 ## ========================================================
@@ -349,6 +355,10 @@ IF(NOT BUILD_CORE_ONLY)
       # Ensure that correct Python include path is selected by CMake on Windows
       IF(WIN32)
         SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/include ${CMAKE_INCLUDE_PATH})
+      # Ensure that correct Python include path and library are selected by CMake on Linux (in case of non standard installation)
+      ELSEIF(LINUX)
+        SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/../include ${CMAKE_INCLUDE_PATH})
+        SET(CMAKE_LIBRARY_PATH ${PYTHON_HOME_PATH}/../lib ${CMAKE_LIBRARY_PATH})  
       ENDIF(WIN32)
 
       FIND_PACKAGE(PythonLibs REQUIRED)
@@ -412,25 +422,43 @@ IF(NOT BUILD_CORE_ONLY)
         ENDIF(SIP_OK)
 
         IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
-          EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
-          EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
-          IF(NOT WHEEL_OK EQUAL 0)
-            MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
-            MESSAGE("You can install it trough the 'pip' tool ($ pip install wheel)")
-          ENDIF(NOT WHEEL_OK EQUAL 0)
-          IF(NOT TWINE_OK EQUAL 0)
-            MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
-            MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
-          ENDIF(NOT TWINE_OK EQUAL 0)
+          IF(NOT LINUX)
+            EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
+            EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
+            IF(NOT WHEEL_OK EQUAL 0)
+              MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
+              MESSAGE("You can install it trough the 'pip' tool ($ pip install wheel)")
+            ENDIF(NOT WHEEL_OK EQUAL 0)
+            IF(NOT TWINE_OK EQUAL 0)
+              MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
+              MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
+            ENDIF(NOT TWINE_OK EQUAL 0)
+          ELSE(NOT LINUX)
 
-          ADD_CUSTOM_TARGET(tulip-core-wheel
-                            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+            EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
+            EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade twine)
 
-          ADD_CUSTOM_TARGET(tulip-gui-wheel
-                            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
-                            DEPENDS tulip-core-wheel)
+            # When building Python binary wheels on Linux, produced binaries have to be patched
+            # in order for the tulip modules to be successfully imported and loaded on every computer.
+            # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
+            # in order to ease that patching task, so install its latest version with pip first.
+            # The tool is only compatible with Python 3.X, so we will use Python 3.5 installed
+            # in the docker image provided by the manylinux project (see https://github.com/pypa/manylinux).
+            EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip install --upgrade auditwheel)
+
+
+            ADD_CUSTOM_TARGET(tulip-core-wheel
+                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+                              COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1` 
+                              WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+
+            ADD_CUSTOM_TARGET(tulip-gui-wheel
+                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+                              COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
+                              WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+                              DEPENDS tulip-core-wheel)
+
+          ENDIF(NOT LINUX)  
 
           # In order to upload the generated wheels, an account must be created on PyPi
           # and the following configuration must be stored in the ~/.pypirc file
@@ -453,24 +481,31 @@ IF(NOT BUILD_CORE_ONLY)
 
 
           SET(TWINE twine)
+          IF(EXISTS ${PYTHON_HOME_PATH}/twine)
+            SET(TWINE ${PYTHON_HOME_PATH}/twine)
+          ENDIF(EXISTS ${PYTHON_HOME_PATH}/twine)
           IF(WIN32)
             SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
           ENDIF(WIN32)
+          SET(WHEEL_FILES_REGEXP "*")
+          IF(LINUX)
+            SET(WHEEL_FILES_REGEXP "*manylinux*")
+          ENDIF(LINUX)
           ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
                             COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypitest dist/*
+                            COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
                             WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
           ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
                             COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypitest dist/*
+                            COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
                             WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
           ADD_CUSTOM_TARGET(tulip-core-wheel-upload
                             COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypi dist/*
+                            COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
                             WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
           ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
                             COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypi dist/*
+                            COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
                             WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
 
           ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)

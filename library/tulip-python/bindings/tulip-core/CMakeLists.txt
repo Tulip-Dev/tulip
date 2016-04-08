@@ -108,7 +108,7 @@ ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
 ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIP_PYTHON_FOLDER}/../setup.cfg
-                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/Manifest.in ${TULIP_PYTHON_FOLDER}/../Manifest.in
+                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipCoreDllDependencies.cmake ${TULIP_PYTHON_FOLDER}/../copyTulipCoreDllDependencies.cmake
 )
@@ -146,7 +146,9 @@ TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${LibTulipCoreName})
 IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
   SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
 ELSE(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
-  TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
+  IF(NOT LINUX OR NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+    TARGET_LINK_LIBRARIES(${LibTulipCorePythonBindingsName} ${PYTHON_LIBRARY})
+  ENDIF(NOT LINUX OR NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(NOT PYTHON_DIST_PACKAGE)

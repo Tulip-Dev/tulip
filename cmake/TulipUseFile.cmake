@@ -305,7 +305,8 @@ IF(WIN32)
 ENDIF(WIN32)
 
 MACRO(COPY_TARGET_LIBRARY_POST_BUILD target_name destination)
-  SET(COPY_TARGET_NAME copy-${target_name}-to-python-wheel-native-folder)
+  STRING(MD5 DESTINATION_HASH "${destination}")
+  SET(COPY_TARGET_NAME copy-${target_name}-${DESTINATION_HASH})
 
   IF(WIN32)
     ADD_CUSTOM_TARGET(${COPY_TARGET_NAME} ALL
