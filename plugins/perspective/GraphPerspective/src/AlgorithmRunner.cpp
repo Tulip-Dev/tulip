@@ -213,7 +213,7 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>()) {
     connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
   }
-  foreach(QString a, TulipSettings::instance().favoriteAlgorithms()) {
+  foreach(const QString &a, TulipSettings::instance().favoriteAlgorithms()) {
     addFavorite(a);
   }
   connect(_ui->header, SIGNAL(expanded(bool)),this,SLOT(expanded(bool)));
