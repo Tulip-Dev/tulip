@@ -109,6 +109,14 @@ protected :
   typename std::vector<itType>::const_iterator copyIterator;
 };
 
+ /**
+ * @brief Convenient function for creating a stable iterator from an iterator
+ **/
+template<class itType>
+inline StableIterator<itType> *stableIterator(Iterator<itType> *it) {
+  return new StableIterator<itType>(it);
+}
+
 }
 #endif
 ///@endcond

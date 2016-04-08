@@ -332,8 +332,7 @@ bool EdgeBundling::run() {
     // Grid graph computation first step : generate quad-tree/octree
     if (layout3D) {
       OctreeBundle::compute(graph, splitRatio, layout, size);
-      edge e;
-      stableForEach(e, graph->getEdges()) {
+      for(edge e : stableIterator(graph->getEdges())) {
         if(oriGraph->isElement(e)) continue;
 
         graph->delEdge(e);
@@ -359,16 +358,14 @@ bool EdgeBundling::run() {
       workGraph->applyAlgorithm("Equal Value", err, &equalValueParams);
 
       // Iterate on the created clusters
-      Graph *sg = NULL;
-      stableForEach(sg, workGraph->getSubGraphs()) {
+      for(Graph *sg : stableIterator(workGraph->getSubGraphs())) {
         // At least two nodes have the same position
         if (sg->numberOfNodes() > 1) {
           std::vector<tlp::node> nodes;
-          tlp::node n;
           int i = 0;
           // keep one of the node in the clone subgraph, remove the others from it
           // but keep a list of those nodes having the same position
-          stableForEach(n, sg->getNodes()) {
+          for(node n : stableIterator(sg->getNodes())) {
             if (i++ > 0) {
               workGraph->delNode(n);
             }
@@ -406,8 +403,7 @@ bool EdgeBundling::run() {
   // If sphere mode, remove the grid nodes inside the sphere
   // as we only want to route on the sphere surface
   if (sphereLayout) {
-    node n;
-    stableForEach(n, graph->getNodes()) {
+    for(node n : stableIterator(graph->getNodes())) {
       if(oriGraph->isElement(n)) continue;
 
       const Coord& c = layout->getNodeValue(n);
@@ -424,8 +420,8 @@ bool EdgeBundling::run() {
   //==========================================================
   gridGraph = graph->getSubGraph("Voronoi");
   gridGraph->setName("Grid Graph");
-  edge e;
-  stableForEach(e, gridGraph->getEdges()) {
+
+  for(edge e : stableIterator(gridGraph->getEdges())) {
     if (ntype->getEdgeValue(e) == 1) {
       gridGraph->delEdge(e);
     }
@@ -737,8 +733,7 @@ bool EdgeBundling::run() {
   }
 
   if (!keepGrid) {
-    node n;
-    stableForEach(n, graph->getNodes()) {
+    for(node n : stableIterator(graph->getNodes())) {
       if (!oriGraph->isElement(n))
         graph->delNode(n, true);
     }

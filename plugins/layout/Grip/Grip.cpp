@@ -68,7 +68,8 @@ bool Grip::run() {
   graph->applyAlgorithm("Equal Value", err, &tmp);
   unsigned int nbComp = 0;
 
-  stableForEach(currentGraph , graph->getSubGraphs()) {
+  for(Graph *sg : stableIterator(graph->getSubGraphs())) {
+    currentGraph = sg;
     nbComp++;
 
     if(currentGraph->numberOfNodes() <= 3) {

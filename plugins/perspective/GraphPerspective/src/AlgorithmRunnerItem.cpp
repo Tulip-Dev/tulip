@@ -106,8 +106,7 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
   if (_ui->parameters->model() != NULL) {
     ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
     DataSet dataSet = model->parametersValues();
-    std::pair<std::string,tlp::DataType*> it;
-    stableForEach(it,dataSet.getValues()) {
+    for(const std::pair<std::string,tlp::DataType*> &it : stableIterator(dataSet.getValues())) {
       DataType* t = it.second;
 
       if (ISPROP(tlp::BooleanProperty*) ||

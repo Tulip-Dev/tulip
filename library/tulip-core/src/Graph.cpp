@@ -1386,9 +1386,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
   mappingM.setAll(node());
   //add node from meta to graph
   {
-    node n;
     //stable in case of fractal graph
-    stableForEach(n, metaGraph->getNodes()) {
+    for(node n : stableIterator(metaGraph->getNodes())) {
       addNode(n);
       mappingM.set(n.id, n);
       Graph *sg = metaInfo->getNodeValue(n);
@@ -1653,12 +1652,11 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 
     {
       set<MetaEdge> myQuotientGraph;
-      edge e;
       // for each existing edge in the current graph
       // add a meta edge for the corresponding couple
       // (meta source, meta target) if it does not already exists
       // and register the edge as associated to this meta edge
-      stableForEach(e, getEdges()) {
+      for(edge e : stableIterator(getEdges())) {
         pair<node, node> eEnds = ends(e);
         set<node>& metaSources = nMapping[eEnds.first];
         set<node>& metaTargets = nMapping[eEnds.second];

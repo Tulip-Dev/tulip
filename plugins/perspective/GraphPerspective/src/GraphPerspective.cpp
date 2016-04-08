@@ -932,11 +932,9 @@ void GraphPerspective::copy(Graph* g, bool deleteAfter) {
   tlp::exportGraph(copyGraph,ss,"TLP Export",data);
   QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
 
-
   if (deleteAfter) {
-    tlp::node n;
-    stableForEach(n, selection->getNodesEqualTo(true))
-    g->delNode(n);
+    for(node n : stableIterator(selection->getNodesEqualTo(true)))
+      g->delNode(n);
   }
 
   delete copyGraph;

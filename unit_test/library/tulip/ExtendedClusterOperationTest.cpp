@@ -179,8 +179,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
   //open all meta nodes
-  node n;
-  stableForEach(n, subgraph->getNodes()) {
+  for(node n : stableIterator(subgraph->getNodes())) {
     subgraph->openMetaNode(n);
   }
   CPPUNIT_ASSERT_EQUAL(6u, subgraph->numberOfNodes());

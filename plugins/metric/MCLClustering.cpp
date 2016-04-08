@@ -91,14 +91,12 @@ const double epsilon = 1E-9;
 
 //=================================================
 void MCLClustering::power(node n) {
-  edge e1;
 
-  stableForEach(e1, g.getOutEdges(n)) {
+  for(edge e1 : stableIterator(g.getOutEdges(n))) {
     double v1 = inW[e1];
 
     if (v1 > epsilon) {
-      edge e2;
-      stableForEach(e2, g.getOutEdges(g.target(e1))) {
+      for(edge e2 : stableIterator(g.getOutEdges(g.target(e1)))) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
@@ -134,7 +132,7 @@ void MCLClustering::prune(node n) {
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
-  // - avoid a costly stableForEach when deleting edges
+  // - avoid a costly stable iterator use when deleting edges
   std::vector<pair<double, edge> > pvect;
   pvect.reserve(outdeg);
 
@@ -160,7 +158,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
-  // - avoid a costly stableForEach when deleting edges
+  // - avoid a costly stable iterator use when deleting edges
   std::vector<pair<double, edge> > pvect;
   pvect.reserve(sz);
 
