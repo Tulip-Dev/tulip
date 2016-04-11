@@ -70,14 +70,14 @@ void GlMetaNodeRenderer::render(node n,float,Camera* camera) {
     return;
 
   Graph *metaGraph = _inputData->getGraph()->getNodeMetaInfo(n);
-  GlScene *scene = NULL;
+  GlScene *scene = nullptr;
 
   if(_metaGraphToSceneMap.count(metaGraph)!=0) {
     scene=_metaGraphToSceneMap[metaGraph];
   }
   else {
     scene = createScene(metaGraph);
-    assert(scene!=NULL);
+    assert(scene!=nullptr);
     _metaGraphToSceneMap[metaGraph]=scene;
     metaGraph->addListener(this);
   }
@@ -196,7 +196,7 @@ void GlMetaNodeRenderer::clearScenes() {
 
 GlScene* GlMetaNodeRenderer::getSceneForMetaGraph(Graph *g) const {
   std::map<Graph *,GlScene *>::const_iterator sceneit(_metaGraphToSceneMap.find(g));
-  return (sceneit==_metaGraphToSceneMap.end())?(NULL):(sceneit->second);
+  return (sceneit==_metaGraphToSceneMap.end())?(nullptr):(sceneit->second);
 }
 
 }

@@ -256,7 +256,7 @@ void ImportExportTest::importExportGraph(tlp::Graph* original) {
 }
 
 void ImportExportTest::exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename) {
-  std::ostream *os = NULL;
+  std::ostream *os = nullptr;
 
   if (filename.rfind(".gz") == (filename.length() - 3))
     os = tlp::getOgzstream(filename);
@@ -278,7 +278,7 @@ tlp::Graph *ImportExportTest::importGraph(const std::string &importPluginName, c
 }
 
 void ImportExportTest::testGraphsAreEqual(Graph* first, Graph* second) {
-  CPPUNIT_ASSERT_MESSAGE("The import failed; the graph is null", second != NULL);
+  CPPUNIT_ASSERT_MESSAGE("The import failed; the graph is null", second != nullptr);
 
   testGraphsTopologiesAreEqual(first, second);
   testGraphAttributesAreEqual(first, second);
@@ -458,7 +458,7 @@ void TulipSaveLoadGraphFunctionsTest::setUp() {}
 
 void TulipSaveLoadGraphFunctionsTest::testTulipSaveLoadGraphFunctions() {
   tlp::Graph *graph = createSimpleGraph();
-  tlp::Graph *loadedGraph = NULL;
+  tlp::Graph *loadedGraph = nullptr;
   string exportFilename;
 
   exportFilename = "test_tlp_export_import.tlp";

@@ -65,7 +65,7 @@ Below is an exhaustive list of those types :
   if (dynamic_cast<tlp::GraphEvent*>(sipCpp)) {
     sipType = sipFindType("tlp::GraphEvent");
   } else {
-    sipType = NULL;
+    sipType = nullptr;
   }
 %End
 

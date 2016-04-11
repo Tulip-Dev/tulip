@@ -157,9 +157,9 @@ class GraphUpdatesRecorder :public Observable {
     MutableContainer<bool>* recordedNodes;
     MutableContainer<bool>* recordedEdges;
 
-    RecordedValues(PropertyInterface* prop = NULL,
-                   MutableContainer<bool>* rn = NULL,
-                   MutableContainer<bool>* re = NULL):
+    RecordedValues(PropertyInterface* prop = nullptr,
+                   MutableContainer<bool>* rn = nullptr,
+                   MutableContainer<bool>* re = nullptr):
       values(prop), recordedNodes(rn), recordedEdges(re) {}
   };
 
@@ -179,7 +179,7 @@ class GraphUpdatesRecorder :public Observable {
   // deletion of various containers
   template<typename T>
   void deleteContainerValues(MutableContainer<T>& ctnr) {
-    IteratorValue* it = ctnr.findAllValues(NULL, false);
+    IteratorValue* it = ctnr.findAllValues(nullptr, false);
 
     while(it->hasNext()) {
       TypedValueContainer<T> tvc;

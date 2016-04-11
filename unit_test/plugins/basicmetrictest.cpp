@@ -31,12 +31,12 @@ bool BasicMetricTest::computeProperty(const std::string &algorithm,
                                       PropType* prop) {
 
   DataSet ds;
-  tlp::Graph* g = tlp::importGraph(graphType, ds, NULL, graph);
+  tlp::Graph* g = tlp::importGraph(graphType, ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 
-  bool deleteProp = prop == NULL;
+  bool deleteProp = prop == nullptr;
 
-  if (prop == NULL)
+  if (prop == nullptr)
     prop = new PropType(graph);
 
   std::string errorMsg;

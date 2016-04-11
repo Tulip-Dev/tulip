@@ -45,8 +45,8 @@ using namespace tlp;
   Helper storage class to ensure synchronization between panels list and model passed down to opened panels
   */
 Workspace::Workspace(QWidget *parent)
-  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(NULL), _focusedPanel(NULL),
-    _focusedPanelHighlighting(false), _model(NULL), _pageCountLabel(NULL), _autoCenterViews(false) {
+  : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(nullptr), _focusedPanel(nullptr),
+    _focusedPanelHighlighting(false), _model(nullptr), _pageCountLabel(nullptr), _autoCenterViews(false) {
   _ui->setupUi(this);
   _ui->startupMainFrame->hide();
   _pageCountLabel = _ui->pagesLabel;
@@ -88,13 +88,13 @@ Workspace::~Workspace() {
 }
 
 void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
-  if (_model != NULL) {
+  if (_model != nullptr) {
     disconnect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(updateStartupMode()));
   }
 
   _model = model;
 
-  if (_model != NULL) {
+  if (_model != nullptr) {
     foreach(WorkspacePanel* panel,_panels)
     panel->setGraphsModel(_model);
     connect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(updateStartupMode()));
@@ -145,7 +145,7 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
 int Workspace::addPanel(tlp::View* view) {
   WorkspacePanel* panel = new WorkspacePanel(view);
 
-  if (_model != NULL)
+  if (_model != nullptr)
     panel->setGraphsModel(_model);
 
   panel->setWindowTitle(panelTitle(panel));
@@ -187,7 +187,7 @@ void Workspace::panelDestroyed(QObject* obj) {
   WorkspacePanel* panel = static_cast<WorkspacePanel*>(obj);
 
   if (panel == _focusedPanel)
-    _focusedPanel = NULL;
+    _focusedPanel = nullptr;
 
   int removeCount = _panels.removeAll(panel);
 
@@ -334,7 +334,7 @@ void Workspace::updatePanels() {
 
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
     foreach(PlaceHolderWidget* panel, panelSlots) {
-      panel->setWidget(NULL);
+      panel->setWidget(nullptr);
     }
   }
 
@@ -348,10 +348,10 @@ void Workspace::updatePanels() {
   int i = _currentPanelIndex;
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
     if (i >= _panels.size()) {
-      slt->setWidget(NULL);
+      slt->setWidget(nullptr);
     }
     else if (slt->widget() != _panels[i]) {
-      slt->setWidget(NULL);
+      slt->setWidget(nullptr);
     }
 
     i++;
@@ -421,7 +421,7 @@ void Workspace::setGraphForFocusedPanel(tlp::Graph* g) {
 }
 
 WorkspacePanel* Workspace::panelForScene(QObject *obj) {
-  WorkspacePanel* p = NULL;
+  WorkspacePanel* p = nullptr;
   foreach(WorkspacePanel* panel, _panels) {
     if(panel->view()->graphicsView()->scene() == obj) {
       p = panel;
@@ -437,12 +437,12 @@ bool Workspace::eventFilter(QObject* obj, QEvent* ev) {
     childObj->removeEventFilter(this);
     QGraphicsView* graphicsView = dynamic_cast<QGraphicsView*>(childObj);
 
-    if (graphicsView != NULL && graphicsView->scene())  {
+    if (graphicsView != nullptr && graphicsView->scene())  {
       graphicsView->scene()->removeEventFilter(this);
     }
   }
   else if (ev->type() == QEvent::FocusIn) {
-    if (dynamic_cast<QGraphicsView*>(obj) != NULL) {
+    if (dynamic_cast<QGraphicsView*>(obj) != nullptr) {
       tlp::WorkspacePanel* panel = static_cast<tlp::WorkspacePanel*>(obj->parent());
       setFocusedPanel(panel);
     }
@@ -460,7 +460,7 @@ void Workspace::dropEvent(QDropEvent* event) {
 }
 
 bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
-  if(dynamic_cast<const GraphMimeType*>(mimedata) != NULL ) {
+  if(dynamic_cast<const GraphMimeType*>(mimedata) != nullptr ) {
     e->accept();
     return true;
   }
@@ -471,10 +471,10 @@ bool Workspace::handleDragEnterEvent(QEvent* e, const QMimeData* mimedata) {
 bool Workspace::handleDropEvent(const QMimeData* mimedata) {
   const GraphMimeType* graphMime = dynamic_cast<const GraphMimeType*>(mimedata);
 
-  if (graphMime == NULL)
+  if (graphMime == nullptr)
     return false;
 
-  if (graphMime != NULL && graphMime->graph()) {
+  if (graphMime != nullptr && graphMime->graph()) {
     emit(addPanelRequest(graphMime->graph()));
     return true;
   }
@@ -642,9 +642,9 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
       }
     }
 
-    View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
+    View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),nullptr);
 
-    if (view == NULL)
+    if (view == nullptr)
       continue;
 
     view->setupUi();
@@ -652,7 +652,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
     assert(rootGraph);
     Graph* g = rootGraph->getDescendantGraph(id.toInt());
 
-    if (g == NULL)
+    if (g == nullptr)
       g = rootGraph;
 
     view->setGraph(g);
@@ -665,7 +665,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
 
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
 
-  if (workspaceXml == NULL)
+  if (workspaceXml == nullptr)
     return;
 
   QDomDocument doc;
@@ -741,7 +741,7 @@ void Workspace::swapPanelsRequested(WorkspacePanel* panel) {
 }
 
 void Workspace::updateStartupMode() {
-  if (currentModeWidget() == _ui->startupPage && _model != NULL) {
+  if (currentModeWidget() == _ui->startupPage && _model != nullptr) {
     _ui->startupImportFrame->setVisible(_model->empty());
     _ui->startupMainFrame->setVisible(!_model->empty());
   }

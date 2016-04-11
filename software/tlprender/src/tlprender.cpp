@@ -80,7 +80,7 @@ static string saveTLPFile;
 static string importPluginName("TLP Import");
 static string filename(DEFAULT_FILENAME);
 static string imageFormat(tlprender::SUPPORTED_IMAGE_FORMATS[0]); //default image format
-static tlprender::ImageWriter *imageWriter(NULL);
+static tlprender::ImageWriter *imageWriter(nullptr);
 static int width(640), height(480);
 
 static const int BUFFERSIZE(64 * 1024 * 1024);
@@ -109,7 +109,7 @@ public:
     scene.setViewport(viewport);
 
     buffer = new GLubyte [width * height * 4];
-    osContext = OSMesaCreateContext(OSMESA_RGBA, NULL);
+    osContext = OSMesaCreateContext(OSMESA_RGBA, nullptr);
 
     if (!osContext) {
       cerr << programName << ": OpenGL: CreateContext Failed!" << endl;
@@ -215,12 +215,12 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
 
   delete itP;
 
-  //Graph *newGraph=tlp::importGraph(importPluginName, dataSet, NULL);
+  //Graph *newGraph=tlp::importGraph(importPluginName, dataSet, nullptr);
   //Graph *newGraph=tlp::loadGraph(filename);
   Graph *newGraph = tlp::newGraph();
-  tlp::importGraph(importPluginName, dataSet, NULL,newGraph);
+  tlp::importGraph(importPluginName, dataSet, nullptr,newGraph);
 
-  if (newGraph!=NULL) {
+  if (newGraph!=nullptr) {
     string sceneData;
     dataSet.get<std::string>("scene", sceneData);
 
@@ -319,7 +319,7 @@ int main (int argc, char **argv) {
   //write image
   imageWriter = tlprender::ImageWriter::getImageWriter(imageFormat, glOffscreen.getImageBuffer(), width, height);
 
-  if (imageWriter != NULL) {
+  if (imageWriter != nullptr) {
     imageWriter->setSoftware(programName);
     imageWriter->setSource(graphFile);
 
@@ -366,7 +366,7 @@ int main (int argc, char **argv) {
       viewport[2] = width;
       viewport[3] = height;
 
-      builder.begin(viewport,NULL,0,0);
+      builder.begin(viewport,nullptr,0,0);
       recorder.record(false,size,buffer,viewport);
       string str;
       builder.getResult(&str);
@@ -385,7 +385,7 @@ int main (int argc, char **argv) {
 
     dataSet.set("displaying", glOffscreen.scene.getGlGraphComposite()->getRenderingParameters().getParameters());
 
-    if (!tlp::exportGraph(glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph(), *os, "TLP Export", dataSet, NULL)) {
+    if (!tlp::exportGraph(glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph(), *os, "TLP Export", dataSet, nullptr)) {
       cerr << programName << ": saving graph to \"" << saveTLPFile << "\" failed. Exiting" << endl;
       return EXIT_FAILURE;
     }

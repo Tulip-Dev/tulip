@@ -203,7 +203,7 @@ class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {
    if (dynamic_cast<tlp::ViewSettingsEvent*>(sipCpp)) {
         sipType = sipFindType("tlp::ViewSettingsEvent");
    } else {
-        sipType = NULL;
+        sipType = nullptr;
    }
 %End
 

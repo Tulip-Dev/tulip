@@ -37,7 +37,7 @@ class QNetworkReply;
 class TulipWelcomePage: public QWidget {
   Q_OBJECT
 public:
-  explicit TulipWelcomePage(QWidget *parent=NULL);
+  explicit TulipWelcomePage(QWidget *parent=nullptr);
   virtual ~TulipWelcomePage();
 
 signals:

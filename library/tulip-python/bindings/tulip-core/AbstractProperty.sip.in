@@ -279,19 +279,19 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const ;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const ;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const ;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = nullptr) const ;
 
 //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const ;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const ;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const ;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = nullptr) const ;
 
 //===========================================================================================
 
@@ -922,11 +922,11 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const;
 
 //===========================================================================================
 

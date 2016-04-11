@@ -115,7 +115,7 @@ void HistogramInteractorMetricMapping::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(NULL), histoStatistics(NULL) {
+HistogramInteractorStatistics::HistogramInteractorStatistics(const PluginContext *) : HistogramInteractor(":/i_histo_statistics.png", "Statistics"),histoStatsConfigWidget(nullptr), histoStatistics(nullptr) {
   setPriority(StandardInteractorPriority::ViewInteractor2);
 }
 
@@ -135,7 +135,7 @@ QWidget *HistogramInteractorStatistics::configurationWidget() const {
 }
 
 void HistogramInteractorStatistics::install(QObject *target) {
-  if(target!=NULL) {
+  if(target!=nullptr) {
     histoStatistics->computeInteractor();
   }
 }
@@ -147,7 +147,7 @@ class HistogramMouseShowElementInfos : public MouseShowElementInfos {
   HistogramView* hView;
 public:
   HistogramMouseShowElementInfos()
-    :MouseShowElementInfos(), hView(NULL) {}
+    :MouseShowElementInfos(), hView(nullptr) {}
   ~HistogramMouseShowElementInfos() {}
 
 

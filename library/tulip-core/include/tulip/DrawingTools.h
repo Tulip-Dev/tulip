@@ -52,7 +52,7 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+    const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -67,7 +67,7 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+    const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -87,7 +87,7 @@ TLP_SCOPE   std::pair<Coord, Coord> computeBoundingRadius (const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+    const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 
@@ -103,7 +103,7 @@ TLP_SCOPE   std::vector<Coord> computeConvexHull (const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
-    const BooleanProperty *selection = NULL);
+    const BooleanProperty *selection = nullptr);
 
 //======================================================================================================
 

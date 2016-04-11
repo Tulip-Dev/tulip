@@ -35,7 +35,7 @@ using namespace std;
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
 
-  if(qMouseEv != NULL) {
+  if(qMouseEv != nullptr) {
     SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = (GlMainWidget *) widget;
 

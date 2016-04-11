@@ -23,7 +23,7 @@
 #include <tulip/Glyph.h>
 #include <tulip/TulipViewSettings.h>
 
-tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = NULL;
+tlp::EdgeExtremityGlyphManager* tlp::EdgeExtremityGlyphManager::eeinst = nullptr;
 
 using namespace std;
 

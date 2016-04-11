@@ -63,8 +63,8 @@ template<class Property>
 class TLP_SCOPE TemplateAlgorithm : public PropertyAlgorithm {
 public:
   Property* result;
-  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(NULL) {
-    if (dataSet != NULL) {
+  TemplateAlgorithm (const tlp::PluginContext* context) : tlp::PropertyAlgorithm(context), result(nullptr) {
+    if (dataSet != nullptr) {
       if(!dataSet->exist("result")) {
         std::stringstream propname;
         propname << "result";

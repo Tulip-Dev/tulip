@@ -113,7 +113,7 @@ void PlanarityTestTest::planarGraphsEmbedding() {
   // no planar connected map computed
   // beacause is not connected
   graphMap = computePlanarConMap(graph);
-  CPPUNIT_ASSERT(graphMap == NULL);
+  CPPUNIT_ASSERT(graphMap == nullptr);
   delete graph;
   tlp::warning() << "==================================" << endl;
   tlp::warning() << "unbiconnected" << endl;

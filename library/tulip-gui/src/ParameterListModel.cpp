@@ -147,7 +147,7 @@ bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value
     if (dataType)
       _data.setData(infos.getName(), dataType);
 
-    return (dataType != NULL);
+    return (dataType != nullptr);
   }
 
   return QAbstractItemModel::setData(index,value,role);

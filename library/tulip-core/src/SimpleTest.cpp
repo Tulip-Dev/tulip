@@ -25,7 +25,7 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-SimpleTest * SimpleTest::instance=NULL;
+SimpleTest * SimpleTest::instance=nullptr;
 //=================================================================
 SimpleTest::SimpleTest () {
 }
@@ -57,7 +57,7 @@ void SimpleTest::makeSimple(Graph* graph,vector<edge> &removed) {
 //=================================================================
 bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdges, vector< edge >* loops) {
   bool result = true;
-  bool computeAll = (loops != NULL) || (multipleEdges != NULL);
+  bool computeAll = (loops != nullptr) || (multipleEdges != nullptr);
   Iterator<node> *itNode = graph->getNodes();
   MutableContainer<bool> visited;
   visited.setAll(false);
@@ -86,7 +86,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
           break;
         }
 
-        if (loops!=NULL) {
+        if (loops!=nullptr) {
 	  loops->push_back(e);
         }
       }
@@ -97,7 +97,7 @@ bool SimpleTest::simpleTest(const tlp::Graph* graph, vector< edge >* multipleEdg
           break;
         }
 
-        if (multipleEdges != NULL)  {
+        if (multipleEdges != nullptr)  {
 	  multipleEdges->push_back(e);
         }
       }

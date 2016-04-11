@@ -176,10 +176,10 @@ ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgo
 ConeTreeExtended::~ConeTreeExtended() {}
 //===============================================================
 bool ConeTreeExtended::run() {
-  nodeSize = NULL;
+  nodeSize = nullptr;
   string orientation = "vertical";
 
-  if (dataSet!=NULL) {
+  if (dataSet!=nullptr) {
     getNodeSizePropertyParameter(dataSet, nodeSize);
     StringCollection tmp;
 

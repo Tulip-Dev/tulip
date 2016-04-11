@@ -37,7 +37,7 @@ class GraphPerspectiveLogger: public QFrame {
   bool _pythonOutput;
 
 public:
-  GraphPerspectiveLogger(QWidget* parent = NULL);
+  GraphPerspectiveLogger(QWidget* parent = nullptr);
   ~GraphPerspectiveLogger();
   QPixmap icon();
   unsigned int count() const;

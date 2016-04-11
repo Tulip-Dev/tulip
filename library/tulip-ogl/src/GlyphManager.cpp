@@ -23,7 +23,7 @@
 #include <tulip/Glyph.h>
 
 //====================================================
-tlp::GlyphManager* tlp::GlyphManager::inst=NULL;
+tlp::GlyphManager* tlp::GlyphManager::inst=nullptr;
 
 using namespace std;
 

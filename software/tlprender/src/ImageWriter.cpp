@@ -56,7 +56,7 @@ ImageWriter *ImageWriter::getImageWriter(string &type, const GLubyte *buffer, co
     else
 #endif
     {
-      return NULL;
+      return nullptr;
     }
 }
 

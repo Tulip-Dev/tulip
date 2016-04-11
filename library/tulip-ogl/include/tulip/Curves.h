@@ -90,7 +90,7 @@ TLP_GL_SCOPE GLfloat* buildCurvePoints (const std::vector<Coord> &vertices,
                                         const Coord &startN,
                                         const Coord &endN,
                                         unsigned int &resultSize,
-                                        std::vector<unsigned int> *dec=NULL);
+                                        std::vector<unsigned int> *dec=nullptr);
 TLP_GL_SCOPE void buildCurvePoints (const std::vector<Coord> &vertices,
                                     const std::vector<float> &sizes,
                                     const Coord &startN,

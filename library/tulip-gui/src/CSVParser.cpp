@@ -72,7 +72,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
 
     QTextCodec * codec = QTextCodec::codecForName ( _fileEncoding.c_str());
 
-    if(codec == NULL) {
+    if(codec == nullptr) {
       qWarning() << __PRETTY_FUNCTION__<<":"<<__LINE__<<" Cannot found the convertion codec to convert from "<<_fileEncoding<<" string will be treated as utf8.";
       codec = QTextCodec::codecForName("UTF-8");
     }
@@ -82,7 +82,7 @@ bool CSVSimpleParser::parse(CSVContentHandler* handler, PluginProgress* progress
     }
 
     // change locale if needed
-    char* prevLocale = setlocale(LC_NUMERIC, NULL);
+    char* prevLocale = setlocale(LC_NUMERIC, nullptr);
 
     if (decimalMark() == ',')
       setlocale(LC_NUMERIC, "fr_FR");

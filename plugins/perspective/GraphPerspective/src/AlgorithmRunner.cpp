@@ -32,7 +32,7 @@
 struct FavoriteBox: public ExpandableGroupBox {
   bool _droppingFavorite;
 
-  explicit FavoriteBox(QWidget *parent = NULL, const QString &title=QString()): ExpandableGroupBox(parent,title), _droppingFavorite(false) {
+  explicit FavoriteBox(QWidget *parent = nullptr, const QString &title=QString()): ExpandableGroupBox(parent,title), _droppingFavorite(false) {
   }
 
 protected:
@@ -49,7 +49,7 @@ protected:
 using namespace tlp;
 
 static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
-  ExpandableGroupBox* groupBox = new ExpandableGroupBox(NULL,name);
+  ExpandableGroupBox* groupBox = new ExpandableGroupBox(nullptr,name);
   groupBox->setProperty("root",root);
   QWidget* groupWidget = new QWidget();
   groupWidget->setLayout(new QVBoxLayout);
@@ -82,7 +82,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
   QString category = plugin.category().c_str();
   QString group = plugin.group().c_str();
 
-  ExpandableGroupBox* categoryBox = NULL, *groupBox = NULL;
+  ExpandableGroupBox* categoryBox = nullptr, *groupBox = nullptr;
   foreach(ExpandableGroupBox* box, w->findChildren<ExpandableGroupBox*>()) {
     if (box->title() ==  category) {
       categoryBox = box;
@@ -90,7 +90,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
     }
   }
 
-  if (categoryBox==NULL)
+  if (categoryBox==nullptr)
     return;
 
   if (!group.isEmpty()) {
@@ -102,7 +102,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
     }
   }
 
-  if (!group.isEmpty() && groupBox == NULL) {
+  if (!group.isEmpty() && groupBox == nullptr) {
     groupBox = createGroupBox(group);
     QVBoxLayout *categoryLayout = static_cast<QVBoxLayout*>(categoryBox->widget()->layout());
     int index = 0;
@@ -170,7 +170,7 @@ void AlgorithmRunner::refreshTreeUi(QWidget* w) {
   }
 }
 
-AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(NULL) {
+AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr) {
   _ui->setupUi(this);
   _ui->favoritesBox->setWidget(new QWidget());
   _ui->favoritesBox->widget()->setAcceptDrops(true);
@@ -224,7 +224,7 @@ AlgorithmRunner::~AlgorithmRunner() {
 }
 
 void AlgorithmRunner::setGraph(Graph* g) {
-  _ui->contents->setEnabled(g != NULL);
+  _ui->contents->setEnabled(g != nullptr);
   _graph = g;
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>()) {
     if (item->graph() != g) {
@@ -259,7 +259,7 @@ QList<T> childrenObj(QObject* obj) {
   foreach(QObject* o, obj->children()) {
     T var = dynamic_cast<T>(o);
 
-    if (var != NULL)
+    if (var != nullptr)
       result+=var;
   }
   return result;
@@ -319,7 +319,7 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
   else if ((ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) && draggableObject) {
     QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
 
-    if (dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData()) != NULL) {
+    if (dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData()) != nullptr) {
       _ui->favoritesBox->_droppingFavorite = true;
       ev->accept();
       _ui->favoritesBox->repaint();
@@ -335,7 +335,7 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
     QDropEvent* dropEv = static_cast<QDropEvent*>(ev);
     const AlgorithmMimeType* mime = dynamic_cast<const AlgorithmMimeType*>(dropEv->mimeData());
 
-    if (mime != NULL)
+    if (mime != nullptr)
       addFavorite(mime->algorithm(),mime->params());
 
     _ui->favoritesBox->_droppingFavorite = false;

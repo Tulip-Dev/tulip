@@ -47,7 +47,7 @@ struct _TLP_IT {
 **/
 template<typename TYPE>
 inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
-  assert(_it._it != NULL);
+  assert(_it._it != nullptr);
 
   if(_it._it->hasNext()) {
     n = _it._it->next();

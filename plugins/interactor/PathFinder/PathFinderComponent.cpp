@@ -33,7 +33,7 @@ using namespace std;
 using namespace tlp;
 
 
-PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false), timerId(0), glMW(NULL) {
+PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false), timerId(0), glMW(nullptr) {
 }
 
 PathFinderComponent::~PathFinderComponent() {
@@ -44,7 +44,7 @@ bool PathFinderComponent::eventFilter(QObject *obj, QEvent *event) {
   QMouseEvent *qMouseEv = static_cast<QMouseEvent *> (event);
   GlMainWidget *glw= dynamic_cast<GlMainWidget *> (obj);
 
-  if (glw==NULL)
+  if (glw==nullptr)
     return false;
 
   if(event->type() == QEvent::MouseMove) {
@@ -203,7 +203,7 @@ PathHighlighter *PathFinderComponent::findHighlighter(const string &name) {
     if (p->getName() == name)
       return p;
   }
-  return NULL;
+  return nullptr;
 }
 
 void PathFinderComponent::addHighlighter(PathHighlighter *highlighter) {

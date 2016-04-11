@@ -31,7 +31,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BasicLayoutTest);
 
 void BasicLayoutTest::initializeGraph(const string& type) {
     DataSet ds;
-    Graph* g = importGraph(type, ds, NULL, graph);
+    Graph* g = importGraph(type, ds, nullptr, graph);
     CPPUNIT_ASSERT_EQUAL(g, graph);
 }
 //==========================================================
@@ -40,9 +40,9 @@ bool BasicLayoutTest::computeProperty(const std::string &algorithm,
                                       const std::string & graphType,
                                       PropType* prop) {
     initializeGraph(graphType);
-    bool deleteProp = prop == NULL;
+    bool deleteProp = prop == nullptr;
 
-    if (prop == NULL)
+    if (prop == nullptr)
         prop = new PropType(graph);
 
     string errorMsg;
@@ -92,14 +92,14 @@ void BasicLayoutTest::testDendrogram() {
     LayoutProperty layout(graph);
     string errorMsg;
     bool result =
-            graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, NULL, &ds);
+            graph->applyPropertyAlgorithm("Dendrogram", &layout, errorMsg, nullptr, &ds);
     CPPUNIT_ASSERT(result);
 }
 //==========================================================
 void BasicLayoutTest::testGEMLayout() {
     DataSet ds;
     ds.set("file::filename", string("data/unconnected.tlp"));
-    Graph* g = importGraph("TLP Import", ds, NULL, graph);
+    Graph* g = importGraph("TLP Import", ds, nullptr, graph);
     CPPUNIT_ASSERT(g == graph);
     LayoutProperty prop(graph);
     string errorMsg;
@@ -125,7 +125,7 @@ void BasicLayoutTest::testMixedModel() {
     LayoutProperty layout(graph);
     string errorMsg;
     bool result =
-            graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, NULL, &ds);
+            graph->applyPropertyAlgorithm("Mixed Model", &layout, errorMsg, nullptr, &ds);
     CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -145,7 +145,7 @@ void BasicLayoutTest::testSquarifiedTreeMap() {
     LayoutProperty layout(graph);
     ds.set("metric", &metric);
     result = graph->applyPropertyAlgorithm("Squarified Tree Map", &layout,
-                                           errorMsg, NULL, &ds);
+                                           errorMsg, nullptr, &ds);
     CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -156,7 +156,7 @@ void BasicLayoutTest::testTreeLeaf() {
     ds.set("node size", &size);
     LayoutProperty layout(graph);
     string errorMsg;
-    bool result = graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, NULL, &ds);
+    bool result = graph->applyPropertyAlgorithm("Tree Leaf", &layout, errorMsg, nullptr, &ds);
     CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -201,6 +201,6 @@ void BasicLayoutTest::testFastOverlapRemoval() {
     ds.set("layout", &layout);
     string errorMsg;
     bool result =
-            graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, NULL, &ds);
+            graph->applyPropertyAlgorithm("Fast Overlap Removal", &layout, errorMsg, nullptr, &ds);
     CPPUNIT_ASSERT(result);
 }

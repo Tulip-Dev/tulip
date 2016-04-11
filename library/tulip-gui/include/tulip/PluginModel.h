@@ -40,7 +40,7 @@ private:
 
 public:
 
-  SimplePluginListModel(const QList<std::string>& plugins,QObject *parent = NULL);
+  SimplePluginListModel(const QList<std::string>& plugins,QObject *parent = nullptr);
   virtual ~SimplePluginListModel();
   int columnCount ( const QModelIndex& = QModelIndex() ) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -55,7 +55,7 @@ template<typename PLUGIN>
 class PluginModel : public tlp::TulipModel {
   struct TreeItem {
     TreeItem(QString name, QString infos = QString::null,
-             TreeItem* parent = NULL): name(name), infos(infos), parent(parent) {}
+             TreeItem* parent = nullptr): name(name), infos(infos), parent(parent) {}
     virtual ~TreeItem() {
       foreach(TreeItem* c, children)
       delete c;
@@ -129,7 +129,7 @@ class PluginModel : public tlp::TulipModel {
   }
 
 public:
-  explicit PluginModel(QObject *parent = NULL): TulipModel(parent), _root(NULL) {
+  explicit PluginModel(QObject *parent = nullptr): TulipModel(parent), _root(nullptr) {
     buildTree();
   }
   virtual ~PluginModel() {

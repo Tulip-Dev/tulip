@@ -128,7 +128,7 @@ typedef unsigned int flex_uint32_t;
 #endif
 
 /* Returned upon end-of-file. */
-#define YY_NULL 0
+#define YY_nullptr 0
 
 /* Promotes a possibly negative, possibly signed char to an unsigned
  * integer for use as an array index.  If the signed char is negative,
@@ -278,20 +278,20 @@ int yy_buffer_status;
 /* Stack of input buffers. */
 static size_t yy_buffer_stack_top = 0; /**< index of top of stack. */
 static size_t yy_buffer_stack_max = 0; /**< capacity of stack. */
-static YY_BUFFER_STATE * yy_buffer_stack = NULL; /**< Stack as an array. */
+static YY_BUFFER_STATE * yy_buffer_stack = nullptr; /**< Stack as an array. */
 
 /* We provide macros for accessing buffer states in case in the
  * future we want to put the buffer states in a more general
  * "scanner state".
  *
- * Returns the top of the stack, or NULL.
+ * Returns the top of the stack, or nullptr.
  */
 #define YY_CURRENT_BUFFER ( (yy_buffer_stack) \
                           ? (yy_buffer_stack)[(yy_buffer_stack_top)] \
-                          : NULL)
+                          : nullptr)
 
 /* Same as previous macro, but useful when we know that the buffer stack is not
- * NULL or when we need an lvalue. For internal use only.
+ * nullptr or when we need an lvalue. For internal use only.
  */
 #define YY_CURRENT_BUFFER_LVALUE (yy_buffer_stack)[(yy_buffer_stack_top)]
 
@@ -301,7 +301,7 @@ static int yy_n_chars;    /* number of characters read into yy_ch_buf */
 int yyleng;
 
 /* Points to current character in buffer. */
-static char *yy_c_buf_p = (char *) NULL;
+static char *yy_c_buf_p = (char *) nullptr;
 static int yy_init = 0;   /* whether we need to initialize */
 static int yy_start = 0;  /* start state number */
 
@@ -681,7 +681,7 @@ static int input (void );
 #define ECHO do { if (fwrite( yytext, yyleng, 1, yyout )) {} } while (0)
 #endif
 
-/* Gets input and stuffs it into "buf".  number of characters read, or YY_NULL,
+/* Gets input and stuffs it into "buf".  number of characters read, or YY_nullptr,
  * is returned in "result".
  */
 #ifndef YY_INPUT
@@ -722,7 +722,7 @@ static int input (void );
  * some compilers to complain about unreachable statements.
  */
 #ifndef yyterminate
-#define yyterminate() return YY_NULL
+#define yyterminate() return YY_nullptr
 #endif
 
 /* Number of entries by which start-condition stack grows. */
@@ -1147,8 +1147,8 @@ do_action:  /* This label is used only to access EOF actions. */
            * yy_c_buf_p so that if some total
            * hoser (like flex itself) wants to
            * call the scanner after we return the
-           * YY_NULL, it'll still work - another
-           * YY_NULL will get returned.
+           * YY_nullptr, it'll still work - another
+           * YY_nullptr will get returned.
            */
           (yy_c_buf_p) = (yytext_ptr) + YY_MORE_ADJ;
 
@@ -1666,7 +1666,7 @@ if ( b == YY_CURRENT_BUFFER )
  *
  */
 //void yypush_buffer_state (YY_BUFFER_STATE new_buffer ) {
-//if (new_buffer == NULL)
+//if (new_buffer == nullptr)
 //  return;
 
 //yyensure_buffer_stack();
@@ -1699,7 +1699,7 @@ if ( b == YY_CURRENT_BUFFER )
 //  return;
 
 //yy_delete_buffer(YY_CURRENT_BUFFER );
-//YY_CURRENT_BUFFER_LVALUE = NULL;
+//YY_CURRENT_BUFFER_LVALUE = nullptr;
 
 //if ((yy_buffer_stack_top) > 0)
 //  --(yy_buffer_stack_top);
@@ -1972,13 +1972,13 @@ exit( YY_EXIT_FAILURE );
 ///* Pop the buffer stack, destroying each element. */
 //while(YY_CURRENT_BUFFER) {
 //  yy_delete_buffer(YY_CURRENT_BUFFER  );
-//  YY_CURRENT_BUFFER_LVALUE = NULL;
+//  YY_CURRENT_BUFFER_LVALUE = nullptr;
 //  yypop_buffer_state();
 //}
 
 ///* Destroy the stack itself. */
 //yyfree((yy_buffer_stack) );
-//(yy_buffer_stack) = NULL;
+//(yy_buffer_stack) = nullptr;
 
 ///* Reset the globals. This is important in a non-reentrant scanner so the next time
 // * yylex() is called, initialization will occur. */

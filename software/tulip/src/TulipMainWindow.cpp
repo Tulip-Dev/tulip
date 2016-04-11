@@ -48,7 +48,7 @@
 
 using namespace tlp;
 
-TulipMainWindow* TulipMainWindow::_instance = NULL;
+TulipMainWindow* TulipMainWindow::_instance = nullptr;
 
 TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new Ui::TulipMainWindowData()), _systemTrayIcon(0) {
   _ui->setupUi(this);

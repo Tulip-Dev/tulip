@@ -37,9 +37,9 @@ GlAbstractPolygon::GlAbstractPolygon():
   textureName(""),
   outlineSize(1.),
   hideOutlineLod(0.),
-  indices(NULL),
-  auxIndices(NULL),
-  texArray(NULL),
+  indices(nullptr),
+  auxIndices(nullptr),
+  texArray(nullptr),
   generated(false) {
 }
 //=====================================================
@@ -283,10 +283,10 @@ void GlAbstractPolygon::draw(float lod,Camera *) {
 
       delete[] indices;
       delete[] auxIndices;
-      indices=NULL;
-      auxIndices=NULL;
+      indices=nullptr;
+      auxIndices=nullptr;
       delete[] texArray;
-      texArray=NULL;
+      texArray=nullptr;
       normalArray.clear();
     }
 
@@ -531,11 +531,11 @@ void GlAbstractPolygon::setOutlineColors(const std::vector<Color> &colors) {
 //============================================================
 void GlAbstractPolygon::clearGenerated() {
   delete[] indices;
-  indices=NULL;
+  indices=nullptr;
   delete[] auxIndices;
-  auxIndices=NULL;
+  auxIndices=nullptr;
   delete[] texArray;
-  texArray=NULL;
+  texArray=nullptr;
   normalArray.clear();
 
   if(generated)

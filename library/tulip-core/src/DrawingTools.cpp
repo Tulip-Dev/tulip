@@ -54,7 +54,7 @@ public:
 void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
                         const BooleanProperty *selection, HullBuilder &builder) {
 
-  if (itN != NULL) {
+  if (itN != nullptr) {
 
     for(node itn : itN) {
       if (!selection || selection->getNodeValue(itn)) {
@@ -77,7 +77,7 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
 
   }
 
-  if (itE != NULL) {
+  if (itE != nullptr) {
 
     for(edge ite : itE) {
       if (!selection || selection->getEdgeValue(ite)) {

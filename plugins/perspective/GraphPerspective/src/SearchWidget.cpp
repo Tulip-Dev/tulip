@@ -153,10 +153,10 @@ QVector<SearchOperator*> SearchWidget::NUMERIC_OPERATORS = QVector<SearchOperato
 QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator*>()
     << new StringEqualsOperator
     << new StringDifferentOperator
-    << NULL
-    << NULL
-    << NULL
-    << NULL
+    << nullptr
+    << nullptr
+    << nullptr
+    << nullptr
     << new StartsWithOperator
     << new EndsWithOperator
     << new ContainsOperator
@@ -165,10 +165,10 @@ QVector<SearchOperator*> SearchWidget::STRING_OPERATORS = QVector<SearchOperator
 QVector<SearchOperator*> SearchWidget::NOCASE_STRING_OPERATORS = QVector<SearchOperator*>()
     << new NoCaseStringEqualsOperator
     << new NoCaseStringDifferentOperator
-    << NULL
-    << NULL
-    << NULL
-    << NULL
+    << nullptr
+    << nullptr
+    << nullptr
+    << nullptr
     << new NoCaseStartsWithOperator
     << new NoCaseEndsWithOperator
     << new NoCaseContainsOperator
@@ -179,9 +179,9 @@ SearchWidget::SearchWidget(QWidget *parent): QWidget(parent), _ui(new Ui::Search
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
 
-  _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(NULL,false,_ui->resultsStorageCombo));
-  _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(NULL,false,_ui->searchTermACombo));
-  _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),NULL,false,_ui->searchTermBCombo));
+  _ui->resultsStorageCombo->setModel(new GraphPropertiesModel<BooleanProperty>(nullptr,false,_ui->resultsStorageCombo));
+  _ui->searchTermACombo->setModel(new GraphPropertiesModel<PropertyInterface>(nullptr,false,_ui->searchTermACombo));
+  _ui->searchTermBCombo->setModel(new GraphPropertiesModel<PropertyInterface>(trUtf8("Custom value"),nullptr,false,_ui->searchTermBCombo));
   connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphIndexChanged()));
   connect(_ui->selectionModeCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(selectionModeChanged(int)));
 }
@@ -218,7 +218,7 @@ void searchForIndex(QComboBox* combo, const QString& s) {
 }
 
 void SearchWidget::setGraph(Graph *g) {
-  if (g != NULL) {
+  if (g != nullptr) {
     // Force creation of viewSelection to ensure we have at least one boolean property exising in the graph
     g->getProperty<BooleanProperty>("viewSelection");
   }
@@ -231,15 +231,15 @@ void SearchWidget::setGraph(Graph *g) {
   QString oldTermAName = QString::null;
   QString oldTermBName = QString::null;
 
-  if (_ui->resultsStorageCombo->model() != NULL) {
+  if (_ui->resultsStorageCombo->model() != nullptr) {
     oldStorageName = _ui->resultsStorageCombo->currentText();
   }
 
-  if (_ui->searchTermACombo->model() != NULL) {
+  if (_ui->searchTermACombo->model() != nullptr) {
     oldTermAName = _ui->searchTermACombo->currentText();
   }
 
-  if (_ui->searchTermBCombo->model() != NULL) {
+  if (_ui->searchTermBCombo->model() != nullptr) {
     oldTermBName = _ui->searchTermBCombo->currentText();
   }
 
@@ -274,7 +274,7 @@ void SearchWidget::search() {
   SearchOperator* op = searchOperator();
 
   tlp::PropertyInterface* a = term(_ui->searchTermACombo);
-  tlp::PropertyInterface* b = NULL;
+  tlp::PropertyInterface* b = nullptr;
   bool deleteTermB = false;
 
   if (_ui->tableWidget->isVisible()) {
@@ -290,7 +290,7 @@ void SearchWidget::search() {
       StringProperty* stringProp = new StringProperty(g);
       DataType* tulipData = TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
 
-      if(tulipData == NULL) {
+      if(tulipData == nullptr) {
         qCritical() << "could not convert this type correctly " << _ui->tableWidget->item(0, 0)->data(Qt::DisplayRole) << ", please report this as a bug";
 #ifdef NDEBUG
 	delete stringProp;
@@ -300,7 +300,7 @@ void SearchWidget::search() {
 
       DataTypeSerializer* serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
 
-      if(serializer == NULL) {
+      if(serializer == nullptr) {
         qCritical() << QString::fromUtf8("no type serializer found for ") << tlp::tlpStringToQString(tulipData->getTypeName()) << ", please report this as a bug";
 #ifdef NDEBUG
 	delete stringProp;
@@ -426,7 +426,7 @@ void SearchWidget::termBChanged() {
 }
 
 void SearchWidget::updateOperators(tlp::PropertyInterface *a, tlp::PropertyInterface *b) {
-  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty*>(a) != NULL && dynamic_cast<tlp::NumericProperty*>(b) != NULL);
+  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty*>(a) != nullptr && dynamic_cast<tlp::NumericProperty*>(b) != nullptr);
 }
 
 void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
@@ -437,7 +437,7 @@ void SearchWidget::updateOperators(PropertyInterface *a, const QString &b) {
   else
     b.toDouble(&isCustomValueDouble);
 
-  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty*>(a) != NULL && isCustomValueDouble);
+  setNumericOperatorsEnabled(dynamic_cast<tlp::NumericProperty*>(a) != nullptr && isCustomValueDouble);
 }
 
 void SearchWidget::setNumericOperatorsEnabled(bool e) {
@@ -472,7 +472,7 @@ void SearchWidget::updateEditorWidget() {
 void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
   const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dragEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     dragEv->accept();
   }
 }
@@ -480,7 +480,7 @@ void SearchWidget::dragEnterEvent(QDragEnterEvent *dragEv) {
 void SearchWidget::dropEvent(QDropEvent* dropEv) {
   const GraphMimeType* mimeType = dynamic_cast<const GraphMimeType*>(dropEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     currentGraphChanged(mimeType->graph());
     dropEv->accept();
   }
@@ -492,7 +492,7 @@ PropertyInterface *SearchWidget::term(QComboBox *combo) {
 }
 
 SearchOperator *SearchWidget::searchOperator() {
-  SearchOperator* op = NULL;
+  SearchOperator* op = nullptr;
 
   if (isNumericComparison())
     op = NUMERIC_OPERATORS[_ui->operatorCombo->currentIndex()];

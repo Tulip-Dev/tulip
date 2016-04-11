@@ -57,8 +57,8 @@ RenamePropertyDialog::~RenamePropertyDialog() {
 
 bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
     QWidget* parent) {
-  if (prop == NULL) {
-    QMessageBox::critical(parent,tr("Error during the renaming"), "The property is NULL");
+  if (prop == nullptr) {
+    QMessageBox::critical(parent,tr("Error during the renaming"), "The property is nullptr");
     return false;
   }
 

@@ -36,7 +36,7 @@ static const QString setCurrentGraphFunction =
   "	graph = g\n"
   ;
 
-PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPanel), _button(NULL), _animation(NULL) {
+PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPanel), _button(nullptr), _animation(nullptr) {
   _ui->setupUi(this);
   connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphComboIndexChanged()));
   tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
@@ -59,7 +59,7 @@ void PythonPanel::graphComboIndexChanged() {
 void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
   const tlp::GraphMimeType* mimeType = dynamic_cast<const tlp::GraphMimeType*>(dragEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     dragEv->accept();
   }
 }
@@ -67,7 +67,7 @@ void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
 void PythonPanel::dropEvent(QDropEvent* dropEv) {
   const tlp::GraphMimeType* mimeType = dynamic_cast<const tlp::GraphMimeType*>(dropEv->mimeData());
 
-  if (mimeType != NULL) {
+  if (mimeType != nullptr) {
     tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
     QModelIndex graphIndex = model->indexOf(mimeType->graph());
 

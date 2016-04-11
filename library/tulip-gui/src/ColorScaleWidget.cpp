@@ -26,7 +26,7 @@ using namespace tlp;
 using namespace std;
 
 ColorScaleWidget::ColorScaleWidget(QWidget* parent) :
-  QWidget(parent), colorScale(NULL), orientation(Qt::Horizontal) {
+  QWidget(parent), colorScale(nullptr), orientation(Qt::Horizontal) {
 }
 
 ColorScaleWidget::~ColorScaleWidget() {
@@ -40,7 +40,7 @@ void ColorScaleWidget::setColorScale(ColorScale *colorScale) {
 void ColorScaleWidget::paintEvent(QPaintEvent * event) {
   QPainter painter(this);
 
-  if (colorScale != NULL) {
+  if (colorScale != nullptr) {
     paintColorScale(painter, event->rect());
   }
 

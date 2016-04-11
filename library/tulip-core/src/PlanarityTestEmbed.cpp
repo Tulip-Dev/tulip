@@ -97,7 +97,7 @@ void PlanarityTestImpl::embedRoot(Graph *sG, int n) {
   for(int i = 1 ; i <= nH ; ++i) {
     e = backEdge[i];
 
-    if (e != NULL_EDGE) {
+    if (e != nullptr_EDGE) {
       node predU = sG->source(e);
       node u = parent.get(predU.id);
       embedList[r].push(e);
@@ -447,7 +447,7 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW,
     list<node>& traversedNodes,
     tlp::BmdList<edge>& embList) {
   list<node> toEmbedLater;
-  node u = t1, predU = NULL_NODE;
+  node u = t1, predU = nullptr_NODE;
 
   while (predU != t2) {
     if (isCNode(u)) {
@@ -462,7 +462,7 @@ list<node> PlanarityTestImpl::embedUpwardT(bool embBackEdgesOutW,
         return toEmbedLater;
     }
     else {
-      if (predU != NULL_NODE) {
+      if (predU != nullptr_NODE) {
 
         embList.push(edgeReversal( T0EdgeIn.get(predU.id)));
 
@@ -517,7 +517,7 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
 
   list<node> listNodesL, listNodesR;
   // goes to the left;
-  BmdLink<node> *aux = NULL;
+  BmdLink<node> *aux = nullptr;
   BmdLink<node> *s = it;
 
   while (labelB.get(jl.id) <= dfsPosNum.get(w.id)) {
@@ -549,8 +549,8 @@ void PlanarityTestImpl::addOldCNodeToEmbedding(bool embBackEdgesOutW,
 
   // checks if need to flip oldCNode;
   // u == nil when oldCNode is a terminal node;
-  bool flipped = ((!listNodesL.empty() && (jl == u || u == NULL_NODE))
-                  || (jr != u && u != NULL_NODE));
+  bool flipped = ((!listNodesL.empty() && (jl == u || u == nullptr_NODE))
+                  || (jr != u && u != nullptr_NODE));
 
   if (flipped)
     listNodesL.swap(listNodesR);
@@ -607,7 +607,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
   for(int i = 1; i <= n; ++i) {
     e = backEdge[i];
 
-    if (e != NULL_EDGE) {
+    if (e != nullptr_EDGE) {
       if (embBackEdgesOutW)
         wl1.append(edgeReversal( e));
       else
@@ -618,7 +618,7 @@ void PlanarityTestImpl::embedBackEdges(bool embBackEdgesOutW,
   for(int i = n; i >= 1; i--) {
     e = backEdge[i];
 
-    if (e != NULL_EDGE) {
+    if (e != nullptr_EDGE) {
       l1.push(e);
       node predU = sG->source(e);
       node u = parent.get(predU.id);
@@ -674,7 +674,7 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   for (list<edge>::iterator it = listBackEdges.begin(); it != listBackEdges.end(); ++it) {
     edge e = *it;
     node u = sG->source(e);
-    node predU = NULL_NODE;
+    node predU = nullptr_NODE;
 
     while (state.get(u.id) == NOT_VISITED) {
       if (isCNode(u)) {
@@ -691,14 +691,14 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
         nodeInG[nodeInD[u]] = u;
       }
 
-      if (predU != NULL_NODE)
+      if (predU != nullptr_NODE)
         D->addEdge(nodeInD[u], nodeInD[predU]);
 
       predU = u;
       u = parent.get(u.id);
     }
 
-    if (predU != NULL_NODE)
+    if (predU != nullptr_NODE)
       D->addEdge(nodeInD[u], nodeInD[predU]);
   }
 
@@ -749,10 +749,10 @@ int PlanarityTestImpl::sortBackEdgesByDfs(Graph *sG,
   posDFS(D, dfsPos);
   int tot = D->numberOfNodes();
   backEdge.resize(tot + 1); //Warning
-  backEdge[0] = NULL_EDGE;
+  backEdge[0] = nullptr_EDGE;
 
   for (int i = 1 ; i <= tot ; ++i)
-    backEdge[i] = NULL_EDGE;
+    backEdge[i] = nullptr_EDGE;
 
   //forall(e, listBackEdges)
   for (list<edge>::iterator it = listBackEdges.begin() ; it != listBackEdges.end() ; ++it) {

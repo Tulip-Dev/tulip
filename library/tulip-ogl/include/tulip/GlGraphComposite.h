@@ -56,7 +56,7 @@ public:
    *
    * You can specify a GlGraphRenderer, if you don't do this a GlGraphHighDetailsRenderer will be used to display the graph
    */
-  GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer=NULL);
+  GlGraphComposite(Graph* graph, GlGraphRenderer *graphRenderer=nullptr);
 
   /**
    * @brief Build a GlGraphComposite with the graph data
@@ -149,7 +149,7 @@ public:
   }
 
   /**
-   * @brief setRenderer Delete the old renderer and replace it by the new one. If the new renderer is equal to NULL create a GlGraphHighDetailsRenderer.
+   * @brief setRenderer Delete the old renderer and replace it by the new one. If the new renderer is equal to nullptr create a GlGraphHighDetailsRenderer.
    */
   void setRenderer(tlp::GlGraphRenderer*);
 

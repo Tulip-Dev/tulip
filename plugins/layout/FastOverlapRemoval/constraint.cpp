@@ -44,8 +44,8 @@ Constraint::~Constraint() {
   right->in.erase(i);
 }
 std::ostream& operator <<(std::ostream &os, const Constraint &c) {
-  if(&c==NULL) {
-    os<<"NULL";
+  if(&c==nullptr) {
+    os<<"nullptr";
   }
   else {
     const char *type=c.equality?"=":"<=";

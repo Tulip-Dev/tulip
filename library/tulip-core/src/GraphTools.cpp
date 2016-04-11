@@ -118,7 +118,7 @@ node makeSimpleSource(Graph* graph) {
 vector<vector<node> > computeCanonicalOrdering(PlanarConMap *carte, std::vector<edge>  *dummyEdges,PluginProgress* pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
-  if (dummyEdges!=NULL)
+  if (dummyEdges!=nullptr)
     *dummyEdges = o.getDummyEdges();
 
   vector<vector<node> > res;

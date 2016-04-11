@@ -99,7 +99,7 @@ void GlComposite::reset(bool deleteElems) {
 }
 //============================================================
 void GlComposite::addGlEntity(GlSimpleEntity *entity, const string &key) {
-  assert(entity!=NULL);
+  assert(entity!=nullptr);
 
   bool doSceneTreatment=false;
 
@@ -226,7 +226,7 @@ GlSimpleEntity* GlComposite::findGlEntity(const string &key) {
   ITM ite = elements.find(key);
 
   if (ite == elements.end())
-    return NULL;
+    return nullptr;
 
   return (*ite).second;
 }

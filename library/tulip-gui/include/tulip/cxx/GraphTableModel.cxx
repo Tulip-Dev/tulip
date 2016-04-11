@@ -83,7 +83,7 @@ void GraphTableModel::addToVector(const std::set<T>& objects,std::vector<T>& vec
     vect.reserve(vect.size() + objects.size());
   }
 
-  if(comp == NULL) {
+  if(comp == nullptr) {
     //If there is no comparator append the elements to add at the end of the vector
     if(addRows) {
       beginInsertRows(QModelIndex(),vect.size(),vect.size()+objects.size()-1);

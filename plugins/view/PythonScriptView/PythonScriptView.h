@@ -89,7 +89,7 @@ public :
   void draw() {}
 
   void graphDeleted(tlp::Graph* parent) {
-    _graph = NULL;
+    _graph = nullptr;
     ViewWidget::graphDeleted(parent);
   }
 

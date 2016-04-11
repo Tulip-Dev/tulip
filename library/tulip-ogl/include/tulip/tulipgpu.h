@@ -30,7 +30,7 @@ TLP_GL_SCOPE GpuGraph* genGpuGraph(const tlp::Graph& graph);
 
 // associate a Tulip Property to a gpu property variable
 // and compute the needed infos
-// return NULL if there is no texture image unit available
+// return nullptr if there is no texture image unit available
 // BooleanProperty
 TLP_GL_SCOPE GpuProperty* genGpuProperty(tlp::BooleanProperty& property,
     const tlp::Graph& graph,

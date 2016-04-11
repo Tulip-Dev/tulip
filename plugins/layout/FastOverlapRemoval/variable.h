@@ -33,7 +33,7 @@ public:
     : desiredPosition(desiredPos)
     , weight(weight)
     , offset(0)
-    , block(NULL)
+    , block(nullptr)
     , visited(false) {
   }
   inline double position() const {

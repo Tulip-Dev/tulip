@@ -61,9 +61,9 @@ bool MouseMagnifyingGlassInteractor::isCompatible(const std::string &viewName) c
 
 PLUGIN(MouseMagnifyingGlassInteractor)
 
-MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent() : fbo(NULL), fbo2(NULL), camera(NULL),drawInteractor(false), radius(200), magnifyPower(2) {}
+MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent() : fbo(nullptr), fbo2(nullptr), camera(nullptr),drawInteractor(false), radius(200), magnifyPower(2) {}
 
-MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent) : fbo(NULL), fbo2(NULL), drawInteractor(false) {
+MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent) : fbo(nullptr), fbo2(nullptr), drawInteractor(false) {
   boxCenter = mouseMagnifyingGlassInteractorComponent.boxCenter;
   radius = mouseMagnifyingGlassInteractorComponent.radius;
   magnifyPower = mouseMagnifyingGlassInteractorComponent.magnifyPower;
@@ -106,8 +106,8 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
 
       delete fbo;
       delete fbo2;
-      fbo = NULL;
-      fbo2 = NULL;
+      fbo = nullptr;
+      fbo2 = nullptr;
     }
     else if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ShiftModifier)) {
       updateMagnifyingGlass = true;
@@ -142,7 +142,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
   int fboSize = static_cast<int>(radius * 2);
 
   // instantiate fbo if needed
-  if (fbo == NULL) {
+  if (fbo == nullptr) {
     QGLFramebufferObjectFormat fboFormat;
     fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
@@ -270,8 +270,8 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
 }
 
 void MouseMagnifyingGlassInteractorComponent::viewChanged(View *view) {
-  if (view == NULL) {
-    glWidget = NULL;
+  if (view == nullptr) {
+    glWidget = nullptr;
     return;
   }
 

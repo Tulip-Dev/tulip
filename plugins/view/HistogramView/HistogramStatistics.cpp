@@ -121,7 +121,7 @@ static void drawComposite(tlp::GlComposite *composite, float lod, tlp::Camera *c
     tlp::GlSimpleEntity *entity = it2->second;
     tlp::GlComposite *compositeEntity = dynamic_cast<tlp::GlComposite *>(entity);
 
-    if (compositeEntity != NULL) {
+    if (compositeEntity != nullptr) {
       drawComposite(compositeEntity, lod, camera);
     }
     else {
@@ -240,19 +240,19 @@ public :
 
 
 HistogramStatistics::HistogramStatistics(HistoStatsConfigWidget *ConfigWidget)
-  : histoView(NULL) , histoStatsConfigWidget(ConfigWidget),
+  : histoView(nullptr) , histoStatsConfigWidget(ConfigWidget),
     propertyMean(0), propertyStandardDeviation(0),
-    densityAxis(NULL), meanAxis(NULL), standardDeviationPosAxis(NULL),
-    standardDeviationNegAxis(NULL), standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
-    standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
+    densityAxis(nullptr), meanAxis(nullptr), standardDeviationPosAxis(nullptr),
+    standardDeviationNegAxis(nullptr), standardDeviation2PosAxis(nullptr), standardDeviation2NegAxis(nullptr),
+    standardDeviation3PosAxis(nullptr), standardDeviation3NegAxis(nullptr) {
   initKernelFunctionsMap();
 }
 
 HistogramStatistics::HistogramStatistics(const HistogramStatistics &histoStats)
   : histoView(histoStats.histoView), histoStatsConfigWidget(histoStats.histoStatsConfigWidget), propertyMean(0), propertyStandardDeviation(0),
-    densityAxis(NULL), meanAxis(NULL), standardDeviationPosAxis(NULL),
-    standardDeviationNegAxis(NULL), standardDeviation2PosAxis(NULL), standardDeviation2NegAxis(NULL),
-    standardDeviation3PosAxis(NULL), standardDeviation3NegAxis(NULL) {
+    densityAxis(nullptr), meanAxis(nullptr), standardDeviationPosAxis(nullptr),
+    standardDeviationNegAxis(nullptr), standardDeviation2PosAxis(nullptr), standardDeviation2NegAxis(nullptr),
+    standardDeviation3PosAxis(nullptr), standardDeviation3NegAxis(nullptr) {
   initKernelFunctionsMap();
 }
 
@@ -291,35 +291,35 @@ bool HistogramStatistics::eventFilter(QObject *, QEvent *e) {
 }
 
 void HistogramStatistics::cleanupAxis() {
-  if (densityAxis != NULL) {
+  if (densityAxis != nullptr) {
     delete densityAxis;
-    densityAxis = NULL;
+    densityAxis = nullptr;
   }
 
-  if (meanAxis != NULL) {
+  if (meanAxis != nullptr) {
     delete meanAxis;
-    meanAxis = NULL;
+    meanAxis = nullptr;
   }
 
-  if (standardDeviationNegAxis != NULL) {
+  if (standardDeviationNegAxis != nullptr) {
     delete standardDeviationNegAxis;
-    standardDeviationNegAxis = NULL;
+    standardDeviationNegAxis = nullptr;
     delete standardDeviationPosAxis;
-    standardDeviationPosAxis = NULL;
+    standardDeviationPosAxis = nullptr;
   }
 
-  if (standardDeviation2PosAxis != NULL) {
+  if (standardDeviation2PosAxis != nullptr) {
     delete standardDeviation2PosAxis;
-    standardDeviation2PosAxis = NULL;
+    standardDeviation2PosAxis = nullptr;
     delete standardDeviation2NegAxis;
-    standardDeviation2NegAxis = NULL;
+    standardDeviation2NegAxis = nullptr;
   }
 
-  if (standardDeviation3PosAxis != NULL) {
+  if (standardDeviation3PosAxis != nullptr) {
     delete standardDeviation3PosAxis;
-    standardDeviation3PosAxis = NULL;
+    standardDeviation3PosAxis = nullptr;
     delete standardDeviation3NegAxis;
-    standardDeviation3NegAxis = NULL;
+    standardDeviation3NegAxis = nullptr;
   }
 }
 
@@ -327,7 +327,7 @@ void HistogramStatistics::computeInteractor() {
   GlQuantitativeAxis *histoXAxis = histoView->getDetailedHistogram()->getXAxis();
   GlQuantitativeAxis *histoYAxis = histoView->getDetailedHistogram()->getYAxis();
 
-  if (histoYAxis == NULL) {
+  if (histoYAxis == nullptr) {
     return;
   }
 
@@ -481,8 +481,8 @@ void HistogramStatistics::computeInteractor() {
       standardDeviation2NegAxis->addCaption(GlAxis::LEFT, captionHeight, false);
     }
     else {
-      standardDeviation2NegAxis = NULL;
-      standardDeviation2PosAxis = NULL;
+      standardDeviation2NegAxis = nullptr;
+      standardDeviation2PosAxis = nullptr;
     }
 
     if (propertyMean - 3 * propertyStandardDeviation > min) {
@@ -494,8 +494,8 @@ void HistogramStatistics::computeInteractor() {
       standardDeviation3NegAxis->addCaption(GlAxis::LEFT, captionHeight, false);
     }
     else {
-      standardDeviation3NegAxis = NULL;
-      standardDeviation3PosAxis = NULL;
+      standardDeviation3NegAxis = nullptr;
+      standardDeviation3PosAxis = nullptr;
     }
 
     if (histoStatsConfigWidget->nodesSelection()) {
@@ -552,21 +552,21 @@ bool HistogramStatistics::draw(GlMainWidget *glMainWidget) {
     drawComposite(densityAxis, 0, &camera);
   }
 
-  if (meanAxis != NULL) {
+  if (meanAxis != nullptr) {
     drawComposite(meanAxis, 0, &camera);
   }
 
-  if (standardDeviationPosAxis != NULL) {
+  if (standardDeviationPosAxis != nullptr) {
     drawComposite(standardDeviationPosAxis, 0, &camera);
     drawComposite(standardDeviationNegAxis, 0, &camera);
   }
 
-  if (standardDeviation2PosAxis != NULL) {
+  if (standardDeviation2PosAxis != nullptr) {
     drawComposite(standardDeviation2PosAxis, 0, &camera);
     drawComposite(standardDeviation2NegAxis, 0, &camera);
   }
 
-  if (standardDeviation3PosAxis != NULL) {
+  if (standardDeviation3PosAxis != nullptr) {
     drawComposite(standardDeviation3PosAxis, 0, &camera);
     drawComposite(standardDeviation3NegAxis, 0, &camera);
   }

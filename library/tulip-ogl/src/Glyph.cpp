@@ -23,10 +23,10 @@
 using namespace tlp;
 using namespace std;
 
-Glyph::Glyph(const tlp::PluginContext* context) : glGraphInputData(NULL) {
-  if(context != NULL) {
+Glyph::Glyph(const tlp::PluginContext* context) : glGraphInputData(nullptr) {
+  if(context != nullptr) {
     const GlyphContext* glyphContext = dynamic_cast<const GlyphContext*>(context);
-    assert(glyphContext != NULL);
+    assert(glyphContext != nullptr);
     glGraphInputData = glyphContext->glGraphInputData;
   }
 }

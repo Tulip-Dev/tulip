@@ -87,7 +87,7 @@ public :
     return StandardInteractorPriority::MagnifyingGlass;
   }
   QWidget *configurationWidget() const {
-    return NULL;
+    return nullptr;
   }
 
   bool isCompatible(const std::string &viewName) const;

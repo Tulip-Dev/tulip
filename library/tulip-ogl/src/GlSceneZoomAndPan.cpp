@@ -29,7 +29,7 @@ namespace tlp {
 
 GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundingBox, const std::string &layerName, const int nbAnimationSteps, const bool optimalPath, const double p) :
   camera(glScene->getLayer(layerName)->getCamera()),viewport(glScene->getViewport()),nbAnimationSteps(nbAnimationSteps), optimalPath(optimalPath), p(p),
-  camCenterStart(camera.getCenter()),camCenterEnd(Coord(boundingBox.center())),additionalAnimation(NULL) {
+  camCenterStart(camera.getCenter()),camCenterEnd(Coord(boundingBox.center())),additionalAnimation(nullptr) {
 
   camCenterEnd[2] = camCenterStart[2];
 
@@ -90,7 +90,7 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
 void GlSceneZoomAndPan::setAdditionalGlSceneAnimation(AdditionalGlSceneAnimation *additionalAnimation) {
   this->additionalAnimation = additionalAnimation;
 
-  if (additionalAnimation != NULL) {
+  if (additionalAnimation != nullptr) {
     additionalAnimation->setNbAnimationSteps(nbAnimationSteps);
   }
 }
@@ -158,7 +158,7 @@ void GlSceneZoomAndPan::zoomAndPanAnimationStep(int animationStep) {
     camera.setZoomFactor(camera.getZoomFactor() * newZoomFactor);
   }
 
-  if (additionalAnimation != NULL) {
+  if (additionalAnimation != nullptr) {
     additionalAnimation->animationStep(animationStep);
   }
 }

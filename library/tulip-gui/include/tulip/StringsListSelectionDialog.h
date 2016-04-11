@@ -54,7 +54,7 @@ public:
   /**
     * @brief Constructs a dialog with the given parent.
     **/
-  explicit StringsListSelectionDialog(QWidget *parent = NULL);
+  explicit StringsListSelectionDialog(QWidget *parent = nullptr);
 
   /**
    * set the look of the widget
@@ -80,7 +80,7 @@ public:
     * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no size restriction)
     **/
   explicit StringsListSelectionDialog(QString title,
-                                      QWidget *parent = NULL,
+                                      QWidget *parent = nullptr,
                                       const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST,
                                       const unsigned int maxSelectedStringsListSize = 0);
   ~StringsListSelectionDialog();
@@ -98,7 +98,7 @@ public:
     **/
   static bool choose(QString title, const std::vector<std::string>& strList,
                      std::vector<std::string>& selList,
-                     QWidget* parent=NULL,
+                     QWidget* parent=nullptr,
                      const StringsListSelectionWidget::ListType listType =
                        StringsListSelectionWidget::SIMPLE_LIST,
                      const unsigned int maxSize = 0);

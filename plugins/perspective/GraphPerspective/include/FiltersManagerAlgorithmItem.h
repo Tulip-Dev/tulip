@@ -30,7 +30,7 @@ class FiltersManagerAlgorithmItem: public AbstractFiltersManagerItem {
   Q_OBJECT
   Ui::FiltersManagerAlgorithmItem* _ui;
 public:
-  explicit FiltersManagerAlgorithmItem(QWidget* parent = NULL);
+  explicit FiltersManagerAlgorithmItem(QWidget* parent = nullptr);
   ~FiltersManagerAlgorithmItem();
   void applyFilter(tlp::BooleanProperty*);
   QString title() const;

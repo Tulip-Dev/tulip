@@ -63,7 +63,7 @@ void FiltersManagerItem::setMode(Mode m) {
   _ui->addButton->setVisible(m == Invalid);
   _ui->dataBox->setVisible(m != Invalid);
 
-  AbstractFiltersManagerItem* w = NULL;
+  AbstractFiltersManagerItem* w = nullptr;
 
   if (m == Compare)
     w = new FiltersManagerCompareItem;
@@ -74,7 +74,7 @@ void FiltersManagerItem::setMode(Mode m) {
 
   _ui->dataBox->setWidget(w);
 
-  if (w != NULL) {
+  if (w != nullptr) {
     connect(w,SIGNAL(titleChanged()),this,SLOT(dataBoxTitleChanged()));
     _ui->dataBox->setTitle(w->title());
 
@@ -97,12 +97,12 @@ void FiltersManagerItem::dataBoxTitleChanged() {
 }
 
 void FiltersManagerItem::graphChanged(Graph *g) {
-  if (_ui->dataBox->widget() != NULL)
+  if (_ui->dataBox->widget() != nullptr)
     static_cast<AbstractFiltersManagerItem*>(_ui->dataBox->widget())->setGraph(g);
 }
 
 void FiltersManagerItem::applyFilter(tlp::BooleanProperty* prop) {
-  if (_ui->dataBox->widget() != NULL) {
+  if (_ui->dataBox->widget() != nullptr) {
     static_cast<AbstractFiltersManagerItem*>(_ui->dataBox->widget())->applyFilter(prop);
   }
 }

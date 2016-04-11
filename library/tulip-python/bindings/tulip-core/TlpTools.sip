@@ -113,7 +113,7 @@ Looks for the Tulip plugins directory and fills the Tulip path variables : tlp.T
 The plug-ins directory can be defined in different ways, given by order of prevalence:
 
     * the TLP_DIR environment variable, if it has a value
-    * the appDirPath parameter, if it is not NULL
+    * the appDirPath parameter, if it is not nullptr
     * at that point, the Tulip paths will be retrieved from the path of the loaded Tulip shared library
       (you must dispose of a standard Tulip installation for that feature to work,
       meaning the relative path for the Tulip plugins folder to the Tulip libraries one must be ../lib/tulip/).
@@ -122,7 +122,7 @@ The plug-ins directory can be defined in different ways, given by order of preva
 %End
 
 %MethodCode
-  const char *appDirPathStr = NULL;
+  const char *appDirPathStr = nullptr;
   if ((*a0) != "") {
     appDirPathStr = (*a0).c_str();
   }

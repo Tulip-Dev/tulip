@@ -34,7 +34,7 @@ class BooleanProperty;
 class TLP_QT_SCOPE LayoutPropertyAnimation: public CachedPropertyAnimation<tlp::LayoutProperty, tlp::Coord, std::vector<tlp::Coord> > {
 public:
   LayoutPropertyAnimation(tlp::Graph *g, tlp::LayoutProperty *start, tlp::LayoutProperty *end, tlp::LayoutProperty *out,
-                          tlp::BooleanProperty *selection = NULL, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject *parent=NULL);
+                          tlp::BooleanProperty *selection = nullptr, int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject *parent=nullptr);
 
   virtual ~LayoutPropertyAnimation() {}
 

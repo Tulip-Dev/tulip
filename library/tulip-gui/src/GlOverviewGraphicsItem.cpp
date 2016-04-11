@@ -39,7 +39,7 @@ GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
 }
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
-  overview.setParentItem(NULL);
+  overview.setParentItem(nullptr);
 }
 
 void GlOverviewGraphicsItem::setSize(unsigned int width, unsigned int height) {

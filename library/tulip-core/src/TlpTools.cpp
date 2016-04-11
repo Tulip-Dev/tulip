@@ -90,7 +90,7 @@ extern "C" {
 #endif
     HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
-    if (hmod != NULL) {
+    if (hmod != nullptr) {
       TCHAR szPath[512 + 1];
       DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
 
@@ -112,10 +112,10 @@ extern "C" {
 
     ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
-    if (ptr != NULL) {
+    if (ptr != nullptr) {
       void* symbol = dlsym(ptr, "getTulipLibDir");
 
-      if (symbol != NULL) {
+      if (symbol != nullptr) {
         if (dladdr(symbol, &info)) {
           std::string tmp = info.dli_fname;
           tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
@@ -208,14 +208,14 @@ void tlp::initTulipLib(const char* appDirPath) {
     TulipLibDir+='/';
 
   // check TulipLibDir exists
-  bool tlpDirSet = (getEnvTlp!=NULL);
+  bool tlpDirSet = (getEnvTlp!=nullptr);
 
   if (tlpDirSet)
     checkDirectory(TulipLibDir);
 
   getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
-  if (getEnvTlp!=NULL) {
+  if (getEnvTlp!=nullptr) {
     TulipPluginsPath=string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
@@ -335,7 +335,7 @@ unsigned int tlp::getSeedOfRandomSequence() {
 
 void tlp::initRandomSequence() {
   if (randomSeed == UINT_MAX)
-    srand((unsigned int) time(NULL));
+    srand((unsigned int) time(nullptr));
   else
     srand(randomSeed);
 }
@@ -391,7 +391,7 @@ static std::wstring openmodeToWString(std::ios_base::openmode mode) {
 // class to open a file for reading whose path contains non ascii characters (MinGW only)
 class wifilestream : public std::istream {
 public:
-  wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode) : fp(NULL), buffer(NULL) {
+  wifilestream(const std::wstring &wfilename, std::ios_base::openmode mode) : fp(nullptr), buffer(nullptr) {
     fp = _wfopen(wfilename.c_str(), openmodeToWString(mode).c_str());
 
     if (fp) {
@@ -415,7 +415,7 @@ private:
 // class to open a file for writing whose path contains non ascii characters (MinGW only)
 class wofilestream : public std::ostream {
 public:
-  wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode) : fp(NULL), buffer(NULL) {
+  wofilestream(const std::wstring &wfilename, std::ios_base::openmode open_mode) : fp(nullptr), buffer(nullptr) {
     fp = _wfopen(wfilename.c_str(), openmodeToWString(open_mode).c_str());
 
     if (fp) {

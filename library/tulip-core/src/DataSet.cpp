@@ -87,14 +87,14 @@ DataType* DataSet::getData(const string &str) const {
   for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
          data.begin(); it != data.end(); ++it) {
     if ((*it).first == str)
-      return it->second ? it->second->clone() : NULL;
+      return it->second ? it->second->clone() : nullptr;
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void DataSet::setData(const std::string &str, const DataType* value) {
-  DataType* val = value ? value->clone() : NULL;
+  DataType* val = value ? value->clone() : nullptr;
 
   for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
          data.begin(); it != data.end(); ++it) {
@@ -307,7 +307,7 @@ bool DataSet::read(std::istream& is, DataSet& ds) {
 
 DataTypeSerializer *DataSet::typenameToSerializer(const std::string &name) {
   if (serializerContainer.tnTodts.count(name) == 0)
-    return NULL;
+    return nullptr;
 
   return serializerContainer.tnTodts[name];
 }

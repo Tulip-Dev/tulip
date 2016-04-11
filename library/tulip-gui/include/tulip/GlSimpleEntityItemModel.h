@@ -84,7 +84,7 @@ public:
     SimpleEntityRole = Qt::UserRole+1
   };
 
-  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent=NULL);
+  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent=nullptr);
   virtual ~GlSimpleEntityItemModel();
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;

@@ -177,7 +177,7 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
   QWidget(parent),
-  ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL) {
+  ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(nullptr) {
   ui->setupUi(this);
 
   //Import line number change
@@ -376,7 +376,7 @@ QString CSVImportConfigurationWidget::generateColumnName(unsigned int col)const 
   if(useFirstLineAsPropertyName()) {
     QTableWidgetItem *item = ui->previewTableWidget->item(0,col);
 
-    if(item!=NULL) {
+    if(item!=nullptr) {
       return item->text();
     }
     else {
@@ -475,11 +475,11 @@ PropertyConfigurationWidget *CSVImportConfigurationWidget::createPropertyConfigu
 void CSVImportConfigurationWidget::propertyNameChanged(QString newName) {
   //Update headers
   PropertyConfigurationWidget *widget = qobject_cast<PropertyConfigurationWidget*>(sender());
-  assert(widget != NULL);
+  assert(widget != nullptr);
 
   QTableWidgetItem * item = ui->previewTableWidget->horizontalHeaderItem( widget->getPropertyNumber());
 
-  if(item == NULL) {
+  if(item == nullptr) {
     item = new QTableWidgetItem(newName);
     ui->previewTableWidget->setHorizontalHeaderItem(widget->getPropertyNumber(),item);
   }
@@ -493,7 +493,7 @@ void CSVImportConfigurationWidget::propertyNameChanged(QString newName) {
 
 void CSVImportConfigurationWidget::propertyStateChanged(bool state) {
   PropertyConfigurationWidget *widget = qobject_cast<PropertyConfigurationWidget*>(sender());
-  assert(widget != NULL);
+  assert(widget != nullptr);
 
   for(int i = 0 ; i < ui->previewTableWidget->rowCount(); ++ i) {
     QTableWidgetItem* item = ui->previewTableWidget->item(i,widget->getPropertyNumber());
@@ -604,7 +604,7 @@ string CSVImportConfigurationWidget::guessDataType(const string& data) const {
     return IntegerProperty::propertyTypename;
   }
 
-  char* prevLocale = setlocale(LC_NUMERIC, NULL);
+  char* prevLocale = setlocale(LC_NUMERIC, nullptr);
 
   if (parser->decimalMark() == ',')
     setlocale(LC_NUMERIC, "fr_FR");
@@ -637,7 +637,7 @@ bool CSVImportConfigurationWidget::eventFilter(QObject *obj, QEvent *evt) {
   if(evt->type() == QEvent::Resize) {
     PropertyConfigurationWidget* columnWidget = qobject_cast<PropertyConfigurationWidget*>(obj);
 
-    if(columnWidget!=NULL) {
+    if(columnWidget!=nullptr) {
       columnSizeChanged(columnWidget->getPropertyNumber());
     }
   }
@@ -649,7 +649,7 @@ void CSVImportConfigurationWidget::columnSizeChanged(unsigned int i) {
   //    assert(_columns.size()>i);
   PropertyConfigurationWidget* widget = propertyWidgets[i];
 
-  if(widget!=NULL) {
+  if(widget!=nullptr) {
     //QRect widgetRect = ui->horizontalLayout_4->;
     ui->previewTableWidget->setColumnWidth(i,widget->width());
   }

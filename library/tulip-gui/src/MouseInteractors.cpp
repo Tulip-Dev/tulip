@@ -132,7 +132,7 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if(qMouseEv != NULL) {
+  if(qMouseEv != nullptr) {
     SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
@@ -481,7 +481,7 @@ bool MouseNKeysNavigator::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseButtonRelease) {
     glmainwidget->setCursor(oldCursor);
     delete currentSpecInteractorComponent;
-    currentSpecInteractorComponent=NULL;
+    currentSpecInteractorComponent=nullptr;
     return true;
   }
 

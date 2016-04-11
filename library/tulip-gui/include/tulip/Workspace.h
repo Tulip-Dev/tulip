@@ -67,7 +67,7 @@ class TLP_QT_SCOPE Workspace: public QWidget {
   bool _autoCenterViews;
 
 public:
-  explicit Workspace(QWidget *parent = NULL);
+  explicit Workspace(QWidget *parent = nullptr);
   virtual ~Workspace();
 
   int addPanel(tlp::View*);
@@ -123,7 +123,7 @@ public slots:
 signals:
   void panelFocused(tlp::View*);
   void focusedPanelSynchronized();
-  void addPanelRequest(tlp::Graph* g = NULL);
+  void addPanelRequest(tlp::Graph* g = nullptr);
   void importGraphRequest();
 
 protected slots:

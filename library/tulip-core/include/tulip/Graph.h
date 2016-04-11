@@ -63,12 +63,12 @@ enum ElementType {
  * Before Tulip 4.8 and as a fallback, the function uses the "TLP Import" import plugin
  * (always loaded as it is linked into the tulip-core library).
  *
- * If the import fails (no such file, parse error, ...) NULL is returned.
+ * If the import fails (no such file, parse error, ...) nullptr is returned.
  *
  * @param filename the file in one of the supported formats to parse.
- * @return Graph* the imported Graph, NULL if the import failed.
+ * @return Graph* the imported Graph, nullptr if the import failed.
  **/
-TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* progress = NULL);
+TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* progress = nullptr);
 
 /**
  * @ingroup Graph
@@ -90,7 +90,7 @@ TLP_SCOPE Graph * loadGraph(const std::string &filename, tlp::PluginProgress* pr
  * @param filename the file to save the graph to.
  * @return bool whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = NULL);
+TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginProgress* progress = nullptr);
 
 /**
  * @ingroup Graph
@@ -102,25 +102,25 @@ TLP_SCOPE bool saveGraph(Graph* graph, const std::string &filename, tlp::PluginP
  * @param outputStream The stream to export to. Can be a standard ostream, an ofstream, or even a gzipped ostream.
  * @param format The format to use to export the Graph.
  * @param dataSet The parameters to pass to the export plugin (e.g. additional data, options for the format)
- * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to nullptr.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL);
+TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress=nullptr);
 
 /**
  * @ingroup Graph
  * @brief Imports a graph using the specified import plugin with the parameters stored in the DataSet.
  *
  * If no graph is passed, then a new graph will be created. You can pass a graph in order to import data into it.
- * Returns the graph with imported data, or NULL if the import failed. In this case, the Pluginprogress should have an error that can be displayed.
+ * Returns the graph with imported data, or nullptr if the import failed. In this case, the Pluginprogress should have an error that can be displayed.
  *
  * @param format The format to use to import the graph.
  * @param dataSet The parameters to pass to the import plugin (file to read, ...)
- * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
- * @param newGraph The graph to import the data into. This can be usefull to import data into a subgraph. Defaults to NULL.
- * @return :Graph* The graph containing the imported data, or NULL in case of failure.
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to nullptr.
+ * @param newGraph The graph to import the data into. This can be usefull to import data into a subgraph. Defaults to nullptr.
+ * @return :Graph* The graph containing the imported data, or nullptr in case of failure.
  **/
-TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
+TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=nullptr,Graph *newGraph=nullptr);
 
 /**
  * @ingroup Graph
@@ -137,19 +137,19 @@ TLP_SCOPE Graph* newGraph();
 /**
  * @ingroup Graph
  * Appends the selected part of the graph inG (properties, nodes and edges) into the graph outG.
- * If no selection is done (inSel=NULL), the whole inG graph is appended.
+ * If no selection is done (inSel=nullptr), the whole inG graph is appended.
  * The output selection is used to select the appended nodes & edges
  * \warning The input selection is extended to all selected edge ends.
  */
-TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=NULL, BooleanProperty* outSelection=NULL );
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty* inSelection=nullptr, BooleanProperty* outSelection=nullptr );
 
 /**
  * @ingroup Graph
  * Removes the selected part of the graph ioG (properties values, nodes and edges).
- * If no selection is done (inSel=NULL), the whole graph is reseted to default value.
+ * If no selection is done (inSel=nullptr), the whole graph is reseted to default value.
  * \warning The selection is extended to all selected edge ends.
  */
-TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
+TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=nullptr);
 
 
 /**
@@ -234,11 +234,11 @@ public:
    *
    * @param algorithm The algorithm to apply.
    * @param errorMessage A string that will be modified to contain an error message should an error occur.
-   * @param dataSet The parameters to the algorithm. Defaults to NULL.
-   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+   * @param dataSet The parameters to the algorithm. Defaults to nullptr.
+   * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to nullptr.
    * @return bool Whether the algorithm was successfully applied.
    **/
-  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage, DataSet *dataSet=NULL, PluginProgress *progress=NULL);
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage, DataSet *dataSet=nullptr, PluginProgress *progress=nullptr);
 
   //=========================================================================
   // Graph hierarchy access and building
@@ -266,7 +266,7 @@ public:
     * @param name The name of the newly created subgraph. Defaults to "unnamed".
     * @return :Graph* The newly created subgraph.
     **/
-  virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
+  virtual Graph *addSubGraph(BooleanProperty *selection=nullptr,
                              const std::string& name = "unnamed")=0;
 
   /**
@@ -282,7 +282,7 @@ public:
    *
    * @param name The name of the newly created subgraph. Defaults to "unnamed".
    * @param addSibling if true the clone subgraph will be a sibling of this graph, if false (the default) it will be a subgraph of this graph
-   * @return :Graph* The newly created clone subgraph. NULL will be returned if addSibling is set to true and this graph is a root graph.
+   * @return :Graph* The newly created clone subgraph. nullptr will be returned if addSibling is set to true and this graph is a root graph.
    **/
   virtual Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false);
 
@@ -295,7 +295,7 @@ public:
    * @return The newly created subgraph.
    */
   Graph *inducedSubGraph(const std::set<node>& nodeSet,
-                         Graph* parentSubGraph = NULL);
+                         Graph* parentSubGraph = nullptr);
 
   /**
    * @brief Deletes a sub-graph of this graph.
@@ -389,7 +389,7 @@ public:
       }
     }
     delete it;
-    return NULL;
+    return nullptr;
    * @endcode
    * @param n the index of the subgraph to retrieve.
    * @return The n-th subgraph.
@@ -446,7 +446,7 @@ public:
 
   /**
    * @brief Returns a pointer on the sub-graph with the corresponding id
-   * or NULL if there is no sub-graph with that id.
+   * or nullptr if there is no sub-graph with that id.
    * @param id The id of the subgraph to retrieve.
    * @return A subgraph of the given id, or null if no such subgraph exists on this graph.
    * @see getDescendantGraph(unsigned int) to search in the whole hierarchy.
@@ -455,27 +455,27 @@ public:
 
   /**
    * @brief Returns a pointer on the sub-graph with the corresponding name
-   * or NULL if there is no sub-graph with that name.
+   * or nullptr if there is no sub-graph with that name.
    * @param name The name of the subgraph to retrieve.
-   * @return A Graph named name, or NULL if no such subgraph exists on this graph.
+   * @return A Graph named name, or nullptr if no such subgraph exists on this graph.
    * @see getDescendantGraph(const std::string &) to search in the whole hierarchy.
    */
   virtual Graph* getSubGraph(const std::string &name) const=0;
 
   /**
    * @brief Returns a pointer on the descendant with the corresponding id
-   * or NULL if there is no descendant  with that id.
+   * or nullptr if there is no descendant  with that id.
    * @param id The id of the descendant graph to retrieve.
-   * @return A graph with the given id, or NULL if no such graph exists in this graph's descendants.
+   * @return A graph with the given id, or nullptr if no such graph exists in this graph's descendants.
    * @see getSubGraph(unsigned int) to search only in direct subgraphs.
    */
   virtual Graph* getDescendantGraph(unsigned int id) const=0;
 
   /**
    * @brief Returns a pointer on the first descendant graph with the corresponding name
-   * or NULL if there is no descendant graph with that name.
+   * or nullptr if there is no descendant graph with that name.
    * @param name The name of the descendant graph to look for.
-   * @return A graph named name, or NULL if there is no such graph in this graph's descendants.
+   * @return A graph named name, or nullptr if there is no such graph in this graph's descendants.
    * @see getSubGraph(const std::string &) to search only in direct subgraphs.
    */
   virtual Graph* getDescendantGraph(const std::string &name) const=0;
@@ -1142,7 +1142,7 @@ public:
    * Graph::delLocalProperty().
    *
    * @param name The unique identifier of the property.
-   * @return An existing property, or NULL if no property with the given name exists.
+   * @return An existing property, or nullptr if no property with the given name exists.
    */
   virtual PropertyInterface* getProperty(const std::string& name) const = 0;
 
@@ -1169,7 +1169,7 @@ public:
    * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
-   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return nullptr.
    * @param name The unique identifier of the property.
    * @return An existing property, or a new one if none exists with the given name.
    */
@@ -1183,7 +1183,7 @@ public:
    * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
-   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return nullptr.
    * @param propertyName The unique identifier of the property.
    * @param propertyType A string describing the type of the property.
    * @return The property of given name.
@@ -1198,7 +1198,7 @@ public:
    * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    *
-   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return NULL.
+   * @warning using the wrong propertyType will result in a segmentation fault. Using an invalid property type will always return nullptr.
    * @param propertyName The unique identifier of the property.
    * @param propertyType A string describing the type of the property.
    * @return The property of given name.
@@ -1283,8 +1283,8 @@ public:
   bool applyPropertyAlgorithm(const std::string &algorithm,
                               PropertyInterface* result,
                               std::string &errorMessage,
-                              PluginProgress *progress=NULL,
-                              DataSet *parameters=NULL);
+                              PluginProgress *progress=nullptr,
+                              DataSet *parameters=nullptr);
 
   // updates management
   /**
@@ -1347,7 +1347,7 @@ public:
    * @see canPopThenUnPop()
    */
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL)=0;
+                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= nullptr)=0;
 
   /**
    * @brief Undoes modifications and reverts the whole graph hierarchy back to a previous state.

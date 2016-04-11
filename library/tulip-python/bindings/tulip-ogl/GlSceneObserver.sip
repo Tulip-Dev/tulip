@@ -34,7 +34,7 @@ class GlSceneEvent : tlp::Event {
    if (dynamic_cast<tlp::GlSceneEvent*>(sipCpp)) {
         sipType = sipFindType("tlp::GlSceneEvent");
    } else {
-        sipType = NULL;
+        sipType = nullptr;
    }
 %End
 

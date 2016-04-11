@@ -36,7 +36,7 @@ class TLP_QT_SCOPE TreeViewComboBox : public QComboBox {
   QModelIndex _lastIndex;
 
 public:
-  explicit TreeViewComboBox(QWidget *parent = NULL);
+  explicit TreeViewComboBox(QWidget *parent = nullptr);
 
   void setModel(QAbstractItemModel * model);
 

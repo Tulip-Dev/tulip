@@ -75,7 +75,7 @@ consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
   char *buf;
 
   if(!PyArg_ParseTuple(o, "s", &buf))
-    return NULL;
+    return nullptr;
 
   QString output(QString::fromUtf8(buf));
 
@@ -92,7 +92,7 @@ consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
 
   if (outputActivated) {
 
-    if (buf != NULL && reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole) {
+    if (buf != nullptr && reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole) {
 
       currentConcatOutput += output;
 
@@ -115,7 +115,7 @@ consoleutils_ConsoleOutput_enableConsoleOutput(PyObject *self, PyObject *o) {
   int i;
 
   if(!PyArg_ParseTuple(o, "i", &i))
-    return NULL;
+    return nullptr;
 
   ((consoleutils_ConsoleOutput *)self)->writeToConsole = i > 0;
 
@@ -163,9 +163,9 @@ static PyMethodDef consoleutils_ConsoleOutput_methods[] = {
 
 static PyTypeObject consoleutils_ConsoleOutputType = {
 #if PY_MAJOR_VERSION >= 3
-  PyVarObject_HEAD_INIT(NULL, 0)
+  PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-  PyObject_HEAD_INIT(NULL)
+  PyObject_HEAD_INIT(nullptr)
   0,                         /*ob_size*/
 #endif
   "consoleutils.ConsoleOutput",             /*tp_name*/
@@ -272,9 +272,9 @@ static PyMethodDef consoleutils_ConsoleInput_methods[] = {
 
 static PyTypeObject consoleutils_ConsoleInputType = {
 #if PY_MAJOR_VERSION >= 3
-  PyVarObject_HEAD_INIT(NULL, 0)
+  PyVarObject_HEAD_INIT(nullptr, 0)
 #else
-  PyObject_HEAD_INIT(NULL)
+  PyObject_HEAD_INIT(nullptr)
   0,                         /*ob_size*/
 #endif
   "consoleutils.ConsoleInput",             /*tp_name*/
@@ -334,11 +334,11 @@ static struct PyModuleDef consoleutilsModuleDef = {
   "consoleutils",     /* m_name */
   "",  /* m_doc */
   -1,                  /* m_size */
-  NULL,    /* m_methods */
-  NULL,                /* m_reload */
-  NULL,                /* m_traverse */
-  NULL,                /* m_clear */
-  NULL,                /* m_free */
+  nullptr,    /* m_methods */
+  nullptr,                /* m_reload */
+  nullptr,                /* m_traverse */
+  nullptr,                /* m_clear */
+  nullptr,                /* m_free */
 };
 #endif
 
@@ -359,7 +359,7 @@ initconsoleutils(void) {
   m = PyModule_Create(&consoleutilsModuleDef);
   _PyImport_FixupBuiltin(m, const_cast<char *>("consoleutils"));
 #else
-  m = Py_InitModule3("consoleutils", NULL,"");
+  m = Py_InitModule3("consoleutils", nullptr,"");
   _PyImport_FixupExtension(const_cast<char *>("consoleutils"), const_cast<char *>("consoleutils"));
 #endif
   PyObject *cot = reinterpret_cast<PyObject*>(&consoleutils_ConsoleOutputType);

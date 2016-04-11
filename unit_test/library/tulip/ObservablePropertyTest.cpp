@@ -418,7 +418,7 @@ void ObservablePropertyTest::testSynchronousDelete() {
   for(unsigned int i = 0; i < 7; ++i) {
     PropertyInterface* prop = props[i];
     delete prop;
-    props[i] = NULL;
+    props[i] = nullptr;
     CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
     CPPUNIT_ASSERT(observer->found(prop));
     CPPUNIT_ASSERT(pObserver->nbProperties() == i + 1);
@@ -435,7 +435,7 @@ void ObservablePropertyTest::testAsynchronousDelete() {
   for(unsigned int i = 0; i < 7; ++i) {
     PropertyInterface* prop = props[i];
     delete prop;
-    props[i] = NULL;
+    props[i] = nullptr;
     // deletion is not asynchronous
     CPPUNIT_ASSERT(observer->nbObservables() == i + 1);
     CPPUNIT_ASSERT(observer->found(prop));
@@ -476,7 +476,7 @@ void ObservablePropertyTest::testRemoveObserver() {
 
   for(unsigned int i = 0; i < 7; ++i) {
     delete props[i];
-    props[i] = NULL;
+    props[i] = nullptr;
     CPPUNIT_ASSERT(observer->nbObservables() == 0);
     CPPUNIT_ASSERT(pObserver->nbProperties() == 0);
   }

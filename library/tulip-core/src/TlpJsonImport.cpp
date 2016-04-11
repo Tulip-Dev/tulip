@@ -58,7 +58,7 @@ public:
     _currentAttributeName(std::string()),
     _currentAttributeTypeName(std::string()),
     _parsingProperties(false),
-    _currentProperty(NULL),
+    _currentProperty(nullptr),
     _propertyName(std::string()),
     _currentIdentifier(UINT_MAX),
     _parsingPropertyType(false),
@@ -209,7 +209,7 @@ public:
     }
 
     if(!_parsingPropertyNodeValues && !_parsingPropertyEdgeValues && !_propertyName.empty()) {
-      _currentProperty = NULL;
+      _currentProperty = nullptr;
       _propertyName = string();
     }
 
@@ -511,7 +511,7 @@ private:
  **/
 class YajlProxy : public YajlParseFacade {
 public:
-  YajlProxy(tlp::PluginProgress* progress = NULL) : YajlParseFacade(progress), _proxy(NULL) {
+  YajlProxy(tlp::PluginProgress* progress = nullptr) : YajlParseFacade(progress), _proxy(nullptr) {
   }
   virtual ~YajlProxy() {
   }

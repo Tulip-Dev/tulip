@@ -47,7 +47,7 @@ struct CoordXOrdering: public binary_function<Coord, Coord, bool> {
 Coord *computeStraightLineIntersection(const Coord line1[2],
                                        const Coord line2[2]) {
 
-  Coord *intersectionPoint = NULL;
+  Coord *intersectionPoint = nullptr;
   bool line1ParallelToXaxis = false;
   bool line1ParallelToYaxis = false;
   bool line2ParallelToXaxis = false;
@@ -227,7 +227,7 @@ void GlEditableCurve::addCurveAnchor(const Coord &point) {
 }
 
 Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point) {
-  Coord *anchor = NULL;
+  Coord *anchor = nullptr;
   vector<Coord> curvePointsCp(curvePoints);
   curvePointsCp.insert(curvePointsCp.begin(), startPoint);
   curvePointsCp.push_back(endPoint);
@@ -316,7 +316,7 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
   float ret;
   Coord *intersectionPoint = computeStraightLineIntersection(line1, line2);
 
-  if (intersectionPoint != NULL) {
+  if (intersectionPoint != nullptr) {
     ret = intersectionPoint->getY();
     delete intersectionPoint;
   }
@@ -421,7 +421,7 @@ Color ColorScale::getColorAtLen(const float pos) const {
 GlColorScale::GlColorScale(const Coord &baseCoord, const float length,
                            const float thickness, Orientation orientation, ColorScale *colorScale) :
   scale(colorScale), baseCoord(baseCoord), length(length),
-  thickness(thickness), colorScalePolyQuad(NULL),orientation(orientation) {
+  thickness(thickness), colorScalePolyQuad(nullptr),orientation(orientation) {
   if (colorScale)
     updateDrawing();
 
@@ -431,23 +431,23 @@ GlColorScale::GlColorScale(const GlColorScale &colorScale): orientation(Horizont
   if (colorScale.scale)
     scale = new ColorScale(*colorScale.scale);
   else
-    scale = NULL;
+    scale = nullptr;
 
   baseCoord = colorScale.getBaseCoord();
   thickness = colorScale.getThickness();
   length = colorScale.getLength();
   GlPolyQuad *polyQuad = colorScale.getColorScalePolyQuad();
 
-  if (polyQuad != NULL) {
+  if (polyQuad != nullptr) {
     colorScalePolyQuad = new GlPolyQuad(*polyQuad);
   }
   else {
-    colorScalePolyQuad = NULL;
+    colorScalePolyQuad = nullptr;
   }
 }
 
 GlColorScale::~GlColorScale() {
-  if (colorScalePolyQuad != NULL) {
+  if (colorScalePolyQuad != nullptr) {
     delete colorScalePolyQuad;
   }
 }
@@ -458,7 +458,7 @@ void GlColorScale::setColorScale(ColorScale * scale) {
 }
 
 void GlColorScale::updateDrawing() {
-  if (colorScalePolyQuad != NULL) {
+  if (colorScalePolyQuad != nullptr) {
     delete colorScalePolyQuad;
   }
 
@@ -525,7 +525,7 @@ void GlColorScale::updateDrawing() {
   boundingBox = colorScalePolyQuad->getBoundingBox();
 }
 void GlColorScale::draw(float lod, Camera* camera) {
-  if (colorScalePolyQuad != NULL) {
+  if (colorScalePolyQuad != nullptr) {
     colorScalePolyQuad->draw(lod, camera);
   }
 }

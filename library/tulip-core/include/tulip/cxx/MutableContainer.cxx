@@ -19,7 +19,7 @@
 //===================================================================
 template <typename TYPE>
 tlp::MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredType<TYPE>::Value>()),
-  hData(NULL), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
+  hData(nullptr), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
   ratio(double(sizeof(typename tlp::StoredType<TYPE>::Value)) / (3.0*double(sizeof(void *))+double(sizeof(typename tlp::StoredType<TYPE>::Value)))),
   compressing(false) {
 }
@@ -43,7 +43,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
     }
 
     delete vData;
-    vData = NULL;
+    vData = nullptr;
     break;
 
   case HASH:
@@ -59,7 +59,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
     }
 
     delete hData;
-    hData = NULL;
+    hData = nullptr;
     break;
 
   default:
@@ -105,7 +105,7 @@ void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
     }
 
     delete hData;
-    hData = NULL;
+    hData = nullptr;
     vData = new std::deque<typename StoredType<TYPE>::Value>();
     break;
 
@@ -131,7 +131,7 @@ tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value
   if (equal &&
       StoredType<TYPE>::equal(defaultValue, value))
     // error
-    return NULL;
+    return nullptr;
   else {
     switch (state) {
     case VECT:
@@ -145,7 +145,7 @@ tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value
     default:
       assert(false);
       tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
-      return NULL;
+      return nullptr;
     }
   }
 }
@@ -459,7 +459,7 @@ void tlp::MutableContainer<TYPE>::vecttohash() {
   maxIndex = newMaxIndex;
   minIndex = newMinIndex;
   delete vData;
-  vData = NULL;
+  vData = nullptr;
   state = HASH;
 }
 //===================================================================
@@ -478,7 +478,7 @@ void tlp::MutableContainer<TYPE>::hashtovect() {
   }
 
   delete hData;
-  hData = NULL;
+  hData = nullptr;
 }
 //===================================================================
 template <typename TYPE>

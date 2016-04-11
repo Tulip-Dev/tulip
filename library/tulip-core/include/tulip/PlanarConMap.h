@@ -193,7 +193,7 @@ private:
 };
 
 // Compute a PlanarConMap from a graph.
-// return a NULL value if the graph is not connected
+// return a nullptr value if the graph is not connected
 TLP_SCOPE PlanarConMap* computePlanarConMap(Graph* graph);
 
 }

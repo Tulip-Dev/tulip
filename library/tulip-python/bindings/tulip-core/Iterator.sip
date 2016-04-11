@@ -58,7 +58,7 @@ public:
     sipRes = copyValue(sipCpp->next());
   } else {
     PyErr_SetNone(PyExc_StopIteration);
-    return NULL;
+    return nullptr;
   }
 %End
 

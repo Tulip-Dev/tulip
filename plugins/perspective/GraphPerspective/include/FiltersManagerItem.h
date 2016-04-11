@@ -51,7 +51,7 @@ public:
     Invalid
   };
 
-  explicit FiltersManagerItem(QWidget *parent=NULL);
+  explicit FiltersManagerItem(QWidget *parent=nullptr);
   virtual ~FiltersManagerItem();
 
 signals:

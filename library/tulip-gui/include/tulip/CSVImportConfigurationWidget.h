@@ -49,7 +49,7 @@ class TLP_QT_SCOPE PropertyConfigurationWidget: public QWidget {
   Q_OBJECT
 public:
   PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable,
-                              const std::string& PropertyType, QWidget* parent = NULL);
+                              const std::string& PropertyType, QWidget* parent = nullptr);
   /**
      * Return the selected property type. The property type is not the label displayed in the combobox but correspond to the Property::propertyTypename static string variable of the property class.
      */
@@ -100,7 +100,7 @@ signals:
  **/
 class TLP_QT_SCOPE PropertyNameValidator: public QValidator {
 public:
-  PropertyNameValidator(const std::vector<PropertyConfigurationWidget*>& widgets,QObject*parent=NULL) :
+  PropertyNameValidator(const std::vector<PropertyConfigurationWidget*>& widgets,QObject*parent=nullptr) :
     QValidator(parent), widgets(widgets) {
   }
   virtual ~PropertyNameValidator() {
@@ -121,7 +121,7 @@ private:
 **/
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:
-  CSVTableWidget(QWidget* parent=NULL);
+  CSVTableWidget(QWidget* parent=nullptr);
   bool begin();
   bool line(unsigned int row,const std::vector<std::string>& lineTokens);
   bool end(unsigned int rowNumber, unsigned int columnNumber);
@@ -161,7 +161,7 @@ private:
 class TLP_QT_SCOPE CSVImportConfigurationWidget : public QWidget, public CSVContentHandler {
   Q_OBJECT
 public:
-  CSVImportConfigurationWidget(QWidget *parent = NULL);
+  CSVImportConfigurationWidget(QWidget *parent = nullptr);
   ~CSVImportConfigurationWidget();
   bool begin();
   bool line(unsigned int row,const std::vector<std::string>& lineTokens);

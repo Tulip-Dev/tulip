@@ -95,7 +95,7 @@ bool GlEditableComplexPolygon::pointInsidePolygon(const Coord &point) {
 }
 
 Coord *GlEditableComplexPolygon::getPolygonVertexUnderPointerIfAny(const Coord &pointerViewportCoord, Camera *camera) {
-  Coord *ret = NULL;
+  Coord *ret = nullptr;
   vector<Coord>::iterator it;
   camera->initGl();
 
@@ -126,7 +126,7 @@ std::pair<Coord, Coord> *GlEditableComplexPolygon::getPolygonSegmentUnderPointer
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 void GlEditableComplexPolygon::movePolygonVertexToPoint(const Coord &polygonVertex, const Coord &targetPoint) {
@@ -175,7 +175,7 @@ void GlEditableComplexPolygon::draw(float lod,Camera* camera) {
 }
 
 ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(ScatterPlotCorrelCoeffSelectorOptionsWidget *optionsWidget) :
-  optionsWidget(optionsWidget), scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL), dragStarted(false), x(0), y(0) {
+  optionsWidget(optionsWidget), scatterView(nullptr), selectedPolygon(nullptr), selectedPolygonPoint(nullptr), dragStarted(false), x(0), y(0) {
   basicCircle.resizePoints(30);
   basicCircle.setFillMode(true);
   basicCircle.setOutlineMode(true);
@@ -184,7 +184,7 @@ ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(ScatterPlotCorrel
 }
 
 ScatterPlotCorrelCoeffSelector::ScatterPlotCorrelCoeffSelector(const ScatterPlotCorrelCoeffSelector &scatterPlotCorrelCoeffSelector) :
-  scatterView(NULL), selectedPolygon(NULL), selectedPolygonPoint(NULL),
+  scatterView(nullptr), selectedPolygon(nullptr), selectedPolygonPoint(nullptr),
   dragStarted(false), x(0), y(0) {
   optionsWidget = scatterPlotCorrelCoeffSelector.optionsWidget;
   basicCircle.resizePoints(30);
@@ -199,7 +199,7 @@ ScatterPlotCorrelCoeffSelector::~ScatterPlotCorrelCoeffSelector() {}
 bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
   GlMainWidget *glWidget = dynamic_cast<GlMainWidget *>(obj);
 
-  if(glWidget==NULL)
+  if(glWidget==nullptr)
     return false;
 
   Camera &camera = glWidget->getScene()->getLayer("Main")->getCamera();
@@ -222,10 +222,10 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
       if (!dragStarted) {
         getPolygonAndPointUnderPointerIfAny(currentPointerSceneCoords, &camera);
 
-        if (selectedPolygonPoint != NULL) {
+        if (selectedPolygonPoint != nullptr) {
           glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
         }
-        else if (selectedPolygon != NULL) {
+        else if (selectedPolygon != nullptr) {
           glWidget->setCursor(QCursor(Qt::SizeAllCursor));
         }
         else {
@@ -233,15 +233,15 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
         }
       }
       else {
-        if (selectedPolygon != NULL && selectedPolygonPoint != NULL) {
+        if (selectedPolygon != nullptr && selectedPolygonPoint != nullptr) {
           selectedPolygon->movePolygonVertexToPoint(*selectedPolygonPoint, currentPointerSceneCoords);
           delete selectedPolygonPoint;
           selectedPolygonPoint = new Coord(currentPointerSceneCoords);
         }
-        else if (selectedPolygon != NULL) {
+        else if (selectedPolygon != nullptr) {
           selectedPolygon->translate(translationVectorScene);
 
-          if (selectedPolygonPoint != NULL) {
+          if (selectedPolygonPoint != nullptr) {
             *selectedPolygonPoint += translationVectorScene;
           }
         }
@@ -271,7 +271,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     currentPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0));
 
     if (me->buttons() == Qt::LeftButton) {
-      if (selectedPolygon != NULL || selectedPolygonPoint != NULL) {
+      if (selectedPolygon != nullptr || selectedPolygonPoint != nullptr) {
         dragStarted = true;
       }
       else if (polygonEdit.size() < 2) {
@@ -301,7 +301,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
         polygonEdit.clear();
         glWidget->redraw();
       }
-      else if (selectedPolygon != NULL) {
+      else if (selectedPolygon != nullptr) {
         QMenu contextMenu(glWidget);
         QAction *deletePoly = contextMenu.addAction("Remove polygon");
         QAction *selectData = contextMenu.addAction("Select nodes under polygon");
@@ -311,9 +311,9 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
           polygons.erase(std::remove(polygons.begin(), polygons.end(), selectedPolygon), polygons.end());
           polygonsToNodesSubsetAndCorrelCoeff.erase(selectedPolygon);
           delete selectedPolygon;
-          selectedPolygon = NULL;
+          selectedPolygon = nullptr;
           delete selectedPolygonPoint;
-          selectedPolygonPoint = NULL;
+          selectedPolygonPoint = nullptr;
           glWidget->redraw();
         }
         else if (selectedAction == selectData) {
@@ -343,7 +343,7 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
   else if (e->type() == QEvent::MouseButtonRelease) {
     dragStarted = false;
 
-    if (selectedPolygon != NULL) {
+    if (selectedPolygon != nullptr) {
       mapPolygonColorToCorrelCoeffOfData(selectedPolygon, glWidget);
       glWidget->redraw();
     }
@@ -356,17 +356,17 @@ bool ScatterPlotCorrelCoeffSelector::eventFilter(QObject *obj, QEvent *e) {
     y = glWidget->screenToViewport(me->y());
     currentPointerSceneCoords = camera.viewportTo3DWorld(Coord(x, y, 0.0f));
 
-    if (selectedPolygon != NULL && selectedPolygonPoint != NULL) {
+    if (selectedPolygon != nullptr && selectedPolygonPoint != nullptr) {
       if (selectedPolygon->getNumberOfVertex() > 3) {
         selectedPolygon->removePolygonVertex(*selectedPolygonPoint);
         delete selectedPolygonPoint;
-        selectedPolygonPoint = NULL;
+        selectedPolygonPoint = nullptr;
       }
     }
-    else if (selectedPolygon != NULL) {
+    else if (selectedPolygon != nullptr) {
       pair<Coord, Coord> *polygonSegment = selectedPolygon->getPolygonSegmentUnderPointerIfAny(currentPointerSceneCoords);
 
-      if (polygonSegment != NULL) {
+      if (polygonSegment != nullptr) {
         selectedPolygon->addPolygonVertex(*polygonSegment, currentPointerSceneCoords);
         delete polygonSegment;
       }
@@ -391,7 +391,7 @@ bool ScatterPlotCorrelCoeffSelector::draw(GlMainWidget *glMainWidget) {
 
   camera.initGl();
 
-  if (selectedPolygon != NULL) {
+  if (selectedPolygon != nullptr) {
     GlQuantitativeAxis *xAxis = scatterView->getDetailedScatterPlot()->getXAxis();
     GlQuantitativeAxis *yAxis = scatterView->getDetailedScatterPlot()->getYAxis();
     GlLabel coeffLabel(Coord(xAxis->getAxisBaseCoord().getX() + (1.0f / 2.0f) * xAxis->getAxisLength(), yAxis->getAxisBaseCoord().getY() + yAxis->getAxisLength() + yAxis->getLabelHeight()),
@@ -451,21 +451,21 @@ void ScatterPlotCorrelCoeffSelector::viewChanged(View *view) {
 }
 
 void ScatterPlotCorrelCoeffSelector::getPolygonAndPointUnderPointerIfAny(const Coord &pointerSceneCoord, Camera *camera) {
-  selectedPolygon = NULL;
+  selectedPolygon = nullptr;
   delete selectedPolygonPoint;
-  selectedPolygonPoint = NULL;
+  selectedPolygonPoint = nullptr;
   Coord pointerViewportCoord(camera->worldTo2DViewport(pointerSceneCoord));
 
   for (size_t i = 0 ; i < polygons.size() ; ++i) {
     selectedPolygonPoint = polygons[i]->getPolygonVertexUnderPointerIfAny(pointerViewportCoord, camera);
 
-    if (selectedPolygonPoint != NULL) {
+    if (selectedPolygonPoint != nullptr) {
       selectedPolygon = polygons[i];
       break;
     }
   }
 
-  if (selectedPolygon == NULL) {
+  if (selectedPolygon == nullptr) {
     for (size_t i = 0 ; i < polygons.size() ; ++i) {
       if (polygons[i]->pointInsidePolygon(pointerSceneCoord)) {
         selectedPolygon = polygons[i];
@@ -571,7 +571,7 @@ void ScatterPlotCorrelCoeffSelector::mapPolygonColorToCorrelCoeffOfData(GlEditab
   if (!selectedNodes.empty()) {
     string xDim(scatterView->getDetailedScatterPlot()->getXDim());
     string yDim(scatterView->getDetailedScatterPlot()->getYDim());
-    NumericProperty *xProp = NULL, *yProp = NULL;
+    NumericProperty *xProp = nullptr, *yProp = nullptr;
 
     xProp = (NumericProperty *) graph->getProperty(xDim);
     yProp = (NumericProperty *) graph->getProperty(yDim);

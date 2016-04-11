@@ -67,12 +67,12 @@ Returns :const:`True` if the node is a valid one, meaning it is attached to a gr
 
   SIP_PYOBJECT __copy__() const;
 %MethodCode
-  sipRes = sipConvertFromNewType(new tlp::node(sipCpp->id), sipFindType("tlp::node"), NULL);
+  sipRes = sipConvertFromNewType(new tlp::node(sipCpp->id), sipFindType("tlp::node"), nullptr);
 %End
 
   SIP_PYOBJECT __deepcopy__(SIP_PYOBJECT) const;
 %MethodCode
-  sipRes = sipConvertFromNewType(new tlp::node(sipCpp->id), sipFindType("tlp::node"), NULL);
+  sipRes = sipConvertFromNewType(new tlp::node(sipCpp->id), sipFindType("tlp::node"), nullptr);
 %End
 
 };

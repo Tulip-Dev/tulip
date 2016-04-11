@@ -71,7 +71,7 @@ string fisheyeVertexProgram =
   "gl_TexCoord[0] = gl_MultiTexCoord0;"
   "}";
 
-FishEyeInteractor::FishEyeInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"),fisheyeConfigWidget(NULL) {}
+FishEyeInteractor::FishEyeInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"),fisheyeConfigWidget(nullptr) {}
 
 void FishEyeInteractor::construct() {
   fisheyeConfigWidget = new FishEyeConfigWidget();
@@ -105,9 +105,9 @@ QWidget *FishEyeInteractor::configurationWidget() const {
 
 PLUGIN(FishEyeInteractor)
 
-FishEyeInteractorComponent::FishEyeInteractorComponent() : fisheyeShader(NULL) {}
+FishEyeInteractorComponent::FishEyeInteractorComponent() : fisheyeShader(nullptr) {}
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) : fisheyeShader(NULL) {
+FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) : fisheyeShader(nullptr) {
   fisheyeCenter = fisheyeInteractorComponent.fisheyeCenter;
   configWidget = fisheyeInteractorComponent.configWidget;
 }
@@ -117,7 +117,7 @@ FishEyeInteractorComponent::~FishEyeInteractorComponent() {
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {
-  if (view == NULL) {
+  if (view == nullptr) {
     return;
   }
 
@@ -194,7 +194,7 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     fisheyeShader->link();
   }
 
-  if (activateFishEye && fisheyeShader != NULL && fisheyeShader->isLinked()) {
+  if (activateFishEye && fisheyeShader != nullptr && fisheyeShader->isLinked()) {
     fisheyeShader->activate();
 
     Matrix<float, 4> modelViewMatrix;

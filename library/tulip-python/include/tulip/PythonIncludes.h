@@ -91,8 +91,8 @@ static const sipAPIDef *getSipAPI() {
   sip_module = PyImport_ImportModule("sip");
 #endif
 
-  if (sip_module == NULL)
-    return NULL;
+  if (sip_module == nullptr)
+    return nullptr;
 
   /* Get the module's dictionary. */
   sip_module_dict = PyModule_GetDict(sip_module);
@@ -100,19 +100,19 @@ static const sipAPIDef *getSipAPI() {
   /* Get the "_C_API" attribute. */
   c_api = PyDict_GetItemString(sip_module_dict, "_C_API");
 
-  if (c_api == NULL)
-    return NULL;
+  if (c_api == nullptr)
+    return nullptr;
 
   /* Sanity check that it is the right type. */
   if (!PyCObject_Check(c_api))
-    return NULL;
+    return nullptr;
 
   /* Get the actual pointer from the object. */
   return (const sipAPIDef *)PyCObject_AsVoidPtr(c_api);
 #endif
 }
 
-static const sipAPIDef *sipAPIPtr = NULL;
+static const sipAPIDef *sipAPIPtr = nullptr;
 
 inline const sipAPIDef * sipAPI() {
   if (!sipAPIPtr) {

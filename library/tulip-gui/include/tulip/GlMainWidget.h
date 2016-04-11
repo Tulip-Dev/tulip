@@ -85,7 +85,7 @@ public:
    * @param parent Qt Widget parent system
    * @param view if you want to link this GlMainWidget to a view : use this parameter
    */
-  GlMainWidget(QWidget *parent=NULL, View *view=NULL);
+  GlMainWidget(QWidget *parent=nullptr, View *view=nullptr);
   ~GlMainWidget();
 
   /**
@@ -113,7 +113,7 @@ public:
   void pickNodesEdges(const int x, const int y,
                       const int width, const int height,
                       std::vector<SelectedEntity> &selectedNodes, std::vector<SelectedEntity> &selectedEdges,
-                      tlp::GlLayer* layer=NULL, bool pickNodes=true, bool pickEdges=true);
+                      tlp::GlLayer* layer=nullptr, bool pickNodes=true, bool pickEdges=true);
 
   /** @brief Select a node or edge at a screen point
    *  Try to select at point (x,y) a node in the first place then if no result try to select an edge
@@ -125,7 +125,7 @@ public:
    */
   bool pickNodesEdges(const int x, const int y,
                       SelectedEntity &selectedEntity,
-                      tlp::GlLayer* layer=NULL,
+                      tlp::GlLayer* layer=nullptr,
                       bool pickNodes=true, bool pickEdges=true);
 
   /**
@@ -134,7 +134,7 @@ public:
   _DEPRECATED void doSelect(const int x, const int y,
                             const int width, const int height,
                             std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
-                            tlp::GlLayer* layer=NULL);
+                            tlp::GlLayer* layer=nullptr);
 
   /**
    * @deprecated this function should not be used anymore, use pickNodesEdges()
@@ -142,7 +142,7 @@ public:
   _DEPRECATED bool doSelect(const int x, const int y,
                             tlp::ElementType &type,
                             tlp::node &n,tlp::edge &e,
-                            tlp::GlLayer* layer=NULL);
+                            tlp::GlLayer* layer=nullptr);
 
 
   /**
@@ -265,7 +265,7 @@ public:
                       const int width, const int height,
                       std::vector<SelectedEntity>
                       &pickedEntities,
-                      tlp::GlLayer* layer=NULL);
+                      tlp::GlLayer* layer=nullptr);
   /**
    * @brief Function to do picking on entities.
    * It just calls selectEntities on the GlScene instance with a small window of twelve pixels.
@@ -277,7 +277,7 @@ public:
   bool pickGlEntities(const int x, const int y,
                       std::vector<SelectedEntity>
                       &pickedEntities,
-                      tlp::GlLayer* layer=NULL);
+                      tlp::GlLayer* layer=nullptr);
 
   /**
    * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
@@ -285,7 +285,7 @@ public:
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     const int width, const int height,
                                     std::vector<GlSimpleEntity*> &pickedEntities,
-                                    tlp::GlLayer* layer=NULL) {
+                                    tlp::GlLayer* layer=nullptr) {
     std::vector<SelectedEntity> entities;
     pickGlEntities(x,y,width,height,entities,layer);
     bool foundEntity=false;
@@ -305,7 +305,7 @@ public:
    */
   _DEPRECATED bool selectGlEntities(const int x, const int y,
                                     std::vector<GlSimpleEntity*> &pickedEntities,
-                                    tlp::GlLayer* layer=NULL) {
+                                    tlp::GlLayer* layer=nullptr) {
     std::vector<SelectedEntity> entities;
     pickGlEntities(x,y,entities,layer);
     bool foundEntity=false;

@@ -22,7 +22,7 @@
 
 using namespace tlp;
 
-PropertyInterface::PropertyInterface(): graph(NULL) {
+PropertyInterface::PropertyInterface(): graph(nullptr) {
 
 }
 

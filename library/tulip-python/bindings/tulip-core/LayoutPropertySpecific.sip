@@ -17,7 +17,7 @@
  *
  */
 
-  tlp::Coord getMax(tlp::Graph *subgraph=NULL);
+  tlp::Coord getMax(tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.getMax([subgraph = None])
 
@@ -47,7 +47,7 @@ i.e. the top-right corner of the graph drawing bounding box.
 
 //===========================================================================================
 
-  tlp::Coord getMin(tlp::Graph *subgraph=NULL);
+  tlp::Coord getMin(tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.getMin([subgraph = None])
 
@@ -77,7 +77,7 @@ i.e. the bottom-left corner of the graph drawing bounding box.
 
 //===========================================================================================
 
-  void translate(const tlp::Vec3f &move, tlp::Graph *subgraph=NULL);
+  void translate(const tlp::Vec3f &move, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.translate(move[, subgraph = None])
 
@@ -123,7 +123,7 @@ Translates the layout of a set of nodes and edges provided through iterators acc
 
 //===========================================================================================
 
-  void scale(const tlp::Vec3f &scaleFactors, tlp::Graph *subgraph=NULL);
+  void scale(const tlp::Vec3f &scaleFactors, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.scale(scaleFactors[, subgraph = None])
 
@@ -169,7 +169,7 @@ Scales the layout of the nodes and edges provided through iterators according to
 
 //===========================================================================================
 
-  void rotateX(const double &alpha, tlp::Graph *subgraph=NULL);
+  void rotateX(const double &alpha, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateX(alpha[, subgraph = None])
 
@@ -201,7 +201,7 @@ Rotates the layout around the X-axis according to an angle in degrees.
 
 //===========================================================================================
 
-        void rotateY(const double &alpha, tlp::Graph *subgraph=NULL);
+        void rotateY(const double &alpha, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateY(alpha[, subgraph = None])
 
@@ -233,7 +233,7 @@ Rotates the layout around the Y-axis according to an angle in degrees.
 
 //===========================================================================================
   
-  void rotateZ(const double &alpha, tlp::Graph *subgraph=NULL);
+  void rotateZ(const double &alpha, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateZ(alpha[, subgraph = None])
 
@@ -311,7 +311,7 @@ Rotates the layout around the Z-axis of the nodes and edges provided through ite
 
 //===========================================================================================
 
-  void center(tlp::Graph *subgraph=NULL);
+  void center(tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.center([subgraph = None])
 
@@ -339,7 +339,7 @@ Centers the layout, meaning translating it in order that the center of its bound
 
 //===========================================================================================
 
-  void center(const tlp::Vec3f &newCenter, tlp::Graph *subgraph=NULL);
+  void center(const tlp::Vec3f &newCenter, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.center(newCenter[, subgraph = None])
 
@@ -372,7 +372,7 @@ the center of its bounding box is equal to newCenter.
 
 //===========================================================================================
 
-  void normalize(tlp::Graph *subgraph=NULL);
+  void normalize(tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.normalize([subgraph = None])
 
@@ -434,7 +434,7 @@ Thus, it measures the length of a polyline.
 
 //===========================================================================================
 
-  double averageEdgeLength(const tlp::Graph *subgraph=NULL);
+  double averageEdgeLength(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.averageEdgeLength([subgraph=None])
 
@@ -466,7 +466,7 @@ Returns the average edge length of the layout, the bends are taken into account.
 
 //===========================================================================================
   
-  double averageAngularResolution(const tlp::Graph *subgraph=NULL);
+  double averageAngularResolution(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.averageAngularResolution([subgraph = None])
 
@@ -497,7 +497,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
 
 //===========================================================================================  
   
-  double averageAngularResolution(const tlp::node n, const tlp::Graph *subgraph=NULL);
+  double averageAngularResolution(const tlp::node n, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.averageAngularResolution(node[, subgraph = None])
 
@@ -542,7 +542,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
   
 //===========================================================================================  
   
-  std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *subgraph=NULL);
+  std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.angularResolutions(node[, subgraph=None])
 
@@ -586,7 +586,7 @@ It is only defined for 2D drawing, meaning the third coordinates is omitted
 
 //===========================================================================================
 
-  void computeEmbedding(tlp::Graph *subgraph=NULL);
+  void computeEmbedding(tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.computeEmbedding([subgraph=None])
 
@@ -618,7 +618,7 @@ Only works in 2D, the third coordinate is not taken into account.
 
 //===========================================================================================
   
-  void computeEmbedding(const tlp::node n, tlp::Graph *subgraph=NULL);
+  void computeEmbedding(const tlp::node n, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.computeEmbedding(node[, subgraph=None])
 

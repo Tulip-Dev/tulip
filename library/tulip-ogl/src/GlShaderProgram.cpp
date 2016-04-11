@@ -111,7 +111,7 @@ void GlShader::compileFromSourceCode(const std::string &shaderSrc) {
 }
 
 void GlShader::compileFromSourceFile(const std::string &shaderSrcFilename) {
-  char *shaderSrcCode = NULL;
+  char *shaderSrcCode = nullptr;
   readShaderSourceFile(shaderSrcFilename, &shaderSrcCode);
 
   if (shaderSrcCode) {
@@ -121,7 +121,7 @@ void GlShader::compileFromSourceFile(const std::string &shaderSrcFilename) {
 }
 
 void GlShader::compileShaderObject(const char *shaderSrc) {
-  glShaderSource(shaderObjectId, 1,(const char **) &shaderSrc, NULL);
+  glShaderSource(shaderObjectId, 1,(const char **) &shaderSrc, nullptr);
   glCompileShader(shaderObjectId);
   GLint compileStatus;
   glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, &compileStatus);
@@ -129,7 +129,7 @@ void GlShader::compileShaderObject(const char *shaderSrc) {
   getInfoLog(shaderObjectId, SHADER, compilationLog);
 }
 
-GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(NULL);
+GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(nullptr);
 
 GlShaderProgram::GlShaderProgram(const std::string &name) :
   programName(name), programObjectId(0), programLinked(false), maxGeometryShaderOutputVertices(0) {
@@ -275,7 +275,7 @@ void GlShaderProgram::activate() {
 
 void GlShaderProgram::desactivate() {
   glUseProgram(0);
-  currentActiveShaderProgram = NULL;
+  currentActiveShaderProgram = nullptr;
 }
 
 bool GlShaderProgram::shaderProgramsSupported() {

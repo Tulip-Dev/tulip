@@ -39,7 +39,7 @@ That class represents the main type of view offered by Tulip : a node link diagr
 
 public:
 
-  NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
+  NodeLinkDiagramComponent(const tlp::PluginContext* context = nullptr);
   virtual ~NodeLinkDiagramComponent();
 
 // =======================================================================================

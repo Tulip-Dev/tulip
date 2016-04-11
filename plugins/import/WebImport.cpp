@@ -87,7 +87,7 @@ struct less<UrlElement> {
 }
 
 HttpContext::HttpContext():
-  status(false), code(-1), reply(NULL),
+  status(false), code(-1), reply(nullptr),
   processed(false), redirected(false), isHtml(false) {
 }
 
@@ -126,7 +126,7 @@ void HttpContext::finished() {
 
   reply->close();
   reply->deleteLater();
-  reply = NULL;
+  reply = nullptr;
 }
 
 void HttpContext::headerReceived() {
@@ -157,7 +157,7 @@ void HttpContext::headerReceived() {
 
         reply->close();
         reply->deleteLater();
-        reply = NULL;
+        reply = nullptr;
       }
 
       return;
@@ -169,7 +169,7 @@ void HttpContext::headerReceived() {
                        value.toString().contains(QString("text/html")));
     reply->close();
     reply->deleteLater();
-    reply = NULL;
+    reply = nullptr;
   }
 }
 
@@ -190,7 +190,7 @@ UrlElement::UrlElement():http_prefix("http://"),data(""),context(0)  {
 }
 UrlElement::UrlElement(const UrlElement &c):
   http_prefix(c.http_prefix),
-  data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(NULL) {
+  data(""),server(c.server),url(c.url),clean_url(c.clean_url),context(nullptr) {
 }
 
 void UrlElement::setUrl(const std::string& theUrl) {
@@ -210,7 +210,7 @@ void UrlElement::fill(std::string &result) {
 void UrlElement::clear() {
   if (context) {
     delete context;
-    context = NULL;
+    context = nullptr;
   }
 
   data = "";
@@ -491,7 +491,7 @@ struct WebImport:public ImportModule {
   bool visitOther;
   bool extractNonHttp;
 
-  WebImport(tlp::PluginContext* context):ImportModule(context),labels(NULL), urls(NULL), colors(NULL), redirectionColor(NULL), maxSize(1000), visitOther(false), extractNonHttp(true) {
+  WebImport(tlp::PluginContext* context):ImportModule(context),labels(nullptr), urls(nullptr), colors(nullptr), redirectionColor(nullptr), maxSize(1000), visitOther(false), extractNonHttp(true) {
     addInParameter<string>("server",paramHelp[0],"www.labri.fr");
     addInParameter<string>("web page",paramHelp[1], "");
     addInParameter<int>("max size",paramHelp[2], "1000");
@@ -773,7 +773,7 @@ struct WebImport:public ImportModule {
     visitOther = false;
     extractNonHttp = true;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("server", server);
       dataSet->get("web page", url);
       dataSet->get("max size", maxSize);

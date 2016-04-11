@@ -61,7 +61,7 @@ class PythonScriptViewWidget : public QWidget {
 
 public :
 
-  PythonScriptViewWidget(PythonScriptView *view, QWidget *parent=NULL);
+  PythonScriptViewWidget(PythonScriptView *view, QWidget *parent=nullptr);
   ~PythonScriptViewWidget();
   void showEvent(QShowEvent *);
   void resizeEvent(QResizeEvent *);

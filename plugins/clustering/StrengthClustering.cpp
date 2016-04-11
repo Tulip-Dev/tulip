@@ -300,7 +300,7 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped) {
 //  if (!tlp::applyAlgorithm(sg, errMsg, &tmpData, "Quotient Clustering",
 //         pluginProgress))
 //    return 0;
-//  Graph *quotientGraph = NULL;
+//  Graph *quotientGraph = nullptr;
 //  tmpData.get<Graph *>("quotientGraph", quotientGraph);
 //  vector<edge> toRemoved;
 //  SimpleTest::makeSimple(quotientGraph, toRemoved);
@@ -339,7 +339,7 @@ bool StrengthClustering::run() {
   if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, pluginProgress))
     return false;
 
-  NumericProperty *metric = NULL;
+  NumericProperty *metric = nullptr;
 
   if (dataSet) {
     dataSet->get("metric", metric);

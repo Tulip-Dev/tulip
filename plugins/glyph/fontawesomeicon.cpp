@@ -53,7 +53,7 @@ public:
 
   GLYPHINFORMATION("2D - Font Awesome Icon", "Antoine Lambert", "26/02/2015", "Font Awesome Icon", "1.0", NodeShape::FontAwesomeIcon)
 
-  FontAwesomeIcon(const tlp::PluginContext* context = NULL) : Glyph(context) {}
+  FontAwesomeIcon(const tlp::PluginContext* context = nullptr) : Glyph(context) {}
 
   ~FontAwesomeIcon() {}
 

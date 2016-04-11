@@ -60,7 +60,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  typename nodeType::RealType getNodeMin(Graph* graph = NULL);
+  typename nodeType::RealType getNodeMin(Graph* graph = nullptr);
 
   /**
    * @brief Computes the maximum value on the nodes.
@@ -69,7 +69,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  typename nodeType::RealType getNodeMax(Graph* graph = NULL);
+  typename nodeType::RealType getNodeMax(Graph* graph = nullptr);
 
   /**
    * @brief Computes the minimum value on the edges.
@@ -78,7 +78,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The minimal value on this graph for this property.
    **/
-  typename edgeType::RealType getEdgeMin(Graph* graph = NULL);
+  typename edgeType::RealType getEdgeMin(Graph* graph = nullptr);
 
   /**
    * @brief Computes the maximum value on the edges.
@@ -87,7 +87,7 @@ public:
    * @param graph The graph on which to compute.
    * @return The maximal value on this graph for this property.
    **/
-  typename edgeType::RealType getEdgeMax(Graph* graph = NULL);
+  typename edgeType::RealType getEdgeMax(Graph* graph = nullptr);
 
   /**
    * @brief Updates the value on a node, and updates the minimal/maximal cached values if necessary.

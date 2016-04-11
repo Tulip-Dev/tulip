@@ -62,7 +62,7 @@ class PropertyInterface : tlp::Observable /Abstract/ {
   } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
     sipType = sipFindType("tlp::StringVectorProperty");
   } else {
-    sipType = NULL;
+    sipType = nullptr;
   }
 %End
 
@@ -82,7 +82,7 @@ Returns the graph on which the property has been defined.
 
  //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const = 0;
  %Docstring
  tlp.PropertyInterface.numberOfNonDefaultValuatedNodes([subgraph = None])
 
@@ -98,7 +98,7 @@ Returns the graph on which the property has been defined.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const = 0;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedNodes([subgraph = None])
 
@@ -112,7 +112,7 @@ from the default value.
 
  //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const = 0;
  %Docstring
  tlp.PropertyInterface.numberOfNonDefaultValuatedEdges([subgraph = None])
 
@@ -128,7 +128,7 @@ from the default value.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const = 0;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedEdges([subgraph = None])
 

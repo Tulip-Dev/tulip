@@ -43,7 +43,7 @@ class PluginsCenter: public QWidget {
   PluginInformationsListItem* _currentItem;
 
 public:
-  explicit PluginsCenter(QWidget *parent=NULL);
+  explicit PluginsCenter(QWidget *parent=nullptr);
 
 public slots:
   void reportPluginErrors(const QMap<QString,QString>&errors);

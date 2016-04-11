@@ -37,7 +37,7 @@ ReverseEdges::ReverseEdges(tlp::PluginContext* context): Algorithm(context) {
 }
 
 bool ReverseEdges::run() {
-  BooleanProperty* selection = NULL;
+  BooleanProperty* selection = nullptr;
 
   if (dataSet)
     dataSet->get<BooleanProperty*>("selection", selection);

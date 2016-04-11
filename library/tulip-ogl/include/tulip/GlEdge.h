@@ -79,7 +79,7 @@ public:
    * Draw the label of the edge if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  void drawLabel(OcclusionTest* test,const GlGraphInputData* data, float lod, Camera *camera=NULL);
+  void drawLabel(OcclusionTest* test,const GlGraphInputData* data, float lod, Camera *camera=nullptr);
 
   /**
    * This function is used by the engine to get line coordinates of the edge
@@ -144,7 +144,7 @@ private :
    */
   void displayArrowAndAdjustAnchor(const GlGraphInputData *data,const edge &e,const node &source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
                                    int tgtEdgeGlyph,size_t numberOfBends,const Coord &anchor,const Coord &tgtCoord,
-                                   const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor, EdgeExtremityGlyph* srcEdgeGlyph = NULL, Camera *camera = NULL);
+                                   const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor, EdgeExtremityGlyph* srcEdgeGlyph = nullptr, Camera *camera = nullptr);
 
 };
 

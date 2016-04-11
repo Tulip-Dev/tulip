@@ -65,14 +65,14 @@ public:
   *
   * @param subgraph If not null, returns the maximum coordinate for a sub-graph layout
   **/
-  Coord getMax(Graph *subgraph=NULL);
+  Coord getMax(Graph *subgraph=nullptr);
 
   /**
   * Returns the minimum coordinate of the layout, i.e. the bottom-left corner of the induced bounding box
   *
   * @param subgraph If not null, returns the minimum coordinate for a sub-graph layout
   **/
-  Coord getMin(Graph *subgraph=NULL);
+  Coord getMin(Graph *subgraph=nullptr);
 
   //============================================
   //Functions for layout modification
@@ -84,7 +84,7 @@ public:
   * @param move a movement vector
   * @param subgraph If not null, only translates the layout of that sub-graph
   **/
-  void translate(const Vec3f &move, Graph *subgraph=NULL);
+  void translate(const Vec3f &move, Graph *subgraph=nullptr);
 
   /**
   * Translates the layout of a set of nodes and edges provided through iterators
@@ -104,7 +104,7 @@ public:
   * @param scaleFactors a vector of scale factors
   * @param subgraph If not null, only scales the layout of that sub-graph
   **/
-  void scale(const Vec3f &scaleFactors, Graph *subgraph=NULL);
+  void scale(const Vec3f &scaleFactors, Graph *subgraph=nullptr);
 
   /**
   * Scales the layout of a set of nodes and edges provided through iterators
@@ -124,7 +124,7 @@ public:
   * @param alpha an angle in degrees
   * @param subgraph If not null, only rotates the layout of that sub-graph
   **/
-  void rotateX(const double &alpha, Graph *subgraph=NULL);
+  void rotateX(const double &alpha, Graph *subgraph=nullptr);
 
   /**
   * Rotates the layout around the Y-axis according to an angle in degrees.
@@ -132,7 +132,7 @@ public:
   * @param alpha an angle in degrees
   * @param subgraph If not null, only rotates the layout of that sub-graph
   **/
-  void rotateY(const double &alpha, Graph *subgraph=NULL);
+  void rotateY(const double &alpha, Graph *subgraph=nullptr);
 
   /**
   * Rotates the layout around the Z-axis according to an angle in degrees.
@@ -140,7 +140,7 @@ public:
   * @param alpha an angle in degrees
   * @param subgraph If not null, only rotates the layout of that sub-graph
   **/
-  void rotateZ(const double &alpha, Graph *subgraph=NULL);
+  void rotateZ(const double &alpha, Graph *subgraph=nullptr);
 
   /**
   * Rotates the layout around the X-axis of the nodes and edges provided
@@ -184,7 +184,7 @@ public:
   *
   * @param subgraph If not null, only centers the layout of that sub-graph
   **/
-  void center(Graph *subgraph=NULL);
+  void center(Graph *subgraph=nullptr);
 
   /**
   * Centers the layout to newCenter, meaning translating it in order that
@@ -193,14 +193,14 @@ public:
   * @param newCenter the coordinate of the new layout center
   * @param subgraph If not null, only centers the layout of that sub-graph
   **/
-  void center(const Vec3f &newCenter, Graph *subgraph=NULL);
+  void center(const Vec3f &newCenter, Graph *subgraph=nullptr);
 
   /**
   * Normalizes the layout, meaning dividing each nodes and edges coordinate by the maximum magnitude of the whole coordinates set
   *
   * @param subgraph If not null, only normalizes the layout of that sub-graph
   **/
-  void normalize(Graph *subgraph=NULL);
+  void normalize(Graph *subgraph=nullptr);
 
   /**
   * Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
@@ -227,7 +227,7 @@ public:
   *
   * @param subgraph If not null, only compute the average edge length for that sub-graph
   **/
-  double averageEdgeLength(const Graph *subgraph=NULL) const;
+  double averageEdgeLength(const Graph *subgraph=nullptr) const;
 
   /**
   * Returns the average angular resolution of the layout.
@@ -236,7 +236,7 @@ public:
   *
   * @param subgraph It not null, only computes the average angular resolution for that sub-graph
   **/
-  double averageAngularResolution(const Graph *subgraph=NULL) const;
+  double averageAngularResolution(const Graph *subgraph=nullptr) const;
 
   /**
   * Returns the average angular resolution of a node.
@@ -246,7 +246,7 @@ public:
   * @param n the graph node on which to compute the angular resolution
   * @param subgraph If not null, only computes the average angular resolution for the node in that sub-graph
   **/
-  double averageAngularResolution(const node n, const Graph *subgraph=NULL) const;
+  double averageAngularResolution(const node n, const Graph *subgraph=nullptr) const;
 
   /**
   * Returns a vector of all angular resolution of a node.
@@ -256,7 +256,7 @@ public:
   * @param n the graph node on which to compute the angular resolution
   * @param subgraph If not null, only computes the average angular resolution for the node in that sub-graph
   **/
-  std::vector<double> angularResolutions(const node n, const Graph *subgraph=NULL) const;
+  std::vector<double> angularResolutions(const node n, const Graph *subgraph=nullptr) const;
 
   /**
   * Fixes embedding of the graph according to the layout
@@ -265,7 +265,7 @@ public:
   *
   * @param subgraph It not null, only fixes embedding in that sub-graph
   **/
-  void computeEmbedding(Graph *subgraph=NULL);
+  void computeEmbedding(Graph *subgraph=nullptr);
 
   /**
   * Fixes embedding of the node according to the layout
@@ -275,7 +275,7 @@ public:
   * @param n the graph node on which to fix embedding
   * @param subgraph If not null, only fixes the embedding of the node in that sub-graph
   **/
-  void computeEmbedding(const node n, Graph *subgraph=NULL);
+  void computeEmbedding(const node n, Graph *subgraph=nullptr);
 
   /**
   * Returns the number of crossings in the layout

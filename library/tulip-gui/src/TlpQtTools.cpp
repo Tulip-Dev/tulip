@@ -468,10 +468,10 @@ public:
   QDebugOStream():std::ostream(&qDebugBuf) {}
 };
 
-static QDebugOStream* qDebugStream = NULL;
+static QDebugOStream* qDebugStream = nullptr;
 
 void redirectDebugOutputToQDebug() {
-  if (qDebugStream == NULL)
+  if (qDebugStream == nullptr)
     qDebugStream = new QDebugOStream();
 
   tlp::setDebugOutput(*qDebugStream);
@@ -512,10 +512,10 @@ public:
   QWarningOStream() :std::ostream(&qWarningBuf) {}
 };
 
-static QWarningOStream* qWarningStream = NULL;
+static QWarningOStream* qWarningStream = nullptr;
 
 void redirectWarningOutputToQWarning() {
-  if (qWarningStream == NULL)
+  if (qWarningStream == nullptr)
     qWarningStream = new QWarningOStream();
 
   tlp::setWarningOutput(*qWarningStream);
@@ -556,10 +556,10 @@ public:
   QErrorOStream():std::ostream(&qErrorBuf) {}
 };
 
-static QErrorOStream* qErrorStream = NULL;
+static QErrorOStream* qErrorStream = nullptr;
 
 void redirectErrorOutputToQCritical() {
-  if (qErrorStream == NULL)
+  if (qErrorStream == nullptr)
     qErrorStream = new QErrorOStream();
 
   tlp::setErrorOutput(*qErrorStream);
@@ -602,7 +602,7 @@ bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event) {
   }
 }
 
-static NoQtUserInputFilter* disableQtUserInputFilter = NULL;
+static NoQtUserInputFilter* disableQtUserInputFilter = nullptr;
 
 void disableQtUserInput() {
   if (disableQtUserInputFilter)
@@ -619,7 +619,7 @@ void enableQtUserInput() {
 
   QCoreApplication::instance()->removeEventFilter(disableQtUserInputFilter);
   delete disableQtUserInputFilter;
-  disableQtUserInputFilter = NULL;
+  disableQtUserInputFilter = nullptr;
   QApplication::restoreOverrideCursor();
 }
 

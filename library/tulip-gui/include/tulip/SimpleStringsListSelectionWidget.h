@@ -42,7 +42,7 @@ class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget, public Str
 
 public :
 
-  SimpleStringsListSelectionWidget(QWidget *parent = NULL, const unsigned int maxSelectedStringsListSize = 0);
+  SimpleStringsListSelectionWidget(QWidget *parent = nullptr, const unsigned int maxSelectedStringsListSize = 0);
   ~SimpleStringsListSelectionWidget();
 
   void setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList);

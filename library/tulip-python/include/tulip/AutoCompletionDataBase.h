@@ -52,7 +52,7 @@ class TLP_PYTHON_SCOPE AutoCompletionDataBase {
 
 public :
 
-  AutoCompletionDataBase(APIDataBase *_apiDb = NULL);
+  AutoCompletionDataBase(APIDataBase *_apiDb = nullptr);
 
   void setGraph(tlp::Graph * graph) {
     _graph = graph;

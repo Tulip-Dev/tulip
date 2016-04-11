@@ -47,7 +47,7 @@ class FiltersManager: public QWidget {
   QToolButton* _loadButton;
 
 public:
-  explicit FiltersManager(QWidget *parent=NULL);
+  explicit FiltersManager(QWidget *parent=nullptr);
   virtual ~FiltersManager();
 
 public slots:

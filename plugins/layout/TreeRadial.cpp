@@ -52,7 +52,7 @@ public:
     Iterator<node>* neighbours;
 
     dfsNodeRadiiStruct(node n = node(), float r = 0, unsigned int d = 0,
-                       Iterator<node>* it = NULL):
+                       Iterator<node>* it = nullptr):
       current(n), radius(r), depth(d), neighbours(it) {}
   };
 
@@ -140,7 +140,7 @@ public:
     Iterator<node>* neighbours;
 
     dfsAngularSpreadStruct(node n = node(), unsigned int d = 0,
-                           Iterator<node>* it = NULL):
+                           Iterator<node>* it = nullptr):
       current(n), cAngle(0), depth(d), neighbours(it) {}
   };
 
@@ -205,7 +205,7 @@ public:
 
     dfsDoLayoutStruct(node n = node(), double bAngle = 0, double eAngle = 0,
                       double spread = 0, bool flag = false, unsigned int d = 0,
-                      Iterator<node>* it = NULL):
+                      Iterator<node>* it = nullptr):
       current(n), startAngle(bAngle), endAngle(eAngle),
       sAngle(eAngle - bAngle), nSpread(spread),
       checkAngle(flag), depth(d), neighbours(it) {}
@@ -276,7 +276,7 @@ public:
     }
   }
 
-  TreeRadial(const PluginContext* context):LayoutAlgorithm(context), tree(NULL) {
+  TreeRadial(const PluginContext* context):LayoutAlgorithm(context), tree(nullptr) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
   }

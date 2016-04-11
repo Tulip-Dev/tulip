@@ -35,7 +35,7 @@ class TLP_QT_SCOPE TulipFontWidget : public QWidget {
   Q_PROPERTY(TulipFont font READ font WRITE setFont)
 
 public:
-  explicit TulipFontWidget(QWidget *parent = NULL);
+  explicit TulipFontWidget(QWidget *parent = nullptr);
   ~TulipFontWidget();
   void setFont(const TulipFont& font);
   TulipFont font()const;

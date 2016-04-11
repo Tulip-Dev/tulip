@@ -33,7 +33,7 @@
 using namespace std;
 using namespace tlp;
 
-MouseEdgeBuilder::MouseEdgeBuilder():_source(node()),_started(false),_graph(NULL),_layoutProperty(NULL) {}
+MouseEdgeBuilder::MouseEdgeBuilder():_source(node()),_started(false),_graph(nullptr),_layoutProperty(nullptr) {}
 
 bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
@@ -159,12 +159,12 @@ void MouseEdgeBuilder::clearObserver() {
   if(_graph)
     _graph->removeListener(this);
 
-  _graph=NULL;
+  _graph=nullptr;
 
   if(_layoutProperty)
     _layoutProperty->removeListener(this);
 
-  _layoutProperty=NULL;
+  _layoutProperty=nullptr;
 }
 
 void MouseEdgeBuilder::treatEvent(const Event& evt) {

@@ -65,7 +65,7 @@ class GraphHierarchiesEditor : public QWidget {
   tlp::GraphHierarchiesModel* _model;
 
 public:
-  explicit GraphHierarchiesEditor(QWidget *parent = NULL);
+  explicit GraphHierarchiesEditor(QWidget *parent = nullptr);
   virtual ~GraphHierarchiesEditor();
   void setModel(tlp::GraphHierarchiesModel *model);
   bool synchronized() const;

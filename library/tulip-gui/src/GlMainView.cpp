@@ -40,9 +40,9 @@
 using namespace tlp;
 
 GlMainView::GlMainView():
-  _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true),
-  _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
-  _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
+  _glMainWidget(nullptr), _overviewItem(nullptr), isOverviewVisible(true),
+  _quickAccessBarItem(nullptr), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr),
+  _sceneLayersConfigurationWidget(nullptr), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
 
 GlMainView::~GlMainView() {
   delete _sceneConfigurationWidget;
@@ -80,7 +80,7 @@ bool GlMainView::updateOverview() const {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
-  if(_overviewItem == NULL) {
+  if(_overviewItem == nullptr) {
     _overviewItem=new GlOverviewGraphicsItem(this,*_glMainWidget->getScene());
     addToScene(_overviewItem);
     generatePixmap=true;
@@ -96,7 +96,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
 void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget) {
   _glMainWidget=glMainWidget;
 
-  if(_sceneLayersConfigurationWidget == NULL) {
+  if(_sceneLayersConfigurationWidget == nullptr) {
     _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
   }
 
@@ -118,7 +118,7 @@ GlOverviewGraphicsItem *GlMainView::overviewItem() const {
 
 void GlMainView::setupWidget() {
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
-  assignNewGlMainWidget(new GlMainWidget(NULL,this),true);
+  assignNewGlMainWidget(new GlMainWidget(nullptr,this),true);
 
   _forceRedrawAction=new QAction(trUtf8("Force redraw"),this);
   connect(_forceRedrawAction,SIGNAL(triggered()),this,SLOT(redraw()));
@@ -151,7 +151,7 @@ GlMainWidget* GlMainView::getGlMainWidget() const {
 }
 
 void GlMainView::centerView(bool graphChanged) {
-  if (QApplication::activeWindow() == NULL) {
+  if (QApplication::activeWindow() == nullptr) {
     // the view may not have the correct size
     // if the call occurs before the first window activation
     // so we ensure it happens when everything is ok
@@ -204,8 +204,8 @@ void GlMainView::setViewOrtho(bool viewOrtho) {
 void GlMainView::setQuickAccessBarVisible(bool visible) {
   if (!visible) {
     delete _quickAccessBar;
-    _quickAccessBar = NULL;
-    _quickAccessBarItem = NULL;
+    _quickAccessBar = nullptr;
+    _quickAccessBarItem = nullptr;
   }
 
   else if (!quickAccessBarVisible()) {
@@ -229,21 +229,21 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
 }
 
 bool GlMainView::quickAccessBarVisible() const {
-  return _quickAccessBarItem != NULL;
+  return _quickAccessBarItem != nullptr;
 }
 
 void GlMainView::sceneRectChanged(const QRectF& rect) {
-  if (_quickAccessBar != NULL) {
+  if (_quickAccessBar != nullptr) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
 
-  if (_overviewItem != NULL) {
+  if (_overviewItem != nullptr) {
     // put overview in the bottom right corner
     if (_overviewPosition == OVERVIEW_BOTTOM_RIGHT)
-      _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_BOTTOM_LEFT)
-      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_TOP_LEFT)
       _overviewItem->setPos(0, 0);
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
@@ -258,14 +258,14 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     Gl2DRect *labriLogo = dynamic_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
 
     if (labriLogo) {
-      labriLogo->setCoordinates((_quickAccessBar != NULL) ? 35. : 0., 5., 50., 50.);
+      labriLogo->setCoordinates((_quickAccessBar != nullptr) ? 35. : 0., 5., 50., 50.);
       draw();
     }
   }
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) const {
-  if (_glMainWidget == NULL)
+  if (_glMainWidget == nullptr)
     return QPixmap();
 
   QSize realSize = outputSize;

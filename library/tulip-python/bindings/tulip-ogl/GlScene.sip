@@ -86,7 +86,7 @@ class GlScene  : tlp::Observable {
     if (dynamic_cast<tlp::GlScene*>(sipCpp)) {
       sipType = sipFindType("tlp::GlScene");
     } else {
-      sipType = NULL;
+      sipType = nullptr;
     }
 %End
 

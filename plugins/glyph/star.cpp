@@ -34,7 +34,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlStar *star = NULL;
+static GlStar *star = nullptr;
 static void drawStar(const Color &fillColor,const Color &borderColor,
                      float borderWidth,const std::string &textureName,
                      float lod) {
@@ -50,7 +50,7 @@ static void drawStar(const Color &fillColor,const Color &borderColor,
   }
 
   star->setTextureName(textureName);
-  star->draw(lod,NULL);
+  star->draw(lod,nullptr);
 }
 
 /** \addtogroup glyph */
@@ -64,7 +64,7 @@ static void drawStar(const Color &fillColor,const Color &borderColor,
 class Star: public Glyph {
 public:
   GLYPHINFORMATION("2D - Star", "David Auber", "09/07/2002", "Textured Star", "1.0", NodeShape::Star)
-  Star(const tlp::PluginContext *context = NULL);
+  Star(const tlp::PluginContext *context = nullptr);
   virtual ~Star();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);

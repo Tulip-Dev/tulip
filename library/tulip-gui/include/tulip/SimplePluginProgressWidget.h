@@ -47,7 +47,7 @@ class TLP_QT_SCOPE SimplePluginProgressWidget: public QWidget, public tlp::Plugi
   tlp::ProgressState _state;
 
 public:
-  explicit SimplePluginProgressWidget(QWidget *parent=NULL,Qt::WindowFlags f=0);
+  explicit SimplePluginProgressWidget(QWidget *parent=nullptr,Qt::WindowFlags f=0);
   virtual ~SimplePluginProgressWidget();
 
   void setComment(const std::string&);
@@ -85,7 +85,7 @@ protected slots:
 class TLP_QT_SCOPE SimplePluginProgressDialog: public QDialog, public tlp::PluginProgress {
   Q_OBJECT
 public:
-  explicit SimplePluginProgressDialog(QWidget *parent=NULL);
+  explicit SimplePluginProgressDialog(QWidget *parent=nullptr);
   virtual ~SimplePluginProgressDialog();
 
   void setComment(const std::string&);

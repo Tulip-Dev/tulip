@@ -26,7 +26,7 @@
 #include <map>
 #include <string>
 
-#define BUFFER_OFFSET(bytes) ((GLubyte*) NULL + (bytes))
+#define BUFFER_OFFSET(bytes) ((GLubyte*) nullptr + (bytes))
 
 namespace tlp {
 

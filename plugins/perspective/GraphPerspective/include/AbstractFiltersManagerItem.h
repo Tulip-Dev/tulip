@@ -45,7 +45,7 @@ class AbstractFiltersManagerItem: public QWidget {
 protected:
   tlp::Graph* _graph;
 public:
-  explicit AbstractFiltersManagerItem(QWidget* parent = NULL);
+  explicit AbstractFiltersManagerItem(QWidget* parent = nullptr);
   virtual void applyFilter(tlp::BooleanProperty*)=0;
   virtual QString title() const=0;
   void setGraph(tlp::Graph*);
@@ -63,10 +63,10 @@ protected:
         h += table->rowHeight(i);
     }
     else {
-      if (table->model() != NULL)
+      if (table->model() != nullptr)
         table->model()->deleteLater();
 
-      table->setModel(NULL);
+      table->setModel(nullptr);
     }
 
     table->setMaximumHeight(h);

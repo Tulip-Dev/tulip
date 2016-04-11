@@ -64,10 +64,10 @@ public :
   virtual double getNodeDoubleDefaultValue() const {
     return (double) getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(Graph* g = NULL) {
+  virtual double getNodeDoubleMin(Graph* g = nullptr) {
     return (double) getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(Graph* g = NULL) {
+  virtual double getNodeDoubleMax(Graph* g = nullptr) {
     return (double) getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
@@ -76,10 +76,10 @@ public :
   virtual double getEdgeDoubleDefaultValue() const {
     return (double) getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(Graph* g = NULL) {
+  virtual double getEdgeDoubleMin(Graph* g = nullptr) {
     return (double) getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(Graph* g = NULL) {
+  virtual double getEdgeDoubleMax(Graph* g = nullptr) {
     return (double) getEdgeMax(g);
   }
 

@@ -52,7 +52,7 @@ private:
   tlp::Graph *graph;
   void initializeGraph(const std::string& type);
   template<typename PropType>
-  bool computeProperty(const std::string &algorithm, const std::string& graphType = "Planar Graph", PropType* prop = NULL);
+  bool computeProperty(const std::string &algorithm, const std::string& graphType = "Planar Graph", PropType* prop = nullptr);
 public:
   virtual void setUp();
   virtual void tearDown();

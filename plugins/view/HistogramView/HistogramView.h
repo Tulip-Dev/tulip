@@ -114,7 +114,7 @@ public :
     return dataLocation;
   }
 
-  void updateHistograms(Histogram *detailOverview = NULL);
+  void updateHistograms(Histogram *detailOverview = nullptr);
 
   void treatEvent(const Event &message);
 

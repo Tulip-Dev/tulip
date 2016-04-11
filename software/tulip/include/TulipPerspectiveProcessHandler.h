@@ -31,7 +31,7 @@
 
 class SelectionButton: public QPushButton {
 public:
-  explicit SelectionButton(QWidget *parent=NULL);
+  explicit SelectionButton(QWidget *parent=nullptr);
   void paintEvent(QPaintEvent *e);
 };
 

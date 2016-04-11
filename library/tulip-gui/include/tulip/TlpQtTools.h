@@ -109,7 +109,7 @@ TLP_QT_SCOPE QString localPluginsPath();
  @li It loads plugins from the application path
  @endlist
  */
-extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = NULL, bool removeDiscardedPlugins=false);
+extern TLP_QT_SCOPE void initTulipSoftware(PluginLoader *loader = nullptr, bool removeDiscardedPlugins=false);
 
 /**
  * @brief redirect tlp::debug() to qDebug()

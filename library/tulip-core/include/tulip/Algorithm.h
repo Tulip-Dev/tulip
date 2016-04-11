@@ -50,10 +50,10 @@ public :
    * @param context The context this algorithm runs in, containing the graph, a DataSet for the parameters, and a PluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
-  Algorithm (const PluginContext* context) : graph(NULL),pluginProgress(NULL),dataSet(NULL) {
-    if(context != NULL) {
+  Algorithm (const PluginContext* context) : graph(nullptr),pluginProgress(nullptr),dataSet(nullptr) {
+    if(context != nullptr) {
       const AlgorithmContext* algorithmContext = dynamic_cast<const AlgorithmContext*>(context);
-      assert(algorithmContext != NULL);
+      assert(algorithmContext != nullptr);
       graph = algorithmContext->graph;
       pluginProgress = algorithmContext->pluginProgress;
       dataSet = algorithmContext->dataSet;
@@ -92,7 +92,7 @@ public :
    */
   Graph *graph;
   /**
-   * @brief A PluginProgress to give feedback to the user, retrieved from the context. It can be a NULL pointer, so use with caution.
+   * @brief A PluginProgress to give feedback to the user, retrieved from the context. It can be a nullptr pointer, so use with caution.
    */
   PluginProgress *pluginProgress;
   /**

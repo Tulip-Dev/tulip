@@ -53,7 +53,7 @@ using namespace std;
 
 const string NodeLinkDiagramComponent::viewName("Node Link Diagram view");
 
-NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(NULL), _gridOptions(NULL),_hasHulls(false),_tooltips(false),grid_ui(NULL) {
+NodeLinkDiagramComponent::NodeLinkDiagramComponent(const tlp::PluginContext*): _grid(nullptr), _gridOptions(nullptr),_hasHulls(false),_tooltips(false),grid_ui(nullptr) {
 }
 
 NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
@@ -62,9 +62,9 @@ NodeLinkDiagramComponent::~NodeLinkDiagramComponent() {
 
 void NodeLinkDiagramComponent::updateGrid() {
   delete _grid;
-  _grid = NULL;
+  _grid = nullptr;
 
-  if(_gridOptions==NULL)
+  if(_gridOptions==nullptr)
     return;
 
   DataSet gridData = static_cast<ParameterListModel*>(_gridOptions->findChild<QTableView*>()->model())->parametersValues();
@@ -184,7 +184,7 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   gridParameters.add<bool>("X grid","","true",false);
   gridParameters.add<bool>("Y grid","","true",false);
   gridParameters.add<bool>("Z grid","","true",false);
-  ParameterListModel* model = new ParameterListModel(gridParameters,NULL,this);
+  ParameterListModel* model = new ParameterListModel(gridParameters,nullptr,this);
 
   grid_ui = new Ui::GridOptionsWidget;
   _gridOptions = new QDialog(graphicsView());
@@ -222,11 +222,11 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
   GlGraphComposite* composite =
     getGlMainWidget()->getScene()->getGlGraphComposite();
-  Graph* oldGraph = composite ? composite->getGraph() : NULL;
+  Graph* oldGraph = composite ? composite->getGraph() : nullptr;
   loadGraphOnScene(graph);
   registerTriggers();
 
-  if (oldGraph == NULL || graph == NULL ||
+  if (oldGraph == nullptr || graph == nullptr ||
       (oldGraph->getRoot() != graph->getRoot()) ||
       getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging() == false)
     centerView();
@@ -370,7 +370,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
   GlGraphRenderingParameters param=oldGraphComposite->getRenderingParameters();
   GlMetaNodeRenderer *metaNodeRenderer=oldGraphComposite->getInputData()->getMetaNodeRenderer();
   // prevent deletion of MetaNodeRenderer when deleting oldGraphComposite
-  oldGraphComposite->getInputData()->setMetaNodeRenderer(NULL,false);
+  oldGraphComposite->getInputData()->setMetaNodeRenderer(nullptr,false);
   GlGraphComposite* graphComposite=new GlGraphComposite(graph);
   graphComposite->setRenderingParameters(param);
 
@@ -382,7 +382,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
     delete graphComposite->getInputData()->getGlVertexArrayManager();
     graphComposite->getInputData()->setGlVertexArrayManager(oldGraphComposite->getInputData()->getGlVertexArrayManager());
     // prevent deletion of GlVertexArrayManager when deleting oldGraphComposite
-    oldGraphComposite->getInputData()->setGlVertexArrayManager(NULL);
+    oldGraphComposite->getInputData()->setGlVertexArrayManager(nullptr);
     graphComposite->getInputData()->getGlVertexArrayManager()->setInputData(graphComposite->getInputData());
   }
 
@@ -395,7 +395,7 @@ void NodeLinkDiagramComponent::loadGraphOnScene(Graph *graph) {
 void NodeLinkDiagramComponent::registerTriggers() {
   clearRedrawTriggers();
 
-  if (graph() == NULL)
+  if (graph() == nullptr)
     return;
 
   addRedrawTrigger(getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());

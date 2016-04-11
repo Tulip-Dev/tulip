@@ -48,7 +48,7 @@ class TopPopupComboBox: public QComboBox {
   QListView* _view;
 
 public:
-  TopPopupComboBox(QWidget* parent = NULL): QComboBox(parent), _view(NULL) {
+  TopPopupComboBox(QWidget* parent = nullptr): QComboBox(parent), _view(nullptr) {
   }
 
   bool eventFilter(QObject*, QEvent* ev) {
@@ -69,11 +69,11 @@ public:
   virtual void showPopup() {
     QPoint mainWindowPos = tlp::Perspective::instance()->mainWindow()->pos();
 
-    if (_view == NULL) {
+    if (_view == nullptr) {
       _view = findChild<QListView*>();
       _view->installEventFilter(this);
       _view->viewport()->installEventFilter(this);
-      _view->setParent(NULL);
+      _view->setParent(nullptr);
       _view->setMouseTracking(true);
     }
 
@@ -85,7 +85,7 @@ public:
   }
 
   virtual void hidePopup() {
-    if (_view != NULL)
+    if (_view != nullptr)
       _view->close();
   }
 
@@ -96,7 +96,7 @@ public:
 using namespace tlp;
 
 QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *parent)
-  : QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(NULL), delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
+  : QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(nullptr), delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1),_captionsInitialized(false) {
   _ui->setupUi(this);
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
@@ -125,12 +125,12 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 void QuickAccessBar::reset() {
   _resetting = true;
 
-  _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->labelColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
+  _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
+  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
+  _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
+  _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
+  _ui->labelColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
 
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());

@@ -78,7 +78,7 @@ class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
   bool isComboAlgorithm(QComboBox*) const;
 
 public:
-  explicit FiltersManagerCompareItem(QWidget* parent = NULL);
+  explicit FiltersManagerCompareItem(QWidget* parent = nullptr);
   ~FiltersManagerCompareItem();
   void applyFilter(tlp::BooleanProperty*);
   QString title() const;

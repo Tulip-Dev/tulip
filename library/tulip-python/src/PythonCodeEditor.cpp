@@ -453,7 +453,7 @@ void FindReplaceDialog::hideEvent(QHideEvent *) {
   _editor->setFocus();
 }
 
-PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _highlighter(NULL), _tooltipActive(false) {
+PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false) {
   installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
@@ -1612,7 +1612,7 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   _lastSavedTime = fileInfo.lastModified();
 
   if (filePath == getFileName() && !toPlainText().isEmpty()) {
-    if (scriptCode != getCleanCode() && QMessageBox::question(NULL, "File changed on disk", QString("The file ") + filePath + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
+    if (scriptCode != getCleanCode() && QMessageBox::question(nullptr, "File changed on disk", QString("The file ") + filePath + " has been modified by another editor. Do you want to reload it ?", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes) == QMessageBox::Yes) {
       setPlainText(scriptCode);
     }
     else {

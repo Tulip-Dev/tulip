@@ -49,7 +49,7 @@ static bool runQHull(int dim, vector<double> &points,
   qhullCommand += qhullOptions;
 
   // run qhull convex hull computation
-  int qhullKo = qh_new_qhull(dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+  int qhullKo = qh_new_qhull(dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), nullptr, stderr);
 
   if (!qhullKo) {
     facetT *facet;

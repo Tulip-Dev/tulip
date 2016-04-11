@@ -67,7 +67,7 @@ public:
   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
-  static void loadPlugins(PluginLoader *loader = NULL, const std::string& pluginPath = "");
+  static void loadPlugins(PluginLoader *loader = nullptr, const std::string& pluginPath = "");
 
   /**
    * @brief Loads a single plugin library.
@@ -76,7 +76,7 @@ public:
    * @param loader A loader to report what is going on (only its loaded or aborted functions will be called) Defaults to 0.
    * @return bool Whether the plugin was sucessfully loaded.
    **/
-  static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = NULL);
+  static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = nullptr);
 #endif //EMSCRIPTEN
 
   /**
@@ -98,7 +98,7 @@ private:
 #endif
 
   static PluginLibraryLoader* getInstance() {
-    if(_instance == NULL) {
+    if(_instance == nullptr) {
       _instance = new PluginLibraryLoader();
     }
 

@@ -175,7 +175,7 @@ const unsigned char maxCircleAlphaValue = 200;
 
 PLUGIN(NeighborhoodHighlighterInteractor)
 
-NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_neighborhood_highlighter.png"), "Highlight node neighborhood"), configWidget(NULL) {}
+NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_neighborhood_highlighter.png"), "Highlight node neighborhood"), configWidget(nullptr) {}
 
 NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
   delete configWidget;
@@ -200,18 +200,18 @@ void NeighborhoodHighlighterInteractor::construct() {
 }
 
 NeighborhoodHighlighter::NeighborhoodHighlighter() :
-  originalGraph(NULL), originalGlGraphComposite(NULL),
-  neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), glNeighborhoodCamera(NULL),
-  neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
-  neighborhoodGraphOriginalLayout(NULL),neighborhoodGraphColors(NULL),
-  neighborhoodGraphBackupColors(NULL), centralNodeLocked(false),
-  circleLayoutSet(false), glWidget(NULL), neighborhoodDist(1),
-  configWidget(NULL), circleAlphaValue(maxCircleAlphaValue),
+  originalGraph(nullptr), originalGlGraphComposite(nullptr),
+  neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), glNeighborhoodCamera(nullptr),
+  neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
+  neighborhoodGraphOriginalLayout(nullptr),neighborhoodGraphColors(nullptr),
+  neighborhoodGraphBackupColors(nullptr), centralNodeLocked(false),
+  circleLayoutSet(false), glWidget(nullptr), neighborhoodDist(1),
+  configWidget(nullptr), circleAlphaValue(maxCircleAlphaValue),
   startAlpha(0), endAlpha(255), nbAnimSteps(0) {
 }
 
-NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) : neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), glNeighborhoodCamera(NULL), neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
-  neighborhoodGraphOriginalLayout(NULL), neighborhoodGraphColors(NULL), neighborhoodGraphBackupColors(NULL),
+NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) : neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), glNeighborhoodCamera(nullptr), neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
+  neighborhoodGraphOriginalLayout(nullptr), neighborhoodGraphColors(nullptr), neighborhoodGraphBackupColors(nullptr),
   centralNodeLocked(false), circleLayoutSet(false), neighborhoodDist(1), circleAlphaValue(maxCircleAlphaValue) {
   configWidget = neighborhoodHighlighter.configWidget;
   connect(configWidget, SIGNAL(updateNeighborhoodGraph()), this, SLOT(updateNeighborhoodGraph()));
@@ -222,10 +222,10 @@ NeighborhoodHighlighter::~NeighborhoodHighlighter() {
 }
 
 void NeighborhoodHighlighter::viewChanged(View *view) {
-  originalGraph = NULL;
+  originalGraph = nullptr;
 
-  if (view == NULL) {
-    glWidget = NULL;
+  if (view == nullptr) {
+    glWidget = nullptr;
     return;
   }
 
@@ -234,7 +234,7 @@ void NeighborhoodHighlighter::viewChanged(View *view) {
 }
 
 bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
-  if(originalGraph==NULL) {
+  if(originalGraph==nullptr) {
     originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
     originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
 
@@ -416,7 +416,7 @@ node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, 
   node n;
   glWidget->makeCurrent();
   vector<SelectedEntity> selectedElements;
-  glWidget->getScene()->selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), glWidget->screenToViewport(x-1), glWidget->screenToViewport(y-1), glWidget->screenToViewport(3), glWidget->screenToViewport(3), NULL, selectedElements);
+  glWidget->getScene()->selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), glWidget->screenToViewport(x-1), glWidget->screenToViewport(y-1), glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
 
   if(!selectedElements.empty()) {
     n=node(selectedElements[0].getComplexEntityId());
@@ -441,7 +441,7 @@ void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB, Addit
   glWidget->installEventFilter(&medf);
   QtGlSceneZoomAndPanAnimator sceneZoomAndPan(glWidget, destBB);
 
-  if (additionalAnimation != NULL) {
+  if (additionalAnimation != nullptr) {
     sceneZoomAndPan.setAdditionalGlSceneAnimation(additionalAnimation);
   }
 
@@ -451,21 +451,21 @@ void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB, Addit
 
 void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   delete glNeighborhoodGraph;
-  glNeighborhoodGraph = NULL;
+  glNeighborhoodGraph = nullptr;
   delete neighborhoodGraph;
-  neighborhoodGraph = NULL;
+  neighborhoodGraph = nullptr;
   delete neighborhoodGraphLayout;
-  neighborhoodGraphLayout = NULL;
+  neighborhoodGraphLayout = nullptr;
   delete neighborhoodGraphCircleLayout;
-  neighborhoodGraphCircleLayout = NULL;
+  neighborhoodGraphCircleLayout = nullptr;
   delete neighborhoodGraphOriginalLayout;
-  neighborhoodGraphOriginalLayout = NULL;
+  neighborhoodGraphOriginalLayout = nullptr;
   delete neighborhoodGraphColors;
-  neighborhoodGraphColors = NULL;
+  neighborhoodGraphColors = nullptr;
   delete neighborhoodGraphBackupColors;
-  neighborhoodGraphBackupColors = NULL;
+  neighborhoodGraphBackupColors = nullptr;
   delete glNeighborhoodCamera;
-  glNeighborhoodCamera = NULL;
+  glNeighborhoodCamera = nullptr;
 }
 
 void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
@@ -494,7 +494,7 @@ void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
 }
 
 void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
-  if(originalGlGraphComposite != NULL) {
+  if(originalGlGraphComposite != nullptr) {
     GlGraphInputData *originalInputData = originalGlGraphComposite->getInputData();
     LayoutProperty *origGraphLayout = originalInputData->getElementLayout();
     ColorProperty *origGraphColors = originalInputData->getElementColor();
@@ -671,7 +671,7 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *ne
 
 bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
 
-  if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != NULL) {
+  if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != nullptr) {
     if(!glNeighborhoodCamera)
       glNeighborhoodCamera=new Camera(glMainWidget->getScene()->getLayer("Main")->getCamera());
 

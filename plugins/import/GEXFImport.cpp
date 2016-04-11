@@ -72,8 +72,8 @@ public :
                     "Imports a new graph from a file in the GEXF input format<br/>as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet supported.",
                     "1.0","File")
   GEXFImport(const PluginContext*  context):ImportModule(context),
-    viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),
-    viewShape(NULL), nodesHaveCoordinates(false) {
+    viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr), viewLabel(nullptr),
+    viewShape(nullptr), nodesHaveCoordinates(false) {
     // add a file parameter for the plugin
     addInParameter<string>("file::filename", paramHelp[0],"");
     addInParameter<bool>("Curved edges",paramHelp[1], "false");
@@ -188,7 +188,7 @@ public :
   // according to data types
   void createPropertiesFromAttributes(QXmlStreamReader &xmlReader) {
     bool nodeProperties = xmlReader.attributes().value("class") == "node";
-    map<string, PropertyInterface *> *propertiesMap = NULL;
+    map<string, PropertyInterface *> *propertiesMap = nullptr;
 
     if (nodeProperties) {
       propertiesMap = &nodePropertiesMap;
@@ -260,7 +260,7 @@ public :
 
     Graph* sg = (Graph*) nodeToSubgraph.get(pn.id);
 
-    if (sg == NULL) {
+    if (sg == nullptr) {
       // add a subgraph for the fake meta node
       sg = graph->addSubGraph();
       // record pn as its fake meta node
@@ -359,7 +359,7 @@ public :
       else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "nodes") {
         Graph* sg = (Graph *) nodeToSubgraph.get(n.id);
 
-        if (sg == NULL) {
+        if (sg == nullptr) {
           // add subgraph
           sg = graph->addSubGraph();
           // record the current node as its fake meta node
@@ -447,7 +447,7 @@ public :
   Graph* addSubGraphsNodes() {
     // quotientGraph will be created
     // as soon as there is a subgraph
-    Graph* quotientGraph = NULL;
+    Graph* quotientGraph = nullptr;
     // iterate on each subgraph of graph
     // and add missing nodes
     StableIterator<Graph*> itg(graph->getSubGraphs());
@@ -512,7 +512,7 @@ public :
         node n = itn.next();
         Graph* msg = (Graph*) nodeToSubgraph.get(n.id);
 
-        if (msg != NULL) {
+        if (msg != nullptr) {
           // n is a fake meta node
           // create the real meta node
           // pointing to msg

@@ -37,7 +37,7 @@ slurp_symtab(bfd *abfd, bool useMini,
   *nSymbols = 0;
   *symbolSize = 0;
   *isDynamic = false;
-  asymbol **symbol_table = NULL;
+  asymbol **symbol_table = nullptr;
 
   if ((bfd_get_file_flags (abfd) & HAS_SYMS) == 0) {
     *nSymbols = 0;
@@ -121,9 +121,9 @@ static void tokenize(const string& str, vector<string>& tokens, const string& de
 static bool bfdInit = false;
 
 BfdWrapper::BfdWrapper(const char *dsoName) :
-  filePath(dsoName), abfd(NULL), textSection(NULL), symbolTable(NULL),
+  filePath(dsoName), abfd(nullptr), textSection(nullptr), symbolTable(nullptr),
   nSymbols(0), symbolSize(0), isMini(true), isDynamic(false),
-  scratchSymbol(NULL), relocationOffset(-1) {
+  scratchSymbol(nullptr), relocationOffset(-1) {
 
 #ifndef __MINGW32__
 
@@ -169,9 +169,9 @@ BfdWrapper::BfdWrapper(const char *dsoName) :
     bfdInit = true;
   }
 
-  abfd = bfd_openr(filePath.c_str(), NULL);
+  abfd = bfd_openr(filePath.c_str(), nullptr);
 
-  if (abfd == NULL) {
+  if (abfd == nullptr) {
     cerr << "Can't open file " << filePath << endl;
     return;
   }
@@ -184,7 +184,7 @@ BfdWrapper::BfdWrapper(const char *dsoName) :
 
   textSection = bfd_get_section_by_name(abfd, ".text");
 
-  if (textSection == NULL) {
+  if (textSection == nullptr) {
     cerr << "Can't find .text section in " << bfd_get_filename(abfd) << endl;
     bfd_close(abfd);
     return;
@@ -205,7 +205,7 @@ BfdWrapper::BfdWrapper(const char *dsoName) :
 
   asymbol *scratchSymbol = bfd_make_empty_symbol(abfd);
 
-  if (scratchSymbol == NULL) {
+  if (scratchSymbol == nullptr) {
     cerr << "Error (bfd_make_empty_symbol) in " << bfd_get_filename(abfd) << endl;
     free(symbolTable);
     bfd_close(abfd);
@@ -214,11 +214,11 @@ BfdWrapper::BfdWrapper(const char *dsoName) :
 }
 
 BfdWrapper::~BfdWrapper() {
-  if (symbolTable != NULL) {
+  if (symbolTable != nullptr) {
     free(symbolTable);
   }
 
-  if (abfd != NULL) {
+  if (abfd != nullptr) {
     bfd_close(abfd);
   }
 }
@@ -238,7 +238,7 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
   for (; from < fromend; from += symbolSize, index++) {
     asymbol *sym = bfd_minisymbol_to_symbol(abfd, isDynamic, from, scratchSymbol);
 
-    if (sym == NULL) {
+    if (sym == nullptr) {
       cerr << "Error (bfd_minisymbol_to_symbol) in " << bfd_get_filename(abfd) << endl;
       return ret;
     }
@@ -262,8 +262,8 @@ pair<const char *, unsigned int> BfdWrapper::getFileAndLineForAddress(const char
         if (relocationOffset != -1)
           unrelocatedAddr -= relocationOffset;
 
-        const char *funcName = NULL;
-        const char *fileName = NULL;
+        const char *funcName = nullptr;
+        const char *fileName = nullptr;
         unsigned int lineno = 0;
 
         bfd_vma textSection_vma = bfd_get_section_vma(abfd, textSection);

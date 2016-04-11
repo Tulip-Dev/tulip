@@ -116,7 +116,7 @@ QNetworkRequest WebDavManager::initRequest(const QString& destination, QIODevice
   request.setRawHeader(QByteArray("Authorization"), _credentials.toLatin1());
   request.setRawHeader(QByteArray("Host"), _host.toUtf8());
 
-  if(data != NULL) {
+  if(data != nullptr) {
     request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(data->size()));
   }
 

@@ -24,7 +24,7 @@
 using namespace std;
 using namespace tlp;
 
-tlp::Graph* nullGraph = NULL;
+tlp::Graph* nullGraph = nullptr;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( GraphPropertyTest );
 

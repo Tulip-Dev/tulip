@@ -60,8 +60,8 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgesMaxSizeToNodesSize(true),
   _feedbackRender(false),
   _selectionColor(GlDefaultSelectionColorManager::getDefaultSelectionColor()),
-  _displayFilteringProperty(NULL),
-  _elementOrderingProperty(NULL) {
+  _displayFilteringProperty(nullptr),
+  _elementOrderingProperty(nullptr) {
 }
 //This function should rewriten completly
 DataSet GlGraphRenderingParameters::getParameters() const {
@@ -492,7 +492,7 @@ tlp::NumericProperty* GlGraphRenderingParameters::getElementOrderingProperty() c
   return _elementOrderingProperty;
 }
 //====================================================
-GlDefaultSelectionColorManager* GlDefaultSelectionColorManager::manager = NULL;
+GlDefaultSelectionColorManager* GlDefaultSelectionColorManager::manager = nullptr;
 
 void GlDefaultSelectionColorManager::setManager(GlDefaultSelectionColorManager* mgr) {
   manager = mgr;

@@ -32,7 +32,7 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : parallelView(NULL), selectedAxis(NULL), x(0), y(0), dragStarted(false) {}
+ParallelCoordsAxisSpacer::ParallelCoordsAxisSpacer() : parallelView(nullptr), selectedAxis(nullptr), x(0), y(0), dragStarted(false) {}
 
 bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
@@ -50,7 +50,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 1], allAxis[1]);
         }
         else {
-          neighborsAxis = make_pair((ParallelAxis *) NULL, allAxis[1]);
+          neighborsAxis = make_pair((ParallelAxis *) nullptr, allAxis[1]);
         }
       }
       else if (selectedAxis == allAxis[allAxis.size() - 1]) {
@@ -58,7 +58,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
           neighborsAxis = make_pair(allAxis[allAxis.size() - 2], allAxis[0]);
         }
         else {
-          neighborsAxis = make_pair(allAxis[allAxis.size() - 2], (ParallelAxis *) NULL);
+          neighborsAxis = make_pair(allAxis[allAxis.size() - 2], (ParallelAxis *) nullptr);
         }
       }
 
@@ -70,7 +70,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
       parallelView->refresh();
     }
-    else if (selectedAxis != NULL) {
+    else if (selectedAxis != nullptr) {
       x = glWidget->width() - me->x();
       y = me->y();
       Coord screenCoords(x, y, 0.0f);
@@ -108,8 +108,8 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
         BoundingBox axisBB(selectedAxis->getBoundingBox());
         axisBB.translate(translationVector);
 
-        if ((neighborsAxis.first == NULL || axisBB[0][0] > neighborsAxis.first->getBoundingBox()[1][0]) &&
-            (neighborsAxis.second == NULL || axisBB[1][0] < neighborsAxis.second->getBoundingBox()[0][0])) {
+        if ((neighborsAxis.first == nullptr || axisBB[0][0] > neighborsAxis.first->getBoundingBox()[1][0]) &&
+            (neighborsAxis.second == nullptr || axisBB[1][0] < neighborsAxis.second->getBoundingBox()[0][0])) {
           selectedAxis->translate(translationVector);
         }
       }
@@ -120,7 +120,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
     return true;
   }
   else if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
-    if (selectedAxis != NULL && !dragStarted) {
+    if (selectedAxis != nullptr && !dragStarted) {
       dragStarted = true;
     }
 
@@ -128,9 +128,9 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 
   }
   else if (e->type() == QEvent::MouseButtonRelease && ((QMouseEvent *) e)->button() == Qt::LeftButton) {
-    if (selectedAxis != NULL && dragStarted) {
+    if (selectedAxis != nullptr && dragStarted) {
       dragStarted = false;
-      selectedAxis = NULL;
+      selectedAxis = nullptr;
       parallelView->draw();
       return true;
     }
@@ -145,7 +145,7 @@ bool ParallelCoordsAxisSpacer::eventFilter(QObject *widget, QEvent *e) {
 }
 
 bool ParallelCoordsAxisSpacer::draw(GlMainWidget *glMainWidget) {
-  if (selectedAxis != NULL) {
+  if (selectedAxis != nullptr) {
     glMainWidget->getScene()->getLayer("Main")->getCamera().initGl();
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

@@ -50,7 +50,7 @@ const unsigned int twoArrowWithLineSize=10;
 const Coord twoArrowWithLine[] = {Coord(0,0,0),Coord(5,-5,0),Coord(-5,-5,0),Coord(0,0,0),Coord(-5,0,0),Coord(5,0,0),Coord(0,0,0),Coord(5,5,0),Coord(-5,5,0),Coord(0,0,0)};
 
 //========================================================================================
-MouseSelectionEditor::MouseSelectionEditor():glMainWidget(NULL),layer(NULL),composite(NULL) {
+MouseSelectionEditor::MouseSelectionEditor():glMainWidget(nullptr),layer(nullptr),composite(nullptr) {
   operation = NONE;
 
   _controls[0].resizePoints(3); //triangle
@@ -95,10 +95,10 @@ MouseSelectionEditor::~MouseSelectionEditor() {
 }
 //========================================================================================
 void MouseSelectionEditor::clear() {
-  if (glMainWidget != NULL) {
+  if (glMainWidget != nullptr) {
     glMainWidget->getScene()->removeLayer(layer,false);
     delete layer;
-    layer=NULL;
+    layer=nullptr;
 
     glMainWidget->setCursor(QCursor());
   }
@@ -461,7 +461,7 @@ bool MouseSelectionEditor::compute(GlMainWidget *glMainWidget) {
   else {
     if(layer) {
       glMainWidget->getScene()->removeLayer(layer,true);
-      layer=NULL;
+      layer=nullptr;
     }
 
     return false;
@@ -488,7 +488,7 @@ void MouseSelectionEditor::stopEdition() {
   //qWarning() << __PRETTY_FUNCTION__ << endl;
   if(layer) {
     glMainWidget->getScene()->removeLayer(layer,true);
-    layer=NULL;
+    layer=nullptr;
   }
 
   operation = NONE;

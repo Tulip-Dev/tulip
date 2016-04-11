@@ -40,7 +40,7 @@
 
 using namespace tlp;
 
-TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(NULL), _model(NULL), isNewGraph(false), filteringColumns(false) {}
+TableView::TableView(tlp::PluginContext *): ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr), isNewGraph(false), filteringColumns(false) {}
 
 TableView::~TableView() {
   delete _ui;
@@ -52,7 +52,7 @@ TableView::~TableView() {
 tlp::BooleanProperty* TableView::getFilteringProperty() const {
   GraphPropertiesModel<BooleanProperty>* model = static_cast<GraphPropertiesModel<BooleanProperty>*>(_ui->filteringPropertyCombo->model());
   PropertyInterface* pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(),0),TulipModel::PropertyRole).value<PropertyInterface*>();
-  return pi ? static_cast<BooleanProperty*>(pi) : NULL;
+  return pi ? static_cast<BooleanProperty*>(pi) : nullptr;
 }
 
 bool TableView::hasEffectiveFiltering() {
@@ -68,7 +68,7 @@ tlp::DataSet TableView::state() const {
 
   BooleanProperty* pi = getFilteringProperty();
 
-  if (pi != NULL)
+  if (pi != nullptr)
     data.set("filtering_property",pi->getName());
 
   return data;
@@ -185,7 +185,7 @@ void TableView::graphChanged(tlp::Graph* g) {
   _ui->table->verticalHeader()->show();
 
   //Show all the properties
-  if (_model != NULL) {
+  if (_model != nullptr) {
     for(int i=0; i < _model->columnCount(); ++i) {
       QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
       bool checked = !visibleProperties.isEmpty() ?
@@ -199,13 +199,13 @@ void TableView::graphChanged(tlp::Graph* g) {
 }
 
 void TableView::graphDeleted(Graph*) {
-  setGraph(NULL);
+  setGraph(nullptr);
 }
 
 void TableView::readSettings() {
-  if ( isNewGraph || ((_ui->eltTypeCombo->currentIndex() == 0) && dynamic_cast<NodesGraphModel*>(_model) == NULL) ||
-       ((_ui->eltTypeCombo->currentIndex() == 1) && dynamic_cast<EdgesGraphModel*>(_model) == NULL)) {
-    _ui->table->setModel(NULL);
+  if ( isNewGraph || ((_ui->eltTypeCombo->currentIndex() == 0) && dynamic_cast<NodesGraphModel*>(_model) == nullptr) ||
+       ((_ui->eltTypeCombo->currentIndex() == 1) && dynamic_cast<EdgesGraphModel*>(_model) == nullptr)) {
+    _ui->table->setModel(nullptr);
 
     delete _model;
 
@@ -264,7 +264,7 @@ void TableView::columnsInserted(const QModelIndex&, int start, int end) {
 }
 
 void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
-  if (_model == NULL)
+  if (_model == nullptr)
     return;
 
   QString propName = tlpStringToQString(pi->getName());
@@ -654,14 +654,14 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   QAction* addProp = contextMenu.addAction("Add new");
   QAction* copyProp = contextMenu.addAction("Copy");
-  QAction* deleteProp = NULL;
+  QAction* deleteProp = nullptr;
 
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str()) ||
       // Enable deletion of reserved properties when on a subgraph and that properties are local
       (graph() != graph()->getRoot() && graph()->existLocalProperty(propName)))
     deleteProp = contextMenu.addAction("Delete");
 
-  QAction* renameProp = NULL;
+  QAction* renameProp = nullptr;
 
   if (!Perspective::instance()->isReservedPropertyName(propName.c_str()))
     renameProp = contextMenu.addAction("Rename");
@@ -671,18 +671,18 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges"));
   QAction* nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes"));
   QAction* edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges"));
-  QAction* highlightedSetAll = NULL;
+  QAction* highlightedSetAll = nullptr;
 
   if (highlightedRows.size() != 0)
     highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
-  QAction* toLabels = NULL;
-  QAction* nodesToLabels = NULL;
-  QAction* edgesToLabels = NULL;
-  QAction* selectedToLabels = NULL;
-  QAction* nodesSelectedToLabels = NULL;
-  QAction* edgesSelectedToLabels = NULL;
-  QAction* highlightedToLabels = NULL;
+  QAction* toLabels = nullptr;
+  QAction* nodesToLabels = nullptr;
+  QAction* edgesToLabels = nullptr;
+  QAction* selectedToLabels = nullptr;
+  QAction* nodesSelectedToLabels = nullptr;
+  QAction* edgesSelectedToLabels = nullptr;
+  QAction* highlightedToLabels = nullptr;
 
   if (propName != "viewLabel") {
     subMenu = contextMenu.addMenu(trUtf8("To labels of "));
@@ -713,7 +713,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
       _ui->table->horizontalHeader()->setSortIndicator(-1, Qt::AscendingOrder);
       GraphSortFilterProxyModel* sortModel = static_cast<GraphSortFilterProxyModel*>(_ui->table->model());
       QAbstractItemModel* model = sortModel->sourceModel();
-      sortModel->setSourceModel(NULL);
+      sortModel->setSourceModel(nullptr);
       sortModel->setSourceModel(model);
       sortModel->setFilterProperty(getFilteringProperty());
 
@@ -740,7 +740,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   if (action == copyProp) {
     if (CopyPropertyDialog::copyProperty(graph(), prop, true,
                                          Perspective::instance()->mainWindow())
-        == NULL)
+        == nullptr)
       // cancelled so undo
       graph()->pop();
 
@@ -762,7 +762,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   if (action == addProp) {
     if (PropertyCreationDialog::createNewProperty(graph(), Perspective::instance()->mainWindow(), prop->getTypename())
-        == NULL)
+        == nullptr)
       // cancelled so undo
       graph()->pop();
 

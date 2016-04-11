@@ -83,7 +83,7 @@ public:
   //=========================================================================
   // updates management
   virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= NULL);
+                    std::vector<PropertyInterface*>* propertiesToPreserveOnPop= nullptr);
   virtual void pop(bool unpopAllowed = true);
   virtual void unpop();
   virtual bool canPop();

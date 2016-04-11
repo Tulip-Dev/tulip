@@ -49,8 +49,8 @@
 using namespace std;
 using namespace tlp;
 
-GeographicView::GeographicView(PluginContext *) : geoViewConfigWidget(NULL),geolocalisationConfigWidget(NULL),sceneConfigurationWidget(NULL),
-  sceneLayersConfigurationWidget(NULL),useSharedLayoutProperty(true),useSharedSizeProperty(true),useSharedShapeProperty(true) {
+GeographicView::GeographicView(PluginContext *) : geoViewConfigWidget(nullptr),geolocalisationConfigWidget(nullptr),sceneConfigurationWidget(nullptr),
+  sceneLayersConfigurationWidget(nullptr),useSharedLayoutProperty(true),useSharedSizeProperty(true),useSharedShapeProperty(true) {
   _viewType=GoogleRoadMap;
 }
 
@@ -84,7 +84,7 @@ void GeographicView::setupUi() {
 void GeographicView::viewTypeChanged(QString viewTypeName) {
   QComboBox *comboBox=geoViewGraphicsView->getViewTypeComboBox();
 
-  if (comboBox == NULL)
+  if (comboBox == nullptr)
     return;
 
   disconnect(comboBox,SIGNAL(currentIndexChanged(QString)),this,SLOT(viewTypeChanged(QString)));
@@ -378,7 +378,7 @@ QGraphicsItem *GeographicView::centralItem() const {
 void GeographicView::registerTriggers() {
   clearRedrawTriggers();
 
-  if (graph() == NULL)
+  if (graph() == nullptr)
     return;
 
   addRedrawTrigger(geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());

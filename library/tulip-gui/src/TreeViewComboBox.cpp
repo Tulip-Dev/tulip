@@ -38,7 +38,7 @@ public:
   }
 };
 
-TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(NULL), _skipNextHide(false), _popupVisible(false) {
+TreeViewComboBox::TreeViewComboBox(QWidget *parent): QComboBox(parent), _treeView(nullptr), _skipNextHide(false), _popupVisible(false) {
   _treeView = new QTreeView(this);
   _treeView->setEditTriggers(QTreeView::NoEditTriggers);
   _treeView->setAlternatingRowColors(true);

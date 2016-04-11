@@ -33,7 +33,7 @@ static const char * paramHelp[] = {
   HTML_HELP_CLOSE(),
 };
 
-DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(NULL) {
+DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(nullptr) {
   addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "", false);
 }
 
@@ -44,7 +44,7 @@ struct dfsDepthStruct {
   double maxDepth;
   double edgeValue;
 
-  dfsDepthStruct(): outEdges(NULL), maxDepth(0.0), edgeValue(0.0) {}
+  dfsDepthStruct(): outEdges(nullptr), maxDepth(0.0), edgeValue(0.0) {}
   dfsDepthStruct(node n, Iterator<edge>* edges):
     current(n), outEdges(edges), maxDepth(0.0), edgeValue(0.0) {}
 };
@@ -133,7 +133,7 @@ double DepthMetric::getNodeValue(tlp::node current) {
 }
 //====================================================================
 bool DepthMetric::run() {
-  if ( dataSet!=NULL) {
+  if ( dataSet!=nullptr) {
     dataSet->get("edge weight", edgeWeight);
   }
 

@@ -3,7 +3,7 @@
 
 namespace tlp {
 
-TulipViewSettings *TulipViewSettings::_instance(NULL);
+TulipViewSettings *TulipViewSettings::_instance(nullptr);
 
 TulipViewSettings::TulipViewSettings() :
   _defaultNodeColor(Color::Red),

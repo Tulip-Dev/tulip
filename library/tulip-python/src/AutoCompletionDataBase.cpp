@@ -41,7 +41,7 @@ using namespace tlp;
 
 static char sepChar[] = {' ', '\t', '=', '(', '[', '{' , ',', '*', '+', '/', '^', '-', 0};
 
-AutoCompletionDataBase::AutoCompletionDataBase(APIDataBase *apiDb) : _graph(NULL), _apiDb(apiDb) {
+AutoCompletionDataBase::AutoCompletionDataBase(APIDataBase *apiDb) : _graph(nullptr), _apiDb(apiDb) {
   _iteratorType["tlp.IteratorNode"] = "tlp.node";
   _iteratorType["tlp.NodeMapIterator"] = "tlp.node";
   _iteratorType["tlp.IteratorEdge"] = "tlp.edge";
@@ -1161,7 +1161,7 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   std::list<std::string> pluginNames = tlp::PluginLister::availablePlugins();
 
   for (std::list<std::string>::iterator it = pluginNames.begin() ; it != pluginNames.end() ; ++it) {
-    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, NULL);
+    tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, nullptr);
 
     if (plugin->category() != tlp::GLYPH_CATEGORY && plugin->category() != EEGLYPH_CATEGORY &&
         plugin->category() != tlp::INTERACTOR_CATEGORY && plugin->category() != tlp::VIEW_CATEGORY &&

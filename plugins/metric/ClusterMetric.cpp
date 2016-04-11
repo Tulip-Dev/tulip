@@ -57,7 +57,7 @@ bool ClusterMetric::run() {
   //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   unsigned int maxDepth = 1;
 
-  if (dataSet!=NULL) dataSet->get("depth", maxDepth);
+  if (dataSet!=nullptr) dataSet->get("depth", maxDepth);
 
   MutableContainer<double> clusters;
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);

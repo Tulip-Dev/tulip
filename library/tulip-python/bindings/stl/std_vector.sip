@@ -37,12 +37,12 @@ template<TYPE>
   const sipTypeDef* kpTypeDef = getSipType("TYPE");
 
   if (!kpTypeDef) {
-    return NULL;
+    return nullptr;
   }
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -53,11 +53,11 @@ template<TYPE>
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    //if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
-    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+    //if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == nullptr) {
+    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == nullptr) {
       // There was an error so garbage collect the Python list.
       Py_XDECREF(l);
-      return NULL;
+      return nullptr;
     }
 
     // Add the wrapper to the list.
@@ -77,7 +77,7 @@ template<TYPE>
   }
 
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -126,12 +126,12 @@ template<TYPE*>
   const sipTypeDef* kpTypeDef = getSipType("TYPE");
 
   if (!kpTypeDef) {
-    return NULL;
+    return nullptr;
   }
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -141,10 +141,10 @@ template<TYPE*>
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    if ((pobj = sipConvertFromType(sipCpp -> at(i), kpTypeDef, sipTransferObj)) == NULL) {
+    if ((pobj = sipConvertFromType(sipCpp -> at(i), kpTypeDef, sipTransferObj)) == nullptr) {
       // There was an error so garbage collect the Python list.
       Py_XDECREF(l);
-      return NULL;
+      return nullptr;
     }
 
     // Add the wrapper to the list.
@@ -164,7 +164,7 @@ template<TYPE*>
   }
 
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -184,7 +184,7 @@ template<TYPE*>
   for (SIP_SSIZE_T i = 0; i < PyList_GET_SIZE(sipPy); ++i) {
     int state;
     PyObject *item = PyList_GET_ITEM(sipPy, i);
-    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, nullptr, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       sipReleaseType(p, kpTypeDef, state);
@@ -216,8 +216,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -233,7 +233,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -274,8 +274,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -291,7 +291,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -333,8 +333,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -350,7 +350,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -403,8 +403,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -420,7 +420,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -473,8 +473,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -490,7 +490,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -543,8 +543,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -560,7 +560,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }
@@ -613,8 +613,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create the Python list of the correct length.
-  if ((l = PyList_New(sipCpp -> size())) == NULL) {
-    return NULL;
+  if ((l = PyList_New(sipCpp -> size())) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -630,7 +630,7 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PyList_Check(sipPy)) {
       return 0;
     }

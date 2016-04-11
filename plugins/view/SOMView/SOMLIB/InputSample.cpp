@@ -323,7 +323,7 @@ tlp::Iterator<tlp::node>* InputSample::getNodes() {
   if (rootGraph)
     return rootGraph->getNodes();
   else
-    return NULL;
+    return nullptr;
 }
 
 tlp::Iterator<tlp::node>* InputSample::getRandomNodeOrder() {
@@ -340,7 +340,7 @@ tlp::Iterator<tlp::node>* InputSample::getRandomNodeOrder() {
            randomVector.end());
   }
   else
-    return NULL;
+    return nullptr;
 }
 
 void InputSample::updateMeanValue(unsigned int propNum) {

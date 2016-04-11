@@ -42,7 +42,7 @@ This interface allows to notify and control the progression of a process.
   if (dynamic_cast<tlp::SimplePluginProgress*>(sipCpp)) {
     sipType = sipFindType("tlp::SimplePluginProgress");
   } else {
-    sipType = NULL;
+    sipType = nullptr;
   }
 %End
 

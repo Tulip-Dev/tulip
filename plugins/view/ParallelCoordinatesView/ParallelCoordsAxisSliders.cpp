@@ -136,7 +136,7 @@ void AxisSlider::draw(float lod,Camera *camera) {
 }
 
 BoundingBox AxisSlider::getBoundingBox() {
-  GlBoundingBoxSceneVisitor glBBSV(NULL);
+  GlBoundingBoxSceneVisitor glBBSV(nullptr);
   sliderComposite->acceptVisitor(&glBBSV);
   BoundingBox slidersBoundingBox = glBBSV.getBoundingBox();
 
@@ -165,7 +165,7 @@ void AxisSlider::translate(const Coord &move) {
 }
 
 ParallelCoordsAxisSliders::ParallelCoordsAxisSliders() :
-  parallelView(NULL), currentGraph(NULL), selectedAxis(NULL), selectedSlider(NULL),
+  parallelView(nullptr), currentGraph(nullptr), selectedAxis(nullptr), selectedSlider(nullptr),
   axisSliderDragStarted(false), pointerBetweenSliders(false),
   slidersRangeDragStarted(false), slidersRangeLength(0), xClick(0), yClick(0),
   lastAxisHeight(0), lastNbAxis(0), highlightedEltsSetOperation(ParallelCoordinatesDrawing::NONE),
@@ -177,8 +177,8 @@ ParallelCoordsAxisSliders::~ParallelCoordsAxisSliders() {
 }
 
 void ParallelCoordsAxisSliders::viewChanged(View *view) {
-  if (view == NULL) {
-    parallelView = NULL;
+  if (view == nullptr) {
+    parallelView = nullptr;
     return;
   }
 
@@ -205,7 +205,7 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
       (lastNbAxis != 0 && lastNbAxis != allAxis.size()) || (currentGraph != parallelView->getGraphProxy()->getGraph())) {
     deleteGlSliders();
 
-    if (currentGraph != NULL && currentGraph != parallelView->getGraphProxy()->getGraph()) {
+    if (currentGraph != nullptr && currentGraph != parallelView->getGraphProxy()->getGraph()) {
       vector<ParallelAxis *>::iterator it;
 
       for (it = allAxis.begin() ; it != allAxis.end() ; ++it) {
@@ -214,8 +214,8 @@ void ParallelCoordsAxisSliders::initOrUpdateSliders() {
     }
 
     buildGlSliders(allAxis);
-    selectedSlider = NULL;
-    selectedAxis = NULL;
+    selectedSlider = nullptr;
+    selectedAxis = nullptr;
     lastSelectedAxis.clear();
     parallelView->refresh();
   }
@@ -236,7 +236,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
 
   GlMainWidget *glWidget = dynamic_cast<GlMainWidget *>(widget);
 
-  if(glWidget==NULL)
+  if(glWidget==nullptr)
     return false;
 
   selectionLayer->setSharedCamera(&glWidget->getScene()->getLayer("Main")->getCamera());
@@ -257,7 +257,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
     if (!axisSliderDragStarted && !slidersRangeDragStarted) {
       selectedAxis = parallelView->getAxisUnderPointer(me->x(), me->y());
 
-      if (selectedAxis != NULL) {
+      if (selectedAxis != nullptr) {
         if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
           rotateVector(sceneCoords, -(selectedAxis->getRotationAngle()), Z_ROT);
         }
@@ -270,7 +270,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
         pointerBetweenSliders = false;
       }
     }
-    else if (selectedAxis != NULL && selectedSlider != NULL && axisSliderDragStarted) {
+    else if (selectedAxis != nullptr && selectedSlider != nullptr && axisSliderDragStarted) {
 
       float minY, maxY;
 
@@ -294,7 +294,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
         sceneCoords = Coord(selectedAxis->getBaseCoord().getX(), maxY, 0.0f);
       }
 
-      if (selectedSlider != NULL && selectedSlider->getSliderType() == TOP_SLIDER) {
+      if (selectedSlider != nullptr && selectedSlider->getSliderType() == TOP_SLIDER) {
         if (sceneCoords.getY() < selectedAxis->getBottomSliderCoord().getY()) {
           sceneCoords = selectedAxis->getBottomSliderCoord();
         }
@@ -309,7 +309,7 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
         selectedAxis->setBottomSliderCoord(Coord(selectedAxis->getBaseCoord().getX(), sceneCoords.getY()));
       }
     }
-    else if (selectedAxis != NULL && slidersRangeDragStarted) {
+    else if (selectedAxis != nullptr && slidersRangeDragStarted) {
       int dy = yClick - y;
 
       if (parallelView->getLayoutType() == ParallelCoordinatesDrawing::CIRCULAR) {
@@ -349,12 +349,12 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
   else if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
-    if (me->button() == Qt::LeftButton && selectedSlider != NULL && !axisSliderDragStarted) {
+    if (me->button() == Qt::LeftButton && selectedSlider != nullptr && !axisSliderDragStarted) {
       axisSliderDragStarted = true;
       parallelView->refresh();
       return true;
     }
-    else if (selectedAxis != NULL && pointerBetweenSliders &&
+    else if (selectedAxis != nullptr && pointerBetweenSliders &&
              highlightedEltsSetOperation != ParallelCoordinatesDrawing::INTERSECTION && !slidersRangeDragStarted) {
       QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
       slidersRangeDragStarted = true;
@@ -368,21 +368,21 @@ bool ParallelCoordsAxisSliders::eventFilter(QObject *widget, QEvent *e) {
   else if (e->type() == QEvent::MouseButtonRelease) {
     QMouseEvent *me = dynamic_cast<QMouseEvent *>(e);
 
-    if (me->button() == Qt::LeftButton && selectedAxis != NULL && (axisSliderDragStarted || slidersRangeDragStarted)) {
+    if (me->button() == Qt::LeftButton && selectedAxis != nullptr && (axisSliderDragStarted || slidersRangeDragStarted)) {
       axisSliderDragStarted = false;
       slidersRangeDragStarted = false;
       Observable::holdObservers();
       parallelView->updateWithAxisSlidersRange(selectedAxis, highlightedEltsSetOperation);
       updateSlidersYBoundaries();
       Observable::unholdObservers();
-      selectedSlider = NULL;
+      selectedSlider = nullptr;
 
       if (highlightedEltsSetOperation == ParallelCoordinatesDrawing::NONE) {
         lastSelectedAxis.clear();
       }
 
       lastSelectedAxis.push_back(selectedAxis);;
-      selectedAxis = NULL;
+      selectedAxis = nullptr;
       parallelView->refresh();
       return true;
     }
@@ -460,7 +460,7 @@ AxisSlider *ParallelCoordsAxisSliders::getSliderUnderPointer(GlMainWidget *glWid
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 
@@ -539,7 +539,7 @@ bool ParallelCoordsAxisSliders::draw(GlMainWidget *glMainWidget) {
     }
   }
 
-  if (selectedAxis != NULL && pointerBetweenSliders) {
+  if (selectedAxis != nullptr && pointerBetweenSliders) {
     Coord p1 = Coord(axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getX() - 1.5f * selectedAxis->getAxisGradsWidth(), axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
     Coord p2 = Coord(axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getX() + 1.5f * selectedAxis->getAxisGradsWidth(), axisSlidersMap[selectedAxis][TOP_SLIDER]->getSliderCoord().getY());
     Coord p3 = Coord(axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getX() + 1.5f * selectedAxis->getAxisGradsWidth(), axisSlidersMap[selectedAxis][BOTTOM_SLIDER]->getSliderCoord().getY());

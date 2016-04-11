@@ -168,7 +168,7 @@ static void computeEdgeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 
 // 2 arrays to hold the predefined functions
 DoubleNodePredefinedCalculator nodeCalculators[] = {
-  NULL,
+  nullptr,
   computeNodeAvgValue,
   computeNodeSumValue,
   computeNodeMaxValue,
@@ -176,7 +176,7 @@ DoubleNodePredefinedCalculator nodeCalculators[] = {
 };
 
 DoubleEdgePredefinedCalculator edgeCalculators[] = {
-  NULL,
+  nullptr,
   computeEdgeAvgValue,
   computeEdgeSumValue,
   computeEdgeMaxValue,
@@ -227,7 +227,7 @@ static ViewBorderWidthCalculator vWidthCalc;
 //==============================
 ///Constructeur d'un DoubleProperty
 DoubleProperty::DoubleProperty (Graph *g, const std::string& n) : DoubleMinMaxProperty(g, n, -DBL_MAX, DBL_MAX, -DBL_MAX, DBL_MAX) {
-  assert(g!=NULL);
+  assert(g!=nullptr);
 
   // the computed meta value will be the average value
   if (n != "viewBorderWidth") {

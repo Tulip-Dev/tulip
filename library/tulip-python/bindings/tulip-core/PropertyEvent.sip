@@ -45,7 +45,7 @@ Below is an exhaustive list of those types :
   if (dynamic_cast<tlp::PropertyEvent*>(sipCpp)) {
     sipType = sipFindType("tlp::PropertyEvent");
   } else {
-    sipType = NULL;
+    sipType = nullptr;
   }
 %End
 

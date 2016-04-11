@@ -32,8 +32,8 @@
 #include <tulip/OpenGlConfigManager.h>
 
 //====================================================
-tlp::GlTextureManager* tlp::GlTextureManager::inst=NULL;
-tlp::GlTextureLoader* tlp::GlTextureManager::loader=NULL;
+tlp::GlTextureManager* tlp::GlTextureManager::inst=nullptr;
+tlp::GlTextureLoader* tlp::GlTextureManager::loader=nullptr;
 
 using namespace std;
 
@@ -65,7 +65,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
   fopen_s(&file, filename.c_str(), "rb");
 #endif
 
-  if (file == NULL) {
+  if (file == nullptr) {
     tlp::error() << "File not found:" << filename << std::endl;
     return false;
   }
@@ -144,7 +144,7 @@ static bool loadBMP(const string &filename, TextureInfo *texture) {
   if (!fread(texture->data, biSizeImage, 1, file)) {
     tlp::error() << "Error reading file: " << filename << std::endl;
     delete [] texture->data;
-    texture->data=NULL;
+    texture->data=nullptr;
     fclose(file);
     return false;
   }
@@ -169,7 +169,7 @@ static bool loadJPEG(const string &filename, TextureInfo *texture) {
   fopen_s(&file, filename.c_str(), "rb");
 #endif
 
-  if (file == NULL) {
+  if (file == nullptr) {
     tlp::error() << "File not found:" << filename << std::endl;
     return false;
   }
@@ -226,12 +226,12 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   fopen_s(&file, filename.c_str(), "rb");
 #endif
 
-  if (file == NULL) {
+  if (file == nullptr) {
     tlp::error() << "File not found:" << filename << std::endl;
     return false;
   }
 
-  png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+  png_structp png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
 
   if (!png_ptr) {
     tlp::error() << "Error reading file: " << filename << std::endl;
@@ -243,7 +243,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
 
   if (!info_ptr) {
     tlp::error() << "Error reading file: " << filename << std::endl;
-    png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
+    png_destroy_read_struct(&png_ptr, (png_infopp)nullptr, (png_infopp)nullptr);
     fclose(file);
     return false;
   }
@@ -252,7 +252,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
 
   if (!end_info) {
     tlp::error() << "Error reading file: " << filename << std::endl;
-    png_destroy_read_struct(&png_ptr, &info_ptr,  (png_infopp)NULL);
+    png_destroy_read_struct(&png_ptr, &info_ptr,  (png_infopp)nullptr);
     fclose(file);
     return false;
   }
@@ -264,7 +264,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   {
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     fclose(file);
-    return file != NULL;
+    return file != nullptr;
   }
 
   png_init_io(png_ptr, file);
@@ -439,7 +439,7 @@ bool GlTextureLoader::loadTexture(const string& filename,
   for (int i=0; i < (int)extension.length(); ++i)
     extension[i] = (char) toupper(extension[i]);
 
-  TextureLoader_t *loader = NULL;
+  TextureLoader_t *loader = nullptr;
 
   if (extension == "BMP") loader = &loadBMP;
   else if ((extension == "JPG") || (extension == "JPEG")) loader = &loadJPEG;
@@ -450,7 +450,7 @@ bool GlTextureLoader::loadTexture(const string& filename,
 
   TextureInfo texti;
 
-  if ((loader == NULL) || !(*loader)(filename, &texti)) {
+  if ((loader == nullptr) || !(*loader)(filename, &texti)) {
     return false;
   }
 

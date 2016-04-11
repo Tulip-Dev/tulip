@@ -37,9 +37,9 @@ enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
  * the shorted distance is set to 0.
  * see http://en.wikipedia.org/wiki/Average_path_length for more details
  */
-TLP_SCOPE double averagePathLength(const Graph* g, PluginProgress* = NULL);
+TLP_SCOPE double averagePathLength(const Graph* g, PluginProgress* = nullptr);
 // obsolete version for compatibility purpose
-inline bool averagePathLength(Graph *g, double& result, PluginProgress *pp = NULL) {
+inline bool averagePathLength(Graph *g, double& result, PluginProgress *pp = nullptr) {
   result = averagePathLength(g, pp);
   return true;
 }
@@ -49,9 +49,9 @@ inline bool averagePathLength(Graph *g, double& result, PluginProgress *pp = NUL
  * (see clusteringCoefficient function) of all the nodes.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details.
  */
-TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = NULL);
+TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = nullptr);
 // obsolete version for compatibility purpose
-inline bool averageCluster(Graph* g, double& result, PluginProgress* pp = NULL) {
+inline bool averageCluster(Graph* g, double& result, PluginProgress* pp = nullptr) {
   result = averageClusteringCoefficient(g, pp);
   return true;
 }
@@ -62,7 +62,7 @@ inline bool averageCluster(Graph* g, double& result, PluginProgress* pp = NULL) 
  * This quantifies how close its neighbors are to being a clique.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
  */
-TLP_SCOPE void clusteringCoefficient(const Graph *g, MutableContainer<double> &result, unsigned int maxDepth = 1, PluginProgress* = NULL);
+TLP_SCOPE void clusteringCoefficient(const Graph *g, MutableContainer<double> &result, unsigned int maxDepth = 1, PluginProgress* = nullptr);
 /*
  * assigns to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
@@ -70,7 +70,7 @@ TLP_SCOPE void clusteringCoefficient(const Graph *g, MutableContainer<double> &r
  *
  * Warning : the graph must be acyclic (no self loops).
  */
-TLP_SCOPE void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress* = NULL);
+TLP_SCOPE void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress* = nullptr);
 // returns the maximum value of the degree of the graph's nodes
 TLP_SCOPE unsigned int maxDegree(const Graph *);
 

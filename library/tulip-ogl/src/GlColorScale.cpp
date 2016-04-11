@@ -30,7 +30,7 @@ namespace tlp {
 GlColorScale::GlColorScale(ColorScale *colorScale, const Coord &baseCoord, const float length,
                            const float thickness, Orientation orientation) :
   colorScale(colorScale), baseCoord(baseCoord), length(length),
-  thickness(thickness), colorScalePolyQuad(NULL),orientation(orientation) {
+  thickness(thickness), colorScalePolyQuad(nullptr),orientation(orientation) {
   colorScale->addListener(this);
   updateDrawing();
 }
@@ -81,7 +81,7 @@ void GlColorScale::updateDrawing() {
 }
 
 void GlColorScale::draw(float lod, Camera* camera) {
-  if (colorScalePolyQuad != NULL) {
+  if (colorScalePolyQuad != nullptr) {
     colorScalePolyQuad->draw(lod, camera);
   }
 }
@@ -109,7 +109,7 @@ Color GlColorScale::getColorAtPos(Coord pos) {
 }
 
 void GlColorScale::translate(const Coord &move) {
-  if (colorScalePolyQuad != NULL) {
+  if (colorScalePolyQuad != nullptr) {
     colorScalePolyQuad->translate(move);
     baseCoord += move;
     boundingBox = colorScalePolyQuad->getBoundingBox();

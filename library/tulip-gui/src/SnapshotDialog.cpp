@@ -81,7 +81,7 @@ protected :
 };
 
 
-SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(NULL),pixmapItem(NULL),ratio(-1),inSizeSpinBoxValueChanged(false) {
+SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),ui(new Ui::SnapshotDialogData()),view(v),scene(nullptr),pixmapItem(nullptr),ratio(-1),inSizeSpinBoxValueChanged(false) {
   ui->setupUi(this);
 
   int maxTextureSize = 0;
@@ -225,7 +225,7 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
 
     ratio = static_cast<float>(ui->widthSpinBox->value())/ static_cast<float>(ui->heightSpinBox->value());
 
-    if (pixmapItem != NULL) {
+    if (pixmapItem != nullptr) {
       delete scene;
     }
 

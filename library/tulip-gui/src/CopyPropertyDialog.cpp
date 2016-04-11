@@ -51,7 +51,7 @@ property = newProperty; \
 
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget* parent)
-  : QDialog(parent),ui(new Ui::CopyPropertyDialogData()),_graph(NULL),_source(NULL) {
+  : QDialog(parent),ui(new Ui::CopyPropertyDialogData()),_graph(nullptr),_source(nullptr) {
   ui->setupUi(this);
   connect(ui->buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
   connect(ui->buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
@@ -70,7 +70,7 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
   _source = source;
   ui->newPropertyRadioButton->setChecked(true);
 
-  if(_graph != NULL) {
+  if(_graph != nullptr) {
     Graph *parent = _graph->getSuperGraph();
 
     if (parent == graph) {
@@ -111,16 +111,16 @@ void CopyPropertyDialog::init(Graph* graph,PropertyInterface* source) {
 }
 
 PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg) {
-  PropertyInterface* property = NULL;
+  PropertyInterface* property = nullptr;
   QString propertyName;
   bool valid = true;
 
   //Check if parameters are valid.
-  if(_graph==NULL) {
+  if(_graph==nullptr) {
     valid = false;
     errorMsg = tr("Invalid graph");
   }
-  else if(_source == NULL) {
+  else if(_source == nullptr) {
     valid = false;
     errorMsg = tr("Invalid source property");
   }
@@ -182,7 +182,7 @@ PropertyInterface* CopyPropertyDialog::copyProperty(QString& errorMsg) {
 }
 
 PropertyInterface* CopyPropertyDialog::copyProperty(Graph* graph,PropertyInterface* toCopy,bool askBeforePropertyOverwriting,QWidget* parent) {
-  PropertyInterface* property = NULL;
+  PropertyInterface* property = nullptr;
   CopyPropertyDialog dialog(parent);
   dialog.setWindowTitle(tr("Copy property ")+tlpStringToQString(toCopy->getName()));
   dialog.init(graph,toCopy);
@@ -206,7 +206,7 @@ PropertyInterface* CopyPropertyDialog::copyProperty(Graph* graph,PropertyInterfa
     if(copy) {
       PropertyInterface* createdProperty = dialog.copyProperty(errorMsg);
 
-      if(createdProperty == NULL) {
+      if(createdProperty == nullptr) {
         QMessageBox::critical(parent,tr("Error during the copy"),errorMsg);
       }
 
@@ -221,11 +221,11 @@ void CopyPropertyDialog::checkValidity() {
   bool valid = true;
   QString errorMsg;
 
-  if(_graph==NULL) {
+  if(_graph==nullptr) {
     valid = false;
     errorMsg = tr("Invalid graph");
   }
-  else if(_source == NULL) {
+  else if(_source == nullptr) {
     valid = false;
     errorMsg = tr("Invalid source property");
   }
@@ -264,7 +264,7 @@ void CopyPropertyDialog::checkValidity() {
 }
 
 QString CopyPropertyDialog::destinationPropertyName()const {
-  if(_graph==NULL || _source == NULL) {
+  if(_graph==nullptr || _source == nullptr) {
     return QString();
   }
 

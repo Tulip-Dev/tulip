@@ -46,7 +46,7 @@ class CSVToGraphDataMapping;
 class TLP_QT_SCOPE CSVGraphMappingConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
-  CSVGraphMappingConfigurationWidget(QWidget *parent = NULL);
+  CSVGraphMappingConfigurationWidget(QWidget *parent = nullptr);
   ~CSVGraphMappingConfigurationWidget();
 
   /**
@@ -61,7 +61,7 @@ public:
   /**
     * @brief Check if the values entered by user are valid.
     *
-    * If return true you are sure that buildMappingObject never return a NULL object.
+    * If return true you are sure that buildMappingObject never return a nullptr object.
     **/
   bool isValid()const;
 

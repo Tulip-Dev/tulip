@@ -26,7 +26,7 @@ using namespace std;
 
 namespace tlp {
 
-ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(NULL), lastDataLocation(NODE) {
+ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(nullptr), lastDataLocation(NODE) {
   _ui->setupUi(this);
 }
 
@@ -45,12 +45,12 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
   if(graph==this->graph)
     notSameGraph=false;
 
-  if(notSameGraph && this->graph!=NULL && graph!=NULL)
+  if(notSameGraph && this->graph!=nullptr && graph!=nullptr)
     this->graph->removeListener(this);
 
   this->graph = graph;
 
-  if(graph!=NULL && notSameGraph)
+  if(graph!=nullptr && notSameGraph)
     graph->addListener(this);
 
   this->graphPropertiesTypesFilter = graphPropertiesTypesFilter;

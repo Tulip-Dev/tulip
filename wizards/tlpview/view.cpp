@@ -45,7 +45,7 @@ QGraphicsView* %ProjectName:c%::graphicsView() const {
 
 QGraphicsItem* %ProjectName:c%::centralItem() const {
   // Return the main background item in the view
-  return NULL;
+  return nullptr;
 }
 @endif
 
@@ -91,7 +91,7 @@ void %ProjectName:c%::graphChanged(tlp::Graph*) {
 
 @if "%BaseView%" == "View"
 void %ProjectName:c%::graphDeleted(tlp::Graph* parentGraph) {
-  // Moves the visualization to the parent graph (or NULL if the previous graph was root)
+  // Moves the visualization to the parent graph (or nullptr if the previous graph was root)
   setGraph(parentGraph);
 }
 

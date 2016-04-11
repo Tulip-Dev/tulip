@@ -39,7 +39,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlSphere *sphere = NULL;
+static GlSphere *sphere = nullptr;
 
 static void drawGlyph(const Color& glyphColor, const string& texture,
                       const string& texturePath, float) {
@@ -65,7 +65,7 @@ static void drawGlyph(const Color& glyphColor, const string& texture,
 class Sphere: public Glyph {
 public:
   GLYPHINFORMATION("3D - Sphere", "Bertrand Mathieu", "09/07/2002", "Textured sphere", "1.0", NodeShape::Sphere)
-  Sphere(const tlp::PluginContext *context = NULL);
+  Sphere(const tlp::PluginContext *context = nullptr);
   virtual ~Sphere();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);

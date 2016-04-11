@@ -34,7 +34,7 @@ namespace tlp {
 class TLP_QT_SCOPE GraphTableItemDelegate: public TulipItemDelegate {
   Q_OBJECT
 public:
-  GraphTableItemDelegate(QObject* parent=NULL) ;
+  GraphTableItemDelegate(QObject* parent=nullptr) ;
   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 
 };

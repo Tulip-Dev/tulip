@@ -266,18 +266,18 @@ public:
   virtual DataMem* getEdgeDataMemValue( const edge e ) const = 0;
 
   /**
-   * @brief Returns the value in a DataMem if it is not default, otherwise returns NULL.
+   * @brief Returns the value in a DataMem if it is not default, otherwise returns nullptr.
    * @param n The node to get the value of.
-   * @return The value of the node if it is not default, or NULL.
+   * @return The value of the node if it is not default, or nullptr.
    *
    * @warning The ownership of this pointer is given to the caller.
    */
   virtual DataMem* getNonDefaultDataMemValue( const node n ) const = 0;
 
   /**
-   * @brief Returns the value in a DataMem if it is not default, otherwise returns NULL.
+   * @brief Returns the value in a DataMem if it is not default, otherwise returns nullptr.
    * @param e The edge to get the value of.
-   * @return The value of the edge if it is not default, or NULL.
+   * @return The value of the edge if it is not default, or nullptr.
    *
    * @warning The ownership of this pointer is given to the caller.
    */
@@ -304,7 +304,7 @@ public:
    *
    * @warning The ownership of the iterator is given to the caller.
    */
-  virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
+  virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* = nullptr) const = 0;
 
   /**
    * @brief Returns the number of nodes with a non default value.
@@ -312,7 +312,7 @@ public:
    * @return the number of nodes with a non default value.
    *
    */
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const Graph* = NULL) const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const Graph* = nullptr) const = 0;
 
   /**
    * @brief Gets an Iterator on all non-default valuated edges.
@@ -321,14 +321,14 @@ public:
    *
    * @warning The ownership of the iterator is given to the caller.
    */
-  virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
+  virtual tlp::Iterator<edge>* getNonDefaultValuatedEdges(const Graph* = nullptr) const = 0;
 
   /**
    * @brief Returns the number of edges with a non default value.
    * @return the number of edges with a non default value.
    *
    */
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const Graph* = NULL) const = 0;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const Graph* = nullptr) const = 0;
 
   /**
    * @brief Returns the size in bytes of a node's value.

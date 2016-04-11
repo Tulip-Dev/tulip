@@ -70,7 +70,7 @@ void FiltersManagerAlgorithmItem::applyFilter(BooleanProperty* prop) {
   ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->algorithmParams->model());
   string msg;
 
-  if (model != NULL) {
+  if (model != nullptr) {
     DataSet data = model->parametersValues();
     _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(),
                                    prop,

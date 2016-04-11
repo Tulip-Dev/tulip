@@ -46,7 +46,7 @@ using namespace std;
 
 namespace tlp {
 
-QGLWidget* GlMainWidget::firstQGLWidget=NULL;
+QGLWidget* GlMainWidget::firstQGLWidget=nullptr;
 bool GlMainWidget::inRendering=false;
 
 //==================================================
@@ -143,7 +143,7 @@ void GlMainWidget::doSelect(const int x, const int y,
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),
-  widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(NULL), glFrameBuf2(NULL),
+  widthStored(0),heightStored(0), useFramebufferObject(false), glFrameBuf(nullptr), glFrameBuf2(nullptr),
   keepPointOfViewOnSubgraphChanging(false), advancedAntiAliasing(false) {
   assert(this->isValid());
   setFocusPolicy(Qt::StrongFocus);
@@ -151,7 +151,7 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   grabGesture(Qt::PinchGesture);
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
-  renderingStore=NULL;
+  renderingStore=nullptr;
   getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
   OpenGlConfigManager::getInst().initExtensions();
 }
@@ -208,7 +208,7 @@ void GlMainWidget::createRenderingStore(int width, int height) {
   if (!useFramebufferObject) {
     int size = width*height;
 
-    if (renderingStore==NULL || (size > (widthStored*heightStored))) {
+    if (renderingStore==nullptr || (size > (widthStored*heightStored))) {
       deleteRenderingStore();
       renderingStore=new unsigned char[width*height*4];
       widthStored=width;
@@ -219,11 +219,11 @@ void GlMainWidget::createRenderingStore(int width, int height) {
 //==================================================
 void GlMainWidget::deleteRenderingStore() {
   delete glFrameBuf;
-  glFrameBuf=NULL;
+  glFrameBuf=nullptr;
   delete glFrameBuf2;
-  glFrameBuf2=NULL;
+  glFrameBuf2=nullptr;
   delete[] renderingStore;
-  renderingStore=NULL;
+  renderingStore=nullptr;
 }
 
 //==================================================
@@ -253,7 +253,7 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
     computeInteractors();
 
-    if(options.testFlag(RenderScene) || renderingStore==NULL) {
+    if(options.testFlag(RenderScene) || renderingStore==nullptr) {
       createRenderingStore(width,height);
 
       if (useFramebufferObject) {
@@ -293,7 +293,7 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
         glDrawBuffer(GL_BACK);
         setRasterPosition(0,0);
 
-        if (renderingStore != NULL)
+        if (renderingStore != nullptr)
           glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
       }
     }
@@ -332,7 +332,7 @@ void GlMainWidget::computeInteractors() {
 
   GLInteractorComposite *interactor=dynamic_cast<GLInteractorComposite*>(view->currentInteractor());
 
-  if(interactor == NULL)
+  if(interactor == nullptr)
     return;
 
   interactor->compute(this);
@@ -504,7 +504,7 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 
   GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
 
-  return NULL;
+  return nullptr;
 }
 
 //=====================================================
@@ -519,8 +519,8 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
-  QGLFramebufferObject *frameBuf=NULL;
-  QGLFramebufferObject *frameBuf2=NULL;
+  QGLFramebufferObject *frameBuf=nullptr;
+  QGLFramebufferObject *frameBuf2=nullptr;
 
   QGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);

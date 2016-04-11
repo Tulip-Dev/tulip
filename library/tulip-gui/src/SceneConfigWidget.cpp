@@ -42,7 +42,7 @@
 
 using namespace tlp;
 
-SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(NULL), _resetting(false) {
+SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(nullptr), _resetting(false) {
   _ui->setupUi(this);
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
@@ -52,7 +52,7 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
   _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
 
-  if (Perspective::instance() != NULL && Perspective::instance()->mainWindow() != NULL) {
+  if (Perspective::instance() != nullptr && Perspective::instance()->mainWindow() != nullptr) {
     _ui->selectionColorButton->setDialogParent(Perspective::instance()->mainWindow());
     _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());
   }
@@ -68,14 +68,14 @@ SceneConfigWidget::~SceneConfigWidget() {
 }
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
-  if (_glMainWidget != NULL) {
+  if (_glMainWidget != nullptr) {
     disconnect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
     disconnect(_glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(resetChanges()));
   }
 
   _glMainWidget = glMainWidget;
 
-  if (_glMainWidget != NULL) {
+  if (_glMainWidget != nullptr) {
     connect(_glMainWidget,SIGNAL(graphChanged()),this,SLOT(resetChanges()));
     // we assume that if an outside action causes an update of one
     // of the rendering parameters managed in this widget, necessarily
@@ -89,9 +89,9 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget* glMainWidget) {
 void SceneConfigWidget::resetChanges() {
   _resetting = true;
 
-  _ui->scrollArea->setEnabled(_glMainWidget != NULL);
+  _ui->scrollArea->setEnabled(_glMainWidget != nullptr);
 
-  if (_glMainWidget == NULL || _glMainWidget->getScene()->getGlGraphComposite() == NULL || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == NULL)
+  if (_glMainWidget == nullptr || _glMainWidget->getScene()->getGlGraphComposite() == nullptr || _glMainWidget->getScene()->getGlGraphComposite()->getGraph() == nullptr)
     return;
 
   Graph* graph = _glMainWidget->getScene()->getGlGraphComposite()->getGraph();
@@ -102,7 +102,7 @@ void SceneConfigWidget::resetChanges() {
   GraphPropertiesModel<NumericProperty>* model = new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"),graph);
   _ui->labelsOrderingCombo->setModel(model);
 
-  if (renderingParameters->getElementOrderingProperty() == NULL)
+  if (renderingParameters->getElementOrderingProperty() == nullptr)
     _ui->labelsOrderingCombo->setCurrentIndex(0);
   else
     _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters->getElementOrderingProperty()));
@@ -172,7 +172,7 @@ void SceneConfigWidget::applySettings() {
 
   // NODES
   if (_ui->labelsOrderingCombo->currentIndex()==0)
-    renderingParameters->setElementOrderingProperty(NULL);
+    renderingParameters->setElementOrderingProperty(nullptr);
   else {
     GraphPropertiesModel<NumericProperty>* model = static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
     renderingParameters->setElementOrderingProperty(dynamic_cast<NumericProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));

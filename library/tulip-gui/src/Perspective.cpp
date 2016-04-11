@@ -29,7 +29,7 @@
 
 using namespace tlp;
 
-tlp::Perspective* Perspective::_instance = NULL;
+tlp::Perspective* Perspective::_instance = nullptr;
 
 Perspective* Perspective::instance() {
   return _instance;
@@ -38,8 +38,8 @@ void Perspective::setInstance(Perspective* p) {
   _instance = p;
 }
 
-Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(NULL), _maximised(false), _project(NULL), _mainWindow(NULL), _externalFile(QString()), _parameters(QVariantMap()) {
-  if(c != NULL) {
+Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(nullptr), _maximised(false), _project(nullptr), _mainWindow(nullptr), _externalFile(QString()), _parameters(QVariantMap()) {
+  if(c != nullptr) {
     const PerspectiveContext* perspectiveContext = dynamic_cast<const PerspectiveContext*>(c);
     _mainWindow = perspectiveContext->mainWindow;
     _project = perspectiveContext->project;
@@ -53,10 +53,10 @@ Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(NULL), _max
 
       if (!_agentSocket->waitForConnected(2000)) {
         _agentSocket->deleteLater();
-        _agentSocket = NULL;
+        _agentSocket = nullptr;
       }
 
-      if (_project != NULL) {
+      if (_project != nullptr) {
         notifyProjectLocation(_project->absoluteRootPath());
       }
     }
@@ -70,7 +70,7 @@ Perspective::~Perspective() {
   delete _project;
 
   if (this == _instance)
-    _instance = NULL;
+    _instance = nullptr;
 }
 
 PluginProgress* Perspective::progress(ProgressOptions options)  {
@@ -113,12 +113,12 @@ bool Perspective::isReservedPropertyName(QString s) {
 }
 
 bool Perspective::checkSocketConnected() {
-  if(_agentSocket != NULL) {
+  if(_agentSocket != nullptr) {
     if(_agentSocket->state()!=QAbstractSocket::UnconnectedState)
       return true;
     else {
       _agentSocket->deleteLater();
-      _agentSocket = NULL;
+      _agentSocket = nullptr;
       qWarning("Tulip lauchner closed, now running in standalone mode");
     }
   }

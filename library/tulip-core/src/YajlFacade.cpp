@@ -146,7 +146,7 @@ void YajlParseFacade::parse(const unsigned char* data, int length) {
     parse_boolean,
     parse_integer,
     parse_double,
-    NULL,
+    nullptr,
     parse_string,
     parse_start_map,
     parse_map_key,
@@ -154,7 +154,7 @@ void YajlParseFacade::parse(const unsigned char* data, int length) {
     parse_start_array,
     parse_end_array
   };
-  yajl_handle hand = yajl_alloc(&callbacks, NULL, this);
+  yajl_handle hand = yajl_alloc(&callbacks, nullptr, this);
   yajl_status stat  = yajl_parse(hand, data, length);
 
   if (stat != yajl_status_ok) {
@@ -213,7 +213,7 @@ void YajlParseFacade::parseString(const std::string&) {
 /** ============================================================= **/
 
 YajlWriteFacade::YajlWriteFacade() {
-  _generator = yajl_gen_alloc(NULL);
+  _generator = yajl_gen_alloc(nullptr);
   yajl_gen_config(_generator, yajl_gen_validate_utf8, 1);
 }
 

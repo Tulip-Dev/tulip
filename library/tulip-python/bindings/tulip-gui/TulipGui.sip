@@ -105,7 +105,7 @@ Returns an instance of the newly created view.
 %End
 
 %MethodCode
-    sipRes = NULL;
+    sipRes = nullptr;
     std::vector<std::string> tlpViews = tvm.getTulipViews();
     if (std::find(tlpViews.begin(), tlpViews.end(), *a0) != tlpViews.end()) {
         if (tvm.tlpWorkspace()) {

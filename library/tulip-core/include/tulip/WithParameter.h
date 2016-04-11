@@ -223,7 +223,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param inG A graph on which to create properties if any parameter is of a property type. Defaults to 0.
    * @return void
    **/
-  void buildDefaultDataSet(DataSet& ioDataSet, Graph* inG = NULL) const;
+  void buildDefaultDataSet(DataSet& ioDataSet, Graph* inG = nullptr) const;
 
   /**
    * @brief Returns the number of parameters.

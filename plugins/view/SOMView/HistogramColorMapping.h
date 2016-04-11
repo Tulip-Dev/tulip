@@ -121,7 +121,7 @@ public:
     Horizontal, Vertival
   };
   GlColorScale(const Coord &baseCoord, const float length,
-               const float thickness, Orientation orientation,ColorScale *colorScale=NULL);
+               const float thickness, Orientation orientation,ColorScale *colorScale=nullptr);
   GlColorScale(const GlColorScale &colorScale);
   ~GlColorScale();
 

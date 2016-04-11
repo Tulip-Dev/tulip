@@ -64,7 +64,7 @@ private:
     std::string library;
     Plugin* infos;
 
-    PluginDescription(): factory(NULL), infos(NULL) {}
+    PluginDescription(): factory(nullptr), infos(nullptr) {}
     ~PluginDescription() {
       delete infos;
     }
@@ -109,7 +109,7 @@ public:
     std::map<std::string, PluginDescription>::const_iterator it =
       _plugins.find(pluginName);
     return (it != _plugins.end() &&
-            (dynamic_cast<const PluginType*>(it->second.infos) != NULL));
+            (dynamic_cast<const PluginType*>(it->second.infos) != nullptr));
   }
 
   /**
@@ -120,7 +120,7 @@ public:
    * @param name The plugin's name
    * @param context The context to give to the plugin
    *
-   * @return The plugin instance. If there is no such plugin or if the plugin does not match the required type, this method returns NULL
+   * @return The plugin instance. If there is no such plugin or if the plugin does not match the required type, this method returns nullptr
    */
   template<typename PluginType>
   PluginType* getPluginObject(const std::string& name,
@@ -128,9 +128,9 @@ public:
     std::map<std::string, PluginDescription>::const_iterator it =
       _plugins.find(name);
     return (it != _plugins.end() &&
-            (dynamic_cast<const PluginType*>(it->second.infos) != NULL))
+            (dynamic_cast<const PluginType*>(it->second.infos) != nullptr))
            ? static_cast<PluginType*>(it->second.factory->createPluginObject(context))
-           : NULL;
+           : nullptr;
   }
 
 
@@ -148,7 +148,7 @@ public:
     for(std::map<std::string, PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
       PluginType* plugin = dynamic_cast<PluginType*>(it->second.infos);
 
-      if(plugin != NULL) {
+      if(plugin != nullptr) {
         keys.push_back(it->first);
       }
     }

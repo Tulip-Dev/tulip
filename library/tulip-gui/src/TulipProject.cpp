@@ -212,7 +212,7 @@ std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::op
 
   if (!result->is_open()) {
     delete result;
-    result = NULL;
+    result = nullptr;
   }
 
   return result;
@@ -322,7 +322,7 @@ bool TulipProject::readMetaInfos() {
 
     QDomElement e = n.toElement();
 
-    // On MacOS, converting e.tagName() to a const char* only lives for the duration of the QString, to avoid the char* to be NULL, we don't use temporary variables
+    // On MacOS, converting e.tagName() to a const char* only lives for the duration of the QString, to avoid the char* to be nullptr, we don't use temporary variables
     if (property(e.tagName().toStdString().c_str()).isValid())
       setProperty(e.tagName().toStdString().c_str(),e.text());
   }

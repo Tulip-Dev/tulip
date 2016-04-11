@@ -98,7 +98,7 @@ std::string pOpen(const std::string &cmd) {
     char *s = fgets(buffer, MAX - 1, cmdPipe);
     pclose(cmdPipe);
 
-    if (s == NULL) {
+    if (s == nullptr) {
       return "";
     }
     else {
@@ -161,7 +161,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   int size = backtrace(array, MAX_BACKTRACE_SIZE);
   char ** messages = backtrace_symbols(array, size);
 
-  if (messages == NULL || size < 2)
+  if (messages == nullptr || size < 2)
     return;
 
   std::ostringstream oss;
@@ -345,7 +345,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   }
 
   char procname[MAX_PATH];
-  GetModuleFileNameA(NULL, procname, sizeof procname);
+  GetModuleFileNameA(nullptr, procname, sizeof procname);
 
   STACKFRAME frame;
   memset(&frame,0,sizeof(frame));
@@ -413,7 +413,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #endif
 
-    const char * func = NULL;
+    const char * func = nullptr;
 
 #ifndef I64
     DWORD dummy = 0;
@@ -442,7 +442,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #endif
 
-    if (func == NULL) {
+    if (func == nullptr) {
       func = "";
     }
 
@@ -453,7 +453,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
 #endif
 
-    if (infos.first == NULL || infos.second == 0) {
+    if (infos.first == nullptr || infos.second == 0) {
       printFrameInfos(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset);
     }
     else {
@@ -468,7 +468,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #include <dbghelp.h>
 
-StackWalkerMSVC::StackWalkerMSVC(): context(NULL) {}
+StackWalkerMSVC::StackWalkerMSVC(): context(nullptr) {}
 
 StackWalkerMSVC::~StackWalkerMSVC() {}
 
@@ -480,7 +480,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   SymSetOptions(SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_UNDNAME);
 
-  if (!SymInitialize(process, NULL, TRUE)) {
+  if (!SymInitialize(process, nullptr, TRUE)) {
     std::cerr << "Failed to init symbol context" << std::endl;
     return;
   }
@@ -533,10 +533,10 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
                thread,
                &stack,
                context,
-               NULL,
+               nullptr,
                SymFunctionTableAccess,
                SymGetModuleBase,
-               NULL
+               nullptr
              );
 
     if(!result) {

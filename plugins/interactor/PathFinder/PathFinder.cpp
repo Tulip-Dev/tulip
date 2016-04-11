@@ -44,7 +44,7 @@ PLUGIN(PathFinder)
 
 PathFinder::PathFinder(const tlp::PluginContext *) :
   GLInteractorComposite(QIcon(":/pathfinder.png"), "Select the path(s) between two nodes"), weightMetric(NO_METRIC), selectAllPaths(false), edgeOrientation(DEFAULT_ORIENTATION),
-  pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION), tolerance(DEFAULT_TOLERANCE), _configurationWidget(NULL), highlightersListWidget(NULL), configureHighlighterBtn(NULL) {
+  pathsTypes(DEFAULT_PATHS_TYPE), toleranceActivated(DEFAULT_TOLERANCE_ACTIVATION), tolerance(DEFAULT_TOLERANCE), _configurationWidget(nullptr), highlightersListWidget(nullptr), configureHighlighterBtn(nullptr) {
 
   edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
   edgeOrientationLabels[PathAlgorithm::NonOriented] = "Consider edges as non-oriented";
@@ -63,7 +63,7 @@ bool PathFinder::isCompatible(const std::string &viewName) const {
 }
 
 void PathFinder::construct() {
-  if (view() == NULL)
+  if (view() == nullptr)
     return;
 
   push_back(new MousePanNZoomNavigator);

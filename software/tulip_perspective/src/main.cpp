@@ -248,7 +248,7 @@ int main(int argc,char **argv) {
   progress->setWindowIcon(icon);
   progress->show();
 
-  TulipProject *project = NULL;
+  TulipProject *project = nullptr;
   QString error;
 
   if(!projectFilePath.isEmpty() && !QFileInfo(projectFilePath).exists()) {
@@ -261,11 +261,11 @@ int main(int argc,char **argv) {
     if (!project->isValid()) {
       error = project->lastError();
       delete project;
-      project = NULL;
+      project = nullptr;
     }
   }
 
-  if (project == NULL) {
+  if (project == nullptr) {
     context->externalFile = projectFilePath;
     project = TulipProject::newProject();
   }
@@ -307,7 +307,7 @@ int main(int argc,char **argv) {
   // Create perspective object
   Perspective *perspective = PluginLister::instance()->getPluginObject<Perspective>(perspectiveName.toStdString(), context);
 
-  if (perspective==NULL) {
+  if (perspective==nullptr) {
     usage("Cannot open perspective: " + perspectiveName + "\nWrong plugin type or plugin not found.");
   }
 

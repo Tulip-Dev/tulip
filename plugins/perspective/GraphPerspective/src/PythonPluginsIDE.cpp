@@ -190,7 +190,7 @@ static QString infosMsg = QString("When the plugin development is finished, you 
 
 PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPluginsIDE),
   _pythonInterpreter(PythonInterpreter::getInstance()),
-  _dontTreatFocusIn(false), _project(NULL) {
+  _dontTreatFocusIn(false), _project(nullptr) {
   _ui->setupUi(this);
   _ui->tabWidget->setDrawTabBarBgGradient(true);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));

@@ -136,14 +136,14 @@ QWidget* PropertyEditorCreator<PROPTYPE>::createWidget(QWidget* parent) const {
 
 template<typename PROPTYPE>
 void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& val,bool isMandatory,tlp::Graph* g) {
-  if (g == NULL) {
+  if (g == nullptr) {
     w->setEnabled(false);
     return;
   }
 
   PROPTYPE* prop = val.value<PROPTYPE*>();
   QComboBox* combo = static_cast<QComboBox*>(w);
-  GraphPropertiesModel<PROPTYPE>* model = NULL;
+  GraphPropertiesModel<PROPTYPE>* model = nullptr;
 
   if (isMandatory)
     model = new GraphPropertiesModel<PROPTYPE>(g,false,combo);
@@ -156,7 +156,7 @@ void PropertyEditorCreator<PROPTYPE>::setEditorData(QWidget* w, const QVariant& 
 
 template<typename PROPTYPE>
 QVariant PropertyEditorCreator<PROPTYPE>::editorData(QWidget* w,tlp::Graph* g) {
-  if (g == NULL)
+  if (g == nullptr)
     return QVariant();
 
   QComboBox* combo = static_cast<QComboBox*>(w);
@@ -171,7 +171,7 @@ template<typename PROPTYPE>
 QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
   PROPTYPE *prop = v.value<PROPTYPE*>();
 
-  if (prop==NULL)
+  if (prop==nullptr)
     return QObject::trUtf8("Select a property");
 
   return QString::fromUtf8(prop->getName().c_str());
@@ -179,7 +179,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
 
 template<typename ElementType>
 QWidget* VectorEditorCreator<ElementType>::createWidget(QWidget*) const {
-  VectorEditor* w = new VectorEditor(NULL);
+  VectorEditor* w = new VectorEditor(nullptr);
   w->setWindowFlags(Qt::Dialog);
   w->setWindowModality(Qt::ApplicationModal);
   return w;
@@ -216,7 +216,7 @@ struct DisplayVectorDataType :public DataType {
   ~DisplayVectorDataType() {
   }
   DataType* clone() const {
-    return NULL;
+    return nullptr;
   }
 
   std::string getTypeName() const {

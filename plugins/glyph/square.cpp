@@ -34,7 +34,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlRect *rect = NULL;
+static GlRect *rect = nullptr;
 
 static void drawGlyph(const Color& glyphColor, const string& texture,
                       const string& texturePath, double borderWidth,
@@ -51,7 +51,7 @@ static void drawGlyph(const Color& glyphColor, const string& texture,
     rect->setOutlineMode(false);
   }
 
-  rect->draw(lod,NULL);
+  rect->draw(lod,nullptr);
 
 }
 
@@ -67,7 +67,7 @@ static void drawGlyph(const Color& glyphColor, const string& texture,
 class Square: public Glyph {
 public:
   GLYPHINFORMATION("2D - Square", "David Auber", "09/07/2002", "Textured square", "1.0", NodeShape::Square)
-  Square(const tlp::PluginContext *context = NULL);
+  Square(const tlp::PluginContext *context = nullptr);
   virtual ~Square();
   virtual void draw(node n, float lod);
   virtual Coord getAnchor(const Coord &vector) const;

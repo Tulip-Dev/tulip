@@ -42,7 +42,7 @@ class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
   bool _resetting;
 
 public:
-  explicit SceneConfigWidget(QWidget *parent = NULL);
+  explicit SceneConfigWidget(QWidget *parent = nullptr);
   ~SceneConfigWidget();
 
 signals:

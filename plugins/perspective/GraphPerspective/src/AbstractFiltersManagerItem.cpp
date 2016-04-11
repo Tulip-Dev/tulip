@@ -43,7 +43,7 @@ void fillTitle(QComboBox* combo, const QString& s) {
   item->setSelectable(false);
 }
 
-AbstractFiltersManagerItem::AbstractFiltersManagerItem(QWidget* parent): QWidget(parent), _graph(NULL) {}
+AbstractFiltersManagerItem::AbstractFiltersManagerItem(QWidget* parent): QWidget(parent), _graph(nullptr) {}
 
 void AbstractFiltersManagerItem::setGraph(Graph *g) {
   _graph = g;

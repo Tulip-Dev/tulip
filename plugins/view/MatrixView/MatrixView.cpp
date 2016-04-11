@@ -40,8 +40,8 @@ using namespace std;
 
 MatrixView::MatrixView(const PluginContext *):
   NodeLinkDiagramComponent(),
-  _matrixGraph(NULL), _graphEntitiesToDisplayedNodes(NULL), _displayedNodesToGraphEntities(NULL), _displayedEdgesToGraphEdges(NULL), _displayedNodesAreNodes(NULL), _dispatcher(NULL),
-  _configurationWidget(NULL), _mustUpdateSizes(false), _mustUpdateLayout(false), _isOriented(false), _orderingMetricName("") {
+  _matrixGraph(nullptr), _graphEntitiesToDisplayedNodes(nullptr), _displayedNodesToGraphEntities(nullptr), _displayedEdgesToGraphEdges(nullptr), _displayedNodesAreNodes(nullptr), _dispatcher(nullptr),
+  _configurationWidget(nullptr), _mustUpdateSizes(false), _mustUpdateLayout(false), _isOriented(false), _orderingMetricName("") {
 }
 
 MatrixView::~MatrixView() {
@@ -226,17 +226,17 @@ void MatrixView::deleteDisplayedGraph() {
     removeRedrawTrigger(obs);
   }
   delete _matrixGraph;
-  _matrixGraph=NULL;
+  _matrixGraph=nullptr;
   delete _graphEntitiesToDisplayedNodes;
-  _graphEntitiesToDisplayedNodes=NULL;
+  _graphEntitiesToDisplayedNodes=nullptr;
   delete _displayedNodesToGraphEntities;
-  _displayedNodesToGraphEntities=NULL;
+  _displayedNodesToGraphEntities=nullptr;
   delete _displayedEdgesToGraphEdges;
-  _displayedEdgesToGraphEdges=NULL;
+  _displayedEdgesToGraphEdges=nullptr;
   delete _displayedNodesAreNodes;
-  _displayedNodesAreNodes=NULL;
+  _displayedNodesAreNodes=nullptr;
   delete _dispatcher;
-  _dispatcher=NULL;
+  _dispatcher=nullptr;
 }
 
 void MatrixView::initDisplayedGraph() {

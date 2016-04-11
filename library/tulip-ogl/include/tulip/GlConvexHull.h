@@ -89,7 +89,7 @@ public:
       std::vector<Color> fColors,
       std::vector<Color> oColors,
       bool deduceFromChilds = true,
-      Graph *root = NULL,
+      Graph *root = nullptr,
       unsigned int depth = 0);
 
   /**

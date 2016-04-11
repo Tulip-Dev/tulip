@@ -66,7 +66,7 @@ void ImportWizard::algorithmSelected(const QModelIndex& index) {
   QString alg(index.data().toString());
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel* oldModel = _ui->parametersList->model();
-  QAbstractItemModel* newModel = NULL;
+  QAbstractItemModel* newModel = nullptr;
 
   if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)));
@@ -88,12 +88,12 @@ QString ImportWizard::algorithm() const {
 tlp::DataSet ImportWizard::parameters() const {
   ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
 
-  if (model == NULL)
+  if (model == nullptr)
     return DataSet();
 
   return model->parametersValues();
 }
 
 void ImportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != NULL);
+  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != nullptr);
 }

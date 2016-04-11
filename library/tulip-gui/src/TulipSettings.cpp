@@ -33,7 +33,7 @@
 using namespace tlp;
 using namespace std;
 
-TulipSettings *TulipSettings::_instance = NULL;
+TulipSettings *TulipSettings::_instance = nullptr;
 
 const QString TulipSettings::RemoteLocationsConfigEntry = "app/remote_locations";
 const QString TulipSettings::RecentDocumentsConfigEntry = "app/recent_documents";

@@ -109,7 +109,7 @@ public:
     unsigned int arityMax = 5;
     bool needLayout = false;
 
-    if (dataSet!=NULL) {
+    if (dataSet!=nullptr) {
       if(dataSet->exist("Minimum size"))
         dataSet->get("Minimum size", sizeMin);
       else

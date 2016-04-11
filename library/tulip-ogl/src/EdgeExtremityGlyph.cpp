@@ -22,10 +22,10 @@
 
 using namespace tlp;
 
-EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext* context) : edgeExtGlGraphInputData(NULL) {
-  if(context != NULL) {
+EdgeExtremityGlyph::EdgeExtremityGlyph(const PluginContext* context) : edgeExtGlGraphInputData(nullptr) {
+  if(context != nullptr) {
     const GlyphContext* glyphContext = dynamic_cast<const GlyphContext*>(context);
-    assert(glyphContext != NULL);
+    assert(glyphContext != nullptr);
     edgeExtGlGraphInputData = glyphContext->glGraphInputData;
   }
 }

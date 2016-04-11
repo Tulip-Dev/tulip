@@ -37,7 +37,7 @@ using namespace tlp;
 using namespace std;
 
 CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *parent) :
-  QWidget(parent),graph(NULL),
+  QWidget(parent),graph(nullptr),
   ui(new Ui::CSVGraphMappingConfigurationWidget) {
   ui->setupUi(this);
   connect(ui->mappingConfigurationStackedWidget,SIGNAL(currentChanged(int)),this,SIGNAL(mappingChanged()));
@@ -140,7 +140,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
   }
   else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importNodesPage) {
     if (nodeProperties.empty() || nodeColumnIds.empty()) {
-      return NULL;
+      return nullptr;
     }
 
     bool createMissingElement = ui->createMissingNodesCheckBox->isChecked();
@@ -148,7 +148,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
   }
   else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesPages) {
     if(edgeProperties.empty() || edgeColumnIds.empty()) {
-      return NULL;
+      return nullptr;
     }
 
     return new CSVToGraphEdgeIdMapping(graph, edgeColumnIds, edgeProperties);
@@ -172,14 +172,14 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     }
 
     if (sameColumns) {
-      return NULL;
+      return nullptr;
     }
 
     bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
     return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnIds, tgtColumnIds, srcProperties, tgtProperties, createMissingElement);
   }
   else {
-    return NULL;
+    return nullptr;
   }
 }
 

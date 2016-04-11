@@ -73,7 +73,7 @@ public:
   template<typename PropType>
   bool computeProperty(const std::string &algorithm,
                        const std::string& graphType = "Planar Graph",
-                       PropType* prop = NULL);
+                       PropType* prop = nullptr);
   void testImportCompleteGraph();
   void testImportCompleteTree();
   void testImportRandomGraph();

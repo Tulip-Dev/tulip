@@ -68,7 +68,7 @@ Color getInverseColor(const Color &c) {
 }
 
 //******************************************************
-EnclosingCircleHighlighter::EnclosingCircleHighlighter():PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false),configurationWidget(NULL) {
+EnclosingCircleHighlighter::EnclosingCircleHighlighter():PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false),configurationWidget(nullptr) {
 
 }
 

@@ -169,7 +169,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
 
   for (it = selectedProperties.begin(); it != selectedProperties.end() ; ++it) {
 
-    ParallelAxis *axis = NULL;
+    ParallelAxis *axis = nullptr;
     float rotationAngle = (cpt++ * rotationAngleBase) * (180.0f / M_PI);
     Coord coord;
 
@@ -227,7 +227,7 @@ void ParallelCoordinatesDrawing::createAxis(GlMainWidget *glWidget,
       }
     }
 
-    if (axis != NULL) {
+    if (axis != nullptr) {
       axisPlotComposite->addGlEntity(axis, *it);
       axisOrder.push_back(*it);
       parallelAxis[*it] = axis;
@@ -375,7 +375,7 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
   if (axisOrder.size() < 2)
     return;
 
-  GlSimpleEntity *line = NULL;
+  GlSimpleEntity *line = nullptr;
   bool closeSpline = (layoutType == CIRCULAR);
 
   if (linesType == STRAIGHT) {
@@ -529,7 +529,7 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
   destroyAxisIfNeeded();
 
   // needed to have some feedback
-  GlProgressBar *progressBar = NULL;
+  GlProgressBar *progressBar = nullptr;
 
   if (!updateWithoutProgressBar) {
     // disable user input
@@ -557,7 +557,7 @@ void ParallelCoordinatesDrawing::update(GlMainWidget *glWidget, bool updateWitho
   eraseDataPlot();
   plotAllData(glWidget, progressBar);
 
-  if (progressBar != NULL) {
+  if (progressBar != nullptr) {
     deleteGlEntity(progressBar);
     delete progressBar;
     // reenable user input
@@ -630,7 +630,7 @@ vector<ParallelAxis *> ParallelCoordinatesDrawing::getAllAxis() {
   for (size_t i = 0 ; i < axisOrder.size() ; ++i) {
     ParallelAxis *pa = parallelAxis[axisOrder[i]];
 
-    if (pa == NULL) {
+    if (pa == nullptr) {
       // on the fly clean up for deleted properties
       parallelAxis.erase(axisOrder[i]);
       continue;

@@ -61,7 +61,7 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   //Force widget to clear content.
   previewTableWidget->begin();
 
-  if(parser!=NULL) {
+  if(parser!=nullptr) {
     previewTableWidget->setEnabled(true);
     SimplePluginProgressDialog progress(this);
     progress.showPreview(false);
@@ -99,7 +99,7 @@ CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage ( QWidget *
 }
 void CSVImportConfigurationQWizardPage::initializePage() {
   CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
-  assert(csvWizard!=NULL);
+  assert(csvWizard!=nullptr);
   importConfigurationWidget->setNewParser(csvWizard->getParsingConfigurationPage()->buildParser());
 }
 
@@ -119,7 +119,7 @@ CSVImportParameters CSVImportConfigurationQWizardPage::getImportParameters()cons
 
 void CSVGraphMappingConfigurationQWizardPage::initializePage() {
   CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
-  assert(csvWizard!=NULL);
+  assert(csvWizard!=nullptr);
   graphMappingConfigurationWidget->updateWidget(csvWizard->getGraph(),csvWizard->getImportConfigurationPage()->getImportParameters());
 }
 
@@ -148,10 +148,10 @@ CSVGraphMappingConfigurationQWizardPage* CSVImportWizard::getMappingConfiguratio
 void CSVImportWizard::accept() {
   bool processIsValid=false;
 
-  if(graph != NULL) {
+  if(graph != nullptr) {
     CSVParser* parser = getParsingConfigurationPage()->buildParser();
 
-    if(parser != NULL) {
+    if(parser != nullptr) {
       processIsValid = true;
       CSVImportParameters importParam = getImportConfigurationPage()->getImportParameters();
       //Get row to graph element mapping
@@ -160,7 +160,7 @@ void CSVImportWizard::accept() {
       CSVImportColumnToGraphPropertyMapping *columnMapping = new CSVImportColumnToGraphPropertyMappingProxy(graph,importParam,this);
 
       //Invalid mapping objects
-      if(rowMapping== NULL || columnMapping==NULL) {
+      if(rowMapping== nullptr || columnMapping==nullptr) {
         processIsValid = false;
       }
 

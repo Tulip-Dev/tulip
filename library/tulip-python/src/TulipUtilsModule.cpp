@@ -35,7 +35,7 @@ tuliputils_updateVisualization(PyObject *, PyObject *args) {
 
   bool centerViews = i > 0;
 
-  if (persp != NULL) {
+  if (persp != nullptr) {
     persp->redrawPanels(centerViews);
   }
 
@@ -50,8 +50,8 @@ tuliputils_pauseRunningScript(PyObject *, PyObject *) {
 
 static PyObject *
 tuliputils_runGraphScript(PyObject *, PyObject *args) {
-  char *s = NULL;
-  PyObject *o = NULL;
+  char *s = nullptr;
+  PyObject *o = nullptr;
 
   if (PyArg_ParseTuple(args, "sO", &s, &o)) {
     QString scriptName(s);
@@ -68,27 +68,27 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
         int err = 0;
 
         // Unwrapping C++ instance
-        tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipConvertToType(o, kpTypeDef, NULL, SIP_NOT_NONE, &state, &err));
+        tlp::Graph *graph = reinterpret_cast<tlp::Graph *>(sipConvertToType(o, kpTypeDef, nullptr, SIP_NOT_NONE, &state, &err));
 
         if (!PythonInterpreter::getInstance()->runGraphScript(scriptName, "main", graph)) {
           PyErr_SetString(PyExc_Exception, (std::string("An exception occurred when executing the ") + std::string(s) + " script").c_str());
-          return NULL;
+          return nullptr;
         }
 
       }
       else {
         PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
-        return NULL;
+        return nullptr;
       }
     }
     else {
       PyErr_SetString(PyExc_Exception, (std::string("The script ") + std::string(s) + " does not exist").c_str());
-      return NULL;
+      return nullptr;
     }
   }
   else {
     PyErr_SetString(PyExc_TypeError, "Parameters provided to the runGraphScript function have invalid types");
-    return NULL;
+    return nullptr;
   }
 
   Py_RETURN_NONE;
@@ -114,7 +114,7 @@ tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
   int i;
 
   if(!PyArg_ParseTuple(o, "i", &i))
-    return NULL;
+    return nullptr;
 
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
 
@@ -127,7 +127,7 @@ static PyMethodDef tulipUtilsMethods[] = {
   {"removePlugin",  tuliputils_removePlugin, METH_VARARGS, ""},
   {"runGraphScript",  tuliputils_runGraphScript, METH_VARARGS, "Allow to execute a script from a script."},
   {"setProcessQtEvents",  tuliputils_setProcessQtEvents, METH_VARARGS, ""},
-  {NULL, NULL, 0, NULL}        /* Sentinel */
+  {nullptr, nullptr, 0, nullptr}        /* Sentinel */
 };
 
 #if PY_MAJOR_VERSION >= 3
@@ -137,10 +137,10 @@ static struct PyModuleDef tulipUtilsModuleDef = {
   "",  /* m_doc */
   -1,                  /* m_size */
   tulipUtilsMethods,    /* m_methods */
-  NULL,                /* m_reload */
-  NULL,                /* m_traverse */
-  NULL,                /* m_clear */
-  NULL,                /* m_free */
+  nullptr,                /* m_reload */
+  nullptr,                /* m_traverse */
+  nullptr,                /* m_clear */
+  nullptr,                /* m_free */
 };
 #endif
 

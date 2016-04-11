@@ -32,7 +32,7 @@ GlHTMLFeedBackBuilder::GlHTMLFeedBackBuilder(bool outputBody,const string &filen
   filename(filename),
   hrefp(hrefp),
   altp(altp),
-  poly(NULL),
+  poly(nullptr),
   nodeId(-1) {
 }
 

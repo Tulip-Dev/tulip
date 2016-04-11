@@ -115,7 +115,7 @@ public :
     return dataLocation;
   }
 
-  void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = NULL);
+  void generateScatterPlot(ScatterPlot2D *scatterPlot, GlMainWidget *glWidget = nullptr);
 
   //
   void computeNodeSizes();

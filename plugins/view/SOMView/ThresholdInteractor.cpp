@@ -57,7 +57,7 @@ void drawComposite(GlComposite *composite, float lod, Camera *camera) {
 
 ColorScaleSlider::ColorScaleSlider(SliderWay way, Size size, GlLabelledColorScale *colorScale,
                                    const string& textureName) :
-  way(way), size(size), linkedSlider(NULL), linkedScale(colorScale), currentShift(0) {
+  way(way), size(size), linkedSlider(nullptr), linkedScale(colorScale), currentShift(0) {
 
   buildComposite(textureName);
   linkedScale->getGlColorScale()->getColorScale()->addObserver(this);
@@ -123,13 +123,13 @@ void ColorScaleSlider::buildComposite(const std::string& textureName) {
 
 void ColorScaleSlider::setLinkedSlider(ColorScaleSlider* linkedSlider) {
   if (!linkedSlider)
-    this->linkedSlider = NULL;
+    this->linkedSlider = nullptr;
   else {
     if (way == ToLeft) {
       if (linkedSlider->getBasePosition().getX() <= position.getX())
         this->linkedSlider = linkedSlider;
       else {
-        this->linkedSlider = NULL;
+        this->linkedSlider = nullptr;
         std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
                   << "Invalid linked slider bad coordinates" << std::endl;
       }
@@ -138,7 +138,7 @@ void ColorScaleSlider::setLinkedSlider(ColorScaleSlider* linkedSlider) {
       if (linkedSlider->getBasePosition().getX() >= position.getX())
         this->linkedSlider = linkedSlider;
       else {
-        this->linkedSlider = NULL;
+        this->linkedSlider = nullptr;
         std::cerr << __PRETTY_FUNCTION__ << ":" << __LINE__ << " "
                   << "Invalid linked slider bad coordinates" << std::endl;
       }
@@ -147,7 +147,7 @@ void ColorScaleSlider::setLinkedSlider(ColorScaleSlider* linkedSlider) {
 }
 
 void ColorScaleSlider::computeBoundingBox() {
-  tlp::GlBoundingBoxSceneVisitor visitor(NULL);
+  tlp::GlBoundingBoxSceneVisitor visitor(nullptr);
   acceptVisitor(&visitor);
   boundingBox = visitor.getBoundingBox();
 }
@@ -157,13 +157,13 @@ void ColorScaleSlider::setColor(Color c) {
 }
 
 float ColorScaleSlider::getLeftBound() {
-  if (way == ToRight || linkedSlider == NULL)
+  if (way == ToRight || linkedSlider == nullptr)
     return 0;
   else
     return linkedSlider->getCurrentShift();
 }
 float ColorScaleSlider::getRightBound() {
-  if (way == ToLeft || linkedSlider == NULL)
+  if (way == ToLeft || linkedSlider == nullptr)
     return 1;
   else
     return linkedSlider->getCurrentShift();
@@ -296,7 +296,7 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
   glDisable(GL_BLEND);
 }
 ThresholdInteractor::ThresholdInteractor() :
-  layer(new GlLayer("Threshold")), mouvingSlider(NULL),rSlider(NULL),lSlider(NULL), startDrag(false), textureName("") {
+  layer(new GlLayer("Threshold")), mouvingSlider(nullptr),rSlider(nullptr),lSlider(nullptr), startDrag(false), textureName("") {
 }
 
 ThresholdInteractor::~ThresholdInteractor() {
@@ -427,11 +427,11 @@ bool ThresholdInteractor::eventFilter(QObject * widget, QEvent * event) {
   if (event->type() == QEvent::MouseButtonRelease && startDrag) {
     QMouseEvent *me = (QMouseEvent*) event;
     SOMMap *som = somView->getSOM();
-    assert(mouvingSlider != NULL);
+    assert(mouvingSlider != nullptr);
     glMainWidget->setMouseTracking(false);
     startDrag = false;
     mouvingSlider->endShift();
-    mouvingSlider = NULL;
+    mouvingSlider = nullptr;
     Qt::KeyboardModifiers systMod;
 #if defined(__APPLE__)
     systMod = Qt::AltModifier;
@@ -576,9 +576,9 @@ void ThresholdInteractor::clearSliders() {
   if (layer)
     layer->getComposite()->reset(true);
 
-  rSlider = NULL;
-  lSlider = NULL;
-  bar = NULL;
+  rSlider = nullptr;
+  lSlider = nullptr;
+  bar = nullptr;
 }
 
 void ThresholdInteractor::generateSliderTexture(GlMainWidget* widget) {

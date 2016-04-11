@@ -86,7 +86,7 @@ void FiltersManager::itemModeChanged(FiltersManagerItem::Mode m) {
 
 
 void FiltersManager::currentGraphChanged(tlp::Graph* g) {
-  _ui->filtersList->setEnabled(g != NULL);
+  _ui->filtersList->setEnabled(g != nullptr);
 }
 
 void FiltersManager::applyFilter() {

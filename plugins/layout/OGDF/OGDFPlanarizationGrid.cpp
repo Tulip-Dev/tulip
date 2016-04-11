@@ -100,7 +100,7 @@ public:
   void beforeCall() {
     ogdf::PlanarizationGridLayout *pgl = static_cast<ogdf::PlanarizationGridLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       double dval = 0;
 
       if (dataSet->get("page ratio", dval))

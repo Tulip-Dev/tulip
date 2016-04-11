@@ -29,7 +29,7 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION( ObservableGraphTest );
 
-tlp::Graph* ObservableGraphTest::graph = NULL;
+tlp::Graph* ObservableGraphTest::graph = nullptr;
 
 // these classes will capture
 // everything that will happen to our properties
@@ -373,8 +373,8 @@ public:
 	  delete observer;
 	  GraphObserverTest* obs = new GraphObserverTest();
 	  addListener(obs);
-	  observer = NULL;
-	  ObservableGraphTest::setGraph(NULL);
+	  observer = nullptr;
+	  ObservableGraphTest::setGraph(nullptr);
 	}
 	else
 	  destroy(graph);
@@ -401,7 +401,7 @@ public:
       initialized = true;
     }
     else {
-      inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name)!=NULL);
+      inheritedPropertyExist = inheritedPropertyExist & (g->getProperty(name)!=nullptr);
 
       if(inheritedPropertyExist) {
         g->getProperty(name)->getName();
@@ -1022,13 +1022,13 @@ void ObservableGraphTest::testNotifyDelInheritedPropertyIsSendWhenLocalPropertyI
 }
 
 void ObservableGraphTest::testDeleteBug747() {
-  CPPUNIT_ASSERT(observer != NULL);
-  CPPUNIT_ASSERT(graph != NULL);
+  CPPUNIT_ASSERT(observer != nullptr);
+  CPPUNIT_ASSERT(graph != nullptr);
 
   gObserver->deleteBug747 = true;
   delete graph;
 
-  CPPUNIT_ASSERT(observer == NULL);
-  CPPUNIT_ASSERT(graph == NULL);
+  CPPUNIT_ASSERT(observer == nullptr);
+  CPPUNIT_ASSERT(graph == nullptr);
 }
   

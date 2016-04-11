@@ -70,14 +70,14 @@ ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PluginContext* c
 //====================================================================
 bool ConnectedComponentPacking::run() {
 
-  LayoutProperty *layout = NULL;
-  SizeProperty *size = NULL;
-  DoubleProperty *rotation = NULL;
+  LayoutProperty *layout = nullptr;
+  SizeProperty *size = nullptr;
+  DoubleProperty *rotation = nullptr;
   string complexity("auto");
 
   workingGraph = graph->addCloneSubGraph("workingGraph");
 
-  if ( dataSet!=NULL ) {
+  if ( dataSet!=nullptr ) {
     dataSet->get("coordinates", layout);
     getNodeSizePropertyParameter(dataSet, size);
     dataSet->get("rotation", rotation);
@@ -87,13 +87,13 @@ bool ConnectedComponentPacking::run() {
       complexity = complexityCol.getCurrentString();
   }
 
-  if (layout==NULL)
+  if (layout==nullptr)
     layout = workingGraph->getProperty<LayoutProperty>("viewLayout");
 
-  if (size==NULL)
+  if (size==nullptr)
     size = workingGraph->getProperty<SizeProperty>("viewSize");
 
-  if (rotation==NULL)
+  if (rotation==nullptr)
     rotation = workingGraph->getProperty<DoubleProperty>("viewRotation");
 
   if (complexity=="none")

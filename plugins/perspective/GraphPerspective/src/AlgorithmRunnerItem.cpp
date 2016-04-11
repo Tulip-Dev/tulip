@@ -43,7 +43,7 @@
 
 using namespace tlp;
 
-AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(NULL), _storeResultAsLocal(true) {
+AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr), _storeResultAsLocal(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
@@ -103,7 +103,7 @@ AlgorithmRunnerItem::~AlgorithmRunnerItem() {
 void AlgorithmRunnerItem::setGraph(Graph* g) {
   _graph = g;
 
-  if (_ui->parameters->model() != NULL) {
+  if (_ui->parameters->model() != nullptr) {
     ParameterListModel* model = static_cast<ParameterListModel*>(_ui->parameters->model());
     DataSet dataSet = model->parametersValues();
     for(const std::pair<std::string,tlp::DataType*> &it : stableIterator(dataSet.getValues())) {
@@ -131,7 +131,7 @@ void AlgorithmRunnerItem::setGraph(Graph* g) {
     }
     _initData = dataSet;
 
-    _ui->parameters->setModel(NULL);
+    _ui->parameters->setModel(nullptr);
   }
 
   if (_ui->parameters->isVisible())
@@ -183,7 +183,7 @@ struct OutPropertyParam {
   PropertyInterface* tmp;  // the temporary property
 
   OutPropertyParam(const std::string& pName)
-    : name(pName), dest(NULL), tmp(NULL) {}
+    : name(pName), dest(nullptr), tmp(nullptr) {}
 };
 
 class AlgorithmPreviewHandler: public ProgressPreviewHandler {
@@ -246,10 +246,10 @@ public:
 void AlgorithmRunnerItem::run(Graph *g) {
   initModel();
 
-  if (g == NULL)
+  if (g == nullptr)
     g=_graph;
 
-  if (g == NULL) {
+  if (g == nullptr) {
     qCritical() << QStringToTlpString(name()) << trUtf8(": No graph selected");
     return;
   }
@@ -285,10 +285,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
           || typeName == TN(IntegerVectorProperty)
           || typeName == TN(SizeVectorProperty)
           || typeName == TN(ColorVectorProperty)) {
-        PropertyInterface* prop = NULL;
+        PropertyInterface* prop = nullptr;
         dataSet.get(desc.getName(), prop);
 
-        if (prop != NULL) {
+        if (prop != nullptr) {
           PropertyInterface* localProp = g->getProperty(prop->getName());
 
           if (prop != localProp)
@@ -338,10 +338,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
       if (desc.isMandatory()) {
         // if it is a mandatory input property
         // check it is not null
-        PropertyInterface* prop = NULL;
+        PropertyInterface* prop = nullptr;
         dataSet.get(desc.getName(), prop);
 
-        if (prop == NULL) {
+        if (prop == nullptr) {
           g->pop();
           Observable::holdObservers();
           QString message("Mandatory property parameter '");
@@ -363,7 +363,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     // temporary property
     outPropParam.tmp = outPropParam.dest ?
                        outPropParam.dest->clonePrototype(outPropParam.dest->getGraph(), "") :
-                       NULL;
+                       nullptr;
     // set the temporary as the destination property
     dataSet.set(desc.getName(), outPropParam.tmp);
 
@@ -396,7 +396,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
   bool result = g->applyAlgorithm(algorithm,errorMessage,&dataSet,progress);
 
   if (!outPropertyParams.empty())
-    progress->setPreviewHandler(NULL);
+    progress->setPreviewHandler(nullptr);
 
   // display spent time
   if (TulipSettings::instance().isRunningTimeComputed())
@@ -520,7 +520,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
 
   if (pluginLister->pluginExists<LayoutAlgorithm>(stdName)) {
     if (TulipSettings::instance().isAutomaticRatio()) {
-      LayoutProperty* prop = NULL;
+      LayoutProperty* prop = nullptr;
       dataSet.get<LayoutProperty*>("result",prop);
 
       if (prop)
@@ -536,10 +536,10 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
   }
   else if (pluginLister->pluginExists<DoubleAlgorithm>(stdName) &&
            TulipSettings::instance().isAutomaticMapMetric()) {
-    DoubleProperty* prop = NULL;
+    DoubleProperty* prop = nullptr;
     dataSet.get<DoubleProperty*>("result",prop);
 
-    if (prop != NULL && prop->getName().compare("viewMetric") == 0) {
+    if (prop != nullptr && prop->getName().compare("viewMetric") == 0) {
       std::string errMsg;
       ColorProperty* color;
 
@@ -583,7 +583,7 @@ void AlgorithmRunnerItem::setFavorite(bool f) {
 }
 
 tlp::DataSet AlgorithmRunnerItem::data() const {
-  if (_ui->parameters->model() == NULL)
+  if (_ui->parameters->model() == nullptr)
     return DataSet();
 
   return static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
@@ -591,7 +591,7 @@ tlp::DataSet AlgorithmRunnerItem::data() const {
 
 
 void AlgorithmRunnerItem::initModel() {
-  if (_ui->parameters->model() != NULL)
+  if (_ui->parameters->model() != nullptr)
     return;
 
   ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),_graph,_ui->parameters);

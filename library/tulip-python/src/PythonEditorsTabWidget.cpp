@@ -65,7 +65,7 @@ PythonCodeEditor *PythonEditorsTabWidget::getEditor(int editorIdx) const {
     return static_cast<PythonCodeEditor*>(widget(editorIdx));
   }
   else {
-    return NULL;
+    return nullptr;
   }
 }
 

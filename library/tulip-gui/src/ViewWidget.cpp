@@ -32,7 +32,7 @@ using namespace tlp;
 struct MyGraphicsView: public QGraphicsView {
   QGraphicsItem* _centralItem;
 
-  MyGraphicsView(): QGraphicsView(new QGraphicsScene()), _centralItem(NULL) {
+  MyGraphicsView(): QGraphicsView(new QGraphicsScene()), _centralItem(nullptr) {
     setAcceptDrops(false);
     setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -63,7 +63,7 @@ struct MyGraphicsView: public QGraphicsView {
 };
 
 ViewWidget::ViewWidget()
-  : View(), _graphicsView(NULL), _centralWidget(NULL), _centralWidgetItem(NULL) {
+  : View(), _graphicsView(nullptr), _centralWidget(nullptr), _centralWidgetItem(nullptr) {
 }
 
 ViewWidget::~ViewWidget() {
@@ -122,7 +122,7 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
   }
   else {
     _graphicsView->setRenderHints(QPainter::TextAntialiasing);
-    _graphicsView->setViewport(NULL);
+    _graphicsView->setViewport(nullptr);
     _graphicsView->setViewportUpdateMode(QGraphicsView::MinimalViewportUpdate);
     _centralWidgetItem = _graphicsView->scene()->addWidget(w);
     _centralWidget->resize(_graphicsView->width(),_graphicsView->height());
@@ -175,7 +175,7 @@ QGraphicsItem* ViewWidget::centralItem() const {
 }
 
 QPixmap ViewWidget::snapshot(const QSize &outputSize) const {
-  if (_centralWidget == NULL)
+  if (_centralWidget == nullptr)
     return QPixmap();
 
   QPixmap result(_centralWidget->size());

@@ -35,7 +35,7 @@ const string metaGraphPropertyName = "viewMetaGraph";
 GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
   :supergraph(supergraph ? supergraph : this),
    root((supergraph == this) ? this : supergraph->getRoot()),
-   subGraphToKeep(NULL), metaGraphProperty(NULL) {
+   subGraphToKeep(nullptr), metaGraphProperty(nullptr) {
   // get id
   if (supergraph != this)
     id = ((GraphImpl *) getRoot())->getSubGraphId(sgId);
@@ -109,7 +109,7 @@ Graph *GraphAbstract::addSubGraph(BooleanProperty *selection,
 Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
 
   if (n >= subgraphs.size())
-    return NULL;
+    return nullptr;
 
   return subgraphs[n];
 }
@@ -138,7 +138,7 @@ void GraphAbstract::delSubGraph(Graph *toRemove) {
   assert(it != subgraphs.end());
 
   if (it != subgraphs.end()) {
-    subGraphToKeep = NULL;
+    subGraphToKeep = nullptr;
 
     // remove from subgraphs
     notifyBeforeDelSubGraph(toRemove);
@@ -242,7 +242,7 @@ Graph* GraphAbstract::getSubGraph(unsigned int sgId) const {
     ++it;
   }
 
-  return NULL;
+  return nullptr;
 }
 //=========================================================================
 Graph* GraphAbstract::getSubGraph(const std::string &name) const {
@@ -255,7 +255,7 @@ Graph* GraphAbstract::getSubGraph(const std::string &name) const {
     ++it;
   }
 
-  return NULL;
+  return nullptr;
 }
 //=========================================================================
 Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
@@ -273,7 +273,7 @@ Graph* GraphAbstract::getDescendantGraph(unsigned int sgId) const {
     ++it;
   }
 
-  return NULL;
+  return nullptr;
 }
 //=========================================================================
 Graph* GraphAbstract::getDescendantGraph(const string &name) const {
@@ -291,7 +291,7 @@ Graph* GraphAbstract::getDescendantGraph(const string &name) const {
     ++it;
   }
 
-  return NULL;
+  return nullptr;
 }
 //=========================================================================
 node GraphAbstract::getOneNode() const {
@@ -408,7 +408,7 @@ unsigned int GraphAbstract::outdeg(const node n) const {
 }
 //=========================================================================
 void GraphAbstract::delNodes(Iterator<node>* itN, bool deleteInAllGraphs) {
-  assert(itN != NULL);
+  assert(itN != nullptr);
 
   while(itN->hasNext()) {
     delNode(itN->next(), deleteInAllGraphs);
@@ -452,7 +452,7 @@ void GraphAbstract::reverse(const edge e) {
 }
 //=========================================================================
 void GraphAbstract::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
-  assert(itE != NULL);
+  assert(itE != nullptr);
 
   while(itE->hasNext()) {
     delEdge(itE->next(), deleteInAllGraphs);
@@ -596,7 +596,7 @@ Graph* GraphAbstract::getNodeMetaInfo(const node n) const {
   if (metaGraphProperty)
     return metaGraphProperty->getNodeValue(n);
 
-  return NULL;
+  return nullptr;
 }
 
 // only used to return a reference on an empty vector of edges

@@ -104,7 +104,7 @@ void FiltersManagerCompareItem::fillCombo(QComboBox* combo) {
   // Properties
   fillTitle(combo,trUtf8("Properties"));
 
-  if (_graph != NULL) {
+  if (_graph != nullptr) {
     for(const string &s :_graph->getProperties()) {
 #ifdef NDEBUG
 
@@ -143,12 +143,12 @@ FiltersManagerCompareItem::ComboElementType FiltersManagerCompareItem::comboElem
 
   QStandardItem* item = itemAt(combo,combo->currentIndex());
 
-  if (item == NULL)
+  if (item == nullptr)
     return E_Unknown;
 
   QVariant data = item->data(Qt::UserRole);
 
-  if (data.value<PropertyInterface*>() != NULL)
+  if (data.value<PropertyInterface*>() != nullptr)
     return E_Property;
 
   if (data.toInt() == STRING_ALGORITHM_ID)
@@ -169,7 +169,7 @@ bool FiltersManagerCompareItem::isComparisonNumeric(QComboBox* combo) const {
   bool isCustomDouble;
   _ui->customValueEdit->text().toDouble(&isCustomDouble);
   return (elType == E_CustomValue && isCustomDouble) ||
-         (elType == E_Property && (dynamic_cast<DoubleProperty*>(comboProperty(combo)) != NULL || dynamic_cast<IntegerProperty*>(comboProperty(combo)) != NULL)) ||
+         (elType == E_Property && (dynamic_cast<DoubleProperty*>(comboProperty(combo)) != nullptr || dynamic_cast<IntegerProperty*>(comboProperty(combo)) != nullptr)) ||
          (elType == E_DoubleAlgorithm);
 }
 bool FiltersManagerCompareItem::isComboAlgorithm(QComboBox* combo) const {
@@ -205,10 +205,10 @@ void FiltersManagerCompareItem::elementChanged() {
       if (isComboAlgorithm(c))
         comboParams[c]->setModel(new ParameterListModel(comboAlgorithmParams(c),_graph,comboParams[c]));
       else {
-        if (comboParams[c]->model() != NULL)
+        if (comboParams[c]->model() != nullptr)
           comboParams[c]->model()->deleteLater();
 
-        comboParams[c]->setModel(NULL);
+        comboParams[c]->setModel(nullptr);
       }
     }
   }
@@ -240,12 +240,12 @@ public:
   }
 
   double getNodeValue(node n) {
-    if (_intProp != NULL) return (double)(_intProp->getNodeValue(n));
+    if (_intProp != nullptr) return (double)(_intProp->getNodeValue(n));
 
     return _doubleProp->getNodeValue(n);
   }
   double getEdgeValue(edge e) {
-    if (_intProp != NULL) return (double)(_intProp->getEdgeValue(e));
+    if (_intProp != nullptr) return (double)(_intProp->getEdgeValue(e));
 
     return _doubleProp->getEdgeValue(e);
   }

@@ -148,22 +148,22 @@ void PlanarityTestImpl::init() {
   listBackEdgesOutW.clear();
   ptrItem.setAll(0);
   dfsPosNum.setAll(0);
-  nodeWithDfsPos.setAll(NULL_NODE);
-  parent.setAll(NULL_NODE);
+  nodeWithDfsPos.setAll(nullptr_NODE);
+  parent.setAll(nullptr_NODE);
   largestNeighbor.setAll(0);
   labelB.setAll(0);
-  nodeLabelB.setAll(NULL_NODE);
-  neighborWTerminal.setAll(NULL_NODE);
-  lastVisited.setAll(NULL_NODE);
+  nodeLabelB.setAll(nullptr_NODE);
+  neighborWTerminal.setAll(nullptr_NODE);
+  lastVisited.setAll(nullptr_NODE);
   childrenInT0.clear();
   state.setAll(NOT_VISITED);
   totalCNodes = 0;
-  T0EdgeIn.setAll(NULL_EDGE);
+  T0EdgeIn.setAll(nullptr_EDGE);
   listBackEdges.clear();
   hasBackEdge.setAll(false);
-  lastNodeInQLinha = NULL_NODE;
-  p0.setAll(NULL_NODE);
-  cNodeOfPossibleK33Obstruction = NULL_NODE;
+  lastNodeInQLinha = nullptr_NODE;
+  p0.setAll(nullptr_NODE);
+  cNodeOfPossibleK33Obstruction = nullptr_NODE;
   counter.setAll(0);
   //if(SimpleTest::isSimple(sG))
   makeBidirected(sg);
@@ -178,7 +178,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
   map<node, node> componentOf;
   list<node> traversedNodes; // to restore state[u] for all traversed node u;
   list<edge> listEdges;
-  componentOf[n] = NULL_NODE;
+  componentOf[n] = nullptr_NODE;
   state.set(n.id, VISITED);
   traversedNodes.push_back(n);
   //forall_out_edges(e, n) {
@@ -197,7 +197,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
         listEdges.push_back(edgeReversal(e));
       }
 
-      node terminalNode = NULL_NODE;
+      node terminalNode = nullptr_NODE;
 
       // looks for a terminal node, upward in T;
       while (state.get(target.id) != VISITED && state.get(target.id) != TERMINAL) {
@@ -212,7 +212,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
         }
 
         // is target a candidate for a terminal node?
-        if (terminalNode == NULL_NODE && labelB.get(target.id) > dfsPosNum.get(n.id)) {
+        if (terminalNode == nullptr_NODE && labelB.get(target.id) > dfsPosNum.get(n.id)) {
           state.set(target.id, TERMINAL);
           terminalNode = target;
         }
@@ -239,7 +239,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
       }
 
       // did we find a terminal node?
-      if (terminalNode != NULL_NODE) {
+      if (terminalNode != nullptr_NODE) {
         node c = componentOf[terminalNode];
         // add the terminal node found in the terminal_nodes list
         // of its respective component;
@@ -275,7 +275,7 @@ void PlanarityTestImpl::findTerminalNodes(Graph *sG, node n,
 }
 //=================================================================
 bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalNodes) {
-  cNodeOfPossibleK33Obstruction = NULL_NODE; // reset global variable;
+  cNodeOfPossibleK33Obstruction = nullptr_NODE; // reset global variable;
 
   list<node> listTerminal = terminalNodes;
 
@@ -288,11 +288,11 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
       return true;
     }
 
-    if (cNodeOfPossibleK33Obstruction != NULL_NODE) {
+    if (cNodeOfPossibleK33Obstruction != nullptr_NODE) {
       node v = findNodeWithLabelBGreaterThanDfsN(false, sG, n,
                cNodeOfPossibleK33Obstruction);
 
-      if (v != NULL_NODE) {
+      if (v != nullptr_NODE) {
         if (embed)
           obstructionEdgesPossibleObstrConfirmed(sG, n, t1, v);
 
@@ -314,7 +314,7 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
       return true;
     }
 
-    if (cNodeOfPossibleK33Obstruction != NULL_NODE) {
+    if (cNodeOfPossibleK33Obstruction != nullptr_NODE) {
       if (embed) {
         node v = t2;
 
@@ -334,7 +334,7 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
     if (testObstructionFromTerminalNode(sG, n, t2, t22))
       return true;
 
-    if (cNodeOfPossibleK33Obstruction != NULL_NODE) {
+    if (cNodeOfPossibleK33Obstruction != nullptr_NODE) {
       if (embed) {
         node v = t1;
 
@@ -365,10 +365,10 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
     // u which is not in Q_linha and label_b[u] > dfspos_num[w];
     node v = findNodeWithLabelBGreaterThanDfsN(true, sG, n, m);
 
-    if (v != NULL_NODE) { // v is p-node;
+    if (v != nullptr_NODE) { // v is p-node;
       if (embed) {
         int countMin = 0;
-        node vv = NULL_NODE, mm = NULL_NODE;
+        node vv = nullptr_NODE, mm = nullptr_NODE;
 
         if (isCNode(m)) {
           vv = lcaBetween(v, parent.get(m.id), p0);
@@ -404,12 +404,12 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
             }
           }
           else
-            mm = NULL_NODE;
+            mm = nullptr_NODE;
         }
 
         if (t1 == t12 && t2 == t22 && countMin >= 2 && vv == parent.get(m.id)) // m is c-node;
-          obstructionEdgesK5(sG, n, m, t1, t2, NULL_NODE);
-        else if (mm != NULL_NODE) { // m is c-node;
+          obstructionEdgesK5(sG, n, m, t1, t2, nullptr_NODE);
+        else if (mm != nullptr_NODE) { // m is c-node;
           if (t2 != t22 || vv != parent.get(m.id)) {
             node q = t22, k = parent.get(m.id);
 
@@ -418,13 +418,13 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
               k = v;
             }
 
-            obstructionEdgesCountMin23(sG, n, m, t1, t2, NULL_NODE, q, k);
+            obstructionEdgesCountMin23(sG, n, m, t1, t2, nullptr_NODE, q, k);
           }
           else
-            obstructionEdgesCountMin1(sG, n, m, t1, t2, NULL_NODE);
+            obstructionEdgesCountMin1(sG, n, m, t1, t2, nullptr_NODE);
         }
         else
-          obstructionEdgesT0(sG, n, t1, t2, NULL_NODE, v);
+          obstructionEdgesT0(sG, n, t1, t2, nullptr_NODE, v);
 
         return true;
       }
@@ -449,10 +449,10 @@ bool PlanarityTestImpl::findObstruction(Graph *sG, node n, list<node>& terminalN
         obstructionEdgesK5(sG, n, cNode, t1, t2, t3); // K5, bcycle;
       else if (countF == 3)
         obstructionEdgesCountMin1(sG, n, cNode, t1, t2, t3); // bcycle;
-      else if (cNode != NULL_NODE)
-        obstructionEdgesCountMin23(sG, n, cNode, t1, t2, t3, q, NULL_NODE); // bcycle;
+      else if (cNode != nullptr_NODE)
+        obstructionEdgesCountMin23(sG, n, cNode, t1, t2, t3, q, nullptr_NODE); // bcycle;
       else
-        obstructionEdgesT0(sG, n, t1, t2, t3, NULL_NODE);    // T0;
+        obstructionEdgesT0(sG, n, t1, t2, t3, nullptr_NODE);    // T0;
     }
 
     return true;
@@ -471,25 +471,25 @@ void PlanarityTestImpl::setInfoForNewCNode(Graph *sG,
   labelB.set(newCNode.id, dfsPosNum.get(n.id));
 
   if (embed) // needed to calculate obstruction edges;
-    nodeLabelB.set(newCNode.id, NULL_NODE);
+    nodeLabelB.set(newCNode.id, nullptr_NODE);
 
-  neighborWTerminal.set(newCNode.id, NULL_NODE);
+  neighborWTerminal.set(newCNode.id, nullptr_NODE);
   parent.set(newCNode.id, n);
   state.set(newCNode.id, NOT_VISITED);
   counter.set(newCNode.id, 0);
   calculateNewRBC(sG, newCNode, n, terminalNodes);
 
-  if (lastNodeInQLinha != NULL_NODE) { // see find_node_with_label_b_greater_than_dfs_n;
+  if (lastNodeInQLinha != nullptr_NODE) { // see find_node_with_label_b_greater_than_dfs_n;
     parent.set(lastNodeInQLinha.id, newCNode);
-    lastNodeInQLinha = NULL_NODE; // resets global variable;
+    lastNodeInQLinha = nullptr_NODE; // resets global variable;
   }
 
   RBC[newCNode].push(n);
 
   BmdLink<node> *first = RBC[newCNode].firstItem();
   BmdLink<node> *last  = RBC[newCNode].lastItem();
-  assert(first!=NULL);
-  assert(last!=NULL);
+  assert(first!=nullptr);
+  assert(last!=nullptr);
   activeCNode[first] = newCNode;
   activeCNode[last]  = newCNode;
 }

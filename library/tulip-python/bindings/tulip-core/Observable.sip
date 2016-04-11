@@ -60,7 +60,7 @@ Here is a sample code below::
 %End
 
 %ConvertToSubClassCode
-  sipType = NULL;
+  sipType = nullptr;
 %End
 
 
@@ -181,7 +181,7 @@ To attach to an object for receiving events, call its :meth:`tlp.Observable.addO
   } else if (dynamic_cast<tlp::StringVectorProperty *>(sipCpp)) {
     sipType = sipFindType("tlp::StringVectorProperty");
   } else {
-    sipType = NULL;
+    sipType = nullptr;
   }
 %End
 

@@ -268,7 +268,7 @@ static const char * paramHelp[] = {
   HTML_HELP_CLOSE(),
 };
 //=================================================
-MCLClustering::MCLClustering(const tlp::PluginContext *context):DoubleAlgorithm(context), weights(NULL), _r(2.0), _k(5) {
+MCLClustering::MCLClustering(const tlp::PluginContext *context):DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
   addInParameter<double>("inflate", paramHelp[0], "2.", false);
   addInParameter<NumericProperty*>("weights", paramHelp[1], "", false);
   addInParameter<unsigned int>("pruning", paramHelp[2], "5", false);
@@ -293,7 +293,7 @@ void MCLClustering::init() {
     edge tmp = g.addEdge(src, tgt);
     edgeMapping.set(e.id, tmp);
 
-    double weight = (weights != NULL) ? weights->getEdgeDoubleValue(e) : 1.0;
+    double weight = (weights != nullptr) ? weights->getEdgeDoubleValue(e) : 1.0;
     inW[tmp] = weight;
     outW[tmp] = 0.;
     // add reverse edge
@@ -353,7 +353,7 @@ bool MCLClustering::run() {
   g.alloc(outW);
   g.alloc(tlpNodes);
 
-  weights = NULL;
+  weights = nullptr;
   _r = 2.;
   _k = 5;
 

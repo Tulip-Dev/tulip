@@ -112,7 +112,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT_EQUAL(6u, graph->numberOfNodes());
 
   Graph *cluster = quotient->getNodeMetaInfo(meta);
-  CPPUNIT_ASSERT(cluster!=NULL);
+  CPPUNIT_ASSERT(cluster!=nullptr);
   CPPUNIT_ASSERT(cluster->isElement(nodes[0]));
   CPPUNIT_ASSERT(cluster->isElement(nodes[1]));
   CPPUNIT_ASSERT_EQUAL(1u, cluster->numberOfEdges());
@@ -164,7 +164,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   Graph * graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
   //take the quotient graph
   bool find = false;
-  Graph* subgraph = NULL;
+  Graph* subgraph = nullptr;
   for(Graph* sg : graph->getSubGraphs()) {
     string name;
     sg->getAttribute("name", name);
@@ -175,7 +175,7 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
       break;
     }
   }
-  CPPUNIT_ASSERT(find && subgraph != NULL);
+  CPPUNIT_ASSERT(find && subgraph != nullptr);
   CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
   //open all meta nodes

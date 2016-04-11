@@ -34,7 +34,7 @@ class ColorScale;
  */
 class TLP_QT_SCOPE ColorScaleWidget : public QWidget {
 public:
-  ColorScaleWidget(QWidget* parent=NULL);
+  ColorScaleWidget(QWidget* parent=nullptr);
   virtual ~ColorScaleWidget();
 
   /**

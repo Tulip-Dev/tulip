@@ -242,7 +242,7 @@ Graph * tlp::loadGraph(const std::string &filename, PluginProgress *progress) {
 
   if (gzip && importPluginName != "TLP Import" && importPluginName != "TLPB Import") {
     tlp::error() << "GZip compression is only supported for TLP and TLPB formats." << endl;
-    return NULL;
+    return nullptr;
   }
 
   dataSet.set("file::filename", filename);
@@ -305,12 +305,12 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   if (!PluginLister::pluginExists(format)) {
     tlp::warning() << "libtulip: " << __FUNCTION__ << ": import plugin \"" << format
                    << "\" does not exist (or is not loaded)" << endl;
-    return NULL;
+    return nullptr;
   }
 
   bool newGraphP=false;
 
-  if (graph==NULL) {
+  if (graph==nullptr) {
     graph=tlp::newGraph();
     newGraphP=true;
   }
@@ -318,7 +318,7 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
   PluginProgress *tmpProgress;
   bool deletePluginProgress=false;
 
-  if (progress==NULL) {
+  if (progress==nullptr) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
@@ -326,14 +326,14 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   AlgorithmContext* tmp = new AlgorithmContext(graph, &dataSet, tmpProgress);
   ImportModule *newImportModule = PluginLister::instance()->getPluginObject<ImportModule>(format, tmp);
-  assert(newImportModule!=NULL);
+  assert(newImportModule!=nullptr);
 
   // ensure that the parsing of float or double does not depend on locale
   setlocale(LC_NUMERIC, "C");
 
   //If the import failed and we created the graph then delete the graph
   if (!newImportModule->importGraph()) {
-    graph = NULL;
+    graph = nullptr;
 
     if (newGraphP)
       delete graph;
@@ -364,9 +364,9 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
 
   bool result;
   bool deletePluginProgress=false;
-  PluginProgress *tmpProgress=NULL;
+  PluginProgress *tmpProgress=nullptr;
 
-  if (progress==NULL) {
+  if (progress==nullptr) {
     tmpProgress=new SimplePluginProgress();
     deletePluginProgress=true;
   }
@@ -374,7 +374,7 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
 
   AlgorithmContext* context = new AlgorithmContext(graph, &dataSet, tmpProgress);
   ExportModule *newExportModule=PluginLister::instance()->getPluginObject<ExportModule>(format, context);
-  assert(newExportModule!=NULL);
+  assert(newExportModule!=nullptr);
   std::string filename;
 
   if (dataSet.get("file", filename)) {
@@ -502,7 +502,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
 
-      if (dynamic_cast<GraphProperty *>(src) == NULL) {
+      if (dynamic_cast<GraphProperty *>(src) == nullptr) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName)
@@ -537,7 +537,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
     while (propIt->hasNext()) {
       PropertyInterface *src = propIt->next();
 
-      if (dynamic_cast<GraphProperty *>(src) == NULL) {
+      if (dynamic_cast<GraphProperty *>(src) == nullptr) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
           outG->existProperty(pName) ? outG->getProperty(pName)
@@ -608,7 +608,7 @@ bool Graph::applyAlgorithm(const std::string &algorithm,
   bool deletePluginProgress=false;
   PluginProgress *tmpProgress;
 
-  if (progress == NULL) {
+  if (progress == nullptr) {
     tmpProgress = new SimplePluginProgress();
     deletePluginProgress = true;
   }
@@ -681,12 +681,12 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 
   tlp::PluginProgress *tmpProgress;
 
-  if (progress==NULL)
+  if (progress==nullptr)
     tmpProgress=new tlp::SimplePluginProgress();
   else
     tmpProgress=progress;
 
-  bool hasData = parameters != NULL;
+  bool hasData = parameters != nullptr;
 
   if (!hasData)
     parameters = new tlp::DataSet();
@@ -703,7 +703,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   Algorithm *tmpAlgo =
     tlp::PluginLister::instance()->getPluginObject<PropertyAlgorithm>(algorithm, &context);
 
-  if (tmpAlgo != NULL) {
+  if (tmpAlgo != nullptr) {
     result = tmpAlgo->check(errorMessage);
 
     if (result) {
@@ -726,7 +726,7 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
   circularCalls.erase(algorithm);
   tlp::Observable::unholdObservers();
 
-  if (progress==NULL) delete tmpProgress;
+  if (progress==nullptr) delete tmpProgress;
 
   if (hasData)
     // remove result from dataset
@@ -956,7 +956,7 @@ PropertyInterface *Graph::getLocalProperty(const std::string& propertyName, cons
     return getLocalProperty<GraphProperty> (propertyName);
   }
   else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -1007,7 +1007,7 @@ PropertyInterface *Graph::getProperty(const std::string& propertyName, const std
     return getProperty<GraphProperty> (propertyName);
   }
   else {
-    return NULL;
+    return nullptr;
   }
 }
 
@@ -1027,7 +1027,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
 
     Graph *meta = metaInfo->getNodeValue(n);
 
-    if ( meta != NULL)
+    if ( meta != nullptr)
       buildMapping(meta->getNodes(), mapping, metaInfo, mapping.get(n.id));
   }
 
@@ -1036,7 +1036,7 @@ static void buildMapping(Iterator<node> *it, MutableContainer<node> &mapping, Gr
 //====================================================================================
 void updatePropertiesUngroup(Graph *graph, node metanode,
                              GraphProperty *clusterInfo) {
-  if (clusterInfo->getNodeValue(metanode)==NULL) return; //The metanode is not a metanode.
+  if (clusterInfo->getNodeValue(metanode)==nullptr) return; //The metanode is not a metanode.
 
   LayoutProperty *graphLayout = graph->getProperty<LayoutProperty>(layoutProperty);
   SizeProperty *graphSize = graph->getProperty<SizeProperty>(sizeProperty);
@@ -1104,7 +1104,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
         property == graphRot)
       continue;
 
-    PropertyInterface *graphProp = NULL;
+    PropertyInterface *graphProp = nullptr;
 
     if (graph->existProperty(property->getName()) &&
         graph->getProperty(property->getName())->getTypename() == property->getTypename())
@@ -1132,7 +1132,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 }
 //=========================================================
 Graph* Graph::addSubGraph(const std::string& name) {
-  Graph* g = addSubGraph(NULL, name);
+  Graph* g = addSubGraph(nullptr, name);
   return g;
 }
 //=========================================================
@@ -1147,7 +1147,7 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling) {
 
     if (this == parentSubGraph)
       // cannot add sibling of root graph
-      return NULL;
+      return nullptr;
   }
 
   return parentSubGraph->addSubGraph(&selection, name);
@@ -1155,7 +1155,7 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling) {
 //=========================================================
 Graph * Graph::inducedSubGraph(const std::set<node> &nodes,
                                Graph* parentSubGraph) {
-  if (parentSubGraph == NULL)
+  if (parentSubGraph == nullptr)
     parentSubGraph = this;
 
   // create subgraph and add nodes
@@ -1269,8 +1269,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
       node src = eEnds.first;
       node tgt = eEnds.second;
       bool toDelete =
-        ((metaInfo->getNodeValue(src)!=NULL) ||
-         (metaInfo->getNodeValue(tgt)!=NULL)) &&
+        ((metaInfo->getNodeValue(src)!=nullptr) ||
+         (metaInfo->getNodeValue(tgt)!=nullptr)) &&
         isElement (src) && isElement (tgt) &&
         existEdge (src, tgt).isValid();
 
@@ -1379,7 +1379,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     ((GraphAbstract *) getRoot())->getMetaGraphProperty();
   Graph *metaGraph = metaInfo->getNodeValue(metaNode);
 
-  if (metaGraph == NULL) return;
+  if (metaGraph == nullptr) return;
 
   Observable::holdObservers();
   MutableContainer<node> mappingM;
@@ -1429,7 +1429,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       mappingM.set(mn.id, mn);
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
-      if (mnGraph != NULL) {
+      if (mnGraph != nullptr) {
         Iterator<node> *it = mnGraph->getNodes();
 
         while(it->hasNext()) {
@@ -1572,8 +1572,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
         else continue;
       }
 
-      if (metaInfo->getNodeValue(src) == NULL &&
-          metaInfo->getNodeValue(tgt) == NULL) {
+      if (metaInfo->getNodeValue(src) == nullptr &&
+          metaInfo->getNodeValue(tgt) == nullptr) {
         addEdge(e);
         continue;
       }
@@ -1723,7 +1723,7 @@ Graph *Graph::getNthSubGraph(unsigned int n) const {
   }
 
   delete it;
-  return NULL;
+  return nullptr;
 }
 
 const std::string& GraphEvent::getPropertyName() const {
@@ -1767,7 +1767,7 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
 
     if (!current->hasNext()) {
       delete current;
-      current = NULL;
+      current = nullptr;
     }
   }
 
@@ -1782,7 +1782,7 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
   }
 
   bool hasNext() {
-    return current != NULL;
+    return current != nullptr;
   }
 
   Graph* next() {
@@ -1810,14 +1810,14 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
             iterators.pop();
           }
           else
-            current = NULL;
+            current = nullptr;
         }
       }
 
       return g;
     }
 
-    return NULL;
+    return nullptr;
   }
 };
 

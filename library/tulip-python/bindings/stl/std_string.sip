@@ -25,7 +25,7 @@
 %End
 
 %ConvertToTypeCode
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
 #if PY_MAJOR_VERSION >= 3
     return PyUnicode_Check(sipPy);
 #else

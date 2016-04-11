@@ -64,7 +64,7 @@ public:
   void setView(View* view);
 
   /**
-   * @return The view on which the interactor is installed (NULL if none)
+   * @return The view on which the interactor is installed (nullptr if none)
    */
   View* view() const;
 
@@ -100,7 +100,7 @@ protected:
 
   /**
     @return The last target the interactor was installed on.
-    @note If the lastTarget is destroyed before uninstall was called, the lastTarget() method will return NULL.
+    @note If the lastTarget is destroyed before uninstall was called, the lastTarget() method will return nullptr.
     */
   QObject* lastTarget() const;
 

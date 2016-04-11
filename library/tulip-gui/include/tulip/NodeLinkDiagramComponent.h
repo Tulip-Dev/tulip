@@ -56,7 +56,7 @@ public:
                     "This view allows you to change the glyph used to represent nodes (e.g. square, round, cross, ...), as well as the shape of the arrows indicating the direction of the relationship.",
                     "1.0", "relational")
 
-  NodeLinkDiagramComponent(const tlp::PluginContext* context = NULL);
+  NodeLinkDiagramComponent(const tlp::PluginContext* context = nullptr);
   virtual ~NodeLinkDiagramComponent();
   std::string icon() const {
     return ":/tulip/gui/icons/32/node_link_diagram_view.png";

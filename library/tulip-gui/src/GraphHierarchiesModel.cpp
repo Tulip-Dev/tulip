@@ -48,13 +48,13 @@ using namespace tlp;
 #define NODES_SECTION 2
 #define EDGES_SECTION 3
 
-GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(NULL) {}
+GraphHierarchiesModel::GraphHierarchiesModel(QObject *parent): TulipModel(parent), _currentGraph(nullptr) {}
 
 GraphHierarchiesModel::GraphHierarchiesModel(const GraphHierarchiesModel &copy): TulipModel(copy.QObject::parent()), tlp::Observable() {
   for (int i=0; i < copy.size(); ++i)
     addGraph(copy[i]);
 
-  _currentGraph = NULL;
+  _currentGraph = nullptr;
 }
 
 GraphHierarchiesModel::~GraphHierarchiesModel() {
@@ -63,7 +63,7 @@ GraphHierarchiesModel::~GraphHierarchiesModel() {
 
 // Cache related methods
 QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
-  if (g == NULL)
+  if (g == nullptr)
     return QModelIndex();
 
   QModelIndex result = _indexCache[g];
@@ -75,7 +75,7 @@ QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
 }
 
 QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
-  if (g == NULL)
+  if (g == nullptr)
     return QModelIndex();
 
   QModelIndex result;
@@ -172,14 +172,14 @@ QModelIndex GraphHierarchiesModel::index(int row, int column, const QModelIndex 
   if (row < 0)
     return QModelIndex();
 
-  Graph *g = NULL;
+  Graph *g = nullptr;
 
   if (parent.isValid())
     g = reinterpret_cast<Graph*>(parent.internalPointer())->getNthSubGraph(row);
   else if (row < _graphs.size())
     g = _graphs[row];
 
-  if (g == NULL) {
+  if (g == nullptr) {
     return QModelIndex();
   }
 
@@ -192,7 +192,7 @@ QModelIndex GraphHierarchiesModel::parent(const QModelIndex &child) const {
 
   Graph* childGraph = reinterpret_cast<Graph*>(child.internalPointer());
 
-  if (childGraph == NULL || _graphs.contains(childGraph) || childGraph->getSuperGraph() == childGraph) {
+  if (childGraph == nullptr || _graphs.contains(childGraph) || childGraph->getSuperGraph() == childGraph) {
     return QModelIndex();
   }
 
@@ -318,7 +318,7 @@ QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const
   foreach(QModelIndex index, indexes) {
     Graph *g = data(index,GraphRole).value<Graph*>();
 
-    if (g != NULL)
+    if (g != nullptr)
       graphs.insert(g);
   }
 
@@ -362,13 +362,13 @@ void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
   Graph* oldGraph = _currentGraph;
   _currentGraph = g;
 
-  if (oldGraph != NULL && oldGraph != _currentGraph) {
+  if (oldGraph != nullptr && oldGraph != _currentGraph) {
     QModelIndex oldRow1 = indexOf(oldGraph);
     QModelIndex oldRow2 = createIndex(oldRow1.row(),columnCount()-1);
     emit dataChanged(oldRow1,oldRow2);
   }
 
-  if (_currentGraph != NULL) {
+  if (_currentGraph != nullptr) {
     QModelIndex newRow1 = indexOf(_currentGraph);
     QModelIndex newRow2 = createIndex(newRow1.row(),columnCount()-1);
     emit dataChanged(newRow1,newRow2);
@@ -398,7 +398,7 @@ static void addListenerToWholeGraphHierarchy(Graph *root, Observable *listener) 
 }
 
 void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
-  if (_graphs.contains(g) || g == NULL)
+  if (_graphs.contains(g) || g == nullptr)
     return;
 
   Graph *i;
@@ -435,7 +435,7 @@ void GraphHierarchiesModel::removeGraph(tlp::Graph *g) {
 
     if (_currentGraph == g) {
       if (_graphs.empty()) {
-        _currentGraph = NULL;
+        _currentGraph = nullptr;
         emit currentGraphChanged(_currentGraph);
       }
       else
@@ -459,7 +459,7 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
 
     if (_currentGraph == g) {
       if (_graphs.empty())
-        _currentGraph = NULL;
+        _currentGraph = nullptr;
       else
         _currentGraph = _graphs[0];
 
@@ -607,7 +607,7 @@ void GraphHierarchiesModel::treatEvents(const std::vector<tlp::Event> &) {
 
   emit layoutAboutToBeChanged();
 
-  const Graph *graph = NULL;
+  const Graph *graph = nullptr;
   foreach (graph, _graphsChanged) {
     QModelIndex graphIndex = indexOf(graph);
     QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);

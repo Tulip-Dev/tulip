@@ -38,10 +38,10 @@ using namespace std;
 
 namespace tlp {
 
-GlOffscreenRenderer *GlOffscreenRenderer::instance(NULL);
+GlOffscreenRenderer *GlOffscreenRenderer::instance(nullptr);
 
 GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
-  if (instance == NULL) {
+  if (instance == nullptr) {
     instance = new GlOffscreenRenderer();
   }
 
@@ -49,7 +49,7 @@ GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-  : vPWidth(512), vPHeight(512), glFrameBuf(NULL), glFrameBuf2(NULL), mainLayer(new GlLayer("Main")),
+  : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr), mainLayer(new GlLayer("Main")),
     entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
   GlLayer *backgroundLayer=new GlLayer("Background");
   backgroundLayer->setVisible(true);
@@ -101,7 +101,7 @@ void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphCompos
   //Delete old composite if it exist
   GlSimpleEntity *oldComposite = mainLayer->findGlEntity("graph");
 
-  if(oldComposite!=NULL) {
+  if(oldComposite!=nullptr) {
     mainLayer->deleteGlEntity(oldComposite);
   }
 
@@ -130,15 +130,15 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
-  if (glFrameBuf != NULL && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
+  if (glFrameBuf != nullptr && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
     delete glFrameBuf;
-    glFrameBuf = NULL;
+    glFrameBuf = nullptr;
     delete glFrameBuf2;
-    glFrameBuf2 = NULL;
+    glFrameBuf2 = nullptr;
   }
 
 
-  if (glFrameBuf == NULL) {
+  if (glFrameBuf == nullptr) {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
@@ -150,7 +150,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
   }
 
 
-  if (antialiasedFbo && glFrameBuf2 == NULL) {
+  if (antialiasedFbo && glFrameBuf2 == nullptr) {
     glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
   }
 

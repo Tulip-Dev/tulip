@@ -675,7 +675,7 @@ We will first begin with the creation of the graph and its properties::
 
   int main() {
     //initialize the Tulip libs
-    initTulipLib(NULL);
+    initTulipLib(nullptr);
 
     //create an empty graph
     Graph *graph=tlp::newGraph();
@@ -840,7 +840,7 @@ Following is the sample of code that created such a graph::
 
   int main() {
     //initialize the Tulip libs
-    initTulipLib(NULL);
+    initTulipLib(nullptr);
 
     //create an empty graph
     Graph *graph = newGraph();
@@ -1005,7 +1005,7 @@ Divided in three types, the events can be launched by a graph modification (addi
 This class contains two essentials methods and a self-instance. The first method, named *launchListenerClass(const tlp::Graph * graph)*, must be called in the main. It is used to link the instance with the current graph with the function *graph->addListener(instance)*::
 
   void ListenerClass::launchListenerClass(const tlp::Graph* graph) {
-    if (instance == NULL) {
+    if (instance == nullptr) {
       instance = new ListenerClass();
     }
     graph->addListener(instance);

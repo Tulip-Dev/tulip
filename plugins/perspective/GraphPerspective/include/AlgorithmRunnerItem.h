@@ -42,7 +42,7 @@ class AlgorithmRunnerItem: public QWidget {
 
 
 public:
-  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = NULL);
+  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = nullptr);
   virtual ~AlgorithmRunnerItem();
 
   QString name() const;
@@ -60,7 +60,7 @@ public slots:
   void setData(const tlp::DataSet& data);
   void setStoreResultAsLocal(bool);
 
-  void run(tlp::Graph* g = NULL);
+  void run(tlp::Graph* g = nullptr);
 
 signals:
   void favorized(bool);

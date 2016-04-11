@@ -36,7 +36,7 @@ class CSVParser;
 class TLP_QT_SCOPE CSVParserConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
-  CSVParserConfigurationWidget(QWidget *parent = NULL);
+  CSVParserConfigurationWidget(QWidget *parent = nullptr);
   ~CSVParserConfigurationWidget();
   /**
     * @brief Generate a csv parser in function of the parameters in the widget. User define the range of line to import.

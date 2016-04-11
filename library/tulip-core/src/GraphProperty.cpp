@@ -41,13 +41,13 @@ GraphProperty::~GraphProperty() {
     while(it->hasNext()) {
       node n = it->next();
 
-      if (getNodeValue(n) != NULL)
+      if (getNodeValue(n) != nullptr)
         getNodeValue(n)->removeListener(this);
     }
 
     delete it;
 
-    if (getNodeDefaultValue() != NULL) {
+    if (getNodeDefaultValue() != nullptr) {
       getNodeDefaultValue()->removeListener(this);
     }
   }
@@ -66,13 +66,13 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
 
-  if (getNodeDefaultValue() != NULL) {
+  if (getNodeDefaultValue() != nullptr) {
     getNodeDefaultValue()->removeListener(this);
   }
 
   AbstractGraphProperty::setAllNodeValue(g);
 
-  if (g != NULL)
+  if (g != nullptr)
     g->addListener(this);
 }
 //==============================
@@ -80,7 +80,7 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
   //gestion désabonnement
   Graph * oldGraph = getNodeValue(n);
 
-  if (oldGraph != NULL && oldGraph != sg) {
+  if (oldGraph != nullptr && oldGraph != sg) {
     //gestion du désabonnement
     bool notDefault;
     set<node> &refs = referencedGraph.get(oldGraph->getId(), notDefault);
@@ -101,7 +101,7 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
 
   AbstractGraphProperty::setNodeValue(n, sg);
 
-  if (sg == NULL || oldGraph == sg)
+  if (sg == nullptr || oldGraph == sg)
     return;
 
   //Gestion de l'abonnement
@@ -123,7 +123,7 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
 //============================================================
 PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n) {
   if( !g )
-    return NULL;
+    return nullptr;
 
   // allow to get an unregistered property (empty name)
   GraphProperty * p = n.empty()

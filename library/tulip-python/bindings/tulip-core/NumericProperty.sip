@@ -36,7 +36,7 @@ class NumericProperty : tlp::PropertyInterface /Abstract/ {
   } else if (dynamic_cast<tlp::IntegerProperty *>(sipCpp)) {
     sipType = sipFindType("tlp::IntegerProperty");
   } else {
-    sipType = NULL;
+    sipType = nullptr;
   }
 %End
 
@@ -213,7 +213,7 @@ An uniform quantification tries to separate the edges in n classes of equivalent
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getSortedNodes(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::node>* getSortedNodes(tlp::Graph *sg = nullptr, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedNodes([subgraph=None, ascendingOrder=True])
 
@@ -230,7 +230,7 @@ Gets an iterator sorting nodes according to their values in that numeric propert
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getSortedEdges(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdges(tlp::Graph *sg = nullptr, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdges([subgraph=None, ascendingOrder=True])
 
@@ -247,7 +247,7 @@ Gets an iterator sorting edges according to their values in that numeric propert
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getSortedEdgesBySourceValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdgesBySourceValue(tlp::Graph *sg = nullptr, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdgesBySourceValue([subgraph=None, ascendingOrder=True])
 
@@ -264,7 +264,7 @@ Gets an iterator sorting edges according to the values of their source nodes in 
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(tlp::Graph *sg = nullptr, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdgesByTargetValue([subgraph=None, ascendingOrder=True])
 
@@ -281,7 +281,7 @@ Gets an iterator sorting edges according to the values of their target nodes in 
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getSortedEdgesByExtremitiesValues(tlp::Graph *sg = NULL, bool ascendingOrder = true);
+  tlp::Iterator<tlp::edge>* getSortedEdgesByExtremitiesValues(tlp::Graph *sg = nullptr, bool ascendingOrder = true);
 %Docstring
 tlp.NumericProperty.getSortedEdgesByExtremitiesValues([subgraph=None, ascendingOrder=True])
 

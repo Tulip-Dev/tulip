@@ -51,7 +51,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
   bool edge_color_interpolation = false;
   bool edge_extremities = false;
 
-  if(ds!=NULL) {
+  if(ds!=nullptr) {
     ds->get("Element's layout property", layout);
     ds->get("Element's color property", colors);
     ds->get("Element's shape property", shape);

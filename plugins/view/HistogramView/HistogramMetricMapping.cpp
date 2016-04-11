@@ -53,7 +53,7 @@ struct CoordXOrdering : public binary_function<Coord, Coord, bool> {
 
 Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]) {
 
-  Coord *intersectionPoint = NULL;
+  Coord *intersectionPoint = nullptr;
   bool line1ParallelToXaxis = false;
   bool line1ParallelToYaxis = false;
   bool line2ParallelToXaxis = false;
@@ -149,7 +149,7 @@ const float CIRCLE_RADIUS = 5.;
 const float scaleWidth = 60.;
 
 GlEditableCurve::GlEditableCurve(const Coord &start, const Coord &end, const Color &curveColor)
-  : startPoint(start), endPoint(end), minPoint(startPoint), maxPoint(endPoint), curveColor(curveColor), xAxis(NULL) {
+  : startPoint(start), endPoint(end), minPoint(startPoint), maxPoint(endPoint), curveColor(curveColor), xAxis(nullptr) {
   init();
 }
 
@@ -204,7 +204,7 @@ void GlEditableCurve::draw(float lod,Camera* camera) {
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     basicCircle.draw(lod, camera);
 
-    if (xAxis != NULL) {
+    if (xAxis != nullptr) {
       int factor = 2;
       double val = xAxis->getValueForAxisPoint(anchor);
       string labelText = getStringFromNumber(val);
@@ -251,7 +251,7 @@ void GlEditableCurve::addCurveAnchor(const Coord &point) {
 }
 
 Coord *GlEditableCurve::getCurveAnchorAtPointIfAny(const Coord &point, Camera *camera) {
-  Coord *anchor = NULL;
+  Coord *anchor = nullptr;
   vector<Coord> curvePointsCp(curvePoints);
   curvePointsCp.insert(curvePointsCp.begin(), startPoint);
   curvePointsCp.push_back(endPoint);
@@ -329,7 +329,7 @@ float GlEditableCurve::getYCoordForX(const float xCoord) {
   float ret;
   Coord *intersectionPoint = computeStraightLineIntersection(line1, line2);
 
-  if (intersectionPoint != NULL) {
+  if (intersectionPoint != nullptr) {
     ret = intersectionPoint->getY();
     delete intersectionPoint;
   }
@@ -573,36 +573,36 @@ void GlGlyphScale::translate(const Coord &move) {
 }
 
 HistogramMetricMapping::HistogramMetricMapping() :
-  histoView(NULL), curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
-  colorScale(new ColorScale()), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
-  colorScaleConfigDialog(NULL), sizeScaleConfigDialog(NULL), glyphScaleConfigDialog(NULL), lastXAxisLength(0), histoXAxis(NULL),
-  mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
-  mappingType(VIEWCOLOR_MAPPING), popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL), viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
+  histoView(nullptr), curve(nullptr), curveDragStarted(false), selectedAnchor(nullptr),
+  colorScale(new ColorScale()), glColorScale(nullptr), glSizeScale(nullptr), glGlyphScale(nullptr),
+  colorScaleConfigDialog(nullptr), sizeScaleConfigDialog(nullptr), glyphScaleConfigDialog(nullptr), lastXAxisLength(0), histoXAxis(nullptr),
+  mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
+  mappingType(VIEWCOLOR_MAPPING), popupMenu(nullptr), colorMappingMenu(nullptr), viewColorMappingAction(nullptr), viewBorderColorMappingAction(nullptr), sizeMapping(nullptr), glyphMapping(nullptr) {
 }
 
 HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &histoMetricMapping)
-  : curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
-    colorScale(NULL), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
-    histoXAxis(NULL), mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+  : curve(nullptr), curveDragStarted(false), selectedAnchor(nullptr),
+    colorScale(nullptr), glColorScale(nullptr), glSizeScale(nullptr), glGlyphScale(nullptr),
+    histoXAxis(nullptr), mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
     glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
-    popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL),
-    viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {
+    popupMenu(nullptr), colorMappingMenu(nullptr), viewColorMappingAction(nullptr),
+    viewBorderColorMappingAction(nullptr), sizeMapping(nullptr), glyphMapping(nullptr) {
 
   GlEditableCurve *lastCurve = histoMetricMapping.curve;
 
-  if (lastCurve != NULL) {
+  if (lastCurve != nullptr) {
     curve = new GlEditableCurve(*lastCurve);
   }
 
   Coord *lastSelectedAnchor = histoMetricMapping.selectedAnchor;
 
-  if (lastSelectedAnchor != NULL) {
+  if (lastSelectedAnchor != nullptr) {
     selectedAnchor = new Coord(*lastSelectedAnchor);
   }
 
   ColorScale *lastColorScale = histoMetricMapping.colorScale;
 
-  if (lastColorScale != NULL) {
+  if (lastColorScale != nullptr) {
     colorScale = new ColorScale(*lastColorScale);
   }
 
@@ -610,13 +610,13 @@ HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &his
   sizeScaleConfigDialog = histoMetricMapping.sizeScaleConfigDialog;
   glyphScaleConfigDialog = histoMetricMapping.glyphScaleConfigDialog;
 
-  if (colorScaleConfigDialog != NULL) {
+  if (colorScaleConfigDialog != nullptr) {
     colorScaleConfigDialog->setColorScale(colorScale);
   }
 
   GlPolyQuad *lastColorMappingPolyQuad = histoMetricMapping.mappinqPolyQuad;
 
-  if (lastColorMappingPolyQuad != NULL) {
+  if (lastColorMappingPolyQuad != nullptr) {
     mappinqPolyQuad = new GlPolyQuad(*lastColorMappingPolyQuad);
   }
 
@@ -627,27 +627,27 @@ HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &his
 }
 
 HistogramMetricMapping::~HistogramMetricMapping() {
-  if (glColorScale != NULL) {
+  if (glColorScale != nullptr) {
     delete glColorScale;
   }
 
-  if (glSizeScale != NULL) {
+  if (glSizeScale != nullptr) {
     delete glSizeScale;
   }
 
-  if (glGlyphScale != NULL) {
+  if (glGlyphScale != nullptr) {
     delete glGlyphScale;
   }
 
-  if (colorScale != NULL) {
+  if (colorScale != nullptr) {
     delete colorScale;
   }
 
-  if (mappinqPolyQuad != NULL) {
+  if (mappinqPolyQuad != nullptr) {
     delete mappinqPolyQuad;
   }
 
-  if (popupMenu != NULL) {
+  if (popupMenu != nullptr) {
     delete popupMenu;
   }
 
@@ -661,8 +661,8 @@ bool HistogramMetricMapping::compute(GlMainWidget *) {
 }
 
 void HistogramMetricMapping::viewChanged(View *view) {
-  if (view == NULL) {
-    histoView = NULL;
+  if (view == nullptr) {
+    histoView = nullptr;
     return;
   }
 
@@ -689,33 +689,33 @@ void HistogramMetricMapping::initInteractor() {
   if(!histoView->getDetailedHistogram())
     return;
 
-  if (colorScaleConfigDialog == NULL) {
+  if (colorScaleConfigDialog == nullptr) {
     colorScaleConfigDialog = new ColorScaleConfigDialog(colorScale, histoView->getGlMainWidget());
     *colorScale=colorScaleConfigDialog->getColorScale();
     colorScale->setColorMapTransparency(200);
   }
 
-  if (sizeScaleConfigDialog == NULL) {
+  if (sizeScaleConfigDialog == nullptr) {
     sizeScaleConfigDialog = new SizeScaleConfigDialog(histoView->getGlMainWidget());
   }
 
-  if (glyphScaleConfigDialog == NULL) {
+  if (glyphScaleConfigDialog == nullptr) {
     glyphScaleConfigDialog = new GlyphScaleConfigDialog(histoView->getGlMainWidget());
   }
 
   histoXAxis = histoView->getDetailedHistogram()->getXAxis();
   GlQuantitativeAxis *histoYAxis = histoView->getDetailedHistogram()->getYAxis();
 
-  if (histoXAxis == NULL || histoYAxis == NULL) {
+  if (histoXAxis == nullptr || histoYAxis == nullptr) {
     return;
   }
 
   Coord curveStartPoint(histoXAxis->getAxisBaseCoord());
 
-  if (curve == NULL || lastXAxisLength != histoXAxis->getAxisLength()) {
+  if (curve == nullptr || lastXAxisLength != histoXAxis->getAxisLength()) {
     Coord curveEndPoint(histoXAxis->getAxisBaseCoord().getX() + histoXAxis->getAxisLength(), histoYAxis->getAxisBaseCoord().getY() + histoYAxis->getAxisLength(), 0);
 
-    if (curve != NULL) {
+    if (curve != nullptr) {
       curve->updateSize(curveStartPoint, curveEndPoint);
       updateMapping(histoXAxis, histoView->getDetailedHistogram()->getNbHistogramBins());
     }
@@ -732,13 +732,13 @@ void HistogramMetricMapping::initInteractor() {
     curve->setXAxisScale(histoXAxis);
   }
   else {
-    curve->setXAxisScale(NULL);
+    curve->setXAxisScale(nullptr);
   }
 
   scaleAxisOffset = histoYAxis->getMaxLabelWidth() + scaleWidth;
 
 
-  if (glColorScale == NULL) {
+  if (glColorScale == nullptr) {
     glColorScale = new GlColorScale(colorScale, curveStartPoint - Coord(scaleAxisOffset,0,0), histoYAxis->getAxisLength(), scaleWidth, GlColorScale::Vertical);
   }
   else {
@@ -750,7 +750,7 @@ void HistogramMetricMapping::initInteractor() {
     }
   }
 
-  if (glSizeScale == NULL) {
+  if (glSizeScale == nullptr) {
     glSizeScale = new GlSizeScale(sizeScaleConfigDialog->getMinSize(), sizeScaleConfigDialog->getMaxSize(), curveStartPoint - Coord(scaleAxisOffset,0,0), histoYAxis->getAxisLength(), scaleWidth, Color(0,0,0), GlSizeScale::Vertical);
   }
   else {
@@ -764,7 +764,7 @@ void HistogramMetricMapping::initInteractor() {
     glSizeScale->setColor(histoXAxis->getAxisColor());
   }
 
-  if (glGlyphScale == NULL) {
+  if (glGlyphScale == nullptr) {
     glGlyphScale = new GlGlyphScale(curveStartPoint - Coord(histoYAxis->getMaxLabelWidth(),0,0), histoYAxis->getAxisLength(), GlGlyphScale::Vertical);
     glGlyphScale->setGlyphsList(glyphScaleConfigDialog->getSelectedGlyphsId());
   }
@@ -808,13 +808,13 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       Coord *anchor = curve->getCurveAnchorAtPointIfAny(glWidget->screenToViewport(Coord(me->x(), glWidget->height() - me->y(), 0)), &glWidget->getScene()->getLayer("Main")->getCamera());
       bool pointerColorScale = pointerUnderScale(sceneCoords);
 
-      if (selectedAnchor != NULL) {
+      if (selectedAnchor != nullptr) {
         delete selectedAnchor;
       }
 
       selectedAnchor = anchor;
 
-      if (selectedAnchor != NULL) {
+      if (selectedAnchor != nullptr) {
         glWidget->setCursor(QCursor(Qt::OpenHandCursor));
       }
       else if (pointerColorScale) {
@@ -824,7 +824,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
         glWidget->setCursor(QCursor(Qt::ArrowCursor));
       }
     }
-    else if (selectedAnchor != NULL) {
+    else if (selectedAnchor != nullptr) {
       Coord newAnchorCord(curve->translateCurveAnchorToPoint(*selectedAnchor, sceneCoords));
       delete selectedAnchor;
       selectedAnchor = new Coord(newAnchorCord);
@@ -835,12 +835,12 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
     ret = true;
   }
   else if (e->type() == QEvent::MouseButtonDblClick) {
-    if (selectedAnchor != NULL) {
+    if (selectedAnchor != nullptr) {
       curve->removeCurveAnchor(*selectedAnchor);
       updateGraphWithMapping(histoView->histoGraph(), histoView->getDetailedHistogram()->getHistogramLayout());
       updateMapping(histoXAxis, histoView->getDetailedHistogram()->getNbHistogramBins());
       delete selectedAnchor;
-      selectedAnchor = NULL;
+      selectedAnchor = nullptr;
     }
     else {
       QMouseEvent *me = (QMouseEvent *) e;
@@ -880,7 +880,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
   else if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent *me = (QMouseEvent *) e;
 
-    if (me->buttons() == Qt::LeftButton && selectedAnchor != NULL) {
+    if (me->buttons() == Qt::LeftButton && selectedAnchor != nullptr) {
       curveDragStarted = true;
       glWidget->setCursor(QCursor(Qt::ClosedHandCursor));
     }
@@ -976,7 +976,7 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
 }
 
 bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
-  if (curve != NULL) {
+  if (curve != nullptr) {
     Camera &camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
     camera.initGl();
     float xStart = 0, yEnd = 0;
@@ -986,7 +986,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
       glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
       glColorScale->draw(0, &camera);
 
-      if (mappinqPolyQuad != NULL) {
+      if (mappinqPolyQuad != nullptr) {
         mappinqPolyQuad->draw(0, &camera);
       }
 
@@ -996,7 +996,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
     else if (mappingType == SIZE_MAPPING) {
       glSizeScale->draw(0, &camera);
 
-      if (mappinqPolyQuad != NULL) {
+      if (mappinqPolyQuad != nullptr) {
         mappinqPolyQuad->draw(0, &camera);
       }
 
@@ -1042,7 +1042,7 @@ bool HistogramMetricMapping::draw(GlMainWidget *glMainWidget) {
 }
 
 bool HistogramMetricMapping::pointerUnderScale(const Coord &sceneCoords) {
-  GlSimpleEntity *scale = NULL;
+  GlSimpleEntity *scale = nullptr;
 
   if (mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) {
     scale = glColorScale;
@@ -1054,7 +1054,7 @@ bool HistogramMetricMapping::pointerUnderScale(const Coord &sceneCoords) {
     scale = glGlyphScale;
   }
 
-  if (scale == NULL) {
+  if (scale == nullptr) {
     return false;
   }
   else {
@@ -1075,7 +1075,7 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
   }
 
   node n;
-  ColorProperty *graphColors = NULL;
+  ColorProperty *graphColors = nullptr;
 
   if (mappingType == VIEWCOLOR_MAPPING) {
     graphColors = graph->getProperty<ColorProperty>("viewColor");
@@ -1150,9 +1150,9 @@ void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty
 }
 
 void HistogramMetricMapping::updateMapping(GlQuantitativeAxis *histoXAxis, unsigned int nbHistogramBins) {
-  if (mappinqPolyQuad != NULL) {
+  if (mappinqPolyQuad != nullptr) {
     delete mappinqPolyQuad;
-    mappinqPolyQuad = NULL;
+    mappinqPolyQuad = nullptr;
   }
 
   if (mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING || mappingType == SIZE_MAPPING) {

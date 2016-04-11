@@ -40,7 +40,7 @@ associated to a view.
 
 %MethodCode
     if (tlp::PluginLister::instance()->pluginExists<tlp::Interactor>(*a0)) {
-        sipRes = tlp::PluginLister::instance()->getPluginObject<tlp::Interactor>(*a0, NULL);
+        sipRes = tlp::PluginLister::instance()->getPluginObject<tlp::Interactor>(*a0, nullptr);
     } else {
         sipIsErr = 1;
         std::ostringstream oss;

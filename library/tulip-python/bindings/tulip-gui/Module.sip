@@ -27,7 +27,7 @@ bool initQt = true;
 // special case for PPA build, otherwise Python documentation is not generated
 #if defined(__linux)
 char *display = getenv("DISPLAY");
-initQt = (display != NULL);
+initQt = (display != nullptr);
 #endif
 
 // If there is no QApplication instance, it means that we are working from the classical Python shell

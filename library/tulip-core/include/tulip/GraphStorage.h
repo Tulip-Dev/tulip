@@ -294,7 +294,7 @@ public:
    * is cleared before adding nodes
    * @complexity: o(1)
    */
-  void addNodes(unsigned int nb, std::vector<node>* addedNodes = NULL);
+  void addNodes(unsigned int nb, std::vector<node>* addedNodes = nullptr);
   //=======================================================
   /**
    * @brief Add the given nodes in the structure
@@ -350,7 +350,7 @@ public:
    * these structures will be devalidated.
    */
   void addEdges(const std::vector<std::pair<node, node> >& edges,
-                std::vector<edge>* addedEdges = NULL);
+                std::vector<edge>* addedEdges = nullptr);
   //=======================================================
   /**
    * @brief restore edges in the structure and returns them

@@ -32,7 +32,7 @@ using namespace tlp;
 using namespace std;
 
 PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent)
-  : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(NULL), _currentItem(QString::null) {
+  : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(nullptr), _currentItem(QString::null) {
   _ui->setupUi(this);
   connect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
   _ui->graphCombo->setModel(_model);
@@ -70,7 +70,7 @@ tlp::View* PanelSelectionWizard::panel() const {
 }
 
 void PanelSelectionWizard::createView() {
-  _view = PluginLister::instance()->getPluginObject<View>(_currentItem.toStdString(),NULL);
+  _view = PluginLister::instance()->getPluginObject<View>(_currentItem.toStdString(),nullptr);
   _view->setupUi();
   _view->setGraph(graph());
   _view->setState(DataSet());
@@ -78,7 +78,7 @@ void PanelSelectionWizard::createView() {
 
 void PanelSelectionWizard::clearView() {
   delete _view;
-  _view = NULL;
+  _view = nullptr;
 
   foreach(int id, pageIds()) {
     if (id == startId() || id == currentId())
@@ -93,7 +93,7 @@ void PanelSelectionWizard::clearView() {
 }
 
 void PanelSelectionWizard::done(int result) {
-  if (result == QDialog::Accepted && _view == NULL) {
+  if (result == QDialog::Accepted && _view == nullptr) {
     createView();
   }
   else if (result == QDialog::Rejected) {

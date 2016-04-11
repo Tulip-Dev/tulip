@@ -23,7 +23,7 @@ template<class T>
 class DynamicVector {
 public:
   DynamicVector() :
-    array(NULL), size(0) {
+    array(nullptr), size(0) {
   }
 
   DynamicVector(const DynamicVector<T>& vect) {

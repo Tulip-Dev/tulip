@@ -233,8 +233,8 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
 
 PLUGIN(PythonScriptView)
 
-PythonScriptView::PythonScriptView(tlp::PluginContext *) : _viewWidget(NULL), _pythonInterpreter(PythonInterpreter::getInstance()),
-  _graph(NULL), _scriptStopped(false), _runningScript(false) {
+PythonScriptView::PythonScriptView(tlp::PluginContext *) : _viewWidget(nullptr), _pythonInterpreter(PythonInterpreter::getInstance()),
+  _graph(nullptr), _scriptStopped(false), _runningScript(false) {
 }
 
 PythonScriptView::~PythonScriptView() {}
@@ -605,7 +605,7 @@ void PythonScriptView::newScript() {
 }
 
 void PythonScriptView::loadScript() {
-  QString fileName = QFileDialog::getOpenFileName(NULL, "Open Main Script","", "Python script (*.py)");
+  QString fileName = QFileDialog::getOpenFileName(nullptr, "Open Main Script","", "Python script (*.py)");
   loadScript(fileName);
 }
 
@@ -655,7 +655,7 @@ void PythonScriptView::saveScript(int tabIdx, bool clear) {
         dir = tabText;
       }
 
-      fileName = QFileDialog::getSaveFileName(NULL, tr("Save Main Script"),dir,"Python script (*.py)");
+      fileName = QFileDialog::getSaveFileName(nullptr, tr("Save Main Script"),dir,"Python script (*.py)");
     }
     else
       fileName = mainScriptFileName;
@@ -765,7 +765,7 @@ QString PythonScriptView::findFile(const QString &filePath) {
 
 
 void PythonScriptView::loadModule() {
-  QString fileName = QFileDialog::getOpenFileName(NULL, "Open Module","", "Python script (*.py)");
+  QString fileName = QFileDialog::getOpenFileName(nullptr, "Open Module","", "Python script (*.py)");
   loadModule(fileName);
 }
 
@@ -808,7 +808,7 @@ bool PythonScriptView::loadModuleFromSrcCode(const QString &moduleName, const QS
 }
 
 void PythonScriptView::newFileModule() {
-  QString fileName = QFileDialog::getSaveFileName(NULL, tr("Set Module filename"),"","Python script (*.py)");
+  QString fileName = QFileDialog::getSaveFileName(nullptr, tr("Set Module filename"),"","Python script (*.py)");
 
   if (fileName.isEmpty())
     return;
@@ -836,7 +836,7 @@ void PythonScriptView::newFileModule() {
 
 void PythonScriptView::newStringModule() {
   bool ok;
-  QString moduleName = QInputDialog::getText(NULL, "New string module  ", "module name :", QLineEdit::Normal,"", &ok);
+  QString moduleName = QInputDialog::getText(nullptr, "New string module  ", "module name :", QLineEdit::Normal,"", &ok);
 
   if (ok && !moduleName.isEmpty()) {
 

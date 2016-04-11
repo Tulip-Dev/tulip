@@ -75,12 +75,12 @@ Returns :const:`True` if the edge is a valid one, meaning it is attached to a gr
 
   SIP_PYOBJECT __copy__() const;
 %MethodCode
-  sipRes = sipConvertFromNewType(new tlp::edge(sipCpp->id), sipFindType("tlp::edge"), NULL);
+  sipRes = sipConvertFromNewType(new tlp::edge(sipCpp->id), sipFindType("tlp::edge"), nullptr);
 %End
 
   SIP_PYOBJECT __deepcopy__(SIP_PYOBJECT) const;
 %MethodCode
-  sipRes = sipConvertFromNewType(new tlp::edge(sipCpp->id), sipFindType("tlp::edge"), NULL);
+  sipRes = sipConvertFromNewType(new tlp::edge(sipCpp->id), sipFindType("tlp::edge"), nullptr);
 %End
 };
 };

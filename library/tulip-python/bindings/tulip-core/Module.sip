@@ -111,7 +111,7 @@ bool canGetProperty(const tlp::Graph *graph, const std::string &propName) {
   if (!graph->existProperty(propName)) {
     return true;
   }
-  return dynamic_cast<PROP*>(graph->getProperty(propName)) != NULL;
+  return dynamic_cast<PROP*>(graph->getProperty(propName)) != nullptr;
 }
 
 extern int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n);

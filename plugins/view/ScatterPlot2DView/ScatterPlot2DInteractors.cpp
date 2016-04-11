@@ -84,7 +84,7 @@ void ScatterPlot2DInteractorTrendLine::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),optionsWidget(NULL) {
+ScatterPlot2DInteractorCorrelCoeffSelector::ScatterPlot2DInteractorCorrelCoeffSelector(const tlp::PluginContext *) : ScatterPlot2DInteractor(":/tulip/gui/icons/i_magic.png", "Correlation Coefficient Selector"),optionsWidget(nullptr) {
   setPriority(StandardInteractorPriority::ViewInteractor2);
 }
 
@@ -109,7 +109,7 @@ class ScatterPlot2DMouseShowElementInfos : public MouseShowElementInfos {
   ScatterPlot2DView* scp2DView;
 public:
   ScatterPlot2DMouseShowElementInfos()
-    :MouseShowElementInfos(), scp2DView(NULL) {}
+    :MouseShowElementInfos(), scp2DView(nullptr) {}
   ~ScatterPlot2DMouseShowElementInfos() {}
 
 

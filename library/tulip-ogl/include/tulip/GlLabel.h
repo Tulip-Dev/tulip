@@ -193,7 +193,7 @@ public :
   /**
    * @brief Set the stencil and draw the Label, this function is usefull when we directly call draw without tulip engine
    */
-  void drawWithStencil(float lod,Camera *camera=NULL);
+  void drawWithStencil(float lod,Camera *camera=nullptr);
 
   /**
    * @brief Return the height of the label after scaling in  size box
@@ -203,7 +203,7 @@ public :
   /**
    * @brief Draw the Label
    */
-  virtual void draw(float, Camera *camera=NULL);
+  virtual void draw(float, Camera *camera=nullptr);
 
   /**
    * @brief Translate entity
@@ -254,7 +254,7 @@ public :
 
   /**
    * @brief Set the occlusion tester
-   * If occlusionTester is NULL : deactivate occlusion test
+   * If occlusionTester is nullptr : deactivate occlusion test
    */
   virtual void setOcclusionTester(OcclusionTest *tester) {
     occlusionTester=tester;

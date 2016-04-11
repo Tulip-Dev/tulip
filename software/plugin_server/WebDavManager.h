@@ -95,7 +95,7 @@ private:
 
   QUrl initUrl(const QString& dest);
 
-  QNetworkRequest initRequest(const QString & destination, QIODevice* data = NULL, QVariant mimetype = QVariant("binary/octet-stream"));
+  QNetworkRequest initRequest(const QString & destination, QIODevice* data = nullptr, QVariant mimetype = QVariant("binary/octet-stream"));
 
   QString _host;
   QString _url;

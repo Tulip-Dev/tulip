@@ -48,9 +48,9 @@ public:
   * @param context The context this import plug-in runs into.
   **/
   ImportModule (const tlp::PluginContext* context) {
-    if(context != NULL) {
+    if(context != nullptr) {
       const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
-      assert(algoritmContext != NULL);
+      assert(algoritmContext != nullptr);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
       dataSet = algoritmContext->dataSet;

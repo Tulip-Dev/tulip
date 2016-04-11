@@ -81,7 +81,7 @@ public:
   /**
    * Create the inputData with Graph : graph and GlGraphRenderingParameters : parameters
    */
-  GlGraphInputData(Graph* graph, GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer = NULL);
+  GlGraphInputData(Graph* graph, GlGraphRenderingParameters* parameters,GlMetaNodeRenderer *renderer = nullptr);
 
   ~GlGraphInputData();
 
@@ -136,7 +136,7 @@ public:
     if (it != _propertiesNameMap.end())
       return _propertiesMap[it->second];
 
-    return NULL;
+    return nullptr;
   }
 
   /**

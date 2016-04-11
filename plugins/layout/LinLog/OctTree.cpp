@@ -43,8 +43,8 @@ OctTree::OctTree (tlp::node _node,
   linLogWeight = _linLogWeight;
   MAX_DEPTH = 8;
   MAX_CHILDREN = 8;
-  //node = NULL;
-  //if(_node != NULL)
+  //node = nullptr;
+  //if(_node != nullptr)
   node = _node;
   isLeaf = true;
 
@@ -54,16 +54,16 @@ OctTree::OctTree (tlp::node _node,
 
   //childrenSize = 0;
   childCount = 0;
-  _children = NULL; //new OctTree*[8]; //init à NULL?
+  _children = nullptr; //new OctTree*[8]; //init à nullptr?
   this->weight = 0.0;
 
   /*
     for(int i=0;i<8;++i)
     {
-    _children[i] = NULL;
+    _children[i] = nullptr;
     }
   */
-  // if (_node != NULL)
+  // if (_node != nullptr)
   // {
   if(!firstNode)
     this->weight = linLogWeight->getNodeValue(_node);
@@ -78,17 +78,17 @@ OctTree::OctTree (tlp::node _node,
  */
 OctTree::~OctTree () {
   //std::cerr<<"deletion of an octtree\n";
-  if (_children!=NULL) {
+  if (_children!=nullptr) {
 
     for (unsigned int i=0; i<MAX_CHILDREN; ++i) {
-      if(_children[i]!=NULL)
+      if(_children[i]!=nullptr)
         delete _children[i];
 
-      _children[i] = NULL;
+      _children[i] = nullptr;
     }
 
     delete[] _children;
-    _children = NULL;
+    _children = nullptr;
   }
 }
 
@@ -120,7 +120,7 @@ OctTree::addNode (tlp::node newNode,
   }
 
   /*
-  if(newNode == NULL)
+  if(newNode == nullptr)
   {
   std::cerr<<"assert: adding a null node\n";
   return;
@@ -135,14 +135,14 @@ OctTree::addNode (tlp::node newNode,
   }
 
   //on passe de feuille a branche
-  //if (node != NULL)
+  //if (node != nullptr)
   //{
   if (isLeaf) {
     addNode2 (node, position, depth); //!depth
     isLeaf = false;
   }
 
-  //  node = NULL;
+  //  node = nullptr;
   //}
 
   for (int d = 0; d < 3; ++d) {
@@ -191,17 +191,17 @@ OctTree::addNode2 (tlp::node newNode,
       }
 
       for (unsigned int i=MAX_CHILDREN; i<MAX_CHILDREN*2; ++i) {
-        _children[i] = NULL;
+        _children[i] = nullptr;
       }
 
       MAX_CHILDREN *= 2;
     }
 
-    if (childCount == 0 || _children == NULL) {
+    if (childCount == 0 || _children == nullptr) {
       _children = new OctTree*[MAX_CHILDREN];
 
       for (unsigned int i = 0; i<MAX_CHILDREN; ++i)
-        _children[i] = NULL;
+        _children[i] = nullptr;
     }
 
     _children[childCount++] = new OctTree(newNode, newPos, newPos, newPos,linLogWeight, false);
@@ -218,15 +218,15 @@ OctTree::addNode2 (tlp::node newNode,
     }
   }
 
-  if (childCount == 0 || _children == NULL) {
+  if (childCount == 0 || _children == nullptr) {
     _children = new OctTree*[MAX_CHILDREN];
 
     for (unsigned int i = 0; i<MAX_CHILDREN; ++i)
-      _children[i] = NULL;
+      _children[i] = nullptr;
   }
 
   //si la place est vide
-  if (_children[childIndex] == NULL) {
+  if (_children[childIndex] == nullptr) {
 
     Coord newMinPos;
     Coord newMaxPos;
@@ -265,9 +265,9 @@ void OctTree::printTree (unsigned int depth) {
 
   std::cerr<<"[d("<<depth<<"),w("<<weight<<"),n("<<node.id<<"),l("<<isLeaf<<"),p("<<position[0]<<","<<position[1]<<","<<position[2]<<"),";
 
-  if(_children!=NULL) {
+  if(_children!=nullptr) {
     for (unsigned int i=0; i<MAX_CHILDREN; ++i) {
-      if(_children[i] ==NULL) {
+      if(_children[i] ==nullptr) {
         std::cerr<<"X,";
       }
       else {
@@ -276,7 +276,7 @@ void OctTree::printTree (unsigned int depth) {
     }
 
     for (unsigned int i=0; i<MAX_CHILDREN; ++i)
-      if(_children[i] !=NULL)
+      if(_children[i] !=nullptr)
         if (depth < MAX_DEPTH)
           _children[i]->printTree(depth+1);
 
@@ -299,15 +299,15 @@ void OctTree::removeNode (tlp::node oldNode,
   //std::cerr<<"depth: "<<depth<<"\n";
 
   /*
-    if(_children!=NULL)
+    if(_children!=nullptr)
     {
     std::cerr<<"[";
 
     for (int i=0; i<MAX_CHILDREN; ++i)
     {
-    if(_children[i] ==NULL)
+    if(_children[i] ==nullptr)
     {
-    std::cerr<<" NULL |";
+    std::cerr<<" nullptr |";
     }
     else
     std::cerr<<" "<<_children[i]<<" |";
@@ -330,15 +330,15 @@ void OctTree::removeNode (tlp::node oldNode,
 
   if (weight <= onWeight) {
     weight = 0.0;
-    //    node = NULL;
+    //    node = nullptr;
 
     for (unsigned int i = 0; i < childCount; ++i) {
       delete _children[i];
-      _children[i] = NULL;
+      _children[i] = nullptr;
     }
 
     delete[] _children;
-    _children = NULL;
+    _children = nullptr;
 
     childCount = 0;
     return;
@@ -368,13 +368,13 @@ void OctTree::removeNode (tlp::node oldNode,
 
       while (endwhile == false) {
         if(childIndex < MAX_CHILDREN) {
-          if (_children[childIndex] == NULL) {
+          if (_children[childIndex] == nullptr) {
             std::cerr<<"this part of the tree is null\n";
             childIndex++;
           }
-          /*          else if ((_children[childIndex])->node == NULL || oldNode == NULL)
+          /*          else if ((_children[childIndex])->node == nullptr || oldNode == nullptr)
                 {
-                //std::cerr<<"this tree node or the searched one is NULL: "<<oldNode<<" and "<<(_children[childIndex])->node<<"\n";
+                //std::cerr<<"this tree node or the searched one is nullptr: "<<oldNode<<" and "<<(_children[childIndex])->node<<"\n";
                 childIndex++;
                 }
           */
@@ -407,14 +407,14 @@ void OctTree::removeNode (tlp::node oldNode,
       */
 
       delete _children[childIndex];
-      _children[childIndex] = NULL;
+      _children[childIndex] = nullptr;
 
       for (unsigned int i = childIndex; i < childCount-1; ++i) {
         _children[i] = _children[i+1];
       }
 
       //delete _children[childCount];
-      _children[childCount-1] = NULL; //delete
+      _children[childCount-1] = nullptr; //delete
 
       --childCount;
 
@@ -434,18 +434,18 @@ void OctTree::removeNode (tlp::node oldNode,
       }
     }
 
-    if(_children[childIndex]!=NULL) {
+    if(_children[childIndex]!=nullptr) {
 
       _children[childIndex]->removeNode(oldNode, oldPos, depth+1);
 
       if (_children[childIndex]->weight == 0.0) {
         delete _children[childIndex];
-        _children[childIndex] = NULL;
+        _children[childIndex] = nullptr;
         --childCount;
       }
     }
     else {
-      std::cerr<<"assert: the selected child it is not supposed to be NULL!\n";
+      std::cerr<<"assert: the selected child it is not supposed to be nullptr!\n";
       return;
     }
   }
@@ -480,7 +480,7 @@ OctTree::getHeight () {
   for (unsigned int i=0; i<childCount; ++i) {
     OctTree* aChild = _children[i];
 
-    if (aChild != NULL) {
+    if (aChild != nullptr) {
       height = std::max(height, aChild->getHeight());
     }
   }

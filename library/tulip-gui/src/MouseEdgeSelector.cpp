@@ -60,7 +60,7 @@ bool MouseEdgeSelector::eventFilter(QObject *widget, QEvent *e) {
       }
       else {
         if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
-          graph = NULL;
+          graph = nullptr;
           started = false;
           return false;
         }
@@ -172,7 +172,7 @@ bool MouseEdgeSelector::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
 
   if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
-    graph = NULL;
+    graph = nullptr;
     started = false;
   }
 

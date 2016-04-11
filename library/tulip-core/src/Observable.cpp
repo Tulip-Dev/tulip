@@ -180,7 +180,7 @@ Observable* Event::sender() const {
 class NoObservableIterator : public Iterator<Observable *> {
 public:
   Observable* next() {
-    return NULL;
+    return nullptr;
   }
   bool hasNext() {
     return false;
@@ -405,13 +405,13 @@ void Observable::addOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) con
 }
 //----------------------------------------
 void Observable::addObserver(Observable * const observer) const {
-  assert(observer != NULL);
+  assert(observer != nullptr);
   queuedEvent = false;
   addOnlooker(*observer, OBSERVER);
 }
 //----------------------------------------
 void Observable::addListener(Observable * const listener) const {
-  assert(listener != NULL);
+  assert(listener != nullptr);
   addOnlooker(*listener, LISTENER);
 }
 //----------------------------------------
@@ -463,7 +463,7 @@ void Observable::sendEvent(const Event &message) {
 
     if (_oAlive[src]) {
       Observable *obs = _oPointer[src];
-      assert(obs != NULL);
+      assert(obs != nullptr);
 
       if ((_oType[e] & OBSERVER) && (message.type() != Event::TLP_INFORMATION)) {
         if (_oHoldCounter == 0  || message.type() == Event::TLP_DELETE) {
@@ -621,12 +621,12 @@ void Observable::removeOnlooker(const Observable &obs, OBSERVABLEEDGETYPE type) 
 }
 //----------------------------------------
 void Observable::removeObserver(Observable  * const observerver) const {
-  assert(observerver != NULL);
+  assert(observerver != nullptr);
   removeOnlooker(*observerver, OBSERVER);
 }
 //----------------------------------------
 void Observable::removeListener(Observable  * const listener) const {
-  assert(listener != NULL);
+  assert(listener != nullptr);
   removeOnlooker(*listener, LISTENER);
 }
 //----------------------------------------

@@ -63,18 +63,18 @@ EqualValueClustering::EqualValueClustering(tlp::PluginContext* context):Algorith
 }
 //===============================================================================
 bool EqualValueClustering::run() {
-  PropertyInterface *property=NULL;
+  PropertyInterface *property=nullptr;
   StringCollection eltTypes(ELT_TYPES);
   bool connected = false;
   eltTypes.setCurrent(0);
 
-  if (dataSet!=NULL) {
+  if (dataSet!=nullptr) {
     dataSet->get("Property", property);
     dataSet->get(ELT_TYPE, eltTypes);
     dataSet->get("Connected", connected);
   }
 
-  if (property == NULL)
+  if (property == nullptr)
     property = graph->getProperty("viewMetric");
 
   const bool onNodes = eltTypes.getCurrent() == NODE_ELT;

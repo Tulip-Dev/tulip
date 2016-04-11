@@ -43,7 +43,7 @@ class PropertyInterface;
 class TLP_QT_SCOPE RenamePropertyDialog : public QDialog {
   Q_OBJECT
 public:
-  RenamePropertyDialog(QWidget *parent = NULL);
+  RenamePropertyDialog(QWidget *parent = nullptr);
   ~RenamePropertyDialog();
 
   /**
@@ -54,7 +54,7 @@ public:
     * @param toRenameProp The property to rename.
     **/
   static bool renameProperty(tlp::PropertyInterface* toRenameProp,
-                             QWidget* parent=NULL);
+                             QWidget* parent=nullptr);
 
 private:
   Ui::RenamePropertyDialogData *ui;

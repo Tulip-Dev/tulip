@@ -82,7 +82,7 @@ public:
   }
 };
 
-static MemoryChecker* memory_checker = NULL;
+static MemoryChecker* memory_checker = nullptr;
 static bool block_inserts = false;
 
 void memchecker_insert_stack(void* ptr,char** strings, size_t size) {

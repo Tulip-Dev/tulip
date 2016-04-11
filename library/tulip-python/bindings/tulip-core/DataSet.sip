@@ -24,20 +24,20 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-extern PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict = NULL);
-extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *refDataSet=NULL, const std::string &algoName = "");
-extern bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &entry, PyObject *value, tlp::DataType *refDataType = NULL, const std::string &algoName = "");
+extern PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict = nullptr);
+extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *refDataSet=nullptr, const std::string &algoName = "");
+extern bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &entry, PyObject *value, tlp::DataType *refDataType = nullptr, const std::string &algoName = "");
 %End
 
 %ModuleCode
 PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict) {
   if (!dict) dict = PyDict_New();
   for(const std::pair<std::string, tlp::DataType*> &entry : dataSet.getValues()) {
-    PyObject *key = sipConvertFromNewType(new std::string(entry.first), sipFindType("std::string"), NULL);
-    PyObject *val = NULL;
+    PyObject *key = sipConvertFromNewType(new std::string(entry.first), sipFindType("std::string"), nullptr);
+    PyObject *val = nullptr;
     if (entry.second->getTypeName() == std::string(typeid(tlp::StringCollection).name())) {
       tlp::StringCollection *sc = reinterpret_cast<tlp::StringCollection*>(entry.second->value);
-      val = sipConvertFromNewType(new std::string(sc->getCurrentString()), sipFindType("std::string"), NULL);
+      val = sipConvertFromNewType(new std::string(sc->getCurrentString()), sipFindType("std::string"), nullptr);
     } else {
       val = getPyObjectFromDataType(entry.second);
     }
@@ -47,8 +47,8 @@ PyObject* convertTlpDataSetToPyDict(const tlp::DataSet &dataSet, PyObject *dict)
 }
 
 extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *refDataSet, const std::string &algoName) {
-  PyObject *key = NULL;
-  PyObject *val = NULL;
+  PyObject *key = nullptr;
+  PyObject *val = nullptr;
   Py_ssize_t pos = 0;
   int state=0, err=0;
   tlp::DataSet *ret = new tlp::DataSet();
@@ -57,13 +57,13 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
   }
   while (PyDict_Next(dict, &pos, &key, &val)) {
     std::string *keyStr = reinterpret_cast<std::string*>(sipConvertToType(key, sipFindType("std::string"), Py_None, SIP_NOT_NONE, &state, &err));
-    tlp::DataType *dataType = NULL;
+    tlp::DataType *dataType = nullptr;
     if (refDataSet) {
       dataType = refDataSet->getData(*keyStr);
     }
     if (!setDataSetEntryFromPyObject(ret, *keyStr, val, dataType, algoName)) {
       delete ret;
-      ret = NULL;
+      ret = nullptr;
       break;
     }
   }
@@ -72,7 +72,7 @@ extern tlp::DataSet* convertPyDictToTlpDataSet(PyObject *dict, tlp::DataSet *ref
 
 bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, PyObject *value, tlp::DataType *refDataType, const std::string &algoName) {
   bool ret = true;
-  tlp::DataType* dataType = NULL;
+  tlp::DataType* dataType = nullptr;
   if (refDataType) {
     dataType = refDataType;
   }
@@ -142,11 +142,11 @@ struct DataSet {
 
 %ConvertToTypeCode
 
-  PyObject *key = NULL;
-  PyObject *val = NULL;
+  PyObject *key = nullptr;
+  PyObject *val = nullptr;
   Py_ssize_t pos = 0;
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (sipCanConvertToType(sipPy, sipFindType("tlp::DataSet"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
       return 1;
     } else if (PyDict_Check(sipPy)) {
@@ -290,9 +290,9 @@ Returns the list of keys associated to the values stored in the data set.
 
   SIP_PYOBJECT __getitem__(const std::string &attributeName);
 %MethodCode
-  sipRes = NULL;
+  sipRes = nullptr;
   tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = sipCpp->getValues();
-  tlp::DataType* dataType = NULL;
+  tlp::DataType* dataType = nullptr;
   while (it->hasNext()) {
     std::pair<std::string, tlp::DataType*> p = it->next();
     if (p.first == *a0) {

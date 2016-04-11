@@ -68,7 +68,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 
   QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if(qMouseEv != NULL) {
+  if(qMouseEv != nullptr) {
     GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
     assert(glMainView);
     SelectedEntity selectedEntity;
@@ -139,8 +139,8 @@ bool MouseShowElementInfos::pick(int x, int y, SelectedEntity &selectedEntity) {
 }
 
 void MouseShowElementInfos::viewChanged(View * view) {
-  if (view == NULL) {
-    _view = NULL;
+  if (view == nullptr) {
+    _view = nullptr;
     return;
   }
 

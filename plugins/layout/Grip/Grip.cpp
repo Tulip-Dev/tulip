@@ -40,7 +40,7 @@ static const char * paramHelp[] = {
 
 //======================================================
 Grip::Grip(const tlp::PluginContext *context) : LayoutAlgorithm(context),
-  misf(NULL), edgeLength(0), level(0), currentGraph(NULL), _dim(0) {
+  misf(nullptr), edgeLength(0), level(0), currentGraph(nullptr), _dim(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
   addDependency("Connected Component", "1.0");
   addDependency("Equal Value", "1.1");
@@ -52,7 +52,7 @@ Grip::~Grip() {}
 bool Grip::run() {
   bool is3D = false;
 
-  if(dataSet != NULL) {
+  if(dataSet != nullptr) {
     if(!dataSet->get("3D layout", is3D))
       is3D = false;
   }
@@ -150,7 +150,7 @@ bool Grip::run() {
     LayoutProperty layout(graph);
     tmp.set("coordinates", result);
     graph->applyPropertyAlgorithm("Connected Component Packing",&layout,
-                                  err,NULL,&tmp);
+                                  err,nullptr,&tmp);
     Iterator<node> *itN = graph->getNodes();
 
     while(itN->hasNext()) {

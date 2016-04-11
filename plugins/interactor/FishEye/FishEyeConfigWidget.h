@@ -34,7 +34,7 @@ class FishEyeConfigWidget : public QWidget {
 
 public :
 
-  FishEyeConfigWidget(QWidget *parent = NULL);
+  FishEyeConfigWidget(QWidget *parent = nullptr);
   ~FishEyeConfigWidget();
 
   int getFishEyeType() const;

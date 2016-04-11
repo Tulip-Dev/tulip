@@ -142,7 +142,7 @@ const char * paramHelp[] = {
 };
 }
 //==============================================================================================================
-LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context), metric(NULL) {
+LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context), metric(nullptr) {
   addInParameter<NumericProperty*>("metric", paramHelp[0],"",false);
   addInParameter<bool>("Group isthmus", paramHelp[1],"true",true);
   addInParameter<unsigned int>("Number of steps",paramHelp[2],"200",true);
@@ -156,7 +156,7 @@ bool LinkCommunities::run() {
   omp_set_num_threads(omp_get_num_procs());
 #endif
 
-  metric = NULL;
+  metric = nullptr;
   bool group_isthmus = true;
   unsigned int nb_steps = 200;
 
@@ -240,7 +240,7 @@ void LinkCommunities::createDualGraph() {
 }
 //==============================================================================================================
 void LinkCommunities::computeSimilarities() {
-  if(metric == NULL) {
+  if(metric == nullptr) {
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif

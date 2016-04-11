@@ -115,7 +115,7 @@ int main(int argc, char** argv) {
   // Initialize the library and load all plugins
   tlp::initTulipSoftware();
 
-  Graph* g = NULL;
+  Graph* g = nullptr;
   if(QApplication::arguments().size()==2) {
       // Load the file passed as first argument into a graph.
       // This method will select the default Tulip algorithm plugin (TLP)
@@ -134,7 +134,7 @@ int main(int argc, char** argv) {
   }
 
   // Creates the main widget that will display our graph
-  GlMainWidget* mainWidget = new GlMainWidget(NULL);
+  GlMainWidget* mainWidget = new GlMainWidget(nullptr);
 
   // Adds a layer to the scene
   GlLayer* mainLayer = mainWidget->getScene()->createLayer("Main");

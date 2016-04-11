@@ -30,7 +30,7 @@ using namespace std;
 */
 template <class T>
 PairingHeap<T>::PairingHeap( bool (*lessThan)(T const &lhs, T const &rhs) ) {
-  root = NULL;
+  root = nullptr;
   counter=0;
   this->lessThan=lessThan;
 }
@@ -41,7 +41,7 @@ PairingHeap<T>::PairingHeap( bool (*lessThan)(T const &lhs, T const &rhs) ) {
 */
 template <class T>
 PairingHeap<T>::PairingHeap( const PairingHeap<T> & rhs ) {
-  root = NULL;
+  root = nullptr;
   counter=rhs->size();
   *this = rhs;
 }
@@ -63,7 +63,7 @@ PairNode<T> *
 PairingHeap<T>::insert( const T & x ) {
   PairNode<T> *newNode = new PairNode<T>( x );
 
-  if( root == NULL )
+  if( root == nullptr )
     root = newNode;
   else
     compareAndLink( root, newNode );
@@ -97,8 +97,8 @@ void PairingHeap<T>::deleteMin( ) {
 
   PairNode<T> *oldRoot = root;
 
-  if( root->leftChild == NULL )
-    root = NULL;
+  if( root->leftChild == nullptr )
+    root = nullptr;
   else
     root = combineSiblings( root->leftChild );
 
@@ -112,7 +112,7 @@ void PairingHeap<T>::deleteMin( ) {
 */
 template <class T>
 bool PairingHeap<T>::isEmpty( ) const {
-  return root == NULL;
+  return root == nullptr;
 }
 
 /**
@@ -130,7 +130,7 @@ bool PairingHeap<T>::isFull( ) const {
 template <class T>
 void PairingHeap<T>::makeEmpty( ) {
   reclaimMemory( root );
-  root = NULL;
+  root = nullptr;
 }
 
 /**
@@ -153,7 +153,7 @@ PairingHeap<T>::operator=( const PairingHeap<T> & rhs ) {
 */
 template <class T>
 void PairingHeap<T>::reclaimMemory( PairNode<T> * t ) const {
-  if( t != NULL ) {
+  if( t != nullptr ) {
     reclaimMemory( t->leftChild );
     reclaimMemory( t->nextSibling );
     delete t;
@@ -176,7 +176,7 @@ void PairingHeap<T>::decreaseKey( PairNode<T> *p,
   p->element = newVal;
 
   if( p != root ) {
-    if( p->nextSibling != NULL )
+    if( p->nextSibling != nullptr )
       p->nextSibling->prev = p->prev;
 
     if( p->prev->leftChild == p )
@@ -184,7 +184,7 @@ void PairingHeap<T>::decreaseKey( PairNode<T> *p,
     else
       p->prev->nextSibling = p->nextSibling;
 
-    p->nextSibling = NULL;
+    p->nextSibling = nullptr;
     compareAndLink( root, p );
   }
 }
@@ -192,16 +192,16 @@ void PairingHeap<T>::decreaseKey( PairNode<T> *p,
 /**
 * Internal method that is the basic operation to maintain order.
 * Links first and second together to satisfy heap order.
-* first is root of tree 1, which may not be NULL.
-*    first->nextSibling MUST be NULL on entry.
-* second is root of tree 2, which may be NULL.
+* first is root of tree 1, which may not be nullptr.
+*    first->nextSibling MUST be nullptr on entry.
+* second is root of tree 2, which may be nullptr.
 * first becomes the result of the tree merge.
 */
 template <class T>
 void PairingHeap<T>::
 compareAndLink( PairNode<T> * & first,
                 PairNode<T> *second ) const {
-  if( second == NULL )
+  if( second == nullptr )
     return;
 
   if( lessThan(second->element,first->element) ) {
@@ -210,7 +210,7 @@ compareAndLink( PairNode<T> * & first,
     first->prev = second;
     first->nextSibling = second->leftChild;
 
-    if( first->nextSibling != NULL )
+    if( first->nextSibling != nullptr )
       first->nextSibling->prev = first;
 
     second->leftChild = first;
@@ -221,12 +221,12 @@ compareAndLink( PairNode<T> * & first,
     second->prev = first;
     first->nextSibling = second->nextSibling;
 
-    if( first->nextSibling != NULL )
+    if( first->nextSibling != nullptr )
       first->nextSibling->prev = first;
 
     second->nextSibling = first->leftChild;
 
-    if( second->nextSibling != NULL )
+    if( second->nextSibling != nullptr )
       second->nextSibling->prev = second;
 
     first->leftChild = second;
@@ -236,12 +236,12 @@ compareAndLink( PairNode<T> * & first,
 /**
 * Internal method that implements two-pass merging.
 * firstSibling the root of the conglomerate;
-*     assumed not NULL.
+*     assumed not nullptr.
 */
 template <class T>
 PairNode<T> *
 PairingHeap<T>::combineSiblings( PairNode<T> *firstSibling ) const {
-  if( firstSibling->nextSibling == NULL )
+  if( firstSibling->nextSibling == nullptr )
     return firstSibling;
 
   // Allocate the array
@@ -250,19 +250,19 @@ PairingHeap<T>::combineSiblings( PairNode<T> *firstSibling ) const {
   // Store the subtrees in an array
   int numSiblings = 0;
 
-  for( ; firstSibling != NULL; numSiblings++ ) {
+  for( ; firstSibling != nullptr; numSiblings++ ) {
     if( numSiblings == (int)treeArray.size( ) )
       treeArray.resize( numSiblings * 2 );
 
     treeArray[ numSiblings ] = firstSibling;
-    firstSibling->prev->nextSibling = NULL;  // break links
+    firstSibling->prev->nextSibling = nullptr;  // break links
     firstSibling = firstSibling->nextSibling;
   }
 
   if( numSiblings == (int)treeArray.size( ) )
     treeArray.resize( numSiblings + 1 );
 
-  treeArray[ numSiblings ] = NULL;
+  treeArray[ numSiblings ] = nullptr;
 
   // Combine subtrees two at a time, going left to right
   int i = 0;
@@ -292,15 +292,15 @@ PairingHeap<T>::combineSiblings( PairNode<T> *firstSibling ) const {
 template <class T>
 PairNode<T> *
 PairingHeap<T>::clone( PairNode<T> * t ) const {
-  if( t == NULL )
-    return NULL;
+  if( t == nullptr )
+    return nullptr;
   else {
     PairNode<T> *p = new PairNode<T>( t->element );
 
-    if( ( p->leftChild = clone( t->leftChild ) ) != NULL )
+    if( ( p->leftChild = clone( t->leftChild ) ) != nullptr )
       p->leftChild->prev = p;
 
-    if( ( p->nextSibling = clone( t->nextSibling ) ) != NULL )
+    if( ( p->nextSibling = clone( t->nextSibling ) ) != nullptr )
       p->nextSibling->prev = p;
 
     return p;
@@ -310,7 +310,7 @@ template <class T>
 ostream& operator <<(ostream &os, const PairingHeap<T> &b) {
   os<<"Heap:";
 
-  if (b.root != NULL) {
+  if (b.root != nullptr) {
     PairNode<T> *r = b.root;
     list<PairNode<T>*> q;
     q.push_back(r);
@@ -319,11 +319,11 @@ ostream& operator <<(ostream &os, const PairingHeap<T> &b) {
       r = q.front();
       q.pop_front();
 
-      if (r->leftChild != NULL) {
+      if (r->leftChild != nullptr) {
         os << *r->element << ">";
         PairNode<T> *c = r->leftChild;
 
-        while (c != NULL) {
+        while (c != nullptr) {
           q.push_back(c);
           os << "," << *c->element;
           c = c->nextSibling;

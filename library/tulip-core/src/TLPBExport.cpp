@@ -346,7 +346,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write nodes values
       {
         // write nb of non default values
-        size = prop->numberOfNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : NULL);
+        size = prop->numberOfNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : nullptr);
         os.write((char *) &size, sizeof(size));
         // prepare ouput stream
         stringstream vs;
@@ -360,7 +360,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 #else
         std::ostream &s = vs;
 #endif
-        char* vBuf = NULL;
+        char* vBuf = nullptr;
         unsigned int valueSize = prop->nodeValueSize();
 
         if (valueSize && !emscripten) {
@@ -373,7 +373,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // loop on nodes
         unsigned int nbValues = 0;
-        for(node n : prop->getNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : NULL)) {
+        for(node n : prop->getNonDefaultValuatedNodes(rootProps.find(prop) != rootProps.end() ? graph : nullptr)) {
           size = getNode(n).id;
           s.write((char *) &size, sizeof(size));
 
@@ -425,7 +425,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write edges values
       {
         // write nb of non default values
-        size = prop->numberOfNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : NULL);
+        size = prop->numberOfNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : nullptr);
         os.write((char *) &size, sizeof(size));
         // prepare ouput stream
         stringstream vs;
@@ -439,7 +439,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 #else
         ostream &s = vs;
 #endif
-        char* vBuf = NULL;
+        char* vBuf = nullptr;
         unsigned int valueSize = prop->edgeValueSize();
         bool isGraphProperty = false;
 
@@ -457,7 +457,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         // loop on edges
         unsigned int nbValues = 0;
-        for(edge e : prop->getNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : NULL)) {
+        for(edge e : prop->getNonDefaultValuatedEdges(rootProps.find(prop) != rootProps.end() ? graph : nullptr)) {
           size = getEdge(e).id;
           s.write((char *) &size, sizeof(size));
 

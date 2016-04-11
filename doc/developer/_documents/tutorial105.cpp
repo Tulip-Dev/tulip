@@ -29,10 +29,10 @@ int main(int argc, char** argv) {
 	Initialize the library, load plugins and set application runtime pathes accordingly to the host operating system
 	This method should always be called if you intend to use plugins in your application.
 	*/
-	tlp::initTulipSoftware(NULL);
+	tlp::initTulipSoftware(nullptr);
 
 	// Creates the main widget that will display our graph
-	GlMainWidget* mainWidget = new GlMainWidget(NULL);
+	GlMainWidget* mainWidget = new GlMainWidget(nullptr);
 	// Adds a layer to the scene
 	GlLayer* mainLayer = mainWidget->getScene()->createLayer("Main");
 

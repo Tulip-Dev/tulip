@@ -88,10 +88,10 @@ MixedModel::~MixedModel() {
 //====================================================
 bool MixedModel::run() {
   string orientation = "vertical";
-  sizeResult = NULL;
-  glyphResult = NULL;
+  sizeResult = nullptr;
+  glyphResult = nullptr;
 
-  if (dataSet!=NULL) {
+  if (dataSet!=nullptr) {
     getNodeSizePropertyParameter(dataSet, sizeResult);
     StringCollection tmp;
 
@@ -104,10 +104,10 @@ bool MixedModel::run() {
     dataSet->get("node shape", glyphResult);
   }
 
-  if (sizeResult == NULL)
+  if (sizeResult == nullptr)
     sizeResult = graph->getProperty<SizeProperty>("viewSize");
 
-  if (glyphResult == NULL)
+  if (glyphResult == nullptr)
     glyphResult = graph->getLocalProperty<IntegerProperty>("viewShape");
 
 
@@ -329,7 +329,7 @@ bool MixedModel::run() {
     LayoutProperty layout(graph);
     DataSet tmp;
     tmp.set("coordinates", result);
-    graph->applyPropertyAlgorithm(string("Connected Component Packing"),&layout,err,NULL,&tmp);
+    graph->applyPropertyAlgorithm(string("Connected Component Packing"),&layout,err,nullptr,&tmp);
     Iterator<node> *itN = graph->getNodes();
 
     while(itN->hasNext()) {

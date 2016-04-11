@@ -38,7 +38,7 @@ bool InteractorComponent::eventFilter(QObject *, QEvent *) {
 // *******************************
 
 InteractorComposite::InteractorComposite(const QIcon &icon, const QString &text)
-  : Interactor(), _action(new QAction(icon,text,this)), _view(NULL), _lastTarget(NULL) {
+  : Interactor(), _action(new QAction(icon,text,this)), _view(nullptr), _lastTarget(nullptr) {
 }
 
 InteractorComposite::~InteractorComposite() {
@@ -65,7 +65,7 @@ void InteractorComposite::setLastTarget(QObject *target) {
 
 void InteractorComposite::lastTargetDestroyed() {
   if (sender() == lastTarget())
-    _lastTarget = NULL;
+    _lastTarget = nullptr;
 }
 
 QObject* InteractorComposite::lastTarget() const {
@@ -100,21 +100,21 @@ void InteractorComposite::push_front(InteractorComponent *i) {
 void InteractorComposite::install(QObject* target) {
   setLastTarget(target);
 
-  if (target != NULL)
+  if (target != nullptr)
     foreach(InteractorComponent* i, _components) {
     target->installEventFilter(i);
     i->init();
   }
 }
 void InteractorComposite::uninstall() {
-  if (lastTarget() != NULL) {
+  if (lastTarget() != nullptr) {
     foreach(InteractorComponent* i, _components) {
       lastTarget()->removeEventFilter(i);
       i->clear();
     }
   }
 
-  install(NULL);
+  install(nullptr);
 }
 
 QAction* InteractorComposite::action() const {

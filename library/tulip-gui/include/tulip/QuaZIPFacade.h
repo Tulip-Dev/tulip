@@ -47,7 +47,7 @@ public:
     @warning If an archive already exists with that name, it will be overwritten.
     @return true if compression process went sucessfuly
     */
-  static bool zipDir(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress=NULL);
+  static bool zipDir(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress=nullptr);
 
   /**
     @brief Uncompress (un-ZIPs) an archive into a directory.
@@ -58,7 +58,7 @@ public:
     @warning If some files already exist in the target directory, they will be overwritten.
     @return true if uncompression process went sucessfuly
     */
-  static bool unzip(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress=NULL);
+  static bool unzip(const QString &rootPath, const QString &archivePath, tlp::PluginProgress *progress=nullptr);
 };
 
 #endif // QUAZIPFACADE_H

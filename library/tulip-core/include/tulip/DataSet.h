@@ -136,7 +136,7 @@ struct TypedDataSerializer :public DataTypeSerializer {
     if (ok)
       return new TypedData<T>(new T(value));
 
-    return NULL;
+    return nullptr;
   }
   // set a value into a DataSet
   virtual bool setData(DataSet& ds, const std::string& prop, const std::string& value)=0;
@@ -264,7 +264,7 @@ public:
 
   /**
    * @param str The name of the element to retrieve
-   * @return A untyped value for a given element name. NULL if the element does not exist
+   * @return A untyped value for a given element name. nullptr if the element does not exist
    */
   DataType* getData(const std::string &str) const;
 
@@ -289,7 +289,7 @@ public:
   bool empty() const;
 
   /**
-   * @return the data type serializer associated to the given typename. NULL if no serializer is found
+   * @return the data type serializer associated to the given typename. nullptr if no serializer is found
    */
   static DataTypeSerializer *typenameToSerializer(const std::string &name);
 

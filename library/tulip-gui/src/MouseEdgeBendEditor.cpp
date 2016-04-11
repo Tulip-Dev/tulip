@@ -30,7 +30,7 @@ using namespace std;
 
 //========================================================================================
 MouseEdgeBendEditor::MouseEdgeBendEditor()
-  :glMainWidget(NULL),layer(NULL),edgeEntity(NULL),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(NULL),mouseButtonPressOnEdge(false) {
+  :glMainWidget(nullptr),layer(nullptr),edgeEntity(nullptr),targetTriangle(Coord(0,0,0),Size(1,1,1)),circleString(nullptr),mouseButtonPressOnEdge(false) {
   _operation = NONE_OP;
 
   basicCircle.resizePoints(30); //circle
@@ -45,16 +45,16 @@ MouseEdgeBendEditor::~MouseEdgeBendEditor() {
 }
 //========================================================================================
 void MouseEdgeBendEditor::clear() {
-  if (glMainWidget != NULL) {
+  if (glMainWidget != nullptr) {
     glMainWidget->getScene()->removeLayer(layer,false);
 
     delete layer;
-    layer=NULL;
-    circleString=NULL;
+    layer=nullptr;
+    circleString=nullptr;
 
     glMainWidget->getScene()->getGraphLayer()->deleteGlEntity("edgeEntity");
     delete edgeEntity;
-    edgeEntity=NULL;
+    edgeEntity=nullptr;
 
     glMainWidget->setCursor(QCursor());
   }
@@ -70,7 +70,7 @@ bool MouseEdgeBendEditor::eventFilter(QObject *widget, QEvent *e) {
 
   QMouseEvent * qMouseEv = (QMouseEvent *) e;
 
-  if(qMouseEv == NULL)
+  if(qMouseEv == nullptr)
     return false;
 
   // Double click to create a new control point
@@ -283,7 +283,7 @@ void MouseEdgeBendEditor::initProxies(GlMainWidget *glMainWidget) {
   if(_graph->existProperty("viewPolygonCoords"))
     _coordsVectorProperty=_graph->getProperty<CoordVectorProperty>("viewPolygonCoords");
   else
-    _coordsVectorProperty=NULL;
+    _coordsVectorProperty=nullptr;
 }
 //========================================================================================
 //Does the point p belong to the segment [u,v]?

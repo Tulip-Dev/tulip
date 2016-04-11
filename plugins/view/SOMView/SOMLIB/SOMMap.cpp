@@ -82,10 +82,10 @@ void SOMMap::initMap() {
     gridDataSet.set("oppositeNodesConnected", oppositeConnected);
     //Suppress spacing
     gridDataSet.set("spacing", (double) 0.0);
-    graph_component = importGraph("Grid", gridDataSet, NULL, graph_component);
+    graph_component = importGraph("Grid", gridDataSet, nullptr, graph_component);
   }
 
-  assert(graph_component != NULL);
+  assert(graph_component != nullptr);
   IntegerProperty *nodeShape = graph_component->getProperty<IntegerProperty> ("viewShape");
 
   switch (connectivity) {

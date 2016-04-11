@@ -29,14 +29,14 @@ using namespace tlp;
 
 PropertyCreationDialog::PropertyCreationDialog(QWidget *parent) :
   QDialog(parent),
-  ui(new Ui::PropertyCreationDialog),_createPropertyButton(NULL),_graph(NULL),_createdProperty(NULL) {
+  ui(new Ui::PropertyCreationDialog),_createPropertyButton(nullptr),_graph(nullptr),_createdProperty(nullptr) {
   initGui();
 }
 
 PropertyCreationDialog::PropertyCreationDialog(Graph* graph, QWidget *parent,
     const std::string& selectedType):
   QDialog(parent),
-  ui(new Ui::PropertyCreationDialog),_graph(graph),_createdProperty(NULL) {
+  ui(new Ui::PropertyCreationDialog),_graph(graph),_createdProperty(nullptr) {
   initGui();
 
   if (!selectedType.empty()) {
@@ -84,7 +84,7 @@ void PropertyCreationDialog::setGraph(Graph* graph) {
 void PropertyCreationDialog::accept() {
   bool error = false;
 
-  if(_graph == NULL) {
+  if(_graph == nullptr) {
     QMessageBox::warning(this, "Fail to create property", "The parent graph is invalid",
                          QMessageBox::Ok, QMessageBox::Ok);
     error = true;
@@ -114,7 +114,7 @@ void PropertyCreationDialog::accept() {
 
 PropertyInterface* PropertyCreationDialog::createNewProperty(tlp::Graph* graph,QWidget* parent, const std::string& selectedType) {
   PropertyCreationDialog *dialog = new PropertyCreationDialog(graph,parent,selectedType);
-  PropertyInterface* result = NULL;
+  PropertyInterface* result = nullptr;
 
   if(dialog->exec() == QDialog::Accepted) {
     result = dialog->createdProperty();
@@ -127,7 +127,7 @@ PropertyInterface* PropertyCreationDialog::createNewProperty(tlp::Graph* graph,Q
 void PropertyCreationDialog::checkValidity() {
   QString propertyName = ui->propertyNameLineEdit->text();
 
-  if(_graph == NULL) {
+  if(_graph == nullptr) {
     ui->errorLabel->setText(tr("You need to specify a parent graph"));
     ui->errorNotificationWidget->setVisible(true);
     _createPropertyButton->setEnabled(false);

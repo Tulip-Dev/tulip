@@ -118,7 +118,7 @@ bool TreeLeaf::run() {
 
   uniformLayerDistance = true;
 
-  if (dataSet != NULL)
+  if (dataSet != nullptr)
     dataSet->get("uniform layer spacing", uniformLayerDistance);
 
   OrientableSizeProxy oriSize(size, mask);

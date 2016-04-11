@@ -34,7 +34,7 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlRegularPolygon *diamond = NULL;
+static GlRegularPolygon *diamond = nullptr;
 static void drawDiamond(const Color &fillColor,
                         const Color &borderColor,
                         float borderWidth,
@@ -53,7 +53,7 @@ static void drawDiamond(const Color &fillColor,
   }
 
   diamond->setTextureName(textureName);
-  diamond->draw(lod,NULL);
+  diamond->draw(lod,nullptr);
 }
 
 /** \addtogroup glyph */
@@ -67,7 +67,7 @@ static void drawDiamond(const Color &fillColor,
 class Diamond: public Glyph {
 public:
   GLYPHINFORMATION("2D - Diamond", "Patrick Mary", "23/06/2011", "Textured Diamond", "1.0", NodeShape::Diamond)
-  Diamond(const tlp::PluginContext *context = NULL);
+  Diamond(const tlp::PluginContext *context = nullptr);
   virtual ~Diamond();
   virtual void getIncludeBoundingBox(BoundingBox &boundingBox,node);
   virtual void draw(node n, float lod);

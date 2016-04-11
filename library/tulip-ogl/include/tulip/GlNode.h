@@ -81,7 +81,7 @@ public:
    * Draw the label of the node if drawEdgesLabel is true
    * Use TextRenderer : renderer to draw the label
    */
-  virtual void drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lod,Camera *camera=NULL);
+  virtual void drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lod,Camera *camera=nullptr);
 
   unsigned int id;
 

@@ -81,7 +81,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
     while(!glPixelBuffer->isValid() && !bufferToWidthHeight.empty()) {
       int widthToRemove=0;
       int heightToRemove=0;
-      QGLPixelBuffer *bufferToRemove = NULL;
+      QGLPixelBuffer *bufferToRemove = nullptr;
 
       for(it=widthHeightToBuffer.begin(); it!=widthHeightToBuffer.end(); ++it) {
         if((((*it).first.first)*((*it).first.second))>widthToRemove*heightToRemove) {
@@ -127,7 +127,7 @@ QGLFramebufferObject *QGlBufferManager::getFramebufferObject(int width, int heig
     while(!glFramebufferObject->isValid() && !framebufferToWidthHeight.empty()) {
       int widthToRemove=0;
       int heightToRemove=0;
-      QGLFramebufferObject *bufferToRemove = NULL;
+      QGLFramebufferObject *bufferToRemove = nullptr;
 
       for(it=widthHeightToFramebuffer.begin(); it!=widthHeightToFramebuffer.end(); ++it) {
         if((((*it).first.first)*((*it).first.second))>widthToRemove*heightToRemove) {

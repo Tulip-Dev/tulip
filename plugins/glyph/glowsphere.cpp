@@ -35,8 +35,8 @@ using namespace tlp;
 
 namespace tlp {
 
-static GlSphere *sphere = NULL;
-static GlRect *rect = NULL;
+static GlSphere *sphere = nullptr;
+static GlRect *rect = nullptr;
 
 /** \addtogroup glyph */
 /*@{*/
@@ -47,7 +47,7 @@ static GlRect *rect = NULL;
 class GlowSphere: public Glyph {
 public:
   GLYPHINFORMATION("3D - Glow Sphere", "Patrick Mary", "24/01/2012", "Glow Sphere", "1.0", NodeShape::GlowSphere)
-  GlowSphere(const tlp::PluginContext *context = NULL) :
+  GlowSphere(const tlp::PluginContext *context = nullptr) :
     Glyph(context) {
   }
   virtual ~GlowSphere() {}
@@ -124,7 +124,7 @@ void GlowSphere::draw(node n, float /* lod */) {
 class EEGlowSphere: public EdgeExtremityGlyph {
 public:
   GLYPHINFORMATION("3D - Glow Sphere extremity", "Patrick Mary", "24/01/2012", "Glow Sphere for edge extremities", "1.0", EdgeExtremityShape::GlowSphere)
-  EEGlowSphere(const tlp::PluginContext *context = NULL) :
+  EEGlowSphere(const tlp::PluginContext *context = nullptr) :
     EdgeExtremityGlyph(context) {
   }
   virtual ~EEGlowSphere() {}

@@ -71,7 +71,7 @@ QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
     if (_processInfos[k]._perspectiveId == (time_t) id)
       return k;
   }
-  return NULL;
+  return nullptr;
 }
 
 TulipPerspectiveProcessHandler *TulipPerspectiveProcessHandler::instance() {
@@ -96,7 +96,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   args << "--" + k + "=" + parameters[k].toString();
 
   args << "--port=" + QString::number(serverPort());
-  time_t perspectiveId = time(NULL);
+  time_t perspectiveId = time(nullptr);
   args << "--id=" + QString::number(perspectiveId);
 
   QDir appDir(QApplication::applicationDirPath());
@@ -225,7 +225,7 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   else if (tokens[0] == "PROJECT_LOCATION") {
     QProcess* p = fromId(tokens[1].toUInt());
 
-    if (p != NULL) {
+    if (p != nullptr) {
       PerspectiveProcessInfos infos = _processInfos[p];
       infos.projectPath = args2;
       _processInfos[p] = infos;

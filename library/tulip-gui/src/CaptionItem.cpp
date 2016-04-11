@@ -30,7 +30,7 @@ using namespace std;
 
 namespace tlp {
 
-CaptionItem::CaptionItem(View *view):view(view),_graph(NULL),_metricProperty(NULL),_colorProperty(NULL),_sizeProperty(NULL),_backupColorProperty(NULL),_backupBorderColorProperty(NULL) {
+CaptionItem::CaptionItem(View *view):view(view),_graph(nullptr),_metricProperty(nullptr),_colorProperty(nullptr),_sizeProperty(nullptr),_backupColorProperty(nullptr),_backupBorderColorProperty(nullptr) {
   _captionGraphicsItem=new CaptionGraphicsItem(view);
   connect(_captionGraphicsItem,SIGNAL(filterChanged(float,float)),this,SLOT(applyNewFilter(float,float)));
   connect(_captionGraphicsItem,SIGNAL(selectedPropertyChanged(std::string)),this,SLOT(selectedPropertyChanged(std::string)));
@@ -57,7 +57,7 @@ void CaptionItem::create(CaptionType captionType) {
 
   _backupColorProperty=new ColorProperty(_graph);
   *_backupColorProperty=*_colorProperty;
-  _backupBorderColorProperty=NULL;
+  _backupBorderColorProperty=nullptr;
 }
 
 void CaptionItem::initCaption() {
@@ -66,17 +66,17 @@ void CaptionItem::initCaption() {
   if(_metricProperty)
     _metricProperty->removeObserver(this);
 
-  _metricProperty=NULL;
+  _metricProperty=nullptr;
 
   if(_colorProperty)
     _colorProperty->removeObserver(this);
 
-  _colorProperty=NULL;
+  _colorProperty=nullptr;
 
   if(_sizeProperty)
     _sizeProperty->removeObserver(this);
 
-  _sizeProperty=NULL;
+  _sizeProperty=nullptr;
 
 
 }
@@ -89,10 +89,10 @@ void CaptionItem::clearObservers() {
 
   _graph=view->graph();
 
-  if(_graph==NULL) {
-    _metricProperty=NULL;
-    _colorProperty=NULL;
-    _sizeProperty=NULL;
+  if(_graph==nullptr) {
+    _metricProperty=nullptr;
+    _colorProperty=nullptr;
+    _sizeProperty=nullptr;
     return;
   }
 
@@ -104,7 +104,7 @@ void CaptionItem::clearObservers() {
     _metricProperty->addObserver(this);
   }
   else {
-    _metricProperty=NULL;
+    _metricProperty=nullptr;
   }
 
   if(_captionType==NodesColorCaption || _captionType==EdgesColorCaption) {
@@ -143,7 +143,7 @@ void CaptionItem::generateColorCaption(CaptionType captionType) {
 
   string propertyName="empty";
 
-  if(_metricProperty==NULL) {
+  if(_metricProperty==nullptr) {
     metricToColorFiltered.push_back(pair<double,Color>(0.,Color(255,255,255,255)));
     metricToColorFiltered.push_back(pair<double,Color>(1.,Color(255,255,255,255)));
   }
@@ -322,7 +322,7 @@ void CaptionItem::removeObservation(bool remove) {
 }
 
 void CaptionItem::applyNewFilter(float begin, float end) {
-  if(_metricProperty==NULL)
+  if(_metricProperty==nullptr)
     return;
 
   emit filtering(true);

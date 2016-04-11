@@ -237,7 +237,7 @@ public:
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       int ival = 0;
       double dval = 0;
       bool bval = false;
@@ -343,7 +343,7 @@ public:
   }
 
   void afterCall() {
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       bool bval = false;
 
       if (dataSet->get("transpose", bval)) {

@@ -177,7 +177,7 @@ void MapRefresher::refreshMap() {
   emit refreshMapSignal();
 }
 
-JsCallback* JsCallback::_lastCreatedInstance = NULL;
+JsCallback* JsCallback::_lastCreatedInstance = nullptr;
 
 #endif
 

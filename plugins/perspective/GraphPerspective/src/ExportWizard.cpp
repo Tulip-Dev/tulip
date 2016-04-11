@@ -69,7 +69,7 @@ void ExportWizard::algorithmSelected(const QModelIndex& index) {
   QString alg(index.data().toString());
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel* oldModel = _ui->parametersList->model();
-  QAbstractItemModel* newModel = NULL;
+  QAbstractItemModel* newModel = nullptr;
 
   if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)),_graph);
@@ -91,7 +91,7 @@ QString ExportWizard::algorithm() const {
 tlp::DataSet ExportWizard::parameters() const {
   ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
 
-  if (model == NULL)
+  if (model == nullptr)
     return DataSet();
 
   return model->parametersValues();
@@ -102,7 +102,7 @@ QString ExportWizard::outputFile() const {
 }
 
 void ExportWizard::updateFinishButton() {
-  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != NULL);
+  button(QWizard::FinishButton)->setEnabled(_ui->parametersList->model() != nullptr);
 }
 
 void ExportWizard::pathChanged(QString s) {
@@ -117,7 +117,7 @@ void ExportWizard::pathChanged(QString s) {
 
   for(std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
     ExportModule* p =
-      PluginLister::instance()->getPluginObject<ExportModule>(*itm,NULL);
+      PluginLister::instance()->getPluginObject<ExportModule>(*itm,nullptr);
     std::string extension = p->fileExtension();
 
     if (s.endsWith(extension.c_str())) {
@@ -133,7 +133,7 @@ void ExportWizard::pathChanged(QString s) {
       // look for a corresponding import module supporting the gz extension
       for(std::list<std::string>::const_iterator it = imports.begin();
           it != imports.end(); ++it) {
-        ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, NULL);
+        ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
         std::list<std::string> extensions(m->fileExtensions());
 
         for(std::list<std::string>::const_iterator ite = extensions.begin();
@@ -147,12 +147,12 @@ void ExportWizard::pathChanged(QString s) {
 
         delete m;
 
-        if (selectedExport != NULL) {
+        if (selectedExport != nullptr) {
           break;
         }
       }
 
-      if (selectedExport != NULL) {
+      if (selectedExport != nullptr) {
         delete p;
         break;
       }

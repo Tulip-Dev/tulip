@@ -41,7 +41,7 @@ class View  : tlp::Plugin /Abstract/ {
    } else if (dynamic_cast<tlp::GlMainView*>(sipCpp)) {
         sipType = sipFindType("tlp::GlMainView");
    } else {
-        sipType = NULL;
+        sipType = nullptr;
    }
 %End
 

@@ -186,7 +186,7 @@ public:\
   std::string release() const { return std::string(VERSION); }\
   std::string tulipRelease() const { return std::string(TULIP_VERSION); }\
   std::string group() const { return getComponent()->group(); }\
-  CLASS_NAME(const PluginContext *):_component(NULL) {}\
+  CLASS_NAME(const PluginContext *):_component(nullptr) {}\
   bool isCompatible(const std::string& viewName) const { return viewName == VIEW_STRING_NAME; }\
   QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
   unsigned int priority() const { return getComponent()->priority(); }\
@@ -200,7 +200,7 @@ public:\
   void undoIsDone() { getComponent()->undoIsDone(); }\
   tlp::Interactor* getComponent() const {\
     if(!_component) {\
-      _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME,NULL); assert(_component != NULL);\
+      _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME,nullptr); assert(_component != nullptr);\
     }\
     return _component;\
   }\
@@ -225,7 +225,7 @@ public:\
   std::string release() const { return std::string(VERSION); }\
   std::string tulipRelease() const { return std::string(TULIP_VERSION); }\
   std::string group() const { return getComponent()->group(); }\
-  CLASS_NAME(const PluginContext *):_component(NULL) {}\
+  CLASS_NAME(const PluginContext *):_component(nullptr) {}\
   bool isCompatible(const std::string& viewName) const { return viewName == VIEW_STRING_NAME; }\
   QWidget* configurationWidget() const { return getComponent()->configurationWidget(); }\
   unsigned int priority() const { return PRIORITY; }\
@@ -239,7 +239,7 @@ public:\
   void undoIsDone() { getComponent()->undoIsDone(); }\
   tlp::Interactor* getComponent() const {\
     if(!_component) {\
-      _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME,NULL); assert(_component != NULL);\
+      _component = tlp::PluginLister::instance()->getPluginObject<Interactor>(BASE_INTERACTOR_STRING_NAME,nullptr); assert(_component != nullptr);\
     }\
     return _component;\
   }\

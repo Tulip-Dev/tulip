@@ -59,7 +59,7 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
     tlp::DataSet *params = prepareAlgorithmParameters(algoName, graph, inputDataSet, inputDataSetWrapper);
     if (params) {
       PropertyType tmp(graph);
-      ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, NULL, params);
+      ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, nullptr, params);
       *result = tmp;
       updateWrappedDataSetAfterAlgorithmCall(params, inputDataSet, inputDataSetWrapper);
       delete params;
@@ -122,7 +122,7 @@ void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
 
 tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph, tlp::DataSet *inputParams, PyObject *inputParamsWrapper) {
   tlp::DataSet algoParams = ::getDefaultPluginParameters(algoName, graph);
-  tlp::DataSet *params = NULL;
+  tlp::DataSet *params = nullptr;
   if (inputParams && PyDict_Check(inputParamsWrapper)) {
     params = convertPyDictToTlpDataSet(inputParamsWrapper, &algoParams, algoName);
   } else {
@@ -332,7 +332,7 @@ public:
 
 //===========================================================================================
 
-  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL);
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = nullptr);
 %Docstring
 tlp.Graph.applyAlgorithm(algoName[, params])
 
@@ -3505,7 +3505,7 @@ This is equivalent to call::
 %End
 
  //===========================================================================================
-  void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= NULL);
+  void push(bool unpopAllowed = true, std::vector<tlp::PropertyInterface*>* propertiesToPreserveOnPop= nullptr);
 %Docstring
 tlp.Graph.push([unpopAllowed=True])
 
@@ -3798,7 +3798,7 @@ Returns a reference on an attribute of the graph or :const:`None` if it does not
 %End
 
 %MethodCode
-  sipRes = NULL;
+  sipRes = nullptr;
   if (sipCpp->attributeExist(*a0)) {
     tlp::DataType* dataType = sipCpp->getAttribute(*a0);
     sipRes = getPyObjectFromDataType(dataType);

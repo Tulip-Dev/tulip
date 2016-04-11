@@ -29,7 +29,7 @@ namespace tlp {
 int GlConvexGraphHull::bezierValue = 1;
 
 GlConvexGraphHull::GlConvexGraphHull(GlComposite* parent, const std::string& name, const tlp::Color &fcolor, Graph *graph, LayoutProperty *layout, SizeProperty *size, DoubleProperty *rotation)       :
-  _parent(parent), _name(name), _fcolor(fcolor), _polygon(NULL), graph(graph), layout(layout), size(size), rotation(rotation) {
+  _parent(parent), _name(name), _fcolor(fcolor), _polygon(nullptr), graph(graph), layout(layout), size(size), rotation(rotation) {
   assert(graph);
 
   if (graph->numberOfNodes() > 0) {
@@ -40,7 +40,7 @@ GlConvexGraphHull::GlConvexGraphHull(GlComposite* parent, const std::string& nam
 
 GlConvexGraphHull::~GlConvexGraphHull() {
   delete _polygon;
-  _polygon = NULL;
+  _polygon = nullptr;
 }
 
 void GlConvexGraphHull::updateHull() {

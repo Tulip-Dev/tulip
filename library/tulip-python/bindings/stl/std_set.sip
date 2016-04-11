@@ -29,12 +29,12 @@ template<TYPE>
   const sipTypeDef* kpTypeDef = getSipType("TYPE");
 
   if (!kpTypeDef) {
-    return NULL;
+    return nullptr;
   }
 
   // Create an empty Python set
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -45,10 +45,10 @@ template<TYPE>
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+    if ((pobj = sipConvertFromNewType(cpp, kpTypeDef, sipTransferObj)) == nullptr) {
       // There was an error so garbage collect the Python set.
       Py_XDECREF(l);
-      return NULL;
+      return nullptr;
     }
 
     // Add the wrapper to the set.
@@ -68,12 +68,12 @@ template<TYPE>
   }
 
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
 
     while (item = PyIter_Next(iterator)) {
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
@@ -92,7 +92,7 @@ template<TYPE>
   std::set<TYPE> *s = new std::set<TYPE>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
     int state;
     TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, sipTransferObj, SIP_NOT_NONE, &state, sipIsErr));
@@ -128,12 +128,12 @@ template<TYPE*>
   const sipTypeDef* kpTypeDef = getSipType("TYPE");
 
   if (!kpTypeDef) {
-    return NULL;
+    return nullptr;
   }
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -144,10 +144,10 @@ template<TYPE*>
 
     // Get the Python wrapper for the Type instance, creating a new
     // one if necessary, and handle any ownership transfer.
-    if ((pobj = sipConvertFromType(cpp, kpTypeDef, sipTransferObj)) == NULL) {
+    if ((pobj = sipConvertFromType(cpp, kpTypeDef, sipTransferObj)) == nullptr) {
       // There was an error so garbage collect the Python set.
       Py_XDECREF(l);
-      return NULL;
+      return nullptr;
     }
 
     // Add the wrapper to the set.
@@ -167,12 +167,12 @@ template<TYPE*>
   }
 
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
       if (!sipCanConvertToType(item, kpTypeDef, SIP_NOT_NONE)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to TYPE");
@@ -190,10 +190,10 @@ template<TYPE*>
   std::set<TYPE*> *s = new std::set<TYPE*>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
     int state;
-    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, NULL, SIP_NOT_NONE, &state, sipIsErr));
+    TYPE* p = reinterpret_cast<TYPE*>(sipConvertToType(item, kpTypeDef, nullptr, SIP_NOT_NONE, &state, sipIsErr));
 
     if (*sipIsErr) {
       Py_DECREF(item);
@@ -225,8 +225,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }    
 
   // Go through each element in the C++ instance and convert it to a
@@ -242,12 +242,12 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
       if (!PyNumber_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to double");
@@ -265,7 +265,7 @@ template<TYPE*>
   std::set<double> *s = new std::set<double>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
     PyObject *f = PyNumber_Float(item);
     s->insert(PyFloat_AsDouble(f));
@@ -289,8 +289,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }    
 
   // Go through each element in the C++ instance and convert it to a
@@ -306,12 +306,12 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
       if (!PyNumber_Check(item)) {
         //printErrorMessage("TypeError : object in list of type " + std::string(item->ob_type->tp_name) + " can not be converted to float");
@@ -329,7 +329,7 @@ template<TYPE*>
   std::set<float> *s = new std::set<float>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
     PyObject *f = PyNumber_Float(item);
     s->insert(static_cast<float>(PyFloat_AsDouble(f)));
@@ -353,8 +353,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -370,12 +370,12 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
       if (!PyLong_Check(item)) {
@@ -397,7 +397,7 @@ template<TYPE*>
   std::set<int> *s = new std::set<int>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
     s->insert(static_cast<int>(PyLong_AsLong(item)));
@@ -427,8 +427,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -444,12 +444,12 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
       if (!PyLong_Check(item)) {
@@ -471,7 +471,7 @@ template<TYPE*>
   std::set<long> *s = new std::set<long>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
     s->insert(PyLong_AsLong(item));
@@ -501,8 +501,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -518,12 +518,12 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
       if (!PyLong_Check(item)) {
@@ -545,7 +545,7 @@ template<TYPE*>
   std::set<unsigned int> *s = new std::set<unsigned int>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
     s->insert(static_cast<unsigned int>(PyLong_AsUnsignedLong(item)));
@@ -574,8 +574,8 @@ template<TYPE*>
   PyObject *l;
 
   // Create an empty Python set.
-  if ((l = PySet_New(NULL)) == NULL) {
-    return NULL;
+  if ((l = PySet_New(nullptr)) == nullptr) {
+    return nullptr;
   }
 
   // Go through each element in the C++ instance and convert it to a
@@ -591,12 +591,12 @@ template<TYPE*>
 
 %ConvertToTypeCode
   // Check if type is compatible
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (!PySet_Check(sipPy)) {
       return 0;
     }
     PyObject *iterator = PyObject_GetIter(sipPy);
-    PyObject *item = NULL;
+    PyObject *item = nullptr;
     while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
       if (!PyLong_Check(item)) {
@@ -618,7 +618,7 @@ template<TYPE*>
   std::set<unsigned long> *s = new std::set<unsigned long>();
 
   PyObject *iterator = PyObject_GetIter(sipPy);
-  PyObject *item = NULL;
+  PyObject *item = nullptr;
   while (item = PyIter_Next(iterator)) {
 #if PY_MAJOR_VERSION >= 3
     s->insert(PyLong_AsUnsignedLong(item));

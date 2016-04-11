@@ -368,7 +368,7 @@ void GlComplexPolygon::runTesselation() {
   verticesData.clear();
   verticesIndices.clear();
   // instantiate the tesselator from libtess2
-  TESStesselator* tess = tessNewTess(NULL);
+  TESStesselator* tess = tessNewTess(nullptr);
 
   // add contours
   for (size_t i = 0 ; i < points.size() ; ++i) {
@@ -496,7 +496,7 @@ void GlComplexPolygon::draw(float,Camera *) {
 
       if (GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
 
-        static GlShaderProgram *outlineExtrusionShader = NULL;
+        static GlShaderProgram *outlineExtrusionShader = nullptr;
 
         if (!outlineExtrusionShader) {
           outlineExtrusionShader = new GlShaderProgram();

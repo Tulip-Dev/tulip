@@ -52,7 +52,7 @@ as the average of the local clustering coefficients
 :rtype: float
 %End
   
-  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = NULL);
+  void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = nullptr);
 %Docstring 
 tlp.clusteringCoefficient(graph, result[, maxDepth = 1])
 

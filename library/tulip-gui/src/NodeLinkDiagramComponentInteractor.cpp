@@ -25,7 +25,7 @@
 
 using namespace tlp;
 
-NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text, unsigned int priority):GLInteractorComposite(QIcon(iconPath),text), _label(NULL), _priority(priority) {
+NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text, unsigned int priority):GLInteractorComposite(QIcon(iconPath),text), _label(nullptr), _priority(priority) {
 }
 
 NodeLinkDiagramComponentInteractor::~NodeLinkDiagramComponentInteractor() {
@@ -33,7 +33,7 @@ NodeLinkDiagramComponentInteractor::~NodeLinkDiagramComponentInteractor() {
 }
 
 void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QString& text) {
-  assert(_label == NULL);
+  assert(_label == nullptr);
   _label = new QLabel(text);
   _label->setWordWrap(true);
   _label->setAlignment(Qt::AlignTop);

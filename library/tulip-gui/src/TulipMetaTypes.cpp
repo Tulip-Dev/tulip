@@ -130,7 +130,7 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   if (v.userType() == qMetaTypeId<TulipFontAwesomeIcon>())
     return new TypedData<std::string>(new std::string(QStringToTlpString(v.value<TulipFontAwesomeIcon>().iconName)));
 
-  return NULL;
+  return nullptr;
 }
 
 #define CHECK_DATATYPE(TYPE) if (type.compare(typeid(TYPE).name()) == 0) return typedVariant<TYPE>(dm);

@@ -64,7 +64,7 @@ public :
 
   void setBLCorner(const Coord &blCorner);
 
-  void computePixelView(GlMainWidget *glWidget = NULL);
+  void computePixelView(GlMainWidget *glWidget = nullptr);
 
   bool overviewGenerated() const  {
     return overviewGen;
@@ -80,7 +80,7 @@ public :
 private :
 
   void computeBoundingBox() {
-    GlBoundingBoxSceneVisitor glBBSV(NULL);
+    GlBoundingBoxSceneVisitor glBBSV(nullptr);
     acceptVisitor(&glBBSV);
     boundingBox = glBBSV.getBoundingBox();
   }

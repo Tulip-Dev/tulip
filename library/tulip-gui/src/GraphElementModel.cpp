@@ -33,7 +33,7 @@ GraphElementModel::GraphElementModel(Graph *graph,unsigned int id,QObject *paren
 }
 
 int GraphElementModel::rowCount(const QModelIndex &parent) const {
-  if (_graph == NULL || parent.isValid())
+  if (_graph == nullptr || parent.isValid())
     return 0;
 #ifdef NDEBUG
   auto filterOutViewMetaGraph = [](tlp::PropertyInterface *prop) {
@@ -46,7 +46,7 @@ int GraphElementModel::rowCount(const QModelIndex &parent) const {
 }
 
 int GraphElementModel::columnCount(const QModelIndex &parent) const {
-  if (_graph == NULL || parent.isValid())
+  if (_graph == nullptr || parent.isValid())
     return 0;
 
   return 1;
@@ -87,7 +87,7 @@ QModelIndex GraphElementModel::index(int row, int column,const QModelIndex &pare
   if (!hasIndex(row,column,parent))
     return QModelIndex();
 
-  PropertyInterface* prop=NULL;
+  PropertyInterface* prop=nullptr;
   int result=0;
   for(PropertyInterface* p : _graph->getObjectProperties()) {
 #ifdef NDEBUG
@@ -131,7 +131,7 @@ Qt::ItemFlags GraphElementModel::flags(const QModelIndex &index) const {
 
 bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
-    PropertyInterface* prop=NULL;
+    PropertyInterface* prop=nullptr;
     int result=0;
     for(PropertyInterface* p : _graph->getObjectProperties()) {
 #ifdef NDEBUG
@@ -158,7 +158,7 @@ bool GraphNodeElementModel::setData(const QModelIndex &index, const QVariant &va
 
 bool GraphEdgeElementModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if(role==Qt::EditRole) {
-    PropertyInterface* prop=NULL;
+    PropertyInterface* prop=nullptr;
     int result=0;
     for(PropertyInterface* p :_graph->getObjectProperties()) {
 #ifdef NDEBUG

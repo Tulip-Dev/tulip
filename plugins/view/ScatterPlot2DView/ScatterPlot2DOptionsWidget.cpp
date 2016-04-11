@@ -193,7 +193,7 @@ void ScatterPlot2DOptionsWidget::resetAxisScale() {
 void ScatterPlot2DOptionsWidget::changeButtonBackgroundColor(QPushButton *button) {
   QColor currentButtonColor = button->palette().color(QPalette::Button);
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-  QColor newColor = QColorDialog::getColor(currentButtonColor, NULL, "Select Color", QColorDialog::ShowAlphaChannel);
+  QColor newColor = QColorDialog::getColor(currentButtonColor, nullptr, "Select Color", QColorDialog::ShowAlphaChannel);
 
   if (newColor.isValid()) {
     setButtonBackgroundColor(button, Color(newColor.red(), newColor.green(), newColor.blue(), newColor.alpha()));

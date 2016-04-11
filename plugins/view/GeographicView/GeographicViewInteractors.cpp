@@ -45,7 +45,7 @@ void GeographicViewInteractorNavigation::construct() {
 }
 
 QWidget *GeographicViewInteractorNavigation::configurationWidget() const {
-  return NULL;
+  return nullptr;
 }
 
 GeographicViewNavigator::GeographicViewNavigator(): x(0), y(0), inRotation(false) {}
