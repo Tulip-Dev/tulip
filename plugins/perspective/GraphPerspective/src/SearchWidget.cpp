@@ -380,14 +380,8 @@ void SearchWidget::search() {
     delete b;
 
   unsigned int resultsCountNodes = 0, resultsCountEdges=0;
-  for(node n : result->getNodesEqualTo(true)) {
-    (void) n;
-    resultsCountNodes++;
-  }
-  for(edge e : result->getEdgesEqualTo(true)) {
-    (void) e;
-    resultsCountEdges++;
-  }
+  resultsCountNodes = iteratorCount(result->getNodesEqualTo(true));
+  resultsCountEdges = iteratorCount(result->getEdgesEqualTo(true));
   delete result;
 
   if(onNodes&&!onEdges)

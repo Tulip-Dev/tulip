@@ -23,24 +23,23 @@
 
 #include <tulip/memorypool.h>
 
-
-
 namespace tlp {
 /**
-  * @class FilterIterator
-  * @brief Iterator that enables to filter an other Iterator
-  * @param it the iterator that should be filtered
-  * @param filter the functor that enables to test wheter or not an element is filtered
-  *
-  * The functor function shoul have the following form
-  * @code
-  * class AFilterFunctor {
-  *  bool operator()(TYPE a) {
-  *    return true if a should be iterated, false if a should be removed;
-  *  }
-  * };
-  * @endcode
-  */
+* @class FilterIterator
+* @ingroup Iterators
+* @brief Iterator that enables to filter an other Iterator
+* @param it the iterator that should be filtered
+* @param filter the functor or lambda function that enables to test whether or not an element is filtered
+*
+* The functor function should have the following form:
+* @code
+* class AFilterFunctor {
+*  bool operator()(TYPE a) {
+*    return true if a should be iterated, false if a should be removed;
+*  }
+* };
+* @endcode
+**/
 template <typename TYPE, typename FILTER>
 class FilterIterator : public Iterator<TYPE> {
 public:
@@ -81,12 +80,7 @@ private:
   FILTER _filter;
   size_t _nbele;
 };
-/**
-  * @class MPFilterIterator
-  * @brief MPFilterIterator implements memory pool for FilterIterator
-  * @warning never inherit from that class
-  * @see FilterIterator
-  */
+
 template <typename TYPE, typename FILTER>
 class MPFilterIterator : public FilterIterator<TYPE, FILTER>, public MemoryPool<MPFilterIterator<TYPE, FILTER> > {
 public:
@@ -94,6 +88,22 @@ public:
     FilterIterator<TYPE, FILTER>(it, filter) {
   }
 };
+
+/**
+* @brief Convenient function for creating a FilterIterator.
+* @ingroup Iterators
+*
+* Creates a FilterIterator from another iterator and a filter function.
+* The returned iterator takes ownership of the one provided as parameter.
+*
+* @param it a Tulip iterator
+* @param filter the functor or lambda function that enables to test whether or not an element is filtered
+* @return a FilterIterator
+**/
+template <typename TYPE, typename FILTER>
+inline FilterIterator<TYPE, FILTER> *filterIterator(Iterator<TYPE> *it, FILTER filter) {
+  return new MPFilterIterator<TYPE, FILTER>(it, filter);
+}
 
 }
 #endif // FILTERITERATOR_H

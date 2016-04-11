@@ -33,8 +33,10 @@ extern TLP_SCOPE int getNumIterators();
 
 /**
 * @brief Interface for Tulip iterators.
+* @ingroup Iterators
+*
 * Allows basic iteration operations only.
-* @see forEach
+*
 **/
 template<class itType> struct Iterator {
   ///
@@ -84,8 +86,73 @@ private:
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 
+/**
+* @brief Counts the number of iterated elements
+* @ingroup Iterators
+*
+* Counts the number of elements iterated by the provided iterator.
+* That function takes ownership of the iterator and will delete it.
+*
+* @param it a Tulip iterator
+*
+* @return The number of iterated elements
+**/
+template<typename itType>
+unsigned int iteratorCount(Iterator<itType> *it) {
+  unsigned int count = 0;
+  while(it->hasNext()) {
+    ++count;
+    it->next();
+  }
+  delete it;
+  return count;
 }
 
+/**
+* @brief Applies a function to each iterated element
+* @ingroup Iterators
+*
+* Applies a function to each element iterated by the provided iterator.
+* That function takes ownership of the iterator and will delete it.
+*
+* @param it a Tulip iterator
+* @param mapFunction functor or lambda function taking one parameter of the same type of the iterated elements
+*
+**/
+template<typename itType, class MapFunction>
+void iteratorMap(Iterator<itType> *it, MapFunction mapFunction) {
+  while(it->hasNext()) {
+    mapFunction(it->next());
+  }
+  delete it;
+}
+
+/**
+* @brief Reduces iterated elements to a single value
+* @ingroup Iterators
+*
+* Produces a single value from the iterated elements (e.g. sum).
+* That function takes ownership of the iterator and will delete it.
+*
+* @param it a Tulip iterator
+* @param initVal initial value of the reduced result
+* @param reduceFunction functor or lambda function taking two parameters : first one being the current reduced value,
+* second one being the current iterated element and returning intermediate reduced value
+*
+* @return the reduced value from the iterated elements
+*
+**/
+template<typename itType, typename reduceType, class ReduceFunction>
+reduceType iteratorReduce(tlp::Iterator<itType> *it, const reduceType &initVal, ReduceFunction reduceFunction) {
+  reduceType val = initVal;
+  while(it->hasNext()) {
+    val = reduceFunction(val, it->next());
+  }
+  delete it;
+  return val;
+}
+
+}
 
 #ifdef _MSC_VER
 

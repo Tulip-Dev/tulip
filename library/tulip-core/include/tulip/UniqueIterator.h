@@ -27,36 +27,36 @@
 //===============================================================================
 namespace tlp {
 /**
-  * \brief that class implement a default functor that always return true
-  *
-  * @see UniqueIterator
-  */
+* @brief that class implement a default functor that always returns true
+*
+* @see UniqueIterator
+*/
 template <typename TYPE>
-class CheckAllFunctor {
+struct CheckAllFunctor {
   bool operator()(const TYPE &) {
     return true;
   }
 };
 
 /**
-  * @class UniqueIterator
-  * @ingroup Iterators
-  *
-  * @brief UniqueIterator enables to remove duplicated elements in an iterator
-  *
-  * @param it the iterator in which we want to filter out duplicated elements
-  * @param checkFuncor a functor that enable to indicate wheter or not the element could be duplicated (default test all elements)
-  *
-  * The functor function shoul have the following form
-  * @code
-  * class ACheckFunctor {
-  *  bool operator(TYPE a) {
-  *   return true if a could be duplicated else false;
-  *  }
-  * };
-  * @endcode
-  * checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when not necessary.
-  */
+* @class UniqueIterator
+* @ingroup Iterators
+*
+* @brief UniqueIterator enables to remove duplicated elements in an iterator
+*
+* @param it the iterator in which we want to filter out duplicated elements
+* @param checkFunctor a functor that enables to indicate whether or not the element could be duplicated (default test all elements)
+*
+* The functor function shoul have the following form
+* @code
+* class ACheckFunctor {
+*  bool operator(TYPE a) {
+*   return true if a could be duplicated else false;
+*  }
+* };
+* @endcode
+* checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when not necessary.
+**/
 template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
 class UniqueIterator : public Iterator<TYPE> {
 public:
@@ -105,13 +105,7 @@ private:
   TYPE curVal;
   TOCHECKFUNCTOR _checkFunctor;
 };
-/**
-  * @class MPUniqueIterator
-  * @ingroup Iterators
-  * @brief MPUniqueIterator implements memory pool for UniqueIterator
-  * @warning never inherit from that class
-  * @see UniqueIterator
-  */
+
 template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
 class MPUniqueIterator : public UniqueIterator<TYPE, TOCHECKFUNCTOR> ,
   public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR> > {
@@ -120,6 +114,23 @@ public:
     UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {
   }
 };
+
+/**
+* @brief Convenient function for creating a UniqueIterator.
+* @ingroup Iterators
+*
+* Creates a UniqueIterator from another Iterator.
+* The returned Iterator takes ownership of the one provided as parameter.
+*
+* @param it a Tulip Iterator
+*
+* @return a UniqueIterator
+*
+**/
+template <typename TYPE>
+inline UniqueIterator<TYPE> *uniqueIterator(Iterator<TYPE> *it) {
+  return new MPUniqueIterator<TYPE>(it);
+}
 
 }
 #endif // UNIQUEITERATOR_H

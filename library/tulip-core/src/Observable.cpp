@@ -28,8 +28,8 @@
 #include <map>
 
 #include <tulip/Observable.h>
-#include <tulip/conversioniterator.h>
-#include <tulip/filteriterator.h>
+#include <tulip/ConversionIterator.h>
+#include <tulip/FilterIterator.h>
 
 using namespace std;
 using namespace tlp;
@@ -661,23 +661,14 @@ unsigned int Observable::countListeners() const {
   if (!hasOnlookers())
     return 0;
 
-  unsigned int result = 0;
-  for(node n : (new FilterIterator<node, LinkFilter<LISTENER> >(_oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(_oGraph, _oType, getNode())))) {
-    (void) n;
-    ++result;
-  }
-  return result;
+  return tlp::iteratorCount(tlp::filterIterator(_oGraph.getInNodes(getNode()), LinkFilter<LISTENER>(_oGraph, _oType, getNode())));
+
 }
 //----------------------------------------
 unsigned int Observable::countObservers() const {
   if (!hasOnlookers())
     return 0;
 
-  unsigned int result = 0;
-  for(node n : (new FilterIterator<node, LinkFilter<OBSERVER> >(_oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(_oGraph, _oType, getNode())))) {
-    (void) n;
-    ++result;
-  }
-  return result;
+  return tlp::iteratorCount(tlp::filterIterator(_oGraph.getInNodes(getNode()), LinkFilter<OBSERVER>(_oGraph, _oType, getNode())));
 }
 }

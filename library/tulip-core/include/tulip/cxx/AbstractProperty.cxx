@@ -159,12 +159,7 @@ unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuate
     return nodeProperties.numberOfNonDefaultValues();
   }
   else {
-    unsigned int ret = 0;
-    for(node n : getNonDefaultValuatedNodes(g)) {
-      (void) n;
-      ++ret;
-    }
-    return ret;
+    return tlp::iteratorCount(getNonDefaultValuatedNodes(g));
   }
 }
 //============================================================
@@ -228,12 +223,7 @@ unsigned int tlp::AbstractProperty<Tnode,Tedge,Tprop>::numberOfNonDefaultValuate
     return edgeProperties.numberOfNonDefaultValues();
   }
   else {
-    unsigned int ret = 0;
-    for(edge e : getNonDefaultValuatedEdges(g)) {
-      (void) e;
-      ++ret;
-    }
-    return ret;
+    return tlp::iteratorCount(getNonDefaultValuatedEdges(g));
   }
 }
 //============================================================

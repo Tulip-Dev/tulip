@@ -15,7 +15,7 @@ INSTALL(FILES
   tulip/ConcatIterator.h
   tulip/ConnectedTest.h
   tulip/ConsoleUtils.h
-  tulip/conversioniterator.h
+  tulip/ConversionIterator.h
   tulip/ConvexHull.h
   tulip/Coord.h
   tulip/DataSet.h
@@ -26,7 +26,7 @@ INSTALL(FILES
   tulip/ExportModule.h
   tulip/Face.h
   tulip/FaceIterator.h
-  tulip/filteriterator.h
+  tulip/FilterIterator.h
   tulip/ForEach.h
   tulip/GraphAbstract.h
   tulip/GraphDecorator.h
@@ -86,7 +86,7 @@ INSTALL(FILES
   tulip/tuliphash.h
   tulip/TulipPluginHeaders.h
   tulip/TulipViewSettings.h
-  tulip/uniqueiterator.h
+  tulip/UniqueIterator.h
   tulip/VectorCast.h
   tulip/vectorgraph.h
   tulip/vectorgraphproperty.h

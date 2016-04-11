@@ -25,21 +25,21 @@
 //
 namespace tlp {
 /**
-  * @class ConversionIterator
-  * @ingroup Iterators
-  * @brief Iterator that enables to convert an Iterator of type TYPEIN to an Iterator if type TYPEOUT
-  * @param it, the iterator that should be converted
-  * @param convFunctor, the functor that enable to convert TYPEIN in TYPEOUT
-  *
-  * The functor function shoul have the following form
-  * @code
-  * class AConversionFunctor {
-  *  TYPEOUT operator()(TYPEIN a) {
-  *    return a converted in TYPEOUT;
-  *  }
-  * };
-  * @endcode
-  */
+* @class ConversionIterator
+* @ingroup Iterators
+* @brief Iterator that enables to convert an Iterator of type TYPEIN to an Iterator of type TYPEOUT
+* @param it the iterator that should be converted
+* @param convFunctor the functor or lamnda function that enables to convert TYPEIN to TYPEOUT
+*
+* The functor function shouls have the following form:
+* @code
+* class AConversionFunctor {
+*  TYPEOUT operator()(TYPEIN a) {
+*    return a converted in TYPEOUT;
+*  }
+* };
+* @endcode
+**/
 template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
 class ConversionIterator : public Iterator<TYPEOUT> {
 public:
@@ -59,12 +59,12 @@ private:
   CONVERSIONFUNCTOR _convFunctor;
 };
 /**
-  * @class MPConversionIterator
-  * @ingroup Iterators
-  * @brief MPConversionIterator implements memory pool for ConversionIterator
-  * @warning never inherit from that class
-  * @see ConversionIterator
-  */
+* @class MPConversionIterator
+* @ingroup Iterators
+* @brief MPConversionIterator implements memory pool for ConversionIterator
+* @warning never inherit from that class
+* @see ConversionIterator
+**/
 template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
 class MPConversionIterator : public ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>, public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR> > {
 public:
@@ -72,6 +72,24 @@ public:
     ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {
   }
 };
+
+/**
+* @brief Convenient function for creating a ConversionIterator.
+* @ingroup Iterators
+*
+* Creates a ConversionIterator from another Iterator and a conversion function.
+* The returned Iterator takes ownership of the one provided as parameter.
+*
+* @param it a Tulip Iterator
+* @param convFunc functor or lambda function converting a value of type TYPEIN to type TYPEOUT
+*
+* @return a ConversionIterator
+*
+**/
+template <typename TYPEOUT, typename CONVERSIONFUNCTOR, typename TYPEIN>
+inline ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>* conversionIterator(tlp::Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunc) {
+  return new MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunc);
+}
 
 }
 #endif // CONVERSIONITERATOR_H

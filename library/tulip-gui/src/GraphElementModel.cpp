@@ -23,6 +23,7 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/Graph.h>
+#include <tulip/FilterIterator.h>
 
 using namespace tlp;
 using namespace std;
@@ -34,19 +35,14 @@ GraphElementModel::GraphElementModel(Graph *graph,unsigned int id,QObject *paren
 int GraphElementModel::rowCount(const QModelIndex &parent) const {
   if (_graph == NULL || parent.isValid())
     return 0;
-
-  int result=0;
-  for(PropertyInterface* prop :_graph->getObjectProperties()) {
 #ifdef NDEBUG
-
-    if (prop->getName() == "viewMetaGraph")
-      continue;
+  auto filterOutViewMetaGraph = [](tlp::PropertyInterface *prop) {
+    return (prop->getName() != "viewMetaGraph");
+  };
+  return iteratorCount(filterIterator(_graph->getObjectProperties(), filterOutViewMetaGraph));
 #else
-  (void) prop;
+  return iteratorCount(_graph->getObjectProperties());
 #endif
-    ++result;
-  }
-  return result;
 }
 
 int GraphElementModel::columnCount(const QModelIndex &parent) const {

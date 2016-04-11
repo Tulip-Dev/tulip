@@ -180,6 +180,40 @@ struct SortExtremitiesEdgeIterator : public StableIterator<tlp::edge> {
   ~SortExtremitiesEdgeIterator() {}
 };
 
+/**
+* @brief This Iterator wraps an existing one and sort its iterated elements based on comparison function.
+* @ingroup Iterators
+**/
+template <typename T, class CompareFunction>
+struct SortIterator : public tlp::StableIterator<T> {
+  ///
+  SortIterator(Iterator<T> *itIn, CompareFunction compFunc) : StableIterator<T>(itIn) {
+    sort(this->sequenceCopy.begin(), this->sequenceCopy.end(), compFunc);
+    this->copyIterator=this->sequenceCopy.begin();
+  }
+  ///
+  ~SortIterator() {}
+};
+
+/**
+* @brief Convenient function for creating a SortIterator.
+* @ingroup Iterators
+*
+* Creates a SortIterator from another Iterator and a comparison function.
+* The returned Iterator takes ownership of the one provided as parameter.
+*
+* @param it a Tulip Iterator
+* @param compFunc functor or lambda function taking two parameters of type const T& and returning a boolean
+*
+* @return a SortIterator
+*
+**/
+template <typename T, class CompareFunction>
+inline SortIterator<T, CompareFunction> *sortIterator(Iterator<T> *it, CompareFunction compFunc) {
+  return new SortIterator<T, CompareFunction>(it, compFunc);
+}
+
+
 }
 #endif
 ///@endcond

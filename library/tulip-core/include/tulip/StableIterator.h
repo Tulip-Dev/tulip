@@ -27,31 +27,31 @@
 
 namespace tlp {
 /**
-  * @class StableIterator
-  * @brief Stores the elements of an iterator and iterates a copy.
-  *
-  * This Iterator stores all the elements accessible by another Iterator into an internal data
-  * structure (created at the construction), and then uses this structure for the iteration.
-  * Iteration order is the same.
-  *
-  * @warning By default StableIterator takes ownership of the iterator given in parameter, (ie,
-  * delete will be called on the input iterator). The deletion takes place when constructing the StableIterator.
-  *
-  * This class is really useful when one needs to modify the graph during an iteration. For
-  * instance the following code remove all nodes that match the function myfunc().
-  * Using standard iterators for that operations is not possible since we modify the graph.
-  *
-  * @code
-  * StableIterator<node> it(graph->getNodes());
-  * while(it.hasNext()) {
-  *  node n = it.next();
-  *  if (myfunc(n))
-  *     graph->delNode(n);
-  * }
-  * @endcode
-  *
-  * @see stableForEach
-  */
+* @class StableIterator
+* @ingroup Iterators
+* @brief Stores the elements of an iterator and iterates a copy.
+*
+* This Iterator stores all the elements accessible by another Iterator into an internal data
+* structure (created at the construction), and then uses this structure for the iteration.
+* Iteration order is the same.
+*
+* @warning By default StableIterator takes ownership of the iterator given in parameter, (ie,
+* delete will be called on the input iterator). The deletion takes place when constructing the StableIterator.
+*
+* This class is really useful when one needs to modify the graph during an iteration. For
+* instance the following code remove all nodes that match the function myfunc().
+* Using standard iterators for that operation is not possible since we modify the graph.
+*
+* @code
+* StableIterator<node> it(graph->getNodes());
+* while(it.hasNext()) {
+*  node n = it.next();
+*  if (myfunc(n))
+*     graph->delNode(n);
+* }
+* @endcode
+*
+**/
 template<class itType>
 struct StableIterator : public Iterator<itType> {
   //=============================
@@ -109,9 +109,16 @@ protected :
   typename std::vector<itType>::const_iterator copyIterator;
 };
 
- /**
- * @brief Convenient function for creating a stable iterator from an iterator
- **/
+/**
+* @brief Convenient function for creating a stable Iterator.
+* @ingroup Iterators
+*
+* Creates a stable Iterator from another Iterator.
+* The returned Iterator takes ownership of the one provided as parameter.
+*
+* @param it a Tulip Iterator
+* @return a stable Iterator
+**/
 template<class itType>
 inline StableIterator<itType> *stableIterator(Iterator<itType> *it) {
   return new StableIterator<itType>(it);

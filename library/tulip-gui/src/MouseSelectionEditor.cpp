@@ -34,6 +34,7 @@
 
 #include <cmath>
 #include <climits>
+#include <memory>
 
 #define EPSILON 1.0
 #define EPSILON_SCREEN 50
@@ -192,19 +193,10 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
     switch(qMouseEv->buttons()) {
     case Qt::LeftButton : {
       // first ensure that something is selected
-      bool hasSelection = false;
-      for(node no : _selection->getNodesEqualTo(true, _graph)) {
-        (void) no;
-        hasSelection = true;
-        break;
-      }
+      bool hasSelection = std::unique_ptr<Iterator<node>>(_selection->getNodesEqualTo(true, _graph))->hasNext();
 
       if (!hasSelection) {
-        for(edge ed : _selection->getEdgesEqualTo(true, _graph)) {
-          (void) ed;
-          hasSelection = true;
-          break;
-        }
+        hasSelection = std::unique_ptr<Iterator<edge>>(_selection->getEdgesEqualTo(true, _graph))->hasNext();
       }
 
       if (!hasSelection ||
@@ -334,19 +326,10 @@ bool MouseSelectionEditor::eventFilter(QObject *widget, QEvent *e) {
 
   if(e->type() == QEvent::KeyPress) {
     // first ensure that something is selected
-    bool hasSelection = false;
-    for(node no : _selection->getNodesEqualTo(true, _graph)) {
-      (void) no;
-      hasSelection = true;
-      break;
-    }
+    bool hasSelection = std::unique_ptr<Iterator<node>>(_selection->getNodesEqualTo(true, _graph))->hasNext();
 
     if (!hasSelection) {
-      for(edge ed : _selection->getEdgesEqualTo(true, _graph)) {
-        (void) ed;
-        hasSelection = true;
-        break;
-      }
+      hasSelection = std::unique_ptr<Iterator<edge>>(_selection->getEdgesEqualTo(true, _graph))->hasNext();
     }
 
     if(hasSelection) {
