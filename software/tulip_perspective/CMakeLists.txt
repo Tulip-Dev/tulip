@@ -60,9 +60,16 @@ IF(WIN32)
     IF(NOT MSVC)
       SET(GEOVIEW_DLL "lib${GEOVIEW_DLL}")
     ENDIF(NOT MSVC)
-    INSTALL(CODE
-      "INCLUDE(BundleUtilities)
-       FIXUP_BUNDLE(\"${APP}\"   \"${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}\"   \"${LIB_DIRS}\")"
-    )
+    IF(EXISTS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
+      INSTALL(CODE
+	"INCLUDE(BundleUtilities)
+         FIXUP_BUNDLE(\"${APP}\"   \"${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}\"   \"${LIB_DIRS}\")"
+      )
+    ELSE(EXISTS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
+      INSTALL(CODE
+	"INCLUDE(BundleUtilities)
+         FIXUP_BUNDLE(\"${APP}\"   \"${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}\"   \"${LIB_DIRS}\")"
+      )
+    ENDIF(EXISTS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
   ENDIF(FIXUP_BUNDLE)
 ENDIF(WIN32)
