@@ -528,6 +528,8 @@ void GraphPerspective::exportGraph(Graph* g) {
   DataSet data = wizard.parameters();
   PluginProgress* prg = progress(NoProgressOption);
   prg->setTitle(exportPluginName);
+  // take time before run
+  QDateTime start = QDateTime::currentDateTime();
   bool result = tlp::exportGraph(g,*os,exportPluginName,data,prg);
   delete os;
 
@@ -535,10 +537,13 @@ void GraphPerspective::exportGraph(Graph* g) {
     QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format ") + wizard.algorithm());
   }
   else {
+    // display spent time
+    if (TulipSettings::instance().isRunningTimeComputed()) {
+      std::string moduleAndParams = exportPluginName + " - " + data.toString();
+      qDebug() << moduleAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+    }
     addRecentDocument(wizard.outputFile());
   }
-
-
   delete prg;
 }
 
@@ -597,6 +602,8 @@ void GraphPerspective::importGraph(const std::string& module,
   if (!module.empty()) {
     PluginProgress* prg = progress(IsStoppable | IsCancellable);
     prg->setTitle(module);
+    // take time before run
+    QDateTime start = QDateTime::currentDateTime();
     g = tlp::importGraph(module,data,prg);
 
     if (g == NULL) {
@@ -607,6 +614,12 @@ void GraphPerspective::importGraph(const std::string& module,
     }
 
     delete prg;
+
+    // display spent time
+    if (TulipSettings::instance().isRunningTimeComputed()) {
+      std::string moduleAndParams = module + " import - " + data.toString();
+    qDebug() << moduleAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+    }
 
     if (g->getName().empty()) {
       QString n = tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
