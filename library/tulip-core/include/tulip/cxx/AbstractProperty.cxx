@@ -19,7 +19,7 @@
 #include <cstdlib>
 
 template <class Tnode, class Tedge, class Tprop>
-tlp::AbstractProperty<Tnode,Tedge,Tprop>::AbstractProperty(tlp::Graph *sg, const std::string& n) {
+tlp::AbstractProperty<Tnode,Tedge,Tprop>::AbstractProperty(tlp::Graph *sg, const std::string& n) : nodeValueSetter(this), edgeValueSetter(this) {
   Tprop::graph = sg;
   Tprop::name = n;
   nodeDefaultValue = Tnode::defaultValue();
@@ -265,6 +265,28 @@ bool tlp::AbstractProperty<Tnode,Tedge,Tprop>::readEdgeValue(std::istream& iss,
   }
 
   return false;
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::operator[](const node n) const {
+  return getNodeValue(n);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+tlp::PropertyNodeValueSetter<Tnode, Tedge, Tprop>& tlp::AbstractProperty<Tnode, Tedge, Tprop>::operator[](const node n) {
+  assert(n.isValid());
+  return nodeValueSetter(n);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::operator[](const edge e) const {
+  return getEdgeValue(e);
+}
+//============================================================
+template <class Tnode, class Tedge, class Tprop>
+tlp::PropertyEdgeValueSetter<Tnode, Tedge, Tprop>& tlp::AbstractProperty<Tnode, Tedge, Tprop>::operator[](const edge e) {
+  assert(n.isValid());
+  return edgeValueSetter(e);
 }
 //============================================================
 template <typename vectType, typename eltType, typename propType>

@@ -36,6 +36,83 @@ namespace tlp {
 
 class GraphView;
 
+template <class Tnode, class Tedge, class Tprop>
+class AbstractProperty;
+
+/**
+ * @brief Helper class allowing to implement operator[](const node) in AbstractProperty class.
+ * It can not be instantiated and is only used internally in the AbstractProperty class.
+ *
+ */
+template <class Tnode, class Tedge, class Tprop>
+class TLP_SCOPE PropertyNodeValueSetter {
+
+  friend class AbstractProperty<Tnode, Tedge, Tprop>;
+
+public:
+
+  operator typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue() const {
+    return property->getNodeValue(n);
+  }
+
+  PropertyNodeValueSetter<Tnode, Tedge, Tprop> &operator=(const typename Tnode::RealType &v) {
+    property->setNodeValue(n, v);
+    return *this;
+  }
+
+private:
+
+  PropertyNodeValueSetter() {}
+
+  PropertyNodeValueSetter(AbstractProperty<Tnode, Tedge, Tprop> *property) : property(property) {}
+
+  PropertyNodeValueSetter<Tnode, Tedge, Tprop> &operator()(const node n) {
+    this->n = n;
+    return *this;
+  }
+
+  AbstractProperty<Tnode, Tedge, Tprop> *property;
+  node n;
+
+};
+
+/**
+ * @brief Helper class allowing to implement operator[](const edge) in AbstractProperty class.
+ * It can not be instantiated and is only used internally in the AbstractProperty class.
+ *
+ */
+template <class Tnode, class Tedge, class Tprop>
+class TLP_SCOPE PropertyEdgeValueSetter {
+
+  friend class AbstractProperty<Tnode, Tedge, Tprop>;
+
+public:
+
+  operator typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue() const {
+    return property->getEdgeValue(e);
+  }
+
+  PropertyEdgeValueSetter<Tnode, Tedge, Tprop> &operator=(const typename Tedge::RealType &v) {
+    property->setEdgeValue(e, v);
+    return *this;
+  }
+
+private:
+
+  PropertyEdgeValueSetter() {}
+
+  PropertyEdgeValueSetter(AbstractProperty<Tnode, Tedge, Tprop> *property) : property(property) {}
+
+  PropertyEdgeValueSetter<Tnode, Tedge, Tprop> &operator()(const edge e) {
+    this->e = e;
+    return *this;
+  }
+
+  AbstractProperty<Tnode, Tedge, Tprop> *property;
+  edge e;
+
+};
+
 //==============================================================
 
 /**
@@ -208,6 +285,63 @@ public:
 
     return *this;
   }
+
+  /**
+   * @brief This operator overload adds syntactic sugar to get a node value in a property.
+   *
+   * @code
+   * const tlp::DoubleProperty &metric = graph->getDoubleProperty("metric");
+   * double metricSum = 0;
+   * for (tlp::node n : graph->getNodes()) {
+   *   metricSum += metric[n];
+   * }
+   * @endcode
+   * @param n the node to get value in that property
+   * @return a const reference to the value of the node in that property
+   */
+  typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue operator[](const node n) const;
+
+  /**
+   * @brief This operator overload adds syntactic sugar to set a node value in a property.
+   *
+   * @code
+   * tlp::DoubleProperty &degreeProp = graph->getDoubleProperty("degree");
+   * for (tlp::node n : graph->getNodes()) {
+   *   degreeProp[n] = graph->deg(n);
+   * }
+   * @endcode
+   * @param n the node to set value in that property
+   */
+  PropertyNodeValueSetter<Tnode, Tedge, Tprop>& operator[](const node n);
+
+  /**
+   * @brief This operator overload adds syntactic sugar to get an edge value in a property.
+   *
+   * @code
+   * const tlp::DoubleProperty &metric = graph->getDoubleProperty("metric");
+   * double metricSum = 0;
+   * for (tlp::edge e : graph->getEdges()) {
+   *   metricSum += metric[e];
+   * }
+   * @endcode
+   * @param e the edge to get value in that property
+   * @return a const reference to the value of the edge in that property
+   */
+  typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue operator[](const edge e) const;
+
+  /**
+   * @brief This operator overload adds syntactic sugar to set a node value in a property.
+   *
+   * @code
+   * tlp::DoubleProperty &idProp = graph->getDoubleProperty("id");
+   * for (tlp::edge e : graph->getEdges()) {
+   *   idProp[e] = e.id;
+   * }
+   * @endcode
+   * @param e the edge to set value in that property
+   */
+  PropertyEdgeValueSetter<Tnode, Tedge, Tprop>& operator[](const edge e);
+
   //=================================================================================
   // Untyped accessors inherited from PropertyInterface, documentation is inherited
   virtual std::string getNodeDefaultStringValue() const {
@@ -418,6 +552,8 @@ protected:
   MutableContainer<typename Tedge::RealType> edgeProperties;
   typename Tnode::RealType nodeDefaultValue;
   typename Tedge::RealType edgeDefaultValue;
+  PropertyNodeValueSetter<Tnode, Tedge, Tprop> nodeValueSetter;
+  PropertyEdgeValueSetter<Tnode, Tedge, Tprop> edgeValueSetter;
 };
 
 template <typename vectType,typename eltType,typename propType=VectorPropertyInterface>
@@ -515,7 +651,6 @@ public:
    **/
   void resizeEdgeValue(const edge e, size_t size, typename eltType::RealType elt = eltType::defaultValue());
 };
-
 
 }
 #if !defined(_MSC_VER) || defined(DLL_TULIP) //When using VC++, we only want to include this when we are in the TULIP dll. With any other compiler, include it all the time

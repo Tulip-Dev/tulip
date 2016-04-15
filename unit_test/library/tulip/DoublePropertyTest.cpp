@@ -172,3 +172,16 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
   prop->setNodeStringValue(n , "-inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
 }
+
+void DoublePropertyTest::testDoublePropertyRefAndGetSetOperators() {
+  const double val1 = 56.2;
+  const double val2 = 33.42;
+
+  DoubleProperty &doubleProp = graph->getDoubleProperty(doublePropertyName);
+
+  doubleProp.setNodeValue(n1, val1);
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(val1, doubleProp[n1], 1e-6);
+
+  doubleProp[n4] = val2;
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(val2, doubleProp.getNodeValue(n4), 1e-6);
+}

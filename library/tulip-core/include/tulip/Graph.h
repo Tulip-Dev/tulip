@@ -35,6 +35,19 @@ namespace tlp {
 
 class PropertyInterface;
 class BooleanProperty;
+class ColorProperty;
+class DoubleProperty;
+class IntegerProperty;
+class LayoutProperty;
+class SizeProperty;
+class StringProperty;
+class BooleanVectorProperty;
+class ColorVectorProperty;
+class DoubleVectorProperty;
+class IntegerVectorProperty;
+class CoordVectorProperty;
+class SizeVectorProperty;
+class StringVectorProperty;
 class PluginProgress;
 template<class C>struct Iterator;
 
@@ -1148,11 +1161,11 @@ public:
 
   /**
    * @brief Gets a property on this graph.
-   * The name of a property indentifies it uniquely.
+   * The name of a property identifies it uniquely.
    * Either there already exists a property with the given name, in which case it is returned.
-   * Either no such porperty exists and it is created.
+   * Either no such property exists and it is created.
    *
-   * The graph keeps ownership of the property, if you wish to remove it fgrom the graph use
+   * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    * @warning using the wrong template parameter will cause a segmentation fault.
    * @param The unique identifier of the property.
@@ -1267,6 +1280,314 @@ public:
    * @return An iterator over all of the properties attached to this graph.
    */
   virtual Iterator<PropertyInterface*>* getObjectProperties() const=0;
+
+  /**
+   * @brief Gets a reference on a boolean property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the boolean property of the given name.
+   */
+  BooleanProperty& getBooleanProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a boolean property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the boolean property of the given name.
+   */
+  BooleanProperty& getLocalBooleanProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a color property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the color property of the given name.
+   */
+  ColorProperty& getColorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a color property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the color property of the given name.
+   */
+  ColorProperty& getLocalColorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a double property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the double property of the given name.
+   */
+  DoubleProperty& getDoubleProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a double property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the double property of the given name.
+   */
+  DoubleProperty& getLocalDoubleProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on an integer property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the integer property of the given name.
+   */
+  IntegerProperty& getIntegerProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on an integer property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the integer property of the given name.
+   */
+  IntegerProperty& getLocalIntegerProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a layout property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the layout property of the given name.
+   */
+  LayoutProperty& getLayoutProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a layout property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the layout property of the given name.
+   */
+  LayoutProperty& getLocalLayoutProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a size property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the size property of the given name.
+   */
+  SizeProperty& getSizeProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a size property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the size property of the given name.
+   */
+  SizeProperty& getLocalSizeProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a string property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the string property of the given name.
+   */
+  StringProperty& getStringProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a string property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the string property of the given name.
+   */
+  StringProperty& getLocalStringProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a boolean vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the boolean vector property of the given name.
+   */
+  BooleanVectorProperty& getBooleanVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a boolean property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the boolean property of the given name.
+   */
+  BooleanVectorProperty& getLocalBooleanVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a color vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the color vector property of the given name.
+   */
+  ColorVectorProperty& getColorVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a color vector property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the color vector property of the given name.
+   */
+  ColorVectorProperty& getLocalColorVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a double vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the double vector property of the given name.
+   */
+  DoubleVectorProperty& getDoubleVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a double vector property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the double vector property of the given name.
+   */
+  DoubleVectorProperty& getLocalDoubleVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on an integer vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the integer vector property of the given name.
+   */
+  IntegerVectorProperty& getIntegerVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on an integer vector property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the integer vector property of the given name.
+   */
+  IntegerVectorProperty& getLocalIntegerVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a coord vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the coord vector property of the given name.
+   */
+  CoordVectorProperty& getCoordVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a coord vector property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the coord vector property of the given name.
+   */
+  CoordVectorProperty& getLocalCoordVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a size vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the size vector property of the given name.
+   */
+  SizeVectorProperty& getSizeVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a size vector property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the size vector property of the given name.
+   */
+  SizeVectorProperty& getLocalSizeVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a string vector property of this graph or one of its ancestors.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the string vector property of the given name.
+   */
+  StringVectorProperty& getStringVectorProperty(const std::string &name);
+
+  /**
+   * @brief Gets a reference on a string vector property of this graph.
+   * The name of a property identifies it uniquely.
+   * Either there already exists a property with the given name, in which case it is returned.
+   * Either no such property exists and it is created.
+   *
+   * @param The unique identifier of the property.
+   * @return a reference on the string vector property of the given name.
+   */
+  StringVectorProperty& getLocalStringVectorProperty(const std::string &name);
 
   /**
    * @brief Runs a plugin on the graph, whose result is a property.

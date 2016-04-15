@@ -1617,7 +1617,7 @@ struct less<MetaEdge> {
   }
 };
 }
-
+//====================================================================================
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
                             vector<node>& metaNodes) {
   GraphProperty *metaInfo =
@@ -1708,7 +1708,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 
   Observable::unholdObservers();
 }
-
+//====================================================================================
 Graph *Graph::getNthSubGraph(unsigned int n) const {
   unsigned int i=0;
   Iterator<Graph *> *it = getSubGraphs();
@@ -1725,7 +1725,7 @@ Graph *Graph::getNthSubGraph(unsigned int n) const {
   delete it;
   return nullptr;
 }
-
+//====================================================================================
 const std::string& GraphEvent::getPropertyName() const {
   assert(evtType > TLP_AFTER_DEL_SUBGRAPH && evtType < TLP_BEFORE_SET_ATTRIBUTE);
 
@@ -1735,27 +1735,27 @@ const std::string& GraphEvent::getPropertyName() const {
 
   return *(info.name);
 }
-
+//====================================================================================
 void Graph::addNodes(const std::vector<node>& nodes) {
   StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(), nodes.end());
   addNodes(&vIterator);
 }
-
+//====================================================================================
 void Graph::delNodes(const std::vector<node>& nodes, bool deleteInAllGraphs) {
   StlIterator<node, vector<node>::const_iterator> vIterator(nodes.begin(), nodes.end());
   delNodes(&vIterator, deleteInAllGraphs);
 }
-
+//====================================================================================
 void Graph::addEdges(const std::vector<edge>& edges) {
   StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
   addEdges(&vIterator);
 }
-
+//====================================================================================
 void Graph::delEdges(const std::vector<edge>& edges, bool deleteInAllGraphs) {
   StlIterator<edge, vector<edge>::const_iterator> vIterator(edges.begin(), edges.end());
   delEdges(&vIterator, deleteInAllGraphs);
 }
-
+//====================================================================================
 struct DescendantGraphsIterator :public Iterator<Graph*> {
   // use a stack to store non empty iterators
   stack<Iterator<Graph *>*> iterators;
@@ -1820,7 +1820,119 @@ struct DescendantGraphsIterator :public Iterator<Graph*> {
     return nullptr;
   }
 };
-
+//====================================================================================
 Iterator<Graph*>* Graph::getDescendantGraphs() const {
   return new DescendantGraphsIterator(this);
+}
+//====================================================================================
+BooleanProperty& Graph::getBooleanProperty(const std::string &name) {
+  return *(getProperty<BooleanProperty>(name));
+}
+//====================================================================================
+BooleanProperty& Graph::getLocalBooleanProperty(const std::string &name) {
+  return *(getLocalProperty<BooleanProperty>(name));
+}
+//====================================================================================
+ColorProperty& Graph::getColorProperty(const std::string &name) {
+  return *(getProperty<ColorProperty>(name));
+}
+//====================================================================================
+ColorProperty& Graph::getLocalColorProperty(const std::string &name) {
+  return *(getLocalProperty<ColorProperty>(name));
+}
+//====================================================================================
+DoubleProperty& Graph::getDoubleProperty(const std::string &name) {
+  return *(getProperty<DoubleProperty>(name));
+}
+//====================================================================================
+DoubleProperty& Graph::getLocalDoubleProperty(const std::string &name) {
+  return *(getLocalProperty<DoubleProperty>(name));
+}
+//====================================================================================
+IntegerProperty& Graph::getIntegerProperty(const std::string &name) {
+  return *(getProperty<IntegerProperty>(name));
+}
+//====================================================================================
+IntegerProperty& Graph::getLocalIntegerProperty(const std::string &name) {
+  return *(getLocalProperty<IntegerProperty>(name));
+}
+//====================================================================================
+LayoutProperty& Graph::getLayoutProperty(const std::string &name) {
+  return *(getProperty<LayoutProperty>(name));
+}
+//====================================================================================
+LayoutProperty& Graph::getLocalLayoutProperty(const std::string &name) {
+  return *(getLocalProperty<LayoutProperty>(name));
+}
+//====================================================================================
+SizeProperty& Graph::getSizeProperty(const std::string &name) {
+  return *(getProperty<SizeProperty>(name));
+}
+//====================================================================================
+SizeProperty& Graph::getLocalSizeProperty(const std::string &name) {
+  return *(getLocalProperty<SizeProperty>(name));
+}
+//====================================================================================
+StringProperty& Graph::getStringProperty(const std::string &name) {
+  return *(getProperty<StringProperty>(name));
+}
+//====================================================================================
+StringProperty& Graph::getLocalStringProperty(const std::string &name) {
+  return *(getLocalProperty<StringProperty>(name));
+}
+//====================================================================================
+BooleanVectorProperty& Graph::getBooleanVectorProperty(const std::string &name) {
+  return *(getProperty<BooleanVectorProperty>(name));
+}
+//====================================================================================
+BooleanVectorProperty& Graph::getLocalBooleanVectorProperty(const std::string &name) {
+  return *(getLocalProperty<BooleanVectorProperty>(name));
+}
+//====================================================================================
+ColorVectorProperty& Graph::getColorVectorProperty(const std::string &name) {
+  return *(getProperty<ColorVectorProperty>(name));
+}
+//====================================================================================
+ColorVectorProperty& Graph::getLocalColorVectorProperty(const std::string &name) {
+  return *(getLocalProperty<ColorVectorProperty>(name));
+}
+//====================================================================================
+DoubleVectorProperty& Graph::getDoubleVectorProperty(const std::string &name) {
+  return *(getProperty<DoubleVectorProperty>(name));
+}
+//====================================================================================
+DoubleVectorProperty& Graph::getLocalDoubleVectorProperty(const std::string &name) {
+  return *(getLocalProperty<DoubleVectorProperty>(name));
+}
+//====================================================================================
+IntegerVectorProperty& Graph::getIntegerVectorProperty(const std::string &name) {
+  return *(getProperty<IntegerVectorProperty>(name));
+}
+//====================================================================================
+IntegerVectorProperty& Graph::getLocalIntegerVectorProperty(const std::string &name) {
+  return *(getLocalProperty<IntegerVectorProperty>(name));
+}
+//====================================================================================
+CoordVectorProperty& Graph::getCoordVectorProperty(const std::string &name) {
+  return *(getProperty<CoordVectorProperty>(name));
+}
+//====================================================================================
+CoordVectorProperty& Graph::getLocalCoordVectorProperty(const std::string &name) {
+  return *(getLocalProperty<CoordVectorProperty>(name));
+}
+//====================================================================================
+SizeVectorProperty& Graph::getSizeVectorProperty(const std::string &name) {
+  return *(getProperty<SizeVectorProperty>(name));
+}
+//====================================================================================
+SizeVectorProperty& Graph::getLocalSizeVectorProperty(const std::string &name) {
+  return *(getLocalProperty<SizeVectorProperty>(name));
+}
+//====================================================================================
+StringVectorProperty& Graph::getStringVectorProperty(const std::string &name) {
+  return *(getProperty<StringVectorProperty>(name));
+}
+//====================================================================================
+StringVectorProperty& Graph::getLocalStringVectorProperty(const std::string &name) {
+  return *(getLocalProperty<StringVectorProperty>(name));
 }
