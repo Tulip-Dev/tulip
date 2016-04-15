@@ -1148,11 +1148,11 @@ public:
 
   /**
    * @brief Gets a property on this graph.
-   * The name of a property indentifies it uniquely.
+   * The name of a property identifies it uniquely.
    * Either there already exists a property with the given name, in which case it is returned.
-   * Either no such porperty exists and it is created.
+   * Either no such property exists and it is created.
    *
-   * The graph keeps ownership of the property, if you wish to remove it fgrom the graph use
+   * The graph keeps ownership of the property, if you wish to remove it from the graph use
    * Graph::delLocalProperty().
    * @warning using the wrong template parameter will cause a segmentation fault.
    * @param The unique identifier of the property.
