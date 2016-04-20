@@ -38,7 +38,7 @@ static const char *pythonVersion[]  = {
 
 #include <windows.h>
 
-#ifndef I64
+#ifndef X86_64
 // function to check if a 32 bits program run on a 64 bits system
 static bool isWow64() {
   BOOL bIsWow64 = FALSE;
@@ -65,7 +65,7 @@ static bool isWow64() {
 // On windows, Python can be installed for all users or for the current user only. That function handles both cases
 static QString pythonHome(const QString &pythonVersion) {
 // 32 bit Python
-#ifndef I64
+#ifndef X86_64
   // on windows 64 bit
   if (isWow64()) {
     QString win64RegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
@@ -155,7 +155,7 @@ static QString getDefaultPythonVersionIfAny() {
       pythonProcess.waitForFinished(-1);
       QString arch = pythonProcess.readAll();
 
-#ifdef I64
+#ifdef X86_64
 
       if (arch != "64") {
         defaultPythonVersion = "";

@@ -33,13 +33,13 @@ ENDIF(CMAKE_BUILD_TYPE MATCHES "[Dd][Ee][Bb][Uu][Gg]")
 ## ========================================================
 ## Check processor architecture
 ## ========================================================
-STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" I64)
-IF(I64)
+STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X86_64)
+IF(X86_64)
   SET(PROCESSOR_ARCHITECTURE "64")
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DI64")
-ELSE(I64)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DX86_64")
+ELSE(X86_64)
   SET(PROCESSOR_ARCHITECTURE "32")
-ENDIF(I64)
+ENDIF(X86_64)
 
 ## ========================================================
 ## Consider FreeBSD as Linux
@@ -455,7 +455,7 @@ IF(NOT BUILD_CORE_ONLY)
 
             ADD_CUSTOM_TARGET(tulip-core-wheel
                               COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                              COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1` 
+                              COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
                               WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
 
             ADD_CUSTOM_TARGET(tulip-gui-wheel
