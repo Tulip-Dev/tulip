@@ -340,7 +340,7 @@ public:
       if(targetType.getCurrent()==NODES_TARGET) {
 
         node n;
-        stableForEach(n, graph->getNodes()) {
+        forEach(n, graph->getNodes()) {
           std::string tmp = metric->getNodeStringValue(n);
 
           if(mapMetricElements.count(tmp)==0)
@@ -352,7 +352,7 @@ public:
       else {
 
         edge e;
-        stableForEach(e, graph->getEdges()) {
+        forEach(e, graph->getEdges()) {
           std::string tmp = metric->getEdgeStringValue(e);
 
           if(mapMetricElements.count(tmp)==0)
