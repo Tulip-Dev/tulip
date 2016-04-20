@@ -439,6 +439,16 @@ IF(NOT BUILD_CORE_ONLY)
               MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
               MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
             ENDIF(NOT TWINE_OK EQUAL 0)
+
+            ADD_CUSTOM_TARGET(tulip-core-wheel
+                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+                              WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+
+            ADD_CUSTOM_TARGET(tulip-gui-wheel
+                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+                              WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+                              DEPENDS tulip-core-wheel)
+
           ELSE(NOT LINUX)
 
             EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
