@@ -166,7 +166,7 @@ void tlp::initTulipLib(const char* appDirPath) {
       TulipLibDir.append(appDirPath,
                          strlen(appDirPath) -
                          strlen(strrchr(appDirPath, '/') + 1));
-#ifdef I64
+#ifdef X86_64
       // check for lib64
       string tlpPath64 = TulipLibDir + "lib64/tulip";
       tlp_stat_t statInfo;

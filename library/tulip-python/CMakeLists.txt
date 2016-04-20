@@ -1,6 +1,6 @@
-IF(MINGW AND I64)
+IF(MINGW AND X86_64)
   ADD_DEFINITIONS(-DMS_WIN64)
-ENDIF(MINGW AND I64)
+ENDIF(MINGW AND X86_64)
 
 # VS2013 and beyond implement C99 math functions.  Of interest to Python is the function round().
 # Python conditionally provides its own implementation of round() based on whether or not HAVE_ROUND is defined, but in no case is HAVE_ROUND ever defined.

@@ -279,7 +279,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
         int64_t exOffset = getOffsetInExecutable(array[i]);
         std::ostringstream oss;
         oss << "atos -d -o " << dsoName;
-#ifdef I64
+#ifdef X86_64
         oss << " -arch x86_64 ";
 #else
         oss << " -arch i386 ";
@@ -350,7 +350,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME frame;
   memset(&frame,0,sizeof(frame));
 
-#ifndef I64
+#ifndef X86_64
   DWORD machine = IMAGE_FILE_MACHINE_I386;
   frame.AddrPC.Offset    = context->Eip;
   frame.AddrStack.Offset = context->Esp;
@@ -389,7 +389,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     symbol->SizeOfStruct = (sizeof *symbol) + 255;
     symbol->MaxNameLength = 254;
 
-#ifndef I64
+#ifndef X86_64
     DWORD module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
 #else
     DWORD64 module_base = SymGetModuleBase(process, frame.AddrPC.Offset);
@@ -415,7 +415,7 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
     const char * func = nullptr;
 
-#ifndef I64
+#ifndef X86_64
     DWORD dummy = 0;
 #else
     DWORD64 dummy = 0;
@@ -497,7 +497,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   STACKFRAME        stack;
   ULONG               frame;
   IMAGEHLP_SYMBOL   *symbol = reinterpret_cast<IMAGEHLP_SYMBOL*>(malloc(sizeof(IMAGEHLP_SYMBOL)+2048*sizeof(TCHAR)));
-#ifdef I64
+#ifdef X86_64
   DWORD64             displacement = 0;
 #else
   DWORD             displacement = 0;
@@ -510,7 +510,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
   symbol->SizeOfStruct  = sizeof( IMAGEHLP_SYMBOL );
   symbol->MaxNameLength = 2048;
 
-#ifndef I64
+#ifndef X86_64
   DWORD machine = IMAGE_FILE_MACHINE_I386;
   stack.AddrPC.Offset    = context->Eip;
   stack.AddrStack.Offset = context->Esp;
@@ -554,7 +554,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
     std::string file_name = "";
     int line = 0;
 
-#ifndef I64
+#ifndef X86_64
     DWORD module_base = SymGetModuleBase(process, stack.AddrPC.Offset);
 #else
     DWORD64 module_base = SymGetModuleBase(process, stack.AddrPC.Offset);

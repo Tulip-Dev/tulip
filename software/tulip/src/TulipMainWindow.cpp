@@ -137,7 +137,7 @@ void TulipMainWindow::checkPython() {
     QStringList installedPythons = PythonVersionChecker::installedVersions();
 
     QString requiredPython = "Python " + PythonVersionChecker::compiledVersion();
-#ifdef I64
+#ifdef X86_64
     requiredPython += " (64 bit)";
 #else
     requiredPython += " (32 bit)";
