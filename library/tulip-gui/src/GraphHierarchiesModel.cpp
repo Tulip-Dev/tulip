@@ -34,7 +34,6 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GraphNeedsSavingObserver.h>
 #include <tulip/TlpQtTools.h>
 

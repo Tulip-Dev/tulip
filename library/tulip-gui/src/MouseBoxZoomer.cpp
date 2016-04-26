@@ -21,13 +21,15 @@
 
 #include <tulip/Graph.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/GlTools.h>
+#include <tulip/GlUtils.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
 #include <tulip/Camera.h>
 #include <tulip/MouseBoxZoomer.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlRect2D.h>
 
 #if defined(_MSC_VER)
 #include <Windows.h>
@@ -49,7 +51,6 @@ MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
-  GlGraphInputData *inputData = glw->getScene()->getGlGraphComposite()->getInputData();
 
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
@@ -63,10 +64,10 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
         w = 0;
         h = 0;
         started = true;
-        graph = inputData->getGraph();
+        graph = glw->getScene()->getMainGlGraph()->getGraph();
       }
       else {
-        if (inputData->getGraph() != graph) {
+        if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
           graph = nullptr;
           started = false;
         }
@@ -90,7 +91,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if ((qMouseEv->buttons() & mButton) &&
         (kModifier == Qt::NoModifier ||
          qMouseEv->modifiers() & kModifier)) {
-      if (inputData->getGraph() != graph) {
+      if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
         graph = nullptr;
         started = false;
       }
@@ -109,8 +110,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   }
 
   if (e->type() == QEvent::MouseButtonDblClick) {
-    GlBoundingBoxSceneVisitor bbVisitor(inputData);
-    glw->getScene()->getLayer("Main")->acceptVisitor(&bbVisitor);
+    GlBoundingBoxSceneVisitor bbVisitor;
+    glw->getScene()->getMainLayer()->acceptVisitor(&bbVisitor);
     QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bbVisitor.getBoundingBox());
     zoomAnPan.animateZoomAndPan();
     return true;
@@ -123,7 +124,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     if ((qMouseEv->button() == mButton &&
          (kModifier == Qt::NoModifier ||
           qMouseEv->modifiers() & kModifier))) {
-      if (inputData->getGraph() != graph) {
+      if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
         graph = nullptr;
         started = false;
       }
@@ -141,8 +142,8 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
           if (abs(bbMax[0] - bbMin[0]) > 1 && abs(bbMax[1] - bbMin[1]) > 1) {
 
             BoundingBox sceneBB;
-            sceneBB.expand(glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMin)));
-            sceneBB.expand(glw->getScene()->getGraphCamera().viewportTo3DWorld(glw->screenToViewport(bbMax)));
+            sceneBB.expand(glw->getScene()->getMainLayer()->getCamera()->viewportTo3DWorld(glw->screenToViewport(bbMin)));
+            sceneBB.expand(glw->getScene()->getMainLayer()->getCamera()->viewportTo3DWorld(glw->screenToViewport(bbMax)));
 
             QtGlSceneZoomAndPanAnimator zoomAnPan(glw, sceneBB);
             zoomAnPan.animateZoomAndPan();
@@ -160,50 +161,22 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   if (!started) return false;
 
-  if (glw->getScene()->getGlGraphComposite()->getInputData()->getGraph() != graph) {
+  if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
     graph = nullptr;
     started = false;
   }
 
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glMatrixMode (GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity();
-  glOrtho(0.0, (GLdouble)glw->width(), 0.0, (GLdouble)glw->height(), -1, 1);
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
-  glDisable(GL_LIGHTING);
-  glDisable(GL_CULL_FACE);
-  glDisable(GL_DEPTH_TEST);
+  Camera *camera = glw->getScene()->getMainLayer()->getCamera();
+  Camera camera2d(false);
+  tlp::Vec4i viewport = camera->getViewport();
+  camera2d.setViewport(viewport);
+  camera2d.initGl();
+  GlRect2D rect(x, y, w, h, tlp::Color(0,0,255,100), tlp::Color::Black);
   glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_SRC_COLOR);
-
-  float col[4] = {0.8f, 0.4f, 0.4f, 0.2f};
-  setColor(col);
-  glBegin(GL_QUADS);
-  glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y-h);
-  glVertex2f(x, y-h);
-  glEnd();
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  rect.draw(camera2d);
   glDisable(GL_BLEND);
 
-  glLineWidth(2);
-  glLineStipple(2, 0xAAAA);
-  glEnable(GL_LINE_STIPPLE);
-  glBegin(GL_LINE_LOOP);
-  glVertex2f(x, y);
-  glVertex2f(x+w, y);
-  glVertex2f(x+w, y-h);
-  glVertex2f(x, y-h);
-  glEnd();
-
-  glPopMatrix();
-  glMatrixMode (GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode (GL_MODELVIEW);
-  glPopAttrib();
   return true;
 }
 

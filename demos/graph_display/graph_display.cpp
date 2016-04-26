@@ -9,7 +9,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/IntegerProperty.h>
 #include <tulip/TulipViewSettings.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/ForEach.h>
 
@@ -93,16 +93,16 @@ void setTreeVisualProperties(Graph *tree) {
 
 
 // That function sets some rendering parameters on the graph to visualize
-void setGraphRenderingParameters(GlGraphComposite *glGraphComposite) {
-    GlGraphRenderingParameters *renderingParameters = glGraphComposite->getRenderingParametersPointer();
+void setGraphRenderingParameters(GlGraph *glGraph) {
+    GlGraphRenderingParameters *renderingParameters = &(glGraph->getRenderingParameters());
     // Activate the display of edge extremities (arrows by default)
-    renderingParameters->setViewArrow(true);
+    renderingParameters->setDisplayEdgesExtremities(true);
     // No color interpolation for the edges
-    renderingParameters->setEdgeColorInterpolate(false);
+    renderingParameters->setInterpolateEdgesColors(false);
     // Size interpolation for the edges
-    renderingParameters->setEdgeSizeInterpolate(true);
+    renderingParameters->setInterpolateEdgesSizes(true);
     // Scale labels to node sizes
-    renderingParameters->setLabelScaled(true);
+    renderingParameters->setLabelsScaled(true);
 }
 
 int main(int argc, char** argv) {
@@ -136,14 +136,11 @@ int main(int argc, char** argv) {
   // Creates the main widget that will display our graph
   GlMainWidget* mainWidget = new GlMainWidget(nullptr);
 
-  // Adds a layer to the scene
-  GlLayer* mainLayer = mainWidget->getScene()->createLayer("Main");
-
-  // Adds the graph to this layer
-  mainLayer->addGraph(g,"graph");
+  // Adds the graph to the scene
+  mainWidget->getScene()->addMainGlGraph(g);
 
   // Sets some rendering parameters on the graph to visualize
-  setGraphRenderingParameters(mainWidget->getScene()->getGlGraphComposite());
+  setGraphRenderingParameters(mainWidget->getScene()->getMainGlGraph());
 
   // Display the widget
   mainWidget->show();

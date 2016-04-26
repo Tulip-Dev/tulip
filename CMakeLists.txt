@@ -82,7 +82,8 @@ SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersi
 ## Tulip libraries names
 ## ========================================================
 SET(LibTulipCoreName "tulip-core-${TulipMMVersion}")
-SET(LibTulipOGLName "tulip-ogl-${TulipMMVersion}")
+SET(LibTulipOglName "tulip-ogles-${TulipMMVersion}")
+SET(LibTulipOglesName "tulip-ogles-${TulipMMVersion}")
 SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
 SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
@@ -363,7 +364,7 @@ IF(NOT BUILD_CORE_ONLY)
       # Ensure that correct Python include path and library are selected by CMake on Linux (in case of non standard installation)
       ELSEIF(LINUX)
         SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/../include ${CMAKE_INCLUDE_PATH})
-        SET(CMAKE_LIBRARY_PATH ${PYTHON_HOME_PATH}/../lib ${CMAKE_LIBRARY_PATH})  
+        SET(CMAKE_LIBRARY_PATH ${PYTHON_HOME_PATH}/../lib ${CMAKE_LIBRARY_PATH})
       ENDIF(WIN32)
 
       FIND_PACKAGE(PythonLibs REQUIRED)
@@ -414,7 +415,7 @@ IF(NOT BUILD_CORE_ONLY)
           ENDIF(SIP_OK)
           SET(SIP_LIB tulipsip)
           SET(SYSTEM_SIP FALSE)
-          
+
           TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen sip
                       CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
                                   -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} -DPYTHON_INCLUDE_DIR2=${PYTHON_INCLUDE_DIR2}
@@ -478,7 +479,7 @@ IF(NOT BUILD_CORE_ONLY)
                               WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
                               DEPENDS tulip-core-wheel)
 
-          ENDIF(NOT LINUX)  
+          ENDIF(NOT LINUX)
 
           # In order to upload the generated wheels, an account must be created on PyPi
           # and the following configuration must be stored in the ~/.pypirc file
@@ -559,6 +560,8 @@ IF(NOT BUILD_CORE_ONLY)
   SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
   SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
   SET(Tess2Library tess2-tulip-${TulipMMVersion})
+  SET(NanoVGInclude ${PROJECT_SOURCE_DIR}/thirdparty/nanovg)
+  SET(STBInclude ${PROJECT_SOURCE_DIR}/thirdparty/stb)
 ENDIF(NOT BUILD_CORE_ONLY)
 
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
@@ -571,7 +574,8 @@ SET(QtAwesomeInclude ${PROJECT_SOURCE_DIR}/thirdparty/QtAwesome)
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
 SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
-SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogl/include/)
+SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogles/include/)
+SET(TulipOGLESInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogles/include/)
 SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)
 SET(TulipGUIBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-gui/include/)
@@ -682,13 +686,13 @@ ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(plugins)
 IF(NOT BUILD_CORE_ONLY)
-  ADD_SUBDIRECTORY(doc)
+#  ADD_SUBDIRECTORY(doc)
   ADD_SUBDIRECTORY(textures)
-  IF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
-    ADD_SUBDIRECTORY(externalplugins)
+#  IF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+#    ADD_SUBDIRECTORY(externalplugins)
     ADD_SUBDIRECTORY(demos)
     ADD_SUBDIRECTORY(software)
-  ENDIF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+#  ENDIF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(NOT BUILD_CORE_ONLY)
 
 IF(BUILD_TESTS)
@@ -759,7 +763,7 @@ IF(NOT BUILD_CORE_ONLY)
     # updated in plugins/view/GeographicView,
     # and finally used in software/tulip_perpective/CMakeLists.txt
     SET_PROPERTY(GLOBAL PROPERTY FIXUP_BUNDLE_LIBS "")
-    
+
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
     IF(USE_QT5)
       INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})

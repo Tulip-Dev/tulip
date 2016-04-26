@@ -51,7 +51,7 @@
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/GlMainView.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
 #include <tulip/TulipSettings.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
@@ -1228,7 +1228,7 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph* g, const std:
     GlMainView* glMainView = dynamic_cast<tlp::GlMainView*>(v);
 
     if (v->graph() == g && glMainView != nullptr) {
-      if (glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->installProperties(propsMap))
+      if (glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getInputData().installProperties(propsMap))
         result = true;
     }
   }
@@ -1265,7 +1265,7 @@ void GraphPerspective::openPreferences() {
 
       if (glMainView != nullptr) {
         if (glMainView->getGlMainWidget() != nullptr) {
-          glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setSelectionColor(TulipSettings::instance().defaultSelectionColor());
+          glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(TulipSettings::instance().defaultSelectionColor());
         }
       }
     }

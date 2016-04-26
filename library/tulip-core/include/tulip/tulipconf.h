@@ -160,14 +160,14 @@ static float strtof(const char* cptr, char** endptr) {
 #endif
 
 #ifdef _WIN32
-#  ifdef DLL_TULIP_GL
-#    define TLP_GL_SCOPE       __declspec(dllexport)
+#  ifdef DLL_TULIP_GLES
+#    define TLP_GLES_SCOPE       __declspec(dllexport)
 #  else
-#    define TLP_GL_SCOPE       __declspec(dllimport)
+#    define TLP_GLES_SCOPE       __declspec(dllimport)
 #  endif
 #endif
-#ifndef TLP_GL_SCOPE
-#  define TLP_GL_SCOPE
+#ifndef TLP_GLES_SCOPE
+#  define TLP_GLES_SCOPE
 #endif
 
 #ifdef _WIN32

@@ -27,20 +27,15 @@
 #endif
 #include <tulip/TulipSettings.h>
 #include <tulip/Graph.h>
-#include <tulip/GlTools.h>
-#include <tulip/GlDisplayListManager.h>
-#include <tulip/GlTextureManager.h>
-#include <tulip/Gl2DRect.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/GLInteractor.h>
-#include <tulip/GlGraphComposite.h>
 #include <tulip/QGlPixelBufferManager.h>
 #include <tulip/Interactor.h>
-#include <tulip/GlCompositeHierarchyManager.h>
-#include <tulip/GlVertexArrayManager.h>
 #include <tulip/View.h>
 #include <tulip/Camera.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlTextureManager.h>
+#include <tulip/GlLayer.h>
 
 using namespace std;
 
@@ -56,7 +51,6 @@ static void setRasterPosition(unsigned int x, unsigned int y) {
   glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
   glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
   glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
-  glTest(__PRETTY_FUNCTION__);
 }
 //==================================================
 static QGLFormat GlInit() {
@@ -78,7 +72,7 @@ static QGLFormat GlInit() {
   if (maxSamples < 0) {
     maxSamples = 0;
     GlMainWidget::getFirstQGLWidget()->makeCurrent();
-    maxSamples = OpenGlConfigManager::getInst().maxNumberOfSamples();
+    maxSamples = OpenGlConfigManager::instance().maxNumberOfSamples();
     GlMainWidget::getFirstQGLWidget()->doneCurrent();
   }
 
@@ -101,45 +95,6 @@ void GlMainWidget::clearFirstQGLWidget() {
     delete GlMainWidget::firstQGLWidget;
 }
 
-bool GlMainWidget::doSelect(const int x, const int y,
-                            ElementType &type,
-                            node &n, edge &e,
-                            GlLayer* layer) {
-  SelectedEntity entity;
-  bool foundEntity=pickNodesEdges(x,y,entity,layer);
-
-  if(!foundEntity)
-    return false;
-
-  if(entity.getEntityType()==SelectedEntity::NODE_SELECTED) {
-    n=node(entity.getComplexEntityId());
-    type=NODE;
-  }
-  else {
-    e=edge(entity.getComplexEntityId());
-    type=EDGE;
-  }
-
-  return true;
-}
-
-void GlMainWidget::doSelect(const int x, const int y,
-                            const int width, const int height,
-                            vector<node> &sNode, vector<edge> &sEdge,
-                            GlLayer* layer) {
-  std::vector<SelectedEntity> nodes;
-  std::vector<SelectedEntity> edges;
-  pickNodesEdges(x,y,width,height,nodes,edges,layer);
-
-  for(std::vector<SelectedEntity>::iterator it=nodes.begin(); it!=nodes.end(); ++it) {
-    sNode.push_back(node((*it).getComplexEntityId()));
-  }
-
-  for(std::vector<SelectedEntity>::iterator it=edges.begin(); it!=edges.end(); ++it) {
-    sEdge.push_back(edge((*it).getComplexEntityId()));
-  }
-}
-
 //==================================================
 GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   QGLWidget(GlInit(), parent, getFirstQGLWidget()),scene(new GlQuadTreeLODCalculator),view(view),
@@ -152,8 +107,6 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
   renderingStore=nullptr;
-  getScene()->setViewOrtho(TulipSettings::instance().isViewOrtho());
-  OpenGlConfigManager::getInst().initExtensions();
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
@@ -197,7 +150,7 @@ void GlMainWidget::createRenderingStore(int width, int height) {
     deleteRenderingStore();
     QGLFramebufferObjectFormat fboFormat;
     fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-    fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+    fboFormat.setSamples(OpenGlConfigManager::instance().maxNumberOfSamples());
     glFrameBuf=new QGLFramebufferObject(width,height, fboFormat);
     glFrameBuf2=new QGLFramebufferObject(width,height);
     useFramebufferObject=glFrameBuf->isValid();
@@ -378,8 +331,6 @@ void GlMainWidget::resizeGL(int w, int h) {
 void GlMainWidget::makeCurrent() {
   if (isVisible()) {
     QGLWidget::makeCurrent();
-    GlDisplayListManager::getInst().changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
-    GlTextureManager::getInst().changeContext(reinterpret_cast<uintptr_t>(GlMainWidget::firstQGLWidget));
     int width = contentsRect().width();
     int height = contentsRect().height();
     scene.setViewport(0,0,screenToViewport(width),screenToViewport(height));
@@ -391,10 +342,9 @@ bool GlMainWidget::pickGlEntities(const int x, const int y,
                                   std::vector<SelectedEntity> &pickedEntities,
                                   GlLayer* layer) {
   makeCurrent();
-  return scene.selectEntities((RenderingEntitiesFlag)(RenderingSimpleEntities | RenderingWithoutRemove),screenToViewport(x), screenToViewport(y),
+  return scene.selectEntities(RenderingGlEntities, screenToViewport(x), screenToViewport(contentsRect().height()-y),
                               screenToViewport(width), screenToViewport(height),
-                              layer,
-                              pickedEntities);
+                              pickedEntities, layer);
 }
 //==================================================
 bool GlMainWidget::pickGlEntities(const int x, const int y,
@@ -410,11 +360,11 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
   makeCurrent();
 
   if (pickNodes) {
-    scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), layer, selectedNodes);
+    scene.selectEntities(RenderingNodes, screenToViewport(x), screenToViewport(contentsRect().height()-y), screenToViewport(width), screenToViewport(height), selectedNodes, layer);
   }
 
   if (pickEdges) {
-    scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), layer, selectedEdges);
+    scene.selectEntities(RenderingEdges, screenToViewport(x), screenToViewport(contentsRect().height()-y), screenToViewport(width), screenToViewport(height), selectedEdges, layer);
   }
 }
 //=====================================================
@@ -422,29 +372,17 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
-  if(pickNodes && scene.selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), layer, selectedEntities)) {
+  if(pickNodes && scene.selectEntities(RenderingNodes, screenToViewport(x-1), screenToViewport(contentsRect().height()-y-1), screenToViewport(3), screenToViewport(3), selectedEntities, layer)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
-  if(pickEdges && scene.selectEntities((RenderingEntitiesFlag)(RenderingEdges | RenderingWithoutRemove), screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), layer, selectedEntities)) {
+  if(pickEdges && scene.selectEntities(RenderingEdges, screenToViewport(x-1), screenToViewport(contentsRect().height()-y-1), screenToViewport(3), screenToViewport(3), selectedEntities, layer)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
   return false;
-}
-//=====================================================
-bool GlMainWidget::outputEPS(int size, int, const char *filename) {
-  makeCurrent();
-  scene.outputEPS(size, filename);
-  return true;
-}
-//=====================================================
-bool GlMainWidget::outputSVG(int size, const char* filename) {
-  makeCurrent();
-  scene.outputSVG(size, filename);
-  return true;
 }
 //=====================================================
 void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWidth, int &textureRealHeight) {
@@ -473,7 +411,7 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 
   makeCurrent();
   scene.setViewport(0,0,width,height);
-  scene.ajustSceneToSize(width,height);
+  scene.centerScene();
 
   QGLFramebufferObject *glFrameBuf= QGlPixelBufferManager::getInst().getFramebufferObject(width,height);
   assert(glFrameBuf->size()==QSize(width,height));
@@ -502,7 +440,7 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
 
   glFrameBuf->release();
 
-  GlTextureManager::getInst().registerExternalTexture(textureName,textureId);
+  GlTextureManager::instance()->addExternalTexture(textureName,textureId);
 
   return nullptr;
 }
@@ -524,7 +462,7 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
   QGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+  fboFormat.setSamples(OpenGlConfigManager::instance().maxNumberOfSamples());
   frameBuf=new QGLFramebufferObject(width,height, fboFormat);
   frameBuf2=new QGLFramebufferObject(width,height);
 
@@ -534,19 +472,18 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
     int oldWidth=scene.getViewport()[2];
     int oldHeight=scene.getViewport()[3];
     vector<Camera> oldCameras;
-    const vector<pair<string, GlLayer*> > &layersList=scene.getLayersList();
 
     if(center) {
-      for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-        if(!(*it).second->useSharedCamera())
-          oldCameras.push_back((*it).second->getCamera());
+      for(GlLayer *layer : scene.getLayersList()) {
+        if(!layer->useSharedCamera())
+          oldCameras.push_back(*(layer->getCamera()));
       }
     }
 
     scene.setViewport(0,0,width,height);
 
     if(center)
-      scene.ajustSceneToSize(width,height);
+      scene.centerScene();
 
     computeInteractors();
     scene.draw();
@@ -562,14 +499,14 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
     if(center) {
       int i=0;
 
-      for(vector<pair<string, GlLayer*> >::const_iterator it=layersList.begin(); it!=layersList.end(); ++it) {
-        if(!(*it).second->useSharedCamera()) {
-          Camera &camera=(*it).second->getCamera();
-          camera.setCenter(oldCameras[i].getCenter());
-          camera.setEyes(oldCameras[i].getEyes());
-          camera.setSceneRadius(oldCameras[i].getSceneRadius());
-          camera.setUp(oldCameras[i].getUp());
-          camera.setZoomFactor(oldCameras[i].getZoomFactor());
+      for(GlLayer *layer : scene.getLayersList()) {
+        if(!layer->useSharedCamera()) {
+          Camera *camera=layer->getCamera();
+          camera->setCenter(oldCameras[i].getCenter());
+          camera->setEyes(oldCameras[i].getEyes());
+          camera->setSceneRadius(oldCameras[i].getSceneRadius());
+          camera->setUp(oldCameras[i].getUp());
+          camera->setZoomFactor(oldCameras[i].getZoomFactor());
         }
 
         i++;
@@ -590,7 +527,7 @@ void GlMainWidget::centerScene(bool graphChanged, float zf) {
   scene.centerScene();
 
   if (zf != 1)
-    scene.zoomFactor(zf);
+    scene.getMainLayer()->getCamera()->setZoomFactor(zf);
 
   draw(graphChanged);
 }

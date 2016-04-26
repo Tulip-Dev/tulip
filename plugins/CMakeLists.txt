@@ -15,7 +15,7 @@ ADD_SUBDIRECTORY(sizes)
 ADD_SUBDIRECTORY(test)
 ADD_SUBDIRECTORY(colors)
 IF(NOT BUILD_CORE_ONLY)
-ADD_SUBDIRECTORY(glyph)
+#ADD_SUBDIRECTORY(glyph)
 ADD_SUBDIRECTORY(interactor)
 # Tulip perspective is not bundled in tulipgui Python wheel
 IF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)

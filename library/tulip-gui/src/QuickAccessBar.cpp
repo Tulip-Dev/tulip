@@ -33,7 +33,7 @@
 #include <tulip/TulipFontDialog.h>
 #include <tulip/ForEach.h>
 #include <tulip/ColorProperty.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
 #include <tulip/GlGraphRenderingParameters.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/GlMainWidget.h>
@@ -133,16 +133,16 @@ void QuickAccessBar::reset() {
   _ui->labelColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : nullptr);
 
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
-  _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
-  _ui->colorInterpolationToggle->setIcon((renderingParameters()->isEdgeColorInterpolate() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
-  _ui->sizeInterpolationToggle->setChecked(renderingParameters()->isEdgeSizeInterpolate());
-  _ui->sizeInterpolationToggle->setIcon((renderingParameters()->isEdgeSizeInterpolate() ? QIcon(":/tulip/gui/icons/20/size_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/size_interpolation_disabled.png")));
-  _ui->showEdgesToggle->setChecked(renderingParameters()->isDisplayEdges());
-  _ui->showEdgesToggle->setIcon((renderingParameters()->isDisplayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
-  _ui->showLabelsToggle->setChecked(renderingParameters()->isViewNodeLabel());
-  _ui->showLabelsToggle->setIcon((renderingParameters()->isViewNodeLabel() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
-  _ui->labelsScaledToggle->setChecked(renderingParameters()->isLabelScaled());
-  _ui->labelsScaledToggle->setIcon((renderingParameters()->isLabelScaled() ? QIcon(":/tulip/gui/icons/20/labels_scaled_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
+  _ui->colorInterpolationToggle->setChecked(renderingParameters()->interpolateEdgesColors());
+  _ui->colorInterpolationToggle->setIcon((renderingParameters()->interpolateEdgesColors() ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
+  _ui->sizeInterpolationToggle->setChecked(renderingParameters()->interpolateEdgesSizes());
+  _ui->sizeInterpolationToggle->setIcon((renderingParameters()->interpolateEdgesSizes() ? QIcon(":/tulip/gui/icons/20/size_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/size_interpolation_disabled.png")));
+  _ui->showEdgesToggle->setChecked(renderingParameters()->displayEdges());
+  _ui->showEdgesToggle->setIcon((renderingParameters()->displayEdges() ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
+  _ui->showLabelsToggle->setChecked(renderingParameters()->displayNodesLabels());
+  _ui->showLabelsToggle->setIcon((renderingParameters()->displayNodesLabels() ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
+  _ui->labelsScaledToggle->setChecked(renderingParameters()->labelsScaled());
+  _ui->labelsScaledToggle->setIcon((renderingParameters()->labelsScaled() ? QIcon(":/tulip/gui/icons/20/labels_scaled_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
   updateFontButtonStyle();
   _resetting = false;
 }
@@ -231,8 +231,8 @@ void QuickAccessBar::setBackgroundColor(const QColor& c) {
 }
 
 void QuickAccessBar::setColorInterpolation(bool f) {
-  if(renderingParameters()->isEdgeColorInterpolate()!=f) {
-    renderingParameters()->setEdgeColorInterpolate(f);
+  if(renderingParameters()->interpolateEdgesColors()!=f) {
+    renderingParameters()->setInterpolateEdgesColors(f);
     _ui->colorInterpolationToggle->setIcon((f ? QIcon(":/tulip/gui/icons/20/color_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/color_interpolation_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
@@ -240,8 +240,8 @@ void QuickAccessBar::setColorInterpolation(bool f) {
 }
 
 void QuickAccessBar::setSizeInterpolation(bool f) {
-  if(renderingParameters()->isEdgeSizeInterpolate()!=f) {
-    renderingParameters()->setEdgeSizeInterpolate(f);
+  if(renderingParameters()->interpolateEdgesSizes()!=f) {
+    renderingParameters()->setInterpolateEdgesSizes(f);
     _ui->sizeInterpolationToggle->setIcon((f ? QIcon(":/tulip/gui/icons/20/size_interpolation_enabled.png") : QIcon(":/tulip/gui/icons/20/size_interpolation_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
@@ -279,7 +279,7 @@ void QuickAccessBar::setLabelColor(const QColor& c) {
 
 void QuickAccessBar::setAllColorValues(unsigned int eltType,
                                        ColorProperty* prop, const Color &color) {
-  BooleanProperty* selected = inputData()->getElementSelected();
+  BooleanProperty* selected = inputData()->getElementSelection();
   bool hasSelected = false;
 
   _mainView->graph()->push();
@@ -337,7 +337,7 @@ void QuickAccessBar::setAllValues(unsigned int eltType,
   if (!val.isValid())
     return;
 
-  BooleanProperty* selected = inputData()->getElementSelected();
+  BooleanProperty* selected = inputData()->getElementSelection();
   bool hasSelected = false;
 
   _mainView->graph()->push();
@@ -388,7 +388,7 @@ void QuickAccessBar::setNodeLabelPosition() {
 }
 
 void QuickAccessBar::setEdgesVisible(bool v) {
-  if(renderingParameters()->isDisplayEdges() != v) {
+  if(renderingParameters()->displayEdges() != v) {
     renderingParameters()->setDisplayEdges(v);
     _ui->showEdgesToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/edges_enabled.png") : QIcon(":/tulip/gui/icons/20/edges_disabled.png")));
     _mainView->emitDrawNeededSignal();
@@ -397,8 +397,8 @@ void QuickAccessBar::setEdgesVisible(bool v) {
 }
 
 void QuickAccessBar::setLabelsVisible(bool v) {
-  if(renderingParameters()->isViewNodeLabel()!=v) {
-    renderingParameters()->setViewNodeLabel(v);
+  if(renderingParameters()->displayNodesLabels()!=v) {
+    renderingParameters()->setDisplayNodesLabels(v);
     _ui->showLabelsToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/labels_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
@@ -406,8 +406,8 @@ void QuickAccessBar::setLabelsVisible(bool v) {
 }
 
 void QuickAccessBar::setLabelsScaled(bool v) {
-  if(renderingParameters()->isLabelScaled()!=v) {
-    renderingParameters()->setLabelScaled(v);
+  if(renderingParameters()->labelsScaled()!=v) {
+    renderingParameters()->setLabelsScaled(v);
     _ui->labelsScaledToggle->setIcon((v ? QIcon(":/tulip/gui/icons/20/labels_scaled_enabled.png") : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
     _mainView->emitDrawNeededSignal();
     emit settingsChanged();
@@ -415,11 +415,11 @@ void QuickAccessBar::setLabelsScaled(bool v) {
 }
 
 GlGraphRenderingParameters* QuickAccessBar::renderingParameters() const {
-  return scene()->getGlGraphComposite()->getRenderingParametersPointer();
+  return &scene()->getMainGlGraph()->getRenderingParameters();
 }
 
 GlGraphInputData* QuickAccessBar::inputData() const {
-  return scene()->getGlGraphComposite()->getInputData();
+  return &scene()->getMainGlGraph()->getInputData();
 }
 
 GlScene* QuickAccessBar::scene() const {

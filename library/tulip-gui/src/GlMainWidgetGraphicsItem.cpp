@@ -27,8 +27,7 @@
 #include <QGraphicsScene>
 
 #include <tulip/GlTextureManager.h>
-#include <tulip/GlQuad.h>
-#include <tulip/GlTools.h>
+#include <tulip/GlUtils.h>
 #include <tulip/GlMainWidget.h>
 
 using namespace std;

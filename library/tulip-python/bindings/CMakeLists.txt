@@ -1,7 +1,7 @@
 ADD_SUBDIRECTORY(stl)
 ADD_SUBDIRECTORY(tulip-core)
-ADD_SUBDIRECTORY(tulip-ogl)
-ADD_SUBDIRECTORY(tulip-gui)
+#ADD_SUBDIRECTORY(tulip-ogl)
+#ADD_SUBDIRECTORY(tulip-gui)
 
 # When building Python wheels on MacOS, copy dependencies dylibs in wheels folders.
 # They will be distributed and relinked when generating the wheels.

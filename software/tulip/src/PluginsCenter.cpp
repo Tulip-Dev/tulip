@@ -28,8 +28,6 @@
 #include <tulip/View.h>
 #include <tulip/Perspective.h>
 #include <tulip/Interactor.h>
-#include <tulip/Glyph.h>
-#include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
 #include <tulip/PluginManager.h>
@@ -105,11 +103,11 @@ void PluginsCenter::searchImportExport() {
                      << tlp::EXPORT_CATEGORY.c_str());
 }
 
-void PluginsCenter::searchGlyphs() {
-  setCategoryFilters(QStringList()
-                     << tlp::GLYPH_CATEGORY.c_str()
-                     << tlp::EEGLYPH_CATEGORY.c_str());
-}
+//void PluginsCenter::searchGlyphs() {
+//  setCategoryFilters(QStringList()
+//                     << tlp::GLYPH_CATEGORY.c_str()
+//                     << tlp::EEGLYPH_CATEGORY.c_str());
+//}
 
 void PluginsCenter::searchViews() {
   setCategoryFilter(tlp::VIEW_CATEGORY.c_str());
@@ -178,7 +176,7 @@ void PluginsCenter::sideListRowChanged(int i) {
     break;
 
   case GLYPHS_ROW:
-    searchGlyphs();
+    //searchGlyphs();
     break;
 
   case VIEWS_ROW:

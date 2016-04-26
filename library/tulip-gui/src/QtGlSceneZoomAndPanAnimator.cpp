@@ -22,24 +22,21 @@
 
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/GlLayer.h>
 
 namespace tlp {
 
-QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration, const std::string &layerName, const bool optimalPath, const double velocity, const double p) :
-  GlSceneZoomAndPan(glWidget->getScene(), boundingBox, layerName, 0, optimalPath, p), glWidget(glWidget), animationDurationMsec(duration) {
-  if (doZoomAndPan) {
-    animationDurationMsec *= S/velocity;
-  }
-
-  nbAnimationSteps = animationDurationMsec / 40 + 1;
+QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration, const bool optimalPath, const double velocity, const double p) :
+  ZoomAndPanAnimation(glWidget->getScene()->getMainLayer()->getCamera(), boundingBox, duration, optimalPath, velocity, p), glWidget(glWidget) {
+  nbAnimationSteps = _animationDuration / 40 + 1;
 }
 
 void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
-  QTimeLine timeLine(animationDurationMsec);
+  QTimeLine timeLine(_animationDuration);
   timeLine.setFrameRange(0, nbAnimationSteps);
   connect(&timeLine, SIGNAL(frameChanged(int)), this, SLOT(zoomAndPanAnimStepSlot(int)));
 
-  if (doZoomAndPan || (!doZoomAndPan && additionalAnimation != nullptr)) {
+  if (_doZoomAndPan || (!_doZoomAndPan && _additionalAnimation != nullptr)) {
     timeLine.start();
 
     while (timeLine.state() != QTimeLine::NotRunning) {
@@ -51,7 +48,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
 
 
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
-  zoomAndPanAnimationStep(animationStep);
+  zoomAndPanAnimationStep(animationStep/static_cast<double>(nbAnimationSteps-1));
   glWidget->draw();
 }
 

@@ -22,7 +22,7 @@
 
 #include <QObject>
 
-#include <tulip/GlSceneZoomAndPan.h>
+#include <tulip/ZoomAndPanAnimation.h>
 
 namespace tlp {
 
@@ -35,7 +35,7 @@ class GlMainWidget;
  *  The algorithm used to perform this task is the one published in : Jarke J. van Wijk and Wim A.A. Nuij, "Smooth and efficient zooming and panning"
  *  For more details, the paper can be downloaded at the following url : www.win.tue.nl/~vanwijk/zoompan.pdf
  */
-class TLP_QT_SCOPE QtGlSceneZoomAndPanAnimator : public QObject, public GlSceneZoomAndPan {
+class TLP_QT_SCOPE QtGlSceneZoomAndPanAnimator : public QObject, public ZoomAndPanAnimation {
 
   Q_OBJECT
 
@@ -52,7 +52,7 @@ public :
    * \param velocity animation speed parameter, adjust it according to your needs
    * \param p zoom/pan trade-off parameter, adjust it according to your needs
    */
-  QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration=1000., const std::string &layerName = "Main", const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
+  QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration=1000., const bool optimalPath = true, const double velocity = 1.1, const double p = sqrt(1.6));
 
   /**
    * Method to call to start the Zoom and Pan animation
@@ -66,7 +66,7 @@ protected slots :
 protected :
 
   GlMainWidget *glWidget;
-  double animationDurationMsec;
+  unsigned int nbAnimationSteps;
 
 };
 

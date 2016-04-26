@@ -31,12 +31,14 @@
 
 #include <tulip/ColorScaleButton.h>
 #include <tulip/CoordEditor.h>
-#include <tulip/EdgeExtremityGlyph.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
-#include <tulip/GlLabel.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/GlyphRenderer.h>
+#include <tulip/StringEditor.h>
+//#include <tulip/GlyphRenderer.h>
+//#include <tulip/EdgeExtremityGlyphManager.h>
+//#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/TulipFontDialog.h>
+//#include <tulip/GlyphManager.h>
 #include <tulip/GraphPropertiesModel.h>
+//#include <tulip/GlLabel.h>
 #include <tulip/Perspective.h>
 #include <tulip/StringEditor.h>
 #include <tulip/TextureFileDialog.h>
@@ -758,17 +760,16 @@ QSize TulipFontAwesomeIconCreator::sizeHint(const QStyleOptionViewItem &option,
 
 QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
   CustomComboBox *combobox = new CustomComboBox(parent);
-  std::list<std::string> glyphs(
-      PluginLister::instance()->availablePlugins<Glyph>());
+  //  std::list<std::string>
+  //  glyphs(PluginLister::instance()->availablePlugins<Glyph>());
 
-  for (std::list<std::string>::const_iterator it = glyphs.begin();
-       it != glyphs.end(); ++it) {
-    std::string glyphName(*it);
-    int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
-    // Create the glyph entry
-    combobox->addItem(GlyphRenderer::getInst().render(glyphIndex),
-                      tlpStringToQString(glyphName), glyphIndex);
-  }
+  //  for(std::list<std::string>::const_iterator it = glyphs.begin(); it !=
+  //  glyphs.end(); ++it) {
+  //    std::string glyphName(*it);
+  //    int glyphIndex = GlyphManager::getInst().glyphId(glyphName);
+  //    //Create the glyph entry
+  //    combobox->addItem(GlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+  //  }
 
   return combobox;
 }
@@ -789,19 +790,22 @@ QVariant NodeShapeEditorCreator::editorData(QWidget *editor, Graph *) {
 }
 
 QString NodeShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(
-      GlyphManager::getInst().glyphName(data.value<NodeShape::NodeShapes>()));
+  // return
+  // tlpStringToQString(GlyphManager::getInst().glyphName(data.value<NodeShape::NodeShapes>()));
+  return "";
 }
 
 QSize NodeShapeEditorCreator::sizeHint(const QStyleOptionViewItem &option,
                                        const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  static QPixmap pixmap =
-      GlyphRenderer::getInst().render(data.value<NodeShape::NodeShapes>());
+  // static QPixmap pixmap =
+  // GlyphRenderer::getInst().render(data.value<NodeShape::NodeShapes>());
   QFontMetrics fontMetrics(option.font);
-  return QSize(pixmap.width() +
-                   fontMetrics.boundingRect(displayText(data)).width() + 20,
-               pixmap.height());
+  // return
+  // QSize(pixmap.width()+fontMetrics.boundingRect(displayText(data)).width()+20,
+  // pixmap.height());
+  return QSize(fontMetrics.boundingRect(displayText(data)).width() + 20,
+               fontMetrics.boundingRect(displayText(data)).height());
 }
 
 bool NodeShapeEditorCreator::paint(QPainter *painter,
@@ -809,37 +813,36 @@ bool NodeShapeEditorCreator::paint(QPainter *painter,
                                    const QVariant &data) const {
   TulipItemEditorCreator::paint(painter, option, data);
 
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  QPixmap pixmap =
-      GlyphRenderer::getInst().render(data.value<NodeShape::NodeShapes>());
-  opt.icon = QIcon(pixmap);
-  opt.decorationSize = pixmap.size();
+  //  QStyleOptionViewItemV4 opt = option;
+  //  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  //  QPixmap pixmap =
+  //  GlyphRenderer::getInst().render(data.value<NodeShape::NodeShapes>());
+  //  opt.icon = QIcon(pixmap);
+  //  opt.decorationSize = pixmap.size();
 
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-  opt.text = displayText(data);
+  //  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+  //  opt.text = displayText(data);
 
-  QStyle *style = QApplication::style();
-  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
+  //  QStyle *style = QApplication::style();
+  //  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
   return true;
 }
 
 /// EdgeExtremityShapeEditorCreator
 QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
   CustomComboBox *combobox = new CustomComboBox(parent);
-  combobox->addItem(QString("NONE"), EdgeExtremityShape::None);
-  std::list<std::string> glyphs(
-      PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
+  //  combobox->addItem(QString("NONE"),EdgeExtremityShape::None);
+  //  std::list<std::string>
+  //  glyphs(PluginLister::instance()->availablePlugins<EdgeExtremityGlyph>());
 
-  for (std::list<std::string>::const_iterator it = glyphs.begin();
-       it != glyphs.end(); ++it) {
-    std::string glyphName(*it);
-    const tlp::Plugin &infos = PluginLister::pluginInformation(glyphName);
-    int glyphIndex = infos.id();
-    // Create the glyph entry
-    combobox->addItem(EdgeExtremityGlyphRenderer::getInst().render(glyphIndex),
-                      tlpStringToQString(glyphName), glyphIndex);
-  }
+  //  for(std::list<std::string>::const_iterator it = glyphs.begin(); it !=
+  //  glyphs.end(); ++it) {
+  //    std::string glyphName(*it);
+  //    const tlp::Plugin& infos = PluginLister::pluginInformation(glyphName);
+  //    int glyphIndex = infos.id();
+  //    //Create the glyph entry
+  //    combobox->addItem(EdgeExtremityGlyphRenderer::getInst().render(glyphIndex),tlpStringToQString(glyphName),glyphIndex);
+  //  }
 
   return combobox;
 }
@@ -860,8 +863,9 @@ QVariant EdgeExtremityShapeEditorCreator::editorData(QWidget *editor, Graph *) {
 
 QString
 EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
-  return tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
+  // return
+  // tlpStringToQString(EdgeExtremityGlyphManager::getInst().glyphName(data.value<EdgeExtremityShape::EdgeExtremityShapes>()));
+  return "";
 }
 
 bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
@@ -869,30 +873,32 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
                                             const QVariant &data) const {
   TulipItemEditorCreator::paint(painter, option, data);
 
-  QStyleOptionViewItemV4 opt = option;
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
-  QPixmap pixmap = EdgeExtremityGlyphRenderer::getInst().render(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>());
-  opt.icon = QIcon(pixmap);
-  opt.decorationSize = pixmap.size();
+  //  QStyleOptionViewItemV4 opt = option;
+  //  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  //  QPixmap pixmap =
+  //  EdgeExtremityGlyphRenderer::getInst().render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
+  //  opt.icon = QIcon(pixmap);
+  //  opt.decorationSize = pixmap.size();
 
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
-  opt.text = displayText(data);
+  //  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+  //  opt.text = displayText(data);
 
-  QStyle *style = QApplication::style();
-  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
+  //  QStyle *style = QApplication::style();
+  //  style->drawControl(QStyle::CE_ItemViewItem, &opt, painter, nullptr);
   return true;
 }
 
 QSize EdgeExtremityShapeEditorCreator::sizeHint(
     const QStyleOptionViewItem &option, const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  static QPixmap pixmap = EdgeExtremityGlyphRenderer::getInst().render(
-      data.value<EdgeExtremityShape::EdgeExtremityShapes>());
+  // static QPixmap pixmap =
+  // EdgeExtremityGlyphRenderer::getInst().render(data.value<EdgeExtremityShape::EdgeExtremityShapes>());
   QFontMetrics fontMetrics(option.font);
-  return QSize(pixmap.width() +
-                   fontMetrics.boundingRect(displayText(data)).width() + 40,
-               pixmap.height());
+  // return
+  // QSize(pixmap.width()+fontMetrics.boundingRect(displayText(data)).width()+40,
+  // pixmap.height());
+  return QSize(fontMetrics.boundingRect(displayText(data)).width() + 40,
+               fontMetrics.boundingRect(displayText(data)).height());
 }
 
 /// EdgeShapeEditorCreator
@@ -978,11 +984,12 @@ QVariant TulipLabelPositionEditorCreator::editorData(QWidget *w, tlp::Graph *) {
 QString TulipLabelPositionEditorCreator::displayText(const QVariant &v) const {
   int pos = (int)(v.value<LabelPosition::LabelPositions>());
 
-  if (pos < MIN_LABEL_POSITION || pos > MAX_LABEL_POSITION) {
-    qCritical() << QObject::trUtf8("Invalid value found as label position");
-    return QObject::trUtf8("Invalid label position");
-  } else
-    return POSITION_LABEL[pos];
+  //  if (pos < MIN_LABEL_POSITION || pos > MAX_LABEL_POSITION) {
+  //    qCritical() << QObject::trUtf8("Invalid value found as label position");
+  //    return QObject::trUtf8("Invalid label position");
+  //  }
+  //  else
+  return POSITION_LABEL[pos];
 }
 
 // GraphEditorCreator

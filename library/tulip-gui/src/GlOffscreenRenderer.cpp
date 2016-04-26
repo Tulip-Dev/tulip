@@ -18,7 +18,7 @@
  */
 
 #if defined(_MSC_VER)
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #include <GL/glew.h>
@@ -28,11 +28,12 @@
 #include <tulip/Camera.h>
 #include <tulip/GlOffscreenRenderer.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlGraphComposite.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlLayer.h>
+#include <tulip/GlGraph.h>
 
 #include <sstream>
+#include <cfloat>
 
 using namespace std;
 
@@ -49,17 +50,15 @@ GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-  : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr), mainLayer(new GlLayer("Main")),
+  : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
     entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
-  GlLayer *backgroundLayer=new GlLayer("Background");
+  mainLayer = scene.getMainLayer();
+  GlLayer *backgroundLayer=new GlLayer("Background", false);
   backgroundLayer->setVisible(true);
-  GlLayer *foregroundLayer=new GlLayer("Foreground");
+  GlLayer *foregroundLayer=new GlLayer("Foreground", false);
   foregroundLayer->setVisible(true);
-  backgroundLayer->set2DMode();
-  foregroundLayer->set2DMode();
-  scene.addExistingLayer(backgroundLayer);
-  scene.addExistingLayer(mainLayer);
-  scene.addExistingLayer(foregroundLayer);
+  scene.addExistingLayerBefore(backgroundLayer, mainLayer);
+  scene.addExistingLayerAfter(foregroundLayer, mainLayer);
   antialiasedFbo = false;
 }
 
@@ -67,7 +66,6 @@ GlOffscreenRenderer::~GlOffscreenRenderer() {
   delete glFrameBuf;
   delete glFrameBuf2;
   clearScene();
-  delete mainLayer;
 }
 
 void GlOffscreenRenderer::setViewPortSize(const unsigned int viewPortWidth, const unsigned int viewPortHeight) {
@@ -87,36 +85,22 @@ unsigned int GlOffscreenRenderer::getViewportHeight() {
   return glFrameBuf->height();
 }
 
-void GlOffscreenRenderer::addGlEntityToScene(GlSimpleEntity *entity) {
+void GlOffscreenRenderer::addGlEntityToScene(GlEntity *entity) {
   ostringstream oss;
   oss << "entity " << ++entitiesCpt;
   mainLayer->addGlEntity(entity, oss.str());
 }
 
 void GlOffscreenRenderer::addGraphToScene(Graph* graph) {
-  addGraphCompositeToScene(new GlGraphComposite(graph));
-}
-
-void GlOffscreenRenderer::addGraphCompositeToScene(GlGraphComposite *graphComposite) {
-  //Delete old composite if it exist
-  GlSimpleEntity *oldComposite = mainLayer->findGlEntity("graph");
-
-  if(oldComposite!=nullptr) {
-    mainLayer->deleteGlEntity(oldComposite);
-  }
-
-  GlVertexArrayManager *vertexArrayManager=graphComposite->getInputData()->getGlVertexArrayManager();
-  vertexArrayManager->setHaveToComputeAll(true);
-  mainLayer->addGlEntity(graphComposite, "graph");
+  addGlEntityToScene(new GlGraph(graph));
 }
 
 void GlOffscreenRenderer::clearScene() {
-  mainLayer->getComposite()->reset(false);
-  const vector<pair<string, GlLayer *> > &layersList = scene.getLayersList();
+  mainLayer->clear(false);
 
-  for (unsigned int i = 0 ; i < layersList.size() ; ++i) {
-    if (layersList[i].second != mainLayer) {
-      layersList[i].second->getComposite()->reset(true);
+  for(GlLayer *layer : scene.getLayersList()) {
+    if (layer != mainLayer) {
+      layer->clear(true);
     }
   }
 
@@ -144,7 +128,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
     if (antialiasedFbo)
-      fboFmt.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+      fboFmt.setSamples(OpenGlConfigManager::instance().maxNumberOfSamples());
 
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
@@ -173,17 +157,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
   scene.setViewport(0,0,vPWidth, vPHeight);
 
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-
-
-  Camera &camera = mainLayer->getCamera();
-
+  Camera *camera = mainLayer->getCamera();
 
   glFrameBuf->bind();
 
@@ -192,14 +166,14 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   }
 
   if (cameraCenter != Coord(FLT_MAX, FLT_MAX, FLT_MAX)) {
-    camera.setCenter(cameraCenter);
-    camera.setEyes(Coord(0, 0, camera.getSceneRadius()));
-    camera.setEyes(camera.getEyes() + camera.getCenter());
-    camera.setUp(Coord(0, 1., 0));
+    camera->setCenter(cameraCenter);
+    camera->setEyes(Coord(0, 0, camera->getSceneRadius()));
+    camera->setEyes(camera->getEyes() + camera->getCenter());
+    camera->setUp(Coord(0, 1., 0));
   }
 
   if (zoomFactor != DBL_MAX) {
-    camera.setZoomFactor(zoomFactor);
+    camera->setZoomFactor(zoomFactor);
   }
 
   scene.draw();
@@ -212,13 +186,6 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
 #endif
 
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-
-  glPopAttrib();
 }
 
 void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antialiased) {
@@ -234,14 +201,6 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
 
   scene->setViewport(0,0,vPWidth, vPHeight);
 
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-  glMatrixMode(GL_PROJECTION);
-  glPushMatrix();
-
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-
   glFrameBuf->bind();
   scene->draw();
   glFrameBuf->release();
@@ -252,14 +211,6 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
     QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
 
 #endif
-
-  glMatrixMode(GL_MODELVIEW);
-  glPopMatrix();
-
-  glMatrixMode(GL_PROJECTION);
-  glPopMatrix();
-
-  glPopAttrib();
 
   scene->setViewport(backupViewport);
 }
@@ -281,8 +232,8 @@ QImage GlOffscreenRenderer::getImage() {
 
 GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
-  bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
-                       OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+  bool canUseMipmaps = OpenGlConfigManager::instance().isExtensionSupported("GL_ARB_framebuffer_object") ||
+                       OpenGlConfigManager::instance().isExtensionSupported("GL_EXT_framebuffer_object");
 
   GLuint textureId = 0;
   glGenTextures(1, &textureId);

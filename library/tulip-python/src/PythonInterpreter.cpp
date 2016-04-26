@@ -355,8 +355,8 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       runString("site.main()");
 #endif
       runString("from tulip import *");
-      runString("from tulipogl import *");
-      runString("from tulipgui import *");
+      //runString("from tulipogl import *");
+      //runString("from tulipgui import *");
 
       // When importing the tulip module, Tulip Python plugins and
       // startup scripts will be possibly loaded and other Python modules can be loaded as a side effect.

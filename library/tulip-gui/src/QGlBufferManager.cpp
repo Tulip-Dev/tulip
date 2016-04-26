@@ -69,7 +69,7 @@ QGLPixelBuffer *QGlBufferManager::getPixelBuffer(int width, int height) {
   QGLFormat format=QGLFormat::defaultFormat();
   format.setAlpha(true);
   format.setSampleBuffers(true);
-  format.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+  format.setSamples(OpenGlConfigManager::instance().maxNumberOfSamples());
   QGLPixelBuffer *glPixelBuffer=new QGLPixelBuffer(width,height,format,GlMainWidget::getFirstQGLWidget());
 
   if(!glPixelBuffer->isValid()) {

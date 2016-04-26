@@ -22,7 +22,6 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PropertyTypes.h>
 #include <tulip/GlGraphStaticData.h>
-#include <tulip/GlyphManager.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpTools.h>

@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLInclude} ${TulipCoreBuildInclude} ${QuazipInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipGUIInclude} ${TulipOGLESInclude} ${TulipCoreBuildInclude} ${QuazipInclude})
 
 IF(USE_QT5)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
@@ -16,7 +16,7 @@ ADD_EXECUTABLE(packagePlugins PluginPackager.cpp ${RCC_SRCS})
 TARGET_LINK_LIBRARIES(packagePlugins
                       ${LibTulipCoreName}
                       ${LibTulipGUIName}
-                      ${LibTulipOGLName}
+                      ${LibTulipOglesName}
                       ${LibTulipOGDFName}
                       ${OGDFLibrary}
                       ${QT_LIBRARIES}

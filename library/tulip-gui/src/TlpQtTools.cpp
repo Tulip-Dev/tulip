@@ -59,8 +59,6 @@
 #include <tulip/TlpTools.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/PluginManager.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/TulipMetaTypes.h>
@@ -195,175 +193,6 @@ QString localPluginsPath() {
 #endif
 }
 
-// we define a specific GlTextureLoader allowing to load a GlTexture
-// from a QImage
-class GlTextureFromQImageLoader :public GlTextureLoader {
-public:
-  // redefine the inherited method
-  bool loadTexture(const std::string& filename, GlTexture& glTexture) {
-
-    QImage image;
-
-    QString qFilename = QString::fromUtf8(filename.c_str());
-
-    if (qFilename.startsWith("http")) {
-      FileDownloader fileDownloader;
-      QByteArray imageData = fileDownloader.download(QUrl(qFilename));
-
-      if (imageData.isEmpty()) {
-        tlp::error() << "Error when donwloading texture from url " << filename.c_str() << std::endl;
-        return false;
-      }
-      else {
-        bool imageLoaded = image.loadFromData(imageData);
-
-        if (!imageLoaded) {
-          tlp::error() << "Error when loading texture from url " << filename.c_str() << std::endl;
-          return false;
-        }
-      }
-    }
-    else {
-
-      QFile imageFile(qFilename);
-      if (imageFile.open(QIODevice::ReadOnly)) {
-        image.loadFromData(imageFile.readAll());
-      }
-
-      if (image.isNull()) {
-        if (!imageFile.exists())
-          tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
-        else
-          tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
-
-        return false;
-      }
-
-    }
-
-    bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
-                         OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
-
-    unsigned int width=image.width();
-    unsigned int height=image.height();
-
-    bool isSprite=false;
-
-    if(width!=height) {
-      bool widthPowerOfTwo=false;
-      bool heightPowerOfTwo=false;
-
-      for(unsigned int i=1; i<=width; i*=2) {
-        if(i==width)
-          widthPowerOfTwo=true;
-      }
-
-      for(unsigned int i=1; i<=height; i*=2) {
-        if(i==height)
-          heightPowerOfTwo=true;
-      }
-
-      if(widthPowerOfTwo && heightPowerOfTwo) {
-        isSprite=true;
-      }
-    }
-
-    int spriteNumber=1;
-
-    if(isSprite) {
-      if(width>height) {
-        spriteNumber=width/height;
-      }
-      else {
-        spriteNumber=height/width;
-      }
-    }
-
-    GLuint* textureNum = new GLuint[spriteNumber];
-
-    image = QGLWidget::convertToGLFormat(image);
-
-    glTexture.width=width;
-    glTexture.height=height;
-    glTexture.spriteNumber=spriteNumber;
-    glTexture.id=new GLuint[spriteNumber];
-
-    glGenTextures(spriteNumber, textureNum);  //FIXME: handle case where no memory is available to load texture
-
-    glEnable(GL_TEXTURE_2D);
-
-    if(!isSprite) {
-      glBindTexture(GL_TEXTURE_2D, textureNum[0]);
-
-      glTexture.id[0]=textureNum[0];
-
-      int GLFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
-      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, image.bits());
-
-      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-      if (canUseMipmaps) {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-        glGenerateMipmap(GL_TEXTURE_2D);
-      }
-      else {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-      }
-
-    }
-    else {
-      QImage *images=new QImage[spriteNumber];
-
-      if(width>height) {
-        QRect rect(0,0,height,height);
-
-        for(int i=0; i<spriteNumber; i++) {
-          images[i]=image.copy(rect);
-          rect.translate(height,0);
-        }
-      }
-      else {
-        QRect rect(0,0,width,width);
-
-        for(int i=0; i<spriteNumber; i++) {
-          images[i]=image.copy(rect);
-          rect.translate(0,width);
-        }
-      }
-
-      width=images[0].width();
-      height=images[0].height();
-
-      for(int i=0; i<spriteNumber; i++) {
-        glBindTexture(GL_TEXTURE_2D, textureNum[i]);
-
-        glTexture.id[i]=textureNum[i];
-
-        int GLFmt = images[i].hasAlphaChannel() ? GL_RGBA : GL_RGB;
-        glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, images[i].bits());
-
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-        if (canUseMipmaps) {
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-          glGenerateMipmap(GL_TEXTURE_2D);
-        }
-        else {
-          glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        }
-
-      }
-
-      delete[] images;
-    }
-
-    glDisable(GL_TEXTURE_2D);
-
-
-    return true;
-  }
-};
-
 void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 
   QLocale::setDefault(QLocale(QLocale::English));
@@ -408,8 +237,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 
   tlp::initTulipLib();
   initQTypeSerializers();
-  // initialize Texture loader
-  GlTextureManager::setTextureLoader(new GlTextureFromQImageLoader());
+
 
   tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
                           tlp::PATH_DELIMITER +
@@ -429,8 +257,8 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   tlp::PluginLibraryLoader::loadPlugins(loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
-  tlp::GlyphManager::getInst().loadGlyphPlugins();
-  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+//  tlp::GlyphManager::getInst().loadGlyphPlugins();
+//  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 }
 
 // tlp::debug redirection

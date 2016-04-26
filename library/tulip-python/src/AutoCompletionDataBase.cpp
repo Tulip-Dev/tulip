@@ -30,11 +30,11 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
-#include <tulip/Glyph.h>
+//#include <tulip/Glyph.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
 #include <tulip/Perspective.h>
-#include <tulip/EdgeExtremityGlyph.h>
+//#include <tulip/EdgeExtremityGlyph.h>
 
 using namespace std;
 using namespace tlp;
@@ -1170,8 +1170,7 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   for (std::list<std::string>::iterator it = pluginNames.begin() ; it != pluginNames.end() ; ++it) {
     tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, nullptr);
 
-    if (plugin->category() != tlp::GLYPH_CATEGORY && plugin->category() != EEGLYPH_CATEGORY &&
-        plugin->category() != tlp::INTERACTOR_CATEGORY && plugin->category() != tlp::VIEW_CATEGORY &&
+    if (plugin->category() != tlp::INTERACTOR_CATEGORY && plugin->category() != tlp::VIEW_CATEGORY &&
         plugin->category() != tlp::PERSPECTIVE_CATEGORY) {
 
       if (type.isEmpty() || plugin->category() == type.toStdString()) {

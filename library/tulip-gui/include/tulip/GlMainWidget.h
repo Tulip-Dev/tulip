@@ -28,6 +28,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/GlScene.h>
+#include <tulip/Coord.h>
 #include <tulip/Graph.h>
 
 class QGLFramebufferObject;
@@ -129,23 +130,6 @@ public:
                       bool pickNodes=true, bool pickEdges=true);
 
   /**
-   * @deprecated this function should not be used anymore, use pickNodesEdges()
-   */
-  _DEPRECATED void doSelect(const int x, const int y,
-                            const int width, const int height,
-                            std::vector<tlp::node> &sNode, std::vector<tlp::edge> &sEdge,
-                            tlp::GlLayer* layer=nullptr);
-
-  /**
-   * @deprecated this function should not be used anymore, use pickNodesEdges()
-   */
-  _DEPRECATED bool doSelect(const int x, const int y,
-                            tlp::ElementType &type,
-                            tlp::node &n,tlp::edge &e,
-                            tlp::GlLayer* layer=nullptr);
-
-
-  /**
    * @brief convert a screen measure into a viewport measure
    * @param a measure in screen coordinates specified as an integer
    * @return the converted measure in viewport coordinates as an integer
@@ -213,15 +197,6 @@ public:
   }
 
   /**
-   * @brief EPS output of the GlMainWidget
-   */
-  bool outputEPS(int size, int doSort, const char *filename);
-  /**
-   * @brief SVG output of the GlMainWidget
-   */
-  bool outputSVG(int size, const char* filename);
-
-  /**
    * @brief Compute texture size in power of two with given height and width
    * For example if you set width to 94 and height to 256, this function set textureRealWidth to 128 and textureRealHeight to 256
    */
@@ -278,47 +253,6 @@ public:
                       std::vector<SelectedEntity>
                       &pickedEntities,
                       tlp::GlLayer* layer=nullptr);
-
-  /**
-   * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
-   */
-  _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    const int width, const int height,
-                                    std::vector<GlSimpleEntity*> &pickedEntities,
-                                    tlp::GlLayer* layer=nullptr) {
-    std::vector<SelectedEntity> entities;
-    pickGlEntities(x,y,width,height,entities,layer);
-    bool foundEntity=false;
-
-    for(std::vector<SelectedEntity>::iterator it=entities.begin(); it!=entities.end(); ++it) {
-      if((*it).getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED) {
-        pickedEntities.push_back((*it).getSimpleEntity());
-        foundEntity=true;
-      }
-    }
-
-    return foundEntity;
-  }
-
-  /**
-   * @deprecated this function should not be used anymore, please use pickGlEntities() instead.
-   */
-  _DEPRECATED bool selectGlEntities(const int x, const int y,
-                                    std::vector<GlSimpleEntity*> &pickedEntities,
-                                    tlp::GlLayer* layer=nullptr) {
-    std::vector<SelectedEntity> entities;
-    pickGlEntities(x,y,entities,layer);
-    bool foundEntity=false;
-
-    for(std::vector<SelectedEntity>::iterator it=entities.begin(); it!=entities.end(); ++it) {
-      if((*it).getEntityType()==SelectedEntity::SIMPLE_ENTITY_SELECTED) {
-        pickedEntities.push_back((*it).getSimpleEntity());
-        foundEntity=true;
-      }
-    }
-
-    return foundEntity;
-  }
 
   /**
    * Grab the FrameBuffer of this GlMainWidget

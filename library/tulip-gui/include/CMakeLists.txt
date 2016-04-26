@@ -11,7 +11,6 @@ INSTALL(FILES
   tulip/CSVParser.h
   tulip/DoubleStringsListSelectionWidget.h
   tulip/DownloadManager.h
-  tulip/GlCompositeHierarchyManager.h
   tulip/GlMainView.h
   tulip/GlMainWidget.h
   tulip/GlOffscreenRenderer.h
@@ -94,7 +93,7 @@ INSTALL(FILES
   tulip/SnapshotDialog.h
   tulip/SceneConfigWidget.h
   tulip/SceneLayersConfigWidget.h
-  tulip/GlSimpleEntityItemModel.h
+  #tulip/GlSimpleEntityItemModel.h
   tulip/QuaZIPFacade.h
   tulip/CoordEditor.h
   tulip/StringEditor.h

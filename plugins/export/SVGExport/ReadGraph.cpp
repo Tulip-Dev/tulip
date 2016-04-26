@@ -19,11 +19,14 @@
 #include "ReadGraph.h"
 #include "ExportInterface.h"
 
+//#include <tulip/GlyphManager.h>
+//#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/DrawingTools.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlGraphInputData.h>
 #include <tulip/GlGraphRenderingParameters.h>
+#include <tulip/GlGraphStaticData.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/GlyphManager.h>
 #include <tulip/StringProperty.h>

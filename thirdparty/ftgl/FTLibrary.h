@@ -51,7 +51,7 @@
  * @see "Freetype 2 Documentation"
  *
  */
-class FTLibrary
+class FTGL_EXPORT FTLibrary
 {
     public:
         /**

@@ -40,7 +40,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorScale.h>
 #include <tulip/GlGraphStaticData.h>
-#include <tulip/GlLabel.h>
 #include <tulip/TulipFont.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TulipViewSettings.h>

@@ -95,14 +95,10 @@ public :
   /**
    * @brief Add an entity to the scene. The scene become the owner of the object.
    **/
-  void addGlEntityToScene(GlSimpleEntity *entity);
-  /**
-   * @brief Add a graph composite to the scene. The scene become the owner of the object.
-   **/
-  void addGraphCompositeToScene(GlGraphComposite *graphComposite);
+  void addGlEntityToScene(GlEntity *entity);
 
   /**
-   * @brief Add a graph to the scene. Just create a new GraphComposite and call GlGraphComposite.
+   * @brief Add a graph to the scene.
    **/
   void addGraphToScene(Graph* graph);
 

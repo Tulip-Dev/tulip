@@ -34,8 +34,6 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/Interactor.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 
 #include <fcntl.h>
 
@@ -80,8 +78,8 @@ int main(int argc,char **argv) {
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(0);
   tlp::InteractorLister::initInteractorsDependencies();
-  tlp::GlyphManager::getInst().loadGlyphPlugins();
-  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  //tlp::GlyphManager::getInst().loadGlyphPlugins();
+  //tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
 
   QDir outputDir(destinationDir);
 

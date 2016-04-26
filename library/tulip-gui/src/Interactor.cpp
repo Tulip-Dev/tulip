@@ -22,7 +22,6 @@
 
 #include <tulip/ForEach.h>
 #include <tulip/View.h>
-#include <tulip/Glyph.h>
 
 
 using namespace std;

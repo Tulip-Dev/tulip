@@ -6,6 +6,7 @@ INSTALL(FILES
   titlebarGradient.png
   logo32x32.ico
   logolabri.jpg
+  radialGradientTexture.png
 DESTINATION ${TulipBitmapInstallDir}
 COMPONENT tulip_textures
 )

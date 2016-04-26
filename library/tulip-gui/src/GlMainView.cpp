@@ -31,10 +31,10 @@
 #include <tulip/SceneLayersConfigWidget.h>
 #include <tulip/GlOverviewGraphicsItem.h>
 #include <tulip/QuickAccessBar.h>
-#include <tulip/GlGraphComposite.h>
 #include <tulip/SnapshotDialog.h>
-#include <tulip/Gl2DRect.h>
+#include <tulip/GlRect2D.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlLayer.h>
 
 
 using namespace tlp;
@@ -185,7 +185,7 @@ void GlMainView::setOverviewVisible(bool display) {
   isOverviewVisible=display;
 
   if(display) {
-    drawOverview(true);
+    //drawOverview(true);
     _overviewItem->setVisible(true);
   }
   else if(_overviewItem)
@@ -255,10 +255,10 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
   if (fgLayer) {
-    Gl2DRect *labriLogo = dynamic_cast<Gl2DRect*>(fgLayer->findGlEntity("labrilogo"));
+    GlRect2D *labriLogo = dynamic_cast<GlRect2D*>(fgLayer->findGlEntity("labrilogo"));
 
     if (labriLogo) {
-      labriLogo->setCoordinates((_quickAccessBar != nullptr) ? 35. : 0., 5., 50., 50.);
+      labriLogo->setCoordinatesAndSize((_quickAccessBar != nullptr) ? 35. : 0., 5., 50., 50.);
       draw();
     }
   }
@@ -299,7 +299,7 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
 
   QAction* antiAliasing = menu->addAction(trUtf8("Anti-aliasing"));
   antiAliasing->setCheckable(true);
-  antiAliasing->setChecked(OpenGlConfigManager::getInst().antiAliasing());
+  antiAliasing->setChecked(OpenGlConfigManager::instance().antiAliasing());
   connect(antiAliasing,SIGNAL(triggered(bool)),this,SLOT(setAntiAliasing(bool)));
 
   menu->addAction(_advAntiAliasingAction);
@@ -322,7 +322,7 @@ void GlMainView::applySettings() {
 }
 
 void GlMainView::setAntiAliasing(bool aa) {
-  OpenGlConfigManager::getInst().setAntiAliasing(aa);
+  OpenGlConfigManager::instance().setAntiAliasing(aa);
   _advAntiAliasingAction->setVisible(aa);
 
   if (_advAntiAliasingAction->isChecked()) {
