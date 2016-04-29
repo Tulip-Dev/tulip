@@ -752,7 +752,11 @@ IF(NOT BUILD_CORE_ONLY)
   ENDIF(MSVC)
 
   IF(WIN32)
-
+    # initialize the list of bundle libs (second arg of FIXUP_BUNDLE),
+    # updated in plugins/view/GeographicView,
+    # and finally used in software/tulip_perpective/CMakeLists.txt
+    SET_PROPERTY(GLOBAL PROPERTY FIXUP_BUNDLE_LIBS "")
+    
     INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/imageformats DESTINATION ${TulipBinInstallDir})
     IF(USE_QT5)
       INSTALL(DIRECTORY ${QT_PLUGINS_DIR}/platforms DESTINATION ${TulipBinInstallDir})

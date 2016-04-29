@@ -42,6 +42,15 @@ QTX_WRAP_CPP(LIB_MOC_SRCS
     OPTIONS ${QT_WEB_DEFINITIONS}
 )
 
+IF(WIN32)
+  SET(GEOVIEW_DLL "GeographicView-${TulipVersion}.dll")
+  IF(NOT MSVC)
+    SET(GEOVIEW_DLL "lib${GEOVIEW_DLL}")
+  ENDIF(NOT MSVC)
+  # update the list of bundle libs
+  SET_PROPERTY(GLOBAL APPEND PROPERTY FIXUP_BUNDLE_LIBS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
+ENDIF(WIN32)
+
 ADD_LIBRARY(GeographicView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(GeographicView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${OPENGL_gl_LIBRARY} ${QT_LIBRARIES})
 

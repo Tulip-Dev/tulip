@@ -56,20 +56,10 @@ IF(WIN32)
     SET(APP "${CMAKE_INSTALL_PREFIX}/bin/tulip_perspective.exe")
     SET(LIB_DIRS ${QT_BINARY_DIR} ${CMAKE_LIBRARY_PATH})
     STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
-    SET(GEOVIEW_DLL "GeographicView-${TulipVersion}.dll")
-    IF(NOT MSVC)
-      SET(GEOVIEW_DLL "lib${GEOVIEW_DLL}")
-    ENDIF(NOT MSVC)
-    IF(EXISTS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
-      INSTALL(CODE
+    GET_PROPERTY(FIXUP_BUNDLE_LIBS GLOBAL PROPERTY FIXUP_BUNDLE_LIBS)
+    INSTALL(CODE
           "INCLUDE(BundleUtilities)
-           FIXUP_BUNDLE(\"${APP}\"   \"${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}\"   \"${LIB_DIRS}\")"
+           FIXUP_BUNDLE(\"${APP}\" \"${FIXUP_BUNDLE_LIBS}\" \"${LIB_DIRS}\")"
       )
-    ELSE(EXISTS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
-      INSTALL(CODE
-          "INCLUDE(BundleUtilities)
-           FIXUP_BUNDLE(\"${APP}\"   \"\"   \"${LIB_DIRS}\")"
-      )
-    ENDIF(EXISTS "${CMAKE_INSTALL_PREFIX}/lib/tulip/view/${GEOVIEW_DLL}")
   ENDIF(FIXUP_BUNDLE)
 ENDIF(WIN32)
