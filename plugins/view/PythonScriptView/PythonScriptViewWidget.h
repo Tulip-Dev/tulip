@@ -109,6 +109,8 @@ public :
   QLabel *scriptStatusLabel() const;
   QProgressBar *progressBar() const;
 
+  bool useUndoFeature() const;
+
 public slots :
 
   void decreaseFontSize();
