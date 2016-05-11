@@ -201,7 +201,11 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   lodCalculator->clear();
-  lodCalculator->setRenderingEntitiesFlag(RenderingAll);
+  if (!selectionDrawActivate) {
+    lodCalculator->setRenderingEntitiesFlag(RenderingAll);
+  } else {
+    lodCalculator->setRenderingEntitiesFlag(static_cast<RenderingEntitiesFlag>(RenderingAll|RenderingWithoutRemove));
+  }
 
   // Fake scene creation
   //  This scene is needed by lod calculator to compute lod
