@@ -201,9 +201,11 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
   }
 
   lodCalculator->clear();
+
   if (!selectionDrawActivate) {
     lodCalculator->setRenderingEntitiesFlag(RenderingAll);
-  } else {
+  }
+  else {
     lodCalculator->setRenderingEntitiesFlag(static_cast<RenderingEntitiesFlag>(RenderingAll|RenderingWithoutRemove));
   }
 
