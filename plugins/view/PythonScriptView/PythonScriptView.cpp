@@ -478,7 +478,9 @@ void PythonScriptView::executeCurrentScript() {
       return;
     }
 
-    _graph->push();
+    if (_viewWidget->useUndoFeature()) {
+      _graph->push();
+    }
     Observable::holdObservers();
 
     _pythonInterpreter->setProcessQtEventsDuringScriptExecution(true);
@@ -510,8 +512,9 @@ void PythonScriptView::executeCurrentScript() {
       if (!_scriptStopped) {
         indicateErrors();
       }
-
-      _graph->pop(false);
+      if (_viewWidget->useUndoFeature()) {
+        _graph->pop(false);
+      }
     }
 
     _viewWidget->progressBar()->setRange(0,100);

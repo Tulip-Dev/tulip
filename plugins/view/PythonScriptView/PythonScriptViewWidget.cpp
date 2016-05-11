@@ -410,3 +410,7 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
   }
 
 }
+
+bool PythonScriptViewWidget::useUndoFeature() const {
+  return _ui->useUndoCB->isChecked();
+}
