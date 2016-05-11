@@ -481,6 +481,7 @@ void PythonScriptView::executeCurrentScript() {
     if (_viewWidget->useUndoFeature()) {
       _graph->push();
     }
+
     Observable::holdObservers();
 
     _pythonInterpreter->setProcessQtEventsDuringScriptExecution(true);
@@ -512,6 +513,7 @@ void PythonScriptView::executeCurrentScript() {
       if (!_scriptStopped) {
         indicateErrors();
       }
+
       if (_viewWidget->useUndoFeature()) {
         _graph->pop(false);
       }
