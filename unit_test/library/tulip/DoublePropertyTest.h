@@ -28,6 +28,7 @@
 
 class DoublePropertyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(DoublePropertyTest);
+  CPPUNIT_TEST(testAnonymousDoublePropertyMaxUpdate);
   CPPUNIT_TEST(testDoublePropertyMinUpdate);
   CPPUNIT_TEST(testDoublePropertyMaxUpdate);
   CPPUNIT_TEST(testDoublePropertyMinUpdateFromString);
@@ -39,6 +40,7 @@ class DoublePropertyTest : public CppUnit::TestFixture {
 public:
   void setUp();
   void tearDown();
+  void testAnonymousDoublePropertyMaxUpdate();
   void testDoublePropertyMinUpdate();
   void testDoublePropertyMaxUpdate();
   void testDoublePropertyMinUpdateFromString();

@@ -57,6 +57,17 @@ void DoublePropertyTest::tearDown() {
   delete graph;
 }
 
+void DoublePropertyTest::testAnonymousDoublePropertyMaxUpdate() {
+  DoubleProperty prop(graph);
+  double maxNode;
+
+  maxNode = prop.getNodeMax();
+  CPPUNIT_ASSERT(maxNode == 0.0);
+  prop.setNodeValue(n1, newMax);
+  maxNode = prop.getNodeMax();
+  CPPUNIT_ASSERT(maxNode == newMax);
+}
+
 void DoublePropertyTest::testDoublePropertyMinUpdate() {
   double minNode;
 
