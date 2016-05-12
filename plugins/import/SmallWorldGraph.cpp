@@ -112,12 +112,13 @@ public:
     pluginProgress->showPreview(false);
 
     graph->addNodes(nbNodes, sg);
+    graph->reserveEdges(nbNodes * avgDegree);
 
     for (unsigned int i=0; i<nbNodes; ++i) {
       newLayout->setNodeValue(sg[i],Coord(static_cast<float>(rand()%WIDTH), static_cast<float>(rand()%HEIGHT), 0));
     }
 
-    double minSize = DBL_MAX;
+    //double minSize = DBL_MAX;
 
     for (unsigned int i=0; i<nbNodes-1; ++i) {
       bool longEdge =false;
@@ -125,7 +126,7 @@ public:
       for (unsigned int j=i+1; j<nbNodes; ++j) {
         if (i!=j) {
           double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
-          minSize = std::min(distance, minSize);
+          //minSize = std::min(distance, minSize);
 
           //newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
           if ( distance  < (double)maxDistance)
