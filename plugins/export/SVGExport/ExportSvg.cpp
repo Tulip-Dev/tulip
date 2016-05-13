@@ -45,11 +45,12 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 
 void ExportSvg::getData(std::ostream& os) const {
-  os << _outs.toStdString();
+  os << string(_outs);
 }
 
 ExportSvg::ExportSvg():_res(&_outs) {
   _res.setAutoFormatting(true);
+  _res.setCodec("UTF-8");
 }
 
 void ExportSvg::writeHeader(BoundingBox &bb) {
