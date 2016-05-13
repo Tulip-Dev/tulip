@@ -1160,6 +1160,10 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
 
   gnr->elts.set(n, true);
 
+  for(PropertyInterface* prop : g->getLocalObjectProperties()) {
+    beforeSetNodeValue(prop, n);
+  }
+
   if (g == g->getSuperGraph())
     recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
 }
@@ -1230,6 +1234,11 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   }
 
   ger->elts.set(e, true);
+
+  // loop on properties to save the edge's associated values
+  for(PropertyInterface* prop : g->getLocalObjectProperties()) {
+    beforeSetEdgeValue(prop, e);
+  }
 
   if (g == g->getSuperGraph()) {
     // record source & target old containers
@@ -1496,6 +1505,7 @@ void GraphUpdatesRecorder::beforeSetNodeValue(PropertyInterface* p, node n) {
 void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
   if  (oldNodeDefaultValues.find(p) == oldNodeDefaultValues.end()) {
     // first save the already existing value for all non default valuated nodes
+
     for(node n : p->getNonDefaultValuatedNodes())
       beforeSetNodeValue(p, n);
     // then record the old default value
@@ -1553,6 +1563,7 @@ void GraphUpdatesRecorder::beforeSetEdgeValue(PropertyInterface* p, edge e) {
 void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
   if (oldEdgeDefaultValues.find(p) == oldEdgeDefaultValues.end()) {
     // first save the already existing value for all non default valuated edges
+
     for(edge e : p->getNonDefaultValuatedEdges())
       beforeSetEdgeValue(p, e);
     // then record the old default value
