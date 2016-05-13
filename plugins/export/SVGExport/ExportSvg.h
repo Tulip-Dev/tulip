@@ -23,7 +23,7 @@
 #include "RepresentExport.h"
 
 #include <QXmlStreamWriter>
-#include <QString>
+#include <QByteArray>
 
 #include <tulip/TulipViewSettings.h>
 
@@ -31,7 +31,7 @@
 class ExportSvg : public RepresentExport {
 
   QXmlStreamWriter _res;
-  QString _outs;
+  QByteArray _outs;
 
   void createEdge(const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice);
 
