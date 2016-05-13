@@ -1164,13 +1164,10 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
 
   gnr->elts.set(n, true);
 
-  // no need of the loop below because properties are observed too
-  // loop on properties to save the node's associated values
-
-  /*PropertyInterface* prop;
+  PropertyInterface* prop;
   forEach(prop, g->getLocalObjectProperties()) {
-  beforeSetNodeValue(prop, n);
-  }*/
+    beforeSetNodeValue(prop, n);
+  }
   if (g == g->getSuperGraph())
     recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
 }
@@ -1246,14 +1243,11 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 
   ger->elts.set(e, true);
 
-  // no need of the loop below because properties are observed too
-  // loop on properties
-
-  /*PropertyInterface* prop;
+  PropertyInterface* prop;
   // loop on properties to save the edge's associated values
   forEach(prop, g->getLocalObjectProperties()) {
-  beforeSetEdgeValue(prop, e);
-  }*/
+    beforeSetEdgeValue(prop, e);
+  }
   if (g == g->getSuperGraph()) {
     // record source & target old containers
     const pair<node, node> &eEnds = g->ends(e);
@@ -1522,7 +1516,7 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
     // first save the already existing value for all non default valuated nodes
     node n;
     forEach(n, p->getNonDefaultValuatedNodes())
-    beforeSetNodeValue(p, n);
+      beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
     oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
@@ -1580,7 +1574,7 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
     // first save the already existing value for all non default valuated edges
     edge e;
     forEach(e, p->getNonDefaultValuatedEdges())
-    beforeSetEdgeValue(p, e);
+      beforeSetEdgeValue(p, e);
     // then record the old default value
     // because beforeSetEdgeValue does nothing if it has already been changed
     oldEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();

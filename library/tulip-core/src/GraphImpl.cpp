@@ -311,9 +311,7 @@ void GraphImpl::delNode(const node n, bool) {
   std::vector<edge>::const_iterator ite = edges.begin();
 
   while (ite != edges.end()) {
-    edge e = (*ite);
-    notifyDelEdge(e);
-    propertyContainer->erase(e);
+    removeEdge(*ite);
     ++ite;
   }
 
@@ -498,8 +496,8 @@ void GraphImpl::removeEdge(const edge e) {
   assert(isElement(e));
   notifyDelEdge(e);
   // remove from propertyContainer and storage
-  propertyContainer->erase(e);
   storage.delEdge(e);
+  propertyContainer->erase(e);
 }
 //----------------------------------------------------------------
 bool GraphImpl::canPop() {
