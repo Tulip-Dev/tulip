@@ -1168,6 +1168,7 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
   forEach(prop, g->getLocalObjectProperties()) {
     beforeSetNodeValue(prop, n);
   }
+
   if (g == g->getSuperGraph())
     recordEdgeContainer(oldContainers, (GraphImpl*) g, n);
 }
@@ -1248,6 +1249,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
   forEach(prop, g->getLocalObjectProperties()) {
     beforeSetEdgeValue(prop, e);
   }
+
   if (g == g->getSuperGraph()) {
     // record source & target old containers
     const pair<node, node> &eEnds = g->ends(e);
@@ -1516,7 +1518,7 @@ void GraphUpdatesRecorder::beforeSetAllNodeValue(PropertyInterface* p) {
     // first save the already existing value for all non default valuated nodes
     node n;
     forEach(n, p->getNonDefaultValuatedNodes())
-      beforeSetNodeValue(p, n);
+    beforeSetNodeValue(p, n);
     // then record the old default value
     // because beforeSetNodeValue does nothing if it has already been changed
     oldNodeDefaultValues[p] = p->getNodeDefaultDataMemValue();
@@ -1574,7 +1576,7 @@ void GraphUpdatesRecorder::beforeSetAllEdgeValue(PropertyInterface* p) {
     // first save the already existing value for all non default valuated edges
     edge e;
     forEach(e, p->getNonDefaultValuatedEdges())
-      beforeSetEdgeValue(p, e);
+    beforeSetEdgeValue(p, e);
     // then record the old default value
     // because beforeSetEdgeValue does nothing if it has already been changed
     oldEdgeDefaultValues[p] = p->getEdgeDefaultDataMemValue();
