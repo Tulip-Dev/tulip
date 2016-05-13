@@ -48,6 +48,7 @@ public:
   void testAsynchronousDelete();
   void testRemoveObserver();
   void testObserverWhenRemoveObservable();
+  void testNoPropertiesEventsAfterGraphClear();
 
   void setNodeValue(tlp::PropertyInterface*, const char*, bool, bool, bool = true);
   void setEdgeValue(tlp::PropertyInterface*, const char*, bool, bool, bool = true);
