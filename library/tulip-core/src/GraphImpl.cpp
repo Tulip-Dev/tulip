@@ -578,9 +578,11 @@ void GraphImpl::push(bool unpopAllowed,
   unobserveUpdates();
 
   bool hasRecorders = !recorders.empty();
+
   if (hasRecorders)
     // stop recording for current recorder
     recorders.front()->stopRecording(this);
+
   const GraphStorageIdsMemento* prevIdsMemento =
     hasRecorders ? recorders.front()->newIdsState : NULL;
 
