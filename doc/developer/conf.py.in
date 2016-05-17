@@ -28,7 +28,7 @@ import sys, os
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.doctest', 'sphinx.ext.intersphinx', 'sphinx.ext.todo', 'sphinx.ext.coverage', 'sphinx.ext.pngmath', 'sphinx.ext.mathjax', 'sphinx.ext.ifconfig', 'sphinx.ext.viewcode']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../common/_templates']
+templates_path = ['@CMAKE_CURRENT_SOURCE_DIR@/../common/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
@@ -117,12 +117,12 @@ html_style = 'customized.css'
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-html_favicon = '../../textures/logo32x32.ico'
+html_favicon = '@CMAKE_CURRENT_SOURCE_DIR@/../../textures/logo32x32.ico'
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['../common/_static']
+html_static_path = ['@CMAKE_CURRENT_SOURCE_DIR@/../common/_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
