@@ -90,6 +90,7 @@ class GraphUpdatesRecorder :public Observable {
   bool updatesReverted;
   bool restartAllowed;
   bool newValuesRecorded;
+  const bool oldIdsStateRecorded;
 
   // one 'set' of added nodes per graph
   MutableContainer<GraphEltsRecord*> graphAddedNodes;
@@ -220,7 +221,8 @@ class GraphUpdatesRecorder :public Observable {
   bool isAddedOrDeletedProperty(Graph*, PropertyInterface *);
 
 public:
-  GraphUpdatesRecorder(bool allowRestart = true);
+  GraphUpdatesRecorder(bool allowRestart = true,
+		       const GraphStorageIdsMemento* prevIdsMemento = NULL);
   ~GraphUpdatesRecorder();
 
   // old GraphObserver interface
