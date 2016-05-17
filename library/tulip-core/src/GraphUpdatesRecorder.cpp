@@ -24,13 +24,15 @@
 using namespace std;
 using namespace tlp;
 
-GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart):
+GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart,
+					   const GraphStorageIdsMemento* prevIdsMemento):
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif
   updatesReverted(false),
   restartAllowed(allowRestart),
-  newValuesRecorded(false), oldIdsState(NULL), newIdsState(NULL) {
+  newValuesRecorded(false), oldIdsStateRecorded(prevIdsMemento == NULL),
+  oldIdsState(prevIdsMemento), newIdsState(NULL) {
 }
 
 GraphUpdatesRecorder::~GraphUpdatesRecorder() {
@@ -42,7 +44,7 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
   deleteDefaultValues(oldEdgeDefaultValues);
   deleteDefaultValues(newEdgeDefaultValues);
 
-  if (oldIdsState)
+  if (oldIdsStateRecorded && oldIdsState)
     delete oldIdsState;
 
   if (newIdsState)
@@ -293,7 +295,9 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     // get ids memento
     GraphImpl* root = (GraphImpl*) g;
     assert(newIdsState == NULL);
-    newIdsState = root->storage.getIdsMemento();
+    // record ids memento only if needed
+    if (graphAddedNodes.get(g->getId()) || graphAddedEdges.get(g->getId()))
+      newIdsState = root->storage.getIdsMemento();
     // record new edges containers
     IteratorValue *itae = addedEdgesEnds.findAllValues(NULL, false);
 
@@ -612,8 +616,8 @@ void GraphUpdatesRecorder::recordNewEdgeValues(PropertyInterface* p) {
 
 void GraphUpdatesRecorder::startRecording(GraphImpl* g) {
   if (g->getSuperGraph() == g) {
-    assert(oldIdsState == NULL);
-    oldIdsState = ((GraphImpl*) g)->storage.getIdsMemento();
+    if (oldIdsState == NULL)
+      oldIdsState = ((GraphImpl*) g)->storage.getIdsMemento();
   }
 
   restartRecording(g);
@@ -634,8 +638,8 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
     deleteValues(newValues);
     deleteDefaultValues(newNodeDefaultValues);
     deleteDefaultValues(newEdgeDefaultValues);
-    assert(newIdsState != NULL);
-    delete newIdsState;
+    if (newIdsState)
+      delete newIdsState;
     newIdsState = NULL;
     newValuesRecorded = false;
   }
@@ -864,7 +868,9 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   // this is done before the loop on the edges to add
   // because of some assertion in debug mode
   // while calling the restoreEdge method
-  g->storage.restoreIdsMemento(undo? oldIdsState : newIdsState);
+  const GraphStorageIdsMemento* idsState = undo? oldIdsState : newIdsState;
+  if (idsState)
+    g->storage.restoreIdsMemento(idsState);
 
   // loop on revertedEdges
   set<edge>::const_iterator itre = revertedEdges.begin();
