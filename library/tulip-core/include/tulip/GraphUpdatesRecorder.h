@@ -222,7 +222,7 @@ class GraphUpdatesRecorder :public Observable {
 
 public:
   GraphUpdatesRecorder(bool allowRestart = true,
-		       const GraphStorageIdsMemento* prevIdsMemento = NULL);
+                       const GraphStorageIdsMemento* prevIdsMemento = NULL);
   ~GraphUpdatesRecorder();
 
   // old GraphObserver interface

@@ -25,7 +25,7 @@ using namespace std;
 using namespace tlp;
 
 GraphUpdatesRecorder::GraphUpdatesRecorder(bool allowRestart,
-					   const GraphStorageIdsMemento* prevIdsMemento):
+    const GraphStorageIdsMemento* prevIdsMemento):
 #if !defined(NDEBUG)
   recordingStopped(true),
 #endif
@@ -295,9 +295,11 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl* g) {
     // get ids memento
     GraphImpl* root = (GraphImpl*) g;
     assert(newIdsState == NULL);
+
     // record ids memento only if needed
     if (graphAddedNodes.get(g->getId()) || graphAddedEdges.get(g->getId()))
       newIdsState = root->storage.getIdsMemento();
+
     // record new edges containers
     IteratorValue *itae = addedEdgesEnds.findAllValues(NULL, false);
 
@@ -638,8 +640,10 @@ void GraphUpdatesRecorder::restartRecording(Graph* g) {
     deleteValues(newValues);
     deleteDefaultValues(newNodeDefaultValues);
     deleteDefaultValues(newEdgeDefaultValues);
+
     if (newIdsState)
       delete newIdsState;
+
     newIdsState = NULL;
     newValuesRecorded = false;
   }
@@ -869,6 +873,7 @@ void GraphUpdatesRecorder::doUpdates(GraphImpl* g, bool undo) {
   // because of some assertion in debug mode
   // while calling the restoreEdge method
   const GraphStorageIdsMemento* idsState = undo? oldIdsState : newIdsState;
+
   if (idsState)
     g->storage.restoreIdsMemento(idsState);
 
