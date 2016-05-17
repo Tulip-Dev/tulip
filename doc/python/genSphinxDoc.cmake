@@ -51,5 +51,5 @@ IF(APPLE)
   SET(ENV{LC_ALL} "en_EN.UTF-8")
 ENDIF(APPLE)
 
-# Everything is now set up, we can generate the documenation
-EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -b html -E -d ${BIN_DIR}/doctrees ${SOURCE_DIR} ${BIN_DIR}/html)
+# Everything is now set up, we can generate the documentation
+EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -c ${CMAKE_CURRENT_BINARY_DIR} -b html -E -d ${BIN_DIR}/doctrees ${SOURCE_DIR} ${BIN_DIR}/html)
