@@ -417,7 +417,7 @@ IF(NOT BUILD_CORE_ONLY)
             ELSE()
               SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/sip)
             ENDIF()
-            SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
+            SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
           ENDIF(SIP_OK)
         ENDIF(SIP_OK)
 
