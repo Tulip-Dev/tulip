@@ -1,5 +1,4 @@
-INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}  ${CMAKE_CURRENT_SOURCE_DIR} ${OPENGL_INCLUDE_DIR} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR}  ${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude})
 
 SET(LIB_SRCS
     PathFinder.cpp
@@ -30,6 +29,6 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 )
 
 ADD_LIBRARY(PathFinder-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(PathFinder-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(PathFinder-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
 
 INSTALL_TULIP_PLUGIN(PathFinder-${TulipVersion} ${TulipInteractorPluginsInstallDir})

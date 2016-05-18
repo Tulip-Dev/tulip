@@ -26,7 +26,7 @@ QTX_WRAP_CPP(tulipguiutils_MOC TulipViewsUtils.h)
 QTX_ADD_RESOURCES(tulipgui_RCC_SRCS TulipGui.qrc)
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUtils.cpp ${tulipguiutils_MOC} ${tulipgui_RCC_SRCS})
-           
+
 DISABLE_COMPILER_WARNINGS()
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
@@ -41,8 +41,8 @@ ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
-INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR}  ${TulipCoreBuildInclude} ${TulipGUIBuildInclude})
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${OPENGL_INCLUDE_DIR} ${QT_INCLUDE_DIR} ${QT_INCLUDE_DIR}/QtOpenGL ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude})
+INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${QT_INCLUDE_DIR} ${QT_INCLUDE_DIR}/QtOpenGL ${TulipCoreInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${TulipGUIBuildInclude} ${TulipCoreBuildInclude})
 
 ADD_LIBRARY(${LibTulipGUIPythonBindingsName} SHARED ${TULIP_GUI_PYTHON_BINDINGS_SRC})
 
@@ -86,7 +86,7 @@ IF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/../../../;@loader_path/../../../../Frameworks")
 ENDIF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName} ${QT_LIBRARIES})
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
 # and use dynamic lookup for retrieving its symbols.
 # That way, we can produce a C extension module that can be imported through the Python interpreter

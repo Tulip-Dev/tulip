@@ -1,12 +1,12 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${GLEW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_BINARY_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${GLEW_INCLUDE_DIR})
 
 SET(LIB_SRCS
-    FishEyeInteractor.cpp 
+    FishEyeInteractor.cpp
     FishEyeConfigWidget.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
-    FishEyeConfigWidget.ui  
+    FishEyeConfigWidget.ui
 )
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
@@ -17,6 +17,6 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 )
 
 ADD_LIBRARY(FishEyeInteractor-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(FishEyeInteractor-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(FishEyeInteractor-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
 
 INSTALL_TULIP_PLUGIN(FishEyeInteractor-${TulipVersion} ${TulipInteractorPluginsInstallDir})

@@ -21,7 +21,7 @@ QTX_ADD_RESOURCES(RCC_SRCS TableView.qrc)
 
 ADD_LIBRARY(TableView-${TulipVersion} SHARED ${LIB_SRCS} ${MOC_SRCS} ${UI_SRCS} ${RCC_SRCS})
 
-TARGET_LINK_LIBRARIES(TableView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglesName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(TableView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
 
 INSTALL_TULIP_PLUGIN(TableView-${TulipVersion} ${TulipViewPluginsInstallDir})
 

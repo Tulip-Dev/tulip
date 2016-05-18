@@ -33,16 +33,16 @@ SET(TULIP_OGL_PYTHON_BINDINGS_SRC
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_OGL_PYTHON_BINDINGS_SRC}
   COMMAND ${SIP_EXE} -o -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_BINARY_DIR}/../tulip-core -I ${CMAKE_CURRENT_SOURCE_DIR}/../tulip-core -c ${CMAKE_CURRENT_BINARY_DIR} -j3 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-  COMMENT "Generating Python Bindings for libtulip-ogl"
+  COMMENT "Generating Python Bindings for libtulip-ogles"
   DEPENDS ${TULIP_OGL_SIP_FILES} ${TULIP_SIP_FILES} ${STL_SIP_FILES} VERBATIM)
-           
+
 DISABLE_COMPILER_WARNINGS()
 
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude})
 
 ADD_LIBRARY(${LibTulipOGLPythonBindingsName} SHARED ${TULIP_OGL_PYTHON_BINDINGS_SRC})
 
@@ -83,7 +83,7 @@ IF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
   SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/../../../;@loader_path/../../../../Frameworks")
 ENDIF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-TARGET_LINK_LIBRARIES(${LibTulipOGLPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName})
+TARGET_LINK_LIBRARIES(${LibTulipOGLPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLESName})
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
 # and use dynamic lookup for retrieving its symbols.
 # That way, we can produce a C extension module that can be imported through the Python interpreter

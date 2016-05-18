@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(LIB_SRCS
     ParallelCoordinatesView.cpp
@@ -6,7 +6,7 @@ SET(LIB_SRCS
       ParallelCoordinatesGraphProxy.cpp
       ParallelAxis.cpp
       NominalParallelAxis.cpp
-      AxisConfigDialogs.cpp 
+      AxisConfigDialogs.cpp
       QuantitativeParallelAxis.cpp
       ParallelCoordsElementShowInfos.cpp
       ParallelCoordsElementsSelector.cpp
@@ -19,7 +19,7 @@ SET(LIB_SRCS
       ParallelCoordsAxisSpacer.cpp
       ParallelCoordinatesInteractors.cpp
       ParallelTools.cpp
-      ParallelCoordsDrawConfigWidget.cpp      
+      ParallelCoordsDrawConfigWidget.cpp
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.cpp
 )
 
@@ -31,7 +31,7 @@ QTX_WRAP_UI(LIB_UI_HEADERS
 QTX_WRAP_CPP(LIB_MOC_SRCS
       ParallelCoordinatesView.h
       AxisConfigDialogs.h
-      ParallelCoordsDrawConfigWidget.h 
+      ParallelCoordsDrawConfigWidget.h
       ${CMAKE_CURRENT_SOURCE_DIR}/../utils/ViewGraphPropertiesSelectionWidget.h
 )
 
@@ -40,6 +40,6 @@ ParallelResource.qrc
 )
 
 ADD_LIBRARY(ParallelCoordinatesView-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(ParallelCoordinatesView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(ParallelCoordinatesView-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
 
 INSTALL_TULIP_PLUGIN(ParallelCoordinatesView-${TulipVersion} ${TulipViewPluginsInstallDir})

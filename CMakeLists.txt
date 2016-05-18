@@ -82,16 +82,15 @@ SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersi
 ## Tulip libraries names
 ## ========================================================
 SET(LibTulipCoreName "tulip-core-${TulipMMVersion}")
-SET(LibTulipOglName "tulip-ogles-${TulipMMVersion}")
-SET(LibTulipOglesName "tulip-ogles-${TulipMMVersion}")
+SET(LibTulipOGLESName "tulip-ogles-${TulipMMVersion}")
 SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
 SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
 SET(LibStlPythonBindingsName "stl-python-bindings")
 SET(LibTulipCorePythonBindingsName "tulip-core-python-bindings")
-SET(LibTulipOGLPythonBindingsName "tulip-opengl-python-bindings")
+SET(LibTulipOGLPythonBindingsName "tulip-opengles-python-bindings")
 SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
-SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulipOGDFName})
+SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
 ## ========================================================
 ## Current year (used in documentation config files)
@@ -574,7 +573,6 @@ SET(QtAwesomeInclude ${PROJECT_SOURCE_DIR}/thirdparty/QtAwesome)
 
 SET(TulipCoreInclude ${PROJECT_SOURCE_DIR}/library/tulip-core/include/)
 SET(TulipCoreBuildInclude ${PROJECT_BINARY_DIR}/library/tulip-core/include/)
-SET(TulipOGLInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogles/include/)
 SET(TulipOGLESInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogles/include/)
 SET(TulipOGDFInclude ${PROJECT_SOURCE_DIR}/library/tulip-ogdf/)
 SET(TulipGUIInclude ${PROJECT_SOURCE_DIR}/library/tulip-gui/include/)

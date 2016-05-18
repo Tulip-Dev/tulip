@@ -40,7 +40,7 @@ ADD_EXECUTABLE(tulip_perspective ${SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(tulip_perspective crash_handling)
 
-TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOglesName} ${LibTulipGUIName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName} ${QT_LIBRARIES})
 
 INSTALL(TARGETS tulip_perspective
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app

@@ -6,7 +6,7 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
     interactor_plugin_resource.qrc
 )
 
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLESInclude} ${TulipGUIInclude})
 
 ADD_LIBRARY(interactor_plugin-${TULIP_VERSION} SHARED interactor_plugin.cpp ${LIB_RCC_SRCS})
 TARGET_LINK_LIBRARIES(interactor_plugin-${TULIP_VERSION} ${TULIP_LIBRARIES} ${QT_LIBRARIES})

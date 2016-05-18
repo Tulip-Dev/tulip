@@ -78,7 +78,7 @@ ENDIF(WIN32)
 
 ADD_EXECUTABLE(tulip ${SRCS} ${UI_HEADERS} ${MOC_SRCS} ${RCC_SRCS})
 
-TARGET_LINK_LIBRARIES(tulip crash_handling ${LibTulipCoreName} ${LibTulipOglesName} ${LibTulipGUIName} ${QT_LIBRARIES} ${QxtLibrary})
+TARGET_LINK_LIBRARIES(tulip crash_handling ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName} ${QT_LIBRARIES} ${QxtLibrary})
 
 INSTALL(TARGETS tulip
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app

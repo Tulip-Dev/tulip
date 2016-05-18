@@ -16,7 +16,7 @@ ADD_EXECUTABLE(packagePlugins PluginPackager.cpp ${RCC_SRCS})
 TARGET_LINK_LIBRARIES(packagePlugins
                       ${LibTulipCoreName}
                       ${LibTulipGUIName}
-                      ${LibTulipOglesName}
+                      ${LibTulipOGLESName}
                       ${LibTulipOGDFName}
                       ${OGDFLibrary}
                       ${QT_LIBRARIES}

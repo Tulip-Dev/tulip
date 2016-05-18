@@ -234,7 +234,7 @@ ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
 INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QxtInclude} ${QtAwesomeInclude})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOglesName} ${QuazipLibrary} ${QxtLibrary} ${QtAwesomeLibrary})
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLESName} ${QuazipLibrary} ${QxtLibrary} ${QtAwesomeLibrary})
 
 IF(BUILD_PYTHON_COMPONENTS)
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-gui-python)
