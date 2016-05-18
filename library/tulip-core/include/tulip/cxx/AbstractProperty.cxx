@@ -285,7 +285,7 @@ typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::Abst
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 tlp::PropertyEdgeValueSetter<Tnode, Tedge, Tprop>& tlp::AbstractProperty<Tnode, Tedge, Tprop>::operator[](const edge e) {
-  assert(n.isValid());
+  assert(e.isValid());
   return edgeValueSetter(e);
 }
 //============================================================
