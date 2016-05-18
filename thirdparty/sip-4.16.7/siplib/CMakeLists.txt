@@ -1,46 +1,46 @@
-IF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)   					
+IF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
 
 IF(MINGW AND X86_64)
   ADD_DEFINITIONS(-DMS_WIN64)
 ENDIF(MINGW AND X86_64)
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
 
 SET(siplib_SRCS
-    apiversions.c
-    array.c
-    bool.cpp
-    descriptors.c
-    objmap.c
-    qtlib.c
-    siplib.c
-    threads.c
-    voidptr.c
-    sip.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/apiversions.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/array.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/bool.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/descriptors.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/objmap.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/qtlib.c
+    ${CMAKE_CURRENT_BINARY_DIR}/siplib.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/threads.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/voidptr.c
+    ${CMAKE_CURRENT_BINARY_DIR}/sip.h
 )
 
 DISABLE_COMPILER_WARNINGS()
 
-ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/sip.h ${CMAKE_CURRENT_SOURCE_DIR}/siplib.c
+ADD_CUSTOM_COMMAND(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/sip.h ${CMAKE_CURRENT_BINARY_DIR}/siplib.c
                    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/../configure.py --sip-module ${SIP_LIB}
                                                 -b ${CMAKE_CURRENT_BINARY_DIR}/../sipgen
-                                                -e ${CMAKE_CURRENT_SOURCE_DIR}/../siplib
+                                                -e ${CMAKE_CURRENT_BINARY_DIR}/../siplib
                                                 -d ${CMAKE_CURRENT_BINARY_DIR}/../siplib
 
                    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/sip.h.in ${CMAKE_CURRENT_SOURCE_DIR}/siplib.c.in
-                   WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../ VERBATIM)
+                   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/../ VERBATIM)
 
 ADD_LIBRARY(${SIP_LIB} SHARED ${siplib_SRCS})
 
-SET_TARGET_PROPERTIES(${SIP_LIB} 
+SET_TARGET_PROPERTIES(${SIP_LIB}
                       PROPERTIES OUTPUT_NAME ${SIP_LIB} PREFIX "")
 
 IF(WIN32)
-SET_TARGET_PROPERTIES(${SIP_LIB} 
-		      PROPERTIES SUFFIX ".pyd")
+SET_TARGET_PROPERTIES(${SIP_LIB}
+          PROPERTIES SUFFIX ".pyd")
 ELSE(WIN32)
-SET_TARGET_PROPERTIES(${SIP_LIB} 
-		      PROPERTIES SUFFIX ".so")		      
+SET_TARGET_PROPERTIES(${SIP_LIB}
+          PROPERTIES SUFFIX ".so")
 ENDIF(WIN32)
 
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
@@ -64,4 +64,4 @@ IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 COPY_TARGET_LIBRARY_POST_BUILD(${SIP_LIB} ${TULIP_PYTHON_NATIVE_FOLDER} wheels)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-ENDIF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)   					
+ENDIF (PYTHONLIBS_FOUND AND PYTHONINTERP_FOUND)
