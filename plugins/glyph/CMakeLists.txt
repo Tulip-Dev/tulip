@@ -1,37 +1,20 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${GLEW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${GLEW_INCLUDE_DIR})
 
-MACRO(GLYPH name source)
-  ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
-  TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName})
+MACRO(GLYPH name)
+  ADD_LIBRARY(${name}-${TulipVersion} SHARED ${ARGN})
+  TARGET_LINK_LIBRARIES(${name}-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName})
   INSTALL_TULIP_PLUGIN(${name}-${TulipVersion} ${TulipGlyphPluginsInstallDir})
 ENDMACRO(GLYPH)
 
-GLYPH(Cone cone.cpp)
-
-GLYPH(Circle circle.cpp)
-GLYPH(Sphere sphere.cpp)
-
-GLYPH(Square square.cpp)
-GLYPH(RoundedBox roundedbox.cpp)
-GLYPH(Cube cube.cpp)
-
-GLYPH(Window window.cpp)
-GLYPH(Hexagone hexagone.cpp)
-GLYPH(Triangle triangle.cpp)
-GLYPH(Pentagone pentagone.cpp)
-GLYPH(CubeOutlinedTransparent cubeoutlinedtransparent.cpp)
-GLYPH(Ring ring.cpp)
-GLYPH(Billboard billboard.cpp)
-GLYPH(Cylinder cylinder.cpp)
-GLYPH(ChristmasTree christmastree.cpp)
-GLYPH(Diamond diamond.cpp)
-GLYPH(Cross cross.cpp)
-GLYPH(GlowSphere glowsphere.cpp)
-GLYPH(Star star.cpp)
-GLYPH(FontAwesomeIcon fontawesomeicon.cpp)
-
-## radialGradientTexture.png is used in glowsphere.cpp
-INSTALL(FILES
-  radialGradientTexture.png
-  DESTINATION ${TulipBitmapInstallDir}
-  COMPONENT tulip_plugins)
+GLYPH(Cone ConeGlyph.cpp)
+GLYPH(Cross CrossGlyph.cpp)
+GLYPH(Cube CubeGlyph.cpp)
+GLYPH(Cylinder CylinderGlyph.cpp)
+GLYPH(Diamond DiamondGlyph.cpp)
+GLYPH(Hexagon HexagonGlyph.cpp)
+GLYPH(Pentagon PentagonGlyph.cpp)
+Glyph(Ring RingGlyph.cpp)
+Glyph(RoundedBox RoundedBoxGlyph.cpp)
+Glyph(Sphere SphereGlyph.cpp)
+Glyph(Square SquareGlyph.cpp)
+Glyph(Star StarGlyph.cpp)

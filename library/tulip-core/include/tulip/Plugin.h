@@ -170,14 +170,6 @@ public:
    */
   virtual std::string tulipMinor() const;
 
-  /**
-  * @brief Returns the ID of the glyph this factory builds.
-  * @TODO this member should be removed once there is a system in Tulip to handle glyphs.
-  *
-  * @return int the id of the glyph.
-  **/
-  virtual int id() const;
-
   virtual std::string programmingLanguage() const;
 
 };

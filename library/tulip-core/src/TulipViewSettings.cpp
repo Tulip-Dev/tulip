@@ -30,6 +30,8 @@ TulipViewSettings::TulipViewSettings() :
 
 TulipViewSettings &TulipViewSettings::instance() {
   if (!_instance) {
+    // ensure tlp::TulipBitmapDir is set
+    initTulipLib();
     _instance = new TulipViewSettings();
   }
 

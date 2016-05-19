@@ -64,6 +64,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/FileDownloader.h>
+#include <tulip/GlyphsManager.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -257,8 +258,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   tlp::PluginLibraryLoader::loadPlugins(loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
-//  tlp::GlyphManager::getInst().loadGlyphPlugins();
-//  tlp::EdgeExtremityGlyphManager::getInst().loadGlyphPlugins();
+  tlp::GlyphsManager::instance().loadGlyphPlugins();
 }
 
 // tlp::debug redirection

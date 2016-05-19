@@ -26,7 +26,7 @@
  */
 
 #include <tulip/GlGlyphEntity.h>
-#include <tulip/glyphs/GlyphsRenderer.h>
+#include <tulip/GlyphsRenderer.h>
 
 using namespace tlp;
 using namespace std;

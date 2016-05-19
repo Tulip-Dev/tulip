@@ -78,7 +78,7 @@ SET(SRCS
     GraphTableItemDelegate.cpp
     StringEditor.cpp
     VectorEditor.cpp
-  #  GlyphRenderer.cpp
+    GlyphPreviewRenderer.cpp
     TulipFontWidget.cpp
     ClearableLineEdit.cpp
     CaptionItem.cpp

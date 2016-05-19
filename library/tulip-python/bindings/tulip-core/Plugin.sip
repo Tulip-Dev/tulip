@@ -119,8 +119,6 @@ Returns the Tulip release number.
 
   virtual std::string tulipMinor() const;
 
-  virtual int id() const;
-
   virtual std::string programmingLanguage() const;
 
 };

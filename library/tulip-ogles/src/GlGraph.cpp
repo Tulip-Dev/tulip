@@ -49,13 +49,13 @@
 #include <tulip/ShaderManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlFrameBufferObject.h>
-#include <tulip/glyphs/GlyphsManager.h>
+#include <tulip/GlyphsManager.h>
 #include <tulip/LabelsRenderer.h>
 #include <tulip/GlQuadTreeLODCalculator.h>
 #include <tulip/Camera.h>
 #include <tulip/Light.h>
 
-#include <tulip/glyphs/GlyphsRenderer.h>
+#include <tulip/GlyphsRenderer.h>
 
 
 #ifdef __EMSCRIPTEN__
@@ -451,7 +451,7 @@ GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator) :
   _lodCalculator(lodCalculator)
 {
 
-  const map<int, Glyph*> &glyphs = GlyphsManager::getGlyphs();
+  const map<int, Glyph*> &glyphs = GlyphsManager::instance().getGlyphs();
   map<int, Glyph*>::const_iterator it = glyphs.begin();
   for( ; it != glyphs.end() ; ++it) {
     _nodesGlyphs[it->first] = vector<node>();
@@ -577,7 +577,7 @@ void GlGraph::addEdgeData(const tlp::edge e) {
 
 void GlGraph::uploadEdgesData() {
 
-  if (!_edgesDataNeedUpload) {
+  if (!_edgesDataNeedUpload || _graph->numberOfEdges() == 0) {
     return;
   }
 
@@ -939,7 +939,7 @@ void GlGraph::renderMetaNodes(const std::vector<tlp::node> &metaNodes, const Cam
     const tlp::Coord &metaNodePos = _inputData.getElementLayout()->getNodeValue(metaNodes[i]);
     const tlp::Size &metaNodeSize = _inputData.getElementSize()->getNodeValue(metaNodes[i]);
     tlp::BoundingBox metaNodeBB(metaNodePos - metaNodeSize/2.f, metaNodePos + metaNodeSize/2.f);
-    Glyph *metaNodeGlyph = GlyphsManager::getGlyph(_inputData.getElementShape()->getNodeValue(metaNodes[i]));
+    Glyph *metaNodeGlyph = GlyphsManager::instance().getGlyph(_inputData.getElementShape()->getNodeValue(metaNodes[i]));
     tlp::BoundingBox includeBB;
     metaNodeGlyph->getIncludeBoundingBox(includeBB);
     tlp::BoundingBox metaNodeBBTmp;
@@ -1663,10 +1663,10 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
   while (!glyphsOk) {
 
     srcAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
-    srcAnchor = GlyphsManager::getGlyph(srcGlyphId)->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
+    srcAnchor = GlyphsManager::instance().getGlyph(srcGlyphId)->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
 
     tgtAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
-    tgtAnchor = GlyphsManager::getGlyph(tgtGlyphId)->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
+    tgtAnchor = GlyphsManager::instance().getGlyph(tgtGlyphId)->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
 
     edgePoints.clear();
     edgePoints.push_back(srcAnchor);

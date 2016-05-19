@@ -161,7 +161,6 @@ void PluginsTest::pluginInformations() {
   CPPUNIT_ASSERT_EQUAL(string("Jezequel"), factory.author());
   CPPUNIT_ASSERT_EQUAL(string("03/11/2004"), factory.date());
   CPPUNIT_ASSERT_EQUAL(string(""), factory.group());
-  CPPUNIT_ASSERT_EQUAL(0, factory.id());
   CPPUNIT_ASSERT_EQUAL(string("1"), factory.major());
   CPPUNIT_ASSERT_EQUAL(string("0"), factory.minor());
   CPPUNIT_ASSERT_EQUAL(string("Test"), factory.name());

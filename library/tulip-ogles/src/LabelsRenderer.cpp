@@ -31,6 +31,7 @@
 #include <fstream>
 #include <set>
 #include <iostream>
+#include <cmath>
 
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -42,7 +43,7 @@
 #include <tulip/GlUtils.h>
 #include <utf8.h>
 #include <tulip/NanoVGManager.h>
-#include <tulip/glyphs/GlyphsManager.h>
+#include <tulip/GlyphsManager.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace std;
@@ -89,7 +90,9 @@ static void renderText(NVGcontext *vg, const std::string &text, const tlp::Bound
     BoundingBox rb;
     rb[0] = Vec3f(renderingBox[0][0], renderingBox[0][1] + i * fontSize);
     rb[1] = Vec3f(renderingBox[1][0], renderingBox[0][1] + (i+1) * fontSize);
-    nvgText(vg, rb.center()[0], rb.center()[1], textVector[i].c_str(), nullptr);
+    nvgTranslate(vg, rb.center()[0], rb.center()[1]);
+    nvgText(vg, 0, 0, textVector[i].c_str(), nullptr);
+    nvgResetTransform(vg);
   }
 
 }
@@ -233,7 +236,7 @@ static BoundingBox labelBoundingBoxForNode(Graph *graph, node n) {
   LayoutProperty *viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
   SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
   BoundingBox renderingBox;
-  GlyphsManager::getGlyph(viewShape->getNodeValue(n))->getTextBoundingBox(renderingBox);
+  GlyphsManager::instance().getGlyph(viewShape->getNodeValue(n))->getTextBoundingBox(renderingBox);
   const Coord &pos = viewLayout->getNodeValue(n);
   const Size &size = viewSize->getNodeValue(n) * Size(renderingBox.width(), renderingBox.height(), renderingBox.depth());
   return BoundingBox(pos - size/2.f, pos + size/2.f);
@@ -309,7 +312,7 @@ void LabelsRenderer::renderGraphNodesLabels(Graph *graph, const Camera &camera, 
 
     if (_occlusionTest) {
 
-      //if (!camera.hasRotation()) {
+      if (!camera.hasRotation()) {
         BoundingBox textScrBB;
         textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]), 0));
         textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]), 0));
@@ -325,24 +328,24 @@ void LabelsRenderer::renderGraphNodesLabels(Graph *graph, const Camera &camera, 
           renderedLabelsScrBB.push_back(textScrBB);
         }
 
-//      } else {
-//        vector<Vec2f> textScrRect;
-//        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, textBB[0]));
-//        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, Vec3f(textBB[0][0]+textBB.width(), textBB[0][1], textBB[0][2])));
-//        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, textBB[1]));
-//        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, Vec3f(textBB[0][0], textBB[0][1]+textBB.height(), textBB[0][2])));
+      } else {
+        vector<Vec2f> textScrRect;
+        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, textBB[0]));
+        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, Vec3f(textBB[0][0]+textBB.width(), textBB[0][1], textBB[0][2])));
+        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, textBB[1]));
+        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, Vec3f(textBB[0][0], textBB[0][1]+textBB.height(), textBB[0][2])));
 
-//        for (size_t i = 0 ; i < renderedLabelsScrRect.size() ; ++i) {
-//          if (convexPolygonsIntersect(textScrRect, renderedLabelsScrRect[i])) {
-//            canRender = false;
-//            break;
-//          }
-//        }
+        for (size_t i = 0 ; i < renderedLabelsScrRect.size() ; ++i) {
+          if (convexPolygonsIntersect(textScrRect, renderedLabelsScrRect[i])) {
+            canRender = false;
+            break;
+          }
+        }
 
-//        if (canRender) {
-//          renderedLabelsScrRect.push_back(textScrRect);
-//        }
-//      }
+        if (canRender) {
+          renderedLabelsScrRect.push_back(textScrRect);
+        }
+      }
     }
 
     if (canRender) {

@@ -44,6 +44,8 @@
 #include <vector>
 #include <sstream>
 
+#define ushort_cast(x) static_cast<unsigned short>((x))
+
 namespace tlp {
 
 typedef Matrix<float, 4> MatrixGL;

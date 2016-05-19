@@ -92,7 +92,7 @@ void GlOffscreenRenderer::addGlEntityToScene(GlEntity *entity) {
 }
 
 void GlOffscreenRenderer::addGraphToScene(Graph* graph) {
-  addGlEntityToScene(new GlGraph(graph));
+  scene.addMainGlGraph(graph);
 }
 
 void GlOffscreenRenderer::clearScene() {

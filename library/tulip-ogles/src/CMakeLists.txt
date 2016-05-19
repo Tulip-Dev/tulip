@@ -29,26 +29,12 @@ SET(tulip-ogles_LIB_SRCS
   GlTextureManager.cpp
   ZoomAndPanAnimation.cpp
   OpenGlConfigManager.cpp
-  glyphs/CircleGlyph.cpp
-  glyphs/ConeGlyph.cpp
-  glyphs/CrossGlyph.cpp
-  glyphs/CubeGlyph.cpp
-  glyphs/CubeOutlinedGlyph.cpp
-  glyphs/CubeOutlinedTransparentGlyph.cpp
-  glyphs/CylinderGlyph.cpp
-  glyphs/DiamondGlyph.cpp
-  glyphs/FontAwesomeGlyph.cpp
-  glyphs/Glyph.cpp
-  glyphs/GlyphsManager.cpp
-  glyphs/GlyphsRenderer.cpp
-  glyphs/HexagonGlyph.cpp
-  glyphs/PentagonGlyph.cpp
-  glyphs/RingGlyph.cpp
-  glyphs/RoundedBoxGlyph.cpp
-  glyphs/SphereGlyph.cpp
-  glyphs/SquareGlyph.cpp
-  glyphs/StarGlyph.cpp
-  glyphs/TriangleGlyph.cpp
+  Glyph.cpp
+  GlyphsManager.cpp
+  GlyphsRenderer.cpp
+  CircleGlyph.cpp
+  TriangleGlyph.cpp
+  FontAwesomeGlyph.cpp
 )
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include} ${STBInclude})
