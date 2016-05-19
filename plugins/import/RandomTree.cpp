@@ -71,10 +71,11 @@ class RandomTree:public ImportModule {
       n1=graph->addNode();
       graph->addEdge(n,n1);
       result = buildNode(n1,sizeM);
+
       if (result) {
-	n2=graph->addNode();
-	graph->addEdge(n,n2);
-	result = buildNode(n2,sizeM);
+        n2=graph->addNode();
+        graph->addEdge(n,n2);
+        result = buildNode(n2,sizeM);
       }
     }
 
