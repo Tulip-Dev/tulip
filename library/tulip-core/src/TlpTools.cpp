@@ -339,7 +339,7 @@ void tlp::initRandomSequence() {
     // init a sequence of rand() calls
     srand(seed);
 #ifndef WIN32
-    // init a sequence of random() calls 
+    // init a sequence of random() calls
     srandom(seed);
 #endif
   }
