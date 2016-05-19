@@ -97,7 +97,7 @@ TLP_SCOPE std::ostream *getOgzstream(const std::string &name, int open_mode = st
 
 /**
  * @brief give the value of the seed used for further initialization
- * of a random sequence (with further calls to rand() or rand_r(...)).
+ * of a random sequence (with further calls to rand() or random()).
  * @param seed the value of the seed.
  * Set seed to UINT_MAX if you need a random choice of the seed.
  */
@@ -111,7 +111,7 @@ TLP_SCOPE unsigned int getSeedOfRandomSequence();
 
 /**
  * @brief initialize a random sequence with the seed previously set
- * Further calls to rand() or rand_r(...) will return the elements of
+ * Further calls to rand() or random() will return the elements of
  * that sequence
  */
 TLP_SCOPE void initRandomSequence();
