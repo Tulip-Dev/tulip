@@ -61,7 +61,7 @@ const char * paramHelp[] = {
 class RandomTree:public ImportModule {
 
   bool buildNode(node n, unsigned int sizeM) {
-    if (graph->numberOfNodes()>=sizeM+2) return false;
+    if (graph->numberOfNodes()>=sizeM - 1) return false;
 
     bool result=true;
     int randNumber=rand();
@@ -69,11 +69,13 @@ class RandomTree:public ImportModule {
     if (randNumber>RAND_MAX/2) {
       node n1,n2;
       n1=graph->addNode();
-      n2=graph->addNode();
       graph->addEdge(n,n1);
-      graph->addEdge(n,n2);
-      result= result && buildNode(n1,sizeM);
-      result= result && buildNode(n2,sizeM);
+      result = buildNode(n1,sizeM);
+      if (result) {
+	n2=graph->addNode();
+	graph->addEdge(n,n2);
+	result = buildNode(n2,sizeM);
+      }
     }
 
     return result;
@@ -82,8 +84,8 @@ class RandomTree:public ImportModule {
 public:
   PLUGININFORMATION("Uniform Random Binary Tree","Auber","16/02/2001","Imports a new randomly generated uniform binary tree.","1.1","Graph")
   RandomTree(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("Minimum size",paramHelp[0],"100");
-    addInParameter<unsigned int>("Maximum size",paramHelp[1],"1000");
+    addInParameter<unsigned int>("Minimum size",paramHelp[0],"50");
+    addInParameter<unsigned int>("Maximum size",paramHelp[1],"60");
     addInParameter<bool>("tree layout",paramHelp[2],"false");
     addDependency("Tree Leaf", "1.0");
   }
@@ -135,7 +137,7 @@ public:
       node n=graph->addNode();
       ok = !buildNode(n,maxSize);
 
-      if (graph->numberOfNodes()<minSize-2) ok=true;
+      if (graph->numberOfNodes()<minSize) ok=true;
     }
 
     if (pluginProgress->progress(100,100)==TLP_CANCEL)
