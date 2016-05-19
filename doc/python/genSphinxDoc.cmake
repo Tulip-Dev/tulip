@@ -52,4 +52,4 @@ IF(APPLE)
 ENDIF(APPLE)
 
 # Everything is now set up, we can generate the documentation
-EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -c ${CMAKE_CURRENT_BINARY_DIR} -b html -E -d ${BIN_DIR}/doctrees ${SOURCE_DIR} ${BIN_DIR}/html)
+EXECUTE_PROCESS(COMMAND ${SPHINX_EXECUTABLE} -c ${BIN_DIR} -b html -E -d ${BIN_DIR}/doctrees ${SOURCE_DIR} ${BIN_DIR}/html)
