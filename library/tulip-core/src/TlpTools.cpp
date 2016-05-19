@@ -338,12 +338,16 @@ void tlp::initRandomSequence() {
     unsigned int seed = static_cast<unsigned int>(time(nullptr));
     // init a sequence of rand() calls
     srand(seed);
+#ifndef WIN32
     // init a sequence of random() calls 
     srandom(seed);
+#endif
   }
   else {
     srand(randomSeed);
+#ifndef WIN32
     srandom(randomSeed);
+#endif
   }
 }
 
