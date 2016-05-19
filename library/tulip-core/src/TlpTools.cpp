@@ -334,10 +334,17 @@ unsigned int tlp::getSeedOfRandomSequence() {
 }
 
 void tlp::initRandomSequence() {
-  if (randomSeed == UINT_MAX)
-    srand((unsigned int) time(NULL));
-  else
+  if (randomSeed == UINT_MAX) {
+    unsigned int seed = (unsigned int) time(NULL);
+    // init a sequence of rand() calls
+    srand(seed);
+    // init a sequence of random() calls 
+    srandom(seed);
+  }
+  else {
     srand(randomSeed);
+    srandom(randomSeed);
+  }
 }
 
 //=========================================================
