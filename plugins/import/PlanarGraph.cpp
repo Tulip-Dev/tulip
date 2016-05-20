@@ -74,6 +74,10 @@ public:
     SizeProperty  *newSize   = graph->getLocalProperty<SizeProperty>("viewSize");
     newSize->setAllNodeValue(Size(1.0,1.0,1.0));
 
+    // reserve graph needed elts
+    graph->reserveNodes(nbNodes);
+    graph->reserveEdges(3 * (nbNodes - 2));
+
     vector<Triangle> faces;
     Triangle f(graph->addNode(),
                graph->addNode(),
