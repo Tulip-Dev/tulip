@@ -115,11 +115,7 @@ public:
     }
 
     vector<node> tmpVect(nbNodes);
-    graph->reserveNodes(nbNodes);
-
-    for (unsigned int i=0; i<nbNodes; ++i) {
-      tmpVect[i]=graph->addNode();
-    }
+    graph->addNodes(nbNodes, tmpVect);
 
     graph->reserveEdges(myGraph.size());
 

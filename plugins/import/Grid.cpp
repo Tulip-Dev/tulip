@@ -272,6 +272,7 @@ public:
     ends.reserve(nbEdges);
     vector<edge> edges;
     edges.reserve(nbEdges);
+    graph->reserveEdges(nbEdges);
 
     buildRow(nodes, ends, 0, width, conn, isTore, spacing);
 
