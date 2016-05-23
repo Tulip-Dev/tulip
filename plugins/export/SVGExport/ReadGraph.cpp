@@ -180,12 +180,13 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
     }
 
     double width=0;
+
     if(edge_size_interpolation) {
-        //svg only handles a width for each edge
-        width = std::min(sizes->getNodeValue(ends.first)[0]/8, sizes->getNodeValue(ends.second)[0]/8);
+      //svg only handles a width for each edge
+      width = std::min(sizes->getNodeValue(ends.first)[0]/8, sizes->getNodeValue(ends.second)[0]/8);
     }
     else
-        width = std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1])+1;
+      width = std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1])+1;
 
     // Get edge type
     if(!edge_color_interpolation) {
