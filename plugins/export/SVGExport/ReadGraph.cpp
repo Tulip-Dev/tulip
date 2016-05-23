@@ -50,6 +50,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
   DoubleProperty *rotation =  graph->getProperty<DoubleProperty>("viewRotation");
   bool edge_color_interpolation = false;
   bool edge_extremities = false;
+  bool edge_size_interpolation = true;
 
   if(ds!=NULL) {
     ds->get("Element's layout property", layout);
@@ -64,6 +65,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
     ds->get("Element's border width property", borderwidth);
     ds->get("Element's rotation property", rotation);
     ds->get("Edge color interpolation", edge_color_interpolation);
+    ds->get("Edge size interpolation", edge_size_interpolation);
     ds->get("Edge extremities", edge_extremities);
   }
 
@@ -79,7 +81,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
   unsigned i=0;
 
   // Analysing edges
-  treatEdges(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_extremities);
+  treatEdges(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
 
   // Analysing nodes
   std::vector<tlp::node> metanodeVertices;
@@ -120,7 +122,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
       indice_Transform +=2;
 
       // Analysing edges in the metanode
-      treatEdges(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_extremities);
+      treatEdges(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
 
       // Analysing nodes in the metanode
       treatNodes(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices);
@@ -137,7 +139,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
   r->writeEnd();
 }
 
-void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape,tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_extremities) {
+void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape,tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_size_interpolation, bool edge_extremities) {
   pp->setComment("Exporting edges...");
   r->groupEdge();
 
@@ -146,8 +148,6 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
   unsigned int id_tgt_shape = 0;
   unsigned int id_src_grad = 0;
   unsigned int id_tgt_grad = 0;
-  /*unsigned int& id_src_gradient = id_src_grad;
-    unsigned int& id_tgt_gradient = id_tgt_grad;*/
   tlp::GlGraphRenderingParameters rp;
   tlp::GlGraphInputData inputData(graph, &rp);
   GlEdge glEdge(0);
@@ -157,7 +157,6 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
 
     const pair<node, node>& ends = graph->ends(e);
     r->startEdge(e.id);
-    Size s = sizes->getEdgeValue(e);
 
     glEdge.id = e.id;
     std::vector<Coord> edgeVertices;
@@ -180,12 +179,20 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
       r->exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type, tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad, id_tgt_grad, edgeVertices[0], edgeVertices[edgeVertices.size() - 1], sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second));
     }
 
+    double width=0;
+    if(edge_size_interpolation) {
+        //svg only handles a width for each edge
+        width = std::min(sizes->getNodeValue(ends.first)[0]/8, sizes->getNodeValue(ends.second)[0]/8);
+    }
+    else
+        width = std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1])+1;
+
     // Get edge type
     if(!edge_color_interpolation) {
       r->exportEdge (static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
                      layout->getEdgeValue(e),
                      colors->getEdgeValue(e),
-                     ((s.getH()+s.getW())/2)+1,
+                     width,
                      src_anchor_shape_type,
                      id_src_shape,
                      tgt_anchor_shape_type,
@@ -199,7 +206,7 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
                      layout->getEdgeValue(e),
                      colors->getNodeValue(ends.first),
                      colors->getNodeValue(ends.second),
-                     ((s.getH()+s.getW())/2)+1,
+                     width,
                      src_anchor_shape_type,
                      id_src_shape,
                      tgt_anchor_shape_type,
