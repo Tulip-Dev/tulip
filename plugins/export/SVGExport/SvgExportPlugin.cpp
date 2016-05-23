@@ -139,7 +139,7 @@ const char * paramHelp[] = {
 class ExportMultiple_svg:public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file","1.6", "File")
+  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.6", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
