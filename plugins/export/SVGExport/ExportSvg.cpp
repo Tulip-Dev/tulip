@@ -32,6 +32,8 @@ using namespace tlp;
  * - handle viewTexture
  */
 
+#define MARGIN 10
+
 namespace {
 QString tlpColor2SvgColor(const Color &color) {
   //converting color to SVG
@@ -56,10 +58,13 @@ ExportSvg::ExportSvg():_res(&_outs) {
 void ExportSvg::writeHeader(BoundingBox &bb) {
   _res.writeStartDocument();
   _res.writeStartElement("svg");
-  _res.writeAttribute("width", QString::number(bb.width() + 1));
-  _res.writeAttribute("height", QString::number(bb.height() + 1));
+  double width= bb.width() + 1;
+  double height = bb.height() + 1;
+  _res.writeAttribute("width", QString::number(width));
+  _res.writeAttribute("height", QString::number(height));
   _res.writeAttribute("xmlns", "http://www.w3.org/2000/svg" );
   _res.writeAttribute("xmlns:xlink","http://www.w3.org/1999/xlink");
+  _res.writeAttribute("viewbox", "0 0 "+ QString::number(width+MARGIN) + " " + QString::number(height+MARGIN));
   _res.writeAttribute("version", "1.1");
 }
 
