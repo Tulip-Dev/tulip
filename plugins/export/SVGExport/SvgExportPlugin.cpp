@@ -117,14 +117,21 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
   HTML_HELP_BODY() \
-  "Indicates if edge color interpolation has to be used" \
-  HTML_HELP_CLOSE(),
+    "Indicates if edge color interpolation has to be used." \
+    HTML_HELP_CLOSE(),
+    // size interpolation
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "default", "true" )
+    HTML_HELP_BODY() \
+    "Indicates if edge size interpolation has to be used." \
+    HTML_HELP_CLOSE(),
   // edge extremities
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
   HTML_HELP_BODY() \
-  "Indicates if edge extremities have to be exported" \
+  "Indicates if edge extremities have to be exported." \
   HTML_HELP_CLOSE(),
 };
 }
@@ -132,7 +139,7 @@ const char * paramHelp[] = {
 class ExportMultiple_svg:public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file","1.5", "File")
+  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file","1.6", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
@@ -156,7 +163,8 @@ public:
     addInParameter<DoubleProperty>("Element's border width property", paramHelp[9], "viewBorderWidth");
     addInParameter<DoubleProperty>("Element's rotation property", paramHelp[10], "viewRotation");
     addInParameter<bool>("Edge color interpolation", paramHelp[11], "false");
-    addInParameter<bool>("Edge extremities", paramHelp[12], "false");
+    addInParameter<bool>("Edge size interpolation", paramHelp[12], "true");
+    addInParameter<bool>("Edge extremities", paramHelp[13], "false");
   }
 
   ~ExportMultiple_svg() {}
