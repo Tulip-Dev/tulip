@@ -117,15 +117,15 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
   HTML_HELP_BODY() \
-    "Indicates if edge color interpolation has to be used." \
-    HTML_HELP_CLOSE(),
-    // size interpolation
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "default", "true" )
-    HTML_HELP_BODY() \
-    "Indicates if edge size interpolation has to be used." \
-    HTML_HELP_CLOSE(),
+  "Indicates if edge color interpolation has to be used." \
+  HTML_HELP_CLOSE(),
+  // size interpolation
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "true" )
+  HTML_HELP_BODY() \
+  "Indicates if edge size interpolation has to be used." \
+  HTML_HELP_CLOSE(),
   // edge extremities
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
