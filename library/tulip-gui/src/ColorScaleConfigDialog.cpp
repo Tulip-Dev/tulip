@@ -61,6 +61,7 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale& colorScale,
   connect(_ui->saveColorScaleButton, SIGNAL(clicked()), this, SLOT(saveCurrentColorScale()));
   connect(_ui->deleteColorScaleButton, SIGNAL(clicked()), this, SLOT(deleteSavedColorScale()));
   connect(_ui->importFromImgButton, SIGNAL(clicked()), this, SLOT(importColorScaleFromImageFile()));
+  connect(_ui->importFromPredefinedCSButton, SIGNAL(clicked()), this, SLOT(importColorScaleFromColorScaleFile()));
   connect(_ui->invertColorScaleButton, SIGNAL(clicked()), this, SLOT(invertEditedColorScale()));
 
   if (tulipImageColorScales.empty()) {
@@ -167,10 +168,9 @@ void ColorScaleConfigDialog::loadTulipImageColorScales() {
   }
 }
 
-void ColorScaleConfigDialog::importColorScaleFromImageFile() {
-  QString parentDirectory="./";
+void ColorScaleConfigDialog::importColorScaleFromFile(const QString& currentDir) {
   QString imageFilePath = QFileDialog::getOpenFileName(this, tr("Open Image File"),
-                          parentDirectory, tr("Image Files (*.png *.jpg *.bmp)"));
+                          currentDir, tr("Image Files (*.png *.jpg *.bmp)"));
 
   if (imageFilePath.isEmpty())
     return;
@@ -182,6 +182,14 @@ void ColorScaleConfigDialog::importColorScaleFromImageFile() {
     setColorScale(scaleTmp);
     displayUserGradientPreview();
   }
+}
+
+void ColorScaleConfigDialog::importColorScaleFromColorScaleFile() {
+  importColorScaleFromFile(QString((tlp::TulipBitmapDir + '/' + "colorscales").c_str()));
+}
+
+void ColorScaleConfigDialog::importColorScaleFromImageFile() {
+  importColorScaleFromFile(QString("./"));
 }
 
 void ColorScaleConfigDialog::pressButtonBrowse() {
