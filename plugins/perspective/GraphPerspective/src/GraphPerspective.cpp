@@ -1293,7 +1293,10 @@ void GraphPerspective::newProject() {
 
 void GraphPerspective::openRecentFile() {
   QAction* action = static_cast<QAction*>(sender());
-  open(action->text());
+  // workaround a Qt5 bug (seems only Linux related) when upgrading the Qt version :
+  // the path of a recently opened file stored in Tulip QSettings got a '&' character
+  // added to it, making it invalid and thus the file is not loaded.
+  open(action->text().replace("&", ""));
 }
 
 void GraphPerspective::treatEvent(const tlp::Event &ev) {
