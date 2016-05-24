@@ -176,6 +176,19 @@ from image</string>
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="importFromPredefinedCSButton">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Import from
+predefined color scale</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="saveColorScaleButton">
                 <property name="font">
                  <font>
