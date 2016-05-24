@@ -33,6 +33,8 @@ class ColorScaleConfigDialog;
 class TLP_QT_SCOPE ColorScaleButton: public QPushButton {
   Q_OBJECT
   ColorScale _colorScale;
+  ColorScaleConfigDialog* dlg;
+
 public:
   static void paintScale(QPainter*,const QRect&, const ColorScale&);
 
