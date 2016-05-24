@@ -65,6 +65,7 @@ private slots :
   void deleteSavedColorScale();
   void reeditSaveColorScale(QListWidgetItem *savedColorScaleItem);
   void importColorScaleFromImageFile();
+  void importColorScaleFromColorScaleFile();
   void invertEditedColorScale();
 
 private :
@@ -74,6 +75,7 @@ private :
 
   void loadUserSavedColorScales();
   void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
+  void importColorScaleFromFile(const QString& currentDir);
 
   ColorScale colorScale;
   std::string gradientsImageDirectory;
