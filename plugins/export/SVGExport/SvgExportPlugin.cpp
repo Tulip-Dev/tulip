@@ -136,7 +136,7 @@ const char * paramHelp[] = {
 };
 }
 
-class ExportMultiple_svg:public tlp::ExportModule {
+class svgExport:public tlp::ExportModule {
 
 public:
   PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.6", "File")
@@ -149,7 +149,7 @@ public:
     return "svg";
   }
 
-  ExportMultiple_svg(tlp::PluginContext* context) : tlp::ExportModule(context) {
+  svgExport(tlp::PluginContext* context) : tlp::ExportModule(context) {
 
     addInParameter<LayoutProperty>("Element's layout property", paramHelp[0], "viewLayout");
     addInParameter<ColorProperty>("Element's color property", paramHelp[1], "viewColor");
@@ -167,7 +167,7 @@ public:
     addInParameter<bool>("Edge extremities", paramHelp[13], "false");
   }
 
-  ~ExportMultiple_svg() {}
+  ~svgExport() {}
 
   bool exportGraph(ostream &os) {
 
@@ -183,4 +183,4 @@ public:
 
 
 };
-PLUGIN(ExportMultiple_svg)
+PLUGIN(svgExport)

@@ -41,7 +41,7 @@ class ReadGraph {
   RepresentExport *_representExport;
 
   friend std::ostream& operator<<(std::ostream &os, const ReadGraph &r);
-  // This method retrieve the result after the analysis
+  // This method retrieves the result after the analysis
   void getExport(std::ostream &os) const;
 
 public:
