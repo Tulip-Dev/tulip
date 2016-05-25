@@ -30,6 +30,9 @@ using namespace tlp;
  * - export label correctly (font used and overlapping if possible)
  * - export label position (bottom, top, right and left)
  * - handle viewTexture
+ * - add better support for Glowsphere node (done for edge extremity)
+ * - add a better shape for cone and star
+ * - check how fontawesomeicon can be implemented
  */
 
 #define MARGIN 10
@@ -177,13 +180,6 @@ void ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
 }
 
 void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &coord, const Size &size) {
-
-  QList<NodeShape::NodeShapes> list_ellipse;
-  list_ellipse << NodeShape::Circle << NodeShape::Cone << NodeShape::Cylinder << NodeShape::HalfCylinder << NodeShape::Sphere;
-
-  QList<NodeShape::NodeShapes> list_polygone;
-  list_polygone << NodeShape::Billboard << NodeShape::CubeOutlined << NodeShape::CubeOutlinedTransparent << NodeShape::Triangle << NodeShape::Pentagon << NodeShape::Hexagon << NodeShape::Diamond << NodeShape::Window;
-
   //node coord
   float x = coord.getX();
   float y = coord.getY();
@@ -191,269 +187,230 @@ void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   float w = size.getW()/2.f;  //why /2 ????
   float h = size.getH()/2.f;
 
-  if (list_ellipse.contains(type)) { // If the shape is an ellipse
-    _res.writeStartElement("ellipse");
-    _res.writeAttribute("cx", QString::number(x));
-    _res.writeAttribute("cy", QString::number(y));
-    _res.writeAttribute("rx", QString::number(w));
-    _res.writeAttribute("ry", QString::number(h));
-    _res.writeEndElement();
+  switch(type) {
+  case NodeShape::Circle:
+  case NodeShape::Cylinder:
+  case NodeShape::HalfCylinder:
+  case NodeShape::Sphere:
+  case NodeShape::GlowSphere:
+      _res.writeStartElement("ellipse");
+      _res.writeAttribute("cx", QString::number(x));
+      _res.writeAttribute("cy", QString::number(y));
+      _res.writeAttribute("rx", QString::number(w));
+      _res.writeAttribute("ry", QString::number(h));
+      break;
+  case NodeShape::Billboard:
+  case NodeShape::CubeOutlined:
+  case NodeShape::CubeOutlinedTransparent:
+  case NodeShape::Triangle:
+  case NodeShape::Pentagon:
+  case NodeShape::Hexagon:
+  case NodeShape::Diamond:
+  case NodeShape::Window:
+  {
+      /*
+        This is the scheme of coordinates of each point used
+
+        a * * r * * e * * s * * b
+        *           *           *
+        *           *           *
+        g           *           i
+        *           *           *
+        n           *           o
+        p * * * * * o * * * * * q
+        *           *           *
+        *           *           *
+        j           *           k
+        *           *           *
+        *           *           *
+        d * * l * * f * * m * * c
+      */
+
+      //Rectangle points
+      float xa=x-w;
+      float ya=y+h;
+      float xb=x+w;
+      float yb=y+h;
+      float xc=x+w;
+      float yc=y-h;
+      QString xcstr = QString::number(xc);
+      QString ycstr = QString::number(yc);
+
+      float xd=x-w;
+      float yd=y-h;
+      QString xdstr = QString::number(xd);
+      QString ydstr = QString::number(yd);
+
+      //Extra triangle
+      float xe=x;
+      float ye=y+h;
+      QString xestr = QString::number(xe);
+      QString yestr = QString::number(ye);
+
+      //Extra hexagon
+      float yf=y-h;
+      QString yfstr = QString::number(yf);
+      QString xfstr = QString::number(x);
+      float xg=x-w;
+      float yg=y+(h*0.5);
+      float xi=x+w;
+      float yi=y+(h*0.5);
+      float xj=x-w;
+      float yj=y-(h*0.5);
+      float xk=x+w;
+      float yk=y-(h*0.5);
+
+      //Extra pentagon
+      float xl=x-(w*0.5);
+      float yl=y-h;
+      float xm=x+(w*0.5);
+      float ym=y-h;
+      float xn=x-w;
+      float yn=y+(h*0.3);
+      float xo=x+w;
+      float yo=y+(h*0.3);
+
+      //Extra diamond
+      float xp=x-w;
+      float xq=x+w;
+
+      // Now we group up points to get the shape
+      QString list_points_rect=QString::number(xa)+","+QString::number(ya)+" "+QString::number(xb)+","+QString::number(yb)+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr;
+
+      _res.writeStartElement("polygon");
+
+      if (type == NodeShape::Triangle)
+        _res.writeAttribute("points", xestr+","+yestr+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr);
+      else if (type==NodeShape::Hexagon)
+        _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+xfstr+","+yfstr+" "+QString::number(xj)+","+QString::number(yj)+" "+QString::number(xg)+","+QString::number(yg));
+      else if (type==NodeShape::Pentagon)
+        _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xo)+","+QString::number(yo)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl)+" "+QString::number(xn)+","+QString::number(yn));
+      else if (type==NodeShape::Diamond)
+        _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xq)+","+QString::number(y)+" "+xfstr+","+yfstr+" "+QString::number(xp)+","+QString::number(y));
+      else if (type==NodeShape::CubeOutlinedTransparent) {
+        _res.writeAttribute("points", list_points_rect);
+        _res.writeEndElement();
+        _res.writeStartElement("rect");
+        _res.writeAttribute("x", QString::number((x-size.getX()/2)+w/10));
+        _res.writeAttribute("y", QString::number((y-size.getY()/2)+h/10));
+        _res.writeAttribute("width",QString::number(w*1.8));
+        _res.writeAttribute("height",QString::number(h*1.8));
+        _res.writeAttribute("fill", "white");
+        _res.writeAttribute("fill-opacity", "1");
+      }
+      else
+        _res.writeAttribute("points", list_points_rect);
   }
-
-  else if (list_polygone.contains(type)) { // Else if the shape is a polygon
-    /*
-      This is the scheme of coordinates of each point used
-
-      a * * r * * e * * s * * b
-      *           *           *
-      *           *           *
-      g           *           i
-      *           *           *
-      n           *           o
-      p * * * * * o * * * * * q
-      *           *           *
-      *           *           *
-      j           *           k
-      *           *           *
-      *           *           *
-      d * * l * * f * * m * * c
-    */
-
-    //Rectangle points
-    float xa=x-w;
-    float ya=y+h;
-    QString xastr = QString::number(xa);
-    QString yastr = QString::number(ya);
-
-    float xb=x+w;
-    float yb=y+h;
-    QString xbstr = QString::number(xb);
-    QString ybstr = QString::number(yb);
-
-    float xc=x+w;
-    float yc=y-h;
-    QString xcstr = QString::number(xc);
-    QString ycstr = QString::number(yc);
-
-    float xd=x-w;
-    float yd=y-h;
-    QString xdstr = QString::number(xd);
-    QString ydstr = QString::number(yd);
-
-    //Extra triangle
-
-    float xe=x;
-    float ye=y+h;
-    QString xestr = QString::number(xe);
-    QString yestr = QString::number(ye);
-
-    //Extra hexagon
-
-    float xf=x;
-    float yf=y-h;
-    QString xfstr = QString::number(xf);
-    QString yfstr = QString::number(yf);
-
-    float xg=x-w;
-    float yg=y+(h*0.5);
-    QString xgstr = QString::number(xg);
-    QString ygstr = QString::number(yg);
-
-    float xi=x+w;
-    float yi=y+(h*0.5);
-    QString xistr = QString::number(xi);
-    QString yistr = QString::number(yi);
-
-    float xj=x-w;
-    float yj=y-(h*0.5);
-    QString xjstr = QString::number(xj);
-    QString yjstr = QString::number(yj);
-
-    float xk=x+w;
-    float yk=y-(h*0.5);
-    QString xkstr = QString::number(xk);
-    QString ykstr = QString::number(yk);
-
-    //Extra pentagon
-
-    float xl=x-(w*0.5);
-    float yl=y-h;
-    QString xlstr = QString::number(xl);
-    QString ylstr = QString::number(yl);
-
-    float xm=x+(w*0.5);
-    float ym=y-h;
-    QString xmstr = QString::number(xm);
-    QString ymstr = QString::number(ym);
-
-    float xn=x-w;
-    float yn=y+(h*0.3);
-    QString xnstr = QString::number(xn);
-    QString ynstr = QString::number(yn);
-
-    float xo=x+w;
-    float yo=y+(h*0.3);
-    QString xostr = QString::number(xo);
-    QString yostr = QString::number(yo);
-
-    //Extra diamond
-
-    float xp=x-w;
-    float yp=y;
-    QString xpstr = QString::number(xp);
-    QString ypstr = QString::number(yp);
-
-    float xq=x+w;
-    float yq=y;
-    QString xqstr = QString::number(xq);
-    QString yqstr = QString::number(yq);
-
-
-    // Now we group up points to get the shape
-
-    QString list_points_rect=xastr+","+yastr+" "+xbstr+","+ybstr+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr;
-    QString list_points_triangle=xestr+","+yestr+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr;
-    QString list_points_hexagone=xestr+","+yestr+" "+xistr+","+yistr+" "+xkstr+","+ykstr+" "+xfstr+","+yfstr+" "+xjstr+","+yjstr+" "+xgstr+","+ygstr;
-    QString list_points_pentagone=xestr+","+yestr+" "+xostr+","+yostr+" "+xmstr+","+ymstr+" "+xlstr+","+ylstr+" "+xnstr+","+ynstr;
-    QString list_points_diamond=xestr+","+yestr+" "+xqstr+","+yqstr+" "+xfstr+","+yfstr+" "+xpstr+","+ypstr;
-
-    _res.writeStartElement("polygon");
-
-    if (type == NodeShape::Triangle)
-      _res.writeAttribute("points", list_points_triangle);
-    else if (type==NodeShape::Hexagon)
-      _res.writeAttribute("points", list_points_hexagone);
-    else if (type==NodeShape::Pentagon)
-      _res.writeAttribute("points", list_points_pentagone);
-    else if (type==NodeShape::Diamond)
-      _res.writeAttribute("points", list_points_diamond);
-    else if (type==NodeShape::CubeOutlinedTransparent) {
-      _res.writeAttribute("points", list_points_rect);
-      _res.writeEndElement();
+      break;
+  case NodeShape::Cube:
+  case NodeShape::Square:
+  case NodeShape::RoundedBox:
       _res.writeStartElement("rect");
-      _res.writeAttribute("x", QString::number((x-size.getX()/2)+w/10));
-      _res.writeAttribute("y", QString::number((y-size.getY()/2)+h/10));
-      _res.writeAttribute("width",QString::number(w*1.8));
-      _res.writeAttribute("height",QString::number(h*1.8));
+      _res.writeAttribute("x", QString::number(x-size.getX()/2));
+      _res.writeAttribute("y", QString::number(y-size.getY()/2));
+      _res.writeAttribute("width",QString::number(w*2));
+      _res.writeAttribute("height",QString::number(h*2));
+      if(type==NodeShape::RoundedBox) {
+          _res.writeAttribute("rx", QString::number(w/10.f));
+          _res.writeAttribute("ry", QString::number(h/10.f));
+      }
+      break;
+  case NodeShape::ChristmasTree: // If the shape is a christmas tree: composed by a circle, a triangle and a rectangle
+  {
+      //circle
+      float yc=y+(0.9*h);
+      float rx=0.1*w;
+      float ry=0.1*h;
+
+      _res.writeStartElement("ellipse");
+      _res.writeAttribute("cx", QString::number(x));
+      _res.writeAttribute("cy", QString::number(yc));
+      _res.writeAttribute("rx", QString::number(rx));
+      _res.writeAttribute("ry", QString::number(ry));
+      _res.writeEndElement(); // ellipse
+
+      //triangle
+      float yt1=y+(0.8*h);
+      float xt2=x+(0.8*w);
+      float yt2=y-(0.5*h);
+      float xt3=x-(0.8*w);
+      QString list_pt_tr=QString::number(x)+","+QString::number(yt1)+" "+QString::number(xt2)+","+QString::number(yt2)+" "+QString::number(xt3)+","+QString::number(yt2);
+
+      _res.writeStartElement("polygon");
+      _res.writeAttribute("points", list_pt_tr);
+      _res.writeAttribute("fill", "#1A7900");
+      _res.writeEndElement(); // triangle
+
+      //rectangle
+      float xr1=x-(0.25*w);
+      float xr2=x+(0.25*w);
+      float yr3=y-h;
+
+      QString list_pt_rect=QString::number(xr1)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yr3)+" "+QString::number(xr1)+","+QString::number(yr3);
+
+      _res.writeStartElement("polygon");
+      _res.writeAttribute("points", list_pt_rect);
+      _res.writeAttribute("fill", "#7D7900");
+  }
+      break;
+  case NodeShape::Ring: // If the shape is a ring, we have to draw the white circle in the middle$
+      _res.writeStartElement("ellipse");
+      _res.writeAttribute("cx", QString::number(x));
+      _res.writeAttribute("cy", QString::number(y));
+      _res.writeAttribute("rx", QString::number(w));
+      _res.writeAttribute("ry", QString::number(h));
+      _res.writeEndElement(); // ellipse
+
+      _res.writeStartElement("ellipse");
+      _res.writeAttribute("cx", QString::number(x));
+      _res.writeAttribute("cy", QString::number(y));
+      _res.writeAttribute("rx",  QString::number(w/3));
+      _res.writeAttribute("ry", QString::number(h/3));
       _res.writeAttribute("fill", "white");
       _res.writeAttribute("fill-opacity", "1");
-    }
-    else
-      _res.writeAttribute("points", list_points_rect);
+      break;
+  case NodeShape::Cross:
+  {
+      //polygone 1
+      float xr=x-(w*0.25);
+      float yr=y+h;
+      float xs=x+(w*0.25);
+      float ys=y+h;
+      float xm=x+(w*0.25);
+      float ym=y-h;
+      float xl=x-(w*0.25);
+      float yl=y-h;
 
-    _res.writeEndElement();
+      //polygone 2
+      float xg=x-w;
+      float yg=y+(h*0.25);
+      float xi=x+w;
+      float yi=y+(h*0.25);
+      float xk=x+w;
+      float yk=y-(h*0.25);
+      float xj=x-w;
+      float yj=y-(h*0.25);
+
+      _res.writeStartElement("polygon");
+      _res.writeAttribute("points", QString::number(xr)+","+QString::number(yr)+" "+QString::number(xs)+","+QString::number(ys)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl));
+      _res.writeEndElement();
+
+      _res.writeStartElement("polygon");
+      _res.writeAttribute("points", QString::number(xg)+","+QString::number(yg)+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+QString::number(xj)+","+QString::number(yj));
   }
-
-  else if((type==NodeShape::RoundedBox)||(type==NodeShape::Cube)||(type==NodeShape::Square)) {
-    _res.writeStartElement("rect");
-    _res.writeAttribute("x", QString::number(x-size.getX()/2));
-    _res.writeAttribute("y", QString::number(y-size.getY()/2));
-    _res.writeAttribute("width",QString::number(w*2));
-    _res.writeAttribute("height",QString::number(h*2));
-
-    if(type==NodeShape::RoundedBox) {
-      _res.writeAttribute("rx", QString::number(w/10.f));
-      _res.writeAttribute("ry", QString::number(h/10.f));
-    }
-
-    _res.writeEndElement();
+      break;
+      //TODO!!!! Right now, just draw a circle
+  case NodeShape::Cone:
+  case NodeShape::Star:
+  case NodeShape::FontAwesomeIcon:
+      _res.writeStartElement("circle");
+      _res.writeAttribute("cx", QString::number(x));
+      _res.writeAttribute("cy", QString::number(y));
+      _res.writeAttribute("r", QString::number(w));
+      break;
   }
-
-  else if (type==NodeShape::ChristmasTree) { // If the shape is a christmas tree : composed by a circle, a triangle and a rectangle
-    //circle
-    float yc=y+(0.9*h);
-    float rx=0.1*w;
-    float ry=0.1*h;
-
-    _res.writeStartElement("ellipse");
-    _res.writeAttribute("cx", QString::number(x));
-    _res.writeAttribute("cy", QString::number(yc));
-    _res.writeAttribute("rx", QString::number(rx));
-    _res.writeAttribute("ry", QString::number(ry));
-    _res.writeEndElement(); // ellipse
-
-    //triangle
-    float yt1=y+(0.8*h);
-    float xt2=x+(0.8*w);
-    float yt2=y-(0.5*h);
-    float xt3=x-(0.8*w);
-    QString list_pt_tr=QString::number(x)+","+QString::number(yt1)+" "+QString::number(xt2)+","+QString::number(yt2)+" "+QString::number(xt3)+","+QString::number(yt2);
-
-    _res.writeStartElement("polygon");
-    _res.writeAttribute("points", list_pt_tr);
-    _res.writeAttribute("fill", "#1A7900");
-    _res.writeEndElement(); // triangle
-
-    //rectangle
-    float xr1=x-(0.25*w);
-    float xr2=x+(0.25*w);
-    float yr3=y-h;
-
-    QString list_pt_rect=QString::number(xr1)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yr3)+" "+QString::number(xr1)+","+QString::number(yr3);
-
-    _res.writeStartElement("polygon");
-    _res.writeAttribute("points", list_pt_rect);
-    _res.writeAttribute("fill", "#7D7900");
-    _res.writeEndElement(); // rectangle
-  }
-
-  else if (type==NodeShape::Ring) { // If the shape is a ring, we have to draw the white circle in the middle
-    _res.writeStartElement("ellipse");
-    _res.writeAttribute("cx", QString::number(x));
-    _res.writeAttribute("cy", QString::number(y));
-    _res.writeAttribute("rx", QString::number(w));
-    _res.writeAttribute("ry", QString::number(h));
-    _res.writeEndElement(); // ellipse
-
-    _res.writeStartElement("ellipse");
-    _res.writeAttribute("cx", QString::number(x));
-    _res.writeAttribute("cy", QString::number(y));
-    _res.writeAttribute("rx",  QString::number(w/3));
-    _res.writeAttribute("ry", QString::number(h/3));
-    _res.writeAttribute("fill", "white");
-    _res.writeAttribute("fill-opacity", "1");
-    _res.writeEndElement(); // ring
-  }
-
-  else if (type==NodeShape::Cross) { // If the shape is a cross, represented by two neat rectangles and perpendicular
-    //polygone 1
-    float xr=x-(w*0.25);
-    float yr=y+h;
-    float xs=x+(w*0.25);
-    float ys=y+h;
-    float xm=x+(w*0.25);
-    float ym=y-h;
-    float xl=x-(w*0.25);
-    float yl=y-h;
-
-    //polygone 2
-    float xg=x-w;
-    float yg=y+(h*0.25);
-    float xi=x+w;
-    float yi=y+(h*0.25);
-    float xk=x+w;
-    float yk=y-(h*0.25);
-    float xj=x-w;
-    float yj=y-(h*0.25);
-
-    _res.writeStartElement("polygon");
-    _res.writeAttribute("points", QString::number(xr)+","+QString::number(yr)+" "+QString::number(xs)+","+QString::number(ys)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl));
-    _res.writeEndElement();
-
-    _res.writeStartElement("polygon");
-    _res.writeAttribute("points", QString::number(xg)+","+QString::number(yg)+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+QString::number(xj)+","+QString::number(yj));
-    _res.writeEndElement();
-  }
-
-  else { // If the shape is undefined, we draw it like a circle
-    _res.writeStartElement("circle");
-    _res.writeAttribute("cx", QString::number(x));
-    _res.writeAttribute("cy", QString::number(y));
-    _res.writeAttribute("r", QString::number(w));
-    _res.writeEndElement();
-  }
+  _res.writeEndElement();
 }
-
 
 void ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
   //Color gradient
@@ -483,23 +440,15 @@ void ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &
 
 }
 
-
 void ExportSvg::exportEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const Color &color, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
   createEdge(type, bends, tlpColor2SvgColor(color), tlpAlphaColor2Opacity(color), width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
 }
 
-
 void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
-
-  QString node_source_X;
-  QString node_source_Y;
-  QString node_target_X;
-  QString node_target_Y;
-
-  node_source_X = QString::number(edgeVertice[0].getX());
-  node_source_Y = QString::number(edgeVertice[0].getY());
-  node_target_X = QString::number(edgeVertice[edgeVertice.size() - 1].getX());
-  node_target_Y = QString::number(edgeVertice[edgeVertice.size() - 1].getY());
+  QString node_source_X(QString::number(edgeVertice[0].getX()));
+  QString node_source_Y(QString::number(edgeVertice[0].getY()));
+  QString node_target_X(QString::number(edgeVertice[edgeVertice.size() - 1].getX()));
+  QString node_target_Y(QString::number(edgeVertice[edgeVertice.size() - 1].getY()));
 
   _res.writeStartElement("path");
   QString points = QString("M")+ " " + node_source_X + "," + node_source_Y;
@@ -517,11 +466,9 @@ void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
     switch(type) {
     case EdgeShape::Polyline: {
       points += " L";
-
       for(vector<Coord>::const_iterator it=bends.begin(); it!=bends.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
-
       break;
     }
 
@@ -533,41 +480,26 @@ void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
       else {
         computeBezierPoints(controlPoints, curvePoints);
         points += " S";
-
         for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
           points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
         }
       }
-
       break;
     }
 
     case EdgeShape::CatmullRomCurve : {
       computeCatmullRomPoints(controlPoints, curvePoints);
       points += " S";
-
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
-
       break;
     }
 
     case EdgeShape::CubicBSplineCurve : {
       computeOpenUniformBsplinePoints(controlPoints, curvePoints);
       points += " S";
-
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
-        points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
-      }
-
-      break;
-    }
-
-    default : {
-      points += " S";
-
-      for(vector<Coord>::const_iterator it = edgeVertice.begin(); it != edgeVertice.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
 
@@ -596,7 +528,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     // Writing the context
     _res.writeStartElement("defs");
     _res.writeStartElement("marker");
-
     _res.writeAttribute("id","Msrc" % QString::number(id_src_shape));
     _res.writeAttribute("markerUnits","strokeWidth");
     _res.writeAttribute("orient","auto");
@@ -604,15 +535,16 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     _res.writeAttribute("markerHeight","3");
 
     switch(src_anchor_shape_type) {
+    case EdgeExtremityShape::None:
+        break;
+    case EdgeExtremityShape::FontAwesomeIcon:    //add an arrow to replace FontAwesomeIcon
     case EdgeExtremityShape::Arrow: {
       _res.writeAttribute("viewBox","-10 0 10 10");
       _res.writeAttribute("refX","-6.7");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polyline");
       _res.writeAttribute("points","0,0 -10,5 0,10 -1,5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -620,13 +552,11 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","1 1 10 10");
       _res.writeAttribute("refX","1.5");
       _res.writeAttribute("refY","6");
-
       _res.writeStartElement("circle");
       _res.writeAttribute("cx","6");
       _res.writeAttribute("cy","6");
       _res.writeAttribute("r","5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -634,12 +564,10 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","4");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("path");
       _res.writeAttribute("d","M 0 0 L 10 10 M 0 10 L 10 0");
       _res.writeAttribute("stroke",tlpColor2SvgColor(color));
       _res.writeAttribute("stroke-width","2");
-      _res.writeEndElement();
       break;
     }
 
@@ -647,11 +575,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","1.7");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","5,0 0,5 5,10 10,5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -659,11 +585,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","0");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","5,0 0,3 0,7 5,10 10,7 10,3");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -671,11 +595,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","0");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","6,0 0,2 0,8 6,10 10,5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -685,21 +607,18 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("refY","5");
       _res.writeAttribute("stroke",tlpColor2SvgColor(color));
       _res.writeAttribute("stroke-width","0.55");
-
       _res.writeStartElement("circle");
       _res.writeAttribute("cx","5");
       _res.writeAttribute("cy","5");
       _res.writeAttribute("r","4.5");
       _res.writeAttribute("fill","white");
       _res.writeEndElement();
-
       _res.writeStartElement("circle");
       _res.writeAttribute("cx","5");
       _res.writeAttribute("cy","5");
       _res.writeAttribute("r","3.2");
       _res.writeAttribute("fill","white");
       _res.writeAttribute("stroke-width","2.5");
-      _res.writeEndElement();
       break;
     }
 
@@ -707,14 +626,12 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","0");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("rect");
       _res.writeAttribute("x","0");
       _res.writeAttribute("y","0");
       _res.writeAttribute("width","10");
       _res.writeAttribute("height","10");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -722,11 +639,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","2");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","6,0 3.75,3 0,2 2.25,5 0,8 3.75,6.9 6,10 6,6.25 10,5 6,3.75");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -734,14 +649,12 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","0");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("rect");
       _res.writeAttribute("x","0");
       _res.writeAttribute("y","0");
       _res.writeAttribute("width","10");
       _res.writeAttribute("height","10");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -750,14 +663,12 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("refX","0");
       _res.writeAttribute("refY","5");
       _res.writeAttribute("stroke",tlpColor2SvgColor(color));
-
       _res.writeStartElement("rect");
       _res.writeAttribute("x","0");
       _res.writeAttribute("y","0");
       _res.writeAttribute("width","10");
       _res.writeAttribute("height","10");
       _res.writeAttribute("fill","white");
-      _res.writeEndElement();
       break;
     }
 
@@ -765,11 +676,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 11 10");
       _res.writeAttribute("refX","1");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","0,5 0.94,8 3.44,10 6.94,10 9.88,8.15 10.94,5 9.88,2 6.94,0 3.44,0 0.94,2");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -777,11 +686,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("viewBox","0 0 11 10");
       _res.writeAttribute("refX","1");
       _res.writeAttribute("refY","5");
-
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","0,5 0.94,8 3.44,10 6.94,10 9.88,8.15 10.94,5 9.88,2 6.94,0 3.44,0 0.94,2");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -851,8 +758,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("offset","100%");
       _res.writeAttribute("stop-color",couleur100);
       _res.writeEndElement();
-
-      _res.writeEndElement(); // End element "radialGradient"
       break;
     }
 
@@ -983,13 +888,11 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("ry",QString::number(size_node_src.getH()/2 - size_node_src.getH()/8));
       _res.writeAttribute("fill","white");
       _res.writeAttribute("fill-opacity","0");
-      _res.writeEndElement();
       break;
     }
 
-    default:
-      break;
     }
+    _res.writeEndElement();
 
     if(src_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
       _res.writeEndElement();// End context "marker"
@@ -1009,6 +912,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     _res.writeAttribute("markerHeight","3");
 
     switch(tgt_anchor_shape_type) {
+    case EdgeExtremityShape::None:
+        break;
+    case EdgeExtremityShape::FontAwesomeIcon: //add an arrow to replace FontAwesomeIcon
     case EdgeExtremityShape::Arrow: {
       _res.writeAttribute("viewBox","0 0 10 10");
       _res.writeAttribute("refX","6.7");
@@ -1017,7 +923,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polyline");
       _res.writeAttribute("points","0,0 10,5 0,10 1,5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1031,7 +936,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("cy","6");
       _res.writeAttribute("r","5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1044,7 +948,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("d","M 0 0 L 10 10 M 0 10 L 10 0");
       _res.writeAttribute("stroke",tlpColor2SvgColor(color));
       _res.writeAttribute("stroke-width","2");
-      _res.writeEndElement();
       break;
     }
 
@@ -1056,7 +959,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","5,0 0,5 5,10 10,5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1068,7 +970,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","5,0 0,3 0,7 5,10 10,7 10,3");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1080,7 +981,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","6,0 0,2 0,8 6,10 10,5");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1104,7 +1004,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("r","3.2");
       _res.writeAttribute("fill","white");
       _res.writeAttribute("stroke-width","2.5");
-      _res.writeEndElement();
       break;
     }
 
@@ -1119,7 +1018,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("width","10");
       _res.writeAttribute("height","10");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1131,7 +1029,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","6,0 3.75,3 0,2 2.25,5 0,8 3.75,6.9 6,10 6,6.25 10,5 6,3.75");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1146,7 +1043,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("width","10");
       _res.writeAttribute("height","10");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1162,7 +1058,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("width","10");
       _res.writeAttribute("height","10");
       _res.writeAttribute("fill","white");
-      _res.writeEndElement();
       break;
     }
 
@@ -1174,7 +1069,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","0,5 0.94,8 3.44,10 6.94,10 9.88,8.15 10.94,5 9.88,2 6.94,0 3.44,0 0.94,2");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1186,7 +1080,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeStartElement("polygon");
       _res.writeAttribute("points","0,5 0.94,8 3.44,10 6.94,10 9.88,8.15 10.94,5 9.88,2 6.94,0 3.44,0 0.94,2");
       _res.writeAttribute("fill",tlpColor2SvgColor(color));
-      _res.writeEndElement();
       break;
     }
 
@@ -1256,8 +1149,6 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("offset","100%");
       _res.writeAttribute("stop-color",couleur100);
       _res.writeEndElement();
-
-      _res.writeEndElement(); // End element "radialGradient"
       break;
     }
 
@@ -1388,14 +1279,10 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeAttribute("ry",QString::number(size_node_tgt.getH()/2 - size_node_tgt.getH()/8));
       _res.writeAttribute("fill","white");
       _res.writeAttribute("fill-opacity","0");
-      _res.writeEndElement();
       break;
     }
-
-    default:
-      break;
     }
-
+    _res.writeEndElement();
     if(tgt_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
       _res.writeEndElement();// End context "marker"
       _res.writeEndElement();// End context "def"

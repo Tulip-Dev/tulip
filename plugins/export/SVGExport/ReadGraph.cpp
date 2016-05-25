@@ -69,7 +69,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
     ds->get("Edge extremities", edge_extremities);
   }
 
-  // Finding graph's size
+  // Finding graph size
   BoundingBox graphbb = tlp::computeBoundingBox(graph,layout, sizes, rotation);
 
   // Writing the header of the file
@@ -87,17 +87,13 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
   std::vector<tlp::node> metanodeVertices;
   treatNodes(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices);
 
-
-
   // Analysing meta-nodes
-
-  std::vector<int> transformationVertices;
+  vector<int> transformationVertices;
   int indice_Transform = 0;
   unsigned sizeFirstVertice = 2* metanodeVertices.size();
 
   while(!metanodeVertices.empty()) {
-    std::vector<tlp::node> subMetanodeVertices;
-
+    vector<tlp::node> subMetanodeVertices;
     for(vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end(); ++it) {
       node metanode = *it;
       Graph *metagraph = graph->getNodeMetaInfo(metanode);
@@ -150,7 +146,6 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
   unsigned int id_tgt_grad = 0;
   tlp::GlGraphRenderingParameters rp;
   tlp::GlGraphInputData inputData(graph, &rp);
-  GlEdge glEdge(0);
   forEach(e, graph->getEdges()) {
     if ((++i % 100) == 0)
       pp->progress(i,nb_elements);
@@ -158,7 +153,7 @@ void ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
     const pair<node, node>& ends = graph->ends(e);
     r->startEdge(e.id);
 
-    glEdge.id = e.id;
+    GlEdge glEdge(e.id);
     std::vector<Coord> edgeVertices;
     glEdge.getVertices(&inputData, edgeVertices);
 

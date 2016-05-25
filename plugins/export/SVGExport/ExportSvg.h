@@ -27,7 +27,6 @@
 
 #include <tulip/TulipViewSettings.h>
 
-// First concrete builder
 class ExportSvg : public RepresentExport {
 
   QXmlStreamWriter _res;
