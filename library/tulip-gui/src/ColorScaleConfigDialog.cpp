@@ -428,10 +428,24 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
 
   ColorScale scaleTmp(colorsList, gradient);
   setColorScale(scaleTmp);
-  _ui->tabWidget->setCurrentIndex(0);
+  //_ui->tabWidget->setCurrentIndex(0);
 }
 
 void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
+  // first look for a predefined ColorScale
+  for (int row = 0; row < _ui->savedColorScalesList->count(); ++row) {
+    QListWidgetItem* item = _ui->savedColorScalesList->item(row);
+    if (colorScale == tulipImageColorScales[item->text()]) {
+      // colorScale is a predefined one
+      // so select it
+      _ui->savedColorScalesList->setCurrentItem(item);
+      _ui->tabWidget->setCurrentIndex(1);
+      accept();
+      return;
+    }
+  }
+
+  // it not a predefined one, so allow to update it
   disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
 
   _ui->colorsTable->clear();
@@ -503,6 +517,7 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
   }
 
   connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
+  _ui->tabWidget->setCurrentIndex(0);
 }
 
 const ColorScale& ColorScaleConfigDialog::getColorScale() const {

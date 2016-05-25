@@ -253,7 +253,7 @@ protected :
   GlEditableCurve *curve;
   bool curveDragStarted;
   Coord *selectedAnchor;
-  ColorScale *colorScale;
+  ColorScale *colorScale, dialogColorScale;
   GlColorScale *glColorScale;
   GlSizeScale *glSizeScale;
   GlGlyphScale *glGlyphScale;

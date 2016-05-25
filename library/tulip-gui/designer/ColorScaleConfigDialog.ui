@@ -223,7 +223,7 @@ color scale</string>
           </size>
          </property>
          <property name="title">
-          <string>Color scale preview</string>
+          <string>    Preview</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
@@ -394,7 +394,7 @@ color scale</string>
           </size>
          </property>
          <property name="title">
-          <string>Color scale preview</string>
+          <string>    Preview</string>
          </property>
          <layout class="QVBoxLayout" name="verticalLayout_8">
           <item>
