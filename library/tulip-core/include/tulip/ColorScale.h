@@ -86,7 +86,8 @@ public:
 
   /**
    * @brief Configures the color scale.
-   * This method configures the color scale. If the scale was previously configured the old configuration is lost.
+   * This method configures the color scale.
+   * If the scale was already configured the previous configuration is lost.
    * @param colors The colors to use in the color scale.
    * @param gradient If set to true, color scale is a gradient
    */
@@ -112,7 +113,7 @@ public:
    * @brief Returns true is the color scale was initialized.
    */
   bool colorScaleInitialized() const {
-    return colorScaleSet;
+    return !colorMap.empty();
   }
   /**
    * @brief Returns a map corresponding to the color scale.
@@ -138,13 +139,22 @@ public:
     *
     **/
   void setColorMapTransparency(unsigned char transparency);
+  /**
+    * @brief test ColorScale equality
+    *
+    **/
+  bool operator==(const ColorScale& cs) const {
+    return (gradient == cs.gradient) && (colorMap == cs.colorMap);
+  }
+  /**
+    * @brief test ColorScale equality
+    *
+    **/
+  bool operator==(const std::vector<Color> &colors) const;
 
 protected:
-
   std::map<float, Color> colorMap;
   bool gradient;
-  bool colorScaleSet;
-
 };
 
 }
