@@ -693,7 +693,7 @@ void HistogramMetricMapping::initInteractor() {
 
   if (colorScaleConfigDialog == NULL) {
     colorScaleConfigDialog = new ColorScaleConfigDialog(colorScale, histoView->getGlMainWidget());
-    *colorScale=colorScaleConfigDialog->getColorScale();
+    dialogColorScale = *colorScale=colorScaleConfigDialog->getColorScale();
     colorScale->setColorMapTransparency(200);
   }
 
@@ -856,7 +856,8 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       }
       else if (pointerUnderScale(sceneCoords)) {
         bool updateMappingNeeded = false;
-
+	
+	colorScaleConfigDialog->setColorScale(dialogColorScale);
         if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) && colorScaleConfigDialog->exec() == QDialog::Accepted) {
           updateMappingNeeded = true;
         }
@@ -1069,7 +1070,7 @@ bool HistogramMetricMapping::pointerUnderScale(const Coord &sceneCoords) {
 
 void HistogramMetricMapping::updateGraphWithMapping(Graph *graph, LayoutProperty *histogramLayout) {
 
-  *colorScale=colorScaleConfigDialog->getColorScale();
+  dialogColorScale = *colorScale=colorScaleConfigDialog->getColorScale();
   colorScale->setColorMapTransparency(200);
   glColorScale->setColorScale(colorScale);
 
