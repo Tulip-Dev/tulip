@@ -25,7 +25,7 @@ namespace tlp {
 
 
 ColorScale::ColorScale(const bool gradient) :
-  gradient(gradient), colorScaleSet(false) {
+  gradient(gradient) {
   colorMap[0.0f] = Color(75, 75, 255, 200);
   colorMap[0.25f] = Color(156, 161, 255, 200);
   colorMap[0.5f] = Color(255, 255, 127, 200);
@@ -34,7 +34,7 @@ ColorScale::ColorScale(const bool gradient) :
 }
 
 ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) :
-  gradient(gradient), colorScaleSet(true) {
+  gradient(gradient) {
   setColorScale(colors, gradient);
 }
 
@@ -58,8 +58,6 @@ void ColorScale::setColorScale(const std::vector<Color> colors,
   colorMap.clear();
 
   if (!colors.empty()) {
-    colorScaleSet = true;
-
     if (colors.size() == 1) {
       colorMap[0.0f] = colors[0];
       colorMap[1.0f] = colors[0];
@@ -99,7 +97,6 @@ void ColorScale::setColorScale(const std::vector<Color> colors,
 
 void ColorScale::setColorAtPos(const float pos, const Color &color) {
   colorMap[pos] = color;
-  colorScaleSet = true;
 }
 
 Color ColorScale::getColorAtPos(const float pos) const {
@@ -147,8 +144,6 @@ Color ColorScale::getColorAtPos(const float pos) const {
 }
 
 void ColorScale::setColorMap(const map<float, Color>& newColorMap) {
-  colorScaleSet = false;
-
   colorMap.clear();
 
   // insert all values in [0, 1]
@@ -187,11 +182,6 @@ void ColorScale::setColorMap(const map<float, Color>& newColorMap) {
         colorMap[1.f]=c;
       }
     }
-
-    colorScaleSet = true;
-  }
-  else {
-    colorScaleSet = false;
   }
 }
 
@@ -203,4 +193,18 @@ void ColorScale::setColorMapTransparency(unsigned char alpha) {
     color.setA(alpha);
   }
 }
+
+bool ColorScale::operator==(const std::vector<Color> &colors) const {
+  if (colorMap.size() != colors.size())
+    return false;
+  unsigned int i = 0;
+  for(map<float, Color>::const_iterator it = colorMap.begin();
+      it != colorMap.end(); ++it, ++i) {
+    Color csColor = it->second;
+    if (csColor != colors[i])
+      return false;
+  }
+  return true;
 }
+}
+
