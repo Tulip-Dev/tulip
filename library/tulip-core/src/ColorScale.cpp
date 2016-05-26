@@ -197,13 +197,17 @@ void ColorScale::setColorMapTransparency(unsigned char alpha) {
 bool ColorScale::operator==(const std::vector<Color> &colors) const {
   if (colorMap.size() != colors.size())
     return false;
+
   unsigned int i = 0;
+
   for(map<float, Color>::const_iterator it = colorMap.begin();
       it != colorMap.end(); ++it, ++i) {
     Color csColor = it->second;
+
     if (csColor != colors[i])
       return false;
   }
+
   return true;
 }
 }

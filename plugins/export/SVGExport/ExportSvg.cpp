@@ -193,12 +193,13 @@ void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   case NodeShape::HalfCylinder:
   case NodeShape::Sphere:
   case NodeShape::GlowSphere:
-      _res.writeStartElement("ellipse");
-      _res.writeAttribute("cx", QString::number(x));
-      _res.writeAttribute("cy", QString::number(y));
-      _res.writeAttribute("rx", QString::number(w));
-      _res.writeAttribute("ry", QString::number(h));
-      break;
+    _res.writeStartElement("ellipse");
+    _res.writeAttribute("cx", QString::number(x));
+    _res.writeAttribute("cy", QString::number(y));
+    _res.writeAttribute("rx", QString::number(w));
+    _res.writeAttribute("ry", QString::number(h));
+    break;
+
   case NodeShape::Billboard:
   case NodeShape::CubeOutlined:
   case NodeShape::CubeOutlinedTransparent:
@@ -206,209 +207,214 @@ void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   case NodeShape::Pentagon:
   case NodeShape::Hexagon:
   case NodeShape::Diamond:
-  case NodeShape::Window:
-  {
-      /*
-        This is the scheme of coordinates of each point used
+  case NodeShape::Window: {
+    /*
+      This is the scheme of coordinates of each point used
 
-        a * * r * * e * * s * * b
-        *           *           *
-        *           *           *
-        g           *           i
-        *           *           *
-        n           *           o
-        p * * * * * o * * * * * q
-        *           *           *
-        *           *           *
-        j           *           k
-        *           *           *
-        *           *           *
-        d * * l * * f * * m * * c
-      */
+      a * * r * * e * * s * * b
+      *           *           *
+      *           *           *
+      g           *           i
+      *           *           *
+      n           *           o
+      p * * * * * o * * * * * q
+      *           *           *
+      *           *           *
+      j           *           k
+      *           *           *
+      *           *           *
+      d * * l * * f * * m * * c
+    */
 
-      //Rectangle points
-      float xa=x-w;
-      float ya=y+h;
-      float xb=x+w;
-      float yb=y+h;
-      float xc=x+w;
-      float yc=y-h;
-      QString xcstr = QString::number(xc);
-      QString ycstr = QString::number(yc);
+    //Rectangle points
+    float xa=x-w;
+    float ya=y+h;
+    float xb=x+w;
+    float yb=y+h;
+    float xc=x+w;
+    float yc=y-h;
+    QString xcstr = QString::number(xc);
+    QString ycstr = QString::number(yc);
 
-      float xd=x-w;
-      float yd=y-h;
-      QString xdstr = QString::number(xd);
-      QString ydstr = QString::number(yd);
+    float xd=x-w;
+    float yd=y-h;
+    QString xdstr = QString::number(xd);
+    QString ydstr = QString::number(yd);
 
-      //Extra triangle
-      float xe=x;
-      float ye=y+h;
-      QString xestr = QString::number(xe);
-      QString yestr = QString::number(ye);
+    //Extra triangle
+    float xe=x;
+    float ye=y+h;
+    QString xestr = QString::number(xe);
+    QString yestr = QString::number(ye);
 
-      //Extra hexagon
-      float yf=y-h;
-      QString yfstr = QString::number(yf);
-      QString xfstr = QString::number(x);
-      float xg=x-w;
-      float yg=y+(h*0.5);
-      float xi=x+w;
-      float yi=y+(h*0.5);
-      float xj=x-w;
-      float yj=y-(h*0.5);
-      float xk=x+w;
-      float yk=y-(h*0.5);
+    //Extra hexagon
+    float yf=y-h;
+    QString yfstr = QString::number(yf);
+    QString xfstr = QString::number(x);
+    float xg=x-w;
+    float yg=y+(h*0.5);
+    float xi=x+w;
+    float yi=y+(h*0.5);
+    float xj=x-w;
+    float yj=y-(h*0.5);
+    float xk=x+w;
+    float yk=y-(h*0.5);
 
-      //Extra pentagon
-      float xl=x-(w*0.5);
-      float yl=y-h;
-      float xm=x+(w*0.5);
-      float ym=y-h;
-      float xn=x-w;
-      float yn=y+(h*0.3);
-      float xo=x+w;
-      float yo=y+(h*0.3);
+    //Extra pentagon
+    float xl=x-(w*0.5);
+    float yl=y-h;
+    float xm=x+(w*0.5);
+    float ym=y-h;
+    float xn=x-w;
+    float yn=y+(h*0.3);
+    float xo=x+w;
+    float yo=y+(h*0.3);
 
-      //Extra diamond
-      float xp=x-w;
-      float xq=x+w;
+    //Extra diamond
+    float xp=x-w;
+    float xq=x+w;
 
-      // Now we group up points to get the shape
-      QString list_points_rect=QString::number(xa)+","+QString::number(ya)+" "+QString::number(xb)+","+QString::number(yb)+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr;
+    // Now we group up points to get the shape
+    QString list_points_rect=QString::number(xa)+","+QString::number(ya)+" "+QString::number(xb)+","+QString::number(yb)+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr;
 
-      _res.writeStartElement("polygon");
+    _res.writeStartElement("polygon");
 
-      if (type == NodeShape::Triangle)
-        _res.writeAttribute("points", xestr+","+yestr+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr);
-      else if (type==NodeShape::Hexagon)
-        _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+xfstr+","+yfstr+" "+QString::number(xj)+","+QString::number(yj)+" "+QString::number(xg)+","+QString::number(yg));
-      else if (type==NodeShape::Pentagon)
-        _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xo)+","+QString::number(yo)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl)+" "+QString::number(xn)+","+QString::number(yn));
-      else if (type==NodeShape::Diamond)
-        _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xq)+","+QString::number(y)+" "+xfstr+","+yfstr+" "+QString::number(xp)+","+QString::number(y));
-      else if (type==NodeShape::CubeOutlinedTransparent) {
-        _res.writeAttribute("points", list_points_rect);
-        _res.writeEndElement();
-        _res.writeStartElement("rect");
-        _res.writeAttribute("x", QString::number((x-size.getX()/2)+w/10));
-        _res.writeAttribute("y", QString::number((y-size.getY()/2)+h/10));
-        _res.writeAttribute("width",QString::number(w*1.8));
-        _res.writeAttribute("height",QString::number(h*1.8));
-        _res.writeAttribute("fill", "white");
-        _res.writeAttribute("fill-opacity", "1");
-      }
-      else
-        _res.writeAttribute("points", list_points_rect);
+    if (type == NodeShape::Triangle)
+      _res.writeAttribute("points", xestr+","+yestr+" "+xcstr+","+ycstr+" "+xdstr+","+ydstr);
+    else if (type==NodeShape::Hexagon)
+      _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+xfstr+","+yfstr+" "+QString::number(xj)+","+QString::number(yj)+" "+QString::number(xg)+","+QString::number(yg));
+    else if (type==NodeShape::Pentagon)
+      _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xo)+","+QString::number(yo)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl)+" "+QString::number(xn)+","+QString::number(yn));
+    else if (type==NodeShape::Diamond)
+      _res.writeAttribute("points", xestr+","+yestr+" "+QString::number(xq)+","+QString::number(y)+" "+xfstr+","+yfstr+" "+QString::number(xp)+","+QString::number(y));
+    else if (type==NodeShape::CubeOutlinedTransparent) {
+      _res.writeAttribute("points", list_points_rect);
+      _res.writeEndElement();
+      _res.writeStartElement("rect");
+      _res.writeAttribute("x", QString::number((x-size.getX()/2)+w/10));
+      _res.writeAttribute("y", QString::number((y-size.getY()/2)+h/10));
+      _res.writeAttribute("width",QString::number(w*1.8));
+      _res.writeAttribute("height",QString::number(h*1.8));
+      _res.writeAttribute("fill", "white");
+      _res.writeAttribute("fill-opacity", "1");
+    }
+    else
+      _res.writeAttribute("points", list_points_rect);
   }
-      break;
+  break;
+
   case NodeShape::Cube:
   case NodeShape::Square:
   case NodeShape::RoundedBox:
-      _res.writeStartElement("rect");
-      _res.writeAttribute("x", QString::number(x-size.getX()/2));
-      _res.writeAttribute("y", QString::number(y-size.getY()/2));
-      _res.writeAttribute("width",QString::number(w*2));
-      _res.writeAttribute("height",QString::number(h*2));
-      if(type==NodeShape::RoundedBox) {
-          _res.writeAttribute("rx", QString::number(w/10.f));
-          _res.writeAttribute("ry", QString::number(h/10.f));
-      }
-      break;
-  case NodeShape::ChristmasTree: // If the shape is a christmas tree: composed by a circle, a triangle and a rectangle
-  {
-      //circle
-      float yc=y+(0.9*h);
-      float rx=0.1*w;
-      float ry=0.1*h;
+    _res.writeStartElement("rect");
+    _res.writeAttribute("x", QString::number(x-size.getX()/2));
+    _res.writeAttribute("y", QString::number(y-size.getY()/2));
+    _res.writeAttribute("width",QString::number(w*2));
+    _res.writeAttribute("height",QString::number(h*2));
 
-      _res.writeStartElement("ellipse");
-      _res.writeAttribute("cx", QString::number(x));
-      _res.writeAttribute("cy", QString::number(yc));
-      _res.writeAttribute("rx", QString::number(rx));
-      _res.writeAttribute("ry", QString::number(ry));
-      _res.writeEndElement(); // ellipse
+    if(type==NodeShape::RoundedBox) {
+      _res.writeAttribute("rx", QString::number(w/10.f));
+      _res.writeAttribute("ry", QString::number(h/10.f));
+    }
 
-      //triangle
-      float yt1=y+(0.8*h);
-      float xt2=x+(0.8*w);
-      float yt2=y-(0.5*h);
-      float xt3=x-(0.8*w);
-      QString list_pt_tr=QString::number(x)+","+QString::number(yt1)+" "+QString::number(xt2)+","+QString::number(yt2)+" "+QString::number(xt3)+","+QString::number(yt2);
+    break;
 
-      _res.writeStartElement("polygon");
-      _res.writeAttribute("points", list_pt_tr);
-      _res.writeAttribute("fill", "#1A7900");
-      _res.writeEndElement(); // triangle
+  case NodeShape::ChristmasTree: { // If the shape is a christmas tree: composed by a circle, a triangle and a rectangle
+    //circle
+    float yc=y+(0.9*h);
+    float rx=0.1*w;
+    float ry=0.1*h;
 
-      //rectangle
-      float xr1=x-(0.25*w);
-      float xr2=x+(0.25*w);
-      float yr3=y-h;
+    _res.writeStartElement("ellipse");
+    _res.writeAttribute("cx", QString::number(x));
+    _res.writeAttribute("cy", QString::number(yc));
+    _res.writeAttribute("rx", QString::number(rx));
+    _res.writeAttribute("ry", QString::number(ry));
+    _res.writeEndElement(); // ellipse
 
-      QString list_pt_rect=QString::number(xr1)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yr3)+" "+QString::number(xr1)+","+QString::number(yr3);
+    //triangle
+    float yt1=y+(0.8*h);
+    float xt2=x+(0.8*w);
+    float yt2=y-(0.5*h);
+    float xt3=x-(0.8*w);
+    QString list_pt_tr=QString::number(x)+","+QString::number(yt1)+" "+QString::number(xt2)+","+QString::number(yt2)+" "+QString::number(xt3)+","+QString::number(yt2);
 
-      _res.writeStartElement("polygon");
-      _res.writeAttribute("points", list_pt_rect);
-      _res.writeAttribute("fill", "#7D7900");
+    _res.writeStartElement("polygon");
+    _res.writeAttribute("points", list_pt_tr);
+    _res.writeAttribute("fill", "#1A7900");
+    _res.writeEndElement(); // triangle
+
+    //rectangle
+    float xr1=x-(0.25*w);
+    float xr2=x+(0.25*w);
+    float yr3=y-h;
+
+    QString list_pt_rect=QString::number(xr1)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yr3)+" "+QString::number(xr1)+","+QString::number(yr3);
+
+    _res.writeStartElement("polygon");
+    _res.writeAttribute("points", list_pt_rect);
+    _res.writeAttribute("fill", "#7D7900");
   }
-      break;
+  break;
+
   case NodeShape::Ring: // If the shape is a ring, we have to draw the white circle in the middle$
-      _res.writeStartElement("ellipse");
-      _res.writeAttribute("cx", QString::number(x));
-      _res.writeAttribute("cy", QString::number(y));
-      _res.writeAttribute("rx", QString::number(w));
-      _res.writeAttribute("ry", QString::number(h));
-      _res.writeEndElement(); // ellipse
+    _res.writeStartElement("ellipse");
+    _res.writeAttribute("cx", QString::number(x));
+    _res.writeAttribute("cy", QString::number(y));
+    _res.writeAttribute("rx", QString::number(w));
+    _res.writeAttribute("ry", QString::number(h));
+    _res.writeEndElement(); // ellipse
 
-      _res.writeStartElement("ellipse");
-      _res.writeAttribute("cx", QString::number(x));
-      _res.writeAttribute("cy", QString::number(y));
-      _res.writeAttribute("rx",  QString::number(w/3));
-      _res.writeAttribute("ry", QString::number(h/3));
-      _res.writeAttribute("fill", "white");
-      _res.writeAttribute("fill-opacity", "1");
-      break;
-  case NodeShape::Cross:
-  {
-      //polygone 1
-      float xr=x-(w*0.25);
-      float yr=y+h;
-      float xs=x+(w*0.25);
-      float ys=y+h;
-      float xm=x+(w*0.25);
-      float ym=y-h;
-      float xl=x-(w*0.25);
-      float yl=y-h;
+    _res.writeStartElement("ellipse");
+    _res.writeAttribute("cx", QString::number(x));
+    _res.writeAttribute("cy", QString::number(y));
+    _res.writeAttribute("rx",  QString::number(w/3));
+    _res.writeAttribute("ry", QString::number(h/3));
+    _res.writeAttribute("fill", "white");
+    _res.writeAttribute("fill-opacity", "1");
+    break;
 
-      //polygone 2
-      float xg=x-w;
-      float yg=y+(h*0.25);
-      float xi=x+w;
-      float yi=y+(h*0.25);
-      float xk=x+w;
-      float yk=y-(h*0.25);
-      float xj=x-w;
-      float yj=y-(h*0.25);
+  case NodeShape::Cross: {
+    //polygone 1
+    float xr=x-(w*0.25);
+    float yr=y+h;
+    float xs=x+(w*0.25);
+    float ys=y+h;
+    float xm=x+(w*0.25);
+    float ym=y-h;
+    float xl=x-(w*0.25);
+    float yl=y-h;
 
-      _res.writeStartElement("polygon");
-      _res.writeAttribute("points", QString::number(xr)+","+QString::number(yr)+" "+QString::number(xs)+","+QString::number(ys)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl));
-      _res.writeEndElement();
+    //polygone 2
+    float xg=x-w;
+    float yg=y+(h*0.25);
+    float xi=x+w;
+    float yi=y+(h*0.25);
+    float xk=x+w;
+    float yk=y-(h*0.25);
+    float xj=x-w;
+    float yj=y-(h*0.25);
 
-      _res.writeStartElement("polygon");
-      _res.writeAttribute("points", QString::number(xg)+","+QString::number(yg)+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+QString::number(xj)+","+QString::number(yj));
+    _res.writeStartElement("polygon");
+    _res.writeAttribute("points", QString::number(xr)+","+QString::number(yr)+" "+QString::number(xs)+","+QString::number(ys)+" "+QString::number(xm)+","+QString::number(ym)+" "+QString::number(xl)+","+QString::number(yl));
+    _res.writeEndElement();
+
+    _res.writeStartElement("polygon");
+    _res.writeAttribute("points", QString::number(xg)+","+QString::number(yg)+" "+QString::number(xi)+","+QString::number(yi)+" "+QString::number(xk)+","+QString::number(yk)+" "+QString::number(xj)+","+QString::number(yj));
   }
-      break;
-      //TODO!!!! Right now, just draw a circle
+  break;
+
+  //TODO!!!! Right now, just draw a circle
   case NodeShape::Cone:
   case NodeShape::Star:
   case NodeShape::FontAwesomeIcon:
-      _res.writeStartElement("circle");
-      _res.writeAttribute("cx", QString::number(x));
-      _res.writeAttribute("cy", QString::number(y));
-      _res.writeAttribute("r", QString::number(w));
-      break;
+    _res.writeStartElement("circle");
+    _res.writeAttribute("cx", QString::number(x));
+    _res.writeAttribute("cy", QString::number(y));
+    _res.writeAttribute("r", QString::number(w));
+    break;
   }
+
   _res.writeEndElement();
 }
 
@@ -466,9 +472,11 @@ void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
     switch(type) {
     case EdgeShape::Polyline: {
       points += " L";
+
       for(vector<Coord>::const_iterator it=bends.begin(); it!=bends.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
+
       break;
     }
 
@@ -480,25 +488,30 @@ void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
       else {
         computeBezierPoints(controlPoints, curvePoints);
         points += " S";
+
         for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
           points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
         }
       }
+
       break;
     }
 
     case EdgeShape::CatmullRomCurve : {
       computeCatmullRomPoints(controlPoints, curvePoints);
       points += " S";
+
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
+
       break;
     }
 
     case EdgeShape::CubicBSplineCurve : {
       computeOpenUniformBsplinePoints(controlPoints, curvePoints);
       points += " S";
+
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
@@ -536,7 +549,8 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
 
     switch(src_anchor_shape_type) {
     case EdgeExtremityShape::None:
-        break;
+      break;
+
     case EdgeExtremityShape::FontAwesomeIcon:    //add an arrow to replace FontAwesomeIcon
     case EdgeExtremityShape::Arrow: {
       _res.writeAttribute("viewBox","-10 0 10 10");
@@ -892,6 +906,7 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     }
 
     }
+
     _res.writeEndElement();
 
     if(src_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
@@ -913,7 +928,8 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
 
     switch(tgt_anchor_shape_type) {
     case EdgeExtremityShape::None:
-        break;
+      break;
+
     case EdgeExtremityShape::FontAwesomeIcon: //add an arrow to replace FontAwesomeIcon
     case EdgeExtremityShape::Arrow: {
       _res.writeAttribute("viewBox","0 0 10 10");
@@ -1282,7 +1298,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
     }
     }
+
     _res.writeEndElement();
+
     if(tgt_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
       _res.writeEndElement();// End context "marker"
       _res.writeEndElement();// End context "def"
