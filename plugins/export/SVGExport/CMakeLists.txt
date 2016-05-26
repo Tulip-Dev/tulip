@@ -2,6 +2,6 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 FILE(GLOB LIB_SRCS "*.cpp")
 
 ADD_LIBRARY(SVGExport-${TulipVersion} SHARED ${LIB_SRCS})
-TARGET_LINK_LIBRARIES(SVGExport-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(SVGExport-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${QT_LIBRARIES})
 
 INSTALL_TULIP_PLUGIN(SVGExport-${TulipVersion} ${TulipPluginsInstallDir})

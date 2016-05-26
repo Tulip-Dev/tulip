@@ -17,6 +17,6 @@ QTX_ADD_RESOURCES(LIB_RCC_SRCS
 )
 
 ADD_LIBRARY(FishEyeInteractor-${TulipVersion} SHARED ${LIB_SRCS} ${LIB_UI_HEADERS} ${LIB_MOC_SRCS} ${LIB_RCC_SRCS})
-TARGET_LINK_LIBRARIES(FishEyeInteractor-${TulipVersion} ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName})
+TARGET_LINK_LIBRARIES(FishEyeInteractor-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 
 INSTALL_TULIP_PLUGIN(FishEyeInteractor-${TulipVersion} ${TulipInteractorPluginsInstallDir})

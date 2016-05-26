@@ -78,7 +78,7 @@ IF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
   SET_TARGET_PROPERTIES(${LibTulipOGLPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/../../../;@loader_path/../../../../Frameworks")
 ENDIF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-TARGET_LINK_LIBRARIES(${LibTulipOGLPythonBindingsName} ${LibTulipCoreName} ${LibTulipOglName})
+TARGET_LINK_LIBRARIES(${LibTulipOGLPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName})
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
 # and use dynamic lookup for retrieving its symbols.
 # That way, we can produce a C extension module that can be imported through the Python interpreter
