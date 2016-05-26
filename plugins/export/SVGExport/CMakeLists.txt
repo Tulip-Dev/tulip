@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${CMAKE_CURRENT_SOURCE_DIR} ${QT_USE_FILE})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${CMAKE_CURRENT_SOURCE_DIR} ${TulipGUIInclude})
 FILE(GLOB LIB_SRCS "*.cpp")
 
 ADD_LIBRARY(SVGExport-${TulipVersion} SHARED ${LIB_SRCS})
