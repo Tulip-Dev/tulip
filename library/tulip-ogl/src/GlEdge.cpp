@@ -580,7 +580,7 @@ void GlEdge::drawLabel(OcclusionTest* test, const GlGraphInputData* data, float 
 
 void GlEdge::getVertices(const GlGraphInputData *data,
                          std::vector<Coord> &linesCoordsArray) {
-  edge e = edge(id);
+  edge e(id);
 
   const std::pair<node, node>& eEnds = data->graph->ends(e);
   const node source = eEnds.first;
@@ -590,13 +590,13 @@ void GlEdge::getVertices(const GlGraphInputData *data,
   bool selected = data->getElementSelected()->getEdgeValue(e);
 
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
-  unsigned nbBends = bends.size();
+  bool hasBends(!bends.empty());
 
-  if (nbBends == 0 && (source == target)) { //a loop without bends
+  if (!hasBends && (source == target)) { //a loop without bends
     return;
   }
 
-  if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
+  if (!hasBends && (srcCoord - tgtCoord).norm() < 1E-4)
     return;
 
   const Size &srcSize = data->getElementSize()->getNodeValue(source);
@@ -629,7 +629,7 @@ void GlEdge::getVertices(const GlGraphInputData *data,
 
   if (data->parameters->isViewArrow() && startEdgeGlyph != nullptr) {
     displayArrowAndAdjustAnchor(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),Color(),maxSrcSize,selected,0, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
-                                bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+                                bends.size(),(hasBends) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
   }
   else {
     beginLineAnchor = srcAnchor;
@@ -639,7 +639,7 @@ void GlEdge::getVertices(const GlGraphInputData *data,
 
   if (data->parameters->isViewArrow() && endEdgeGlyph != nullptr) {
     displayArrowAndAdjustAnchor(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),Color(),maxTgtSize,selected,0,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
-                                bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+                                bends.size(),(hasBends) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
   }
   else {
     endLineAnchor = tgtAnchor;
@@ -668,12 +668,7 @@ void GlEdge::getVertices(const GlGraphInputData *data,
     vertices = curvePoints;
   }
 
-
-  size_t numberOfVertices=vertices.size();
-
-  for(size_t i=0; i<numberOfVertices; ++i) {
-    linesCoordsArray.push_back(vertices[i]);
-  }
+  linesCoordsArray.insert(linesCoordsArray.end(), vertices.begin(), vertices.end());
 }
 
 void GlEdge::getColors(const GlGraphInputData *data,
