@@ -85,7 +85,7 @@ SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersi
 ## Tulip libraries names
 ## ========================================================
 SET(LibTulipCoreName "tulip-core-${TulipMMVersion}")
-SET(LibTulipOglName "tulip-ogl-${TulipMMVersion}")
+SET(LibTulipOGLName "tulip-ogl-${TulipMMVersion}")
 SET(LibTulipGUIName "tulip-gui-${TulipMMVersion}")
 SET(LibTulipPythonName "tulip-python-${TulipMMVersion}")
 SET(LibTulipOGDFName "tulip-ogdf-${TulipMMVersion}")
@@ -93,7 +93,7 @@ SET(LibStlPythonBindingsName "stl-python-bindings")
 SET(LibTulipCorePythonBindingsName "tulip-core-python-bindings")
 SET(LibTulipOGLPythonBindingsName "tulip-opengl-python-bindings")
 SET(LibTulipGUIPythonBindingsName "tulip-gui-python-bindings")
-SET(TulipLibs ${LibTulipCoreName} ${LibTulipOglName} ${LibTulipGUIName} ${LibTulipOGDFName})
+SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTulipOGDFName})
 
 ## ========================================================
 ## Current year (used in documentation config files)
