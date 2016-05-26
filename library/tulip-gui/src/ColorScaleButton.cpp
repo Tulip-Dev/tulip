@@ -66,6 +66,7 @@ void ColorScaleButton::editColorScale(const ColorScale& cs) {
     dlg = new ColorScaleConfigDialog(cs, this);
 
   dlg->setColorScale(cs);
+
   if (dlg->exec() == QDialog::Accepted)
     _colorScale = dlg->getColorScale();
   else if (&cs != &_colorScale)

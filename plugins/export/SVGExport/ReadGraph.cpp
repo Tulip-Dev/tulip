@@ -94,6 +94,7 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
 
   while(!metanodeVertices.empty()) {
     vector<tlp::node> subMetanodeVertices;
+
     for(vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end(); ++it) {
       node metanode = *it;
       Graph *metagraph = graph->getNodeMetaInfo(metanode);

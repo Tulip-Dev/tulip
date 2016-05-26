@@ -856,8 +856,9 @@ bool HistogramMetricMapping::eventFilter(QObject *widget, QEvent *e) {
       }
       else if (pointerUnderScale(sceneCoords)) {
         bool updateMappingNeeded = false;
-	
-	colorScaleConfigDialog->setColorScale(dialogColorScale);
+
+        colorScaleConfigDialog->setColorScale(dialogColorScale);
+
         if ((mappingType == VIEWCOLOR_MAPPING || mappingType == VIEWBORDERCOLOR_MAPPING) && colorScaleConfigDialog->exec() == QDialog::Accepted) {
           updateMappingNeeded = true;
         }
