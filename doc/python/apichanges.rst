@@ -3,6 +3,73 @@
 Important API changes
 ======================
 
+Since Tulip 4.8.2
+------------------
+
+Special syntax for automatic creation of graph properties through type inference
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+For convenient use, in particular when importing graph data, it is now possible to create
+graph properties on the fly without prior calls to the methods dedicated to these tasks (e.g.
+:meth:`tlp.Graph.getBooleanProperty`, :meth:`tlp.Graph.getIntegerProperty`, :meth:`tlp.Graph.getDoubleProperty`, ...).
+It allows to save a consequent lines of code but also to work faster using the tulip Python API.
+
+For instance, consider the following task : importing nodes data from a JSON file.
+As an example, we will use the following file containing data about cars with different types : string, float and integer,
+and will create one node for each car and one graph property (correctly typed) for each data field.
+
+.. code-block:: javascript
+
+  [
+    {
+      "acceleration": 12.0,
+      "car": "Chevrolet Chevelle Malibu",
+      "cylinders": 8,
+      "displacement": 307.0,
+      "horsepower": 130.0,
+      "id": 0,
+      "model": 70,
+      "mpg": 18.0,
+      "origin": "US",
+      "weight": 3504.0
+    },
+    {
+      "acceleration": 11.5,
+      "car": "Buick Skylark 320",
+      "cylinders": 8,
+      "displacement": 350.0,
+      "horsepower": 165.0,
+      "id": 1,
+      "model": 70,
+      "mpg": 15.0,
+      "origin": "US",
+      "weight": 3693.0
+    },
+    ...
+  ]
+
+To correctly import those data into Tulip graph nodes, the sample script below is sufficient::
+
+  cars = json.loads(open('cars.json').read())
+
+  for car in cars:
+    n = graph.addNode()
+    for k, v in car.items():
+      graph[k][n] = v
+
+Before Tulip 4.8.2, it was necessary to create the graph properties first by calling the following methods::
+
+  graph.getDoubleProperty('acceleration')
+  graph.getStringProperty('car')
+  graph.getIntegerProperty('cylinders')
+  graph.getDoubleProperty('displacement')
+  graph.getDoubleProperty('horsepower')
+  graph.getIntegerProperty('id')
+  graph.getIntegerProperty('model')
+  graph.getDoubleProperty('mpg')
+  graph.getStringProperty('origin')
+  graph.getDoubleProperty('weight')
+
 Since Tulip 4.8.1
 ------------------
 

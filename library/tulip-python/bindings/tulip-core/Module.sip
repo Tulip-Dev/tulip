@@ -40,7 +40,6 @@
   PyObject *tlpClass = PyDict_GetItemString(moduleDict, "tlp");
   PyObject *tlpVec3f = PyObject_GetAttrString(tlpClass, "Vec3f");
   PyObject_SetAttrString(tlpClass, "Coord", tlpVec3f);
-  PyObject_SetAttrString(tlpClass, "Size", tlpVec3f);
   // ensure that 'tulip' is in globals() to avoid exception when calling methods defined
   // in the tulip module (tulip/__init__.py) from a startup script(executed the first time the module is imported)
   PyRun_SimpleString("import sys;globals()['tulip'] = sys.modules['tulip']");
@@ -337,6 +336,7 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
 %Include IntegerProperty.sip
 %Include LayoutProperty.sip
 %Include NumericProperty.sip
+%Include PropertyProxy.sip
 
 %Include GraphProperty.sip
 

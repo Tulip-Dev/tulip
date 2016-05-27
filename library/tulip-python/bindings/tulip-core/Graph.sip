@@ -3721,15 +3721,12 @@ meta node and other nodes in the graph.
 
 //===========================================================================================
 
-  tlp::PropertyInterface* __getitem__(const std::string &attributeName) const;
+  SIP_PYOBJECT __getitem__(const std::string &attributeName) const;
 %MethodCode
-  if (!sipCpp->existProperty(*a0)) {
-    std::ostringstream oss;
-    oss << "graph property named \"" << *a0 << "\" does not exist.";
-    sipIsErr = -1;    
-    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+  if (sipCpp->existProperty(*a0)) {
+    sipRes = sipConvertFromType(sipCpp->getProperty(*a0), sipFindType("tlp::PropertyInterface"), NULL);
   } else {
-    sipRes = sipCpp->getProperty(*a0);
+    sipRes = sipConvertFromNewType(new tlp::PropertyProxy(sipCpp, *a0), sipFindType("tlp::PropertyProxy"), NULL);
   }
 %End
 
