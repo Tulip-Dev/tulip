@@ -47,6 +47,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyAlgorithm.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyEvent.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/PropertyInterface.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/PropertyProxy.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SimpleTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/SizePropertySpecific.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Size.sip

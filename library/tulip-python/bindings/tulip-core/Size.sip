@@ -17,8 +17,37 @@
  *
  */
 
+// Small hack used internally to differentiate tlp.Coord and tlp.Size types in Python
+// (as tlp::Coord and tlp::Size are just typedef to tlp::Vec3f in C++)
+
+%ModuleHeaderCode
 namespace tlp {
 
-typedef tlp::Vec3f Size;
+class PySize : public tlp::Vec3f {
+
+ public:
+
+  PySize(const float a0=1, const float a1=1, const float a2=1) : tlp::Vec3f(a0, a1, a2) {}
+
+  PySize(const tlp::PySize &s) : tlp::Vec3f(s) {}
+
+};
+
+}
+%End
+
+namespace tlp {
+
+class PySize : tlp::Vec3f /PyName=Size/ {
+
+ public:
+
+  PySize(const float a0=1, const float a1=1, const float a2=1);
+
+  PySize(const tlp::PySize &s);
+
+};
+
+typedef tlp::PySize Size;
 
 };
