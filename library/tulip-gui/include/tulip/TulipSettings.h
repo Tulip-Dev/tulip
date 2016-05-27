@@ -42,35 +42,6 @@ class TLP_QT_SCOPE TulipSettings: public QSettings, GlDefaultSelectionColorManag
 
 public:
 
-  static const QString RemoteLocationsConfigEntry;
-  static const QString RecentDocumentsConfigEntry;
-  static const QString PluginsToRemoveConfigEntry;
-  static const QString DefaultColorConfigEntry;
-  static const QString DefaultLabelColorConfigEntry;
-  static const QString DefaultSizeConfigEntry;
-  static const QString DefaultShapeConfigEntry;
-  static const QString DefaultSelectionColorEntry;
-  static const QString FavoriteAlgorithmsEntry;
-  static const QString FirstRunEntry;
-
-  static const QString ProxyEnabledEntry;
-  static const QString ProxyTypeEntry;
-  static const QString ProxyHostEntry;
-  static const QString ProxyPortEntry;
-  static const QString ProxyUseAuthEntry;
-  static const QString ProxyUsernameEntry;
-  static const QString ProxyPasswordEntry;
-
-  static const QString AutomaticDisplayDefaultViews;
-  static const QString AutomaticPerfectAspectRatioEntry;
-  static const QString ViewOrthoEntry;
-  static const QString AutomaticMapMetricEntry;
-  static const QString ResultPropertyStoredEntry;
-  static const QString RunningTimeComputedEntry;
-  static const QString SeedForRandomSequenceEntry;
-
-  static const QString WarnUserAboutGraphicsCardEntry;
-
   static TulipSettings &instance();
 
   static QString elementKey(const QString& configEntry, tlp::ElementType elem);
@@ -167,6 +138,9 @@ public:
 
   bool isFirstRun() const;
   void setFirstRun(bool);
+
+  bool isFirstTulipMMRun() const;
+  void setFirstTulipMMRun(bool);
 
   bool displayDefaultViews() const;
   void setDisplayDefaultViews(bool);
