@@ -39,8 +39,8 @@ const quint32 EDGE_LABELS_ID = 6;
 const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << EDGES_ID
     << META_NODES_ID
     << META_NODE_LABELS_ID << NODE_LABELS_ID << EDGE_LABELS_ID;
-const int NO_STENCIL = 0xFFFF;
-const int FULL_STENCIL = 0x0002;
+const int NO_STENCIL = 0xFF;
+const int FULL_STENCIL = 0x02;
 
 SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): TulipModel(parent), _scene(scene) {
   _scene->addListener(this);
@@ -230,7 +230,6 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
 
   if (!index.parent().isValid()) {
     layer = reinterpret_cast<GlLayer*>(index.internalPointer());
-    entity = layer->getComposite();
   }
   else {
     entity = reinterpret_cast<GlEntity*>(index.internalPointer());
@@ -256,11 +255,20 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
   }
 
   if (role == Qt::CheckStateRole) {
-    if (index.column() == 1)
-      return (entity->isVisible() ? Qt::Checked : Qt::Unchecked);
-
-    if (index.column() == 2)
-      return (entity->getStencil() == NO_STENCIL ? Qt::Unchecked : Qt::Checked);
+    if (index.column() == 1) {
+      if (layer) {
+        return (layer->isVisible() ? Qt::Checked : Qt::Unchecked);
+      } else {
+        return (entity->isVisible() ? Qt::Checked : Qt::Unchecked);
+      }
+    }
+    if (index.column() == 2) {
+      if (layer) {
+        return Qt::Unchecked;
+      } else {
+        return (entity->getStencil() == NO_STENCIL ? Qt::Unchecked : Qt::Checked);
+      }
+    }
   }
 
   if (role == Qt::TextAlignmentRole && index.column() != 0)
@@ -319,7 +327,6 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
 
   if (!index.parent().isValid()) {
     layer = reinterpret_cast<GlLayer*>(index.internalPointer());
-    entity = layer->getComposite();
   }
   else
     entity = reinterpret_cast<GlEntity*>(index.internalPointer());
@@ -330,9 +337,10 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
     if (layer)
       layer->setVisible(val);
 
-    entity->setVisible(val);
+    if (entity)
+      entity->setVisible(val);
   }
-  else if (index.column() == 2)
+  else if (index.column() == 2 && entity)
     entity->setStencil(val ? FULL_STENCIL : 0xFFFF);
 
   emit drawNeeded(_scene);
