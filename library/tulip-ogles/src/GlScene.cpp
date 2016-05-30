@@ -269,7 +269,7 @@ void GlScene::drawBackBufferBackup() {
   camera2d.initGl();
   Vec2f bl(0, 0);
   Vec2f tr(_viewport[2], _viewport[3]);
-  GlRect2D rect(bl, tr, 0, Color::White);
+  GlRect2D rect(bl, tr, Color::White);
   rect.setTexture(_backBufferTextureName);
   rect.draw(camera2d);
 }

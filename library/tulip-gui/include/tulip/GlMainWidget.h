@@ -66,6 +66,7 @@ class GlCompositeHierarchyManager;
  * - others operation on GlScene and QGlWidget
  */
 class TLP_QT_SCOPE GlMainWidget : public QGLWidget {
+
   Q_OBJECT
 
 public:
@@ -209,7 +210,7 @@ public:
    * You can use this texture with Tulip texture system
    * @see GlTextureManager
    */
-  QGLFramebufferObject *createTexture(const std::string &textureName,int width, int height);
+  void createTexture(const std::string &textureName,int width, int height);
   /**
    * @brief Take a snapshot of the Widget and put it in a picture
    * @param width size
@@ -269,17 +270,17 @@ public:
   /**
    * Resize openGL view
    */
-  void  resizeGL(int w, int h);
+  void resizeGL(int w, int h);
 
   /**
    * Compute interactors before drawing
    */
-  void  computeInteractors();
+  void computeInteractors();
 
   /**
    * Draw interactors
    */
-  void  drawInteractors();
+  void drawInteractors();
 
   /**
     * @brief This function performs all the rendering process of the graph.
@@ -321,17 +322,15 @@ public:
 
 private:
 
-  void  setupOpenGlContext();
-  void createRenderingStore(int width, int height);
-  void deleteRenderingStore();
+  void setupOpenGlContext();
+  void createFrameBuffers(int width, int height);
+  void deleteFrameBuffers();
 
   tlp::GlScene scene;
   QRegion _visibleArea;
   View *view;
   int widthStored;
   int heightStored;
-  unsigned char *renderingStore;
-  bool frameBufferStored;
   bool useFramebufferObject;
   QGLFramebufferObject *glFrameBuf, *glFrameBuf2;
   static bool inRendering;
@@ -343,6 +342,7 @@ public slots:
    * Draw the GlScene and the interactors
    */
   void draw(bool graphChanged=true);
+
   /**
    * This function is given for optimisation purpose only. If the hardware enable it,
    * it enables to redraw only the Augmented display and the interactors and not the graph
@@ -351,7 +351,6 @@ public slots:
    * applying that fonction will not display the change, in that case, use the draw function.
    */
   void redraw();
-
 
   void closeEvent(QCloseEvent *e);
 
@@ -369,6 +368,7 @@ public slots:
   void emitGraphChanged();
 
 protected slots:
+
   void paintEvent( QPaintEvent* );
 
 signals:
@@ -401,6 +401,7 @@ public :
   static void clearFirstQGLWidget();
 
 private :
+
   static QGLWidget *firstQGLWidget;
 
 };

@@ -252,7 +252,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
   GlLayer *backgroundLayer=new GlLayer("Background", false);
   backgroundLayer->setVisible(false);
   GlLayer *foregroundLayer=new GlLayer("Foreground", false);
-  foregroundLayer->setVisible(true);
+  foregroundLayer->setVisible(false);
 
   std::string dir=TulipBitmapDir;
   GlRect2D *labri=new GlRect2D(35.f, 5.f, 50.f, 50.f, tlp::Color::White);
@@ -360,7 +360,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
   //Check if a node/edge is under the mouse pointer
   bool result;
   SelectedEntity entity;
-  result = getGlMainWidget()->pickNodesEdges(point.x(), point.y(), entity);
+  result = getGlMainWidget()->pickNodesEdges(point.x(), getGlMainWidget()->height() - point.y(), entity);
 
   if (result) {
     menu->addSeparator();

@@ -202,7 +202,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/PlaceHolderWidget.h
   ../include/tulip/GraphHierarchiesModel.h
   ../include/tulip/CoordEditor.h
-  ../include/tulip/GlOverviewGraphicsItem.h
   ../include/tulip/SceneConfigWidget.h
   ../include/tulip/QuickAccessBar.h
   ../include/tulip/TulipFont.h

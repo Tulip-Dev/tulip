@@ -89,7 +89,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
   }
 
   if (_updateOverview) {
-    _overviewItem->draw(generatePixmap);
+    _overviewItem->generatePixmap(generatePixmap);
   }
 }
 

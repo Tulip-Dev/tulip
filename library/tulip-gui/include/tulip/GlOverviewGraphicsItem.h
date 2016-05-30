@@ -35,9 +35,7 @@ namespace tlp {
 class GlMainView;
 class GlScene;
 
-class TLP_QT_SCOPE GlOverviewGraphicsItem : public QObject, public QGraphicsRectItem {
-
-  Q_OBJECT
+class TLP_QT_SCOPE GlOverviewGraphicsItem : public QGraphicsRectItem {
 
 public:
 
@@ -62,11 +60,15 @@ public:
 
   void setLayerVisible(const std::string &name,bool visible);
 
-public slots :
+  void generatePixmap(bool generatePixmap) {
+    _generatePixmap = generatePixmap;
+  }
 
-  void draw(bool generatePixmap);
+  void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 
 private :
+
+  void draw(bool generatePixmap);
 
   void mousePressEvent(QGraphicsSceneMouseEvent* event);
   void mouseReleaseEvent(QGraphicsSceneMouseEvent* event);
@@ -90,6 +92,7 @@ private :
 
   Color _frameColor;
   int _frameWidth;
+  bool _generatePixmap;
 
 };
 

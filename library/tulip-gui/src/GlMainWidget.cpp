@@ -45,14 +45,6 @@ QGLWidget* GlMainWidget::firstQGLWidget=nullptr;
 bool GlMainWidget::inRendering=false;
 
 //==================================================
-static void setRasterPosition(unsigned int x, unsigned int y) {
-  float val[4];
-  unsigned char tmp[10];
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
-  glBitmap(0,0,0,0,-val[0] + x, -val[1] + y, tmp);
-  glGetFloatv(GL_CURRENT_RASTER_POSITION, (float*)&val);
-}
-//==================================================
 static QGLFormat GlInit() {
   QGLFormat tmpFormat = QGLFormat::defaultFormat();
   tmpFormat.setDirectRendering(true);
@@ -106,13 +98,11 @@ GlMainWidget::GlMainWidget(QWidget *parent,View *view):
   grabGesture(Qt::PinchGesture);
   grabGesture(Qt::PanGesture);
   grabGesture(Qt::SwipeGesture);
-  renderingStore=nullptr;
 }
 //==================================================
 GlMainWidget::~GlMainWidget() {
   delete glFrameBuf;
   delete glFrameBuf2;
-  delete [] renderingStore;
 }
 //==================================================
 void GlMainWidget::paintEvent( QPaintEvent*) {
@@ -141,13 +131,13 @@ void GlMainWidget::setupOpenGlContext() {
   makeCurrent();
 }
 //==================================================
-void GlMainWidget::createRenderingStore(int width, int height) {
+void GlMainWidget::createFrameBuffers(int width, int height) {
 
   useFramebufferObject = advancedAntiAliasing && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 
   if (useFramebufferObject && (!glFrameBuf || glFrameBuf->size().width()!=width || glFrameBuf->size().height()!=height)) {
     makeCurrent();
-    deleteRenderingStore();
+    deleteFrameBuffers();
     QGLFramebufferObjectFormat fboFormat;
     fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
     fboFormat.setSamples(OpenGlConfigManager::instance().maxNumberOfSamples());
@@ -158,30 +148,17 @@ void GlMainWidget::createRenderingStore(int width, int height) {
     heightStored=height;
   }
 
-  if (!useFramebufferObject) {
-    int size = width*height;
-
-    if (renderingStore==nullptr || (size > (widthStored*heightStored))) {
-      deleteRenderingStore();
-      renderingStore=new unsigned char[width*height*4];
-      widthStored=width;
-      heightStored=height;
-    }
-  }
 }
 //==================================================
-void GlMainWidget::deleteRenderingStore() {
+void GlMainWidget::deleteFrameBuffers() {
   delete glFrameBuf;
   glFrameBuf=nullptr;
   delete glFrameBuf2;
   glFrameBuf2=nullptr;
-  delete[] renderingStore;
-  renderingStore=nullptr;
 }
 
 //==================================================
 void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
-
 
   if ((isVisible() || !checkVisibility) && !inRendering) {
 
@@ -199,30 +176,20 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
     height *= this->windowHandle()->devicePixelRatio();
 #endif
 
-    //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
-    if(widthStored!=width || heightStored!=height) {
-      options |= RenderScene;
-    }
-
     computeInteractors();
 
-    if(options.testFlag(RenderScene) || renderingStore==nullptr) {
-      createRenderingStore(width,height);
+    createFrameBuffers(width,height);
 
-      if (useFramebufferObject) {
-        glFrameBuf->bind();
-      }
-
-      //Render the graph in the frame buffer.
-      scene.draw();
-
-      if (useFramebufferObject) {
-        glFrameBuf->release();
-        QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
-      }
+    if (useFramebufferObject) {
+      glFrameBuf->bind();
     }
-    else {
-      scene.initGlParameters();
+
+    //Render the scene in the frame buffer.
+    scene.draw();
+
+    if (useFramebufferObject) {
+      glFrameBuf->release();
+      QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
     }
 
     glDisable(GL_TEXTURE_2D);
@@ -233,22 +200,6 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 
     if (useFramebufferObject) {
       QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf2, QRect(0,0,width, height));
-    }
-    else {
-      if(options.testFlag(RenderScene)) {
-        //Copy the back buffer (containing the graph render) in the rendering store to reuse it later.
-        glReadBuffer(GL_BACK);
-        glReadPixels(0,0,width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-        glFlush();
-      }
-      else {
-        //Copy the rendering store into the back buffer : restore the last graph render.
-        glDrawBuffer(GL_BACK);
-        setRasterPosition(0,0);
-
-        if (renderingStore != nullptr)
-          glDrawPixels(width,height,GL_RGBA,GL_UNSIGNED_BYTE,renderingStore);
-      }
     }
 
     glEnable(GL_DEPTH_TEST);
@@ -321,7 +272,7 @@ void GlMainWidget::resizeGL(int w, int h) {
   int width = contentsRect().width();
   int height = contentsRect().height();
 
-  deleteRenderingStore();
+  deleteFrameBuffers();
 
   scene.setViewport(0,0,screenToViewport(width), screenToViewport(height));
 
@@ -360,11 +311,11 @@ void GlMainWidget::pickNodesEdges(const int x, const int y,
   makeCurrent();
 
   if (pickNodes) {
-    scene.selectEntities(RenderingNodes, screenToViewport(x), screenToViewport(contentsRect().height()-y), screenToViewport(width), screenToViewport(height), selectedNodes, layer);
+    scene.selectEntities(RenderingNodes, screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), selectedNodes, layer);
   }
 
   if (pickEdges) {
-    scene.selectEntities(RenderingEdges, screenToViewport(x), screenToViewport(contentsRect().height()-y), screenToViewport(width), screenToViewport(height), selectedEdges, layer);
+    scene.selectEntities(RenderingEdges, screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), selectedEdges, layer);
   }
 }
 //=====================================================
@@ -372,12 +323,12 @@ bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &sele
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
 
-  if(pickNodes && scene.selectEntities(RenderingNodes, screenToViewport(x-1), screenToViewport(contentsRect().height()-y-1), screenToViewport(3), screenToViewport(3), selectedEntities, layer)) {
+  if(pickNodes && scene.selectEntities(RenderingNodes, screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), selectedEntities, layer)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
 
-  if(pickEdges && scene.selectEntities(RenderingEdges, screenToViewport(x-1), screenToViewport(contentsRect().height()-y-1), screenToViewport(3), screenToViewport(3), selectedEntities, layer)) {
+  if(pickEdges && scene.selectEntities(RenderingEdges, screenToViewport(x-1), screenToViewport(y-1), screenToViewport(3), screenToViewport(3), selectedEntities, layer)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
@@ -407,7 +358,7 @@ void GlMainWidget::getTextureRealSize(int width, int height, int &textureRealWid
 
 }
 //=====================================================
-QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName, int width, int height) {
+void GlMainWidget::createTexture(const std::string &textureName, int width, int height) {
 
   makeCurrent();
   scene.setViewport(0,0,width,height);
@@ -441,8 +392,6 @@ QGLFramebufferObject *GlMainWidget::createTexture(const std::string &textureName
   glFrameBuf->release();
 
   GlTextureManager::instance()->addExternalTexture(textureName,textureId);
-
-  return nullptr;
 }
 
 //=====================================================

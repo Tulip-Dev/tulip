@@ -36,7 +36,7 @@ namespace tlp {
 
 GlOverviewGraphicsItem::GlOverviewGraphicsItem(GlMainView *view,GlScene &scene):
   QGraphicsRectItem(0,0,128,128),view(view),baseScene(scene),width(128),height(128), mouseClicked(false),
-  _frameColor(Color::Gray), _frameWidth(2) {
+  _frameColor(Color::Gray), _frameWidth(2), _generatePixmap(true) {
 }
 
 GlOverviewGraphicsItem::~GlOverviewGraphicsItem() {
@@ -151,9 +151,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];
 
   // Change viewport of the scene to the overview viewport
-  baseScene.setViewport(0,0,width, height);
+  baseScene.setViewport(0, 0, width, height);
 
-  if(generatePixmap || _oldCameras.size()!=layersList.size()) {
+  if(generatePixmap || _oldCameras.size() != layersList.size()) {
     // Center the scene
     baseScene.centerScene();
     _oldCameras.clear();
@@ -197,6 +197,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
 
   if(generatePixmap) {
+
     bool edgesLabels=baseScene.getMainGlGraph()->getRenderingParameters().displayEdgesLabels();
     bool nodesLabels=baseScene.getMainGlGraph()->getRenderingParameters().displayNodesLabels();
     bool metaNodesLabels=baseScene.getMainGlGraph()->getRenderingParameters().displayMetaNodesLabels();
@@ -295,6 +296,12 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   overviewBorder.setPen(pen);
 
+}
+
+void GlOverviewGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) {
+  draw(_generatePixmap);
+  QGraphicsRectItem::paint(painter, option, widget);
+  _generatePixmap = false;
 }
 
 void GlOverviewGraphicsItem::mousePressEvent(QGraphicsSceneMouseEvent* event) {

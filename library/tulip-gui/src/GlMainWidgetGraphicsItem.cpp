@@ -35,7 +35,7 @@ using namespace tlp;
 
 GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, int width, int height):
   QGraphicsObject(),
-  glMainWidget(glMainWidget), _redrawNeeded(true), _graphChanged(true) {
+  glMainWidget(glMainWidget), _graphChanged(true) {
 
   setFlag(QGraphicsItem::ItemIsSelectable, true);
   setFlag(QGraphicsItem::ItemIsFocusable, true);
@@ -65,14 +65,13 @@ void GlMainWidgetGraphicsItem::resize(int width, int height) {
   this->height = height;
   glMainWidget->resize(width,height);
   glMainWidget->resizeGL(width,height);
-  _redrawNeeded = true;
   _graphChanged=true;
   prepareGeometryChange();
 }
 
 void GlMainWidgetGraphicsItem::glMainWidgetDraw(GlMainWidget *,bool graphChanged) {
-  _redrawNeeded=true;
   _graphChanged=graphChanged;
+  emit widgetPainted(_graphChanged);
   update();
 }
 
@@ -82,27 +81,18 @@ void GlMainWidgetGraphicsItem::glMainWidgetRedraw(GlMainWidget *) {
 
 void GlMainWidgetGraphicsItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
 
-  if(_redrawNeeded) {
-    emit widgetPainted(_graphChanged);
-  }
-
   painter->beginNativePainting();
 
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
-  if(_redrawNeeded) {
-    glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),false);
-    _redrawNeeded=false;
-  }
-  else {
-    glMainWidget->render(GlMainWidget::RenderingOptions(),false);
-  }
+  glMainWidget->render(GlMainWidget::RenderingOptions(GlMainWidget::RenderScene),false);
 
   glFlush();
 
   glPopAttrib();
 
   painter->endNativePainting();
+
 }
 
 void GlMainWidgetGraphicsItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event) {
