@@ -6,6 +6,9 @@ SET(Qt5Xml_FOUND false)
 SET(Qt5XmlPatterns_FOUND false)
 SET(Qt5Network_FOUND false)
 
+SET(QT_HAS_WEBKIT FALSE)
+SET(QT_HAS_WEBENGINE FALSE)
+
 # If requested, use Qt5 to build the project.
 # If CMake does not automatically find Qt5 , the root directory
 # of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable.
@@ -193,7 +196,9 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND
   SET(QT_USE_QTDBUS false)
   INCLUDE(${QT_USE_FILE})
 
-  SET(QT_HAS_WEBKIT TRUE)
+  IF(Qt4::QtWebKit)	
+    SET(QT_HAS_WEBKIT TRUE)
+  ENDIF(Qt4::QtWebKit)
 
   SET(QT_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
 
