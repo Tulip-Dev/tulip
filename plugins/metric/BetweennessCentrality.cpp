@@ -181,6 +181,7 @@ public:
     //Normalization
     if(norm || !directed) {
       double n = graph->numberOfNodes();
+      const double nNormFactor = 1./(double)((n - 1) * (n - 2));
       it = graph->getNodes();
 
       while(it->hasNext()) {
@@ -188,26 +189,25 @@ public:
 
         //In the undirected case, the metric must be divided by two, then
         if(norm)
-          result->setNodeValue(s,result->getNodeValue(s)/((n-1.0)*(n-2.0)));
+          result->setNodeValue(s,result->getNodeValue(s) * nNormFactor);
 
         if(!directed)
-          result->setNodeValue(s,result->getNodeValue(s)/2.0);
+          result->setNodeValue(s,result->getNodeValue(s) * 0.5);
       }
-
       delete it;
 
       Iterator<edge> *itE = graph->getEdges();
+      const double eNormFactor = 4./(double)(n * n);
 
       while(itE->hasNext()) {
         edge e = itE->next();
 
         if(norm)
-          result->setEdgeValue(e,4.0*result->getEdgeValue(e)/(n*n));
+          result->setEdgeValue(e,result->getEdgeValue(e) * eNormFactor);
 
         if(!directed)
-          result->setEdgeValue(e,result->getEdgeValue(e)/(2.0));
+          result->setEdgeValue(e,result->getEdgeValue(e) * 0.5);
       }
-
       delete itE;
     }
 

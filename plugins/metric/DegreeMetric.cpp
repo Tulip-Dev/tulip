@@ -82,23 +82,23 @@ bool DegreeMetric::run() {
   double normalization = 1.;
 
   if (norm && graph->numberOfNodes() > 1 && graph->numberOfEdges())
-    normalization = graph->numberOfNodes() - 1;
+    normalization = 1./(double) (graph->numberOfNodes() - 1);
 
   if (!weights) {
     switch(degreeTypes.getCurrent()) {
     case INOUT:
       for(node n : graph->getNodes())
-        result->setNodeValue(n, double(graph->deg(n))/normalization);
+        result->setNodeValue(n, normalization * graph->deg(n));
       break;
 
     case IN:
-      for(node n : graph->getNodes())
-        result->setNodeValue(n, double(graph->indeg(n))/normalization);
+      for(node n: graph->getNodes())
+        result->setNodeValue(n, normalization * graph->indeg(n));
       break;
 
     case OUT:
       for(node n : graph->getNodes())
-        result->setNodeValue(n, double(graph->outdeg(n))/normalization);
+        result->setNodeValue(n, normalization * graph->outdeg(n));
       break;
     }
 
@@ -110,9 +110,12 @@ bool DegreeMetric::run() {
       double sum = 0;
       for(edge e : graph->getEdges())
         sum += fabs(weights->getEdgeDoubleValue(e));
-      normalization = (sum / double(graph->numberOfEdges())) * double(graph->numberOfNodes() - 1);
+      normalization = (sum / graph->numberOfEdges()) * (graph->numberOfNodes() - 1);
 
-      if (fabs(normalization) < 1E-9) normalization = 1.0;
+      if (fabs(normalization) < 1E-9)
+        normalization = 1.0;
+      else
+        normalization = 1.0/normalization;
     }
 
     switch(degreeTypes.getCurrent()) {
@@ -122,7 +125,7 @@ bool DegreeMetric::run() {
         for(edge e : graph->getInOutEdges(n)) {
           nWeight += weights->getEdgeDoubleValue(e);
         }
-        result->setNodeValue(n, nWeight / normalization);
+        result->setNodeValue(n, nWeight * normalization);
       }
       break;
 
@@ -132,7 +135,7 @@ bool DegreeMetric::run() {
         for(edge e : graph->getInEdges(n)) {
           nWeight += weights->getEdgeDoubleValue(e);
         }
-        result->setNodeValue(n, nWeight / normalization);
+        result->setNodeValue(n, nWeight * normalization);
       }
       break;
 
@@ -142,7 +145,7 @@ bool DegreeMetric::run() {
         for(edge e : graph->getOutEdges(n)) {
           nWeight += weights->getEdgeDoubleValue(e);
         }
-        result->setNodeValue(n, nWeight / normalization);
+        result->setNodeValue(n, nWeight * normalization);
       }
       break;
     }
@@ -173,6 +176,3 @@ bool DegreeMetric::check(std::string& errorMsg) {
 
   return true;
 }
-
-
-

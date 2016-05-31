@@ -73,6 +73,8 @@ private:
   EdgeProperty<double>* weights;
   // total weight (sum of edge weights for the quotient graph)
   double total_weight;
+  // 1./total_weight
+  double ootw;
 
   std::vector<double> neigh_weight;
   std::vector<unsigned int> neigh_pos;
@@ -119,20 +121,19 @@ private:
   //       d(node,com) = number of links from node to comm
   //       deg(node)   = node degree
   //       m           = number of links
-  double modularity_gain(unsigned int /*node*/, unsigned int comm,
-                         double dnode_comm, double w_degree) {
-    return (dnode_comm - tot[comm] * w_degree/total_weight);
+  inline double modularity_gain(unsigned int /*node*/, unsigned int comm,
+				double dnode_comm, double w_degree) {
+    return (dnode_comm - tot[comm] * w_degree * ootw);
   }
 
 
   // compute the modularity of the current partition
   double modularity()  {
     double q  = 0.;
-    double m2 = total_weight;
 
     for (unsigned int i=0 ; i<size ; i++) {
       if (tot[i]>0)
-        q += in[i]/m2 - (tot[i]/m2)*(tot[i]/m2);
+        q += ootw * (in[i] - tot[i] * tot[i] * ootw);
     }
 
     return q;
@@ -237,6 +238,7 @@ private:
         }
       }
     }
+    ootw = 1./total_weight;
 
     delete quotient;
     delete weights;
@@ -413,6 +415,7 @@ bool LouvainClustering::run() {
       // set current edge weight
       (*weights)[qe] += weight;
   }
+  ootw = 1./total_weight;
 
   // init other vectors
   init_level();
