@@ -90,17 +90,17 @@ bool DegreeMetric::run() {
     switch(degreeTypes.getCurrent()) {
     case INOUT:
       forEach(n, graph->getNodes())
-	result->setNodeValue(n, normalization * graph->deg(n));
+      result->setNodeValue(n, normalization * graph->deg(n));
       break;
 
     case IN:
       forEach(n, graph->getNodes())
-	result->setNodeValue(n, normalization * graph->indeg(n));
+      result->setNodeValue(n, normalization * graph->indeg(n));
       break;
 
     case OUT:
       forEach(n, graph->getNodes())
-	result->setNodeValue(n, normalization * graph->outdeg(n));
+      result->setNodeValue(n, normalization * graph->outdeg(n));
       break;
     }
 
@@ -112,13 +112,13 @@ bool DegreeMetric::run() {
       double sum = 0;
       edge e;
       forEach(e, graph->getEdges())
-	sum += fabs(weights->getEdgeDoubleValue(e));
+      sum += fabs(weights->getEdgeDoubleValue(e));
       normalization = (sum / graph->numberOfEdges()) * (graph->numberOfNodes() - 1);
 
       if (fabs(normalization) < 1E-9)
-	normalization = 1.0;
+        normalization = 1.0;
       else
-	normalization = 1.0/normalization;
+        normalization = 1.0/normalization;
     }
 
     switch(degreeTypes.getCurrent()) {

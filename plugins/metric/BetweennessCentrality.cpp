@@ -194,6 +194,7 @@ public:
         if(!directed)
           result->setNodeValue(s,result->getNodeValue(s) * 0.5);
       }
+
       delete it;
 
       Iterator<edge> *itE = graph->getEdges();
@@ -208,6 +209,7 @@ public:
         if(!directed)
           result->setEdgeValue(e,result->getEdgeValue(e) * 0.5);
       }
+
       delete itE;
     }
 

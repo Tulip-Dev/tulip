@@ -122,7 +122,7 @@ private:
   //       deg(node)   = node degree
   //       m           = number of links
   inline double modularity_gain(unsigned int /*node*/, unsigned int comm,
-				double dnode_comm, double w_degree) {
+                                double dnode_comm, double w_degree) {
     return (dnode_comm - tot[comm] * w_degree * ootw);
   }
 
@@ -239,6 +239,7 @@ private:
         }
       }
     }
+
     ootw = 1./total_weight;
 
     delete quotient;
