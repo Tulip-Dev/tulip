@@ -106,7 +106,7 @@ protected :
 
 };
 
-void adjustViewToBoundingBox(Camera *camera, const tlp::BoundingBox &boundingBox);
+void TLP_GLES_SCOPE adjustViewToBoundingBox(Camera *camera, const tlp::BoundingBox &boundingBox);
 
 }
 
