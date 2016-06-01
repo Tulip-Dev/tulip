@@ -703,6 +703,26 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     GlyphsRenderer::instance()->renderGlyph(camera, light, NodeShape::Cube, _boundingBox.center(),
                                             Size(_boundingBox.width(), _boundingBox.height(), _boundingBox.depth()),
                                             _pickingColor, "", 0, tlp::Color(), tlp::Vec4f(), true);
+
+    // ensure that at least one pixel is drawn for the graph bounding box (case when we have zoom out a lot)
+    GlBuffer pointVertexBuffer(GlBuffer::VertexBuffer);
+    vector<tlp::Vec3f> pointVertex = {_boundingBox.center()};
+    pointVertexBuffer.bind();
+    pointVertexBuffer.allocate(pointVertex);
+    _flatShader->activate();
+    _flatShader->setUniformMat4Float("u_projectionMatrix", camera.projectionMatrix());
+    _flatShader->setUniformMat4Float("u_modelviewMatrix", camera.modelviewMatrix());
+    _flatShader->setUniformBool("u_textureActivated", false);
+    _flatShader->setUniformBool("u_globalColor", true);
+    _flatShader->setUniformColor("u_color", _pickingColor);
+    _flatShader->setUniformBool("u_pointsRendering", true);
+    _flatShader->setUniformBool("u_globalPointSize", true);
+    _flatShader->setUniformFloat("u_pointSize", 2.0f);
+    _flatShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), BUFFER_OFFSET(0));
+    glDrawArrays(GL_POINTS, 0, 1);
+    _flatShader->desactivate();
+    pointVertexBuffer.release();
+
     return;
   }
 
