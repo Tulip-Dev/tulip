@@ -534,7 +534,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   delete os;
 
   if (!result) {
-    QMessageBox::critical(_mainWindow,trUtf8("Export error"),trUtf8("Failed to export to format ") + wizard.algorithm());
+    QMessageBox::critical(_mainWindow,trUtf8("Export error"),QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
   }
   else {
     // display spent time
