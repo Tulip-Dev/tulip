@@ -149,7 +149,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
     textStream << "\t\treturn True" << endl << endl;
   }
   else if (pluginType == "Export") {
-    textStream << "\tdef exportGraph(os, self):" << endl;
+    textStream << "\tdef exportGraph(self, os):" << endl;
     textStream << "\t\t# This method is called to export a graph." << endl;
     textStream << "\t\t# The graph to export is accessible through the \"graph\" class attribute" << endl;
     textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
