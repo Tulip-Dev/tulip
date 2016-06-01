@@ -177,6 +177,9 @@ void GlConvexPolygon::draw(const Camera &camera, const Light &, bool pickingMode
   _polygonDataBuffer->release();
 
   GlTextureManager::instance()->unbindTexture(_texture);
+
+  shader->desactivate();
+
 }
 
 void GlConvexPolygon::translate(const Coord &move) {
