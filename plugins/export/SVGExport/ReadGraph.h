@@ -48,8 +48,8 @@ public:
   ReadGraph(tlp::Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, RepresentExport *r);
 
 private:
-  void treatEdges(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r,unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label, tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_size_interpolation, bool edge_extremities);
-  void treatNodes(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices);
+  bool treatEdges(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r,unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label, tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_size_interpolation, bool edge_extremities);
+  bool treatNodes(tlp::Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices);
 };
 
 std::ostream& operator<<(std::ostream &os, const ReadGraph &r);
