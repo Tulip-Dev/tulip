@@ -34,6 +34,7 @@ public:
   void testgridImportExport();
   void testSubGraphsImportExport();
   void testAttributes();
+  void testNanInfValuesImportExport();
 
 protected :
   tlp::Graph* createSimpleGraph() const;
@@ -54,6 +55,7 @@ class TlpImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testgridImportExport);
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
+  CPPUNIT_TEST(testNanInfValuesImportExport);
   CPPUNIT_TEST_SUITE_END();
 public:
   TlpImportExportTest();
@@ -64,6 +66,7 @@ class TlpBImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testgridImportExport);
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
+  CPPUNIT_TEST(testNanInfValuesImportExport);
   CPPUNIT_TEST_SUITE_END();
 public:
   TlpBImportExportTest();
@@ -74,6 +77,7 @@ class JsonImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testgridImportExport);
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testSubGraphsImportExport);
+  CPPUNIT_TEST(testNanInfValuesImportExport);
   CPPUNIT_TEST_SUITE_END();
 public:
   JsonImportExportTest();
