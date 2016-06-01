@@ -221,6 +221,7 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
 }
 //==================================================
 void GlMainWidget::redraw() {
+  scene.setSceneNeedRedraw(false);
   render(SwapBuffers);
   emit viewRedrawn(this);
 }
