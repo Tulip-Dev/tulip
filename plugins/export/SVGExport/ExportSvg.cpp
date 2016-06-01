@@ -50,12 +50,13 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 
 void ExportSvg::getData(std::ostream& os) const {
-  os << string(_outs);
+    os << _out.constData();
 }
 
-ExportSvg::ExportSvg():_res(&_outs) {
-  _res.setAutoFormatting(true);
-  _res.setCodec("UTF-8");
+
+ExportSvg::ExportSvg(PluginProgress *pp):_res(&_out), _pp(pp) {
+    _res.setAutoFormatting(true);
+    _res.setCodec("UTF-8");
 }
 
 void ExportSvg::writeHeader(BoundingBox &bb) {
@@ -412,7 +413,7 @@ void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   _res.writeEndElement();
 }
 
-void ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
+bool ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice, edge e) {
   //Color gradient
   QString name("gradient_edge_"+QString::number(id));
   _res.writeStartElement("defs");
@@ -436,15 +437,15 @@ void ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &
   _res.writeEndElement();
   _res.writeEndElement();
 
-  createEdge(type, bends, "url(#"+name+")", "1", width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
+  return createEdge(type, bends, "url(#"+name+")", "1", width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice,e);
 
 }
 
-void ExportSvg::exportEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const Color &color, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
-  createEdge(type, bends, tlpColor2SvgColor(color), tlpAlphaColor2Opacity(color), width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
+bool ExportSvg::exportEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const Color &color, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice, tlp::edge e) {
+  return createEdge(type, bends, tlpColor2SvgColor(color), tlpAlphaColor2Opacity(color), width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice, e);
 }
 
-void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
+bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice, edge e) {
   QString node_source_X(QString::number(edgeVertice[0].getX()));
   QString node_source_Y(QString::number(edgeVertice[0].getY()));
   QString node_target_X(QString::number(edgeVertice[edgeVertice.size() - 1].getX()));
@@ -521,6 +522,15 @@ void ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
     _res.writeAttribute("marker-end","url(#Mtgt" + QString::number(id_tgt_shape) + ")");
 
   _res.writeEndElement(); // path
+  //hasError() in xmlStreanWriter class exists only since Qt 4.8.0
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+  if(_res.hasError()) {
+      QString str("Error when exporting edge "+ QString::number(e.id));
+      _pp->setError(tlp::QStringToTlpString(str));
+      return false;
+  }
+#endif
+  return true;
 }
 
 void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, unsigned int& id_src_gradient, unsigned int& id_tgt_gradient, const Coord &coord_edge_extremity_source, const Coord &coord_edge_extremity_target, const Size &size_node_src, const Size &size_node_tgt) {

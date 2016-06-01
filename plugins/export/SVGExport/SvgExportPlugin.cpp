@@ -172,12 +172,13 @@ public:
   bool exportGraph(ostream &os) {
 
     pluginProgress->showPreview(false);
-    RepresentExport *svg = new ExportSvg(); // We call our first concrete builder
+    RepresentExport *svg = new ExportSvg(pluginProgress); // We call our first concrete builder
     ReadGraph gr1(graph, dataSet, pluginProgress, svg); // We analyse the graph
-    os << gr1; // We retrieve the result
-
+    if(pluginProgress->getError().empty()) {
+        os << gr1; // We retrieve the result
+    }
     delete svg;
-    return true;
+    return pluginProgress->getError().empty();
 
   }
 
