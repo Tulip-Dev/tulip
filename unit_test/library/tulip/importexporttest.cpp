@@ -242,6 +242,30 @@ Graph* ImportExportTest::createSimpleGraph() const {
   return original;
 }
 
+void ImportExportTest::testNanInfValuesImportExport() {
+  Graph* original = createSimpleGraph();
+  DoubleProperty *doubleProp = original->getProperty<DoubleProperty>("doubleProp");
+  DoubleVectorProperty *doubleVecProp = original->getProperty<DoubleVectorProperty>("doubleVecProp");
+  node n;
+  forEach(n, original->getNodes()) {
+    if (n.id % 3 == 0) {
+      doubleProp->setNodeValue(n, std::numeric_limits<double>::quiet_NaN());
+    } else
+    if (n.id % 3 == 1) {
+      doubleProp->setNodeValue(n, numeric_limits<float>::infinity());
+    } else {
+      doubleProp->setNodeValue(n, -numeric_limits<float>::infinity());
+    }
+  }
+  vector<double> value;
+  value.push_back(std::numeric_limits<double>::quiet_NaN());
+  value.push_back(numeric_limits<float>::infinity());
+  value.push_back(-numeric_limits<float>::infinity());
+  doubleVecProp->setAllNodeValue(value);
+
+  importExportGraph(original);
+}
+
 void ImportExportTest::importExportGraph(tlp::Graph* original) {
 
   const string exportFilename = "graph_export";
