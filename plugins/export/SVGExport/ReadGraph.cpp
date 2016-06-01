@@ -82,74 +82,83 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
 
   // Analysing edges
   bool ret = treatEdges(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
+
   if(!ret) {
-      return;
+    return;
   }
+
   // Analysing nodes
   std::vector<tlp::node> metanodeVertices;
- ret =  treatNodes(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices);
- if(!ret) {
-     return;
- }
+  ret =  treatNodes(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices);
+
+  if(!ret) {
+    return;
+  }
+
   // Analysing meta-nodes
   vector<int> transformationVertices;
   int indice_Transform = 0;
   unsigned sizeFirstVertice = 2* metanodeVertices.size();
 
   while(!metanodeVertices.empty()) {
-      vector<tlp::node> subMetanodeVertices;
+    vector<tlp::node> subMetanodeVertices;
 
-      for(vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end(); ++it) {
-          node metanode = *it;
-          Graph *metagraph = graph->getNodeMetaInfo(metanode);
-          BoundingBox metagraphbb = tlp::computeBoundingBox(metagraph, layout, sizes, rotation);
-          Coord coord_meta_node = layout->getNodeValue(metanode);
-          Size size_meta_node = sizes->getNodeValue(metanode);
+    for(vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end(); ++it) {
+      node metanode = *it;
+      Graph *metagraph = graph->getNodeMetaInfo(metanode);
+      BoundingBox metagraphbb = tlp::computeBoundingBox(metagraph, layout, sizes, rotation);
+      Coord coord_meta_node = layout->getNodeValue(metanode);
+      Size size_meta_node = sizes->getNodeValue(metanode);
 
-          // We compute the scale
-          float scale = min(size_meta_node.width()/(metagraphbb.width()*1.4),size_meta_node.height()/(metagraphbb.height()*1.4));
+      // We compute the scale
+      float scale = min(size_meta_node.width()/(metagraphbb.width()*1.4),size_meta_node.height()/(metagraphbb.height()*1.4));
 
-          if (scale >= 1)
-              scale *= 0.64f;
+      if (scale >= 1)
+        scale *= 0.64f;
 
-          // We compute the transformation on X and add him to our vertice
-          transformationVertices.push_back(-graphbb.center().getX() + graphbb.width()/2 - metagraphbb.center().getX()*(scale-1) + coord_meta_node.getX() - metagraphbb.center().getX());
-          // We compute the transformation on Y and add him to our vertice
-          transformationVertices.push_back(graphbb.center().getY() + graphbb.height()/2 + metagraphbb.center().getY()*(scale-1) - coord_meta_node.getY() + metagraphbb.center().getY());
+      // We compute the transformation on X and add him to our vertice
+      transformationVertices.push_back(-graphbb.center().getX() + graphbb.width()/2 - metagraphbb.center().getX()*(scale-1) + coord_meta_node.getX() - metagraphbb.center().getX());
+      // We compute the transformation on Y and add him to our vertice
+      transformationVertices.push_back(graphbb.center().getY() + graphbb.height()/2 + metagraphbb.center().getY()*(scale-1) - coord_meta_node.getY() + metagraphbb.center().getY());
 
-          vector<int>::const_iterator tran = transformationVertices.begin();
+      vector<int>::const_iterator tran = transformationVertices.begin();
 
-          r->writeMetaGraph(tran[indice_Transform], tran[indice_Transform+1], scale);
-          indice_Transform +=2;
+      r->writeMetaGraph(tran[indice_Transform], tran[indice_Transform+1], scale);
+      indice_Transform +=2;
 
-          // Analysing edges in the metanode
-         ret = treatEdges(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
-         if(!ret) {
-             return;
-         }
-          // Analysing nodes in the metanode
-          ret = treatNodes(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices);
-          if(!ret) {
-              return;
-          }
-          if(transformationVertices.size() > sizeFirstVertice)
-              cerr << "Metanode in a metanode not working properly" << endl;
+      // Analysing edges in the metanode
+      ret = treatEdges(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
+
+      if(!ret) {
+        return;
       }
 
-      indice_Transform = 0;
-      metanodeVertices = subMetanodeVertices;
+      // Analysing nodes in the metanode
+      ret = treatNodes(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices);
+
+      if(!ret) {
+        return;
+      }
+
+      if(transformationVertices.size() > sizeFirstVertice)
+        cerr << "Metanode in a metanode not working properly" << endl;
+    }
+
+    indice_Transform = 0;
+    metanodeVertices = subMetanodeVertices;
   }
+
 // Writing the end of the file
-r->writeEnd();
+  r->writeEnd();
 
 }
 
 bool ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape,tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_size_interpolation, bool edge_extremities) {
-    pp->setComment("Exporting edges...");
-    r->groupEdge();
+  pp->setComment("Exporting edges...");
+  r->groupEdge();
 
-    edge e;
-    unsigned int id_src_shape = 0;
+  edge e;
+  unsigned int id_src_shape = 0;
   unsigned int id_tgt_shape = 0;
   unsigned int id_src_grad = 0;
   unsigned int id_tgt_grad = 0;
@@ -194,36 +203,38 @@ bool ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExpor
 
     // Get edge type
     bool ret(true);
+
     if(!edge_color_interpolation) {
       ret = r->exportEdge (static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-                     layout->getEdgeValue(e),
-                     colors->getEdgeValue(e),
-                     width,
-                     src_anchor_shape_type,
-                     id_src_shape,
-                     tgt_anchor_shape_type,
-                     id_tgt_shape,
-                     edgeVertices,
-                     e
-                    );
+                           layout->getEdgeValue(e),
+                           colors->getEdgeValue(e),
+                           width,
+                           src_anchor_shape_type,
+                           id_src_shape,
+                           tgt_anchor_shape_type,
+                           id_tgt_shape,
+                           edgeVertices,
+                           e
+                          );
     }
     else {
       ret = r->exportEdge (e.id,
-                     static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-                     layout->getEdgeValue(e),
-                     colors->getNodeValue(ends.first),
-                     colors->getNodeValue(ends.second),
-                     width,
-                     src_anchor_shape_type,
-                     id_src_shape,
-                     tgt_anchor_shape_type,
-                     id_tgt_shape,
-                     edgeVertices,
-                     e
-                    );
+                           static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
+                           layout->getEdgeValue(e),
+                           colors->getNodeValue(ends.first),
+                           colors->getNodeValue(ends.second),
+                           width,
+                           src_anchor_shape_type,
+                           id_src_shape,
+                           tgt_anchor_shape_type,
+                           id_tgt_shape,
+                           edgeVertices,
+                           e
+                          );
     }
+
     if(!ret)
-        return false;
+      return false;
 
     Coord c = edgeVertices[edgeVertices.size()/2] + edgeVertices[edgeVertices.size()/2 - 1];
     r->addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c/=2, sizes->getEdgeValue(e));
