@@ -18,7 +18,6 @@
  */
 
 #include <sstream>
-#include <time.h>
 
 #include <tulip/ForEach.h>
 #include <tulip/ExportModule.h>
