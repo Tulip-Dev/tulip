@@ -226,7 +226,9 @@ void GlScene::draw() {
     drawBackBufferBackup();
   }
 
-  _sceneNeedRedraw = false;
+  if (!_pickingMode) {
+    _sceneNeedRedraw = false;
+  }
 
   if (GlShaderProgram::getCurrentActiveShader()) {
     GlShaderProgram::getCurrentActiveShader()->desactivate();
