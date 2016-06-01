@@ -50,13 +50,13 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 
 void ExportSvg::getData(std::ostream& os) const {
-    os << _out.constData();
+  os << _out.constData();
 }
 
 
 ExportSvg::ExportSvg(PluginProgress *pp):_res(&_out), _pp(pp) {
-    _res.setAutoFormatting(true);
-    _res.setCodec("UTF-8");
+  _res.setAutoFormatting(true);
+  _res.setCodec("UTF-8");
 }
 
 void ExportSvg::writeHeader(BoundingBox &bb) {
@@ -537,11 +537,13 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
   _res.writeEndElement(); // path
   //hasError() in xmlStreanWriter class exists only since Qt 4.8.0
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+
   if(_res.hasError()) {
-      QString str("Error when exporting edge "+ QString::number(e.id));
-      _pp->setError(tlp::QStringToTlpString(str));
-      return false;
+    QString str("Error when exporting edge "+ QString::number(e.id));
+    _pp->setError(tlp::QStringToTlpString(str));
+    return false;
   }
+
 #endif
   return true;
 }
