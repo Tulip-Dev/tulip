@@ -384,8 +384,11 @@ void Camera::translate(const tlp::Vec3f &move) {
     float dist = _center.dist(_eyes);
     Vec3f viewdir;
     getCameraParametersFromModelviewMatrix(_modelviewMatrix, _eyes, viewdir, _up);
-    _center = _eyes + viewdir * dist;
-    notifyModified();
+    Coord newCenter = _eyes + viewdir * dist;
+    if (newCenter != _center) {
+      _center = newCenter;
+      notifyModified();
+    }
   }
 }
 //====================================================
