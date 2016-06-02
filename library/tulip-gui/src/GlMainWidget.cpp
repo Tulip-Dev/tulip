@@ -192,25 +192,12 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
       QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,width, height), glFrameBuf, QRect(0,0,width, height));
     }
 
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_STENCIL_TEST);
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_BLEND);
-    glDisable(GL_LIGHTING);
-
     if (useFramebufferObject) {
       QGLFramebufferObject::blitFramebuffer(0, QRect(0,0,width, height), glFrameBuf2, QRect(0,0,width, height));
     }
 
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_BLEND);
-    glEnable(GL_LIGHTING);
-
     //Draw interactors and foreground entities.
     drawInteractors();
-
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_STENCIL_TEST);
 
     if(options.testFlag(SwapBuffers)) {
       swapBuffers();
