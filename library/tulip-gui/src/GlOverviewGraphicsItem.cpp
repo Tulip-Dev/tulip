@@ -151,6 +151,7 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
     cameraBoundingBox[i]=cameraBoundingBox[i]-eyesVector*cameraBoundingBox[i][2];
 
   // Change viewport of the scene to the overview viewport
+  baseScene.setBackupBackBuffer(false);
   baseScene.setViewport(0, 0, width, height);
 
   if(generatePixmap || _oldCameras.size() != layersList.size()) {
@@ -245,6 +246,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   // invert applied viewport
   baseScene.setViewport(backupViewport);
+  baseScene.setBackupBackBuffer(true);
+  baseScene.setSceneNeedRedraw(false);
+
 
   if(generatePixmap) {
     // Load scene pixmap to the item
