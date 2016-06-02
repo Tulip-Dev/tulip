@@ -110,7 +110,7 @@ Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 :type name: string
 :param help: a description of the parameter, that will be displayed to the user
 :type help: string
-:param defaultValue: the default value (in the form "entry1;entry2;...;entryN") the parameter should take, to be the initial value in the GUI
+:param defaultValue: the default value (in the form "entry1;entry2;...;entryN") gives the list of the possible values of the parameter to be defined; these values are separated by the character ';' and the first value is the default one.
 :type defaultValue: string
 :param isMandatory: specify whether this parameter requires a value or not
 :type isMandatory: boolean 
