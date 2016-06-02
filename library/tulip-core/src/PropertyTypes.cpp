@@ -197,6 +197,8 @@ bool DoubleType::read(istream& iss, double& v) {
         return false;
 
       v = std::numeric_limits<double>::quiet_NaN();
+
+      return true;
     }
     else {
       iss.unget();

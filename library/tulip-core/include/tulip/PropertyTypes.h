@@ -82,7 +82,7 @@ public:
   FORWARD_STRING_METHODS(FloatType)
 };
 
-typedef SerializableVectorType<double,false> DoubleVectorType;
+typedef SerializableVectorType<double, DoubleType, false> DoubleVectorType;
 
 class TLP_SCOPE IntegerType: public SerializableType<int> {
 public:
@@ -102,8 +102,8 @@ public:
   static unsigned int defaultValue();
 };
 
-typedef SerializableVectorType<int,false> IntegerVectorType;
-typedef SerializableVectorType<unsigned int,false> UnsignedIntegerVectorType;
+typedef SerializableVectorType<int, IntegerType, false> IntegerVectorType;
+typedef SerializableVectorType<unsigned int, UnsignedIntegerType, false> UnsignedIntegerVectorType;
 
 class TLP_SCOPE BooleanType: public TypeInterface<bool> {
 public:
@@ -125,13 +125,6 @@ public:
   FORWARD_STRING_METHODS(BooleanVectorType)
 };
 
-class TLP_SCOPE LineType: public SerializableVectorType<tlp::Coord,false> {
-public:
-  static bool read(std::istream&, RealType&, char openChar = '(',
-                   char sepChar = ',', char closeChar = ')');
-  FORWARD_STRING_METHODS(LineType)
-};
-
 class TLP_SCOPE PointType: public SerializableType<tlp::Coord> {
 public:
   static RealType undefinedValue();
@@ -139,6 +132,13 @@ public:
   static bool read(std::istream&, RealType&);
   static bool fromString(RealType &, const std::string &);
   FORWARD_TOSTRING(PointType)
+};
+
+class TLP_SCOPE LineType: public SerializableVectorType<tlp::Coord, PointType, false> {
+public:
+  static bool read(std::istream&, RealType&, char openChar = '(',
+                   char sepChar = ',', char closeChar = ')');
+  FORWARD_STRING_METHODS(LineType)
 };
 
 class TLP_SCOPE SizeType: public SerializableType<tlp::Size> {
@@ -150,7 +150,7 @@ public:
   FORWARD_TOSTRING(SizeType)
 };
 
-typedef SerializableVectorType<tlp::Size,true> SizeVectorType;
+typedef SerializableVectorType<tlp::Size, SizeType, true> SizeVectorType;
 
 class TLP_SCOPE StringType: public TypeInterface<std::string> {
 public:
@@ -188,8 +188,8 @@ public:
   static bool fromString(RealType &v, const std::string &s);
 };
 
-typedef SerializableVectorType<tlp::Color,true> ColorVectorType;
-typedef SerializableVectorType<tlp::Coord,true> CoordVectorType;
+typedef SerializableVectorType<tlp::Color, ColorType, true> ColorVectorType;
+typedef SerializableVectorType<tlp::Coord, PointType, true> CoordVectorType;
 
 DECL_STORED_STRUCT(tlp::EdgeSetType::RealType)
 DECL_STORED_STRUCT(std::set<tlp::node>)
