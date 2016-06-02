@@ -44,8 +44,8 @@ protected:
   Qt::MouseButton mButton;
   Qt::KeyboardModifier kModifier;
   Qt::KeyboardModifiers mousePressModifier;
-  unsigned int x,y;
-  int w,h;
+  int firstX, firstY;
+  int curX, curY;
   bool started;
   Graph *graph;
   SelectionMode _mode;

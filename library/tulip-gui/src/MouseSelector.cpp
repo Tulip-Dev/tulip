@@ -22,9 +22,11 @@
 #include <tulip/Graph.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/GlMainWidget.h>
-#include <tulip/GlTools.h>
+#include <tulip/GlUtils.h>
 #include <tulip/MouseSelector.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
+#include <tulip/Camera.h>
+#include <tulip/GlRect2D.h>
 
 #if defined(_MSC_VER)
 #include <Windows.h>
@@ -43,14 +45,14 @@ using namespace tlp;
 MouseSelector::MouseSelector(Qt::MouseButton button,
                              Qt::KeyboardModifier modifier,
                              SelectionMode mode):
-  mButton(button), kModifier(modifier), x(0),y(0),w(0),h(0),
+  mButton(button), kModifier(modifier), firstX(0), firstY(0), curX(0), curY(0),
   started(false),graph(nullptr),_mode(mode) {
 }
 //==================================================================
 bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
-  Graph *g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
+  Graph *g = glMainWidget->getScene()->getMainGlGraph()->getGraph();
 
   if (e->type() == QEvent::MouseButtonPress) {
 
@@ -58,10 +60,8 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         (kModifier == Qt::NoModifier ||
          qMouseEv->modifiers() & kModifier)) {
       if (!started) {
-        x = qMouseEv->x();
-        y = qMouseEv->y();
-        w = 0;
-        h = 0;
+        firstX = curX = qMouseEv->x();
+        firstY = curY = qMouseEv->y();
         started = true;
         graph=g;
         mousePressModifier=qMouseEv->modifiers();
@@ -95,23 +95,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (started) {
-      int clampedX=qMouseEv->x();
-      int clampedY=qMouseEv->y();
+      curX = clamp(qMouseEv->x(), 0, glMainWidget->width());
+      curY = clamp(qMouseEv->y(), 0, glMainWidget->height());
 
-      if(clampedX<0)
-        clampedX=0;
-
-      if(clampedY<0)
-        clampedY=0;
-
-      if(clampedX>glMainWidget->width())
-        clampedX=glMainWidget->width();
-
-      if(clampedY>glMainWidget->height())
-        clampedY=glMainWidget->height();
-
-      w = clampedX - x;
-      h = clampedY - y;
       glMainWidget->redraw();
       return true;
     }
@@ -129,7 +115,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
     if (started) {
       Observable::holdObservers();
-      BooleanProperty* selection=glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getElementSelected();
+      BooleanProperty* selection=glMainWidget->getScene()->getMainGlGraph()->getInputData().getElementSelection();
       bool revertSelection = false; // add to selection
       bool boolVal = true;
       bool needPush = true; // undo management
@@ -184,16 +170,16 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         boolVal = true;
       }
 
-      if ((w==0) && (h==0)) {
+      if (abs(firstX - curX) == 0 || abs(firstY - curY) == 0) {
         SelectedEntity selectedEntity;
-        bool result = glMainWidget->pickNodesEdges(x, y, selectedEntity);
+        bool result = glMainWidget->pickNodesEdges(curX, glMainWidget->height() - curY, selectedEntity);
 
         if (result) {
           switch(selectedEntity.getEntityType()) {
           case SelectedEntity::NODE_SELECTED:
 
             if(_mode == EdgesAndNodes || _mode == NodesOnly) {
-              result = selection->getNodeValue(node(selectedEntity.getComplexEntityId()));
+              result = selection->getNodeValue(selectedEntity.getNode());
 
               if (revertSelection || boolVal != result) {
                 if (needPush) {
@@ -201,7 +187,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
                   needPush = false;
                 }
 
-                selection->setNodeValue(node(selectedEntity.getComplexEntityId()), !result);
+                selection->setNodeValue(selectedEntity.getNode(), !result);
               }
             }
 
@@ -210,7 +196,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
           case SelectedEntity::EDGE_SELECTED:
 
             if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
-              result = selection->getEdgeValue(edge(selectedEntity.getComplexEntityId()));
+              result = selection->getEdgeValue(selectedEntity.getEdge());
 
               if (revertSelection || boolVal != result) {
                 if (needPush) {
@@ -218,7 +204,7 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
                   needPush = false;
                 }
 
-                selection->setEdgeValue(edge(selectedEntity.getComplexEntityId()), !result);
+                selection->setEdgeValue(selectedEntity.getEdge(), !result);
               }
             }
 
@@ -233,16 +219,10 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
         vector<SelectedEntity> tmpSetNode;
         vector<SelectedEntity> tmpSetEdge;
 
-        if (w < 0) {
-          w *= -1;
-          x -= w;
-        }
-
-        if (h<0) {
-          h *= -1;
-          y -= h;
-        }
-
+        int x = std::min(firstX, curX);
+        int y = std::min(glMainWidget->height() - firstY, glMainWidget->height() - curY);
+        int w = std::max(firstX, curX) - x;
+        int h = std::max(glMainWidget->height() - firstY, glMainWidget->height() - curY) - y;
         glMainWidget->pickNodesEdges(x, y, w, h, tmpSetNode, tmpSetEdge);
 
         if (needPush)
@@ -252,18 +232,18 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
         if(_mode == EdgesAndNodes || _mode == NodesOnly) {
           for (it=tmpSetNode.begin(); it!=tmpSetNode.end(); ++it) {
-            selection->setNodeValue(node((*it).getComplexEntityId()),
+            selection->setNodeValue((*it).getNode(),
                                     revertSelection ?
-                                    !selection->getNodeValue(node((*it).getComplexEntityId()))
+                                    !selection->getNodeValue((*it).getNode())
                                     : boolVal);
           }
         }
 
         if(_mode == EdgesAndNodes || _mode == EdgesOnly) {
           for (it=tmpSetEdge.begin(); it!=tmpSetEdge.end(); ++it) {
-            selection->setEdgeValue(edge((*it).getComplexEntityId()),
+            selection->setEdgeValue((*it).getEdge(),
                                     revertSelection ?
-                                    !selection->getEdgeValue(edge((*it).getComplexEntityId()))
+                                    !selection->getEdgeValue((*it).getEdge())
                                     : boolVal);
           }
         }
@@ -271,7 +251,9 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 
       started = false;
       Observable::unholdObservers();
-      glMainWidget->redraw();
+      firstX = curX = -1;
+      firstY = curY = -1;
+      glMainWidget->draw();
       return true;
     }
   }
@@ -282,71 +264,48 @@ bool MouseSelector::eventFilter(QObject *widget, QEvent *e) {
 bool MouseSelector::draw(GlMainWidget *glMainWidget) {
   if (!started) return false;
 
-  if (glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph()!=graph) {
+  if (glMainWidget->getScene()->getMainGlGraph()->getGraph()!=graph) {
     graph = nullptr;
     started = false;
   }
 
-  float yy = glMainWidget->height() - y;
-  glPushAttrib(GL_ALL_ATTRIB_BITS);
-  glMatrixMode (GL_PROJECTION);
-  glPushMatrix();
-  glLoadIdentity ();
-  glOrtho(0.0, (GLdouble) glMainWidget->width(), 0.0, (GLdouble) glMainWidget->height(), -1, 1);
-  glMatrixMode(GL_MODELVIEW);
-  glPushMatrix();
-  glLoadIdentity();
-  glDisable(GL_LIGHTING);
-  glDisable(GL_CULL_FACE);
-  glDisable(GL_DEPTH_TEST);
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA,GL_SRC_COLOR);
-  float col[4]= {0,0,0,0.2f};
+  if (firstX != -1) {
+    Color color(204,204,179,100);
 
-  if (mousePressModifier ==
+    if (mousePressModifier ==
 #if defined(__APPLE__)
-      Qt::AltModifier
+        Qt::AltModifier
 #else
-      Qt::ControlModifier
+        Qt::ControlModifier
 #endif
-     ) {
-    col[0]=1.;
-    col[1]=0.8f;
-    col[2]=1.;
-  }
-  else if(mousePressModifier == Qt::ShiftModifier) {
-    col[0]=1.;
-    col[1]=.7f;
-    col[2]=.7f;
-  }
-  else {
-    col[0]=0.8f;
-    col[1]=0.8f;
-    col[2]=0.7f;
+       ) {
+      color[0]=255;
+      color[1]=204;
+      color[2]=255;
+    }
+    else if(mousePressModifier == Qt::ShiftModifier) {
+      color[0]=255;
+      color[1]=179;
+      color[2]=179;
+    }
+
+    Color outlineColor(color);
+    outlineColor[3] = 255;
+
+    Camera camera2d(false);
+    tlp::Vec4i viewport = glMainWidget->getScene()->getViewport();
+    camera2d.setViewport(viewport);
+    camera2d.initGl();
+    tlp::Vec2f bl(std::min(firstX, curX), std::min(viewport[3] - firstY, viewport[3] - curY));
+    tlp::Vec2f tr(std::max(firstX, curX), std::max(viewport[3] - firstY, viewport[3] - curY));
+    GlRect2D rect(bl, tr, color, outlineColor);
+    rect.setOutlineWidth(2);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    rect.draw(camera2d);
+    glDisable(GL_BLEND);
+
   }
 
-  setColor(col);
-  glBegin(GL_QUADS);
-  glVertex2f(x, yy);
-  glVertex2f(x+w, yy);
-  glVertex2f(x+w, yy-h);
-  glVertex2f(x, yy-h);
-  glEnd();
-  glDisable(GL_BLEND);
-  glLineWidth(2);
-  glLineStipple(2, 0xAAAA);
-  glEnable(GL_LINE_STIPPLE);
-  glBegin(GL_LINE_LOOP);
-  glVertex2f(x, yy);
-  glVertex2f(x+w, yy);
-  glVertex2f(x+w, yy-h);
-  glVertex2f(x, yy-h);
-  glEnd();
-  glLineWidth(1);
-  glPopMatrix();
-  glMatrixMode (GL_PROJECTION);
-  glPopMatrix();
-  glMatrixMode (GL_MODELVIEW);
-  glPopAttrib();
   return true;
 }

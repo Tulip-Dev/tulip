@@ -24,7 +24,7 @@ SET(SRCS
     MouseInteractors.cpp
   #  MouseNodeBuilder.cpp
   #  MouseSelectionEditor.cpp
-  #  MouseSelector.cpp
+    MouseSelector.cpp
   #  MouseShowElementInfos.cpp
     NodeLinkDiagramComponent.cpp
     NodeLinkDiagramComponentInteractor.cpp
