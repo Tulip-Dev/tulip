@@ -51,7 +51,7 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _edgesLabelStencil(0xFFFF),
   _labelScaled(false),
   _labelFixedFontSize(false),
-  _labelMinSize(8),
+  _labelMinSize(4),
   _labelMaxSize(30),
   _labelsDensity(0),
   _labelsAreBillboarded(false),
