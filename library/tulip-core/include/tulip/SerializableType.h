@@ -49,14 +49,14 @@ public:
   FORWARD_STRING_METHODS(typename TypeInterface<T>)
 };
 
-template<typename VT, int openParen>
-class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
-  static bool readVector(std::istream& is, std::vector<VT>& v,
+template<typename ELT_TYPE, typename ELT_READER, int openParen>
+class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<ELT_TYPE> > {
+  static bool readVector(std::istream& is, std::vector<ELT_TYPE>& v,
                          char openChar, char sepChar, char closeChar) {
     v.clear();
 
     char c =' ';
-    VT val;
+    ELT_TYPE val;
     bool firstVal = true;
     bool sepFound = false;
 
@@ -97,7 +97,7 @@ class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
 
           is.unget();
 
-          if( !(is >> val) )
+          if( !ELT_READER::read(is, val) )
             return false;
 
           v.push_back(val);
@@ -109,7 +109,7 @@ class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
       }
     }
   }
-  static void writeVector(std::ostream& os, const std::vector<VT>& v) {
+  static void writeVector(std::ostream& os, const std::vector<ELT_TYPE>& v) {
     os << '(';
 
     for( unsigned int i = 0 ; i < v.size() ; i++ ) {
@@ -123,23 +123,23 @@ class TLP_SCOPE SerializableVectorType: public TypeInterface<std::vector<VT> > {
   }
 
 public:
-  static void write(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) {
+  static void write(std::ostream& oss, const typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v) {
     writeVector(oss, v);
   }
-  static void writeb(std::ostream& oss, const typename TypeInterface<std::vector<VT> >::RealType& v) {
+  static void writeb(std::ostream& oss, const typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v) {
     unsigned int vSize = v.size();
     oss.write((char *) &vSize, sizeof(vSize));
-    oss.write((char *) v.data(), vSize * sizeof(VT));
+    oss.write((char *) v.data(), vSize * sizeof(ELT_TYPE));
   }
-  static bool read(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v, char openChar = '(', char sepChar = ',', char closeChar = ')') {
+  static bool read(std::istream& iss, typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v, char openChar = '(', char sepChar = ',', char closeChar = ')') {
     return readVector(iss, v, openChar, sepChar, closeChar);
   }
-  static bool readb(std::istream& iss, typename TypeInterface<std::vector<VT> >::RealType& v) {
+  static bool readb(std::istream& iss, typename TypeInterface<std::vector<ELT_TYPE> >::RealType& v) {
     unsigned int vSize;
 
     if (bool(iss.read((char *) &vSize, sizeof(vSize)))) {
       v.resize(vSize);
-      return bool(iss.read((char *) v.data(), vSize * sizeof(VT)));
+      return bool(iss.read((char *) v.data(), vSize * sizeof(ELT_TYPE)));
     }
 
     return false;
@@ -147,7 +147,7 @@ public:
   static unsigned int valueSize() {
     return 0; // means is not fixed
   }
-  FORWARD_STRING_METHODS(typename TypeInterface<std::vector<VT> >)
+  FORWARD_STRING_METHODS(typename TypeInterface<std::vector<ELT_TYPE> >)
 };
 }
 
