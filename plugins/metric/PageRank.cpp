@@ -16,7 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/ForEach.h>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
@@ -82,51 +84,52 @@ struct PageRank : public DoubleAlgorithm {
 
     if(d <= 0 || d >= 1) return false;
 
-    double nbNodes = graph->numberOfNodes();
+
+    unsigned int nbNodes = graph->numberOfNodes();
 
     // Initialize the PageRank
-    MutableContainer<double>* R = new MutableContainer<double>();
-    MutableContainer<double>* R2 = new MutableContainer<double>();
-    R->setAll(1./nbNodes);
+    MutableContainer<unsigned int> nodeMap;
+    std::vector<double> pr(nbNodes);
+    std::vector<double> next_pr(nbNodes);
+
+    std::vector<node> nodes(nbNodes);
+    unsigned int i = 0;
+    for(node n : graph->getNodes()) {
+      nodeMap.set(n, i);
+      nodes[i] = n;
+      ++i;
+    }
+    double oon = 1./nbNodes;
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for(i = 0; i < nbNodes; ++i)
+      pr[i] = oon;
+
     const double one_minus_d = (1-d)/nbNodes;
-
-    for(unsigned int k=0; k < 15*log(nbNodes); ++k) {
+    const unsigned int kMax = (unsigned int) (15*log(nbNodes));
+    for(unsigned int k=0; k < kMax + 1; ++k) {
       if (directed) {
-
-        for(node tgt : graph->getNodes()) {
-          double r2Val = 0;
-          for(node src : graph->getInNodes(tgt)) {
-            r2Val += R->get(src)/graph->outdeg(src);
-          }
-          R2->set(tgt, one_minus_d + d * r2Val);
+        for(i = 0; i < nbNodes; ++i) {
+          double n_sum = 0;
+          for(node n : graph->getInNodes(nodes[i]))
+            n_sum += pr[nodeMap.get(n)]/graph->outdeg(n);
+          next_pr[i] = one_minus_d + d * n_sum;
         }
-        // swap R and R2
-        MutableContainer<double>*tmp = R;
-        R = R2;
-        R2 = tmp;
       }
       else {
-        R2->setAll(0.);
-        for(edge e : graph->getEdges()) {
-          const std::pair<node, node> eEnds = graph->ends(e);
-          node src = eEnds.first;
-          node tgt = eEnds.second;
-          double prev = R2->get(tgt);
-          R2->set(tgt, prev + R->get(src) / double(graph->deg(src)));
-          prev = R2->get(src);
-          R2->set(src, prev + R->get(tgt) / double(graph->deg(tgt)));
+        for(i = 0; i < nbNodes; ++i) {
+          double n_sum = 0;
+          for(node n : graph->getInOutNodes(nodes[i]))
+            n_sum += pr[nodeMap.get(n)]/graph->deg(n);
+          next_pr[i] = one_minus_d + d * n_sum;
         }
-
-        for(node n : graph->getNodes())
-          R->set(n, one_minus_d + d * R2->get(n));
       }
+      // swap pr and next_pr
+      pr.swap(next_pr);
     }
-
-    for(node n : graph->getNodes())
-        result->setNodeValue(n, R->get(n));
-
-    delete R;
-    delete R2;
+    for(i = 0; i < nbNodes; ++i)
+      result->setNodeValue(nodes[i], pr[i]);
 
     return true;
   }
