@@ -223,9 +223,21 @@ void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, co
 static BoundingBox labelBoundingBoxForNode(const GlGraphInputData &inputData, node n) {
   BoundingBox renderingBox;
   GlyphsManager::instance().getGlyph(inputData.getElementShape()->getNodeValue(n))->getTextBoundingBox(renderingBox);
-  const Coord &pos = inputData.getElementLayout()->getNodeValue(n);
-  const Size &size = inputData.getElementSize()->getNodeValue(n) * Size(renderingBox.width(), renderingBox.height(), renderingBox.depth());
-  return BoundingBox(pos - size/2.f, pos + size/2.f);
+  const Coord &nodePos = inputData.getElementLayout()->getNodeValue(n);
+  const Size &nodeSize = inputData.getElementSize()->getNodeValue(n);
+  Size labelSize = nodeSize* Size(renderingBox.width(), renderingBox.height(), renderingBox.depth());
+  Coord pos = nodePos;
+  int labelPos = inputData.getElementLabelPosition()->getNodeValue(n);
+  if (labelPos == LabelPosition::Top) {
+    pos += Coord(0, nodeSize[1]/2.f+labelSize[1]/2.f);
+  } else if (labelPos == LabelPosition::Bottom) {
+    pos += Coord(0, -nodeSize[1]/2.f-labelSize[1]/2.f);
+  } else if (labelPos == LabelPosition::Left) {
+    pos += Coord(-nodeSize[0]/2.f-labelSize[0]/2.f, 0);
+  } else if (labelPos == LabelPosition::Right) {
+    pos += Coord(nodeSize[0]/2.f+labelSize[0]/2.f, 0);
+  }
+  return BoundingBox(pos - labelSize/2.f, pos + labelSize/2.f);
 }
 
 static void adjustTextBoundingBox(BoundingBox &textBB, const Camera &camera, float minSize, float maxSize, unsigned int nbLines) {

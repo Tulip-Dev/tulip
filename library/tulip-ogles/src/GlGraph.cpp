@@ -1886,7 +1886,7 @@ void GlGraph::treatEvent(const tlp::Event &message) {
              (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE || pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE)) {
 
     notifyModified();
-  } else if (pEvt && pEvt->getProperty() == _inputData.getElementSelection()) {
+  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementSelection() || pEvt->getProperty() == _inputData.getElementLabelPosition())) {
     notifyModified();
   } else if (pEvt && pEvt->getProperty() == _inputData.getElementFont()) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
