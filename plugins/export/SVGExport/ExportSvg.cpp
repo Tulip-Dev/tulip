@@ -49,17 +49,12 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 }
 
-void ExportSvg::getData(std::ostream& os) const {
-  os << _out.constData();
-}
-
-
-ExportSvg::ExportSvg(PluginProgress *pp):_res(&_out), _pp(pp) {
-  _res.setAutoFormatting(true);
+ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, bool autoformatting):ExportInterface(pp, os),_res(&_out) {
+  _res.setAutoFormatting(autoformatting);
   _res.setCodec("UTF-8");
 }
 
-void ExportSvg::writeHeader(BoundingBox &bb) {
+bool ExportSvg::writeHeader(BoundingBox &bb) {
   _res.writeStartDocument();
   _res.writeStartElement("svg");
   double width= bb.width() + 1;
@@ -70,9 +65,14 @@ void ExportSvg::writeHeader(BoundingBox &bb) {
   _res.writeAttribute("xmlns:xlink","http://www.w3.org/1999/xlink");
   _res.writeAttribute("viewbox", "0 0 "+ QString::number(width+MARGIN) + " " + QString::number(height+MARGIN));
   _res.writeAttribute("version", "1.1");
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::writeGraph( BoundingBox &bb) {
+bool ExportSvg::writeGraph( BoundingBox &bb) {
   _res.writeStartElement("g");
   _res.writeAttribute("desc", "Graph");
   _res.writeAttribute("transform", "translate("+QString::number(-bb.center().getX()+bb.width()/2.f)+","+QString::number(bb.center().getY()+bb.height()/2.f)+") scale(1,-1)"); // Translation for having a cartesian landmark in the middle of the graph
@@ -83,63 +83,124 @@ void ExportSvg::writeGraph( BoundingBox &bb) {
   _res.writeAttribute("height", QString::number(bb.height() + 1));
   _res.writeAttribute("fill", "white");
   _res.writeEndElement();//rect
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
 
-void ExportSvg::writeMetaGraph(const int transform_X, const int transform_Y, float scale) {
+bool ExportSvg::writeMetaGraph(const int transform_X, const int transform_Y, float scale) {
   _res.writeStartElement("g");
   _res.writeAttribute("desc", "Meta-Graph");
   _res.writeAttribute("transform", "translate("+QString::number(transform_X)+","+QString::number(transform_Y)+") scale(" + QString::number(scale) + "," + QString::number(-scale) + ")"); // Translation for having a cartesian landmark in the middle of the graph
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
 
-void ExportSvg::writeEndGraph() {
+bool ExportSvg::writeEndGraph() {
   _res.writeEndElement();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::writeEnd() {
+bool ExportSvg::writeEnd() {
   _res.writeEndDocument();
+  _os << _out.constData();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::groupNode() {
+bool ExportSvg::groupNode() {
   _res.writeStartElement("g");
   _res.writeAttribute("id", "Nodes");
   _res.writeAttribute("desc","This is the group of nodes");
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::groupEdge() {
+bool ExportSvg::groupEdge() {
   _res.writeStartElement("g");
   _res.writeAttribute("id", "Edges");
   _res.writeAttribute("desc","This is the group of edges");
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::endGroupNode() {
-  _res.writeEndElement(); //g
+bool ExportSvg::endGroupNode() {
+  _res.writeEndElement();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::endGroupEdge() {
-  _res.writeEndElement(); //g
+bool ExportSvg::endGroupEdge() {
+  _res.writeEndElement();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::startNode(const unsigned id) {
+bool ExportSvg::startNode(const unsigned id) {
   _res.writeStartElement("g");
   _res.writeAttribute("id", QString::number(id));
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::endNode() {
-  _res.writeEndElement(); // g
+bool ExportSvg::endNode() {
+  _res.writeEndElement();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::startEdge(const unsigned id) {
+bool ExportSvg::startEdge(const unsigned id) {
   _res.writeStartElement("g");
   _res.writeAttribute("id", QString::number(id));
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::endEdge() {
-  _res.writeEndElement(); // g
+bool ExportSvg::endEdge() {
+  _res.writeEndElement();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::addLabel(const string &type, const string &label, const Color &labelcolor, const Coord &coord, const Size &size) {
+bool ExportSvg::addLabel(const string &type, const string &label, const Color &labelcolor, const Coord &coord, const Size &size) {
   if(!label.empty()) {
     _res.writeStartElement("text");
     _res.writeAttribute("x", QString::number(coord.getX()));
@@ -163,24 +224,44 @@ void ExportSvg::addLabel(const string &type, const string &label, const Color &l
     _res.writeCharacters(tlp::tlpStringToQString(label));
     _res.writeEndElement(); //text
   }
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::addColor(const tlp::Color &color) {
+bool ExportSvg::addColor(const tlp::Color &color) {
   _res.writeAttribute("fill", tlpColor2SvgColor(color));
   _res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::addRotation(const double rotation, const Coord &center) {
+bool ExportSvg::addRotation(const double rotation, const Coord &center) {
   _res.writeAttribute("transform", "rotate("+QString::number(rotation)+","+QString::number(center.getX())+","+QString::number(center.getY())+")");
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
+bool ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
   _res.writeAttribute("stroke", tlpColor2SvgColor(borderColor));
   _res.writeAttribute("stroke-opacity", tlpAlphaColor2Opacity(borderColor));
   _res.writeAttribute("stroke-width", QString::number(borderwidth));
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &coord, const Size &size) {
+bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &coord, const Size &size) {
   //node coord
   float x = coord.getX();
   float y = coord.getY();
@@ -415,11 +496,15 @@ void ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.writeAttribute("r", QString::number(w));
     break;
   }
-
   _res.writeEndElement();
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }
 
-bool ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice, edge e) {
+bool ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
   //Color gradient
   QString name("gradient_edge_"+QString::number(id));
   _res.writeStartElement("defs");
@@ -439,19 +524,17 @@ bool ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &
   _res.writeAttribute("stop-color", tlpColor2SvgColor(color1));
   _res.writeAttribute("stop-opacity", tlpAlphaColor2Opacity(color1));
   _res.writeEndElement();
-
   _res.writeEndElement();
   _res.writeEndElement();
 
-  return createEdge(type, bends, "url(#"+name+")", "1", width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice,e);
-
+  return createEdge(type, bends, "url(#"+name+")", "1", width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
 }
 
-bool ExportSvg::exportEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const Color &color, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice, tlp::edge e) {
-  return createEdge(type, bends, tlpColor2SvgColor(color), tlpAlphaColor2Opacity(color), width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice, e);
+bool ExportSvg::exportEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const Color &color, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
+  return createEdge(type, bends, tlpColor2SvgColor(color), tlpAlphaColor2Opacity(color), width, src_anchor_shape_type, id_src_shape, tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
 }
 
-bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice, edge e) {
+bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
   QString node_source_X(QString::number(edgeVertice[0].getX()));
   QString node_source_Y(QString::number(edgeVertice[0].getY()));
   QString node_target_X(QString::number(edgeVertice[edgeVertice.size() - 1].getX()));
@@ -469,7 +552,6 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
     controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
     controlPoints.push_back(edgeVertice[edgeVertice.size() - 1]);
     vector<Coord> curvePoints;
-
     switch(type) {
     case EdgeShape::Polyline: {
       points += " L";
@@ -477,7 +559,6 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
       for(vector<Coord>::const_iterator it=bends.begin(); it!=bends.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
-
       break;
     }
 
@@ -494,29 +575,24 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
           points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
         }
       }
-
       break;
     }
 
     case EdgeShape::CatmullRomCurve : {
       computeCatmullRomPoints(controlPoints, curvePoints);
       points += " S";
-
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
-
       break;
     }
 
     case EdgeShape::CubicBSplineCurve : {
       computeOpenUniformBsplinePoints(controlPoints, curvePoints);
       points += " S";
-
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
-
       break;
     }
     }
@@ -529,26 +605,20 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
   _res.writeAttribute("stroke", color);
 
   if (src_anchor_shape_type != EdgeExtremityShape::None)
-    _res.writeAttribute("marker-start","url(#Msrc" + QString::number(id_src_shape) + ")");
+      _res.writeAttribute("marker-start","url(#Msrc" + QString::number(id_src_shape) + ")");
 
   if (tgt_anchor_shape_type != EdgeExtremityShape::None)
-    _res.writeAttribute("marker-end","url(#Mtgt" + QString::number(id_tgt_shape) + ")");
+      _res.writeAttribute("marker-end","url(#Mtgt" + QString::number(id_tgt_shape) + ")");
 
   _res.writeEndElement(); // path
-  //hasError() in xmlStreanWriter class exists only since Qt 4.8.0
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-
-  if(_res.hasError()) {
-    QString str("Error when exporting edge "+ QString::number(e.id));
-    _pp->setError(tlp::QStringToTlpString(str));
-    return false;
-  }
-
-#endif
+    return !_res.hasError();
+#else
   return true;
+#endif
 }
 
-void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, unsigned int& id_src_gradient, unsigned int& id_tgt_gradient, const Coord &coord_edge_extremity_source, const Coord &coord_edge_extremity_target, const Size &size_node_src, const Size &size_node_tgt) {
+bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, unsigned int& id_src_gradient, unsigned int& id_tgt_gradient, const Coord &coord_edge_extremity_source, const Coord &coord_edge_extremity_target, const Size &size_node_src, const Size &size_node_tgt) {
   if (src_anchor_shape_type != EdgeExtremityShape::None) {
     // Writing the context
     _res.writeStartElement("defs");
@@ -1318,4 +1388,9 @@ void ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeEndElement();// End context "def"
     }
   }
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+    return !_res.hasError();
+#else
+  return true;
+#endif
 }

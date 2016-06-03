@@ -17,13 +17,12 @@
  *
  */
 #include "ReadGraph.h"
-#include "RepresentExport.h"
+#include "ExportInterface.h"
 
 #include <tulip/GlyphManager.h>
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/DrawingTools.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/StringProperty.h>
 #include <tulip/GlEdge.h>
 #include <tulip/GlGraphInputData.h>
@@ -32,11 +31,275 @@
 using namespace std;
 using namespace tlp;
 
+static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& exportint, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape,tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_size_interpolation, bool edge_extremities) {
+  pp->setComment("Exporting edges...");
+  bool ret(true);
+  ret = exportint.groupEdge();
+  if(!ret) {
+      if(pp->getError().empty())
+          pp->setError("Error when starting edge export");
+    return false;
+  }
 
-// Director
-ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, RepresentExport *r):_representExport(r) {
+  edge e;
+  unsigned int id_src_shape = 0;
+  unsigned int id_tgt_shape = 0;
+  unsigned int id_src_grad = 0;
+  unsigned int id_tgt_grad = 0;
+  GlGraphRenderingParameters rp;
+  GlGraphInputData inputData(graph, &rp);
+  forEach(e, graph->getEdges()) {
+    if ((++i % 100) == 0)
+      pp->progress(i,nb_elements);
 
-  // We declare the properties
+    const pair<node, node>& ends = graph->ends(e);
+    ret = exportint.startEdge(e.id);
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when starting to export edge " << e;
+            pp->setError(str.str());
+        }
+        return false;
+    }
+
+    GlEdge glEdge(e);
+    vector<Coord> edgeVertices;
+    glEdge.getVertices(&inputData, edgeVertices);
+
+    // nothing to do if current edge is a loop with no bends
+    if (edgeVertices.empty())
+      continue;
+
+    // Edges extremities
+    EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type = EdgeExtremityShape::None;
+    EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type = EdgeExtremityShape::None;
+    bool ret(true);
+    if(edge_extremities) {
+      src_anchor_shape_type = static_cast<EdgeExtremityShape::EdgeExtremityShapes>(srcanchorshape->getEdgeValue(e));
+      tgt_anchor_shape_type = static_cast<EdgeExtremityShape::EdgeExtremityShapes>(tgtanchorshape->getEdgeValue(e));
+    }
+
+    if(src_anchor_shape_type != EdgeExtremityShape::None || tgt_anchor_shape_type != EdgeExtremityShape::None) {
+      ret = exportint.exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type, tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad, id_tgt_grad, edgeVertices[0], edgeVertices[edgeVertices.size() - 1], sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second));
+      if(!ret) {
+          if(pp->getError().empty()) {
+              stringstream str;
+              str << "Error when exporting edge extremity for edge " << e;
+              pp->setError(str.str());
+          }
+        return false;
+      }
+    }
+
+    double width=0;
+
+    if(edge_size_interpolation) {
+      //svg only handles a width for each edge
+      width = std::min(sizes->getNodeValue(ends.first)[0]/8, sizes->getNodeValue(ends.second)[0]/8);
+    }
+    else
+      width = std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1])+1;
+
+    // Get edge type
+    if(!edge_color_interpolation) {
+      ret = exportint.exportEdge (static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
+                           layout->getEdgeValue(e),
+                           colors->getEdgeValue(e),
+                           width,
+                           src_anchor_shape_type,
+                           id_src_shape,
+                           tgt_anchor_shape_type,
+                           id_tgt_shape,
+                           edgeVertices
+                          );
+    }
+    else {
+      ret = exportint.exportEdge (e.id,
+                           static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
+                           layout->getEdgeValue(e),
+                           colors->getNodeValue(ends.first),
+                           colors->getNodeValue(ends.second),
+                           width,
+                           src_anchor_shape_type,
+                           id_src_shape,
+                           tgt_anchor_shape_type,
+                           id_tgt_shape,
+                           edgeVertices
+                          );
+    }
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when exporting edge " << e;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+
+    Coord c = edgeVertices[edgeVertices.size()/2] + edgeVertices[edgeVertices.size()/2 - 1];
+    ret = exportint.addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c/=2, sizes->getEdgeValue(e));
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when exporting label for edge " << e;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+    ret = exportint.endEdge();
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when terminating export of edge " << e;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+
+    if(src_anchor_shape_type != EdgeExtremityShape::None)
+      ++id_src_shape;
+
+    if(tgt_anchor_shape_type != EdgeExtremityShape::None)
+      ++id_tgt_shape;
+
+    if(src_anchor_shape_type == EdgeExtremityShape::Sphere)
+      ++id_src_grad;
+
+    if(src_anchor_shape_type == EdgeExtremityShape::GlowSphere)
+      id_src_grad +=2;
+
+    if(tgt_anchor_shape_type == EdgeExtremityShape::Sphere)
+      ++id_tgt_grad;
+
+    if(tgt_anchor_shape_type == EdgeExtremityShape::GlowSphere)
+      id_tgt_grad +=2;
+  }
+
+  // Ending the group of edges
+  ret = exportint.endGroupEdge();
+  if(!ret) {
+      if(pp->getError().empty())
+          pp->setError("Error when ending edge export");
+    return false;
+  }
+  return true;
+}
+
+static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& exportint, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices) {
+  pp->setComment("Exporting nodes...");
+  bool ret = exportint.groupNode();
+  if(!ret) {
+      if(pp->getError().empty())
+          pp->setError("Error when starting node export");
+    return false;
+  }
+  node n;
+
+  forEach(n, graph->getNodes()) {
+    if(graph->isMetaNode(n))
+      metanodeVertices.push_back(n);
+
+    Coord c = layout->getNodeValue(n);
+    Size s = sizes->getNodeValue(n);
+
+    if ((++i % 100) == 0)
+      pp->progress(i,nb_elements);
+
+    // Never change the call order of the methods below
+    ret = exportint.startNode(n.id);
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when starting to export node " << n;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+    ret = exportint.addColor(colors->getNodeValue(n));
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when exporting color for node " << n;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+
+    if(rotation->getNodeValue(n) != 0)  {
+      ret = exportint.addRotation(rotation->getNodeValue(n),c);
+      if(!ret) {
+          if(pp->getError().empty()) {
+              stringstream str;
+              str << "Error when exporting rotation for node " << n;
+              pp->setError(str.str());
+          }
+        return false;
+      }
+    }
+
+    if(borderwidth->getNodeValue(n) != 0) {
+      exportint.addBorder(bordercolor->getNodeValue(n), borderwidth->getNodeValue(n));
+      if(!ret) {
+          if(pp->getError().empty()) {
+              stringstream str;
+              str << "Error when exporting borderwidth for node "<<n;
+              pp->setError(str.str());
+          }
+        return false;
+      }
+    }
+
+    ret = exportint.addShape(static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s);
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when exporting shape for node "<<n;
+            pp->setError(str.str());
+        }
+        return false;
+    }
+    ret = exportint.addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c, s);
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when exporting label color for node "<<n;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+    ret = exportint.endNode();
+    if(!ret) {
+        if(pp->getError().empty()) {
+            stringstream str;
+            str << "Error when finishing to export node "<<n;
+            pp->setError(str.str());
+        }
+      return false;
+    }
+  }
+
+  // Ending the group of nodes
+  ret = exportint.endGroupNode();
+  if(!ret) {
+      if(pp->getError().empty())
+          pp->setError("Error when finishing to export nodes");
+    return false;
+  }
+  ret = exportint.writeEndGraph();
+  if(!ret) {
+      if(pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting node "<<n;
+          pp->setError(str.str());
+      }
+    return false;
+  }
+  return true;
+}
+
+
+bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, ExportInterface& exportint) {
   LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
   ColorProperty *colors = graph->getProperty<ColorProperty>("viewColor");
   IntegerProperty *shape =graph->getProperty<IntegerProperty>("viewShape");
@@ -73,35 +336,46 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
   BoundingBox graphbb = tlp::computeBoundingBox(graph,layout, sizes, rotation);
 
   // Writing the header of the file
-  r->writeHeader(graphbb);
-  r->writeGraph(graphbb);
+ bool ret = exportint.writeHeader(graphbb);
+ if(!ret) {
+     if(pp->getError().empty())
+         pp->setError("Error when exporting graph header");
+   return false;
+ }
+ ret = exportint.writeGraph(graphbb);
+ if(!ret) {
+     if(pp->getError().empty())
+         pp->setError("Error when starting to export graph");
+   return false;
+ }
 
-  // We will start by analysing the edges for a better display of the image : the foreground and the background
+  // We will start by analysing edges for a better display of the image
   int nb_elements = graph->numberOfEdges()+graph->numberOfNodes();
   unsigned i=0;
 
   // Analysing edges
-  bool ret = treatEdges(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
-
+  ret = treatEdges(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
   if(!ret) {
-    return;
+     if(pp->getError().empty())
+         pp->setError("Error when exporting edges");
+      return false;
   }
 
   // Analysing nodes
   std::vector<tlp::node> metanodeVertices;
-  ret =  treatNodes(graph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices);
-
+  ret =  treatNodes(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices);
   if(!ret) {
-    return;
+      if(pp->getError().empty())
+          pp->setError("Error when exporting nodes");
+      return false;
   }
 
   // Analysing meta-nodes
-  vector<int> transformationVertices;
-  int indice_Transform = 0;
-  unsigned sizeFirstVertice = 2* metanodeVertices.size();
-
   while(!metanodeVertices.empty()) {
-    vector<tlp::node> subMetanodeVertices;
+      vector<int> transformationVertices;
+      int indice_Transform = 0;
+      unsigned sizeFirstVertice = 2* metanodeVertices.size();
+      vector<tlp::node> subMetanodeVertices;
 
     for(vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end(); ++it) {
       node metanode = *it;
@@ -123,188 +397,45 @@ ReadGraph::ReadGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, Re
 
       vector<int>::const_iterator tran = transformationVertices.begin();
 
-      r->writeMetaGraph(tran[indice_Transform], tran[indice_Transform+1], scale);
+      ret = exportint.writeMetaGraph(tran[indice_Transform], tran[indice_Transform+1], scale);
+      if(!ret) {
+          if(pp->getError().empty())
+              pp->setError("Error when exporting a metanode");
+        return false;
+      }
       indice_Transform +=2;
 
       // Analysing edges in the metanode
-      ret = treatEdges(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
+      ret = treatEdges(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
 
       if(!ret) {
-        return;
+          stringstream str;
+          str << pp->getError() << "-- metanode "<<metanode;
+          pp->setError(str.str());
+          return false;
       }
 
       // Analysing nodes in the metanode
-      ret = treatNodes(metagraph, pp, r, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices);
-
+      ret = treatNodes(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices);
       if(!ret) {
-        return;
+          stringstream str;
+          str << pp->getError() << "-- metanode "<<metanode;
+          pp->setError(str.str());
+          return false;
       }
-
       if(transformationVertices.size() > sizeFirstVertice)
         cerr << "Metanode in a metanode not working properly" << endl;
     }
-
     indice_Transform = 0;
     metanodeVertices = subMetanodeVertices;
   }
 
 // Writing the end of the file
-  r->writeEnd();
-
-}
-
-bool ReadGraph::treatEdges(Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape,tlp::IntegerProperty *srcanchorshape, tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, bool edge_color_interpolation, bool edge_size_interpolation, bool edge_extremities) {
-  pp->setComment("Exporting edges...");
-  r->groupEdge();
-
-  edge e;
-  unsigned int id_src_shape = 0;
-  unsigned int id_tgt_shape = 0;
-  unsigned int id_src_grad = 0;
-  unsigned int id_tgt_grad = 0;
-  tlp::GlGraphRenderingParameters rp;
-  tlp::GlGraphInputData inputData(graph, &rp);
-  forEach(e, graph->getEdges()) {
-    if ((++i % 100) == 0)
-      pp->progress(i,nb_elements);
-
-    const pair<node, node>& ends = graph->ends(e);
-    r->startEdge(e.id);
-
-    GlEdge glEdge(e.id);
-    std::vector<Coord> edgeVertices;
-    glEdge.getVertices(&inputData, edgeVertices);
-
-    // nothing to do if current edge is a loop with no bends
-    if (edgeVertices.empty())
-      continue;
-
-    // Edges extremities
-    EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type = EdgeExtremityShape::None;
-    EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type = EdgeExtremityShape::None;
-
-    if(edge_extremities) {
-      src_anchor_shape_type = static_cast<EdgeExtremityShape::EdgeExtremityShapes>(srcanchorshape->getEdgeValue(e));
-      tgt_anchor_shape_type = static_cast<EdgeExtremityShape::EdgeExtremityShapes>(tgtanchorshape->getEdgeValue(e));
-    }
-
-    if(src_anchor_shape_type != EdgeExtremityShape::None || tgt_anchor_shape_type != EdgeExtremityShape::None) {
-      r->exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type, tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad, id_tgt_grad, edgeVertices[0], edgeVertices[edgeVertices.size() - 1], sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second));
-    }
-
-    double width=0;
-
-    if(edge_size_interpolation) {
-      //svg only handles a width for each edge
-      width = std::min(sizes->getNodeValue(ends.first)[0]/8, sizes->getNodeValue(ends.second)[0]/8);
-    }
-    else
-      width = std::min(sizes->getEdgeValue(e)[0], sizes->getEdgeValue(e)[1])+1;
-
-    // Get edge type
-    bool ret(true);
-
-    if(!edge_color_interpolation) {
-      ret = r->exportEdge (static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-                           layout->getEdgeValue(e),
-                           colors->getEdgeValue(e),
-                           width,
-                           src_anchor_shape_type,
-                           id_src_shape,
-                           tgt_anchor_shape_type,
-                           id_tgt_shape,
-                           edgeVertices,
-                           e
-                          );
-    }
-    else {
-      ret = r->exportEdge (e.id,
-                           static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-                           layout->getEdgeValue(e),
-                           colors->getNodeValue(ends.first),
-                           colors->getNodeValue(ends.second),
-                           width,
-                           src_anchor_shape_type,
-                           id_src_shape,
-                           tgt_anchor_shape_type,
-                           id_tgt_shape,
-                           edgeVertices,
-                           e
-                          );
-    }
-
-    if(!ret)
-      return false;
-
-    Coord c = edgeVertices[edgeVertices.size()/2] + edgeVertices[edgeVertices.size()/2 - 1];
-    r->addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c/=2, sizes->getEdgeValue(e));
-    r->endEdge();
-
-    if(src_anchor_shape_type != EdgeExtremityShape::None)
-      ++id_src_shape;
-
-    if(tgt_anchor_shape_type != EdgeExtremityShape::None)
-      ++id_tgt_shape;
-
-    if(src_anchor_shape_type == EdgeExtremityShape::Sphere)
-      ++id_src_grad;
-
-    if(src_anchor_shape_type == EdgeExtremityShape::GlowSphere)
-      id_src_grad +=2;
-
-    if(tgt_anchor_shape_type == EdgeExtremityShape::Sphere)
-      ++id_tgt_grad;
-
-    if(tgt_anchor_shape_type == EdgeExtremityShape::GlowSphere)
-      id_tgt_grad +=2;
+  ret = exportint.writeEnd();
+  if(!ret) {
+      if(pp->getError().empty())
+          pp->setError("Error when ending graph export");
+    return false;
   }
-
-  // Ending the group of edges
-  r->endGroupEdge();
   return true;
-}
-
-bool ReadGraph::treatNodes(Graph *graph, tlp::PluginProgress *pp, RepresentExport *r, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices) {
-  pp->setComment("Exporting nodes...");
-  r->groupNode();
-  node n;
-
-  forEach(n, graph->getNodes()) {
-    if(graph->isMetaNode(n))
-      metanodeVertices.push_back(n);
-
-    Coord c = layout->getNodeValue(n);
-    Size s = sizes->getNodeValue(n);
-
-    if ((++i % 100) == 0)
-      pp->progress(i,nb_elements);
-
-    // Never change the call order of the methods below
-    r->startNode(n.id);
-    r->addColor(colors->getNodeValue(n));
-
-    if(rotation->getNodeValue(n) != 0)
-      r->addRotation(rotation->getNodeValue(n),c);
-
-    if(borderwidth->getNodeValue(n) != 0)
-      r->addBorder(bordercolor->getNodeValue(n), borderwidth->getNodeValue(n));
-
-    r->addShape(static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s);
-    r->addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c, s);
-    r->endNode();
-  }
-
-  // Ending the group of nodes
-  r->endGroupNode();
-  r->writeEndGraph();
-  return true;
-}
-
-void ReadGraph::getExport(std::ostream &os) const {
-  _representExport->getData(os);
-}
-
-std::ostream& operator<<(std::ostream &os, const ReadGraph &r) {
-  r.getExport(os);
-  return os;
 }
