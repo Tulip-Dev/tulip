@@ -33,18 +33,15 @@
 #include <iostream>
 #include <cmath>
 
-#ifdef __EMSCRIPTEN__
-#include <emscripten.h>
-#endif
+#include <utf8.h>
 
 #include <tulip/IntegerProperty.h>
-
 #include <tulip/LabelsRenderer.h>
 #include <tulip/GlUtils.h>
-#include <utf8.h>
 #include <tulip/NanoVGManager.h>
 #include <tulip/GlyphsManager.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/GlGraphInputData.h>
 
 using namespace std;
 using namespace tlp;
@@ -63,20 +60,6 @@ static vector<string> splitStringToLines(const string &text) {
   return textVector;
 }
 
-
-#ifdef __EMSCRIPTEN__
-
-static set<string> fontFileRequested;
-
-static void fontFileLoaded(const char *fontFile) {
-  cout << "Font file " << fontFile << " successfully loaded" << endl;
-}
-
-static void fontFileLoadError(const char *fontFile) {
-  cout << "Error when trying to load font file " << fontFile << endl;
-}
-#endif
-
 static void renderText(NVGcontext *vg, const std::string &text, const tlp::BoundingBox &renderingBox, const tlp::Color &textColor)  {
 
   vector<string> textVector = splitStringToLines(text);
@@ -84,7 +67,7 @@ static void renderText(NVGcontext *vg, const std::string &text, const tlp::Bound
   float fontSize = renderingBox.height()/textVector.size();
 
   nvgFontSize(vg, fontSize);
-  nvgTextAlign(vg,NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
+  nvgTextAlign(vg, NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
   nvgFillColor(vg, nvgRGBA(textColor[0],textColor[1],textColor[2],textColor[3]));
   for (size_t i = 0 ; i < textVector.size() ; ++i) {
     BoundingBox rb;
@@ -112,43 +95,40 @@ LabelsRenderer *LabelsRenderer::instance(const std::string &canvasId) {
 }
 
 LabelsRenderer::LabelsRenderer() :
-  _fontHandle(-1), _labelsScaled(false),
+  _labelsScaled(false),
   _minSize(12), _maxSize(72), _occlusionTest(true) {
-
-  setFontFile(TulipViewSettings::instance().defaultFontFile());
-
 }
 
-LabelsRenderer::~LabelsRenderer() {
-
-}
-
-void LabelsRenderer::initFont() {
-  if (_fontFile.empty()) return;
-  if (!fontInit()) {
-  #ifdef __EMSCRIPTEN__
-    if (!fileExists(_fontFile.c_str()) && fontFileRequested.find(_fontFile) == fontFileRequested.end()) {
-      fontFileRequested.insert(_fontFile);
-      emscripten_async_wget(_fontFile.c_str(), _fontFile.c_str(), fontFileLoaded, fontFileLoadError);
-      return;
-    }
-  #endif
-    if (fileExists(_fontFile.c_str())) {
-      _fontHandle = nvgCreateFont(NanoVGManager::instance()->getNanoVGContext(), _fontFile.c_str(), _fontFile.c_str());
+void LabelsRenderer::initFont(const std::string &fontFile) {
+  if (_fontHandles.find(fontFile) == _fontHandles.end()) {
+    _fontHandles[fontFile] = -1;
+    if (fileExists(fontFile.c_str())) {
+      _fontHandles[fontFile] = nvgCreateFont(NanoVGManager::instance()->getNanoVGContext(), fontFile.c_str(), fontFile.c_str());
+      if (_fontHandles[fontFile] == -1) {
+        error() << "Font file " << fontFile << " can not be loaded" << endl;
+      }
     } else {
-      std::cout << _fontFile << " is not loaded" << std::endl;
+      error() << fontFile << " is not a valid path, font can not be loaded" << endl;
     }
-  } else {
-    nvgFontFace(NanoVGManager::instance()->getNanoVGContext(), _fontFile.c_str());
   }
 }
 
-void LabelsRenderer::addOrUpdateNodeLabel(Graph *graph, node n) {
-  StringProperty *viewLabel = graph->getProperty<StringProperty>("viewLabel");
-  const string &label = viewLabel->getNodeValue(n);
+void LabelsRenderer::setFont(const std::string &fontFile) {
+  if (_fontHandles[fontFile] != -1) {
+    nvgFontFaceId(NanoVGManager::instance()->getNanoVGContext(), _fontHandles[fontFile]);
+    _currentFont = fontFile;
+  } else {
+    setFont(TulipViewSettings::instance().defaultFontFile());
+  }
+}
+
+void LabelsRenderer::addOrUpdateNodeLabel(const GlGraphInputData &inputData, node n) {
+  return;
+  const string &label = inputData.getElementLabel()->getNodeValue(n);
+  setFont(inputData.getElementFont()->getNodeValue(n));
   if (!label.empty()) {
-    _nodeLabelAspectRatio[graph][n] = getTextAspectRatio(label);
-    _nodeLabelNbLines[graph][n] = std::count(label.begin(), label.end(), '\n')+1;
+    _nodeLabelAspectRatio[inputData.getGraph()][n] = getTextAspectRatio(label);
+    _nodeLabelNbLines[inputData.getGraph()][n] = std::count(label.begin(), label.end(), '\n')+1;
   }
 }
 
@@ -207,9 +187,18 @@ float LabelsRenderer::getTextAspectRatio(const string &text) {
 
 }
 
-void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, const BoundingBox &renderingBox, const Color &labelColor) {
-  initFont();
+void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, const BoundingBox &renderingBox,
+                                    const Color &labelColor, const std::string &fontFile) {
+
   if (text.empty()) return;
+
+  if (!fontFile.empty()) {
+    initFont(fontFile);
+    setFont(fontFile);
+  } else {
+    initFont(TulipViewSettings::instance().defaultFontFile());
+    setFont(TulipViewSettings::instance().defaultFontFile());
+  }
 
   BoundingBox textBBScaled = getLabelRenderingBoxScaled(renderingBox, getTextAspectRatio(text));
 
@@ -231,14 +220,11 @@ void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, co
   nvgEndFrame(vg);
 }
 
-static BoundingBox labelBoundingBoxForNode(Graph *graph, node n) {
-  IntegerProperty *viewShape = graph->getProperty<IntegerProperty>("viewShape");
-  LayoutProperty *viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
-  SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");
+static BoundingBox labelBoundingBoxForNode(const GlGraphInputData &inputData, node n) {
   BoundingBox renderingBox;
-  GlyphsManager::instance().getGlyph(viewShape->getNodeValue(n))->getTextBoundingBox(renderingBox);
-  const Coord &pos = viewLayout->getNodeValue(n);
-  const Size &size = viewSize->getNodeValue(n) * Size(renderingBox.width(), renderingBox.height(), renderingBox.depth());
+  GlyphsManager::instance().getGlyph(inputData.getElementShape()->getNodeValue(n))->getTextBoundingBox(renderingBox);
+  const Coord &pos = inputData.getElementLayout()->getNodeValue(n);
+  const Size &size = inputData.getElementSize()->getNodeValue(n) * Size(renderingBox.width(), renderingBox.height(), renderingBox.depth());
   return BoundingBox(pos - size/2.f, pos + size/2.f);
 }
 
@@ -269,13 +255,9 @@ static void adjustTextBoundingBox(BoundingBox &textBB, const Camera &camera, flo
   textBB[1][1] = ((textBB[1][1] - center[1]) / scale[1]) * scaleY + center[1];
 }
 
-void LabelsRenderer::renderGraphNodesLabels(Graph *graph, const Camera &camera, const Color &selectionColor) {
+void LabelsRenderer::renderGraphNodesLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor) {
 
-  initFont();
-
-  BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
-  ColorProperty *viewLabelColor = graph->getProperty<ColorProperty>("viewLabelColor");
-  StringProperty *viewLabel = graph->getProperty<StringProperty>("viewLabel");
+  initFont(TulipViewSettings::instance().defaultFontFile());
 
   Vec4i viewport = camera.getViewport();
 
@@ -286,26 +268,30 @@ void LabelsRenderer::renderGraphNodesLabels(Graph *graph, const Camera &camera, 
 
   nvgBeginFrame(vg, camera.getViewport()[0], camera.getViewport()[1], camera.getViewport()[2], camera.getViewport()[3], 1.0);
 
-  for (vector<node>::iterator it = _labelsToRender[graph].begin() ; it != _labelsToRender[graph].end() ; ++it) {
+  Graph *graph = inputData.getGraph();
 
-    const std::string &label = viewLabel->getNodeValue(*it);
+  for (node n :_labelsToRender[graph]) {
+
+    setFont(inputData.getElementFont()->getNodeValue(n));
+
+    const std::string &label = inputData.getElementLabel()->getNodeValue(n);
 
     if (label.empty()) {
       continue;
     }
 
-    if (_nodeLabelAspectRatio[graph].find(*it) == _nodeLabelAspectRatio[graph].end()) {
-      _nodeLabelAspectRatio[graph][*it] = getTextAspectRatio(label);
-      _nodeLabelNbLines[graph][*it] = std::count(label.begin(), label.end(), '\n')+1;
+    if (_nodeLabelAspectRatio[graph].find(n) == _nodeLabelAspectRatio[graph].end()) {
+      _nodeLabelAspectRatio[graph][n] = getTextAspectRatio(label);
+      _nodeLabelNbLines[graph][n] = std::count(label.begin(), label.end(), '\n')+1;
     }
 
-    BoundingBox nodeBB = labelBoundingBoxForNode(graph, *it);
+    BoundingBox nodeBB = labelBoundingBoxForNode(inputData, n);
 
-    BoundingBox textBB = getLabelRenderingBoxScaled(nodeBB, _nodeLabelAspectRatio[graph][*it]);
+    BoundingBox textBB = getLabelRenderingBoxScaled(nodeBB, _nodeLabelAspectRatio[graph][n]);
 
     if (!_labelsScaled) {
 
-      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _nodeLabelNbLines[graph][*it]);
+      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _nodeLabelNbLines[graph][n]);
     }
 
     bool canRender = true;
@@ -356,7 +342,7 @@ void LabelsRenderer::renderGraphNodesLabels(Graph *graph, const Camera &camera, 
       bb.expand(Vec3f(textBBMinScr[0], viewport[3] - textBBMinScr[1]));
       bb.expand(Vec3f(textBBMaxScr[0], viewport[3] - textBBMaxScr[1]));
 
-      renderText(vg, viewLabel->getNodeValue(*it), bb, viewSelection->getNodeValue(*it) ? selectionColor : viewLabelColor->getNodeValue(*it));
+      renderText(vg, label, bb, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n));
 
     }
 

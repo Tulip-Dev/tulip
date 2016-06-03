@@ -667,19 +667,16 @@ void GlGraph::uploadEdgesData() {
 }
 
 void GlGraph::prepareNodesLabelsData() {
-  _labelsRenderer->initFont();
-  if (_labelsRenderer->fontInit()) {
-    _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
-    if (_graph->numberOfNodes() > 0) {
-      for(node n : _graph->getNodes()) {
-        prepareNodeLabelData(n);
-      }
+  _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
+  if (_graph->numberOfNodes() > 0) {
+    for(node n : _graph->getNodes()) {
+      prepareNodeLabelData(n);
     }
   }
 }
 
 void GlGraph::prepareNodeLabelData(const tlp::node n) {
-  _labelsRenderer->addOrUpdateNodeLabel(_graph, n);
+  _labelsRenderer->addOrUpdateNodeLabel(_inputData, n);
 }
 
 void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
@@ -922,7 +919,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       std::reverse(nodesLabelsToRender.begin(), itN);
     }
     _labelsRenderer->setGraphNodesLabelsToRender(_graph, nodesLabelsToRender);
-    _labelsRenderer->renderGraphNodesLabels(_graph, camera, _renderingParameters.selectionColor());
+    _labelsRenderer->renderGraphNodesLabels(_inputData, camera, _renderingParameters.selectionColor());
   }
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_STENCIL_TEST);
@@ -1890,6 +1887,15 @@ void GlGraph::treatEvent(const tlp::Event &message) {
 
     notifyModified();
   } else if (pEvt && pEvt->getProperty() == _inputData.getElementSelection()) {
+    notifyModified();
+  } else if (pEvt && pEvt->getProperty() == _inputData.getElementFont()) {
+    if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
+      _labelsRenderer->removeNodeLabel(_graph, pEvt->getNode());
+      _labelsRenderer->initFont(_inputData.getElementFont()->getNodeValue(pEvt->getNode()));
+    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
+      _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
+      _labelsRenderer->initFont(_inputData.getElementFont()->getNodeDefaultValue());
+    }
     notifyModified();
   } else if (rpEvt && (rpEvt->getType() == GlGraphRenderingParametersEvent::DISPLAY_EDGES_EXTREMITIES_TOGGLED)) {
     for(edge e : _graph->getEdges()) {

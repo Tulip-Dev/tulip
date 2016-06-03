@@ -43,6 +43,8 @@
 
 namespace tlp {
 
+class GlGraphInputData;
+
 class TLP_GLES_SCOPE LabelsRenderer {
 
 public :
@@ -55,24 +57,9 @@ public :
     _currentCanvasId = canvasId;
   }
 
-  ~LabelsRenderer();
+  void initFont(const std::string &fontFile);
 
-  void setFontFile(const std::string &fontFile) {
-    _fontFile = fontFile;
-    _fontHandle = -1;
-  }
-
-  void initFont();
-
-  bool fontInit() const {
-    return _fontHandle != -1;
-  }
-
-  std::string fontFile() const {
-    return _fontFile;
-  }
-
-  void addOrUpdateNodeLabel(tlp::Graph *graph, tlp::node n);
+  void addOrUpdateNodeLabel(const GlGraphInputData &inputData, tlp::node n);
 
   void removeNodeLabel(tlp::Graph *graph, tlp::node n);
 
@@ -93,10 +80,10 @@ public :
     _occlusionTest = occlusionTest;
   }
 
-  void renderGraphNodesLabels(tlp::Graph *graph, const Camera &camera, const tlp::Color &selectionColor);
+  void renderGraphNodesLabels(const GlGraphInputData &inputData, const Camera &camera, const tlp::Color &selectionColor);
 
   void renderOneLabel(const Camera &camera, const std::string &text, const tlp::BoundingBox &renderingBox,
-                      const tlp::Color &labelColor = tlp::Color::Black);
+                      const tlp::Color &labelColor = tlp::Color::Black, const std::string &fontFile = "");
 
   void clearGraphNodesLabelsRenderingData(tlp::Graph *graph);
 
@@ -106,9 +93,10 @@ public :
 
 private :
 
+  void setFont(const std::string &fontFile);
+
   static std::map<std::string, LabelsRenderer *> _instances;
   static std::string _currentCanvasId;
-
 
   LabelsRenderer();
 
@@ -116,8 +104,8 @@ private :
 
   tlp::BoundingBox getLabelRenderingBoxScaled(const tlp::BoundingBox &renderingBox, float textAspectRatio);
 
-  std::string _fontFile;
-  int _fontHandle;
+  std::map<std::string, int> _fontHandles;
+  std::string _currentFont;
 
   std::map<tlp::Graph *, std::vector<tlp::node> > _labelsToRender;
   std::map<tlp::Graph *, std::map<tlp::node, float> > _nodeLabelAspectRatio;
