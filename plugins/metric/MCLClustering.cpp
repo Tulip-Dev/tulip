@@ -76,7 +76,7 @@ public:
 
   VectorGraph g;
   EdgeProperty<double> inW, outW;
-  NodeProperty<node> tlpNodes;
+  std::vector<node> tlpNodes;
   MutableContainer<node> nodeMapping;
   MutableContainer<edge> edgeMapping;
   NumericProperty *weights;
@@ -91,14 +91,15 @@ const double epsilon = 1E-9;
 
 //=================================================
 void MCLClustering::power(node n) {
+  TLP_HASH_MAP<node, double> newTargets;
   edge e1;
 
-  stableForEach(e1, g.getOutEdges(n)) {
+  forEach(e1, g.getOutEdges(n)) {
     double v1 = inW[e1];
 
     if (v1 > epsilon) {
       edge e2;
-      stableForEach(e2, g.getOutEdges(g.target(e1))) {
+      forEach(e2, g.getOutEdges(g.target(e1))) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
@@ -108,13 +109,22 @@ void MCLClustering::power(node n) {
           if (ne.isValid())
             outW[ne] += v2;
           else {
-            ne = g.addEdge(n, tgt);
-            inW[ne] = 0.;
-            outW[ne] = v2;
+	    TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
+	    if (it != newTargets.end())
+	      newTargets[tgt] += v2;
+	    else
+	      newTargets[tgt] = v2;
           }
         }
       }
     }
+  }
+  for(TLP_HASH_MAP<node, double>::iterator it = newTargets.begin();
+      it != newTargets.end(); ++it) {
+    edge ne;
+    ne = g.addEdge(n, it->first);
+    inW[ne] = 0.;
+    outW[ne] = it->second;
   }
 }
 //==================================================
@@ -173,9 +183,10 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   }
 
   if (sum > 0.) {
+    double oos = 1./sum;
     for(unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
-      p.first = outW[p.second] = pow(p.first, r) / sum;
+      p.first = outW[p.second] = pow(p.first, r) * oos;
     }
   }
 
@@ -221,12 +232,13 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   }
 
   if (sum > 0.) {
+    double oos = 1./sum;
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       e = p.second;
 
       if (e.isValid()) {
-        double outVal = outW[e] = p.first / sum;
+        double outVal = outW[e] = p.first * oos;
 
         if (equal && (fabs(outVal - inW[e]) > epsilon))
           // more iteration needed
@@ -235,12 +247,13 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
     }
   }
   else {
+    double ood = 1./outdeg;
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       e = p.second;
 
       if (e.isValid()) {
-        double outVal = outW[e] = 1. / double(outdeg);
+        double outVal = outW[e] = ood;
 
         if (equal && (fabs(outVal - inW[e]) > epsilon))
           // more iteration needed
@@ -281,12 +294,17 @@ MCLClustering::~MCLClustering() {
 }
 //================================================================================
 void MCLClustering::init() {
+  unsigned int nbNodes = graph->numberOfNodes();
+  g.reserveNodes(nbNodes);
+  g.reserveEdges(nbNodes + 2 * graph->numberOfEdges());
+  tlpNodes.resize(nbNodes);
   node n;
   node newNode;
   forEach(n, graph->getNodes()) {
     newNode = g.addNode();
     nodeMapping.set(n.id, newNode);
     tlpNodes[newNode] = n;
+    g.reserveAdj(newNode, 2 * graph->deg(n) + 1);
   }
 
   edge e;
@@ -307,8 +325,6 @@ void MCLClustering::init() {
   }
 
   // add loops (Set the maximum of out-edges weights to self-loops weight)
-  unsigned int nbNodes = g.numberOfNodes();
-
   for (unsigned int i = 0; i < nbNodes; ++i) {
     n = g[i];
     edge tmp = g.addEdge(n, n);
@@ -331,9 +347,9 @@ void MCLClustering::init() {
       inW[tmp] = 1.;
       sum=double(g.outdeg(n));
     }
-
+    double oos = 1./sum;
     forEach(e, g.getOutEdges(n))
-    inW[e] /= sum;
+      inW[e] *= oos;
   }
 }
 //================================================================================
@@ -355,7 +371,6 @@ bool MCLClustering::run() {
 
   g.alloc(inW);
   g.alloc(outW);
-  g.alloc(tlpNodes);
 
   weights = NULL;
   _r = 2.;
