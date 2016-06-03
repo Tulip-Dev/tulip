@@ -109,16 +109,18 @@ void MCLClustering::power(node n) {
           if (ne.isValid())
             outW[ne] += v2;
           else {
-	    TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
-	    if (it != newTargets.end())
-	      newTargets[tgt] += v2;
-	    else
-	      newTargets[tgt] = v2;
+            TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
+
+            if (it != newTargets.end())
+              newTargets[tgt] += v2;
+            else
+              newTargets[tgt] = v2;
           }
         }
       }
     }
   }
+
   for(TLP_HASH_MAP<node, double>::iterator it = newTargets.begin();
       it != newTargets.end(); ++it) {
     edge ne;
@@ -184,6 +186,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 
   if (sum > 0.) {
     double oos = 1./sum;
+
     for(unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       p.first = outW[p.second] = pow(p.first, r) * oos;
@@ -233,6 +236,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 
   if (sum > 0.) {
     double oos = 1./sum;
+
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       e = p.second;
@@ -248,6 +252,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   }
   else {
     double ood = 1./outdeg;
+
     for (unsigned int i = 0; i < sz; ++i) {
       pair<double, edge>& p = pvect[i];
       e = p.second;
@@ -347,9 +352,10 @@ void MCLClustering::init() {
       inW[tmp] = 1.;
       sum=double(g.outdeg(n));
     }
+
     double oos = 1./sum;
     forEach(e, g.getOutEdges(n))
-      inW[e] *= oos;
+    inW[e] *= oos;
   }
 }
 //================================================================================
