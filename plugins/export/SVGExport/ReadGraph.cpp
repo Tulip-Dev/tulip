@@ -35,9 +35,11 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
   pp->setComment("Exporting edges...");
   bool ret(true);
   ret = exportint.groupEdge();
+
   if(!ret) {
-      if(pp->getError().empty())
-          pp->setError("Error when starting edge export");
+    if(pp->getError().empty())
+      pp->setError("Error when starting edge export");
+
     return false;
   }
 
@@ -54,13 +56,15 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
     const pair<node, node>& ends = graph->ends(e);
     ret = exportint.startEdge(e.id);
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when starting to export edge " << e;
-            pp->setError(str.str());
-        }
-        return false;
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when starting to export edge " << e;
+        pp->setError(str.str());
+      }
+
+      return false;
     }
 
     GlEdge glEdge(e);
@@ -75,6 +79,7 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
     EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type = EdgeExtremityShape::None;
     EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type = EdgeExtremityShape::None;
     bool ret(true);
+
     if(edge_extremities) {
       src_anchor_shape_type = static_cast<EdgeExtremityShape::EdgeExtremityShapes>(srcanchorshape->getEdgeValue(e));
       tgt_anchor_shape_type = static_cast<EdgeExtremityShape::EdgeExtremityShapes>(tgtanchorshape->getEdgeValue(e));
@@ -82,12 +87,14 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
     if(src_anchor_shape_type != EdgeExtremityShape::None || tgt_anchor_shape_type != EdgeExtremityShape::None) {
       ret = exportint.exportEdgeExtremity(id_src_shape, id_tgt_shape, src_anchor_shape_type, tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad, id_tgt_grad, edgeVertices[0], edgeVertices[edgeVertices.size() - 1], sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second));
+
       if(!ret) {
-          if(pp->getError().empty()) {
-              stringstream str;
-              str << "Error when exporting edge extremity for edge " << e;
-              pp->setError(str.str());
-          }
+        if(pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting edge extremity for edge " << e;
+          pp->setError(str.str());
+        }
+
         return false;
       }
     }
@@ -104,56 +111,63 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
     // Get edge type
     if(!edge_color_interpolation) {
       ret = exportint.exportEdge (static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-                           layout->getEdgeValue(e),
-                           colors->getEdgeValue(e),
-                           width,
-                           src_anchor_shape_type,
-                           id_src_shape,
-                           tgt_anchor_shape_type,
-                           id_tgt_shape,
-                           edgeVertices
-                          );
+                                  layout->getEdgeValue(e),
+                                  colors->getEdgeValue(e),
+                                  width,
+                                  src_anchor_shape_type,
+                                  id_src_shape,
+                                  tgt_anchor_shape_type,
+                                  id_tgt_shape,
+                                  edgeVertices
+                                 );
     }
     else {
       ret = exportint.exportEdge (e.id,
-                           static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
-                           layout->getEdgeValue(e),
-                           colors->getNodeValue(ends.first),
-                           colors->getNodeValue(ends.second),
-                           width,
-                           src_anchor_shape_type,
-                           id_src_shape,
-                           tgt_anchor_shape_type,
-                           id_tgt_shape,
-                           edgeVertices
-                          );
+                                  static_cast<EdgeShape::EdgeShapes>(shape->getEdgeValue(e)),
+                                  layout->getEdgeValue(e),
+                                  colors->getNodeValue(ends.first),
+                                  colors->getNodeValue(ends.second),
+                                  width,
+                                  src_anchor_shape_type,
+                                  id_src_shape,
+                                  tgt_anchor_shape_type,
+                                  id_tgt_shape,
+                                  edgeVertices
+                                 );
     }
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when exporting edge " << e;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when exporting edge " << e;
+        pp->setError(str.str());
+      }
+
       return false;
     }
 
     Coord c = edgeVertices[edgeVertices.size()/2] + edgeVertices[edgeVertices.size()/2 - 1];
     ret = exportint.addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c/=2, sizes->getEdgeValue(e));
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when exporting label for edge " << e;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when exporting label for edge " << e;
+        pp->setError(str.str());
+      }
+
       return false;
     }
+
     ret = exportint.endEdge();
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when terminating export of edge " << e;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when terminating export of edge " << e;
+        pp->setError(str.str());
+      }
+
       return false;
     }
 
@@ -178,22 +192,28 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
   // Ending the group of edges
   ret = exportint.endGroupEdge();
+
   if(!ret) {
-      if(pp->getError().empty())
-          pp->setError("Error when ending edge export");
+    if(pp->getError().empty())
+      pp->setError("Error when ending edge export");
+
     return false;
   }
+
   return true;
 }
 
 static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& exportint, unsigned &i, const int nb_elements, tlp::SizeProperty *sizes, tlp::ColorProperty *colors, tlp::LayoutProperty *layout, tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation, tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor, std::vector<tlp::node> &metanodeVertices) {
   pp->setComment("Exporting nodes...");
   bool ret = exportint.groupNode();
+
   if(!ret) {
-      if(pp->getError().empty())
-          pp->setError("Error when starting node export");
+    if(pp->getError().empty())
+      pp->setError("Error when starting node export");
+
     return false;
   }
+
   node n;
 
   forEach(n, graph->getNodes()) {
@@ -208,93 +228,116 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
     // Never change the call order of the methods below
     ret = exportint.startNode(n.id);
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when starting to export node " << n;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when starting to export node " << n;
+        pp->setError(str.str());
+      }
+
       return false;
     }
+
     ret = exportint.addColor(colors->getNodeValue(n));
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when exporting color for node " << n;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when exporting color for node " << n;
+        pp->setError(str.str());
+      }
+
       return false;
     }
 
     if(rotation->getNodeValue(n) != 0)  {
       ret = exportint.addRotation(rotation->getNodeValue(n),c);
+
       if(!ret) {
-          if(pp->getError().empty()) {
-              stringstream str;
-              str << "Error when exporting rotation for node " << n;
-              pp->setError(str.str());
-          }
+        if(pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting rotation for node " << n;
+          pp->setError(str.str());
+        }
+
         return false;
       }
     }
 
     if(borderwidth->getNodeValue(n) != 0) {
       exportint.addBorder(bordercolor->getNodeValue(n), borderwidth->getNodeValue(n));
+
       if(!ret) {
-          if(pp->getError().empty()) {
-              stringstream str;
-              str << "Error when exporting borderwidth for node "<<n;
-              pp->setError(str.str());
-          }
+        if(pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting borderwidth for node "<<n;
+          pp->setError(str.str());
+        }
+
         return false;
       }
     }
 
     ret = exportint.addShape(static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s);
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when exporting shape for node "<<n;
-            pp->setError(str.str());
-        }
-        return false;
-    }
-    ret = exportint.addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c, s);
-    if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when exporting label color for node "<<n;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when exporting shape for node "<<n;
+        pp->setError(str.str());
+      }
+
       return false;
     }
-    ret = exportint.endNode();
+
+    ret = exportint.addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c, s);
+
     if(!ret) {
-        if(pp->getError().empty()) {
-            stringstream str;
-            str << "Error when finishing to export node "<<n;
-            pp->setError(str.str());
-        }
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when exporting label color for node "<<n;
+        pp->setError(str.str());
+      }
+
+      return false;
+    }
+
+    ret = exportint.endNode();
+
+    if(!ret) {
+      if(pp->getError().empty()) {
+        stringstream str;
+        str << "Error when finishing to export node "<<n;
+        pp->setError(str.str());
+      }
+
       return false;
     }
   }
 
   // Ending the group of nodes
   ret = exportint.endGroupNode();
+
   if(!ret) {
-      if(pp->getError().empty())
-          pp->setError("Error when finishing to export nodes");
+    if(pp->getError().empty())
+      pp->setError("Error when finishing to export nodes");
+
     return false;
   }
+
   ret = exportint.writeEndGraph();
+
   if(!ret) {
-      if(pp->getError().empty()) {
-          stringstream str;
-          str << "Error when exporting node "<<n;
-          pp->setError(str.str());
-      }
+    if(pp->getError().empty()) {
+      stringstream str;
+      str << "Error when exporting node "<<n;
+      pp->setError(str.str());
+    }
+
     return false;
   }
+
   return true;
 }
 
@@ -336,18 +379,23 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
   BoundingBox graphbb = tlp::computeBoundingBox(graph,layout, sizes, rotation);
 
   // Writing the header of the file
- bool ret = exportint.writeHeader(graphbb);
- if(!ret) {
-     if(pp->getError().empty())
-         pp->setError("Error when exporting graph header");
-   return false;
- }
- ret = exportint.writeGraph(graphbb);
- if(!ret) {
-     if(pp->getError().empty())
-         pp->setError("Error when starting to export graph");
-   return false;
- }
+  bool ret = exportint.writeHeader(graphbb);
+
+  if(!ret) {
+    if(pp->getError().empty())
+      pp->setError("Error when exporting graph header");
+
+    return false;
+  }
+
+  ret = exportint.writeGraph(graphbb);
+
+  if(!ret) {
+    if(pp->getError().empty())
+      pp->setError("Error when starting to export graph");
+
+    return false;
+  }
 
   // We will start by analysing edges for a better display of the image
   int nb_elements = graph->numberOfEdges()+graph->numberOfNodes();
@@ -355,27 +403,31 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
 
   // Analysing edges
   ret = treatEdges(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
+
   if(!ret) {
-     if(pp->getError().empty())
-         pp->setError("Error when exporting edges");
-      return false;
+    if(pp->getError().empty())
+      pp->setError("Error when exporting edges");
+
+    return false;
   }
 
   // Analysing nodes
   std::vector<tlp::node> metanodeVertices;
   ret =  treatNodes(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices);
+
   if(!ret) {
-      if(pp->getError().empty())
-          pp->setError("Error when exporting nodes");
-      return false;
+    if(pp->getError().empty())
+      pp->setError("Error when exporting nodes");
+
+    return false;
   }
 
   // Analysing meta-nodes
   while(!metanodeVertices.empty()) {
-      vector<int> transformationVertices;
-      int indice_Transform = 0;
-      unsigned sizeFirstVertice = 2* metanodeVertices.size();
-      vector<tlp::node> subMetanodeVertices;
+    vector<int> transformationVertices;
+    int indice_Transform = 0;
+    unsigned sizeFirstVertice = 2* metanodeVertices.size();
+    vector<tlp::node> subMetanodeVertices;
 
     for(vector<node>::const_iterator it = metanodeVertices.begin(); it != metanodeVertices.end(); ++it) {
       node metanode = *it;
@@ -398,44 +450,53 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
       vector<int>::const_iterator tran = transformationVertices.begin();
 
       ret = exportint.writeMetaGraph(tran[indice_Transform], tran[indice_Transform+1], scale);
+
       if(!ret) {
-          if(pp->getError().empty())
-              pp->setError("Error when exporting a metanode");
+        if(pp->getError().empty())
+          pp->setError("Error when exporting a metanode");
+
         return false;
       }
+
       indice_Transform +=2;
 
       // Analysing edges in the metanode
       ret = treatEdges(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities);
 
       if(!ret) {
-          stringstream str;
-          str << pp->getError() << "-- metanode "<<metanode;
-          pp->setError(str.str());
-          return false;
+        stringstream str;
+        str << pp->getError() << "-- metanode "<<metanode;
+        pp->setError(str.str());
+        return false;
       }
 
       // Analysing nodes in the metanode
       ret = treatNodes(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices);
+
       if(!ret) {
-          stringstream str;
-          str << pp->getError() << "-- metanode "<<metanode;
-          pp->setError(str.str());
-          return false;
+        stringstream str;
+        str << pp->getError() << "-- metanode "<<metanode;
+        pp->setError(str.str());
+        return false;
       }
+
       if(transformationVertices.size() > sizeFirstVertice)
         cerr << "Metanode in a metanode not working properly" << endl;
     }
+
     indice_Transform = 0;
     metanodeVertices = subMetanodeVertices;
   }
 
 // Writing the end of the file
   ret = exportint.writeEnd();
+
   if(!ret) {
-      if(pp->getError().empty())
-          pp->setError("Error when ending graph export");
+    if(pp->getError().empty())
+      pp->setError("Error when ending graph export");
+
     return false;
   }
+
   return true;
 }

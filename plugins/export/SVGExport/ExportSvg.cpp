@@ -66,7 +66,7 @@ bool ExportSvg::writeHeader(BoundingBox &bb) {
   _res.writeAttribute("viewbox", "0 0 "+ QString::number(width+MARGIN) + " " + QString::number(height+MARGIN));
   _res.writeAttribute("version", "1.1");
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -84,7 +84,7 @@ bool ExportSvg::writeGraph( BoundingBox &bb) {
   _res.writeAttribute("fill", "white");
   _res.writeEndElement();//rect
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -96,7 +96,7 @@ bool ExportSvg::writeMetaGraph(const int transform_X, const int transform_Y, flo
   _res.writeAttribute("desc", "Meta-Graph");
   _res.writeAttribute("transform", "translate("+QString::number(transform_X)+","+QString::number(transform_Y)+") scale(" + QString::number(scale) + "," + QString::number(-scale) + ")"); // Translation for having a cartesian landmark in the middle of the graph
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -106,7 +106,7 @@ bool ExportSvg::writeMetaGraph(const int transform_X, const int transform_Y, flo
 bool ExportSvg::writeEndGraph() {
   _res.writeEndElement();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -116,7 +116,7 @@ bool ExportSvg::writeEnd() {
   _res.writeEndDocument();
   _os << _out.constData();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -127,7 +127,7 @@ bool ExportSvg::groupNode() {
   _res.writeAttribute("id", "Nodes");
   _res.writeAttribute("desc","This is the group of nodes");
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -138,7 +138,7 @@ bool ExportSvg::groupEdge() {
   _res.writeAttribute("id", "Edges");
   _res.writeAttribute("desc","This is the group of edges");
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -147,7 +147,7 @@ bool ExportSvg::groupEdge() {
 bool ExportSvg::endGroupNode() {
   _res.writeEndElement();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -156,7 +156,7 @@ bool ExportSvg::endGroupNode() {
 bool ExportSvg::endGroupEdge() {
   _res.writeEndElement();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -166,7 +166,7 @@ bool ExportSvg::startNode(const unsigned id) {
   _res.writeStartElement("g");
   _res.writeAttribute("id", QString::number(id));
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -175,7 +175,7 @@ bool ExportSvg::startNode(const unsigned id) {
 bool ExportSvg::endNode() {
   _res.writeEndElement();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -185,7 +185,7 @@ bool ExportSvg::startEdge(const unsigned id) {
   _res.writeStartElement("g");
   _res.writeAttribute("id", QString::number(id));
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -194,7 +194,7 @@ bool ExportSvg::startEdge(const unsigned id) {
 bool ExportSvg::endEdge() {
   _res.writeEndElement();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -224,8 +224,9 @@ bool ExportSvg::addLabel(const string &type, const string &label, const Color &l
     _res.writeCharacters(tlp::tlpStringToQString(label));
     _res.writeEndElement(); //text
   }
+
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -235,7 +236,7 @@ bool ExportSvg::addColor(const tlp::Color &color) {
   _res.writeAttribute("fill", tlpColor2SvgColor(color));
   _res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -244,7 +245,7 @@ bool ExportSvg::addColor(const tlp::Color &color) {
 bool ExportSvg::addRotation(const double rotation, const Coord &center) {
   _res.writeAttribute("transform", "rotate("+QString::number(rotation)+","+QString::number(center.getX())+","+QString::number(center.getY())+")");
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -255,7 +256,7 @@ bool ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
   _res.writeAttribute("stroke-opacity", tlpAlphaColor2Opacity(borderColor));
   _res.writeAttribute("stroke-width", QString::number(borderwidth));
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -496,9 +497,10 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.writeAttribute("r", QString::number(w));
     break;
   }
+
   _res.writeEndElement();
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -552,6 +554,7 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
     controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
     controlPoints.push_back(edgeVertice[edgeVertice.size() - 1]);
     vector<Coord> curvePoints;
+
     switch(type) {
     case EdgeShape::Polyline: {
       points += " L";
@@ -559,6 +562,7 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
       for(vector<Coord>::const_iterator it=bends.begin(); it!=bends.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
+
       break;
     }
 
@@ -575,24 +579,29 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
           points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
         }
       }
+
       break;
     }
 
     case EdgeShape::CatmullRomCurve : {
       computeCatmullRomPoints(controlPoints, curvePoints);
       points += " S";
+
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
+
       break;
     }
 
     case EdgeShape::CubicBSplineCurve : {
       computeOpenUniformBsplinePoints(controlPoints, curvePoints);
       points += " S";
+
       for(vector<Coord>::const_iterator it = curvePoints.begin(); it != curvePoints.end(); ++it) {
         points += " " + QString::number(it->getX()) + "," + QString::number(it->getY());
       }
+
       break;
     }
     }
@@ -605,14 +614,14 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
   _res.writeAttribute("stroke", color);
 
   if (src_anchor_shape_type != EdgeExtremityShape::None)
-      _res.writeAttribute("marker-start","url(#Msrc" + QString::number(id_src_shape) + ")");
+    _res.writeAttribute("marker-start","url(#Msrc" + QString::number(id_src_shape) + ")");
 
   if (tgt_anchor_shape_type != EdgeExtremityShape::None)
-      _res.writeAttribute("marker-end","url(#Mtgt" + QString::number(id_tgt_shape) + ")");
+    _res.writeAttribute("marker-end","url(#Mtgt" + QString::number(id_tgt_shape) + ")");
 
   _res.writeEndElement(); // path
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif
@@ -1388,8 +1397,9 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       _res.writeEndElement();// End context "def"
     }
   }
+
 #if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-    return !_res.hasError();
+  return !_res.hasError();
 #else
   return true;
 #endif

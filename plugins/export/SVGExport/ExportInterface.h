@@ -36,8 +36,8 @@ class PluginProgress;
 class ExportInterface {
 
 protected:
-    std::ostream& _os;
-    tlp::PluginProgress* _prg;
+  std::ostream& _os;
+  tlp::PluginProgress* _prg;
 public:
   ExportInterface(tlp::PluginProgress* prg, std::ostream& os);
   virtual ~ExportInterface() {}

@@ -130,15 +130,15 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "Indicates if edge extremities have to be exported." \
   HTML_HELP_CLOSE(),
-    // human readable
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "default", "true" )
-    HTML_HELP_BODY() \
-    "Adds line-breaks and indentation to empty sections between elements\
+  // human readable
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "true" )
+  HTML_HELP_BODY() \
+  "Adds line-breaks and indentation to empty sections between elements\
     (ignorable whitespace). The main purpose of this parameter is to split the data into several lines, and to increase readability for a human reader.\
     Be careful, this adds a large amount of data to the output file."\
-    HTML_HELP_CLOSE(),
+  HTML_HELP_CLOSE(),
 };
 }
 
@@ -176,13 +176,17 @@ public:
   bool exportGraph(ostream &os) {
     pluginProgress->showPreview(false);
     bool autoformatting(true);
+
     if(dataSet!=NULL)
-        dataSet->get("Makes SVG output human readable", autoformatting);
+      dataSet->get("Makes SVG output human readable", autoformatting);
+
     ExportSvg svg(pluginProgress, os, autoformatting); // We call our first concrete builder
     bool ret = ReadGraph::readGraph(graph, dataSet, pluginProgress, svg);
+
     if(!ret&&autoformatting) {
-        pluginProgress->setError(pluginProgress->getError()+"<br/><br/>Human readable output is on. This adds a large amount of data to the output file. Try to disable it and try again.");
+      pluginProgress->setError(pluginProgress->getError()+"<br/><br/>Human readable output is on. This adds a large amount of data to the output file. Try to disable it and try again.");
     }
+
     return ret;
   }
 };
