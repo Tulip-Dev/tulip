@@ -59,9 +59,21 @@ public :
 
   void initFont(const std::string &fontFile);
 
-  void addOrUpdateNodeLabel(const GlGraphInputData &inputData, tlp::node n);
+  void setGraphNodesLabelsToRender(tlp::Graph *graph, const std::vector<tlp::node> &labelsToRender) {
+    _nodesLabelsToRender[graph] = labelsToRender;
+  }
 
   void removeNodeLabel(tlp::Graph *graph, tlp::node n);
+
+  void clearGraphNodesLabelsRenderingData(tlp::Graph *graph);
+
+  void setGraphEdgesLabelsToRender(tlp::Graph *graph, const std::vector<tlp::edge> &labelsToRender) {
+    _edgesLabelsToRender[graph] = labelsToRender;
+  }
+
+  void removeEdgeLabel(tlp::Graph *graph, tlp::edge e);
+
+  void clearGraphEdgesLabelsRenderingData(tlp::Graph *graph);
 
   void setLabelsScaled(const bool labelsScaled) {
     _labelsScaled = labelsScaled;
@@ -80,16 +92,14 @@ public :
     _occlusionTest = occlusionTest;
   }
 
-  void renderGraphNodesLabels(const GlGraphInputData &inputData, const Camera &camera, const tlp::Color &selectionColor);
+  void renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const tlp::Color &selectionColor);
 
   void renderOneLabel(const Camera &camera, const std::string &text, const tlp::BoundingBox &renderingBox,
                       const tlp::Color &labelColor = tlp::Color::Black, const std::string &fontFile = "");
 
-  void clearGraphNodesLabelsRenderingData(tlp::Graph *graph);
 
-  void setGraphNodesLabelsToRender(tlp::Graph *graph, const std::vector<tlp::node> &labelsToRender) {
-    _labelsToRender[graph] = labelsToRender;
-  }
+
+
 
 private :
 
@@ -107,9 +117,12 @@ private :
   std::map<std::string, int> _fontHandles;
   std::string _currentFont;
 
-  std::map<tlp::Graph *, std::vector<tlp::node> > _labelsToRender;
+  std::map<tlp::Graph *, std::vector<tlp::node> > _nodesLabelsToRender;
+  std::map<tlp::Graph *, std::vector<tlp::edge> > _edgesLabelsToRender;
   std::map<tlp::Graph *, std::map<tlp::node, float> > _nodeLabelAspectRatio;
   std::map<tlp::Graph *, std::map<tlp::node, unsigned int> > _nodeLabelNbLines;
+  std::map<tlp::Graph *, std::map<tlp::edge, float> > _edgeLabelAspectRatio;
+  std::map<tlp::Graph *, std::map<tlp::edge, unsigned int> > _edgeLabelNbLines;
 
   bool _labelsScaled;
   float _minSize, _maxSize;

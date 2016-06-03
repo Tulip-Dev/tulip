@@ -173,7 +173,10 @@ bool GlGraphRenderingParameters::displayEdgesLabels()const {
   return _displayEdgesLabels;
 }
 void GlGraphRenderingParameters::setDisplayEdgesLabels(const bool b) {
-  _displayEdgesLabels=b;
+  if (_displayEdgesLabels != b) {
+    _displayEdgesLabels=b;
+    sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
+  }
 }
 //====================================================
 void GlGraphRenderingParameters::setNodesStencil(const int stencil) {

@@ -93,9 +93,6 @@ public:
 
   void computeGraphBoundingBox();
 
-  void prepareNodeLabelData(const tlp::node n);
-  void prepareNodesLabelsData();
-
   void clearEdgesData();
   void addEdgeData(const tlp::edge e);
   void uploadEdgesData();
@@ -173,7 +170,6 @@ private :
   bool _graphElementsPickingMode = false;
 
   std::set<tlp::edge> _edgesToUpdate;
-  std::set<tlp::node> _nodesToUpdate;
 
   std::set<tlp::edge> _edgesToDiscard;
   std::set<tlp::node> _nodesToDiscard;

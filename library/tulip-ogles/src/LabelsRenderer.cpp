@@ -42,6 +42,7 @@
 #include <tulip/GlyphsManager.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/GlGraphInputData.h>
+#include <tulip/ParametricCurves.h>
 
 using namespace std;
 using namespace tlp;
@@ -60,7 +61,35 @@ static vector<string> splitStringToLines(const string &text) {
   return textVector;
 }
 
-static void renderText(NVGcontext *vg, const std::string &text, const tlp::BoundingBox &renderingBox, const tlp::Color &textColor)  {
+Vec2f computeScreenPos(const MatrixGL &transformMatrix, const Vec4i &viewport, const Vec3f &point) {
+  Vec4f screenCoord = Vec4f(point, 1.0) * transformMatrix;
+  screenCoord /= screenCoord[3];
+  screenCoord[0] = (screenCoord[0]+1.)*viewport[2]/2. + viewport[0];
+  screenCoord[1] = (screenCoord[1]+1.)*viewport[3]/2. + viewport[1];
+  return Vec2f(screenCoord[0], screenCoord[1]);
+}
+
+static Vec3f rotatePoint(const Vec3f &center, float angle, const Vec3f &p) {
+  float s = sin(angle);
+  float c = cos(angle);
+
+  Vec3f ret = p;
+
+  // translate point back to origin:
+  ret -= center;
+
+  // rotate point
+  float xnew = ret[0] * c - ret[1] * s;
+  float ynew = ret[0] * s + ret[1] * c;
+
+  // translate point back:
+  ret[0] = xnew + center[0];
+  ret[1] = ynew + center[1];
+  return ret;
+}
+
+static void renderText(NVGcontext *vg, const std::string &text, const tlp::BoundingBox &renderingBox,
+                       const tlp::Color &textColor, float rotation = 0)  {
 
   vector<string> textVector = splitStringToLines(text);
 
@@ -74,6 +103,7 @@ static void renderText(NVGcontext *vg, const std::string &text, const tlp::Bound
     rb[0] = Vec3f(renderingBox[0][0], renderingBox[0][1] + i * fontSize);
     rb[1] = Vec3f(renderingBox[1][0], renderingBox[0][1] + (i+1) * fontSize);
     nvgTranslate(vg, rb.center()[0], rb.center()[1]);
+    nvgRotate(vg, rotation);
     nvgText(vg, 0, 0, textVector[i].c_str(), nullptr);
     nvgResetTransform(vg);
   }
@@ -122,27 +152,14 @@ void LabelsRenderer::setFont(const std::string &fontFile) {
   }
 }
 
-void LabelsRenderer::addOrUpdateNodeLabel(const GlGraphInputData &inputData, node n) {
-  return;
-  const string &label = inputData.getElementLabel()->getNodeValue(n);
-  setFont(inputData.getElementFont()->getNodeValue(n));
-  if (!label.empty()) {
-    _nodeLabelAspectRatio[inputData.getGraph()][n] = getTextAspectRatio(label);
-    _nodeLabelNbLines[inputData.getGraph()][n] = std::count(label.begin(), label.end(), '\n')+1;
-  }
-}
-
 void LabelsRenderer::removeNodeLabel(tlp::Graph *graph, tlp::node n) {
   _nodeLabelAspectRatio[graph].erase(n);
   _nodeLabelNbLines[graph].erase(n);
 }
 
-Vec2f computeScreenPos(const MatrixGL &transformMatrix, const Vec4i &viewport, const Vec3f &point) {
-  Vec4f screenCoord = Vec4f(point, 1.0) * transformMatrix;
-  screenCoord /= screenCoord[3];
-  screenCoord[0] = (screenCoord[0]+1.)*viewport[2]/2. + viewport[0];
-  screenCoord[1] = (screenCoord[1]+1.)*viewport[3]/2. + viewport[1];
-  return Vec2f(screenCoord[0], screenCoord[1]);
+void LabelsRenderer::removeEdgeLabel(tlp::Graph *graph, tlp::edge e) {
+  _edgeLabelAspectRatio[graph].erase(e);
+  _edgeLabelNbLines[graph].erase(e);
 }
 
 tlp::BoundingBox LabelsRenderer::getLabelRenderingBoxScaled(const tlp::BoundingBox &renderingBox, float textAspectRatio) {
@@ -240,6 +257,94 @@ static BoundingBox labelBoundingBoxForNode(const GlGraphInputData &inputData, no
   return BoundingBox(pos - labelSize/2.f, pos + labelSize/2.f);
 }
 
+static Coord getPointOnPolylineAt(const std::vector<Coord> &polyline, float t) {
+
+  if (t == 0) {
+    return polyline.front();
+  } else if (t == 1.0) {
+    return polyline.back();
+  }
+
+  vector<float> ts;
+  ts.resize(polyline.size());
+  float totalDist = 0;
+  for (size_t i = 0 ; i < polyline.size() - 1 ; ++i) {
+    totalDist += polyline[i].dist(polyline[i+1]);
+  }
+  float dist = 0;
+  for (size_t i = 0 ; i < polyline.size() - 1 ; ++i) {
+    ts[i] = dist / totalDist;
+    dist += polyline[i].dist(polyline[i+1]);
+  }
+  ts[polyline.size() - 1] = 1.0;
+
+  size_t idx = 0;
+  while (t >= ts[idx+1]) {
+    ++idx;
+  }
+
+  Coord point = polyline[idx] + (t-ts[idx])/(ts[idx+1] - ts[idx]) * (polyline[idx+1] - polyline[idx]);
+
+  return point;
+
+}
+
+static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const GlGraphInputData &inputData, edge e) {
+  const Coord &srcPos = inputData.getElementLayout()->getNodeValue(inputData.getGraph()->source(e));
+  const Coord &tgtPos = inputData.getElementLayout()->getNodeValue(inputData.getGraph()->target(e));
+  const Size &srcSize = inputData.getElementSize()->getNodeValue(inputData.getGraph()->source(e));
+  const Size &tgtSize = inputData.getElementSize()->getNodeValue(inputData.getGraph()->target(e));
+  double srcRot = inputData.getElementRotation()->getNodeValue(inputData.getGraph()->source(e));
+  double tgtRot = inputData.getElementRotation()->getNodeValue(inputData.getGraph()->target(e));
+  int srcGlyphId = inputData.getElementShape()->getNodeValue(inputData.getGraph()->source(e));
+  int tgtGlyphId = inputData.getElementShape()->getNodeValue(inputData.getGraph()->target(e));
+  const vector<Coord> &bends = inputData.getElementLayout()->getEdgeValue(e);
+  const Size &edgeSize = inputData.getElementSize()->getEdgeValue(e);
+  int edgeShape = inputData.getElementShape()->getEdgeValue(e);
+
+  Coord srcAnchor = (bends.size() > 0) ? bends.front() : tgtPos;
+  srcAnchor = GlyphsManager::instance().getGlyph(srcGlyphId)->getAnchor(srcPos, srcAnchor, srcSize, srcRot);
+
+  Coord tgtAnchor = (bends.size() > 0) ? bends.back() : srcPos;
+  tgtAnchor = GlyphsManager::instance().getGlyph(tgtGlyphId)->getAnchor(tgtPos, tgtAnchor, tgtSize, tgtRot);
+
+  float dist = srcAnchor.dist(tgtAnchor);
+
+  Coord center;
+  float angle = 0;
+
+  if (bends.empty()) {
+    center = (srcPos + tgtPos) / 2.f;
+    angle=atan((tgtPos[1]-srcPos[1])/(tgtPos[0]-srcPos[0]));
+  } else {
+    vector<Coord> controlPoints = {srcPos};
+    controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
+    controlPoints.push_back(tgtPos);
+    Coord prevPoint;
+    if (edgeShape == EdgeShape::BezierCurve ||
+        (edgeShape == EdgeShape::CubicBSplineCurve && controlPoints.size() <= 3)) {
+      prevPoint = computeBezierPoint(controlPoints, 0.45);
+      center = computeBezierPoint(controlPoints, 0.5);
+    } else if (edgeShape == EdgeShape::Polyline) {
+      prevPoint = getPointOnPolylineAt(controlPoints, 0.45);
+      center = getPointOnPolylineAt(controlPoints, 0.5);
+    } else if (edgeShape == EdgeShape::CubicBSplineCurve) {
+      prevPoint = computeOpenUniformBsplinePoint(controlPoints, 0.45);
+      center = computeOpenUniformBsplinePoint(controlPoints, 0.5);
+    } else {
+      prevPoint = computeCatmullRomPoint(controlPoints, 0.45);
+      center = computeCatmullRomPoint(controlPoints, 0.5);
+    }
+    angle=atan((center[1]-prevPoint[1])/(center[0]-prevPoint[0]));
+  }
+
+  BoundingBox renderingBox;
+  renderingBox.expand(center - Vec3f(dist/3.f, 4*edgeSize[1]));
+  renderingBox.expand(center + Vec3f(dist/3.f, 4*edgeSize[1]));
+
+  return make_pair(renderingBox, -angle);
+}
+
 static void adjustTextBoundingBox(BoundingBox &textBB, const Camera &camera, float minSize, float maxSize, unsigned int nbLines) {
   Vec4i viewport = camera.getViewport();
   Vec2f textBBMinScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[0]);
@@ -267,7 +372,7 @@ static void adjustTextBoundingBox(BoundingBox &textBB, const Camera &camera, flo
   textBB[1][1] = ((textBB[1][1] - center[1]) / scale[1]) * scaleY + center[1];
 }
 
-void LabelsRenderer::renderGraphNodesLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor) {
+void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor) {
 
   initFont(TulipViewSettings::instance().defaultFontFile());
 
@@ -282,7 +387,7 @@ void LabelsRenderer::renderGraphNodesLabels(const GlGraphInputData &inputData, c
 
   Graph *graph = inputData.getGraph();
 
-  for (node n :_labelsToRender[graph]) {
+  for (node n :_nodesLabelsToRender[graph]) {
 
     setFont(inputData.getElementFont()->getNodeValue(n));
 
@@ -355,9 +460,78 @@ void LabelsRenderer::renderGraphNodesLabels(const GlGraphInputData &inputData, c
       bb.expand(Vec3f(textBBMaxScr[0], viewport[3] - textBBMaxScr[1]));
 
       renderText(vg, label, bb, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n));
+    }
+  }
 
+  for (edge e : _edgesLabelsToRender[graph]) {
+
+    bool canRender = true;
+
+    setFont(inputData.getElementFont()->getEdgeValue(e));
+
+    const std::string &label = inputData.getElementLabel()->getEdgeValue(e);
+
+    if (label.empty()) {
+      continue;
     }
 
+    if (_edgeLabelAspectRatio[graph].find(e) == _edgeLabelAspectRatio[graph].end()) {
+      _edgeLabelAspectRatio[graph][e] = getTextAspectRatio(label);
+      _edgeLabelNbLines[graph][e] = std::count(label.begin(), label.end(), '\n')+1;
+    }
+
+    pair<BoundingBox, float> edgeBB = labelBoundingBoxAndAngleForEdge(inputData, e);
+
+    BoundingBox textBB = getLabelRenderingBoxScaled(edgeBB.first, _edgeLabelAspectRatio[graph][e]);
+
+    if (!_labelsScaled) {
+      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _edgeLabelNbLines[graph][e]);
+    }
+
+    if (_occlusionTest) {
+
+      vector<Vec2f> textScrRect;
+      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, textBB[0])));
+      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, Vec3f(textBB[0][0]+textBB.width(), textBB[0][1], textBB[0][2]))));
+      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, textBB[1])));
+      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, Vec3f(textBB[0][0], textBB[0][1]+textBB.height(), textBB[0][2]))));
+
+      for (size_t i = 0 ; i < renderedLabelsScrRect.size() ; ++i) {
+        if (convexPolygonsIntersect(textScrRect, renderedLabelsScrRect[i])) {
+          canRender = false;
+          break;
+        }
+      }
+
+      if (canRender) {
+
+        for (size_t i = 0 ; i < renderedLabelsScrBB.size() ; ++i) {
+          vector<Vec2f> textScrBB;
+          textScrBB.push_back(Vec2f(renderedLabelsScrBB[i][0]));
+          textScrBB.push_back(Vec2f(renderedLabelsScrBB[i][0])+Vec2f(renderedLabelsScrBB[i].width(), 0));
+          textScrBB.push_back(Vec2f(renderedLabelsScrBB[i][1]));
+          textScrBB.push_back(Vec2f(renderedLabelsScrBB[i][0])+Vec2f(0,renderedLabelsScrBB[i].height()));
+
+          if (convexPolygonsIntersect(textScrRect, textScrBB)) {
+            canRender = false;
+            break;
+          }
+        }
+      }
+
+      if (canRender) {
+        renderedLabelsScrRect.push_back(textScrRect);
+
+        Vec2f textBBMinScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[0]);
+        Vec2f textBBMaxScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[1]);
+        BoundingBox bb;
+        bb.expand(Vec3f(textBBMinScr[0], viewport[3] - textBBMinScr[1]));
+        bb.expand(Vec3f(textBBMaxScr[0], viewport[3] - textBBMaxScr[1]));
+
+        renderText(vg, label, bb, inputData.getElementSelection()->getEdgeValue(e) ? selectionColor : inputData.getElementLabelColor()->getEdgeValue(e), edgeBB.second);
+      }
+
+    }
   }
 
   nvgEndFrame(vg);
@@ -367,6 +541,12 @@ void LabelsRenderer::clearGraphNodesLabelsRenderingData(Graph *graph) {
   if (!graph) return;
   _nodeLabelNbLines.erase(graph);
   _nodeLabelAspectRatio.erase(graph);
+}
+
+void LabelsRenderer::clearGraphEdgesLabelsRenderingData(Graph *graph) {
+  if (!graph) return;
+  _edgeLabelNbLines.erase(graph);
+  _edgeLabelAspectRatio.erase(graph);
 }
 
 

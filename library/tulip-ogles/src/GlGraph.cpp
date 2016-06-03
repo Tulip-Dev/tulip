@@ -385,6 +385,29 @@ private:
 };
 
 
+struct EdgesLabelsSorting {
+
+  EdgesLabelsSorting(BooleanProperty *selection, NumericProperty *metric = nullptr) : _selection(selection), _metric(metric) {}
+
+  bool operator()(const tlp::edge &e1, const tlp::edge &e2) const {
+    if (_selection->getEdgeValue(e1) && !_selection->getEdgeValue(e2)) {
+      return true;
+    } else if (!_selection->getEdgeValue(e1) && _selection->getEdgeValue(e2)) {
+      return false;
+    } else if (_metric) {
+      return (_metric->getEdgeDoubleValue(e1) > _metric->getEdgeDoubleValue(e2));
+    } else {
+      return e1.id < e2.id;
+    }
+  }
+
+private:
+
+  BooleanProperty *_selection;
+  NumericProperty *_metric;
+
+};
+
 class GreatThanNode {
 
 public:
@@ -503,6 +526,7 @@ void GlGraph::setGraph(tlp::Graph *graph) {
   if (_graph) {
     clearObservers();
     _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
+    _labelsRenderer->clearGraphEdgesLabelsRenderingData(_graph);
   }
 
   _graph = graph;
@@ -516,7 +540,6 @@ void GlGraph::setGraph(tlp::Graph *graph) {
   computeGraphBoundingBox();
 
   _edgesToUpdate.clear();
-  _nodesToUpdate.clear();
 
   prepareEdgesData();
 
@@ -666,19 +689,6 @@ void GlGraph::uploadEdgesData() {
 
 }
 
-void GlGraph::prepareNodesLabelsData() {
-  _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
-  if (_graph->numberOfNodes() > 0) {
-    for(node n : _graph->getNodes()) {
-      prepareNodeLabelData(n);
-    }
-  }
-}
-
-void GlGraph::prepareNodeLabelData(const tlp::node n) {
-  _labelsRenderer->addOrUpdateNodeLabel(_inputData, n);
-}
-
 void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
 
   if (!_graph || _graph->numberOfNodes() == 0) return;
@@ -739,6 +749,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   _nodesGlyphs.clear();
 
   vector<node> nodesLabelsToRender;
+  vector<edge> edgesLabelsToRender;
   vector<node> selectedNodes;
   vector<node> pointsNodes;
   vector<node> glyphsNodes;
@@ -752,12 +763,14 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     if (nodesLodResult[i].lod < 0 || _nodesToDiscard.find(nodesLodResult[i].n) != _nodesToDiscard.end()) continue;
     if (nodesLodResult[i].lod < 10 && !_renderingParameters.bypassLodSystem()) {
       pointsNodes.push_back(nodesLodResult[i].n);
-      if (!_renderingParameters.labelsScaled()) {
+      if (!_renderingParameters.labelsScaled() && _renderingParameters.displayNodesLabels()) {
         nodesLabelsToRender.push_back(nodesLodResult[i].n);
       }
       continue;
     }
-    nodesLabelsToRender.push_back(nodesLodResult[i].n);
+    if (_renderingParameters.displayNodesLabels()) {
+      nodesLabelsToRender.push_back(nodesLodResult[i].n);
+    }
     glyphsNodes.push_back(nodesLodResult[i].n);
     int glyphId = _inputData.getElementShape()->getNodeValue(nodesLodResult[i].n);
     if (glyphId == tlp::NodeShape::FontAwesomeIcon) {
@@ -793,12 +806,18 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       } else {
         lineEdges.push_back(edgesLodResult[i].e);
       }
+      if (_renderingParameters.displayEdgesLabels()) {
+        edgesLabelsToRender.push_back(edgesLodResult[i].e);
+      }
     }
     else {
       if (_inputData.getElementSelection()->getEdgeValue(edgesLodResult[i].e)) {
         selectedQuadsEdges.push_back(edgesLodResult[i].e);
       } else {
         quadsEdges.push_back(edgesLodResult[i].e);
+      }
+      if (_renderingParameters.displayEdgesLabels()) {
+        edgesLabelsToRender.push_back(edgesLodResult[i].e);
       }
     }
   }
@@ -903,10 +922,11 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
 
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_STENCIL_TEST);
-  if (!_graphElementsPickingMode && _renderingParameters.displayNodesLabels()) {
+  if (!_graphElementsPickingMode) {
     _labelsRenderer->setLabelsScaled(_renderingParameters.labelsScaled());
     _labelsRenderer->setMinMaxSizes(_renderingParameters.minSizeOfLabels(), _renderingParameters.maxSizeOfLabels());
     std::sort(nodesLabelsToRender.begin(), nodesLabelsToRender.end(), NodesLabelsSorting(_inputData.getElementSelection(), orderingProperty));
+    std::sort(edgesLabelsToRender.begin(), edgesLabelsToRender.end(), EdgesLabelsSorting(_inputData.getElementSelection(), orderingProperty));
     if (_renderingParameters.elementsOrdered() && orderingProperty && !_renderingParameters.elementsOrderedDescending()) {
       vector<node>::iterator itN = nodesLabelsToRender.begin();
       while (itN != nodesLabelsToRender.end()) {
@@ -917,9 +937,20 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
         }
       }
       std::reverse(nodesLabelsToRender.begin(), itN);
+
+      vector<edge>::iterator itE = edgesLabelsToRender.begin();
+      while (itE != edgesLabelsToRender.end()) {
+        if (_inputData.getElementSelection()->getEdgeValue(*itE)) {
+          break;
+        } else {
+          ++itE;
+        }
+      }
+      std::reverse(edgesLabelsToRender.begin(), itE);
     }
     _labelsRenderer->setGraphNodesLabelsToRender(_graph, nodesLabelsToRender);
-    _labelsRenderer->renderGraphNodesLabels(_inputData, camera, _renderingParameters.selectionColor());
+    _labelsRenderer->setGraphEdgesLabelsToRender(_graph, edgesLabelsToRender);
+    _labelsRenderer->renderGraphElementsLabels(_inputData, camera, _renderingParameters.selectionColor());
   }
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_STENCIL_TEST);
@@ -1815,14 +1846,7 @@ void GlGraph::treatEvent(const tlp::Event &message) {
   const PropertyEvent *pEvt = dynamic_cast<const PropertyEvent *>(&message);
   const GlGraphRenderingParametersEvent *rpEvt = dynamic_cast<const GlGraphRenderingParametersEvent *>(&message);
   if (gEvt) {
-    if (gEvt->getType() == GraphEvent::TLP_ADD_NODE) {
-      _nodesToUpdate.insert(gEvt->getNode());
-    } else if (gEvt->getType() == GraphEvent::TLP_ADD_NODES) {
-      const std::vector<node> nodes = gEvt->getNodes();
-      for (size_t i = 0 ; i < nodes.size() ; ++i) {
-        _nodesToUpdate.insert(nodes[i]);
-      }
-    } else if (gEvt->getType() == GraphEvent::TLP_DEL_NODE) {
+    if (gEvt->getType() == GraphEvent::TLP_DEL_NODE) {
       _labelsRenderer->removeNodeLabel(_graph, gEvt->getNode());
       _updateQuadTree = true;
       notifyModified();
@@ -1864,11 +1888,13 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     }
   } else if (pEvt && pEvt->getProperty() == _inputData.getElementLabel()) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && _graph->isElement(pEvt->getNode())) {
-      _nodesToUpdate.insert(pEvt->getNode());
+      _labelsRenderer->removeNodeLabel(_graph, pEvt->getNode());
     } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
-      for(node n : _graph->getNodes()) {
-        _nodesToUpdate.insert(n);
-      }
+      _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
+    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE && _graph->isElement(pEvt->getEdge())) {
+      _labelsRenderer->removeEdgeLabel(_graph, pEvt->getEdge());
+    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
+      _labelsRenderer->clearGraphEdgesLabelsRenderingData(_graph);
     }
   } else if (pEvt && (pEvt->getProperty() == _inputData.getElementShape() || pEvt->getProperty() == _inputData.getElementBorderWidth() || pEvt->getProperty() == _inputData.getElementBorderColor())) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
@@ -1882,9 +1908,7 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE || pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
       notifyModified();
     }
-  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementGlow() || pEvt->getProperty() == _inputData.getElementFontAwesomeIcon() || pEvt->getProperty() == _inputData.getElementLabelColor()) &&
-             (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE || pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE)) {
-
+  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementGlow() || pEvt->getProperty() == _inputData.getElementFontAwesomeIcon() || pEvt->getProperty() == _inputData.getElementLabelColor())) {
     notifyModified();
   } else if (pEvt && (pEvt->getProperty() == _inputData.getElementSelection() || pEvt->getProperty() == _inputData.getElementLabelPosition())) {
     notifyModified();
@@ -1895,6 +1919,12 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
       _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
       _labelsRenderer->initFont(_inputData.getElementFont()->getNodeDefaultValue());
+    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
+      _labelsRenderer->removeEdgeLabel(_graph, pEvt->getEdge());
+      _labelsRenderer->initFont(_inputData.getElementFont()->getEdgeValue(pEvt->getEdge()));
+    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
+      _labelsRenderer->clearGraphEdgesLabelsRenderingData(_graph);
+      _labelsRenderer->initFont(_inputData.getElementFont()->getEdgeDefaultValue());
     }
     notifyModified();
   } else if (rpEvt && (rpEvt->getType() == GlGraphRenderingParametersEvent::DISPLAY_EDGES_EXTREMITIES_TOGGLED)) {
@@ -1908,12 +1938,7 @@ void GlGraph::treatEvent(const tlp::Event &message) {
 
 void GlGraph::treatEvents(const std::vector<tlp::Event> &) {
 
-  if (!_edgesToUpdate.empty() || !_nodesToUpdate.empty()) {
-
-    set<node>::iterator itN;
-    for (itN = _nodesToUpdate.begin() ; itN != _nodesToUpdate.end() ; ++itN) {
-      prepareNodeLabelData(*itN);
-    }
+  if (!_edgesToUpdate.empty()) {
 
     set<edge>::iterator itE;
     for (itE = _edgesToUpdate.begin() ; itE != _edgesToUpdate.end() ; ++itE) {
@@ -1924,7 +1949,6 @@ void GlGraph::treatEvents(const std::vector<tlp::Event> &) {
     }
 
     _edgesToUpdate.clear();
-    _nodesToUpdate.clear();
 
     computeGraphBoundingBox();
 
