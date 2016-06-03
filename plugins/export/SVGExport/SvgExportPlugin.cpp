@@ -16,11 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "RepresentExport.h"
 #include "ReadGraph.h"
 #include "ExportSvg.h"
-
-#include <iostream>
 
 #include <tulip/ExportModule.h>
 #include <tulip/LayoutProperty.h>
@@ -133,24 +130,32 @@ const char * paramHelp[] = {
   HTML_HELP_BODY() \
   "Indicates if edge extremities have to be exported." \
   HTML_HELP_CLOSE(),
+    // human readable
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "bool" ) \
+    HTML_HELP_DEF( "default", "true" )
+    HTML_HELP_BODY() \
+    "Adds line-breaks and indentation to empty sections between elements\
+    (ignorable whitespace). The main purpose of this parameter is to split the data into several lines, and to increase readability for a human reader.\
+    Be careful, this adds a large amount of data to the output file."\
+    HTML_HELP_CLOSE(),
 };
 }
 
 class svgExport:public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.6", "File")
+  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.7", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
   }
 
-  std::string fileExtension() const {
+  string fileExtension() const {
     return "svg";
   }
 
   svgExport(tlp::PluginContext* context) : tlp::ExportModule(context) {
-
     addInParameter<LayoutProperty>("Element's layout property", paramHelp[0], "viewLayout");
     addInParameter<ColorProperty>("Element's color property", paramHelp[1], "viewColor");
     addInParameter<IntegerProperty>("Element's shape property", paramHelp[2], "viewShape");
@@ -165,25 +170,20 @@ public:
     addInParameter<bool>("Edge color interpolation", paramHelp[11], "false");
     addInParameter<bool>("Edge size interpolation", paramHelp[12], "true");
     addInParameter<bool>("Edge extremities", paramHelp[13], "false");
+    addInParameter<bool>("Makes SVG output human readable", paramHelp[14], "true");
   }
-
-  ~svgExport() {}
 
   bool exportGraph(ostream &os) {
-
     pluginProgress->showPreview(false);
-    RepresentExport *svg = new ExportSvg(pluginProgress); // We call our first concrete builder
-    ReadGraph gr1(graph, dataSet, pluginProgress, svg); // We analyse the graph
-
-    if(pluginProgress->getError().empty()) {
-      os << gr1; // We retrieve the result
+    bool autoformatting(true);
+    if(dataSet!=NULL)
+        dataSet->get("Makes SVG output human readable", autoformatting);
+    ExportSvg svg(pluginProgress, os, autoformatting); // We call our first concrete builder
+    bool ret = ReadGraph::readGraph(graph, dataSet, pluginProgress, svg);
+    if(!ret&&autoformatting) {
+        pluginProgress->setError(pluginProgress->getError()+"<br/><br/>Human readable output is on. This adds a large amount of data to the output file. Try to disable it and try again.");
     }
-
-    delete svg;
-    return pluginProgress->getError().empty();
-
+    return ret;
   }
-
-
 };
 PLUGIN(svgExport)

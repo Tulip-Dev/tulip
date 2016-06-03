@@ -1,7 +1,3 @@
-#ifndef READGRAPH_H
-#define READGRAPH_H
-
-
 /**
  *
  * This file is part of Tulip (www.tulip-software.org)
@@ -20,18 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include "ExportInterface.h"
 
-class ExportInterface;
+ExportInterface::ExportInterface(tlp::PluginProgress *prg, std::ostream &os):_os(os),_prg(prg){
 
-namespace tlp {
-class Graph;
-class DataSet;
-class PluginProgress;
 }
-
-// Director
-struct ReadGraph {
-  static bool readGraph(tlp::Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *pp, ExportInterface &exportint);
-};
-
-#endif // READGRAPH_H
