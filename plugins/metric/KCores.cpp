@@ -16,9 +16,12 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/TulipPluginHeaders.h>
-#include <tulip/StringCollection.h>
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include <climits>
+#include <tulip/StringCollection.h>
+#include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
 using namespace tlp;
@@ -43,10 +46,12 @@ using namespace tlp;
  *
  * C. Giatsidis, D. Thilikos, M. Vazirgiannis, \n
  * "Evaluating cooperation in communities with the k-core structure",\n
- * "Proceedings of the 2011 International Conference on Advances in Social Networks Analysis and Mining (ASONAM)",\n
+ * "Proceedings of the 2011 International Conference on Advances in Social
+ * Networks Analysis and Mining (ASONAM)",\n
  * "2011"
  *
- * \note Use the default parameters to compute simple K-Cores (undirected and unweighted)
+ * \note Use the default parameters to compute simple K-Cores (undirected and
+ * unweighted)
  *
  *  <b>HISTORY</b>
  *
@@ -58,14 +63,19 @@ using namespace tlp;
  *
  *
  */
-class KCores:public tlp::DoubleAlgorithm {
+class KCores : public tlp::DoubleAlgorithm {
 public:
-
-  PLUGININFORMATION("K-Cores", "David Auber","28/05/2006",
-                    "Node partitioning measure based on the K-core decomposition of a graph.<br/>"
-                    "K-cores were first introduced in:<br/><b>Network structure and minimum degree</b>, S. B. Seidman, Social Networks 5:269-287 (1983).<br/>"
-                    "This is a method for simplifying a graph topology which helps in analysis and visualization of social networks.<br>"
-                    "<b>Note</b>: use the default parameters to compute simple K-Cores (undirected and unweighted).",
+  PLUGININFORMATION("K-Cores", "David Auber", "28/05/2006",
+                    "Node partitioning measure based on the K-core "
+                    "decomposition of a graph.<br/>"
+                    "K-cores were first introduced in:<br/><b>Network "
+                    "structure and minimum degree</b>, S. B. Seidman, Social "
+                    "Networks 5:269-287 (1983).<br/>"
+                    "This is a method for simplifying a graph topology which "
+                    "helps in analysis and visualization of social "
+                    "networks.<br>"
+                    "<b>Note</b>: use the default parameters to compute simple "
+                    "K-Cores (undirected and unweighted).",
                     "2.0", "Graph")
 
   KCores(const tlp::PluginContext *context);
@@ -75,22 +85,16 @@ public:
 
 //========================================================================================
 namespace {
-const char * paramHelp[] = {
-  //direction
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "InOut" )  \
-  HTML_HELP_BODY() \
-  "This parameter indicates the direction used to compute K-Cores values."  \
-  HTML_HELP_CLOSE(),
-  // metric
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "NumericProperty" )       \
-  HTML_HELP_DEF( "value", "An existing edge metric" )   \
-  HTML_HELP_BODY()              \
-  "An existing edge metric property"\
-  HTML_HELP_CLOSE()
-};
+const char *paramHelp[] = {
+    // direction
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "String Collection")
+        HTML_HELP_DEF("default", "InOut")
+            HTML_HELP_BODY() "This parameter indicates the direction used to "
+                             "compute K-Cores values." HTML_HELP_CLOSE(),
+    // metric
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "NumericProperty") HTML_HELP_DEF(
+        "value", "An existing edge metric")
+        HTML_HELP_BODY() "An existing edge metric property" HTML_HELP_CLOSE()};
 }
 #define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
@@ -98,36 +102,58 @@ const char * paramHelp[] = {
 #define IN 1
 #define OUT 2
 //========================================================================================
-KCores::KCores(const PluginContext *context):DoubleAlgorithm(context) {
+KCores::KCores(const PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
-  addInParameter<NumericProperty*>("metric",paramHelp[1],"",false);
-  addDependency("Degree","1.0");
+  addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
+  addDependency("Degree", "1.0");
 }
 //========================================================================================
 KCores::~KCores() {}
 //========================================================================================
+// to maximize the locality of reference we will use a vector
+// holding the all the nodes needed infos in the structure below
+struct nodeInfos {
+  node n;
+  double k;
+  bool deleted;
+};
+
 bool KCores::run() {
-  NumericProperty* metric = nullptr;
+  NumericProperty *metric = nullptr;
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
 
-  if (dataSet!=nullptr) {
+  if (dataSet != nullptr) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", metric);
   }
 
   unsigned int degree_type = degreeTypes.getCurrent();
 
-  string errMsg="";
-  graph->applyPropertyAlgorithm("Degree", result, errMsg,
-                                pluginProgress, dataSet);
+  string errMsg = "";
+  graph->applyPropertyAlgorithm("Degree", result, errMsg, pluginProgress,
+                                dataSet);
 
-  // keep track of deleted nodes
-  MutableContainer<bool> deleted;
   // the number of non deleted nodes
   unsigned int nbNodes = graph->numberOfNodes();
+
+  node n;
+  unsigned int i = 0;
   // the famous k
-  double k = result->getNodeMin();
+  double k = DBL_MAX;
+  // record nodes infos in a vector to improve
+  // the locality of reference during the multiple
+  // needed nodes loop
+  std::vector<nodeInfos> nodesInfos(nbNodes);
+  MutableContainer<unsigned int> toNodesInfos;
+  forEach(n, graph->getNodes()) {
+    nodeInfos &nInfos = nodesInfos[i];
+    nInfos.n = n;
+    nInfos.k = result->getNodeValue(n);
+    k = std::min(k, nInfos.k);
+    nInfos.deleted = false;
+    toNodesInfos.set(n.id, i++);
+  }
 
   // loop on remaining nodes
   while (nbNodes > 0) {
@@ -136,19 +162,22 @@ bool KCores::run() {
 
     while (modify) {
       modify = false;
-      for(node n : graph->getNodes()) {
+      // finally set the values
+      for (i = 0; i < nodesInfos.size(); ++i) {
+        nodeInfos &nInfos = nodesInfos[i];
         // nothing to do if the node
-        // has been already deleted
-        if (deleted.get(n.id))
+        // is already deleted
+        if (nInfos.deleted)
           continue;
+        node n = nInfos.n;
 
-        double val = result->getNodeValue(n);
+        unsigned int current_k = nInfos.k;
 
-        if (val <= k) {
-          result->setNodeValue(n, k);
-          Iterator<edge>* ite;
+        if (current_k <= k) {
+          nInfos.k = k;
+          Iterator<edge> *ite;
 
-          switch(degree_type) {
+          switch (degree_type) {
           case INOUT:
             ite = graph->getInOutEdges(n);
             break;
@@ -163,29 +192,39 @@ bool KCores::run() {
           }
 
           // decrease neighbours weighted degree
-          while(ite->hasNext()) {
+          while (ite->hasNext()) {
             edge ee = ite->next();
             node m = graph->opposite(ee, n);
 
-            if (deleted.get(m.id))
+            nodeInfos &mInfos = nodesInfos[toNodesInfos.get(m.id)];
+            if (mInfos.deleted)
               continue;
-
-            result->setNodeValue(m, result->getNodeValue(m) -
-                                 (metric ? metric->getEdgeDoubleValue(ee) : 1));
+            if (metric)
+              mInfos.k -= metric->getEdgeDoubleValue(ee);
+            else
+              mInfos.k -= 1;
           }
+          delete ite;
 
           // mark node as deleted
-          deleted.set(n.id, true);
+          nInfos.deleted = true;
           --nbNodes;
           modify = true;
-        }
-        else if (val < next_k)
+        } else if (current_k < next_k)
           // update next k value
-          next_k = val;
+          next_k = current_k;
       }
     }
 
     k = next_k;
+  }
+// finally set the values
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+  for (i = 0; i < nodesInfos.size(); ++i) {
+    nodeInfos &nInfos = nodesInfos[i];
+    result->setNodeValue(nInfos.n, nInfos.k);
   }
 
   return true;
