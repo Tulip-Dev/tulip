@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/StringCollection.h>
 #include <climits>
@@ -106,6 +109,14 @@ KCores::KCores(const PluginContext *context):DoubleAlgorithm(context) {
 //========================================================================================
 KCores::~KCores() {}
 //========================================================================================
+// to maximize the locality of reference we will use a vector
+// holding the all the nodes needed infos in the structure below
+struct nodeInfos {
+  node n;
+  double k;
+  bool deleted;
+};
+
 bool KCores::run() {
   NumericProperty* metric = NULL;
   StringCollection degreeTypes(DEGREE_TYPES);
@@ -120,14 +131,28 @@ bool KCores::run() {
 
   string errMsg="";
   graph->applyPropertyAlgorithm("Degree", result, errMsg,
-                                pluginProgress, dataSet);
-
-  // keep track of deleted nodes
-  MutableContainer<bool> deleted;
+  pluginProgress, dataSet);
+  
   // the number of non deleted nodes
   unsigned int nbNodes = graph->numberOfNodes();
+  
+  node n;
+  unsigned int i = 0;
   // the famous k
-  double k = result->getNodeMin();
+  double k = DBL_MAX;
+  // record nodes infos in a vector to improve
+  // the locality of reference during the multiple
+  // needed nodes loop
+  std::vector<nodeInfos> nodesInfos(nbNodes);
+  MutableContainer<unsigned int> toNodesInfos;  
+  forEach(n, graph->getNodes()) {
+    nodeInfos& nInfos = nodesInfos[i];
+    nInfos.n = n;
+    nInfos.k = result->getNodeValue(n);
+    k = std::min(k, nInfos.k);
+    nInfos.deleted = false;
+    toNodesInfos.set(n.id, i++);
+  }
 
   // loop on remaining nodes
   while (nbNodes > 0) {
@@ -136,17 +161,19 @@ bool KCores::run() {
 
     while (modify) {
       modify = false;
-      node n;
-      forEach(n, graph->getNodes()) {
+      // finally set the values
+      for (i = 0; i < nodesInfos.size(); ++i) {
+	nodeInfos& nInfos = nodesInfos[i];
         // nothing to do if the node
-        // has been already deleted
-        if (deleted.get(n.id))
+        // is already deleted
+        if (nInfos.deleted)
           continue;
+	node n = nInfos.n;
 
-        double val = result->getNodeValue(n);
+        unsigned int current_k = nInfos.k;
 
-        if (val <= k) {
-          result->setNodeValue(n, k);
+        if (current_k <= k) {
+	  nInfos.k = k;
           Iterator<edge>* ite;
 
           switch(degree_type) {
@@ -168,27 +195,38 @@ bool KCores::run() {
             edge ee = ite->next();
             node m = graph->opposite(ee, n);
 
-            if (deleted.get(m.id))
+	    nodeInfos& mInfos = nodesInfos[toNodesInfos.get(m.id)];
+            if (mInfos.deleted)
               continue;
-
-            result->setNodeValue(m, result->getNodeValue(m) -
-                                 (metric ? metric->getEdgeDoubleValue(ee) : 1));
+	    if (metric)
+	      mInfos.k -= metric->getEdgeDoubleValue(ee);
+	    else
+	      mInfos.k -= 1;
           }
+	  delete ite;
 
           // mark node as deleted
-          deleted.set(n.id, true);
+          nInfos.deleted = true;
           --nbNodes;
           modify = true;
         }
-        else if (val < next_k)
+        else if (current_k < next_k)
           // update next k value
-          next_k = val;
+          next_k = current_k;
       }
     }
 
     k = next_k;
   }
-
+  // finally set the values
+#ifdef _OPENMP
+    #pragma omp parallel for
+#endif
+  for (i = 0; i < nodesInfos.size(); ++i) {
+    nodeInfos& nInfos = nodesInfos[i];
+    result->setNodeValue(nInfos.n, nInfos.k);
+  }
+  
   return true;
 }
 //========================================================================================
