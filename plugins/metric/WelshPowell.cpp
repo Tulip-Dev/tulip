@@ -71,8 +71,10 @@ class WelshPowell:public DoubleAlgorithm {
   struct nodesInfosCmp {
     bool operator()(const nodeInfos& u, const nodeInfos& v) {
       int du = u.val, dv = v.val;
+
       if (du == dv)
-	return u.n.id > v.n.id;
+        return u.n.id > v.n.id;
+
       return du > dv;
     }
   };
@@ -96,6 +98,7 @@ public:
     sort(nodesInfos.begin(), nodesInfos.end(), nodesInfosCmp());
     // build a map
     MutableContainer<unsigned int> toNodesInfos;
+
     for (i = 0; i < nbNodes; ++i) {
       nodeInfos& nInfos = nodesInfos[i];
       // initialize the value
@@ -118,42 +121,46 @@ public:
 #ifndef NDEBUG
         cout << "i:" <<  i << endl;
 #endif
-	nodeInfos& nInfos = nodesInfos[i];
+        nodeInfos& nInfos = nodesInfos[i];
+
         if (nInfos.val == -1) {
-	  bool sameColor = false;
-	  node u;
-	  forEach(u, graph->getInOutNodes(nInfos.n)) {
-	    if (nodesInfos[toNodesInfos.get(u.id)].val == currentColor) {
-	      sameColor = true;
-	      break;
-	    }
-	  }
+          bool sameColor = false;
+          node u;
+          forEach(u, graph->getInOutNodes(nInfos.n)) {
+            if (nodesInfos[toNodesInfos.get(u.id)].val == currentColor) {
+              sameColor = true;
+              break;
+            }
+          }
+
           if (!sameColor) {
 #ifndef NDEBUG
-	    cout << "new node found color : " << currentColor << endl;
+            cout << "new node found color : " << currentColor << endl;
 #endif
-	    nInfos.val = currentColor;
-	    ++numberOfColoredNodes;
+            nInfos.val = currentColor;
+            ++numberOfColoredNodes;
 
-	    if (i == minIndex)
-	      ++minIndex;
+            if (i == minIndex)
+              ++minIndex;
           }
-        else
-           nextMaxIndex = i + 1;
-	}
-      else if (i == minIndex)
-	++minIndex;
+          else
+            nextMaxIndex = i + 1;
+        }
+        else if (i == minIndex)
+          ++minIndex;
       }
 
       maxIndex = nextMaxIndex;
       ++currentColor;
     }
-  // finally set the values
-  for (i = 0; i < nbNodes; ++i) {
-    nodeInfos& nInfos = nodesInfos[i];
-    result->setNodeValue(nInfos.n, nInfos.val);
-  }
-  return true;
+
+    // finally set the values
+    for (i = 0; i < nbNodes; ++i) {
+      nodeInfos& nInfos = nodesInfos[i];
+      result->setNodeValue(nInfos.n, nInfos.val);
+    }
+
+    return true;
   }
 };
 /*@}*/

@@ -93,8 +93,10 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
 
     if (dts) {
       bool result = dts->setData(dataSet, name, defaultValue);
+
       if (!result)
-	tlp::error() << "Unable to parse \"" << defaultValue.c_str() << "\" as a default value for parameter \"" << name.c_str() << "\"" << std::endl;
+        tlp::error() << "Unable to parse \"" << defaultValue.c_str() << "\" as a default value for parameter \"" << name.c_str() << "\"" << std::endl;
+
       assert(result);
       continue;
     }

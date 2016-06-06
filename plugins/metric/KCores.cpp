@@ -131,11 +131,11 @@ bool KCores::run() {
 
   string errMsg="";
   graph->applyPropertyAlgorithm("Degree", result, errMsg,
-  pluginProgress, dataSet);
-  
+                                pluginProgress, dataSet);
+
   // the number of non deleted nodes
   unsigned int nbNodes = graph->numberOfNodes();
-  
+
   node n;
   unsigned int i = 0;
   // the famous k
@@ -144,7 +144,7 @@ bool KCores::run() {
   // the locality of reference during the multiple
   // needed nodes loop
   std::vector<nodeInfos> nodesInfos(nbNodes);
-  MutableContainer<unsigned int> toNodesInfos;  
+  MutableContainer<unsigned int> toNodesInfos;
   forEach(n, graph->getNodes()) {
     nodeInfos& nInfos = nodesInfos[i];
     nInfos.n = n;
@@ -161,19 +161,22 @@ bool KCores::run() {
 
     while (modify) {
       modify = false;
+
       // finally set the values
       for (i = 0; i < nodesInfos.size(); ++i) {
-	nodeInfos& nInfos = nodesInfos[i];
+        nodeInfos& nInfos = nodesInfos[i];
+
         // nothing to do if the node
         // is already deleted
         if (nInfos.deleted)
           continue;
-	node n = nInfos.n;
+
+        node n = nInfos.n;
 
         unsigned int current_k = nInfos.k;
 
         if (current_k <= k) {
-	  nInfos.k = k;
+          nInfos.k = k;
           Iterator<edge>* ite;
 
           switch(degree_type) {
@@ -195,15 +198,18 @@ bool KCores::run() {
             edge ee = ite->next();
             node m = graph->opposite(ee, n);
 
-	    nodeInfos& mInfos = nodesInfos[toNodesInfos.get(m.id)];
+            nodeInfos& mInfos = nodesInfos[toNodesInfos.get(m.id)];
+
             if (mInfos.deleted)
               continue;
-	    if (metric)
-	      mInfos.k -= metric->getEdgeDoubleValue(ee);
-	    else
-	      mInfos.k -= 1;
+
+            if (metric)
+              mInfos.k -= metric->getEdgeDoubleValue(ee);
+            else
+              mInfos.k -= 1;
           }
-	  delete ite;
+
+          delete ite;
 
           // mark node as deleted
           nInfos.deleted = true;
@@ -218,15 +224,17 @@ bool KCores::run() {
 
     k = next_k;
   }
+
   // finally set the values
 #ifdef _OPENMP
-    #pragma omp parallel for
+  #pragma omp parallel for
 #endif
+
   for (i = 0; i < nodesInfos.size(); ++i) {
     nodeInfos& nInfos = nodesInfos[i];
     result->setNodeValue(nInfos.n, nInfos.k);
   }
-  
+
   return true;
 }
 //========================================================================================
