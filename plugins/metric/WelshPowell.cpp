@@ -22,13 +22,11 @@
 using namespace std;
 using namespace tlp;
 
-
 class CompNodes {
 
-public :
-  Graph * graph;
-  CompNodes(Graph *g):graph(g) {
-  }
+public:
+  Graph *graph;
+  CompNodes(Graph *g) : graph(g) {}
 
   bool operator()(const node u, const node v) {
     unsigned int du = graph->deg(u), dv = graph->deg(v);
@@ -39,7 +37,6 @@ public :
     return du > dv;
   }
 };
-
 
 /*@{*/
 /** \file
@@ -59,73 +56,99 @@ public :
  *
  *
 */
-class WelshPowell:public DoubleAlgorithm {
+class WelshPowell : public DoubleAlgorithm {
+  // to maximize the locality of reference we will use a vector
+  // holding the all the nodes needed infos in the structure below
+  struct nodeInfos {
+    node n;
+    int val;
+  };
+
+  // a comparator used to sort the vector
+  struct nodesInfosCmp {
+    bool operator()(const nodeInfos &u, const nodeInfos &v) {
+      int du = u.val, dv = v.val;
+      if (du == dv)
+        return u.n.id > v.n.id;
+      return du > dv;
+    }
+  };
+
 public:
+  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005",
+                    "Nodes coloring measure,<br/>values assigned to adjacent "
+                    "nodes are always different.",
+                    "1.0", "Graph")
 
-  PLUGININFORMATION("Welsh & Powell","David Auber","03/01/2005","Nodes coloring measure,<br/>values assigned to adjacent nodes are always different.","1.0", "Graph")
+  WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
 
-  WelshPowell(const tlp::PluginContext *context):DoubleAlgorithm(context) {}
-
-  bool hasNeighbourColoredWith(const node n, const int color) {
-    for(node u : graph->getInOutNodes(n))
-      if (result->getNodeValue(u) == color)
-        return true;
-    return false;
-  }
-
-  void colorize() {
-    vector<node> toSort(graph->numberOfNodes());
+  bool run() {
+    unsigned int nbNodes = graph->numberOfNodes();
+    vector<nodeInfos> nodesInfos(nbNodes);
     unsigned int i = 0;
-    for(node n : graph->getNodes())
-      toSort[i++]=n;
-    CompNodes cmp(graph);
-    sort(toSort.begin(),toSort.end(),cmp);
+    for (node n : graph->getNodes()) {
+      nodeInfos &nInfos = nodesInfos[i++];
+      nInfos.n = n, nInfos.val = graph->deg(n);
+    }
+    // sort the nodes in descending order of their degrees
+    sort(nodesInfos.begin(), nodesInfos.end(), nodesInfosCmp());
+    // build a map
+    MutableContainer<unsigned int> toNodesInfos;
+    for (i = 0; i < nbNodes; ++i) {
+      nodeInfos &nInfos = nodesInfos[i];
+      // initialize the value
+      nInfos.val = -1;
+      toNodesInfos.set(nInfos.n.id, i);
+    }
 
-    result->setAllNodeValue(-1);
     int currentColor = 0;
     unsigned int numberOfColoredNodes = 0;
     unsigned int minIndex = 0;
-    unsigned int maxIndex = toSort.size();
+    unsigned int maxIndex = nbNodes;
 
-    while (numberOfColoredNodes != graph->numberOfNodes()) {
+    while (numberOfColoredNodes != nbNodes) {
 #ifndef NDEBUG
-      cout << "nbColored :"  << numberOfColoredNodes << endl;
+      cout << "nbColored :" << numberOfColoredNodes << endl;
 #endif
       unsigned int nextMaxIndex = minIndex;
 
-      for(unsigned int i= minIndex; i < maxIndex; ++i) {
+      for (i = minIndex; i < maxIndex; ++i) {
 #ifndef NDEBUG
-        cout << "i:" <<  i << endl;
+        cout << "i:" << i << endl;
 #endif
-        node n = toSort[i];
-
-        if (result->getNodeValue(n) == -1) {
-          if (!hasNeighbourColoredWith(n, currentColor)) {
+        nodeInfos &nInfos = nodesInfos[i];
+        if (nInfos.val == -1) {
+          bool sameColor = false;
+          node u;
+          forEach(u, graph->getInOutNodes(nInfos.n)) {
+            if (nodesInfos[toNodesInfos.get(u.id)].val == currentColor) {
+              sameColor = true;
+              break;
+            }
+          }
+          if (!sameColor) {
 #ifndef NDEBUG
             cout << "new node found color : " << currentColor << endl;
 #endif
-            result->setNodeValue(toSort[i], currentColor);
+            nInfos.val = currentColor;
             ++numberOfColoredNodes;
 
             if (i == minIndex)
               ++minIndex;
-          }
-          else
+          } else
             nextMaxIndex = i + 1;
-        }
-        else if (i == minIndex)
+        } else if (i == minIndex)
           ++minIndex;
       }
 
       maxIndex = nextMaxIndex;
       ++currentColor;
     }
-  }
-
-
-  bool run() {
-    colorize();
-
+    // finally set the values
+    for (i = 0; i < nbNodes; ++i) {
+      nodeInfos &nInfos = nodesInfos[i];
+      result->setNodeValue(nInfos.n, nInfos.val);
+    }
     return true;
   }
 };
