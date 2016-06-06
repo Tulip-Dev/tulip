@@ -77,6 +77,14 @@ bool ExportSvg::writeHeader(BoundingBox &bb) {
 }
 
 bool ExportSvg::writeGraph(BoundingBox &bb) {
+  // Background color
+  _res.writeStartElement("rect");
+  _res.writeAttribute("width", QString::number(bb.width() + 1));
+  _res.writeAttribute("height", QString::number(bb.height() + 1));
+  _res.writeAttribute("fill", "white");
+  _res.writeEndElement(); // rect
+  // start to add graph. First translate from Tulip coordinates to SVG
+  // coordinates
   _res.writeStartElement("g");
   _res.writeAttribute("desc", "Graph");
   _res.writeAttribute(
@@ -85,13 +93,6 @@ bool ExportSvg::writeGraph(BoundingBox &bb) {
           "," + QString::number(bb.center().getY() + bb.height() / 2.f) +
           ") scale(1,-1)"); // Translation for having a cartesian landmark in
                             // the middle of the graph
-
-  // Background color
-  _res.writeStartElement("rect");
-  _res.writeAttribute("width", QString::number(bb.width() + 1));
-  _res.writeAttribute("height", QString::number(bb.height() + 1));
-  _res.writeAttribute("fill", "white");
-  _res.writeEndElement(); // rect
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
   return !_res.hasError();
 #else
