@@ -20,7 +20,7 @@
  * for the code itself.
  */
 
-#include <math.h>
+#include <cmath>
 /* You might try changing the above to <cmath> if you have problems.
  * Whether you use math.h or cmath, you may need to edit the .cpp file
  * and/or other .h files to use the same header file.
