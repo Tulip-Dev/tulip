@@ -72,20 +72,8 @@ Vec2f computeScreenPos(const MatrixGL &transformMatrix, const Vec4i &viewport, c
 static Vec3f rotatePoint(const Vec3f &center, float angle, const Vec3f &p) {
   float s = sin(angle);
   float c = cos(angle);
-
-  Vec3f ret = p;
-
-  // translate point back to origin:
-  ret -= center;
-
-  // rotate point
-  float xnew = ret[0] * c - ret[1] * s;
-  float ynew = ret[0] * s + ret[1] * c;
-
-  // translate point back:
-  ret[0] = xnew + center[0];
-  ret[1] = ynew + center[1];
-  return ret;
+  return Vec3f(center[0]+(p[0]-center[0])*c - (p[1]-center[1])*s,
+               center[1]+(p[0]-center[0])*s + (p[1]-center[1])*c);
 }
 
 static void renderText(NVGcontext *vg, const std::string &text, const tlp::BoundingBox &renderingBox,
