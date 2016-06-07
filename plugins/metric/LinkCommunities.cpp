@@ -19,10 +19,11 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include <set>
+#include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/vectorgraph.h>
 #include <tulip/vectorgraphproperty.h>
-#include <tulip/ForEach.h>
 
 using namespace std;
 using namespace tlp;
@@ -30,7 +31,8 @@ using namespace tlp;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
-* @brief This plugin is an implementation of a fuzzy clustering procedure. First introduced in :
+* @brief This plugin is an implementation of a fuzzy clustering procedure. First
+*introduced in :
 *
 * Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., \n
 * "Link communities reveal multiscale complexity in networks", \n
@@ -38,27 +40,32 @@ using namespace tlp;
 * pages 761--764, \n
 * 2010 \n
 *
-* The result of this procedure is saved as an edge metric : two edges share the same value
+* The result of this procedure is saved as an edge metric : two edges share the
+*same value
 * if they are part of the same group.
 * The result for a node shows the number of groups to which it belongs.
 *
-* @note To create subgraphs using the result of this algortihm use "Equal Value" with parameter Type="edges".
+* @note To create subgraphs using the result of this algortihm use "Equal Value"
+*with parameter Type="edges".
 *
 * @todo Deal with directed graphs.
 *
 **/
 class LinkCommunities : public tlp::DoubleAlgorithm {
 public:
-
-  PLUGININFORMATION("Link Communities","François Queyroi","25/02/11",
-                    "Edges partitioning measure used for community detection.<br>"
-                    "It is an implementation of a fuzzy clustering procedure. First introduced in :<br>"
-                    " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
-                    "1.0","Clustering")
+  PLUGININFORMATION(
+      "Link Communities", "François Queyroi", "25/02/11",
+      "Edges partitioning measure used for community detection.<br>"
+      "It is an implementation of a fuzzy clustering procedure. First "
+      "introduced in :<br>"
+      " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, "
+      "Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
+      "1.0", "Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
   ~LinkCommunities();
   bool run();
+
 private:
   /**
   * @brief Create the dual (as VectorGraph) of the graph
@@ -71,44 +78,39 @@ private:
   **/
   void computeSimilarities();
   /**
-  * @brief Compute similarity (Jaccard) between edges mapDNtoE[source(e)] and mapDNtoE[target(e)]
+  * @brief Compute similarity (Jaccard) between edges mapDNtoE[source(e)] and
+  *mapDNtoE[target(e)]
   **/
   double getSimilarity(tlp::edge e);
   /**
-  * @brief Compute weighted (Tanimoto) similarity between edges mapDNtoE[source(e)] and mapDNtoE[target(e)]
+  * @brief Compute weighted (Tanimoto) similarity between edges
+  *mapDNtoE[source(e)] and mapDNtoE[target(e)]
   **/
   double getWeightedSimilarity(tlp::edge e);
   /**
-  * @brief Return the number of graph node induced by the set of dual node.
-  **/
-  double getNumberOfNodes(std::set<tlp::node>& se);
-  /**
-  * @brief Compute the density of the set of dual node.
-  * d(se) = (|se|-NumberOfNodes(se)+1)/( |se|*(|se|-1)/2 - NumberOfNodes(se)+1 )
-  **/
-  double getDensity(std::set<tlp::node>& se);
-  /**
-  * @brief Compute the average density of the edge partition
-  * D(partition) = 2/M sum d(se)
-  **/
-  double getAverageDensity(std::vector<std::set<tlp::node> >& partition);
-  /**
-  * @brief Perform #(step) single linkage clustering in order to find the partition
+  * @brief Perform #(step) single linkage clustering in order to find the
+  *partition
   * which maximise the average density
   **/
   double findBestThreshold(unsigned int);
   /**
   * @brief Compute the partition of dual node for the given threshold value
+  * and return average density of this edge partition
   **/
-  void computeNodePartition(double, std::vector<std::set<tlp::node> >&);
+  double computeAverageDensity(double);
+  /**
+  * @brief set edge values according the partition corresponding
+  * to the best threshold
+  **/
+  void setEdgeValues(double, bool);
 
-  tlp::VectorGraph dual; // Dual Node -> Graph Edges; Duag Edge -> indicates that the linked Graph Edges have a same end.
-  tlp::MutableContainer<tlp::edge> mapDNtoE;
+  tlp::VectorGraph dual; // Dual Node -> Graph Edges; Dual Edge -> indicates
+                         // that the linked Graph Edges have a same end.
+  tlp::NodeProperty<tlp::edge> mapDNtoE;
   tlp::MutableContainer<tlp::node> mapKeystone;
   tlp::EdgeProperty<double> similarity;
 
-
-  tlp::NumericProperty* metric;
+  tlp::NumericProperty *metric;
 };
 /*@}*/
 
@@ -116,56 +118,45 @@ private:
 PLUGIN(LinkCommunities)
 //==============================================================================================================
 namespace {
-const char * paramHelp[] = {
-  // metric
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "NumericProperty" )       \
-  HTML_HELP_DEF( "value", "An existing edge metric" )                 \
-  HTML_HELP_BODY()              \
-  "An existing edge metric property"\
-  HTML_HELP_CLOSE(),
-  // Group isthmus
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates whether the single-link clusters should be merged or not." \
-  HTML_HELP_CLOSE(),
-  // Number of steps
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "200" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates the number of thresholds to be compared" \
-  HTML_HELP_CLOSE(),
+const char *paramHelp[] = {
+    // metric
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "NumericProperty") HTML_HELP_DEF(
+        "value", "An existing edge metric")
+        HTML_HELP_BODY() "An existing edge metric property" HTML_HELP_CLOSE(),
+    // Group isthmus
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "bool") HTML_HELP_DEF(
+        "values", "[true, false]") HTML_HELP_DEF("default", "true")
+        HTML_HELP_BODY() "This parameter indicates whether the single-link "
+                         "clusters should be merged or not." HTML_HELP_CLOSE(),
+    // Number of steps
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "unsigned int")
+        HTML_HELP_DEF("default", "200")
+            HTML_HELP_BODY() "This parameter indicates the number of "
+                             "thresholds to be compared" HTML_HELP_CLOSE(),
 };
 }
 //==============================================================================================================
-LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context), metric(nullptr) {
-  addInParameter<NumericProperty*>("metric", paramHelp[0],"",false);
-  addInParameter<bool>("Group isthmus", paramHelp[1],"true",true);
-  addInParameter<unsigned int>("Number of steps",paramHelp[2],"200",true);
+LinkCommunities::LinkCommunities(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context), metric(nullptr) {
+  addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
+  addInParameter<bool>("Group isthmus", paramHelp[1], "true", true);
+  addInParameter<unsigned int>("Number of steps", paramHelp[2], "200", true);
 }
 //==============================================================================================================
 LinkCommunities::~LinkCommunities() {}
 //==============================================================================================================
 bool LinkCommunities::run() {
-
-#ifdef _OPENMP
-  omp_set_num_threads(omp_get_num_procs());
-#endif
-
   metric = nullptr;
   bool group_isthmus = true;
   unsigned int nb_steps = 200;
 
-  if(dataSet!=0) {
-    dataSet->get("metric",metric);
-    dataSet->get("Group isthmus",group_isthmus);
-    dataSet->get("Number of steps",nb_steps);
+  if (dataSet != 0) {
+    dataSet->get("metric", metric);
+    dataSet->get("Group isthmus", group_isthmus);
+    dataSet->get("Number of steps", nb_steps);
   }
 
+  dual.alloc(mapDNtoE);
   createDualGraph();
 
   dual.alloc(similarity);
@@ -175,286 +166,310 @@ bool LinkCommunities::run() {
   result->setAllEdgeValue(0);
   double th = findBestThreshold(nb_steps);
 
-  std::vector<std::set<tlp::node> > best_part;
-  computeNodePartition(th, best_part);
+  setEdgeValues(th, group_isthmus);
 
-  for(unsigned int i=0; i<best_part.size(); ++i) {
-    //Isthmus are gathered in community 0
-    if(best_part[i].size()>=2 || group_isthmus==false) {
-      set<node>::const_iterator ite;
-
-      for(ite=best_part[i].begin(); ite!=best_part[i].end(); ++ite) {
-        edge re = mapDNtoE.get((*ite).id);
-        result->setEdgeValue(re,i+1);
-      }
-    }
-  }
-
+  dual.free(mapDNtoE);
   dual.free(similarity);
   dual.clear();
 
-  for(node n : graph->getNodes()) {
-    set<double> around;
-    for(edge e : graph->getInOutEdges(n)) {
-      if(around.find(result->getEdgeValue(e))==around.end() && result->getEdgeValue(e)!=0) {
-        around.insert(result->getEdgeValue(e));
+  for (node n : graph->getNodes()) {
+    std::set<double> around;
+    for (edge e : graph->getInOutEdges(n)) {
+      double val = result->getEdgeValue(e);
+      if (val && around.find(val) == around.end()) {
+        around.insert(val);
       }
     }
-    result->setNodeValue(n,around.size());
+    result->setNodeValue(n, around.size());
   }
   return true;
 }
 //==============================================================================================================
 void LinkCommunities::createDualGraph() {
+  dual.reserveNodes(graph->numberOfEdges());
   tlp::MutableContainer<node> mapEtoN;
   mapEtoN.setAll(node());
-  for(edge e : graph->getEdges()) {
+  for (edge e : graph->getEdges()) {
     node dn = dual.addNode();
-    mapDNtoE.set(dn.id,e);
-    mapEtoN.set(e.id,dn);
-    const std::pair<node, node>& eEnds = graph->ends(e);
+    mapDNtoE[dn.id] = e;
+    mapEtoN.set(e.id, dn);
+    const std::pair<node, node> eEnds = graph->ends(e);
     node src = eEnds.first;
     node tgt = eEnds.second;
-    for(edge ee : graph->getInOutEdges(src)) {
-      if(ee!=e) {
-        if(mapEtoN.get(ee.id).isValid()) {
-          if(!dual.existEdge(dn,mapEtoN.get(ee.id),false).isValid()) {
-            edge de = dual.addEdge(dn,mapEtoN.get(ee.id));
-            mapKeystone.set(de.id,src);
+    for (edge ee : graph->getInOutEdges(src)) {
+      if (ee != e) {
+        if (mapEtoN.get(ee.id).isValid()) {
+          if (!dual.existEdge(dn, mapEtoN.get(ee.id), false).isValid()) {
+            edge de = dual.addEdge(dn, mapEtoN.get(ee.id));
+            mapKeystone.set(de.id, src);
           }
         }
       }
     }
-    for(edge ee : graph->getInOutEdges(tgt)) {
-      if(ee!=e) {
-        if(mapEtoN.get(ee.id).isValid()) {
-          if(!dual.existEdge(dn,mapEtoN.get(ee.id),false).isValid()) {
-            edge de = dual.addEdge(dn,mapEtoN.get(ee.id));
-            mapKeystone.set(de.id,tgt);
+    for (edge ee : graph->getInOutEdges(tgt)) {
+      if (ee != e) {
+        if (mapEtoN.get(ee.id).isValid()) {
+          if (!dual.existEdge(dn, mapEtoN.get(ee.id), false).isValid()) {
+            edge de = dual.addEdge(dn, mapEtoN.get(ee.id));
+            mapKeystone.set(de.id, tgt);
           }
         }
       }
     }
-
   }
 }
 //==============================================================================================================
 void LinkCommunities::computeSimilarities() {
-  if(metric == nullptr) {
+  if (metric == nullptr) {
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
 
-    for(int i=0; i<(int)dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
+    for (int i = 0; i < (int)dual.numberOfEdges();
+         ++i) { // use int for MSVS2010 compilation
       edge e = dual(i);
-      similarity[e]=getSimilarity(e);
+      similarity[e] = getSimilarity(e);
     }
-  }
-  else
+  } else
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
-    for(int i=0; i<(int)dual.numberOfEdges(); ++i) { //use int for MSVS2010 compilation
+    for (int i = 0; i < (int)dual.numberOfEdges();
+         ++i) { // use int for MSVS2010 compilation
       edge e = dual(i);
-      similarity[e]=getWeightedSimilarity(e);
+      similarity[e] = getWeightedSimilarity(e);
     }
 }
 //==============================================================================================================
 double LinkCommunities::getSimilarity(edge ee) {
   node key = mapKeystone.get(ee.id);
-  edge e1=mapDNtoE.get(dual.source(ee).id);
-  edge e2=mapDNtoE.get(dual.target(ee).id);
-  const std::pair<node, node>& e1Ends = graph->ends(e1);
+  const std::pair<node, node> eeEnds = dual.ends(ee);
+  edge e1 = mapDNtoE[eeEnds.first];
+  edge e2 = mapDNtoE[eeEnds.second];
+  const std::pair<node, node> e1Ends = graph->ends(e1);
   node n1 = (e1Ends.first != key) ? e1Ends.first : e1Ends.second;
-  const std::pair<node, node>& e2Ends = graph->ends(e2);
+  const std::pair<node, node> e2Ends = graph->ends(e2);
   node n2 = (e2Ends.first != key) ? e2Ends.first : e2Ends.second;
-  double wuv=0.0,m=0.0;
-  for(node n : graph->getOutNodes(n1)) {
-    if(graph->existEdge(n2,n,true).isValid())
-      wuv+=1.0;
+  unsigned int wuv = 0, m = 0;
+  for (node n : graph->getInOutNodes(n1)) {
+    if (graph->existEdge(n2, n, true).isValid())
+      wuv += 1;
 
-    if(graph->existEdge(n,n2,true).isValid())
-      wuv+=1.0;
+    if (graph->existEdge(n, n2, true).isValid())
+      wuv += 1;
 
-    m+=1.0;
-  }
-  for(node n : graph->getInNodes(n1)) {
-    if(graph->existEdge(n2,n,true).isValid())
-      wuv+=1.0;
-
-    if(graph->existEdge(n,n2,true).isValid())
-      wuv+=1.0;
-
-    m+=1.0;
+    m += 1.0;
   }
 
-  for(node n : graph->getInOutNodes(n2)) {
-    if(!graph->existEdge(n1,n,false).isValid())
-      m+=1.0;
+  for (node n : graph->getInOutNodes(n2)) {
+    if (!graph->existEdge(n1, n, false).isValid())
+      m += 1;
   }
 
-  if(graph->existEdge(n1,n2,false).isValid())
-    wuv+=2.0;
+  if (graph->existEdge(n1, n2, false).isValid())
+    wuv += 2;
 
-  if(m>0)
-    return wuv/m;
+  if (m > 0)
+    return (double)wuv / (double)m;
   else
     return 0.0;
 }
 //==============================================================================================================
 double LinkCommunities::getWeightedSimilarity(tlp::edge ee) {
   node key = mapKeystone.get(ee.id);
-  edge e1=mapDNtoE.get(dual.source(ee).id);
-  edge e2=mapDNtoE.get(dual.target(ee).id);
-  const std::pair<node, node>& e1Ends = graph->ends(e1);
+  const std::pair<node, node> eeEnds = dual.ends(ee);
+  edge e1 = mapDNtoE[eeEnds.first];
+  edge e2 = mapDNtoE[eeEnds.second];
+  const std::pair<node, node> &e1Ends = graph->ends(e1);
   node n1 = (e1Ends.first != key) ? e1Ends.first : e1Ends.second;
-  const std::pair<node, node>& e2Ends = graph->ends(e2);
+  const std::pair<node, node> &e2Ends = graph->ends(e2);
   node n2 = (e2Ends.first != key) ? e2Ends.first : e2Ends.second;
 
-  if(graph->deg(n1)>graph->deg(n2)) {
-    node tmp=n1;
-    n1=n2;
-    n2=tmp;
+  if (graph->deg(n1) > graph->deg(n2)) {
+    node tmp = n1;
+    n1 = n2;
+    n2 = tmp;
   }
 
-  double a1a2=0.0;
-  double a1=0.0,a2=0.0;
-  double a11=0.0,a22=0.0;
-  for(edge e : graph->getInEdges(n1)) {
+  double a1a2 = 0.0;
+  double a1 = 0.0, a2 = 0.0;
+  double a11 = 0.0, a22 = 0.0;
+  for (edge e : graph->getInEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
-    node n=graph->source(e);
-    edge me = graph->existEdge(n2,n,true);
+    node n = graph->source(e);
+    edge me = graph->existEdge(n2, n, true);
 
-    if(me.isValid())
-      a1a2+=val*metric->getEdgeDoubleValue(me);
+    if (me.isValid())
+      a1a2 += val * metric->getEdgeDoubleValue(me);
 
-    me = graph->existEdge(n,n2,true);
+    me = graph->existEdge(n, n2, true);
 
-    if(me.isValid())
-      a1a2+=val*metric->getEdgeDoubleValue(me);
+    if (me.isValid())
+      a1a2 += val * metric->getEdgeDoubleValue(me);
 
-    a1+=val;
-    a11+=val*val;
+    a1 += val;
+    a11 += val * val;
   }
 
-  for(edge e : graph->getOutEdges(n1)) {
+  for (edge e : graph->getOutEdges(n1)) {
     double val = metric->getEdgeDoubleValue(e);
-    node n=graph->target(e);
-    edge me = graph->existEdge(n2,n,true);
+    node n = graph->target(e);
+    edge me = graph->existEdge(n2, n, true);
 
-    if(me.isValid())
-      a1a2+=val*metric->getEdgeDoubleValue(me);
+    if (me.isValid())
+      a1a2 += val * metric->getEdgeDoubleValue(me);
 
-    me = graph->existEdge(n,n2,true);
+    me = graph->existEdge(n, n2, true);
 
-    if(me.isValid())
-      a1a2+=val*metric->getEdgeDoubleValue(me);
+    if (me.isValid())
+      a1a2 += val * metric->getEdgeDoubleValue(me);
 
-    a1+=val;
-    a11+=val*val;
+    a1 += val;
+    a11 += val * val;
   }
 
-  for(edge e : graph->getInOutEdges(n2)) {
+  for (edge e : graph->getInOutEdges(n2)) {
     double val = metric->getEdgeDoubleValue(e);
-    a2+=val;
-    a22+=val*val;
+    a2 += val;
+    a22 += val * val;
   }
-  a1/=graph->deg(n1);
-  a11+=a1*a1;
-  a2/=graph->deg(n2);
-  a22+=a2*a2;
+  a1 /= graph->deg(n1);
+  a11 += a1 * a1;
+  a2 /= graph->deg(n2);
+  a22 += a2 * a2;
 
-  edge e = graph->existEdge(n1,n2,false);
+  edge e = graph->existEdge(n1, n2, false);
 
-  if(e.isValid())
-    a1a2+=metric->getEdgeDoubleValue(e)*(a1+a2);
+  if (e.isValid())
+    a1a2 += metric->getEdgeDoubleValue(e) * (a1 + a2);
 
-  double m=a11+a22-a1a2;
+  double m = a11 + a22 - a1a2;
 
-  if(m<0.0)
+  if (m < 0.0)
     return 0.0;
   else
-    return a1a2/m;
+    return a1a2 / m;
 }
 //==============================================================================================================
-double LinkCommunities::getNumberOfNodes(set<node> &se) {
-  set<node> rns;
-  set<node>::const_iterator ite;
-
-  for(ite=se.begin(); ite!=se.end(); ++ite) {
-    edge re = mapDNtoE.get((*ite).id);
-    const std::pair<node, node>& reEnds = graph->ends(re);
-    rns.insert(reEnds.first);
-    rns.insert(reEnds.second);
-  }
-
-  return double(rns.size());
-}
-//==============================================================================================================
-double LinkCommunities::getDensity(set<node> &se) {
-  double nc = getNumberOfNodes(se);
-
-  if(nc<3.0)
-    return 0.0;
-
-  double mc = se.size();
-  return (mc-nc+1)/(nc*(nc-1)/2.0-nc+1);
-}
-//==============================================================================================================
-double LinkCommunities::getAverageDensity(vector<set<node> >& partition) {
-  double d=0.0;
-
-  for(unsigned int i=0; i<partition.size(); ++i) {
-    d+=double(partition[i].size())*getDensity(partition[i]);
-  }
-
-  return 2.0*d/(graph->numberOfEdges());
-}
-//==============================================================================================================
-void LinkCommunities::computeNodePartition(double threshold,
-    vector<set<node> >& result) {
-  tlp::MutableContainer<bool> visited;
-  visited.setAll(false);
+double LinkCommunities::computeAverageDensity(double threshold) {
+  double d = 0.0;
+  tlp::MutableContainer<bool> dn_visited;
+  dn_visited.setAll(false);
 
   unsigned int sz = dual.numberOfNodes();
 
-  for(unsigned int i = 0; i < sz; ++i) {
-    node curNode = dual[i];
+  for (unsigned int i = 0; i < sz; ++i) {
+    node dn = dual[i];
 
-    if(!(visited.get(curNode.id))) {
-      result.push_back(std::set<node>());
-      set<node>& component = result.back();
-      component.insert(curNode);
-      list<node> nodesToVisit;
-      visited.set(curNode.id,true);
-      nodesToVisit.push_front(curNode);
+    if (!(dn_visited.get(dn))) {
+      unsigned int nbDNodes = 1;
+      dn_visited.set(dn.id, true);
+      edge re = mapDNtoE[dn];
+      MutableContainer<bool> visited;
+      unsigned int nbNodes = 1;
+      const std::pair<node, node> reEnds = graph->ends(re);
+      visited.set(reEnds.first.id, true);
+      if (reEnds.first != reEnds.second) {
+        visited.set(reEnds.second.id, true);
+        nbNodes = 2;
+      }
 
-      while(!nodesToVisit.empty()) {
-        curNode=nodesToVisit.front();
-        nodesToVisit.pop_front();
-        const std::vector<edge>& curEdges = dual.star(curNode);
+      list<node> dnToVisit;
+      dnToVisit.push_front(dn);
+
+      while (!dnToVisit.empty()) {
+        dn = dnToVisit.front();
+        dnToVisit.pop_front();
+        const std::vector<edge> &curEdges = dual.star(dn);
         unsigned int eSz = curEdges.size();
 
-        for(unsigned int j = 0; j < eSz; ++j) {
+        for (unsigned int j = 0; j < eSz; ++j) {
           edge e = curEdges[j];
 
-          if(similarity[e]>threshold) {
-            node neighbour = dual.opposite(e,curNode);
+          if (similarity[e] > threshold) {
+            node neighbour = dual.opposite(e, dn);
 
-            if(!(visited.get(neighbour.id))) {
-              visited.set(neighbour.id,true);
-              component.insert(neighbour);
-              nodesToVisit.push_back(neighbour);
+            if (!(dn_visited.get(neighbour.id))) {
+              dn_visited.set(neighbour.id, true);
+              dnToVisit.push_back(neighbour);
+              ++nbDNodes;
+              edge re = mapDNtoE[neighbour];
+              const std::pair<node, node> reEnds = graph->ends(re);
+              if (!visited.get(reEnds.first.id)) {
+                visited.set(reEnds.first.id, true);
+                ++nbNodes;
+              }
+              if (!visited.get(reEnds.second.id)) {
+                visited.set(reEnds.second.id, true);
+                ++nbNodes;
+              }
             }
           }
         }
       }
+      if (nbNodes >= 3) {
+        double mc = nbDNodes;
+        double nc = nbNodes;
+        double density = (mc - nc + 1) / (nc * (nc - 1) / 2.0 - nc + 1);
+        d += nbDNodes * density;
+      }
+    }
+  }
+  return 2.0 * d / (graph->numberOfEdges());
+}
+//==============================================================================================================
+void LinkCommunities::setEdgeValues(double threshold, bool group_isthmus) {
+  tlp::MutableContainer<bool> dn_visited;
+  dn_visited.setAll(false);
+
+  double val = 1;
+  unsigned int sz = dual.numberOfNodes();
+
+  for (unsigned int i = 0; i < sz; ++i) {
+    node dn = dual[i];
+
+    if (!(dn_visited.get(dn.id))) {
+      dn_visited.set(dn.id, true);
+      vector<node> component;
+      component.push_back(dn);
+
+      list<node> dnToVisit;
+      dnToVisit.push_front(dn);
+
+      while (!dnToVisit.empty()) {
+        dn = dnToVisit.front();
+        dnToVisit.pop_front();
+        const std::vector<edge> &curEdges = dual.star(dn);
+        unsigned int eSz = curEdges.size();
+
+        for (unsigned int j = 0; j < eSz; ++j) {
+          edge e = curEdges[j];
+
+          if (similarity[e] > threshold) {
+            node neighbour = dual.opposite(e, dn);
+
+            if (!(dn_visited.get(neighbour.id))) {
+              dn_visited.set(neighbour.id, true);
+              dnToVisit.push_back(neighbour);
+              component.push_back(neighbour);
+            }
+          }
+        }
+      }
+      if (component.size() >= 2 || group_isthmus == false) {
+        vector<node>::const_iterator ite;
+        for (ite = component.begin(); ite != component.end(); ++ite) {
+          edge re = mapDNtoE[*ite];
+          result->setEdgeValue(re, val);
+        }
+      }
+      val += 1;
     }
   }
 }
 //==============================================================================================================
 double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
-  double maxD=-2;
+  double maxD = -2;
   double threshold = 0.0;
 
   double min = 1.1;
@@ -462,13 +477,12 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
 
   int sz = dual.numberOfEdges();
 #ifdef _OPENMP
-  #pragma omp parallel for
+//#pragma omp parallel for
 #endif
-
-  for(int i = 0; i < sz; ++i) {
+  for (int i = 0; i < sz; ++i) {
     double value = similarity[dual(i)];
 #ifdef _OPENMP
-    #pragma omp critical
+//#pragma omp critical
 #endif
     {
       if (value < min)
@@ -478,25 +492,22 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
     }
   }
 
-  double deltaThreshold = (max-min)/double(numberOfSteps);
+  double deltaThreshold = (max - min) / double(numberOfSteps);
 
 #ifdef _OPENMP
-  #pragma omp parallel for
+#pragma omp parallel for
 #endif
-
-  for (int i=0; i<(int)numberOfSteps; i++) {    //use int for msvs2010 compilation
+  for (int i = 0; i < (int)numberOfSteps;
+       i++) { // use int for msvs2010 compilation
     double step = min + i * deltaThreshold;
-    vector<set<node> > tmp;
-    computeNodePartition(step, tmp);
-    double d = getAverageDensity(tmp);
-
+    double d = computeAverageDensity(step);
 #ifdef _OPENMP
-    #pragma omp critical
+#pragma omp critical
 #endif
     {
-      if ( d > maxD) {
-        threshold=step;
-        maxD=d;
+      if (d > maxD) {
+        threshold = step;
+        maxD = d;
       }
     }
   }
