@@ -176,6 +176,7 @@ bool LinkCommunities::run() {
     edge e;
     forEach(e,graph->getInOutEdges(n)) {
       double val = result->getEdgeValue(e);
+
       if (val && around.find(val)==around.end()) {
         around.insert(val);
       }
@@ -372,9 +373,10 @@ double LinkCommunities::computeAverageDensity(double threshold) {
       unsigned int nbNodes = 1;
       const std::pair<node, node> reEnds = graph->ends(re);
       visited.set(reEnds.first.id, true);
+
       if (reEnds.first != reEnds.second) {
-	visited.set(reEnds.second.id, true);
-	nbNodes = 2;
+        visited.set(reEnds.second.id, true);
+        nbNodes = 2;
       }
 
       list<node> dnToVisit;
@@ -395,29 +397,33 @@ double LinkCommunities::computeAverageDensity(double threshold) {
             if (!(dn_visited.get(neighbour.id))) {
               dn_visited.set(neighbour.id, true);
               dnToVisit.push_back(neighbour);
-	      ++nbDNodes;
-	      edge re = mapDNtoE[neighbour];
-	      const std::pair<node, node> reEnds = graph->ends(re);
-	      if (!visited.get(reEnds.first.id)) {
-		visited.set(reEnds.first.id, true);
-		++nbNodes;
-	      }
-	      if (!visited.get(reEnds.second.id)) {
-		visited.set(reEnds.second.id, true);
-		++nbNodes;
-	      }
-	    }
-	  }
-	}
+              ++nbDNodes;
+              edge re = mapDNtoE[neighbour];
+              const std::pair<node, node> reEnds = graph->ends(re);
+
+              if (!visited.get(reEnds.first.id)) {
+                visited.set(reEnds.first.id, true);
+                ++nbNodes;
+              }
+
+              if (!visited.get(reEnds.second.id)) {
+                visited.set(reEnds.second.id, true);
+                ++nbNodes;
+              }
+            }
+          }
+        }
       }
+
       if (nbNodes >= 3) {
-	double mc = nbDNodes;
-	double nc = nbNodes;
-	double density = (mc-nc+1)/(nc*(nc-1)/2.0-nc+1);
-	d += nbDNodes * density;
+        double mc = nbDNodes;
+        double nc = nbNodes;
+        double density = (mc-nc+1)/(nc*(nc-1)/2.0-nc+1);
+        d += nbDNodes * density;
       }
     }
   }
+
   return 2.0*d/(graph->numberOfEdges());
 }
 //==============================================================================================================
@@ -454,18 +460,21 @@ void LinkCommunities::setEdgeValues(double threshold, bool group_isthmus) {
             if (!(dn_visited.get(neighbour.id))) {
               dn_visited.set(neighbour.id, true);
               dnToVisit.push_back(neighbour);
-	      component.push_back(neighbour);
-	    }
-	  }
-	}
+              component.push_back(neighbour);
+            }
+          }
+        }
       }
+
       if (component.size() >= 2 || group_isthmus == false) {
-	vector<node>::const_iterator ite;
-	for(ite=component.begin(); ite!=component.end(); ++ite) {
-	  edge re = mapDNtoE[*ite];
-	  result->setEdgeValue(re, val);
-	}
+        vector<node>::const_iterator ite;
+
+        for(ite=component.begin(); ite!=component.end(); ++ite) {
+          edge re = mapDNtoE[*ite];
+          result->setEdgeValue(re, val);
+        }
       }
+
       val += 1;
     }
   }
@@ -482,6 +491,7 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
 #ifdef _OPENMP
   //#pragma omp parallel for
 #endif
+
   for(int i = 0; i < sz; ++i) {
     double value = similarity[dual(i)];
 #ifdef _OPENMP
@@ -498,13 +508,14 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
   double deltaThreshold = (max-min)/double(numberOfSteps);
 
 #ifdef _OPENMP
-#pragma omp parallel for
+  #pragma omp parallel for
 #endif
+
   for (int i=0; i<(int)numberOfSteps; i++) {    //use int for msvs2010 compilation
     double step = min + i * deltaThreshold;
     double d = computeAverageDensity(step);
 #ifdef _OPENMP
-#pragma omp critical
+    #pragma omp critical
 #endif
     {
       if ( d > maxD) {
