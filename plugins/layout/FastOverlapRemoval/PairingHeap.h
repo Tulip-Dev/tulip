@@ -17,7 +17,7 @@
  */
 #ifndef PAIRING_HEAP_H_
 #define PAIRING_HEAP_H_
-#include <stdlib.h>
+#include <cstdlib>
 #include <fstream>
 // Pairing heap class
 //

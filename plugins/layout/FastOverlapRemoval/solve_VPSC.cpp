@@ -15,7 +15,7 @@
 #include "block.h"
 #include "blocks.h"
 #include "solve_VPSC.h"
-#include <math.h>
+#include <cmath>
 #include <sstream>
 #ifdef RECTANGLE_OVERLAP_LOGGING
 #include <fstream>
