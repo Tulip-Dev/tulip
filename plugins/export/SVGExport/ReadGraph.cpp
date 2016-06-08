@@ -336,22 +336,13 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
   bool edge_color_interpolation = false;
   bool edge_extremities = false;
   bool edge_size_interpolation = true;
+  Color background = Color::White;
 
   if (ds != NULL) {
-    ds->get("Element's layout property", layout);
-    ds->get("Element's color property", colors);
-    ds->get("Element's shape property", shape);
-    ds->get("Element's SrcAnchorShape property", srcanchorshape);
-    ds->get("Element's TgtAnchorShape property", tgtanchorshape);
-    ds->get("Element's size property", sizes);
-    ds->get("Element's label property", label);
-    ds->get("Element's label color property", labelcolor);
-    ds->get("Element's border color property", bordercolor);
-    ds->get("Element's border width property", borderwidth);
-    ds->get("Element's rotation property", rotation);
     ds->get("Edge color interpolation", edge_color_interpolation);
     ds->get("Edge size interpolation", edge_size_interpolation);
     ds->get("Edge extremities", edge_extremities);
+    ds->get("Background color", background);
   }
 
   // Finding graph size
@@ -364,7 +355,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
       pp->setError("Error when exporting graph header");
     return false;
   }
-  ret = exportint.writeGraph(graphbb);
+
+  ret = exportint.writeGraph(graphbb, background);
+
   if (!ret) {
     if (pp->getError().empty())
       pp->setError("Error when starting to export graph");

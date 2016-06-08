@@ -57,7 +57,7 @@ ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, bool autoformatting)
   _res.setCodec("UTF-8");
 }
 
-bool ExportSvg::writeHeader(BoundingBox &bb) {
+bool ExportSvg::writeHeader(const BoundingBox &bb) {
   _res.writeStartDocument();
   _res.writeStartElement("svg");
   double width = bb.width() + 1;
@@ -76,12 +76,12 @@ bool ExportSvg::writeHeader(BoundingBox &bb) {
 #endif
 }
 
-bool ExportSvg::writeGraph(BoundingBox &bb) {
+bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background) {
   // Background color
   _res.writeStartElement("rect");
   _res.writeAttribute("width", QString::number(bb.width() + 1));
   _res.writeAttribute("height", QString::number(bb.height() + 1));
-  _res.writeAttribute("fill", "white");
+  _res.writeAttribute("fill", tlpColor2SvgColor(background));
   _res.writeEndElement(); // rect
   // start to add graph. First translate from Tulip coordinates to SVG
   // coordinates

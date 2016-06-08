@@ -43,10 +43,10 @@ public:
   virtual ~ExportInterface() {}
 
   //This method writes the header of the exported file
-  virtual bool writeHeader(tlp::BoundingBox &bb)=0;
+  virtual bool writeHeader(const tlp::BoundingBox &bb)=0;
 
   //This method begins a graph
-  virtual bool writeGraph(tlp::BoundingBox &bb)=0;
+  virtual bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color& background)=0;
 
   //This method begins a meta-graph
   virtual bool writeMetaGraph(const int transform_X, const int transform_Y, float scale)=0;
