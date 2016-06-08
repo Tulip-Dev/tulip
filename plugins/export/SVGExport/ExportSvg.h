@@ -34,8 +34,8 @@ class ExportSvg : public ExportInterface {
 
 public:
   ExportSvg(tlp::PluginProgress* pp, std::ostream& os, bool autoformatting);
-  bool writeHeader(tlp::BoundingBox &bb);
-  bool writeGraph(tlp::BoundingBox &bb);
+  bool writeHeader(const tlp::BoundingBox &bb);
+  bool writeGraph(const tlp::BoundingBox &bb, const tlp::Color &background);
   bool writeMetaGraph(const int transform_X, const int transform_Y, float scale);
   bool writeEndGraph();
   bool groupNode();
