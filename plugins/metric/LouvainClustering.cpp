@@ -63,11 +63,11 @@ private:
   // a quotient graph of the original graph
   VectorGraph* quotient;
   // number of nodes in the quotient graph and size of all vectors
-  unsigned int size;
+  unsigned int nb_qnodes;
 
   // the mapping between the nodes of the original graph
   // and the quotient nodes
-  TLP_HASH_MAP<unsigned int, unsigned int> clusters;
+  MutableContainer<unsigned int> clusters;
 
   // quotient graph edge weights
   EdgeProperty<double>* weights;
@@ -131,7 +131,7 @@ private:
   double modularity()  {
     double q  = 0.;
 
-    for (unsigned int i=0 ; i<size ; i++) {
+    for (unsigned int i=0 ; i<nb_qnodes ; i++) {
       if (tot[i]>0)
         q += ootw * (in[i] - tot[i] * tot[i] * ootw);
     }
@@ -176,25 +176,25 @@ private:
   void partitionToQuotient(VectorGraph* new_quotient,
                            EdgeProperty<double>* new_weights) {
     // Renumber communities
-    vector<int> renumber(size, -1);
+    vector<int> renumber(nb_qnodes, -1);
 
-    for (unsigned int n=0 ; n<size ; n++) {
+    for (unsigned int n=0 ; n<nb_qnodes ; n++) {
       renumber[n2c[n]]++;
     }
 
     int final=0;
 
-    for (unsigned int i=0 ; i<size ; i++)
+    for (unsigned int i=0 ; i<nb_qnodes ; i++)
       if (renumber[i]!=-1)
         renumber[i]=final++;
 
     // update clustering
     node n;
     forEach(n, graph->getNodes()) {
-      clusters[n.id] = renumber[n2c[clusters[n.id]]];
+      clusters.set(n.id, renumber[n2c[clusters.get(n.id)]]);
     }
-
     // Compute weighted graph
+    new_quotient->reserveNodes(final);
     for (int i = 0; i < final; ++i)
       new_quotient->addNode();
 
@@ -241,11 +241,6 @@ private:
     }
 
     ootw = 1./total_weight;
-
-    delete quotient;
-    delete weights;
-    quotient = new_quotient;
-    weights = new_weights;
   }
 
   // compute communities of the graph for one level
@@ -268,7 +263,7 @@ private:
       // for each node:
       // remove the node from its community
       // and insert it in the best community
-      for (unsigned int n = 0 ; n <size ; n++) {
+      for (unsigned int n = 0 ; n <nb_qnodes ; n++) {
         unsigned int n_comm     = n2c[n];
         double n_wdg;
         double n_nsl;
@@ -322,16 +317,16 @@ private:
   }
 
   void init_level() {
-    size = quotient->numberOfNodes();
-    neigh_weight.resize(size,-1);
-    neigh_pos.resize(size);
+    nb_qnodes = quotient->numberOfNodes();
+    neigh_weight.resize(nb_qnodes,-1);
+    neigh_pos.resize(nb_qnodes);
     neigh_last=0;
 
-    n2c.resize(size);
-    in.resize(size);
-    tot.resize(size);
+    n2c.resize(nb_qnodes);
+    in.resize(nb_qnodes);
+    tot.resize(nb_qnodes);
 
-    for (unsigned int i=0 ; i < size ; i++) {
+    for (unsigned int i=0 ; i < nb_qnodes ; i++) {
       n2c[i] = i;
       double wdg, nsl;
       get_weighted_degree_and_selfloops(i, wdg, nsl);
@@ -388,11 +383,12 @@ bool LouvainClustering::run() {
   nb_nodes = graph->numberOfNodes();
 
   quotient = new VectorGraph();
+  quotient->reserveNodes(nb_nodes);
 
   tlp::node n;
   unsigned int i = 0;
   forEach(n, graph->getNodes()) {
-    clusters[n.id] = i++;
+    clusters.set(n.id, i++);
     quotient->addNode();
   }
 
@@ -403,8 +399,8 @@ bool LouvainClustering::run() {
   forEach(e, graph->getEdges()) {
     double weight = metric ? metric->getEdgeDoubleValue(e) : 1;
     std::pair<node, node> ends = graph->ends(e);
-    node q_src = node(clusters[ends.first.id]);
-    node q_tgt = node(clusters[ends.second.id]);
+    node q_src(clusters.get(ends.first.id));
+    node q_tgt(clusters.get(ends.second.id));
     // self loops are counted only once
     total_weight += q_src != q_tgt ? 2 * weight : weight;
     // create corresponding edge if needed
@@ -431,7 +427,7 @@ bool LouvainClustering::run() {
     if (verbose) {
       std::cout << "level " << level << ':' << std::endl;
       std::cout << "  network size: "
-                << size << " nodes, "
+                << nb_qnodes << " nodes, "
                 << quotient->numberOfEdges() << " links, "
                 << total_weight << " weight." << endl << std::flush;
     }
@@ -447,6 +443,10 @@ bool LouvainClustering::run() {
       new_quotient->alloc(*new_weights);
 
       partitionToQuotient(new_quotient, new_weights);
+      delete quotient;
+      delete weights;
+      quotient = new_quotient;
+      weights = new_weights;
 
       if (verbose)
         std::cout << " modularity increased from " << mod
@@ -462,22 +462,22 @@ bool LouvainClustering::run() {
 
       // update measure
       // Renumber communities
-      vector<int> renumber(size, -1);
+      vector<int> renumber(nb_qnodes, -1);
 
-      for (unsigned int n=0 ; n<size ; n++) {
+      for (unsigned int n=0 ; n<nb_qnodes ; n++) {
         renumber[n2c[n]]++;
       }
 
       int final=0;
 
-      for (unsigned int i=0 ; i<size ; i++)
+      for (unsigned int i=0 ; i<nb_qnodes ; i++)
         if (renumber[i]!=-1)
           renumber[i]=final++;
 
       // then set measure values
       node n;
       forEach(n, graph->getNodes()) {
-        result->setNodeValue(n, renumber[n2c[clusters[n.id]]]);
+        result->setNodeValue(n, renumber[n2c[clusters.get(n.id)]]);
       }
       delete quotient;
       delete weights;
