@@ -32,7 +32,7 @@ using namespace tlp;
 
 namespace {
 const char * paramHelp[] = {
-   // color interpolation
+  // color interpolation
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
@@ -51,24 +51,24 @@ const char * paramHelp[] = {
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
   HTML_HELP_BODY() \
-    "Indicates if edge extremities have to be exported." \
-    HTML_HELP_CLOSE(),
-    //Background color
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Color" ) \
-    HTML_HELP_DEF( "default", "(0,0,0,0)" )
-    HTML_HELP_BODY() \
-    "Specify the background color of the SVG file."\
-    HTML_HELP_CLOSE(),
-    // human readable
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "bool" ) \
-    HTML_HELP_DEF( "default", "true" )
-    HTML_HELP_BODY() \
-    "Adds line-breaks and indentation to empty sections between elements\
+  "Indicates if edge extremities have to be exported." \
+  HTML_HELP_CLOSE(),
+  //Background color
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Color" ) \
+  HTML_HELP_DEF( "default", "(0,0,0,0)" )
+  HTML_HELP_BODY() \
+  "Specify the background color of the SVG file."\
+  HTML_HELP_CLOSE(),
+  // human readable
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "bool" ) \
+  HTML_HELP_DEF( "default", "true" )
+  HTML_HELP_BODY() \
+  "Adds line-breaks and indentation to empty sections between elements\
     (ignorable whitespace). The main purpose of this parameter is to split the data into several lines, and to increase readability for a human reader.\
     Be careful, this adds a large amount of data to the output file."\
-    HTML_HELP_CLOSE(),
+  HTML_HELP_CLOSE(),
 };
 }
 

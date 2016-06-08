@@ -195,6 +195,7 @@ private:
     }
     // Compute weighted graph
     new_quotient->reserveNodes(final);
+
     for (int i = 0; i < final; ++i)
       new_quotient->addNode();
 
