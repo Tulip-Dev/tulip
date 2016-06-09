@@ -42,12 +42,14 @@ ELSE(X86_64)
 ENDIF(X86_64)
 
 ## ========================================================
-## Consider FreeBSD as Linux
+## Consider *BSD as Linux
 ## ========================================================
-EXEC_PROGRAM(uname OUTPUT_VARIABLE UNAME_OUT)
-STRING(COMPARE EQUAL "${UNAME_OUT}" "Linux" LINUX)
+STRING(COMPARE EQUAL "${CMAKE_SYSTEM_NAME}" "Linux" LINUX)
 IF(NOT LINUX)
-  STRING(COMPARE EQUAL "${UNAME_OUT}" "GNU/kFreeBSD" LINUX)
+  STRING(FIND "${CMAKE_SYSTEM_NAME}" "BSD" BSD_POS)
+  IF(BSD_POS GREATER -1)
+    SET(LINUX TRUE)
+  ENDIF()
 ENDIF(NOT LINUX)
 
 ## ========================================================
