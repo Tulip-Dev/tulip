@@ -143,6 +143,7 @@ protected slots:
   void openRecentFile();
   void changeSynchronization(bool);
   void openExternalFile();
+  void showHideSideBar();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
