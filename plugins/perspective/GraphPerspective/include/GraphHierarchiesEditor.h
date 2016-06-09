@@ -85,6 +85,8 @@ protected slots:
 
   void addSubGraph();
   void cloneSubGraph();
+  void cloneSibling();
+  void cloneSiblingWithProperties();
   void addInducedSubGraph();
   void delGraph();
   void delAllGraph();

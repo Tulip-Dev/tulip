@@ -165,10 +165,26 @@
   </action>
   <action name="actionClone_subgraph">
    <property name="text">
-    <string>Clone subgraph</string>
+     <string>Create clone sub-graph</string>
    </property>
    <property name="toolTip">
     <string>Clone the selected graph into a sub-graph</string>
+   </property>
+  </action>
+  <action name="actionClone_sibling">
+   <property name="text">
+    <string>Create clone sibling</string>
+   </property>
+   <property name="toolTip">
+    <string>Clone the selected graph into a sibling of that graph </string>
+   </property>
+  </action>
+  <action name="actionClone_sibling_with_properties">
+   <property name="text">
+    <string>Create clone sibling (with properties)</string>
+   </property>
+   <property name="toolTip">
+    <string>Clone the selected graph and its local properties into a sibling of that graph </string>
    </property>
   </action>
   <action name="actionDelete_graph">
@@ -307,6 +323,38 @@
    <signal>triggered()</signal>
    <receiver>GraphHierarchiesEditorData</receiver>
    <slot>cloneSubGraph()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClone_sibling</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>cloneSibling()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>117</x>
+     <y>208</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionClone_sibling_with_properties</sender>
+   <signal>triggered()</signal>
+   <receiver>GraphHierarchiesEditorData</receiver>
+   <slot>cloneSiblingWithProperties()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>-1</x>
@@ -469,6 +517,7 @@
   <slot>addSubGraph()</slot>
   <slot>delGraph()</slot>
   <slot>cloneSubGraph()</slot>
+  <slot>cloneSibling()</slot>
   <slot>delAllGraph()</slot>
   <slot>createPanel()</slot>
   <slot>exportGraph()</slot>

@@ -155,6 +155,10 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.addAction(_ui->actionAdd_sub_graph);
     menu.addAction(_ui->actionCreate_induced_sub_graph);
     menu.addAction(_ui->actionClone_subgraph);
+    if(_contextGraph->getRoot() != _contextGraph) {
+      menu.addAction(_ui->actionClone_sibling);
+      menu.addAction(_ui->actionClone_sibling_with_properties);
+    }
     menu.addSeparator();
 
     if(_contextGraph->getRoot() != _contextGraph) {
@@ -217,12 +221,27 @@ void GraphHierarchiesEditor::cloneSubGraph() {
   if (_contextGraph == NULL)
     return;
 
-  tlp::BooleanProperty* prop = new tlp::BooleanProperty(_contextGraph);
-  prop->setAllNodeValue(true);
-  prop->setAllEdgeValue(true);
   _contextGraph->push();
-  _contextGraph->addSubGraph(prop,"clone sub-graph");
-  delete prop;
+  std::string sgName("clone sub-graph of ");
+  _contextGraph->addCloneSubGraph(sgName + _contextGraph->getName());
+}
+
+void GraphHierarchiesEditor::cloneSibling() {
+  if (_contextGraph == NULL)
+    return;
+
+  _contextGraph->push();
+  std::string sgName("clone sibling of ");
+  _contextGraph->addCloneSubGraph(sgName + _contextGraph->getName(), true);
+}
+
+void GraphHierarchiesEditor::cloneSiblingWithProperties() {
+  if (_contextGraph == NULL)
+    return;
+
+  _contextGraph->push();
+  std::string sgName("clone sibling of ");
+  _contextGraph->addCloneSubGraph(sgName + _contextGraph->getName(), true, true);
 }
 
 void GraphHierarchiesEditor::addInducedSubGraph() {
