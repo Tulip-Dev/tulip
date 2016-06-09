@@ -59,12 +59,12 @@ Build a Graph
 
 .. _first_save:
 
-Save your Work
-==============
+Save or Export your Work
+========================
 
 Tulip allows you to save your whole project with its own file format (\*.tlpx). To do so, select *File → Save* or *File → Save as*.
 
-If you are interested to only save the graph, Tulip proposes to save it in its own TLP format, do a right click on the graph's name in the graph list and select *Save to file* in the contextual menu then displayed. You can also export it in the GML format (other plugins can offer more possibilities) by selecting *Export* in the same contextual menu.
+If you are interested to only save the graph, Tulip proposes to save it in its own TLP format, do a right click on the graph's name in the graph list and select *Save* in the contextual menu then displayed. You can also export it in the GML format (other plugins can offer more possibilities) by selecting *Export* in the same contextual menu.
 
 
 .. _first_algo:
