@@ -450,6 +450,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     connect(h,SIGNAL(expanded(bool)),this,SLOT(refreshDockExpandControls()));
   }
 
+  connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
+
 #if !defined(__APPLE__) && !defined(_WIN32)
   // Hide plugins center when not on MacOS or Windows
   _ui->pluginsButton->hide();
@@ -1331,5 +1333,14 @@ void GraphPerspective::showPythonDocumentation() {
   QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html"));
 }
 
+void GraphPerspective::showHideSideBar() {
+  if (_ui->docksWidget->isVisible()) {
+    _ui->docksWidget->setVisible(false);
+    _ui->sidebarButton->setToolTip("Show Sidebar");
+  } else {
+    _ui->docksWidget->setVisible(true);
+    _ui->sidebarButton->setToolTip("Hide Sidebar");
+  }
+}
 
 PLUGIN(GraphPerspective)
