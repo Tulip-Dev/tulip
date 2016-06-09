@@ -1140,7 +1140,7 @@ Graph* Graph::addSubGraph(const std::string& name) {
 }
 //=========================================================
 Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling,
-			       bool addSiblingProperties) {
+                               bool addSiblingProperties) {
   BooleanProperty selection(this);
   selection.setAllNodeValue(true);
   selection.setAllEdgeValue(true);
@@ -1155,16 +1155,19 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling,
   }
 
   Graph* clone = parentSubGraph->addSubGraph(&selection, name);
+
   if (addSibling && addSiblingProperties) {
     Iterator<PropertyInterface*>* itp = getLocalObjectProperties();
+
     while(itp->hasNext()) {
       PropertyInterface* prop = itp->next();
       PropertyInterface* cloneProp =
-	prop->clonePrototype(clone, prop->getName());
+        prop->clonePrototype(clone, prop->getName());
       tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
       cloneProp->copy(prop);
     }
   }
+
   return clone;
 }
 //=========================================================

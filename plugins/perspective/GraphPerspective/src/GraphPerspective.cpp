@@ -1337,7 +1337,8 @@ void GraphPerspective::showHideSideBar() {
   if (_ui->docksWidget->isVisible()) {
     _ui->docksWidget->setVisible(false);
     _ui->sidebarButton->setToolTip("Show Sidebar");
-  } else {
+  }
+  else {
     _ui->docksWidget->setVisible(true);
     _ui->sidebarButton->setToolTip("Hide Sidebar");
   }

@@ -155,10 +155,12 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.addAction(_ui->actionAdd_sub_graph);
     menu.addAction(_ui->actionCreate_induced_sub_graph);
     menu.addAction(_ui->actionClone_subgraph);
+
     if(_contextGraph->getRoot() != _contextGraph) {
       menu.addAction(_ui->actionClone_sibling);
       menu.addAction(_ui->actionClone_sibling_with_properties);
     }
+
     menu.addSeparator();
 
     if(_contextGraph->getRoot() != _contextGraph) {
