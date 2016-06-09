@@ -11,6 +11,12 @@ CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR
 # only the first list entry is transferred otherwise.
 STRING(REPLACE ";" "," CMAKE_LIBRARY_PATH_STR "${CMAKE_LIBRARY_PATH}")
 
+# Ensure that libraries paths are in MSYS format when using MSYS Makefiles,
+# otherwise the documentation fails to build
+IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
+  WINDOWS_TO_MSYS_PATH(${CMAKE_LIBRARY_PATH_STR} CMAKE_LIBRARY_PATH_STR)
+ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
+
 ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                                                          -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR} -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
                                                          -DSYSTEM_SIP=${SYSTEM_SIP} -DSIP_VERSION=${SIP_VERSION_STR} -DQT_BIN_DIR=${QT_BINARY_DIR}
