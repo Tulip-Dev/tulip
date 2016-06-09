@@ -14,7 +14,7 @@
         <file>icons/logo32x32.png</file>
         <file>icons/json32x32.png</file>
         <file>icons/tlpb32x32.png</file>
-	<file>icons/tulip.ico</file>
+        <file>icons/tulip.ico</file>
         <file>ui/arrowdown.png</file>
         <file>ui/arrowup.png</file>
         <file>ui/btn_26.png</file>
@@ -94,5 +94,6 @@
         <file>icons/64/document-import.png</file>
         <file>icons/arrow_two_head.png</file>
         <file>ui/split3_3_screen.png</file>
+        <file>ui/sidebar.png</file>
     </qresource>
 </RCC>
