@@ -97,9 +97,9 @@ Creating subgraphs or meta-nodes
 
 You can simply create a subgraph by selecting the nodes and edges you want to isolate in your graph and click on the *Create subgraph from selection* option. It can be found either with a right click on the graph name in the graph list or in the *Edit* menu.
 
-From those menus you will also be able to create empty subgraphs. You can add here new nodes and edges, which will be directly added into the subgraphs above the current one in the hierarchy. The *Clone subgraph* action will duplicate the target graph in a subgraph just beneath it in the hierchical scale.
+From those menus you will also be able to create empty subgraphs. You can add here new nodes and edges, which will be directly added into the subgraphs above the current one in the hierarchy. The *Create clone sub-graph* action will duplicate the target graph in a subgraph just beneath it in the hierchical scale.
 
-To create a meta-node, you can proceed in a fashion similar to the one followed to create subgraph from selection. Once you have picked the nodes, click on the option *Group elements* in the menu *Edit*. 
+To create a meta-node, you can proceed in a fashion similar to the one followed to create subgraph from selection. Once you have picked the nodes, click on the option *Group elements* in the *Edit* menu. 
 
 Optionally, the edge selection for the subgraph creation can be realized with the "Induced Sub-graph" algorithm.
 
