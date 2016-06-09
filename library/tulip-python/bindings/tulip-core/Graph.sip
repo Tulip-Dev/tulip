@@ -436,9 +436,9 @@ Creates and returns a new named sub-graph of this graph.
 
 //===========================================================================================
 
-  tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false);
+  tlp::Graph* addCloneSubGraph(const std::string& name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
 %Docstring
-tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false)
+tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false, addSiblinProperties = false)
 
 .. versionadded:: 4.5
 
@@ -448,6 +448,8 @@ Creates and returns a subgraph of this graph (or the parent of this graph) that 
 :type name: string
 :param addSibling: if true a sibling of this graph will be created; a subgraph of this graph if not. Defaults to false
 :type addSibling: bool
+:param addSiblingProperties: if true all the local properties of this graph will be copied into its clone sibling. Defaults to false
+:type addSiblingProperties: bool
 :rtype: :class:`tlp.Graph`
 %End
 
