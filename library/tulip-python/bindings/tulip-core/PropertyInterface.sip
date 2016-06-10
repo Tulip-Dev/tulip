@@ -186,6 +186,43 @@ Returns a string representation of the edge default value.
 %End
 //===========================================================================================
 
+  virtual tlp::PropertyInterface* clonePrototype(tlp::Graph* g, const std::string & name) const = 0;
+%Docstring
+tlp.PropertyInterface.clonePrototype(g, name)
+
+Returns a newly created property of the same type in the graph g.
+
+:param graph: the graph in with the new property will be added
+:type name: :class::`tlp.Graph`
+:param name: the name of the property to create and return
+:type name: string
+:rtype: :class:`tlp.PropertyInterface`
+%End
+//===========================================================================================
+
+  virtual void copy(tlp::PropertyInterface* source) = 0;
+%Docstring
+tlp.PropertyInterface.copy(source)
+
+Copies the values of the source property to this property.
+
+:param soure: the property from which to copy values.
+:type name: :class::`tlp.PropertyInterface`
+:throws: an exception if the properties have nt the same type
+%End
+%MethodCode
+  if (sipCpp->getTypename() == a0->getTypename()) {
+    sipCpp->copy(a0);
+  } else {
+    std::ostringstream oss;
+    oss << "Unable to copy property named \"" << a0->getName().c_str() << "\" into property named \"" << sipCpp->getName().c_str() <<"\": types are not the same.";
+    PyErr_SetString(PyExc_Exception, oss.str().c_str());
+    sipIsErr = -1;
+  }
+%End
+
+//===========================================================================================
+
   virtual bool setAllNodeStringValue( const std::string & strVal ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllNodeStringValue(str)
