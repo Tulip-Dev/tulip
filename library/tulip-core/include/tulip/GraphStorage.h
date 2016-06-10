@@ -72,33 +72,33 @@ public:
    * Reserving memory before to addNode enable to reduce the number of vector resizing and then
    * to speed up significantly construction of graphs.
    */
-  void reserveNodes(size_t nb);
+  void reserveNodes(const size_t nb);
   //=======================================================
   /**
    * @brief Enables to reserve memory for nbEdges
    * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
    * to speed up significantly construction of graphs.
     */
-  void reserveEdges(size_t nb);
+  void reserveEdges(const size_t nb);
   //=======================================================
   /**
    * @brief Enables to reserve memory for adjacency nodes
    * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
    * to speed up significantly construction of graphs.
    */
-  void reserveAdj(node n, size_t nb);
+  void reserveAdj(const node n, const size_t nb);
   //=======================================================
   /**
    * @brief Enables to reserve memory for adjacency nodes
    * Reserving memory before to addEdge enable to reduce the number of vector resizing and then
    * to speed up significantly construction of graphs.
    */
-  void reserveAdj(size_t nb);
+  void reserveAdj(const size_t nb);
   //=======================================================
   /**
    * @brief restore adjacency edges of a given node
    */
-  void restoreAdj(node n, const std::vector<edge>& edges);
+  void restoreAdj(const node n, const std::vector<edge>& edges);
   //=======================================================
   /**
    * @brief Return the first node of graph
@@ -135,25 +135,25 @@ public:
    * @warning: be careful that loops appear twice
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getInOutEdges(node n) const;
+  Iterator<edge>* getInOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief get adjacency edges of a given node
    */
-  void getInOutEdges(node n, std::vector<edge>& edges,
+  void getInOutEdges(const node n, std::vector<edge>& edges,
                      bool loopsOnlyOnce = false) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getOutEdges(node n) const;
+  Iterator<edge>* getOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in edges of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getInEdges(node n) const;
+  Iterator<edge>* getInEdges(const node n) const;
   //=======================================================
   /**
    * @brief Returns if edges exist between two nodes
@@ -172,34 +172,34 @@ public:
    * @brief Return a Tulip Iterator on adjacent nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getInOutNodes(node n) const;
+  Iterator<node>* getInOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getInNodes(node n) const;
+  Iterator<node>* getInNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getOutNodes(node n) const;
+  Iterator<node>* getOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return the degree of a node
    */
-  unsigned int deg(node n) const;
+  unsigned int deg(const node n) const;
   //=======================================================
   /**
    * @brief Return the out degree of a node
    */
-  unsigned int outdeg(node n) const;
+  unsigned int outdeg(const node n) const;
   //=======================================================
   /**
    * @brief Return the in degree of a node
    */
-  unsigned int indeg(node n) const;
+  unsigned int indeg(const node n) const;
   //=======================================================
   /**
    * @brief Return the number of edges in the graph
@@ -219,17 +219,17 @@ public:
   /**
    * @brief return the first extremity (considered as source if the graph is directed) of an edge
    */
-  node source(edge e) const;
+  node source(const edge e) const;
   //=======================================================
   /**
    * @brief return the second extremity (considered as target if the graph is directed) of an edge
    */
-  node target(edge e) const;
+  node target(const edge e) const;
   //=======================================================
   /**
    * @brief return the opposite node of n through edge e
    */
-  node opposite(edge e, node n) const;
+  node opposite(const edge e, const node n) const;
   //=======================================================
   /**
    * @brief Reconnect the edge e to have the new given ends
@@ -276,7 +276,7 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  node addNode(node n);
+  node addNode(const node n);
   //=======================================================
   /**
    * @brief Add a new node in the structure and return it
@@ -321,7 +321,7 @@ public:
    * @warning Orders of edges in the extremities of the deleted edges are affected
    * @complexity: o(1)
    */
-  void delNode(node n);
+  void delNode(const node n);
   //=======================================================
   /**
    * @brief Add the given edge between src and tgt and return it
@@ -340,7 +340,7 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  edge addEdge(node src, node tgt);
+  edge addEdge(const node src, const node tgt);
   //=======================================================
   /**
    * @brief Add edges in the structure and returns them
@@ -370,7 +370,7 @@ public:
    * it devalidates iterators on adjacency for the nodes at the extremities od the deleted edge.
    * @warning Orders of edges in the extremities of the deleted edge are affected
    */
-  void delEdge(edge e);
+  void delEdge(const edge e);
   //=======================================================
   /**
    * @brief Delete all edges in the graph
