@@ -58,7 +58,7 @@ void IdManagerTest::testGetFree() {
     idManager->free(i*2);
   }
 
-  for (unsigned int i = 1; i < 500; ++i) {
+  for (unsigned int i = 0; i < 500; ++i) {
 #ifdef TLP_NO_IDS_REUSE
     CPPUNIT_ASSERT_EQUAL(++maxId, idManager->get());
 #else
