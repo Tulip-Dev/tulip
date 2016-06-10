@@ -231,15 +231,15 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual void erase(const tlp::node node) ;
+  virtual void erase(const tlp::node node);
 
 //===========================================================================================
 
-  virtual void erase(const tlp::edge edge) ;
+  virtual void erase(const tlp::edge edge);
 
 //===========================================================================================
 
-  virtual const std::string& getTypename() const ;
+  virtual const std::string& getTypename() const;
 
 //===========================================================================================
 
@@ -247,19 +247,19 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual std::string getNodeDefaultStringValue() const ;
+  virtual std::string getNodeDefaultStringValue() const;
 
 //===========================================================================================
 
-  virtual std::string getEdgeDefaultStringValue() const ;
+  virtual std::string getEdgeDefaultStringValue() const;
 
 //===========================================================================================
 
-  virtual std::string getNodeStringValue(const tlp::node node) const ;
+  virtual std::string getNodeStringValue(const tlp::node node) const;
 
 //===========================================================================================
 
-  virtual std::string getEdgeStringValue(const tlp::edge edge) const ;
+  virtual std::string getEdgeStringValue(const tlp::edge edge) const;
 
 //===========================================================================================
 
@@ -279,19 +279,23 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const ;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = nullptr) const ;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const;
 
 //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const ;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = nullptr) const ;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const;
+
+//===========================================================================================
+
+  virtual tlp::PropertyInterface* clonePrototype(tlp::Graph* g, const std::string & name) const;
 
 //===========================================================================================
 
@@ -301,7 +305,7 @@ tlp.@PROPERTY_TYPE@Property.copy(nodeDst, nodeSrc, prop[, ifNotDefault=False])
 
 .. versionadded:: 3.8
 
-Copies the value hold by a property on a node to another node on this property.
+Copies the value hold by a property on a node to another node in this property.
 
 :param nodeDst: the node to copy the value to.
 :type nodeDst: :class:`tlp.node`
@@ -321,7 +325,7 @@ tlp.@PROPERTY_TYPE@Property.copy(edgeDst, edgeSrc, prop[, ifNotDefault=False])
 
 .. versionadded:: 3.8
 
-Copies the value hold by a property on an edge to another edge on this property.
+Copies the value hold by a property on an edge to another edge in this property.
 
 :param edgeDst: the node to copy the value to.
 :type edgeDst: :class:`tlp.edge`
@@ -341,7 +345,7 @@ tlp.@PROPERTY_TYPE@Property.copy(prop)
 
 .. versionadded:: 3.8
 
-Copies the values hold by a property on this property.
+Copies the values hold by a property in this property.
 
 :param prop: the property to copy
 :type prop: :class:`tlp.@PROPERTY_TYPE@Property`
@@ -370,7 +374,7 @@ public :
   @VEC_PROPERTY_TYPE@VectorProperty (tlp::Graph *graph, std::string name="");
 
 //===========================================================================================
- 
+
   const std::vector<@CPP_TYPE@> getNodeDefaultValue();
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeDefaultValue()
@@ -490,7 +494,7 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val)
 Sets the same list of values on the whole set of nodes.
 
 :param val: the list of values to set on the nodes
-:type val: list of @PYTHON_TYPE@ 
+:type val: list of @PYTHON_TYPE@
 %End
 
 //===========================================================================================
@@ -502,7 +506,7 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val)
 Sets the same list of values on the whole set of edges.
 
 :param val: the list of values to set on the edges
-:type val: list of @PYTHON_TYPE@ 
+:type val: list of @PYTHON_TYPE@
 %End
 
 //===========================================================================================
@@ -539,7 +543,7 @@ Sets the value in the list attached to a particular node at the given index.
 %End
 
 //===========================================================================================
- 
+
   const @CPP_TYPE@ getNodeEltValue(const tlp::node node, unsigned int index);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodeEltValue(node, index)
@@ -568,10 +572,10 @@ Returns the value in the list attached to a particular node at the given index.
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
-%End  
-  
-//===========================================================================================  
-  
+%End
+
+//===========================================================================================
+
   void pushBackNodeEltValue(const tlp::node node, const @CPP_TYPE@& val);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.pushBackNodeEltValue(node, val)
@@ -592,9 +596,9 @@ Inserts a value at the end of the list attached to a particular node. The size o
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
 %End
- 
-//=========================================================================================== 
- 
+
+//===========================================================================================
+
   void popBackNodeEltValue(const tlp::node node);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.popBackNodeEltValue(node)
@@ -693,10 +697,10 @@ Sets the value in the list attached to a particular edge at the given index.
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
-%End  
+%End
 
-//===========================================================================================  
-  
+//===========================================================================================
+
   const @CPP_TYPE@ getEdgeEltValue(const tlp::edge edge, unsigned int index);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgeEltValue(edge, index)
@@ -725,7 +729,7 @@ Returns the value in the list attached to a particular edge at the given index.
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
-%End  
+%End
 
 //===========================================================================================
 
@@ -750,8 +754,8 @@ Inserts a value at the end of the list attached to a particular edge. The size o
   }
 %End
 
-//=========================================================================================== 
-  
+//===========================================================================================
+
   void popBackEdgeEltValue(const tlp::edge edge);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.popBackEdgeEltValue(edge)
@@ -772,7 +776,7 @@ Removes the value at the end of the list (if not empty) attached to a particular
 %End
 
 //===========================================================================================
-  
+
   void resizeEdgeValue(const tlp::edge edge, unsigned int size);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.resizeEdgeValue(edge, size)
@@ -817,10 +821,10 @@ Resizes the list attached to a particular edge. The value given in paramater wil
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
-%End    
+%End
 
-//===========================================================================================    
-    
+//===========================================================================================
+
   std::vector<@CPP_TYPE@> __getitem__(const tlp::node node) const;
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
@@ -930,13 +934,17 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
+  virtual tlp::PropertyInterface* clonePrototype(tlp::Graph* g, const std::string & name) const;
+
+//===========================================================================================
+
   virtual bool copy(tlp::node src, tlp::node dst, tlp::@VEC_PROPERTY_TYPE@VectorProperty* prop, bool ifNotDefault=false);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(nodeDst, nodeSrc, prop[, ifNotDefault=False])
 
 .. versionadded:: 3.8
 
-Copies the value hold by a property on a node to another node on this property.
+Copies the value hold by a property on a node to another node in this property.
 
 :param nodeDst: the node to copy the value to.
 :type nodeDst: :class:`tlp.node`
@@ -956,7 +964,7 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(edgeDst, edgeSrc, prop[, ifNotDefault
 
 .. versionadded:: 3.8
 
-Copies the value hold by a property on an edge to another edge on this property.
+Copies the value hold by a property on an edge to another edge in this property.
 
 :param edgeDst: the node to copy the value to.
 :type edgeDst: :class:`tlp.edge`
@@ -976,7 +984,7 @@ tlp.@VEC_PROPERTY_TYPE@VectorProperty.copy(prop)
 
 .. versionadded:: 3.8
 
-Copies the values hold by a property on this property.
+Copies the values hold by a property in this property.
 
 :param prop: the property to copy
 :type prop: :class:`tlp.@VEC_PROPERTY_TYPE@VectorProperty`
