@@ -655,7 +655,7 @@ Returns the sub-graph with the corresponding name or :const:`None` if there is n
 %Docstring
 tlp.Graph.getDescendantGraph(id)
 
-Returns the descendant graph with the corresponding id or :const:`None` if there is no descendant with that id. 
+Returns the descendant graph with the corresponding id or :const:`None` if there is no such descendant graph.
 
 :param id: a graph id
 :type id: integer
@@ -670,7 +670,7 @@ tlp.Graph.getDescendantGraph(name)
 
 .. versionadded:: 3.7
 
-Returns the descendant with the corresponding name or :const:`None` if there is no descendant with that name.
+Returns the descendant graph with the corresponding name or :const:`None` if there is no such descendant graph.
 
 :param name: the name of the descendant to return
 :type name: string
