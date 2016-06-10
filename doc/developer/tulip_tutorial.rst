@@ -18,20 +18,26 @@ Tutorial compilation instructions
 
 The present tutorials are only here to help you familiarize with the Tulip tool while using some of the classic graph manipulation operations. To compile the tutorial files, you will first need a C++ compiler (see the minimal compatible versions in the *INSTALL.[linux, mac, win]* file).
 
-The second needed element is the *tulip-config* file. If you have followed the standard installation procedures, such file should exists in the directory ::
+The second needed element is the *tulip-config* file. If you have followed the standard installation procedures, such file should exists in the directory
+
+.. code-block:: bash
 
   /usr/local/bin
 
 along with *tulip* and *tulip_perspective*.
-If you have, however, followed the customized installation procedures, the files should be in the directory ::
+If you have, however, followed the customized installation procedures, the files should be in the directory
+
+.. code-block:: bash
 
   [...]/Tulip-4.3/install-[debug,release]/bin/*
 
 You can either add this folder address to the path or specify the whole address in the compilation command line.
 
-This command will be formed as ::
+This command will be formed as
 
-  g++ [name of your file].cpp `[whole path to]tulip-config --libs --cxxflags` -o [name of your executable]
+.. code-block:: bash
+
+  $ g++ [name of your file].cpp `[whole path to]tulip-config --libs --cxxflags` -o [name of your executable]
 
 
 .. _tulip_library_tutorial_001:
@@ -191,9 +197,11 @@ Before exiting the main function, do not forget memory leaks (even it's not impo
 10. Compiling and running the program
 -------------------------------------
 
-Compile this program with the following command::
+Compile this program with the following command
 
-  g++ tutorial001.cpp `tulip-config --libs --cxxflags` -o tutorial001
+.. code-block:: bash
+
+  $ g++ tutorial001.cpp `tulip-config --libs --cxxflags` -o tutorial001
 
 And run it to have a look::
 
@@ -260,9 +268,11 @@ In this *while* loop, we display some node topological properties ::
 
 At the end of the loop, we will need to delete the iterator: *delete itNodes;*
 
-Following is the output of this simple while loop ::
+Following is the output of this simple while loop
 
-  tulip$ ./tutorial002
+.. code-block:: bash
+
+  $ tulip$ ./tutorial002
   node: 0
    degree: 2
    in-degree: 1
@@ -455,9 +465,11 @@ Note that you should always declare the variable used in the forEach before the 
 Compiling and running the program
 ---------------------------------
 
-Compile this program with this command::
+Compile this program with this command
 
-  g++ tutorial002.cpp `tulip-config --libs --cxxflags` -o tutorial002
+.. code-block:: bash
+
+  $ g++ tutorial002.cpp `tulip-config --libs --cxxflags` -o tutorial002
 
 Run it to have a look::
 
@@ -971,18 +983,22 @@ Each test is running with a specific function which can be found in the graph cl
      			
 * *TriconnectedTest::isTriconnected(graph);*
 
-A simple example reusing the graph presented in the tutorial 006 can be found :download:`here <./_documents/tutorial008.cpp>`. The execution::
+A simple example reusing the graph presented in the tutorial 006 can be found :download:`here <./_documents/tutorial008.cpp>`. The execution
 
-  g++ tutorial008.cpp `tulip-config --libs --cxxflags` -o tutorial008
+.. code-block:: bash
 
-should give you something similar to::
+  $ g++ tutorial008.cpp `tulip-config --libs --cxxflags` -o tutorial008
 
-  ./tutorial008
-    The graph is cyclic
-    The graph is connected
-    The graph is planar
-    The graph is simple
-    The graph is not a tree
+should give you something similar to
+
+.. code-block:: bash
+
+  $ ./tutorial008
+  The graph is cyclic
+  The graph is connected
+  The graph is planar
+  The graph is simple
+  The graph is not a tree
 
 
 .. _tulip_library_tutorial_009:
@@ -1059,9 +1075,11 @@ We only use basic graph events in this tutorial. However, *PropertyEvents* and *
 Compiling and running the program
 ---------------------------------
 
-We compile the program using the standard command line::
+We compile the program using the standard command line
 
-  g++ tutorial009.cpp ListenerClass.cpp `tulip-config --libs --cxxflags` -o tutorial009
+.. code-block:: bash
+
+  $ g++ tutorial009.cpp ListenerClass.cpp `tulip-config --libs --cxxflags` -o tutorial009
 
 The execution output should resemble to the following::
 
