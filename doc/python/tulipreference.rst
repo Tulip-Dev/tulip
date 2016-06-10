@@ -281,9 +281,9 @@ from the graph while iterating on its nodes/edges/subgraphs.
 
 .. automethod:: tulip::tlp.Graph.getEdgeMetaInfo
 
-.. _graph-class.informations:
+.. _graph-class.information:
 
-Informations about the graph stucture
+Information about the graph stucture
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. automethod:: tulip::tlp.Graph.getId
