@@ -172,7 +172,11 @@ Modification of the graph structure
 
 .. automethod:: tulip::tlp.Graph.addEdges
 
+.. automethod:: tulip::tlp.Graph.addEdges
+
 .. automethod:: tulip::tlp.Graph.delEdge
+
+.. automethod:: tulip::tlp.Graph.delEdges
 
 .. automethod:: tulip::tlp.Graph.delEdges
 

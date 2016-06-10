@@ -999,7 +999,7 @@ The new edges are also added in all the graph ancestors to maintain the sub-grap
 :param edges: the list of edges to add described by a pair of nodes
 :type edges: list of tuples containing two :class:`tlp.node` objects
 :rtype: list of :class:`tlp.edge`
-:throws: an exception if of the provided nodes to link is not an element of the graph.
+:throws: an exception if one of the provided nodes to link is not an element of the graph.
 %End
 
 %MethodCode
@@ -1074,11 +1074,11 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 
 :param itEdges: an iterator on the edges to add
 :type itEdges: a Tulip iterator on :class:`tlp.edge` objects
-:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edges extremities is not an element of the graph.
+:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edge extremities is not an element of the graph.
 
 .. warning:: The added edges must be elements of the graph hierarchy, thus they must be elements of the root graph.
 
-.. warning : One can't add existing edges to the root graph.
+.. warning : One cannot add existing edges to the root graph.
 %End
 
 %MethodCode
@@ -1092,7 +1092,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
     } else {
       if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
         std::ostringstream oss;
-        oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+        oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
             << "because the graph does not contain its source node.";
         printErrorMessage(oss.str());
         sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
@@ -1100,7 +1100,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
       }
       if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
         std::ostringstream oss;
-        oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+        oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
             << "because the graph does not contain its target node.";
         printErrorMessage(oss.str());
         sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
@@ -1115,22 +1115,22 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %End
 //===========================================================================================
 
-  void addEdges(const std::vector<tlp::edge>& edges);
+  void addEdges(const std::vector<tlp::edge>& list_edges);
 %Docstring
-tlp.Graph.addEdges(edges)
+tlp.Graph.addEdges(list_edges)
 
 .. versionadded:: 4.5
 
 Adds existing edges in the graph. The edges are also added in all
 the graph ancestors to maintain the sub-graph relation between graphs.
 
-:param edges: a vector of edges to add
-:type edges: a list of :class:`tlp.edge` objects
-:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edges extremities is not an element of the graph.
+:param list_edges: a list of edges to add
+:type list_edges: a list of :class:`tlp.edge` objects
+:throws: an exception if one of the edge to add is not an element of the root graph or if one of the edge extremities is not an element of the graph.
 
 .. warning:: The added edges must be elements of the graph hierarchy, thus they must be elements of the root graph.
 
-.. warning:: One can't add existing edges to the root graph.
+.. warning:: It is not possible to add existing edges to the root graph.
 
 %End
 
@@ -1143,7 +1143,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
     } else {
       if (!sipCpp->isElement(sipCpp->getRoot()->source(e))) {
           std::ostringstream oss;
-          oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+          oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
               << "because the graph does not contain its source node.";
           printErrorMessage(oss.str());
           sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->source(e));
@@ -1151,7 +1151,7 @@ the graph ancestors to maintain the sub-graph relation between graphs.
       }
       if (!sipCpp->isElement(sipCpp->getRoot()->target(e))) {
           std::ostringstream oss;
-          oss << "Error : edge " << e.id << " can not be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
+          oss << "Error : edge " << e.id << " cannot be added in graph \\\"" << sipCpp->getName() << "\\\" (id " << sipCpp->getId() << ") "
               << "because the graph does not contain its target node.";
           printErrorMessage(oss.str());
           sipIsErr = throwInvalidNodeException(sipCpp, sipCpp->getRoot()->target(e));
@@ -1199,12 +1199,12 @@ tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
 Deletes edges in the graph. These edges are also removed in
 the sub-graphs hierarchy of the current graph to maintain
 the sub-graph relation between graphs.
-The ordering of remaining edges is preserved.
+The ordering of the remaining edges is preserved.
 
 :param itEdges: an iterator on the edges to delete
 :type itEdges: a Tulip iterator on :class:`tlp.edge` objects
-:param deleteInAllGraphs: If :const:`True`, the edges are deleted in the whole hierarchy of graphs.
-:param deleteInAllGraphs: boolean
+:param deleteInAllGraphs: If :const:`True`, the edges are deleted in the whole graph hierarchy.
+:param deleteInAllGraphs: Boolean
 :throws: an exception if one of the edge to delete is not an element of the graph
 %End
 
@@ -1236,11 +1236,11 @@ Deletes edges in the graph. These edges are also removed in
 the sub-graphs hierarchy of the current graph to maintain
 the sub-graph relation between graphs.
 
-:param edges: a vector of edges to add
+:param edges: a list of edges to delete
 :type edges: a list of :class:`tlp.edge` objects
 :type itEdges: a Tulip iterator on :class:`tlp.edge` objects
-:param deleteInAllGraphs: if :const:`True`, these edges are  deleted in the whole hierarchy of graphs.
-:type deleteInAllGraphs: boolean
+:param deleteInAllGraphs: if :const:`True`, these edges are deleted in the whole graph hierarchy.
+:type deleteInAllGraphs: Boolean
 :throws: an exception if one of the edge to delete is not an element of the graph
 %End
 
