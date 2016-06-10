@@ -100,25 +100,35 @@ Two macros are defines for *Tulip* documentations.
             
 * How to insert an equation ?
 
-See the `appropriate section <http://www.stack.nl/~dimitri/doxygen/formulas.html>`_ in the Doxygen website. Doxygen allows you to put Latex formulas in the ouput (just for HTML and latex format). Three ways are avaible. If you want to include formulas in-text, you have to put formulas between a pair of *\f$* ::
+See the `appropriate section <http://www.stack.nl/~dimitri/doxygen/formulas.html>`_ in the Doxygen website. Doxygen allows you to put Latex formulas in the ouput (just for HTML and latex format). Three ways are avaible. If you want to include formulas in-text, you have to put formulas between a pair of *\f$*
+
+.. code-block:: latex
 
   \f$ AB = \sqrt{BC^2 + CA^2} \f$
 
-The second way is for a centered display on a seperate line. These formulas should be put between :: 
+The second way is for a centered display on a seperate line. These formulas should be put between
+
+.. code-block:: latex
 
   \f[
 
-and ::
+and
+
+.. code-block:: latex
 
   \f]
 
 commands.
 
-The third way is to used formulas or other latex elements that are not in a math environment. It can be specified using ::
+The third way is to used formulas or other latex elements that are not in a math environment. It can be specified using
+
+.. code-block:: latex
 
   \f{environment}
 
-where *environment* is the latex environment, the corresponding end commands is ::
+where *environment* is the latex environment, the corresponding end commands is
+
+.. code-block:: latex
 
   \f}
 
