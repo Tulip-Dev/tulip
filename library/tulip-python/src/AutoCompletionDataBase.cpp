@@ -84,13 +84,18 @@ static QSet<QString> getParametersListForPlugin(const QString &pluginName, const
 
     while (it->hasNext()) {
       ParameterDescription pd = it->next();
-      QString paramName = "\"" + QString::fromUtf8(pd.getName().c_str()) + "\" (" + getPythonTypeName(pd.getTypeName().c_str()) + ")";
+      QString param = QString::fromUtf8(pd.getName().c_str());
+      // remove the special prefixes for files parameters used internally by the Tulip GUI
+      param = param.replace("anyfile::", "");
+      param = param.replace("file::", "");
+      param = param.replace("dir::", "");
+      QString paramName = "\"" + param + "\" (" + getPythonTypeName(pd.getTypeName().c_str()) + ")";
       paramName.replace("\n", "\\n");
 
       if (paramName.startsWith(prefix))
         ret.insert(paramName);
 
-      paramName = "'" + QString::fromUtf8(pd.getName().c_str()) + "' (" + getPythonTypeName(pd.getTypeName().c_str()) + ")";
+      paramName = "'" + param + "' (" + getPythonTypeName(pd.getTypeName().c_str()) + ")";
       paramName.replace("\n", "\\n");
 
       if (paramName.startsWith(prefix))

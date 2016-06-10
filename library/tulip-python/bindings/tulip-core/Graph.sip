@@ -133,6 +133,30 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
       }
     }
   }
+  // if some file parameters are defined without the special prefix provided, ensure
+  // the prefixed versions are defined and set their values before calling Tulip algorithm
+  std::vector<std::string> filesPrefixes;
+  filesPrefixes.push_back("file::");
+  filesPrefixes.push_back("anyfile::");
+  filesPrefixes.push_back("dir::");
+  std::pair<std::string, tlp::DataType*> entry;
+  stableForEach(entry, params->getValues()) {
+    for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
+      std::string fileParamTlpName = filesPrefixes[i] + entry.first;
+      if (algoParams.exist(fileParamTlpName)) {
+        std::string fileParamTlp;
+        std::string fileParam;
+        params->get(fileParamTlpName, fileParamTlp);
+        params->get(entry.first, fileParam);
+        if (fileParamTlp.empty() && !fileParam.empty()) {
+          params->set(fileParamTlpName, fileParam);
+        }
+        if (!fileParamTlp.empty() && fileParam.empty()) {
+          params->set(entry.first, fileParamTlp);
+        }
+      }
+    }
+  }
   return params;
 }
 
@@ -4121,7 +4145,7 @@ Returns :const:`True` if the graph has been successfully saved.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSet = tlp::DataSet()) /TransferBack/;
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSet /GetWrapper/ = tlp::DataSet()) /TransferBack/;
 %Docstring
 tlp.importGraph(importPluginName[, params, newGraph = None])
 
@@ -4140,7 +4164,14 @@ Returns a new graph or None if the import fails.
 
 %MethodCode
   if (pluginExists<tlp::ImportModule>(*a0)) {
-    sipRes = tlp::importGraph(*a0, *a1, 0);
+    tlp::DataSet *params = prepareAlgorithmParameters(*a0, NULL, a1, a1Wrapper);
+    if (params) {
+      sipRes = tlp::importGraph(*a0, *params, NULL);
+      updateWrappedDataSetAfterAlgorithmCall(params, a1, a1Wrapper);
+      delete params;
+    } else {
+      sipIsErr = -1;
+    }
   } else {
     sipIsErr = -1;
     std::string msg = "No Tulip import plugin named  ";
@@ -4152,7 +4183,7 @@ Returns a new graph or None if the import fails.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet, tlp::Graph *newGraph);
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataSet /GetWrapper/, tlp::Graph *newGraph);
 %Docstring
 tlp.importGraph(importPluginName, params[, newGraph = None])
 
@@ -4178,7 +4209,14 @@ Returns a new graph or None if the import fails.
 
 %MethodCode
   if (pluginExists<tlp::ImportModule>(*a0)) {
-    sipRes = tlp::importGraph(*a0, *a1, 0, a2);
+    tlp::DataSet *params = prepareAlgorithmParameters(*a0, a2, a1, a1Wrapper);
+    if (params) {
+      sipRes = tlp::importGraph(*a0, *params, 0, a2);
+      updateWrappedDataSetAfterAlgorithmCall(params, a1, a1Wrapper);
+      delete params;
+    } else {
+      sipIsErr = 1;
+    }
   } else {
     sipIsErr = -1;
     std::string msg = "No Tulip import plugin named  ";
@@ -4190,7 +4228,7 @@ Returns a new graph or None if the import fails.
 
 //===========================================================================================
 
-bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const std::string &outputFilePath, tlp::DataSet dataSet = tlp::DataSet());
+bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const std::string &outputFilePath, tlp::DataSet dataSet /GetWrapper/ = tlp::DataSet());
 %Docstring
 tlp.exportGraph(exportPluginName, graph, outputFilePath[, params])
 
@@ -4215,7 +4253,14 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
   if (pluginExists<tlp::ExportModule>(*a0)) {
     std::ostream *ofs = tlp::getOutputFileStream((*a2).c_str());
     if (ofs->good()) {
-      sipRes = tlp::exportGraph(a1, *ofs, *a0, *a3);
+      tlp::DataSet *params = prepareAlgorithmParameters(*a0, a1, a3, a3Wrapper);
+      if (params) {
+        sipRes = tlp::exportGraph(a1, *ofs, *a0, *params);
+        updateWrappedDataSetAfterAlgorithmCall(params, a3, a3Wrapper);
+        delete params;
+      } else {
+        sipIsErr = -1;
+      }
     } else {
       std::string msg = "Export error : The specified file path (";
       msg += *a2;
