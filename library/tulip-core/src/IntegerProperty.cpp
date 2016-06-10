@@ -40,7 +40,7 @@ void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::Inte
   }
 }
 //=================================================================================
-PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
@@ -84,7 +84,7 @@ int IntegerProperty::compare(const edge e1, const edge e2)const {
   return getEdgeValue(e1) - getEdgeValue(e2);
 }
 //=================================================================================
-PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 

@@ -37,7 +37,7 @@ class TLP_SCOPE ColorProperty:public AbstractColorProperty {
 public :
   ColorProperty (Graph *g, const std::string& n="");
   // PropertyInterface inherited methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
@@ -56,7 +56,7 @@ class TLP_SCOPE ColorVectorProperty:public AbstractVectorProperty<tlp::ColorVect
 public :
   ColorVectorProperty(Graph *g, const std::string& n="") :AbstractVectorProperty<ColorVectorType, tlp::ColorType>(g, n) {}
   // PropertyInterface inherited methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&);
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;

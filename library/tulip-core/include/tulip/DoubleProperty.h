@@ -43,7 +43,7 @@ public :
 
   virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &);
 
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
@@ -115,7 +115,7 @@ class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVe
 public :
   DoubleVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
