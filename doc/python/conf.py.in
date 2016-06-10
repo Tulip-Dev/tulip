@@ -28,7 +28,7 @@ import sys, os
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.coverage', 'sphinx.ext.pngmath']
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['../common/_templates']
+templates_path = ['@CMAKE_CURRENT_SOURCE_DIR@/../common/_templates']
 
 # The suffix of source filenames.
 source_suffix = '.rst'
