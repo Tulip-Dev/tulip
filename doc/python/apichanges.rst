@@ -70,6 +70,42 @@ Before Tulip 4.8.2, it was necessary to create the graph properties first by cal
   graph.getStringProperty('origin')
   graph.getDoubleProperty('weight')
 
+Improvements regarding the declaration and transmission of file / directory parameters for plugins
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+When implementing Tulip plugins in Python (see :ref:`Writing Tulip plugins in Python <tulippythonplugins>`),
+it can be usefull to declare a file / directory parameter to perform
+a variety of tasks during the plugin execution: reading / writing graph data to a file, logging messages to a file, ...
+
+Prior to the 4.8.2 release, it was necessary to declare a file parameter in the plugin constructor the way below::
+
+  self.addStringParameter('file::filename', 'the path to an existing file')
+
+The "file::" prefix acts as a hint for the Tulip GUI to create a dialog in order to easily pick a file from the filesystem.
+
+To retrieve the path of the file selected by the user, the following instruction had to be used in the plugin main method
+(:meth:`tlp.ImportModule.importGraph`, :meth:`tlp.ExportModule.exportGraph`, :meth:`tlp.Algorithm.run`)::
+
+  filename = self.dataSet['file::filename']
+
+That way to proceed is not really intuitive so Tulip 4.8.2 introduces a more user friendly mechanism to work
+with file / directory parameters : two new methods have been added in order to easily declare file / directory parameters
+(:meth:`tlp.WithParameter.addFileParameter`, :meth:`tlp.WithParameter.addDirectoryParameter`)
+and it is no more needed to explicitely write the "file::" prefix.
+
+So the recommended way to declare a file parameter in the plugin constructor is now the one below::
+
+  self.addFileParameter('filename', True, 'the path to an existing file')
+
+And to get the path of the file selected by the user, you can now simply write in the plugin main method::
+
+  filename = self.dataSet['filename']
+
+In the same manner, when transmitting a file parameter to a plugin trough a dictionnary (see :ref:`Applying an algorithm on a graph <applyGraphAlgorithm>`),
+the "file::" prefix is no more required to be written.
+
+Nevertheless for backward compatibility, the old mechanism can still be used.
+
 Since Tulip 4.8.1
 ------------------
 

@@ -58,7 +58,7 @@ A window containing an OpenGL visualization of the graph will be created and dis
     params = tlp.getDefaultPluginParameters('File System Directory')
     params['directory color'] = tlp.Color.Blue
     params['other color'] = tlp.Color.Red
-    params['dir::directory'] = pythonStdLibPath
+    params['directory'] = pythonStdLibPath
     graph = tlp.importGraph('File System Directory', params)
 
     # compute an anonymous graph double property that will store node degrees
