@@ -199,7 +199,7 @@ void SizeProperty::setAllNodeValue(const Size &v) {
   AbstractSizeProperty::setAllNodeValue(v);
 }
 //=============================================================================
-PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
@@ -220,7 +220,7 @@ int SizeProperty::compare(const node n1, const node n2) const {
 }
 
 //=============================================================================
-PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* SizeVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 

@@ -69,7 +69,7 @@ StringProperty::StringProperty(Graph *g, const std::string& n) : AbstractStringP
   }
 }
 //=================================================================================
-PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* StringProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
@@ -89,7 +89,7 @@ int StringProperty::compare(const edge e1,const edge e2)const {
   return getEdgeValue(e1).compare(getEdgeValue(e2));
 }
 //=================================================================================
-PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* StringVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 

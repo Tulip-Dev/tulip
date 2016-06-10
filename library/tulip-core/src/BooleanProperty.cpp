@@ -99,7 +99,7 @@ void BooleanProperty::reverseEdgeDirection() {
   delete itE;
 }
 //=================================================================================
-PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
@@ -111,7 +111,7 @@ PropertyInterface* BooleanProperty::clonePrototype(Graph * g, const std::string&
   return p;
 }
 //=================================================================================
-PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* BooleanVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 

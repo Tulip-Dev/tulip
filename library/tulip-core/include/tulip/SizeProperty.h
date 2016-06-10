@@ -46,7 +46,7 @@ public :
   void scale( const tlp::Vector<float,3>&, Iterator<node> *, Iterator<edge> *);
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
@@ -77,7 +77,7 @@ public :
   SizeVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<SizeVectorType, SizeType>(g, n) {}
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;

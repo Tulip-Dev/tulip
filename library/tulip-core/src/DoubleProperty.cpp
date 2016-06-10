@@ -293,7 +293,7 @@ void DoubleProperty::setAllEdgeValue(const double &v) {
   DoubleMinMaxProperty::setAllEdgeValue(v);
 }
 //=================================================================================
-PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
@@ -305,7 +305,7 @@ PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& 
   return p;
 }
 //=================================================================================
-PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* DoubleVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 

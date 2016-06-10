@@ -121,7 +121,7 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
   }
 }
 //============================================================
-PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return nullptr;
 
