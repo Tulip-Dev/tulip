@@ -178,7 +178,7 @@ visual attributes on graph elements and finally it creates a node link diagram v
 
     # Set the parameters for the "File System Directory" Import module
     fsImportParams = tlp.getDefaultPluginParameters("File System Directory", graph)
-    fsImportParams["dir::directory"] = "/home/antoine/tulip_install"
+    fsImportParams["directory"] = "/home/antoine/tulip_install"
 
     # Import a file system directory content as a tree
     tlp.importGraph("File System Directory", fsImportParams, graph)

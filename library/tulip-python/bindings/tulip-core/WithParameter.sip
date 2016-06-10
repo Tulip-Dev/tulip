@@ -759,5 +759,71 @@ Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
   addParameter<tlp::PropertyInterface*>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
 %End
 
+// ==================================================================================
+
+void addFileParameter(const std::string & str,
+                      bool mustExist = true,
+                      const std::string & inHelp = "",
+                      const std::string & inDefValue = "",
+                      bool isMandatory = true);
+
+%Docstring
+tlp.WithParameter.addFileParameter(name[, mustExist = True, help = "", defaultValue = "", isMandatory = True])
+
+.. versionadded:: 4.8.2
+
+Adds a file parameter to the plug-in. A dialog will be created by the Tulip GUI in order to select the file.
+
+:param name: the name of the file parameter to add
+:type name: string
+:param mustExist: specify if the file must exist or not. This is used as a hint by the Tulip GUI to correctly configure the dialog that will be created for selecting the file.
+:type mustExist: boolean
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean
+%End
+
+%MethodCode
+  if (a1) {
+    addParameter<std::string>(sipCpp, (std::string("file::") + (*a0)).c_str(), (*a2).c_str(), (*a3).c_str(), a4, true, false);
+  } else {
+    addParameter<std::string>(sipCpp, (std::string("anyfile::") + (*a0)).c_str(), (*a2).c_str(), (*a3).c_str(), a4, true, false);
+  }
+
+%End
+
+// ==================================================================================
+
+void addDirectoryParameter(const std::string & str,
+                           const std::string & inHelp = "",
+                           const std::string & inDefValue = "",
+                           bool isMandatory = true);
+
+%Docstring
+tlp.WithParameter.addDirectoryParameter(name[, help = "", defaultValue = "", isMandatory = True])
+
+.. versionadded:: 4.8.2
+
+Adds a directory parameter to the plug-in. A dialog will be created by the Tulip GUI in order to select an existing folder.
+
+:param name: the name of the directory parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean
+%End
+
+%MethodCode
+  addParameter<std::string>(sipCpp, (std::string("dir::") + (*a0)).c_str(), (*a1).c_str(), (*a2).c_str(), a3, true, false);
+%End
+
 };
+
+
 };

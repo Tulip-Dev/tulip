@@ -34,7 +34,7 @@ void setTulipGlobalVar(const std::string &varName, const std::string &value);
 std::string getTulipGlobalVar(const std::string &varName);
 }
 
-extern tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
+extern tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0, bool transformFilesParameters=false);
 %End
 
 %ModuleCode
@@ -69,10 +69,26 @@ std::string getTulipGlobalVar(const std::string &varName) {
 
 }
 
-tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph) {
+tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph, bool transformFilesParameters) {
   tlp::DataSet result;
   const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(pluginName);
   parameters.buildDefaultDataSet(result, graph);
+  if (transformFilesParameters) {
+    std::vector<std::string> filesPrefixes;
+    filesPrefixes.push_back("file::");
+    filesPrefixes.push_back("anyfile::");
+    filesPrefixes.push_back("dir::");
+    std::pair<std::string, tlp::DataType*> entry;
+    stableForEach(entry, result.getValues()) {
+      for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
+        if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
+          std::string paramName = entry.first.substr(filesPrefixes[i].length());
+          result.set(paramName, *(reinterpret_cast<std::string*>(entry.second->value)));
+          result.remove(entry.first);
+        }
+      }
+    }
+  }
   return result;
 }
 %End
@@ -237,7 +253,7 @@ Returns a Python dictionnary with string keys filled with default parameters (if
 
 %MethodCode
   if (tlp::PluginLister::pluginExists(*a0)) {
-    sipRes = new tlp::DataSet(::getDefaultPluginParameters(*a0, a1));
+    sipRes = new tlp::DataSet(::getDefaultPluginParameters(*a0, a1, true));
   } else {
     sipIsErr = 1;
     std::string msg = "No plugin named  ";
