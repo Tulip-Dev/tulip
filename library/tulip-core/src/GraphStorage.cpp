@@ -54,7 +54,7 @@ bool GraphStorage::isElement(const edge e) const {
 /**
  * @brief Enables to reserve memory for nbNodes
  */
-void GraphStorage::reserveNodes(size_t nb) {
+void GraphStorage::reserveNodes(const size_t nb) {
   if (nb > nbNodes)
     nodes.reserve(nb);
 }
@@ -62,7 +62,7 @@ void GraphStorage::reserveNodes(size_t nb) {
 /**
  * @brief Enables to reserve memory for nbEdges
  */
-void GraphStorage::reserveEdges(size_t nb) {
+void GraphStorage::reserveEdges(const size_t nb) {
   if (nb > nbEdges)
     edges.reserve(nb);
 }
@@ -70,7 +70,7 @@ void GraphStorage::reserveEdges(size_t nb) {
 /**
  * @brief Enables to reserve memory for adjacency nodes
  */
-void GraphStorage::reserveAdj(node n, size_t nb) {
+void GraphStorage::reserveAdj(const node n, const size_t nb) {
   EdgeVector& nEdges = nodes[n.id].edges;
 
   if (nEdges.size() < nb)
@@ -80,7 +80,7 @@ void GraphStorage::reserveAdj(node n, size_t nb) {
 /**
  * @brief Enables to reserve memory for adjacency nodes
  */
-void GraphStorage::reserveAdj(size_t nb) {
+void GraphStorage::reserveAdj(const size_t nb) {
   for (unsigned int i = 0; i < nodes.size(); ++i) {
     reserveAdj(node(i), nb);
   }
@@ -89,7 +89,7 @@ void GraphStorage::reserveAdj(size_t nb) {
 /**
  * @brief restore adjacency edges of a given node
  */
-void GraphStorage::restoreAdj(node n, const std::vector<edge>& edges) {
+void GraphStorage::restoreAdj(const node n, const std::vector<edge>& edges) {
   EdgeVector& nEdges = nodes[n.id].edges;
   nEdges.clear();
 
@@ -288,11 +288,11 @@ struct IONodesIterator :public Iterator<node>,
 
 };
 //=======================================================
-Iterator<edge>* GraphStorage::getInOutEdges(node n) const {
+Iterator<edge>* GraphStorage::getInOutEdges(const node n) const {
   return new EdgeContainerIterator(nodes[n.id].edges);
 }
 //=======================================================
-void GraphStorage::getInOutEdges(node n, std::vector<edge>& edges,
+void GraphStorage::getInOutEdges(const node n, std::vector<edge>& edges,
                                  bool loopsOnlyOnce) const {
   edges.reserve(nodes[n.id].edges.size());
   SimpleVector<edge>::const_iterator it = nodes[n.id].edges.begin();
@@ -310,7 +310,7 @@ void GraphStorage::getInOutEdges(node n, std::vector<edge>& edges,
   }
 }
 //=======================================================
-bool GraphStorage::getEdges(node src, node tgt, bool directed,
+bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
                             std::vector<edge>& vEdges,
                             bool onlyFirst) const {
   SimpleVector<edge>::const_iterator it = nodes[src.id].edges.begin();
@@ -342,30 +342,30 @@ bool GraphStorage::getEdges(node src, node tgt, bool directed,
   return result;
 }
 //=======================================================
-Iterator<edge>* GraphStorage::getOutEdges(node n) const {
+Iterator<edge>* GraphStorage::getOutEdges(const node n) const {
   return new IOEdgeContainerIterator<IO_OUT>(n, nodes[n.id].edges, edges);
 }
 //=======================================================
-Iterator<edge>* GraphStorage::getInEdges(node n) const {
+Iterator<edge>* GraphStorage::getInEdges(const node n) const {
   return new IOEdgeContainerIterator<IO_IN>(n, nodes[n.id].edges, edges);
 }
 //=======================================================
-Iterator<node>* GraphStorage::getInOutNodes(node n) const {
+Iterator<node>* GraphStorage::getInOutNodes(const node n) const {
   return new IONodesIterator<IO_INOUT>(n, nodes[n.id].edges, edges);
 }
 //=======================================================
-Iterator<node>* GraphStorage::getInNodes(node n) const {
+Iterator<node>* GraphStorage::getInNodes(const node n) const {
   return new IONodesIterator<IO_IN>(n, nodes[n.id].edges, edges);
 }
 //=======================================================
-Iterator<node>* GraphStorage::getOutNodes(node n) const  {
+Iterator<node>* GraphStorage::getOutNodes(const node n) const  {
   return new IONodesIterator<IO_OUT>(n, nodes[n.id].edges, edges);
 }
 //=======================================================
 /**
  * @brief Return the degree of a node
  */
-unsigned int GraphStorage::deg(node n) const {
+unsigned int GraphStorage::deg(const node n) const {
   assert(isElement(n));
   return nodes[n.id].edges.size();
 }
@@ -374,7 +374,7 @@ unsigned int GraphStorage::deg(node n) const {
 /**
  * @brief Return the out degree of a node
  */
-unsigned int GraphStorage::outdeg(node n) const {
+unsigned int GraphStorage::outdeg(const node n) const {
   assert(isElement(n));
   return nodes[n.id].outDegree;
 }
@@ -383,7 +383,7 @@ unsigned int GraphStorage::outdeg(node n) const {
 /**
  * @brief Return the in degree of a node
  */
-unsigned int GraphStorage::indeg(node n) const {
+unsigned int GraphStorage::indeg(const node n) const {
   assert(isElement(n));
   const EdgeContainer& ctnr = nodes[n.id];
   return ctnr.edges.size() - ctnr.outDegree;
@@ -414,7 +414,7 @@ const std::pair<node, node>& GraphStorage::ends(const edge e) const {
 /**
  * @brief return the first extremity (considered as source if the graph is directed) of an edge
  */
-node GraphStorage::source(edge e) const {
+node GraphStorage::source(const edge e) const {
   return edges[e.id].first;
 }
 //=======================================================
@@ -422,14 +422,14 @@ node GraphStorage::source(edge e) const {
  * @brief return the second extremity (considered as target if the graph is directed) of an edge
  * @complexity o(1)
  */
-node GraphStorage::target(edge e) const {
+node GraphStorage::target(const edge e) const {
   return edges[e.id].second;
 }
 //=======================================================
 /**
  * @brief return the opposite node of n through edge e
  */
-node GraphStorage::opposite(edge e, node n) const {
+node GraphStorage::opposite(const edge e, const node n) const {
   const std::pair<node, node>& eEnds = edges[e.id];
   assert((eEnds.first == n) || (eEnds.second == n));
   return (eEnds.first == n) ? eEnds.second : eEnds.first;
@@ -555,7 +555,7 @@ void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
 /**
  * @brief Add the given node in the structure and return it
  */
-node GraphStorage::addNode(node n) {
+node GraphStorage::addNode(const node n) {
   if (nodes.size() <= n.id)
     nodes.resize(n.id + 1);
   else {
@@ -641,7 +641,7 @@ void GraphStorage::removeFromNodes(const node n) {
 /**
  * @brief Delete a node and all its adjacent edges in the graph
  */
-void GraphStorage::delNode(node n) {
+void GraphStorage::delNode(const node n) {
   assert(isElement(n));
   std::set<edge> loops;
   bool haveLoops = false;
@@ -703,7 +703,7 @@ edge GraphStorage::addEdge(const node src, const node tgt,
 /**
  * @brief Add a new edge between src and tgt and return it
  */
-edge GraphStorage::addEdge(node src, node tgt) {
+edge GraphStorage::addEdge(const node src, const node tgt) {
   return addEdge(src, tgt, edge(edgeIds.get()), true);
 }
 //=======================================================
@@ -782,7 +782,7 @@ void GraphStorage::restoreEdges(const std::vector<edge>& rEdges,
 /**
  * @brief Delete an edge in the graph
  */
-void GraphStorage::delEdge(edge e) {
+void GraphStorage::delEdge(const edge e) {
   unsigned srcId = source(e).id;
   nodes[srcId].outDegree -= 1;
   removeFromEdges(e);
