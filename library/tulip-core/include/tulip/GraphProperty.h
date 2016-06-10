@@ -46,7 +46,7 @@ public :
   void treatEvent(const Event&);
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string& );
+  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   bool setNodeStringValue(const node n, const std::string & v);
   bool setAllNodeStringValue(const std::string & v);
   bool setEdgeStringValue( const edge e, const std::string & v);

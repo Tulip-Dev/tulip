@@ -53,7 +53,7 @@ ColorProperty::ColorProperty(Graph *g, const std::string& n) : AbstractColorProp
   }
 }
 //=================================================================================
-PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
@@ -65,7 +65,7 @@ PropertyInterface* ColorProperty::clonePrototype(Graph * g, const std::string& n
   return p;
 }
 //=================================================================================
-PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::string& n) {
+PropertyInterface* ColorVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
   if( !g )
     return 0;
 
