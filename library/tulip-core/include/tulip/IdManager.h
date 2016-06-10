@@ -111,8 +111,8 @@ public:
     return state.nextId++;
 #else
     return state.firstId ?
-      --state.firstId :
-      (state.freeIds.empty() ? state.nextId++ : getFreeId());
+           --state.firstId :
+           (state.freeIds.empty() ? state.nextId++ : getFreeId());
 #endif
   }
   /**
