@@ -64,7 +64,8 @@ static QString getPythonTypeName(const QString &cppTypeName) {
   }
   else if (cppTypeName == "d") {
     return "float";
-  } else if (cppTypeName == typeid(std::string).name()) {
+  }
+  else if (cppTypeName == typeid(std::string).name()) {
     return "string";
   }
   else {
