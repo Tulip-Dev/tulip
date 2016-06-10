@@ -29,6 +29,8 @@
 
 #include <tulip/StringProperty.h>
 
+#include <tulip/GraphImpl.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -36,7 +38,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION( PushPopTest );
 
 //==========================================================
 void PushPopTest::setUp() {
-  graph = tlp::newGraph();
+  graph = //tlp::newGraph();
+    new GraphImpl();
 }
 //==========================================================
 void PushPopTest::tearDown() {
@@ -763,12 +766,13 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(graph->isElement(e));
   CPPUNIT_ASSERT(graph->isElement(n[1]));
   CPPUNIT_ASSERT(graph->isElement(n2));
+  CPPUNIT_ASSERT(e == e0);
 
   graph->pop();
-  CPPUNIT_ASSERT(!g2->isElement(e));
+  CPPUNIT_ASSERT(g2->isElement(e0));
   CPPUNIT_ASSERT(g2->isElement(n[1]));
   CPPUNIT_ASSERT(!g2->isElement(n2));
-  CPPUNIT_ASSERT(!graph->isElement(e));
+  CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT(graph->isElement(n[1]));
   CPPUNIT_ASSERT(!graph->isElement(n2));
 

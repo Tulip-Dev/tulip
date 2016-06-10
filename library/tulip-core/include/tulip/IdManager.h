@@ -110,7 +110,9 @@ public:
 #ifdef TLP_NO_IDS_REUSE
     return state.nextId++;
 #else
-    return state.freeIds.empty() ? state.nextId++ : getFreeId();
+    return state.firstId ?
+      --state.firstId :
+      (state.freeIds.empty() ? state.nextId++ : getFreeId());
 #endif
   }
   /**
