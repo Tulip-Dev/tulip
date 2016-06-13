@@ -377,6 +377,7 @@ void VectorGraph::delNode(const node n) {
   }
 
   _nodes.resize(nb_nodes);
+
   if (nb_nodes) {
     _freeNodes.push_back(n);
     _nData[n]._nodesId = UINT_MAX;
@@ -385,6 +386,7 @@ void VectorGraph::delNode(const node n) {
     _nData.resize(0);
     _freeNodes.resize(0);
   }
+
   //integrityTest();
 }
 //=======================================================
@@ -769,6 +771,7 @@ void VectorGraph::removeEdge(edge e) {
   }
 
   _edges.resize(nb_edges);
+
   if (nb_edges) {
     _freeEdges.push_back(e);
     _eData[e]._edgesId = UINT_MAX;
@@ -776,7 +779,7 @@ void VectorGraph::removeEdge(edge e) {
   else {
     _eData.resize(0);
     _freeEdges.resize(0);
-  }  
+  }
 }
 //=======================================================
 void VectorGraph::moveEdge(node n, unsigned int a, unsigned int b) {
