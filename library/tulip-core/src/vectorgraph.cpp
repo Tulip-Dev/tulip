@@ -371,14 +371,20 @@ void VectorGraph::delNode(const node n) {
   unsigned int nb_nodes = _nodes.size();
   unsigned int npos = _nData[n]._nodesId;
 
-  if (npos != nb_nodes - 1) {
-    _nodes[npos] = _nodes[nb_nodes - 1];
+  if (npos != --nb_nodes) {
+    _nodes[npos] = _nodes[nb_nodes];
     _nData[_nodes[npos]]._nodesId = npos;
   }
 
-  _nodes.resize(nb_nodes - 1);
-  _freeNodes.push_back(n);
-  _nData[n]._nodesId = UINT_MAX;
+  _nodes.resize(nb_nodes);
+  if (nb_nodes) {
+    _freeNodes.push_back(n);
+    _nData[n]._nodesId = UINT_MAX;
+  }
+  else {
+    _nData.resize(0);
+    _freeNodes.resize(0);
+  }
   //integrityTest();
 }
 //=======================================================
@@ -757,14 +763,20 @@ void VectorGraph::removeEdge(edge e) {
   unsigned int nb_edges = _edges.size();
   unsigned int epos = _eData[e]._edgesId;
 
-  if (epos != nb_edges - 1) {
-    _edges[epos] = _edges[nb_edges - 1];
+  if (epos != --nb_edges) {
+    _edges[epos] = _edges[nb_edges];
     _eData[_edges[epos]]._edgesId = epos;
   }
 
-  _edges.resize(nb_edges - 1);
-  _freeEdges.push_back(e);
-  _eData[e]._edgesId = UINT_MAX;
+  _edges.resize(nb_edges);
+  if (nb_edges) {
+    _freeEdges.push_back(e);
+    _eData[e]._edgesId = UINT_MAX;
+  }
+  else {
+    _eData.resize(0);
+    _freeEdges.resize(0);
+  }  
 }
 //=======================================================
 void VectorGraph::moveEdge(node n, unsigned int a, unsigned int b) {
