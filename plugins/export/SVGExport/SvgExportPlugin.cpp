@@ -32,7 +32,7 @@ using namespace tlp;
 
 namespace {
 const char * paramHelp[] = {
-    // color interpolation
+  // color interpolation
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
@@ -69,27 +69,27 @@ const char * paramHelp[] = {
     (ignorable whitespace). The main purpose of this parameter is to split the data into several lines, and to increase readability for a human reader.\
     Be careful, this adds a large amount of data to the output file."\
   HTML_HELP_CLOSE(),
-    //node labels
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Boolean" ) \
-    HTML_HELP_DEF( "default", "true" )
-    HTML_HELP_BODY() \
-    "Specify if node labels have to be exported."\
-    HTML_HELP_CLOSE(),
-    //edge labels
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Boolean" ) \
-    HTML_HELP_DEF( "default", "false" )
-    HTML_HELP_BODY() \
-    "Specify if edge labels have to be exported."\
-    HTML_HELP_CLOSE(),
-    //metanode labels
-    HTML_HELP_OPEN() \
-    HTML_HELP_DEF( "type", "Boolean" ) \
-    HTML_HELP_DEF( "default", "false" )
-    HTML_HELP_BODY() \
-    "Specify if node and edge labels inside metanodes have to be exported."\
-    HTML_HELP_CLOSE(),
+  //node labels
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Boolean" ) \
+  HTML_HELP_DEF( "default", "true" )
+  HTML_HELP_BODY() \
+  "Specify if node labels have to be exported."\
+  HTML_HELP_CLOSE(),
+  //edge labels
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Boolean" ) \
+  HTML_HELP_DEF( "default", "false" )
+  HTML_HELP_BODY() \
+  "Specify if edge labels have to be exported."\
+  HTML_HELP_CLOSE(),
+  //metanode labels
+  HTML_HELP_OPEN() \
+  HTML_HELP_DEF( "type", "Boolean" ) \
+  HTML_HELP_DEF( "default", "false" )
+  HTML_HELP_BODY() \
+  "Specify if node and edge labels inside metanodes have to be exported."\
+  HTML_HELP_CLOSE(),
 };
 }
 
