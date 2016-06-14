@@ -32,7 +32,7 @@ using namespace tlp;
 
 namespace {
 const char * paramHelp[] = {
-  // color interpolation
+    // color interpolation
   HTML_HELP_OPEN() \
   HTML_HELP_DEF( "type", "bool" ) \
   HTML_HELP_DEF( "default", "false" )
@@ -69,13 +69,34 @@ const char * paramHelp[] = {
     (ignorable whitespace). The main purpose of this parameter is to split the data into several lines, and to increase readability for a human reader.\
     Be careful, this adds a large amount of data to the output file."\
   HTML_HELP_CLOSE(),
+    //node labels
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Boolean" ) \
+    HTML_HELP_DEF( "default", "true" )
+    HTML_HELP_BODY() \
+    "Specify if node labels have to be exported."\
+    HTML_HELP_CLOSE(),
+    //edge labels
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Boolean" ) \
+    HTML_HELP_DEF( "default", "false" )
+    HTML_HELP_BODY() \
+    "Specify if edge labels have to be exported."\
+    HTML_HELP_CLOSE(),
+    //metanode labels
+    HTML_HELP_OPEN() \
+    HTML_HELP_DEF( "type", "Boolean" ) \
+    HTML_HELP_DEF( "default", "false" )
+    HTML_HELP_BODY() \
+    "Specify if node and edge labels inside metanodes have to be exported."\
+    HTML_HELP_CLOSE(),
 };
 }
 
 class svgExport:public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.8", "File")
+  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.9", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
@@ -91,6 +112,9 @@ public:
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
     addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
     addInParameter<bool>("Makes SVG output human readable", paramHelp[4], "true");
+    addInParameter<bool>("Export node labels", paramHelp[4], "true");
+    addInParameter<bool>("Export edge labels", paramHelp[5], "false");
+    addInParameter<bool>("Export metanode labels", paramHelp[6], "false");
   }
 
   bool exportGraph(ostream &os) {
