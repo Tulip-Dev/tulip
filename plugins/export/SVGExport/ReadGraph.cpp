@@ -145,19 +145,20 @@ static bool treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
       return false;
     }
+
     if(edge_labels) {
-        Coord c = edgeVertices[edgeVertices.size()/2] + edgeVertices[edgeVertices.size()/2 - 1];
-        ret = exportint.addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c/=2, fontsize->getEdgeValue(e),sizes->getEdgeValue(e));
+      Coord c = edgeVertices[edgeVertices.size()/2] + edgeVertices[edgeVertices.size()/2 - 1];
+      ret = exportint.addLabel("edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c/=2, fontsize->getEdgeValue(e),sizes->getEdgeValue(e));
 
-        if(!ret) {
-            if(pp->getError().empty()) {
-                stringstream str;
-                str << "Error when exporting label for edge " << e;
-                pp->setError(str.str());
-            }
-
-            return false;
+      if(!ret) {
+        if(pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting label for edge " << e;
+          pp->setError(str.str());
         }
+
+        return false;
+      }
     }
 
     ret = exportint.endEdge();
@@ -269,18 +270,19 @@ static bool treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface& e
 
       return false;
     }
+
     if(node_labels) {
-        ret = exportint.addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c, fontsize->getNodeValue(n), s);
+      ret = exportint.addLabel("node", label->getNodeValue(n), labelcolor->getNodeValue(n), c, fontsize->getNodeValue(n), s);
 
-        if(!ret) {
-            if(pp->getError().empty()) {
-                stringstream str;
-                str << "Error when exporting label for node "<<n;
-                pp->setError(str.str());
-            }
-
-            return false;
+      if(!ret) {
+        if(pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting label for node "<<n;
+          pp->setError(str.str());
         }
+
+        return false;
+      }
     }
 
     ret = exportint.endNode();

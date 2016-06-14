@@ -95,8 +95,8 @@ public:
   virtual bool addRotation(const double rotation, const tlp::Coord &center)=0;
 
 protected:
-    virtual bool addBorder(const tlp::Color &borderColor, const double borderwidth)=0;
-    virtual bool addColor(const tlp::Color &nodeColor)=0;
+  virtual bool addBorder(const tlp::Color &borderColor, const double borderwidth)=0;
+  virtual bool addColor(const tlp::Color &nodeColor)=0;
 };
 
 #endif
