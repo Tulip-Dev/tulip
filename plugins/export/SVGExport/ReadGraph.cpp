@@ -38,7 +38,8 @@ treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
            tlp::IntegerProperty *shape, tlp::IntegerProperty *srcanchorshape,
            tlp::IntegerProperty *tgtanchorshape, tlp::StringProperty *label,
            tlp::ColorProperty *labelcolor, bool edge_color_interpolation,
-           bool edge_size_interpolation, bool edge_extremities) {
+           bool edge_size_interpolation, bool edge_extremities,
+           const bool edge_labels, IntegerProperty *fontsize) {
   pp->setComment("Exporting edges...");
   bool ret(true);
   ret = exportint.groupEdge();
@@ -140,19 +141,22 @@ treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
       }
       return false;
     }
+    if (edge_labels) {
+      Coord c = edgeVertices[edgeVertices.size() / 2] +
+                edgeVertices[edgeVertices.size() / 2 - 1];
+      ret = exportint.addLabel(
+          "edge", label->getEdgeValue(e), labelcolor->getEdgeValue(e), c /= 2,
+          fontsize->getEdgeValue(e), sizes->getEdgeValue(e));
 
-    Coord c = edgeVertices[edgeVertices.size() / 2] +
-              edgeVertices[edgeVertices.size() / 2 - 1];
-    ret = exportint.addLabel("edge", label->getEdgeValue(e),
-                             labelcolor->getEdgeValue(e), c /= 2,
-                             sizes->getEdgeValue(e));
-    if (!ret) {
-      if (pp->getError().empty()) {
-        stringstream str;
-        str << "Error when exporting label for edge " << e;
-        pp->setError(str.str());
+      if (!ret) {
+        if (pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting label for edge " << e;
+          pp->setError(str.str());
+        }
+
+        return false;
       }
-      return false;
     }
     ret = exportint.endEdge();
     if (!ret) {
@@ -200,7 +204,8 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
            tlp::IntegerProperty *shape, tlp::DoubleProperty *rotation,
            tlp::DoubleProperty *borderwidth, tlp::StringProperty *label,
            tlp::ColorProperty *labelcolor, tlp::ColorProperty *bordercolor,
-           std::vector<tlp::node> &metanodeVertices) {
+           std::vector<tlp::node> &metanodeVertices, const bool node_labels,
+           IntegerProperty *fontsize) {
   pp->setComment("Exporting nodes...");
   bool ret = exportint.groupNode();
   if (!ret) {
@@ -230,18 +235,10 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
       }
       return false;
     }
-    ret = exportint.addColor(colors->getNodeValue(n));
-    if (!ret) {
-      if (pp->getError().empty()) {
-        stringstream str;
-        str << "Error when exporting color for node " << n;
-        pp->setError(str.str());
-      }
-      return false;
-    }
 
     if (rotation->getNodeValue(n) != 0) {
       ret = exportint.addRotation(rotation->getNodeValue(n), c);
+
       if (!ret) {
         if (pp->getError().empty()) {
           stringstream str;
@@ -252,21 +249,11 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
       }
     }
 
-    if (borderwidth->getNodeValue(n) != 0) {
-      exportint.addBorder(bordercolor->getNodeValue(n),
-                          borderwidth->getNodeValue(n));
-      if (!ret) {
-        if (pp->getError().empty()) {
-          stringstream str;
-          str << "Error when exporting borderwidth for node " << n;
-          pp->setError(str.str());
-        }
-        return false;
-      }
-    }
-
     ret = exportint.addShape(
-        static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s);
+        static_cast<NodeShape::NodeShapes>(shape->getNodeValue(n)), c, s,
+        bordercolor->getNodeValue(n), borderwidth->getNodeValue(n),
+        colors->getNodeValue(n));
+
     if (!ret) {
       if (pp->getError().empty()) {
         stringstream str;
@@ -275,15 +262,20 @@ treatNodes(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
       }
       return false;
     }
-    ret = exportint.addLabel("node", label->getNodeValue(n),
-                             labelcolor->getNodeValue(n), c, s);
-    if (!ret) {
-      if (pp->getError().empty()) {
-        stringstream str;
-        str << "Error when exporting label color for node " << n;
-        pp->setError(str.str());
+    if (node_labels) {
+      ret = exportint.addLabel("node", label->getNodeValue(n),
+                               labelcolor->getNodeValue(n), c,
+                               fontsize->getNodeValue(n), s);
+
+      if (!ret) {
+        if (pp->getError().empty()) {
+          stringstream str;
+          str << "Error when exporting label for node " << n;
+          pp->setError(str.str());
+        }
+
+        return false;
       }
-      return false;
     }
     ret = exportint.endNode();
     if (!ret) {
@@ -333,9 +325,12 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
   DoubleProperty *borderwidth =
       graph->getProperty<DoubleProperty>("viewBorderWidth");
   DoubleProperty *rotation = graph->getProperty<DoubleProperty>("viewRotation");
+  IntegerProperty *fontsize =
+      graph->getProperty<IntegerProperty>("viewFontSize");
   bool edge_color_interpolation = false;
   bool edge_extremities = false;
   bool edge_size_interpolation = true;
+  bool edge_labels(false), node_labels(true), metanode_labels(false);
   Color background = Color::White;
 
   if (ds != NULL) {
@@ -343,6 +338,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
     ds->get("Edge size interpolation", edge_size_interpolation);
     ds->get("Edge extremities", edge_extremities);
     ds->get("Background color", background);
+    ds->get("Export node labels", node_labels);
+    ds->get("Export edge labels", edge_labels);
+    ds->get("Export metanode labels", metanode_labels);
   }
 
   // Finding graph size
@@ -372,7 +370,8 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
   ret = treatEdges(graph, pp, exportint, i, nb_elements, sizes, colors, layout,
                    shape, srcanchorshape, tgtanchorshape, label, labelcolor,
                    edge_color_interpolation, edge_size_interpolation,
-                   edge_extremities);
+                   edge_extremities, edge_labels, fontsize);
+
   if (!ret) {
     if (pp->getError().empty())
       pp->setError("Error when exporting edges");
@@ -383,7 +382,8 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
   std::vector<tlp::node> metanodeVertices;
   ret = treatNodes(graph, pp, exportint, i, nb_elements, sizes, colors, layout,
                    shape, rotation, borderwidth, label, labelcolor, bordercolor,
-                   metanodeVertices);
+                   metanodeVertices, node_labels, fontsize);
+
   if (!ret) {
     if (pp->getError().empty())
       pp->setError("Error when exporting nodes");
@@ -439,7 +439,8 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
       ret = treatEdges(metagraph, pp, exportint, i, nb_elements, sizes, colors,
                        layout, shape, srcanchorshape, tgtanchorshape, label,
                        labelcolor, edge_color_interpolation,
-                       edge_size_interpolation, edge_extremities);
+                       edge_size_interpolation, edge_extremities,
+                       metanode_labels, fontsize);
 
       if (!ret) {
         stringstream str;
@@ -451,7 +452,9 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds,
       // Analysing nodes in the metanode
       ret = treatNodes(metagraph, pp, exportint, i, nb_elements, sizes, colors,
                        layout, shape, rotation, borderwidth, label, labelcolor,
-                       bordercolor, subMetanodeVertices);
+                       bordercolor, subMetanodeVertices, metanode_labels,
+                       fontsize);
+
       if (!ret) {
         stringstream str;
         str << pp->getError() << "-- metanode " << metanode;
