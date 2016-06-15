@@ -3,6 +3,7 @@
         <file>icons/i_addedge.png</file>
         <file>icons/i_bends.png</file>
         <file>icons/i_del.png</file>
+        <file>icons/i_invalid.png</file>
         <file>icons/i_locked.png</file>
         <file>icons/i_magic.png</file>
         <file>icons/i_move.png</file>
