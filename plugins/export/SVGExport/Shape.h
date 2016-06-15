@@ -23,8 +23,8 @@
 #include <tulip/Coord.h>
 #include <tulip/Size.h>
 
-class QXmlStreamWriter;
-class QString;
+#include <QXmlStreamWriter>
+#include <QString>
 
 struct ExtremityShape {
 

@@ -1,7 +1,5 @@
 #include "Shape.h"
 
-#include <QXmlStreamWriter>
-
 using namespace std;
 
 void ExtremityShape::Arrow(QXmlStreamWriter& res, const QString& color, bool tgt) {
