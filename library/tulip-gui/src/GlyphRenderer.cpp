@@ -72,7 +72,7 @@ GlyphRenderer& GlyphRenderer::getInst() {
 }
 
 QPixmap GlyphRenderer::render(unsigned int pluginId) {
-  if(_previews.find(pluginId) == _previews.end()) {
+  if(_graph && _previews.find(pluginId) == _previews.end()) {
     _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node,pluginId);
     GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
     renderer->setViewPortSize(16,16);
@@ -143,7 +143,7 @@ EdgeExtremityGlyphRenderer & EdgeExtremityGlyphRenderer::getInst() {
 }
 
 QPixmap EdgeExtremityGlyphRenderer::render(unsigned int pluginId) {
-  if(_previews.find(pluginId) == _previews.end()) {
+  if(_graph && _previews.find(pluginId) == _previews.end()) {
     _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge,pluginId);
     GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
     renderer->setViewPortSize(16,16);
