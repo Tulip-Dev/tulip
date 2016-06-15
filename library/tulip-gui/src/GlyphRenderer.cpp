@@ -72,17 +72,21 @@ GlyphRenderer& GlyphRenderer::getInst() {
 }
 
 QPixmap GlyphRenderer::render(unsigned int pluginId) {
-  if(_graph && _previews.find(pluginId) == _previews.end()) {
-    _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node,pluginId);
-    GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
-    renderer->setViewPortSize(16,16);
-    renderer->clearScene();
-    renderer->addGraphToScene(_graph);
-    renderer->getScene()->centerScene();
-    renderer->getScene()->getGraphCamera().setZoomFactor(0.9);
-    renderer->renderScene(false, true);
-    QImage preview = renderer->getImage();
-    _previews[pluginId] = QPixmap::fromImage(preview);
+  if(_previews.find(pluginId) == _previews.end()) {
+    if (_graph) {
+      _graph->getProperty<IntegerProperty>("viewShape")->setNodeValue(_node,pluginId);
+      GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
+      renderer->setViewPortSize(16,16);
+      renderer->clearScene();
+      renderer->addGraphToScene(_graph);
+      renderer->getScene()->centerScene();
+      renderer->getScene()->getGraphCamera().setZoomFactor(0.9);
+      renderer->renderScene(false, true);
+      QImage preview = renderer->getImage();
+      _previews[pluginId] = QPixmap::fromImage(preview);
+    }
+    else
+      return QPixmap(":/tulip/gui/icons/i_invalid.png");
   }
 
   return _previews[pluginId];
@@ -143,20 +147,24 @@ EdgeExtremityGlyphRenderer & EdgeExtremityGlyphRenderer::getInst() {
 }
 
 QPixmap EdgeExtremityGlyphRenderer::render(unsigned int pluginId) {
-  if(_graph && _previews.find(pluginId) == _previews.end()) {
-    _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge,pluginId);
-    GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
-    renderer->setViewPortSize(16,16);
-    renderer->clearScene();
-    renderer->addGraphToScene(_graph);
-    GlGraphRenderingParameters renderingParamerters = renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
-    renderingParamerters.setEdgeColorInterpolate(false);
-    renderingParamerters.setEdgeSizeInterpolate(false);
-    renderingParamerters.setViewArrow(true);
-    renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
-    renderer->renderScene(true);
-    QImage preview = renderer->getImage();
-    _previews[pluginId] = QPixmap::fromImage(preview);
+  if(_previews.find(pluginId) == _previews.end()) {
+    if (_graph) {
+      _graph->getProperty<IntegerProperty>("viewTgtAnchorShape")->setEdgeValue(_edge,pluginId);
+      GlOffscreenRenderer *renderer = GlOffscreenRenderer::getInstance();
+      renderer->setViewPortSize(16,16);
+      renderer->clearScene();
+      renderer->addGraphToScene(_graph);
+      GlGraphRenderingParameters renderingParamerters = renderer->getScene()->getGlGraphComposite()->getRenderingParameters();
+      renderingParamerters.setEdgeColorInterpolate(false);
+      renderingParamerters.setEdgeSizeInterpolate(false);
+      renderingParamerters.setViewArrow(true);
+      renderer->getScene()->getGlGraphComposite()->setRenderingParameters(renderingParamerters);
+      renderer->renderScene(true);
+      QImage preview = renderer->getImage();
+      _previews[pluginId] = QPixmap::fromImage(preview);
+    }
+    else
+      return QPixmap(":/tulip/gui/icons/i_invalid.png");
   }
 
   return _previews[pluginId];
