@@ -19,13 +19,18 @@ def setTestMode(mode):
 def getCallingModuleName():
     import sys
     if sys.version_info[0] == 3:
-        f = list(sys._current_frames().values())[0]
+        frames = list(sys._current_frames().values())
     else:
-        f = sys._current_frames().values()[0]
+        frames = sys._current_frames().values()
+    for i in range(len(frames)):
+        f = frames[i]
+        if f.f_globals['__name__'] == "tulipplugins":
+            f = f.f_back
+            break
     while f.f_globals['__name__'] == "tulipplugins":
         f = f.f_back
     return f.f_globals['__name__']
-   
+
 def reloadTulipPythonPlugin(pluginName):
     if pluginName in pluginModules:
         module = pluginModules[pluginName]
@@ -33,7 +38,7 @@ def reloadTulipPythonPlugin(pluginName):
         code += "import " + module + "\n"
         code += "reload(" + module + ")\n"
         exec(code)
-   
+
 def reloadTulipPythonPlugins():
     for plugin in pluginModules.keys():
         reloadTulipPythonPlugin(plugin)
@@ -83,7 +88,7 @@ def importGraph(plugin):
     except:
         if plugin.pluginProgress:
             plugin.pluginProgress.setError(traceback.format_exc())
-        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr    
+        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr
         if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
             sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
             traceback.print_exc()
@@ -98,7 +103,7 @@ def exportGraph(plugin, os):
     except:
         if plugin.pluginProgress:
             plugin.pluginProgress.setError(traceback.format_exc())
-        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr    
+        # Case where the plugin execution has not been launched through the Tulip GUI, so print the stack trace to stderr
         if type(plugin.pluginProgress) == tlp.SimplePluginProgress:
             sys.stdout.write("There was an error when running Python plugin named \"" + plugin.name() + "\". See stack trace below.\n")
             traceback.print_exc()
@@ -161,8 +166,8 @@ def registerPluginOfGroup(pluginClassName, pluginName, author, date, info, relea
                                          "__init__": (lambda self: initFactory(self)), \
                                          "createPluginObject" : (lambda self, context: createPlugin(context, pluginModule, pluginClassName, pluginName, author, date, info, release, group))} \
                                          )()
-        
-        sys.stdout.write('Tulip Python Plug-in "' + pluginName + '" loaded, Author: "' + author + '", Date: "' + date + '", Release: "' + release + '"\n')   
+
+        sys.stdout.write('Tulip Python Plug-in "' + pluginName + '" loaded, Author: "' + author + '", Date: "' + date + '", Release: "' + release + '"\n')
 
     except:
         sys.stdout.write("There was an error when registering Python plugin named \"" + pluginName + "\". See stack trace below.\n")
@@ -265,5 +270,3 @@ def registerExportPlugin(pluginClassName, pluginName, author, date, info, releas
 def registerExportPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group):
 
     registerPluginOfGroup(pluginClassName, pluginName, author, date, info, release, group)
-
-
