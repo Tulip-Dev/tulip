@@ -76,47 +76,9 @@
         <number>0</number>
        </property>
        <item>
-        <spacer name="horizontalSpacer">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>40</width>
-           <height>20</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonOK">
-         <property name="text">
-          <string>&amp;Rename</string>
-         </property>
-         <property name="shortcut">
-          <string>Alt+O</string>
-         </property>
-         <property name="autoDefault">
-          <bool>true</bool>
-         </property>
-         <property name="default">
-          <bool>true</bool>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonCancel">
-         <property name="text">
-          <string>&amp;Cancel</string>
-         </property>
-         <property name="shortcut">
-          <string>Alt+C</string>
-         </property>
-         <property name="autoDefault">
-          <bool>true</bool>
-         </property>
-         <property name="default">
-          <bool>false</bool>
+        <widget class="QDialogButtonBox" name="buttonBox">
+         <property name="standardButtons">
+          <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
          </property>
         </widget>
        </item>
@@ -130,39 +92,36 @@
  <resources/>
  <connections>
   <connection>
-   <sender>buttonOK</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
    <receiver>RenamePropertyDialogData</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>181</x>
-     <y>144</y>
+     <x>198</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>153</x>
-     <y>85</y>
+     <x>198</x>
+     <y>40</y>
     </hint>
    </hints>
   </connection>
   <connection>
-   <sender>buttonCancel</sender>
-   <signal>clicked()</signal>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
    <receiver>RenamePropertyDialogData</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>262</x>
-     <y>144</y>
+     <x>198</x>
+     <y>58</y>
     </hint>
     <hint type="destinationlabel">
-     <x>153</x>
-     <y>85</y>
+     <x>198</x>
+     <y>40</y>
     </hint>
    </hints>
   </connection>
  </connections>
- <buttongroups>
-  <buttongroup name="buttonGroup"/>
- </buttongroups>
 </ui>
