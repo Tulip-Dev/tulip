@@ -139,7 +139,14 @@ QTX_WRAP_UI(UI_HEADERS
 )
 
 QTX_WRAP_CPP(MOC_SRCS
+  ../include/tulip/Animation.h
+  ../include/tulip/CaptionGraphicsItem.h
+  ../include/tulip/CaptionGraphicsSubItems.h
+  ../include/tulip/CaptionItem.h
+  ../include/tulip/ColorButton.h
+  ../include/tulip/ColorScaleButton.h
   ../include/tulip/ColorScaleConfigDialog.h
+  ../include/tulip/CoordEditor.h
   ../include/tulip/CopyPropertyDialog.h
   ../include/tulip/CSVGraphMappingConfigurationWidget.h
   ../include/tulip/CSVImportConfigurationWidget.h
@@ -147,60 +154,52 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/CSVParserConfigurationWidget.h
   ../include/tulip/DoubleStringsListSelectionWidget.h
   ../include/tulip/DownloadManager.h
+  ../include/tulip/DragHandle.h
+  ../include/tulip/FileDownloader.h
+  ../include/tulip/GLInteractor.h
   ../include/tulip/GlMainView.h
   ../include/tulip/GlMainWidget.h
+  ../include/tulip/GlMainWidgetGraphicsItem.h
+  ../include/tulip/GlOverviewGraphicsItem.h
+  ../include/tulip/GlSimpleEntityItemModel.h
+  ../include/tulip/GraphHierarchiesModel.h
+  ../include/tulip/GraphNeedsSavingObserver.h
+  ../include/tulip/GraphTableItemDelegate.h
+  ../include/tulip/Interactor.h
+  ../include/tulip/InteractorComposite.h
   ../include/tulip/ItemsListWidget.h
   ../include/tulip/NodeLinkDiagramComponent.h
   ../include/tulip/Perspective.h
+  ../include/tulip/PlaceHolderWidget.h
+  ../include/tulip/ProcessingAnimationItem.h
   ../include/tulip/PropertyCreationDialog.h
   ../include/tulip/QtGlSceneZoomAndPanAnimator.h
-  ../include/tulip/RenamePropertyDialog.h
-  ../include/tulip/SimplePluginProgressWidget.h
-  ../include/tulip/SimpleStringsListSelectionWidget.h
-  ../include/tulip/StringsListSelectionDialog.h
-  ../include/tulip/TulipProject.h
-  ../include/tulip/Animation.h
-  ../include/tulip/ColorButton.h
-  ../include/tulip/TulipModel.h
-  ../include/tulip/ColorScaleButton.h
-  ../include/tulip/TulipSettings.h
-  ../include/tulip/View.h
-  ../include/tulip/ViewWidget.h
-  ../include/tulip/GlMainWidgetGraphicsItem.h
-  ../include/tulip/Interactor.h
-  ../include/tulip/InteractorComposite.h
-  ../include/tulip/GLInteractor.h
-  ../include/tulip/WorkspacePanel.h
-  ../include/tulip/TulipWorkspace.h
-  ../include/tulip/ProcessingAnimationItem.h
-  ../include/tulip/Workspace.h
-  ../include/tulip/TulipFileDescriptorWidget.h
-  ../include/tulip/PlaceHolderWidget.h
-  ../include/tulip/GraphHierarchiesModel.h
-  ../include/tulip/CoordEditor.h
-  ../include/tulip/GlOverviewGraphicsItem.h
-  ../include/tulip/SceneConfigWidget.h
   ../include/tulip/QuickAccessBar.h
-  ../include/tulip/TulipFont.h
-  ../include/tulip/TulipFontDialog.h
-  ../include/tulip/ScrollPopupButton.h
-  ../include/tulip/WorkspaceExposeWidget.h  
-  ../include/tulip/GraphTableItemDelegate.h
-  ../include/tulip/VectorEditor.h
-  ../include/tulip/TulipFontWidget.h
-  ../include/tulip/CaptionItem.h
-  ../include/tulip/CaptionGraphicsItem.h
-  ../include/tulip/CaptionGraphicsSubItems.h
-  ../include/tulip/GraphNeedsSavingObserver.h
-  ../include/tulip/DragHandle.h
-  ../include/tulip/SnapshotDialog.h
+  ../include/tulip/SceneConfigWidget.h
   ../include/tulip/SceneLayersModel.h
   ../include/tulip/SceneLayersConfigWidget.h
-  ../include/tulip/TulipMimes.h
+  ../include/tulip/ScrollPopupButton.h
+  ../include/tulip/SimplePluginProgressWidget.h
+  ../include/tulip/SimpleStringsListSelectionWidget.h
+  ../include/tulip/SnapshotDialog.h
+  ../include/tulip/StringsListSelectionDialog.h
   ../include/tulip/TreeViewComboBox.h
+  ../include/tulip/TulipFileDescriptorWidget.h
+  ../include/tulip/TulipFont.h
+  ../include/tulip/TulipFontDialog.h
+  ../include/tulip/TulipFontWidget.h
   ../include/tulip/TulipItemDelegate.h
-  ../include/tulip/GlSimpleEntityItemModel.h
-  ../include/tulip/FileDownloader.h
+  ../include/tulip/TulipMimes.h
+  ../include/tulip/TulipModel.h
+  ../include/tulip/TulipProject.h
+  ../include/tulip/TulipSettings.h
+  ../include/tulip/TulipWorkspace.h
+  ../include/tulip/VectorEditor.h
+  ../include/tulip/View.h
+  ../include/tulip/ViewWidget.h
+  ../include/tulip/WorkspacePanel.h
+  ../include/tulip/Workspace.h
+  ../include/tulip/WorkspaceExposeWidget.h  
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
