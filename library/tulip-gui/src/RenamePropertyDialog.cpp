@@ -47,8 +47,7 @@ using namespace tlp;
 RenamePropertyDialog::RenamePropertyDialog(QWidget* parent)
   : QDialog(parent),ui(new Ui::RenamePropertyDialogData()) {
   ui->setupUi(this);
-  connect(ui->buttonOK , SIGNAL(clicked()), this, SLOT(accept()) );
-  connect(ui->buttonCancel , SIGNAL(clicked()), this, SLOT(reject()) );
+  ui->buttonBox->button(QDialogButtonBox::Ok)->setText("&Rename");
 }
 
 RenamePropertyDialog::~RenamePropertyDialog() {
