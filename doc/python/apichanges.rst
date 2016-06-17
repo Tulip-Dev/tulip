@@ -169,7 +169,7 @@ Deprecation of the direct use of the :class:`tlp.StringCollection` class
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The :class:`tlp.StringCollection` class represents a list of selectable string entries that can be used as plugin parameter.
-Formerly, to select the string to transmit to a plugin, the following code have to be used::
+Formerly, to select the string to transmit to a plugin, the following code has to be used::
 
   # get defaut parameters for the 'FM^3 (OGDF)' layout plugin
   params = tlp.getDefaultPluginParameters('FM^3 (OGDF)')
