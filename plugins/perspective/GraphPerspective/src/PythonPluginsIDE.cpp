@@ -83,9 +83,9 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
   textStream << "class " << pluginClassName << "(" << pluginClass << "):" << endl;
   textStream << "\tdef __init__(self, context):" << endl;
   textStream << "\t\t" << pluginClass << ".__init__(self, context)"<< endl;
-  textStream << "\t\t# you can add parameters to the plugin here through the following syntax"<< endl;
+  textStream << "\t\t# You can add parameters to the plugin here through the following syntax:"<< endl;
   textStream << "\t\t# self.add<Type>Parameter(\"<paramName>\", \"<paramDoc>\", \"<paramDefaultValue>\")" << endl;
-  textStream << "\t\t# (see the documentation of class tlp.WithParameter to see what parameter types are supported)"<< endl << endl;
+  textStream << "\t\t# (see the documentation of class tlp.WithParameter to see what parameter types are supported)."<< endl << endl;
 
   if (pluginType != "Import" && pluginType != "Export") {
 
@@ -94,16 +94,15 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
     textStream << "\t\t# You can perform some precondition checks here." << endl;
     textStream << "\t\t# See comments in the run method to know how to have access to the input graph." << endl << endl;
     textStream << "\t\t# Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied" << endl;
-    textStream << "\t\t# and the second one can be used to provide an error message" << endl;
+    textStream << "\t\t# and the second one can be used to provide an error message." << endl;
     textStream << "\t\treturn (True, \"\")" << endl << endl;
     textStream << "\tdef run(self):" << endl;
     textStream << "\t\t# This method is the entry point of the algorithm when it is called" << endl;
     textStream << "\t\t# and must contain its implementation." << endl << endl;
     textStream << "\t\t# The graph on which the algorithm is applied can be accessed through" << endl;
     textStream << "\t\t# the \"graph\" class attribute (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
-    textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
-    textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+    textStream << "\t\t# The parameters provided by the user are stored in a dictionnary" << endl;
+    textStream << "\t\t# that can be accessed through the \"dataSet\" class attribute." << endl << endl;
 
     if (pluginType == "Layout") {
       textStream << "\t\t# The result of this layout algorithm must be stored in the" << endl;
@@ -141,9 +140,9 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
     textStream << "\t\t# This method is called to import a new graph." << endl;
     textStream << "\t\t# An empty graph to populate is accessible through the \"graph\" class attribute" << endl;
     textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
-    textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
-    textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+    textStream << "\t\t# The parameters provided by the user are stored in a dictionnary" << endl;
+    textStream << "\t\t# that can be accessed through the \"dataSet\" class attribute." << endl << endl;
+
     textStream << "\t\t# The method must return a Boolean indicating if the" << endl;
     textStream << "\t\t# graph has been successfully imported." << endl;
     textStream << "\t\treturn True" << endl << endl;
@@ -153,9 +152,9 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
     textStream << "\t\t# This method is called to export a graph." << endl;
     textStream << "\t\t# The graph to export is accessible through the \"graph\" class attribute" << endl;
     textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "\t\t# The parameters provided by the user are stored in a Tulip DataSet " << endl;
-    textStream << "\t\t# and can be accessed through the \"dataSet\" class attribute" << endl ;
-    textStream << "\t\t# (see documentation of class tlp.DataSet)." << endl << endl;
+    textStream << "\t\t# The parameters provided by the user are stored in dictionnary" << endl;
+    textStream << "\t\t# that can be accessed through the \"dataSet\" class attribute." << endl << endl;
+
     textStream << "\t\t# The os parameter is an output file stream (initialized by the Tulip GUI" << endl;
     textStream << "\t\t# or by the tlp.exportGraph function.)." << endl;
     textStream << "\t\t# To write data to the file, you have to use the following syntax:" << endl << endl;
