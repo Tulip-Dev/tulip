@@ -35,6 +35,7 @@
 #include <GL/gl.h>
 
 #include <tulip/tulipconf.h>
+#include <tulip/Vector.h>
 
 namespace tlp {
 
@@ -49,7 +50,7 @@ public:
     CombinedDepthStencil
   };
 
-  GlFrameBufferObject(int width, int height, Attachment attachement = Depth,
+  GlFrameBufferObject(int width, int height, Attachment attachement = Depth, unsigned int numberOfSamples = 0,
                       GLint textureMagFilter = GL_NEAREST, GLint textureMinFilter = GL_NEAREST,
                       GLint textureWrap = GL_CLAMP_TO_EDGE, bool generateMipmap = false);
 
@@ -77,7 +78,18 @@ public:
 
   static bool bufferBound();
 
+  static bool hasOpenGLFramebufferBlit();
+
+  static void blitFramebuffer(GlFrameBufferObject *target, const Vec2i &targetX0Y0, const Vec2i &targetX1Y1,
+                              GlFrameBufferObject *source, const Vec2i &sourceX0Y0, const Vec2i &sourceX1Y1,
+                              GLbitfield mask = GL_COLOR_BUFFER_BIT, GLenum filter = GL_NEAREST);
+
 private:
+
+  GLuint handle() const {
+    return _fboHandle;
+  }
+
 
   int _width, _height;
   GLuint _fboHandle;
