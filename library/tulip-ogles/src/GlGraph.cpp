@@ -1357,11 +1357,6 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
 
 void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::vector<edge> &edges, bool lineMode, bool billboard) {
 
-  if (!lineMode && billboard && !_graphElementsPickingMode) {
-    GlTextureManager::instance()->addTextureFromFile(TulipBitmapDir+"cylinderTexture.png");
-    GlTextureManager::instance()->bindTexture(TulipBitmapDir+"cylinderTexture.png");
-  }
-
   glStencilFunc(GL_LEQUAL, _renderingParameters.edgesStencil(), 0xFF);
 
   std::vector<unsigned int> edgesLinesRenderingIndices;
@@ -1482,6 +1477,11 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
       float stepKnots = 1.0f / ((static_cast<float>(nbKnots) - 2.0f * (static_cast<float>(bSplineDegree) + 1.0f)) + 2.0f - 1.0f);
 
       edgeShader->setUniformFloat("u_stepKnots", stepKnots);
+
+      if (!lineMode && billboard && !_graphElementsPickingMode) {
+        GlTextureManager::instance()->addTextureFromFile(TulipBitmapDir+"cylinderTexture.png");
+        GlTextureManager::instance()->bindTexture(TulipBitmapDir+"cylinderTexture.png");
+      }
 
       GlTextureManager::instance()->addTextureFromFile(edgeTexture, true);
       GlTextureManager::instance()->bindTexture(edgeTexture, 1);
