@@ -1,4 +1,4 @@
-#ADD_SUBDIRECTORY(FishEye)
+ADD_SUBDIRECTORY(FishEye)
 #ADD_SUBDIRECTORY(MouseMagnifyingGlass)
 ADD_SUBDIRECTORY(MouseLassoNodesSelector)
 #ADD_SUBDIRECTORY(NeighborhoodHighlighter)

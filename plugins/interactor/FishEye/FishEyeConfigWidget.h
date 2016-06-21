@@ -37,8 +37,6 @@ public :
   FishEyeConfigWidget(QWidget *parent = nullptr);
   ~FishEyeConfigWidget();
 
-  int getFishEyeType() const;
-
   float getFishEyeRadius() const;
   void setFishEyeRadius(const float radius);
 

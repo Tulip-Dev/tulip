@@ -31,18 +31,6 @@ FishEyeConfigWidget::~FishEyeConfigWidget() {
   delete _ui;
 }
 
-int FishEyeConfigWidget::getFishEyeType() const {
-  if (_ui->furnasFisheyeRb->isChecked()) {
-    return 1;
-  }
-  else if (_ui->auberFishEyeRb->isChecked()) {
-    return 2;
-  }
-  else {
-    return 3;
-  }
-}
-
 float FishEyeConfigWidget::getFishEyeRadius() const {
   return (float) _ui->radiusValSP->value();
 }

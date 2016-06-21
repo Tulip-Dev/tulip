@@ -20,8 +20,8 @@
 #ifndef FISHEYEINTERACTOR_H_
 #define FISHEYEINTERACTOR_H_
 
-#include <tulip/GLInteractor.h>
 #include <tulip/Coord.h>
+#include <tulip/GLInteractor.h>
 
 #include "../../utils/StandardInteractorPriority.h"
 
@@ -29,50 +29,57 @@ namespace tlp {
 
 class FishEyeConfigWidget;
 class GlShaderProgram;
+class GlBuffer;
+class GlFrameBufferObject;
 
 class FishEyeInteractorComponent : public GLInteractorComponent {
 
-public :
-
+public:
   FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
-  FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
+  FishEyeInteractorComponent(
+      const FishEyeInteractorComponent &fisheyeInteractorComponent);
 
   bool eventFilter(QObject *widget, QEvent *e);
 
-  bool compute(GlMainWidget *) {
-    return false;
-  }
+  bool compute(GlMainWidget *) { return false; }
 
   void viewChanged(View *view);
 
   bool draw(GlMainWidget *glMainWidget);
 
-private :
+private:
+  FishEyeConfigWidget *_configWidget;
+  int _curX, _curY;
 
-  FishEyeConfigWidget *configWidget;
-  Coord fisheyeCenter;
-  static GlShaderProgram *fisheyeShader;
-  bool activateFishEye;
+  static GlShaderProgram *_fisheyeShader;
+  static GlBuffer *_buffer;
+  static GlBuffer *_indicesBuffer;
+  static GlFrameBufferObject *_fbo;
 
+  static int _maxTextureSize;
+  bool _activateFishEye;
 };
 
 /*@{*/
 /** \file
  *  \brief  Tulip Fisheye Interactor
 
- * This interactor plugin allow to perform a fisheye distortion effect on Tulip views.
- * It allows to gain focus on a certain area of a visualization by magnifying it without losing
+ * This interactor plugin allow to perform a fisheye distortion effect on Tulip
+ views.
+ * It allows to gain focus on a certain area of a visualization by magnifying it
+ without losing
  * the context.
  *
- * Your graphic card must support shader programs otherwise the plugin won't work.
+ * Your graphic card must support shader programs otherwise the plugin won't
+ work.
  *
  *
  */
 class FishEyeInteractor : public GLInteractorComposite {
 
-public :
-
-  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor", "1.0", "Visualization")
+public:
+  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009",
+                    "FishEye Interactor", "1.0", "Visualization")
 
   FishEyeInteractor(const PluginContext *);
   ~FishEyeInteractor();
@@ -83,17 +90,13 @@ public :
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const {
-    return StandardInteractorPriority::FishEye;
-  }
+  unsigned int priority() const { return StandardInteractorPriority::FishEye; }
 
   virtual bool isCompatible(const std::string &viewName) const;
 
-private :
-
-  FishEyeConfigWidget *fisheyeConfigWidget;
+private:
+  FishEyeConfigWidget *_fisheyeConfigWidget;
 };
-
 }
 
 #endif /* FISHEYEINTERACTOR_H_ */
