@@ -31,13 +31,13 @@
 using namespace tlp;
 
 Light::Light() :
-  _camera(nullptr), _directionnalLight(true), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
+  _camera(nullptr), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
   _diffuseColor(255, 255, 255), _specularColor(255, 255, 255),
   _constantAttenuation(1.0f), _linearAttenuation(0.00001f), _quadraticAttenuation(0.000001f) {}
 
 
 Light::Light(Camera *camera) :
-  _camera(camera), _directionnalLight(true), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
+  _camera(camera), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
   _diffuseColor(255, 255, 255), _specularColor(255, 255, 255),
   _constantAttenuation(1.0f), _linearAttenuation(0.00001f), _quadraticAttenuation(0.000001f) {}
 
