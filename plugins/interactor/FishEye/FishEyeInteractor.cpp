@@ -37,6 +37,7 @@
 #include <tulip/GlUtils.h>
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/OpenGlConfigManager.h>
 #include <tulip/ShaderManager.h>
 #include <tulip/ZoomAndPanAnimation.h>
 
@@ -86,6 +87,8 @@ static std::string fisheyeFragmentShaderSrc() {
       "uniform vec2 u_mouse;"
       "uniform vec2 u_resolution;"
 
+      "uniform bool u_useFXAA;"
+
       "varying vec2 v_texCoord;"
 
       +
@@ -107,10 +110,14 @@ static std::string fisheyeFragmentShaderSrc() {
       "		 pos = center + dir;"
       "    vec2 fisheyePos = vec2(pos.x - (u_mouse.x - u_fisheyeRadius), pos.y "
       "- (u_mouse.y - u_fisheyeRadius)) / vec2(2.0*u_fisheyeRadius);"
-      "    vec2 fisheyeTexRes = vec2(u_fisheyeTextureSize);"
-      "    vec2 fisheyeFragCoord = fisheyePos * fisheyeTexRes;"
-      "    gl_FragColor = applyFXAA(u_fisheyeTexture, fisheyeFragCoord, "
+      "    if (!u_useFXAA) {"
+      "      gl_FragColor = texture2D(u_fisheyeTexture, fisheyePos);"
+      "    } else {"
+      "      vec2 fisheyeTexRes = vec2(u_fisheyeTextureSize);"
+      "      vec2 fisheyeFragCoord = fisheyePos * fisheyeTexRes;"
+      "      gl_FragColor = applyFXAA(u_fisheyeTexture, fisheyeFragCoord, "
       "fisheyeTexRes);"
+      "    }"
       "  } else {"
       "    gl_FragColor = texture2D(u_texture, pos / u_resolution);"
       "  }"
@@ -151,17 +158,27 @@ PLUGIN(FishEyeInteractor)
 GlShaderProgram *FishEyeInteractorComponent::_fisheyeShader(nullptr);
 GlBuffer *FishEyeInteractorComponent::_buffer(nullptr);
 GlBuffer *FishEyeInteractorComponent::_indicesBuffer(nullptr);
-GlFrameBufferObject *FishEyeInteractorComponent::_fbo(nullptr);
 int FishEyeInteractorComponent::_maxTextureSize(0);
 
 FishEyeInteractorComponent::FishEyeInteractorComponent(
     FishEyeConfigWidget *configWidget)
-    : _configWidget(configWidget), _curX(-1), _curY(-1) {}
+    : _configWidget(configWidget), _curX(-1), _curY(-1), _fbo(nullptr),
+      _fbo2(nullptr) {
+  _fboTextureId =
+      "fisheyeTexture" + toString(reinterpret_cast<unsigned long long>(this));
+}
 
 FishEyeInteractorComponent::FishEyeInteractorComponent(
     const FishEyeInteractorComponent &fisheyeInteractorComponent)
-    : _curX(-1), _curY(-1) {
+    : _curX(-1), _curY(-1), _fbo(nullptr), _fbo2(nullptr) {
   _configWidget = fisheyeInteractorComponent._configWidget;
+  _fboTextureId =
+      "fisheyeTexture" + toString(reinterpret_cast<unsigned long long>(this));
+}
+
+FishEyeInteractorComponent::~FishEyeInteractorComponent() {
+  delete _fbo;
+  delete _fbo2;
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {
@@ -267,11 +284,23 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
 
     if (!_fbo || _fbo->width() != fboSize) {
       delete _fbo;
-      _fbo = new GlFrameBufferObject(fboSize, fboSize,
-                                     GlFrameBufferObject::CombinedDepthStencil,
-                                     GL_LINEAR, GL_LINEAR);
-      GlTextureManager::instance()->addExternalTexture("fisheyeTexture",
-                                                       _fbo->texture());
+      delete _fbo2;
+      if (GlFrameBufferObject::hasOpenGLFramebufferBlit()) {
+        _fbo = new GlFrameBufferObject(
+            fboSize, fboSize, GlFrameBufferObject::CombinedDepthStencil,
+            OpenGlConfigManager::instance().maxNumberOfSamples());
+        _fbo2 = new GlFrameBufferObject(fboSize, fboSize,
+                                        GlFrameBufferObject::NoAttachment, 0,
+                                        GL_LINEAR, GL_LINEAR);
+        GlTextureManager::instance()->addExternalTexture(_fboTextureId,
+                                                         _fbo2->texture());
+      } else {
+        _fbo = new GlFrameBufferObject(
+            fboSize, fboSize, GlFrameBufferObject::CombinedDepthStencil, 0,
+            GL_LINEAR, GL_LINEAR);
+        GlTextureManager::instance()->addExternalTexture(_fboTextureId,
+                                                         _fbo->texture());
+      }
     }
 
     Camera *camera = glScene->getMainLayer()->getCamera();
@@ -301,6 +330,11 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     glDisable(GL_SCISSOR_TEST);
     glScene->draw();
     _fbo->release();
+    if (GlFrameBufferObject::hasOpenGLFramebufferBlit()) {
+      GlFrameBufferObject::blitFramebuffer(
+          _fbo2, Vec2i(0, 0), Vec2i(fboSize, fboSize), _fbo, Vec2i(0, 0),
+          Vec2i(fboSize, fboSize), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+    }
 
     glEntities = glScene->getEntities();
     for (std::set<GlEntity *>::iterator it = glEntities.begin();
@@ -353,6 +387,8 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     _fisheyeShader->setUniformVec2Float("u_mouse", _curX, viewport[3] - _curY);
     _fisheyeShader->setUniformVec2Float("u_resolution", viewport[2],
                                         viewport[3]);
+    _fisheyeShader->setUniformBool(
+        "u_useFXAA", !GlFrameBufferObject::hasOpenGLFramebufferBlit());
     _fisheyeShader->setUniformFloat("u_fisheyeRadius", fisheyeRadius);
     _fisheyeShader->setUniformFloat("u_fisheyeHeight", -fisheyeHeight);
     _fisheyeShader->setUniformFloat("u_fisheyeTextureSize", fboSize);
@@ -360,12 +396,12 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     _indicesBuffer->allocate(indices);
     GlTextureManager::instance()->bindTexture(
         glScene->getBackBufferTextureName());
-    GlTextureManager::instance()->bindTexture("fisheyeTexture", 1);
+    GlTextureManager::instance()->bindTexture(_fboTextureId, 1);
     glDrawElements(GL_TRIANGLES, indices.size(), GL_UNSIGNED_SHORT,
                    BUFFER_OFFSET(0));
     GlTextureManager::instance()->unbindTexture(
         glScene->getBackBufferTextureName());
-    GlTextureManager::instance()->unbindTexture("fisheyeTexture");
+    GlTextureManager::instance()->unbindTexture(_fboTextureId);
     _fisheyeShader->desactivate();
     _indicesBuffer->release();
     _buffer->release();

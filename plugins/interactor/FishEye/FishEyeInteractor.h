@@ -38,6 +38,7 @@ public:
   FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
   FishEyeInteractorComponent(
       const FishEyeInteractorComponent &fisheyeInteractorComponent);
+  ~FishEyeInteractorComponent();
 
   bool eventFilter(QObject *widget, QEvent *e);
 
@@ -54,7 +55,9 @@ private:
   static GlShaderProgram *_fisheyeShader;
   static GlBuffer *_buffer;
   static GlBuffer *_indicesBuffer;
-  static GlFrameBufferObject *_fbo;
+  GlFrameBufferObject *_fbo;
+  GlFrameBufferObject *_fbo2;
+  std::string _fboTextureId;
 
   static int _maxTextureSize;
   bool _activateFishEye;
