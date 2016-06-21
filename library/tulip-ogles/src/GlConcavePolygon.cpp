@@ -251,6 +251,8 @@ void GlConcavePolygon::draw(const Camera &camera, const Light &, bool pickingMod
 
   GlBuffer::release(GlBuffer::VertexBuffer);
   GlTextureManager::instance()->unbindTexture(_texture);
+
+  shader->desactivate();
 }
 
 void GlConcavePolygon::draw(const Camera &camera, bool pickingMode) {
