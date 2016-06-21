@@ -51,7 +51,7 @@ bool Light::directionnalLight() const {
 
 Vec4f Light::getPosition() const {
   Vec4f lightPos;
-  if (!directionnalLight()) {
+  if (!directionnalLight() && _camera) {
     Vec3f eyes = _camera->getEyes();
     Vec3f center = _camera->getCenter();
     float zoomFactor = _camera->getZoomFactor();
