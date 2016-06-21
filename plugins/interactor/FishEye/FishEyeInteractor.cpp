@@ -76,8 +76,7 @@ FishEyeInteractor::FishEyeInteractor(const PluginContext *) : GLInteractorCompos
 void FishEyeInteractor::construct() {
   fisheyeConfigWidget = new FishEyeConfigWidget();
   push_back(new MousePanNZoomNavigator());
-  FishEyeInteractorComponent *fisheyeInteractorComponent = new FishEyeInteractorComponent();
-  fisheyeInteractorComponent->setConfigWidget(fisheyeConfigWidget);
+  FishEyeInteractorComponent *fisheyeInteractorComponent = new FishEyeInteractorComponent(fisheyeConfigWidget);
   push_back(fisheyeInteractorComponent);
 }
 
@@ -105,15 +104,13 @@ QWidget *FishEyeInteractor::configurationWidget() const {
 
 PLUGIN(FishEyeInteractor)
 
-FishEyeInteractorComponent::FishEyeInteractorComponent() : fisheyeShader(NULL) {}
+GlShaderProgram *FishEyeInteractorComponent::fisheyeShader(NULL);
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) : fisheyeShader(NULL) {
+FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget) : configWidget(configWidget) {}
+
+FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) {
   fisheyeCenter = fisheyeInteractorComponent.fisheyeCenter;
   configWidget = fisheyeInteractorComponent.configWidget;
-}
-
-FishEyeInteractorComponent::~FishEyeInteractorComponent() {
-  delete fisheyeShader;
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {
@@ -156,8 +153,7 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
   else if (e->type() == QEvent::Wheel) {
     activateFishEye = true;
     QWheelEvent *wheelEvent = (QWheelEvent *) e;
-    int numDegrees = wheelEvent->delta() / 8;
-    int numSteps = numDegrees / 15;
+    int numSteps = wheelEvent->delta() / 120;
 
     if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ControlModifier)) {
       activateFishEye = true;
@@ -188,7 +184,7 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
 bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
   Camera *camera=&glWidget->getScene()->getGraphCamera();
 
-  if (GlShaderProgram::shaderProgramsSupported()) {
+  if (GlShaderProgram::shaderProgramsSupported() && !fisheyeShader) {
     fisheyeShader = new GlShaderProgram("fisheye");
     fisheyeShader->addShaderFromSourceCode(Vertex, fisheyeVertexProgram);
     fisheyeShader->link();

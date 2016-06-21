@@ -34,9 +34,8 @@ class FishEyeInteractorComponent : public GLInteractorComponent {
 
 public :
 
-  FishEyeInteractorComponent();
+  FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
   FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
-  ~FishEyeInteractorComponent();
 
   bool eventFilter(QObject *widget, QEvent *e);
 
@@ -46,17 +45,13 @@ public :
 
   void viewChanged(View *view);
 
-  void setConfigWidget(FishEyeConfigWidget *configWidget) {
-    this->configWidget = configWidget;
-  }
-
   bool draw(GlMainWidget *glMainWidget);
 
 private :
 
   FishEyeConfigWidget *configWidget;
   Coord fisheyeCenter;
-  GlShaderProgram *fisheyeShader;
+  static GlShaderProgram *fisheyeShader;
   bool activateFishEye;
 
 };
