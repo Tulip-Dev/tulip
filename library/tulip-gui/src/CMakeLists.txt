@@ -20,7 +20,6 @@ SET(SRCS
     MouseBoxZoomer.cpp
   #  MouseEdgeBendEditor.cpp
   #  MouseEdgeBuilder.cpp
-  #  MouseEdgeSelector.cpp
     MouseInteractors.cpp
   #  MouseNodeBuilder.cpp
   #  MouseSelectionEditor.cpp
