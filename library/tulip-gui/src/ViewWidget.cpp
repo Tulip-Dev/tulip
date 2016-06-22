@@ -67,6 +67,8 @@ ViewWidget::ViewWidget()
 }
 
 ViewWidget::~ViewWidget() {
+  if (currentInteractor())
+    currentInteractor()->uninstall();
   if (_centralWidgetItem) {
     _graphicsView->scene()->removeItem(_centralWidgetItem);
     delete _centralWidgetItem;
