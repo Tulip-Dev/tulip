@@ -32,8 +32,8 @@ class Graph;
 
 class TLP_QT_SCOPE MouseBoxZoomer : public GLInteractorComponent {
 private:
-  Qt::MouseButton mButton;
-  Qt::KeyboardModifier kModifier;
+  Qt::MouseButton _mButton;
+  Qt::KeyboardModifier _kModifier;
 public:
   MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
                  Qt::KeyboardModifier modifier = Qt::NoModifier);
@@ -42,10 +42,10 @@ public:
   bool eventFilter(QObject *, QEvent *);
 
 private:
-  unsigned int x, y;
-  int w, h;
-  bool started;
-  Graph *graph;
+  int _firstX, _firstY;
+  int _curX, _curY;
+  bool _dragStarted;
+  Graph *_graph;
 };
 
 

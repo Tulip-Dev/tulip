@@ -30,9 +30,10 @@
 #include <tulip/MouseBoxZoomer.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlRect2D.h>
+#include <tulip/GlUtils.h>
 
 #if defined(_MSC_VER)
-#include <Windows.h>
+#include <windows.h>
 #endif
 
 #if defined(__APPLE__)
@@ -46,30 +47,29 @@ using namespace tlp;
 
 MouseBoxZoomer::MouseBoxZoomer(Qt::MouseButton button,
                                Qt::KeyboardModifier modifier)
-  : mButton(button), kModifier(modifier), x(0), y(0), w(0), h(0), started(false), graph(0) {}
+  : _mButton(button), _kModifier(modifier), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false), _graph(0) {}
 MouseBoxZoomer::~MouseBoxZoomer() {}
 //=====================================================================
 bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   GlMainWidget *glw = static_cast<GlMainWidget *>(widget);
+  Camera *camera = glw->getScene()->getMainLayer()->getCamera();
 
   if (e->type() == QEvent::MouseButtonPress) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
-    if (qMouseEv->buttons() == mButton &&
-        (kModifier == Qt::NoModifier ||
-         qMouseEv->modifiers() & kModifier)) {
-      if (!started) {
-        x = qMouseEv->x();
-        y =  glw->height() - qMouseEv->y();
-        w = 0;
-        h = 0;
-        started = true;
-        graph = glw->getScene()->getMainGlGraph()->getGraph();
+    if (qMouseEv->buttons() == _mButton &&
+        (_kModifier == Qt::NoModifier ||
+         qMouseEv->modifiers() & _kModifier)) {
+      if (!_dragStarted) {
+        _firstX = _curX = qMouseEv->x();
+        _firstY = _curY = qMouseEv->y();
+        _dragStarted = true;
+        _graph = glw->getScene()->getMainGlGraph()->getGraph();
       }
       else {
-        if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
-          graph = nullptr;
-          started = false;
+        if (glw->getScene()->getMainGlGraph()->getGraph() != _graph) {
+          _graph = nullptr;
+          _dragStarted = false;
         }
       }
 
@@ -77,7 +77,7 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
     }
 
     if (qMouseEv->buttons()==Qt::MidButton) {
-      started = false;
+      _dragStarted = false;
       glw->redraw();
       return true;
     }
@@ -88,21 +88,17 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
   if (e->type() == QEvent::MouseMove) {
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
-    if ((qMouseEv->buttons() & mButton) &&
-        (kModifier == Qt::NoModifier ||
-         qMouseEv->modifiers() & kModifier)) {
-      if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
-        graph = nullptr;
-        started = false;
+    if ((qMouseEv->buttons() & _mButton) &&
+        (_kModifier == Qt::NoModifier ||
+         qMouseEv->modifiers() & _kModifier)) {
+      if (glw->getScene()->getMainGlGraph()->getGraph() != _graph) {
+        _graph = nullptr;
+        _dragStarted = false;
       }
 
-      if (started) {
-        if ((qMouseEv->x() > 0) && (qMouseEv->x() < glw->width()))
-          w = qMouseEv->x() - x;
-
-        if ((qMouseEv->y() > 0) && (qMouseEv->y() < glw->height()))
-          h = y - (glw->height() - qMouseEv->y());
-
+      if (_dragStarted) {
+        _curX = clamp(qMouseEv->x(), 0, glw->width());
+        _curY = clamp(qMouseEv->y(), 0, glw->height());
         glw->redraw();
         return true;
       }
@@ -121,36 +117,30 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 
     QMouseEvent * qMouseEv = static_cast<QMouseEvent *>(e);
 
-    if ((qMouseEv->button() == mButton &&
-         (kModifier == Qt::NoModifier ||
-          qMouseEv->modifiers() & kModifier))) {
-      if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
-        graph = nullptr;
-        started = false;
+    if ((qMouseEv->button() == _mButton &&
+         (_kModifier == Qt::NoModifier ||
+          qMouseEv->modifiers() & _kModifier))) {
+      if (glw->getScene()->getMainGlGraph()->getGraph() != _graph) {
+        _graph = nullptr;
+        _dragStarted = false;
       }
 
-      if (started) {
-        started = false;
+      if (_dragStarted) {
+        _dragStarted = false;
+        tlp::Coord bbMin = camera->viewportTo3DWorld(glw->screenToViewport(tlp::Coord(glw->width() - _firstX, _firstY)));
+        tlp::Coord bbMax = camera->viewportTo3DWorld(glw->screenToViewport(tlp::Coord(glw->width() - _curX, _curY)));
+        tlp::BoundingBox bb;
+        bb.expand(bbMin);
+        bb.expand(bbMax);
 
-        if(!(w==0 && h==0)) {
-          int width = glw->width();
-          int height = glw->height();
-
-          Coord bbMin(width-x, height - y+h);
-          Coord bbMax(width-(x+w), height - y);
-
-          if (abs(bbMax[0] - bbMin[0]) > 1 && abs(bbMax[1] - bbMin[1]) > 1) {
-
-            BoundingBox sceneBB;
-            sceneBB.expand(glw->getScene()->getMainLayer()->getCamera()->viewportTo3DWorld(glw->screenToViewport(bbMin)));
-            sceneBB.expand(glw->getScene()->getMainLayer()->getCamera()->viewportTo3DWorld(glw->screenToViewport(bbMax)));
-
-            QtGlSceneZoomAndPanAnimator zoomAnPan(glw, sceneBB);
-            zoomAnPan.animateZoomAndPan();
-          }
+        if (bb.width() > 1 && bb.height() > 1) {
+          QtGlSceneZoomAndPanAnimator zoomAnPan(glw, bb);
+          zoomAnPan.animateZoomAndPan();
         }
       }
 
+      _firstX = _curX = -1;
+      _firstY = _curY = -1;
       return true;
     }
   }
@@ -159,11 +149,11 @@ bool MouseBoxZoomer::eventFilter(QObject *widget, QEvent *e) {
 }
 //=====================================================================
 bool MouseBoxZoomer::draw(GlMainWidget *glw) {
-  if (!started) return false;
+  if (!_dragStarted) return false;
 
-  if (glw->getScene()->getMainGlGraph()->getGraph() != graph) {
-    graph = nullptr;
-    started = false;
+  if (glw->getScene()->getMainGlGraph()->getGraph() != _graph) {
+    _graph = nullptr;
+    _dragStarted = false;
   }
 
   Camera *camera = glw->getScene()->getMainLayer()->getCamera();
@@ -171,7 +161,11 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   tlp::Vec4i viewport = camera->getViewport();
   camera2d.setViewport(viewport);
   camera2d.initGl();
-  GlRect2D rect(x, y, w, h, tlp::Color(0,0,255,100), tlp::Color::Black);
+  tlp::Vec2f bl(glw->screenToViewport(std::min(_firstX, _curX)),
+                glw->screenToViewport(std::min(glw->height() - _firstY, glw->height() - _curY)));
+  tlp::Vec2f tr(glw->screenToViewport(std::max(_firstX, _curX)),
+                glw->screenToViewport(std::max(glw->height() - _firstY, glw->height() - _curY)));
+  GlRect2D rect(bl, tr, tlp::Color(0,0,255,100), tlp::Color::Black);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   rect.draw(camera2d);
