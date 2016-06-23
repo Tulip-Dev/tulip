@@ -24,10 +24,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TulipFontAwesome.h>
 
-#include <QBuffer>
 #include <QFile>
-#include <QStringBuilder>
-#include <QStringBuilder>
 
 using namespace std;
 using namespace tlp;
@@ -803,7 +800,7 @@ bool ExportSvg::createEdge(
         // Writing the context
         _res.writeStartElement("defs");
         _res.writeStartElement("marker");
-        _res.writeAttribute("id", "Msrc" % QString::number(id_src_shape));
+        _res.writeAttribute("id", "Msrc" + QString::number(id_src_shape));
         _res.writeAttribute("markerUnits", "strokeWidth");
         _res.writeAttribute("orient", "auto");
         _res.writeAttribute("markerWidth", "4");
@@ -883,40 +880,11 @@ bool ExportSvg::createEdge(
           break;
         }
 
-        bool ExportSvg::exportEdge(
-            const unsigned id, const tlp::EdgeShape::EdgeShapes &type,
-            const std::vector<tlp::Coord> &bends, const tlp::Color &color1,
-            const tlp::Color &color2, const double width,
-            const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type,
-            const unsigned id_src_shape,
-            const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type,
-            const unsigned id_tgt_shape,
-            const std::vector<Coord> &edgeVertice) {
-          // Color gradient
-          QString name("gradient_edge_" + QString::number(id));
-          _res.writeStartElement("defs");
-          _res.writeStartElement("linearGradient");
+        _res.writeEndElement();
 
-          _res.writeAttribute("id", name);
-          _res.writeAttribute("gradientUnits", "objectBoundingBox");
-
-          _res.writeStartElement("stop");
-          _res.writeAttribute("offset", "0%");
-          _res.writeAttribute("stop-color", tlpColor2SvgColor(color2));
-          _res.writeAttribute("stop-opacity", tlpAlphaColor2Opacity(color2));
-          _res.writeEndElement();
-
-          _res.writeStartElement("stop");
-          _res.writeAttribute("offset", "100%");
-          _res.writeAttribute("stop-color", tlpColor2SvgColor(color1));
-          _res.writeAttribute("stop-opacity", tlpAlphaColor2Opacity(color1));
-          _res.writeEndElement();
-          _res.writeEndElement();
-          _res.writeEndElement();
-
-          return createEdge(type, bends, "url(#" + name + ")", "1", width,
-                            src_anchor_shape_type, id_src_shape,
-                            tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
+        if (src_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
+          _res.writeEndElement(); // End context "marker"
+          _res.writeEndElement(); // End context "def"
         }
       }
 
@@ -925,7 +893,7 @@ bool ExportSvg::createEdge(
         _res.writeStartElement("defs");
         _res.writeStartElement("marker");
 
-        _res.writeAttribute("id", "Mtgt" % QString::number(id_tgt_shape));
+        _res.writeAttribute("id", "Mtgt" + QString::number(id_tgt_shape));
         _res.writeAttribute("markerUnits", "strokeWidth");
         _res.writeAttribute("orient", "auto");
         _res.writeAttribute("markerWidth", "4");
@@ -949,321 +917,560 @@ bool ExportSvg::createEdge(
           ExtremityShape::Circle(_res, tlpColor2SvgColor(color), true);
           break;
 
-          bool ExportSvg::exportEdge(
-              const tlp::EdgeShape::EdgeShapes &type,
-              const vector<Coord> &bends, const Color &color,
-              const double width,
-              const tlp::EdgeExtremityShape::EdgeExtremityShapes
-                  src_anchor_shape_type,
-              const unsigned id_src_shape,
-              const tlp::EdgeExtremityShape::EdgeExtremityShapes
-                  tgt_anchor_shape_type,
-              const unsigned id_tgt_shape,
-              const std::vector<Coord> &edgeVertice) {
-            return createEdge(type, bends, tlpColor2SvgColor(color),
-                              tlpAlphaColor2Opacity(color), width,
-                              src_anchor_shape_type, id_src_shape,
-                              tgt_anchor_shape_type, id_tgt_shape, edgeVertice);
+        case EdgeExtremityShape::Cross:
+          ExtremityShape::Cross(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Diamond:
+          ExtremityShape::Diamond(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Hexagon:
+          ExtremityShape::Hexagon(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Pentagon:
+          ExtremityShape::Pentagon(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Ring:
+          ExtremityShape::Ring(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Square:
+          ExtremityShape::Square(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Star:
+          ExtremityShape::Star(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Cube:
+          ExtremityShape::Cube(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::CubeOutlinedTransparent:
+          ExtremityShape::CubeOutlinedTransparent(
+              _res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Cone:
+          ExtremityShape::Cone(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Cylinder:
+          ExtremityShape::Cone(_res, tlpColor2SvgColor(color), true);
+          break;
+
+        case EdgeExtremityShape::Sphere:
+          ExtremityShape::Sphere(_res, color, true, id_tgt_gradient);
+          break;
+
+        case EdgeExtremityShape::GlowSphere:
+          ExtremityShape::GlowSphere(_res, color, true, id_tgt_gradient,
+                                     coord_edge_extremity_target,
+                                     size_node_tgt);
+          break;
+        }
+
+        bool ExportSvg::exportEdgeExtremity(
+            const unsigned id_src_shape, const unsigned id_tgt_shape,
+            const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                src_anchor_shape_type,
+            const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                tgt_anchor_shape_type,
+            const tlp::Color &color, const unsigned int id_src_gradient,
+            const unsigned int id_tgt_gradient,
+            const Coord &coord_edge_extremity_source,
+            const Coord &coord_edge_extremity_target, const Size &size_node_src,
+            const Size &size_node_tgt, const string &iconName) {
+          if (src_anchor_shape_type != EdgeExtremityShape::None) {
+            // Writing the context
+            _res.writeStartElement("defs");
+            _res.writeStartElement("marker");
+            _res.writeAttribute("id", "Msrc" % QString::number(id_src_shape));
+            _res.writeAttribute("markerUnits", "strokeWidth");
+            _res.writeAttribute("orient", "auto");
+            _res.writeAttribute("markerWidth", "4");
+            _res.writeAttribute("markerHeight", "3");
+
+            switch (src_anchor_shape_type) {
+            case EdgeExtremityShape::None:
+              break;
+
+            case EdgeExtremityShape::FontAwesomeIcon:
+              addBase64font();
+              ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color),
+                                              iconName, false);
+              break;
+
+            case EdgeExtremityShape::Arrow:
+              ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Circle:
+              ExtremityShape::Circle(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Cross:
+              ExtremityShape::Cross(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Diamond:
+              ExtremityShape::Diamond(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Hexagon:
+              ExtremityShape::Hexagon(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Pentagon:
+              ExtremityShape::Pentagon(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Ring:
+              ExtremityShape::Ring(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Square:
+              ExtremityShape::Square(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Star:
+              ExtremityShape::Star(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Cube:
+              ExtremityShape::Cube(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::CubeOutlinedTransparent:
+              ExtremityShape::CubeOutlinedTransparent(
+                  _res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Cone:
+              ExtremityShape::Cone(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Cylinder:
+              ExtremityShape::Cylinder(_res, tlpColor2SvgColor(color), false);
+              break;
+
+            case EdgeExtremityShape::Sphere:
+              ExtremityShape::Sphere(_res, color, false, id_src_gradient);
+              break;
+
+            case EdgeExtremityShape::GlowSphere:
+              ExtremityShape::GlowSphere(_res, color, false, id_src_gradient,
+                                         coord_edge_extremity_source,
+                                         size_node_src);
+              break;
+            }
+
+            bool ExportSvg::exportEdge(
+                const unsigned id, const tlp::EdgeShape::EdgeShapes &type,
+                const std::vector<tlp::Coord> &bends, const tlp::Color &color1,
+                const tlp::Color &color2, const double width,
+                const EdgeExtremityShape::EdgeExtremityShapes
+                    src_anchor_shape_type,
+                const unsigned id_src_shape,
+                const EdgeExtremityShape::EdgeExtremityShapes
+                    tgt_anchor_shape_type,
+                const unsigned id_tgt_shape,
+                const std::vector<Coord> &edgeVertice) {
+              // Color gradient
+              QString name("gradient_edge_" + QString::number(id));
+              _res.writeStartElement("defs");
+              _res.writeStartElement("linearGradient");
+
+              _res.writeAttribute("id", name);
+              _res.writeAttribute("gradientUnits", "objectBoundingBox");
+
+              _res.writeStartElement("stop");
+              _res.writeAttribute("offset", "0%");
+              _res.writeAttribute("stop-color", tlpColor2SvgColor(color2));
+              _res.writeAttribute("stop-opacity",
+                                  tlpAlphaColor2Opacity(color2));
+              _res.writeEndElement();
+
+              _res.writeStartElement("stop");
+              _res.writeAttribute("offset", "100%");
+              _res.writeAttribute("stop-color", tlpColor2SvgColor(color1));
+              _res.writeAttribute("stop-opacity",
+                                  tlpAlphaColor2Opacity(color1));
+              _res.writeEndElement();
+              _res.writeEndElement();
+              _res.writeEndElement();
+
+              return createEdge(type, bends, "url(#" + name + ")", "1", width,
+                                src_anchor_shape_type, id_src_shape,
+                                tgt_anchor_shape_type, id_tgt_shape,
+                                edgeVertice);
+            }
           }
 
-          bool ExportSvg::createEdge(
-              const tlp::EdgeShape::EdgeShapes &type,
-              const vector<Coord> &bends, const QString &color,
-              const QString &qcolorA, const double width,
-              const tlp::EdgeExtremityShape::EdgeExtremityShapes
-                  src_anchor_shape_type,
-              const unsigned id_src_shape,
-              const tlp::EdgeExtremityShape::EdgeExtremityShapes
-                  tgt_anchor_shape_type,
-              const unsigned id_tgt_shape,
-              const std::vector<Coord> &edgeVertice) {
-            QString node_source_X(QString::number(edgeVertice[0].getX()));
-            QString node_source_Y(QString::number(edgeVertice[0].getY()));
-            QString node_target_X(
-                QString::number(edgeVertice[edgeVertice.size() - 1].getX()));
-            QString node_target_Y(
-                QString::number(edgeVertice[edgeVertice.size() - 1].getY()));
+          if (tgt_anchor_shape_type != EdgeExtremityShape::None) {
+            // Writing the context
+            _res.writeStartElement("defs");
+            _res.writeStartElement("marker");
 
-            _res.writeStartElement("path");
-            QString points("M " + node_source_X + "," + node_source_Y);
+            _res.writeAttribute("id", "Mtgt" % QString::number(id_tgt_shape));
+            _res.writeAttribute("markerUnits", "strokeWidth");
+            _res.writeAttribute("orient", "auto");
+            _res.writeAttribute("markerWidth", "4");
+            _res.writeAttribute("markerHeight", "3");
 
-            if (bends.empty()) { // If there is no checkpoints, it will be a
-                                 // simple
-                                 // line
-              points += " L";
-            } else { // Otherwise, we draw it according to its type
-              vector<Coord> controlPoints;
-              controlPoints.push_back(edgeVertice[0]);
-              controlPoints.insert(controlPoints.end(), bends.begin(),
-                                   bends.end());
-              controlPoints.push_back(edgeVertice[edgeVertice.size() - 1]);
-              vector<Coord> curvePoints;
-              switch (type) {
-              case EdgeShape::Polyline: {
-                points += " L";
-                for (vector<Coord>::const_iterator it = bends.begin();
-                     it != bends.end(); ++it) {
-                  points += " " + QString::number(it->getX()) + "," +
-                            QString::number(it->getY());
-                }
-                break;
+            switch (tgt_anchor_shape_type) {
+            case EdgeExtremityShape::None:
+              break;
+
+            case EdgeExtremityShape::Arrow:
+              ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), true);
+              break;
+
+            case EdgeExtremityShape::FontAwesomeIcon:
+              addBase64font();
+              ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color),
+                                              iconName, true);
+              break;
+
+            case EdgeExtremityShape::Circle:
+              ExtremityShape::Circle(_res, tlpColor2SvgColor(color), true);
+              break;
+
+              bool ExportSvg::exportEdge(
+                  const tlp::EdgeShape::EdgeShapes &type,
+                  const vector<Coord> &bends, const Color &color,
+                  const double width,
+                  const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                      src_anchor_shape_type,
+                  const unsigned id_src_shape,
+                  const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                      tgt_anchor_shape_type,
+                  const unsigned id_tgt_shape,
+                  const std::vector<Coord> &edgeVertice) {
+                return createEdge(type, bends, tlpColor2SvgColor(color),
+                                  tlpAlphaColor2Opacity(color), width,
+                                  src_anchor_shape_type, id_src_shape,
+                                  tgt_anchor_shape_type, id_tgt_shape,
+                                  edgeVertice);
               }
 
-              case EdgeShape::BezierCurve: {
-                if (bends.size() == 1) {
-                  points += " Q " + QString::number(bends.begin()->getX()) +
-                            "," + QString::number(bends.begin()->getY());
-                  break;
-                } else {
-                  computeBezierPoints(controlPoints, curvePoints);
-                  points += " S";
-                  for (vector<Coord>::const_iterator it = curvePoints.begin();
-                       it != curvePoints.end(); ++it) {
-                    points += " " + QString::number(it->getX()) + "," +
-                              QString::number(it->getY());
+              bool ExportSvg::createEdge(
+                  const tlp::EdgeShape::EdgeShapes &type,
+                  const vector<Coord> &bends, const QString &color,
+                  const QString &qcolorA, const double width,
+                  const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                      src_anchor_shape_type,
+                  const unsigned id_src_shape,
+                  const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                      tgt_anchor_shape_type,
+                  const unsigned id_tgt_shape,
+                  const std::vector<Coord> &edgeVertice) {
+                QString node_source_X(QString::number(edgeVertice[0].getX()));
+                QString node_source_Y(QString::number(edgeVertice[0].getY()));
+                QString node_target_X(QString::number(
+                    edgeVertice[edgeVertice.size() - 1].getX()));
+                QString node_target_Y(QString::number(
+                    edgeVertice[edgeVertice.size() - 1].getY()));
+
+                _res.writeStartElement("path");
+                QString points("M " + node_source_X + "," + node_source_Y);
+
+                if (bends.empty()) { // If there is no checkpoints, it will be a
+                                     // simple
+                                     // line
+                  points += " L";
+                } else { // Otherwise, we draw it according to its type
+                  vector<Coord> controlPoints;
+                  controlPoints.push_back(edgeVertice[0]);
+                  controlPoints.insert(controlPoints.end(), bends.begin(),
+                                       bends.end());
+                  controlPoints.push_back(edgeVertice[edgeVertice.size() - 1]);
+                  vector<Coord> curvePoints;
+                  switch (type) {
+                  case EdgeShape::Polyline: {
+                    points += " L";
+                    for (vector<Coord>::const_iterator it = bends.begin();
+                         it != bends.end(); ++it) {
+                      points += " " + QString::number(it->getX()) + "," +
+                                QString::number(it->getY());
+                    }
+                    break;
+                  }
+
+                  case EdgeShape::BezierCurve: {
+                    if (bends.size() == 1) {
+                      points += " Q " + QString::number(bends.begin()->getX()) +
+                                "," + QString::number(bends.begin()->getY());
+                      break;
+                    } else {
+                      computeBezierPoints(controlPoints, curvePoints);
+                      points += " S";
+                      for (vector<Coord>::const_iterator it =
+                               curvePoints.begin();
+                           it != curvePoints.end(); ++it) {
+                        points += " " + QString::number(it->getX()) + "," +
+                                  QString::number(it->getY());
+                      }
+                    }
+                    break;
+                  }
+
+                  case EdgeShape::CatmullRomCurve: {
+                    computeCatmullRomPoints(controlPoints, curvePoints);
+                    points += " S";
+                    for (vector<Coord>::const_iterator it = curvePoints.begin();
+                         it != curvePoints.end(); ++it) {
+                      points += " " + QString::number(it->getX()) + "," +
+                                QString::number(it->getY());
+                    }
+                    break;
+                  }
+
+                  case EdgeShape::CubicBSplineCurve: {
+                    computeOpenUniformBsplinePoints(controlPoints, curvePoints);
+                    points += " S";
+                    for (vector<Coord>::const_iterator it = curvePoints.begin();
+                         it != curvePoints.end(); ++it) {
+                      points += " " + QString::number(it->getX()) + "," +
+                                QString::number(it->getY());
+                    }
+                    break;
+                  }
                   }
                 }
-                break;
-              }
 
-              case EdgeShape::CatmullRomCurve: {
-                computeCatmullRomPoints(controlPoints, curvePoints);
-                points += " S";
-                for (vector<Coord>::const_iterator it = curvePoints.begin();
-                     it != curvePoints.end(); ++it) {
-                  points += " " + QString::number(it->getX()) + "," +
-                            QString::number(it->getY());
-                }
-                break;
-              }
+                _res.writeAttribute("d", points + " " + node_target_X + "," +
+                                             node_target_Y);
+                _res.writeAttribute("fill", "none");
+                _res.writeAttribute("stroke-width", QString::number(width));
+                _res.writeAttribute("stroke-opacity", qcolorA);
+                _res.writeAttribute("stroke", color);
 
-              case EdgeShape::CubicBSplineCurve: {
-                computeOpenUniformBsplinePoints(controlPoints, curvePoints);
-                points += " S";
-                for (vector<Coord>::const_iterator it = curvePoints.begin();
-                     it != curvePoints.end(); ++it) {
-                  points += " " + QString::number(it->getX()) + "," +
-                            QString::number(it->getY());
-                }
-                break;
-              }
-              }
-            }
+                if (src_anchor_shape_type != EdgeExtremityShape::None)
+                  _res.writeAttribute("marker-start",
+                                      "url(#Msrc" +
+                                          QString::number(id_src_shape) + ")");
 
-            _res.writeAttribute("d", points + " " + node_target_X + "," +
-                                         node_target_Y);
-            _res.writeAttribute("fill", "none");
-            _res.writeAttribute("stroke-width", QString::number(width));
-            _res.writeAttribute("stroke-opacity", qcolorA);
-            _res.writeAttribute("stroke", color);
+                if (tgt_anchor_shape_type != EdgeExtremityShape::None)
+                  _res.writeAttribute("marker-end",
+                                      "url(#Mtgt" +
+                                          QString::number(id_tgt_shape) + ")");
 
-            if (src_anchor_shape_type != EdgeExtremityShape::None)
-              _res.writeAttribute("marker-start",
-                                  "url(#Msrc" + QString::number(id_src_shape) +
-                                      ")");
-
-            if (tgt_anchor_shape_type != EdgeExtremityShape::None)
-              _res.writeAttribute("marker-end",
-                                  "url(#Mtgt" + QString::number(id_tgt_shape) +
-                                      ")");
-
-            _res.writeEndElement(); // path
+                _res.writeEndElement(); // path
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
-            return !_res.hasError();
+                return !_res.hasError();
 #else
-            return true;
+                return true;
 #endif
-          }
-
-          bool ExportSvg::exportEdgeExtremity(
-              const unsigned id_src_shape, const unsigned id_tgt_shape,
-              const tlp::EdgeExtremityShape::EdgeExtremityShapes
-                  src_anchor_shape_type,
-              const tlp::EdgeExtremityShape::EdgeExtremityShapes
-                  tgt_anchor_shape_type,
-              const tlp::Color &color, const unsigned int id_src_gradient,
-              const unsigned int id_tgt_gradient,
-              const Coord &coord_edge_extremity_source,
-              const Coord &coord_edge_extremity_target,
-              const Size &size_node_src, const Size &size_node_tgt) {
-            if (src_anchor_shape_type != EdgeExtremityShape::None) {
-              // Writing the context
-              _res.writeStartElement("defs");
-              _res.writeStartElement("marker");
-              _res.writeAttribute("id", "Msrc" % QString::number(id_src_shape));
-              _res.writeAttribute("markerUnits", "strokeWidth");
-              _res.writeAttribute("orient", "auto");
-              _res.writeAttribute("markerWidth", "4");
-              _res.writeAttribute("markerHeight", "3");
-
-              switch (src_anchor_shape_type) {
-              case EdgeExtremityShape::None:
-                break;
-
-              case EdgeExtremityShape::FontAwesomeIcon: // add an arrow to
-                                                        // replace
-                                                        // FontAwesomeIcon
-              case EdgeExtremityShape::Arrow:
-                ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Circle:
-                ExtremityShape::Circle(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Cross:
-                ExtremityShape::Cross(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Diamond:
-                ExtremityShape::Diamond(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Hexagon:
-                ExtremityShape::Hexagon(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Pentagon:
-                ExtremityShape::Pentagon(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Ring:
-                ExtremityShape::Ring(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Square:
-                ExtremityShape::Square(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Star:
-                ExtremityShape::Star(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Cube:
-                ExtremityShape::Cube(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::CubeOutlinedTransparent:
-                ExtremityShape::CubeOutlinedTransparent(
-                    _res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Cone:
-                ExtremityShape::Cone(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Cylinder:
-                ExtremityShape::Cylinder(_res, tlpColor2SvgColor(color), false);
-                break;
-
-              case EdgeExtremityShape::Sphere:
-                ExtremityShape::Sphere(_res, color, false, id_src_gradient);
-                break;
-
-              case EdgeExtremityShape::GlowSphere:
-                ExtremityShape::GlowSphere(_res, color, false, id_src_gradient,
-                                           coord_edge_extremity_source,
-                                           size_node_src);
-                break;
               }
-              _res.writeEndElement();
 
-              if (src_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
-                _res.writeEndElement(); // End context "marker"
-                _res.writeEndElement(); // End context "def"
-              }
-            }
+              bool ExportSvg::exportEdgeExtremity(
+                  const unsigned id_src_shape, const unsigned id_tgt_shape,
+                  const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                      src_anchor_shape_type,
+                  const tlp::EdgeExtremityShape::EdgeExtremityShapes
+                      tgt_anchor_shape_type,
+                  const tlp::Color &color, const unsigned int id_src_gradient,
+                  const unsigned int id_tgt_gradient,
+                  const Coord &coord_edge_extremity_source,
+                  const Coord &coord_edge_extremity_target,
+                  const Size &size_node_src, const Size &size_node_tgt) {
+                if (src_anchor_shape_type != EdgeExtremityShape::None) {
+                  // Writing the context
+                  _res.writeStartElement("defs");
+                  _res.writeStartElement("marker");
+                  _res.writeAttribute("id",
+                                      "Msrc" % QString::number(id_src_shape));
+                  _res.writeAttribute("markerUnits", "strokeWidth");
+                  _res.writeAttribute("orient", "auto");
+                  _res.writeAttribute("markerWidth", "4");
+                  _res.writeAttribute("markerHeight", "3");
 
-            if (tgt_anchor_shape_type != EdgeExtremityShape::None) {
-              // Writing the context
-              _res.writeStartElement("defs");
-              _res.writeStartElement("marker");
+                  switch (src_anchor_shape_type) {
+                  case EdgeExtremityShape::None:
+                    break;
 
-              _res.writeAttribute("id", "Mtgt" % QString::number(id_tgt_shape));
-              _res.writeAttribute("markerUnits", "strokeWidth");
-              _res.writeAttribute("orient", "auto");
-              _res.writeAttribute("markerWidth", "4");
-              _res.writeAttribute("markerHeight", "3");
+                  case EdgeExtremityShape::FontAwesomeIcon: // add an arrow to
+                                                            // replace
+                                                            // FontAwesomeIcon
+                  case EdgeExtremityShape::Arrow:
+                    ExtremityShape::Arrow(_res, tlpColor2SvgColor(color),
+                                          false);
+                    break;
 
-              switch (tgt_anchor_shape_type) {
-              case EdgeExtremityShape::None:
-                break;
+                  case EdgeExtremityShape::Circle:
+                    ExtremityShape::Circle(_res, tlpColor2SvgColor(color),
+                                           false);
+                    break;
 
-              case EdgeExtremityShape::FontAwesomeIcon: // add an arrow to
-                                                        // replace
-                                                        // FontAwesomeIcon
-              case EdgeExtremityShape::Arrow:
-                ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Cross:
+                    ExtremityShape::Cross(_res, tlpColor2SvgColor(color),
+                                          false);
+                    break;
 
-              case EdgeExtremityShape::Circle:
-                ExtremityShape::Circle(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Diamond:
+                    ExtremityShape::Diamond(_res, tlpColor2SvgColor(color),
+                                            false);
+                    break;
 
-              case EdgeExtremityShape::Cross:
-                ExtremityShape::Cross(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Hexagon:
+                    ExtremityShape::Hexagon(_res, tlpColor2SvgColor(color),
+                                            false);
+                    break;
 
-              case EdgeExtremityShape::Diamond:
-                ExtremityShape::Diamond(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Pentagon:
+                    ExtremityShape::Pentagon(_res, tlpColor2SvgColor(color),
+                                             false);
+                    break;
 
-              case EdgeExtremityShape::Hexagon:
-                ExtremityShape::Hexagon(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Ring:
+                    ExtremityShape::Ring(_res, tlpColor2SvgColor(color), false);
+                    break;
 
-              case EdgeExtremityShape::Pentagon:
-                ExtremityShape::Pentagon(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Square:
+                    ExtremityShape::Square(_res, tlpColor2SvgColor(color),
+                                           false);
+                    break;
 
-              case EdgeExtremityShape::Ring:
-                ExtremityShape::Ring(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Star:
+                    ExtremityShape::Star(_res, tlpColor2SvgColor(color), false);
+                    break;
 
-              case EdgeExtremityShape::Square:
-                ExtremityShape::Square(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Cube:
+                    ExtremityShape::Cube(_res, tlpColor2SvgColor(color), false);
+                    break;
 
-              case EdgeExtremityShape::Star:
-                ExtremityShape::Star(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::CubeOutlinedTransparent:
+                    ExtremityShape::CubeOutlinedTransparent(
+                        _res, tlpColor2SvgColor(color), false);
+                    break;
 
-              case EdgeExtremityShape::Cube:
-                ExtremityShape::Cube(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Cone:
+                    ExtremityShape::Cone(_res, tlpColor2SvgColor(color), false);
+                    break;
 
-              case EdgeExtremityShape::CubeOutlinedTransparent:
-                ExtremityShape::CubeOutlinedTransparent(
-                    _res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Cylinder:
+                    ExtremityShape::Cylinder(_res, tlpColor2SvgColor(color),
+                                             false);
+                    break;
 
-              case EdgeExtremityShape::Cone:
-                ExtremityShape::Cone(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::Sphere:
+                    ExtremityShape::Sphere(_res, color, false, id_src_gradient);
+                    break;
 
-              case EdgeExtremityShape::Cylinder:
-                ExtremityShape::Cone(_res, tlpColor2SvgColor(color), true);
-                break;
+                  case EdgeExtremityShape::GlowSphere:
+                    ExtremityShape::GlowSphere(
+                        _res, color, false, id_src_gradient,
+                        coord_edge_extremity_source, size_node_src);
+                    break;
+                  }
+                  _res.writeEndElement();
 
-              case EdgeExtremityShape::Sphere:
-                ExtremityShape::Sphere(_res, color, true, id_tgt_gradient);
-                break;
+                  if (src_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
+                    _res.writeEndElement(); // End context "marker"
+                    _res.writeEndElement(); // End context "def"
+                  }
+                }
 
-              case EdgeExtremityShape::GlowSphere:
-                ExtremityShape::GlowSphere(_res, color, true, id_tgt_gradient,
-                                           coord_edge_extremity_target,
-                                           size_node_tgt);
-                break;
-              }
-              _res.writeEndElement();
-              if (tgt_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
-                _res.writeEndElement(); // End context "marker"
-                _res.writeEndElement(); // End context "def"
-              }
-            }
+                if (tgt_anchor_shape_type != EdgeExtremityShape::None) {
+                  // Writing the context
+                  _res.writeStartElement("defs");
+                  _res.writeStartElement("marker");
+
+                  _res.writeAttribute("id",
+                                      "Mtgt" % QString::number(id_tgt_shape));
+                  _res.writeAttribute("markerUnits", "strokeWidth");
+                  _res.writeAttribute("orient", "auto");
+                  _res.writeAttribute("markerWidth", "4");
+                  _res.writeAttribute("markerHeight", "3");
+
+                  switch (tgt_anchor_shape_type) {
+                  case EdgeExtremityShape::None:
+                    break;
+
+                  case EdgeExtremityShape::FontAwesomeIcon: // add an arrow to
+                                                            // replace
+                                                            // FontAwesomeIcon
+                  case EdgeExtremityShape::Arrow:
+                    ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Circle:
+                    ExtremityShape::Circle(_res, tlpColor2SvgColor(color),
+                                           true);
+                    break;
+
+                  case EdgeExtremityShape::Cross:
+                    ExtremityShape::Cross(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Diamond:
+                    ExtremityShape::Diamond(_res, tlpColor2SvgColor(color),
+                                            true);
+                    break;
+
+                  case EdgeExtremityShape::Hexagon:
+                    ExtremityShape::Hexagon(_res, tlpColor2SvgColor(color),
+                                            true);
+                    break;
+
+                  case EdgeExtremityShape::Pentagon:
+                    ExtremityShape::Pentagon(_res, tlpColor2SvgColor(color),
+                                             true);
+                    break;
+
+                  case EdgeExtremityShape::Ring:
+                    ExtremityShape::Ring(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Square:
+                    ExtremityShape::Square(_res, tlpColor2SvgColor(color),
+                                           true);
+                    break;
+
+                  case EdgeExtremityShape::Star:
+                    ExtremityShape::Star(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Cube:
+                    ExtremityShape::Cube(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::CubeOutlinedTransparent:
+                    ExtremityShape::CubeOutlinedTransparent(
+                        _res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Cone:
+                    ExtremityShape::Cone(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Cylinder:
+                    ExtremityShape::Cone(_res, tlpColor2SvgColor(color), true);
+                    break;
+
+                  case EdgeExtremityShape::Sphere:
+                    ExtremityShape::Sphere(_res, color, true, id_tgt_gradient);
+                    break;
+
+                  case EdgeExtremityShape::GlowSphere:
+                    ExtremityShape::GlowSphere(
+                        _res, color, true, id_tgt_gradient,
+                        coord_edge_extremity_target, size_node_tgt);
+                    break;
+                  }
+                  _res.writeEndElement();
+                  if (tgt_anchor_shape_type != EdgeExtremityShape::GlowSphere) {
+                    _res.writeEndElement(); // End context "marker"
+                    _res.writeEndElement(); // End context "def"
+                  }
+                }
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
-            return !_res.hasError();
+                return !_res.hasError();
 #else
-            return true;
+                return true;
 #endif
-          }
+              }
