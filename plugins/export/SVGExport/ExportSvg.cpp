@@ -24,10 +24,9 @@
 #include <tulip/TlpTools.h>
 #include <tulip/TulipFontAwesome.h>
 
-#include <QtAwesome.h>
-
 #include <QBuffer>
 #include <QFile>
+#include <QStringBuilder>
 #include <QStringBuilder>
 
 using namespace std;
