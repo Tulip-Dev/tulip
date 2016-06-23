@@ -18,21 +18,28 @@
  */
 #include "ExportSvg.h"
 #include "Shape.h"
+
 #include <tulip/TlpQtTools.h>
 #include <tulip/BoundingBox.h>
+#include <tulip/TulipFontAwesome.h>
+#include <tulip/TlpTools.h>
+
+#include <QtAwesome.h>
 
 #include <QStringBuilder>
+#include <QBuffer>
+#include <QFile>
+
 
 using namespace std;
 using namespace tlp;
 
 /*TODO
- * - export label correctly (font used and overlapping if possible)
+ * - improve label export (font used and overlapping if possible)
  * - export label position (bottom, top, right and left)
  * - handle viewTexture
- * - add better support for Glowsphere node (done for edge extremity)
+ * - add better support for Glowsphere node (done for edge extremities)
  * - add a better shape for cone and star
- * - check how fontawesomeicon can be implemented
  */
 
 #define MARGIN 10
@@ -49,7 +56,7 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 }
 
-ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, bool autoformatting):ExportInterface(pp, os),_res(&_out) {
+ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2):ExportInterface(pp, os),_res(&_out), _base64fontAdded(false),_woff2(woff2) {
   _res.setAutoFormatting(autoformatting);
   _res.setCodec("UTF-8");
 }
@@ -261,7 +268,27 @@ bool ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
 #endif
 }
 
-bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &coord, const Size &size, const Color &bordercolor, const double borderwidth, const Color &color) {
+void ExportSvg::addBase64font() {
+    if(!_base64fontAdded) {
+        _base64fontAdded=true;
+        QString extension("woff");
+        if(_woff2)
+            extension = "woff2";
+        QFile file(tlp::tlpStringToQString(tlp::TulipBitmapDir).append("fontawesome-webfont."+extension));
+        if (!file.open(QIODevice::ReadOnly))
+            tlp::warning() << "Cannot open " << tlp::TulipBitmapDir << "fontawesome-webfont."<<tlp::QStringToTlpString(extension) << endl;
+        QByteArray byteArray(file.readAll());
+        file.close();
+        _res.writeStartElement("style");
+        _res.writeAttribute("style","text/css");
+        QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
+        QString header("@font-face {font-family: \"fontawesome\";src: url(\"data:application/x-font-"+extension+";base64,");
+        _res.writeCDATA(header+base64code+"\");}");
+        _res.writeEndElement();
+    }
+}
+
+bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &coord, const Size &size, const Color &bordercolor, const double borderwidth, const Color &color, string iconName) {
   //node coord
   float x = coord.getX();
   float y = coord.getY();
@@ -443,48 +470,6 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
     break;
 
-  case NodeShape::ChristmasTree: { // If the shape is a christmas tree: composed by a circle, a triangle and a rectangle
-    //circle
-    float yc=y+(0.9*h);
-    float rx=0.1*w;
-    float ry=0.1*h;
-    addColor(color);
-
-    if(borderwidth>0)
-      addBorder(bordercolor, borderwidth);
-
-    _res.writeStartElement("ellipse");
-    _res.writeAttribute("cx", QString::number(x));
-    _res.writeAttribute("cy", QString::number(yc));
-    _res.writeAttribute("rx", QString::number(rx));
-    _res.writeAttribute("ry", QString::number(ry));
-    _res.writeEndElement(); // ellipse
-
-    //triangle
-    float yt1=y+(0.8*h);
-    float xt2=x+(0.8*w);
-    float yt2=y-(0.5*h);
-    float xt3=x-(0.8*w);
-    QString list_pt_tr=QString::number(x)+","+QString::number(yt1)+" "+QString::number(xt2)+","+QString::number(yt2)+" "+QString::number(xt3)+","+QString::number(yt2);
-
-    _res.writeStartElement("polygon");
-    _res.writeAttribute("points", list_pt_tr);
-    _res.writeAttribute("fill", "#1A7900");
-    _res.writeEndElement(); // triangle
-
-    //rectangle
-    float xr1=x-(0.25*w);
-    float xr2=x+(0.25*w);
-    float yr3=y-h;
-
-    QString list_pt_rect=QString::number(xr1)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yt2)+" "+QString::number(xr2)+","+QString::number(yr3)+" "+QString::number(xr1)+","+QString::number(yr3);
-
-    _res.writeStartElement("polygon");
-    _res.writeAttribute("points", list_pt_rect);
-    _res.writeAttribute("fill", "#7D7900");
-  }
-  break;
-
   case NodeShape::Ring: // If the shape is a ring, we have to draw the white circle in the middle
     _res.writeStartElement("ellipse");
     _res.writeAttribute("cx", QString::number(x));
@@ -543,10 +528,31 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   }
   break;
 
-  //TODO!!!! Right now, just draw a circle
+  case NodeShape::ChristmasTree:
+      iconName=TulipFontAwesome::Tree;
+
+  case NodeShape::FontAwesomeIcon: {
+      addBase64font();
+
+      _res.writeStartElement("text");
+      _res.writeAttribute("x", QString::number(x));
+      _res.writeAttribute("y", QString::number(-y));
+      _res.writeAttribute("font-family","fontawesome");
+      _res.writeAttribute("transform", "scale(1,-1) translate(0,"+QString::number(h)+")");
+      _res.writeAttribute("font-size", QString::number(w*2));
+      _res.writeAttribute("text-anchor","middle");
+      addColor(color);
+      if(borderwidth>0)
+          addBorder(bordercolor, borderwidth);
+      _res.writeCharacters("");
+      _res.device()->write("&"); //do not escape the character
+      _res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
+  }
+      break;
+
+  //TODO!!!! Right now, just draw an ellipse
   case NodeShape::Cone:
   case NodeShape::Star:
-  case NodeShape::FontAwesomeIcon:
   default:
     _res.writeStartElement("ellipse");
     _res.writeAttribute("cx", QString::number(x));
@@ -690,7 +696,8 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
 #endif
 }
 
-bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const Coord &coord_edge_extremity_source, const Coord &coord_edge_extremity_target, const Size &size_node_src, const Size &size_node_tgt) {
+bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const Coord &coord_edge_extremity_source, const Coord &coord_edge_extremity_target, const Size &size_node_src, const Size &size_node_tgt,
+                                    const string& iconName) {
   if (src_anchor_shape_type != EdgeExtremityShape::None) {
     // Writing the context
     _res.writeStartElement("defs");
@@ -705,10 +712,14 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     case EdgeExtremityShape::None:
       break;
 
-    case EdgeExtremityShape::FontAwesomeIcon:    //add an arrow to replace FontAwesomeIcon
+    case EdgeExtremityShape::FontAwesomeIcon:
+        addBase64font();
+        ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, false);
+        break;
+
     case EdgeExtremityShape::Arrow:
-      ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), false);
-      break;
+        ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), false);
+        break;
 
     case EdgeExtremityShape::Circle:
       ExtremityShape::Circle(_res, tlpColor2SvgColor(color), false);
@@ -790,10 +801,14 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     case EdgeExtremityShape::None:
       break;
 
-    case EdgeExtremityShape::FontAwesomeIcon: //add an arrow to replace FontAwesomeIcon
     case EdgeExtremityShape::Arrow:
       ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), true);
       break;
+
+    case EdgeExtremityShape::FontAwesomeIcon:
+        addBase64font();
+        ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, true);
+        break;
 
     case EdgeExtremityShape::Circle:
       ExtremityShape::Circle(_res, tlpColor2SvgColor(color), true);
