@@ -119,10 +119,10 @@ public:
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
     addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
     addInParameter<bool>("Makes SVG output human readable", paramHelp[4], "true");
-    addInParameter<bool>("Export node labels", paramHelp[4], "true");
-    addInParameter<bool>("Export edge labels", paramHelp[5], "false");
-    addInParameter<bool>("Export metanode labels", paramHelp[6], "false");
-    addInParameter<bool>("Use Web Open Font Format v2", paramHelp[7], "false");
+    addInParameter<bool>("Export node labels", paramHelp[5], "true");
+    addInParameter<bool>("Export edge labels", paramHelp[6], "false");
+    addInParameter<bool>("Export metanode labels", paramHelp[7], "false");
+    addInParameter<bool>("Use Web Open Font Format v2", paramHelp[8], "false");
   }
 
   bool exportGraph(ostream &os) {
