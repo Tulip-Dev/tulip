@@ -74,7 +74,7 @@ public:
   virtual bool endNode()=0;
 
   //This method defines the shape of a node
-  virtual bool addShape(const tlp::NodeShape::NodeShapes &, const tlp::Coord &coord, const tlp::Size &size, const tlp::Color& bordercolor, const double borderwidth, const tlp::Color& color)=0;
+  virtual bool addShape(const tlp::NodeShape::NodeShapes &, const tlp::Coord &coord, const tlp::Size &size, const tlp::Color& bordercolor, const double borderwidth, const tlp::Color& color, std::string iconName)=0;
 
   //This method represents edges according to incoming parameters
   //No edge color interpolation
@@ -83,7 +83,7 @@ public:
   virtual bool exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &, const std::vector<tlp::Coord> &bends, const tlp::Color &edgeColor1, const tlp::Color &edgeColor2, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice)=0;
 
   //This method defines extremities of edges
-  virtual bool exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const tlp::Coord &coord_edge_extremity_source, const tlp::Coord &coord_edge_extremity_target, const tlp::Size &size_node_src, const tlp::Size &size_node_tgt)=0;
+  virtual bool exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const tlp::Coord &coord_edge_extremity_source, const tlp::Coord &coord_edge_extremity_target, const tlp::Size &size_node_src, const tlp::Size &size_node_tgt, const std::string &iconName)=0;
 
   //This method represents edges according to incoming parameters
   virtual bool startEdge(const unsigned id)=0;

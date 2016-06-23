@@ -73,6 +73,13 @@ const char *paramHelp[] = {
         HTML_HELP_DEF("default", "false")
             HTML_HELP_BODY() "Specify if node and edge labels inside metanodes "
                              "have to be exported." HTML_HELP_CLOSE(),
+    // woff2
+    HTML_HELP_OPEN() HTML_HELP_DEF("type", "Boolean")
+        HTML_HELP_DEF("default", "false")
+            HTML_HELP_BODY() "Use Web Open Font Format version 2 (woff2) to "
+                             "reduce generated file length. This format is "
+                             "supported in almost all recent Internet "
+                             "browser." HTML_HELP_CLOSE(),
 };
 }
 
@@ -102,15 +109,19 @@ public:
     addInParameter<bool>("Export node labels", paramHelp[4], "true");
     addInParameter<bool>("Export edge labels", paramHelp[5], "false");
     addInParameter<bool>("Export metanode labels", paramHelp[6], "false");
+    addInParameter<bool>("Use Web Open Font Format v2", paramHelp[7], "false");
   }
 
   bool exportGraph(ostream &os) {
     pluginProgress->showPreview(false);
-    bool autoformatting(true);
-    if (dataSet != NULL)
+    bool autoformatting(true), woff2(false);
+
+    if (dataSet != NULL) {
       dataSet->get("Makes SVG output human readable", autoformatting);
-    ExportSvg svg(pluginProgress, os,
-                  autoformatting); // We call our first concrete builder
+      dataSet->get("Use Web Open Font Format v2", woff2);
+    }
+    ExportSvg svg(pluginProgress, os, autoformatting,
+                  woff2); // We call our first concrete builder
     bool ret = ReadGraph::readGraph(graph, dataSet, pluginProgress, svg);
     if (!ret && autoformatting) {
       pluginProgress->setError(pluginProgress->getError() +
