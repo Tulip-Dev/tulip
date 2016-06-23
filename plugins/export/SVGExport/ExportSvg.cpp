@@ -24,8 +24,6 @@
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TlpTools.h>
 
-#include <QtAwesome.h>
-
 #include <QStringBuilder>
 #include <QBuffer>
 #include <QFile>
