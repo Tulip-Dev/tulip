@@ -84,7 +84,7 @@ public:
                           const Size &scale, const double zRotation) const;
 
   /**
-   * Return if the Glyph render its label (return true) of if GlNode have to render label (return false)
+   * Return if the Glyph render its label (return true) or if GlNode have to render label (return false)
    */
   virtual bool renderLabel() {
     return false;
