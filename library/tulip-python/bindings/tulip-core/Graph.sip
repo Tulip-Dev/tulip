@@ -47,7 +47,7 @@ typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
 extern void releaseGraphWrapper(tlp::Graph *graph);
 extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
-extern tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph, tlp::DataSet *inputParams, PyObject *inputParamsWrapper);
+extern tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph=NULL, tlp::DataSet *inputParams=NULL, PyObject *inputParamsWrapper=NULL);
 extern void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, tlp::DataSet *inputDataSet, PyObject *inputDataSetWrapper);
 
 template<class AlgorithmType, class PropertyType>
@@ -4145,7 +4145,21 @@ Returns :const:`True` if the graph has been successfully saved.
 
 //===========================================================================================
 
-tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSet /GetWrapper/ = tlp::DataSet()) /TransferBack/;
+tlp::Graph *importGraph(const std::string &importPluginName) /TransferBack/;
+%MethodCode
+  if (pluginExists<tlp::ImportModule>(*a0)) {
+    tlp::DataSet *params = prepareAlgorithmParameters(*a0);
+    sipRes = tlp::importGraph(*a0, *params, NULL);
+  } else {
+    sipIsErr = -1;
+    std::string msg = "No Tulip import plugin named  ";
+    msg += *a0;
+    msg += ".";
+    PyErr_SetString(PyExc_Exception, msg.c_str());
+  }
+%End
+
+tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSet /GetWrapper/ ) /TransferBack/;
 %Docstring
 tlp.importGraph(importPluginName[, params, newGraph = None])
 
