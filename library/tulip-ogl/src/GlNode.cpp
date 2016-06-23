@@ -252,9 +252,9 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data) {
 
 void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lod,Camera *camera) {
 
-  node n=node(id);
+  node n(id);
 
-  // If glyph can't render label : return
+  // If glyph cannot render label: return
   if(data->glyphs.get(data->getElementShape()->getNodeValue(n))->renderLabel())
     return;
 
