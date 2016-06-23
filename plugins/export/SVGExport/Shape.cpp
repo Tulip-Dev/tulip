@@ -1,6 +1,9 @@
 #include "Shape.h"
 
+#include <tulip/TulipFontAwesome.h>
+
 using namespace std;
+using namespace tlp;
 
 void ExtremityShape::Arrow(QXmlStreamWriter& res, const QString& color, bool tgt) {
   res.writeAttribute("viewBox",(tgt?"0 0 10 10":"-10 0 10 10"));
@@ -199,6 +202,21 @@ void ExtremityShape::Sphere(QXmlStreamWriter& res, const tlp::Color& color, bool
   res.writeAttribute("offset","100%");
   res.writeAttribute("stop-color",couleur);
   res.writeEndElement();
+}
+
+void ExtremityShape::FontAwesomeIcon(QXmlStreamWriter& res, const QString& color, const string &iconName, bool tgt ) {
+    res.writeStartElement("text");
+    res.writeAttribute("font-family","fontawesome");
+    res.writeAttribute("transform", "scale(1,-1)");
+    res.writeAttribute("font-size", "2");
+    res.writeAttribute("text-anchor","middle");
+    res.writeAttribute("refX",(tgt?"10.5":"1.5"));
+    res.writeAttribute("refY","6");
+    res.writeAttribute("fill", color);
+    //res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
+    res.writeCharacters("");
+    res.device()->write("&"); //do not escape the character
+    res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
 }
 
 void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, bool tgt, const unsigned id_gradient, const tlp::Coord &node_coord, const tlp::Size &node_size) {
