@@ -267,23 +267,27 @@ bool ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
 }
 
 void ExportSvg::addBase64font() {
-    if(!_base64fontAdded) {
-        _base64fontAdded=true;
-        QString extension("woff");
-        if(_woff2)
-            extension = "woff2";
-        QFile file(tlp::tlpStringToQString(tlp::TulipBitmapDir).append("fontawesome-webfont."+extension));
-        if (!file.open(QIODevice::ReadOnly))
-            tlp::warning() << "Cannot open " << tlp::TulipBitmapDir << "fontawesome-webfont."<<tlp::QStringToTlpString(extension) << endl;
-        QByteArray byteArray(file.readAll());
-        file.close();
-        _res.writeStartElement("style");
-        _res.writeAttribute("style","text/css");
-        QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
-        QString header("@font-face {font-family: \"fontawesome\";src: url(\"data:application/x-font-"+extension+";base64,");
-        _res.writeCDATA(header+base64code+"\");}");
-        _res.writeEndElement();
-    }
+  if(!_base64fontAdded) {
+    _base64fontAdded=true;
+    QString extension("woff");
+
+    if(_woff2)
+      extension = "woff2";
+
+    QFile file(tlp::tlpStringToQString(tlp::TulipBitmapDir).append("fontawesome-webfont."+extension));
+
+    if (!file.open(QIODevice::ReadOnly))
+      tlp::warning() << "Cannot open " << tlp::TulipBitmapDir << "fontawesome-webfont."<<tlp::QStringToTlpString(extension) << endl;
+
+    QByteArray byteArray(file.readAll());
+    file.close();
+    _res.writeStartElement("style");
+    _res.writeAttribute("style","text/css");
+    QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
+    QString header("@font-face {font-family: \"fontawesome\";src: url(\"data:application/x-font-"+extension+";base64,");
+    _res.writeCDATA(header+base64code+"\");}");
+    _res.writeEndElement();
+  }
 }
 
 bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &coord, const Size &size, const Color &bordercolor, const double borderwidth, const Color &color, string iconName) {
@@ -527,26 +531,28 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   break;
 
   case NodeShape::ChristmasTree:
-      iconName=TulipFontAwesome::Tree;
+    iconName=TulipFontAwesome::Tree;
 
   case NodeShape::FontAwesomeIcon: {
-      addBase64font();
+    addBase64font();
 
-      _res.writeStartElement("text");
-      _res.writeAttribute("x", QString::number(x));
-      _res.writeAttribute("y", QString::number(-y));
-      _res.writeAttribute("font-family","fontawesome");
-      _res.writeAttribute("transform", "scale(1,-1) translate(0,"+QString::number(h)+")");
-      _res.writeAttribute("font-size", QString::number(w*2));
-      _res.writeAttribute("text-anchor","middle");
-      addColor(color);
-      if(borderwidth>0)
-          addBorder(bordercolor, borderwidth);
-      _res.writeCharacters("");
-      _res.device()->write("&"); //do not escape the character
-      _res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
+    _res.writeStartElement("text");
+    _res.writeAttribute("x", QString::number(x));
+    _res.writeAttribute("y", QString::number(-y));
+    _res.writeAttribute("font-family","fontawesome");
+    _res.writeAttribute("transform", "scale(1,-1) translate(0,"+QString::number(h)+")");
+    _res.writeAttribute("font-size", QString::number(w*2));
+    _res.writeAttribute("text-anchor","middle");
+    addColor(color);
+
+    if(borderwidth>0)
+      addBorder(bordercolor, borderwidth);
+
+    _res.writeCharacters("");
+    _res.device()->write("&"); //do not escape the character
+    _res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
   }
-      break;
+  break;
 
   //TODO!!!! Right now, just draw an ellipse
   case NodeShape::Cone:
@@ -711,13 +717,13 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
 
     case EdgeExtremityShape::FontAwesomeIcon:
-        addBase64font();
-        ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, false);
-        break;
+      addBase64font();
+      ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, false);
+      break;
 
     case EdgeExtremityShape::Arrow:
-        ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), false);
-        break;
+      ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), false);
+      break;
 
     case EdgeExtremityShape::Circle:
       ExtremityShape::Circle(_res, tlpColor2SvgColor(color), false);
@@ -804,9 +810,9 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
 
     case EdgeExtremityShape::FontAwesomeIcon:
-        addBase64font();
-        ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, true);
-        break;
+      addBase64font();
+      ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, true);
+      break;
 
     case EdgeExtremityShape::Circle:
       ExtremityShape::Circle(_res, tlpColor2SvgColor(color), true);

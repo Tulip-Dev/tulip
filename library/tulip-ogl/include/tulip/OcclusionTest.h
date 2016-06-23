@@ -71,6 +71,7 @@ struct TLP_GL_SCOPE OcclusionTest {
       if (rec.intersect(*it))
         return true;
     }
+
     return false;
   }
 };
