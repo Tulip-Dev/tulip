@@ -24,10 +24,7 @@
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TlpTools.h>
 
-#include <QStringBuilder>
-#include <QBuffer>
 #include <QFile>
-
 
 using namespace std;
 using namespace tlp;
@@ -706,7 +703,7 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     // Writing the context
     _res.writeStartElement("defs");
     _res.writeStartElement("marker");
-    _res.writeAttribute("id","Msrc" % QString::number(id_src_shape));
+    _res.writeAttribute("id","Msrc" + QString::number(id_src_shape));
     _res.writeAttribute("markerUnits","strokeWidth");
     _res.writeAttribute("orient","auto");
     _res.writeAttribute("markerWidth","4");
@@ -795,7 +792,7 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     _res.writeStartElement("defs");
     _res.writeStartElement("marker");
 
-    _res.writeAttribute("id","Mtgt" % QString::number(id_tgt_shape));
+    _res.writeAttribute("id","Mtgt" + QString::number(id_tgt_shape));
     _res.writeAttribute("markerUnits","strokeWidth");
     _res.writeAttribute("orient","auto");
     _res.writeAttribute("markerWidth","4");
