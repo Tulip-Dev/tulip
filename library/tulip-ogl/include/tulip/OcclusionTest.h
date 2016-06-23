@@ -62,23 +62,17 @@ struct TLP_GL_SCOPE OcclusionTest {
     return false;
   }
   /**
-  * @brief test wehter or nor the AABB intersect with a AABB already inserted.
+  * @brief test wehter or nort the AABB intersect with a AABB already inserted.
   *
-  * @return true is the ABBB intersect else false.
+  * @return true if the AABB intersect else false.
   */
   bool testRectangle(const RectangleInt2D &rec) {
-    bool intersect=false;
-
     for (std::vector<RectangleInt2D>::const_iterator it=data.begin(); it!=data.end(); ++it) {
-      if (rec.intersect(*it)) {
-        intersect=true;
-        break;
-      }
+      if (rec.intersect(*it))
+        return true;
     }
-
-    return intersect;
+    return false;
   }
-
 };
 
 }
