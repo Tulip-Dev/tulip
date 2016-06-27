@@ -48,7 +48,8 @@ class CSVParsingConfigurationQWizardPage : public QWizardPage {
 public:
   CSVParsingConfigurationQWizardPage ( QWidget * parent = nullptr );
   bool isComplete() const;
-  CSVParser* buildParser()const;
+  CSVParser* buildParser(int firstLine = 0)const;
+  int getFirstLineIndex() const;
 
 private:
   void updatePreview();

@@ -53,6 +53,7 @@ public:
   bool invertMatrix()const;
   bool getMergeSeparator() const;
   void initWithLastOpenedFile();
+  int getFirstLineIndex() const;
 
 public slots:
   void setFileToOpen(const QString& fileToOpen);
@@ -63,6 +64,7 @@ protected slots:
   void changeFileNameButtonPressed();
   void encodingChanged();
   void changeSeparator(int index);
+  void ignoreFirstLines(int checkState);
 
 private:
 
