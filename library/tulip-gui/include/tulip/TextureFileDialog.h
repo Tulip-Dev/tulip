@@ -18,28 +18,45 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef TULIPFILEDESCRIPTORWIDGET_H
-#define TULIPFILEDESCRIPTORWIDGET_H
+#ifndef TEXTUREFILEDIALOG_H
+#define TEXTUREFILEDIALOG_H
 
-#include <QWidget>
+#include <QDialog>
 
-#include <tulip/tulipconf.h>
+#include "ui_TextureFileDialog.h"
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/tulipconf.h>
 
-class TLP_QT_SCOPE TulipFileDescriptorWidget: public QWidget {
+namespace Ui {
+class TextureFileDialogData;
+}
+
+namespace tlp {
+
+/**
+  * @brief Provide a dialog that allow the user to choose
+  * a file whose name may be empty
+  *
+  *
+  **/
+class TLP_QT_SCOPE TextureFileDialog : public QDialog {
   Q_OBJECT
-
-  TulipFileDescriptor _data;
-  QWidget* _display;
 public:
-  explicit TulipFileDescriptorWidget(QWidget* parent = nullptr);
+  Ui::TextureFileDialogData *ui;
+  TextureFile _data;
+  int ok;
+  TextureFileDialog(QWidget *parent = nullptr);
 
-  void setData(TulipFileDescriptor);
-  TulipFileDescriptor data() const;
+  ~TextureFileDialog();
 
-protected slots:
+  void done(int res);
+
+  void setData(const TextureFile &tf);
+
+  const TextureFile &data() { return _data; }
+public slots:
   void browse();
 };
-
-#endif // TULIPFILEDESCRIPTORWIDGET_H
+}
+#endif // TEXTUREFILEDIALOG_H
 ///@endcond

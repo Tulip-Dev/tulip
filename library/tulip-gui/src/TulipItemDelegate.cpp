@@ -66,6 +66,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
   registerCreator<tlp::NumericProperty*>(new PropertyEditorCreator<tlp::NumericProperty>);
   registerCreator<tlp::ColorScale>(new ColorScaleEditorCreator);
   registerCreator<tlp::StringCollection>(new StringCollectionEditorCreator);
+  registerCreator<TextureFile>(new TextureFileEditorCreator);
   registerCreator<TulipFileDescriptor>(new TulipFileDescriptorEditorCreator);
   registerCreator<NodeShape::NodeShapes>(new NodeShapeEditorCreator);
   registerCreator<EdgeShape::EdgeShapes>(new EdgeShapeEditorCreator);

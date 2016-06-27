@@ -63,6 +63,12 @@ struct TulipFileDescriptor {
   QString fileFilterPattern;
 };
 
+struct TextureFile {
+  QString texturePath;
+  TextureFile() {}
+  TextureFile(const QString &texturePath) : texturePath(texturePath) {}
+};
+
 struct TulipFontAwesomeIcon {
 
   TulipFontAwesomeIcon() {}
@@ -122,6 +128,7 @@ Q_DECLARE_METATYPE(tlp::ColorScale)
 
 Q_DECLARE_METATYPE(tlp::StringCollection)
 
+Q_DECLARE_METATYPE(TextureFile)
 Q_DECLARE_METATYPE(TulipFileDescriptor)
 Q_DECLARE_METATYPE(TulipFontAwesomeIcon)
 
