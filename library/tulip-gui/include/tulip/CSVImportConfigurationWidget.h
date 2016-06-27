@@ -34,7 +34,7 @@ class QValidator;
 class QLineEdit;
 
 namespace Ui {
-class CSVImportConifgurationWidget;
+class CSVImportConfigurationWidget;
 }
 
 namespace tlp {
@@ -166,6 +166,7 @@ public:
   bool begin();
   bool line(unsigned int row,const std::vector<std::string>& lineTokens);
   bool end(unsigned int rowNumber, unsigned int columnNumber);
+  void setFirstLineIndex(int firstLine);
 
   /**
     * @brief Update the widget contents with the new file parser.
@@ -208,8 +209,7 @@ protected:
   unsigned int getLastLineIndex()const;
   /**
     * @brief The index of the first imported line. This index change if user use the first line as column names.
-    * The first imported line is the firstLineIndex but with the
-    * By example if user want to import all lines but use the first line as column names this funnction will return 1 not 0.
+    * For example if the user wants to import all lines but uses the first line as column names this function will return 1 not 0.
     **/
   unsigned int getFirstImportedLineIndex()const;
 
@@ -251,7 +251,6 @@ protected slots:
   void filterPreviewLineNumber(bool filter);
   void previewLineNumberChanged(int value);
 
-  void fromLineValueChanged(int value);
   void toLineValueChanged(int value);
 
   void updateTableHeaders();
@@ -287,11 +286,12 @@ private:
   //The data type of the rest of the column;
   std::vector<std::string> columnType;
 
-  Ui::CSVImportConifgurationWidget *ui;
+  Ui::CSVImportConfigurationWidget *ui;
   PropertyNameValidator* validator;
   unsigned int maxLineNumber;
   unsigned int headerColumnCount;
   tlp::CSVParser* parser;
+  unsigned int firstLine;
 };
 
 }
