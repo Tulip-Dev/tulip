@@ -177,12 +177,11 @@ bool CSVTableWidget::end(unsigned int, unsigned int) {
 
 CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
   QWidget(parent),
-  ui(new Ui::CSVImportConifgurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL) {
+  ui(new Ui::CSVImportConfigurationWidget),validator(new PropertyNameValidator(propertyWidgets,this)),maxLineNumber(0),parser(NULL), firstLine(0) {
   ui->setupUi(this);
 
   //Import line number change
-  connect(ui->fromLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(fromLineValueChanged(int)));
-  connect(ui->toLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(toLineValueChanged(int)));
+  //connect(ui->toLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(toLineValueChanged(int)));
   connect(ui->useFirstLineAsPropertyNamecheckBox,SIGNAL(clicked(bool)),this,SLOT(useFirstLineAsHeaderUpdated()));
   connect(ui->limitPreviewLineNumberCheckBox,SIGNAL(clicked(bool)),this,SLOT(filterPreviewLineNumber(bool)));
   connect(ui->previewLineNumberSpinBox,SIGNAL(valueChanged(int)),this,SLOT(previewLineNumberChanged(int)));
@@ -199,6 +198,12 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
   delete ui;
   delete parser;
+}
+
+void CSVImportConfigurationWidget::setFirstLineIndex(int fl) {
+  firstLine = fl;
+  ui->importLinesLabel->setText(QString("Import lines from %1 to").arg(fl + 1));
+  ui->toLineSpinBox->setMinimum(fl + 1);
 }
 
 void CSVImportConfigurationWidget::setNewParser(CSVParser *newParser) {
@@ -320,14 +325,7 @@ void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber) {
   updateLineNumbers(true);
 }
 
-void CSVImportConfigurationWidget::fromLineValueChanged(int value) {
-  ui->toLineSpinBox->setMinimum(value);
-  updateWidget();
-  emit fileInfoChanged();
-}
-
-void CSVImportConfigurationWidget::toLineValueChanged(int value) {
-  ui->fromLineSpinBox->setMaximum(value);
+void CSVImportConfigurationWidget::toLineValueChanged(int) {
   updateWidget();
   emit fileInfoChanged();
 }
@@ -412,7 +410,6 @@ void CSVImportConfigurationWidget::useFirstLineAsHeaderUpdated() {
 
 void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues) {
   blockSignals(true);
-  ui->fromLineSpinBox->blockSignals(true);
   ui->toLineSpinBox->blockSignals(true);
   bool wasAtMax = ui->toLineSpinBox->value()==ui->toLineSpinBox->maximum();
   //If the first line is not headers the maximum of line number to import increase.
@@ -424,18 +421,12 @@ void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues) {
   }
 
   //Reset all the values of the spinbox.
-  if(resetValues) {
-    ui->fromLineSpinBox->setValue(1);
+  if(resetValues)
     ui->toLineSpinBox->setValue(rowNumber);
-  }
 
   //Reset min/max values
-  ui->fromLineSpinBox->setMinimum(1);
-  ui->fromLineSpinBox->setMaximum(ui->toLineSpinBox->value());
-  ui->toLineSpinBox->setMinimum(ui->fromLineSpinBox->value());
   ui->toLineSpinBox->setMaximum(rowNumber);
 
-  ui->fromLineSpinBox->blockSignals(false);
   ui->toLineSpinBox->blockSignals(false);
   blockSignals(false);
 }
@@ -522,9 +513,9 @@ unsigned int CSVImportConfigurationWidget::getFirstImportedLineIndex()const {
 }
 
 unsigned int CSVImportConfigurationWidget::getFirstLineIndex()const {
-  return ui->fromLineSpinBox->value()-1;
-
+  return firstLine;
 }
+
 unsigned int CSVImportConfigurationWidget::getLastLineIndex()const {
   unsigned int lastLine = ui->toLineSpinBox->value();
 

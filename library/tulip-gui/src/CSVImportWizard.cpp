@@ -57,7 +57,10 @@ bool CSVParsingConfigurationQWizardPage::isComplete() const {
 
 void CSVParsingConfigurationQWizardPage::parserChanged() {
   //Fill the preview widget
-  CSVParser* parser = parserConfigurationWidget->buildParser(0,previewLineNumber);
+  int firstLine = parserConfigurationWidget->getFirstLineIndex();
+  CSVParser* parser =
+    parserConfigurationWidget->buildParser(firstLine,
+					   firstLine + previewLineNumber);
   //Force widget to clear content.
   previewTableWidget->begin();
 
@@ -89,18 +92,25 @@ void CSVParsingConfigurationQWizardPage::updatePreview() {
   previewTableWidget->setColumnCount(0);
 }
 
-CSVParser* CSVParsingConfigurationQWizardPage::buildParser() const {
-  return parserConfigurationWidget->buildParser();
+CSVParser* CSVParsingConfigurationQWizardPage::buildParser(int firstLine) const {
+  return parserConfigurationWidget->buildParser(firstLine);
 }
 
-CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent),importConfigurationWidget(new CSVImportConfigurationWidget(this)) {
+int CSVParsingConfigurationQWizardPage::getFirstLineIndex() const {
+  return parserConfigurationWidget->getFirstLineIndex();
+}
+
+CSVImportConfigurationQWizardPage::CSVImportConfigurationQWizardPage ( QWidget * parent):QWizardPage(parent), importConfigurationWidget(new CSVImportConfigurationWidget(this)) {
   setLayout(new QVBoxLayout());
   layout()->addWidget(importConfigurationWidget);
 }
+
 void CSVImportConfigurationQWizardPage::initializePage() {
   CSVImportWizard* csvWizard= qobject_cast<CSVImportWizard*>(wizard());
   assert(csvWizard!=NULL);
-  importConfigurationWidget->setNewParser(csvWizard->getParsingConfigurationPage()->buildParser());
+  int firstLine = csvWizard->getParsingConfigurationPage()->getFirstLineIndex();
+  importConfigurationWidget->setFirstLineIndex(firstLine);
+  importConfigurationWidget->setNewParser(csvWizard->getParsingConfigurationPage()->buildParser(firstLine));
 }
 
 CSVGraphMappingConfigurationQWizardPage::CSVGraphMappingConfigurationQWizardPage ( QWidget * parent ):QWizardPage(parent),graphMappingConfigurationWidget(new CSVGraphMappingConfigurationWidget()) {

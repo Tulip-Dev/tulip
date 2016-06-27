@@ -45,6 +45,10 @@ CSVParserConfigurationWidget::CSVParserConfigurationWidget(QWidget *parent) :
 
   //Invert rows and column
   connect(ui->switchRowColumnCheckBox,SIGNAL(stateChanged ( int )),this,SIGNAL(parserChanged()));
+  //Ignore first lines
+  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged ( int )),this,SLOT(ignoreFirstLines(int)));
+  connect(ui->ignoreFirstLinesCheckBox, SIGNAL(stateChanged ( int )),this,SIGNAL(parserChanged()));
+  connect(ui->nbOfIgnoredLinesSpinBox, SIGNAL(valueChanged ( int )),this,SIGNAL(parserChanged()));
 
   //Separator and text delimiters.
   connect(ui->separatorComboBox,SIGNAL(currentIndexChanged ( int)),this,SLOT(changeSeparator(int)));
@@ -200,4 +204,13 @@ bool CSVParserConfigurationWidget::getMergeSeparator() const {
 
 bool CSVParserConfigurationWidget::invertMatrix()const {
   return ui->switchRowColumnCheckBox->isChecked();
+}
+
+void CSVParserConfigurationWidget::ignoreFirstLines(int state) {
+  ui->nbOfIgnoredLinesSpinBox->setEnabled(state == Qt::Checked);
+}
+
+int CSVParserConfigurationWidget::getFirstLineIndex() const {
+  return ui->ignoreFirstLinesCheckBox->isChecked() ?
+    ui->nbOfIgnoredLinesSpinBox->value() : 0;
 }
