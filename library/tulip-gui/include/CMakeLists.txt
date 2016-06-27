@@ -41,6 +41,7 @@ INSTALL(FILES
   tulip/StringsListSelectionWidget.h
   tulip/StringsListSelectionWidgetInterface.h
   tulip/StringsListSelectionDialog.h
+  tulip/TextureFileDialog.h
   tulip/TlpQtTools.h
   tulip/TulipProject.h
   tulip/TulipSettings.h
@@ -69,7 +70,6 @@ INSTALL(FILES
   tulip/Workspace.h
   tulip/WorkspacePanel.h
   tulip/PlaceHolderWidget.h
-  tulip/TulipFileDescriptorWidget.h
   tulip/TreeViewComboBox.h
   tulip/GraphHierarchiesModel.h
   tulip/GlOverviewGraphicsItem.h

@@ -150,6 +150,13 @@ public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
+
+class TLP_QT_SCOPE TextureFileEditorCreator: public tlp::TulipItemEditorCreator {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };

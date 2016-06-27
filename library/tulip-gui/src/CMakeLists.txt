@@ -40,6 +40,7 @@ SET(SRCS
   SimpleStringsListSelectionWidget.cpp
   StringsListSelectionWidget.cpp
   StringsListSelectionDialog.cpp
+  TextureFileDialog.cpp
   TlpQtTools.cpp
   TulipProject.cpp
   TulipSettings.cpp
@@ -66,7 +67,6 @@ SET(SRCS
   ProcessingAnimationItem.cpp
   Workspace.cpp
   PlaceHolderWidget.cpp
-  TulipFileDescriptorWidget.cpp
   GraphHierarchiesModel.cpp
   CoordEditor.cpp
   GlOverviewGraphicsItem.cpp
@@ -129,6 +129,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/CoordEditor.ui
   ../designer/SceneConfigWidget.ui
   ../designer/QuickAccessBar.ui
+  ../designer/TextureFileDialog.ui
   ../designer/TulipFontDialog.ui
   ../designer/VectorEditor.ui
   ../designer/TulipFontWidget.ui
@@ -183,8 +184,8 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/SimpleStringsListSelectionWidget.h
   ../include/tulip/SnapshotDialog.h
   ../include/tulip/StringsListSelectionDialog.h
+  ../include/tulip/TextureFileDialog.h
   ../include/tulip/TreeViewComboBox.h
-  ../include/tulip/TulipFileDescriptorWidget.h
   ../include/tulip/TulipFont.h
   ../include/tulip/TulipFontDialog.h
   ../include/tulip/TulipFontWidget.h
