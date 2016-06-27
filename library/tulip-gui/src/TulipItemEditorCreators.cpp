@@ -31,7 +31,7 @@
 
 #include <tulip/TlpQtTools.h>
 #include <tulip/ColorScaleButton.h>
-#include <tulip/TulipFileDescriptorWidget.h>
+#include <tulip/TulipMetaTypes.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/StringEditor.h>
 #include <tulip/GlyphRenderer.h>
@@ -44,6 +44,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/TulipItemEditorCreators.h>
 #include <tulip/TulipFontAwesome.h>
+#include <tulip/TextureFileDialog.h>
 
 using namespace tlp;
 
@@ -410,6 +411,26 @@ QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   return QVariant::fromValue<TulipFileDescriptor>(TulipFileDescriptor());
 }
 
+/*
+  TextureFileEditorCreator
+  */
+QWidget* TextureFileEditorCreator::createWidget(QWidget* parent) const {
+  return new TextureFileDialog(Perspective::instance()
+			       ? Perspective::instance()->mainWindow()
+			       : parent);
+}
+
+void TextureFileEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
+  TextureFile desc = v.value<TextureFile>();
+  TextureFileDialog* dlg = static_cast<TextureFileDialog*>(w);
+  dlg->setData(desc);
+}
+
+QVariant TextureFileEditorCreator::editorData(QWidget* w,tlp::Graph*) {
+  TextureFileDialog* dlg = static_cast<TextureFileDialog*>(w);
+  return QVariant::fromValue<TextureFile>(dlg->data());
+}
+
 class QImageIconPool {
 
 public:
@@ -452,32 +473,20 @@ private:
 
 static QImageIconPool imageIconPool;
 
-bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
+bool TextureFileEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
   TulipItemEditorCreator::paint(painter,option,v);
   QRect rect = option.rect;
-  TulipFileDescriptor fileDesc = v.value<TulipFileDescriptor>();
-  QFileInfo fileInfo(fileDesc.absolutePath);
+  TextureFile tf = v.value<TextureFile>();
+  QFileInfo fileInfo(tf.texturePath);
   QString imageFilePath = fileInfo.absoluteFilePath();
 
   QIcon icon;
-  QString text;
+  QString text = fileInfo.fileName();
 
   const QIcon &imageIcon = imageIconPool.getIconForImageFile(imageFilePath);
 
-  if (!imageIcon.isNull()) {
+  if (!imageIcon.isNull())
     icon = imageIcon;
-    text = fileInfo.fileName();
-  }
-  else if (fileInfo.isFile()) {
-    icon = QApplication::style()->standardIcon(QStyle::SP_FileIcon);
-    text = fileInfo.fileName();
-  }
-  else if (fileInfo.isDir()) {
-    icon = QApplication::style()->standardIcon(QStyle::SP_DirIcon);
-    QDir d1 = fileInfo.dir();
-    d1.cdUp();
-    text = fileInfo.absoluteFilePath().remove(0,d1.absolutePath().length()-1);
-  }
 
   int iconSize = rect.height()-4;
 
@@ -494,25 +503,16 @@ bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOpti
     painter->setBrush(option.palette.text());
   }
 
-  painter->drawText(textXPos, rect.y() + 2, rect.width() - (textXPos - rect.x()), rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, QFileInfo(fileDesc.absolutePath).fileName());
+  painter->drawText(textXPos, rect.y() + 2, rect.width() - (textXPos - rect.x()), rect.height()-4,Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, text);
 
   return true;
 }
 
-QSize TulipFileDescriptorEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
+QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
-  TulipFileDescriptor fileDesc = data.value<TulipFileDescriptor>();
-  QFileInfo fileInfo(fileDesc.absolutePath);
-  QString text;
-
-  if (fileInfo.isDir()) {
-    QDir d1 = fileInfo.dir();
-    d1.cdUp();
-    text = fileInfo.absoluteFilePath().remove(0,d1.absolutePath().length()-1);
-  }
-  else {
-    text = fileInfo.fileName();
-  }
+  TextureFile tf = data.value<TextureFile>();
+  QFileInfo fileInfo(tf.texturePath);
+  QString text = fileInfo.fileName();
 
   const int pixmapWidth = 32;
 
