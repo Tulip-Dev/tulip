@@ -416,8 +416,8 @@ QVariant TulipFileDescriptorEditorCreator::editorData(QWidget* w,tlp::Graph*) {
   */
 QWidget* TextureFileEditorCreator::createWidget(QWidget* parent) const {
   return new TextureFileDialog(Perspective::instance()
-			       ? Perspective::instance()->mainWindow()
-			       : parent);
+                               ? Perspective::instance()->mainWindow()
+                               : parent);
 }
 
 void TextureFileEditorCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
