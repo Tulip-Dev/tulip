@@ -56,7 +56,7 @@ public:
   const TextureFile& data() {
     return _data;
   }
- public slots:
+public slots:
   void browse();
 };
 }

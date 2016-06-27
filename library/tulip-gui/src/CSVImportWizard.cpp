@@ -60,7 +60,7 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
   int firstLine = parserConfigurationWidget->getFirstLineIndex();
   CSVParser* parser =
     parserConfigurationWidget->buildParser(firstLine,
-					   firstLine + previewLineNumber);
+        firstLine + previewLineNumber);
   //Force widget to clear content.
   previewTableWidget->begin();
 
