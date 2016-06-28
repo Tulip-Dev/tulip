@@ -1186,6 +1186,7 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
     // nothing to record for newly added properties
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
+
     beforeSetNodeValue(prop, n);
   }
 
@@ -1276,6 +1277,7 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
     // nothing to record for newly added properties
     if (newProps && (newProps->find(prop) != newProps->end()))
       continue;
+
     beforeSetEdgeValue(prop, e);
   }
 
