@@ -35,7 +35,7 @@ CSVParsingConfigurationQWizardPage::CSVParsingConfigurationQWizardPage(
     QWidget *parent)
     : QWizardPage(parent),
       parserConfigurationWidget(new CSVParserConfigurationWidget(this)),
-      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(5) {
+      previewTableWidget(new CSVTableWidget(this)), previewLineNumber(6) {
   QVBoxLayout *vbLayout = new QVBoxLayout();
   vbLayout->setContentsMargins(0, 0, 0, 0);
   vbLayout->setSpacing(0);
@@ -77,6 +77,9 @@ void CSVParsingConfigurationQWizardPage::parserChanged() {
     progress.showPreview(false);
     progress.setWindowTitle(tr("Parsing file"));
     parser->parse(previewTableWidget, &progress);
+    unsigned int nbCommentsLines = previewTableWidget->getNbCommentsLines();
+    if (nbCommentsLines)
+      parserConfigurationWidget->setNbIgnoredLines(nbCommentsLines);
   } else {
     previewTableWidget->setEnabled(false);
   }

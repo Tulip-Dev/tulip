@@ -214,3 +214,8 @@ int CSVParserConfigurationWidget::getFirstLineIndex() const {
   return ui->ignoreFirstLinesCheckBox->isChecked() ?
     ui->nbOfIgnoredLinesSpinBox->value() : 0;
 }
+
+void CSVParserConfigurationWidget::setNbIgnoredLines(int nb) {
+  if (!ui->ignoreFirstLinesCheckBox->isChecked())
+    ui->nbOfIgnoredLinesSpinBox->setValue(nb);
+}
