@@ -35,7 +35,7 @@
      <item>
       <widget class="QLabel" name="importLinesLabel">
        <property name="text">
-        <string>Import lines from</string>
+        <string>Import lines from %1 to </string>
        </property>
       </widget>
      </item>
@@ -139,7 +139,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Limit number of preview lines</string>
+        <string>Limit the number of preview lines to</string>
        </property>
        <property name="checked">
         <bool>true</bool>
@@ -158,6 +158,19 @@
         <number>5</number>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
    </item>
