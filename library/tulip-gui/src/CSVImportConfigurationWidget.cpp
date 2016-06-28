@@ -128,7 +128,7 @@ void PropertyConfigurationWidget::setPropertyNameValidator(QValidator* validator
 }
 
 
-CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX),firstLineIndex(0) {
+CSVTableWidget::CSVTableWidget(QWidget* parent):QTableWidget(parent),maxLineNumber(UINT_MAX),firstLineIndex(0), checkCommentsLines(true), nbCommentsLines(0) {
 
 }
 
@@ -136,6 +136,8 @@ bool CSVTableWidget::begin() {
   clear();
   setColumnCount(0);
   setRowCount(0);
+  nbCommentsLines = 0;
+  checkCommentsLines = true;
   //Force the table view to redraw
   QApplication::processEvents();
   return true;
@@ -151,6 +153,15 @@ bool CSVTableWidget::line(unsigned int row,const vector<string>& lineTokens) {
   //If the maximum line number is reach ignore the token.
   if(static_cast<unsigned>(rowCount()) >= maxLineNumber) {
     return true;
+  }
+
+  if (checkCommentsLines) {
+    if (lineTokens[0][0] == '#')
+      ++nbCommentsLines;
+    else if (lineTokens[0].substr(0, 2) == "//")
+      ++nbCommentsLines;
+    else
+      checkCommentsLines = false;
   }
 
   //Add a new row in the table
