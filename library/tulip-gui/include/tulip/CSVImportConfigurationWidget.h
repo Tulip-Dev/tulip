@@ -147,9 +147,15 @@ public:
     firstLineIndex = index;
   }
 
+  int getNbCommentsLines() {
+    return nbCommentsLines;
+  }
+
 private:
   unsigned int maxLineNumber;
   unsigned int firstLineIndex;
+  bool checkCommentsLines;
+  int nbCommentsLines;
 };
 
 

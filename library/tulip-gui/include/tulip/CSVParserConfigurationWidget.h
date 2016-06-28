@@ -54,6 +54,7 @@ public:
   bool getMergeSeparator() const;
   void initWithLastOpenedFile();
   int getFirstLineIndex() const;
+  void setNbIgnoredLines(int);
 
 public slots:
   void setFileToOpen(const QString& fileToOpen);
