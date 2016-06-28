@@ -1175,8 +1175,17 @@ void GraphUpdatesRecorder::delNode(Graph* g, node n) {
 
   gnr->elts.set(n, true);
 
+  // get the set of added properties if any
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::const_iterator itp =
+    addedProperties.find(g);
+  const set<PropertyInterface*>* newProps =
+    (itp == addedProperties.end()) ? NULL : &(itp->second);
+
   PropertyInterface* prop;
   forEach(prop, g->getLocalObjectProperties()) {
+    // nothing to record for newly added properties
+    if (newProps && (newProps->find(prop) != newProps->end()))
+      continue;
     beforeSetNodeValue(prop, n);
   }
 
@@ -1255,9 +1264,18 @@ void GraphUpdatesRecorder::delEdge(Graph* g, edge e) {
 
   ger->elts.set(e, true);
 
+  // get the set of added properties if any
+  TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::const_iterator itp =
+    addedProperties.find(g);
+  const set<PropertyInterface*>* newProps =
+    (itp == addedProperties.end()) ? NULL : &(itp->second);
+
   PropertyInterface* prop;
   // loop on properties to save the edge's associated values
   forEach(prop, g->getLocalObjectProperties()) {
+    // nothing to record for newly added properties
+    if (newProps && (newProps->find(prop) != newProps->end()))
+      continue;
     beforeSetEdgeValue(prop, e);
   }
 
@@ -1430,6 +1448,7 @@ void GraphUpdatesRecorder::addLocalProperty(Graph* g, const string& name) {
 
 void GraphUpdatesRecorder::delLocalProperty(Graph* g, const string& name) {
   PropertyInterface* prop = g->getProperty(name);
+
   TLP_HASH_MAP<Graph*, set<PropertyInterface*> >::iterator it =
     addedProperties.find(g);
 
