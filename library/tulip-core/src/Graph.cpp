@@ -1166,6 +1166,7 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling,
       tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
       cloneProp->copy(prop);
     }
+
     delete itp;
   }
 
