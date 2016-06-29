@@ -161,6 +161,8 @@ protected slots:
 
   void fillContextMenu(QMenu *, const QPointF &);
 
+  void initMap();
+
 private :
 
   void updatePoly(bool force=false);
@@ -183,6 +185,9 @@ private :
   bool useSharedLayoutProperty;
   bool useSharedSizeProperty;
   bool useSharedShapeProperty;
+
+  double mapCenterLatitudeInit, mapCenterLongitudeInit;
+  int mapZoomInit;
 
 };
 
