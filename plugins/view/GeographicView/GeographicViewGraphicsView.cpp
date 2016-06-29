@@ -404,7 +404,6 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView, 
   connect(googleMaps, SIGNAL(currentZoomChanged()), _geoView, SLOT(currentZoomChanged()));
   connect(googleMaps, SIGNAL(refreshMap()), this, SLOT(queueMapRefresh()));
 
-
   _placeholderItem = new QGraphicsRectItem(0,0,1,1);
   _placeholderItem->setBrush(Qt::transparent);
   _placeholderItem->setPen(QPen(Qt::transparent));
@@ -561,7 +560,7 @@ void GeographicViewGraphicsView::setGraph(Graph *graph) {
     graphComposite->setRenderingParameters(rp);
     GlLayer *layer=scene->createLayer("Main");
 
-    layer->addGlEntity(graphComposite,"Graph");
+    layer->addGlEntity(graphComposite,"graph");
 
     geoLayout = graph->getProperty<LayoutProperty>("viewLayout");
     geoViewSize = graph->getProperty<SizeProperty>("viewSize");

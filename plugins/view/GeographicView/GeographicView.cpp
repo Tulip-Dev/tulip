@@ -41,6 +41,7 @@
 #include <QApplication>
 #include <QGLFramebufferObject>
 #include <QMessageBox>
+#include <QTimer>
 
 #include <iostream>
 
@@ -167,12 +168,6 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   viewTypeChanged(viewTypeName.c_str());
 
-  if(dataSet.exist("cameras")) {
-    string cameras;
-    dataSet.get("cameras",cameras);
-    geoViewGraphicsView->getGlMainWidget()->getScene()->setWithXML(cameras,graph());
-  }
-
   sceneLayersConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
   sceneConfigurationWidget->setGlMainWidget(geoViewGraphicsView->getGlMainWidget());
 
@@ -189,17 +184,52 @@ void GeographicView::setState(const DataSet &dataSet) {
     computeGeoLayout();
   }
 
+  if (dataSet.exist("renderingParameters")) {
+    GlGraphComposite *graphComposite = geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
+    DataSet renderingParameters;
+    dataSet.get("renderingParameters", renderingParameters);
+    GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
+    rp.setParameters(renderingParameters);
+    string s;
+
+    if (renderingParameters.get("elementsOrderingPropertyName", s) &&
+        !s.empty()) {
+      rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty*>(graph()->getProperty(s)));
+    }
+
+    graphComposite->setRenderingParameters(rp);
+    sceneConfigurationWidget->resetChanges();
+  }
+
+  if(dataSet.exist("mapCenterLatitude")) {
+
+    dataSet.get("mapCenterLatitude", mapCenterLatitudeInit);
+    dataSet.get("mapCenterLongitude", mapCenterLongitudeInit);
+    dataSet.get("mapZoom", mapZoomInit);
+
+    QTimer::singleShot(1500, this, SLOT(initMap()));
+  }
+
+}
+
+void GeographicView::initMap() {
+  geoViewGraphicsView->getGoogleMapsPage()->setMapCenter(mapCenterLatitudeInit, mapCenterLongitudeInit);
+  geoViewGraphicsView->getGoogleMapsPage()->setCurrentZoom(mapZoomInit);
 }
 
 DataSet GeographicView::state() const {
   DataSet dataSet;
-  DataSet configurationWidget=geoViewConfigWidget->state();
-  dataSet.set("configurationWidget",configurationWidget);
-  dataSet.set("viewType",(int)_viewType);
+  DataSet configurationWidget = geoViewConfigWidget->state();
+  dataSet.set("configurationWidget", configurationWidget);
+  dataSet.set("viewType", static_cast<int>(_viewType));
+  pair<double, double> mapCenter = geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapCenter();
+  dataSet.set("mapCenterLatitude", mapCenter.first);
+  dataSet.set("mapCenterLongitude", mapCenter.second);
+  dataSet.set("mapZoom", geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapZoom());
+  dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters().getParameters());
+
   saveStoredPolyInformations(dataSet);
-  string cameras;
-  geoViewGraphicsView->getGlMainWidget()->getScene()->getXMLOnlyForCameras(cameras);
-  dataSet.set("cameras",cameras);
+
   std::string latitudePropName = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
   std::string longitudePropName = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
 
