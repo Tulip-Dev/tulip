@@ -63,7 +63,7 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
 public:
   GraphPerspectiveLogger* _logger;
 
-  PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11", "Analyze several graphs/subgraphs hierarchies", "1.0", "")
+  PLUGININFORMATION("Tulip", "Tulip Team", "2011/07/11", "Analyze several graphs/subgraphs hierarchies\n(designed to import/explore data from various graph or csv file formats)", "1.0", "")
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/desktop.png";
   }
