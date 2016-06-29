@@ -535,6 +535,12 @@ void GeographicViewGraphicsView::cleanup() {
 
     if(geoViewShape!=graph->getProperty<IntegerProperty>("viewShape"))
       delete geoViewShape;
+
+    // those entities have been deleted by the prior call to GlScene::clearLayersList,
+    // so reset the pointers to NULL value
+    polygonEntity = NULL;
+    planisphereEntity = NULL;
+
   }
 }
 
