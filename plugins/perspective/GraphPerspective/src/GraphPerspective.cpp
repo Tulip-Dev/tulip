@@ -374,6 +374,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
   connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
   connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
+  connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));

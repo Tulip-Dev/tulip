@@ -18,22 +18,22 @@
  */
 #include "GraphHierarchiesEditor.h"
 
-#include <QDebug>
 #include <QContextMenuEvent>
-#include <QMenu>
+#include <QDebug>
 #include <QGraphicsEffect>
+#include <QMenu>
 #include <QPainter>
+#include <QSortFilterProxyModel>
 #include <QTextDocument>
 #include <QToolButton>
-#include <QSortFilterProxyModel>
 
-#include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>
+#include <tulip/Perspective.h>
 #include <tulip/TulipMetaTypes.h>
 
 #include "GraphPerspective.h"
-#include <tulip/GraphHierarchiesModel.h>
 #include "ui_GraphHierarchiesEditor.h"
+#include <tulip/GraphHierarchiesModel.h>
 
 CustomTreeView::CustomTreeView(QWidget *parent) : QTreeView(parent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -41,10 +41,10 @@ CustomTreeView::CustomTreeView(QWidget *parent) : QTreeView(parent) {
 #else
   header()->setResizeMode(QHeaderView::ResizeToContents);
 #endif
-  connect(this, SIGNAL(collapsed(const QModelIndex &)),
-          this, SLOT(resizeFirstColumnToContent()));
-  connect(this, SIGNAL(expanded(const QModelIndex &)),
-          this, SLOT(resizeFirstColumnToContent()));
+  connect(this, SIGNAL(collapsed(const QModelIndex &)), this,
+          SLOT(resizeFirstColumnToContent()));
+  connect(this, SIGNAL(expanded(const QModelIndex &)), this,
+          SLOT(resizeFirstColumnToContent()));
 }
 
 int CustomTreeView::sizeHintForColumn(int col) const {
@@ -53,11 +53,14 @@ int CustomTreeView::sizeHintForColumn(int col) const {
 
   ensurePolished();
   int hint = 0;
-  QModelIndex index = model()->index(0,col);
+  QModelIndex index = model()->index(0, col);
 
   while (index.isValid()) {
     if (viewport()->rect().contains(visualRect(index))) {
-      hint = qMax(hint, visualRect(index).x() + itemDelegate(index)->sizeHint(viewOptions(), index).width());
+      hint =
+          qMax(hint,
+               visualRect(index).x() +
+                   itemDelegate(index)->sizeHint(viewOptions(), index).width());
     }
 
     index = indexBelow(index);
@@ -76,42 +79,50 @@ void CustomTreeView::scrollContentsBy(int dx, int dy) {
 
 void CustomTreeView::setModel(QAbstractItemModel *m) {
   if (model()) {
-    disconnect(model(), SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
-    disconnect(model(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
+    disconnect(model(), SIGNAL(rowsInserted(const QModelIndex &, int, int)),
+               this, SLOT(resizeFirstColumnToContent()));
+    disconnect(model(), SIGNAL(rowsRemoved(const QModelIndex &, int, int)),
+               this, SLOT(resizeFirstColumnToContent()));
   }
 
-  connect(m, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
-  connect(m, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this, SLOT(resizeFirstColumnToContent()));
+  connect(m, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this,
+          SLOT(resizeFirstColumnToContent()));
+  connect(m, SIGNAL(rowsRemoved(const QModelIndex &, int, int)), this,
+          SLOT(resizeFirstColumnToContent()));
   QTreeView::setModel(m);
   resizeFirstColumnToContent();
 }
 
-void CustomTreeView::resizeFirstColumnToContent() {
-  resizeColumnToContents(0);
-}
+void CustomTreeView::resizeFirstColumnToContent() { resizeColumnToContents(0); }
 
-GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData), _contextGraph(nullptr), _model(nullptr) {
+GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData),
+      _contextGraph(nullptr), _model(nullptr) {
   _ui->setupUi(this);
   _ui->hierarchiesTree->addAction(_ui->actionDelete_All);
   _ui->actionDelete_All->setShortcutContext(Qt::WidgetWithChildrenShortcut);
 
-  QToolButton* linkButton = new QToolButton();
+  QToolButton *linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
   linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
-  linkButton->setToolTip("Click here to disable the synchronization with workspace active panel.\nWhen synchronization is enabled, the graph currently displayed\nin the active panel, becomes the current one in the Graphs panel.");
-  linkButton->setIconSize(QSize(22,22));
-  linkButton->setMinimumSize(25,25);
-  linkButton->setMaximumSize(25,25);
+  linkButton->setToolTip("Click here to disable the synchronization with "
+                         "workspace active panel.\nWhen synchronization is "
+                         "enabled, the graph currently displayed\nin the "
+                         "active panel, becomes the current one in the Graphs "
+                         "panel.");
+  linkButton->setIconSize(QSize(22, 22));
+  linkButton->setMinimumSize(25, 25);
+  linkButton->setMaximumSize(25, 25);
   linkButton->setCheckable(true);
   linkButton->setChecked(true);
   _ui->header->insertWidget(linkButton);
   _linkButton = linkButton;
-  connect(linkButton, SIGNAL(toggled(bool)),
-          this, SLOT(toggleSynchronization(bool)));
+  connect(linkButton, SIGNAL(toggled(bool)), this,
+          SLOT(toggleSynchronization(bool)));
   _ui->hierarchiesTree->installEventFilter(this);
 
-  connect(_ui->hierarchiesTree, SIGNAL(clicked(const QModelIndex &)),
-          this, SLOT(clicked(const QModelIndex &)));
+  connect(_ui->hierarchiesTree, SIGNAL(clicked(const QModelIndex &)), this,
+          SLOT(clicked(const QModelIndex &)));
 }
 
 bool GraphHierarchiesEditor::synchronized() const {
@@ -120,30 +131,31 @@ bool GraphHierarchiesEditor::synchronized() const {
 
 void GraphHierarchiesEditor::setModel(tlp::GraphHierarchiesModel *model) {
   _model = model;
-  QSortFilterProxyModel* proxyModel = new QSortFilterProxyModel(_ui->hierarchiesTree);
+  QSortFilterProxyModel *proxyModel =
+      new QSortFilterProxyModel(_ui->hierarchiesTree);
   proxyModel->setSourceModel(model);
   proxyModel->setDynamicSortFilter(false);
   _ui->hierarchiesTree->setModel(proxyModel);
   _ui->hierarchiesTree->header()->resizeSection(0, 100);
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
-  _ui->hierarchiesTree->header()->setSectionResizeMode(0, QHeaderView::Interactive);
+  _ui->hierarchiesTree->header()->setSectionResizeMode(
+      0, QHeaderView::Interactive);
 #else
   _ui->hierarchiesTree->header()->setResizeMode(0, QHeaderView::Interactive);
 #endif
   connect(_ui->hierarchiesTree->selectionModel(),
-          SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-          this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+          SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
+          this, SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
 }
 
-GraphHierarchiesEditor::~GraphHierarchiesEditor() {
-  delete _ui;
-}
+GraphHierarchiesEditor::~GraphHierarchiesEditor() { delete _ui; }
 
-void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
+void GraphHierarchiesEditor::contextMenuRequested(const QPoint &p) {
   _contextIndex = _ui->hierarchiesTree->indexAt(p);
 
   if (_contextIndex.isValid()) {
-    _contextGraph = _contextIndex.data(tlp::GraphHierarchiesModel::GraphRole).value<tlp::Graph*>();
+    _contextGraph = _contextIndex.data(tlp::GraphHierarchiesModel::GraphRole)
+                        .value<tlp::Graph *>();
     QMenu menu;
     menu.addAction(_ui->actionCreate_panel);
     menu.addSeparator();
@@ -155,13 +167,13 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
     menu.addAction(_ui->actionAdd_sub_graph);
     menu.addAction(_ui->actionCreate_induced_sub_graph);
     menu.addAction(_ui->actionClone_subgraph);
-    if(_contextGraph->getRoot() != _contextGraph) {
+    if (_contextGraph->getRoot() != _contextGraph) {
       menu.addAction(_ui->actionClone_sibling);
       menu.addAction(_ui->actionClone_sibling_with_properties);
     }
     menu.addSeparator();
 
-    if(_contextGraph->getRoot() != _contextGraph) {
+    if (_contextGraph->getRoot() != _contextGraph) {
       menu.addAction(_ui->actionDelete_graph);
     }
 
@@ -172,39 +184,42 @@ void GraphHierarchiesEditor::contextMenuRequested(const QPoint& p) {
   }
 }
 
-void GraphHierarchiesEditor::clicked(const QModelIndex& index) {
+void GraphHierarchiesEditor::clicked(const QModelIndex &index) {
   if (!index.isValid() || index.internalPointer() == nullptr)
     return;
 
-  _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   _model->setCurrentGraph(_contextGraph);
   _contextGraph = nullptr;
 }
 
-void GraphHierarchiesEditor::doubleClicked(const QModelIndex& index) {
+void GraphHierarchiesEditor::doubleClicked(const QModelIndex &index) {
   if (!index.isValid() || index.internalPointer() == nullptr)
     return;
 
-  _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   _model->setCurrentGraph(_contextGraph);
   createPanel();
   _contextGraph = nullptr;
 }
 
-void GraphHierarchiesEditor::currentChanged(const QModelIndex& index,
-    const QModelIndex& previous) {
+void GraphHierarchiesEditor::currentChanged(const QModelIndex &index,
+                                            const QModelIndex &previous) {
   if (synchronized() && index.isValid() && index.internalPointer()) {
     if (index == previous)
       return;
 
-    _contextGraph = index.data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+    _contextGraph =
+        index.data(tlp::TulipModel::GraphRole).value<tlp::Graph *>();
     disconnect(_ui->hierarchiesTree->selectionModel(),
-               SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-               this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+               SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
+               this,
+               SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
     _model->setCurrentGraph(_contextGraph);
     connect(_ui->hierarchiesTree->selectionModel(),
-            SIGNAL(currentChanged(const QModelIndex&, const QModelIndex&)),
-            this, SLOT(currentChanged(const QModelIndex&, const QModelIndex&)));
+            SIGNAL(currentChanged(const QModelIndex &, const QModelIndex &)),
+            this,
+            SLOT(currentChanged(const QModelIndex &, const QModelIndex &)));
     _contextGraph = nullptr;
   }
 }
@@ -241,74 +256,76 @@ void GraphHierarchiesEditor::cloneSiblingWithProperties() {
 
   _contextGraph->push();
   std::string sgName("clone sibling of ");
-  _contextGraph->addCloneSubGraph(sgName + _contextGraph->getName(), true, true);
+  _contextGraph->addCloneSubGraph(sgName + _contextGraph->getName(), true,
+                                  true);
 }
 
 void GraphHierarchiesEditor::addInducedSubGraph() {
   if (_contextGraph == nullptr)
     return;
 
-  GraphPerspective* persp = GraphPerspective::typedInstance<GraphPerspective>();
+  GraphPerspective *persp = GraphPerspective::typedInstance<GraphPerspective>();
   persp->createSubGraph(_contextGraph);
 }
 
 void GraphHierarchiesEditor::delGraph() {
-  if (_contextGraph == nullptr && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
-    _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  if (_contextGraph == nullptr &&
+      !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
+    _contextGraph = _ui->hierarchiesTree->selectionModel()
+                        ->selectedRows(0)[0]
+                        .data(tlp::TulipModel::GraphRole)
+                        .value<tlp::Graph *>();
   }
 
   if (_contextGraph == nullptr)
     return;
 
-  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
+  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(
+      _contextGraph);
   _contextGraph->push();
 
   if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
     _model->setCurrentGraph(nullptr);
-  }
-  else {
-    tlp::Graph* sg = _contextGraph->getSuperGraph();
+  } else {
+    tlp::Graph *sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delSubGraph(_contextGraph);
     _model->setCurrentGraph(sg);
   }
 
-  _contextGraph=nullptr;
+  _contextGraph = nullptr;
 }
 
 void GraphHierarchiesEditor::delAllGraph() {
-  if (_contextGraph == nullptr && !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
-    _contextGraph = _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0].data(tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  if (_contextGraph == nullptr &&
+      !_ui->hierarchiesTree->selectionModel()->selectedRows(0).empty()) {
+    _contextGraph = _ui->hierarchiesTree->selectionModel()
+                        ->selectedRows(0)[0]
+                        .data(tlp::TulipModel::GraphRole)
+                        .value<tlp::Graph *>();
   }
 
   if (_contextGraph == nullptr)
     return;
 
-  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
+  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(
+      _contextGraph);
   _contextGraph->push();
 
   if (_contextGraph->getRoot() == _contextGraph) {
     delete _contextGraph;
     _model->setCurrentGraph(nullptr);
-  }
-  else {
-    tlp::Graph* sg = _contextGraph->getSuperGraph();
+  } else {
+    tlp::Graph *sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
     _model->setCurrentGraph(sg);
   }
 
-  _contextGraph=nullptr;
+  _contextGraph = nullptr;
 }
 
 void GraphHierarchiesEditor::createPanel() {
-  tlp::Graph* g = _contextGraph;
-
-  if (sender() == _ui->addPanelButton) {
-    QModelIndexList selectedGraphs = _ui->hierarchiesTree->selectionModel()->selectedRows();
-
-    if (!selectedGraphs.empty())
-      g = _ui->hierarchiesTree->model()->data(selectedGraphs[0],tlp::TulipModel::GraphRole).value<tlp::Graph*>();
-  }
+  tlp::Graph *g = _contextGraph;
 
   if (g == nullptr) {
     g = _model->currentGraph();
@@ -321,7 +338,8 @@ void GraphHierarchiesEditor::createPanel() {
 }
 
 void GraphHierarchiesEditor::exportGraph() {
-  tlp::Perspective::typedInstance<GraphPerspective>()->exportGraph(_contextGraph);
+  tlp::Perspective::typedInstance<GraphPerspective>()->exportGraph(
+      _contextGraph);
 }
 
 void GraphHierarchiesEditor::renameGraph() {
@@ -329,27 +347,37 @@ void GraphHierarchiesEditor::renameGraph() {
       _ui->hierarchiesTree->selectionModel()->selectedRows(0).size() == 1) {
     // Qt bug workaround
     // there is a potential pb when calling
-    // _ui->hierarchiesTree->model()->index(_contextIndex.row(), 0, _contextIndex.parent())
+    // _ui->hierarchiesTree->model()->index(_contextIndex.row(), 0,
+    // _contextIndex.parent())
     // to get the index of the name to edit
     // because the call to _contextIndex.parent() may cause a crash
     // same pb if using _contextIndex.sibling(__contextIndex.row(), 0) instead
     // It seems safer to use an index build from the selectionModel()
-    _ui->hierarchiesTree->edit(_ui->hierarchiesTree->selectionModel()->selectedRows(0)[0]);
+    _ui->hierarchiesTree->edit(
+        _ui->hierarchiesTree->selectionModel()->selectedRows(0)[0]);
   }
 }
 
 void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
-  tlp::Perspective::typedInstance<GraphPerspective>()->saveGraphHierarchyInTlpFile(_contextGraph);
+  tlp::Perspective::typedInstance<GraphPerspective>()
+      ->saveGraphHierarchyInTlpFile(_contextGraph);
 }
 
 void GraphHierarchiesEditor::toggleSynchronization(bool f) {
   if (f) {
     _linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
-    _linkButton->setToolTip("Click here to disable the synchronization with workspace active panel.\nWhen synchronization is enabled, the graph currently displayed\nin the active panel, becomes the current one in the Graphs panel.");
-  }
-  else {
+    _linkButton->setToolTip("Click here to disable the synchronization with "
+                            "workspace active panel.\nWhen synchronization is "
+                            "enabled, the graph currently displayed\nin the "
+                            "active panel, becomes the current one in the "
+                            "Graphs panel.");
+  } else {
     _linkButton->setIcon(QIcon(":/tulip/gui/icons/16/unlink.png"));
-    _linkButton->setToolTip("Click here to enable the synchronization with workspace active panel.\nWhen synchronization is enabled, the graph currently displayed\nin the active panel, becomes the current one in the Graphs panel.");
+    _linkButton->setToolTip("Click here to enable the synchronization with "
+                            "workspace active panel.\nWhen synchronization is "
+                            "enabled, the graph currently displayed\nin the "
+                            "active panel, becomes the current one in the "
+                            "Graphs panel.");
   }
 
   emit changeSynchronization(f);
@@ -358,8 +386,3 @@ void GraphHierarchiesEditor::toggleSynchronization(bool f) {
 void GraphHierarchiesEditor::setSynchronizeButtonVisible(bool f) {
   _linkButton->setVisible(f);
 }
-
-void GraphHierarchiesEditor::setAddPanelButtonVisible(bool f) {
-  _ui->addPanelButton->setVisible(f);
-}
-

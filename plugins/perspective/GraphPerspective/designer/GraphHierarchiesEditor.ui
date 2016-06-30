@@ -131,26 +131,6 @@
         </property>
        </spacer>
       </item>
-      <item>
-       <widget class="QPushButton" name="addPanelButton">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>24</height>
-         </size>
-        </property>
-        <property name="toolTip">
-         <string>Add a new panel into the workspace&lt;br/&gt;for the data of a graph to select.</string>
-        </property>
-        <property name="text">
-         <string>Add panel</string>
-        </property>
-        <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
-        </property>
-       </widget>
-      </item>
      </layout>
     </widget>
    </item>
@@ -165,7 +145,7 @@
   </action>
   <action name="actionClone_subgraph">
    <property name="text">
-     <string>Create clone sub-graph</string>
+    <string>Create clone sub-graph</string>
    </property>
    <property name="toolTip">
     <string>Clone the selected graph into a sub-graph</string>
@@ -407,22 +387,6 @@
     <hint type="sourcelabel">
      <x>-1</x>
      <y>-1</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>117</x>
-     <y>208</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>addPanelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>GraphHierarchiesEditorData</receiver>
-   <slot>createPanel()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>191</x>
-     <y>403</y>
     </hint>
     <hint type="destinationlabel">
      <x>117</x>
