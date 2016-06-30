@@ -75,7 +75,6 @@ signals:
 
 public slots:
   void setSynchronizeButtonVisible(bool);
-  void setAddPanelButtonVisible(bool);
 
 protected slots:
   void contextMenuRequested(const QPoint&);
