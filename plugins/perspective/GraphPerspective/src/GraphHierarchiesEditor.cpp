@@ -305,13 +305,6 @@ void GraphHierarchiesEditor::delAllGraph() {
 void GraphHierarchiesEditor::createPanel() {
   tlp::Graph* g = _contextGraph;
 
-  if (sender() == _ui->addPanelButton) {
-    QModelIndexList selectedGraphs = _ui->hierarchiesTree->selectionModel()->selectedRows();
-
-    if (!selectedGraphs.empty())
-      g = _ui->hierarchiesTree->model()->data(selectedGraphs[0],tlp::TulipModel::GraphRole).value<tlp::Graph*>();
-  }
-
   if (g == NULL) {
     g = _model->currentGraph();
 
@@ -360,8 +353,3 @@ void GraphHierarchiesEditor::toggleSynchronization(bool f) {
 void GraphHierarchiesEditor::setSynchronizeButtonVisible(bool f) {
   _linkButton->setVisible(f);
 }
-
-void GraphHierarchiesEditor::setAddPanelButtonVisible(bool f) {
-  _ui->addPanelButton->setVisible(f);
-}
-
