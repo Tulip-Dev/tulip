@@ -219,7 +219,7 @@ void ExtremityShape::FontAwesomeIcon(QXmlStreamWriter& res, const QString& color
   res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
 }
 
-void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, bool tgt, const unsigned id_gradient, const tlp::Coord &node_coord, const tlp::Size &node_size) {
+void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, bool tgt, const unsigned id_gradient) {
   QString milieu_gradient_sphere("RadGradientTgt" + QString::number(id_gradient));
   QString gradient_sphere("url(#" + milieu_gradient_sphere +")");
 
@@ -232,6 +232,7 @@ void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, 
   res.writeAttribute("cy","6");
   res.writeAttribute("r","5");
   res.writeAttribute("fill",gradient_sphere);
+  res.writeAttribute("filter", "url(#fglow1)");
   res.writeEndElement();
 
   res.writeStartElement("radialGradient");
@@ -281,59 +282,4 @@ void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, 
 
   res.writeEndElement();// End element "radialGRadient"
   res.writeEndElement();// End context "marker"
-  res.writeEndElement();// End context "def"
-
-  // Starting the glow effect
-  res.writeStartElement("def");
-
-  QString milieu_glow_sphere = "RadGradientTgt" + QString::number(id_gradient+1);
-  QString glow_sphere("url(#" + milieu_glow_sphere +")");
-
-  res.writeStartElement("radialGradient");
-  res.writeAttribute("id",milieu_glow_sphere);
-  res.writeAttribute("cx","50%");
-  res.writeAttribute("cy","50%");
-  res.writeAttribute("r","50%");
-  res.writeAttribute("fx","50%");
-  res.writeAttribute("fy","50%");
-
-  res.writeStartElement("stop");
-  res.writeAttribute("offset","80%");
-  res.writeAttribute("stop-color","white");
-  res.writeEndElement();
-
-  Rcolor = QString::number(colorR - colorR/9);
-  Gcolor = QString::number(colorG - colorG/9);
-  Bcolor = QString::number(colorB - colorB/9);
-  QString couleur90 = "rgb(" + Rcolor + "," + Gcolor + "," + Bcolor + ")";
-
-  res.writeStartElement("stop");
-  res.writeAttribute("offset","90%");
-  res.writeAttribute("stop-color",couleur90);
-  res.writeEndElement();
-
-  res.writeStartElement("stop");
-  res.writeAttribute("offset","100%");
-  res.writeAttribute("stop-color","white");
-  res.writeEndElement();
-
-  res.writeEndElement();// End element "radialGradient"
-  res.writeEndElement();// End context "def"
-
-  res.writeStartElement("ellipse");
-  res.writeAttribute("cx",QString::number(node_coord.getX()));
-  res.writeAttribute("cy",QString::number(node_coord.getY()));
-  res.writeAttribute("rx",QString::number(node_size.getW()/2));
-  res.writeAttribute("ry",QString::number(node_size.getH()/2));
-  res.writeAttribute("fill",glow_sphere);
-  res.writeAttribute("fill-opacity","0.5");
-  res.writeEndElement();
-
-  res.writeStartElement("ellipse");
-  res.writeAttribute("cx",QString::number(node_coord.getX()));
-  res.writeAttribute("cy",QString::number(node_coord.getY()));
-  res.writeAttribute("rx",QString::number(node_size.getW()/2 - node_size.getW()/8));
-  res.writeAttribute("ry",QString::number(node_size.getH()/2 - node_size.getH()/8));
-  res.writeAttribute("fill","white");
-  res.writeAttribute("fill-opacity","0");
 }

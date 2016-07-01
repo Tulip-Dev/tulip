@@ -31,8 +31,10 @@ class ExportSvg : public ExportInterface {
   QByteArray _out;
   bool _base64fontAdded;
   bool _woff2;
+  bool _gloweffectAdded;
   bool createEdge(const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice);
   void addBase64font();
+  void addGlowEffect();
 public:
   ExportSvg(tlp::PluginProgress* pp, std::ostream& os, const bool autoformatting, const bool woff2);
   bool writeHeader(const tlp::BoundingBox &bb);
@@ -46,7 +48,7 @@ public:
   bool groupEdge();
   bool exportEdge(const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice);
   bool exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice);
-  bool exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const tlp::Coord &coord_edge_extremity_source, const tlp::Coord &coord_edge_extremity_target, const tlp::Size &size_node_src, const tlp::Size &size_node_tgt, const std::string &iconName);
+  bool exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const std::string &iconName);
   bool addLabel(const std::string &type, const std::string &label, const tlp::Color &labelcolor, const tlp::Coord &coord, const unsigned &fsize, const tlp::Size &size);
   bool addBorder(const tlp::Color &borderColor, const double borderwidth);
   bool startNode(const unsigned id);
