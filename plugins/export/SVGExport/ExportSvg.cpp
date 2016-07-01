@@ -30,11 +30,10 @@ using namespace std;
 using namespace tlp;
 
 /*TODO
- * - improve label export (font used and overlapping if possible)
+ * - improve label export (try to have something close to Tulip rendering)
  * - export label position (bottom, top, right and left)
  * - handle viewTexture
- * - add better support for Glowsphere node (done for edge extremities)
- * - add a better shape for cone and star
+ * - add a better shape for star shape
  */
 
 #define MARGIN 10
@@ -51,7 +50,7 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 }
 
-ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2):ExportInterface(pp, os),_res(&_out), _base64fontAdded(false),_woff2(woff2) {
+ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2):ExportInterface(pp, os),_res(&_out), _base64fontAdded(false),_woff2(woff2),_gloweffectAdded(false) {
   _res.setAutoFormatting(autoformatting);
   _res.setCodec("UTF-8");
 }
@@ -263,6 +262,41 @@ bool ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
 #endif
 }
 
+void ExportSvg::addGlowEffect() {
+    if(!_gloweffectAdded) {
+        _gloweffectAdded=true;
+        _res.writeStartElement("defs");
+
+        _res.writeStartElement("filter");
+        _res.writeAttribute("id", "fglow1");
+        _res.writeAttribute("x", "-200%");
+        _res.writeAttribute("y", "-200%");
+        _res.writeAttribute("width", "400%");
+        _res.writeAttribute("height", "400%");
+
+        _res.writeStartElement("feGaussianBlur");
+        _res.writeAttribute("result", "blurOut");
+        _res.writeAttribute("in", "SourceGraphic");
+        _res.writeAttribute("stdDeviation", "0.5");
+        _res.writeEndElement();
+
+        _res.writeStartElement("feMerge");
+
+        _res.writeStartElement("feMergeNode");
+        _res.writeAttribute("in", "blurOut");
+        _res.writeEndElement();
+
+        _res.writeStartElement("feMergeNode");
+        _res.writeAttribute("in", "SourceGraphic");
+        _res.writeEndElement();
+
+        _res.writeEndElement();
+
+        _res.writeEndElement();
+        _res.writeEndElement();
+    }
+}
+
 void ExportSvg::addBase64font() {
   if(!_base64fontAdded) {
     _base64fontAdded=true;
@@ -366,11 +400,23 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
 
   switch(type) {
+
+  case NodeShape::GlowSphere:
+      addGlowEffect();
+      _res.writeStartElement("ellipse");
+      _res.writeAttribute("cx", QString::number(x));
+      _res.writeAttribute("cy", QString::number(y));
+      _res.writeAttribute("rx", QString::number(w));
+      _res.writeAttribute("ry", QString::number(h));
+      addColor(color);
+      _res.writeAttribute("filter", "url(#fglow1)");
+      if(borderwidth>0)
+        addBorder(bordercolor, borderwidth);
+      break;
   case NodeShape::Circle:
   case NodeShape::Cylinder:
   case NodeShape::HalfCylinder:
   case NodeShape::Sphere:
-  case NodeShape::GlowSphere:
     _res.writeStartElement("ellipse");
     _res.writeAttribute("cx", QString::number(x));
     _res.writeAttribute("cy", QString::number(y));
@@ -697,9 +743,10 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
 #endif
 }
 
-bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const Coord &coord_edge_extremity_source, const Coord &coord_edge_extremity_target, const Size &size_node_src, const Size &size_node_tgt,
-                                    const string& iconName) {
+bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const string& iconName) {
   if (src_anchor_shape_type != EdgeExtremityShape::None) {
+      if(src_anchor_shape_type==EdgeExtremityShape::GlowSphere)
+          addGlowEffect();
     // Writing the context
     _res.writeStartElement("defs");
     _res.writeStartElement("marker");
@@ -775,7 +822,7 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
 
     case EdgeExtremityShape::GlowSphere:
-      ExtremityShape::GlowSphere(_res, color, false, id_src_gradient, coord_edge_extremity_source, size_node_src);
+      ExtremityShape::GlowSphere(_res, color, false, id_src_gradient);
       break;
     }
 
@@ -788,7 +835,9 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
   }
 
   if (tgt_anchor_shape_type != EdgeExtremityShape::None) {
-    // Writing the context
+    if(tgt_anchor_shape_type==EdgeExtremityShape::GlowSphere)
+        addGlowEffect();
+      // Writing the context
     _res.writeStartElement("defs");
     _res.writeStartElement("marker");
 
@@ -864,7 +913,7 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       break;
 
     case EdgeExtremityShape::GlowSphere:
-      ExtremityShape::GlowSphere(_res, color, true, id_tgt_gradient, coord_edge_extremity_target, size_node_tgt);
+        ExtremityShape::GlowSphere(_res, color, true, id_tgt_gradient);
       break;
     }
 
