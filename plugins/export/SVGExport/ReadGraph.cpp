@@ -99,9 +99,7 @@ treatEdges(Graph *graph, tlp::PluginProgress *pp, ExportInterface &exportint,
       ret = exportint.exportEdgeExtremity(
           id_src_shape, id_tgt_shape, src_anchor_shape_type,
           tgt_anchor_shape_type, colors->getEdgeValue(e), id_src_grad,
-          id_tgt_grad, edgeVertices[0], edgeVertices[edgeVertices.size() - 1],
-          sizes->getNodeValue(ends.first), sizes->getNodeValue(ends.second),
-          iconName->getEdgeValue(e));
+          id_tgt_grad, iconName->getEdgeValue(e));
 
       if (!ret) {
         if (pp->getError().empty()) {

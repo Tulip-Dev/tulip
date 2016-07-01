@@ -45,9 +45,7 @@ struct ExtremityShape {
   static void Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt,
                      const unsigned id_src_gradient);
   static void GlowSphere(QXmlStreamWriter &res, const tlp::Color &color,
-                         bool tgt, const unsigned id_gradient,
-                         const tlp::Coord &node_coord,
-                         const tlp::Size &node_size);
+                         bool tgt, const unsigned id_gradient);
   static void FontAwesomeIcon(QXmlStreamWriter &res, const QString &color,
                               const std::string &iconName, bool tgt);
 };
