@@ -117,16 +117,7 @@ border-bottom-right-radius: 1px;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>0</number>
-   </property>
-   <property name="topMargin">
-    <number>0</number>
-   </property>
-   <property name="rightMargin">
-    <number>0</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>0</number>
    </property>
    <item>
@@ -185,16 +176,7 @@ background-color:#838383;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
@@ -323,16 +305,7 @@ QTabWidget::pane { /* The tab widget frame */
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="leftMargin">
-         <number>0</number>
-        </property>
-        <property name="topMargin">
-         <number>0</number>
-        </property>
-        <property name="rightMargin">
-         <number>0</number>
-        </property>
-        <property name="bottomMargin">
+        <property name="margin">
          <number>0</number>
         </property>
         <item>
@@ -514,6 +487,12 @@ background-color: white;
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <widget class="QToolButton" name="runScriptButton">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>22</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string>Run script (Ctrl + Return)</string>
           </property>
@@ -531,6 +510,12 @@ background-color: white;
           <property name="enabled">
            <bool>false</bool>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>22</height>
+           </size>
+          </property>
           <property name="toolTip">
            <string>Pause script</string>
           </property>
@@ -547,6 +532,12 @@ background-color: white;
          <widget class="QToolButton" name="stopScriptButton">
           <property name="enabled">
            <bool>false</bool>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>22</height>
+           </size>
           </property>
           <property name="toolTip">
            <string>Stop script</string>
@@ -600,6 +591,12 @@ can not be undone but performance of the script execution will be better
         </item>
         <item>
          <widget class="QToolButton" name="decreaseFontSizeButton">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>22</height>
+           </size>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -611,6 +608,12 @@ can not be undone but performance of the script execution will be better
         </item>
         <item>
          <widget class="QToolButton" name="increaseFontSizeButton">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>22</height>
+           </size>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
