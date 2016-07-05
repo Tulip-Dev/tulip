@@ -3,8 +3,8 @@
 Important API changes
 ======================
 
-Since Tulip 4.8.2
-------------------
+Since Tulip 4.9
+---------------
 
 Special syntax for automatic creation of graph properties through type inference
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -57,7 +57,7 @@ To correctly import those data into Tulip graph nodes, the sample script below i
     for k, v in car.items():
       graph[k][n] = v
 
-Before Tulip 4.8.2, it was necessary to create the graph properties first by calling the following methods::
+Before Tulip 4.9, it was necessary to create the graph properties first by calling the following methods::
 
   graph.getDoubleProperty('acceleration')
   graph.getStringProperty('car')
@@ -77,7 +77,7 @@ When implementing Tulip plugins in Python (see :ref:`Writing Tulip plugins in Py
 it can be usefull to declare a file / directory parameter to perform
 a variety of tasks during the plugin execution: reading / writing graph data to a file, logging messages to a file, ...
 
-Prior to the 4.8.2 release, it was necessary to declare a file parameter in the plugin constructor the way below::
+Prior to the 4.9 release, it was necessary to declare a file parameter in the plugin constructor the way below::
 
   self.addStringParameter('file::filename', 'the path to an existing file')
 
@@ -88,7 +88,7 @@ To retrieve the path of the file selected by the user, the following instruction
 
   filename = self.dataSet['file::filename']
 
-That way to proceed is not really intuitive so Tulip 4.8.2 introduces a more user friendly mechanism to work
+That way to proceed is not really intuitive so Tulip 4.9 introduces a more user friendly mechanism to work
 with file / directory parameters : two new methods have been added in order to easily declare file / directory parameters
 (:meth:`tlp.WithParameter.addFileParameter`, :meth:`tlp.WithParameter.addDirectoryParameter`)
 and it is no more needed to explicitely write the "file::" prefix.

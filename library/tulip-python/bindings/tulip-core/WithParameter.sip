@@ -770,7 +770,7 @@ void addFileParameter(const std::string & str,
 %Docstring
 tlp.WithParameter.addFileParameter(name[, mustExist = True, help = "", defaultValue = "", isMandatory = True])
 
-.. versionadded:: 4.8.2
+.. versionadded:: 4.9
 
 Adds a file parameter to the plug-in. A dialog will be created by the Tulip GUI in order to select the file.
 
@@ -805,7 +805,7 @@ void addDirectoryParameter(const std::string & str,
 %Docstring
 tlp.WithParameter.addDirectoryParameter(name[, help = "", defaultValue = "", isMandatory = True])
 
-.. versionadded:: 4.8.2
+.. versionadded:: 4.9
 
 Adds a directory parameter to the plug-in. A dialog will be created by the Tulip GUI in order to select an existing folder.
 
