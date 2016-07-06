@@ -68,7 +68,8 @@ QModelIndex GraphHierarchiesModel::indexOf(const tlp::Graph* g) {
 
   QModelIndex result = _indexCache[g];
 
-  if (!result.isValid())
+  // ensure result is valid and points on an existing row
+  if (!result.isValid() || (result.row() > (size() - 1)))
     result = forceGraphIndex(const_cast<Graph*>(g));
 
   return result;
