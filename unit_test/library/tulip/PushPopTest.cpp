@@ -861,6 +861,19 @@ void PushPopTest::testPushAddSubgraphsPop() {
   graph->unpop();
   CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
   CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+
+  // non regression test for sf bug #835
+  node n1 = g2->addNode();
+  edge e1 = g2->addEdge(n1, n1);
+  Graph* g3 = g2->addCloneSubGraph();
+  graph->delEdge(e1);
+  graph->pop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  graph->unpop();
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g2->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
 }
 
 //==========================================================
