@@ -68,6 +68,31 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale& colorScale,
     loadTulipImageColorScales();
   }
 
+  //init dialog with default colors
+  _ui->colorsTable->setRowCount(5);
+  QTableWidgetItem *item1 = new QTableWidgetItem();
+  item1->setBackgroundColor(QColor(229, 40, 0, 200));
+  item1->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item2 = new QTableWidgetItem();
+  item2->setBackgroundColor(QColor(255, 170, 0, 200));
+  item2->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item3 = new QTableWidgetItem();
+  item3->setBackgroundColor(QColor(255, 255, 127, 200));
+  item3->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item4 = new QTableWidgetItem();
+  item4->setBackgroundColor(QColor(156, 161, 255, 200));
+  item4->setFlags(Qt::ItemIsEnabled);
+  QTableWidgetItem *item5 = new QTableWidgetItem();
+  item5->setBackgroundColor(QColor(75, 75, 255, 200));
+  item5->setFlags(Qt::ItemIsEnabled);
+  _ui->colorsTable->setItem(0, 0, item1);
+  _ui->colorsTable->setItem(1, 0, item2);
+  _ui->colorsTable->setItem(2, 0, item3);
+  _ui->colorsTable->setItem(3, 0, item4);
+  _ui->colorsTable->setItem(4, 0, item5);
+  _ui->nbColors->setValue(5);
+  _ui->gradientCB->setChecked(true);
+
   loadUserSavedColorScales();
   setColorScale(colorScale);
 }
@@ -432,6 +457,7 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
 }
 
 void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
+
   // first look for a predefined ColorScale
   for (int row = 0; row < _ui->savedColorScalesList->count(); ++row) {
     QListWidgetItem* item = _ui->savedColorScalesList->item(row);
@@ -488,31 +514,6 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
 
   }
   else {
-    //init dialog with default colors
-    _ui->colorsTable->setRowCount(5);
-    QTableWidgetItem *item1 = new QTableWidgetItem();
-    item1->setBackgroundColor(QColor(229, 40, 0, 200));
-    item1->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item2 = new QTableWidgetItem();
-    item2->setBackgroundColor(QColor(255, 170, 0, 200));
-    item2->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item3 = new QTableWidgetItem();
-    item3->setBackgroundColor(QColor(255, 255, 127, 200));
-    item3->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item4 = new QTableWidgetItem();
-    item4->setBackgroundColor(QColor(156, 161, 255, 200));
-    item4->setFlags(Qt::ItemIsEnabled);
-    QTableWidgetItem *item5 = new QTableWidgetItem();
-    item5->setBackgroundColor(QColor(75, 75, 255, 200));
-    item5->setFlags(Qt::ItemIsEnabled);
-    _ui->colorsTable->setItem(0, 0, item1);
-    _ui->colorsTable->setItem(1, 0, item2);
-    _ui->colorsTable->setItem(2, 0, item3);
-    _ui->colorsTable->setItem(3, 0, item4);
-    _ui->colorsTable->setItem(4, 0, item5);
-    _ui->nbColors->setValue(5);
-    _ui->gradientCB->setChecked(true);
-
     accept();
   }
 
