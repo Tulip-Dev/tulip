@@ -1376,14 +1376,18 @@ void GraphUpdatesRecorder::addSubGraph(Graph* g, Graph* sg) {
   // cf addCloneSubGraph
   if (sg->numberOfNodes()) {
     Iterator<node>* itn = sg->getNodes();
+
     while(itn->hasNext()) {
       addNode(sg, itn->next());
     }
+
     delete itn;
     Iterator<edge>* ite = sg->getEdges();
+
     while(ite->hasNext()) {
       addEdge(sg, ite->next());
     }
+
     delete ite;
   }
 
