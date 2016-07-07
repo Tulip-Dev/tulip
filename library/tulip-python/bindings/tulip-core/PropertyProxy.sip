@@ -150,6 +150,10 @@ public:
     return _property;
   }
 
+  std::string getPropertyName() const {
+    return _propertyName;
+  }
+
 private:
 
   tlp::Graph *_graph;
@@ -204,36 +208,43 @@ void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const tlp::Color &val)
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<bool> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::BooleanVectorProperty>(_propertyName);
   static_cast<tlp::BooleanVectorProperty*>(_property)->setNodeValue(n, val);
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<int> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::IntegerVectorProperty>(_propertyName);
   static_cast<tlp::IntegerVectorProperty*>(_property)->setNodeValue(n, val);
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<double> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::DoubleVectorProperty>(_propertyName);
   static_cast<tlp::DoubleVectorProperty*>(_property)->setNodeValue(n, val);
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<std::string> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::StringVectorProperty>(_propertyName);
   static_cast<tlp::StringVectorProperty*>(_property)->setNodeValue(n, val);
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<tlp::Coord> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::CoordVectorProperty>(_propertyName);
   static_cast<tlp::CoordVectorProperty*>(_property)->setNodeValue(n, val);
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<tlp::PySize> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::SizeVectorProperty>(_propertyName);
   static_cast<tlp::SizeVectorProperty*>(_property)->setNodeValue(n, reinterpret_cast<const std::vector<tlp::Size> &>(val));
 }
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, const std::vector<tlp::Color> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::ColorVectorProperty>(_propertyName);
   static_cast<tlp::ColorVectorProperty*>(_property)->setNodeValue(n, val);
 }
@@ -259,6 +270,7 @@ void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::string &val
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<tlp::Coord> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::LayoutProperty>(_propertyName);
   static_cast<tlp::LayoutProperty*>(_property)->setEdgeValue(e, val);
 }
@@ -274,31 +286,37 @@ void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const tlp::Color &val)
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<bool> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::BooleanVectorProperty>(_propertyName);
   static_cast<tlp::BooleanVectorProperty*>(_property)->setEdgeValue(e, val);
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<int> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::IntegerVectorProperty>(_propertyName);
   static_cast<tlp::IntegerVectorProperty*>(_property)->setEdgeValue(e, val);
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<double> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::DoubleVectorProperty>(_propertyName);
   static_cast<tlp::DoubleVectorProperty*>(_property)->setEdgeValue(e, val);
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<std::string> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::StringVectorProperty>(_propertyName);
   static_cast<tlp::StringVectorProperty*>(_property)->setEdgeValue(e, val);
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<tlp::PySize> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::SizeVectorProperty>(_propertyName);
   static_cast<tlp::SizeVectorProperty*>(_property)->setEdgeValue(e, reinterpret_cast<const std::vector<tlp::Size> &>(val));
 }
 
 void tlp::PropertyProxy::setEdgeValue(const tlp::edge &e, const std::vector<tlp::Color> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::ColorVectorProperty>(_propertyName);
   static_cast<tlp::ColorVectorProperty*>(_property)->setEdgeValue(e, val);
 }
@@ -339,36 +357,43 @@ void tlp::PropertyProxy::setAllNodeValue(const tlp::Color &val) {
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<bool> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::BooleanVectorProperty>(_propertyName);
   static_cast<tlp::BooleanVectorProperty*>(_property)->setAllNodeValue(val);
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<int> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::IntegerVectorProperty>(_propertyName);
   static_cast<tlp::IntegerVectorProperty*>(_property)->setAllNodeValue(val);
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<double> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::DoubleVectorProperty>(_propertyName);
   static_cast<tlp::DoubleVectorProperty*>(_property)->setAllNodeValue(val);
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<std::string> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::StringVectorProperty>(_propertyName);
   static_cast<tlp::StringVectorProperty*>(_property)->setAllNodeValue(val);
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<tlp::Coord> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::CoordVectorProperty>(_propertyName);
   static_cast<tlp::CoordVectorProperty*>(_property)->setAllNodeValue(val);
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<tlp::PySize> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::SizeVectorProperty>(_propertyName);
   static_cast<tlp::SizeVectorProperty*>(_property)->setAllNodeValue(reinterpret_cast<const std::vector<tlp::Size> &>(val));
 }
 
 void tlp::PropertyProxy::setAllNodeValue(const std::vector<tlp::Color> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::ColorVectorProperty>(_propertyName);
   static_cast<tlp::ColorVectorProperty*>(_property)->setAllNodeValue(val);
 }
@@ -394,6 +419,7 @@ void tlp::PropertyProxy::setAllEdgeValue(const std::string &val) {
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<tlp::Coord> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::LayoutProperty>(_propertyName);
   static_cast<tlp::LayoutProperty*>(_property)->setAllEdgeValue(val);
 }
@@ -409,31 +435,37 @@ void tlp::PropertyProxy::setAllEdgeValue(const tlp::Color &val) {
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<bool> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::BooleanVectorProperty>(_propertyName);
   static_cast<tlp::BooleanVectorProperty*>(_property)->setAllEdgeValue(val);
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<int> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::IntegerVectorProperty>(_propertyName);
   static_cast<tlp::IntegerVectorProperty*>(_property)->setAllEdgeValue(val);
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<double> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::DoubleVectorProperty>(_propertyName);
   static_cast<tlp::DoubleVectorProperty*>(_property)->setAllEdgeValue(val);
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<std::string> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::StringVectorProperty>(_propertyName);
   static_cast<tlp::StringVectorProperty*>(_property)->setAllEdgeValue(val);
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<tlp::PySize> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::SizeVectorProperty>(_propertyName);
   static_cast<tlp::SizeVectorProperty*>(_property)->setAllEdgeValue(reinterpret_cast<const std::vector<tlp::Size> &>(val));
 }
 
 void tlp::PropertyProxy::setAllEdgeValue(const std::vector<tlp::Color> &val) {
+  if (val.size() == 0) return;
   _property = _graph->getProperty<tlp::ColorVectorProperty>(_propertyName);
   static_cast<tlp::ColorVectorProperty*>(_property)->setAllEdgeValue(val);
 }
@@ -509,28 +541,28 @@ public:
   }
 %End
 
-  void __setitem__(const tlp::node n, const std::vector<bool> &val);
+  void __setitem__(const tlp::node n, const std::vector<bool> &val /Constrained/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setNodeValue(*a0, a1);
+    sipCpp->setNodeValue(*a0, *a1);
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
 %End
 
-void __setitem__(const tlp::node n, const std::vector<int> &val);
+void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setNodeValue(*a0, a1);
+    sipCpp->setNodeValue(*a0, *a1);
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
 %End
 
-  void __setitem__(const tlp::node n, const std::vector<double> &val);
+  void __setitem__(const tlp::node n, const std::vector<double> &val /Constrained/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setNodeValue(*a0, a1);
+    sipCpp->setNodeValue(*a0, *a1);
   } else {
     sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
   }
@@ -574,7 +606,9 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
 
   void __setitem__(const tlp::node n, SIP_PYOBJECT val);
 %MethodCode
-  PyErr_SetString(PyExc_Exception, "Error : unable to create a graph property.");
+  std::string pythonType(a1->ob_type->tp_name);
+  std::string errMsg = "Error : unable to create a graph property for Python type '" + pythonType + "'.";
+  PyErr_SetString(PyExc_Exception, errMsg.c_str());
   sipIsErr = -1;
 %End
 
@@ -641,28 +675,28 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
   }
 %End
 
-  void __setitem__(const tlp::edge e, const std::vector<bool> &val);
+  void __setitem__(const tlp::edge e, const std::vector<bool> &val /Constrained/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setEdgeValue(*a0, a1);
+    sipCpp->setEdgeValue(*a0, *a1);
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
 %End
 
-  void __setitem__(const tlp::edge e, const std::vector<int> &val);
+  void __setitem__(const tlp::edge e, const std::vector<int> &val /Constrained/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setEdgeValue(*a0, a1);
+    sipCpp->setEdgeValue(*a0, *a1);
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
 %End
 
-  void __setitem__(const tlp::edge e, const std::vector<double> &val);
+  void __setitem__(const tlp::edge e, const std::vector<double> &val /Constrained/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setEdgeValue(*a0, a1);
+    sipCpp->setEdgeValue(*a0, *a1);
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
@@ -697,7 +731,9 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
 
   void __setitem__(const tlp::edge e, SIP_PYOBJECT val);
 %MethodCode
-  PyErr_SetString(PyExc_Exception, "Error : unable to create a graph property.");
+  std::string pythonType(a1->ob_type->tp_name);
+  std::string errMsg = "Error : unable to create a graph property for Python type '" + pythonType + "'.";
+  PyErr_SetString(PyExc_Exception, errMsg.c_str());
   sipIsErr = -1;
 %End
 
@@ -736,17 +772,17 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const std::vector<bool> &val);
+  void setAllNodeValue(const std::vector<bool> &val /Constrained/);
 %MethodCode
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const std::vector<int> &val);
+  void setAllNodeValue(const std::vector<int> &val /Constrained/);
 %MethodCode
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const std::vector<double> &val);
+  void setAllNodeValue(const std::vector<double> &val /Constrained/);
 %MethodCode
   sipCpp->setAllNodeValue(*a0);
 %End
@@ -769,6 +805,14 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
   void setAllNodeValue(const std::vector<tlp::Color> &val);
 %MethodCode
   sipCpp->setAllNodeValue(*a0);
+%End
+
+void setAllNodeValue(SIP_PYOBJECT val);
+%MethodCode
+  std::string pythonType(a0->ob_type->tp_name);
+  std::string errMsg = "Error : unable to create a graph property for Python type '" + pythonType + "'.";
+  PyErr_SetString(PyExc_Exception, errMsg.c_str());
+  sipIsErr = -1;
 %End
 
   void setAllEdgeValue(bool val /Constrained/);
@@ -806,19 +850,19 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
   sipCpp->setAllEdgeValue(*a0);
 %End
 
-  void setAllEdgeValue(const std::vector<bool> &val);
+  void setAllEdgeValue(const std::vector<bool> &val /Constrained/);
 %MethodCode
-  sipCpp->setAllEdgeValue(a0);
+  sipCpp->setAllEdgeValue(*a0);
 %End
 
-  void setAllEdgeValue(const std::vector<int> &val);
+  void setAllEdgeValue(const std::vector<int> &val /Constrained/);
 %MethodCode
-  sipCpp->setAllEdgeValue(a0);
+  sipCpp->setAllEdgeValue(*a0);
 %End
 
-  void setAllEdgeValue(const std::vector<double> &val);
+  void setAllEdgeValue(const std::vector<double> &val /Constrained/);
 %MethodCode
-  sipCpp->setAllEdgeValue(a0);
+  sipCpp->setAllEdgeValue(*a0);
 %End
 
   void setAllEdgeValue(const std::vector<std::string> &val);
@@ -834,6 +878,14 @@ void __setitem__(const tlp::node n, const std::vector<int> &val);
   void setAllEdgeValue(const std::vector<tlp::Color> &val);
 %MethodCode
   sipCpp->setAllEdgeValue(*a0);
+%End
+
+void setAllEdgeValue(SIP_PYOBJECT val);
+%MethodCode
+  std::string pythonType(a0->ob_type->tp_name);
+  std::string errMsg = "Error : unable to create a graph property for Python type '" + pythonType + "'.";
+  PyErr_SetString(PyExc_Exception, errMsg.c_str());
+  sipIsErr = -1;
 %End
 
   SIP_PYOBJECT __getitem__(const tlp::node n /GetWrapper/);
