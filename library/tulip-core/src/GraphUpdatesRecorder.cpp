@@ -1372,6 +1372,21 @@ void GraphUpdatesRecorder::addSubGraph(Graph* g, Graph* sg) {
   // last added sub-graph will be deleted first during undo/redo
   addedSubGraphs.push_front(std::make_pair(g, sg));
 
+  // sg may already have nodes and edges
+  // cf addCloneSubGraph
+  if (sg->numberOfNodes()) {
+    Iterator<node>* itn = sg->getNodes();
+    while(itn->hasNext()) {
+      addNode(sg, itn->next());
+    }
+    delete itn;
+    Iterator<edge>* ite = sg->getEdges();
+    while(ite->hasNext()) {
+      addEdge(sg, ite->next());
+    }
+    delete ite;
+  }
+
   sg->addListener(this);
 }
 
