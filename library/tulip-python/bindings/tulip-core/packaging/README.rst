@@ -33,6 +33,14 @@ Release notes
 
 Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **4.9.0** : based on Tulip 4.9.0 released on 08/07/2016
+
+      * add a mechanism to ease the creation of graph properties through type inference (see updated documentation)
+
+      * simplify the declaration of file parameters for Tulip Python plugins (see updated documentation)
+
+      * a few bugs fixes
+
     * **4.8.1** : based on Tulip 4.8.1 released on 16/02/2016
 
         * add new convenient methods for getting / setting multiple properties values of nodes and edges,
