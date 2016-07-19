@@ -45,8 +45,7 @@ public :
   ~ColorScaleConfigDialog();
   void setColorScale(const ColorScale &colorScale);
   const ColorScale& getColorScale() const;
-  static ColorScale getColorScaleFromImageFile(const std::string& imageFilePath,
-      bool gradient = true);
+  static ColorScale getColorScaleFromImageFile(const std::string& imageFilePath, bool gradient = true);
 
 protected :
 
@@ -67,6 +66,7 @@ private slots :
   void importColorScaleFromImageFile();
   void importColorScaleFromColorScaleFile();
   void invertEditedColorScale();
+  void applyGlobalAlphaToColorScale();
 
 private :
   Ui::ColorScaleDialog *_ui;

@@ -63,6 +63,9 @@ ColorScaleConfigDialog::ColorScaleConfigDialog(const ColorScale& colorScale,
   connect(_ui->importFromImgButton, SIGNAL(clicked()), this, SLOT(importColorScaleFromImageFile()));
   connect(_ui->importFromPredefinedCSButton, SIGNAL(clicked()), this, SLOT(importColorScaleFromColorScaleFile()));
   connect(_ui->invertColorScaleButton, SIGNAL(clicked()), this, SLOT(invertEditedColorScale()));
+  connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), _ui->globalAlphaSB, SLOT(setEnabled(bool)));
+  connect(_ui->globalAlphaCB, SIGNAL(toggled(bool)), this, SLOT(applyGlobalAlphaToColorScale()));
+  connect(_ui->globalAlphaSB, SIGNAL(valueChanged(int)), this, SLOT(applyGlobalAlphaToColorScale()));
 
   if (tulipImageColorScales.empty()) {
     loadTulipImageColorScales();
@@ -322,11 +325,15 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
   _ui->colorsTable->setRowCount(value);
 
   if (lastCount < value) {
-    for(int j = 0; j <= value - lastCount; ++j) {
+    for(int j = 0 ; j < value - lastCount; ++j) {
       QTableWidgetItem *item = new QTableWidgetItem();
-      item->setBackgroundColor(QColor(255, 255, 255, 255));
+      QColor color(255, 255, 255, 255);
+      if (_ui->globalAlphaCB->isChecked()) {
+        color.setAlpha(_ui->globalAlphaSB->value());
+      }
+      item->setBackgroundColor(color);
       item->setFlags(Qt::ItemIsEnabled);
-      _ui->colorsTable->setItem(0, lastCount + j - 1, item);
+      _ui->colorsTable->setItem(0, lastCount + j, item);
     }
   }
 
@@ -338,6 +345,9 @@ void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item)
   QColor newColor;
 
   if(getColorDialog(itemBgColor, this, "Select Color",newColor)) {
+    if (_ui->globalAlphaCB->isChecked()) {
+      newColor.setAlpha(_ui->globalAlphaSB->value());
+    }
     item->setBackgroundColor(newColor);
     displayUserGradientPreview();
   }
@@ -453,26 +463,20 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
 
   ColorScale scaleTmp(colorsList, gradient);
   setColorScale(scaleTmp);
-  //_ui->tabWidget->setCurrentIndex(0);
 }
 
 void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
 
-  // first look for a predefined ColorScale
   for (int row = 0; row < _ui->savedColorScalesList->count(); ++row) {
     QListWidgetItem* item = _ui->savedColorScalesList->item(row);
 
     if (colorScale == tulipImageColorScales[item->text()]) {
       // colorScale is a predefined one
-      // so select it
+      // so select it in the list view
       _ui->savedColorScalesList->setCurrentItem(item);
-      _ui->tabWidget->setCurrentIndex(1);
-      accept();
-      return;
     }
   }
 
-  // it not a predefined one, so allow to update it
   disconnect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
 
   _ui->colorsTable->clear();
@@ -512,18 +516,26 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
         ++it;
       }
     }
-
-  }
-  else {
-    accept();
   }
 
   connect(_ui->nbColors, SIGNAL(valueChanged(int)), this, SLOT(nbColorsValueChanged(int)));
   _ui->tabWidget->setCurrentIndex(0);
+  applyGlobalAlphaToColorScale();
 }
 
 const ColorScale& ColorScaleConfigDialog::getColorScale() const {
   return colorScale;
+}
+
+void ColorScaleConfigDialog::applyGlobalAlphaToColorScale() {
+  if (_ui->globalAlphaCB->isChecked()) {
+    for (int i = 0; i < _ui->colorsTable->rowCount(); ++i) {
+      QColor itemColor = _ui->colorsTable->item(i, 0)->backgroundColor();
+      itemColor.setAlpha(_ui->globalAlphaSB->value());
+      _ui->colorsTable->item(i, 0)->setBackgroundColor(itemColor);
+    }
+    displayUserGradientPreview();
+  }
 }
 
 }
