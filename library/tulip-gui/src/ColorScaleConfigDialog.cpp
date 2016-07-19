@@ -328,9 +328,11 @@ void ColorScaleConfigDialog::nbColorsValueChanged(int value) {
     for(int j = 0 ; j < value - lastCount; ++j) {
       QTableWidgetItem *item = new QTableWidgetItem();
       QColor color(255, 255, 255, 255);
+
       if (_ui->globalAlphaCB->isChecked()) {
         color.setAlpha(_ui->globalAlphaSB->value());
       }
+
       item->setBackgroundColor(color);
       item->setFlags(Qt::ItemIsEnabled);
       _ui->colorsTable->setItem(0, lastCount + j, item);
@@ -348,6 +350,7 @@ void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item)
     if (_ui->globalAlphaCB->isChecked()) {
       newColor.setAlpha(_ui->globalAlphaSB->value());
     }
+
     item->setBackgroundColor(newColor);
     displayUserGradientPreview();
   }
@@ -534,6 +537,7 @@ void ColorScaleConfigDialog::applyGlobalAlphaToColorScale() {
       itemColor.setAlpha(_ui->globalAlphaSB->value());
       _ui->colorsTable->item(i, 0)->setBackgroundColor(itemColor);
     }
+
     displayUserGradientPreview();
   }
 }
