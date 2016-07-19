@@ -55,6 +55,14 @@ ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting,
   _res.setCodec("UTF-8");
 }
 
+bool ExportSvg::checkError() const {
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+  return !_res.hasError();
+#else
+  return true;
+#endif
+}
+
 bool ExportSvg::writeHeader(const BoundingBox &bb) {
   _res.writeStartDocument();
   _res.writeStartElement("svg");
@@ -66,11 +74,7 @@ bool ExportSvg::writeHeader(const BoundingBox &bb) {
   _res.writeAttribute("xmlns:xlink","http://www.w3.org/1999/xlink");
   _res.writeAttribute("viewbox", "0 0 "+ QString::number(width+MARGIN) + " " + QString::number(height+MARGIN));
   _res.writeAttribute("version", "1.1");
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background) {
@@ -84,11 +88,7 @@ bool ExportSvg::writeGraph(const BoundingBox &bb, const Color &background) {
   _res.writeStartElement("g");
   _res.writeAttribute("desc", "Graph");
   _res.writeAttribute("transform", "translate("+QString::number(-bb.center().getX()+bb.width()/2.f)+","+QString::number(bb.center().getY()+bb.height()/2.f)+") scale(1,-1)"); // Translation for having a cartesian landmark in the middle of the graph
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 
@@ -96,109 +96,65 @@ bool ExportSvg::writeMetaGraph(const int transform_X, const int transform_Y, flo
   _res.writeStartElement("g");
   _res.writeAttribute("desc", "Meta-Graph");
   _res.writeAttribute("transform", "translate("+QString::number(transform_X)+","+QString::number(transform_Y)+") scale(" + QString::number(scale) + "," + QString::number(-scale) + ")"); // Translation for having a cartesian landmark in the middle of the graph
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 
 bool ExportSvg::writeEndGraph() {
   _res.writeEndElement();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::writeEnd() {
   _res.writeEndDocument();
   _os << _out.constData();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::groupNode() {
   _res.writeStartElement("g");
   _res.writeAttribute("id", "Nodes");
   _res.writeAttribute("desc","This is the group of nodes");
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::groupEdge() {
   _res.writeStartElement("g");
   _res.writeAttribute("id", "Edges");
   _res.writeAttribute("desc","This is the group of edges");
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::endGroupNode() {
   _res.writeEndElement();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::endGroupEdge() {
   _res.writeEndElement();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::startNode(const unsigned id) {
   _res.writeStartElement("g");
   _res.writeAttribute("id", QString::number(id));
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::endNode() {
   _res.writeEndElement();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::startEdge(const unsigned id) {
   _res.writeStartElement("g");
   _res.writeAttribute("id", QString::number(id));
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::endEdge() {
   _res.writeEndElement();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::addLabel(const string &type, const string &label, const Color &labelcolor, const Coord &coord, const unsigned &fsize, const Size& size) {
@@ -225,41 +181,25 @@ bool ExportSvg::addLabel(const string &type, const string &label, const Color &l
     _res.writeEndElement(); //text
   }
 
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::addColor(const tlp::Color &color) {
   _res.writeAttribute("fill", tlpColor2SvgColor(color));
   _res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::addRotation(const double rotation, const Coord &center) {
   _res.writeAttribute("transform", "rotate("+QString::number(rotation)+","+QString::number(center.getX())+","+QString::number(center.getY())+")");
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::addBorder(const Color &borderColor, const double borderwidth) {
   _res.writeAttribute("stroke", tlpColor2SvgColor(borderColor));
   _res.writeAttribute("stroke-opacity", tlpAlphaColor2Opacity(borderColor));
   _res.writeAttribute("stroke-width", QString::number(borderwidth/10));
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 void ExportSvg::addGlowEffect() {
@@ -618,11 +558,7 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   }
 
   _res.writeEndElement();
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::exportEdge(const unsigned id, const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const tlp::Color &color1, const tlp::Color &color2, const double width, const EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<Coord>& edgeVertice) {
@@ -739,11 +675,7 @@ bool ExportSvg::createEdge(const tlp::EdgeShape::EdgeShapes &type, const vector<
     _res.writeAttribute("marker-end","url(#Mtgt" + QString::number(id_tgt_shape) + ")");
 
   _res.writeEndElement(); // path
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
 
 bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned id_tgt_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const tlp::Color &color, const unsigned int id_src_gradient, const unsigned int id_tgt_gradient, const string& iconName) {
@@ -930,9 +862,5 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     }
   }
 
-#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
-  return !_res.hasError();
-#else
-  return true;
-#endif
+  return checkError();
 }
