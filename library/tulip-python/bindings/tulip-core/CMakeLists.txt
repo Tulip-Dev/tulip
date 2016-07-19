@@ -101,6 +101,12 @@ SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPU
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIP_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipCorePythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIP_PYTHON_NATIVE_FOLDER})
 
+# Ensure bindings build output folder exists
+ADD_CUSTOM_TARGET(create-tulip-python-native-folder ALL
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIP_PYTHON_NATIVE_FOLDER})
+ADD_DEPENDENCIES(${LibTulipCorePythonBindingsName} create-tulip-python-native-folder)
+
+
 ADD_CUSTOM_TARGET(copyTulipInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIP_PYTHON_FOLDER}/__init__.py)
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_DEPENDENCIES(tulip-core-wheel copyTulipInitPy)

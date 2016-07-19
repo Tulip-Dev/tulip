@@ -53,6 +53,11 @@ SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELWITHDEBINFO ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${TULIPGUI_PYTHON_NATIVE_FOLDER})
 
+# Ensure bindings build output folder exists
+ADD_CUSTOM_TARGET(create-tulipgui-python-native-folder ALL
+                  COMMAND ${CMAKE_COMMAND} -E make_directory ${TULIPGUI_PYTHON_NATIVE_FOLDER})
+ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} create-tulipgui-python-native-folder)
+
 ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiInitPy)
