@@ -35,6 +35,7 @@ class ExportSvg : public ExportInterface {
   bool createEdge(const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice);
   void addBase64font();
   void addGlowEffect();
+  bool checkError() const;
 public:
   ExportSvg(tlp::PluginProgress* pp, std::ostream& os, const bool autoformatting, const bool woff2);
   bool writeHeader(const tlp::BoundingBox &bb);
