@@ -64,7 +64,6 @@ SET(SRCS
     ProcessingAnimationItem.cpp
     Workspace.cpp
     PlaceHolderWidget.cpp
-    TulipFileDescriptorWidget.cpp
     GraphHierarchiesModel.cpp
     CoordEditor.cpp
     GlOverviewGraphicsItem.cpp
@@ -94,6 +93,7 @@ SET(SRCS
     PluginModel.cpp
     GraphNeedsSavingObserver.cpp
     FileDownloader.cpp
+    TextureFileDialog.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)
@@ -197,7 +197,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/ViewWidget.h
   ../include/tulip/WorkspacePanel.h
   ../include/tulip/Workspace.h
-  ../include/tulip/TulipFileDescriptorWidget.h
   ../include/tulip/PlaceHolderWidget.h
   ../include/tulip/GraphHierarchiesModel.h
   ../include/tulip/CoordEditor.h
