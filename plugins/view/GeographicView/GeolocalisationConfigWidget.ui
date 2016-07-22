@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>298</width>
-    <height>576</height>
+    <width>366</width>
+    <height>661</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Geolocation</string>
   </property>
-  <layout class="QVBoxLayout" name="verticalLayout">
+  <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
@@ -28,7 +28,7 @@ p, li { white-space: pre-wrap; }
    <item>
     <widget class="QRadioButton" name="addressLocRB">
      <property name="text">
-      <string>By address :</string>
+      <string>&amp;By address :</string>
      </property>
      <property name="checked">
       <bool>true</bool>
@@ -115,7 +115,7 @@ loading in the future</string>
    <item>
     <widget class="QRadioButton" name="latLngRB">
      <property name="text">
-      <string>By latitude and longitude : </string>
+      <string>B&amp;y latitude and longitude : </string>
      </property>
     </widget>
    </item>
@@ -177,6 +177,63 @@ latitude and longitude associated to nodes</string>
       </widget>
      </item>
     </layout>
+   </item>
+   <item>
+    <widget class="QGroupBox" name="edgesControlPointsGB">
+     <property name="title">
+      <string>edges control points</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+     <property name="checked">
+      <bool>false</bool>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout">
+      <item>
+       <widget class="QLabel" name="label_7">
+        <property name="text">
+         <string>Select a double vector property containing lists of
+latitude/longitude (in the form [lat1, lng1, lat2, lng2, ...])
+defining paths for edges</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <item>
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QComboBox" name="edgesPathsPropertyCB"/>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <spacer name="verticalSpacer">
