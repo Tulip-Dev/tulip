@@ -245,6 +245,7 @@ DataSet GeographicView::state() const {
   }
 
   std::string edgesPathsPropName = geolocalisationConfigWidget->getEdgesPathsPropertyName();
+
   if (graph()->existProperty(edgesPathsPropName)) {
     dataSet.set("edgesPathsPropertyName", edgesPathsPropName);
   }
@@ -273,6 +274,7 @@ void GeographicView::computeGeoLayout() {
     string latProp = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
     string lngProp = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
     string edgesPathsProp = "";
+
     if (geolocalisationConfigWidget->useEdgesPaths()) {
       edgesPathsProp = geolocalisationConfigWidget->getEdgesPathsPropertyName();
     }

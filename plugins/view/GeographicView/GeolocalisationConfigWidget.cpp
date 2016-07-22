@@ -83,6 +83,7 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
 
   _ui->edgesPathsPropertyCB->clear();
   vector<string> doubleVectorProperties = getGraphPropertiesListAccordingToType(graph, "vector<double>");
+
   for (size_t i = 0 ; i < doubleVectorProperties.size() ; ++i) {
     _ui->edgesPathsPropertyCB->addItem(QString::fromUtf8(doubleVectorProperties[i].c_str()));
   }
@@ -101,6 +102,7 @@ void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latit
 
 void GeolocalisationConfigWidget::setEdgesPathsPropertyName(const std::string &edgesPathsPropertyName) {
   int edgesPathsPropertyIndex = _ui->edgesPathsPropertyCB->findText(QString::fromUtf8(edgesPathsPropertyName.c_str()));
+
   if (edgesPathsPropertyIndex != -1) {
     _ui->edgesControlPointsGB->setChecked(true);
     _ui->edgesPathsPropertyCB->setCurrentIndex(edgesPathsPropertyIndex);
