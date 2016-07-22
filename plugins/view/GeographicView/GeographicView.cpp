@@ -181,6 +181,11 @@ void GeographicView::setState(const DataSet &dataSet) {
 
   if (graph()->existProperty(latitudePropName) && graph()->existProperty(longitudePropName)) {
     geolocalisationConfigWidget->setLatLngGeoLocMethod(latitudePropName, longitudePropName);
+
+    string edgesPathsPropName;
+    dataSet.get("edgesPathsPropertyName", edgesPathsPropName);
+    geolocalisationConfigWidget->setEdgesPathsPropertyName(edgesPathsPropName);
+
     computeGeoLayout();
   }
 
@@ -239,6 +244,11 @@ DataSet GeographicView::state() const {
     dataSet.set("longitudePropertyName", longitudePropName);
   }
 
+  std::string edgesPathsPropName = geolocalisationConfigWidget->getEdgesPathsPropertyName();
+  if (graph()->existProperty(edgesPathsPropName)) {
+    dataSet.set("edgesPathsPropertyName", edgesPathsPropName);
+  }
+
   return dataSet;
 }
 
@@ -262,9 +272,13 @@ void GeographicView::computeGeoLayout() {
   else {
     string latProp = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
     string lngProp = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
+    string edgesPathsProp = "";
+    if (geolocalisationConfigWidget->useEdgesPaths()) {
+      edgesPathsProp = geolocalisationConfigWidget->getEdgesPathsPropertyName();
+    }
 
     if (latProp != lngProp) {
-      geoViewGraphicsView->createLayoutWithLatLngs(latProp, lngProp);
+      geoViewGraphicsView->createLayoutWithLatLngs(latProp, lngProp, edgesPathsProp);
     }
   }
 
