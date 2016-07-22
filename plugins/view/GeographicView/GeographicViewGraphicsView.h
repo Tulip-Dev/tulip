@@ -46,7 +46,8 @@ public :
 
   void setGraph(Graph *graph);
   void createLayoutWithAddresses(const std::string& addressPropertyName, bool createLatAndLngProps);
-  void createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName);
+  void createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName,
+                               const std::string& edgesPathsPropertyName);
 
   GlGraphComposite *getGlGraphComposite() const;
 

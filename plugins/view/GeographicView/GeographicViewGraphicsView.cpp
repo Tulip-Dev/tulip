@@ -892,7 +892,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string& address
   geocodingActive = false;
 }
 
-void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName) {
+void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string& latitudePropertyName, const std::string& longitudePropertyName, const string &edgesPathsPropertyName) {
   nodeLatLng.clear();
   pair<double, double> latLng;
 
@@ -906,6 +906,20 @@ void GeographicViewGraphicsView::createLayoutWithLatLngs(const std::string& lati
       nodeLatLng[n] = latLng;
     }
   }
+
+  if (graph->existProperty(edgesPathsPropertyName)) {
+    DoubleVectorProperty *edgesPathsProperty = graph->getProperty<DoubleVectorProperty>(edgesPathsPropertyName);
+    edge e;
+    forEach(e, graph->getEdges()) {
+      const std::vector<double> &edgePath = edgesPathsProperty->getEdgeValue(e);
+      std::vector<std::pair<double, double> > latLngs;
+      for (size_t i = 0 ; i < edgePath.size() ; i+=2) {
+        latLngs.push_back(make_pair(edgePath[i], edgePath[i+1]));
+      }
+      edgeBendsLatLng[e] = latLngs;
+    }
+  }
+
 }
 
 void GeographicViewGraphicsView::resizeEvent(QResizeEvent *event) {

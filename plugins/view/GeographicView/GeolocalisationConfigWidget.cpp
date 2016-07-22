@@ -68,7 +68,7 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   _ui->addressPropCB->clear();
   vector<string> stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
 
-  for (unsigned int i = 0 ; i < stringProperties.size() ; ++i) {
+  for (size_t i = 0 ; i < stringProperties.size() ; ++i) {
     _ui->addressPropCB->addItem(QString::fromUtf8(stringProperties[i].c_str()));
   }
 
@@ -80,6 +80,12 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
     _ui->latPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
     _ui->lngPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
   }
+
+  _ui->edgesPathsPropertyCB->clear();
+  vector<string> doubleVectorProperties = getGraphPropertiesListAccordingToType(graph, "vector<double>");
+  for (size_t i = 0 ; i < doubleVectorProperties.size() ; ++i) {
+    _ui->edgesPathsPropertyCB->addItem(QString::fromUtf8(doubleVectorProperties[i].c_str()));
+  }
 }
 
 void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latitudePropertyName, const std::string &longitudePropertyName) {
@@ -90,6 +96,14 @@ void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latit
   if (latPropIndex != -1 && lngPropIndex != -1) {
     _ui->latPropCB->setCurrentIndex(latPropIndex);
     _ui->lngPropCB->setCurrentIndex(lngPropIndex);
+  }
+}
+
+void GeolocalisationConfigWidget::setEdgesPathsPropertyName(const std::string &edgesPathsPropertyName) {
+  int edgesPathsPropertyIndex = _ui->edgesPathsPropertyCB->findText(QString::fromUtf8(edgesPathsPropertyName.c_str()));
+  if (edgesPathsPropertyIndex != -1) {
+    _ui->edgesControlPointsGB->setChecked(true);
+    _ui->edgesPathsPropertyCB->setCurrentIndex(edgesPathsPropertyIndex);
   }
 }
 
@@ -124,4 +138,12 @@ void GeolocalisationConfigWidget::enableDisableComboBoxes() {
     _ui->latPropCB->setEnabled(true);
     _ui->lngPropCB->setEnabled(true);
   }
+}
+
+bool GeolocalisationConfigWidget::useEdgesPaths() const {
+  return _ui->edgesControlPointsGB->isChecked();
+}
+
+std::string GeolocalisationConfigWidget::getEdgesPathsPropertyName() const {
+  return std::string(_ui->edgesPathsPropertyCB->currentText().toUtf8().data());
 }

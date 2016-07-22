@@ -44,6 +44,8 @@ public :
 
   void setLatLngGeoLocMethod(const std::string &latitudePropertyName, const std::string &longitudePropertyName);
 
+  void setEdgesPathsPropertyName(const std::string &edgesPathsPropertyName);
+
   bool geolocateByAddress() const;
 
   bool createLatAndLngProperties() const;
@@ -53,6 +55,10 @@ public :
   std::string getLatitudeGraphPropertyName() const;
 
   std::string getLongitudeGraphPropertyName() const;
+
+  bool useEdgesPaths() const;
+
+  std::string getEdgesPathsPropertyName() const;
 
 public slots :
 
