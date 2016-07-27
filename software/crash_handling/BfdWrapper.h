@@ -32,6 +32,27 @@
 #include <utility>
 #include <string>
 
+// On FreeBSD, the ansidecl.h header file from the binutils port, containing the ATTRIBUTE_UNUSED and ENUM_BITFIELD
+// preprocessor macro is not installed and its use from bfd.h is also removed (see https://svnweb.freebsd.org/ports?view=revision&revision=366535,
+// https://svnweb.freebsd.org/ports?view=revision&revision=343349, https://svnweb.freebsd.org/ports?view=revision&revision=336642)
+// Those macro are needed for compiling a file including bfd.h, so define them as found in ansidecl.h
+#ifdef __FreeBSD__
+#ifndef ATTRIBUTE_UNUSED
+#define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
+#endif
+#ifndef ENUM_BITFIELD
+#define ENUM_BITFIELD(TYPE) enum TYPE
+#endif
+
+// To link an application against libbfd from devel/binutils, one must install
+// devel/gnulibiberty to resolve the missing symbols, but that port uses
+// libiberty from binutils v2.19.1 which doesn't contain all the symbols from
+// v2.24, in particular filename_ncmp required by libbfd.
+// So add the implementation from filename_ncmp as found in the libiberty source code.
+extern "C" int filename_ncmp (const char *s1, const char *s2, size_t n);
+
+#endif
+
 #include <bfd.h>
 
 class BfdWrapper {

@@ -1422,7 +1422,7 @@ OsiClpSolverInterface::setupForRepeatedUse(int senseOfAdventure, int printOut)
   if (stopPrinting) {
     CoinMessages * messagesPointer = modelPtr_->messagesPointer();
     // won't even build messages
-    messagesPointer->setDetailMessages(100,10000,reinterpret_cast<int *> (NULL));
+    messagesPointer->setDetailMessages(100,10000,static_cast<int *> (NULL));
   }
 #endif
 }

@@ -9,7 +9,7 @@ QTX_WRAP_CPP(MOC_SRCS
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../crash_handling)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} include/)
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR} include/)
 
 IF(USE_QT5)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${Qt5Widgets_EXECUTABLE_COMPILE_FLAGS}")
@@ -38,9 +38,7 @@ ENDIF(WIN32)
 
 ADD_EXECUTABLE(tulip_perspective ${SRCS} ${MOC_SRCS})
 
-TARGET_LINK_LIBRARIES(tulip_perspective crash_handling)
-
-TARGET_LINK_LIBRARIES(tulip_perspective ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
+TARGET_LINK_LIBRARIES(tulip_perspective crash_handling ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
 
 INSTALL(TARGETS tulip_perspective
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_app
