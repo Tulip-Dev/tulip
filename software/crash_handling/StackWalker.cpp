@@ -40,6 +40,7 @@ int backtrace(void **buffer, int size) {
     buffer[i] = ip;
     bp = reinterpret_cast<void**>(bp[0]);
   }
+
   return i;
 }
 
@@ -162,7 +163,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   if (messages == NULL || size < 2)
     return;
-  
+
   std::ostringstream oss;
   oss << callerAddress;
   std::string callerAddressStr = oss.str();
