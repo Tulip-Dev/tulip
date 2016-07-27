@@ -19,16 +19,13 @@
 
 #include "StackWalker.h"
 
-
 #include <sstream>
 #include <cstring>
 
 #if defined(__unix__) || defined(__APPLE__)
 
 #include <cxxabi.h>
-#ifndef __APPLE__
-#include <execinfo.h>
-#else
+#if defined(__APPLE__) || defined(__FreeBSD__)
 #include <dlfcn.h>
 #include <sys/stat.h>
 
@@ -43,7 +40,6 @@ int backtrace(void **buffer, int size) {
     buffer[i] = ip;
     bp = reinterpret_cast<void**>(bp[0]);
   }
-
   return i;
 }
 
@@ -74,6 +70,7 @@ char **backtrace_symbols(void *const *buffer, int size) {
   return ret;
 }
 
+#ifdef __APPLE__
 int64_t getOffsetInExecutable(void *address) {
   Dl_info dli;
   int64_t ret = 0;
@@ -137,7 +134,9 @@ int file_exist(const std::string &filename) {
   struct stat buffer;
   return (stat(filename.c_str(), &buffer) == 0);
 }
-
+#endif
+#else
+#include <execinfo.h>
 #endif
 
 StackWalkerGCC::StackWalkerGCC() {}
@@ -163,7 +162,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
   if (messages == nullptr || size < 2)
     return;
-
+  
   std::ostringstream oss;
   oss << callerAddress;
   std::string callerAddressStr = oss.str();
@@ -206,6 +205,8 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #endif
 
+  if (i == size) i = 0;
+
   int offset = i;
 
   for (; i < size ; ++i) {
@@ -217,7 +218,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       return;
 
     for (char *p = messages[i]; *p; ++p) {
-      if (*p == '(') {
+      if (*p == '(' && !mangled_name) {
         mangled_name = p;
       }
       else if (*p == '+') {
@@ -251,7 +252,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
       std::string dsoNameStr(dsoName);
 
-      int status;
+      int status = 0;
       char * real_name = abi::__cxa_demangle(mangled_name, 0, 0, &status);
 
       char *end;
@@ -265,12 +266,15 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
 #ifdef HAVE_BFD
 
-      if (bfdMap.find(dsoNameStr) == bfdMap.end()) {
+      if (dsoNameStr != "???" && bfdMap.find(dsoNameStr) == bfdMap.end()) {
         bfdMap[dsoNameStr] = new BfdWrapper(dsoName);
       }
 
-      dsoName = const_cast<char*>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
-      infos =bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+      if (bfdMap[dsoNameStr]) {
+        dsoName = const_cast<char*>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
+        infos = bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+      }
+
 #endif
 
 #ifdef __APPLE__

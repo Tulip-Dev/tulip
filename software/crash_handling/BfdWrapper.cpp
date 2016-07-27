@@ -27,6 +27,12 @@
 
 #define INRANGE(foo,bar,baz) (foo(bar))&&((bar)baz)
 
+#ifdef __FreeBSD__
+extern "C" int filename_ncmp (const char *s1, const char *s2, size_t n) {
+  return strncmp(s1, s2, n);
+}
+#endif
+
 using namespace std;
 
 static asymbol **

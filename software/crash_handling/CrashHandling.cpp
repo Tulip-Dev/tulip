@@ -86,6 +86,9 @@ static void dumpStackTrace(StackWalker &sw) {
 
 #if defined(__APPLE__)
 #include <sys/ucontext.h>
+#elif defined(__FreeBSD__)
+#include <sys/ucontext.h>
+typedef ucontext_t sig_ucontext_t;
 #else
 
 // This structure mirrors the one found in /usr/include/asm/ucontext.h
@@ -107,9 +110,17 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 
   sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
 #if defined(__i386__)
+#ifdef __FreeBSD__
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.mc_eip); // x86 specific;
+#else
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.eip); // x86 specific;
+#endif
+#else
+#ifdef __FreeBSD__
+  void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.mc_rip); // x86_64 specific;
 #else
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.rip); // x86_64 specific;
+#endif
 #endif
 
 #else

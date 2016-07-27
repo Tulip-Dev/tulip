@@ -38,7 +38,7 @@ IF(NOT MSVC)
 
 ENDIF(NOT MSVC)
 	
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 IF(UNIX)
 
@@ -54,6 +54,13 @@ IF(BFD_FOUND)
 
   TARGET_LINK_LIBRARIES(crash_handling ${BFD_LIBRARY})
 
+  # some build environments requires the need to link against the intl library
+  IF(INTL_LIBRARY)
+
+    TARGET_LINK_LIBRARIES(crash_handling ${INTL_LIBRARY})
+
+  ENDIF(INTL_LIBRARY)
+
 ENDIF(BFD_FOUND)
 
 IF(IBERTY_LIBRARY)
@@ -65,17 +72,6 @@ ENDIF(IBERTY_LIBRARY)
 IF(MINGW)
 
   TARGET_LINK_LIBRARIES(crash_handling imagehlp)
-
-  IF(BFD_FOUND)
-
-    # MinGW build environments may differ about the need to link against the intl library
-    IF(INTL_LIBRARY)
-
-      TARGET_LINK_LIBRARIES(crash_handling ${INTL_LIBRARY})
-
-    ENDIF(INTL_LIBRARY)
-
-  ENDIF(BFD_FOUND)
 
 ELSEIF(MSVC)
 
