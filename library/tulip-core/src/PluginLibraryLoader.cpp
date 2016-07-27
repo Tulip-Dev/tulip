@@ -146,7 +146,7 @@ int __tulip_select_libs(const struct dirent *ent) {
 int __tulip_select_libs(struct dirent *ent) {
 #endif /* __FreeBSD_version */
 #else /* __FreeBSD__ */
-int __tulip_select_libs(struct dirent *ent) {  
+int __tulip_select_libs(struct dirent *ent) {
 #endif
 #if !defined(__APPLE__)
   const char *suffix = ".so";
