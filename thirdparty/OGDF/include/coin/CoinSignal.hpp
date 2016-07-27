@@ -69,7 +69,7 @@ typedef typeof(SIG_DFL) CoinSighandler_t;
 //-----------------------------------------------------------------------------
 
 #if defined(__FreeBSD__) && defined(__GNUC__)
-   typedef typeof(SIG_DFL) CoinSighandler_t;
+   typedef void(*CoinSighandler_t)(int);
 #  define CoinSighandler_t_defined
 #endif
 

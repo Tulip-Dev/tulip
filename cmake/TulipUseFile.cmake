@@ -7,11 +7,39 @@ MACRO(SET_COMPILER_OPTIONS)
 
   STRING(COMPARE EQUAL "${CMAKE_CXX_COMPILER_ID}" "Clang" CLANG)
 
+  IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
+    EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
+            OUTPUT_VARIABLE GCXX_VERSION)
+  ENDIF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
+
   IF(NOT MSVC) #visual studio does not recognize these options
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wunused -Wno-long-long")
     IF(NOT APPLE)
       SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pedantic")
     ENDIF(NOT APPLE)
+
+    IF(BSD)
+      # That compiler flag is required on FreeBSD in order to get a backtrace when Tulip crashes
+      SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
+      # Those flags are required to compile Tulip with gcc48 or clang on FreeBSD 9.x and 10.x
+      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_C99 -std=c++11 -fno-omit-frame-pointer")
+      # Need to set rpath for the right libstdc++ to use
+      IF(GCXX_VERSION VERSION_GREATER 4.7.0 AND GCXX_VERSION VERSION_LESS 4.9.0)
+        SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc48")
+        SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc48")
+        SET(CMAKE_MODULE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc48")
+      ENDIF(GCXX_VERSION VERSION_GREATER 4.7.0 AND GCXX_VERSION VERSION_LESS 4.9.0)
+      IF(GCXX_VERSION VERSION_GREATER 4.8.0 AND GCXX_VERSION VERSION_LESS 5.0.0)
+        SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc49")
+        SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc49")
+        SET(CMAKE_MODULE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc49")
+      ENDIF(GCXX_VERSION VERSION_GREATER 4.8.0 AND GCXX_VERSION VERSION_LESS 5.0.0)
+      IF(GCXX_VERSION VERSION_EQUAL 5.0.0 OR GCXX_VERSION VERSION_GREATER 5.0.0)
+        SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc5")
+        SET(CMAKE_SHARED_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc5")
+        SET(CMAKE_MODULE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc5")
+      ENDIF(GCXX_VERSION VERSION_EQUAL 5.0.0 OR GCXX_VERSION VERSION_GREATER 5.0.0)
+    ENDIF(BSD)
   ENDIF(NOT MSVC)
   
   # use legacy libstdc++ with clang on MacOS (no c++11 support but Tulip does not use any of its feature)
@@ -49,8 +77,6 @@ MACRO(SET_COMPILER_OPTIONS)
       # Dynamic ling against libstdc++ on win32/MinGW
       # The second test is for the case where ccache is used (CMAKE_CXX_COMPILER_ARG1 contains the path to the g++ compiler)
       IF(CMAKE_COMPILER_IS_GNUCXX OR "${CMAKE_CXX_COMPILER_ARG1}" MATCHES ".*[g][+][+].*")
-        EXECUTE_PROCESS(COMMAND ${CMAKE_CXX_COMPILER} ${CMAKE_CXX_COMPILER_ARG1} -dumpversion
-                OUTPUT_VARIABLE GCXX_VERSION)
 
         IF(GCXX_VERSION VERSION_GREATER 4.0)
           SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wl,--subsystem,windows")
