@@ -23,6 +23,7 @@
 // Need to include cmath before Python.h when compiling with MinGW and C++11 standard
 // to avoid a compilation error (see http://stackoverflow.com/questions/28683358/)
 #if defined(__MINGW32__) && __cplusplus >= 201103
+#include <math.h>
 #include <cmath>
 #endif
 
