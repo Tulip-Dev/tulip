@@ -138,6 +138,9 @@ WorkspacePanel::~WorkspacePanel() {
   _ui = nullptr;
 
   if (_view != nullptr) {
+    if (_view->currentInteractor()) {
+      _view->currentInteractor()->uninstall();
+    }
     disconnect(_view,SIGNAL(destroyed()),this,SLOT(viewDestroyed()));
     delete _view;
     // same as above
