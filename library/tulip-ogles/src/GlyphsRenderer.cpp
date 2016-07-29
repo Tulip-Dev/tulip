@@ -35,372 +35,354 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/Camera.h>
 #include <tulip/Light.h>
+#include <tulip/ShaderManager.h>
 
 using namespace std;
 using namespace tlp;
 
 static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRenderingBatch) {
-  std::string shaderSrc =
-    #ifdef __EMSCRIPTEN__
-      "precision highp float;"
-      "precision highp int;"
-    #else
-      "#version 120\n"
-    #endif
-      "uniform mat4 u_modelviewMatrix;"
-      "uniform mat4 u_projectionMatrix;"
-      "uniform mat4 u_normalMatrix;"
-      "uniform bool u_textureActivated;"
-      "uniform bool u_flatShading;"
-      "uniform bool u_swapYZ;"
-      "uniform bool u_billboarding;"
+  std::string shaderSrc = ShaderManager::getShaderSrcPrefix() +
+    "const int MAX_NB_GLYPHS = " + toString(maxNbGlyphsByRenderingBatch) + ";\n" + R"(
+     uniform mat4 u_modelviewMatrix;
+     uniform mat4 u_projectionMatrix;
+     uniform mat4 u_normalMatrix;
+     uniform bool u_textureActivated;
+     uniform bool u_flatShading;
+     uniform bool u_swapYZ;
+     uniform bool u_billboarding;
 
-      "uniform vec3 u_center["+toString(maxNbGlyphsByRenderingBatch)+"];"+
-      "uniform vec3 u_scale["+toString(maxNbGlyphsByRenderingBatch)+"];"+
-      "uniform vec4 u_rotation["+toString(maxNbGlyphsByRenderingBatch)+"];"+
-      "uniform vec4 u_color["+toString(maxNbGlyphsByRenderingBatch)+"];"+
-      "uniform float u_textureUnit["+toString(maxNbGlyphsByRenderingBatch)+"];"+
-      "uniform vec4 u_texCoordOffsets["+toString(maxNbGlyphsByRenderingBatch)+"];"+
+     uniform vec3 u_center[MAX_NB_GLYPHS]; +
+     uniform vec3 u_scale[MAX_NB_GLYPHS]; +
+     uniform vec4 u_rotation[MAX_NB_GLYPHS]; +
+     uniform vec4 u_color[MAX_NB_GLYPHS]; +
+     uniform float u_textureUnit[MAX_NB_GLYPHS]; +
+     uniform vec4 u_texCoordOffsets[MAX_NB_GLYPHS]; +
 
-      "uniform vec3 u_eyePosition;"
-      "uniform vec4 u_lightPosition;"
-      "uniform float u_lightConstantAttenuation;"
-      "uniform float u_lightLinearAttenuation;"
-      "uniform float u_lightQuadraticAttenuation;"
-      "uniform vec4 u_lightModelAmbientColor;"
-      "uniform vec4 u_lightAmbientColor;"
-      "uniform vec4 u_lightDiffuseColor;"
+     uniform vec3 u_eyePosition;
+     uniform vec4 u_lightPosition;
+     uniform float u_lightConstantAttenuation;
+     uniform float u_lightLinearAttenuation;
+     uniform float u_lightQuadraticAttenuation;
+     uniform vec4 u_lightModelAmbientColor;
+     uniform vec4 u_lightAmbientColor;
+     uniform vec4 u_lightDiffuseColor;
 
-      "uniform vec4 u_materialAmbientColor;"
+     uniform vec4 u_materialAmbientColor;
 
-      "attribute vec4 a_position;"
-      "attribute vec2 a_texCoord;"
-      "attribute vec3 a_normal;"
+     attribute vec4 a_position;
+     attribute vec2 a_texCoord;
+     attribute vec3 a_normal;
 
-      "varying vec4 v_diffuseColor;"
-      "varying vec4 v_ambientGlobalColor;"
-      "varying vec4 v_ambientColor;"
+     varying vec4 v_diffuseColor;
+     varying vec4 v_ambientGlobalColor;
+     varying vec4 v_ambientColor;
 
-      "varying vec3 v_normal;"
-      "varying vec3 v_lightDir;"
-      "varying vec3 v_halfVector;"
-      "varying float v_attenuation;"
+     varying vec3 v_normal;
+     varying vec3 v_lightDir;
+     varying vec3 v_halfVector;
+     varying float v_attenuation;
 
-      "varying vec4 v_texData;"
+     varying vec4 v_texData;
 
-      "mat4 scaleMatrix(vec3 scale) {"
-      "   mat4 ret = mat4(1.0);"
-      "   ret[0][0] = scale[0];"
-      "   ret[1][1] = scale[1];"
-      "   ret[2][2] = scale[2];"
-      "   return ret;"
-      "}"
+     mat4 scaleMatrix(vec3 scale) {
+        mat4 ret = mat4(1.0);
+        ret[0][0] = scale[0];
+        ret[1][1] = scale[1];
+        ret[2][2] = scale[2];
+        return ret;
+     }
 
-      "mat4 translationMatrix(vec3 center) {"
-      "   mat4 ret = mat4(1.0);"
-      "   ret[3][0] = center[0];"
-      "   ret[3][1] = center[1];"
-      "   ret[3][2] = center[2];"
-      "   return ret;"
-      "}"
+     mat4 translationMatrix(vec3 center) {
+        mat4 ret = mat4(1.0);
+        ret[3][0] = center[0];
+        ret[3][1] = center[1];
+        ret[3][2] = center[2];
+        return ret;
+     }
 
-      "mat4 rotationMatrix(vec3 rotationVector, float rotationAngle) {"
-      "   mat4 ret = mat4(1.0);"
-      "   float c = cos(rotationAngle);"
-      "   float s = sin(rotationAngle);"
-      "   ret[0][0] = rotationVector[0]*rotationVector[0]*(1.0 - c) + c;"
-      "   ret[1][0] = rotationVector[0]*rotationVector[1]*(1.0 - c) - rotationVector[2]*s;"
-      "   ret[2][0] = rotationVector[0]*rotationVector[2]*(1.0 - c) + rotationVector[1]*s;"
-      "   ret[0][1] = rotationVector[1]*rotationVector[0]*(1.0 - c) + rotationVector[2]*s;"
-      "   ret[1][1] = rotationVector[1]*rotationVector[1]*(1.0 - c) + c;"
-      "   ret[2][1] = rotationVector[1]*rotationVector[2]*(1.0 - c) - rotationVector[0]*s;"
-      "   ret[0][2] = rotationVector[0]*rotationVector[2]*(1.0 - c) - rotationVector[1]*s;"
-      "   ret[1][2] = rotationVector[1]*rotationVector[2]*(1.0 - c) + rotationVector[0]*s;"
-      "   ret[2][2] = rotationVector[2]*rotationVector[2]*(1.0 - c) + c;"
-      "   return ret;"
-      "}"
+     mat4 rotationMatrix(vec3 rotationVector, float rotationAngle) {
+        mat4 ret = mat4(1.0);
+        float c = cos(rotationAngle);
+        float s = sin(rotationAngle);
+        ret[0][0] = rotationVector[0]*rotationVector[0]*(1.0 - c) + c;
+        ret[1][0] = rotationVector[0]*rotationVector[1]*(1.0 - c) - rotationVector[2]*s;
+        ret[2][0] = rotationVector[0]*rotationVector[2]*(1.0 - c) + rotationVector[1]*s;
+        ret[0][1] = rotationVector[1]*rotationVector[0]*(1.0 - c) + rotationVector[2]*s;
+        ret[1][1] = rotationVector[1]*rotationVector[1]*(1.0 - c) + c;
+        ret[2][1] = rotationVector[1]*rotationVector[2]*(1.0 - c) - rotationVector[0]*s;
+        ret[0][2] = rotationVector[0]*rotationVector[2]*(1.0 - c) - rotationVector[1]*s;
+        ret[1][2] = rotationVector[1]*rotationVector[2]*(1.0 - c) + rotationVector[0]*s;
+        ret[2][2] = rotationVector[2]*rotationVector[2]*(1.0 - c) + c;
+        return ret;
+     }
 
-      "mat4 billboardMatrix(mat4 originalMdvMatrix, vec3 size) {"
-      "  mat4 ret = originalMdvMatrix;"
-      "  ret[0][0] = size.x;"
-      "  ret[1][1] = size.y;"
-      "  ret[2][2] = size.z;"
-      "  ret[0][1] = 0.0;"
-      "  ret[0][2] = 0.0;"
-      "  ret[1][0] = 0.0;"
-      "  ret[1][2] = 0.0;"
-      "  ret[2][0] = 0.0;"
-      "  ret[2][1] = 0.0;"
-      "  return ret;"
-      "}"
+     mat4 billboardMatrix(mat4 originalMdvMatrix, vec3 size) {
+       mat4 ret = originalMdvMatrix;
+       ret[0][0] = size.x;
+       ret[1][1] = size.y;
+       ret[2][2] = size.z;
+       ret[0][1] = 0.0;
+       ret[0][2] = 0.0;
+       ret[1][0] = 0.0;
+       ret[1][2] = 0.0;
+       ret[2][0] = 0.0;
+       ret[2][1] = 0.0;
+       return ret;
+     }
 
-      "void main() {"
-      "  int id = int(a_position.w);"
-      "  mat4 mdv = u_modelviewMatrix * translationMatrix(u_center[id]) * rotationMatrix(u_rotation[id].xyz, u_rotation[id].w) * scaleMatrix(u_scale[id]);"
-      "  if (u_billboarding) {"
-      "    mdv = billboardMatrix(mdv, u_scale[id]) * rotationMatrix(u_rotation[id].xyz, u_rotation[id].w);"
-      "  }"
-      "  vec4 pos;"
-      "  if (u_swapYZ) {"
-      "    pos = mdv * vec4(a_position.xzy, 1.0);"
-      "  } else {"
-      "    pos = mdv * vec4(a_position.xyz, 1.0);"
-      "  }"
-      "  gl_Position = u_projectionMatrix * pos;"
+     void main() {
+       int id = int(a_position.w);
+       mat4 mdv = u_modelviewMatrix * translationMatrix(u_center[id]) * rotationMatrix(u_rotation[id].xyz, u_rotation[id].w) * scaleMatrix(u_scale[id]);
+       if (u_billboarding) {
+         mdv = billboardMatrix(mdv, u_scale[id]) * rotationMatrix(u_rotation[id].xyz, u_rotation[id].w);
+       }
+       vec4 pos;
+       if (u_swapYZ) {
+         pos = mdv * vec4(a_position.xzy, 1.0);
+       } else {
+         pos = mdv * vec4(a_position.xyz, 1.0);
+       }
+       gl_Position = u_projectionMatrix * pos;
 
-      "  if (u_textureActivated) {"
-      "    v_texData.xy = vec2(u_texCoordOffsets[id].x + a_texCoord.x * (u_texCoordOffsets[id].z - u_texCoordOffsets[id].x),"
-      "                      u_texCoordOffsets[id].y + a_texCoord.y * (u_texCoordOffsets[id].w - u_texCoordOffsets[id].y));"
-      "    v_texData.z = u_textureUnit[id];"
-      "  }"
+       if (u_textureActivated) {
+         v_texData.xy = vec2(u_texCoordOffsets[id].x + a_texCoord.x * (u_texCoordOffsets[id].z - u_texCoordOffsets[id].x),
+                           u_texCoordOffsets[id].y + a_texCoord.y * (u_texCoordOffsets[id].w - u_texCoordOffsets[id].y));
+         v_texData.z = u_textureUnit[id];
+       }
 
-      "  if (u_flatShading) {"
-      "     v_diffuseColor = u_color[id];"
-      "     return;"
-      "  }"
+       if (u_flatShading) {
+          v_diffuseColor = u_color[id];
+          return;
+       }
 
-      "  if (u_swapYZ) {"
-      "    v_normal = normalize(mat3(u_normalMatrix) * a_normal.xzy);"
-      "  } else {"
-      "    v_normal = normalize(mat3(u_normalMatrix) * a_normal);"
-      "  }"
-      "  vec3 lightVec = u_lightPosition.xyz-pos.xyz;"
-      "  if (u_lightPosition.w == 0.0) {"
-      "    lightVec = -u_lightPosition.xyz;"
-      "  }"
-      "  v_lightDir = normalize(lightVec);"
-      "  float dist = length(lightVec);"
-      "  v_attenuation = 1.0 / (u_lightConstantAttenuation +"
-      "                  u_lightLinearAttenuation * dist +"
-      "                  u_lightQuadraticAttenuation * dist * dist);"
+       if (u_swapYZ) {
+         v_normal = normalize(mat3(u_normalMatrix) * a_normal.xzy);
+       } else {
+         v_normal = normalize(mat3(u_normalMatrix) * a_normal);
+       }
+       vec3 lightVec = u_lightPosition.xyz-pos.xyz;
+       if (u_lightPosition.w == 0.0) {
+         lightVec = -u_lightPosition.xyz;
+       }
+       v_lightDir = normalize(lightVec);
+       float dist = length(lightVec);
+       v_attenuation = 1.0 / (u_lightConstantAttenuation +
+                       u_lightLinearAttenuation * dist +
+                       u_lightQuadraticAttenuation * dist * dist);
 
-      "  v_halfVector = u_eyePosition + u_lightPosition.xyz;"
-      "  v_halfVector = normalize(v_halfVector);"
+       v_halfVector = u_eyePosition + u_lightPosition.xyz;
+       v_halfVector = normalize(v_halfVector);
 
-      "  v_diffuseColor = u_lightDiffuseColor * u_color[id];"
+       v_diffuseColor = u_lightDiffuseColor * u_color[id];
 
-      "  v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;"
-      "  v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;"
-      "}"
-      ;
+       v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;
+       v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;
+     }
+    )";
   return shaderSrc;
 }
 
-static std::string glyphsVertexShaderHardwareInstancingSrc =
-    #ifdef __EMSCRIPTEN__
-    "precision highp float;"
-    "precision highp int;"
-    #else
-    "#version 120\n"
-    #endif
+static std::string glyphsVertexShaderHardwareInstancingSrc = ShaderManager::getShaderSrcPrefix() + R"(
+  uniform mat4 u_modelviewMatrix;
+  uniform mat4 u_projectionMatrix;
+  uniform mat4 u_normalMatrix;
+  uniform bool u_textureActivated;
+  uniform bool u_flatShading;
+  uniform bool u_swapYZ;
+  uniform bool u_billboarding;
 
-    "uniform mat4 u_modelviewMatrix;"
-    "uniform mat4 u_projectionMatrix;"
-    "uniform mat4 u_normalMatrix;"
-    "uniform bool u_textureActivated;"
-    "uniform bool u_flatShading;"
-    "uniform bool u_swapYZ;"
-    "uniform bool u_billboarding;"
+  attribute vec3 a_position;
+  attribute vec2 a_texCoord;
+  attribute vec3 a_normal;
 
-    "attribute vec3 a_position;"
-    "attribute vec2 a_texCoord;"
-    "attribute vec3 a_normal;"
+  attribute vec3 a_center;
+  attribute vec3 a_scale;
+  attribute vec4 a_rotation;
+  attribute vec4 a_color;
+  attribute float a_textureUnit;
+  attribute vec4 a_texCoordOffsets;
 
-    "attribute vec3 a_center;"
-    "attribute vec3 a_scale;"
-    "attribute vec4 a_rotation;"
-    "attribute vec4 a_color;"
-    "attribute float a_textureUnit;"
-    "attribute vec4 a_texCoordOffsets;"
+  uniform vec3 u_eyePosition;
+  uniform vec4 u_lightPosition;
+  uniform float u_lightConstantAttenuation;
+  uniform float u_lightLinearAttenuation;
+  uniform float u_lightQuadraticAttenuation;
+  uniform vec4 u_lightModelAmbientColor;
+  uniform vec4 u_lightAmbientColor;
+  uniform vec4 u_lightDiffuseColor;
 
-    "uniform vec3 u_eyePosition;"
-    "uniform vec4 u_lightPosition;"
-    "uniform float u_lightConstantAttenuation;"
-    "uniform float u_lightLinearAttenuation;"
-    "uniform float u_lightQuadraticAttenuation;"
-    "uniform vec4 u_lightModelAmbientColor;"
-    "uniform vec4 u_lightAmbientColor;"
-    "uniform vec4 u_lightDiffuseColor;"
+  uniform vec4 u_materialAmbientColor;
 
-    "uniform vec4 u_materialAmbientColor;"
+  varying vec4 v_diffuseColor;
+  varying vec4 v_ambientGlobalColor;
+  varying vec4 v_ambientColor;
 
-    "varying vec4 v_diffuseColor;"
-    "varying vec4 v_ambientGlobalColor;"
-    "varying vec4 v_ambientColor;"
+  varying vec3 v_normal;
+  varying vec3 v_lightDir;
+  varying vec3 v_halfVector;
+  varying float v_attenuation;
 
-    "varying vec3 v_normal;"
-    "varying vec3 v_lightDir;"
-    "varying vec3 v_halfVector;"
-    "varying float v_attenuation;"
+  varying vec4 v_texData;
 
-    "varying vec4 v_texData;"
+  mat4 scaleMatrix(vec3 scale) {
+    mat4 ret = mat4(1.0);
+    ret[0][0] = scale[0];
+    ret[1][1] = scale[1];
+    ret[2][2] = scale[2];
+    return ret;
+  }
 
-    "mat4 scaleMatrix(vec3 scale) {"
-    "   mat4 ret = mat4(1.0);"
-    "   ret[0][0] = scale[0];"
-    "   ret[1][1] = scale[1];"
-    "   ret[2][2] = scale[2];"
-    "   return ret;"
-    "}"
+  mat4 translationMatrix(vec3 center) {
+    mat4 ret = mat4(1.0);
+    ret[3][0] = center[0];
+    ret[3][1] = center[1];
+    ret[3][2] = center[2];
+    return ret;
+  }
 
-    "mat4 translationMatrix(vec3 center) {"
-    "   mat4 ret = mat4(1.0);"
-    "   ret[3][0] = center[0];"
-    "   ret[3][1] = center[1];"
-    "   ret[3][2] = center[2];"
-    "   return ret;"
-    "}"
+  mat4 rotationMatrix(vec3 rotationVector, float rotationAngle) {
+    mat4 ret = mat4(1.0);
+    float c = cos(rotationAngle);
+    float s = sin(rotationAngle);
+    ret[0][0] = rotationVector[0]*rotationVector[0]*(1.0 - c) + c;
+    ret[1][0] = rotationVector[0]*rotationVector[1]*(1.0 - c) - rotationVector[2]*s;
+    ret[2][0] = rotationVector[0]*rotationVector[2]*(1.0 - c) + rotationVector[1]*s;
+    ret[0][1] = rotationVector[1]*rotationVector[0]*(1.0 - c) + rotationVector[2]*s;
+    ret[1][1] = rotationVector[1]*rotationVector[1]*(1.0 - c) + c;
+    ret[2][1] = rotationVector[1]*rotationVector[2]*(1.0 - c) - rotationVector[0]*s;
+    ret[0][2] = rotationVector[0]*rotationVector[2]*(1.0 - c) - rotationVector[1]*s;
+    ret[1][2] = rotationVector[1]*rotationVector[2]*(1.0 - c) + rotationVector[0]*s;
+    ret[2][2] = rotationVector[2]*rotationVector[2]*(1.0 - c) + c;
+    return ret;
+  }
 
-    "mat4 rotationMatrix(vec3 rotationVector, float rotationAngle) {"
-    "   mat4 ret = mat4(1.0);"
-    "   float c = cos(rotationAngle);"
-    "   float s = sin(rotationAngle);"
-    "   ret[0][0] = rotationVector[0]*rotationVector[0]*(1.0 - c) + c;"
-    "   ret[1][0] = rotationVector[0]*rotationVector[1]*(1.0 - c) - rotationVector[2]*s;"
-    "   ret[2][0] = rotationVector[0]*rotationVector[2]*(1.0 - c) + rotationVector[1]*s;"
-    "   ret[0][1] = rotationVector[1]*rotationVector[0]*(1.0 - c) + rotationVector[2]*s;"
-    "   ret[1][1] = rotationVector[1]*rotationVector[1]*(1.0 - c) + c;"
-    "   ret[2][1] = rotationVector[1]*rotationVector[2]*(1.0 - c) - rotationVector[0]*s;"
-    "   ret[0][2] = rotationVector[0]*rotationVector[2]*(1.0 - c) - rotationVector[1]*s;"
-    "   ret[1][2] = rotationVector[1]*rotationVector[2]*(1.0 - c) + rotationVector[0]*s;"
-    "   ret[2][2] = rotationVector[2]*rotationVector[2]*(1.0 - c) + c;"
-    "   return ret;"
-    "}"
+  mat4 billboardMatrix(mat4 originalMdvMatrix, vec3 size) {
+    mat4 ret = originalMdvMatrix;
+    ret[0][0] = size.x;
+    ret[1][1] = size.y;
+    ret[2][2] = size.z;
+    ret[0][1] = 0.0;
+    ret[0][2] = 0.0;
+    ret[1][0] = 0.0;
+    ret[1][2] = 0.0;
+    ret[2][0] = 0.0;
+    ret[2][1] = 0.0;
+    return ret;
+  }
 
-    "mat4 billboardMatrix(mat4 originalMdvMatrix, vec3 size) {"
-    "  mat4 ret = originalMdvMatrix;"
-    "  ret[0][0] = size.x;"
-    "  ret[1][1] = size.y;"
-    "  ret[2][2] = size.z;"
-    "  ret[0][1] = 0.0;"
-    "  ret[0][2] = 0.0;"
-    "  ret[1][0] = 0.0;"
-    "  ret[1][2] = 0.0;"
-    "  ret[2][0] = 0.0;"
-    "  ret[2][1] = 0.0;"
-    "  return ret;"
-    "}"
+  void main() {
+    mat4 mdv = u_modelviewMatrix * translationMatrix(a_center) * rotationMatrix(a_rotation.xyz, a_rotation.w) * scaleMatrix(a_scale);
+    if (u_billboarding) {
+      mdv = billboardMatrix(mdv, a_scale) * rotationMatrix(a_rotation.xyz, a_rotation.w);
+    }
+    vec4 pos;
+    if (u_swapYZ) {
+      pos = mdv * vec4(a_position.xzy, 1.0);
+    } else {
+      pos = mdv * vec4(a_position.xyz, 1.0);
+    }
 
-    "void main() {"
-    "  mat4 mdv = u_modelviewMatrix * translationMatrix(a_center) * rotationMatrix(a_rotation.xyz, a_rotation.w) * scaleMatrix(a_scale);"
-    "  if (u_billboarding) {"
-    "    mdv = billboardMatrix(mdv, a_scale) * rotationMatrix(a_rotation.xyz, a_rotation.w);"
-    "  }"
-    "  vec4 pos;"
-    "  if (u_swapYZ) {"
-    "    pos = mdv * vec4(a_position.xzy, 1.0);"
-    "  } else {"
-    "    pos = mdv * vec4(a_position.xyz, 1.0);"
-    "  }"
+    gl_Position = u_projectionMatrix * pos;
 
-    "  gl_Position = u_projectionMatrix * pos;"
+    if (u_textureActivated) {
+      v_texData.xy = vec2(a_texCoordOffsets.x + a_texCoord.x * (a_texCoordOffsets.z - a_texCoordOffsets.x),
+                          a_texCoordOffsets.y + a_texCoord.y * (a_texCoordOffsets.w - a_texCoordOffsets.y));
+      v_texData.z = a_textureUnit;
+    }
 
-    "  if (u_textureActivated) {"
-    "    v_texData.xy = vec2(a_texCoordOffsets.x + a_texCoord.x * (a_texCoordOffsets.z - a_texCoordOffsets.x),"
-    "                      a_texCoordOffsets.y + a_texCoord.y * (a_texCoordOffsets.w - a_texCoordOffsets.y));"
-    "    v_texData.z = a_textureUnit;"
-    "  }"
+    if (u_flatShading) {
+      v_diffuseColor = a_color;
+      return;
+    }
 
-    "  if (u_flatShading) {"
-    "     v_diffuseColor = a_color;"
-    "     return;"
-    "  }"
+    if (u_swapYZ) {
+      v_normal = normalize(mat3(u_normalMatrix) * a_normal.xzy);
+    } else {
+      v_normal = normalize(mat3(u_normalMatrix) * a_normal);
+    }
 
-    "  if (u_swapYZ) {"
-    "    v_normal = normalize(mat3(u_normalMatrix) * a_normal.xzy);"
-    "  } else {"
-    "    v_normal = normalize(mat3(u_normalMatrix) * a_normal);"
-    "  }"
+    vec3 lightVec = u_lightPosition.xyz-pos.xyz;
+    if (u_lightPosition.w == 0.0) {
+      lightVec = -u_lightPosition.xyz;
+    }
+    v_lightDir = normalize(lightVec);
+    float dist = length(lightVec);
+    v_attenuation = 1.0 / (u_lightConstantAttenuation +
+                    u_lightLinearAttenuation * dist +
+                    u_lightQuadraticAttenuation * dist * dist);
 
-    "  vec3 lightVec = u_lightPosition.xyz-pos.xyz;"
-    "  if (u_lightPosition.w == 0.0) {"
-    "    lightVec = -u_lightPosition.xyz;"
-    "  }"
-    "  v_lightDir = normalize(lightVec);"
-    "  float dist = length(lightVec);"
-    "  v_attenuation = 1.0 / (u_lightConstantAttenuation +"
-    "                  u_lightLinearAttenuation * dist +"
-    "                  u_lightQuadraticAttenuation * dist * dist);"
+    v_halfVector = u_eyePosition + u_lightPosition.xyz;
+    v_halfVector = normalize(v_halfVector);
 
-    "  v_halfVector = u_eyePosition + u_lightPosition.xyz;"
-    "  v_halfVector = normalize(v_halfVector);"
+    v_diffuseColor = u_lightDiffuseColor * a_color;
 
-    "  v_diffuseColor = u_lightDiffuseColor * a_color;"
+    v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;
+    v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;
+  }
+)";
 
-    "  v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;"
-    "  v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;"
-    "}"
-    ;
+static std::string glyphsFragmentShaderSrc = ShaderManager::getShaderSrcPrefix() + R"(
+  uniform bool u_flatShading;
+  uniform bool u_textureActivated;
+  uniform sampler2D u_textures[4];
 
-static std::string glyphsFragmentShaderSrc =
-    #ifdef __EMSCRIPTEN__
-    "precision highp float;"
-    "precision highp int;"
-    #else
-    "#version 120\n"
-    #endif
+  uniform vec4 u_lightSpecularColor;
+  uniform vec4 u_materialSpecularColor;
+  uniform float u_materialShininess;
 
-    "uniform bool u_flatShading;"
-    "uniform bool u_textureActivated;"
-    "uniform sampler2D u_textures[4];"
+  varying vec4 v_diffuseColor;
+  varying vec4 v_ambientGlobalColor;
+  varying vec4 v_ambientColor;
 
-    "uniform vec4 u_lightSpecularColor;"
-    "uniform vec4 u_materialSpecularColor;"
-    "uniform float u_materialShininess;"
+  varying vec3 v_normal;
+  varying vec3 v_lightDir;
+  varying vec3 v_halfVector;
+  varying float v_attenuation;
 
-    "varying vec4 v_diffuseColor;"
-    "varying vec4 v_ambientGlobalColor;"
-    "varying vec4 v_ambientColor;"
+  varying vec4 v_texData;
 
-    "varying vec3 v_normal;"
-    "varying vec3 v_lightDir;"
-    "varying vec3 v_halfVector;"
-    "varying float v_attenuation;"
+  vec4 getTexel(int samplerId) {
+    vec2 v_texCoord = v_texData.xy;
+    vec4 texel = vec4(0.0);
+    if (samplerId == 0) {
+      texel = texture2D(u_textures[0], v_texCoord);
+    } else if (samplerId == 1) {
+      texel = texture2D(u_textures[1], v_texCoord);
+    } else if (samplerId == 2) {
+      texel = texture2D(u_textures[2], v_texCoord);
+    } else if (samplerId == 3) {
+      texel = texture2D(u_textures[3], v_texCoord);
+    }
+    return texel;
+  }
 
-    "varying vec4 v_texData;"
+  void main() {
+    int samplerId = int(v_texData.z);
+    if (u_flatShading) {
+      gl_FragColor = v_diffuseColor;
+      if (u_textureActivated && samplerId != -1) {
+        gl_FragColor *= getTexel(samplerId);
+      }
+      return;
+    }
+    vec3 normal = normalize(v_normal);
+    vec4 color = v_ambientGlobalColor + v_ambientColor;
+    //   float NdotL = max(dot(normal,normalize(v_lightDir)),0.0);
+    float NdotL = abs(dot(normal,normalize(v_lightDir)));
+    if (NdotL > 0.0) {
+      color += (v_attenuation * v_diffuseColor * NdotL);
+      vec3 halfV = normalize(v_halfVector);
+      float NdotHV = max(dot(normal, halfV), 0.0);
+      color += v_attenuation * u_materialSpecularColor * u_lightSpecularColor * pow(NdotHV, u_materialShininess);
+    }
 
-    "vec4 getTexel(int samplerId) {"
-    "  vec2 v_texCoord = v_texData.xy;"
-    "  vec4 texel = vec4(0.0);"
-    "  if (samplerId == 0) {"
-    "    texel = texture2D(u_textures[0], v_texCoord);"
-    "  } else if (samplerId == 1) {"
-    "    texel = texture2D(u_textures[1], v_texCoord);"
-    "  } else if (samplerId == 2) {"
-    "    texel = texture2D(u_textures[2], v_texCoord);"
-    "  } else if (samplerId == 3) {"
-    "    texel = texture2D(u_textures[3], v_texCoord);"
-    "  }"
-    "  return texel;"
-    "}"
+    if (u_textureActivated && samplerId != -1) {
+      color *= getTexel(samplerId);
+    }
 
-    "void main() {"
-    "  int samplerId = int(v_texData.z);"
-    "  if (u_flatShading) {"
-    "     gl_FragColor = v_diffuseColor;"
-    "     if (u_textureActivated && samplerId != -1) {"
-    "       gl_FragColor *= getTexel(samplerId);"
-    "     }"
-    "     return;"
-    "  }"
-    "  vec3 normal = normalize(v_normal);"
-    "  vec4 color = v_ambientGlobalColor + v_ambientColor;"
-    //"  float NdotL = max(dot(normal,normalize(v_lightDir)),0.0);"
-    "  float NdotL = abs(dot(normal,normalize(v_lightDir)));"
-    "  if (NdotL > 0.0) {"
-    "    color += (v_attenuation * v_diffuseColor * NdotL);"
-    "    vec3 halfV = normalize(v_halfVector);"
-    "    float NdotHV = max(dot(normal, halfV), 0.0);"
-    "    color += v_attenuation * u_materialSpecularColor * u_lightSpecularColor * pow(NdotHV, u_materialShininess);"
-    "  }"
-
-    "  if (u_textureActivated && samplerId != -1) {"
-    "    color *= getTexel(samplerId);"
-    "  }"
-
-    "  gl_FragColor = color;"
-    "}"
-    ;
+    gl_FragColor = color;
+  }
+)";
 
 static const unsigned int ushortMax = 65535;
 

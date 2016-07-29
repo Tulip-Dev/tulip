@@ -65,297 +65,291 @@
 using namespace std;
 using namespace tlp;
 
-static string curveVertexShaderSrc =
-    "uniform mat4 u_projectionMatrix;"
-    "uniform mat4 u_modelviewMatrix;"
-    "uniform bool u_billboard;"
-    "uniform bool u_textureActivated;"
-    "uniform vec3 u_lookDir;"
-    "uniform bool u_lineMode;"
-    "uniform float u_stepKnots;"
-    "uniform float u_curveInterpolationStep;"
+static string curveVertexShaderSrc = R"(
+  uniform mat4 u_projectionMatrix;
+  uniform mat4 u_modelviewMatrix;
+  uniform bool u_billboard;
+  uniform bool u_textureActivated;
+  uniform vec3 u_lookDir;
+  uniform bool u_lineMode;
+  uniform float u_stepKnots;
+  uniform float u_curveInterpolationStep;
 
-    "const int MAX_CURVE_POINTS = 200;"
+  const int MAX_CURVE_POINTS = 200;
 
-    "uniform vec4 u_curvePoints[MAX_CURVE_POINTS];"
-    "uniform int u_nbCurvePoints;"
-    "uniform float u_startSize;"
-    "uniform float u_endSize;"
-    "uniform vec4 u_startColor;"
-    "uniform vec4 u_endColor;"
-    "uniform vec3 u_startN;"
-    "uniform vec3 u_endN;"
+  uniform vec4 u_curvePoints[MAX_CURVE_POINTS];
+  uniform int u_nbCurvePoints;
+  uniform float u_startSize;
+  uniform float u_endSize;
+  uniform vec4 u_startColor;
+  uniform vec4 u_endColor;
+  uniform vec3 u_startN;
+  uniform vec3 u_endN;
 
-    "attribute vec3 a_position;"
+  attribute vec3 a_position;
 
-    "varying vec4 v_color;"
-    "varying vec2 v_texCoord;"
+  varying vec4 v_color;
+  varying vec2 v_texCoord;
 
-    "const float M_PI = 3.14159265358979323846;"
+  const float M_PI = 3.14159265358979323846;
 
-    "\n#ifdef BEZIER_VERTEX_SHADER\n"
+  #ifdef BEZIER_VERTEX_SHADER
 
-    "vec3 computeCurvePoint(float t) {"
-    "  if (t == 0.0) {"
-    "    return u_curvePoints[0].xyz;"
-    "  } else if (t == 1.0) {"
-    "    return u_curvePoints[u_nbCurvePoints - 1].xyz;"
-    "  } else {"
-    "    float s = (1.0 - t);"
-    "    float r = float(u_nbCurvePoints);"
-    "    float curCoeff = 1.0;"
-    "    float t2 = 1.0;"
-    "    vec3 bezierPoint = vec3(0.0);"
-    "    for (int i = 0 ; i < MAX_CURVE_POINTS ; ++i) { "
-    "      bezierPoint += u_curvePoints[i].xyz * curCoeff * t2 * pow(s, float(u_nbCurvePoints - 1 - i));"
-    "      float c = float(i+1);"
-    "      curCoeff *= (r-c)/c;"
-    "      t2 *= t;"
-    "      if (i == u_nbCurvePoints) break;"
-    "    }"
-    "    return bezierPoint;"
-    "  }"
-    "}"
+  vec3 computeCurvePoint(float t) {
+    if (t == 0.0) {
+      return u_curvePoints[0].xyz;
+    } else if (t == 1.0) {
+      return u_curvePoints[u_nbCurvePoints - 1].xyz;
+    } else {
+      float s = (1.0 - t);
+      float r = float(u_nbCurvePoints);
+      float curCoeff = 1.0;
+      float t2 = 1.0;
+      vec3 bezierPoint = vec3(0.0);
+      for (int i = 0 ; i < MAX_CURVE_POINTS ; ++i) {
+        bezierPoint += u_curvePoints[i].xyz * curCoeff * t2 * pow(s, float(u_nbCurvePoints - 1 - i));
+        float c = float(i+1);
+        curCoeff *= (r-c)/c;
+        t2 *= t;
+        if (i == u_nbCurvePoints) break;
+      }
+      return bezierPoint;
+    }
+  }
 
-    "\n#endif\n"
+  #endif
 
-    "\n#ifdef BSPLINE_VERTEX_SHADER\n"
+  #ifdef BSPLINE_VERTEX_SHADER
 
-    "const int bsplineDegree = 3;"
-    "float coeffs[bsplineDegree + 1];"
+  const int bsplineDegree = 3;
+  float coeffs[bsplineDegree + 1];
 
-    "vec3 computeCurvePoint(float t) {"
-    "  if (t == 0.0) {"
-    "    return u_curvePoints[0].xyz;"
-    "  } else if (t >= 1.0) {"
-    "    return u_curvePoints[u_nbCurvePoints - 1].xyz;"
-    "  } else {"
-    "    int k = bsplineDegree;"
-    "    float cpt = 0.0;"
-    "    for (int i = 0 ; i < MAX_CURVE_POINTS + bsplineDegree + 1 ; ++i) {"
-    "      if (!(t > (cpt * u_stepKnots) && t >= ((cpt+1.0) * u_stepKnots))) break;"
-    "      ++k;"
-    "      ++cpt;"
-    "    }"
-    "    float knotVal = cpt * u_stepKnots;"
-    "    for (int i = 0 ; i < (bsplineDegree + 1) ; ++i) {"
-    "      coeffs[i] = 0.0;"
-    "    }"
-    "    coeffs[bsplineDegree] = 1.0;"
-    "    for (int i = 1 ; i <= bsplineDegree ; ++i) {"
-    "      coeffs[bsplineDegree-i] = (clamp(knotVal + u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(-i+1) * u_stepKnots, 0.0, 1.0)) * coeffs[bsplineDegree-i+1];"
-    "      int tabIdx = bsplineDegree-i+1;"
-    "      for (int j = -bsplineDegree+1 ; j <= -1 ; ++j) {"
-    "        if (j < (-i+1)) continue;"
-    "        if (tabIdx == 0)"
-    "          coeffs[0] = ((t - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0)) / (clamp(knotVal + float(j+i) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0))) * coeffs[0] + ((clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j+1) * u_stepKnots, 0.0, 1.0))) * coeffs[1];"
-    "        if (tabIdx == 1)"
-    "          coeffs[1] = ((t - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0)) / (clamp(knotVal + float(j+i) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0))) * coeffs[1] + ((clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j+1) * u_stepKnots, 0.0, 1.0))) * coeffs[2];"
-    "        if (tabIdx == 2)"
-    "          coeffs[2] = ((t - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0)) / (clamp(knotVal + float(j+i) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0))) * coeffs[2] + ((clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j+1) * u_stepKnots, 0.0, 1.0))) * coeffs[3];"
-    "        ++tabIdx;"
-    "      }"
-    "      coeffs[3] = ((t - knotVal) / (clamp(knotVal + float(i) * u_stepKnots, 0.0, 1.0) - knotVal)) * coeffs[3];"
-    "    }"
-    "    int startIdx = k - bsplineDegree;"
-    "    vec3 curvePoint = vec3(0.0);"
-    "    for (int i = 0 ; i <= bsplineDegree ; ++i) {"
-    "      curvePoint += coeffs[i] * u_curvePoints[startIdx + i].xyz;"
-    "    }"
-    "    return curvePoint;"
-    "  }"
-    "}"
+  vec3 computeCurvePoint(float t) {
+    if (t == 0.0) {
+      return u_curvePoints[0].xyz;
+    } else if (t >= 1.0) {
+      return u_curvePoints[u_nbCurvePoints - 1].xyz;
+    } else {
+      int k = bsplineDegree;
+      float cpt = 0.0;
+      for (int i = 0 ; i < MAX_CURVE_POINTS + bsplineDegree + 1 ; ++i) {
+        if (!(t > (cpt * u_stepKnots) && t >= ((cpt+1.0) * u_stepKnots))) break;
+        ++k;
+        ++cpt;
+      }
+      float knotVal = cpt * u_stepKnots;
+      for (int i = 0 ; i < (bsplineDegree + 1) ; ++i) {
+        coeffs[i] = 0.0;
+      }
+      coeffs[bsplineDegree] = 1.0;
+      for (int i = 1 ; i <= bsplineDegree ; ++i) {
+        coeffs[bsplineDegree-i] = (clamp(knotVal + u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(-i+1) * u_stepKnots, 0.0, 1.0)) * coeffs[bsplineDegree-i+1];
+        int tabIdx = bsplineDegree-i+1;
+        for (int j = -bsplineDegree+1 ; j <= -1 ; ++j) {
+          if (j < (-i+1)) continue;
+          if (tabIdx == 0)
+            coeffs[0] = ((t - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0)) / (clamp(knotVal + float(j+i) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0))) * coeffs[0] + ((clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j+1) * u_stepKnots, 0.0, 1.0))) * coeffs[1];
+          if (tabIdx == 1)
+            coeffs[1] = ((t - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0)) / (clamp(knotVal + float(j+i) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0))) * coeffs[1] + ((clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j+1) * u_stepKnots, 0.0, 1.0))) * coeffs[2];
+          if (tabIdx == 2)
+            coeffs[2] = ((t - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0)) / (clamp(knotVal + float(j+i) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j) * u_stepKnots, 0.0, 1.0))) * coeffs[2] + ((clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - t) / (clamp(knotVal + float(j+i+1) * u_stepKnots, 0.0, 1.0) - clamp(knotVal + float(j+1) * u_stepKnots, 0.0, 1.0))) * coeffs[3];
+          ++tabIdx;
+        }
+        coeffs[3] = ((t - knotVal) / (clamp(knotVal + float(i) * u_stepKnots, 0.0, 1.0) - knotVal)) * coeffs[3];
+      }
+      int startIdx = k - bsplineDegree;
+      vec3 curvePoint = vec3(0.0);
+      for (int i = 0 ; i <= bsplineDegree ; ++i) {
+        curvePoint += coeffs[i] * u_curvePoints[startIdx + i].xyz;
+      }
+      return curvePoint;
+    }
+  }
 
-    "\n#endif\n"
+  #endif
 
-    "\n#ifdef CATMULL_VERTEX_SHADER\n"
+  #ifdef CATMULL_VERTEX_SHADER
 
-    "vec3 bezierControlPoints[4];"
+  vec3 bezierControlPoints[4];
 
-    "float parameter[2];"
+  float parameter[2];
 
-    "const float alpha = 0.5;"
+  const float alpha = 0.5;
 
-    "void computeBezierSegmentControlPoints(vec3 pBefore, vec3 pStart, vec3 pEnd, vec3 pAfter) {"
-    "  bezierControlPoints[0] = pStart;"
-    "  float d1 = distance(pBefore, pStart);"
-    "  float d2 = distance(pStart, pEnd);"
-    "  float d3 = distance(pEnd, pAfter);"
-    "  float d1alpha = pow(d1, alpha);"
-    "  float d12alpha = pow(d1, 2.0*alpha);"
-    "  float d2alpha = pow(d2, alpha);"
-    "  float d22alpha = pow(d2, 2.0*alpha);"
-    "  float d3alpha = pow(d3, alpha);"
-    "  float d32alpha = pow(d3, 2.0*alpha);"
-    "  bezierControlPoints[1] = (d12alpha*pEnd-d22alpha*pBefore+(2.0*d12alpha+3.0*d1alpha*d2alpha+d22alpha)*pStart)/(3.0*d1alpha*(d1alpha+d2alpha));"
-    "  bezierControlPoints[2] = (d32alpha*pStart-d22alpha*pAfter+(2.0*d32alpha+3.0*d3alpha*d2alpha+d22alpha)*pEnd)/(3.0*d3alpha*(d3alpha+d2alpha));"
-    "  bezierControlPoints[3] = pEnd;"
-    "}"
+  void computeBezierSegmentControlPoints(vec3 pBefore, vec3 pStart, vec3 pEnd, vec3 pAfter) {
+    bezierControlPoints[0] = pStart;
+    float d1 = distance(pBefore, pStart);
+    float d2 = distance(pStart, pEnd);
+    float d3 = distance(pEnd, pAfter);
+    float d1alpha = pow(d1, alpha);
+    float d12alpha = pow(d1, 2.0*alpha);
+    float d2alpha = pow(d2, alpha);
+    float d22alpha = pow(d2, 2.0*alpha);
+    float d3alpha = pow(d3, alpha);
+    float d32alpha = pow(d3, 2.0*alpha);
+    bezierControlPoints[1] = (d12alpha*pEnd-d22alpha*pBefore+(2.0*d12alpha+3.0*d1alpha*d2alpha+d22alpha)*pStart)/(3.0*d1alpha*(d1alpha+d2alpha));
+    bezierControlPoints[2] = (d32alpha*pStart-d22alpha*pAfter+(2.0*d32alpha+3.0*d3alpha*d2alpha+d22alpha)*pEnd)/(3.0*d3alpha*(d3alpha+d2alpha));
+    bezierControlPoints[3] = pEnd;
+  }
 
-    "int computeSegmentIndex(float t) {"
-    "  float dist = pow(distance(u_curvePoints[0].xyz, u_curvePoints[1].xyz), alpha);"
-    "  parameter[0] = 0.0;"
-    "  parameter[1] = dist / u_curvePoints[u_nbCurvePoints-1].w;"
-    "  if (t == 0.0) {"
-    "    return 0;"
-    "  } else if (t == 1.0)   {"
-    "    return u_nbCurvePoints - 1;"
-    "  } else {"
-    "    int ret = 0;"
-    "    for (int i = 0 ; i < MAX_CURVE_POINTS ; ++i) {"
-    "      ret = i;"
-    "      if (t < (dist / u_curvePoints[u_nbCurvePoints-1].w)) break;"
-    "      parameter[0] = dist / u_curvePoints[u_nbCurvePoints-1].w;"
-    "      dist += pow(distance(u_curvePoints[i].xyz, u_curvePoints[i+1].xyz), alpha);"
-    "    }"
-    "    parameter[1] = dist / u_curvePoints[u_nbCurvePoints-1].w;"
-    "    return ret;"
-    "  }"
-    "}"
+  int computeSegmentIndex(float t) {
+    float dist = pow(distance(u_curvePoints[0].xyz, u_curvePoints[1].xyz), alpha);
+    parameter[0] = 0.0;
+    parameter[1] = dist / u_curvePoints[u_nbCurvePoints-1].w;
+    if (t == 0.0) {
+      return 0;
+    } else if (t == 1.0)   {
+      return u_nbCurvePoints - 1;
+    } else {
+      int ret = 0;
+      for (int i = 0 ; i < MAX_CURVE_POINTS ; ++i) {
+        ret = i;
+        if (t < (dist / u_curvePoints[u_nbCurvePoints-1].w)) break;
+        parameter[0] = dist / u_curvePoints[u_nbCurvePoints-1].w;
+        dist += pow(distance(u_curvePoints[i].xyz, u_curvePoints[i+1].xyz), alpha);
+      }
+      parameter[1] = dist / u_curvePoints[u_nbCurvePoints-1].w;
+      return ret;
+    }
+  }
 
-    "vec3 computeCurvePoint(float t) {"
-    "  int i = computeSegmentIndex(t);"
-    "  float localT = 0.0;"
-    "  if (t == 1.0) {"
-    "    localT = 1.0;"
-    "  } else if (t != 0.0) {"
-    "    localT = (t - parameter[0]) / (parameter[1] - parameter[0]);"
-    "  }"
-    "  if (i == 0) {"
-    "    computeBezierSegmentControlPoints(u_curvePoints[i].xyz - (u_curvePoints[i+1].xyz - u_curvePoints[i].xyz), u_curvePoints[i].xyz, u_curvePoints[i+1].xyz, u_curvePoints[i+2].xyz);"
-    "  } else if (i == u_nbCurvePoints - 2) {"
-    "    computeBezierSegmentControlPoints(u_curvePoints[i-1].xyz, u_curvePoints[i].xyz, u_curvePoints[i+1].xyz, u_curvePoints[i+1].xyz + (u_curvePoints[i+1].xyz - u_curvePoints[i].xyz));"
-    "  } else if (i == u_nbCurvePoints - 1) {"
-    "    computeBezierSegmentControlPoints(u_curvePoints[i-2].xyz, u_curvePoints[i-1].xyz, u_curvePoints[i].xyz, u_curvePoints[i].xyz + (u_curvePoints[i].xyz - u_curvePoints[i-1].xyz));"
-    "  } else {"
-    "    computeBezierSegmentControlPoints(u_curvePoints[i-1].xyz, u_curvePoints[i].xyz, u_curvePoints[i+1].xyz, u_curvePoints[i+2].xyz);"
-    "  }"
-    "  float t2 = localT * localT;"
-    "  float t3 = t2 * localT;"
-    "  float s = 1.0 - localT;"
-    "  float s2 = s * s;"
-    "  float s3 = s2 * s;"
-    "  return (bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3);"
-    "}"
+  vec3 computeCurvePoint(float t) {
+    int i = computeSegmentIndex(t);
+    float localT = 0.0;
+    if (t == 1.0) {
+      localT = 1.0;
+    } else if (t != 0.0) {
+      localT = (t - parameter[0]) / (parameter[1] - parameter[0]);
+    }
+    if (i == 0) {
+      computeBezierSegmentControlPoints(u_curvePoints[i].xyz - (u_curvePoints[i+1].xyz - u_curvePoints[i].xyz), u_curvePoints[i].xyz, u_curvePoints[i+1].xyz, u_curvePoints[i+2].xyz);
+    } else if (i == u_nbCurvePoints - 2) {
+      computeBezierSegmentControlPoints(u_curvePoints[i-1].xyz, u_curvePoints[i].xyz, u_curvePoints[i+1].xyz, u_curvePoints[i+1].xyz + (u_curvePoints[i+1].xyz - u_curvePoints[i].xyz));
+    } else if (i == u_nbCurvePoints - 1) {
+      computeBezierSegmentControlPoints(u_curvePoints[i-2].xyz, u_curvePoints[i-1].xyz, u_curvePoints[i].xyz, u_curvePoints[i].xyz + (u_curvePoints[i].xyz - u_curvePoints[i-1].xyz));
+    } else {
+      computeBezierSegmentControlPoints(u_curvePoints[i-1].xyz, u_curvePoints[i].xyz, u_curvePoints[i+1].xyz, u_curvePoints[i+2].xyz);
+    }
+    float t2 = localT * localT;
+    float t3 = t2 * localT;
+    float s = 1.0 - localT;
+    float s2 = s * s;
+    float s3 = s2 * s;
+    return (bezierControlPoints[0] * s3 + bezierControlPoints[1] * 3.0 * localT * s2 + bezierControlPoints[2] * 3.0 * t2 * s + bezierControlPoints[3] * t3);
+  }
 
-    "\n#endif\n"
+  #endif
 
-    "vec3 computeBinormal(vec3 nextCurvePoint, vec3 currentCurvePoint) {"
-    "  vec3 tangent = normalize(nextCurvePoint - currentCurvePoint);"
-    "  vec3 normal = vec3(-tangent.y, tangent.x, tangent.z);"
-    "  if (tangent.x == 0.0 && tangent.y == 0.0) {"
-    "    normal = vec3(-tangent.z, tangent.x, tangent.y);"
-    "  }"
-    "  vec3 ret = cross(tangent, normal);"
-    "  return ret;"
-    "}"
+  vec3 computeBinormal(vec3 nextCurvePoint, vec3 currentCurvePoint) {
+    vec3 tangent = normalize(nextCurvePoint - currentCurvePoint);
+    vec3 normal = vec3(-tangent.y, tangent.x, tangent.z);
+    if (tangent.x == 0.0 && tangent.y == 0.0) {
+      normal = vec3(-tangent.z, tangent.x, tangent.y);
+    }
+    vec3 ret = cross(tangent, normal);
+    return ret;
+  }
 
-    "vec3 computeCurvePoint(vec3 previousCurvePoint, vec3 currentCurvePoint, vec3 nextCurvePoint, float ori, float size, vec3 lookDir) {"
-    "  vec3 pos = vec3(0.0);"
-    "  vec3 u = previousCurvePoint - currentCurvePoint;"
-    "  vec3 v = nextCurvePoint - currentCurvePoint;"
-    "  vec3 un = normalize(u);"
-    "  vec3 vn = normalize(v);"
-    "  vec3 xu = normalize(cross(un, lookDir));"
-    "  vec3 xv = normalize(cross(vn, -lookDir));"
-    "  vec3 xu_xv = normalize(xu+xv);"
-    //"  float angle = M_PI - acos(dot(u,v)/length(u)*length(v));"
-    //"  if (angle != angle) angle = 0.0;"
-    //"  size = size/cos(angle/2.0);"
-    "  pos = currentCurvePoint + ori * xu_xv * size;"
-    "  return pos;"
-    "}"
+  vec3 computeCurvePoint(vec3 previousCurvePoint, vec3 currentCurvePoint, vec3 nextCurvePoint, float ori, float size, vec3 lookDir) {
+    vec3 pos = vec3(0.0);
+    vec3 u = previousCurvePoint - currentCurvePoint;
+    vec3 v = nextCurvePoint - currentCurvePoint;
+    vec3 un = normalize(u);
+    vec3 vn = normalize(v);
+    vec3 xu = normalize(cross(un, lookDir));
+    vec3 xv = normalize(cross(vn, -lookDir));
+    vec3 xu_xv = normalize(xu+xv);
+    //   float angle = M_PI - acos(dot(u,v)/length(u)*length(v));
+    //   if (angle != angle) angle = 0.0;
+    //   size = size/cos(angle/2.0);
+    pos = currentCurvePoint + ori * xu_xv * size;
+    return pos;
+  }
 
-    "void main() {"
-    "  int pointIdx = 0;"
-    "  vec3 currentCurvePoint = vec3(0.0);"
-    "  vec3 previousCurvePoint = vec3(0.0);"
-    "  vec3 nextCurvePoint = vec3(0.0);"
-    "  float size = 0.0;"
-    "  float s = 0.0;"
-    "\n#ifdef POLYLINE_VERTEX_SHADER\n"
-    "    pointIdx = int(a_position.x);"
-    "    currentCurvePoint = u_curvePoints[pointIdx].xyz;"
-    "    if (pointIdx == 0) {"
-    "      nextCurvePoint = u_curvePoints[pointIdx+1].xyz;"
-    "      previousCurvePoint = currentCurvePoint - (nextCurvePoint - currentCurvePoint);"
-    "    } else if (pointIdx == u_nbCurvePoints-1) {"
-    "      previousCurvePoint = u_curvePoints[pointIdx-1].xyz;"
-    "      nextCurvePoint = currentCurvePoint + (currentCurvePoint - previousCurvePoint);"
-    "    } else {"
-    "      previousCurvePoint = u_curvePoints[pointIdx-1].xyz;"
-    "      nextCurvePoint = u_curvePoints[pointIdx+1].xyz;"
-    "    }"
-    "    float t = u_curvePoints[pointIdx].w / u_curvePoints[u_nbCurvePoints - 1].w;"
-    "    v_color = mix(u_startColor, u_endColor, t);"
-    "    size = mix(u_startSize, u_endSize, t);"
-    "    s = u_curvePoints[pointIdx].w/(u_startSize*2.0);"
-    "\n#else\n"
-    "    float t = a_position.x;"
-    "    currentCurvePoint = computeCurvePoint(t);"
-    "    if (t == 0.0) {"
-    "      nextCurvePoint = computeCurvePoint(t + u_curveInterpolationStep);"
-    "      previousCurvePoint = currentCurvePoint - (nextCurvePoint - currentCurvePoint);"
-    "    } else if (t == 1.0) {"
-    "      previousCurvePoint = computeCurvePoint(t - u_curveInterpolationStep);"
-    "      nextCurvePoint = currentCurvePoint + (currentCurvePoint - previousCurvePoint);"
-    "    } else {"
-    "      previousCurvePoint = computeCurvePoint(t - u_curveInterpolationStep);"
-    "      nextCurvePoint = computeCurvePoint(t + u_curveInterpolationStep);"
-    "    }"
-    "    v_color = mix(u_startColor, u_endColor, t);"
-    "    size = mix(u_startSize, u_endSize, t);"
-    "    if (u_billboard || u_textureActivated) {"
-    "      float t1 = float(u_nbCurvePoints/2) / float(u_nbCurvePoints - 1);"
-    "      float t2 = float(u_nbCurvePoints/2 + 1) / float(u_nbCurvePoints - 1);"
-    "      float texCoordFactor = distance(computeCurvePoint(t1), computeCurvePoint(t2))/(u_startSize*2.0);"
-    "      s = t * float(u_nbCurvePoints - 1) * texCoordFactor;"
-    "    }"
-    "\n#endif\n"
-    "  if (u_lineMode) {"
-    "    gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(currentCurvePoint, 1.0);"
-    "  } else {"
-    "    float ori = a_position.y;"
-    "    vec3 binormal = u_lookDir;"
-    "    if (!u_billboard) {"
-    "      binormal = computeBinormal(currentCurvePoint, nextCurvePoint);"
-    "    }"
-    "    vec3 pos = computeCurvePoint(previousCurvePoint, currentCurvePoint, nextCurvePoint, ori, size, binormal);"
-    "    gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(pos, 1.0);"
-    "    if (ori < 0.0) {"
-    "      v_texCoord = vec2(s, 0.0);"
-    "    } else {"
-    "      v_texCoord = vec2(s, 1.0);"
-    "    }"
-    "  }"
-    "}"
-    ;
+  void main() {
+    int pointIdx = 0;
+    vec3 currentCurvePoint = vec3(0.0);
+    vec3 previousCurvePoint = vec3(0.0);
+    vec3 nextCurvePoint = vec3(0.0);
+    float size = 0.0;
+    float s = 0.0;
+  #ifdef POLYLINE_VERTEX_SHADER
+    pointIdx = int(a_position.x);
+    currentCurvePoint = u_curvePoints[pointIdx].xyz;
+    if (pointIdx == 0) {
+      nextCurvePoint = u_curvePoints[pointIdx+1].xyz;
+      previousCurvePoint = currentCurvePoint - (nextCurvePoint - currentCurvePoint);
+    } else if (pointIdx == u_nbCurvePoints-1) {
+      previousCurvePoint = u_curvePoints[pointIdx-1].xyz;
+      nextCurvePoint = currentCurvePoint + (currentCurvePoint - previousCurvePoint);
+    } else {
+      previousCurvePoint = u_curvePoints[pointIdx-1].xyz;
+      nextCurvePoint = u_curvePoints[pointIdx+1].xyz;
+    }
+    float t = u_curvePoints[pointIdx].w / u_curvePoints[u_nbCurvePoints - 1].w;
+    v_color = mix(u_startColor, u_endColor, t);
+    size = mix(u_startSize, u_endSize, t);
+    s = u_curvePoints[pointIdx].w/(u_startSize*2.0);
+  #else
+    float t = a_position.x;
+    currentCurvePoint = computeCurvePoint(t);
+    if (t == 0.0) {
+      nextCurvePoint = computeCurvePoint(t + u_curveInterpolationStep);
+      previousCurvePoint = currentCurvePoint - (nextCurvePoint - currentCurvePoint);
+    } else if (t == 1.0) {
+      previousCurvePoint = computeCurvePoint(t - u_curveInterpolationStep);
+      nextCurvePoint = currentCurvePoint + (currentCurvePoint - previousCurvePoint);
+    } else {
+      previousCurvePoint = computeCurvePoint(t - u_curveInterpolationStep);
+      nextCurvePoint = computeCurvePoint(t + u_curveInterpolationStep);
+    }
+    v_color = mix(u_startColor, u_endColor, t);
+    size = mix(u_startSize, u_endSize, t);
+    if (u_billboard || u_textureActivated) {
+      float t1 = float(u_nbCurvePoints/2) / float(u_nbCurvePoints - 1);
+      float t2 = float(u_nbCurvePoints/2 + 1) / float(u_nbCurvePoints - 1);
+      float texCoordFactor = distance(computeCurvePoint(t1), computeCurvePoint(t2))/(u_startSize*2.0);
+      s = t * float(u_nbCurvePoints - 1) * texCoordFactor;
+    }
+  #endif
+    if (u_lineMode) {
+      gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(currentCurvePoint, 1.0);
+    } else {
+      float ori = a_position.y;
+      vec3 binormal = u_lookDir;
+      if (!u_billboard) {
+        binormal = computeBinormal(currentCurvePoint, nextCurvePoint);
+      }
+      vec3 pos = computeCurvePoint(previousCurvePoint, currentCurvePoint, nextCurvePoint, ori, size, binormal);
+      gl_Position = u_projectionMatrix * u_modelviewMatrix * vec4(pos, 1.0);
+      if (ori < 0.0) {
+        v_texCoord = vec2(s, 0.0);
+      } else {
+        v_texCoord = vec2(s, 1.0);
+      }
+    }
+  }
+)";
 
-static string curveFragmentShaderSrc =
-    #ifdef __EMSCRIPTEN__
-    "precision highp float;\n"
-    "precision highp int;\n"
-    #else
-    "#version 120\n"
-    #endif
-    "uniform sampler2D u_texture0;"
-    "uniform sampler2D u_texture1;"
-    "uniform bool u_textureActivated;"
-    "uniform bool u_billboardTex;"
+static string curveFragmentShaderSrc = R"(
+  uniform sampler2D u_texture0;
+  uniform sampler2D u_texture1;
+  uniform bool u_textureActivated;
+  uniform bool u_billboardTex;
 
-    "varying vec4 v_color;"
-    "varying vec2 v_texCoord;"
+  varying vec4 v_color;
+  varying vec2 v_texCoord;
 
-    "void main() {"
-    "  gl_FragColor = v_color;"
-    "  if (u_billboardTex) {"
-    "    gl_FragColor *= texture2D(u_texture0, v_texCoord);"
-    "  }"
-    "  if (u_textureActivated) {"
-    "    gl_FragColor *= texture2D(u_texture1, v_texCoord);"
-    "  }"
-    "}"
-    ;
+  void main() {
+    gl_FragColor = v_color;
+    if (u_billboardTex) {
+      gl_FragColor *= texture2D(u_texture0, v_texCoord);
+    }
+    if (u_textureActivated) {
+      gl_FragColor *= texture2D(u_texture1, v_texCoord);
+    }
+  }
+)";
 
 const unsigned int nbCurveInterpolationPoints = 200;
 const unsigned int bSplineDegree = 3;
@@ -442,14 +436,7 @@ private:
 
 GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
   if (_edgesShaders.find(edgeShape) == _edgesShaders.end()) {
-    string preproDefine =
-    #ifdef __EMSCRIPTEN__
-        "precision highp float;\n"
-        "precision highp int;\n"
-    #else
-        "#version 120\n"
-    #endif
-        ;
+    string preproDefine = ShaderManager::getShaderSrcPrefix();
     if (edgeShape == EdgeShape::Polyline) {
       preproDefine += "#define POLYLINE_VERTEX_SHADER\n";
     } else if (edgeShape == EdgeShape::BezierCurve) {
@@ -461,7 +448,7 @@ GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
     }
     GlShaderProgram *edgeShader = new GlShaderProgram();
     edgeShader->addShaderFromSourceCode(GlShader::Vertex, preproDefine + curveVertexShaderSrc);
-    edgeShader->addShaderFromSourceCode(GlShader::Fragment, curveFragmentShaderSrc);
+    edgeShader->addShaderFromSourceCode(GlShader::Fragment, ShaderManager::getShaderSrcPrefix() + curveFragmentShaderSrc);
     edgeShader->link();
     edgeShader->printInfoLog();
     _edgesShaders[edgeShape] = edgeShader;
