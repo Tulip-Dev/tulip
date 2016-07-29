@@ -33,13 +33,31 @@
 
 namespace tlp {
 
-class TLP_GLES_SCOPE FontAwesomeGlyph : public Glyph {
+class TLP_GLES_SCOPE FontIconGlyph : public Glyph {
+
+public:
+
+  FontIconGlyph(const std::string &fontFile, unsigned int iconCodePoint);
+
+};
+
+class TLP_GLES_SCOPE FontAwesomeGlyph : public FontIconGlyph {
 
 public:
 
   GLYPHINFORMATION("2D - Font Awesome Icon", "2D - Font Awesome Icon extremity", "Antoine Lambert", "26/02/2015", "Font Awesome Icon", "1.0", NodeShape::FontAwesomeIcon)
 
   FontAwesomeGlyph(unsigned int iconCodePoint);
+
+};
+
+class TLP_GLES_SCOPE MaterialDesignIconGlyph : public FontIconGlyph {
+
+public:
+
+  GLYPHINFORMATION("2D - Material Design Icon", "2D - Material Design Icon extremity", "Antoine Lambert", "29/07/2016", "Material Design Icon", "1.0", NodeShape::MaterialDesignIcon)
+
+  MaterialDesignIconGlyph(unsigned int iconCodePoint);
 
 };
 

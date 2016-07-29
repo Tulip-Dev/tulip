@@ -58,7 +58,7 @@ private:
   static GlyphsManager _instance;
 
   std::map<int, Glyph*> _glyphs;
-  std::map<int, Glyph*> _faGlyphs;
+  std::map<int, Glyph*> _iconGlyphs;
 
 };
 

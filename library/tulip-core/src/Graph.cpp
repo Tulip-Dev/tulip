@@ -43,6 +43,7 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TulipFontAwesome.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 using namespace std;
 using namespace tlp;
@@ -100,7 +101,7 @@ static void setViewPropertiesDefaults(Graph *g) {
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontAwesomeIcon = "viewFontAwesomeIcon", fontSizes = "viewFontSize",
                     borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
                     labelColor = "viewLabelColor", labelBorderColor = "viewLabelBorderColor", labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition", label="viewLabel",
-                    layout = "viewLayout", rotation = "viewRotation", srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
+                    layout = "viewLayout", materialDesignIcon = "viewMaterialDesignIcon", rotation = "viewRotation", srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
   if (!g->existProperty(shapes)) {
     g->getProperty<IntegerProperty>(shapes)->setAllNodeValue(TulipViewSettings::instance().defaultShape(NODE));
@@ -206,6 +207,11 @@ static void setViewPropertiesDefaults(Graph *g) {
   if (!g->existProperty(fontAwesomeIcon)) {
     g->getProperty<StringProperty>(fontAwesomeIcon)->setAllNodeValue(TulipFontAwesome::QuestionCircle);
     g->getProperty<StringProperty>(fontAwesomeIcon)->setAllEdgeValue(TulipFontAwesome::QuestionCircle);
+  }
+
+  if (!g->existProperty(materialDesignIcon)) {
+    g->getProperty<StringProperty>(materialDesignIcon)->setAllNodeValue(TulipMaterialDesignIcons::HelpCircle);
+    g->getProperty<StringProperty>(materialDesignIcon)->setAllEdgeValue(TulipMaterialDesignIcons::HelpCircle);
   }
 
 }

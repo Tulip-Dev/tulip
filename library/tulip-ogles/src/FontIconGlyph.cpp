@@ -31,11 +31,12 @@
 
 #include <FTLibrary.h>
 
-#include <tulip/FontAwesomeGlyph.h>
+#include <tulip/FontIconGlyph.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/TlpTools.h>
 #include <tulip/GlUtils.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <map>
 
@@ -45,13 +46,13 @@
 
 using namespace tlp;
 
-FontAwesomeGlyph::FontAwesomeGlyph(unsigned int iconCodePoint) : Glyph(nullptr) {
+FontIconGlyph::FontIconGlyph(const std::string &fontFile, unsigned int iconCodePoint) : Glyph(nullptr) {
 
   const FT_Library* library = FTLibrary::Instance().GetLibrary();
 
   FT_Face face;
 
-  FT_Error err = FT_New_Face(*library, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation().c_str(), 0, &face);
+  FT_Error err = FT_New_Face(*library, fontFile.c_str(), 0, &face);
 
   if (err) {
     return;
@@ -140,3 +141,9 @@ FontAwesomeGlyph::FontAwesomeGlyph(unsigned int iconCodePoint) : Glyph(nullptr) 
   }
 
 }
+
+FontAwesomeGlyph::FontAwesomeGlyph(unsigned int iconCodePoint) :
+  FontIconGlyph(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), iconCodePoint) {}
+
+MaterialDesignIconGlyph::MaterialDesignIconGlyph(unsigned int iconCodePoint) :
+  FontIconGlyph(TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(), iconCodePoint) {}

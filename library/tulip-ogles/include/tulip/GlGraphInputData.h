@@ -73,6 +73,7 @@ public:
     VIEW_FONTAWESOMEICON, /**< font awesome icon name for the font awesome icon glyph*/
     VIEW_GLOW, /**< draw a glow around graph elements ?*/
     VIEW_GLOWCOLOR, /**< color of glow effect */
+    VIEW_MATERIALDESIGNICON, /**< material design icon name for the material design icon glyph*/
     NB_PROPS /** must be the last, give the number of enum props */
   };
 
@@ -343,6 +344,19 @@ public:
    */
   void setElementFontAwesomeIcon(tlp::StringProperty *property) {
     setProperty(VIEW_FONTAWESOMEICON,property);
+  }
+
+  /**
+   * Return a pointer on the property used to elementMaterialDesignIcon
+   */
+  tlp::StringProperty *getElementMaterialDesignIcon() const {
+    return getProperty<tlp::StringProperty>(VIEW_MATERIALDESIGNICON);
+  }
+  /**
+   * Set the pointer on the property used to elementMaterialDesignIcon
+   */
+  void setElementMaterialDesignIcon(tlp::StringProperty *property) {
+    setProperty(VIEW_MATERIALDESIGNICON,property);
   }
 
   /**

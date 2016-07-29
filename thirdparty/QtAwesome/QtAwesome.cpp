@@ -870,6 +870,39 @@ bool QtAwesome::initFontAwesome(const QString &fontAwesomeFile)
     return true;
 }
 
+bool QtAwesome::initMaterialDesignIcons(const QString &materialDesignIconsFile)
+{
+    static int materialDesignIconsFontId = -1;
+
+    // only load material design icons once
+    if( materialDesignIconsFontId < 0 ) {
+
+
+        // load the font file
+        QFile res(materialDesignIconsFile);
+        if(!res.open(QIODevice::ReadOnly)) {
+            qDebug() << "Material design icons font could not be loaded!";
+            return false;
+        }
+        QByteArray fontData( res.readAll() );
+        res.close();
+
+        // fetch the given font
+        materialDesignIconsFontId = QFontDatabase::addApplicationFontFromData(fontData);
+    }
+
+    QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(materialDesignIconsFontId);
+    if( !loadedFontFamilies.empty() ) {
+        fontName_= loadedFontFamilies.at(0);
+    } else {
+        qDebug() << "Material design icons font is empty?!";
+        materialDesignIconsFontId = -1; // restore the font-awesome id
+        return false;
+    }
+
+    return true;
+}
+
 void QtAwesome::addNamedCodepoint( const QString& name, fa::iconCodePoint codePoint)
 {
     namedCodepoints_.insert( name, codePoint);
@@ -918,6 +951,14 @@ QIcon QtAwesome::icon(fa::iconCodePoint character, const QVariantMap &options)
     return icon( fontIconPainter_, optionMap );
 }
 
+QIcon QtAwesome::icon(mdi::iconCodePoint character, const QVariantMap &options)
+{
+    // create a merged QVariantMap to have default options and icon-specific options
+    QVariantMap optionMap = mergeOptions( defaultOptions_, options );
+    optionMap.insert("text", QString( QChar(static_cast<int>(character)) ) );
+
+    return icon( fontIconPainter_, optionMap );
+}
 
 
 /// Creates an icon with the given name

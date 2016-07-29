@@ -288,6 +288,9 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface * prop) {
     if (prop->getName() == "viewFontAwesomeIcon")
       return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str())));
 
+    if (prop->getName() == "viewMaterialDesignIcon")
+      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str())));
+
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeValue(n).c_str())));
 
@@ -318,6 +321,9 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
     if (prop->getName() == "viewFontAwesomeIcon")
       return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str())));
 
+    if (prop->getName() == "viewMaterialDesignIcon")
+      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str())));
+
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty*>(prop)->getNodeDefaultValue().c_str())));
 
@@ -345,6 +351,8 @@ bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v) {
       static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()));
     else if (prop->getName() == "viewFontAwesomeIcon")
       static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()));
+    else if (prop->getName() == "viewMaterialDesignIcon")
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()));
     else if (prop->getName() == "viewTexture")
       static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()));
     else
@@ -377,6 +385,8 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface * prop, QVarian
       static_cast<StringProperty*>(prop)->setNodeValue(n, std::string(v.value<TulipFont>().fontFile().toUtf8().data()));
     else if (prop->getName() == "viewFontAwesomeIcon")
       static_cast<StringProperty*>(prop)->setNodeValue(n,std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()));
+    else if (prop->getName() == "viewMaterialDesignIcon")
+      static_cast<StringProperty*>(prop)->setNodeValue(n,std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()));
     else if (prop->getName() == "viewTexture")
       static_cast<StringProperty*>(prop)->setNodeValue(n,std::string(v.value<TextureFile>().texturePath.toUtf8().data()));
     else
@@ -418,6 +428,9 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface * prop) {
     if (prop->getName() == "viewFontAwesomeIcon")
       return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str())));
 
+    if (prop->getName() == "viewMaterialDesignIcon")
+      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str())));
+
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeValue(e).c_str())));
 
@@ -453,6 +466,9 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface * prop) {
 
     if (prop->getName() == "viewFontAwesomeIcon")
       return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str())));
+
+    if (prop->getName() == "viewMaterialDesignIcon")
+      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str())));
 
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty*>(prop)->getEdgeDefaultValue().c_str())));
@@ -491,6 +507,8 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
       static_cast<StringProperty*>(prop)->setEdgeValue(e, std::string(v.value<TulipFont>().fontFile().toUtf8().data()));
     else if (prop->getName() == "viewFontAwesomeIcon")
       static_cast<StringProperty*>(prop)->setEdgeValue(e,std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()));
+    else if (prop->getName() == "viewMaterialDesignIcon")
+      static_cast<StringProperty*>(prop)->setEdgeValue(e,std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()));
     else if (prop->getName() == "viewTexture")
       static_cast<StringProperty*>(prop)->setEdgeValue(e,std::string(v.value<TextureFile>().texturePath.toUtf8().data()));
     else
@@ -529,6 +547,9 @@ bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v) {
 
     else if (prop->getName() == "viewFontAwesomeIcon")
       static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()));
+
+    else if (prop->getName() == "viewMaterialDesignIcon")
+      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()));
 
     else if (prop->getName() == "viewTexture")
       static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()));

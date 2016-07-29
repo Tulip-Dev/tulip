@@ -72,11 +72,13 @@ TlpJsonImport.cpp
 TLPBExport.cpp
 TLPBImport.cpp
 TulipFontAwesome.cpp
+TulipMaterialDesignIcons.cpp
 )
 
 # disable GCC var tracking on that file as it eats too much compile time
 IF(CMAKE_COMPILER_IS_GNUCXX)
 SET_SOURCE_FILES_PROPERTIES(TulipFontAwesome.cpp COMPILE_FLAGS -fno-var-tracking)
+SET_SOURCE_FILES_PROPERTIES(TulipMaterialDesignIcons.cpp COMPILE_FLAGS -fno-var-tracking)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
 IF(CHECK_MEMORY)

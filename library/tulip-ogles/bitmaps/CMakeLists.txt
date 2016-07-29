@@ -7,6 +7,7 @@ INSTALL(FILES
   halfCylinderTexture.png
   cylinderTexture.png
   roundTexture.png
+  materialdesignicons-webfont.ttf
 DESTINATION ${TulipBitmapInstallDir}
 COMPONENT tulip_ogl)
 

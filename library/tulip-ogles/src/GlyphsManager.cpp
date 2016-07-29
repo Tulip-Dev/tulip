@@ -30,7 +30,8 @@
 #include <tulip/GlyphsManager.h>
 #include <tulip/CircleGlyph.h>
 #include <tulip/TriangleGlyph.h>
-#include <tulip/FontAwesomeGlyph.h>
+#include <tulip/FontIconGlyph.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 
 using namespace std;
@@ -46,17 +47,19 @@ GlyphsManager::GlyphsManager() {
   CircleGlyph *circleGlyph = new CircleGlyph();
   TriangleGlyph *triangleGlyph = new TriangleGlyph();
   FontAwesomeGlyph *fontAwesomeGlyph = new FontAwesomeGlyph(TulipFontAwesome::getFontAwesomeIconCodePoint(TulipFontAwesome::QuestionCircle));
+  MaterialDesignIconGlyph *materialDesignIconGlyph = new MaterialDesignIconGlyph(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(TulipMaterialDesignIcons::HelpCircle));
 
   _glyphs[circleGlyph->id()] = circleGlyph;
   _glyphs[triangleGlyph->id()] = triangleGlyph;
   _glyphs[fontAwesomeGlyph->id()] = fontAwesomeGlyph;
+  _glyphs[materialDesignIconGlyph->id()] = materialDesignIconGlyph;
 }
 
 GlyphsManager::~GlyphsManager() {
   for(const pair<int, Glyph*> glyph : _glyphs) {
     delete glyph.second;
   }
-  for(const pair<int, Glyph*> glyph : _faGlyphs) {
+  for(const pair<int, Glyph*> glyph : _iconGlyphs) {
     delete glyph.second;
   }
 }
@@ -66,11 +69,16 @@ Glyph *GlyphsManager::getGlyph(int glyphId) {
   if (glyphId == 50) {
     return _glyphs[tlp::NodeShape::Triangle];
   }
-  if (glyphId >= 0xf000) {
-    if(_faGlyphs.find(glyphId) == _faGlyphs.end()) {
-      _faGlyphs[glyphId] = new FontAwesomeGlyph(glyphId);
+  if (glyphId >= 0x1e000) {
+    if(_iconGlyphs.find(glyphId) == _iconGlyphs.end()) {
+      _iconGlyphs[glyphId] = new MaterialDesignIconGlyph(glyphId-0xf000);
     }
-    return _faGlyphs[glyphId];
+    return _iconGlyphs[glyphId];
+  } else if (glyphId >= 0xf000) {
+    if(_iconGlyphs.find(glyphId) == _iconGlyphs.end()) {
+      _iconGlyphs[glyphId] = new FontAwesomeGlyph(glyphId);
+    }
+    return _iconGlyphs[glyphId];
   }
   if (_glyphs.find(glyphId) == _glyphs.end()) {
     return _glyphs[tlp::NodeShape::Circle];

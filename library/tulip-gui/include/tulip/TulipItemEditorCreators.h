@@ -163,14 +163,18 @@ public:
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
-class TLP_QT_SCOPE TulipFontAwesomeIconCreator: public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE TulipFontGlyphIconCreator: public tlp::TulipItemEditorCreator {
 public:
+
+  TulipFontGlyphIconCreator(bool fontAwesome);
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
   virtual QVariant editorData(QWidget*,tlp::Graph*);
   virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
   virtual QString displayText(const QVariant &) const;
+private:
+  bool _fontAwesome;
 };
 
 class TLP_QT_SCOPE NodeShapeEditorCreator: public tlp::TulipItemEditorCreator {

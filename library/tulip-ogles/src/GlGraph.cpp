@@ -39,6 +39,7 @@
 #include <tulip/DrawingTools.h>
 #include <tulip/TulipFontAwesome.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <tulip/GlScene.h>
 #include <tulip/GlLayer.h>
@@ -763,6 +764,9 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     if (glyphId == tlp::NodeShape::FontAwesomeIcon) {
       std::string icon = _inputData.getElementFontAwesomeIcon()->getNodeValue(nodesLodResult[i].n);
       glyphId = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
+    } else if (glyphId == tlp::NodeShape::MaterialDesignIcon) {
+      std::string icon = _inputData.getElementMaterialDesignIcon()->getNodeValue(nodesLodResult[i].n);
+      glyphId = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon)+0xf000;
     }
     _nodesGlyphs[glyphId].push_back(nodesLodResult[i].n);
     if (_inputData.getElementSelection()->getNodeValue(nodesLodResult[i].n) && nodesLodResult[i].lod >= 10) {
@@ -1261,11 +1265,17 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
   if (srcShape == tlp::EdgeExtremityShape::FontAwesomeIcon) {
     std::string icon = _inputData.getElementFontAwesomeIcon()->getEdgeValue(e);
     srcShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
+  } else if (srcShape == tlp::EdgeExtremityShape::MaterialDesignIcon) {
+    std::string icon = _inputData.getElementMaterialDesignIcon()->getEdgeValue(e);
+    srcShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon)+0xf000;
   }
 
   if (tgtShape == tlp::EdgeExtremityShape::FontAwesomeIcon) {
     std::string icon = _inputData.getElementFontAwesomeIcon()->getEdgeValue(e);
     tgtShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
+  } else if (tgtShape == tlp::EdgeExtremityShape::MaterialDesignIcon) {
+    std::string icon = _inputData.getElementMaterialDesignIcon()->getEdgeValue(e);
+    tgtShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon)+0xf000;
   }
 
   if (srcShape != EdgeExtremityShape::None) {
@@ -1895,7 +1905,10 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE || pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
       notifyModified();
     }
-  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementGlow() || pEvt->getProperty() == _inputData.getElementFontAwesomeIcon() || pEvt->getProperty() == _inputData.getElementLabelColor())) {
+  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementGlow() ||
+                      pEvt->getProperty() == _inputData.getElementFontAwesomeIcon() ||
+                      pEvt->getProperty() == _inputData.getElementMaterialDesignIcon() ||
+                      pEvt->getProperty() == _inputData.getElementLabelColor())) {
     notifyModified();
   } else if (pEvt && (pEvt->getProperty() == _inputData.getElementSelection() || pEvt->getProperty() == _inputData.getElementLabelPosition())) {
     notifyModified();
