@@ -98,10 +98,15 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 
             QLabel* title = _informationsWidget->findChild<QLabel*>();
 
-            ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED?NODE:EDGE;
+            ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
-            tableView()->setModel(buildModel(eltType,selectedEntity.getComplexEntityId(),_informationsWidget));
-            title->setText(elementName(eltType,selectedEntity.getComplexEntityId()));
+            if (eltType == NODE) {
+              tableView()->setModel(buildModel(eltType,selectedEntity.getNode().id,_informationsWidget));
+              title->setText(elementName(eltType,selectedEntity.getNode().id));
+            } else {
+              tableView()->setModel(buildModel(eltType,selectedEntity.getEdge().id,_informationsWidget));
+              title->setText(elementName(eltType,selectedEntity.getEdge().id));
+            }
 
             QPoint position=qMouseEv->pos();
 
@@ -135,7 +140,7 @@ bool MouseShowElementInfos::eventFilter(QObject *widget, QEvent* e) {
 bool MouseShowElementInfos::pick(int x, int y, SelectedEntity &selectedEntity) {
   GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
   assert(glMainView);
-  return glMainView->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity);
+  return glMainView->getGlMainWidget()->pickNodesEdges(x,glMainView->getGlMainWidget()->height()-y,selectedEntity);
 }
 
 void MouseShowElementInfos::viewChanged(View * view) {

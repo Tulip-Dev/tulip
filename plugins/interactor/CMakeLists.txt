@@ -11,8 +11,8 @@ ADD_LIBRARY(InteractorNavigation-${TulipVersion} SHARED InteractorNavigation.cpp
 TARGET_LINK_LIBRARIES(InteractorNavigation-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
 
 ###----------------------------------------------------------------------------------------------------------------------------
-#ADD_LIBRARY(InteractorGetInformation-${TulipVersion} SHARED InteractorGetInformation.cpp)
-#TARGET_LINK_LIBRARIES(InteractorGetInformation-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
+ADD_LIBRARY(InteractorGetInformation-${TulipVersion} SHARED InteractorGetInformation.cpp)
+TARGET_LINK_LIBRARIES(InteractorGetInformation-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
 
 ###----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(InteractorSelection-${TulipVersion} SHARED InteractorSelection.cpp)
@@ -40,7 +40,7 @@ TARGET_LINK_LIBRARIES(InteractorRectangleZoom-${TulipVersion} ${LibTulipCoreName
 
 ##----------------------------------------------------------------------------------------------------------------------------
 INSTALL_TULIP_PLUGIN(InteractorNavigation-${TulipVersion} ${TulipInteractorPluginsInstallDir})
-#INSTALL_TULIP_PLUGIN(InteractorGetInformation-${TulipVersion} ${TulipInteractorPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(InteractorGetInformation-${TulipVersion} ${TulipInteractorPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(InteractorSelection-${TulipVersion} ${TulipInteractorPluginsInstallDir})
 #INSTALL_TULIP_PLUGIN(InteractorSelectionModifier-${TulipVersion} ${TulipInteractorPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(InteractorRectangleZoom-${TulipVersion} ${TulipInteractorPluginsInstallDir})
