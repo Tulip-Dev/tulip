@@ -51,12 +51,12 @@ static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRend
      uniform bool u_swapYZ;
      uniform bool u_billboarding;
 
-     uniform vec3 u_center[MAX_NB_GLYPHS]; +
-     uniform vec3 u_scale[MAX_NB_GLYPHS]; +
-     uniform vec4 u_rotation[MAX_NB_GLYPHS]; +
-     uniform vec4 u_color[MAX_NB_GLYPHS]; +
-     uniform float u_textureUnit[MAX_NB_GLYPHS]; +
-     uniform vec4 u_texCoordOffsets[MAX_NB_GLYPHS]; +
+     uniform vec3 u_center[MAX_NB_GLYPHS];
+     uniform vec3 u_scale[MAX_NB_GLYPHS];
+     uniform vec4 u_rotation[MAX_NB_GLYPHS];
+     uniform vec4 u_color[MAX_NB_GLYPHS];
+     uniform float u_textureUnit[MAX_NB_GLYPHS];
+     uniform vec4 u_texCoordOffsets[MAX_NB_GLYPHS];
 
      uniform vec3 u_eyePosition;
      uniform vec4 u_lightPosition;
