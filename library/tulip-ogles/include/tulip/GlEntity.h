@@ -48,7 +48,7 @@ public:
 
   GlEntity();
 
-  virtual ~GlEntity() {}
+  virtual ~GlEntity();
 
   virtual void setVisible(bool visible);
 

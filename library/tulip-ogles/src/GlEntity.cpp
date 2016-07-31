@@ -42,6 +42,10 @@ GlEntity::GlEntity() : _visible(true), _stencil(0xFF), _selected(false), _layer(
   _boundingBox[1].fill(0);
 }
 
+GlEntity::~GlEntity() {
+  idToEntity.erase(_id);
+}
+
 void GlEntity::setVisible(bool visible) {
   if (_visible != visible) {
     _visible = visible;
