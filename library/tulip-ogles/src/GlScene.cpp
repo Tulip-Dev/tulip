@@ -612,11 +612,19 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
   _pickingMode = true;
   vector<SelectedEntity> selectedEntitiesInternal;
   selectedEntities.clear();
-  GlFrameBufferObject *fbo = new GlFrameBufferObject(_viewport[2], _viewport[3], GlFrameBufferObject::NoAttachment);
-  fbo->bind();
+
+  x = clamp(x, 0, _viewport[2]);
+  y = clamp(y, 0, _viewport[3]);
+  if (x+width > _viewport[2]) {
+    width -= x+width-_viewport[2];
+  }
+  if (y+height > _viewport[3]) {
+    height -= y+height-_viewport[3];
+  }
+
   unsigned int bufferSize = width*height*4;
   unsigned char *buffer = new unsigned char[bufferSize];
-  bool done = false;
+
   _selectionViewport = Vec4i(x - _viewport[2], _viewport[3] - y, width, height);
 
   std::map<GlLayer *, bool> layersVisibility;
@@ -631,6 +639,10 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
     layer->setVisible(true);
   }
 
+  GlFrameBufferObject *fbo = new GlFrameBufferObject(_viewport[2], _viewport[3], GlFrameBufferObject::NoAttachment);
+  fbo->bind();
+
+  bool done = false;
   while (!done) {
     set<GlEntity*> tmpSelectedEntities;
     draw();
