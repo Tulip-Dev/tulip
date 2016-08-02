@@ -35,6 +35,7 @@ SET(tulip-ogles_LIB_SRCS
   CircleGlyph.cpp
   TriangleGlyph.cpp
   FontIconGlyph.cpp
+  GlLine.cpp
 )
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include} ${STBInclude})

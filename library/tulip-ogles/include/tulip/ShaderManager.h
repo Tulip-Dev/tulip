@@ -62,6 +62,10 @@ public:
     return _blinnPhongRenderingShader;
   }
 
+  GlShaderProgram *getLineRenderingShader() const {
+    return _lineRenderingShader;
+  }
+
 private:
 
   ShaderManager();
@@ -72,6 +76,8 @@ private:
   GlShaderProgram *_flatRenderingShader;
 
   GlShaderProgram *_blinnPhongRenderingShader;
+
+  GlShaderProgram *_lineRenderingShader;
 
 };
 

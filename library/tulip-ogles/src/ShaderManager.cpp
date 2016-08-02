@@ -88,6 +88,88 @@ static string defaultVertexShaderSrc = shaderSrcPrefix + R"(
   }
 )";
 
+
+// original shader code can be found in the webgl-lines project (https://github.com/mattdesl/webgl-lines)
+// from Matt DesLauriers (MIT License)
+static string lineRenderingVertexShaderSrc = shaderSrcPrefix + R"(
+  uniform mat4 u_modelviewMatrix;
+  uniform mat4 u_projectionMatrix;
+  uniform bool u_textureActivated;
+  uniform vec4 u_texCoordOffsets;
+  uniform float u_aspect;
+  uniform float u_thickness;
+  uniform bool u_miter;
+  uniform vec3 u_lookDir;
+
+  attribute vec3 a_position;
+  attribute float a_direction;
+  attribute vec3 a_next;
+  attribute vec3 a_previous;
+  attribute vec4 a_color;
+  attribute vec2 a_texCoord;
+
+  varying vec4 v_color;
+  varying vec2 v_texCoord;
+  varying vec4 v_texCoordOffsets;
+
+  void main() {
+    vec2 aspectVec = vec2(u_aspect, 1.0);
+    mat4 projViewModel = u_projectionMatrix * u_modelviewMatrix;
+    vec4 previousProjected = projViewModel * vec4(a_previous, 1.0);
+    vec4 currentProjected = projViewModel * vec4(a_position, 1.0);
+    vec4 nextProjected = projViewModel * vec4(a_next, 1.0);
+
+    // get 2D screen space with W divide and aspect correction
+    vec2 currentScreen = currentProjected.xy / currentProjected.w * aspectVec;
+    vec2 previousScreen = previousProjected.xy / previousProjected.w * aspectVec;
+    vec2 nextScreen = nextProjected.xy / nextProjected.w * aspectVec;
+
+    float len = u_thickness;
+    float orientation = a_direction;
+
+    // starting point uses (next - current)
+    vec2 dir = vec2(0.0);
+    if (currentScreen == previousScreen) {
+      dir = normalize(nextScreen - currentScreen);
+    }
+    // ending point uses (current - previous)
+    else if (currentScreen == nextScreen) {
+      dir = normalize(currentScreen - previousScreen);
+    }
+    // somewhere in middle, needs a join
+    else {
+      // get directions from (C - B) and (B - A)
+      vec2 dirA = normalize(currentScreen - previousScreen);
+      if (u_miter) {
+        vec2 dirB = normalize(nextScreen - currentScreen);
+        // now compute the miter join normal and length
+        vec2 tangent = normalize(dirA + dirB);
+        vec2 perp = vec2(-dirA.y, dirA.x);
+        vec2 miter = vec2(-tangent.y, tangent.x);
+        dir = tangent;
+        len = len / dot(miter, perp);
+        if (len > 50.0 * u_thickness) {
+          len = u_thickness;
+        }
+      } else {
+        dir = dirA;
+      }
+    }
+    vec2 normal = vec2(-dir.y, dir.x);
+    normal *= len/2.0;
+    normal.x /= u_aspect;
+
+    vec4 offset = vec4(normal * orientation, 0.0, 0.0);
+    gl_Position = (currentProjected + offset);
+    gl_Position.w = 1.0;
+    v_color = a_color;
+    if (u_textureActivated) {
+      v_texCoord = a_texCoord;
+      v_texCoordOffsets = u_texCoordOffsets;
+    }
+  }
+)";
+
 static string defaultFragmentShaderSrc = shaderSrcPrefix + R"(
   uniform bool u_textureActivated;
   uniform sampler2D u_texture;
@@ -381,6 +463,15 @@ ShaderManager::ShaderManager() {
   if (!_blinnPhongRenderingShader->isLinked()) {
     _blinnPhongRenderingShader->printInfoLog();
   }
+
+  _lineRenderingShader = new GlShaderProgram();
+  _lineRenderingShader->addShaderFromSourceCode(GlShader::Vertex, lineRenderingVertexShaderSrc);
+  _lineRenderingShader->addShaderFromSourceCode(GlShader::Fragment, defaultFragmentShaderSrc);
+  _lineRenderingShader->link();
+  if (!_lineRenderingShader->isLinked()) {
+    _lineRenderingShader->printInfoLog();
+  }
+
 }
 
 string ShaderManager::getFXAAFunctionsSource() {
