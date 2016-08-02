@@ -140,6 +140,23 @@ TLP_SCOPE std::istream *getInputFileStream(const std::string &filename, std::ios
  */
 TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename, std::ios_base::openmode open_mode = std::ios::out);
 
+/**
+ * @brief Utility function for replacing all occurrences of a pattern in a string
+ * @param subject The string in which to replace a pattern
+ * @param search The string pattern to replace
+ * @param replace The string to replace the pattern with
+ * @return a new string with the string pattern replaced
+ */
+TLP_SCOPE std::string stringReplace(std::string subject, const std::string& search, const std::string& replace);
+
+/**
+ * @brief Utility function for replacing all occurrences of a pattern in a string in place (no copy is performed)
+ * @param subject The string in which to replace a pattern
+ * @param search The string pattern to replace
+ * @param replace The string to replace the pattern with
+ */
+TLP_SCOPE void stringReplaceInPlace(std::string& subject, const std::string& search, const std::string& replace);
+
 }
 
 #endif

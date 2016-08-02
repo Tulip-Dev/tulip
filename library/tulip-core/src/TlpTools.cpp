@@ -493,3 +493,25 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename, std::ios_bas
 #endif
 #endif
 }
+
+//=========================================================
+
+std::string tlp::stringReplace(std::string subject, const std::string& search, const std::string& replace) {
+  size_t pos = 0;
+  while ((pos = subject.find(search, pos)) != std::string::npos) {
+    subject.replace(pos, search.length(), replace);
+    pos += replace.length();
+  }
+  return subject;
+}
+
+//=========================================================
+
+void tlp::stringReplaceInPlace(std::string& subject, const std::string& search, const std::string& replace) {
+  size_t pos = 0;
+  while ((pos = subject.find(search, pos)) != std::string::npos) {
+    subject.replace(pos, search.length(), replace);
+    pos += replace.length();
+  }
+}
+
