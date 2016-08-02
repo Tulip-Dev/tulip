@@ -29,7 +29,7 @@ using namespace std;
 using namespace tlp;
 
 class SizeMetaValueCalculator
-    :public AbstractSizeProperty::MetaValueCalculator {
+  :public AbstractSizeProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractSizeProperty* prop,
                         node mN, Graph* sg, Graph*) {

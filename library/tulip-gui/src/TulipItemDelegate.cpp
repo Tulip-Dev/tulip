@@ -86,7 +86,7 @@ TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(paren
 
 TulipItemDelegate::~TulipItemDelegate() {
   foreach(tlp::TulipItemEditorCreator* v,_creators.values())
-  delete v;
+    delete v;
 }
 
 void TulipItemDelegate::unregisterCreator(tlp::TulipItemEditorCreator* c) {

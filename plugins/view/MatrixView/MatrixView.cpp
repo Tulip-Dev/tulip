@@ -225,6 +225,7 @@ void MatrixView::deleteDisplayedGraph() {
   foreach (tlp::Observable* obs, triggers()) {
     removeRedrawTrigger(obs);
   }
+
   delete _matrixGraph;
   _matrixGraph=NULL;
   delete _graphEntitiesToDisplayedNodes;

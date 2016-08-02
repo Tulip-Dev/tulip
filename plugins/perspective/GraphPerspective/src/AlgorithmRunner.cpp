@@ -83,6 +83,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
   QString group = plugin.group().c_str();
 
   ExpandableGroupBox* categoryBox = NULL, *groupBox = NULL;
+
   foreach(ExpandableGroupBox* box, w->findChildren<ExpandableGroupBox*>()) {
     if (box->title() ==  category) {
       categoryBox = box;
@@ -144,6 +145,7 @@ void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
 
 void AlgorithmRunner::refreshTreeUi(QWidget* w) {
   QStringList visibleItems;
+
   foreach(AlgorithmRunnerItem* i, w->findChildren<AlgorithmRunnerItem*>()) {
     if (PluginLister::instance()->pluginExists(i->name().toStdString()))
       visibleItems.push_back(i->name());
@@ -210,12 +212,15 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
   PluginModel<tlp::Algorithm> model;
   buildTreeUi(_ui->contents, &model, QModelIndex(), true);
   _ui->contents->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Minimum,QSizePolicy::Expanding));
+
   foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>()) {
     connect(i,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
   }
+
   foreach(QString a, TulipSettings::instance().favoriteAlgorithms()) {
     addFavorite(a);
   }
+
   connect(_ui->header, SIGNAL(expanded(bool)),this,SLOT(expanded(bool)));
 }
 
@@ -226,6 +231,7 @@ AlgorithmRunner::~AlgorithmRunner() {
 void AlgorithmRunner::setGraph(Graph* g) {
   _ui->contents->setEnabled(g != NULL);
   _graph = g;
+
   foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>()) {
     if (item->graph() != g) {
       item->setGraph(g);
@@ -256,12 +262,14 @@ void AlgorithmRunner::favorized(bool f) {
 template<typename T>
 QList<T> childrenObj(QObject* obj) {
   QList<T> result;
+
   foreach(QObject* o, obj->children()) {
     T var = dynamic_cast<T>(o);
 
     if (var != NULL)
       result+=var;
   }
+
   return result;
 }
 bool filterGroup(ExpandableGroupBox* group, QString filter) {
@@ -270,24 +278,30 @@ bool filterGroup(ExpandableGroupBox* group, QString filter) {
 
   if (group->title().contains(filter,Qt::CaseInsensitive)) {
     group->show();
+
     foreach(ExpandableGroupBox* g, subGroups) {
       g->show();
       subItems+=childrenObj<AlgorithmRunnerItem*>(g->widget());
     }
+
     foreach(AlgorithmRunnerItem* i, subItems)
-    i->show();
+      i->show();
+
     return true;
   }
 
   bool groupVisible = false;
+
   foreach(ExpandableGroupBox* g, subGroups) {
     groupVisible |= filterGroup(g,filter);
   }
+
   foreach(AlgorithmRunnerItem* i, subItems) {
     bool itemVisible = i->name().contains(filter,Qt::CaseInsensitive);
     i->setVisible(itemVisible);
     groupVisible |= itemVisible;
   }
+
   group->setVisible(groupVisible);
   return groupVisible;
 }
@@ -297,6 +311,7 @@ void AlgorithmRunner::setFilter(QString filter) {
     if (group != _ui->favoritesBox)
       filterGroup(group,filter);
   }
+
   filterGroup(_ui->favoritesBox,filter);
 }
 
@@ -350,14 +365,16 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
     if (i->name() == algName) {
       _favorites.removeAll(i);
       i->deleteLater();
+
       foreach(AlgorithmRunnerItem* item, findChildren<AlgorithmRunnerItem*>())
 
-      if (item != i && item->name() == algName)
-        item->setFavorite(false);
+        if (item != i && item->name() == algName)
+          item->setFavorite(false);
 
       break;
     }
   }
+
   TulipSettings::instance().removeFavoriteAlgorithm(algName);
 
   if (_favorites.isEmpty())
@@ -385,6 +402,7 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
 
   item->setFavorite(true);
   int itemPos = 0;
+
   foreach(AlgorithmRunnerItem* i, _ui->favoritesBox->widget()->findChildren<AlgorithmRunnerItem*>()) {
     if (i->name() > item->name()) {
       break;
@@ -392,10 +410,15 @@ void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
 
     ++itemPos;
   }
+
   static_cast<QBoxLayout*>(_ui->favoritesBox->widget()->layout())->insertWidget(itemPos,item);
+
   _favorites+=item;
+
   item->installEventFilter(this);
+
   item->setAcceptDrops(true);
+
   connect(item,SIGNAL(favorized(bool)),this,SLOT(favorized(bool)));
 
   foreach(AlgorithmRunnerItem* i, findChildren<AlgorithmRunnerItem*>()) {

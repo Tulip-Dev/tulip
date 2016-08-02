@@ -699,6 +699,7 @@ BooleanProperty *GraphSortFilterProxyModel::filterProperty() const {
  */
 void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
   typedef QPair<unsigned int,bool> PUB;
+
   foreach(PUB e, _elementsToModify) {
     bool add = e.second;
     unsigned int id = e.first;
@@ -730,6 +731,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
       endRemoveRows();
     }
   }
+
   _elementsToModify.clear();
 }
 void NodesGraphModel::treatEvent(const Event& ev) {

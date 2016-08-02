@@ -88,6 +88,7 @@ void PanelSelectionWizard::clearView() {
     removePage(id);
     delete p;
   }
+
   _ui->placeHolder = new QWizardPage();
   addPage(_ui->placeHolder);
 }
@@ -115,6 +116,7 @@ void PanelSelectionWizard::pageChanged(int id) {
   if (page(id) == _ui->placeHolder) {
     createView();
     bool inPlaceHolder = true;
+
     foreach(QWidget* w, _view->configurationWidgets()) {
       QWizardPage* p;
 

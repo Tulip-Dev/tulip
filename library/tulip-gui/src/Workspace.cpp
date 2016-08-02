@@ -95,7 +95,8 @@ void Workspace::setModel(tlp::GraphHierarchiesModel* model) {
 
   if (_model != NULL) {
     foreach(WorkspacePanel* panel,_panels)
-    panel->setGraphsModel(_model);
+      panel->setGraphsModel(_model);
+
     connect(_model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(updateStartupMode()));
   }
 }
@@ -112,9 +113,11 @@ void Workspace::closeAll() {
 
 QList<tlp::View*> Workspace::panels() const {
   QList<tlp::View*> result;
+
   foreach(WorkspacePanel* panel, _panels) {
     result.push_back(panel->view());
   }
+
   return result;
 }
 
@@ -122,6 +125,7 @@ QString Workspace::panelTitle(tlp::WorkspacePanel* panel) const {
   int digit = 0;
 
   QRegExp regExp("^.*(?:<([^>])*>){1}$");
+
   foreach(WorkspacePanel* other, _panels) {
     if (other == panel)
       continue;
@@ -332,6 +336,7 @@ void Workspace::updatePanels() {
       continue;
 
     QVector<PlaceHolderWidget*> panelSlots = _modeToSlots[mode];
+
     foreach(PlaceHolderWidget* panel, panelSlots) {
       panel->setWidget(NULL);
     }
@@ -345,6 +350,7 @@ void Workspace::updatePanels() {
 
   //   Fill up slots according to the current index until there is no panel to show
   int i = _currentPanelIndex;
+
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
     if (i >= _panels.size()) {
       slt->setWidget(NULL);
@@ -357,6 +363,7 @@ void Workspace::updatePanels() {
   }
 
   i = _currentPanelIndex;
+
   foreach (PlaceHolderWidget* slt, currentModeSlots()) {
     if (i >= _panels.size())
       break;
@@ -383,6 +390,7 @@ void Workspace::updatePanels() {
         fallbackMode = it;
       }
     }
+
     switchWorkspaceMode(fallbackMode);
   }
 
@@ -421,12 +429,14 @@ void Workspace::setGraphForFocusedPanel(tlp::Graph* g) {
 
 WorkspacePanel* Workspace::panelForScene(QObject *obj) {
   WorkspacePanel* p = NULL;
+
   foreach(WorkspacePanel* panel, _panels) {
     if(panel->view()->graphicsView()->scene() == obj) {
       p = panel;
       break;
     }
   }
+
   return p;
 }
 
@@ -493,16 +503,20 @@ void Workspace::showExposeMode() {
     return;
 
   _oldWorkspaceMode = currentModeWidget();
+
   foreach(QWidget* s, _modeSwitches.values()) {
     s->hide();
   }
+
   _ui->nextPageButton->setEnabled(false);
   _ui->previousPageButton->setEnabled(false);
 
   QVector<WorkspacePanel*> panels;
+
   foreach(WorkspacePanel* p, _panels) {
     panels << p;
   }
+
   _ui->exposeMode->setData(panels,_currentPanelIndex);
   _ui->workspaceContents->setCurrentWidget(_ui->exposePage);
 }
@@ -518,8 +532,10 @@ void Workspace::hideExposeMode() {
   _ui->exposeButton->setChecked(false);
   QVector<WorkspacePanel*> newPanels = _ui->exposeMode->panels();
   _panels.clear();
+
   foreach(WorkspacePanel* p, newPanels)
-  _panels.push_back(p);
+    _panels.push_back(p);
+
   _currentPanelIndex = _ui->exposeMode->currentPanelIndex();
 
   if (!_ui->exposeMode->isSwitchToSingleMode()) {
@@ -541,6 +557,7 @@ QWidget* Workspace::suitableMode(QWidget* oldMode) {
 
   int maxSlots = 0;
   QWidget* result = _ui->startupPage;
+
   foreach(QWidget* mode, _modeToSlots.keys()) {
     int slotCount = _modeToSlots[mode].size();
 
@@ -549,6 +566,7 @@ QWidget* Workspace::suitableMode(QWidget* oldMode) {
       result = mode;
     }
   }
+
   return result;
 }
 
@@ -558,6 +576,7 @@ QWidget* Workspace::suitableMode(QWidget* oldMode) {
 void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootIds, tlp::PluginProgress* progress) {
   project->removeAllDir("views");
   int i=0;
+
   foreach(View* v, panels()) {
     progress->progress(i,panels().size());
     QString path = "views/" + QString::number(i);
@@ -581,6 +600,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     delete viewDescFile;
     i++;
   }
+
   QDomDocument doc;
   QDomElement root = doc.createElement("workspace");
   root.setAttribute("current",_currentPanelIndex);
@@ -613,6 +633,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
 void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootIds, PluginProgress* progress) {
   QStringList entries = project->entryList("views",QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
   int step = 0,max_step = entries.size();
+
   foreach(QString entry, entries) {
     progress->progress(step++,max_step);
     QDomDocument doc;
@@ -674,6 +695,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
   QDomElement root = doc.documentElement();
   int current = root.attribute("current","0").toInt();
   int mode = root.attribute("mode","-1").toInt();
+
   foreach(QWidget* modeWidget, _modeToSlots.keys()) {
     if (_modeToSlots[modeWidget].size() == mode) {
       if (current > 0 && current < _panels.size())

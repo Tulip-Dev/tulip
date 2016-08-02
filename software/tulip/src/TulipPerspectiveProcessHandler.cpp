@@ -71,6 +71,7 @@ QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
     if (_processInfos[k]._perspectiveId == (time_t) id)
       return k;
   }
+
   return NULL;
 }
 
@@ -92,8 +93,9 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
     args << file;
 
   QString k;
+
   foreach(k,parameters.keys())
-  args << "--" + k + "=" + parameters[k].toString();
+    args << "--" + k + "=" + parameters[k].toString();
 
   args << "--port=" + QString::number(serverPort());
   time_t perspectiveId = time(NULL);
@@ -160,6 +162,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
     }
     else {
       QRegExp *re;
+
       foreach(re,envInfos.keys()) {
         if (re->exactMatch(line)) {
           envInfos[re] = re->cap(1);

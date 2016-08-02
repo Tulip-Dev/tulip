@@ -203,6 +203,7 @@ PathHighlighter *PathFinderComponent::findHighlighter(const string &name) {
     if (p->getName() == name)
       return p;
   }
+
   return NULL;
 }
 
