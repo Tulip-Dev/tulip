@@ -216,9 +216,10 @@ void FiltersManagerCompareItem::elementChanged() {
 }
 void FiltersManagerCompareItem::setNumerics(bool f) {
   foreach(int i,NUMERIC_OPERATOR_INDEXES)
-  itemAt(_ui->operatorCombo,i)->setEnabled(f);
+    itemAt(_ui->operatorCombo,i)->setEnabled(f);
+
   foreach(int i,STRING_OPERATOR_INDEXES)
-  itemAt(_ui->operatorCombo,i)->setEnabled(!f);
+    itemAt(_ui->operatorCombo,i)->setEnabled(!f);
 }
 void FiltersManagerCompareItem::graphChanged() {
   fillCombo(_ui->elem1);
@@ -275,6 +276,7 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty* out) {
   // First step: convert each comparison element into a property interface
   QVector<PropertyInterface*> comparisonProperties;
   QVector<double> temporaryProperties;
+
   foreach(QComboBox* combo, QList<QComboBox*>() << _ui->elem1 << _ui->elem2) {
     ComboElementType elType = comboElementType(combo);
     temporaryProperties << (elType != E_Property);

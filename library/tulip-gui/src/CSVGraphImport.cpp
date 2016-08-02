@@ -597,7 +597,7 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
 
             if (!(isVectorProperty ?
                   ((VectorPropertyInterface *)property)->setNodeStringValueAsVector(node(elements.second[i]), token, openParen ? '(' : '\0', ',', openParen ? ')' : '\0') :
-                    property->setNodeStringValue(node(elements.second[i]), token))) {
+                  property->setNodeStringValue(node(elements.second[i]), token))) {
               //We add one to the row number as in the configuration widget we start from row 1 not row 0
               qWarning()<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<< token <<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1;
             }
@@ -607,7 +607,7 @@ bool CSVGraphImport::line(unsigned int row,const vector<string>& lineTokens) {
           for (size_t i = 0; i < elements.second.size(); ++i) {
             if(!(isVectorProperty ?
                  ((VectorPropertyInterface *)property)->setEdgeStringValueAsVector(edge(elements.second[i]), token, openParen ? '(' : '\0', ',', openParen ? ')' : '\0') :
-                   property->setEdgeStringValue(edge(elements.second[i]), token))) {
+                 property->setEdgeStringValue(edge(elements.second[i]), token))) {
               //We add one to the row number as in the configuration widget we start from row 1 not row 0
               qWarning()<<__PRETTY_FUNCTION__<<":"<<__LINE__<<" error when importing token \""<<token<<"\" in property \""<<property->getName()<<"\" of type \""<<property->getTypename()<<"\" at line "<<row+1;
             }

@@ -1163,6 +1163,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
 
         toolTipTxt = "";
         int i = 0;
+
         foreach(QString txt, toolTipTxts) {
           toolTipTxt += txt;
 
@@ -1295,6 +1296,7 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
   foreach(QString s, stringList) {
     _autoCompletionList->addItem(s);
   }
+
   _autoCompletionList->sortItems();
 
   _autoCompletionList->setCurrentRow(0);

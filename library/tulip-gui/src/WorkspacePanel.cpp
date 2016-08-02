@@ -179,9 +179,11 @@ void WorkspacePanel::setView(tlp::View* view) {
 
   QList<Interactor*> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
+
   foreach(std::string name,interactorNames) {
     compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name,NULL);
   }
+
   _view->setInteractors(compatibleInteractors);
   _ui->scrollArea->setVisible(!compatibleInteractors.empty());
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
@@ -438,6 +440,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
     QHBoxLayout* interactorsLayout = new QHBoxLayout;
     interactorsLayout->setContentsMargins(0,0,0,0);
     interactorsLayout->setSpacing(4);
+
     foreach(Interactor* i, compatibleInteractors) {
       QPushButton* button = new QPushButton();
       button->setMinimumSize(22,22);
@@ -452,6 +455,7 @@ void WorkspacePanel::refreshInteractorsToolbar() {
       connect(i->action(),SIGNAL(changed()),this,SLOT(actionChanged()));
       _actionTriggers[i->action()] = button;
     }
+
     _ui->interactorsFrame->setLayout(interactorsLayout);
     setCurrentInteractor(compatibleInteractors[0]);
   }

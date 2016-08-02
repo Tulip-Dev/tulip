@@ -39,7 +39,7 @@
 template <class OP1, class OP2, class OP3>
 class compose_f_gx_hx_t
   : public std::unary_function<typename OP2::argument_type,
-      typename OP1::result_type> {
+    typename OP1::result_type> {
 private:
   OP1 op1;    // process: op1(op2(x),op3(x))
   OP2 op2;

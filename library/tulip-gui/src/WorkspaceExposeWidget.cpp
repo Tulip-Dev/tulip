@@ -124,8 +124,10 @@ int WorkspaceExposeWidget::currentPanelIndex() const {
 
 QVector<WorkspacePanel*> WorkspaceExposeWidget::panels() const {
   QVector<WorkspacePanel*> result;
+
   foreach(PreviewItem* item, _items)
-  result << item->panel();
+    result << item->panel();
+
   return result;
 }
 
@@ -136,6 +138,7 @@ bool WorkspaceExposeWidget::isSwitchToSingleMode() const {
 void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, int currentPanelIndex) {
   scene()->clear();
   _items.clear();
+
   foreach(WorkspacePanel* p, panels) {
     QPixmap pixmap = p->view()->snapshot(previewSize());
     PreviewItem* item = new PreviewItem(pixmap,p);
@@ -144,6 +147,7 @@ void WorkspaceExposeWidget::setData(const QVector<WorkspacePanel *> &panels, int
     item->installEventFilter(this);
     connect(item,SIGNAL(opened()),this,SLOT(itemOpened()));
   }
+
   _currentPanelIndex = currentPanelIndex;
   updatePositions();
 }
@@ -164,6 +168,7 @@ void WorkspaceExposeWidget::updatePositions(bool resetScenePos) {
 
   QParallelAnimationGroup* group = new QParallelAnimationGroup(this);
   int x=MARGIN,y=MARGIN;
+
   foreach(PreviewItem* i, _items) {
     if (i != _selectedItem) {
       QPropertyAnimation* moveAnim = new QPropertyAnimation(i,"pos",group);

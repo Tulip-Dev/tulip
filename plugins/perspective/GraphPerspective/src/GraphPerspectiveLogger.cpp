@@ -153,8 +153,9 @@ bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
 
   if (ke && ke->matches(QKeySequence::Copy)) {
     QStringList strings;
+
     foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
-    strings << item->text();
+      strings << item->text();
 
     QApplication::clipboard()->setText(strings.join("\n"));
     return true;

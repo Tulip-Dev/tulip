@@ -30,7 +30,7 @@ TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::
   _ui->setupUi(this);
 
   foreach(QString font, TulipFont::installedFontNames())
-  _ui->nameList->addItem(font);
+    _ui->nameList->addItem(font);
 
   bool hasFont = _ui->nameList->count()>0;
   _ui->settingsWidget->setEnabled(hasFont);

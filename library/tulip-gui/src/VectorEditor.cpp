@@ -50,6 +50,7 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
     i->setFlags(i->flags() | Qt::ItemIsEditable);
     _ui->list->addItem(i);
   }
+
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
   currentVector = d;
 }
@@ -74,7 +75,8 @@ void VectorEditor::add() {
 
 void VectorEditor::remove() {
   foreach(QListWidgetItem* i, _ui->list->selectedItems())
-  delete i;
+    delete i;
+
   _ui->countLabel->setText(QString::number(_ui->list->model()->rowCount()));
 }
 

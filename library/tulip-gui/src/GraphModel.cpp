@@ -697,9 +697,11 @@ BooleanProperty *GraphSortFilterProxyModel::filterProperty() const {
 void GraphModel::addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add) {
   if (add) {
     beginInsertRows(QModelIndex(),_elements.size(),_elements.size()+rowsSequence.size()-1);
+
     foreach(unsigned int id, rowsSequence) {
       _elements.push_back(id);
     }
+
     endInsertRows();
   }
   else {
@@ -717,6 +719,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
   QVector<unsigned int> rowsSequence;
   bool lastAdded = false;
   typedef QPair<unsigned int,bool> PUB;
+
   foreach(PUB e, _elementsToModify) {
     bool add = e.second;
     unsigned int id = e.first;

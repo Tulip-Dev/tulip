@@ -68,6 +68,7 @@ void PluginsCenter::reportPluginErrors(const QMap<QString, QString>& errors) {
   foreach(QString k, errors.keys()) {
     _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(k,errors[k]));
   }
+
   _ui->errorsLogAreaLayout->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
 }
 
@@ -152,6 +153,7 @@ void PluginsCenter::refreshFilter() {
       lyt->addWidget(item);
     }
   }
+
   lyt->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
 
   QString oldObjName = _ui->pluginsSearchListContent->objectName();

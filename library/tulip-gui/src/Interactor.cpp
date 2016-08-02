@@ -51,16 +51,20 @@ void InteractorLister::initInteractorsDependencies() {
   for(std::list<std::string>::const_iterator it = views.begin(); it != views.end(); ++it) {
     string viewName(*it);
     QList<Interactor*> compatibleInteractors;
+
     foreach(Interactor* i,interactorToName.keys()) {
       if (i->isCompatible(viewName))
         compatibleInteractors << i;
     }
+
     qSort(compatibleInteractors.begin(),compatibleInteractors.end(),interactorLessThan);
 
     QList<string> compatibleNames;
+
     foreach(Interactor* i,compatibleInteractors) {
       compatibleNames << interactorToName[i];
     }
+
     _compatibilityMap[viewName] = compatibleNames;
 
   }

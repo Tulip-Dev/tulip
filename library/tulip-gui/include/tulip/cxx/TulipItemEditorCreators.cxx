@@ -204,8 +204,10 @@ template<typename ElementType>
 QVariant VectorEditorCreator<ElementType>::editorData(QWidget* editor,tlp::Graph*) {
   std::vector<ElementType> result;
   QVector<QVariant> editorData = static_cast<VectorEditor*>(editor)->vector();
+
   foreach(QVariant v, editorData)
-  result.push_back(v.value<ElementType>());
+    result.push_back(v.value<ElementType>());
+
   return QVariant::fromValue<std::vector<ElementType> >(result);
 }
 
