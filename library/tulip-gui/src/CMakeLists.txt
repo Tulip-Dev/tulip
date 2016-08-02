@@ -19,9 +19,9 @@ SET(SRCS
     ItemsListWidget.cpp
     MouseBoxZoomer.cpp
   #  MouseEdgeBendEditor.cpp
-  #  MouseEdgeBuilder.cpp
+    MouseEdgeBuilder.cpp
     MouseInteractors.cpp
-  #  MouseNodeBuilder.cpp
+    MouseNodeBuilder.cpp
   #  MouseSelectionEditor.cpp
     MouseSelector.cpp
     MouseShowElementInfos.cpp
