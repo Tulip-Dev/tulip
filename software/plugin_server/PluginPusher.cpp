@@ -31,6 +31,7 @@ void uploadfolder(const QString& origin, WebDavManager& manager) {
   }
 
   QDir originDir(origin);
+
   foreach(const QString& element, originDir.entryList(QDir::Files | QDir::NoSymLinks)) {
     QFile file(originDir.canonicalPath() + "/" + element);
     bool opened = file.open(QIODevice::ReadOnly);
@@ -43,6 +44,7 @@ void uploadfolder(const QString& origin, WebDavManager& manager) {
       std::cout << "could not open file! :'(" << std::endl;
     }
   }
+
   foreach(const QString& element, originDir.entryList(QDir::Dirs | QDir::NoSymLinks | QDir::NoDot | QDir::NoDotDot)) {
     uploadfolder(origin + "/" + element, manager);
   }

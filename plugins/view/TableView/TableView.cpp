@@ -295,6 +295,7 @@ void TableView::setPropertyVisible(PropertyInterface* pi, bool v) {
 
 void TableView::setMatchProperty() {
   QVector<QString> props;
+
   foreach(PropertyInterface* pi, propertiesEditor->visibleProperties()) {
     QString propName = tlpStringToQString(pi->getName());
     int i = 0;
@@ -310,6 +311,7 @@ void TableView::setMatchProperty() {
   QMenu menu;
   QAction* action = menu.addAction("-- Any --");
   menu.setActiveAction(action);
+
   foreach(QString prop, props) {
     if (_ui->matchPropertyButton->text() == prop) {
       action = menu.addAction(prop);
@@ -389,6 +391,7 @@ void TableView::mapToGraphSelection() {
   if (NODES_DISPLAYED) {
     out->setAllNodeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
+
     foreach(QModelIndex idx,selectionModel->selectedRows()) {
       node n(idx.data(TulipModel::ElementIdRole).toUInt());
       out->setNodeValue(n,true);
@@ -397,6 +400,7 @@ void TableView::mapToGraphSelection() {
   else {
     out->setAllEdgeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
+
     foreach(QModelIndex idx,selectionModel->selectedRows()) {
       edge e(idx.data(TulipModel::ElementIdRole).toUInt());
       out->setEdgeValue(e,true);

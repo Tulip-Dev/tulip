@@ -48,6 +48,7 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
   progress->setComment(("Compressing directory " + currentDir.absolutePath()).toStdString());
   int i=0;
   progress->progress(i,entries.size());
+
   foreach(info, entries) {
     progress->progress(i++,entries.size());
 
@@ -72,6 +73,7 @@ bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath
         return false;
     }
   }
+
   return true;
 }
 

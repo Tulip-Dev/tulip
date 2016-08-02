@@ -88,6 +88,7 @@ QLineEdit* PropertiesEditor::getPropertiesFilterEdit() {
 void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
   _contextPropertyList.clear();
+
   foreach(QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
     _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>();
   }
@@ -337,8 +338,9 @@ void PropertiesEditor::delProperty() {
 
 void PropertiesEditor::delProperties() {
   _graph->push();
+
   foreach(PropertyInterface* pi, _contextPropertyList)
-  pi->getGraph()->delLocalProperty(pi->getName());
+    pi->getGraph()->delLocalProperty(pi->getName());
 }
 
 bool PropertiesEditor::renameProperty(PropertyInterface* prop) {

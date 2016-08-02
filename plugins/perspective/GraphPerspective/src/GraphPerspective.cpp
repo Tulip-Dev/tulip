@@ -110,13 +110,16 @@ void GraphPerspective::reserveDefaultProperties() {
 
 void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->clear();
+
   foreach(QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
 
     _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s,this,SLOT(openRecentFile()));
   }
+
   _ui->menuOpen_recent_file->addSeparator();
+
   foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
@@ -229,6 +232,7 @@ bool GraphPerspective::eventFilter(QObject* obj, QEvent* ev) {
 
   if(ev->type() == QEvent::Drop) {
     QDropEvent* dropEvent = dynamic_cast<QDropEvent*>(ev);
+
     foreach(const QUrl& url, dropEvent->mimeData()->urls()) {
       open(url.toLocalFile());
     }
@@ -475,6 +479,7 @@ tlp::GraphHierarchiesModel* GraphPerspective::model() const {
 
 void GraphPerspective::refreshDockExpandControls() {
   QList<HeaderFrame *> expandedHeaders, collapsedHeaders;
+
   foreach(HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
     h->expandControl()->setEnabled(true);
 
@@ -1144,6 +1149,7 @@ void GraphPerspective::CSVImport() {
   else {
     applyRandomLayout(g);
     bool openPanels = true;
+
     foreach(View* v, _ui->workspace->panels()) {
       if (v->graph() == g) {
         openPanels = false;
@@ -1167,6 +1173,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
   _ui->workspace->hideExposeMode();
   View* firstPanel = NULL;
   View* secondPanel = NULL;
+
   foreach(QString panelName, QStringList() << "Spreadsheet view" << "Node Link Diagram view") {
     View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
 
@@ -1180,6 +1187,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
     view->setState(DataSet());
     _ui->workspace->addPanel(view);
   }
+
   _ui->workspace->setActivePanel(firstPanel);
   _ui->workspace->switchToSplitMode();
   secondPanel->centerView(false);
@@ -1211,6 +1219,7 @@ void GraphPerspective::centerPanelsForGraph(tlp::Graph* g, bool graphChanged,
 
 void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
   QVector<View*> viewsToDelete;
+
   foreach(View* v, _ui->workspace->panels()) {
     if (v->graph() == g || g->isDescendantGraph(v->graph()))
       viewsToDelete+=v;
@@ -1220,6 +1229,7 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
     // expose mode is not safe to add a delete a panel
     // so hide it if needed
     _ui->workspace->hideExposeMode();
+
     foreach(View* v, viewsToDelete) {
       _ui->workspace->delView(v);
     }
@@ -1228,6 +1238,7 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph* g) {
 
 bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph* g, const std::map<std::string, tlp::PropertyInterface*>& propsMap) {
   bool result = false;
+
   foreach(View* v, _ui->workspace->panels()) {
     GlMainView* glMainView = dynamic_cast<tlp::GlMainView*>(v);
 
@@ -1236,6 +1247,7 @@ bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph* g, const std:
         result = true;
     }
   }
+
   return result;
 }
 

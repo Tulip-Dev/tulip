@@ -289,11 +289,13 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   _classAttributeToType["tlp.StringAlgorithm"]["self.result"] = "tlp.StringProperty";
 
   QSet<QString> types = _apiDb->getTypesList();
+
   foreach(QString type, types) {
     _globalAutoCompletionList.insert(type);
 
     if (type.indexOf(".") != -1) {
       QStringList types = type.split(".");
+
       foreach(QString entry, types) {
         _globalAutoCompletionList.insert(entry);
       }
@@ -403,6 +405,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
               _varToPluginName[fullName][varName] = pluginName;
               _pluginParametersDataSet[fullName][varName] = getParametersListForPlugin(pluginName);
+
               foreach(QString param, _pluginParametersDataSet[fullName][varName]) {
                 QString name = param.mid(0, param.indexOf("(") - 1);
                 QString type = param.mid(param.indexOf("(")+1, param.indexOf(")") - param.indexOf("(") - 1);
@@ -609,6 +612,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       }
       else {
         QStringList pList = params.split(",");
+
         foreach(QString param, pList) {
           QString paramClean = param;
 
@@ -804,6 +808,7 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
   if (currentType == "" && cleanExpr.indexOf(".") != -1) {
     QStringList parts = cleanExpr.split(".");
     int i = 0;
+
     foreach(QString p, parts) {
       if (i==0) {
         if (_varToType.find(funcName) != _varToType.end()) {
@@ -917,6 +922,7 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
 static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const QString &type="") {
   QSet<QString> ret;
   QVector<PropertyInterface*> properties = getAllGraphPropertiesFromRoot(graph);
+
   foreach(PropertyInterface* prop, properties) {
     if (type == "" || prop->getTypename() == type.toStdString()) {
       QString qProp = "\"" + QString::fromUtf8(prop->getName().c_str()) + "\"";
@@ -932,6 +938,7 @@ static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix,
       }
     }
   }
+
   return ret;
 }
 
@@ -1491,6 +1498,7 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
     }
     else if (!dotContext) {
       ret = _apiDb->getAllDictEntriesStartingWithPrefix(prefix);
+
       foreach(QString s, _globalAutoCompletionList) {
         if (s.toLower().startsWith(prefix.toLower())) {
           ret.insert(s);

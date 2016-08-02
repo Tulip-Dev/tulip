@@ -89,6 +89,7 @@ int main(int argc,char **argv) {
   PluginInformationsCollector collector;
   QDir pluginServerDir(argv[1]);
   PluginLister::currentLoader = &collector;
+
   foreach(const QFileInfo component, pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDot | QDir::NoDotDot)) {
     collector._currentDirectory = component.fileName();
     QDir pluginDir(component.absoluteFilePath());
@@ -100,6 +101,7 @@ int main(int argc,char **argv) {
 
     pluginDir.cd("lib");
     pluginDir.cd("tulip");
+
     foreach(QFileInfo pluginFile, pluginDir.entryInfoList(QDir::Files | QDir::NoSymLinks)) {
       if (QLibrary::isLibrary(pluginFile.absoluteFilePath())) {
         PluginLibraryLoader::loadPluginLibrary(tlp::QStringToTlpString(pluginFile.absoluteFilePath()), &collector);
@@ -141,6 +143,7 @@ int main(int argc,char **argv) {
       pluginsListNode.appendChild(pluginNode);
     }
   }
+
   rootNode.appendChild(pluginsListNode);
 
   QFile outputXML(outputDir.absoluteFilePath("server.xml"));

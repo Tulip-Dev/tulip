@@ -107,14 +107,17 @@ static QString GRAPHS_PATH("/graphs/");
 
 bool GraphHierarchiesModel::needsSaving() {
   bool saveNeeded = false;
+
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded) {
     saveNeeded = saveNeeded || observer->needsSaving();
   }
+
   return saveNeeded;
 }
 
 QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
   QMap<QString,tlp::Graph*> rootIds;
+
   foreach(QString entry, project->entryList(GRAPHS_PATH,QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
@@ -157,14 +160,17 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
   project->removeAllDir(GRAPHS_PATH);
   project->mkpath(GRAPHS_PATH);
   int i=0;
+
   foreach(tlp::Graph* g, _graphs) {
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
     tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
   }
+
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
-  observer->saved();
+    observer->saved();
+
   return rootIds;
 }
 
@@ -350,6 +356,7 @@ QString GraphHierarchiesModel::generateName(tlp::Graph *graph) const {
 void GraphHierarchiesModel::setCurrentGraph(tlp::Graph *g) {
 
   bool inHierarchy = false;
+
   foreach(Graph *i,_graphs) {
     if (i->isDescendantGraph(g) || g == i) {
       inHierarchy = true;
@@ -405,6 +412,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
     return;
 
   Graph *i;
+
   foreach(i,_graphs) {
     if (i->isDescendantGraph(g))
       return;
@@ -616,6 +624,7 @@ void GraphHierarchiesModel::treatEvents(const std::vector<tlp::Event> &) {
   emit layoutAboutToBeChanged();
 
   const Graph *graph = NULL;
+
   foreach (graph, _graphsChanged) {
     QModelIndex graphIndex = indexOf(graph);
     QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);

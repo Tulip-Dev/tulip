@@ -83,6 +83,7 @@ PythonCodeHighlighter::PythonCodeHighlighter(QTextDocument *parent)
 
     QTextCharFormat builtinFormat;
     builtinFormat.setForeground(QColor(0,87,187));
+
     foreach (const QString &pattern, builtinPatterns) {
       rule.pattern = QRegExp(pattern);
       rule.format = builtinFormat;

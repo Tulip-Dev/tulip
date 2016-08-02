@@ -1578,7 +1578,7 @@ yysetstate:
     {
       short int *yyss1 = yyss;
       union yyalloc *yyptr =
-            (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
+          (union yyalloc *) YYSTACK_ALLOC (YYSTACK_BYTES (yystacksize));
 
       if (! yyptr)
         goto yyoverflowlab;

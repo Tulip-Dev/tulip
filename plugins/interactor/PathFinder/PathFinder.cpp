@@ -103,7 +103,7 @@ void PathFinder::construct() {
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
 
   foreach(PathHighlighter *h, highlighters)
-  inactiveList.push_back(h->getName());
+    inactiveList.push_back(h->getName());
 
   highlightersListWidget->setSelectedStringsList(activeList);
   highlightersListWidget->setUnselectedStringsList(inactiveList);

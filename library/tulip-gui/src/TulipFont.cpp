@@ -37,6 +37,7 @@ QString TulipFont::tulipFontsDirectory() {
 QStringList TulipFont::installedFontNames() {
   QStringList result;
   QDir installedFontsDir(tulipFontsDirectory());
+
   foreach(QFileInfo fontDirInfo, installedFontsDir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::Dirs)) {
     QString fontName(fontDirInfo.fileName());
     // sanity checks
@@ -51,6 +52,7 @@ QStringList TulipFont::installedFontNames() {
 
     result << fontName;
   }
+
   return result;
 }
 
