@@ -44,6 +44,7 @@
 #define HRESf 64.f
 #define DPI   72
 
+using namespace std;
 using namespace tlp;
 
 FontIconGlyph::FontIconGlyph(const std::string &fontFile, unsigned int iconCodePoint) : Glyph(nullptr) {
@@ -112,19 +113,17 @@ FontIconGlyph::FontIconGlyph(const std::string &fontFile, unsigned int iconCodeP
   }
 
   for (unsigned int t = 0 ; t < vectoriser.ContourCount() ; ++t)  {
+    vector<unsigned short> outlineIndices;
     const FTContour* contour = vectoriser.Contour(t);
     for (unsigned int i = 0 ; i < contour->PointCount() ; ++i) {
       FTPoint point = contour->Point(i);
       tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
-      FTPoint point2;
-      if (i < contour->PointCount() - 1) {
-        point2 = contour->Point(i+1);
-      } else {
-        point2 = contour->Point(0);
-      }
-      tlp::Coord p2(point2.Xf() / HRESf, point2.Yf() / HRESf, 0.0f);
-      _outlineIndices.insert(_outlineIndices.end(), {ushort_cast(vertexIdx[p]), ushort_cast(vertexIdx[p2])});
+      outlineIndices.push_back(ushort_cast(vertexIdx[p]));
     }
+    FTPoint point = contour->Point(0);
+    tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
+    outlineIndices.push_back(ushort_cast(vertexIdx[p]));
+    _outlinesIndices.push_back(outlineIndices);
   }
 
   tlp::Coord minC = meshBB[0];

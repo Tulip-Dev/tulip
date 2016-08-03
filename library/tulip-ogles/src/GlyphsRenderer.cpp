@@ -363,7 +363,6 @@ GlyphsRenderer::GlyphsRenderer() : _billboardMode(false) {
   }
 
   _glyphsInstanceAttributesDataBuffer = new GlBuffer(GlBuffer::VertexBuffer, GlBuffer::DynamicDraw);
-
 }
 
 void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
@@ -391,7 +390,7 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
   const vector<Coord> &glyphVertices = glyph->getGlyphVertices();
   const vector<Vec2f> &glyphTexCoords = glyph->getGlyphTexCoords();
   const vector<unsigned short> &glyphVerticesIndices = glyph->getGlyphVerticesIndices();
-  const vector<unsigned short> &glyphOutlineIndices = glyph->getGlyphOutlineIndices();
+  const vector<vector<unsigned short>> &glyphOutlinesIndices = glyph->getGlyphOutlineIndices();
   const vector<Coord> &glyphNormals = glyph->getGlyphNormals();
   unsigned short nbVertices = glyphVertices.size();
 
@@ -422,21 +421,33 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
     }
   }
 
-  if (_canUseUIntIndices) {
-    _glyphsOutlineIndicesOffset[glyph] = glyphsIndicesUInt.size() * sizeof(GLuint);
-  } else {
-    _glyphsOutlineIndicesOffset[glyph] = glyphsIndicesUShort.size() * sizeof(unsigned short);
+  vector<unsigned int> glyphOutlinesNbIndices;
+  vector<unsigned int> glyphOutlinesIndicesOffsets;
+  unsigned int offset = 0;
+  for (unsigned int i = 0 ; i < glyphOutlinesIndices.size() ; ++i) {
+    glyphOutlinesNbIndices.push_back(glyphOutlinesIndices[i].size());
+    if (_canUseUIntIndices) {
+      glyphOutlinesIndicesOffsets.push_back((glyphsIndicesUInt.size() + offset) * sizeof(unsigned int));
+    } else {
+      glyphOutlinesIndicesOffsets.push_back((glyphsIndicesUShort.size() + offset) * sizeof(unsigned short));
+    }
+    offset += glyphOutlinesIndices[i].size();
   }
 
   for (unsigned short i = 0 ; i < _maxGlyphInstanceByRenderingBatch[glyph] ; ++i) {
-    for (unsigned short j = 0 ; j < glyphOutlineIndices.size() ; ++j) {
-      if (_canUseUIntIndices) {
-        glyphsIndicesUInt.push_back(i*nbVertices+glyphOutlineIndices[j]);
-      } else {
-        glyphsIndicesUShort.push_back(i*nbVertices+glyphOutlineIndices[j]);
+    for (unsigned int j = 0 ; j < glyphOutlinesIndices.size() ; ++j) {
+      for (unsigned int k = 0 ; k < glyphOutlinesIndices[j].size() ; ++k) {
+        if (_canUseUIntIndices) {
+          glyphsIndicesUInt.push_back(i*nbVertices+glyphOutlinesIndices[j][k]);
+        } else {
+          glyphsIndicesUShort.push_back(i*nbVertices+glyphOutlinesIndices[j][k]);
+        }
       }
     }
   }
+
+  _glyphsOutlinesNbIndices[glyph] = glyphOutlinesNbIndices;
+  _glyphsOutlinesIndicesOffset[glyph] = glyphOutlinesIndicesOffsets;
 
   _glyphsDataBuffer[glyph] = new GlBuffer(GlBuffer::VertexBuffer);
   _glyphsDataBuffer[glyph]->allocate(glyphsData);
@@ -459,12 +470,13 @@ void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
   }
 
   std::vector<float> glyphsData;
+  std::vector<float> glyphsOutlineData;
   std::vector<unsigned short> glyphsIndicesUShort;
 
   const vector<Coord> &glyphVertices = glyph->getGlyphVertices();
   const vector<Vec2f> &glyphTexCoords = glyph->getGlyphTexCoords();
   const vector<unsigned short> &glyphVerticesIndices = glyph->getGlyphVerticesIndices();
-  const vector<unsigned short> &glyphOutlineIndices = glyph->getGlyphOutlineIndices();
+  const vector<vector<unsigned short>> &glyphOutlinesIndices = glyph->getGlyphOutlineIndices();
   const vector<Coord> &glyphNormals = glyph->getGlyphNormals();
   unsigned int nbVertices = glyphVertices.size();
 
@@ -485,15 +497,24 @@ void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
       addTlpVecToVecFloat(glyphNormals[i], glyphsData);
     }
   }
+
   for (size_t i = 0 ; i < glyphVerticesIndices.size() ; ++i) {
     glyphsIndicesUShort.push_back(glyphVerticesIndices[i]);
   }
 
-  _glyphsOutlineIndicesOffset[glyph] = glyphsIndicesUShort.size() * sizeof(unsigned short);
+  vector<unsigned int> glyphOutlinesNbIndices;
+  vector<unsigned int> glyphOutlinesIndicesOffsets;
 
-  for (size_t  i = 0 ; i < glyphOutlineIndices.size() ; ++i) {
-    glyphsIndicesUShort.push_back(glyphOutlineIndices[i]);
+  for (size_t  i = 0 ; i < glyphOutlinesIndices.size() ; ++i) {
+    glyphOutlinesNbIndices.push_back(glyphOutlinesIndices[i].size());
+    glyphOutlinesIndicesOffsets.push_back(glyphsIndicesUShort.size() * sizeof(unsigned short));
+    for (size_t j = 0 ; j < glyphOutlinesIndices[i].size() ; ++j) {
+      glyphsIndicesUShort.push_back(glyphOutlinesIndices[i][j]);
+    }
   }
+
+  _glyphsOutlinesNbIndices[glyph] = glyphOutlinesNbIndices;
+  _glyphsOutlinesIndicesOffset[glyph] = glyphOutlinesIndicesOffsets;
 
   _glyphsDataBuffer[glyph] = new GlBuffer(GlBuffer::VertexBuffer);
   _glyphsDataBuffer[glyph]->allocate(glyphsData);
@@ -560,6 +581,7 @@ void GlyphsRenderer::renderGlyph(const Camera &camera,
 }
 
 void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light) {
+
   _glyphShader->activate();
   _glyphShader->setUniformMat4Float("u_modelviewMatrix", camera.modelviewMatrix());
   _glyphShader->setUniformMat4Float("u_projectionMatrix", camera.projectionMatrix());
@@ -587,6 +609,8 @@ void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light)
 }
 
 const unsigned int glyphsAttributesDataStride = 19;
+const unsigned int glyphsOutlineDataStride = 10;
+
 
 void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
                                                     const std::vector<tlp::Coord> &centers,
@@ -602,7 +626,7 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
   Glyph *glyph = GlyphsManager::instance().getGlyph(glyphId);
 
   unsigned int nbIndices = glyph->getGlyphVerticesIndices().size();
-  unsigned int nbOutlineIndices = glyph->getGlyphOutlineIndices().size();
+  unsigned int nbOutlines = glyph->getGlyphOutlineIndices().size();
 
   _glyphsDataBuffer[glyph]->bind();
   _glyphShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(0));
@@ -678,7 +702,7 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
       glDrawElementsInstancedARB(GL_TRIANGLES, nbIndices, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0), it->second.size());
     }
 
-    if (nbOutlineIndices != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
+    if (nbOutlines != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
 
       _glyphShader->setUniformBool("u_flatShading", true);
       _glyphShader->setUniformBool("u_textureActivated", false);
@@ -690,16 +714,14 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
       } else {
         glLineWidth(2.0f);
       }
-
-      glDrawElementsInstancedARB(GL_LINES, nbOutlineIndices, GL_UNSIGNED_SHORT, BUFFER_OFFSET(_glyphsOutlineIndicesOffset[glyph]), it->second.size());
+      for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
+        glDrawElementsInstancedARB(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], GL_UNSIGNED_SHORT, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i]), it->second.size());
+      }
     }
-
   }
 
-  _glyphsInstanceAttributesDataBuffer->release();
-  _glyphsDataBuffer[glyph]->release();
   _glyphsIndicesBuffer[glyph]->release();
-
+  _glyphsDataBuffer[glyph]->release();
   _glyphShader->disableAttributesArrays();
 }
 
@@ -722,8 +744,13 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
   Glyph *glyph = GlyphsManager::instance().getGlyph(glyphId);
 
   unsigned int nbIndices = glyph->getGlyphVerticesIndices().size();
-  unsigned int nbOutlineIndices = glyph->getGlyphOutlineIndices().size();
+  unsigned int nbOutlines = glyph->getGlyphOutlineIndices().size();
   unsigned nbInstancesByRenderingBatch = _maxGlyphInstanceByRenderingBatch[glyph];
+
+  unsigned int indicesStride = 0;
+  for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
+    indicesStride += _glyphsOutlinesNbIndices[glyph][i];
+  }
 
   _glyphsDataBuffer[glyph]->bind();
   _glyphsIndicesBuffer[glyph]->bind();
@@ -809,7 +836,7 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
           glDrawElements(GL_TRIANGLES, cpt*nbIndices, indicesType, BUFFER_OFFSET(0));
         }
 
-        if (nbOutlineIndices != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
+        if (nbOutlines != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
           _glyphShader->setUniformBool("u_flatShading", true);
           _glyphShader->setUniformBool("u_textureActivated", false);
           _glyphShader->setUniformVec4FloatArray("u_color", nbInstancesByRenderingBatch, &outlineColorsData[0]);
@@ -818,7 +845,16 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
           } else {
             glLineWidth(2.0f);
           }
-          glDrawElements(GL_LINES, cpt*nbOutlineIndices, indicesType, BUFFER_OFFSET(_glyphsOutlineIndicesOffset[glyph]));
+
+          for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
+            for (unsigned int j = 0 ; j < cpt ; ++j) {
+              if (_canUseUIntIndices) {
+                glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned int)));
+              } else {
+                glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned short)));
+              }
+            }
+          }
         }
 
         cpt = 0;
@@ -846,7 +882,7 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
         glDrawElements(GL_TRIANGLES, cpt*nbIndices, indicesType, BUFFER_OFFSET(0));
       }
 
-      if (nbOutlineIndices != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
+      if (nbOutlines != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
         _glyphShader->setUniformBool("u_flatShading", true);
         _glyphShader->setUniformBool("u_textureActivated", false);
         _glyphShader->setUniformVec4FloatArray("u_color", cpt, &outlineColorsData[0]);
@@ -856,7 +892,15 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
           glLineWidth(2.0f);
         }
 
-        glDrawElements(GL_LINES, cpt*nbOutlineIndices, indicesType, BUFFER_OFFSET(_glyphsOutlineIndicesOffset[glyph]));
+        for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
+          for (unsigned int j = 0 ; j < cpt ; ++j) {
+            if (_canUseUIntIndices) {
+              glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned int)));
+            } else {
+              glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned short)));
+            }
+          }
+        }
       }
 
     }

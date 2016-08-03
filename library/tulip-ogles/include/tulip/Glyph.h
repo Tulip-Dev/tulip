@@ -73,8 +73,8 @@ public:
     return _indices;
   }
 
-  virtual const std::vector<unsigned short> &getGlyphOutlineIndices() const {
-    return _outlineIndices;
+  virtual const std::vector<std::vector<unsigned short>> &getGlyphOutlineIndices() const {
+    return _outlinesIndices;
   }
 
   virtual bool glyph2D() const {
@@ -111,7 +111,7 @@ protected:
 
   std::vector<tlp::Coord> _vertices;
   std::vector<unsigned short> _indices;
-  std::vector<unsigned short> _outlineIndices;
+  std::vector<std::vector<unsigned short>> _outlinesIndices;
   std::vector<tlp::Vec2f> _texCoords;
   std::vector<tlp::Coord> _normals;
 

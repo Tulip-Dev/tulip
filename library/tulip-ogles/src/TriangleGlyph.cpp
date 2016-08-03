@@ -33,7 +33,7 @@ using namespace tlp;
 TriangleGlyph::TriangleGlyph() : Glyph(nullptr) {
   _vertices = computeRegularPolygon(3, M_PI/2.f);
   _indices = {0, 1, 2};
-  _outlineIndices = {0, 1, 1, 2, 2, 0};
+  _outlinesIndices.push_back({0, 1, 2, 0});
 }
 
 void TriangleGlyph::getIncludeBoundingBox(BoundingBox &boundingBox) {

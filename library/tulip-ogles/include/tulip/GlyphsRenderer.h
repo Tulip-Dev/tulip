@@ -124,7 +124,8 @@ private:
   GlBuffer *_glyphsInstanceAttributesDataBuffer;
 
   std::map<Glyph*, unsigned int> _glyphsDataStride;
-  std::map<Glyph*, unsigned int> _glyphsOutlineIndicesOffset;
+  std::map<Glyph*, std::vector<unsigned int>> _glyphsOutlinesNbIndices;
+  std::map<Glyph*, std::vector<unsigned int>> _glyphsOutlinesIndicesOffset;
   std::map<Glyph*, unsigned int> _maxGlyphInstanceByRenderingBatch;
 
   bool _billboardMode;

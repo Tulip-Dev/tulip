@@ -42,10 +42,12 @@ CircleGlyph::CircleGlyph() : Glyph(nullptr) {
   }
   _indices.insert(_indices.end(), {0, nbContourPoints, 1});
 
-  for (unsigned short i = 0 ; i < nbContourPoints-1 ; ++i) {
-    _outlineIndices.insert(_outlineIndices.end(), {ushort_cast(i+1), ushort_cast(i+2)});
+  vector<unsigned short> outlineIndices;
+  for (unsigned short i = 1 ; i < nbContourPoints + 1 ; ++i) {
+    outlineIndices.push_back(i);
   }
-  _outlineIndices.insert(_outlineIndices.end(), {nbContourPoints, 1});
+  outlineIndices.push_back(1);
+  _outlinesIndices.push_back(outlineIndices);
 }
 
 void CircleGlyph::getIncludeBoundingBox(BoundingBox &boundingBox) {

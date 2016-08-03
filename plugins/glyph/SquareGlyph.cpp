@@ -41,10 +41,7 @@ public:
   SquareGlyph(PluginContext *context) : Glyph(context) {
     _vertices = computeRegularPolygon(4, M_PI/4.f);
     _indices = {0, 1, 3, 1, 2, 3};
-    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()-1) ; ++i) {
-      _outlineIndices.insert(_outlineIndices.end(), {i, ushort_cast(i+1)});
-    }
-    _outlineIndices.insert(_outlineIndices.end(), {ushort_cast(_vertices.size()-1), 0});
+    _outlinesIndices.push_back({0, 1, 2, 3, 0});
   }
 
 protected:

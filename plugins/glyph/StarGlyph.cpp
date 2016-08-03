@@ -73,10 +73,12 @@ public:
     }
     _indices.insert(_indices.end(), {0, 10, 1});
 
-    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()-2) ; ++i) {
-      _outlineIndices.insert(_outlineIndices.end(), {ushort_cast(i+1), ushort_cast(i+2)});
+    vector<unsigned short> outlineIndices;
+    for (unsigned short i = 1 ; i < ushort_cast(_vertices.size()) ; ++i) {
+      outlineIndices.push_back(i);
     }
-    _outlineIndices.insert(_outlineIndices.end(), {ushort_cast(_vertices.size()-1), 1});
+    outlineIndices.push_back(1);
+    _outlinesIndices.push_back(outlineIndices);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox) {

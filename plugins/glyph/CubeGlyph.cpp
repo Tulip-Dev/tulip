@@ -167,9 +167,12 @@ public:
   GLYPHINFORMATION("3D - Cube Outlined", "3D - Cube Outlined extremity", "Antoine Lambert", "20/05/2016", "Cube Outlined", "1.0", tlp::NodeShape::CubeOutlined)
 
   CubeOutlinedGlyph(PluginContext *context=nullptr) : Glyph(context) {
-    _outlineIndices = {0, 1, 1, 2, 2, 3, 3, 0, 20,
-                       21, 21, 22, 22, 23, 23, 20,
-                       0, 23, 1, 22, 2, 21, 3, 20};
+    _outlinesIndices.push_back({0, 1, 2, 3, 0});
+    _outlinesIndices.push_back({20, 21, 22, 23, 20});
+    _outlinesIndices.push_back({0, 23});
+    _outlinesIndices.push_back({1, 22});
+    _outlinesIndices.push_back({2, 21});
+    _outlinesIndices.push_back({3, 20});
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox) {
@@ -224,7 +227,7 @@ public:
     return _cubeOutlinedGlyph.getGlyphVertices();
   }
 
-  const vector<unsigned short> &getGlyphOutlineIndices() const {
+  const vector<vector<unsigned short>> &getGlyphOutlineIndices() const {
     return _cubeOutlinedGlyph.getGlyphOutlineIndices();
   }
 

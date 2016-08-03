@@ -52,10 +52,16 @@ public:
     _indices.insert(_indices.end(), {nbContourPoints-1, 0, 2*nbContourPoints-1,
                                      0, nbContourPoints, 2*nbContourPoints-1});
 
-    for (unsigned short i = 0 ; i < ushort_cast(outerContour.size()-1) ; ++i) {
-      _outlineIndices.insert(_outlineIndices.end(), {i, ushort_cast(i+1), ushort_cast(nbContourPoints+i), ushort_cast(nbContourPoints+i+1)});
+    vector<unsigned short> firstOutlineIndices;
+    vector<unsigned short> secondOutlineIndices;
+    for (unsigned short i = 0 ; i < ushort_cast(outerContour.size()) ; ++i) {
+      firstOutlineIndices.push_back(ushort_cast(i));
+      secondOutlineIndices.push_back(ushort_cast(nbContourPoints+i));
     }
-    _outlineIndices.insert(_outlineIndices.end(), {nbContourPoints-1, 0, 2*nbContourPoints-1, nbContourPoints});
+    firstOutlineIndices.push_back(0);
+    secondOutlineIndices.push_back(nbContourPoints);
+    _outlinesIndices.push_back(firstOutlineIndices);
+    _outlinesIndices.push_back(secondOutlineIndices);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox) {

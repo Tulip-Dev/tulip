@@ -41,10 +41,12 @@ public:
   DiamondGlyph(PluginContext *context) : Glyph(context) {
     _vertices = computeRegularPolygon(4);
     _indices = {0, 1, 3, 1, 2, 3};
-    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()-1) ; ++i) {
-      _outlineIndices.insert(_outlineIndices.end(), {i, ushort_cast(i+1)});
+    vector<unsigned short> outlineIndices;
+    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()) ; ++i) {
+      outlineIndices.push_back(i);
     }
-    _outlineIndices.insert(_outlineIndices.end(), {ushort_cast(_vertices.size()-1), 0});
+    outlineIndices.push_back(0);
+    _outlinesIndices.push_back(outlineIndices);
   }
 
   void getIncludeBoundingBox(BoundingBox &boundingBox) {
