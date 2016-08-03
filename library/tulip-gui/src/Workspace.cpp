@@ -23,8 +23,8 @@
 #include <QGraphicsView>
 #include <QGraphicsEffect>
 #include <QGraphicsSceneDragDropEvent>
-#include <QDomDocument>
-#include <QDebug>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/View.h>
@@ -33,9 +33,6 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TlpQtTools.h>
-
-#include <iostream>
-#include <sstream>
 
 #include "ui_Workspace.h"
 
@@ -46,10 +43,9 @@ using namespace tlp;
   */
 Workspace::Workspace(QWidget *parent)
   : QWidget(parent), _ui(new Ui::Workspace), _currentPanelIndex(0), _oldWorkspaceMode(NULL), _focusedPanel(NULL),
-    _focusedPanelHighlighting(false), _model(NULL), _pageCountLabel(NULL), _autoCenterViews(false) {
+    _focusedPanelHighlighting(false), _model(NULL), _autoCenterViews(false) {
   _ui->setupUi(this);
   _ui->startupMainFrame->hide();
-  _pageCountLabel = _ui->pagesLabel;
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton,SIGNAL(clicked()),this,SIGNAL(addPanelRequest()));
   connect(_ui->importButton,SIGNAL(clicked()),this,SIGNAL(importGraphRequest()));
@@ -304,7 +300,7 @@ void Workspace::updatePageCountLabel() {
   int current = _currentPanelIndex+1;
   int total = _panels.size()-currentSlotsCount()+1;
 
-  _pageCountLabel->setText(QString::number(current) + " / " + QString::number(total));
+  _ui->pagesLabel->setText(QString::number(current) + " / " + QString::number(total));
 }
 
 QWidget* Workspace::currentModeWidget() const {
@@ -584,49 +580,42 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     project->mkpath(path);
     Graph* g = v->graph();
     QIODevice* viewDescFile = project->fileStream(path + "/view.xml");
-    QDomDocument doc;
-    QDomElement root = doc.createElement("view");
-    root.setAttribute("name",tlpStringToQString(v->name()));
-    root.setAttribute("root",rootIds[g->getRoot()]);
-    root.setAttribute("id",QString::number(g->getId()));
-    QDomElement data = doc.createElement("data");
+    QXmlStreamWriter doc(viewDescFile);
+    doc.setAutoFormatting(true);
+    doc.writeStartElement("view");
+    doc.writeAttribute("name",tlpStringToQString(v->name()));
+    doc.writeAttribute("root",rootIds[g->getRoot()]);
+    doc.writeAttribute("id",QString::number(g->getId()));
     std::stringstream dataStr;
     DataSet::write(dataStr,v->state());
-    QDomText dataText = doc.createTextNode(tlpStringToQString(dataStr.str()));
-    data.appendChild(dataText);
-    root.appendChild(data);
-    doc.appendChild(root);
-    viewDescFile->write(doc.toString().toUtf8());
+    doc.writeTextElement("data",tlpStringToQString(dataStr.str()));
+    doc.writeEndDocument();
     viewDescFile->close();
     delete viewDescFile;
-    i++;
+    ++i;
   }
-
-  QDomDocument doc;
-  QDomElement root = doc.createElement("workspace");
-  root.setAttribute("current",_currentPanelIndex);
-  root.setAttribute("mode",currentSlotsCount());
+  QIODevice* workspaceXml = project->fileStream("/workspace.xml", QIODevice::Truncate | QIODevice::WriteOnly);
+  QXmlStreamWriter doc(workspaceXml);
+  doc.writeStartElement("workspace");
+  doc.writeAttribute("current",QString::number(_currentPanelIndex));
+  doc.writeAttribute("mode", QString::number(currentSlotsCount()));
 
   if (currentModeWidget() == _ui->splitPage) {
-    root.setAttribute("modeWidget","splitPage");
+    doc.writeAttribute("modeWidget","splitPage");
   }
   else if (currentModeWidget() == _ui->splitPageHorizontal) {
-    root.setAttribute("modeWidget","splitPageHorizontal");
+    doc.writeAttribute("modeWidget","splitPageHorizontal");
   }
   else if (currentModeWidget() == _ui->split3Page) {
-    root.setAttribute("modeWidget","split3Page");
+    doc.writeAttribute("modeWidget","split3Page");
   }
   else if (currentModeWidget() == _ui->split32Page) {
-    root.setAttribute("modeWidget","split32Page");
+    doc.writeAttribute("modeWidget","split32Page");
   }
   else if (currentModeWidget() == _ui->split33Page) {
-    root.setAttribute("modeWidget","split33Page");
+    doc.writeAttribute("modeWidget","split33Page");
   }
-
-  doc.appendChild(root);
-  project->removeFile("/workspace.xml");
-  QIODevice* workspaceXml = project->fileStream("/workspace.xml");
-  workspaceXml->write(doc.toString().toUtf8());
+  doc.writeEndDocument();
   workspaceXml->close();
   delete workspaceXml;
 }
@@ -634,98 +623,88 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
 void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootIds, PluginProgress* progress) {
   QStringList entries = project->entryList("views",QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
   int step = 0,max_step = entries.size();
-
-  foreach(QString entry, entries) {
+  foreach(const QString& entry, entries) {
     progress->progress(step++,max_step);
-    QDomDocument doc;
     QIODevice* xmlFile = project->fileStream("views/" + entry + "/view.xml");
-    doc.setContent(xmlFile);
-    xmlFile->close();
-    delete xmlFile;
+    QXmlStreamReader doc(xmlFile);
+        if (doc.readNextStartElement()) {
+            if(!doc.hasError()) {
+                QString viewName = doc.attributes().value("name").toString();
+                QString rootId = doc.attributes().value("root").toString();
+                QString id = doc.attributes().value("id").toString();
+                doc.readNextStartElement();
+                QString data(doc.readElementText());
+                xmlFile->close();
+                delete xmlFile;
 
-    QDomElement root = doc.documentElement();
-    QString viewName = root.attribute("name");
-    QString rootId = root.attribute("root");
-    QString id = root.attribute("id");
-    QString data;
-    QDomNodeList children = root.childNodes();
+                View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
+                if (view == NULL)
+                  continue;
 
-    for (int i=0; i<children.size(); ++i) {
-      QDomNode n = children.at(i);
-      QDomElement child = n.toElement();
+                view->setupUi();
+                Graph* rootGraph = rootIds[rootId];
+                assert(rootGraph);
+                Graph* g = rootGraph->getDescendantGraph(id.toInt());
 
-      if (child.isNull())
-        continue;
+                if (g == NULL)
+                  g = rootGraph;
 
-      if (child.tagName() == "data") {
-        data = child.text();
-        break;
-      }
-    }
+                view->setGraph(g);
+                DataSet dataSet;
+                std::istringstream iss(data.toStdString());
+                DataSet::read(iss,dataSet);
+                view->setState(dataSet);
+                addPanel(view);
+            }
+        }
 
-    View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
 
-    if (view == NULL)
-      continue;
 
-    view->setupUi();
-    Graph* rootGraph = rootIds[rootId];
-    assert(rootGraph);
-    Graph* g = rootGraph->getDescendantGraph(id.toInt());
-
-    if (g == NULL)
-      g = rootGraph;
-
-    view->setGraph(g);
-    DataSet dataSet;
-    std::istringstream iss(data.toStdString());
-    DataSet::read(iss,dataSet);
-    view->setState(dataSet);
-    addPanel(view);
   }
 
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
-
   if (workspaceXml == NULL)
     return;
 
-  QDomDocument doc;
-  doc.setContent(workspaceXml);
+  QXmlStreamReader doc(workspaceXml);
+  if (doc.readNextStartElement()) {
+      if(!doc.hasError()) {
+          int current = doc.attributes().value("current").toString().toInt();
+          int mode = doc.attributes().value("mode").toString().toInt();
+          foreach(QWidget* modeWidget, _modeToSlots.keys()) {
+            if (_modeToSlots[modeWidget].size() == mode) {
+              if (current > 0 && current < _panels.size())
+                setActivePanel(_panels[current]->view());
+
+              QString modeWidgetName = doc.attributes().value("modeWidget").toString();
+
+              if (!modeWidgetName.isEmpty() && (mode == 2 || mode ==3)) {
+                if (modeWidgetName == "splitPage") {
+                  switchToSplitMode();
+                }
+                else if (modeWidgetName == "splitPageHorizontal") {
+                  switchToSplitHorizontalMode();
+                }
+                else if (modeWidgetName == "split3Page") {
+                  switchToSplit3Mode();
+                }
+                else if (modeWidgetName == "split32Page") {
+                  switchToSplit32Mode();
+                }
+                else {
+                  switchToSplit33Mode();
+                }
+              }
+              else {
+                switchWorkspaceMode(modeWidget);
+              }
+            }
+          }
+      }
+  }
+
   workspaceXml->close();
   delete workspaceXml;
-  QDomElement root = doc.documentElement();
-  int current = root.attribute("current","0").toInt();
-  int mode = root.attribute("mode","-1").toInt();
-
-  foreach(QWidget* modeWidget, _modeToSlots.keys()) {
-    if (_modeToSlots[modeWidget].size() == mode) {
-      if (current > 0 && current < _panels.size())
-        setActivePanel(_panels[current]->view());
-
-      QString modeWidgetName = root.attribute("modeWidget");
-
-      if (!modeWidgetName.isEmpty() && (mode == 2 || mode ==3)) {
-        if (modeWidgetName == "splitPage") {
-          switchToSplitMode();
-        }
-        else if (modeWidgetName == "splitPageHorizontal") {
-          switchToSplitHorizontalMode();
-        }
-        else if (modeWidgetName == "split3Page") {
-          switchToSplit3Mode();
-        }
-        else if (modeWidgetName == "split32Page") {
-          switchToSplit32Mode();
-        }
-        else {
-          switchToSplit33Mode();
-        }
-      }
-      else {
-        switchWorkspaceMode(modeWidget);
-      }
-    }
-  }
 }
 
 void Workspace::setBottomFrameVisible(bool f) {
@@ -733,7 +712,7 @@ void Workspace::setBottomFrameVisible(bool f) {
 }
 
 void Workspace::setPageCountLabel(QLabel *l) {
-  _pageCountLabel = l;
+  _ui->pagesLabel = l;
 }
 
 void Workspace::redrawPanels(bool center) {
