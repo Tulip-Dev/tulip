@@ -154,6 +154,7 @@ public :
         }
       }
     }
+
     xmlFile.close();
 
     // Special case : some GEXF files declare edges before nodes
