@@ -594,6 +594,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
     delete viewDescFile;
     ++i;
   }
+
   QIODevice* workspaceXml = project->fileStream("/workspace.xml", QIODevice::Truncate | QIODevice::WriteOnly);
   QXmlStreamWriter doc(workspaceXml);
   doc.writeStartElement("workspace");
@@ -615,6 +616,7 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
   else if (currentModeWidget() == _ui->split33Page) {
     doc.writeAttribute("modeWidget","split33Page");
   }
+
   doc.writeEndDocument();
   workspaceXml->close();
   delete workspaceXml;
@@ -623,84 +625,90 @@ void Workspace::writeProject(TulipProject* project, QMap<Graph *, QString> rootI
 void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootIds, PluginProgress* progress) {
   QStringList entries = project->entryList("views",QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
   int step = 0,max_step = entries.size();
+
   foreach(const QString& entry, entries) {
     progress->progress(step++,max_step);
     QIODevice* xmlFile = project->fileStream("views/" + entry + "/view.xml");
     QXmlStreamReader doc(xmlFile);
-        if (doc.readNextStartElement()) {
-            if(!doc.hasError()) {
-                QString viewName = doc.attributes().value("name").toString();
-                QString rootId = doc.attributes().value("root").toString();
-                QString id = doc.attributes().value("id").toString();
-                doc.readNextStartElement();
-                QString data(doc.readElementText());
-                xmlFile->close();
-                delete xmlFile;
 
-                View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
-                if (view == NULL)
-                  continue;
+    if (doc.readNextStartElement()) {
+      if(!doc.hasError()) {
+        QString viewName = doc.attributes().value("name").toString();
+        QString rootId = doc.attributes().value("root").toString();
+        QString id = doc.attributes().value("id").toString();
+        doc.readNextStartElement();
+        QString data(doc.readElementText());
+        xmlFile->close();
+        delete xmlFile;
 
-                view->setupUi();
-                Graph* rootGraph = rootIds[rootId];
-                assert(rootGraph);
-                Graph* g = rootGraph->getDescendantGraph(id.toInt());
+        View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
 
-                if (g == NULL)
-                  g = rootGraph;
+        if (view == NULL)
+          continue;
 
-                view->setGraph(g);
-                DataSet dataSet;
-                std::istringstream iss(data.toStdString());
-                DataSet::read(iss,dataSet);
-                view->setState(dataSet);
-                addPanel(view);
-            }
-        }
+        view->setupUi();
+        Graph* rootGraph = rootIds[rootId];
+        assert(rootGraph);
+        Graph* g = rootGraph->getDescendantGraph(id.toInt());
+
+        if (g == NULL)
+          g = rootGraph;
+
+        view->setGraph(g);
+        DataSet dataSet;
+        std::istringstream iss(data.toStdString());
+        DataSet::read(iss,dataSet);
+        view->setState(dataSet);
+        addPanel(view);
+      }
+    }
 
 
 
   }
 
   QIODevice* workspaceXml = project->fileStream("/workspace.xml");
+
   if (workspaceXml == NULL)
     return;
 
   QXmlStreamReader doc(workspaceXml);
+
   if (doc.readNextStartElement()) {
-      if(!doc.hasError()) {
-          int current = doc.attributes().value("current").toString().toInt();
-          int mode = doc.attributes().value("mode").toString().toInt();
-          foreach(QWidget* modeWidget, _modeToSlots.keys()) {
-            if (_modeToSlots[modeWidget].size() == mode) {
-              if (current > 0 && current < _panels.size())
-                setActivePanel(_panels[current]->view());
+    if(!doc.hasError()) {
+      int current = doc.attributes().value("current").toString().toInt();
+      int mode = doc.attributes().value("mode").toString().toInt();
 
-              QString modeWidgetName = doc.attributes().value("modeWidget").toString();
+      foreach(QWidget* modeWidget, _modeToSlots.keys()) {
+        if (_modeToSlots[modeWidget].size() == mode) {
+          if (current > 0 && current < _panels.size())
+            setActivePanel(_panels[current]->view());
 
-              if (!modeWidgetName.isEmpty() && (mode == 2 || mode ==3)) {
-                if (modeWidgetName == "splitPage") {
-                  switchToSplitMode();
-                }
-                else if (modeWidgetName == "splitPageHorizontal") {
-                  switchToSplitHorizontalMode();
-                }
-                else if (modeWidgetName == "split3Page") {
-                  switchToSplit3Mode();
-                }
-                else if (modeWidgetName == "split32Page") {
-                  switchToSplit32Mode();
-                }
-                else {
-                  switchToSplit33Mode();
-                }
-              }
-              else {
-                switchWorkspaceMode(modeWidget);
-              }
+          QString modeWidgetName = doc.attributes().value("modeWidget").toString();
+
+          if (!modeWidgetName.isEmpty() && (mode == 2 || mode ==3)) {
+            if (modeWidgetName == "splitPage") {
+              switchToSplitMode();
+            }
+            else if (modeWidgetName == "splitPageHorizontal") {
+              switchToSplitHorizontalMode();
+            }
+            else if (modeWidgetName == "split3Page") {
+              switchToSplit3Mode();
+            }
+            else if (modeWidgetName == "split32Page") {
+              switchToSplit32Mode();
+            }
+            else {
+              switchToSplit33Mode();
             }
           }
+          else {
+            switchWorkspaceMode(modeWidget);
+          }
+        }
       }
+    }
   }
 
   workspaceXml->close();

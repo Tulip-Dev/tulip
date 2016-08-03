@@ -269,10 +269,11 @@ QString TulipProject::version() const {
 }
 
 bool TulipProject::writeMetaInfo() {
-    QFile out(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
+  QFile out(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
 
-    if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
-      return false;
+  if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
+    return false;
+
   QXmlStreamWriter doc(&out);
   doc.setAutoFormatting(true);
   doc.writeStartElement("tuliproject");
@@ -282,6 +283,7 @@ bool TulipProject::writeMetaInfo() {
 
   for (int i=mo->propertyOffset(); i < mo->propertyCount(); ++i) {
     QMetaProperty prop(mo->property(i));
+
     if (QString(prop.name()) == "objectName")
       continue;
 
@@ -306,24 +308,27 @@ bool TulipProject::readMetaInfo() {
   QXmlStreamReader doc(&in);
 
   if (doc.hasError()) {
-      in.close();
-      tlp::debug() << "Error opening xml meta information file: " << doc.errorString().toStdString() << std::endl;
-      return false;
-  }
-  while (!doc.atEnd()) {
-      if (doc.readNextStartElement()) {
-          if(doc.hasError()) {
-              tlp::debug() << "Error reading xml meta information: " << doc.errorString().toStdString() << std::endl;
-              in.close();
-              return false;
-          }
-         const char* name(doc.name().toString().toStdString().data());
-          if (property(name).isValid())
-              setProperty(name,doc.readElementText());
-      }
+    in.close();
+    tlp::debug() << "Error opening xml meta information file: " << doc.errorString().toStdString() << std::endl;
+    return false;
   }
 
- in.close();
+  while (!doc.atEnd()) {
+    if (doc.readNextStartElement()) {
+      if(doc.hasError()) {
+        tlp::debug() << "Error reading xml meta information: " << doc.errorString().toStdString() << std::endl;
+        in.close();
+        return false;
+      }
+
+      const char* name(doc.name().toString().toStdString().data());
+
+      if (property(name).isValid())
+        setProperty(name,doc.readElementText());
+    }
+  }
+
+  in.close();
   return true;
 }
 
