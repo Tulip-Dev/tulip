@@ -19,15 +19,16 @@
 
 #include "tulip/TulipProject.h"
 
-#include <QDebug>
-#include <QMetaProperty>
-#include <QDir>
 #include <QCoreApplication>
+#include <QDebug>
+#include <QDir>
+#include <QMetaProperty>
 #include <QTextStream>
-#include <QDomDocument>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
-#include <tulip/SimplePluginProgress.h>
 #include <tulip/QuaZIPFacade.h>
+#include <tulip/SimplePluginProgress.h>
 
 #include <cstdlib>
 
@@ -37,19 +38,18 @@
 
 namespace tlp {
 
-TulipProject::TulipProject(): _isValid(false) {
-  // This private constructer should never been called. It has been privately declared to prevent use of default constructor
+TulipProject::TulipProject() : _isValid(false) {
+  // This private constructer should never been called. It has been privately
+  // declared to prevent use of default constructor
 }
 
 TulipProject::TulipProject(const QString &path)
-  : _rootDir(path),
-    _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)), _isValid(true) {
-  writeMetaInfos();
+    : _rootDir(path), _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)),
+      _isValid(true) {
+  writeMetaInfo();
 }
 
-TulipProject::~TulipProject() {
-  removeAllDirPrivate(_rootDir.absolutePath());
-}
+TulipProject::~TulipProject() { removeAllDirPrivate(_rootDir.absolutePath()); }
 
 TulipProject *TulipProject::newProject() {
   QString rootPath = temporaryPath();
@@ -67,9 +67,9 @@ TulipProject *TulipProject::newProject() {
 
 bool TulipProject::openProjectFile(const QString &file,
                                    tlp::PluginProgress *progress) {
-  if(!QFileInfo(file).exists()) {
+  if (!QFileInfo(file).exists()) {
     _isValid = false;
-    _lastError = "File "+file+" not found";
+    _lastError = "File " + file + " not found";
     return false;
   }
 
@@ -80,7 +80,7 @@ bool TulipProject::openProjectFile(const QString &file,
     deleteProgress = true;
   }
 
-  if (!QuaZIPFacade::unzip(_rootDir.absolutePath(),file,progress)) {
+  if (!QuaZIPFacade::unzip(_rootDir.absolutePath(), file, progress)) {
     _isValid = false;
     _lastError = "Failed to unzip project.";
 
@@ -90,7 +90,7 @@ bool TulipProject::openProjectFile(const QString &file,
     return false;
   }
 
-  readMetaInfos();
+  readMetaInfo();
 
   if (deleteProgress)
     delete progress;
@@ -100,7 +100,8 @@ bool TulipProject::openProjectFile(const QString &file,
   return true;
 }
 
-TulipProject *TulipProject::openProject(const QString &file, tlp::PluginProgress *progress) {
+TulipProject *TulipProject::openProject(const QString &file,
+                                        tlp::PluginProgress *progress) {
   TulipProject *project = TulipProject::newProject();
 
   if (!project->isValid())
@@ -118,12 +119,12 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
     deleteProgress = true;
   }
 
-  if (!writeMetaInfos()) {
+  if (!writeMetaInfo()) {
     _lastError = "Failed to save meta-informations.";
     return false;
   }
 
-  if (!QuaZIPFacade::zipDir(_rootDir.absolutePath(),file)) {
+  if (!QuaZIPFacade::zipDir(_rootDir.absolutePath(), file)) {
     _lastError = "Failed to zip project.";
     return false;
   }
@@ -138,15 +139,17 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
 
 TulipProject *TulipProject::restoreProject(const QString &path) {
   TulipProject *project = new TulipProject(path);
-  project->_isValid = project->readMetaInfos();
+  project->_isValid = project->readMetaInfo();
   return project;
 }
 
 // ==============================
 //      FILES MANIPULATION
 // ==============================
-QStringList TulipProject::entryList(const QString &relativePath, const QStringList &nameFilters,
-                                    QDir::Filters filters, QDir::SortFlags sort) {
+QStringList TulipProject::entryList(const QString &relativePath,
+                                    const QStringList &nameFilters,
+                                    QDir::Filters filters,
+                                    QDir::SortFlags sort) {
   QString path(toAbsolutePath(relativePath));
   QFileInfo info(path);
 
@@ -154,10 +157,12 @@ QStringList TulipProject::entryList(const QString &relativePath, const QStringLi
     return QStringList();
 
   QDir dir(path);
-  return dir.entryList(nameFilters,filters,sort);
+  return dir.entryList(nameFilters, filters, sort);
 }
 
-QStringList TulipProject::entryList(const QString &relativePath, QDir::Filters filters, QDir::SortFlags sort) {
+QStringList TulipProject::entryList(const QString &relativePath,
+                                    QDir::Filters filters,
+                                    QDir::SortFlags sort) {
   QString path(toAbsolutePath(relativePath));
   QFileInfo info(path);
 
@@ -165,7 +170,7 @@ QStringList TulipProject::entryList(const QString &relativePath, QDir::Filters f
     return QStringList();
 
   QDir dir(path);
-  return dir.entryList(filters,sort);
+  return dir.entryList(filters, sort);
 }
 
 bool TulipProject::isDir(const QString &path) {
@@ -202,10 +207,11 @@ bool TulipProject::removeAllDir(const QString &path) {
 }
 
 bool TulipProject::copy(const QString &source, const QString &destination) {
-  return QFile::copy(source,toAbsolutePath(destination));
+  return QFile::copy(source, toAbsolutePath(destination));
 }
 
-std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::openmode mode) {
+std::fstream *TulipProject::stdFileStream(const QString &path,
+                                          std::ios_base::openmode mode) {
   QString filePath(toAbsolutePath(path));
   std::fstream *result = new std::fstream();
   result->open(filePath.toUtf8().data(), mode);
@@ -218,7 +224,8 @@ std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::op
   return result;
 }
 
-QIODevice *TulipProject::fileStream(const QString &path, QIODevice::OpenMode mode) {
+QIODevice *TulipProject::fileStream(const QString &path,
+                                    QIODevice::OpenMode mode) {
   QFile *result = new QFile(toAbsolutePath(path));
   result->open(mode);
   return result;
@@ -231,102 +238,82 @@ QString TulipProject::absoluteRootPath() const {
 // ==============================
 //      META-INFORMATIONS
 // ==============================
-QString TulipProject::name() const {
-  return _name;
-}
+QString TulipProject::name() const { return _name; }
 
-void TulipProject::setName(const QString &n) {
-  _name = n;
-}
+void TulipProject::setName(const QString &n) { _name = n; }
 
-QString TulipProject::description() const {
-  return _description;
-}
+QString TulipProject::description() const { return _description; }
 
-void TulipProject::setDescription(const QString &d) {
-  _description = d;
-}
+void TulipProject::setDescription(const QString &d) { _description = d; }
 
-QString TulipProject::author() const {
-  return _author;
-}
+QString TulipProject::author() const { return _author; }
 
-void TulipProject::setAuthor(const QString &a) {
-  _author = a;
-}
+void TulipProject::setAuthor(const QString &a) { _author = a; }
 
-QString TulipProject::perspective() const {
-  return _perspective;
-}
+QString TulipProject::perspective() const { return _perspective; }
 
-void TulipProject::setPerspective(const QString &p) {
-  _perspective = p;
-}
+void TulipProject::setPerspective(const QString &p) { _perspective = p; }
 
-QString TulipProject::version() const {
-  return TLPPROJ_VERSION;
-}
+QString TulipProject::version() const { return TLPPROJ_VERSION; }
 
-bool TulipProject::writeMetaInfos() {
-  QDomDocument doc;
-  QDomElement rootNode(doc.createElement("tulipproject"));
-  rootNode.setAttribute("version",TLPPROJ_VERSION);
-  doc.appendChild(rootNode);
-
-  const QMetaObject *mo = metaObject();
-
-  for (int i=0; i < mo->propertyCount(); ++i) {
-    QMetaProperty prop(mo->property(i));
-
-    if (QString(prop.name()) == "objectName")
-      continue;
-
-    QDomElement e(doc.createElement(prop.name()));
-    rootNode.appendChild(e);
-    QDomText txt = doc.createTextNode(property(prop.name()).toString());
-    e.appendChild(txt);
-  }
-
+bool TulipProject::writeMetaInfo() {
   QFile out(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
 
   if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
     return false;
+  QXmlStreamWriter doc(&out);
+  doc.setAutoFormatting(true);
+  doc.writeStartElement("tuliproject");
+  doc.writeAttribute("version", TLPPROJ_VERSION);
 
-  out.write(doc.toByteArray(2));
+  const QMetaObject *mo = metaObject();
+
+  for (int i = mo->propertyOffset(); i < mo->propertyCount(); ++i) {
+    QMetaProperty prop(mo->property(i));
+    if (QString(prop.name()) == "objectName")
+      continue;
+
+    doc.writeTextElement(prop.name(), property(prop.name()).toString());
+  }
+
+  doc.writeEndDocument();
   out.close();
-
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 8, 0))
+  return !doc.hasError();
+#else
   return true;
+#endif
 }
 
-bool TulipProject::readMetaInfos() {
+bool TulipProject::readMetaInfo() {
   QFile in(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
 
   if (!in.open(QIODevice::ReadOnly))
     return false;
 
-  QDomDocument doc;
+  QXmlStreamReader doc(&in);
 
-  if (!doc.setContent(&in))
+  if (doc.hasError()) {
+    in.close();
+    tlp::debug() << "Error opening xml meta information file: "
+                 << doc.errorString().toStdString() << std::endl;
     return false;
-
-  in.close();
-
-  QDomElement rootElement = doc.documentElement();
-  QDomNodeList children = rootElement.childNodes();
-
-  for (int i=0; i < children.count(); ++i) {
-    QDomNode n = children.at(i);
-
-    if (!n.isElement())
-      continue;
-
-    QDomElement e = n.toElement();
-
-    // On MacOS, converting e.tagName() to a const char* only lives for the duration of the QString, to avoid the char* to be nullptr, we don't use temporary variables
-    if (property(e.tagName().toStdString().c_str()).isValid())
-      setProperty(e.tagName().toStdString().c_str(),e.text());
+  }
+  while (!doc.atEnd()) {
+    if (doc.readNextStartElement()) {
+      if (doc.hasError()) {
+        tlp::debug() << "Error reading xml meta information: "
+                     << doc.errorString().toStdString() << std::endl;
+        in.close();
+        return false;
+      }
+      const char *name(doc.name().toString().toStdString().data());
+      if (property(name).isValid())
+        setProperty(name, doc.readElementText());
+    }
   }
 
+  in.close();
   return true;
 }
 
@@ -334,21 +321,22 @@ QString TulipProject::toAbsolutePath(const QString &relativePath) {
   QString path(relativePath);
 
   if (relativePath.startsWith("/"))
-    path = path.remove(0,1);
+    path = path.remove(0, 1);
 
   return _dataDir.absoluteFilePath(path);
 }
 
 // Some hack: Qt does not provide method to create temporary DIRS.
 QString TulipProject::temporaryPath() {
-  QString basePath(QDir::tempPath() + QDir::separator() + QCoreApplication::applicationName() + "-" + QString::number(QCoreApplication::applicationPid()) + "-");
-  int prefix=0;
+  QString basePath(QDir::tempPath() + QDir::separator() +
+                   QCoreApplication::applicationName() + "-" +
+                   QString::number(QCoreApplication::applicationPid()) + "-");
+  int prefix = 0;
   QString result;
 
   do {
     result = basePath + QString::number(prefix++);
-  }
-  while (QDir(result).exists());
+  } while (QDir(result).exists());
 
   return result;
 }
@@ -360,16 +348,19 @@ bool TulipProject::removeAllDirPrivate(const QString &path) {
     return false;
 
   QDir dir(pathInfo.absoluteFilePath());
-  QFileInfoList entries(dir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
+  QFileInfoList entries(dir.entryInfoList(QDir::NoDot | QDir::NoDotDot |
+                                              QDir::System | QDir::Hidden |
+                                              QDir::AllDirs | QDir::Files,
+                                          QDir::DirsFirst));
 
-  for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
+  for (QFileInfoList::iterator it = entries.begin(); it != entries.end();
+       ++it) {
     QFileInfo info(*it);
     bool result = true;
 
     if (info.isDir()) {
       result = removeAllDirPrivate(info.absoluteFilePath());
-    }
-    else
+    } else
       result = dir.remove(info.absoluteFilePath());
 
     if (!result)
@@ -379,5 +370,4 @@ bool TulipProject::removeAllDirPrivate(const QString &path) {
   dir.rmdir(pathInfo.absoluteFilePath());
   return true;
 }
-
 }

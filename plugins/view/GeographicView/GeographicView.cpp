@@ -35,7 +35,6 @@
 #include <QMenu>
 #include <QThread>
 #include <QComboBox>
-#include <QDomDocument>
 #include <QXmlDefaultHandler>
 #include <QTimeLine>
 #include <QApplication>

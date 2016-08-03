@@ -63,7 +63,6 @@ class TLP_QT_SCOPE Workspace: public QWidget {
 
   QString panelTitle(WorkspacePanel*) const;
 
-  QLabel* _pageCountLabel;
   bool _autoCenterViews;
 
 public:

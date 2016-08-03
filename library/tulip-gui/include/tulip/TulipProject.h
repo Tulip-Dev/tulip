@@ -350,8 +350,8 @@ public slots:
 private:
   static QString temporaryPath();
 
-  bool writeMetaInfos();
-  bool readMetaInfos();
+  bool writeMetaInfo();
+  bool readMetaInfo();
 
   bool removeAllDirPrivate(const QString &path);
 
