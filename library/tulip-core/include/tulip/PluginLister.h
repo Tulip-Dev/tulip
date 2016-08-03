@@ -135,8 +135,8 @@ public:
 
 
   /**
-   * @brief Gets the list of plugins of a given type (template parameter).   *
-   * @return A std::list<std::string> containing the names of the plugins.
+   * @brief Gets the list of plugins of a given type (template parameter).
+   * @return A std::list<std::string> containing plugin names.
    **/
   static std::list<std::string> availablePlugins();
 
