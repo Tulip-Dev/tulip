@@ -24,7 +24,8 @@
 #include <QDir>
 #include <QCoreApplication>
 #include <QTextStream>
-#include <QDomDocument>
+#include <QXmlStreamWriter>
+#include <QXmlStreamReader>
 
 #include <tulip/SimplePluginProgress.h>
 #include <tulip/QuaZIPFacade.h>
@@ -44,7 +45,7 @@ TulipProject::TulipProject(): _isValid(false) {
 TulipProject::TulipProject(const QString &path)
   : _rootDir(path),
     _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)), _isValid(true) {
-  writeMetaInfos();
+  writeMetaInfo();
 }
 
 TulipProject::~TulipProject() {
@@ -90,7 +91,7 @@ bool TulipProject::openProjectFile(const QString &file,
     return false;
   }
 
-  readMetaInfos();
+  readMetaInfo();
 
   if (deleteProgress)
     delete progress;
@@ -118,7 +119,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
     deleteProgress = true;
   }
 
-  if (!writeMetaInfos()) {
+  if (!writeMetaInfo()) {
     _lastError = "Failed to save meta-informations.";
     return false;
   }
@@ -138,7 +139,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
 
 TulipProject *TulipProject::restoreProject(const QString &path) {
   TulipProject *project = new TulipProject(path);
-  project->_isValid = project->readMetaInfos();
+  project->_isValid = project->readMetaInfo();
   return project;
 }
 
@@ -267,66 +268,62 @@ QString TulipProject::version() const {
   return TLPPROJ_VERSION;
 }
 
-bool TulipProject::writeMetaInfos() {
-  QDomDocument doc;
-  QDomElement rootNode(doc.createElement("tulipproject"));
-  rootNode.setAttribute("version",TLPPROJ_VERSION);
-  doc.appendChild(rootNode);
+bool TulipProject::writeMetaInfo() {
+    QFile out(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
+
+    if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
+      return false;
+  QXmlStreamWriter doc(&out);
+  doc.setAutoFormatting(true);
+  doc.writeStartElement("tuliproject");
+  doc.writeAttribute("version", TLPPROJ_VERSION);
 
   const QMetaObject *mo = metaObject();
 
-  for (int i=0; i < mo->propertyCount(); ++i) {
+  for (int i=mo->propertyOffset(); i < mo->propertyCount(); ++i) {
     QMetaProperty prop(mo->property(i));
-
     if (QString(prop.name()) == "objectName")
       continue;
 
-    QDomElement e(doc.createElement(prop.name()));
-    rootNode.appendChild(e);
-    QDomText txt = doc.createTextNode(property(prop.name()).toString());
-    e.appendChild(txt);
+    doc.writeTextElement(prop.name(), property(prop.name()).toString());
   }
 
-  QFile out(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
-
-  if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
-    return false;
-
-  out.write(doc.toByteArray(2));
+  doc.writeEndDocument();
   out.close();
-
+#if(QT_VERSION>=QT_VERSION_CHECK(4,8,0))
+  return !doc.hasError();
+#else
   return true;
+#endif
 }
 
-bool TulipProject::readMetaInfos() {
+bool TulipProject::readMetaInfo() {
   QFile in(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
 
   if (!in.open(QIODevice::ReadOnly))
     return false;
 
-  QDomDocument doc;
+  QXmlStreamReader doc(&in);
 
-  if (!doc.setContent(&in))
-    return false;
-
-  in.close();
-
-  QDomElement rootElement = doc.documentElement();
-  QDomNodeList children = rootElement.childNodes();
-
-  for (int i=0; i < children.count(); ++i) {
-    QDomNode n = children.at(i);
-
-    if (!n.isElement())
-      continue;
-
-    QDomElement e = n.toElement();
-
-    // On MacOS, converting e.tagName() to a const char* only lives for the duration of the QString, to avoid the char* to be NULL, we don't use temporary variables
-    if (property(e.tagName().toStdString().c_str()).isValid())
-      setProperty(e.tagName().toStdString().c_str(),e.text());
+  if (doc.hasError()) {
+      in.close();
+      tlp::debug() << "Error opening xml meta information file: " << doc.errorString().toStdString() << std::endl;
+      return false;
+  }
+  while (!doc.atEnd()) {
+      if (doc.readNextStartElement()) {
+          if(doc.hasError()) {
+              tlp::debug() << "Error reading xml meta information: " << doc.errorString().toStdString() << std::endl;
+              in.close();
+              return false;
+          }
+         const char* name(doc.name().toString().toStdString().data());
+          if (property(name).isValid())
+              setProperty(name,doc.readElementText());
+      }
   }
 
+ in.close();
   return true;
 }
 
