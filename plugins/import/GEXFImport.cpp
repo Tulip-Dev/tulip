@@ -116,16 +116,16 @@ public :
     nodesHaveCoordinates = false;
 
     // Open the GEXF file choosed by the user
-    QFile *xmlFile = new QFile(qfilename);
+    QFile xmlFile(qfilename);
 
-    if (!xmlFile->open(QIODevice::ReadOnly | QIODevice::Text)) {
+    if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
       // get error
-      pluginProgress->setError(xmlFile->errorString().toUtf8().data());
+      pluginProgress->setError(xmlFile.errorString().toUtf8().data());
       return false;
     }
 
     // Instantiate a QXmlStreamReader to parse the file (GEXF is xml)
-    QXmlStreamReader xmlReader(xmlFile);
+    QXmlStreamReader xmlReader(&xmlFile);
 
     // Parse each line of the file
     while (!xmlReader.atEnd()) {
@@ -154,8 +154,7 @@ public :
         }
       }
     }
-
-    delete xmlFile;
+    xmlFile.close();
 
     // Special case : some GEXF files declare edges before nodes
     // so we have to add edges once nodes have been parsed
