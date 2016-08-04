@@ -142,7 +142,7 @@ BoundingBox GlCPULODCalculator::getEdgeBoundingBox(edge e) {
   double srcRot = _viewRotation->getNodeValue(source);
   double tgtRot = _viewRotation->getNodeValue(target);
 
-  const LineType::RealType &bends = _viewLayout->getEdgeValue(e);
+  vector<Coord> bends = _viewLayout->getEdgeValue(e);
 
   // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
   Coord srcAnchor, tgtAnchor, tmpAnchor;
@@ -158,14 +158,16 @@ BoundingBox GlCPULODCalculator::getEdgeBoundingBox(edge e) {
   tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
   tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
-  if (!bends.empty()) {
+  bends.insert(bends.begin(), srcAnchor);
+  bends.push_back(tgtAnchor);
 
-    for (vector<Coord>::const_iterator it = bends.begin(); it != bends.end(); ++it)
-      bb.expand(*it);
+  Size edgeSize = getEdgeSize(_graph, e, _viewSize, _renderingParameters);
+
+  vector<Coord> extrudedEdge = buildCurvePoints(bends, getSizes(bends, edgeSize[0], edgeSize[1]), srcCoord, tgtCoord);
+
+  for (const Coord &c : extrudedEdge) {
+    bb.expand(c);
   }
-
-  bb.expand(srcAnchor);
-  bb.expand(tgtAnchor);
 
   return bb;
 }

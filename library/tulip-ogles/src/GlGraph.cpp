@@ -746,7 +746,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   const vector<NodeEntityLODUnit> &nodesLodResult = _lodCalculator->getNodesResult();
 
   for (size_t i = 0 ; i < nodesLodResult.size() ; ++i) {
-
     if (nodesLodResult[i].lod < 0 || _nodesToDiscard.find(nodesLodResult[i].n) != _nodesToDiscard.end()) continue;
     if (nodesLodResult[i].lod < 10 && !_renderingParameters.bypassLodSystem()) {
       pointsNodes.push_back(nodesLodResult[i].n);
@@ -1571,9 +1570,9 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera,
   glViewport(0, 0, viewport[2], viewport[3]);
   unsigned int bufferSize = width*height*4;
   unsigned char *buffer = new unsigned char[bufferSize];
-  bool done = false;
+  _selectionViewport = Vec4i(x, y, width, height);
   setGraphElementsPickingMode(true);
-  setSelectionViewport(Vec4i(x - viewport[2], viewport[3] - y, width, height));
+  bool done = false;
   while (!done) {
     std::set<tlp::node> tmpNodeSet;
     std::set<tlp::edge> tmpEdgeSet;

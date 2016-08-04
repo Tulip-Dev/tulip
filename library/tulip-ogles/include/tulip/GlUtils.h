@@ -74,11 +74,11 @@ const T &clamp(const T& n, const T& lower, const T& upper) {
 
 TLP_GLES_SCOPE void addColorToVecFloat(const tlp::Color &c, std::vector<float> &v);
 
-TLP_GLES_SCOPE void getSizes(const std::vector<tlp::Coord> &line, float s1, float s2, std::vector<float> &result);
+TLP_GLES_SCOPE std::vector<float> getSizes(const std::vector<tlp::Coord> &line, float s1, float s2);
 
 TLP_GLES_SCOPE void getColors(const std::vector<tlp::Coord> &line, const tlp::Color &c1, const tlp::Color &c2, std::vector<tlp::Color> &result);
 
-TLP_GLES_SCOPE void buildCurvePoints (const std::vector<tlp::Coord> &vertices, const std::vector<float> &sizes, const tlp::Coord &startN, const tlp::Coord &endN, std::vector<tlp::Coord> &result);
+TLP_GLES_SCOPE std::vector<tlp::Coord> buildCurvePoints (const std::vector<tlp::Coord> &vertices, const std::vector<float> &sizes, const tlp::Coord &startN, const tlp::Coord &endN);
 
 TLP_GLES_SCOPE std::vector<tlp::Coord> computeRegularPolygon(unsigned int numberOfSides, float startAngle=0.f, const tlp::Coord &position = tlp::Coord(0.f,0.f), const tlp::Size &size = tlp::Size(0.5f, 0.5f));
 

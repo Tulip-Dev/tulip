@@ -132,10 +132,6 @@ private :
     _graphElementsPickingMode = pickingMode;
   }
 
-  void setSelectionViewport(const tlp::Vec4i &selectionViewport) {
-    _selectionViewport = selectionViewport;
-  }
-
   void prepareEdgeData(tlp::edge e);
 
   tlp::Size getEdgeSize(tlp::edge e);
