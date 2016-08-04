@@ -151,19 +151,17 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(const Coord &eye, const Matrix<
   invTransformMatrix.inverse();
   Coord pSrc = projectPoint(Coord(0,0,0), transformMatrix, globalViewport);
 
-  Vector<int,4> transformedViewport=currentViewport;
-  transformedViewport[1]=globalViewport[3]-(currentViewport[1]+currentViewport[3]);
   BoundingBox cameraBoundingBox;
 
   // Project camera bounding box to known visible part of the quadtree
-  pSrc[0] = transformedViewport[0];
-  pSrc[1] = (globalViewport[1] + globalViewport[3]) - (transformedViewport[1] + transformedViewport[3]);
+  pSrc[0] = currentViewport[0];
+  pSrc[1] = (globalViewport[1] + globalViewport[3]) - (currentViewport[1] + currentViewport[3]);
   cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
-  pSrc[1] = transformedViewport[1]+transformedViewport[3];
+  pSrc[1] = currentViewport[1]+currentViewport[3];
   cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
-  pSrc[0] = transformedViewport[0]+transformedViewport[2];
+  pSrc[0] = currentViewport[0]+currentViewport[2];
   cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
-  pSrc[1] = transformedViewport[1];
+  pSrc[1] = currentViewport[1];
   cameraBoundingBox.expand(unprojectPoint(pSrc, invTransformMatrix, globalViewport));
 
   // Get result of quadtrees
