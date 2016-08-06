@@ -79,7 +79,8 @@ public:
                          const int x, const int y,
                          const int width, const int height,
                          std::set<tlp::node> &selectedNodes,
-                         std::set<tlp::edge> &selectedEdges);
+                         std::set<tlp::edge> &selectedEdges,
+                         bool singleSelection = false);
 
 
   bool pickNodeOrEdge(const Camera &camera,

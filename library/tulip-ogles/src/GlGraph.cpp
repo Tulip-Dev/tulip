@@ -1560,7 +1560,7 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera,
                                 const int x, const int y,
                                 const int width, const int height,
                                 std::set<tlp::node> &selectedNodes,
-                                std::set<tlp::edge> &selectedEdges) {
+                                std::set<tlp::edge> &selectedEdges, bool singleSelection) {
 
   selectedNodes.clear();
   selectedEdges.clear();
@@ -1605,6 +1605,9 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera,
       selectedEdges.insert(tmpEdgeSet.begin(), tmpEdgeSet.end());
       _nodesToDiscard = selectedNodes;
       _edgesToDiscard = selectedEdges;
+      if (singleSelection) {
+        done = true;
+      }
     }
   }
   setGraphElementsPickingMode(false);
@@ -1626,7 +1629,7 @@ bool GlGraph::pickNodeOrEdge(const Camera &camera,
   pickedEdge = tlp::edge();
   std::set<tlp::node> selectedNodes;
   std::set<tlp::edge> selectedEdges;
-  bool ret = pickNodesAndEdges(camera, x-1, y-1, 3, 3, selectedNodes, selectedEdges);
+  bool ret = pickNodesAndEdges(camera, x-1, y-1, 3, 3, selectedNodes, selectedEdges, true);
   if (!selectedNodes.empty()) {
     pickedNode = *(selectedNodes.begin());
   } else if (!selectedEdges.empty()) {

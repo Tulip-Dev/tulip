@@ -608,7 +608,7 @@ void GlScene::treatEvent(const Event &message) {
   }
 }
 
-bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, vector<SelectedEntity>& selectedEntities, GlLayer *layer) {
+bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, vector<SelectedEntity>& selectedEntities, GlLayer *layer, bool singleSelection) {
   _pickingMode = true;
   vector<SelectedEntity> selectedEntitiesInternal;
   selectedEntities.clear();
@@ -663,6 +663,9 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
       for (set<GlEntity*>::iterator it = tmpSelectedEntities.begin() ; it != tmpSelectedEntities.end() ; ++it) {
         selectedEntitiesInternal.push_back(SelectedEntity(*it));
       }
+      if (singleSelection) {
+        done = true;
+      }
     }
   }
   delete [] buffer;
@@ -681,7 +684,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
       set<edge> selectedEdges;
       Camera *camera = glGraph->getLayer()->getCamera();
       camera->initGl();
-      glGraph->pickNodesAndEdges(*camera, x, y, width, height, selectedNodes, selectedEdges);
+      glGraph->pickNodesAndEdges(*camera, x, y, width, height, selectedNodes, selectedEdges, singleSelection);
       if (!selectedNodes.empty() && (type & RenderingNodes)) {
         for (set<node>::iterator it = selectedNodes.begin() ; it != selectedNodes.end() ; ++it) {
           selectedEntities.push_back(SelectedEntity(SelectedEntity::NODE_SELECTED, glGraph, it->id));
@@ -706,7 +709,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
 
 bool GlScene::selectEntity(RenderingEntitiesFlag type, int x, int y, SelectedEntity &selectedEntity, GlLayer *layer) {
   vector<SelectedEntity> selectedEntities;
-  bool ret = selectEntities(type, x-1, y-1, 3, 3, selectedEntities, layer);
+  bool ret = selectEntities(type, x-1, y-1, 3, 3, selectedEntities, layer, true);
   if (!selectedEntities.empty()) {
     selectedEntity = selectedEntities.front();
   } else {

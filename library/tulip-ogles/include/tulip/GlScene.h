@@ -163,7 +163,7 @@ public:
 
   void zoomFactor(float factor);
 
-  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, std::vector<SelectedEntity>& selectedEntities, GlLayer *layer = nullptr);
+  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, std::vector<SelectedEntity>& selectedEntities, GlLayer *layer = nullptr, bool singleSelection = false);
 
   bool selectEntity(RenderingEntitiesFlag type, int x, int y, SelectedEntity &selectedEntity, GlLayer *layer = nullptr);
 
