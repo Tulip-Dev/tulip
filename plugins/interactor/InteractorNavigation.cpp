@@ -20,6 +20,7 @@
 #include <tulip/MouseInteractors.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/FontIconManager.h>
 
 #include "../utils/StandardInteractorPriority.h"
 #include "../utils/ViewNames.h"
@@ -36,7 +37,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorNavigation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_navigation.png","Navigate in graph") {
+  InteractorNavigation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(FontIconManager::instance()->getMaterialDesignIcon(mdi::cursorpointer, Qt::white),"Navigate in graph") {
     setPriority(StandardInteractorPriority::Navigation);
     setConfigurationWidgetText(QString("<h3>Navigate in graph</h3>")+
                                "3D Navigation in the graph<br/><br/>"+

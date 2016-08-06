@@ -39,7 +39,7 @@ protected:
   void paintEvent(QPaintEvent *event) {
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
-    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/favorite.png" : ":/tulip/graphperspective/icons/16/favorite-empty.png"));
+    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/star.svg" : ":/tulip/graphperspective/icons/16/star-outline.svg"));
     painter.drawPixmap(20,0,px);
   }
 };
@@ -306,14 +306,12 @@ bool AlgorithmRunner::eventFilter(QObject* obj, QEvent* ev) {
   if (ev->type() == QEvent::Paint) {
     if (obj == _ui->favoritesBox->widget() && _favorites.empty()) {
       QPainter painter(_ui->favoritesBox->widget());
-      QPixmap px((_ui->favoritesBox->_droppingFavorite ? ":/tulip/graphperspective/icons/32/favorite.png" : ":/tulip/graphperspective/icons/32/favorite-empty.png"));
-      painter.drawPixmap(_ui->favoritesBox->widget()->width() - px.width() - 8, 8, px);
       QFont f;
       f.setItalic(true);
       painter.setFont(f);
       painter.setBrush(QColor(107,107,107));
       painter.setPen(QColor(107,107,107));
-      painter.drawText(0, 8 + (px.height() - 12)/2,_ui->favoritesBox->widget()->width(),65535,/*Qt::AlignHCenter | Qt::AlignTop |*/ Qt::TextWordWrap,trUtf8("Put your favorite algorithms here"));
+      painter.drawText(0, 8,_ui->favoritesBox->widget()->width(),65535,/*Qt::AlignHCenter | Qt::AlignTop |*/ Qt::TextWordWrap,trUtf8("Put your favorite algorithms here"));
     }
   }
   else if ((ev->type() == QEvent::DragEnter || ev->type() == QEvent::DragMove) && draggableObject) {

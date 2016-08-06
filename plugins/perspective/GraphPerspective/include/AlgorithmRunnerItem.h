@@ -31,6 +31,8 @@ namespace tlp {
 class Graph;
 }
 
+class QCheckBox;
+
 class AlgorithmRunnerItem: public QWidget {
   Q_OBJECT
   Ui::AlgorithmRunnerItem* _ui;

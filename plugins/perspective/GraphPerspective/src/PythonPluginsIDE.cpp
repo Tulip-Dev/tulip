@@ -28,6 +28,7 @@
 #include <tulip/PythonCodeEditor.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
+#include <tulip/FontIconManager.h>
 
 #include "PythonPluginsIDE.h"
 #include "PythonPluginCreationDialog.h"
@@ -191,6 +192,14 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _pythonInterpreter(PythonInterpreter::getInstance()),
   _dontTreatFocusIn(false), _project(nullptr) {
   _ui->setupUi(this);
+  _ui->newPluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, Qt::white));
+  _ui->loadPluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, Qt::white));
+  _ui->savePluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::export_, Qt::white));
+  _ui->newModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, Qt::white));
+  _ui->loadModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, Qt::white));
+  _ui->saveModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::export_, Qt::white));
+  _ui->decreaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::minuscircle, Qt::black));
+  _ui->increaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::pluscircle, Qt::black));
   _ui->tabWidget->setDrawTabBarBgGradient(true);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->modulesTabWidget->clear();

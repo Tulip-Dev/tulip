@@ -20,7 +20,7 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDrag>
-#include <QtCore/QDateTime>
+#include <QDateTime>
 
 #include "GraphPerspective.h"
 #include "AlgorithmRunnerItem.h"
@@ -40,11 +40,14 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/FontIconManager.h>
 
 using namespace tlp;
 
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr), _storeResultAsLocal(true) {
   _ui->setupUi(this);
+  _ui->settingsButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::settings, Qt::blue, 0.8));
+  _ui->playButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::play, Qt::green));
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
   // split pluginName after the second word if needed
@@ -81,15 +84,12 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
 
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
-  static QPixmap cppPix(":/tulip/graphperspective/icons/16/cpp.png");
-  static QPixmap pythonPix(":/tulip/graphperspective/icons/16/python.png");
-
   if (plugin.programmingLanguage() == "Python") {
-    _ui->languageLabel->setPixmap(pythonPix);
+    _ui->languageLabel->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, QColor(50,50,50), 0.6).pixmap(_ui->languageLabel->size()));
     _ui->languageLabel->setToolTip("Plugin written in Python");
   }
   else {
-    _ui->languageLabel->setPixmap(cppPix);
+    _ui->languageLabel->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagecpp, QColor(50,50,50), 0.6).pixmap(_ui->languageLabel->size()));
     _ui->languageLabel->setToolTip("Plugin written in C++");
   }
 }

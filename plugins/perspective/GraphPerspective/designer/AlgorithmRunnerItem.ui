@@ -85,7 +85,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/GraphPerspective.qrc">
           <normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</normaloff>:/tulip/graphperspective/icons/16/preferences-other.png</iconset>
         </property>
         <property name="checkable">
@@ -105,7 +105,7 @@
          </sizepolicy>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/GraphPerspective.qrc">
           <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
         </property>
         <property name="flat">
@@ -167,16 +167,16 @@ width: 28px;
 height: 28px;
 }
 QCheckBox::indicator:unchecked {
-image: url(:/tulip/graphperspective/icons/16/favorite-empty.png);
+image: url(:/tulip/graphperspective/icons/16/star-outline.svg);
 }
 QCheckBox::indicator:unchecked:hover {
-image: url(:/tulip/graphperspective/icons/16/favorite-empty-hover.png);
+image: url(:/tulip/graphperspective/icons/16/star-outline-hover.svg);
 }
 QCheckBox::indicator:checked {
-image: url(:/tulip/graphperspective/icons/16/favorite.png);
+image: url(:/tulip/graphperspective/icons/16/star.svg);
 }
 QCheckBox::indicator:checked:hover {
-image: url(:/tulip/graphperspective/icons/16/favorite-hover.png);
+image: url(:/tulip/graphperspective/icons/16/star-hover.svg);
 }</string>
         </property>
        </widget>
@@ -251,7 +251,9 @@ font: 10pt;
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>playButton</sender>

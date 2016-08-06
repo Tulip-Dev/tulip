@@ -35,7 +35,7 @@ class TLP_QT_SCOPE NodeLinkDiagramComponentInteractor
 
 public :
 
-  NodeLinkDiagramComponentInteractor(const QString &iconPath, const QString &text, unsigned int priority=0);
+  NodeLinkDiagramComponentInteractor(const QIcon &icon, const QString &text, unsigned int priority=0);
 
   virtual ~NodeLinkDiagramComponentInteractor();
 

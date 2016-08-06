@@ -107,7 +107,6 @@ color: white;
        </property>
        <property name="styleSheet">
         <string notr="true">QPushButton {
-border-image: url(:/tulip/graphperspective/icons/16/edit-clear.png);
 border: none;
 margin: 0px;
 padding: 0px;

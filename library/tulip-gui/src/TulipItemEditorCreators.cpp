@@ -27,10 +27,9 @@
 #include <QPaintEvent>
 #include <QStylePainter>
 
-#include <QtAwesome.h>
-
 #include <tulip/ColorScaleButton.h>
 #include <tulip/CoordEditor.h>
+#include <tulip/FontIconManager.h>
 #include <tulip/GlyphPreviewRenderer.h>
 #include <tulip/GlyphsManager.h>
 #include <tulip/GraphPropertiesModel.h>
@@ -38,6 +37,7 @@
 #include <tulip/StringEditor.h>
 #include <tulip/StringEditor.h>
 #include <tulip/TextureFileDialog.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TulipMaterialDesignIcons.h>
 
 using namespace tlp;
@@ -465,28 +465,19 @@ public:
   }
 
   QIcon getFontAwesomeIcon(const QString &iconName) {
-    if (qtAwesome.fontName().isEmpty())
-      qtAwesome.initFontAwesome(tlpStringToQString(
-          TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
-
-    return qtAwesome.icon(static_cast<fa::iconCodePoint>(
-        TulipFontAwesome::getFontAwesomeIconCodePoint(iconName.toStdString())));
+    fa::iconCodePoint icon = static_cast<fa::iconCodePoint>(
+        TulipFontAwesome::getFontAwesomeIconCodePoint(iconName.toStdString()));
+    return FontIconManager::instance()->getFontAwesomeIcon(icon);
   }
 
   QIcon getMaterialDesignIcon(const QString &iconName) {
-    if (qtAwesomeMdi.fontName().isEmpty())
-      qtAwesomeMdi.initMaterialDesignIcons(
-          tlpStringToQString(TulipMaterialDesignIcons::
-                                 getMaterialDesignIconsTrueTypeFileLocation()));
-
-    return qtAwesomeMdi.icon(static_cast<mdi::iconCodePoint>(
+    mdi::iconCodePoint icon = static_cast<mdi::iconCodePoint>(
         TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(
-            iconName.toStdString())));
+            iconName.toStdString()));
+    return FontIconManager::instance()->getMaterialDesignIcon(icon);
   }
 
 private:
-  QtAwesome qtAwesome;
-  QtAwesome qtAwesomeMdi;
   QMap<QString, QIcon> iconPool;
   QIcon nullIcon;
 };

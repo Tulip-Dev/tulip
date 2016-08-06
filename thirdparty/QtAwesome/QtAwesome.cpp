@@ -54,7 +54,9 @@ public:
 
         // add some 'padding' around the icon
         int drawSize = qRound(rect.height()*options.value("scale-factor").toFloat());
+        QPointF translation = options.value("translation").toPointF();
 
+        painter->translate(translation);
         painter->setFont( awesome->font(drawSize) );
         painter->drawText( rect, text, QTextOption( Qt::AlignCenter|Qt::AlignVCenter ) );
         painter->restore();
@@ -125,6 +127,8 @@ QtAwesome::QtAwesome( QObject* parent )
     setDefaultOption( "color-active", QColor(10,10,10));
     setDefaultOption( "color-selected", QColor(10,10,10));
     setDefaultOption( "scale-factor", 0.9 );
+    setDefaultOption( "scale-factor", 0.9 );
+    setDefaultOption( "translation", QPointF(0,0) );
 
     setDefaultOption( "text", QVariant() );
     setDefaultOption( "text-disabled", QVariant() );
@@ -941,7 +945,8 @@ static QVariantMap mergeOptions( const QVariantMap& defaults, const QVariantMap&
 /// Creates an icon with the given code-point
 /// <code>
 ///     awesome->icon( icon_group )
-/// </code>
+/// </code>           const double scaleFactor) {
+QVariantMap ret;
 QIcon QtAwesome::icon(fa::iconCodePoint character, const QVariantMap &options)
 {
     // create a merged QVariantMap to have default options and icon-specific options

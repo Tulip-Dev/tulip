@@ -41,6 +41,7 @@
 #include <tulip/ShaderManager.h>
 #include <tulip/ZoomAndPanAnimation.h>
 #include <tulip/ShaderManager.h>
+#include <tulip/FontIconManager.h>
 
 using namespace std;
 using namespace tlp;
@@ -101,7 +102,7 @@ static std::string fisheyeFragmentShaderSrc() {
 }
 
 FishEyeInteractor::FishEyeInteractor(const PluginContext *)
-    : GLInteractorComposite(QIcon(":/i_fisheye.png"), "Fisheye"), _fisheyeConfigWidget(nullptr) {}
+    : GLInteractorComposite(FontIconManager::instance()->getMaterialDesignIcon(mdi::web, Qt::white), "Fisheye"), _fisheyeConfigWidget(nullptr) {}
 
 void FishEyeInteractor::construct() {
   _fisheyeConfigWidget = new FishEyeConfigWidget();

@@ -66,5 +66,9 @@
         <file>icons/48/doc_import.png</file>
         <file>icons/16/cpp.png</file>
         <file>icons/16/python.png</file>
+        <file>icons/16/star-outline.svg</file>
+        <file>icons/16/star.svg</file>
+        <file>icons/16/star-hover.svg</file>
+        <file>icons/16/star-outline-hover.svg</file>
     </qresource>
 </RCC>

@@ -19,6 +19,7 @@
 
 #include <tulip/PythonInterpreter.h>
 #include <tulip/PythonCodeEditor.h>
+#include <tulip/FontIconManager.h>
 
 #include <QFile>
 #include <QToolBar>
@@ -48,18 +49,23 @@ static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view), checkEditors(true) {
   _ui->setupUi(this);
+  _ui->runScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::play, Qt::black, 1.0));
+  _ui->pauseScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::pause, Qt::black, 1.0));
+  _ui->stopScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::stop, Qt::black, 1.0));
+  _ui->decreaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::minuscircle, Qt::black, 1.0));
+  _ui->increaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::pluscircle, Qt::black, 1.0));
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
   _mainScriptToolBar = new QToolBar(_ui->mainScriptToolBarWidget);
-  _newMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_new.png"), "New main script");
-  _loadMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_import.png"), "Load main script from file");
-  _saveMainScriptAction = _mainScriptToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save main script to file");
+  _newMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::file, Qt::white), "New main script");
+  _loadMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, Qt::white, 1.0), "Load main script from file");
+  _saveMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::export_, Qt::white, 1.0), "Save main script to file");
 
   _modulesToolBar = new QToolBar(_ui->modulesToolBarWidget);
-  _newStringModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_plus.png"), "New string module");
-  _newFileModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_new.png"), "New file module");
-  _loadModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_import.png"), "Import module from file");
-  _saveModuleAction = _modulesToolBar->addAction(QIcon(":/icons/doc_export.png"), "Save module to file");
+  _newStringModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, Qt::white), "New string module");
+  _newFileModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::file, Qt::white), "New file module");
+  _loadModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, Qt::white, 1.0), "Import module from file");
+  _saveModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::export_, Qt::white, 1.0), "Save module to file");
 
   _ui->modulesTabWidget->clear();
   _ui->mainScriptsTabWidget->clear();

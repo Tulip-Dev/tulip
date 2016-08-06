@@ -21,11 +21,18 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/MouseBoxZoomer.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/FontIconManager.h>
 
 #include "../utils/StandardInteractorPriority.h"
 #include "../utils/ViewNames.h"
 
 using namespace tlp;
+
+static QIcon getInteractorIcon() {
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::selection, Qt::white);
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::magnifyplus, Qt::white, 0.6);
+  return FontIconManager::stackIcons(backIcon, frontIcon);
+}
 
 /** \brief Tulip interactor to do a rectangle zoom
  *
@@ -37,7 +44,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorRectangleZoom(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_zoom.png","Zoom on rectangle") {
+  InteractorRectangleZoom(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(getInteractorIcon(), "Zoom on rectangle") {
     setPriority(StandardInteractorPriority::ZoomOnRectangle);
     setConfigurationWidgetText(QString("<h3>Zoom on rectangle</h3>")+
                                "Zoom on selected rectangle.<br><b>Mouse left</b> down indicates the first corner.<br> <b>Mouse left</b> up indicates the opposite corner.<br> <b>Mouse left Doucle click</b> to center the view.");

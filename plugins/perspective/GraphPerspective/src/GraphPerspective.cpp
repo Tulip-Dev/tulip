@@ -56,6 +56,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
+#include <tulip/FontIconManager.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -271,6 +272,13 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::white));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, Qt::black));
+  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, Qt::white));
+  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::tablelarge, Qt::white));
+  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::reply, Qt::white));
+  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::share, Qt::white));
+  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, Qt::white));
 #ifdef BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
@@ -1307,6 +1315,8 @@ void GraphPerspective::setWorkspaceMode() {
   _ui->developButton->setChecked(false);
   _ui->centralWidget->widget(1)->setVisible(false);
   _ui->centralWidget->setCurrentIndex(0);
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::white));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, Qt::black));
 }
 
 void GraphPerspective::setDevelopMode() {
@@ -1314,6 +1324,8 @@ void GraphPerspective::setDevelopMode() {
   _ui->developButton->setChecked(true);
   _ui->centralWidget->widget(1)->setVisible(true);
   _ui->centralWidget->setCurrentIndex(1);
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::black));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, Qt::white));
 }
 
 void GraphPerspective::showUserDocumentation() {

@@ -2,7 +2,7 @@ IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
 # Force to use SIP headers located in thirdparty and not those installed in the system
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${TulipPythonInclude} ${QtAwesomeInclude} ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 
 SET(PythonScriptView_LIB_SRCS
     PythonScriptView.h

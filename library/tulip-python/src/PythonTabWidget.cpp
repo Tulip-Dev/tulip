@@ -19,6 +19,7 @@
 
 #include "tulip/PythonInterpreter.h"
 #include "tulip/PythonTabWidget.h"
+#include "tulip/FontIconManager.h"
 
 #include <QPainter>
 #include <QTabBar>
@@ -30,7 +31,6 @@ PythonTabWidget::PythonTabWidget(QWidget *parent) : QTabWidget(parent), _drawGra
 
 void PythonTabWidget::paintEvent(QPaintEvent * event) {
   QTabWidget::paintEvent(event);
-  static QImage pythonLogoImg(":/tulip/python/python-logo-small.png");
   static QString pythonVersion(PythonInterpreter::getInstance()->getPythonVersionStr());
   QPainter painter(this);
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
@@ -54,9 +54,9 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   int imageWidth = static_cast<int>(30 * tabBar()->height() / 27.0);
   int secondLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
   QRectF rect(width()-(firstLabelWidth+imageWidth+secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
-  QRectF rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
+  QRect rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
   QRectF rect3(width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
   painter.drawText(rect,  Qt::AlignCenter, "Powered by ");
-  painter.drawImage(rect2, pythonLogoImg);
+  painter.drawPixmap(rect2, FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, _textColor).pixmap(QSize(32,32)));
   painter.drawText(rect3,  Qt::AlignCenter, QString("Python ") + pythonVersion);
 }

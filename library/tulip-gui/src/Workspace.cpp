@@ -26,13 +26,21 @@
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
 
+#include <tulip/FontIconManager.h>
 #include <tulip/GraphHierarchiesModel.h>
+#include <tulip/GraphHierarchiesModel.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/TulipMimes.h>
+#include <tulip/TulipMimes.h>
+#include <tulip/TulipProject.h>
 #include <tulip/TulipProject.h>
 #include <tulip/View.h>
 #include <tulip/WorkspacePanel.h>
+
+#include <iostream>
+#include <sstream>
 
 #include "ui_Workspace.h"
 
@@ -48,6 +56,11 @@ Workspace::Workspace(QWidget *parent)
       _focusedPanelHighlighting(false), _model(nullptr),
       _autoCenterViews(false) {
   _ui->setupUi(this);
+  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
+      mdi::import, Qt::black));
+  _ui->startupButton->setIcon(
+      FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox,
+                                                         Qt::black));
   _ui->startupMainFrame->hide();
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);
   connect(_ui->startupButton, SIGNAL(clicked()), this,

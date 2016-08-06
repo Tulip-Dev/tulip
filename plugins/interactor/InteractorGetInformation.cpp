@@ -21,11 +21,18 @@
 #include <tulip/MouseShowElementInfos.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
+#include <tulip/FontIconManager.h>
 
 #include "../utils/StandardInteractorPriority.h"
 #include "../utils/ViewNames.h"
 
 using namespace tlp;
+
+static QIcon getInteractorIcon() {
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::cursordefault, Qt::white, 0.9, QPointF(-20, 0));
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::help, Qt::white, 0.6, QPointF(40, -20));
+  return FontIconManager::stackIcons(backIcon, frontIcon);
+}
 
 /** \brief Tulip interactor to get information about an element of the graph
  *
@@ -37,7 +44,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png","Display node or edge properties") {
+  InteractorGetInformation(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(getInteractorIcon(), "Display node or edge properties") {
     setPriority(StandardInteractorPriority::GetInformation);
     setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>")+
                                "<b>Mouse left click</b> on an element to display its properties.<br/>then <b>Mouse left click</b> on a row to edit the corresponding value.");

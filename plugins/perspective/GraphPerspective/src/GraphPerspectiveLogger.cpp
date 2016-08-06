@@ -18,8 +18,10 @@
  */
 
 #include "GraphPerspectiveLogger.h"
-
 #include "ui_GraphPerspectiveLogger.h"
+
+#include "tulip/FontIconManager.h"
+
 #include <iostream>
 
 #include <QKeyEvent>
@@ -28,6 +30,7 @@
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
   QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
+  _ui->clearButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::broom, Qt::yellow));
   // we want to be able to select multiple rows in the logger list for copy/paste operations
   _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
   _ui->listWidget->installEventFilter(this);
@@ -39,32 +42,29 @@ GraphPerspectiveLogger::~GraphPerspectiveLogger() {
   delete _ui;
 }
 
-static QString iconForType(QtMsgType type) {
-  QString pxUrl(":/tulip/graphperspective/icons/16/logger-");
+static QIcon iconForType(QtMsgType type) {
+  QIcon icon;
 
   switch (type) {
   case QtDebugMsg:
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
   case QtInfoMsg:
 #endif
-    pxUrl+="info";
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::information, QColor("#407FB2"), 0.8);
     break;
 
   case QtWarningMsg:
-    pxUrl+="danger";
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::alert, QColor("#E18D2B"), 0.8);
     break;
 
   case QtCriticalMsg:
   case QtFatalMsg:
-    pxUrl+="error";
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::minuscircle, QColor("#C42730"), 0.8);
     break;
 
 
   }
-
-  pxUrl += ".png";
-
-  return pxUrl;
+  return icon;
 }
 
 unsigned int GraphPerspectiveLogger::count() const {
@@ -86,11 +86,11 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
+    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.8), msgClean));
     _pythonOutput = true;
   }
   else {
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), msg));
+    _ui->listWidget->addItem(new QListWidgetItem(iconForType(type), msg));
     _pythonOutput = false;
   }
 }
@@ -118,11 +118,11 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
   if (qmsg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(":/tulip/graphperspective/icons/16/python.png"), msgClean));
+    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.8), msgClean));
     _pythonOutput = true;
   }
   else {
-    _ui->listWidget->addItem(new QListWidgetItem(QIcon(iconForType(type)), qmsg));
+    _ui->listWidget->addItem(new QListWidgetItem(iconForType(type), qmsg));
     _pythonOutput = false;
   }
 }
@@ -130,10 +130,10 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 
 QPixmap GraphPerspectiveLogger::icon() {
   if (!_pythonOutput) {
-    return QPixmap(iconForType(_logSeverity));
+    return QPixmap(iconForType(_logSeverity).pixmap(QSize(16,16)));
   }
   else {
-    return QPixmap(":/tulip/graphperspective/icons/16/python.png");
+    return tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray).pixmap(QSize(16,16));
   }
 }
 

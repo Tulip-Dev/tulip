@@ -94,6 +94,7 @@ SET(SRCS
     GraphNeedsSavingObserver.cpp
     FileDownloader.cpp
     TextureFileDialog.cpp
+    FontIconManager.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)
