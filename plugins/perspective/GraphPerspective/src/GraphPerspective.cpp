@@ -72,6 +72,15 @@
 using namespace tlp;
 using namespace std;
 
+static QColor sideBarIconColor = Qt::white;
+static QColor menuIconColor = QColor("#404244");
+
+static QIcon getFileNewIcon() {
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::file, menuIconColor, 1.0);
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::plus, Qt::white, 0.7, QPointF(0, 10));
+  return FontIconManager::stackIcons(backIcon, frontIcon);
+}
+
 GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
@@ -114,13 +123,13 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach(QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/archive.png"),s,this,SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::archive, menuIconColor, 1.0),s,this,SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
   foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::file, menuIconColor, 1.0),s,this,SLOT(openRecentFile()));
   }
 }
 
@@ -272,13 +281,23 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::white));
-  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, Qt::black));
-  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, Qt::white));
-  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::tablelarge, Qt::white));
-  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::reply, Qt::white));
-  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::share, Qt::white));
-  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, Qt::white));
+
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, sideBarIconColor));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, sideBarIconColor));
+  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, sideBarIconColor));
+  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::tablelarge, sideBarIconColor));
+  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::reply, sideBarIconColor));
+  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::share, sideBarIconColor));
+  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, sideBarIconColor));
+  _ui->actionNewProject->setIcon(getFileNewIcon());
+  _ui->actionOpen_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::fileimport, menuIconColor, 1.0));
+  _ui->menuOpen_recent_file->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::clock, menuIconColor, 1.0));
+  _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::fileexport, menuIconColor, 1.0));
+  _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::fileexport, menuIconColor, 1.0));
+  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, menuIconColor, 1.0));
+  _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::table, menuIconColor, 1.0));
+  _ui->actionNew_graph->setIcon(getFileNewIcon());
+  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::closecircle, menuIconColor, 1.0));
 #ifdef BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
@@ -1315,8 +1334,6 @@ void GraphPerspective::setWorkspaceMode() {
   _ui->developButton->setChecked(false);
   _ui->centralWidget->widget(1)->setVisible(false);
   _ui->centralWidget->setCurrentIndex(0);
-  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::white));
-  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, Qt::black));
 }
 
 void GraphPerspective::setDevelopMode() {
@@ -1324,8 +1341,6 @@ void GraphPerspective::setDevelopMode() {
   _ui->developButton->setChecked(true);
   _ui->centralWidget->widget(1)->setVisible(true);
   _ui->centralWidget->setCurrentIndex(1);
-  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::black));
-  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, Qt::white));
 }
 
 void GraphPerspective::showUserDocumentation() {

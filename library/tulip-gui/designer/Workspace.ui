@@ -19,8 +19,17 @@ border: 0px;
 }
 
 QSplitter::handle {
-background-color: #A9A9A9;
-}</string>
+background-color: #262829;
+}
+
+QSplitter::handle:horizontal {
+    width: 1px;
+}
+
+QSplitter::handle:vertical {
+    height: 1px;
+}
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

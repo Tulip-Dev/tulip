@@ -70,5 +70,7 @@
         <file>icons/16/star.svg</file>
         <file>icons/16/star-hover.svg</file>
         <file>icons/16/star-outline-hover.svg</file>
+        <file>icons/16/chevron-down.svg</file>
+        <file>icons/16/chevron-up.svg</file>
     </qresource>
 </RCC>

@@ -42,6 +42,7 @@
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/FontIconManager.h>
 
 using namespace tlp;
 
@@ -112,6 +113,9 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
     _viewConfigurationExpanded(false),
     _currentInteractorConfigurationItem(nullptr) {
   _ui->setupUi(this);
+  _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariantoff, Qt::white, 0.8));
+  _ui->dragHandle->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(mdi::cursormove, Qt::white).pixmap(QSize(20,20)));
+  _ui->closeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::close, Qt::white));
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
   _ui->dragHandle->setPanel(this);
@@ -191,7 +195,9 @@ void WorkspacePanel::setView(tlp::View* view) {
   _view->graphicsView()->addAction(_ui->actionClose);
   layout()->addWidget(_view->graphicsView());
   refreshInteractorsToolbar();
-
+  if (compatibleInteractors.isEmpty()) {
+    _ui->sep4->hide();
+  }
 
   if (!compatibleInteractors.empty())
     setCurrentInteractor(compatibleInteractors[0]);
@@ -434,7 +440,6 @@ void WorkspacePanel::refreshInteractorsToolbar() {
   bool interactorsUiShown = !compatibleInteractors.isEmpty();
   _ui->currentInteractorButton->setVisible(interactorsUiShown);
   _ui->interactorsFrame->setVisible(interactorsUiShown);
-  _ui->sep1->setVisible(interactorsUiShown);
   _ui->sep2->setVisible(interactorsUiShown);
 
   if (interactorsUiShown) {
@@ -598,23 +603,16 @@ void WorkspacePanel::setHighlightMode(bool hm) {
   // which made appear a 2 pixel height line
   // on top of this panel
   // (only top margin has a non null value in WorkspacePanel.ui)
+
+  static QString headerStyleSheet = _ui->headerFrame->styleSheet();
+
   if (hm)
-    _ui->borderFrame->setStyleSheet(QString::fromUtf8("QFrame[border = \"true\"] {\n"
-                                    "border-image:none;\n"
-                                    "background-color: #CBDE5D;\n"
-                                    "color: white;\n"
+    _ui->headerFrame->setStyleSheet(headerStyleSheet + QString::fromUtf8("QFrame[header = \"true\"], QComboBox, QLabel, QToolButton, QPushButton, #interactorsFrame {\n"
+                                    "background-color: #262829;\n"
                                     "}"));
   else
     // restore the style sheet as described in WorkspacePanel.ui
-    _ui->borderFrame->setStyleSheet(QString::fromUtf8("QFrame[border = \"true\"] {\n"
-                                    "border-image:none;\n"
-                                    "background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,\n"
-                                    "stop: 0 #838383,\n"
-                                    "stop: 0.4 #707070,\n"
-                                    "stop: 0.401 #636363,\n"
-                                    "stop: 1 #4a4a4a);\n"
-                                    "color: white;\n"
-                                    "}"));
+    _ui->headerFrame->setStyleSheet(headerStyleSheet);
 }
 
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent * evt) {
@@ -666,11 +664,11 @@ bool WorkspacePanel::isGraphSynchronized() const {
 
 void WorkspacePanel::toggleSynchronization(bool f) {
   if (f) {
-    _ui->linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
+    _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariant, Qt::white));
     _ui->linkButton->setToolTip("Click here to disable the synchronization with the Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the current one in the workspace active panel.");
   }
   else {
-    _ui->linkButton->setIcon(QIcon(":/tulip/gui/icons/16/unlink.png"));
+    _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariantoff, Qt::white));
     _ui->linkButton->setToolTip("Click here to enable the synchronization with the Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the current one in the workspace active panel.");
   }
 

@@ -30,6 +30,7 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/Perspective.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/FontIconManager.h>
 
 #include "GraphPerspective.h"
 #include "ui_GraphHierarchiesEditor.h"
@@ -104,7 +105,7 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
 
   QToolButton *linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
-  linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
+  linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariant, Qt::white));
   linkButton->setToolTip("Click here to disable the synchronization with "
                          "workspace active panel.\nWhen synchronization is "
                          "enabled, the graph currently displayed\nin the "
@@ -365,14 +366,14 @@ void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
 
 void GraphHierarchiesEditor::toggleSynchronization(bool f) {
   if (f) {
-    _linkButton->setIcon(QIcon(":/tulip/gui/icons/16/link.png"));
+    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariant, Qt::white));
     _linkButton->setToolTip("Click here to disable the synchronization with "
                             "workspace active panel.\nWhen synchronization is "
                             "enabled, the graph currently displayed\nin the "
                             "active panel, becomes the current one in the "
                             "Graphs panel.");
   } else {
-    _linkButton->setIcon(QIcon(":/tulip/gui/icons/16/unlink.png"));
+    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariantoff, Qt::white));
     _linkButton->setToolTip("Click here to enable the synchronization with "
                             "workspace active panel.\nWhen synchronization is "
                             "enabled, the graph currently displayed\nin the "

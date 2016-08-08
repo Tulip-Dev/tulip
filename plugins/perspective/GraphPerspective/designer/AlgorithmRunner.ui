@@ -60,7 +60,7 @@ margin-left: 1ex;
 ExpandableGroupBox[root = &quot;false&quot; ][expanded = &quot;true&quot; ] {
 margin-left: 1ex;
 }
-QToolButton, QComboBox {
+QComboBox {
 border-image: url(:/tulip/gui/ui/btn_26.png) 4;
 border-width: 4;
 padding: 0px 6px;
@@ -93,7 +93,16 @@ border: 1px solid &quot;#C9C9C9&quot;;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -168,7 +177,16 @@ border: 1px solid &quot;#C9C9C9&quot;;
         </rect>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>

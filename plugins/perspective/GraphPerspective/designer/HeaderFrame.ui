@@ -25,14 +25,16 @@
   <property name="styleSheet">
    <string notr="true">#mainFrame, QToolButton, QPushButton, .QWidget {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #939393,
-stop: 0.4 #808080,
-stop: 0.401 #737373,
-stop: 1 #5a5a5a);
+background-color: #404244;
 border: 0px;
 color: white;
 }
+
+#mainFrame {
+border-top: 1px solid #262829;
+border-bottom: 1px solid #262829;
+}
+
 QLabel {
 border-image:none;
 border: 0px;
@@ -40,30 +42,24 @@ color: white;
 }
 QComboBox:hover, QToolButton:hover, QPushButton:hover {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #8F8F8F,
-stop: 0.4 #7C7C7C,
-stop: 0.401 #6F6F6F,
-stop: 1 #565656);
+background-color: #595B5D;
 border: 0px;
 color: white;
 }
 QToolButton:pressed, QPushButton:pressed {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #777777,
-stop: 0.4 #646464,
-stop: 0.401 #575757,
-stop: 1 #3e3e3e);
+background-color: #595B5D;
 border: 0px;
 color: white;
 }
 
 #expandButton {
-image: url(&quot;:/tulip/gui/ui/arrowup.png&quot;);
+color: white;
+image: url(&quot;:/tulip/graphperspective/icons/16/chevron-up.svg&quot;);
 }
 #expandButton::checked {
-image: url(&quot;:/tulip/gui/ui/arrowdown.png&quot;);
+color: white;
+image: url(&quot;:/tulip/graphperspective/icons/16/chevron-down.svg&quot;);
 }
 
 QComboBox::down-arrow {
@@ -92,7 +88,16 @@ border: 1px solid #C9C9C9;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
@@ -101,7 +106,16 @@ border: 1px solid #C9C9C9;
       <property name="spacing">
        <number>0</number>
       </property>
-      <property name="margin">
+      <property name="leftMargin">
+       <number>0</number>
+      </property>
+      <property name="topMargin">
+       <number>0</number>
+      </property>
+      <property name="rightMargin">
+       <number>0</number>
+      </property>
+      <property name="bottomMargin">
        <number>0</number>
       </property>
       <item>
@@ -147,6 +161,9 @@ border: 1px solid #C9C9C9;
           <height>25</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Hide contents</string>
+        </property>
         <property name="iconSize">
          <size>
           <width>22</width>
@@ -158,9 +175,6 @@ border: 1px solid #C9C9C9;
         </property>
         <property name="checked">
          <bool>true</bool>
-        </property>
-	<property name="toolTip">
-	 <string>Hide contents</string>
         </property>
        </widget>
       </item>
