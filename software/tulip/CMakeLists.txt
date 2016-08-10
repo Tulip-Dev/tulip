@@ -7,7 +7,6 @@ SET(SRCS
   src/PluginLoaderReporter.cpp
   src/PluginsCenter.cpp
   src/PluginInformationsListItem.cpp
-  src/RssParser.cpp
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
   src/TulipWelcomePage.cpp
