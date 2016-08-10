@@ -64,8 +64,8 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
 
     foreach (const QString &txt2, recentDocs)
       txt += "<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
-                     txt2 + "\">" + txt2 + "</a>" +
-                     "</span></p><p/>";
+             txt2 + "\">" + txt2 + "</a>" +
+             "</span></p><p/>";
 
     _ui->recentDocumentsLabel->setText(txt);
   }
@@ -81,7 +81,7 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
 }
 
 TulipWelcomePage::~TulipWelcomePage() {
-    delete _ui;
+  delete _ui;
 }
 
 void TulipWelcomePage::rssReply(QNetworkReply *reply) {
@@ -92,35 +92,42 @@ void TulipWelcomePage::rssReply(QNetworkReply *reply) {
   rssLayout->setContentsMargins(0,0,0,0);
   rssLayout->setSpacing(30);
   _ui->rssScroll->widget()->setLayout(rssLayout);
+
   while (!xmlReader.atEnd()&&i<RSS_LIMIT) {
-      if (xmlReader.readNextStartElement()) {
-          QString title, description;
-          if(xmlReader.name()=="item") {
-              ++i;
-              _ui->rssError->setVisible(false);
-              _ui->rssScroll->setVisible(true);
-              QXmlStreamReader::TokenType p(xmlReader.readNext());
-              while(xmlReader.name()!="item"&&p!=QXmlStreamReader::EndElement) {
-                  xmlReader.readNextStartElement();
-                  if(xmlReader.name()=="title")
-                      title = xmlReader.readElementText();
-                  if(xmlReader.name()=="description")
-                      description = xmlReader.readElementText();
-             }
-              QString text("<p><span style=\"color:#626262; font-size:large;\">");
-              text+=title+ "</span></p><p><span>" + description+ "</span></p>";
-              QLabel *label = new QLabel(text,0);
-              label->setMinimumWidth(1);
-              label->setWordWrap(true);
-              label->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-              connect(label,SIGNAL(linkActivated(QString)),this,SLOT(openLink(QString)));
-              rssLayout->addWidget(label);
-          }
+    if (xmlReader.readNextStartElement()) {
+      QString title, description;
+
+      if(xmlReader.name()=="item") {
+        ++i;
+        _ui->rssError->setVisible(false);
+        _ui->rssScroll->setVisible(true);
+        QXmlStreamReader::TokenType p(xmlReader.readNext());
+
+        while(xmlReader.name()!="item"&&p!=QXmlStreamReader::EndElement) {
+          xmlReader.readNextStartElement();
+
+          if(xmlReader.name()=="title")
+            title = xmlReader.readElementText();
+
+          if(xmlReader.name()=="description")
+            description = xmlReader.readElementText();
+        }
+
+        QString text("<p><span style=\"color:#626262; font-size:large;\">");
+        text+=title+ "</span></p><p><span>" + description+ "</span></p>";
+        QLabel *label = new QLabel(text,0);
+        label->setMinimumWidth(1);
+        label->setWordWrap(true);
+        label->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+        connect(label,SIGNAL(linkActivated(QString)),this,SLOT(openLink(QString)));
+        rssLayout->addWidget(label);
       }
-      if(xmlReader.hasError()) {
-          _ui->rssError->setVisible(true);
-          _ui->rssScroll->setVisible(false);
-      }
+    }
+
+    if(xmlReader.hasError()) {
+      _ui->rssError->setVisible(true);
+      _ui->rssScroll->setVisible(false);
+    }
   }
 }
 
