@@ -30,7 +30,7 @@ border: 0px;
 color: white;
 }
 
-#mainFrame {
+#mainFrame, #linkButton {
 border-top: 1px solid #262829;
 border-bottom: 1px solid #262829;
 }
@@ -142,8 +142,14 @@ border: 1px solid #C9C9C9;
           <height>25</height>
          </size>
         </property>
+        <property name="text">
+         <string/>
+        </property>
         <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+        </property>
+        <property name="indent">
+         <number>0</number>
         </property>
        </widget>
       </item>
@@ -151,14 +157,14 @@ border: 1px solid #C9C9C9;
        <widget class="QToolButton" name="expandButton">
         <property name="minimumSize">
          <size>
-          <width>25</width>
-          <height>25</height>
+          <width>23</width>
+          <height>23</height>
          </size>
         </property>
         <property name="maximumSize">
          <size>
-          <width>25</width>
-          <height>25</height>
+          <width>23</width>
+          <height>23</height>
          </size>
         </property>
         <property name="toolTip">
@@ -166,8 +172,8 @@ border: 1px solid #C9C9C9;
         </property>
         <property name="iconSize">
          <size>
-          <width>22</width>
-          <height>22</height>
+          <width>23</width>
+          <height>23</height>
          </size>
         </property>
         <property name="checkable">

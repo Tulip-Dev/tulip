@@ -111,7 +111,7 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
                          "enabled, the graph currently displayed\nin the "
                          "active panel, becomes the current one in the Graphs "
                          "panel.");
-  linkButton->setIconSize(QSize(22, 22));
+  linkButton->setIconSize(QSize(23, 23));
   linkButton->setMinimumSize(25, 25);
   linkButton->setMaximumSize(25, 25);
   linkButton->setCheckable(true);

@@ -182,10 +182,11 @@ AlgorithmRunner::AlgorithmRunner(QWidget* parent): QWidget(parent), _ui(new Ui::
 
   _ui->contents->setEnabled(false);
   _storeResultAsLocalButton = new QToolButton(_ui->header);
-  _storeResultAsLocalButton->setMaximumSize(25,25);
-  _storeResultAsLocalButton->setMinimumSize(25,25);
+  _storeResultAsLocalButton->setObjectName("storeAsLocalButton");
+  _storeResultAsLocalButton->setMaximumSize(23,23);
+  _storeResultAsLocalButton->setMinimumSize(23,23);
   _storeResultAsLocalButton->setIcon(QIcon(":/tulip/graphperspective/icons/16/hierarchy_add.png"));
-  _storeResultAsLocalButton->setIconSize(QSize(22,22));
+  _storeResultAsLocalButton->setIconSize(QSize(23,23));
   _storeResultAsLocalButton->setToolTip(trUtf8("Choose the storage policy for the result of property algorithms\nWhen they are applied to a subgraph, this result can be stored either\n- in a local subgraph property (created on the fly if needed),\nor\n- in a property already existing in the ascendant hierarchy (inherited or local)."));
   _ui->header->mainFrame()->layout()->addWidget(_storeResultAsLocalButton);
   QMenu* resultMenu = new QMenu(this);
