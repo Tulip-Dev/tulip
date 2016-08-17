@@ -52,7 +52,7 @@ public:
   }
 
   std::string icon() const {
-    return ":/tulip/gui/icons/32/plugin_glyph.png";
+    return "shape-plus";
   }
 
   virtual void getIncludeBoundingBox(tlp::BoundingBox &boundingBox);

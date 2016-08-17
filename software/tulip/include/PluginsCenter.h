@@ -55,7 +55,7 @@ public slots:
   void searchAll();
   void searchAlgorithms();
   void searchImportExport();
-  //void searchGlyphs();
+  void searchGlyphs();
   void searchViews();
   void searchInteractors();
   void searchPerspectives();

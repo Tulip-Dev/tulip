@@ -14,7 +14,7 @@
    <string>Import</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -59,7 +59,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePluginPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/document-import.png&quot; width=32 height=32/&gt; Graph importing Wizard</string>
+    <string>Graph importing Wizard</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -283,7 +283,9 @@ font: 10pt;
    </layout>
   </widget>
  </widget>
- <resources/>
+ <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>ImportWizard</sender>

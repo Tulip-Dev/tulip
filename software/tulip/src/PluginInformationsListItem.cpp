@@ -21,6 +21,8 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/FontIconManager.h>
 
 #include <QPainter>
 #include <QNetworkReply>
@@ -57,8 +59,15 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
     }
   }
 
-  if (!versionInfos.icon.isEmpty())
-    _ui->icon->setPixmap(QPixmap(versionInfos.icon).scaled(32,32));
+  if (!versionInfos.icon.isEmpty()) {
+    QPixmap pixmap(versionInfos.icon);
+    if (!pixmap.isNull()) {
+      pixmap = pixmap.scaled(32,32);
+    } else if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(QStringToTlpString(versionInfos.icon))) {
+      pixmap = FontIconManager::instance()->getMaterialDesignIcon(static_cast<mdi::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(versionInfos.icon))), Qt::black, 1.0).pixmap(QSize(32, 32));
+    }
+    _ui->icon->setPixmap(pixmap);
+  }
   _ui->name->setText(infos.name + " " + versionInfos.version);
   _ui->desc->setText(versionInfos.description + "\n\n" + trUtf8("Author: ") + versionInfos.author);
   _ui->installButton->setText(trUtf8("Install ") + infos.availableVersion.version);

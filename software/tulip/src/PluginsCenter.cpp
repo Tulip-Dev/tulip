@@ -32,6 +32,7 @@
 #include <tulip/ExportModule.h>
 #include <tulip/PluginManager.h>
 #include <tulip/TulipSettings.h>
+#include <tulip/Glyph.h>
 
 #include "ui_PluginsCenter.h"
 
@@ -48,6 +49,7 @@ using namespace tlp;
 
 PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::PluginsCenterData()), _currentItem(nullptr) {
   _ui->setupUi(this);
+
 
   QStringList remoteLocs = TulipSettings::instance().remoteLocations();
   _ui->stableCheck->setChecked(remoteLocs.contains(PluginManager::STABLE_LOCATION));
@@ -103,11 +105,10 @@ void PluginsCenter::searchImportExport() {
                      << tlp::EXPORT_CATEGORY.c_str());
 }
 
-//void PluginsCenter::searchGlyphs() {
-//  setCategoryFilters(QStringList()
-//                     << tlp::GLYPH_CATEGORY.c_str()
-//                     << tlp::EEGLYPH_CATEGORY.c_str());
-//}
+void PluginsCenter::searchGlyphs() {
+  setCategoryFilters(QStringList()
+                     << tlp::GLYPH_CATEGORY.c_str());
+}
 
 void PluginsCenter::searchViews() {
   setCategoryFilter(tlp::VIEW_CATEGORY.c_str());
@@ -176,7 +177,7 @@ void PluginsCenter::sideListRowChanged(int i) {
     break;
 
   case GLYPHS_ROW:
-    //searchGlyphs();
+    searchGlyphs();
     break;
 
   case VIEWS_ROW:
