@@ -46,8 +46,8 @@ GlyphsManager& GlyphsManager::instance() {
 GlyphsManager::GlyphsManager() {
   CircleGlyph *circleGlyph = new CircleGlyph();
   TriangleGlyph *triangleGlyph = new TriangleGlyph();
-  FontAwesomeGlyph *fontAwesomeGlyph = new FontAwesomeGlyph(TulipFontAwesome::getFontAwesomeIconCodePoint(TulipFontAwesome::QuestionCircle));
-  MaterialDesignIconGlyph *materialDesignIconGlyph = new MaterialDesignIconGlyph(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(TulipMaterialDesignIcons::HelpCircle));
+  FontAwesomeGlyph *fontAwesomeGlyph = new FontAwesomeGlyph(nullptr, TulipFontAwesome::getFontAwesomeIconCodePoint(TulipFontAwesome::QuestionCircle));
+  MaterialDesignIconGlyph *materialDesignIconGlyph = new MaterialDesignIconGlyph(nullptr, TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(TulipMaterialDesignIcons::HelpCircle));
 
   _glyphs[circleGlyph->id()] = circleGlyph;
   _glyphs[triangleGlyph->id()] = triangleGlyph;
@@ -71,12 +71,12 @@ Glyph *GlyphsManager::getGlyph(int glyphId) {
   }
   if (glyphId >= 0x1e000) {
     if(_iconGlyphs.find(glyphId) == _iconGlyphs.end()) {
-      _iconGlyphs[glyphId] = new MaterialDesignIconGlyph(glyphId-0xf000);
+      _iconGlyphs[glyphId] = new MaterialDesignIconGlyph(nullptr, glyphId-0xf000);
     }
     return _iconGlyphs[glyphId];
   } else if (glyphId >= 0xf000) {
     if(_iconGlyphs.find(glyphId) == _iconGlyphs.end()) {
-      _iconGlyphs[glyphId] = new FontAwesomeGlyph(glyphId);
+      _iconGlyphs[glyphId] = new FontAwesomeGlyph(nullptr, glyphId);
     }
     return _iconGlyphs[glyphId];
   }

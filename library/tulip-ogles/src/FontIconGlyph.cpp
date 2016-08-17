@@ -47,7 +47,7 @@
 using namespace std;
 using namespace tlp;
 
-FontIconGlyph::FontIconGlyph(const std::string &fontFile, unsigned int iconCodePoint) : Glyph(nullptr) {
+FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile, unsigned int iconCodePoint) : Glyph(context) {
 
   const FT_Library* library = FTLibrary::Instance().GetLibrary();
 
@@ -141,8 +141,11 @@ FontIconGlyph::FontIconGlyph(const std::string &fontFile, unsigned int iconCodeP
 
 }
 
-FontAwesomeGlyph::FontAwesomeGlyph(unsigned int iconCodePoint) :
-  FontIconGlyph(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), iconCodePoint) {}
+FontAwesomeGlyph::FontAwesomeGlyph(PluginContext *context, unsigned int iconCodePoint) :
+  FontIconGlyph(context, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), iconCodePoint) {}
 
-MaterialDesignIconGlyph::MaterialDesignIconGlyph(unsigned int iconCodePoint) :
-  FontIconGlyph(TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(), iconCodePoint) {}
+MaterialDesignIconGlyph::MaterialDesignIconGlyph(PluginContext *context, unsigned int iconCodePoint) :
+  FontIconGlyph(context, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(), iconCodePoint) {}
+
+PLUGIN(FontAwesomeGlyph)
+PLUGIN(MaterialDesignIconGlyph)

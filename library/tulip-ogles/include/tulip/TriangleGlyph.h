@@ -36,7 +36,7 @@ public:
 
   GLYPHINFORMATION("2D - Triangle", "2D - Arrow", "Antoine Lambert", "19/05/2016", "Triangle", "1.0", NodeShape::Triangle)
 
-  TriangleGlyph();
+  TriangleGlyph(PluginContext *context = nullptr);
 
   void getIncludeBoundingBox(BoundingBox &boundingBox);
 

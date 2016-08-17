@@ -33,7 +33,7 @@ using namespace tlp;
 
 static const unsigned short nbContourPoints = 30;
 
-CircleGlyph::CircleGlyph() : Glyph(nullptr) {
+CircleGlyph::CircleGlyph(PluginContext *context) : Glyph(context) {
   _vertices.push_back(Coord());
   vector<Coord> contour = computeRegularPolygon(nbContourPoints);
   _vertices.insert(_vertices.end(), contour.begin(), contour.end());
@@ -54,5 +54,7 @@ void CircleGlyph::getIncludeBoundingBox(BoundingBox &boundingBox) {
   boundingBox[0] = Coord(-0.35f, -0.35f, 0);
   boundingBox[1] = Coord(0.35f, 0.35f, 0);
 }
+
+PLUGIN(CircleGlyph)
 
 
