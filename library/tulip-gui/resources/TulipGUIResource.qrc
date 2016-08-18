@@ -96,5 +96,9 @@
         <file>icons/arrow_two_head.png</file>
         <file>ui/split3_3_screen.png</file>
         <file>ui/sidebar.png</file>
+        <file>icons/close-hover.svg</file>
+        <file>icons/close-pressed.svg</file>
+        <file>icons/close-selected.svg</file>
+        <file>icons/close-unselected.svg</file>
     </qresource>
 </RCC>

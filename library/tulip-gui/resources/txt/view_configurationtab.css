@@ -1,20 +1,23 @@
+
 QTabWidget {
   background-color: transparent;
 }
 
 QTabWidget::pane {
   background-color: white;
-  border: 1px solid #C9C9C9;
+  border: 1px solid #262829;
 }
+
+
 
 QTabBar::tab {
   border-image:none;
-  border: 1px solid #C9C9C9;
+  border: 1px solid #262829;
   border-right: 0px;
   border-top-left-radius: 4px;
   border-bottom-left-radius: 4px;
   min-height: 15ex;
-  padding: 2px;
+  padding-right: 3px;
   font: bold;
 }
 
@@ -23,35 +26,40 @@ QTabBar::tab:!selected {
 }
 
 QTabBar::tab:!selected {
-  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-  stop: 0 #ffffff,
-  stop: 0.4 #eeeeee,
-  stop: 0.401 #e2e2e2,
-  stop: 1 #dddddd);
-  color: black;
+  background-color: #404244;
+  color: gray;
 }
 
 QTabBar::tab:!selected:hover {
-  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-  stop: 0 #ffffff,
-  stop: 0.4 #fefefe,
-  stop: 0.401 #f2f2f2,
-  stop: 1 #ededed);
+  background-color: #565656;
 }
 
 QTabBar::tab:selected {
-  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-  stop: 0 #838383,
-  stop: 0.4 #707070,
-  stop: 0.401 #636363,
-  stop: 1 #4a4a4a);
+  background-color: #262829;
   color: white;
 }
 
 QTabBar::tab:selected:hover {
-  background-color: qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-  stop: 0 #939393,
-  stop: 0.4 #808080,
-  stop: 0.401 #737373,
-  stop: 1 #5a5a5a);
+  background-color: #565656;
+}
+
+QTabBar::close-button:selected  {
+    image: url(:/tulip/gui/icons/close-selected.svg);
+    background: transparent;
+}
+
+QTabBar::close-button  {
+    image: url(:/tulip/gui/icons/close-unselected.svg);
+    background: transparent;
+}
+
+QTabBar::close-button:hover
+{
+    image: url(:/tulip/gui/icons/close-hover.svg);
+    background: transparent;
+}
+
+QTabBar::close-button:pressed {
+    image: url(:/tulip/gui/icons/close-pressed.svg);
+    background: transparent;
 }
