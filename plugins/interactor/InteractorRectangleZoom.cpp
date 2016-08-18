@@ -29,8 +29,8 @@
 using namespace tlp;
 
 static QIcon getInteractorIcon() {
-  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::selection, Qt::white, 0.9);
-  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::magnifyplus, Qt::white, 0.6);
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(md::selection, Qt::white, 0.9);
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(md::magnifyplus, Qt::white, 0.6);
   return FontIconManager::stackIcons(backIcon, frontIcon);
 }
 

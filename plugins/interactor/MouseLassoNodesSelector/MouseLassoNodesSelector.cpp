@@ -35,7 +35,7 @@
 using namespace std;
 using namespace tlp;
 
-MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *):NodeLinkDiagramComponentInteractor(FontIconManager::instance()->getMaterialDesignIcon(mdi::vectorpolygon, Qt::white), "Select nodes in a freehand drawn region", StandardInteractorPriority::FreeHandSelection) {
+MouseLassoNodesSelectorInteractor::MouseLassoNodesSelectorInteractor(const tlp::PluginContext *):NodeLinkDiagramComponentInteractor(FontIconManager::instance()->getMaterialDesignIcon(md::vectorpolygon, Qt::white), "Select nodes in a freehand drawn region", StandardInteractorPriority::FreeHandSelection) {
   setConfigurationWidgetText(QString("<h3>Select nodes in a freehand drawn region</h3>")+ "<b>Mouse left</b> down begins the freehand drawing of the selection region,<br/><b>Mouse left</b> up ends the drawing of the region.<br/>All the nodes enclosed in the region are selected and the edges linking them too.");
 }
 

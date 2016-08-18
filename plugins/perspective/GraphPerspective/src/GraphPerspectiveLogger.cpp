@@ -30,7 +30,7 @@
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
   QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
-  _ui->clearButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::broom, Qt::yellow));
+  _ui->clearButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::broom, Qt::yellow));
   // we want to be able to select multiple rows in the logger list for copy/paste operations
   _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
   _ui->listWidget->installEventFilter(this);
@@ -50,16 +50,16 @@ static QIcon iconForType(QtMsgType type) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
   case QtInfoMsg:
 #endif
-    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::information, QColor("#407FB2"), 0.8);
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2"), 0.8);
     break;
 
   case QtWarningMsg:
-    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::alert, QColor("#E18D2B"), 0.8);
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::alert, QColor("#E18D2B"), 0.8);
     break;
 
   case QtCriticalMsg:
   case QtFatalMsg:
-    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::minuscircle, QColor("#C42730"), 0.8);
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::minuscircle, QColor("#C42730"), 0.8);
     break;
 
 
@@ -86,7 +86,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
-    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.8), msgClean));
+    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray, 0.8), msgClean));
     _pythonOutput = true;
   }
   else {
@@ -133,7 +133,7 @@ QPixmap GraphPerspectiveLogger::icon() {
     return QPixmap(iconForType(_logSeverity).pixmap(QSize(16,16)));
   }
   else {
-    return tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray).pixmap(QSize(16,16));
+    return tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray).pixmap(QSize(16,16));
   }
 }
 

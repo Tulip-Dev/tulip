@@ -1,16 +1,17 @@
 #include "tulip/FontIconManager.h"
-
-#include "tulip/TulipFontAwesome.h"
-#include "tulip/TulipMaterialDesignIcons.h"
 #include "tulip/TlpQtTools.h"
+
+#include <QtAwesome.h>
 
 using namespace tlp;
 
 FontIconManager *FontIconManager::_instance(nullptr);
 
 FontIconManager::FontIconManager() {
-  _faIconCreator.initFontAwesome(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
-  _mdiIconCreator.initMaterialDesignIcons(tlpStringToQString(TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation()));
+  _faIconCreator = new QtAwesome;
+  _mdiIconCreator = new QtAwesome;
+  _faIconCreator->initIconicFont(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
+  _mdiIconCreator->initIconicFont(tlpStringToQString(TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation()));
 }
 
 FontIconManager *FontIconManager::instance() {
@@ -59,21 +60,21 @@ QIcon FontIconManager::getFontAwesomeIcon(fa::iconCodePoint icon, const QColor &
   QString optionsString = getOptionsString(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   auto p = qMakePair(icon, optionsString);
   if (!_faIcons.contains(p)) {
-    _faIcons[p] = _faIconCreator.icon(icon, options);
+    _faIcons[p] = _faIconCreator->icon(static_cast<int>(icon), options);
   }
   return _faIcons[p];
 }
 
-QIcon FontIconManager::getMaterialDesignIcon(mdi::iconCodePoint icon, const QColor &color, const double scaleFactor, const QPointF &translation) {
+QIcon FontIconManager::getMaterialDesignIcon(md::iconCodePoint icon, const QColor &color, const double scaleFactor, const QPointF &translation) {
   return getMaterialDesignIcon(icon, color, color, color, color, scaleFactor, translation);
 }
 
-QIcon FontIconManager::getMaterialDesignIcon(mdi::iconCodePoint icon, const QColor &color, const QColor &colorDisabled, const QColor &colorActive, const QColor &colorSelected, const double scaleFactor, const QPointF &translation) {
+QIcon FontIconManager::getMaterialDesignIcon(md::iconCodePoint icon, const QColor &color, const QColor &colorDisabled, const QColor &colorActive, const QColor &colorSelected, const double scaleFactor, const QPointF &translation) {
   QVariantMap options = getOptionsMap(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   QString optionsString = getOptionsString(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   auto p = qMakePair(icon, optionsString);
   if (!_mdiIcons.contains(p)) {
-    _mdiIcons[p] = _mdiIconCreator.icon(icon, options);
+    _mdiIcons[p] = _mdiIconCreator->icon(static_cast<int>(icon), options);
   }
   return _mdiIcons[p];
 }

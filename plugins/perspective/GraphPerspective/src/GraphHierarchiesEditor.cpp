@@ -105,7 +105,7 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
 
   QToolButton *linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
-  linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariant, Qt::white));
+  linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariant, Qt::white));
   linkButton->setToolTip("Click here to disable the synchronization with "
                          "workspace active panel.\nWhen synchronization is "
                          "enabled, the graph currently displayed\nin the "
@@ -366,14 +366,14 @@ void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
 
 void GraphHierarchiesEditor::toggleSynchronization(bool f) {
   if (f) {
-    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariant, Qt::white));
+    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariant, Qt::white));
     _linkButton->setToolTip("Click here to disable the synchronization with "
                             "workspace active panel.\nWhen synchronization is "
                             "enabled, the graph currently displayed\nin the "
                             "active panel, becomes the current one in the "
                             "Graphs panel.");
   } else {
-    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariantoff, Qt::white));
+    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariantoff, Qt::white));
     _linkButton->setToolTip("Click here to enable the synchronization with "
                             "workspace active panel.\nWhen synchronization is "
                             "enabled, the graph currently displayed\nin the "

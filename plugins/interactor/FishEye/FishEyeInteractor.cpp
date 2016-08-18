@@ -102,7 +102,7 @@ static std::string fisheyeFragmentShaderSrc() {
 }
 
 FishEyeInteractor::FishEyeInteractor(const PluginContext *)
-    : GLInteractorComposite(FontIconManager::instance()->getMaterialDesignIcon(mdi::web, Qt::white), "Fisheye"), _fisheyeConfigWidget(nullptr) {}
+    : GLInteractorComposite(FontIconManager::instance()->getMaterialDesignIcon(md::web, Qt::white), "Fisheye"), _fisheyeConfigWidget(nullptr) {}
 
 void FishEyeInteractor::construct() {
   _fisheyeConfigWidget = new FishEyeConfigWidget();

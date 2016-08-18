@@ -46,8 +46,8 @@ using namespace tlp;
 
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr), _storeResultAsLocal(true) {
   _ui->setupUi(this);
-  _ui->settingsButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::settings, QColor("#5C8EC8"), 0.8));
-  _ui->playButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::play, Qt::green));
+  _ui->settingsButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, QColor("#5C8EC8"), 0.8));
+  _ui->playButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::play, Qt::green));
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
   // split pluginName after the second word if needed
@@ -85,11 +85,11 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): Q
   setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Maximum);
 
   if (plugin.programmingLanguage() == "Python") {
-    _ui->languageLabel->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, QColor(50,50,50), 0.6).pixmap(_ui->languageLabel->size()));
+    _ui->languageLabel->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, QColor(50,50,50), 0.6).pixmap(_ui->languageLabel->size()));
     _ui->languageLabel->setToolTip("Plugin written in Python");
   }
   else {
-    _ui->languageLabel->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagecpp, QColor(50,50,50), 0.6).pixmap(_ui->languageLabel->size()));
+    _ui->languageLabel->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(md::languagecpp, QColor(50,50,50), 0.6).pixmap(_ui->languageLabel->size()));
     _ui->languageLabel->setToolTip("Plugin written in C++");
   }
 }

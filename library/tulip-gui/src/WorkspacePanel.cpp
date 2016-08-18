@@ -113,9 +113,9 @@ WorkspacePanel::WorkspacePanel(tlp::View* view, QWidget *parent)
     _viewConfigurationExpanded(false),
     _currentInteractorConfigurationItem(nullptr) {
   _ui->setupUi(this);
-  _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariantoff, Qt::white, 0.8));
-  _ui->dragHandle->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(mdi::cursormove, Qt::white).pixmap(QSize(20,20)));
-  _ui->closeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::close, Qt::white));
+  _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::linkvariantoff, Qt::white, 0.8));
+  _ui->dragHandle->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(md::cursormove, Qt::white).pixmap(QSize(20,20)));
+  _ui->closeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close, Qt::white));
   _ui->actionClose->setShortcutContext(Qt::WidgetWithChildrenShortcut);
   _ui->interactorsFrame->installEventFilter(this);
   _ui->dragHandle->setPanel(this);
@@ -664,11 +664,11 @@ bool WorkspacePanel::isGraphSynchronized() const {
 
 void WorkspacePanel::toggleSynchronization(bool f) {
   if (f) {
-    _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariant, Qt::white));
+    _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::linkvariant, Qt::white));
     _ui->linkButton->setToolTip("Click here to disable the synchronization with the Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the current one in the workspace active panel.");
   }
   else {
-    _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::linkvariantoff, Qt::white));
+    _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::linkvariantoff, Qt::white));
     _ui->linkButton->setToolTip("Click here to enable the synchronization with the Graphs panel.\nWhen synchronization is enabled, the current graph of the Graphs panel,\nbecomes the current one in the workspace active panel.");
   }
 

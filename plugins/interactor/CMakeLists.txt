@@ -4,7 +4,7 @@ ADD_SUBDIRECTORY(MouseLassoNodesSelector)
 #ADD_SUBDIRECTORY(NeighborhoodHighlighter)
 #ADD_SUBDIRECTORY(PathFinder)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${QtAwesomeInclude})
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(InteractorNavigation-${TulipVersion} SHARED InteractorNavigation.cpp)

@@ -76,7 +76,7 @@ QVariant SimplePluginListModel::data(const QModelIndex &index, int role) const {
       const Plugin& p = PluginLister::pluginInformation(name);
       QPixmap pix(tlp::tlpStringToQString(p.icon()));
       if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(p.icon())) {
-        pix = FontIconManager::instance()->getMaterialDesignIcon(static_cast<mdi::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(p.icon())), Qt::black, 1.0).pixmap(QSize(32, 32));
+        pix = FontIconManager::instance()->getMaterialDesignIcon(static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(p.icon())), Qt::black, 1.0).pixmap(QSize(32, 32));
       }
       return pix;
     }

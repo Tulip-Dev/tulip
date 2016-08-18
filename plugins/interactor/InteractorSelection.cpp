@@ -38,7 +38,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorSelection(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(FontIconManager::instance()->getMaterialDesignIcon(mdi::selection, Qt::white),"Select nodes/edges in a rectangle") {
+  InteractorSelection(const tlp::PluginContext*):NodeLinkDiagramComponentInteractor(FontIconManager::instance()->getMaterialDesignIcon(md::selection, Qt::white),"Select nodes/edges in a rectangle") {
     setPriority(StandardInteractorPriority::RectangleSelection);
     setConfigurationWidgetText(QString("<h3>Selection nodes/edges in a rectangle</h3>")+
                                "Draw selection rectangle.<br/><b>Mouse left</b> down indicates the first corner, <b>Mouse left</b> up indicates the opposite corner,<br/>all graph elements instersecting the rectangle are selected<br/><br/>"+

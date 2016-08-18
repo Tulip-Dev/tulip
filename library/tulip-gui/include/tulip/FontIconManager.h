@@ -1,11 +1,15 @@
 #ifndef FONTICONMANAGER_H
 #define FONTICONMANAGER_H
 
-#include <QtAwesome.h>
 #include <tulip/tulipconf.h>
+#include <tulip/TulipFontAwesome.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 #include <QMap>
 #include <QPair>
+#include <QIcon>
+
+class QtAwesome;
 
 namespace tlp {
 
@@ -28,12 +32,12 @@ public:
                            const double scaleFactor = 0.9,
                            const QPointF &translation = QPointF(0,0));
 
-  QIcon getMaterialDesignIcon(mdi::iconCodePoint icon,
+  QIcon getMaterialDesignIcon(md::iconCodePoint icon,
                               const QColor &color = QColor(50, 50, 50),
                               const double scaleFactor = 0.9,
                               const QPointF &translation = QPointF(0,0));
 
-  QIcon getMaterialDesignIcon(mdi::iconCodePoint icon,
+  QIcon getMaterialDesignIcon(md::iconCodePoint icon,
                               const QColor &color,
                               const QColor &colorDisabled,
                               const QColor &colorActive,
@@ -47,11 +51,11 @@ private:
 
   FontIconManager();
 
-  QtAwesome _faIconCreator;
-  QtAwesome _mdiIconCreator;
+  QtAwesome *_faIconCreator;
+  QtAwesome *_mdiIconCreator;
 
   QMap<QPair<fa::iconCodePoint, QString>, QIcon> _faIcons;
-  QMap<QPair<mdi::iconCodePoint, QString>, QIcon> _mdiIcons;
+  QMap<QPair<md::iconCodePoint, QString>, QIcon> _mdiIcons;
 
   static FontIconManager *_instance;
 };

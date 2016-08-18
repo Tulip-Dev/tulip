@@ -57,9 +57,9 @@ Workspace::Workspace(QWidget *parent)
       _autoCenterViews(false) {
   _ui->setupUi(this);
   _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      mdi::import, Qt::black));
+      md::import, Qt::black));
   _ui->startupButton->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox,
+      FontIconManager::instance()->getMaterialDesignIcon(md::plusbox,
                                                          Qt::black));
   _ui->startupMainFrame->hide();
   _ui->workspaceContents->setCurrentWidget(_ui->startupPage);

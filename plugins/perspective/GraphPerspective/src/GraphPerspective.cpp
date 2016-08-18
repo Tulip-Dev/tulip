@@ -76,8 +76,8 @@ static QColor sideBarIconColor = Qt::white;
 static QColor menuIconColor = QColor("#404244");
 
 static QIcon getFileNewIcon() {
-  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::file, menuIconColor, 1.0);
-  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(mdi::plus, Qt::white, 0.7, QPointF(0, 10));
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor, 1.0);
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(md::plus, Qt::white, 0.7, QPointF(0, 10));
   return FontIconManager::stackIcons(backIcon, frontIcon);
 }
 
@@ -123,13 +123,13 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach(QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::archive, menuIconColor, 1.0),s,this,SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::archive, menuIconColor, 1.0),s,this,SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
   foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(mdi::file, menuIconColor, 1.0),s,this,SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor, 1.0),s,this,SLOT(openRecentFile()));
   }
 }
 
@@ -282,22 +282,22 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
 
-  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, sideBarIconColor));
-  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::televisionguide, sideBarIconColor));
-  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, sideBarIconColor));
-  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::tablelarge, sideBarIconColor));
-  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::reply, sideBarIconColor));
-  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::share, sideBarIconColor));
-  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::plusbox, sideBarIconColor));
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, sideBarIconColor));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::televisionguide, sideBarIconColor));
+  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, sideBarIconColor));
+  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::tablelarge, sideBarIconColor));
+  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, sideBarIconColor));
+  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, sideBarIconColor));
+  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, sideBarIconColor));
   _ui->actionNewProject->setIcon(getFileNewIcon());
-  _ui->actionOpen_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::fileimport, menuIconColor, 1.0));
-  _ui->menuOpen_recent_file->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::clock, menuIconColor, 1.0));
-  _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::fileexport, menuIconColor, 1.0));
-  _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::fileexport, menuIconColor, 1.0));
-  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::import, menuIconColor, 1.0));
-  _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::table, menuIconColor, 1.0));
+  _ui->actionOpen_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, menuIconColor, 1.0));
+  _ui->menuOpen_recent_file->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::clock, menuIconColor, 1.0));
+  _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor, 1.0));
+  _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor, 1.0));
+  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, menuIconColor, 1.0));
+  _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::table, menuIconColor, 1.0));
   _ui->actionNew_graph->setIcon(getFileNewIcon());
-  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(mdi::closecircle, menuIconColor, 1.0));
+  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::closecircle, menuIconColor, 1.0));
 #ifdef BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();

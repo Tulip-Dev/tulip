@@ -57,6 +57,6 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   QRect rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
   QRectF rect3(width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
   painter.drawText(rect,  Qt::AlignCenter, "Powered by ");
-  painter.drawPixmap(rect2, FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, _textColor).pixmap(QSize(32,32)));
+  painter.drawPixmap(rect2, FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, _textColor).pixmap(QSize(32,32)));
   painter.drawText(rect3,  Qt::AlignCenter, QString("Python ") + pythonVersion);
 }

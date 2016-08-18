@@ -27,7 +27,6 @@
 #include <tulip/TulipModel.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginLister.h>
-#include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/FontIconManager.h>
 
 #include <string>
@@ -198,7 +197,7 @@ public:
       const tlp::Plugin& p = tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
       QIcon icon(tlp::tlpStringToQString(p.icon()));
       if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(p.icon())) {
-        icon = FontIconManager::instance()->getMaterialDesignIcon(static_cast<mdi::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(p.icon())), Qt::black, 1.0);
+        icon = FontIconManager::instance()->getMaterialDesignIcon(static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(p.icon())), Qt::black, 1.0);
       }
       return icon;
     }

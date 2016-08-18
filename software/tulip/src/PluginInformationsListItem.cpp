@@ -21,7 +21,6 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
-#include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/FontIconManager.h>
 
 #include <QPainter>
@@ -64,7 +63,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
     if (!pixmap.isNull()) {
       pixmap = pixmap.scaled(32,32);
     } else if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(QStringToTlpString(versionInfos.icon))) {
-      pixmap = FontIconManager::instance()->getMaterialDesignIcon(static_cast<mdi::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(versionInfos.icon))), Qt::black, 1.0).pixmap(QSize(32, 32));
+      pixmap = FontIconManager::instance()->getMaterialDesignIcon(static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(versionInfos.icon))), Qt::black, 1.0).pixmap(QSize(32, 32));
     }
     _ui->icon->setPixmap(pixmap);
   }

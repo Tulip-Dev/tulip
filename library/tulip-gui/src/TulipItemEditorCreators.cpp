@@ -30,15 +30,13 @@
 #include <tulip/ColorScaleButton.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/FontIconManager.h>
+#include <tulip/FontIconManager.h>
 #include <tulip/GlyphPreviewRenderer.h>
 #include <tulip/GlyphsManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/Perspective.h>
-#include <tulip/StringEditor.h>
-#include <tulip/StringEditor.h>
 #include <tulip/TextureFileDialog.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/TulipMaterialDesignIcons.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 using namespace tlp;
 
@@ -471,7 +469,7 @@ public:
   }
 
   QIcon getMaterialDesignIcon(const QString &iconName) {
-    mdi::iconCodePoint icon = static_cast<mdi::iconCodePoint>(
+    md::iconCodePoint icon = static_cast<md::iconCodePoint>(
         TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(
             iconName.toStdString()));
     return FontIconManager::instance()->getMaterialDesignIcon(icon);
