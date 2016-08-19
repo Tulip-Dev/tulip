@@ -35,14 +35,7 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   QPainter painter(this);
   painter.setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
-  if (_drawGradient) {
-    QLinearGradient gradient(width()/2,tabBar()->pos().y(),width()/2,tabBar()->pos().y()+tabBar()->height());
-    gradient.setColorAt(0.0, "#838383");
-    gradient.setColorAt(0.4, "#707070");
-    gradient.setColorAt(0.401, "#636363");
-    gradient.setColorAt(1.0, "#4a4a4a");
-    painter.fillRect(x(), tabBar()->pos().y(), width(), tabBar()->height(), gradient);
-  }
+  painter.fillRect(x(), tabBar()->pos().y(), width(), tabBar()->height(), QColor("#404244"));
 
   painter.setPen(_textColor);
 #ifndef __APPLE__
@@ -50,9 +43,9 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
 #else
   painter.setFont(QFont("Arial", static_cast<int>(18 * tabBar()->height() / 27.0)));
 #endif
-  int firstLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
+  int firstLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(30 * tabBar()->height() / 27.0);
-  int secondLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
+  int secondLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
   QRectF rect(width()-(firstLabelWidth+imageWidth+secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
   QRect rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
   QRectF rect3(width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());

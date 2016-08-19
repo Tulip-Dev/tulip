@@ -58,14 +58,14 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
   _mainScriptToolBar = new QToolBar(_ui->mainScriptToolBarWidget);
   _newMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, Qt::white), "New main script");
-  _loadMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::import, Qt::white, 1.0), "Load main script from file");
-  _saveMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::export_, Qt::white, 1.0), "Save main script to file");
+  _loadMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white, 1.0), "Load main script from file");
+  _saveMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white, 1.0), "Save main script to file");
 
   _modulesToolBar = new QToolBar(_ui->modulesToolBarWidget);
   _newStringModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::white), "New string module");
   _newFileModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, Qt::white), "New file module");
-  _loadModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::import, Qt::white, 1.0), "Import module from file");
-  _saveModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::export_, Qt::white, 1.0), "Save module to file");
+  _loadModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white, 1.0), "Import module from file");
+  _saveModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white, 1.0), "Save module to file");
 
   _ui->modulesTabWidget->clear();
   _ui->mainScriptsTabWidget->clear();

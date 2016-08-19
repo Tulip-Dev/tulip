@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>520</width>
+    <width>542</width>
     <height>608</height>
    </rect>
   </property>
@@ -20,41 +20,75 @@
    <string>Form</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTabWidget:pane {
-border: 0px; 
+   <string notr="true">QTabWidget {
+  background-color: #404244;
+}
+
+QTabWidget::pane {
+  background-color: #404244;
+  border: 1px solid #262829;
+  border-left: 0px;
+  border-right: 0px;
 }
 
 QTabBar::tab {
-   color: #333;
-border: 1px solid #000;
-/*border-top-left-radius: 11px;
-border-top-right-radius: 11px;*/
-border-bottom: none;
-padding: 5px;
-background: qradialgradient(cx: 0.3, cy: -0.4,
-fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #888);
-min-width:120px;
-height:14px;
-font:bold;
+  border-image:none;
+  border-bottom: 0px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  min-width: 15ex;
+  padding-bottom: 3px;
+  margin-top: 1px;
+  margin-left: 2px;
+  font: bold;
 }
 
-QTabBar::tab:hover {
-    background: qradialgradient(cx: 0.3, cy: -0.4,
-fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #bbb);
+QTabBar::tab:!selected {
+  margin-top: 2px;
+  border: 1px solid #262829;
+  border-bottom: 0px;
+  background-color: #404244;
+  color: gray;
+}
+
+QTabBar::tab:!selected:hover {
+  background-color: #565656;
 }
 
 QTabBar::tab:selected {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-    stop: 0 #EFEFEF, stop: 1 #EEEEEE);
-    color: #3c3c3c;
+  background-color: #262829;
+  border: 1px solid gray;
+  border-bottom: 0px;
+  color: white;
 }
 
+QTabBar::tab:selected:hover {
+  background-color: #565656;
+}
 
+QTabBar::close-button:selected  {
+    image: url(:/tulip/gui/icons/close-selected.svg);
+    background: transparent;
+}
+
+QTabBar::close-button  {
+    image: url(:/tulip/gui/icons/close-unselected.svg);
+    background: transparent;
+}
+
+QTabBar::close-button:hover
+{
+    image: url(:/tulip/gui/icons/close-hover.svg);
+    background: transparent;
+}
+
+QTabBar::close-button:pressed {
+    image: url(:/tulip/gui/icons/close-pressed.svg);
+    background: transparent;
+}
 
 QSplitter::handle {
-background-color: #C0C0C0;
+background-color: #404244;
 border-width:0px;
 }
 
@@ -111,20 +145,38 @@ border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
+
+QSplitter::handle:horizontal {
+    width: 0px;
+}
+
+QSplitter::handle:vertical {
+    height: 0px;
+}
 </string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_7">
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
     <number>0</number>
    </property>
    <item>
     <widget class="QSplitter" name="splitter">
      <property name="styleSheet">
       <string notr="true">QSplitter, QFrame {
-background-color:#838383;
+background-color:#404244;
+border-width: 0px;
 }
 
 </string>
@@ -136,7 +188,7 @@ background-color:#838383;
       <bool>true</bool>
      </property>
      <property name="handleWidth">
-      <number>5</number>
+      <number>2</number>
      </property>
      <widget class="PythonTabWidget" name="tabWidget">
       <property name="sizePolicy">
@@ -154,7 +206,6 @@ background-color:#838383;
       <property name="styleSheet">
        <string notr="true">QTabWidget::pane { /* The tab widget frame */
      border-top: none;
-
  }
 
 </string>
@@ -165,7 +216,7 @@ background-color:#838383;
       <widget class="QWidget" name="tab">
        <property name="styleSheet">
         <string notr="true">#tab {
-    background-color:#838383;
+    background-color:#404244;
 }
 </string>
        </property>
@@ -176,7 +227,16 @@ background-color:#838383;
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -189,11 +249,11 @@ background-color:#838383;
           </property>
           <property name="styleSheet">
            <string notr="true">QFrame {
-	border-top: black;
-	border-bottom: black;
+	border-top: 1px solid #262829;
+	border-bottom: 1px solid #262829;
 	border-right: black;
 	border-left: black;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+	background-color: #404244;
 }
 
 QToolButton {
@@ -210,15 +270,13 @@ QToolButton {
 
 QToolButton:hover {
 	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(93, 93, 93, 255), 
-    stop:1 rgba(150, 150, 150, 255));
-	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	background-color: #595B5D;
+	border-left: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
 	stop: 1.0 rgba(0,0,0,0));
-	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	border-right: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
@@ -227,12 +285,9 @@ QToolButton:hover {
 
 QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
 	border-image:none;
-	color: black;
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(198, 198, 198, 255), 
-    stop:1 rgba(255, 255, 255, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
+    background-color: #262829;
+	border-left: 1px solid rgba(70,70,70);
+	border-right: 1px solid rgba(70,70,70);
 }
 
 QPushButton::pressed {
@@ -267,10 +322,14 @@ font:normal;
 
 QTabWidget::pane { /* The tab widget frame */
      border-top: none;
+     border-bottom:none;
  }
 
 
 </string>
+          </property>
+          <property name="currentIndex">
+           <number>0</number>
           </property>
           <property name="tabsClosable">
            <bool>true</bool>
@@ -295,7 +354,7 @@ QTabWidget::pane { /* The tab widget frame */
       <widget class="QWidget" name="tab_2">
        <property name="styleSheet">
         <string notr="true">#tab_2 { /* The tab widget frame */
-     background-color:#838383;
+     background-color:#404244;
 }</string>
        </property>
        <attribute name="title">
@@ -305,7 +364,16 @@ QTabWidget::pane { /* The tab widget frame */
         <property name="spacing">
          <number>0</number>
         </property>
-        <property name="margin">
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
          <number>0</number>
         </property>
         <item>
@@ -318,11 +386,11 @@ QTabWidget::pane { /* The tab widget frame */
           </property>
           <property name="styleSheet">
            <string notr="true">QFrame {
-	border-top: black;
-	border-bottom: black;
+	border-top: 1px solid #262829;
+	border-bottom: 1px solid #262829;
 	border-right: black;
 	border-left: black;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+	background-color: #404244;
 }
 
 QToolButton {
@@ -339,15 +407,13 @@ QToolButton {
 
 QToolButton:hover {
 	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(93, 93, 93, 255), 
-    stop:1 rgba(150, 150, 150, 255));
-	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	background-color: #595B5D;
+	border-left: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
 	stop: 1.0 rgba(0,0,0,0));
-	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	border-right: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
@@ -356,12 +422,9 @@ QToolButton:hover {
 
 QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
 	border-image:none;
-	color: black;
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(198, 198, 198, 255), 
-    stop:1 rgba(255, 255, 255, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
+    background-color: #262829;
+	border-left: 1px solid rgba(70,70,70);
+	border-right: 1px solid rgba(70,70,70);
 }
 
 QPushButton::pressed {
@@ -392,6 +455,7 @@ QToolBar {
           <property name="styleSheet">
            <string notr="true">QTabWidget::pane { /* The tab widget frame */
      border-top: none;
+     border-bottom: none;
  }
 
 QTabBar::tab {
@@ -431,6 +495,7 @@ font:normal;
         <widget class="QLabel" name="label">
          <property name="styleSheet">
           <string notr="true">background-color:white;
+border: none;
 </string>
          </property>
          <property name="lineWidth">
@@ -474,6 +539,11 @@ background-color: white;
      <property name="styleSheet">
       <string notr="true">QFrame {
 background-color: white;
+}
+
+#scriptControlFrame {
+border-top: 1px solid #262829;
+border-radius: 4px;
 }</string>
      </property>
      <property name="frameShape">
@@ -500,7 +570,7 @@ background-color: white;
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="PythonScriptViewResource.qrc">
             <normaloff>:/icons/playback_play.png</normaloff>:/icons/playback_play.png</iconset>
           </property>
          </widget>
@@ -523,7 +593,7 @@ background-color: white;
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="PythonScriptViewResource.qrc">
             <normaloff>:/icons/playback_pause.png</normaloff>:/icons/playback_pause.png</iconset>
           </property>
          </widget>
@@ -546,7 +616,7 @@ background-color: white;
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="PythonScriptViewResource.qrc">
             <normaloff>:/icons/playback_stop.png</normaloff>:/icons/playback_stop.png</iconset>
           </property>
          </widget>
@@ -601,7 +671,7 @@ can not be undone but performance of the script execution will be better
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="PythonScriptViewResource.qrc">
             <normaloff>:/icons/round_minus.png</normaloff>:/icons/round_minus.png</iconset>
           </property>
          </widget>
@@ -618,7 +688,7 @@ can not be undone but performance of the script execution will be better
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="PythonScriptViewResource.qrc">
             <normaloff>:/icons/round_plus.png</normaloff>:/icons/round_plus.png</iconset>
           </property>
          </widget>
@@ -670,6 +740,8 @@ can not be undone but performance of the script execution will be better
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="PythonScriptViewResource.qrc"/>
+ </resources>
  <connections/>
 </ui>

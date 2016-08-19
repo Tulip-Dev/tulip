@@ -23,35 +23,71 @@
    <bool>false</bool>
   </property>
   <property name="styleSheet">
-   <string notr="true">QTabWidget:pane {
-border: 0px; 
+   <string notr="true">QTabWidget {
+  background-color: #404244;
+}
+
+QTabWidget::pane {
+  background-color: #404244;
+  border: 1px solid #262829;
+  border-left: 0px;
+  border-right: 0px;
 }
 
 QTabBar::tab {
-   color: #333;
-border: 1px solid #000;
-/*border-top-left-radius: 11px;
-border-top-right-radius: 11px;*/
-border-bottom: none;
-padding: 5px;
-background: qradialgradient(cx: 0.3, cy: -0.4,
-fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #888);
-min-width:120px;
-height:14px;
-font:bold;
+  border-image:none;
+  border-bottom: 0px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  min-width: 15ex;
+  padding-bottom: 3px;
+  margin-top: 1px;
+  margin-left: 2px;
+  font: bold;
 }
 
-QTabBar::tab:hover {
-    background: qradialgradient(cx: 0.3, cy: -0.4,
-fx: 0.3, fy: -0.4,
-radius: 1.35, stop: 0 #fff, stop: 1 #bbb);
+QTabBar::tab:!selected {
+  margin-top: 2px;
+  border: 1px solid #262829;
+  border-bottom: 0px;
+  background-color: #404244;
+  color: gray;
+}
+
+QTabBar::tab:!selected:hover {
+  background-color: #565656;
 }
 
 QTabBar::tab:selected {
-    background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
-    stop: 0 #EFEFEF, stop: 1 #EEEEEE);
-    color: #3c3c3c;
+  background-color: #262829;
+  border: 1px solid gray;
+  border-bottom: 0px;
+  color: white;
+}
+
+QTabBar::tab:selected:hover {
+  background-color: #565656;
+}
+
+QTabBar::close-button:selected  {
+    image: url(:/tulip/gui/icons/close-selected.svg);
+    background: transparent;
+}
+
+QTabBar::close-button  {
+    image: url(:/tulip/gui/icons/close-unselected.svg);
+    background: transparent;
+}
+
+QTabBar::close-button:hover
+{
+    image: url(:/tulip/gui/icons/close-hover.svg);
+    background: transparent;
+}
+
+QTabBar::close-button:pressed {
+    image: url(:/tulip/gui/icons/close-pressed.svg);
+    background: transparent;
 }
 </string>
   </property>
@@ -72,7 +108,7 @@ QTabBar::tab:selected {
     <widget class="QSplitter" name="splitter">
      <property name="styleSheet">
       <string notr="true">QSplitter, QFrame {
-    background-color:#838383;
+    background-color:#404244;
 }
 </string>
      </property>
@@ -80,7 +116,7 @@ QTabBar::tab:selected {
       <enum>Qt::Vertical</enum>
      </property>
      <property name="handleWidth">
-      <number>1</number>
+      <number>3</number>
      </property>
      <widget class="PythonTabWidget" name="tabWidget">
       <property name="sizePolicy">
@@ -98,6 +134,7 @@ QTabBar::tab:selected {
       <property name="styleSheet">
        <string notr="true">QTabWidget::pane { 
      border-top: none;
+     border-bottom: none;
  }
 
 
@@ -112,7 +149,7 @@ QTabBar::tab:selected {
        </property>
        <property name="styleSheet">
         <string notr="true">#tab_8 {
-     background-color:#838383;
+     background-color:#404244;
 }</string>
        </property>
        <attribute name="title">
@@ -139,7 +176,7 @@ QTabBar::tab:selected {
           <property name="minimumSize">
            <size>
             <width>0</width>
-            <height>50</height>
+            <height>40</height>
            </size>
           </property>
           <property name="maximumSize">
@@ -150,11 +187,9 @@ QTabBar::tab:selected {
           </property>
           <property name="styleSheet">
            <string notr="true">#pluginsToolBarWidget {
-	border-top: black;
-	border-bottom: black;
-	border-right: black;
-	border-left: black;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+	border-top: 1px solid #262829;
+	border-bottom: 1px solid #262829;
+	background-color: #404244;
 }
 
 QToolButton {
@@ -167,19 +202,18 @@ QToolButton {
 	font: bold 10px;
 	height:20px;
     background-color: rgba(0,0,0,0);
+    padding-bottom: 5px;
 }
 
 QToolButton:hover {
 	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(93, 93, 93, 255), 
-    stop:1 rgba(150, 150, 150, 255));
-	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	background-color: #595B5D;
+	border-left: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
 	stop: 1.0 rgba(0,0,0,0));
-	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	border-right: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
@@ -188,12 +222,9 @@ QToolButton:hover {
 
 QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
 	border-image:none;
-	color: black;
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(198, 198, 198, 255), 
-    stop:1 rgba(255, 255, 255, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
+    background-color: #262829;
+	border-left: 1px solid rgba(70,70,70);
+	border-right: 1px solid rgba(70,70,70);
 }
 
 QPushButton::pressed {
@@ -249,10 +280,6 @@ QToolButton:pressed {
              <property name="text">
               <string>New</string>
              </property>
-             <property name="icon">
-              <iconset resource="../resources/GraphPerspective.qrc">
-               <normaloff>:/tulip/graphperspective/icons/48/doc_plus.png</normaloff>:/tulip/graphperspective/icons/48/doc_plus.png</iconset>
-             </property>
              <property name="iconSize">
               <size>
                <width>28</width>
@@ -284,10 +311,6 @@ QToolButton:pressed {
              <property name="text">
               <string>Load</string>
              </property>
-             <property name="icon">
-              <iconset resource="../resources/GraphPerspective.qrc">
-               <normaloff>:/tulip/graphperspective/icons/48/doc_import.png</normaloff>:/tulip/graphperspective/icons/48/doc_import.png</iconset>
-             </property>
              <property name="iconSize">
               <size>
                <width>28</width>
@@ -318,10 +341,6 @@ QToolButton:pressed {
              </property>
              <property name="text">
               <string>Save</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../resources/GraphPerspective.qrc">
-               <normaloff>:/tulip/graphperspective/icons/48/doc_export.png</normaloff>:/tulip/graphperspective/icons/48/doc_export.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -358,7 +377,7 @@ font:normal;
 }
 
 #pluginsTabWidget {
-     background-color:#838383;
+     background-color:#404244;
 }</string>
           </property>
           <property name="currentIndex">
@@ -387,7 +406,7 @@ font:normal;
       <widget class="QWidget" name="tab_2">
        <property name="styleSheet">
         <string notr="true">#tab_2 {
-background-color:#838383;
+background-color:#404244;
 }</string>
        </property>
        <attribute name="title">
@@ -425,11 +444,11 @@ background-color:#838383;
           </property>
           <property name="styleSheet">
            <string notr="true">#modulesToolBarWidget {
-	border-top: black;
-	border-bottom: black;
+	border-top: 1px solid #262829;
+	border-bottom: 1px solid #262829;
 	border-right: black;
 	border-left: black;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, stop:0 rgba(73, 73, 73, 255), stop:1 rgba(130, 130, 130, 255));
+	background-color: #404244;
 }
 
 QToolButton {
@@ -442,19 +461,18 @@ QToolButton {
 	font: bold 10px;
 	height:20px;
     background-color: rgba(0,0,0,0);
+    padding-bottom: 5px;
 }
 
 QToolButton:hover {
 	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(93, 93, 93, 255), 
-    stop:1 rgba(150, 150, 150, 255));
-	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	background-color: #595B5D;
+	border-left: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
 	stop: 1.0 rgba(0,0,0,0));
-	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
+	border-right: 1px solid qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,
 	stop: 0.0 rgba(0,0,0,0),
 	stop: 0.4 rgba(170,170,170,255),
 	stop: 0.5 rgba(170,170,170,255),
@@ -463,12 +481,9 @@ QToolButton:hover {
 
 QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
 	border-image:none;
-	color: black;
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(198, 198, 198, 255), 
-    stop:1 rgba(255, 255, 255, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
+    background-color: #262829;
+	border-left: 1px solid rgba(70,70,70);
+	border-right: 1px solid rgba(70,70,70);
 }
 
 QPushButton::pressed {
@@ -478,59 +493,7 @@ QPushButton::pressed {
 	border-bottom: 1px solid rgba(70,70,70);
 }
 
-QToolButton:pressed {
-	border-image:none;
-}
-
-QToolButton {
-	border-image:none;
-	border-top: 1px solid rgba(0,0,0,0);
-	border-bottom: 1px solid rgba(0,0,0,0);
-	border-left: 0px solid rgba(0,0,0,0);
-	border-right: 0px solid rgba(0,0,0,0);
-	color: white;
-	font: bold 10px;
-	height:20px;
-    background-color: rgba(0,0,0,0);
-}
-
-QToolButton:hover {
-	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(93, 93, 93, 255), 
-    stop:1 rgba(150, 150, 150, 255));
-	border-top: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-	stop: 0.0 rgba(0,0,0,0),
-	stop: 0.4 rgba(170,170,170,255),
-	stop: 0.5 rgba(170,170,170,255),
-	stop: 1.0 rgba(0,0,0,0));
-	border-bottom: 1px solid qlineargradient(x1: 0, y1: 0, x2: 1, y2: 0,
-	stop: 0.0 rgba(0,0,0,0),
-	stop: 0.4 rgba(170,170,170,255),
-	stop: 0.5 rgba(170,170,170,255),
-	stop: 1.0 rgba(0,0,0,0));
-}
-
-QToolButton:checked, QToolButton:checked:pressed, QToolButton:pressed {
-	border-image:none;
-	color: black;
-    background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, 
-    stop:0 rgba(198, 198, 198, 255), 
-    stop:1 rgba(255, 255, 255, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
-}
-
-QPushButton::pressed {
-	border-image:none;
-	background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:0, stop:0 rgba(53, 53, 53, 255), stop:1 rgba(120, 120, 120, 255));
-	border-top: 1px solid rgba(70,70,70);
-	border-bottom: 1px solid rgba(70,70,70);
-}
-
-QToolButton:pressed {
-	border-image:none;
-}</string>
+</string>
           </property>
           <property name="frameShape">
            <enum>QFrame::StyledPanel</enum>
@@ -574,10 +537,6 @@ QToolButton:pressed {
              <property name="text">
               <string>New</string>
              </property>
-             <property name="icon">
-              <iconset resource="../resources/GraphPerspective.qrc">
-               <normaloff>:/tulip/graphperspective/icons/48/doc_plus.png</normaloff>:/tulip/graphperspective/icons/48/doc_plus.png</iconset>
-             </property>
              <property name="iconSize">
               <size>
                <width>28</width>
@@ -609,10 +568,6 @@ QToolButton:pressed {
              <property name="text">
               <string>Load</string>
              </property>
-             <property name="icon">
-              <iconset resource="../resources/GraphPerspective.qrc">
-               <normaloff>:/tulip/graphperspective/icons/48/doc_import.png</normaloff>:/tulip/graphperspective/icons/48/doc_import.png</iconset>
-             </property>
              <property name="iconSize">
               <size>
                <width>28</width>
@@ -643,10 +598,6 @@ QToolButton:pressed {
              </property>
              <property name="text">
               <string>Save</string>
-             </property>
-             <property name="icon">
-              <iconset resource="../resources/GraphPerspective.qrc">
-               <normaloff>:/tulip/graphperspective/icons/48/doc_export.png</normaloff>:/tulip/graphperspective/icons/48/doc_export.png</iconset>
              </property>
              <property name="iconSize">
               <size>
@@ -682,7 +633,7 @@ QToolButton:pressed {
 font:normal;
 }
 #modulesTabWidget {
-background-color:#838383;
+background-color:#404244;
 }</string>
           </property>
           <property name="currentIndex">
@@ -722,13 +673,13 @@ background-color:#838383;
       <property name="minimumSize">
        <size>
         <width>0</width>
-        <height>200</height>
+        <height>150</height>
        </size>
       </property>
       <property name="maximumSize">
        <size>
         <width>16777215</width>
-        <height>200</height>
+        <height>150</height>
        </size>
       </property>
       <property name="styleSheet">
@@ -743,6 +694,9 @@ background-color: white;
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_6">
+       <property name="spacing">
+        <number>6</number>
+       </property>
        <property name="leftMargin">
         <number>6</number>
        </property>
@@ -762,7 +716,13 @@ background-color: white;
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -778,7 +738,13 @@ background-color: white;
            <property name="minimumSize">
             <size>
              <width>0</width>
-             <height>35</height>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
             </size>
            </property>
            <property name="styleSheet">
@@ -797,6 +763,18 @@ background-color: white;
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="text">
             <string/>
            </property>
@@ -804,6 +782,18 @@ background-color: white;
          </item>
          <item>
           <widget class="QLabel" name="label_3">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
            <property name="font">
             <font>
              <weight>75</weight>
@@ -816,24 +806,55 @@ background-color: white;
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="decreaseFontSizeButton">
-           <property name="text">
-            <string>...</string>
+          <widget class="QPushButton" name="decreaseFontSizeButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
            </property>
-           <property name="icon">
-            <iconset resource="../../../view/PythonScriptView/PythonScriptViewResource.qrc">
-             <normaloff>:/icons/round_minus.png</normaloff>:/icons/round_minus.png</iconset>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>23</width>
+             <height>23</height>
+            </size>
+           </property>
+           <property name="flat">
+            <bool>false</bool>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QToolButton" name="increaseFontSizeButton">
-           <property name="text">
-            <string>...</string>
+          <widget class="QPushButton" name="increaseFontSizeButton">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>30</height>
+            </size>
            </property>
-           <property name="icon">
-            <iconset resource="../../../view/PythonScriptView/PythonScriptViewResource.qrc">
-             <normaloff>:/icons/round_plus.png</normaloff>:/icons/round_plus.png</iconset>
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>30</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="iconSize">
+            <size>
+             <width>23</width>
+             <height>23</height>
+            </size>
            </property>
           </widget>
          </item>
@@ -848,6 +869,15 @@ background-color: white;
        </item>
        <item>
         <widget class="QTextBrowser" name="pluginsInfosWidget">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">border: 0px;</string>
+         </property>
          <property name="openLinks">
           <bool>false</bool>
          </property>
@@ -855,6 +885,35 @@ background-color: white;
        </item>
       </layout>
      </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="frame">
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>27</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>16777215</width>
+       <height>27</height>
+      </size>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">QFrame {
+border-top: 1px solid #262829;
+border-bottom: 1px solid #262829;
+background-color: #404244;
+}</string>
+     </property>
+     <property name="frameShape">
+      <enum>QFrame::StyledPanel</enum>
+     </property>
+     <property name="frameShadow">
+      <enum>QFrame::Raised</enum>
+     </property>
     </widget>
    </item>
   </layout>
@@ -873,9 +932,6 @@ background-color: white;
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="../../../view/PythonScriptView/PythonScriptViewResource.qrc"/>
-  <include location="../resources/GraphPerspective.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

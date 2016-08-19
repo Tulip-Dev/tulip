@@ -193,11 +193,11 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _dontTreatFocusIn(false), _project(nullptr) {
   _ui->setupUi(this);
   _ui->newPluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::white));
-  _ui->loadPluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, Qt::white));
-  _ui->savePluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, Qt::white));
+  _ui->loadPluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white));
+  _ui->savePluginButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white));
   _ui->newModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::white));
-  _ui->loadModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, Qt::white));
-  _ui->saveModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, Qt::white));
+  _ui->loadModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white));
+  _ui->saveModuleButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white));
   _ui->decreaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::minuscircle, Qt::black));
   _ui->increaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::pluscircle, Qt::black));
   _ui->tabWidget->setDrawTabBarBgGradient(true);
