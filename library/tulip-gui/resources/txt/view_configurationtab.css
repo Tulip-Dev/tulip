@@ -6,9 +6,8 @@ QTabWidget {
 QTabWidget::pane {
   background-color: white;
   border: 1px solid #262829;
+  border-right: 0px;
 }
-
-
 
 QTabBar::tab {
   border-image:none;
@@ -23,10 +22,8 @@ QTabBar::tab {
 
 QTabBar::tab:!selected {
   margin-left: 1px;
-}
-
-QTabBar::tab:!selected {
   background-color: #404244;
+  border: 1px solid #262829;
   color: gray;
 }
 
@@ -36,6 +33,7 @@ QTabBar::tab:!selected:hover {
 
 QTabBar::tab:selected {
   background-color: #262829;
+  border: 1px solid gray;
   color: white;
 }
 
@@ -44,22 +42,22 @@ QTabBar::tab:selected:hover {
 }
 
 QTabBar::close-button:selected  {
-    image: url(:/tulip/gui/icons/close-selected.svg);
-    background: transparent;
+  image: url(:/tulip/gui/icons/close-selected.svg);
+  background: transparent;
 }
 
 QTabBar::close-button  {
-    image: url(:/tulip/gui/icons/close-unselected.svg);
-    background: transparent;
+  image: url(:/tulip/gui/icons/close-unselected.svg);
+  background: transparent;
 }
 
 QTabBar::close-button:hover
 {
-    image: url(:/tulip/gui/icons/close-hover.svg);
-    background: transparent;
+  image: url(:/tulip/gui/icons/close-hover.svg);
+  background: transparent;
 }
 
 QTabBar::close-button:pressed {
-    image: url(:/tulip/gui/icons/close-pressed.svg);
-    background: transparent;
+  image: url(:/tulip/gui/icons/close-pressed.svg);
+  background: transparent;
 }

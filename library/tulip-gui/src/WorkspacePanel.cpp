@@ -559,7 +559,7 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
     _viewConfigurationWidgets->setPos(newPos);
 
   //there are artefacts in the fonts when the opacity is 1; ugly fix
-  _viewConfigurationWidgets->setOpacity((expanded ? 0.99 : 0.6));
+  _viewConfigurationWidgets->setOpacity((expanded ? 0.99 : 0.7));
 
   if (!expanded && _viewConfigurationExpanded) {
     _view->applySettings();

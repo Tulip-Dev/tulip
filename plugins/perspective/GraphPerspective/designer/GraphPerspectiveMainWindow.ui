@@ -92,7 +92,6 @@ QSplitter::handle:vertical {
     height: 0px;
 }
 
-
 QFrame[ bottomFrame = &quot;true&quot; ] * {
 font: bold 11px;
 }
@@ -655,7 +654,7 @@ color: white;
               <enum>Qt::Vertical</enum>
              </property>
              <property name="handleWidth">
-              <number>1</number>
+              <number>2</number>
              </property>
              <widget class="AlgorithmRunner" name="algorithmRunner" native="true"/>
              <widget class="GraphHierarchiesEditor" name="graphHierarchiesEditor" native="true"/>
@@ -708,7 +707,7 @@ border: 0px;
                   <enum>Qt::Vertical</enum>
                  </property>
                  <property name="handleWidth">
-                  <number>1</number>
+                  <number>2</number>
                  </property>
                  <widget class="tlp::Workspace" name="workspace" native="true">
                   <property name="bottomFrameVisible" stdset="0">

@@ -60,7 +60,7 @@ background-color: white;
 }</string>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>9</number>
      </property>
      <widget class="QWidget" name="startupPage">
       <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -220,7 +220,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="PlaceHolderWidget" name="sixMode1" native="true"/>
           <widget class="PlaceHolderWidget" name="sixMode2" native="true"/>
@@ -230,7 +230,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="PlaceHolderWidget" name="sixMode3" native="true"/>
           <widget class="PlaceHolderWidget" name="sixMode4" native="true"/>
@@ -240,7 +240,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="PlaceHolderWidget" name="sixMode5" native="true"/>
           <widget class="PlaceHolderWidget" name="sixMode6" native="true"/>
@@ -335,6 +335,9 @@ p, li { white-space: pre-wrap; }
          <property name="orientation">
           <enum>Qt::Vertical</enum>
          </property>
+         <property name="handleWidth">
+          <number>2</number>
+         </property>
          <widget class="PlaceHolderWidget" name="splitPageHorizontalPanel1" native="true"/>
          <widget class="PlaceHolderWidget" name="splitPageHorizontalPanel2" native="true"/>
         </widget>
@@ -371,7 +374,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <property name="childrenCollapsible">
            <bool>false</bool>
@@ -384,7 +387,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <property name="childrenCollapsible">
            <bool>false</bool>
@@ -416,7 +419,7 @@ p, li { white-space: pre-wrap; }
           <enum>Qt::Vertical</enum>
          </property>
          <property name="handleWidth">
-          <number>3</number>
+          <number>2</number>
          </property>
          <widget class="QSplitter" name="split3PageVerticalSplitter">
           <property name="orientation">
@@ -461,7 +464,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="PlaceHolderWidget" name="split32Panel2" native="true"/>
           <widget class="PlaceHolderWidget" name="split32Panel3" native="true"/>
@@ -497,7 +500,7 @@ p, li { white-space: pre-wrap; }
            <enum>Qt::Vertical</enum>
           </property>
           <property name="handleWidth">
-           <number>3</number>
+           <number>2</number>
           </property>
           <widget class="PlaceHolderWidget" name="split33Panel1" native="true"/>
           <widget class="PlaceHolderWidget" name="split33Panel2" native="true"/>
