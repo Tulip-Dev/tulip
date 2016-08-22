@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>376</width>
+    <width>380</width>
     <height>712</height>
    </rect>
   </property>
@@ -81,17 +81,20 @@ padding-top: 5px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>0</number>
+   </property>
    <property name="leftMargin">
-    <number>10</number>
+    <number>0</number>
    </property>
    <property name="topMargin">
-    <number>10</number>
+    <number>0</number>
    </property>
    <property name="rightMargin">
-    <number>10</number>
+    <number>0</number>
    </property>
    <property name="bottomMargin">
-    <number>10</number>
+    <number>0</number>
    </property>
    <item>
     <widget class="QFrame" name="horizontalFrame_2">
@@ -130,11 +133,23 @@ padding-top: 5px;
        <verstretch>0</verstretch>
       </sizepolicy>
      </property>
+     <property name="minimumSize">
+      <size>
+       <width>380</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>450</width>
+       <height>16777215</height>
+      </size>
+     </property>
      <property name="frameShape">
       <enum>QFrame::NoFrame</enum>
      </property>
      <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarAsNeeded</enum>
+      <enum>Qt::ScrollBarAlwaysOff</enum>
      </property>
      <property name="widgetResizable">
       <bool>true</bool>
@@ -144,8 +159,8 @@ padding-top: 5px;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>341</width>
-        <height>685</height>
+        <width>366</width>
+        <height>759</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -379,7 +394,7 @@ background-color: rgb(160, 160, 160);</string>
                 <enum>Qt::Horizontal</enum>
                </property>
                <property name="tickPosition">
-                <enum>QSlider::TicksAbove</enum>
+                <enum>QSlider::NoTicks</enum>
                </property>
                <property name="tickInterval">
                 <number>100</number>
@@ -1130,7 +1145,7 @@ of the scene remains unchanged.</string>
   <slot>applySettings()</slot>
  </slots>
  <buttongroups>
-  <buttongroup name="buttonGroup"/>
   <buttongroup name="buttonGroup1"/>
+  <buttongroup name="buttonGroup"/>
  </buttongroups>
 </ui>

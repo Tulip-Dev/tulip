@@ -298,6 +298,25 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::table, menuIconColor, 1.0));
   _ui->actionNew_graph->setIcon(getFileNewIcon());
   _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::closecircle, menuIconColor, 1.0));
+  _ui->actionUndo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, menuIconColor, 1.0));
+  _ui->actionRedo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, menuIconColor, 1.0));
+  _ui->actionCut->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcut, menuIconColor, 1.0));
+  _ui->actionPaste->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentpaste, menuIconColor, 1.0));
+  _ui->actionCopy->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy, menuIconColor, 1.0));
+  _ui->actionDelete->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::delete_, menuIconColor, 1.0));
+  _ui->actionSelect_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectall, menuIconColor, 1.0));
+  _ui->actionInvert_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectinverse, menuIconColor, 1.0));
+  _ui->actionCancel_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectoff, menuIconColor, 1.0));
+  _ui->actionGroup_elements->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::group, menuIconColor, 1.0));
+  _ui->actionPreferences->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, menuIconColor, 1.0));
+  _ui->actionFull_screen->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fullscreen, menuIconColor, 1.0));
+  _ui->action_Close_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::windowclose, menuIconColor, 1.0));
+  _ui->actionMessages_log->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2"), 1.0));
+  _ui->actionFind_plugins->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::magnify, menuIconColor, 1.0));
+  _ui->actionAbout_us->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::star, QColor("#F9AA3A"), 1.0));
+  _ui->actionShowUserDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor, 1.0));
+  _ui->actionShowDevelDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor, 1.0));
+  _ui->actionShowPythonDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor, 1.0));
 #ifdef BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();

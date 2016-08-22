@@ -164,6 +164,12 @@ border: 1px solid &quot;#C9C9C9&quot;;
       <property name="frameShape">
        <enum>QFrame::NoFrame</enum>
       </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOff</enum>
+      </property>
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+      </property>
       <property name="widgetResizable">
        <bool>true</bool>
       </property>

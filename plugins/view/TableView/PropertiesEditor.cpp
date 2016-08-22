@@ -39,6 +39,7 @@
 #include <tulip/StringProperty.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/FontIconManager.h>
 
 Q_DECLARE_METATYPE(Qt::CheckState)
 
@@ -46,6 +47,7 @@ using namespace tlp;
 
 PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr), _delegate(new tlp::TulipItemDelegate), _sourceModel(nullptr), filteringProperties(false), editorParent(parent) {
   _ui->setupUi(this);
+  _ui->newButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::black));
   connect(_ui->newButton,SIGNAL(clicked()),this,SLOT(newProperty()));
 }
 

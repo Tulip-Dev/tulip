@@ -56,7 +56,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePanelPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/view-open.png&quot; width=32 height=32/&gt; Panel creation dialog</string>
+    <string>Panel creation dialog</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -130,7 +130,16 @@ border: 0px;
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_3">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -209,7 +218,16 @@ background-color: white
          <enum>QFrame::Plain</enum>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_4">
-         <property name="margin">
+         <property name="leftMargin">
+          <number>0</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <property name="rightMargin">
+          <number>0</number>
+         </property>
+         <property name="bottomMargin">
           <number>0</number>
          </property>
          <item>
@@ -297,7 +315,6 @@ background-color: white
  </customwidgets>
  <resources>
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
-  <include location="../resources/GraphPerspective.qrc"/>
  </resources>
  <connections/>
  <slots>

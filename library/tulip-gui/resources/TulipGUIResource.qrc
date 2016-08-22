@@ -100,5 +100,8 @@
         <file>icons/close-pressed.svg</file>
         <file>icons/close-selected.svg</file>
         <file>icons/close-unselected.svg</file>
+        <file>icons/eye.svg</file>
+        <file>icons/eye_disabled.svg</file>
+        <file>icons/eye_partially_disabled.svg</file>
     </qresource>
 </RCC>

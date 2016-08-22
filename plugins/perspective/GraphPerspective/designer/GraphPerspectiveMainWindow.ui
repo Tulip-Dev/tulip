@@ -1504,9 +1504,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;User HandBook</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+?</string>
-   </property>
   </action>
   <action name="actionShowDevelDocumentation">
    <property name="text">
@@ -1622,11 +1619,25 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
   </action>
   <action name="actionCreate_empty_sub_graph">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
    <property name="text">
     <string>Create &amp;empty sub-graph</string>
    </property>
   </action>
   <action name="actionClone_sub_graph">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
    <property name="text">
     <string>Create c&amp;lone sub-graph</string>
    </property>
@@ -1645,7 +1656,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="action_Close_All">
    <property name="text">
-    <string>&amp;Close All</string>
+    <string>&amp;Close all panels</string>
    </property>
   </action>
  </widget>

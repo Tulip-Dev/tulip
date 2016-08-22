@@ -167,16 +167,16 @@ width: 28px;
 height: 28px;
 }
 QCheckBox::indicator:unchecked {
-image: url(:/tulip/graphperspective/icons/16/star-outline.svg);
+image: url(:/tulip/graphperspective/icons/star-outline.svg);
 }
 QCheckBox::indicator:unchecked:hover {
-image: url(:/tulip/graphperspective/icons/16/star-outline-hover.svg);
+image: url(:/tulip/graphperspective/icons/star-outline-hover.svg);
 }
 QCheckBox::indicator:checked {
-image: url(:/tulip/graphperspective/icons/16/star.svg);
+image: url(:/tulip/graphperspective/icons/star.svg);
 }
 QCheckBox::indicator:checked:hover {
-image: url(:/tulip/graphperspective/icons/16/star-hover.svg);
+image: url(:/tulip/graphperspective/icons/star-hover.svg);
 }</string>
         </property>
        </widget>

@@ -39,7 +39,7 @@ protected:
   void paintEvent(QPaintEvent *event) {
     ExpandableGroupBox::paintEvent(event);
     QPainter painter(this);
-    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/16/star.svg" : ":/tulip/graphperspective/icons/16/star-outline.svg"));
+    QPixmap px((_droppingFavorite ? ":/tulip/graphperspective/icons/star.svg" : ":/tulip/graphperspective/icons/star-outline.svg"));
     painter.drawPixmap(20,0,px);
   }
 };

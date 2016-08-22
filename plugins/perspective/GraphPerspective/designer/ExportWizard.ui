@@ -14,7 +14,7 @@
    <string>Export</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -59,7 +59,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePluginPage">
    <property name="title">
-    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/document-export.png&quot; width=32 height=32/&gt; Graph exporting Wizard</string>
+    <string>Graph exporting Wizard</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -93,7 +93,7 @@ border: 0px;
          </size>
         </property>
         <property name="icon">
-         <iconset>
+         <iconset resource="../resources/GraphPerspective.qrc">
           <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
         </property>
        </widget>
@@ -320,7 +320,10 @@ font: 10pt;
    <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+  <include location="../resources/GraphPerspective.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>ExportWizard</sender>

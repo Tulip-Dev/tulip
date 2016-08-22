@@ -81,37 +81,46 @@ padding-top: 5px;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <property name="margin">
-    <number>10</number>
+   <property name="leftMargin">
+    <number>0</number>
+   </property>
+   <property name="topMargin">
+    <number>0</number>
+   </property>
+   <property name="rightMargin">
+    <number>0</number>
+   </property>
+   <property name="bottomMargin">
+    <number>0</number>
    </property>
    <item>
-     <widget class="QFrame" name="horizontalFrame_2">
-       <property name="sizePolicy">
-	 <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-	 </sizepolicy>
-       </property>
-       <layout class="QHBoxLayout" name="horizontalLayout_4">
-	 <item>
-           <widget class="QLabel" name="title">
-	     <property name="minimumSize">
-	       <size>
-		 <width>0</width>
-		 <height>36</height>
-	       </size>
-	     </property>
-	     <property name="styleSheet">
-	       <string notr="true">font-weight: bold;
+    <widget class="QFrame" name="horizontalFrame_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <layout class="QHBoxLayout" name="horizontalLayout_4">
+      <item>
+       <widget class="QLabel" name="title">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>36</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">font-weight: bold;
 	       color: #595959;</string>
-	     </property>
-	     <property name="text">
-	       <string>&lt;font size=&quot;5&quot;&gt;Layer settings&lt;/font&gt;</string>
-	     </property>
-           </widget>
-	 </item>
-       </layout>
-     </widget>
+        </property>
+        <property name="text">
+         <string>&lt;font size=&quot;5&quot;&gt;Layer settings&lt;/font&gt;</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
     <widget class="QScrollArea" name="scrollArea">
@@ -183,9 +192,7 @@ padding-top: 5px;
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resources/TulipGUIResource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
  <slots>
   <slot>settingsChanged()</slot>

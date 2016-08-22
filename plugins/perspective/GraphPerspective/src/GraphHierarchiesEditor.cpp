@@ -96,12 +96,19 @@ void CustomTreeView::setModel(QAbstractItemModel *m) {
 
 void CustomTreeView::resizeFirstColumnToContent() { resizeColumnToContents(0); }
 
+static QColor menuIconColor = QColor("#404244");
+
 GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
     : QWidget(parent), _ui(new Ui::GraphHierarchiesEditorData),
       _contextGraph(nullptr), _model(nullptr) {
   _ui->setupUi(this);
-  _ui->hierarchiesTree->addAction(_ui->actionDelete_All);
-  _ui->actionDelete_All->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+
+  _ui->actionCreate_panel->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::plusbox, menuIconColor, 1.0));
+  _ui->actionExport->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::export_, menuIconColor, 1.0));
+  _ui->actionSave_to_file->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::fileexport, menuIconColor, 1.0));;
+  _ui->actionRename->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::renamebox, menuIconColor, 1.0));;;
+  _ui->actionDelete_graph->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::delete_, menuIconColor, 1.0));;;
+  _ui->actionDelete_All->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::delete_, menuIconColor, 1.0));;;
 
   QToolButton *linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
