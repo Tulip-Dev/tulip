@@ -69,14 +69,20 @@ ENDIF(APPLE)
 ## ========================================================
 SET(TulipMajorVersion 5)
 SET(TulipMinorVersion 0)
-SET(TulipReleaseVersion 0)
+SET(TulipReleaseVersion "alpha1")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
-SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
+IF(TulipReleaseVersion MATCHES "^[0-9]+$")
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
+ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
+  # just a hack to force the display of the full Tulip version in window title bar
+  # when it contains non digit characters (like alpha, beta, ...)
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
+ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================
 ## Tulip libraries names
@@ -678,7 +684,7 @@ ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(plugins)
 IF(NOT BUILD_CORE_ONLY)
-#  ADD_SUBDIRECTORY(doc)
+  ADD_SUBDIRECTORY(doc)
   ADD_SUBDIRECTORY(textures)
 #  IF(NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
 #    ADD_SUBDIRECTORY(externalplugins)
