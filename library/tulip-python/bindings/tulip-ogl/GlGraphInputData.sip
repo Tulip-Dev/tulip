@@ -101,53 +101,6 @@ Sets the color property that defines the current labels colors of graph elements
 // =============================================================================================
 
 
-    tlp::ColorProperty *getElementLabelBorderColor() const;
-%Docstring
-tlpogl.GlGraphInputData.getElementLabelBorderColor()
-
-Returns the color property that defines the current labels border colors of graph elements (see :ref:`graph-colors`).
-
-:rtype: :class:`tulip.tlp.ColorProperty`
-%End
-
-// =============================================================================================
-
-    void setElementLabelBorderColor(tlp::ColorProperty *property);
-%Docstring
-tlpogl.GlGraphInputData.setElementBorderColor(property)
-
-Sets the color property that defines the current labels borders colors of graph elements (see :ref:`graph-colors`).
-
-:param property: a color property attached to the graph associated to these data.
-:type property: :class:`tulip.tlp.ColorProperty`
-%End
-
-// =============================================================================================
-
-
-    tlp::DoubleProperty *getElementLabelBorderWidth() const;
-%Docstring
-tlpogl.GlGraphInputData.getElementLabelBorderWidth()
-
-Returns the double property that defines the current labels borders widths of graph elements (see :ref:`borders-widths`).
-
-:rtype: :class:`tulip.tlp.DoubleProperty`
-%End
-
-// =============================================================================================
-
-    void setElementLabelBorderWidth(tlp::DoubleProperty *property);
-%Docstring
-tlpogl.GlGraphInputData.setElementLabelBorderWidth(property)
-
-Sets the double property that defines the current labels borders widths of graph elements (see :ref:`borders-widths`).
-
-:param property: a double property attached to the graph associated to these data.
-:type property: :class:`tulip.tlp.DoubleProperty`
-%End
-
-// =============================================================================================
-
     tlp::SizeProperty *getElementSize() const;
 %Docstring
 tlpogl.GlGraphInputData.getElementSize()
@@ -240,9 +193,9 @@ Sets the double property that defines the current rotations graph nodes (see :re
 
 // =============================================================================================
 
-    tlp::BooleanProperty *getElementSelected() const;
+    tlp::BooleanProperty *getElementSelection() const;
 %Docstring
-tlpogl.GlGraphInputData.getElementSelected()
+tlpogl.GlGraphInputData.getElementSelection()
 
 Returns the boolean property that defines the current selection of graph elements (see :ref:`graph-selection`).
 
@@ -251,9 +204,9 @@ Returns the boolean property that defines the current selection of graph element
 
 // =============================================================================================
 
-    void setElementSelected(tlp::BooleanProperty *property);
+    void setElementSelection(tlp::BooleanProperty *property);
 %Docstring
-tlpogl.GlGraphInputData.setElementSelected(property)
+tlpogl.GlGraphInputData.setElementSelection(property)
 
 Sets the boolean property that defines the current selection of graph elements (see :ref:`graph-selection`).
 

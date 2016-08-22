@@ -20,7 +20,6 @@
 %Module _tulipogl
 
 %ModuleHeaderCode
-#include <tulip/GlSceneObserver.h>
 #include <tulip/Camera.h>
 #include <string>
 extern void printErrorMessage(const std::string &errMsg);

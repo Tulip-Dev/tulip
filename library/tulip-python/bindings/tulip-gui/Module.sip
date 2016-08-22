@@ -66,8 +66,6 @@ PyDict_SetItemString(moduleDict, "tlpgui", tlpClass);
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/PluginLister.h>
-#include <tulip/GlyphManager.h>
-#include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/Interactor.h>
 #include <tulip/PluginLibraryLoader.h>
 #include <tulip/Perspective.h>
