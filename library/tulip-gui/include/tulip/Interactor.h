@@ -62,7 +62,7 @@ public:
     return INTERACTOR_CATEGORY;
   }
   std::string icon() const {
-    return ":/tulip/gui/icons/32/plugin_interactor.png";
+    return "wrench";
   }
   /**
     @brief Checks the compatibility between the interactor and the given view (identified by its name).

@@ -97,7 +97,7 @@ public:
     return VIEW_CATEGORY;
   }
   std::string icon() const {
-    return ":/tulip/gui/icons/32/plugin_view.png";
+    return "application";
   }
 
   /**

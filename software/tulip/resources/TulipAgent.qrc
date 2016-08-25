@@ -30,5 +30,11 @@
         <file>icons/irc.png</file>
         <file>icons/tutorials.png</file>
         <file>icons/16/dialog-error.png</file>
+        <file>icons/chart-bar.svg</file>
+        <file>icons/shape-plus.svg</file>
+        <file>icons/swap-horizontal.svg</file>
+        <file>icons/application.svg</file>
+        <file>icons/television-guide.svg</file>
+        <file>icons/wrench.svg</file>
     </qresource>
 </RCC>

@@ -124,7 +124,7 @@ public:
     return PERSPECTIVE_CATEGORY;
   }
   std::string icon() const {
-    return ":/tulip/gui/icons/32/plugin_controller.png";
+    return "television-guide";
   }
 
   /**

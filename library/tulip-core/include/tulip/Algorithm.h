@@ -62,7 +62,7 @@ public :
   virtual ~Algorithm() {}
 
   std::string icon() const {
-    return ":/tulip/gui/icons/32/plugin_algorithm.png";
+    return "chart-bar";
   }
   /**
    * @brief Runs the algorithm.
