@@ -46,7 +46,7 @@ using namespace tlp;
 
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(nullptr), _storeResultAsLocal(true) {
   _ui->setupUi(this);
-  _ui->settingsButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, QColor("#5C8EC8"), 0.8));
+  _ui->settingsButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, QColor("#5C8EC8")));
   _ui->playButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::play, Qt::green));
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
   const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());

@@ -21,7 +21,7 @@ public:
 
   QIcon getFontAwesomeIcon(fa::iconCodePoint icon,
                            const QColor &color = QColor(50, 50, 50),
-                           const double scaleFactor = 0.9,
+                           const double scaleFactor = 1.0,
                            const QPointF &translation = QPointF(0,0));
 
   QIcon getFontAwesomeIcon(fa::iconCodePoint icon,
@@ -29,12 +29,12 @@ public:
                            const QColor &colorDisabled,
                            const QColor &colorActive,
                            const QColor &colorSelected,
-                           const double scaleFactor = 0.9,
+                           const double scaleFactor = 1.0,
                            const QPointF &translation = QPointF(0,0));
 
   QIcon getMaterialDesignIcon(md::iconCodePoint icon,
                               const QColor &color = QColor(50, 50, 50),
-                              const double scaleFactor = 0.9,
+                              const double scaleFactor = 1.0,
                               const QPointF &translation = QPointF(0,0));
 
   QIcon getMaterialDesignIcon(md::iconCodePoint icon,
@@ -42,7 +42,7 @@ public:
                               const QColor &colorDisabled,
                               const QColor &colorActive,
                               const QColor &colorSelected,
-                              const double scaleFactor = 0.9,
+                              const double scaleFactor = 1.0,
                               const QPointF &translation = QPointF(0,0));
 
   static QIcon stackIcons(const QIcon &backIcon, const QIcon &frontIcon);

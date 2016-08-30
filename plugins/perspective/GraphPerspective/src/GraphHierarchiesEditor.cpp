@@ -103,16 +103,16 @@ GraphHierarchiesEditor::GraphHierarchiesEditor(QWidget *parent)
       _contextGraph(nullptr), _model(nullptr) {
   _ui->setupUi(this);
 
-  _ui->actionCreate_panel->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::plusbox, menuIconColor, 1.0));
-  _ui->actionExport->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::export_, menuIconColor, 1.0));
-  _ui->actionSave_to_file->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::fileexport, menuIconColor, 1.0));;
-  _ui->actionRename->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::renamebox, menuIconColor, 1.0));;;
-  _ui->actionDelete_graph->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::delete_, menuIconColor, 1.0));;;
-  _ui->actionDelete_All->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::delete_, menuIconColor, 1.0));;;
+  _ui->actionCreate_panel->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::plusbox, menuIconColor));
+  _ui->actionExport->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::export_, menuIconColor));
+  _ui->actionSave_to_file->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::fileexport, menuIconColor));
+  _ui->actionRename->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::renamebox, menuIconColor));
+  _ui->actionDelete_graph->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::delete_, menuIconColor));
+  _ui->actionDelete_All->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::delete_, menuIconColor));
 
   QToolButton *linkButton = new QToolButton();
   linkButton->setObjectName("linkButton");
-  linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariant, Qt::white));
+  linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariant, Qt::white, 0.8, QPointF(-1, -1)));
   linkButton->setToolTip("Click here to disable the synchronization with "
                          "workspace active panel.\nWhen synchronization is "
                          "enabled, the graph currently displayed\nin the "
@@ -373,14 +373,14 @@ void GraphHierarchiesEditor::saveGraphHierarchyInTlpFile() {
 
 void GraphHierarchiesEditor::toggleSynchronization(bool f) {
   if (f) {
-    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariant, Qt::white));
+    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariant, Qt::white, 0.8, QPointF(-1, -1)));
     _linkButton->setToolTip("Click here to disable the synchronization with "
                             "workspace active panel.\nWhen synchronization is "
                             "enabled, the graph currently displayed\nin the "
                             "active panel, becomes the current one in the "
                             "Graphs panel.");
   } else {
-    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariantoff, Qt::white));
+    _linkButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::linkvariantoff, Qt::white, 0.8));
     _linkButton->setToolTip("Click here to enable the synchronization with "
                             "workspace active panel.\nWhen synchronization is "
                             "enabled, the graph currently displayed\nin the "

@@ -11,39 +11,32 @@
    </rect>
   </property>
   <property name="styleSheet">
-   <string notr="true">QLabel, QPushButton, .QWidget {
+   <string notr="true">QLabel, QToolButton, QPushButton {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #939393,
-stop: 0.4 #808080,
-stop: 0.401 #737373,
-stop: 1 #5a5a5a);
+background-color: #404244;
 border: 0px;
 color: white;
 }
 
-QPushButton:hover {
+#label, #clearButton {
+border-top: 1px solid #262829;
+border-bottom: 1px solid #262829;
+}
+
+
+QToolButton:hover, QPushButton:hover {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #8F8F8F,
-stop: 0.4 #7C7C7C,
-stop: 0.401 #6F6F6F,
-stop: 1 #565656);
+background-color: #595B5D;
 border: 0px;
 color: white;
 }
 
-QPushButton:pressed {
+QToolButton:pressed, QPushButton:pressed {
 border-image:none;
-background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,
-stop: 0 #777777,
-stop: 0.4 #646464,
-stop: 0.401 #575757,
-stop: 1 #3e3e3e);
+background-color: #595B5D;
 border: 0px;
 color: white;
-}
-</string>
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">

@@ -159,8 +159,8 @@ padding-top: 5px;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>366</width>
-        <height>759</height>
+        <width>367</width>
+        <height>734</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -177,7 +177,7 @@ padding-top: 5px;
         <number>0</number>
        </property>
        <property name="rightMargin">
-        <number>20</number>
+        <number>0</number>
        </property>
        <property name="bottomMargin">
         <number>0</number>

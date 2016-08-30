@@ -189,7 +189,7 @@ QTabBar::close-button:pressed {
            <string notr="true">#pluginsToolBarWidget {
 	border-top: 1px solid #262829;
 	border-bottom: 1px solid #262829;
-	background-color: #404244;
+	background-color: #262829;
 }
 
 QToolButton {
@@ -448,7 +448,7 @@ background-color:#404244;
 	border-bottom: 1px solid #262829;
 	border-right: black;
 	border-left: black;
-	background-color: #404244;
+	background-color: #262829;
 }
 
 QToolButton {
@@ -637,7 +637,7 @@ background-color:#404244;
 }</string>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <property name="tabsClosable">
            <bool>true</bool>

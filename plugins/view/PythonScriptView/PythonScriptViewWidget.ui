@@ -253,7 +253,7 @@ border-width: 0px;
 	border-bottom: 1px solid #262829;
 	border-right: black;
 	border-left: black;
-	background-color: #404244;
+	background-color: #262829;
 }
 
 QToolButton {
@@ -390,7 +390,7 @@ QTabWidget::pane { /* The tab widget frame */
 	border-bottom: 1px solid #262829;
 	border-right: black;
 	border-left: black;
-	background-color: #404244;
+	background-color: #262829;
 }
 
 QToolButton {

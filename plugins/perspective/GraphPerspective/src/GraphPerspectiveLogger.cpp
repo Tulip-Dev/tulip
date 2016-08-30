@@ -50,16 +50,16 @@ static QIcon iconForType(QtMsgType type) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 5, 0))
   case QtInfoMsg:
 #endif
-    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2"), 0.8);
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2"), 0.9);
     break;
 
-  case QtWarningMsg:
-    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::alert, QColor("#E18D2B"), 0.8);
+ case QtWarningMsg:
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::alert, QColor("#E18D2B"), 0.9);
     break;
 
   case QtCriticalMsg:
   case QtFatalMsg:
-    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::minuscircle, QColor("#C42730"), 0.8);
+    icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::minuscircle, QColor("#C42730"), 0.9);
     break;
 
 
@@ -86,7 +86,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = msg.mid(14).mid(2, msg.length()-17);
-    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray, 0.8), msgClean));
+    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray, 0.9), msgClean));
     _pythonOutput = true;
   }
   else {
@@ -118,7 +118,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
   if (qmsg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
-    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.8), msgClean));
+    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.9), msgClean));
     _pythonOutput = true;
   }
   else {

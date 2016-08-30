@@ -49,23 +49,23 @@ static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
 PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view), checkEditors(true) {
   _ui->setupUi(this);
-  _ui->runScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::play, Qt::black, 1.0));
-  _ui->pauseScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::pause, Qt::black, 1.0));
-  _ui->stopScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::stop, Qt::black, 1.0));
-  _ui->decreaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::minuscircle, Qt::black, 1.0));
-  _ui->increaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::pluscircle, Qt::black, 1.0));
+  _ui->runScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::play, Qt::black));
+  _ui->pauseScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::pause, Qt::black));
+  _ui->stopScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::stop, Qt::black));
+  _ui->decreaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::minuscircle, Qt::black));
+  _ui->increaseFontSizeButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::pluscircle, Qt::black));
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
   _mainScriptToolBar = new QToolBar(_ui->mainScriptToolBarWidget);
   _newMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, Qt::white), "New main script");
-  _loadMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white, 1.0), "Load main script from file");
-  _saveMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white, 1.0), "Save main script to file");
+  _loadMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white), "Load main script from file");
+  _saveMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white), "Save main script to file");
 
   _modulesToolBar = new QToolBar(_ui->modulesToolBarWidget);
   _newStringModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::white), "New string module");
   _newFileModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, Qt::white), "New file module");
-  _loadModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white, 1.0), "Import module from file");
-  _saveModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white, 1.0), "Save module to file");
+  _loadModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white), "Import module from file");
+  _saveModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white), "Save module to file");
 
   _ui->modulesTabWidget->clear();
   _ui->mainScriptsTabWidget->clear();
