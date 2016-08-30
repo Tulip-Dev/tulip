@@ -576,7 +576,7 @@ float tlp::calculateAABBSize(const BoundingBox &bb,const Coord &eye, const Matri
 
   for(int i=0; i<num; i++) {
     dst[i] = projectPoint(src[(int)hullVertexTable[pos][i+1]],transformMatrix,globalViewport);
-    dst[i] -= Coord(globalViewport[0], globalViewport[1]);
+    //dst[i] -= Coord(globalViewport[0], globalViewport[1]);
   }
 
   bool inScreen=false;
