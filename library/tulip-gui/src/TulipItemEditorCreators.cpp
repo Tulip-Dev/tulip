@@ -765,7 +765,11 @@ bool TulipFontGlyphIconCreator::paint(QPainter *painter,
     return true;
   }
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItemV4 opt = option;
+#else
+  QStyleOptionViewItem opt = option;
+#endif
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
   if (_fontAwesome) {
     opt.icon = imageIconPool.getFontAwesomeIcon(iconName);
@@ -844,7 +848,11 @@ bool NodeShapeEditorCreator::paint(QPainter *painter,
                                    const QVariant &data) const {
   TulipItemEditorCreator::paint(painter, option, data);
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItemV4 opt = option;
+#else
+  QStyleOptionViewItem opt = option;
+#endif
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
   QPixmap pixmap = GlyphPreviewRenderer::instance().render(
       data.value<NodeShape::NodeShapes>());
@@ -908,7 +916,11 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
                                             const QVariant &data) const {
   TulipItemEditorCreator::paint(painter, option, data);
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItemV4 opt = option;
+#else
+  QStyleOptionViewItem opt = option;
+#endif
   opt.features |= QStyleOptionViewItemV2::HasDecoration;
   QPixmap pixmap = EdgeExtremityGlyphPreviewRenderer::instance().render(
       data.value<EdgeExtremityShape::EdgeExtremityShapes>());
