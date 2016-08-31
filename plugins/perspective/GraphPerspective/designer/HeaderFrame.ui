@@ -146,7 +146,7 @@ border: 1px solid #C9C9C9;
          <string/>
         </property>
         <property name="alignment">
-         <set>Qt::AlignHCenter|Qt::AlignTop</set>
+         <set>Qt::AlignCenter</set>
         </property>
         <property name="indent">
          <number>0</number>
