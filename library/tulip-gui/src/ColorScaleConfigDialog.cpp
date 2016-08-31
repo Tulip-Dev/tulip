@@ -473,7 +473,7 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
   for (int row = 0; row < _ui->savedColorScalesList->count(); ++row) {
     QListWidgetItem* item = _ui->savedColorScalesList->item(row);
 
-    if (colorScale == tulipImageColorScales[item->text()]) {
+    if (tulipImageColorScales.find(item->text()) != tulipImageColorScales.end() && colorScale == tulipImageColorScales[item->text()]) {
       // colorScale is a predefined one
       // so select it in the list view
       _ui->savedColorScalesList->setCurrentItem(item);
