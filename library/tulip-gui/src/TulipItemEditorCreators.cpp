@@ -29,14 +29,18 @@
 
 #include <tulip/ColorScaleButton.h>
 #include <tulip/CoordEditor.h>
-#include <tulip/FontIconManager.h>
+#include <tulip/CoordEditor.h>
 #include <tulip/FontIconManager.h>
 #include <tulip/GlyphPreviewRenderer.h>
 #include <tulip/GlyphsManager.h>
 #include <tulip/GraphPropertiesModel.h>
 #include <tulip/Perspective.h>
+#include <tulip/StringEditor.h>
 #include <tulip/TextureFileDialog.h>
+#include <tulip/TlpQtTools.h>
+#include <tulip/TulipFontDialog.h>
 #include <tulip/TulipItemEditorCreators.h>
+#include <tulip/TulipMetaTypes.h>
 
 using namespace tlp;
 
