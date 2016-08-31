@@ -59,6 +59,7 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
     tlp::DataSet *params = prepareAlgorithmParameters(algoName, graph, inputDataSet, inputDataSetWrapper);
     if (params) {
       PropertyType tmp(graph);
+      tmp = *result;
       ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, NULL, params);
       *result = tmp;
       updateWrappedDataSetAfterAlgorithmCall(params, inputDataSet, inputDataSetWrapper);
