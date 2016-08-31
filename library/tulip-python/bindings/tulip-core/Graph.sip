@@ -59,6 +59,7 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
     tlp::DataSet *params = prepareAlgorithmParameters(algoName, graph, inputDataSet, inputDataSetWrapper);
     if (params) {
       PropertyType tmp(graph);
+      tmp = *result;
       ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, nullptr, params);
       *result = tmp;
       updateWrappedDataSetAfterAlgorithmCall(params, inputDataSet, inputDataSetWrapper);
@@ -363,7 +364,7 @@ tlp.Graph.applyAlgorithm(algoName[, params])
 .. versionadded:: 3.7
 
 Applies an algorithm plugin, identified by its name.
-Algorithm plugins are objects implementing the tlp::Algorithm interface 
+Algorithm plugins are objects implementing the tlp::Algorithm interface
 in C++ or the :class:`tlp.Algorithm` interface in Python.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
@@ -375,8 +376,8 @@ To determine a plugin's parameters, you can either:
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: The name of the algorithm to apply.
@@ -420,7 +421,7 @@ Remove all nodes, edges and subgraphs from the graph .
 %Docstring
 tlp.Graph.addSubGraph([selection = None, name = "unnamed"])
 
-Creates and returns a new sub-graph. The elements of the new sub-graph are those 
+Creates and returns a new sub-graph. The elements of the new sub-graph are those
 selected in the selection. If there is no selection an empty sub-graph is returned.
 
 :param selection: a Boolean property whose selected elements will be added to the sub-graph
@@ -477,19 +478,19 @@ Creates and returns a subgraph of this graph (or the parent of this graph) that 
 :rtype: :class:`tlp.Graph`
 %End
 
-//=========================================================================================== 
+//===========================================================================================
 
   tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet);
 %Docstring
 tlp.Graph.inducedSubGraph(nodeSet)
 
-Creates and returns a new sub-graph of the graph induced by a set of nodes. 
-The sub-graph contains all the nodes of the set and all the existing edges 
+Creates and returns a new sub-graph of the graph induced by a set of nodes.
+The sub-graph contains all the nodes of the set and all the existing edges
 between two nodes of the set including self-loops.
 
 :param nodeSet: the set of nodes from which to build the induced sub-graph
 :type nodeSet: list or set of :class:`tlp.node`
-:rtype: :class:`tlp.Graph` 
+:rtype: :class:`tlp.Graph`
 %End
 
 // For code compatibility with Tulip-Python 3.X
@@ -540,7 +541,7 @@ tlp.Graph.delAllSubGraphs(subgraph)
 Delete a sub-graph of this graph and all its sub-graphs.
 
 :param subgraph: the sub-graph to remove
-:type subgraph: :class:`tlp.Graph` 
+:type subgraph: :class:`tlp.Graph`
 %End
 
 %MethodCode
@@ -573,7 +574,7 @@ tlp.Graph.getSuperGraph()
 
 Returns the parent of the graph, if it has no parent (is the root graph), it returns itself.
 
-:rtype: :class:`tlp.Graph` 
+:rtype: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
@@ -584,7 +585,7 @@ tlp.Graph.getRoot()
 
 Returns the root graph of the graph hierarchy.
 
-:rtype: :class:`tlp.Graph` 
+:rtype: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
@@ -624,7 +625,7 @@ Returns :const:`True` if the graph argument is a direct sub-graph of the graph.
 
 :param graph: a graph
 :type graph: :class:`tlp.Graph`
-:rtype: boolean 
+:rtype: boolean
 %End
 
 //===========================================================================================
@@ -637,7 +638,7 @@ Returns :const:`True` if the graph argument is a descendant of this graph.
 
 :param graph: a graph
 :type graph: :class:`tlp.Graph`
-:rtype: boolean 
+:rtype: boolean
 %End
 
 //===========================================================================================
@@ -650,7 +651,7 @@ Returns the sub-graph with the corresponding id or :const:`None` if there is no 
 
 :param id: a graph id
 :type id: integer
-:rtype: :class:`tlp.Graph` or :const:`None` 
+:rtype: :class:`tlp.Graph` or :const:`None`
 %End
 
 //===========================================================================================
@@ -665,7 +666,7 @@ Returns the sub-graph with the corresponding name or :const:`None` if there is n
 
 :param name: the name of the sub-graph to return
 :type name: string
-:rtype: :class:`tlp.Graph` or :const:`None` 
+:rtype: :class:`tlp.Graph` or :const:`None`
 %End
 
 //===========================================================================================
@@ -678,7 +679,7 @@ Returns the descendant graph with the corresponding id or :const:`None` if there
 
 :param id: a graph id
 :type id: integer
-:rtype: :class:`tlp.Graph` or :const:`None` 
+:rtype: :class:`tlp.Graph` or :const:`None`
 %End
 
 //===========================================================================================
@@ -711,7 +712,7 @@ Since order cannot be ensured in every implementation, this method should be equ
   for sg in graph.getSubGraphs():
     if i++ == n:
       return sg
-  return None    
+  return None
 
 :param n: the index of the sub-graph to return
 :type n: integer
@@ -729,10 +730,10 @@ tlp.Graph.numberOfSubGraphs()
 Returns the number of direct sub-graphs.
 
 :rtype: integer
-%End  
-  
-//===========================================================================================  
-  
+%End
+
+//===========================================================================================
+
   unsigned int numberOfDescendantGraphs() const;
 %Docstring
 tlp.Graph.numberOfDescendantGraphs()
@@ -765,7 +766,7 @@ Returns an iterator over all the descendant graphs of the graph.
 %Docstring
 tlp.Graph.addNode()
 
-Adds a new node in the graph and returns it. This node is also added in all 
+Adds a new node in the graph and returns it. This node is also added in all
 the graph's ancestors to maintain the sub-graph relation between graphs.
 
 :rtype: :class:`tlp.node`
@@ -796,7 +797,7 @@ The new nodes are also added in all the graph ancestors to maintain the sub-grap
 %Docstring
 tlp.Graph.addNode(node)
 
-Adds an existing node in the graph. This node is also added in all the graph ancestors 
+Adds an existing node in the graph. This node is also added in all the graph ancestors
 to maintain the sub-graph relation between graphs.
 
 :param node: an existing node to add to the graph
@@ -893,11 +894,11 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %Docstring
 tlp.Graph.delNode(node[, deleteInAllGraphs = False])
 
-Deletes a node in the graph. This node is also removed in all the sub-graphs of the graph 
-to maintain the sub-graph relation between graphs. 
+Deletes a node in the graph. This node is also removed in all the sub-graphs of the graph
+to maintain the sub-graph relation between graphs.
 
 :param node: the node to delete
-:type node: :class:`tlp.node` 
+:type node: :class:`tlp.node`
 :param deleteInAllGraphs: if :const:`True`, remove the node in all the hierarchy of graphs
 :type deleteInAllGraphs: boolean
 :throws: an exception if the node does not belong to the graph
@@ -986,7 +987,7 @@ the sub-graph relation between graphs.
 %Docstring
 tlp.Graph.addEdge(src, tgt)
 
-Adds a new edge in the graph and returns it. This edge is also added in all 
+Adds a new edge in the graph and returns it. This edge is also added in all
 the graph's ancestors to maintain the sub-graph relation between graphs.
 
 :param src: the source node of the new edge
@@ -1048,8 +1049,8 @@ The new edges are also added in all the graph ancestors to maintain the sub-grap
 %Docstring
 tlp.Graph.addEdge(edge)
 
-Adds an existing edge in the graph. This edge is also added in all 
-the graph's ancestors to maintain the sub-graph relation between graphs. 
+Adds an existing edge in the graph. This edge is also added in all
+the graph's ancestors to maintain the sub-graph relation between graphs.
 
 :param edge: an existing edge to add to the graph
 :type edge: :class:`tlp.edge`
@@ -1194,16 +1195,16 @@ the graph ancestors to maintain the sub-graph relation between graphs.
 %Docstring
 tlp.Graph.delEdge(edge[, deleteInAllGraphs = False])
 
-Deletes an edge in the graph. This edge is also removed in all the sub-graphs 
-of the graph to maintain the sub-graph relation between graphs. The ordering of edges is preserved. 
+Deletes an edge in the graph. This edge is also removed in all the sub-graphs
+of the graph to maintain the sub-graph relation between graphs. The ordering of edges is preserved.
 
 :param edge: the edge to delete
-:type edge: :class:`tlp.edge` 
+:type edge: :class:`tlp.edge`
 :param deleteInAllGraphs: if :const:`True`, remove the edge in all the hierarchy of graphs
 :type deleteInAllGraphs: boolean
 :throws: an exception if the edge does not belong to the graph
-%End 
- 
+%End
+
 %MethodCode
   if (sipCpp->isElement(*a0)) {
     sipCpp->delEdge(*a0);
@@ -1286,7 +1287,7 @@ the sub-graph relation between graphs.
 %Docstring
 tlp.Graph.setEdgeOrder(node, edges)
 
-Sets the order of the edges around a node. This operation ensures that adjacent edges 
+Sets the order of the edges around a node. This operation ensures that adjacent edges
 of a node will be ordered as they are in the list of edges given in parameter.
 
 :param node: the node on which to set edges ordering
@@ -1363,9 +1364,9 @@ Sets the source of an existing edge.
     sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
   }
 %End
-  
-//===========================================================================================  
-  
+
+//===========================================================================================
+
 void setTarget(const tlp::edge edge, const tlp::node tgt);
 %Docstring
 tlp.Graph.setTarget(edge, tgt)
@@ -1391,14 +1392,14 @@ Sets the target of an existing edge.
   }
 %End
 
-  
-//===========================================================================================  
-  
+
+//===========================================================================================
+
 void setEnds(const tlp::edge edge, const tlp::node src, const tlp::node tgt);
 %Docstring
 tlp.Graph.setEnds(edge, src, tgt)
 
-Sets both the source and target of an existing edge. 
+Sets both the source and target of an existing edge.
 
 :param edge: the edge on which to change the source and target nodes
 :type edge: :class:`tlp.edge`
@@ -1431,11 +1432,11 @@ Sets both the source and target of an existing edge.
 %Docstring
 tlp.Graph.reverse(edge)
 
-Reverses the direction of an edge, the source becomes the target 
-and the target becomes the source. 
+Reverses the direction of an edge, the source becomes the target
+and the target becomes the source.
 
 :param edge: the edge on which to revert the direction.
-:type edge: :class:`tlp.edge` 
+:type edge: :class:`tlp.edge`
 :throws: an exception if the edge does not belong to the graph
 
 .. warning:: The ordering is global to the entire graph hierarchy. Thus, by changing the ordering in a graph you change the ordering in the hierarchy.
@@ -1458,7 +1459,7 @@ tlp.Graph.getOneNode()
 
 Returns the first node in the graph.
 
-:rtype: :class:`tlp.node`  
+:rtype: :class:`tlp.node`
 %End
 
 //===========================================================================================
@@ -1509,7 +1510,7 @@ Returns an iterator on the nodes.
 %Docstring
 tlp.Graph.getInNode(node, i)
 
-Returns the ith predecessor of a node. 
+Returns the ith predecessor of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
@@ -1519,7 +1520,7 @@ Returns the ith predecessor of a node.
 :throws: an exception if the node does not belong to the graph or if the requested index is lesser than the number of predecessor nodes
 %End
 
- 
+
 %MethodCode
   if (sipCpp->isElement(*a0)) {
     if (a1 == 0) {
@@ -1531,7 +1532,7 @@ Returns the ith predecessor of a node.
       std::ostringstream oss;
       std::string graphName;
       sipCpp->getAttribute("name", graphName);
-      oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->indeg(*a0) << " predecessor nodes and the requested index is " << a1; 
+      oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->indeg(*a0) << " predecessor nodes and the requested index is " << a1;
       PyErr_SetString(PyExc_Exception, oss.str().c_str());
       sipIsErr = -1;
     }
@@ -1546,7 +1547,7 @@ Returns the ith predecessor of a node.
 %Docstring
 tlp.Graph.getInNodes(node)
 
-Return an iterator on the predecessors of a node. 
+Return an iterator on the predecessors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
@@ -1568,7 +1569,7 @@ Return an iterator on the predecessors of a node.
 %Docstring
 tlp.Graph.getOutNode(node, i)
 
-Returns the ith successor of a node. 
+Returns the ith successor of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
@@ -1589,7 +1590,7 @@ Returns the ith successor of a node.
       std::ostringstream oss;
       std::string graphName;
       sipCpp->getAttribute("name", graphName);
-      oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->outdeg(*a0) << " successor nodes and the requested index is " << a1; 
+      oss << "node with id " << a0->id << " belonging to graph \"" << graphName << "\" (id " << sipCpp->getId() << ") has " << sipCpp->outdeg(*a0) << " successor nodes and the requested index is " << a1;
       PyErr_SetString(PyExc_Exception, oss.str().c_str());
       sipIsErr = -1;
     }
@@ -1605,7 +1606,7 @@ Returns the ith successor of a node.
 %Docstring
 tlp.Graph.getOutNodes(node)
 
-Returns an iterator on the successors of a node. 
+Returns an iterator on the successors of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
@@ -1627,7 +1628,7 @@ Returns an iterator on the successors of a node.
 %Docstring
 tlp.Graph.getInOutNodes(node)
 
-Returns an iterator on the neighbours of a node. 
+Returns an iterator on the neighbours of a node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
@@ -1738,7 +1739,7 @@ tlp.Graph.getOneEdge()
 
 Returns the first edge in the graph.
 
-:rtype: :class:`tlp.edge`  
+:rtype: :class:`tlp.edge`
 %End
 
 //===========================================================================================
@@ -1995,7 +1996,7 @@ Returns a tuple containing the two end nodes of an edge
 
 :param edge: an existing edge of the graph
 :type node: :class:`tlp.edge`
-:rtype: (:class:`tlp.node`, :class:`tlp.node`) 
+:rtype: (:class:`tlp.node`, :class:`tlp.node`)
 :throws: an exception if the edge does not belong to the graph
 %End
 
@@ -2023,7 +2024,7 @@ Returns the opposite node of the edge for the given node.
 
 %MethodCode
   if (sipCpp->isElement(*a0)) {
-    if (sipCpp->source(*a0) == *a1 || sipCpp->target(*a0) == *a1) {  
+    if (sipCpp->source(*a0) == *a1 || sipCpp->target(*a0) == *a1) {
       sipRes = new tlp::node(sipCpp->opposite(*a0, *a1));
     } else {
       std::ostringstream oss;
@@ -2210,8 +2211,8 @@ If no edge is found, returns edges is empty.
 tlp.Graph.getBooleanProperty(name)
 
 Returns the boolean property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the boolean property to return or to create
 :type name: string
@@ -2233,8 +2234,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalBooleanProperty(name)
 
 Returns the boolean property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the boolean property to return or to create
 :type name: string
@@ -2256,8 +2257,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getBooleanVectorProperty(name)
 
 Returns the boolean vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the boolean vector property to return or to create
 :type name: string
@@ -2279,8 +2280,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalBooleanVectorProperty(name)
 
 Returns the boolean vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the boolean vector property to return or to create
 :type name: string
@@ -2302,8 +2303,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLayoutProperty(name)
 
 Returns the layout property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the layout property to return or to create
 :type name: string
@@ -2325,8 +2326,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalLayoutProperty(name)
 
 Returns the layout property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the layout property to return or to create
 :type name: string
@@ -2348,8 +2349,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getCoordVectorProperty(name)
 
 Returns the coord vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the coord vector property to return or to create
 :type name: string
@@ -2371,8 +2372,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalCoordVectorProperty(name)
 
 Returns the coord vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the coord vector property to return or to create
 :type name: string
@@ -2394,8 +2395,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getColorProperty(name)
 
 Returns the color property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the color property to return or to create
 :type name: string
@@ -2417,8 +2418,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalColorProperty(name)
 
 Returns the color property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the color property to return or to create
 :type name: string
@@ -2440,8 +2441,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getColorVectorProperty(name)
 
 Returns the color vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the color vector property to return or to create
 :type name: string
@@ -2463,8 +2464,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalColorVectorProperty(name)
 
 Returns the color vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the color vector property to return or to create
 :type name: string
@@ -2486,8 +2487,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getDoubleProperty(name)
 
 Returns the double property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the double property to return or to create
 :type name: string
@@ -2509,8 +2510,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalDoubleProperty(name)
 
 Returns the double property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the double property to return or to create
 :type name: string
@@ -2532,8 +2533,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getDoubleVectorProperty(name)
 
 Returns the double vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the double vector property to return or to create
 :type name: string
@@ -2555,8 +2556,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalDoubleVectorProperty(name)
 
 Returns the double vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the double vector property to return or to create
 :type name: string
@@ -2578,8 +2579,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getStringProperty(name)
 
 Returns the string property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the string property to return or to create
 :type name: string
@@ -2601,8 +2602,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalStringProperty(name)
 
 Returns the string property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the string property to return or to create
 :type name: string
@@ -2624,8 +2625,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getStringVectorProperty(name)
 
 Returns the string vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the string vector property to return or to create
 :type name: string
@@ -2647,8 +2648,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalStringVectorProperty(name)
 
 Returns the string vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the string vector property to return or to create
 :type name: string
@@ -2670,8 +2671,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getSizeProperty(name)
 
 Returns the size property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the size property to return or to create
 :type name: string
@@ -2693,8 +2694,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalSizeProperty(name)
 
 Returns the size property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the size property to return or to create
 :type name: string
@@ -2716,8 +2717,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getSizeVectorProperty(name)
 
 Returns the size vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the size vector property to return or to create
 :type name: string
@@ -2739,8 +2740,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalSizeVectorProperty(name)
 
 Returns the size vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the size vector property to return or to create
 :type name: string
@@ -2762,8 +2763,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getIntegerProperty(name)
 
 Returns the integer property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the integer property to return or to create
 :type name: string
@@ -2785,8 +2786,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalIntegerProperty(name)
 
 Returns the integer property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the integer property to return or to create
 :type name: string
@@ -2808,8 +2809,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getIntegerVectorProperty(name)
 
 Returns the integer vector property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the integer vector property to return or to create
 :type name: string
@@ -2831,8 +2832,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalIntegerVectorProperty(name)
 
 Returns the integer vector property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the integer vector property to return or to create
 :type name: string
@@ -2854,8 +2855,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getGraphProperty(name)
 
 Returns the meta-graph property associated to name in the graph properties pool or in the pool of an ancestor in the sub-graphs hierarchy.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the meta-graph property to return or to create
 :type name: string
@@ -2877,8 +2878,8 @@ Using of :const:`del` on that property will cause a segmentation violation (use 
 tlp.Graph.getLocalGraphProperty(name)
 
 Returns the meta-graph property associated to name in the graph properties pool.
-If the property is not registered in the pool, it creates a new one and returns it. 
-Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead). 
+If the property is not registered in the pool, it creates a new one and returns it.
+Using of :const:`del` on that property will cause a segmentation violation (use :meth:`tlp.Graph.delLocalProperty` instead).
 
 :param name: the name of the meta-graph property to return or to create
 :type name: string
@@ -2901,14 +2902,14 @@ tlp.Graph.getProperty(name)
 
 Returns the property associated to name in the graph properties pool.
 The returned property is referenced by its base class :class:`tlp.PropertyInterface` meaning getting and setting values
-can only be done via the use of strings. To get the property correctly typed, use the methods described above. 
-If the property does not exist it returns :const:`None`. 
+can only be done via the use of strings. To get the property correctly typed, use the methods described above.
+If the property does not exist it returns :const:`None`.
 
 :param name: the name of the property to return
 :type name: string
 :rtype: :class:`tlp.PropertyInterface`
 %End
- 
+
 
 //===========================================================================================
 
@@ -3067,14 +3068,14 @@ tlp.Graph.applyIntegerAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes an integer property on the current graph 
+Computes an integer property on the current graph
 using an external named integer algorithm (plugin).
 Integer algorithm plugins are objects
-implementing the tlp::IntegerAlgorithm interface in C++ or 
+implementing the tlp::IntegerAlgorithm interface in C++ or
 the :class:`tlp.IntegerAlgorithm` interface in Python.
 The list of currently loaded integer algorithm plugins can be
 retrieved through the :func:`tlp.getIntegerAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
@@ -3082,12 +3083,12 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the integer algorithm to call
@@ -3118,14 +3119,14 @@ tlp.Graph.applyDoubleAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes a double property on the current graph 
+Computes a double property on the current graph
 using an external named double algorithm (plugin).
 Double algorithm plugins are objects
-implementing the tlp::DoubleAlgorithm interface in C++ or 
+implementing the tlp::DoubleAlgorithm interface in C++ or
 the :class:`tlp.DoubleAlgorithm` interface in Python.
 The list of currently loaded double algorithm plugins can be
 retrieved through the :func:`tlp.getDoubleAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
@@ -3133,12 +3134,12 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the double algorithm to call
@@ -3188,14 +3189,14 @@ tlp.Graph.applyLayoutAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes a layout property on the current graph 
+Computes a layout property on the current graph
 using an external named layout algorithm (plugin).
 Layout algorithm plugins are objects
-implementing the tlp::LayoutAlgorithm interface in C++ or 
+implementing the tlp::LayoutAlgorithm interface in C++ or
 the :class:`tlp.LayoutAlgorithm` interface in Python.
 The list of currently loaded layout algorithm plugins can be
 retrieved through the :func:`tlp.getLayoutAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
@@ -3203,12 +3204,12 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the layout algorithm to call
@@ -3258,14 +3259,14 @@ tlp.Graph.applyBooleanAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes a boolean property on the current graph 
+Computes a boolean property on the current graph
 using an external named boolean algorithm (plugin).
 Boolean algorithm plugins are objects
-implementing the tlp::BooleanAlgorithm interface in C++ or 
+implementing the tlp::BooleanAlgorithm interface in C++ or
 the :class:`tlp.BooleanAlgorithm` interface in Python.
 The list of currently loaded boolean algorithm plugins can be
 retrieved through the :func:`tlp.getBooleanAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
@@ -3273,12 +3274,12 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the boolean algorithm to call
@@ -3329,14 +3330,14 @@ tlp.Graph.applySizeAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes a size property on the current graph 
+Computes a size property on the current graph
 using an external named size algorithm (plugin).
 Size algorithm plugins are objects
-implementing the tlp::SizeAlgorithm interface in C++ or 
+implementing the tlp::SizeAlgorithm interface in C++ or
 the :class:`tlp.SizeAlgorithm` interface in Python.
 The list of currently loaded size algorithm plugins can be
 retrieved through the :func:`tlp.getSizeAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
@@ -3344,12 +3345,12 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the size algorithm to call
@@ -3399,14 +3400,14 @@ tlp.Graph.applyColorAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes a color property on the current graph 
+Computes a color property on the current graph
 using an external named color algorithm (plugin).
 Color algorithm plugins are objects
-implementing the tlp::ColorAlgorithm interface in C++ or 
+implementing the tlp::ColorAlgorithm interface in C++ or
 the :class:`tlp.ColorAlgorithm` interface in Python.
 The list of currently loaded color algorithm plugins can be
 retrieved through the :func:`tlp.getColorAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
@@ -3414,12 +3415,12 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the color algorithm to call
@@ -3469,26 +3470,26 @@ tlp.Graph.applyStringAlgorithm(algoName, result[, params = None])
 
 .. versionadded:: 3.8
 
-Computes a string property on the current graph 
+Computes a string property on the current graph
 using an external named string algorithm (plugin).
 String algorithm plugins are objects
-implementing the tlp::StringAlgorithm interface in C++ or 
+implementing the tlp::StringAlgorithm interface in C++ or
 the :class:`tlp.StringAlgorithm` interface in Python.
 The list of currently loaded string algorithm plugins can be
 retrieved through the :func:`tlp.getStringAlgorithmPluginsList` function.
-The computed values will be stored in result. 
+The computed values will be stored in result.
 Parameters can be transmit to the algorithm using a Python dictionnary
 filled with parameters values where keys are of type string (parameters names) .
 In some cases, algorithms
 can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
-    
+
   * refer to its documentation
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
-Returns a tuple whose first member is a boolean indicating if the 
-algorithm terminates successfully and second member is a string 
+Returns a tuple whose first member is a boolean indicating if the
+algorithm terminates successfully and second member is a string
 which can contain an error message.
 
 :param algoName: the name of the string algorithm to call
@@ -3537,7 +3538,7 @@ tlp.Graph.push([unpopAllowed=True])
 
 Marks the state of the current root graph in the hierarchy.
 The next updates will be recorded in order to be undone at the
-next call of the :meth:`tlp.Graph.pop` method. Be careful that all 
+next call of the :meth:`tlp.Graph.pop` method. Be careful that all
 the updates are undone except those who affect the ordering of edges.
 
 :param unpopAllowed: If set to :const:`False`, the next updates could not be replayed after undone. If some previously undonevupdates exist they could no longer be replayed.
@@ -3804,7 +3805,7 @@ Sets an attribute of the graph.
     PyErr_SetString(PyExc_Exception, msg.c_str());
   }
   delete dataType;
-%End 
+%End
 
 //===========================================================================================
 
@@ -3834,7 +3835,7 @@ Returns a reference on an attribute of the graph or :const:`None` if it does not
     sipIsErr = -1;
     PyErr_SetString(PyExc_AttributeError, oss.str().c_str());
   }
-%End  
+%End
 
 //===========================================================================================
 
@@ -4173,7 +4174,7 @@ Returns a new graph or None if the import fails.
 :param newGraph: if provided, add imported graph elements in that graph
 :type newGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph`
-:throws: an exception if the requested import plugin is not registered in the plugins database. 
+:throws: an exception if the requested import plugin is not registered in the plugins database.
 %End
 
 %MethodCode
@@ -4257,7 +4258,7 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
 :param params: The parameters to the algorithm.
 :type params: a dictionnary with string keys (parameters names) and parameters values
 :rtype: boolean
-:throws: an exception if the requested export plugin is not registered in the plugins database. 
+:throws: an exception if the requested export plugin is not registered in the plugins database.
 
 .. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
              able to call import modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
@@ -4278,7 +4279,7 @@ Exports a graph to a file using a Tulip export plugin (must be loaded).
     } else {
       std::string msg = "Export error : The specified file path (";
       msg += *a2;
-      msg += ") is not valid.";  
+      msg += ") is not valid.";
       printErrorMessage(msg);
       sipRes = false;
     }
@@ -4308,7 +4309,7 @@ The output selection is used to select the appended nodes & edges
 :type inGraph: :class:`tlp.Graph`
 :param inSelection: boolean property attached to inGraph, only selected elements will be appended if provided
 :type inSelection: :class:`tlp.BooleanProperty`
-:param outSelection: boolean property attached to outGraph, appended nodes and edges will be selected if provided 
+:param outSelection: boolean property attached to outGraph, appended nodes and edges will be selected if provided
 :type outSelection: :class:`tlp.BooleanProperty`
 
 .. warning:: The input selection is extended to all selected edge ends.
@@ -4344,4 +4345,3 @@ Returns an iterator on all the currently existing root graphs.
 %End
 
 };
-
