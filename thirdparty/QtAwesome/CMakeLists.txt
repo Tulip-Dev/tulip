@@ -6,7 +6,7 @@ QTX_WRAP_CPP(MOC_SRCS
   QtAwesome.h
 )
 
-ADD_LIBRARY(${QtAwesomeLibrary} SHARED ${SRCS} ${MOC_SRCS})
+ADD_LIBRARY(${QtAwesomeLibrary} STATIC ${SRCS} ${MOC_SRCS})
 
 INSTALL(TARGETS ${QtAwesomeLibrary}
        RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT quazip

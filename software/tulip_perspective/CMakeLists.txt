@@ -19,6 +19,10 @@ IF(WIN32)
 
 STRING(TIMESTAMP CURRENT_YEAR "%Y")
 
+IF(NOT TulipReleaseVersion MATCHES "^[0-9]+$")
+  SET(TulipReleaseVersion 0)
+ENDIF(NOT TulipReleaseVersion MATCHES "^[0-9]+$")
+
 INCLUDE(generate_product_version)
 generate_product_version(
    VersionFiles
