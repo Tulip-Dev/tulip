@@ -44,6 +44,9 @@ const int FULL_STENCIL = 0x02;
 
 SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): TulipModel(parent), _scene(scene) {
   _scene->addListener(this);
+  for(const GlLayer *layer : _scene->getLayersList()) {
+    layer->addListener(this);
+  }
 }
 
 QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &parent) const {
@@ -375,28 +378,35 @@ Qt::ItemFlags SceneLayersModel::flags(const QModelIndex &index) const {
 }
 
 void SceneLayersModel::treatEvent(const Event &e) {
-//  if (e.type() == Event::TLP_MODIFICATION) {
-//    const GlSceneEvent *glse = dynamic_cast<const GlSceneEvent *>(&e);
+  if (e.type() == Event::TLP_MODIFICATION) {
+    const GlSceneEvent *glse = dynamic_cast<const GlSceneEvent *>(&e);
+    const GlLayerEvent *glle = dynamic_cast<const GlLayerEvent *>(&e);
 
-//    if (glse) {
-//      emit layoutAboutToBeChanged();
+    if (glse) {
+      if (glse->getType() == GlSceneEvent::LAYER_ADDED_IN_SCENE) {
+        glse->getGlLayer()->addListener(this);
+      } else if (glse->getType() == GlSceneEvent::LAYER_REMOVED_FROM_SCENE) {
+        glse->getGlLayer()->removeListener(this);
+      }
+    } else if (glle) {
+      emit layoutAboutToBeChanged();
 
-//      // prevent dangling pointers to remain in the model persistent indexes
-//      if (glse->getSceneEventType() == GlSceneEvent::TLP_DELENTITY) {
-//        QModelIndexList persistentIndexes = persistentIndexList();
+      // prevent dangling pointers to remain in the model persistent indexes
+      if (glle->getType() == GlLayerEvent::ENTITY_REMOVED_FROM_LAYER) {
+        QModelIndexList persistentIndexes = persistentIndexList();
 
-//        for (int i = 0 ; i < persistentIndexes.size() ; ++i) {
-//          if (persistentIndexes.at(i).internalPointer() == glse->getGlEntity()) {
-//            changePersistentIndex(persistentIndexes.at(i), QModelIndex());
-//            break;
-//          }
-//        }
-//      }
+        for (int i = 0 ; i < persistentIndexes.size() ; ++i) {
+          if (persistentIndexes.at(i).internalPointer() == glle->getGlEntity()) {
+            changePersistentIndex(persistentIndexes.at(i), QModelIndex());
+            break;
+          }
+        }
+      }
 
-//      emit layoutChanged();
+      emit layoutChanged();
 
-//    }
-//  }
+    }
+  }
 }
 
 
