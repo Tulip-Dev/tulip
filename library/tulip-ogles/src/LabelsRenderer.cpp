@@ -277,9 +277,9 @@ static Coord getPointOnPolylineAt(const std::vector<Coord> &polyline, float t) {
 
 }
 
-static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const GlGraphInputData &inputData, edge e) {
-  const Coord &srcPos = inputData.getElementLayout()->getNodeValue(inputData.getGraph()->source(e));
-  const Coord &tgtPos = inputData.getElementLayout()->getNodeValue(inputData.getGraph()->target(e));
+static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const Camera &camera, const GlGraphInputData &inputData, edge e) {
+  Coord srcPos = inputData.getElementLayout()->getNodeValue(inputData.getGraph()->source(e));
+  Coord tgtPos = inputData.getElementLayout()->getNodeValue(inputData.getGraph()->target(e));
   const Size &srcSize = inputData.getElementSize()->getNodeValue(inputData.getGraph()->source(e));
   const Size &tgtSize = inputData.getElementSize()->getNodeValue(inputData.getGraph()->target(e));
   double srcRot = inputData.getElementRotation()->getNodeValue(inputData.getGraph()->source(e));
@@ -303,7 +303,9 @@ static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const GlGraphInp
 
   if (bends.empty()) {
     center = (srcPos + tgtPos) / 2.f;
-    angle=atan((tgtPos[1]-srcPos[1])/(tgtPos[0]-srcPos[0]));
+    srcPos = Vec4f(srcPos, 1) * camera.modelviewMatrix();
+    tgtPos = Vec4f(tgtPos, 1) * camera.modelviewMatrix();
+    angle = atan((tgtPos[1]-srcPos[1])/(tgtPos[0]-srcPos[0]));
   } else {
     vector<Coord> controlPoints = {srcPos};
     controlPoints.insert(controlPoints.end(), bends.begin(), bends.end());
@@ -323,7 +325,9 @@ static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const GlGraphInp
       prevPoint = computeCatmullRomPoint(controlPoints, 0.45);
       center = computeCatmullRomPoint(controlPoints, 0.5);
     }
-    angle=atan((center[1]-prevPoint[1])/(center[0]-prevPoint[0]));
+    Coord centerProj = Vec4f(center, 1) * camera.modelviewMatrix();
+    Coord prevPointProj = Vec4f(prevPoint, 1) * camera.modelviewMatrix();
+    angle=atan((centerProj[1]-prevPointProj[1])/(centerProj[0]-prevPointProj[0]));
   }
 
   BoundingBox renderingBox;
@@ -335,8 +339,8 @@ static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const GlGraphInp
 
 static void adjustTextBoundingBox(BoundingBox &textBB, const Camera &camera, float minSize, float maxSize, unsigned int nbLines) {
   Vec4i viewport = camera.getViewport();
-  Vec2f textBBMinScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[0]);
-  Vec2f textBBMaxScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[1]);
+  Vec2f textBBMinScr = computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]);
+  Vec2f textBBMaxScr = computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]);
 
   float screenH = (textBBMaxScr[1] - textBBMinScr[1]) / nbLines;
 
@@ -401,55 +405,34 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
 
     bool canRender = true;
 
+    BoundingBox textScrBB;
+    textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]), 0));
+    textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]), 0));
+    float width = textScrBB.width();
+    float height = textScrBB.height();
+    Coord centerScr = Vec3f(computeScreenPos(camera.transformMatrix(), viewport, textBB.center()), 0);
+    centerScr[1] = viewport[3] - centerScr[1];
+
+    textScrBB[0] = centerScr - Vec3f(width/2, height/2);
+    textScrBB[1] = centerScr + Vec3f(width/2, height/2);
+
     if (_occlusionTest) {
 
-      if (!camera.hasRotation()) {
-        BoundingBox textScrBB;
-        textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]), 0));
-        textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]), 0));
-
-        for (size_t i = 0 ; i < renderedLabelsScrBB.size() ; ++i) {
-          if (textScrBB.intersect(renderedLabelsScrBB[i])) {
-            canRender = false;
-            break;
-          }
-        }
-
-        if (canRender) {
-          renderedLabelsScrBB.push_back(textScrBB);
-        }
-
-      } else {
-        vector<Vec2f> textScrRect;
-        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, textBB[0]));
-        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, Vec3f(textBB[0][0]+textBB.width(), textBB[0][1], textBB[0][2])));
-        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, textBB[1]));
-        textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, Vec3f(textBB[0][0], textBB[0][1]+textBB.height(), textBB[0][2])));
-
-        for (size_t i = 0 ; i < renderedLabelsScrRect.size() ; ++i) {
-          if (convexPolygonsIntersect(textScrRect, renderedLabelsScrRect[i])) {
-            canRender = false;
-            break;
-          }
-        }
-
-        if (canRender) {
-          renderedLabelsScrRect.push_back(textScrRect);
+      for (size_t i = 0 ; i < renderedLabelsScrBB.size() ; ++i) {
+        if (textScrBB.intersect(renderedLabelsScrBB[i])) {
+          canRender = false;
+          break;
         }
       }
+
     }
 
     if (canRender) {
-
-      Vec2f textBBMinScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[0]);
-      Vec2f textBBMaxScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[1]);
-      BoundingBox bb;
-      bb.expand(Vec3f(textBBMinScr[0], viewport[3] - textBBMinScr[1]));
-      bb.expand(Vec3f(textBBMaxScr[0], viewport[3] - textBBMaxScr[1]));
-
-      renderText(vg, label, bb, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n));
+      renderText(vg, label, textScrBB, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n));
+      renderedLabelsScrBB.push_back(textScrBB);
     }
   }
+
 
   for (edge e : _edgesLabelsToRender[graph]) {
 
@@ -468,7 +451,7 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
       _edgeLabelNbLines[graph][e] = std::count(label.begin(), label.end(), '\n')+1;
     }
 
-    pair<BoundingBox, float> edgeBB = labelBoundingBoxAndAngleForEdge(inputData, e);
+    auto edgeBB = labelBoundingBoxAndAngleForEdge(camera, inputData, e);
 
     BoundingBox textBB = getLabelRenderingBoxScaled(edgeBB.first, _edgeLabelAspectRatio[graph][e]);
 
@@ -476,13 +459,24 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
       adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _edgeLabelNbLines[graph][e]);
     }
 
-    if (_occlusionTest) {
+    BoundingBox textScrBB;
+    textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]), 0));
+    textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]), 0));
+    float width = textScrBB.width();
+    float height = textScrBB.height();
+    Coord centerScr = Vec3f(computeScreenPos(camera.transformMatrix(), viewport, textBB.center()), 0);
+    centerScr[1] = viewport[3] - centerScr[1];
 
-      vector<Vec2f> textScrRect;
-      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, textBB[0])));
-      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, Vec3f(textBB[0][0]+textBB.width(), textBB[0][1], textBB[0][2]))));
-      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, textBB[1])));
-      textScrRect.push_back(computeScreenPos(camera.transformMatrix(), viewport, rotatePoint(textBB.center(), edgeBB.second, Vec3f(textBB[0][0], textBB[0][1]+textBB.height(), textBB[0][2]))));
+    textScrBB[0] = centerScr - Vec3f(width/2, height/2);
+    textScrBB[1] = centerScr + Vec3f(width/2, height/2);
+
+    vector<Vec2f> textScrRect;
+    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, textScrBB[0]));
+    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, Vec3f(textScrBB[0][0]+textScrBB.width(), textScrBB[0][1], textScrBB[0][2])));
+    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, textScrBB[1]));
+    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, Vec3f(textScrBB[0][0], textScrBB[0][1]+textScrBB.height(), textScrBB[0][2])));
+
+    if (_occlusionTest) {
 
       for (size_t i = 0 ; i < renderedLabelsScrRect.size() ; ++i) {
         if (convexPolygonsIntersect(textScrRect, renderedLabelsScrRect[i])) {
@@ -509,20 +503,14 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
 
       if (canRender) {
         renderedLabelsScrRect.push_back(textScrRect);
-
-        Vec2f textBBMinScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[0]);
-        Vec2f textBBMaxScr = computeScreenPos(camera.transformMatrix(), viewport, textBB[1]);
-        BoundingBox bb;
-        bb.expand(Vec3f(textBBMinScr[0], viewport[3] - textBBMinScr[1]));
-        bb.expand(Vec3f(textBBMaxScr[0], viewport[3] - textBBMaxScr[1]));
-
-        renderText(vg, label, bb, inputData.getElementSelection()->getEdgeValue(e) ? selectionColor : inputData.getElementLabelColor()->getEdgeValue(e), edgeBB.second);
+        renderText(vg, label, textScrBB, inputData.getElementSelection()->getEdgeValue(e) ? selectionColor : inputData.getElementLabelColor()->getEdgeValue(e), edgeBB.second);
       }
 
     }
   }
 
   nvgEndFrame(vg);
+
 }
 
 void LabelsRenderer::clearGraphNodesLabelsRenderingData(Graph *graph) {
