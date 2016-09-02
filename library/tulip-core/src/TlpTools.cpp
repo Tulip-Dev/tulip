@@ -292,7 +292,9 @@ std::string tlp::demangleClassName(const char* className,
 
 #else // __EMSCRIPTEN__
 
-void initTulipLib(const char*) {}
+void tlp::initTulipLib(const char*) {
+  TulipBitmapDir = "/resources/";
+}
 
 std::string tlp::demangleClassName(const char* className, bool) {
   return std::string(className);

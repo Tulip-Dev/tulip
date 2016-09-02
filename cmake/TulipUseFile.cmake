@@ -52,7 +52,7 @@ MACRO(SET_COMPILER_OPTIONS)
     FIND_PACKAGE(PythonInterp REQUIRED)
     EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} embuilder.py build zlib WORKING_DIRECTORY ${EMSCRIPTEN_ROOT_PATH})
 
-    SET(EM_COMPILER_FLAGS "-s USE_ZLIB=1 -Wno-warn-absolute-paths")
+    SET(EM_COMPILER_FLAGS "-s USE_ZLIB=1 -s USE_FREETYPE=1 -Wno-warn-absolute-paths")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EM_COMPILER_FLAGS}")
     SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 ${EM_COMPILER_FLAGS}")
 
@@ -370,10 +370,12 @@ ENDMACRO(COPY_TARGET_LIBRARY_POST_BUILD)
 MACRO(INSTALL_TULIP_PLUGIN plugin_target destination)
   SET(COMPONENT_NAME ${plugin_target})
   STRING(REPLACE "-${TulipVersion}" "" COMPONENT_NAME "${COMPONENT_NAME}")
-  INSTALL(TARGETS ${plugin_target}
-          RUNTIME DESTINATION ${destination}
-          LIBRARY DESTINATION ${destination}
-          COMPONENT ${COMPONENT_NAME})
+  IF(NOT EMSCRIPTEN)
+    INSTALL(TARGETS ${plugin_target}
+            RUNTIME DESTINATION ${destination}
+            LIBRARY DESTINATION ${destination}
+            COMPONENT ${COMPONENT_NAME})
+  ENDIF(NOT EMSCRIPTEN)
 
   # When building a Python wheel, copy Tulip plugins in wheel build folder
   # in order to package them with the Tulip Python bindings

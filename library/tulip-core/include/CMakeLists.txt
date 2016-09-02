@@ -1,3 +1,4 @@
+IF(NOT EMSCRIPTEN)
 INSTALL(FILES
   tulip/Plugin.h
   tulip/AbstractProperty.h
@@ -115,3 +116,4 @@ INSTALL(FILES
 DESTINATION ${TulipIncludeInstallDir}/tulip/cxx/
 COMPONENT tulip_core_dev
 )
+ENDIF(NOT EMSCRIPTEN)

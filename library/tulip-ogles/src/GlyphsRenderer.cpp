@@ -609,8 +609,6 @@ void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light)
 }
 
 const unsigned int glyphsAttributesDataStride = 19;
-const unsigned int glyphsOutlineDataStride = 10;
-
 
 void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
                                                     const std::vector<tlp::Coord> &centers,

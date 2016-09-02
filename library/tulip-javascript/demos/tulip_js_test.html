@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+     <meta charset="utf-8">
+     <title>Tulip Javascript Bindings Test</title>
+     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+     <script async type="text/javascript" src="tulip.js"></script>
+    </head>
+
+    <body>
+      <div id="tulip-view" ></div>
+      <button onclick="processGraph()">Random Layout</button>
+   </body>
+<script type='text/javascript'>
+
+ var graph = null;
+ var graph2 = null;
+ var tulipView = null;
+
+ var size = 100;
+
+ function randomColor() {
+   var r = Math.random() * 255 | 0;
+   var g = Math.random() * 255 | 0;
+   var b = Math.random() * 255 | 0;
+   return tulip.Color(r, g, b);
+ }
+
+ function randomCoord() {
+   var x = Math.random() * size;
+   var y = Math.random() * size;
+   return new tulip.Coord(x, y);
+ }
+
+ function processGraph() {
+   tulip.holdObservers();
+   var viewLayout = graph.getLayoutProperty('viewLayout');
+   var viewColor = graph.getColorProperty('viewColor');
+   var viewLabel = graph.getStringProperty("viewLabel");
+//   viewLayout.setAllEdgeValue(new Array());
+//   var n = graph.addNode();
+//   viewColor.setNodeValue(n, randomColor());
+//   viewLabel.setNodeValue(n, 'node ' + graph.numberOfNodes());
+//   var nodes = graph.getNodes();
+   graph.getNodes().forEach(function(node) {
+     //viewLayout.setNodeValue(node, randomCoord());
+     viewColor.setNodeValue(node, randomColor());
+   });
+
+ //  var i = Math.random() * graph.numberOfNodes() | 0;
+ //  var j = Math.random() * graph.numberOfNodes() | 0;
+
+ //  graph.addEdge(nodes[i], nodes[j]);
+   tulip.unholdObservers();
+   tulipView.centerScene();
+ //  tulip.computeLayout('canvas', 'FM^3 (OGDF)');
+ }
+
+ var EventReceiver = function() {
+
+   this.treatEvent = function(event) {
+     if (event instanceof tulip.GraphEvent) {
+       console.log("Received graph event : ", event);
+     } else if (event instanceof tulip.PropertyEvent) {
+       console.log("Received property event : ", event);
+     } else {
+       console.log("Received event : ", event);
+     }
+   };
+
+   this.treatEvents = function(events) {
+     console.log("Received events : ", events);
+   };
+
+ };
+
+ var er = new EventReceiver();
+
+ function initTulip() {
+
+   if (typeof tulip == 'undefined' || !tulip.isLoaded()) {
+     setTimeout(initTulip, 1000);
+   } else {
+
+    graph = new tulip.Graph();
+    graph.setEventsActivated(true);
+
+
+    tulip.addListener(graph, er);
+    tulip.addObserver(graph, er);
+
+    tulip.holdObservers();
+
+    graph.setName("Test Javascript Graph");
+    var n1 = graph.addNode();
+    var n2 = graph.addNode();
+    var n3 = graph.addNode();
+    var n4 = graph.addNode();
+    var e1 = graph.addEdge(n1, n2);
+    var e2 = graph.addEdge(n2, n3);
+    var e3 = graph.addEdge(n3, n4);
+    var e4 = graph.addEdge(n4, n1);
+
+    var viewLayout = graph.getLayoutProperty('viewLayout');
+    tulip.addListener(viewLayout, er);
+    tulip.addObserver(viewLayout, er);
+    viewLayout.setNodeValue(n1, new tulip.Coord(-10, 10, 0));
+    viewLayout.setNodeValue(n2, new tulip.Coord(10, 10, 0));
+    viewLayout.setNodeValue(n3, new tulip.Coord(10, -10, 0));
+    viewLayout.setNodeValue(n4, new tulip.Coord(-10, -10, 0));
+
+    var bends = new Array();
+    bends.push(new tulip.Coord(0,0,0));
+
+    viewLayout.setAllEdgeValue(bends);
+
+    var viewShape = graph.getIntegerProperty('viewShape');
+    viewShape.setNodeValue(n1, tulip.NodeShape.Square);
+    viewShape.setNodeValue(n2, tulip.NodeShape.Circle);
+    viewShape.setNodeValue(n3, tulip.NodeShape.RoundedBox);
+    viewShape.setNodeValue(n4, tulip.NodeShape.Hexagon);
+
+    viewShape.setAllEdgeValue(tulip.EdgeShape.CatmullRomCurve);
+
+    var viewColor = graph.getColorProperty('viewColor');
+    viewColor.setNodeValue(n1, new tulip.Color(255,255,0));
+    viewColor.setNodeValue(n2, new tulip.Color(128,255,56));
+    viewColor.setNodeValue(n3, new tulip.Color(0,255,45));
+    viewColor.setNodeValue(n4, new tulip.Color(25,89,255));
+
+    var viewLabel = graph.getStringProperty("viewLabel");
+    viewLabel.setNodeValue(n1, "node 1");
+    viewLabel.setNodeValue(n2, "node 2");
+    viewLabel.setNodeValue(n3, "node 3");
+    viewLabel.setNodeValue(n4, "node 4");
+
+
+    tulip.unholdObservers();
+
+    tulipView = new tulip.View('tulip-view', 640, 480);
+    tulipView.setGraph(graph);
+
+  }
+}
+
+initTulip();
+
+</script>
+
+</html>

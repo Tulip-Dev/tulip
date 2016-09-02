@@ -55,10 +55,12 @@ GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attac
     glBindTexture(GL_TEXTURE_2D, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
   } else {
+#ifndef __EMSCRIPTEN__
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _texture);
     glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, numberOfSamples, GL_RGBA, width, height, GL_TRUE);
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, _texture, 0);
+#endif
   }
 
   glGenRenderbuffers(1, &_attachmentRbo);
@@ -68,7 +70,9 @@ GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attac
     if (numberOfSamples == 0) {
       glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
     } else {
+#ifndef __EMSCRIPTEN__
       glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_DEPTH_COMPONENT24, width, height);
+#endif
     }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _attachmentRbo);
@@ -78,7 +82,9 @@ GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attac
     if (numberOfSamples == 0) {
       glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
     } else {
+#ifndef __EMSCRIPTEN__
       glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_STENCIL_INDEX8, width, height);
+#endif
     }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _attachmentRbo);
@@ -88,7 +94,9 @@ GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attac
     if (numberOfSamples == 0) {
       glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
     } else {
+#ifndef __EMSCRIPTEN__
       glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_DEPTH24_STENCIL8, width, height);
+#endif
     }
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _attachmentRbo);

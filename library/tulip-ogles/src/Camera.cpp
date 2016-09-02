@@ -497,3 +497,15 @@ bool Camera::hasRotation() const {
 void Camera::notifyModified() {
   sendEvent(Event(*this, Event::TLP_MODIFICATION));
 }
+
+void Camera::setModelViewMatrix(const tlp::MatrixGL &mdvMat) {
+  _modelviewMatrix = mdvMat;
+  _mdvMatCoherent = true;
+  notifyModified();
+}
+
+void Camera::setProjectionMatrix(const tlp::MatrixGL &projMat) {
+  _projectionMatrix = projMat;
+  _projectionMatCoherent = true;
+  notifyModified();
+}

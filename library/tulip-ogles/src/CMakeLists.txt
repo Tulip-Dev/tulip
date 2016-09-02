@@ -41,17 +41,19 @@ SET(tulip-ogles_LIB_SRCS
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include} ${STBInclude} ${ClipperInclude})
 INCLUDE_DIRECTORIES(${FTGLInclude} ${NanoVGInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} )
+INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude})
 
 
 ADD_LIBRARY (${LibTulipOGLESName} SHARED ${tulip-ogles_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOGLESName} ${LibTulipCoreName} ${FTGLLibrary} ${GLEW_LIBRARY}
                        ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${Tess2Library} ${ClipperLibrary} ${NanoVGLibrary})
 
+IF(NOT EMSCRIPTEN)
 INSTALL(TARGETS ${LibTulipOGLESName}
   RUNTIME DESTINATION ${TulipBinInstallDir}
   LIBRARY DESTINATION ${TulipLibInstallDir}
   ARCHIVE DESTINATION ${TulipLibInstallDir})
+ENDIF(NOT EMSCRIPTEN)
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 COPY_TARGET_LIBRARY_POST_BUILD(${LibTulipOGLESName} ${TULIPOGL_PYTHON_NATIVE_FOLDER} wheels)

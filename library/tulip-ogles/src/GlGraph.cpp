@@ -1553,7 +1553,7 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
   GlBuffer::release(GlBuffer::IndexBuffer);
 
   if (!lineMode && billboard && !_graphElementsPickingMode) {
-    GlTextureManager::instance()->unbindTexture("resources/cylinderTexture.png");
+    GlTextureManager::instance()->unbindTexture(TulipBitmapDir+"cylinderTexture.png");
   }
 
 }

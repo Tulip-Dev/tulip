@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+      <meta charset="utf-8">
+      <title>Tulip DFS Test</title>
+      <script async type="text/javascript" src="tulip.js"></script>
+      <link rel="icon" type="image/x-icon" href="favicon.ico" />
+      <link rel="stylesheet" href="http://css-spinners.com/css/spinner/spinner.css" type="text/css">
+      <style type="text/css">
+        #tulip-view {
+          width: 1024px;
+          height: 768px;
+          background: white;
+          border: 1px solid #c3c6cf;
+          display: table-cell;
+          text-align: center;
+          vertical-align: middle;
+        }
+      </style>
+    </head>
+    <body>
+      <div id="tulip-view" >
+          <div class="spinner-loader">
+            Loading…
+          </div>
+      </div>
+      <button onclick="traverseGraph(bfsNodes)">BFS animation</button>
+      <button onclick="traverseGraph(dfsNodes)">DFS animation</button>
+   </body>
+
+<script type='text/javascript'>
+
+ var tulipView = null;
+ var graph = null;
+ var viewColor = null;
+ var viewLabel = null;
+ var dfsNodes = null;
+ var bfsNodes = null;
+ var curIdx = 0;
+ var timerId = null;
+
+ function graphLoadedCallback(g) {
+   graph = g;
+   viewColor = graph.getColorProperty('viewColor');
+   viewLabel = graph.getStringProperty('viewLabel');
+   viewColor.setAllNodeValue(new tulip.Color(255,0,0));
+   viewLabel.setAllNodeValue('');
+   dfsNodes = graph.dfs();
+   bfsNodes = graph.bfs();
+ }
+
+ function traversalStep(nodes) {
+   var n = nodes[curIdx];
+   curIdx = curIdx + 1;
+   viewColor.setNodeValue(n, new tulip.Color(0,255,0));
+   viewLabel.setNodeValue(n, curIdx.toString());
+   if (curIdx == graph.numberOfNodes()) {
+     clearInterval(timerId);
+     timerId = null;
+   }
+ }
+
+ function traverseGraph(nodes) {
+   if (timerId) {
+     clearInterval(timerId);
+     timerId = null;
+   }
+   viewColor.setAllNodeValue(new tulip.Color(255,0,0));
+   viewLabel.setAllNodeValue('');
+   tulipView.draw();
+   curIdx = 0;
+   timerId = setInterval(function() {
+                           traversalStep(nodes);
+                         }, 500);
+ }
+
+ function initTulipView() {
+   if (typeof tulip == 'undefined' || !tulip.isLoaded()) {
+     setTimeout(initTulipView, 1000);
+   } else {
+     var spinners = document.getElementsByClassName("spinner-loader");
+     for (var i = 0 ; i < spinners.length ; ++i) {
+       spinners[i].style.display = 'none';
+     }
+     tulipView = new tulip.View('tulip-view');
+     tulipView.loadGraphFromFile('data/complete_tree.tlp.gz', false, graphLoadedCallback);
+   }
+ }
+
+ initTulipView();
+
+</script>
+
+</html>

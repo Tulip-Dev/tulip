@@ -1,3 +1,4 @@
+IF(NOT EMSCRIPTEN)
 INSTALL(FILES
   fontb.ttf
   font.ttf 
@@ -16,6 +17,7 @@ INSTALL(DIRECTORY
 COMPONENT tulip_ogl
 DESTINATION ${TulipBitmapInstallDir}
 PATTERN ".svn" EXCLUDE)
+ENDIF(NOT EMSCRIPTEN)
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_CUSTOM_TARGET(copyTulipOglBitmaps ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/fontb.ttf ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/fontb.ttf
