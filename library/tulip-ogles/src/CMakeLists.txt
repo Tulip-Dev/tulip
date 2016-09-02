@@ -36,16 +36,17 @@ SET(tulip-ogles_LIB_SRCS
   TriangleGlyph.cpp
   FontIconGlyph.cpp
   GlLine.cpp
+  ConcaveHullBuilder.cpp
 )
 
-INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include} ${STBInclude})
+INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include} ${STBInclude} ${ClipperInclude})
 INCLUDE_DIRECTORIES(${FTGLInclude} ${NanoVGInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} )
 
 
 ADD_LIBRARY (${LibTulipOGLESName} SHARED ${tulip-ogles_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOGLESName} ${LibTulipCoreName} ${FTGLLibrary} ${GLEW_LIBRARY}
-                       ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${Tess2Library} nanovg)
+                       ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${Tess2Library} ${ClipperLibrary} nanovg)
 
 INSTALL(TARGETS ${LibTulipOGLESName}
   RUNTIME DESTINATION ${TulipBinInstallDir}
