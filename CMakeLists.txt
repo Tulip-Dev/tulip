@@ -560,6 +560,7 @@ IF(NOT BUILD_CORE_ONLY)
   SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
   SET(Tess2Library tess2-tulip-${TulipMMVersion})
   SET(NanoVGInclude ${PROJECT_SOURCE_DIR}/thirdparty/nanovg)
+  SET(NanoVGLibrary nanovg-tulip-${TulipMMVersion})
   SET(STBInclude ${PROJECT_SOURCE_DIR}/thirdparty/stb)
 ENDIF(NOT BUILD_CORE_ONLY)
 

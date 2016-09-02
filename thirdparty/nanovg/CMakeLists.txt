@@ -4,4 +4,4 @@ ENDIF(UNIX)
 
 INCLUDE_DIRECTORIES(${STBInclude})
 
-ADD_LIBRARY(nanovg STATIC nanovg.c)
+ADD_LIBRARY(${NanoVGLibrary} STATIC nanovg.c)

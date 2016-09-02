@@ -46,7 +46,7 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInc
 
 ADD_LIBRARY (${LibTulipOGLESName} SHARED ${tulip-ogles_LIB_SRCS})
 TARGET_LINK_LIBRARIES(${LibTulipOGLESName} ${LibTulipCoreName} ${FTGLLibrary} ${GLEW_LIBRARY}
-                       ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${Tess2Library} ${ClipperLibrary} nanovg)
+                       ${OPENGL_gl_LIBRARY} ${FREETYPE_LIBRARY} ${Tess2Library} ${ClipperLibrary} ${NanoVGLibrary})
 
 INSTALL(TARGETS ${LibTulipOGLESName}
   RUNTIME DESTINATION ${TulipBinInstallDir}
