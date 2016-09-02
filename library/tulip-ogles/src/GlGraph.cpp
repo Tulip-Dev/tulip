@@ -260,8 +260,10 @@ static string curveVertexShaderSrc = R"(
     vec3 xu = normalize(cross(un, lookDir));
     vec3 xv = normalize(cross(vn, -lookDir));
     vec3 xu_xv = normalize(xu+xv);
-    vec3 perp = vec3(-un.y, un.x, un.z);
-    size = size / dot(xu_xv, perp);
+    if (!u_billboard) {
+      vec3 perp = vec3(-un.y, un.x, un.z);
+      size = size / dot(xu_xv, perp);
+    }
     pos = currentCurvePoint + ori * xu_xv * size;
     return pos;
   }
