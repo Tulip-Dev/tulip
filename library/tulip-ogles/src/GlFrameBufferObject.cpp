@@ -38,11 +38,17 @@ GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attac
                                          GLint textureWrap, bool generateMipmap) :
   _width(width), _height(height), _fboHandle(0), _texture(0), _attachmentRbo(0), _isValid(false) {
 
+#ifdef __EMSCRIPTEN__
+  (void) numberOfSamples;
+#endif
+
   glGenFramebuffers(1, &_fboHandle);
   glBindFramebuffer(GL_FRAMEBUFFER, _fboHandle);
 
   glGenTextures(1, &_texture);
+#ifndef __EMSCRIPTEN__
   if (numberOfSamples == 0) {
+#endif
     glBindTexture(GL_TEXTURE_2D, _texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, textureMagFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, textureMinFilter);
@@ -54,50 +60,56 @@ GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attac
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, _texture, 0);
-  } else {
 #ifndef __EMSCRIPTEN__
+  } else {
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, _texture);
     glTexImage2DMultisample(GL_TEXTURE_2D_MULTISAMPLE, numberOfSamples, GL_RGBA, width, height, GL_TRUE);
     glBindTexture(GL_TEXTURE_2D_MULTISAMPLE, 0);
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D_MULTISAMPLE, _texture, 0);
-#endif
   }
+#endif
 
   glGenRenderbuffers(1, &_attachmentRbo);
   glBindRenderbuffer(GL_RENDERBUFFER, _attachmentRbo);
 
   if (attachement == Depth) {
-    if (numberOfSamples == 0) {
-      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
-    } else {
 #ifndef __EMSCRIPTEN__
-      glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_DEPTH_COMPONENT24, width, height);
+    if (numberOfSamples == 0) {
 #endif
+      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, width, height);
+#ifndef __EMSCRIPTEN__
+    } else {
+      glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_DEPTH_COMPONENT24, width, height);
     }
+#endif
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, _attachmentRbo);
   }
 
   if (attachement == Stencil) {
-    if (numberOfSamples == 0) {
-      glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
-    } else {
 #ifndef __EMSCRIPTEN__
-      glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_STENCIL_INDEX8, width, height);
+    if (numberOfSamples == 0) {
 #endif
+      glRenderbufferStorage(GL_RENDERBUFFER, GL_STENCIL_INDEX8, width, height);
+#ifndef __EMSCRIPTEN__
+    } else {
+      glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_STENCIL_INDEX8, width, height);
     }
+#endif
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _attachmentRbo);
   }
 
   if (attachement == CombinedDepthStencil) {
-    if (numberOfSamples == 0) {
-      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, width, height);
-    } else {
 #ifndef __EMSCRIPTEN__
-      glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_DEPTH24_STENCIL8, width, height);
+    if (numberOfSamples == 0) {
 #endif
+      glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_STENCIL, width, height);
+#ifndef __EMSCRIPTEN__
+    } else {
+      glRenderbufferStorageMultisample(GL_RENDERBUFFER, numberOfSamples, GL_DEPTH24_STENCIL8, width, height);
     }
+#endif
     glBindRenderbuffer(GL_RENDERBUFFER, 0);
     glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, _attachmentRbo);
   }
