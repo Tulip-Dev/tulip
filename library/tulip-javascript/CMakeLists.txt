@@ -204,8 +204,20 @@ ENDIF(NOT CMAKE_DEBUG_MODE)
 
 ADD_DEPENDENCIES(copy-tulipjs-to-demos tulip.js)
 
+IF(USE_WASM)
+INSTALL(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm.mappedGlobals
+  demos/tulip_web.html
+  demos/spinner.css
+  DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
+ENDIF(USE_WASM)
+
 INSTALL(DIRECTORY
   demos/data
   demos/images
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
+
+SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.js.mem;tulip.data;tulip.asm.js;tulip.wast;tulip.wasm;tulip.wast.mappedGlobals;tulip.wasm.mappedGlobals")
