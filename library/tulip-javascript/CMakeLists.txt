@@ -172,12 +172,12 @@ ADD_CUSTOM_TARGET(copy-tulipjs-resources ALL
                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/textures/radialGradientTexture.png ${CMAKE_CURRENT_BINARY_DIR}/resources)
 ADD_DEPENDENCIES(tulip.js copy-tulipjs-resources)
 
+IF(NOT CMAKE_DEBUG_MODE)
+
 ADD_CUSTOM_TARGET(copy-tulipjs-to-demos ALL
                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos
                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js.mem ${CMAKE_CURRENT_SOURCE_DIR}/demos
                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.data ${CMAKE_CURRENT_SOURCE_DIR}/demos)
-ADD_DEPENDENCIES(copy-tulipjs-to-demos tulip.js)
-
 INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js.mem
@@ -187,9 +187,25 @@ INSTALL(FILES
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 
+ELSE(NOT CMAKE_DEBUG_MODE)
+
+ADD_CUSTOM_TARGET(copy-tulipjs-to-demos ALL
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.data ${CMAKE_CURRENT_SOURCE_DIR}/demos)
+INSTALL(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip.js
+  ${CMAKE_CURRENT_BINARY_DIR}/tulip.data
+  demos/tulip_web.html
+  demos/spinner.css
+  DESTINATION ${CMAKE_INSTALL_PREFIX}
+)
+
+ENDIF(NOT CMAKE_DEBUG_MODE)
+
+ADD_DEPENDENCIES(copy-tulipjs-to-demos tulip.js)
+
 INSTALL(DIRECTORY
   demos/data
   demos/images
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
-
