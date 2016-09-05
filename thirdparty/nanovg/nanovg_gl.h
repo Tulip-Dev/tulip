@@ -719,6 +719,16 @@ static int glnvg__renderCreateTexture(void* uptr, int type, int w, int h, int im
 	}
 #endif
 
+  int freeData = 0;
+  if (!data) {
+    if (type == NVG_TEXTURE_RGBA) {
+      data = (const unsigned char*)calloc(w*h*4, sizeof(unsigned char));
+    } else {
+      data = (const unsigned char*)calloc(w*h, sizeof(unsigned char));
+    }
+    freeData = 1;
+  }
+
 	if (type == NVG_TEXTURE_RGBA)
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 	else
@@ -729,6 +739,10 @@ static int glnvg__renderCreateTexture(void* uptr, int type, int w, int h, int im
 #else
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, w, h, 0, GL_RED, GL_UNSIGNED_BYTE, data);
 #endif
+
+  if (freeData) {
+    free((void*)data);
+  }
 
 	if (imageFlags & NVG_IMAGE_GENERATE_MIPMAPS) {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
