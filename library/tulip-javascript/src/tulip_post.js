@@ -5042,7 +5042,6 @@ if (workerMode) {
           break;
         case 'endGraphData':
           graph._fillMetaGraphInfos();
-          tulip.unholdObservers();
           setTimeout(function() {
             if (tulip.vizFeatures && view) {
               view.setProgressBarComment("Finalizing graph rendering data ...");
