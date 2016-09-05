@@ -460,7 +460,11 @@ GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
 }
 
 GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator) :
-  _lodCalculator(lodCalculator)
+  _graph(nullptr),
+  _graphElementsPickingMode(false),
+  _lodCalculator(lodCalculator),
+  _maxEdgePoints(0),
+  _updateQuadTree(true)
 {
 
   const map<int, Glyph*> &glyphs = GlyphsManager::instance().getGlyphs();
@@ -529,6 +533,8 @@ void GlGraph::setGraph(tlp::Graph *graph) {
   computeGraphBoundingBox();
 
   _edgesToUpdate.clear();
+  _edgePoints.clear();
+  _edgeLineVerticesIndices.clear();
 
   prepareEdgesData();
 
@@ -559,6 +565,7 @@ void GlGraph::clearObservers() {
 }
 
 void GlGraph::computeGraphBoundingBox() {
+  if (!_graph) return;
   _boundingBox = tlp::computeBoundingBox(_graph, _inputData.getElementLayout(), _inputData.getElementSize(), _inputData.getElementRotation());
 }
 
