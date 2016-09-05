@@ -48,9 +48,6 @@ MACRO(SET_COMPILER_OPTIONS)
   ENDIF(NOT MSVC)
   
   IF(EMSCRIPTEN)
-    # Ensure emscripten port of zlib is compiled before compiling Tulip
-    FIND_PACKAGE(PythonInterp REQUIRED)
-    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} embuilder.py build zlib WORKING_DIRECTORY ${EMSCRIPTEN_ROOT_PATH})
 
     SET(EM_COMPILER_FLAGS "-s USE_ZLIB=1 -s USE_FREETYPE=1 -Wno-warn-absolute-paths")
     SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${EM_COMPILER_FLAGS}")
