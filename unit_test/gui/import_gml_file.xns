@@ -392,6 +392,10 @@ NEW-WINDOW:695,215:60817461,60817461,16792541,0,0,0:0x0+546+400:0,0:Open
 6,2,0,0,0,116,0,1384371,3,Virtual core keyboard
 7,3,0,0,0,116,0,1384515,9,AT Translated Set 2 keyboard
 6,3,0,0,0,116,0,1384515,3,Virtual core keyboard
+7,2,0,0,0,116,0,1384871,9,AT Translated Set 2 keyboard
+6,2,0,0,0,116,0,1384871,3,Virtual core keyboard
+7,3,0,0,0,116,0,1384915,9,AT Translated Set 2 keyboard
+6,3,0,0,0,116,0,1384915,3,Virtual core keyboard
 7,2,0,0,0,36,0,1385254,9,AT Translated Set 2 keyboard
 6,2,0,0,0,36,0,1385254,3,Virtual core keyboard
 0,21,0,0,0,0,0,1385259
