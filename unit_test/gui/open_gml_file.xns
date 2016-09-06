@@ -236,6 +236,12 @@ NEW-WINDOW:583,206:54525997,54525997,14691242,0,0,0:0x0+635+430:0,0:Open graph
 7,3,0,0,0,116,0,25074264,10,AT Translated Set 2 keyboard
 0,3,0,0,0,116,0,25074264
 6,3,0,0,0,116,0,25074264,3,Virtual core keyboard
+7,2,0,0,0,116,0,25075095,10,AT Translated Set 2 keyboard
+0,2,0,0,0,116,0,25075095
+6,2,0,0,0,116,0,25075095,3,Virtual core keyboard
+7,3,0,0,0,116,0,25075264,10,AT Translated Set 2 keyboard
+0,3,0,0,0,116,0,25075264
+6,3,0,0,0,116,0,25075264,3,Virtual core keyboard
 7,2,0,0,0,36,0,25075871,10,AT Translated Set 2 keyboard
 0,2,0,0,0,36,0,25075871
 6,2,0,0,0,36,0,25075871,3,Virtual core keyboard
