@@ -129,6 +129,21 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 //===============================================================
+void MouseElementDeleter::delElement(Graph* graph, SelectedEntity &selectedEntity){
+    switch(selectedEntity.getEntityType()) {
+    case SelectedEntity::NODE_SELECTED:
+        graph->delNode(node(selectedEntity.getComplexEntityId()));
+        break;
+
+    case SelectedEntity::EDGE_SELECTED:
+        graph->delEdge(edge(selectedEntity.getComplexEntityId()));
+        break;
+
+    default :
+        break;
+    }
+}
+
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
   QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
@@ -152,20 +167,7 @@ bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
         Graph* graph = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
         // allow to undo
         graph->push();
-
-        switch(selectedEntity.getEntityType()) {
-        case SelectedEntity::NODE_SELECTED:
-          graph->delNode(node(selectedEntity.getComplexEntityId()));
-          break;
-
-        case SelectedEntity::EDGE_SELECTED:
-          graph->delEdge(edge(selectedEntity.getComplexEntityId()));
-          break;
-
-        default :
-          break;
-        }
-
+        delElement(graph, selectedEntity);
         glMainWidget->redraw();
         Observable::unholdObservers();
         return true;
