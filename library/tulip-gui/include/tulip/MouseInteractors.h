@@ -23,6 +23,7 @@
 
 #include <tulip/InteractorComposite.h>
 #include <tulip/Camera.h>
+#include <tulip/GlScene.h>
 
 namespace tlp {
 
@@ -48,6 +49,7 @@ public:
   ~MouseElementDeleter() {}
   bool eventFilter(QObject *, QEvent *);
   void clear();
+  virtual void delElement(tlp::Graph* graph, tlp::SelectedEntity& selectedEntity);
 };
 
 /** An interactor class to translate/rotate using keys or mouse movements,
