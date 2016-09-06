@@ -129,19 +129,19 @@ bool MousePanNZoomNavigator::eventFilter(QObject *widget, QEvent *e) {
 }
 
 //===============================================================
-void MouseElementDeleter::delElement(Graph* graph, SelectedEntity &selectedEntity){
-    switch(selectedEntity.getEntityType()) {
-    case SelectedEntity::NODE_SELECTED:
-        graph->delNode(node(selectedEntity.getComplexEntityId()));
-        break;
+void MouseElementDeleter::delElement(Graph* graph, SelectedEntity &selectedEntity) {
+  switch(selectedEntity.getEntityType()) {
+  case SelectedEntity::NODE_SELECTED:
+    graph->delNode(node(selectedEntity.getComplexEntityId()));
+    break;
 
-    case SelectedEntity::EDGE_SELECTED:
-        graph->delEdge(edge(selectedEntity.getComplexEntityId()));
-        break;
+  case SelectedEntity::EDGE_SELECTED:
+    graph->delEdge(edge(selectedEntity.getComplexEntityId()));
+    break;
 
-    default :
-        break;
-    }
+  default :
+    break;
+  }
 }
 
 bool MouseElementDeleter::eventFilter(QObject *widget, QEvent *e) {
