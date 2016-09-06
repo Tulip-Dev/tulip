@@ -252,7 +252,7 @@ void GlScene::backupBackBuffer() {
   }
   glBindTexture(GL_TEXTURE_2D, _backBufferTexture);
 #ifdef __EMSCRIPTEN__
-  glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _viewport[0], _viewport[1], _viewport[2], _viewport[3], 0);
+  glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _viewport[0], _viewport[1], _viewport[2], _viewport[3], 0);
 #else
   // On desktop OpenGL, glCopyTexImage2D does not preserve antialiasing so we grab the back buffer content
   // and create a texture from it
