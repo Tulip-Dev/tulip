@@ -4788,8 +4788,8 @@ if (workerMode) {
         return;
       }
       self.postMessage({eventType : 'addEdges', graphHierarchyId : data.graphHierarchyId,
-                         edgesJson : JSON.stringify(edgesData[data.graphHierarchyId]),
-                         lastEdgeId : edgesData[data.graphHierarchyId][edgesData[data.graphHierarchyId].length - 1].edgeId});
+                        edgesJson : JSON.stringify(edgesData[data.graphHierarchyId]),
+                        lastEdgeId : edgesData[data.graphHierarchyId][edgesData[data.graphHierarchyId].length - 1].edgeId});
       break;
     case 'sendNextSubGraph':
       curSubGraphIdx[data.graphHierarchyId] = curSubGraphIdx[data.graphHierarchyId] + 1;
@@ -4983,156 +4983,173 @@ if (workerMode) {
 
   }
 
-  var tulipWorkerInit = true;
+  if (!nodejs) {
 
-  if (!nodejs && tulip.useWorker) {
+    function createTulipWebWorker() {
 
-    tulipWorkerInit = false;
+        var tulipWorkerInit = false;
 
-    var _tulipWorker = new Worker(tulip.modulePrefixURL + scriptName);
+        var tulipWorker = new Worker(tulip.modulePrefixURL + scriptName);
 
-    _tulipWorker.addEventListener('message', function (event) {
-      var delay = 0;
-      var view = null;
-      var graphHierarchyId = null;
-      var graph = null;
-      if ('graphHierarchyId' in event.data) {
-        graphHierarchyId = event.data.graphHierarchyId;
-        graph = graphHierarchyIdToWrapper[graphHierarchyId];
-      }
-      if (tulip.vizFeatures && graphHierarchyId) {
-        view = graphHierarchyIdToView[graphHierarchyId];
-      }
-      switch (event.data.eventType) {
-        case 'tulipWorkerInit':
-          tulipWorkerInit = true;
-          break;
-        case 'print':
-          console.log(event.data.text);
-          break;
-        case 'progressValue':
-          if (tulip.vizFeatures && view) {
-            view.stopBusyAnimation();
-            view.setProgressBarPercent(event.data.value);
-            if (event.data.value >= 0) {
-              view.draw();
+        tulipWorker.addEventListener('message', function (event) {
+          var delay = 0;
+          var view = null;
+          var graphHierarchyId = null;
+          var graph = null;
+          if ('graphHierarchyId' in event.data) {
+            graphHierarchyId = event.data.graphHierarchyId;
+            graph = graphHierarchyIdToWrapper[graphHierarchyId];
+          }
+          if (tulip.vizFeatures && graphHierarchyId) {
+            view = graphHierarchyIdToView[graphHierarchyId];
+          }
+          switch (event.data.eventType) {
+            case 'tulipWorkerInit':
+              tulipWorkerInit = true;
+              break;
+            case 'print':
+              console.log(event.data.text);
+              break;
+            case 'progressValue':
+              if (tulip.vizFeatures && view) {
+                view.stopBusyAnimation();
+                view.setProgressBarPercent(event.data.value);
+                if (event.data.value >= 0) {
+                  view.draw();
+                } else {
+                  view.startBusyAnimation();
+                }
+              }
+              break;
+            case 'progressComment':
+              if (tulip.vizFeatures && view) {
+                view.setProgressBarComment(event.data.comment);
+                view.draw();
+              }
+              break;
+            case 'startGraphData':
+              setTimeout(function() {
+                tulip.holdObservers();
+                graph._parseGraphAttributesJSONData(event.data.graphAttributes);
+                if (tulip.vizFeatures && view) {
+                  view.stopBusyAnimation();
+                  view.setProgressBarComment("Initializing graph visualization ...");
+                  view.setProgressBarPercent(0);
+                  view.startGraphViewData();
+                  graphData[graphHierarchyId] = event.data;
+                }
+              }, delay);
+              break;
+            case 'endGraphData':
+              graph._fillMetaGraphInfos();
+              setTimeout(function() {
+                if (tulip.vizFeatures && view) {
+                  view.setProgressBarComment("Finalizing graph rendering data ...");
+                  view.endGraphViewData();
+                  view.setGraphRenderingDataReady(true);
+                  view.centerScene();
+                }
+                if (graphHierarchyId in graphLoadedCallbacks) {
+                  graphLoadedCallbacks[graphHierarchyId](graph);
+                }
+                tulipWorker.terminate();
+                tulipWorker = null;
+                tulip.unholdObservers();
+              }, delay);
+              break;
+            case 'startGraphUpdate':
+              tulip.holdObservers();
+              algorithmSucceed[graphHierarchyId] = event.data.algoSucceed;
+              algorithmGraphId[graphHierarchyId] = event.data.graphId;
+              graph._parseGraphAttributesJSONData(event.data.graphAttributes);
+              if (tulip.vizFeatures && view) {
+                view.stopBusyAnimation();
+                setTimeout(function() {
+                  view.setProgressBarComment("Updating graph visualization ...");
+                  view.startGraphViewUpdate(event.data.clearGraph);
+                  graphData[graphHierarchyId] = event.data;
+                }, delay);
+              }
+              break;
+            case 'endGraphUpdate':
+              graph._fillMetaGraphInfos();
+              if (graphHierarchyId in algorithmFinishedCallbacks) {
+                var g = graph;
+                if (algorithmGraphId[graphHierarchyId] != 0) {
+                  g = graph.getDescendantGraph(algorithmGraphId[graphHierarchyId]);
+                }
+                algorithmFinishedCallbacks[graphHierarchyId](g, algorithmSucceed[graphHierarchyId]);
+              }
+              tulipWorker.terminate();
+              tulipWorker = null;
+              tulip.unholdObservers();
+              if (tulip.vizFeatures && view) {
+                setTimeout(function() {
+                  view.endGraphViewUpdate();
+                  view.setGraphRenderingDataReady(true);
+                  view.centerScene();
+                }, delay);
+              }
+              break;
+            case 'createGraphProperties':
+              setTimeout(function() {
+                graph._createGraphProperties(event.data.properties);
+              }, delay);
+              break;
+            case 'addNodes':
+              setTimeout(function() {
+                graph._parseNodesJSONData(event.data.nodesJson);
+                if (tulip.vizFeatures && view) {
+                  var nodeId = event.data.lastNodeId;
+                  var percent = (nodeId / (graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + graphData[graphHierarchyId].numberOfSubgraphs - 1)) * 100;
+                  view.setProgressBarComment("Importing graph nodes data (" + nodeId + " / " + graphData[graphHierarchyId].numberOfNodes + ") ...");
+                  view.setProgressBarPercent(percent);
+                  view.draw();
+                }
+                tulipWorker.postMessage({eventType : 'sendNextNodes', graphHierarchyId : graphHierarchyId});
+              }, delay);
+              break;
+            case 'addEdges':
+              setTimeout(function() {
+                graph._parseEdgesJSONData(event.data.edgesJson);
+                if (tulip.vizFeatures && view) {
+                  var edgeId = event.data.lastEdgeId;
+                  var percent = ((graphData[graphHierarchyId].numberOfNodes + edgeId) / (graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + graphData[graphHierarchyId].numberOfSubgraphs - 1)) * 100;
+                  view.setProgressBarComment("Importing graph edges data (" + edgeId + " / " + graphData[graphHierarchyId].numberOfEdges + ") ...");
+                  view.setProgressBarPercent(percent);
+                  view.draw();
+                }
+                tulipWorker.postMessage({eventType : 'sendNextEdges' , graphHierarchyId : graphHierarchyId});
+              }, delay);
+              break;
+            case 'addSubGraph':
+              setTimeout(function() {
+                graph._addSubGraph(event.data.subGraphData);
+                if (tulip.vizFeatures && view) {
+                  var sgId = graph.numberOfDescendantGraphs();
+                  var percent = ((graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + sgId) / (graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + graphData[graphHierarchyId].numberOfSubgraphs - 1)) * 100;
+                  view.setProgressBarComment("Importing subgraphs data (" + sgId + " / " + graphData[graphHierarchyId].numberOfSubgraphs + ") ...");
+                  view.setProgressBarPercent(percent);
+                  view.draw();
+                }
+                tulipWorker.postMessage({eventType : 'sendNextSubGraph', graphHierarchyId : event.data.graphHierarchyId});
+              }, delay);
+              break;
+          };
+        }, false);
+
+        return new Promise(function(resolve, reject) {
+          function checkWorkerInit() {
+            if (tulipWorkerInit) {
+              resolve(tulipWorker);
             } else {
-              view.startBusyAnimation();
+              setTimeout(checkWorkerInit);
             }
           }
-          break;
-        case 'progressComment':
-          if (tulip.vizFeatures && view) {
-            view.setProgressBarComment(event.data.comment);
-            view.draw();
-          }
-          break;
-        case 'startGraphData':
-          setTimeout(function() {
-            tulip.holdObservers();
-            graph._parseGraphAttributesJSONData(event.data.graphAttributes);
-            if (tulip.vizFeatures && view) {
-              view.stopBusyAnimation();
-              view.setProgressBarComment("Initializing graph visualization ...");
-              view.setProgressBarPercent(0);
-              view.startGraphViewData();
-              graphData[graphHierarchyId] = event.data;
-            }
-          }, delay);
-          break;
-        case 'endGraphData':
-          graph._fillMetaGraphInfos();
-          setTimeout(function() {
-            if (tulip.vizFeatures && view) {
-              view.setProgressBarComment("Finalizing graph rendering data ...");
-              view.endGraphViewData();
-              view.setGraphRenderingDataReady(true);
-              view.centerScene();
-            }
-            if (graphHierarchyId in graphLoadedCallbacks) {
-              graphLoadedCallbacks[graphHierarchyId](graph);
-            }
-            tulip.unholdObservers();
-          }, delay);
-          break;
-        case 'startGraphUpdate':
-          tulip.holdObservers();
-          algorithmSucceed[graphHierarchyId] = event.data.algoSucceed;
-          algorithmGraphId[graphHierarchyId] = event.data.graphId;
-          graph._parseGraphAttributesJSONData(event.data.graphAttributes);
-          if (tulip.vizFeatures && view) {
-            view.stopBusyAnimation();
-            setTimeout(function() {
-              view.setProgressBarComment("Updating graph visualization ...");
-              view.startGraphViewUpdate(event.data.clearGraph);
-              graphData[graphHierarchyId] = event.data;
-            }, delay);
-          }
-          break;
-        case 'endGraphUpdate':
-          graph._fillMetaGraphInfos();
-          if (graphHierarchyId in algorithmFinishedCallbacks) {
-            var g = graph;
-            if (algorithmGraphId[graphHierarchyId] != 0) {
-              g = graph.getDescendantGraph(algorithmGraphId[graphHierarchyId]);
-            }
-            algorithmFinishedCallbacks[graphHierarchyId](g, algorithmSucceed[graphHierarchyId]);
-          }
-          tulip.unholdObservers();
-          if (tulip.vizFeatures && view) {
-            setTimeout(function() {
-              view.endGraphViewUpdate();
-              view.setGraphRenderingDataReady(true);
-              view.centerScene();
-            }, delay);
-          }
-          break;
-        case 'createGraphProperties':
-          setTimeout(function() {
-            graph._createGraphProperties(event.data.properties);
-          }, delay);
-          break;
-        case 'addNodes':
-          setTimeout(function() {
-            graph._parseNodesJSONData(event.data.nodesJson);
-            if (tulip.vizFeatures && view) {
-              var nodeId = event.data.lastNodeId;
-              var percent = (nodeId / (graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + graphData[graphHierarchyId].numberOfSubgraphs - 1)) * 100;
-              view.setProgressBarComment("Importing graph nodes data (" + nodeId + " / " + graphData[graphHierarchyId].numberOfNodes + ") ...");
-              view.setProgressBarPercent(percent);
-              view.draw();
-            }
-            _tulipWorker.postMessage({eventType : 'sendNextNodes', graphHierarchyId : graphHierarchyId});
-          }, delay);
-          break;
-        case 'addEdges':
-          setTimeout(function() {
-            graph._parseEdgesJSONData(event.data.edgesJson);
-            if (tulip.vizFeatures && view) {
-              var edgeId = event.data.lastEdgeId;
-              var percent = ((graphData[graphHierarchyId].numberOfNodes + edgeId) / (graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + graphData[graphHierarchyId].numberOfSubgraphs - 1)) * 100;
-              view.setProgressBarComment("Importing graph edges data (" + edgeId + " / " + graphData[graphHierarchyId].numberOfEdges + ") ...");
-              view.setProgressBarPercent(percent);
-              view.draw();
-            }
-            _tulipWorker.postMessage({eventType : 'sendNextEdges' , graphHierarchyId : graphHierarchyId});
-          }, delay);
-          break;
-        case 'addSubGraph':
-          setTimeout(function() {
-            graph._addSubGraph(event.data.subGraphData);
-            if (tulip.vizFeatures && view) {
-              var sgId = graph.numberOfDescendantGraphs();
-              var percent = ((graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + sgId) / (graphData[graphHierarchyId].numberOfNodes + graphData[graphHierarchyId].numberOfEdges + graphData[graphHierarchyId].numberOfSubgraphs - 1)) * 100;
-              view.setProgressBarComment("Importing subgraphs data (" + sgId + " / " + graphData[graphHierarchyId].numberOfSubgraphs + ") ...");
-              view.setProgressBarPercent(percent);
-              view.draw();
-            }
-            _tulipWorker.postMessage({eventType : 'sendNextSubGraph', graphHierarchyId : event.data.graphHierarchyId});
-          }, delay);
-          break;
-      };
-    }, false);
+          checkWorkerInit();
+        });
+
+    }
 
     function sendGraphToWorker(graph, graphFilePath, graphFileData, sendDataBack) {
       if (arguments.length == 1) {
@@ -5143,7 +5160,7 @@ if (workerMode) {
         var saved = tulip.saveGraph(graph, "/graph.tlpb.gz");
         var graphData = FS.readFile("/graph.tlpb.gz");
         FS.unlink("/graph.tlpb.gz");
-        sendGraphToWorker(graph, "graph.tlpb.gz", graphData.buffer, false);
+        return sendGraphToWorker(graph, "graph.tlpb.gz", graphData.buffer, false);
       } else {
         var messageData = {
           eventType: 'loadGraph',
@@ -5152,11 +5169,14 @@ if (workerMode) {
           graphFileData : graphFileData,
           sendDataBack : sendDataBack
         };
-        if (graphFileData) {
-          _tulipWorker.postMessage(messageData, [messageData.graphFileData]);
-        } else {
-          _tulipWorker.postMessage(messageData);
-        }
+        return createTulipWebWorker().then(function(tulipWorker) {
+          if (graphFileData) {
+            tulipWorker.postMessage(messageData, [messageData.graphFileData]);
+          } else {
+            tulipWorker.postMessage(messageData);
+          }
+          return tulipWorker;
+        });
       }
     }
 
@@ -5404,7 +5424,7 @@ if (workerMode) {
       graphReq.onload = function (oEvent) {
         var arrayBuffer = graphReq.response;
         var paths = graphFilePath.split('/');
-        if (loadGraphInWorker && tulip.useWorker) {
+        if (loadGraphInWorker) {
           view.loadGraphFromData(paths[paths.length-1], arrayBuffer, loadGraphInWorker, graphLoadedCallback);
         } else {
           var file = FS.findObject(graphFilePath);
@@ -5431,7 +5451,7 @@ if (workerMode) {
 
     tulip.View.prototype.loadGraphFromData = function(graphFilePath, graphFileData, loadGraphInWorker, graphLoadedCallback) {
       var view = this;
-      if (loadGraphInWorker && tulip.useWorker) {
+      if (loadGraphInWorker) {
         var graph = tulip.Graph();
         view.setGraph(graph, true);
         if (graphLoadedCallback) {
@@ -6078,10 +6098,10 @@ if (workerMode) {
 
 
   tulip.isLoaded = function() {
-    return tulip.mainCalled && tulipWorkerInit;
+    return tulip.mainCalled;
   }
 
-  if (!nodejs && tulip.useWorker) {
+  if (!nodejs) {
 
     tulip.Graph.prototype.applyAlgorithmInWorker = function(algorithmName, algoParameters, algoFinishedCallback) {
       if (!tulip.algorithmExists(algorithmName)) {
@@ -6098,18 +6118,20 @@ if (workerMode) {
         view.startBusyAnimation();
         view.setProgressBarComment("Applying " + algorithmName + " algorithm ...");
       }
-      sendGraphToWorker(this.getRoot());
-      var messageData = {
-        graphHierarchyId : graphHierarchyId,
-        graphId : this.getId(),
-        eventType: 'algorithm',
-        algorithmName : algorithmName,
-        parameters : JSON.stringify(algoParameters)
-      };
-      if (algoFinishedCallback) {
-        algorithmFinishedCallbacks[graphHierarchyId] = algoFinishedCallback;
-      }
-      _tulipWorker.postMessage(messageData);
+      var graph = this;
+      sendGraphToWorker(this.getRoot()).then(function(tulipWorker) {
+        var messageData = {
+          graphHierarchyId : graphHierarchyId,
+          graphId : graph.getId(),
+          eventType: 'algorithm',
+          algorithmName : algorithmName,
+          parameters : JSON.stringify(algoParameters)
+        };
+        if (algoFinishedCallback) {
+          algorithmFinishedCallbacks[graphHierarchyId] = algoFinishedCallback;
+        }
+        tulipWorker.postMessage(messageData);
+      });
     };
 
     function applyPropertyAlgorithmInWorker(graph, algorithmName, resultProperty, algoParameters, algoFinishedCallback) {
@@ -6117,25 +6139,26 @@ if (workerMode) {
         algoParameters = {};
       }
       var graphHierarchyId = graph.getRoot().getCppPointer();
-      sendGraphToWorker(graph.getRoot());
-      var messageData = {
-        graphHierarchyId : graphHierarchyId,
-        graphId : graph.getId(),
-        eventType: 'propertyAlgorithm',
-        algorithmName : algorithmName,
-        resultPropertyName : resultProperty.getName(),
-        parameters : JSON.stringify(algoParameters)
-      };
-      if (algoFinishedCallback) {
-        algorithmFinishedCallbacks[graphHierarchyId] = algoFinishedCallback;
-      }
-      _tulipWorker.postMessage(messageData);
-      if (tulip.vizFeatures && graphHierarchyId in graphHierarchyIdToView) {
-        var view = graphHierarchyIdToView[graphHierarchyId];
-        view.setGraphRenderingDataReady(false);
-        view.startBusyAnimation();
-        view.setProgressBarComment("Applying " + algorithmName + " " + resultProperty.getTypename() + " algorithm ...");
-      }
+      sendGraphToWorker(graph.getRoot()).then(function(tulipWorker) {
+        var messageData = {
+          graphHierarchyId : graphHierarchyId,
+          graphId : graph.getId(),
+          eventType: 'propertyAlgorithm',
+          algorithmName : algorithmName,
+          resultPropertyName : resultProperty.getName(),
+          parameters : JSON.stringify(algoParameters)
+        };
+        if (algoFinishedCallback) {
+          algorithmFinishedCallbacks[graphHierarchyId] = algoFinishedCallback;
+        }
+        tulipWorker.postMessage(messageData);
+        if (tulip.vizFeatures && graphHierarchyId in graphHierarchyIdToView) {
+          var view = graphHierarchyIdToView[graphHierarchyId];
+          view.setGraphRenderingDataReady(false);
+          view.startBusyAnimation();
+          view.setProgressBarComment("Applying " + algorithmName + " " + resultProperty.getTypename() + " algorithm ...");
+        }
+      });
     }
 
     tulip.Graph.prototype.applyDoubleAlgorithmInWorker = function(algorithmName, resultProperty, algoParameters, algoFinishedCallback) {
@@ -6175,24 +6198,26 @@ if (workerMode) {
     };
 
     tulip.Graph.prototype.executeScriptInWorker = function(graphFunction, scriptExecutedCallback, scriptParameters) {
+      var graph = this;
       var graphHierarchyId = this.getRoot().getCppPointer();
-      sendGraphToWorker(this.getRoot());
-      if (scriptExecutedCallback) {
-        algorithmFinishedCallbacks[graphHierarchyId] = scriptExecutedCallback;
-      }
-      if (tulip.vizFeatures && graphHierarchyId in graphHierarchyIdToView) {
-        var view = graphHierarchyIdToView[graphHierarchyId];
-        view.setGraphRenderingDataReady(false);
-        view.startBusyAnimation();
-        view.setProgressBarComment("Executing script on graph ...");
-      }
-      _tulipWorker.postMessage({
-                                 graphHierarchyId: graphHierarchyId,
-                                 graphId : this.getId(),
-                                 eventType: 'executeGraphScript',
-                                 scriptCode: graphFunction.toString(),
-                                 scriptParameters: scriptParameters
-                               });
+      sendGraphToWorker(this.getRoot()).then(function(tulipWorker) {
+        if (scriptExecutedCallback) {
+          algorithmFinishedCallbacks[graphHierarchyId] = scriptExecutedCallback;
+        }
+        if (tulip.vizFeatures && graphHierarchyId in graphHierarchyIdToView) {
+          var view = graphHierarchyIdToView[graphHierarchyId];
+          view.setGraphRenderingDataReady(false);
+          view.startBusyAnimation();
+          view.setProgressBarComment("Executing script on graph ...");
+        }
+        tulipWorker.postMessage({
+                                   graphHierarchyId: graphHierarchyId,
+                                   graphId : graph.getId(),
+                                   eventType: 'executeGraphScript',
+                                   scriptCode: graphFunction.toString(),
+                                   scriptParameters: scriptParameters
+                                 });
+      });
     };
 
   }

@@ -122,7 +122,7 @@
 
         <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
           <h3> Graph datasets </h3>
-          <label><input id="load-in-worker" type="checkbox" name="checkbox-0" data-mini="true" checked=true> Load graphs in Web Worker (slower but with loading feeback) </label>
+          <label><input id="load-in-worker" type="checkbox" name="checkbox-0" data-mini="false" checked="false"> Load graphs in Web Worker (slower but with loading feeback) </label>
 
           <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Programming Languages network" onclick ="loadGraphFromDataFolder('programming_language_network.tlp.gz')" > Programming Languages network </a>
           <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="FIFA World Cup 2014 players network" onclick ="loadGraphFromDataFolder('world_cup_network.tlp.gz')" > FIFA World Cup 2014 players network </a>
@@ -596,6 +596,7 @@
     $('#tulip-view').height(window.innerHeight-80);
     window.addEventListener('resize', resize, false);
 
+    $('#load-in-worker').prop('checked', false).checkboxradio('refresh');
     $('#display-nodes').prop('checked', true).checkboxradio('refresh');
     $('#display-nodes-labels').prop('checked', true).checkboxradio('refresh');
     $('#display-edges').prop('checked', true).checkboxradio('refresh');

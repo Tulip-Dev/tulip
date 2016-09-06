@@ -4,7 +4,7 @@ INCLUDE_DIRECTORIES(${Tess2Include} ${FTGLInclude} ${NanoVGInclude})
 
 SET(USE_DFE OFF CACHE BOOL "Use duplicate functions elimination to reduce emitted js file size (time consuming)")
 SET(USE_WASM OFF CACHE BOOL "Use WebAssembly (experimental) instead of asm.js")
-SET(LIGHTWEIGHT_TULIPJS OFF CACHE BOOL "Compile a lightweight version of tulip.js : contains only the graph visualization features, no algorithms bundled and no Worker created")
+SET(LIGHTWEIGHT_TULIPJS OFF CACHE BOOL "Compile a lightweight version of tulip.js : contains only the graph visualization features, no algorithms bundled")
 
 SET(TULIPJS_SRCS
   src/TulipHtml5.cpp
@@ -38,8 +38,6 @@ SET(TULIP_GLYPHS_PLUGINS_LIBRARIES Cone-${TulipVersion}
                                    Star-${TulipVersion})
 
 TARGET_LINK_LIBRARIES(tulip.js ${LibTulipCoreName} ${LibTulipOGLESName} ${FTGLLibrary} ${Tess2Library} ${ClipperLibrary} ${NanoVGLibrary} ${TULIP_GLYPHS_PLUGINS_LIBRARIES})
-
-SET(USE_WORKER OFF)
 
 SET(TULIP_CORE_PLUGINS_LIBRARIES Delaunay-${TulipVersion}
                                  Voronoi-${TulipVersion}
@@ -153,7 +151,6 @@ SET(TULIP_CORE_PLUGINS_LIBRARIES Delaunay-${TulipVersion}
 
 IF(NOT LIGHTWEIGHT_TULIPJS)
   TARGET_LINK_LIBRARIES(tulip.js ${LibTulipOGDFName} ${TULIP_CORE_PLUGINS_LIBRARIES})
-  SET(USE_WORKER ON)
 ENDIF(NOT LIGHTWEIGHT_TULIPJS)
 
 SET(TULIP_JS_LINK_FLAGS "--bind -s USE_ZLIB=1 -s USE_FREETYPE=1 -s LZ4=1 -s TOTAL_MEMORY=268435456 -s MODULARIZE=1 -s EVAL_CTORS=0 -s EXPORT_NAME=\\\"tulipjs\\\" --preload-file resources/")
@@ -175,7 +172,7 @@ EM_LINK_POST_JS(tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/src/tulip_post.js)
 EM_LINK_JS_LIBRARY(tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/src/tulip_library.js)
 
 ADD_CUSTOM_COMMAND(TARGET tulip.js POST_BUILD
-                   COMMAND ${CMAKE_COMMAND} -DUSE_WASM=${USE_WASM} -DTULIP_VIZ_FEATURES=ON -DTULIP_USE_WORKER=${USE_WORKER} -DJSFILE=tulip.js -DJSUTILSFILE=${CMAKE_CURRENT_SOURCE_DIR}/src/utils.js -P ${CMAKE_CURRENT_SOURCE_DIR}/src/wrap_compiled_code.cmake
+                   COMMAND ${CMAKE_COMMAND} -DUSE_WASM=${USE_WASM} -DTULIP_VIZ_FEATURES=ON -DJSFILE=tulip.js -DJSUTILSFILE=${CMAKE_CURRENT_SOURCE_DIR}/src/utils.js -P ${CMAKE_CURRENT_SOURCE_DIR}/src/wrap_compiled_code.cmake
                    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})
 
 ADD_CUSTOM_TARGET(copy-tulipjs-resources ALL
