@@ -467,7 +467,7 @@ GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator) :
   _updateQuadTree(true)
 {
 
-  const map<int, Glyph*> &glyphs = GlyphsManager::instance().getGlyphs();
+  const map<int, Glyph*> &glyphs = GlyphsManager::instance()->getGlyphs();
   map<int, Glyph*>::const_iterator it = glyphs.begin();
   for( ; it != glyphs.end() ; ++it) {
     _nodesGlyphs[it->first] = vector<node>();
@@ -985,7 +985,7 @@ void GlGraph::renderMetaNodes(const std::vector<tlp::node> &metaNodes, const Cam
     const tlp::Coord &metaNodePos = _inputData.getElementLayout()->getNodeValue(metaNodes[i]);
     const tlp::Size &metaNodeSize = _inputData.getElementSize()->getNodeValue(metaNodes[i]);
     tlp::BoundingBox metaNodeBB(metaNodePos - metaNodeSize/2.f, metaNodePos + metaNodeSize/2.f);
-    Glyph *metaNodeGlyph = GlyphsManager::instance().getGlyph(_inputData.getElementShape()->getNodeValue(metaNodes[i]));
+    Glyph *metaNodeGlyph = GlyphsManager::instance()->getGlyph(_inputData.getElementShape()->getNodeValue(metaNodes[i]));
     tlp::BoundingBox includeBB;
     metaNodeGlyph->getIncludeBoundingBox(includeBB);
     tlp::BoundingBox metaNodeBBTmp;
@@ -1718,10 +1718,10 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
   while (!glyphsOk) {
 
     srcAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
-    srcAnchor = GlyphsManager::instance().getGlyph(srcGlyphId)->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
+    srcAnchor = GlyphsManager::instance()->getGlyph(srcGlyphId)->getAnchor(srcCoord, srcAnchor, srcSize, srcRot);
 
     tgtAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
-    tgtAnchor = GlyphsManager::instance().getGlyph(tgtGlyphId)->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
+    tgtAnchor = GlyphsManager::instance()->getGlyph(tgtGlyphId)->getAnchor(tgtCoord, tgtAnchor, tgtSize, tgtRot);
 
     edgePoints.clear();
     edgePoints.push_back(srcAnchor);

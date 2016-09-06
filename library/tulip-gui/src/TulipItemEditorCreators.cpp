@@ -799,7 +799,7 @@ QSize TulipFontGlyphIconCreator::sizeHint(const QStyleOptionViewItem &option,
 QWidget *NodeShapeEditorCreator::createWidget(QWidget *parent) const {
   CustomComboBox *combobox = new CustomComboBox(parent);
 
-  const std::map<int, Glyph *> &glyphs = GlyphsManager::instance().getGlyphs();
+  const std::map<int, Glyph *> &glyphs = GlyphsManager::instance()->getGlyphs();
 
   for (const std::pair<int, Glyph *> &glyph : glyphs) {
     combobox->addItem(GlyphPreviewRenderer::instance().render(glyph.first),
@@ -827,7 +827,7 @@ QVariant NodeShapeEditorCreator::editorData(QWidget *editor, Graph *) {
 
 QString NodeShapeEditorCreator::displayText(const QVariant &data) const {
   return tlpStringToQString(GlyphsManager::instance()
-                                .getGlyph(data.value<NodeShape::NodeShapes>())
+                                ->getGlyph(data.value<NodeShape::NodeShapes>())
                                 ->nodeGlyphName());
   return "";
 }
@@ -872,7 +872,7 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
   CustomComboBox *combobox = new CustomComboBox(parent);
   combobox->addItem(QString("None"), EdgeExtremityShape::None);
 
-  const std::map<int, Glyph *> &glyphs = GlyphsManager::instance().getGlyphs();
+  const std::map<int, Glyph *> &glyphs = GlyphsManager::instance()->getGlyphs();
 
   for (const std::pair<int, Glyph *> &glyph : glyphs) {
     if (glyph.second->edgeExtremityGlyph()) {

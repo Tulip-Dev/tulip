@@ -185,8 +185,8 @@ static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRend
   return shaderSrc;
 }
 
-static std::string glyphsVertexShaderHardwareInstancingSrc =
-    ShaderManager::getShaderSrcPrefix() + glyphVertexShaderSrcCommonCode + R"(
+static std::string glyphsVertexShaderHardwareInstancingSrc() {
+    return ShaderManager::getShaderSrcPrefix() + glyphVertexShaderSrcCommonCode + R"(
       attribute vec3 a_center;
       attribute vec3 a_scale;
       attribute vec4 a_rotation;
@@ -243,70 +243,73 @@ static std::string glyphsVertexShaderHardwareInstancingSrc =
         v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;
         v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;
       }
-)";
+    )";
+}
 
-static std::string glyphsFragmentShaderSrc = ShaderManager::getShaderSrcPrefix() + R"(
-  uniform bool u_flatShading;
-  uniform bool u_textureActivated;
-  uniform sampler2D u_textures[4];
+static std::string glyphsFragmentShaderSrc() {
+  return ShaderManager::getShaderSrcPrefix() + R"(
+    uniform bool u_flatShading;
+    uniform bool u_textureActivated;
+    uniform sampler2D u_textures[4];
 
-  uniform vec4 u_lightSpecularColor;
-  uniform vec4 u_materialSpecularColor;
-  uniform float u_materialShininess;
+    uniform vec4 u_lightSpecularColor;
+    uniform vec4 u_materialSpecularColor;
+    uniform float u_materialShininess;
 
-  varying vec4 v_diffuseColor;
-  varying vec4 v_ambientGlobalColor;
-  varying vec4 v_ambientColor;
+    varying vec4 v_diffuseColor;
+    varying vec4 v_ambientGlobalColor;
+    varying vec4 v_ambientColor;
 
-  varying vec3 v_normal;
-  varying vec3 v_lightDir;
-  varying vec3 v_halfVector;
-  varying float v_attenuation;
+    varying vec3 v_normal;
+    varying vec3 v_lightDir;
+    varying vec3 v_halfVector;
+    varying float v_attenuation;
 
-  varying vec4 v_texData;
+    varying vec4 v_texData;
 
-  vec4 getTexel(int samplerId) {
-    vec2 v_texCoord = v_texData.xy;
-    vec4 texel = vec4(0.0);
-    if (samplerId == 0) {
-      texel = texture2D(u_textures[0], v_texCoord);
-    } else if (samplerId == 1) {
-      texel = texture2D(u_textures[1], v_texCoord);
-    } else if (samplerId == 2) {
-      texel = texture2D(u_textures[2], v_texCoord);
-    } else if (samplerId == 3) {
-      texel = texture2D(u_textures[3], v_texCoord);
-    }
-    return texel;
-  }
-
-  void main() {
-    int samplerId = int(v_texData.z);
-    if (u_flatShading) {
-      gl_FragColor = v_diffuseColor;
-      if (u_textureActivated && samplerId != -1) {
-        gl_FragColor *= getTexel(samplerId);
+    vec4 getTexel(int samplerId) {
+      vec2 v_texCoord = v_texData.xy;
+      vec4 texel = vec4(0.0);
+      if (samplerId == 0) {
+        texel = texture2D(u_textures[0], v_texCoord);
+      } else if (samplerId == 1) {
+        texel = texture2D(u_textures[1], v_texCoord);
+      } else if (samplerId == 2) {
+        texel = texture2D(u_textures[2], v_texCoord);
+      } else if (samplerId == 3) {
+        texel = texture2D(u_textures[3], v_texCoord);
       }
-      return;
-    }
-    vec3 normal = normalize(v_normal);
-    vec4 color = v_ambientGlobalColor + v_ambientColor;
-    //   float NdotL = max(dot(normal,normalize(v_lightDir)),0.0);
-    float NdotL = abs(dot(normal,normalize(v_lightDir)));
-    if (NdotL > 0.0) {
-      color += (v_attenuation * v_diffuseColor * NdotL);
-      vec3 halfV = normalize(v_halfVector);
-      float NdotHV = max(dot(normal, halfV), 0.0);
-      color += v_attenuation * u_materialSpecularColor * u_lightSpecularColor * pow(NdotHV, u_materialShininess);
+      return texel;
     }
 
-    if (u_textureActivated && samplerId != -1) {
-      color *= getTexel(samplerId);
-    }
+    void main() {
+      int samplerId = int(v_texData.z);
+      if (u_flatShading) {
+        gl_FragColor = v_diffuseColor;
+        if (u_textureActivated && samplerId != -1) {
+          gl_FragColor *= getTexel(samplerId);
+        }
+        return;
+      }
+      vec3 normal = normalize(v_normal);
+      vec4 color = v_ambientGlobalColor + v_ambientColor;
+      //   float NdotL = max(dot(normal,normalize(v_lightDir)),0.0);
+      float NdotL = abs(dot(normal,normalize(v_lightDir)));
+      if (NdotL > 0.0) {
+        color += (v_attenuation * v_diffuseColor * NdotL);
+        vec3 halfV = normalize(v_halfVector);
+        float NdotHV = max(dot(normal, halfV), 0.0);
+        color += v_attenuation * u_materialSpecularColor * u_lightSpecularColor * pow(NdotHV, u_materialShininess);
+      }
 
-    gl_FragColor = color;
-  }
-)";
+      if (u_textureActivated && samplerId != -1) {
+        color *= getTexel(samplerId);
+      }
+
+      gl_FragColor = color;
+    }
+  )";
+}
 
 static const unsigned int ushortMax = 65535;
 
@@ -347,11 +350,11 @@ GlyphsRenderer::GlyphsRenderer() : _billboardMode(false) {
   while (!glyphShaderOk) {
     _glyphShader = new GlShaderProgram();
     if (_canUseHardwareInstancing) {
-      _glyphShader->addShaderFromSourceCode(GlShader::Vertex, glyphsVertexShaderHardwareInstancingSrc);
+      _glyphShader->addShaderFromSourceCode(GlShader::Vertex, glyphsVertexShaderHardwareInstancingSrc());
     } else {
       _glyphShader->addShaderFromSourceCode(GlShader::Vertex, genGlyphsVertexShaderSrc(maxNbGlyphsByRenderingBatch));
     }
-    _glyphShader->addShaderFromSourceCode(GlShader::Fragment, glyphsFragmentShaderSrc);
+    _glyphShader->addShaderFromSourceCode(GlShader::Fragment, glyphsFragmentShaderSrc());
 
     _glyphShader->link();
     if (!_glyphShader->isLinked()) {
@@ -367,7 +370,7 @@ GlyphsRenderer::GlyphsRenderer() : _billboardMode(false) {
 
 void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
 
-  Glyph *glyph = GlyphsManager::instance().getGlyph(glyphId);
+  Glyph *glyph = GlyphsManager::instance()->getGlyph(glyphId);
 
   if (_glyphsDataStride.find(glyph) != _glyphsDataStride.end()) {
     return;
@@ -463,7 +466,7 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
 
 void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
 
-  Glyph *glyph = GlyphsManager::instance().getGlyph(glyphId);
+  Glyph *glyph = GlyphsManager::instance()->getGlyph(glyphId);
 
   if (_glyphsDataStride.find(glyph) != _glyphsDataStride.end()) {
     return;
@@ -621,7 +624,7 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
                                                     bool forceFlatShading, bool swapYZ) {
 
   prepareGlyphDataHardwareInstancing(glyphId);
-  Glyph *glyph = GlyphsManager::instance().getGlyph(glyphId);
+  Glyph *glyph = GlyphsManager::instance()->getGlyph(glyphId);
 
   unsigned int nbIndices = glyph->getGlyphVerticesIndices().size();
   unsigned int nbOutlines = glyph->getGlyphOutlineIndices().size();
@@ -739,7 +742,7 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
   }
 
   prepareGlyphDataPseudoInstancing(glyphId);
-  Glyph *glyph = GlyphsManager::instance().getGlyph(glyphId);
+  Glyph *glyph = GlyphsManager::instance()->getGlyph(glyphId);
 
   unsigned int nbIndices = glyph->getGlyphVerticesIndices().size();
   unsigned int nbOutlines = glyph->getGlyphOutlineIndices().size();

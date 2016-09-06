@@ -37,9 +37,12 @@
 using namespace std;
 using namespace tlp;
 
-GlyphsManager GlyphsManager::_instance;
+GlyphsManager* GlyphsManager::_instance(nullptr);
 
-GlyphsManager& GlyphsManager::instance() {
+GlyphsManager *GlyphsManager::instance() {
+  if (!_instance) {
+    _instance = new GlyphsManager();
+  }
   return _instance;
 }
 

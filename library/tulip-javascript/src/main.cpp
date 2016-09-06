@@ -25,13 +25,15 @@
  *
  */
 
-#include <tulip/PropertyTypes.h>
+#include <tulip/TlpTools.h>
+#include <tulip/GlyphsManager.h>
 
 #include <emscripten/emscripten.h>
 
 int EMSCRIPTEN_KEEPALIVE main(int /* argc */, char ** /* argv */) {
 
-  tlp::initTypeSerializers();
+  tlp::initTulipLib();
+  tlp::GlyphsManager::instance()->loadGlyphPlugins();
 
   emscripten_run_script("if (typeof window != 'undefined' && typeof window.tulip != 'undefined') { window.tulip.mainCalled = true; }");
 

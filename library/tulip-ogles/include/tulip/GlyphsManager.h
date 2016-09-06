@@ -41,7 +41,7 @@ public:
 
   ~GlyphsManager();
 
-  static GlyphsManager& instance();
+  static GlyphsManager* instance();
 
   void loadGlyphPlugins();
 
@@ -55,7 +55,7 @@ private:
 
   GlyphsManager();
 
-  static GlyphsManager _instance;
+  static GlyphsManager *_instance;
 
   std::map<int, Glyph*> _glyphs;
   std::map<int, Glyph*> _iconGlyphs;

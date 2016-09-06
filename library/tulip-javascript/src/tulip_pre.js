@@ -38,7 +38,6 @@ if (workerMode) {
   };
 }
 
-
 Module.noExitRuntime = true;
 
 if (nodejs) {

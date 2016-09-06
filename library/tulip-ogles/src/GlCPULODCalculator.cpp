@@ -148,12 +148,12 @@ BoundingBox GlCPULODCalculator::getEdgeBoundingBox(edge e) {
   Coord srcAnchor, tgtAnchor, tmpAnchor;
 
   int srcGlyphId = _viewShape->getNodeValue(source);
-  Glyph *sourceGlyph = GlyphsManager::instance().getGlyph(srcGlyphId);
+  Glyph *sourceGlyph = GlyphsManager::instance()->getGlyph(srcGlyphId);
   tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
   srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
 
   int tgtGlyphId = _viewShape->getNodeValue(target);
-  Glyph *targetGlyph = GlyphsManager::instance().getGlyph(tgtGlyphId);
+  Glyph *targetGlyph = GlyphsManager::instance()->getGlyph(tgtGlyphId);
   //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
   tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
   tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);

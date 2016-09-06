@@ -258,7 +258,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   tlp::PluginLibraryLoader::loadPlugins(loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
-  tlp::GlyphsManager::instance().loadGlyphPlugins();
+  tlp::GlyphsManager::instance()->loadGlyphPlugins();
 }
 
 // tlp::debug redirection

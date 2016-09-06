@@ -294,6 +294,7 @@ std::string tlp::demangleClassName(const char* className,
 
 void tlp::initTulipLib(const char*) {
   TulipBitmapDir = "/resources/";
+  initTypeSerializers();
 }
 
 std::string tlp::demangleClassName(const char* className, bool) {

@@ -227,7 +227,7 @@ void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, co
 
 static BoundingBox labelBoundingBoxForNode(const GlGraphInputData &inputData, node n) {
   BoundingBox renderingBox;
-  GlyphsManager::instance().getGlyph(inputData.getElementShape()->getNodeValue(n))->getTextBoundingBox(renderingBox);
+  GlyphsManager::instance()->getGlyph(inputData.getElementShape()->getNodeValue(n))->getTextBoundingBox(renderingBox);
   const Coord &nodePos = inputData.getElementLayout()->getNodeValue(n);
   const Size &nodeSize = inputData.getElementSize()->getNodeValue(n);
   Size labelSize = nodeSize* Size(renderingBox.width(), renderingBox.height(), renderingBox.depth());
@@ -291,10 +291,10 @@ static pair<BoundingBox, float> labelBoundingBoxAndAngleForEdge(const Camera &ca
   int edgeShape = inputData.getElementShape()->getEdgeValue(e);
 
   Coord srcAnchor = (bends.size() > 0) ? bends.front() : tgtPos;
-  srcAnchor = GlyphsManager::instance().getGlyph(srcGlyphId)->getAnchor(srcPos, srcAnchor, srcSize, srcRot);
+  srcAnchor = GlyphsManager::instance()->getGlyph(srcGlyphId)->getAnchor(srcPos, srcAnchor, srcSize, srcRot);
 
   Coord tgtAnchor = (bends.size() > 0) ? bends.back() : srcPos;
-  tgtAnchor = GlyphsManager::instance().getGlyph(tgtGlyphId)->getAnchor(tgtPos, tgtAnchor, tgtSize, tgtRot);
+  tgtAnchor = GlyphsManager::instance()->getGlyph(tgtGlyphId)->getAnchor(tgtPos, tgtAnchor, tgtSize, tgtRot);
 
   float dist = srcAnchor.dist(tgtAnchor);
 
