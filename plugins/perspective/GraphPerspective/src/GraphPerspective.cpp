@@ -285,6 +285,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, sideBarIconColor));
   _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::televisionguide, sideBarIconColor));
   _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, sideBarIconColor));
+  _ui->exportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, sideBarIconColor));
   _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::tablelarge, sideBarIconColor));
   _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, sideBarIconColor));
   _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, sideBarIconColor));
@@ -295,6 +296,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
   _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
   _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, menuIconColor));
+  _ui->actionExport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, menuIconColor));
   _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::table, menuIconColor));
   _ui->actionNew_graph->setIcon(getFileNewIcon());
   _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::closecircle, menuIconColor));
