@@ -269,7 +269,10 @@ int GlGraphRenderingParameters::labelsDensity() const {
   return _labelsDensity;
 }
 void GlGraphRenderingParameters::setLabelsDensity(int density) {
-  _labelsDensity=density;
+  if (_labelsDensity != density) {
+    _labelsDensity=density;
+    sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
+  }
 }
 //====================================================
 float GlGraphRenderingParameters::minSizeOfLabels() const {

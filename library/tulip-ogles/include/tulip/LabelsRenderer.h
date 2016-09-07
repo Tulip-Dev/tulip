@@ -92,7 +92,7 @@ public :
     _occlusionTest = occlusionTest;
   }
 
-  void renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const tlp::Color &selectionColor);
+  void renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const tlp::Color &selectionColor, int labelsDensity = 0);
 
   void renderOneLabel(const Camera &camera, const std::string &text, const tlp::BoundingBox &renderingBox,
                       const tlp::Color &labelColor = tlp::Color::Black, const std::string &fontFile = "");

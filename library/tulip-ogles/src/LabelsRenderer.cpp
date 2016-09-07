@@ -364,7 +364,9 @@ static void adjustTextBoundingBox(BoundingBox &textBB, const Camera &camera, flo
   textBB[1][1] = ((textBB[1][1] - center[1]) / scale[1]) * scaleY + center[1];
 }
 
-void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor) {
+void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor, int labelsDensity) {
+
+  if (labelsDensity == -100) return;
 
   initFont(TulipViewSettings::instance().defaultFontFile());
 
@@ -399,13 +401,13 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
     BoundingBox textBB = getLabelRenderingBoxScaled(nodeBB, _nodeLabelAspectRatio[graph][n]);
 
     if (!_labelsScaled) {
-
       adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _nodeLabelNbLines[graph][n]);
     }
 
     bool canRender = true;
 
     BoundingBox textScrBB;
+    BoundingBox textScrBBModified;
     textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]), 0));
     textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]), 0));
     float width = textScrBB.width();
@@ -416,10 +418,22 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
     textScrBB[0] = centerScr - Vec3f(width/2, height/2);
     textScrBB[1] = centerScr + Vec3f(width/2, height/2);
 
-    if (_occlusionTest) {
+    if (_occlusionTest && labelsDensity != 100) {
+
+      float newWidth, newHeight;
+      if (labelsDensity < 0) {
+        newWidth = textScrBB.width() + (-labelsDensity/100.f) * textScrBB.width();
+        newHeight = textScrBB.height() + (-labelsDensity/100.f) * textScrBB.height();
+      } else {
+        newWidth = textScrBB.width() - (labelsDensity/100.f) * textScrBB.width();
+        newHeight = textScrBB.height() - (labelsDensity/100.f) * textScrBB.height();
+      }
+
+      textScrBBModified[0] = textScrBB.center() - Coord(newWidth/2, newHeight/2);
+      textScrBBModified[1] = textScrBB.center() + Coord(newWidth/2, newHeight/2);
 
       for (size_t i = 0 ; i < renderedLabelsScrBB.size() ; ++i) {
-        if (textScrBB.intersect(renderedLabelsScrBB[i])) {
+        if (textScrBBModified.intersect(renderedLabelsScrBB[i])) {
           canRender = false;
           break;
         }
@@ -429,10 +443,10 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
 
     if (canRender) {
       renderText(vg, label, textScrBB, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n));
-      renderedLabelsScrBB.push_back(textScrBB);
+      renderedLabelsScrBB.push_back(textScrBBModified);
     }
-  }
 
+  }
 
   for (edge e : _edgesLabelsToRender[graph]) {
 
@@ -476,7 +490,7 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
     textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, textScrBB[1]));
     textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, Vec3f(textScrBB[0][0], textScrBB[0][1]+textScrBB.height(), textScrBB[0][2])));
 
-    if (_occlusionTest) {
+    if (_occlusionTest && labelsDensity != 100) {
 
       for (size_t i = 0 ; i < renderedLabelsScrRect.size() ; ++i) {
         if (convexPolygonsIntersect(textScrRect, renderedLabelsScrRect[i])) {

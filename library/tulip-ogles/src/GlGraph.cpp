@@ -948,7 +948,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     }
     _labelsRenderer->setGraphNodesLabelsToRender(_graph, nodesLabelsToRender);
     _labelsRenderer->setGraphEdgesLabelsToRender(_graph, edgesLabelsToRender);
-    _labelsRenderer->renderGraphElementsLabels(_inputData, camera, _renderingParameters.selectionColor());
+    _labelsRenderer->renderGraphElementsLabels(_inputData, camera, _renderingParameters.selectionColor(), _renderingParameters.labelsDensity());
   }
   glEnable(GL_DEPTH_TEST);
   glEnable(GL_STENCIL_TEST);
