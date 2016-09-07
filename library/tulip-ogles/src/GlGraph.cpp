@@ -518,8 +518,6 @@ void GlGraph::setGraph(tlp::Graph *graph) {
 
   if (_graph) {
     clearObservers();
-    _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
-    _labelsRenderer->clearGraphEdgesLabelsRenderingData(_graph);
   }
 
   _graph = graph;
@@ -946,6 +944,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       }
       std::reverse(edgesLabelsToRender.begin(), itE);
     }
+    _labelsRenderer->setUseFixedFontSize(_renderingParameters.labelsFixedFontSize());
     _labelsRenderer->setGraphNodesLabelsToRender(_graph, nodesLabelsToRender);
     _labelsRenderer->setGraphEdgesLabelsToRender(_graph, edgesLabelsToRender);
     _labelsRenderer->renderGraphElementsLabels(_inputData, camera, _renderingParameters.selectionColor(), _renderingParameters.labelsDensity());
@@ -1854,7 +1853,6 @@ void GlGraph::treatEvent(const tlp::Event &message) {
   const GlGraphRenderingParametersEvent *rpEvt = dynamic_cast<const GlGraphRenderingParametersEvent *>(&message);
   if (gEvt) {
     if (gEvt->getType() == GraphEvent::TLP_ADD_NODE || gEvt->getType() == GraphEvent::TLP_DEL_NODE) {
-      _labelsRenderer->removeNodeLabel(_graph, gEvt->getNode());
       _updateQuadTree = true;
       _edgesDataNeedUpload = true;
     } else if (gEvt->getType() == GraphEvent::TLP_ADD_EDGE ||
@@ -1894,16 +1892,6 @@ void GlGraph::treatEvent(const tlp::Event &message) {
         _edgesToUpdate.insert(e);
       }
     }
-  } else if (pEvt && pEvt->getProperty() == _inputData.getElementLabel()) {
-    if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && _graph->isElement(pEvt->getNode())) {
-      _labelsRenderer->removeNodeLabel(_graph, pEvt->getNode());
-    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
-      _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
-    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE && _graph->isElement(pEvt->getEdge())) {
-      _labelsRenderer->removeEdgeLabel(_graph, pEvt->getEdge());
-    } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
-      _labelsRenderer->clearGraphEdgesLabelsRenderingData(_graph);
-    }
   } else if (pEvt && (pEvt->getProperty() == _inputData.getElementShape() || pEvt->getProperty() == _inputData.getElementBorderWidth() || pEvt->getProperty() == _inputData.getElementBorderColor())) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
       for(edge e : _graph->getEdges()) {
@@ -1915,16 +1903,12 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     }
   } else if (pEvt && pEvt->getProperty() == _inputData.getElementFont()) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
-      _labelsRenderer->removeNodeLabel(_graph, pEvt->getNode());
       _labelsRenderer->initFont(_inputData.getElementFont()->getNodeValue(pEvt->getNode()));
     } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
-      _labelsRenderer->clearGraphNodesLabelsRenderingData(_graph);
       _labelsRenderer->initFont(_inputData.getElementFont()->getNodeDefaultValue());
     } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
-      _labelsRenderer->removeEdgeLabel(_graph, pEvt->getEdge());
       _labelsRenderer->initFont(_inputData.getElementFont()->getEdgeValue(pEvt->getEdge()));
     } else if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
-      _labelsRenderer->clearGraphEdgesLabelsRenderingData(_graph);
       _labelsRenderer->initFont(_inputData.getElementFont()->getEdgeDefaultValue());
     }
   } else if (rpEvt && (rpEvt->getType() == GlGraphRenderingParametersEvent::DISPLAY_EDGES_EXTREMITIES_TOGGLED)) {

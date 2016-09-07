@@ -41,6 +41,8 @@
 
 #include <tulip/Camera.h>
 
+struct NVGcontext;
+
 namespace tlp {
 
 class GlGraphInputData;
@@ -59,21 +61,13 @@ public :
 
   void initFont(const std::string &fontFile);
 
-  void setGraphNodesLabelsToRender(tlp::Graph *graph, const std::vector<tlp::node> &labelsToRender) {
+  void setGraphNodesLabelsToRender(Graph *graph, const std::vector<node> &labelsToRender) {
     _nodesLabelsToRender[graph] = labelsToRender;
   }
 
-  void removeNodeLabel(tlp::Graph *graph, tlp::node n);
-
-  void clearGraphNodesLabelsRenderingData(tlp::Graph *graph);
-
-  void setGraphEdgesLabelsToRender(tlp::Graph *graph, const std::vector<tlp::edge> &labelsToRender) {
+  void setGraphEdgesLabelsToRender(Graph *graph, const std::vector<edge> &labelsToRender) {
     _edgesLabelsToRender[graph] = labelsToRender;
   }
-
-  void removeEdgeLabel(tlp::Graph *graph, tlp::edge e);
-
-  void clearGraphEdgesLabelsRenderingData(tlp::Graph *graph);
 
   void setLabelsScaled(const bool labelsScaled) {
     _labelsScaled = labelsScaled;
@@ -92,41 +86,41 @@ public :
     _occlusionTest = occlusionTest;
   }
 
-  void renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const tlp::Color &selectionColor, int labelsDensity = 0);
+  void setUseFixedFontSize(bool useFixedFontSize) {
+    _useFixedFontSize = useFixedFontSize;
+  }
 
-  void renderOneLabel(const Camera &camera, const std::string &text, const tlp::BoundingBox &renderingBox,
-                      const tlp::Color &labelColor = tlp::Color::Black, const std::string &fontFile = "");
+  void renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor, int labelsDensity = 0);
 
-
-
-
+  void renderOneLabel(const Camera &camera, const std::string &text, const BoundingBox &renderingBox,
+                      const Color &labelColor = Color::Black, int fontSize = 18, const std::string &fontFile = "");
 
 private :
 
   void setFont(const std::string &fontFile);
+
+  void renderText(NVGcontext *vg, const std::string &text, const BoundingBox &renderingBox,
+                  const Color &textColor, int fontSize, float rotation = 0);
 
   static std::map<std::string, LabelsRenderer *> _instances;
   static std::string _currentCanvasId;
 
   LabelsRenderer();
 
-  float getTextAspectRatio(const std::string &text);
+  BoundingBox getTextBoundingBox(const std::string &text, int fontSize);
 
-  tlp::BoundingBox getLabelRenderingBoxScaled(const tlp::BoundingBox &renderingBox, float textAspectRatio);
+  BoundingBox getLabelRenderingBoxScaled(const BoundingBox &renderingBox, float textAspectRatio);
 
   std::map<std::string, int> _fontHandles;
   std::string _currentFont;
 
-  std::map<tlp::Graph *, std::vector<tlp::node> > _nodesLabelsToRender;
-  std::map<tlp::Graph *, std::vector<tlp::edge> > _edgesLabelsToRender;
-  std::map<tlp::Graph *, std::map<tlp::node, float> > _nodeLabelAspectRatio;
-  std::map<tlp::Graph *, std::map<tlp::node, unsigned int> > _nodeLabelNbLines;
-  std::map<tlp::Graph *, std::map<tlp::edge, float> > _edgeLabelAspectRatio;
-  std::map<tlp::Graph *, std::map<tlp::edge, unsigned int> > _edgeLabelNbLines;
+  std::map<Graph *, std::vector<node> > _nodesLabelsToRender;
+  std::map<Graph *, std::vector<edge> > _edgesLabelsToRender;
 
   bool _labelsScaled;
   float _minSize, _maxSize;
   bool _occlusionTest;
+  bool _useFixedFontSize;
 
 };
 

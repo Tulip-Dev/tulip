@@ -110,8 +110,8 @@ void SceneConfigWidget::resetChanges() {
   _ui->descendingCB->setChecked(renderingParameters.elementsOrderedDescending());
 
   _ui->labelsFitCheck->setChecked(renderingParameters.labelsScaled());
-  _ui->fixedFontSizeRB->setChecked(false);
-  _ui->dynamicFontSizeRB->setChecked(true);
+  _ui->fixedFontSizeRB->setChecked(renderingParameters.labelsFixedFontSize());
+  _ui->dynamicFontSizeRB->setChecked(!renderingParameters.labelsFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters.labelsDensity());
   _ui->labelSizesSpanSlider->setLowerValue(renderingParameters.minSizeOfLabels());
   _ui->labelSizesSpanSlider->setUpperValue(renderingParameters.maxSizeOfLabels());
@@ -138,7 +138,6 @@ void SceneConfigWidget::resetChanges() {
   else
     _ui->centerSceneRadioButton->setChecked(true);
 
-//  QApplication::processEvents();
   _resetting = false;
 }
 
@@ -178,7 +177,7 @@ void SceneConfigWidget::applySettings() {
   }
 
   renderingParameters.setElementOrderedDescending(_ui->descendingCB->isChecked());
-
+  renderingParameters.setLabelsFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters.setLabelsScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters.setLabelsDensity(_ui->labelsDensitySlider->value());
   renderingParameters.setMinSizeOfLabels(_ui->labelSizesSpanSlider->lowerValue());

@@ -666,7 +666,6 @@ void EMSCRIPTEN_KEEPALIVE getSelectedEdges(unsigned int *edgesIds) {
 }
 
 void EMSCRIPTEN_KEEPALIVE startGraphViewData(const char *canvasId) {
-  LabelsRenderer::instance(canvasId)->clearGraphNodesLabelsRenderingData(graph[canvasId]);
   glGraph[canvasId]->setGraph(graph[canvasId]);
   glGraph[canvasId]->clearObservers();
 }

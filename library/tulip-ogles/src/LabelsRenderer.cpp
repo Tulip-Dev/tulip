@@ -76,28 +76,6 @@ static Vec3f rotatePoint(const Vec3f &center, float angle, const Vec3f &p) {
                center[1]+(p[0]-center[0])*s + (p[1]-center[1])*c);
 }
 
-static void renderText(NVGcontext *vg, const std::string &text, const tlp::BoundingBox &renderingBox,
-                       const tlp::Color &textColor, float rotation = 0)  {
-
-  vector<string> textVector = splitStringToLines(text);
-
-  float fontSize = renderingBox.height()/textVector.size();
-
-  nvgFontSize(vg, fontSize);
-  nvgTextAlign(vg, NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
-  nvgFillColor(vg, nvgRGBA(textColor[0],textColor[1],textColor[2],textColor[3]));
-  for (size_t i = 0 ; i < textVector.size() ; ++i) {
-    BoundingBox rb;
-    rb[0] = Vec3f(renderingBox[0][0], renderingBox[0][1] + i * fontSize);
-    rb[1] = Vec3f(renderingBox[1][0], renderingBox[0][1] + (i+1) * fontSize);
-    nvgTranslate(vg, rb.center()[0], rb.center()[1]);
-    nvgRotate(vg, rotation);
-    nvgText(vg, 0, 0, textVector[i].c_str(), nullptr);
-    nvgResetTransform(vg);
-  }
-
-}
-
 map<string, LabelsRenderer *> LabelsRenderer::_instances;
 string LabelsRenderer::_currentCanvasId("");
 
@@ -105,7 +83,7 @@ LabelsRenderer* LabelsRenderer::instance() {
   return instance(_currentCanvasId);
 }
 
-LabelsRenderer *LabelsRenderer::instance(const std::string &canvasId) {
+LabelsRenderer *LabelsRenderer::instance(const string &canvasId) {
   if (_instances.find(canvasId) == _instances.end()) {
     _instances[canvasId] = new LabelsRenderer();
   }
@@ -113,11 +91,11 @@ LabelsRenderer *LabelsRenderer::instance(const std::string &canvasId) {
 }
 
 LabelsRenderer::LabelsRenderer() :
-  _labelsScaled(false),
-  _minSize(12), _maxSize(72), _occlusionTest(true) {
+  _labelsScaled(false), _minSize(12), _maxSize(72),
+  _occlusionTest(true), _useFixedFontSize(false) {
 }
 
-void LabelsRenderer::initFont(const std::string &fontFile) {
+void LabelsRenderer::initFont(const string &fontFile) {
   if (_fontHandles.find(fontFile) == _fontHandles.end()) {
     _fontHandles[fontFile] = -1;
     if (fileExists(fontFile.c_str())) {
@@ -131,7 +109,7 @@ void LabelsRenderer::initFont(const std::string &fontFile) {
   }
 }
 
-void LabelsRenderer::setFont(const std::string &fontFile) {
+void LabelsRenderer::setFont(const string &fontFile) {
   if (_fontHandles[fontFile] != -1) {
     nvgFontFaceId(NanoVGManager::instance()->getNanoVGContext(), _fontHandles[fontFile]);
     _currentFont = fontFile;
@@ -140,17 +118,33 @@ void LabelsRenderer::setFont(const std::string &fontFile) {
   }
 }
 
-void LabelsRenderer::removeNodeLabel(tlp::Graph *graph, tlp::node n) {
-  _nodeLabelAspectRatio[graph].erase(n);
-  _nodeLabelNbLines[graph].erase(n);
+void LabelsRenderer::renderText(NVGcontext *vg, const string &text, const BoundingBox &renderingBox,
+                                const Color &textColor, int fontSize, float rotation) {
+
+  vector<string> textVector = splitStringToLines(text);
+
+  float lineHeight = renderingBox.height()/textVector.size();
+
+  if (_useFixedFontSize && !_labelsScaled) {
+    nvgFontSize(vg, fontSize);
+  } else {
+    nvgFontSize(vg, lineHeight);
+  }
+  nvgTextAlign(vg, NVG_ALIGN_CENTER|NVG_ALIGN_MIDDLE);
+  nvgFillColor(vg, nvgRGBA(textColor[0],textColor[1],textColor[2],textColor[3]));
+  for (size_t i = 0 ; i < textVector.size() ; ++i) {
+    BoundingBox rb;
+    rb[0] = Vec3f(renderingBox[0][0], renderingBox[0][1] + i * lineHeight);
+    rb[1] = Vec3f(renderingBox[1][0], renderingBox[0][1] + (i+1) * lineHeight);
+    nvgTranslate(vg, rb.center()[0], rb.center()[1]);
+    nvgRotate(vg, rotation);
+    nvgText(vg, 0, 0, textVector[i].c_str(), nullptr);
+    nvgResetTransform(vg);
+  }
+
 }
 
-void LabelsRenderer::removeEdgeLabel(tlp::Graph *graph, tlp::edge e) {
-  _edgeLabelAspectRatio[graph].erase(e);
-  _edgeLabelNbLines[graph].erase(e);
-}
-
-tlp::BoundingBox LabelsRenderer::getLabelRenderingBoxScaled(const tlp::BoundingBox &renderingBox, float textAspectRatio) {
+BoundingBox LabelsRenderer::getLabelRenderingBoxScaled(const BoundingBox &renderingBox, float textAspectRatio) {
   BoundingBox renderingBoxScaled;
 
   float ratio = renderingBox.width() / renderingBox.height();
@@ -174,11 +168,15 @@ tlp::BoundingBox LabelsRenderer::getLabelRenderingBoxScaled(const tlp::BoundingB
   return renderingBoxScaled;
 }
 
-float LabelsRenderer::getTextAspectRatio(const string &text) {
+BoundingBox LabelsRenderer::getTextBoundingBox(const string &text, int fontSize) {
 
   vector<string> textVector = splitStringToLines(text);
 
   NVGcontext* vg = NanoVGManager::instance()->getNanoVGContext();
+
+  if (_useFixedFontSize) {
+    nvgFontSize(vg, fontSize);
+  }
 
   float width = 0, height = 0;
   for (size_t i = 0 ; i < textVector.size() ; ++i) {
@@ -188,12 +186,12 @@ float LabelsRenderer::getTextAspectRatio(const string &text) {
     height += (bounds[3] - bounds[1]);
   }
 
-  return width/height;
+  return BoundingBox(Coord(0,0), Coord(width, height));
 
 }
 
 void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, const BoundingBox &renderingBox,
-                                    const Color &labelColor, const std::string &fontFile) {
+                                    const Color &labelColor, int fontSize, const string &fontFile) {
 
   if (text.empty()) return;
 
@@ -205,7 +203,9 @@ void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, co
     setFont(TulipViewSettings::instance().defaultFontFile());
   }
 
-  BoundingBox textBBScaled = getLabelRenderingBoxScaled(renderingBox, getTextAspectRatio(text));
+  BoundingBox textBB = getTextBoundingBox(text, fontSize);
+
+  BoundingBox textBBScaled = getLabelRenderingBoxScaled(renderingBox, textBB.width()/textBB.height());
 
   Vec4i viewport = camera.getViewport();
 
@@ -220,7 +220,7 @@ void LabelsRenderer::renderOneLabel(const Camera &camera, const string &text, co
 
   nvgBeginFrame(vg, camera.getViewport()[0], camera.getViewport()[1], camera.getViewport()[2], camera.getViewport()[3], 1.0);
 
-  renderText(vg, text, bb, labelColor);
+  renderText(vg, text, bb, labelColor, fontSize);
 
   nvgEndFrame(vg);
 }
@@ -245,7 +245,7 @@ static BoundingBox labelBoundingBoxForNode(const GlGraphInputData &inputData, no
   return BoundingBox(pos - labelSize/2.f, pos + labelSize/2.f);
 }
 
-static Coord getPointOnPolylineAt(const std::vector<Coord> &polyline, float t) {
+static Coord getPointOnPolylineAt(const vector<Coord> &polyline, float t) {
 
   if (t == 0) {
     return polyline.front();
@@ -385,23 +385,23 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
 
     setFont(inputData.getElementFont()->getNodeValue(n));
 
-    const std::string &label = inputData.getElementLabel()->getNodeValue(n);
+    const string &label = inputData.getElementLabel()->getNodeValue(n);
 
     if (label.empty()) {
       continue;
     }
 
-    if (_nodeLabelAspectRatio[graph].find(n) == _nodeLabelAspectRatio[graph].end()) {
-      _nodeLabelAspectRatio[graph][n] = getTextAspectRatio(label);
-      _nodeLabelNbLines[graph][n] = std::count(label.begin(), label.end(), '\n')+1;
-    }
+    BoundingBox textBBFont = getTextBoundingBox(label, inputData.getElementFontSize()->getNodeValue(n));
+
+    float nodeLabelAspectRatio = textBBFont.width() / textBBFont.height();
+    float nodeLabelNbLines = count(label.begin(), label.end(), '\n') + 1;
 
     BoundingBox nodeBB = labelBoundingBoxForNode(inputData, n);
 
-    BoundingBox textBB = getLabelRenderingBoxScaled(nodeBB, _nodeLabelAspectRatio[graph][n]);
+    BoundingBox textBB = getLabelRenderingBoxScaled(nodeBB, nodeLabelAspectRatio);
 
-    if (!_labelsScaled) {
-      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _nodeLabelNbLines[graph][n]);
+    if (!_labelsScaled && !_useFixedFontSize) {
+      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, nodeLabelNbLines);
     }
 
     bool canRender = true;
@@ -415,8 +415,13 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
     Coord centerScr = Vec3f(computeScreenPos(camera.transformMatrix(), viewport, textBB.center()), 0);
     centerScr[1] = viewport[3] - centerScr[1];
 
-    textScrBB[0] = centerScr - Vec3f(width/2, height/2);
-    textScrBB[1] = centerScr + Vec3f(width/2, height/2);
+    if (!_useFixedFontSize || _labelsScaled) {
+      textScrBB[0] = centerScr - Vec3f(width/2, height/2);
+      textScrBB[1] = centerScr + Vec3f(width/2, height/2);
+    } else {
+      textScrBB[0] = centerScr - Vec3f(textBBFont.width()/2, textBBFont.height()/2);
+      textScrBB[1] = centerScr + Vec3f(textBBFont.width()/2, textBBFont.height()/2);
+    }
 
     if (_occlusionTest && labelsDensity != 100) {
 
@@ -442,7 +447,8 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
     }
 
     if (canRender) {
-      renderText(vg, label, textScrBB, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n));
+      renderText(vg, label, textScrBB, inputData.getElementSelection()->getNodeValue(n) ? selectionColor : inputData.getElementLabelColor()->getNodeValue(n),
+                 inputData.getElementFontSize()->getNodeValue(n));
       renderedLabelsScrBB.push_back(textScrBBModified);
     }
 
@@ -454,26 +460,27 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
 
     setFont(inputData.getElementFont()->getEdgeValue(e));
 
-    const std::string &label = inputData.getElementLabel()->getEdgeValue(e);
+    const string &label = inputData.getElementLabel()->getEdgeValue(e);
 
     if (label.empty()) {
       continue;
     }
 
-    if (_edgeLabelAspectRatio[graph].find(e) == _edgeLabelAspectRatio[graph].end()) {
-      _edgeLabelAspectRatio[graph][e] = getTextAspectRatio(label);
-      _edgeLabelNbLines[graph][e] = std::count(label.begin(), label.end(), '\n')+1;
-    }
+    BoundingBox textBBFont = getTextBoundingBox(label, inputData.getElementFontSize()->getEdgeValue(e));
+
+    float edgeLabelAspectRatio = textBBFont.width() / textBBFont.height();
+    float edgeLabelNbLines = count(label.begin(), label.end(), '\n') + 1;
 
     auto edgeBB = labelBoundingBoxAndAngleForEdge(camera, inputData, e);
 
-    BoundingBox textBB = getLabelRenderingBoxScaled(edgeBB.first, _edgeLabelAspectRatio[graph][e]);
+    BoundingBox textBB = getLabelRenderingBoxScaled(edgeBB.first, edgeLabelAspectRatio);
 
-    if (!_labelsScaled) {
-      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, _edgeLabelNbLines[graph][e]);
+    if (!_labelsScaled && !_useFixedFontSize) {
+      adjustTextBoundingBox(textBB, camera, _minSize, _maxSize, edgeLabelNbLines);
     }
 
     BoundingBox textScrBB;
+    BoundingBox textScrBBModified;
     textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[0]), 0));
     textScrBB.expand(Vec3f(computeScreenPos(camera.transformMatrixBillboard(), viewport, textBB[1]), 0));
     float width = textScrBB.width();
@@ -481,14 +488,37 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
     Coord centerScr = Vec3f(computeScreenPos(camera.transformMatrix(), viewport, textBB.center()), 0);
     centerScr[1] = viewport[3] - centerScr[1];
 
-    textScrBB[0] = centerScr - Vec3f(width/2, height/2);
-    textScrBB[1] = centerScr + Vec3f(width/2, height/2);
+    if (!_useFixedFontSize || _labelsScaled) {
+      textScrBB[0] = centerScr - Vec3f(width/2, height/2);
+      textScrBB[1] = centerScr + Vec3f(width/2, height/2);
+    } else {
+      textScrBB[0] = centerScr - Vec3f(textBBFont.width()/2, textBBFont.height()/2);
+      textScrBB[1] = centerScr + Vec3f(textBBFont.width()/2, textBBFont.height()/2);
+    }
+
+    if (_occlusionTest && labelsDensity != 100) {
+
+      float newWidth, newHeight;
+      if (labelsDensity < 0) {
+        newWidth = textScrBB.width() + (-labelsDensity/100.f) * textScrBB.width();
+        newHeight = textScrBB.height() + (-labelsDensity/100.f) * textScrBB.height();
+      } else {
+        newWidth = textScrBB.width() - (labelsDensity/100.f) * textScrBB.width();
+        newHeight = textScrBB.height() - (labelsDensity/100.f) * textScrBB.height();
+      }
+
+      textScrBBModified[0] = textScrBB.center() - Coord(newWidth/2, newHeight/2);
+      textScrBBModified[1] = textScrBB.center() + Coord(newWidth/2, newHeight/2);
+
+    } else {
+      textScrBBModified = textScrBB;
+    }
 
     vector<Vec2f> textScrRect;
-    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, textScrBB[0]));
-    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, Vec3f(textScrBB[0][0]+textScrBB.width(), textScrBB[0][1], textScrBB[0][2])));
-    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, textScrBB[1]));
-    textScrRect.push_back(rotatePoint(textScrBB.center(), edgeBB.second, Vec3f(textScrBB[0][0], textScrBB[0][1]+textScrBB.height(), textScrBB[0][2])));
+    textScrRect.push_back(rotatePoint(textScrBBModified.center(), edgeBB.second, textScrBBModified[0]));
+    textScrRect.push_back(rotatePoint(textScrBBModified.center(), edgeBB.second, Vec3f(textScrBBModified[0][0]+textScrBBModified.width(), textScrBBModified[0][1], textScrBBModified[0][2])));
+    textScrRect.push_back(rotatePoint(textScrBBModified.center(), edgeBB.second, textScrBBModified[1]));
+    textScrRect.push_back(rotatePoint(textScrBBModified.center(), edgeBB.second, Vec3f(textScrBBModified[0][0], textScrBBModified[0][1]+textScrBBModified.height(), textScrBBModified[0][2])));
 
     if (_occlusionTest && labelsDensity != 100) {
 
@@ -517,7 +547,8 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
 
       if (canRender) {
         renderedLabelsScrRect.push_back(textScrRect);
-        renderText(vg, label, textScrBB, inputData.getElementSelection()->getEdgeValue(e) ? selectionColor : inputData.getElementLabelColor()->getEdgeValue(e), edgeBB.second);
+        renderText(vg, label, textScrBB, inputData.getElementSelection()->getEdgeValue(e) ? selectionColor : inputData.getElementLabelColor()->getEdgeValue(e),
+                   inputData.getElementFontSize()->getEdgeValue(e), edgeBB.second);
       }
 
     }
@@ -526,17 +557,3 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
   nvgEndFrame(vg);
 
 }
-
-void LabelsRenderer::clearGraphNodesLabelsRenderingData(Graph *graph) {
-  if (!graph) return;
-  _nodeLabelNbLines.erase(graph);
-  _nodeLabelAspectRatio.erase(graph);
-}
-
-void LabelsRenderer::clearGraphEdgesLabelsRenderingData(Graph *graph) {
-  if (!graph) return;
-  _edgeLabelNbLines.erase(graph);
-  _edgeLabelAspectRatio.erase(graph);
-}
-
-

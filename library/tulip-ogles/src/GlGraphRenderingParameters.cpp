@@ -59,7 +59,8 @@ GlGraphRenderingParameters::GlGraphRenderingParameters() :
   _selectionColor(Color(255,0,255)),
   _displayFilteringProperty(nullptr),
   _elementsOrderingProperty(nullptr),
-  _bypassLodSystem(false)
+  _bypassLodSystem(false),
+  _labelsFixedFontSize(false)
 {
 }
 //====================================================
@@ -261,6 +262,16 @@ bool GlGraphRenderingParameters::labelsScaled() const {
 void GlGraphRenderingParameters::setLabelsScaled(bool state) {
   if (_labelsScaled != state) {
     _labelsScaled=state;
+    sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
+  }
+}
+//====================================================
+bool GlGraphRenderingParameters::labelsFixedFontSize() const {
+  return _labelsFixedFontSize;
+}
+void GlGraphRenderingParameters::setLabelsFixedFontSize(bool state) {
+  if (_labelsFixedFontSize != state) {
+    _labelsFixedFontSize=state;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }

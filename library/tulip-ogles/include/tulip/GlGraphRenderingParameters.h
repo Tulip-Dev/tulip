@@ -117,6 +117,9 @@ public:
   void setSelectionColor(const tlp::Color &color);
   tlp::Color selectionColor() const;
 
+  void setLabelsFixedFontSize(bool state);
+  bool labelsFixedFontSize() const;
+
   void setLabelsScaled(bool state);
   bool labelsScaled() const;
 
@@ -170,6 +173,7 @@ private:
   tlp::BooleanProperty *_displayFilteringProperty;
   tlp::NumericProperty* _elementsOrderingProperty;
   bool _bypassLodSystem;
+  bool _labelsFixedFontSize;
 };
 
 class TLP_GLES_SCOPE GlGraphRenderingParametersEvent : public tlp::Event {
