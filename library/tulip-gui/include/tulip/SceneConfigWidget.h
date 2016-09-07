@@ -54,6 +54,7 @@ public slots:
   void applySettings();
   void dynamicFontRBToggled(bool);
   void updateSliderRangeLabels();
+  void scaleLabelsToggled(bool);
 
 
 protected:

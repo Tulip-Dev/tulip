@@ -159,8 +159,8 @@ padding-top: 5px;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>367</width>
-        <height>734</height>
+        <width>380</width>
+        <height>628</height>
        </rect>
       </property>
       <property name="sizePolicy">
@@ -478,6 +478,9 @@ background-color: rgb(160, 160, 160);</string>
              </item>
              <item>
               <widget class="QLabel" name="labelsMaxSizeLabel">
+               <property name="enabled">
+                <bool>true</bool>
+               </property>
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
                  <horstretch>0</horstretch>
@@ -508,17 +511,7 @@ background-color: rgb(160, 160, 160);</string>
           <item>
            <widget class="QCheckBox" name="labelsFitCheck">
             <property name="text">
-             <string>Fit labels size to nodes size</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QCheckBox" name="labelsBillboardedCheck">
-            <property name="toolTip">
-             <string>If checked the labels are always&lt;br/&gt;drawn horizontally in the screen plan.</string>
-            </property>
-            <property name="text">
-             <string>Draw 2D labels ( in the screen plan)</string>
+             <string>Fit labels sizes to graph elements sizes</string>
             </property>
            </widget>
           </item>
