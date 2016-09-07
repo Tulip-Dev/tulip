@@ -170,11 +170,13 @@ void SceneConfigWidget::applySettings() {
   GlGraphRenderingParameters& renderingParameters = _glMainWidget->getScene()->getMainGlGraph()->getRenderingParameters();
 
   // NODES
-  if (_ui->labelsOrderingCombo->currentIndex()==0)
+  if (_ui->labelsOrderingCombo->currentIndex()==0) {
     renderingParameters.setElementsOrderingProperty(nullptr);
-  else {
+    renderingParameters.setElementsOrdered(false);
+  } else {
     GraphPropertiesModel<NumericProperty>* model = static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
     renderingParameters.setElementsOrderingProperty(dynamic_cast<NumericProperty*>(model->index(_ui->labelsOrderingCombo->currentIndex(),0).data(TulipModel::PropertyRole).value<PropertyInterface*>()));
+    renderingParameters.setElementsOrdered(true);
   }
 
   renderingParameters.setElementOrderedDescending(_ui->descendingCB->isChecked());
