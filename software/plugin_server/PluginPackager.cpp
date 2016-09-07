@@ -119,6 +119,7 @@ int main(int argc,char **argv) {
   stream.writeAttribute("lastUpdate", QDateTime::currentDateTime().toString(Qt::ISODate));
   stream.writeAttribute("release",TULIP_VERSION);
   stream.writeStartElement("plugins");
+
   foreach(QString component, collector._directoryPlugins.keys()) {
     foreach(QString plugin, collector._directoryPlugins[component]) {
       // Server description
@@ -140,10 +141,12 @@ int main(int argc,char **argv) {
         stream.writeAttribute("name", tlp::tlpStringToQString(it->pluginName));
         stream.writeEndElement(); // dependency
       }
+
       stream.writeEndElement(); // dependencies
       stream.writeEndElement(); // plugin
     }
   }
+
   stream.writeEndElement(); // plugins
   stream.writeEndElement(); // server
   stream.writeEndDocument();
