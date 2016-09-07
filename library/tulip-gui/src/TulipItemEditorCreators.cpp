@@ -907,7 +907,7 @@ EdgeExtremityShapeEditorCreator::displayText(const QVariant &data) const {
     return "None";
   } else {
     return tlpStringToQString(
-        GlyphsManager::instance().getGlyph(glyphId)->edgeExtremityGlyphName());
+        GlyphsManager::instance()->getGlyph(glyphId)->edgeExtremityGlyphName());
   }
 }
 
