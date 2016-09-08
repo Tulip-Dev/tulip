@@ -3,6 +3,68 @@
 Important API changes
 ======================
 
+Since Tulip 4.10
+----------------
+
+Improvements for working with Tulip color scales
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+As mapping colors to graph elements according to various metrics are quite a common task when
+working with Tulip, several improvements have been added to facilitate their use in Python.
+
+.. _colorScalesNewSyntax:
+
+No need to use the :class:`tlp.ColorScale` class directly anymore
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+For commodity of use in the Python world, it is now possible to define Tulip color scales
+trough the following ways:
+
+  * using a list of :class:`tlp.Color` that will define a color scale with regular stop points
+
+  * using a dictionnary with float keys (between 0.0 and 1.0) and :class:`tlp.Color` values
+
+For instance, if one wants to apply a color mapping to graph nodes according to their degrees,
+the following script can now be used::
+
+  # computes a double property containing the degree of each node
+  degree = tlp.DoubleProperty(graph)
+  graph.applyDoubleAlgorithm('Degree', degree)
+
+  # creates a regular color scale going from blue to yellow to red
+  colorScale = [tlp.Color.Blue, tlp.Color.Yellow, tlp.Color.Red]
+  # a dictionnary can also be used (allow to define non regular scales)
+  # colorMap = {0: tlp.Color.Blue, 0.5: tlp.Color.Yellow, 1.0: tlp.Color.Red}
+
+  # sets the parameters for the 'Color Mapping' color algorithm
+  colorMappingParams = tlp.getDefaultPluginParameters('Color Mapping', graph)
+  colorMappingParams['input property'] = degree
+  colorMappingParams['colorScale'] = colorScale
+  # colorMappingParams['colorScale'] = colorMap
+
+  # computes the color mapping
+  graph.applyColorAlgorithm('Color Mapping', colorMappingParams)
+
+Nevertheless for backward compatibilty, instances of the :class:`tlp.ColorScale` class can still be created.
+
+Tulip predefined color scales can now be easily retrieved from Python
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+Tulip is bundled with a lot of predefined color scales (in particular, the great ones from `Color Brewer <http://colorbrewer2.org/>`_).
+You can get a preview of them in the color scale config dialog inside the main Tulip GUI. The dialog can be displayed
+trough the 'Edit -> Color scales management' main menu entry or by double clicking on the color scale parameter in the
+configuration table of the 'Color Mapping' algorithm.
+
+These color scales can now be easily retrieved from Python by using the static :class:`tulipgui.tlpgui.ColorScalesManager` class.
+That class lies in the :mod:`tulipgui` module as Tulip uses Qt under the hood for managing predefined color scales.
+That class also allows to register new color scales in a local persistent database for further reuse in every Python working session.
+
+For instance, if one wants to use the '9-class OrRd' scale from `Color Brewer <http://colorbrewer2.org/>`_ in the above example,
+the instruction below can now be used::
+
+  colorMappingParams['colorScale'] = tlpgui.ColorScalesManager.getColorScale('OrRd_9')
+
+
 Since Tulip 4.9
 ---------------
 

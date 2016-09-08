@@ -98,6 +98,7 @@ INSTALL(FILES
   tulip/QuaZIPFacade.h
   tulip/CoordEditor.h
   tulip/StringEditor.h
+  tulip/ColorScalesManager.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

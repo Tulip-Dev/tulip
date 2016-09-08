@@ -9,6 +9,7 @@ SET(TULIP_GUI_SIP_FILES
     GlMainView.sip
     NodeLinkDiagramComponent.sip
     TulipGui.sip
+    ColorScalesManager.sip
 )
 
 SET(TULIP_GUI_PYTHON_BINDINGS_SRC
