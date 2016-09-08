@@ -48,7 +48,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
 
 
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
-  zoomAndPanAnimationStep(animationStep/static_cast<double>(nbAnimationSteps-1));
+  zoomAndPanAnimationStep(animationStep/static_cast<double>(nbAnimationSteps));
   glWidget->draw();
 }
 
