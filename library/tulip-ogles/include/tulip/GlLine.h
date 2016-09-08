@@ -1,4 +1,4 @@
-/*
+/**
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
@@ -17,6 +17,13 @@
  *
  */
 
+/**
+ *
+ * tulip-ogles library : rewrite of old tulip-ogl library using OpenGL ES API
+ * Copyright (c) 2016 Antoine Lambert, Thales Services SAS
+ * antoine-e.lambert@thalesgroup.com / antoine.lambert33@gmail.com
+ *
+ */
 
 #ifndef GLLINE_H
 #define GLLINE_H

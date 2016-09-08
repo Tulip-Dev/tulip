@@ -17,6 +17,14 @@
  *
  */
 
+/**
+ *
+ * tulip-ogles library : rewrite of old tulip-ogl library using OpenGL ES API
+ * Copyright (c) 2016 Antoine Lambert, Thales Services SAS
+ * antoine-e.lambert@thalesgroup.com / antoine.lambert33@gmail.com
+ *
+ */
+
 #include <tulip/GlLine.h>
 #include <tulip/GlBuffer.h>
 #include <tulip/GlShaderProgram.h>
