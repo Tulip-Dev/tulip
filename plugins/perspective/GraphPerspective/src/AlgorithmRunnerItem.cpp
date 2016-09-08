@@ -452,8 +452,6 @@ void AlgorithmRunnerItem::run(Graph *g) {
     }
   }
 
-  afterRun(g, dataSet);
-
   if (result && !outNonPropertyParams.empty()) {
     // only show computed value of non property output parameters.
     // output property params are not taken into account
@@ -471,6 +469,10 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   while (Observable::observersHoldCounter() > 0)
     Observable::unholdObservers();
+
+  Observable::holdObservers();
+  afterRun(g, dataSet);
+  Observable::unholdObservers();
 }
 
 void AlgorithmRunnerItem::setStoreResultAsLocal(bool m) {
@@ -526,7 +528,6 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
       if (prop)
         prop->perfectAspectRatio();
     }
-
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
   else if (pluginLister->pluginExists<Algorithm>(stdName) &&
