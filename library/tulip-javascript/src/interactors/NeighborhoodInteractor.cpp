@@ -111,7 +111,7 @@ void NeighborhoodInteractor::draw() {
     camera2d.initGl();
     tlp::Vec2f bl(viewport[0], viewport[1]);
     tlp::Vec2f tr(viewport[2], viewport[3]);
-    GlRect2D rect(bl, tr, 0, tlp::Color(255,255,255,200));
+    GlRect2D rect(bl, tr, tlp::Color(255,255,255,200));
     rect.draw(camera2d);
     _glScene->getMainLayer()->getCamera()->initGl();
     _glNeighborhoodGraph->setRenderingParameters(_glGraph->getRenderingParameters());
