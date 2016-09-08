@@ -95,6 +95,7 @@ SET(SRCS
     FileDownloader.cpp
     TextureFileDialog.cpp
     FontIconManager.cpp
+    ColorScalesManager.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)

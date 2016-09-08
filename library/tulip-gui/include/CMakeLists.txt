@@ -97,6 +97,7 @@ INSTALL(FILES
   tulip/CoordEditor.h
   tulip/StringEditor.h
   tulip/FontIconManager.h
+  tulip/ColorScalesManager.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )

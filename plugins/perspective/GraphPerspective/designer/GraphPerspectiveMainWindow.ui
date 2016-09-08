@@ -74,7 +74,7 @@ image: url(:/tulip/gui/ui/combobox_arrow.png);
 QComboBox:drop-down {
 subcontrol-origin: padding;
 subcontrol-position: top right;
-border-left-style: none; 
+border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
@@ -1252,6 +1252,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionClone_sub_graph"/>
     <addaction name="separator"/>
     <addaction name="actionPreferences"/>
+    <addaction name="actionColor_scales_management"/>
    </widget>
    <widget class="QMenu" name="menuWindow">
     <property name="title">
@@ -1693,6 +1694,14 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="action_Close_All">
    <property name="text">
     <string>&amp;Close all panels</string>
+   </property>
+  </action>
+  <action name="actionColor_scales_management">
+   <property name="text">
+    <string>Color scales management</string>
+   </property>
+   <property name="toolTip">
+    <string>Manage Tulip color scales</string>
    </property>
   </action>
  </widget>
