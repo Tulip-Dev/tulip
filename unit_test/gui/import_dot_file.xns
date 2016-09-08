@@ -1,8 +1,8 @@
 ####################################
 #         System information       #
 ####################################
-# Date:                   2016:08:09 
-# Time:                   10:04:49 
+# Date:                   2016:09:08 
+# Time:                   15:03:55 
 # Xnee program:           cnee 
 # Xnee version:           3.19 
 # Xnee home:              http://www.gnu.org/software/xnee/ 
@@ -11,29 +11,29 @@
 # X version:              11 
 # X revision:             0 
 # X vendor:               The X.Org Foundation 
-# X vendor release:       11701000 
+# X vendor release:       11803000 
 # Record version major:   1
 # Record version minor:   13
 # OS name:                Linux 
-# OS Release:             3.19.0-65-generic 
-# OS Version:             #73~14.04.1-Ubuntu SMP Wed Jun 29 21:05:22 UTC 2016 
+# OS Release:             4.4.0-36-generic 
+# OS Version:             #55-Ubuntu SMP Thu Aug 11 18:01:55 UTC 2016 
 # Machine:                x86_64 
-# Nodename:               pm-laptop 
-# Display name:           :0.0
-# Dimension:              1920x1080
+# Nodename:               tulip-carri 
+# Display name:           :0
+# Dimension:              2048x1152
 
 
 
 ##############################################
 #      Xnee application arguments            #
 ##############################################
-#  /home/pm/xnee-3.19/cnee/src//cnee -rec -etr -1 --keyboard --mouse -sk End -o import_dot_file.xns 
+#  /home/tulip/xnee-3.19/cnee/src/cnee -rec -etr -1 --keyboard --mouse -sk End -o import_dot_file.xns 
 
 
 ##############################################
 #      Displays                              #
 ##############################################
-# display :0.0
+# display :0
 # distribute
 
 
@@ -77,7 +77,7 @@ all-clients
 ##############################################
 
 # Resolution
-#recorded-resolution  1920x1080
+#recorded-resolution  2048x1152
 #replay-resolution  1x1
 #resolution-adjustment  0
 
@@ -134,7 +134,7 @@ feedback-xosd
 #          Record settings              #
 #########################################
 #   data_flags          7
-#   rState              0x1989020
+#   rState              0x1a20020
 #   xids[0]             3
 #   xids[1]             0
 # Number of Ranges      2
@@ -158,880 +158,1084 @@ extension-reply-minor-range   0-0
 delivered-event-range         0-0 
 device-event-range            66-71 
 error-range                   0-0 
-7,2,0,0,0,37,0,953909,9,AT Translated Set 2 keyboard
-6,2,0,0,0,37,0,953909,3,Virtual core keyboard
-7,2,0,0,0,50,0,954061,9,AT Translated Set 2 keyboard
-6,2,0,0,0,50,0,954062,3,Virtual core keyboard
-7,2,0,0,0,32,0,954345,9,AT Translated Set 2 keyboard
-6,2,0,0,0,32,0,954345,3,Virtual core keyboard
-0,21,0,0,0,0,0,954395
-NEW-WINDOW:461,197:60817460,60817460,16787520,0,0,0:0x0+879+458:0,0:Import
-0,21,0,0,0,0,0,954395
-0,21,0,0,0,0,0,954395
-7,3,0,0,0,32,0,954422,9,AT Translated Set 2 keyboard
-6,3,0,0,0,32,0,954422,3,Virtual core keyboard
-7,3,0,0,0,50,0,954422,9,AT Translated Set 2 keyboard
-6,3,0,0,0,50,0,954422,3,Virtual core keyboard
-7,3,0,0,0,37,0,954436,9,AT Translated Set 2 keyboard
-6,3,0,0,0,37,0,954436,3,Virtual core keyboard
-7,2,0,0,0,116,0,956478,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,956478,3,Virtual core keyboard
-7,3,0,0,0,116,0,956621,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,956621,3,Virtual core keyboard
-7,2,0,0,0,116,0,956802,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,956802,3,Virtual core keyboard
-7,3,0,0,0,116,0,956904,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,956904,3,Virtual core keyboard
-7,2,0,0,0,116,0,957076,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,957076,3,Virtual core keyboard
-7,3,0,0,0,116,0,957168,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,957168,3,Virtual core keyboard
-7,2,0,0,0,116,0,957430,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,957430,3,Virtual core keyboard
-7,3,0,0,0,116,0,957523,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,957523,3,Virtual core keyboard
-7,2,0,0,0,116,0,958141,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,958141,3,Virtual core keyboard
-7,3,0,0,0,116,0,958222,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,958223,3,Virtual core keyboard
-7,6,216,430,0,0,0,958911,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,429,0,0,0,958926,11,'SynPS/2 Synaptics TouchPad'
-7,6,218,427,0,0,0,958942,11,'SynPS/2 Synaptics TouchPad'
-7,6,229,425,0,0,0,958959,11,'SynPS/2 Synaptics TouchPad'
-7,6,236,423,0,0,0,958975,11,'SynPS/2 Synaptics TouchPad'
-7,6,246,421,0,0,0,958993,11,'SynPS/2 Synaptics TouchPad'
-7,6,250,420,0,0,0,959010,11,'SynPS/2 Synaptics TouchPad'
-7,6,259,418,0,0,0,959028,11,'SynPS/2 Synaptics TouchPad'
-7,6,269,418,0,0,0,959046,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,417,0,0,0,959063,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,417,0,0,0,959080,11,'SynPS/2 Synaptics TouchPad'
-7,6,296,416,0,0,0,959096,11,'SynPS/2 Synaptics TouchPad'
-7,6,311,416,0,0,0,959113,11,'SynPS/2 Synaptics TouchPad'
-7,6,319,416,0,0,0,959131,11,'SynPS/2 Synaptics TouchPad'
-7,6,335,416,0,0,0,959147,11,'SynPS/2 Synaptics TouchPad'
-7,6,349,416,0,0,0,959164,11,'SynPS/2 Synaptics TouchPad'
-7,6,356,416,0,0,0,959181,11,'SynPS/2 Synaptics TouchPad'
-7,6,373,416,0,0,0,959197,11,'SynPS/2 Synaptics TouchPad'
-7,6,393,415,0,0,0,959215,11,'SynPS/2 Synaptics TouchPad'
-7,6,401,414,0,0,0,959232,11,'SynPS/2 Synaptics TouchPad'
-7,6,417,414,0,0,0,959248,11,'SynPS/2 Synaptics TouchPad'
-7,6,433,414,0,0,0,959265,11,'SynPS/2 Synaptics TouchPad'
-7,6,441,414,0,0,0,959282,11,'SynPS/2 Synaptics TouchPad'
-7,6,455,413,0,0,0,959298,11,'SynPS/2 Synaptics TouchPad'
-7,6,473,411,0,0,0,959316,11,'SynPS/2 Synaptics TouchPad'
-7,6,484,409,0,0,0,959333,11,'SynPS/2 Synaptics TouchPad'
-7,6,511,405,0,0,0,959349,11,'SynPS/2 Synaptics TouchPad'
-7,6,545,400,0,0,0,959366,11,'SynPS/2 Synaptics TouchPad'
-7,6,561,399,0,0,0,959383,11,'SynPS/2 Synaptics TouchPad'
-7,6,588,398,0,0,0,959400,11,'SynPS/2 Synaptics TouchPad'
-7,6,612,398,0,0,0,959417,11,'SynPS/2 Synaptics TouchPad'
-7,6,624,398,0,0,0,959434,11,'SynPS/2 Synaptics TouchPad'
-7,6,646,398,0,0,0,959450,11,'SynPS/2 Synaptics TouchPad'
-7,6,665,398,0,0,0,959784,11,'SynPS/2 Synaptics TouchPad'
-7,6,665,398,0,0,0,959819,11,'SynPS/2 Synaptics TouchPad'
-7,6,671,398,0,0,0,959837,11,'SynPS/2 Synaptics TouchPad'
-7,6,682,396,0,0,0,959854,11,'SynPS/2 Synaptics TouchPad'
-7,6,688,396,0,0,0,959871,11,'SynPS/2 Synaptics TouchPad'
-7,6,697,395,0,0,0,959889,11,'SynPS/2 Synaptics TouchPad'
-7,6,705,394,0,0,0,959905,11,'SynPS/2 Synaptics TouchPad'
-7,6,708,394,0,0,0,959923,11,'SynPS/2 Synaptics TouchPad'
-7,6,712,393,0,0,0,959941,11,'SynPS/2 Synaptics TouchPad'
-7,6,717,392,0,0,0,959958,11,'SynPS/2 Synaptics TouchPad'
-7,6,719,392,0,0,0,959975,11,'SynPS/2 Synaptics TouchPad'
-7,6,724,391,0,0,0,959992,11,'SynPS/2 Synaptics TouchPad'
-7,6,727,390,0,0,0,960010,11,'SynPS/2 Synaptics TouchPad'
-7,6,731,389,0,0,0,960029,11,'SynPS/2 Synaptics TouchPad'
-7,6,732,389,0,0,0,960046,11,'SynPS/2 Synaptics TouchPad'
-7,6,736,389,0,0,0,960063,11,'SynPS/2 Synaptics TouchPad'
-7,6,741,389,0,0,0,960080,11,'SynPS/2 Synaptics TouchPad'
-7,6,745,389,0,0,0,960097,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,389,0,0,0,960115,11,'SynPS/2 Synaptics TouchPad'
-7,6,762,388,0,0,0,960133,11,'SynPS/2 Synaptics TouchPad'
-7,6,769,388,0,0,0,960148,11,'SynPS/2 Synaptics TouchPad'
-7,6,773,388,0,0,0,960165,11,'SynPS/2 Synaptics TouchPad'
-7,6,779,387,0,0,0,960180,11,'SynPS/2 Synaptics TouchPad'
-7,6,783,386,0,0,0,960196,11,'SynPS/2 Synaptics TouchPad'
-7,6,785,385,0,0,0,960211,11,'SynPS/2 Synaptics TouchPad'
-7,6,789,385,0,0,0,960226,11,'SynPS/2 Synaptics TouchPad'
-7,6,791,385,0,0,0,960241,11,'SynPS/2 Synaptics TouchPad'
-7,6,794,385,0,0,0,960256,11,'SynPS/2 Synaptics TouchPad'
-7,6,796,385,0,0,0,960271,11,'SynPS/2 Synaptics TouchPad'
-7,6,799,385,0,0,0,960287,11,'SynPS/2 Synaptics TouchPad'
-7,6,801,385,0,0,0,960305,11,'SynPS/2 Synaptics TouchPad'
-7,6,803,385,0,0,0,960322,11,'SynPS/2 Synaptics TouchPad'
-7,6,805,385,0,0,0,960337,11,'SynPS/2 Synaptics TouchPad'
-7,6,806,385,0,0,0,960352,11,'SynPS/2 Synaptics TouchPad'
-7,6,807,385,0,0,0,960368,11,'SynPS/2 Synaptics TouchPad'
-7,6,807,385,0,0,0,960383,11,'SynPS/2 Synaptics TouchPad'
-7,6,808,385,0,0,0,960399,11,'SynPS/2 Synaptics TouchPad'
-7,6,808,385,0,0,0,960417,11,'SynPS/2 Synaptics TouchPad'
-7,6,808,385,0,0,0,960451,11,'SynPS/2 Synaptics TouchPad'
-7,6,809,385,0,0,0,960469,11,'SynPS/2 Synaptics TouchPad'
-7,6,809,385,0,0,0,960503,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,385,0,0,0,960522,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,385,0,0,0,960539,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,385,0,0,0,960557,11,'SynPS/2 Synaptics TouchPad'
-7,6,811,385,0,0,0,960574,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,960650,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,960650,2,Virtual core pointer
-7,5,0,0,1,0,0,960678,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,960678,2,Virtual core pointer
-0,21,0,0,0,0,0,960758
-NEW-WINDOW:662,213:60817470,60817470,16787580,0,0,0:0x0+546+400:0,0:Open
-0,21,0,0,0,0,0,960758
-0,21,0,0,0,0,0,960758
-7,6,811,385,0,0,0,962226,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,385,0,0,0,962241,11,'SynPS/2 Synaptics TouchPad'
-7,6,810,385,0,0,0,962257,11,'SynPS/2 Synaptics TouchPad'
-7,6,806,391,0,0,0,962272,11,'SynPS/2 Synaptics TouchPad'
-7,6,804,399,0,0,0,962287,11,'SynPS/2 Synaptics TouchPad'
-7,6,800,423,0,0,0,962302,11,'SynPS/2 Synaptics TouchPad'
-7,6,799,438,0,0,0,962317,11,'SynPS/2 Synaptics TouchPad'
-7,6,798,463,0,0,0,962332,11,'SynPS/2 Synaptics TouchPad'
-7,6,797,474,0,0,0,962348,11,'SynPS/2 Synaptics TouchPad'
-7,6,796,493,0,0,0,962363,11,'SynPS/2 Synaptics TouchPad'
-7,6,795,500,0,0,0,962378,11,'SynPS/2 Synaptics TouchPad'
-7,6,793,513,0,0,0,962393,11,'SynPS/2 Synaptics TouchPad'
-7,6,793,520,0,0,0,962408,11,'SynPS/2 Synaptics TouchPad'
-7,6,792,536,0,0,0,962424,11,'SynPS/2 Synaptics TouchPad'
-7,6,791,544,0,0,0,962439,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,562,0,0,0,962456,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,570,0,0,0,962473,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,583,0,0,0,962489,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,591,0,0,0,962507,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,593,0,0,0,962524,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,595,0,0,0,962541,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,596,0,0,0,962560,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,597,0,0,0,962577,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,598,0,0,0,962594,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,599,0,0,0,962612,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,600,0,0,0,962631,11,'SynPS/2 Synaptics TouchPad'
-7,6,790,600,0,0,0,962682,11,'SynPS/2 Synaptics TouchPad'
-7,6,791,600,0,0,0,962700,11,'SynPS/2 Synaptics TouchPad'
-7,6,791,600,0,0,0,962718,11,'SynPS/2 Synaptics TouchPad'
-7,6,793,593,0,0,0,962734,11,'SynPS/2 Synaptics TouchPad'
-7,6,796,584,0,0,0,962752,11,'SynPS/2 Synaptics TouchPad'
-7,6,797,580,0,0,0,962769,11,'SynPS/2 Synaptics TouchPad'
-7,6,798,572,0,0,0,962787,11,'SynPS/2 Synaptics TouchPad'
-7,6,800,565,0,0,0,962804,11,'SynPS/2 Synaptics TouchPad'
-7,6,800,563,0,0,0,962821,11,'SynPS/2 Synaptics TouchPad'
-7,6,801,560,0,0,0,962838,11,'SynPS/2 Synaptics TouchPad'
-7,6,801,558,0,0,0,962856,11,'SynPS/2 Synaptics TouchPad'
-7,6,801,557,0,0,0,962874,11,'SynPS/2 Synaptics TouchPad'
-7,6,802,557,0,0,0,962891,11,'SynPS/2 Synaptics TouchPad'
-7,6,802,556,0,0,0,962908,11,'SynPS/2 Synaptics TouchPad'
-7,6,802,556,0,0,0,962941,11,'SynPS/2 Synaptics TouchPad'
-7,6,802,555,0,0,0,962958,11,'SynPS/2 Synaptics TouchPad'
-7,6,802,555,0,0,0,962976,11,'SynPS/2 Synaptics TouchPad'
-7,6,803,554,0,0,0,962993,11,'SynPS/2 Synaptics TouchPad'
-7,6,803,554,0,0,0,963008,11,'SynPS/2 Synaptics TouchPad'
-7,6,803,554,0,0,0,963023,11,'SynPS/2 Synaptics TouchPad'
-7,6,804,554,0,0,0,963040,11,'SynPS/2 Synaptics TouchPad'
-7,6,804,553,0,0,0,963058,11,'SynPS/2 Synaptics TouchPad'
-7,6,804,553,0,0,0,963075,11,'SynPS/2 Synaptics TouchPad'
-7,6,805,553,0,0,0,963091,11,'SynPS/2 Synaptics TouchPad'
-7,6,805,552,0,0,0,963108,11,'SynPS/2 Synaptics TouchPad'
-7,6,805,552,0,0,0,963125,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,963302,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,963302,2,Virtual core pointer
-7,5,0,0,1,0,0,963310,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,963310,2,Virtual core pointer
-7,2,0,0,0,40,0,964222,9,AT Translated Set 2 keyboard
-6,2,0,0,0,40,0,964222,3,Virtual core keyboard
-7,3,0,0,0,40,0,964293,9,AT Translated Set 2 keyboard
-6,3,0,0,0,40,0,964293,3,Virtual core keyboard
-7,2,0,0,0,24,0,964424,9,AT Translated Set 2 keyboard
-6,2,0,0,0,24,0,964424,3,Virtual core keyboard
-7,3,0,0,0,24,0,964516,9,AT Translated Set 2 keyboard
-6,3,0,0,0,24,0,964516,3,Virtual core keyboard
-7,2,0,0,0,28,0,964708,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,964708,3,Virtual core keyboard
-7,3,0,0,0,28,0,964790,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,964790,3,Virtual core keyboard
-7,2,0,0,0,24,0,964962,9,AT Translated Set 2 keyboard
-6,2,0,0,0,24,0,964962,3,Virtual core keyboard
-7,3,0,0,0,24,0,965054,9,AT Translated Set 2 keyboard
-6,3,0,0,0,24,0,965054,3,Virtual core keyboard
-7,2,0,0,0,62,0,965226,9,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,965226,3,Virtual core keyboard
-7,2,0,0,0,60,0,965428,9,AT Translated Set 2 keyboard
-6,2,0,0,0,60,0,965428,3,Virtual core keyboard
-7,3,0,0,0,60,0,965540,9,AT Translated Set 2 keyboard
-6,3,0,0,0,60,0,965540,3,Virtual core keyboard
-7,3,0,0,0,62,0,965582,9,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,965582,3,Virtual core keyboard
-7,2,0,0,0,42,0,967071,9,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,967071,3,Virtual core keyboard
-7,3,0,0,0,42,0,967133,9,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,967133,3,Virtual core keyboard
-7,2,0,0,0,27,0,967294,9,AT Translated Set 2 keyboard
-6,2,0,0,0,27,0,967294,3,Virtual core keyboard
-7,3,0,0,0,27,0,967356,9,AT Translated Set 2 keyboard
-6,3,0,0,0,27,0,967356,3,Virtual core keyboard
-7,2,0,0,0,24,0,967567,9,AT Translated Set 2 keyboard
-6,2,0,0,0,24,0,967567,3,Virtual core keyboard
-7,3,0,0,0,24,0,967680,9,AT Translated Set 2 keyboard
-6,3,0,0,0,24,0,967680,3,Virtual core keyboard
-7,2,0,0,0,33,0,968238,9,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,968238,3,Virtual core keyboard
-7,3,0,0,0,33,0,968330,9,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,968330,3,Virtual core keyboard
-7,2,0,0,0,43,0,968643,9,AT Translated Set 2 keyboard
-6,2,0,0,0,43,0,968643,3,Virtual core keyboard
-7,3,0,0,0,43,0,968735,9,AT Translated Set 2 keyboard
-6,3,0,0,0,43,0,968735,3,Virtual core keyboard
-7,2,0,0,0,62,0,969018,9,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,969018,3,Virtual core keyboard
-7,2,0,0,0,59,0,969190,9,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,969191,3,Virtual core keyboard
-7,3,0,0,0,59,0,969293,9,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,969293,3,Virtual core keyboard
-7,3,0,0,0,62,0,969353,9,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,969353,3,Virtual core keyboard
-7,2,0,0,0,116,0,971639,9,AT Translated Set 2 keyboard
-6,2,0,0,0,116,0,971639,3,Virtual core keyboard
-7,3,0,0,0,116,0,971761,9,AT Translated Set 2 keyboard
-6,3,0,0,0,116,0,971761,3,Virtual core keyboard
-7,2,0,0,0,36,0,972121,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,972122,3,Virtual core keyboard
-0,21,0,0,0,0,0,972128
-NEW-WINDOW:0,0:60817483,60817483,748,0,0,1:0x0+604762847+32767:604762888,604762888:
-0,21,0,0,0,0,0,972128
-0,21,0,0,0,0,0,972128
-0,21,0,0,0,0,0,972128
-0,21,0,0,0,0,0,972128
-0,21,0,0,0,0,0,972128
-7,3,0,0,0,36,0,972195,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,972195,3,Virtual core keyboard
-7,2,0,0,0,36,0,974048,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,974048,3,Virtual core keyboard
-0,21,0,0,0,0,0,974067
-NEW-WINDOW:8384,0:60817491,60817491,16787727,0,0,0:27053480x0+27038496+0:27033808,27033808:
-0,21,0,0,0,0,0,974067
-0,21,0,0,0,0,0,974067
-7,3,0,0,0,36,0,974100,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,974100,3,Virtual core keyboard
-0,21,0,0,0,0,0,974262
-NEW-WINDOW:459,141:60817460,60817460,748,0,0,0:459x141+879+458:0,0:Import
-0,21,0,0,0,0,0,974262
-0,21,0,0,0,0,0,974262
-0,21,0,0,0,0,0,974262
-0,21,0,0,0,0,0,974262
-0,21,0,0,0,0,0,974405
-NEW-WINDOW:8384,0:60817536,60817536,748,0,0,0:2189x0+27053480+0:604762888,604762888:
-0,21,0,0,0,0,0,974405
-0,21,0,0,0,0,0,974405
-0,21,0,0,0,0,0,974405
-0,21,0,0,0,0,0,974405
-0,21,0,0,0,0,0,974405
-0,21,0,0,0,0,0,974439
-NEW-WINDOW:0,0:60817542,60817542,748,0,0,0:0x0+604762847+32767:27033808,27033808:
-0,21,0,0,0,0,0,974439
-0,21,0,0,0,0,0,974439
-0,21,0,0,0,0,0,974439
-0,21,0,0,0,0,0,974439
-0,21,0,0,0,0,0,974439
-0,21,0,0,0,0,0,974439
-NEW-WINDOW:0,0:60817545,60817545,60817567,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,974439
-NEW-WINDOW:0,0:60817547,60817547,60817567,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,974439
-NEW-WINDOW:0,0:60817551,60817551,60817567,0,0,0:0x0+960+432:0,0:
-0,21,0,0,0,0,0,974459
-NEW-WINDOW:0,0:60817577,60817577,748,0,0,0:0x0+1172+848:0,0:Spreadsheet view
-0,21,0,0,0,0,0,974459
-0,21,0,0,0,0,0,974459
-0,21,0,0,0,0,0,974459
-0,21,0,0,0,0,0,974459
-0,21,0,0,0,0,0,974459
-0,21,0,0,0,0,0,974467
-NEW-WINDOW:0,0:60817562,60817562,748,0,0,0:0x0+943+595:0,0:Node Link Diagram view
-0,21,0,0,0,0,0,974467
-0,21,0,0,0,0,0,974467
-0,21,0,0,0,0,0,974467
-0,21,0,0,0,0,0,974467
-0,21,0,0,0,0,0,974467
-0,21,0,0,0,0,0,974490
-NEW-WINDOW:1117,103:60817565,60817565,60817669,0,0,0:0x0+100+30:0,0:
-0,21,0,0,0,0,0,974490
-NEW-WINDOW:1117,103:60817567,60817567,60817669,0,0,0:0x0+960+432:0,0:
-7,6,805,552,0,0,0,976386,11,'SynPS/2 Synaptics TouchPad'
-7,6,800,552,0,0,0,976403,11,'SynPS/2 Synaptics TouchPad'
-7,6,792,548,0,0,0,976421,11,'SynPS/2 Synaptics TouchPad'
-7,6,787,546,0,0,0,976438,11,'SynPS/2 Synaptics TouchPad'
-7,6,776,540,0,0,0,976455,11,'SynPS/2 Synaptics TouchPad'
-7,6,761,533,0,0,0,976472,11,'SynPS/2 Synaptics TouchPad'
-7,6,753,528,0,0,0,976490,11,'SynPS/2 Synaptics TouchPad'
-7,6,734,517,0,0,0,976507,11,'SynPS/2 Synaptics TouchPad'
-7,6,713,505,0,0,0,976525,11,'SynPS/2 Synaptics TouchPad'
-7,6,687,491,0,0,0,976542,11,'SynPS/2 Synaptics TouchPad'
-7,6,673,483,0,0,0,976559,11,'SynPS/2 Synaptics TouchPad'
-7,6,643,468,0,0,0,976576,11,'SynPS/2 Synaptics TouchPad'
-7,6,617,455,0,0,0,976594,11,'SynPS/2 Synaptics TouchPad'
-7,6,605,448,0,0,0,976612,11,'SynPS/2 Synaptics TouchPad'
-7,6,584,435,0,0,0,976629,11,'SynPS/2 Synaptics TouchPad'
-7,6,564,424,0,0,0,976646,11,'SynPS/2 Synaptics TouchPad'
-7,6,554,418,0,0,0,976663,11,'SynPS/2 Synaptics TouchPad'
-7,6,537,407,0,0,0,976681,11,'SynPS/2 Synaptics TouchPad'
-7,6,520,393,0,0,0,976696,11,'SynPS/2 Synaptics TouchPad'
-7,6,501,377,0,0,0,976716,11,'SynPS/2 Synaptics TouchPad'
-7,6,492,368,0,0,0,976733,11,'SynPS/2 Synaptics TouchPad'
-7,6,475,352,0,0,0,976749,11,'SynPS/2 Synaptics TouchPad'
-7,6,460,336,0,0,0,976767,11,'SynPS/2 Synaptics TouchPad'
-7,6,452,329,0,0,0,976784,11,'SynPS/2 Synaptics TouchPad'
-7,6,437,317,0,0,0,976800,11,'SynPS/2 Synaptics TouchPad'
-7,6,423,306,0,0,0,976819,11,'SynPS/2 Synaptics TouchPad'
-7,6,417,301,0,0,0,977162,11,'SynPS/2 Synaptics TouchPad'
-7,6,415,301,0,0,0,977180,11,'SynPS/2 Synaptics TouchPad'
-7,6,403,296,0,0,0,977198,11,'SynPS/2 Synaptics TouchPad'
-7,6,386,283,0,0,0,977214,11,'SynPS/2 Synaptics TouchPad'
-7,6,380,278,0,0,0,977231,11,'SynPS/2 Synaptics TouchPad'
-7,6,370,270,0,0,0,977248,11,'SynPS/2 Synaptics TouchPad'
-7,6,362,263,0,0,0,977266,11,'SynPS/2 Synaptics TouchPad'
-7,6,358,260,0,0,0,977283,11,'SynPS/2 Synaptics TouchPad'
-7,6,352,254,0,0,0,977301,11,'SynPS/2 Synaptics TouchPad'
-7,6,345,248,0,0,0,977318,11,'SynPS/2 Synaptics TouchPad'
-7,6,338,241,0,0,0,977335,11,'SynPS/2 Synaptics TouchPad'
-7,6,335,238,0,0,0,977352,11,'SynPS/2 Synaptics TouchPad'
-7,6,328,232,0,0,0,977370,11,'SynPS/2 Synaptics TouchPad'
-7,6,323,225,0,0,0,977388,11,'SynPS/2 Synaptics TouchPad'
-7,6,320,222,0,0,0,977405,11,'SynPS/2 Synaptics TouchPad'
-7,6,316,216,0,0,0,977422,11,'SynPS/2 Synaptics TouchPad'
-7,6,312,210,0,0,0,977439,11,'SynPS/2 Synaptics TouchPad'
-7,6,311,206,0,0,0,977457,11,'SynPS/2 Synaptics TouchPad'
-7,6,307,199,0,0,0,977474,11,'SynPS/2 Synaptics TouchPad'
-7,6,303,191,0,0,0,977492,11,'SynPS/2 Synaptics TouchPad'
-7,6,299,184,0,0,0,977509,11,'SynPS/2 Synaptics TouchPad'
-7,6,297,180,0,0,0,977526,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,174,0,0,0,977857,11,'SynPS/2 Synaptics TouchPad'
-7,6,293,168,0,0,0,977872,11,'SynPS/2 Synaptics TouchPad'
-7,6,291,165,0,0,0,977887,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,159,0,0,0,977903,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,156,0,0,0,977918,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,152,0,0,0,977933,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,150,0,0,0,977948,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,148,0,0,0,977963,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,148,0,0,0,977978,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,147,0,0,0,978011,11,'SynPS/2 Synaptics TouchPad'
-7,6,278,147,0,0,0,978028,11,'SynPS/2 Synaptics TouchPad'
-7,6,278,146,0,0,0,978045,11,'SynPS/2 Synaptics TouchPad'
-7,6,278,146,0,0,0,978063,11,'SynPS/2 Synaptics TouchPad'
-7,6,277,145,0,0,0,978081,11,'SynPS/2 Synaptics TouchPad'
-7,6,277,144,0,0,0,978099,11,'SynPS/2 Synaptics TouchPad'
-7,6,277,144,0,0,0,978115,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,143,0,0,0,978132,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,143,0,0,0,978149,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,143,0,0,0,978167,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,142,0,0,0,978185,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,142,0,0,0,978202,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,142,0,0,0,978217,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,141,0,0,0,978235,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,141,0,0,0,978253,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,141,0,0,0,978270,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,140,0,0,0,978287,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,140,0,0,0,978304,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,140,0,0,0,978323,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,139,0,0,0,978341,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,978485,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,978485,2,Virtual core pointer
-7,5,0,0,1,0,0,978529,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,978529,2,Virtual core pointer
-7,2,0,0,0,28,0,979444,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,979444,3,Virtual core keyboard
-7,3,0,0,0,28,0,979536,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,979536,3,Virtual core keyboard
-7,2,0,0,0,27,0,979657,9,AT Translated Set 2 keyboard
-6,2,0,0,0,27,0,979657,3,Virtual core keyboard
-7,3,0,0,0,27,0,979718,9,AT Translated Set 2 keyboard
-6,3,0,0,0,27,0,979718,3,Virtual core keyboard
-7,2,0,0,0,26,0,980012,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,980012,3,Virtual core keyboard
-7,3,0,0,0,26,0,980063,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,980063,3,Virtual core keyboard
-7,2,0,0,0,26,0,980154,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,980154,3,Virtual core keyboard
-7,3,0,0,0,26,0,980225,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,980225,3,Virtual core keyboard
-7,2,0,0,0,65,0,981320,9,AT Translated Set 2 keyboard
-6,2,0,0,0,65,0,981320,3,Virtual core keyboard
-7,3,0,0,0,65,0,981412,9,AT Translated Set 2 keyboard
-6,3,0,0,0,65,0,981412,3,Virtual core keyboard
-7,6,276,139,0,0,0,982841,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,140,0,0,0,982858,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,141,0,0,0,982876,11,'SynPS/2 Synaptics TouchPad'
-7,6,276,143,0,0,0,982894,11,'SynPS/2 Synaptics TouchPad'
-7,6,277,145,0,0,0,982911,11,'SynPS/2 Synaptics TouchPad'
-7,6,277,148,0,0,0,982928,11,'SynPS/2 Synaptics TouchPad'
-7,6,277,150,0,0,0,982945,11,'SynPS/2 Synaptics TouchPad'
-7,6,278,155,0,0,0,982962,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,162,0,0,0,982980,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,165,0,0,0,982998,11,'SynPS/2 Synaptics TouchPad'
-7,6,280,174,0,0,0,983015,11,'SynPS/2 Synaptics TouchPad'
-7,6,280,182,0,0,0,983032,11,'SynPS/2 Synaptics TouchPad'
-7,6,280,187,0,0,0,983049,11,'SynPS/2 Synaptics TouchPad'
-7,6,281,194,0,0,0,983066,11,'SynPS/2 Synaptics TouchPad'
-7,6,282,201,0,0,0,983084,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,206,0,0,0,983103,11,'SynPS/2 Synaptics TouchPad'
-7,6,283,208,0,0,0,983120,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,211,0,0,0,983137,11,'SynPS/2 Synaptics TouchPad'
-7,6,285,214,0,0,0,983155,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,217,0,0,0,983171,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,218,0,0,0,983186,11,'SynPS/2 Synaptics TouchPad'
-7,6,286,220,0,0,0,983202,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,221,0,0,0,983219,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,223,0,0,0,983234,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,225,0,0,0,983250,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,226,0,0,0,983265,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,229,0,0,0,983281,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,231,0,0,0,983298,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,235,0,0,0,983315,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,237,0,0,0,983334,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,240,0,0,0,983351,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,244,0,0,0,983367,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,248,0,0,0,983384,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,251,0,0,0,983401,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,255,0,0,0,983418,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,257,0,0,0,983435,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,260,0,0,0,983452,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,263,0,0,0,983469,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,265,0,0,0,983485,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,268,0,0,0,983502,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,270,0,0,0,983519,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,271,0,0,0,983536,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,274,0,0,0,983553,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,276,0,0,0,983569,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,278,0,0,0,983586,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,280,0,0,0,983604,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,282,0,0,0,983620,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,283,0,0,0,983637,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,284,0,0,0,983654,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,286,0,0,0,983671,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,287,0,0,0,983688,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,288,0,0,0,983705,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,289,0,0,0,983721,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,289,0,0,0,983738,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,290,0,0,0,983755,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,292,0,0,0,983773,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,293,0,0,0,983788,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,296,0,0,0,983803,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,297,0,0,0,983818,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,298,0,0,0,983833,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,299,0,0,0,983848,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,299,0,0,0,983864,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,300,0,0,0,983879,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,300,0,0,0,983894,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,300,0,0,0,983909,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,984137,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,984137,2,Virtual core pointer
-7,5,0,0,1,0,0,984163,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,984163,2,Virtual core pointer
-0,21,0,0,0,0,0,984182
-NEW-WINDOW:8384,0:60817677,60817677,16787849,0,0,0:2304x0+27053480+0:604762888,604762888:
-0,21,0,0,0,0,0,984182
-0,21,0,0,0,0,0,984182
-7,6,287,301,0,0,0,984318,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,301,0,0,0,984904,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,301,0,0,0,984988,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,306,0,0,0,985005,11,'SynPS/2 Synaptics TouchPad'
-7,6,287,313,0,0,0,985023,11,'SynPS/2 Synaptics TouchPad'
-7,6,284,318,0,0,0,985039,11,'SynPS/2 Synaptics TouchPad'
-7,6,279,330,0,0,0,985056,11,'SynPS/2 Synaptics TouchPad'
-7,6,273,341,0,0,0,985073,11,'SynPS/2 Synaptics TouchPad'
-7,6,271,346,0,0,0,985089,11,'SynPS/2 Synaptics TouchPad'
-7,6,267,357,0,0,0,985107,11,'SynPS/2 Synaptics TouchPad'
-7,6,263,370,0,0,0,985124,11,'SynPS/2 Synaptics TouchPad'
-7,6,261,376,0,0,0,985140,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,389,0,0,0,985157,11,'SynPS/2 Synaptics TouchPad'
-7,6,254,402,0,0,0,985174,11,'SynPS/2 Synaptics TouchPad'
-7,6,252,408,0,0,0,985192,11,'SynPS/2 Synaptics TouchPad'
-7,6,250,421,0,0,0,985207,11,'SynPS/2 Synaptics TouchPad'
-7,6,248,434,0,0,0,985224,11,'SynPS/2 Synaptics TouchPad'
-7,6,247,440,0,0,0,985239,11,'SynPS/2 Synaptics TouchPad'
-7,6,246,450,0,0,0,985255,11,'SynPS/2 Synaptics TouchPad'
-7,6,245,455,0,0,0,985274,11,'SynPS/2 Synaptics TouchPad'
-7,6,244,462,0,0,0,985291,11,'SynPS/2 Synaptics TouchPad'
-7,6,243,469,0,0,0,985308,11,'SynPS/2 Synaptics TouchPad'
-7,6,243,472,0,0,0,985325,11,'SynPS/2 Synaptics TouchPad'
-7,6,242,480,0,0,0,985342,11,'SynPS/2 Synaptics TouchPad'
-7,6,241,489,0,0,0,985360,11,'SynPS/2 Synaptics TouchPad'
-7,6,241,493,0,0,0,985377,11,'SynPS/2 Synaptics TouchPad'
-7,6,240,500,0,0,0,985395,11,'SynPS/2 Synaptics TouchPad'
-7,6,240,507,0,0,0,985412,11,'SynPS/2 Synaptics TouchPad'
-7,6,240,514,0,0,0,985429,11,'SynPS/2 Synaptics TouchPad'
-7,6,240,517,0,0,0,985446,11,'SynPS/2 Synaptics TouchPad'
-7,6,239,524,0,0,0,985464,11,'SynPS/2 Synaptics TouchPad'
-7,6,238,532,0,0,0,985481,11,'SynPS/2 Synaptics TouchPad'
-7,6,238,537,0,0,0,985498,11,'SynPS/2 Synaptics TouchPad'
-7,6,237,547,0,0,0,985516,11,'SynPS/2 Synaptics TouchPad'
-7,6,236,557,0,0,0,985533,11,'SynPS/2 Synaptics TouchPad'
-7,6,235,564,0,0,0,985551,11,'SynPS/2 Synaptics TouchPad'
-7,6,235,568,0,0,0,985568,11,'SynPS/2 Synaptics TouchPad'
-7,6,234,574,0,0,0,985585,11,'SynPS/2 Synaptics TouchPad'
-7,6,234,581,0,0,0,985602,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,585,0,0,0,985620,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,596,0,0,0,985638,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,607,0,0,0,985655,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,617,0,0,0,985958,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,620,0,0,0,985976,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,627,0,0,0,985994,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,637,0,0,0,986011,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,646,0,0,0,986028,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,651,0,0,0,986045,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,659,0,0,0,986063,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,666,0,0,0,986081,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,668,0,0,0,986098,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,671,0,0,0,986115,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,673,0,0,0,986132,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,676,0,0,0,986149,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,677,0,0,0,986166,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,679,0,0,0,986183,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,681,0,0,0,986200,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,682,0,0,0,986217,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,683,0,0,0,986235,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,684,0,0,0,986252,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,684,0,0,0,986269,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,685,0,0,0,986287,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,687,0,0,0,986302,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,688,0,0,0,986320,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,689,0,0,0,986337,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,691,0,0,0,986354,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,693,0,0,0,986371,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,696,0,0,0,986388,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,699,0,0,0,986406,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,700,0,0,0,986423,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,701,0,0,0,986441,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,702,0,0,0,986458,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,703,0,0,0,986475,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,703,0,0,0,986493,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,705,0,0,0,986510,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,706,0,0,0,986527,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,707,0,0,0,986545,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,708,0,0,0,986562,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,709,0,0,0,986579,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,709,0,0,0,986597,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,710,0,0,0,986614,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,710,0,0,0,986631,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,711,0,0,0,986649,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,712,0,0,0,986666,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,713,0,0,0,986684,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,713,0,0,0,986701,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,714,0,0,0,986718,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,714,0,0,0,986735,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,986752,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,986771,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,986805,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,987178,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,987196,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,987213,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,987230,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,715,0,0,0,987265,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,714,0,0,0,987283,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,3,0,0,988882,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,3,0,0,988882,2,Virtual core pointer
-7,5,0,0,3,0,0,988928,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,3,0,0,988928,2,Virtual core pointer
-7,6,233,714,0,0,0,989567,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,714,0,0,0,989586,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,717,0,0,0,989604,11,'SynPS/2 Synaptics TouchPad'
-7,6,234,726,0,0,0,989621,11,'SynPS/2 Synaptics TouchPad'
-7,6,236,736,0,0,0,989638,11,'SynPS/2 Synaptics TouchPad'
-7,6,237,744,0,0,0,989657,11,'SynPS/2 Synaptics TouchPad'
-7,6,237,747,0,0,0,989674,11,'SynPS/2 Synaptics TouchPad'
-7,6,238,750,0,0,0,989692,11,'SynPS/2 Synaptics TouchPad'
-7,6,238,753,0,0,0,989709,11,'SynPS/2 Synaptics TouchPad'
-7,6,239,754,0,0,0,989728,11,'SynPS/2 Synaptics TouchPad'
-7,6,239,754,0,0,0,989745,11,'SynPS/2 Synaptics TouchPad'
-7,6,240,756,0,0,0,989762,11,'SynPS/2 Synaptics TouchPad'
-7,6,241,758,0,0,0,989780,11,'SynPS/2 Synaptics TouchPad'
-7,6,242,759,0,0,0,989797,11,'SynPS/2 Synaptics TouchPad'
-7,6,243,763,0,0,0,989815,11,'SynPS/2 Synaptics TouchPad'
-7,6,245,766,0,0,0,989832,11,'SynPS/2 Synaptics TouchPad'
-7,6,246,769,0,0,0,989848,11,'SynPS/2 Synaptics TouchPad'
-7,6,246,770,0,0,0,989867,11,'SynPS/2 Synaptics TouchPad'
-7,6,247,771,0,0,0,989884,11,'SynPS/2 Synaptics TouchPad'
-7,6,247,772,0,0,0,989901,11,'SynPS/2 Synaptics TouchPad'
-7,6,247,772,0,0,0,989917,11,'SynPS/2 Synaptics TouchPad'
-7,6,248,774,0,0,0,989932,11,'SynPS/2 Synaptics TouchPad'
-7,6,248,776,0,0,0,989948,11,'SynPS/2 Synaptics TouchPad'
-7,6,249,778,0,0,0,989963,11,'SynPS/2 Synaptics TouchPad'
-7,6,250,782,0,0,0,989981,11,'SynPS/2 Synaptics TouchPad'
-7,6,250,783,0,0,0,989996,11,'SynPS/2 Synaptics TouchPad'
-7,6,250,786,0,0,0,990013,11,'SynPS/2 Synaptics TouchPad'
-7,6,251,787,0,0,0,990029,11,'SynPS/2 Synaptics TouchPad'
-7,6,251,789,0,0,0,990044,11,'SynPS/2 Synaptics TouchPad'
-7,6,252,791,0,0,0,990062,11,'SynPS/2 Synaptics TouchPad'
-7,6,252,792,0,0,0,990077,11,'SynPS/2 Synaptics TouchPad'
-7,6,253,795,0,0,0,990095,11,'SynPS/2 Synaptics TouchPad'
-7,6,253,797,0,0,0,990109,11,'SynPS/2 Synaptics TouchPad'
-7,6,254,800,0,0,0,990125,11,'SynPS/2 Synaptics TouchPad'
-7,6,255,802,0,0,0,990143,11,'SynPS/2 Synaptics TouchPad'
-7,6,255,803,0,0,0,990158,11,'SynPS/2 Synaptics TouchPad'
-7,6,256,804,0,0,0,990175,11,'SynPS/2 Synaptics TouchPad'
-7,6,256,804,0,0,0,990192,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,805,0,0,0,990210,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,805,0,0,0,990227,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,805,0,0,0,990245,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,806,0,0,0,990262,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,806,0,0,0,990400,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,806,0,0,0,990418,11,'SynPS/2 Synaptics TouchPad'
-7,6,258,806,0,0,0,990433,11,'SynPS/2 Synaptics TouchPad'
-7,6,258,806,0,0,0,990450,11,'SynPS/2 Synaptics TouchPad'
-7,6,259,806,0,0,0,990466,11,'SynPS/2 Synaptics TouchPad'
-7,6,259,806,0,0,0,990481,11,'SynPS/2 Synaptics TouchPad'
-7,6,260,806,0,0,0,990499,11,'SynPS/2 Synaptics TouchPad'
-7,6,260,806,0,0,0,990514,11,'SynPS/2 Synaptics TouchPad'
-7,6,261,806,0,0,0,990531,11,'SynPS/2 Synaptics TouchPad'
-7,6,261,806,0,0,0,990546,11,'SynPS/2 Synaptics TouchPad'
-7,6,262,805,0,0,0,990562,11,'SynPS/2 Synaptics TouchPad'
-7,6,262,803,0,0,0,990580,11,'SynPS/2 Synaptics TouchPad'
-7,6,262,803,0,0,0,990595,11,'SynPS/2 Synaptics TouchPad'
-7,6,262,802,0,0,0,990610,11,'SynPS/2 Synaptics TouchPad'
-7,6,263,801,0,0,0,990625,11,'SynPS/2 Synaptics TouchPad'
-7,6,263,800,0,0,0,990643,11,'SynPS/2 Synaptics TouchPad'
-7,6,263,800,0,0,0,990658,11,'SynPS/2 Synaptics TouchPad'
-7,6,264,799,0,0,0,990673,11,'SynPS/2 Synaptics TouchPad'
-7,6,264,798,0,0,0,990689,11,'SynPS/2 Synaptics TouchPad'
-7,6,264,798,0,0,0,990706,11,'SynPS/2 Synaptics TouchPad'
-7,6,264,798,0,0,0,990724,11,'SynPS/2 Synaptics TouchPad'
-7,6,265,798,0,0,0,990741,11,'SynPS/2 Synaptics TouchPad'
-7,6,265,797,0,0,0,990757,11,'SynPS/2 Synaptics TouchPad'
-7,6,265,796,0,0,0,990774,11,'SynPS/2 Synaptics TouchPad'
-7,6,265,796,0,0,0,990791,11,'SynPS/2 Synaptics TouchPad'
-7,6,265,796,0,0,0,990808,11,'SynPS/2 Synaptics TouchPad'
-7,6,266,795,0,0,0,990825,11,'SynPS/2 Synaptics TouchPad'
-7,6,266,795,0,0,0,990842,11,'SynPS/2 Synaptics TouchPad'
-7,6,266,795,0,0,0,990859,11,'SynPS/2 Synaptics TouchPad'
-7,6,266,794,0,0,0,990876,11,'SynPS/2 Synaptics TouchPad'
-7,6,266,794,0,0,0,990895,11,'SynPS/2 Synaptics TouchPad'
-7,6,266,794,0,0,0,990912,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,991056,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,991056,2,Virtual core pointer
-7,5,0,0,1,0,0,991102,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,991102,2,Virtual core pointer
-7,2,0,0,0,42,0,994133,9,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,994133,3,Virtual core keyboard
-7,3,0,0,0,42,0,994204,9,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,994204,3,Virtual core keyboard
-7,2,0,0,0,27,0,994550,9,AT Translated Set 2 keyboard
-6,2,0,0,0,27,0,994550,3,Virtual core keyboard
-7,3,0,0,0,27,0,994611,9,AT Translated Set 2 keyboard
-6,3,0,0,0,27,0,994611,3,Virtual core keyboard
-7,2,0,0,0,24,0,994853,9,AT Translated Set 2 keyboard
-6,2,0,0,0,24,0,994853,3,Virtual core keyboard
-7,3,0,0,0,24,0,994946,9,AT Translated Set 2 keyboard
-6,3,0,0,0,24,0,994946,3,Virtual core keyboard
-7,2,0,0,0,33,0,995239,9,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,995239,3,Virtual core keyboard
-7,3,0,0,0,33,0,995342,9,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,995342,3,Virtual core keyboard
-7,2,0,0,0,55,0,996649,9,AT Translated Set 2 keyboard
-6,2,0,0,0,55,0,996649,3,Virtual core keyboard
-7,3,0,0,0,55,0,996721,9,AT Translated Set 2 keyboard
-6,3,0,0,0,55,0,996721,3,Virtual core keyboard
-7,2,0,0,0,31,0,996750,9,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,996751,3,Virtual core keyboard
-7,3,0,0,0,31,0,996832,9,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,996832,3,Virtual core keyboard
-7,2,0,0,0,22,0,997897,9,AT Translated Set 2 keyboard
-6,2,0,0,0,22,0,997897,3,Virtual core keyboard
-7,3,0,0,0,22,0,998000,9,AT Translated Set 2 keyboard
-6,3,0,0,0,22,0,998000,3,Virtual core keyboard
-7,2,0,0,0,22,0,998150,9,AT Translated Set 2 keyboard
-6,2,0,0,0,22,0,998151,3,Virtual core keyboard
-7,3,0,0,0,22,0,998253,9,AT Translated Set 2 keyboard
-6,3,0,0,0,22,0,998253,3,Virtual core keyboard
-7,2,0,0,0,43,0,999126,9,AT Translated Set 2 keyboard
-6,2,0,0,0,43,0,999126,3,Virtual core keyboard
-7,3,0,0,0,43,0,999187,9,AT Translated Set 2 keyboard
-6,3,0,0,0,43,0,999187,3,Virtual core keyboard
-7,2,0,0,0,55,0,999602,9,AT Translated Set 2 keyboard
-6,2,0,0,0,55,0,999602,3,Virtual core keyboard
-7,3,0,0,0,55,0,999664,9,AT Translated Set 2 keyboard
-6,3,0,0,0,55,0,999664,3,Virtual core keyboard
-7,2,0,0,0,31,0,999704,9,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,999704,3,Virtual core keyboard
-7,3,0,0,0,31,0,999775,9,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,999775,3,Virtual core keyboard
-7,2,0,0,0,25,0,1000383,9,AT Translated Set 2 keyboard
-6,2,0,0,0,25,0,1000384,3,Virtual core keyboard
-7,3,0,0,0,25,0,1000467,9,AT Translated Set 2 keyboard
-6,3,0,0,0,25,0,1000467,3,Virtual core keyboard
-7,2,0,0,0,36,0,1001713,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,1001713,3,Virtual core keyboard
-7,3,0,0,0,36,0,1001784,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,1001784,3,Virtual core keyboard
-7,6,266,793,0,0,0,1002540,11,'SynPS/2 Synaptics TouchPad'
-7,6,265,793,0,0,0,1002555,11,'SynPS/2 Synaptics TouchPad'
-7,6,263,793,0,0,0,1002571,11,'SynPS/2 Synaptics TouchPad'
-7,6,262,793,0,0,0,1002588,11,'SynPS/2 Synaptics TouchPad'
-7,6,260,793,0,0,0,1002604,11,'SynPS/2 Synaptics TouchPad'
-7,6,257,793,0,0,0,1002621,11,'SynPS/2 Synaptics TouchPad'
-7,6,256,793,0,0,0,1002638,11,'SynPS/2 Synaptics TouchPad'
-7,6,254,793,0,0,0,1002656,11,'SynPS/2 Synaptics TouchPad'
-7,6,251,790,0,0,0,1002673,11,'SynPS/2 Synaptics TouchPad'
-7,6,249,787,0,0,0,1002690,11,'SynPS/2 Synaptics TouchPad'
-7,6,246,780,0,0,0,1002708,11,'SynPS/2 Synaptics TouchPad'
-7,6,243,775,0,0,0,1002725,11,'SynPS/2 Synaptics TouchPad'
-7,6,241,770,0,0,0,1002743,11,'SynPS/2 Synaptics TouchPad'
-7,6,239,767,0,0,0,1002760,11,'SynPS/2 Synaptics TouchPad'
-7,6,236,763,0,0,0,1002777,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,758,0,0,0,1002794,11,'SynPS/2 Synaptics TouchPad'
-7,6,232,755,0,0,0,1002811,11,'SynPS/2 Synaptics TouchPad'
-7,6,228,750,0,0,0,1002830,11,'SynPS/2 Synaptics TouchPad'
-7,6,226,747,0,0,0,1002846,11,'SynPS/2 Synaptics TouchPad'
-7,6,224,744,0,0,0,1002863,11,'SynPS/2 Synaptics TouchPad'
-7,6,224,743,0,0,0,1002880,11,'SynPS/2 Synaptics TouchPad'
-7,6,223,741,0,0,0,1002896,11,'SynPS/2 Synaptics TouchPad'
-7,6,222,739,0,0,0,1002914,11,'SynPS/2 Synaptics TouchPad'
-7,6,221,738,0,0,0,1002931,11,'SynPS/2 Synaptics TouchPad'
-7,6,220,737,0,0,0,1002947,11,'SynPS/2 Synaptics TouchPad'
-7,6,220,736,0,0,0,1002964,11,'SynPS/2 Synaptics TouchPad'
-7,6,219,735,0,0,0,1002981,11,'SynPS/2 Synaptics TouchPad'
-7,6,219,734,0,0,0,1002999,11,'SynPS/2 Synaptics TouchPad'
-7,6,218,733,0,0,0,1003016,11,'SynPS/2 Synaptics TouchPad'
-7,6,218,729,0,0,0,1003033,11,'SynPS/2 Synaptics TouchPad'
-7,6,217,725,0,0,0,1003050,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,721,0,0,0,1003067,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,719,0,0,0,1003085,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,717,0,0,0,1003101,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,715,0,0,0,1003117,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,715,0,0,0,1003132,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,713,0,0,0,1003147,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,712,0,0,0,1003163,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,709,0,0,0,1003178,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,708,0,0,0,1003193,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,707,0,0,0,1003208,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,706,0,0,0,1003223,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1003238,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1003254,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1003269,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,704,0,0,0,1003284,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,704,0,0,0,1003314,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,704,0,0,0,1004143,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,704,0,0,0,1004178,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,704,0,0,0,1004195,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,704,0,0,0,1004229,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1004262,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1004279,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1004430,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1004448,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,705,0,0,0,1004479,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,706,0,0,0,1004493,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,706,0,0,0,1004563,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,706,0,0,0,1004597,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,706,0,0,0,1004825,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,3,0,0,1005533,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,3,0,0,1005533,2,Virtual core pointer
-7,5,0,0,3,0,0,1005597,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,3,0,0,1005597,2,Virtual core pointer
-7,6,216,707,0,0,0,1006382,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,707,0,0,0,1006399,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,707,0,0,0,1006416,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,708,0,0,0,1006433,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,708,0,0,0,1006449,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,709,0,0,0,1006467,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,710,0,0,0,1006484,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,711,0,0,0,1006499,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,713,0,0,0,1006514,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,715,0,0,0,1006533,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,716,0,0,0,1006551,11,'SynPS/2 Synaptics TouchPad'
-7,6,216,718,0,0,0,1006568,11,'SynPS/2 Synaptics TouchPad'
-7,6,217,719,0,0,0,1006585,11,'SynPS/2 Synaptics TouchPad'
-7,6,218,720,0,0,0,1006603,11,'SynPS/2 Synaptics TouchPad'
-7,6,218,720,0,0,0,1006621,11,'SynPS/2 Synaptics TouchPad'
-7,6,219,721,0,0,0,1006637,11,'SynPS/2 Synaptics TouchPad'
-7,6,220,722,0,0,0,1006654,11,'SynPS/2 Synaptics TouchPad'
-7,6,221,723,0,0,0,1006671,11,'SynPS/2 Synaptics TouchPad'
-7,6,222,724,0,0,0,1006688,11,'SynPS/2 Synaptics TouchPad'
-7,6,223,726,0,0,0,1006706,11,'SynPS/2 Synaptics TouchPad'
-7,6,223,726,0,0,0,1006723,11,'SynPS/2 Synaptics TouchPad'
-7,6,224,727,0,0,0,1006740,11,'SynPS/2 Synaptics TouchPad'
-7,6,225,728,0,0,0,1006758,11,'SynPS/2 Synaptics TouchPad'
-7,6,226,728,0,0,0,1006775,11,'SynPS/2 Synaptics TouchPad'
-7,6,227,729,0,0,0,1006791,11,'SynPS/2 Synaptics TouchPad'
-7,6,229,731,0,0,0,1006809,11,'SynPS/2 Synaptics TouchPad'
-7,6,229,732,0,0,0,1006826,11,'SynPS/2 Synaptics TouchPad'
-7,6,231,734,0,0,0,1006842,11,'SynPS/2 Synaptics TouchPad'
-7,6,231,735,0,0,0,1006859,11,'SynPS/2 Synaptics TouchPad'
-7,6,232,735,0,0,0,1006877,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,735,0,0,0,1006893,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,736,0,0,0,1006910,11,'SynPS/2 Synaptics TouchPad'
-7,6,233,736,0,0,0,1006927,11,'SynPS/2 Synaptics TouchPad'
-7,6,234,736,0,0,0,1006943,11,'SynPS/2 Synaptics TouchPad'
-7,6,234,737,0,0,0,1006961,11,'SynPS/2 Synaptics TouchPad'
-7,6,234,737,0,0,0,1006978,11,'SynPS/2 Synaptics TouchPad'
-7,4,0,0,1,0,0,1007168,11,SynPS/2 Synaptics TouchPad
-6,4,0,0,1,0,0,1007168,2,Virtual core pointer
-7,5,0,0,1,0,0,1007174,11,SynPS/2 Synaptics TouchPad
-6,5,0,0,1,0,0,1007174,2,Virtual core pointer
-0,21,0,0,0,0,0,1007223
-NEW-WINDOW:461,197:60817714,60817714,16788003,0,0,0:0x0+879+458:0,0:Export of graph "graphviz"
-0,21,0,0,0,0,0,1007223
-0,21,0,0,0,0,0,1007223
-7,6,235,737,0,0,0,1007318,11,'SynPS/2 Synaptics TouchPad'
-7,2,0,0,0,28,0,1008426,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,1008426,3,Virtual core keyboard
-7,3,0,0,0,28,0,1008507,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,1008507,3,Virtual core keyboard
-7,2,0,0,0,26,0,1008649,9,AT Translated Set 2 keyboard
-6,2,0,0,0,26,0,1008649,3,Virtual core keyboard
-7,3,0,0,0,26,0,1008731,9,AT Translated Set 2 keyboard
-6,3,0,0,0,26,0,1008731,3,Virtual core keyboard
-7,2,0,0,0,39,0,1008882,9,AT Translated Set 2 keyboard
-6,2,0,0,0,39,0,1008882,3,Virtual core keyboard
-7,3,0,0,0,39,0,1008954,9,AT Translated Set 2 keyboard
-6,3,0,0,0,39,0,1008954,3,Virtual core keyboard
-7,2,0,0,0,28,0,1009126,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,1009126,3,Virtual core keyboard
-7,3,0,0,0,28,0,1009228,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,1009228,3,Virtual core keyboard
-7,2,0,0,0,17,0,1009257,9,AT Translated Set 2 keyboard
-6,2,0,0,0,17,0,1009258,3,Virtual core keyboard
-7,3,0,0,0,17,0,1009329,9,AT Translated Set 2 keyboard
-6,3,0,0,0,17,0,1009329,3,Virtual core keyboard
-7,2,0,0,0,42,0,1009846,9,AT Translated Set 2 keyboard
-6,2,0,0,0,42,0,1009846,3,Virtual core keyboard
-7,3,0,0,0,42,0,1009959,9,AT Translated Set 2 keyboard
-6,3,0,0,0,42,0,1009959,3,Virtual core keyboard
-7,2,0,0,0,30,0,1009961,9,AT Translated Set 2 keyboard
-6,2,0,0,0,30,0,1009962,3,Virtual core keyboard
-7,2,0,0,0,31,0,1010029,9,AT Translated Set 2 keyboard
-6,2,0,0,0,31,0,1010029,3,Virtual core keyboard
-7,3,0,0,0,30,0,1010060,9,AT Translated Set 2 keyboard
-6,3,0,0,0,30,0,1010060,3,Virtual core keyboard
-7,3,0,0,0,31,0,1010142,9,AT Translated Set 2 keyboard
-6,3,0,0,0,31,0,1010142,3,Virtual core keyboard
-7,2,0,0,0,62,0,1010526,9,AT Translated Set 2 keyboard
-6,2,0,0,0,62,0,1010526,3,Virtual core keyboard
-7,2,0,0,0,59,0,1010720,9,AT Translated Set 2 keyboard
-6,2,0,0,0,59,0,1010720,3,Virtual core keyboard
-7,3,0,0,0,59,0,1010812,9,AT Translated Set 2 keyboard
-6,3,0,0,0,59,0,1010812,3,Virtual core keyboard
-7,3,0,0,0,62,0,1010815,9,AT Translated Set 2 keyboard
-6,3,0,0,0,62,0,1010815,3,Virtual core keyboard
-7,2,0,0,0,28,0,1011198,9,AT Translated Set 2 keyboard
-6,2,0,0,0,28,0,1011198,3,Virtual core keyboard
-7,3,0,0,0,28,0,1011310,9,AT Translated Set 2 keyboard
-6,3,0,0,0,28,0,1011310,3,Virtual core keyboard
-7,2,0,0,0,46,0,1011313,9,AT Translated Set 2 keyboard
-6,2,0,0,0,46,0,1011314,3,Virtual core keyboard
-7,2,0,0,0,33,0,1011380,9,AT Translated Set 2 keyboard
-6,2,0,0,0,33,0,1011381,3,Virtual core keyboard
-7,3,0,0,0,46,0,1011462,9,AT Translated Set 2 keyboard
-6,3,0,0,0,46,0,1011462,3,Virtual core keyboard
-7,3,0,0,0,33,0,1011543,9,AT Translated Set 2 keyboard
-6,3,0,0,0,33,0,1011543,3,Virtual core keyboard
-7,2,0,0,0,36,0,1012486,9,AT Translated Set 2 keyboard
-6,2,0,0,0,36,0,1012486,3,Virtual core keyboard
-0,21,0,0,0,0,0,1012552
-NEW-WINDOW:650,337:60817722,60817722,16788080,0,0,0:0x0+500+37:0,0:TLP Export
-0,21,0,0,0,0,0,1012552
-0,21,0,0,0,0,0,1012552
-7,3,0,0,0,36,0,1012568,9,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,1012568,3,Virtual core keyboard
-0,21,0,0,0,0,0,1012574
-NEW-WINDOW:459,141:60817714,60817714,748,0,0,0:459x141+879+458:0,0:Export of graph "graphviz"
-0,21,0,0,0,0,0,1012574
-0,21,0,0,0,0,0,1012574
-0,21,0,0,0,0,0,1012574
-0,21,0,0,0,0,0,1012574
+7,2,0,0,0,37,0,280767048,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,37,0,280767048,3,Virtual core keyboard
+7,2,0,0,0,50,0,280767264,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,50,0,280767264,3,Virtual core keyboard
+7,2,0,0,0,32,0,280767664,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,32,0,280767664,3,Virtual core keyboard
+0,21,0,0,0,0,0,280767714
+NEW-WINDOW:461,197:52428839,52428839,15869294,0,0,0:0x0+879+458:0,0:Import
+0,21,0,0,0,0,0,280767714
+0,21,0,0,0,0,0,280767714
+7,3,0,0,0,32,0,280767728,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,32,0,280767728,3,Virtual core keyboard
+7,3,0,0,0,50,0,280767777,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,50,0,280767777,3,Virtual core keyboard
+7,3,0,0,0,37,0,280767800,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,37,0,280767800,3,Virtual core keyboard
+7,2,0,0,0,116,0,280770328,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280770328,3,Virtual core keyboard
+7,3,0,0,0,116,0,280770424,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280770424,3,Virtual core keyboard
+7,2,0,0,0,116,0,280770584,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280770584,3,Virtual core keyboard
+7,3,0,0,0,116,0,280770688,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280770688,3,Virtual core keyboard
+7,2,0,0,0,116,0,280770832,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280770832,3,Virtual core keyboard
+7,3,0,0,0,116,0,280770936,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280770936,3,Virtual core keyboard
+7,2,0,0,0,116,0,280771096,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280771096,3,Virtual core keyboard
+7,3,0,0,0,116,0,280771224,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280771224,3,Virtual core keyboard
+7,2,0,0,0,116,0,280771448,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280771448,3,Virtual core keyboard
+7,3,0,0,0,116,0,280771592,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280771592,3,Virtual core keyboard
+7,6,266,705,0,0,0,280773098,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,266,704,0,0,0,280773104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,703,0,0,0,280773112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,269,703,0,0,0,280773120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,270,702,0,0,0,280773128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,271,702,0,0,0,280773136,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,273,701,0,0,0,280773144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,276,700,0,0,0,280773152,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,280,700,0,0,0,280773160,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,285,699,0,0,0,280773168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,287,699,0,0,0,280773176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,289,699,0,0,0,280773184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,291,698,0,0,0,280773192,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,294,698,0,0,0,280773200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,295,697,0,0,0,280773208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,298,697,0,0,0,280773216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,299,697,0,0,0,280773224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,301,696,0,0,0,280773232,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,303,696,0,0,0,280773240,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,304,695,0,0,0,280773248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,305,695,0,0,0,280773256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,307,695,0,0,0,280773264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,309,694,0,0,0,280773272,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,311,694,0,0,0,280773280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,312,693,0,0,0,280773288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,313,692,0,0,0,280773296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,314,692,0,0,0,280773304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,315,692,0,0,0,280773312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,316,692,0,0,0,280773320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,317,691,0,0,0,280773328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,319,691,0,0,0,280773336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,321,690,0,0,0,280773344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,323,689,0,0,0,280773352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,328,688,0,0,0,280773360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,330,687,0,0,0,280773368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,334,687,0,0,0,280773376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,337,687,0,0,0,280773384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,686,0,0,0,280773392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,343,685,0,0,0,280773400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,348,683,0,0,0,280773408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,351,682,0,0,0,280773416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,355,681,0,0,0,280773424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,358,679,0,0,0,280773432,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,361,677,0,0,0,280773440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,363,675,0,0,0,280773448,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,368,673,0,0,0,280773456,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,370,672,0,0,0,280773464,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,374,670,0,0,0,280773472,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,376,666,0,0,0,280773480,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,378,664,0,0,0,280773488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,382,663,0,0,0,280773496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,385,662,0,0,0,280773504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,391,660,0,0,0,280773512,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,393,658,0,0,0,280773520,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,398,656,0,0,0,280773528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,401,653,0,0,0,280773536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,403,651,0,0,0,280773544,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,405,650,0,0,0,280773552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,407,648,0,0,0,280773560,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,411,645,0,0,0,280773568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,414,643,0,0,0,280773576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,417,642,0,0,0,280773584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,419,641,0,0,0,280773592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,422,639,0,0,0,280773600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,425,638,0,0,0,280773608,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,432,637,0,0,0,280773616,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,438,635,0,0,0,280773624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,441,634,0,0,0,280773632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,445,633,0,0,0,280773640,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,447,631,0,0,0,280773648,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,450,629,0,0,0,280773656,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,454,628,0,0,0,280773664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,456,626,0,0,0,280773672,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,459,624,0,0,0,280773680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,461,622,0,0,0,280773688,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,466,620,0,0,0,280773696,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,469,617,0,0,0,280773704,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,471,615,0,0,0,280773712,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,474,613,0,0,0,280773720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,480,610,0,0,0,280773728,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,491,606,0,0,0,280773736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,497,600,0,0,0,280773744,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,503,596,0,0,0,280773752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,508,592,0,0,0,280773760,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,514,588,0,0,0,280773768,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,520,586,0,0,0,280773776,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,518,584,0,0,0,280773784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,521,583,0,0,0,280773792,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,531,580,0,0,0,280773800,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,539,578,0,0,0,280773808,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,544,577,0,0,0,280773816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,547,575,0,0,0,280773824,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,549,574,0,0,0,280773832,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,550,572,0,0,0,280773840,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,553,570,0,0,0,280773848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,555,569,0,0,0,280773856,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,556,568,0,0,0,280773864,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,559,567,0,0,0,280773872,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,561,566,0,0,0,280773880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,563,564,0,0,0,280773888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,565,562,0,0,0,280773896,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,576,560,0,0,0,280773904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,582,558,0,0,0,280773912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,586,556,0,0,0,280773920,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,590,555,0,0,0,280773928,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,593,554,0,0,0,280773936,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,595,553,0,0,0,280773944,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,597,552,0,0,0,280773952,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,602,550,0,0,0,280773960,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,605,548,0,0,0,280773968,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,609,547,0,0,0,280773976,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,617,546,0,0,0,280773984,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,622,545,0,0,0,280773992,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,627,543,0,0,0,280774000,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,633,540,0,0,0,280774008,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,642,539,0,0,0,280774016,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,653,534,0,0,0,280774024,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,657,533,0,0,0,280774032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,666,530,0,0,0,280774040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,677,528,0,0,0,280774048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,686,525,0,0,0,280774056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,692,523,0,0,0,280774064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,698,520,0,0,0,280774072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,705,514,0,0,0,280774080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,709,509,0,0,0,280774088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,715,505,0,0,0,280774096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,721,501,0,0,0,280774104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,727,496,0,0,0,280774112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,733,492,0,0,0,280774120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,739,490,0,0,0,280774128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,745,488,0,0,0,280774136,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,751,484,0,0,0,280774144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,758,478,0,0,0,280774152,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,764,472,0,0,0,280774160,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,768,468,0,0,0,280774168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,772,462,0,0,0,280774176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,776,458,0,0,0,280774184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,787,454,0,0,0,280774192,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,791,450,0,0,0,280774200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,795,446,0,0,0,280774208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,800,442,0,0,0,280774216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,806,437,0,0,0,280774224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,812,432,0,0,0,280774232,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,816,428,0,0,0,280774240,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,820,423,0,0,0,280774248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,824,419,0,0,0,280774256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,830,415,0,0,0,280774264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,833,411,0,0,0,280774272,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,836,409,0,0,0,280774280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,838,407,0,0,0,280774288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,840,406,0,0,0,280774296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,842,403,0,0,0,280774304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,844,401,0,0,0,280774312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,846,399,0,0,0,280774320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,848,397,0,0,0,280774328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,850,396,0,0,0,280774336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,852,394,0,0,0,280774344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,854,393,0,0,0,280774352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,856,391,0,0,0,280774360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,858,390,0,0,0,280774368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,859,389,0,0,0,280774376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,861,388,0,0,0,280774384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,862,386,0,0,0,280774392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,864,384,0,0,0,280774400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,865,383,0,0,0,280774408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,867,382,0,0,0,280774416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,868,381,0,0,0,280774424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,380,0,0,0,280774432,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,378,0,0,0,280774440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,377,0,0,0,280774448,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,376,0,0,0,280774464,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,376,0,0,0,280774536,9,'Logitech USB-PS/2 Optical Mouse'
+7,4,0,0,1,0,0,280774880,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280774880,2,Virtual core pointer
+0,21,0,0,0,0,0,280774925
+NEW-WINDOW:724,203:52428849,52428849,15869347,0,0,0:0x0+546+400:0,0:Open
+0,21,0,0,0,0,0,280774925
+0,21,0,0,0,0,0,280774925
+7,5,0,0,1,0,0,280775032,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280775032,2,Virtual core pointer
+7,6,873,375,0,0,0,280777032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,374,0,0,0,280777040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,372,0,0,0,280777048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,371,0,0,0,280777064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,370,0,0,0,280777072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,369,0,0,0,280777088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,368,0,0,0,280777096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,367,0,0,0,280777112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,366,0,0,0,280777128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,365,0,0,0,280777144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,364,0,0,0,280777168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,363,0,0,0,280777176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,362,0,0,0,280777184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,361,0,0,0,280777200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,360,0,0,0,280777208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,359,0,0,0,280777216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,358,0,0,0,280777224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,357,0,0,0,280777240,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,356,0,0,0,280777248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,354,0,0,0,280777256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,353,0,0,0,280777264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,352,0,0,0,280777272,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,351,0,0,0,280777280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,350,0,0,0,280777288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,348,0,0,0,280777296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,347,0,0,0,280777304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,345,0,0,0,280777312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,344,0,0,0,280777320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,343,0,0,0,280777328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,341,0,0,0,280777336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,339,0,0,0,280777344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,338,0,0,0,280777352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,337,0,0,0,280777360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,336,0,0,0,280777368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,335,0,0,0,280777376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,333,0,0,0,280777384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,332,0,0,0,280777392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,330,0,0,0,280777400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,329,0,0,0,280777408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,328,0,0,0,280777416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,327,0,0,0,280777424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,325,0,0,0,280777432,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,324,0,0,0,280777440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,323,0,0,0,280777448,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,322,0,0,0,280777456,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,321,0,0,0,280777472,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,319,0,0,0,280777480,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,318,0,0,0,280777488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,317,0,0,0,280777496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,316,0,0,0,280777504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,314,0,0,0,280777520,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,313,0,0,0,280777528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,312,0,0,0,280777536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,310,0,0,0,280777552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,869,309,0,0,0,280777560,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,308,0,0,0,280777568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,307,0,0,0,280777576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,306,0,0,0,280777584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,305,0,0,0,280777592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,303,0,0,0,280777600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,302,0,0,0,280777616,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,301,0,0,0,280777624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,300,0,0,0,280777632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,299,0,0,0,280777640,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,298,0,0,0,280777648,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,297,0,0,0,280777656,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,296,0,0,0,280777664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,294,0,0,0,280777680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,292,0,0,0,280777688,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,291,0,0,0,280777696,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,290,0,0,0,280777704,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,289,0,0,0,280777720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,288,0,0,0,280777728,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,287,0,0,0,280777736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,286,0,0,0,280777752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,285,0,0,0,280777760,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,284,0,0,0,280777768,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,283,0,0,0,280777776,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,282,0,0,0,280777784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,281,0,0,0,280777800,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,280,0,0,0,280777816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,279,0,0,0,280777832,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,278,0,0,0,280777848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,277,0,0,0,280777864,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,276,0,0,0,280777880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,275,0,0,0,280777904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,274,0,0,0,280777912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,273,0,0,0,280777944,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,272,0,0,0,280777968,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,271,0,0,0,280777976,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,270,0,0,0,280778000,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,269,0,0,0,280778016,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,268,0,0,0,280778048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,267,0,0,0,280778064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,266,0,0,0,280778072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,265,0,0,0,280778104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,264,0,0,0,280778112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,263,0,0,0,280778128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,262,0,0,0,280778144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,261,0,0,0,280778208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,260,0,0,0,280778232,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,259,0,0,0,280778256,9,'Logitech USB-PS/2 Optical Mouse'
+7,4,0,0,1,0,0,280779192,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280779192,2,Virtual core pointer
+7,5,0,0,1,0,0,280779320,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280779320,2,Virtual core pointer
+7,4,0,0,1,0,0,280779424,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280779424,2,Virtual core pointer
+7,5,0,0,1,0,0,280779544,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280779544,2,Virtual core pointer
+7,6,870,258,0,0,0,280782032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,259,0,0,0,280782040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,261,0,0,0,280782048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,262,0,0,0,280782056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,263,0,0,0,280782064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,264,0,0,0,280782072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,870,265,0,0,0,280782080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,266,0,0,0,280782088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,267,0,0,0,280782104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,268,0,0,0,280782112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,269,0,0,0,280782144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,270,0,0,0,280782168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,271,0,0,0,280782184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,272,0,0,0,280782208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,273,0,0,0,280782224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,871,274,0,0,0,280782248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,275,0,0,0,280782264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,276,0,0,0,280782280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,277,0,0,0,280782288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,278,0,0,0,280782296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,279,0,0,0,280782312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,280,0,0,0,280782320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,281,0,0,0,280782328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,873,282,0,0,0,280782336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,282,0,0,0,280782344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,283,0,0,0,280782352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,284,0,0,0,280782360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,285,0,0,0,280782368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,286,0,0,0,280782384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,287,0,0,0,280782392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,288,0,0,0,280782408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,289,0,0,0,280782416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,875,289,0,0,0,280782424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,875,290,0,0,0,280782440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,875,291,0,0,0,280782456,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,875,292,0,0,0,280782464,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,876,293,0,0,0,280782472,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,876,294,0,0,0,280782480,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,877,295,0,0,0,280782488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,877,296,0,0,0,280782496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,878,297,0,0,0,280782504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,878,298,0,0,0,280782520,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,878,299,0,0,0,280782528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,878,300,0,0,0,280782536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,878,301,0,0,0,280782552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,879,302,0,0,0,280782560,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,879,303,0,0,0,280782568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,880,304,0,0,0,280782584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,880,305,0,0,0,280782592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,880,306,0,0,0,280782600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,881,307,0,0,0,280782616,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,881,308,0,0,0,280782624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,881,309,0,0,0,280782632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,882,310,0,0,0,280782664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,882,311,0,0,0,280782680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,882,312,0,0,0,280782688,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,883,313,0,0,0,280782712,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,883,314,0,0,0,280782720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,883,315,0,0,0,280782736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,883,316,0,0,0,280782744,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,316,0,0,0,280782752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,317,0,0,0,280782784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,318,0,0,0,280782816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,319,0,0,0,280782824,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,320,0,0,0,280782840,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,321,0,0,0,280782848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,322,0,0,0,280782888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,323,0,0,0,280782912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,324,0,0,0,280782928,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,325,0,0,0,280782944,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,884,326,0,0,0,280782952,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,326,0,0,0,280782968,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,327,0,0,0,280782992,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,328,0,0,0,280783032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,329,0,0,0,280783096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,330,0,0,0,280783168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,331,0,0,0,280783184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,332,0,0,0,280783216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,333,0,0,0,280783256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,886,333,0,0,0,280783264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,886,334,0,0,0,280783360,9,'Logitech USB-PS/2 Optical Mouse'
+7,4,0,0,1,0,0,280786656,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280786656,2,Virtual core pointer
+7,5,0,0,1,0,0,280786760,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280786760,2,Virtual core pointer
+7,4,0,0,1,0,0,280786856,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280786856,2,Virtual core pointer
+7,5,0,0,1,0,0,280786976,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280786976,2,Virtual core pointer
+7,2,0,0,0,36,0,280789272,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,36,0,280789272,3,Virtual core keyboard
+0,21,0,0,0,0,0,280789295
+NEW-WINDOW:650,334:52428857,52428857,15869480,0,0,0:0x0+500+46:0,0:graphviz
+0,21,0,0,0,0,0,280789295
+0,21,0,0,0,0,0,280789295
+7,3,0,0,0,36,0,280789344,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,36,0,280789344,3,Virtual core keyboard
+0,21,0,0,0,0,0,280789545
+NEW-WINDOW:459,141:52428839,52428839,663,0,0,0:459x141+879+458:0,0:Import
+0,21,0,0,0,0,0,280789545
+0,21,0,0,0,0,0,280789545
+0,21,0,0,0,0,0,280789545
+0,21,0,0,0,0,0,280789545
+0,21,0,0,0,0,0,280789867
+NEW-WINDOW:0,0:52428902,52428902,663,0,0,0:0x0+640+480:0,0:tulip_perspective
+0,21,0,0,0,0,0,280789867
+0,21,0,0,0,0,0,280789867
+0,21,0,0,0,0,0,280789867
+0,21,0,0,0,0,0,280789867
+0,21,0,0,0,0,0,280789867
+0,21,0,0,0,0,0,280789917
+NEW-WINDOW:5,49:52428908,52428908,663,0,0,0:91x110+0+0:0,0:
+0,21,0,0,0,0,0,280789917
+0,21,0,0,0,0,0,280789917
+0,21,0,0,0,0,0,280789917
+0,21,0,0,0,0,0,280789917
+0,21,0,0,0,0,0,280789917
+0,21,0,0,0,0,0,280789917
+NEW-WINDOW:0,0:52428911,52428911,52428933,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,280789917
+NEW-WINDOW:0,0:52428913,52428913,52428933,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,280789917
+NEW-WINDOW:0,0:52428917,52428917,52428933,0,0,0:0x0+1024+460:0,0:
+0,21,0,0,0,0,0,280789985
+NEW-WINDOW:8384,0:52428943,52428943,663,0,0,0:1004509776x32766+1004509768+32766:2599,2599:
+0,21,0,0,0,0,0,280789985
+0,21,0,0,0,0,0,280789985
+0,21,0,0,0,0,0,280789985
+0,21,0,0,0,0,0,280789985
+0,21,0,0,0,0,0,280789985
+0,21,0,0,0,0,0,280790016
+NEW-WINDOW:8384,0:52428928,52428928,663,0,0,0:0x0+943+595:0,0:
+0,21,0,0,0,0,0,280790016
+0,21,0,0,0,0,0,280790016
+0,21,0,0,0,0,0,280790016
+0,21,0,0,0,0,0,280790016
+0,21,0,0,0,0,0,280790016
+0,21,0,0,0,0,0,280790049
+NEW-WINDOW:1117,102:52428931,52428931,52429035,0,0,0:0x0+100+30:0,0:
+0,21,0,0,0,0,0,280790049
+NEW-WINDOW:1117,102:52428933,52428933,52429035,0,0,0:0x0+1024+460:0,0:
+7,6,886,335,0,0,0,280792536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,885,336,0,0,0,280792544,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,883,336,0,0,0,280792552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,881,336,0,0,0,280792560,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,879,336,0,0,0,280792568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,877,336,0,0,0,280792576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,875,336,0,0,0,280792584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,874,336,0,0,0,280792592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,872,336,0,0,0,280792600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,868,336,0,0,0,280792608,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,866,336,0,0,0,280792616,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,865,337,0,0,0,280792624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,863,337,0,0,0,280792632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,862,337,0,0,0,280792640,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,861,337,0,0,0,280792648,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,860,337,0,0,0,280792656,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,858,337,0,0,0,280792664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,857,337,0,0,0,280792672,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,856,337,0,0,0,280792680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,855,337,0,0,0,280792688,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,854,337,0,0,0,280792696,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,852,337,0,0,0,280792704,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,851,337,0,0,0,280792712,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,849,337,0,0,0,280792720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,847,337,0,0,0,280792728,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,846,336,0,0,0,280792736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,843,336,0,0,0,280792744,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,842,336,0,0,0,280792752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,840,336,0,0,0,280792760,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,838,335,0,0,0,280792768,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,836,335,0,0,0,280792776,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,835,334,0,0,0,280792784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,833,333,0,0,0,280792792,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,832,333,0,0,0,280792800,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,829,333,0,0,0,280792808,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,827,332,0,0,0,280792816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,825,331,0,0,0,280792824,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,822,331,0,0,0,280792832,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,820,330,0,0,0,280792840,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,813,329,0,0,0,280792848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,811,329,0,0,0,280792856,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,805,328,0,0,0,280792864,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,801,327,0,0,0,280792872,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,799,327,0,0,0,280792880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,796,326,0,0,0,280792888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,794,325,0,0,0,280792896,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,791,324,0,0,0,280792904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,789,324,0,0,0,280792912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,787,323,0,0,0,280792920,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,785,322,0,0,0,280792928,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,783,321,0,0,0,280792936,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,779,321,0,0,0,280792944,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,777,320,0,0,0,280792952,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,771,319,0,0,0,280792960,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,761,318,0,0,0,280792968,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,752,316,0,0,0,280792976,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,748,314,0,0,0,280792984,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,741,312,0,0,0,280792992,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,735,311,0,0,0,280793000,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,730,310,0,0,0,280793008,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,723,308,0,0,0,280793016,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,719,308,0,0,0,280793024,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,716,307,0,0,0,280793032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,714,306,0,0,0,280793040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,711,305,0,0,0,280793048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,708,304,0,0,0,280793056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,705,304,0,0,0,280793064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,702,303,0,0,0,280793072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,700,302,0,0,0,280793080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,686,300,0,0,0,280793088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,680,298,0,0,0,280793096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,678,297,0,0,0,280793104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,671,296,0,0,0,280793112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,668,295,0,0,0,280793120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,665,294,0,0,0,280793128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,661,293,0,0,0,280793136,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,659,292,0,0,0,280793144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,657,290,0,0,0,280793152,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,655,289,0,0,0,280793160,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,652,287,0,0,0,280793168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,650,286,0,0,0,280793176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,648,285,0,0,0,280793184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,646,284,0,0,0,280793192,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,643,283,0,0,0,280793200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,641,282,0,0,0,280793208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,638,280,0,0,0,280793216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,636,278,0,0,0,280793224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,632,277,0,0,0,280793232,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,627,275,0,0,0,280793240,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,624,274,0,0,0,280793248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,617,271,0,0,0,280793256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,614,270,0,0,0,280793264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,608,268,0,0,0,280793272,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,604,267,0,0,0,280793280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,599,266,0,0,0,280793288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,596,265,0,0,0,280793296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,592,264,0,0,0,280793304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,586,262,0,0,0,280793312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,581,260,0,0,0,280793320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,577,258,0,0,0,280793328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,576,257,0,0,0,280793336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,570,256,0,0,0,280793344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,566,255,0,0,0,280793352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,563,253,0,0,0,280793360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,560,253,0,0,0,280793368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,553,252,0,0,0,280793376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,550,250,0,0,0,280793384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,547,249,0,0,0,280793392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,543,248,0,0,0,280793400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,538,247,0,0,0,280793408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,535,246,0,0,0,280793416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,531,245,0,0,0,280793424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,530,244,0,0,0,280793432,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,527,243,0,0,0,280793440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,525,242,0,0,0,280793448,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,523,241,0,0,0,280793456,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,520,239,0,0,0,280793464,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,518,238,0,0,0,280793472,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,515,236,0,0,0,280793480,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,513,234,0,0,0,280793488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,506,231,0,0,0,280793496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,504,230,0,0,0,280793504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,498,227,0,0,0,280793512,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,494,225,0,0,0,280793520,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,492,223,0,0,0,280793528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,489,221,0,0,0,280793536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,487,220,0,0,0,280793544,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,484,218,0,0,0,280793552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,482,217,0,0,0,280793560,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,478,215,0,0,0,280793568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,475,214,0,0,0,280793576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,473,213,0,0,0,280793584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,469,212,0,0,0,280793592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,467,211,0,0,0,280793600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,465,210,0,0,0,280793608,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,461,208,0,0,0,280793616,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,459,207,0,0,0,280793624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,457,206,0,0,0,280793632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,453,204,0,0,0,280793640,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,451,203,0,0,0,280793648,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,449,202,0,0,0,280793656,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,447,201,0,0,0,280793664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,445,200,0,0,0,280793672,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,443,200,0,0,0,280793680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,442,199,0,0,0,280793688,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,440,198,0,0,0,280793696,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,439,197,0,0,0,280793704,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,437,197,0,0,0,280793712,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,436,196,0,0,0,280793720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,434,195,0,0,0,280793728,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,432,194,0,0,0,280793736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,430,192,0,0,0,280793744,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,427,191,0,0,0,280793752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,425,189,0,0,0,280793760,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,423,188,0,0,0,280793768,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,421,186,0,0,0,280793776,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,419,184,0,0,0,280793784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,417,183,0,0,0,280793792,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,415,182,0,0,0,280793800,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,413,181,0,0,0,280793808,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,412,179,0,0,0,280793816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,410,178,0,0,0,280793824,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,409,177,0,0,0,280793832,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,407,175,0,0,0,280793840,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,405,173,0,0,0,280793848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,404,172,0,0,0,280793856,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,402,170,0,0,0,280793864,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,401,170,0,0,0,280793872,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,400,169,0,0,0,280793880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,399,168,0,0,0,280793888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,398,167,0,0,0,280793896,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,398,166,0,0,0,280793904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,397,165,0,0,0,280793912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,396,164,0,0,0,280793920,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,395,163,0,0,0,280793928,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,393,162,0,0,0,280793936,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,392,162,0,0,0,280793944,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,391,161,0,0,0,280793960,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,390,160,0,0,0,280793976,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,389,159,0,0,0,280793984,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,388,158,0,0,0,280793992,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,387,157,0,0,0,280794000,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,386,157,0,0,0,280794008,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,385,157,0,0,0,280794016,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,384,156,0,0,0,280794024,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,383,155,0,0,0,280794032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,382,154,0,0,0,280794040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,380,154,0,0,0,280794048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,380,153,0,0,0,280794056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,379,153,0,0,0,280794064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,378,152,0,0,0,280794072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,377,151,0,0,0,280794080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,376,151,0,0,0,280794088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,376,150,0,0,0,280794096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,375,150,0,0,0,280794104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,375,149,0,0,0,280794112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,374,148,0,0,0,280794120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,374,147,0,0,0,280794128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,373,147,0,0,0,280794136,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,373,146,0,0,0,280794144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,373,145,0,0,0,280794152,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,372,144,0,0,0,280794160,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,372,143,0,0,0,280794168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,143,0,0,0,280794176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,142,0,0,0,280794184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,141,0,0,0,280794192,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,140,0,0,0,280794200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,370,140,0,0,0,280794208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,370,139,0,0,0,280794264,9,'Logitech USB-PS/2 Optical Mouse'
+7,4,0,0,1,0,0,280794432,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280794432,2,Virtual core pointer
+7,5,0,0,1,0,0,280794584,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280794584,2,Virtual core pointer
+7,6,370,138,0,0,0,280794880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,138,0,0,0,280794888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,372,138,0,0,0,280794896,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,373,138,0,0,0,280794904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,374,139,0,0,0,280794912,9,'Logitech USB-PS/2 Optical Mouse'
+7,2,0,0,0,28,0,280795704,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,28,0,280795704,3,Virtual core keyboard
+7,3,0,0,0,28,0,280795808,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,28,0,280795808,3,Virtual core keyboard
+7,2,0,0,0,27,0,280796016,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,27,0,280796016,3,Virtual core keyboard
+7,3,0,0,0,27,0,280796096,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,27,0,280796096,3,Virtual core keyboard
+7,2,0,0,0,26,0,280796368,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,26,0,280796368,3,Virtual core keyboard
+7,3,0,0,0,26,0,280796440,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,26,0,280796440,3,Virtual core keyboard
+7,2,0,0,0,26,0,280796536,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,26,0,280796536,3,Virtual core keyboard
+7,3,0,0,0,26,0,280796608,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,26,0,280796608,3,Virtual core keyboard
+7,2,0,0,0,65,0,280796840,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,65,0,280796840,3,Virtual core keyboard
+7,3,0,0,0,65,0,280796936,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,65,0,280796936,3,Virtual core keyboard
+7,2,0,0,0,46,0,280797344,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,46,0,280797344,3,Virtual core keyboard
+7,3,0,0,0,46,0,280797464,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,46,0,280797464,3,Virtual core keyboard
+7,6,375,139,0,0,0,280798960,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,375,140,0,0,0,280798968,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,374,140,0,0,0,280798984,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,374,141,0,0,0,280798992,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,373,141,0,0,0,280799000,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,372,142,0,0,0,280799008,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,372,144,0,0,0,280799024,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,372,145,0,0,0,280799032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,146,0,0,0,280799040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,371,147,0,0,0,280799048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,370,148,0,0,0,280799056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,369,150,0,0,0,280799072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,369,152,0,0,0,280799080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,368,153,0,0,0,280799088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,367,154,0,0,0,280799096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,367,155,0,0,0,280799104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,366,156,0,0,0,280799112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,365,158,0,0,0,280799120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,365,159,0,0,0,280799128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,364,159,0,0,0,280799136,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,364,160,0,0,0,280799144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,363,161,0,0,0,280799152,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,363,162,0,0,0,280799160,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,362,163,0,0,0,280799168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,362,164,0,0,0,280799176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,361,166,0,0,0,280799184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,361,167,0,0,0,280799192,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,361,168,0,0,0,280799200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,360,170,0,0,0,280799208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,360,171,0,0,0,280799216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,359,173,0,0,0,280799224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,359,174,0,0,0,280799232,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,358,176,0,0,0,280799240,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,357,177,0,0,0,280799248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,357,179,0,0,0,280799256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,356,180,0,0,0,280799264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,356,182,0,0,0,280799272,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,355,183,0,0,0,280799280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,355,184,0,0,0,280799288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,354,185,0,0,0,280799296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,353,186,0,0,0,280799304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,352,187,0,0,0,280799312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,352,189,0,0,0,280799328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,351,190,0,0,0,280799336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,351,191,0,0,0,280799352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,350,192,0,0,0,280799368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,350,193,0,0,0,280799376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,349,194,0,0,0,280799392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,349,195,0,0,0,280799400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,349,197,0,0,0,280799408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,348,198,0,0,0,280799416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,347,199,0,0,0,280799424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,347,201,0,0,0,280799432,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,346,201,0,0,0,280799440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,346,202,0,0,0,280799448,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,345,203,0,0,0,280799456,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,345,204,0,0,0,280799464,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,344,205,0,0,0,280799488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,343,206,0,0,0,280799496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,343,207,0,0,0,280799504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,343,208,0,0,0,280799512,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,342,209,0,0,0,280799520,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,342,210,0,0,0,280799528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,341,211,0,0,0,280799536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,341,212,0,0,0,280799544,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,340,213,0,0,0,280799576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,214,0,0,0,280799592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,215,0,0,0,280799632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,216,0,0,0,280799656,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,217,0,0,0,280799664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,218,0,0,0,280799680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,219,0,0,0,280799712,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,339,220,0,0,0,280799736,9,'Logitech USB-PS/2 Optical Mouse'
+7,4,0,0,1,0,0,280800096,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,1,0,0,280800096,2,Virtual core pointer
+7,5,0,0,1,0,0,280800280,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,1,0,0,280800280,2,Virtual core pointer
+0,21,0,0,0,0,0,280800298
+NEW-WINDOW:650,328:52429048,52429048,15869630,0,0,0:0x0+500+65:0,0:Tree Leaf
+0,21,0,0,0,0,0,280800298
+0,21,0,0,0,0,0,280800298
+7,6,339,221,0,0,0,280801312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,338,222,0,0,0,280801320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,336,223,0,0,0,280801328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,334,224,0,0,0,280801336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,332,225,0,0,0,280801344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,331,226,0,0,0,280801352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,330,228,0,0,0,280801360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,329,230,0,0,0,280801368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,328,233,0,0,0,280801376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,328,236,0,0,0,280801384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,327,238,0,0,0,280801392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,326,243,0,0,0,280801400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,325,245,0,0,0,280801408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,323,256,0,0,0,280801416,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,322,266,0,0,0,280801424,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,320,281,0,0,0,280801432,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,318,295,0,0,0,280801440,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,316,305,0,0,0,280801448,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,313,312,0,0,0,280801456,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,312,324,0,0,0,280801464,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,310,333,0,0,0,280801472,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,308,339,0,0,0,280801480,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,305,351,0,0,0,280801488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,304,365,0,0,0,280801496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,304,377,0,0,0,280801504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,301,396,0,0,0,280801512,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,301,404,0,0,0,280801520,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,301,415,0,0,0,280801528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,301,428,0,0,0,280801536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,298,440,0,0,0,280801544,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,298,444,0,0,0,280801552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,297,450,0,0,0,280801560,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,295,452,0,0,0,280801568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,294,454,0,0,0,280801576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,294,458,0,0,0,280801584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,293,459,0,0,0,280801592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,291,462,0,0,0,280801600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,290,464,0,0,0,280801608,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,289,469,0,0,0,280801616,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,288,472,0,0,0,280801624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,287,476,0,0,0,280801632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,286,479,0,0,0,280801640,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,285,481,0,0,0,280801648,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,285,488,0,0,0,280801656,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,284,489,0,0,0,280801664,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,283,492,0,0,0,280801672,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,282,496,0,0,0,280801680,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,280,499,0,0,0,280801688,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,279,502,0,0,0,280801696,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,278,506,0,0,0,280801704,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,277,511,0,0,0,280801712,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,277,514,0,0,0,280801720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,276,518,0,0,0,280801728,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,275,523,0,0,0,280801736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,275,526,0,0,0,280801744,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,274,533,0,0,0,280801752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,273,535,0,0,0,280801760,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,272,538,0,0,0,280801768,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,271,540,0,0,0,280801776,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,271,543,0,0,0,280801784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,270,544,0,0,0,280801792,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,270,546,0,0,0,280801800,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,269,548,0,0,0,280801808,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,269,549,0,0,0,280801816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,549,0,0,0,280801824,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,550,0,0,0,280801832,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,551,0,0,0,280801840,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,553,0,0,0,280801848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,554,0,0,0,280801856,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,555,0,0,0,280801864,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,556,0,0,0,280801872,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,558,0,0,0,280801880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,559,0,0,0,280801888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,560,0,0,0,280801896,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,561,0,0,0,280801904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,562,0,0,0,280801912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,564,0,0,0,280801920,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,565,0,0,0,280801928,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,566,0,0,0,280801944,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,567,0,0,0,280801952,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,568,0,0,0,280802048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,569,0,0,0,280802056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,571,0,0,0,280802064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,572,0,0,0,280802080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,573,0,0,0,280802088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,574,0,0,0,280802104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,576,0,0,0,280802112,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,576,0,0,0,280802120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,577,0,0,0,280802128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,578,0,0,0,280802168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,578,0,0,0,280802176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,580,0,0,0,280802200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,581,0,0,0,280802224,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,268,582,0,0,0,280802256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,582,0,0,0,280802280,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,583,0,0,0,280802288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,585,0,0,0,280802296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,267,587,0,0,0,280802304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,266,589,0,0,0,280802312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,265,590,0,0,0,280802320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,265,592,0,0,0,280802328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,264,594,0,0,0,280802336,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,595,0,0,0,280802344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,597,0,0,0,280802352,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,599,0,0,0,280802360,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,600,0,0,0,280802368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,601,0,0,0,280802384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,601,0,0,0,280802400,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,601,0,0,0,280802408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,602,0,0,0,280802488,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,603,0,0,0,280802496,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,604,0,0,0,280802504,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,605,0,0,0,280802512,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,606,0,0,0,280802528,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,263,607,0,0,0,280802536,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,608,0,0,0,280802544,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,610,0,0,0,280802552,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,611,0,0,0,280802568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,612,0,0,0,280802576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,614,0,0,0,280802592,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,615,0,0,0,280802600,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,616,0,0,0,280802608,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,618,0,0,0,280802624,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,619,0,0,0,280802632,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,620,0,0,0,280802648,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,621,0,0,0,280802672,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,622,0,0,0,280802696,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,623,0,0,0,280802720,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,624,0,0,0,280802736,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,624,0,0,0,280802744,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,625,0,0,0,280802752,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,627,0,0,0,280802760,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,628,0,0,0,280802768,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,629,0,0,0,280802776,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,262,632,0,0,0,280802784,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,634,0,0,0,280802792,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,261,635,0,0,0,280802800,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,637,0,0,0,280802808,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,638,0,0,0,280802816,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,640,0,0,0,280802824,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,642,0,0,0,280802832,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,643,0,0,0,280802840,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,645,0,0,0,280802848,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,648,0,0,0,280802856,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,650,0,0,0,280802864,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,652,0,0,0,280802872,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,653,0,0,0,280802880,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,654,0,0,0,280802888,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,655,0,0,0,280802896,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,656,0,0,0,280802904,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,657,0,0,0,280802912,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,260,658,0,0,0,280802920,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,659,0,0,0,280802928,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,660,0,0,0,280802936,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,661,0,0,0,280802992,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,662,0,0,0,280803016,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,663,0,0,0,280803024,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,664,0,0,0,280803032,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,665,0,0,0,280803040,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,667,0,0,0,280803048,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,668,0,0,0,280803056,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,669,0,0,0,280803064,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,671,0,0,0,280803072,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,672,0,0,0,280803080,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,673,0,0,0,280803088,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,674,0,0,0,280803096,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,675,0,0,0,280803104,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,676,0,0,0,280803120,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,677,0,0,0,280803128,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,678,0,0,0,280803136,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,680,0,0,0,280803144,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,682,0,0,0,280803152,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,684,0,0,0,280803160,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,685,0,0,0,280803168,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,686,0,0,0,280803176,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,688,0,0,0,280803184,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,689,0,0,0,280803192,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,691,0,0,0,280803200,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,692,0,0,0,280803208,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,693,0,0,0,280803216,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,694,0,0,0,280803232,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,695,0,0,0,280803248,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,696,0,0,0,280803256,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,697,0,0,0,280803264,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,698,0,0,0,280803272,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,699,0,0,0,280803288,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,700,0,0,0,280803296,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,701,0,0,0,280803304,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,703,0,0,0,280803312,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,705,0,0,0,280803320,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,706,0,0,0,280803328,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,708,0,0,0,280803344,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,709,0,0,0,280803368,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,710,0,0,0,280803376,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,711,0,0,0,280803384,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,712,0,0,0,280803392,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,713,0,0,0,280803408,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,256,714,0,0,0,280803568,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,714,0,0,0,280803576,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,713,0,0,0,280803584,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,712,0,0,0,280803608,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,257,711,0,0,0,280803640,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,711,0,0,0,280803952,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,258,710,0,0,0,280803968,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,259,710,0,0,0,280803976,9,'Logitech USB-PS/2 Optical Mouse'
+7,4,0,0,3,0,0,280804424,9,Logitech USB-PS/2 Optical Mouse
+6,4,0,0,3,0,0,280804424,2,Virtual core pointer
+7,5,0,0,3,0,0,280804648,9,Logitech USB-PS/2 Optical Mouse
+6,5,0,0,3,0,0,280804648,2,Virtual core pointer
+7,2,0,0,0,116,0,280806072,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280806072,3,Virtual core keyboard
+7,3,0,0,0,116,0,280806176,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280806176,3,Virtual core keyboard
+7,2,0,0,0,116,0,280806464,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280806464,3,Virtual core keyboard
+7,3,0,0,0,116,0,280806608,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280806608,3,Virtual core keyboard
+7,2,0,0,0,36,0,280807256,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,36,0,280807256,3,Virtual core keyboard
+0,21,0,0,0,0,0,280807306
+NEW-WINDOW:461,197:52429064,52429064,15869690,0,0,0:0x0+879+458:0,0:Export of graph "graphviz - 'filename'="/home/tulip/tulip4/tulip/unit_test/gui/data/graph.dot" "
+0,21,0,0,0,0,0,280807306
+0,21,0,0,0,0,0,280807306
+7,3,0,0,0,36,0,280807340,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,36,0,280807340,3,Virtual core keyboard
+7,2,0,0,0,28,0,280808728,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,28,0,280808728,3,Virtual core keyboard
+7,3,0,0,0,28,0,280808816,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,28,0,280808816,3,Virtual core keyboard
+7,2,0,0,0,26,0,280809208,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,26,0,280809208,3,Virtual core keyboard
+7,3,0,0,0,26,0,280809304,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,26,0,280809304,3,Virtual core keyboard
+7,2,0,0,0,39,0,280809480,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,39,0,280809480,3,Virtual core keyboard
+7,3,0,0,0,39,0,280809560,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,39,0,280809560,3,Virtual core keyboard
+7,2,0,0,0,28,0,280809760,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,28,0,280809760,3,Virtual core keyboard
+7,3,0,0,0,28,0,280809832,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,28,0,280809832,3,Virtual core keyboard
+7,2,0,0,0,17,0,280811008,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,17,0,280811008,3,Virtual core keyboard
+7,3,0,0,0,17,0,280811080,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,17,0,280811080,3,Virtual core keyboard
+7,2,0,0,0,42,0,280811864,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,42,0,280811864,3,Virtual core keyboard
+7,2,0,0,0,30,0,280811912,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,30,0,280811912,3,Virtual core keyboard
+7,3,0,0,0,42,0,280811936,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,42,0,280811936,3,Virtual core keyboard
+7,2,0,0,0,31,0,280811976,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,31,0,280811976,3,Virtual core keyboard
+7,3,0,0,0,30,0,280812024,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,30,0,280812024,3,Virtual core keyboard
+7,3,0,0,0,31,0,280812096,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,31,0,280812096,3,Virtual core keyboard
+7,2,0,0,0,62,0,280812680,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,62,0,280812680,3,Virtual core keyboard
+7,2,0,0,0,59,0,280813048,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,59,0,280813048,3,Virtual core keyboard
+7,3,0,0,0,59,0,280813152,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,59,0,280813152,3,Virtual core keyboard
+7,3,0,0,0,62,0,280813224,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,62,0,280813224,3,Virtual core keyboard
+7,2,0,0,0,28,0,280813752,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,28,0,280813752,3,Virtual core keyboard
+7,2,0,0,0,46,0,280813808,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,46,0,280813808,3,Virtual core keyboard
+7,3,0,0,0,28,0,280813832,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,28,0,280813832,3,Virtual core keyboard
+7,2,0,0,0,33,0,280813896,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,33,0,280813896,3,Virtual core keyboard
+7,3,0,0,0,46,0,280813976,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,46,0,280813976,3,Virtual core keyboard
+7,3,0,0,0,33,0,280814040,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,33,0,280814040,3,Virtual core keyboard
+7,2,0,0,0,36,0,280814648,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,36,0,280814648,3,Virtual core keyboard
+0,21,0,0,0,0,0,280814672
+NEW-WINDOW:1,28:52429072,52429072,15869779,0,0,0:0x0+500+36:0,0:TLP Export
+0,21,0,0,0,0,0,280814672
+0,21,0,0,0,0,0,280814672
+7,3,0,0,0,36,0,280814715,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,36,0,280814715,3,Virtual core keyboard
+0,21,0,0,0,0,0,280814831
+NEW-WINDOW:459,141:52429064,52429064,663,0,0,0:459x141+879+458:0,0:Export of graph "graphviz - 'filename'="/home/tulip/tulip4/tulip/unit_test/gui/data/graph.dot" "
+0,21,0,0,0,0,0,280814831
+0,21,0,0,0,0,0,280814831
+0,21,0,0,0,0,0,280814831
+0,21,0,0,0,0,0,280814831
