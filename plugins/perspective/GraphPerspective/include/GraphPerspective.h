@@ -34,6 +34,7 @@ namespace tlp {
 class GraphHierarchiesModel;
 class View;
 class BooleanProperty;
+class ColorScaleConfigDialog;
 }
 
 namespace Ui {
@@ -49,6 +50,7 @@ class GraphPerspective : public tlp::Perspective, tlp::Observable {
   Q_OBJECT
   Ui::GraphPerspectiveMainWindowData *_ui;
   tlp::GraphHierarchiesModel *_graphs;
+  tlp::ColorScaleConfigDialog *_colorScalesDialog;
 
   void reserveDefaultProperties();
   QString _lastOpenLocation;
@@ -115,6 +117,8 @@ public slots:
 
   void setWorkspaceMode();
   void setDevelopMode();
+
+  void displayColorScalesDialog();
 
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);

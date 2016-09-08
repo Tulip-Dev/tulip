@@ -38,6 +38,9 @@ ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) :
   setColorScale(colors, gradient);
 }
 
+ColorScale::ColorScale(const std::map<float, Color> &colorMap, const bool gradient) :
+  colorMap(colorMap), gradient(gradient) {}
+
 ColorScale::ColorScale(const ColorScale& scale) : Observable() {
   setColorMap(scale.colorMap);
   gradient = scale.gradient;
@@ -210,5 +213,24 @@ bool ColorScale::operator==(const std::vector<Color> &colors) const {
 
   return true;
 }
+
+bool ColorScale::hasRegularStops() const {
+  if (colorMap.size() <= 2) {
+    return true;
+  }
+  vector<float> v;
+  map<float, Color>::const_iterator it = colorMap.begin();
+  for(; it != colorMap.end() ; ++it) {
+    v.push_back(it->first);
+  }
+  std::sort(v.begin(), v.end());
+  float d = v[1] - v[0];
+  for (size_t i = 2 ; i < v.size() ; ++i) {
+    if (abs((v[i] - v[i-1]) - d) > 1e-6) {
+      return false;
+    }
+  }
+  return true;
 }
 
+}

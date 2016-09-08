@@ -56,6 +56,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
+#include <tulip/ColorScaleConfigDialog.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -327,6 +328,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _mainWindow->setAcceptDrops(true);
   connect(_logger,SIGNAL(cleared()),this,SLOT(logCleared()));
 
+  _colorScalesDialog = new ColorScaleConfigDialog(ColorScale(), mainWindow());
+
   // redirection of various output
   redirectDebugOutputToQDebug();
   redirectWarningOutputToQWarning();
@@ -379,6 +382,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
   connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
   connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
+  connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this, SLOT(displayColorScalesDialog()));
 
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
@@ -1355,6 +1359,10 @@ void GraphPerspective::showHideSideBar() {
     _ui->docksWidget->setVisible(true);
     _ui->sidebarButton->setToolTip("Hide Sidebar");
   }
+}
+
+void GraphPerspective::displayColorScalesDialog() {
+  _colorScalesDialog->show();
 }
 
 PLUGIN(GraphPerspective)

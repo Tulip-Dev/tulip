@@ -28,6 +28,12 @@ Utility functions
 
 .. autofunction:: tulipgui::tlpgui.getInteractorsCompatibleWithView
 
+tlpgui.ColorScalesManager
+-------------------------
+
+.. autoclass:: tulipgui::tlpgui.ColorScalesManager
+        :members:
+
 tlpgui.Interactor
 ------------------
 

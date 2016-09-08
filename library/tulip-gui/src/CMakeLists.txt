@@ -96,6 +96,7 @@ SET(SRCS
   PluginModel.cpp
   GraphNeedsSavingObserver.cpp
   FileDownloader.cpp
+  ColorScalesManager.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)

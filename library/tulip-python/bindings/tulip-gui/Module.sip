@@ -173,6 +173,7 @@ namespace tlp {
 %Include GlMainView.sip
 %Include NodeLinkDiagramComponent.sip
 %Include TulipGui.sip
+%Include ColorScalesManager.sip
 
 %Import ../tulip-ogl/Module.sip
 
