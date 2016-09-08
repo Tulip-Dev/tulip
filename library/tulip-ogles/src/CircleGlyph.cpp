@@ -31,7 +31,7 @@
 using namespace std;
 using namespace tlp;
 
-static const unsigned short nbContourPoints = 30;
+static const unsigned short nbContourPoints = 60;
 
 CircleGlyph::CircleGlyph(PluginContext *context) : Glyph(context) {
   _vertices.push_back(Coord());
