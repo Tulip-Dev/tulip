@@ -149,17 +149,16 @@ bool RectangleZoomInteractor::keyboardCallback(const std::string &keyStr, const 
 void RectangleZoomInteractor::draw() {
   if (!_glScene || _firstX != -1) {
     Camera *camera = _glScene->getMainLayer()->getCamera();
-    Camera camera2d(false);
-    tlp::Vec4i viewport = camera->getViewport();
-    camera2d.setViewport(viewport);
-    camera2d.initGl();
+    Vec4i viewport = camera->getViewport();
+    camera->initGl2D();
     tlp::Vec2f bl(std::min(_firstX, _curX), std::min(viewport[3] - _firstY, viewport[3] - _curY));
     tlp::Vec2f tr(std::max(_firstX, _curX), std::max(viewport[3] - _firstY, viewport[3] - _curY));
     GlRect2D rect(bl, tr, tlp::Color(0,0,255,100), tlp::Color::Black);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    rect.draw(camera2d);
+    rect.draw(*camera);
     glDisable(GL_BLEND);
+    camera->initGl();
   }
 }
 

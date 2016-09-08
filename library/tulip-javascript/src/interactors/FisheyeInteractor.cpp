@@ -228,9 +228,7 @@ void FisheyeInteractor::draw() {
   _glScene->initGlParameters();
   _glScene->setSceneNeedRedraw(false);
 
-  Camera camera2d(false);
-  camera2d.setViewport(viewport);
-  camera2d.initGl();
+  camera->initGl2D();
 
   std::vector<float> quadData;
   addTlpVecToVecFloat(tlp::Vec3f(0, 0, 0), quadData);
@@ -248,8 +246,8 @@ void FisheyeInteractor::draw() {
   _buffer->bind();
   _buffer->allocate(quadData);
   _fisheyeShader->activate();
-  _fisheyeShader->setUniformMat4Float("u_modelviewMatrix", camera2d.modelviewMatrix());
-  _fisheyeShader->setUniformMat4Float("u_projectionMatrix", camera2d.projectionMatrix());
+  _fisheyeShader->setUniformMat4Float("u_modelviewMatrix", camera->modelviewMatrix());
+  _fisheyeShader->setUniformMat4Float("u_projectionMatrix", camera->projectionMatrix());
   _fisheyeShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), BUFFER_OFFSET(0));
   _fisheyeShader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), BUFFER_OFFSET(3*sizeof(float)));
   _fisheyeShader->setUniformTextureSampler("u_texture", 0);
@@ -270,5 +268,6 @@ void FisheyeInteractor::draw() {
   _indicesBuffer->release();
   _buffer->release();
 
+  camera->initGl();
 
 }

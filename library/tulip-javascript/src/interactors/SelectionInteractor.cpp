@@ -170,17 +170,17 @@ bool SelectionInteractor::mouseMoveCallback(int x, int y, const int & /* modifie
 
 void SelectionInteractor::draw() {
   if (_firstX != -1) {
-    Camera camera2d(false);
-    tlp::Vec4i viewport = _glScene->getViewport();
-    camera2d.setViewport(viewport);
-    camera2d.initGl();
+    Camera *camera = _glScene->getMainLayer()->getCamera();
+    camera->initGl2D();
+    Vec4i viewport = camera->getViewport();
     tlp::Vec2f bl(std::min(_firstX, _curX), std::min(viewport[3] - _firstY, viewport[3] - _curY));
     tlp::Vec2f tr(std::max(_firstX, _curX), std::max(viewport[3] - _firstY, viewport[3] - _curY));
     GlRect2D rect(bl, tr, tlp::Color(255,0,0,100), tlp::Color::Black);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    rect.draw(camera2d);
+    rect.draw(*camera);
     glDisable(GL_BLEND);
+    camera->initGl();
   }
 }
 

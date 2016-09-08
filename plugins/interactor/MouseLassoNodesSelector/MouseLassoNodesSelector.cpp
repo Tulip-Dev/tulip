@@ -280,8 +280,7 @@ bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
 
   if (!polygon.empty()) {
 
-    Camera camera2D(false);
-    camera2D.setViewport(glWidget->getScene()->getViewport());
+    Camera *camera = glWidget->getScene()->getMainLayer()->getCamera();
 
     Color backgroundColor = glWidget->getScene()->getBackgroundColor();
     Color foregroundColor;
@@ -297,11 +296,13 @@ bool MouseLassoNodesSelectorInteractorComponent::draw(GlMainWidget *glWidget) {
     glEnable(GL_BLEND);
     glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    camera2D.initGl();
+    camera->initGl2D();
     GlConcavePolygon concavePolygon(polygon, Color(0,255,0,100), Color(0,255,0));
-    concavePolygon.draw(camera2D);
+    concavePolygon.draw(*camera);
 
     glDisable(GL_BLEND);
+
+    camera->initGl();
   }
 
 

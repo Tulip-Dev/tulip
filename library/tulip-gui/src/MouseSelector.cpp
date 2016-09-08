@@ -27,6 +27,7 @@
 #include <tulip/GlGraph.h>
 #include <tulip/Camera.h>
 #include <tulip/GlRect2D.h>
+#include <tulip/GlLayer.h>
 
 #if defined(_MSC_VER)
 #include <Windows.h>
@@ -292,18 +293,20 @@ bool MouseSelector::draw(GlMainWidget *glMainWidget) {
     Color outlineColor(color);
     outlineColor[3] = 255;
 
-    Camera camera2d(false);
-    tlp::Vec4i viewport = glMainWidget->getScene()->getViewport();
-    camera2d.setViewport(viewport);
-    camera2d.initGl();
+    Camera *camera = glMainWidget->getScene()->getMainLayer()->getCamera();
+    camera->initGl2D();
+    Vec4i viewport = camera->getViewport();
+
     tlp::Vec2f bl(std::min(firstX, curX), std::min(viewport[3] - firstY, viewport[3] - curY));
     tlp::Vec2f tr(std::max(firstX, curX), std::max(viewport[3] - firstY, viewport[3] - curY));
     GlRect2D rect(bl, tr, color, outlineColor);
     rect.setOutlineWidth(2);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    rect.draw(camera2d);
+    rect.draw(*camera);
     glDisable(GL_BLEND);
+
+    camera->initGl();
 
   }
 

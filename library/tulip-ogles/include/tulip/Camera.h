@@ -112,6 +112,7 @@ public:
   }
 
   void initGl();
+  void initGl2D();
 
   const tlp::MatrixGL &modelviewMatrix() const {
     return _modelviewMatrix;
@@ -162,9 +163,10 @@ public:
 
 private:
 
-  void initProjection(const tlp::Vec4i& viewport);
-  void initProjection();
-  void initModelView();
+  void initProjection(const tlp::Vec4i& viewport, bool threeD);
+  void initProjection(bool threeD);
+  void initModelView(bool threeD);
+  void computeTransformMatrices();
 
   void ortho(float  left,  float  right,  float  bottom,  float  top,  float  nearVal,  float  farVal);
   void frustum(float  left,  float  right,  float  bottom,  float  top,  float  nearVal,  float  farVal);

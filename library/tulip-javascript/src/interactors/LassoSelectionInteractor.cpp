@@ -236,16 +236,15 @@ void LassoSelectionInteractor::selectGraphElementsUnderPolygon() {
 
 void LassoSelectionInteractor::draw() {
   if (_polygon.empty()) return;
-  Camera camera2d(false);
-  tlp::Vec4i viewport = _glScene->getViewport();
-  camera2d.setViewport(viewport);
-  camera2d.initGl();
+  Camera *camera = _glScene->getMainLayer()->getCamera();
+  camera->initGl2D();
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   Color polygonColor = Color::Green;
   Color polygonOutlineColor = polygonColor;
   polygonColor[3] = 100;
   GlConcavePolygon glPolygon(_polygon, polygonColor, polygonOutlineColor);
-  glPolygon.draw(camera2d);
+  glPolygon.draw(*camera);
   glDisable(GL_BLEND);
+  camera->initGl();
 }

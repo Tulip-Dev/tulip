@@ -105,15 +105,13 @@ void NeighborhoodInteractor::draw() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     Camera *camera = _glScene->getMainLayer()->getCamera();
-    Camera camera2d(false);
-    tlp::Vec4i viewport = camera->getViewport();
-    camera2d.setViewport(viewport);
-    camera2d.initGl();
+    Vec4i viewport = camera->getViewport();
+    camera->initGl2D();
     tlp::Vec2f bl(viewport[0], viewport[1]);
     tlp::Vec2f tr(viewport[2], viewport[3]);
     GlRect2D rect(bl, tr, tlp::Color(255,255,255,200));
-    rect.draw(camera2d);
-    _glScene->getMainLayer()->getCamera()->initGl();
+    rect.draw(*camera);
+    camera->initGl();
     _glNeighborhoodGraph->setRenderingParameters(_glGraph->getRenderingParameters());
     _glNeighborhoodGraph->draw(*camera, *(_glScene->getMainLayer()->getLight()));
   }

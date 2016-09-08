@@ -157,10 +157,7 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   }
 
   Camera *camera = glw->getScene()->getMainLayer()->getCamera();
-  Camera camera2d(false);
-  tlp::Vec4i viewport = camera->getViewport();
-  camera2d.setViewport(viewport);
-  camera2d.initGl();
+  camera->initGl2D();
   tlp::Vec2f bl(glw->screenToViewport(std::min(_firstX, _curX)),
                 glw->screenToViewport(std::min(glw->height() - _firstY, glw->height() - _curY)));
   tlp::Vec2f tr(glw->screenToViewport(std::max(_firstX, _curX)),
@@ -168,8 +165,9 @@ bool MouseBoxZoomer::draw(GlMainWidget *glw) {
   GlRect2D rect(bl, tr, tlp::Color(0,0,255,100), tlp::Color::Black);
   glEnable(GL_BLEND);
   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-  rect.draw(camera2d);
+  rect.draw(*camera);
   glDisable(GL_BLEND);
+  camera->initGl();
 
   return true;
 }

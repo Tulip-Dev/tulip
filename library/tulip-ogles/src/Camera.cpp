@@ -173,8 +173,26 @@ BoundingBox Camera::getBoundingBox() {
 }
 //====================================================
 void Camera::initGl() {
-  initProjection();
-  initModelView();
+  initProjection(_3d);
+  initModelView(_3d);
+  computeTransformMatrices();
+}
+//====================================================
+void Camera::initGl2D() {
+  if (_3d) {
+    _mdvMatCoherent = false;
+    _projectionMatCoherent = false;
+  }
+  initProjection(false);
+  initModelView(false);
+  computeTransformMatrices();
+  if (_3d) {
+    _mdvMatCoherent = false;
+    _projectionMatCoherent = false;
+  }
+}
+//====================================================
+void Camera::computeTransformMatrices() {
   _transformMatrix = _modelviewMatrix * _projectionMatrix;
   MatrixGL modelviewMatrixBillboard = _modelviewMatrix;
   modelviewMatrixBillboard[0] = Vec4f(1,0,0,0);
@@ -182,8 +200,9 @@ void Camera::initGl() {
   modelviewMatrixBillboard[2] = Vec4f(0,0,1,0);
   _transformMatrixBillboard = modelviewMatrixBillboard * _projectionMatrix;
 }
+
 //====================================================
-void Camera::initProjection(const Vec4i& viewport) {
+void Camera::initProjection(const Vec4i& viewport, bool threeD) {
 
   if (_projectionMatCoherent) return;
 
@@ -207,7 +226,7 @@ void Camera::initProjection(const Vec4i& viewport) {
     _far=_sceneRadius;
   }
 
-  if(_3d) {
+  if(threeD) {
     float ratio = double(viewport[2])/double(viewport[3]);
 
     if(_viewOrtho) {
@@ -240,17 +259,17 @@ void Camera::initProjection(const Vec4i& viewport) {
 
 }
 //====================================================
-void Camera::initProjection() {
-  initProjection(_viewport);
+void Camera::initProjection(bool threeD) {
+  initProjection(_viewport, threeD);
 }
 //====================================================
-void Camera::initModelView() {
+void Camera::initModelView(bool threeD) {
 
   if (_mdvMatCoherent) return;
 
   identityMatrix(_modelviewMatrix);
 
-  if(_3d) {
+  if(threeD) {
     lookAt(_eyes[0], _eyes[1], _eyes[2],
         _center[0], _center[1], _center[2],
         _up[0], _up[1], _up[2]);
