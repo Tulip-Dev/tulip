@@ -677,7 +677,6 @@ void GlGraph::uploadEdgesData() {
   }
   _edgeLineRenderingDataBuffer->allocate(edgesLinesRenderingData);
 
-
   _updateQuadTree = true;
   _edgesDataNeedUpload = false;
 
@@ -1367,6 +1366,12 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
 
   for (size_t i = 0 ; i < edges.size() ; ++i) {
     edge e = edges[i];
+    unsigned int nbCurvePoints = _edgePoints[e].size();
+
+    if (nbCurvePoints == 0) {
+      continue;
+    }
+
     node src = _graph->source(e);
     node tgt = _graph->target(e);
     const Coord &srcCoord = _inputData.getElementLayout()->getNodeValue(src);
@@ -1389,7 +1394,7 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
 
     int edgeShape = _inputData.getElementShape()->getEdgeValue(e);
 
-    unsigned int nbCurvePoints = _edgePoints[e].size();
+
     unsigned int indicesOffset = _maxEdgePoints;
     bool bezierMode = (_edgePoints[e].size() > 2) && (edgeShape == tlp::EdgeShape::BezierCurve);
     bool bsplineMode = (_edgePoints[e].size() > 2) && (edgeShape == tlp::EdgeShape::CubicBSplineCurve);
@@ -1832,8 +1837,13 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
 
   }
 
-  _edgePoints[e] = edgePoints;
-  _edgeAnchors[e] = make_pair(srcAnchor, tgtAnchor);
+  if (edgePoints.size() == 2 && srcAnchor.dist(tgtAnchor) < 1e-6) {
+    _edgePoints.erase(e);
+    _edgeAnchors.erase(e);
+  } else {
+    _edgePoints[e] = edgePoints;
+    _edgeAnchors[e] = make_pair(srcAnchor, tgtAnchor);
+  }
 
   _maxEdgePoints = std::max(_maxEdgePoints, edgePoints.size());
 
