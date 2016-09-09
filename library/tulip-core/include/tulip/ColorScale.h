@@ -176,6 +176,13 @@ public:
   }
 
   /**
+   * @brief specify whether the color scale must be considered as a gradient
+   */
+  void setGradient(const bool g) {
+    gradient = g;
+  }
+
+  /**
    * @brief Sets the transparency of all the colors in the underlying map.
    *
    */
