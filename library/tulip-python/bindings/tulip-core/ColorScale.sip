@@ -234,6 +234,18 @@ Returns :const:`True` if the color scale is a gradient.
   
 //==========================================================================================
 
+  void setGradient(const bool gradient);
+%Docstring
+tlp.ColorScale.setGradient(gradient)
+
+Specify whether the color scale must be considered as a gradient.
+
+:param gradient: the flag value
+:type gradient: boolean
+%End
+
+//==========================================================================================
+
   std::map<float, tlp::Color> getColorMap() const;
 %Docstring
 tlp.ColorScale.getColorMap()
