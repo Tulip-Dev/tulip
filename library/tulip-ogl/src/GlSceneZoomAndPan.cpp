@@ -57,7 +57,7 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
   u0 = 0;
   u1 = camCenterStart.dist(camCenterEnd);
 
-  if (u1 < 1e-5) u1 = 0;
+  if (u1 < 1e-3) u1 = 0;
 
   if (optimalPath) {
     if (u0 != u1) {
@@ -85,6 +85,7 @@ GlSceneZoomAndPan::GlSceneZoomAndPan(GlScene *glScene, const BoundingBox &boundi
   else {
     doZoomAndPan = false;
   }
+
 }
 
 void GlSceneZoomAndPan::setAdditionalGlSceneAnimation(AdditionalGlSceneAnimation *additionalAnimation) {
