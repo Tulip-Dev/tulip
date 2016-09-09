@@ -282,7 +282,10 @@ void GlMainView::openSnapshotDialog() {
 }
 
 void GlMainView::undoCallback() {
-  getGlMainWidget()->getScene()->centerScene();
+  float gvWidth = (float) graphicsView()->width();
+  // we apply a zoom factor to preserve a 50 px margin width
+  // to ensure the scene will not be drawn under the configuration tabs title
+  getGlMainWidget()->centerScene(true, (gvWidth - 50) / gvWidth);
   draw();
 }
 
