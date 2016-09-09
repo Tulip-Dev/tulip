@@ -222,6 +222,7 @@ void GlScene::draw() {
     }
 
   } else if (_backupBackBuffer && !GlFrameBufferObject::bufferBound()) {
+
     initGlParameters(true);
     drawBackBufferBackup();
   }

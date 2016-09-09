@@ -104,6 +104,14 @@ public:
     return _rotationAxisAndAngle;
   }
 
+  void setFilled(bool filled) {
+    _filled = filled;
+  }
+
+  void setOutlined(bool outlined) {
+    _outlined = outlined;
+  }
+
 
 private:
 
@@ -117,6 +125,8 @@ private:
   float _borderWidth;
   tlp::Color _borderColor;
   tlp::Vec4f _rotationAxisAndAngle;
+  bool _filled;
+  bool _outlined;
 
 
 };

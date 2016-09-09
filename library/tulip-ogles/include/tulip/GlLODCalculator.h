@@ -48,6 +48,7 @@ class SizeProperty;
 class Camera;
 class GlLayer;
 class GlGraphRenderingParameters;
+class GlGraphInputData;
 
 enum RenderingEntitiesFlag {
   RenderingGlEntities = 1,
@@ -104,7 +105,7 @@ public:
     _renderingEntitiesFlag=flag;
   }
 
-  virtual void setGraph(tlp::Graph *graph, GlGraphRenderingParameters *renderingParameters) = 0;
+  virtual void setGraph(tlp::Graph *graph, GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters) = 0;
 
   virtual void compute(Camera *camera, const tlp::Vec4i &selectionViewport = tlp::Vec4i(-1,-1,-1,-1)) = 0;
 

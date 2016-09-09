@@ -30,17 +30,15 @@
 #include <tulip/GlMainView.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlCircle.h>
-#include <tulip/OcclusionTest.h>
 #include <tulip/GlBoundingBoxSceneVisitor.h>
-#include <tulip/GlRect.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlGraphStaticData.h>
 #include <tulip/Rectangle.h>
 #include <tulip/QtGlSceneZoomAndPanAnimator.h>
-#include <tulip/GlNode.h>
-#include <tulip/GlEdge.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/GlLayer.h>
+#include <tulip/GlCPULODCalculator.h>
+#include <tulip/FontIconManager.h>
 
 #include "NeighborhoodHighlighterInteractor.h"
 #include "../../utils/ViewNames.h"
@@ -51,55 +49,6 @@ using namespace std;
 
 namespace tlp {
 
-class GraphCompositeDrawVisitor : public GlSceneVisitor {
-
-public :
-
-  GraphCompositeDrawVisitor(GlGraphInputData *inputData, Camera *camera) : inputData(inputData), camera(camera), drawLabelMode(false) {}
-
-  void visit(GlNode *glNode) {
-    if (!drawLabelMode) {
-      glNode->draw(30, inputData, camera);
-    }
-    else {
-      glPushAttrib(GL_ALL_ATTRIB_BITS);
-      glDisable(GL_LIGHTING);
-      glDepthFunc(GL_ALWAYS );
-      glDisable(GL_CULL_FACE);
-      glDisable(GL_COLOR_MATERIAL);
-      glNode->drawLabel(&occlusionTest, inputData);
-      glPopAttrib();
-    }
-  }
-
-  void visit(GlEdge *glEdge) {
-    if (!drawLabelMode) {
-      glEdge->draw(30, inputData, camera);
-    }
-    else {
-      glPushAttrib(GL_ALL_ATTRIB_BITS);
-      glDisable(GL_LIGHTING);
-      glDepthFunc(GL_ALWAYS );
-      glDisable(GL_CULL_FACE);
-      glDisable(GL_COLOR_MATERIAL);
-      glEdge->drawLabel(&occlusionTest, inputData);
-      glPopAttrib();
-    }
-  }
-
-  void setDrawLabelMode(const bool drawLabel) {
-    drawLabelMode = drawLabel;
-  }
-
-private :
-
-  GlGraphInputData *inputData;
-  Camera *camera;
-  OcclusionTest occlusionTest;
-  bool drawLabelMode;
-
-};
-
 class GraphLayoutMorphing : public AdditionalGlSceneAnimation {
 
 public :
@@ -107,11 +56,12 @@ public :
   GraphLayoutMorphing(Graph *graph, LayoutProperty *srcLayout, LayoutProperty *destLayout, LayoutProperty *viewLayout) :
     graph(graph), srcLayout(srcLayout), destLayout(destLayout), viewLayout(viewLayout) {}
 
-  void animationStep(int animationStep) {
+  void animationStep(double t) {
+    tlp::Observable::holdObservers();
     for(node n : graph->getNodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
       const Coord &endPos = destLayout->getNodeValue(n);
-      viewLayout->setNodeValue(n, startPos + (animationStep / (float) nbAnimationSteps) * (endPos - startPos));
+      viewLayout->setNodeValue(n, startPos + static_cast<float>(t) * (endPos - startPos));
     }
 
     for(edge e : graph->getEdges()) {
@@ -120,11 +70,12 @@ public :
       vector<Coord> newBends;
 
       for (size_t i = 0 ; i < destBends.size() ; ++i) {
-        newBends.push_back(srcBends[i] + (animationStep / (float) nbAnimationSteps) * (destBends[i] - srcBends[i]));
+        newBends.push_back(srcBends[i] + static_cast<float>(t) * (destBends[i] - srcBends[i]));
       }
 
       viewLayout->setEdgeValue(e, newBends);
     }
+    tlp::Observable::unholdObservers();
   }
 
 private :
@@ -154,28 +105,11 @@ private :
   LayoutProperty *layout;
 };
 
-class MouseEventDiscardFilter : public QObject {
-
-public :
-
-  bool eventFilter(QObject*, QEvent *event) {
-    if (event->type() == QEvent::MouseMove ||
-        event->type() == QEvent::MouseButtonDblClick ||
-        event->type() == QEvent::MouseButtonPress ||
-        event->type() == QEvent::MouseButtonRelease) {
-      return true;
-    }
-
-    return false;
-  }
-
-};
-
 const unsigned char maxCircleAlphaValue = 200;
 
 PLUGIN(NeighborhoodHighlighterInteractor)
 
-NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *) : GLInteractorComposite(QIcon(":/i_neighborhood_highlighter.png"), "Highlight node neighborhood"), configWidget(nullptr) {}
+NeighborhoodHighlighterInteractor::NeighborhoodHighlighterInteractor(const PluginContext *) : GLInteractorComposite(FontIconManager::instance()->getMaterialDesignIcon(md::googlecirclesextended, Qt::white), "Highlight node neighborhood"), configWidget(nullptr) {}
 
 NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
   delete configWidget;
@@ -184,8 +118,6 @@ NeighborhoodHighlighterInteractor::~NeighborhoodHighlighterInteractor() {
 bool NeighborhoodHighlighterInteractor::isCompatible(const std::string &viewName) const {
   return ((viewName==NodeLinkDiagramComponent::viewName)
           ||(viewName==ViewName::HistogramViewName)
-          //Interactor does not work
-          //||(viewName==ViewName::MatrixViewName)
           ||(viewName==ViewName::ScatterPlot2DViewName)
          );
 }
@@ -200,7 +132,7 @@ void NeighborhoodHighlighterInteractor::construct() {
 }
 
 NeighborhoodHighlighter::NeighborhoodHighlighter() :
-  originalGraph(nullptr), originalGlGraphComposite(nullptr),
+  originalGraph(nullptr), originalGlGraph(nullptr),
   neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), glNeighborhoodCamera(nullptr),
   neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
   neighborhoodGraphOriginalLayout(nullptr),neighborhoodGraphColors(nullptr),
@@ -223,6 +155,7 @@ NeighborhoodHighlighter::~NeighborhoodHighlighter() {
 
 void NeighborhoodHighlighter::viewChanged(View *view) {
   originalGraph = nullptr;
+  _animating = false;
 
   if (view == nullptr) {
     glWidget = nullptr;
@@ -234,9 +167,14 @@ void NeighborhoodHighlighter::viewChanged(View *view) {
 }
 
 bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
+
+  if (_animating) {
+    return true;
+  }
+
   if(originalGraph==nullptr) {
-    originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
-    originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
+    originalGraph = glWidget->getScene()->getMainGlGraph()->getGraph();
+    originalGlGraph = glWidget->getScene()->getMainGlGraph();
 
     if(!glWidget->hasMouseTracking()) {
       glWidget->setMouseTracking(true);
@@ -256,23 +194,21 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
     delete it;
   }
 
-  if(glWidget->getScene()->getGlGraphComposite()->getGraph() != originalGraph) {
+  if(glWidget->getScene()->getMainGlGraph()->getGraph() != originalGraph) {
     centralNodeLocked = false;
     circleLayoutSet = false;
     cleanupNeighborhoodGraph();
-    originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
-    originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
+    originalGraph = glWidget->getScene()->getMainGlGraph()->getGraph();
+    originalGlGraph = glWidget->getScene()->getMainGlGraph();
   }
 
-  SelectedEntity selectedEntity;
-
   if (e->type() == QEvent::Wheel && centralNodeLocked && !circleLayoutSet) {
-    QWheelEvent *we = (QWheelEvent *)e;
+    QWheelEvent *we = static_cast<QWheelEvent *>(e);
 
-    if (selectInAugmentedDisplayGraph(we->x(), we->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-      if (selectedEntity.getComplexEntityId() == neighborhoodGraphCentralNode.id) {
-        int numDegrees = we->delta() / 8;
-        int numSteps = numDegrees / 15;
+    node selectedNode = selectNodeInAugmentedDisplayGraph(we->x(), we->y());
+    if (selectedNode.isValid()) {
+      if (selectedNode == neighborhoodGraphCentralNode) {
+        int numSteps = we->delta() / 120;
         neighborhoodDist += numSteps;
 
         if (neighborhoodDist < 1) {
@@ -284,17 +220,17 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
         updateNeighborhoodGraphLayoutAndColors();
         delete glNeighborhoodGraph;
         updateGlNeighborhoodGraph();
-        glWidget->redraw();
+        glWidget->draw();
         return true;
       }
     }
 
   }
   else if (e->type() == QEvent::MouseMove) {
-    QMouseEvent *qMouseEv = (QMouseEvent *) e;
+    QMouseEvent *qMouseEv = static_cast<QMouseEvent *>(e);
 
     if (!centralNodeLocked) {
-      node tmpNode = selectNodeInOriginalGraph(glWidget, qMouseEv->x(), qMouseEv->y());
+      node tmpNode = selectNodeInOriginalGraph(qMouseEv->x(), qMouseEv->y());
 
       if (tmpNode != selectedNode) {
         buildNeighborhoodGraph(tmpNode, originalGraph);
@@ -302,27 +238,24 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
       }
     }
     else {
+      Observable::holdObservers();
       *neighborhoodGraphColors = *neighborhoodGraphBackupColors;
-
-      if (selectInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
-        if (selectedEntity.getComplexEntityId() != neighborhoodGraphCentralNode.id) {
-          neighborhoodGraphColors->setNodeValue(node(selectedEntity.getComplexEntityId()), Color(0,255,0));
+      selectedNeighborNode = selectNodeInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y());
+      if (selectedNeighborNode.isValid()) {
+        if (selectedNeighborNode != neighborhoodGraphCentralNode) {
+          neighborhoodGraphColors->setNodeValue(selectedNeighborNode, Color(0,255,0));
         }
         else {
-          neighborhoodGraphColors->setNodeValue(node(selectedEntity.getComplexEntityId()), Color(0,0,255));
+          neighborhoodGraphColors->setNodeValue(selectedNeighborNode, Color(0,0,255));
         }
       }
-
-      if(selectedEntity.getEntityType()==SelectedEntity::NODE_SELECTED)
-        selectedNeighborNode = node(selectedEntity.getComplexEntityId());
-      else
-        selectedNeighborNode = node();
+      Observable::unholdObservers();
     }
 
-    glWidget->redraw();
+    glWidget->draw();
     return true;
   }
-  else if (e->type() == QEvent::MouseButtonPress && ((QMouseEvent *) e)->buttons()==Qt::LeftButton) {
+  else if (e->type() == QEvent::MouseButtonPress && static_cast<QMouseEvent *>(e)->buttons()==Qt::LeftButton) {
     if (neighborhoodGraphCentralNode.isValid() && !centralNodeLocked) {
       centralNodeLocked = true;
     }
@@ -342,7 +275,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
       neighborhoodGraphCentralNode = node();
       neighborhoodDist = 1;
       configWidget->setCurrentMaxDistanceForReachableNodes(neighborhoodDist);
-      glWidget->redraw();
+      glWidget->draw();
     }
     else if (selectedNeighborNode.isValid()) {
       if (circleLayoutSet) {
@@ -369,7 +302,9 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
           buildNeighborhoodGraph(currentCentralNode, originalGraph);
           computeNeighborhoodGraphCircleLayout();
           computeNeighborhoodGraphBoundingBoxes();
+          Observable::holdObservers();
           *neighborhoodGraphLayout = *neighborhoodGraphCircleLayout;
+          Observable::unholdObservers();
           GraphLayoutMorphing *layoutMorphing = new GraphLayoutMorphing(neighborhoodGraph, neighborhoodGraphCircleLayout, neighborhoodGraphOriginalLayout, neighborhoodGraphLayout);
           performZoomAndPan(destBB, layoutMorphing);
           delete layoutMorphing;
@@ -395,7 +330,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
         neighborhoodDist = 1;
         configWidget->setCurrentMaxDistanceForReachableNodes(neighborhoodDist);
         buildNeighborhoodGraph(selectedNeighborNode, originalGraph);
-        glWidget->redraw();
+        glWidget->draw();
       }
     }
     else {
@@ -404,7 +339,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
       neighborhoodDist = 1;
       configWidget->setCurrentMaxDistanceForReachableNodes(neighborhoodDist);
       neighborhoodGraphCentralNode = node();
-      glWidget->redraw();
+      glWidget->draw();
     }
 
     return true;
@@ -412,41 +347,28 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
 
   return false;
 }
-node NeighborhoodHighlighter::selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y) {
-  node n;
+node NeighborhoodHighlighter::selectNodeInOriginalGraph(int x, int y) {
   glWidget->makeCurrent();
-  vector<SelectedEntity> selectedElements;
-  glWidget->getScene()->selectEntities((RenderingEntitiesFlag)(RenderingNodes | RenderingWithoutRemove), glWidget->screenToViewport(x-1), glWidget->screenToViewport(y-1), glWidget->screenToViewport(3), glWidget->screenToViewport(3), nullptr, selectedElements);
+  SelectedEntity entity;
+  glWidget->pickNodesEdges(x, glWidget->height() - y, entity, nullptr, true, false);
+  return entity.getNode();
+}
 
-  if(!selectedElements.empty()) {
-    n=node(selectedElements[0].getComplexEntityId());
-  }
-
+node NeighborhoodHighlighter::selectNodeInAugmentedDisplayGraph(int x, int y) {
+  node n;
+  edge e;
+  glNeighborhoodGraph->pickNodeOrEdge(*(glWidget->getScene()->getMainLayer()->getCamera()), x, glWidget->height() - y, n, e);
   return n;
 }
 
-bool NeighborhoodHighlighter::selectInAugmentedDisplayGraph(const int x, const int y, SelectedEntity &selectedEntity) {
-  GlLayer *l = glWidget->getScene()->getLayer("Main");
-  GlGraphComposite *graphComposite = (GlGraphComposite *) l->findGlEntity("graph");
-  l->deleteGlEntity("graph");
-  l->addGlEntity(glNeighborhoodGraph, "graph");
-  bool ret = glWidget->pickNodesEdges(x, y, selectedEntity);
-  l->deleteGlEntity("graph");
-  l->addGlEntity(graphComposite, "graph");
-  return ret;
-}
-
 void NeighborhoodHighlighter::performZoomAndPan(const BoundingBox &destBB, AdditionalGlSceneAnimation *additionalAnimation) {
-  MouseEventDiscardFilter medf;
-  glWidget->installEventFilter(&medf);
   QtGlSceneZoomAndPanAnimator sceneZoomAndPan(glWidget, destBB);
-
   if (additionalAnimation != nullptr) {
     sceneZoomAndPan.setAdditionalGlSceneAnimation(additionalAnimation);
   }
-
+  _animating = true;
   sceneZoomAndPan.animateZoomAndPan();
-  glWidget->removeEventFilter(&medf);
+  _animating = false;
 }
 
 void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
@@ -494,8 +416,8 @@ void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
 }
 
 void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
-  if(originalGlGraphComposite != nullptr) {
-    GlGraphInputData *originalInputData = originalGlGraphComposite->getInputData();
+  if(originalGlGraph != nullptr) {
+    GlGraphInputData *originalInputData = &(originalGlGraph->getInputData());
     LayoutProperty *origGraphLayout = originalInputData->getElementLayout();
     ColorProperty *origGraphColors = originalInputData->getElementColor();
 
@@ -515,19 +437,18 @@ void NeighborhoodHighlighter::updateNeighborhoodGraphLayoutAndColors() {
 }
 
 void NeighborhoodHighlighter::updateGlNeighborhoodGraph() {
-  GlGraphInputData *originalInputData = originalGlGraphComposite->getInputData();
-  glNeighborhoodGraph = new GlGraphComposite(neighborhoodGraph);
-  GlGraphInputData *glNeighborhoodGraphInputData = glNeighborhoodGraph->getInputData();
+  GlGraphInputData *originalInputData = &(originalGlGraph->getInputData());
+  glNeighborhoodGraph = new GlGraph(neighborhoodGraph, new GlCPULODCalculator());
+  GlGraphInputData *glNeighborhoodGraphInputData = &(glNeighborhoodGraph->getInputData());
   glNeighborhoodGraphInputData->setElementBorderColor(originalInputData->getElementBorderColor());
   glNeighborhoodGraphInputData->setElementBorderWidth(originalInputData->getElementBorderWidth());
   glNeighborhoodGraphInputData->setElementColor(neighborhoodGraphColors);
   glNeighborhoodGraphInputData->setElementLabel(originalInputData->getElementLabel());
   glNeighborhoodGraphInputData->setElementLabelColor(originalInputData->getElementLabelColor());
-  glNeighborhoodGraphInputData->setElementLabelBorderColor(originalInputData->getElementLabelBorderColor());
   glNeighborhoodGraphInputData->setElementLabelPosition(originalInputData->getElementLabelPosition());
   glNeighborhoodGraphInputData->setElementLayout(neighborhoodGraphLayout);
   glNeighborhoodGraphInputData->setElementRotation(originalInputData->getElementRotation());
-  glNeighborhoodGraphInputData->setElementSelected(originalInputData->getElementSelected());
+  glNeighborhoodGraphInputData->setElementSelection(originalInputData->getElementSelection());
   glNeighborhoodGraphInputData->setElementShape(originalInputData->getElementShape());
   glNeighborhoodGraphInputData->setElementSize(originalInputData->getElementSize());
   glNeighborhoodGraphInputData->setElementTexture(originalInputData->getElementTexture());
@@ -542,7 +463,7 @@ void NeighborhoodHighlighter::updateGlNeighborhoodGraph() {
 void NeighborhoodHighlighter::updateNeighborhoodGraph() {
   if (neighborhoodGraphCentralNode.isValid()) {
     buildNeighborhoodGraph(neighborhoodGraphCentralNode, originalGraph);
-    glWidget->redraw();
+    glWidget->draw();
   }
 }
 
@@ -563,7 +484,7 @@ bool boundingBoxesIntersect(const BoundingBox &bb1, const BoundingBox &bb2)  {
 
 void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
-  Size centralNodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(neighborhoodGraphCentralNode);
+  Size centralNodeSize = originalGlGraph->getInputData().getElementSize()->getNodeValue(neighborhoodGraphCentralNode);
   Coord centralNodeCoord = neighborhoodGraphLayout->getNodeValue(neighborhoodGraphCentralNode);
   neighborhoodGraphCircleLayout->setNodeValue(neighborhoodGraphCentralNode, centralNodeCoord);
 
@@ -583,7 +504,7 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
   for (size_t i = 0 ; i < neighborsNodes.size() ; ++i) {
 
-    Size neighborNodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(neighborsNodes[i]);
+    Size neighborNodeSize = originalGlGraph->getInputData().getElementSize()->getNodeValue(neighborsNodes[i]);
     Coord neighborNodeCoord = neighborhoodGraphLayout->getNodeValue(neighborsNodes[i]);
     float edgeLength = centralNodeCoord.dist(neighborNodeCoord);
 
@@ -642,16 +563,18 @@ void NeighborhoodHighlighter::morphCircleAlpha(unsigned char startA, unsigned en
   QTimeLine timeLine(500);
   timeLine.setFrameRange(0, nbAnimSteps);
   connect(&timeLine, SIGNAL(frameChanged(int)), this, SLOT(morphCircleAlphaAnimStep(int)));
+  _animating = true;
   timeLine.start();
 
   while (timeLine.state() != QTimeLine::NotRunning) {
     QApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
   }
+  _animating = false;
 }
 
 void NeighborhoodHighlighter::morphCircleAlphaAnimStep(int animStep) {
-  circleAlphaValue = (unsigned char) (startAlpha + animStep/(float)nbAnimSteps * (endAlpha - startAlpha));
-  glWidget->redraw();
+  circleAlphaValue = static_cast<unsigned char>(startAlpha + animStep/static_cast<float>(nbAnimSteps) * (endAlpha - startAlpha));
+  glWidget->draw();
 }
 
 float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp) {
@@ -659,7 +582,7 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *ne
   Coord centralNodeCoord = neighborhoodGraphLayoutProp->getNodeValue(neighborhoodGraphCentralNode);
   for(node n : neighborhoodGraph->getNodes()) {
     Coord nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
-    Size nodeSize = originalGlGraphComposite->getInputData()->getElementSize()->getNodeValue(n);
+    Size nodeSize = originalGlGraph->getInputData().getElementSize()->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();
 
     if (dist > radius) {
@@ -672,39 +595,26 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *ne
 bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
 
   if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != nullptr) {
-    if(!glNeighborhoodCamera)
-      glNeighborhoodCamera=new Camera(glMainWidget->getScene()->getLayer("Main")->getCamera());
 
-    *glNeighborhoodCamera=glMainWidget->getScene()->getLayer("Main")->getCamera();
-    glNeighborhoodCamera->initGl();
+    Camera *camera = glMainWidget->getScene()->getLayer("Main")->getCamera();
+    Light *light = glMainWidget->getScene()->getLayer("Main")->getLight();
 
-    glLineWidth(1.0);
-    glPointSize(1.0);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_NORMALIZE);
-    glDepthFunc(GL_LEQUAL );
-    glPolygonMode(GL_FRONT, GL_FILL);
-    glColorMask(1, 1, 1, 1);
-    glEnable(GL_LINE_SMOOTH);
+    camera->initGl();
+
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    glIndexMask(UINT_MAX);
-    glClearStencil(0xFFFF);
-    glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
     glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_LIGHTING);
 
-    GlCircle circle(circleCenter, computeNeighborhoodGraphRadius(neighborhoodGraphLayout), Color(0, 0 , 0, circleAlphaValue),
-                    Color (255, 255, 255, circleAlphaValue), true, true, 0.0, 60);
-    circle.draw(0,0);
+    GlCircle circle(circleCenter, computeNeighborhoodGraphRadius(neighborhoodGraphLayout),
+                    Color (255, 255, 255, circleAlphaValue),  Color(0, 0 , 0));
+    circle.draw(*camera);
 
-    GlGraphRenderingParameters renderingParameters = glWidget->getScene()->getGlGraphComposite()->getRenderingParameters();
+    GlGraphRenderingParameters renderingParameters = glWidget->getScene()->getMainGlGraph()->getRenderingParameters();
     renderingParameters.setNodesStencil(1);
-    renderingParameters.setNodesLabelStencil(1);
+    renderingParameters.setNodesLabelsStencil(1);
     renderingParameters.setDisplayEdges(configWidget->isdisplayEdgesCBChecked());
     glNeighborhoodGraph->setRenderingParameters(renderingParameters);
-    glNeighborhoodGraph->draw(10,glNeighborhoodCamera);
+    glNeighborhoodGraph->draw(*camera, *light);
 
   }
 

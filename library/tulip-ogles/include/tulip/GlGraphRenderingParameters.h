@@ -141,6 +141,8 @@ public:
   void setBypassLodSystem(bool bypassLodSystem);
   bool bypassLodSystem() const;
 
+  GlGraphRenderingParameters& operator=(const GlGraphRenderingParameters &params);
+
 private:
 
   GlGraph *_glGraph;

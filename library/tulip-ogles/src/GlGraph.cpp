@@ -260,10 +260,12 @@ static string curveVertexShaderSrc = R"(
     vec3 xu = normalize(cross(un, lookDir));
     vec3 xv = normalize(cross(vn, -lookDir));
     vec3 xu_xv = normalize(xu+xv);
+  #ifdef POLYLINE_VERTEX_SHADER
     if (!u_billboard) {
       vec3 perp = vec3(-un.y, un.x, un.z);
       size = size / dot(xu_xv, perp);
     }
+  #endif
     pos = currentCurvePoint + ori * xu_xv * size;
     return pos;
   }
@@ -493,9 +495,6 @@ GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator) :
 
 void GlGraph::setRenderingParameters(const GlGraphRenderingParameters &renderingParameters) {
   _renderingParameters = renderingParameters;
-  _renderingParameters.setGlGraph(this);
-  _renderingParameters.addListener(this);
-  _renderingParameters.addObserver(this);
 }
 
 GlGraph::~GlGraph() {
@@ -546,7 +545,9 @@ void GlGraph::initObservers() {
   _graph->addListener(this);
   _graph->addObserver(this);
 
-  for(PropertyInterface *prop : _inputData.getProperties()) {
+  _observedProperties = _inputData.getProperties();
+
+  for(PropertyInterface *prop : _observedProperties) {
     prop->addListener(this);
     prop->addObserver(this);
   }
@@ -556,7 +557,7 @@ void GlGraph::clearObservers() {
   _graph->removeListener(this);
   _graph->removeObserver(this);
 
-  for(auto prop : _inputData.getProperties()) {
+  for(PropertyInterface* prop : _observedProperties) {
     prop->removeListener(this);
     prop->removeObserver(this);
   }
@@ -594,7 +595,7 @@ void GlGraph::addEdgeData(const tlp::edge e) {
 
 void GlGraph::uploadEdgesData() {
 
-  if (!_edgesDataNeedUpload || _graph->numberOfEdges() == 0) {
+  if (!_edgeLineRenderingDataBuffer || !_edgesDataNeedUpload || _graph->numberOfEdges() == 0) {
     return;
   }
 
@@ -728,7 +729,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
 
   if (_updateQuadTree) {
     _lodCalculator->setSceneBoundingBox(_boundingBox);
-    _lodCalculator->setGraph(_graph, &_renderingParameters);
+    _lodCalculator->setGraph(_graph, &_inputData, &_renderingParameters);
     _lastGraphBoundingBox = _boundingBox;
     _updateQuadTree = false;
   }
@@ -1708,7 +1709,9 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
   vector<Coord> bends;
   for (size_t i = 0 ; i < oribends.size() ; ++i) {
     if (!srcBB.contains(oribends[i]) && !tgtBB.contains(oribends[i])) {
-      bends.push_back(oribends[i]);
+      if (bends.empty() || oribends[i] != bends.back()) {
+        bends.push_back(oribends[i]);
+      }
     }
   }
 
@@ -1856,7 +1859,17 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     _graph = nullptr;
     return;
   }
+  if (message.type() == Event::TLP_DELETE && dynamic_cast<tlp::PropertyInterface *>(message.sender())) {
+    _observedProperties.erase(static_cast<PropertyInterface*>(message.sender()));
+    return;
+  }
   if (message.type() != Event::TLP_MODIFICATION) return;
+
+  if (dynamic_cast<GlGraphInputData*>(message.sender())) {
+    clearObservers();
+    initObservers();
+    return;
+  }
 
   const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&message);
   const PropertyEvent *pEvt = dynamic_cast<const PropertyEvent *>(&message);
@@ -1936,9 +1949,8 @@ void GlGraph::treatEvents(const std::vector<tlp::Event> &) {
     for (itE = _edgesToUpdate.begin() ; itE != _edgesToUpdate.end() ; ++itE) {
       prepareEdgeData(*itE);
     }
-    if (!_edgesToUpdate.empty()) {
-      uploadEdgesData();
-    }
+
+    uploadEdgesData();
 
     _edgesToUpdate.clear();
 

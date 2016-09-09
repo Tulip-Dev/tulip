@@ -36,6 +36,7 @@
 #include <tulip/DoubleProperty.h>
 #include <tulip/SizeProperty.h>
 #include <tulip/IntegerProperty.h>
+#include <tulip/GlGraphInputData.h>
 
 #ifdef _OPENMP
 #include <omp.h>
@@ -50,14 +51,14 @@ GlCPULODCalculator::GlCPULODCalculator() : _graph(nullptr) {}
 
 GlCPULODCalculator::~GlCPULODCalculator() {}
 
-void GlCPULODCalculator::setGraph(tlp::Graph *graph, GlGraphRenderingParameters *renderingParameters) {
+void GlCPULODCalculator::setGraph(tlp::Graph *graph, class GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters) {
   clear();
   _graph = graph;
   _renderingParameters = renderingParameters;
-  _viewLayout = graph->getProperty<LayoutProperty>("viewLayout");
-  _viewSize = graph->getProperty<SizeProperty>("viewSize");
-  _viewRotation = graph->getProperty<DoubleProperty>("viewRotation");
-  _viewShape = graph->getProperty<IntegerProperty>("viewShape");
+  _viewLayout = inputData->getElementLayout();
+  _viewSize = inputData->getElementSize();
+  _viewRotation = inputData->getElementRotation();
+  _viewShape = inputData->getElementShape();
   _nodesLODVector.clear();
   _edgesLODVector.clear();
   _nodesLODVector.reserve(graph->numberOfNodes());

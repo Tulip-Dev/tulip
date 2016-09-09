@@ -57,9 +57,9 @@ GlQuadTreeLODCalculator::~GlQuadTreeLODCalculator() {
   delete _edgesQuadTree;
 }
 
-void GlQuadTreeLODCalculator::setGraph(tlp::Graph *graph, GlGraphRenderingParameters *renderingParameters) {
+void GlQuadTreeLODCalculator::setGraph(tlp::Graph *graph, GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters) {
   _haveToCompute = true;
-  GlCPULODCalculator::setGraph(graph, renderingParameters);
+  GlCPULODCalculator::setGraph(graph, inputData, renderingParameters);
 }
 
 void GlQuadTreeLODCalculator::initQuadTree() {

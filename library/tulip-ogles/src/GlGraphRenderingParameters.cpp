@@ -353,3 +353,39 @@ tlp::Color GlDefaultSelectionColorManager::getDefaultSelectionColor() {
   static Color selectionColor(23, 81, 228);
   return manager ? manager->defaultSelectionColor() : selectionColor;
 }
+
+GlGraphRenderingParameters& GlGraphRenderingParameters::operator=(const GlGraphRenderingParameters &params) {
+  Observable::holdObservers();
+  setDisplayEdgesExtremities(params.displayEdgesExtremities());
+  setDisplayNodesLabels(params.displayNodesLabels());
+  setDisplayEdgesLabels(params.displayEdgesLabels());
+  setInterpolateEdgesColors(params.interpolateEdgesColors());
+  setInterpolateEdgesSizes(params.interpolateEdgesSizes());
+  setDisplayMetaNodesLabels(params.displayMetaNodesLabels());
+  setDisplayEdges(params.displayEdges());
+  setDisplayNodes(params.displayNodes());
+  setDisplayMetaNodes(params.displayMetaNodes());
+  setNodesStencil(params.nodesStencil());
+  setMetaNodesStencil(params.metaNodesStencil());
+  setEdgesStencil(params.edgesStencil());
+  setNodesLabelsStencil(params.nodesLabelsStencil());
+  setMetaNodesLabelsStencil(params.metaNodesLabelsStencil());
+  setEdgesLabelsStencil(params.edgesLabelsStencil());
+  setElementsOrdered(params.elementsOrdered());
+  setElementOrderedDescending(params.elementsOrderedDescending());
+  setElementsOrderingProperty(params.elementsOrderingProperty());
+  setElementsZOrdered(params.elementsZOrdered());
+  setEdges3D(params.edges3D());
+  setMaxEdgesSizesToNodesSizes(params.maxEdgesSizesToNodesSizes());
+  setSelectionColor(params.selectionColor());
+  setLabelsFixedFontSize(params.labelsFixedFontSize());
+  setLabelsScaled(params.labelsScaled());
+  setLabelsDensity(params.labelsDensity());
+  setMinSizeOfLabels(params.minSizeOfLabels());
+  setMaxSizeOfLabels(params.maxSizeOfLabels());
+  setBillboardedNodes(params.billboardedNodes());
+  setDisplayFilteringProperty(params.displayFilteringProperty());
+  setBypassLodSystem(params.bypassLodSystem());
+  Observable::unholdObservers();
+  return *this;
+}

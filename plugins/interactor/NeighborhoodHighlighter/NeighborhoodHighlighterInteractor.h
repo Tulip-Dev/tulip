@@ -27,7 +27,7 @@
 #include <QObject>
 
 #include <tulip/GLInteractor.h>
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
 #include <tulip/GlLayer.h>
 #include <tulip/GlScene.h>
 
@@ -101,7 +101,7 @@ public slots :
 
 private :
 
-  node selectNodeInOriginalGraph(GlMainWidget *glWidget, int x, int y);
+  node selectNodeInOriginalGraph(int x, int y);
 
   void buildNeighborhoodGraph(node n, Graph *g);
 
@@ -111,7 +111,7 @@ private :
 
   void cleanupNeighborhoodGraph();
 
-  bool selectInAugmentedDisplayGraph(const int x, const int y, SelectedEntity &);
+  node selectNodeInAugmentedDisplayGraph(int x, int y);
 
   void updateNeighborhoodGraphLayoutAndColors();
 
@@ -124,10 +124,10 @@ private :
   void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
 
   Graph *originalGraph;
-  GlGraphComposite *originalGlGraphComposite;
+  GlGraph *originalGlGraph;
   node selectedNode;
   NodeNeighborhoodView *neighborhoodGraph;
-  GlGraphComposite *glNeighborhoodGraph;
+  GlGraph *glNeighborhoodGraph;
   Camera *glNeighborhoodCamera;
   Coord circleCenter;
 
@@ -151,6 +151,8 @@ private :
   unsigned char circleAlphaValue;
   unsigned char startAlpha, endAlpha;
   int nbAnimSteps;
+
+  bool _animating;
 
 };
 

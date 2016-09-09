@@ -67,7 +67,7 @@ ZoomAndPanAnimation::ZoomAndPanAnimation(Camera *camera, const BoundingBox &boun
   _u0 = 0;
   _u1 = _camCenterStart.dist(_camCenterEnd);
 
-  if (_u1 < 1e-5) _u1 = 0;
+  if (_u1 < 1e-3) _u1 = 0;
 
   if (optimalPath) {
     if (_u0 != _u1) {
@@ -96,7 +96,9 @@ ZoomAndPanAnimation::ZoomAndPanAnimation(Camera *camera, const BoundingBox &boun
     _doZoomAndPan = false;
   }
 
-  _animationDuration *= _S/velocity;
+  if (_doZoomAndPan) {
+    _animationDuration *= _S/velocity;
+  }
 }
 
 void ZoomAndPanAnimation::zoomAndPanAnimationStep(double t) {
@@ -160,9 +162,10 @@ void ZoomAndPanAnimation::zoomAndPanAnimationStep(double t) {
 
     _camera->setZoomFactor(_camera->getZoomFactor() * newZoomFactor);
 
-    if (_additionalAnimation != nullptr) {
-      _additionalAnimation->animationStep(t);
-    }
+  }
+
+  if (_additionalAnimation != nullptr) {
+    _additionalAnimation->animationStep(t);
   }
 }
 

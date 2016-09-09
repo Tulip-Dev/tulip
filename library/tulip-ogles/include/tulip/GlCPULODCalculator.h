@@ -46,6 +46,7 @@ class IntegerProperty;
 class LayoutProperty;
 class SizeProperty;
 class GlGraphRenderingParameters;
+class GlGraphInputData;
 
 class TLP_GLES_SCOPE GlCPULODCalculator : public GlLODCalculator {
 
@@ -54,7 +55,7 @@ public:
   GlCPULODCalculator();
   ~GlCPULODCalculator();
 
-  void setGraph(tlp::Graph *graph, GlGraphRenderingParameters *renderingParameters);
+  void setGraph(tlp::Graph *graph, GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters);
 
   void compute(Camera *camera, const tlp::Vec4i &selectionViewport = tlp::Vec4i(-1,-1,-1,-1));
 

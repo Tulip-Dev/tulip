@@ -51,7 +51,7 @@ public:
   GlQuadTreeLODCalculator();
   ~GlQuadTreeLODCalculator();
 
-  void setGraph(tlp::Graph *graph, GlGraphRenderingParameters *renderingParameters);
+  void setGraph(tlp::Graph *graph, GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters);
 
   void computeFor3DCamera(const tlp::Coord &eye,
                           const tlp::MatrixGL &transformMatrix,

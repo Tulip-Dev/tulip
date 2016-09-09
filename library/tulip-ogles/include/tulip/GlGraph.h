@@ -187,6 +187,8 @@ private :
   bool _updateQuadTree = true;
   bool _edgesDataNeedUpload = true;
 
+  std::set<PropertyInterface*> _observedProperties;
+
 };
 
 }
