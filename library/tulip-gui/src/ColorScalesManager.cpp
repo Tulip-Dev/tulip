@@ -35,10 +35,12 @@ list<string> ColorScalesManager::getColorScalesList() {
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("ColorScales");
   QStringList savedColorScalesIdList = settings.childKeys();
+
   for (int i = 0 ; i < savedColorScalesIdList.size() ; ++i) {
     if (!savedColorScalesIdList.at(i).contains("_gradient?"))
       ret.push_back(QStringToTlpString(savedColorScalesIdList.at(i)));
   }
+
   settings.endGroup();
 
   settings.beginGroup("ColorScalesNoRegular");
@@ -84,11 +86,13 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   QString colorscaleDirectory(tlpStringToQString(TulipBitmapDir)+QString("colorscales"));
 
   QFileInfo colorScaleFile(colorscaleDirectory + "/" + colorScaleName.c_str() + ".png");
+
   if (colorScaleFile.exists()) {
     return getColorScaleFromImageFile(colorScaleFile.absoluteFilePath());
   }
 
   colorScaleFile = QFileInfo(colorscaleDirectory + "/" + colorScaleName.c_str() + "_from_ColorBrewer.org.png");
+
   if (colorScaleFile.exists()) {
     return getColorScaleFromImageFile(colorScaleFile.absoluteFilePath());
   }
@@ -98,25 +102,31 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
 
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("ColorScales");
+
   if (settings.contains(colorScaleName.c_str())) {
     QList<QVariant> colorsListv = settings.value(colorScaleName.c_str()).toList();
     reverse(colorsListv.begin(), colorsListv.end());
+
     for (int i = 0 ; i < colorsListv.size() ; ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
       float stop = i / static_cast<float>(colorsListv.size()-1);
       colorsMap[stop] = QColorToColor(color);
     }
   }
+
   QString gradientScaleId = tlpStringToQString(colorScaleName) + "_gradient?";
   gradient = settings.value(gradientScaleId).toBool();
   settings.endGroup();
 
   settings.beginGroup("ColorScalesNoRegular");
+
   if (settings.contains(colorScaleName.c_str())) {
     QVariantMap colorsMapv = settings.value(colorScaleName.c_str()).toMap();
+
     for(QVariantMap::iterator it = colorsMapv.begin() ; it != colorsMapv.end() ; ++it) {
       colorsMap[(it.key()).toDouble()] = QColorToColor(it.value().value<QColor>());
     }
+
     gradient = settings.value(gradientScaleId).toBool();
   }
 
@@ -125,14 +135,17 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
 
 void ColorScalesManager::registerColorScale(const string &colorScaleName, const ColorScale &colorScale) {
   list<string> colorScalesList = ColorScalesManager::getColorScalesList();
+
   if (find(colorScalesList.begin(), colorScalesList.end(), colorScaleName) != colorScalesList.end()) {
     if (colorScale.hasRegularStops()) {
       QList<QVariant> colorsVector;
+
       for (unsigned int i = 0; i < const_cast<ColorScale&>(colorScale).getStopsCount() ; ++i) {
         float stop = i / static_cast<float>(const_cast<ColorScale&>(colorScale).getStopsCount()-1);
         Color color = colorScale.getColorAtPos(stop);
         colorsVector.push_back(QVariant(colorToQColor(color)));
       }
+
       reverse(colorsVector.begin(), colorsVector.end());
       QSettings settings("TulipSoftware","Tulip");
       settings.beginGroup("ColorScales");
@@ -140,12 +153,15 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName, const 
       QString gradientId = tlpStringToQString(colorScaleName) + "_gradient?";
       settings.setValue(gradientId, colorScale.isGradient());
       settings.endGroup();
-    } else {
+    }
+    else {
       QVariantMap colorsMap;
       map<float, Color> colorsMapTlp = colorScale.getColorMap();
+
       for (map<float, Color>::iterator it = colorsMapTlp.begin() ; it != colorsMapTlp.end() ; ++it) {
         colorsMap[QString::number(it->first)] = colorToQColor(it->second);
       }
+
       QSettings settings("TulipSoftware","Tulip");
       settings.beginGroup("ColorScalesNoRegular");
       settings.setValue(tlpStringToQString(colorScaleName), colorsMap);
@@ -160,16 +176,20 @@ void ColorScalesManager::removeColorScale(const string &colorScaleName) {
   QSettings settings("TulipSoftware","Tulip");
   settings.beginGroup("ColorScales");
   QString savedColorScaleId = tlpStringToQString(colorScaleName);
+
   if (settings.contains(savedColorScaleId)) {
     settings.remove(savedColorScaleId);
     settings.remove(savedColorScaleId+"_gradient?");
   }
+
   settings.endGroup();
   settings.beginGroup("ColorScalesNoRegular");
   savedColorScaleId = tlpStringToQString(colorScaleName);
+
   if (settings.contains(savedColorScaleId)) {
     settings.remove(savedColorScaleId);
     settings.remove(savedColorScaleId+"_gradient?");
   }
+
   settings.endGroup();
 }
