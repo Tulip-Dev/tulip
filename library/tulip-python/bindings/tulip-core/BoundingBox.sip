@@ -147,9 +147,9 @@ If the bounding box is invalid the result is always :const:`False`.
 :rtype: boolean
 %End
 
-  bool intersect(const tlp::BoundingBox &boundingBox) const;
+  bool intersects(const tlp::BoundingBox &boundingBox) const;
 %Docstring
-tlp.BoundingBox.intersect(boundingBox)
+tlp.BoundingBox.intersects(boundingBox)
 
 .. versionadded:: 3.7
 
@@ -161,9 +161,9 @@ If one of the bounding boxes is invalid returns :const:`False`.
 :rtype: boolean
 %End
 
-  bool intersect(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
+  bool intersects(const tlp::Vec3f &segStart, const tlp::Vec3f &segEnd) const;
 %Docstring
-tlp.BoundingBox.intersect(segStart, segEnd)
+tlp.BoundingBox.intersects(segStart, segEnd)
 
 .. versionadded:: 3.7
 

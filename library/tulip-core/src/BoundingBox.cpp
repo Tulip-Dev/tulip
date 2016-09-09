@@ -110,7 +110,7 @@ bool BoundingBox::contains(const tlp::BoundingBox& boundingBox) const {
   }
 }
 
-bool BoundingBox::intersect(const tlp::BoundingBox& boundingBox)const {
+bool BoundingBox::intersects(const tlp::BoundingBox& boundingBox)const {
   if(!isValid() || !boundingBox.isValid())
     return false;
 
@@ -129,7 +129,7 @@ bool BoundingBox::intersect(const tlp::BoundingBox& boundingBox)const {
   return true;
 }
 
-bool BoundingBox::intersect(const Vec3f& segStart, const Vec3f& segEnd)const {
+bool BoundingBox::intersects(const Vec3f& segStart, const Vec3f& segEnd)const {
   if(!isValid())
     return false;
 

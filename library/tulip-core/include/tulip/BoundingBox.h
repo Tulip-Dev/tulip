@@ -161,7 +161,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param boundingBox The bounding box to compare with.
   * @return bool Wether the bounding boxes intersect.
   **/
-  bool intersect(const tlp::BoundingBox& boundingBox) const;
+  bool intersects(const tlp::BoundingBox& boundingBox) const;
 
   /**
   * @brief Checks if the bounding box intersects a given line segment. If the bounding box is invalid the result is always false.
@@ -169,7 +169,7 @@ struct TLP_SCOPE BoundingBox : public Array<Vec3f, 2> {
   * @param segEnd the end point of the line segment on which to check intersection
   * @return bool Wether the line segment intersects the bounding box
   **/
-  bool intersect(const Vec3f& segStart, const Vec3f& segEnd) const;
+  bool intersects(const Vec3f& segStart, const Vec3f& segEnd) const;
 
 
   /**

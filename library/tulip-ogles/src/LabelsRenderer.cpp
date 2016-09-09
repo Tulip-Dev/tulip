@@ -438,7 +438,7 @@ void LabelsRenderer::renderGraphElementsLabels(const GlGraphInputData &inputData
       textScrBBModified[1] = textScrBB.center() + Coord(newWidth/2, newHeight/2);
 
       for (size_t i = 0 ; i < renderedLabelsScrBB.size() ; ++i) {
-        if (textScrBBModified.intersect(renderedLabelsScrBB[i])) {
+        if (textScrBBModified.intersects(renderedLabelsScrBB[i])) {
           canRender = false;
           break;
         }

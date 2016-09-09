@@ -477,11 +477,6 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphBoundingBoxes() {
   neighborhoodGraphCircleLayoutBB[1] = centralNodeCoord + Coord(circleLayoutRadius, circleLayoutRadius);
 }
 
-bool boundingBoxesIntersect(const BoundingBox &bb1, const BoundingBox &bb2)  {
-  return Rectangle<float>(bb1).intersect(Rectangle<float>(bb2));
-}
-
-
 void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
   Size centralNodeSize = originalGlGraph->getInputData().getElementSize()->getNodeValue(neighborhoodGraphCentralNode);
@@ -520,7 +515,7 @@ void NeighborhoodHighlighter::computeNeighborhoodGraphCircleLayout() {
 
       if (i > 0) {
         for (unsigned int k = 0 ; k < i ; ++k) {
-          nodePosOk = nodePosOk && !boundingBoxesIntersect(neighborhoodNodesNewLayoutBB[i],neighborhoodNodesNewLayoutBB[k]) && !boundingBoxesIntersect(neighborhoodNodesNewLayoutBB[i], centralNodeBB);
+          nodePosOk = nodePosOk && !neighborhoodNodesNewLayoutBB[i].intersects(neighborhoodNodesNewLayoutBB[k]) && !neighborhoodNodesNewLayoutBB[i].intersects(centralNodeBB);
         }
       }
 
