@@ -130,7 +130,6 @@ private :
   node selectedNode;
   NodeNeighborhoodView *neighborhoodGraph;
   GlGraphComposite *glNeighborhoodGraph;
-  Camera *glNeighborhoodCamera;
   Coord circleCenter;
 
   node neighborhoodGraphCentralNode;

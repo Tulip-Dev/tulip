@@ -203,7 +203,7 @@ void NeighborhoodHighlighterInteractor::construct() {
 
 NeighborhoodHighlighter::NeighborhoodHighlighter() :
   originalGraph(NULL), originalGlGraphComposite(NULL),
-  neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), glNeighborhoodCamera(NULL),
+  neighborhoodGraph(NULL), glNeighborhoodGraph(NULL),
   neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
   neighborhoodGraphOriginalLayout(NULL),neighborhoodGraphColors(NULL),
   neighborhoodGraphBackupColors(NULL), centralNodeLocked(false),
@@ -212,7 +212,8 @@ NeighborhoodHighlighter::NeighborhoodHighlighter() :
   startAlpha(0), endAlpha(255), nbAnimSteps(0) {
 }
 
-NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) : neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), glNeighborhoodCamera(NULL), neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
+NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) :
+  neighborhoodGraph(NULL), glNeighborhoodGraph(NULL), neighborhoodGraphLayout(NULL), neighborhoodGraphCircleLayout(NULL),
   neighborhoodGraphOriginalLayout(NULL), neighborhoodGraphColors(NULL), neighborhoodGraphBackupColors(NULL),
   centralNodeLocked(false), circleLayoutSet(false), neighborhoodDist(1), circleAlphaValue(maxCircleAlphaValue) {
   configWidget = neighborhoodHighlighter.configWidget;
@@ -461,8 +462,6 @@ void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   neighborhoodGraphColors = NULL;
   delete neighborhoodGraphBackupColors;
   neighborhoodGraphBackupColors = NULL;
-  delete glNeighborhoodCamera;
-  glNeighborhoodCamera = NULL;
 }
 
 void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
@@ -687,11 +686,9 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
   checkIfGraphHasChanged();
 
   if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != NULL) {
-    if(!glNeighborhoodCamera)
-      glNeighborhoodCamera=new Camera(glMainWidget->getScene()->getLayer("Main")->getCamera());
 
-    *glNeighborhoodCamera=glMainWidget->getScene()->getLayer("Main")->getCamera();
-    glNeighborhoodCamera->initGl();
+    Camera *camera = &(glMainWidget->getScene()->getLayer("Main")->getCamera());
+    camera->initGl();
 
     glLineWidth(1.0);
     glPointSize(1.0);
@@ -719,7 +716,7 @@ bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
     renderingParameters.setNodesLabelStencil(1);
     renderingParameters.setDisplayEdges(configWidget->isdisplayEdgesCBChecked());
     glNeighborhoodGraph->setRenderingParameters(renderingParameters);
-    glNeighborhoodGraph->draw(10,glNeighborhoodCamera);
+    glNeighborhoodGraph->draw(10, camera);
 
   }
 
