@@ -47,7 +47,10 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
 public:
   explicit GraphPropertiesModel(tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph* graph, bool checkable=false, QObject *parent = NULL);
-  virtual ~GraphPropertiesModel() {}
+  virtual ~GraphPropertiesModel() {
+    if (_graph != NULL)
+      _graph->removeListener(this);
+  }
 
   tlp::Graph* graph() const {
     return _graph;
@@ -87,10 +90,13 @@ public:
   // Methods inherited from the observable system
   void treatEvent(const tlp::Event& evt) {
     if (evt.type() == Event::TLP_DELETE) {
-      beginResetModel();
+      // calls to *ResetModel() functions below
+      // are not needed because they may cause a Free Memory Read.
+      // However the current model will be soon deleted
+      // beginResetModel();
       _graph = NULL;
       _properties.clear();
-      endResetModel();
+      // endResetModel();
       return;
     }
 
