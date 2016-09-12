@@ -236,6 +236,9 @@ void NeighborhoodHighlighter::viewChanged(View *view) {
 }
 
 bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
+
+  checkIfGraphHasChanged();
+
   if(originalGraph==NULL) {
     originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
     originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
@@ -256,14 +259,6 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
     }
 
     delete it;
-  }
-
-  if(glWidget->getScene()->getGlGraphComposite()->getGraph() != originalGraph) {
-    centralNodeLocked = false;
-    circleLayoutSet = false;
-    cleanupNeighborhoodGraph();
-    originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
-    originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
   }
 
   SelectedEntity selectedEntity;
@@ -676,7 +671,20 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *ne
   return radius;
 }
 
+void NeighborhoodHighlighter::checkIfGraphHasChanged() {
+  if(glWidget->getScene()->getGlGraphComposite()->getGraph() != originalGraph) {
+    neighborhoodGraphCentralNode = node();
+    centralNodeLocked = false;
+    circleLayoutSet = false;
+    cleanupNeighborhoodGraph();
+    originalGraph = glWidget->getScene()->getGlGraphComposite()->getGraph();
+    originalGlGraphComposite = glWidget->getScene()->getGlGraphComposite();
+  }
+}
+
 bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
+
+  checkIfGraphHasChanged();
 
   if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != NULL) {
     if(!glNeighborhoodCamera)

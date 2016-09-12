@@ -123,6 +123,8 @@ private :
 
   void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
 
+  void checkIfGraphHasChanged();
+
   Graph *originalGraph;
   GlGraphComposite *originalGlGraphComposite;
   node selectedNode;
