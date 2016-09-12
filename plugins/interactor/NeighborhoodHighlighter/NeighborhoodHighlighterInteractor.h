@@ -123,12 +123,13 @@ private :
 
   void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
 
+  void checkIfGraphHasChanged();
+
   Graph *originalGraph;
   GlGraph *originalGlGraph;
   node selectedNode;
   NodeNeighborhoodView *neighborhoodGraph;
   GlGraph *glNeighborhoodGraph;
-  Camera *glNeighborhoodCamera;
   Coord circleCenter;
 
   node neighborhoodGraphCentralNode;

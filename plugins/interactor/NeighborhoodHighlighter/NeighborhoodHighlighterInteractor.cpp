@@ -133,7 +133,7 @@ void NeighborhoodHighlighterInteractor::construct() {
 
 NeighborhoodHighlighter::NeighborhoodHighlighter() :
   originalGraph(nullptr), originalGlGraph(nullptr),
-  neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), glNeighborhoodCamera(nullptr),
+  neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr),
   neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
   neighborhoodGraphOriginalLayout(nullptr),neighborhoodGraphColors(nullptr),
   neighborhoodGraphBackupColors(nullptr), centralNodeLocked(false),
@@ -142,7 +142,8 @@ NeighborhoodHighlighter::NeighborhoodHighlighter() :
   startAlpha(0), endAlpha(255), nbAnimSteps(0) {
 }
 
-NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) : neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), glNeighborhoodCamera(nullptr), neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
+NeighborhoodHighlighter::NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter) :
+  neighborhoodGraph(nullptr), glNeighborhoodGraph(nullptr), neighborhoodGraphLayout(nullptr), neighborhoodGraphCircleLayout(nullptr),
   neighborhoodGraphOriginalLayout(nullptr), neighborhoodGraphColors(nullptr), neighborhoodGraphBackupColors(nullptr),
   centralNodeLocked(false), circleLayoutSet(false), neighborhoodDist(1), circleAlphaValue(maxCircleAlphaValue) {
   configWidget = neighborhoodHighlighter.configWidget;
@@ -172,6 +173,8 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
     return true;
   }
 
+  checkIfGraphHasChanged();
+
   if(originalGraph==nullptr) {
     originalGraph = glWidget->getScene()->getMainGlGraph()->getGraph();
     originalGlGraph = glWidget->getScene()->getMainGlGraph();
@@ -192,14 +195,6 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
     }
 
     delete it;
-  }
-
-  if(glWidget->getScene()->getMainGlGraph()->getGraph() != originalGraph) {
-    centralNodeLocked = false;
-    circleLayoutSet = false;
-    cleanupNeighborhoodGraph();
-    originalGraph = glWidget->getScene()->getMainGlGraph()->getGraph();
-    originalGlGraph = glWidget->getScene()->getMainGlGraph();
   }
 
   if (e->type() == QEvent::Wheel && centralNodeLocked && !circleLayoutSet) {
@@ -238,6 +233,7 @@ bool NeighborhoodHighlighter::eventFilter(QObject*, QEvent *e) {
       }
     }
     else {
+
       Observable::holdObservers();
       *neighborhoodGraphColors = *neighborhoodGraphBackupColors;
       selectedNeighborNode = selectNodeInAugmentedDisplayGraph(qMouseEv->x(), qMouseEv->y());
@@ -386,8 +382,6 @@ void NeighborhoodHighlighter::cleanupNeighborhoodGraph() {
   neighborhoodGraphColors = nullptr;
   delete neighborhoodGraphBackupColors;
   neighborhoodGraphBackupColors = nullptr;
-  delete glNeighborhoodCamera;
-  glNeighborhoodCamera = nullptr;
 }
 
 void NeighborhoodHighlighter::buildNeighborhoodGraph(node n, Graph *g) {
@@ -587,7 +581,20 @@ float NeighborhoodHighlighter::computeNeighborhoodGraphRadius(LayoutProperty *ne
   return radius;
 }
 
+void NeighborhoodHighlighter::checkIfGraphHasChanged() {
+  if(glWidget->getScene()->getMainGlGraph()->getGraph() != originalGraph) {
+    neighborhoodGraphCentralNode = node();
+    centralNodeLocked = false;
+    circleLayoutSet = false;
+    cleanupNeighborhoodGraph();
+    originalGraph = glWidget->getScene()->getMainGlGraph()->getGraph();
+    originalGlGraph = glWidget->getScene()->getMainGlGraph();
+  }
+}
+
 bool NeighborhoodHighlighter::draw(GlMainWidget *glMainWidget) {
+
+  checkIfGraphHasChanged();
 
   if (neighborhoodGraphCentralNode.isValid() && glNeighborhoodGraph != nullptr) {
 

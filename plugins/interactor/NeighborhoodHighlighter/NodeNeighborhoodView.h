@@ -53,10 +53,6 @@ public :
   Iterator<edge>* getInOutEdges(const node n) const;
   Iterator<edge>* getInEdges(const node n) const;
 
-  Graph *getRoot() const {
-    return const_cast<NodeNeighborhoodView*>(this);
-  }
-
 private :
 
   void getNeighbors(node n, unsigned int dist, bool noRecursion = false);
