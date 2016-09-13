@@ -109,7 +109,7 @@ void ColorScaleConfigDialog::accept() {
   bool gradient = true;
 
   if (_ui->tabWidget->currentIndex() == 1) {
-    if (_ui->savedColorScalesList->count() > 0) {
+    if (_ui->savedColorScalesList->count() > 0 && _ui->savedColorScalesList->currentItem()) {
       QString savedColorScaleId = _ui->savedColorScalesList->currentItem()->text();
 
       if (tulipImageColorScales.find(savedColorScaleId) != tulipImageColorScales.end()) {
