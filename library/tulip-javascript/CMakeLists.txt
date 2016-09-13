@@ -230,7 +230,6 @@ ENDIF(USE_WASM)
 
 INSTALL(DIRECTORY
   demos/data
-  demos/images
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 

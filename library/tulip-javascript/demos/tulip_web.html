@@ -14,6 +14,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/themes/default/style.min.css" />
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/deitch/jstree-grid/master/jstreegrid.js"></script>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css">
 
     <style type="text/css">
      .ui-icon-interactor-navigation,
@@ -30,27 +31,6 @@
         -webkit-border-radius:0px;
         border-radius:0px;
      }
-    .ui-icon-interactor-navigation {
-      background-image: url("images/i_navigation.png");
-    }
-    .ui-icon-interactor-zoom {
-      background-image: url("images/i_zoom.png");
-    }
-    .ui-icon-interactor-selection {
-      background-image: url("images/i_selection.png");
-    }
-    .ui-icon-interactor-selection-modifier {
-      background-image: url("images/i_move.png");
-    }
-    .ui-icon-interactor-lasso-selection {
-      background-image: url("images/i_lasso.png");
-    }
-    .ui-icon-interactor-neighborhood {
-      background-image: url("images/i_neighborhood_highlighter.png");
-    }
-    .ui-icon-interactor-fisheye {
-      background-image: url("images/i_fisheye.png");
-    }
     .ui-focus,
     .ui-btn:focus {
       -moz-box-shadow: none;
@@ -78,13 +58,13 @@
       <a href="#computepanel" class="ui-btn-left">Menu</a>
       <div data-role="controlgroup" data-type="horizontal" style="display: inline-block;">
 
-      <a id="navigation-button" href=# class="ui-icon-nodisc ui-btn-active interactor-button" data-role="button" data-icon="interactor-navigation" data-iconpos="notext">Navigate in graph</a>
-      <a id="zoom-button" href=# class="ui-icon-nodisc interactor-button" data-role="button" data-icon="interactor-zoom" data-iconpos="notext">Zoom on rectangle</a>
-      <a id="selection-button" href=# class="ui-icon-nodisc interactor-button" data-role="button" data-icon="interactor-selection" data-iconpos="notext">Select nodes/edges in a rectangle</a>
-      <a id="lasso-selection-button" href=# class="ui-icon-nodisc interactor-button" data-role="button" data-icon="interactor-lasso-selection" data-iconpos="notext">Select nodes in a freehand drawn region</a>
-      <a id="neighborhood-highlighter-button" href=# class="ui-icon-nodisc interactor-button" data-role="button" data-icon="interactor-neighborhood" data-iconpos="notext">Highlight node neighborhood</a>
-      <a id="fisheye-button" href=# class="ui-icon-nodisc interactor-button" data-role="button" data-icon="interactor-fisheye" data-iconpos="notext">Fisheye lens</a>
-      <a id="selection-modifier-button" href=# class="ui-icon-nodisc interactor-button" data-role="button" data-icon="interactor-selection-modifier" data-iconpos="notext">Move rectangle selection</a>
+      <a id="navigation-button" href=# class="ui-icon-nodisc ui-btn-active interactor-button" data-role="button"><i class="mdi mdi-18px mdi-cursor-pointer"></i></a>
+      <a id="zoom-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-magnify-plus"></i></a>
+      <a id="selection-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-selection"></i></a>
+      <a id="lasso-selection-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-vector-polygon"></i></a>
+      <a id="neighborhood-highlighter-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-google-circles-extended"></i></a>
+      <a id="fisheye-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-web"></i></a>
+      <a id="selection-modifier-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-cursor-move"></i></a>
 
       </div>
 
@@ -249,18 +229,26 @@
   }
 
   $('#navigation-button').button().bind('click', activateInteractor('ZoomAndPan'));
+  $('#navigation-button').attr('title', 'Navigate in graph');
 
   $('#zoom-button').button().bind('click', activateInteractor('RectangleZoom'));
+  $('#zoom-button').attr('title', 'Zoom on rectangle');
 
   $('#selection-button').button().bind('click', activateInteractor('Selection'));
+  $('#selection-button').attr('title', 'Select nodes/edges in a rectangle');
 
   $('#selection-modifier-button').button().bind('click', activateInteractor('SelectionModifier'));
+  $('#selection-modifier-button').attr('title', 'Move rectangle selection');
 
   $('#lasso-selection-button').button().bind('click', activateInteractor('LassoSelection'));
+  $('#lasso-selection-button').attr('title', 'Select nodes in a freehand drawn region');
 
   $('#neighborhood-highlighter-button').button().bind('click', activateInteractor('Neighborhood'));
+  $('#neighborhood-highlighter-button').attr('title', 'Highlight node neighborhood');
 
   $('#fisheye-button').button().bind('click', activateInteractor('Fisheye'));
+  $('#fisheye-button').attr('title', 'Fisheye lens');
+
 
   var start = null;
   var graph = null;
