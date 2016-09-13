@@ -102,7 +102,7 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   TulipSettings::instance().beginGroup("ColorScales");
 
   if (TulipSettings::instance().contains(colorScaleName.c_str())) {
-    QList<QVariant> colorsListv = 
+    QList<QVariant> colorsListv =
       TulipSettings::instance().value(colorScaleName.c_str()).toList();
     reverse(colorsListv.begin(), colorsListv.end());
 
@@ -120,7 +120,7 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   TulipSettings::instance().beginGroup("ColorScalesNoRegular");
 
   if (TulipSettings::instance().contains(colorScaleName.c_str())) {
-    QVariantMap colorsMapv = 
+    QVariantMap colorsMapv =
       TulipSettings::instance().value(colorScaleName.c_str()).toMap();
 
     for(QVariantMap::iterator it = colorsMapv.begin() ; it != colorsMapv.end() ; ++it) {
