@@ -234,7 +234,7 @@ MATRIX MATRIX::cofactor() const {
 //=====================================================================================
 template<typename Obj,unsigned int SIZE>
 MATRIX & MATRIX::transpose() {
-  register Obj tmp;
+  Obj tmp;
 
   for (unsigned int i=1; i<SIZE; ++i) {
     for (unsigned int j=0; j<i; ++j) {
