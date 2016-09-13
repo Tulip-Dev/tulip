@@ -21,7 +21,6 @@
 #include <QHeaderView>
 #include <QLinearGradient>
 #include <QPainter>
-#include <QSettings>
 #include <QMessageBox>
 #include <QInputDialog>
 
@@ -31,6 +30,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TulipSettings.h>
 
 #include "ui_ColorScaleConfigDialog.h"
 
@@ -116,12 +116,11 @@ void ColorScaleConfigDialog::accept() {
         colors = tulipImageColorScales[savedColorScaleId];
       }
       else {
-        QSettings settings("TulipSoftware","Tulip");
-        settings.beginGroup("ColorScales");
-        QList<QVariant> colorsVector = settings.value(savedColorScaleId).toList();
+	TulipSettings::instance().beginGroup("ColorScales");
+        QList<QVariant> colorsVector = TulipSettings::instance().value(savedColorScaleId).toList();
         QString gradientScaleId = savedColorScaleId + "_gradient?";
-        gradient = settings.value(gradientScaleId).toBool();
-        settings.endGroup();
+        gradient = TulipSettings::instance().value(gradientScaleId).toBool();
+        TulipSettings::instance().endGroup();
 
         for (int i = 0 ; i < colorsVector.size() ; ++i) {
           colors.push_back(Color(colorsVector.at(i).value<QColor>().red(), colorsVector.at(i).value<QColor>().green(),
@@ -240,12 +239,11 @@ void ColorScaleConfigDialog::displaySavedGradientPreview() {
       }
     }
     else {
-      QSettings settings("TulipSoftware","Tulip");
-      settings.beginGroup("ColorScales");
-      QList<QVariant> colorsListv = settings.value(savedColorScaleId).toList();
+      TulipSettings::instance().beginGroup("ColorScales");
+      QList<QVariant> colorsListv = TulipSettings::instance().value(savedColorScaleId).toList();
       QString gradientScaleId = savedColorScaleId + "_gradient?";
-      gradient = settings.value(gradientScaleId).toBool();
-      settings.endGroup();
+      gradient = TulipSettings::instance().value(gradientScaleId).toBool();
+      TulipSettings::instance().endGroup();
 
       for (int i = 0 ; i < colorsListv.size() ; ++i) {
         colorsList.push_back(colorsListv.at(i).value<QColor>());
@@ -357,9 +355,8 @@ void ColorScaleConfigDialog::colorTableItemDoubleClicked(QTableWidgetItem *item)
 }
 
 void ColorScaleConfigDialog::saveCurrentColorScale() {
-  QSettings settings("TulipSoftware","Tulip");
-  settings.beginGroup("ColorScales");
-  QStringList savedColorScalesList = settings.childKeys();
+  TulipSettings::instance().beginGroup("ColorScales");
+  QStringList savedColorScalesList = TulipSettings::instance().childKeys();
   bool ok;
   QString text = QInputDialog::getText(this, tr("Color scale saving"),
                                        tr("Enter a name for this color scale : "), QLineEdit::Normal,
@@ -380,12 +377,12 @@ void ColorScaleConfigDialog::saveCurrentColorScale() {
       colorsVector.push_back(QVariant(_ui->colorsTable->item(i, 0)->backgroundColor()));
     }
 
-    settings.setValue(text, colorsVector);
+    TulipSettings::instance().setValue(text, colorsVector);
     QString gradientId = text + "_gradient?";
-    settings.setValue(gradientId, _ui->gradientCB->isChecked());
+    TulipSettings::instance().setValue(gradientId, _ui->gradientCB->isChecked());
   }
 
-  settings.endGroup();
+  TulipSettings::instance().endGroup();
   loadUserSavedColorScales();
 }
 
@@ -397,11 +394,10 @@ void ColorScaleConfigDialog::deleteSavedColorScale() {
       return;
     }
 
-    QSettings settings("TulipSoftware","Tulip");
-    settings.beginGroup("ColorScales");
-    settings.remove(savedColorScaleId);
-    settings.remove(savedColorScaleId+"_gradient?");
-    settings.endGroup();
+    TulipSettings::instance().beginGroup("ColorScales");
+    TulipSettings::instance().remove(savedColorScaleId);
+    TulipSettings::instance().remove(savedColorScaleId+"_gradient?");
+    TulipSettings::instance().endGroup();
     loadUserSavedColorScales();
   }
 }
@@ -415,16 +411,15 @@ void ColorScaleConfigDialog::loadUserSavedColorScales() {
     _ui->savedColorScalesList->addItem(it->first);
   }
 
-  QSettings settings("TulipSoftware","Tulip");
-  settings.beginGroup("ColorScales");
-  QStringList savedColorScalesIdList = settings.childKeys();
+  TulipSettings::instance().beginGroup("ColorScales");
+  QStringList savedColorScalesIdList = TulipSettings::instance().childKeys();
 
   for (int i = 0 ; i < savedColorScalesIdList.size() ; ++i) {
     if (!savedColorScalesIdList.at(i).contains("_gradient?"))
       _ui->savedColorScalesList->addItem(savedColorScalesIdList.at(i));
   }
 
-  settings.endGroup();
+  TulipSettings::instance().endGroup();
 
 }
 
@@ -449,12 +444,11 @@ void ColorScaleConfigDialog::reeditSaveColorScale(QListWidgetItem *savedColorSca
     colorsList = tulipImageColorScales[savedColorScaleId];
   }
   else {
-    QSettings settings("TulipSoftware","Tulip");
-    settings.beginGroup("ColorScales");
-    QList<QVariant> colorsListv = settings.value(savedColorScaleId).toList();
+    TulipSettings::instance().beginGroup("ColorScales");
+    QList<QVariant> colorsListv = TulipSettings::instance().value(savedColorScaleId).toList();
     QString gradientScaleId = savedColorScaleId + "_gradient?";
-    gradient = settings.value(gradientScaleId).toBool();
-    settings.endGroup();
+    gradient = TulipSettings::instance().value(gradientScaleId).toBool();
+    TulipSettings::instance().endGroup();
 
     for (int i = 0 ; i < colorsListv.size() ; ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
