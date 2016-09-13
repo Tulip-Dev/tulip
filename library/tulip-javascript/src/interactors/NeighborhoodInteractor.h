@@ -29,11 +29,13 @@
 #define NEIGHBORHOODINTERACTOR_H
 
 #include <tulip/Graph.h>
+#include <tulip/Coord.h>
 
 #include "GlSceneInteractor.h"
 
 namespace tlp {
 class GlGraph;
+class AdditionalGlSceneAnimation;
 }
 
 
@@ -41,30 +43,52 @@ class ZoomAndPanInteractor;
 
 class NeighborhoodInteractor : public GlSceneInteractor {
 
+  friend void animate(void *value);
+
 public:
 
   NeighborhoodInteractor(tlp::GlScene *scene = NULL);
 
   void setScene(tlp::GlScene *glScene);
 
-  virtual bool mouseCallback(const MouseButton & button, const MouseButtonState &state, int x, int y, const int & modifiers);
+  bool mouseCallback(const MouseButton & button, const MouseButtonState &state, int x, int y, const int & modifiers);
 
-  virtual bool mouseMoveCallback(int x, int y, const int & modifiers);
+  bool mouseMoveCallback(int x, int y, const int & modifiers);
 
-  virtual void draw();
+  void draw();
+
+  void desactivate();
+
 
 private:
 
-  void buildNeighborhoodSubgraph();
-  void destroyNeighborhoodSubgraph();
+  void buildNeighborhoodGraph(tlp::node centralNode);
+  void destroyNeighborhoodGraph();
+  tlp::node selectNodeInAugmentedDisplayGraph(int x, int y);
+  void computeNeighborhoodGraphCircleLayout();
+  float computeNeighborhoodGraphRadius(tlp::LayoutProperty *neighborhoodGraphLayoutProp);
+  void computeNeighborhoodGraphBoundingBoxes();
+  void performZoomAndPan(const tlp::BoundingBox &destBB, tlp::AdditionalGlSceneAnimation *additionalAnimation=nullptr);
 
   ZoomAndPanInteractor *_znpInteractor;
 
   tlp::GlGraph *_glGraph;
   tlp::node _centralNode;
+  tlp::node _selectedNeighborNode;
 
-  tlp::Graph *_neighborhoodSg;
+  tlp::Graph *_neighborhoodGraph;
   tlp::GlGraph *_glNeighborhoodGraph;
+  tlp::ColorProperty *_neighborhoodGraphColors;
+  tlp::ColorProperty *_neighborhoodGraphBackupColors;
+  tlp::LayoutProperty *_neighborhoodGraphLayout;
+  tlp::LayoutProperty *_neighborhoodGraphCircleLayout;
+  tlp::LayoutProperty *_neighborhoodGraphOriginalLayout;
+
+  tlp::Coord _circleCenter;
+  tlp::BoundingBox _neighborhoodGraphCircleLayoutBB;
+  tlp::BoundingBox _neighborhoodGraphOriginalLayoutBB;
+  bool _circleLayoutSet = false;
+  bool _bringAndGoAnimation = false;
 };
 
 #endif // NEIGHBORHOODINTERACTOR_H

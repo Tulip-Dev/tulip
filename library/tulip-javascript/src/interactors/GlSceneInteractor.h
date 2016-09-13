@@ -77,6 +77,10 @@ public:
     _glScene = glScene;
   }
 
+  tlp::GlScene *getScene() const {
+    return _glScene;
+  }
+
 protected:
 
   tlp::GlScene *_glScene;
