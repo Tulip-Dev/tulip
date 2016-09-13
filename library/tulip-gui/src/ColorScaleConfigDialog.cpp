@@ -116,7 +116,7 @@ void ColorScaleConfigDialog::accept() {
         colors = tulipImageColorScales[savedColorScaleId];
       }
       else {
-	TulipSettings::instance().beginGroup("ColorScales");
+        TulipSettings::instance().beginGroup("ColorScales");
         QList<QVariant> colorsVector = TulipSettings::instance().value(savedColorScaleId).toList();
         QString gradientScaleId = savedColorScaleId + "_gradient?";
         gradient = TulipSettings::instance().value(gradientScaleId).toBool();
