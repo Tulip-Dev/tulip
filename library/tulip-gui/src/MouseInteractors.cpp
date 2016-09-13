@@ -144,11 +144,11 @@ void MouseElementDeleter::delElement(Graph *graph,
                                      SelectedEntity &selectedEntity) {
   switch (selectedEntity.getEntityType()) {
   case SelectedEntity::NODE_SELECTED:
-    graph->delNode(node(selectedEntity.getComplexEntityId()));
+    graph->delNode(selectedEntity.getNode());
     break;
 
   case SelectedEntity::EDGE_SELECTED:
-    graph->delEdge(edge(selectedEntity.getComplexEntityId()));
+    graph->delEdge(selectedEntity.getEdge());
     break;
 
   default:
