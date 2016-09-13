@@ -2,6 +2,8 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInc
 INCLUDE_DIRECTORIES(${UTF8CppInclude} ${ClipperInclude} ${STBInclude})
 INCLUDE_DIRECTORIES(${Tess2Include} ${FTGLInclude} ${NanoVGInclude})
 
+IF(EMSCRIPTEN)
+
 SET(USE_DFE OFF CACHE BOOL "Use duplicate functions elimination to reduce emitted js file size (time consuming)")
 SET(USE_WASM OFF CACHE BOOL "Use WebAssembly (experimental) instead of asm.js")
 SET(LIGHTWEIGHT_TULIPJS OFF CACHE BOOL "Compile a lightweight version of tulip.js : contains only the graph visualization features, no algorithms bundled")
@@ -233,3 +235,36 @@ INSTALL(DIRECTORY
 )
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.js.mem;tulip.data;tulip.asm.js;tulip.wast;tulip.wasm;tulip.wast.mappedGlobals;tulip.wasm.mappedGlobals")
+
+#################################################################################
+
+ELSE(EMSCRIPTEN)
+
+SET(BUILD_GLUT_RENDERER OFF CACHE BOOL "Build simple GLUT application for rendering graphs (usefull to easily debug tulip.js)")
+
+IF(BUILD_GLUT_RENDERER)
+
+FIND_PACKAGE(GLUT REQUIRED)
+
+INCLUDE_DIRECTORIES(${FREETYPE_INCLUDE_DIRS} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${OPENGL_INCLUDE_DIR} ${GLUT_INCLUDES})
+ADD_EXECUTABLE(graph_renderer src/glut_main.cpp
+                              src/TimeMeasurer.cpp
+                              src/interactors/FisheyeInteractor.cpp
+                              src/interactors/LassoSelectionInteractor.cpp
+                              src/interactors/NeighborhoodInteractor.cpp
+                              src/interactors/RectangleZoomInteractor.cpp
+                              src/interactors/SelectionInteractor.cpp
+                              src/interactors/SelectionModifierInteractor.cpp
+                              src/interactors/ZoomAndPanInteractor.cpp)
+
+TARGET_LINK_LIBRARIES(graph_renderer ${LibTulipCoreName} ${LibTulipOGLESName})
+TARGET_LINK_LIBRARIES(graph_renderer ${QT_LIBRARIES} ${GLUT_LIBRARY})
+
+INSTALL(TARGETS graph_renderer
+  RUNTIME DESTINATION ${TulipBinInstallDir}
+  LIBRARY DESTINATION ${TulipLibInstallDir}
+  ARCHIVE DESTINATION ${TulipLibInstallDir})
+
+ENDIF(BUILD_GLUT_RENDERER)
+
+ENDIF(EMSCRIPTEN)

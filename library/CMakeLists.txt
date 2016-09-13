@@ -1,8 +1,6 @@
 ADD_CORE_FILES(CMakeLists.txt)
 
-IF(EMSCRIPTEN)
 ADD_SUBDIRECTORY(tulip-javascript)
-ENDIF(EMSCRIPTEN)
 
 ADD_SUBDIRECTORY(tulip-core)
 ADD_SUBDIRECTORY(tulip-ogdf)
