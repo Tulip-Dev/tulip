@@ -784,6 +784,42 @@ public:
   static const char * StopCircleO;
   static const char * Usb;
 
+  // static constants for the new icons added in Font Awesome 4.6
+  static const char* AmericanSignLanguageInterpreting;
+  static const char* AslInterpreting;
+  static const char* AssistiveListeningSystems;
+  static const char* AudioDescription;
+  static const char* Blind;
+  static const char* Braille;
+  static const char* Deaf;
+  static const char* Deafness;
+  static const char* Envira;
+  static const char* Fa;
+  static const char* FirstOrder;
+  static const char* FontAwesome;
+  static const char* Gitlab;
+  static const char* Glide;
+  static const char* GlideG;
+  static const char* GooglePlusCircle;
+  static const char* GooglePlusOfficial;
+  static const char* HardOfHearing;
+  static const char* LowVision;
+  static const char* QuestionCircleO;
+  static const char* SignLanguage;
+  static const char* Signing;
+  static const char* Snapchat;
+  static const char* SnapchatGhost;
+  static const char* SnapchatSquare;
+  static const char* Themeisle;
+  static const char* UniversalAccess;
+  static const char* Viadeo;
+  static const char* ViadeoSquare;
+  static const char* VolumeControlPhone;
+  static const char* WheelchairAlt;
+  static const char* Wpbeginner;
+  static const char* Wpforms;
+  static const char* Yoast;
+
 };
 
 /// A list of all icon-names with the codepoint (unicode-value) on the right
@@ -1467,7 +1503,42 @@ public:
     yen                  = 0xf157,
     youtube              = 0xf167,
     youtubeplay          = 0xf16a,
-    youtubesquare        = 0xf166
+    youtubesquare        = 0xf166,
+
+    gitlab = 0xf2a3,
+    wpbeginner = 0xf2a3,
+    wpforms = 0xf2a2,
+    envira = 0xf29e,
+    universalaccess = 0xf29d,
+    wheelchairalt = 0xf2a1,
+    questioncircleo = 0xf2a4,
+    blind = 0xf2a4,
+    audiodescription = 0xf299,
+    volumecontrolphone = 0xf2b4,
+    braille = 0xf2b0,
+    assistivelisteningsystems = 0xf2b4,
+    aslinterpreting = 0xf296,
+    americansignlanguageinterpreting = 0xf2a5,
+    deafness = 0xf2a6,
+    hardofhearing = 0xf2b3,
+    deaf = 0xf2b3,
+    glide = 0xf2a4,
+    glideg = 0xf2a8,
+    signing = 0xf2ae,
+    signlanguage = 0xf29c,
+    lowvision = 0xf2a7,
+    viadeo = 0xf2a7,
+    viadeosquare = 0xf2ab,
+    snapchat = 0xf2ac,
+    snapchatghost = 0xf2ad,
+    snapchatsquare = 0xf2b2,
+    firstorder = 0xf2a9,
+    yoast = 0xf2aa,
+    themeisle = 0xf2a0,
+    googlepluscircle = 0xf29b,
+    googleplusofficial = 0xf297,
+    fa_ = 0xf298,
+    fontawesome = 0xf2b1
   };
 };
 
