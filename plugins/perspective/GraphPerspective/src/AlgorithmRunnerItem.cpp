@@ -528,9 +528,11 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
         prop->perfectAspectRatio();
     }
 
-    Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
+    if (TulipSettings::instance().isAutomaticCentering())
+      Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
-  else if (pluginLister->pluginExists<Algorithm>(stdName) &&
+  else if (TulipSettings::instance().isAutomaticCentering() &&
+	   pluginLister->pluginExists<Algorithm>(stdName) &&
            !pluginLister->pluginExists<PropertyAlgorithm>(stdName) &&
            !pluginLister->pluginExists<GraphTest>(stdName)) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);

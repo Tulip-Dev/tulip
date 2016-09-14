@@ -57,6 +57,7 @@ static const QString TS_ProxyPasswordEntry = "app/proxy/passwd";
 
 static const QString TS_AutomaticDisplayDefaultViews = "graph/auto/defaultViews";
 static const QString TS_AutomaticPerfectAspectRatioEntry = "graph/auto/ratio";
+static const QString TS_AutomaticCenteringEntry = "graph/auto/center";
 static const QString TS_ViewOrthoEntry = "graph/auto/ortho";
 static const QString TS_AutomaticMapMetricEntry = "graph/auto/colors";
 
@@ -352,6 +353,14 @@ bool TulipSettings::isAutomaticRatio() const {
 
 void TulipSettings::setAutomaticRatio(bool f) {
   setValue(TS_AutomaticPerfectAspectRatioEntry,f);
+}
+
+bool TulipSettings::isAutomaticCentering() const {
+  return value(TS_AutomaticCenteringEntry,true).toBool();
+}
+
+void TulipSettings::setAutomaticCentering(bool f) {
+  setValue(TS_AutomaticCenteringEntry,f);
 }
 
 bool TulipSettings::isViewOrtho() const {

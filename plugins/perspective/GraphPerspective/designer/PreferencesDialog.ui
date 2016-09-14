@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>707</height>
+    <height>732</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -92,16 +92,7 @@ background-color: #F4F4F4;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="leftMargin">
-    <number>10</number>
-   </property>
-   <property name="topMargin">
-    <number>10</number>
-   </property>
-   <property name="rightMargin">
-    <number>10</number>
-   </property>
-   <property name="bottomMargin">
+   <property name="margin">
     <number>10</number>
    </property>
    <item>
@@ -620,6 +611,16 @@ font: 10pt;
          <widget class="QCheckBox" name="aspectRatioCheck">
           <property name="text">
            <string>Adjust aspect ratio when changing layout</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="centerViewCheck">
+          <property name="text">
+           <string>Center views when changing layout or applying general algorithms</string>
+          </property>
+          <property name="checked">
+           <bool>false</bool>
           </property>
          </widget>
         </item>
