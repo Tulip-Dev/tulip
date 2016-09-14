@@ -60,7 +60,7 @@ class TLP_SCOPE TulipFontAwesome {
 public:
 
   /**
-   * Returns the location of the Font Awesome ttf file bundled with Tulip
+   * Returns the location of the Font Awesome TrueType font file bundled with Tulip
    */
   static std::string getFontAwesomeTrueTypeFileLocation();
 
@@ -783,6 +783,42 @@ public:
   static const char * StopCircle;
   static const char * StopCircleO;
   static const char * Usb;
+
+  // static constants for the new icons added in Font Awesome 4.6
+  static const char* AmericanSignLanguageInterpreting;
+  static const char* AslInterpreting;
+  static const char* AssistiveListeningSystems;
+  static const char* AudioDescription;
+  static const char* Blind;
+  static const char* Braille;
+  static const char* Deaf;
+  static const char* Deafness;
+  static const char* Envira;
+  static const char* Fa;
+  static const char* FirstOrder;
+  static const char* FontAwesome;
+  static const char* Gitlab;
+  static const char* Glide;
+  static const char* GlideG;
+  static const char* GooglePlusCircle;
+  static const char* GooglePlusOfficial;
+  static const char* HardOfHearing;
+  static const char* LowVision;
+  static const char* QuestionCircleO;
+  static const char* SignLanguage;
+  static const char* Signing;
+  static const char* Snapchat;
+  static const char* SnapchatGhost;
+  static const char* SnapchatSquare;
+  static const char* Themeisle;
+  static const char* UniversalAccess;
+  static const char* Viadeo;
+  static const char* ViadeoSquare;
+  static const char* VolumeControlPhone;
+  static const char* WheelchairAlt;
+  static const char* Wpbeginner;
+  static const char* Wpforms;
+  static const char* Yoast;
 
 
 
