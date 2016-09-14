@@ -24,6 +24,8 @@
 
 #include <vector>
 
+#undef linux
+
 namespace tlp {
 
 /**
@@ -40,7 +42,7 @@ namespace tlp {
  * To set a node glyph as a Material Design icon, the Material Design Icon glyph must be associated
  * to the node through the modification of the "viewShape" integer property attached to the graph.
  * The name of the icon to use must then be set in the "viewMaterialDesignIcon" string property.
- * As an example, the following code snippet activates the Font Awesome glyph for all nodes
+ * As an example, the following code snippet activates the Material Design glyph for all nodes
  * and sets the "user" icon.
  *
  * @code
@@ -48,7 +50,7 @@ namespace tlp {
  *    tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
  *    tlp::StringProperty *viewMaterialDesignIcon = graph->getProperty<tlp::StringProperty>("viewMaterialDesignIcon");
  *
- *    // sets the Font Awesome glyph on all nodes
+ *    // sets the Material Design glyph on all nodes
  *    viewShape->setAllNodeValue(tlp::NodeShape::MaterialDesignIcon);
  *    // sets the "user" glyph for all nodes
  *    viewMaterialDesignIconsIcon->setAllNodeValue(tlp::TulipMaterialDesignIcons::User);
@@ -60,17 +62,17 @@ class TLP_SCOPE TulipMaterialDesignIcons {
 public:
 
   /**
-   * Returns the location of the Font Awesome ttf file bundled with Tulip
+   * Returns the location of the Material Design Icons TrueType font file bundled with Tulip
    */
   static std::string getMaterialDesignIconsTrueTypeFileLocation();
 
   /**
-   * Returns the list of supported Font Awesome icons names
+   * Returns the list of supported Material Design icons names
    */
   static const std::vector<std::string> &getSupportedMaterialDesignIcons();
 
   /**
-   * Checks if the provided Font Awesome icon name is supported
+   * Checks if the provided Material Design icon name is supported
    * @param iconName the name of the icon to check support
    */
   static bool isMaterialDesignIconSupported(const std::string& iconName);
@@ -82,8 +84,8 @@ public:
   static unsigned int getMaterialDesignIconCodePoint(const std::string& iconName);
 
   /**
-   * Returns an UTF-8 encoded string of a Font Awesome icon
-   * @param iconName a Font Awesome icon name
+   * Returns an UTF-8 encoded string of a Material Design icon
+   * @param iconName a Material Design icon name
    * @return
    */
   static std::string getMaterialDesignIconUtf8String(const std::string& iconName);
@@ -129,6 +131,7 @@ public:
   static const char* AlarmMultiple;
   static const char* AlarmOff;
   static const char* AlarmPlus;
+  static const char* AlarmSnooze;
   static const char* Album;
   static const char* Alert;
   static const char* AlertBox;
@@ -147,6 +150,7 @@ public:
   static const char* Android;
   static const char* AndroidDebugBridge;
   static const char* AndroidStudio;
+  static const char* Angular;
   static const char* Animation;
   static const char* Apple;
   static const char* AppleFinder;
@@ -212,9 +216,11 @@ public:
   static const char* Autorenew;
   static const char* AvTimer;
   static const char* Baby;
+  static const char* BabyBuggy;
   static const char* Backburger;
   static const char* Backspace;
   static const char* BackupRestore;
+  static const char* Bandcamp;
   static const char* Bank;
   static const char* Barcode;
   static const char* BarcodeScan;
@@ -250,6 +256,7 @@ public:
   static const char* BatteryPositive;
   static const char* BatteryUnknown;
   static const char* Beach;
+  static const char* Beaker;
   static const char* Beats;
   static const char* Beer;
   static const char* Behance;
@@ -284,6 +291,7 @@ public:
   static const char* BlurLinear;
   static const char* BlurOff;
   static const char* BlurRadial;
+  static const char* Bomb;
   static const char* Bone;
   static const char* Book;
   static const char* BookMinus;
@@ -314,6 +322,7 @@ public:
   static const char* BorderStyle;
   static const char* BorderTop;
   static const char* BorderVertical;
+  static const char* BowTie;
   static const char* Bowl;
   static const char* Bowling;
   static const char* Box;
@@ -353,6 +362,8 @@ public:
   static const char* CalendarMultiple;
   static const char* CalendarMultipleCheck;
   static const char* CalendarPlus;
+  static const char* CalendarQuestion;
+  static const char* CalendarRange;
   static const char* CalendarRemove;
   static const char* CalendarText;
   static const char* CalendarToday;
@@ -366,6 +377,7 @@ public:
   static const char* CamcorderBoxOff;
   static const char* CamcorderOff;
   static const char* Camera;
+  static const char* CameraBurst;
   static const char* CameraEnhance;
   static const char* CameraFront;
   static const char* CameraFrontVariant;
@@ -501,10 +513,12 @@ public:
   static const char* CodeParentheses;
   static const char* CodeString;
   static const char* CodeTags;
+  static const char* CodeTagsCheck;
   static const char* Codepen;
   static const char* Coffee;
   static const char* CoffeeToGo;
   static const char* Coin;
+  static const char* Coins;
   static const char* Collage;
   static const char* ColorHelper;
   static const char* Comment;
@@ -542,14 +556,17 @@ public:
   static const char* Copyright;
   static const char* Counter;
   static const char* Cow;
+  static const char* Creation;
   static const char* CreditCard;
   static const char* CreditCardMultiple;
   static const char* CreditCardOff;
+  static const char* CreditCardPlus;
   static const char* CreditCardScan;
   static const char* Crop;
   static const char* CropFree;
   static const char* CropLandscape;
   static const char* CropPortrait;
+  static const char* CropRotate;
   static const char* CropSquare;
   static const char* Crosshairs;
   static const char* CrosshairsGps;
@@ -569,6 +586,7 @@ public:
   static const char* CurrencyRub;
   static const char* CurrencyTry;
   static const char* CurrencyUsd;
+  static const char* CurrencyUsdOff;
   static const char* CursorDefault;
   static const char* CursorDefaultOutline;
   static const char* CursorMove;
@@ -583,6 +601,7 @@ public:
   static const char* DecimalDecrease;
   static const char* DecimalIncrease;
   static const char* Delete;
+  static const char* DeleteCircle;
   static const char* DeleteForever;
   static const char* DeleteSweep;
   static const char* DeleteVariant;
@@ -591,6 +610,7 @@ public:
   static const char* DesktopMac;
   static const char* DesktopTower;
   static const char* Details;
+  static const char* DeveloperBoard;
   static const char* Deviantart;
   static const char* Dialpad;
   static const char* Diamond;
@@ -614,10 +634,15 @@ public:
   static const char* DisqusOutline;
   static const char* Division;
   static const char* DivisionBox;
+  static const char* Dna;
   static const char* Dns;
+  static const char* DoNotDisturb;
+  static const char* DoNotDisturbOff;
+  static const char* Dolby;
   static const char* Domain;
   static const char* DotsHorizontal;
   static const char* DotsVertical;
+  static const char* Douban;
   static const char* Download;
   static const char* Drag;
   static const char* DragHorizontal;
@@ -644,9 +669,12 @@ public:
   static const char* EmailOutline;
   static const char* EmailSecure;
   static const char* EmailVariant;
+  static const char* Emby;
   static const char* Emoticon;
   static const char* EmoticonCool;
+  static const char* EmoticonDead;
   static const char* EmoticonDevil;
+  static const char* EmoticonExcited;
   static const char* EmoticonHappy;
   static const char* EmoticonNeutral;
   static const char* EmoticonPoop;
@@ -733,6 +761,7 @@ public:
   static const char* Flash;
   static const char* FlashAuto;
   static const char* FlashOff;
+  static const char* FlashRedEye;
   static const char* Flashlight;
   static const char* FlashlightOff;
   static const char* Flask;
@@ -758,6 +787,7 @@ public:
   static const char* FolderOutline;
   static const char* FolderPlus;
   static const char* FolderRemove;
+  static const char* FolderStar;
   static const char* FolderUpload;
   static const char* Food;
   static const char* FoodApple;
@@ -775,6 +805,7 @@ public:
   static const char* FormatBold;
   static const char* FormatClear;
   static const char* FormatColorFill;
+  static const char* FormatColorText;
   static const char* FormatFloatCenter;
   static const char* FormatFloatLeft;
   static const char* FormatFloatNone;
@@ -804,6 +835,7 @@ public:
   static const char* FormatPaint;
   static const char* FormatParagraph;
   static const char* FormatQuote;
+  static const char* FormatSection;
   static const char* FormatSize;
   static const char* FormatStrikethrough;
   static const char* FormatStrikethroughVariant;
@@ -855,6 +887,7 @@ public:
   static const char* Glasses;
   static const char* Gmail;
   static const char* Gnome;
+  static const char* Gondola;
   static const char* Google;
   static const char* GoogleCardboard;
   static const char* GoogleChrome;
@@ -876,6 +909,7 @@ public:
   static const char* GooglePlusBox;
   static const char* GoogleTranslate;
   static const char* GoogleWallet;
+  static const char* Gradient;
   static const char* GreasePencil;
   static const char* Grid;
   static const char* GridOff;
@@ -884,6 +918,7 @@ public:
   static const char* GuitarPick;
   static const char* GuitarPickOutline;
   static const char* Hackernews;
+  static const char* Hamburger;
   static const char* HandPointingRight;
   static const char* Hanger;
   static const char* Hangouts;
@@ -911,6 +946,7 @@ public:
   static const char* Home;
   static const char* HomeMapMarker;
   static const char* HomeModern;
+  static const char* HomeOutline;
   static const char* HomeVariant;
   static const char* Hops;
   static const char* Hospital;
@@ -947,6 +983,8 @@ public:
   static const char* ImageMultiple;
   static const char* Import;
   static const char* Inbox;
+  static const char* InboxArrowDown;
+  static const char* InboxArrowUp;
   static const char* Incognito;
   static const char* Information;
   static const char* InformationOutline;
@@ -955,6 +993,7 @@ public:
   static const char* Instapaper;
   static const char* InternetExplorer;
   static const char* InvertColors;
+  static const char* Itunes;
   static const char* Jeepney;
   static const char* Jira;
   static const char* Jsfiddle;
@@ -979,6 +1018,7 @@ public:
   static const char* Label;
   static const char* LabelOutline;
   static const char* Lambda;
+  static const char* Lamp;
   static const char* Lan;
   static const char* LanConnect;
   static const char* LanDisconnect;
@@ -1060,11 +1100,15 @@ public:
   static const char* Memory;
   static const char* Menu;
   static const char* MenuDown;
+  static const char* MenuDownOutline;
   static const char* MenuLeft;
   static const char* MenuRight;
   static const char* MenuUp;
+  static const char* MenuUpOutline;
   static const char* Message;
   static const char* MessageAlert;
+  static const char* MessageBulleted;
+  static const char* MessageBulletedOff;
   static const char* MessageDraw;
   static const char* MessageImage;
   static const char* MessageOutline;
@@ -1130,11 +1174,14 @@ public:
   static const char* NfcVariant;
   static const char* Nodejs;
   static const char* Note;
+  static const char* NoteMultiple;
+  static const char* NoteMultipleOutline;
   static const char* NoteOutline;
   static const char* NotePlus;
   static const char* NotePlusOutline;
   static const char* NoteText;
   static const char* NotificationClearAll;
+  static const char* Nuke;
   static const char* Numeric;
   static const char* Numeric0Box;
   static const char* Numeric0BoxMultipleOutline;
@@ -1170,6 +1217,7 @@ public:
   static const char* Numeric9PlusBoxMultipleOutline;
   static const char* Numeric9PlusBoxOutline;
   static const char* Nutrition;
+  static const char* Oar;
   static const char* Octagon;
   static const char* OctagonOutline;
   static const char* Odnoklassniki;
@@ -1185,7 +1233,6 @@ public:
   static const char* Opera;
   static const char* Ornament;
   static const char* OrnamentVariant;
-  static const char* Outbox;
   static const char* Owl;
   static const char* Package;
   static const char* PackageDown;
@@ -1239,6 +1286,7 @@ public:
   static const char* PhoneVoip;
   static const char* Pi;
   static const char* PiBox;
+  static const char* Piano;
   static const char* Pig;
   static const char* Pill;
   static const char* Pin;
@@ -1248,6 +1296,7 @@ public:
   static const char* Pinterest;
   static const char* PinterestBox;
   static const char* Pizza;
+  static const char* PlaneShield;
   static const char* Play;
   static const char* PlayBoxOutline;
   static const char* PlayCircle;
@@ -1260,6 +1309,7 @@ public:
   static const char* PlaylistPlus;
   static const char* PlaylistRemove;
   static const char* Playstation;
+  static const char* Plex;
   static const char* Plus;
   static const char* PlusBox;
   static const char* PlusCircle;
@@ -1280,6 +1330,8 @@ public:
   static const char* Pound;
   static const char* PoundBox;
   static const char* Power;
+  static const char* PowerPlug;
+  static const char* PowerPlugOff;
   static const char* PowerSettings;
   static const char* PowerSocket;
   static const char* Presentation;
@@ -1292,6 +1344,7 @@ public:
   static const char* ProfessionalHexagon;
   static const char* Projector;
   static const char* ProjectorScreen;
+  static const char* Publish;
   static const char* Pulse;
   static const char* Puzzle;
   static const char* Qqchat;
@@ -1331,6 +1384,8 @@ public:
   static const char* Reload;
   static const char* Remote;
   static const char* RenameBox;
+  static const char* ReorderHorizontal;
+  static const char* ReorderVertical;
   static const char* Repeat;
   static const char* RepeatOff;
   static const char* RepeatOnce;
@@ -1340,12 +1395,15 @@ public:
   static const char* Reproduction;
   static const char* ResizeBottomRight;
   static const char* Responsive;
+  static const char* Restore;
   static const char* Rewind;
   static const char* Ribbon;
   static const char* Road;
   static const char* RoadVariant;
+  static const char* Robot;
   static const char* Rocket;
   static const char* Rotate3d;
+  static const char* Rotate90;
   static const char* RotateLeft;
   static const char* RotateLeftVariant;
   static const char* RotateRight;
@@ -1365,6 +1423,7 @@ public:
   static const char* Scale;
   static const char* ScaleBalance;
   static const char* ScaleBathroom;
+  static const char* Scanner;
   static const char* School;
   static const char* ScreenRotation;
   static const char* ScreenRotationLock;
@@ -1381,6 +1440,7 @@ public:
   static const char* SeatReclineExtra;
   static const char* SeatReclineNormal;
   static const char* Security;
+  static const char* SecurityHome;
   static const char* SecurityNetwork;
   static const char* Select;
   static const char* SelectAll;
@@ -1435,6 +1495,7 @@ public:
   static const char* SkipPrevious;
   static const char* SkipPreviousCircle;
   static const char* SkipPreviousCircleOutline;
+  static const char* Skull;
   static const char* Skype;
   static const char* SkypeBusiness;
   static const char* Slack;
@@ -1446,6 +1507,7 @@ public:
   static const char* Snowman;
   static const char* Soccer;
   static const char* Sofa;
+  static const char* Solid;
   static const char* Sort;
   static const char* SortAlphabetical;
   static const char* SortAscending;
@@ -1493,6 +1555,7 @@ public:
   static const char* SubdirectoryArrowLeft;
   static const char* SubdirectoryArrowRight;
   static const char* Subway;
+  static const char* SubwayVariant;
   static const char* Sunglasses;
   static const char* SurroundSound;
   static const char* SwapHorizontal;
@@ -1521,6 +1584,7 @@ public:
   static const char* TabletIpad;
   static const char* Tag;
   static const char* TagFaces;
+  static const char* TagHeart;
   static const char* TagMultiple;
   static const char* TagOutline;
   static const char* TagTextOutline;
@@ -1561,6 +1625,7 @@ public:
   static const char* Timer3;
   static const char* TimerOff;
   static const char* TimerSand;
+  static const char* TimerSandEmpty;
   static const char* Timetable;
   static const char* ToggleSwitch;
   static const char* ToggleSwitchOff;
@@ -1572,12 +1637,15 @@ public:
   static const char* TooltipText;
   static const char* Tooth;
   static const char* Tor;
+  static const char* TowerBeach;
+  static const char* TowerFire;
   static const char* TrafficLight;
   static const char* Train;
   static const char* Tram;
   static const char* Transcribe;
   static const char* TranscribeClose;
   static const char* Transfer;
+  static const char* TransitTransfer;
   static const char* Translate;
   static const char* Tree;
   static const char* Trello;
@@ -1613,7 +1681,9 @@ public:
   static const char* UnfoldLess;
   static const char* UnfoldMore;
   static const char* Ungroup;
+  static const char* Unity;
   static const char* Untappd;
+  static const char* Update;
   static const char* Upload;
   static const char* Usb;
   static const char* VectorArrangeAbove;
@@ -1677,6 +1747,7 @@ public:
   static const char* Watch;
   static const char* WatchExport;
   static const char* WatchImport;
+  static const char* WatchVibrate;
   static const char* Water;
   static const char* WaterOff;
   static const char* WaterPercent;
@@ -1686,11 +1757,13 @@ public:
   static const char* WeatherFog;
   static const char* WeatherHail;
   static const char* WeatherLightning;
+  static const char* WeatherLightningRainy;
   static const char* WeatherNight;
   static const char* WeatherPartlycloudy;
   static const char* WeatherPouring;
   static const char* WeatherRainy;
   static const char* WeatherSnowy;
+  static const char* WeatherSnowyRainy;
   static const char* WeatherSunny;
   static const char* WeatherSunset;
   static const char* WeatherSunsetDown;
@@ -1736,8 +1809,10 @@ public:
   static const char* Xml;
   static const char* Yeast;
   static const char* Yelp;
+  static const char* YinYang;
   static const char* YoutubePlay;
   static const char* ZipBox;
+
 
 };
 
@@ -1787,6 +1862,7 @@ public:
     alarmmultiple = 0xf022,
     alarmoff = 0xf023,
     alarmplus = 0xf024,
+    alarmsnooze = 0xf68d,
     album = 0xf025,
     alert = 0xf026,
     alertbox = 0xf027,
@@ -1805,6 +1881,7 @@ public:
     android = 0xf032,
     androiddebugbridge = 0xf033,
     androidstudio = 0xf034,
+    angular = 0xf6b1,
     animation = 0xf5d8,
     apple = 0xf035,
     applefinder = 0xf036,
@@ -1870,9 +1947,11 @@ public:
     autoupload = 0xf069,
     avtimer = 0xf06b,
     baby = 0xf06c,
+    babybuggy = 0xf68e,
     backburger = 0xf06d,
     backspace = 0xf06e,
     backuprestore = 0xf06f,
+    bandcamp = 0xf674,
     bank = 0xf070,
     barcode = 0xf071,
     barcodescan = 0xf072,
@@ -1908,6 +1987,7 @@ public:
     batterypositive = 0xf090,
     batteryunknown = 0xf091,
     beach = 0xf092,
+    beaker = 0xf68f,
     beats = 0xf097,
     beer = 0xf098,
     behance = 0xf099,
@@ -1942,6 +2022,7 @@ public:
     blurlinear = 0xf0b6,
     bluroff = 0xf0b7,
     blurradial = 0xf0b8,
+    bomb = 0xf690,
     bone = 0xf0b9,
     book = 0xf0ba,
     bookmark = 0xf0c0,
@@ -1974,6 +2055,7 @@ public:
     bordervertical = 0xf0d2,
     bowl = 0xf617,
     bowling = 0xf0d3,
+    bowtie = 0xf677,
     box = 0xf0d4,
     boxcutter = 0xf0d5,
     boxshadow = 0xf637,
@@ -2011,6 +2093,8 @@ public:
     calendarmultiple = 0xf0f1,
     calendarmultiplecheck = 0xf0f2,
     calendarplus = 0xf0f3,
+    calendarquestion = 0xf691,
+    calendarrange = 0xf678,
     calendarremove = 0xf0f4,
     calendartext = 0xf0f5,
     calendartoday = 0xf0f6,
@@ -2024,6 +2108,7 @@ public:
     camcorderboxoff = 0xf0fe,
     camcorderoff = 0xf0ff,
     camera = 0xf100,
+    cameraburst = 0xf692,
     cameraenhance = 0xf101,
     camerafront = 0xf102,
     camerafrontvariant = 0xf103,
@@ -2160,9 +2245,11 @@ public:
     codepen = 0xf175,
     codestring = 0xf173,
     codetags = 0xf174,
+    codetagscheck = 0xf693,
     coffee = 0xf176,
     coffeetogo = 0xf177,
     coin = 0xf178,
+    coins = 0xf694,
     collage = 0xf640,
     colorhelper = 0xf179,
     comment = 0xf17a,
@@ -2200,14 +2287,17 @@ public:
     copyright = 0xf5e6,
     counter = 0xf199,
     cow = 0xf19a,
+    creation = 0xf1c9,
     creditcard = 0xf19b,
     creditcardmultiple = 0xf19c,
     creditcardoff = 0xf5e4,
+    creditcardplus = 0xf675,
     creditcardscan = 0xf19d,
     crop = 0xf19e,
     cropfree = 0xf19f,
     croplandscape = 0xf1a0,
     cropportrait = 0xf1a1,
+    croprotate = 0xf695,
     cropsquare = 0xf1a2,
     crosshairs = 0xf1a3,
     crosshairsgps = 0xf1a4,
@@ -2227,6 +2317,7 @@ public:
     currencyrub = 0xf1b1,
     currencytry = 0xf1b2,
     currencyusd = 0xf1b3,
+    currencyusdoff = 0xf679,
     cursordefault = 0xf1b4,
     cursordefaultoutline = 0xf1b5,
     cursormove = 0xf1b6,
@@ -2241,6 +2332,7 @@ public:
     decimaldecrease = 0xf1be,
     decimalincrease = 0xf1bf,
     delete_ = 0xf1c0,
+    deletecircle = 0xf682,
     deleteforever = 0xf5e8,
     deletesweep = 0xf5e9,
     deletevariant = 0xf1c1,
@@ -2249,6 +2341,7 @@ public:
     desktopmac = 0xf1c4,
     desktoptower = 0xf1c5,
     details = 0xf1c6,
+    developerboard = 0xf696,
     deviantart = 0xf1c7,
     dialpad = 0xf61c,
     diamond = 0xf1c8,
@@ -2272,10 +2365,15 @@ public:
     disqusoutline = 0xf1d3,
     division = 0xf1d4,
     divisionbox = 0xf1d5,
+    dna = 0xf683,
     dns = 0xf1d6,
+    dolby = 0xf6b2,
     domain = 0xf1d7,
+    donotdisturb = 0xf697,
+    donotdisturboff = 0xf698,
     dotshorizontal = 0xf1d8,
     dotsvertical = 0xf1d9,
+    douban = 0xf699,
     download = 0xf1da,
     drag = 0xf1db,
     draghorizontal = 0xf1dc,
@@ -2302,9 +2400,12 @@ public:
     emailoutline = 0xf1f0,
     emailsecure = 0xf1f1,
     emailvariant = 0xf5f0,
+    emby = 0xf6b3,
     emoticon = 0xf1f2,
     emoticoncool = 0xf1f3,
+    emoticondead = 0xf69a,
     emoticondevil = 0xf1f4,
+    emoticonexcited = 0xf69b,
     emoticonhappy = 0xf1f5,
     emoticonneutral = 0xf1f6,
     emoticonpoop = 0xf1f7,
@@ -2393,6 +2494,7 @@ public:
     flashlight = 0xf244,
     flashlightoff = 0xf245,
     flashoff = 0xf243,
+    flashredeye = 0xf67a,
     flask = 0xf093,
     flaskempty = 0xf094,
     flaskemptyoutline = 0xf095,
@@ -2416,6 +2518,7 @@ public:
     folderoutline = 0xf256,
     folderplus = 0xf257,
     folderremove = 0xf258,
+    folderstar = 0xf69c,
     folderupload = 0xf259,
     food = 0xf25a,
     foodapple = 0xf25b,
@@ -2433,6 +2536,7 @@ public:
     formatbold = 0xf264,
     formatclear = 0xf265,
     formatcolorfill = 0xf266,
+    formatcolortext = 0xf69d,
     formatfloatcenter = 0xf267,
     formatfloatleft = 0xf268,
     formatfloatnone = 0xf269,
@@ -2462,6 +2566,7 @@ public:
     formatpaint = 0xf27c,
     formatparagraph = 0xf27d,
     formatquote = 0xf27e,
+    formatsection = 0xf69e,
     formatsize = 0xf27f,
     formatstrikethrough = 0xf280,
     formatstrikethroughvariant = 0xf281,
@@ -2513,6 +2618,7 @@ public:
     glasstulip = 0xf2a8,
     gmail = 0xf2ab,
     gnome = 0xf2ac,
+    gondola = 0xf685,
     google = 0xf2ad,
     googlecardboard = 0xf2ae,
     googlechrome = 0xf2af,
@@ -2534,6 +2640,7 @@ public:
     googleplusbox = 0xf2be,
     googletranslate = 0xf2bf,
     googlewallet = 0xf2c0,
+    gradient = 0xf69f,
     greasepencil = 0xf648,
     grid = 0xf2c1,
     gridoff = 0xf2c2,
@@ -2542,6 +2649,7 @@ public:
     guitarpick = 0xf2c5,
     guitarpickoutline = 0xf2c6,
     hackernews = 0xf624,
+    hamburger = 0xf684,
     handpointingright = 0xf2c7,
     hanger = 0xf2c8,
     hangouts = 0xf2c9,
@@ -2569,6 +2677,7 @@ public:
     home = 0xf2dc,
     homemapmarker = 0xf5f8,
     homemodern = 0xf2dd,
+    homeoutline = 0xf6a0,
     homevariant = 0xf2de,
     hops = 0xf2df,
     hospital = 0xf2e0,
@@ -2604,7 +2713,9 @@ public:
     imagefiltervintage = 0xf2f8,
     imagemultiple = 0xf2f9,
     import = 0xf2fa,
-    inbox = 0xf2fb,
+    inbox = 0xf686,
+    inboxarrowdown = 0xf2fb,
+    inboxarrowup = 0xf3d1,
     incognito = 0xf5f9,
     information = 0xf2fc,
     informationoutline = 0xf2fd,
@@ -2613,6 +2724,7 @@ public:
     instapaper = 0xf2ff,
     internetexplorer = 0xf300,
     invertcolors = 0xf301,
+    itunes = 0xf676,
     jeepney = 0xf302,
     jira = 0xf303,
     jsfiddle = 0xf304,
@@ -2637,6 +2749,7 @@ public:
     label = 0xf315,
     labeloutline = 0xf316,
     lambda = 0xf627,
+    lamp = 0xf6b4,
     lan = 0xf317,
     lanconnect = 0xf318,
     landisconnect = 0xf319,
@@ -2678,7 +2791,7 @@ public:
     linkoff = 0xf338,
     linkvariant = 0xf339,
     linkvariantoff = 0xf33a,
-    linux_ = 0xf33d,
+    linux = 0xf33d,
     lock = 0xf33e,
     lockopen = 0xf33f,
     lockopenoutline = 0xf340,
@@ -2718,11 +2831,15 @@ public:
     memory = 0xf35b,
     menu = 0xf35c,
     menudown = 0xf35d,
+    menudownoutline = 0xf6b5,
     menuleft = 0xf35e,
     menuright = 0xf35f,
     menuup = 0xf360,
+    menuupoutline = 0xf6b6,
     message = 0xf361,
     messagealert = 0xf362,
+    messagebulleted = 0xf6a1,
+    messagebulletedoff = 0xf6a2,
     messagedraw = 0xf363,
     messageimage = 0xf364,
     messageoutline = 0xf365,
@@ -2788,11 +2905,14 @@ public:
     nfcvariant = 0xf398,
     nodejs = 0xf399,
     note = 0xf39a,
+    notemultiple = 0xf6b7,
+    notemultipleoutline = 0xf6b8,
     noteoutline = 0xf39b,
     noteplus = 0xf39c,
     noteplusoutline = 0xf39d,
     notetext = 0xf39e,
     notificationclearall = 0xf39f,
+    nuke = 0xf6a3,
     numeric = 0xf3a0,
     numeric0box = 0xf3a1,
     numeric0boxmultipleoutline = 0xf3a2,
@@ -2828,6 +2948,7 @@ public:
     numeric9plusboxmultipleoutline = 0xf3c0,
     numeric9plusboxoutline = 0xf3c1,
     nutrition = 0xf3c2,
+    oar = 0xf67b,
     octagon = 0xf3c3,
     octagonoutline = 0xf3c4,
     odnoklassniki = 0xf3c5,
@@ -2843,7 +2964,6 @@ public:
     opera = 0xf3ce,
     ornament = 0xf3cf,
     ornamentvariant = 0xf3d0,
-    outbox = 0xf3d1,
     owl = 0xf3d2,
     package = 0xf3d3,
     packagedown = 0xf3d4,
@@ -2896,6 +3016,7 @@ public:
     phonesettings = 0xf3fd,
     phonevoip = 0xf3fe,
     pi = 0xf3ff,
+    piano = 0xf67c,
     pibox = 0xf400,
     pig = 0xf401,
     pill = 0xf402,
@@ -2906,6 +3027,7 @@ public:
     pinterest = 0xf407,
     pinterestbox = 0xf408,
     pizza = 0xf409,
+    planeshield = 0xf6ba,
     play = 0xf40a,
     playboxoutline = 0xf40b,
     playcircle = 0xf40c,
@@ -2918,6 +3040,7 @@ public:
     playpause = 0xf40e,
     playprotectedcontent = 0xf40f,
     playstation = 0xf414,
+    plex = 0xf6b9,
     plus = 0xf415,
     plusbox = 0xf416,
     pluscircle = 0xf417,
@@ -2938,6 +3061,8 @@ public:
     pound = 0xf423,
     poundbox = 0xf424,
     power = 0xf425,
+    powerplug = 0xf6a4,
+    powerplugoff = 0xf6a5,
     powersettings = 0xf426,
     powersocket = 0xf427,
     presentation = 0xf428,
@@ -2950,6 +3075,7 @@ public:
     professionalhexagon = 0xf42d,
     projector = 0xf42e,
     projectorscreen = 0xf42f,
+    publish = 0xf6a6,
     pulse = 0xf430,
     puzzle = 0xf431,
     qqchat = 0xf605,
@@ -2989,6 +3115,8 @@ public:
     reload = 0xf453,
     remote = 0xf454,
     renamebox = 0xf455,
+    reorderhorizontal = 0xf687,
+    reordervertical = 0xf688,
     repeat = 0xf456,
     repeatoff = 0xf457,
     repeatonce = 0xf458,
@@ -2998,12 +3126,15 @@ public:
     reproduction = 0xf45c,
     resizebottomright = 0xf45d,
     responsive = 0xf45e,
+    restore = 0xf6a7,
     rewind = 0xf45f,
     ribbon = 0xf460,
     road = 0xf461,
     roadvariant = 0xf462,
+    robot = 0xf6a8,
     rocket = 0xf463,
     rotate3d = 0xf464,
+    rotate90 = 0xf6a9,
     rotateleft = 0xf465,
     rotateleftvariant = 0xf466,
     rotateright = 0xf467,
@@ -3023,6 +3154,7 @@ public:
     scale = 0xf472,
     scalebalance = 0xf5d1,
     scalebathroom = 0xf473,
+    scanner = 0xf6aa,
     school = 0xf474,
     screenrotation = 0xf475,
     screenrotationlock = 0xf476,
@@ -3039,6 +3171,7 @@ public:
     seatreclineextra = 0xf481,
     seatreclinenormal = 0xf482,
     security = 0xf483,
+    securityhome = 0xf689,
     securitynetwork = 0xf484,
     select = 0xf485,
     selectall = 0xf486,
@@ -3093,6 +3226,7 @@ public:
     skipprevious = 0xf4ae,
     skippreviouscircle = 0xf663,
     skippreviouscircleoutline = 0xf664,
+    skull = 0xf68b,
     skype = 0xf4af,
     skypebusiness = 0xf4b0,
     slack = 0xf4b1,
@@ -3104,6 +3238,7 @@ public:
     snowman = 0xf4b7,
     soccer = 0xf4b8,
     sofa = 0xf4b9,
+    solid = 0xf68c,
     sort = 0xf4ba,
     sortalphabetical = 0xf4bb,
     sortascending = 0xf4bc,
@@ -3150,7 +3285,8 @@ public:
     stove = 0xf4de,
     subdirectoryarrowleft = 0xf60c,
     subdirectoryarrowright = 0xf60d,
-    subway = 0xf4df,
+    subway = 0xf6ab,
+    subwayvariant = 0xf4df,
     sunglasses = 0xf4e0,
     surroundsound = 0xf5c5,
     swaphorizontal = 0xf4e1,
@@ -3179,6 +3315,7 @@ public:
     tabunselected = 0xf4ea,
     tag = 0xf4f9,
     tagfaces = 0xf4fa,
+    tagheart = 0xf68a,
     tagmultiple = 0xf4fb,
     tagoutline = 0xf4fc,
     tagtextoutline = 0xf4fd,
@@ -3219,6 +3356,7 @@ public:
     timer3 = 0xf51d,
     timeroff = 0xf51e,
     timersand = 0xf51f,
+    timersandempty = 0xf6ac,
     timetable = 0xf520,
     toggleswitch = 0xf521,
     toggleswitchoff = 0xf522,
@@ -3230,12 +3368,15 @@ public:
     tooltiptext = 0xf528,
     tooth = 0xf529,
     tor = 0xf52a,
+    towerbeach = 0xf680,
+    towerfire = 0xf681,
     trafficlight = 0xf52b,
     train = 0xf52c,
     tram = 0xf52d,
     transcribe = 0xf52e,
     transcribeclose = 0xf52f,
     transfer = 0xf530,
+    transittransfer = 0xf6ad,
     translate = 0xf5ca,
     tree = 0xf531,
     trello = 0xf532,
@@ -3271,7 +3412,9 @@ public:
     unfoldless = 0xf54e,
     unfoldmore = 0xf54f,
     ungroup = 0xf550,
+    unity = 0xf6ae,
     untappd = 0xf551,
+    update = 0xf6af,
     upload = 0xf552,
     usb = 0xf553,
     vectorarrangeabove = 0xf554,
@@ -3335,6 +3478,7 @@ public:
     watch = 0xf589,
     watchexport = 0xf58a,
     watchimport = 0xf58b,
+    watchvibrate = 0xf6b0,
     water = 0xf58c,
     watermark = 0xf612,
     wateroff = 0xf58d,
@@ -3344,11 +3488,13 @@ public:
     weatherfog = 0xf591,
     weatherhail = 0xf592,
     weatherlightning = 0xf593,
+    weatherlightningrainy = 0xf67d,
     weathernight = 0xf594,
     weatherpartlycloudy = 0xf595,
     weatherpouring = 0xf596,
     weatherrainy = 0xf597,
     weathersnowy = 0xf598,
+    weathersnowyrainy = 0xf67e,
     weathersunny = 0xf599,
     weathersunset = 0xf59a,
     weathersunsetdown = 0xf59b,
@@ -3394,6 +3540,7 @@ public:
     xml = 0xf5c0,
     yeast = 0xf5c1,
     yelp = 0xf5c2,
+    yinyang = 0xf67f,
     youtubeplay = 0xf5c3,
     zipbox = 0xf5c4
 

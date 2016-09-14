@@ -334,7 +334,16 @@ def faicon_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
     node = emphasis(**options)
     return [node], []
 
+def mdicon_role(role, rawtext, text, lineno, inliner, options={}, content=[]):
+
+    options.update({'classes': ["mdi"] + ["mdi-" + x for x in text.split(",")]})
+    options['classes'].append('icon-holder')
+    set_classes(options)
+    node = emphasis(**options)
+    return [node], []
+
 def setup(app):
   app.connect('autodoc-process-signature', process_signature)
   app.connect('autodoc-process-docstring', process_docstring)
   app.add_role('faicon', faicon_role)
+  app.add_role('mdicon', mdicon_role)

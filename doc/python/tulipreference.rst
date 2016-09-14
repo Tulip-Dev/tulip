@@ -526,9 +526,9 @@ tlp.BoundingBox
 
         .. automethod:: tulip::tlp.BoundingBox.height
 
-        .. automethod:: tulip::tlp.BoundingBox.intersect
+        .. automethod:: tulip::tlp.BoundingBox.intersects
 
-        .. automethod:: tulip::tlp.BoundingBox.intersect
+        .. automethod:: tulip::tlp.BoundingBox.intersects
 
         .. automethod:: tulip::tlp.BoundingBox.isValid
 
@@ -899,4 +899,10 @@ tlp.TulipFontAwesome
 ^^^^^^^^^^^^^^^^^^^^
 
 .. autoclass:: tulip::tlp.TulipFontAwesome
+    :members:
+
+tlp.TulipMaterialDesignIcons
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.TulipMaterialDesignIcons
     :members:

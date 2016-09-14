@@ -56,6 +56,7 @@ SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/TreeTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/TriconnectedTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/TulipFontAwesome.sip
+    ${CMAKE_CURRENT_SOURCE_DIR}/TulipMaterialDesignIcons.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/TulipViewSettings.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/Vector.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/WithDependency.sip
