@@ -238,7 +238,7 @@ it is unloaded and removed from the current plugins database.
 
 //=====================================================================
 
-tlp::DataSet getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
+SIP_PYOBJECT getDefaultPluginParameters(const std::string &pluginName, tlp::Graph *graph = 0);
 %Docstring
 tlp.getDefaultPluginParameters(pluginName[, graph = None])
 
@@ -253,7 +253,8 @@ Returns a Python dictionnary with string keys filled with default parameters (if
 
 %MethodCode
   if (tlp::PluginLister::pluginExists(*a0)) {
-    sipRes = new tlp::DataSet(::getDefaultPluginParameters(*a0, a1, true));
+    tlp::DataSet params = ::getDefaultPluginParameters(*a0, a1, true);
+    sipRes = convertTlpDataSetToPyDict(params);
   } else {
     sipIsErr = 1;
     std::string msg = "No plugin named  ";
