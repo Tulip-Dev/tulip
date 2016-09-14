@@ -92,6 +92,7 @@ void animate(void *value) {
   if (t < 1.0) {
     zoomAndPanAnimation->zoomAndPanAnimationStep(t);
     scene->setBackupBackBuffer(false);
+    scene->forceRedraw();
     scene->requestDraw();
     timerFunc(delay, animate, value);
   } else {
