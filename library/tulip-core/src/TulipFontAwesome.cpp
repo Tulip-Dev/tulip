@@ -723,6 +723,42 @@ const char * TulipFontAwesome::StopCircle = "stop-circle";
 const char * TulipFontAwesome::StopCircleO = "stop-circle-o";
 const char * TulipFontAwesome::Usb = "usb";
 
+const char* TulipFontAwesome::AmericanSignLanguageInterpreting = "american-sign-language-interpreting";
+const char* TulipFontAwesome::AslInterpreting = "asl-interpreting";
+const char* TulipFontAwesome::AssistiveListeningSystems = "assistive-listening-systems";
+const char* TulipFontAwesome::AudioDescription = "audio-description";
+const char* TulipFontAwesome::Blind = "blind";
+const char* TulipFontAwesome::Braille = "braille";
+const char* TulipFontAwesome::Deaf = "deaf";
+const char* TulipFontAwesome::Deafness = "deafness";
+const char* TulipFontAwesome::Envira = "envira";
+const char* TulipFontAwesome::Fa = "fa";
+const char* TulipFontAwesome::FirstOrder = "first-order";
+const char* TulipFontAwesome::FontAwesome = "font-awesome";
+const char* TulipFontAwesome::Gitlab = "gitlab";
+const char* TulipFontAwesome::Glide = "glide";
+const char* TulipFontAwesome::GlideG = "glide-g";
+const char* TulipFontAwesome::GooglePlusCircle = "google-plus-circle";
+const char* TulipFontAwesome::GooglePlusOfficial = "google-plus-official";
+const char* TulipFontAwesome::HardOfHearing = "hard-of-hearing";
+const char* TulipFontAwesome::LowVision = "low-vision";
+const char* TulipFontAwesome::QuestionCircleO = "question-circle-o";
+const char* TulipFontAwesome::SignLanguage = "sign-language";
+const char* TulipFontAwesome::Signing = "signing";
+const char* TulipFontAwesome::Snapchat = "snapchat";
+const char* TulipFontAwesome::SnapchatGhost = "snapchat-ghost";
+const char* TulipFontAwesome::SnapchatSquare = "snapchat-square";
+const char* TulipFontAwesome::Themeisle = "themeisle";
+const char* TulipFontAwesome::UniversalAccess = "universal-access";
+const char* TulipFontAwesome::Viadeo = "viadeo";
+const char* TulipFontAwesome::ViadeoSquare = "viadeo-square";
+const char* TulipFontAwesome::VolumeControlPhone = "volume-control-phone";
+const char* TulipFontAwesome::WheelchairAlt = "wheelchair-alt";
+const char* TulipFontAwesome::Wpbeginner = "wpbeginner";
+const char* TulipFontAwesome::Wpforms = "wpforms";
+const char* TulipFontAwesome::Yoast = "yoast";
+
+
 struct cmpCharPtr {
   bool operator()(const char *s1, const char *s2) const {
     return strcmp(s1, s2) < 0;
@@ -1432,6 +1468,42 @@ static void initFontAwesomeIconCodePoints() {
   addIconCodePoint(TulipFontAwesome::StopCircle, 0xf28d);
   addIconCodePoint(TulipFontAwesome::StopCircleO, 0xf28e);
   addIconCodePoint(TulipFontAwesome::Usb, 0xf287);
+
+  addIconCodePoint(TulipFontAwesome::AmericanSignLanguageInterpreting, 0xf2a3);
+  addIconCodePoint(TulipFontAwesome::AslInterpreting, 0xf2a3);
+  addIconCodePoint(TulipFontAwesome::AssistiveListeningSystems, 0xf2a2);
+  addIconCodePoint(TulipFontAwesome::AudioDescription, 0xf29e);
+  addIconCodePoint(TulipFontAwesome::Blind, 0xf29d);
+  addIconCodePoint(TulipFontAwesome::Braille, 0xf2a1);
+  addIconCodePoint(TulipFontAwesome::Deaf, 0xf2a4);
+  addIconCodePoint(TulipFontAwesome::Deafness, 0xf2a4);
+  addIconCodePoint(TulipFontAwesome::Envira, 0xf299);
+  addIconCodePoint(TulipFontAwesome::Fa, 0xf2b4);
+  addIconCodePoint(TulipFontAwesome::FirstOrder, 0xf2b0);
+  addIconCodePoint(TulipFontAwesome::FontAwesome, 0xf2b4);
+  addIconCodePoint(TulipFontAwesome::Gitlab, 0xf296);
+  addIconCodePoint(TulipFontAwesome::Glide, 0xf2a5);
+  addIconCodePoint(TulipFontAwesome::GlideG, 0xf2a6);
+  addIconCodePoint(TulipFontAwesome::GooglePlusCircle, 0xf2b3);
+  addIconCodePoint(TulipFontAwesome::GooglePlusOfficial, 0xf2b3);
+  addIconCodePoint(TulipFontAwesome::HardOfHearing, 0xf2a4);
+  addIconCodePoint(TulipFontAwesome::LowVision, 0xf2a8);
+  addIconCodePoint(TulipFontAwesome::QuestionCircleO, 0xf29c);
+  addIconCodePoint(TulipFontAwesome::SignLanguage, 0xf2a7);
+  addIconCodePoint(TulipFontAwesome::Signing, 0xf2a7);
+  addIconCodePoint(TulipFontAwesome::Snapchat, 0xf2ab);
+  addIconCodePoint(TulipFontAwesome::SnapchatGhost, 0xf2ac);
+  addIconCodePoint(TulipFontAwesome::SnapchatSquare, 0xf2ad);
+  addIconCodePoint(TulipFontAwesome::Themeisle, 0xf2b2);
+  addIconCodePoint(TulipFontAwesome::UniversalAccess, 0xf29a);
+  addIconCodePoint(TulipFontAwesome::Viadeo, 0xf2a9);
+  addIconCodePoint(TulipFontAwesome::ViadeoSquare, 0xf2aa);
+  addIconCodePoint(TulipFontAwesome::VolumeControlPhone, 0xf2a0);
+  addIconCodePoint(TulipFontAwesome::WheelchairAlt, 0xf29b);
+  addIconCodePoint(TulipFontAwesome::Wpbeginner, 0xf297);
+  addIconCodePoint(TulipFontAwesome::Wpforms, 0xf298);
+  addIconCodePoint(TulipFontAwesome::Yoast, 0xf2b1);
+
 
   map<const char*, vector<unsigned int>, cmpCharPtr>::iterator it = fontAwesomeIconCodePoint.begin();
 
