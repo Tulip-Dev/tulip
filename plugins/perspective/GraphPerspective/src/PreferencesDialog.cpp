@@ -95,6 +95,7 @@ void PreferencesDialog::writeSettings() {
   TulipSettings::instance().setDisplayDefaultViews(_ui->displayDefaultViews->isChecked());
   TulipSettings::instance().setAutomaticMapMetric(_ui->colorMappingCheck->isChecked());
   TulipSettings::instance().setAutomaticRatio(_ui->aspectRatioCheck->isChecked());
+  TulipSettings::instance().setAutomaticCentering(_ui->centerViewCheck->isChecked());
   TulipSettings::instance().setViewOrtho(_ui->viewOrthoCheck->isChecked());
   TulipSettings::instance().setResultPropertyStored(_ui->resultPropertyStoredCheck->isChecked());
   TulipSettings::instance().setRunningTimeComputed(_ui->runningTimeComputedCheck->isChecked());
@@ -168,6 +169,7 @@ void PreferencesDialog::readSettings() {
 
   _ui->displayDefaultViews->setChecked(TulipSettings::instance().displayDefaultViews());
   _ui->aspectRatioCheck->setChecked(TulipSettings::instance().isAutomaticRatio());
+  _ui->centerViewCheck->setChecked(TulipSettings::instance().isAutomaticCentering());
   _ui->viewOrthoCheck->setChecked(TulipSettings::instance().isViewOrtho());
   _ui->resultPropertyStoredCheck->setChecked(TulipSettings::instance().isResultPropertyStored());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());

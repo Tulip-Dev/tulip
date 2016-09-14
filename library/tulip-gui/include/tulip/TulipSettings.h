@@ -148,6 +148,9 @@ public:
   bool isAutomaticMapMetric() const;
   void setAutomaticMapMetric(bool);
 
+  bool isAutomaticCentering() const;
+  void setAutomaticCentering(bool);
+
   bool isAutomaticRatio() const;
   void setAutomaticRatio(bool);
 
