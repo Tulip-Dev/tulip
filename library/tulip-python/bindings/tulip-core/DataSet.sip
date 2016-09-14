@@ -176,10 +176,6 @@ struct DataSet {
 
 %End
 
-%ConvertFromTypeCode
-  return convertTlpDataSetToPyDict(*sipCpp);
-%End
-
 %Docstring
 
 .. deprecated:: 4.8
@@ -321,6 +317,13 @@ Converts that data set to a Python dictionnary.
 %End
 %MethodCode
   sipRes = convertTlpDataSetToPyDict(*sipCpp);
+%End
+
+  SIP_PYOBJECT __repr__() const;
+%MethodCode
+  PyObject *pyDict = convertTlpDataSetToPyDict(*sipCpp);
+  sipRes = PyObject_Repr(pyDict);
+  Py_XDECREF(pyDict);
 %End
 
 };
