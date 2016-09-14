@@ -532,7 +532,7 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
       Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
   }
   else if (TulipSettings::instance().isAutomaticCentering() &&
-	   pluginLister->pluginExists<Algorithm>(stdName) &&
+           pluginLister->pluginExists<Algorithm>(stdName) &&
            !pluginLister->pluginExists<PropertyAlgorithm>(stdName) &&
            !pluginLister->pluginExists<GraphTest>(stdName)) {
     Perspective::typedInstance<GraphPerspective>()->centerPanelsForGraph(g);
