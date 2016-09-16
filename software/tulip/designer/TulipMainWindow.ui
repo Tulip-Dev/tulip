@@ -311,7 +311,7 @@ QToolButton:pressed {
           </sizepolicy>
          </property>
          <property name="text">
-          <string>About us</string>
+          <string>About Tulip</string>
          </property>
          <property name="checkable">
           <bool>true</bool>

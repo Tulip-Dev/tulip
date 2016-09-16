@@ -35,8 +35,6 @@ class AboutTulipPage : public QWidget {
 public:
   explicit AboutTulipPage(QWidget *parent = 0);
 
-  bool eventFilter(QObject *, QEvent *);
-
 private:
   Ui::AboutTulipPageData *_ui;
 };
