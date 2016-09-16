@@ -32,14 +32,14 @@ background-color: white;
     <number>15</number>
    </property>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
      <property name="spacing">
       <number>20</number>
      </property>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout">
+        <layout class="QHBoxLayout" name="horizontalLayout_1">
          <item>
           <layout class="QVBoxLayout" name="verticalLayout_2">
            <item>
@@ -79,10 +79,10 @@ background-color: white;
 font: bold italic 11pt &quot;Arial&quot;;</string>
            </property>
            <property name="text">
-            <string>&lt;br/&gt;&lt;i&gt;Tulip is an information visualization framework dedicated to the analysis and visualization of relational data. Tulip aims to provide the developer with a complete library, supporting the design of interactive information visualization applications for relational data that can be tailored to the problems he or she is addressing.&lt;/i&gt;</string>
+            <string>&lt;i&gt;Tulip is an information visualization framework dedicated to the analysis and visualization of relational data. Tulip aims to provide the developer with a complete library, supporting the design of interactive information visualization applications for relational data that can be tailored to the problems he or she is addressing.&lt;/i&gt;</string>
            </property>
            <property name="alignment">
-            <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
            </property>
            <property name="wordWrap">
             <bool>true</bool>
@@ -104,10 +104,153 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
          </property>
         </widget>
        </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
+         <property name="spacing">
+          <number>20</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="sample_1221">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>230</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="sample_1861">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>230</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="sample_1531">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>230</width>
+             <height>128</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="scaledContents">
+            <bool>false</bool>
+           </property>
+           <property name="alignment">
+            <set>Qt::AlignCenter</set>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_12">
+         <property name="styleSheet">
+          <string notr="true">color: #696969;</string>
+         </property>
+         <property name="text">
+          <string>&lt;br/&gt;Please check the list of reported bugs before reporting a new one. Only sourceforge registered users can report.</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
+         </property>
+         <property name="wordWrap">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
       </layout>
      </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_4">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_9">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../resources/TulipAgent.qrc">:/tulip/app/icons/tutorials.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_6">
+           <property name="styleSheet">
+            <string notr="true">font: bold;</string>
+           </property>
+           <property name="text">
+            <string>&lt;a href=&quot;http://tulip.labri.fr/TulipDrupal/?q=tutorials&quot;&gt;Tutorials&lt;/a&gt;</string>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <property name="spacing">
@@ -154,12 +297,12 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
         </layout>
        </item>
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_5">
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
          <property name="spacing">
           <number>10</number>
          </property>
          <item>
-          <widget class="QLabel" name="label_9">
+          <widget class="QLabel" name="label_10">
            <property name="minimumSize">
             <size>
              <width>32</width>
@@ -176,7 +319,7 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
             <string/>
            </property>
            <property name="pixmap">
-            <pixmap resource="../resources/TulipAgent.qrc">:/tulip/app/icons/tutorials.png</pixmap>
+            <pixmap resource="../resources/TulipAgent.qrc">:/tulip/app/icons/screenshots.png</pixmap>
            </property>
            <property name="scaledContents">
             <bool>true</bool>
@@ -184,12 +327,57 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
           </widget>
          </item>
          <item>
-          <widget class="QLabel" name="label_6">
+          <widget class="QLabel" name="label_11">
            <property name="styleSheet">
             <string notr="true">font: bold;</string>
            </property>
            <property name="text">
-            <string>&lt;a href=&quot;http://tulip.labri.fr/TulipDrupal/?q=tutorials&quot;&gt;Tutorials&lt;/a&gt;</string>
+            <string>&lt;a href=&quot;http://tulip.labri.fr/TulipDrupal/?q=screenshots&quot;&gt;Screenshots&lt;/a&gt;</string>
+           </property>
+           <property name="openExternalLinks">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <property name="spacing">
+          <number>10</number>
+         </property>
+         <item>
+          <widget class="QLabel" name="label_14">
+           <property name="minimumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>32</width>
+             <height>32</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+           <property name="pixmap">
+            <pixmap resource="../resources/TulipAgent.qrc">:/tulip/app/icons/bugs.png</pixmap>
+           </property>
+           <property name="scaledContents">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="label_13">
+           <property name="styleSheet">
+            <string notr="true">font: bold;</string>
+           </property>
+           <property name="text">
+            <string>&lt;a href=&quot;http://sourceforge.net/p/auber/bugs&quot;&gt;Bugs&lt;/a&gt;</string>
            </property>
            <property name="openExternalLinks">
             <bool>true</bool>
@@ -202,26 +390,8 @@ font: bold italic 11pt &quot;Arial&quot;;</string>
      </item>
     </layout>
    </item>
-   <item>
-    <widget class="QxtFlowView" name="flowView" native="true">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-    </widget>
-   </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>QxtFlowView</class>
-   <extends>QWidget</extends>
-   <header location="global">qxtflowview.h</header>
-   <container>1</container>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../resources/TulipAgent.qrc"/>
  </resources>
