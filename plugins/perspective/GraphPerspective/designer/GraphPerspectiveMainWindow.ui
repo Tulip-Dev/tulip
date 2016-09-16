@@ -1564,7 +1564,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/graphperspective/icons/16/help-about.png</normaloff>:/tulip/graphperspective/icons/16/help-about.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;About us</string>
+    <string>&amp;About Tulip</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
