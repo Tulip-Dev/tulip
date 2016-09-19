@@ -204,6 +204,9 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
   else {
     ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
   }
+  // ensure the table columns are vertically aligned
+  // with the PropertyConfigurationWidget(s)
+  ui->previewTableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
 }
 
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
