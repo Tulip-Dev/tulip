@@ -59,8 +59,6 @@ PropertyConfigurationWidget::PropertyConfigurationWidget(
       QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
   layout()->addWidget(propertyNameLineEdit);
   layout()->setAlignment(propertyNameLineEdit, Qt::AlignHCenter);
-  connect(propertyNameLineEdit, SIGNAL(editingFinished()), this,
-          SLOT(nameEditFinished()));
   fillPropertyTypeComboBox();
   propertyTypeComboBox->setCurrentIndex(0);
 
@@ -239,10 +237,15 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
   } else {
     ui->previewTableWidget->setMaxPreviewLineNumber(UINT_MAX);
   }
-  // ensure the table columns are vertically aligned
-  // with the PropertyConfigurationWidget(s)
+// ensure the table columns are vertically aligned
+// with the PropertyConfigurationWidget(s)
+#if QT_VERSION >= 0x050000
+  ui->previewTableWidget->horizontalHeader()->setSectionResizeMode(
+      QHeaderView::Stretch);
+#else
   ui->previewTableWidget->horizontalHeader()->setResizeMode(
       QHeaderView::Stretch);
+#endif
 }
 
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
