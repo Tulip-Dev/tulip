@@ -27,7 +27,7 @@
 
 #include <clipper.hpp>
 
-#ifndef __EMSCRIPTEN__
+#ifdef _OPENMP
 #include <omp.h>
 #endif
 
@@ -79,7 +79,7 @@ static Paths buildHull(const vector<Paths> &polygonsToClip, bool withHoles) {
   vector<Paths> polygonsCp(polygonsToClip);
   while (polygonsCp.size() > 1) {
     vector<Paths> tmp(polygonsCp.size()/2);
-#ifndef __EMSCRIPTEN__
+#ifdef _OPENMP
 #pragma omp parallel for
 #endif
     for (size_t i = 0 ; i < polygonsCp.size() ; i+=2) {
