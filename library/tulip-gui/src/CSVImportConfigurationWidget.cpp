@@ -146,10 +146,6 @@ bool PropertyConfigurationWidget::getPropertyUsed() const {
 unsigned int PropertyConfigurationWidget::getPropertyNumber() const {
   return propertyNumber;
 }
-void PropertyConfigurationWidget::nameEditFinished() {
-  emit propertyNameChange(propertyNameLineEdit->text());
-}
-
 void PropertyConfigurationWidget::useStateChanged(int state) {
   if (state == Qt::Checked) {
     propertyNameLineEdit->setEnabled(nameEditable);
@@ -231,8 +227,6 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
 
   // Import line number change
   // connect(ui->toLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(toLineValueChanged(int)));
-  connect(ui->useFirstLineAsPropertyNamecheckBox, SIGNAL(clicked(bool)), this,
-          SLOT(useFirstLineAsHeaderUpdated()));
   connect(ui->limitPreviewLineNumberCheckBox, SIGNAL(clicked(bool)), this,
           SLOT(filterPreviewLineNumber(bool)));
   connect(ui->previewLineNumberSpinBox, SIGNAL(valueChanged(int)), this,
@@ -247,7 +241,8 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
   }
   // ensure the table columns are vertically aligned
   // with the PropertyConfigurationWidget(s)
-  ui->previewTableWidget->horizontalHeader()->setResizeMode(QHeaderView::Stretch);
+  ui->previewTableWidget->horizontalHeader()->setResizeMode(
+      QHeaderView::Stretch);
 }
 
 CSVImportConfigurationWidget::~CSVImportConfigurationWidget() {
@@ -388,10 +383,7 @@ void CSVImportConfigurationWidget::previewLineNumberChanged(int maxLineNumber) {
   updateLineNumbers(true);
 }
 
-void CSVImportConfigurationWidget::toLineValueChanged(int) {
-  updateWidget();
-  emit fileInfoChanged();
-}
+void CSVImportConfigurationWidget::toLineValueChanged(int) { updateWidget(); }
 
 bool CSVImportConfigurationWidget::useFirstLineAsPropertyName() const {
   return ui->useFirstLineAsPropertyNamecheckBox->checkState() == Qt::Checked;
@@ -466,7 +458,6 @@ void CSVImportConfigurationWidget::useFirstLineAsHeaderUpdated() {
 
   updateTableHeaders();
   updateLineNumbers(false);
-  emit fileInfoChanged();
 }
 
 void CSVImportConfigurationWidget::updateLineNumbers(bool resetValues) {
@@ -528,33 +519,10 @@ CSVImportConfigurationWidget::createPropertyConfigurationWidget(
   propertyConfigurationWidget->setPropertyNameValidator(validator);
   propertyConfigurationWidget->setSizePolicy(
       QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-  connect(propertyConfigurationWidget, SIGNAL(propertyNameChange(QString)),
-          this, SLOT(propertyNameChanged(QString)));
   connect(propertyConfigurationWidget, SIGNAL(stateChange(bool)), this,
           SLOT(propertyStateChanged(bool)));
   propertyConfigurationWidget->installEventFilter(this);
   return propertyConfigurationWidget;
-}
-
-void CSVImportConfigurationWidget::propertyNameChanged(QString newName) {
-  // Update headers
-  PropertyConfigurationWidget *widget =
-      qobject_cast<PropertyConfigurationWidget *>(sender());
-  assert(widget != nullptr);
-
-  QTableWidgetItem *item =
-      ui->previewTableWidget->horizontalHeaderItem(widget->getPropertyNumber());
-
-  if (item == nullptr) {
-    item = new QTableWidgetItem(newName);
-    ui->previewTableWidget->setHorizontalHeaderItem(widget->getPropertyNumber(),
-                                                    item);
-  } else {
-    item->setText(newName);
-  }
-
-  // Tell other widget property name changed.
-  emit fileInfoChanged();
 }
 
 void CSVImportConfigurationWidget::propertyStateChanged(bool state) {
