@@ -91,7 +91,6 @@ private slots:
   void useStateChanged(int state);
 
 signals:
-  void propertyNameChange(QString newName);
   void stateChange(bool state);
 };
 
@@ -262,11 +261,7 @@ protected slots:
   void updateTableHeaders();
 
   void useFirstLineAsHeaderUpdated();
-  void propertyNameChanged(QString propertyName);
   void propertyStateChanged(bool activated);
-
-signals:
-  void fileInfoChanged();
 
 private:
 
