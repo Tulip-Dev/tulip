@@ -87,7 +87,6 @@ private:
   unsigned int propertyNumber;
 
 private slots:
-  void nameEditFinished();
   void useStateChanged(int state);
 
 signals:
