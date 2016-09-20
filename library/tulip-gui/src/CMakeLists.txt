@@ -96,6 +96,7 @@ SET(SRCS
     TextureFileDialog.cpp
     FontIconManager.cpp
     ColorScalesManager.cpp
+    RangeSlider.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)
@@ -182,6 +183,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/SimplePluginProgressWidget.h
   ../include/tulip/SimpleStringsListSelectionWidget.h
   ../include/tulip/SnapshotDialog.h
+  ../include/tulip/RangeSlider.h
   ../include/tulip/StringsListSelectionDialog.h
   ../include/tulip/TextureFileDialog.h
   ../include/tulip/TreeViewComboBox.h
@@ -231,9 +233,9 @@ QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 ADD_DEFINITIONS(-DQT_DLL)
 ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
 
-INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QxtInclude} ${QtAwesomeInclude})
+INCLUDE_DIRECTORIES(../include ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIBuildInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QtAwesomeInclude})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
-TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLESName} ${QuazipLibrary} ${QxtLibrary} ${QtAwesomeLibrary})
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLESName} ${QuazipLibrary} ${QtAwesomeLibrary})
 
 IF(BUILD_PYTHON_COMPONENTS)
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-gui-python)
