@@ -374,6 +374,11 @@ bool TLPBImport::importGraph() {
         // loop on nodes values
         size = prop->nodeValueSize();
 
+        // for backward compatibility with TLPB format <= 1.1, (see sourceforge commit #11536)
+        if (header.major == 1 && header.minor <= 1 && propType==GraphProperty::propertyTypename) {
+          size = sizeof(tlp::Graph*);
+        }
+
         if (size && !emscripten) {
           // as the size of any value is fixed
           // we can use a buffer to limit the number of disk reads
