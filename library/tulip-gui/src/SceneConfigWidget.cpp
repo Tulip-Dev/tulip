@@ -125,17 +125,13 @@ void SceneConfigWidget::resetChanges() {
   _ui->descendingCB->setChecked(
       renderingParameters.elementsOrderedDescending());
 
-  _ui->labelsFitCheck->setChecked(renderingParameters->isLabelScaled());
-  _ui->labelsBillboardedCheck->setChecked(
-      renderingParameters->getLabelsAreBillboarded());
-  _ui->fixedFontSizeRB->setChecked(renderingParameters->isLabelFixedFontSize());
-  _ui->dynamicFontSizeRB->setChecked(
-      !renderingParameters->isLabelFixedFontSize());
-  _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
-  _ui->labelSizesRangeSlider->setLowerValue(
-      renderingParameters->getMinSizeOfLabel());
-  _ui->labelSizesRangeSlider->setUpperValue(
-      renderingParameters->getMaxSizeOfLabel());
+
+  _ui->labelsFitCheck->setChecked(renderingParameters.labelsScaled());
+  _ui->fixedFontSizeRB->setChecked(renderingParameters.labelsFixedFontSize());
+  _ui->dynamicFontSizeRB->setChecked(!renderingParameters.labelsFixedFontSize());
+  _ui->labelsDensitySlider->setValue(renderingParameters.labelsDensity());
+  _ui->labelSizesRangeSlider->setLowerValue(renderingParameters.minSizeOfLabels());
+  _ui->labelSizesRangeSlider->setUpperValue(renderingParameters.maxSizeOfLabels());
 
   // EDGES
   _ui->edges3DCheck->setChecked(renderingParameters.edges3D());
@@ -209,18 +205,13 @@ void SceneConfigWidget::applySettings() {
     renderingParameters.setElementsOrdered(true);
   }
 
-  renderingParameters->setElementOrderedDescending(
-      _ui->descendingCB->isChecked());
+  renderingParameters.setElementOrderedDescending(_ui->descendingCB->isChecked());
+  renderingParameters.setLabelsFixedFontSize(_ui->fixedFontSizeRB->isChecked());
+  renderingParameters.setLabelsScaled(_ui->labelsFitCheck->isChecked());
+  renderingParameters.setLabelsDensity(_ui->labelsDensitySlider->value());
+  renderingParameters.setMinSizeOfLabels(_ui->labelSizesRangeSlider->lowerValue());
+  renderingParameters.setMaxSizeOfLabels(_ui->labelSizesRangeSlider->upperValue());
 
-  renderingParameters->setLabelScaled(_ui->labelsFitCheck->isChecked());
-  renderingParameters->setLabelsAreBillboarded(
-      _ui->labelsBillboardedCheck->isChecked());
-  renderingParameters->setLabelFixedFontSize(_ui->fixedFontSizeRB->isChecked());
-  renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
-  renderingParameters->setMinSizeOfLabel(
-      _ui->labelSizesRangeSlider->lowerValue());
-  renderingParameters->setMaxSizeOfLabel(
-      _ui->labelSizesRangeSlider->upperValue());
 
   // EDGES
   renderingParameters.setEdges3D(_ui->edges3DCheck->isChecked());
@@ -262,5 +253,5 @@ void SceneConfigWidget::updateSliderRangeLabels() {
 void SceneConfigWidget::scaleLabelsToggled(bool state) {
   _ui->dynamicFontSizeRB->setEnabled(!state);
   _ui->fixedFontSizeRB->setEnabled(!state);
-  _ui->labelSizesSpanSlider->setEnabled(!state);
+  _ui->labelSizesRangeSlider->setEnabled(!state);
 }
