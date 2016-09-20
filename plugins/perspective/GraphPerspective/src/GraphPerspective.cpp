@@ -400,6 +400,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->actionShowPythonDocumentation->setIcon(
       FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant,
                                                          menuIconColor));
+  _ui->actionColor_scales_management->setIcon(
+        FontIconManager::instance()->getMaterialDesignIcon(md::palette,
+                                                           menuIconColor));
 #ifdef BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
