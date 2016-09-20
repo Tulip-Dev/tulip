@@ -690,6 +690,10 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
     // Getting proper sipWrapperType
     const sipTypeDef* kpTypeDef = sipFindType("tlp::Graph");
 
+    if (!kpTypeDef) {
+      return false;
+    }
+
     // Wrapping up C++ instance
     PyObject* pArgs = sipConvertFromType(graph, kpTypeDef, nullptr);
 
