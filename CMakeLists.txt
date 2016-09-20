@@ -559,8 +559,6 @@ IF(NOT BUILD_CORE_ONLY)
     SET(QuazipLibrary quazip-tulip-${TulipMMVersion})
   ENDIF(QUAZIP_FOUND)
 
-  SET(QxtInclude ${PROJECT_SOURCE_DIR}/thirdparty/qxt/src)
-  SET(QxtLibrary qxt-tulip-${TulipMMVersion})
   SET(FTGLInclude ${PROJECT_SOURCE_DIR}/thirdparty/ftgl/)
   SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
   SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
