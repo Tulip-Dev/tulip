@@ -46,8 +46,8 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
   _ui->setupUi(this);
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
-  connect(_ui->labelSizesSpanSlider, SIGNAL(lowerValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
-  connect(_ui->labelSizesSpanSlider, SIGNAL(upperValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
+  connect(_ui->labelSizesRangeSlider, SIGNAL(lowerValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
+  connect(_ui->labelSizesRangeSlider, SIGNAL(upperValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
 
   _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
@@ -57,7 +57,6 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
     _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());
   }
 
-  _ui->labelSizesSpanSlider->setHandleMovementMode(QxtSpanSlider::FreeMovement);
   _ui->labelsDisabledLabel->installEventFilter(this);
   _ui->labelsNoOverlapLabel->installEventFilter(this);
   _ui->labelsShowAllLabel->installEventFilter(this);
@@ -114,8 +113,8 @@ void SceneConfigWidget::resetChanges() {
   _ui->fixedFontSizeRB->setChecked(renderingParameters->isLabelFixedFontSize());
   _ui->dynamicFontSizeRB->setChecked(!renderingParameters->isLabelFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters->getLabelsDensity());
-  _ui->labelSizesSpanSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
-  _ui->labelSizesSpanSlider->setUpperValue(renderingParameters->getMaxSizeOfLabel());
+  _ui->labelSizesRangeSlider->setLowerValue(renderingParameters->getMinSizeOfLabel());
+  _ui->labelSizesRangeSlider->setUpperValue(renderingParameters->getMaxSizeOfLabel());
 
   // EDGES
   _ui->edges3DCheck->setChecked(renderingParameters->isEdge3D());
@@ -184,8 +183,8 @@ void SceneConfigWidget::applySettings() {
   renderingParameters->setLabelsAreBillboarded(_ui->labelsBillboardedCheck->isChecked());
   renderingParameters->setLabelFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters->setLabelsDensity(_ui->labelsDensitySlider->value());
-  renderingParameters->setMinSizeOfLabel(_ui->labelSizesSpanSlider->lowerValue());
-  renderingParameters->setMaxSizeOfLabel(_ui->labelSizesSpanSlider->upperValue());
+  renderingParameters->setMinSizeOfLabel(_ui->labelSizesRangeSlider->lowerValue());
+  renderingParameters->setMaxSizeOfLabel(_ui->labelSizesRangeSlider->upperValue());
 
   // EDGES
   renderingParameters->setEdge3D(_ui->edges3DCheck->isChecked());
@@ -212,6 +211,6 @@ void SceneConfigWidget::dynamicFontRBToggled(bool state) {
 }
 
 void SceneConfigWidget::updateSliderRangeLabels() {
-  _ui->labelsMinSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->lowerValue()));
-  _ui->labelsMaxSizeLabel->setText(QString::number(_ui->labelSizesSpanSlider->upperValue()));
+  _ui->labelsMinSizeLabel->setText(QString::number(_ui->labelSizesRangeSlider->lowerValue()));
+  _ui->labelsMaxSizeLabel->setText(QString::number(_ui->labelSizesRangeSlider->upperValue()));
 }

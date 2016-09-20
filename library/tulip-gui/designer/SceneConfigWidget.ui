@@ -443,7 +443,7 @@ background-color: rgb(160, 160, 160);</string>
               </widget>
              </item>
              <item>
-              <widget class="QxtSpanSlider" name="labelSizesSpanSlider">
+              <widget class="tlp::RangeSlider" name="labelSizesRangeSlider">
                <property name="sizePolicy">
                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                  <horstretch>0</horstretch>
@@ -881,9 +881,9 @@ of the scene remains unchanged.</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>QxtSpanSlider</class>
+   <class>tlp::RangeSlider</class>
    <extends>QSlider</extends>
-   <header location="global">qxtspanslider.h</header>
+   <header location="global">tulip/RangeSlider.h</header>
    <slots>
     <signal>lowerValueChanged(int)</signal>
     <signal>upperValueChanged(int)</signal>
@@ -1029,7 +1029,7 @@ of the scene remains unchanged.</string>
    </hints>
   </connection>
   <connection>
-   <sender>labelSizesSpanSlider</sender>
+   <sender>labelSizesRangeSlider</sender>
    <signal>sliderReleased()</signal>
    <receiver>SceneConfigWidget</receiver>
    <slot>applySettings()</slot>
