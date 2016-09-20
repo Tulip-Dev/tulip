@@ -103,5 +103,10 @@
         <file>icons/eye.svg</file>
         <file>icons/eye_disabled.svg</file>
         <file>icons/eye_partially_disabled.svg</file>
+        <file>icons/bugs.png</file>
+        <file>icons/forums.png</file>
+        <file>icons/icon-quote.gif</file>
+        <file>icons/screenshots.png</file>
+        <file>icons/tutorials.png</file>
     </qresource>
 </RCC>

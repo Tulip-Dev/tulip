@@ -716,9 +716,13 @@ IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF(BUILD_TESTS)
 
-IF(NOT EMSCRIPTEN)
-INSTALL(FILES cmake/FindTULIP.cmake cmake/FindGLEW.cmake cmake/FindQtX.cmake cmake/TulipUseFile.cmake DESTINATION ${TulipShareInstallDir})
-ENDIF(NOT EMSCRIPTEN)
+INSTALL(FILES AUTHORS
+              COPYING.LESSER
+              cmake/FindTULIP.cmake
+              cmake/FindGLEW.cmake
+              cmake/FindQtX.cmake
+              cmake/TulipUseFile.cmake
+        DESTINATION ${TulipShareInstallDir})
 
 IF(NOT BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(bundlers)

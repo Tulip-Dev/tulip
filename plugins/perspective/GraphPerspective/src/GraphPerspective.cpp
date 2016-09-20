@@ -37,8 +37,11 @@
 #include <QMimeData>
 #include <QTimer>
 #include <QUrl>
+#include <QVBoxLayout>
 
+#include <tulip/AboutTulipPage.h>
 #include <tulip/CSVImportWizard.h>
+#include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/ExportModule.h>
 #include <tulip/FontIconManager.h>
@@ -534,6 +537,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
           SLOT(showPluginsCenter()));
   connect(_ui->actionAbout_us, SIGNAL(triggered()), this,
           SLOT(showAboutPage()));
+  connect(_ui->actionAbout_us, SIGNAL(triggered()), this,
+          SLOT(showAboutTulipPage()));
 
   if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
             "doc/tulip-user/html/index.html")
@@ -1560,6 +1565,16 @@ void GraphPerspective::showHideSideBar() {
 
 void GraphPerspective::displayColorScalesDialog() {
   _colorScalesDialog->show();
+}
+
+void GraphPerspective::showAboutTulipPage() {
+  tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
+  QDialog aboutDialog(mainWindow(), Qt::Window);
+  QVBoxLayout *layout = new QVBoxLayout;
+  layout->addWidget(aboutPage);
+  aboutDialog.setLayout(layout);
+  aboutDialog.resize(800, 600);
+  aboutDialog.exec();
 }
 
 PLUGIN(GraphPerspective)
