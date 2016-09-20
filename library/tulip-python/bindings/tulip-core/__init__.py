@@ -11,10 +11,6 @@ sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
   os.environ['PATH'] = _tulipNativeLibsPath + ';' + os.environ['PATH']
-elif platform.system() == 'Linux' and os.path.exists(_tulipNativeLibsPath):
-  # fix loading of Tulip plugins when the tulip module has been installed through pip
-  import DLFCN
-  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
 
 import _tulip
 
@@ -124,6 +120,17 @@ tlpPythonPluginsHomePath = os.path.expanduser('~') + '/.Tulip-' + tulipVersion +
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsPath, False)
 tlp.loadTulipPluginsFromDir(tlpPythonPluginsHomePath, False)
 
-tlp.loadTulipPluginsFromDir(_tulipNativeLibsPath + 'plugins')
+_tulipNativePluginsPath = _tulipNativeLibsPath + 'plugins'
+
+# fix loading of Tulip plugins when the tulip module has been installed through pip
+if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
+  import DLFCN
+  dlOpenFlagsBackup = sys.getdlopenflags()
+  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
+
+tlp.loadTulipPluginsFromDir(_tulipNativePluginsPath)
+
+if platform.system() == 'Linux' and os.path.exists(_tulipNativePluginsPath):
+  sys.setdlopenflags(dlOpenFlagsBackup)
 
 __all__ = ['tlp']
