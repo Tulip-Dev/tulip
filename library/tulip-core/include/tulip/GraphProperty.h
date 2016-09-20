@@ -62,6 +62,11 @@ public :
   virtual void setAllNodeValue(const GraphType::RealType& g);
   virtual bool readNodeDefaultValue(std::istream& iss);
   virtual bool readNodeValue(std::istream& iss, node n);
+  // tlp::GraphType encapsulates a tlp::Graph pointer but that is the graph id
+  // that gets serialized when using the TLPB format
+  virtual unsigned int nodeValueSize() const {
+    return sizeof(unsigned int);
+  }
   virtual unsigned int edgeValueSize() const {
     return 0;
   }
