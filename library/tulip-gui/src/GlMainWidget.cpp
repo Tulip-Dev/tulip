@@ -390,7 +390,7 @@ void GlMainWidget::createPicture(const std::string &pictureName, int width, int 
 //=====================================================
 QImage GlMainWidget::createPicture(int width, int height,bool center) {
 
-  QImage resultImage;
+  static QImage resultImage;
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
 
@@ -423,6 +423,7 @@ QImage GlMainWidget::createPicture(int width, int height,bool center) {
       scene.centerScene();
 
     computeInteractors();
+    scene.forceRedraw();
     scene.draw();
     drawInteractors();
     frameBuf->release();
