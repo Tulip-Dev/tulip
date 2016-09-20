@@ -26,7 +26,6 @@
 #define QXTSPANSLIDER_H
 
 #include <QSlider>
-#include "qxtnamespace.h"
 #include "qxtglobal.h"
 
 class QxtSpanSliderPrivate;
