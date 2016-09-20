@@ -30,6 +30,7 @@
 
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/PluginModel.h>
+#include <tulip/FontIconManager.h>
 
 using namespace tlp;
 using namespace std;
@@ -58,6 +59,8 @@ ExportWizard::ExportWizard(Graph *g, const QString& exportFile, QWidget *parent)
   updateFinishButton();
 
   _ui->pathEdit->setText(exportFile);
+
+  _ui->browseButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport));
 }
 
 ExportWizard::~ExportWizard() {

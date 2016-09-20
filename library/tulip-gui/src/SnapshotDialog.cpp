@@ -20,6 +20,7 @@
 #include <GL/glew.h>
 
 #include "tulip/SnapshotDialog.h"
+#include "tulip/FontIconManager.h"
 #include "ui_SnapshotDialog.h"
 
 #include <QLabel>
@@ -102,8 +103,9 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),u
   ui->horizontalLayout_2->addWidget(lockLabel);
   lockLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
 
-  ui->okButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogOkButton));
-  ui->cancelButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DialogCancelButton));
+  ui->copybutton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy));
+  ui->okButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimage));
+  ui->cancelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close));
 }
 
 SnapshotDialog::~SnapshotDialog() {
