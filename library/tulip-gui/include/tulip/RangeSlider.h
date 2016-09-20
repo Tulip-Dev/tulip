@@ -28,7 +28,7 @@
 
 namespace tlp {
 
-/* 
+/*
    RangeSlider is a slider with two handles. It is
    handy for letting user to choose a range of integers between min/max.
    This class is totally inspired by the QxtSpanSlider class
@@ -42,7 +42,7 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
   Q_ENUMS(HandleMovementMode)
 
- public:
+public:
   explicit RangeSlider(QWidget* parent = 0);
   explicit RangeSlider(Qt::Orientation orientation, QWidget* parent = 0);
   ~RangeSlider() {}
@@ -62,30 +62,30 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   int lowerPosition() const;
   int upperPosition() const;
 
- public slots:
-   void setLowerValue(int lower);
-   void setUpperValue(int upper);
-   void setRange(int lower, int upper);
-  
-   void setLowerPosition(int lower);
-   void setUpperPosition(int upper);
+public slots:
+  void setLowerValue(int lower);
+  void setUpperValue(int upper);
+  void setRange(int lower, int upper);
 
- signals:
-   void rangeChanged(int lower, int upper);
-   void lowerValueChanged(int lower);
-   void upperValueChanged(int upper);
-  
-   void lowerPositionChanged(int lower);
-   void upperPositionChanged(int upper);
+  void setLowerPosition(int lower);
+  void setUpperPosition(int upper);
 
-  protected:
-   virtual void keyPressEvent(QKeyEvent* event);
-   virtual void mousePressEvent(QMouseEvent* event);
-   virtual void mouseMoveEvent(QMouseEvent* event);
-   virtual void mouseReleaseEvent(QMouseEvent* event);
-   virtual void paintEvent(QPaintEvent* event);
+signals:
+  void rangeChanged(int lower, int upper);
+  void lowerValueChanged(int lower);
+  void upperValueChanged(int upper);
 
- private:
+  void lowerPositionChanged(int lower);
+  void upperPositionChanged(int upper);
+
+protected:
+  virtual void keyPressEvent(QKeyEvent* event);
+  virtual void mousePressEvent(QMouseEvent* event);
+  virtual void mouseMoveEvent(QMouseEvent* event);
+  virtual void mouseReleaseEvent(QMouseEvent* event);
+  virtual void paintEvent(QPaintEvent* event);
+
+private:
   enum RangeHandle {
     NoHandle,
     LowerHandle,
@@ -120,10 +120,10 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   HandleMovementMode movement;
   bool firstMovement;
   bool blockTracking;
-  
- public slots:
-   void updateRange(int min, int max);
-   void movePressedHandle();
+
+public slots:
+  void updateRange(int min, int max);
+  void movePressedHandle();
 };
 
 }
