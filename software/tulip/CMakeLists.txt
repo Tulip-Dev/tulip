@@ -1,5 +1,4 @@
 SET(SRCS
-  src/AboutTulipPage.cpp
   src/main.cpp
   src/PerspectiveItemWidget.cpp
   src/PluginErrorReport.cpp
@@ -17,7 +16,6 @@ SET(SRCS
 )
 
 QTX_WRAP_UI(UI_HEADERS
-  designer/AboutTulipPage.ui
   designer/PerspectiveItem.ui
   designer/PluginErrorReport.ui
   designer/PluginsCenter.ui

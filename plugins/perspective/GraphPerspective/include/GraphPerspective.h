@@ -120,6 +120,8 @@ public slots:
 
   void displayColorScalesDialog();
 
+  void showAboutTulipPage();
+
 protected slots:
   void currentGraphChanged(tlp::Graph* graph);
   void refreshDockExpandControls();

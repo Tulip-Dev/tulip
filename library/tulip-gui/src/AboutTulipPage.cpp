@@ -16,19 +16,36 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "AboutTulipPage.h"
+#include <tulip/AboutTulipPage.h>
 #include <tulip/TlpTools.h>
-
+#include <tulip/TlpQtTools.h>
 #include "ui_AboutTulipPage.h"
+
+#include <QFile>
+#include <QTextStream>
+
+using namespace tlp;
 
 AboutTulipPage::AboutTulipPage(QWidget *parent) :
   QWidget(parent), _ui(new Ui::AboutTulipPageData()) {
   _ui->setupUi(this);
 
-  QPixmap qp(QString((tlp::TulipBitmapDir + "/samplePictures/1221.png").c_str()));
+  QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
   _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-  qp = QPixmap(QString((tlp::TulipBitmapDir + "/samplePictures/1861.jpg").c_str()));
+  qp = QPixmap(QString((TulipBitmapDir + "/samplePictures/1861.jpg").c_str()));
   _ui->sample_1861->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-  qp = QPixmap(QString((tlp::TulipBitmapDir + "/samplePictures/1531.png").c_str()));
+  qp = QPixmap(QString((TulipBitmapDir + "/samplePictures/1531.png").c_str()));
   _ui->sample_1531->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+
+  QFile authorsFile(tlpStringToQString(TulipShareDir + "AUTHORS"));
+  QFile licenseFile(tlpStringToQString(TulipShareDir + "COPYING.LESSER"));
+
+  if (authorsFile.open(QFile::ReadOnly | QFile::Text)) {
+    QTextStream in(&authorsFile);
+    _ui->authorsTextEdit->setText(in.readAll());
+  }
+  if (licenseFile.open(QFile::ReadOnly | QFile::Text)) {
+    QTextStream in(&licenseFile);
+    _ui->licenseTextEdit->setText(in.readAll());
+  }
 }

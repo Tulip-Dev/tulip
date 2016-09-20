@@ -37,6 +37,7 @@
 #include <QUrl>
 #include <QMimeData>
 #include <QTimer>
+#include <QVBoxLayout>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -57,6 +58,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
 #include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/AboutTulipPage.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -387,6 +389,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // Agent actions
   connect(_ui->actionPlugins_Center,SIGNAL(triggered()),this,SLOT(showPluginsCenter()));
   connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutPage()));
+  connect(_ui->actionAbout_us,SIGNAL(triggered()),this,SLOT(showAboutTulipPage()));
 
   if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
             "doc/tulip-user/html/index.html").exists()) {
@@ -1363,6 +1366,16 @@ void GraphPerspective::showHideSideBar() {
 
 void GraphPerspective::displayColorScalesDialog() {
   _colorScalesDialog->show();
+}
+
+void GraphPerspective::showAboutTulipPage() {
+  tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
+  QDialog aboutDialog(mainWindow(), Qt::Window);
+  QVBoxLayout *layout = new QVBoxLayout;
+  layout->addWidget(aboutPage);
+  aboutDialog.setLayout(layout);
+  aboutDialog.resize(800, 600);
+  aboutDialog.exec();
 }
 
 PLUGIN(GraphPerspective)
