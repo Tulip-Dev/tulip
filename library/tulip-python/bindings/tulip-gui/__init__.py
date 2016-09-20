@@ -25,10 +25,6 @@ sys.path.append(_tulipGuiNativeLibsPath)
 
 if platform.system() == 'Windows':
   os.environ['PATH'] = _tulipGuiNativeLibsPath + ';' + os.environ['PATH']
-elif platform.system() == 'Linux' and os.path.exists(_tulipGuiNativeLibsPath):
-  # fix loading of Tulip plugins when the tulipgui module has been installed through pip
-  import DLFCN
-  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
 
 import _tulipgui
 
@@ -41,7 +37,18 @@ def tulipguiExitFunc():
   import tulipgui
   tulipgui.tlpgui.runQtMainLoop()
 
-tlp.loadTulipPluginsFromDir(_tulipGuiNativeLibsPath + 'plugins')
+_tulipGuiNativePluginsPath = _tulipGuiNativeLibsPath + 'plugins'
+
+# fix loading of Tulip plugins when the tulipgui module has been installed through pip
+if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
+  import DLFCN
+  dlOpenFlagsBackup = sys.getdlopenflags()
+  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
+
+tlp.loadTulipPluginsFromDir(_tulipGuiNativePluginsPath)
+
+if platform.system() == 'Linux' and os.path.exists(_tulipGuiNativePluginsPath):
+  sys.setdlopenflags(dlOpenFlagsBackup)
 
 # Check if we are in script execution mode (sys.ps1 is not defined in that case)
 # If so, register an exit callback that will run the Qt event loop if some widgets are

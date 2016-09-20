@@ -12,10 +12,6 @@ sys.path.append(_tulipOglNativeLibsPath)
 
 if platform.system() == 'Windows':
   os.environ['PATH'] = _tulipOglNativeLibsPath + ';' + os.environ['PATH']
-elif platform.system() == 'Linux' and os.path.exists(_tulipOglNativeLibsPath):
-  # fix loading of Tulip plugins when the tulipogl module has been installed through pip
-  import DLFCN
-  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
 
 import _tulipogl
 
@@ -32,6 +28,17 @@ if not sys.argv[0] == 'tulip':
     tlp.TulipBitmapDir = bitmapDir
     tlp.TulipViewSettings.instance().setDefaultFontFile(tlp.TulipBitmapDir + 'font.ttf')
 
-tlp.loadTulipPluginsFromDir(_tulipOglNativeLibsPath + 'plugins')
+_tulipOglNativePluginsPath = _tulipOglNativeLibsPath + 'plugins'
+
+# fix loading of Tulip plugins when the tulipogl module has been installed through pip
+if platform.system() == 'Linux' and os.path.exists(_tulipOglNativePluginsPath):
+  import DLFCN
+  dlOpenFlagsBackup = sys.getdlopenflags()
+  sys.setdlopenflags(DLFCN.RTLD_NOW | DLFCN.RTLD_GLOBAL)
+
+tlp.loadTulipPluginsFromDir(_tulipOglNativePluginsPath)
+
+if platform.system() == 'Linux' and os.path.exists(_tulipOglNativePluginsPath):
+  sys.setdlopenflags(dlOpenFlagsBackup)
 
 __all__ = ['tlpogl']
