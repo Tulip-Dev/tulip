@@ -46,9 +46,6 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent): QWidget(parent), _ui(new 
   _ui->setupUi(this);
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
-  connect(_ui->labelSizesRangeSlider, SIGNAL(lowerValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
-  connect(_ui->labelSizesRangeSlider, SIGNAL(upperValueChanged(int)), this, SLOT(updateSliderRangeLabels()));
-
   _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
 
@@ -208,9 +205,4 @@ void SceneConfigWidget::applySettings() {
 
 void SceneConfigWidget::dynamicFontRBToggled(bool state) {
   _ui->sizeLimitsGB->setEnabled(state);
-}
-
-void SceneConfigWidget::updateSliderRangeLabels() {
-  _ui->labelsMinSizeLabel->setText(QString::number(_ui->labelSizesRangeSlider->lowerValue()));
-  _ui->labelsMaxSizeLabel->setText(QString::number(_ui->labelSizesRangeSlider->upperValue()));
 }
