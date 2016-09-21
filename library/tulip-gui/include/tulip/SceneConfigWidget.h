@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef SCENECONFIGWIDGET_H
 #define SCENECONFIGWIDGET_H
 
@@ -36,8 +35,8 @@ class GlMainWidget;
 class TLP_QT_SCOPE SceneConfigWidget : public QWidget {
   Q_OBJECT
 
-  Ui::SceneConfigWidget* _ui;
-  tlp::GlMainWidget* _glMainWidget;
+  Ui::SceneConfigWidget *_ui;
+  tlp::GlMainWidget *_glMainWidget;
 
   bool _resetting;
 
@@ -49,17 +48,14 @@ signals:
   void settingsApplied();
 
 public slots:
-  void setGlMainWidget(tlp::GlMainWidget*);
+  void setGlMainWidget(tlp::GlMainWidget *);
   void resetChanges();
   void applySettings();
   void dynamicFontRBToggled(bool);
-  void updateSliderRangeLabels();
   void scaleLabelsToggled(bool);
-
 
 protected:
   bool eventFilter(QObject *, QEvent *);
-
 };
 }
 
