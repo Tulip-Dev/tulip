@@ -1372,6 +1372,7 @@ void GraphPerspective::showAboutTulipPage() {
     if(!checkSocketConnected()) {
         tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
         QDialog aboutDialog(mainWindow(), Qt::Window);
+        aboutDialog.setWindowTitle("About Tulip");
         QVBoxLayout *layout = new QVBoxLayout;
         layout->addWidget(aboutPage);
         aboutDialog.setLayout(layout);
