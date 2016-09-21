@@ -1,9 +1,25 @@
+# This file is part of Tulip (www.tulip-software.org)
+#
+# Authors: David Auber and the Tulip development Team
+# from LaBRI, University of Bordeaux
+#
+# Tulip is free software; you can redistribute it and/or modify
+# it under the terms of the GNU Lesser General Public License
+# as published by the Free Software Foundation, either version 3
+# of the License, or (at your option) any later version.
+#
+# Tulip is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# See the GNU General Public License for more details.
+
 # -*- coding: utf-8 -*-
 
 import os
 import os.path
 import sys
 import platform
+from datetime import date
 
 from tulip import *
 from tulipogl import *
@@ -64,3 +80,10 @@ if not sys.argv[0] == 'tulip':
   tlpgui.initInteractorsDependencies()
 
 __all__ = ['tlpgui']
+__author__ = "David Auber, Antoine Lambert and the Tulip development Team"
+__copyright__ = "Copyright " + str(date.today().year) + ", LaBRI and University of Bordeaux"
+__license__ = "LGPL-3.0"
+__version__ = tlp.getTulipRelease()
+__maintainer__ = "Antoine Lambert"
+__email__ = "antoine.lambert33@gmail.com"
+__status__ = "Production"
