@@ -44,6 +44,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
     QTextStream in(&authorsFile);
     _ui->authorsTextEdit->setText(in.readAll());
   }
+
   if (licenseFile.open(QFile::ReadOnly | QFile::Text)) {
     QTextStream in(&licenseFile);
     _ui->licenseTextEdit->setText(in.readAll());
@@ -51,5 +52,5 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 }
 
 AboutTulipPage::~AboutTulipPage() {
-    delete _ui;
+  delete _ui;
 }
