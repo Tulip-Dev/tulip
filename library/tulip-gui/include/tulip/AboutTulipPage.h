@@ -38,6 +38,7 @@ namespace tlp {
 class TLP_QT_SCOPE AboutTulipPage : public QWidget {
 public:
   explicit AboutTulipPage(QWidget *parent = 0);
+  ~AboutTulipPage();
 
 private:
   Ui::AboutTulipPageData *_ui;
