@@ -1,9 +1,9 @@
-/**
+/*
  *
  * This file is part of Tulip (www.tulip-software.org)
  *
  * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux 1 and Inria Bordeaux - Sud Ouest
+ * from LaBRI, University of Bordeaux
  *
  * Tulip is free software; you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License
@@ -17,6 +17,12 @@
  *
  */
 
+// +-------------------------------------------------------------------------+
+// | Tulip Python Bindings                                                   |
+// | inspired from bindings by the Booggie project development team          |
+// | (https://sourceforge.net/projects/booggie/)                             |
+// +-------------------------------------------------------------------------+
+
   tlp::Coord getMax(tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.getMax([subgraph = None])
@@ -26,7 +32,7 @@ i.e. the top-right corner of the graph drawing bounding box.
 
 :param subgraph: a sub-graph can be given in parameter, in that case return the maximum coordinate of the sub-graph layout.
 :type subgraph: :class:`tlp.Graph`
-:rtype: :class:`tlp.Coord` 
+:rtype: :class:`tlp.Coord`
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
 %End
 
@@ -56,7 +62,7 @@ i.e. the bottom-left corner of the graph drawing bounding box.
 
 :param subgraph: a sub-graph can be given in parameter, in that case return the minimum coordinate of the sub-graph layout.
 :type subgraph: :class:`tlp.Graph`
-:rtype: :class:`tlp.Coord` 
+:rtype: :class:`tlp.Coord`
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
 %End
 
@@ -88,7 +94,7 @@ Translates the current layout according to a movement vector.
 :param subgraph: a sub-graph can be given in parameter, in that case translates the layout of the nodes belonging to that sub-graph.
 :type subgraph: :class:`tlp.Graph`
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
-%End 
+%End
 
 %MethodCode
   if (a1) {
@@ -104,9 +110,9 @@ Translates the current layout according to a movement vector.
     sipCpp->translate(*a0, a1);
   }
 %End
- 
+
  //===========================================================================================
- 
+
   void translate(const tlp::Vec3f &move, tlp::Iterator<tlp::node> *itNodes, tlp::Iterator<tlp::edge> *itEdges);
 %Docstring
 tlp.LayoutProperty.translate(move, itNodes, itEdges)
@@ -134,7 +140,7 @@ Scales the layout according to a vector of scale factors (sx, sy, sz).
 :param subgraph: a sub-graph can be given in parameter, in that case scales the layout of the nodes belonging to that sub-graph.
 :type subgraph: :class:`tlp.Graph`
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
-%End 
+%End
 
 %MethodCode
   if (a1) {
@@ -232,7 +238,7 @@ Rotates the layout around the Y-axis according to an angle in degrees.
 %End
 
 //===========================================================================================
-  
+
   void rotateZ(const double &alpha, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateZ(alpha[, subgraph = None])
@@ -244,7 +250,7 @@ Rotates the layout around the Z-axis according to an angle in degrees.
 :param subgraph: a sub-graph can be given in parameter, in that case rotates the layout of the nodes belonging to that sub-graph.
 :type subgraph: :class:`tlp.Graph`
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
-%End 
+%End
 
 %MethodCode
   if (a1) {
@@ -267,7 +273,7 @@ Rotates the layout around the Z-axis according to an angle in degrees.
 %Docstring
 tlp.LayoutProperty.rotateX(alpha, itNodes, itEdges)
 
-Rotates the layout around the X-axis of the nodes and edges provided through iterators according to an angle in degrees. 
+Rotates the layout around the X-axis of the nodes and edges provided through iterators according to an angle in degrees.
 
 :param alpha: an angle in degrees
 :type alpha: float
@@ -283,7 +289,7 @@ Rotates the layout around the X-axis of the nodes and edges provided through ite
 %Docstring
 tlp.LayoutProperty.rotateY(alpha, itNodes, itEdges)
 
-Rotates the layout around the Y-axis of the nodes and edges provided through iterators according to an angle in degrees. 
+Rotates the layout around the Y-axis of the nodes and edges provided through iterators according to an angle in degrees.
 
 :param alpha: an angle in degrees
 :type alpha: float
@@ -299,7 +305,7 @@ Rotates the layout around the Y-axis of the nodes and edges provided through ite
 %Docstring
 tlp.LayoutProperty.rotateZ(alpha, itNodes, itEdges)
 
-Rotates the layout around the Z-axis of the nodes and edges provided through iterators according to an angle in degrees. 
+Rotates the layout around the Z-axis of the nodes and edges provided through iterators according to an angle in degrees.
 
 :param alpha: an angle in degrees
 :type alpha: float
@@ -404,11 +410,11 @@ Normalizes the layout, meaning dividing each nodes and edges coordinate by the m
 %Docstring
 tlp.LayoutProperty.perfectAspectRatio()
 
-Scales the layout in order to approach an aspect ratio (width / height) of 1.0 . 
-%End  
+Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
+%End
 
-//=========================================================================================== 
-  
+//===========================================================================================
+
   double edgeLength(const tlp::edge e);
 %Docstring
 tlp.LayoutProperty.edgeLength(edge)
@@ -465,7 +471,7 @@ Returns the average edge length of the layout, the bends are taken into account.
 %End
 
 //===========================================================================================
-  
+
   double averageAngularResolution(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.averageAngularResolution([subgraph = None])
@@ -478,7 +484,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
 :rtype: float
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
 %End
-  
+
 %MethodCode
   if (a0) {
     if (!sipCpp->getGraph()->isDescendantGraph(a0) && a0 != sipCpp->getGraph()) {
@@ -495,8 +501,8 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
   }
 %End
 
-//===========================================================================================  
-  
+//===========================================================================================
+
   double averageAngularResolution(const tlp::node n, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.averageAngularResolution(node[, subgraph = None])
@@ -510,7 +516,7 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
 :type subgraph: :class:`tlp.Graph`
 :rtype: float
 :throws: an exception if the node does not belong to the graph attached to the property or if the provided sub-graph is not a descendant of the graph attached to the property
-%End 
+%End
 
 
 %MethodCode
@@ -539,9 +545,9 @@ It is only defined for 2D drawing, meaning the third coordinate is omitted
     }
   }
 %End
-  
-//===========================================================================================  
-  
+
+//===========================================================================================
+
   std::vector<double> angularResolutions(const tlp::node n, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.angularResolutions(node[, subgraph=None])
@@ -597,7 +603,7 @@ Only works in 2D, the third coordinate is not taken into account.
 :param subgraph: a sub-graph can be given in parameter, in that case fixes embedding of that sub-graph
 :type subgraph: :class:`tlp.Graph`
 :throws: an exception if the provided sub-graph is not a descendant of the graph attached to the property
-%End  
+%End
 
 %MethodCode
   if (a0) {
@@ -614,10 +620,10 @@ Only works in 2D, the third coordinate is not taken into account.
     sipCpp->computeEmbedding(a0);
   }
 %End
-  
+
 
 //===========================================================================================
-  
+
   void computeEmbedding(const tlp::node n, tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.computeEmbedding(node[, subgraph=None])
@@ -655,7 +661,7 @@ Only works in 2D, the third coordinate is not taken into account.
       }
     } else {
       sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-    } 
+    }
   }
 %End
 
