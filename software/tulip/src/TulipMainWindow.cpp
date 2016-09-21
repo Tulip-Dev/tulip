@@ -250,7 +250,7 @@ void TulipMainWindow::bringWindowToFront() {
 }
 
 void TulipMainWindow::showPluginsCenter() {
- bringWindowToFront();
+  bringWindowToFront();
 #if defined(__APPLE__) || defined(_WIN32)
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 #endif
