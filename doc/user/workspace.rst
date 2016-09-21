@@ -273,16 +273,17 @@ This element of the node link diagram panel is located at the top of the window 
 
 The first one, when clicked on, opens the configuration panel, giving explanations about the currently selected tool and proposing the advanced options.
 
-.. image:: _images/i_workspace_toolbar_configuration.png
-    :width: 300
+Before clicking:
 
+.. image:: _images/i_workspace_toolbar_configuration.png
+
+After clicking:
+	   
 .. image:: _images/i_workspace_toolbar_configuration_clicked.png
-    :width: 300
 
 The second part contains the tools icons:
 
 .. image:: _images/icon_wst_toolbar.png
-    :width: 342
 
 The use of the tools will not be explained in detail here. More information about their use can be found by selecting the tool and clicking on the configuration panel button.
 
@@ -328,14 +329,15 @@ Scene
 The scene rendering settings can be opened by clicking on the **Scene** tab, in the top right corner of the node link diagram panel. The following tab then appears :
 
 .. image:: _images/i_workspace_scene.png
-    :width: 452
 
 
-* **Labels**: manage the labels display by ordering them according to a metric, adapting their size so they can fit into their respective nodes, choosing the number of labels simultaneously displayed and setting their limit size. 
+* **Colors**: customize the selection and background colors.
+
+* **Labels**: manage the labels display by adapting their size so they can fit into their respective nodes, choosing the number of labels simultaneously displayed and setting the size limits of the used font. 
 
 * **Edges**: manage the edge display by enabling the 3D edges, showing the arrows, enabling the color or the size interpolations.
 
-* **Colors**: customize the selection and background colors.
+* **Graph elements rendering**: manage the display of the graph nodes/edges and their labels by ordering them according to a given metric. 
 
 * **Projection**: select the orthogonal or classic perspective projection.
 
