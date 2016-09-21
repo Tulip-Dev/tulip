@@ -119,7 +119,7 @@ bool Perspective::checkSocketConnected() {
     else {
       _agentSocket->deleteLater();
       _agentSocket = NULL;
-      qWarning("Tulip lauchner closed, now running in standalone mode");
+      qWarning("Tulip launcher closed, now running in standalone mode");
     }
   }
 
