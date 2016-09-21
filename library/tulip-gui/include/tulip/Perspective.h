@@ -77,7 +77,7 @@ class TLP_QT_SCOPE Perspective : public QObject, public tlp::Plugin {
   bool _maximised;
   void sendAgentMessage(const QString&);
   void notifyProjectLocation(const QString& path);
-  bool checkSocketConnected();
+
 
 protected:
   /**
@@ -110,6 +110,7 @@ protected:
    * @brief Contains extra parameters that have not been parsed by the overleying system. Those are considered to be Perspective-specific and are forwarded into this variable.
    */
   QVariantMap _parameters;
+  bool checkSocketConnected();
 
 public:
   enum ProgressOption {
