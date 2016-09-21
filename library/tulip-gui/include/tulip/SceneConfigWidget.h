@@ -53,8 +53,6 @@ public slots:
   void resetChanges();
   void applySettings();
   void dynamicFontRBToggled(bool);
-  void updateSliderRangeLabels();
-
 
 protected:
   bool eventFilter(QObject *, QEvent *);
