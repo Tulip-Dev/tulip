@@ -242,29 +242,27 @@ void TulipMainWindow::showOpenProjectWindow() {
   openProject(filePath);
 }
 
-void TulipMainWindow::showPluginsCenter() {
-  if (!isVisible())
-    setVisible(true);
-
+void TulipMainWindow::bringWindowToFront() {
+  hide();
+  show();
   raise();
+  activateWindow();
+}
+
+void TulipMainWindow::showPluginsCenter() {
+ bringWindowToFront();
 #if defined(__APPLE__) || defined(_WIN32)
   _ui->pages->setCurrentWidget(_ui->pluginsPage);
 #endif
 }
 
 void TulipMainWindow::showProjectsCenter() {
-  if (!isVisible())
-    setVisible(true);
-
-  raise();
+  bringWindowToFront();
   _ui->pages->setCurrentWidget(_ui->welcomePage);
 }
 
 void TulipMainWindow::showAboutCenter() {
-  if (!isVisible())
-    setVisible(true);
-
-  raise();
+  bringWindowToFront();
   _ui->pages->setCurrentWidget(_ui->aboutPage);
 }
 
