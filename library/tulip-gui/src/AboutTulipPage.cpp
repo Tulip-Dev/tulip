@@ -49,3 +49,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
     _ui->licenseTextEdit->setText(in.readAll());
   }
 }
+
+AboutTulipPage::~AboutTulipPage() {
+    delete _ui;
+}
