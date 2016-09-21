@@ -539,6 +539,13 @@ void WorkspacePanel::resizeEvent(QResizeEvent* ev) {
 }
 
 void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
+
+  if (_view != NULL) {
+    _viewConfigurationWidgets->setMinimumHeight(_view->graphicsView()->height());
+    _viewConfigurationWidgets->setMaximumHeight(_view->graphicsView()->height());
+    _viewConfigurationWidgets->setMaximumWidth(_view->graphicsView()->width());
+  }
+
   QPointF newPos = configurationTabPosition(expanded);
 
   if (newPos == _viewConfigurationWidgets->pos())
@@ -562,10 +569,6 @@ void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
   }
 
   _viewConfigurationExpanded = expanded;
-
-  if (_view != NULL) {
-    _viewConfigurationWidgets->setMaximumSize(_view->graphicsView()->size());
-  }
 }
 
 QPointF WorkspacePanel::configurationTabPosition(bool expanded) const {
