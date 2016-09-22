@@ -24,17 +24,11 @@ using namespace std;
 namespace tlp {
 
 
-ColorScale::ColorScale(const bool gradient) :
-  gradient(gradient) {
-  colorMap[0.0f] = Color(75, 75, 255, 200);
-  colorMap[0.25f] = Color(156, 161, 255, 200);
-  colorMap[0.5f] = Color(255, 255, 127, 200);
-  colorMap[0.75f] = Color(255, 170, 0, 200);
-  colorMap[1.0f] = Color(229, 40, 0, 200);
+ColorScale::ColorScale(const bool gradient) {
+  setColorScale(vector<Color>(), gradient);
 }
 
-ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) :
-  gradient(gradient) {
+ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) {
   setColorScale(colors, gradient);
 }
 
@@ -60,7 +54,14 @@ void ColorScale::setColorScale(const std::vector<Color> colors,
   gradient = gradientV;
   colorMap.clear();
 
-  if (!colors.empty()) {
+  if (colors.empty()) {
+    colorMap[0.0f] = Color(75, 75, 255, 200);
+    colorMap[0.25f] = Color(156, 161, 255, 200);
+    colorMap[0.5f] = Color(255, 255, 127, 200);
+    colorMap[0.75f] = Color(255, 170, 0, 200);
+    colorMap[1.0f] = Color(229, 40, 0, 200);
+  }
+  else {
     if (colors.size() == 1) {
       colorMap[0.0f] = colors[0];
       colorMap[1.0f] = colors[0];
