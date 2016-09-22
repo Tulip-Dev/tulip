@@ -160,7 +160,7 @@ the use of a list or a dictionnary. (see :ref:`No need to use the tlp.ColorScale
 
 //==========================================================================================
 
-  ColorScale(const bool gradient = true);
+  ColorScale();
   ColorScale(const std::vector<tlp::Color> &colors, const bool gradient = true);
   ColorScale(const std::map<float, tlp::Color> &colors, const bool gradient = true);
   ColorScale(const tlp::ColorScale& scale);
