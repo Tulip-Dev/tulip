@@ -23,9 +23,8 @@ using namespace std;
 
 namespace tlp {
 
-
-ColorScale::ColorScale(const bool gradient) {
-  setColorScale(vector<Color>(), gradient);
+ColorScale::ColorScale() {
+  setColorScale(vector<Color>(), true);
 }
 
 ColorScale::ColorScale(const std::vector<Color> &colors, const bool gradient) {

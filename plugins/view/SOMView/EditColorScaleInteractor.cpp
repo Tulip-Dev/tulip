@@ -74,7 +74,7 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
       for (vector<SelectedEntity>::iterator entityIterator = entities.begin(); entityIterator
            != entities.end(); ++entityIterator) {
         if ((*entityIterator).getSimpleEntity() == colorScale->getGlColorScale()) {
-          ColorScaleConfigDialog dialog(colorScale->getGlColorScale()->getColorScale(),
+          ColorScaleConfigDialog dialog(*colorScale->getGlColorScale()->getColorScale(),
                                         glMainWidget);
           foundGlColorScale = true;
           dialog.exec();
