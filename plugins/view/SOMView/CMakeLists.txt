@@ -4,31 +4,31 @@ INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclu
 
 SET(LIB_SRCS
     ColorScalePreview.cpp
-    SOMMapElement.cpp
-    SOMWidget.cpp
     ComputeSOMWidget.cpp
-    SOMPreviewComposite.cpp
     EditColorScaleInteractor.cpp
     GlLabelledColorScale.cpp
-    SOMPropertiesWidget.cpp
     GradientManager.cpp
-    SOMView.cpp
     ThresholdInteractor.cpp
+    SOMMapElement.cpp
+    SOMPreviewComposite.cpp
+    SOMPropertiesWidget.cpp
+    SOMView.cpp
+    SOMWidget.cpp
     SOMViewInteractor.cpp
     ZoomUtils.cpp
 )
 
 QTX_WRAP_UI(LIB_UI_HEADERS
-    SOMPropertiesWidget.ui
     ComputeSOMWidget.ui
+    SOMPropertiesWidget.ui
     SOMWidget.ui
 )
 
 QTX_WRAP_CPP(LIB_MOC_SRCS
     ColorScalePreview.h
+    ComputeSOMWidget.h
     SOMPropertiesWidget.h
     SOMWidget.h
-    ComputeSOMWidget.h
     SOMView.h
 )
 
