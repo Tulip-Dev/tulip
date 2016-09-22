@@ -613,7 +613,7 @@ HistogramMetricMapping::HistogramMetricMapping(const HistogramMetricMapping &his
   glyphScaleConfigDialog = histoMetricMapping.glyphScaleConfigDialog;
 
   if (colorScaleConfigDialog != NULL) {
-    colorScaleConfigDialog->setColorScale(colorScale);
+    colorScaleConfigDialog->setColorScale(*colorScale);
   }
 
   GlPolyQuad *lastColorMappingPolyQuad = histoMetricMapping.mappinqPolyQuad;
@@ -692,7 +692,7 @@ void HistogramMetricMapping::initInteractor() {
     return;
 
   if (colorScaleConfigDialog == NULL) {
-    colorScaleConfigDialog = new ColorScaleConfigDialog(colorScale, histoView->getGlMainWidget());
+    colorScaleConfigDialog = new ColorScaleConfigDialog(*colorScale, histoView->getGlMainWidget());
     dialogColorScale = *colorScale=colorScaleConfigDialog->getColorScale();
     colorScale->setColorMapTransparency(200);
   }
