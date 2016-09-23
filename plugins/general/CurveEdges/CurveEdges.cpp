@@ -75,18 +75,18 @@ static const char *paramHelp[] = {
 };
 
 const std::string curveTypeValues =
-    "QuadraticContinuous <br>"
-    "QuadraticDiscrete <br>"
-    "QuadraticDiagonalCross <br>"
-    "QuadraticStraightCross <br>"
-    "QuadraticHorizontal <br>"
-    "QuadraticVertical <br>"
-    "CubicContinuous <br>"
-    "CubicVertical <br>"
-    "CubicDiagonalCross <br>"
-    "CubicVerticalDiagonalCross <br>"
-    "CubicStraightCrossSource <br>"
-    "CubicStraightCrossTarget";
+  "QuadraticContinuous <br>"
+  "QuadraticDiscrete <br>"
+  "QuadraticDiagonalCross <br>"
+  "QuadraticStraightCross <br>"
+  "QuadraticHorizontal <br>"
+  "QuadraticVertical <br>"
+  "CubicContinuous <br>"
+  "CubicVertical <br>"
+  "CubicDiagonalCross <br>"
+  "CubicVerticalDiagonalCross <br>"
+  "CubicStraightCrossSource <br>"
+  "CubicStraightCrossTarget";
 
 
 class CurveEdges : public tlp::Algorithm {

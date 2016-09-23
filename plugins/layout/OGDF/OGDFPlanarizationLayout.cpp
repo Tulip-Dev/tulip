@@ -86,7 +86,7 @@ static const string embedderValuesDescription =
   "EmbedderMinDepthMaxFace <i>(Planar graph embedding with minimum block-nesting depth and maximum external face)</i><br>"
   "EmbedderMinDepthMaxFaceLayers <i>(Planar graph embedding with minimum block-nesting depth and maximum external face, plus layers approach)</i><br>"
   "EmbedderMinDepthPiTa <i>(Planar graph embedding with minimum block-nesting depth for given embedded blocks)</i>"
-   //"EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>"
+  //"EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>"
   ;
 
 static const char *paramHelp[] = {

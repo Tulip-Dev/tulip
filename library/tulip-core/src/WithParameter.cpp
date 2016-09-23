@@ -60,62 +60,81 @@ static string html_help_def(const string &A, const string &B) {
 static string getParameterTypename(const string &name, const string &typeId) {
   if (name.substr(0, 6) == "file::" || name.substr(0, 9) == "anyfile::") {
     return FILE_PATH_TYPE;
-  } else if (name.substr(0, 5) == "dir::") {
+  }
+  else if (name.substr(0, 5) == "dir::") {
     return DIR_PATH_TYPE;
-  } else if (typeId == typeid(bool).name()) {
+  }
+  else if (typeId == typeid(bool).name()) {
     return BOOLEAN_TYPE;
-  } else if (typeId == typeid(int).name()) {
+  }
+  else if (typeId == typeid(int).name()) {
     return INT_TYPE;
-  } else if (typeId == typeid(unsigned int).name()) {
+  }
+  else if (typeId == typeid(unsigned int).name()) {
     return UINT_TYPE;
-  } else if (typeId == typeid(float).name()) {
+  }
+  else if (typeId == typeid(float).name()) {
     return FLOAT_TYPE;
-  } else if (typeId == typeid(double).name()) {
+  }
+  else if (typeId == typeid(double).name()) {
     return DOUBLE_TYPE;
-  } else if (typeId == typeid(string).name()) {
+  }
+  else if (typeId == typeid(string).name()) {
     return STRING_TYPE;
-  } else {
+  }
+  else {
     string typeName = demangleTlpClassName(typeId.c_str());
+
     // remove pointer mark if any
     if (typeName[typeName.size()-1] == '*') {
       return typeName.substr(0, typeName.size()-1);
-    } else  {
+    }
+    else  {
       return typeName;
     }
   }
 }
 
 string ParameterDescriptionList::generateParameterHTMLDocumentation(const string &name,
-                                                                    const string &help,
-                                                                    const string &type,
-                                                                    const string &defaultValue,
-                                                                    const string &valuesDescription,
-                                                                    const ParameterDirection &direction) {
+    const string &help,
+    const string &type,
+    const string &defaultValue,
+    const string &valuesDescription,
+    const ParameterDirection &direction) {
 
   static string htmlDocheader = HTML_HELP_OPEN();
+
   // for backward compatibility for external plugins using the old plugin parameters doc system
   if (help.substr(0, htmlDocheader.size()) == htmlDocheader) {
     return help;
   }
+
   string doc = htmlDocheader;
   doc += html_help_def( TYPE_SECTION, getParameterTypename(name, type) );
+
   if (!valuesDescription.empty()) {
     doc += html_help_def( VALUES_SECTION, valuesDescription );
   }
+
   if (!defaultValue.empty()) {
     if (type != typeid(tlp::StringCollection).name()) {
       doc += html_help_def( DEFAULT_SECTION, defaultValue );
-    } else {
+    }
+    else {
       doc += html_help_def( DEFAULT_SECTION, defaultValue.substr(0, defaultValue.find(";")));
     }
   }
+
   if (direction == IN_PARAM) {
     doc += html_help_def( DIRECTION_SECTION, IN_DIRECTION );
-  } else if (direction == OUT_PARAM) {
-     doc += html_help_def( DIRECTION_SECTION, OUT_DIRECTION );
-  } else {
+  }
+  else if (direction == OUT_PARAM) {
+    doc += html_help_def( DIRECTION_SECTION, OUT_DIRECTION );
+  }
+  else {
     doc += html_help_def( DIRECTION_SECTION, INOUT_DIRECTION );
   }
+
   doc += HTML_HELP_BODY();
   doc += help;
   doc += HTML_HELP_CLOSE();

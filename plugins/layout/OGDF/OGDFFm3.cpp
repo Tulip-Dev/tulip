@@ -150,7 +150,7 @@ using namespace std;
 
 static const char *paramHelp[] = {
 
-   // Edge Length Property
+  // Edge Length Property
   "A numeric property containing unit edge's length to use.",
 
   // Node Size

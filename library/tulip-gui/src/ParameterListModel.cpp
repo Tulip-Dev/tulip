@@ -130,9 +130,11 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
     else if (role == Qt::DecorationRole) {
       if (infos.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
-      } else if (infos.getDirection() == OUT_PARAM || infos.getName() == "result") {
+      }
+      else if (infos.getDirection() == OUT_PARAM || infos.getName() == "result") {
         return QIcon(":/tulip/gui/icons/32/output.png");
-      } else {
+      }
+      else {
         return QIcon(":/tulip/gui/icons/32/input-output.png");
       }
     }
