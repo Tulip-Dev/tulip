@@ -63,7 +63,7 @@ static const char *paramHelp[] = {
     "Uses Web Open Font Format version 2 (woff2) to reduce generated file "
     "length. This format is supported in almost all recent Internet browsers."};
 
-class svgExport : public tlp::ExportModule {
+class SvgExport : public tlp::ExportModule {
 
 public:
   PLUGININFORMATION("SVG Export",
@@ -78,7 +78,7 @@ public:
 
   string fileExtension() const { return "svg"; }
 
-  svgExport(tlp::PluginContext *context) : tlp::ExportModule(context) {
+  SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context) {
     addInParameter<bool>("Edge color interpolation", paramHelp[0], "false");
     addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
@@ -112,4 +112,4 @@ public:
     return ret;
   }
 };
-PLUGIN(svgExport)
+PLUGIN(SvgExport)
