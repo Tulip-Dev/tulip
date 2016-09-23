@@ -22,72 +22,35 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "NumericProperty" ) \
-  HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
-  HTML_HELP_BODY() \
-  "Metric to map to size." \
-  HTML_HELP_CLOSE(),
-  // input
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "SizeProperty" ) \
-  HTML_HELP_DEF( "default", "\"viewSize\"" ) \
-  HTML_HELP_BODY() \
-  "If not all dimensions (width, height, depth) are checked below, the dimensions not computed are copied from this property." \
-  HTML_HELP_CLOSE(),
-  // width, height, depth
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "boolean" ) \
-  HTML_HELP_DEF( "values", "true/false" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "Each checked dimension is adjusted to represent property, each unchecked dimension is copied from input." \
-  HTML_HELP_CLOSE(),
-  // min
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "double" ) \
-  HTML_HELP_BODY() \
-  "Gives the minimum value of the range of computed sizes." \
-  HTML_HELP_CLOSE(),
-  // max
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "double" ) \
-  HTML_HELP_BODY() \
-  "Gives the maximum value of the range of computed sizes." \
-  HTML_HELP_CLOSE(),
-  // Mapping type
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_DEF( "values", "true / false" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "Type of mapping." \
-  "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used in between.)</li>" \
-  "<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>"                          \
-  HTML_HELP_CLOSE(),
-  // Mapping type
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_DEF( "values", "true / false" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true the algorithm will compute the size of nodes else it will compute the size of edges:" \
-  "<ul><li>true: node size</li><li>false: edge size</li></ul>" \
-  HTML_HELP_CLOSE(),
+  "Input metric whose values will be mapped to sizes.",
 
-  //proportional mapping
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "string" ) \
-  HTML_HELP_DEF( "default", "Area Proportional" ) \
-  HTML_HELP_BODY() \
-  "The mapping can either be area/volume proportional, or square/cubic;" \
-  "i.e. the areas/volumes will be proportional, or the dimensions (width, height and depth) will be." \
-  HTML_HELP_CLOSE(),
+  // input
+  "If not all dimensions (width, height, depth) are checked below, the dimensions not computed are copied from this property.",
+
+  // width, height, depth
+  "Each checked dimension is adjusted to represent property, each unchecked dimension is copied from input.",
+
+  // min
+  "Gives the minimum value of the range of computed sizes.",
+
+  // max
+  "Gives the maximum value of the range of computed sizes.",
+
+  // Mapping type
+  "Type of mapping."
+  "<ul><li>true: linear mapping (min value of property is mapped to min size, max to max size, and a linear interpolation is used in between.)</li>"
+  "<li>false: uniform quantification (the values of property are sorted, and the same size increment is used between consecutive values).</li></ul>",
+
+  // node/edge
+  "If true the algorithm will compute the size of nodes else it will compute the size of edges:"
+  "<ul><li>true: node size</li><li>false: edge size</li></ul>",
+
+  // proportional mapping
+  "The mapping can either be area/volume proportional, or square/cubic;"
+  "i.e. the areas/volumes will be proportional, or the dimensions (width, height and depth) will be."
 };
-}
 
 // error msg for invalid range value
 static const string rangeSizeErrorMsg = "max size must be greater than min size";
@@ -115,7 +78,9 @@ public:
     addInParameter<double>("max size",paramHelp[4],"10");
     addInParameter<bool>("type", paramHelp[5],"true");
     addInParameter<bool>("node/edge", paramHelp[6],"true");
-    addInParameter<StringCollection>("area proportional", paramHelp[7], "Area Proportional;Quadratic/Cubic");
+    addInParameter<StringCollection>("area proportional", paramHelp[7],
+                                     "Area Proportional;Quadratic/Cubic", true,
+                                     "Area Proportional <br> Quadratic/Cubic");
 
     // result needs to be an inout parameter
     // in order to preserve the original values of non targetted elements

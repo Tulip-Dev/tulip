@@ -34,23 +34,18 @@ using namespace tlp;
 static const int NB_UPDOWN_SWEEP = 4;
 
 //================================================================================
-namespace {
-const char * paramHelp[] = {
-  //Orientation
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "horizontal" )   \
-  HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
-  HTML_HELP_CLOSE()
+
+static const char *paramHelp[] = {
+  // orientation
+  "This parameter enables to choose the orientation of the drawing."
 };
-}
+
 //================================================================================
 #define ORIENTATION "horizontal;vertical;"
 //================================================================================
 HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);
-  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION, true, "horizontal <br> vertical");
   addSpacingParameters(this);
   addDependency("Dag Level", "1.0");
   addDependency("Hierarchical Tree (R-T Extended)", "1.1");

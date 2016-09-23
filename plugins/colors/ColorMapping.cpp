@@ -31,73 +31,36 @@
 
 using namespace tlp;
 
-namespace {
-
-const char * paramHelp[] = {
+static const char * paramHelp[] = {
   // type
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "linear <BR> uniform <BR> enumerated <BR> logarithmic") \
-  HTML_HELP_DEF( "default", "linear" )   \
-  HTML_HELP_BODY() \
-  "If linear or logarithmic, the input property must be a <b>numeric</b> property. For the linear case, the minimum value is mapped to one end of the color scale, " \
-  "the maximum value is mapped to the other end, and a linear interpolation is used between both to compute the associated color. For the logarithmic case, graph elements values are first mapped in the [1, +inf[ range. " \
-  "Then the log of each mapped value is computed and used to compute the associated color of the graph element trough a linear interpolation between 0 and the log of the mapped maximum value of graph elements.<BR>" \
-  "If uniform, this is the same except for the interpolation: the values are sorted, numbered, and a linear interpolation is used on those numbers" \
-  "(in other words, only the order is taken into account, not the actual values).<BR>" \
-  "Finally, if enumerated, the input property can be of <b>any type</b>. Each possible value is mapped to a distinct color without specific any order." \
-  HTML_HELP_CLOSE(),
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "PropertyInterface" ) \
-  HTML_HELP_BODY() \
-  "This property is used to get the values affected to graph items." \
-  HTML_HELP_CLOSE(),
-  // target
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "nodes <BR> edges") \
-  HTML_HELP_DEF( "default", "nodes" )  \
-  HTML_HELP_BODY() \
-  "Whether colors are computed for nodes or for edges."  \
-  HTML_HELP_CLOSE(),
-  // color
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "ColorScale" ) \
-  HTML_HELP_BODY() \
-  "Color scale used to transform a scalar into a color." \
-  HTML_HELP_CLOSE(),
-  // override min
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "Set true to override minimum value of input property to keep coloring consistent across datasets." \
-  HTML_HELP_CLOSE(),
-  // min
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "double" ) \
-  HTML_HELP_DEF( "default", "" ) \
-  HTML_HELP_BODY() \
-  "Value to set minimum value of input property." \
-  HTML_HELP_CLOSE(),
-  // override max
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "Set true to override maximum value of input property to keep coloring consistent across datasets." \
-  HTML_HELP_CLOSE(),
-  // max
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "double" ) \
-  HTML_HELP_DEF( "default", "" ) \
-  HTML_HELP_BODY() \
-  "Value to set maximum value of input property." \
-  HTML_HELP_CLOSE(),
-};
+  "If linear or logarithmic, the input property must be a <b>numeric</b> property. For the linear case, the minimum value is mapped to one end of the color scale, "
+  "the maximum value is mapped to the other end, and a linear interpolation is used between both to compute the associated color. For the logarithmic case, graph elements values are first mapped in the [1, +inf[ range. "
+  "Then the log of each mapped value is computed and used to compute the associated color of the graph element trough a linear interpolation between 0 and the log of the mapped maximum value of graph elements.<BR>"
+  "If uniform, this is the same except for the interpolation: the values are sorted, numbered, and a linear interpolation is used on those numbers"
+  "(in other words, only the order is taken into account, not the actual values).<BR>"
+  "Finally, if enumerated, the input property can be of <b>any type</b>. Each possible value is mapped to a distinct color without any specific order.",
 
-}
+  // property
+  "This property is used to get the values affected to graph items.",
+
+  // target
+  "Whether colors are computed for nodes or for edges.",
+
+  // color scale
+  "The color scale used to transform a node/edge property value into a color.",
+
+  // override min
+  "If true override the minimum value of the input property to keep coloring consistent across datasets.",
+
+  // min
+  "That value will be used to override the minimum one of the input property.",
+
+  // override max
+  "If true override the maximum value of the input property to keep coloring consistent across datasets.",
+
+  // max
+  "That value will be used to override the maximum one of the input property."
+};
 
 #define ELT_TYPE "type"
 #define ELT_TYPES "linear;uniform;enumerated;logarithmic"
@@ -131,9 +94,9 @@ public:
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES),
     maxInput(std::numeric_limits<double>::quiet_NaN()), minInput(std::numeric_limits<double>::quiet_NaN()),
     overrideMaxInput(false), overrideMinInput(false) {
-    addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
+    addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES, true, "linear <br> uniform <br> enumerated <br> logarithmic");
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
-    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES);
+    addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES, true, "nodes <br> edges");
     addInParameter<ColorScale>("color scale",paramHelp[3], "");
     addInParameter<bool>("override minimum value",paramHelp[4],"false", false);
     addInParameter<double>("minimum value",paramHelp[5],"", false);

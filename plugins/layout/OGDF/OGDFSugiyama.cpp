@@ -37,30 +37,6 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-#define ELT_RANKING "Ranking"
-#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking;CoffmanGrahamRanking"
-#define ELT_LONGESTPATHRANKING 0
-#define ELT_OPTIMALRANKING 1
-#define ELT_COFFMANGRAHAMRANKING 2
-
-#define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
-#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;GreedySwitchHeuristic;GlobalSiftingHeuristic;GridSiftingHeuristic"
-#define ELT_BARYCENTER 0
-#define ELT_MEDIAN 1
-#define ELT_SPLIT 2
-#define ELT_SIFTING 3
-#define ELT_GREEDYINSERT 4
-#define ELT_GREEDYSWITCH 5
-#define ELT_GLOBALSIFTING 6
-#define ELT_GRIDSIFTING 7
-
-#define ELT_HIERARCHYLAYOUT "Layout"
-#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout;OptimalHierarchyLayout"
-#define ELT_FASTHIERARCHY 0
-#define ELT_FASTSIMPLEHIERARCHY 1
-#define ELT_OPTIMALHIERARCHY 2
-
-
 // comments below have been extracted from OGDF/src/layered/sugiyama.cpp
 /** \addtogroup layout */
 
@@ -107,126 +83,113 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+#define ELT_RANKING "Ranking"
+#define ELT_RANKINGLIST "LongestPathRanking;OptimalRanking;CoffmanGrahamRanking"
+#define ELT_LONGESTPATHRANKING 0
+#define ELT_OPTIMALRANKING 1
+#define ELT_COFFMANGRAHAMRANKING 2
+
+#define ELT_TWOLAYERCROSS "Two-layer crossing minimization"
+#define ELT_TWOLAYERCROSSLIST "BarycenterHeuristic;MedianHeuristic;SplitHeuristic;SiftingHeuristic;GreedyInsertHeuristic;GreedySwitchHeuristic;GlobalSiftingHeuristic;GridSiftingHeuristic"
+#define ELT_BARYCENTER 0
+#define ELT_MEDIAN 1
+#define ELT_SPLIT 2
+#define ELT_SIFTING 3
+#define ELT_GREEDYINSERT 4
+#define ELT_GREEDYSWITCH 5
+#define ELT_GLOBALSIFTING 6
+#define ELT_GRIDSIFTING 7
+
+#define ELT_HIERARCHYLAYOUT "Layout"
+#define ELT_HIERARCHYLAYOUTLIST "FastHierarchyLayout;FastSimpleHierarchyLayout;OptimalHierarchyLayout"
+#define ELT_FASTHIERARCHY 0
+#define ELT_FASTSIMPLEHIERARCHY 1
+#define ELT_OPTIMALHIERARCHY 2
+
+static const char *paramHelp[] = {
+  // fails
+  "The number of times that the number of crossings may not decrease after a complete top-down bottom-up traversal, before a run is terminated.",
+
+  // runs
+  "Determines, how many times the crossing minimization is repeated. Each repetition (except for the first) starts with randomly permuted nodes on each layer. Deterministic behaviour can be achieved by setting runs to 1.",
+
+  // node distance
+  "The minimal horizontal distance between two nodes on the same layer.",
+
+  // layer distance
+  "The minimal vertical distance between two nodes on neighboring layers.",
+
+  // fixed layer distance
+  "If true, the distance between neighboring layers is fixed, otherwise variable (only for FastHierarchyLayout).",
+
+  // transpose
+  "Determines whether the transpose step is performed after each 2-layer crossing minimization; this step tries to reduce the number of crossings by switching neighbored nodes on a layer.",
+
+  // arrangeCCs
+  "If set to true connected components are laid out separately and the resulting layouts are arranged afterwards using the packer module.",
+
+  // minDistCC
+  "Specifies the spacing between connected components of the graph.",
+
+  // pageRatio
+  "The page ratio used for packing connected components.",
+
+  // alignBaseClasses
+  "Determines if base classes of inheritance hierarchies shall be aligned.",
+
+  // alignSiblings
+  "Sets the option alignSiblings.",
+
+  // Ranking
+  "Sets the option for the node ranking (layer assignment).",
+
+  // Two-layer crossing minimization
+  "Sets the module option for the two-layer crossing minimization.",
+
+  // Layout
+  "The hierarchy layout module that computes the final layout."
+};
+
+static const string eltRankingValuesDescription =
+  "CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br>"
+  "LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br>"
+  "OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>";
+
+static const string twoLayerCrossValuesDescription =
+  "BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br>"
+  "GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br>"
+  "GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization)</i><br>"
+  "MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br>"
+  "SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br>"
+  "SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i><br>"
+  "GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br>"
+  "GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing minimization)</i>";
+
+static const string hierarchyLayoutValuesDescription =
+  "FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br>"
+  "FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i><br>"
+  "OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>";
+
 class OGDFSugiyama : public OGDFLayoutPluginBase {
 
 public:
 
   OGDFSugiyama(const tlp::PluginContext *context) :OGDFLayoutPluginBase(context, new ogdf::SugiyamaLayout()) {
-    addInParameter<int>("fails",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of times that the number of crossings may not decrease after a complete top-down bottom-up traversal, before a run is terminated."
-                        HTML_HELP_CLOSE(),
-                        "4");
-    addInParameter<int>("runs",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "Determines, how many times the crossing minimization is repeated. Each repetition (except for the first) starts with randomly permuted nodes on each layer. Deterministic behaviour can be achieved by setting runs to 1."
-                        HTML_HELP_CLOSE(),
-                        "15");
-    addInParameter<double>("node distance",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "the minimal horizontal distance between two nodes on the same layer."
-                           HTML_HELP_CLOSE(),
-                           "3");
-    addInParameter<double>("layer distance",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "the minimal vertical distance between two nodes on neighboring layers."
-                           HTML_HELP_CLOSE(),
-                           "3");
-    addInParameter<bool>("fixed layer distance",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "if true, the distance between neighboring layers is fixed, otherwise variable (only for FastHierarchyLayout)."
-                         HTML_HELP_CLOSE(),
-                         "false");
-    addInParameter<bool>("transpose",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "Determines whether the transpose step is performed after each 2-layer crossing minimization; this step tries to reduce the number of crossings by switching neighbored nodes on a layer."
-                         HTML_HELP_CLOSE(),
-                         "true");
-    addInParameter<bool>("arrangeCCs",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true connected components are laid out separately and the resulting layouts are arranged afterwards using the packer module."
-                         HTML_HELP_CLOSE(),
-                         "true");
-    addInParameter<double>("minDistCC",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "Specifies the spacing between connected components of the graph.."
-                           HTML_HELP_CLOSE(),
-                           "20");
-    addInParameter<double>("pageRatio",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "The page ratio used for packing connected components."
-                           HTML_HELP_CLOSE(),
-                           "1.0");
-    addInParameter<bool>("alignBaseClasses",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "Determines if base classes of inheritance hierarchies shall be aligned."
-                         HTML_HELP_CLOSE(),
-                         "false");
-    addInParameter<bool>("alignSiblings",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "Sets the option alignSiblings."
-                         HTML_HELP_CLOSE(),
-                         "false");
-    addInParameter<StringCollection>(ELT_RANKING,
-                                     HTML_HELP_OPEN()
-                                     HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br/>"
-                                         "- LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br/>"
-                                         "- OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>")
-                                     HTML_HELP_DEF( "default", "LongestPathRanking" )
-                                     HTML_HELP_BODY()
-                                     "Sets the option for the node ranking (layer assignment)."
-                                     HTML_HELP_CLOSE(),
-                                     ELT_RANKINGLIST);
-    addInParameter<StringCollection>(ELT_TWOLAYERCROSS,
-                                     HTML_HELP_OPEN()
-                                     HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- MedianHeuristic <i>(the median heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- SiftingHeuristic <i>(The sifting heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- SplitHeuristic <i>(the split heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br/>"
-                                         "- GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing minimization)</i>")
-                                     HTML_HELP_DEF( "default", "BarycenterHeuristic" )
-                                     HTML_HELP_BODY()
-                                     "Sets the module option for the two-layer crossing minimization."
-                                     HTML_HELP_CLOSE(),
-                                     ELT_TWOLAYERCROSSLIST);
-    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT,
-                                     HTML_HELP_OPEN()
-                                     HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br/>"
-                                         "- FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i><br/>"
-                                         "- OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>")
-                                     HTML_HELP_DEF( "default", "FastHierarchyLayout" )
-                                     HTML_HELP_BODY()
-                                     "The hierarchy layout module that computes the final layout."
-                                     HTML_HELP_CLOSE(),
-                                     ELT_HIERARCHYLAYOUTLIST);
+    addInParameter<int>("fails", paramHelp[0], "4");
+    addInParameter<int>("runs", paramHelp[1], "15");
+    addInParameter<double>("node distance", paramHelp[2], "3");
+    addInParameter<double>("layer distance", paramHelp[3], "3");
+    addInParameter<bool>("fixed layer distance", paramHelp[4], "false");
+    addInParameter<bool>("transpose", paramHelp[5], "true");
+    addInParameter<bool>("arrangeCCs", paramHelp[6], "true");
+    addInParameter<double>("minDistCC", paramHelp[7], "20");
+    addInParameter<double>("pageRatio", paramHelp[8], "1.0");
+    addInParameter<bool>("alignBaseClasses", paramHelp[9], "false");
+    addInParameter<bool>("alignSiblings", paramHelp[10], "false");
+    addInParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST, true, eltRankingValuesDescription);
+    addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST, true, twoLayerCrossValuesDescription);
+    addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST, true, hierarchyLayoutValuesDescription);
   }
 
   ~OGDFSugiyama() {}

@@ -25,55 +25,27 @@
 
 using namespace tlp;
 
-namespace {
-const char* paramHelp[] = {
-  //Orientation
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "StringCollection") \
-  HTML_HELP_DEF("Values", "up to down <BR> down to up <BR> right to left <BR> left to right") \
-  HTML_HELP_DEF("Default", "up to down") \
-  HTML_HELP_BODY() \
-  "Choose your <BR> wished orientation" \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // orientation
+  "Choose a desired orientation.",
 
-  //Orthogonal Edge
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "Boolean") \
-  HTML_HELP_DEF("Values", "true <BR> false") \
-  HTML_HELP_DEF("Default", "false") \
-  HTML_HELP_BODY() \
-  "If true then use orthogonal edges" \
-  HTML_HELP_CLOSE(),
+  // orthogonal
+  "If true then use orthogonal edges.",
 
-  //Layer Spacing
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "float" ) \
-  HTML_HELP_DEF( "default", "64." )  \
-  HTML_HELP_BODY() \
-  "This parameter enables to set up the minimum space between two layers in the drawing" \
-  HTML_HELP_CLOSE(),
-  //Node Spacing
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "float" ) \
-  HTML_HELP_DEF( "default", "18." )  \
-  HTML_HELP_BODY() \
-  "This parameter enables to set up the minimum space between two nodes in the same layer" \
-  HTML_HELP_CLOSE(),
+  // layer spacing
+  "This parameter enables to set up the minimum space between two layers in the drawing.",
+
+  // node spacing
+  "This parameter enables to set up the minimum space between two nodes in the same layer.",
 
   // node size
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Size" ) \
-  HTML_HELP_DEF( "values", "An existing size property" ) \
-  HTML_HELP_DEF( "default", "viewSize" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used for node's sizes." \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the property used for nodes' sizes."
 };
-}
 
 //====================================================================
 void addOrientationParameters(LayoutAlgorithm* pLayout) {
-  pLayout->addInParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION);
+  pLayout->addInParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION, true,
+                                            "up to down <br> down to up <br> right to left <br> left to right");
 }
 
 //====================================================================
@@ -98,11 +70,9 @@ void getSpacingParameters(DataSet* dataSet, float& nodeSpacing, float& layerSpac
 //====================================================================
 void addNodeSizePropertyParameter(LayoutAlgorithm* pLayout, bool inout) {
   if (inout)
-    pLayout->addInOutParameter<SizeProperty>("node size", paramHelp[4],
-        "viewSize");
+    pLayout->addInOutParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
   else
-    pLayout->addInParameter<SizeProperty>("node size", paramHelp[4],
-                                          "viewSize");
+    pLayout->addInParameter<SizeProperty>("node size", paramHelp[4], "viewSize");
 }
 
 bool getNodeSizePropertyParameter(DataSet* dataSet, SizeProperty* &sizes) {

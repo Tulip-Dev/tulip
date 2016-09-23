@@ -21,19 +21,15 @@
 
 #include <tulip/BooleanProperty.h>
 
-PLUGIN(ReverseEdges)
-
 using namespace tlp;
 
+static const char *paramHelp[] = {
+  // selection
+  "Only edges selected in this property (or all edges if no property is given) will be reversed."
+};
+
 ReverseEdges::ReverseEdges(tlp::PluginContext* context): Algorithm(context) {
-  addInParameter<BooleanProperty>("selection",
-                                  HTML_HELP_OPEN()      \
-                                  HTML_HELP_DEF("type","BooleanProperty") \
-                                  HTML_HELP_DEF("default","viewSelection") \
-                                  HTML_HELP_BODY()      \
-                                  "Only edges selected in this property (or all edges if no property is given) will be reversed." \
-                                  HTML_HELP_CLOSE(),
-                                  "viewSelection", false);
+  addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection", false);
 }
 
 bool ReverseEdges::run() {
@@ -61,3 +57,5 @@ bool ReverseEdges::run() {
 
   return true;
 }
+
+PLUGIN(ReverseEdges)

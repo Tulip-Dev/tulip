@@ -25,51 +25,32 @@ using namespace tlp;
 
 PLUGIN(ReachableSubGraphSelection)
 
-namespace {
-const char * paramHelp[] = {
-  // direction
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "StringCollection" ) \
-  HTML_HELP_DEF( "values", "{output edges, input edges, all edges}" ) \
-  HTML_HELP_DEF( "default", "output edges" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the navigation direction. Following values are corrects :" \
-  "<ul><li>output edges: follow ouput edges (directed);</li>" \
-  "<li>input edges: follow input edges (reverse-directed);</li>" \
-  "<li>all edges: all edges (undirected).</li></ul>" \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // edges direction
+  "This parameter defines the navigation direction.",
 
-  // startingNodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Selection" ) \
-  HTML_HELP_DEF( "default", "\"viewSelection\"" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the starting set of nodes used to walk in the graph." \
-  HTML_HELP_CLOSE(),
+  // starting nodes
+  "This parameter defines the starting set of nodes used to walk in the graph.",
 
-  // maxdepth
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "int" ) \
-  HTML_HELP_DEF( "values", "[0,1000000]" ) \
-  HTML_HELP_DEF( "default", "5" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the maximal distance of reachable nodes." \
-  HTML_HELP_CLOSE(),
+  // distance
+  "This parameter defines the maximal distance of reachable nodes."
 };
 
-std::string edgesDirectionLabels[] = {
+static const std::string directionValuesDescription =
+  "output edges : <i>follow ouput edges (directed)</i><br>"
+  "input edges : <i>follow input edges (reverse-directed)</i><br>"
+  "all edges : <i>all edges (undirected)</i>";
+
+static const std::string edgesDirectionLabels[] = {
   "output edges",
   "input edges",
   "all edges",
 };
-}
-
-
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context):BooleanAlgorithm(context) {
-  addInParameter<StringCollection> ("edges direction",paramHelp[0],"output edges;input edges;all edges");
-  addInParameter<BooleanProperty> ("starting nodes",paramHelp[1],"viewSelection");
-  addInParameter<int> ("distance",paramHelp[2],"5");
+  addInParameter<StringCollection> ("edges direction", paramHelp[0], "output edges;input edges;all edges", true, directionValuesDescription);
+  addInParameter<BooleanProperty> ("starting nodes", paramHelp[1], "viewSelection");
+  addInParameter<int> ("distance", paramHelp[2], "5");
 }
 
 ReachableSubGraphSelection::~ReachableSubGraphSelection() {}

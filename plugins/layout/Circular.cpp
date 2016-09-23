@@ -23,17 +23,11 @@ PLUGIN(Circular)
 
 using namespace std;
 using namespace tlp;
-namespace {
-const char * paramHelp[] = {
-  HTML_HELP_OPEN()             \
-  HTML_HELP_DEF( "type", "bool" )      \
-  HTML_HELP_DEF( "values", "true/false" ) \
-  HTML_HELP_DEF( "default", "false" )      \
-  HTML_HELP_BODY()              \
-  "If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). If false, nodes are ordered using a depth first search." \
-  HTML_HELP_CLOSE()
+
+static const char *paramHelp[] = {
+  // search cycle
+  "If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). If false, nodes are ordered using a depth first search."
 };
-}
 
 Circular::Circular(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);

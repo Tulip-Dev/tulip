@@ -77,8 +77,9 @@ public:
                        const std::string& help, const std::string& defaultValue,
                        bool mandatory, ParameterDirection direction)
     : name(name), type(type), help(help),
-      defaultValue(defaultValue), mandatory(mandatory), direction(direction) {
-  }
+      defaultValue(defaultValue), mandatory(mandatory),
+      direction(direction) {}
+
   /**
    * @return The parameter's name
    */
@@ -154,7 +155,8 @@ struct TLP_SCOPE ParameterDescriptionList {
                                 const std::string& help,
                                 const std::string& defaultValue,
                                 bool isMandatory = true,
-                                ParameterDirection direction = IN_PARAM) {
+                                ParameterDirection direction = IN_PARAM,
+                                const std::string &valuesDescription = std::string()) {
     for (unsigned int i = 0; i < parameters.size(); ++i) {
       if (parameters[i].getName() == parameterName) {
 #ifndef NDEBUG
@@ -166,7 +168,7 @@ struct TLP_SCOPE ParameterDescriptionList {
 
     ParameterDescription newParameter(parameterName,
                                       typeid(T).name(),
-                                      help,
+                                      generateParameterHTMLDocumentation(parameterName, help, typeid(T).name(), defaultValue, valuesDescription, direction),
                                       defaultValue,
                                       isMandatory, direction);
     parameters.push_back(newParameter);
@@ -245,6 +247,11 @@ struct TLP_SCOPE ParameterDescriptionList {
 
 private:
   ParameterDescription* getParameter(const std::string& parameterName);
+  std::string generateParameterHTMLDocumentation(const std::string &name, const std::string &help,
+                                                 const std::string &type,
+                                                 const std::string &defaultValue,
+                                                 const std::string &valuesDescription,
+                                                 const ParameterDirection &direction);
   std::vector<ParameterDescription> parameters;
 };
 
@@ -252,10 +259,11 @@ private:
 #define HTML_HELP_OPEN() "<!DOCTYPE html><html><head>\
 <style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
     .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
-    .help { font-style: italic; font-size: 90%; }</style>\
+    .help { font-style: italic; font-size: 90%; }\
+    .b { padding-left: 5px; }</style>\
 </head><body><table border=\"0\" class=\"paramtable\">"
 
-#define HTML_HELP_DEF(A,B) "<tr><td><b>" A "</b><td>" B "</td></tr>"
+#define HTML_HELP_DEF(A,B) "<tr><td><b>" A "</b><td class=\"b\">" B "</td></tr>"
 
 #define HTML_HELP_BODY() "</table><p class=\"help\">"
 
@@ -284,14 +292,16 @@ struct TLP_SCOPE WithParameter {
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to "".
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
+   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults to "".
    * @return void
    **/
   template<typename T>
   void addInParameter(const std::string &name,
                       const std::string &help,
                       const std::string &defaultValue,
-                      bool isMandatory = true) {
-    parameters.template add<T>(name, help, defaultValue, isMandatory, IN_PARAM);
+                      bool isMandatory = true,
+                      const std::string &valuesDescription = std::string()) {
+    parameters.template add<T>(name, help, defaultValue, isMandatory, IN_PARAM, valuesDescription);
   }
 
   /**
@@ -301,14 +311,16 @@ struct TLP_SCOPE WithParameter {
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to "".
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
+   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults to "".
    * @return void
    **/
   template<typename T>
   void addOutParameter(const std::string &name,
                        const std::string &help=std::string(),
                        const std::string &defaultValue = std::string(),
-                       bool isMandatory = true) {
-    parameters.template add<T>(name, help, defaultValue, isMandatory, OUT_PARAM);
+                       bool isMandatory = true,
+                       const std::string &valuesDescription = std::string()) {
+    parameters.template add<T>(name, help, defaultValue, isMandatory, OUT_PARAM, valuesDescription);
   }
 
   /**
@@ -318,14 +330,16 @@ struct TLP_SCOPE WithParameter {
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to "".
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
+   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults to "".
    * @return void
    **/
   template<typename T>
   void addInOutParameter(const std::string &name,
                          const std::string &help=std::string(),
                          const std::string &defaultValue = std::string(),
-                         bool isMandatory = true) {
-    parameters.template add<T>(name, help, defaultValue, isMandatory, INOUT_PARAM);
+                         bool isMandatory = true,
+                         const std::string &valuesDescription = std::string()) {
+    parameters.template add<T>(name, help, defaultValue, isMandatory, INOUT_PARAM, valuesDescription);
   }
 
   /**

@@ -21,20 +21,14 @@
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>
 
+PLUGIN(RandomMetric)
+
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // target
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "nodes <BR> edges") \
-  HTML_HELP_DEF( "default", "nodes" )  \
-  HTML_HELP_BODY() \
-  "Whether metric is computed only for nodes, only for edges, or for both."  \
-  HTML_HELP_CLOSE(),
+  "Whether metric is computed only for nodes, only for edges, or for both."
 };
-}
 
 #define TARGET_TYPE "target"
 #define TARGET_TYPES "both;nodes;edges"
@@ -43,7 +37,7 @@ const char * paramHelp[] = {
 #define BOTH_TARGET 0
 
 RandomMetric::RandomMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES);
+  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true, "both <br> nodes <br> edges");
 
   // result needs to be an inout parameter
   // in order to preserve the original values of non targetted elements
@@ -89,5 +83,3 @@ bool RandomMetric::run() {
 
   return true;
 }
-
-PLUGIN(RandomMetric)

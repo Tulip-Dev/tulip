@@ -87,16 +87,25 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool c
   return ret;
 }
 
+static const char *paramHelp[] = {
+
+  // voronoi cells
+  "If true, a subgraph will be added for each computed voronoi cell.",
+
+  // connect
+  "If true, existing graph nodes will be connected to the vertices of their voronoi cell."
+};
+
 class VoronoiDiagram : public tlp::Algorithm {
 
 public :
 
   VoronoiDiagram(tlp::PluginContext *context) : tlp::Algorithm(context) {
-    addInParameter<bool>("voronoi cells", "If checked, a subgraph will be added for each computed voronoi cell.", "false");
-    addInParameter<bool>("connect", "If checked, existing graph nodes will be connected to the vertices of their voronoi cell.", "false");
+    addInParameter<bool>("voronoi cells", paramHelp[0], "false");
+    addInParameter<bool>("connect", paramHelp[1], "false");
   }
 
-  PLUGININFORMATION("Voronoi diagram","Antoine LAMBERT","",
+  PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "",
                     "Performs a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.0","Triangulation")
 
   bool run() {

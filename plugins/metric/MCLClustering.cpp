@@ -87,8 +87,6 @@ public:
 };
 /*@}*/
 
-PLUGIN(MCLClustering)
-
 const double epsilon = 1E-9;
 
 //=================================================
@@ -264,16 +262,15 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 }
 //=================================================
 static const char *paramHelp[] = {
-    // number of clusters
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "unsigned int")
-        HTML_HELP_BODY() "Determines the random walk length at each "
-                         "step" HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "NumericProperty")
-        HTML_HELP_BODY() "Edge weights to use" HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "unsigned int")
-        HTML_HELP_BODY() "Determines, for each node, the number of strongest "
-                         "link kept at each iteration" HTML_HELP_CLOSE(),
-};
+    // inflate
+    "Determines the random walk length at each step.",
+
+    // weights
+    "Edges' weights to use.",
+
+    // pruning
+    "Determines, for each node, the number of strongest link kept at each "
+    "iteration."};
 //=================================================
 MCLClustering::MCLClustering(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
@@ -459,3 +456,5 @@ bool MCLClustering::run() {
 
   return true;
 }
+//==============================================================================
+PLUGIN(MCLClustering)

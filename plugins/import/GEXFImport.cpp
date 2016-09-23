@@ -47,21 +47,12 @@ using namespace std;
  *
  */
 
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // filename
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "pathname" )       \
-  HTML_HELP_BODY()                  \
-  "This parameter defines the file pathname to import."       \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the file's pathname to import.",
+
   // curved edges
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "bool" )       \
-  HTML_HELP_DEF( "values", "true, false" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY()                  \
-  "Indicates if Bezier curves will be used to draw the edges."       \
-  HTML_HELP_CLOSE(),
+  "Indicates if Bézier curves should be used to draw the edges."
 };
 
 class GEXFImport : public ImportModule {

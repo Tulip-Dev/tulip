@@ -43,26 +43,20 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-static const char* paramHelp[] = {
-//LayoutAlgorithm
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "LayoutProperty") \
-  HTML_HELP_DEF("Values", "Any layout property") \
-  HTML_HELP_DEF("Default", "viewLayout") \
-  HTML_HELP_BODY() \
-  "Input coordinates of nodes and edges" \
-  HTML_HELP_CLOSE(),
-//Rotation
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "DoubleProperty") \
-  HTML_HELP_DEF("Values", "Any double property used for rotation of nodes on z-axis") \
-  HTML_HELP_DEF("Default", "viewRotation") \
-  HTML_HELP_BODY() \
-  "Input rotation of nodes on z-axis" \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // coordinates
+  "Input layout of nodes and edges.",
+
+  // rotation
+  "Input rotation of nodes on z-axis",
+
+  // margin
+  "The minimum margin between each pair of nodes in the resulting packed layout.",
+
+  // increment
+  "The polyomino packing tries to find a place where the next polyomino will fit by following a square."
+  "If there is no place where the polyomino fits, the square gets bigger and every place gets tried again."
 };
-}
 
 typedef struct {
   tlp::Graph *cc; // the connected component associated to that polyomino
@@ -129,18 +123,11 @@ public :
 PLUGIN(PolyominoPacking)
 
 PolyominoPacking::PolyominoPacking( const PluginContext* context ) : LayoutAlgorithm(context) {
-  addInParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
+  addInParameter<LayoutProperty> ("coordinates", paramHelp[0], "viewLayout");
   addNodeSizePropertyParameter(this);
-  addInParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
-  addInParameter<unsigned int>("margin", "", "1");
-  addInParameter<unsigned int>("increment", HTML_HELP_OPEN()                            \
-                               HTML_HELP_DEF( "type", "unsigned int" )               \
-                               HTML_HELP_DEF( "value", "the increment of the square's side" )                 \
-                               HTML_HELP_BODY()                            \
-                               "The polyomino packing tries to find a place where the next polyomino will fit by following a square."
-                               "If there is not place where the polyomino fits, the square gets bigger and every place gets tried again."\
-                               HTML_HELP_CLOSE(),
-                               "1");
+  addInParameter<DoubleProperty> ("rotation", paramHelp[1], "viewRotation");
+  addInParameter<unsigned int>("margin", paramHelp[2], "1");
+  addInParameter<unsigned int>("increment", paramHelp[3], "1");
 }
 
 PolyominoPacking::~PolyominoPacking() {}

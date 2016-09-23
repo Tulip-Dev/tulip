@@ -302,18 +302,11 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
   delete it;
 }
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   //Complexity
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false] o(nlog(n)) / o(n)" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "This parameter enables to choose the complexity of the algorithm." \
-  HTML_HELP_CLOSE()
+  "This parameter enables to choose the complexity of the algorithm."
+  "If true, the complexity is O(n.log(n)), if false it is O(n)."
 };
-}
 
 BubbleTree::BubbleTree(const tlp::PluginContext* context):LayoutAlgorithm(context) {
   addNodeSizePropertyParameter(this);

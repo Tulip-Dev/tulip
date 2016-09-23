@@ -22,42 +22,24 @@
 #include <tulip/ConnectedTest.h>
 #include "Eccentricity.h"
 
-PLUGIN(EccentricityMetric)
-
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true , false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the closeness centrality is computed (i.e. the average distance from the node to all others)."\
-  HTML_HELP_CLOSE(),
+PLUGIN(EccentricityMetric)
+
+static const char *paramHelp[] = {
+  // closeness centrality
+  "If true, the closeness centrality is computed (i.e. the average distance from a node to all others).",
+
   // norm
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true , false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the returned values are normalized. " \
-  "For the closeness centrality, the reciprocal of the sum of distances is returned. " \
-  "The eccentricity values are divided by the graph diameter. " \
-  "<b> Warning : </b> The normalized eccentricity values sould be computed on a (strongly) connected graph."
-  HTML_HELP_CLOSE(),
+  "If true, the returned values are normalized. "
+  "For the closeness centrality, the reciprocal of the sum of distances is returned. "
+  "The eccentricity values are divided by the graph diameter. "
+  "<b> Warning : </b> The normalized eccentricity values sould be computed on a (strongly) connected graph.",
+
   // directed
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true , false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the graph is considered directed."\
-  HTML_HELP_CLOSE(),
+  "If true, the graph is considered directed."
 };
-}
 
 EccentricityMetric::EccentricityMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), allPaths(false), norm(true), directed(false) {
   addInParameter<bool>("closeness centrality",paramHelp[0],"false");

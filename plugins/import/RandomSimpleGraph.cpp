@@ -55,27 +55,13 @@ struct less<edgeS> {
 };
 }
 
-namespace {
-
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // nodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "500" ) \
-  HTML_HELP_BODY() \
-  "Number of nodes in the final graph." \
-  HTML_HELP_CLOSE(),
+  "Number of nodes in the final graph.",
 
   // edges
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "1000" ) \
-  HTML_HELP_BODY() \
-  "Number of edges in the final graph." \
-  HTML_HELP_CLOSE(),
+  "Number of edges in the final graph."
 };
-
-}
 
 /** \addtogroup import */
 

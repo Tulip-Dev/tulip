@@ -524,18 +524,10 @@ bool GMLGraphBuilder::addStruct(const string& structName,GMLBuilder*&newBuilder)
 }
 //=================================================================================
 
-
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // filename
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "pathname" )       \
-  HTML_HELP_BODY()                  \
-  "File to import."       \
-  HTML_HELP_CLOSE(),
+  "The pathname of the GML file to import."
 };
-}
-
 
 /** \addtogroup import */
 

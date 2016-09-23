@@ -61,32 +61,25 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+static const char *paramHelp[] = {
+  // number of pivots
+  "Sets the number of pivots. If the new value is smaller or equal 0 the default value (250) is used.",
+
+  // use edge costs
+  "Sets if the edge costs attribute has to be used.",
+
+  // edge costs
+  "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
+};
+
 class OGDFPivotMDS : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Pivot MDS (OGDF)","Mark Ortmann","29/05/2015","By setting the number of pivots to infinity this algorithm behaves just like classical MDS. See Brandes and Pich: Eigensolver methods for progressive multidimensional scaling of large data.","1.0","Force Directed")
   OGDFPivotMDS(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), pivotMds(new ogdf::PivotMDS()) {
-    addInParameter<int> ("number of pivots",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "integer" )
-                         HTML_HELP_BODY()
-                         "Sets the number of pivots. If the new value is smaller or equal 0 the default value (250) is used."
-                         HTML_HELP_CLOSE(),
-                         "250", false);
-    addInParameter<bool> ("use edge costs",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "boolean" )
-                          HTML_HELP_BODY()
-                          "Sets if the edge costs attribute has to be used."
-                          HTML_HELP_CLOSE(),
-                          "false", false);
-    addInParameter<double> ("edge costs",
-                            HTML_HELP_OPEN()
-                            HTML_HELP_DEF( "type", "double" )
-                            HTML_HELP_BODY()
-                            "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
-                            HTML_HELP_CLOSE(),
-                            "100", false);
+    addInParameter<int> ("number of pivots", paramHelp[0], "250", false);
+    addInParameter<bool> ("use edge costs", paramHelp[1], "false", false);
+    addInParameter<double> ("edge costs", paramHelp[2], "100", false);
 
     ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     csl->setLayoutModule(pivotMds);

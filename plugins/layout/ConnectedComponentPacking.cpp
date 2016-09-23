@@ -31,41 +31,26 @@ PLUGIN(ConnectedComponentPacking)
 
 const float spacing = 8;
 #define COMPLEXITY "auto;n5;n4logn;n4;n3logn;n3;n2logn;n2;nlogn;n;"
-namespace {
-const char* paramHelp[] = {
-//LayoutAlgorithm
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "LayoutProperty") \
-  HTML_HELP_DEF("Values", "Any layout property") \
-  HTML_HELP_DEF("Default", "viewLayout") \
-  HTML_HELP_BODY() \
-  "Input coordinates of nodes and edges" \
-  HTML_HELP_CLOSE(),
-//Rotation
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "DoubleProperty") \
-  HTML_HELP_DEF("Values", "Any double property used for rotation of nodes on z-axis") \
-  HTML_HELP_DEF("Default", "viewRotation") \
-  HTML_HELP_BODY() \
-  "Input rotation of nodes on z-axis" \
-  HTML_HELP_CLOSE(),
-//Complexity
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "StringCollection") \
-  HTML_HELP_DEF("Default", "auto") \
-  HTML_HELP_BODY() \
-  "Complexity of the algorithm.<br> n is the number of connected components in the graph." \
-  HTML_HELP_CLOSE()
+
+static const char *paramHelp[] = {
+  // coordinates
+  "Input layout of nodes and edges.",
+
+  // rotation
+  "Input rotation of nodes around the z-axis.",
+
+  // complexity
+  "Complexity of the algorithm.<br> n is the number of connected components in the graph."
 };
-}
 
 //====================================================================
 ConnectedComponentPacking::ConnectedComponentPacking(const tlp::PluginContext* context)
   : LayoutAlgorithm(context) {
-  addInParameter<LayoutProperty> ("coordinates",paramHelp[0],"viewLayout");
+  addInParameter<LayoutProperty> ("coordinates", paramHelp[0]," viewLayout");
   addNodeSizePropertyParameter(this);
-  addInParameter<DoubleProperty> ("rotation",paramHelp[1],"viewRotation");
-  addInParameter<StringCollection> ("complexity", paramHelp[2], COMPLEXITY );
+  addInParameter<DoubleProperty> ("rotation", paramHelp[1], "viewRotation");
+  addInParameter<StringCollection> ("complexity", paramHelp[2], COMPLEXITY, true,
+                                    "auto <br> n5 <br> n4logn <br> n4 <br> n3logn <br> n3 <br> n2logn <br> n2 <br> nlogn <br> n");
 }
 //====================================================================
 bool ConnectedComponentPacking::run() {

@@ -81,18 +81,18 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+static const char *paramHelp[] = {
+  // page ratio
+  "Sets the option pageRatio."
+};
+
 class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Planarization Grid (OGDF)","Carsten Gutwenger","12/11/2007","The planarization grid layout algorithm applies the planarization approach for crossing minimization, combined with the topology-shape-metrics approach for orthogonal planar graph drawing. It produces drawings with few crossings and is suited for small to medium sized sparse graphs. It uses a planar grid layout algorithm to produce a drawing on a grid.","1.0","Planar")
   OGDFPlanarizationGrid(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::PlanarizationGridLayout()) {
-    addInParameter<double>("page ratio",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "Sets the option pageRatio."
-                           HTML_HELP_CLOSE(),
-                           "1.1");
+    addInParameter<double>("page ratio", paramHelp[0], "1.1");
   }
 
   ~OGDFPlanarizationGrid() {}

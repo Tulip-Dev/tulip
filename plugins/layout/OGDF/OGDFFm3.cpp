@@ -25,6 +25,49 @@
 
 using namespace std;
 
+// comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
+/** \addtogroup layout */
+
+/**
+ * This is an implementation of Fast Multipole Multilevel Method (FM^3).
+ * \author Stefan Hachul
+ *
+ * \par License:
+ * This is part of the Open Graph Drawing Framework (OGDF).
+ * Copyright (C) 2005-2007
+ *
+ * \par
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License
+ * Version 2 or 3 as published by the Free Software Foundation
+ * and appearing in the files LICENSE_GPL_v2.txt and
+ * LICENSE_GPL_v3.txt included in the packaging of this file.
+ *
+ * \par
+ * In addition, as a special exception, you have permission to link
+ * this software with the libraries of the COIN-OR Osi project
+ * (http://www.coin-or.org/projects/Osi.xml), all libraries required
+ * by Osi, and all LP-solver libraries directly supported by the
+ * COIN-OR Osi project, and distribute executables, as long as
+ * you follow the requirements of the GNU General Public License
+ * in regard to all of the software in the executable aside from these
+ * third-party libraries.
+ *
+ * \par
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * \par
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+ *
+ * \see  http://www.gnu.org/copyleft/gpl.html
+ ***************************************************************/
+
 #define ELT_PAGEFORMAT "Page Format"
 #define ELT_PAGEFORMATLIST "Square;Portrait;Landscape"
 #define ELT_SQUARE 0
@@ -105,48 +148,118 @@ using namespace std;
 #define ELT_ITERATIVELY 0
 #define ELT_ALURU 1
 
-// comments below have been extracted from OGDF/src/energybased/FMMMLayout.cpp
-/** \addtogroup layout */
+static const char *paramHelp[] = {
 
-/**
- * This is an implementation of Fast Multipole Multilevel Method (FM^3).
- * \author Stefan Hachul
- *
- * \par License:
- * This is part of the Open Graph Drawing Framework (OGDF).
- * Copyright (C) 2005-2007
- *
- * \par
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License
- * Version 2 or 3 as published by the Free Software Foundation
- * and appearing in the files LICENSE_GPL_v2.txt and
- * LICENSE_GPL_v3.txt included in the packaging of this file.
- *
- * \par
- * In addition, as a special exception, you have permission to link
- * this software with the libraries of the COIN-OR Osi project
- * (http://www.coin-or.org/projects/Osi.xml), all libraries required
- * by Osi, and all LP-solver libraries directly supported by the
- * COIN-OR Osi project, and distribute executables, as long as
- * you follow the requirements of the GNU General Public License
- * in regard to all of the software in the executable aside from these
- * third-party libraries.
- *
- * \par
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * \par
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
- *
- * \see  http://www.gnu.org/copyleft/gpl.html
- ***************************************************************/
+   // Edge Length Property
+  "A numeric property containing unit edge's length to use.",
+
+  // Node Size
+  "The nodes' sizes.",
+
+  // Unit edge length
+  "The unit edge's length.",
+
+  // New initial placement
+  "Indicates the initial placement before running algorithm.",
+
+  // Fixed iterations
+  "The fixed number of iterations for the stop criterion.",
+
+  // Threshold
+  "The threshold for the stop criterion.",
+
+  // Page Format
+  "Possible page's formats.",
+
+  // Quality vs Speed
+  "Trade-off between run-time and quality.",
+
+  // Edge Length Measurement
+  "Specifies how the length of an edge is measured.",
+
+  // Allowed Positions
+  "Specifies which positions for a node are allowed.",
+
+  // Tip Over
+  "Specifies in which case it is allowed to tip over drawings of connected components.",
+
+  // Pre Sort
+  "Specifies how connected components are sorted before the packing algorithm is applied.",
+
+  // Galaxy Choice
+  "Specifies how sun nodes of galaxies are selected.",
+
+  // Max Iter Change
+  "Specifies how MaxIterations is changed in subsequent multilevels.",
+
+  // Initial Placement
+  "Specifies how the initial placement is generated.",
+
+  // Force Model
+  "Specifies the force-model.",
+
+  // Repulsive Force Model
+  "Specifies how to calculate repulsive forces.",
+
+  // Initial Placement Forces
+  "Specifies how the initial placement is done.",
+
+  // Reduced Tree Construction
+  "Specifies how the reduced bucket quadtree is constructed.",
+
+  // Smallest Cell Finding
+  "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+};
+
+static const string pageFormatValuesDescription =
+  "Portrait <i>(A4 portrait page)</i><br>"
+  "Landscape <i>(A4 landscape page)</i><br>"
+  "Square <i>(Square format)</i>";
+
+static const string qualityVsSpeedValuesDescription =
+  "GorgeousAndEfficient <i>(Best quality)</i><br>"
+  "BeautifulAndFast <i>(Medium quality and speed)</i><br>"
+  "NiceAndIncredibleSpeed <i>(Best speed</i>";
+
+static const string edgeLengthMeasurementValuesDescription =
+  "Midpoint <i>(Measure from center point of edge end points)</i><br>"
+  "BoundingCircle <i>(Measure from border of circle surrounding edge end points)</i>";
+
+static const string presortValuesDescription =
+  "None <i>(Do not presort)</i><br>"
+  "DecreasingHeight <i>(Presort by decreasing height of components)</i><br>"
+  "DecreasingWidth <i>(Presort by decreasing width of components)</i>";
+
+static const string galaxyChoiceValuesDescription =
+  "UniformProb<br>"
+  "NonUniformProbLowerMass<br>"
+  "NonUniformProbHigherMass";
+
+static const string maxIterChangeValuesDescription =
+  "Constant <br>"
+  "LinearlyDecreasing <br>"
+  "RapidlyDecreasing";
+
+static const string forceModelValuesDescription =
+  "FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br>"
+  "Eades <i>(The force-model by Eades)</i><br>"
+  "New <i>(The new force-model)</i>";
+
+static const string repulsiveForceValuesDescription =
+  "Exact <i>(Exact calculation)</i><br>"
+  "GridApproximation <i>(Grid approximation)</i><br>"
+  "NMM <i>(Calculation as for new multipole method)</i>";
+
+static const string initialPlacementValuesDescription =
+  "UniformGrid <i>(Uniform placement on a grid)</i><br>"
+  "RandomTime <i>(Random placement, based on current time)</i><br>"
+  "RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br>"
+  "KeepPositions <i>(No change in placement)</i>";
+
+static const string smallestCellFindingValuesDescription =
+  "Iteratively <i>(Iteratively, in constant time)</i><br>"
+  "Aluru <i>(According to formula by Aluru et al., in constant time)</i>";
+
 class OGDFFm3: public OGDFLayoutPluginBase {
 
   tlp::StringCollection stringCollection;
@@ -166,197 +279,26 @@ PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
   OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
-  addInParameter<NumericProperty*> ("Edge Length Property",
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "NumericProperty" )
-                                    HTML_HELP_BODY()
-                                    "A numeric property containing unit edge length to use."
-                                    HTML_HELP_CLOSE(),
-                                    "viewMetric", false);
-  addInParameter<SizeProperty> ("Node Size",
-                                HTML_HELP_OPEN()
-                                HTML_HELP_DEF( "type", "SizeProperty" )
-                                HTML_HELP_BODY()
-                                "The nodes size."
-                                HTML_HELP_CLOSE(),
-                                "viewSize", false);
-  addInParameter<double> ("Unit edge length",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "double" )
-                          HTML_HELP_BODY()
-                          "The unit edge length."
-                          HTML_HELP_CLOSE(),
-                          "10.0", false);
-  addInParameter<bool> ("New initial placement",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "bool" )
-                        HTML_HELP_BODY()
-                        "Indicates the initial placement before running algorithm."
-                        HTML_HELP_CLOSE(),
-                        "true");
-  addInParameter<int>("Fixed iterations",
-                      HTML_HELP_OPEN()
-                      HTML_HELP_DEF( "type", "int" )
-                      HTML_HELP_BODY()
-                      "The fixed number of iterations for the stop criterion."
-                      HTML_HELP_CLOSE(),
-                      "30");
-  addInParameter<double>("Threshold",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "double" )
-                         HTML_HELP_BODY()
-                         "The threshold for the stop criterion."
-                         HTML_HELP_CLOSE(),
-                         "0.01");
-  addInParameter<StringCollection> (ELT_PAGEFORMAT,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- Portrait <i>(A4 portrait page)</i><br/>"
-                                        "- Landscape <i>(A4 landscape page)</i><br>"
-                                        "- Square <i>(Square format)</i>")
-                                    HTML_HELP_DEF( "default", "Square" )
-                                    HTML_HELP_BODY()
-                                    "Possible page formats."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_PAGEFORMATLIST);
-  addInParameter<StringCollection> (ELT_QUALITYVSSPEED,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- GorgeousAndEfficient <i>(Best quality)</i><br/>"
-                                        "- BeautifulAndFast <i>(Medium quality and speed)</i><br/>"
-                                        "- NiceAndIncredibleSpeed <i>(Best speed</i>")
-                                    HTML_HELP_DEF( "default", "BeautifulAndFast" )
-                                    HTML_HELP_BODY()
-                                    "Trade-off between run-time and quality."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_QUALITYVSSPEEDLIST);
-  addInParameter<StringCollection> (ELT_EDGELENGTHMEASUREMENT,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- Midpoint <i>(Measure from center point of edge end points)</i><br>"
-                                        "- BoundingCircle <i>(Measure from border of circle surrounding edge end points)</i>")
-                                    HTML_HELP_DEF( "default", "BoundingCircle" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how the length of an edge is measured."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_EDGELENGTHMEASUREMENTLIST);
-  addInParameter<StringCollection> (ELT_ALLOWEDPOSITIONS,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- All<br/>- Integer<br/>"
-                                        "- Exponent")
-                                    HTML_HELP_DEF( "default", "Integer" )
-                                    HTML_HELP_BODY()
-                                    "Specifies which positions for a node are allowed."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_ALLOWEDPOSITIONSLIST);
-  addInParameter<StringCollection> (ELT_TIPOVER,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- None<br/>- NoGrowingRow<br/>"
-                                        "- Always")
-                                    HTML_HELP_DEF( "default", "NoGrowingRow" )
-                                    HTML_HELP_BODY()
-                                    "Specifies in which case it is allowed to tip over drawings of connected components."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_TIPOVERLIST);
-  addInParameter<StringCollection> (ELT_PRESORT,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- None <i>(Do not presort)</i><br/>"
-                                        "- DecreasingHeight <i>(Presort by decreasing height of components)</i><br/>"
-                                        "- DecreasingWidth <i>(Presort by decreasing width of components)</i>")
-                                    HTML_HELP_DEF( "default", "DecreasingHeight" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how connected components are sorted before the packing algorithm is applied."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_PRESORTLIST);
-  addInParameter<StringCollection> (ELT_GALAXYCHOICE,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "-UniformProb<br>"
-                                        "- NonUniformProbLowerMass<br/>"
-                                        "- NonUniformProbHigherMass")
-                                    HTML_HELP_DEF( "default", "NonUniformProbLowerMass" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how sun nodes of galaxies are selected. "
-                                    HTML_HELP_CLOSE(),
-                                    ELT_GALAXYCHOICELIST);
-  addInParameter<StringCollection> (ELT_MAXITERCHANGE,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- Constant<br/>"
-                                        "- LinearlyDecreasing<br/>"
-                                        "- RapidlyDecreasing")
-                                    HTML_HELP_DEF( "default", "LinearlyDecreasing" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how MaxIterations is changed in subsequent multilevels. "
-                                    HTML_HELP_CLOSE(),
-                                    ELT_MAXITERCHANGELIST);
-  addInParameter<StringCollection> (ELT_INITIALPLACEMENTMULT,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- Simple<br/>"
-                                        "- Advanced")
-                                    HTML_HELP_DEF( "default", "Advanced" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how the initial placement is generated."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_INITIALPLACEMENTMULTLIST);
-  addInParameter<StringCollection> (ELT_FORCEMODEL,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br/>"
-                                        "- Eades <i>(The force-model by Eades)</i><br/>"
-                                        "- New <i>(The new force-model)</i>")
-                                    HTML_HELP_DEF( "default", "New" )
-                                    HTML_HELP_BODY()
-                                    "Specifies the force model. "
-                                    HTML_HELP_CLOSE(),
-                                    ELT_FORCEMODELLIST);
-  addInParameter<StringCollection> (ELT_REPULSIVEFORCEMETHOD,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- Exact <i>(Exact calculation)</i><br/>"
-                                        "- GridApproximation <i>(Grid approximation)</i><br/>"
-                                        "- NMM <i>(Calculation as for new multipole method)</i>")
-                                    HTML_HELP_DEF( "default", "NMM" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how to calculate repulsive forces."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_REPULSIVEFORCEMETHODLIST);
-  addInParameter<StringCollection> (ELT_INITIALPLACEMENTFORCES,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- UniformGrid <i>(Uniform placement on a grid)</i><br/>"
-                                        "- RandomTime <i>(Random placement, based on current time)</i><br/>"
-                                        "- RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br/>"
-                                        "- KeepPositions <i>(No change in placement)</i>")
-                                    HTML_HELP_DEF( "default", "RandomRandIterNr" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how the initial placement is done. "
-                                    HTML_HELP_CLOSE(),
-                                    ELT_INITIALPLACEMENTFORCESLIST);
-  addInParameter<StringCollection> (ELT_REDUCEDTREECONSTRCUCTION,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- PathByPath<br/>"
-                                        "- SubtreeBySubtree")
-                                    HTML_HELP_DEF( "default", "Advanced" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how the reduced bucket quadtree is constructed."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_REDUCEDTREECONSTRCUCTIONLIST);
-  addInParameter<StringCollection> (ELT_SMALLESTCELLFINDING,
-                                    HTML_HELP_OPEN()
-                                    HTML_HELP_DEF( "type", "String Collection" )
-                                    HTML_HELP_DEF("values", "- Iteratively <i>(Iteratively, in constant time)</i><br/>"
-                                        "- Aluru <i>(According to formula by Aluru et al., in constant time)</i>")
-                                    HTML_HELP_DEF( "default", "Advanced" )
-                                    HTML_HELP_BODY()
-                                    "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
-                                    HTML_HELP_CLOSE(),
-                                    ELT_SMALLESTCELLFINDINGLIST);
+  addInParameter<NumericProperty*> ("Edge Length Property", paramHelp[0], "viewMetric", false);
+  addInParameter<SizeProperty> ("Node Size", paramHelp[1], "viewSize", false);
+  addInParameter<double> ("Unit edge length", paramHelp[2], "10.0", false);
+  addInParameter<bool> ("New initial placement", paramHelp[3], "true");
+  addInParameter<int>("Fixed iterations", paramHelp[4], "30");
+  addInParameter<double>("Threshold", paramHelp[5], "0.01");
+  addInParameter<StringCollection> (ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true, pageFormatValuesDescription);
+  addInParameter<StringCollection> (ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true, qualityVsSpeedValuesDescription);
+  addInParameter<StringCollection> (ELT_EDGELENGTHMEASUREMENT, paramHelp[8], ELT_EDGELENGTHMEASUREMENTLIST, true, edgeLengthMeasurementValuesDescription);
+  addInParameter<StringCollection> (ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST, true, "All<br> Integer <br> Exponent");
+  addInParameter<StringCollection> (ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true, "None<br> NoGrowingRow<br> Always");
+  addInParameter<StringCollection> (ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true, presortValuesDescription);
+  addInParameter<StringCollection> (ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true, galaxyChoiceValuesDescription);
+  addInParameter<StringCollection> (ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true, maxIterChangeValuesDescription);
+  addInParameter<StringCollection> (ELT_INITIALPLACEMENTMULT, paramHelp[14], ELT_INITIALPLACEMENTMULTLIST, true, "Simple <br> Advanced");
+  addInParameter<StringCollection> (ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true, forceModelValuesDescription);
+  addInParameter<StringCollection> (ELT_REPULSIVEFORCEMETHOD, paramHelp[16], ELT_REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
+  addInParameter<StringCollection> (ELT_INITIALPLACEMENTFORCES, paramHelp[17], ELT_INITIALPLACEMENTFORCESLIST, true, initialPlacementValuesDescription);
+  addInParameter<StringCollection> (ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18], ELT_REDUCEDTREECONSTRCUCTIONLIST, true, "PathByPath <br> SubtreeBySubtree");
+  addInParameter<StringCollection> (ELT_SMALLESTCELLFINDING, paramHelp[19], ELT_SMALLESTCELLFINDINGLIST, true, smallestCellFindingValuesDescription);
 }
 
 OGDFFm3::~OGDFFm3() {

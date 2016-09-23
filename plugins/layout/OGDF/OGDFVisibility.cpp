@@ -66,26 +66,23 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+static const char *paramHelp[] = {
+  // minimum grid distance
+  "The minimum grid distance.",
+
+  // transpose
+  "If true, transpose the layout vertically."
+};
+
 class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007",
                     "Implements a simple upward drawing algorithm based on visibility representations (horizontal segments for nodes, vectical segments for edges).","1.1","Hierarchical")
   OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), visibility(new ogdf::VisibilityLayout()) {
-    addInParameter<int>("minimum grid distance",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The minimum grid distance."
-                        HTML_HELP_CLOSE(),
-                        "1");
-    addInParameter<bool>("transpose",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "The parameter for transposing the layout vertically ."
-                         HTML_HELP_CLOSE(),
-                         "false");
+    addInParameter<int>("minimum grid distance", paramHelp[0], "1");
+    addInParameter<bool>("transpose", paramHelp[1], "false");
     ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the VisibilityLayout instance
     csl->setLayoutModule(visibility);

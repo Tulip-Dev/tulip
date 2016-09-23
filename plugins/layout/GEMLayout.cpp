@@ -25,39 +25,22 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // 3D
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_BODY() \
-  "If true, the layout is in 3D else it is computed in 2D." \
-  HTML_HELP_CLOSE(),
+  "If true, the layout is in 3D else it is computed in 2D.",
+
   // edge length
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "NumericProperty" ) \
-  HTML_HELP_BODY() \
-  "This metric is used to compute the length of edges." \
-  HTML_HELP_CLOSE(),
+  "This metric is used to compute the length of edges.",
+
   // initial layout
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "LayoutProperty" ) \
-  HTML_HELP_BODY() \
-  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm." \
-  HTML_HELP_CLOSE(),
+  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm.",
+
   // selection of unmovable nodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "BooleanProperty" ) \
-  HTML_HELP_BODY() \
-  "This property is used to indicate the unmovable nodes, the ones for which a new position will not be computed by the algorithm. This property is taken into account only if a layout property has been given to get the initial position of the unmovable nodes." \
-  HTML_HELP_CLOSE(),
+  "This property is used to indicate the unmovable nodes, the ones for which a new position will not be computed by the algorithm. This property is taken into account only if a layout property has been given to get the initial position of the unmovable nodes.",
+
   // max iterations
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned integer" ) \
-  HTML_HELP_DEF( "default", "0" ) \
-  HTML_HELP_BODY() \
-  "This parameter allows to choose the number of iterations. The default value of 0 corresponds to (3 * nb_nodes * nb_nodes) if the graph has more than 100 nodes."\
-  " For smaller graph, the number of iterations is set to 30 000." \
-  HTML_HELP_CLOSE(),
+  "This parameter allows to choose the number of iterations. The default value of 0 corresponds to (3 * nb_nodes * nb_nodes) if the graph has more than 100 nodes."
+  " For smaller graph, the number of iterations is set to 30 000."
 };
 
 /*

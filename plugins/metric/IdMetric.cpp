@@ -21,22 +21,14 @@
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 
+PLUGIN(IdMetric)
+
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // target
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "nodes <BR> edges") \
-  HTML_HELP_DEF( "default", "nodes" )  \
-  HTML_HELP_BODY() \
-  "Whether the id is copied only for nodes, only for edges, or for both."  \
-  HTML_HELP_CLOSE(),
+  "Whether the id is copied only for nodes, only for edges, or for both."
 };
-}
-
-PLUGIN(IdMetric)
 
 #define TARGET_TYPE "target"
 #define TARGET_TYPES "both;nodes;edges"
@@ -46,7 +38,7 @@ PLUGIN(IdMetric)
 
 //==================================================================
 IdMetric::IdMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES);
+  addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true, "both <br> nodes <br> edges");
 
   // result needs to be an inout parameter
   // in order to preserve the original values of non targetted elements
