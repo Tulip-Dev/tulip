@@ -134,7 +134,7 @@ public:
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES);
     addInParameter<PropertyInterface*>("input property",paramHelp[1],"viewMetric");
     addInParameter<StringCollection>(TARGET_TYPE, paramHelp[2], TARGET_TYPES);
-    addInParameter<ColorScale>("colorScale",paramHelp[3],"((75, 75, 255, 200), (156, 161, 255, 200), (255, 255, 127, 200), (255, 170, 0, 200), (229, 40, 0, 200))");
+    addInParameter<ColorScale>("color scale",paramHelp[3], "");
     addInParameter<bool>("override minimum value",paramHelp[4],"false", false);
     addInParameter<double>("minimum value",paramHelp[5],"", false);
     addInParameter<bool>("override maximum value",paramHelp[6],"false", false);
@@ -326,7 +326,7 @@ public:
       dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->get("colorScale", colorScale);
+      dataSet->get("color scale", colorScale);
       dataSet->get("maximum value", maxInput);
       dataSet->get("minimum value", minInput);
     }
