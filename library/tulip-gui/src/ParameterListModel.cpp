@@ -23,6 +23,7 @@
 
 #include <QColor>
 #include <QModelIndex>
+#include <QIcon>
 
 namespace tlp {
 
@@ -123,8 +124,18 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
       else
         return QColor(222, 255, 222);
     }
-    else if (role == Qt::ToolTipRole)
+    else if (role == Qt::ToolTipRole) {
       return tlp::tlpStringToQString(infos.getHelp());
+    }
+    else if (role == Qt::DecorationRole) {
+      if (infos.getDirection() == IN_PARAM) {
+        return QIcon(":/tulip/gui/icons/32/input.png");
+      } else if (infos.getDirection() == OUT_PARAM || infos.getName() == "result") {
+        return QIcon(":/tulip/gui/icons/32/output.png");
+      } else {
+        return QIcon(":/tulip/gui/icons/32/input-output.png");
+      }
+    }
   }
 
   return TulipModel::headerData(section,orientation,role);
