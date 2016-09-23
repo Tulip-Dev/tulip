@@ -5,7 +5,7 @@ SET(PLUGIN_NAME ReverseEdges)
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipGUIInclude})
 
 SET(PLUGIN_SRCS
- reverseedges.cpp
+ ReverseEdges.cpp
 )
 
 ADD_LIBRARY(${PLUGIN_NAME}-${TulipVersion} SHARED ${PLUGIN_SRCS})
