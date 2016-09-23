@@ -20,6 +20,11 @@ PROJECT(tulip)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
+# Force build type to release with debug infos if none has been provided
+IF("${CMAKE_BUILD_TYPE}" STREQUAL "")
+  SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "" FORCE)
+ENDIF("${CMAKE_BUILD_TYPE}" STREQUAL "")
+
 ## ========================================================
 ## Build type detection
 ## ========================================================
