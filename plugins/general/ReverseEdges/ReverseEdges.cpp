@@ -17,7 +17,7 @@
  *
  */
 
-#include "reverseedges.h"
+#include "ReverseEdges.h"
 
 #include <tulip/BooleanProperty.h>
 
