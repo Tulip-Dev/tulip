@@ -101,5 +101,8 @@
         <file>icons/icon-quote.gif</file>
         <file>icons/screenshots.png</file>
         <file>icons/tutorials.png</file>
+        <file>icons/32/input-output.png</file>
+        <file>icons/32/input.png</file>
+        <file>icons/32/output.png</file>
     </qresource>
 </RCC>
