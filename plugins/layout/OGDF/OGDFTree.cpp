@@ -112,9 +112,9 @@ static const string orientationValuesDescription =
   "rightToLeft <i>(Edges are oriented from right to left)</i>";
 
 static const string rootSelectionValuesDescription =
-    "rootIsSource <i>(Select a source in the graph)</i><br>"
-    "rootIsSink <i>(Select a sink in the graph)</i><br>"
-    "rootByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is topToBottom)</i>";
+  "rootIsSource <i>(Select a source in the graph)</i><br>"
+  "rootIsSink <i>(Select a sink in the graph)</i><br>"
+  "rootByCoord <i>(Use the coordinates, e.g., select the topmost node if orientation is topToBottom)</i>";
 
 
 class OGDFTree : public OGDFLayoutPluginBase {

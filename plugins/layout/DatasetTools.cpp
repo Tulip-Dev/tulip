@@ -45,7 +45,7 @@ static const char *paramHelp[] = {
 //====================================================================
 void addOrientationParameters(LayoutAlgorithm* pLayout) {
   pLayout->addInParameter<StringCollection>(ORIENTATION_ID, paramHelp[0], ORIENTATION, true,
-                                            "up to down <br> down to up <br> right to left <br> left to right");
+      "up to down <br> down to up <br> right to left <br> left to right");
 }
 
 //====================================================================

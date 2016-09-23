@@ -443,9 +443,9 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
       QListWidgetItem* item = _ui->savedColorScalesList->item(row);
 
       if (tulipImageColorScales.find(item->text()) != tulipImageColorScales.end() && colorScale == tulipImageColorScales[item->text()]) {
-	// colorScale is a predefined one
-	// so select it in the list view
-	_ui->savedColorScalesList->setCurrentItem(item);
+        // colorScale is a predefined one
+        // so select it in the list view
+        _ui->savedColorScalesList->setCurrentItem(item);
       }
     }
 
@@ -472,7 +472,7 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     }
 
     for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it
-	   != colorMap.end();) {
+         != colorMap.end();) {
       QTableWidgetItem *item = new QTableWidgetItem();
       item->setFlags(Qt::ItemIsEnabled);
       item->setBackgroundColor(QColor(it->second.getR(), it->second.getG(),

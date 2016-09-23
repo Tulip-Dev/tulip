@@ -248,10 +248,10 @@ struct TLP_SCOPE ParameterDescriptionList {
 private:
   ParameterDescription* getParameter(const std::string& parameterName);
   std::string generateParameterHTMLDocumentation(const std::string &name, const std::string &help,
-                                                 const std::string &type,
-                                                 const std::string &defaultValue,
-                                                 const std::string &valuesDescription,
-                                                 const ParameterDirection &direction);
+      const std::string &type,
+      const std::string &defaultValue,
+      const std::string &valuesDescription,
+      const ParameterDirection &direction);
   std::vector<ParameterDescription> parameters;
 };
 
