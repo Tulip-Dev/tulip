@@ -60,32 +60,25 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
+static const char *paramHelp[] = {
+  // impred
+  "Sets impred option.",
+
+  // iterno
+  "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes.",
+
+  // reqlength
+  "The required edge's length."
+};
+
 class OGDFBertaultLayout : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Bertault (OGDF)","Smit Sanghavi","29/05/2015","Computes a force directed layout (Bertault Layout) for preserving the planar embedding in the graph.","1.0","Force Directed")
   OGDFBertaultLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BertaultLayout()) {
-    addInParameter<bool> ("impred",
-                          HTML_HELP_OPEN()
-                          HTML_HELP_DEF( "type", "boolean" )
-                          HTML_HELP_BODY()
-                          "Sets impred option."
-                          HTML_HELP_CLOSE(),
-                          "false", false);
-    addInParameter<int> ("iterno",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "integer" )
-                         HTML_HELP_BODY()
-                         "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes."
-                         HTML_HELP_CLOSE(),
-                         "20", false);
-    addInParameter<double> ("reqlength",
-                            HTML_HELP_OPEN()
-                            HTML_HELP_DEF( "type", "double" )
-                            HTML_HELP_BODY()
-                            "The required edge length."
-                            HTML_HELP_CLOSE(),
-                            "0.0", false);
+    addInParameter<bool> ("impred", paramHelp[0], "false", false);
+    addInParameter<int> ("iterno", paramHelp[1], "20", false);
+    addInParameter<double> ("reqlength", paramHelp[2], "0.0", false);
   }
   ~OGDFBertaultLayout() {}
 

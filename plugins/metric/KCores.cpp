@@ -77,24 +77,13 @@ public:
 };
 
 //========================================================================================
-namespace {
-const char * paramHelp[] = {
-  //direction
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "InOut" )  \
-  HTML_HELP_BODY() \
-  "This parameter indicates the direction used to compute K-Cores values."  \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // direction
+  "This parameter indicates the direction used to compute K-Cores values.",
+
   // metric
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "NumericProperty" )       \
-  HTML_HELP_DEF( "value", "An existing edge metric" )   \
-  HTML_HELP_BODY()              \
-  "An existing edge metric property"\
-  HTML_HELP_CLOSE()
+  "An existing edge metric property."
 };
-}
 #define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
 #define INOUT 0
@@ -102,7 +91,7 @@ const char * paramHelp[] = {
 #define OUT 2
 //========================================================================================
 KCores::KCores(const PluginContext *context):DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
   addInParameter<NumericProperty*>("metric",paramHelp[1],"",false);
   addDependency("Degree","1.0");
 }
@@ -239,4 +228,3 @@ bool KCores::run() {
 }
 //========================================================================================
 PLUGIN(KCores)
-//========================================================================================

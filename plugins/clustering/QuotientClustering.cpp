@@ -31,79 +31,34 @@ using namespace std;
 using namespace tlp;
 
 //==============================================================================
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // oriented
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true, the graph is considered oriented." \
-  HTML_HELP_CLOSE(),
+  "If true, the graph is considered oriented.",
+
   // recursive
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the algorithm is applied along the entire hierarchy of subgraphs." \
-  HTML_HELP_CLOSE(),
+  "If true, the algorithm is applied along the entire hierarchy of subgraphs.",
+
   // node aggregation function
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "none" )   \
-  HTML_HELP_BODY() \
-  "Function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none', no value is be computed." \
-  HTML_HELP_CLOSE(),
+  "Function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none', no value is computed.",
+
   // edge aggregation function
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "none" )   \
-  HTML_HELP_BODY() \
-  "Function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none', no value is computed." \
-  HTML_HELP_CLOSE(),
+  "Function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none', no value is computed.",
+
   // meta-node label
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "StringProperty" )       \
-  HTML_HELP_DEF( "value", "An existing string property" )   \
-  HTML_HELP_BODY()              \
-  "Property used to label meta-nodes. An arbitrary underlying node is chosen and its associated value for the given property becomes the meta-node label."\
-  HTML_HELP_CLOSE(),
+  "Property used to label meta-nodes. An arbitrary underlying node is chosen and its associated value for the given property becomes the meta-node label.",
+
   // use name of subgraphs
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the meta-node label is the same as the name of the subgraph it represents." \
-  HTML_HELP_CLOSE(),
+  "If true, the meta-node label is the same as the name of the subgraph it represents.",
+
   // edge cardinality
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the property edgeCardinality is created for each meta-edge of the quotient graph (and store the number of edges it represents)." \
-  HTML_HELP_CLOSE(),
+  "If true, the property edgeCardinality is created for each meta-edge of the quotient graph (and store the number of edges it represents).",
+
   // layout quotient graph
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, a force directed layout is computed for each quotient graphs." \
-  HTML_HELP_CLOSE(),
+  "If true, a force directed layout is computed for each quotient graph.",
+
   // layout clusters graphs
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, a force directed layout is computed for each clusters graphs." \
-  HTML_HELP_CLOSE(),
+  "If true, a force directed layout is computed for each clusters graph."
 };
-}
 
 //===============================================================================
 // define a specific calculator for viewLabel
@@ -153,8 +108,8 @@ public:
     addDependency("FM^3 (OGDF)", "1.2");
     addDependency("Fast Overlap Removal", "1.3");
     addInParameter<bool>("oriented", paramHelp[0], "true");
-    addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS);
-    addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS);
+    addInParameter<StringCollection>("node function", paramHelp[2], AGGREGATION_FUNCTIONS, true, "none <br> average <br> sum <br> max <br> min");
+    addInParameter<StringCollection>("edge function", paramHelp[3], AGGREGATION_FUNCTIONS, true, "none <br> average <br> sum <br> max <br> min");
     addInParameter<StringProperty>("meta-node label", paramHelp[4], "", false);
     addInParameter<bool>("use name of subgraph", paramHelp[5], "false");
     addInParameter<bool>("recursive", paramHelp[1], "false");

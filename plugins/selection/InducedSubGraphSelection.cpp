@@ -24,16 +24,10 @@ using namespace tlp;
 PLUGIN(InducedSubGraphSelection)
 
 //=================================================================================
-namespace {
-const char * paramHelp[] = {
-  // selectedNodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Selection" ) \
-  HTML_HELP_BODY() \
-  "Set of nodes for which the induced sub-graph is computed." \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // Nodes
+  "Set of nodes for which the induced sub-graph is computed."
 };
-}
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext* context):
   BooleanAlgorithm(context) {

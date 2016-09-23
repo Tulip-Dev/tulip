@@ -27,30 +27,17 @@ using namespace tlp;
 
 PLUGIN(EqualValueClustering)
 
-namespace {
-const char * paramHelp[] = {
-  // selectedNodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "PropertyInterface*" ) \
-  HTML_HELP_BODY() \
-  "Property used to partition the graph" \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF("values", "nodes <BR> edges") \
-  HTML_HELP_DEF( "default", "nodes" )  \
-  HTML_HELP_BODY() \
-  "Graph elements to partition"  \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the resulting subgraphs are guaranted to be connected." \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // Property
+  "Property used to partition the graph.",
+
+  // Type
+  "The type of graph's elements to partition.",
+
+  // Connected
+  "If true, the resulting subgraphs are guaranteed to be connected."
 };
-}
+
 #define ELT_TYPE "Type"
 #define ELT_TYPES "nodes;edges;"
 #define NODE_ELT 0
@@ -58,7 +45,7 @@ const char * paramHelp[] = {
 //================================================================================
 EqualValueClustering::EqualValueClustering(tlp::PluginContext* context):Algorithm(context) {
   addInParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
-  addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES);
+  addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES, true, "nodes <br> edges");
   addInParameter<bool>("Connected", paramHelp[2], "false");
 }
 //===============================================================================

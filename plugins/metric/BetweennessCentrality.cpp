@@ -25,24 +25,17 @@
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" )  \
-  HTML_HELP_BODY() \
-  "indicate if the graph should be considered as directed or not" \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" )  \
-  HTML_HELP_BODY() \
-  "If true the node measure will be normalized<br/>" \
-  " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br/>"  \
-  " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br/>"    \
-  "If true the edge measure will be normalized<br/>" \
-  " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br/>"  \
-  " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)" \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // directed
+  "Indicates if the graph should be considered as directed or not.",
+
+  // norm
+  "If true the node measure will be normalized<br>"
+  " - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2)<br>"
+  " - if directed     : m(n) = c(n) / (#V - 1)(#V - 2)<br>"
+  "If true the edge measure will be normalized<br>"
+  " - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2)<br>"
+  " - if directed     : m(e) = c(e) / (#V / 2)(#V / 2)"
 };
 
 /** \addtogroup metric */

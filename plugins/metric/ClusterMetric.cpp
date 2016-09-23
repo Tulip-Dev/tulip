@@ -23,18 +23,10 @@ PLUGIN(ClusterMetric)
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "int" ) \
-  HTML_HELP_DEF( "values", "[1 , |G|]" ) \
-  HTML_HELP_DEF( "default", "1" ) \
-  HTML_HELP_BODY() \
-  "Maximal depth of a computed cluster." \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // depth
+  "Maximal depth of a computed cluster."
 };
-}
 //=================================================
 ClusterMetric::ClusterMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
   addInParameter<unsigned int>("depth",paramHelp[0],"1");
@@ -69,4 +61,6 @@ bool ClusterMetric::run() {
   result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   return true;
 }
+
+
 

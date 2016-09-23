@@ -43,16 +43,11 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // filename
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "pathname" )       \
-  HTML_HELP_BODY()                  \
-  "This parameter indicates the pathname of the file (.net) to import."       \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates the pathname of the Pajek file (.net or .paj) to import.",
 };
-}
+
 
 namespace {
 bool tokenize(const string& str, vector<string>& tokens, const string& delimiters) {

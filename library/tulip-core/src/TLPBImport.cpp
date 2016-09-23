@@ -59,13 +59,7 @@ bool errorTrap(void* buf = NULL) {
 
 //================================================================================
 TLPBImport::TLPBImport(tlp::PluginContext* context):ImportModule(context) {
-  addInParameter<std::string>("file::filename",
-                              HTML_HELP_OPEN()  \
-                              HTML_HELP_DEF( "type", "pathname" ) \
-                              HTML_HELP_BODY()        \
-                              "The file to import."     \
-                              HTML_HELP_CLOSE()
-                              , "");
+  addInParameter<std::string>("file::filename", "The TLPB file to import.", "");
 }
 //================================================================================
 bool TLPBImport::importGraph() {

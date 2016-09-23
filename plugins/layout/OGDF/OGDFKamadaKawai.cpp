@@ -63,60 +63,42 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+static const char *paramHelp[] {
+  // stop tolerance
+  "The value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped.",
+
+  // used layout
+  "If set to true, the given layout is used for the initial positions.",
+
+  // zero length
+  "If set != 0, value zerolength is used to determine the desirable edge's length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes.",
+
+  // edge length
+  "The desirable edge's length.",
+
+  // compute max iterations
+  "If set to true, the number of iterations is computed depending on G.",
+
+  // global iterations
+  "The number of global iterations.",
+
+  // local iterations
+  "The number of local iterations."
+};
+
 class OGDFKamadaKawai : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Kamada Kawai (OGDF)","Karsten Klein","12/11/2007","Implements the Kamada-Kawai layout algorithm.<br/>It is a force-directed layout algorithm that tries to place vertices with a distance corresponding to their graph theoretic distance. ","1.0","Force Directed")
   OGDFKamadaKawai(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::SpringEmbedderKK()) {
-    addInParameter<double>("stop tolerance",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "The value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped. "
-                           HTML_HELP_CLOSE(),
-                           "0.001");
-    addInParameter<bool>("used layout",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true, the given layout is used for the initial positions."
-                         HTML_HELP_CLOSE(),
-                         "true");
-    addInParameter<double>("zero length",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "If set != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes."
-                           HTML_HELP_CLOSE(),
-                           "0");
-    addInParameter<double>("edge length",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "desirable edge length directly."
-                           HTML_HELP_CLOSE(),
-                           "0");
-    addInParameter<bool>("compute max iterations",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If set to true, the number of iterations is computed depending on G."
-                         HTML_HELP_CLOSE(),
-                         "true");
-    addInParameter<int>("global iterations",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of global iterations."
-                        HTML_HELP_CLOSE(),
-                        "50");
-    addInParameter<int>("local iterations",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of local iterations."
-                        HTML_HELP_CLOSE(),
-                        "50");
+    addInParameter<double>("stop tolerance", paramHelp[0], "0.001");
+    addInParameter<bool>("used layout", paramHelp[1], "true");
+    addInParameter<double>("zero length", paramHelp[2], "0");
+    addInParameter<double>("edge length", paramHelp[3], "0");
+    addInParameter<bool>("compute max iterations", paramHelp[4], "true");
+    addInParameter<int>("global iterations", paramHelp[5], "50");
+    addInParameter<int>("local iterations", paramHelp[6], "50");
   }
   ~OGDFKamadaKawai() {}
 

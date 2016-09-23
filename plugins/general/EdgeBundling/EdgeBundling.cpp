@@ -48,83 +48,42 @@ using namespace tlp;
 
 //============================================
 
-static const char* paramHelp[] = {
+static const char *paramHelp[] = {
+  // layout
+  "The input layout of the graph.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "LayoutProperty" )
-  HTML_HELP_DEF( "default", "viewLayout" )
-  HTML_HELP_BODY()
-  "The input layout of the graph"
-  HTML_HELP_CLOSE(),
+  // size
+  "The input nodes' sizes.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "SizeProperty" )
-  HTML_HELP_DEF( "default", "viewSize" )
-  HTML_HELP_BODY()
-  "The input node sizes"
-  HTML_HELP_CLOSE(),
+  // grid_graph
+  "If true, a subgraph corresponding to the grid used for routing edges will be added.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "boolean" )
-  HTML_HELP_DEF( "default", "false" )
-  HTML_HELP_BODY()
-  "If true, a subgraph corresponding to the grid used for routing edges will be added."
-  HTML_HELP_CLOSE(),
+  // 3D_layout
+  "If true, it is assumed that the input layout is in 3d and 3d edge bundling will be performed.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "boolean" )
-  HTML_HELP_DEF( "default", "false" )
-  HTML_HELP_BODY()
-  "If true, it is assumed that the input layout is in 3d and 3d edge bundling will be performed."
-  HTML_HELP_CLOSE(),
-
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "boolean" )
-  HTML_HELP_DEF( "default", "false" )
-  HTML_HELP_BODY()
-  "If true, it is assumed that the nodes are originally layouted on a sphere surface."
+  // sphere_layout
+  "If true, it is assumed that the nodes have been originally laid out on a sphere surface."
   "Edges will be routed along the sphere surface. The 3D_layout parameter needs also to be set to true"
-  " to make that feature work."
-  HTML_HELP_CLOSE(),
+  " for that feature to work.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_DEF( "default", "0.9" )
-  HTML_HELP_BODY()
+  // long_edges
   "That parameter defines the way long edges will be routed. A value less than 1.0 "
-  "will promote paths outside dense regions of the input graph drawing."
-  HTML_HELP_CLOSE(),
+  "will promote paths outside dense regions of the input graph drawing.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_DEF( "default", "10" )
-  HTML_HELP_BODY()
+  // split_ratio
   "That parameter defines the granularity of the grid that will be generated for routing the edges. "
-  "The higher its value is, the more precise the grid is."
-  HTML_HELP_CLOSE(),
+  "The higher its value is, the more precise the grid is.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "integer" )
-  HTML_HELP_DEF( "default", "2" )
-  HTML_HELP_BODY()
+  // iterations
   "That parameter defines the number of iterations for the edge bundling process. "
-  "The higher is its value, the more edges will be bundled."
-  HTML_HELP_CLOSE(),
+  "The higher is its value, the more edges will be bundled.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "integer" )
-  HTML_HELP_DEF( "default", "0" )
-  HTML_HELP_BODY()
+  // max_thread
   "That parameter defines the number of threads to use for speeding up the edge bundling process. "
-  "A value of 0 will use as much threads as processors on the host machine."
-  HTML_HELP_CLOSE(),
+  "A value of 0 will use as much threads as processors on the host machine.",
 
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "boolean" )
-  HTML_HELP_DEF( "default", "false" )
-  HTML_HELP_BODY()
+  // edge_node_overlap
   "If true, edges can be routed on original nodes."
-  HTML_HELP_CLOSE(),
 };
 
 //============================================
