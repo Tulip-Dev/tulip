@@ -60,6 +60,35 @@ CubicDiagonalCross;CubicVerticalDiagonalCross;CubicStraightCrossSource;CubicStra
 #define CURVE_TYPE_CUBIC_STRAIGHTCROSS_SOURCE 10
 #define CURVE_TYPE_CUBIC_STRAIGHTCROSS_TARGET 11
 
+static const char *paramHelp[] = {
+  // layout
+  "The input layout of the graph.",
+
+  // curve roundness
+  "Parameter for tweaking the curve roundness. The value range is from 0 to 1 with a maximum roundness at 0.5.",
+
+  // curve type
+  "The type of curve to compute (12 available : 6 quadratic ones and 6 cubic ones).",
+
+  // bezier edges
+  "If activated, set all edges shapes to Bézier curves."
+};
+
+const std::string curveTypeValues =
+    "QuadraticContinuous <br>"
+    "QuadraticDiscrete <br>"
+    "QuadraticDiagonalCross <br>"
+    "QuadraticStraightCross <br>"
+    "QuadraticHorizontal <br>"
+    "QuadraticVertical <br>"
+    "CubicContinuous <br>"
+    "CubicVertical <br>"
+    "CubicDiagonalCross <br>"
+    "CubicVerticalDiagonalCross <br>"
+    "CubicStraightCrossSource <br>"
+    "CubicStraightCrossTarget";
+
+
 class CurveEdges : public tlp::Algorithm {
 
 public:
@@ -67,10 +96,10 @@ public:
   PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015", "Computes quadratic or cubic bezier paths for edges", "1.0", "")
 
   CurveEdges(tlp::PluginContext* context) : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(NULL), bezierEdges(true) {
-    addInParameter<tlp::LayoutProperty>("layout", "the input layout of the graph", "viewLayout");
-    addInParameter<float>("curve roundness", "parameter for tweaking the curve roundness. The value range is from 0 to 1 with a maximum roundness at 0.5.", "0.5");
-    addInParameter<tlp::StringCollection>("curve type", "the type of curve to compute (12 available : 6 quadratic ones and 6 cubic ones)", CURVE_TYPE_LIST);
-    addInParameter<bool>("bezier edges", "if activated, set all edges shapes to Bezier curves", "true");
+    addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout");
+    addInParameter<float>("curve roundness", paramHelp[1], "0.5");
+    addInParameter<tlp::StringCollection>("curve type", paramHelp[2], CURVE_TYPE_LIST, true, curveTypeValues);
+    addInParameter<bool>("bezier edges", paramHelp[3], "true");
   }
 
   std::vector<tlp::Coord> computeCubicBezierControlPoints(tlp::edge e) {

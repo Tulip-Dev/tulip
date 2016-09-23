@@ -32,7 +32,7 @@ bool DagLevelMetric::run() {
   dagLevel(graph, level, pluginProgress);
   node n;
   forEach(n, graph->getNodes())
-  result->setNodeValue(n, level.get(n.id));
+    result->setNodeValue(n, level.get(n.id));
   return true;
 }
 //======================================================

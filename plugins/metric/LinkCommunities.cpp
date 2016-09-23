@@ -106,34 +106,16 @@ private:
 /*@}*/
 
 //==============================================================================================================
-PLUGIN(LinkCommunities)
-//==============================================================================================================
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // metric
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "NumericProperty" )       \
-  HTML_HELP_DEF( "value", "An existing edge metric" )                 \
-  HTML_HELP_BODY()              \
-  "An existing edge metric property"\
-  HTML_HELP_CLOSE(),
+  "An existing edge metric property.",
+
   // Group isthmus
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates whether the single-link clusters should be merged or not." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates whether the single-link clusters should be merged or not.",
+
   // Number of steps
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "200" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates the number of thresholds to be compared" \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates the number of thresholds to be compared."
 };
-}
 //==============================================================================================================
 LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context), metric(NULL) {
   addInParameter<NumericProperty*>("metric", paramHelp[0],"",false);
@@ -528,3 +510,4 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
   return threshold;
 }
 //==============================================================================================================
+PLUGIN(LinkCommunities)

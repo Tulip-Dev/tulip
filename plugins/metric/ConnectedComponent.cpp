@@ -19,9 +19,9 @@
 #include "ConnectedComponent.h"
 #include <tulip/ConnectedTest.h>
 
-using namespace tlp;
-
 PLUGIN(ConnectedComponent)
+
+using namespace tlp;
 
 ConnectedComponent::ConnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
 //======================================================

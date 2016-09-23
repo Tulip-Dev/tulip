@@ -67,26 +67,23 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+static const char *paramHelp[] = {
+  // number of threads
+  "The number of threads to use during the computation of the layout.",
+
+  // multilevel nodes bound
+  "The bound for the number of nodes in a multilevel step."
+};
+
 class OGDFFastMultipoleMultiLevelEmbedder : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Fast Multipole Multilevel Embedder (OGDF)","Martin Gronemann","12/11/2007","The FMME layout algorithm is a variant of multilevel, force-directed layout, which utilizes various tools to speed up the computation.","1.1","Multilevel")
   OGDFFastMultipoleMultiLevelEmbedder(const tlp::PluginContext* context) :
     OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), fmme(new ogdf::FastMultipoleMultilevelEmbedder()) {
-    addInParameter<int>("number of threads",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of threads to use during the computation of the layout."
-                        HTML_HELP_CLOSE(),
-                        "2");
-    addInParameter<int>("multilevel nodes bound",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The bound for the number of nodes for multilevel step."
-                        HTML_HELP_CLOSE(),
-                        "10");
+    addInParameter<int>("number of threads", paramHelp[0], "2");
+    addInParameter<int>("multilevel nodes bound", paramHelp[1], "10");
 
     ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the FastMultipoleMultilevelEmbedder instance

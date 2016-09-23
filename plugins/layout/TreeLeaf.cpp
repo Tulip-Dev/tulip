@@ -26,14 +26,9 @@ PLUGIN(TreeLeaf)
 using namespace std;
 using namespace tlp;
 
-const char* paramHelp[] = {
-  //Orientation
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF("Type", "bool") \
-  HTML_HELP_DEF("Default", "true") \
-  HTML_HELP_BODY() \
-  "If the layer spacing is uniform, the spacing between to consecutive layers will be the same." \
-  HTML_HELP_CLOSE(),
+static const char* paramHelp[] = {
+  // uniform layer spacing
+  "If the layer spacing is uniform, the spacing between two consecutive layers will be the same."
 };
 
 void TreeLeaf::computeLevelHeights(tlp::Graph *tree, tlp::node n, unsigned int depth,

@@ -26,33 +26,16 @@ using namespace tlp;
 static const int WIDTH = 1024;
 static const int HEIGHT = 1024;
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // nodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "100" ) \
-  HTML_HELP_BODY() \
-  "Number of nodes in the final graph." \
-  HTML_HELP_CLOSE(),
+  "Number of nodes in the final graph.",
 
   // degree
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "10" ) \
-  HTML_HELP_BODY() \
-  "Average degree of the nodes in the final graph." \
-  HTML_HELP_CLOSE(),
+  "Average degree of the nodes in the final graph.",
 
   // degree
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, long distance edges are added in the grid approximation." \
-  HTML_HELP_CLOSE(),
+  "If true, long distance edges are added in the grid approximation."
 };
-}
 
 /*
  * TODO :

@@ -408,74 +408,34 @@ UrlElement UrlElement::parseUrl (const std::string &href) {
   return newUrl;
 }
 
-
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // server
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "string" ) \
-  HTML_HELP_DEF( "default", "www.labri.fr" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end." \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the web server that you want to inspect. No need for http:// at the beginning; http protocol is always assumed. No need for / at the end.",
+
   // initial page
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "string" ) \
-  HTML_HELP_DEF( "default", "" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the first web page to visit. No need for / at the beginning."\
-  HTML_HELP_CLOSE(),
+  "This parameter defines the first web page to visit. No need for / at the beginning.",
+
   // max number of links
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "1000" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph." \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the maximum number of nodes (different pages) allowed in the extracted graph.",
+
   // non http links
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "boolean" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates if non http links (https, ftp, mailto...) have to be extracted.",
+
   // other server
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "boolean" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates if links or redirection to other server pages have to be followed." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates if links or redirection to other server pages have to be followed.",
+
   // compute layout
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "boolean" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates if a layout of the extracted graph has to be computed." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates if a layout of the extracted graph has to be computed.",
+
   // page color
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "color" ) \
-  HTML_HELP_DEF( "default", "red" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicated the color used to display nodes." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates the color used to display nodes.",
+
   // link color
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "color" ) \
-  HTML_HELP_DEF( "default", "blue" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicated the color used to display links." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates the color used to display links.",
+
   // link color
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "color" ) \
-  HTML_HELP_DEF( "default", "yellow" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicated the color used to display redirections." \
-  HTML_HELP_CLOSE()
+  "This parameter indicates the color used to display redirections."
 };
-}
 
 struct WebImport:public ImportModule {
   PLUGININFORMATION("Web Site","Auber","15/11/2004","Imports a new graph from Web site structure (one node per page).","1.1","Misc")

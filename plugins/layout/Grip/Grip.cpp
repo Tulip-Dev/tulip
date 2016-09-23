@@ -29,13 +29,9 @@ using namespace std;
 using namespace tlp;
 
 
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // 3D
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_BODY() \
-  "If true the layout is in 3D else it is computed in 2D" \
-  HTML_HELP_CLOSE(),
+  "If true the layout is in 3D else it is computed in 2D"
 };
 
 //======================================================

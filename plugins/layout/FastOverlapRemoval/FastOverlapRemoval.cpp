@@ -30,66 +30,38 @@ using namespace tlp;
 PLUGIN(FastOverlapRemoval)
 
 static const char* paramHelp[] = {
+  // overlaps removal type
+  "Overlaps removal type.",
+
   // layout
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "String Collection" )
-  HTML_HELP_DEF("values", "X-Y <i>(Remove overlaps in both X and Y directions)</i><br/>X <i>(Remove overlaps only in X direction)</i><br/>Y <i>(Remove overlaps only in Y direction)</i>")
-  HTML_HELP_DEF( "default", "X-Y" )
-  HTML_HELP_BODY()
-  "Overlaps removal type."
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()          \
-  HTML_HELP_DEF("Type", "LayoutProperty")    \
-  HTML_HELP_DEF("Values", "Any layout property")   \
-  HTML_HELP_DEF("Default", "viewLayout")     \
-  HTML_HELP_BODY()           \
-  "The property used for the input layout of nodes and edges"    \
-  HTML_HELP_CLOSE(),
+  "The property used for the input layout of nodes and edges.",
+
   // node size
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Size" ) \
-  HTML_HELP_DEF( "values", "An existing size property" ) \
-  HTML_HELP_DEF( "default", "viewSize" ) \
-  HTML_HELP_BODY() \
-  "The property used for node's sizes." \
-  HTML_HELP_CLOSE(),
-  //Rotation
-  HTML_HELP_OPEN()          \
-  HTML_HELP_DEF("Type", "DoubleProperty")       \
-  HTML_HELP_DEF("Values", "Any double property used for rotation of nodes on z-axis") \
-  HTML_HELP_DEF("Default", "viewRotation")        \
-  HTML_HELP_BODY()              \
-  "The property used as rotation of nodes on z-axis"      \
-  HTML_HELP_CLOSE(),
-  //Iterations
-  HTML_HELP_OPEN()          \
-  HTML_HELP_DEF("Type", "int")       \
-  HTML_HELP_DEF("Values", "The number of time the algorithm will be applied with increasing node size.") \
-  HTML_HELP_DEF("Default", "5")        \
-  HTML_HELP_BODY()              \
-  "The algorithm will be applied N times, each time increasing node size to attain original size at the final iteration. This greatly enhances the layout."      \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()          \
-  HTML_HELP_DEF("Type", "double")       \
-  HTML_HELP_DEF("Values", "floating point number") \
-  HTML_HELP_DEF("Default", "0.0")        \
-  HTML_HELP_BODY()              \
-  "The minimal x border value that will separate the graph nodes after application of the algorithm"      \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()          \
-  HTML_HELP_DEF("Type", "double")       \
-  HTML_HELP_DEF("Values", "floating point number") \
-  HTML_HELP_DEF("Default", "0.0")        \
-  HTML_HELP_BODY()              \
-  "The minimal y border value that will separate the graph nodes after application of the algorithm"      \
-  HTML_HELP_CLOSE(),
+  "The property used for nodes' sizes.",
+
+  // Rotation
+  "The property defining rotation's angles of nodes around the z-axis.",
+
+  // Iterations
+  "The algorithm will be applied N times, each time increasing node size to attain original size at the final iteration. This greatly enhances the layout.",
+
+  // x border
+  "The minimal x border value that will separate the graph's nodes after application of the algorithm.",
+
+  // y border
+  "The minimal y border value that will separate the graph's nodes after application of the algorithm."
 };
 
 #define OVERLAP_TYPE "X-Y;X;Y"
 
+static const string overlapRemovalTypeValuesDescription =
+  "X-Y <i>(Remove overlaps in both X and Y directions)</i><br>"
+  "X <i>(Remove overlaps only in X direction)</i><br>"
+  "Y <i>(Remove overlaps only in Y direction)</i>";
+
 FastOverlapRemoval::FastOverlapRemoval(const tlp::PluginContext* context) :
   tlp::LayoutAlgorithm(context) {
-  addInParameter<StringCollection> ("overlaps removal type", paramHelp[0], OVERLAP_TYPE);
+  addInParameter<StringCollection> ("overlaps removal type", paramHelp[0], OVERLAP_TYPE, true, overlapRemovalTypeValuesDescription);
   addInParameter<LayoutProperty>("layout", paramHelp[1], "viewLayout");
   addInParameter<SizeProperty>("bounding box", paramHelp[2], "viewSize");
   addInParameter<DoubleProperty>("rotation", paramHelp[3], "viewRotation");

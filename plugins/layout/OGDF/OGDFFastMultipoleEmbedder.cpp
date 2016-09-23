@@ -65,54 +65,39 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+static const char *paramHelp[] = {
+  // number of iterations
+  "The maximum number of iterations.",
+
+  // number of coefficients
+  "The number of coefficients for the expansions.",
+
+  // randomize layout
+  "If true, the initial layout will be randomized.",
+
+  // default node size
+  "The default node's size.",
+
+  // default edge length
+  "The default edge's length.",
+
+  // number of threads
+  "The number of threads to use during the computation of the layout."
+};
+
 class OGDFFastMultipoleEmbedder : public OGDFLayoutPluginBase {
 
 public:
 
   PLUGININFORMATION("Fast Multipole Embedder (OGDF)","Martin Gronemann","12/11/2007","Implements the fast multipole embedder layout algorithm of Martin Gronemann.","1.0","Force Directed")
   OGDFFastMultipoleEmbedder(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), fme(new ogdf::FastMultipoleEmbedder()) {
-    addInParameter<int>("number of iterations",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The maximum number of iterations."
-                        HTML_HELP_CLOSE(),
-                        "100");
-    addInParameter<int>("number of coefficients",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of coefficients for the expansions."
-                        HTML_HELP_CLOSE(),
-                        "5");
-    addInParameter<bool>("randomize layout",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "If true, the initial layout will be randomized."
-                         HTML_HELP_CLOSE(),
-                         "true");
-    addInParameter<double>("default node size",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "The default node size."
-                           HTML_HELP_CLOSE(),
-                           "20.0");
-    addInParameter<double>("default edge length",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "The default edge length. "
-                           HTML_HELP_CLOSE(),
-                           "1.0");
-    addInParameter<int>("number of threads",
-                        HTML_HELP_OPEN()
-                        HTML_HELP_DEF( "type", "int" )
-                        HTML_HELP_BODY()
-                        "The number of threads to use during the computation of the layout."
-                        HTML_HELP_CLOSE(),
-                        "3");
+    addInParameter<int>("number of iterations", paramHelp[0], "100");
+    addInParameter<int>("number of coefficients", paramHelp[1], "5");
+    addInParameter<bool>("randomize layout", paramHelp[2], "true");
+    addInParameter<double>("default node size", paramHelp[3], "20.0");
+    addInParameter<double>("default edge length", paramHelp[4], "1.0");
+    addInParameter<int>("number of threads", paramHelp[5], "3");
     ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the FastMultipoleEmbedder instance
     csl->setLayoutModule(fme);

@@ -20,40 +20,27 @@
 
 #include <tulip/StringCollection.h>
 
-using namespace tlp;
-
 PLUGIN(DegreeMetric)
 
-namespace {
-const char * paramHelp[] = {
-  //Degree type
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "InOut" )  \
-  HTML_HELP_BODY() \
-  "Type of degree to compute (in/out/inout)."  \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "NumericProperty" )       \
-  HTML_HELP_DEF( "value", "An existing metric corresponding to weights.")   \
-  HTML_HELP_DEF( "default", "none" )          \
-  HTML_HELP_BODY()              \
-  "The weighted degree of a node is the sum of weights of "\
-  "all its in/out/inout edges. "\
-  "If no metric is specified, using a uniform metric value of 1 for all edges " \
-  "returns the usual degree for nodes (number of neighbors)."\
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" )  \
-  HTML_HELP_BODY() \
-  "If true, the measure is normalized in the following way." \
-  "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "               \
-  "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>" \
-  HTML_HELP_CLOSE(),
+using namespace tlp;
+
+static const char *paramHelp[] = {
+  // type
+  "Type of degree to compute (in/out/inout).",
+
+  // metric
+  "The weighted degree of a node is the sum of weights of "
+  "all its in/out/inout edges. "
+  "If no metric is specified, using a uniform metric value of 1 for all edges "
+  "returns the usual degree for nodes (number of neighbors).",
+
+  // norm
+  "If true, the measure is normalized in the following way."
+  "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "
+  "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>"
 
 };
-}
+
 #define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
 #define INOUT 0
@@ -61,7 +48,7 @@ const char * paramHelp[] = {
 #define OUT 2
 //==============================================================================
 DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES);
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
   addInParameter<NumericProperty*>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
@@ -182,6 +169,5 @@ bool DegreeMetric::check(std::string& errorMsg) {
 
   return true;
 }
-
 
 

@@ -312,35 +312,12 @@ double StrengthClustering::findBestThreshold(int numberOfSteps, bool& stopped) {
 //  return quotientGraph;
 //}
 //==============================================================================
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // metric
-  HTML_HELP_OPEN()              \
-  HTML_HELP_DEF( "type", "DoubleProperty" )       \
-  HTML_HELP_DEF( "value", "An existing metric property" )   \
-  HTML_HELP_BODY()              \
-  "Metric used in order to multiply strength metric computed values."\
-  "If one is given, the complexity is O(n log(n)), O(n) neither." \
-  HTML_HELP_CLOSE(),
-// do you mean "else it will be O(n)" instead of "O(n) neither"?
-  /*// layout subgraphs
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true the layout of the newly created subgraphs is computed." \
-  HTML_HELP_CLOSE(),
-  // layout quotient graph
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "values", "[true, false]" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true the layout of the quotient graph is computed." \
-  HTML_HELP_CLOSE(),*/
+  "Metric used in order to multiply strength metric computed values."
+  "If one is given, the complexity is O(n log(n)), O(n) neither."
+  // do you mean "else it will be O(n)" instead of "O(n) neither"?
 };
-}
 
 //================================================================================
 StrengthClustering::StrengthClustering(PluginContext* context):DoubleAlgorithm(context) {

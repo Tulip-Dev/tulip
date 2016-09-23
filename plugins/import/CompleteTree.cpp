@@ -22,38 +22,16 @@
 using namespace std;
 using namespace tlp;
 
-
-
-namespace {
-
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // depth
-  HTML_HELP_OPEN()          \
-  HTML_HELP_DEF( "type", "unsigned int" )   \
-  HTML_HELP_DEF( "default", "5" )     \
-  HTML_HELP_BODY()                \
-  "Depth of the tree."     \
-  HTML_HELP_CLOSE(),
+  "Depth of the tree.",
 
   // degree
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "2" ) \
-  HTML_HELP_BODY() \
-  "The tree's degree." \
-  HTML_HELP_CLOSE(),
+  "The tree's degree.",
+
   // tree layout
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the generated tree is drawn with a tree layout algorithm." \
-  HTML_HELP_CLOSE(),
+  "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."
 };
-
-}
-
-
 
 /** \addtogroup import */
 

@@ -30,9 +30,98 @@
 #include <tulip/ColorScale.h>
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
+#include <tulip/TlpTools.h>
 
 using namespace tlp;
 using namespace std;
+
+#define TYPE_SECTION "type"
+#define VALUES_SECTION "values"
+#define DEFAULT_SECTION "default"
+#define DIRECTION_SECTION "direction"
+
+#define BOOLEAN_TYPE "Boolean"
+#define INT_TYPE "integer"
+#define UINT_TYPE "unsigned integer"
+#define FLOAT_TYPE "floating point number"
+#define DOUBLE_TYPE "floating point number (double precision)"
+#define STRING_TYPE "string"
+#define FILE_PATH_TYPE "file pathname"
+#define DIR_PATH_TYPE "directory pathname"
+
+#define IN_DIRECTION "input"
+#define OUT_DIRECTION "output"
+#define INOUT_DIRECTION "input/output"
+
+static string html_help_def(const string &A, const string &B) {
+  return "<tr><td><b>" + A + "</b><td class=\"b\">" + B + "</td></tr>";
+}
+
+static string getParameterTypename(const string &name, const string &typeId) {
+  if (name.substr(0, 6) == "file::" || name.substr(0, 9) == "anyfile::") {
+    return FILE_PATH_TYPE;
+  } else if (name.substr(0, 5) == "dir::") {
+    return DIR_PATH_TYPE;
+  } else if (typeId == typeid(bool).name()) {
+    return BOOLEAN_TYPE;
+  } else if (typeId == typeid(int).name()) {
+    return INT_TYPE;
+  } else if (typeId == typeid(unsigned int).name()) {
+    return UINT_TYPE;
+  } else if (typeId == typeid(float).name()) {
+    return FLOAT_TYPE;
+  } else if (typeId == typeid(double).name()) {
+    return DOUBLE_TYPE;
+  } else if (typeId == typeid(string).name()) {
+    return STRING_TYPE;
+  } else {
+    string typeName = demangleTlpClassName(typeId.c_str());
+    // remove pointer mark if any
+    if (typeName[typeName.size()-1] == '*') {
+      return typeName.substr(0, typeName.size()-1);
+    } else  {
+      return typeName;
+    }
+  }
+}
+
+string ParameterDescriptionList::generateParameterHTMLDocumentation(const string &name,
+                                                                    const string &help,
+                                                                    const string &type,
+                                                                    const string &defaultValue,
+                                                                    const string &valuesDescription,
+                                                                    const ParameterDirection &direction) {
+
+  static string htmlDocheader = HTML_HELP_OPEN();
+  // for backward compatibility for external plugins using the old plugin parameters doc system
+  if (help.substr(0, htmlDocheader.size()) == htmlDocheader) {
+    return help;
+  }
+  string doc = htmlDocheader;
+  doc += html_help_def( TYPE_SECTION, getParameterTypename(name, type) );
+  if (!valuesDescription.empty()) {
+    doc += html_help_def( VALUES_SECTION, valuesDescription );
+  }
+  if (!defaultValue.empty()) {
+    if (type != typeid(tlp::StringCollection).name()) {
+      doc += html_help_def( DEFAULT_SECTION, defaultValue );
+    } else {
+      doc += html_help_def( DEFAULT_SECTION, defaultValue.substr(0, defaultValue.find(";")));
+    }
+  }
+  if (direction == IN_PARAM) {
+    doc += html_help_def( DIRECTION_SECTION, IN_DIRECTION );
+  } else if (direction == OUT_PARAM) {
+     doc += html_help_def( DIRECTION_SECTION, OUT_DIRECTION );
+  } else {
+    doc += html_help_def( DIRECTION_SECTION, INOUT_DIRECTION );
+  }
+  doc += HTML_HELP_BODY();
+  doc += help;
+  doc += HTML_HELP_CLOSE();
+
+  return doc;
+}
 
 const ParameterDescriptionList& tlp::WithParameter::getParameters() const {
   return parameters;
@@ -42,7 +131,7 @@ Iterator<ParameterDescription>* ParameterDescriptionList::getParameters() const 
   return new StlIterator<ParameterDescription, vector<ParameterDescription>::const_iterator>(parameters.begin(), parameters.end());
 }
 
-ParameterDescription* ParameterDescriptionList::getParameter(const std::string& name) {
+ParameterDescription* ParameterDescriptionList::getParameter(const string& name) {
   for(unsigned int i = 0; i < parameters.size(); ++i) {
     if (name == parameters[i].getName())
       return &parameters[i];
@@ -55,7 +144,7 @@ ParameterDescription* ParameterDescriptionList::getParameter(const std::string& 
   return NULL;
 }
 
-const std::string& ParameterDescriptionList::getDefaultValue(const string& name)  const {
+const string& ParameterDescriptionList::getDefaultValue(const string& name)  const {
   return ((ParameterDescriptionList *) this)->getParameter(name)->getDefaultValue();
 }
 
@@ -95,7 +184,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
       bool result = dts->setData(dataSet, name, defaultValue);
 
       if (!result)
-        tlp::error() << "Unable to parse \"" << defaultValue.c_str() << "\" as a default value for parameter \"" << name.c_str() << "\"" << std::endl;
+        tlp::error() << "Unable to parse \"" << defaultValue.c_str() << "\" as a default value for parameter \"" << name.c_str() << "\"" << endl;
 
       assert(result);
       continue;
@@ -131,7 +220,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
         PropertyInterface* prop = g->getProperty(defaultValue);
 
         if (!dynamic_cast<NumericProperty*>(prop)) {
-          tlp::error() << "NumericProperty '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
+          tlp::error() << "NumericProperty '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << endl;
           prop = NULL;
         }
 
@@ -146,7 +235,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) c
         dataSet.set(name, (PropertyInterface*) NULL);
       else {
         if (!g->existProperty(defaultValue)) {
-          tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << std::endl;
+          tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << endl;
           dataSet.set(name, (PropertyInterface*) NULL);
         }
         else

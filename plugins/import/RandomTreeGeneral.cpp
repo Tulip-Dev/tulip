@@ -21,41 +21,19 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // minsize
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "int" ) \
-  HTML_HELP_DEF( "default", "10" ) \
-  HTML_HELP_BODY() \
-  "Minimal number of nodes in the tree." \
-  HTML_HELP_CLOSE(),
+  "Minimal number of nodes in the tree.",
+
   // maxsize
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "int" ) \
-  HTML_HELP_DEF( "default", "100" ) \
-  HTML_HELP_BODY() \
-  "Maximal number of nodes in the tree." \
-  HTML_HELP_CLOSE(),
+  "Maximal number of nodes in the tree.",
+
   // maxdegree
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "int" ) \
-  HTML_HELP_DEF( "default", "5" ) \
-  HTML_HELP_BODY() \
-  "Maximal degree of the nodes." \
-  HTML_HELP_CLOSE(),
+  "Maximal degree of the nodes.",
+
   // tree layout
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "If true, the generated tree is drawn with a tree layout algorithm." \
-  HTML_HELP_CLOSE(),
+  "If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm."
 };
-}
-
-
 
 /** \addtogroup import */
 

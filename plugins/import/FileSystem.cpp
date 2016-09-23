@@ -30,51 +30,27 @@
 
 using namespace tlp;
 
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // directory
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "directory pathname" )       \
-  HTML_HELP_BODY()                  \
-  "Directory to scan recursively."        \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "boolean" )       \
-  HTML_HELP_BODY()                  \
-  "If true, set icons as node shapes according to file mime types."        \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "boolean" )       \
-  HTML_HELP_BODY()                  \
-  "If true, apply the Bubble Tree layout algorithm on the imported graph."        \
-  HTML_HELP_CLOSE(),
+  "The directory to scan recursively.",
+
+  // icons
+  "If true, set icons as nodes' shapes according to files' mime types.",
+
+  // tree layout
+  "If true, apply the 'Bubble Tree' layout algorithm on the imported graph.",
+
   // directory color
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "color" ) \
-  HTML_HELP_DEF( "default", "red" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates the color used to display directories." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates the color used to display directories.",
+
   // other color
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "color" ) \
-  HTML_HELP_DEF( "default", "blue" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates the color used to display other files." \
-  HTML_HELP_CLOSE(),
+  "This parameter indicates the color used to display other files.",
+
   // hidden files
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "boolean" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true, also include hidden files." \
-  HTML_HELP_CLOSE(),
+  "If true, also include hidden files.",
+
   // symlinks
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "boolean" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows." \
-  HTML_HELP_CLOSE(),
+  "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows."
 };
 
 static const char* commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json",
@@ -136,13 +112,13 @@ public:
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isDir(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL), _fontAwesomeIcon(NULL), _useIcons(true), _treeLayout(true), dirColor(255, 255, 127, 128) {
-    addInParameter<std::string>("dir::directory", paramHelp[0],"");
-    addInParameter<bool>("include hidden files", paramHelp[5],"true");
+    addInParameter<std::string>("dir::directory", paramHelp[0], "");
+    addInParameter<bool>("include hidden files", paramHelp[5], "true");
     addInParameter<bool>("follow symlinks", paramHelp[6], "true");
-    addInParameter<bool>("icons", paramHelp[1],"true");
-    addInParameter<bool>("tree layout", paramHelp[2],"true");
-    addInParameter<tlp::Color>("directory color",paramHelp[3],"(255, 255, 127, 128)");
-    addInParameter<tlp::Color>("other color",paramHelp[4],"(85, 170, 255,128)");
+    addInParameter<bool>("icons", paramHelp[1], "true");
+    addInParameter<bool>("tree layout", paramHelp[2], "true");
+    addInParameter<tlp::Color>("directory color",paramHelp[3], "(255, 255, 127, 128)");
+    addInParameter<tlp::Color>("other color",paramHelp[4], "(85, 170, 255,128)");
   }
 
   bool importGraph() {

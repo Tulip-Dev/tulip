@@ -22,7 +22,6 @@
 using namespace std;
 using namespace tlp;
 
-
 class CompNodes {
 
 public :

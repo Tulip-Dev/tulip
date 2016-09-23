@@ -24,17 +24,15 @@
 
 using namespace std;
 
+static const char *paramHelp[] = {
+  // metric
+  "An existing node metric property."
+};
+
 namespace tlp {
-PLUGIN(ConvolutionClustering)
 
 ConvolutionClustering::ConvolutionClustering(PluginContext* context):DoubleAlgorithm(context), metric(NULL) {
-  addInParameter<NumericProperty*>("metric",
-                                   HTML_HELP_OPEN()     \
-                                   HTML_HELP_DEF( "type", "NumericProperty" ) \
-                                   HTML_HELP_DEF( "value", "An existing node metric" ) \
-                                   HTML_HELP_BODY()     \
-                                   "An existing node metric property" \
-                                   HTML_HELP_CLOSE(), "viewMetric", false);
+  addInParameter<NumericProperty*>("metric", paramHelp[0], "viewMetric", false);
 }
 
 //convolution function, build a triangular function center in 0 with a width width and a
@@ -47,7 +45,7 @@ double g(int k,double width,double amplitude) {
     if (k<0)
       return ((double)k*slope+amplitude); //partie croissante du signal triangulaire
     else
-      return ((double)-k*slope+amplitude); //partie d�croissante du signal triangulaire
+      return ((double)-k*slope+amplitude); //partie décroissante du signal triangulaire
   }
 }
 //================================================================================
@@ -289,4 +287,7 @@ bool ConvolutionClustering::check(std::string& errorMsg) {
 
   return true;
 }
+
+PLUGIN(ConvolutionClustering)
+
 }
