@@ -30,6 +30,7 @@
 #include <vector>
 
 #include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/ColorScalesManager.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipSettings.h>
@@ -167,6 +168,8 @@ void ColorScaleConfigDialog::accept() {
   if (!colors.empty()) {
     colorScale.setColorScale(colors, gradient);
   }
+
+  ColorScalesManager::setLatestColorScale(colorScale);
 
   QDialog::accept();
 }
