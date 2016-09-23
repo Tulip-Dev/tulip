@@ -287,7 +287,12 @@ public:
       dataSet->get("input property", metric);
       dataSet->get(ELT_TYPE, eltTypes);
       dataSet->get(TARGET_TYPE, targetType);
-      dataSet->get("color scale", colorScale);
+      if (dataSet->exist("color scale")) {
+        dataSet->get("color scale", colorScale);
+      } else {
+        // for backward compatibility with the old parameter name
+        dataSet->get("colorScale", colorScale);
+      }
       dataSet->get("maximum value", maxInput);
       dataSet->get("minimum value", minInput);
     }
