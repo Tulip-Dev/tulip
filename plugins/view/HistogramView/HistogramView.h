@@ -91,7 +91,6 @@ public :
   }
   bool eventFilter(QObject *object,QEvent *event);
   QList<QWidget*> configurationWidgets() const;
-  void setInteractors(const std::list<Interactor *> &interactors);
 
   std::vector<Histogram *> getHistograms() const;
   bool smallMultiplesViewSet() const {

@@ -913,6 +913,7 @@ void GlScene::outputSVG(unsigned int size,const string& filename) {
       perror(filename.c_str());
     }
   }
+  free(buffer);
 }
 //====================================================
 void GlScene::outputEPS(unsigned int size,const string& filename) {
@@ -961,6 +962,7 @@ void GlScene::outputEPS(unsigned int size,const string& filename) {
       perror(filename.c_str());
     }
   }
+  free(buffer);
 }
 //====================================================
 unsigned char * GlScene::getImage() {
