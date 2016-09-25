@@ -76,18 +76,18 @@ static const char *paramHelp[] = {
     // bezier edges
     "If activated, set all edges shapes to Bézier curves."};
 
-const std::string curveTypeValues = "QuadraticContinuous <br>"
-                                    "QuadraticDiscrete <br>"
-                                    "QuadraticDiagonalCross <br>"
-                                    "QuadraticStraightCross <br>"
-                                    "QuadraticHorizontal <br>"
-                                    "QuadraticVertical <br>"
-                                    "CubicContinuous <br>"
-                                    "CubicVertical <br>"
-                                    "CubicDiagonalCross <br>"
-                                    "CubicVerticalDiagonalCross <br>"
-                                    "CubicStraightCrossSource <br>"
-                                    "CubicStraightCrossTarget";
+static const char *curveTypeValues = "QuadraticContinuous <br>"
+                                     "QuadraticDiscrete <br>"
+                                     "QuadraticDiagonalCross <br>"
+                                     "QuadraticStraightCross <br>"
+                                     "QuadraticHorizontal <br>"
+                                     "QuadraticVertical <br>"
+                                     "CubicContinuous <br>"
+                                     "CubicVertical <br>"
+                                     "CubicDiagonalCross <br>"
+                                     "CubicVerticalDiagonalCross <br>"
+                                     "CubicStraightCrossSource <br>"
+                                     "CubicStraightCrossTarget";
 
 class CurveEdges : public tlp::Algorithm {
 
