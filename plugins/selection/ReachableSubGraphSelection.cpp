@@ -44,7 +44,7 @@ static const std::string directionValuesDescription =
 static const std::string edgesDirectionLabels[] = {
   "output edges",
   "input edges",
-  "all edges",
+  "all edges"
 };
 
 ReachableSubGraphSelection::ReachableSubGraphSelection(const tlp::PluginContext *context):BooleanAlgorithm(context) {

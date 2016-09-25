@@ -39,8 +39,6 @@
 
 using namespace std;
 
-const float DEFAULT_AXIS_LENGTH = 1000.;
-
 const unsigned int OVERVIEW_SIZE = 512;
 
 const string propertiesTypes[] = {"double", "int"};
