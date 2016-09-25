@@ -68,7 +68,7 @@
 
 static const char *paramHelp[] = {
   // minimum grid distance
-  "The minimum grid's distance.",
+  "The minimum grid distance.",
 
   // transpose
   "If true, transpose the layout vertically."

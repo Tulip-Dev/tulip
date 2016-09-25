@@ -48,7 +48,7 @@ static const char *paramHelp[] = {
   "This boolean property is used to skip nodes in computation when their value are set to true.",
 
   // initial layout
-  "The layout property used to compute the initial position of the graph's elements. If none is given the initial position will be computed by the algorithm."
+  "The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm."
 };
 
 LinLogAlgorithm::LinLogAlgorithm(const tlp::PluginContext *context) : LayoutAlgorithm(context), linlog(NULL) {

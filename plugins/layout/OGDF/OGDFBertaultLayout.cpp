@@ -68,7 +68,7 @@ static const char *paramHelp[] = {
   "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes.",
 
   // reqlength
-  "The required edge's length."
+  "The required edge length."
 };
 
 class OGDFBertaultLayout : public OGDFLayoutPluginBase {

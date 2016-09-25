@@ -85,7 +85,7 @@ static const char *paramHelp[] = {
   "Gravitational constant parameter.",
 
   // desired length
-  "The desired edge's length to x; must be >= 0.",
+  "The desired edge length to x; must be >= 0.",
 
   // maximal disturbance
   "The maximal disturbance to x; must be >= 0.",
@@ -97,10 +97,10 @@ static const char *paramHelp[] = {
   "Sets the opening angle for oscillations to x (0 <= x <= pi / 2).",
 
   // rotation sensitivity
-  "The rotation's sensitivity to x (0 <= x <= 1).",
+  "The rotation sensitivity to x (0 <= x <= 1).",
 
   // oscillation sensitivity
-  "The oscillation's sensitivity to x (0 <= x <= 1).",
+  "The oscillation sensitivity to x (0 <= x <= 1).",
 
   // Attraction formula
   "The formula for attraction.",

@@ -25,7 +25,7 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
   // edge weight
-  "Metric containing the edges' weights."
+  "Metric containing the edge weights."
 };
 //======================================================
 Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {

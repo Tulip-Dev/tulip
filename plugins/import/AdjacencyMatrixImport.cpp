@@ -32,7 +32,7 @@ enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3, T
 
 static const char *paramHelp[] = {
   // filename
-  "This parameter defines the file's pathname to import."
+  "This parameter defines the pathname of the file to import."
 };
 
 

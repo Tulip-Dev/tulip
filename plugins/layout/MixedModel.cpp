@@ -50,7 +50,7 @@ static const char *paramHelp[] = {
   "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge.",
 
   // node shape
-  "This parameter defines the property holding nodes' shapes."
+  "This parameter defines the property holding node shapes."
 };
 
 #define ORIENTATION "vertical;horizontal;"

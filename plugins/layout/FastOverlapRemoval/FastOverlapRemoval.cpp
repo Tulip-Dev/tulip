@@ -37,19 +37,19 @@ static const char* paramHelp[] = {
   "The property used for the input layout of nodes and edges.",
 
   // node size
-  "The property used for nodes' sizes.",
+  "The property used for node sizes.",
 
   // Rotation
-  "The property defining rotation's angles of nodes around the z-axis.",
+  "The property defining rotation angles of nodes around the z-axis.",
 
   // Iterations
   "The algorithm will be applied N times, each time increasing node size to attain original size at the final iteration. This greatly enhances the layout.",
 
   // x border
-  "The minimal x border value that will separate the graph's nodes after application of the algorithm.",
+  "The minimal x border value that will separate the graph nodes after application of the algorithm.",
 
   // y border
-  "The minimal y border value that will separate the graph's nodes after application of the algorithm."
+  "The minimal y border value that will separate the graph nodes after application of the algorithm."
 };
 
 #define OVERLAP_TYPE "X-Y;X;Y"

@@ -273,7 +273,7 @@ static const char *paramHelp[] = {
   "Determines the random walk length at each step.",
 
   // weights
-  "Edges' weights to use.",
+  "Edge weights to use.",
 
   // pruning
   "Determines, for each node, the number of strongest link kept at each iteration."
