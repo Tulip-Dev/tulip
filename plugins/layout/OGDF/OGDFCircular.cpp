@@ -65,7 +65,7 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
-static const char *paramHelp[] {
+static const char *paramHelp[] = {
   // minDistCircle
   "The minimal distance between nodes on a circle.",
 
