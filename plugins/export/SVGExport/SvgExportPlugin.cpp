@@ -38,7 +38,7 @@ static const char *paramHelp[] = {
   "Indicates if edge size interpolation has to be used.",
 
   // edge extremities
-  "Indicates if edges extremities have to be exported.",
+  "Indicates if edge extremities have to be exported.",
 
   // Background color
   "Specifies the background color of the SVG file.",
@@ -50,13 +50,13 @@ static const char *paramHelp[] = {
   " Be careful, this adds a large amount of data to the output file.",
 
   // node labels
-  "Specifies if nodes labels have to be exported.",
+  "Specifies if node labels have to be exported.",
 
   // edge labels
-  "Specifies if edges labels have to be exported.",
+  "Specifies if edge labels have to be exported.",
 
   // metanode labels
-  "Specifies if nodes and edges labels inside metanodes have to be exported.",
+  "Specifies if node and edge labels inside metanodes have to be exported.",
 
   //woff2
   "Uses Web Open Font Format version 2 (woff2) to reduce generated file length. This format is supported in almost all recent Internet browsers."
