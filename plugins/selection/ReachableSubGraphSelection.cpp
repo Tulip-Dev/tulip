@@ -36,12 +36,12 @@ static const char *paramHelp[] = {
   "This parameter defines the maximal distance of reachable nodes."
 };
 
-static const std::string directionValuesDescription =
+static const char *directionValuesDescription =
   "output edges : <i>follow ouput edges (directed)</i><br>"
   "input edges : <i>follow input edges (reverse-directed)</i><br>"
   "all edges : <i>all edges (undirected)</i>";
 
-static const std::string edgesDirectionLabels[] = {
+static const char *edgesDirectionLabels[] = {
   "output edges",
   "input edges",
   "all edges"

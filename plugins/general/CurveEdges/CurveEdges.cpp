@@ -74,7 +74,7 @@ static const char *paramHelp[] = {
   "If activated, set all edges shapes to Bézier curves."
 };
 
-const std::string curveTypeValues =
+static const char *curveTypeValues =
   "QuadraticContinuous <br>"
   "QuadraticDiscrete <br>"
   "QuadraticDiagonalCross <br>"

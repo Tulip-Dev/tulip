@@ -18,7 +18,7 @@
  */
 #include "Random.h"
 
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // 3D layout
   "If true, the layout is computed in 3D, else it is computed in 2D."
 };

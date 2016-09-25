@@ -211,52 +211,52 @@ static const char *paramHelp[] = {
   "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
 };
 
-static const string pageFormatValuesDescription =
+static const char *pageFormatValuesDescription =
   "Portrait <i>(A4 portrait page)</i><br>"
   "Landscape <i>(A4 landscape page)</i><br>"
   "Square <i>(Square format)</i>";
 
-static const string qualityVsSpeedValuesDescription =
+static const char *qualityVsSpeedValuesDescription =
   "GorgeousAndEfficient <i>(Best quality)</i><br>"
   "BeautifulAndFast <i>(Medium quality and speed)</i><br>"
   "NiceAndIncredibleSpeed <i>(Best speed</i>";
 
-static const string edgeLengthMeasurementValuesDescription =
+static const char *edgeLengthMeasurementValuesDescription =
   "Midpoint <i>(Measure from center point of edge end points)</i><br>"
   "BoundingCircle <i>(Measure from border of circle surrounding edge end points)</i>";
 
-static const string presortValuesDescription =
+static const char *presortValuesDescription =
   "None <i>(Do not presort)</i><br>"
   "DecreasingHeight <i>(Presort by decreasing height of components)</i><br>"
   "DecreasingWidth <i>(Presort by decreasing width of components)</i>";
 
-static const string galaxyChoiceValuesDescription =
+static const char *galaxyChoiceValuesDescription =
   "UniformProb<br>"
   "NonUniformProbLowerMass<br>"
   "NonUniformProbHigherMass";
 
-static const string maxIterChangeValuesDescription =
+static const char *maxIterChangeValuesDescription =
   "Constant <br>"
   "LinearlyDecreasing <br>"
   "RapidlyDecreasing";
 
-static const string forceModelValuesDescription =
+static const char *forceModelValuesDescription =
   "FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br>"
   "Eades <i>(The force-model by Eades)</i><br>"
   "New <i>(The new force-model)</i>";
 
-static const string repulsiveForceValuesDescription =
+static const char *repulsiveForceValuesDescription =
   "Exact <i>(Exact calculation)</i><br>"
   "GridApproximation <i>(Grid approximation)</i><br>"
   "NMM <i>(Calculation as for new multipole method)</i>";
 
-static const string initialPlacementValuesDescription =
+static const char *initialPlacementValuesDescription =
   "UniformGrid <i>(Uniform placement on a grid)</i><br>"
   "RandomTime <i>(Random placement, based on current time)</i><br>"
   "RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br>"
   "KeepPositions <i>(No change in placement)</i>";
 
-static const string smallestCellFindingValuesDescription =
+static const char *smallestCellFindingValuesDescription =
   "Iteratively <i>(Iteratively, in constant time)</i><br>"
   "Aluru <i>(According to formula by Aluru et al., in constant time)</i>";
 

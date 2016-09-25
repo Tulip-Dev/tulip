@@ -31,7 +31,7 @@
 
 using namespace tlp;
 
-static const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // type
   "If linear or logarithmic, the input property must be a <b>numeric</b> property. For the linear case, the minimum value is mapped to one end of the color scale, "
   "the maximum value is mapped to the other end, and a linear interpolation is used between both to compute the associated color. For the logarithmic case, graph elements values are first mapped in the [1, +inf[ range. "
