@@ -151,12 +151,12 @@ static const char *paramHelp[] = {
   "The hierarchy layout module that computes the final layout."
 };
 
-static const string eltRankingValuesDescription =
+static const char *eltRankingValuesDescription =
   "CoffmanGrahamRanking <i>(The coffman graham ranking algorithm)</i><br>"
   "LongestPathRanking <i>(the well-known longest-path ranking algorithm)</i><br>"
   "OptimalRanking <i>(the LP-based algorithm for computing a node ranking with minimal edge lengths)</i>";
 
-static const string twoLayerCrossValuesDescription =
+static const char *twoLayerCrossValuesDescription =
   "BarycenterHeuristic <i>(the barycenter heuristic for 2-layer crossing minimization)</i><br>"
   "GreedyInsertHeuristic <i>(The greedy-insert heuristic for 2-layer crossing minimization)</i><br>"
   "GreedySwitchHeuristic <i>(The greedy-switch heuristic for 2-layer crossing minimization)</i><br>"
@@ -166,7 +166,7 @@ static const string twoLayerCrossValuesDescription =
   "GridSiftingHeuristic <i>(the grid sifting heuristic for 2-layer crossing minimization)</i><br>"
   "GlobalSiftingHeuristic <i>(the global sifting heuristic for 2-layer crossing minimization)</i>";
 
-static const string hierarchyLayoutValuesDescription =
+static const char *hierarchyLayoutValuesDescription =
   "FastHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Buchheim et al.)</i><br>"
   "FastSimpleHierarchyLayout <i>(Coordinate assignment phase for the Sugiyama algorithm by Ulrik Brandes and Boris Koepf)</i><br>"
   "OptimalHierarchyLayout <i>(The LP-based hierarchy layout algorithm)</i>";

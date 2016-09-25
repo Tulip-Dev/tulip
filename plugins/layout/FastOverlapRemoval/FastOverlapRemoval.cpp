@@ -54,7 +54,7 @@ static const char* paramHelp[] = {
 
 #define OVERLAP_TYPE "X-Y;X;Y"
 
-static const string overlapRemovalTypeValuesDescription =
+static const char *overlapRemovalTypeValuesDescription =
   "X-Y <i>(Remove overlaps in both X and Y directions)</i><br>"
   "X <i>(Remove overlaps only in X direction)</i><br>"
   "Y <i>(Remove overlaps only in Y direction)</i>";
