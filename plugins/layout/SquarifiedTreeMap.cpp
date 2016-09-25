@@ -45,10 +45,10 @@ static const char *paramHelp[] = {
   "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (J. J. van Wijk)",
 
   // Node Size
-  "This parameter defines the property used as nodes' sizes.",
+  "This parameter defines the property used as node sizes.",
 
   // Node Shape
-  "This parameter defines the property used as nodes' shapes."
+  "This parameter defines the property used as node shapes."
 };
 
 //====================================================================

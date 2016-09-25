@@ -49,7 +49,7 @@ using namespace std;
 
 static const char *paramHelp[] = {
   // filename
-  "This parameter defines the file's pathname to import.",
+  "This parameter defines the pathname of the GEXF file to import.",
 
   // curved edges
   "Indicates if Bézier curves should be used to draw the edges."

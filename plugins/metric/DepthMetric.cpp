@@ -26,7 +26,7 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
   // edge weight
-  "This parameter defines the metric used for edges' weights."
+  "This parameter defines the metric used for edge weights."
 };
 
 DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(nullptr) {

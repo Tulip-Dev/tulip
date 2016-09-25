@@ -32,7 +32,7 @@ static const char *paramHelp[] = {
   "Property used to partition the graph.",
 
   // Type
-  "The type of graph's elements to partition.",
+  "The type of graph elements to partition.",
 
   // Connected
   "If true, the resulting subgraphs are guaranteed to be connected."

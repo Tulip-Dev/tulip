@@ -94,10 +94,10 @@ static const char *paramHelp[] = {
   "Easy way to set temperature and number of iterations.",
 
   // preferredEdgeLength
-  "The preferred edge's length.",
+  "The preferred edge length.",
 
   // preferredEdgeLengthMultiplier
-  "The preferred edge's length multiplier for attraction."
+  "The preferred edge length multiplier for attraction."
 };
 
 class OGDFDavidsonHarel : public OGDFLayoutPluginBase {

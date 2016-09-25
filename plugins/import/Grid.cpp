@@ -27,10 +27,10 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
   // width
-  "Grid's node width.",
+  "Grid node width.",
 
   // height
-  "Grid's node height.",
+  "Grid node height.",
 
   // Connectivity
   "Connectivity number of each node.",

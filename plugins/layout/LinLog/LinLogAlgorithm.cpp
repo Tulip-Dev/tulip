@@ -50,7 +50,7 @@ static const char *paramHelp[] = {
     "value are set to true.",
 
     // initial layout
-    "The layout property used to compute the initial position of the graph's "
+    "The layout property used to compute the initial position of the graph "
     "elements. If none is given the initial position will be computed by the "
     "algorithm."};
 

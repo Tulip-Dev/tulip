@@ -79,16 +79,16 @@ static const char *paramHelp[] = {
   "Sets the parameter noise.",
 
   // use node weights
-  "Indicates if the nodes' weights have to be used.",
+  "Indicates if the node weights have to be used.",
 
   // node weights
-  "The metric containing nodes' weights.",
+  "The metric containing node weights.",
 
   // Cooling function
   "Sets the parameter cooling function",
 
   // ideal edge length
-  "The ideal edge's length.",
+  "The ideal edge length.",
 
   // minDistCC
   "The minimal distance between connected components.",

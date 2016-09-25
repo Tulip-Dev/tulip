@@ -53,7 +53,7 @@ static const char *paramHelp[] = {
   "The input layout of the graph.",
 
   // size
-  "The input nodes' sizes.",
+  "The input node sizes.",
 
   // grid_graph
   "If true, a subgraph corresponding to the grid used for routing edges will be added.",

@@ -35,7 +35,7 @@ static const char *paramHelp[] = {
     "The directory to scan recursively.",
 
     // icons
-    "If true, set icons as nodes' shapes according to files' mime types.",
+    "If true, set icons as node shapes according to file mime types.",
 
     // tree layout
     "If true, apply the 'Bubble Tree' layout algorithm on the imported graph.",

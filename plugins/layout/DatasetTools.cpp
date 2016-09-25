@@ -39,7 +39,7 @@ static const char *paramHelp[] = {
   "This parameter enables to set up the minimum space between two nodes in the same layer.",
 
   // node size
-  "This parameter defines the property used for nodes' sizes."
+  "This parameter defines the property used for node sizes."
 };
 
 //====================================================================
