@@ -39,10 +39,10 @@ static const char *paramHelp[] = {
   "If true, the algorithm is applied along the entire hierarchy of subgraphs.",
 
   // node aggregation function
-  "Function used to compute a measure value for a meta-node using the values of its underlying nodes. If 'none', no value is computed.",
+  "Function used to compute a measure for a meta-node based on the values of its underlying nodes. If 'none', no value is computed.",
 
   // edge aggregation function
-  "Function used to compute a measure value for a meta-edge using the values of its underlying edges. If 'none', no value is computed.",
+  "Function used to compute a measure for a meta-edge based on the values of its underlying edges. If 'none', no value is computed.",
 
   // meta-node label
   "Property used to label meta-nodes. An arbitrary underlying node is chosen and its associated value for the given property becomes the meta-node label.",
@@ -57,7 +57,7 @@ static const char *paramHelp[] = {
   "If true, a force directed layout is computed for each quotient graph.",
 
   // layout clusters graphs
-  "If true, a force directed layout is computed for each clusters graph."
+  "If true, a force directed layout is computed for each cluster graph."
 };
 
 //===============================================================================
