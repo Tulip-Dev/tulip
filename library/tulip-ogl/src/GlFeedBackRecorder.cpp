@@ -44,7 +44,16 @@ static int compare(const void *a, const void *b) {
 GlFeedBackRecorder::GlFeedBackRecorder(GlFeedBackBuilder *builder,unsigned int pointSize):feedBackBuilder(builder), pointSize(pointSize) {}
 
 void GlFeedBackRecorder::record(bool doSort,GLint size, GLfloat *feedBackBuffer,const Vector<int,4>& viewport) {
-  feedBackBuilder->begin(viewport);
+
+  GLfloat clearColor[4];
+  GLfloat lineWidth;
+  GLfloat pointSize;
+
+  glGetFloatv(GL_COLOR_CLEAR_VALUE, clearColor);
+  glGetFloatv(GL_LINE_WIDTH, &lineWidth);
+  glGetFloatv(GL_POINT_SIZE, &pointSize);
+
+  feedBackBuilder->begin(viewport, clearColor, pointSize, lineWidth);
 
   if(doSort)
     sortAndRecord(size,feedBackBuffer);

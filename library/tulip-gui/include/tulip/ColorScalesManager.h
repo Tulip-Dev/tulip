@@ -1,5 +1,5 @@
 #ifndef COLORSCALESMANAGER_H
-#define COLORSCALESMANAHER_H
+#define COLORSCALESMANAGER_H
 
 #include <tulip/ColorScale.h>
 

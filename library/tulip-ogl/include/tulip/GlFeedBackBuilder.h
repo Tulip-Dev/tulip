@@ -63,7 +63,7 @@ public:
 
   virtual ~GlFeedBackBuilder() {}
 
-  virtual void begin(const Vector<int, 4> &) {}
+  virtual void begin(const Vector<int, 4> &, GLfloat *, GLfloat , GLfloat) {}
   virtual void passThroughToken(GLfloat*) {}
   virtual void pointToken(GLfloat*) {}
   virtual void lineToken(GLfloat*) {}
