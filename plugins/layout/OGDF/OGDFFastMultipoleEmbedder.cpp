@@ -77,10 +77,10 @@ static const char *paramHelp[] = {
   "If true, the initial layout will be randomized.",
 
   // default node size
-  "The default node's size.",
+  "The default node size.",
 
   // default edge length
-  "The default edge's length.",
+  "The default edge length.",
 
   // number of threads
   "The number of threads to use during the computation of the layout."

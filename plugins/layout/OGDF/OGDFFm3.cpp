@@ -151,13 +151,13 @@ using namespace std;
 static const char *paramHelp[] = {
 
   // Edge Length Property
-  "A numeric property containing unit edge's length to use.",
+  "A numeric property containing unit edge length to use.",
 
   // Node Size
-  "The nodes' sizes.",
+  "The node sizes.",
 
   // Unit edge length
-  "The unit edge's length.",
+  "The unit edge length.",
 
   // New initial placement
   "Indicates the initial placement before running algorithm.",
@@ -169,7 +169,7 @@ static const char *paramHelp[] = {
   "The threshold for the stop criterion.",
 
   // Page Format
-  "Possible page's formats.",
+  "Possible page formats.",
 
   // Quality vs Speed
   "Trade-off between run-time and quality.",

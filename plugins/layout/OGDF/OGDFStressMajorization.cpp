@@ -82,7 +82,7 @@ static const char *paramHelp[] = {
   "Tells whether the current layout should be used or the initial layout needs to be computed.",
 
   // layoutComponentsSeparately
-  "Sets whether the graph's components should be layouted separately or a dummy distance should be used for nodes within different components.",
+  "Sets whether the graph components should be layouted separately or a dummy distance should be used for nodes within different components.",
 
   // numberOfIterations
   "Sets a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used.",

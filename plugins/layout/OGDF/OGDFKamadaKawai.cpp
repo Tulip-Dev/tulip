@@ -72,10 +72,10 @@ static const char *paramHelp[] = {
   "If set to true, the given layout is used for the initial positions.",
 
   // zero length
-  "If set != 0, value zerolength is used to determine the desirable edge's length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes.",
+  "If set != 0, value zerolength is used to determine the desirable edge length by L = zerolength / max distance_ij. Otherwise, zerolength is determined using the node number and sizes.",
 
   // edge length
-  "The desirable edge's length.",
+  "The desirable edge length.",
 
   // compute max iterations
   "If set to true, the number of iterations is computed depending on G.",
