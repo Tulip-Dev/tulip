@@ -64,7 +64,7 @@
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
 
-static const char *paramHelp[] {
+static const char *paramHelp[] = {
   // stop tolerance
   "The value for the stop tolerance, below which the system is regarded stable (balanced) and the optimization stopped.",
 
