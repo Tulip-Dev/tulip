@@ -1568,16 +1568,17 @@ void GraphPerspective::displayColorScalesDialog() {
 }
 
 void GraphPerspective::showAboutTulipPage() {
-    if(!checkSocketConnected()) {
-        tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
-        QDialog aboutDialog(mainWindow(), Qt::Window);
-        aboutDialog.setWindowTitle("About Tulip");
-        QVBoxLayout *layout = new QVBoxLayout;
-        layout->addWidget(aboutPage);
-        aboutDialog.setLayout(layout);
-        aboutDialog.resize(800, 600);
-        aboutDialog.exec();
-    }
+  if (!checkSocketConnected()) {
+    tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
+    QDialog aboutDialog(mainWindow(), Qt::Window);
+    aboutDialog.setWindowTitle("About Tulip");
+    QVBoxLayout *layout = new QVBoxLayout;
+    layout->addWidget(aboutPage);
+    layout->setContentsMargins(0, 0, 0, 0);
+    aboutDialog.setLayout(layout);
+    aboutDialog.resize(800, 600);
+    aboutDialog.exec();
+  }
 }
 
 PLUGIN(GraphPerspective)
