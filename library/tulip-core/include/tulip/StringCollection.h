@@ -118,9 +118,9 @@ public:
    * Concatenete a string collection to the current collection
    *
    */
-    inline void insert(const tlp::StringCollection& str) {
-        _data.insert(_data.end(), str._data.begin(), str._data.end());
-    }
+  inline void insert(const tlp::StringCollection& str) {
+    _data.insert(_data.end(), str._data.begin(), str._data.end());
+  }
 
   /**
    * Returns true if the collection is empty.
