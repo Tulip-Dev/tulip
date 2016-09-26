@@ -134,8 +134,8 @@ public:
   bool isEditable() const {
     // input parameters are editable
     return (direction != OUT_PARAM) ||
-      // only property output parameters are editable
-      (type.find("Property") != std::string::npos);
+           // only property output parameters are editable
+           (type.find("Property") != std::string::npos);
   }
 };
 
