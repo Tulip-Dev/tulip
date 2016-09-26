@@ -1375,6 +1375,7 @@ void GraphPerspective::showAboutTulipPage() {
     aboutDialog.setWindowTitle("About Tulip");
     QVBoxLayout *layout = new QVBoxLayout;
     layout->addWidget(aboutPage);
+    layout->setContentsMargins(0,0,0,0);
     aboutDialog.setLayout(layout);
     aboutDialog.resize(800, 600);
     aboutDialog.exec();
