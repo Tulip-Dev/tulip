@@ -128,6 +128,15 @@ public:
   void setDirection(ParameterDirection dir) {
     direction = dir;
   }
+  /**
+   * @return Whether the parameter is editable or not.
+   */
+  bool isEditable() const {
+    // input parameters are editable
+    return (direction != OUT_PARAM) ||
+      // only property output parameters are editable
+      (type.find("Property") != std::string::npos);
+  }
 };
 
 /**

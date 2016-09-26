@@ -145,10 +145,16 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
-
-  if (index.column() == 0)
-    result |= Qt::ItemIsEditable;
-
+  const ParameterDescription& infos = _params[index.row()];
+  bool editable = infos.isEditable();
+    
+  if (index.column() == 0) {
+    if (editable)
+      result |= Qt::ItemIsEditable;
+  }
+  else if (!editable)
+    result ^= Qt::ItemIsEditable;
+  
   return result;
 }
 
