@@ -79,7 +79,7 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
           clearObserver();
           // allow to undo
           _graph->push();
-          addLink(widget, _source, node(selectedEntity.getComplexEntityId()));
+          addLink(widget, _source, selectedEntity.getNode());
           // edge finished. clear _source and _started
           _source = node();
           _started = false;
