@@ -40,10 +40,6 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent)
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this,
           SLOT(dynamicFontRBToggled(bool)));
-  connect(_ui->labelSizesRangeSlider, SIGNAL(lowerValueChanged(int)), this,
-          SLOT(updateSliderRangeLabels()));
-  connect(_ui->labelSizesRangeSlider, SIGNAL(upperValueChanged(int)), this,
-          SLOT(updateSliderRangeLabels()));
 
   _ui->selectionColorButton->setDialogTitle(
       "Choose the color of selected nodes or edges");
