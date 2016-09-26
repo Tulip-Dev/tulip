@@ -67,11 +67,13 @@ bool MouseEdgeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
         if (result && (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)) {
           Observable::holdObservers();
-          _started=false;
           clearObserver();
           // allow to undo
           _graph->push();
           addLink(widget,_source,node(selectedEntity.getComplexEntityId()));
+          //edge finished. clear _source and _started
+          _source=node();
+          _started=false;
           Observable::unholdObservers();
 
         }
