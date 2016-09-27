@@ -27,6 +27,8 @@
 
 #include <QTcpServer>
 
+#include <ctime>
+
 // Some utility class used in crash handler dialog designer form
 
 class SelectionButton: public QPushButton {
