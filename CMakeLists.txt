@@ -79,15 +79,22 @@ ENDIF(APPLE)
 ## Tulip version variables
 ## ========================================================
 SET(TulipMajorVersion 4)
-SET(TulipMinorVersion 9)
-SET(TulipReleaseVersion 0)
+SET(TulipMinorVersion 10)
+SET(TulipReleaseVersion "0-dev")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
-SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
+SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
+IF(TulipReleaseVersion MATCHES "^[0-9]+$")
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
+ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
+  # just a hack to force the display of the full Tulip version in window title bar
+  # when it contains non digit characters (like alpha, beta, dev, ...)
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
+ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================
 ## Tulip libraries names
