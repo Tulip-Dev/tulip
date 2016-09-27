@@ -90,7 +90,7 @@ Adds a string parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<std::string>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<std::string>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -121,7 +121,7 @@ Adds a :class:`tlp.StringCollection` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::StringCollection>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::StringCollection>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 
@@ -153,7 +153,7 @@ Adds an integer parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<int>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<int>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -184,7 +184,7 @@ Adds a floating point number parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<double>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<double>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -215,7 +215,7 @@ Adds a boolean parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<bool>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<bool>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -246,7 +246,7 @@ Adds a :class:`tlp.DoubleProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::DoubleProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::DoubleProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -279,7 +279,7 @@ Adds a :class:`tlp.DoubleVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::DoubleVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::DoubleVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -310,7 +310,7 @@ Adds a :class:`tlp.IntegerProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::IntegerProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::IntegerProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -343,7 +343,7 @@ Adds a :class:`tlp.IntegerVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::IntegerVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::IntegerVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -374,7 +374,7 @@ Adds a :class:`tlp.LayoutProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::LayoutProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::LayoutProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -407,7 +407,7 @@ Adds a :class:`tlp.CoorVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::CoordVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::CoordVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -438,7 +438,7 @@ Adds a :class:`tlp.SizeProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-    addParameter<tlp::SizeProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+    addParameter<tlp::SizeProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -471,7 +471,7 @@ Adds a :class:`tlp.SizeVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::SizeVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::SizeVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -502,7 +502,7 @@ Adds a :class:`tlp.ColorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::ColorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::ColorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -535,7 +535,7 @@ Adds a :class:`tlp.ColorVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::ColorVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::ColorVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -566,7 +566,7 @@ Adds a :class:`tlp.BooleanProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::BooleanProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::BooleanProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -599,7 +599,7 @@ Adds a :class:`tlp.BooleanVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::BooleanVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::BooleanVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -630,7 +630,7 @@ Adds a :class:`tlp.StringProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::StringProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::StringProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -663,7 +663,7 @@ Adds a :class:`tlp.StringVectorProperty` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::StringVectorProperty>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::StringVectorProperty>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -694,7 +694,7 @@ Adds a :class:`tlp.Color` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::Color>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::Color>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -725,7 +725,7 @@ Adds a :class:`tlp.ColorScale` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::ColorScale>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::ColorScale>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -756,7 +756,7 @@ Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
 %End
 
 %MethodCode
-  addParameter<tlp::PropertyInterface*>(sipCpp, (*a0).c_str(), (*a1).c_str(), (*a2).c_str(), a3, a4, a5);
+  addParameter<tlp::PropertyInterface*>(sipCpp, *a0, *a1, *a2, a3, a4, a5);
 %End
 
 // ==================================================================================
@@ -788,9 +788,9 @@ Adds a file parameter to the plug-in. A dialog will be created by the Tulip GUI 
 
 %MethodCode
   if (a1) {
-    addParameter<std::string>(sipCpp, (std::string("file::") + (*a0)).c_str(), (*a2).c_str(), (*a3).c_str(), a4, true, false);
+    addParameter<std::string>(sipCpp, std::string("file::") + *a0, *a2, *a3, a4, true, false);
   } else {
-    addParameter<std::string>(sipCpp, (std::string("anyfile::") + (*a0)).c_str(), (*a2).c_str(), (*a3).c_str(), a4, true, false);
+    addParameter<std::string>(sipCpp, std::string("anyfile::") + *a0, *a2, *a3, a4, true, false);
   }
 
 %End
@@ -820,7 +820,7 @@ Adds a directory parameter to the plug-in. A dialog will be created by the Tulip
 %End
 
 %MethodCode
-  addParameter<std::string>(sipCpp, (std::string("dir::") + (*a0)).c_str(), (*a1).c_str(), (*a2).c_str(), a3, true, false);
+  addParameter<std::string>(sipCpp, std::string("dir::") + *a0, *a1, *a2, a3, true, false);
 %End
 
 };
