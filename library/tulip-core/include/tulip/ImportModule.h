@@ -69,7 +69,7 @@ public:
     return IMPORT_CATEGORY;
   }
   std::string icon() const {
-    return ":/tulip/gui/icons/32/plugin_import_export.png";
+    return ":/tulip/gui/icons/64/document-import.png";
   }
 
   /**

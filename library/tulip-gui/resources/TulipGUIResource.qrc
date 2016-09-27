@@ -77,7 +77,6 @@
         <file>icons/32/plugin_algorithm.png</file>
         <file>icons/32/plugin_controller.png</file>
         <file>icons/32/plugin_glyph.png</file>
-        <file>icons/32/plugin_import_export.png</file>
         <file>icons/32/plugin_interactor.png</file>
         <file>icons/32/plugin_view.png</file>
         <file>ui/split3_2_screen.png</file>
@@ -92,6 +91,7 @@
         <file>ui/right_arrow-white.png</file>
         <file>ui/six_screen.png</file>
         <file>icons/16/clipboard.png</file>
+        <file>icons/64/document-export.png</file>
         <file>icons/64/document-import.png</file>
         <file>icons/arrow_two_head.png</file>
         <file>ui/split3_3_screen.png</file>

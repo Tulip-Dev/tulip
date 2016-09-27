@@ -207,7 +207,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/16/plugin_algorithm.png</normaloff>:/tulip/app/icons/16/plugin_algorithm.png</iconset>
+            <normaloff>:/tulip/app/icons/64/plugin_algorithm.png</normaloff>:/tulip/app/icons/64/plugin_algorithm.png</iconset>
           </property>
          </item>
          <item>
@@ -216,7 +216,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/16/plugin_import_export.png</normaloff>:/tulip/app/icons/16/plugin_import_export.png</iconset>
+            <normaloff>:/tulip/app/icons/64/plugin_import_export.png</normaloff>:/tulip/app/icons/64/plugin_import_export.png</iconset>
           </property>
          </item>
          <item>
@@ -225,7 +225,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/16/plugin_glyph.png</normaloff>:/tulip/app/icons/16/plugin_glyph.png</iconset>
+            <normaloff>:/tulip/app/icons/64/plugin_glyph.png</normaloff>:/tulip/app/icons/64/plugin_glyph.png</iconset>
           </property>
          </item>
          <item>
@@ -234,7 +234,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/16/plugin_view.png</normaloff>:/tulip/app/icons/16/plugin_view.png</iconset>
+            <normaloff>:/tulip/app/icons/64/plugin_view.png</normaloff>:/tulip/app/icons/64/plugin_view.png</iconset>
           </property>
          </item>
          <item>
@@ -243,7 +243,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/16/plugin_interactor.png</normaloff>:/tulip/app/icons/16/plugin_interactor.png</iconset>
+            <normaloff>:/tulip/app/icons/64/plugin_interactor.png</normaloff>:/tulip/app/icons/64/plugin_interactor.png</iconset>
           </property>
          </item>
          <item>
@@ -252,7 +252,7 @@ border-bottom: 1px solid &quot;#C9C9C9&quot;;
           </property>
           <property name="icon">
            <iconset resource="../resources/TulipAgent.qrc">
-            <normaloff>:/tulip/app/icons/16/plugin_controller.png</normaloff>:/tulip/app/icons/16/plugin_controller.png</iconset>
+            <normaloff>:/tulip/app/icons/64/plugin_controller.png</normaloff>:/tulip/app/icons/64/plugin_controller.png</iconset>
           </property>
          </item>
          <item>
