@@ -78,13 +78,17 @@ void AlgorithmRunner::buildTreeUi(QWidget* w, PluginModel<tlp::Algorithm>* model
 }
 
 void AlgorithmRunner::insertItem(QWidget* w, const QString& name) {
+
   const Plugin& plugin = PluginLister::pluginInformation(name.toStdString());
   QString category = plugin.category().c_str();
   QString group = plugin.group().c_str();
 
   ExpandableGroupBox* categoryBox = nullptr, *groupBox = nullptr;
   foreach(ExpandableGroupBox* box, w->findChildren<ExpandableGroupBox*>()) {
-    if (box->title() ==  category) {
+    // workaround a Qt5 bug (seems only Linux related):
+    // the box title got a '&' character added to it when algorithms are filtered
+    // resulting in the new algorithm not being inserted in the GUI
+    if (box->title().replace("&", "") ==  category) {
       categoryBox = box;
       break;
     }
