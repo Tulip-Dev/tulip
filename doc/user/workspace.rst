@@ -1000,7 +1000,7 @@ Beside offering the capability to work on high-dimensionnal data, the self organ
 Example : Coloring a graph
 ==========================
 
-.. |icon_import| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/document-import.png
+.. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
     :width: 32
 .. |icon_add| image:: ../../library/tulip-gui/resources/icons/64/list-add.png
     :width: 40
