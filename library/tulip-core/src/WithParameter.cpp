@@ -139,6 +139,7 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(const string
     doc += HTML_HELP_BODY();
     doc += help;
   }
+
   doc += HTML_HELP_CLOSE();
 
   return doc;
