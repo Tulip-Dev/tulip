@@ -828,6 +828,42 @@ Adds a :class:`tlp.PropertyInterface` parameter to the plug-in.
 
 // ==================================================================================
 
+ void addNumericPropertyParameter(const std::string & str,
+                                  const std::string & inHelp = "",
+                                  const std::string & inDefValue = "",
+                                  bool isMandatory = true,
+                                  bool inParam = true, bool outParam = false,
+                                  const std::string &valuesDescription = "");
+
+%Docstring
+tlp.WithParameter.addNumericPropertyParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+
+.. versionadded:: 4.10
+
+Adds a :class:`tlp.NumericProperty` parameter to the plug-in.
+
+:param name: the name of the :class:`tlp.NumericProperty` parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "<property_name>") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+:param valuesDescription: An optional description of the values the parameter can take.
+:type valuesDescription: string
+%End
+
+%MethodCode
+ addParameter<tlp::NumericProperty*>(sipCpp, *a0, *a1, *a2, a3, a4, a5, *a6);
+%End
+
+// ==================================================================================
+
 void addFileParameter(const std::string & str,
                       bool mustExist = true,
                       const std::string & inHelp = "",
