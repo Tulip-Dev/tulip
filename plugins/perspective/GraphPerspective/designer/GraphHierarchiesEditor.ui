@@ -208,8 +208,8 @@
   </action>
   <action name="actionExport">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/document-export.png</normaloff>:/tulip/graphperspective/icons/16/document-export.png</iconset>
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
    </property>
    <property name="text">
     <string>Export</string>
