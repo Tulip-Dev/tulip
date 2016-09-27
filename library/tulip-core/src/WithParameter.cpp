@@ -53,9 +53,7 @@ using namespace std;
 #define OUT_DIRECTION "output"
 #define INOUT_DIRECTION "input/output"
 
-static string html_help_def(const string &A, const string &B) {
-  return "<tr><td><b>" + A + "</b><td class=\"b\">" + B + "</td></tr>";
-}
+static string html_help_def(const string &A, const string &B) { return "<tr><td><b>" + A + "</b><td class=\"b\">" + B + "</td></tr>"; }
 
 static string getParameterTypename(const string &name, const string &typeId) {
   if (name.substr(0, 6) == "file::" || name.substr(0, 9) == "anyfile::") {
@@ -85,10 +83,8 @@ static string getParameterTypename(const string &name, const string &typeId) {
   }
 }
 
-string ParameterDescriptionList::generateParameterHTMLDocumentation(
-    const string &name, const string &help, const string &type,
-    const string &defaultValue, const string &valuesDescription,
-    const ParameterDirection &direction) {
+string ParameterDescriptionList::generateParameterHTMLDocumentation(const string &name, const string &help, const string &type, const string &defaultValue, const string &valuesDescription,
+                                                                    const ParameterDirection &direction) {
 
   static string htmlDocheader = HTML_HELP_OPEN();
   // for backward compatibility for external plugins using the old plugin
@@ -105,8 +101,7 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(
     if (type != typeid(tlp::StringCollection).name()) {
       doc += html_help_def(DEFAULT_SECTION, defaultValue);
     } else {
-      doc += html_help_def(DEFAULT_SECTION,
-                           defaultValue.substr(0, defaultValue.find(";")));
+      doc += html_help_def(DEFAULT_SECTION, defaultValue.substr(0, defaultValue.find(";")));
     }
   }
   if (direction == IN_PARAM) {
@@ -116,26 +111,26 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(
   } else {
     doc += html_help_def(DIRECTION_SECTION, INOUT_DIRECTION);
   }
-  doc += HTML_HELP_BODY();
-  doc += help;
+  else {
+    doc += html_help_def(DIRECTION_SECTION, INOUT_DIRECTION);
+  }
+
+  if (!help.empty()) {
+    doc += HTML_HELP_BODY();
+    doc += help;
+  }
   doc += HTML_HELP_CLOSE();
 
   return doc;
 }
 
-const ParameterDescriptionList &tlp::WithParameter::getParameters() const {
-  return parameters;
+const ParameterDescriptionList &tlp::WithParameter::getParameters() const { return parameters; }
+
+Iterator<ParameterDescription> *ParameterDescriptionList::getParameters() const {
+  return new StlIterator<ParameterDescription, vector<ParameterDescription>::const_iterator>(parameters.begin(), parameters.end());
 }
 
-Iterator<ParameterDescription> *
-ParameterDescriptionList::getParameters() const {
-  return new StlIterator<ParameterDescription,
-                         vector<ParameterDescription>::const_iterator>(
-      parameters.begin(), parameters.end());
-}
-
-ParameterDescription *
-ParameterDescriptionList::getParameter(const string &name) {
+ParameterDescription *ParameterDescriptionList::getParameter(const string &name) {
   for (unsigned int i = 0; i < parameters.size(); ++i) {
     if (name == parameters[i].getName())
       return &parameters[i];
@@ -148,38 +143,24 @@ ParameterDescriptionList::getParameter(const string &name) {
   return nullptr;
 }
 
-const string &
-ParameterDescriptionList::getDefaultValue(const string &name) const {
-  return ((ParameterDescriptionList *)this)
-      ->getParameter(name)
-      ->getDefaultValue();
-}
+const string &ParameterDescriptionList::getDefaultValue(const string &name) const { return ((ParameterDescriptionList *)this)->getParameter(name)->getDefaultValue(); }
 
-void ParameterDescriptionList::setDefaultValue(const string &name,
-                                               const string &val) {
-  getParameter(name)->setDefaultValue(val);
-}
+void ParameterDescriptionList::setDefaultValue(const string &name, const string &val) { getParameter(name)->setDefaultValue(val); }
 
-void ParameterDescriptionList::setDirection(const string &name,
-                                            ParameterDirection direction) {
-  getParameter(name)->setDirection(direction);
-}
+void ParameterDescriptionList::setDirection(const string &name, ParameterDirection direction) { getParameter(name)->setDirection(direction); }
 
-bool ParameterDescriptionList::isMandatory(const string &name) const {
-  return ((ParameterDescriptionList *)this)->getParameter(name)->isMandatory();
-}
+bool ParameterDescriptionList::isMandatory(const string &name) const { return ((ParameterDescriptionList *)this)->getParameter(name)->isMandatory(); }
 
-#define CHECK_PROPERTY(T)                                                      \
-  if (type.compare(typeid(T).name()) == 0) {                                   \
-    if (!g || defaultValue.empty() || !g->existProperty(defaultValue))         \
-      dataSet.set(name, (T *)nullptr);                                         \
-    else                                                                       \
-      dataSet.set(name, (T *)g->getProperty<T>(defaultValue));                 \
-    continue;                                                                  \
+#define CHECK_PROPERTY(T)                                                                                                                                                                              \
+  if (type.compare(typeid(T).name()) == 0) {                                                                                                                                                           \
+    if (!g || defaultValue.empty() || !g->existProperty(defaultValue))                                                                                                                                 \
+      dataSet.set(name, (T *)nullptr);                                                                                                                                                                 \
+    else                                                                                                                                                                                               \
+      dataSet.set(name, (T *)g->getProperty<T>(defaultValue));                                                                                                                                         \
+    continue;                                                                                                                                                                                          \
   }
 
-void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet,
-                                                   Graph *g) const {
+void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {
   for (const ParameterDescription &param : getParameters()) {
     const string &name = param.getName();
     const string &type = param.getTypeName();
@@ -190,9 +171,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet,
     if (dts) {
       bool result = dts->setData(dataSet, name, defaultValue);
       if (!result)
-        tlp::error() << "Unable to parse \"" << defaultValue.c_str()
-                     << "\" as a default value for parameter \"" << name.c_str()
-                     << "\"" << endl;
+        tlp::error() << "Unable to parse \"" << defaultValue.c_str() << "\" as a default value for parameter \"" << name.c_str() << "\"" << endl;
 
       assert(result);
       continue;
@@ -227,8 +206,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet,
         PropertyInterface *prop = g->getProperty(defaultValue);
 
         if (!dynamic_cast<NumericProperty *>(prop)) {
-          tlp::error() << "NumericProperty '" << defaultValue.c_str()
-                       << "' not found for parameter '" << name.c_str() << endl;
+          tlp::error() << "NumericProperty '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << endl;
           prop = nullptr;
         }
 
@@ -243,8 +221,7 @@ void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet,
         dataSet.set(name, (PropertyInterface *)nullptr);
       else {
         if (!g->existProperty(defaultValue)) {
-          tlp::error() << "Property '" << defaultValue.c_str()
-                       << "' not found for parameter '" << name.c_str() << endl;
+          tlp::error() << "Property '" << defaultValue.c_str() << "' not found for parameter '" << name.c_str() << endl;
           dataSet.set(name, (PropertyInterface *)nullptr);
         } else
           dataSet.set(name, g->getProperty(defaultValue));
