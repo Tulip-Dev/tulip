@@ -95,8 +95,7 @@ Some *layout* algorithms can only be applied to graphs belonging to a specific g
 
 There are many algorithms for testing, coloring, resizing... more information on them can be find in :ref:`the Algorithm section <algo>`.
 
-
-.. |icon_import| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/document-import.png
+.. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
+     :width: 32
 .. |icon_wst_add_nodes_edges| image:: ../../library/tulip-gui/resources/icons/i_addedge.png
 .. |icon_wst_delete_nodes_edges| image:: ../../library/tulip-gui/resources/icons/i_del.png
-
