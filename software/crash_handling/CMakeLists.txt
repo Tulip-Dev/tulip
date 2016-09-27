@@ -2,7 +2,7 @@ SET(LIB_SRCS
     CrashHandling.cpp
     StackWalker.cpp)
 
-IF(NOT MSVC)
+IF(NOT MSVC AND NOT BSD)
 
   IF(LINUX OR MINGW)
 
@@ -36,7 +36,7 @@ IF(NOT MSVC)
 
   ENDIF(LINUX OR MINGW)
 
-ENDIF(NOT MSVC)
+ENDIF(NOT MSVC AND NOT BSD)
 	
 INCLUDE_DIRECTORIES(BEFORE ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
