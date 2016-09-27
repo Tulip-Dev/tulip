@@ -135,8 +135,10 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(const string
     doc += html_help_def( DIRECTION_SECTION, INOUT_DIRECTION );
   }
 
-  doc += HTML_HELP_BODY();
-  doc += help;
+  if (!help.empty()) {
+    doc += HTML_HELP_BODY();
+    doc += help;
+  }
   doc += HTML_HELP_CLOSE();
 
   return doc;
