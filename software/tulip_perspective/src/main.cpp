@@ -271,13 +271,11 @@ int main(int argc,char **argv) {
   }
   else if (perspectiveName.isEmpty()) {
     perspectiveName = project->perspective();
-
-    if(perspectiveName.isEmpty())
-      error = "No perspective given on the command line or in the project file";
   }
 
   if (perspectiveName.isEmpty()) {
-    usage("Could not determine the perspective to launch: \n"+ error);
+    // set Tulip as default perspective
+    perspectiveName = "Tulip";
   }
 
   context->project = project;
