@@ -62,24 +62,24 @@ MACRO(RETRIEVE_VERSION)
   IF(TULIP_INCLUDE_DIR)
     FILE(STRINGS ${TULIP_INCLUDE_DIR}/tulip/TulipRelease.h
          TMPSTR
-         REGEX "[0-9]*\\${TulipVersionSeparator}[0-9]*"
+         REGEX "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
          NO_HEX_CONVERSION)
 
-    STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9]*"
+    STRING(REGEX MATCH "[0-9]*\\${TulipVersionSeparator}[0-9]*\\${TulipVersionSeparator}[0-9][^\"]*"
            TULIP_VERSION
            ${TMPSTR})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
             "\\1"
            TULIP_MAJOR_VERSION
            ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
             "\\2"
            TULIP_MINOR_VERSION
            ${TULIP_VERSION})
 
-    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9]*)"
+    STRING(REGEX REPLACE "([0-9]*)\\${TulipVersionSeparator}([0-9]*)\\${TulipVersionSeparator}([0-9][^\"]*)"
             "\\3"
            TULIP_PATCH_VERSION
            ${TULIP_VERSION})
