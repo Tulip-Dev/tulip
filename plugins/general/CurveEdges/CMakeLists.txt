@@ -1,6 +1,6 @@
 SET(PLUGIN_NAME CurveEdges)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 SET(PLUGIN_SRCS
  CurveEdges.cpp

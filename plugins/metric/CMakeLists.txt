@@ -1,6 +1,6 @@
 ADD_CORE_FILES(.)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(Eccentricity-${TulipVersion} SHARED Eccentricity.h Eccentricity.cpp)

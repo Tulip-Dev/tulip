@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude} ${GLEW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${GLEW_INCLUDE_DIR})
 
 MACRO(GLYPH name source)
   ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})

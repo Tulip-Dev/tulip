@@ -42,7 +42,7 @@ DISABLE_COMPILER_WARNINGS()
 # instead of those installed in the system
 INCLUDE_DIRECTORIES(BEFORE ${SIP_INCLUDE_DIR})
 
-INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLInclude})
+INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_DIR} ${PYTHON_INCLUDE_PATH} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude})
 
 ADD_LIBRARY(${LibTulipOGLPythonBindingsName} SHARED ${TULIP_OGL_PYTHON_BINDINGS_SRC})
 
