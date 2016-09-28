@@ -1,6 +1,6 @@
 ADD_CORE_FILES(".")
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${CMAKE_CURRENT_BINARY_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${CMAKE_CURRENT_BINARY_DIR})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(Planarity_SRCS

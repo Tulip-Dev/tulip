@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${CppUnit_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${CppUnit_INCLUDE_DIRS})
 
 ADD_LIBRARY(testPlugin SHARED testPlugin.cpp)
 SET_TARGET_PROPERTIES(testPlugin 

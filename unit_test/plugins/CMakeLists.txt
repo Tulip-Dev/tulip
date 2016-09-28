@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${CppUnit_INCLUDE_DIRS})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${CppUnit_INCLUDE_DIRS})
 
 SET(TULIP_PLUGINS_TESTS_SRCS
   BasicPluginsTest.cpp

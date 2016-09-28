@@ -4,7 +4,11 @@ ADD_SUBDIRECTORY(MouseLassoNodesSelector)
 ADD_SUBDIRECTORY(NeighborhoodHighlighter)
 #ADD_SUBDIRECTORY(PathFinder)
 
+<<<<<<< HEAD
 INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ${TulipOGLESInclude} ${TulipGUIInclude})
+=======
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${OPENGL_INCLUDE_DIR})
+>>>>>>> 530af02... ensure Tulip build include folders are searched before the source include ones : prevent possible bad compilation surprises when accidentally running the cmake command in the tulip root source folder
 
 ##----------------------------------------------------------------------------------------------------------------------------
 ADD_LIBRARY(InteractorNavigation-${TulipVersion} SHARED InteractorNavigation.cpp)

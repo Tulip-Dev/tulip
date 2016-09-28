@@ -2,7 +2,7 @@ IF(NOT BUILD_CORE_ONLY)
 #ADD_SUBDIRECTORY(SVGExport)
 ENDIF(NOT BUILD_CORE_ONLY)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 ##----------------------------------------------------------------------------------------------------------------------------
 SET(GMLExport_SRCS

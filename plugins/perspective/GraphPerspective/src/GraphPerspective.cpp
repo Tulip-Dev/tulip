@@ -80,17 +80,13 @@ static QColor sideBarIconColor = Qt::white;
 static QColor menuIconColor = QColor("#404244");
 
 static QIcon getFileNewIcon() {
-  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(
-      md::file, menuIconColor);
-  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(
-      md::plus, Qt::white, 0.7, QPointF(0, 10));
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor);
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(md::plus, Qt::white, 0.7, QPointF(0, 10));
   return FontIconManager::stackIcons(backIcon, frontIcon);
 }
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
-    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)),
-      _recentDocumentsSettingsKey("perspective/recent_files"),
-      _logger(nullptr) {
+    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && ((PerspectiveContext *)c)->parameters.contains("gui_testing")) {
@@ -132,28 +128,18 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach (QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(
-        FontIconManager::instance()->getMaterialDesignIcon(md::archive,
-                                                           menuIconColor),
-        s, this, SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::archive, menuIconColor), s, this, SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
-  foreach (QString s, TulipSettings::instance()
-                          .value(_recentDocumentsSettingsKey)
-                          .toStringList()) {
+  foreach (QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(
-        FontIconManager::instance()->getMaterialDesignIcon(md::file,
-                                                           menuIconColor),
-        s, this, SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor), s, this, SLOT(openRecentFile()));
   }
 }
 
 void GraphPerspective::addRecentDocument(const QString &path) {
-  QStringList recents = TulipSettings::instance()
-                            .value(_recentDocumentsSettingsKey)
-                            .toStringList();
+  QStringList recents = TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList();
 
   if (recents.contains(path))
     return;
@@ -170,8 +156,7 @@ void GraphPerspective::addRecentDocument(const QString &path) {
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
-void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context,
-                            const QString &msg) {
+void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = msg.mid(14).mid(2, msg.length() - 17);
@@ -185,12 +170,10 @@ void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context,
     std::cerr << msg.toStdString() << std::endl;
   }
 
-  static_cast<GraphPerspective *>(Perspective::instance())
-      ->log(type, context, msg);
+  static_cast<GraphPerspective *>(Perspective::instance())->log(type, context, msg);
 }
 
-void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context,
-                           const QString &msg) {
+void GraphPerspective::log(QtMsgType type, const QMessageLogContext &context, const QString &msg) {
   _logger->log(type, context, msg);
   _ui->loggerIcon->setPixmap(_logger->icon());
   _ui->loggerMessage->setText(QString::number(_logger->count()));
@@ -253,9 +236,7 @@ bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
 
   if (ev->type() == QEvent::Drop) {
     QDropEvent *dropEvent = dynamic_cast<QDropEvent *>(ev);
-    foreach (const QUrl &url, dropEvent->mimeData()->urls()) {
-      open(url.toLocalFile());
-    }
+    foreach (const QUrl &url, dropEvent->mimeData()->urls()) { open(url.toLocalFile()); }
   }
 
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
@@ -263,15 +244,11 @@ bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
 
   if (obj == _mainWindow && ev->type() == QEvent::Close) {
     if (_graphs->needsSaving()) {
-      QMessageBox::StandardButton answer =
-          QMessageBox::question(_mainWindow, trUtf8("Save"),
-                                trUtf8("The project has been modified. Do you "
-                                       "want to save your changes?"),
-                                QMessageBox::Yes | QMessageBox::No |
-                                    QMessageBox::Cancel | QMessageBox::Escape);
+      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you "
+                                                                                                     "want to save your changes?"),
+                                                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
-      if ((answer == QMessageBox::Yes && !save()) ||
-          (answer == QMessageBox::Cancel)) {
+      if ((answer == QMessageBox::Yes && !save()) || (answer == QMessageBox::Cancel)) {
         ev->ignore();
         return true;
       }
@@ -287,125 +264,60 @@ void GraphPerspective::showLogger() {
 
   QPoint pos = _mainWindow->mapToGlobal(_ui->loggerFrame->pos());
   pos.setX(pos.x() + _ui->loggerFrame->width());
-  pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0, 0)).y() +
-                             mainWindow()->height() - _logger->height(),
-                         pos.y()));
+  pos.setY(std::min<int>(_mainWindow->mapToGlobal(QPoint(0, 0)).y() + mainWindow()->height() - _logger->height(), pos.y()));
   _logger->move(pos);
   // extend the logger frame width until reaching the right side of the main
   // window
-  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x() +
-                      mainWindow()->width() -
-                      _mainWindow->mapToGlobal(_logger->pos()).x(),
-                  _logger->height());
+  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x() + mainWindow()->width() - _mainWindow->mapToGlobal(_logger->pos()).x(), _logger->height());
+
   _logger->show();
 }
 
-void GraphPerspective::redrawPanels(bool center) {
-  _ui->workspace->redrawPanels(center);
-}
+void GraphPerspective::redrawPanels(bool center) { _ui->workspace->redrawPanels(center); }
 
 void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
 
-  _ui->developButton->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::languagepython,
-                                                         sideBarIconColor));
-  _ui->workspaceButton->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::televisionguide,
-                                                         sideBarIconColor));
-  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::import, sideBarIconColor));
-  _ui->exportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::export_, sideBarIconColor));
-  _ui->csvImportButton->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::tablelarge,
-                                                         sideBarIconColor));
-  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::reply, sideBarIconColor));
-  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::share, sideBarIconColor));
-  _ui->addPanelButton->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::plusbox,
-                                                         sideBarIconColor));
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, sideBarIconColor));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::televisionguide, sideBarIconColor));
+  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, sideBarIconColor));
+  _ui->exportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, sideBarIconColor));
+  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::tablelarge, sideBarIconColor));
+  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, sideBarIconColor));
+  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, sideBarIconColor));
+  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, sideBarIconColor));
   _ui->actionNewProject->setIcon(getFileNewIcon());
-  _ui->actionOpen_Project->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::fileimport,
-                                                         menuIconColor));
-  _ui->menuOpen_recent_file->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::clock,
-                                                         menuIconColor));
-  _ui->actionSave_Project->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::fileexport,
-                                                         menuIconColor));
-  _ui->actionSave_Project_as->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::fileexport,
-                                                         menuIconColor));
-  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::import, menuIconColor));
-  _ui->actionExport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::export_, menuIconColor));
-  _ui->actionImport_CSV->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::table,
-                                                         menuIconColor));
+  _ui->actionOpen_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, menuIconColor));
+  _ui->menuOpen_recent_file->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::clock, menuIconColor));
+  _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
+  _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
+  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, menuIconColor));
+  _ui->actionExport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, menuIconColor));
+  _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::table, menuIconColor));
   _ui->actionNew_graph->setIcon(getFileNewIcon());
-  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::closecircle, menuIconColor));
-  _ui->actionUndo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::reply, menuIconColor));
-  _ui->actionRedo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::share, menuIconColor));
-  _ui->actionCut->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::contentcut, menuIconColor));
-  _ui->actionPaste->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::contentpaste, menuIconColor));
-  _ui->actionCopy->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::contentcopy, menuIconColor));
-  _ui->actionDelete->setIcon(FontIconManager::instance()->getMaterialDesignIcon(
-      md::delete_, menuIconColor));
-  _ui->actionSelect_All->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::selectall,
-                                                         menuIconColor));
-  _ui->actionInvert_selection->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::selectinverse,
-                                                         menuIconColor));
-  _ui->actionCancel_selection->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::selectoff,
-                                                         menuIconColor));
-  _ui->actionGroup_elements->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::group,
-                                                         menuIconColor));
-  _ui->actionPreferences->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::settings,
-                                                         menuIconColor));
-  _ui->actionFull_screen->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::fullscreen,
-                                                         menuIconColor));
-  _ui->action_Close_All->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::windowclose,
-                                                         menuIconColor));
-  _ui->actionMessages_log->setIcon(
-      tlp::FontIconManager::instance()->getMaterialDesignIcon(
-          tlp::md::information, QColor("#407FB2")));
-  _ui->actionFind_plugins->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::magnify,
-                                                         menuIconColor));
-  _ui->actionAbout_us->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::star,
-                                                         QColor("#F9AA3A")));
-  _ui->actionShowUserDocumentation->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant,
-                                                         menuIconColor));
-  _ui->actionShowDevelDocumentation->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant,
-                                                         menuIconColor));
-  _ui->actionShowPythonDocumentation->setIcon(
-      FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant,
-                                                         menuIconColor));
-  _ui->actionColor_scales_management->setIcon(
-        FontIconManager::instance()->getMaterialDesignIcon(md::palette,
-                                                           menuIconColor));
+  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::closecircle, menuIconColor));
+  _ui->actionUndo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, menuIconColor));
+  _ui->actionRedo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, menuIconColor));
+  _ui->actionCut->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcut, menuIconColor));
+  _ui->actionPaste->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentpaste, menuIconColor));
+  _ui->actionCopy->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy, menuIconColor));
+  _ui->actionDelete->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::delete_, menuIconColor));
+  _ui->actionSelect_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectall, menuIconColor));
+  _ui->actionInvert_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectinverse, menuIconColor));
+  _ui->actionCancel_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectoff, menuIconColor));
+  _ui->actionGroup_elements->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::group, menuIconColor));
+  _ui->actionPreferences->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, menuIconColor));
+  _ui->actionFull_screen->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fullscreen, menuIconColor));
+  _ui->action_Close_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::windowclose, menuIconColor));
+  _ui->actionMessages_log->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2")));
+  _ui->actionFind_plugins->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::magnify, menuIconColor));
+  _ui->actionAbout_us->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::star, QColor("#F9AA3A")));
+  _ui->actionShowUserDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
+  _ui->actionShowDevelDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
+  _ui->actionShowPythonDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
+  _ui->actionColor_scales_management->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::palette, menuIconColor));
 #ifdef BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
@@ -471,38 +383,25 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   qInstallMsgHandler(graphPerspectiveLogger);
 #endif
 
-  connect(_ui->workspace, SIGNAL(addPanelRequest(tlp::Graph *)), this,
-          SLOT(createPanel(tlp::Graph *)));
-  connect(_ui->workspace, SIGNAL(focusedPanelSynchronized()), this,
-          SLOT(focusedPanelSynchronized()));
-  connect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), this,
-          SLOT(currentGraphChanged(tlp::Graph *)));
-  connect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)),
-          _ui->algorithmRunner, SLOT(setGraph(tlp::Graph *)));
-  connect(_ui->graphHierarchiesEditor, SIGNAL(changeSynchronization(bool)),
-          this, SLOT(changeSynchronization(bool)));
+  connect(_ui->workspace, SIGNAL(addPanelRequest(tlp::Graph *)), this, SLOT(createPanel(tlp::Graph *)));
+  connect(_ui->workspace, SIGNAL(focusedPanelSynchronized()), this, SLOT(focusedPanelSynchronized()));
+  connect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), this, SLOT(currentGraphChanged(tlp::Graph *)));
+  connect(_graphs, SIGNAL(currentGraphChanged(tlp::Graph *)), _ui->algorithmRunner, SLOT(setGraph(tlp::Graph *)));
+  connect(_ui->graphHierarchiesEditor, SIGNAL(changeSynchronization(bool)), this, SLOT(changeSynchronization(bool)));
 
   // Connect actions
-  connect(_ui->actionMessages_log, SIGNAL(triggered()), this,
-          SLOT(showLogger()));
-  connect(_ui->actionFull_screen, SIGNAL(triggered(bool)), this,
-          SLOT(showFullScreen(bool)));
+  connect(_ui->actionMessages_log, SIGNAL(triggered()), this, SLOT(showLogger()));
+  connect(_ui->actionFull_screen, SIGNAL(triggered(bool)), this, SLOT(showFullScreen(bool)));
   connect(_ui->actionImport, SIGNAL(triggered()), this, SLOT(importGraph()));
   connect(_ui->actionExport, SIGNAL(triggered()), this, SLOT(exportGraph()));
-  connect(_ui->actionSave_graph_to_file, SIGNAL(triggered()), this,
-          SLOT(saveGraphHierarchyInTlpFile()));
-  connect(_ui->workspace, SIGNAL(panelFocused(tlp::View *)), this,
-          SLOT(panelFocused(tlp::View *)));
+  connect(_ui->actionSave_graph_to_file, SIGNAL(triggered()), this, SLOT(saveGraphHierarchyInTlpFile()));
+  connect(_ui->workspace, SIGNAL(panelFocused(tlp::View *)), this, SLOT(panelFocused(tlp::View *)));
   connect(_ui->actionSave_Project, SIGNAL(triggered()), this, SLOT(save()));
-  connect(_ui->actionSave_Project_as, SIGNAL(triggered()), this,
-          SLOT(saveAs()));
+  connect(_ui->actionSave_Project_as, SIGNAL(triggered()), this, SLOT(saveAs()));
   connect(_ui->actionOpen_Project, SIGNAL(triggered()), this, SLOT(open()));
-  connect(_ui->actionDelete, SIGNAL(triggered()), this,
-          SLOT(deleteSelectedElements()));
-  connect(_ui->actionInvert_selection, SIGNAL(triggered()), this,
-          SLOT(invertSelection()));
-  connect(_ui->actionCancel_selection, SIGNAL(triggered()), this,
-          SLOT(cancelSelection()));
+  connect(_ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteSelectedElements()));
+  connect(_ui->actionInvert_selection, SIGNAL(triggered()), this, SLOT(invertSelection()));
+  connect(_ui->actionCancel_selection, SIGNAL(triggered()), this, SLOT(cancelSelection()));
   connect(_ui->actionSelect_All, SIGNAL(triggered()), this, SLOT(selectAll()));
   connect(_ui->actionUndo, SIGNAL(triggered()), this, SLOT(undo()));
   connect(_ui->actionRedo, SIGNAL(triggered()), this, SLOT(redo()));
@@ -510,48 +409,30 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionPaste, SIGNAL(triggered()), this, SLOT(paste()));
   connect(_ui->actionCopy, SIGNAL(triggered()), this, SLOT(copy()));
   connect(_ui->actionGroup_elements, SIGNAL(triggered()), this, SLOT(group()));
-  connect(_ui->actionCreate_sub_graph, SIGNAL(triggered()), this,
-          SLOT(createSubGraph()));
-  connect(_ui->actionClone_sub_graph, SIGNAL(triggered()), this,
-          SLOT(cloneSubGraph()));
-  connect(_ui->actionCreate_empty_sub_graph, SIGNAL(triggered()), this,
-          SLOT(addEmptySubGraph()));
+  connect(_ui->actionCreate_sub_graph, SIGNAL(triggered()), this, SLOT(createSubGraph()));
+  connect(_ui->actionClone_sub_graph, SIGNAL(triggered()), this, SLOT(cloneSubGraph()));
+  connect(_ui->actionCreate_empty_sub_graph, SIGNAL(triggered()), this, SLOT(addEmptySubGraph()));
   connect(_ui->actionImport_CSV, SIGNAL(triggered()), this, SLOT(CSVImport()));
-  connect(_ui->actionFind_plugins, SIGNAL(triggered()), this,
-          SLOT(findPlugins()));
+  connect(_ui->actionFind_plugins, SIGNAL(triggered()), this, SLOT(findPlugins()));
   connect(_ui->actionNew_graph, SIGNAL(triggered()), this, SLOT(addNewGraph()));
   connect(_ui->actionNewProject, SIGNAL(triggered()), this, SLOT(newProject()));
-  connect(_ui->actionPreferences, SIGNAL(triggered()), this,
-          SLOT(openPreferences()));
-  connect(_ui->searchButton, SIGNAL(clicked(bool)), this,
-          SLOT(setSearchOutput(bool)));
-  connect(_ui->workspace, SIGNAL(importGraphRequest()), this,
-          SLOT(importGraph()));
-  connect(_ui->workspaceButton, SIGNAL(clicked()), this,
-          SLOT(setWorkspaceMode()));
-  connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace,
-          SLOT(closeAll()));
+  connect(_ui->actionPreferences, SIGNAL(triggered()), this, SLOT(openPreferences()));
+  connect(_ui->searchButton, SIGNAL(clicked(bool)), this, SLOT(setSearchOutput(bool)));
+  connect(_ui->workspace, SIGNAL(importGraphRequest()), this, SLOT(importGraph()));
+  connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
+  connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
   connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
-  connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this,
-          SLOT(displayColorScalesDialog()));
+  connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this, SLOT(displayColorScalesDialog()));
 
   // Agent actions
-  connect(_ui->actionPlugins_Center, SIGNAL(triggered()), this,
-          SLOT(showPluginsCenter()));
-  connect(_ui->actionAbout_us, SIGNAL(triggered()), this,
-          SLOT(showAboutPage()));
-  connect(_ui->actionAbout_us, SIGNAL(triggered()), this,
-          SLOT(showAboutTulipPage()));
+  connect(_ui->actionPlugins_Center, SIGNAL(triggered()), this, SLOT(showPluginsCenter()));
+  connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutPage()));
+  connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutTulipPage()));
 
-  if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-            "doc/tulip-user/html/index.html")
-          .exists()) {
-    connect(_ui->actionShowUserDocumentation, SIGNAL(triggered()), this,
-            SLOT(showUserDocumentation()));
-    connect(_ui->actionShowDevelDocumentation, SIGNAL(triggered()), this,
-            SLOT(showDevelDocumentation()));
-    connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this,
-            SLOT(showPythonDocumentation()));
+  if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html").exists()) {
+    connect(_ui->actionShowUserDocumentation, SIGNAL(triggered()), this, SLOT(showUserDocumentation()));
+    connect(_ui->actionShowDevelDocumentation, SIGNAL(triggered()), this, SLOT(showDevelDocumentation()));
+    connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this, SLOT(showPythonDocumentation()));
   } else {
     _ui->actionShowUserDocumentation->setVisible(false);
     _ui->actionShowDevelDocumentation->setVisible(false);
@@ -571,9 +452,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     rootIds = _graphs->readProject(_project, progress);
 
     if (rootIds.empty())
-      QMessageBox::critical(_mainWindow, QString("Error while loading project ")
-                                             .append(_project->projectFile()),
-                            progress->getError().c_str());
+      QMessageBox::critical(_mainWindow, QString("Error while loading project ").append(_project->projectFile()), progress->getError().c_str());
   }
 
   // these ui initializations are needed here
@@ -587,30 +466,23 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->searchPanel->setModel(_graphs);
 
 #ifdef BUILD_PYTHON_COMPONENTS
-  connect(_ui->pythonButton, SIGNAL(clicked(bool)), this,
-          SLOT(setPythonPanel(bool)));
+  connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   _pythonPanel->setModel(_graphs);
   tlp::PluginLister::instance()->addListener(this);
   _developFrame->setProject(_project);
 
-  APIDataBase::getInstance()->loadApiFile(
-      tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
-  APIDataBase::getInstance()->loadApiFile(
-      tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" +
-      PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
-  APIDataBase::getInstance()->loadApiFile(
-      tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
-  APIDataBase::getInstance()->loadApiFile(
-      tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
 
   PythonInterpreter::getInstance()->setOutputEnabled(false);
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 
   if (PythonInterpreter::getInstance()->runString("import PyQt4")) {
-    APIDataBase::getInstance()->loadApiFile(
-        tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
+    APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
   }
 
 #endif
@@ -622,9 +494,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     open(_externalFile);
   }
 
-  foreach (HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
-    connect(h, SIGNAL(expanded(bool)), this, SLOT(refreshDockExpandControls()));
-  }
+  foreach (HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) { connect(h, SIGNAL(expanded(bool)), this, SLOT(refreshDockExpandControls())); }
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
 
@@ -668,11 +538,9 @@ void GraphPerspective::exportGraph(Graph *g) {
 
   static QString exportFile;
   ExportWizard wizard(g, exportFile, _mainWindow);
-  wizard.setWindowTitle(QString("Export of graph \"") + g->getName().c_str() +
-                        '"');
+  wizard.setWindowTitle(QString("Export of graph \"") + g->getName().c_str() + '"');
 
-  if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() ||
-      wizard.outputFile().isEmpty())
+  if (wizard.exec() != QDialog::Accepted || wizard.algorithm().isNull() || wizard.outputFile().isEmpty())
     return;
 
   std::ostream *os;
@@ -681,10 +549,7 @@ void GraphPerspective::exportGraph(Graph *g) {
 
   if (filename.rfind(".gz") == (filename.length() - 3)) {
     if (exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
-      QMessageBox::critical(
-          _mainWindow, trUtf8("Format error"),
-          trUtf8(
-              "GZip compression is only supported for TLP and TLPB formats."));
+      QMessageBox::critical(_mainWindow, trUtf8("Format error"), trUtf8("GZip compression is only supported for TLP and TLPB formats."));
       return;
     }
 
@@ -697,9 +562,7 @@ void GraphPerspective::exportGraph(Graph *g) {
   }
 
   if (os->fail()) {
-    QMessageBox::critical(_mainWindow, trUtf8("File error"),
-                          trUtf8("Cannot open output file for writing: ") +
-                              wizard.outputFile());
+    QMessageBox::critical(_mainWindow, trUtf8("File error"), trUtf8("Cannot open output file for writing: ") + wizard.outputFile());
     delete os;
     return;
   }
@@ -713,17 +576,13 @@ void GraphPerspective::exportGraph(Graph *g) {
   delete os;
 
   if (!result) {
-    QMessageBox::critical(
-        _mainWindow, trUtf8("Export error"),
-        QString("<i>") + wizard.algorithm() +
-            trUtf8("</i> failed to export graph.<br/><br/><b>") +
-            tlp::tlpStringToQString(prg->getError()) + "</b>");
+    QMessageBox::critical(_mainWindow, trUtf8("Export error"),
+                          QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string moduleAndParams = exportPluginName + " - " + data.toString();
-      qDebug() << moduleAndParams << ": "
-               << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+      qDebug() << moduleAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
     }
     addRecentDocument(wizard.outputFile());
   }
@@ -739,12 +598,7 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
 
   static QString savedFile;
   QString filter("TLP (*.tlp *.tlp.gz)");
-  std::string filename =
-      QFileDialog::getSaveFileName(_mainWindow,
-                                   tr("Save graph hierarchy in tlp file"),
-                                   savedFile, filter)
-          .toUtf8()
-          .data();
+  std::string filename = QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp file"), savedFile, filter).toUtf8().data();
 
   if (!filename.empty()) {
     std::ostream *os;
@@ -760,9 +614,7 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     }
 
     if (os->fail()) {
-      QMessageBox::critical(_mainWindow, trUtf8("File error"),
-                            trUtf8("Cannot open output file for writing: ") +
-                                QString::fromUtf8(filename.c_str()));
+      QMessageBox::critical(_mainWindow, trUtf8("File error"), trUtf8("Cannot open output file for writing: ") + QString::fromUtf8(filename.c_str()));
       delete os;
       return;
     }
@@ -775,8 +627,7 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     bool result = tlp::exportGraph(g, *os, "TLP Export", params);
 
     if (!result)
-      QMessageBox::critical(_mainWindow, trUtf8("Save error"),
-                            trUtf8("Failed to save graph hierarchy"));
+      QMessageBox::critical(_mainWindow, trUtf8("Save error"), trUtf8("Failed to save graph hierarchy"));
     else
       addRecentDocument(savedFile);
 
@@ -795,11 +646,8 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::importGraph(module, data, prg);
 
     if (g == nullptr) {
-      QMessageBox::critical(
-          _mainWindow, trUtf8("Import error"),
-          QString("<i>") + module.c_str() +
-              trUtf8("</i> failed to import data.<br/><br/><b>") +
-              tlp::tlpStringToQString(prg->getError()) + "</b>");
+      QMessageBox::critical(_mainWindow, trUtf8("Import error"),
+                            QString("<i>") + module.c_str() + trUtf8("</i> failed to import data.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
     }
@@ -809,13 +657,11 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string moduleAndParams = module + " import - " + data.toString();
-      qDebug() << moduleAndParams << ": "
-               << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+      qDebug() << moduleAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
     }
 
     if (g->getName().empty()) {
-      QString n = tlp::tlpStringToQString(module) + " - " +
-                  tlp::tlpStringToQString(data.toString());
+      QString n = tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
       n.replace(QRegExp("[\\w]*::"), ""); // remove words before "::"
       g->setName(tlp::QStringToTlpString(n));
     }
@@ -829,8 +675,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
   if (data.get("file::filename", fileName))
     // set current directory to the directory of the loaded file
     // to ensure a correct loading of the associated texture files if any
-    QDir::setCurrent(
-        QFileInfo(QString::fromUtf8(fileName.c_str())).absolutePath());
+    QDir::setCurrent(QFileInfo(QString::fromUtf8(fileName.c_str())).absolutePath());
 
   applyRandomLayout(g);
   showStartPanels(g);
@@ -874,30 +719,21 @@ void GraphPerspective::panelFocused(tlp::View *view) {
   if (!_ui->graphHierarchiesEditor->synchronized())
     return;
 
-  connect(view, SIGNAL(graphSet(tlp::Graph *)), this,
-          SLOT(focusedPanelGraphSet(tlp::Graph *)));
+  connect(view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(focusedPanelGraphSet(tlp::Graph *)));
   focusedPanelGraphSet(view->graph());
 }
 
-void GraphPerspective::changeSynchronization(bool s) {
-  _ui->workspace->setFocusedPanelHighlighting(s);
-}
+void GraphPerspective::changeSynchronization(bool s) { _ui->workspace->setFocusedPanelHighlighting(s); }
 
-void GraphPerspective::focusedPanelGraphSet(Graph *g) {
-  _graphs->setCurrentGraph(g);
-}
+void GraphPerspective::focusedPanelGraphSet(Graph *g) { _graphs->setCurrentGraph(g); }
 
-void GraphPerspective::focusedPanelSynchronized() {
-  _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph());
-}
+void GraphPerspective::focusedPanelSynchronized() { _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph()); }
 
 bool GraphPerspective::save() { return saveAs(_project->projectFile()); }
 
 bool GraphPerspective::saveAs(const QString &path) {
   if (path.isEmpty()) {
-    QString path =
-        QFileDialog::getSaveFileName(_mainWindow, trUtf8("Save project"),
-                                     QString(), "Tulip Project (*.tlpx)");
+    QString path = QFileDialog::getSaveFileName(_mainWindow, trUtf8("Save project"), QString(), "Tulip Project (*.tlpx)");
 
     if (!path.isEmpty()) {
       if (!path.endsWith(".tlpx"))
@@ -922,23 +758,18 @@ bool GraphPerspective::saveAs(const QString &path) {
 
 void GraphPerspective::open(QString fileName) {
   QMap<std::string, std::string> modules;
-  std::list<std::string> imports =
-      PluginLister::instance()->availablePlugins<ImportModule>();
+  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
 
   std::string filters("Tulip project (*.tlpx);;");
   std::string filterAny("Any supported format (");
 
-  for (std::list<std::string>::const_iterator it = imports.begin();
-       it != imports.end(); ++it) {
-    ImportModule *m =
-        PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
+  for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
+    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
     std::list<std::string> fileExtension(m->fileExtensions());
 
     std::string currentFilter;
 
-    for (std::list<std::string>::const_iterator listIt = fileExtension.begin();
-         listIt != fileExtension.end(); ++listIt) {
-
+    for (std::list<std::string>::const_iterator listIt = fileExtension.begin(); listIt != fileExtension.end(); ++listIt) {
       if (listIt->empty())
         continue;
 
@@ -961,8 +792,7 @@ void GraphPerspective::open(QString fileName) {
 
   if (fileName.isNull()) // If open() was called without a parameter, open the
                          // file dialog
-    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"),
-                                            _lastOpenLocation, filters.c_str());
+    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"), _lastOpenLocation, filters.c_str());
 
   if (!fileName.isEmpty()) {
     QFileInfo fileInfo(fileName);
@@ -976,8 +806,7 @@ void GraphPerspective::open(QString fileName) {
     foreach (const std::string &extension, modules.keys()) {
       if (fileName.endsWith(".tlpx")) {
         openProjectFile(fileName);
-        TulipSettings::instance().addToRecentDocuments(
-            fileInfo.absoluteFilePath());
+        TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
         break;
       } else if (fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
@@ -1000,8 +829,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
     _developFrame->setProject(_project);
 #endif
 
-    for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin();
-         it != rootIds.end(); ++it) {
+    for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin(); it != rootIds.end(); ++it) {
       it.value()->setAttribute("file", std::string(path.toUtf8().data()));
     }
 
@@ -1014,8 +842,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
 void GraphPerspective::deleteSelectedElements() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
 
   graph->push();
   tlp::Iterator<edge> *itEdges = selection->getEdgesEqualTo(true);
@@ -1032,8 +859,7 @@ void GraphPerspective::deleteSelectedElements() {
 void GraphPerspective::invertSelection() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
   selection->reverse();
   Observable::unholdObservers();
@@ -1042,8 +868,7 @@ void GraphPerspective::invertSelection() {
 void GraphPerspective::cancelSelection() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
 
   for (node n : selection->getNodesEqualTo(true)) {
@@ -1059,8 +884,7 @@ void GraphPerspective::cancelSelection() {
 void GraphPerspective::selectAll() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
 
   for (node n : graph->getNodes()) {
@@ -1157,8 +981,7 @@ void GraphPerspective::copy(Graph *g, bool deleteAfter) {
 void GraphPerspective::group() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
   std::set<node> groupedNodes;
 
   for (node n : selection->getNodesEqualTo(true)) {
@@ -1168,10 +991,7 @@ void GraphPerspective::group() {
 
   if (groupedNodes.empty()) {
     Observable::unholdObservers();
-    qCritical() << trUtf8(
-                       "[Group] Cannot create meta-nodes from empty selection")
-                       .toUtf8()
-                       .data();
+    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection").toUtf8().data();
     return;
   }
 
@@ -1212,28 +1032,21 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
 
   Observable::holdObservers();
 
-  tlp::BooleanProperty *selection =
-      graph->getProperty<BooleanProperty>("viewSelection");
+  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
 
   for (edge e : selection->getEdgesEqualTo(true)) {
     const pair<node, node> &ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {
 #ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #")
-               << QString::number(ends.first.id) << trUtf8(" source of edge #")
-               << QString::number(e.id)
-               << trUtf8(" automatically added to selection.");
+      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
 #endif
       selection->setNodeValue(ends.first, true);
     }
 
     if (!selection->getNodeValue(ends.second)) {
 #ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #")
-               << QString::number(ends.second.id) << trUtf8(" target of edge #")
-               << QString::number(e.id)
-               << trUtf8(" automatically added to selection.");
+      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
 #endif
       selection->setNodeValue(ends.second, true);
     }
@@ -1243,9 +1056,7 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
   return result;
 }
 
-void GraphPerspective::createSubGraph() {
-  createSubGraph(_graphs->currentGraph());
-}
+void GraphPerspective::createSubGraph() { createSubGraph(_graphs->currentGraph()); }
 
 void GraphPerspective::cloneSubGraph() {
   if (_graphs->currentGraph() == nullptr)
@@ -1325,13 +1136,10 @@ void GraphPerspective::CSVImport() {
 
   if (mustDeleteGraph) {
     wizard.setWindowTitle("Import CSV data into a new graph");
-    wizard.setButtonText(QWizard::FinishButton,
-                         QString("Import into a new graph"));
+    wizard.setButtonText(QWizard::FinishButton, QString("Import into a new graph"));
   } else {
-    wizard.setWindowTitle(QString("Import CSV data into current graph: ") +
-                          g->getName().c_str());
-    wizard.setButtonText(QWizard::FinishButton,
-                         QString("Import into current graph"));
+    wizard.setWindowTitle(QString("Import CSV data into current graph: ") + g->getName().c_str());
+    wizard.setButtonText(QWizard::FinishButton, QString("Import into current graph"));
   }
 
   wizard.setGraph(g);
@@ -1374,8 +1182,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View *secondPanel = nullptr;
   foreach (QString panelName, QStringList() << "Spreadsheet view"
                                             << "Node Link Diagram view") {
-    View *view = PluginLister::instance()->getPluginObject<View>(
-        panelName.toStdString(), nullptr);
+    View *view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(), nullptr);
 
     if (firstPanel == nullptr)
       firstPanel = view;
@@ -1407,11 +1214,9 @@ void GraphPerspective::applyRandomLayout(Graph *g) {
   Observable::unholdObservers();
 }
 
-void GraphPerspective::centerPanelsForGraph(tlp::Graph *g, bool graphChanged,
-                                            bool onlyGlMainView) {
+void GraphPerspective::centerPanelsForGraph(tlp::Graph *g, bool graphChanged, bool onlyGlMainView) {
   foreach (View *v, _ui->workspace->panels()) {
-    if ((v->graph() == g) &&
-        (!onlyGlMainView || dynamic_cast<tlp::GlMainView *>(v)))
+    if ((v->graph() == g) && (!onlyGlMainView || dynamic_cast<tlp::GlMainView *>(v)))
       v->centerView(graphChanged);
   }
 }
@@ -1431,19 +1236,13 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
   }
 }
 
-bool GraphPerspective::setGlMainViewPropertiesForGraph(
-    tlp::Graph *g,
-    const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
+bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph *g, const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
   bool result = false;
   foreach (View *v, _ui->workspace->panels()) {
     GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
 
     if (v->graph() == g && glMainView != nullptr) {
-      if (glMainView->getGlMainWidget()
-              ->getScene()
-              ->getMainGlGraph()
-              ->getInputData()
-              .installProperties(propsMap))
+      if (glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getInputData().installProperties(propsMap))
         result = true;
     }
   }
@@ -1480,25 +1279,16 @@ void GraphPerspective::openPreferences() {
 
       if (glMainView != nullptr) {
         if (glMainView->getGlMainWidget() != nullptr) {
-          glMainView->getGlMainWidget()
-              ->getScene()
-              ->getMainGlGraph()
-              ->getRenderingParameters()
-              .setSelectionColor(
-                  TulipSettings::instance().defaultSelectionColor());
+          glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(TulipSettings::instance().defaultSelectionColor());
         }
       }
     }
   }
 }
 
-void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) {
-  _ui->workspace->setAutoCenterPanelsOnDraw(f);
-}
+void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) { _ui->workspace->setAutoCenterPanelsOnDraw(f); }
 
-void GraphPerspective::pluginsListChanged() {
-  _ui->algorithmRunner->refreshPluginsList();
-}
+void GraphPerspective::pluginsListChanged() { _ui->algorithmRunner->refreshPluginsList(); }
 
 void GraphPerspective::addNewGraph() {
   Graph *g = tlp::newGraph();
@@ -1538,23 +1328,11 @@ void GraphPerspective::setDevelopMode() {
   _ui->centralWidget->setCurrentIndex(1);
 }
 
-void GraphPerspective::showUserDocumentation() {
-  QDesktopServices::openUrl(
-      QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-                          "doc/tulip-user/html/index.html"));
-}
+void GraphPerspective::showUserDocumentation() { QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html")); }
 
-void GraphPerspective::showDevelDocumentation() {
-  QDesktopServices::openUrl(
-      QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-                          "doc/tulip-dev/html/index.html"));
-}
+void GraphPerspective::showDevelDocumentation() { QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-dev/html/index.html")); }
 
-void GraphPerspective::showPythonDocumentation() {
-  QDesktopServices::openUrl(
-      QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) +
-                          "doc/tulip-python/html/index.html"));
-}
+void GraphPerspective::showPythonDocumentation() { QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html")); }
 
 void GraphPerspective::showHideSideBar() {
   if (_ui->docksWidget->isVisible()) {
@@ -1566,9 +1344,7 @@ void GraphPerspective::showHideSideBar() {
   }
 }
 
-void GraphPerspective::displayColorScalesDialog() {
-  _colorScalesDialog->show();
-}
+void GraphPerspective::displayColorScalesDialog() { _colorScalesDialog->show(); }
 
 void GraphPerspective::showAboutTulipPage() {
   if (!checkSocketConnected()) {
