@@ -314,10 +314,12 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
   }
   else {
     Observable::holdObservers();
+
     if (nodes)
       GraphModel::setAllNodeValue(prop, val, graphOnly ? _graph : NULL);
     else
       GraphModel::setAllEdgeValue(prop, val, graphOnly ? _graph : NULL);
+
     Observable::unholdObservers();
   }
 
