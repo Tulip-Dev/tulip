@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude} ${OGDFInclude} ${TulipOGDFInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${OGDFInclude} ${TulipOGDFInclude})
 
 SET(PLUGINS_SRCS
 OGDFFm3.cpp

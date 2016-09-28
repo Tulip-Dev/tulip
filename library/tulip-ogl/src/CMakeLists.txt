@@ -76,7 +76,7 @@ SET(tulip-ogl_LIB_SRCS
   OpenGlConfigManager.cpp
 )
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude} ../include/ ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${PROJECT_SOURCE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS} ${UTF8CppInclude})
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${JPEG_INCLUDE_DIR} ${PNG_INCLUDE_DIR} ${Tess2Include})
 
 ADD_LIBRARY (${LibTulipOGLName} SHARED ${tulip-ogl_LIB_SRCS})

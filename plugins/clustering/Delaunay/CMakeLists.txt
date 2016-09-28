@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR} ${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 ADD_LIBRARY(Delaunay-${TulipVersion} SHARED DelaunayTriangulation.cpp)
 TARGET_LINK_LIBRARIES(Delaunay-${TulipVersion} ${LibTulipCoreName})

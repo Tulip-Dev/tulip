@@ -5,7 +5,7 @@ ADD_SUBDIRECTORY(FastOverlapRemoval)
 ADD_SUBDIRECTORY(Grip)
 ADD_SUBDIRECTORY(LinLog)
 
-INCLUDE_DIRECTORIES(${TulipCoreInclude} ${TulipCoreBuildInclude})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude})
 
 IF(UNIX)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fPIC")
