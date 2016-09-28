@@ -74,7 +74,7 @@ ENDIF(APPLE)
 ## ========================================================
 SET(TulipMajorVersion 5)
 SET(TulipMinorVersion 0)
-SET(TulipReleaseVersion "alpha1")
+SET(TulipReleaseVersion "0-alpha1")
 SET(TulipVersionSeparator .)
 IF(MSVC) #specific options for Visual Studio
   SET(TulipVersionSeparator _)
