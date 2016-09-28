@@ -1313,6 +1313,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/cut.png</normaloff>:/tulip/graphperspective/icons/16/cut.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Cut</string>
    </property>
@@ -1324,6 +1328,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/copy.png</normaloff>:/tulip/graphperspective/icons/16/copy.png</iconset>
+   </property>
    <property name="text">
     <string>C&amp;opy</string>
    </property>
@@ -1334,6 +1342,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionPaste">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/paste.png</normaloff>:/tulip/graphperspective/icons/16/paste.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Paste</string>
@@ -1347,8 +1359,8 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Delete</string>
@@ -1361,6 +1373,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/select-all.png</normaloff>:/tulip/graphperspective/icons/16/select-all.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Select All</string>
    </property>
@@ -1372,6 +1388,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="enabled">
     <bool>false</bool>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/invert-select.png</normaloff>:/tulip/graphperspective/icons/16/invert-select.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Invert selection</string>
    </property>
@@ -1382,6 +1402,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionCancel_selection">
    <property name="enabled">
     <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/cancel-select.png</normaloff>:/tulip/graphperspective/icons/16/cancel-select.png</iconset>
    </property>
    <property name="text">
     <string>Ca&amp;ncel selection</string>

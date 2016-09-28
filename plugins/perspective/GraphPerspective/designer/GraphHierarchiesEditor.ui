@@ -169,8 +169,8 @@
   </action>
   <action name="actionDelete_graph">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
     <string>Delete</string>
@@ -181,8 +181,8 @@
   </action>
   <action name="actionDelete_All">
    <property name="icon">
-    <iconset>
-     <normaloff>:/tulip/graphperspective/icons/16/process-stop.png</normaloff>:/tulip/graphperspective/icons/16/process-stop.png</iconset>
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
     <string>Delete All</string>
@@ -219,6 +219,10 @@
    </property>
   </action>
   <action name="actionRename">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/rename.png</normaloff>:/tulip/graphperspective/icons/16/rename.png</iconset>
+   </property>
    <property name="text">
     <string>Rename</string>
    </property>
