@@ -956,7 +956,7 @@ public:
   }
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<std::string>("file::filename", "The TLP file to import.", "");
+    addInParameter<std::string>("file::filename", "The pathname of the TLP file to import.", "");
 //    addInParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}
