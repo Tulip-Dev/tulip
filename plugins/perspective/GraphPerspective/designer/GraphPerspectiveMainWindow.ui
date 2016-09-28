@@ -1213,7 +1213,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionNewProject">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/16/document-new.png</normaloff>:/tulip/graphperspective/icons/16/document-new.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/archive-new.png</normaloff>:/tulip/graphperspective/icons/16/archive-new.png</iconset>
    </property>
    <property name="text">
     <string>&amp;New project</string>
@@ -1223,9 +1223,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+N</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionSave_Project">
@@ -1268,9 +1265,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+O</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionExit">
@@ -1476,7 +1470,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionAbout_us">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/16/help-about.png</normaloff>:/tulip/graphperspective/icons/16/help-about.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/16/logger-info.png</normaloff>:/tulip/graphperspective/icons/16/logger-info.png</iconset>
    </property>
    <property name="text">
     <string>&amp;About Tulip</string>
@@ -1545,9 +1539,6 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="shortcut">
     <string>Ctrl+O</string>
-   </property>
-   <property name="iconVisibleInMenu">
-    <bool>false</bool>
    </property>
   </action>
   <action name="actionFind_plugins">

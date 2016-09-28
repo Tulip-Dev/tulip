@@ -9,7 +9,6 @@
         <file>icons/16/edit-undo.png</file>
         <file>icons/16/forward.png</file>
         <file>icons/16/group.png</file>
-        <file>icons/16/help-about.png</file>
         <file>icons/16/hierarchy_add.png</file>
         <file>icons/16/no_hierarchy_add.png</file>
         <file>icons/16/media-playback-start.png</file>
@@ -18,7 +17,6 @@
         <file>icons/22/hierarchy.png</file>
         <file>icons/32/desktop.png</file>
         <file>icons/32/export_svg.png</file>
-        <file>icons/32/help-about.png</file>
         <file>icons/32/import_adj_mat.png</file>
         <file>icons/32/import_gephi.png</file>
         <file>icons/32/import_graphviz.png</file>
@@ -53,6 +51,7 @@
         <file>icons/32/redo.png</file>
         <file>icons/16/document-open-recent.png</file>
         <file>icons/16/archive.png</file>
+        <file>icons/16/archive-new.png</file>
         <file>icons/16/empty-file.png</file>
         <file>icons/48/desktop.png</file>
         <file>icons/48/python.png</file>
