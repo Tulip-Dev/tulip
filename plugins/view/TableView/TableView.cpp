@@ -531,14 +531,15 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   contextMenu.addSeparator();
 
   QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction* setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
-  QAction* selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
+  QAction* setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + " in the property");
+  QAction* setAllGraph = subMenu->addAction(trUtf8("All") + ' ' + eltsName + " in the current graph");
+  QAction* selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + " in the current graph");
 
   QAction* highlightedSetAll = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   subMenu = contextMenu.addMenu(trUtf8("To labels of "));
-  QAction* toLabels = subMenu->addAction(trUtf8("All") + ' ' + eltsName);
-  QAction* selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName);
+  QAction* toLabels = subMenu->addAction(trUtf8("All ") + eltsName + " in the current graph");
+  QAction* selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + " in the current graph");
 
   QAction* highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
@@ -587,6 +588,14 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
 
   if (action == setAll) {
     if (!propertiesEditor->setAllValues(prop, NODES_DISPLAYED, false))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == setAllGraph) {
+    if (!propertiesEditor->setAllValues(prop, NODES_DISPLAYED, false, graph()))
       // cancelled so undo
       graph()->pop();
 
@@ -671,10 +680,12 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
     renameProp = contextMenu.addAction("Rename");
 
   QMenu* subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes"));
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges"));
-  QAction* nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes"));
-  QAction* edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges"));
+  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes in the property"));
+  QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes in the current graph"));
+  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges in the property"));
+  QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges in the current graph"));
+  QAction* nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
+  QAction* edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges in the current graph"));
   QAction* highlightedSetAll = NULL;
 
   if (highlightedRows.size() != 0)
@@ -690,12 +701,12 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
 
   if (propName != "viewLabel") {
     subMenu = contextMenu.addMenu(trUtf8("To labels of "));
-    toLabels = subMenu->addAction("All");
-    nodesToLabels = subMenu->addAction("All nodes");
-    edgesToLabels = subMenu->addAction("All edges");
-    selectedToLabels = subMenu->addAction("All selected");
-    nodesSelectedToLabels = subMenu->addAction("Selected nodes");
-    edgesSelectedToLabels = subMenu->addAction("Selected edges");
+    toLabels = subMenu->addAction("All elements in the current graph");
+    nodesToLabels = subMenu->addAction("All nodes in the current graph");
+    edgesToLabels = subMenu->addAction("All edges in the current graph");
+    selectedToLabels = subMenu->addAction("All selected elements in the current graph");
+    nodesSelectedToLabels = subMenu->addAction("Selected nodes in the current graph");
+    edgesSelectedToLabels = subMenu->addAction("Selected edges in the current graph");
 
     if (highlightedRows.size() != 0)
       highlightedToLabels = subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) + (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
@@ -781,8 +792,24 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
     return;
   }
 
+  if (action == nodesSetAllGraph) {
+    if (!propertiesEditor->setAllValues(prop, true, false, true))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
   if (action == edgesSetAll) {
     if (!propertiesEditor->setAllValues(prop, false, false))
+      // cancelled so undo
+      graph()->pop();
+
+    return;
+  }
+
+  if (action == edgesSetAllGraph) {
+    if (!propertiesEditor->setAllValues(prop, false, false, true))
       // cancelled so undo
       graph()->pop();
 

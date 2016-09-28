@@ -331,28 +331,28 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface * prop) {
   return QVariant();
 }
 
-#define SET_ALL_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllNodeValue(v.value< TYPE >())
-bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v) {
+#define SET_ALL_NODE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllNodeValue(v.value< TYPE >(), graph)
+bool GraphModel::setAllNodeValue(PropertyInterface * prop, QVariant v, Graph *graph) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
     if (prop->getName() == "viewShape")
-      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<NodeShape::NodeShapes>());
+      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<NodeShape::NodeShapes>(), graph);
     else if (prop->getName() == "viewLabelPosition")
-      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<LabelPosition::LabelPositions>());
+      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<LabelPosition::LabelPositions>(), graph);
     else
-      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<int>());
+      static_cast<IntegerProperty*>(prop)->setAllNodeValue(v.value<int>(), graph);
   }
   else if (dynamic_cast<StringProperty*>(prop) != NULL) {
     if (prop->getName() == "viewFont")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()), graph);
     else if (prop->getName() == "viewFontAwesomeIcon")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
     else if (prop->getName() == "viewTexture")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
     else
-      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<QString>().toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<QString>().toUtf8().data()), graph);
   }
   else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
-    static_cast<BooleanVectorProperty*>(prop)->setAllNodeValue(v.value<QVector<bool> >().toStdVector());
+    static_cast<BooleanVectorProperty*>(prop)->setAllNodeValue(v.value<QVector<bool> >().toStdVector(), graph);
 
   STANDARD_NODE_CHECKS(SET_ALL_NODE_VALUE)
   else
@@ -506,39 +506,39 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface* prop, QVariant
 
   return true;
 }
-#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllEdgeValue(v.value< TYPE >())
-bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v) {
+#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllEdgeValue(v.value< TYPE >(), graph)
+bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v, Graph *graph) {
   if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
     if (prop->getName() == "viewShape")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>());
+      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>(), graph);
 
     else if (prop->getName() == "viewTgtAnchorShape")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>());
+      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
 
     else if (prop->getName() == "viewSrcAnchorShape")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>());
+      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
 
     else if (prop->getName() == "viewLabelPosition")
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<LabelPosition::LabelPositions>());
+      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<LabelPosition::LabelPositions>(), graph);
 
     else
-      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<int>());
+      static_cast<IntegerProperty*>(prop)->setAllEdgeValue(v.value<int>(), graph);
   }
   else if (dynamic_cast<StringProperty*>(prop) != NULL) {
     if (prop->getName() == "viewFont")
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()), graph);
 
     else if (prop->getName() == "viewFontAwesomeIcon")
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
 
     else if (prop->getName() == "viewTexture")
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
 
     else
-      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<QString>().toUtf8().data()));
+      static_cast<StringProperty*>(prop)->setAllEdgeValue(std::string(v.value<QString>().toUtf8().data()), graph);
   }
   else if (dynamic_cast<BooleanVectorProperty*>(prop) != NULL)
-    static_cast<BooleanVectorProperty*>(prop)->setAllEdgeValue(v.value<QVector<bool> >().toStdVector());
+    static_cast<BooleanVectorProperty*>(prop)->setAllEdgeValue(v.value<QVector<bool> >().toStdVector(), graph);
 
   STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
   else

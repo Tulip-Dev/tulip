@@ -207,17 +207,25 @@ public:
    * @brief Sets all the nodes value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
    * All previous values are lost and the represented value is assigned as the default one to the future added nodes.
    * @param value A string representing the new value to set on all the nodes.
+   * @param graph (since Tulip 4.10) An optional descendant graph from the one associated to that property (itself included).
+   * If provided, only the nodes from that descendant graph will have their value modified.
+   * In the case of the descendant graph is different from the one associated to that property, the default node value will not be modified.
+   * @warning If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
-  virtual bool setAllNodeStringValue( const std::string & value ) = 0;
+  virtual bool setAllNodeStringValue( const std::string & value, Graph *graph = NULL ) = 0;
 
   /**
    * @brief Sets all the edges value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
    * All previous values are lost and the represented value is assigned as the default one to the future added edges.
    * @param value A string representing the new value to set on all the edges.
+   * @param graph (since Tulip 4.10)An optional descendant graph from the one associated to that property (itself included).
+   * If provided, only the edges from that descendant graph will have their value modified.
+   * In the case of the descendant graph is different from the one associated to that property, the default edge value will not be modified.
+   * @warning If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
-  virtual bool setAllEdgeStringValue( const std::string & value ) = 0;
+  virtual bool setAllEdgeStringValue( const std::string & value, Graph *graph = NULL ) = 0;
 
   /**
    * @brief Gets a pointer to the tlp::DataMem structure that contains the node default value.

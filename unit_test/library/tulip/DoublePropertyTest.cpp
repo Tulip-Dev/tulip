@@ -37,7 +37,6 @@ const double newMax = 15;
 CPPUNIT_TEST_SUITE_REGISTRATION( DoublePropertyTest );
 
 void DoublePropertyTest::setUp() {
-  node n2, n3;
   graph = newGraph();
   graph->getLocalProperty<DoubleProperty>(doublePropertyName);
   n1 = graph->addNode();
@@ -51,6 +50,9 @@ void DoublePropertyTest::setUp() {
 
   n4 = graph->addNode();
   graph->getLocalProperty<DoubleProperty>(doublePropertyName)->setNodeValue(n4, originalMax);
+
+  e1 = graph->addEdge(n1, n3);
+  e2 = graph->addEdge(n2, n4);
 }
 
 void DoublePropertyTest::tearDown() {
@@ -182,4 +184,64 @@ void DoublePropertyTest::testDoublePropertyInfValue() {
 
   prop->setNodeStringValue(n , "-inf");
   CPPUNIT_ASSERT(prop->getNodeValue(n) == -infValue);
+}
+
+void DoublePropertyTest::testDoublePropertySetAllValue() {
+
+  // create a subgraph
+  Graph *sg = graph->addSubGraph();
+  sg->addNode(graph->source(e1));
+  sg->addNode(graph->target(e1));
+  sg->addEdge(e1);
+
+  const double v1 = 9.66878788;
+  const double v2 = 100.06586685;
+
+  // create a double property and set all values for nodes and edges
+  DoubleProperty* prop = graph->getLocalProperty<DoubleProperty>(doublePropertyName);
+  prop->setAllNodeValue(v1);
+  prop->setAllEdgeValue(v2);
+
+  // check that each node has the correct value
+  node n;
+  forEach(n, graph->getNodes()) {
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
+  }
+  // check that the default node value has been changed
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
+
+  // check that each edge has the correct value
+  edge e;
+  forEach(e, graph->getEdges()) {
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
+  }
+  // check that the default edge value has been changed
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
+
+  // set different values for the nodes and edges of the subgraph
+  prop->setAllNodeValue(v2, sg);
+  prop->setAllEdgeValue(v1, sg);
+
+  // check that the nodes have expected values
+  forEach(n, graph->getNodes()) {
+    if (sg->isElement(n)) {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v2, 1e-6);
+    } else {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
+    }
+  }
+  // check that the default node value has not been modified
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
+
+  // check that the edges have expected values
+  forEach(e, graph->getEdges()) {
+    if (sg->isElement(e)) {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v1, 1e-6);
+    } else {
+      CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
+    }
+  }
+  // check that the default edge value has not been modified
+  CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
+
 }

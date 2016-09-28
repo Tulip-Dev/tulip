@@ -201,31 +201,47 @@ Returns a newly created property of the same type in the graph g.
 
 //===========================================================================================
 
-  virtual bool setAllNodeStringValue( const std::string & strVal ) = 0;
+  virtual bool setAllNodeStringValue( const std::string & strVal , tlp::Graph *graph = NULL ) = 0;
 %Docstring
-tlp.PropertyInterface.setAllNodeStringValue(str)
+tlp.PropertyInterface.setAllNodeStringValue(str[, graph])
 
 Clears all nodes registered values, and sets a new node default value
 in converting the given string representation of a value.
+Since Tulip 4.10, an optional descendant graph from the one associated to that property (itself included)
+can also be provided. In that case only the nodes from that descendant graph will have their value modified.
+If the descendant graph is different from the one associated to that property, the default node value will not be modified.
+
+.. warning:: If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
+
 Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
 
 :param str: a string representation of a value
 :type str: string
+:param graph: an optional descendant graph
+:type graph: :class:`tlp.Graph`
 :rtype: boolean
 %End
 
 //===========================================================================================
 
-  virtual bool setAllEdgeStringValue( const std::string & strVal ) = 0;
+  virtual bool setAllEdgeStringValue( const std::string & strVal , tlp::Graph *graph = NULL ) = 0;
 %Docstring
-tlp.PropertyInterface.setAllEdgeStringValue(str)
+tlp.PropertyInterface.setAllEdgeStringValue(str[, graph])
 
 Clears all edges registered values, and sets a new edge default value
 in converting the given string representation of a value.
+Since Tulip 4.10, an optional descendant graph from the one associated to that property (itself included)
+can also be provided. In that case only the edges from that descendant graph will have their value modified.
+If the descendant graph is different from the one associated to that property, the default edge value will not be modified.
+
+.. warning:: If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
+
 Returns :const:`True` if the given string representation has been successfully converted to a value, :const:`False` otherwise.
 
 :param str: a string representation of a value
 :type str: string
+:param graph: an optional descendant graph
+:type graph: :class:`tlp.Graph`
 :rtype: boolean
 %End
 //===========================================================================================

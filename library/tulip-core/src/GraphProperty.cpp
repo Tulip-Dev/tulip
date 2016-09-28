@@ -53,9 +53,9 @@ GraphProperty::~GraphProperty() {
   }
 }
 //==============================
-void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
+void GraphProperty::setAllNodeValue(const GraphType::RealType& g, Graph *graph) {
   //remove all observed graphs if any
-  Iterator<node> *it = getNonDefaultValuatedNodes();
+  Iterator<node> *it = getNonDefaultValuatedNodes(graph);
 
   while(it->hasNext()) {
     node n = it->next();
@@ -66,11 +66,11 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
 
-  if (getNodeDefaultValue() != NULL) {
+  if ((!graph || getGraph() == graph) && getNodeDefaultValue() != NULL) {
     getNodeDefaultValue()->removeListener(this);
   }
 
-  AbstractGraphProperty::setAllNodeValue(g);
+  AbstractGraphProperty::setAllNodeValue(g, graph);
 
   if (g != NULL)
     g->addListener(this);

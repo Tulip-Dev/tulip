@@ -55,7 +55,7 @@ public :
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const Size &v);
-  virtual void setAllNodeValue(const Size &v);
+  virtual void setAllNodeValue(const Size &v, Graph *graph = NULL);
 
   int compare(const node n1, const node n2)const;
 
