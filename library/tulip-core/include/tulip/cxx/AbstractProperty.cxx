@@ -74,7 +74,8 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(const typename Tn
     forEach(n, graph->getNodes()) {
       setNodeValue(n, v);
     }
-  } else if (!graph || this->getGraph() == graph) {
+  }
+  else if (!graph || this->getGraph() == graph) {
     Tprop::notifyBeforeSetAllNodeValue();
     nodeDefaultValue = v;
     nodeProperties.setAll(v);
@@ -89,7 +90,8 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(const typename Te
     forEach(e, graph->getEdges()) {
       setEdgeValue(e, v);
     }
-  } else if (!graph || this->getGraph() == graph) {
+  }
+  else if (!graph || this->getGraph() == graph) {
     Tprop::notifyBeforeSetAllEdgeValue();
     edgeDefaultValue = v;
     edgeProperties.setAll(v);
