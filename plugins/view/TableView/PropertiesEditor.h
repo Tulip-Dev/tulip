@@ -64,7 +64,7 @@ public:
   QLineEdit* getPropertiesFilterEdit();
   void toLabels(tlp::PropertyInterface* prop,
                 bool nodes, bool edges, bool selectedOnly = false);
-  bool setAllValues(tlp::PropertyInterface* prop, bool nodes, bool selectedOnly);
+  bool setAllValues(tlp::PropertyInterface* prop, bool nodes, bool selectedOnly, bool graphOnly = false);
   bool renameProperty(tlp::PropertyInterface* prop);
 
   tlp::PropertyInterface* contextProperty() const;

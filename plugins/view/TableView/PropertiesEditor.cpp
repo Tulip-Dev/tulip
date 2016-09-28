@@ -148,26 +148,28 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   menu.addSeparator();
 
   QMenu* subMenu = menu.addMenu(trUtf8("Set values of"));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes"));
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges"));
-  QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes"));
-  QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges"));
+  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes in the property"));
+  QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes in the current graph"));
+  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges in the property"));
+  QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges in the current graph"));
+  QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
+  QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges in the current graph"));
 
   enabled = (pname != "viewLabel");
 
   if (enabled) {
     subMenu = menu.addMenu(trUtf8("To labels of"));
-    QAction* action = subMenu->addAction(trUtf8("All"));
+    QAction* action = subMenu->addAction(trUtf8("All elements in the current graph"));
     connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
-    action = subMenu->addAction(trUtf8("All nodes"));
+    action = subMenu->addAction(trUtf8("All nodes in the current graph"));
     connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
-    action = subMenu->addAction(trUtf8("All edges"));
+    action = subMenu->addAction(trUtf8("All edges in the current graph"));
     connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
-    action = subMenu->addAction(trUtf8("All selected"));
+    action = subMenu->addAction(trUtf8("All selected elements in the current graph"));
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
-    action = subMenu->addAction(trUtf8("Selected nodes"));
+    action = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
-    action = subMenu->addAction(trUtf8("Selected edges"));
+    action = subMenu->addAction(trUtf8("Selected edges in the current graph"));
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
   }
 
@@ -181,8 +183,14 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
     if (action == nodesSetAll)
       result = setAllValues(_contextProperty, true, false);
 
+    if (action == nodesSetAllGraph)
+      result = setAllValues(_contextProperty, true, false, true);
+
     if (action == edgesSetAll)
       result = setAllValues(_contextProperty, false, false);
+
+    if (action == edgesSetAllGraph)
+      result = setAllValues(_contextProperty, false, false, true);
 
     if (action == selectedNodesSetAll)
       result = setAllValues(_contextProperty, true, true);
@@ -277,7 +285,7 @@ void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent,
 }
 
 bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
-                                    bool selectedOnly) {
+                                    bool selectedOnly, bool graphOnly) {
   QVariant val =
     TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
                                         prop, _graph,
@@ -304,10 +312,12 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
     }
   }
   else {
+    Observable::holdObservers();
     if (nodes)
-      GraphModel::setAllNodeValue(prop,val);
+      GraphModel::setAllNodeValue(prop, val, graphOnly ? _graph : NULL);
     else
-      GraphModel::setAllEdgeValue(prop,val);
+      GraphModel::setAllEdgeValue(prop, val, graphOnly ? _graph : NULL);
+    Observable::unholdObservers();
   }
 
   return true;

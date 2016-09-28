@@ -42,26 +42,40 @@ public :
 
 //===========================================================================================
 
-  void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val);
+  void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val, tlp::Graph *graph = nullptr);
 %Docstring
-tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val)
+tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val[, graph])
 
 Sets the same value on the whole set of nodes.
+Since Tulip 4.10, an optional descendant graph from the one associated to that property (itself included)
+can also be provided. In that case only the nodes from that descendant graph will have their value modified.
+If the descendant graph is different from the one associated to that property, the default node value will not be modified.
+
+.. warning:: If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
 
 :param val: the value to set on the nodes.
 :type val: @PYTHON_NODE_TYPE@
+  :param graph: an optional descendant graph
+  :type graph: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
 
-  void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val);
+  void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val, tlp::Graph *graph = nullptr);
 %Docstring
-tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val)
+tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val[, graph])
 
 Sets the same value on the whole set of edges.
+Since Tulip 4.10, an optional descendant graph from the one associated to that property (itself included)
+can also be provided. In that case only the edges from that descendant graph will have their value modified.
+If the descendant graph is different from the one associated to that property, the default edge value will not be modified.
+
+.. warning:: If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
 
 :param val: the value to set on the edges.
 :type val: @PYTHON_EDGE_TYPE@
+:param graph: an optional descendant graph
+:type graph: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
@@ -279,19 +293,19 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const;
+  virtual unsigned int numberOfNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = nullptr) const;
 
 //===========================================================================================
 
-  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const;
+  virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = nullptr) const;
 
 //===========================================================================================
 
@@ -485,28 +499,41 @@ Sets the list of values of a particular edge.
   }
 %End
 
-//===========================================================================================
-
-  void setAllNodeValue(const std::vector<@CPP_TYPE@> &val);
+//==========================================================================================
+  void setAllNodeValue(const std::vector<@CPP_TYPE@> &val, tlp::Graph *graph = nullptr);
 %Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val)
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val[, graph])
 
 Sets the same list of values on the whole set of nodes.
+Since Tulip 4.10, an optional descendant graph from the one associated to that property (itself included)
+can also be provided. In that case only the nodes from that descendant graph will have their value modified.
+If the descendant graph is different from the one associated to that property, the default node value will not be modified.
+
+.. warning:: If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
 
 :param val: the list of values to set on the nodes
 :type val: list of @PYTHON_TYPE@
+:param graph: an optional descendant graph
+:type graph: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
 
-  void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val);
+  void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val, tlp::Graph *graph = nullptr);
 %Docstring
-tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val)
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val[, graph])
 
 Sets the same list of values on the whole set of edges.
+Since Tulip 4.10, an optional descendant graph from the one associated to that property (itself included)
+can also be provided. In that case only the edges from that descendant graph will have their value modified.
+If the descendant graph is different from the one associated to that property, the default edge value will not be modified.
+
+.. warning:: If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
 
 :param val: the list of values to set on the edges
 :type val: list of @PYTHON_TYPE@
+:param graph: an optional descendant graph
+:type graph: :class:`tlp.Graph`
 %End
 
 //===========================================================================================

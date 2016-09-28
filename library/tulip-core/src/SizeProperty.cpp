@@ -194,9 +194,9 @@ void SizeProperty::setNodeValue(const node n, const Size &v) {
   AbstractSizeProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void SizeProperty::setAllNodeValue(const Size &v) {
+void SizeProperty::setAllNodeValue(const Size &v, Graph *graph) {
   resetMinMax();
-  AbstractSizeProperty::setAllNodeValue(v);
+  AbstractSizeProperty::setAllNodeValue(v, graph);
 }
 //=============================================================================
 PropertyInterface* SizeProperty::clonePrototype(Graph * g, const std::string& n) const {

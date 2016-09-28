@@ -186,18 +186,26 @@ public:
    * All previous values are lost and the given value is assigned as the default one to the future added nodes.
    *
    * @param v The value to set to all nodes.
+   * @param graph (since Tulip 4.10) An optional descendant graph from the one associated to that property (itself included).
+   * If provided, only the nodes from that descendant graph will have their value modified.
+   * In the case of the descendant graph is different from the one associated to that property, the default node value will not be modified.
+   * @warning If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
    *
    **/
-  virtual void setAllNodeValue(const typename Tnode::RealType &v);
+  virtual void setAllNodeValue(const typename Tnode::RealType &v, Graph *graph = NULL);
 
   /**
    * @brief Sets the value of all edges and notify the observers.
    * All previous values are lost and the given value is assigned as the default one to the future added edges.
+   * @param graph (since Tulip 4.10) An optional descendant graph from the one associated to that property (itself included).
+   * If provided, only the edges from that descendant graph will have their value modified.
+   * In the case of the descendant graph is different from the one associated to that property, the default edge value will not be modified.
+   * @warning If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
    *
    * @param v The value to set to all edges.
    *
    **/
-  virtual void setAllEdgeValue(const typename Tedge::RealType &v);
+  virtual void setAllEdgeValue(const typename Tedge::RealType &v, Graph *graph = NULL);
   //=================================================================================
 
   /**
@@ -378,22 +386,22 @@ public:
     setEdgeValue( inE, v );
     return true;
   }
-  virtual bool setAllNodeStringValue( const std::string & inV ) {
+  virtual bool setAllNodeStringValue( const std::string & inV , Graph *graph = NULL ) {
     typename Tnode::RealType v;
 
     if( !Tnode::fromString(v,inV) )
       return false;
 
-    setAllNodeValue( v );
+    setAllNodeValue( v , graph );
     return true;
   }
-  virtual bool setAllEdgeStringValue( const std::string & inV ) {
+  virtual bool setAllEdgeStringValue( const std::string & inV , Graph *graph = NULL ) {
     typename Tedge::RealType v;
 
     if( !Tedge::fromString(v,inV) )
       return false;
 
-    setAllEdgeValue( v );
+    setAllEdgeValue( v , graph );
     return true;
   }
   virtual tlp::Iterator<node>* getNonDefaultValuatedNodes(const Graph* g = nullptr) const;

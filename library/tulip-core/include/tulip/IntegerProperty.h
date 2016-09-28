@@ -51,8 +51,8 @@ public :
   }
   virtual void setNodeValue(const node n, const int &v);
   virtual void setEdgeValue(const edge e, const int &v);
-  virtual void setAllNodeValue(const int &v);
-  virtual void setAllEdgeValue(const int &v);
+  virtual void setAllNodeValue(const int &v, Graph *graph = NULL);
+  virtual void setAllEdgeValue(const int &v, Graph *graph = NULL);
 
   int compare(const node n1, const node n2) const;
   int compare(const edge e1, const edge e2) const;

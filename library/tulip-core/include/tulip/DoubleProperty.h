@@ -51,8 +51,8 @@ public :
 
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
-  virtual void setAllNodeValue(const double &v);
-  virtual void setAllEdgeValue(const double &v);
+  virtual void setAllNodeValue(const double &v, Graph* graph = NULL);
+  virtual void setAllEdgeValue(const double &v, Graph *graph = NULL);
 
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
                                       MAX_CALC = 3, MIN_CALC = 4

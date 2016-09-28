@@ -283,14 +283,14 @@ void DoubleProperty::setEdgeValue(const edge e, const double &v) {
   DoubleMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void DoubleProperty::setAllNodeValue(const double &v) {
+void DoubleProperty::setAllNodeValue(const double &v, Graph *graph) {
   DoubleMinMaxProperty::updateAllNodesValues(v);
-  DoubleMinMaxProperty::setAllNodeValue(v);
+  DoubleMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void DoubleProperty::setAllEdgeValue(const double &v) {
+void DoubleProperty::setAllEdgeValue(const double &v, Graph *graph) {
   DoubleMinMaxProperty::updateAllEdgesValues(v);
-  DoubleMinMaxProperty::setAllEdgeValue(v);
+  DoubleMinMaxProperty::setAllEdgeValue(v, graph);
 }
 //=================================================================================
 PropertyInterface* DoubleProperty::clonePrototype(Graph * g, const std::string& n) const {

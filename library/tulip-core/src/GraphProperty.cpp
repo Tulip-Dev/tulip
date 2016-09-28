@@ -26,19 +26,16 @@
 using namespace std;
 using namespace tlp;
 
-const string GraphProperty::propertyTypename="graph";
+const string GraphProperty::propertyTypename = "graph";
 
 //==============================
-GraphProperty::GraphProperty (Graph *sg, const std::string& n) :
-  AbstractProperty<GraphType, EdgeSetType>(sg, n) {
-  setAllNodeValue(0);
-}
+GraphProperty::GraphProperty(Graph *sg, const std::string &n) : AbstractProperty<GraphType, EdgeSetType>(sg, n) { setAllNodeValue(0); }
 //==============================
 GraphProperty::~GraphProperty() {
   if (graph) {
     Iterator<node> *it = graph->getNodes();
 
-    while(it->hasNext()) {
+    while (it->hasNext()) {
       node n = it->next();
 
       if (getNodeValue(n) != nullptr)
@@ -53,11 +50,11 @@ GraphProperty::~GraphProperty() {
   }
 }
 //==============================
-void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
-  //remove all observed graphs if any
-  Iterator<node> *it = getNonDefaultValuatedNodes();
+void GraphProperty::setAllNodeValue(const GraphType::RealType &g, Graph *graph) {
+  // remove all observed graphs if any
+  Iterator<node> *it = getNonDefaultValuatedNodes(graph);
 
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     node n = it->next();
     getNodeValue(n)->removeListener(this);
   }
@@ -66,36 +63,35 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g) {
   set<node> emptySet;
   referencedGraph.setAll(emptySet);
 
-  if (getNodeDefaultValue() != nullptr) {
+  if ((!graph || getGraph() == graph) && getNodeDefaultValue() != nullptr) {
     getNodeDefaultValue()->removeListener(this);
   }
 
-  AbstractGraphProperty::setAllNodeValue(g);
+  AbstractGraphProperty::setAllNodeValue(g, graph);
 
   if (g != nullptr)
     g->addListener(this);
 }
 //==============================
-void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
-  //gestion désabonnement
-  Graph * oldGraph = getNodeValue(n);
+void GraphProperty::setNodeValue(const node n, const GraphType::RealType &sg) {
+  // gestion désabonnement
+  Graph *oldGraph = getNodeValue(n);
 
   if (oldGraph != nullptr && oldGraph != sg) {
-    //gestion du désabonnement
+    // gestion du désabonnement
     bool notDefault;
     set<node> &refs = referencedGraph.get(oldGraph->getId(), notDefault);
 
     if (notDefault) {
       refs.erase(n);
 
-      if (refs.empty())  {
+      if (refs.empty()) {
         if (oldGraph != getNodeDefaultValue())
           oldGraph->removeListener(this);
 
         referencedGraph.set(oldGraph->getId(), set<node>());
       }
-    }
-    else if (oldGraph != getNodeDefaultValue())
+    } else if (oldGraph != getNodeDefaultValue())
       oldGraph->removeListener(this);
   }
 
@@ -104,7 +100,7 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
   if (sg == nullptr || oldGraph == sg)
     return;
 
-  //Gestion de l'abonnement
+  // Gestion de l'abonnement
   sg->addListener(this);
 
   if (sg != getNodeDefaultValue()) {
@@ -121,61 +117,50 @@ void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
   }
 }
 //============================================================
-PropertyInterface* GraphProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *GraphProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return nullptr;
 
   // allow to get an unregistered property (empty name)
-  GraphProperty * p = n.empty()
-                      ? new GraphProperty(g) : g->getLocalProperty<GraphProperty>( n );
+  GraphProperty *p = n.empty() ? new GraphProperty(g) : g->getLocalProperty<GraphProperty>(n);
 
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=============================================================
 // disabled, use setNodeValue instead
-bool GraphProperty::setNodeStringValue(const node, const std::string &) {
-  return false;
-}
+bool GraphProperty::setNodeStringValue(const node, const std::string &) { return false; }
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &) {
-  return false;
-}
+bool GraphProperty::setAllNodeStringValue(const std::string &) { return false; }
 //=============================================================
 // disabled, use setEdgeValue instead
-bool GraphProperty::setEdgeStringValue(const edge, const std::string&) {
-  return false;
-}
+bool GraphProperty::setEdgeStringValue(const edge, const std::string &) { return false; }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string&) {
-  return false;
-}
+bool GraphProperty::setAllEdgeStringValue(const std::string &) { return false; }
 //=============================================================
-const set<edge>& GraphProperty::getReferencedEdges(const edge e) const {
-  return ((GraphProperty *) this)->edgeProperties.get(e.id);
-}
+const set<edge> &GraphProperty::getReferencedEdges(const edge e) const { return ((GraphProperty *)this)->edgeProperties.get(e.id); }
 //=============================================================
-void GraphProperty::treatEvent(const Event& evt) {
+void GraphProperty::treatEvent(const Event &evt) {
   if (evt.type() == Event::TLP_DELETE) {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
-    Graph* sg = reinterpret_cast<Graph *>(evt.sender());
+    Graph *sg = reinterpret_cast<Graph *>(evt.sender());
 
-    if(sg) {
+    if (sg) {
 #ifndef NDEBUG
       tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << std::endl;
 #endif
 
       if (getNodeDefaultValue() == sg) {
-        //we must backup old value
+        // we must backup old value
         MutableContainer<Graph *> backup;
         backup.setAll(0);
         Iterator<node> *it = graph->getNodes();
 
-        while(it->hasNext()) {
+        while (it->hasNext()) {
           node n = it->next();
 
           if (getNodeValue(n) != sg)
@@ -184,10 +169,10 @@ void GraphProperty::treatEvent(const Event& evt) {
 
         delete it;
         setAllNodeValue(0);
-        //restore values
+        // restore values
         it = graph->getNodes();
 
-        while(it->hasNext()) {
+        while (it->hasNext()) {
           node n = it->next();
           setNodeValue(n, backup.get(n.id));
         }
@@ -195,14 +180,14 @@ void GraphProperty::treatEvent(const Event& evt) {
         delete it;
       }
 
-      const set<node>& refs = referencedGraph.get(sg->getId());
+      const set<node> &refs = referencedGraph.get(sg->getId());
 
       set<node>::const_iterator it = refs.begin();
 
       if (it != refs.end()) {
         // don't change values if this non longer exists (when undoing)
         if (graph->existProperty(name)) {
-          for (; it!=refs.end(); ++it) {
+          for (; it != refs.end(); ++it) {
             AbstractGraphProperty::setNodeValue((*it), 0);
           }
         }
@@ -213,25 +198,25 @@ void GraphProperty::treatEvent(const Event& evt) {
   }
 }
 
-bool GraphProperty::readNodeDefaultValue(std::istream& iss) {
+bool GraphProperty::readNodeDefaultValue(std::istream &iss) {
   // must read 0 (see GraphType::writeb)
   unsigned int id = 0;
 
-  if (!bool(iss.read((char *) &id, sizeof(id))))
+  if (!bool(iss.read((char *)&id, sizeof(id))))
     return false;
 
   assert(id == 0);
   return id == 0;
 }
 
-bool GraphProperty::readNodeValue(std::istream& iss, node n) {
+bool GraphProperty::readNodeValue(std::istream &iss, node n) {
   // must read the id of a subgraph
   unsigned int id = 0;
 
-  if (!bool(iss.read((char *) &id, sizeof(id))))
+  if (!bool(iss.read((char *)&id, sizeof(id))))
     return false;
 
-  Graph* sg = graph->getRoot()->getDescendantGraph(id);
+  Graph *sg = graph->getRoot()->getDescendantGraph(id);
   setNodeValue(n, sg);
   return true;
 }

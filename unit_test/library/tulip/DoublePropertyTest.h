@@ -20,11 +20,11 @@
 #ifndef DOUBLEPROPERTYTEST_H_
 #define DOUBLEPROPERTYTEST_H_
 
-#include <tulip/Graph.h>
-#include <tulip/DoubleProperty.h>
 #include <cppunit/TestFixture.h>
 #include <cppunit/TestSuite.h>
 #include <cppunit/extensions/HelperMacros.h>
+#include <tulip/DoubleProperty.h>
+#include <tulip/Graph.h>
 
 class DoublePropertyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST_SUITE(DoublePropertyTest);
@@ -35,7 +35,7 @@ class DoublePropertyTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testDoublePropertyMaxUpdateFromString);
   CPPUNIT_TEST(testDoublePropertySubGraphMin);
   CPPUNIT_TEST(testDoublePropertyInfValue);
-  CPPUNIT_TEST(testDoublePropertyRefAndGetSetOperators);
+  CPPUNIT_TEST(testDoublePropertySetAllValue);
   CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -49,11 +49,12 @@ public:
   void testDoublePropertySubGraphMin();
   void testDoublePropertySubGraphMax();
   void testDoublePropertyInfValue();
-  void testDoublePropertyRefAndGetSetOperators();
+  void testDoublePropertySetAllValue();
 
-private :
+private:
   tlp::Graph *graph;
-  tlp::node n1, n4;
+  tlp::node n1, n2, n3, n4;
+  tlp::edge e1, e2;
 };
 
 #endif /* DOUBLEPROPERTYTEST_H_ */
