@@ -59,7 +59,7 @@ public :
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const GraphType::RealType& g);
-  virtual void setAllNodeValue(const GraphType::RealType& g);
+  virtual void setAllNodeValue(const GraphType::RealType& g, Graph *graph = NULL);
   virtual bool readNodeDefaultValue(std::istream& iss);
   virtual bool readNodeValue(std::istream& iss, node n);
   // tlp::GraphType encapsulates a tlp::Graph pointer but that is the graph id

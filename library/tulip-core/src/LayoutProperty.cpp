@@ -559,14 +559,14 @@ void LayoutProperty::setEdgeValue(const edge e, const std::vector<Coord>& v) {
   LayoutMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void LayoutProperty::setAllNodeValue(const Coord &v) {
+void LayoutProperty::setAllNodeValue(const Coord &v, Graph *graph) {
   resetBoundingBox();
-  LayoutMinMaxProperty::setAllNodeValue(v);
+  LayoutMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v) {
+void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v, Graph *graph) {
   resetBoundingBox();
-  LayoutMinMaxProperty::setAllEdgeValue(v);
+  LayoutMinMaxProperty::setAllEdgeValue(v, graph);
 }
 //=================================================================================
 double LayoutProperty::averageAngularResolution(const Graph *sg) const {

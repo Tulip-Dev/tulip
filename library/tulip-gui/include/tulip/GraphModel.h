@@ -40,11 +40,11 @@ public:
   static QVariant nodeValue(unsigned int, tlp::PropertyInterface*);
   static QVariant nodeDefaultValue(tlp::PropertyInterface*);
   static bool setNodeValue(unsigned int,tlp::PropertyInterface*, QVariant);
-  static bool setAllNodeValue(tlp::PropertyInterface*, QVariant);
+  static bool setAllNodeValue(tlp::PropertyInterface*, QVariant, Graph *graph = NULL);
   static QVariant edgeValue(unsigned int, tlp::PropertyInterface*);
   static QVariant edgeDefaultValue(tlp::PropertyInterface*);
   static bool setEdgeValue(unsigned int,tlp::PropertyInterface*, QVariant);
-  static bool setAllEdgeValue(tlp::PropertyInterface*, QVariant);
+  static bool setAllEdgeValue(tlp::PropertyInterface*, QVariant, Graph *graph = NULL);
 
   explicit GraphModel(QObject *parent = NULL);
 
