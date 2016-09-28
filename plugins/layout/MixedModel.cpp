@@ -38,48 +38,29 @@ float spacing = 2;
 float edgeNodeSpacing = 2;
 
 //===============================================================
-namespace {
-const char * paramHelp[] = {
-  //Orientation
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "vertical" )   \
-  HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
-  HTML_HELP_CLOSE(),
+
+static const char *paramHelp[] = {
+  // orientation
+  "This parameter enables to choose the orientation of the drawing.",
+
   // y node-node spacing
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "float" ) \
-  HTML_HELP_DEF( "default", "2" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the minimum y-spacing between any two nodes." \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the minimum y-spacing between any two nodes.",
+
   // x node-node and edge-node spacing
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "float" ) \
-  HTML_HELP_DEF( "default", "2" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge." \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the minimum x-spacing between any two nodes or between a node and an edge.",
+
   // node shape
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Integer" ) \
-  HTML_HELP_DEF( "values", "An existing shape property" ) \
-  HTML_HELP_DEF( "default", "viewShape" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used as node's shape." \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the property holding node shapes."
 };
-}
+
 #define ORIENTATION "vertical;horizontal;"
 //====================================================
 MixedModel::MixedModel(const tlp::PluginContext* context):LayoutAlgorithm(context)  {
   addNodeSizePropertyParameter(this, true /* inout */);
-  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
-  addInParameter<float> ("y node-node spacing",paramHelp[1],"2");
-  addInParameter<float> ("x node-node and edge-node spacing",paramHelp[2],"2");
-  addOutParameter<IntegerProperty>("node shape", paramHelp[3],
-                                   "viewShape");
+  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION, true, "vertical <br> horizontal");
+  addInParameter<float> ("y node-node spacing", paramHelp[1], "2");
+  addInParameter<float> ("x node-node and edge-node spacing", paramHelp[2], "2");
+  addOutParameter<IntegerProperty>("node shape", paramHelp[3], "viewShape");
   addDependency("Connected Component Packing", "1.0");
 }
 //====================================================

@@ -343,23 +343,13 @@ private:
 /*@}*/
 
 //========================================================================================
-PLUGIN(LouvainClustering)
-//========================================================================================
-//========================================================================================
-namespace {
-const char *paramHelp[] = {
-    // metric
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "NumericProperty")
-        HTML_HELP_DEF("value", "An existing edge metric")
-            HTML_HELP_BODY() "An existing edge weight metric property. If "
-                             "it is not defined all edges have a weight of "
-                             "1.0." // precision
-    HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "double")
-        HTML_HELP_BODY() "A given pass stops when the modularity is increased "
-                         "by less than precision. Default value is "
-                         "<b>0.000001</b>" HTML_HELP_CLOSE()};
-}
+static const char *paramHelp[] = {
+  // metric
+  "An existing edge weight metric property. If it is not defined all edges have a weight of 1.0.",
+
+  // precision
+  "A given pass stops when the modularity is increased by less than precision. Default value is <b>0.000001</b>"
+};
 //========================================================================================
 // same precision as the original code
 #define DEFAULT_PRECISION 0.000001
@@ -486,3 +476,5 @@ bool LouvainClustering::run() {
 
   return true;
 }
+//========================================================================================
+PLUGIN(LouvainClustering)

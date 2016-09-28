@@ -334,7 +334,7 @@ QToolButton:pressed {
       </property>
       <widget class="TulipWelcomePage" name="welcomePage"/>
       <widget class="PluginsCenter" name="pluginsPage"/>
-      <widget class="AboutTulipPage" name="aboutPage"/>
+      <widget class="tlp::AboutTulipPage" name="aboutPage"/>
      </widget>
     </item>
    </layout>
@@ -355,9 +355,9 @@ QToolButton:pressed {
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>AboutTulipPage</class>
+   <class>tlp::AboutTulipPage</class>
    <extends>QWidget</extends>
-   <header>AboutTulipPage.h</header>
+   <header location="global">tulip/AboutTulipPage.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

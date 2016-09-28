@@ -767,10 +767,14 @@ bool TulipFontGlyphIconCreator::paint(QPainter *painter,
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #else
   QStyleOptionViewItem opt = option;
+  opt.features |= QStyleOptionViewItem::HasDecoration;
+  opt.features |= QStyleOptionViewItem::HasDisplay;
 #endif
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+
   if (_fontAwesome) {
     opt.icon = imageIconPool.getFontAwesomeIcon(iconName);
   } else {
@@ -778,7 +782,7 @@ bool TulipFontGlyphIconCreator::paint(QPainter *painter,
   }
   opt.decorationSize = opt.icon.actualSize(QSize(16, 16));
 
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+
   opt.text = displayText(v);
 
   QStyle *style = QApplication::style();
@@ -850,16 +854,19 @@ bool NodeShapeEditorCreator::paint(QPainter *painter,
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #else
   QStyleOptionViewItem opt = option;
+  opt.features |= QStyleOptionViewItem::HasDecoration;
+  opt.features |= QStyleOptionViewItem::HasDisplay;
 #endif
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+
   QPixmap pixmap = GlyphPreviewRenderer::instance().render(
       data.value<NodeShape::NodeShapes>());
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
 
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
   opt.text = displayText(data);
 
   QStyle *style = QApplication::style();
@@ -918,16 +925,20 @@ bool EdgeExtremityShapeEditorCreator::paint(QPainter *painter,
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 7, 0))
   QStyleOptionViewItemV4 opt = option;
+  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+  opt.features |= QStyleOptionViewItemV2::HasDisplay;
 #else
   QStyleOptionViewItem opt = option;
+  opt.features |= QStyleOptionViewItem::HasDecoration;
+  opt.features |= QStyleOptionViewItem::HasDisplay;
 #endif
-  opt.features |= QStyleOptionViewItemV2::HasDecoration;
+
   QPixmap pixmap = EdgeExtremityGlyphPreviewRenderer::instance().render(
       data.value<EdgeExtremityShape::EdgeExtremityShapes>());
   opt.icon = QIcon(pixmap);
   opt.decorationSize = pixmap.size();
 
-  opt.features |= QStyleOptionViewItemV2::HasDisplay;
+
   opt.text = displayText(data);
 
   QStyle *style = QApplication::style();

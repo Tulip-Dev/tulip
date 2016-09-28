@@ -74,6 +74,8 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
 
   if (plugin.inputRequired()) {
     tooltip += " with current settings";
+  }
+  if (plugin.getParameters().size() > 0) {
     _ui->parameters->setItemDelegate(new TulipItemDelegate);
   } else {
     _ui->settingsButton->setVisible(false);

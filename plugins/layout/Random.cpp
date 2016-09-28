@@ -18,13 +18,9 @@
  */
 #include "Random.h"
 
-static const char * paramHelp[] = {
-  // 3D
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Boolean" ) \
-  HTML_HELP_BODY() \
-  "If true, the layout is computed in 3D, else it is computed in 2D" \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // 3D layout
+  "If true, the layout is computed in 3D, else it is computed in 2D."
 };
 
 PLUGIN(Random)

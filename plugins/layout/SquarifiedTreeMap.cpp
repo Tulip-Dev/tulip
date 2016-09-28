@@ -34,60 +34,31 @@ const double DEFAULT_RATIO = 1.4;
 const int DEFAULT_WIDTH   = 1024;
 const int DEFAULT_HEIGHT  = 1024;
 
-namespace {
-const char * paramHelp[] = {
-  // metric :
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "NumericProperty" ) \
-  HTML_HELP_DEF( "values", "An existing metric property" ) \
-  HTML_HELP_DEF( "default", "viewMetric if it exists" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the metric used to estimate the size allocated to each node." \
-  HTML_HELP_CLOSE(),
-  // aspect ratio
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "double" ) \
-  HTML_HELP_DEF( "default", "1." )   \
-  HTML_HELP_BODY() \
-  "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node." \
-  HTML_HELP_CLOSE(),
-  // treemap type
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "true", "B. Shneiderman" ) \
-  HTML_HELP_DEF( "false", "J. J. van Wijk" ) \
-  HTML_HELP_DEF( "default", "false" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (van Wijk)" \
-  HTML_HELP_CLOSE(),
-  // node size
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Size" ) \
-  HTML_HELP_DEF( "values", "An existing size property" ) \
-  HTML_HELP_DEF( "default", "viewSize" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used as node's size." \
-  HTML_HELP_CLOSE(),
-  // node shape
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Integer" ) \
-  HTML_HELP_DEF( "values", "An existing shape property" ) \
-  HTML_HELP_DEF( "default", "viewShape" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the property used as node's shape." \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // metric
+  "This parameter defines the metric used to estimate the size allocated to each node.",
+
+  // Aspect Ratio
+  "This parameter enables to set up the aspect ratio (height/width) for the rectangle corresponding to the root node.",
+
+  // Treemap Type
+  "This parameter indicates to use normal Treemaps (B. Shneiderman) or Squarified Treemaps (J. J. van Wijk)",
+
+  // Node Size
+  "This parameter defines the property used as node sizes.",
+
+  // Node Shape
+  "This parameter defines the property used as node shapes."
 };
-}
+
 //====================================================================
 SquarifiedTreeMap::SquarifiedTreeMap(const tlp::PluginContext* context) :LayoutAlgorithm(context) {
   aspectRatio = DEFAULT_RATIO;
   addInParameter<NumericProperty*>("metric", paramHelp[0], "viewMetric", false);
   addInParameter<double>("Aspect Ratio", paramHelp[1], "1.");
   addInParameter<bool>("Treemap Type", paramHelp[2], "false");
-  addOutParameter<SizeProperty>("Node Size", paramHelp[3],
-                                "viewSize");
-  addOutParameter<IntegerProperty>("Node Shape", paramHelp[4],
-                                   "viewShape");
+  addOutParameter<SizeProperty>("Node Size", paramHelp[3], "viewSize");
+  addOutParameter<IntegerProperty>("Node Shape", paramHelp[4],  "viewShape");
 }
 
 //====================================================================

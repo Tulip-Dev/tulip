@@ -23,25 +23,25 @@ PLUGIN(DagLevelMetric)
 using namespace std;
 using namespace tlp;
 
-DagLevelMetric::DagLevelMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+DagLevelMetric::DagLevelMetric(const tlp::PluginContext *context)
+    : DoubleAlgorithm(context) {}
 
 DagLevelMetric::~DagLevelMetric() {}
 //======================================================
 bool DagLevelMetric::run() {
   MutableContainer<unsigned int> level;
   dagLevel(graph, level, pluginProgress);
-  for(node n : graph->getNodes())
+  for (node n : graph->getNodes())
     result->setNodeValue(n, level.get(n.id));
   return true;
 }
 //======================================================
 bool DagLevelMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph)) {
-    erreurMsg="";
+    erreurMsg = "";
     return true;
-  }
-  else {
-    erreurMsg="The graph must be a acylic.";
+  } else {
+    erreurMsg = "The graph must be a acylic.";
     return false;
   }
 }

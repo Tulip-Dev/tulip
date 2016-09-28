@@ -29,16 +29,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/TulipSettings.h>
 
-// Disable GCC pedantic warnings when including "ui_SceneConfigWidget.h"
-// because it includes qxtspanslider.h which raises a warning
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-pedantic"
-#endif
 #include "ui_SceneConfigWidget.h"
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 
 using namespace tlp;
 
@@ -49,10 +40,6 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent)
 
   connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this,
           SLOT(dynamicFontRBToggled(bool)));
-  connect(_ui->labelSizesRangeSlider, SIGNAL(lowerValueChanged(int)), this,
-          SLOT(updateSliderRangeLabels()));
-  connect(_ui->labelSizesRangeSlider, SIGNAL(upperValueChanged(int)), this,
-          SLOT(updateSliderRangeLabels()));
 
   _ui->selectionColorButton->setDialogTitle(
       "Choose the color of selected nodes or edges");
@@ -125,13 +112,15 @@ void SceneConfigWidget::resetChanges() {
   _ui->descendingCB->setChecked(
       renderingParameters.elementsOrderedDescending());
 
-
   _ui->labelsFitCheck->setChecked(renderingParameters.labelsScaled());
   _ui->fixedFontSizeRB->setChecked(renderingParameters.labelsFixedFontSize());
-  _ui->dynamicFontSizeRB->setChecked(!renderingParameters.labelsFixedFontSize());
+  _ui->dynamicFontSizeRB->setChecked(
+      !renderingParameters.labelsFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters.labelsDensity());
-  _ui->labelSizesRangeSlider->setLowerValue(renderingParameters.minSizeOfLabels());
-  _ui->labelSizesRangeSlider->setUpperValue(renderingParameters.maxSizeOfLabels());
+  _ui->labelSizesRangeSlider->setLowerValue(
+      renderingParameters.minSizeOfLabels());
+  _ui->labelSizesRangeSlider->setUpperValue(
+      renderingParameters.maxSizeOfLabels());
 
   // EDGES
   _ui->edges3DCheck->setChecked(renderingParameters.edges3D());
@@ -205,13 +194,15 @@ void SceneConfigWidget::applySettings() {
     renderingParameters.setElementsOrdered(true);
   }
 
-  renderingParameters.setElementOrderedDescending(_ui->descendingCB->isChecked());
+  renderingParameters.setElementOrderedDescending(
+      _ui->descendingCB->isChecked());
   renderingParameters.setLabelsFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters.setLabelsScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters.setLabelsDensity(_ui->labelsDensitySlider->value());
-  renderingParameters.setMinSizeOfLabels(_ui->labelSizesRangeSlider->lowerValue());
-  renderingParameters.setMaxSizeOfLabels(_ui->labelSizesRangeSlider->upperValue());
-
+  renderingParameters.setMinSizeOfLabels(
+      _ui->labelSizesRangeSlider->lowerValue());
+  renderingParameters.setMaxSizeOfLabels(
+      _ui->labelSizesRangeSlider->upperValue());
 
   // EDGES
   renderingParameters.setEdges3D(_ui->edges3DCheck->isChecked());
@@ -241,13 +232,6 @@ void SceneConfigWidget::applySettings() {
 
 void SceneConfigWidget::dynamicFontRBToggled(bool state) {
   _ui->sizeLimitsGB->setEnabled(state);
-}
-
-void SceneConfigWidget::updateSliderRangeLabels() {
-  _ui->labelsMinSizeLabel->setText(
-      QString::number(_ui->labelSizesRangeSlider->lowerValue()));
-  _ui->labelsMaxSizeLabel->setText(
-      QString::number(_ui->labelSizesRangeSlider->upperValue()));
 }
 
 void SceneConfigWidget::scaleLabelsToggled(bool state) {

@@ -21,43 +21,28 @@
 
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "PropertyInterface" ) \
-  HTML_HELP_BODY() \
-  "Property to copy on labels" \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "BooleanProperty" ) \
-  HTML_HELP_DEF( "default", "none" ) \
-  HTML_HELP_BODY() \
-  "Set of elements for which to set the labels." \
-  HTML_HELP_CLOSE(),
-  // on nodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_BODY() \
-  "Copy nodes values" \
-  HTML_HELP_CLOSE(),
-  // property
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_BODY() \
-  "Copy edges values" \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // input
+  "Property to stringify values on labels.",
+
+  // selection
+  "Set of elements for which to set the labels.",
+
+  // nodes
+  "Sets labels on nodes.",
+
+  // edges
+  "Set labels on edges."
 };
-}
 
 class ToLabels: public tlp::StringAlgorithm {
 public:
   PLUGININFORMATION("To labels","Ludwig Fiolka","2012/03/16","Maps the labels of the graph elements onto the values of a given property.","1.0","")
   ToLabels(const tlp::PluginContext* context): StringAlgorithm(context) {
-    addInParameter<PropertyInterface*>("input",paramHelp[0],"viewMetric",true);
-    addInParameter<BooleanProperty>("selection",paramHelp[1],"",false);
-    addInParameter<bool>("nodes",paramHelp[2],"true");
-    addInParameter<bool>("edges",paramHelp[3],"true");
+    addInParameter<PropertyInterface*>("input", paramHelp[0], "viewMetric", true);
+    addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
+    addInParameter<bool>("nodes", paramHelp[2], "true");
+    addInParameter<bool>("edges", paramHelp[3], "true");
   }
 
   bool run() {

@@ -60,7 +60,7 @@ image: url(:/tulip/gui/ui/combobox_arrow.png);
 QComboBox:drop-down {
 subcontrol-origin: padding;
 subcontrol-position: top right;
-border-left-style: none; 
+border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
@@ -203,16 +203,7 @@ padding-top: 5px;
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <item>
@@ -299,16 +290,7 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <item>
@@ -384,6 +366,9 @@ background-color: rgb(160, 160, 160);</string>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
+               <property name="toolTip">
+                <string>specify the quantity of labels to be displayed</string>
+               </property>
                <property name="minimum">
                 <number>-100</number>
                </property>
@@ -435,25 +420,34 @@ background-color: rgb(160, 160, 160);</string>
           <item>
            <widget class="QGroupBox" name="sizeLimitsGB">
             <property name="title">
-             <string>Size limits</string>
+             <string>Font size limits</string>
             </property>
             <layout class="QHBoxLayout" name="horizontalLayout">
+             <property name="spacing">
+              <number>6</number>
+             </property>
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>9</number>
+             </property>
              <item>
-              <widget class="QLabel" name="labelsMinSizeLabel">
+              <widget class="QLCDNumber" name="labelsMinSize">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize">
-                <size>
-                 <width>25</width>
-                 <height>0</height>
-                </size>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
                </property>
-               <property name="text">
-                <string>    0</string>
+               <property name="digitCount">
+                <number>3</number>
+               </property>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
              </item>
@@ -464,6 +458,9 @@ background-color: rgb(160, 160, 160);</string>
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
+               </property>
+               <property name="toolTip">
+                <string>give the allowed range of values for the dynamic font size</string>
                </property>
                <property name="minimum">
                 <number>0</number>
@@ -477,24 +474,27 @@ background-color: rgb(160, 160, 160);</string>
               </widget>
              </item>
              <item>
-              <widget class="QLabel" name="labelsMaxSizeLabel">
-               <property name="enabled">
-                <bool>true</bool>
-               </property>
+              <widget class="QLCDNumber" name="labelsMaxSize">
                <property name="sizePolicy">
-                <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                  <horstretch>0</horstretch>
                  <verstretch>0</verstretch>
                 </sizepolicy>
                </property>
-               <property name="minimumSize">
-                <size>
-                 <width>25</width>
-                 <height>0</height>
-                </size>
+               <property name="frameShape">
+                <enum>QFrame::NoFrame</enum>
                </property>
-               <property name="text">
-                <string>200</string>
+               <property name="lineWidth">
+                <number>0</number>
+               </property>
+               <property name="numDigits">
+                <number>3</number>
+               </property>
+               <property name="digitCount">
+                <number>3</number>
+               </property>
+               <property name="segmentStyle">
+                <enum>QLCDNumber::Flat</enum>
                </property>
               </widget>
              </item>
@@ -510,6 +510,9 @@ background-color: rgb(160, 160, 160);</string>
           </item>
           <item>
            <widget class="QCheckBox" name="labelsFitCheck">
+            <property name="toolTip">
+             <string>&lt;p&gt;if checked, node labels  are always displayed into the associated  node&lt;/p&gt;</string>
+            </property>
             <property name="text">
              <string>Fit labels sizes to graph elements sizes</string>
             </property>
@@ -539,16 +542,7 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <item>
@@ -584,6 +578,9 @@ background-color: rgb(160, 160, 160);</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>if checked, edges are drawn as tubes</string>
+              </property>
               <property name="text">
                <string>Enable 3D edges</string>
               </property>
@@ -591,6 +588,9 @@ background-color: rgb(160, 160, 160);</string>
             </item>
             <item>
              <widget class="QCheckBox" name="edgesArrowCheck">
+              <property name="toolTip">
+               <string>enable/disable the display of the edges arrows</string>
+              </property>
               <property name="text">
                <string>Show arrows</string>
               </property>
@@ -598,6 +598,9 @@ background-color: rgb(160, 160, 160);</string>
             </item>
             <item>
              <widget class="QCheckBox" name="edgesColorInterpolationCheck">
+              <property name="toolTip">
+               <string>&lt;p&gt;if checked, the color along the edges is interpolated using the colors of the linked nodes&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Enable color interpolation</string>
               </property>
@@ -605,6 +608,9 @@ background-color: rgb(160, 160, 160);</string>
             </item>
             <item>
              <widget class="QCheckBox" name="edgesSizeInterpolationCheck">
+              <property name="toolTip">
+               <string>&lt;p&gt;if checked, the size along the edges is interpolated using the sizes of the linked nodes&lt;/p&gt;</string>
+              </property>
               <property name="text">
                <string>Enable size interpolation</string>
               </property>
@@ -627,16 +633,7 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <item>
@@ -660,6 +657,9 @@ background-color: rgb(160, 160, 160);</string>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="toolTip">
+               <string>manage the display of the graph nodes/edges by ordering them according to a metric</string>
+              </property>
               <property name="text">
                <string>Metric ordering</string>
               </property>
@@ -672,6 +672,9 @@ background-color: rgb(160, 160, 160);</string>
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="toolTip">
+               <string>manage the display of the graph nodes/edges by ordering them according to a metric</string>
               </property>
              </widget>
             </item>
@@ -721,16 +724,7 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <item>
@@ -810,16 +804,7 @@ background-color: rgb(160, 160, 160);</string>
           <property name="spacing">
            <number>0</number>
           </property>
-          <property name="leftMargin">
-           <number>5</number>
-          </property>
-          <property name="topMargin">
-           <number>5</number>
-          </property>
-          <property name="rightMargin">
-           <number>5</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>5</number>
           </property>
           <item>
@@ -1129,6 +1114,38 @@ of the scene remains unchanged.</string>
     <hint type="destinationlabel">
      <x>187</x>
      <y>355</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelSizesRangeSlider</sender>
+   <signal>lowerValueChanged(int)</signal>
+   <receiver>labelsMinSize</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>346</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>labelSizesRangeSlider</sender>
+   <signal>upperValueChanged(int)</signal>
+   <receiver>labelsMaxSize</receiver>
+   <slot>display(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>179</x>
+     <y>346</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>302</x>
+     <y>346</y>
     </hint>
    </hints>
   </connection>

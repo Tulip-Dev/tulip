@@ -931,16 +931,6 @@ static int getUncompressedSizeOfGzipFile(const std::string &gzipFilePath) {
 
 //================================================================================
 
-namespace {
-const char * paramHelp[] = {
-  // filename
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "pathname" ) \
-  HTML_HELP_BODY() \
-  "The file to import." \
-  HTML_HELP_CLOSE()
-};
-}
 #endif //DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
@@ -966,7 +956,7 @@ public:
   }
 
   TLPImport(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<std::string>("file::filename", paramHelp[0],"");
+    addInParameter<std::string>("file::filename", "The TLP file to import.", "");
 //    addInParameter<DataSet>(DISPLAYING);
   }
   ~TLPImport() {}

@@ -62,10 +62,9 @@ public:
 
   /**
    * Initializes a color scale with a default set of colors.
-   * @param gradient specifies if the color scale should be a gradient or not
    *
    */
-  ColorScale(const bool gradient = true);
+  ColorScale();
 
   /**
    * Initializes a color scale with a set of colors passed as parameter.

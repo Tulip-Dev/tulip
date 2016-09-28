@@ -23,16 +23,10 @@ PLUGIN(Kruskal)
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "NumericProperty" ) \
-  HTML_HELP_DEF( "default", "\"viewMetric\"" ) \
-  HTML_HELP_BODY() \
-  "Metric containing the edges weights." \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // edge weight
+  "Metric containing the edge weights."
 };
-}
 //======================================================
 Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
   addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "viewMetric");

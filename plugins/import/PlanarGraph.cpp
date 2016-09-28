@@ -23,17 +23,11 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // nodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "30" ) \
-  HTML_HELP_BODY() \
-  "Number of nodes in the final graph." \
-  HTML_HELP_CLOSE(),
+  "Number of nodes in the final graph."
 };
-}
+
 namespace {
 struct Triangle {
   Triangle(node a, node b, node c):

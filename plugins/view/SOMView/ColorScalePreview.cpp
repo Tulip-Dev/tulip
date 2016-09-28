@@ -64,7 +64,7 @@ void ColorScalePreview::resizeEvent(QResizeEvent * event) {
 }
 
 void ColorScalePreview::mousePressEvent(QMouseEvent *) {
-  tlp::ColorScaleConfigDialog dialog(currentColorScale, this);
+  tlp::ColorScaleConfigDialog dialog(*currentColorScale, this);
   dialog.exec();
   fillLabel();
 }

@@ -22,18 +22,6 @@
 
 #include "tulip2ogdf/OGDFLayoutPluginBase.h"
 
-#define ELT_SETTINGS "Settings"
-#define ELT_SETTINGSLIST "Standard;Repulse;Planar"
-#define STANDARD_ELT 0
-#define REPULSE_ELT 1
-#define PLANAR_ELT 2
-
-#define ELT_SPEED "Speed"
-#define ELT_SPEEDLIST "Fast;Medium;HQ"
-#define FAST_ELT 0
-#define MEDIUM_ELT 1
-#define HQ_ELT 2
-
 /** \addtogroup layout */
 // comments below have been extracted from OGDF/src/energybased/DavidsonHarelLayout.cpp
 
@@ -85,6 +73,33 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+#define ELT_SETTINGS "Settings"
+#define ELT_SETTINGSLIST "Standard;Repulse;Planar"
+#define STANDARD_ELT 0
+#define REPULSE_ELT 1
+#define PLANAR_ELT 2
+
+#define ELT_SPEED "Speed"
+#define ELT_SPEEDLIST "Fast;Medium;HQ"
+#define FAST_ELT 0
+#define MEDIUM_ELT 1
+#define HQ_ELT 2
+
+static const char *paramHelp[] = {
+  // Settings
+  "Easy way to set fixed costs.",
+
+  // Speed
+  "Easy way to set temperature and number of iterations.",
+
+  // preferredEdgeLength
+  "The preferred edge length.",
+
+  // preferredEdgeLengthMultiplier
+  "The preferred edge length multiplier for attraction."
+};
+
 class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
 
   tlp::StringCollection settings;
@@ -93,39 +108,10 @@ class OGDFDavidsonHarel : public OGDFLayoutPluginBase {
 public:
   PLUGININFORMATION("Davidson Harel (OGDF)","Rene Weiskircher","12/11/2007","Implements the Davidson-Harel layout algorithm which uses simulated annealing to find a layout of minimal energy.<br/>Due to this approach, the algorithm can only handle graphs of rather limited size.<br/>It is based on the following publication:<br/><b>Drawing Graphs Nicely Using Simulated Annealing</b>, Ron Davidson, David Harel,  ACM Transactions on Graphics 15(4), pp. 301-331, 1996.","1.3","Force Directed")
   OGDFDavidsonHarel(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::DavidsonHarelLayout()) {
-    addInParameter<StringCollection>(ELT_SETTINGS,
-                                     HTML_HELP_OPEN()
-                                     HTML_HELP_DEF( "type", "String Collection" )
-                                     HTML_HELP_DEF("values", "- Standard<br/>- Repulse<br/>- Planar")
-                                     HTML_HELP_DEF( "default", "Standard" )
-                                     HTML_HELP_BODY()
-                                     "Easy way to set fixed costs. "
-                                     HTML_HELP_CLOSE(),
-                                     ELT_SETTINGSLIST);
-    addInParameter<StringCollection>(ELT_SPEED,
-                                     HTML_HELP_OPEN()
-                                     HTML_HELP_DEF( "type", "String Collection" )
-                                     HTML_HELP_DEF("values", "- Fast<br/>- Medium<br/>- HQ")
-                                     HTML_HELP_DEF( "default", "Medium" )
-                                     HTML_HELP_BODY()
-                                     "Easy way to set temperature and iterations. "
-                                     HTML_HELP_CLOSE(),
-                                     ELT_SPEEDLIST);
-    addInParameter<double>("preferredEdgeLength",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "the preferred edge length. "
-                           HTML_HELP_CLOSE(),
-                           "0");
-    addInParameter<double>("preferredEdgeLengthMultiplier",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "The preferred edge length multiplier for attraction. "
-                           HTML_HELP_CLOSE(),
-                           "2.0");
-
+    addInParameter<StringCollection>(ELT_SETTINGS, paramHelp[0], ELT_SETTINGSLIST, true, "Standard <br> Repulse <br> Planar");
+    addInParameter<StringCollection>(ELT_SPEED, paramHelp[1], ELT_SPEEDLIST, true, "Fast <br> Medium <br> HQ");
+    addInParameter<double>("preferredEdgeLength", paramHelp[2], "0.0");
+    addInParameter<double>("preferredEdgeLengthMultiplier", paramHelp[3], "2.0");
   }
 
   void beforeCall() {

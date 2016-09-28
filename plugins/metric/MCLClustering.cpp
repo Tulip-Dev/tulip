@@ -1,21 +1,21 @@
 /**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
+*
+* This file is part of Tulip (www.tulip-software.org)
+*
+* Authors: David Auber and the Tulip development Team
+* from LaBRI, University of Bordeaux
+*
+* Tulip is free software; you can redistribute it and/or modify
+* it under the terms of the GNU Lesser General Public License
+* as published by the Free Software Foundation, either version 3
+* of the License, or (at your option) any later version.
+*
+* Tulip is distributed in the hope that it will be useful,
+* but WITHOUT ANY WARRANTY; without even the implied warranty of
+* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+* See the GNU General Public License for more details.
+*
+*/
 #include <algorithm>
 #include <queue>
 #include <sstream>
@@ -86,8 +86,6 @@ public:
   unsigned int _k;
 };
 /*@}*/
-
-PLUGIN(MCLClustering)
 
 const double epsilon = 1E-9;
 
@@ -191,7 +189,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   }
 
   /*if (noprune)
-    return;*/
+  return;*/
 
   // pruneK step
   std::sort(pvect.begin(), pvect.end(), pvectCmp());
@@ -264,16 +262,15 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 }
 //=================================================
 static const char *paramHelp[] = {
-    // number of clusters
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "unsigned int")
-        HTML_HELP_BODY() "Determines the random walk length at each "
-                         "step" HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "NumericProperty")
-        HTML_HELP_BODY() "Edge weights to use" HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "unsigned int")
-        HTML_HELP_BODY() "Determines, for each node, the number of strongest "
-                         "link kept at each iteration" HTML_HELP_CLOSE(),
-};
+    // inflate
+    "Determines the random walk length at each step.",
+
+    // weights
+    "Edges' weights to use.",
+
+    // pruning
+    "Determines, for each node, the number of strongest link kept at each "
+    "iteration."};
 //=================================================
 MCLClustering::MCLClustering(const tlp::PluginContext *context)
     : DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
@@ -459,3 +456,5 @@ bool MCLClustering::run() {
 
   return true;
 }
+//==============================================================================
+PLUGIN(MCLClustering)

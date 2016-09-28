@@ -148,28 +148,18 @@ void ConeTreeExtended::calcLayout(tlp::node n, TLP_HASH_MAP<tlp::node,double> *p
   }
 }
 //===============================================================
-namespace {
-const char * paramHelp[] = {
-  //Orientation
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "horizontal" )   \
-  HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "float" ) \
-  HTML_HELP_DEF( "default", "1.0" )   \
-  HTML_HELP_BODY() \
-  "This parameter enables to add extra spacing between the different levels of the tree" \
-  HTML_HELP_CLOSE()
+static const char *paramHelp[] = {
+  // orientation
+  "This parameter enables to choose the orientation of the drawing.",
+
+  // space between levels
+  "This parameter enables to add extra spacing between the different levels of the tree"
 };
-}
 #define ORIENTATION "vertical;horizontal;"
 //===============================================================
 ConeTreeExtended::ConeTreeExtended(const tlp::PluginContext* context):LayoutAlgorithm(context), spaceBetweenLevels(10) {
   addNodeSizePropertyParameter(this);
-  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION );
+  addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION, true, "vertical <br> horizontal");
   addInParameter<float>("space between levels", paramHelp[1], "1.0");
 }
 //===============================================================

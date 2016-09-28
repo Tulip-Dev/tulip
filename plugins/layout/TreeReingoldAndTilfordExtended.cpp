@@ -27,47 +27,22 @@ PLUGIN(TreeReingoldAndTilfordExtended)
 using namespace std;
 using namespace tlp;
 
-namespace {
-const char * paramHelp[] = {
-  //edge length
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "Int" ) \
-  HTML_HELP_DEF( "values", "An existing int property" ) \
-  HTML_HELP_DEF( "default", "None" ) \
-  HTML_HELP_BODY() \
-  "This parameter indicates the property used to compute the length of edges." \
-  HTML_HELP_CLOSE(),
-  //Orientation
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "String Collection" ) \
-  HTML_HELP_DEF( "default", "horizontal" )   \
-  HTML_HELP_BODY() \
-  "This parameter enables to choose the orientation of the drawing" \
-  HTML_HELP_CLOSE(),
-  //Orthogonal
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "true" )          \
-  HTML_HELP_BODY()              \
-  "This parameter enables to choose if the tree is drawn orthogonally or not" \
-  HTML_HELP_CLOSE(),
-  //bounding circles
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "false" )  \
-  HTML_HELP_BODY() \
-  "Indicates if the node bounding objects are boxes or bounding circles." \
+static const char *paramHelp[] = {
+  // edge length
+  "This parameter indicates the property used to compute the length of edges.",
 
-  HTML_HELP_CLOSE(),
-  //compact layout
-  HTML_HELP_OPEN()         \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "true" )   \
-  HTML_HELP_BODY() \
-  "Indicates if a compact layout is computed." \
-  HTML_HELP_CLOSE()
+  // orientation
+  "This parameter enables to choose the orientation of the drawing.",
+
+  // orthogonal
+  "This parameter enables to choose if the tree is drawn orthogonally or not.",
+
+  // bounding circles
+  "Indicates if the node bounding objects are boxes or bounding circles.",
+
+  // compact layout
+  "Indicates if a compact layout is computed."
 };
-}
 //=============================================================================
 #define ORIENTATION "vertical;horizontal;"
 //=============================================================================
@@ -76,7 +51,7 @@ TreeReingoldAndTilfordExtended::TreeReingoldAndTilfordExtended(const tlp::Plugin
   lengthMetric(0) {
   addNodeSizePropertyParameter(this);
   addInParameter<IntegerProperty>("edge length", paramHelp[0], "", false);
-  addInParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION );
+  addInParameter<StringCollection>("orientation", paramHelp[1], ORIENTATION, true, "vertical <br> horizontal");
   addInParameter<bool>("orthogonal", paramHelp[2], "true" );
   addSpacingParameters(this);
   addInParameter<bool>("bounding circles", paramHelp[3], "false");

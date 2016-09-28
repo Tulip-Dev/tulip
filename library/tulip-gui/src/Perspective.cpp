@@ -20,27 +20,27 @@
 #include <tulip/TulipProject.h>
 
 #include <QApplication>
+#include <QHostAddress>
 #include <QMainWindow>
 #include <QProcess>
 #include <QTcpSocket>
-#include <QHostAddress>
 
 #include <tulip/SimplePluginProgressWidget.h>
 
 using namespace tlp;
 
-tlp::Perspective* Perspective::_instance = nullptr;
+tlp::Perspective *Perspective::_instance = nullptr;
 
-Perspective* Perspective::instance() {
-  return _instance;
-}
-void Perspective::setInstance(Perspective* p) {
-  _instance = p;
-}
+Perspective *Perspective::instance() { return _instance; }
+void Perspective::setInstance(Perspective *p) { _instance = p; }
 
-Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(nullptr), _maximised(false), _project(nullptr), _mainWindow(nullptr), _externalFile(QString()), _parameters(QVariantMap()) {
-  if(c != nullptr) {
-    const PerspectiveContext* perspectiveContext = dynamic_cast<const PerspectiveContext*>(c);
+Perspective::Perspective(const tlp::PluginContext *c)
+    : _agentSocket(nullptr), _maximised(false), _project(nullptr),
+      _mainWindow(nullptr), _externalFile(QString()),
+      _parameters(QVariantMap()) {
+  if (c != nullptr) {
+    const PerspectiveContext *perspectiveContext =
+        dynamic_cast<const PerspectiveContext *>(c);
     _mainWindow = perspectiveContext->mainWindow;
     _project = perspectiveContext->project;
     _externalFile = perspectiveContext->externalFile;
@@ -49,7 +49,8 @@ Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(nullptr), _
 
     if (perspectiveContext->tulipPort != 0) {
       _agentSocket = new QTcpSocket(this);
-      _agentSocket->connectToHost(QHostAddress::LocalHost,perspectiveContext->tulipPort);
+      _agentSocket->connectToHost(QHostAddress::LocalHost,
+                                  perspectiveContext->tulipPort);
 
       if (!_agentSocket->waitForConnected(2000)) {
         _agentSocket->deleteLater();
@@ -59,8 +60,7 @@ Perspective::Perspective(const tlp::PluginContext* c) : _agentSocket(nullptr), _
       if (_project != nullptr) {
         notifyProjectLocation(_project->absoluteRootPath());
       }
-    }
-    else {
+    } else {
       qWarning("Perspective running in standalone mode");
     }
   }
@@ -73,8 +73,8 @@ Perspective::~Perspective() {
     _instance = nullptr;
 }
 
-PluginProgress* Perspective::progress(ProgressOptions options)  {
-  SimplePluginProgressDialog* dlg = new SimplePluginProgressDialog(_mainWindow);
+PluginProgress *Perspective::progress(ProgressOptions options) {
+  SimplePluginProgressDialog *dlg = new SimplePluginProgressDialog(_mainWindow);
   dlg->setWindowIcon(_mainWindow->windowIcon());
   dlg->showPreview(options.testFlag(IsPreviewable));
   dlg->setCancelButtonVisible(options.testFlag(IsCancellable));
@@ -84,16 +84,13 @@ PluginProgress* Perspective::progress(ProgressOptions options)  {
   return dlg;
 }
 
-QMainWindow* Perspective::mainWindow() const {
-  return _mainWindow;
-}
+QMainWindow *Perspective::mainWindow() const { return _mainWindow; }
 
 void Perspective::showFullScreen(bool f) {
   if (f) {
     _maximised = _mainWindow->isMaximized();
     _mainWindow->showFullScreen();
-  }
-  else {
+  } else {
     _mainWindow->showNormal();
 
     if (_maximised)
@@ -105,16 +102,15 @@ void Perspective::registerReservedProperty(QString s) {
   _reservedProperties.insert(s);
 }
 
-void Perspective::centerPanelsForGraph(Graph *) {
-}
+void Perspective::centerPanelsForGraph(Graph *) {}
 
 bool Perspective::isReservedPropertyName(QString s) {
   return _reservedProperties.contains(s);
 }
 
 bool Perspective::checkSocketConnected() {
-  if(_agentSocket != nullptr) {
-    if(_agentSocket->state()!=QAbstractSocket::UnconnectedState)
+  if (_agentSocket != nullptr) {
+    if (_agentSocket->state() != QAbstractSocket::UnconnectedState)
       return true;
     else {
       _agentSocket->deleteLater();
@@ -126,8 +122,8 @@ bool Perspective::checkSocketConnected() {
   return false;
 }
 
-void Perspective::sendAgentMessage(const QString& msg) {
-  if(checkSocketConnected()) {
+void Perspective::sendAgentMessage(const QString &msg) {
+  if (checkSocketConnected()) {
     _agentSocket->write(msg.toUtf8());
     _agentSocket->flush();
   }
@@ -141,9 +137,7 @@ void Perspective::showProjectsPage() {
   sendAgentMessage("SHOW_AGENT\tPROJECTS");
 }
 
-void Perspective::showAboutPage() {
-  sendAgentMessage("SHOW_AGENT\tABOUT");
-}
+void Perspective::showAboutPage() { sendAgentMessage("SHOW_AGENT\tABOUT"); }
 
 void Perspective::showTrayMessage(const QString &s) {
   sendAgentMessage("TRAY_MESSAGE\t" + s);
@@ -154,23 +148,24 @@ void Perspective::showErrorMessage(const QString &title, const QString &s) {
 }
 
 void Perspective::openProjectFile(const QString &path) {
-  if(checkSocketConnected()) {
+  if (checkSocketConnected()) {
     sendAgentMessage("OPEN_PROJECT\t" + path);
-  }
-  else { // on standalone mode, spawn a new standalone perspective
-    QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << path);
+  } else { // on standalone mode, spawn a new standalone perspective
+    QProcess::startDetached(QApplication::applicationFilePath(), QStringList()
+                                                                     << path);
   }
 }
 
 void Perspective::createPerspective(const QString &name) {
-  if(checkSocketConnected()) {
+  if (checkSocketConnected()) {
     sendAgentMessage("CREATE_PERSPECTIVE\t" + name);
-  }
-  else { // on standalone mode, spawn a new standalone perspective
-    QProcess::startDetached(QApplication::applicationFilePath(),QStringList() << "--perspective=" + name);
+  } else { // on standalone mode, spawn a new standalone perspective
+    QProcess::startDetached(QApplication::applicationFilePath(),
+                            QStringList() << "--perspective=" + name);
   }
 }
 
 void Perspective::notifyProjectLocation(const QString &path) {
-  sendAgentMessage("PROJECT_LOCATION\t" + QString::number(_perspectiveId) + " " + path);
+  sendAgentMessage("PROJECT_LOCATION\t" + QString::number(_perspectiveId) +
+                   " " + path);
 }

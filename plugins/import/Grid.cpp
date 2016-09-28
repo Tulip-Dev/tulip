@@ -25,47 +25,23 @@ using namespace std;
 using namespace tlp;
 #define DEGTORAD(x) (M_PI/180) * x
 
-namespace {
-const char
-* paramHelp[] = {
+static const char *paramHelp[] = {
   // width
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "unsigned int" )
-  HTML_HELP_DEF( "default", "10" )
-  HTML_HELP_BODY()
-  "Grid's node width."
-  HTML_HELP_CLOSE(),
+  "Grid node width.",
 
   // height
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "unsigned int" )
-  HTML_HELP_DEF( "default", "10" )
-  HTML_HELP_BODY()
-  "Grid's node height."
-  HTML_HELP_CLOSE(),
-  //Connectivity
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "StringCollection" )
-  HTML_HELP_DEF( "values", "4 <br> 6 <br> 8" )
-  HTML_HELP_DEF( "default", "4" )
-  HTML_HELP_BODY()
-  "Connectivity number of each node."
-  HTML_HELP_CLOSE(),
+  "Grid node height.",
+
+  // Connectivity
+  "Connectivity number of each node.",
+
   // tore
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "bool" )
-  HTML_HELP_DEF( "default", "false" )
-  HTML_HELP_BODY()
-  "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the resulting object is a torus."
-  HTML_HELP_CLOSE(),
+  "If true, opposite nodes on each side of the grid are connected. In a 4 connectivity the resulting object is a torus.",
+
   // Line spacing
-  HTML_HELP_OPEN()
-  HTML_HELP_DEF( "type", "double" )
-  HTML_HELP_DEF( "default", "1.0" )
-  HTML_HELP_BODY()
   "Spacing between nodes."
 };
-}
+
 /** \addtogroup import */
 
 /// Grid - Import of a grid.
@@ -80,7 +56,7 @@ public:
     ImportModule(context) {
     addInParameter<unsigned int> ("width", paramHelp[0], "10");
     addInParameter<unsigned int> ("height", paramHelp[1], "10");
-    addInParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8");
+    addInParameter<StringCollection> ("connectivity", paramHelp[2], "4;6;8", true, "4 <br> 6 <br> 8");
     addInParameter<bool> ("oppositeNodesConnected", paramHelp[3], "false");
     addInParameter<double> ("spacing", paramHelp[4], "1.0");
   }

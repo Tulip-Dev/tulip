@@ -63,19 +63,19 @@
  *
  * \see  http://www.gnu.org/copyleft/gpl.html
  ***************************************************************/
+
+static const char *paramHelp[] = {
+  // transpose
+  "If true, transpose the layout vertically."
+};
+
 class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007",
                     "Implements an alternative to the classical Sugiyama approach. It adapts the planarization approach for hierarchical graphs and produces significantly less crossings than Sugiyama layout.","1.1","Hierarchical")
   OGDFUpwardPlanarization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
-    addInParameter<bool>("transpose",
-                         HTML_HELP_OPEN()
-                         HTML_HELP_DEF( "type", "bool" )
-                         HTML_HELP_BODY()
-                         "The option for transposing layout vertically ."
-                         HTML_HELP_CLOSE(),
-                         "false");
+    addInParameter<bool>("transpose", paramHelp[0], "false");
     ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     csl->setLayoutModule(new ogdf::UpwardPlanarizationLayout());
   }

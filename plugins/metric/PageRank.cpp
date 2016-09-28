@@ -25,13 +25,11 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "double")
-        HTML_HELP_BODY() "Choose a damping factor in ]0,1[" HTML_HELP_CLOSE(),
-    HTML_HELP_OPEN() HTML_HELP_DEF("type", "bool")
-        HTML_HELP_DEF("default", "true")
-            HTML_HELP_BODY() "indicate if the graph should be considered as "
-                             "directed or not" HTML_HELP_CLOSE(),
-};
+    // d
+    "Enables to choose a damping factor in ]0,1[.",
+
+    // directed
+    "Indicates if the graph should be considered as directed or not."};
 
 /*@{*/
 /** \file

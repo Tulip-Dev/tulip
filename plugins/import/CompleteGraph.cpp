@@ -21,27 +21,13 @@
 using namespace std;
 using namespace tlp;
 
-namespace {
-
-const char * paramHelp[] = {
+static const char *paramHelp[] = {
   // nodes
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "unsigned int" ) \
-  HTML_HELP_DEF( "default", "5" ) \
-  HTML_HELP_BODY() \
-  "Number of nodes in the final graph." \
-  HTML_HELP_CLOSE(),
-  // bool
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "bool" ) \
-  HTML_HELP_DEF( "default", "true" ) \
-  HTML_HELP_BODY() \
-  "If true, the generated graph is undirected. If false, two edges are created between each pair of nodes." \
-  HTML_HELP_CLOSE(),
+  "Number of nodes in the final graph.",
 
+  // undirected
+  "If true, the generated graph is undirected. If false, two edges are created between each pair of nodes."
 };
-}
-
 
 class CompleteGraph:public ImportModule {
 public:

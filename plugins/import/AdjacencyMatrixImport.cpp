@@ -29,16 +29,12 @@ using namespace std;
 using namespace tlp;
 
 enum ValType { TLP_DOUBLE = 0, TLP_STRING = 1, TLP_NOVAL = 2, TLP_NOTHING = 3, TLP_AND = 4 };
-namespace {
-const char * paramHelp[] = {
+
+static const char *paramHelp[] = {
   // filename
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "pathname" )       \
-  HTML_HELP_BODY()                  \
-  "This parameter defines the file pathname to import."       \
-  HTML_HELP_CLOSE(),
+  "This parameter defines the pathname of the file to import."
 };
-}
+
 
 /** \addtogroup import */
 

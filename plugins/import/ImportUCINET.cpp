@@ -41,22 +41,6 @@ using namespace std;
 using namespace tlp;
 
 namespace {
-const char * paramHelp[] = {
-  // filename
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "pathname" )       \
-  HTML_HELP_BODY()                  \
-  "This parameter indicates the pathname of the file in dl format to import."       \
-  HTML_HELP_CLOSE(),
-  HTML_HELP_OPEN()            \
-  HTML_HELP_DEF( "type", "string" )       \
-  HTML_HELP_BODY()                  \
-  "This parameter indicates the name of the default metric."        \
-  HTML_HELP_CLOSE(),
-};
-}
-
-namespace {
 bool getUnsignedInt(unsigned int& i, const string& str) {
   const char* ptr = str.c_str();
   char* endPtr;
@@ -212,6 +196,14 @@ bool tokenize(const string& str, vector<string>& tokens,
   return result;
 }
 }
+
+static const char *paramHelp[] = {
+  // filename
+  "This parameter indicates the pathname of the file in UCINET DL format to import.",
+
+  // Default metric
+  "This parameter indicates the name of the default metric."
+};
 
 class ImportUCINET : public ImportModule {
 

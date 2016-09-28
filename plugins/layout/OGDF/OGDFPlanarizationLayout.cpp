@@ -78,35 +78,32 @@
 #define ELT_EMBEDDER_MINDEPTHPITA 6
 #define ELT_EMBEDDER_OPTIMALFLEXDRAW 7
 
+static const char *embedderValuesDescription =
+  "SimpleEmbedder <i>(Planar graph embedding from the algorithm of Boyer and Myrvold)</i><br>"
+  "EmbedderMaxFace <i>(Planar graph embedding with maximum external face)</i><br>"
+  "EmbedderMaxFaceLayers <i>(Planar graph embedding with maximum external face, plus layers approach)</i><br>"
+  "EmbedderMinDepth <i>(Planar graph embedding with minimum block-nesting depth)</i><br>"
+  "EmbedderMinDepthMaxFace <i>(Planar graph embedding with minimum block-nesting depth and maximum external face)</i><br>"
+  "EmbedderMinDepthMaxFaceLayers <i>(Planar graph embedding with minimum block-nesting depth and maximum external face, plus layers approach)</i><br>"
+  "EmbedderMinDepthPiTa <i>(Planar graph embedding with minimum block-nesting depth for given embedded blocks)</i>"
+   //"EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>"
+  ;
+
+static const char *paramHelp[] = {
+  // page ratio
+  "Sets the option page ratio.",
+
+  // Embedder
+  "The result of the crossing minimization step is a planar graph, in which crossings are replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph."
+};
 
 class OGDFPlanarizationLayout : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Planarization Layout (OGDF)","Carsten Gutwenger","12/11/2007","The planarization approach for drawing graphs.","1.0","Planar")
-  OGDFPlanarizationLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()) {
-    addInParameter<double>("page ratio",
-                           HTML_HELP_OPEN()
-                           HTML_HELP_DEF( "type", "double" )
-                           HTML_HELP_BODY()
-                           "Sets the option page ratio."
-                           HTML_HELP_CLOSE(),
-                           "1.1");
-    addInParameter<StringCollection>(ELT_EMBEDDER,
-                                     HTML_HELP_OPEN()
-                                     HTML_HELP_DEF( "type", "StringCollection")
-                                     HTML_HELP_DEF("values", "- SimpleEmbedder <i>(Planar graph embedding from the algorithm of Boyer and Myrvold)</i><br/>"
-                                         "- EmbedderMaxFace <i>(Planar graph embedding with maximum external face)</i><br/>"
-                                         "- EmbedderMaxFaceLayers <i>(Planar graph embedding with maximum external face, plus layers approach)</i><br/>"
-                                         "- EmbedderMinDepth <i>(Planar graph embedding with minimum block-nesting depth)</i><br/>"
-                                         "- EmbedderMinDepthMaxFace <i>(Planar graph embedding with minimum block-nesting depth and maximum external face)</i><br/>"
-                                         "- EmbedderMinDepthMaxFaceLayers <i>(Planar graph embedding with minimum block-nesting depth and maximum external face, plus layers approach)</i><br/>"
-                                         "- EmbedderMinDepthPiTa <i>(Planar graph embedding with minimum block-nesting depth for given embedded blocks)</i><br/>")
-                                     //"- EmbedderOptimalFlexDraw <i>(Planar graph embedding with minimum cost)</i>")
-                                     HTML_HELP_DEF("default", "SimpleEmbedder")
-                                     HTML_HELP_BODY()
-                                     "The result of the crossing minimization step is a planar graph, in which crossings are replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph."
-                                     HTML_HELP_CLOSE(),
-                                     ELT_EMBEDDER_LIST);
+  OGDFPlanarizationLayout(const tlp::PluginContext* context) : OGDFLayoutPluginBase(context, new ogdf::PlanarizationLayout()) {
+    addInParameter<double>("page ratio", paramHelp[0], "1.1");
+    addInParameter<StringCollection>(ELT_EMBEDDER, paramHelp[1], ELT_EMBEDDER_LIST, true, embedderValuesDescription);
   }
 
   ~OGDFPlanarizationLayout() {}

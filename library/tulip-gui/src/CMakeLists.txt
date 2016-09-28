@@ -97,6 +97,7 @@ SET(SRCS
     FontIconManager.cpp
     ColorScalesManager.cpp
     RangeSlider.cpp
+    AboutTulipPage.cpp
 )
 
 IF(BUILD_PYTHON_COMPONENTS)
@@ -138,6 +139,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/ElementInformationsWidget.ui
   ../designer/SnapshotDialog.ui
   ../designer/SceneLayersConfigWidget.ui
+  ../designer/AboutTulipPage.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS

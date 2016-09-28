@@ -24,13 +24,9 @@ PLUGIN(DepthMetric)
 using namespace std;
 using namespace tlp;
 
-static const char * paramHelp[] = {
-  HTML_HELP_OPEN() \
-  HTML_HELP_DEF( "type", "NumericProperty" ) \
-  HTML_HELP_DEF( "default", "None" ) \
-  HTML_HELP_BODY() \
-  "This parameter defines the metric used for edges weight." \
-  HTML_HELP_CLOSE(),
+static const char *paramHelp[] = {
+  // edge weight
+  "This parameter defines the metric used for edge weights."
 };
 
 DepthMetric::DepthMetric(const tlp::PluginContext* context):DoubleAlgorithm(context), edgeWeight(nullptr) {
