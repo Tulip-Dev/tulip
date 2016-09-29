@@ -2,7 +2,6 @@
     <qresource prefix="/tulip/graphperspective">
         <file>icons/16/archive.png</file>
         <file>icons/16/archive-new.png</file>
-        <file>icons/16/back.png</file>
         <file>icons/16/cancel-select.png</file>
         <file>icons/16/color-scale.png</file>
         <file>icons/16/copy.png</file>
@@ -22,7 +21,6 @@
         <file>icons/16/favorite-empty-hover.png</file>
         <file>icons/16/favorite-hover.png</file>
         <file>icons/16/find-plugins.png</file>
-        <file>icons/16/forward.png</file>
         <file>icons/16/full-screen.png</file>
         <file>icons/16/group.png</file>
         <file>icons/16/hierarchy_add.png</file>
@@ -30,7 +28,6 @@
         <file>icons/16/logger-info.png</file>
         <file>icons/16/logger-danger.png</file>
         <file>icons/16/logger-error.png</file>
-        <file>icons/16/media-playback-start.png</file>
         <file>icons/16/no_hierarchy_add.png</file>
         <file>icons/16/paste.png</file>
         <file>icons/16/preferences-other.png</file>
@@ -38,15 +35,12 @@
         <file>icons/16/python.png</file>
         <file>icons/16/rename.png</file>
         <file>icons/16/select-all.png</file>
-        <file>icons/16/view-open.png</file>
         <file>icons/16/view-add.png</file>
         <file>icons/22/edit-find.png</file>
         <file>icons/22/hierarchy.png</file>
         <file>icons/22/hierarchy-select.png</file>
         <file>icons/22/sibling-clone.png</file>
         <file>icons/22/sibling-clone-props.png</file>
-        <file>icons/32/database.png</file>
-        <file>icons/32/desktop.png</file>
         <file>icons/32/export_svg.png</file>
         <file>icons/32/favorite.png</file>
         <file>icons/32/favorite-empty.png</file>
@@ -55,11 +49,9 @@
         <file>icons/32/import_graphviz.png</file>
         <file>icons/32/import_pajek.png</file>
         <file>icons/32/import_ucinet.png</file>
-        <file>icons/32/python.png</file>
         <file>icons/32/spreadsheet.png</file>
         <file>icons/32/system-software-install.png</file>
         <file>icons/32/redo.png</file>
-        <file>icons/32/table.png</file>
         <file>icons/32/undo.png</file>
         <file>icons/32/view-open.png</file>
         <file>icons/48/desktop.png</file>
