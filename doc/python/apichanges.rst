@@ -39,8 +39,8 @@ the following script can now be used::
   # sets the parameters for the 'Color Mapping' color algorithm
   colorMappingParams = tlp.getDefaultPluginParameters('Color Mapping', graph)
   colorMappingParams['input property'] = degree
-  colorMappingParams['colorScale'] = colorScale
-  # colorMappingParams['colorScale'] = colorMap
+  colorMappingParams['color scale'] = colorScale
+  # colorMappingParams['color scale'] = colorMap
 
   # computes the color mapping
   graph.applyColorAlgorithm('Color Mapping', colorMappingParams)
@@ -62,7 +62,7 @@ That class also allows to register new color scales in a local persistent databa
 For instance, if one wants to use the '9-class OrRd' scale from `Color Brewer <http://colorbrewer2.org/>`_ in the above example,
 the instruction below can now be used::
 
-  colorMappingParams['colorScale'] = tlpgui.ColorScalesManager.getColorScale('OrRd_9')
+  colorMappingParams['color scale'] = tlpgui.ColorScalesManager.getColorScale('OrRd_9')
 
 
 Since Tulip 4.9
