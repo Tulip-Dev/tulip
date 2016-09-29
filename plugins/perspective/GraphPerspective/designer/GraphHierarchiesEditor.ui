@@ -147,6 +147,10 @@
    <property name="text">
     <string>Create clone sub-graph</string>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
    <property name="toolTip">
     <string>Clone the selected graph into a sub-graph</string>
    </property>
@@ -155,6 +159,10 @@
    <property name="text">
     <string>Create clone sibling</string>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/sibling-clone.png</normaloff>:/tulip/graphperspective/icons/22/sibling-clone.png</iconset>
+   </property>
    <property name="toolTip">
     <string>Clone the selected graph into a sibling of that graph </string>
    </property>
@@ -162,6 +170,10 @@
   <action name="actionClone_sibling_with_properties">
    <property name="text">
     <string>Create clone sibling (with properties)</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/sibling-clone-props.png</normaloff>:/tulip/graphperspective/icons/22/sibling-clone-props.png</iconset>
    </property>
    <property name="toolTip">
     <string>Clone the selected graph and its local properties into a sibling of that graph </string>
@@ -242,7 +254,7 @@
   <action name="actionCreate_induced_sub_graph">
    <property name="icon">
     <iconset>
-     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</iconset>
    </property>
    <property name="text">
     <string>Create sub-graph from selection</string>

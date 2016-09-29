@@ -1435,7 +1435,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</iconset>
    </property>
    <property name="text">
     <string>Create sub-graph &amp;from selection</string>
@@ -1463,6 +1463,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>&amp;Full screen</string>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/full-screen.png</normaloff>:/tulip/graphperspective/icons/16/full-screen.png</iconset>
+   </property>
    <property name="shortcut">
     <string>F11</string>
    </property>
@@ -1474,6 +1478,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="shortcut">
     <string>Ctrl+?</string>
    </property>
+   <property name="icon">
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+    <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
+   </property>
   </action>
   <action name="actionShowDevelDocumentation">
    <property name="text">
@@ -1482,6 +1490,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="shortcut">
     <string>Ctrl+?</string>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/cpp.png</normaloff>:/tulip/graphperspective/icons/16/cpp.png</iconset>
+   </property>
   </action>
   <action name="actionShowPythonDocumentation">
    <property name="text">
@@ -1489,6 +1501,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="shortcut">
     <string>Ctrl+?</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/python.png</normaloff>:/tulip/graphperspective/icons/16/python.png</iconset>
    </property>
   </action>
   <action name="actionAbout_us">
@@ -1538,7 +1554,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   <action name="actionExport">
    <property name="icon">
     <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
-    <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/32/plugin_exort.png</iconset>
+    <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/32/plugin_export.png</iconset>
    </property>
    <property name="text">
     <string>Export</string>
@@ -1569,6 +1585,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Find &amp;Plugins</string>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</normaloff>:/tulip/graphperspective/icons/16/find-plugins.png</iconset>
+   </property>
    <property name="toolTip">
     <string>Search in installed plugins</string>
    </property>
@@ -1597,6 +1617,10 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    <property name="text">
     <string>Create c&amp;lone sub-graph</string>
    </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
   </action>
   <action name="actionNew_graph">
    <property name="icon">
@@ -1612,12 +1636,23 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
   </action>
   <action name="action_Close_All">
    <property name="text">
-    <string>&amp;Close All</string>
+    <string>&amp;Close all views</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
+   </property>
+   <property name="toolTip">
+    <string>Close all opened workspace views</string>
    </property>
   </action>
   <action name="actionColor_scales_management">
    <property name="text">
     <string>Color scales management</string>
+   </property>
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/color-scale.png</normaloff>:/tulip/graphperspective/icons/16/color-scale.png</iconset>
    </property>
    <property name="toolTip">
     <string>Manage Tulip color scales</string>

@@ -4,6 +4,7 @@
         <file>icons/16/archive-new.png</file>
         <file>icons/16/back.png</file>
         <file>icons/16/cancel-select.png</file>
+        <file>icons/16/color-scale.png</file>
         <file>icons/16/copy.png</file>
         <file>icons/16/cpp.png</file>
         <file>icons/16/cut.png</file>
@@ -20,7 +21,9 @@
         <file>icons/16/favorite-empty.png</file>
         <file>icons/16/favorite-empty-hover.png</file>
         <file>icons/16/favorite-hover.png</file>
+        <file>icons/16/find-plugins.png</file>
         <file>icons/16/forward.png</file>
+        <file>icons/16/full-screen.png</file>
         <file>icons/16/group.png</file>
         <file>icons/16/hierarchy_add.png</file>
         <file>icons/16/invert-select.png</file>
@@ -39,6 +42,9 @@
         <file>icons/16/view-add.png</file>
         <file>icons/22/edit-find.png</file>
         <file>icons/22/hierarchy.png</file>
+        <file>icons/22/hierarchy-select.png</file>
+        <file>icons/22/sibling-clone.png</file>
+        <file>icons/22/sibling-clone-props.png</file>
         <file>icons/32/database.png</file>
         <file>icons/32/desktop.png</file>
         <file>icons/32/export_svg.png</file>
