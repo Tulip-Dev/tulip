@@ -75,7 +75,7 @@ A window containing an OpenGL visualization of the graph will be created and dis
     # using the heat map color scale
     colorMappingParams = tlp.getDefaultPluginParameters('Color Mapping', graph)
     colorMappingParams['input property'] = degree
-    colorMappingParams['colorScale'] = heatMap
+    colorMappingParams['color scale'] = heatMap
     graph.applyColorAlgorithm('Color Mapping', colorMappingParams)
 
     # apply the 'Bubble Tree' graph layout plugin from Tulip
