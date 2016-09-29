@@ -1011,7 +1011,6 @@ Example : Coloring a graph
 .. |tutorial_color-graph_color3| image:: _images/tutorial_color-graph_color3.png
     :width: 400
 .. |tutorial_color-betweeness_settings| image:: _images/tutorial_color-betweeness_settings.png
-    :width: 300
 
 We can apply some of these new knowledges to a small example aiming at coloring a graph. First we need to open the panels *Node Link Diagram* and *Spreadsheet View*, presented earlier in this chapter. To do so :
 
