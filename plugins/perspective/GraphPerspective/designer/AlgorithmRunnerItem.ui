@@ -105,8 +105,14 @@
          </sizepolicy>
         </property>
         <property name="icon">
-         <iconset>
-          <normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</normaloff>:/tulip/graphperspective/icons/16/media-playback-start.png</iconset>
+         <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+          <normaloff>:/tulip/gui/icons/22/start.png</normaloff>:/tulip/gui/icons/22/start.png</iconset>
+        </property>
+        <property name="iconSize">
+         <size>
+          <width>16</width>
+          <height>16</height>
+         </size>
         </property>
         <property name="flat">
          <bool>true</bool>

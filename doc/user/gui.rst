@@ -54,7 +54,8 @@ Toolbar
 .. |icon_undo| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/undo.png 
 .. |icon_redo| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/redo.png 
 .. |icon_workspace| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/desktop.png
-.. |icon_develop| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/python.png
+.. |icon_develop| image:: ../../plugins/perspective/GraphPerspective/resources/icons/48/python.png
+    :width: 32
 .. |icon_csv| image:: ../../plugins/perspective/GraphPerspective/resources/icons/32/spreadsheet.png
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
     :width: 32
@@ -89,7 +90,8 @@ Algorithms panel
 .. |icon_algorithm_fav| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/favorite.png
 .. |icon_algorithm_unfav| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/favorite-empty.png
 .. |icon_algorithm_properties| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/preferences-other.png
-.. |icon_algorithm_launch| image:: ../../plugins/perspective/GraphPerspective/resources/icons/16/media-playback-start.png
+.. |icon_algorithm_launch| image:: ../../library/tulip-gui/resources/icons/22/start.png
+    :width: 16
 .. |icon_link| image:: _images/i_link.png
 .. |icon_unlink| image:: _images/i_unlink.png
 

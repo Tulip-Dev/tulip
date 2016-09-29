@@ -51,7 +51,7 @@ FiltersManager::FiltersManager(QWidget *parent): QWidget(parent), _ui(new Ui::Fi
   currentGraphChanged(model->currentGraph());
 
   _playButton = insertHeaderControl(_ui->header);
-  _playButton->setIcon(QIcon(":/tulip/gui/icons/22/media-playback-start.png"));
+  _playButton->setIcon(QIcon(":/tulip/gui/icons/22/start.png"));
   connect(_playButton,SIGNAL(clicked()),this,SLOT(applyFilter()));
 }
 

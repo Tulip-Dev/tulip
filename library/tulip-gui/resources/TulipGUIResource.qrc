@@ -37,7 +37,6 @@
         <file>ui/split_screen.png</file>
         <file>ui/split_screen_horizontal.png</file>
         <file>icons/64/list-add.png</file>
-        <file>icons/16/media-playback-start.png</file>
         <file>icons/16/link.png</file>
         <file>icons/16/unlink.png</file>
         <file>icons/20/labels.png</file>
@@ -70,7 +69,7 @@
         <file>icons/16/list-del.png</file>
         <file>icons/16/go-down.png</file>
         <file>icons/16/go-up.png</file>
-        <file>icons/22/media-playback-start.png</file>
+        <file>icons/22/start.png</file>
         <file>icons/16/preferences-other.png</file>
         <file>txt/view_configurationtab.css</file>
         <file>icons/32/node_link_diagram_view.png</file>
