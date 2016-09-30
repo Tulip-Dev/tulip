@@ -189,7 +189,7 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent) :
   //Import line number change
   //connect(ui->toLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(toLineValueChanged(int)));
   connect(ui->useFirstLineAsPropertyNamecheckBox,SIGNAL(clicked(bool)),this,SLOT(useFirstLineAsHeaderUpdated()));
-   connect(ui->limitPreviewLineNumberCheckBox,SIGNAL(clicked(bool)),this,SLOT(filterPreviewLineNumber(bool)));
+  connect(ui->limitPreviewLineNumberCheckBox,SIGNAL(clicked(bool)),this,SLOT(filterPreviewLineNumber(bool)));
   connect(ui->previewLineNumberSpinBox,SIGNAL(valueChanged(int)),this,SLOT(previewLineNumberChanged(int)));
 
   //Init the preview line number with the right value.
@@ -560,18 +560,19 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string& previ
     return previousType;
   //If both types are numeric return the more generic numeric type : double
   else if (previousType == BooleanProperty::propertyTypename &&
-	   (newType == DoubleProperty::propertyTypename ||
-	    newType == IntegerProperty::propertyTypename))
+           (newType == DoubleProperty::propertyTypename ||
+            newType == IntegerProperty::propertyTypename))
     return newType;
   else if (previousType == IntegerProperty::propertyTypename) {
     if (newType == DoubleProperty::propertyTypename)
       return DoubleProperty::propertyTypename;
+
     if (newType == BooleanProperty::propertyTypename)
       return IntegerProperty::propertyTypename;
   }
   else if (previousType == DoubleProperty::propertyTypename &&
-	   (newType == BooleanProperty::propertyTypename ||
-	    newType == IntegerProperty::propertyTypename))
+           (newType == BooleanProperty::propertyTypename ||
+            newType == IntegerProperty::propertyTypename))
     return DoubleProperty::propertyTypename;
 
   return StringProperty::propertyTypename;
@@ -603,8 +604,10 @@ string CSVImportConfigurationWidget::guessDataType(const string& data) const {
     return IntegerProperty::propertyTypename;
 
   QLocale prevLocale;
+
   if (parser->decimalMark() == ',')
     QLocale::setDefault(QLocale::French);
+
   str.toDouble(&ok);
   QLocale::setDefault(prevLocale);
 
