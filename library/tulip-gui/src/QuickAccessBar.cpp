@@ -28,7 +28,6 @@
 #include <QMainWindow>
 #include <QMouseEvent>
 
-#include <tulip/CaptionGraphicsSubItems.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/ForEach.h>
 #include <tulip/GlGraph.h>
@@ -96,7 +95,7 @@ using namespace tlp;
 
 QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *parent)
     : QWidget(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), _mainView(nullptr),
-      delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1), _captionsInitialized(false) {
+      delegate(new TulipItemDelegate(this)), _oldFontScale(1), _oldNodeScale(1) {
   _ui->setupUi(this);
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
@@ -107,13 +106,6 @@ QuickAccessBar::QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *paren
 }
 
 QuickAccessBar::~QuickAccessBar() {
-  if (_captionsInitialized) {
-    delete _captions[0];
-    delete _captions[1];
-    delete _captions[2];
-    delete _captions[3];
-  }
-
   delete _ui;
 }
 
@@ -152,80 +144,6 @@ void QuickAccessBar::reset() {
                                                                           : QIcon(":/tulip/gui/icons/20/labels_scaled_disabled.png")));
   updateFontButtonStyle();
   _resetting = false;
-}
-
-void QuickAccessBar::showHideNodesColorCaption() {
-  showHideCaption(CaptionItem::NodesColorCaption);
-}
-
-void QuickAccessBar::showHideNodesSizeCaption() {
-  showHideCaption(CaptionItem::NodesSizeCaption);
-}
-
-void QuickAccessBar::showHideEdgesColorCaption() {
-  showHideCaption(CaptionItem::EdgesColorCaption);
-}
-
-void QuickAccessBar::showHideEdgesSizeCaption() {
-  showHideCaption(CaptionItem::EdgesSizeCaption);
-}
-
-void QuickAccessBar::showHideCaption(CaptionItem::CaptionType captionType) {
-  if (!_captionsInitialized) {
-    _captionsInitialized = true;
-
-    _captions[0] = new CaptionItem(_mainView);
-    _captions[0]->create(CaptionItem::NodesColorCaption);
-    _captions[0]->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
-    _captions[0]->captionGraphicsItem()->setVisible(false);
-
-    _captions[1] = new CaptionItem(_mainView);
-    _captions[1]->create(CaptionItem::NodesSizeCaption);
-    _captions[1]->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
-    _captions[1]->captionGraphicsItem()->setVisible(false);
-
-    _captions[2] = new CaptionItem(_mainView);
-    _captions[2]->create(CaptionItem::EdgesColorCaption);
-    _captions[2]->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
-    _captions[2]->captionGraphicsItem()->setVisible(false);
-
-    _captions[3] = new CaptionItem(_mainView);
-    _captions[3]->create(CaptionItem::EdgesSizeCaption);
-    _captions[3]->captionGraphicsItem()->setParentItem(_quickAccessBarItem);
-    _captions[3]->captionGraphicsItem()->setVisible(false);
-
-    for (size_t i = 0; i < 4; i++) {
-      connect(_captions[i]->captionGraphicsItem(), SIGNAL(interactionsActivated()), _captions[(i + 1) % 4]->captionGraphicsItem(),
-              SLOT(removeInteractions()));
-      connect(_captions[i]->captionGraphicsItem(), SIGNAL(interactionsActivated()), _captions[(i + 2) % 4]->captionGraphicsItem(),
-              SLOT(removeInteractions()));
-      connect(_captions[i]->captionGraphicsItem(), SIGNAL(interactionsActivated()), _captions[(i + 3) % 4]->captionGraphicsItem(),
-              SLOT(removeInteractions()));
-      connect(_captions[i], SIGNAL(filtering(bool)), _captions[(i + 1) % 4], SLOT(removeObservation(bool)));
-      connect(_captions[i], SIGNAL(filtering(bool)), _captions[(i + 2) % 4], SLOT(removeObservation(bool)));
-      connect(_captions[i], SIGNAL(filtering(bool)), _captions[(i + 3) % 4], SLOT(removeObservation(bool)));
-    }
-  }
-
-  size_t captionIndice = 0;
-
-  if (captionType == CaptionItem::NodesSizeCaption)
-    captionIndice = 1;
-  else if (captionType == CaptionItem::EdgesColorCaption)
-    captionIndice = 2;
-  else if (captionType == CaptionItem::EdgesSizeCaption)
-    captionIndice = 3;
-
-  _captions[captionIndice]->captionGraphicsItem()->setVisible(!_captions[captionIndice]->captionGraphicsItem()->isVisible());
-
-  unsigned int numberVisible = 0;
-
-  for (size_t i = 0; i < 4; i++) {
-    if (_captions[i]->captionGraphicsItem()->isVisible()) {
-      _captions[i]->captionGraphicsItem()->setPos(QPoint(numberVisible * 130, -260));
-      numberVisible++;
-    }
-  }
 }
 
 void QuickAccessBar::takeSnapshot() {

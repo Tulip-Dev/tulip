@@ -23,7 +23,6 @@
 
 #include <QWidget>
 
-#include <tulip/CaptionItem.h>
 #include <tulip/tulipconf.h>
 
 class QGraphicsItem;
@@ -55,10 +54,7 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   GlScene *scene() const;
   double _oldFontScale;
   double _oldNodeScale;
-  bool _captionsInitialized;
-  CaptionItem *_captions[4];
   void updateFontButtonStyle();
-  void showHideCaption(CaptionItem::CaptionType captionType);
   void setAllValues(unsigned int eltType, PropertyInterface *prop);
   void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
 
@@ -82,10 +78,6 @@ public slots:
   void setNodeSize();
   void setEdgeSize();
   void setSizeInterpolation(bool);
-  void showHideNodesColorCaption();
-  void showHideNodesSizeCaption();
-  void showHideEdgesColorCaption();
-  void showHideEdgesSizeCaption();
   void takeSnapshot();
   void setEdgesVisible(bool);
   void setLabelsVisible(bool);

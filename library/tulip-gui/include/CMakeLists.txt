@@ -83,9 +83,6 @@ INSTALL(FILES
   tulip/GlyphPreviewRenderer.h
   tulip/ClearableLineEdit.h
   tulip/GraphPropertiesModel.h
-  tulip/CaptionItem.h
-  tulip/CaptionGraphicsItem.h
-  tulip/CaptionGraphicsSubItems.h
   tulip/GraphModel.h
   tulip/GraphNeedsSavingObserver.h
   tulip/GraphElementModel.h

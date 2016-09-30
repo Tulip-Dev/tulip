@@ -79,9 +79,6 @@ SET(SRCS
     GlyphPreviewRenderer.cpp
     TulipFontWidget.cpp
     ClearableLineEdit.cpp
-    CaptionItem.cpp
-    CaptionGraphicsItem.cpp
-    CaptionGraphicsSubItems.cpp
     GraphModel.cpp
     GraphElementModel.cpp
     SnapshotDialog.cpp
@@ -144,9 +141,6 @@ QTX_WRAP_UI(UI_HEADERS
 
 QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/Animation.h
-  ../include/tulip/CaptionGraphicsItem.h
-  ../include/tulip/CaptionGraphicsSubItems.h
-  ../include/tulip/CaptionItem.h
   ../include/tulip/ColorButton.h
   ../include/tulip/ColorScaleButton.h
   ../include/tulip/ColorScaleConfigDialog.h
@@ -215,9 +209,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/GraphTableItemDelegate.h
   ../include/tulip/VectorEditor.h
   ../include/tulip/TulipFontWidget.h
-  ../include/tulip/CaptionItem.h
-  ../include/tulip/CaptionGraphicsItem.h
-  ../include/tulip/CaptionGraphicsSubItems.h
   ../include/tulip/GraphNeedsSavingObserver.h
   ../include/tulip/DragHandle.h
   ../include/tulip/SnapshotDialog.h
