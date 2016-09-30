@@ -44,7 +44,7 @@ class TLP_QT_SCOPE CSVParser {
 public:
   virtual ~CSVParser() {}
 
-  char decimalMark() const {
+  virtual char decimalMark() const {
     return '.';
   }
   /**
