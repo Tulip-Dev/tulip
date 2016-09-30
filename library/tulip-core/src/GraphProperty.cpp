@@ -133,13 +133,13 @@ PropertyInterface *GraphProperty::clonePrototype(Graph *g, const std::string &n)
 bool GraphProperty::setNodeStringValue(const node, const std::string &) { return false; }
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &) { return false; }
+bool GraphProperty::setAllNodeStringValue(const std::string &, Graph *) { return false; }
 //=============================================================
 // disabled, use setEdgeValue instead
 bool GraphProperty::setEdgeStringValue(const edge, const std::string &) { return false; }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string &) { return false; }
+bool GraphProperty::setAllEdgeStringValue(const std::string &, Graph *) { return false; }
 //=============================================================
 const set<edge> &GraphProperty::getReferencedEdges(const edge e) const { return ((GraphProperty *)this)->edgeProperties.get(e.id); }
 //=============================================================

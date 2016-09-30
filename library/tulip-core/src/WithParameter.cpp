@@ -111,9 +111,6 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(const string
   } else {
     doc += html_help_def(DIRECTION_SECTION, INOUT_DIRECTION);
   }
-  else {
-    doc += html_help_def(DIRECTION_SECTION, INOUT_DIRECTION);
-  }
 
   if (!help.empty()) {
     doc += HTML_HELP_BODY();

@@ -241,37 +241,32 @@ void QuickAccessBar::setSizeInterpolation(bool f) {
 
 void QuickAccessBar::setLabelColor(const QColor &c) {
 
-  BooleanProperty *selected = inputData()->getElementSelected();
+  BooleanProperty *selected = inputData()->getElementSelection();
   bool hasSelected = false;
 
   _mainView->graph()->push();
 
   Observable::holdObservers();
   ColorProperty *labelColors = inputData()->getElementLabelColor();
-  ColorProperty *labelBorderColors = inputData()->getElementLabelBorderColor();
 
   Color color = QColorToColor(c);
 
   for (node n : selected->getNonDefaultValuatedNodes(_mainView->graph())) {
     labelColors->setNodeValue(n, color);
-    labelBorderColors->setNodeValue(n, color);
     hasSelected = true;
   }
 
   if (hasSelected == false) {
     labelColors->setAllNodeValue(color, _mainView->graph());
-    labelBorderColors->setAllNodeValue(color, _mainView->graph());
   }
 
   for (edge e : selected->getNonDefaultValuatedEdges(_mainView->graph())) {
     labelColors->setEdgeValue(e, color);
-    labelBorderColors->setEdgeValue(e, color);
     hasSelected = true;
   }
 
   if (hasSelected == false) {
     labelColors->setAllEdgeValue(color, _mainView->graph());
-    labelBorderColors->setAllEdgeValue(color, _mainView->graph());
   }
 
   Observable::unholdObservers();

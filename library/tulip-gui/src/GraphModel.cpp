@@ -332,7 +332,11 @@ bool GraphModel::setAllNodeValue(PropertyInterface *prop, QVariant v, Graph *gra
     if (prop->getName() == "viewFont")
       static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()), graph);
     else if (prop->getName() == "viewFontAwesomeIcon")
-      else if (prop->getName() == "viewTexture") static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
+    else if (prop->getName() == "viewMaterialDesignIcon")
+      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()), graph);
+    else if (prop->getName() == "viewTexture")
+      static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
     else
       static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<QString>().toUtf8().data()), graph);
   }
@@ -488,42 +492,46 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface *prop, QVariant
 
   return true;
 }
-if (prop->getName() == "viewShape")
-  static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>(), graph);
 
-else if (prop->getName() == "viewTgtAnchorShape")
-  static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
+#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllEdgeValue(v.value< TYPE >(), graph)
+bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v, Graph *graph) {
+  if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
+    if (prop->getName() == "viewShape")
+      static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>(), graph);
 
-else if (prop->getName() == "viewSrcAnchorShape")
-  static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
+    else if (prop->getName() == "viewTgtAnchorShape")
+      static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
 
-else if (prop->getName() == "viewLabelPosition")
-  static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<LabelPosition::LabelPositions>(), graph);
+    else if (prop->getName() == "viewSrcAnchorShape")
+      static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeExtremityShape::EdgeExtremityShapes>(), graph);
 
-else
-  static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<int>(), graph);
-}
-else if (dynamic_cast<StringProperty *>(prop) != nullptr) {
-  if (prop->getName() == "viewFont")
-    static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()), graph);
+    else if (prop->getName() == "viewLabelPosition")
+      static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<LabelPosition::LabelPositions>(), graph);
 
-  else if (prop->getName() == "viewFontAwesomeIcon")
-    static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
+    else
+      static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<int>(), graph);
+  } else if (dynamic_cast<StringProperty *>(prop) != nullptr) {
+    if (prop->getName() == "viewFont")
+      static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()), graph);
 
-  else if (prop->getName() == "viewMaterialDesignIcon")
-    static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()));
+    else if (prop->getName() == "viewFontAwesomeIcon")
+      static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
 
-  else if (prop->getName() == "viewTexture")
-    static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
+    else if (prop->getName() == "viewMaterialDesignIcon")
+      static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()));
 
+    else if (prop->getName() == "viewTexture")
+      static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
+
+    else
+      static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<QString>().toUtf8().data()), graph);
+  }
+
+  STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
   else
-    static_cast<StringProperty *>(prop)->setAllEdgeValue(std::string(v.value<QString>().toUtf8().data()), graph);
-}
+      return false;
 
-STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
-else return false;
-
-return true;
+  return true;
 }
 
 // Nodes model
