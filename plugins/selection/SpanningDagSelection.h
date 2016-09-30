@@ -21,11 +21,9 @@
 
 #include <tulip/TulipPluginHeaders.h>
 
-template<typename T>
-class MutableConatainer;
+template <typename T> class MutableConatainer;
 
 /** \addtogroup selection */
-
 
 /**
  * This selection plugins enables to find a subgraph of G that is acyclic.
@@ -33,12 +31,11 @@ class MutableConatainer;
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
-class SpanningDagSelection:public tlp::BooleanAlgorithm {
+class SpanningDagSelection : public tlp::BooleanAlgorithm {
 
 public:
-  PLUGININFORMATION("Spanning Dag","David Auber","01/12/1999",
-                    "Selects an acyclic subgraph of a graph.","1.0", "Selection")
-  SpanningDagSelection(const tlp::PluginContext* context);
+  PLUGININFORMATION("Spanning Dag", "David Auber", "01/12/1999", "Selects an acyclic subgraph of a graph.", "1.0", "Selection")
+  SpanningDagSelection(const tlp::PluginContext *context);
   bool run();
 };
 

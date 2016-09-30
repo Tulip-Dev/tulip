@@ -34,17 +34,17 @@ namespace tlp {
 /**
   * @brief This class provides convenience functions to access the Tulip settings file (using QSettings)
   * TulipSettings is a wrapper for QSettings providing quick access to common keys provided in the tulip configuration file.
-  * This object does not mask any method from the QSettings class, which mean that the user can still access custom keys by invoking the QSettings::value method.
+  * This object does not mask any method from the QSettings class, which mean that the user can still access custom keys by invoking the
+ * QSettings::value method.
   */
-class TLP_QT_SCOPE TulipSettings: public QSettings, GlDefaultSelectionColorManager, Observable {
+class TLP_QT_SCOPE TulipSettings : public QSettings, GlDefaultSelectionColorManager, Observable {
   Q_OBJECT
   Q_ENUMS(DisplayProperty)
 
 public:
-
   static TulipSettings &instance();
 
-  static QString elementKey(const QString& configEntry, tlp::ElementType elem);
+  static QString elementKey(const QString &configEntry, tlp::ElementType elem);
 
   void synchronizeViewSettings();
 
@@ -70,7 +70,7 @@ public:
    * @param remoteLocation The URL of the plugin server.
    * @return void
    **/
-  void addRemoteLocation(const QString& remoteLocation);
+  void addRemoteLocation(const QString &remoteLocation);
 
   /**
    * @brief Removes a location from which to list plugins.
@@ -78,7 +78,7 @@ public:
    * @param remoteLocation The URL of the plugin server.
    * @return void
    **/
-  void removeRemoteLocation(const QString& remoteLocation);
+  void removeRemoteLocation(const QString &remoteLocation);
 
   /**
    * @brief Retrieves the list of locations from which to list plugins.
@@ -88,17 +88,17 @@ public:
   const QStringList remoteLocations() const;
   const QStringList pluginsToRemove() const;
 
-  void markPluginForRemoval(const QString& pluginLibrary);
-  void unmarkPluginForRemoval(const QString& pluginLibrary);
+  void markPluginForRemoval(const QString &pluginLibrary);
+  void unmarkPluginForRemoval(const QString &pluginLibrary);
 
   tlp::Color defaultColor(tlp::ElementType elem);
-  void setDefaultColor(tlp::ElementType elem, const tlp::Color& color);
+  void setDefaultColor(tlp::ElementType elem, const tlp::Color &color);
 
   tlp::Color defaultLabelColor();
-  void setDefaultLabelColor(const tlp::Color& color);
+  void setDefaultLabelColor(const tlp::Color &color);
 
   tlp::Size defaultSize(tlp::ElementType elem);
-  void setDefaultSize(tlp::ElementType elem, const tlp::Size& size);
+  void setDefaultSize(tlp::ElementType elem, const tlp::Size &size);
 
   int defaultShape(tlp::ElementType elem);
   void setDefaultShape(tlp::ElementType elem, int shape);
@@ -106,11 +106,11 @@ public:
   // in GlDefaultSelectionColorManager interface
   tlp::Color defaultSelectionColor();
 
-  void setDefaultSelectionColor(const tlp::Color& color);
+  void setDefaultSelectionColor(const tlp::Color &color);
 
   QSet<QString> favoriteAlgorithms() const;
-  void addFavoriteAlgorithm(const QString&name);
-  void removeFavoriteAlgorithm(const QString&name);
+  void addFavoriteAlgorithm(const QString &name);
+  void removeFavoriteAlgorithm(const QString &name);
 
   // Proxy settings
   bool isProxyEnabled() const;
@@ -120,7 +120,7 @@ public:
   void setProxyType(QNetworkProxy::ProxyType);
 
   QString proxyHost() const;
-  void setProxyHost(const QString&);
+  void setProxyHost(const QString &);
 
   unsigned int proxyPort() const;
   void setProxyPort(unsigned int);
@@ -129,10 +129,10 @@ public:
   void setUseProxyAuthentification(bool);
 
   QString proxyUsername() const;
-  void setProxyUsername(const QString&);
+  void setProxyUsername(const QString &);
 
   QString proxyPassword() const;
-  void setProxyPassword(const QString&);
+  void setProxyPassword(const QString &);
 
   void applyProxySettings();
 

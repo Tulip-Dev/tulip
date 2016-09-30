@@ -27,15 +27,15 @@
 #include "ParallelAxis.h"
 #include "ParallelCoordinatesGraphProxy.h"
 
-
 namespace tlp {
 
 // Class which allow to render a nominal axis (labels are string)
 class NominalParallelAxis : public ParallelAxis {
 
-public :
-
-  NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy, const std::string &graphPropertyName, const Color &axisColor, const float rotationAngle = 0, const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
+public:
+  NominalParallelAxis(const Coord &base_coord, const float height, const float axisAreaWidth, ParallelCoordinatesGraphProxy *graphProxy,
+                      const std::string &graphPropertyName, const Color &axisColor, const float rotationAngle = 0,
+                      const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
   Coord getLabelCoord(const std::string &label);
 
@@ -64,14 +64,11 @@ public :
   const std::set<unsigned int> &getDataInSlidersRange();
   void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset);
 
-private :
-
+private:
   GlNominativeAxis *glNominativeAxis;
   ParallelCoordinatesGraphProxy *graphProxy;
   std::vector<std::string> labelsOrder;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

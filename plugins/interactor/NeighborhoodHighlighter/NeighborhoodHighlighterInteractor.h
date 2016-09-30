@@ -44,8 +44,7 @@ class AdditionalGlSceneAnimation;
  */
 class NeighborhoodHighlighterInteractor : public GLInteractorComposite {
 
-public :
-
+public:
   PLUGININFORMATION("NeighborhoodHighlighterInteractor", "Antoine Lambert", "19/05/2009", "Node neighborhood highlighter", "1.0", "Navigation")
 
   NeighborhoodHighlighterInteractor(const PluginContext *);
@@ -64,19 +63,15 @@ public :
 
   virtual bool isCompatible(const std::string &viewName) const;
 
-private :
-
+private:
   NeighborhoodHighlighterConfigWidget *configWidget;
-
 };
-
 
 class NeighborhoodHighlighter : public GLInteractorComponent {
 
   Q_OBJECT
 
-public :
-
+public:
   NeighborhoodHighlighter();
 
   NeighborhoodHighlighter(const NeighborhoodHighlighter &neighborhoodHighlighter);
@@ -93,14 +88,13 @@ public :
     this->configWidget = configWidget;
   }
 
-public slots :
+public slots:
 
   void updateNeighborhoodGraph();
 
   void morphCircleAlphaAnimStep(int animStep);
 
-private :
-
+private:
   node selectNodeInOriginalGraph(int x, int y);
 
   void buildNeighborhoodGraph(node n, Graph *g);
@@ -119,9 +113,9 @@ private :
 
   void computeNeighborhoodGraphBoundingBoxes();
 
-  void performZoomAndPan(const BoundingBox &destBB, AdditionalGlSceneAnimation *additionalAnimation=nullptr);
+  void performZoomAndPan(const BoundingBox &destBB, AdditionalGlSceneAnimation *additionalAnimation = nullptr);
 
-  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps=40);
+  void morphCircleAlpha(unsigned char startAlpha, unsigned endAlpha, int nbAnimationSteps = 40);
 
   void checkIfGraphHasChanged();
 
@@ -154,9 +148,7 @@ private :
   int nbAnimSteps;
 
   bool _animating;
-
 };
-
 }
 
 #endif /* NEIGHBOURHOODHIGHLIGHTERINTERACTOR_H_ */

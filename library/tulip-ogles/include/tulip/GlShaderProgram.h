@@ -47,7 +47,7 @@
 
 namespace tlp {
 
-typedef Matrix<float,  2> Mat2f;
+typedef Matrix<float, 2> Mat2f;
 
 /**
  * \brief A class to manage shader objects, components of a shader program
@@ -55,10 +55,12 @@ typedef Matrix<float,  2> Mat2f;
  * This class allow to create and compile OpenGL shader object. Shaders are used to program the graphics processing unit (GPU) rendering pipeline.
  * The three existing types of shaders are managed :
  *
- *  -> Vertex shader : run once for each vertex given to the graphics processor. The purpose is to transform each vertex's 3D position in virtual space
+ *  -> Vertex shader : run once for each vertex given to the graphics processor. The purpose is to transform each vertex's 3D position in virtual
+ * space
  *     to the 2D coordinate at which it appears on the screen (as well as a depth value for the Z-buffer).
  *     Vertex shaders can manipulate properties such as position, color, and texture coordinate, but cannot create new vertices.
- *     The output of the vertex shader goes to the next stage in the pipeline, which is either a geometry shader if present or the rasterizer otherwise.
+ *     The output of the vertex shader goes to the next stage in the pipeline, which is either a geometry shader if present or the rasterizer
+ * otherwise.
  *
  *  -> Geometry shader : can add and remove vertices from a mesh. Geometry shaders can be used to generate geometry procedurally
  *     or to add volumetric detail to existing meshes that would be too costly to process on the CPU. If geometry shaders are being used,
@@ -73,10 +75,9 @@ class TLP_GLES_SCOPE GlShader {
 
   friend class GlShaderProgram;
 
-public :
+public:
+  enum ShaderType { Vertex, Fragment };
 
-  enum ShaderType {Vertex, Fragment};
-  
   /**
    * Vertex and Fragment shader constructor
    *
@@ -140,8 +141,7 @@ public :
     return compilationLog;
   }
 
-private :
-
+private:
   void setAnonymousCreation(const bool anonymousCreation) {
     this->anonymousCreation = anonymousCreation;
   }
@@ -156,7 +156,6 @@ private :
   bool shaderCompiled;
   std::string compilationLog;
   bool anonymousCreation;
-
 };
 
 /**
@@ -171,8 +170,7 @@ private :
  */
 class TLP_GLES_SCOPE GlShaderProgram {
 
-public :
-
+public:
   /**
    * GlShaderProgram constructor
    *
@@ -323,20 +321,16 @@ public :
   void setUniformColor(const std::string &variableName, const tlp::Color &color);
   void setAttributeColor(const std::string &variableName, const tlp::Color &color);
 
-  template <unsigned int SIZE>
-  void setUniformFloatArray(const std::string &variableName, const tlp::Vector<float, SIZE> &vecf);
+  template <unsigned int SIZE> void setUniformFloatArray(const std::string &variableName, const tlp::Vector<float, SIZE> &vecf);
   void setUniformFloatArray(const std::string &variableName, const unsigned int fCount, const float *f);
 
-  template <unsigned int SIZE>
-  void setUniformVec2FloatArray(const std::string &variableName, const tlp::Array<tlp::Vec2f, SIZE> &vecvec2f);
+  template <unsigned int SIZE> void setUniformVec2FloatArray(const std::string &variableName, const tlp::Array<tlp::Vec2f, SIZE> &vecvec2f);
   void setUniformVec2FloatArray(const std::string &variableName, const unsigned int vec2fCount, const float *f);
 
-  template <unsigned int SIZE>
-  void setUniformVec3FloatArray(const std::string &variableName, const tlp::Array<tlp::Vec3f, SIZE> &vecvec3f);
+  template <unsigned int SIZE> void setUniformVec3FloatArray(const std::string &variableName, const tlp::Array<tlp::Vec3f, SIZE> &vecvec3f);
   void setUniformVec3FloatArray(const std::string &variableName, const unsigned int vec3fCount, const float *f);
 
-  template <unsigned int SIZE>
-  void setUniformVec4FloatArray(const std::string &variableName, const tlp::Array<tlp::Vec4f, SIZE> &vecvec4f);
+  template <unsigned int SIZE> void setUniformVec4FloatArray(const std::string &variableName, const tlp::Array<tlp::Vec4f, SIZE> &vecvec4f);
   void setUniformVec4FloatArray(const std::string &variableName, const unsigned int vec4fCount, const float *f);
 
   template <unsigned int SIZE>
@@ -351,36 +345,28 @@ public :
   void setUniformMat4FloatArray(const std::string &variableName, const tlp::Vector<tlp::Mat4f, SIZE> &vecmat4f, const bool transpose = false);
   void setUniformMat4FloatArray(const std::string &variableName, const unsigned int mat4fCount, const float *f, const bool transpose = false);
 
-  template <unsigned int SIZE>
-  void setUniformIntArray(const std::string &variableName, const tlp::Vector<int, SIZE> &veci);
+  template <unsigned int SIZE> void setUniformIntArray(const std::string &variableName, const tlp::Vector<int, SIZE> &veci);
   void setUniformIntArray(const std::string &variableName, const unsigned int iCount, const int *i);
 
-  template <unsigned int SIZE>
-  void setUniformVec2IntArray(const std::string &variableName, const tlp::Array<tlp::Vec2i, SIZE> &vecvec2i);
+  template <unsigned int SIZE> void setUniformVec2IntArray(const std::string &variableName, const tlp::Array<tlp::Vec2i, SIZE> &vecvec2i);
   void setUniformVec2IntArray(const std::string &variableName, const unsigned int vec2iCount, const int *i);
 
-  template <unsigned int SIZE>
-  void setUniformVec3IntArray(const std::string &variableName, const tlp::Array<tlp::Vec3i, SIZE> &vecvec3i);
+  template <unsigned int SIZE> void setUniformVec3IntArray(const std::string &variableName, const tlp::Array<tlp::Vec3i, SIZE> &vecvec3i);
   void setUniformVec3IntArray(const std::string &variableName, const unsigned int vec3iCount, const int *i);
 
-  template <unsigned int SIZE>
-  void setUniformVec4IntArray(const std::string &variableName, const tlp::Array<tlp::Vec4i, SIZE> &vecvec4i);
+  template <unsigned int SIZE> void setUniformVec4IntArray(const std::string &variableName, const tlp::Array<tlp::Vec4i, SIZE> &vecvec4i);
   void setUniformVec4IntArray(const std::string &variableName, const unsigned int vec4iCount, const int *i);
 
-  template <unsigned int SIZE>
-  void setUniformBoolArray(const std::string &variableName, const tlp::Array<bool, SIZE> &vecb);
+  template <unsigned int SIZE> void setUniformBoolArray(const std::string &variableName, const tlp::Array<bool, SIZE> &vecb);
   void setUniformBoolArray(const std::string &variableName, const unsigned int bCount, const bool *b);
 
-  template <unsigned int SIZE>
-  void setUniformVec2BoolArray(const std::string &variableName, const tlp::Array<tlp::Array<bool, 2>, SIZE> &vecvec2b);
+  template <unsigned int SIZE> void setUniformVec2BoolArray(const std::string &variableName, const tlp::Array<tlp::Array<bool, 2>, SIZE> &vecvec2b);
   void setUniformVec2BoolArray(const std::string &variableName, const unsigned int vec2bCount, const bool *b);
 
-  template <unsigned int SIZE>
-  void setUniformVec3BoolArray(const std::string &variableName, const tlp::Array<tlp::Array<bool, 3>, SIZE> &vecvec3b);
+  template <unsigned int SIZE> void setUniformVec3BoolArray(const std::string &variableName, const tlp::Array<tlp::Array<bool, 3>, SIZE> &vecvec3b);
   void setUniformVec3BoolArray(const std::string &variableName, const unsigned int vec3bCount, const bool *b);
 
-  template <unsigned int SIZE>
-  void setUniformVec4BoolArray(const std::string &variableName, const tlp::Array<tlp::Array<bool, 4>, SIZE> &vecvec4b);
+  template <unsigned int SIZE> void setUniformVec4BoolArray(const std::string &variableName, const tlp::Array<tlp::Array<bool, 4>, SIZE> &vecvec4b);
   void setUniformVec4BoolArray(const std::string &variableName, const unsigned int vec4bCount, const bool *b);
 
   void getUniformFloatVariableValue(const std::string &variableName, float *value);
@@ -392,13 +378,13 @@ public :
 
   GLint getUniformVariableLocation(const std::string &variableName);
   GLint getAttributeVariableLocation(const std::string &variableName);
-  
-  void setVertexAttribPointer(const std::string &variableName, GLint size, GLenum type, GLboolean normalized, GLsizei stride,  const GLvoid * pointer, unsigned int divisor = 0);
+
+  void setVertexAttribPointer(const std::string &variableName, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer,
+                              unsigned int divisor = 0);
 
   void disableAttributesArrays();
 
 private:
-  
   std::string programName;
   GLuint programObjectId;
 
@@ -413,9 +399,7 @@ private:
   std::map<std::string, GLint> attributesLocationCache;
 
   static GlShaderProgram *currentActiveShaderProgram;
-
 };
-
 }
 
 #endif // GLSHADERPROGRAM_H

@@ -48,31 +48,35 @@ public:
    * @brief Default constructor
    * @warning don't use this constructor if you want to create a complex polygon, see others constructors
    */
-  GlConcavePolygon() {}
+  GlConcavePolygon() {
+  }
   /**
    * @brief Constructor with a vector of coords, a fill color, and a textureName if you want
    */
-  GlConcavePolygon(const std::vector<tlp::Coord> &coords,tlp::Color fcolor, const std::string &textureName = "");
+  GlConcavePolygon(const std::vector<tlp::Coord> &coords, tlp::Color fcolor, const std::string &textureName = "");
   /**
-   * @brief Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+   * @brief Constructor with a vector of coords, a fill color, an outline color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2
+   * -> bezier curves) and a textureName if you want
    */
-  GlConcavePolygon(const std::vector<tlp::Coord> &coords,tlp::Color fcolor,tlp::Color ocolor, const std::string &textureName = "");
+  GlConcavePolygon(const std::vector<tlp::Coord> &coords, tlp::Color fcolor, tlp::Color ocolor, const std::string &textureName = "");
   /**
-   * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+   * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill
+   * color, a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
-  GlConcavePolygon(const std::vector<std::vector<tlp::Coord> >&coords,tlp::Color fcolor, const std::string &textureName = "");
+  GlConcavePolygon(const std::vector<std::vector<tlp::Coord>> &coords, tlp::Color fcolor, const std::string &textureName = "");
   /**
-   * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill color, an outline color a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
+   * @brief Constructor with a vector of vector of coords (the first vector of coord is the polygon and others vectors are holes in polygon), a fill
+   * color, an outline color a polygon edges type(0 -> straight lines, 1 -> catmull rom curves, 2 -> bezier curves) and a textureName if you want
    */
-  GlConcavePolygon(const std::vector<std::vector<tlp::Coord> >&coords,tlp::Color fcolor,tlp::Color ocolor, const std::string &textureName = "");
+  GlConcavePolygon(const std::vector<std::vector<tlp::Coord>> &coords, tlp::Color fcolor, tlp::Color ocolor, const std::string &textureName = "");
 
   ~GlConcavePolygon();
 
   /**
    * @brief Draw the complex polygon
    */
-  void draw(const Camera &camera, const Light &, bool pickingMode=false);
-  void draw(const Camera &camera, bool pickingMode=false);
+  void draw(const Camera &camera, const Light &, bool pickingMode = false);
+  void draw(const Camera &camera, bool pickingMode = false);
 
   /**
    * @brief Set if the polygon is outlined or not
@@ -95,7 +99,7 @@ public:
    * @brief Set fill color of GlConcavePolygon
    */
   void setFillColor(const tlp::Color &color) {
-    _fillColor=color;
+    _fillColor = color;
   }
 
   /**
@@ -109,7 +113,7 @@ public:
    * @brief Set outline color of GlConcavePolygon
    */
   void setOutlineColor(const tlp::Color &color) {
-    _outlineColor=color;
+    _outlineColor = color;
   }
 
   void setTexture(const std::string &texture) {
@@ -119,18 +123,17 @@ public:
   /**
    * @brief Translate entity
    */
-  virtual void translate(const tlp::Coord& mouvement);
+  virtual void translate(const tlp::Coord &mouvement);
 
-  const std::vector<std::vector<tlp::Coord> > &getPolygonSides() const {
+  const std::vector<std::vector<tlp::Coord>> &getPolygonSides() const {
     return _points;
   }
 
 protected:
-
   /**
    * @brief Add a new point in polygon
    */
-  virtual void addPoint(const tlp::Coord& point);
+  virtual void addPoint(const tlp::Coord &point);
   /**
    * @brief Begin a new hole in the polygon
    */
@@ -145,17 +148,15 @@ protected:
   tlp::Color _outlineColor;
   double _outlineSize;
 
-  std::vector<std::vector<tlp::Coord> > _points;
-  std::vector<GlBuffer*> _pointsVBOs;
+  std::vector<std::vector<tlp::Coord>> _points;
+  std::vector<GlBuffer *> _pointsVBOs;
 
   GlBuffer *_polygonVerticesDataVBO;
   GlBuffer *_polygonIndicesVBO;
   unsigned int _nbIndices;
 
   std::string _texture;
-
 };
-
 }
 
 #endif // GLCONCAVEPOLYGON_H

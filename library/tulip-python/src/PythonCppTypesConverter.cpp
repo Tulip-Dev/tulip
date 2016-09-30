@@ -37,7 +37,7 @@ static std::map<std::string, std::string> getTypenamesMap() {
   ret[tlp::demangleClassName(typeid(std::vector<tlp::Coord>).name())] = "std::vector<tlp::Coord>";
   ret[tlp::demangleClassName(typeid(std::vector<tlp::Color>).name())] = "std::vector<tlp::Color>";
   ret[tlp::demangleClassName(typeid(std::vector<tlp::Size>).name())] = "std::vector<tlp::Size>";
-  ret[tlp::demangleClassName(typeid(std::vector<tlp::Graph*>).name())] = "std::vector<tlp::Graph*>";
+  ret[tlp::demangleClassName(typeid(std::vector<tlp::Graph *>).name())] = "std::vector<tlp::Graph*>";
   ret[tlp::demangleClassName(typeid(std::vector<tlp::ColorScale>).name())] = "std::vector<tlp::ColorScale>";
   ret[tlp::demangleClassName(typeid(std::vector<tlp::StringCollection>).name())] = "std::vector<tlp::StringCollection>";
   ret[tlp::demangleClassName(typeid(std::vector<tlp::BooleanProperty *>).name())] = "std::vector<tlp::BooleanProperty *>";
@@ -61,7 +61,7 @@ static std::map<std::string, std::string> getTypenamesMap() {
   ret[tlp::demangleClassName(typeid(std::list<tlp::Coord>).name())] = "std::list<tlp::Coord>";
   ret[tlp::demangleClassName(typeid(std::list<tlp::Color>).name())] = "std::list<tlp::Color>";
   ret[tlp::demangleClassName(typeid(std::list<tlp::Size>).name())] = "std::list<tlp::Size>";
-  ret[tlp::demangleClassName(typeid(std::list<tlp::Graph*>).name())] = "std::list<tlp::Graph*>";
+  ret[tlp::demangleClassName(typeid(std::list<tlp::Graph *>).name())] = "std::list<tlp::Graph*>";
   ret[tlp::demangleClassName(typeid(std::list<tlp::ColorScale>).name())] = "std::list<tlp::ColorScale>";
   ret[tlp::demangleClassName(typeid(std::list<tlp::StringCollection>).name())] = "std::list<tlp::StringCollection>";
   ret[tlp::demangleClassName(typeid(std::list<tlp::BooleanProperty *>).name())] = "std::list<tlp::BooleanProperty *>";
@@ -84,7 +84,7 @@ static std::map<std::string, std::string> getTypenamesMap() {
   ret[tlp::demangleClassName(typeid(std::set<tlp::Coord>).name())] = "std::set<tlp::Coord>";
   ret[tlp::demangleClassName(typeid(std::set<tlp::Color>).name())] = "std::set<tlp::Color>";
   ret[tlp::demangleClassName(typeid(std::set<tlp::Size>).name())] = "std::set<tlp::Size>";
-  ret[tlp::demangleClassName(typeid(std::set<tlp::Graph*>).name())] = "std::set<tlp::Graph*>";
+  ret[tlp::demangleClassName(typeid(std::set<tlp::Graph *>).name())] = "std::set<tlp::Graph*>";
   return ret;
 }
 
@@ -92,30 +92,27 @@ static std::map<std::string, std::string> cppTypenameToSipTypename = getTypename
 
 void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTypename, const bool transferTo) {
   PyObject *pyObject = sipWrapper;
-  const sipTypeDef* kTypeDef = sipFindType(cppTypename.c_str());
+  const sipTypeDef *kTypeDef = sipFindType(cppTypename.c_str());
 
   if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, transferTo ? 0 : SIP_NOT_NONE)) {
-    int state=0, err=0;
+    int state = 0, err = 0;
 
     if (!transferTo) {
       return sipConvertToType(pyObject, kTypeDef, Py_None, SIP_NOT_NONE, &state, &err);
-    }
-    else {
+    } else {
       void *p = sipConvertToType(pyObject, kTypeDef, nullptr, 0, &state, &err);
       sipTransferTo(pyObject, pyObject);
       return p;
     }
-  }
-  else if (cppTypenameToSipTypename.find(cppTypename) != cppTypenameToSipTypename.end()) {
+  } else if (cppTypenameToSipTypename.find(cppTypename) != cppTypenameToSipTypename.end()) {
     kTypeDef = sipFindType(cppTypenameToSipTypename[cppTypename].c_str());
 
     if (kTypeDef && sipCanConvertToType(pyObject, kTypeDef, transferTo ? 0 : SIP_NOT_NONE)) {
-      int state=0, err=0;
+      int state = 0, err = 0;
 
       if (!transferTo) {
         return sipConvertToType(pyObject, kTypeDef, Py_None, SIP_NOT_NONE, &state, &err);
-      }
-      else {
+      } else {
         void *p = sipConvertToType(pyObject, kTypeDef, nullptr, 0, &state, &err);
         sipTransferTo(pyObject, pyObject);
         return p;
@@ -127,24 +124,21 @@ void *convertSipWrapperToCppType(PyObject *sipWrapper, const std::string &cppTyp
 }
 
 PyObject *convertCppTypeToSipWrapper(void *cppObj, const std::string &cppTypename, bool fromNew) {
-  const sipTypeDef* kTypeDef = sipFindType(cppTypename.c_str());
+  const sipTypeDef *kTypeDef = sipFindType(cppTypename.c_str());
 
   if (kTypeDef) {
     if (fromNew) {
       return sipConvertFromNewType(cppObj, kTypeDef, nullptr);
-    }
-    else {
+    } else {
       return sipConvertFromType(cppObj, kTypeDef, nullptr);
     }
-  }
-  else if (cppTypenameToSipTypename.find(cppTypename) != cppTypenameToSipTypename.end()) {
+  } else if (cppTypenameToSipTypename.find(cppTypename) != cppTypenameToSipTypename.end()) {
     kTypeDef = sipFindType(cppTypenameToSipTypename[cppTypename].c_str());
 
     if (kTypeDef) {
       if (fromNew) {
         return sipConvertFromNewType(cppObj, kTypeDef, nullptr);
-      }
-      else {
+      } else {
         return sipConvertFromType(cppObj, kTypeDef, nullptr);
       }
     }
@@ -180,8 +174,7 @@ bool convertPyObjectToLong(PyObject *pyObject, long &cppObject) {
   if (PyLong_Check(pyObject)) {
     cppObject = PyLong_AsLong(pyObject);
     return true;
-  }
-  else if (PyInt_Check(pyObject)) {
+  } else if (PyInt_Check(pyObject)) {
     cppObject = PyInt_AsLong(pyObject);
     return true;
   }
@@ -189,8 +182,6 @@ bool convertPyObjectToLong(PyObject *pyObject, long &cppObject) {
 #endif
   return false;
 }
-
-
 
 bool convertPyObjectToUnsignedLong(PyObject *pyObject, unsigned long &cppObject) {
 
@@ -206,8 +197,7 @@ bool convertPyObjectToUnsignedLong(PyObject *pyObject, unsigned long &cppObject)
   if (PyLong_Check(pyObject)) {
     cppObject = PyLong_AsUnsignedLong(pyObject);
     return true;
-  }
-  else if (PyInt_Check(pyObject)) {
+  } else if (PyInt_Check(pyObject)) {
     cppObject = PyInt_AsLong(pyObject);
     return true;
   }
@@ -237,16 +227,14 @@ PyObject *convertDoubleToPyObject(double cppObject) {
   return PyFloat_FromDouble(cppObject);
 }
 
-template <typename T>
-PyObject *getPyObjectFromCppObject(const T&cppObject) {
+template <typename T> PyObject *getPyObjectFromCppObject(const T &cppObject) {
   PyObject *pyObj = nullptr;
   CppObjectToPyObjectConvertor<T> convertor;
   convertor.convert(cppObject, pyObj);
   return pyObj;
 }
 
-template <typename T>
-T getCppObjectFromPyObject(PyObject *pyObj) {
+template <typename T> T getCppObjectFromPyObject(PyObject *pyObj) {
   T v;
   PyObjectToCppObjectConvertor<T> convertor;
   convertor.convert(pyObj, v);
@@ -255,8 +243,7 @@ T getCppObjectFromPyObject(PyObject *pyObj) {
 
 // specialized the previous template for unsigned long
 // to fix a GCC warning about v being uninitialized
-template <>
-unsigned long getCppObjectFromPyObject(PyObject *pyObj) {
+template <> unsigned long getCppObjectFromPyObject(PyObject *pyObj) {
   unsigned long v = 0;
   PyObjectToCppObjectConvertor<unsigned long> convertor;
   convertor.convert(pyObj, v);
@@ -265,36 +252,33 @@ unsigned long getCppObjectFromPyObject(PyObject *pyObj) {
 
 // specialized the previous template for long
 // to fix a GCC warning about v being uninitialized
-template <>
-long getCppObjectFromPyObject(PyObject *pyObj) {
+template <> long getCppObjectFromPyObject(PyObject *pyObj) {
   long v = 0;
   PyObjectToCppObjectConvertor<long> convertor;
   convertor.convert(pyObj, v);
   return v;
 }
 
-template <typename T>
-T *getCppPointerFromPyObject(PyObject *pyObj) {
-  T *v=nullptr;
-  PyObjectToCppObjectConvertor<T*> convertor;
+template <typename T> T *getCppPointerFromPyObject(PyObject *pyObj) {
+  T *v = nullptr;
+  PyObjectToCppObjectConvertor<T *> convertor;
   convertor.convert(pyObj, v);
   return v;
 }
 
-#define CHECK_BASE_CPP_TYPE_CONVERSION(T)\
-    if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {\
-        pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T*>(dataType->value)));\
-    }\
- 
-#define CHECK_SIP_CPP_TYPE_CONVERSION(T)\
-    if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {\
-        if (noCopy) {\
-            pyObj = getPyObjectFromCppObject(reinterpret_cast<T*>(dataType->value));\
-        } else {\
-            pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T*>(dataType->value)));\
-        }\
-    }\
- 
+#define CHECK_BASE_CPP_TYPE_CONVERSION(T)                                                                                                            \
+  if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {                                                              \
+    pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T *>(dataType->value)));                                                                     \
+  }
+
+#define CHECK_SIP_CPP_TYPE_CONVERSION(T)                                                                                                             \
+  if (!pyObj && dataType && dataType->getTypeName() == std::string(typeid(T).name())) {                                                              \
+    if (noCopy) {                                                                                                                                    \
+      pyObj = getPyObjectFromCppObject(reinterpret_cast<T *>(dataType->value));                                                                      \
+    } else {                                                                                                                                         \
+      pyObj = getPyObjectFromCppObject(*(reinterpret_cast<T *>(dataType->value)));                                                                   \
+    }                                                                                                                                                \
+  }
 
 PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   PyObject *pyObj = nullptr;
@@ -308,8 +292,8 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   CHECK_BASE_CPP_TYPE_CONVERSION(std::string)
   CHECK_SIP_CPP_TYPE_CONVERSION(tlp::node)
   CHECK_SIP_CPP_TYPE_CONVERSION(tlp::edge)
-  CHECK_BASE_CPP_TYPE_CONVERSION(tlp::Graph*)
-  CHECK_BASE_CPP_TYPE_CONVERSION(tlp::PluginProgress*)
+  CHECK_BASE_CPP_TYPE_CONVERSION(tlp::Graph *)
+  CHECK_BASE_CPP_TYPE_CONVERSION(tlp::PluginProgress *)
   CHECK_SIP_CPP_TYPE_CONVERSION(tlp::DataSet)
   CHECK_SIP_CPP_TYPE_CONVERSION(tlp::Coord)
   CHECK_SIP_CPP_TYPE_CONVERSION(tlp::Color)
@@ -332,7 +316,7 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   CHECK_BASE_CPP_TYPE_CONVERSION(tlp::SizeVectorProperty *)
   CHECK_BASE_CPP_TYPE_CONVERSION(tlp::StringVectorProperty *)
   CHECK_BASE_CPP_TYPE_CONVERSION(tlp::PropertyInterface *)
-  CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<tlp::Graph*>)
+  CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<tlp::Graph *>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<tlp::node>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<tlp::edge>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<std::string>)
@@ -356,7 +340,7 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<unsigned long>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<double>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::vector<float>)
-  CHECK_SIP_CPP_TYPE_CONVERSION(std::set<tlp::Graph*>)
+  CHECK_SIP_CPP_TYPE_CONVERSION(std::set<tlp::Graph *>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::set<tlp::node>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::set<tlp::edge>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::set<std::string>)
@@ -369,7 +353,7 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   CHECK_SIP_CPP_TYPE_CONVERSION(std::set<unsigned long>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::set<double>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::set<float>)
-  CHECK_SIP_CPP_TYPE_CONVERSION(std::list<tlp::Graph*>)
+  CHECK_SIP_CPP_TYPE_CONVERSION(std::list<tlp::Graph *>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::list<tlp::node>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::list<tlp::edge>)
   CHECK_SIP_CPP_TYPE_CONVERSION(std::list<std::string>)
@@ -396,39 +380,37 @@ PyObject *getPyObjectFromDataType(const tlp::DataType *dataType, bool noCopy) {
   return pyObj;
 }
 
+#define CHECK_SIP_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)                                                                                            \
+  if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), SIP_NOT_NONE)) {                                                                         \
+    if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE).name())) {                                                              \
+      valSetter.setValue(getCppObjectFromPyObject<CPP_TYPE>(pyObj));                                                                                 \
+      return true;                                                                                                                                   \
+    }                                                                                                                                                \
+  }
 
+#define CHECK_SIP_ENUM_CONVERSION(SIP_TYPE_STR)                                                                                                      \
+  if (sipCanConvertToEnum(pyObj, sipFindType(SIP_TYPE_STR))) {                                                                                       \
+    valSetter.setValue(static_cast<int>(PyLong_AsLong(pyObj)));                                                                                      \
+    return true;                                                                                                                                     \
+  }
 
-#define CHECK_SIP_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\
-    if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), SIP_NOT_NONE)) {\
-      if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE).name())) {\
-        valSetter.setValue(getCppObjectFromPyObject<CPP_TYPE>(pyObj));\
-        return true;\
-      }\
-    }
+#define CHECK_SIP_POINTER_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)                                                                                    \
+  if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), 0)) {                                                                                    \
+    if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE *).name())) {                                                            \
+      valSetter.setValue(getCppPointerFromPyObject<CPP_TYPE>(pyObj));                                                                                \
+      return true;                                                                                                                                   \
+    }                                                                                                                                                \
+  }
 
-#define CHECK_SIP_ENUM_CONVERSION(SIP_TYPE_STR)\
-    if (sipCanConvertToEnum(pyObj, sipFindType(SIP_TYPE_STR))) {\
-     valSetter.setValue(static_cast<int>(PyLong_AsLong(pyObj)));\
-      return true;\
-    }\
- 
-#define CHECK_SIP_POINTER_TYPE_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\
-    if (sipCanConvertToType(pyObj, sipFindType(SIP_TYPE_STR), 0)) {\
-      if (!dataType || dataType->getTypeName() == std::string(typeid(CPP_TYPE*).name())) {\
-        valSetter.setValue(getCppPointerFromPyObject<CPP_TYPE>(pyObj));\
-        return true;\
-      }\
-    }
-
-#define CHECK_SIP_VECTOR_LIST_CONVERSION(CPP_TYPE, SIP_TYPE_STR)\
-    if (sipCanConvertToType(pyObj, sipFindType((std::string("std::vector<") + SIP_TYPE_STR + ">").c_str()), SIP_NOT_NONE)) {\
-        if (dataType && dataType->getTypeName() == std::string(typeid(std::list<CPP_TYPE>).name())) {\
-            valSetter.setValue(getCppObjectFromPyObject<std::list<CPP_TYPE> >(pyObj));\
-        } else {\
-            valSetter.setValue(getCppObjectFromPyObject<std::vector<CPP_TYPE> >(pyObj));\
-        }\
-        return true;\
-    }
+#define CHECK_SIP_VECTOR_LIST_CONVERSION(CPP_TYPE, SIP_TYPE_STR)                                                                                     \
+  if (sipCanConvertToType(pyObj, sipFindType((std::string("std::vector<") + SIP_TYPE_STR + ">").c_str()), SIP_NOT_NONE)) {                           \
+    if (dataType && dataType->getTypeName() == std::string(typeid(std::list<CPP_TYPE>).name())) {                                                    \
+      valSetter.setValue(getCppObjectFromPyObject<std::list<CPP_TYPE>>(pyObj));                                                                      \
+    } else {                                                                                                                                         \
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<CPP_TYPE>>(pyObj));                                                                    \
+    }                                                                                                                                                \
+    return true;                                                                                                                                     \
+  }
 
 bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataType *dataType) {
 
@@ -444,23 +426,17 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
     if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
       valSetter.setValue(static_cast<int>(val));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
       valSetter.setValue(getCppObjectFromPyObject<unsigned int>(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(long).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(long).name())) {
       valSetter.setValue(val);
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned long).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned long).name())) {
       valSetter.setValue(getCppObjectFromPyObject<unsigned long>(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
       valSetter.setValue(static_cast<float>(val));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
       valSetter.setValue(static_cast<double>(val));
-    }
-    else {
+    } else {
       valSetter.setValue(static_cast<int>(val));
     }
 
@@ -474,37 +450,29 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
     if (dataType && dataType->getTypeName() == std::string(typeid(int).name())) {
       valSetter.setValue(static_cast<int>(val));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned int).name())) {
       valSetter.setValue(getCppObjectFromPyObject<unsigned int>(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(long).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(long).name())) {
       valSetter.setValue(val);
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned long).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(unsigned long).name())) {
       valSetter.setValue(getCppObjectFromPyObject<unsigned long>(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
       valSetter.setValue(static_cast<float>(val));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(double).name())) {
       valSetter.setValue(static_cast<double>(val));
-    }
-    else {
+    } else {
       valSetter.setValue(static_cast<int>(val));
     }
 
     return true;
   }
 
-
 #endif
 
   if (PyFloat_Check(pyObj)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(float).name())) {
       valSetter.setValue(getCppObjectFromPyObject<float>(pyObj));
-    }
-    else {
+    } else {
       valSetter.setValue(getCppObjectFromPyObject<double>(pyObj));
     }
 
@@ -515,44 +483,32 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::vector<long>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<int> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<unsigned int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned int> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<long> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<unsigned long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned long> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<float> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<int>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<unsigned int>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned int>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<long>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<long>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<unsigned long>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<unsigned long>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<float>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<float>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<double>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<double>>(pyObj));
 
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<int> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<unsigned int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned int> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<long> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<unsigned long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned long> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<float> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<double> >(pyObj));
-    }
-    else {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<int> >(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<int>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<int>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<unsigned int>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned int>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<long>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<long>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<unsigned long>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<unsigned long>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<float>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<float>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<double>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<double>>(pyObj));
+    } else {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<int>>(pyObj));
     }
 
     return true;
@@ -560,16 +516,13 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::vector<double>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::vector<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<float> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<float> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::list<double> >(pyObj));
-    }
-    else {
-      valSetter.setValue(getCppObjectFromPyObject<std::vector<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<float>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<float>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<float>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::list<double>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::list<double>>(pyObj));
+    } else {
+      valSetter.setValue(getCppObjectFromPyObject<std::vector<double>>(pyObj));
     }
 
     return true;
@@ -577,25 +530,19 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::set<long>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::set<int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<int> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<unsigned int>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned int> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<long> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<unsigned long>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned long> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<float> >(pyObj));
-    }
-    else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<double>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<double> >(pyObj));
-    }
-    else {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<int> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<int>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<unsigned int>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned int>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<long>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<long>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<unsigned long>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<unsigned long>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<float>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<float>>(pyObj));
+    } else if (dataType && dataType->getTypeName() == std::string(typeid(std::set<double>).name())) {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<double>>(pyObj));
+    } else {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<int>>(pyObj));
     }
 
     return true;
@@ -603,10 +550,9 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
 
   if (sipCanConvertToType(pyObj, sipFindType("std::set<double>"), SIP_NOT_NONE)) {
     if (dataType && dataType->getTypeName() == std::string(typeid(std::set<float>).name())) {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<float> >(pyObj));
-    }
-    else {
-      valSetter.setValue(getCppObjectFromPyObject<std::set<double> >(pyObj));
+      valSetter.setValue(getCppObjectFromPyObject<std::set<float>>(pyObj));
+    } else {
+      valSetter.setValue(getCppObjectFromPyObject<std::set<double>>(pyObj));
     }
 
     return true;
@@ -649,18 +595,18 @@ bool setCppValueFromPyObject(PyObject *pyObj, ValueSetter &valSetter, tlp::DataT
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::Coord, "tlp::Coord")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::Color, "tlp::Color")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::Size, "tlp::Size")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::Graph*, "tlp::Graph*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::Graph *, "tlp::Graph*")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::DataSet, "tlp::DataSet")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::ColorScale, "tlp::ColorScale")
   CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::StringCollection, "tlp::StringCollection")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::BooleanProperty*, "tlp::BooleanProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::ColorProperty*, "tlp::ColorProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::DoubleProperty*, "tlp::DoubleProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::IntegerProperty*, "tlp::IntegerProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::LayoutProperty*, "tlp::LayoutProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::SizeProperty*, "tlp::SizeProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::StringProperty*, "tlp::StringProperty*")
-  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::PropertyInterface*, "tlp::PropertyInterface*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::BooleanProperty *, "tlp::BooleanProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::ColorProperty *, "tlp::ColorProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::DoubleProperty *, "tlp::DoubleProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::IntegerProperty *, "tlp::IntegerProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::LayoutProperty *, "tlp::LayoutProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::SizeProperty *, "tlp::SizeProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::StringProperty *, "tlp::StringProperty*")
+  CHECK_SIP_VECTOR_LIST_CONVERSION(tlp::PropertyInterface *, "tlp::PropertyInterface*")
 
   CHECK_SIP_TYPE_CONVERSION(std::set<std::string>, "std::set<std::string>")
   CHECK_SIP_TYPE_CONVERSION(std::set<tlp::node>, "std::set<tlp::node>")

@@ -32,20 +32,21 @@ class Constraint;
  * 1 or more variables, with the invariant that all constraints inside a block
  * are satisfied by keeping the variables fixed relative to one another
  */
-class Blocks : public std::set<Block*> {
+class Blocks : public std::set<Block *> {
 public:
-  Blocks(const int n, Variable* const vs[]);
+  Blocks(const int n, Variable *const vs[]);
   ~Blocks(void);
   void mergeLeft(Block *r);
   void mergeRight(Block *l);
   void split(Block *b, Block *&l, Block *&r, Constraint *c);
-  std::list<Variable*> *totalOrder();
+  std::list<Variable *> *totalOrder();
   void cleanup();
   double cost();
+
 private:
-  void dfsVisit(Variable *v, std::list<Variable*> *order);
+  void dfsVisit(Variable *v, std::list<Variable *> *order);
   void removeBlock(Block *doomed);
-  Variable* const *vs;
+  Variable *const *vs;
   int nvs;
 };
 

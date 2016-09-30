@@ -18,14 +18,14 @@
  */
 #include "Number.h"
 
-float Number::infini=-1 ;
+float Number::infini = -1;
 
-
-bool Number::operator > (float b) {
-  if(b==Number::infini)
+bool Number::operator>(float b) {
+  if (b == Number::infini)
     return false;
 
-  if(this->value == Number::infini)
+  if (this->value == Number::infini)
     return true;
-  else return (this->value > b);
+  else
+    return (this->value > b);
 }

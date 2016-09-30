@@ -45,26 +45,27 @@ class CSVColumn;
 /**
  * @brief Configuration widget for a property.
  */
-class TLP_QT_SCOPE PropertyConfigurationWidget: public QWidget {
+class TLP_QT_SCOPE PropertyConfigurationWidget : public QWidget {
   Q_OBJECT
 public:
-  PropertyConfigurationWidget(unsigned int propertyNumber, const QString& propertyName, bool propertyNameIsEditable,
-                              const std::string& PropertyType, QWidget* parent = nullptr);
+  PropertyConfigurationWidget(unsigned int propertyNumber, const QString &propertyName, bool propertyNameIsEditable, const std::string &PropertyType,
+                              QWidget *parent = nullptr);
   /**
-     * Return the selected property type. The property type is not the label displayed in the combobox but correspond to the Property::propertyTypename static string variable of the property class.
+     * Return the selected property type. The property type is not the label displayed in the combobox but correspond to the
+   * Property::propertyTypename static string variable of the property class.
      */
   std::string getPropertyType() const;
   /**
     * @brief Change the type of the property. Use the PropertyClass::propertyTypename static var.
     **/
-  void setPropertyType(const std::string& propertyType);
+  void setPropertyType(const std::string &propertyType);
 
   QString getPropertyName() const;
   bool getPropertyUsed() const;
   /**
      *  @brief Set the property name validator. Use to chek if entered graph name is valid.
      */
-  void setPropertyNameValidator(QValidator* validator);
+  void setPropertyNameValidator(QValidator *validator);
   unsigned int getPropertyNumber() const;
 
   QLineEdit *getNameLineEdit() {
@@ -96,22 +97,20 @@ signals:
 /**
  * @brief Check if the property name already exist in the property list.
  **/
-class TLP_QT_SCOPE PropertyNameValidator: public QValidator {
+class TLP_QT_SCOPE PropertyNameValidator : public QValidator {
 public:
-  PropertyNameValidator(const std::vector<PropertyConfigurationWidget*>& widgets,QObject*parent=nullptr) :
-    QValidator(parent), widgets(widgets) {
+  PropertyNameValidator(const std::vector<PropertyConfigurationWidget *> &widgets, QObject *parent = nullptr) : QValidator(parent), widgets(widgets) {
   }
   virtual ~PropertyNameValidator() {
-
   }
 
   /**
    * Validate the new property name. Check if any property does not have the same name
    */
-  QValidator::State validate(QString & input, int & pos) const;
+  QValidator::State validate(QString &input, int &pos) const;
 
 private:
-  const std::vector<PropertyConfigurationWidget*>& widgets;
+  const std::vector<PropertyConfigurationWidget *> &widgets;
 };
 
 /**
@@ -119,9 +118,9 @@ private:
 **/
 class TLP_QT_SCOPE CSVTableWidget : public QTableWidget, public CSVContentHandler {
 public:
-  CSVTableWidget(QWidget* parent=nullptr);
+  CSVTableWidget(QWidget *parent = nullptr);
   bool begin();
-  bool line(unsigned int row,const std::vector<std::string>& lineTokens);
+  bool line(unsigned int row, const std::vector<std::string> &lineTokens);
   bool end(unsigned int rowNumber, unsigned int columnNumber);
   /**
     * @brief Limit the line number of the preview. Need to parse the file again to take this limit in account.
@@ -133,7 +132,7 @@ public:
   /**
     * @brief Get the preview line number.
     **/
-  unsigned int getMaxPreviewLineNumber()const {
+  unsigned int getMaxPreviewLineNumber() const {
     return maxLineNumber;
   }
 
@@ -156,7 +155,6 @@ private:
   int nbCommentsLines;
 };
 
-
 /**
   * @brief Widget generating a CSVImportParameters object configuring the CSV import process.
   *
@@ -168,7 +166,7 @@ public:
   CSVImportConfigurationWidget(QWidget *parent = nullptr);
   ~CSVImportConfigurationWidget();
   bool begin();
-  bool line(unsigned int row,const std::vector<std::string>& lineTokens);
+  bool line(unsigned int row, const std::vector<std::string> &lineTokens);
   bool end(unsigned int rowNumber, unsigned int columnNumber);
   void setFirstLineIndex(int firstLine);
 
@@ -182,40 +180,37 @@ public:
   *
   * Use this object to configure import process of the CSVImportGraph object.
   **/
-  CSVImportParameters getImportParameters()const;
+  CSVImportParameters getImportParameters() const;
 
   bool eventFilter(QObject *, QEvent *);
 
-
 protected:
+  void updateWidget(const std::string &title = "Generating preview");
 
-  void updateWidget(const std::string& title = "Generating preview");
-
-  std::vector<CSVColumn> getPropertiesToImport()const;
+  std::vector<CSVColumn> getPropertiesToImport() const;
 
   void updateLineNumbers(bool resetValues);
 
-  bool useFirstLineAsPropertyName()const;
-  void setUseFirstLineAsPropertyName(bool useFirstLineAsHeader)const;
-  unsigned int rowCount()const;
-  unsigned int columnCount()const;
-
+  bool useFirstLineAsPropertyName() const;
+  void setUseFirstLineAsPropertyName(bool useFirstLineAsHeader) const;
+  unsigned int rowCount() const;
+  unsigned int columnCount() const;
 
   /**
   *@brief The index of the first line to get in the file.
   *@brief A line number from 0 to LastLineIndex.
   **/
-  unsigned int getFirstLineIndex()const;
+  unsigned int getFirstLineIndex() const;
 
   /**
     * @brief The index of the last line to take in the file.
     **/
-  unsigned int getLastLineIndex()const;
+  unsigned int getLastLineIndex() const;
   /**
     * @brief The index of the first imported line. This index change if user use the first line as column names.
     * For example if the user wants to import all lines but uses the first line as column names this function will return 1 not 0.
     **/
-  unsigned int getFirstImportedLineIndex()const;
+  unsigned int getFirstImportedLineIndex() const;
 
   /**
    * Empty the properties list.
@@ -224,7 +219,7 @@ protected:
   /**
    * Add a property to the current property list.
    */
-  void addPropertyToPropertyList(const std::string& propertyName, bool isEditable, const std::string& propertyType=std::string(""));
+  void addPropertyToPropertyList(const std::string &propertyName, bool isEditable, const std::string &propertyType = std::string(""));
 
   /**
    * @brief Creates a property configuration widget.
@@ -236,19 +231,21 @@ protected:
    * @param parent This widget's parent.
    * @return :PropertyConfigurationWidget*
    **/
-  virtual PropertyConfigurationWidget *createPropertyConfigurationWidget(unsigned int propertyNumber,
-      const QString& propertyName, bool propertyNameIsEditable, const std::string& propertyType, QWidget* parent);
+  virtual PropertyConfigurationWidget *createPropertyConfigurationWidget(unsigned int propertyNumber, const QString &propertyName,
+                                                                         bool propertyNameIsEditable, const std::string &propertyType,
+                                                                         QWidget *parent);
 
   /**
-    * @brief Compute the name of the column. Return the first token fo the column if the first lline is used as header r Column_x xhere x is the column index.
+    * @brief Compute the name of the column. Return the first token fo the column if the first lline is used as header r Column_x xhere x is the
+    *column index.
     **/
-  QString generateColumnName(unsigned int col)const;
+  QString generateColumnName(unsigned int col) const;
   /**
     * @brief Compute the column data type. Take in account the first row only if it is not used as column label
     **/
-  std::string getColumnType(unsigned int col)const;
+  std::string getColumnType(unsigned int col) const;
 
-  std::vector<PropertyConfigurationWidget*> propertyWidgets;
+  std::vector<PropertyConfigurationWidget *> propertyWidgets;
 
 protected slots:
 
@@ -263,37 +260,35 @@ protected slots:
   void propertyStateChanged(bool activated);
 
 private:
-
   /**
     * @brief Try to guess the property datatype in function of the type of the previous tokens and the type of the current token.
     **/
-  std::string guessPropertyDataType(const std::string& data,const std::string& previousType)const;
+  std::string guessPropertyDataType(const std::string &data, const std::string &previousType) const;
 
   /**
     * @brief Return the type of the column in function of the old and new type.
     **/
-  std::string combinePropertyDataType(const std::string& previousType,const std::string& newType)const;
+  std::string combinePropertyDataType(const std::string &previousType, const std::string &newType) const;
   /**
     * @brief Try to guess the type of the data. Can recognize int, double, boolean or string. If the type is other return string.
     * @return The property typename of the type
     **/
-  std::string guessDataType(const std::string& data)const;
+  std::string guessDataType(const std::string &data) const;
 
   void columnSizeChanged(unsigned int i);
 
-  //The data type of the header
+  // The data type of the header
   std::vector<std::string> columnHeaderType;
-  //The data type of the rest of the column;
+  // The data type of the rest of the column;
   std::vector<std::string> columnType;
 
   Ui::CSVImportConfigurationWidget *ui;
-  PropertyNameValidator* validator;
+  PropertyNameValidator *validator;
   unsigned int maxLineNumber;
   unsigned int headerColumnCount;
-  tlp::CSVParser* parser;
+  tlp::CSVParser *parser;
   unsigned int firstLine;
 };
-
 }
 #endif // CSVIMPORTCONFIGURATIONWIDGET_H
 ///@endcond

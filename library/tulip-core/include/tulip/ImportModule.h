@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _IMPORTMODULE_H
 #define _IMPORTMODULE_H
 
@@ -35,7 +34,6 @@ class PluginProgress;
 class Graph;
 class DataSet;
 
-
 /**
  * @addtogroup Plugins
  * @brief Base class for import plug-ins.
@@ -47,9 +45,9 @@ public:
   *
   * @param context The context this import plug-in runs into.
   **/
-  ImportModule (const tlp::PluginContext* context) {
-    if(context != nullptr) {
-      const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
+  ImportModule(const tlp::PluginContext *context) {
+    if (context != nullptr) {
+      const tlp::AlgorithmContext *algoritmContext = dynamic_cast<const tlp::AlgorithmContext *>(context);
       assert(algoritmContext != nullptr);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
@@ -78,7 +76,7 @@ public:
   *
   * @return bool Whether the import was successful or not.
   **/
-  virtual bool importGraph()=0;
+  virtual bool importGraph() = 0;
 
   /**
   * @brief The Graph in which to write the data to import.
@@ -95,8 +93,6 @@ public:
   **/
   DataSet *dataSet;
 };
-
-
 }
 #endif
 ///@endcond

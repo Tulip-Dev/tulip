@@ -44,17 +44,17 @@ class TLP_QT_SCOPE GraphNeedsSavingObserver : public QObject, Observable {
   Q_OBJECT
 
   bool _needsSaving;
-  Graph* _graph;
+  Graph *_graph;
 
   void addObserver();
   void removeObservers();
 
-public :
+public:
   /**
    * @brief GraphNeedsSavingObserver Class constructor
    * @param graph the graph which needs to be observed for modifications
    */
-  GraphNeedsSavingObserver(Graph* graph);
+  GraphNeedsSavingObserver(Graph *graph);
 
   /**
     * @brief saved If the graph has been saved, one has to call this method to reset the status of the graph (it does not need to be saved).
@@ -69,7 +69,7 @@ public :
     */
   bool needsSaving() const;
 
-protected :
+protected:
   /**
     * @see Listener
     * @see Observer
@@ -80,7 +80,7 @@ protected :
     *
     * @param events The events that happened since the last unHoldObservers().
     */
-  virtual void treatEvents(const std::vector<Event>&);
+  virtual void treatEvents(const std::vector<Event> &);
 
 signals:
 
@@ -89,7 +89,6 @@ signals:
    */
 
   void savingNeeded();
-
 };
 }
-#endif //GRAPHNEEDSSAVINGOBSERVER_H
+#endif // GRAPHNEEDSSAVINGOBSERVER_H

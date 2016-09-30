@@ -49,8 +49,7 @@ class GlGraphInputData;
 
 class TLP_GLES_SCOPE LabelsRenderer {
 
-public :
-
+public:
   static LabelsRenderer *instance();
 
   static LabelsRenderer *instance(const std::string &canvasId);
@@ -92,15 +91,13 @@ public :
 
   void renderGraphElementsLabels(const GlGraphInputData &inputData, const Camera &camera, const Color &selectionColor, int labelsDensity = 0);
 
-  void renderOneLabel(const Camera &camera, const std::string &text, const BoundingBox &renderingBox,
-                      const Color &labelColor = Color::Black, int fontSize = 18, const std::string &fontFile = "");
+  void renderOneLabel(const Camera &camera, const std::string &text, const BoundingBox &renderingBox, const Color &labelColor = Color::Black,
+                      int fontSize = 18, const std::string &fontFile = "");
 
-private :
-
+private:
   void setFont(const std::string &fontFile);
 
-  void renderText(NVGcontext *vg, const std::string &text, const BoundingBox &renderingBox,
-                  const Color &textColor, int fontSize, float rotation = 0);
+  void renderText(NVGcontext *vg, const std::string &text, const BoundingBox &renderingBox, const Color &textColor, int fontSize, float rotation = 0);
 
   static std::map<std::string, LabelsRenderer *> _instances;
   static std::string _currentCanvasId;
@@ -114,16 +111,14 @@ private :
   std::map<std::string, int> _fontHandles;
   std::string _currentFont;
 
-  std::map<Graph *, std::vector<node> > _nodesLabelsToRender;
-  std::map<Graph *, std::vector<edge> > _edgesLabelsToRender;
+  std::map<Graph *, std::vector<node>> _nodesLabelsToRender;
+  std::map<Graph *, std::vector<edge>> _edgesLabelsToRender;
 
   bool _labelsScaled;
   float _minSize, _maxSize;
   bool _occlusionTest;
   bool _useFixedFontSize;
-
 };
-
 }
 
 #endif // LABELSRENDERER_H

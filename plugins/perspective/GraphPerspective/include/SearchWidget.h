@@ -38,14 +38,14 @@ class PropertyInterface;
 class SearchWidget : public QWidget {
   Q_OBJECT
 
-  static QVector<SearchOperator*> NUMERIC_OPERATORS;
-  static QVector<SearchOperator*> STRING_OPERATORS;
-  static QVector<SearchOperator*> NOCASE_STRING_OPERATORS;
+  static QVector<SearchOperator *> NUMERIC_OPERATORS;
+  static QVector<SearchOperator *> STRING_OPERATORS;
+  static QVector<SearchOperator *> NOCASE_STRING_OPERATORS;
 
-  Ui::SearchWidget* _ui;
-  tlp::PropertyInterface* term(QComboBox* combo);
+  Ui::SearchWidget *_ui;
+  tlp::PropertyInterface *term(QComboBox *combo);
 
-  SearchOperator* searchOperator();
+  SearchOperator *searchOperator();
   bool isNumericComparison();
 
 public:
@@ -55,9 +55,9 @@ public:
 signals:
 
 public slots:
-  void setModel(tlp::GraphHierarchiesModel* model);
-  void currentGraphChanged(tlp::Graph* g);
-  void setGraph(tlp::Graph* g);
+  void setModel(tlp::GraphHierarchiesModel *model);
+  void currentGraphChanged(tlp::Graph *g);
+  void setGraph(tlp::Graph *g);
   void search();
 
 protected slots:
@@ -65,8 +65,8 @@ protected slots:
   void graphIndexChanged();
   void termAChanged();
   void termBChanged();
-  void updateOperators(tlp::PropertyInterface* a, tlp::PropertyInterface* b);
-  void updateOperators(tlp::PropertyInterface* a, const QString& b);
+  void updateOperators(tlp::PropertyInterface *a, tlp::PropertyInterface *b);
+  void updateOperators(tlp::PropertyInterface *a, const QString &b);
   void setNumericOperatorsEnabled(bool e);
   void updateEditorWidget();
   void selectionModeChanged(int index);

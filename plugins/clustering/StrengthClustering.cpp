@@ -25,10 +25,10 @@ using namespace tlp;
 PLUGIN(StrengthClustering)
 
 //================================================================================
-StrengthClustering::~StrengthClustering() {}
+StrengthClustering::~StrengthClustering() {
+}
 //==============================================================================
-double StrengthClustering::computeMQValue(const vector<set<node>> &partition,
-                                          Graph *sg) {
+double StrengthClustering::computeMQValue(const vector<set<node>> &partition, Graph *sg) {
 
   vector<unsigned int> nbIntraEdges(partition.size());
 
@@ -83,23 +83,20 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition,
 
   for (unsigned int i = 0; i < partition.size(); ++i) {
     if (partition[i].size() > 1)
-      positive += 2.0 * double(nbIntraEdges[i]) /
-                  double(partition[i].size() * (partition[i].size() - 1));
+      positive += 2.0 * double(nbIntraEdges[i]) / double(partition[i].size() * (partition[i].size() - 1));
   }
 
   positive /= double(partition.size());
 
   double negative = 0;
-  map<pair<unsigned int, unsigned int>, unsigned int>::const_iterator itMap =
-      nbExtraEdges.begin();
+  map<pair<unsigned int, unsigned int>, unsigned int>::const_iterator itMap = nbExtraEdges.begin();
 
   for (; itMap != nbExtraEdges.end(); ++itMap) {
     pair<unsigned int, unsigned int> pp = itMap->first;
     unsigned int val = itMap->second;
 
     if (!partition[pp.first].empty() && !partition[pp.second].empty())
-      negative += double(val) / double(partition[pp.first].size() *
-                                       partition[pp.second].size());
+      negative += double(val) / double(partition[pp.first].size() * partition[pp.second].size());
   }
 
   if (partition.size() > 1)
@@ -110,8 +107,7 @@ double StrengthClustering::computeMQValue(const vector<set<node>> &partition,
 }
 
 //==============================================================================
-void StrengthClustering::computeNodePartition(double threshold,
-                                              vector<set<node>> &result) {
+void StrengthClustering::computeNodePartition(double threshold, vector<set<node>> &result) {
   // tlp::warning() << __PRETTY_FUNCTION__ << endl;
   Graph *tmpGraph = graph->addCloneSubGraph();
   StableIterator<edge> itE(graph->getEdges());
@@ -145,8 +141,7 @@ void StrengthClustering::computeNodePartition(double threshold,
     edge ite = itE2.next();
     const pair<node, node> &eEnds = graph->ends(ite);
 
-    if (singleton.find(eEnds.first) != singleton.end() &&
-        singleton.find(eEnds.second) != singleton.end()) {
+    if (singleton.find(eEnds.first) != singleton.end() && singleton.find(eEnds.second) != singleton.end()) {
       tmpGraph->addEdge(ite);
     }
   }
@@ -198,13 +193,10 @@ void StrengthClustering::computeNodePartition(double threshold,
 double StrengthClustering::findBestThreshold(int numberOfSteps, bool &stopped) {
   double maxMQ = -2;
   double threshold = values->getEdgeMin(graph);
-  double deltaThreshold =
-      (values->getEdgeMax(graph) - values->getEdgeMin(graph)) /
-      double(numberOfSteps);
+  double deltaThreshold = (values->getEdgeMax(graph) - values->getEdgeMin(graph)) / double(numberOfSteps);
   int steps = 0;
 
-  for (double i = values->getEdgeMin(graph); i < values->getEdgeMax(graph);
-       i += deltaThreshold) {
+  for (double i = values->getEdgeMin(graph); i < values->getEdgeMax(graph); i += deltaThreshold) {
     vector<set<node>> tmp;
     computeNodePartition(i, tmp);
 
@@ -328,8 +320,7 @@ static const char *paramHelp[] = {
 };
 
 //================================================================================
-StrengthClustering::StrengthClustering(PluginContext *context)
-    : DoubleAlgorithm(context) {
+StrengthClustering::StrengthClustering(PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
   addDependency("Strength", "1.0");
 }
@@ -339,8 +330,7 @@ bool StrengthClustering::run() {
   string errMsg;
   values = new DoubleProperty(graph);
 
-  if (!graph->applyPropertyAlgorithm("Strength", values, errMsg,
-                                     pluginProgress))
+  if (!graph->applyPropertyAlgorithm("Strength", values, errMsg, pluginProgress))
     return false;
 
   NumericProperty *metric = nullptr;
@@ -353,8 +343,7 @@ bool StrengthClustering::run() {
     NumericProperty *mult = metric->copyProperty(graph);
 
     if (pluginProgress)
-      pluginProgress->setComment(
-          "Computing Strength metric X specified metric on edges ...");
+      pluginProgress->setComment("Computing Strength metric X specified metric on edges ...");
 
     mult->uniformQuantification(100);
     unsigned int steps = 0, maxSteps = graph->numberOfEdges();
@@ -363,8 +352,7 @@ bool StrengthClustering::run() {
       maxSteps = 10;
 
     for (edge e : graph->getEdges()) {
-      values->setEdgeValue(e, values->getEdgeValue(e) *
-                                  (mult->getEdgeDoubleValue(e) + 1));
+      values->setEdgeValue(e, values->getEdgeValue(e) * (mult->getEdgeDoubleValue(e) + 1));
 
       if (pluginProgress && ((++steps % (maxSteps / 10) == 0))) {
         pluginProgress->progress(steps, maxSteps);

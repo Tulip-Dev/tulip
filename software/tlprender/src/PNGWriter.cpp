@@ -22,13 +22,12 @@
 
 using namespace std;
 
-//functions needed to use  c++ streams with libpng
+// functions needed to use  c++ streams with libpng
 static void stream_write_data(png_structp, png_bytep, png_size_t);
 static void stream_flush_data(png_structp);
 
 namespace tlprender {
-PNGWriter::PNGWriter(const GLubyte *imagebuffer, const int width, const int height):
-  ImageWriter(imagebuffer, width, height) {
+PNGWriter::PNGWriter(const GLubyte *imagebuffer, const int width, const int height) : ImageWriter(imagebuffer, width, height) {
 }
 
 bool PNGWriter::writeImage(std::ostream &os) const {
@@ -41,7 +40,7 @@ bool PNGWriter::writeImage(std::ostream &os) const {
   png_infop info_ptr = png_create_info_struct(png_ptr);
 
   if (!info_ptr) {
-    png_destroy_write_struct(&png_ptr, (png_infopp)nullptr);
+    png_destroy_write_struct(&png_ptr, (png_infopp) nullptr);
     return false;
   }
 
@@ -56,13 +55,12 @@ bool PNGWriter::writeImage(std::ostream &os) const {
 
   png_set_write_fn(png_ptr, &os, &stream_write_data, &stream_flush_data);
   /* PNG Header */
-  png_set_IHDR(png_ptr, info_ptr, width, height, 8,
-               PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE,
-               PNG_COMPRESSION_TYPE_DEFAULT, PNG_FILTER_TYPE_DEFAULT);
+  png_set_IHDR(png_ptr, info_ptr, width, height, 8, PNG_COLOR_TYPE_RGB_ALPHA, PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+               PNG_FILTER_TYPE_DEFAULT);
 
   int num_text = 0 + titleState + softwareState + sourceState + layoutState + commentState;
   png_text *text_ptr = new png_text[num_text];
-  int i=0;
+  int i = 0;
 
   if (titleState) {
     text_ptr[i].compression = PNG_TEXT_COMPRESSION_NONE;
@@ -104,8 +102,8 @@ bool PNGWriter::writeImage(std::ostream &os) const {
   delete text_ptr[];
 
   /* Image */
-  for (int i=height-1; i>=0; --i) {
-    png_bytep rowp = (png_bytep) buffer + (width * i * 4 * sizeof(GLubyte));
+  for (int i = height - 1; i >= 0; --i) {
+    png_bytep rowp = (png_bytep)buffer + (width * i * 4 * sizeof(GLubyte));
     png_write_row(png_ptr, rowp);
   }
 
@@ -119,7 +117,7 @@ bool PNGWriter::writeImage(std::ostream &os) const {
 static void stream_write_data(png_structp png_ptr, png_bytep data, png_size_t length) {
   ostream *os = (ostream *)png_get_io_ptr(png_ptr);
 
-  for(png_size_t i=0; i<length; ++i) {
+  for (png_size_t i = 0; i < length; ++i) {
     (*os) << data[i];
   }
 }

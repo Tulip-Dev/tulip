@@ -34,10 +34,9 @@ class NeighborhoodHighlighterConfigWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::NeighborhoodHighlighterConfigWidgetData* _ui;
+  Ui::NeighborhoodHighlighterConfigWidgetData *_ui;
 
-public :
-
+public:
   NeighborhoodHighlighterConfigWidget(QWidget *parent = 0);
   ~NeighborhoodHighlighterConfigWidget();
 

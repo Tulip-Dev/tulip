@@ -22,7 +22,7 @@
 
 using namespace tlp;
 
-TulipModel::TulipModel(QObject *parent): QAbstractItemModel(parent) {
+TulipModel::TulipModel(QObject *parent) : QAbstractItemModel(parent) {
 }
 
 TulipModel::~TulipModel() {

@@ -38,174 +38,170 @@ using namespace vpsc;
  *    x-positions - this corrects the case where rectangles were moved
  *    too much in the first pass.
  */
-void removeRectangleOverlap(unsigned n, Rectangle *rs[], double& xBorder, double& yBorder) {
+void removeRectangleOverlap(unsigned n, Rectangle *rs[], double &xBorder, double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
-    xBorder+=EXTRA_GAP;
-    yBorder+=EXTRA_GAP;
-    Variable **vs=new Variable*[n];
+    xBorder += EXTRA_GAP;
+    yBorder += EXTRA_GAP;
+    Variable **vs = new Variable *[n];
 
-    for(unsigned i=0; i<n; i++) {
-      vs[i]=new Variable(0,1);
+    for (unsigned i = 0; i < n; i++) {
+      vs[i] = new Variable(0, 1);
     }
 
     Constraint **cs;
     double *oldX = new double[n];
-    unsigned m=ConstraintsGenerator(n).generateXConstraints(rs,vs,cs,true);
+    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs, cs, true);
 
-    for(unsigned i=0; i<n; i++) {
-      oldX[i]=vs[i]->desiredPosition;
+    for (unsigned i = 0; i < n; i++) {
+      oldX[i] = vs[i]->desiredPosition;
     }
 
-    Solver vpsc_x(n,vs,m,cs);
+    Solver vpsc_x(n, vs, m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-    ofstream f(LOGFILE,ios::app);
-    f<<"Calling VPSC: Horizontal pass 1"<<endl;
+    ofstream f(LOGFILE, ios::app);
+    f << "Calling VPSC: Horizontal pass 1" << endl;
     f.close();
 #endif
     vpsc_x.solve();
 
-    for(unsigned i=0; i<n; i++) {
+    for (unsigned i = 0; i < n; i++) {
       rs[i]->moveCentreX(vs[i]->position());
     }
 
-    for(unsigned i = 0; i < m; ++i) {
+    for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
     }
 
-    delete [] cs;
+    delete[] cs;
     // Removing the extra gap here ensures things that were moved to be adjacent to
     // one another above are not considered overlapping
-    xBorder-=EXTRA_GAP;
-    m = ConstraintsGenerator(n).generateYConstraints(rs,vs,cs);
-    Solver vpsc_y(n,vs,m,cs);
+    xBorder -= EXTRA_GAP;
+    m = ConstraintsGenerator(n).generateYConstraints(rs, vs, cs);
+    Solver vpsc_y(n, vs, m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-    f.open(LOGFILE,ios::app);
-    f<<"Calling VPSC: Vertical pass"<<endl;
+    f.open(LOGFILE, ios::app);
+    f << "Calling VPSC: Vertical pass" << endl;
     f.close();
 #endif
     vpsc_y.solve();
 
-    for(unsigned i=0; i<n; i++) {
+    for (unsigned i = 0; i < n; i++) {
       rs[i]->moveCentreY(vs[i]->position());
       rs[i]->moveCentreX(oldX[i]);
     }
 
-    delete [] oldX;
+    delete[] oldX;
 
-    for(unsigned i = 0; i < m; ++i) {
+    for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
     }
 
-    delete [] cs;
-    yBorder-=EXTRA_GAP;
-    m=ConstraintsGenerator(n).generateXConstraints(rs,vs,cs,false);
-    Solver vpsc_x2(n,vs,m,cs);
+    delete[] cs;
+    yBorder -= EXTRA_GAP;
+    m = ConstraintsGenerator(n).generateXConstraints(rs, vs, cs, false);
+    Solver vpsc_x2(n, vs, m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-    f.open(LOGFILE,ios::app);
-    f<<"Calling VPSC: Horizontal pass 2"<<endl;
+    f.open(LOGFILE, ios::app);
+    f << "Calling VPSC: Horizontal pass 2" << endl;
     f.close();
 #endif
     vpsc_x2.solve();
 
-    for(unsigned i = 0; i < m; ++i) {
+    for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
     }
 
-    delete [] cs;
+    delete[] cs;
 
-    for(unsigned i=0; i<n; i++) {
+    for (unsigned i = 0; i < n; i++) {
       rs[i]->moveCentreX(vs[i]->position());
       delete vs[i];
     }
 
-    delete [] vs;
-  }
-  catch (char const *str) {
-    std::cerr<<str<<std::endl;
+    delete[] vs;
+  } catch (char const *str) {
+    std::cerr << str << std::endl;
 
-    for(unsigned i=0; i<n; i++) {
-      std::cerr << *rs[i]<<std::endl;
+    for (unsigned i = 0; i < n; i++) {
+      std::cerr << *rs[i] << std::endl;
     }
   }
 }
 
-void removeRectangleOverlapX(unsigned n, Rectangle *rs[],
-                             double& xBorder, double& yBorder) {
+void removeRectangleOverlapX(unsigned n, Rectangle *rs[], double &xBorder, double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
-    yBorder = (xBorder+=EXTRA_GAP);
-    Variable **vs=new Variable*[n];
+    yBorder = (xBorder += EXTRA_GAP);
+    Variable **vs = new Variable *[n];
 
-    for(unsigned i=0; i<n; i++) {
-      vs[i]=new Variable(0,1);
+    for (unsigned i = 0; i < n; i++) {
+      vs[i] = new Variable(0, 1);
     }
 
     Constraint **cs;
-    unsigned m=ConstraintsGenerator(n).generateXConstraints(rs,vs,cs,false);
-    Solver vpsc_x(n,vs,m,cs);
+    unsigned m = ConstraintsGenerator(n).generateXConstraints(rs, vs, cs, false);
+    Solver vpsc_x(n, vs, m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-    ofstream f(LOGFILE,ios::app);
-    f<<"Calling VPSC: Horizontal pass 1"<<endl;
+    ofstream f(LOGFILE, ios::app);
+    f << "Calling VPSC: Horizontal pass 1" << endl;
     f.close();
 #endif
     vpsc_x.solve();
 
-    for(unsigned i=0; i<n; i++) {
+    for (unsigned i = 0; i < n; i++) {
       rs[i]->moveCentreX(vs[i]->position());
     }
 
-    for(unsigned i = 0; i < m; ++i) {
+    for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
     }
 
-    delete [] cs;
+    delete[] cs;
 
-  }
-  catch (char const *str) {
-    std::cerr<<str<<std::endl;
+  } catch (char const *str) {
+    std::cerr << str << std::endl;
 
-    for(unsigned i=0; i<n; i++) {
-      std::cerr << *rs[i]<<std::endl;
+    for (unsigned i = 0; i < n; i++) {
+      std::cerr << *rs[i] << std::endl;
     }
   }
 }
 
-void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double& yBorder) {
+void removeRectangleOverlapY(unsigned n, Rectangle *rs[], double &yBorder) {
   try {
     // The extra gap avoids numerical imprecision problems
-    yBorder+=EXTRA_GAP;
-    Variable **vs=new Variable*[n];
+    yBorder += EXTRA_GAP;
+    Variable **vs = new Variable *[n];
 
-    for(unsigned i=0; i<n; i++) {
-      vs[i]=new Variable(0,1);
+    for (unsigned i = 0; i < n; i++) {
+      vs[i] = new Variable(0, 1);
     }
 
     Constraint **cs;
-    unsigned int m=ConstraintsGenerator(n).generateYConstraints(rs,vs,cs);
-    Solver vpsc_y(n,vs,m,cs);
+    unsigned int m = ConstraintsGenerator(n).generateYConstraints(rs, vs, cs);
+    Solver vpsc_y(n, vs, m, cs);
 #ifdef RECTANGLE_OVERLAP_LOGGING
-    f.open(LOGFILE,ios::app);
-    f<<"Calling VPSC: Vertical pass"<<endl;
+    f.open(LOGFILE, ios::app);
+    f << "Calling VPSC: Vertical pass" << endl;
     f.close();
 #endif
     vpsc_y.solve();
 
-    for(unsigned i=0; i<n; i++) {
+    for (unsigned i = 0; i < n; i++) {
       rs[i]->moveCentreY(vs[i]->position());
     }
 
-    for(unsigned i = 0; i < m; ++i) {
+    for (unsigned i = 0; i < m; ++i) {
       delete cs[i];
     }
 
-    delete [] cs;
-  }
-  catch (char const *str) {
-    std::cerr<<str<<std::endl;
+    delete[] cs;
+  } catch (char const *str) {
+    std::cerr << str << std::endl;
 
-    for(unsigned i=0; i<n; i++) {
-      std::cerr << *rs[i]<<std::endl;
+    for (unsigned i = 0; i < n; i++) {
+      std::cerr << *rs[i] << std::endl;
     }
   }
 }

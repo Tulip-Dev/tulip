@@ -39,7 +39,6 @@ class Graph;
 class TLP_GLES_SCOPE ConcaveHullBuilder {
 
 public:
-
   ConcaveHullBuilder();
 
   void setScalingFactor(const float scalingFactor);
@@ -54,29 +53,26 @@ public:
 
   unsigned int nbComputedHulls() const;
 
-  const std::vector<std::vector<tlp::Coord> > &getHullWithHoles(unsigned int hullId) const;
+  const std::vector<std::vector<tlp::Coord>> &getHullWithHoles(unsigned int hullId) const;
 
   const std::vector<tlp::Coord> &getHullOuterContour(unsigned int hullId) const;
 
   void clear();
 
-  static std::vector<std::vector<tlp::Coord> > computeGraphHullVertices(tlp::Graph *graph, const bool withHoles = true, const float spacing = 0.1f, const float z=0);
+  static std::vector<std::vector<tlp::Coord>> computeGraphHullVertices(tlp::Graph *graph, const bool withHoles = true, const float spacing = 0.1f,
+                                                                       const float z = 0);
 
 private:
-
   float _scalingFactor;
 
   bool _hullWithHoles;
 
   float _z;
 
-  std::vector<std::vector<tlp::Coord> > _polygons;
+  std::vector<std::vector<tlp::Coord>> _polygons;
 
-  std::vector<std::vector<std::vector<tlp::Coord> > > _computedHulls;
-
+  std::vector<std::vector<std::vector<tlp::Coord>>> _computedHulls;
 };
-
 }
-
 
 #endif // CONCAVEHULLBUILDER_H

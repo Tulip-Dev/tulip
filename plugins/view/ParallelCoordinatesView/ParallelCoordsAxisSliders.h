@@ -35,13 +35,13 @@
 
 namespace tlp {
 
-enum sliderType {TOP_SLIDER = 0, BOTTOM_SLIDER = 1};
+enum sliderType { TOP_SLIDER = 0, BOTTOM_SLIDER = 1 };
 
 class AxisSlider : public GlSimpleEntity {
 
-public :
-
-  AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth, const float halfHeight, const Color &sliderColor, const Color &labelColor, const float rotationAngle = 0);
+public:
+  AxisSlider(const sliderType type, const Coord &sliderCoord, const float halfWidth, const float halfHeight, const Color &sliderColor,
+             const Color &labelColor, const float rotationAngle = 0);
   ~AxisSlider();
 
   void setSliderFillColor(const Color &color);
@@ -53,7 +53,7 @@ public :
     this->rotationAngle = rotationAngle;
   }
 
-  void draw(float lod,Camera *camera);
+  void draw(float lod, Camera *camera);
   BoundingBox getBoundingBox();
   Coord getSliderCoord() const {
     return sliderCoord;
@@ -69,11 +69,12 @@ public :
     return arrowPolygon->getFillColor(0);
   }
 
-  void getXML(std::string &)  {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void getXML(std::string &) {
+  }
+  void setWithXML(const std::string &, unsigned int &) {
+  }
 
-private :
-
+private:
   sliderType type;
 
   GlComposite *sliderComposite;
@@ -87,8 +88,7 @@ private :
 
 class ParallelCoordsAxisSliders : public GLInteractorComponent {
 
-public :
-
+public:
   ParallelCoordsAxisSliders();
   ~ParallelCoordsAxisSliders();
   bool eventFilter(QObject *, QEvent *);
@@ -96,8 +96,7 @@ public :
   bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   void initOrUpdateSliders();
   AxisSlider *getSliderUnderPointer(GlMainWidget *glWidget, ParallelAxis *axis, int x, int y);
   void updateOtherAxisSliders();
@@ -108,7 +107,7 @@ private :
 
   ParallelCoordinatesView *parallelView;
   Graph *currentGraph;
-  std::map<ParallelAxis *, std::vector<AxisSlider *> > axisSlidersMap;
+  std::map<ParallelAxis *, std::vector<AxisSlider *>> axisSlidersMap;
   ParallelAxis *selectedAxis;
   std::vector<ParallelAxis *> lastSelectedAxis;
   AxisSlider *selectedSlider;
@@ -120,11 +119,9 @@ private :
   float lastAxisHeight;
   unsigned int lastNbAxis;
   ParallelCoordinatesDrawing::HighlightedEltsSetOp highlightedEltsSetOperation;
-  std::map<ParallelAxis *, std::pair<float, float> > slidersYBoundaries;
+  std::map<ParallelAxis *, std::pair<float, float>> slidersYBoundaries;
   GlLayer *selectionLayer;
 };
-
-
 }
 
 #endif /* PARALLELCOORDSAXISSLIDERS_H_ */

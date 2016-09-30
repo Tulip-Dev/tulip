@@ -34,7 +34,7 @@
 using namespace tlp;
 
 class GragKeyboardFocusEventFilter : public QObject {
-public :
+public:
   bool eventFilter(QObject *, QEvent *event) {
     if (event->type() == QEvent::ShortcutOverride) {
       event->accept();
@@ -47,7 +47,8 @@ public :
 
 static GragKeyboardFocusEventFilter keyboardFocusEventFilter;
 
-PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::PythonScriptViewWidget),  _pythonScriptView(view), checkEditors(true) {
+PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *parent)
+    : QWidget(parent), _ui(new Ui::PythonScriptViewWidget), _pythonScriptView(view), checkEditors(true) {
   _ui->setupUi(this);
   _ui->runScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::play, Qt::black));
   _ui->pauseScriptButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::pause, Qt::black));
@@ -58,14 +59,19 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
   _ui->consoleOutputWidget->installEventFilter(&keyboardFocusEventFilter);
   _mainScriptToolBar = new QToolBar(_ui->mainScriptToolBarWidget);
   _newMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, Qt::white), "New main script");
-  _loadMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white), "Load main script from file");
-  _saveMainScriptAction = _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white), "Save main script to file");
+  _loadMainScriptAction =
+      _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white), "Load main script from file");
+  _saveMainScriptAction =
+      _mainScriptToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white), "Save main script to file");
 
   _modulesToolBar = new QToolBar(_ui->modulesToolBarWidget);
-  _newStringModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::white), "New string module");
+  _newStringModuleAction =
+      _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::white), "New string module");
   _newFileModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, Qt::white), "New file module");
-  _loadModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white), "Import module from file");
-  _saveModuleAction = _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white), "Save module to file");
+  _loadModuleAction =
+      _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, Qt::white), "Import module from file");
+  _saveModuleAction =
+      _modulesToolBar->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, Qt::white), "Save module to file");
 
   _ui->modulesTabWidget->clear();
   _ui->mainScriptsTabWidget->clear();
@@ -100,10 +106,10 @@ PythonScriptViewWidget::PythonScriptViewWidget(PythonScriptView *view, QWidget *
 PythonScriptViewWidget::~PythonScriptViewWidget() {
   if (checkEditors) {
     // ensure all updated scripts have been saved
-    for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i)
+    for (int i = 0; i < _ui->mainScriptsTabWidget->count(); ++i)
       closeScriptTabRequested(i);
 
-    for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i)
+    for (int i = 0; i < _ui->modulesTabWidget->count(); ++i)
       closeModuleTabRequested(i);
   }
 
@@ -122,13 +128,13 @@ void PythonScriptViewWidget::showEvent(QShowEvent *e) {
 
 bool PythonScriptViewWidget::checkOnClose() {
   // ensure all updated scripts have been saved
-  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
+  for (int i = 0; i < _ui->mainScriptsTabWidget->count(); ++i) {
     if (!closeEditorTabRequested(_ui->mainScriptsTabWidget, i, true)) {
       return false;
     }
   }
 
-  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
+  for (int i = 0; i < _ui->modulesTabWidget->count(); ++i) {
     if (!closeEditorTabRequested(_ui->modulesTabWidget, i, true)) {
       return false;
     }
@@ -155,7 +161,7 @@ void PythonScriptViewWidget::resizeToolBars() {
   _mainScriptToolBar->resize(_ui->mainScriptToolBarWidget->size());
 }
 
-void PythonScriptViewWidget::indicateErrors(const QMap<QString, QVector<int> > &errorLines) {
+void PythonScriptViewWidget::indicateErrors(const QMap<QString, QVector<int>> &errorLines) {
   _ui->mainScriptsTabWidget->indicateErrors(errorLines);
   _ui->modulesTabWidget->indicateErrors(errorLines);
 }
@@ -295,8 +301,7 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
     sizes.push_back(height());
     sizes.push_back(0);
     _ui->runScriptButton->setEnabled(false);
-  }
-  else {
+  } else {
     _ui->runScriptButton->setEnabled(true);
     sizes = lastSizes;
   }
@@ -305,34 +310,30 @@ void PythonScriptViewWidget::currentTabChanged(int index) {
 
   if (index >= 2) {
     _ui->scriptControlFrame->hide();
-  }
-  else {
+  } else {
     _ui->scriptControlFrame->show();
   }
 
   lastTabIndex = index;
 }
 
-bool PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget* tabWidget, int idx, bool mayCancel) {
+bool PythonScriptViewWidget::closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx, bool mayCancel) {
   QString curTabText = tabWidget->tabText(idx);
 
   if (curTabText == "")
     return true;
 
-  if (curTabText[curTabText.size() -1] == '*') {
-    PythonCodeEditor* editor = tabWidget->getEditor(idx);
+  if (curTabText[curTabText.size() - 1] == '*') {
+    PythonCodeEditor *editor = tabWidget->getEditor(idx);
     QString fileName = editor->getFileName();
 
-    QMessageBox::StandardButton button =
-      QMessageBox::question(QApplication::activeWindow(),
-                            QString("Save edited Python code"),
-                            QString("The code of ") +
-                            // if the editor has not yet a file name
-                            // show the tab text instead
-                            (fileName.isEmpty() ? curTabText : fileName) +
-                            QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
-                            QMessageBox::Save | QMessageBox::Discard | (mayCancel ? QMessageBox::Cancel : QMessageBox::Save),
-                            QMessageBox::Save);
+    QMessageBox::StandardButton button = QMessageBox::question(
+        QApplication::activeWindow(), QString("Save edited Python code"),
+        QString("The code of ") +
+            // if the editor has not yet a file name
+            // show the tab text instead
+            (fileName.isEmpty() ? curTabText : fileName) + QString("\n has been edited but has not been saved.\nDo you want to save it ?"),
+        QMessageBox::Save | QMessageBox::Discard | (mayCancel ? QMessageBox::Cancel : QMessageBox::Save), QMessageBox::Save);
 
     if (button == QMessageBox::Save) {
       if (fileName.isEmpty())
@@ -357,17 +358,16 @@ void PythonScriptViewWidget::closeScriptTabRequested(int idx) {
 }
 
 void PythonScriptViewWidget::setGraph(tlp::Graph *graph) {
-  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
+  for (int i = 0; i < _ui->mainScriptsTabWidget->count(); ++i) {
     getMainScriptEditor(i)->getAutoCompletionDb()->setGraph(graph);
   }
 
-  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
+  for (int i = 0; i < _ui->modulesTabWidget->count(); ++i) {
     getModuleEditor(i)->getAutoCompletionDb()->setGraph(graph);
   }
-
 }
 
-void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
+void PythonScriptViewWidget::scrollToEditorLine(const QUrl &link) {
   QString linkStr = QUrl::fromPercentEncoding(link.toEncoded());
 #ifdef WIN32
   linkStr.replace("\\", "/");
@@ -375,11 +375,11 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
   QStringList strList = linkStr.split(":");
   QString file = strList.at(0);
 
-  for (int i = 1 ; i < strList.size() - 1 ; ++i) {
+  for (int i = 1; i < strList.size() - 1; ++i) {
     file += (":" + strList.at(i));
   }
 
-  int line = strList.at(strList.size() - 1).toInt()-1;
+  int line = strList.at(strList.size() - 1).toInt() - 1;
 
   if (file == "<unnamed script>") {
     _ui->tabWidget->setCurrentIndex(0);
@@ -393,7 +393,7 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
   file[0] = file[0].toUpper();
 #endif
 
-  for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
+  for (int i = 0; i < _ui->mainScriptsTabWidget->count(); ++i) {
     PythonCodeEditor *codeEditor = getMainScriptEditor(i);
 
     if (file == codeEditor->getFileName()) {
@@ -404,7 +404,7 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
     }
   }
 
-  for (int i = 0 ; i < _ui->modulesTabWidget->count() ; ++i) {
+  for (int i = 0; i < _ui->modulesTabWidget->count(); ++i) {
     PythonCodeEditor *codeEditor = getModuleEditor(i);
 
     if (file == codeEditor->getFileName()) {
@@ -414,7 +414,6 @@ void PythonScriptViewWidget::scrollToEditorLine(const QUrl & link) {
       return;
     }
   }
-
 }
 
 bool PythonScriptViewWidget::useUndoFeature() const {

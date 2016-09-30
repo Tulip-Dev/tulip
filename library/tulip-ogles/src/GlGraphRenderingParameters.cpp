@@ -29,39 +29,14 @@
 
 using namespace tlp;
 
-GlGraphRenderingParameters::GlGraphRenderingParameters() :
-  _glGraph(nullptr),
-  _displayEdgesExtremities(true),
-  _displayNodesLabels(true),
-  _displayEdgesLabels(false),
-  _displayMetaNodesLabels(false),
-  _elementsOrdered(false),
-  _elementsOrderedDescending(false),
-  _interpolateEdgesColors(false),
-  _edges3D(false),
-  _interpolateEdgesSizes(true),
-  _displayEdges(true),
-  _displayNodes(true),
-  _displayMetaNodes(true),
-  _elementsZOrdered(false),
-  _nodesStencil(0x01),
-  _metaNodesStencil(0x01),
-  _edgesStencil(0x02),
-  _nodesLabelsStencil(0x01),
-  _metaNodesLabelsStencil(0x01),
-  _edgesLabelsStencil(0x02),
-  _labelsScaled(false),
-  _labelsMinSize(12),
-  _labelsMaxSize(72),
-  _labelsDensity(0),
-  _billboardedNodes(false),
-  _maxEdgesSizesToNodesSizes(true),
-  _selectionColor(Color(255,0,255)),
-  _displayFilteringProperty(nullptr),
-  _elementsOrderingProperty(nullptr),
-  _bypassLodSystem(false),
-  _labelsFixedFontSize(false)
-{
+GlGraphRenderingParameters::GlGraphRenderingParameters()
+    : _glGraph(nullptr), _displayEdgesExtremities(true), _displayNodesLabels(true), _displayEdgesLabels(false), _displayMetaNodesLabels(false),
+      _elementsOrdered(false), _elementsOrderedDescending(false), _interpolateEdgesColors(false), _edges3D(false), _interpolateEdgesSizes(true),
+      _displayEdges(true), _displayNodes(true), _displayMetaNodes(true), _elementsZOrdered(false), _nodesStencil(0x01), _metaNodesStencil(0x01),
+      _edgesStencil(0x02), _nodesLabelsStencil(0x01), _metaNodesLabelsStencil(0x01), _edgesLabelsStencil(0x02), _labelsScaled(false),
+      _labelsMinSize(12), _labelsMaxSize(72), _labelsDensity(0), _billboardedNodes(false), _maxEdgesSizesToNodesSizes(true),
+      _selectionColor(Color(255, 0, 255)), _displayFilteringProperty(nullptr), _elementsOrderingProperty(nullptr), _bypassLodSystem(false),
+      _labelsFixedFontSize(false) {
 }
 //====================================================
 void GlGraphRenderingParameters::setGlGraph(GlGraph *glGraph) {
@@ -71,18 +46,19 @@ GlGraph *GlGraphRenderingParameters::glGraph() const {
   return _glGraph;
 }
 //====================================================
-//TODO
+// TODO
 DataSet GlGraphRenderingParameters::getParameters() const {
   DataSet data;
   return data;
 }
-void GlGraphRenderingParameters::setParameters(const DataSet & /* data */) {}
+void GlGraphRenderingParameters::setParameters(const DataSet & /* data */) {
+}
 //====================================================
-bool GlGraphRenderingParameters::displayMetaNodesLabels()const {
+bool GlGraphRenderingParameters::displayMetaNodesLabels() const {
   return _displayMetaNodesLabels;
 }
 void GlGraphRenderingParameters::setDisplayMetaNodesLabels(bool b) {
-  _displayMetaNodesLabels=b;
+  _displayMetaNodesLabels = b;
 }
 //====================================================
 bool GlGraphRenderingParameters::displayEdges() const {
@@ -90,7 +66,7 @@ bool GlGraphRenderingParameters::displayEdges() const {
 }
 void GlGraphRenderingParameters::setDisplayEdges(const bool b) {
   if (b != _displayEdges) {
-    _displayEdges=b;
+    _displayEdges = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -100,7 +76,7 @@ bool GlGraphRenderingParameters::displayNodes() const {
 }
 void GlGraphRenderingParameters::setDisplayNodes(const bool b) {
   if (b != _displayNodes) {
-    _displayNodes=b;
+    _displayNodes = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -109,7 +85,7 @@ bool GlGraphRenderingParameters::displayMetaNodes() const {
   return _displayMetaNodes;
 }
 void GlGraphRenderingParameters::setDisplayMetaNodes(const bool b) {
-  _displayMetaNodes=b;
+  _displayMetaNodes = b;
 }
 //====================================================
 bool GlGraphRenderingParameters::displayEdgesExtremities() const {
@@ -117,7 +93,7 @@ bool GlGraphRenderingParameters::displayEdgesExtremities() const {
 }
 void GlGraphRenderingParameters::setDisplayEdgesExtremities(const bool b) {
   if (b != _displayEdgesExtremities) {
-    _displayEdgesExtremities=b;
+    _displayEdgesExtremities = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::DISPLAY_EDGES_EXTREMITIES_TOGGLED));
   }
 }
@@ -127,14 +103,14 @@ bool GlGraphRenderingParameters::elementsOrdered() const {
 }
 void GlGraphRenderingParameters::setElementsOrdered(const bool b) {
   if (b != _elementsOrdered) {
-    _elementsOrdered=b;
+    _elementsOrdered = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
 //====================================================
 void GlGraphRenderingParameters::setElementOrderedDescending(const bool b) {
   if (b != _elementsOrderedDescending) {
-    _elementsOrderedDescending=b;
+    _elementsOrderedDescending = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -155,79 +131,79 @@ bool GlGraphRenderingParameters::edges3D() const {
 }
 void GlGraphRenderingParameters::setEdges3D(const bool b) {
   if (b != _edges3D) {
-    _edges3D=b;
+    _edges3D = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
 //====================================================
-bool GlGraphRenderingParameters::displayNodesLabels()const {
+bool GlGraphRenderingParameters::displayNodesLabels() const {
   return _displayNodesLabels;
 }
 void GlGraphRenderingParameters::setDisplayNodesLabels(const bool b) {
   if (_displayNodesLabels != b) {
-    _displayNodesLabels=b;
+    _displayNodesLabels = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
 //====================================================
-bool GlGraphRenderingParameters::displayEdgesLabels()const {
+bool GlGraphRenderingParameters::displayEdgesLabels() const {
   return _displayEdgesLabels;
 }
 void GlGraphRenderingParameters::setDisplayEdgesLabels(const bool b) {
   if (_displayEdgesLabels != b) {
-    _displayEdgesLabels=b;
+    _displayEdgesLabels = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
 //====================================================
 void GlGraphRenderingParameters::setNodesStencil(const int stencil) {
-  _nodesStencil=stencil;
+  _nodesStencil = stencil;
 }
 int GlGraphRenderingParameters::nodesStencil() const {
   return _nodesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setMetaNodesStencil(const int stencil) {
-  _metaNodesStencil=stencil;
+  _metaNodesStencil = stencil;
 }
 int GlGraphRenderingParameters::metaNodesStencil() const {
   return _metaNodesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setEdgesStencil(const int stencil) {
-  _edgesStencil=stencil;
+  _edgesStencil = stencil;
 }
 int GlGraphRenderingParameters::edgesStencil() const {
   return _edgesStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setNodesLabelsStencil(const int stencil) {
-  _nodesLabelsStencil=stencil;
+  _nodesLabelsStencil = stencil;
 }
 int GlGraphRenderingParameters::nodesLabelsStencil() const {
   return _nodesLabelsStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setMetaNodesLabelsStencil(const int stencil) {
-  _metaNodesLabelsStencil=stencil;
+  _metaNodesLabelsStencil = stencil;
 }
 int GlGraphRenderingParameters::metaNodesLabelsStencil() const {
   return _metaNodesLabelsStencil;
 }
 //====================================================
 void GlGraphRenderingParameters::setEdgesLabelsStencil(const int stencil) {
-  _edgesLabelsStencil=stencil;
+  _edgesLabelsStencil = stencil;
 }
 int GlGraphRenderingParameters::edgesLabelsStencil() const {
   return _edgesLabelsStencil;
 }
 //====================================================
-bool GlGraphRenderingParameters::interpolateEdgesColors()const {
+bool GlGraphRenderingParameters::interpolateEdgesColors() const {
   return _interpolateEdgesColors;
 }
 void GlGraphRenderingParameters::setInterpolateEdgesColors(const bool b) {
   if (b != _interpolateEdgesColors) {
-    _interpolateEdgesColors=b;
+    _interpolateEdgesColors = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -237,7 +213,7 @@ bool GlGraphRenderingParameters::interpolateEdgesSizes() const {
 }
 void GlGraphRenderingParameters::setInterpolateEdgesSizes(const bool b) {
   if (b != _interpolateEdgesSizes) {
-    _interpolateEdgesSizes=b;
+    _interpolateEdgesSizes = b;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -246,11 +222,11 @@ bool GlGraphRenderingParameters::maxEdgesSizesToNodesSizes() const {
   return _maxEdgesSizesToNodesSizes;
 }
 void GlGraphRenderingParameters::setMaxEdgesSizesToNodesSizes(const bool b) {
-  _maxEdgesSizesToNodesSizes=b;
+  _maxEdgesSizesToNodesSizes = b;
 }
 //====================================================
 void GlGraphRenderingParameters::setSelectionColor(const Color &color) {
-  _selectionColor=color;
+  _selectionColor = color;
 }
 Color GlGraphRenderingParameters::selectionColor() const {
   return _selectionColor;
@@ -261,7 +237,7 @@ bool GlGraphRenderingParameters::labelsScaled() const {
 }
 void GlGraphRenderingParameters::setLabelsScaled(bool state) {
   if (_labelsScaled != state) {
-    _labelsScaled=state;
+    _labelsScaled = state;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -271,7 +247,7 @@ bool GlGraphRenderingParameters::labelsFixedFontSize() const {
 }
 void GlGraphRenderingParameters::setLabelsFixedFontSize(bool state) {
   if (_labelsFixedFontSize != state) {
-    _labelsFixedFontSize=state;
+    _labelsFixedFontSize = state;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -281,7 +257,7 @@ int GlGraphRenderingParameters::labelsDensity() const {
 }
 void GlGraphRenderingParameters::setLabelsDensity(int density) {
   if (_labelsDensity != density) {
-    _labelsDensity=density;
+    _labelsDensity = density;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -291,7 +267,7 @@ float GlGraphRenderingParameters::minSizeOfLabels() const {
 }
 void GlGraphRenderingParameters::setMinSizeOfLabels(float size) {
   if (_labelsMinSize != size) {
-    _labelsMinSize=size;
+    _labelsMinSize = size;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
@@ -301,18 +277,18 @@ float GlGraphRenderingParameters::maxSizeOfLabels() const {
 }
 void GlGraphRenderingParameters::setMaxSizeOfLabels(float size) {
   if (_labelsMaxSize != size) {
-    _labelsMaxSize=size;
+    _labelsMaxSize = size;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
 //====================================================
-void GlGraphRenderingParameters::setElementsOrderingProperty(tlp::NumericProperty* property) {
-  if (property !=_elementsOrderingProperty) {
+void GlGraphRenderingParameters::setElementsOrderingProperty(tlp::NumericProperty *property) {
+  if (property != _elementsOrderingProperty) {
     _elementsOrderingProperty = property;
     sendEvent(GlGraphRenderingParametersEvent(this, GlGraphRenderingParametersEvent::RENDERING_PARAMETERS_MODIFIED));
   }
 }
-tlp::NumericProperty* GlGraphRenderingParameters::elementsOrderingProperty() const {
+tlp::NumericProperty *GlGraphRenderingParameters::elementsOrderingProperty() const {
   return _elementsOrderingProperty;
 }
 //====================================================
@@ -327,9 +303,9 @@ bool GlGraphRenderingParameters::billboardedNodes() const {
 }
 //====================================================
 void GlGraphRenderingParameters::setDisplayFilteringProperty(tlp::BooleanProperty *filteringProperty) {
-  _displayFilteringProperty=filteringProperty;
+  _displayFilteringProperty = filteringProperty;
 }
-tlp::BooleanProperty* GlGraphRenderingParameters::displayFilteringProperty() const {
+tlp::BooleanProperty *GlGraphRenderingParameters::displayFilteringProperty() const {
   return _displayFilteringProperty;
 }
 //====================================================
@@ -343,9 +319,9 @@ bool GlGraphRenderingParameters::bypassLodSystem() const {
   return _bypassLodSystem;
 }
 //====================================================
-GlDefaultSelectionColorManager* GlDefaultSelectionColorManager::manager = nullptr;
+GlDefaultSelectionColorManager *GlDefaultSelectionColorManager::manager = nullptr;
 
-void GlDefaultSelectionColorManager::setManager(GlDefaultSelectionColorManager* mgr) {
+void GlDefaultSelectionColorManager::setManager(GlDefaultSelectionColorManager *mgr) {
   manager = mgr;
 }
 
@@ -354,7 +330,7 @@ tlp::Color GlDefaultSelectionColorManager::getDefaultSelectionColor() {
   return manager ? manager->defaultSelectionColor() : selectionColor;
 }
 
-GlGraphRenderingParameters& GlGraphRenderingParameters::operator=(const GlGraphRenderingParameters &params) {
+GlGraphRenderingParameters &GlGraphRenderingParameters::operator=(const GlGraphRenderingParameters &params) {
   Observable::holdObservers();
   setDisplayEdgesExtremities(params.displayEdgesExtremities());
   setDisplayNodesLabels(params.displayNodesLabels());

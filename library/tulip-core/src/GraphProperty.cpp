@@ -29,7 +29,9 @@ using namespace tlp;
 const string GraphProperty::propertyTypename = "graph";
 
 //==============================
-GraphProperty::GraphProperty(Graph *sg, const std::string &n) : AbstractProperty<GraphType, EdgeSetType>(sg, n) { setAllNodeValue(0); }
+GraphProperty::GraphProperty(Graph *sg, const std::string &n) : AbstractProperty<GraphType, EdgeSetType>(sg, n) {
+  setAllNodeValue(0);
+}
 //==============================
 GraphProperty::~GraphProperty() {
   if (graph) {
@@ -130,18 +132,28 @@ PropertyInterface *GraphProperty::clonePrototype(Graph *g, const std::string &n)
 }
 //=============================================================
 // disabled, use setNodeValue instead
-bool GraphProperty::setNodeStringValue(const node, const std::string &) { return false; }
+bool GraphProperty::setNodeStringValue(const node, const std::string &) {
+  return false;
+}
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &, Graph *) { return false; }
+bool GraphProperty::setAllNodeStringValue(const std::string &, Graph *) {
+  return false;
+}
 //=============================================================
 // disabled, use setEdgeValue instead
-bool GraphProperty::setEdgeStringValue(const edge, const std::string &) { return false; }
+bool GraphProperty::setEdgeStringValue(const edge, const std::string &) {
+  return false;
+}
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string &, Graph *) { return false; }
+bool GraphProperty::setAllEdgeStringValue(const std::string &, Graph *) {
+  return false;
+}
 //=============================================================
-const set<edge> &GraphProperty::getReferencedEdges(const edge e) const { return ((GraphProperty *)this)->edgeProperties.get(e.id); }
+const set<edge> &GraphProperty::getReferencedEdges(const edge e) const {
+  return ((GraphProperty *)this)->edgeProperties.get(e.id);
+}
 //=============================================================
 void GraphProperty::treatEvent(const Event &evt) {
   if (evt.type() == Event::TLP_DELETE) {
@@ -151,7 +163,9 @@ void GraphProperty::treatEvent(const Event &evt) {
 
     if (sg) {
 #ifndef NDEBUG
-      tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to prevent segmentation fault" << std::endl;
+      tlp::warning() << "Tulip Warning : A graph pointed by metanode(s) has been deleted, the metanode(s) pointer has been set to zero in order to "
+                        "prevent segmentation fault"
+                     << std::endl;
 #endif
 
       if (getNodeDefaultValue() == sg) {

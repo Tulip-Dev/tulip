@@ -5,19 +5,16 @@
 using namespace std;
 using namespace tlp;
 
-void ExtremityShape::Arrow(QXmlStreamWriter &res, const QString &color,
-                           bool tgt) {
+void ExtremityShape::Arrow(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", (tgt ? "0 0 10 10" : "-10 0 10 10"));
   res.writeAttribute("refX", (tgt ? "6.7" : "-6.7"));
   res.writeAttribute("refY", "5");
   res.writeStartElement("polyline");
-  res.writeAttribute("points",
-                     (tgt ? "0,0 10,5 0,10 1,5" : "0,0 -10,5 0,10 -1,5"));
+  res.writeAttribute("points", (tgt ? "0,0 10,5 0,10 1,5" : "0,0 -10,5 0,10 -1,5"));
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Circle(QXmlStreamWriter &res, const QString &color,
-                            bool tgt) {
+void ExtremityShape::Circle(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "1 1 10 10");
   res.writeAttribute("refX", (tgt ? "10.5" : "1.5"));
   res.writeAttribute("refY", "6");
@@ -28,8 +25,7 @@ void ExtremityShape::Circle(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Cross(QXmlStreamWriter &res, const QString &color,
-                           bool tgt) {
+void ExtremityShape::Cross(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "6" : "4"));
   res.writeAttribute("refY", "5");
@@ -39,8 +35,7 @@ void ExtremityShape::Cross(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("stroke-width", "2");
 }
 
-void ExtremityShape::Diamond(QXmlStreamWriter &res, const QString &color,
-                             bool tgt) {
+void ExtremityShape::Diamond(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "8.5" : "1.7"));
   res.writeAttribute("refY", "5");
@@ -49,8 +44,7 @@ void ExtremityShape::Diamond(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Hexagon(QXmlStreamWriter &res, const QString &color,
-                             bool tgt) {
+void ExtremityShape::Hexagon(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "10" : "0"));
   res.writeAttribute("refY", "5");
@@ -59,8 +53,7 @@ void ExtremityShape::Hexagon(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Pentagon(QXmlStreamWriter &res, const QString &color,
-                              bool tgt) {
+void ExtremityShape::Pentagon(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "8.5" : "0"));
   res.writeAttribute("refY", "5");
@@ -68,8 +61,7 @@ void ExtremityShape::Pentagon(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("points", "6,0 0,2 0,8 6,10 10,5");
   res.writeAttribute("fill", color);
 }
-void ExtremityShape::Ring(QXmlStreamWriter &res, const QString &color,
-                          bool tgt) {
+void ExtremityShape::Ring(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "9" : "1"));
   res.writeAttribute("refY", "5");
@@ -89,8 +81,7 @@ void ExtremityShape::Ring(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("stroke-width", "2.5");
 }
 
-void ExtremityShape::Square(QXmlStreamWriter &res, const QString &color,
-                            bool tgt) {
+void ExtremityShape::Square(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "10" : "0"));
   res.writeAttribute("refY", "5");
@@ -102,19 +93,16 @@ void ExtremityShape::Square(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Star(QXmlStreamWriter &res, const QString &color,
-                          bool tgt) {
+void ExtremityShape::Star(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "5" : "2"));
   res.writeAttribute("refY", "5");
   res.writeStartElement("polygon");
-  res.writeAttribute(
-      "points", "6,0 3.75,3 0,2 2.25,5 0,8 3.75,6.9 6,10 6,6.25 10,5 6,3.75");
+  res.writeAttribute("points", "6,0 3.75,3 0,2 2.25,5 0,8 3.75,6.9 6,10 6,6.25 10,5 6,3.75");
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Cube(QXmlStreamWriter &res, const QString &color,
-                          bool tgt) {
+void ExtremityShape::Cube(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "10" : "0"));
   res.writeAttribute("refY", "5");
@@ -126,8 +114,7 @@ void ExtremityShape::Cube(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::CubeOutlinedTransparent(QXmlStreamWriter &res,
-                                             const QString &color, bool tgt) {
+void ExtremityShape::CubeOutlinedTransparent(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 10 10");
   res.writeAttribute("refX", (tgt ? "10" : "0"));
   res.writeAttribute("refY", "5");
@@ -139,8 +126,7 @@ void ExtremityShape::CubeOutlinedTransparent(QXmlStreamWriter &res,
   res.writeAttribute("height", "10");
   res.writeAttribute("fill", "white");
 }
-void ExtremityShape::Cone(QXmlStreamWriter &res, const QString &color,
-                          bool tgt) {
+void ExtremityShape::Cone(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 11 10");
   res.writeAttribute("refX", (tgt ? "10" : "1"));
   res.writeAttribute("refY", "5");
@@ -150,8 +136,7 @@ void ExtremityShape::Cone(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Cylinder(QXmlStreamWriter &res, const QString &color,
-                              bool tgt) {
+void ExtremityShape::Cylinder(QXmlStreamWriter &res, const QString &color, bool tgt) {
   res.writeAttribute("viewBox", "0 0 11 10");
   res.writeAttribute("refX", (tgt ? "10" : "1"));
   res.writeAttribute("refY", "5");
@@ -161,14 +146,12 @@ void ExtremityShape::Cylinder(QXmlStreamWriter &res, const QString &color,
   res.writeAttribute("fill", color);
 }
 
-void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color,
-                            bool tgt, const unsigned id_src_gradient) {
+void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt, const unsigned id_src_gradient) {
   res.writeAttribute("viewBox", "1 1 10 10");
   res.writeAttribute("refX", (tgt ? "10.5" : "1.5"));
   res.writeAttribute("refY", "6");
 
-  QString milieu_gradient_sphere("RadGradientSrc" +
-                                 QString::number(id_src_gradient));
+  QString milieu_gradient_sphere("RadGradientSrc" + QString::number(id_src_gradient));
   QString gradient_sphere("url(#" + milieu_gradient_sphere + ")");
   res.writeStartElement("circle");
   res.writeAttribute("cx", "6");
@@ -186,11 +169,8 @@ void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color,
 
   res.writeStartElement("stop");
   res.writeAttribute("offset", "0%");
-  res.writeAttribute("stop-color",
-                     QString("rgb(") +
-                         QString::number(static_cast<int>(color.getR())) + "," +
-                         QString::number(static_cast<int>(color.getG())) + "," +
-                         QString::number(static_cast<int>(color.getB())) + ")");
+  res.writeAttribute("stop-color", QString("rgb(") + QString::number(static_cast<int>(color.getR())) + "," +
+                                       QString::number(static_cast<int>(color.getG())) + "," + QString::number(static_cast<int>(color.getB())) + ")");
   res.writeEndElement();
 
   unsigned colorR = static_cast<unsigned>(color.getR());
@@ -227,9 +207,7 @@ void ExtremityShape::Sphere(QXmlStreamWriter &res, const tlp::Color &color,
   res.writeEndElement();
 }
 
-void ExtremityShape::FontAwesomeIcon(QXmlStreamWriter &res,
-                                     const QString &color,
-                                     const string &iconName, bool tgt) {
+void ExtremityShape::FontAwesomeIcon(QXmlStreamWriter &res, const QString &color, const string &iconName, bool tgt) {
   res.writeStartElement("text");
   res.writeAttribute("font-family", "fontawesome");
   res.writeAttribute("transform", "scale(1,-1)");
@@ -241,16 +219,11 @@ void ExtremityShape::FontAwesomeIcon(QXmlStreamWriter &res,
   // res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
   res.writeCharacters("");
   res.device()->write("&"); // do not escape the character
-  res.writeCharacters(
-      "#x" + QString::number(
-                 TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16) +
-      ";");
+  res.writeCharacters("#x" + QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16) + ";");
 }
 
-void ExtremityShape::GlowSphere(QXmlStreamWriter &res, const tlp::Color &color,
-                                bool tgt, const unsigned id_gradient) {
-  QString milieu_gradient_sphere("RadGradientTgt" +
-                                 QString::number(id_gradient));
+void ExtremityShape::GlowSphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt, const unsigned id_gradient) {
+  QString milieu_gradient_sphere("RadGradientTgt" + QString::number(id_gradient));
   QString gradient_sphere("url(#" + milieu_gradient_sphere + ")");
 
   res.writeAttribute("viewBox", "1 1 10 10");
@@ -274,11 +247,8 @@ void ExtremityShape::GlowSphere(QXmlStreamWriter &res, const tlp::Color &color,
 
   res.writeStartElement("stop");
   res.writeAttribute("offset", "0%");
-  res.writeAttribute("stop-color",
-                     QString("rgb(") +
-                         QString::number(static_cast<int>(color.getR())) + "," +
-                         QString::number(static_cast<int>(color.getG())) + "," +
-                         QString::number(static_cast<int>(color.getB())) + ")");
+  res.writeAttribute("stop-color", QString("rgb(") + QString::number(static_cast<int>(color.getR())) + "," +
+                                       QString::number(static_cast<int>(color.getG())) + "," + QString::number(static_cast<int>(color.getB())) + ")");
   res.writeEndElement();
 
   unsigned colorR = static_cast<unsigned>(color.getR());

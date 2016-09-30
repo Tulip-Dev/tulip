@@ -34,5 +34,4 @@ void ParallelCoordsElementsSelector::selectedEntitiesHandler(ParallelCoordinates
 void ParallelCoordsElementsSelector::selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection) {
   parallelView->setDataInRegionSelectFlag(x, y, w, h, addToSelection);
 }
-
 }

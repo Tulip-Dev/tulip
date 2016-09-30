@@ -38,7 +38,7 @@ extern TLP_SCOPE int getNumIterators();
 * Allows basic iteration operations only.
 *
 **/
-template<class itType> struct Iterator {
+template <class itType> struct Iterator {
   ///
   Iterator() {
 #ifndef NDEBUG
@@ -56,21 +56,21 @@ template<class itType> struct Iterator {
   *
   * @return The current element pointed by the Iterator.
   **/
-  virtual itType next()=0;
+  virtual itType next() = 0;
 
   /**
   * @brief Tells if the sequence is at its end.
   *
   * @return bool Whether there are more elements to iterate.
   **/
-  virtual bool hasNext()=0;
+  virtual bool hasNext() = 0;
 };
 
-//template<class C>class Iterator;
+// template<class C>class Iterator;
 #ifndef DOXYGEN_NOTFOR_DEVEL
-template<typename TYPE> class UINTIterator : public Iterator<TYPE> {
+template <typename TYPE> class UINTIterator : public Iterator<TYPE> {
 public:
-  UINTIterator(Iterator<unsigned int> *it):it(it) {
+  UINTIterator(Iterator<unsigned int> *it) : it(it) {
   }
   ~UINTIterator() {
     delete it;
@@ -81,6 +81,7 @@ public:
   TYPE next() {
     return TYPE(it->next());
   }
+
 private:
   Iterator<unsigned int> *it;
 };
@@ -97,10 +98,9 @@ private:
 *
 * @return The number of iterated elements
 **/
-template<typename itType>
-unsigned int iteratorCount(Iterator<itType> *it) {
+template <typename itType> unsigned int iteratorCount(Iterator<itType> *it) {
   unsigned int count = 0;
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     ++count;
     it->next();
   }
@@ -119,9 +119,8 @@ unsigned int iteratorCount(Iterator<itType> *it) {
 * @param mapFunction functor or lambda function taking one parameter of the same type of the iterated elements
 *
 **/
-template<typename itType, class MapFunction>
-void iteratorMap(Iterator<itType> *it, MapFunction mapFunction) {
-  while(it->hasNext()) {
+template <typename itType, class MapFunction> void iteratorMap(Iterator<itType> *it, MapFunction mapFunction) {
+  while (it->hasNext()) {
     mapFunction(it->next());
   }
   delete it;
@@ -142,16 +141,15 @@ void iteratorMap(Iterator<itType> *it, MapFunction mapFunction) {
 * @return the reduced value from the iterated elements
 *
 **/
-template<typename itType, typename reduceType, class ReduceFunction>
+template <typename itType, typename reduceType, class ReduceFunction>
 reduceType iteratorReduce(tlp::Iterator<itType> *it, const reduceType &initVal, ReduceFunction reduceFunction) {
   reduceType val = initVal;
-  while(it->hasNext()) {
+  while (it->hasNext()) {
     val = reduceFunction(val, it->next());
   }
   delete it;
   return val;
 }
-
 }
 
 #ifdef _MSC_VER

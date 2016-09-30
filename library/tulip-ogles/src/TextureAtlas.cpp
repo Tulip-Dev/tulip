@@ -75,50 +75,43 @@
 using namespace tlp;
 
 //=================================================================================================
-TextureAtlas::TextureAtlas( const size_t width, const size_t height, const size_t depth) :
-  _width(width), _height(height), _depth(depth), _used(0), _id(0), _data(nullptr), _needUpload(false) {
+TextureAtlas::TextureAtlas(const size_t width, const size_t height, const size_t depth)
+    : _width(width), _height(height), _depth(depth), _used(0), _id(0), _data(nullptr), _needUpload(false) {
 
   assert((depth == 1) || (depth == 3) || (depth == 4));
 
   // We want a one pixel border around the whole atlas to avoid any artefact when
   // sampling texture
-  Vec3i node(1,1,width-2);
+  Vec3i node(1, 1, width - 2);
   _nodes.push_back(node);
 
-  _data = new unsigned char[width*height*depth]();
+  _data = new unsigned char[width * height * depth]();
 }
 //=================================================================================================
 TextureAtlas::~TextureAtlas() {
-  delete [] _data;
-  if(_id) {
-    glDeleteTextures( 1, &_id );
+  delete[] _data;
+  if (_id) {
+    glDeleteTextures(1, &_id);
   }
 }
 //=================================================================================================
-void TextureAtlas::setRegion(const size_t x,
-                             const size_t y,
-                             const size_t width,
-                             const size_t height,
-                             const unsigned char * data,
+void TextureAtlas::setRegion(const size_t x, const size_t y, const size_t width, const size_t height, const unsigned char *data,
                              const size_t stride) {
   assert(x > 0);
   assert(y > 0);
-  assert(x < (_width-1));
-  assert((x + width) <= (_width-1));
-  assert(y < (_height-1));
-  assert((y + height) <= (_height-1));
+  assert(x < (_width - 1));
+  assert((x + width) <= (_width - 1));
+  assert(y < (_height - 1));
+  assert((y + height) <= (_height - 1));
 
   size_t charsize = sizeof(char);
-  for(size_t i = 0 ; i < height ; ++i) {
-    memcpy(_data+((y+i)*_width + x ) * charsize * _depth,
-           data + (i*stride) * charsize, width * charsize * _depth);
+  for (size_t i = 0; i < height; ++i) {
+    memcpy(_data + ((y + i) * _width + x) * charsize * _depth, data + (i * stride) * charsize, width * charsize * _depth);
   }
   _needUpload = true;
 }
 //=================================================================================================
-int TextureAtlas::fit(const size_t index,
-                      const size_t width,
-                      const size_t height) {
+int TextureAtlas::fit(const size_t index, const size_t width, const size_t height) {
 
   Vec3i &node = _nodes[index];
   int x = node.x();
@@ -126,16 +119,16 @@ int TextureAtlas::fit(const size_t index,
   int width_left = width;
   size_t i = index;
 
-  if ((x + width) > (_width-1)) {
+  if ((x + width) > (_width - 1)) {
     return -1;
   }
   y = node.y();
-  while(width_left > 0) {
+  while (width_left > 0) {
     node = _nodes[i];
-    if(node.y() > y) {
+    if (node.y() > y) {
       y = node.y();
     }
-    if((y + height) > (_height-1)) {
+    if ((y + height) > (_height - 1)) {
       return -1;
     }
     width_left -= node.z();
@@ -147,32 +140,30 @@ int TextureAtlas::fit(const size_t index,
 void TextureAtlas::merge() {
   Vec3i node, next;
 
-  for(size_t i = 0 ; i < _nodes.size() - 1 ; ++i) {
+  for (size_t i = 0; i < _nodes.size() - 1; ++i) {
     node = _nodes[i];
-    next = _nodes[i+1];
-    if(node.y() == next.y()) {
+    next = _nodes[i + 1];
+    if (node.y() == next.y()) {
       node.z() += next.z();
-      _nodes.erase(_nodes.begin() + i+1);
+      _nodes.erase(_nodes.begin() + i + 1);
       --i;
     }
   }
 }
 //=================================================================================================
-Vec4i TextureAtlas::getRegion(const size_t width,
-                              const size_t height) {
+Vec4i TextureAtlas::getRegion(const size_t width, const size_t height) {
 
   Vec3i node, prev;
   Vec4i region(0, 0, width, height);
 
   int best_height = INT_MAX;
-  int best_index  = -1;
+  int best_index = -1;
   int best_width = INT_MAX;
-  for(size_t i = 0 ; i < _nodes.size() ; ++i) {
+  for (size_t i = 0; i < _nodes.size(); ++i) {
     int y = fit(i, width, height);
-    if(y >= 0) {
+    if (y >= 0) {
       node = _nodes[i];
-      if(((y + int(height)) < best_height) ||
-         (((y + int(height)) == best_height) && (node.z() < best_width))) {
+      if (((y + int(height)) < best_height) || (((y + int(height)) == best_height) && (node.z() < best_width))) {
         best_height = y + height;
         best_index = i;
         best_width = node.z();
@@ -182,7 +173,7 @@ Vec4i TextureAtlas::getRegion(const size_t width,
     }
   }
 
-  if(best_index == -1) {
+  if (best_index == -1) {
     region.x() = -1;
     region.y() = -1;
     region.z() = 0;
@@ -195,18 +186,18 @@ Vec4i TextureAtlas::getRegion(const size_t width,
   node.x() = region.x();
   node.y() = region.y() + height;
   node.z() = width;
-  _nodes.insert(_nodes.begin()+best_index, node);
+  _nodes.insert(_nodes.begin() + best_index, node);
 
-  for(size_t i = best_index+1 ; i < _nodes.size() ; ++i) {
+  for (size_t i = best_index + 1; i < _nodes.size(); ++i) {
     node = _nodes[i];
-    prev = _nodes[i-1];
+    prev = _nodes[i - 1];
 
     if (node.x() < (prev.x() + prev.z())) {
       int shrink = prev.x() + prev.z() - node.x();
       node.x() += shrink;
       node.z() -= shrink;
       if (node.z() <= 0) {
-        _nodes.erase(_nodes.begin()+i);
+        _nodes.erase(_nodes.begin() + i);
         --i;
       } else {
         break;
@@ -221,29 +212,29 @@ Vec4i TextureAtlas::getRegion(const size_t width,
 }
 //=================================================================================================
 void TextureAtlas::clear() {
-  Vec3i node(1,1,1);
+  Vec3i node(1, 1, 1);
 
-  assert( _data );
+  assert(_data);
 
   _nodes.clear();
   _used = 0;
   // We want a one pixel border around the whole atlas to avoid any artefact when
   // sampling texture
-  node.z() = _width-2;
+  node.z() = _width - 2;
 
   _nodes.push_back(node);
-  memset( _data, 0, _width*_height*_depth );
+  memset(_data, 0, _width * _height * _depth);
 }
 //=================================================================================================
 void TextureAtlas::upload() {
-  assert( _data );
+  assert(_data);
 
   if (!_needUpload) {
     return;
   }
 
-  if( !_id ) {
-    glGenTextures( 1, &_id );
+  if (!_id) {
+    glGenTextures(1, &_id);
   }
 
   unsigned char *data = _data;
@@ -254,20 +245,15 @@ void TextureAtlas::upload() {
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
-
-  if(_depth == 4) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height,
-                 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
-  } else if(_depth == 3) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height,
-                 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+  if (_depth == 4) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _width, _height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+  } else if (_depth == 3) {
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _width, _height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
   } else {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, _width, _height,
-                 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_ALPHA, _width, _height, 0, GL_ALPHA, GL_UNSIGNED_BYTE, data);
   }
 
   glGenerateMipmap(GL_TEXTURE_2D);
-
 
   _needUpload = false;
 }
@@ -278,4 +264,3 @@ void TextureAtlas::bind() {
   }
   glBindTexture(GL_TEXTURE_2D, _id);
 }
-

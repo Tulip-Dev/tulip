@@ -37,31 +37,32 @@ typedef __int64 int64_t;
 
 class StackWalker {
 public:
-  virtual ~StackWalker() {}
+  virtual ~StackWalker() {
+  }
   virtual void printCallStack(std::ostream &os, unsigned int maxDepth = 50) = 0;
 
   void printCallStackToStdErr(unsigned int maxDepth = 50) {
     printCallStack(std::cerr, maxDepth);
   }
 
-  virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, const std::string& moduleName, const std::string& funcName="", int64_t symbolOffset=0, const std::string& fileName="", unsigned int line=0) {
+  virtual void printFrameInfos(std::ostream &os, unsigned int frameId, int64_t pcAddress, const std::string &moduleName,
+                               const std::string &funcName = "", int64_t symbolOffset = 0, const std::string &fileName = "", unsigned int line = 0) {
 
-    if (frameId%2 == 0)
+    if (frameId % 2 == 0)
       os << setTextBackgroundColor(DARK_GRAY);
     else
       os << setTextBackgroundColor(LIGHT_GRAY);
 
     os << bold;
 
-    os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId
-       << lightMagenta << " 0x" << std::hex << std::setw(16) << pcAddress << lightRed << " in ";
+    os << lightRed << std::dec << std::setfill('0') << "#" << std::setw(2) << frameId << lightMagenta << " 0x" << std::hex << std::setw(16)
+       << pcAddress << lightRed << " in ";
 
     os << white;
 
     if (funcName != "") {
       os << funcName;
-    }
-    else {
+    } else {
       os << "??";
     }
 
@@ -75,15 +76,12 @@ public:
 
     if (moduleName != "") {
       os << lightRed << " from " << lightCyan << moduleName;
-    }
-    else {
+    } else {
       os << lightRed << " from " << lightGreen << "??";
     }
 
     os << fillToEndOfLine << defaultTextColor << std::endl;
-
   }
-
 };
 
 #if defined(__unix__) || defined(__APPLE__)
@@ -93,7 +91,6 @@ public:
 class StackWalkerGCC : public StackWalker {
 
 public:
-
   StackWalkerGCC();
 
   ~StackWalkerGCC();
@@ -105,14 +102,11 @@ public:
   }
 
 private:
-
   void *callerAddress;
 #ifdef HAVE_BFD
   std::map<std::string, BfdWrapper *> bfdMap;
 #endif
-
 };
-
 
 #elif defined(__MINGW32__)
 
@@ -151,7 +145,7 @@ public:
     this->context = context;
   }
 
-private :
+private:
   CONTEXT *context;
   std::string extraSymbolsSearchPaths;
 };

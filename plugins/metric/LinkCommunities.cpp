@@ -53,14 +53,12 @@ using namespace tlp;
 **/
 class LinkCommunities : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION(
-      "Link Communities", "François Queyroi", "25/02/11",
-      "Edges partitioning measure used for community detection.<br>"
-      "It is an implementation of a fuzzy clustering procedure. First "
-      "introduced in :<br>"
-      " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, "
-      "Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
-      "1.0", "Clustering")
+  PLUGININFORMATION("Link Communities", "François Queyroi", "25/02/11", "Edges partitioning measure used for community detection.<br>"
+                                                                        "It is an implementation of a fuzzy clustering procedure. First "
+                                                                        "introduced in :<br>"
+                                                                        " <b>Link communities reveal multiscale complexity in networks</b>, Ahn, "
+                                                                        "Y.Y. and Bagrow, J.P. and Lehmann, S., Nature vol:466, 761--764 (2010)",
+                    "1.0", "Clustering")
 
   LinkCommunities(const tlp::PluginContext *);
   ~LinkCommunities();
@@ -126,14 +124,14 @@ static const char *paramHelp[] = {
     // Number of steps
     "This parameter indicates the number of thresholds to be compared."};
 //==============================================================================================================
-LinkCommunities::LinkCommunities(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context), metric(nullptr) {
+LinkCommunities::LinkCommunities(const tlp::PluginContext *context) : DoubleAlgorithm(context), metric(nullptr) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
   addInParameter<bool>("Group isthmus", paramHelp[1], "true", true);
   addInParameter<unsigned int>("Number of steps", paramHelp[2], "200", true);
 }
 //==============================================================================================================
-LinkCommunities::~LinkCommunities() {}
+LinkCommunities::~LinkCommunities() {
+}
 //==============================================================================================================
 bool LinkCommunities::run() {
   metric = nullptr;
@@ -215,8 +213,7 @@ void LinkCommunities::computeSimilarities() {
 #pragma omp parallel for
 #endif
 
-    for (int i = 0; i < (int)dual.numberOfEdges();
-         ++i) { // use int for MSVS2010 compilation
+    for (int i = 0; i < (int)dual.numberOfEdges(); ++i) { // use int for MSVS2010 compilation
       edge e = dual(i);
       similarity[e] = getSimilarity(e);
     }
@@ -224,8 +221,7 @@ void LinkCommunities::computeSimilarities() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (int i = 0; i < (int)dual.numberOfEdges();
-         ++i) { // use int for MSVS2010 compilation
+    for (int i = 0; i < (int)dual.numberOfEdges(); ++i) { // use int for MSVS2010 compilation
       edge e = dual(i);
       similarity[e] = getWeightedSimilarity(e);
     }
@@ -487,8 +483,7 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (int i = 0; i < (int)numberOfSteps;
-       i++) { // use int for msvs2010 compilation
+  for (int i = 0; i < (int)numberOfSteps; i++) { // use int for msvs2010 compilation
     double step = min + i * deltaThreshold;
     double d = computeAverageDensity(step);
 #ifdef _OPENMP

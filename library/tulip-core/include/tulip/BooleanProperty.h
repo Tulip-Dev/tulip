@@ -32,13 +32,14 @@ class PropertyContext;
  * @ingroup Graph
  * @brief A graph property that maps a boolean value to graph elements.
  */
-class TLP_SCOPE BooleanProperty:public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
-public :
-  BooleanProperty (Graph *g, const std::string& n="") :AbstractProperty<BooleanType,BooleanType>(g, n) {}
+class TLP_SCOPE BooleanProperty : public AbstractProperty<tlp::BooleanType, tlp::BooleanType> {
+public:
+  BooleanProperty(Graph *g, const std::string &n = "") : AbstractProperty<BooleanType, BooleanType>(g, n) {
+  }
   // PropertyInterface inherited methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
 
@@ -73,18 +74,17 @@ public :
  * @ingroup Graph
  * @brief A graph property that maps a std::vector<bool> value to graph elements.
  */
-class TLP_SCOPE BooleanVectorProperty:public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> {
-public :
-  BooleanVectorProperty(Graph *g, const std::string& n="") :AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {}
+class TLP_SCOPE BooleanVectorProperty : public AbstractVectorProperty<tlp::BooleanVectorType, tlp::BooleanType> {
+public:
+  BooleanVectorProperty(Graph *g, const std::string &n = "") : AbstractVectorProperty<BooleanVectorType, tlp::BooleanType>(g, n) {
+  }
   // PropertyInterface inherited methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
-
 };
-
 }
 
 #endif

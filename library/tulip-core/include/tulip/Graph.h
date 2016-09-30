@@ -88,8 +88,7 @@ enum ElementType {
  * @param filename the file in one of the supported formats to parse.
  * @return Graph* the imported Graph, nullptr if the import failed.
  **/
-TLP_SCOPE Graph *loadGraph(const std::string &filename,
-                           tlp::PluginProgress *progress = nullptr);
+TLP_SCOPE Graph *loadGraph(const std::string &filename, tlp::PluginProgress *progress = nullptr);
 
 /**
  * @ingroup Graph
@@ -117,8 +116,7 @@ TLP_SCOPE Graph *loadGraph(const std::string &filename,
  * @param filename the file to save the graph to.
  * @return bool whether the export was successfull or not.
  **/
-TLP_SCOPE bool saveGraph(Graph *graph, const std::string &filename,
-                         tlp::PluginProgress *progress = nullptr);
+TLP_SCOPE bool saveGraph(Graph *graph, const std::string &filename, tlp::PluginProgress *progress = nullptr);
 
 /**
  * @ingroup Graph
@@ -138,9 +136,7 @@ TLP_SCOPE bool saveGraph(Graph *graph, const std::string &filename,
  *well as final state. Defaults to nullptr.
  * @return bool Whether the export was successfull or not.
  **/
-TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream,
-                           const std::string &format, DataSet &dataSet,
-                           PluginProgress *progress = nullptr);
+TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::string &format, DataSet &dataSet, PluginProgress *progress = nullptr);
 
 /**
  * @ingroup Graph
@@ -162,9 +158,7 @@ TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream,
  * @return :Graph* The graph containing the imported data, or nullptr in case of
  *failure.
  **/
-TLP_SCOPE Graph *importGraph(const std::string &format, DataSet &dataSet,
-                             PluginProgress *progress = nullptr,
-                             Graph *newGraph = nullptr);
+TLP_SCOPE Graph *importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress = nullptr, Graph *newGraph = nullptr);
 
 /**
  * @ingroup Graph
@@ -187,9 +181,7 @@ TLP_SCOPE Graph *newGraph();
  * The output selection is used to select the appended nodes & edges
  * \warning The input selection is extended to all selected edge ends.
  */
-TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG,
-                           BooleanProperty *inSelection = nullptr,
-                           BooleanProperty *outSelection = nullptr);
+TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSelection = nullptr, BooleanProperty *outSelection = nullptr);
 
 /**
  * @ingroup Graph
@@ -199,8 +191,7 @@ TLP_SCOPE void copyToGraph(Graph *outG, const Graph *inG,
  * default value.
  * \warning The selection is extended to all selected edge ends.
  */
-TLP_SCOPE void removeFromGraph(Graph *ioG,
-                               BooleanProperty *inSelection = nullptr);
+TLP_SCOPE void removeFromGraph(Graph *ioG, BooleanProperty *inSelection = nullptr);
 
 /**
  * @ingroup Graph
@@ -277,8 +268,10 @@ class TLP_SCOPE Graph : public Observable {
   friend class PropertyInterface;
 
 public:
-  Graph() : id(0) {}
-  virtual ~Graph() {}
+  Graph() : id(0) {
+  }
+  virtual ~Graph() {
+  }
 
   /**
    * @brief Applies an algorithm plugin, identified by its name.
@@ -306,9 +299,7 @@ public:
    *as well as final state. Defaults to nullptr.
    * @return bool Whether the algorithm was successfully applied.
    **/
-  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage,
-                      DataSet *dataSet = nullptr,
-                      PluginProgress *progress = nullptr);
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage, DataSet *dataSet = nullptr, PluginProgress *progress = nullptr);
 
   //=========================================================================
   // Graph hierarchy access and building
@@ -339,8 +330,7 @@ public:
     * @param name The name of the newly created subgraph. Defaults to "unnamed".
     * @return :Graph* The newly created subgraph.
     **/
-  virtual Graph *addSubGraph(BooleanProperty *selection = nullptr,
-                             const std::string &name = "unnamed") = 0;
+  virtual Graph *addSubGraph(BooleanProperty *selection = nullptr, const std::string &name = "unnamed") = 0;
 
   /**
    * @brief Creates and returns a new named sub-graph of this graph.
@@ -363,9 +353,7 @@ public:
    * @return :Graph* The newly created clone subgraph. NULL will be returned if
    *addSibling is set to true and this graph is a root graph.
    **/
-  virtual Graph *addCloneSubGraph(const std::string &name = "unnamed",
-                                  bool addSibling = false,
-                                  bool addSiblingProperties = false);
+  virtual Graph *addCloneSubGraph(const std::string &name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a set of
@@ -379,8 +367,7 @@ public:
    * created subgraph instead of the graph this method is called on.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(const std::set<node> &nodeSet,
-                         Graph *parentSubGraph = nullptr);
+  Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = nullptr);
 
   /**
    * @brief Deletes a sub-graph of this graph.
@@ -611,8 +598,7 @@ public:
    * being filled.
    * @see addNode() to add a single node.
    */
-  virtual void addNodes(unsigned int nbNodes,
-                        std::vector<node> &addedNodes) = 0;
+  virtual void addNodes(unsigned int nbNodes, std::vector<node> &addedNodes) = 0;
 
   /**
    * @brief Adds an existing node in the graph. This node is also added in all
@@ -717,8 +703,7 @@ public:
    * being filled.
    *
    */
-  virtual void addEdges(const std::vector<std::pair<node, node>> &edges,
-                        std::vector<edge> &addedEdges) = 0;
+  virtual void addEdges(const std::vector<std::pair<node, node>> &edges, std::vector<edge> &addedEdges) = 0;
 
   /**
    * @brief Adds an existing edge in the graph. This edge is also added in all
@@ -775,8 +760,7 @@ public:
    * @param deleteInAllGraphs  Whether to delete in all its parent graphs or
    * only in this graph. By default only removes in the current graph.
    */
-  virtual void delEdges(Iterator<edge> *itE,
-                        bool deleteInAllGraphs = false) = 0;
+  virtual void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false) = 0;
 
   /**
    * @brief Deletes edges in the graph. These edges are also removed in the
@@ -1051,7 +1035,9 @@ public:
    * @brief Gets the unique identifier of the graph.
    * @return The unique identifier of this graph.
    */
-  unsigned int getId() const { return id; }
+  unsigned int getId() const {
+    return id;
+  }
 
   /**
    * @brief Gets the number of nodes in this graph.
@@ -1152,8 +1138,7 @@ public:
    * considered
    * @return true if such an edge exists
    */
-  virtual bool hasEdge(const node source, const node target,
-                       bool directed = true) const {
+  virtual bool hasEdge(const node source, const node target, bool directed = true) const {
     return existEdge(source, target, directed).isValid();
   }
 
@@ -1165,8 +1150,7 @@ public:
    * considered
    * @return a vector of existing edges
    */
-  virtual std::vector<edge> getEdges(const node source, const node target,
-                                     bool directed = true) const = 0;
+  virtual std::vector<edge> getEdges(const node source, const node target, bool directed = true) const = 0;
 
   /**
    * @brief Returns the first edge found between the two given nodes.
@@ -1178,8 +1162,7 @@ public:
    * an edge from target to source may also be returned
    * @return An edge that is only valid if it exists.
    */
-  virtual edge existEdge(const node source, const node target,
-                         bool directed = true) const = 0;
+  virtual edge existEdge(const node source, const node target, bool directed = true) const = 0;
 
   //================================================================================
   // Access to the graph attributes and to the node/edge property.
@@ -1213,8 +1196,7 @@ public:
    * @param value The value to set.
    * @return Whether the setting of the attribute was sucessful.
    */
-  template <typename ATTRIBUTETYPE>
-  bool getAttribute(const std::string &name, ATTRIBUTETYPE &value) const;
+  template <typename ATTRIBUTETYPE> bool getAttribute(const std::string &name, ATTRIBUTETYPE &value) const;
 
   /**
    * @brief Gets a copy of the attribute.
@@ -1228,8 +1210,7 @@ public:
    * @param name The name of the attribute to set.
    * @param value The value to set on this attribute.
    */
-  template <typename ATTRIBUTETYPE>
-  void setAttribute(const std::string &name, const ATTRIBUTETYPE &value);
+  template <typename ATTRIBUTETYPE> void setAttribute(const std::string &name, const ATTRIBUTETYPE &value);
 
   /**
    * @brief Sets an attribute on the graph.
@@ -1263,8 +1244,7 @@ public:
    * @param name The unique identifier of the property.
    * @param prop The property to add.
    */
-  virtual void addLocalProperty(const std::string &name,
-                                PropertyInterface *prop) = 0;
+  virtual void addLocalProperty(const std::string &name, PropertyInterface *prop) = 0;
 
   /**
    * @brief Gets an existing property.
@@ -1295,8 +1275,7 @@ public:
    * @param The unique identifier of the property.
    * @return The property of given name.
    */
-  template <typename PropertyType>
-  PropertyType *getLocalProperty(const std::string &name);
+  template <typename PropertyType> PropertyType *getLocalProperty(const std::string &name);
 
   /**
    * @brief Gets a property on this graph or one of its ancestors.
@@ -1314,8 +1293,7 @@ public:
    * @return An existing property, or a new one if none exists with the given
    * name.
    */
-  template <typename PropertyType>
-  PropertyType *getProperty(const std::string &name);
+  template <typename PropertyType> PropertyType *getProperty(const std::string &name);
 
   /**
    * @brief Gets a property on this graph, and this graph only.
@@ -1333,8 +1311,7 @@ public:
    * @return The property of given name.
    * @see getLocalProperty().
    */
-  PropertyInterface *getLocalProperty(const std::string &propertyName,
-                                      const std::string &propertyType);
+  PropertyInterface *getLocalProperty(const std::string &propertyName, const std::string &propertyType);
 
   /**
    * @brief Gets a property on this graph or one of its ancestors.
@@ -1352,8 +1329,7 @@ public:
    * @return The property of given name.
    * @see getProperty().
    */
-  PropertyInterface *getProperty(const std::string &propertyName,
-                                 const std::string &propertyType);
+  PropertyInterface *getProperty(const std::string &propertyName, const std::string &propertyType);
 
   /**
    * @brief Checks if a property exists in this graph or one of its ancestors.
@@ -1405,8 +1381,7 @@ public:
    * excluding this graph's local properties.
    * @return An iterator over the properties this graph inherited.
    */
-  virtual Iterator<PropertyInterface *> *
-  getInheritedObjectProperties() const = 0;
+  virtual Iterator<PropertyInterface *> *getInheritedObjectProperties() const = 0;
 
   /**
    * @brief Gets an iterator over the names of all the properties attached to
@@ -1791,10 +1766,7 @@ public:
    * @see PluginLister::getPluginParameters() to retrieve the list of default
    * parameters for the pligin.
    */
-  bool applyPropertyAlgorithm(const std::string &algorithm,
-                              PropertyInterface *result,
-                              std::string &errorMessage,
-                              PluginProgress *progress = nullptr,
+  bool applyPropertyAlgorithm(const std::string &algorithm, PropertyInterface *result, std::string &errorMessage, PluginProgress *progress = nullptr,
                               DataSet *parameters = nullptr);
 
   // updates management
@@ -1868,9 +1840,7 @@ public:
    * @see canUnPop()
    * @see canPopThenUnPop()
    */
-  virtual void push(bool unpopAllowed = true,
-                    std::vector<PropertyInterface *>
-                        *propertiesToPreserveOnPop = nullptr) = 0;
+  virtual void push(bool unpopAllowed = true, std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr) = 0;
 
   /**
    * @brief Undoes modifications and reverts the whole graph hierarchy back to a
@@ -1954,8 +1924,7 @@ public:
    * whole hierarchy.
    * @return The newly created meta node.
    */
-  node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true,
-                      bool delAllEdge = true);
+  node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 
   /**
    *  @brief Populates a quotient graph with one meta node
@@ -1966,8 +1935,7 @@ public:
    * @param metaNodes will contains all the added meta nodes after the call
    *
    */
-  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
-                       std::vector<node> &metaNodes);
+  void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node> &metaNodes);
   /**
    * @brief Closes an existing subgraph into a metanode.  Edges from nodes
    * in the subgraph to nodes outside the subgraph are replaced with
@@ -1980,8 +1948,7 @@ public:
    * @param delAllEdge indicates if the underlying edges will be removed from
    * the entire hierarchy
    */
-  node createMetaNode(Graph *subGraph, bool multiEdges = true,
-                      bool delAllEdge = true);
+  node createMetaNode(Graph *subGraph, bool multiEdges = true, bool delAllEdge = true);
 
   /**
    * @brief Opens a metanode and replaces all edges between that
@@ -2002,8 +1969,7 @@ protected:
   virtual node restoreNode(node) = 0;
   virtual void restoreNodes(const std::vector<node> &nodes) = 0;
   virtual edge restoreEdge(edge, node source, node target) = 0;
-  virtual void restoreEdges(const std::vector<edge> &edges,
-                            const std::vector<std::pair<node, node>> &ends) = 0;
+  virtual void restoreEdges(const std::vector<edge> &edges, const std::vector<std::pair<node, node>> &ends) = 0;
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node) = 0;
@@ -2017,8 +1983,7 @@ protected:
 
   // local property renaming
   // can failed if a property with the same name already exists
-  virtual bool renameLocalProperty(PropertyInterface *prop,
-                                   const std::string &newName) = 0;
+  virtual bool renameLocalProperty(PropertyInterface *prop, const std::string &newName) = 0;
 
   // internally used to deal with sub graph deletion
   virtual void removeSubGraph(Graph *) = 0;
@@ -2028,19 +1993,33 @@ protected:
 
   // for notification of GraphObserver
   void notifyAddNode(const node n);
-  void notifyAddNode(Graph *, const node n) { notifyAddNode(n); }
+  void notifyAddNode(Graph *, const node n) {
+    notifyAddNode(n);
+  }
   void notifyAddEdge(const edge e);
-  void notifyAddEdge(Graph *, const edge e) { notifyAddEdge(e); }
+  void notifyAddEdge(Graph *, const edge e) {
+    notifyAddEdge(e);
+  }
   void notifyBeforeSetEnds(const edge e);
-  void notifyBeforeSetEnds(Graph *, const edge e) { notifyBeforeSetEnds(e); }
+  void notifyBeforeSetEnds(Graph *, const edge e) {
+    notifyBeforeSetEnds(e);
+  }
   void notifyAfterSetEnds(const edge e);
-  void notifyAfterSetEnds(Graph *, const edge e) { notifyAfterSetEnds(e); }
+  void notifyAfterSetEnds(Graph *, const edge e) {
+    notifyAfterSetEnds(e);
+  }
   void notifyDelNode(const node n);
-  void notifyDelNode(Graph *, const node n) { notifyDelNode(n); }
+  void notifyDelNode(Graph *, const node n) {
+    notifyDelNode(n);
+  }
   void notifyDelEdge(const edge e);
-  void notifyDelEdge(Graph *, const edge e) { notifyDelEdge(e); }
+  void notifyDelEdge(Graph *, const edge e) {
+    notifyDelEdge(e);
+  }
   void notifyReverseEdge(const edge e);
-  void notifyReverseEdge(Graph *, const edge e) { notifyReverseEdge(e); }
+  void notifyReverseEdge(Graph *, const edge e) {
+    notifyReverseEdge(e);
+  }
   void notifyBeforeAddSubGraph(const Graph *);
   void notifyAfterAddSubGraph(const Graph *);
   void notifyBeforeAddSubGraph(Graph *, const Graph *sg) {
@@ -2086,7 +2065,9 @@ protected:
     notifyRemoveAttribute(name);
   }
   void notifyDestroy();
-  void notifyDestroy(Graph *) { notifyDestroy(); }
+  void notifyDestroy(Graph *) {
+    notifyDestroy();
+  }
 
   unsigned int id;
   TLP_HASH_MAP<std::string, tlp::PropertyInterface *> circularCalls;
@@ -2134,59 +2115,50 @@ public:
   };
 
   // constructor for node/edge events
-  GraphEvent(const Graph &g, GraphEventType graphEvtType, unsigned int id,
-             Event::EventType evtType = Event::TLP_MODIFICATION)
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, unsigned int id, Event::EventType evtType = Event::TLP_MODIFICATION)
       : Event(g, evtType), evtType(graphEvtType) {
     info.eltId = id;
   }
   // constructor for nodes events
-  GraphEvent(const Graph &g, GraphEventType graphEvtType,
-             const std::vector<node> &nodes,
-             Event::EventType evtType = Event::TLP_MODIFICATION)
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, const std::vector<node> &nodes, Event::EventType evtType = Event::TLP_MODIFICATION)
       : Event(g, evtType), evtType(graphEvtType) {
     info.nodes = &nodes;
   }
   // constructor for edges events
-  GraphEvent(const Graph &g, GraphEventType graphEvtType,
-             const std::vector<edge> &edges,
-             Event::EventType evtType = Event::TLP_MODIFICATION)
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, const std::vector<edge> &edges, Event::EventType evtType = Event::TLP_MODIFICATION)
       : Event(g, evtType), evtType(graphEvtType) {
     info.edges = &edges;
   }
   // constructor for subgraph events
-  GraphEvent(const Graph &g, GraphEventType graphEvtType, const Graph *sg)
-      : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, const Graph *sg) : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
     info.subGraph = sg;
   }
 
   // constructor for attribute/property events
-  GraphEvent(const Graph &g, GraphEventType graphEvtType,
-             const std::string &str,
-             Event::EventType evtType = Event::TLP_MODIFICATION)
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, const std::string &str, Event::EventType evtType = Event::TLP_MODIFICATION)
       : Event(g, evtType), evtType(graphEvtType) {
     info.name = new std::string(str);
   }
 
   // constructor for rename property events
-  GraphEvent(const Graph &g, GraphEventType graphEvtType,
-             PropertyInterface *prop, const std::string &newName)
+  GraphEvent(const Graph &g, GraphEventType graphEvtType, PropertyInterface *prop, const std::string &newName)
       : Event(g, Event::TLP_MODIFICATION), evtType(graphEvtType) {
-    info.renamedProp =
-        new std::pair<PropertyInterface *, std::string>(prop, newName);
+    info.renamedProp = new std::pair<PropertyInterface *, std::string>(prop, newName);
   }
 
   // destructor needed to cleanup name if any
   ~GraphEvent() {
     if (evtType > TLP_AFTER_DEL_SUBGRAPH) {
-      if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-          evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
+      if (evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY || evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY)
         delete info.renamedProp;
       else
         delete info.name;
     }
   }
 
-  Graph *getGraph() const { return static_cast<Graph *>(sender()); }
+  Graph *getGraph() const {
+    return static_cast<Graph *>(sender());
+  }
 
   node getNode() const {
     assert(evtType < TLP_ADD_EDGE);
@@ -2221,8 +2193,7 @@ public:
   const std::string &getPropertyName() const;
 
   PropertyInterface *getProperty() const {
-    assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY ||
-           evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
+    assert(evtType == TLP_BEFORE_RENAME_LOCAL_PROPERTY || evtType == TLP_AFTER_RENAME_LOCAL_PROPERTY);
     return info.renamedProp->first;
   }
 
@@ -2236,7 +2207,9 @@ public:
     return info.renamedProp->second;
   }
 
-  GraphEventType getType() const { return evtType; }
+  GraphEventType getType() const {
+    return evtType;
+  }
 
 protected:
   GraphEventType evtType;
@@ -2262,10 +2235,14 @@ TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
 
 TLP_BEGIN_HASH_NAMESPACE {
   template <> struct TLP_SCOPE hash<const tlp::Graph *> {
-    size_t operator()(const tlp::Graph *s) const { return size_t(s->getId()); }
+    size_t operator()(const tlp::Graph *s) const {
+      return size_t(s->getId());
+    }
   };
   template <> struct TLP_SCOPE hash<tlp::Graph *> {
-    size_t operator()(tlp::Graph *s) const { return size_t(s->getId()); }
+    size_t operator()(tlp::Graph *s) const {
+      return size_t(s->getId());
+    }
   };
 }
 TLP_END_HASH_NAMESPACE

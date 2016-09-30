@@ -50,12 +50,12 @@ GlOffscreenRenderer *GlOffscreenRenderer::getInstance() {
 }
 
 GlOffscreenRenderer::GlOffscreenRenderer()
-  : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr),
-    entitiesCpt(0), zoomFactor(DBL_MAX), cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
+    : vPWidth(512), vPHeight(512), glFrameBuf(nullptr), glFrameBuf2(nullptr), entitiesCpt(0), zoomFactor(DBL_MAX),
+      cameraCenter(FLT_MAX, FLT_MAX, FLT_MAX) {
   mainLayer = scene.getMainLayer();
-  GlLayer *backgroundLayer=new GlLayer("Background", false);
+  GlLayer *backgroundLayer = new GlLayer("Background", false);
   backgroundLayer->setVisible(true);
-  GlLayer *foregroundLayer=new GlLayer("Foreground", false);
+  GlLayer *foregroundLayer = new GlLayer("Foreground", false);
   foregroundLayer->setVisible(true);
   scene.addExistingLayerBefore(backgroundLayer, mainLayer);
   scene.addExistingLayerAfter(foregroundLayer, mainLayer);
@@ -91,14 +91,14 @@ void GlOffscreenRenderer::addGlEntityToScene(GlEntity *entity) {
   mainLayer->addGlEntity(entity, oss.str());
 }
 
-void GlOffscreenRenderer::addGraphToScene(Graph* graph) {
+void GlOffscreenRenderer::addGraphToScene(Graph *graph) {
   scene.addMainGlGraph(graph);
 }
 
 void GlOffscreenRenderer::clearScene() {
   mainLayer->clear(false);
 
-  for(GlLayer *layer : scene.getLayersList()) {
+  for (GlLayer *layer : scene.getLayersList()) {
     if (layer != mainLayer) {
       layer->clear(true);
     }
@@ -110,20 +110,22 @@ void GlOffscreenRenderer::clearScene() {
 
 void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                                                                     \
+    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
   antialiasedFbo = antialiased && QGLFramebufferObject::hasOpenGLFramebufferBlit();
 #endif
 
-  if (glFrameBuf != nullptr && (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
+  if (glFrameBuf != nullptr &&
+      (vPWidth != static_cast<unsigned int>(glFrameBuf->width()) || vPHeight != static_cast<unsigned int>(glFrameBuf->height()))) {
     delete glFrameBuf;
     glFrameBuf = nullptr;
     delete glFrameBuf2;
     glFrameBuf2 = nullptr;
   }
 
-
   if (glFrameBuf == nullptr) {
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                                                                     \
+    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
     QGLFramebufferObjectFormat fboFmt;
     fboFmt.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
 
@@ -133,11 +135,9 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, fboFmt);
   }
 
-
   if (antialiasedFbo && glFrameBuf2 == nullptr) {
     glFrameBuf2 = new QGLFramebufferObject(vPWidth, vPHeight);
   }
-
 
 #else
     glFrameBuf = new QGLFramebufferObject(vPWidth, vPHeight, QGLFramebufferObject::CombinedDepthStencil);
@@ -147,7 +147,7 @@ void GlOffscreenRenderer::initFrameBuffers(const bool antialiased) {
 
 void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antialiased) {
 
-  //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
+  // If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
   if (!QGLContext::currentContext()) {
     QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
     firstWidget->makeCurrent();
@@ -155,7 +155,7 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
 
   initFrameBuffers(antialiased);
 
-  scene.setViewport(0,0,vPWidth, vPHeight);
+  scene.setViewport(0, 0, vPWidth, vPHeight);
 
   Camera *camera = mainLayer->getCamera();
 
@@ -179,17 +179,18 @@ void GlOffscreenRenderer::renderScene(const bool centerScene, const bool antiali
   scene.draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                                                                     \
+    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
 
   if (antialiasedFbo)
-    QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
+    QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
+                                          QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 
 #endif
-
 }
 
 void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antialiased) {
-  //If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
+  // If no OpenGL context, activate the default one in order to avoid segfault when trying to render an OpenGL scene
   if (!QGLContext::currentContext()) {
     QGLWidget *firstWidget = GlMainWidget::getFirstQGLWidget();
     firstWidget->makeCurrent();
@@ -197,18 +198,20 @@ void GlOffscreenRenderer::renderExternalScene(GlScene *scene, const bool antiali
 
   initFrameBuffers(antialiased);
 
-  Vector<int,4> backupViewport=scene->getViewport();
+  Vector<int, 4> backupViewport = scene->getViewport();
 
-  scene->setViewport(0,0,vPWidth, vPHeight);
+  scene->setViewport(0, 0, vPWidth, vPHeight);
 
   glFrameBuf->bind();
   scene->draw();
   glFrameBuf->release();
 
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) && (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION > QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
+#if (QT_VERSION >= QT_VERSION_CHECK(4, 6, 0)) &&                                                                                                     \
+    (!defined(__APPLE__) || (defined(__APPLE__) && ((QT_VERSION > QT_VERSION_CHECK(5, 0, 0)) || defined(QT_MAC_USE_COCOA))))
 
   if (antialiasedFbo)
-    QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0,0,glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf, QRect(0,0,glFrameBuf->width(), glFrameBuf->height()));
+    QGLFramebufferObject::blitFramebuffer(glFrameBuf2, QRect(0, 0, glFrameBuf2->width(), glFrameBuf2->height()), glFrameBuf,
+                                          QRect(0, 0, glFrameBuf->width(), glFrameBuf->height()));
 
 #endif
 
@@ -242,8 +245,7 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
 
   if (generateMipMaps && canUseMipmaps) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  }
-  else {
+  } else {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   }
 
@@ -266,7 +268,5 @@ GLuint GlOffscreenRenderer::getGLTexture(const bool generateMipMaps) {
   glDisable(GL_TEXTURE_2D);
 
   return textureId;
-
 }
-
 }

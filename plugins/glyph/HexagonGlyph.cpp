@@ -35,20 +35,19 @@ using namespace tlp;
 class HexagonGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Hexagon", "2D - Hexagon extremity", "Antoine Lambert", "20/05/2016", "Hexagon", "1.0", tlp::NodeShape::Hexagon)
 
-  HexagonGlyph(PluginContext *context) : Glyph(context){
+  HexagonGlyph(PluginContext *context) : Glyph(context) {
     _vertices.push_back(Coord(0.f, 0.f));
-    vector<Coord> contour = computeRegularPolygon(6, M_PI/2.f);
+    vector<Coord> contour = computeRegularPolygon(6, M_PI / 2.f);
     _vertices.insert(_vertices.end(), contour.begin(), contour.end());
-    for (unsigned short i = 0 ; i < 5 ; ++i) {
-      _indices.insert(_indices.end(), {0, ushort_cast(i+1), ushort_cast(i+2)});
+    for (unsigned short i = 0; i < 5; ++i) {
+      _indices.insert(_indices.end(), {0, ushort_cast(i + 1), ushort_cast(i + 2)});
     }
     _indices.insert(_indices.end(), {0, 6, 1});
 
     vector<unsigned short> outlineIndices;
-    for (unsigned short i = 1 ; i < ushort_cast(_vertices.size()) ; ++i) {
+    for (unsigned short i = 1; i < ushort_cast(_vertices.size()); ++i) {
       outlineIndices.push_back(ushort_cast(i));
     }
     outlineIndices.push_back(1);
@@ -59,7 +58,6 @@ public:
     boundingBox[0] = Coord(-0.35f, -0.35f, 0);
     boundingBox[1] = Coord(0.35f, 0.35f, 0);
   }
-
 };
 
 PLUGIN(HexagonGlyph)

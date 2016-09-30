@@ -58,7 +58,6 @@ namespace tlp {
 class TLP_GLES_SCOPE NanoVGManager {
 
 public:
-
   ~NanoVGManager();
 
   static NanoVGManager *instance();
@@ -69,19 +68,16 @@ public:
     _currentCanvasId = canvasId;
   }
 
-  NVGcontext* getNanoVGContext() const;
+  NVGcontext *getNanoVGContext() const;
 
 private:
-
   NanoVGManager();
 
-  NVGcontext* _vg;
+  NVGcontext *_vg;
 
   static std::string _currentCanvasId;
   static std::map<std::string, NanoVGManager *> _instances;
-
 };
-
 }
 
 #endif // NANOVGMANAGER_H

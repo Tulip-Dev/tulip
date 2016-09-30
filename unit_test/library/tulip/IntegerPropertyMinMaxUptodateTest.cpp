@@ -36,7 +36,7 @@ const string newStringMin = "1";
 const int newMax = 15;
 const string newStringMax = "15";
 
-CPPUNIT_TEST_SUITE_REGISTRATION( IntegerPropertyMinMaxUpdateTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(IntegerPropertyMinMaxUpdateTest);
 
 void IntegerPropertyMinMaxUpdateTest::setUp() {
   node n2, n3;
@@ -70,7 +70,7 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMinUpdate() {
   minNode = integerProperty->getNodeMin();
   CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty min value after update", newMin, minNode);
 
-  Graph* subGraph = graph->addSubGraph();
+  Graph *subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
   integerProperty->setNodeValue(n2, 6);
   node n3 = subGraph->addNode();
@@ -97,7 +97,7 @@ void IntegerPropertyMinMaxUpdateTest::testIntegerPropertyMaxUpdate() {
   maxNode = graph->getLocalProperty<IntegerProperty>(integerPropertyName)->getNodeMax();
   CPPUNIT_ASSERT_EQUAL_MESSAGE("test IntegerProperty max value after update", newMax, maxNode);
 
-  Graph* subGraph = graph->addSubGraph();
+  Graph *subGraph = graph->addSubGraph();
   node n2 = subGraph->addNode();
   integerProperty->setNodeValue(n2, 6);
   node n3 = subGraph->addNode();

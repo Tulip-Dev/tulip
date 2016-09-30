@@ -29,11 +29,11 @@ using namespace tlp;
   return 1.0/R*t17/12.0-2.0/3.0*R/t17+1.0/3.0;
   }*/
 inline double xt3(double t, double R) {
-  double t1 = 1.0-t;
-  double t2 = t1*t1;
-  double t4 = t*t;
-  double t9 = t4*t4;
-  return 4.0*R*t2*t4+4.0*R*t1*t4*t+4.0*R*t9;
+  double t1 = 1.0 - t;
+  double t2 = t1 * t1;
+  double t4 = t * t;
+  double t9 = t4 * t4;
+  return 4.0 * R * t2 * t4 + 4.0 * R * t1 * t4 * t + 4.0 * R * t9;
 }
 
 /*inline double tx3(double x, double R) {
@@ -73,9 +73,8 @@ return t;
 static double unprojectRho(double rho_s, double R, double k, double) {
   //    double rho = rho_s;
   if (rho_s < R) {
-    return rho_s * R / ( R * k + R - rho_s * k );
-  }
-  else
+    return rho_s * R / (R * k + R - rho_s * k);
+  } else
     return rho_s;
 
   //    if (rho_s <  3.*R) {
@@ -87,7 +86,7 @@ static double unprojectRho(double rho_s, double R, double k, double) {
 //==============================================================
 static double projectRho(double rho, double R, double k, double) {
   if (rho < R)
-    return (k+1) * rho / (k * rho/R + 1);
+    return (k + 1) * rho / (k * rho / R + 1);
   else
     return rho;
 
@@ -116,9 +115,11 @@ void FishEyesScreenFurnas::setRadius(double r) {
 void FishEyesScreenFurnas::setHeight(double h) {
   k = h;
 
-  if (k <= 0.1) k = 0.1;
+  if (k <= 0.1)
+    k = 0.1;
 
-  if (k > 8) k = 8.0;
+  if (k > 8)
+    k = 8.0;
 }
 void FishEyesScreenFurnas::setCenter(double x, double y) {
   fisheyesCenter[0] = x;
@@ -147,7 +148,8 @@ Vec2f FishEyesScreenFurnas::unproject(const Vec2f &p) const {
     dir /= rho_s;
     double rho = unprojectRho(rho_s, R, k, l);
 
-    if (fabs(rho-rho_s) < 1E-6) return p;
+    if (fabs(rho - rho_s) < 1E-6)
+      return p;
 
     dir *= rho;
   }

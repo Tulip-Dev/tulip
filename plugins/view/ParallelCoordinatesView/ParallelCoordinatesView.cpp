@@ -53,30 +53,30 @@ GLuint ParallelCoordinatesView::slidersTextureId(0);
 unsigned int ParallelCoordinatesView::parallelViewInstancesCount(0);
 
 static void toggleGraphView(GlGraphComposite *glGraph, bool displayNodes) {
-  GlGraphRenderingParameters param = glGraph->getRenderingParameters ();
-  param.setAntialiasing (true);
+  GlGraphRenderingParameters param = glGraph->getRenderingParameters();
+  param.setAntialiasing(true);
   param.setNodesStencil(2);
   param.setNodesLabelStencil(2);
   param.setSelectedNodesStencil(2);
   param.setDisplayEdges(false);
   param.setDisplayNodes(displayNodes);
   param.setFontsType(2);
-  glGraph->setRenderingParameters (param);
+  glGraph->setRenderingParameters(param);
 }
 
 PLUGIN(ParallelCoordinatesView)
-//GRAPHICSVIEWEXTENSION(ParallelCoordinatesGraphicsView, "Parallel Cooordinates graphics view",ParallelCoordinatesView::viewName, "Tulip Team", "16/04/2008", "Parallel GV", "1.0");
+// GRAPHICSVIEWEXTENSION(ParallelCoordinatesGraphicsView, "Parallel Cooordinates graphics view",ParallelCoordinatesView::viewName, "Tulip Team",
+// "16/04/2008", "Parallel GV", "1.0");
 
-ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *) :
-  mainLayer(nullptr),axisSelectionLayer(nullptr), glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr), parallelCoordsDrawing(nullptr) , dataConfigWidget(nullptr), drawConfigWidget(nullptr),
-  firstSet(true), lastNbSelectedProperties(0), center(false), lastViewWindowWidth(0), lastViewWindowHeight(0),isConstruct(false),dontCenterViewAfterConfLoaded(false),needDraw(false) {
+ParallelCoordinatesView::ParallelCoordinatesView(const PluginContext *)
+    : mainLayer(nullptr), axisSelectionLayer(nullptr), glGraphComposite(nullptr), axisPointsGraph(nullptr), graphProxy(nullptr),
+      parallelCoordsDrawing(nullptr), dataConfigWidget(nullptr), drawConfigWidget(nullptr), firstSet(true), lastNbSelectedProperties(0),
+      center(false), lastViewWindowWidth(0), lastViewWindowHeight(0), isConstruct(false), dontCenterViewAfterConfLoaded(false), needDraw(false) {
   ++parallelViewInstancesCount;
 }
 
 ParallelCoordinatesView::~ParallelCoordinatesView() {
-  foreach (tlp::Observable* obs, triggers()) {
-    removeRedrawTrigger(obs);
-  }
+  foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
 
   --parallelViewInstancesCount;
 
@@ -108,7 +108,7 @@ ParallelCoordinatesView::~ParallelCoordinatesView() {
 }
 
 void ParallelCoordinatesView::initGlWidget() {
-  if(!mainLayer) {
+  if (!mainLayer) {
     mainLayer = new GlLayer("Main");
     getGlMainWidget()->getScene()->addExistingLayer(mainLayer);
   }
@@ -117,8 +117,8 @@ void ParallelCoordinatesView::initGlWidget() {
   glGraphComposite = new GlGraphComposite(axisPointsGraph);
   mainLayer->addGlEntity(glGraphComposite, "graph");
   axisSelectionLayer = new GlLayer("Axis selection layer");
-  GlGraphRenderingParameters param = getGlMainWidget()->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
-  param.setAntialiasing (true);
+  GlGraphRenderingParameters param = getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters();
+  param.setAntialiasing(true);
   param.setNodesStencil(2);
   param.setNodesLabelStencil(1);
   param.setSelectedNodesStencil(1);
@@ -126,19 +126,19 @@ void ParallelCoordinatesView::initGlWidget() {
   param.setDisplayNodes(true);
   param.setViewNodeLabel(false);
   param.setFontsType(2);
-  getGlMainWidget()->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
+  getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
   getGlMainWidget()->setMouseTracking(true);
 }
 
 QList<QWidget *> ParallelCoordinatesView::configurationWidgets() const {
-  return QList<QWidget *>() << dataConfigWidget << drawConfigWidget ;
+  return QList<QWidget *>() << dataConfigWidget << drawConfigWidget;
 }
 
 void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
-  GlMainWidget *mainWidget=getGlMainWidget();
+  GlMainWidget *mainWidget = getGlMainWidget();
 
-  if(!isConstruct) {
+  if (!isConstruct) {
 
     initGlWidget();
     buildContextMenu();
@@ -152,12 +152,13 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     if (linesTextureId == 0) {
       GlMainWidget::getFirstQGLWidget()->makeCurrent();
       linesTextureId = mainWidget->bindTexture(QPixmap(":/parallel_texture.png"), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
-      slidersTextureId = mainWidget->bindTexture(QPixmap(":/parallel_sliders_texture.png"), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
+      slidersTextureId =
+          mainWidget->bindTexture(QPixmap(":/parallel_sliders_texture.png"), GL_TEXTURE_2D, GL_RGBA, QGLContext::LinearFilteringBindOption);
       GlTextureManager::getInst().registerExternalTexture(DEFAULT_TEXTURE_FILE, linesTextureId);
       GlTextureManager::getInst().registerExternalTexture(SLIDER_TEXTURE_NAME, slidersTextureId);
     }
 
-    isConstruct=true;
+    isConstruct = true;
   }
 
   removeTriggers();
@@ -166,7 +167,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
   bool sameGraphRoot = false;
 
-  if(graph()) {
+  if (graph()) {
     if (graphProxy != nullptr && (graph()->getRoot() == graphProxy->getRoot())) {
       sameGraphRoot = true;
       selectedPropertiesBak = graphProxy->getSelectedProperties();
@@ -185,7 +186,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     graphProxy = nullptr;
   }
 
-  if(graph()!=nullptr) {
+  if (graph() != nullptr) {
     if (graphProxy == nullptr) {
       graphProxy = new ParallelCoordinatesGraphProxy(graph());
     }
@@ -200,7 +201,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
       dataSet.get("selectedProperties", items);
       int i = 0;
       stringstream ss;
-      ss<<i;
+      ss << i;
 
       while (items.exist(ss.str())) {
         string item;
@@ -223,16 +224,15 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
       mainLayer->addGlEntity(parallelCoordsDrawing, "Parallel Coordinates");
     }
 
-    //overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
+    // overviewWidget->setObservedView(mainWidget, parallelCoordsDrawing);
 
     unsigned int axisHeight = DEFAULT_AXIS_HEIGHT;
     unsigned int linesColorAlphaValue = DEFAULT_LINES_COLOR_ALPHA_VALUE;
 
-
     if (dataSet.exist("dataLocation")) {
       int dataLocation = 0;
       dataSet.get("dataLocation", dataLocation);
-      dataConfigWidget->setDataLocation((ElementType) dataLocation);
+      dataConfigWidget->setDataLocation((ElementType)dataLocation);
     }
 
     if (dataSet.exist("backgroundColor")) {
@@ -287,13 +287,11 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
         straightLinesType->setChecked(true);
         catmullRomSplineLinesType->setChecked(false);
         cubicBSplineInterpolationLinesType->setChecked(false);
-      }
-      else if (linesType == ParallelCoordinatesDrawing::CATMULL_ROM_SPLINE) {
+      } else if (linesType == ParallelCoordinatesDrawing::CATMULL_ROM_SPLINE) {
         straightLinesType->setChecked(false);
         catmullRomSplineLinesType->setChecked(true);
         cubicBSplineInterpolationLinesType->setChecked(false);
-      }
-      else {
+      } else {
         straightLinesType->setChecked(false);
         catmullRomSplineLinesType->setChecked(false);
         cubicBSplineInterpolationLinesType->setChecked(true);
@@ -307,8 +305,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
       if (layoutType == ParallelCoordinatesDrawing::PARALLEL) {
         classicLayout->setChecked(true);
         circularLayout->setChecked(false);
-      }
-      else {
+      } else {
         classicLayout->setChecked(false);
         circularLayout->setChecked(true);
       }
@@ -322,13 +319,12 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
     if (dataSet.exist("scene")) {
       string sceneXML;
-      dataSet.get("scene",sceneXML);
-      getGlMainWidget()->getScene()->setWithXML(sceneXML,nullptr);
-      dontCenterViewAfterConfLoaded=true;
+      dataSet.get("scene", sceneXML);
+      getGlMainWidget()->getScene()->setWithXML(sceneXML, nullptr);
+      dontCenterViewAfterConfLoaded = true;
     }
 
-  }
-  else {
+  } else {
     dataConfigWidget->setWidgetParameters(nullptr, propertiesTypesFilter);
   }
 
@@ -341,13 +337,13 @@ DataSet ParallelCoordinatesView::state() const {
 
   string sceneOut;
   getGlMainWidget()->getScene()->getXMLOnlyForCameras(sceneOut);
-  dataSet.set("scene",sceneOut);
+  dataSet.set("scene", sceneOut);
 
-  vector<string> selectedProperties=graphProxy->getSelectedProperties();
+  vector<string> selectedProperties = graphProxy->getSelectedProperties();
   DataSet selectedPropertiesData;
-  int i=0;
+  int i = 0;
 
-  for (vector<string>::iterator it=selectedProperties.begin(); it != selectedProperties.end(); ++it) {
+  for (vector<string>::iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     std::stringstream s;
     s << i;
     selectedPropertiesData.set(s.str(), *it);
@@ -355,27 +351,27 @@ DataSet ParallelCoordinatesView::state() const {
   }
 
   dataSet.set("selectedProperties", selectedPropertiesData);
-  dataSet.set("dataLocation", (int) graphProxy->getDataLocation());
+  dataSet.set("dataLocation", (int)graphProxy->getDataLocation());
   dataSet.set("backgroundColor", drawConfigWidget->getBackgroundColor());
   dataSet.set("axisHeight", drawConfigWidget->getAxisHeight());
-  unsigned int axisPointMinSize = (unsigned int) drawConfigWidget->getAxisPointMinSize().getW();
-  unsigned int axisPointMaxSize = (unsigned int) drawConfigWidget->getAxisPointMaxSize().getW();
+  unsigned int axisPointMinSize = (unsigned int)drawConfigWidget->getAxisPointMinSize().getW();
+  unsigned int axisPointMaxSize = (unsigned int)drawConfigWidget->getAxisPointMaxSize().getW();
   dataSet.set("axisPointMinSize", axisPointMinSize);
   dataSet.set("axisPointMaxSize", axisPointMaxSize);
   dataSet.set("drawPointsOnAxis", drawConfigWidget->drawPointOnAxis());
   dataSet.set("linesTextureFileName", drawConfigWidget->getLinesTextureFilename());
   dataSet.set("linesColorAlphaValue", drawConfigWidget->getLinesColorAlphaValue());
   dataSet.set("non highlighted alpha value", drawConfigWidget->getUnhighlightedEltsColorsAlphaValue());
-  dataSet.set("layoutType", (int) getLayoutType());
-  dataSet.set("linesType", (int) getLinesType());
-  dataSet.set("lastViewWindowWidth",  getGlMainWidget()->width());
-  dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
+  dataSet.set("layoutType", (int)getLayoutType());
+  dataSet.set("linesType", (int)getLinesType());
+  dataSet.set("lastViewWindowWidth", getGlMainWidget()->width());
+  dataSet.set("lastViewWindowHeight", getGlMainWidget()->height());
 
   return dataSet;
 }
 
-void ParallelCoordinatesView::graphChanged(tlp::Graph*) {
-  if(isConstruct)
+void ParallelCoordinatesView::graphChanged(tlp::Graph *) {
+  if (isConstruct)
     setState(DataSet());
 }
 
@@ -405,20 +401,18 @@ void ParallelCoordinatesView::addEmptyViewLabel() {
   int bgV = backgroundColor.getV();
 
   if (bgV < 128) {
-    foregroundColor = Color(255,255,255);
-  }
-  else {
-    foregroundColor = Color(0,0,0);
+    foregroundColor = Color(255, 255, 255);
+  } else {
+    foregroundColor = Color(0, 0, 0);
   }
 
-
-  GlLabel *noDimsLabel = new GlLabel(Coord(0,0,0), Size(200,200), foregroundColor);
+  GlLabel *noDimsLabel = new GlLabel(Coord(0, 0, 0), Size(200, 200), foregroundColor);
   noDimsLabel->setText(ViewName::ParallelCoordinatesViewName);
   mainLayer->addGlEntity(noDimsLabel, "no dimensions label");
-  GlLabel *noDimsLabel1 = new GlLabel(Coord(0.0f,-50.0f,0.0f), Size(400.0f,200.0f), foregroundColor);
+  GlLabel *noDimsLabel1 = new GlLabel(Coord(0.0f, -50.0f, 0.0f), Size(400.0f, 200.0f), foregroundColor);
   noDimsLabel1->setText("No graph properties selected.");
   mainLayer->addGlEntity(noDimsLabel1, "no dimensions label 1");
-  GlLabel *noDimsLabel2 = new GlLabel(Coord(0.0f,-100.0f,0.0f), Size(700.0f,200.0f), foregroundColor);
+  GlLabel *noDimsLabel2 = new GlLabel(Coord(0.0f, -100.0f, 0.0f), Size(700.0f, 200.0f), foregroundColor);
   noDimsLabel2->setText("Go to the \"Properties\" tab in top right corner.");
   mainLayer->addGlEntity(noDimsLabel2, "no dimensions label 2");
   mainLayer->deleteGlEntity(parallelCoordsDrawing);
@@ -446,50 +440,45 @@ void ParallelCoordinatesView::removeEmptyViewLabel() {
 }
 
 void ParallelCoordinatesView::draw() {
-  if(graph()) {
+  if (graph()) {
     if (graphProxy->getNumberOfSelectedProperties() == 0) {
       removeEmptyViewLabel();
       addEmptyViewLabel();
       getGlMainWidget()->getScene()->centerScene();
       getGlMainWidget()->draw();
       return;
-    }
-    else {
+    } else {
       removeEmptyViewLabel();
 
       if (graphProxy->getDataCount() > PROGRESS_BAR_DISPLAY_NB_DATA_THRESHOLD) {
         updateWithProgressBar();
-      }
-      else {
+      } else {
         updateWithoutProgressBar();
       }
     }
 
     if (lastNbSelectedProperties != graphProxy->getNumberOfSelectedProperties() || center) {
-      if(!dontCenterViewAfterConfLoaded) {
+      if (!dontCenterViewAfterConfLoaded) {
         centerView();
-      }
-      else {
-        dontCenterViewAfterConfLoaded=false;
+      } else {
+        dontCenterViewAfterConfLoaded = false;
       }
 
       center = false;
-    }
-    else {
+    } else {
       getGlMainWidget()->draw();
     }
 
     lastNbSelectedProperties = graphProxy->getNumberOfSelectedProperties();
-  }
-  else {
+  } else {
     getGlMainWidget()->draw();
   }
 
-  needDraw=false;
+  needDraw = false;
 }
 
 void ParallelCoordinatesView::refresh() {
-  if(!needDraw)
+  if (!needDraw)
     getGlMainWidget()->redraw();
   else
     draw();
@@ -499,14 +488,14 @@ void ParallelCoordinatesView::init() {
   emit drawNeeded();
 }
 
-bool ParallelCoordinatesView::eventFilter(QObject *obj,QEvent *event) {
+bool ParallelCoordinatesView::eventFilter(QObject *obj, QEvent *event) {
   if (event->type() == QEvent::KeyPress) {
     QKeyEvent *keyEvent = dynamic_cast<QKeyEvent *>(event);
 
-    if((keyEvent->key()==Qt::Key_R) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
+    if ((keyEvent->key() == Qt::Key_R) && (keyEvent->modifiers() & Qt::ControlModifier) != 0 && (keyEvent->modifiers() & Qt::ShiftModifier) != 0)
       emit drawNeeded();
 
-    if((keyEvent->key()==Qt::Key_C) && (keyEvent->modifiers() & Qt::ControlModifier)!=0 && (keyEvent->modifiers() & Qt::ShiftModifier)!=0)
+    if ((keyEvent->key() == Qt::Key_C) && (keyEvent->modifiers() & Qt::ControlModifier) != 0 && (keyEvent->modifiers() & Qt::ShiftModifier) != 0)
       centerView();
   }
 
@@ -537,36 +526,36 @@ void ParallelCoordinatesView::buildContextMenu() {
   viewSetupMenu = new QMenu(tr("View setup"));
   viewSetupMenu->addAction(tr("Layout type"))->setEnabled(false);
   QActionGroup *layoutActionGroup = new QActionGroup(this);
-  classicLayout = viewSetupMenu->addAction(tr("Classic layout"),this, SLOT(centerSetupAndDrawView()));
+  classicLayout = viewSetupMenu->addAction(tr("Classic layout"), this, SLOT(centerSetupAndDrawView()));
   classicLayout->setCheckable(true);
   classicLayout->setChecked(true);
   layoutActionGroup->addAction(classicLayout);
-  circularLayout = viewSetupMenu->addAction(tr("Circular layout"),this, SLOT(centerSetupAndDrawView()));
+  circularLayout = viewSetupMenu->addAction(tr("Circular layout"), this, SLOT(centerSetupAndDrawView()));
   circularLayout->setCheckable(true);
   layoutActionGroup->addAction(circularLayout);
   viewSetupMenu->addSeparator();
 
   viewSetupMenu->addAction(tr("Lines type"))->setEnabled(false);
   QActionGroup *lineTypeActionGroup = new QActionGroup(this);
-  straightLinesType = viewSetupMenu->addAction(tr("Straight"),this, SLOT(setupAndDrawView()));
+  straightLinesType = viewSetupMenu->addAction(tr("Straight"), this, SLOT(setupAndDrawView()));
   straightLinesType->setCheckable(true);
   straightLinesType->setChecked(true);
   lineTypeActionGroup->addAction(straightLinesType);
-  catmullRomSplineLinesType = viewSetupMenu->addAction(tr("Catmull-Rom spline"),this, SLOT(setupAndDrawView()));
+  catmullRomSplineLinesType = viewSetupMenu->addAction(tr("Catmull-Rom spline"), this, SLOT(setupAndDrawView()));
   catmullRomSplineLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
-  cubicBSplineInterpolationLinesType = viewSetupMenu->addAction(tr("Cubic B-spline interpolation"),this, SLOT(setupAndDrawView()));
+  cubicBSplineInterpolationLinesType = viewSetupMenu->addAction(tr("Cubic B-spline interpolation"), this, SLOT(setupAndDrawView()));
   cubicBSplineInterpolationLinesType->setCheckable(true);
   lineTypeActionGroup->addAction(catmullRomSplineLinesType);
   viewSetupMenu->addSeparator();
 
   viewSetupMenu->addAction(tr("Lines thickness"))->setEnabled(false);
   QActionGroup *lineActionGroup = new QActionGroup(this);
-  thickLines = viewSetupMenu->addAction(tr("Map to viewSize"),this, SLOT(setupAndDrawView()));
+  thickLines = viewSetupMenu->addAction(tr("Map to viewSize"), this, SLOT(setupAndDrawView()));
   thickLines->setCheckable(true);
   thickLines->setChecked(true);
   lineActionGroup->addAction(thickLines);
-  thinLines = viewSetupMenu->addAction(tr("Thin lines"),this, SLOT(setupAndDrawView()));
+  thinLines = viewSetupMenu->addAction(tr("Thin lines"), this, SLOT(setupAndDrawView()));
   thinLines->setCheckable(true);
   lineActionGroup->addAction(thinLines);
 
@@ -575,22 +564,22 @@ void ParallelCoordinatesView::buildContextMenu() {
   showToolTips->setCheckable(true);
   showToolTips->setChecked(false);
 
-  axisMenuSeparator=new QAction(nullptr);
+  axisMenuSeparator = new QAction(nullptr);
   axisMenuSeparator->setSeparator(true);
-  axisConfiguration=new QAction(tr("Axis configuration"),nullptr);
-  connect(axisConfiguration,SIGNAL(triggered()),this,SLOT(axisConfigurationSlot()));
-  removeAxisAction=new QAction(tr("Remove axis"),nullptr);
-  connect(removeAxisAction,SIGNAL(triggered()),this,SLOT(removeAxisSlot()));
-  highlightMenuSeparator=new QAction(nullptr);
+  axisConfiguration = new QAction(tr("Axis configuration"), nullptr);
+  connect(axisConfiguration, SIGNAL(triggered()), this, SLOT(axisConfigurationSlot()));
+  removeAxisAction = new QAction(tr("Remove axis"), nullptr);
+  connect(removeAxisAction, SIGNAL(triggered()), this, SLOT(removeAxisSlot()));
+  highlightMenuSeparator = new QAction(nullptr);
   highlightMenuSeparator->setSeparator(true);
-  selectHighlightedElements=new QAction(tr("Select highlighted elements"),nullptr);
-  connect(selectHighlightedElements,SIGNAL(triggered()),this,SLOT(selectHighlightedElementsSlot()));
-  resetHightlightedElements=new QAction(tr("Reset highlighted elements"),nullptr);
-  connect(resetHightlightedElements,SIGNAL(triggered()),this,SLOT(resetHightlightedElementsSlot()));
+  selectHighlightedElements = new QAction(tr("Select highlighted elements"), nullptr);
+  connect(selectHighlightedElements, SIGNAL(triggered()), this, SLOT(selectHighlightedElementsSlot()));
+  resetHightlightedElements = new QAction(tr("Reset highlighted elements"), nullptr);
+  connect(resetHightlightedElements, SIGNAL(triggered()), this, SLOT(resetHightlightedElementsSlot()));
 }
 
 void ParallelCoordinatesView::fillContextMenu(QMenu *menu, const QPointF &point) {
-  GlMainView::fillContextMenu(menu,point);
+  GlMainView::fillContextMenu(menu, point);
   menu->addAction(viewSetupMenu->menuAction());
   viewSetupMenu->setStyleSheet(menu->styleSheet());
   menu->addAction(optionsMenu->menuAction());
@@ -637,13 +626,12 @@ void ParallelCoordinatesView::resetHightlightedElementsSlot() {
 }
 
 void ParallelCoordinatesView::centerSetupAndDrawView() {
-  center=true;
+  center = true;
   setupAndDrawView();
 }
 
-
 void ParallelCoordinatesView::setupAndDrawView() {
-  if(graph()) {
+  if (graph()) {
     graphProxy->setSelectedProperties(dataConfigWidget->getSelectedGraphProperties());
     graphProxy->setDataLocation(dataConfigWidget->getDataLocation());
     getGlMainWidget()->getScene()->setBackgroundColor(drawConfigWidget->getBackgroundColor());
@@ -657,9 +645,9 @@ void ParallelCoordinatesView::setupAndDrawView() {
     parallelCoordsDrawing->setLayoutType(getLayoutType());
     parallelCoordsDrawing->setLinesType(getLinesType());
     parallelCoordsDrawing->setLinesThickness(getLinesThickness());
-    GlGraphRenderingParameters param = getGlMainWidget()->getScene ()->getGlGraphComposite ()->getRenderingParameters ();
+    GlGraphRenderingParameters param = getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters();
     param.setViewNodeLabel(drawConfigWidget->displayNodesLabels());
-    getGlMainWidget()->getScene()->getGlGraphComposite ()->setRenderingParameters (param);
+    getGlMainWidget()->getScene()->getGlGraphComposite()->setRenderingParameters(param);
 
     if (graphProxy->getUnhighlightedEltsColorAlphaValue() != drawConfigWidget->getUnhighlightedEltsColorsAlphaValue()) {
       graphProxy->setUnhighlightedEltsColorAlphaValue(drawConfigWidget->getUnhighlightedEltsColorsAlphaValue());
@@ -670,7 +658,7 @@ void ParallelCoordinatesView::setupAndDrawView() {
   }
 
   registerTriggers();
-  needDraw=true;
+  needDraw = true;
   draw();
   drawOverview(true);
 }
@@ -678,8 +666,7 @@ void ParallelCoordinatesView::setupAndDrawView() {
 ParallelCoordinatesDrawing::LayoutType ParallelCoordinatesView::getLayoutType() const {
   if (classicLayout->isChecked()) {
     return ParallelCoordinatesDrawing::PARALLEL;
-  }
-  else {
+  } else {
     return ParallelCoordinatesDrawing::CIRCULAR;
   }
 }
@@ -687,11 +674,9 @@ ParallelCoordinatesDrawing::LayoutType ParallelCoordinatesView::getLayoutType() 
 ParallelCoordinatesDrawing::LinesType ParallelCoordinatesView::getLinesType() const {
   if (straightLinesType->isChecked()) {
     return ParallelCoordinatesDrawing::STRAIGHT;
-  }
-  else if (catmullRomSplineLinesType->isChecked()) {
+  } else if (catmullRomSplineLinesType->isChecked()) {
     return ParallelCoordinatesDrawing::CATMULL_ROM_SPLINE;
-  }
-  else {
+  } else {
     return ParallelCoordinatesDrawing::CUBIC_BSPLINE_INTERPOLATION;
   }
 }
@@ -699,13 +684,13 @@ ParallelCoordinatesDrawing::LinesType ParallelCoordinatesView::getLinesType() co
 ParallelCoordinatesDrawing::LinesThickness ParallelCoordinatesView::getLinesThickness() const {
   if (thickLines->isChecked()) {
     return ParallelCoordinatesDrawing::THICK;
-  }
-  else {
+  } else {
     return ParallelCoordinatesDrawing::THIN;
   }
 }
 
-const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(const int x, const int y, const unsigned int width, const unsigned int height) {
+const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(const int x, const int y, const unsigned int width,
+                                                                              const unsigned int height) {
 
   vector<SelectedEntity> selectedEntities;
   vector<SelectedEntity> selectedAxisPoints;
@@ -728,7 +713,7 @@ const set<unsigned int> &ParallelCoordinatesView::mapGlEntitiesInRegionToData(co
     }
   }
 
-  getGlMainWidget()->pickNodesEdges(x, y, width , height, selectedAxisPoints, dummy, mainLayer);
+  getGlMainWidget()->pickNodesEdges(x, y, width, height, selectedAxisPoints, dummy, mainLayer);
   vector<SelectedEntity>::iterator it;
 
   for (it = selectedAxisPoints.begin(); it != selectedAxisPoints.end(); ++it) {
@@ -747,17 +732,18 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
   set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
     if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
       graphProxy->setDataSelected(*it, selectFlag);
   }
 }
 
-void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y, const unsigned int width, const unsigned int height, const bool selectFlag) {
+void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y, const unsigned int width, const unsigned int height,
+                                                        const bool selectFlag) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, width, height));
   set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
     if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
       graphProxy->setDataSelected(*it, selectFlag);
   }
@@ -771,13 +757,13 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
   set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
     if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
       graphProxy->deleteData(*it);
   }
 }
 
-bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const int y,SelectedEntity &selectedEntity) {
+bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const int y, SelectedEntity &selectedEntity) {
   const set<unsigned int> &dataUnderPointer(mapGlEntitiesInRegionToData(x, y, 1, 1));
 
   if (!dataUnderPointer.empty()) {
@@ -785,8 +771,7 @@ bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const i
 
     if (!graphProxy->highlightedEltsSet()) {
       dataId = *(dataUnderPointer.begin());
-    }
-    else {
+    } else {
       set<unsigned int>::iterator it = dataUnderPointer.begin();
 
       while (it != dataUnderPointer.end() && !graphProxy->isDataHighlighted(*it)) {
@@ -795,22 +780,19 @@ bool ParallelCoordinatesView::getDataUnderPointerProperties(const int x, const i
 
       if (it == dataUnderPointer.end()) {
         return false;
-      }
-      else {
+      } else {
         dataId = *it;
       }
     }
 
     if (graphProxy->getDataLocation() == NODE) {
-      selectedEntity=SelectedEntity(graph(),dataId,SelectedEntity::NODE_SELECTED);
-    }
-    else {
-      selectedEntity=SelectedEntity(graph(),dataId,SelectedEntity::EDGE_SELECTED);
+      selectedEntity = SelectedEntity(graph(), dataId, SelectedEntity::NODE_SELECTED);
+    } else {
+      selectedEntity = SelectedEntity(graph(), dataId, SelectedEntity::EDGE_SELECTED);
     }
 
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
@@ -824,7 +806,7 @@ void ParallelCoordinatesView::highlightDataUnderPointer(const int x, const int y
 
   set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
     graphProxy->addOrRemoveEltToHighlight(*it);
   }
 
@@ -840,7 +822,7 @@ void ParallelCoordinatesView::highlightDataInRegion(const int x, const int y, co
 
   set<unsigned int>::iterator it;
 
-  for (it = dataUnderPointer.begin() ; it != dataUnderPointer.end() ; ++it) {
+  for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
     graphProxy->addOrRemoveEltToHighlight(*it);
   }
 
@@ -857,7 +839,7 @@ ParallelAxis *ParallelCoordinatesView::getAxisUnderPointer(const int x, const in
   axisSelectionLayer->setSharedCamera(&getGlMainWidget()->getScene()->getLayer("Main")->getCamera());
   axisSelectionLayer->getComposite()->reset(false);
 
-  for (size_t i = 0 ; i < allAxis.size() ; ++i) {
+  for (size_t i = 0; i < allAxis.size(); ++i) {
     axisSelectionLayer->addGlEntity(allAxis[i], getStringFromNumber(allAxis[i]));
   }
 
@@ -891,13 +873,12 @@ vector<ParallelAxis *> ParallelCoordinatesView::getAllAxis() {
 void ParallelCoordinatesView::updateAxisSlidersPosition() {
   if (!graphProxy->highlightedEltsSet()) {
     parallelCoordsDrawing->resetAxisSlidersPosition();
-  }
-  else {
+  } else {
     const set<unsigned int> &highlightedElts(graphProxy->getHighlightedElts());
     vector<ParallelAxis *> axis(getAllAxis());
     vector<ParallelAxis *>::iterator it;
 
-    for (it = axis.begin() ; it != axis.end() ; ++it) {
+    for (it = axis.begin(); it != axis.end(); ++it) {
       (*it)->updateSlidersWithDataSubset(highlightedElts);
     }
   }
@@ -923,30 +904,25 @@ void ParallelCoordinatesView::highlightDataInAxisBoxPlotRange(QuantitativeParall
 }
 
 void ParallelCoordinatesView::removeTriggers() {
-  foreach (tlp::Observable* obs, triggers()) {
-    removeRedrawTrigger(obs);
-  }
+  foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
 }
 
 void ParallelCoordinatesView::registerTriggers() {
-  foreach (tlp::Observable* obs, triggers()) {
-    removeRedrawTrigger(obs);
-  }
+  foreach (tlp::Observable *obs, triggers()) { removeRedrawTrigger(obs); }
 
-  if(graph()) {
+  if (graph()) {
     addRedrawTrigger(graph());
     Iterator<string> *it = graph()->getProperties();
 
-    while(it->hasNext()) {
-      PropertyInterface *property=graph()->getProperty(it->next());
+    while (it->hasNext()) {
+      PropertyInterface *property = graph()->getProperty(it->next());
       addRedrawTrigger(property);
     }
   }
 }
 
 void ParallelCoordinatesView::applySettings() {
-  if(dataConfigWidget->configurationChanged() || drawConfigWidget->configurationChanged())
+  if (dataConfigWidget->configurationChanged() || drawConfigWidget->configurationChanged())
     setupAndDrawView();
 }
-
 }

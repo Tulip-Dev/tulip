@@ -9,7 +9,6 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlScene.h>
 
-
 using namespace tlp;
 
 /*
@@ -21,16 +20,15 @@ class InteractorPluginComponent : public InteractorComponent {
   QGraphicsProxyWidget *_informationWidgetItem;
   QLabel *_informationLabel;
 
-public :
-
+public:
   /*
   Basic constructor
   In this constructor we create a label to display information
   And a QGraphicsProxyWidget to show information in Tulip QGraphics system
   */
   InteractorPluginComponent() {
-    _informationLabel=new QLabel();
-    _informationWidgetItem=new QGraphicsProxyWidget();
+    _informationLabel = new QLabel();
+    _informationWidgetItem = new QGraphicsProxyWidget();
     _informationWidgetItem->setWidget(_informationLabel);
     _informationWidgetItem->setVisible(false);
   }
@@ -39,7 +37,7 @@ public :
   This function is call when the view associated to this interactor is changed
   So at this moment we add information QGraphicsItem to the QGraphicsScene
   */
-  void viewChanged(View * view) {
+  void viewChanged(View *view) {
     view->graphicsView()->scene()->addItem(_informationWidgetItem);
   }
 
@@ -48,13 +46,13 @@ public :
   When an event arrive on your interactor : this function is call
   You have to process it and return true. If the event do nothing in your interactor : this function return false;
   */
-  bool eventFilter(QObject *, QEvent* e) {
+  bool eventFilter(QObject *, QEvent *e) {
 
     /*
     If you have clicked on a node/edge, information widget is visible.
     And if you use the wheel of the mouse we hide the information widget
     */
-    if(_informationWidgetItem->isVisible() && e->type()==QEvent::Wheel) {
+    if (_informationWidgetItem->isVisible() && e->type() == QEvent::Wheel) {
       _informationWidgetItem->setVisible(false);
       return false;
     }
@@ -62,11 +60,10 @@ public :
     /*
     Check if the event is a mouse event
     */
-    QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
+    QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-    if(qMouseEv != nullptr) {
-      GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
-
+    if (qMouseEv != nullptr) {
+      GlMainView *glMainView = dynamic_cast<GlMainView *>(view());
 
       /*
       Check if event is a left mouse button press
@@ -77,10 +74,9 @@ public :
         If you have clicked on a node/edge, information widget is visible.
         And if you reclick : hide it
         */
-        if(_informationWidgetItem->isVisible()) {
+        if (_informationWidgetItem->isVisible()) {
           _informationWidgetItem->setVisible(false);
-        }
-        else {
+        } else {
 
           /*
           Select entities under the mouse cursor
@@ -89,7 +85,7 @@ public :
           */
           SelectedEntity selectedEntity;
 
-          if (glMainView->getGlMainWidget()->pickNodesEdges(qMouseEv->x(),qMouseEv->y(),selectedEntity)) {
+          if (glMainView->getGlMainWidget()->pickNodesEdges(qMouseEv->x(), qMouseEv->y(), selectedEntity)) {
 
             /*
             Change text of the information label with
@@ -98,12 +94,12 @@ public :
             */
             QString text("Click on ");
 
-            if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)
-              text+="node ";
+            if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED)
+              text += "node ";
             else
-              text+="edge ";
+              text += "edge ";
 
-            text+=" id : "+QString::number(selectedEntity.getComplexEntityId());
+            text += " id : " + QString::number(selectedEntity.getComplexEntityId());
 
             /*
             - Update QLabel with new text
@@ -144,7 +140,7 @@ public :
 /*
  If you want to create an interactor plugin, the first think to do is to create a sub class of InteractorComposite
 */
-class InteractorPlugin  : public InteractorComposite {
+class InteractorPlugin : public InteractorComposite {
 
   QLabel *_configurationLabel;
 
@@ -159,13 +155,13 @@ public:
   The constructor
   Here we specify the icon of interactor with Qt qrc system, and the ToolTip text of the plugin
   */
-  InteractorPlugin(const tlp::PluginContext*):InteractorComposite(QIcon(":/i_interactor_plugin.png"),"Demo Interactor") {
+  InteractorPlugin(const tlp::PluginContext *) : InteractorComposite(QIcon(":/i_interactor_plugin.png"), "Demo Interactor") {
     /*
     Here we create a label with a minimal configuration text
     This text will be displayed when you click on the name of the plugin
     */
-    _configurationLabel=new QLabel(QString("This is a demo interactor.<br>")
-                                   +"You can zoom and pan and display information if you click on a node/edge.");
+    _configurationLabel =
+        new QLabel(QString("This is a demo interactor.<br>") + "You can zoom and pan and display information if you click on a node/edge.");
   }
 
   ~InteractorPlugin() {
@@ -193,13 +189,13 @@ public:
   If you don't implement this function your plugin won't be displayed in interactors tool bar
   */
   bool isCompatible(const std::string &viewName) const {
-    return (viewName=="Node Link Diagram view");
+    return (viewName == "Node Link Diagram view");
   }
 
   /*
   In this function we say : _configurationLabel is the configuration widget
   */
-  QWidget* configurationWidget() const {
+  QWidget *configurationWidget() const {
     return _configurationLabel;
   }
 
@@ -210,7 +206,6 @@ public:
   unsigned int priority() const {
     return 5;
   }
-
 };
 
 /*

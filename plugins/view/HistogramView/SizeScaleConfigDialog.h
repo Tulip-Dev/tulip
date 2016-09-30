@@ -33,10 +33,9 @@ class SizeScaleConfigDialog : public QDialog {
 
   Q_OBJECT
 
-  Ui::SizeScaleConfigDialogData* _ui;
+  Ui::SizeScaleConfigDialogData *_ui;
 
-public :
-
+public:
   SizeScaleConfigDialog(QWidget *d = 0);
   ~SizeScaleConfigDialog();
 
@@ -49,12 +48,11 @@ public :
   bool applySizeMappingOnY() const;
   bool applySizeMappingOnZ() const;
 
-private slots :
+private slots:
 
   void minSizeValueChanged(double newValue);
   void maxSizeValueChanged(double newValue);
   void viewSizeRadioButtonToggled(bool checked);
-
 };
 }
 #endif /* SIZESCALECONFIGDIALOG_H_ */

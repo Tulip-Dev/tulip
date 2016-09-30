@@ -60,21 +60,15 @@ class GeographicView : public View {
 
   Q_OBJECT
 
-  PLUGININFORMATION(ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
-                    "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of Google Maps.</p>"
-                    "<p>If geographic properties are attached to graph nodes (address or latitude/longitude), they are used to layout the nodes on the map.</p>"
-                    "<p>An interactor for performing selection on graph elements is also bundled with the view.</p>", "2.2","View")
+  PLUGININFORMATION(
+      ViewName::GeographicViewName, "Antoine Lambert and Morgan Mathiaut", "06/2012",
+      "<p>The Geographic view allows to visualize a geolocated Tulip graph on top of Google Maps.</p>"
+      "<p>If geographic properties are attached to graph nodes (address or latitude/longitude), they are used to layout the nodes on the map.</p>"
+      "<p>An interactor for performing selection on graph elements is also bundled with the view.</p>",
+      "2.2", "View")
 
-public :
-
-  enum ViewType {
-    GoogleRoadMap=0,
-    GoogleSatellite,
-    GoogleTerrain,
-    GoogleHybrid,
-    Polygon,
-    Globe
-  };
+public:
+  enum ViewType { GoogleRoadMap = 0, GoogleSatellite, GoogleTerrain, GoogleHybrid, Polygon, Globe };
 
   GeographicView(PluginContext *);
   ~GeographicView();
@@ -85,7 +79,7 @@ public :
 
   void setupUi();
 
-  QPixmap snapshot(const QSize&) const;
+  QPixmap snapshot(const QSize &) const;
 
   void setState(const DataSet &dataSet);
   DataSet state() const;
@@ -96,7 +90,7 @@ public :
 
   QList<QWidget *> configurationWidgets() const;
 
-  QGraphicsItem* centralItem() const;
+  QGraphicsItem *centralItem() const;
 
   GoogleMaps *getGoogleMap() {
     return geoViewGraphicsView->getGoogleMapsPage();
@@ -121,7 +115,7 @@ public :
   GeographicViewGraphicsView *getGeographicViewGraphicsView() const;
   void setGoogleMapsGraphicsView(GeographicViewGraphicsView *value);
 
-public slots :
+public slots:
 
   void computeGeoLayout();
 
@@ -133,7 +127,8 @@ public slots :
     setState(DataSet());
   }
 
-  void graphDeleted(tlp::Graph*) {}
+  void graphDeleted(tlp::Graph *) {
+  }
 
   void applySettings();
 
@@ -163,9 +158,8 @@ protected slots:
 
   void initMap();
 
-private :
-
-  void updatePoly(bool force=false);
+private:
+  void updatePoly(bool force = false);
 
   void loadStoredPolyInformations(const DataSet &dataset);
 
@@ -174,8 +168,8 @@ private :
   GeographicViewGraphicsView *geoViewGraphicsView;
   GeographicViewConfigWidget *geoViewConfigWidget;
   GeolocalisationConfigWidget *geolocalisationConfigWidget;
-  SceneConfigWidget* sceneConfigurationWidget;
-  SceneLayersConfigWidget* sceneLayersConfigurationWidget;
+  SceneConfigWidget *sceneConfigurationWidget;
+  SceneLayersConfigWidget *sceneLayersConfigurationWidget;
 
   QAction *centerViewAction;
   QAction *showConfPanelAction;
@@ -188,10 +182,7 @@ private :
 
   double mapCenterLatitudeInit, mapCenterLongitudeInit;
   int mapZoomInit;
-
 };
-
 }
-
 
 #endif /* GOOGLEMAPSVIEW_H_ */

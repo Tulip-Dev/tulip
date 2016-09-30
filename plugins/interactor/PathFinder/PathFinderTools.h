@@ -29,7 +29,6 @@ class GlGraphInputData;
 class SizeProperty;
 class LayoutProperty;
 
-
 /**
  * Computes the enclosing circle of a graph's node using the layout,size etc properties specified in the input data.
  * @param circle The resulting circle.

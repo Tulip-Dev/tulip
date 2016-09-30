@@ -31,14 +31,14 @@ using namespace tlp;
 
 const std::string GRAPHPATH = "./DATA/graphs/";
 
-static Graph* tlp_loadGraph(const std::string& filename) {
+static Graph *tlp_loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph("TLP Import", dataSet);
   return sg;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( PlanarityTestTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(PlanarityTestTest);
 //==========================================================
 void PlanarityTestTest::setUp() {
   //  graph = tlp::newGraph();
@@ -95,8 +95,7 @@ void PlanarityTestTest::notPlanarGraphs() {
 }
 //==========================================================
 unsigned int eulerIdentity(Graph *graph) {
-  return graph->numberOfEdges() - graph->numberOfNodes()
-         + 1u + ConnectedTest::numberOfConnectedComponents(graph);
+  return graph->numberOfEdges() - graph->numberOfNodes() + 1u + ConnectedTest::numberOfConnectedComponents(graph);
 }
 //==========================================================
 void PlanarityTestTest::planarGraphsEmbedding() {
@@ -132,11 +131,11 @@ void PlanarityTestTest::planarGraphsEmbedding() {
 void PlanarityTestTest::planarMetaGraphsEmbedding() {
   tlp::warning() << "===========MetaGraphsEmbedding=======================" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
-  Graph * g = graph->addCloneSubGraph();
+  Graph *g = graph->addCloneSubGraph();
   set<node> toGroup;
-  Iterator<node> * itn = g->getNodes();
+  Iterator<node> *itn = g->getNodes();
 
-  for(unsigned int i = 0; i < 10; ++i) {
+  for (unsigned int i = 0; i < 10; ++i) {
     assert(itn->hasNext());
     toGroup.insert(itn->next());
   }
@@ -144,7 +143,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   g->createMetaNode(toGroup);
   toGroup.clear();
 
-  for(unsigned int i = 0; i < 10; ++i) {
+  for (unsigned int i = 0; i < 10; ++i) {
     assert(itn->hasNext());
     toGroup.insert(itn->next());
   }
@@ -153,7 +152,7 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   toGroup.clear();
   toGroup.insert(meta2);
 
-  for(unsigned int i = 0; i < 10; ++i) {
+  for (unsigned int i = 0; i < 10; ++i) {
     assert(itn->hasNext());
     toGroup.insert(itn->next());
   }
@@ -164,8 +163,8 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
 
   PlanarConMap *graphMap = computePlanarConMap(g);
   //  graphMap->makePlanar();
-  CPPUNIT_ASSERT(PlanarityTest::isPlanar(g));//eulerIdentity(g), graphMap->nbFaces());
-  CPPUNIT_ASSERT(PlanarityTest::isPlanar(graphMap));//eulerIdentity(g), graphMap->nbFaces());
+  CPPUNIT_ASSERT(PlanarityTest::isPlanar(g));        // eulerIdentity(g), graphMap->nbFaces());
+  CPPUNIT_ASSERT(PlanarityTest::isPlanar(graphMap)); // eulerIdentity(g), graphMap->nbFaces());
   delete graphMap;
   graph->delSubGraph(g);
   delete graph;

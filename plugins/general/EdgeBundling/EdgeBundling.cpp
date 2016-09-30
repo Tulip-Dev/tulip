@@ -18,7 +18,7 @@
  */
 #ifdef _OPENMP
 #include <omp.h>
-#define MAX_THREADS (unsigned int) omp_get_max_threads()
+#define MAX_THREADS (unsigned int)omp_get_max_threads()
 #else
 #define MAX_THREADS 1
 #endif
@@ -49,50 +49,49 @@ using namespace tlp;
 //============================================
 
 static const char *paramHelp[] = {
-  // layout
-  "The input layout of the graph.",
+    // layout
+    "The input layout of the graph.",
 
-  // size
-  "The input node sizes.",
+    // size
+    "The input node sizes.",
 
-  // grid_graph
-  "If true, a subgraph corresponding to the grid used for routing edges will be added.",
+    // grid_graph
+    "If true, a subgraph corresponding to the grid used for routing edges will be added.",
 
-  // 3D_layout
-  "If true, it is assumed that the input layout is in 3d and 3d edge bundling will be performed.",
+    // 3D_layout
+    "If true, it is assumed that the input layout is in 3d and 3d edge bundling will be performed.",
 
-  // sphere_layout
-  "If true, it is assumed that the nodes have been originally laid out on a sphere surface."
-  "Edges will be routed along the sphere surface. The 3D_layout parameter needs also to be set to true"
-  " for that feature to work.",
+    // sphere_layout
+    "If true, it is assumed that the nodes have been originally laid out on a sphere surface."
+    "Edges will be routed along the sphere surface. The 3D_layout parameter needs also to be set to true"
+    " for that feature to work.",
 
-  // long_edges
-  "That parameter defines the way long edges will be routed. A value less than 1.0 "
-  "will promote paths outside dense regions of the input graph drawing.",
+    // long_edges
+    "That parameter defines the way long edges will be routed. A value less than 1.0 "
+    "will promote paths outside dense regions of the input graph drawing.",
 
-  // split_ratio
-  "That parameter defines the granularity of the grid that will be generated for routing the edges. "
-  "The higher its value is, the more precise the grid is.",
+    // split_ratio
+    "That parameter defines the granularity of the grid that will be generated for routing the edges. "
+    "The higher its value is, the more precise the grid is.",
 
-  // iterations
-  "That parameter defines the number of iterations for the edge bundling process. "
-  "The higher is its value, the more edges will be bundled.",
+    // iterations
+    "That parameter defines the number of iterations for the edge bundling process. "
+    "The higher is its value, the more edges will be bundled.",
 
-  // max_thread
-  "That parameter defines the number of threads to use for speeding up the edge bundling process. "
-  "A value of 0 will use as much threads as processors on the host machine.",
+    // max_thread
+    "That parameter defines the number of threads to use for speeding up the edge bundling process. "
+    "A value of 0 will use as much threads as processors on the host machine.",
 
-  // edge_node_overlap
-  "If true, edges can be routed on original nodes."
-};
+    // edge_node_overlap
+    "If true, edges can be routed on original nodes."};
 
 //============================================
-EdgeBundling::EdgeBundling(const PluginContext *context):Algorithm(context) {
+EdgeBundling::EdgeBundling(const PluginContext *context) : Algorithm(context) {
   addInParameter<LayoutProperty>("layout", paramHelp[0], "viewLayout");
   addInParameter<SizeProperty>("size", paramHelp[1], "viewSize");
-  addInParameter<bool>  ("grid_graph", paramHelp[2], "false");
-  addInParameter<bool>  ("3D_layout", paramHelp[3], "false");
-  addInParameter<bool>  ("sphere_layout", paramHelp[4], "false");
+  addInParameter<bool>("grid_graph", paramHelp[2], "false");
+  addInParameter<bool>("3D_layout", paramHelp[3], "false");
+  addInParameter<bool>("sphere_layout", paramHelp[4], "false");
   addInParameter<double>("long_edges", paramHelp[5], "0.9");
   addInParameter<double>("split_ratio", paramHelp[6], "10");
   addInParameter<unsigned int>("iterations", paramHelp[7], "2");
@@ -106,29 +105,29 @@ class SortNodes {
 public:
   static Graph *g;
   static DoubleProperty *dist;
-  bool operator()(const node a, const node b) const { //sort in deceresing order;
+  bool operator()(const node a, const node b) const { // sort in deceresing order;
     if (dist->getNodeValue(a) == dist->getNodeValue(b))
       return a.id > b.id;
 
     return dist->getNodeValue(a) > dist->getNodeValue(b);
   }
 };
-DoubleProperty * SortNodes::dist = 0;
+DoubleProperty *SortNodes::dist = 0;
 Graph *SortNodes::g = 0;
 //============================================
-DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
+DoubleProperty *EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
-  for(edge e : graph->getEdges()) {
-    const pair<node, node>& ends = graph->ends(e);
-    const Coord& a = layout->getNodeValue(ends.first);
-    const Coord& b = layout->getNodeValue(ends.second);
-    double abNorm = (double) (a-b).norm();
+  for (edge e : graph->getEdges()) {
+    const pair<node, node> &ends = graph->ends(e);
+    const Coord &a = layout->getNodeValue(ends.first);
+    const Coord &b = layout->getNodeValue(ends.second);
+    double abNorm = (double)(a - b).norm();
     double initialWeight = pow(abNorm, longEdges);
 
     if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap)
       initialWeight = abNorm;
 
-    weights->setEdgeValue(e, initialWeight );
+    weights->setEdgeValue(e, initialWeight);
   }
   return weights;
 }
@@ -148,11 +147,11 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
   int i = 1;
 
   if (graph->source(e) == src) {
-    i = nBends.size()-2;
+    i = nBends.size() - 2;
     sens = false;
   }
 
-  for (unsigned int j = 0; j<bends.size(); ++j) {
+  for (unsigned int j = 0; j < bends.size(); ++j) {
     Coord coord = layout->getNodeValue(nBends[i]);
 
     if (!layout3D)
@@ -160,12 +159,14 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
 
     bends[j] = coord;
 
-    if (sens) ++i;
-    else --i;
+    if (sens)
+      ++i;
+    else
+      --i;
   }
 
 #ifdef _OPENMP
-  #pragma omp critical(LAYOUT)
+#pragma omp critical(LAYOUT)
 #endif
   layout->setEdgeValue(e, bends);
 }
@@ -173,46 +174,44 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
 void EdgeBundling::fixEdgeType() {
   ntype->setAllEdgeValue(0);
-  for(edge e : graph->getEdges()) {
-    if(oriGraph->isElement(e)) {
+  for (edge e : graph->getEdges()) {
+    if (oriGraph->isElement(e)) {
       ntype->setEdgeValue(e, 1);
       continue;
     }
 
-    const pair<node, node>& ends = graph->ends(e);
+    const pair<node, node> &ends = graph->ends(e);
 
     bool inSrc = oriGraph->isElement(ends.first);
 
     bool inTgt = oriGraph->isElement(ends.second);
 
-    if(!inSrc && !inTgt)
+    if (!inSrc && !inTgt)
       ntype->setEdgeValue(e, 0);
     else
-      ntype->setEdgeValue(e,2);
+      ntype->setEdgeValue(e, 2);
   }
 }
 //============================================
-void computeDik(Dijkstra &dijkstra, const Graph * const vertexCoverGraph, const Graph * const oriGraph,
-                const node n, const MutableContainer<double> &mWeights,
-                unsigned int optimizatioLevel
-               ) {
+void computeDik(Dijkstra &dijkstra, const Graph *const vertexCoverGraph, const Graph *const oriGraph, const node n,
+                const MutableContainer<double> &mWeights, unsigned int optimizatioLevel) {
   set<node> focus;
 
-  if (optimizatioLevel>0) {
+  if (optimizatioLevel > 0) {
 #ifdef _OPENMP
-    #pragma omp critical(FOCUS)
+#pragma omp critical(FOCUS)
 #endif
     {
-      for(node ni : vertexCoverGraph->getInOutNodes(n))
+      for (node ni : vertexCoverGraph->getInOutNodes(n))
         focus.insert(ni);
     }
   }
 
-  dijkstra.initDijkstra(oriGraph,  n , mWeights,  focus);
+  dijkstra.initDijkstra(oriGraph, n, mWeights, focus);
 }
 //==========================================================================
 void EdgeBundling::computeDistances() {
-  for(node n : oriGraph->getNodes()) {
+  for (node n : oriGraph->getNodes()) {
     computeDistance(n);
   }
 }
@@ -220,7 +219,7 @@ void EdgeBundling::computeDistances() {
 void EdgeBundling::computeDistance(node n) {
   double maxDist = 0;
   Coord nPos = layout->getNodeValue(n);
-  for(node n2 : vertexCoverGraph->getInOutNodes(n)) {
+  for (node n2 : vertexCoverGraph->getInOutNodes(n)) {
     const Coord &n2Pos = layout->getNodeValue(n2);
     double dist = (nPos - n2Pos).norm();
     maxDist += dist;
@@ -241,12 +240,11 @@ bool EdgeBundling::run() {
   bool keepGrid = false;
   double dist = 50.0;
 
+  SizeProperty *size = graph->getProperty<SizeProperty>("viewSize");
+  layout = graph->getProperty<LayoutProperty>("viewLayout");
 
-  SizeProperty   *size       = graph->getProperty<SizeProperty>("viewSize");
-  layout     = graph->getProperty<LayoutProperty>("viewLayout");
-
-  if(dataSet != nullptr) {
-    dataSet->get("long_edges",  longEdges);
+  if (dataSet != nullptr) {
+    dataSet->get("long_edges", longEdges);
     dataSet->get("split_ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);
     dataSet->get("optimization", optimizationLevel);
@@ -270,11 +268,10 @@ bool EdgeBundling::run() {
   omp_set_dynamic(false);
 #endif
 
-
-  ntype      = graph->getProperty<DoubleProperty>("nodetype");
+  ntype = graph->getProperty<DoubleProperty>("nodetype");
   coloration = graph->getProperty<DoubleProperty>("coloration");
 
-  distance   = graph->getProperty<DoubleProperty>("distance");
+  distance = graph->getProperty<DoubleProperty>("distance");
   ntype->setAllNodeValue(0);
   ntype->setAllEdgeValue(0);
 
@@ -285,25 +282,25 @@ bool EdgeBundling::run() {
   std::vector<tlp::edge> removedEdges;
   tlp::SimpleTest::makeSimple(oriGraph, removedEdges);
 
-  std::vector<std::vector<tlp::node> > samePositionNodes;
+  std::vector<std::vector<tlp::node>> samePositionNodes;
 
   try {
     // Grid graph computation first step : generate quad-tree/octree
     if (layout3D) {
       OctreeBundle::compute(graph, splitRatio, layout, size);
-      for(edge e : stableIterator(graph->getEdges())) {
-        if(oriGraph->isElement(e)) continue;
+      for (edge e : stableIterator(graph->getEdges())) {
+        if (oriGraph->isElement(e))
+          continue;
 
         graph->delEdge(e);
       }
 
       if (sphereLayout) {
-        centerOnOriginAndScale(graph, layout, dist*2.);
-        addSphereGraph(graph, dist+0.5*dist);
-        addSphereGraph(graph, dist-0.2*dist);
+        centerOnOriginAndScale(graph, layout, dist * 2.);
+        addSphereGraph(graph, dist + 0.5 * dist);
+        addSphereGraph(graph, dist - 0.2 * dist);
       }
-    }
-    else {
+    } else {
       // Preprocess the graph to ensure that two nodes does not have the same position
       // otherwise the quad tree computation will fail
 
@@ -317,14 +314,14 @@ bool EdgeBundling::run() {
       workGraph->applyAlgorithm("Equal Value", err, &equalValueParams);
 
       // Iterate on the created clusters
-      for(Graph *sg : stableIterator(workGraph->getSubGraphs())) {
+      for (Graph *sg : stableIterator(workGraph->getSubGraphs())) {
         // At least two nodes have the same position
         if (sg->numberOfNodes() > 1) {
           std::vector<tlp::node> nodes;
           int i = 0;
           // keep one of the node in the clone subgraph, remove the others from it
           // but keep a list of those nodes having the same position
-          for(node n : stableIterator(sg->getNodes())) {
+          for (node n : stableIterator(sg->getNodes())) {
             if (i++ > 0) {
               workGraph->delNode(n);
             }
@@ -341,8 +338,7 @@ bool EdgeBundling::run() {
       QuadTreeBundle::compute(workGraph, splitRatio, layout, size);
       graph->delSubGraph(workGraph);
     }
-  }
-  catch(tlp::TulipException& e) {
+  } catch (tlp::TulipException &e) {
     string errorMsg(e.what());
     pluginProgress->setError(errorMsg);
     return false;
@@ -362,12 +358,13 @@ bool EdgeBundling::run() {
   // If sphere mode, remove the grid nodes inside the sphere
   // as we only want to route on the sphere surface
   if (sphereLayout) {
-    for(node n : stableIterator(graph->getNodes())) {
-      if(oriGraph->isElement(n)) continue;
+    for (node n : stableIterator(graph->getNodes())) {
+      if (oriGraph->isElement(n))
+        continue;
 
-      const Coord& c = layout->getNodeValue(n);
+      const Coord &c = layout->getNodeValue(n);
 
-      if(c.norm() < 0.9 * dist) {
+      if (c.norm() < 0.9 * dist) {
         graph->delNode(n, true);
       }
     }
@@ -375,12 +372,12 @@ bool EdgeBundling::run() {
 
   fixEdgeType();
 
-  //remove all original graph edges
+  // remove all original graph edges
   //==========================================================
   gridGraph = graph->getSubGraph("Voronoi");
   gridGraph->setName("Grid Graph");
 
-  for(edge e : stableIterator(gridGraph->getEdges())) {
+  for (edge e : stableIterator(gridGraph->getEdges())) {
     if (ntype->getEdgeValue(e) == 1) {
       gridGraph->delEdge(e);
     }
@@ -391,11 +388,11 @@ bool EdgeBundling::run() {
   // their enclosing cell vertices.
   // So connect the other ones to the enclosing cell vertices too
   // in order for the shortest path computation to work
-  for (size_t i = 0 ; i < samePositionNodes.size() ; ++i) {
+  for (size_t i = 0; i < samePositionNodes.size(); ++i) {
     node rep;
 
     // get the nodes that has been connected to the voronoi cell vertices
-    for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
+    for (size_t j = 0; j < samePositionNodes[i].size(); ++j) {
       if (gridGraph->deg(samePositionNodes[i][j]) > 0) {
         rep = samePositionNodes[i][j];
         break;
@@ -403,9 +400,10 @@ bool EdgeBundling::run() {
     }
 
     // connect the other nodes to the enclosing voronoi cell vertices
-    for(node n : gridGraph->getOutNodes(rep)) {
-      for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
-        if (samePositionNodes[i][j] == rep) continue;
+    for (node n : gridGraph->getOutNodes(rep)) {
+      for (size_t j = 0; j < samePositionNodes[i].size(); ++j) {
+        if (samePositionNodes[i][j] == rep)
+          continue;
 
         tlp::edge e = gridGraph->addEdge(samePositionNodes[i][j], n);
         ntype->setEdgeValue(e, 2);
@@ -418,11 +416,11 @@ bool EdgeBundling::run() {
   MutableContainer<double> mWeights;
   MutableContainer<double> mWeightsInit;
   {
-    for(edge e : graph->getEdges()) {
+    for (edge e : graph->getEdges()) {
       pair<node, node> ends = graph->ends(e);
       const Coord &a = layout->getNodeValue(ends.first);
       const Coord &b = layout->getNodeValue(ends.second);
-      double abNorm = (double) (a-b).norm();
+      double abNorm = (double)(a - b).norm();
       double initialWeight = pow(abNorm, longEdges);
 
       if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap)
@@ -433,11 +431,10 @@ bool EdgeBundling::run() {
     }
   }
 
-
   //==========================================================
 
   DoubleProperty *depth = graph->getProperty<DoubleProperty>("Depth");
-  //unsigned int nbDijkstraComputed = 0;
+  // unsigned int nbDijkstraComputed = 0;
   DoubleProperty *preference = gridGraph->getProperty<DoubleProperty>("edgeTaken");
   preference->setAllNodeValue(0);
 
@@ -445,14 +442,14 @@ bool EdgeBundling::run() {
   Dijkstra::loadGraph(gridGraph);
 
   // Routing edges into bundles
-  for (unsigned int iteration = 0 ; iteration  < MAX_ITER; iteration++ ) {
+  for (unsigned int iteration = 0; iteration < MAX_ITER; iteration++) {
 
-    if (iteration  < MAX_ITER - 1) {
+    if (iteration < MAX_ITER - 1) {
       depth->setAllNodeValue(0);
       depth->setAllEdgeValue(0);
     }
 
-    vertexCoverGraph = oriGraph->addCloneSubGraph("vertexCoverGraph"); //used for optimizing the vertex cover problem
+    vertexCoverGraph = oriGraph->addCloneSubGraph("vertexCoverGraph"); // used for optimizing the vertex cover problem
 
     MutableContainer<bool> edgeTreated;
     edgeTreated.setAll(false);
@@ -461,30 +458,28 @@ bool EdgeBundling::run() {
     set<node, SortNodes> orderedNodes;
     computeDistances();
     {
-      for(node n : vertexCoverGraph->getNodes())
+      for (node n : vertexCoverGraph->getNodes())
         orderedNodes.insert(n);
-
     }
 
-    while( vertexCoverGraph->numberOfNodes() > 0 ) {
+    while (vertexCoverGraph->numberOfNodes() > 0) {
       stringstream strm;
       strm << "Computing iteration " << iteration + 1 << "/" << MAX_ITER;
       pluginProgress->setComment(strm.str());
-      unsigned int i =
-        oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
+      unsigned int i = oriGraph->numberOfEdges() - vertexCoverGraph->numberOfEdges();
 
       if ((i % 10) == 0)
         pluginProgress->progress(i, oriGraph->numberOfEdges());
 
       //====================================
-      //Select the destination nodes. We do not have to compute
-      //dijkstra for other nodes.
+      // Select the destination nodes. We do not have to compute
+      // dijkstra for other nodes.
       vector<node> toTreatByThreads;
       set<node> blockNodes;
       vector<node> toDelete;
       set<node, SortNodes>::iterator it = orderedNodes.begin();
 
-      for(; it!=orderedNodes.end(); ++it) {
+      for (; it != orderedNodes.end(); ++it) {
         node n = *it;
 
         if ((blockNodes.find(n) == blockNodes.end() || optimizationLevel < 3) && (vertexCoverGraph->deg(n) > 0 || optimizationLevel < 2)) {
@@ -503,8 +498,8 @@ bool EdgeBundling::run() {
           if (addOk) {
             toTreatByThreads.push_back(n);
 
-            if ((optimizationLevel==3) && (toTreatByThreads.size() < MAX_THREADS)) {
-              for(node tmp : vertexCoverGraph->getInOutNodes(n))
+            if ((optimizationLevel == 3) && (toTreatByThreads.size() < MAX_THREADS)) {
+              for (node tmp : vertexCoverGraph->getInOutNodes(n))
                 blockNodes.insert(tmp);
             }
           }
@@ -518,8 +513,8 @@ bool EdgeBundling::run() {
           break;
       }
 
-      if (optimizationLevel>1)
-        for (unsigned int i=0; i<toDelete.size(); i++) {
+      if (optimizationLevel > 1)
+        for (unsigned int i = 0; i < toDelete.size(); i++) {
           orderedNodes.erase(toDelete[i]);
           vertexCoverGraph->delNode(toDelete[i]);
         }
@@ -528,13 +523,13 @@ bool EdgeBundling::run() {
 
       int nbThread = toTreatByThreads.size();
 
-      //nbDijkstraComputed += nbThread;
+      // nbDijkstraComputed += nbThread;
       if (iteration < MAX_ITER - 1) {
 #ifdef _OPENMP
-        #pragma omp parallel for default(none) shared( nbThread, depth, toTreatByThreads, mWeights, edgeTreated) schedule(dynamic, 1)
+#pragma omp parallel for default(none) shared(nbThread, depth, toTreatByThreads, mWeights, edgeTreated) schedule(dynamic, 1)
 #endif
 
-        for ( int j = 0; j < nbThread; j++) {
+        for (int j = 0; j < nbThread; j++) {
           node n = toTreatByThreads[j];
           Dijkstra dijkstra;
 
@@ -543,16 +538,16 @@ bool EdgeBundling::run() {
           else
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
-          //for each edge of n compute the shortest paths in the grid
-          for(edge e : vertexCoverGraph->getInOutEdges(n)) {
+          // for each edge of n compute the shortest paths in the grid
+          for (edge e : vertexCoverGraph->getInOutEdges(n)) {
             node n2 = graph->opposite(e, n);
 
-            if (optimizationLevel < 3  || forceEdgeTest) {
+            if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
 #ifdef _OPENMP
-              #pragma omp critical(EDGETREATED)
+#pragma omp critical(EDGETREATED)
 #endif
-              //when we are not using colration edge can be treated two times
+              // when we are not using colration edge can be treated two times
               {
                 if (edgeTreated.get(e.id))
                   stop = true;
@@ -571,10 +566,9 @@ bool EdgeBundling::run() {
             dijkstra.searchPaths(n2, depth);
           }
         }
-      }
-      else {
+      } else {
 #ifdef _OPENMP
-        #pragma omp parallel for default(none) shared( nbThread, toTreatByThreads, mWeights, preference, edgeTreated) schedule(dynamic, 1)
+#pragma omp parallel for default(none) shared(nbThread, toTreatByThreads, mWeights, preference, edgeTreated) schedule(dynamic, 1)
 #endif
 
         for (int j = 0; j < nbThread; j++) {
@@ -586,14 +580,14 @@ bool EdgeBundling::run() {
           else
             computeDik(dijkstra, vertexCoverGraph, oriGraph, n, mWeights, optimizationLevel);
 
-          //for each edge of n compute the shortest paths in the grid
-          for(edge e : vertexCoverGraph->getInOutEdges(n)) {
+          // for each edge of n compute the shortest paths in the grid
+          for (edge e : vertexCoverGraph->getInOutEdges(n)) {
             if (optimizationLevel < 3 || forceEdgeTest) {
               bool stop = false;
 #ifdef _OPENMP
-              #pragma omp critical(EDGETREATED)
+#pragma omp critical(EDGETREATED)
 #endif
-              //when we are not using colration edge can be treated two times
+              // when we are not using colration edge can be treated two times
               {
                 if (edgeTreated.get(e.id))
                   stop = true;
@@ -601,23 +595,24 @@ bool EdgeBundling::run() {
                 edgeTreated.set(e.id, true);
               }
 
-              if (stop) continue;
+              if (stop)
+                continue;
             }
 
             BooleanProperty tmpP(gridGraph);
             tmpP.setAllNodeValue(false);
             tmpP.setAllEdgeValue(false);
             {
-              ///bends
+              /// bends
               vector<node> tmpV;
               dijkstra.searchPath(graph->opposite(e, n), tmpV);
 
-              //update preference property (if their is two shortest path try to use the
-              //one with high preference)
+              // update preference property (if their is two shortest path try to use the
+              // one with high preference)
               for (size_t ii = 0; ii < tmpV.size(); ++ii) {
-                double res = preference->getNodeValue(tmpV[ii])+1;
+                double res = preference->getNodeValue(tmpV[ii]) + 1;
 #ifdef _OPENMP
-                #pragma omp critical(PREF)
+#pragma omp critical(PREF)
 #endif
                 preference->setNodeValue(tmpV[ii], res);
               }
@@ -634,14 +629,14 @@ bool EdgeBundling::run() {
       for (size_t j = 0; j < toTreatByThreads.size(); ++j) {
         node n = toTreatByThreads[j];
         vector<node> neigbors;
-        for(node n2 : vertexCoverGraph->getInOutNodes(n)) {
+        for (node n2 : vertexCoverGraph->getInOutNodes(n)) {
           neigbors.push_back(n2);
           orderedNodes.erase(n2);
         }
         orderedNodes.erase(n);
         vertexCoverGraph->delNode(n);
 
-        for(unsigned int i=0; i<neigbors.size(); ++i) {
+        for (unsigned int i = 0; i < neigbors.size(); ++i) {
           computeDistance(neigbors[i]);
           orderedNodes.insert(neigbors[i]);
         }
@@ -650,9 +645,9 @@ bool EdgeBundling::run() {
 
     oriGraph->delSubGraph(vertexCoverGraph);
 
-    //Adjust weights of routing grid.
+    // Adjust weights of routing grid.
     if (iteration < MAX_ITER - 1) {
-      for(edge e : gridGraph->getEdges()) {
+      for (edge e : gridGraph->getEdges()) {
         mWeights.set(e.id, mWeightsInit.get(e.id));
 
         if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap) {
@@ -669,15 +664,14 @@ bool EdgeBundling::run() {
   }
 
   // Reinsert multiple edges if any and update their layout
-  for (size_t i = 0 ; i < removedEdges.size() ; ++i) {
-    const std::pair<node, node>& eEnds = graph->ends(removedEdges[i]);
+  for (size_t i = 0; i < removedEdges.size(); ++i) {
+    const std::pair<node, node> &eEnds = graph->ends(removedEdges[i]);
     tlp::edge origEdge = oriGraph->existEdge(eEnds.first, eEnds.second);
 
     if (origEdge.isValid()) {
       oriGraph->addEdge(removedEdges[i]);
       layout->setEdgeValue(removedEdges[i], layout->getEdgeValue(origEdge));
-    }
-    else {
+    } else {
       origEdge = oriGraph->existEdge(eEnds.second, eEnds.first);
       oriGraph->addEdge(removedEdges[i]);
       std::vector<tlp::Coord> bends = layout->getEdgeValue(origEdge);
@@ -692,7 +686,7 @@ bool EdgeBundling::run() {
   }
 
   if (!keepGrid) {
-    for(node n : stableIterator(graph->getNodes())) {
+    for (node n : stableIterator(graph->getNodes())) {
       if (!oriGraph->isElement(n))
         graph->delNode(n, true);
     }

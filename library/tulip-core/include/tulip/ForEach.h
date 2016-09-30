@@ -32,8 +32,7 @@ namespace tlp {
 * so it gets deleted when out of scope.
 *
 **/
-template<typename TYPE>
-struct _TLP_IT {
+template <typename TYPE> struct _TLP_IT {
   _TLP_IT(Iterator<TYPE> *_it) : _it(_it) {
   }
   ~_TLP_IT() {
@@ -45,20 +44,18 @@ struct _TLP_IT {
 /**
 * @brief
 **/
-template<typename TYPE>
-inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
+template <typename TYPE> inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
   assert(_it._it != nullptr);
 
-  if(_it._it->hasNext()) {
+  if (_it._it->hasNext()) {
     n = _it._it->next();
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
 }
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 
 /**
  * @brief Allows to iterate the nodes or edges of a Graph in a clear and concise way.
@@ -74,8 +71,7 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
  *
  * This macro can be used with any Iterator subclass as it's based on the existence of the next() and hasNext() methods
  */
-#define forEach(A, B) \
-  for(tlp::_TLP_IT<TLP_TYPEOF(A) > _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
+#define forEach(A, B) for (tlp::_TLP_IT<TLP_TYPEOF(A)> _it_foreach(B); tlp::_tlp_if_test(A, _it_foreach);)
 
 /**
  * @brief Allows to iterate the nodes or edges of a copy of a Graph in a clear and concise way.
@@ -83,44 +79,39 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
  * It allows deletion operations to be performed without invalidating the iterator.
  * It also avoid having to manage a tulip Iterator, whose deletion is often forgotten.
  */
-#define stableForEach(A, B)  \
-  for(tlp::_TLP_IT<TLP_TYPEOF(A) > _it_foreach(new tlp::StableIterator<TLP_TYPEOF(A) >(B));  tlp::_tlp_if_test(A, _it_foreach);)
+#define stableForEach(A, B)                                                                                                                          \
+  for (tlp::_TLP_IT<TLP_TYPEOF(A)> _it_foreach(new tlp::StableIterator<TLP_TYPEOF(A)>(B)); tlp::_tlp_if_test(A, _it_foreach);)
 
 namespace tlp {
 
-template<typename T>
-class iterator_t  {
+template <typename T> class iterator_t {
 public:
-  enum IteratorType {
-    Begin = 0,
-    End = 1
-  };
+  enum IteratorType { Begin = 0, End = 1 };
 
-  iterator_t(tlp::Iterator<T>* it, IteratorType begin = End) : _finished(false), _iteratorType(begin), _it(it) {
-    if(_iteratorType == Begin) {
-      if(_it->hasNext()) {
+  iterator_t(tlp::Iterator<T> *it, IteratorType begin = End) : _finished(false), _iteratorType(begin), _it(it) {
+    if (_iteratorType == Begin) {
+      if (_it->hasNext()) {
         _current = _it->next();
-      }
-      else {
+      } else {
         _finished = true;
       }
     }
   }
 
   ~iterator_t() {
-    if(_iteratorType == Begin) {
+    if (_iteratorType == Begin) {
       delete _it;
     }
   }
 
-  bool operator!=(const iterator_t&) const {
+  bool operator!=(const iterator_t &) const {
     return !_finished;
   }
 
-  const iterator_t& operator++() {
+  const iterator_t &operator++() {
     _finished = !_it->hasNext();
 
-    if(!_finished)
+    if (!_finished)
       _current = _it->next();
 
     return *this;
@@ -133,20 +124,17 @@ public:
 protected:
   bool _finished;
   IteratorType _iteratorType;
-  tlp::Iterator<T>* _it;
+  tlp::Iterator<T> *_it;
   T _current;
 };
 
-template<typename T>
-iterator_t<T> begin(tlp::Iterator<T>* it) {
+template <typename T> iterator_t<T> begin(tlp::Iterator<T> *it) {
   return iterator_t<T>(it, iterator_t<T>::Begin);
 }
 
-template<typename T>
-iterator_t<T> end(tlp::Iterator<T>* it) {
+template <typename T> iterator_t<T> end(tlp::Iterator<T> *it) {
   return iterator_t<T>(it);
 }
-
 }
 
 #endif

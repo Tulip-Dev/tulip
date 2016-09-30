@@ -41,7 +41,6 @@ struct PluginLoader;
  **/
 class TLP_SCOPE PluginLibraryLoader {
 public:
-
 #ifndef EMSCRIPTEN
   /**
   * @brief Loads all the plugins in each directory contained in TulipPluginsPath.
@@ -67,7 +66,7 @@ public:
   * @param pluginPath A folder to append to each path in TulipPluginsPath (e.g. "glyphs/")
   *
   **/
-  static void loadPlugins(PluginLoader *loader = nullptr, const std::string& pluginPath = "");
+  static void loadPlugins(PluginLoader *loader = nullptr, const std::string &pluginPath = "");
 
   /**
    * @brief Loads a single plugin library.
@@ -76,8 +75,8 @@ public:
    * @param loader A loader to report what is going on (only its loaded or aborted functions will be called) Defaults to 0.
    * @return bool Whether the plugin was sucessfully loaded.
    **/
-  static bool loadPluginLibrary(const std::string & filename, PluginLoader *loader = nullptr);
-#endif //EMSCRIPTEN
+  static bool loadPluginLibrary(const std::string &filename, PluginLoader *loader = nullptr);
+#endif // EMSCRIPTEN
 
   /**
    * @brief Gets the name of the plug-in library being loaded.
@@ -85,32 +84,32 @@ public:
    *
    * @return :string& The name of the plugin library being loaded.
    **/
-  static const std::string& getCurrentPluginFileName() {
+  static const std::string &getCurrentPluginFileName() {
     return getInstance()->currentPluginLibrary;
   }
 
 private:
-  PluginLibraryLoader() {}
+  PluginLibraryLoader() {
+  }
 #ifndef EMSCRIPTEN
   bool loadNextPluginLibrary(PluginLoader *loader);
 
   bool initPluginDir(PluginLoader *loader);
 #endif
 
-  static PluginLibraryLoader* getInstance() {
-    if(_instance == nullptr) {
+  static PluginLibraryLoader *getInstance() {
+    if (_instance == nullptr) {
       _instance = new PluginLibraryLoader();
     }
 
     return _instance;
   }
-  static PluginLibraryLoader* _instance;
+  static PluginLibraryLoader *_instance;
 
   std::string message;
   std::string pluginPath;
   std::string currentPluginLibrary;
 };
-
 }
-#endif //DOXYGEN_NOTFOR_USER
-#endif //PLUGINLIBLOADER_H
+#endif // DOXYGEN_NOTFOR_USER
+#endif // PLUGINLIBLOADER_H

@@ -36,13 +36,14 @@ class FishEyeInteractorComponent : public GLInteractorComponent {
 
 public:
   FishEyeInteractorComponent(FishEyeConfigWidget *configWidget);
-  FishEyeInteractorComponent(
-      const FishEyeInteractorComponent &fisheyeInteractorComponent);
+  FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent);
   ~FishEyeInteractorComponent();
 
   bool eventFilter(QObject *widget, QEvent *e);
 
-  bool compute(GlMainWidget *) { return false; }
+  bool compute(GlMainWidget *) {
+    return false;
+  }
 
   void viewChanged(View *view);
 
@@ -81,8 +82,7 @@ private:
 class FishEyeInteractor : public GLInteractorComposite {
 
 public:
-  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009",
-                    "FishEye Interactor", "1.0", "Visualization")
+  PLUGININFORMATION("FishEyeInteractor", "Antoine Lambert", "29/05/2009", "FishEye Interactor", "1.0", "Visualization")
 
   FishEyeInteractor(const PluginContext *);
   ~FishEyeInteractor();
@@ -93,7 +93,9 @@ public:
 
   QWidget *configurationWidget() const;
 
-  unsigned int priority() const { return StandardInteractorPriority::FishEye; }
+  unsigned int priority() const {
+    return StandardInteractorPriority::FishEye;
+  }
 
   virtual bool isCompatible(const std::string &viewName) const;
 

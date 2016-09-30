@@ -43,13 +43,7 @@ class CaptionItem : public QObject, public Observable {
   Q_OBJECT
 
 public:
-
-  enum CaptionType {
-    NodesColorCaption=1,
-    NodesSizeCaption=2,
-    EdgesColorCaption=3,
-    EdgesSizeCaption=4
-  };
+  enum CaptionType { NodesColorCaption = 1, NodesSizeCaption = 2, EdgesColorCaption = 3, EdgesSizeCaption = 4 };
 
   CaptionItem(View *view);
   ~CaptionItem();
@@ -66,22 +60,21 @@ public:
 
   void treatEvents(const std::vector<Event> &ev);
 
-signals :
+signals:
 
   void filtering(bool);
 
-public slots :
+public slots:
 
   void removeObservation(bool);
 
-  void applyNewFilter(float begin,float end);
+  void applyNewFilter(float begin, float end);
   void selectedPropertyChanged(std::string propertyName);
 
-private :
-
+private:
   void clearObservers();
 
-  void generateGradients(const std::vector<std::pair <double,Color> > &metricToColorFiltered, QGradient &activeGradient, QGradient &hideGradient);
+  void generateGradients(const std::vector<std::pair<double, Color>> &metricToColorFiltered, QGradient &activeGradient, QGradient &hideGradient);
 
   View *view;
 
@@ -95,7 +88,6 @@ private :
   ColorProperty *_backupColorProperty;
   ColorProperty *_backupBorderColorProperty;
 };
-
 }
 
 #endif // CAPTIONITEM_H

@@ -24,54 +24,57 @@ using namespace std;
 
 namespace tlprender {
 
-Shape::Shape() : valid(false), avgZ(0.0) {}
-Shape::~Shape() {}
+Shape::Shape() : valid(false), avgZ(0.0) {
+}
+Shape::~Shape() {
+}
 
 bool Shape::isValid() const {
   return (vertices.size() > 2);
 }
 
 void Shape::begin() {
-  valid=false;
-  vertices=vector<Point>();
+  valid = false;
+  vertices = vector<Point>();
 }
 
 void Shape::add(const int x, const int y, const GLfloat z) {
-  add(Point(x,y,z));
+  add(Point(x, y, z));
 }
 
 bool Shape::end() {
-  int count=0;
-  avgZ=0.0;
+  int count = 0;
+  avgZ = 0.0;
 
-  for (vector<Point>::iterator i = vertices.begin(); i!=vertices.end(); ++i) {
+  for (vector<Point>::iterator i = vertices.begin(); i != vertices.end(); ++i) {
 
-    vector<Point>::const_iterator pre=(i==vertices.begin() ? vertices.end() : i);
-    vector<Point>::const_iterator next=i;
+    vector<Point>::const_iterator pre = (i == vertices.begin() ? vertices.end() : i);
+    vector<Point>::const_iterator next = i;
 
     --pre;
     ++next;
 
-    if (next==vertices.end()) next=vertices.begin();
+    if (next == vertices.end())
+      next = vertices.begin();
 
-    if ((*i==*pre) || (*i==*next)) {
-      i=vertices.erase(i);
-      --i; //FIXME: if we erase vertices.begin(), returned value (i) would be the new vertices.begin() and we'll decrement it.
-    }
-    else {
+    if ((*i == *pre) || (*i == *next)) {
+      i = vertices.erase(i);
+      --i; // FIXME: if we erase vertices.begin(), returned value (i) would be the new vertices.begin() and we'll decrement it.
+    } else {
       ++count;
       avgZ += i->z;
     }
   }
 
-  if (count != 0) avgZ /= count;
+  if (count != 0)
+    avgZ /= count;
 
-  valid = (vertices.size()>2);
+  valid = (vertices.size() > 2);
   return valid;
 }
 
 bool Shape::clip(const Shape &sh) {
-#if 0 //commented code, consider it broken    
+#if 0 // commented code, consider it broken    
 
   if (sh.vertices.size() < 3) return false;
 
@@ -112,30 +115,30 @@ bool Shape::clip(const Shape &sh) {
     }
   }
 
-#endif //end of commented code
+#endif // end of commented code
   return false;
 }
-ostream& operator<<(ostream &os, const Shape &p) {
-  for (vector<Point>::const_iterator i=p.vertices.begin(); i != p.vertices.end();) {
+ostream &operator<<(ostream &os, const Shape &p) {
+  for (vector<Point>::const_iterator i = p.vertices.begin(); i != p.vertices.end();) {
     os << i->x << "," << i->y;
 
-    if (++i != p.vertices.end()) os << ",";
+    if (++i != p.vertices.end())
+      os << ",";
   }
 
   return os;
 }
 
-ostream& operator<<(ostream &os, const Point &p) {
+ostream &operator<<(ostream &os, const Point &p) {
   os << "(" << p.x << "," << p.y << ")";
   return os;
 }
 }
 
-bool less<tlprender::Shape *>::operator() (tlprender::Shape *&p1, tlprender::Shape *&p2) {
+bool less<tlprender::Shape *>::operator()(tlprender::Shape *&p1, tlprender::Shape *&p2) {
   return (*p2 <= *p1);
 }
 
 bool less<tlprender::Shape>::operator()(const tlprender::Shape &p1, const tlprender::Shape &p2) {
   return (p2 <= p1);
 }
-

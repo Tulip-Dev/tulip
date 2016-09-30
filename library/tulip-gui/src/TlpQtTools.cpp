@@ -34,7 +34,6 @@
 #include <QMetaEnum>
 #include <QApplication>
 
-
 #include <QDir>
 #include <QApplication>
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
@@ -75,55 +74,55 @@ using namespace tlp;
 /**
   * Init property type to property label conversion map
   **/
-static map<string,QString> buildPropertyTypeToPropertyTypeLabelMap() {
-  map<string,QString> propertyTypeToPropertyTypeLabel;
-  propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename]=QString("Boolean");
-  propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename]=QString("Color");
-  propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename]=QString("Double");
-  propertyTypeToPropertyTypeLabel[GraphProperty::propertyTypename]=QString("Graph");
-  propertyTypeToPropertyTypeLabel[IntegerProperty::propertyTypename]=QString("Integer");
-  propertyTypeToPropertyTypeLabel[LayoutProperty::propertyTypename]=QString("Layout");
-  propertyTypeToPropertyTypeLabel[SizeProperty::propertyTypename]=QString("Size");
-  propertyTypeToPropertyTypeLabel[StringProperty::propertyTypename]=QString("String");
-  propertyTypeToPropertyTypeLabel[BooleanVectorProperty::propertyTypename]=QString("BooleanVector");
-  propertyTypeToPropertyTypeLabel[ColorVectorProperty::propertyTypename]=QString("ColorVector");
-  propertyTypeToPropertyTypeLabel[CoordVectorProperty::propertyTypename]=QString("CoordVector");
-  propertyTypeToPropertyTypeLabel[DoubleVectorProperty::propertyTypename]=QString("DoubleVector");
-  propertyTypeToPropertyTypeLabel[IntegerVectorProperty::propertyTypename]=QString("IntegerVector");
-  propertyTypeToPropertyTypeLabel[SizeVectorProperty::propertyTypename]=QString("SizeVector");
-  propertyTypeToPropertyTypeLabel[StringVectorProperty::propertyTypename]=QString("StringVector");
+static map<string, QString> buildPropertyTypeToPropertyTypeLabelMap() {
+  map<string, QString> propertyTypeToPropertyTypeLabel;
+  propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] = QString("Boolean");
+  propertyTypeToPropertyTypeLabel[ColorProperty::propertyTypename] = QString("Color");
+  propertyTypeToPropertyTypeLabel[DoubleProperty::propertyTypename] = QString("Double");
+  propertyTypeToPropertyTypeLabel[GraphProperty::propertyTypename] = QString("Graph");
+  propertyTypeToPropertyTypeLabel[IntegerProperty::propertyTypename] = QString("Integer");
+  propertyTypeToPropertyTypeLabel[LayoutProperty::propertyTypename] = QString("Layout");
+  propertyTypeToPropertyTypeLabel[SizeProperty::propertyTypename] = QString("Size");
+  propertyTypeToPropertyTypeLabel[StringProperty::propertyTypename] = QString("String");
+  propertyTypeToPropertyTypeLabel[BooleanVectorProperty::propertyTypename] = QString("BooleanVector");
+  propertyTypeToPropertyTypeLabel[ColorVectorProperty::propertyTypename] = QString("ColorVector");
+  propertyTypeToPropertyTypeLabel[CoordVectorProperty::propertyTypename] = QString("CoordVector");
+  propertyTypeToPropertyTypeLabel[DoubleVectorProperty::propertyTypename] = QString("DoubleVector");
+  propertyTypeToPropertyTypeLabel[IntegerVectorProperty::propertyTypename] = QString("IntegerVector");
+  propertyTypeToPropertyTypeLabel[SizeVectorProperty::propertyTypename] = QString("SizeVector");
+  propertyTypeToPropertyTypeLabel[StringVectorProperty::propertyTypename] = QString("StringVector");
   return propertyTypeToPropertyTypeLabel;
 }
-//Property type to property label conversion map
-static const map<string,QString> propertyTypeToPropertyTypeLabelMap = buildPropertyTypeToPropertyTypeLabelMap();
+// Property type to property label conversion map
+static const map<string, QString> propertyTypeToPropertyTypeLabelMap = buildPropertyTypeToPropertyTypeLabelMap();
 /**
   * Init property type label to property type conversion map
   **/
-static map<QString,string> buildPropertyTypeLabelToPropertyTypeMap() {
-  map<QString,string> propertyTypeLabelToPropertyType;
-  propertyTypeLabelToPropertyType[QString("Boolean")]=BooleanProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Color")]=ColorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Double")]=DoubleProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Graph")]=GraphProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Integer")]=IntegerProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Layout")]=LayoutProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("Size")]=SizeProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("String")]=StringProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("BooleanVector")]=BooleanVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("ColorVector")]=ColorVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("CoordVector")]=CoordVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("DoubleVector")]=DoubleVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("IntegerVector")]=IntegerVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("SizeVector")]=SizeVectorProperty::propertyTypename;
-  propertyTypeLabelToPropertyType[QString("StringVector")]=StringVectorProperty::propertyTypename;
+static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
+  map<QString, string> propertyTypeLabelToPropertyType;
+  propertyTypeLabelToPropertyType[QString("Boolean")] = BooleanProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Color")] = ColorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Double")] = DoubleProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Graph")] = GraphProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Integer")] = IntegerProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Layout")] = LayoutProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("Size")] = SizeProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("String")] = StringProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("BooleanVector")] = BooleanVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("ColorVector")] = ColorVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("CoordVector")] = CoordVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("DoubleVector")] = DoubleVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("IntegerVector")] = IntegerVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("SizeVector")] = SizeVectorProperty::propertyTypename;
+  propertyTypeLabelToPropertyType[QString("StringVector")] = StringVectorProperty::propertyTypename;
   return propertyTypeLabelToPropertyType;
 }
-//Property type label to property type conversion map
-static const map<QString,string> propertyTypeLabelToPropertyTypeMap = buildPropertyTypeLabelToPropertyTypeMap();
+// Property type label to property type conversion map
+static const map<QString, string> propertyTypeLabelToPropertyTypeMap = buildPropertyTypeLabelToPropertyTypeMap();
 
 // Allow to print a human readable representation of Qt events,
 // for debugging purpose (through the use of qDebug() )
-QDebug operator<<(QDebug str, const QEvent * ev) {
+QDebug operator<<(QDebug str, const QEvent *ev) {
   static int eventEnumIndex = QEvent::staticMetaObject.indexOfEnumerator("Type");
   str << "QEvent";
 
@@ -132,8 +131,7 @@ QDebug operator<<(QDebug str, const QEvent * ev) {
 
     if (!name.isEmpty()) {
       str << name;
-    }
-    else {
+    } else {
       str << ev->type();
     }
   }
@@ -143,31 +141,30 @@ QDebug operator<<(QDebug str, const QEvent * ev) {
 
 namespace tlp {
 
-bool getColorDialog(const QColor &color,QWidget *parent,const QString &title,QColor &result) {
+bool getColorDialog(const QColor &color, QWidget *parent, const QString &title, QColor &result) {
 
   QColor newColor = QColorDialog::getColor(color, parent, title, QColorDialog::ShowAlphaChannel | QColorDialog::DontUseNativeDialog);
 
-  if(newColor.isValid()) {
-    result=newColor;
+  if (newColor.isValid()) {
+    result = newColor;
     return true;
-  }
-  else
+  } else
     return false;
-
 }
 
-QString propertyTypeToPropertyTypeLabel(const string& typeName) {
-  map<string,QString>::const_iterator  it = propertyTypeToPropertyTypeLabelMap.find(typeName);
-  return it != propertyTypeToPropertyTypeLabelMap.end()?it->second:QString();
+QString propertyTypeToPropertyTypeLabel(const string &typeName) {
+  map<string, QString>::const_iterator it = propertyTypeToPropertyTypeLabelMap.find(typeName);
+  return it != propertyTypeToPropertyTypeLabelMap.end() ? it->second : QString();
 }
 
-string propertyTypeLabelToPropertyType(const QString& typeNameLabel) {
-  map<QString,string>::const_iterator  it = propertyTypeLabelToPropertyTypeMap.find(typeNameLabel);
-  return it != propertyTypeLabelToPropertyTypeMap.end()?it->second:string();
+string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
+  map<QString, string>::const_iterator it = propertyTypeLabelToPropertyTypeMap.find(typeNameLabel);
+  return it != propertyTypeLabelToPropertyTypeMap.end() ? it->second : string();
 }
 
-QString getPluginPackageName(const QString& pluginName) {
-  return pluginName.simplified().remove(' ').toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_VERSION + "-" + OS_PLATFORM + OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
+QString getPluginPackageName(const QString &pluginName) {
+  return pluginName.simplified().remove(' ').toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_VERSION + "-" + OS_PLATFORM +
+         OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
 }
 
 QString getPluginStagingDirectory() {
@@ -194,7 +191,7 @@ QString localPluginsPath() {
 #endif
 }
 
-void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
+void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 
   QLocale::setDefault(QLocale(QLocale::English));
   TulipSettings::instance().applyProxySettings();
@@ -229,7 +226,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 #endif
 
   if (removeDiscardedPlugins) {
-    foreach (const QString& plugin, tlp::PluginManager::markedForRemoval()) {
+    foreach (const QString &plugin, tlp::PluginManager::markedForRemoval()) {
       QFile f(plugin);
       f.remove();
       tlp::PluginManager::unmarkForRemoval(plugin); // whether or not the removal succeeded, do not try again
@@ -239,20 +236,10 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   tlp::initTulipLib();
   initQTypeSerializers();
 
-
   tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/glyph" +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/interactor" +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/view" +
-                          tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/perspective" +
-                          tlp::PATH_DELIMITER +
-                          tlp::getPluginLocalInstallationDir().toUtf8().data();
+                          tlp::PATH_DELIMITER + tlp::TulipPluginsPath + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/glyph" + tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath + "/interactor" + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/view" + tlp::PATH_DELIMITER +
+                          tlp::TulipPluginsPath + "/perspective" + tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toUtf8().data();
 
   // Load plugins
   tlp::PluginLibraryLoader::loadPlugins(loader);
@@ -262,28 +249,26 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
 }
 
 // tlp::debug redirection
-class QDebugOStream :public std::ostream {
-  class QDebugStreamBuf :public std::streambuf {
+class QDebugOStream : public std::ostream {
+  class QDebugStreamBuf : public std::streambuf {
   protected:
     string buf;
     virtual int_type overflow(int c) {
       if (c == '\n') {
         qDebug() << buf;
         buf.clear();
-      }
-      else
+      } else
         buf += c;
 
       return c;
     }
 
     virtual std::streamsize xsputn(const char *p, std::streamsize n) {
-      if (p[n-1] == '\n') {
+      if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);
         qDebug() << buf.c_str();
         buf.clear();
-      }
-      else
+      } else
         buf += std::string(p, n);
 
       return n;
@@ -293,10 +278,11 @@ class QDebugOStream :public std::ostream {
   QDebugStreamBuf qDebugBuf;
 
 public:
-  QDebugOStream():std::ostream(&qDebugBuf) {}
+  QDebugOStream() : std::ostream(&qDebugBuf) {
+  }
 };
 
-static QDebugOStream* qDebugStream = nullptr;
+static QDebugOStream *qDebugStream = nullptr;
 
 void redirectDebugOutputToQDebug() {
   if (qDebugStream == nullptr)
@@ -306,28 +292,26 @@ void redirectDebugOutputToQDebug() {
 }
 
 // tlp::warning redirection
-class QWarningOStream :public std::ostream {
-  class QWarningStreamBuf :public std::streambuf {
+class QWarningOStream : public std::ostream {
+  class QWarningStreamBuf : public std::streambuf {
   protected:
     string buf;
     virtual int_type overflow(int c) {
       if (c == '\n') {
         qWarning() << buf.c_str();
         buf.clear();
-      }
-      else
+      } else
         buf += c;
 
       return c;
     }
 
     virtual std::streamsize xsputn(const char *p, std::streamsize n) {
-      if (p[n-1] == '\n') {
+      if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);
         qWarning() << buf.c_str();
         buf.clear();
-      }
-      else
+      } else
         buf += std::string(p, n);
 
       return n;
@@ -337,10 +321,11 @@ class QWarningOStream :public std::ostream {
   QWarningStreamBuf qWarningBuf;
 
 public:
-  QWarningOStream() :std::ostream(&qWarningBuf) {}
+  QWarningOStream() : std::ostream(&qWarningBuf) {
+  }
 };
 
-static QWarningOStream* qWarningStream = nullptr;
+static QWarningOStream *qWarningStream = nullptr;
 
 void redirectWarningOutputToQWarning() {
   if (qWarningStream == nullptr)
@@ -350,28 +335,26 @@ void redirectWarningOutputToQWarning() {
 }
 
 // tlp::error redirection
-class QErrorOStream :public std::ostream {
-  class QErrorStreamBuf :public std::streambuf {
+class QErrorOStream : public std::ostream {
+  class QErrorStreamBuf : public std::streambuf {
   protected:
     string buf;
     virtual int_type overflow(int c) {
       if (c == '\n') {
         qCritical() << buf.c_str();
         buf.clear();
-      }
-      else
+      } else
         buf += c;
 
       return c;
     }
 
     virtual std::streamsize xsputn(const char *p, std::streamsize n) {
-      if (p[n-1] == '\n') {
+      if (p[n - 1] == '\n') {
         buf += std::string(p, n - 1);
         qCritical() << buf.c_str();
         buf.clear();
-      }
-      else
+      } else
         buf += std::string(p, n);
 
       return n;
@@ -381,10 +364,11 @@ class QErrorOStream :public std::ostream {
   QErrorStreamBuf qErrorBuf;
 
 public:
-  QErrorOStream():std::ostream(&qErrorBuf) {}
+  QErrorOStream() : std::ostream(&qErrorBuf) {
+  }
 };
 
-static QErrorOStream* qErrorStream = nullptr;
+static QErrorOStream *qErrorStream = nullptr;
 
 void redirectErrorOutputToQCritical() {
   if (qErrorStream == nullptr)
@@ -404,12 +388,12 @@ void setGuiTestingMode(bool enabled) {
   GuiTestingMode = enabled;
 }
 
-class NoQtUserInputFilter :public QObject {
+class NoQtUserInputFilter : public QObject {
 protected:
-  bool eventFilter( QObject *obj, QEvent *event );
+  bool eventFilter(QObject *obj, QEvent *event);
 };
 
-bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event) {
+bool NoQtUserInputFilter::eventFilter(QObject *, QEvent *event) {
   switch (event->type()) {
   case QEvent::KeyPress:
   case QEvent::KeyRelease:
@@ -430,7 +414,7 @@ bool NoQtUserInputFilter::eventFilter(QObject*, QEvent *event) {
   }
 }
 
-static NoQtUserInputFilter* disableQtUserInputFilter = nullptr;
+static NoQtUserInputFilter *disableQtUserInputFilter = nullptr;
 
 void disableQtUserInput() {
   if (disableQtUserInputFilter)

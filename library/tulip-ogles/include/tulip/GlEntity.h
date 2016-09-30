@@ -45,7 +45,6 @@ class GlComposite;
 class TLP_GLES_SCOPE GlEntity : public tlp::Observable {
 
 public:
-
   GlEntity();
 
   virtual ~GlEntity();
@@ -62,12 +61,12 @@ public:
     return _stencil;
   }
 
-  virtual void draw(const Camera &camera, bool pickingMode=false) {
+  virtual void draw(const Camera &camera, bool pickingMode = false) {
     static Light light;
     draw(camera, light, pickingMode);
   }
 
-  virtual void draw(const Camera &camera, const Light &light, bool pickingMode=false) = 0;
+  virtual void draw(const Camera &camera, const Light &light, bool pickingMode = false) = 0;
 
   virtual tlp::BoundingBox getBoundingBox() {
     return _boundingBox;
@@ -109,9 +108,7 @@ public:
     return idToEntity[id];
   }
 
-
 protected:
-
   void notifyModified();
 
   bool _visible;
@@ -128,12 +125,8 @@ protected:
   GlComposite *_parent;
 
   static unsigned int nextId;
-  static std::map<unsigned int, GlEntity*> idToEntity;
-
+  static std::map<unsigned int, GlEntity *> idToEntity;
 };
-
 }
 
 #endif // GLENTITY_H
-
-

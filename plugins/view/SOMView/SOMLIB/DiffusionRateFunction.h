@@ -30,7 +30,7 @@
  */
 class DiffusionRateFunction {
 public:
-  DiffusionRateFunction(TimeDecreasingFunction* decreasingFunction);
+  DiffusionRateFunction(TimeDecreasingFunction *decreasingFunction);
   virtual ~DiffusionRateFunction();
   /**
    * Compute the diffusion rate in function of the current time and the distance.
@@ -40,11 +40,10 @@ public:
    * @param inputSampleSize The sample size.
    * @return the diffusion rate.
    */
-  virtual double computeSpaceRate(unsigned int distance,
-                                  unsigned int currentIteration, unsigned int maxIteration,
-                                  unsigned int inputSampleSize) = 0;
-  TimeDecreasingFunction* getTimeDecreasingFunction();
-  void setTimeDecreasingFunction(TimeDecreasingFunction* timeFunction);
+  virtual double computeSpaceRate(unsigned int distance, unsigned int currentIteration, unsigned int maxIteration, unsigned int inputSampleSize) = 0;
+  TimeDecreasingFunction *getTimeDecreasingFunction();
+  void setTimeDecreasingFunction(TimeDecreasingFunction *timeFunction);
+
 protected:
   TimeDecreasingFunction *timeFunction;
 };

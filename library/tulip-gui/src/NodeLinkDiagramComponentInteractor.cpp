@@ -25,22 +25,23 @@
 
 using namespace tlp;
 
-NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QIcon &icon, const QString &text, unsigned int priority):GLInteractorComposite(icon, text), _label(nullptr), _priority(priority) {
+NodeLinkDiagramComponentInteractor::NodeLinkDiagramComponentInteractor(const QIcon &icon, const QString &text, unsigned int priority)
+    : GLInteractorComposite(icon, text), _label(nullptr), _priority(priority) {
 }
 
 NodeLinkDiagramComponentInteractor::~NodeLinkDiagramComponentInteractor() {
   delete _label;
 }
 
-void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QString& text) {
+void NodeLinkDiagramComponentInteractor::setConfigurationWidgetText(const QString &text) {
   assert(_label == nullptr);
   _label = new QLabel(text);
   _label->setWordWrap(true);
   _label->setAlignment(Qt::AlignTop);
-  _label->setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+  _label->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 }
 
-QWidget* NodeLinkDiagramComponentInteractor::configurationWidget() const {
+QWidget *NodeLinkDiagramComponentInteractor::configurationWidget() const {
   return _label;
 }
 

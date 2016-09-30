@@ -27,17 +27,12 @@ struct Feedback3DColor {
   float x, y, z, r, g, b, a;
 };
 
-GlHTMLFeedBackBuilder::GlHTMLFeedBackBuilder(bool outputBody,const string &filename,StringProperty *hrefp,StringProperty *altp):
-  outputBody(outputBody),
-  filename(filename),
-  hrefp(hrefp),
-  altp(altp),
-  poly(nullptr),
-  nodeId(-1) {
+GlHTMLFeedBackBuilder::GlHTMLFeedBackBuilder(bool outputBody, const string &filename, StringProperty *hrefp, StringProperty *altp)
+    : outputBody(outputBody), filename(filename), hrefp(hrefp), altp(altp), poly(nullptr), nodeId(-1) {
 }
 
-void GlHTMLFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat* clearColor,GLfloat pointSize,GLfloat lineWidth) {
-  height=viewport[3];
+void GlHTMLFeedBackBuilder::begin(const Vector<int, 4> &viewport, GLfloat *clearColor, GLfloat pointSize, GLfloat lineWidth) {
+  height = viewport[3];
 
   if (outputBody) {
     stream_out << "<html><body>" << endl;
@@ -48,10 +43,9 @@ void GlHTMLFeedBackBuilder::begin(const Vector<int, 4> &viewport,GLfloat* clearC
   stream_out << "<map name=\"usemap\">" << endl;
 }
 
-
 void GlHTMLFeedBackBuilder::beginNode(GLfloat data) {
-  nodeId=data;
-  poly=new Shape();
+  nodeId = data;
+  poly = new Shape();
 }
 
 void GlHTMLFeedBackBuilder::endNode() {
@@ -60,34 +54,32 @@ void GlHTMLFeedBackBuilder::endNode() {
   else
     delete poly;
 
-  nodeId=-1;
+  nodeId = -1;
 }
 
-
 void GlHTMLFeedBackBuilder::polygonToken(GLfloat *data) {
-  if(nodeId!=-1) {
+  if (nodeId != -1) {
     unsigned int nbvertices = (unsigned int)(*data);
     Shape *tmp = new Shape();
     tmp->begin();
 
-    for(unsigned int i = 0; i < nbvertices; i++) {
-      Feedback3DColor *vertex = (Feedback3DColor *)(data+3*i+1);
-      vertex->y=height-vertex->y;
-      tmp->add(vertex->x,vertex->y,vertex->z);
+    for (unsigned int i = 0; i < nbvertices; i++) {
+      Feedback3DColor *vertex = (Feedback3DColor *)(data + 3 * i + 1);
+      vertex->y = height - vertex->y;
+      tmp->add(vertex->x, vertex->y, vertex->z);
     }
 
-    if(tmp->end()) {
-      if(!poly->clip(*tmp)) {
-        poly->nodeNum=nodeId;
+    if (tmp->end()) {
+      if (!poly->clip(*tmp)) {
+        poly->nodeNum = nodeId;
 
         if (poly->isValid())
           shapeQueue.push(poly);
         else
           delete poly;
 
-        poly=tmp;
-      }
-      else
+        poly = tmp;
+      } else
         delete tmp;
     }
   }
@@ -99,7 +91,7 @@ void GlHTMLFeedBackBuilder::end() {
 
     string href = hrefp->getNodeValue(node(s->nodeNum));
 
-    if (href=="") {
+    if (href == "") {
       stringstream ss;
       ss << "javascript:alert(\'node " << s->nodeNum << "\')";
       href = ss.str();
@@ -107,7 +99,7 @@ void GlHTMLFeedBackBuilder::end() {
 
     string alt = altp->getNodeValue(node(s->nodeNum));
 
-    if (alt=="") {
+    if (alt == "") {
       stringstream ss;
       ss << "node " << s->nodeNum;
       alt = ss.str();
@@ -126,7 +118,7 @@ void GlHTMLFeedBackBuilder::end() {
   }
 }
 
-void GlHTMLFeedBackBuilder::getResult(string* str) {
-  *str=stream_out.str();
+void GlHTMLFeedBackBuilder::getResult(string *str) {
+  *str = stream_out.str();
 }
 }

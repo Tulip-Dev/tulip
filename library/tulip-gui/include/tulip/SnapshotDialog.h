@@ -41,20 +41,17 @@ class TLP_QT_SCOPE SnapshotDialog : public QDialog {
 
   Q_OBJECT
 
-
-
-public :
-
-  SnapshotDialog(const View *v,QWidget *parent=nullptr);
+public:
+  SnapshotDialog(const View *v, QWidget *parent = nullptr);
   ~SnapshotDialog();
 
   void setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio);
 
-public slots :
+public slots:
 
   void accept();
 
-protected slots :
+protected slots:
 
   void widthSpinBoxValueChanged(int value);
   void heightSpinBoxValueChanged(int value);
@@ -62,8 +59,7 @@ protected slots :
   void fileNameTextChanged(const QString &);
   void copyClicked();
 
-protected :
-
+protected:
   void resizeEvent(QResizeEvent *);
 
   void sizeSpinBoxValueChanged();
@@ -79,14 +75,8 @@ protected :
 
   bool inSizeSpinBoxValueChanged;
 };
-
 }
 
 #endif
-
-
-
-
-
 
 ///@endcond

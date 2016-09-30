@@ -51,7 +51,7 @@ extern TLP_SCOPE std::string TulipShareDir;
  *  (you must dispose of a standard Tulip installation for that feature to work).
  * 4. a fallback value of 'C:/Tulip/lib/' on windows, or '/usr/local/lib/' on Unix.
  */
-extern TLP_SCOPE void initTulipLib(const char* appDirPath = nullptr);
+extern TLP_SCOPE void initTulipLib(const char *appDirPath = nullptr);
 
 /**
  * @ingroup Plugins
@@ -61,8 +61,7 @@ extern TLP_SCOPE void initTulipLib(const char* appDirPath = nullptr);
  * @param hideTlp a flag to indicate if the 'tlp::' prefix
  * @return string The demangled name of a Tulip C++ class.
  */
-TLP_SCOPE std::string demangleClassName(const char *className,
-                                        bool hideTlp = false);
+TLP_SCOPE std::string demangleClassName(const char *className, bool hideTlp = false);
 
 /**
  * @ingroup Plugins
@@ -147,7 +146,7 @@ TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename, std::io
  * @param replace The string to replace the pattern with
  * @return a new string with the string pattern replaced
  */
-TLP_SCOPE std::string stringReplace(std::string subject, const std::string& search, const std::string& replace);
+TLP_SCOPE std::string stringReplace(std::string subject, const std::string &search, const std::string &replace);
 
 /**
  * @brief Utility function for replacing all occurrences of a pattern in a string in place (no copy is performed)
@@ -155,8 +154,7 @@ TLP_SCOPE std::string stringReplace(std::string subject, const std::string& sear
  * @param search The string pattern to replace
  * @param replace The string to replace the pattern with
  */
-TLP_SCOPE void stringReplaceInPlace(std::string& subject, const std::string& search, const std::string& replace);
-
+TLP_SCOPE void stringReplaceInPlace(std::string &subject, const std::string &search, const std::string &replace);
 }
 
 #endif

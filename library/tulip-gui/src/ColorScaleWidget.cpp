@@ -25,8 +25,7 @@
 using namespace tlp;
 using namespace std;
 
-ColorScaleWidget::ColorScaleWidget(QWidget* parent) :
-  QWidget(parent), colorScale(nullptr), orientation(Qt::Horizontal) {
+ColorScaleWidget::ColorScaleWidget(QWidget *parent) : QWidget(parent), colorScale(nullptr), orientation(Qt::Horizontal) {
 }
 
 ColorScaleWidget::~ColorScaleWidget() {
@@ -37,7 +36,7 @@ void ColorScaleWidget::setColorScale(ColorScale *colorScale) {
   update();
 }
 
-void ColorScaleWidget::paintEvent(QPaintEvent * event) {
+void ColorScaleWidget::paintEvent(QPaintEvent *event) {
   QPainter painter(this);
 
   if (colorScale != nullptr) {
@@ -46,10 +45,9 @@ void ColorScaleWidget::paintEvent(QPaintEvent * event) {
 
   painter.setPen(QPen(QBrush(QColor("black")), 1.0));
   painter.drawRect(QRect(event->rect().x(), event->rect().y(), event->rect().width() - 1, event->rect().height() - 1));
-
 }
 
-void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
+void ColorScaleWidget::paintColorScale(QPainter &painter, const QRect &rect) {
   painter.setPen(Qt::NoPen);
   map<float, Color> colorMap = colorScale->getColorMap();
 
@@ -60,8 +58,7 @@ void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
     if (orientation == Qt::Horizontal) {
       start = QPoint(rect.left(), rect.center().y());
       stop = QPoint(rect.right(), rect.center().y());
-    }
-    else {
+    } else {
       start = QPoint(rect.center().x(), rect.bottom());
       stop = QPoint(rect.center().x(), rect.top());
     }
@@ -73,11 +70,10 @@ void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
     }
 
     painter.fillRect(rect, qLinearGradient);
-  }
-  else {
+  } else {
     unsigned int nb = 0;
-    float rectWidth = ((float) rect.width()) / colorMap.size();
-    float rectHeight = ((float) rect.height()) / colorMap.size();
+    float rectWidth = ((float)rect.width()) / colorMap.size();
+    float rectHeight = ((float)rect.height()) / colorMap.size();
 
     for (map<float, Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
       QRectF rectangle;
@@ -85,8 +81,7 @@ void ColorScaleWidget::paintColorScale(QPainter& painter, const QRect& rect) {
       if (orientation == Qt::Horizontal) {
         rectangle.setTopLeft(QPointF(rect.left() + nb * rectWidth, rect.top()));
         rectangle.setSize(QSizeF(rectWidth, rect.height()));
-      }
-      else {
+      } else {
         rectangle.setTopLeft(QPointF(rect.left(), rect.bottom() - (nb + 1) * rectHeight));
         rectangle.setSize(QSizeF(rect.width(), rectHeight));
       }
@@ -106,14 +101,12 @@ void ColorScaleWidget::setOrientation(Qt::Orientation orientation) {
 
 QSize ColorScaleWidget::minimumSizeHint() const {
   if (orientation == Qt::Horizontal) {
-    return QSize(100,25);
-  }
-  else {
-    return QSize(25,100);
+    return QSize(100, 25);
+  } else {
+    return QSize(25, 100);
   }
 }
 
-QSize ColorScaleWidget::sizeHint () const {
+QSize ColorScaleWidget::sizeHint() const {
   return minimumSizeHint();
-
 }

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef _EXPORTMODULE_H
 #define _EXPORTMODULE_H
 
@@ -38,12 +37,12 @@ class PluginProgress;
  * @ingroup Plugins
  * @brief The ExportModule class
  */
-class ExportModule: public tlp::Plugin {
+class ExportModule : public tlp::Plugin {
 public:
   ///
-  ExportModule(const tlp::PluginContext* context) {
-    if(context != nullptr) {
-      const tlp::AlgorithmContext* algoritmContext = dynamic_cast<const tlp::AlgorithmContext*>(context);
+  ExportModule(const tlp::PluginContext *context) {
+    if (context != nullptr) {
+      const tlp::AlgorithmContext *algoritmContext = dynamic_cast<const tlp::AlgorithmContext *>(context);
       assert(algoritmContext != nullptr);
       graph = algoritmContext->graph;
       pluginProgress = algoritmContext->pluginProgress;
@@ -51,7 +50,8 @@ public:
     }
   }
   ///
-  virtual ~ExportModule() {}
+  virtual ~ExportModule() {
+  }
 
   virtual std::string category() const {
     return EXPORT_CATEGORY;
@@ -73,15 +73,13 @@ public:
    * @param the output stream
    * @return bool Whether the export was successful or not.
    **/
-  virtual bool exportGraph(std::ostream &os)=0;
+  virtual bool exportGraph(std::ostream &os) = 0;
   /** It is the root graph*/
   Graph *graph;
   ///
   PluginProgress *pluginProgress;
   DataSet *dataSet;
 };
-
-
 }
 #endif
 ///@endcond

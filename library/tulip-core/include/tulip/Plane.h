@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLP_PLANE_H_
 #define _TLP_PLANE_H_
@@ -37,7 +36,6 @@ namespace tlp {
  */
 class TLP_SCOPE Plane {
 public:
-
   float a, b, c, d;
 
   /**
@@ -73,8 +71,7 @@ public:
    */
   float planePointValue(const Coord &pos);
 };
-
 }
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 ///@endcond

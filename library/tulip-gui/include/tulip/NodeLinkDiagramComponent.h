@@ -33,11 +33,11 @@ class QDialog;
 namespace tlp {
 class GlGrid;
 
-class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
+class TLP_QT_SCOPE NodeLinkDiagramComponent : public tlp::GlMainView {
   Q_OBJECT
 
-  GlGrid* _grid;
-  QDialog* _gridOptions;
+  GlGrid *_grid;
+  QDialog *_gridOptions;
   bool _hasHulls;
 
   void registerTriggers();
@@ -45,16 +45,18 @@ class TLP_QT_SCOPE NodeLinkDiagramComponent: public tlp::GlMainView {
 
   bool _tooltips;
 
-  Ui::GridOptionsWidget* grid_ui;
+  Ui::GridOptionsWidget *grid_ui;
 
 public:
   static const std::string viewName;
   PLUGININFORMATION(NodeLinkDiagramComponent::viewName, "Tulip Team", "16/04/2008",
-                    "The Node Link Diagram view is the standard representation of relational data, where entities are represented as nodes, and their relation as edges.<br>"
-                    "This view allows you to change the glyph used to represent nodes (e.g. square, round, cross, ...), as well as the shape of the arrows indicating the direction of the relationship.",
+                    "The Node Link Diagram view is the standard representation of relational data, where entities are represented as nodes, and "
+                    "their relation as edges.<br>"
+                    "This view allows you to change the glyph used to represent nodes (e.g. square, round, cross, ...), as well as the shape of the "
+                    "arrows indicating the direction of the relationship.",
                     "1.0", "relational")
 
-  NodeLinkDiagramComponent(const tlp::PluginContext* context = nullptr);
+  NodeLinkDiagramComponent(const tlp::PluginContext *context = nullptr);
   virtual ~NodeLinkDiagramComponent();
   std::string icon() const {
     return ":/tulip/gui/icons/32/node_link_diagram_view.png";
@@ -65,7 +67,7 @@ public:
 public slots:
   void draw();
   void requestChangeGraph(Graph *graph);
-  const Camera& goInsideItem(node meta);
+  const Camera &goInsideItem(node meta);
 
 protected slots:
   void addRemoveItemToSelection();
@@ -79,7 +81,7 @@ protected slots:
   void ungroupItem();
   void setZOrdering(bool);
   void showGridControl();
-  void fillContextMenu(QMenu *menu,const QPointF &point);
+  void fillContextMenu(QMenu *menu, const QPointF &point);
   void displayToolTips(bool display);
   void addRemoveInNodesToSelection();
   void addRemoveOutNodesToSelection();
@@ -93,20 +95,15 @@ protected:
 
   void graphChanged(tlp::Graph *);
 
-  void createScene(Graph *graph,DataSet dataSet);
+  void createScene(Graph *graph, DataSet dataSet);
   DataSet sceneData() const;
   void loadGraphOnScene(Graph *graph);
   void setupWidget();
-  bool eventFilter(QObject *,QEvent *e);
-  void editValue(PropertyInterface* pi);
+  bool eventFilter(QObject *, QEvent *e);
+  void editValue(PropertyInterface *pi);
 };
 }
 
 #endif /* NODELINKDIAGRAMCOMPONENT_H_ */
-
-
-
-
-
 
 ///@endcond

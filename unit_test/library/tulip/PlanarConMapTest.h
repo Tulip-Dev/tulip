@@ -42,9 +42,9 @@ class PlanarConMapTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testComputeFaces);
   CPPUNIT_TEST_SUITE_END();
 
-private :
-  tlp::Graph* graph;
-  tlp::PlanarConMap* carte;
+private:
+  tlp::Graph *graph;
+  tlp::PlanarConMap *carte;
 
   std::vector<edge> edges;
   std::vector<node> nodes;
@@ -54,10 +54,10 @@ private :
   void build3();
   void build4();
 
-public :
+public:
   void setUp() {
     graph = tlp::newGraph();
-    //carte = new PlanarConMap(graph);
+    // carte = new PlanarConMap(graph);
     edges.clear();
     nodes.clear();
   }
@@ -81,6 +81,5 @@ public :
 
   void testComputeFaces();
 };
-
 }
 #endif

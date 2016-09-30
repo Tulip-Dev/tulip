@@ -33,14 +33,14 @@ void createCompleteGraphAndSelect(Graph *graph, BooleanProperty *selection) {
 
   vector<node> addedNodes;
 
-  for (unsigned int j=0; j<nbNodesPerCluster; ++j) {
+  for (unsigned int j = 0; j < nbNodesPerCluster; ++j) {
     node n = graph->addNode();
     addedNodes.push_back(n);
     selection->setNodeValue(n, true);
   }
 
-  for (size_t i = 0 ; i < addedNodes.size() ; ++i) {
-    for (size_t j = 0 ; j < addedNodes.size() ; ++j) {
+  for (size_t i = 0; i < addedNodes.size(); ++i) {
+    for (size_t j = 0; j < addedNodes.size(); ++j) {
       if (addedNodes[i] != addedNodes[j]) {
         edge e = graph->addEdge(addedNodes[i], addedNodes[j]);
         selection->setEdgeValue(e, true);
@@ -49,7 +49,7 @@ void createCompleteGraphAndSelect(Graph *graph, BooleanProperty *selection) {
   }
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( IsMetaEdgeTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(IsMetaEdgeTest);
 
 void IsMetaEdgeTest::setUp() {
 
@@ -68,8 +68,8 @@ void IsMetaEdgeTest::setUp() {
   Graph *sg2 = graph->addSubGraph(&selec);
 
   // link each node of the first cluster to each node of the second cluster
-  for(node n1 : sg1->getNodes()) {
-    for(node n2 : sg2->getNodes()) {
+  for (node n1 : sg1->getNodes()) {
+    for (node n2 : sg2->getNodes()) {
       graph->addEdge(n1, n2);
     }
   }
@@ -80,7 +80,6 @@ void IsMetaEdgeTest::setUp() {
   vector<node> mNodes;
   graph->createMetaNodes(itS, quotientGraph, mNodes);
   delete itS;
-
 }
 
 void IsMetaEdgeTest::tearDown() {
@@ -96,13 +95,13 @@ void IsMetaEdgeTest::testIsMetaEdge() {
   CPPUNIT_ASSERT_EQUAL(2u, quotientGraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, quotientGraph->numberOfEdges());
 
-  for(node n : quotientGraph->getNodes()) {
+  for (node n : quotientGraph->getNodes()) {
     if (quotientGraph->isMetaNode(n)) {
       ++nbMetaNodes;
     }
   }
 
-  for(edge e : quotientGraph->getEdges()) {
+  for (edge e : quotientGraph->getEdges()) {
     if (quotientGraph->isMetaEdge(e)) {
       ++nbMetaEdges;
     }
@@ -110,7 +109,6 @@ void IsMetaEdgeTest::testIsMetaEdge() {
 
   // check that the two quotient nodes are meta nodes
   CPPUNIT_ASSERT_EQUAL(2u, nbMetaNodes);
-
 
   set<edge> underlyingEdgesInMetaEdge = quotientGraph->getProperty<GraphProperty>("viewMetaGraph")->getEdgeValue(quotientGraph->getOneEdge());
 

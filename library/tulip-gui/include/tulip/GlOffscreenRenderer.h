@@ -65,7 +65,7 @@ class GlGraphComposite;
  **/
 class TLP_QT_SCOPE GlOffscreenRenderer {
 
-public :
+public:
   /**
    * @brief Get the renderer instance.
    **/
@@ -100,7 +100,7 @@ public :
   /**
    * @brief Add a graph to the scene.
    **/
-  void addGraphToScene(Graph* graph);
+  void addGraphToScene(Graph *graph);
 
   /**
    * @brief Delete all the elements of the scene and clear it.
@@ -123,8 +123,7 @@ public :
    **/
   GLuint getGLTexture(const bool generateMipMaps = false);
 
-private :
-
+private:
   GlOffscreenRenderer();
 
   void initFrameBuffers(const bool antialiased);
@@ -139,12 +138,8 @@ private :
   double zoomFactor;
   Coord cameraCenter;
   bool antialiasedFbo;
-
 };
-
-
 }
-
 
 #endif /* GLOFFSCREENRENDERER_H_ */
 ///@endcond

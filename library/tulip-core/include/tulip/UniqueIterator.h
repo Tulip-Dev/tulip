@@ -23,7 +23,6 @@
 #include <set>
 #include <tulip/memorypool.h>
 
-
 //===============================================================================
 namespace tlp {
 /**
@@ -31,8 +30,7 @@ namespace tlp {
 *
 * @see UniqueIterator
 */
-template <typename TYPE>
-struct CheckAllFunctor {
+template <typename TYPE> struct CheckAllFunctor {
   bool operator()(const TYPE &) {
     return true;
   }
@@ -57,10 +55,9 @@ struct CheckAllFunctor {
 * @endcode
 * checkFunctor are used for optimization purpose to prevent to log(n) test for all elements when not necessary.
 **/
-template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
-class UniqueIterator : public Iterator<TYPE> {
+template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE>> class UniqueIterator : public Iterator<TYPE> {
 public:
-  UniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR()):_it(it), _checkFunctor(checkFunctor) {
+  UniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR()) : _it(it), _checkFunctor(checkFunctor) {
     update();
   }
   //================================================
@@ -81,17 +78,16 @@ public:
   void update() {
     _hasNext = false;
 
-    while(_it->hasNext()) {
+    while (_it->hasNext()) {
       curVal = _it->next();
 
-      if (_checkFunctor(curVal) ) {
+      if (_checkFunctor(curVal)) {
         if (_flag.find(curVal) == _flag.end()) {
           _hasNext = true;
           _flag.insert(curVal);
           return;
         }
-      }
-      else {
+      } else {
         _hasNext = true;
         return;
       }
@@ -106,12 +102,10 @@ private:
   TOCHECKFUNCTOR _checkFunctor;
 };
 
-template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE> >
-class MPUniqueIterator : public UniqueIterator<TYPE, TOCHECKFUNCTOR> ,
-  public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR> > {
+template <typename TYPE, typename TOCHECKFUNCTOR = CheckAllFunctor<TYPE>>
+class MPUniqueIterator : public UniqueIterator<TYPE, TOCHECKFUNCTOR>, public MemoryPool<MPUniqueIterator<TYPE, TOCHECKFUNCTOR>> {
 public:
-  MPUniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR()):
-    UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {
+  MPUniqueIterator(Iterator<TYPE> *it, TOCHECKFUNCTOR checkFunctor = TOCHECKFUNCTOR()) : UniqueIterator<TYPE, TOCHECKFUNCTOR>(it, checkFunctor) {
   }
 };
 
@@ -127,11 +121,9 @@ public:
 * @return a UniqueIterator
 *
 **/
-template <typename TYPE>
-inline UniqueIterator<TYPE> *uniqueIterator(Iterator<TYPE> *it) {
+template <typename TYPE> inline UniqueIterator<TYPE> *uniqueIterator(Iterator<TYPE> *it) {
   return new MPUniqueIterator<TYPE>(it);
 }
-
 }
 #endif // UNIQUEITERATOR_H
 ///@endcond

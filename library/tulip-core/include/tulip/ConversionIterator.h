@@ -40,10 +40,9 @@ namespace tlp {
 * };
 * @endcode
 **/
-template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
-class ConversionIterator : public Iterator<TYPEOUT> {
+template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR> class ConversionIterator : public Iterator<TYPEOUT> {
 public:
-  ConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor):_it(it), _convFunctor(convFunctor) {
+  ConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor) : _it(it), _convFunctor(convFunctor) {
   }
   ~ConversionIterator() {
     delete _it;
@@ -54,6 +53,7 @@ public:
   inline TYPEOUT next() {
     return _convFunctor(_it->next());
   }
+
 private:
   tlp::Iterator<TYPEIN> *_it;
   CONVERSIONFUNCTOR _convFunctor;
@@ -66,10 +66,11 @@ private:
 * @see ConversionIterator
 **/
 template <typename TYPEIN, typename TYPEOUT, typename CONVERSIONFUNCTOR>
-class MPConversionIterator : public ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>, public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR> > {
+class MPConversionIterator : public ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>,
+                             public MemoryPool<MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>> {
 public:
-  MPConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor):
-    ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {
+  MPConversionIterator(Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunctor)
+      : ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunctor) {
   }
 };
 
@@ -87,10 +88,9 @@ public:
 *
 **/
 template <typename TYPEOUT, typename CONVERSIONFUNCTOR, typename TYPEIN>
-inline ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>* conversionIterator(tlp::Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunc) {
+inline ConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR> *conversionIterator(tlp::Iterator<TYPEIN> *it, CONVERSIONFUNCTOR convFunc) {
   return new MPConversionIterator<TYPEIN, TYPEOUT, CONVERSIONFUNCTOR>(it, convFunc);
 }
-
 }
 #endif // CONVERSIONITERATOR_H
 ///@endcond

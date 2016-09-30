@@ -26,9 +26,8 @@ PLUGIN(IdMetric)
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // target
-  "Whether the id is copied only for nodes, only for edges, or for both."
-};
+    // target
+    "Whether the id is copied only for nodes, only for edges, or for both."};
 
 #define TARGET_TYPE "target"
 #define TARGET_TYPES "both;nodes;edges"
@@ -37,7 +36,7 @@ static const char *paramHelp[] = {
 #define BOTH_TARGET 0
 
 //==================================================================
-IdMetric::IdMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
+IdMetric::IdMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<StringCollection>(TARGET_TYPE, paramHelp[0], TARGET_TYPES, true, "both <br> nodes <br> edges");
 
   // result needs to be an inout parameter
@@ -50,31 +49,29 @@ IdMetric::IdMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
 bool IdMetric::run() {
   bool nodes(true), edges(true);
 
-  if ( dataSet!=nullptr ) {
+  if (dataSet != nullptr) {
     StringCollection targetType;
     dataSet->get(TARGET_TYPE, targetType);
 
-    if(targetType.getCurrent()==NODES_TARGET) {
-      edges=false;
-      nodes=true;
-    }
-    else if (targetType.getCurrent()==EDGES_TARGET) {
-      edges=true;
-      nodes=false;
-    }
-    else {
-      edges=true;
-      nodes=true;
+    if (targetType.getCurrent() == NODES_TARGET) {
+      edges = false;
+      nodes = true;
+    } else if (targetType.getCurrent() == EDGES_TARGET) {
+      edges = true;
+      nodes = false;
+    } else {
+      edges = true;
+      nodes = true;
     }
   }
 
-  if(nodes) {
-    for(node n : graph->getNodes())
+  if (nodes) {
+    for (node n : graph->getNodes())
       result->setNodeValue(n, n.id);
   }
 
-  if(edges) {
-    for(edge e : graph->getEdges())
+  if (edges) {
+    for (edge e : graph->getEdges())
       result->setEdgeValue(e, e.id);
   }
 

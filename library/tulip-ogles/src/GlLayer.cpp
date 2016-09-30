@@ -33,14 +33,16 @@
 using namespace std;
 using namespace tlp;
 
-GlLayer::GlLayer(const std::string& name, bool is3d)
-  :_name(name),_scene(0),_camera(new Camera(is3d)),_light(new Light(_camera)),_sharedCamera(false),_sharedLight(false), _visible(true) {}
+GlLayer::GlLayer(const std::string &name, bool is3d)
+    : _name(name), _scene(0), _camera(new Camera(is3d)), _light(new Light(_camera)), _sharedCamera(false), _sharedLight(false), _visible(true) {
+}
 
-GlLayer::GlLayer(const std::string& name, Camera *camera, Light *light)
-  :_name(name),_scene(0),_camera(camera),_light(light),_sharedCamera(true),_sharedLight(true), _visible(true) {}
+GlLayer::GlLayer(const std::string &name, Camera *camera, Light *light)
+    : _name(name), _scene(0), _camera(camera), _light(light), _sharedCamera(true), _sharedLight(true), _visible(true) {
+}
 
 GlLayer::~GlLayer() {
-  if(!_sharedCamera)
+  if (!_sharedCamera)
     delete _camera;
   if (!_sharedLight)
     delete _light;
@@ -51,18 +53,18 @@ void GlLayer::setScene(GlScene *scene) {
     removeListener(_scene);
     _camera->removeListener(_scene);
     _composite.removeListener(_scene);
-    std::map<std::string, GlEntity*>::const_iterator it = getGlEntities().begin();
-    for (; it != getGlEntities().end() ; ++it) {
+    std::map<std::string, GlEntity *>::const_iterator it = getGlEntities().begin();
+    for (; it != getGlEntities().end(); ++it) {
       it->second->removeListener(_scene);
     }
   }
   if (scene) {
-    _scene=scene;
+    _scene = scene;
     addListener(_scene);
     _camera->addListener(_scene);
     _composite.addListener(_scene);
-    std::map<std::string, GlEntity*>::const_iterator it = getGlEntities().begin();
-    for (; it != getGlEntities().end() ; ++it) {
+    std::map<std::string, GlEntity *>::const_iterator it = getGlEntities().begin();
+    for (; it != getGlEntities().end(); ++it) {
       it->second->addListener(_scene);
     }
   }
@@ -113,15 +115,15 @@ void GlLayer::setSharedLight(Light *light) {
 void GlLayer::acceptVisitor(GlSceneVisitor *visitor) {
   assert(visitor);
   visitor->visit(this);
-  if(isVisible()) {
+  if (isVisible()) {
     _composite.acceptVisitor(visitor);
   }
 }
 
-void GlLayer::addGlEntity(GlEntity *entity, const std::string& name) {
+void GlLayer::addGlEntity(GlEntity *entity, const std::string &name) {
   assert(entity);
   entity->setLayer(this);
-  _composite.addGlEntity(entity,name);
+  _composite.addGlEntity(entity, name);
   if (_scene) {
     entity->addListener(_scene);
   }
@@ -152,8 +154,8 @@ void GlLayer::deleteGlEntity(GlEntity *entity) {
 
 void GlLayer::clear(bool deleteEntities) {
   if (_scene) {
-    std::map<std::string, GlEntity*>::const_iterator it = getGlEntities().begin();
-    for (; it != getGlEntities().end() ; ++it) {
+    std::map<std::string, GlEntity *>::const_iterator it = getGlEntities().begin();
+    for (; it != getGlEntities().end(); ++it) {
       sendEvent(GlLayerEvent(GlLayerEvent::ENTITY_REMOVED_FROM_LAYER, this, it->second));
       it->second->removeListener(_scene);
     }
@@ -161,11 +163,11 @@ void GlLayer::clear(bool deleteEntities) {
   _composite.reset(deleteEntities);
 }
 
-GlEntity* GlLayer::findGlEntity(const std::string &key) {
+GlEntity *GlLayer::findGlEntity(const std::string &key) {
   return _composite.findGlEntity(key);
 }
 
-const std::map<std::string, GlEntity*> &GlLayer::getGlEntities() const {
+const std::map<std::string, GlEntity *> &GlLayer::getGlEntities() const {
   return _composite.getGlEntities();
 }
 
@@ -178,5 +180,4 @@ void GlLayer::setVisible(bool visible) {
     _visible = visible;
     sendEvent(GlLayerEvent(GlLayerEvent::LAYER_VISIBILITY_CHANGED, this));
   }
-
 }

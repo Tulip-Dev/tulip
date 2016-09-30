@@ -18,37 +18,30 @@
  */
 
 //=================================================================
-template <typename TYPE>
-tlp::BmdList<TYPE>::BmdList():head(0),tail(0),count(0) {
+template <typename TYPE> tlp::BmdList<TYPE>::BmdList() : head(0), tail(0), count(0) {
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdList<TYPE>::~BmdList() {
+template <typename TYPE> tlp::BmdList<TYPE>::~BmdList() {
   clear();
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::firstItem() {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::firstItem() {
   return head;
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::lastItem() {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::lastItem() {
   return tail;
 }
 //=================================================================
-template <typename TYPE>
-TYPE tlp::BmdList<TYPE>::entry(tlp::BmdLink<TYPE> *it) {
+template <typename TYPE> TYPE tlp::BmdList<TYPE>::entry(tlp::BmdLink<TYPE> *it) {
   return it->data;
 }
 //=================================================================
-template <typename TYPE>
-int BmdList<TYPE>::size() {
+template <typename TYPE> int BmdList<TYPE>::size() {
   return count;
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE>* BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *predP) {
+template <typename TYPE> tlp::BmdLink<TYPE> *BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *predP) {
   if (p != nullptr) {
     if (p == tail)
       return nullptr;
@@ -60,13 +53,11 @@ tlp::BmdLink<TYPE>* BmdList<TYPE>::nextItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<
       return p->prev();
     else
       return p->succ();
-  }
-  else
+  } else
     return nullptr;
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *succP) {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p, tlp::BmdLink<TYPE> *succP) {
   if (p != nullptr) {
     if (p == head)
       return nullptr;
@@ -78,13 +69,11 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::predItem(tlp::BmdLink<TYPE> *p, tlp::Bmd
       return p->succ();
     else
       return p->prev();
-  }
-  else
+  } else
     return nullptr;
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicPred(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *succIt) {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicPred(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *succIt) {
   if (it == nullptr)
     return nullptr;
 
@@ -97,8 +86,7 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicPred(tlp::BmdLink<TYPE> *it, tlp::
   return predItem(it, succIt);
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *predIt) {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::BmdLink<TYPE> *predIt) {
   if (it == nullptr)
     return nullptr;
 
@@ -111,8 +99,7 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::cyclicSucc(tlp::BmdLink<TYPE> *it, tlp::
   return nextItem(it, predIt);
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::push(const TYPE &data) {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::push(const TYPE &data) {
   count++;
 
   if (head != nullptr) {
@@ -120,15 +107,13 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::push(const TYPE &data) {
       head = head->pre = new tlp::BmdLink<TYPE>(data, nullptr, head);
     else
       head = head->suc = new tlp::BmdLink<TYPE>(data, nullptr, head);
-  }
-  else
+  } else
     head = tail = new tlp::BmdLink<TYPE>(data, nullptr, nullptr);
 
   return head;
 }
 //=================================================================
-template <typename TYPE>
-tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::append(const TYPE &data) {
+template <typename TYPE> tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::append(const TYPE &data) {
   count++;
 
   if (tail != nullptr) {
@@ -137,16 +122,14 @@ tlp::BmdLink<TYPE> *tlp::BmdList<TYPE>::append(const TYPE &data) {
     else
       tail = tail->pre = new tlp::BmdLink<TYPE>(data, tail, nullptr);
 
-  }
-  else {
+  } else {
     tail = head = new tlp::BmdLink<TYPE>(data, nullptr, nullptr);
   }
 
   return tail;
 }
 //=================================================================
-template <typename TYPE>
-TYPE tlp::BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
+template <typename TYPE> TYPE tlp::BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
   assert(it != nullptr);
 
   if (it == head)
@@ -174,8 +157,7 @@ TYPE tlp::BmdList<TYPE>::delItem(tlp::BmdLink<TYPE> *it) {
   return x;
 }
 //=================================================================
-template <typename TYPE>
-TYPE tlp::BmdList<TYPE>::pop() {
+template <typename TYPE> TYPE tlp::BmdList<TYPE>::pop() {
   assert(head != nullptr);
   tlp::BmdLink<TYPE> *x = head;
   head = nextItem(head, nullptr);
@@ -185,8 +167,7 @@ TYPE tlp::BmdList<TYPE>::pop() {
       head->suc = nullptr;
     else
       head->pre = nullptr;
-  }
-  else
+  } else
     tail = nullptr;
 
   TYPE p = x->data;
@@ -195,10 +176,9 @@ TYPE tlp::BmdList<TYPE>::pop() {
   return p;
 }
 //=================================================================
-template <typename TYPE>
-TYPE tlp::BmdList<TYPE>::popBack() {
+template <typename TYPE> TYPE tlp::BmdList<TYPE>::popBack() {
   assert(head != nullptr);
-  tlp::BmdLink<TYPE> *x= tail;
+  tlp::BmdLink<TYPE> *x = tail;
   tail = predItem(tail, nullptr);
 
   if (tail) {
@@ -206,8 +186,7 @@ TYPE tlp::BmdList<TYPE>::popBack() {
       tail->pre = nullptr;
     else
       tail->suc = nullptr;
-  }
-  else
+  } else
     head = nullptr;
 
   TYPE p = x->data;
@@ -216,20 +195,17 @@ TYPE tlp::BmdList<TYPE>::popBack() {
   return p;
 }
 //=================================================================
-template <typename TYPE>
-void tlp::BmdList<TYPE>::reverse() {
+template <typename TYPE> void tlp::BmdList<TYPE>::reverse() {
   tlp::BmdLink<TYPE> *x = head;
   head = tail;
   tail = x;
 }
 //=================================================================
-template <typename TYPE>
-void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
+template <typename TYPE> void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
   if (head == nullptr) {
     head = l.head;
     tail = l.tail;
-  }
-  else {
+  } else {
     if (tail->pre == nullptr)
       tail->pre = l.head;
     else
@@ -250,14 +226,14 @@ void tlp::BmdList<TYPE>::conc(tlp::BmdList<TYPE> &l) {
   l.count = 0;
 }
 //=================================================================
-template <typename TYPE>
-void tlp::BmdList<TYPE>::clear() {
-  if (head == nullptr) return;
+template <typename TYPE> void tlp::BmdList<TYPE>::clear() {
+  if (head == nullptr)
+    return;
 
   tlp::BmdLink<TYPE> *it = head;
   tlp::BmdLink<TYPE> *p = head;
 
-  for (int i = 0 ; i < count ; i++) {
+  for (int i = 0; i < count; i++) {
     tlp::BmdLink<TYPE> *x = it;
     it = nextItem(it, p);
 
@@ -272,8 +248,7 @@ void tlp::BmdList<TYPE>::clear() {
   head = tail = nullptr;
 }
 //=================================================================
-template <typename TYPE>
-void tlp::BmdList<TYPE>::swap(tlp::BmdList<TYPE>& l) {
+template <typename TYPE> void tlp::BmdList<TYPE>::swap(tlp::BmdList<TYPE> &l) {
   tlp::BmdLink<TYPE> *tmp;
   int tmp1;
   tmp = l.head;

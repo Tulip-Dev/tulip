@@ -31,11 +31,14 @@ class NodeLinkDiagramComponent;
 
 /** An interactor class allowing to zoom and pan using the mouse wheel.
  */
-class TLP_QT_SCOPE MousePanNZoomNavigator:public InteractorComponent {
+class TLP_QT_SCOPE MousePanNZoomNavigator : public InteractorComponent {
 public:
-  MousePanNZoomNavigator():cameraScaleFactor(1), isGesturing(false) {}
-  ~MousePanNZoomNavigator() {}
+  MousePanNZoomNavigator() : cameraScaleFactor(1), isGesturing(false) {
+  }
+  ~MousePanNZoomNavigator() {
+  }
   bool eventFilter(QObject *, QEvent *);
+
 protected:
   float cameraScaleFactor;
   bool isGesturing;
@@ -43,41 +46,43 @@ protected:
 
 /** An interactor class used to delete a graph element on mouse left click
  */
-class TLP_QT_SCOPE MouseElementDeleter:public InteractorComponent {
+class TLP_QT_SCOPE MouseElementDeleter : public InteractorComponent {
 public:
-  MouseElementDeleter() {}
-  ~MouseElementDeleter() {}
+  MouseElementDeleter() {
+  }
+  ~MouseElementDeleter() {
+  }
   bool eventFilter(QObject *, QEvent *);
   void clear();
-  virtual void delElement(tlp::Graph* graph, tlp::SelectedEntity& selectedEntity);
+  virtual void delElement(tlp::Graph *graph, tlp::SelectedEntity &selectedEntity);
 };
 
 /** An interactor class to translate/rotate using keys or mouse movements,
     or to zoom and pan using the mouse wheel or
  */
-class TLP_QT_SCOPE MouseNKeysNavigator: public MousePanNZoomNavigator {
+class TLP_QT_SCOPE MouseNKeysNavigator : public MousePanNZoomNavigator {
 private:
   InteractorComponent *currentSpecInteractorComponent;
 
   QCursor oldCursor;
+
 public:
-  MouseNKeysNavigator() : currentSpecInteractorComponent(nullptr), nldc(nullptr) {}
-  ~MouseNKeysNavigator() {}
+  MouseNKeysNavigator() : currentSpecInteractorComponent(nullptr), nldc(nullptr) {
+  }
+  ~MouseNKeysNavigator() {
+  }
   bool eventFilter(QObject *, QEvent *);
   void clear();
   void viewChanged(tlp::View *view);
 
-private :
-
+private:
   // member below are to manage meta node navigation
   tlp::NodeLinkDiagramComponent *nldc;
-  std::vector<tlp::Graph*> graphHierarchy;
+  std::vector<tlp::Graph *> graphHierarchy;
   std::vector<tlp::Camera> cameraHierarchy;
   std::vector<tlp::node> nodeHierarchy;
   std::vector<float> alphaHierarchy;
 };
-
-
 }
 #endif
 ///@endcond

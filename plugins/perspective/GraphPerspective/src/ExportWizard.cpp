@@ -35,16 +35,16 @@
 using namespace tlp;
 using namespace std;
 
-ExportWizard::ExportWizard(Graph *g, const QString& exportFile, QWidget *parent): QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
+ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent) : QWizard(parent), _ui(new Ui::ExportWizard), _graph(g) {
   _ui->setupUi(this);
   button(QWizard::FinishButton)->setEnabled(false);
 
-  PluginModel<tlp::ExportModule>* model = new PluginModel<tlp::ExportModule>(_ui->exportModules);
+  PluginModel<tlp::ExportModule> *model = new PluginModel<tlp::ExportModule>(_ui->exportModules);
 
   _ui->exportModules->setModel(model);
   _ui->exportModules->setRootIndex(model->index(0, 0));
   _ui->exportModules->expandAll();
-  connect(_ui->exportModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->exportModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
@@ -68,14 +68,14 @@ ExportWizard::~ExportWizard() {
   delete _ui;
 }
 
-void ExportWizard::algorithmSelected(const QModelIndex& index) {
+void ExportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel* oldModel = _ui->parametersList->model();
-  QAbstractItemModel* newModel = nullptr;
+  QAbstractItemModel *oldModel = _ui->parametersList->model();
+  QAbstractItemModel *newModel = nullptr;
 
   if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)),_graph);
+    newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)), _graph);
   }
 
   _ui->parametersList->setModel(newModel);
@@ -92,7 +92,7 @@ QString ExportWizard::algorithm() const {
 }
 
 tlp::DataSet ExportWizard::parameters() const {
-  ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parametersList->model());
 
   if (model == nullptr)
     return DataSet();
@@ -113,14 +113,11 @@ void ExportWizard::pathChanged(QString s) {
   _ui->algFrame->setEnabled(!s.isEmpty());
   button(QWizard::FinishButton)->setEnabled(!s.isEmpty());
 
-  std::list<std::string> modules =
-    PluginLister::instance()->availablePlugins<ExportModule>();
-  std::list<std::string> imports =
-    PluginLister::instance()->availablePlugins<ImportModule>();
+  std::list<std::string> modules = PluginLister::instance()->availablePlugins<ExportModule>();
+  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
 
-  for(std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
-    ExportModule* p =
-      PluginLister::instance()->getPluginObject<ExportModule>(*itm,nullptr);
+  for (std::list<std::string>::iterator itm = modules.begin(); itm != modules.end(); ++itm) {
+    ExportModule *p = PluginLister::instance()->getPluginObject<ExportModule>(*itm, nullptr);
     std::string extension = p->fileExtension();
 
     if (s.endsWith(extension.c_str())) {
@@ -134,13 +131,11 @@ void ExportWizard::pathChanged(QString s) {
 
     if (s.endsWith((extension).c_str())) {
       // look for a corresponding import module supporting the gz extension
-      for(std::list<std::string>::const_iterator it = imports.begin();
-          it != imports.end(); ++it) {
-        ImportModule* m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
+      for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
+        ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
         std::list<std::string> extensions(m->fileExtensions());
 
-        for(std::list<std::string>::const_iterator ite = extensions.begin();
-            ite != extensions.end(); ++ite) {
+        for (std::list<std::string>::const_iterator ite = extensions.begin(); ite != extensions.end(); ++ite) {
           if (extension == *ite) {
             // found it
             selectedExport = itm->c_str();
@@ -169,7 +164,7 @@ void ExportWizard::pathChanged(QString s) {
     return;
   }
 
-  PluginModel<tlp::ExportModule>* model = static_cast<PluginModel<tlp::ExportModule>*>(_ui->exportModules->model());
+  PluginModel<tlp::ExportModule> *model = static_cast<PluginModel<tlp::ExportModule> *>(_ui->exportModules->model());
   QModelIndexList results = model->match(_ui->exportModules->rootIndex(), Qt::DisplayRole, selectedExport, 1, Qt::MatchExactly | Qt::MatchRecursive);
 
   if (results.empty())

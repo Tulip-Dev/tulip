@@ -24,29 +24,27 @@
 
 using namespace tlp;
 
-TulipFontWidget::TulipFontWidget(QWidget *parent) :
-  QWidget(parent),
-  ui(new Ui::TulipFontWidget) {
+TulipFontWidget::TulipFontWidget(QWidget *parent) : QWidget(parent), ui(new Ui::TulipFontWidget) {
   ui->setupUi(this);
-  connect(ui->pushButton,SIGNAL(clicked(bool)),this,SLOT(editFont()));
+  connect(ui->pushButton, SIGNAL(clicked(bool)), this, SLOT(editFont()));
 }
 
 TulipFontWidget::~TulipFontWidget() {
   delete ui;
 }
 
-void TulipFontWidget::setFont(const TulipFont& font) {
+void TulipFontWidget::setFont(const TulipFont &font) {
   ui->lineEdit->setText(font.fontFile());
 }
 
-TulipFont TulipFontWidget::font()const {
+TulipFont TulipFontWidget::font() const {
   return TulipFont::fromFile(ui->lineEdit->text());
 }
 
 void TulipFontWidget::editFont() {
-  TulipFont newFont = TulipFontDialog::getFont(this,font());
+  TulipFont newFont = TulipFontDialog::getFont(this, font());
 
-  if(newFont.exists()) {
+  if (newFont.exists()) {
     setFont(newFont);
   }
 }

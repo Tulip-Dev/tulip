@@ -34,11 +34,10 @@ class BooleanProperty;
 class DoubleProperty;
 class Graph;
 
-
 /**
  * @brief An implementation of the DFS algorithm to find all the existing paths between two nodes.
  */
-class DFS: public PathAlgorithm {
+class DFS : public PathAlgorithm {
 public:
   /**
    * Initiate the DFS algorithm parameters.
@@ -49,7 +48,8 @@ public:
    * @param edgesOrientation The edge orientation policy.
    * @param maxDist The maximal distance the algorithm can go from the source node before dropping the search (DBL_MAX by default)
    */
-  DFS(tlp::Graph *graph, tlp::BooleanProperty *result, tlp::DoubleProperty *dists, tlp::node tgt, tlp::MutableContainer<double> &weights, EdgeOrientation edgesOrientation, double maxDist=DBL_MAX);
+  DFS(tlp::Graph *graph, tlp::BooleanProperty *result, tlp::DoubleProperty *dists, tlp::node tgt, tlp::MutableContainer<double> &weights,
+      EdgeOrientation edgesOrientation, double maxDist = DBL_MAX);
 
   ~DFS();
 

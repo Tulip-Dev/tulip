@@ -86,7 +86,6 @@ namespace tlp {
 class TLP_GLES_SCOPE TextureAtlas {
 
 public:
-
   /**
    * Creates a new empty texture atlas.
    *
@@ -109,7 +108,9 @@ public:
    */
   void upload();
 
-  bool needUpload() const {return _needUpload;}
+  bool needUpload() const {
+    return _needUpload;
+  }
 
   /**
    *  Allocate a new region in the atlas.
@@ -132,12 +133,7 @@ public:
    *  @param stride stride of the data
    *
    */
-  void setRegion(const size_t x,
-                 const size_t y,
-                 const size_t width,
-                 const size_t height,
-                 const unsigned char *data,
-                 const size_t stride);
+  void setRegion(const size_t x, const size_t y, const size_t width, const size_t height, const unsigned char *data, const size_t stride);
   /**
    *  Remove all allocated regions from the atlas.
    *
@@ -146,21 +142,32 @@ public:
 
   void bind();
 
-  size_t width() {return _width;}
+  size_t width() {
+    return _width;
+  }
 
-  size_t height() {return _height;}
+  size_t height() {
+    return _height;
+  }
 
-  size_t depth() {return _depth;}
+  size_t depth() {
+    return _depth;
+  }
 
-  size_t used() {return _used;}
+  size_t used() {
+    return _used;
+  }
 
-  unsigned int id() {return _id;}
+  unsigned int id() {
+    return _id;
+  }
 
-  unsigned char *data() {return _data;}
+  unsigned char *data() {
+    return _data;
+  }
 
 private:
-
-  int fit(const size_t index, const size_t width, const size_t height );
+  int fit(const size_t index, const size_t width, const size_t height);
 
   void merge();
 
@@ -197,12 +204,10 @@ private:
   /**
    * Atlas data
    */
-  unsigned char * _data;
+  unsigned char *_data;
 
   bool _needUpload;
-
 };
-
 }
 
 #endif /* TEXTUREATLAS_H */

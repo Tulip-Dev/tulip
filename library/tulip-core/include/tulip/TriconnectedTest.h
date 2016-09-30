@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIP_TRICONNECTEDTEST_H
 #define TULIP_TRICONNECTEDTEST_H
 
@@ -34,7 +33,6 @@ namespace tlp {
  **/
 class TLP_SCOPE TriconnectedTest : private Observable {
 public:
-
   /**
    * Returns true if the graph is triconnected (i.e. a connected graph such that deleting any two nodes (and incident edges)
    * results in a graph that is still connected), false otherwise.
@@ -54,21 +52,19 @@ public:
 private:
   TriconnectedTest();
 
-  bool compute(tlp::Graph* graph);
+  bool compute(tlp::Graph *graph);
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   /**
    * @brief Singleton instance of this class.
    **/
-  static TriconnectedTest * instance;
+  static TriconnectedTest *instance;
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
-
 }
 #endif
 ///@endcond

@@ -27,32 +27,32 @@
 
 using namespace tlp;
 
-QToolButton* insertHeaderControl(HeaderFrame* header, int pos=-1) {
-  QToolButton* result = new QToolButton(header);
-  result->setMaximumSize(25,25);
-  result->setMinimumSize(25,25);
-  result->setIconSize(QSize(16,16));
+QToolButton *insertHeaderControl(HeaderFrame *header, int pos = -1) {
+  QToolButton *result = new QToolButton(header);
+  result->setMaximumSize(25, 25);
+  result->setMinimumSize(25, 25);
+  result->setIconSize(QSize(16, 16));
 
   if (pos == -1)
     header->insertWidget(result);
   else {
-    static_cast<QHBoxLayout*>(header->layout())->insertWidget(pos,result);
+    static_cast<QHBoxLayout *>(header->layout())->insertWidget(pos, result);
   }
 
   return result;
 }
 
-FiltersManager::FiltersManager(QWidget *parent): QWidget(parent), _ui(new Ui::FiltersManagerData) {
+FiltersManager::FiltersManager(QWidget *parent) : QWidget(parent), _ui(new Ui::FiltersManagerData) {
   _ui->setupUi(this);
   _ui->filtersListContents->layout()->setAlignment(Qt::AlignTop);
   addItem();
-  GraphHierarchiesModel* model = Perspective::typedInstance<GraphPerspective>()->model();
-  connect(model,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
+  GraphHierarchiesModel *model = Perspective::typedInstance<GraphPerspective>()->model();
+  connect(model, SIGNAL(currentGraphChanged(tlp::Graph *)), this, SLOT(currentGraphChanged(tlp::Graph *)));
   currentGraphChanged(model->currentGraph());
 
   _playButton = insertHeaderControl(_ui->header);
   _playButton->setIcon(QIcon(":/tulip/gui/icons/22/media-playback-start.png"));
-  connect(_playButton,SIGNAL(clicked()),this,SLOT(applyFilter()));
+  connect(_playButton, SIGNAL(clicked()), this, SLOT(applyFilter()));
 }
 
 FiltersManager::~FiltersManager() {
@@ -60,18 +60,18 @@ FiltersManager::~FiltersManager() {
 }
 
 void FiltersManager::addItem() {
-  FiltersManagerItem* item = new FiltersManagerItem();
+  FiltersManagerItem *item = new FiltersManagerItem();
   _items << item;
-  _ui->filtersListContentsLayout->insertWidget(_ui->filtersListContentsLayout->count()-1,item);
-  connect(item,SIGNAL(removed()),this,SLOT(delItem()));
-  connect(item,SIGNAL(modeChanged(FiltersManagerItem::Mode)),this,SLOT(itemModeChanged(FiltersManagerItem::Mode)));
+  _ui->filtersListContentsLayout->insertWidget(_ui->filtersListContentsLayout->count() - 1, item);
+  connect(item, SIGNAL(removed()), this, SLOT(delItem()));
+  connect(item, SIGNAL(modeChanged(FiltersManagerItem::Mode)), this, SLOT(itemModeChanged(FiltersManagerItem::Mode)));
 }
 
 void FiltersManager::delItem() {
-  delItem(static_cast<FiltersManagerItem*>(sender()));
+  delItem(static_cast<FiltersManagerItem *>(sender()));
 }
 
-void FiltersManager::delItem(FiltersManagerItem* item) {
+void FiltersManager::delItem(FiltersManagerItem *item) {
   _items.removeAll(item);
   delete item;
 
@@ -84,8 +84,7 @@ void FiltersManager::itemModeChanged(FiltersManagerItem::Mode m) {
     addItem();
 }
 
-
-void FiltersManager::currentGraphChanged(tlp::Graph* g) {
+void FiltersManager::currentGraphChanged(tlp::Graph *g) {
   _ui->filtersList->setEnabled(g != nullptr);
 }
 
@@ -93,12 +92,12 @@ void FiltersManager::applyFilter() {
   Observable::holdObservers();
   _playButton->setEnabled(false);
 
-  Graph* g = Perspective::typedInstance<GraphPerspective>()->model()->currentGraph();
-  BooleanProperty* result = new BooleanProperty(g);
+  Graph *g = Perspective::typedInstance<GraphPerspective>()->model()->currentGraph();
+  BooleanProperty *result = new BooleanProperty(g);
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
 
-  switch(_ui->header->currentMenuIndex()) {
+  switch (_ui->header->currentMenuIndex()) {
   case None:
     break;
 
@@ -123,7 +122,7 @@ void FiltersManager::applyFilter() {
     break;
   }
 
-  foreach(FiltersManagerItem* item, _items) {
+  foreach (FiltersManagerItem *item, _items) {
     item->applyFilter(result);
     *(g->getProperty<BooleanProperty>("viewSelection")) = *result;
   }

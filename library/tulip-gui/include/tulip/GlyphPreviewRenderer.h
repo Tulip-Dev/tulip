@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLYPHPREVIEWGENERATOR_H
 #define GLYPHPREVIEWGENERATOR_H
 
@@ -38,7 +37,7 @@ class Graph;
   **/
 class TLP_QT_SCOPE GlyphPreviewRenderer {
 public:
-  static GlyphPreviewRenderer& instance();
+  static GlyphPreviewRenderer &instance();
 
   ~GlyphPreviewRenderer();
 
@@ -50,8 +49,8 @@ public:
 private:
   GlyphPreviewRenderer();
   static GlyphPreviewRenderer _instance;
-  std::map<unsigned int,QPixmap> _previews;
-  tlp::Graph* _graph;
+  std::map<unsigned int, QPixmap> _previews;
+  tlp::Graph *_graph;
   tlp::node _node;
 };
 
@@ -60,8 +59,7 @@ private:
   **/
 class TLP_QT_SCOPE EdgeExtremityGlyphPreviewRenderer {
 public:
-
-  static EdgeExtremityGlyphPreviewRenderer& instance();
+  static EdgeExtremityGlyphPreviewRenderer &instance();
 
   ~EdgeExtremityGlyphPreviewRenderer();
 
@@ -73,10 +71,9 @@ public:
 private:
   EdgeExtremityGlyphPreviewRenderer();
   static EdgeExtremityGlyphPreviewRenderer _instance;
-  std::map<unsigned int,QPixmap> _previews;
-  tlp::Graph* _graph;
+  std::map<unsigned int, QPixmap> _previews;
+  tlp::Graph *_graph;
   tlp::edge _edge;
-
 };
 }
 #endif // GLYPHPREVIEWGENERATOR_H

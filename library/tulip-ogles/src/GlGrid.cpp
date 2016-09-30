@@ -35,13 +35,9 @@ using namespace std;
 
 namespace tlp {
 //============================================================
-GlGrid::GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight,
-               const Size& cell, const Color& color, bool displayDim[3]) :
-  frontTopLeft(frontTopLeft),
-  backBottomRight(backBottomRight),
-  color(color),
-  cell(cell) {
-  for(unsigned int i=0; i < 3; ++i)
+GlGrid::GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Size &cell, const Color &color, bool displayDim[3])
+    : frontTopLeft(frontTopLeft), backBottomRight(backBottomRight), color(color), cell(cell) {
+  for (unsigned int i = 0; i < 3; ++i)
     this->displayDim[i] = displayDim[i];
 
   _boundingBox.expand(frontTopLeft);
@@ -53,18 +49,17 @@ void GlGrid::draw(const Camera &camera, const Light &, bool pickingMode) {
   Coord gridSize = backBottomRight - frontTopLeft;
   delta /= gridSize / cell;
 
-
   glLineWidth(1);
 
   vector<Coord> gridVertices;
 
-  //xy-plane
+  // xy-plane
   if (displayDim[0]) {
     Coord A(frontTopLeft);
 
     while (A[0] <= backBottomRight[0] + 1E-3) {
       gridVertices.push_back(Coord(A[0], A[1], A[2]));
-      gridVertices.push_back(Coord(A[0], A[1] + gridSize[1] , A[2]));
+      gridVertices.push_back(Coord(A[0], A[1] + gridSize[1], A[2]));
       A[0] += delta[0];
     }
 
@@ -72,18 +67,18 @@ void GlGrid::draw(const Camera &camera, const Light &, bool pickingMode) {
 
     while (A[1] <= backBottomRight[1] + 1E-3) {
       gridVertices.push_back(Coord(A[0], A[1], A[2]));
-      gridVertices.push_back(Coord(A[0] + gridSize[0], A[1]  , A[2]));
+      gridVertices.push_back(Coord(A[0] + gridSize[0], A[1], A[2]));
       A[1] += delta[1];
     }
   }
 
-  //yz-plane
+  // yz-plane
   if (displayDim[1]) {
     Coord A(frontTopLeft);
 
     while (A[2] <= backBottomRight[2] + 1E-3) {
       gridVertices.push_back(Coord(A[0], A[1], A[2]));
-      gridVertices.push_back(Coord(A[0], A[1] + gridSize[1] , A[2]));
+      gridVertices.push_back(Coord(A[0], A[1] + gridSize[1], A[2]));
       A[2] += delta[2];
     }
 
@@ -91,18 +86,18 @@ void GlGrid::draw(const Camera &camera, const Light &, bool pickingMode) {
 
     while (A[1] <= backBottomRight[1] + 1E-3) {
       gridVertices.push_back(Coord(A[0], A[1], A[2]));
-      gridVertices.push_back(Coord(A[0], A[1] , A[2] + gridSize[2]));
+      gridVertices.push_back(Coord(A[0], A[1], A[2] + gridSize[2]));
       A[1] += delta[1];
     }
   }
 
-  //xz-plane
+  // xz-plane
   if (displayDim[2]) {
     Coord A(frontTopLeft);
 
     while (A[2] <= backBottomRight[2] + 1E-3) {
       gridVertices.push_back(Coord(A[0], A[1], A[2]));
-      gridVertices.push_back(Coord(A[0]+ gridSize[0], A[1]  , A[2]));
+      gridVertices.push_back(Coord(A[0] + gridSize[0], A[1], A[2]));
       A[2] += delta[2];
     }
 
@@ -136,24 +131,22 @@ void GlGrid::draw(const Camera &camera, const Light &, bool pickingMode) {
   }
 
   glDrawArrays(GL_LINES, 0, gridVertices.size());
-
 }
 //============================================================
 void GlGrid::getDisplayDim(bool displayDim[3]) const {
-  for(int i=0; i < 3; ++i)
+  for (int i = 0; i < 3; ++i)
     displayDim[i] = this->displayDim[i];
 }
 //============================================================
 void GlGrid::setDisplayDim(bool displayDim[3]) {
-  for(int i=0; i < 3; i++)
+  for (int i = 0; i < 3; i++)
     this->displayDim[i] = displayDim[i];
 }
 //============================================================
-void GlGrid::translate(const Coord& vec) {
-  _boundingBox[0]  += vec;
-  _boundingBox[1]  += vec;
-  frontTopLeft    += vec;
+void GlGrid::translate(const Coord &vec) {
+  _boundingBox[0] += vec;
+  _boundingBox[1] += vec;
+  frontTopLeft += vec;
   backBottomRight += vec;
 }
-
 }

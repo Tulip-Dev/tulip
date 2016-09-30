@@ -38,16 +38,12 @@ struct ExtremityShape {
   static void Square(QXmlStreamWriter &res, const QString &color, bool tgt);
   static void Star(QXmlStreamWriter &res, const QString &color, bool tgt);
   static void Cube(QXmlStreamWriter &res, const QString &color, bool tgt);
-  static void CubeOutlinedTransparent(QXmlStreamWriter &res,
-                                      const QString &color, bool tgt);
+  static void CubeOutlinedTransparent(QXmlStreamWriter &res, const QString &color, bool tgt);
   static void Cone(QXmlStreamWriter &res, const QString &color, bool tgt);
   static void Cylinder(QXmlStreamWriter &res, const QString &color, bool tgt);
-  static void Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt,
-                     const unsigned id_src_gradient);
-  static void GlowSphere(QXmlStreamWriter &res, const tlp::Color &color,
-                         bool tgt, const unsigned id_gradient);
-  static void FontAwesomeIcon(QXmlStreamWriter &res, const QString &color,
-                              const std::string &iconName, bool tgt);
+  static void Sphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt, const unsigned id_src_gradient);
+  static void GlowSphere(QXmlStreamWriter &res, const tlp::Color &color, bool tgt, const unsigned id_gradient);
+  static void FontAwesomeIcon(QXmlStreamWriter &res, const QString &color, const std::string &iconName, bool tgt);
 };
 
 #endif // SHAPE_H

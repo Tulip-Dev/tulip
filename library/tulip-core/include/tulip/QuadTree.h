@@ -27,7 +27,6 @@
 #include <tulip/Rectangle.h>
 #include <tulip/Coord.h>
 
-
 namespace tlp {
 
 /** \brief QuadTree template class
@@ -37,7 +36,6 @@ namespace tlp {
 template <class TYPE> class QuadTreeNode {
 
 public:
-
   //======================================
   /*
      * build a new Quadtree
@@ -47,18 +45,19 @@ public:
   /**
    * Contructor, you have to put the global bounding box of the quadtree
    */
-  QuadTreeNode(const tlp::Rectangle<float> &box):parent(nullptr), _box(box) {
+  QuadTreeNode(const tlp::Rectangle<float> &box) : parent(nullptr), _box(box) {
     assert(_box.isValid());
 
-    for(int i=0; i<4; ++i)
+    for (int i = 0; i < 4; ++i)
       children[i] = 0;
   }
   /**
    * Basic destructor
    */
   ~QuadTreeNode() {
-    for(int i=0; i<4; ++i)
-      if (children[i] != nullptr) delete children[i];
+    for (int i = 0; i < 4; ++i)
+      if (children[i] != nullptr)
+        delete children[i];
   }
   /**
    * Insert an element in the quadtree
@@ -67,18 +66,18 @@ public:
     assert(box.isValid());
     assert(_box.isValid());
 
-    if (box[0]==box[1])
+    if (box[0] == box[1])
       return;
 
-    //Check for infini recursion : check if we are on float limit case
-    tlp::Vec2f subBox((_box[0]+_box[1])/2.f);
+    // Check for infini recursion : check if we are on float limit case
+    tlp::Vec2f subBox((_box[0] + _box[1]) / 2.f);
 
-    if( !((subBox == _box[0]) || (subBox == _box[1]))) {
-      for (int i=0; i<4; ++i) {
+    if (!((subBox == _box[0]) || (subBox == _box[1]))) {
+      for (int i = 0; i < 4; ++i) {
         if (getChildBox(i).isInside(box)) {
-          QuadTreeNode *child=getChild(i);
+          QuadTreeNode *child = getChild(i);
 
-          if(child)
+          if (child)
             child->insert(box, id);
           else {
             entities.push_back(id);
@@ -113,12 +112,12 @@ public:
     assert(_box.isValid());
 
     if (_box.intersect(box)) {
-      for (size_t i=0; i<entities.size(); ++i) {
+      for (size_t i = 0; i < entities.size(); ++i) {
         result.push_back(entities[i]);
       }
 
-      for (unsigned int i=0; i<4; ++i) {
-        if (children[i]!=nullptr)
+      for (unsigned int i = 0; i < 4; ++i) {
+        if (children[i] != nullptr)
           children[i]->getElements(box, result);
       }
     }
@@ -128,12 +127,12 @@ public:
    * Return all elements of the quadtree
    */
   void getElements(std::vector<TYPE> &result) const {
-    for (size_t i=0; i<entities.size(); ++i) {
+    for (size_t i = 0; i < entities.size(); ++i) {
       result.push_back(entities[i]);
     }
 
-    for (unsigned int i=0; i<4; ++i) {
-      if (children[i]!=nullptr)
+    for (unsigned int i = 0; i < 4; ++i) {
+      if (children[i] != nullptr)
         children[i]->getElements(result);
     }
   }
@@ -147,7 +146,7 @@ public:
   }
 
   QuadTreeNode *getCellForElement(const TYPE &elt) {
-    typename std::map<TYPE, QuadTreeNode*>::iterator it = getRoot()->elementToCell.find(elt);
+    typename std::map<TYPE, QuadTreeNode *>::iterator it = getRoot()->elementToCell.find(elt);
     if (it != getRoot()->elementToCell.end()) {
       return it->second;
     } else {
@@ -155,13 +154,13 @@ public:
     }
   }
 
-  //private:
+  // private:
   //======================================
-  QuadTreeNode* getChild(int i) {
+  QuadTreeNode *getChild(int i) {
     if (children[i] == 0) {
-      tlp::Rectangle<float> box (getChildBox(i));
+      tlp::Rectangle<float> box(getChildBox(i));
 
-      if(box[0] ==_box[0] && box[1]==_box[1])
+      if (box[0] == _box[0] && box[1] == _box[1])
         return nullptr;
 
       children[i] = new QuadTreeNode<TYPE>(box);
@@ -187,7 +186,7 @@ public:
     I[0] = (_box[0][0] + _box[1][0]) / 2.;
     I[1] = _box[0][1];
     tlp::Vec2f E;
-    E[0] =  _box[0][0];
+    E[0] = _box[0][0];
     E[1] = (_box[0][1] + _box[1][1]) / 2.;
     tlp::Vec2f F;
     F[0] = I[0];
@@ -199,7 +198,7 @@ public:
     H[0] = F[0];
     H[1] = _box[1][1];
 
-    switch(i) {
+    switch (i) {
     case 0:
       return tlp::Rectangle<float>(_box[0], F);
       break;
@@ -216,7 +215,7 @@ public:
       return tlp::Rectangle<float>(E, H);
 
     default:
-      tlp::error() << "ERROR" << __PRETTY_FUNCTION__  << std::endl;
+      tlp::error() << "ERROR" << __PRETTY_FUNCTION__ << std::endl;
       return tlp::Rectangle<float>();
       break;
     }
@@ -226,10 +225,8 @@ public:
   QuadTreeNode *children[4];
   std::vector<TYPE> entities;
   tlp::Rectangle<float> _box;
-  std::map<TYPE, QuadTreeNode*> elementToCell;
-
+  std::map<TYPE, QuadTreeNode *> elementToCell;
 };
-
 }
 
 #endif // QUADTREE_H

@@ -32,14 +32,12 @@
 
 using namespace tlp;
 
-GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attachement,
-                                         unsigned int numberOfSamples,
-                                         GLint textureMagFilter, GLint textureMinFilter,
-                                         GLint textureWrap, bool generateMipmap) :
-  _width(width), _height(height), _fboHandle(0), _texture(0), _attachmentRbo(0), _isValid(false) {
+GlFrameBufferObject::GlFrameBufferObject(int width, int height, Attachment attachement, unsigned int numberOfSamples, GLint textureMagFilter,
+                                         GLint textureMinFilter, GLint textureWrap, bool generateMipmap)
+    : _width(width), _height(height), _fboHandle(0), _texture(0), _attachmentRbo(0), _isValid(false) {
 
 #ifdef __EMSCRIPTEN__
-  (void) numberOfSamples;
+  (void)numberOfSamples;
 #endif
 
   glGenFramebuffers(1, &_fboHandle);
@@ -136,7 +134,6 @@ void GlFrameBufferObject::bind() {
   glBindFramebuffer(GL_FRAMEBUFFER, _fboHandle);
 }
 
-
 void GlFrameBufferObject::release() {
   glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
@@ -151,14 +148,12 @@ bool GlFrameBufferObject::hasOpenGLFramebufferBlit() {
   return OpenGlConfigManager::instance().isExtensionSupported("GL_EXT_framebuffer_blit");
 }
 
-void GlFrameBufferObject::blitFramebuffer(GlFrameBufferObject *target, const Vec2i &targetX0Y0, const Vec2i &targetX1Y1,
-                                          GlFrameBufferObject *source, const Vec2i &sourceX0Y0, const Vec2i &sourceX1Y1,
-                                          GLbitfield mask, GLenum filter) {
+void GlFrameBufferObject::blitFramebuffer(GlFrameBufferObject *target, const Vec2i &targetX0Y0, const Vec2i &targetX1Y1, GlFrameBufferObject *source,
+                                          const Vec2i &sourceX0Y0, const Vec2i &sourceX1Y1, GLbitfield mask, GLenum filter) {
   glBindFramebuffer(GL_READ_FRAMEBUFFER, source->handle());
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, target->handle());
-  glBlitFramebuffer(sourceX0Y0[0], sourceX0Y0[1], sourceX1Y1[0], sourceX1Y1[1],
-                    targetX0Y0[0], targetX0Y0[1], targetX1Y1[0], targetX1Y1[1],
-                    mask, filter);
+  glBlitFramebuffer(sourceX0Y0[0], sourceX0Y0[1], sourceX1Y1[0], sourceX1Y1[1], targetX0Y0[0], targetX0Y0[1], targetX1Y1[0], targetX1Y1[1], mask,
+                    filter);
   glBindFramebuffer(GL_READ_FRAMEBUFFER, 0);
   glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 }

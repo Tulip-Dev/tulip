@@ -40,10 +40,9 @@ class TLP_GLES_SCOPE GlLayer : public tlp::Observable {
   friend class GlScene;
 
 public:
+  GlLayer(const std::string &name, bool is3d = true);
 
-  GlLayer(const std::string& name, bool is3d = true);
-
-  GlLayer(const std::string& name, Camera *camera, Light *light);
+  GlLayer(const std::string &name, Camera *camera, Light *light);
 
   ~GlLayer();
 
@@ -83,11 +82,11 @@ public:
 
   void deleteGlEntity(GlEntity *entity);
 
-  GlEntity* findGlEntity(const std::string &key);
+  GlEntity *findGlEntity(const std::string &key);
 
-  const std::map<std::string, GlEntity*> &getGlEntities() const;
+  const std::map<std::string, GlEntity *> &getGlEntities() const;
 
-  void clear(bool deleteEntities=false);
+  void clear(bool deleteEntities = false);
 
   bool useSharedCamera() const {
     return _sharedCamera;
@@ -95,18 +94,16 @@ public:
 
   void acceptVisitor(GlSceneVisitor *visitor);
 
-  GlComposite* getComposite() const {
-    return const_cast<GlComposite*>(&_composite);
+  GlComposite *getComposite() const {
+    return const_cast<GlComposite *>(&_composite);
   }
 
   bool is3d() const;
 
-protected :
-
+protected:
   void setScene(GlScene *_scene);
 
 private:
-
   std::string _name;
 
   GlComposite _composite;
@@ -117,21 +114,16 @@ private:
   bool _sharedCamera;
   bool _sharedLight;
   bool _visible;
-
 };
 
 class GlLayerEvent : public tlp::Event {
 public:
+  enum GlLayerEventType { ENTITY_ADDED_IN_LAYER = 0, ENTITY_REMOVED_FROM_LAYER, LAYER_VISIBILITY_CHANGED };
 
-  enum GlLayerEventType {ENTITY_ADDED_IN_LAYER = 0,
-                         ENTITY_REMOVED_FROM_LAYER,
-                         LAYER_VISIBILITY_CHANGED
-                        };
+  GlLayerEvent(GlLayerEventType type, GlLayer *layer, GlEntity *entity = nullptr, Event::EventType evtType = Event::TLP_MODIFICATION)
 
-  GlLayerEvent(GlLayerEventType type, GlLayer *layer, GlEntity *entity=nullptr,
-               Event::EventType evtType = Event::TLP_MODIFICATION)
-
-    : Event(*layer, evtType), _type(type), _layer(layer), _entity(entity) {}
+      : Event(*layer, evtType), _type(type), _layer(layer), _entity(entity) {
+  }
 
   GlLayer *getGlLayer() const {
     return _layer;
@@ -146,12 +138,10 @@ public:
   }
 
 protected:
-
   GlLayerEventType _type;
   GlLayer *_layer;
   GlEntity *_entity;
 };
-
 }
 
 #endif // GLLAYER_H

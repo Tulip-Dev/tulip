@@ -40,16 +40,21 @@
 
 using namespace tlp;
 
-TableView::TableView(tlp::PluginContext *) : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr), isNewGraph(false), filteringColumns(false) {}
+TableView::TableView(tlp::PluginContext *)
+    : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr), isNewGraph(false), filteringColumns(false) {
+}
 
-TableView::~TableView() { delete _ui; }
+TableView::~TableView() {
+  delete _ui;
+}
 
 #define NODES_DISPLAYED (_ui->eltTypeCombo->currentIndex() == 0)
 #define EDGES_DISPLAYED (_ui->eltTypeCombo->currentIndex() == 1)
 
 tlp::BooleanProperty *TableView::getFilteringProperty() const {
   GraphPropertiesModel<BooleanProperty> *model = static_cast<GraphPropertiesModel<BooleanProperty> *>(_ui->filteringPropertyCombo->model());
-  PropertyInterface *pi = model->data(model->index(_ui->filteringPropertyCombo->currentIndex(), 0), TulipModel::PropertyRole).value<PropertyInterface *>();
+  PropertyInterface *pi =
+      model->data(model->index(_ui->filteringPropertyCombo->currentIndex(), 0), TulipModel::PropertyRole).value<PropertyInterface *>();
   return pi ? static_cast<BooleanProperty *>(pi) : nullptr;
 }
 
@@ -124,7 +129,8 @@ void TableView::setupWidget() {
 
   propertiesEditor = new PropertiesEditor((QWidget *)centralItem()->parentWidget());
 
-  connect(propertiesEditor, SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface *, bool)), this, SLOT(setPropertyVisible(tlp::PropertyInterface *, bool)));
+  connect(propertiesEditor, SIGNAL(propertyVisibilityChanged(tlp::PropertyInterface *, bool)), this,
+          SLOT(setPropertyVisible(tlp::PropertyInterface *, bool)));
   connect(propertiesEditor, SIGNAL(mapToGraphSelection()), this, SLOT(mapToGraphSelection()));
 
   _ui->table->setItemDelegate(new GraphTableItemDelegate(_ui->table));
@@ -134,7 +140,8 @@ void TableView::setupWidget() {
   _ui->table->horizontalHeader()->setMovable(true);
 #endif
   _ui->table->horizontalHeader()->setContextMenuPolicy(Qt::CustomContextMenu);
-  connect(_ui->table->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint &)), this, SLOT(showHorizontalHeaderCustomContextMenu(const QPoint &)));
+  connect(_ui->table->horizontalHeader(), SIGNAL(customContextMenuRequested(const QPoint &)), this,
+          SLOT(showHorizontalHeaderCustomContextMenu(const QPoint &)));
   connect(_ui->table, SIGNAL(customContextMenuRequested(const QPoint &)), SLOT(showCustomContextMenu(const QPoint &)));
   connect(_ui->filterEdit, SIGNAL(returnPressed()), this, SLOT(filterChanged()));
 
@@ -152,17 +159,22 @@ void TableView::setupWidget() {
   connect(propertiesEditor->getPropertiesFilterEdit(), SIGNAL(textChanged(QString)), this, SLOT(setPropertiesFilter(QString)));
 }
 
-QList<QWidget *> TableView::configurationWidgets() const { return QList<QWidget *>() << propertiesEditor; }
+QList<QWidget *> TableView::configurationWidgets() const {
+  return QList<QWidget *>() << propertiesEditor;
+}
 
 void TableView::graphChanged(tlp::Graph *g) {
   isNewGraph = true;
   QSet<QString> visibleProperties;
 
   if (g && propertiesEditor->getGraph() && (g->getRoot() == propertiesEditor->getGraph()->getRoot())) {
-    foreach (tlp::PropertyInterface *pi, propertiesEditor->visibleProperties()) { visibleProperties.insert(QString::fromUtf8(pi->getName().c_str())); }
+    foreach (tlp::PropertyInterface *pi, propertiesEditor->visibleProperties()) {
+      visibleProperties.insert(QString::fromUtf8(pi->getName().c_str()));
+    }
   }
 
-  GraphPropertiesModel<BooleanProperty> *model = new GraphPropertiesModel<BooleanProperty>(trUtf8("no selection"), g, false, _ui->filteringPropertyCombo);
+  GraphPropertiesModel<BooleanProperty> *model =
+      new GraphPropertiesModel<BooleanProperty>(trUtf8("no selection"), g, false, _ui->filteringPropertyCombo);
   _ui->filteringPropertyCombo->setModel(model);
   _ui->filteringPropertyCombo->setCurrentIndex(0);
 
@@ -184,7 +196,9 @@ void TableView::graphChanged(tlp::Graph *g) {
   isNewGraph = false;
 }
 
-void TableView::graphDeleted(Graph *) { setGraph(nullptr); }
+void TableView::graphDeleted(Graph *) {
+  setGraph(nullptr);
+}
 
 void TableView::readSettings() {
   if (isNewGraph || ((_ui->eltTypeCombo->currentIndex() == 0) && dynamic_cast<NodesGraphModel *>(_model) == nullptr) ||
@@ -302,12 +316,12 @@ void TableView::setMatchProperty() {
   QPalette palette = QComboBox().palette();
 
   // set a combo like stylesheet
-  menu.setStyleSheet(
-      QString("QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; font-size: 12px; color: %1; background-color: %2;} QMenu::item:selected {color: %3; background-color: %4}")
-          .arg(palette.color(QPalette::Active, QPalette::Text).name())
-          .arg(palette.color(QPalette::Active, QPalette::Base).name())
-          .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
-          .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
+  menu.setStyleSheet(QString("QMenu::item {border-image: none; border-width: 4; padding: 0px 6px; font-size: 12px; color: %1; background-color: %2;} "
+                             "QMenu::item:selected {color: %3; background-color: %4}")
+                         .arg(palette.color(QPalette::Active, QPalette::Text).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Base).name())
+                         .arg(palette.color(QPalette::Active, QPalette::HighlightedText).name())
+                         .arg(palette.color(QPalette::Active, QPalette::Highlight).name()));
 
   // compute a combo like position
   // to popup the menu
@@ -315,7 +329,8 @@ void TableView::setMatchProperty() {
   QWidget *pView = pViewport->parentWidget();
   QGraphicsView *pGraphicsView = qobject_cast<QGraphicsView *>(pView);
   QGraphicsItem *pGraphicsItem = pGraphicsView->items(pViewport->mapFromGlobal(QCursor::pos())).first();
-  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(pGraphicsItem->mapToScene(((QGraphicsProxyWidget *)pGraphicsItem)->subWidgetRect(_ui->matchPropertyButton).bottomLeft())));
+  QPoint popupPos = pGraphicsView->mapToGlobal(pGraphicsView->mapFromScene(
+      pGraphicsItem->mapToScene(((QGraphicsProxyWidget *)pGraphicsItem)->subWidgetRect(_ui->matchPropertyButton).bottomLeft())));
 
   action = menu.exec(popupPos);
 
@@ -433,7 +448,8 @@ bool TableView::setAllHighlightedRows(PropertyInterface *prop) {
   Graph *g = graph();
   QModelIndexList rows = _ui->table->selectionModel()->selectedRows();
 
-  QVariant val = TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE, prop, g, static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()));
+  QVariant val =
+      TulipItemDelegate::showEditorDialog(NODES_DISPLAYED ? NODE : EDGE, prop, g, static_cast<TulipItemDelegate *>(_ui->table->itemDelegate()));
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -486,8 +502,8 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   contextMenu.setProperty("mainMenu", true);
   // the style sheet below allows to display disabled items
   // as "title" items
-  contextMenu.setStyleSheet(
-      "QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+  contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, "
+                            "y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
 
   QAction *action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
   action->setEnabled(false);
@@ -498,20 +514,25 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   QAction *setAllGraph = subMenu->addAction(trUtf8("All") + ' ' + eltsName + " in the current graph");
   QAction *selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + " in the current graph");
 
-  QAction *highlightedSetAll =
-      subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) +
-                         (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
+  QAction *highlightedSetAll = subMenu->addAction(
+      (trUtf8("Rows highlighted") + ' ' + eltsName) +
+      (highlightedRows.size() > 1
+           ? ""
+           : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   subMenu = contextMenu.addMenu(trUtf8("To labels of "));
   QAction *toLabels = subMenu->addAction(trUtf8("All ") + eltsName + " in the current graph");
   QAction *selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + " in the current graph");
 
-  QAction *highlightedToLabels =
-      subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) +
-                         (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
+  QAction *highlightedToLabels = subMenu->addAction(
+      (trUtf8("Rows highlighted") + ' ' + eltsName) +
+      (highlightedRows.size() > 1
+           ? ""
+           : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   contextMenu.addSeparator();
-  action = contextMenu.addAction(highlightedRows.size() > 1 ? (trUtf8("Rows highlighted") + ' ' + eltsName) : QString(NODES_DISPLAYED ? "Node #%1" : "Edge #%1").arg(eltId));
+  action = contextMenu.addAction(highlightedRows.size() > 1 ? (trUtf8("Rows highlighted") + ' ' + eltsName)
+                                                            : QString(NODES_DISPLAYED ? "Node #%1" : "Edge #%1").arg(eltId));
   action->setEnabled(false);
   contextMenu.addSeparator();
   QAction *toggleAction = contextMenu.addAction(trUtf8("Toggle selection"));
@@ -622,8 +643,8 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   contextMenu.setProperty("mainMenu", true);
   // the style sheet below allows to display disabled items
   // as "title" items
-  contextMenu.setStyleSheet(
-      "QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+  contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, "
+                            "y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
 
   QAction *action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
   action->setEnabled(false);
@@ -653,9 +674,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   QAction *highlightedSetAll = nullptr;
 
   if (highlightedRows.size() != 0)
-    highlightedSetAll =
-        subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) +
-                           (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
+    highlightedSetAll = subMenu->addAction(
+        (trUtf8("Rows highlighted") + ' ' + eltsName) +
+        (highlightedRows.size() > 1
+             ? ""
+             : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   QAction *toLabels = nullptr;
   QAction *nodesToLabels = nullptr;
@@ -675,9 +698,11 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
     edgesSelectedToLabels = subMenu->addAction("Selected edges in the current graph");
 
     if (highlightedRows.size() != 0)
-      highlightedToLabels =
-          subMenu->addAction((trUtf8("Rows highlighted") + ' ' + eltsName) +
-                             (highlightedRows.size() > 1 ? "" : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
+      highlightedToLabels = subMenu->addAction(
+          (trUtf8("Rows highlighted") + ' ' + eltsName) +
+          (highlightedRows.size() > 1
+               ? ""
+               : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
   }
 
   contextMenu.addSeparator();

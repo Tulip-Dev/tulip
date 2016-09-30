@@ -33,18 +33,17 @@ class Graph;
 
 class QCheckBox;
 
-class AlgorithmRunnerItem: public QWidget {
+class AlgorithmRunnerItem : public QWidget {
   Q_OBJECT
-  Ui::AlgorithmRunnerItem* _ui;
+  Ui::AlgorithmRunnerItem *_ui;
   QString _pluginName;
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
   bool _storeResultAsLocal;
   QPointF _dragStartPosition;
   tlp::DataSet _initData;
 
-
 public:
-  explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = nullptr);
+  explicit AlgorithmRunnerItem(QString pluginName, QWidget *parent = nullptr);
   virtual ~AlgorithmRunnerItem();
 
   QString name() const;
@@ -54,21 +53,21 @@ public:
   void setFavorite(bool);
 
 protected:
-  virtual void mousePressEvent(QMouseEvent* ev);
-  virtual void mouseMoveEvent(QMouseEvent* ev);
+  virtual void mousePressEvent(QMouseEvent *ev);
+  virtual void mouseMoveEvent(QMouseEvent *ev);
 
 public slots:
-  void setGraph(tlp::Graph*);
-  void setData(const tlp::DataSet& data);
+  void setGraph(tlp::Graph *);
+  void setData(const tlp::DataSet &data);
   void setStoreResultAsLocal(bool);
 
-  void run(tlp::Graph* g = nullptr);
+  void run(tlp::Graph *g = nullptr);
 
 signals:
   void favorized(bool);
 
 protected slots:
-  void afterRun(tlp::Graph*, const tlp::DataSet&);
+  void afterRun(tlp::Graph *, const tlp::DataSet &);
   void initModel();
 };
 #endif // ALGORITHMRUNNERITEM_H

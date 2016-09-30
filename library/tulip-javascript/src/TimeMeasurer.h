@@ -4,7 +4,6 @@
 class TimeMeasurer {
 
 public:
-
   TimeMeasurer();
 
   void reset();
@@ -14,9 +13,7 @@ public:
   static unsigned int getCurrentTime();
 
 private:
-
   double _startTime, _endTime;
-
 };
 
 #endif // TIMEMEASURER_H

@@ -31,24 +31,25 @@
 using namespace tlp;
 using namespace std;
 
-PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel* model, QWidget *parent)
-  : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(nullptr), _currentItem(QString::null) {
+PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel *model, QWidget *parent)
+    : QWizard(parent), _ui(new Ui::PanelSelectionWizard), _model(model), _view(nullptr), _currentItem(QString::null) {
   _ui->setupUi(this);
-  connect(this,SIGNAL(currentIdChanged(int)),this,SLOT(pageChanged(int)));
+  connect(this, SIGNAL(currentIdChanged(int)), this, SLOT(pageChanged(int)));
   _ui->graphCombo->setModel(_model);
   _ui->graphCombo->selectIndex(_model->indexOf(_model->currentGraph()));
 
-  _ui->panelList->setModel(new SimplePluginListModel(QList<string>::fromStdList(PluginLister::instance()->availablePlugins<tlp::View>()),_ui->panelList));
-  connect(_ui->panelList->selectionModel(), SIGNAL(currentChanged(QModelIndex,QModelIndex)), this, SLOT(panelSelected(QModelIndex)));
-  connect(_ui->panelList,SIGNAL(doubleClicked(QModelIndex)),button(QWizard::FinishButton),SLOT(click()));
-  _ui->panelList->setCurrentIndex(_ui->panelList->model()->index(0,0));
+  _ui->panelList->setModel(
+      new SimplePluginListModel(QList<string>::fromStdList(PluginLister::instance()->availablePlugins<tlp::View>()), _ui->panelList));
+  connect(_ui->panelList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(panelSelected(QModelIndex)));
+  connect(_ui->panelList, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
+  _ui->panelList->setCurrentIndex(_ui->panelList->model()->index(0, 0));
 }
 
 PanelSelectionWizard::~PanelSelectionWizard() {
   delete _ui;
 }
 
-void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
+void PanelSelectionWizard::panelSelected(const QModelIndex &index) {
   _currentItem = index.data().toString();
   _ui->panelDescription->setHtml(PluginLister::pluginInformation(_currentItem.toStdString()).info().c_str());
   // NexButton is temporarily hidden
@@ -57,20 +58,20 @@ void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
   button(QWizard::NextButton)->setEnabled(true);
 }
 
-tlp::Graph* PanelSelectionWizard::graph() const {
-  return _model->data(_ui->graphCombo->selectedIndex(),TulipModel::GraphRole).value<tlp::Graph*>();
+tlp::Graph *PanelSelectionWizard::graph() const {
+  return _model->data(_ui->graphCombo->selectedIndex(), TulipModel::GraphRole).value<tlp::Graph *>();
 }
 
-void PanelSelectionWizard::setSelectedGraph(tlp::Graph* g) {
+void PanelSelectionWizard::setSelectedGraph(tlp::Graph *g) {
   _ui->graphCombo->selectIndex(_model->indexOf(g));
 }
 
-tlp::View* PanelSelectionWizard::panel() const {
+tlp::View *PanelSelectionWizard::panel() const {
   return _view;
 }
 
 void PanelSelectionWizard::createView() {
-  _view = PluginLister::instance()->getPluginObject<View>(_currentItem.toStdString(),nullptr);
+  _view = PluginLister::instance()->getPluginObject<View>(_currentItem.toStdString(), nullptr);
   _view->setupUi();
   _view->setGraph(graph());
   _view->setState(DataSet());
@@ -80,11 +81,11 @@ void PanelSelectionWizard::clearView() {
   delete _view;
   _view = nullptr;
 
-  foreach(int id, pageIds()) {
+  foreach (int id, pageIds()) {
     if (id == startId() || id == currentId())
       continue;
 
-    QWizardPage* p = page(id);
+    QWizardPage *p = page(id);
     removePage(id);
     delete p;
   }
@@ -95,8 +96,7 @@ void PanelSelectionWizard::clearView() {
 void PanelSelectionWizard::done(int result) {
   if (result == QDialog::Accepted && _view == nullptr) {
     createView();
-  }
-  else if (result == QDialog::Rejected) {
+  } else if (result == QDialog::Rejected) {
     clearView();
   }
 
@@ -115,14 +115,13 @@ void PanelSelectionWizard::pageChanged(int id) {
   if (page(id) == _ui->placeHolder) {
     createView();
     bool inPlaceHolder = true;
-    foreach(QWidget* w, _view->configurationWidgets()) {
-      QWizardPage* p;
+    foreach (QWidget *w, _view->configurationWidgets()) {
+      QWizardPage *p;
 
       if (inPlaceHolder) {
         p = _ui->placeHolder;
         inPlaceHolder = false;
-      }
-      else {
+      } else {
         p = new QWizardPage;
         addPage(p);
       }
@@ -135,5 +134,5 @@ void PanelSelectionWizard::pageChanged(int id) {
   // NexButton is temporarily hidden
   // QWizard::HaveNextButtonOnLastPage has been removed
   // from options property in PanelSelectionWizard.ui
-  button(QWizard::NextButton)->setEnabled(nextId()!=-1);
+  button(QWizard::NextButton)->setEnabled(nextId() != -1);
 }

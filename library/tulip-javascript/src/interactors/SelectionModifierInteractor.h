@@ -50,7 +50,6 @@ class GlGraph;
 class SelectionModifierInteractor : public GlSceneInteractor {
 
 public:
-
   SelectionModifierInteractor(tlp::GlScene *glScene = NULL);
 
   void setScene(tlp::GlScene *glScene);
@@ -66,29 +65,27 @@ public:
   void desactivate();
 
 private:
-
   bool hasSelection();
   void updateSelectionBoundingBox();
-  void translateSelection(tlp::Graph*, int x, int y);
+  void translateSelection(tlp::Graph *, int x, int y);
 
   MouseButton _mouseButton;
   int _lastX, _lastY;
 
-  std::map<tlp::Graph*, tlp::Graph*> _selectionSg;
-  std::map<tlp::Graph*, tlp::Graph*> _displayGraph;
-  std::map<tlp::Graph*, tlp::GlGraph*> _displayGlGraph;
-  std::map<tlp::Graph*, tlp::BoundingBox> _selectionBoundingBox;
+  std::map<tlp::Graph *, tlp::Graph *> _selectionSg;
+  std::map<tlp::Graph *, tlp::Graph *> _displayGraph;
+  std::map<tlp::Graph *, tlp::GlGraph *> _displayGlGraph;
+  std::map<tlp::Graph *, tlp::BoundingBox> _selectionBoundingBox;
   SelectionInteractor *_selectionInteractor;
 
-  std::map<tlp::Graph*, tlp::BooleanProperty*> _viewSelection;
-  std::map<tlp::Graph*, tlp::LayoutProperty*>_viewLayout;
-  std::map<tlp::Graph*, tlp::SizeProperty *> _viewSize;
-  std::map<tlp::Graph*, tlp::DoubleProperty *> _viewRotation;
+  std::map<tlp::Graph *, tlp::BooleanProperty *> _viewSelection;
+  std::map<tlp::Graph *, tlp::LayoutProperty *> _viewLayout;
+  std::map<tlp::Graph *, tlp::SizeProperty *> _viewSize;
+  std::map<tlp::Graph *, tlp::DoubleProperty *> _viewRotation;
 
   bool _dragStarted;
   tlp::Graph *_selectedGraph;
   std::set<tlp::node> _previousSelection;
-
 };
 
 #endif // SELECTIONMODIFIERINTERACTOR_H

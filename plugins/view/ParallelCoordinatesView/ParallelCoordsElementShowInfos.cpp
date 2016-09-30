@@ -26,8 +26,6 @@ namespace tlp {
 
 bool ParallelCoordsElementShowInfos::pick(int x, int y, SelectedEntity &selectedEntity) {
   ParallelCoordinatesView *parallelView = dynamic_cast<ParallelCoordinatesView *>(view());
-  return parallelView->getDataUnderPointerProperties(x,y,selectedEntity);
+  return parallelView->getDataUnderPointerProperties(x, y, selectedEntity);
 }
-
 }
-

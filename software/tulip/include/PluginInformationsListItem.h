@@ -27,7 +27,7 @@ namespace Ui {
 class PluginInformationsListItemData;
 }
 
-class PluginInformationsListItem: public QWidget {
+class PluginInformationsListItem : public QWidget {
   Q_OBJECT
   Ui::PluginInformationsListItemData *_ui;
 
@@ -47,7 +47,7 @@ signals:
   void focused();
 
 protected slots:
-  void downloadProgress(qint64,qint64);
+  void downloadProgress(qint64, qint64);
 
 protected:
   void focusInEvent(QFocusEvent *);

@@ -46,10 +46,9 @@
 class Grip : public tlp::LayoutAlgorithm {
 
 public:
-
-  PLUGININFORMATION("GRIP","Romain Bourqui","01/11/2010",
-                    "Implements a force directed graph drawing algorithm first published as:<br/>"
-                    "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. Kobourov, Journal Graph Algorithm and Applications, vol. 6, no. 3, pages 203--224, (2002).",
+  PLUGININFORMATION("GRIP", "Romain Bourqui", "01/11/2010", "Implements a force directed graph drawing algorithm first published as:<br/>"
+                                                            "<b>GRIP: Graph dRawing with Intelligent Placement</b>, P. Gajer and S.G. Kobourov, "
+                                                            "Journal Graph Algorithm and Applications, vol. 6, no. 3, pages 203--224, (2002).",
                     "1.1", "Force Directed")
 
   Grip(const tlp::PluginContext *);
@@ -57,7 +56,7 @@ public:
 
   bool run();
 
-private :
+private:
   void computeOrdering();
   void firstNodesPlacement();
   void placement();
@@ -74,21 +73,20 @@ private :
 
   unsigned int rounds(unsigned int, unsigned int, unsigned int, unsigned int, unsigned int);
   void set_nbr_size();
-  float sched( int, int, int, int, int);
+  float sched(int, int, int, int, int);
 
-
-  MISFiltering * misf;
+  MISFiltering *misf;
   float edgeLength;
   int level;
-  TLP_HASH_MAP<tlp::node, std::vector<unsigned int> > neighbors_dist;
-  TLP_HASH_MAP<tlp::node, std::vector<tlp::node> > neighbors;
+  TLP_HASH_MAP<tlp::node, std::vector<unsigned int>> neighbors_dist;
+  TLP_HASH_MAP<tlp::node, std::vector<tlp::node>> neighbors;
   TLP_HASH_MAP<unsigned int, unsigned int> levelToNbNeighbors;
   TLP_HASH_MAP<tlp::node, tlp::Coord> disp;
   TLP_HASH_MAP<tlp::node, tlp::Coord> oldDisp;
   TLP_HASH_MAP<tlp::node, double> heat;
   TLP_HASH_MAP<tlp::node, double> oldCos;
 
-  tlp::Graph * currentGraph;
+  tlp::Graph *currentGraph;
   int _dim;
 };
 /*@}*/

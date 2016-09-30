@@ -30,9 +30,10 @@ const Color COLOR_SELECT(255, 102, 255, 255);
 
 namespace pocore {
 
-TulipNodeColorMapping::TulipNodeColorMapping(Graph *graph) : graph(graph) {}
+TulipNodeColorMapping::TulipNodeColorMapping(Graph *graph) : graph(graph) {
+}
 
-RGBA TulipNodeColorMapping::getColor(const double&, const unsigned int itemId) const {
+RGBA TulipNodeColorMapping::getColor(const double &, const unsigned int itemId) const {
   RGBA ret;
 
   if (graph->getProperty<BooleanProperty>("viewSelection")->getNodeValue(node(itemId))) {
@@ -40,8 +41,7 @@ RGBA TulipNodeColorMapping::getColor(const double&, const unsigned int itemId) c
     ret[1] = COLOR_SELECT.getG();
     ret[2] = COLOR_SELECT.getB();
     ret[3] = COLOR_SELECT.getA();
-  }
-  else {
+  } else {
     Color nodeColor = graph->getProperty<ColorProperty>("viewColor")->getNodeValue(node(itemId));
     ret[0] = nodeColor.getR();
     ret[1] = nodeColor.getG();
@@ -51,5 +51,4 @@ RGBA TulipNodeColorMapping::getColor(const double&, const unsigned int itemId) c
 
   return ret;
 }
-
 }

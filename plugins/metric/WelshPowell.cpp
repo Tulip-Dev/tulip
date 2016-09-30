@@ -26,7 +26,8 @@ class CompNodes {
 
 public:
   Graph *graph;
-  CompNodes(Graph *g) : graph(g) {}
+  CompNodes(Graph *g) : graph(g) {
+  }
 
   bool operator()(const node u, const node v) {
     unsigned int du = graph->deg(u), dv = graph->deg(v);
@@ -75,12 +76,12 @@ class WelshPowell : public DoubleAlgorithm {
   };
 
 public:
-  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005",
-                    "Nodes coloring measure,<br/>values assigned to adjacent "
-                    "nodes are always different.",
+  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005", "Nodes coloring measure,<br/>values assigned to adjacent "
+                                                                   "nodes are always different.",
                     "1.0", "Graph")
 
-  WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {}
+  WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  }
 
   bool run() {
     unsigned int nbNodes = graph->numberOfNodes();

@@ -44,7 +44,7 @@
 #include <climits>
 
 #define CURVE_TYPE "Curve Type"
-#define CURVE_TYPE_LIST                                                        \
+#define CURVE_TYPE_LIST                                                                                                                              \
   "QuadraticContinuous;QuadraticDiscrete;QuadraticDiagonalCross;\
 QuadraticStraightCross;QuadraticHorizontal;QuadraticVertical;CubicContinuous;CubicVertical;\
 CubicDiagonalCross;CubicVerticalDiagonalCross;CubicStraightCrossSource;CubicStraightCrossTarget"
@@ -92,17 +92,12 @@ static const char *curveTypeValues = "QuadraticContinuous <br>"
 class CurveEdges : public tlp::Algorithm {
 
 public:
-  PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015",
-                    "Computes quadratic or cubic bezier paths for edges", "1.0",
-                    "")
+  PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015", "Computes quadratic or cubic bezier paths for edges", "1.0", "")
 
-  CurveEdges(tlp::PluginContext *context)
-      : tlp::Algorithm(context), curveType(0), curveRoundness(0.5),
-        layout(NULL), bezierEdges(true) {
+  CurveEdges(tlp::PluginContext *context) : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(NULL), bezierEdges(true) {
     addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout");
     addInParameter<float>("curve roundness", paramHelp[1], "0.5");
-    addInParameter<tlp::StringCollection>(
-        "curve type", paramHelp[2], CURVE_TYPE_LIST, true, curveTypeValues);
+    addInParameter<tlp::StringCollection>("curve type", paramHelp[2], CURVE_TYPE_LIST, true, curveTypeValues);
     addInParameter<bool>("bezier edges", paramHelp[3], "true");
   }
 
@@ -118,8 +113,7 @@ public:
     tlp::Coord normal = tlp::Coord(dir[1], -dir[0]);
     normal *= factor;
 
-    if (curveType == CURVE_TYPE_CUBIC_VERTICAL ||
-        curveType == CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS ||
+    if (curveType == CURVE_TYPE_CUBIC_VERTICAL || curveType == CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS ||
         curveType == CURVE_TYPE_CUBIC_STRAIGHTCROSS_SOURCE) {
       dir = tlp::Coord(0, 0, 0);
     }
@@ -140,8 +134,7 @@ public:
     p2 *= -factor;
     p2 += tgtCoord;
 
-    if (curveType == CURVE_TYPE_CUBIC_DIAGONALCROSS ||
-        curveType == CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS) {
+    if (curveType == CURVE_TYPE_CUBIC_DIAGONALCROSS || curveType == CURVE_TYPE_CUBIC_VERTICAL_DIAGONALCROSS) {
       p2 -= normal;
     } else if (curveType != CURVE_TYPE_CUBIC_STRAIGHTCROSS_SOURCE) {
       p2 += normal;
@@ -162,8 +155,7 @@ public:
     float dx = std::abs(srcCoord[0] - tgtCoord[0]);
     float dy = std::abs(srcCoord[1] - tgtCoord[1]);
 
-    if (curveType == CURVE_TYPE_QUADRATIC_DISCRETE ||
-        curveType == CURVE_TYPE_QUADRATIC_DIAGONALCROSS) {
+    if (curveType == CURVE_TYPE_QUADRATIC_DISCRETE || curveType == CURVE_TYPE_QUADRATIC_DIAGONALCROSS) {
       if (dx < dy) {
         if (srcCoord[1] > tgtCoord[1]) {
           if (srcCoord[0] < tgtCoord[0]) {
@@ -342,8 +334,7 @@ public:
     }
 
     if (bezierEdges) {
-      tlp::IntegerProperty *viewShape =
-          graph->getProperty<tlp::IntegerProperty>("viewShape");
+      tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
       viewShape->setAllEdgeValue(tlp::EdgeShape::BezierCurve);
     }
 

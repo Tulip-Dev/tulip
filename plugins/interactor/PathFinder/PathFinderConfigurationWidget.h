@@ -31,12 +31,13 @@ class PathFinderConfigurationData;
 class QString;
 
 namespace tlp {
-class PathFinderConfigurationWidget: public QWidget {
+class PathFinderConfigurationWidget : public QWidget {
   Q_OBJECT
 
-  Ui::PathFinderConfigurationData* _ui;
+  Ui::PathFinderConfigurationData *_ui;
+
 public:
-  PathFinderConfigurationWidget(QWidget *parent=0);
+  PathFinderConfigurationWidget(QWidget *parent = 0);
   ~PathFinderConfigurationWidget();
 
   void addweightComboItem(const QString &s);
@@ -60,7 +61,6 @@ signals:
   void setPathsType(const QString &);
   void activateTolerance(bool);
   void setTolerance(int);
-
 };
 }
 #endif /* PATHFINDERCONFIGURATIONWIDGET_H_ */

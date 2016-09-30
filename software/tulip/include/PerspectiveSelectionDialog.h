@@ -30,14 +30,15 @@ class PerspectiveSelectionDialog;
 class PerspectiveSelectionDialog : public QDialog {
   Q_OBJECT
 
-  Ui::PerspectiveSelectionDialog* _ui;
+  Ui::PerspectiveSelectionDialog *_ui;
   QString _perspective;
+
 public:
   explicit PerspectiveSelectionDialog(QWidget *parent = 0);
   QString perspectiveName() const;
 
 protected slots:
-  void selectionChanged(const QModelIndex& a, const QModelIndex& b);
+  void selectionChanged(const QModelIndex &a, const QModelIndex &b);
 };
 
 #endif // PERSPECTIVESELECTIONDIALOG_H

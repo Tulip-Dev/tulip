@@ -58,10 +58,8 @@ class PythonScriptViewWidget : public QWidget {
   QAction *_loadModuleAction;
   QAction *_saveModuleAction;
 
-
-public :
-
-  PythonScriptViewWidget(PythonScriptView *view, QWidget *parent=nullptr);
+public:
+  PythonScriptViewWidget(PythonScriptView *view, QWidget *parent = nullptr);
   ~PythonScriptViewWidget();
   void showEvent(QShowEvent *);
   void resizeEvent(QResizeEvent *);
@@ -72,8 +70,8 @@ public :
   tlp::PythonEditorsTabWidget *getScriptsTabWidget() const;
   tlp::PythonEditorsTabWidget *getModulesTabWidget() const;
 
-  int addMainScriptEditor(const QString &fileName="");
-  int addModuleEditor(const QString &fileName="");
+  int addMainScriptEditor(const QString &fileName = "");
+  int addModuleEditor(const QString &fileName = "");
 
   int numberOfScriptEditors() const;
   int numberOfModulesEditors() const;
@@ -98,7 +96,7 @@ public :
 
   void setGraph(tlp::Graph *graph);
 
-  void indicateErrors(const QMap<QString, QVector<int> > &errorLines);
+  void indicateErrors(const QMap<QString, QVector<int>> &errorLines);
 
   void clearErrorIndicators();
 
@@ -111,18 +109,16 @@ public :
 
   bool useUndoFeature() const;
 
-public slots :
+public slots:
 
   void decreaseFontSize();
   void increaseFontSize();
   void resizeToolBars();
   void currentTabChanged(int index);
-  bool closeEditorTabRequested(tlp::PythonEditorsTabWidget* tabWidget,
-                               int index, bool mayCancel = false);
+  bool closeEditorTabRequested(tlp::PythonEditorsTabWidget *tabWidget, int index, bool mayCancel = false);
   void closeModuleTabRequested(int index);
   void closeScriptTabRequested(int index);
-  void scrollToEditorLine(const QUrl & link);
-
+  void scrollToEditorLine(const QUrl &link);
 };
 
 #endif /* PYTHONSCRIPTVIEWWIDGET_H_ */

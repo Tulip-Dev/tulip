@@ -20,8 +20,7 @@
 
 using namespace tlp;
 
-TulipWorkspace::TulipWorkspace(QWidget *parent)
-  : QWidget(parent) {
+TulipWorkspace::TulipWorkspace(QWidget *parent) : QWidget(parent) {
 }
 
 TulipWorkspace::~TulipWorkspace() {

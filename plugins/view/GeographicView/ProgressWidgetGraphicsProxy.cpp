@@ -47,7 +47,7 @@ void ProgressWidget::setProgress(int value, int max) {
   _ui->progressBar->setValue(value);
 }
 
-void ProgressWidget::showEvent(QShowEvent * event) {
+void ProgressWidget::showEvent(QShowEvent *event) {
   cancelClicked = false;
   QWidget::showEvent(event);
 }
@@ -60,7 +60,7 @@ ProgressWidgetGraphicsProxy::ProgressWidgetGraphicsProxy() : frameColor(Qt::gree
   progressWidget = new ProgressWidget();
   setWidget(progressWidget);
   setWindowFlags(Qt::Window);
-  setWindowFrameMargins(0,0,0,0);
+  setWindowFrameMargins(0, 0, 0, 0);
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
   setOpacity(0.8);
 #endif
@@ -76,7 +76,7 @@ void ProgressWidgetGraphicsProxy::setProgress(int value, int max) {
 
 const float offset = 10.;
 
-void ProgressWidgetGraphicsProxy::paintWindowFrame (QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *) {
+void ProgressWidgetGraphicsProxy::paintWindowFrame(QPainter *painter, const QStyleOptionGraphicsItem *, QWidget *) {
   QRectF widgetGeometry = windowFrameRect();
   QPainterPath path;
   path.addRect(widgetGeometry);

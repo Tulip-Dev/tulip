@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIP_PLANARITYTESTX_H
 #define TULIP_PLANARITYTESTX_H
 
@@ -34,7 +33,8 @@ namespace tlp {
 /**
  * @ingroup Checks
  * @brief performs tests to check zhether a graph is planar.
- * From wikipedia: "A planar graph is a graph that can be embedded in the plane, i.e., it can be drawn on the plane in such a way that its edges intersect only at their endpoints."
+ * From wikipedia: "A planar graph is a graph that can be embedded in the plane, i.e., it can be drawn on the plane in such a way that its edges
+ *intersect only at their endpoints."
  **/
 class TLP_SCOPE PlanarityTest : private Observable {
 public:
@@ -84,22 +84,21 @@ public:
   static std::list<edge> getObstructionsEdges(Graph *graph);
 
 private:
-  PlanarityTest() {}
-  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  void treatEvent(const Event&);
+  PlanarityTest() {
+  }
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  void treatEvent(const Event &);
   bool compute(Graph *graph);
 
   /**
    * @brief Singleton instance of this class.
    **/
-  static PlanarityTest * instance;
+  static PlanarityTest *instance;
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
-
 }
 #endif
 ///@endcond

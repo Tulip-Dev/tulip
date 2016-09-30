@@ -27,9 +27,10 @@
 
 using namespace tlp;
 
-PythonTabWidget::PythonTabWidget(QWidget *parent) : QTabWidget(parent), _drawGradient(false), _textColor(QColor(100, 100, 100)) {}
+PythonTabWidget::PythonTabWidget(QWidget *parent) : QTabWidget(parent), _drawGradient(false), _textColor(QColor(100, 100, 100)) {
+}
 
-void PythonTabWidget::paintEvent(QPaintEvent * event) {
+void PythonTabWidget::paintEvent(QPaintEvent *event) {
   QTabWidget::paintEvent(event);
   static QString pythonVersion(PythonInterpreter::getInstance()->getPythonVersionStr());
   QPainter painter(this);
@@ -46,10 +47,10 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
   int firstLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(30 * tabBar()->height() / 27.0);
   int secondLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
-  QRectF rect(width()-(firstLabelWidth+imageWidth+secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
-  QRect rect2(width()-(imageWidth+secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
-  QRectF rect3(width()-secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
-  painter.drawText(rect,  Qt::AlignCenter, "Powered by ");
-  painter.drawPixmap(rect2, FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, _textColor, 0.9).pixmap(QSize(32,32)));
-  painter.drawText(rect3,  Qt::AlignCenter, QString("Python ") + pythonVersion);
+  QRectF rect(width() - (firstLabelWidth + imageWidth + secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
+  QRect rect2(width() - (imageWidth + secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
+  QRectF rect3(width() - secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());
+  painter.drawText(rect, Qt::AlignCenter, "Powered by ");
+  painter.drawPixmap(rect2, FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, _textColor, 0.9).pixmap(QSize(32, 32)));
+  painter.drawText(rect3, Qt::AlignCenter, QString("Python ") + pythonVersion);
 }

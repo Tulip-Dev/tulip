@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef CLEARABLELINEEDIT_H
 #define CLEARABLELINEEDIT_H
 
@@ -26,13 +25,13 @@
 
 #include <tulip/tulipconf.h>
 
-
 class TLP_QT_SCOPE ClearableLineEdit : public QLineEdit {
-  static QPixmap* CLEAR_PIXMAP;
+  static QPixmap *CLEAR_PIXMAP;
 
   bool _clearButtonHovered;
   static void initPixmap();
   QRect pixmapRect();
+
 public:
   explicit ClearableLineEdit(QWidget *parent = nullptr);
 
@@ -40,9 +39,7 @@ protected:
   void paintEvent(QPaintEvent *);
   void mouseMoveEvent(QMouseEvent *);
   void mousePressEvent(QMouseEvent *);
-
 };
-
 
 #endif // CLEARABLELINEEDIT_H
 ///@endcond

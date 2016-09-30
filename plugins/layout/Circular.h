@@ -46,13 +46,13 @@
  * Daniel Archambault The University of British Columbia:
  * Email:  archam@cs.ubc.ca
  */
-class Circular:public tlp::LayoutAlgorithm {
+class Circular : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Circular","David Auber/ Daniel Archambault","25/11/2004",
+  PLUGININFORMATION("Circular", "David Auber/ Daniel Archambault", "25/11/2004",
                     "Implements a circular layout that takes node size into account.<br/>"
                     "It manages size of nodes and use a standard dfs for ordering nodes or search the maximum length cycle.",
-                    "1.1","Basic")
-  Circular(const tlp::PluginContext* context);
+                    "1.1", "Basic")
+  Circular(const tlp::PluginContext *context);
   bool run();
 };
 

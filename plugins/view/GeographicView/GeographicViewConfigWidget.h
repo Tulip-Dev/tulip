@@ -33,16 +33,10 @@ class GeographicViewConfigWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::GeographicViewConfigWidgetData* _ui;
+  Ui::GeographicViewConfigWidgetData *_ui;
 
-public :
-
-  enum PolyFileType {
-    None=-1,
-    Default=0,
-    CsvFile,
-    PolyFile
-  };
+public:
+  enum PolyFileType { None = -1, Default = 0, CsvFile, PolyFile };
 
   GeographicViewConfigWidget(QWidget *parent = 0);
   ~GeographicViewConfigWidget();
@@ -62,7 +56,7 @@ public :
 
   DataSet state() const;
 
-signals :
+signals:
 
   void mapToPolygonSignal();
 
@@ -76,11 +70,9 @@ public slots:
     emit mapToPolygonSignal();
   }
 
-protected :
-
+protected:
   PolyFileType _oldPolyFileType;
   std::string _oldFileLoaded;
-
 };
 }
 

@@ -50,7 +50,7 @@ public slots:
   void sendReport();
   void saveData();
   void setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &stackTrace);
-  void setPerspectiveData(const PerspectiveProcessInfos& infos);
+  void setPerspectiveData(const PerspectiveProcessInfos &infos);
 };
 
 #endif // TULIPPERSPECTIVECRASHHANDLER_H

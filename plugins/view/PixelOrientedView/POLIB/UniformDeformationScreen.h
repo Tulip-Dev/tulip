@@ -26,23 +26,23 @@
 namespace pocore {
 class UniformDeformationScreen : public ScreenFunction {
 public:
-  Vec2f  project (const Vec2f& ) const;
-  Vec2f  unproject (const Vec2f& ) const;
-  void   setTranslation (double x, double y);
-  void   getTranslation(double &x,double &y);
-  void   setZoom (double zoom);
-  double getZoom ();
-  UniformDeformationScreen ();
+  Vec2f project(const Vec2f &) const;
+  Vec2f unproject(const Vec2f &) const;
+  void setTranslation(double x, double y);
+  void getTranslation(double &x, double &y);
+  void setZoom(double zoom);
+  double getZoom();
+  UniformDeformationScreen();
+
 private:
   void updateMatrix();
+
 private:
   double _tx;
   double _ty;
   double _zoom;
   tlp::Matrix<double, 3> _mat;
   tlp::Matrix<double, 3> _invMat;
-
 };
 }
-#endif //UNIFORMDEFORMATIONSCREEN_H
-
+#endif // UNIFORMDEFORMATIONSCREEN_H

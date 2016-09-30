@@ -36,33 +36,31 @@
 using namespace std;
 using namespace tlp;
 
-enum ObjectType {SHADER, PROGRAM};
+enum ObjectType { SHADER, PROGRAM };
 
 static void getInfoLog(GLuint obj, ObjectType objectType, string &logStr) {
   GLint infoLogLength = 0;
-  GLint charsWritten  = 0;
+  GLint charsWritten = 0;
   GLchar *infoLog;
 
   if (objectType == SHADER) {
     glGetShaderiv(obj, GL_INFO_LOG_LENGTH, &infoLogLength);
-  }
-  else {
+  } else {
     glGetProgramiv(obj, GL_INFO_LOG_LENGTH, &infoLogLength);
   }
 
   if (infoLogLength > 1) {
-    infoLog = new GLchar[infoLogLength+1];
+    infoLog = new GLchar[infoLogLength + 1];
 
     if (objectType == SHADER) {
       glGetShaderInfoLog(obj, infoLogLength, &charsWritten, infoLog);
-    }
-    else {
+    } else {
       glGetProgramInfoLog(obj, infoLogLength, &charsWritten, infoLog);
     }
 
     infoLog[infoLogLength] = '\0';
     logStr = infoLog;
-    delete [] infoLog;
+    delete[] infoLog;
   }
 }
 
@@ -75,13 +73,13 @@ static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char 
     return;
   }
 
-  ifs.seekg (0, ios::end);
+  ifs.seekg(0, ios::end);
   unsigned int length = static_cast<unsigned int>(ifs.tellg());
-  ifs.seekg (0, ios::beg);
+  ifs.seekg(0, ios::beg);
 
-  *shader = new char[length+1];
+  *shader = new char[length + 1];
 
-  ifs.read ((char *)*shader,length);
+  ifs.read((char *)*shader, length);
   (*shader)[length] = '\0';
   ifs.close();
 }
@@ -89,12 +87,10 @@ static void readShaderSourceFile(const string &vertexShaderSourceFilePath, char 
 GlShader::GlShader(ShaderType shaderType) : shaderType(shaderType), shaderObjectId(0), shaderCompiled(false), anonymousCreation(false) {
   if (shaderType == Vertex) {
     shaderObjectId = glCreateShader(GL_VERTEX_SHADER);
-  }
-  else if (shaderType == Fragment) {
+  } else if (shaderType == Fragment) {
     shaderObjectId = glCreateShader(GL_FRAGMENT_SHADER);
   }
 }
-
 
 GlShader::~GlShader() {
   if (shaderObjectId != 0) {
@@ -116,12 +112,12 @@ void GlShader::compileFromSourceFile(const std::string &shaderSrcFilename) {
 
   if (shaderSrcCode) {
     compileShaderObject(shaderSrcCode);
-    delete [] shaderSrcCode;
+    delete[] shaderSrcCode;
   }
 }
 
 void GlShader::compileShaderObject(const char *shaderSrc) {
-  glShaderSource(shaderObjectId, 1,(const char **) &shaderSrc, nullptr);
+  glShaderSource(shaderObjectId, 1, (const char **)&shaderSrc, nullptr);
   glCompileShader(shaderObjectId);
   GLint compileStatus;
   glGetShaderiv(shaderObjectId, GL_COMPILE_STATUS, &compileStatus);
@@ -131,8 +127,7 @@ void GlShader::compileShaderObject(const char *shaderSrc) {
 
 GlShaderProgram *GlShaderProgram::currentActiveShaderProgram(nullptr);
 
-GlShaderProgram::GlShaderProgram(const std::string &name) :
-  programName(name), programObjectId(0), programLinked(false) {
+GlShaderProgram::GlShaderProgram(const std::string &name) : programName(name), programObjectId(0), programLinked(false) {
   programObjectId = glCreateProgram();
 }
 
@@ -146,7 +141,6 @@ void GlShaderProgram::addShaderFromSourceCode(const GlShader::ShaderType shaderT
   shader->setAnonymousCreation(true);
   shader->compileFromSourceCode(shaderSrc);
   addShader(shader);
-
 }
 
 void GlShaderProgram::addShaderFromSourceCode(const GlShader::ShaderType shaderType, const std::string &shaderSrc) {
@@ -154,7 +148,6 @@ void GlShaderProgram::addShaderFromSourceCode(const GlShader::ShaderType shaderT
   shader->setAnonymousCreation(true);
   shader->compileFromSourceCode(shaderSrc);
   addShader(shader);
-
 }
 
 void GlShaderProgram::addShaderFromSourceFile(const GlShader::ShaderType shaderType, const std::string &shaderSrcFilename) {
@@ -186,7 +179,7 @@ void GlShaderProgram::removeShader(GlShader *shader) {
 }
 
 void GlShaderProgram::removeAllShaders() {
-  for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+  for (size_t i = 0; i < attachedShaders.size(); ++i) {
     removeShader(attachedShaders[i]);
 
     if (attachedShaders[i]->anonymouslyCreated()) {
@@ -198,7 +191,7 @@ void GlShaderProgram::removeAllShaders() {
 void GlShaderProgram::link() {
   bool allShaderCompiled = true;
 
-  for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+  for (size_t i = 0; i < attachedShaders.size(); ++i) {
     if (!attachedShaders[i]->isCompiled()) {
       allShaderCompiled = false;
     }
@@ -214,7 +207,7 @@ void GlShaderProgram::link() {
 }
 
 void GlShaderProgram::printInfoLog() {
-  for (size_t i = 0 ; i < attachedShaders.size() ; ++i) {
+  for (size_t i = 0; i < attachedShaders.size(); ++i) {
     string shaderCompilationlog = attachedShaders[i]->getCompilationLog();
 
     if (shaderCompilationlog != "") {
@@ -223,7 +216,7 @@ void GlShaderProgram::printInfoLog() {
   }
 
   if (programLinkLog != "") {
-    tlp::debug() <<  programLinkLog << endl;
+    tlp::debug() << programLinkLog << endl;
   }
 }
 
@@ -264,7 +257,7 @@ void GlShaderProgram::setUniformFloat(const std::string &variableName, const flo
 }
 
 void GlShaderProgram::setUniformVec2Float(const std::string &variableName, const Vec2f &vec2f) {
-  setUniformVec2FloatArray(variableName, 1, (float *) &vec2f);
+  setUniformVec2FloatArray(variableName, 1, (float *)&vec2f);
 }
 
 void GlShaderProgram::setUniformVec2Float(const std::string &variableName, const float f1, const float f2) {
@@ -273,7 +266,7 @@ void GlShaderProgram::setUniformVec2Float(const std::string &variableName, const
 }
 
 void GlShaderProgram::setUniformVec3Float(const std::string &variableName, const Vec3f &vec3f) {
-  setUniformVec3FloatArray(variableName, 1, (float *) &vec3f);
+  setUniformVec3FloatArray(variableName, 1, (float *)&vec3f);
 }
 
 void GlShaderProgram::setUniformVec3Float(const std::string &variableName, const float f1, const float f2, const float f3) {
@@ -282,7 +275,7 @@ void GlShaderProgram::setUniformVec3Float(const std::string &variableName, const
 }
 
 void GlShaderProgram::setUniformVec4Float(const std::string &variableName, const Vec4f &vec4f) {
-  setUniformVec4FloatArray(variableName, 1, (float *) &vec4f);
+  setUniformVec4FloatArray(variableName, 1, (float *)&vec4f);
 }
 
 void GlShaderProgram::setUniformVec4Float(const std::string &variableName, const float f1, const float f2, const float f3, const float f4) {
@@ -290,12 +283,11 @@ void GlShaderProgram::setUniformVec4Float(const std::string &variableName, const
   glUniform4f(loc, f1, f2, f3, f4);
 }
 
-template <unsigned int SIZE>
-float *getMatrixData(const Matrix<float, SIZE> &matrix) {
-  float *matrixData = new float[SIZE*SIZE];
+template <unsigned int SIZE> float *getMatrixData(const Matrix<float, SIZE> &matrix) {
+  float *matrixData = new float[SIZE * SIZE];
 
-  for (unsigned int i = 0 ; i < SIZE ; ++i) {
-    for (unsigned int j = 0 ; j < SIZE ; ++j) {
+  for (unsigned int i = 0; i < SIZE; ++i) {
+    for (unsigned int j = 0; j < SIZE; ++j) {
       matrixData[i * SIZE + j] = matrix[i][j];
     }
   }
@@ -306,7 +298,7 @@ float *getMatrixData(const Matrix<float, SIZE> &matrix) {
 void GlShaderProgram::setUniformMat2Float(const std::string &variableName, const Mat2f &mat2f, const bool transpose) {
   float *matrixData = getMatrixData(mat2f);
   setUniformMat2Float(variableName, matrixData, transpose);
-  delete [] matrixData;
+  delete[] matrixData;
 }
 
 void GlShaderProgram::setUniformMat2Float(const std::string &variableName, const float *f, const bool transpose) {
@@ -316,7 +308,7 @@ void GlShaderProgram::setUniformMat2Float(const std::string &variableName, const
 void GlShaderProgram::setUniformMat3Float(const std::string &variableName, const Mat3f &mat3f, const bool transpose) {
   float *matrixData = getMatrixData(mat3f);
   setUniformMat3Float(variableName, matrixData, transpose);
-  delete [] matrixData;
+  delete[] matrixData;
 }
 
 void GlShaderProgram::setUniformMat3Float(const std::string &variableName, const float *f, const bool transpose) {
@@ -326,7 +318,7 @@ void GlShaderProgram::setUniformMat3Float(const std::string &variableName, const
 void GlShaderProgram::setUniformMat4Float(const std::string &variableName, const Mat4f &mat4f, const bool transpose) {
   float *matrixData = getMatrixData(mat4f);
   setUniformMat4Float(variableName, matrixData, transpose);
-  delete [] matrixData;
+  delete[] matrixData;
 }
 
 void GlShaderProgram::setUniformMat4Float(const std::string &variableName, const float *f, const bool transpose) {
@@ -339,7 +331,7 @@ void GlShaderProgram::setUniformInt(const std::string &variableName, const int i
 }
 
 void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const Vec2i &vec2i) {
-  setUniformVec2IntArray(variableName, 1, (int *) &vec2i);
+  setUniformVec2IntArray(variableName, 1, (int *)&vec2i);
 }
 
 void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const int i1, const int i2) {
@@ -348,7 +340,7 @@ void GlShaderProgram::setUniformVec2Int(const std::string &variableName, const i
 }
 
 void GlShaderProgram::setUniformVec3Int(const std::string &variableName, const Vec3i &vec3i) {
-  setUniformVec3IntArray(variableName, 1, (int *) &vec3i);
+  setUniformVec3IntArray(variableName, 1, (int *)&vec3i);
 }
 
 void GlShaderProgram::setUniformVec3Int(const std::string &variableName, const int i1, const int i2, const int i3) {
@@ -357,7 +349,7 @@ void GlShaderProgram::setUniformVec3Int(const std::string &variableName, const i
 }
 
 void GlShaderProgram::setUniformVec4Int(const std::string &variableName, const Vec4i &vec4i) {
-  setUniformVec4IntArray(variableName, 1, (int *) &vec4i);
+  setUniformVec4IntArray(variableName, 1, (int *)&vec4i);
 }
 
 void GlShaderProgram::setUniformVec4Int(const std::string &variableName, const int i1, const int i2, const int i3, const int i4) {
@@ -371,7 +363,7 @@ void GlShaderProgram::setUniformBool(const std::string &variableName, const bool
 }
 
 void GlShaderProgram::setUniformVec2Bool(const std::string &variableName, const Array<bool, 2> &vec2b) {
-  setUniformVec2IntArray(variableName, 1, (int *) &vec2b);
+  setUniformVec2IntArray(variableName, 1, (int *)&vec2b);
 }
 
 void GlShaderProgram::setUniformVec2Bool(const std::string &variableName, const bool b1, const bool b2) {
@@ -380,7 +372,7 @@ void GlShaderProgram::setUniformVec2Bool(const std::string &variableName, const 
 }
 
 void GlShaderProgram::setUniformVec3Bool(const std::string &variableName, const Array<bool, 3> &vec3b) {
-  setUniformVec3IntArray(variableName, 1, (int *) &vec3b);
+  setUniformVec3IntArray(variableName, 1, (int *)&vec3b);
 }
 
 void GlShaderProgram::setUniformVec3Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3) {
@@ -389,7 +381,7 @@ void GlShaderProgram::setUniformVec3Bool(const std::string &variableName, const 
 }
 
 void GlShaderProgram::setUniformVec4Bool(const std::string &variableName, const Array<bool, 4> &vec4b) {
-  setUniformVec4IntArray(variableName, 1, (int *) &vec4b);
+  setUniformVec4IntArray(variableName, 1, (int *)&vec4b);
 }
 
 void GlShaderProgram::setUniformVec4Bool(const std::string &variableName, const bool b1, const bool b2, const bool b3, const bool b4) {
@@ -443,17 +435,16 @@ void GlShaderProgram::setUniformTextureSampler(const std::string &samplerVariabl
 void GlShaderProgram::setUniformColor(const std::string &variableName, const Color &color) {
   float *glColor = color.getGL();
   setUniformVec4Float(variableName, glColor[0], glColor[1], glColor[2], glColor[3]);
-  delete [] glColor;
+  delete[] glColor;
 }
 
 void GlShaderProgram::setAttributeColor(const std::string &variableName, const Color &color) {
   float *glColor = color.getGL();
   setAttributeVec4Float(variableName, glColor[0], glColor[1], glColor[2], glColor[3]);
-  delete [] glColor;
+  delete[] glColor;
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformFloatArray(const std::string &variableName, const Vector<float, SIZE> &vecf) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformFloatArray(const std::string &variableName, const Vector<float, SIZE> &vecf) {
   setUniformFloatArray(variableName, SIZE, (float *)vecf);
 }
 
@@ -462,12 +453,11 @@ void GlShaderProgram::setUniformFloatArray(const std::string &variableName, cons
   glUniform1fv(loc, fCount, f);
 }
 
-template <typename T, unsigned int SIZE, unsigned int SIZE2>
-T *getVectorOfVectorData(const Array<Vector<T, SIZE>, SIZE2> &vv) {
-  T *vvData = new T[SIZE*SIZE2];
+template <typename T, unsigned int SIZE, unsigned int SIZE2> T *getVectorOfVectorData(const Array<Vector<T, SIZE>, SIZE2> &vv) {
+  T *vvData = new T[SIZE * SIZE2];
 
-  for (unsigned int i = 0 ; i < SIZE2 ; ++i) {
-    for (unsigned int j = 0 ; j < SIZE ; ++j) {
+  for (unsigned int i = 0; i < SIZE2; ++i) {
+    for (unsigned int j = 0; j < SIZE; ++j) {
       vvData[i * SIZE + j] = vv[i][j];
     }
   }
@@ -475,11 +465,10 @@ T *getVectorOfVectorData(const Array<Vector<T, SIZE>, SIZE2> &vv) {
   return vvData;
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec2FloatArray(const std::string &variableName, const Array<Vec2f, SIZE> &vecvec2f) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformVec2FloatArray(const std::string &variableName, const Array<Vec2f, SIZE> &vecvec2f) {
   float *vvData = getVectorOfVectorData(vecvec2f);
   setUniformVec2FloatArray(variableName, SIZE, vvData);
-  delete [] vvData;
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec2FloatArray(const std::string &variableName, const unsigned int vec2fCount, const float *f) {
@@ -487,11 +476,10 @@ void GlShaderProgram::setUniformVec2FloatArray(const std::string &variableName, 
   glUniform2fv(loc, vec2fCount, f);
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec3FloatArray(const std::string &variableName, const Array<Vec3f, SIZE> &vecvec3f) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformVec3FloatArray(const std::string &variableName, const Array<Vec3f, SIZE> &vecvec3f) {
   float *vvData = getVectorOfVectorData(vecvec3f);
   setUniformVec3FloatArray(variableName, SIZE, vvData);
-  delete [] vvData;
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec3FloatArray(const std::string &variableName, const unsigned int vec3fCount, const float *f) {
@@ -499,11 +487,10 @@ void GlShaderProgram::setUniformVec3FloatArray(const std::string &variableName, 
   glUniform3fv(loc, vec3fCount, f);
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec4FloatArray(const std::string &variableName, const Array<Vec4f, SIZE> &vecvec4f) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformVec4FloatArray(const std::string &variableName, const Array<Vec4f, SIZE> &vecvec4f) {
   float *vvData = getVectorOfVectorData(vecvec4f);
   setUniformVec4FloatArray(variableName, SIZE, vvData);
-  delete [] vvData;
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec4FloatArray(const std::string &variableName, const unsigned int vec4fCount, const float *f) {
@@ -511,13 +498,12 @@ void GlShaderProgram::setUniformVec4FloatArray(const std::string &variableName, 
   glUniform4fv(loc, vec4fCount, f);
 }
 
-template <unsigned int SIZE, unsigned int SIZE2>
-float *getVectorOfMatrixData(const Vector<Matrix<float, SIZE>, SIZE2> &vm) {
-  float *vmData = new float[SIZE*SIZE*SIZE2];
+template <unsigned int SIZE, unsigned int SIZE2> float *getVectorOfMatrixData(const Vector<Matrix<float, SIZE>, SIZE2> &vm) {
+  float *vmData = new float[SIZE * SIZE * SIZE2];
 
-  for (unsigned int i = 0 ; i < SIZE2 ; ++i) {
-    for (unsigned int j = 0 ; j < SIZE ; ++j) {
-      for (unsigned int k = 0 ; k < SIZE ; ++k) {
+  for (unsigned int i = 0; i < SIZE2; ++i) {
+    for (unsigned int j = 0; j < SIZE; ++j) {
+      for (unsigned int k = 0; k < SIZE; ++k) {
         vmData[i * (SIZE * SIZE) + j * SIZE + k] = vm[i][j][k];
       }
     }
@@ -530,7 +516,7 @@ template <unsigned int SIZE>
 void GlShaderProgram::setUniformMat2FloatArray(const std::string &variableName, const Vector<Mat2f, SIZE> &vecmat2f, const bool transpose) {
   float *vmData = getVectorOfMatrixData(vecmat2f);
   setUniformMat2FloatArray(variableName, SIZE, vmData, transpose);
-  delete [] vmData;
+  delete[] vmData;
 }
 
 void GlShaderProgram::setUniformMat2FloatArray(const std::string &variableName, const unsigned int mat2fCount, const float *f, const bool transpose) {
@@ -543,7 +529,7 @@ template <unsigned int SIZE>
 void GlShaderProgram::setUniformMat3FloatArray(const std::string &variableName, const Vector<Mat3f, SIZE> &vecmat3f, const bool transpose) {
   float *vmData = getVectorOfMatrixData(vecmat3f);
   setUniformMat3FloatArray(variableName, SIZE, vmData, transpose);
-  delete [] vmData;
+  delete[] vmData;
 }
 
 void GlShaderProgram::setUniformMat3FloatArray(const std::string &variableName, const unsigned int mat3fCount, const float *f, const bool transpose) {
@@ -556,7 +542,7 @@ template <unsigned int SIZE>
 void GlShaderProgram::setUniformMat4FloatArray(const std::string &variableName, const Vector<Mat4f, SIZE> &vecmat4f, const bool transpose) {
   float *vmData = getVectorOfMatrixData(vecmat4f);
   setUniformMat4FloatArray(variableName, SIZE, vmData, transpose);
-  delete [] vmData;
+  delete[] vmData;
 }
 
 void GlShaderProgram::setUniformMat4FloatArray(const std::string &variableName, const unsigned int mat4fCount, const float *f, const bool transpose) {
@@ -565,93 +551,87 @@ void GlShaderProgram::setUniformMat4FloatArray(const std::string &variableName, 
   glUniformMatrix4fv(loc, mat4fCount, transposeGL, f);
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformIntArray(const std::string &variableName, const Vector<int, SIZE> &veci) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformIntArray(const std::string &variableName, const Vector<int, SIZE> &veci) {
   setUniformIntArray(variableName, SIZE, (int *)&veci);
 }
 
 void GlShaderProgram::setUniformIntArray(const std::string &variableName, const unsigned int iCount, const int *i) {
   GLint loc = getUniformVariableLocation(variableName);
-  glUniform1iv(loc, iCount, (const GLint*)i);
+  glUniform1iv(loc, iCount, (const GLint *)i);
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec2IntArray(const std::string &variableName, const Array<Vec2i, SIZE> &vecvec2i) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformVec2IntArray(const std::string &variableName, const Array<Vec2i, SIZE> &vecvec2i) {
   int *vvData = getVectorOfVectorData(vecvec2i);
   setUniformVec2IntArray(variableName, SIZE, vvData);
-  delete [] vvData;
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec2IntArray(const std::string &variableName, const unsigned int vec2iCount, const int *i) {
   GLint loc = getUniformVariableLocation(variableName);
-  glUniform2iv(loc, vec2iCount,(const GLint*)i);
+  glUniform2iv(loc, vec2iCount, (const GLint *)i);
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec3IntArray(const std::string &variableName, const Array<Vec3i, SIZE> &vecvec3i) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformVec3IntArray(const std::string &variableName, const Array<Vec3i, SIZE> &vecvec3i) {
   int *vvData = getVectorOfVectorData(vecvec3i);
   setUniformVec3IntArray(variableName, SIZE, vvData);
-  delete [] vvData;
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec3IntArray(const std::string &variableName, const unsigned int vec3iCount, const int *i) {
   GLint loc = getUniformVariableLocation(variableName);
-  glUniform3iv(loc, vec3iCount, (const GLint*)i);
+  glUniform3iv(loc, vec3iCount, (const GLint *)i);
 }
 
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformVec4IntArray(const std::string &variableName, const Array<Vec4i, SIZE> &vecvec4i) {
+template <unsigned int SIZE> void GlShaderProgram::setUniformVec4IntArray(const std::string &variableName, const Array<Vec4i, SIZE> &vecvec4i) {
   int *vvData = getVectorOfVectorData(vecvec4i);
   setUniformVec4IntArray(variableName, SIZE, vvData);
-  delete [] vvData;
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec4IntArray(const std::string &variableName, const unsigned int vec4iCount, const int *i) {
   GLint loc = getUniformVariableLocation(variableName);
-  glUniform4iv(loc, vec4iCount, (const GLint*)i);
+  glUniform4iv(loc, vec4iCount, (const GLint *)i);
 }
 
-
-template <unsigned int SIZE>
-void GlShaderProgram::setUniformBoolArray(const std::string &variableName, const Array<bool, SIZE> &vecb) {
-  setUniformIntArray(variableName, SIZE, (int *) &vecb);
+template <unsigned int SIZE> void GlShaderProgram::setUniformBoolArray(const std::string &variableName, const Array<bool, SIZE> &vecb) {
+  setUniformIntArray(variableName, SIZE, (int *)&vecb);
 }
 
 void GlShaderProgram::setUniformBoolArray(const std::string &variableName, const unsigned int bCount, const bool *b) {
-  setUniformIntArray(variableName, bCount, (int *) b);
+  setUniformIntArray(variableName, bCount, (int *)b);
 }
 
 template <unsigned int SIZE>
 void GlShaderProgram::setUniformVec2BoolArray(const std::string &variableName, const Array<Array<bool, 2>, SIZE> &vecvec2b) {
   bool *vvData = getVectorOfVectorData(vecvec2b);
-  setUniformVec2IntArray(variableName, SIZE, (int *) vvData);
-  delete [] vvData;
+  setUniformVec2IntArray(variableName, SIZE, (int *)vvData);
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec2BoolArray(const std::string &variableName, const unsigned int vec2bCount, const bool *b) {
-  setUniformVec2IntArray(variableName, vec2bCount, (int *) b);
+  setUniformVec2IntArray(variableName, vec2bCount, (int *)b);
 }
 
 template <unsigned int SIZE>
 void GlShaderProgram::setUniformVec3BoolArray(const std::string &variableName, const Array<Array<bool, 3>, SIZE> &vecvec3b) {
   bool *vvData = getVectorOfVectorData(vecvec3b);
-  setUniformVec3IntArray(variableName, SIZE, (int *) vvData);
-  delete [] vvData;
+  setUniformVec3IntArray(variableName, SIZE, (int *)vvData);
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec3BoolArray(const std::string &variableName, const unsigned int vec3bCount, const bool *b) {
-  setUniformVec3IntArray(variableName, vec3bCount, (int *) b);
+  setUniformVec3IntArray(variableName, vec3bCount, (int *)b);
 }
 
 template <unsigned int SIZE>
 void GlShaderProgram::setUniformVec4BoolArray(const std::string &variableName, const Array<Array<bool, 4>, SIZE> &vecvec4b) {
   bool *vvData = getVectorOfVectorData(vecvec4b);
-  setUniformVec4IntArray(variableName, SIZE, (int *) vvData);
-  delete [] vvData;
+  setUniformVec4IntArray(variableName, SIZE, (int *)vvData);
+  delete[] vvData;
 }
 
 void GlShaderProgram::setUniformVec4BoolArray(const std::string &variableName, const unsigned int vec4bCount, const bool *b) {
-  setUniformVec4IntArray(variableName, vec4bCount, (int *) b);
+  setUniformVec4IntArray(variableName, vec4bCount, (int *)b);
 }
 
 void GlShaderProgram::getUniformFloatVariableValue(const std::string &variableName, float *value) {
@@ -674,7 +654,7 @@ void GlShaderProgram::getUniformVec2BoolVariableValue(const std::string &variabl
   int valueInt[2];
   getUniformIntVariableValue(variableName, valueInt);
 
-  for (unsigned int i = 0 ; i < 2 ; ++i) {
+  for (unsigned int i = 0; i < 2; ++i) {
     value[i] = (valueInt[i] > 0);
   }
 }
@@ -683,7 +663,7 @@ void GlShaderProgram::getUniformVec3BoolVariableValue(const std::string &variabl
   int valueInt[3];
   getUniformIntVariableValue(variableName, valueInt);
 
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     value[i] = (valueInt[i] > 0);
   }
 }
@@ -692,7 +672,7 @@ void GlShaderProgram::getUniformVec4BoolVariableValue(const std::string &variabl
   int valueInt[4];
   getUniformIntVariableValue(variableName, valueInt);
 
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
+  for (unsigned int i = 0; i < 4; ++i) {
     value[i] = (valueInt[i] > 0);
   }
 }
@@ -707,7 +687,8 @@ static bool hardwareInstancingSupported() {
 #endif
 }
 
-void GlShaderProgram::setVertexAttribPointer(const std::string &variableName, GLint size, GLenum type, GLboolean normalized, GLsizei stride,  const GLvoid * pointer, unsigned int divisor) {
+void GlShaderProgram::setVertexAttribPointer(const std::string &variableName, GLint size, GLenum type, GLboolean normalized, GLsizei stride,
+                                             const GLvoid *pointer, unsigned int divisor) {
   GLint attributeIndex = getAttributeVariableLocation(variableName);
   if (attributeIndex >= 0) {
     activeAttributesArrays.push_back(attributeIndex);
@@ -720,7 +701,7 @@ void GlShaderProgram::setVertexAttribPointer(const std::string &variableName, GL
 }
 
 void GlShaderProgram::disableAttributesArrays() {
-  for (size_t i = 0 ; i < activeAttributesArrays.size() ; ++i) {
+  for (size_t i = 0; i < activeAttributesArrays.size(); ++i) {
     if (hardwareInstancingSupported()) {
       glVertexAttribDivisorARB(activeAttributesArrays[i], 0);
     }
@@ -728,4 +709,3 @@ void GlShaderProgram::disableAttributesArrays() {
   }
   activeAttributesArrays.clear();
 }
-

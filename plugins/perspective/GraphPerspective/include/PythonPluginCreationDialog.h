@@ -26,14 +26,12 @@ namespace Ui {
 class PythonPluginCreationDialog;
 }
 
-class PythonPluginCreationDialog : public QDialog  {
+class PythonPluginCreationDialog : public QDialog {
 
   Q_OBJECT
   Ui::PythonPluginCreationDialog *_ui;
 
-
 public:
-
   PythonPluginCreationDialog(QWidget *parent = 0);
   ~PythonPluginCreationDialog();
   QString getPluginFileName() const;
@@ -59,7 +57,6 @@ protected slots:
   void validateForm();
 
   void selectPluginSourceFile();
-
 };
 
 #endif /* PLUGINCREATIONDIALOG_H_ */

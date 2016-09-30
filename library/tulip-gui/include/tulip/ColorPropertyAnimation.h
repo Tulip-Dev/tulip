@@ -27,7 +27,6 @@
 namespace tlp {
 
 typedef VectorPropertyAnimation<tlp::ColorProperty, tlp::Color, unsigned char, 4> ColorPropertyAnimation;
-
 }
 
 #endif /* COLORPROPERTYANIMATION_H_ */

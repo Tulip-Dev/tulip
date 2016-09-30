@@ -37,15 +37,14 @@ public:
   GradientManager();
   virtual ~GradientManager();
 
-  void init(const std::vector<std::string>& properties);
+  void init(const std::vector<std::string> &properties);
 
-  tlp::ColorScale* getColorScale(const std::string& propertyName);
+  tlp::ColorScale *getColorScale(const std::string &propertyName);
 
 protected:
-
   void cleanAllGradients();
 
-  std::map<std::string, tlp::ColorScale*> colorScaleMap;
+  std::map<std::string, tlp::ColorScale *> colorScaleMap;
   int beginColorRange;
   int endColorRange;
   int minSVal;

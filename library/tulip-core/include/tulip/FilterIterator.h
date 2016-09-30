@@ -40,12 +40,9 @@ namespace tlp {
 * };
 * @endcode
 **/
-template <typename TYPE, typename FILTER>
-class FilterIterator : public Iterator<TYPE> {
+template <typename TYPE, typename FILTER> class FilterIterator : public Iterator<TYPE> {
 public:
-  FilterIterator(Iterator<TYPE> *it, FILTER filter):
-    _it(it),
-    _filter(filter) {
+  FilterIterator(Iterator<TYPE> *it, FILTER filter) : _it(it), _filter(filter) {
     update();
   }
   ~FilterIterator() {
@@ -76,16 +73,15 @@ private:
 
   bool _hasNext;
   Iterator<TYPE> *_it;
-  TYPE   _curVal;
+  TYPE _curVal;
   FILTER _filter;
   size_t _nbele;
 };
 
 template <typename TYPE, typename FILTER>
-class MPFilterIterator : public FilterIterator<TYPE, FILTER>, public MemoryPool<MPFilterIterator<TYPE, FILTER> > {
+class MPFilterIterator : public FilterIterator<TYPE, FILTER>, public MemoryPool<MPFilterIterator<TYPE, FILTER>> {
 public:
-  MPFilterIterator(Iterator<TYPE> *it, FILTER filter):
-    FilterIterator<TYPE, FILTER>(it, filter) {
+  MPFilterIterator(Iterator<TYPE> *it, FILTER filter) : FilterIterator<TYPE, FILTER>(it, filter) {
   }
 };
 
@@ -100,11 +96,9 @@ public:
 * @param filter the functor or lambda function that enables to test whether or not an element is filtered
 * @return a FilterIterator
 **/
-template <typename TYPE, typename FILTER>
-inline FilterIterator<TYPE, FILTER> *filterIterator(Iterator<TYPE> *it, FILTER filter) {
+template <typename TYPE, typename FILTER> inline FilterIterator<TYPE, FILTER> *filterIterator(Iterator<TYPE> *it, FILTER filter) {
   return new MPFilterIterator<TYPE, FILTER>(it, filter);
 }
-
 }
 #endif // FILTERITERATOR_H
 ///@endcond

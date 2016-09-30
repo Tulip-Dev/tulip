@@ -20,7 +20,6 @@
 #ifndef FILTERSMANAGERITEM_H
 #define FILTERSMANAGERITEM_H
 
-
 #include <QFrame>
 #include <tulip/WithParameter.h>
 
@@ -38,20 +37,15 @@ class PropertyInterface;
 class QTableView;
 class QComboBox;
 
-class FiltersManagerItem: public QFrame {
+class FiltersManagerItem : public QFrame {
   Q_OBJECT
   Ui::FiltersManagerItem *_ui;
 
   Q_ENUMS(Mode)
 public:
-  enum Mode {
-    Invert,
-    Compare,
-    Algorithm,
-    Invalid
-  };
+  enum Mode { Invert, Compare, Algorithm, Invalid };
 
-  explicit FiltersManagerItem(QWidget *parent=nullptr);
+  explicit FiltersManagerItem(QWidget *parent = nullptr);
   virtual ~FiltersManagerItem();
 
 signals:
@@ -59,7 +53,7 @@ signals:
   void modeChanged(FiltersManagerItem::Mode);
 
 public slots:
-  void applyFilter(tlp::BooleanProperty*);
+  void applyFilter(tlp::BooleanProperty *);
 
 protected slots:
   void setCompareMode();
@@ -70,7 +64,7 @@ protected slots:
   void addButtonClicked();
   void dataBoxTitleChanged();
 
-  void graphChanged(tlp::Graph*);
+  void graphChanged(tlp::Graph *);
 };
 
 #endif // FILTERSMANAGERITEM_H

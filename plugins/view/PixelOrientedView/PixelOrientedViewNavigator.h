@@ -29,23 +29,19 @@ namespace tlp {
 
 class PixelOrientedViewNavigator : public GLInteractorComponent {
 
-public :
-
+public:
   PixelOrientedViewNavigator();
   ~PixelOrientedViewNavigator();
 
   bool eventFilter(QObject *, QEvent *);
   void viewChanged(View *view);
 
-private :
-
+private:
   PixelOrientedOverview *getOverviewUnderPointer(Coord &sceneCoord);
 
   PixelOrientedView *pixelView;
   PixelOrientedOverview *selectedOverview;
-
 };
-
 }
 
 #endif /* PIXELORIENTEDOVERVIEWSELECTOR_H_ */

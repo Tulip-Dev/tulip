@@ -35,14 +35,13 @@ using namespace tlp;
 class DiamondGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Diamond", "2D - Diamond extremity", "Antoine Lambert", "20/05/2016", "Diamond", "1.0", tlp::NodeShape::Diamond)
 
   DiamondGlyph(PluginContext *context) : Glyph(context) {
     _vertices = computeRegularPolygon(4);
     _indices = {0, 1, 3, 1, 2, 3};
     vector<unsigned short> outlineIndices;
-    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()) ; ++i) {
+    for (unsigned short i = 0; i < ushort_cast(_vertices.size()); ++i) {
       outlineIndices.push_back(i);
     }
     outlineIndices.push_back(0);
@@ -55,16 +54,15 @@ public:
   }
 
 protected:
-
   Coord getAnchor(const Coord &vector) const {
     Coord v(vector);
     float x, y, z;
     v.get(x, y, z);
     // initialize anchor as top corner
     Coord anchor(0, 0.5, 0);
-    float distMin = x*x + ((y - 0.5) * (y - 0.5));
+    float distMin = x * x + ((y - 0.5) * (y - 0.5));
     // check with the right corner
-    float dist = ((x - 0.5) * (x - 0.5)) + y*y;
+    float dist = ((x - 0.5) * (x - 0.5)) + y * y;
 
     if (distMin > dist) {
       distMin = dist;
@@ -72,7 +70,7 @@ protected:
     }
 
     // check with the bottom corner
-    dist = x*x + ((y + 0.5)*(y + 0.5));
+    dist = x * x + ((y + 0.5) * (y + 0.5));
 
     if (distMin > dist) {
       distMin = dist;
@@ -80,12 +78,11 @@ protected:
     }
 
     // check with left corner
-    if (distMin > ((x + 0.5) * (x + 0.5)) + y*y)
+    if (distMin > ((x + 0.5) * (x + 0.5)) + y * y)
       return Coord(-0.5, 0, 0);
 
     return anchor;
   }
-
 };
 
 PLUGIN(DiamondGlyph)

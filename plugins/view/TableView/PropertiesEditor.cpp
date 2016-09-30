@@ -45,10 +45,12 @@ Q_DECLARE_METATYPE(Qt::CheckState)
 
 using namespace tlp;
 
-PropertiesEditor::PropertiesEditor(QWidget *parent): QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr), _delegate(new tlp::TulipItemDelegate), _sourceModel(nullptr), filteringProperties(false), editorParent(parent) {
+PropertiesEditor::PropertiesEditor(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::PropertiesEditor), _contextProperty(nullptr), _graph(nullptr), _delegate(new tlp::TulipItemDelegate),
+      _sourceModel(nullptr), filteringProperties(false), editorParent(parent) {
   _ui->setupUi(this);
   _ui->newButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, Qt::black));
-  connect(_ui->newButton,SIGNAL(clicked()),this,SLOT(newProperty()));
+  connect(_ui->newButton, SIGNAL(clicked()), this, SLOT(newProperty()));
 }
 
 PropertiesEditor::~PropertiesEditor() {
@@ -57,41 +59,39 @@ PropertiesEditor::~PropertiesEditor() {
 }
 
 void PropertiesEditor::setGraph(tlp::Graph *g) {
-  _graph=g;
-  QSortFilterProxyModel* model = new QSortFilterProxyModel(_ui->tableView);
+  _graph = g;
+  QSortFilterProxyModel *model = new QSortFilterProxyModel(_ui->tableView);
   delete _sourceModel;
-  _sourceModel = new GraphPropertiesModel<PropertyInterface>(g,true);
+  _sourceModel = new GraphPropertiesModel<PropertyInterface>(g, true);
   model->setSourceModel(_sourceModel);
   model->setFilterCaseSensitivity(Qt::CaseInsensitive);
   // the 3 signal-to-slot connections below ensure the propagation
   // of the displayed properties filtering
-  connect(_ui->propertiesFilterEdit,SIGNAL(textChanged(QString)),this,SLOT(setPropertiesFilter(QString)));
-  connect(model,SIGNAL(rowsAboutToBeRemoved(const QModelIndex&, int, int)),
-          this,SLOT(displayedPropertiesRemoved(const QModelIndex&, int, int)));
-  connect(model,SIGNAL(rowsInserted(const QModelIndex&, int, int)),
-          this,SLOT(displayedPropertiesInserted(const QModelIndex&, int, int)));
+  connect(_ui->propertiesFilterEdit, SIGNAL(textChanged(QString)), this, SLOT(setPropertiesFilter(QString)));
+  connect(model, SIGNAL(rowsAboutToBeRemoved(const QModelIndex &, int, int)), this, SLOT(displayedPropertiesRemoved(const QModelIndex &, int, int)));
+  connect(model, SIGNAL(rowsInserted(const QModelIndex &, int, int)), this, SLOT(displayedPropertiesInserted(const QModelIndex &, int, int)));
   _ui->tableView->setModel(model);
-  connect(_sourceModel,SIGNAL(checkStateChanged(QModelIndex,Qt::CheckState)),this,SLOT(checkStateChanged(QModelIndex,Qt::CheckState)));
+  connect(_sourceModel, SIGNAL(checkStateChanged(QModelIndex, Qt::CheckState)), this, SLOT(checkStateChanged(QModelIndex, Qt::CheckState)));
   _ui->tableView->resizeColumnsToContents();
-  _ui->tableView->sortByColumn(0,Qt::AscendingOrder);
+  _ui->tableView->sortByColumn(0, Qt::AscendingOrder);
   _ui->visualPropertiesCheck->setChecked(true);
 }
 
 void PropertiesEditor::setPropertiesFilter(QString filter) {
   filteringProperties = true;
-  static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterRegExp(filter);
+  static_cast<QSortFilterProxyModel *>(_ui->tableView->model())->setFilterRegExp(filter);
   filteringProperties = false;
 }
 
-QLineEdit* PropertiesEditor::getPropertiesFilterEdit() {
+QLineEdit *PropertiesEditor::getPropertiesFilterEdit() {
   return _ui->propertiesFilterEdit;
 }
 
-void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
-  _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface*>();
+void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
+  _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface *>();
   _contextPropertyList.clear();
-  foreach(QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
-    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface*>();
+  foreach (QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
+    _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   }
 
   if (_contextProperty == nullptr)
@@ -99,20 +99,21 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
 
   QString pname = QString::fromUtf8(_contextProperty->getName().c_str());
 
-  if (pname.length()>30) {
+  if (pname.length() > 30) {
     pname.truncate(30);
-    pname+= "...";
+    pname += "...";
   }
 
   QMenu menu;
   menu.setProperty("mainMenu", true);
-  menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
+  menu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, "
+                     "stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
   menu.addAction(pname)->setEnabled(false);
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Hide all other properties")),SIGNAL(triggered()),this,SLOT(setPropsNotVisibleExcept()));
+  connect(menu.addAction(trUtf8("Hide all other properties")), SIGNAL(triggered()), this, SLOT(setPropsNotVisibleExcept()));
   menu.addSeparator();
-  connect(menu.addAction(trUtf8("Add new")),SIGNAL(triggered()),this,SLOT(newProperty()));
-  connect(menu.addAction(trUtf8("Copy")),SIGNAL(triggered()),this,SLOT(copyProperty()));
+  connect(menu.addAction(trUtf8("Add new")), SIGNAL(triggered()), this, SLOT(newProperty()));
+  connect(menu.addAction(trUtf8("Copy")), SIGNAL(triggered()), this, SLOT(copyProperty()));
 
   bool enabled = true;
 
@@ -123,57 +124,57 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   }
 
   if (enabled) {
-    connect(menu.addAction(trUtf8("Delete")),SIGNAL(triggered()),this,SLOT(delProperty()));
+    connect(menu.addAction(trUtf8("Delete")), SIGNAL(triggered()), this, SLOT(delProperty()));
   }
 
   if (enabled && _contextPropertyList.size() > 1) {
-    foreach(PropertyInterface* pi, _contextPropertyList) {
-      if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str())
-          && (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
+    foreach (PropertyInterface *pi, _contextPropertyList) {
+      if (Perspective::instance()->isReservedPropertyName(pi->getName().c_str()) &&
+          (_graph == _graph->getRoot() || !_graph->existLocalProperty(pi->getName()))) {
         enabled = false;
         break;
       }
     }
 
     if (enabled) {
-      connect(menu.addAction(trUtf8("Delete highlighted properties")),SIGNAL(triggered()),this,SLOT(delProperties()));
+      connect(menu.addAction(trUtf8("Delete highlighted properties")), SIGNAL(triggered()), this, SLOT(delProperties()));
     }
   }
 
-  QAction* rename = nullptr;
+  QAction *rename = nullptr;
 
   if (!Perspective::instance()->isReservedPropertyName(_contextProperty->getName().c_str()))
     rename = menu.addAction("Rename");
 
   menu.addSeparator();
 
-  QMenu* subMenu = menu.addMenu(trUtf8("Set values of"));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes in the property"));
-  QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes in the current graph"));
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges in the property"));
-  QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges in the current graph"));
-  QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
-  QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges in the current graph"));
+  QMenu *subMenu = menu.addMenu(trUtf8("Set values of"));
+  QAction *nodesSetAll = subMenu->addAction(trUtf8("All nodes in the property"));
+  QAction *nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes in the current graph"));
+  QAction *edgesSetAll = subMenu->addAction(trUtf8("All edges in the property"));
+  QAction *edgesSetAllGraph = subMenu->addAction(trUtf8("All edges in the current graph"));
+  QAction *selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
+  QAction *selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges in the current graph"));
 
   enabled = (pname != "viewLabel");
 
   if (enabled) {
     subMenu = menu.addMenu(trUtf8("To labels of"));
-    QAction* action = subMenu->addAction(trUtf8("All elements in the current graph"));
-    connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
+    QAction *action = subMenu->addAction(trUtf8("All elements in the current graph"));
+    connect(action, SIGNAL(triggered()), this, SLOT(toLabels()));
     action = subMenu->addAction(trUtf8("All nodes in the current graph"));
-    connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
+    connect(action, SIGNAL(triggered()), this, SLOT(toNodesLabels()));
     action = subMenu->addAction(trUtf8("All edges in the current graph"));
-    connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
+    connect(action, SIGNAL(triggered()), this, SLOT(toEdgesLabels()));
     action = subMenu->addAction(trUtf8("All selected elements in the current graph"));
-    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
+    connect(action, SIGNAL(triggered()), this, SLOT(toSelectedLabels()));
     action = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
-    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
+    connect(action, SIGNAL(triggered()), this, SLOT(toSelectedNodesLabels()));
     action = subMenu->addAction(trUtf8("Selected edges in the current graph"));
-    connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
+    connect(action, SIGNAL(triggered()), this, SLOT(toSelectedEdgesLabels()));
   }
 
-  QAction* action = menu.exec(QCursor::pos());
+  QAction *action = menu.exec(QCursor::pos());
 
   if (action != nullptr) {
     bool result = false;
@@ -219,23 +220,22 @@ void PropertiesEditor::setPropsVisibility(int state) {
     // reset property name filter
     _ui->propertiesFilterEdit->setText(QString());
     // no filter
-    static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+    static_cast<QSortFilterProxyModel *>(_ui->tableView->model())->setFilterFixedString("");
   }
 
   bool showVisualP = _ui->visualPropertiesCheck->isChecked();
 
-  for(int i=0; i<_sourceModel->rowCount(); ++i) {
-    if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
+  for (int i = 0; i < _sourceModel->rowCount(); ++i) {
+    if (_sourceModel->index(i, 0).data().toString().indexOf("view") == 0)
       setPropertyChecked(i, showVisualP);
     else
-      _sourceModel->setData(_sourceModel->index(i,0), state,
-                            Qt::CheckStateRole);
+      _sourceModel->setData(_sourceModel->index(i, 0), state, Qt::CheckStateRole);
   }
 }
 
 void PropertiesEditor::setPropsNotVisibleExcept() {
-  for(int i=0; i<_sourceModel->rowCount(); ++i) {
-    setPropertyChecked(i,_sourceModel->index(i,0).data().toString() == _contextProperty->getName().c_str());
+  for (int i = 0; i < _sourceModel->rowCount(); ++i) {
+    setPropertyChecked(i, _sourceModel->index(i, 0).data().toString() == _contextProperty->getName().c_str());
   }
 
   _ui->propsVisibilityCheck->setTristate(true);
@@ -246,24 +246,23 @@ void PropertiesEditor::showVisualProperties(bool f) {
   // reset property name filter
   _ui->propertiesFilterEdit->setText(QString());
 
-  static_cast<QSortFilterProxyModel*>(_ui->tableView->model())->setFilterFixedString("");
+  static_cast<QSortFilterProxyModel *>(_ui->tableView->model())->setFilterFixedString("");
 
   // ensure all visual properties are shown/hidden
-  for(int i=0; i<_sourceModel->rowCount(); ++i) {
-    if (_sourceModel->index(i,0).data().toString().indexOf("view") == 0)
+  for (int i = 0; i < _sourceModel->rowCount(); ++i) {
+    if (_sourceModel->index(i, 0).data().toString().indexOf("view") == 0)
       setPropertyChecked(i, f);
   }
 }
 
 // properties inserted when filtering
 // are visible according to their CheckState
-void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
-    int start, int end) {
-  QSortFilterProxyModel* model = static_cast<QSortFilterProxyModel*>(sender());
+void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent, int start, int end) {
+  QSortFilterProxyModel *model = static_cast<QSortFilterProxyModel *>(sender());
 
-  for(; start <= end; ++start) {
+  for (; start <= end; ++start) {
     QModelIndex sIndex = model->mapToSource(model->index(start, 0, parent));
-    PropertyInterface* pi = _sourceModel->data(sIndex, TulipModel::PropertyRole).value<PropertyInterface*>();
+    PropertyInterface *pi = _sourceModel->data(sIndex, TulipModel::PropertyRole).value<PropertyInterface *>();
 
     if (filteringProperties == false)
       _sourceModel->setData(sIndex, Qt::Checked, Qt::CheckStateRole);
@@ -274,44 +273,36 @@ void PropertiesEditor::displayedPropertiesInserted(const QModelIndex &parent,
 
 // properties removed when filtering
 // are no longer visible
-void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent,
-    int start, int end) {
-  QSortFilterProxyModel* model = static_cast<QSortFilterProxyModel*>(sender());
+void PropertiesEditor::displayedPropertiesRemoved(const QModelIndex &parent, int start, int end) {
+  QSortFilterProxyModel *model = static_cast<QSortFilterProxyModel *>(sender());
 
-  for(; start <= end; ++start) {
-    PropertyInterface* pi = _sourceModel->data(model->mapToSource(model->index(start, 0, parent)), TulipModel::PropertyRole).value<PropertyInterface*>();
+  for (; start <= end; ++start) {
+    PropertyInterface *pi =
+        _sourceModel->data(model->mapToSource(model->index(start, 0, parent)), TulipModel::PropertyRole).value<PropertyInterface *>();
     emit propertyVisibilityChanged(pi, false);
   }
 }
 
-bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
-                                    bool selectedOnly, bool graphOnly) {
-  QVariant val =
-    TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE,
-                                        prop, _graph,
-                                        static_cast<TulipItemDelegate*>(_delegate),
-                                        editorParent);
+bool PropertiesEditor::setAllValues(PropertyInterface *prop, bool nodes, bool selectedOnly, bool graphOnly) {
+  QVariant val = TulipItemDelegate::showEditorDialog(nodes ? NODE : EDGE, prop, _graph, static_cast<TulipItemDelegate *>(_delegate), editorParent);
 
   // Check if edition has been cancelled
   if (!val.isValid())
     return false;
 
   if (selectedOnly) {
-    BooleanProperty* selection =
-      _graph->getProperty<BooleanProperty>("viewSelection");
+    BooleanProperty *selection = _graph->getProperty<BooleanProperty>("viewSelection");
 
     if (nodes) {
-      for(node n : selection->getNonDefaultValuatedNodes(_graph)) {
+      for (node n : selection->getNonDefaultValuatedNodes(_graph)) {
         GraphModel::setNodeValue(n.id, prop, val);
       }
-    }
-    else {
-      for(edge e : selection->getNonDefaultValuatedEdges(_graph)) {
+    } else {
+      for (edge e : selection->getNonDefaultValuatedEdges(_graph)) {
         GraphModel::setEdgeValue(e.id, prop, val);
       }
     }
-  }
-  else {
+  } else {
     Observable::holdObservers();
     if (nodes)
       GraphModel::setAllNodeValue(prop, val, graphOnly ? _graph : NULL);
@@ -326,7 +317,7 @@ bool PropertiesEditor::setAllValues(PropertyInterface* prop, bool nodes,
 void PropertiesEditor::copyProperty() {
   _graph->push();
 
-  if (CopyPropertyDialog::copyProperty(_graph,_contextProperty,true,Perspective::instance()->mainWindow()) == nullptr)
+  if (CopyPropertyDialog::copyProperty(_graph, _contextProperty, true, Perspective::instance()->mainWindow()) == nullptr)
     // copy has been cancelled
     _graph->pop();
 }
@@ -334,7 +325,8 @@ void PropertiesEditor::copyProperty() {
 void PropertiesEditor::newProperty() {
   _graph->push();
 
-  if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow(), _contextProperty ? _contextProperty->getTypename() : std::string()) == nullptr)
+  if (PropertyCreationDialog::createNewProperty(_graph, Perspective::instance()->mainWindow(),
+                                                _contextProperty ? _contextProperty->getTypename() : std::string()) == nullptr)
     // creation has been cancelled
     _graph->pop();
 }
@@ -344,14 +336,13 @@ void PropertiesEditor::delProperty() {
   _contextProperty->getGraph()->delLocalProperty(_contextProperty->getName());
 }
 
-
 void PropertiesEditor::delProperties() {
   _graph->push();
-  foreach(PropertyInterface* pi, _contextPropertyList)
-  pi->getGraph()->delLocalProperty(pi->getName());
+  foreach (PropertyInterface *pi, _contextPropertyList)
+    pi->getGraph()->delLocalProperty(pi->getName());
 }
 
-bool PropertiesEditor::renameProperty(PropertyInterface* prop) {
+bool PropertiesEditor::renameProperty(PropertyInterface *prop) {
   return RenamePropertyDialog::renameProperty(prop, editorParent);
 }
 
@@ -367,7 +358,7 @@ void PropertiesEditor::toNodesLabels() {
 
 void PropertiesEditor::toEdgesLabels() {
   _graph->push();
-  toLabels(_contextProperty, false,true);
+  toLabels(_contextProperty, false, true);
 }
 
 void PropertiesEditor::toSelectedLabels() {
@@ -385,10 +376,10 @@ void PropertiesEditor::toSelectedEdgesLabels() {
   toLabels(_contextProperty, false, true, true);
 }
 
-void PropertiesEditor::toLabels(PropertyInterface* prop, bool nodes, bool edges, bool selectedOnly) {
+void PropertiesEditor::toLabels(PropertyInterface *prop, bool nodes, bool edges, bool selectedOnly) {
   DataSet data;
-  data.set("nodes",nodes);
-  data.set("edges",edges);
+  data.set("nodes", nodes);
+  data.set("edges", edges);
   data.set("input", prop);
 
   if (selectedOnly)
@@ -397,31 +388,31 @@ void PropertiesEditor::toLabels(PropertyInterface* prop, bool nodes, bool edges,
   std::string msg;
   // _graph->push() must be done outside of this method
   // to allow call from TabelView.cpp
-  StringProperty* result = _graph->getProperty<StringProperty>("viewLabel");
-  _graph->applyPropertyAlgorithm("To labels",result,msg,nullptr,&data);
+  StringProperty *result = _graph->getProperty<StringProperty>("viewLabel");
+  _graph->applyPropertyAlgorithm("To labels", result, msg, nullptr, &data);
 }
 
-void PropertiesEditor::checkStateChanged(QModelIndex index,Qt::CheckState state) {
-  PropertyInterface* pi = _sourceModel->data(index,TulipModel::PropertyRole).value<PropertyInterface*>();
-  emit propertyVisibilityChanged(pi,state == Qt::Checked);
+void PropertiesEditor::checkStateChanged(QModelIndex index, Qt::CheckState state) {
+  PropertyInterface *pi = _sourceModel->data(index, TulipModel::PropertyRole).value<PropertyInterface *>();
+  emit propertyVisibilityChanged(pi, state == Qt::Checked);
 }
 
 QSet<PropertyInterface *> PropertiesEditor::visibleProperties() const {
   if (_sourceModel != nullptr)
     return _sourceModel->checkedProperties();
 
-  return QSet<tlp::PropertyInterface*>();
+  return QSet<tlp::PropertyInterface *>();
 }
 
 void PropertiesEditor::setPropertyChecked(int index, bool state) {
-  _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
+  _sourceModel->setData(_sourceModel->index(index, 0), state ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
 }
 
-void PropertiesEditor::setPropertyChecked(const QString& pName, bool state) {
+void PropertiesEditor::setPropertyChecked(const QString &pName, bool state) {
   int index = _sourceModel->rowOf(pName);
 
   if (index != -1)
-    _sourceModel->setData(_sourceModel->index(index,0),state ? Qt::Checked : Qt::Unchecked,Qt::CheckStateRole);
+    _sourceModel->setData(_sourceModel->index(index, 0), state ? Qt::Checked : Qt::Unchecked, Qt::CheckStateRole);
 }
 
 PropertyInterface *PropertiesEditor::contextProperty() const {

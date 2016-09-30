@@ -32,15 +32,15 @@
 using namespace tlp;
 using namespace std;
 
-ImportWizard::ImportWizard(QWidget *parent): QWizard(parent), _ui(new Ui::ImportWizard) {
+ImportWizard::ImportWizard(QWidget *parent) : QWizard(parent), _ui(new Ui::ImportWizard) {
   _ui->setupUi(this);
 
-  PluginModel<tlp::ImportModule>* model = new PluginModel<tlp::ImportModule>(_ui->importModules);
+  PluginModel<tlp::ImportModule> *model = new PluginModel<tlp::ImportModule>(_ui->importModules);
 
   _ui->importModules->setModel(model);
   _ui->importModules->setRootIndex(model->index(0, 0));
   _ui->importModules->expandAll();
-  connect(_ui->importModules->selectionModel(),SIGNAL(currentChanged(QModelIndex,QModelIndex)),this,SLOT(algorithmSelected(QModelIndex)));
+  connect(_ui->importModules->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(algorithmSelected(QModelIndex)));
 
   _ui->parametersList->setItemDelegate(new TulipItemDelegate);
   connect(_ui->parametersList, SIGNAL(destroyed()), _ui->parametersList->itemDelegate(), SLOT(deleteLater()));
@@ -62,11 +62,11 @@ ImportWizard::~ImportWizard() {
   delete _ui;
 }
 
-void ImportWizard::algorithmSelected(const QModelIndex& index) {
+void ImportWizard::algorithmSelected(const QModelIndex &index) {
   QString alg(index.data().toString());
   _ui->parametersFrame->setVisible(!alg.isEmpty());
-  QAbstractItemModel* oldModel = _ui->parametersList->model();
-  QAbstractItemModel* newModel = nullptr;
+  QAbstractItemModel *oldModel = _ui->parametersList->model();
+  QAbstractItemModel *newModel = nullptr;
 
   if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)));
@@ -86,7 +86,7 @@ QString ImportWizard::algorithm() const {
 }
 
 tlp::DataSet ImportWizard::parameters() const {
-  ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->parametersList->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->parametersList->model());
 
   if (model == nullptr)
     return DataSet();

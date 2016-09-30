@@ -35,17 +35,18 @@ namespace tlp {
 class ParallelAxis : public GlSimpleEntity {
 
 public:
-
   virtual ~ParallelAxis();
 
   BoundingBox getBoundingBox();
   void setStencil(int stencil) {
     glAxis->setStencil(stencil);
   }
-  void draw(float lod,Camera *camera);
+  void draw(float lod, Camera *camera);
   void translate(const Coord &c);
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void getXML(std::string &) {
+  }
+  void setWithXML(const std::string &, unsigned int &) {
+  }
 
   virtual void redraw();
   virtual Coord getPointCoordOnAxisForData(const unsigned int dataIdx) = 0;
@@ -74,7 +75,7 @@ public:
     glAxis->setAxisColor(axisColor);
   }
   void setMaxCaptionWidth(const float maxCaptionWidth) {
-    glAxis->setMaxCaptionWidth(maxCaptionWidth/2);
+    glAxis->setMaxCaptionWidth(maxCaptionWidth / 2);
   }
   void setCaptionPosition(const GlAxis::CaptionLabelPosition captionPosition);
 
@@ -108,7 +109,7 @@ public:
     return hidden;
   }
 
-  virtual const std::set<unsigned int> &getDataInSlidersRange() = 0 ;
+  virtual const std::set<unsigned int> &getDataInSlidersRange() = 0;
   virtual void updateSlidersWithDataSubset(const std::set<unsigned int> &dataSubset) = 0;
 
   void enableTrickForSelection();
@@ -120,10 +121,9 @@ public:
   }
   Array<Coord, 4> getBoundingPolygonCoords() const;
 
-
-protected :
-
-  ParallelAxis(GlAxis *glAxis, const float  axisAreaWidth, const float rotationAngle, const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
+protected:
+  ParallelAxis(GlAxis *glAxis, const float axisAreaWidth, const float rotationAngle,
+               const GlAxis::CaptionLabelPosition captionPosition = GlAxis::BELOW);
 
   GlAxis *glAxis;
   GlRect *emptyRect;
@@ -135,9 +135,7 @@ protected :
   float rotationAngle;
   bool hidden;
   std::set<unsigned int> dataSubset;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

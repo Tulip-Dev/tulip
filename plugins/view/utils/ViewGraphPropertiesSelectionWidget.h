@@ -37,8 +37,7 @@ class ViewGraphPropertiesSelectionWidget : public QWidget, public Observable {
 
   Q_OBJECT
 
-public :
-
+public:
   ViewGraphPropertiesSelectionWidget(QWidget *parent = 0);
   ~ViewGraphPropertiesSelectionWidget();
 
@@ -51,20 +50,17 @@ public :
   ElementType getDataLocation() const;
   void setDataLocation(const ElementType location);
   void enableEdgesButton(const bool enable);
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   bool configurationChanged();
 
-private :
-
+private:
   Ui::ViewGraphPropertiesSelectionWidgetData *_ui;
   Graph *graph;
   std::vector<std::string> graphPropertiesTypesFilter;
   std::vector<std::string> lastSelectedProperties;
   ElementType lastDataLocation;
-
 };
-
 }
 
 #endif /* HISTODATACONFIGWIDGET_H_ */

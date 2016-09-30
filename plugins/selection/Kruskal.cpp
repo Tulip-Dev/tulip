@@ -24,12 +24,11 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // edge weight
-  "Metric containing the edge weights."
-};
+    // edge weight
+    "Metric containing the edge weights."};
 //======================================================
-Kruskal::Kruskal(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addInParameter<NumericProperty*> ("edge weight", paramHelp[0], "viewMetric");
+Kruskal::Kruskal(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
+  addInParameter<NumericProperty *>("edge weight", paramHelp[0], "viewMetric");
 }
 //======================================================
 Kruskal::~Kruskal() {
@@ -40,8 +39,7 @@ bool Kruskal::check(std::string &erreurMsg) {
   if (ConnectedTest::isConnected(graph)) {
     erreurMsg = "";
     return true;
-  }
-  else {
+  } else {
     erreurMsg = "The graph must be connected.";
     return false;
   }
@@ -52,7 +50,7 @@ bool Kruskal::run() {
   /* Initialisation */
   NumericProperty *edgeWeight = nullptr;
 
-  if ( dataSet!=nullptr) {
+  if (dataSet != nullptr) {
     dataSet->get("edge weight", edgeWeight);
   }
 

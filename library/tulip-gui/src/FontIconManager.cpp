@@ -21,12 +21,8 @@ FontIconManager *FontIconManager::instance() {
   return _instance;
 }
 
-static QVariantMap getOptionsMap(const QColor &color,
-                                 const QColor &colorDisabled,
-                                 const QColor &colorActive,
-                                 const QColor &colorSelected,
-                                 const double scaleFactor,
-                                 const QPointF& translation) {
+static QVariantMap getOptionsMap(const QColor &color, const QColor &colorDisabled, const QColor &colorActive, const QColor &colorSelected,
+                                 const double scaleFactor, const QPointF &translation) {
   QVariantMap ret;
   ret.insert("color", color);
   ret.insert("color-disabled", colorDisabled);
@@ -37,25 +33,19 @@ static QVariantMap getOptionsMap(const QColor &color,
   return ret;
 }
 
-static QString getOptionsString(const QColor &color,
-                                const QColor &colorDisabled,
-                                const QColor &colorActive,
-                                const QColor &colorSelected,
-                                const double scaleFactor,
-                                const QPointF &translation) {
-  return color.name() + QString::number(color.alpha()) +
-         colorDisabled.name() + QString::number(colorDisabled.alpha()) +
-         colorActive.name() + QString::number(colorActive.alpha()) +
-         colorSelected.name() + QString::number(colorSelected.alpha()) +
-         QString::number(scaleFactor) + QString::number(translation.x()) +
-         QString::number(translation.y()) ;
+static QString getOptionsString(const QColor &color, const QColor &colorDisabled, const QColor &colorActive, const QColor &colorSelected,
+                                const double scaleFactor, const QPointF &translation) {
+  return color.name() + QString::number(color.alpha()) + colorDisabled.name() + QString::number(colorDisabled.alpha()) + colorActive.name() +
+         QString::number(colorActive.alpha()) + colorSelected.name() + QString::number(colorSelected.alpha()) + QString::number(scaleFactor) +
+         QString::number(translation.x()) + QString::number(translation.y());
 }
 
 QIcon FontIconManager::getFontAwesomeIcon(fa::iconCodePoint icon, const QColor &color, const double scaleFactor, const QPointF &translation) {
   return getFontAwesomeIcon(icon, color, color, color, color, scaleFactor, translation);
 }
 
-QIcon FontIconManager::getFontAwesomeIcon(fa::iconCodePoint icon, const QColor &color, const QColor &colorDisabled, const QColor &colorActive, const QColor &colorSelected, const double scaleFactor, const QPointF &translation) {
+QIcon FontIconManager::getFontAwesomeIcon(fa::iconCodePoint icon, const QColor &color, const QColor &colorDisabled, const QColor &colorActive,
+                                          const QColor &colorSelected, const double scaleFactor, const QPointF &translation) {
   QVariantMap options = getOptionsMap(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   QString optionsString = getOptionsString(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   auto p = qMakePair(icon, optionsString);
@@ -69,7 +59,8 @@ QIcon FontIconManager::getMaterialDesignIcon(md::iconCodePoint icon, const QColo
   return getMaterialDesignIcon(icon, color, color, color, color, scaleFactor, translation);
 }
 
-QIcon FontIconManager::getMaterialDesignIcon(md::iconCodePoint icon, const QColor &color, const QColor &colorDisabled, const QColor &colorActive, const QColor &colorSelected, const double scaleFactor, const QPointF &translation) {
+QIcon FontIconManager::getMaterialDesignIcon(md::iconCodePoint icon, const QColor &color, const QColor &colorDisabled, const QColor &colorActive,
+                                             const QColor &colorSelected, const double scaleFactor, const QPointF &translation) {
   QVariantMap options = getOptionsMap(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   QString optionsString = getOptionsString(color, colorDisabled, colorActive, colorSelected, scaleFactor, translation);
   auto p = qMakePair(icon, optionsString);
@@ -80,8 +71,8 @@ QIcon FontIconManager::getMaterialDesignIcon(md::iconCodePoint icon, const QColo
 }
 
 QIcon FontIconManager::stackIcons(const QIcon &backIcon, const QIcon &frontIcon) {
-  QPixmap pixmap= backIcon.pixmap(QSize(128,128));
+  QPixmap pixmap = backIcon.pixmap(QSize(128, 128));
   QPainter painter(&pixmap);
-  painter.drawPixmap(0,0,frontIcon.pixmap(QSize(128,128)));
+  painter.drawPixmap(0, 0, frontIcon.pixmap(QSize(128, 128)));
   return QIcon(pixmap);
 }

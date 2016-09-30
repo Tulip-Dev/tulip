@@ -41,12 +41,12 @@ typedef MinMaxProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty>
  */
 class TLP_SCOPE IntegerProperty : public IntegerMinMaxProperty {
 
-public :
-  IntegerProperty(Graph *, const std::string& n = "");
+public:
+  IntegerProperty(Graph *, const std::string &n = "");
 
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
   virtual void setNodeValue(const node n, const int &v);
@@ -59,36 +59,36 @@ public :
 
   // NumericProperty interface
   virtual double getNodeDoubleValue(const node n) const {
-    return (double) getNodeValue(n);
+    return (double)getNodeValue(n);
   }
   virtual double getNodeDoubleDefaultValue() const {
-    return (double) getNodeDefaultValue();
+    return (double)getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(Graph* g = nullptr) {
-    return (double) getNodeMin(g);
+  virtual double getNodeDoubleMin(Graph *g = nullptr) {
+    return (double)getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(Graph* g = nullptr) {
-    return (double) getNodeMax(g);
+  virtual double getNodeDoubleMax(Graph *g = nullptr) {
+    return (double)getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
-    return (double) getEdgeValue(e);
+    return (double)getEdgeValue(e);
   }
   virtual double getEdgeDoubleDefaultValue() const {
-    return (double) getEdgeDefaultValue();
+    return (double)getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(Graph* g = nullptr) {
-    return (double) getEdgeMin(g);
+  virtual double getEdgeDoubleMin(Graph *g = nullptr) {
+    return (double)getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(Graph* g = nullptr) {
-    return (double) getEdgeMax(g);
+  virtual double getEdgeDoubleMax(Graph *g = nullptr) {
+    return (double)getEdgeMax(g);
   }
 
   void nodesUniformQuantification(unsigned int);
 
   void edgesUniformQuantification(unsigned int);
 
-  NumericProperty* copyProperty(Graph *g) {
-    IntegerProperty* newProp = new IntegerProperty(g);
+  NumericProperty *copyProperty(Graph *g) {
+    IntegerProperty *newProp = new IntegerProperty(g);
     newProp->copy(this);
 
     return newProp;
@@ -99,26 +99,24 @@ protected:
 
 private:
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 };
 
 /**
  * @ingroup Graph
  * @brief A graph property that maps a std::vector<int> value to graph elements.
  */
-class TLP_SCOPE IntegerVectorProperty:public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
-public :
-  IntegerVectorProperty(Graph *g, const std::string& n =""):AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {}
+class TLP_SCOPE IntegerVectorProperty : public AbstractVectorProperty<tlp::IntegerVectorType, tlp::IntegerType> {
+public:
+  IntegerVectorProperty(Graph *g, const std::string &n = "") : AbstractVectorProperty<IntegerVectorType, tlp::IntegerType>(g, n) {
+  }
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
-
 };
-
-
 }
 #endif
 ///@endcond

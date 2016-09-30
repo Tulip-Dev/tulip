@@ -32,7 +32,7 @@
 using namespace std;
 using namespace tlp;
 
-const float startAngle = static_cast<float>(M_PI)/2.0f;
+const float startAngle = static_cast<float>(M_PI) / 2.0f;
 const unsigned short numberOfStarPoints = 5;
 
 static vector<Coord> computeStar(const Coord &position, const Size &size, unsigned int numberOfStarPoints) {
@@ -40,20 +40,20 @@ static vector<Coord> computeStar(const Coord &position, const Size &size, unsign
   vector<Coord> points;
   float delta = (2.0f * M_PI) / static_cast<float>(numberOfStarPoints);
 
-  for (unsigned int i = 0 ; i < numberOfStarPoints ; ++i) {
+  for (unsigned int i = 0; i < numberOfStarPoints; ++i) {
     float deltaX = cos(i * delta + startAngle);
     float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX,deltaY,0));
+    points.push_back(Coord(deltaX, deltaY, 0));
     box.expand(points.back());
-    deltaX = 0.5f * cos(i * delta + delta/2.0f + startAngle);
-    deltaY = 0.5f * sin(i * delta + delta/2.0f + startAngle);
-    points.push_back(Coord(deltaX,deltaY,0));
+    deltaX = 0.5f * cos(i * delta + delta / 2.0f + startAngle);
+    deltaY = 0.5f * sin(i * delta + delta / 2.0f + startAngle);
+    points.push_back(Coord(deltaX, deltaY, 0));
     box.expand(points.back());
   }
 
-  for(vector<Coord>::iterator it=points.begin(); it!=points.end(); ++it) {
-    (*it)[0]=position[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.))/((box[1][0]-box[0][0])/2.))*size[0];
-    (*it)[1]=position[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
+  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
+    (*it)[0] = position[0] + (((*it)[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0];
+    (*it)[1] = position[1] + (((*it)[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1];
   }
 
   return points;
@@ -62,19 +62,18 @@ static vector<Coord> computeStar(const Coord &position, const Size &size, unsign
 class StarGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Star", "2D - Star extremity", "Antoine Lambert", "20/05/2016", "Star", "1.0", tlp::NodeShape::Star)
 
   StarGlyph(PluginContext *context) : Glyph(context) {
-    _vertices = computeStar(Coord(0,0,0),Size(.5,.5,0),numberOfStarPoints);
-    _vertices.insert(_vertices.begin(), Coord(0,0,0));
-    for (unsigned short i = 0 ; i < ushort_cast(2*numberOfStarPoints-1) ; ++i) {
-      _indices.insert(_indices.end(), {0, ushort_cast(i+1), ushort_cast(i+2)});
+    _vertices = computeStar(Coord(0, 0, 0), Size(.5, .5, 0), numberOfStarPoints);
+    _vertices.insert(_vertices.begin(), Coord(0, 0, 0));
+    for (unsigned short i = 0; i < ushort_cast(2 * numberOfStarPoints - 1); ++i) {
+      _indices.insert(_indices.end(), {0, ushort_cast(i + 1), ushort_cast(i + 2)});
     }
     _indices.insert(_indices.end(), {0, 10, 1});
 
     vector<unsigned short> outlineIndices;
-    for (unsigned short i = 1 ; i < ushort_cast(_vertices.size()) ; ++i) {
+    for (unsigned short i = 1; i < ushort_cast(_vertices.size()); ++i) {
       outlineIndices.push_back(i);
     }
     outlineIndices.push_back(1);
@@ -85,7 +84,6 @@ public:
     boundingBox[0] = Coord(-0.3f, -0.35f, 0);
     boundingBox[1] = Coord(0.3f, 0.35f, 0);
   }
-
 };
 
 PLUGIN(StarGlyph)

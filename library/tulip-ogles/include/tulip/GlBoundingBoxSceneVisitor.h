@@ -38,8 +38,8 @@ class GlEntity;
 class TLP_GLES_SCOPE GlBoundingBoxSceneVisitor : public GlSceneVisitor {
 
 public:
-
-  GlBoundingBoxSceneVisitor() {}
+  GlBoundingBoxSceneVisitor() {
+  }
 
   virtual void visit(GlEntity *entity);
 
@@ -48,11 +48,8 @@ public:
   }
 
 private:
-
   tlp::BoundingBox _boundingBox;
-
 };
-
 }
 
 #endif // GLBOUNDINGBOXSCENEVISITOR_H

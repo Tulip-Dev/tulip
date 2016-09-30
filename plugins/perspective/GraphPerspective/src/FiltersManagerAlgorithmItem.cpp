@@ -30,22 +30,23 @@
 using namespace tlp;
 using namespace std;
 
-FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget* parent): AbstractFiltersManagerItem(parent), _ui(new Ui::FiltersManagerAlgorithmItem) {
+FiltersManagerAlgorithmItem::FiltersManagerAlgorithmItem(QWidget *parent)
+    : AbstractFiltersManagerItem(parent), _ui(new Ui::FiltersManagerAlgorithmItem) {
   _ui->setupUi(this);
 
-  fillTitle(_ui->algorithmCombo,trUtf8("Select filter"));
+  fillTitle(_ui->algorithmCombo, trUtf8("Select filter"));
   list<string> booleanAlgorithms = PluginLister::instance()->availablePlugins<BooleanAlgorithm>();
 
-  for(list<string>::const_iterator it = booleanAlgorithms.begin(); it != booleanAlgorithms.end(); ++it) {
+  for (list<string>::const_iterator it = booleanAlgorithms.begin(); it != booleanAlgorithms.end(); ++it) {
     string s(*it);
     _ui->algorithmCombo->addItem(s.c_str());
   }
 
-  connect(_ui->algorithmCombo,SIGNAL(currentIndexChanged(int)),this,SLOT(algorithmSelected(int)));
+  connect(_ui->algorithmCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(algorithmSelected(int)));
   _ui->algorithmParams->setItemDelegate(new TulipItemDelegate);
   connect(_ui->algorithmParams, SIGNAL(destroyed()), _ui->algorithmParams->itemDelegate(), SLOT(deleteLater()));
 
-  updateGraphModel(_ui->algorithmParams,QString::null,_graph);
+  updateGraphModel(_ui->algorithmParams, QString::null, _graph);
 }
 
 FiltersManagerAlgorithmItem::~FiltersManagerAlgorithmItem() {
@@ -59,29 +60,22 @@ void FiltersManagerAlgorithmItem::algorithmSelected(int i) {
   if (i != 0)
     algName = _ui->algorithmCombo->itemText(i);
 
-  updateGraphModel(_ui->algorithmParams,algName,_graph);
+  updateGraphModel(_ui->algorithmParams, algName, _graph);
   emit titleChanged();
 }
 
-void FiltersManagerAlgorithmItem::applyFilter(BooleanProperty* prop) {
+void FiltersManagerAlgorithmItem::applyFilter(BooleanProperty *prop) {
   if (_ui->algorithmCombo->currentIndex() == 0)
     return;
 
-  ParameterListModel* model = dynamic_cast<ParameterListModel*>(_ui->algorithmParams->model());
+  ParameterListModel *model = dynamic_cast<ParameterListModel *>(_ui->algorithmParams->model());
   string msg;
 
   if (model != nullptr) {
     DataSet data = model->parametersValues();
-    _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(),
-                                   prop,
-                                   msg,
-                                   0,
-                                   &data);
-  }
-  else {
-    _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(),
-                                   prop,
-                                   msg);
+    _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(), prop, msg, 0, &data);
+  } else {
+    _graph->applyPropertyAlgorithm(_ui->algorithmCombo->currentText().toStdString(), prop, msg);
   }
 }
 
@@ -94,5 +88,5 @@ QString FiltersManagerAlgorithmItem::title() const {
 
 void FiltersManagerAlgorithmItem::graphChanged() {
   if (_ui->algorithmCombo->currentIndex() != 0)
-    updateGraphModel(_ui->algorithmParams,_ui->algorithmCombo->currentText(),_graph);
+    updateGraphModel(_ui->algorithmParams, _ui->algorithmCombo->currentText(), _graph);
 }

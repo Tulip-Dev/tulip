@@ -23,8 +23,7 @@
 
 using namespace tlp;
 
-ColorScalePreview::ColorScalePreview(ColorScale* colorScale) :
-  currentColorScale(colorScale) {
+ColorScalePreview::ColorScalePreview(ColorScale *colorScale) : currentColorScale(colorScale) {
   setAutoFillBackground(true);
   fillLabel();
 }
@@ -41,8 +40,7 @@ void ColorScalePreview::fillLabel() {
     QPalette p = this->palette();
     QLinearGradient grad(0, height() * 0.5, width(), height() * 0.5);
 
-    for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it
-         != colorMap.end(); ++it) {
+    for (std::map<float, tlp::Color>::iterator it = colorMap.begin(); it != colorMap.end(); ++it) {
       tlp::Color col = it->second;
       QColor c(col.getR(), col.getG(), col.getB(), col.getA());
       grad.setColorAt(it->first, c);
@@ -53,12 +51,12 @@ void ColorScalePreview::fillLabel() {
   }
 }
 
-void ColorScalePreview::setColorScale(ColorScale* colorScale) {
+void ColorScalePreview::setColorScale(ColorScale *colorScale) {
   currentColorScale = colorScale;
   fillLabel();
 }
 
-void ColorScalePreview::resizeEvent(QResizeEvent * event) {
+void ColorScalePreview::resizeEvent(QResizeEvent *event) {
   QLabel::resizeEvent(event);
   fillLabel();
 }

@@ -44,30 +44,27 @@ class NumericProperty;
  *  Let n be the number of nodes, the original algorithm complexity is in O(n).\n
  *  But the implementation of the canonical ordering has not been made in O(n).\n
  */
-TLP_SCOPE std::vector<std::vector<node> > computeCanonicalOrdering(PlanarConMap *,
-    std::vector<edge>  *dummyEdges = nullptr,
-    PluginProgress *pluginProgress = nullptr);
+TLP_SCOPE std::vector<std::vector<node>> computeCanonicalOrdering(PlanarConMap *, std::vector<edge> *dummyEdges = nullptr,
+                                                                  PluginProgress *pluginProgress = nullptr);
 /**
  * Find all the graph centers, that version does not manage edge weight.
  * complexity O(n * m). Only works on connected graphs.
  */
-TLP_SCOPE std::vector<node> computeGraphCenters(Graph * graph);
+TLP_SCOPE std::vector<node> computeGraphCenters(Graph *graph);
 /**
  * return a node that can be considered as the graph center.
  * It is an heuristic, thus it is not absolutely sure that this
  * node is a graph center. Only works on connected graphs.
  */
-TLP_SCOPE node graphCenterHeuristic(Graph * graph,
-                                    PluginProgress *pluginProgress = nullptr);
+TLP_SCOPE node graphCenterHeuristic(Graph *graph, PluginProgress *pluginProgress = nullptr);
 /**
  * return a new node connected to all previously
  * existing nodes which had a null indegree
  */
-TLP_SCOPE node makeSimpleSource(Graph* graph);
+TLP_SCOPE node makeSimpleSource(Graph *graph);
 
-TLP_SCOPE void makeProperDag(Graph* graph,std::list<node> &addedNodes,
-                             TLP_HASH_MAP<edge,edge> &replacedEdges,
-                             IntegerProperty* edgeLength = nullptr);
+TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes, TLP_HASH_MAP<edge, edge> &replacedEdges,
+                             IntegerProperty *edgeLength = nullptr);
 
 /**
    * Select a spanning forest of the graph,
@@ -75,8 +72,7 @@ TLP_SCOPE void makeProperDag(Graph* graph,std::list<node> &addedNodes,
    * the selectionProperty associated value is true. The value is false
    * for the other elements
    */
-TLP_SCOPE void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
-                                    PluginProgress *pluginProgress = nullptr);
+TLP_SCOPE void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty, PluginProgress *pluginProgress = nullptr);
 
 /**
  * Select a spanning tree of a graph assuming it is connected;
@@ -84,8 +80,7 @@ TLP_SCOPE void selectSpanningForest(Graph* graph, BooleanProperty *selectionProp
  * the selectionProperty associated value is true. The value is false
  * for the other elements
  */
-TLP_SCOPE void selectSpanningTree(Graph* graph, BooleanProperty *selection,
-                                  PluginProgress *pluginProgress = nullptr);
+TLP_SCOPE void selectSpanningTree(Graph *graph, BooleanProperty *selection, PluginProgress *pluginProgress = nullptr);
 
 /**
  * Select the minimum spanning tree (Kruskal algorithm) of a weighted graph,
@@ -93,10 +88,8 @@ TLP_SCOPE void selectSpanningTree(Graph* graph, BooleanProperty *selection,
  * the selectionProperty associated value is true. The value is false
  * for the other elements
  */
-TLP_SCOPE void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selectionProperty,
-    NumericProperty *weight = nullptr,
-    PluginProgress *pluginProgress = nullptr);
-
+TLP_SCOPE void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selectionProperty, NumericProperty *weight = nullptr,
+                                         PluginProgress *pluginProgress = nullptr);
 
 /**
  * @brief Performs a breadth-first search on a graph.
@@ -122,14 +115,13 @@ TLP_SCOPE std::vector<node> dfs(const Graph *graph, node root = node());
  * builds a uniform quantification with the NumericProperty associated values
  * of the nodes of a graph
  */
-TLP_SCOPE void buildNodesUniformQuantification(const Graph* graph, const NumericProperty* prop, unsigned int k, std::map<double, int>& mapping);
+TLP_SCOPE void buildNodesUniformQuantification(const Graph *graph, const NumericProperty *prop, unsigned int k, std::map<double, int> &mapping);
 
 /*
  * builds a uniform quantification with the NumericProperty associated values
  * of the edges of a graph
  */
-TLP_SCOPE void buildEdgesUniformQuantification(const Graph* graph, const NumericProperty* prop, unsigned int k, std::map<double, int>& mapping);
-
+TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *prop, unsigned int k, std::map<double, int> &mapping);
 }
 #endif
 ///@endcond

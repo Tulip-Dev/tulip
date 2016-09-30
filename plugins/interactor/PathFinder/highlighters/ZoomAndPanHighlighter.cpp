@@ -33,7 +33,7 @@
 using namespace std;
 using namespace tlp;
 
-void ZoomAndPanHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
+void ZoomAndPanHighlighter::highlight(const PathFinder *, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   Graph *graph = glMainWidget->getScene()->getGlGraphComposite()->getGraph();
   LayoutProperty *layout = inputData->getElementLayout();
@@ -43,7 +43,7 @@ void ZoomAndPanHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWid
   animator.animateZoomAndPan();
 }
 
-void ZoomAndPanHighlighter::draw(GlMainWidget*) {
+void ZoomAndPanHighlighter::draw(GlMainWidget *) {
 }
 
 bool ZoomAndPanHighlighter::isConfigurable() const {

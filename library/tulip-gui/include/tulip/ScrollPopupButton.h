@@ -18,12 +18,10 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef SCROLLPOPUPBUTTON_H
 #define SCROLLPOPUPBUTTON_H
 
 #include <QPushButton>
-
 
 #include <tulip/tulipconf.h>
 
@@ -35,7 +33,7 @@ class TLP_QT_SCOPE ScrollPopupButton : public QPushButton {
   Q_PROPERTY(int minimum READ minimum WRITE setMinimum)
   Q_PROPERTY(int maximum READ maximum WRITE setMaximum)
 
-  QSlider* _slider;
+  QSlider *_slider;
 
 public:
   explicit ScrollPopupButton(QWidget *parent = 0);

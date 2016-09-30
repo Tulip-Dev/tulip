@@ -29,24 +29,25 @@ static int hit_count = 0;
 
 class MemoryChecker {
   struct StackInfo {
-    char** _strings;
+    char **_strings;
     size_t _size;
   };
 
-  std::map<void*,StackInfo> _stacks;
+  std::map<void *, StackInfo> _stacks;
 
 public:
-  MemoryChecker() {}
+  MemoryChecker() {
+  }
 
-  inline void insert(void* ptr,char** strings,size_t size) {
+  inline void insert(void *ptr, char **strings, size_t size) {
     StackInfo infos;
     infos._strings = strings;
     infos._size = size;
     _stacks[ptr] = infos;
   }
 
-  inline void remove(void* ptr) {
-    std::map<void*, StackInfo>::iterator it = _stacks.find(ptr);
+  inline void remove(void *ptr) {
+    std::map<void *, StackInfo>::iterator it = _stacks.find(ptr);
 
     if (it != _stacks.end()) {
       delete it->second._strings;
@@ -55,25 +56,23 @@ public:
   }
 
   inline void print() {
-    for(std::map<void*, StackInfo>::iterator it = _stacks.begin();
-        it != _stacks.end(); ++it) {
-      StackInfo& infos = it->second;
+    for (std::map<void *, StackInfo>::iterator it = _stacks.begin(); it != _stacks.end(); ++it) {
+      StackInfo &infos = it->second;
 
       tlp::warning() << " ======================== " << std::endl;
       tlp::warning() << "Possible memory leak at " << it->first << ": " << std::endl;
 
-      for (size_t i=0; i<infos._size; ++i)
+      for (size_t i = 0; i < infos._size; ++i)
         tlp::warning() << infos._strings[i] << std::endl;
 
-      tlp::warning() << " ======================== "  << std::endl  << std::endl;
+      tlp::warning() << " ======================== " << std::endl << std::endl;
     }
   }
 
   inline void clear() {
     int entries = _stacks.size();
 
-    for(std::map<void*, StackInfo>::iterator it = _stacks.begin();
-        it != _stacks.end(); ++it) {
+    for (std::map<void *, StackInfo>::iterator it = _stacks.begin(); it != _stacks.end(); ++it) {
       delete it->second._strings;
     }
 
@@ -82,23 +81,23 @@ public:
   }
 };
 
-static MemoryChecker* memory_checker = nullptr;
+static MemoryChecker *memory_checker = nullptr;
 static bool block_inserts = false;
 
-void memchecker_insert_stack(void* ptr,char** strings, size_t size) {
+void memchecker_insert_stack(void *ptr, char **strings, size_t size) {
   if (block_inserts)
     return;
 
-  block_inserts=true;
+  block_inserts = true;
 
   if (!memory_checker)
     memory_checker = new MemoryChecker;
 
-  memory_checker->insert(ptr,strings,size);
-  block_inserts=false;
+  memory_checker->insert(ptr, strings, size);
+  block_inserts = false;
 }
 
-void memchecker_remove_stack(void* ptr) {
+void memchecker_remove_stack(void *ptr) {
   block_inserts = true;
   memory_checker->remove(ptr);
   block_inserts = false;

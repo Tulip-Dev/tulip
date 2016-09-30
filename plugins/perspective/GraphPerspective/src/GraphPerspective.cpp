@@ -86,7 +86,8 @@ static QIcon getFileNewIcon() {
 }
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
-    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"), _logger(nullptr) {
+    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"),
+      _logger(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && ((PerspectiveContext *)c)->parameters.contains("gui_testing")) {
@@ -128,13 +129,15 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach (QString s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::archive, menuIconColor), s, this, SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::archive, menuIconColor), s, this,
+                                         SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
   foreach (QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor), s, this, SLOT(openRecentFile()));
+    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor), s, this,
+                                         SLOT(openRecentFile()));
   }
 }
 
@@ -223,7 +226,9 @@ void GraphPerspective::logCleared() {
   _ui->loggerIcon->setPixmap(QPixmap());
 }
 
-void GraphPerspective::findPlugins() { _ui->algorithmRunner->findPlugins(); }
+void GraphPerspective::findPlugins() {
+  _ui->algorithmRunner->findPlugins();
+}
 
 bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::DragEnter) {
@@ -268,12 +273,15 @@ void GraphPerspective::showLogger() {
   _logger->move(pos);
   // extend the logger frame width until reaching the right side of the main
   // window
-  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x() + mainWindow()->width() - _mainWindow->mapToGlobal(_logger->pos()).x(), _logger->height());
+  _logger->resize(_mainWindow->mapToGlobal(_mainWindow->pos()).x() + mainWindow()->width() - _mainWindow->mapToGlobal(_logger->pos()).x(),
+                  _logger->height());
 
   _logger->show();
 }
 
-void GraphPerspective::redrawPanels(bool center) { _ui->workspace->redrawPanels(center); }
+void GraphPerspective::redrawPanels(bool center) {
+  _ui->workspace->redrawPanels(center);
+}
 
 void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
@@ -473,7 +481,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _developFrame->setProject(_project);
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" +
+                                          PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
 
@@ -494,7 +503,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     open(_externalFile);
   }
 
-  foreach (HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) { connect(h, SIGNAL(expanded(bool)), this, SLOT(refreshDockExpandControls())); }
+  foreach (HeaderFrame *h, _ui->docksSplitter->findChildren<HeaderFrame *>()) {
+    connect(h, SIGNAL(expanded(bool)), this, SLOT(refreshDockExpandControls()));
+  }
 
   connect(_ui->sidebarButton, SIGNAL(clicked()), this, SLOT(showHideSideBar()));
 
@@ -510,9 +521,13 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   showTrayMessage("GraphPerspective started");
 }
 
-void GraphPerspective::openExternalFile() { open(_externalFile); }
+void GraphPerspective::openExternalFile() {
+  open(_externalFile);
+}
 
-tlp::GraphHierarchiesModel *GraphPerspective::model() const { return _graphs; }
+tlp::GraphHierarchiesModel *GraphPerspective::model() const {
+  return _graphs;
+}
 
 void GraphPerspective::refreshDockExpandControls() {
   QList<HeaderFrame *> expandedHeaders, collapsedHeaders;
@@ -576,8 +591,9 @@ void GraphPerspective::exportGraph(Graph *g) {
   delete os;
 
   if (!result) {
-    QMessageBox::critical(_mainWindow, trUtf8("Export error"),
-                          QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
+    QMessageBox::critical(_mainWindow, trUtf8("Export error"), QString("<i>") + wizard.algorithm() +
+                                                                   trUtf8("</i> failed to export graph.<br/><br/><b>") +
+                                                                   tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
@@ -646,8 +662,9 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::importGraph(module, data, prg);
 
     if (g == nullptr) {
-      QMessageBox::critical(_mainWindow, trUtf8("Import error"),
-                            QString("<i>") + module.c_str() + trUtf8("</i> failed to import data.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
+      QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + module.c_str() +
+                                                                     trUtf8("</i> failed to import data.<br/><br/><b>") +
+                                                                     tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
     }
@@ -723,13 +740,21 @@ void GraphPerspective::panelFocused(tlp::View *view) {
   focusedPanelGraphSet(view->graph());
 }
 
-void GraphPerspective::changeSynchronization(bool s) { _ui->workspace->setFocusedPanelHighlighting(s); }
+void GraphPerspective::changeSynchronization(bool s) {
+  _ui->workspace->setFocusedPanelHighlighting(s);
+}
 
-void GraphPerspective::focusedPanelGraphSet(Graph *g) { _graphs->setCurrentGraph(g); }
+void GraphPerspective::focusedPanelGraphSet(Graph *g) {
+  _graphs->setCurrentGraph(g);
+}
 
-void GraphPerspective::focusedPanelSynchronized() { _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph()); }
+void GraphPerspective::focusedPanelSynchronized() {
+  _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph());
+}
 
-bool GraphPerspective::save() { return saveAs(_project->projectFile()); }
+bool GraphPerspective::save() {
+  return saveAs(_project->projectFile());
+}
 
 bool GraphPerspective::saveAs(const QString &path) {
   if (path.isEmpty()) {
@@ -928,7 +953,9 @@ void GraphPerspective::redo() {
   }
 }
 
-void GraphPerspective::cut() { copy(_graphs->currentGraph(), true); }
+void GraphPerspective::cut() {
+  copy(_graphs->currentGraph(), true);
+}
 
 void GraphPerspective::paste() {
   if (_graphs->currentGraph() == nullptr)
@@ -949,7 +976,9 @@ void GraphPerspective::paste() {
   centerPanelsForGraph(outGraph);
 }
 
-void GraphPerspective::copy() { copy(_graphs->currentGraph()); }
+void GraphPerspective::copy() {
+  copy(_graphs->currentGraph());
+}
 
 void GraphPerspective::copy(Graph *g, bool deleteAfter) {
   if (g == nullptr)
@@ -1039,14 +1068,16 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
 
     if (!selection->getNodeValue(ends.first)) {
 #ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id)
+               << trUtf8(" automatically added to selection.");
 #endif
       selection->setNodeValue(ends.first, true);
     }
 
     if (!selection->getNodeValue(ends.second)) {
 #ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id)
+               << trUtf8(" automatically added to selection.");
 #endif
       selection->setNodeValue(ends.second, true);
     }
@@ -1056,7 +1087,9 @@ Graph *GraphPerspective::createSubGraph(Graph *graph) {
   return result;
 }
 
-void GraphPerspective::createSubGraph() { createSubGraph(_graphs->currentGraph()); }
+void GraphPerspective::createSubGraph() {
+  createSubGraph(_graphs->currentGraph());
+}
 
 void GraphPerspective::cloneSubGraph() {
   if (_graphs->currentGraph() == nullptr)
@@ -1279,16 +1312,21 @@ void GraphPerspective::openPreferences() {
 
       if (glMainView != nullptr) {
         if (glMainView->getGlMainWidget() != nullptr) {
-          glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(TulipSettings::instance().defaultSelectionColor());
+          glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(
+              TulipSettings::instance().defaultSelectionColor());
         }
       }
     }
   }
 }
 
-void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) { _ui->workspace->setAutoCenterPanelsOnDraw(f); }
+void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) {
+  _ui->workspace->setAutoCenterPanelsOnDraw(f);
+}
 
-void GraphPerspective::pluginsListChanged() { _ui->algorithmRunner->refreshPluginsList(); }
+void GraphPerspective::pluginsListChanged() {
+  _ui->algorithmRunner->refreshPluginsList();
+}
 
 void GraphPerspective::addNewGraph() {
   Graph *g = tlp::newGraph();
@@ -1296,7 +1334,9 @@ void GraphPerspective::addNewGraph() {
   showStartPanels(g);
 }
 
-void GraphPerspective::newProject() { createPerspective(name().c_str()); }
+void GraphPerspective::newProject() {
+  createPerspective(name().c_str());
+}
 
 void GraphPerspective::openRecentFile() {
   QAction *action = static_cast<QAction *>(sender());
@@ -1328,11 +1368,17 @@ void GraphPerspective::setDevelopMode() {
   _ui->centralWidget->setCurrentIndex(1);
 }
 
-void GraphPerspective::showUserDocumentation() { QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html")); }
+void GraphPerspective::showUserDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html"));
+}
 
-void GraphPerspective::showDevelDocumentation() { QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-dev/html/index.html")); }
+void GraphPerspective::showDevelDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-dev/html/index.html"));
+}
 
-void GraphPerspective::showPythonDocumentation() { QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html")); }
+void GraphPerspective::showPythonDocumentation() {
+  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html"));
+}
 
 void GraphPerspective::showHideSideBar() {
   if (_ui->docksWidget->isVisible()) {
@@ -1344,7 +1390,9 @@ void GraphPerspective::showHideSideBar() {
   }
 }
 
-void GraphPerspective::displayColorScalesDialog() { _colorScalesDialog->show(); }
+void GraphPerspective::displayColorScalesDialog() {
+  _colorScalesDialog->show();
+}
 
 void GraphPerspective::showAboutTulipPage() {
   if (!checkSocketConnected()) {

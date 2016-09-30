@@ -31,11 +31,11 @@
 
 using namespace tlp;
 
-PerspectiveItemWidget::PerspectiveItemWidget(const QString& perspectiveName,QWidget *parent)
-  : QWidget(parent), _perspectiveName(perspectiveName), _ui(new Ui::PerspectiveItemData) {
+PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName, QWidget *parent)
+    : QWidget(parent), _perspectiveName(perspectiveName), _ui(new Ui::PerspectiveItemData) {
   _ui->setupUi(this);
   _ui->name->setText(_perspectiveName);
-  const tlp::Plugin& info = PluginLister::instance()->pluginInformation(_perspectiveName.toStdString());
+  const tlp::Plugin &info = PluginLister::instance()->pluginInformation(_perspectiveName.toStdString());
   _ui->description->setText(info.info().c_str());
 
   QPixmap px(info.icon().c_str());
@@ -57,12 +57,11 @@ void PerspectiveItemWidget::mouseDoubleClickEvent(QMouseEvent *) {
 }
 
 void PerspectiveItemWidget::focusInEvent(QFocusEvent *) {
-  _ui->frame->setProperty("highlighted",true);
+  _ui->frame->setProperty("highlighted", true);
   _ui->frame->setStyleSheet(_ui->frame->styleSheet());
 }
 
 void PerspectiveItemWidget::focusOutEvent(QFocusEvent *) {
-  _ui->frame->setProperty("highlighted",false);
+  _ui->frame->setProperty("highlighted", false);
   _ui->frame->setStyleSheet(_ui->frame->styleSheet());
 }
-

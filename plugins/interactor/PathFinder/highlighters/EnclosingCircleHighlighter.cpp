@@ -35,7 +35,8 @@
 using namespace tlp;
 using namespace std;
 
-EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(QWidget *parent): QWidget(parent),_ui(new Ui::EnclosingCircleConfigurationData) {
+EnclosingCircleConfigurationWidget::EnclosingCircleConfigurationWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::EnclosingCircleConfigurationData) {
   _ui->setupUi(this);
   connect(_ui->solidColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(solidColorRadioChecked(bool)));
   connect(_ui->inverseColorRadio, SIGNAL(clicked(bool)), this, SIGNAL(inverseColorRadioChecked(bool)));
@@ -68,39 +69,38 @@ Color getInverseColor(const Color &c) {
 }
 
 //******************************************************
-EnclosingCircleHighlighter::EnclosingCircleHighlighter():PathHighlighter("Enclosing circle"), circleColor(200,200,200), outlineColor(0,0,0), alpha(128), inversedColor(false),configurationWidget(nullptr) {
-
+EnclosingCircleHighlighter::EnclosingCircleHighlighter()
+    : PathHighlighter("Enclosing circle"), circleColor(200, 200, 200), outlineColor(0, 0, 0), alpha(128), inversedColor(false),
+      configurationWidget(nullptr) {
 }
 
-
-void EnclosingCircleHighlighter::highlight(const PathFinder*, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
+void EnclosingCircleHighlighter::highlight(const PathFinder *, GlMainWidget *glMainWidget, BooleanProperty *selection, node, node) {
   GlGraphInputData *inputData(getInputData(glMainWidget));
   GlScene *scene = glMainWidget->getScene();
   LayoutProperty *layout = inputData->getElementLayout();
-  vector<Circlef > circles;
-  float minDepth=-.5; // We'll draw the circle beyond the deeper node. Will work in most cases.
-  for(node n : selection->getNodesEqualTo(true)) {
+  vector<Circlef> circles;
+  float minDepth = -.5; // We'll draw the circle beyond the deeper node. Will work in most cases.
+  for (node n : selection->getNodesEqualTo(true)) {
     Circlef c;
-    minDepth=min(minDepth, layout->getNodeValue(n).getZ());
+    minDepth = min(minDepth, layout->getNodeValue(n).getZ());
 
     if (getNodeEnclosingCircle(c, inputData, n))
       circles.push_back(c);
   }
-  for(edge e : selection->getEdgesEqualTo(true)) {
+  for (edge e : selection->getEdgesEqualTo(true)) {
     Circlef c;
 
     if (getEdgeEnclosingCircle(c, inputData, e))
       circles.push_back(c);
   }
-  Circlef enclosing(enclosingCircle<float> (circles));
+  Circlef enclosing(enclosingCircle<float>(circles));
 
   Color inside, outline;
 
   if (inversedColor) {
     inside = getInverseColor(glMainWidget->getScene()->getBackgroundColor());
     outline = inside;
-  }
-  else {
+  } else {
     inside = circleColor;
     outline = outlineColor;
   }
@@ -111,7 +111,7 @@ void EnclosingCircleHighlighter::highlight(const PathFinder*, GlMainWidget *glMa
   addGlEntity(scene, glCircle, true, "PathFinderCircle");
 }
 
-void EnclosingCircleHighlighter::draw(GlMainWidget*) {
+void EnclosingCircleHighlighter::draw(GlMainWidget *) {
 }
 
 bool EnclosingCircleHighlighter::isConfigurable() const {
@@ -128,8 +128,7 @@ QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
   if (inversedColor) {
     configurationWidget->inverseColorRadioCheck(true);
     configurationWidget->circleColorBtnDisabled(true);
-  }
-  else
+  } else
     configurationWidget->solidColorRadioCheck(true);
 
   configurationWidget->alphaSliderSetValue(alpha);
@@ -142,18 +141,18 @@ QWidget *EnclosingCircleHighlighter::getConfigurationWidget() {
 
 void EnclosingCircleHighlighter::solidColorRadioChecked(bool) {
   configurationWidget->circleColorBtnDisabled(false);
-  inversedColor=false;
+  inversedColor = false;
 }
 
 void EnclosingCircleHighlighter::inverseColorRadioChecked(bool) {
   configurationWidget->circleColorBtnDisabled(true);
-  inversedColor=true;
+  inversedColor = true;
 }
 
 void EnclosingCircleHighlighter::colorButtonClicked() {
   QColor initial(circleColor.getR(), circleColor.getG(), circleColor.getB(), circleColor.getA());
   QColor c(QColorDialog::getColor(initial, configurationWidget));
-  outlineColor = Color(0,0,0);
+  outlineColor = Color(0, 0, 0);
   circleColor = Color(c.red(), c.green(), c.blue(), c.alpha());
 }
 

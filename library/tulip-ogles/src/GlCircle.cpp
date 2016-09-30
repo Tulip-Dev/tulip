@@ -30,8 +30,8 @@
 
 using namespace tlp;
 
-GlCircle::GlCircle(const Coord &center, float radius, const Color &fillColor, const Color &outlineColor,
-                   bool filled, bool outlined) : GlGlyphEntity(NodeShape::Circle) {
+GlCircle::GlCircle(const Coord &center, float radius, const Color &fillColor, const Color &outlineColor, bool filled, bool outlined)
+    : GlGlyphEntity(NodeShape::Circle) {
   setCenter(center);
   setRadius(radius);
   setColor(fillColor);
@@ -41,5 +41,5 @@ GlCircle::GlCircle(const Coord &center, float radius, const Color &fillColor, co
 }
 
 void GlCircle::setRadius(float radius) {
-  setSize(Size(radius*2, radius*2));
+  setSize(Size(radius * 2, radius * 2));
 }

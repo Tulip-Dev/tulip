@@ -31,12 +31,11 @@ namespace tlp {
 /**
 * @brief QItemDelegate to display and edit data from a GraphTableModel in the Qt model/view architecture.
 **/
-class TLP_QT_SCOPE GraphTableItemDelegate: public TulipItemDelegate {
+class TLP_QT_SCOPE GraphTableItemDelegate : public TulipItemDelegate {
   Q_OBJECT
 public:
-  GraphTableItemDelegate(QObject* parent=nullptr) ;
+  GraphTableItemDelegate(QObject *parent = nullptr);
   void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const;
-
 };
 }
 #endif /* TULIPTABLEWIDGETITEMDELEGATE_H_ */

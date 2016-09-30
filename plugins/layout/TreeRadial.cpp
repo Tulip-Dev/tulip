@@ -32,16 +32,17 @@ using namespace tlp;
  * from T. J. Jankun-Kelly, Kwan-Liu Ma
  * published in IEEE Symposium on Information Visualization, INFOVIS pages 59--66 (2003)
  **/
-class TreeRadial:public LayoutAlgorithm {
+class TreeRadial : public LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Tree Radial","Patrick Mary","14/05/2007",
+  PLUGININFORMATION("Tree Radial", "Patrick Mary", "14/05/2007",
                     "Implements the radial tree layout algorithm first published as:<br/>"
-                    "T. J. Jankun-Kelly, Kwan-Liu Ma <b>MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes</b> Proc. IEEE Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
-                    "1.0","Tree")
+                    "T. J. Jankun-Kelly, Kwan-Liu Ma <b>MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual "
+                    "Nodes</b> Proc. IEEE Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
+                    "1.0", "Tree")
   Graph *tree;
   vector<float> nRadii;
   vector<float> lRadii;
-  vector<vector <node> > bfs;
+  vector<vector<node>> bfs;
 
   // simple structure to implement
   // the dfs loop for node radii computation below
@@ -49,34 +50,32 @@ public:
     node current;
     float radius;
     unsigned int depth;
-    Iterator<node>* neighbours;
+    Iterator<node> *neighbours;
 
-    dfsNodeRadiiStruct(node n = node(), float r = 0, unsigned int d = 0,
-                       Iterator<node>* it = nullptr):
-      current(n), radius(r), depth(d), neighbours(it) {}
+    dfsNodeRadiiStruct(node n = node(), float r = 0, unsigned int d = 0, Iterator<node> *it = nullptr)
+        : current(n), radius(r), depth(d), neighbours(it) {
+    }
   };
 
   void dfsComputeNodeRadii(node n, SizeProperty *sizes) {
     MutableContainer<bool> visited;
     visited.setAll(false);
     stack<dfsNodeRadiiStruct> dfsLevels;
-    dfsNodeRadiiStruct dfsParams(n, sizes->getNodeValue(n).getW()/2, 0,
-                                 tree->getOutNodes(n));
+    dfsNodeRadiiStruct dfsParams(n, sizes->getNodeValue(n).getW() / 2, 0, tree->getOutNodes(n));
     dfsLevels.push(dfsParams);
 
-    while(!dfsLevels.empty()) {
+    while (!dfsLevels.empty()) {
       dfsParams = dfsLevels.top();
       n = dfsParams.current;
       float radius = dfsParams.radius;
       unsigned int depth = dfsParams.depth;
-      Iterator<node>* it = dfsParams.neighbours;
+      Iterator<node> *it = dfsParams.neighbours;
 
       if (!visited.get(n.id)) {
         if (bfs.size() == depth) {
           bfs.push_back(vector<node>());
           nRadii.push_back(radius);
-        }
-        else if (radius > nRadii[depth]) {
+        } else if (radius > nRadii[depth]) {
           nRadii[depth] = radius;
         }
 
@@ -88,12 +87,11 @@ public:
         // go deeper in the dfs loop
         n = it->next();
         dfsParams.current = n;
-        dfsParams.radius = sizes->getNodeValue(n).getW()/2;
+        dfsParams.radius = sizes->getNodeValue(n).getW() / 2;
         dfsParams.depth = depth + 1;
         dfsParams.neighbours = tree->getOutNodes(n);
         dfsLevels.push(dfsParams);
-      }
-      else {
+      } else {
         // go back in the dfs levels
         dfsLevels.pop();
         delete it;
@@ -102,7 +100,8 @@ public:
   }
 
   void bfsComputeLayerRadii(float lSpacing, float nSpacing, SizeProperty *) {
-    if (bfs.size() < 2) return;
+    if (bfs.size() < 2)
+      return;
 
     float lRadius = 0, lSpacingMax = 0;
     lRadii.push_back(0);
@@ -112,7 +111,7 @@ public:
       float lRadiusPrev = lRadius;
       lRadius += nRadii[i] + nRadii[i + 1] + lSpacing;
       // check if there is enough space for nodes of layer i + 1
-      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing))/static_cast<float>(2 * M_PI);
+      float mRadius = (bfs[i + 1].size() * (nRadii[i + 1] + nSpacing)) / static_cast<float>(2 * M_PI);
 
       if (mRadius > lRadius)
         lRadius = mRadius;
@@ -137,25 +136,23 @@ public:
     node current;
     double cAngle;
     unsigned int depth;
-    Iterator<node>* neighbours;
+    Iterator<node> *neighbours;
 
-    dfsAngularSpreadStruct(node n = node(), unsigned int d = 0,
-                           Iterator<node>* it = nullptr):
-      current(n), cAngle(0), depth(d), neighbours(it) {}
+    dfsAngularSpreadStruct(node n = node(), unsigned int d = 0, Iterator<node> *it = nullptr) : current(n), cAngle(0), depth(d), neighbours(it) {
+    }
   };
 
-  void dfsComputeAngularSpread(node n, SizeProperty *sizes,
-                               MutableContainer<double>& angles) {
+  void dfsComputeAngularSpread(node n, SizeProperty *sizes, MutableContainer<double> &angles) {
     // we dont use recursive call to avoid a possible stack overflow
     stack<dfsAngularSpreadStruct> dfsLevels;
     dfsAngularSpreadStruct dfsParams(n, 0, tree->getOutNodes(n));
     dfsLevels.push(dfsParams);
 
-    while(!dfsLevels.empty()) {
+    while (!dfsLevels.empty()) {
       dfsParams = dfsLevels.top();
       n = dfsParams.current;
       unsigned int depth = dfsParams.depth;
-      Iterator<node>* it = dfsParams.neighbours;
+      Iterator<node> *it = dfsParams.neighbours;
 
       if (it->hasNext()) {
         // go deeper in the dfs levels
@@ -165,15 +162,14 @@ public:
         dfsParams.depth = depth + 1;
         dfsParams.neighbours = tree->getOutNodes(n);
         dfsLevels.push(dfsParams);
-      }
-      else {
+      } else {
         delete it;
         dfsLevels.pop();
         double cAngle = dfsParams.cAngle;
 
         if (depth > 0) {
           // compute the node angular spread
-          double nAngle = 2 * atan(sizes->getNodeValue(n).getW()/(2. * lRadii[depth]));
+          double nAngle = 2 * atan(sizes->getNodeValue(n).getW() / (2. * lRadii[depth]));
 
           // check if it is not greater than the sum
           if (nAngle > cAngle)
@@ -184,7 +180,7 @@ public:
         angles.set(n.id, cAngle);
 
         if (depth > 0) {
-          dfsAngularSpreadStruct& upParams = dfsLevels.top();
+          dfsAngularSpreadStruct &upParams = dfsLevels.top();
           upParams.cAngle += cAngle;
         }
       }
@@ -201,25 +197,22 @@ public:
     double nSpread;
     bool checkAngle;
     unsigned int depth;
-    Iterator<node>* neighbours;
+    Iterator<node> *neighbours;
 
-    dfsDoLayoutStruct(node n = node(), double bAngle = 0, double eAngle = 0,
-                      double spread = 0, bool flag = false, unsigned int d = 0,
-                      Iterator<node>* it = nullptr):
-      current(n), startAngle(bAngle), endAngle(eAngle),
-      sAngle(eAngle - bAngle), nSpread(spread),
-      checkAngle(flag), depth(d), neighbours(it) {}
+    dfsDoLayoutStruct(node n = node(), double bAngle = 0, double eAngle = 0, double spread = 0, bool flag = false, unsigned int d = 0,
+                      Iterator<node> *it = nullptr)
+        : current(n), startAngle(bAngle), endAngle(eAngle), sAngle(eAngle - bAngle), nSpread(spread), checkAngle(flag), depth(d), neighbours(it) {
+    }
   };
 
-  void doLayout(node n, MutableContainer<double>& angles) {
+  void doLayout(node n, MutableContainer<double> &angles) {
     MutableContainer<bool> visited;
     visited.setAll(false);
     stack<dfsDoLayoutStruct> dfsLevels;
-    dfsDoLayoutStruct dfsParams(n, 0, 2 * M_PI, angles.get(n.id), false,
-                                0, tree->getOutNodes(n));
+    dfsDoLayoutStruct dfsParams(n, 0, 2 * M_PI, angles.get(n.id), false, 0, tree->getOutNodes(n));
     dfsLevels.push(dfsParams);
 
-    while(!dfsLevels.empty()) {
+    while (!dfsLevels.empty()) {
       dfsParams = dfsLevels.top();
       n = dfsParams.current;
       double startAngle = dfsParams.startAngle;
@@ -239,36 +232,31 @@ public:
 
         if (depth > 0) {
           // layout the node in the middle of the sector
-          double nAngle = (startAngle + endAngle)/2.0;
-          result->setNodeValue(n, Coord(lRadii[depth] * static_cast<float>(cos(nAngle)),
-                                        lRadii[depth] * static_cast<float>(sin(nAngle)),
-                                        0));
-        }
-        else
+          double nAngle = (startAngle + endAngle) / 2.0;
+          result->setNodeValue(n, Coord(lRadii[depth] * static_cast<float>(cos(nAngle)), lRadii[depth] * static_cast<float>(sin(nAngle)), 0));
+        } else
           result->setNodeValue(n, Coord(0, 0, 0));
 
         visited.set(n.id, true);
       }
 
-      Iterator<node>* it = dfsParams.neighbours;
+      Iterator<node> *it = dfsParams.neighbours;
       double nSpread = dfsParams.nSpread;
 
       if (it->hasNext()) {
         // go deeper in the dfs levels
         n = it->next();
         double angle = angles.get(n.id);
-        endAngle = startAngle + (sAngle * (angle/nSpread));
+        endAngle = startAngle + (sAngle * (angle / nSpread));
         dfsLevels.top().startAngle = endAngle;
         dfsParams.current = n;
         dfsParams.endAngle = endAngle;
-        dfsParams.sAngle = endAngle - startAngle,
-                  dfsParams.nSpread = angle;
+        dfsParams.sAngle = endAngle - startAngle, dfsParams.nSpread = angle;
         dfsParams.checkAngle = checkAngle;
         dfsParams.depth = depth + 1;
         dfsParams.neighbours = tree->getOutNodes(n);
         dfsLevels.push(dfsParams);
-      }
-      else {
+      } else {
         // go back in the dfs levels
         delete it;
         dfsLevels.pop();
@@ -276,7 +264,7 @@ public:
     }
   }
 
-  TreeRadial(const PluginContext* context):LayoutAlgorithm(context), tree(nullptr) {
+  TreeRadial(const PluginContext *context) : LayoutAlgorithm(context), tree(nullptr) {
     addNodeSizePropertyParameter(this);
     addSpacingParameters(this);
   }
@@ -287,7 +275,7 @@ public:
 
     // push a temporary graph state (not redoable)
     // preserving layout updates
-    std::vector<PropertyInterface*> propsToPreserve;
+    std::vector<PropertyInterface *> propsToPreserve;
 
     if (result->getName() != "")
       propsToPreserve.push_back(result);
@@ -302,7 +290,7 @@ public:
     }
 
     float nSpacing, lSpacing;
-    SizeProperty* sizes;
+    SizeProperty *sizes;
 
     if (!getNodeSizePropertyParameter(dataSet, sizes))
       sizes = graph->getProperty<SizeProperty>("viewSize");
@@ -310,11 +298,10 @@ public:
     getSpacingParameters(dataSet, nSpacing, lSpacing);
 
     SizeProperty *circleSizes = new SizeProperty(graph);
-    for(node n : tree->getNodes()) {
-      const Size& boundingBox = sizes->getNodeValue (n);
-      double diam = 2.*sqrt (boundingBox.getW() * boundingBox.getW()/4.0 +
-                             boundingBox.getH() * boundingBox.getH()/4.0);
-      circleSizes->setNodeValue (n, Size (static_cast<float>(diam), static_cast<float>(diam), 1.0f));
+    for (node n : tree->getNodes()) {
+      const Size &boundingBox = sizes->getNodeValue(n);
+      double diam = 2. * sqrt(boundingBox.getW() * boundingBox.getW() / 4.0 + boundingBox.getH() * boundingBox.getH() / 4.0);
+      circleSizes->setNodeValue(n, Size(static_cast<float>(diam), static_cast<float>(diam), 1.0f));
     }
     sizes = circleSizes;
 
@@ -329,7 +316,7 @@ public:
     doLayout(root, angles);
 
     delete sizes;
-    //clear all bends in the Layout
+    // clear all bends in the Layout
     result->setAllEdgeValue(vector<Coord>());
     // forget last temporary graph state
     graph->pop();

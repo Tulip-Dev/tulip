@@ -123,9 +123,8 @@ static std::string glyphVertexShaderSrcCommonCode = R"(
 )";
 
 static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRenderingBatch) {
-  std::string shaderSrc = ShaderManager::getShaderSrcPrefix() +
-    "const int MAX_NB_GLYPHS = " + toString(maxNbGlyphsByRenderingBatch) + ";\n" +
-     glyphVertexShaderSrcCommonCode + R"(
+  std::string shaderSrc = ShaderManager::getShaderSrcPrefix() + "const int MAX_NB_GLYPHS = " + toString(maxNbGlyphsByRenderingBatch) + ";\n" +
+                          glyphVertexShaderSrcCommonCode + R"(
        uniform vec3 u_center[MAX_NB_GLYPHS];
        uniform vec3 u_scale[MAX_NB_GLYPHS];
        uniform vec4 u_rotation[MAX_NB_GLYPHS];
@@ -186,7 +185,7 @@ static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRend
 }
 
 static std::string glyphsVertexShaderHardwareInstancingSrc() {
-    return ShaderManager::getShaderSrcPrefix() + glyphVertexShaderSrcCommonCode + R"(
+  return ShaderManager::getShaderSrcPrefix() + glyphVertexShaderSrcCommonCode + R"(
       attribute vec3 a_center;
       attribute vec3 a_scale;
       attribute vec4 a_rotation;
@@ -335,7 +334,7 @@ GlyphsRenderer::GlyphsRenderer() : _billboardMode(false) {
   if (maxNbGlyphsByRenderingBatch > 1024) {
     maxNbGlyphsByRenderingBatch /= 4;
   }
-  maxNbGlyphsByRenderingBatch = (maxNbGlyphsByRenderingBatch*160) / 1024;
+  maxNbGlyphsByRenderingBatch = (maxNbGlyphsByRenderingBatch * 160) / 1024;
 
 #ifdef __EMSCRIPTEN__
   std::string webglExtensions = reinterpret_cast<const char *>(glGetString(GL_EXTENSIONS));
@@ -405,8 +404,8 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
     _glyphsDataStride[glyph] += 3;
   }
 
-  for (unsigned short i = 0 ; i < _maxGlyphInstanceByRenderingBatch[glyph] ; ++i) {
-    for (unsigned short j = 0 ; j < nbVertices ; ++j) {
+  for (unsigned short i = 0; i < _maxGlyphInstanceByRenderingBatch[glyph]; ++i) {
+    for (unsigned short j = 0; j < nbVertices; ++j) {
       addTlpVecToVecFloat(Vec4f(glyphVertices[j][0], glyphVertices[j][1], glyphVertices[j][2], float(i)), glyphsData);
       if (!glyphTexCoords.empty()) {
         addTlpVecToVecFloat(glyphTexCoords[j], glyphsData);
@@ -415,11 +414,11 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
         addTlpVecToVecFloat(glyphNormals[j], glyphsData);
       }
     }
-    for (unsigned short j = 0 ; j < glyphVerticesIndices.size() ; ++j) {
+    for (unsigned short j = 0; j < glyphVerticesIndices.size(); ++j) {
       if (_canUseUIntIndices) {
-        glyphsIndicesUInt.push_back(i*nbVertices+glyphVerticesIndices[j]);
+        glyphsIndicesUInt.push_back(i * nbVertices + glyphVerticesIndices[j]);
       } else {
-        glyphsIndicesUShort.push_back(i*nbVertices+glyphVerticesIndices[j]);
+        glyphsIndicesUShort.push_back(i * nbVertices + glyphVerticesIndices[j]);
       }
     }
   }
@@ -427,7 +426,7 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
   vector<unsigned int> glyphOutlinesNbIndices;
   vector<unsigned int> glyphOutlinesIndicesOffsets;
   unsigned int offset = 0;
-  for (unsigned int i = 0 ; i < glyphOutlinesIndices.size() ; ++i) {
+  for (unsigned int i = 0; i < glyphOutlinesIndices.size(); ++i) {
     glyphOutlinesNbIndices.push_back(glyphOutlinesIndices[i].size());
     if (_canUseUIntIndices) {
       glyphOutlinesIndicesOffsets.push_back((glyphsIndicesUInt.size() + offset) * sizeof(unsigned int));
@@ -437,13 +436,13 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
     offset += glyphOutlinesIndices[i].size();
   }
 
-  for (unsigned short i = 0 ; i < _maxGlyphInstanceByRenderingBatch[glyph] ; ++i) {
-    for (unsigned int j = 0 ; j < glyphOutlinesIndices.size() ; ++j) {
-      for (unsigned int k = 0 ; k < glyphOutlinesIndices[j].size() ; ++k) {
+  for (unsigned short i = 0; i < _maxGlyphInstanceByRenderingBatch[glyph]; ++i) {
+    for (unsigned int j = 0; j < glyphOutlinesIndices.size(); ++j) {
+      for (unsigned int k = 0; k < glyphOutlinesIndices[j].size(); ++k) {
         if (_canUseUIntIndices) {
-          glyphsIndicesUInt.push_back(i*nbVertices+glyphOutlinesIndices[j][k]);
+          glyphsIndicesUInt.push_back(i * nbVertices + glyphOutlinesIndices[j][k]);
         } else {
-          glyphsIndicesUShort.push_back(i*nbVertices+glyphOutlinesIndices[j][k]);
+          glyphsIndicesUShort.push_back(i * nbVertices + glyphOutlinesIndices[j][k]);
         }
       }
     }
@@ -461,7 +460,6 @@ void GlyphsRenderer::prepareGlyphDataPseudoInstancing(int glyphId) {
   } else {
     _glyphsIndicesBuffer[glyph]->allocate(glyphsIndicesUShort);
   }
-
 }
 
 void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
@@ -491,7 +489,7 @@ void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
     _glyphsDataStride[glyph] += 3;
   }
 
-  for (unsigned int i = 0 ; i < nbVertices ; ++i) {
+  for (unsigned int i = 0; i < nbVertices; ++i) {
     addTlpVecToVecFloat(glyphVertices[i], glyphsData);
     if (!glyphTexCoords.empty()) {
       addTlpVecToVecFloat(glyphTexCoords[i], glyphsData);
@@ -501,17 +499,17 @@ void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
     }
   }
 
-  for (size_t i = 0 ; i < glyphVerticesIndices.size() ; ++i) {
+  for (size_t i = 0; i < glyphVerticesIndices.size(); ++i) {
     glyphsIndicesUShort.push_back(glyphVerticesIndices[i]);
   }
 
   vector<unsigned int> glyphOutlinesNbIndices;
   vector<unsigned int> glyphOutlinesIndicesOffsets;
 
-  for (size_t  i = 0 ; i < glyphOutlinesIndices.size() ; ++i) {
+  for (size_t i = 0; i < glyphOutlinesIndices.size(); ++i) {
     glyphOutlinesNbIndices.push_back(glyphOutlinesIndices[i].size());
     glyphOutlinesIndicesOffsets.push_back(glyphsIndicesUShort.size() * sizeof(unsigned short));
-    for (size_t j = 0 ; j < glyphOutlinesIndices[i].size() ; ++j) {
+    for (size_t j = 0; j < glyphOutlinesIndices[i].size(); ++j) {
       glyphsIndicesUShort.push_back(glyphOutlinesIndices[i][j]);
     }
   }
@@ -524,20 +522,13 @@ void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
 
   _glyphsIndicesBuffer[glyph] = new GlBuffer(GlBuffer::IndexBuffer);
   _glyphsIndicesBuffer[glyph]->allocate(glyphsIndicesUShort);
-
 }
 
-void GlyphsRenderer::renderGlyphs(const Camera &camera,
-                                  const Light &light,
-                                  int glyphId,
-                                  const std::vector<tlp::Coord> &centers,
-                                  const std::vector<tlp::Size> &sizes,
-                                  const std::vector<tlp::Color> &colors,
-                                  const std::vector<std::string> &textures,
-                                  const std::vector<float> &borderWidths,
-                                  const std::vector<tlp::Color> &borderColors,
-                                  const std::vector<Vec4f> &rotationAxisAndAngles,
-                                  bool forceFlatShading, bool swapYZ) {
+void GlyphsRenderer::renderGlyphs(const Camera &camera, const Light &light, int glyphId, const std::vector<tlp::Coord> &centers,
+                                  const std::vector<tlp::Size> &sizes, const std::vector<tlp::Color> &colors,
+                                  const std::vector<std::string> &textures, const std::vector<float> &borderWidths,
+                                  const std::vector<tlp::Color> &borderColors, const std::vector<Vec4f> &rotationAxisAndAngles, bool forceFlatShading,
+                                  bool swapYZ) {
 
   if (centers.empty()) {
     return;
@@ -549,38 +540,29 @@ void GlyphsRenderer::renderGlyphs(const Camera &camera,
   assert(borderColors.empty() || centers.size() == borderColors.size());
   assert(rotationAxisAndAngles.empty() || centers.size() == rotationAxisAndAngles.size());
 
-
   GlTextureManager::instance()->bindTexturesAtlas();
   setupGlyphsShader(camera, light);
   if (_canUseHardwareInstancing) {
-    renderGlyphsHardwareInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationAxisAndAngles, forceFlatShading, swapYZ);
+    renderGlyphsHardwareInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationAxisAndAngles, forceFlatShading,
+                                   swapYZ);
   } else {
-    renderGlyphsPseudoInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationAxisAndAngles, forceFlatShading, swapYZ);
+    renderGlyphsPseudoInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationAxisAndAngles, forceFlatShading,
+                                 swapYZ);
   }
   GlTextureManager::instance()->unbindTexturesAtlas();
 }
 
-template <typename T>
-vector<T> putValInVector(const T&val) {
+template <typename T> vector<T> putValInVector(const T &val) {
   vector<T> ret;
   ret.push_back(val);
   return ret;
 }
 
-void GlyphsRenderer::renderGlyph(const Camera &camera,
-                                 const Light &light,
-                                 int glyphId,
-                                 const tlp::Coord &center,
-                                 const tlp::Size &size,
-                                 const tlp::Color &color,
-                                 const std::string &texture,
-                                 const float &borderWidth,
-                                 const tlp::Color &borderColor,
-                                 const tlp::Vec4f &rotationAxisAndAngle,
-                                 bool forceFlatShading, bool swapYZ) {
+void GlyphsRenderer::renderGlyph(const Camera &camera, const Light &light, int glyphId, const tlp::Coord &center, const tlp::Size &size,
+                                 const tlp::Color &color, const std::string &texture, const float &borderWidth, const tlp::Color &borderColor,
+                                 const tlp::Vec4f &rotationAxisAndAngle, bool forceFlatShading, bool swapYZ) {
   renderGlyphs(camera, light, glyphId, putValInVector(center), putValInVector(size), putValInVector(color), putValInVector(texture),
                putValInVector(borderWidth), putValInVector(borderColor), putValInVector(rotationAxisAndAngle), forceFlatShading, swapYZ);
-
 }
 
 void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light) {
@@ -598,8 +580,8 @@ void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light)
   _glyphShader->setUniformColor("u_lightAmbientColor", light.getAmbientColor());
   _glyphShader->setUniformColor("u_lightDiffuseColor", light.getDiffuseColor());
   _glyphShader->setUniformColor("u_lightSpecularColor", light.getSpecularColor());
-  _glyphShader->setUniformColor("u_materialAmbientColor", Color(0,0,0));
-  _glyphShader->setUniformColor("u_materialSpecularColor", Color(0,0,0));
+  _glyphShader->setUniformColor("u_materialAmbientColor", Color(0, 0, 0));
+  _glyphShader->setUniformColor("u_materialSpecularColor", Color(0, 0, 0));
   _glyphShader->setUniformFloat("u_materialShininess", 16);
 
   _glyphShader->setUniformTextureSampler("u_textures[0]", 0);
@@ -608,20 +590,14 @@ void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light)
   _glyphShader->setUniformTextureSampler("u_textures[3]", 3);
 
   _glyphShader->setUniformBool("u_billboarding", _billboardMode);
-
 }
 
 const unsigned int glyphsAttributesDataStride = 19;
 
-void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
-                                                    const std::vector<tlp::Coord> &centers,
-                                                    const std::vector<tlp::Size> &sizes,
-                                                    const std::vector<tlp::Color> &colors,
-                                                    const std::vector<std::string> &textures,
-                                                    const std::vector<float> &borderWidths,
-                                                    const std::vector<tlp::Color> &borderColors,
-                                                    const std::vector<Vec4f> &rotationAxisAndAngles,
-                                                    bool forceFlatShading, bool swapYZ) {
+void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
+                                                    const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures,
+                                                    const std::vector<float> &borderWidths, const std::vector<tlp::Color> &borderColors,
+                                                    const std::vector<Vec4f> &rotationAxisAndAngles, bool forceFlatShading, bool swapYZ) {
 
   prepareGlyphDataHardwareInstancing(glyphId);
   Glyph *glyph = GlyphsManager::instance()->getGlyph(glyphId);
@@ -633,15 +609,17 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
   _glyphShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(0));
   unsigned int offset = 3;
   if (!glyph->getGlyphTexCoords().empty()) {
-    _glyphShader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(offset * sizeof(float)));
+    _glyphShader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float),
+                                         BUFFER_OFFSET(offset * sizeof(float)));
     offset += 2;
   }
   if (!glyph->getGlyphNormals().empty()) {
-    _glyphShader->setVertexAttribPointer("a_normal", 3, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(offset * sizeof(float)));
+    _glyphShader->setVertexAttribPointer("a_normal", 3, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float),
+                                         BUFFER_OFFSET(offset * sizeof(float)));
   }
 
-  std::map<float, std::vector<unsigned int> > glyphsBorderWidth;
-  for (size_t i = 0 ; i < centers.size() ; ++i) {
+  std::map<float, std::vector<unsigned int>> glyphsBorderWidth;
+  for (size_t i = 0; i < centers.size(); ++i) {
     if (borderWidths.empty()) {
       glyphsBorderWidth[0].push_back(i);
     } else {
@@ -649,23 +627,23 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
     }
   }
 
-  std::map<float, std::vector<unsigned int> >::iterator it = glyphsBorderWidth.begin();
+  std::map<float, std::vector<unsigned int>>::iterator it = glyphsBorderWidth.begin();
 
-  for (; it != glyphsBorderWidth.end() ; ++it) {
+  for (; it != glyphsBorderWidth.end(); ++it) {
 
     unsigned int idx = 0;
     vector<float> outlineColorsData;
     vector<float> glyphsData;
-    glyphsData.reserve(it->second.size()*glyphsAttributesDataStride);
-    outlineColorsData.reserve(it->second.size()*4);
+    glyphsData.reserve(it->second.size() * glyphsAttributesDataStride);
+    outlineColorsData.reserve(it->second.size() * 4);
 
-    for (size_t i = 0 ; i < it->second.size() ; ++i) {
+    for (size_t i = 0; i < it->second.size(); ++i) {
       idx = it->second[i];
 
       addTlpVecToVecFloat(centers[idx], glyphsData);
       addTlpVecToVecFloat(sizes[idx], glyphsData);
       if (rotationAxisAndAngles.empty()) {
-        addTlpVecToVecFloat(Vec4f(0.0f,0.0f,1.0f,0.0f), glyphsData);
+        addTlpVecToVecFloat(Vec4f(0.0f, 0.0f, 1.0f, 0.0f), glyphsData);
       } else {
         addTlpVecToVecFloat(rotationAxisAndAngles[idx], glyphsData);
       }
@@ -692,11 +670,16 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
     _glyphShader->setUniformBool("u_swapYZ", swapYZ);
     _glyphShader->setUniformBool("u_textureActivated", true);
     _glyphShader->setVertexAttribPointer("a_center", 3, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float), BUFFER_OFFSET(0), 1);
-    _glyphShader->setVertexAttribPointer("a_scale", 3, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float), BUFFER_OFFSET(3*sizeof(float)), 1);
-    _glyphShader->setVertexAttribPointer("a_rotation", 4, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float), BUFFER_OFFSET(6*sizeof(float)), 1);
-    _glyphShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float), BUFFER_OFFSET(10*sizeof(float)), 1);
-    _glyphShader->setVertexAttribPointer("a_textureUnit", 1, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float), BUFFER_OFFSET(14*sizeof(float)), 1);
-    _glyphShader->setVertexAttribPointer("a_texCoordOffsets", 4, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float), BUFFER_OFFSET(15*sizeof(float)), 1);
+    _glyphShader->setVertexAttribPointer("a_scale", 3, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float),
+                                         BUFFER_OFFSET(3 * sizeof(float)), 1);
+    _glyphShader->setVertexAttribPointer("a_rotation", 4, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float),
+                                         BUFFER_OFFSET(6 * sizeof(float)), 1);
+    _glyphShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float),
+                                         BUFFER_OFFSET(10 * sizeof(float)), 1);
+    _glyphShader->setVertexAttribPointer("a_textureUnit", 1, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float),
+                                         BUFFER_OFFSET(14 * sizeof(float)), 1);
+    _glyphShader->setVertexAttribPointer("a_texCoordOffsets", 4, GL_FLOAT, GL_FALSE, glyphsAttributesDataStride * sizeof(float),
+                                         BUFFER_OFFSET(15 * sizeof(float)), 1);
 
     _glyphsIndicesBuffer[glyph]->bind();
     if (nbIndices != 0) {
@@ -707,16 +690,18 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
 
       _glyphShader->setUniformBool("u_flatShading", true);
       _glyphShader->setUniformBool("u_textureActivated", false);
-      for (size_t i = 0 ; i < it->second.size() ; ++i) {
-        _glyphsInstanceAttributesDataBuffer->write((i * glyphsAttributesDataStride + 10) * sizeof(float), 4 * sizeof(float), &outlineColorsData[4*i]);
+      for (size_t i = 0; i < it->second.size(); ++i) {
+        _glyphsInstanceAttributesDataBuffer->write((i * glyphsAttributesDataStride + 10) * sizeof(float), 4 * sizeof(float),
+                                                   &outlineColorsData[4 * i]);
       }
       if (it->first > 0) {
         glLineWidth(it->first);
       } else {
         glLineWidth(2.0f);
       }
-      for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
-        glDrawElementsInstancedARB(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], GL_UNSIGNED_SHORT, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i]), it->second.size());
+      for (unsigned int i = 0; i < nbOutlines; ++i) {
+        glDrawElementsInstancedARB(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], GL_UNSIGNED_SHORT,
+                                   BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i]), it->second.size());
       }
     }
   }
@@ -726,15 +711,10 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId,
   _glyphShader->disableAttributesArrays();
 }
 
-void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
-                                                  const std::vector<tlp::Coord> &centers,
-                                                  const std::vector<tlp::Size> &sizes,
-                                                  const std::vector<tlp::Color> &colors,
-                                                  const std::vector<std::string> &textures,
-                                                  const std::vector<float> &borderWidths,
-                                                  const std::vector<tlp::Color> &borderColors,
-                                                  const std::vector<Vec4f> &rotationAxisAndAngles,
-                                                  bool forceFlatShading, bool swapYZ) {
+void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
+                                                  const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures,
+                                                  const std::vector<float> &borderWidths, const std::vector<tlp::Color> &borderColors,
+                                                  const std::vector<Vec4f> &rotationAxisAndAngles, bool forceFlatShading, bool swapYZ) {
 
   GLenum indicesType = GL_UNSIGNED_SHORT;
   if (_canUseUIntIndices) {
@@ -749,7 +729,7 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
   unsigned nbInstancesByRenderingBatch = _maxGlyphInstanceByRenderingBatch[glyph];
 
   unsigned int indicesStride = 0;
-  for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
+  for (unsigned int i = 0; i < nbOutlines; ++i) {
     indicesStride += _glyphsOutlinesNbIndices[glyph][i];
   }
 
@@ -758,15 +738,17 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
   _glyphShader->setVertexAttribPointer("a_position", 4, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(0));
   unsigned int offset = 4;
   if (!glyph->getGlyphTexCoords().empty()) {
-    _glyphShader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(offset * sizeof(float)));
+    _glyphShader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float),
+                                         BUFFER_OFFSET(offset * sizeof(float)));
     offset += 2;
   }
   if (!glyph->getGlyphNormals().empty()) {
-    _glyphShader->setVertexAttribPointer("a_normal", 3, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float), BUFFER_OFFSET(offset * sizeof(float)));
+    _glyphShader->setVertexAttribPointer("a_normal", 3, GL_FLOAT, GL_FALSE, _glyphsDataStride[glyph] * sizeof(float),
+                                         BUFFER_OFFSET(offset * sizeof(float)));
   }
 
-  std::map<float, std::vector<unsigned int> > glyphsBorderWidth;
-  for (size_t i = 0 ; i < centers.size() ; ++i) {
+  std::map<float, std::vector<unsigned int>> glyphsBorderWidth;
+  for (size_t i = 0; i < centers.size(); ++i) {
     if (borderWidths.empty()) {
       glyphsBorderWidth[0].push_back(i);
     } else {
@@ -774,9 +756,9 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
     }
   }
 
-  std::map<float, std::vector<unsigned int> >::iterator it = glyphsBorderWidth.begin();
+  std::map<float, std::vector<unsigned int>>::iterator it = glyphsBorderWidth.begin();
 
-  for (; it != glyphsBorderWidth.end() ; ++it) {
+  for (; it != glyphsBorderWidth.end(); ++it) {
 
     unsigned int idx = 0;
     unsigned int cpt = 0;
@@ -788,22 +770,22 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
     vector<float> textureUnitsData;
     vector<float> texCoordsOffsetData;
 
-    centersData.reserve(it->second.size()*3);
-    scalesData.reserve(it->second.size()*3);
-    rotationAnglesData.reserve(it->second.size()*4);
-    colorsData.reserve(it->second.size()*4);
-    outlineColorsData.reserve(it->second.size()*4);
+    centersData.reserve(it->second.size() * 3);
+    scalesData.reserve(it->second.size() * 3);
+    rotationAnglesData.reserve(it->second.size() * 4);
+    colorsData.reserve(it->second.size() * 4);
+    outlineColorsData.reserve(it->second.size() * 4);
     textureUnitsData.reserve(it->second.size());
-    texCoordsOffsetData.reserve(it->second.size()*4);
+    texCoordsOffsetData.reserve(it->second.size() * 4);
 
-    for (size_t i = 0 ; i < it->second.size() ; ++i) {
+    for (size_t i = 0; i < it->second.size(); ++i) {
 
       idx = it->second[i];
 
       addTlpVecToVecFloat(centers[idx], centersData);
       addTlpVecToVecFloat(sizes[idx], scalesData);
       if (rotationAxisAndAngles.empty()) {
-        addTlpVecToVecFloat(Vec4f(0.0f,0.0f,0.0f,1.0f), rotationAnglesData);
+        addTlpVecToVecFloat(Vec4f(0.0f, 0.0f, 0.0f, 1.0f), rotationAnglesData);
       } else {
         addTlpVecToVecFloat(rotationAxisAndAngles[idx], rotationAnglesData);
       }
@@ -834,7 +816,7 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
         _glyphShader->setUniformVec4FloatArray("u_texCoordOffsets", nbInstancesByRenderingBatch, &texCoordsOffsetData[0]);
 
         if (nbIndices != 0) {
-          glDrawElements(GL_TRIANGLES, cpt*nbIndices, indicesType, BUFFER_OFFSET(0));
+          glDrawElements(GL_TRIANGLES, cpt * nbIndices, indicesType, BUFFER_OFFSET(0));
         }
 
         if (nbOutlines != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
@@ -847,12 +829,14 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
             glLineWidth(2.0f);
           }
 
-          for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
-            for (unsigned int j = 0 ; j < cpt ; ++j) {
+          for (unsigned int i = 0; i < nbOutlines; ++i) {
+            for (unsigned int j = 0; j < cpt; ++j) {
               if (_canUseUIntIndices) {
-                glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned int)));
+                glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType,
+                               BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned int)));
               } else {
-                glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned short)));
+                glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType,
+                               BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned short)));
               }
             }
           }
@@ -880,7 +864,7 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
       _glyphShader->setUniformVec4FloatArray("u_texCoordOffsets", cpt, &texCoordsOffsetData[0]);
 
       if (nbIndices != 0) {
-        glDrawElements(GL_TRIANGLES, cpt*nbIndices, indicesType, BUFFER_OFFSET(0));
+        glDrawElements(GL_TRIANGLES, cpt * nbIndices, indicesType, BUFFER_OFFSET(0));
       }
 
       if (nbOutlines != 0 && (it->first > 0 || glyphId == tlp::NodeShape::CubeOutlinedTransparent)) {
@@ -893,24 +877,23 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId,
           glLineWidth(2.0f);
         }
 
-        for (unsigned int i = 0 ; i < nbOutlines ; ++i) {
-          for (unsigned int j = 0 ; j < cpt ; ++j) {
+        for (unsigned int i = 0; i < nbOutlines; ++i) {
+          for (unsigned int j = 0; j < cpt; ++j) {
             if (_canUseUIntIndices) {
-              glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned int)));
+              glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType,
+                             BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned int)));
             } else {
-              glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType, BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned short)));
+              glDrawElements(GL_LINE_STRIP, _glyphsOutlinesNbIndices[glyph][i], indicesType,
+                             BUFFER_OFFSET(_glyphsOutlinesIndicesOffset[glyph][i] + j * indicesStride * sizeof(unsigned short)));
             }
           }
         }
       }
-
     }
-
   }
 
   _glyphsDataBuffer[glyph]->release();
   _glyphsIndicesBuffer[glyph]->release();
 
   _glyphShader->disableAttributesArrays();
-
 }

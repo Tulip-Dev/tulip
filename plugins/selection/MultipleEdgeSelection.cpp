@@ -25,7 +25,8 @@ PLUGIN(MultipleEdgeSelection)
 using namespace std;
 using namespace tlp;
 
-MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {}
+MultipleEdgeSelection::MultipleEdgeSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
+}
 
 bool MultipleEdgeSelection::run() {
   vector<edge> multipleEdges;

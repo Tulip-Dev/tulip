@@ -56,14 +56,12 @@ using namespace std;
 **/
 class MCLClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION(
-      "MCL Clustering", "D. Auber & R. Bourqui", "10/10/2005",
-      "Nodes partitioning measure of Markov Cluster algorithm<br/>used for "
-      "community detection."
-      "This is an implementation of the MCL algorithm first published as:<br/>"
-      "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD "
-      "Thesis, University of Utrecht (2000).",
-      "1.0", "Clustering")
+  PLUGININFORMATION("MCL Clustering", "D. Auber & R. Bourqui", "10/10/2005", "Nodes partitioning measure of Markov Cluster algorithm<br/>used for "
+                                                                             "community detection."
+                                                                             "This is an implementation of the MCL algorithm first published as:<br/>"
+                                                                             "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD "
+                                                                             "Thesis, University of Utrecht (2000).",
+                    "1.0", "Clustering")
 
   MCLClustering(const tlp::PluginContext *);
   ~MCLClustering();
@@ -117,8 +115,7 @@ void MCLClustering::power(node n) {
       }
     }
   }
-  for (TLP_HASH_MAP<node, double>::iterator it = newTargets.begin();
-       it != newTargets.end(); ++it) {
+  for (TLP_HASH_MAP<node, double>::iterator it = newTargets.begin(); it != newTargets.end(); ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;
@@ -127,8 +124,7 @@ void MCLClustering::power(node n) {
 }
 //==================================================
 struct pvectCmp {
-  bool operator()(const std::pair<double, edge> &p1,
-                  const std::pair<double, edge> &p2) {
+  bool operator()(const std::pair<double, edge> &p1, const std::pair<double, edge> &p2) {
     return p1.first < p2.first;
   }
 };
@@ -272,14 +268,14 @@ static const char *paramHelp[] = {
     "Determines, for each node, the number of strongest link kept at each "
     "iteration."};
 //=================================================
-MCLClustering::MCLClustering(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
+MCLClustering::MCLClustering(const tlp::PluginContext *context) : DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
   addInParameter<double>("inflate", paramHelp[0], "2.", false);
   addInParameter<NumericProperty *>("weights", paramHelp[1], "", false);
   addInParameter<unsigned int>("pruning", paramHelp[2], "5", false);
 }
 //===================================================================================
-MCLClustering::~MCLClustering() {}
+MCLClustering::~MCLClustering() {
+}
 //================================================================================
 void MCLClustering::init() {
   unsigned int nbNodes = graph->numberOfNodes();
@@ -339,7 +335,8 @@ void MCLClustering::init() {
 }
 //================================================================================
 struct DegreeSort {
-  DegreeSort(VectorGraph &g) : g(g) {}
+  DegreeSort(VectorGraph &g) : g(g) {
+  }
   bool operator()(node a, node b) {
     unsigned int da = g.deg(a), db = g.deg(b);
 

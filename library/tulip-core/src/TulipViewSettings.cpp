@@ -5,27 +5,14 @@ namespace tlp {
 
 TulipViewSettings *TulipViewSettings::_instance(nullptr);
 
-TulipViewSettings::TulipViewSettings() :
-  _defaultNodeColor(Color::Red),
-  _defaultEdgeColor(Color::Black),
-  _defaultNodeBorderColor(Color::Black),
-  _defaultEdgeBorderColor(Color::Black),
-  _defaultLabelColor(Color::Black),
-  _defaultLabelBorderColor(Color::Black),
-  _defaultNodeBorderWidth(0),
-  _defaultEdgeBorderWidth(0),
-  _defaultLabelBorderWidth(1),
-  _defaultLabelPosition(LabelPosition::Center),
-  _defaultNodeSize(Size(1,1,1)),
-  _defaultEdgeSize(Size(0.125,0.125,0.5)),
-  _defaultNodeShape(NodeShape::Circle),
-  _defaultEdgeShape(EdgeShape::Polyline),
-  _defaultEdgeExtremitySrcShape(EdgeExtremityShape::None),
-  _defaultEdgeExtremityTgtShape(EdgeExtremityShape::Arrow),
-  _defaultEdgeExtremitySrcSize(Size(1,1,0)),
-  _defaultEdgeExtremityTgtSize(Size(1,1,0)),
-  _defaultFontFile(tlp::TulipBitmapDir + "font.ttf"),
-  _defaultFontSize(18) {
+TulipViewSettings::TulipViewSettings()
+    : _defaultNodeColor(Color::Red), _defaultEdgeColor(Color::Black), _defaultNodeBorderColor(Color::Black), _defaultEdgeBorderColor(Color::Black),
+      _defaultLabelColor(Color::Black), _defaultLabelBorderColor(Color::Black), _defaultNodeBorderWidth(0), _defaultEdgeBorderWidth(0),
+      _defaultLabelBorderWidth(1), _defaultLabelPosition(LabelPosition::Center), _defaultNodeSize(Size(1, 1, 1)),
+      _defaultEdgeSize(Size(0.125, 0.125, 0.5)), _defaultNodeShape(NodeShape::Circle), _defaultEdgeShape(EdgeShape::Polyline),
+      _defaultEdgeExtremitySrcShape(EdgeExtremityShape::None), _defaultEdgeExtremityTgtShape(EdgeExtremityShape::Arrow),
+      _defaultEdgeExtremitySrcSize(Size(1, 1, 0)), _defaultEdgeExtremityTgtSize(Size(1, 1, 0)), _defaultFontFile(tlp::TulipBitmapDir + "font.ttf"),
+      _defaultFontSize(18) {
 }
 
 TulipViewSettings &TulipViewSettings::instance() {
@@ -41,20 +28,18 @@ TulipViewSettings &TulipViewSettings::instance() {
 Color TulipViewSettings::defaultColor(ElementType elem) const {
   if (elem == NODE) {
     return _defaultNodeColor;
-  }
-  else {
+  } else {
     return _defaultEdgeColor;
   }
 }
 
-void TulipViewSettings::setDefaultColor(ElementType elem, const Color& color) {
+void TulipViewSettings::setDefaultColor(ElementType elem, const Color &color) {
   if (color == defaultColor(elem))
     return;
 
   if (elem == NODE) {
     _defaultNodeColor = color;
-  }
-  else {
+  } else {
     _defaultEdgeColor = color;
   }
 
@@ -64,17 +49,15 @@ void TulipViewSettings::setDefaultColor(ElementType elem, const Color& color) {
 Color TulipViewSettings::defaultBorderColor(ElementType elem) const {
   if (elem == NODE) {
     return _defaultNodeBorderColor;
-  }
-  else {
+  } else {
     return _defaultEdgeBorderColor;
   }
 }
 
-void TulipViewSettings::setDefaultBorderColor(ElementType elem, const Color& color) {
+void TulipViewSettings::setDefaultBorderColor(ElementType elem, const Color &color) {
   if (elem == NODE) {
     _defaultNodeBorderColor = color;
-  }
-  else {
+  } else {
     _defaultEdgeBorderColor = color;
   }
 }
@@ -82,8 +65,7 @@ void TulipViewSettings::setDefaultBorderColor(ElementType elem, const Color& col
 float TulipViewSettings::defaultBorderWidth(ElementType elem) const {
   if (elem == NODE) {
     return _defaultNodeBorderWidth;
-  }
-  else {
+  } else {
     return _defaultEdgeBorderWidth;
   }
 }
@@ -91,8 +73,7 @@ float TulipViewSettings::defaultBorderWidth(ElementType elem) const {
 void TulipViewSettings::setdefaultBorderWidth(ElementType elem, float borderWidth) {
   if (elem == NODE) {
     _defaultNodeBorderWidth = borderWidth;
-  }
-  else {
+  } else {
     _defaultEdgeBorderWidth = borderWidth;
   }
 }
@@ -101,7 +82,7 @@ Color TulipViewSettings::defaultLabelColor() const {
   return _defaultLabelColor;
 }
 
-void TulipViewSettings::setDefaultLabelColor(const Color& color) {
+void TulipViewSettings::setDefaultLabelColor(const Color &color) {
   if (color == _defaultLabelColor)
     return;
 
@@ -113,7 +94,7 @@ Color TulipViewSettings::defaultLabelBorderColor() const {
   return _defaultLabelBorderColor;
 }
 
-void TulipViewSettings::setDefaultLabelBorderColor(const Color& color) {
+void TulipViewSettings::setDefaultLabelBorderColor(const Color &color) {
   _defaultLabelBorderColor = color;
 }
 
@@ -136,20 +117,18 @@ void TulipViewSettings::setDefaultLabelPosition(int position) {
 Size TulipViewSettings::defaultSize(ElementType elem) const {
   if (elem == NODE) {
     return _defaultNodeSize;
-  }
-  else {
+  } else {
     return _defaultEdgeSize;
   }
 }
 
-void TulipViewSettings::setDefaultSize(ElementType elem, const Size& size) {
+void TulipViewSettings::setDefaultSize(ElementType elem, const Size &size) {
   if (size == defaultSize(elem))
     return;
 
   if (elem == NODE) {
     _defaultNodeSize = size;
-  }
-  else {
+  } else {
     _defaultEdgeSize = size;
   }
 
@@ -159,8 +138,7 @@ void TulipViewSettings::setDefaultSize(ElementType elem, const Size& size) {
 int TulipViewSettings::defaultShape(ElementType elem) const {
   if (elem == NODE) {
     return _defaultNodeShape;
-  }
-  else {
+  } else {
     return _defaultEdgeShape;
   }
 }
@@ -171,8 +149,7 @@ void TulipViewSettings::setDefaultShape(ElementType elem, int shape) {
 
   if (elem == NODE) {
     _defaultNodeShape = shape;
-  }
-  else {
+  } else {
     _defaultEdgeShape = shape;
   }
 
@@ -226,5 +203,4 @@ int TulipViewSettings::defaultFontSize() const {
 void TulipViewSettings::setDefaultFontSize(int fontSize) {
   _defaultFontSize = fontSize;
 }
-
 }

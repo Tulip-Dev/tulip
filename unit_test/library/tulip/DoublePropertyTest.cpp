@@ -55,7 +55,9 @@ void DoublePropertyTest::setUp() {
   e2 = graph->addEdge(n2, n4);
 }
 
-void DoublePropertyTest::tearDown() { delete graph; }
+void DoublePropertyTest::tearDown() {
+  delete graph;
+}
 
 void DoublePropertyTest::testAnonymousDoublePropertyMaxUpdate() {
   DoubleProperty prop(graph);
@@ -201,13 +203,17 @@ void DoublePropertyTest::testDoublePropertySetAllValue() {
 
   // check that each node has the correct value
   node n;
-  forEach(n, graph->getNodes()) { CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6); }
+  forEach(n, graph->getNodes()) {
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeValue(n), v1, 1e-6);
+  }
   // check that the default node value has been changed
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getNodeDefaultValue(), v1, 1e-6);
 
   // check that each edge has the correct value
   edge e;
-  forEach(e, graph->getEdges()) { CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6); }
+  forEach(e, graph->getEdges()) {
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeValue(e), v2, 1e-6);
+  }
   // check that the default edge value has been changed
   CPPUNIT_ASSERT_DOUBLES_EQUAL(prop->getEdgeDefaultValue(), v2, 1e-6);
 

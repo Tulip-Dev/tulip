@@ -50,11 +50,14 @@
 using namespace std;
 using namespace tlp;
 
-SelectedEntity::SelectedEntity() : _entityType(NO_ENTITY_SELECTED), _entity(nullptr), _graphEltId(UINT_MAX) {}
+SelectedEntity::SelectedEntity() : _entityType(NO_ENTITY_SELECTED), _entity(nullptr), _graphEltId(UINT_MAX) {
+}
 
-SelectedEntity::SelectedEntity(GlEntity *entity) : _entityType(ENTITY_SELECTED), _entity(entity), _graphEltId(UINT_MAX) {}
+SelectedEntity::SelectedEntity(GlEntity *entity) : _entityType(ENTITY_SELECTED), _entity(entity), _graphEltId(UINT_MAX) {
+}
 
-SelectedEntity::SelectedEntity(SelectedEntityType type, GlGraph *glGraph, unsigned int id) : _entityType(type), _entity(glGraph), _graphEltId(id) {}
+SelectedEntity::SelectedEntity(SelectedEntityType type, GlGraph *glGraph, unsigned int id) : _entityType(type), _entity(glGraph), _graphEltId(id) {
+}
 
 SelectedEntity::SelectedEntityType SelectedEntity::getEntityType() const {
   return _entityType;
@@ -65,21 +68,22 @@ GlEntity *SelectedEntity::getGlEntity() const {
 }
 
 GlGraph *SelectedEntity::getGlGraph() const {
-  return dynamic_cast<GlGraph*>(_entity);
+  return dynamic_cast<GlGraph *>(_entity);
 }
 
-node SelectedEntity::getNode()const {
+node SelectedEntity::getNode() const {
   return node(_graphEltId);
 }
 
-edge SelectedEntity::getEdge()const {
+edge SelectedEntity::getEdge() const {
   return edge(_graphEltId);
 }
 
 const string mainLayerName = "Main";
 
-GlScene::GlScene(GlLODCalculator *calculator) : _lodCalculator(calculator), _backgroundColor(255, 255, 255, 255), _clearBufferAtDraw(true), _sceneNeedRedraw(true),
-  _backBufferTexture(0), _backBufferBackup(nullptr), _pickingMode(false), _backupBackBuffer(true) {
+GlScene::GlScene(GlLODCalculator *calculator)
+    : _lodCalculator(calculator), _backgroundColor(255, 255, 255, 255), _clearBufferAtDraw(true), _sceneNeedRedraw(true), _backBufferTexture(0),
+      _backBufferBackup(nullptr), _pickingMode(false), _backupBackBuffer(true) {
   if (!_lodCalculator)
     _lodCalculator = new GlQuadTreeLODCalculator();
   _lodCalculator->setRenderingEntitiesFlag(RenderingGlEntities);
@@ -87,26 +91,25 @@ GlScene::GlScene(GlLODCalculator *calculator) : _lodCalculator(calculator), _bac
   ostringstream oss;
   oss << "backBufferTexture" << reinterpret_cast<unsigned long long>(this);
   _backBufferTextureName = oss.str();
-
 }
 
 GlScene::~GlScene() {
 
-  for(GlLayer *layer: _layersList) {
+  for (GlLayer *layer : _layersList) {
     delete layer;
   }
 
   delete _lodCalculator;
-  delete [] _backBufferBackup;
+  delete[] _backBufferBackup;
 }
 
 void GlScene::setViewport(const Vec4i &viewport) {
   if (_viewport != viewport) {
-    _viewport=viewport;
+    _viewport = viewport;
     _sceneNeedRedraw = true;
     if (_backupBackBuffer) {
-      delete [] _backBufferBackup;
-      _backBufferBackup = new unsigned char[viewport[2]*viewport[3]*4];
+      delete[] _backBufferBackup;
+      _backBufferBackup = new unsigned char[viewport[2] * viewport[3] * 4];
     }
   }
 }
@@ -123,7 +126,7 @@ bool GlScene::isViewOrtho() const {
   return getMainLayer()->getCamera()->isViewOrtho();
 }
 
-void GlScene::setBackgroundColor(const Color& color) {
+void GlScene::setBackgroundColor(const Color &color) {
   if (_backgroundColor != color) {
     _backgroundColor = color;
     _sceneNeedRedraw = true;
@@ -138,7 +141,7 @@ void GlScene::initGlParameters(bool drawBackBufferBackup) {
     glEnable(GL_SCISSOR_TEST);
     glEnable(GL_STENCIL_TEST);
     glClearStencil(0xFF);
-    glStencilOp(GL_KEEP,GL_KEEP,GL_REPLACE);
+    glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
     if (!_pickingMode) {
@@ -176,7 +179,7 @@ void GlScene::draw() {
 
     initGlParameters();
 
-    for(GlLayer *layer: _layersList) {
+    for (GlLayer *layer : _layersList) {
 
       glClear(GL_STENCIL_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -202,7 +205,7 @@ void GlScene::draw() {
       }
       const vector<GlEntityLODUnit> &lodResult = _lodCalculator->getGlEntitiesResult(layer);
       if (!lodResult.empty()) {
-        for (size_t i = 0 ; i < lodResult.size() ; ++i) {
+        for (size_t i = 0; i < lodResult.size(); ++i) {
           if (lodResult[i].lod < 0 || !lodResult[i].glEntity->isVisible()) {
             continue;
           }
@@ -237,7 +240,6 @@ void GlScene::draw() {
 
   GlBuffer::release(GlBuffer::VertexBuffer);
   GlBuffer::release(GlBuffer::IndexBuffer);
-
 }
 
 void GlScene::backupBackBuffer() {
@@ -280,7 +282,7 @@ void GlScene::drawBackBufferBackup() {
 GlLayer *GlScene::createLayer(const string &name, bool is3d) {
   GlLayer *oldLayer = getLayer(name);
 
-  if(oldLayer != nullptr) {
+  if (oldLayer != nullptr) {
     warning() << "Warning : You have a layer in the scene with same name, previous layer will be removed" << endl;
     removeLayer(oldLayer);
   }
@@ -303,8 +305,8 @@ GlLayer *GlScene::createLayerBefore(const string &layerName, const string &befor
   GlLayer *newLayer = nullptr;
   GlLayer *oldLayer = getLayer(layerName);
 
-  for(vector<GlLayer*>::iterator it = _layersList.begin() ; it != _layersList.end() ; ++it) {
-    if((*it)->getName() == beforeLayerWithName) {
+  for (vector<GlLayer *>::iterator it = _layersList.begin(); it != _layersList.end(); ++it) {
+    if ((*it)->getName() == beforeLayerWithName) {
       if (!is3d) {
         newLayer = new GlLayer(layerName, is3d);
       } else {
@@ -313,7 +315,7 @@ GlLayer *GlScene::createLayerBefore(const string &layerName, const string &befor
       _layersList.insert(it, newLayer);
       newLayer->setScene(this);
 
-      if(oldLayer != nullptr) {
+      if (oldLayer != nullptr) {
         removeLayer(oldLayer);
         warning() << "Warning : You have a layer in the scene with same name, previous layer will be removed" << endl;
       }
@@ -337,8 +339,8 @@ GlLayer *GlScene::createLayerAfter(const string &layerName, const string &afterL
   GlLayer *newLayer = nullptr;
   GlLayer *oldLayer = getLayer(layerName);
 
-  for(vector<GlLayer*>::iterator it = _layersList.begin() ; it != _layersList.end(); ++it) {
-    if((*it)->getName() == afterLayerWithName) {
+  for (vector<GlLayer *>::iterator it = _layersList.begin(); it != _layersList.end(); ++it) {
+    if ((*it)->getName() == afterLayerWithName) {
       ++it;
       if (!is3d) {
         newLayer = new GlLayer(layerName, is3d);
@@ -348,7 +350,7 @@ GlLayer *GlScene::createLayerAfter(const string &layerName, const string &afterL
       _layersList.insert(it, newLayer);
       newLayer->setScene(this);
 
-      if(oldLayer != nullptr) {
+      if (oldLayer != nullptr) {
         warning() << "Warning : You have a layer in the scene with same name, previous layer will be removed" << endl;
         removeLayer(oldLayer);
       }
@@ -369,9 +371,9 @@ GlLayer *GlScene::createLayerAfter(const string &layerName, GlLayer *afterLayer,
 }
 
 void GlScene::addExistingLayer(GlLayer *layer) {
-  GlLayer *oldLayer=getLayer(layer->getName());
+  GlLayer *oldLayer = getLayer(layer->getName());
 
-  if(oldLayer != nullptr) {
+  if (oldLayer != nullptr) {
     warning() << "Warning : You have a layer in the scene with same name, previous layer will be removed" << endl;
     removeLayer(oldLayer);
   }
@@ -382,22 +384,21 @@ void GlScene::addExistingLayer(GlLayer *layer) {
 
   sendEvent(GlSceneEvent(GlSceneEvent::LAYER_ADDED_IN_SCENE, this, layer));
   layerAddedInScene(layer);
-
 }
 
 bool GlScene::addExistingLayerBefore(GlLayer *layer, const string &beforeLayerWithName) {
   bool insertionOk = false;
   GlLayer *oldLayer = getLayer(layer->getName());
 
-  for(vector<GlLayer*>::iterator it = _layersList.begin() ; it != _layersList.end() ; ++it) {
-    if((*it)->getName() == beforeLayerWithName) {
+  for (vector<GlLayer *>::iterator it = _layersList.begin(); it != _layersList.end(); ++it) {
+    if ((*it)->getName() == beforeLayerWithName) {
       _layersList.insert(it, layer);
       layer->setScene(this);
-      if(oldLayer != nullptr) {
+      if (oldLayer != nullptr) {
         warning() << "Warning : You have a layer in the scene with same name, previous layer will be removed" << endl;
         removeLayer(oldLayer);
       }
-      insertionOk=true;
+      insertionOk = true;
       _sceneNeedRedraw = true;
 
       sendEvent(GlSceneEvent(GlSceneEvent::LAYER_ADDED_IN_SCENE, this, layer));
@@ -415,19 +416,19 @@ bool GlScene::addExistingLayerBefore(GlLayer *layer, GlLayer *beforeLayer) {
 }
 
 bool GlScene::addExistingLayerAfter(GlLayer *layer, const string &afterLayerWithName) {
-  bool insertionOk=false;
-  GlLayer *oldLayer=getLayer(layer->getName());
+  bool insertionOk = false;
+  GlLayer *oldLayer = getLayer(layer->getName());
 
-  for(vector<GlLayer*>::iterator it = _layersList.begin() ; it!=_layersList.end() ; ++it) {
-    if((*it)->getName() == afterLayerWithName) {
+  for (vector<GlLayer *>::iterator it = _layersList.begin(); it != _layersList.end(); ++it) {
+    if ((*it)->getName() == afterLayerWithName) {
       ++it;
       _layersList.insert(it, layer);
       layer->setScene(this);
-      if(oldLayer != nullptr) {
+      if (oldLayer != nullptr) {
         warning() << "Warning : You have a layer in the scene with same name, previous layer will be removed" << endl;
         removeLayer(oldLayer);
       }
-      insertionOk=true;
+      insertionOk = true;
       _sceneNeedRedraw = true;
 
       sendEvent(GlSceneEvent(GlSceneEvent::LAYER_ADDED_IN_SCENE, this, layer));
@@ -445,14 +446,14 @@ bool GlScene::addExistingLayerAfter(GlLayer *layer, GlLayer *afterLayer) {
 }
 
 void GlScene::layerAddedInScene(GlLayer *layer) {
-  for (const pair<std::string, GlEntity*> &entity : layer->getGlEntities()) {
+  for (const pair<std::string, GlEntity *> &entity : layer->getGlEntities()) {
     _lodCalculator->addGlEntity(layer, entity.second);
   }
 }
 
 GlLayer *GlScene::getLayer(const string &name) const {
-  for(GlLayer *layer : _layersList) {
-    if(layer->getName() == name) {
+  for (GlLayer *layer : _layersList) {
+    if (layer->getName() == name) {
       return layer;
     }
   }
@@ -465,15 +466,15 @@ GlLayer *GlScene::getMainLayer() const {
 }
 
 void GlScene::removeLayer(const string &name, bool deleteLayer) {
-  for(vector<GlLayer*>::iterator it=_layersList.begin() ; it!=_layersList.end() ; ++it) {
-    if((*it)->getName() == name) {
+  for (vector<GlLayer *>::iterator it = _layersList.begin(); it != _layersList.end(); ++it) {
+    if ((*it)->getName() == name) {
       _lodCalculator->removeLayer(*it);
       _layersList.erase(it);
       _sceneNeedRedraw = true;
 
       sendEvent(GlSceneEvent(GlSceneEvent::LAYER_REMOVED_FROM_SCENE, this, *it));
 
-      if(deleteLayer)
+      if (deleteLayer)
         delete *it;
 
       return;
@@ -482,7 +483,7 @@ void GlScene::removeLayer(const string &name, bool deleteLayer) {
 }
 
 void GlScene::removeLayer(GlLayer *layer, bool deleteLayer) {
-  for(vector<GlLayer*>::iterator it = _layersList.begin() ; it != _layersList.end() ; ++it) {
+  for (vector<GlLayer *>::iterator it = _layersList.begin(); it != _layersList.end(); ++it) {
     if (*it == layer) {
       _lodCalculator->removeLayer(layer);
       _layersList.erase(it);
@@ -490,7 +491,7 @@ void GlScene::removeLayer(GlLayer *layer, bool deleteLayer) {
 
       sendEvent(GlSceneEvent(GlSceneEvent::LAYER_REMOVED_FROM_SCENE, this, *it));
 
-      if(deleteLayer)
+      if (deleteLayer)
         delete *it;
 
       return;
@@ -499,7 +500,7 @@ void GlScene::removeLayer(GlLayer *layer, bool deleteLayer) {
 }
 
 void GlScene::clearLayersList() {
-  for(GlLayer *layer : _layersList) {
+  for (GlLayer *layer : _layersList) {
     _lodCalculator->removeLayer(layer);
     sendEvent(GlSceneEvent(GlSceneEvent::LAYER_REMOVED_FROM_SCENE, this, layer));
     delete layer;
@@ -510,7 +511,7 @@ void GlScene::clearLayersList() {
 
 BoundingBox GlScene::getBoundingBox() {
   GlBoundingBoxSceneVisitor glBBSceneVisitor;
-  for(GlLayer *layer: _layersList) {
+  for (GlLayer *layer : _layersList) {
     if (layer->is3d()) {
       layer->acceptVisitor(&glBBSceneVisitor);
     }
@@ -523,7 +524,7 @@ void GlScene::centerScene(BoundingBox boundingBox) {
   if (!sceneBB.isValid()) {
     sceneBB = getBoundingBox();
   }
-  for(GlLayer *layer: _layersList) {
+  for (GlLayer *layer : _layersList) {
     if (layer->is3d() && !layer->useSharedCamera()) {
       layer->getCamera()->setViewport(_viewport);
       layer->getCamera()->centerScene(sceneBB);
@@ -532,7 +533,7 @@ void GlScene::centerScene(BoundingBox boundingBox) {
 }
 
 void GlScene::translate(int x, int y) {
-  for(GlLayer *layer: _layersList) {
+  for (GlLayer *layer : _layersList) {
     Camera *camera = layer->getCamera();
     if (camera->is3d() && !layer->useSharedCamera()) {
       Coord v1(0, 0, 0);
@@ -546,60 +547,62 @@ void GlScene::translate(int x, int y) {
 }
 
 void GlScene::rotate(int x, int y, int z) {
-  for(GlLayer *layer: _layersList) {
+  for (GlLayer *layer : _layersList) {
     Camera *camera = layer->getCamera();
     if (camera->is3d() && !layer->useSharedCamera()) {
       Coord center = getBoundingBox().center();
       camera->translate(center);
-      camera->rotateX(static_cast<float>(x/360.0 * M_PI));
-      camera->rotateY(static_cast<float>(y/360.0 * M_PI));
-      camera->rotateZ(static_cast<float>(z/360.0 * M_PI));
+      camera->rotateX(static_cast<float>(x / 360.0 * M_PI));
+      camera->rotateY(static_cast<float>(y / 360.0 * M_PI));
+      camera->rotateZ(static_cast<float>(z / 360.0 * M_PI));
       camera->translate(-center);
     }
   }
 }
 
 void GlScene::zoomXY(int x, int y, int step) {
-  for(GlLayer *layer: _layersList) {
+  for (GlLayer *layer : _layersList) {
     Camera *camera = layer->getCamera();
     if (camera->is3d() && !layer->useSharedCamera()) {
-      camera->setZoomFactor(camera->getZoomFactor() * pow(1.1,step));
+      camera->setZoomFactor(camera->getZoomFactor() * pow(1.1, step));
     }
   }
-  if (step < 0) step *= -1;
-  int factX = static_cast<int>(step*(static_cast<double>(_viewport[2])/2.0-x)/ 7.0);
-  int factY = static_cast<int>(step*(static_cast<double>(_viewport[3])/2.0-y)/ 7.0);
-  translate(-factX,factY);
+  if (step < 0)
+    step *= -1;
+  int factX = static_cast<int>(step * (static_cast<double>(_viewport[2]) / 2.0 - x) / 7.0);
+  int factY = static_cast<int>(step * (static_cast<double>(_viewport[3]) / 2.0 - y) / 7.0);
+  translate(-factX, factY);
 }
 
 void GlScene::zoom(int step) {
-  for(GlLayer *layer: _layersList) {
-    if(layer->getCamera()->is3d() && (!layer->useSharedCamera())) {
+  for (GlLayer *layer : _layersList) {
+    if (layer->getCamera()->is3d() && (!layer->useSharedCamera())) {
       layer->getCamera()->setZoomFactor(layer->getCamera()->getZoomFactor() * pow(1.1, step));
     }
   }
 }
 
 void GlScene::zoomFactor(float factor) {
-  for(GlLayer *layer: _layersList) {
-    if(layer->getCamera()->is3d() && (!layer->useSharedCamera())) {
+  for (GlLayer *layer : _layersList) {
+    if (layer->getCamera()->is3d() && (!layer->useSharedCamera())) {
       layer->getCamera()->setZoomFactor(layer->getCamera()->getZoomFactor() * factor);
     }
   }
 }
 
 void GlScene::treatEvent(const Event &message) {
-  if (message.type() != Event::TLP_MODIFICATION) return;
-  Camera *camera = dynamic_cast<Camera*>(message.sender());
-  GlEntity *entity = dynamic_cast<GlEntity*>(message.sender());
-  GlLayer *layer = dynamic_cast<GlLayer*>(message.sender());
+  if (message.type() != Event::TLP_MODIFICATION)
+    return;
+  Camera *camera = dynamic_cast<Camera *>(message.sender());
+  GlEntity *entity = dynamic_cast<GlEntity *>(message.sender());
+  GlLayer *layer = dynamic_cast<GlLayer *>(message.sender());
   if (camera || entity || layer) {
     _sceneNeedRedraw = true;
   }
   if (entity) {
     _lodCalculator->removeGlEntity(entity->getLayer(), entity);
   }
-  const GlLayerEvent *layerEvt = dynamic_cast<const GlLayerEvent*>(&message);
+  const GlLayerEvent *layerEvt = dynamic_cast<const GlLayerEvent *>(&message);
   if (layerEvt) {
     if (layerEvt->getType() == GlLayerEvent::ENTITY_ADDED_IN_LAYER) {
       _lodCalculator->addGlEntity(layerEvt->getGlLayer(), layerEvt->getGlEntity());
@@ -609,21 +612,22 @@ void GlScene::treatEvent(const Event &message) {
   }
 }
 
-bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, vector<SelectedEntity>& selectedEntities, GlLayer *layer, bool singleSelection) {
+bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, vector<SelectedEntity> &selectedEntities,
+                             GlLayer *layer, bool singleSelection) {
   _pickingMode = true;
   vector<SelectedEntity> selectedEntitiesInternal;
   selectedEntities.clear();
 
   x = clamp(x, 0, _viewport[2]);
   y = clamp(y, 0, _viewport[3]);
-  if (x+width > _viewport[2]) {
-    width -= x+width-_viewport[2];
+  if (x + width > _viewport[2]) {
+    width -= x + width - _viewport[2];
   }
-  if (y+height > _viewport[3]) {
-    height -= y+height-_viewport[3];
+  if (y + height > _viewport[3]) {
+    height -= y + height - _viewport[3];
   }
 
-  unsigned int bufferSize = width*height*4;
+  unsigned int bufferSize = width * height * 4;
   unsigned char *buffer = new unsigned char[bufferSize];
 
   _selectionViewport = Vec4i(x, y, width, height);
@@ -645,13 +649,14 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
 
   bool done = false;
   while (!done) {
-    set<GlEntity*> tmpSelectedEntities;
+    set<GlEntity *> tmpSelectedEntities;
     draw();
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    for (unsigned int i = 0 ; i < bufferSize ; i += 4) {
-      Color color(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]);
+    for (unsigned int i = 0; i < bufferSize; i += 4) {
+      Color color(buffer[i], buffer[i + 1], buffer[i + 2], buffer[i + 3]);
       unsigned int id = colorToUint(color);
-      if (id == 0) continue;
+      if (id == 0)
+        continue;
       GlEntity *entity = GlEntity::fromId(id);
       if (entity) {
         tmpSelectedEntities.insert(entity);
@@ -661,7 +666,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
     if (tmpSelectedEntities.empty()) {
       done = true;
     } else {
-      for (set<GlEntity*>::iterator it = tmpSelectedEntities.begin() ; it != tmpSelectedEntities.end() ; ++it) {
+      for (set<GlEntity *>::iterator it = tmpSelectedEntities.begin(); it != tmpSelectedEntities.end(); ++it) {
         selectedEntitiesInternal.push_back(SelectedEntity(*it));
       }
       if (singleSelection) {
@@ -669,15 +674,15 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
       }
     }
   }
-  delete [] buffer;
+  delete[] buffer;
   fbo->release();
   delete fbo;
   _pickingMode = false;
 
-  for (size_t i = 0 ; i < selectedEntitiesInternal.size() ; ++i) {
+  for (size_t i = 0; i < selectedEntitiesInternal.size(); ++i) {
     GlEntity *entity = selectedEntitiesInternal[i].getGlEntity();
     entity->setVisible(true);
-    GlGraph *glGraph = dynamic_cast<GlGraph*>(entity);
+    GlGraph *glGraph = dynamic_cast<GlGraph *>(entity);
     if (!glGraph && (type & RenderingGlEntities)) {
       selectedEntities.push_back(selectedEntitiesInternal[i]);
     } else if (glGraph && ((type & RenderingNodes) || (type & RenderingEdges))) {
@@ -687,12 +692,12 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
       camera->initGl();
       glGraph->pickNodesAndEdges(*camera, x, y, width, height, selectedNodes, selectedEdges, singleSelection);
       if (!selectedNodes.empty() && (type & RenderingNodes)) {
-        for (set<node>::iterator it = selectedNodes.begin() ; it != selectedNodes.end() ; ++it) {
+        for (set<node>::iterator it = selectedNodes.begin(); it != selectedNodes.end(); ++it) {
           selectedEntities.push_back(SelectedEntity(SelectedEntity::NODE_SELECTED, glGraph, it->id));
         }
       }
       if (!selectedEdges.empty() && (type & RenderingEdges)) {
-        for (set<edge>::iterator it = selectedEdges.begin() ; it != selectedEdges.end() ; ++it) {
+        for (set<edge>::iterator it = selectedEdges.begin(); it != selectedEdges.end(); ++it) {
           selectedEntities.push_back(SelectedEntity(SelectedEntity::EDGE_SELECTED, glGraph, it->id));
         }
       }
@@ -710,7 +715,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
 
 bool GlScene::selectEntity(RenderingEntitiesFlag type, int x, int y, SelectedEntity &selectedEntity, GlLayer *layer) {
   vector<SelectedEntity> selectedEntities;
-  bool ret = selectEntities(type, x-1, y-1, 3, 3, selectedEntities, layer, true);
+  bool ret = selectEntities(type, x - 1, y - 1, 3, 3, selectedEntities, layer, true);
   if (!selectedEntities.empty()) {
     selectedEntity = selectedEntities.front();
   } else {
@@ -719,11 +724,11 @@ bool GlScene::selectEntity(RenderingEntitiesFlag type, int x, int y, SelectedEnt
   return ret;
 }
 
-std::set<tlp::GlEntity*> GlScene::getEntities() {
-  set<GlEntity*> ret;
-  for(GlLayer *layer: _layersList) {
-    const map<string, GlEntity*> &layerEntities = layer->getGlEntities();
-    for (map<string, GlEntity*>::const_iterator it2 = layerEntities.begin() ; it2 != layerEntities.end() ; ++it2) {
+std::set<tlp::GlEntity *> GlScene::getEntities() {
+  set<GlEntity *> ret;
+  for (GlLayer *layer : _layersList) {
+    const map<string, GlEntity *> &layerEntities = layer->getGlEntities();
+    for (map<string, GlEntity *>::const_iterator it2 = layerEntities.begin(); it2 != layerEntities.end(); ++it2) {
       GlEntity *entity = it2->second;
       ret.insert(entity);
     }
@@ -746,5 +751,5 @@ void GlScene::addGlGraph(tlp::Graph *graph, const std::string &glGraphName) {
 }
 
 GlGraph *GlScene::getGlGraph(const std::string &glGraphName) const {
-  return dynamic_cast<GlGraph*>(getMainLayer()->findGlEntity(glGraphName));
+  return dynamic_cast<GlGraph *>(getMainLayer()->findGlEntity(glGraphName));
 }

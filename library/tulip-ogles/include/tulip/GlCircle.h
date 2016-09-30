@@ -34,22 +34,14 @@
 
 namespace tlp {
 
-
 class TLP_GLES_SCOPE GlCircle : public GlGlyphEntity {
 
 public:
-
-  GlCircle(const Coord &center = Coord(0,0,0),
-           float radius = 1.,
-           const Color &fillColor = Color (0, 0, 255,255),
-           const Color &outlineColor = Color(255, 0 , 0 , 255),
-           bool filled = true,
-           bool outlined = true);
+  GlCircle(const Coord &center = Coord(0, 0, 0), float radius = 1., const Color &fillColor = Color(0, 0, 255, 255),
+           const Color &outlineColor = Color(255, 0, 0, 255), bool filled = true, bool outlined = true);
 
   void setRadius(float radius);
-
 };
-
 }
 
 #endif

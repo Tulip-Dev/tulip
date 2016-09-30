@@ -6,4 +6,3 @@
  *
  * @file clique_import/cliqueimport.h
  */
-

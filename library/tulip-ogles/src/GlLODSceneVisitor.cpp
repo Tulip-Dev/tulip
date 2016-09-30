@@ -38,4 +38,3 @@ void GlLODSceneVisitor::visit(GlLayer *layer) {
 void GlLODSceneVisitor::visit(GlEntity *entity) {
   _calculator->addGlEntity(_layer, entity);
 }
-

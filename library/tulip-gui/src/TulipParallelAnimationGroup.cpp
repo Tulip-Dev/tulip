@@ -22,7 +22,7 @@
 
 using namespace tlp;
 
-TulipParallelAnimationGroup::TulipParallelAnimationGroup(QObject *parent): QParallelAnimationGroup(parent) {
+TulipParallelAnimationGroup::TulipParallelAnimationGroup(QObject *parent) : QParallelAnimationGroup(parent) {
 }
 
 void TulipParallelAnimationGroup::updateCurrentTime(int currentTime) {

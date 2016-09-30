@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIPFONTWIDGET_H
 #define TULIPFONTWIDGET_H
 
@@ -37,8 +36,8 @@ class TLP_QT_SCOPE TulipFontWidget : public QWidget {
 public:
   explicit TulipFontWidget(QWidget *parent = nullptr);
   ~TulipFontWidget();
-  void setFont(const TulipFont& font);
-  TulipFont font()const;
+  void setFont(const TulipFont &font);
+  TulipFont font() const;
 
 private:
   Ui::TulipFontWidget *ui;

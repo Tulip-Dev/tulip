@@ -40,16 +40,16 @@
 
 #include <map>
 
-#define HRES  64
+#define HRES 64
 #define HRESf 64.f
-#define DPI   72
+#define DPI 72
 
 using namespace std;
 using namespace tlp;
 
 FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile, unsigned int iconCodePoint) : Glyph(context) {
 
-  const FT_Library* library = FTLibrary::Instance().GetLibrary();
+  const FT_Library *library = FTLibrary::Instance().GetLibrary();
 
   FT_Face face;
 
@@ -96,8 +96,8 @@ FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile
   std::map<tlp::Coord, unsigned int> vertexIdx;
 
   unsigned int idx = 0;
-  for(unsigned int t = 0; t < mesh->TesselationCount(); ++t) {
-    const FTTesselation* subMesh = mesh->Tesselation(t);
+  for (unsigned int t = 0; t < mesh->TesselationCount(); ++t) {
+    const FTTesselation *subMesh = mesh->Tesselation(t);
     for (unsigned int i = 0; i < subMesh->PointCount(); ++i) {
       FTPoint point = subMesh->Point(i);
       tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
@@ -112,10 +112,10 @@ FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile
     }
   }
 
-  for (unsigned int t = 0 ; t < vectoriser.ContourCount() ; ++t)  {
+  for (unsigned int t = 0; t < vectoriser.ContourCount(); ++t) {
     vector<unsigned short> outlineIndices;
-    const FTContour* contour = vectoriser.Contour(t);
-    for (unsigned int i = 0 ; i < contour->PointCount() ; ++i) {
+    const FTContour *contour = vectoriser.Contour(t);
+    for (unsigned int i = 0; i < contour->PointCount(); ++i) {
       FTPoint point = contour->Point(i);
       tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
       outlineIndices.push_back(ushort_cast(vertexIdx[p]));
@@ -129,23 +129,24 @@ FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile
   tlp::Coord minC = meshBB[0];
   tlp::Coord maxC = meshBB[1];
 
-  for (size_t i = 0 ; i < _vertices.size() ; ++i) {
+  for (size_t i = 0; i < _vertices.size(); ++i) {
     if (meshBB.height() > meshBB.width()) {
-      _vertices[i][0] = ((_vertices[i][0] - minC[0]) / (maxC[0]-minC[0]) - 0.5) * (meshBB.width() / float(meshBB.height()));
-      _vertices[i][1] = ((_vertices[i][1] - minC[1]) / (maxC[1]-minC[1])) - 0.5;
+      _vertices[i][0] = ((_vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) * (meshBB.width() / float(meshBB.height()));
+      _vertices[i][1] = ((_vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5;
     } else {
-      _vertices[i][0] = ((_vertices[i][0] - minC[0]) / (maxC[0]-minC[0])) - 0.5;
-      _vertices[i][1] = (((_vertices[i][1] - minC[1]) / (maxC[1]-minC[1])) - 0.5) * (meshBB.height() / float(meshBB.width()));
+      _vertices[i][0] = ((_vertices[i][0] - minC[0]) / (maxC[0] - minC[0])) - 0.5;
+      _vertices[i][1] = (((_vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) * (meshBB.height() / float(meshBB.width()));
     }
   }
-
 }
 
-FontAwesomeGlyph::FontAwesomeGlyph(PluginContext *context, unsigned int iconCodePoint) :
-  FontIconGlyph(context, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), iconCodePoint) {}
+FontAwesomeGlyph::FontAwesomeGlyph(PluginContext *context, unsigned int iconCodePoint)
+    : FontIconGlyph(context, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), iconCodePoint) {
+}
 
-MaterialDesignIconGlyph::MaterialDesignIconGlyph(PluginContext *context, unsigned int iconCodePoint) :
-  FontIconGlyph(context, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(), iconCodePoint) {}
+MaterialDesignIconGlyph::MaterialDesignIconGlyph(PluginContext *context, unsigned int iconCodePoint)
+    : FontIconGlyph(context, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(), iconCodePoint) {
+}
 
 PLUGIN(FontAwesomeGlyph)
 PLUGIN(MaterialDesignIconGlyph)

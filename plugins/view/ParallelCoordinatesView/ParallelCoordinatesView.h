@@ -65,14 +65,18 @@ class ParallelCoordinatesView : public GlMainView {
 
   Q_OBJECT
 
-public :
-
+public:
   PLUGININFORMATION(ViewName::ParallelCoordinatesViewName, "Antoine Lambert", "16/04/2008",
                     "<p>The Parallel Coordinates view allows to create a parallel coordinates visualization from graph elements."
                     "Parallel coordinates are a common way of visualizing high-dimensional geometry and analyzing multivariate data.\n"
-                    "The basic idea is to visualize a set of points in an n-dimensional space. To do so, the n dimensions are represented by n parallel axis, typically vertical and equally spaced. A point in n-dimensional space is represented as a polyline with vertices on the parallel axis. The position of the vertex on the i-th axis corresponds to the i-th coordinate of the point.</p>"
-                    "<p>By selecting a set of graph properties (supported types are Metric, Integer and String), nodes and edges of a graph can be visualized as parallel coordinates. Each axis corresponds to a graph property and nodes (or edges) of the graph are represented as polylines or curves.</p>"
-                    "<p>A set of interactors are bundled with the view to perform brushing, elements selection, data filtering, ...</p>", "1.2", "View")
+                    "The basic idea is to visualize a set of points in an n-dimensional space. To do so, the n dimensions are represented by n "
+                    "parallel axis, typically vertical and equally spaced. A point in n-dimensional space is represented as a polyline with vertices "
+                    "on the parallel axis. The position of the vertex on the i-th axis corresponds to the i-th coordinate of the point.</p>"
+                    "<p>By selecting a set of graph properties (supported types are Metric, Integer and String), nodes and edges of a graph can be "
+                    "visualized as parallel coordinates. Each axis corresponds to a graph property and nodes (or edges) of the graph are represented "
+                    "as polylines or curves.</p>"
+                    "<p>A set of interactors are bundled with the view to perform brushing, elements selection, data filtering, ...</p>",
+                    "1.2", "View")
 
   ParallelCoordinatesView(const tlp::PluginContext *);
   ~ParallelCoordinatesView();
@@ -83,8 +87,8 @@ public :
   // View methods
   void setState(const DataSet &dataSet);
   tlp::DataSet state() const;
-  bool eventFilter(QObject *object,QEvent *event);
-  void fillContextMenu(QMenu *menu,const QPointF &point);
+  bool eventFilter(QObject *object, QEvent *event);
+  void fillContextMenu(QMenu *menu, const QPointF &point);
   QList<QWidget *> configurationWidgets() const;
 
   // methods called by interactors
@@ -92,7 +96,7 @@ public :
   void setDataInRegionSelectFlag(const int x, const int y, const unsigned int width, const unsigned int height, const bool selectFlag);
   void resetSelection();
   void deleteDataUnderPointer(const int x, const int y);
-  bool getDataUnderPointerProperties(const int x, const int y,SelectedEntity &selectedEntity);
+  bool getDataUnderPointerProperties(const int x, const int y, SelectedEntity &selectedEntity);
   void highlightDataUnderPointer(const int x, const int y, const bool addEltToMagnifyFlag);
   void highlightDataInRegion(const int x, const int y, const int width, const int height, const bool addEltToMagnifyFlag);
   void resetHighlightedElements();
@@ -117,7 +121,7 @@ public :
   ParallelCoordinatesDrawing::LinesType getLinesType() const;
   ParallelCoordinatesDrawing::LinesThickness getLinesThickness() const;
 
-  //unsigned int getSpaceBetweenAxis() {return drawConfigWidget->getSpaceBetweenAxis();}
+  // unsigned int getSpaceBetweenAxis() {return drawConfigWidget->getSpaceBetweenAxis();}
 
 public slots:
 
@@ -128,9 +132,9 @@ public slots:
     return graphProxy;
   }
 
-  //TODO : reactivate this
-  void elementSelectedSlot(unsigned int , bool ) {
-    //emit elementSelected(id,isNode);
+  // TODO : reactivate this
+  void elementSelectedSlot(unsigned int, bool) {
+    // emit elementSelected(id,isNode);
   }
   void centerSetupAndDrawView();
   void setupAndDrawView();
@@ -139,15 +143,14 @@ public slots:
 
 protected slots:
 
-  void graphChanged(tlp::Graph*);
+  void graphChanged(tlp::Graph *);
 
   void axisConfigurationSlot();
   void removeAxisSlot();
   void selectHighlightedElementsSlot();
   void resetHightlightedElementsSlot();
 
-private :
-
+private:
   const std::set<unsigned int> &mapGlEntitiesInRegionToData(const int x, const int y, const unsigned int width, const unsigned int height);
   void initGlWidget();
   void buildContextMenu();
@@ -213,9 +216,7 @@ private :
   static GLuint linesTextureId;
   static GLuint slidersTextureId;
   static unsigned int parallelViewInstancesCount;
-
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

@@ -35,14 +35,18 @@ namespace Ui {
 class FiltersManagerCompareItem;
 }
 
-#define COMPARER(N) struct N##Comparer: public Comparer { virtual bool compare(const std::string& a, const std::string& b); virtual bool compare(double a, double b); }
-class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
+#define COMPARER(N)                                                                                                                                  \
+  struct N##Comparer : public Comparer {                                                                                                             \
+    virtual bool compare(const std::string &a, const std::string &b);                                                                                \
+    virtual bool compare(double a, double b);                                                                                                        \
+  }
+class FiltersManagerCompareItem : public AbstractFiltersManagerItem {
   Q_OBJECT
-  Ui::FiltersManagerCompareItem* _ui;
+  Ui::FiltersManagerCompareItem *_ui;
 
   struct Comparer {
-    virtual bool compare(const std::string& a, const std::string& b)=0;
-    virtual bool compare(double a, double b)=0;
+    virtual bool compare(const std::string &a, const std::string &b) = 0;
+    virtual bool compare(double a, double b) = 0;
   };
   COMPARER(Equal);
   COMPARER(Different);
@@ -52,7 +56,7 @@ class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
   COMPARER(GreaterEqual);
   COMPARER(Contains);
   COMPARER(Matches);
-  static QVector<Comparer*> COMPARERS;
+  static QVector<Comparer *> COMPARERS;
   static int STRING_ALGORITHM_ID;
   static int DOUBLE_ALGORITHM_ID;
 
@@ -60,27 +64,20 @@ class FiltersManagerCompareItem: public AbstractFiltersManagerItem {
   static QVector<int> STRING_OPERATOR_INDEXES;
   static int CUSTOM_VALUE_CHOICE_INDEX;
 
-  QMap<QComboBox*,QTableView*> comboParams;
+  QMap<QComboBox *, QTableView *> comboParams;
 
-
-  enum ComboElementType {
-    E_Property,
-    E_DoubleAlgorithm,
-    E_StringAlgorithm,
-    E_CustomValue,
-    E_Unknown
-  };
-  void fillCombo(QComboBox*);
-  ComboElementType comboElementType(QComboBox*) const;
-  tlp::PropertyInterface* comboProperty(QComboBox*) const;
-  tlp::ParameterDescriptionList comboAlgorithmParams(QComboBox*) const;
-  bool isComparisonNumeric(QComboBox*) const;
-  bool isComboAlgorithm(QComboBox*) const;
+  enum ComboElementType { E_Property, E_DoubleAlgorithm, E_StringAlgorithm, E_CustomValue, E_Unknown };
+  void fillCombo(QComboBox *);
+  ComboElementType comboElementType(QComboBox *) const;
+  tlp::PropertyInterface *comboProperty(QComboBox *) const;
+  tlp::ParameterDescriptionList comboAlgorithmParams(QComboBox *) const;
+  bool isComparisonNumeric(QComboBox *) const;
+  bool isComboAlgorithm(QComboBox *) const;
 
 public:
-  explicit FiltersManagerCompareItem(QWidget* parent = nullptr);
+  explicit FiltersManagerCompareItem(QWidget *parent = nullptr);
   ~FiltersManagerCompareItem();
-  void applyFilter(tlp::BooleanProperty*);
+  void applyFilter(tlp::BooleanProperty *);
   QString title() const;
 
 protected:

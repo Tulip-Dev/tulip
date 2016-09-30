@@ -90,11 +90,10 @@ static std::map<std::string, GlGraph *> glGraph;
 static std::map<std::string, tlp::Graph *> graph;
 static std::map<std::string, bool> canDeleteGraph;
 static std::map<tlp::Graph *, std::string> graphToCanvas;
-static std::map<std::string, GlSceneInteractor*> currentCanvasInteractor;
+static std::map<std::string, GlSceneInteractor *> currentCanvasInteractor;
 
 static std::map<std::string, GlLayer *> hullsLayer;
-static std::map<std::string, std::map<unsigned int, GlConcavePolygon *> > graphsHulls;
-
+static std::map<std::string, std::map<unsigned int, GlConcavePolygon *>> graphsHulls;
 
 static std::string currentCanvasId;
 
@@ -106,11 +105,11 @@ void safeSetTimeout(unsigned int msecs, void (*func)(void *value), void *value);
 void setCurrentCanvas(const char *canvasId);
 bool domElementExists(const char *elementId);
 bool canXhrOnUrl(const char *url);
-void loadImageFromUrl(const char *url, void (*imageLoadedFunc)(const char *, const unsigned char *, unsigned int, unsigned int), void (*errorFunc)(unsigned int, void *, int));
+void loadImageFromUrl(const char *url, void (*imageLoadedFunc)(const char *, const unsigned char *, unsigned int, unsigned int),
+                      void (*errorFunc)(unsigned int, void *, int));
 bool isChrome();
 void blurCanvas(const char *canvasId);
 void focusCanvas(const char *canvasId);
-
 
 void EMSCRIPTEN_KEEPALIVE updateGlScene(const char *canvasId) {
   std::string curCanvasBak = currentCanvasId;
@@ -131,7 +130,7 @@ void EMSCRIPTEN_KEEPALIVE updateGlScene(const char *canvasId) {
 }
 
 static void drawCallback(void) {
-  for (size_t i = 0 ; i < canvasIds.size() ; ++i) {
+  for (size_t i = 0; i < canvasIds.size(); ++i) {
     if (domElementExists(canvasIds[i].c_str())) {
       updateGlScene(canvasIds[i].c_str());
     } else {
@@ -147,7 +146,6 @@ void EMSCRIPTEN_KEEPALIVE draw(bool refreshDisplay = true) {
     drawCallback();
   }
 }
-
 }
 
 static int getModifiers(const EmscriptenMouseEvent &mouseEvent) {
@@ -186,7 +184,7 @@ static EM_BOOL mouseCallback(int eventType, const EmscriptenMouseEvent *mouseEve
       button = LEFT_BUTTON;
     } else if (mouseEvent->button == 1) {
       button = MIDDLE_BUTTON;
-    } else  {
+    } else {
       button = RIGHT_BUTTON;
     }
     if (eventType == EMSCRIPTEN_EVENT_MOUSEDOWN) {
@@ -213,9 +211,11 @@ static EM_BOOL wheelCallback(int /* eventType */, const EmscriptenWheelEvent *wh
       delta = wheelEvent->deltaX;
     }
     if (delta > 0) {
-      return currentCanvasInteractor[canvasId]->mouseCallback(WHEEL, DOWN, wheelEvent->mouse.targetX, wheelEvent->mouse.targetY, getModifiers(wheelEvent->mouse));
+      return currentCanvasInteractor[canvasId]->mouseCallback(WHEEL, DOWN, wheelEvent->mouse.targetX, wheelEvent->mouse.targetY,
+                                                              getModifiers(wheelEvent->mouse));
     } else {
-      return currentCanvasInteractor[canvasId]->mouseCallback(WHEEL, UP, wheelEvent->mouse.targetX, wheelEvent->mouse.targetY, getModifiers(wheelEvent->mouse));
+      return currentCanvasInteractor[canvasId]->mouseCallback(WHEEL, UP, wheelEvent->mouse.targetX, wheelEvent->mouse.targetY,
+                                                              getModifiers(wheelEvent->mouse));
     }
   }
   return false;
@@ -240,11 +240,11 @@ static int nbTextureToLoad = 0;
 
 static std::vector<std::string> cachedTextureName;
 
-static void onTextureLoaded(unsigned int, void*, const char *texture) {
+static void onTextureLoaded(unsigned int, void *, const char *texture) {
   GlTextureManager::instance(currentCanvasId)->addTextureFromFile(texture, true);
   --nbTextureToLoad;
   if (nbTextureToLoad == 0) {
-    for (auto it = glScene.begin() ; it != glScene.end() ; ++it) {
+    for (auto it = glScene.begin(); it != glScene.end(); ++it) {
       it->second->forceRedraw();
     }
     draw();
@@ -252,13 +252,13 @@ static void onTextureLoaded(unsigned int, void*, const char *texture) {
 }
 
 static void onTextureLoadError(unsigned int, void *texture, int) {
-  std::cout << "Error when loading texture "<< reinterpret_cast<const char*>(texture) << std::endl;
-  if (std::string(reinterpret_cast<const char*>(texture)).substr(0, 4) == "http") {
+  std::cout << "Error when loading texture " << reinterpret_cast<const char *>(texture) << std::endl;
+  if (std::string(reinterpret_cast<const char *>(texture)).substr(0, 4) == "http") {
     std::cout << "CORS requests is probably not supported by the server hosting the image" << std::endl;
   }
   --nbTextureToLoad;
   if (nbTextureToLoad == 0) {
-    for (auto it = glScene.begin() ; it != glScene.end() ; ++it) {
+    for (auto it = glScene.begin(); it != glScene.end(); ++it) {
       it->second->forceRedraw();
     }
     draw();
@@ -269,7 +269,7 @@ static void registerTextureFromData(const char *textureName, const unsigned char
   GlTextureManager::instance(currentCanvasId)->addTextureFromData(textureName, textureData, width, height, true);
   --nbTextureToLoad;
   if (nbTextureToLoad == 0) {
-    for (auto it = glScene.begin() ; it != glScene.end() ; ++it) {
+    for (auto it = glScene.begin(); it != glScene.end(); ++it) {
       it->second->forceRedraw();
     }
     draw();
@@ -291,13 +291,14 @@ static void loadTexture(const std::string &texture) {
         tokenize(texture, paths, "/");
         if (paths.size() > 1) {
           std::string curPath;
-          for (size_t i = 0 ; i < paths.size() - 1 ; ++i) {
+          for (size_t i = 0; i < paths.size() - 1; ++i) {
             curPath += "/" + paths[i];
             mkdir(curPath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
           }
         }
         emscripten_async_wget2(cachedTextureName.back().c_str(), cachedTextureName.back().c_str(), "GET", "",
-                               reinterpret_cast<void*>(const_cast<char*>(cachedTextureName.back().c_str())), onTextureLoaded, onTextureLoadError, NULL);
+                               reinterpret_cast<void *>(const_cast<char *>(cachedTextureName.back().c_str())), onTextureLoaded, onTextureLoadError,
+                               NULL);
       }
     }
   }
@@ -306,19 +307,17 @@ static void loadTexture(const std::string &texture) {
 class GlDrawObserver : public tlp::Observable {
 
 public:
-
   void treatEvent(const tlp::Event &event) {
-    const GlSceneEvent *glSceneEvent = dynamic_cast<const GlSceneEvent*>(&event);
-    const GlLayerEvent *glLayerEvent = dynamic_cast<const GlLayerEvent*>(&event);
-    const tlp::PropertyEvent *propertyEvent = dynamic_cast<const tlp::PropertyEvent*>(&event);
-
+    const GlSceneEvent *glSceneEvent = dynamic_cast<const GlSceneEvent *>(&event);
+    const GlLayerEvent *glLayerEvent = dynamic_cast<const GlLayerEvent *>(&event);
+    const tlp::PropertyEvent *propertyEvent = dynamic_cast<const tlp::PropertyEvent *>(&event);
 
     if (glSceneEvent) {
       if (glSceneEvent->getType() == GlSceneEvent::LAYER_ADDED_IN_SCENE) {
         glSceneEvent->getGlLayer()->addListener(this);
       } else if (glSceneEvent->getType() == GlSceneEvent::LAYER_REMOVED_FROM_SCENE) {
         glSceneEvent->getGlLayer()->removeListener(this);
-      } else if(glSceneEvent->getType() == GlSceneEvent::DRAW_REQUEST) {
+      } else if (glSceneEvent->getType() == GlSceneEvent::DRAW_REQUEST) {
         draw();
       }
     }
@@ -333,20 +332,16 @@ public:
 
     if (propertyEvent) {
       tlp::PropertyInterface *prop = propertyEvent->getProperty();
-      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_NODE_VALUE &&
-          prop->getName() == "viewTexture") {
+      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_NODE_VALUE && prop->getName() == "viewTexture") {
         loadTexture(prop->getNodeStringValue(propertyEvent->getNode()));
       }
-      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_EDGE_VALUE &&
-          prop->getName() == "viewTexture") {
+      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_EDGE_VALUE && prop->getName() == "viewTexture") {
         loadTexture(prop->getEdgeStringValue(propertyEvent->getEdge()));
       }
-      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE &&
-          prop->getName() == "viewTexture") {
+      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE && prop->getName() == "viewTexture") {
         loadTexture(prop->getNodeDefaultStringValue());
       }
-      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE &&
-          prop->getName() == "viewTexture") {
+      if (propertyEvent->getType() == tlp::PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE && prop->getName() == "viewTexture") {
         loadTexture(prop->getEdgeDefaultStringValue());
       }
     }
@@ -354,15 +349,14 @@ public:
 
   void treatEvents(const std::vector<tlp::Event> &events) {
     bool drawNeeded = false;
-    for (size_t i = 0 ; i < events.size() ; ++i) {
-      GlEntity *glEntity = dynamic_cast<GlEntity*>(events[i].sender());
+    for (size_t i = 0; i < events.size(); ++i) {
+      GlEntity *glEntity = dynamic_cast<GlEntity *>(events[i].sender());
       drawNeeded = drawNeeded || (glEntity != NULL);
     }
     if (drawNeeded) {
       draw();
     }
   }
-
 };
 
 static GlDrawObserver glDrawObserver;
@@ -391,12 +385,12 @@ void EMSCRIPTEN_KEEPALIVE desactivateInteractor(const char *canvasId) {
 
 void cleanManagedCanvasIfNeeded() {
   std::vector<std::string> removedCanvas;
-  for (size_t i = 0 ; i < canvasIds.size() ; ++i) {
+  for (size_t i = 0; i < canvasIds.size(); ++i) {
     if (!domElementExists(canvasIds[i].c_str())) {
       removedCanvas.push_back(canvasIds[i]);
     }
   }
-  for (size_t i = 0 ; i < removedCanvas.size() ; ++i) {
+  for (size_t i = 0; i < removedCanvas.size(); ++i) {
     setCurrentCanvas(removedCanvas[i].c_str());
     canvasIds.erase(std::remove(canvasIds.begin(), canvasIds.end(), removedCanvas[i]), canvasIds.end());
     delete glScene[removedCanvas[i]];
@@ -435,13 +429,20 @@ void EMSCRIPTEN_KEEPALIVE initCanvas(const char *canvasId, int width, int height
 
     setCurrentCanvas(canvasId);
 
-    emscripten_set_mousedown_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, mouseCallback);
-    emscripten_set_mouseup_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, mouseCallback);
-    emscripten_set_mousemove_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, mouseCallback);
-    emscripten_set_mouseenter_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, mouseCallback);
-    emscripten_set_mouseleave_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, mouseCallback);
-    emscripten_set_wheel_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, wheelCallback);
-    emscripten_set_keypress_callback(canvasIds.back().c_str(), reinterpret_cast<void*>(const_cast<char*>(canvasIds.back().c_str())), false, keyCallback);
+    emscripten_set_mousedown_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                      mouseCallback);
+    emscripten_set_mouseup_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                    mouseCallback);
+    emscripten_set_mousemove_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                      mouseCallback);
+    emscripten_set_mouseenter_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                       mouseCallback);
+    emscripten_set_mouseleave_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                       mouseCallback);
+    emscripten_set_wheel_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                  wheelCallback);
+    emscripten_set_keypress_callback(canvasIds.back().c_str(), reinterpret_cast<void *>(const_cast<char *>(canvasIds.back().c_str())), false,
+                                     keyCallback);
 
     tlp::Vec4i viewport(0, 0, width, height);
 
@@ -455,14 +456,13 @@ void EMSCRIPTEN_KEEPALIVE initCanvas(const char *canvasId, int width, int height
     glGraph[currentCanvasId] = new GlGraph();
     glScene[currentCanvasId]->getMainLayer()->addGlEntity(glGraph[currentCanvasId], "graph");
 
-    hullsLayer[currentCanvasId] = new GlLayer("hulls", glScene[currentCanvasId]->getMainLayer()->getCamera(), glScene[currentCanvasId]->getMainLayer()->getLight());
+    hullsLayer[currentCanvasId] =
+        new GlLayer("hulls", glScene[currentCanvasId]->getMainLayer()->getCamera(), glScene[currentCanvasId]->getMainLayer()->getLight());
 
     activateInteractor(currentCanvasId.c_str(), "ZoomAndPan");
 
     draw();
-
   }
-
 }
 
 void EMSCRIPTEN_KEEPALIVE setCurrentCanvas(const char *canvasId) {
@@ -479,7 +479,7 @@ void EMSCRIPTEN_KEEPALIVE setCurrentCanvas(const char *canvasId) {
     }
   }
 
-  for (size_t i = 0 ; i < canvasIds.size() ; ++i) {
+  for (size_t i = 0; i < canvasIds.size(); ++i) {
     if (canvasIds[i] != currentCanvasId) {
       blurCanvas(canvasIds[i].c_str());
     }
@@ -488,10 +488,9 @@ void EMSCRIPTEN_KEEPALIVE setCurrentCanvas(const char *canvasId) {
   if (std::string(canvasId) != "") {
     focusCanvas(canvasId);
   }
-
 }
 
-const char * EMSCRIPTEN_KEEPALIVE getCurrentCanvas() {
+const char *EMSCRIPTEN_KEEPALIVE getCurrentCanvas() {
   return currentCanvasId.c_str();
 }
 
@@ -505,7 +504,7 @@ bool EMSCRIPTEN_KEEPALIVE graphHasHull(const char *canvasId, tlp::Graph *g) {
   return graphsHulls[canvasId].find(g->getId()) != graphsHulls[canvasId].end();
 }
 
-void EMSCRIPTEN_KEEPALIVE addGraphHull(const char *canvasId, tlp::Graph *g, bool forceHullComputation=false) {
+void EMSCRIPTEN_KEEPALIVE addGraphHull(const char *canvasId, tlp::Graph *g, bool forceHullComputation = false) {
   tlp::Color hullColor = genRandomColor(100);
   if (graphsHulls[canvasId].find(g->getId()) != graphsHulls[canvasId].end()) {
     hullsLayer[canvasId]->deleteGlEntity(graphsHulls[canvasId][g->getId()]);
@@ -514,7 +513,7 @@ void EMSCRIPTEN_KEEPALIVE addGraphHull(const char *canvasId, tlp::Graph *g, bool
 
   std::ostringstream oss;
 
-  std::vector<std::vector<tlp::Coord> > hullVertices;
+  std::vector<std::vector<tlp::Coord>> hullVertices;
 
   unsigned int i = 0;
   while (1) {
@@ -539,7 +538,6 @@ void EMSCRIPTEN_KEEPALIVE addGraphHull(const char *canvasId, tlp::Graph *g, bool
     graphsHulls[canvasId][g->getId()] = new GlConcavePolygon(hullVertices, hullColor, tlp::Color::Black);
     hullsLayer[canvasId]->addGlEntity(graphsHulls[canvasId][g->getId()], oss.str());
   }
-
 }
 
 void addSubGraphsHull(const char *canvasId, tlp::Graph *g) {
@@ -560,7 +558,7 @@ void setGraphHullsToDisplay(const char *canvasId) {
   }
 
   std::map<unsigned int, GlConcavePolygon *>::iterator it = graphsHulls[canvasId].begin();
-  for (; it != graphsHulls[canvasId].end() ; ++it) {
+  for (; it != graphsHulls[canvasId].end(); ++it) {
     it->second->setVisible(sgIds.find(it->first) != sgIds.end());
   }
 }
@@ -640,7 +638,7 @@ unsigned int EMSCRIPTEN_KEEPALIVE selectNodes(const char *canvasId, int x, int y
 }
 
 void EMSCRIPTEN_KEEPALIVE getSelectedNodes(unsigned int *nodesIds) {
-  for (size_t i = 0 ; i < selectedNodes.size() ; ++i) {
+  for (size_t i = 0; i < selectedNodes.size(); ++i) {
     *nodesIds++ = selectedNodes[i].getNode().id;
   }
 }
@@ -660,7 +658,7 @@ unsigned int EMSCRIPTEN_KEEPALIVE selectEdges(const char *canvasId, int x, int y
 }
 
 void EMSCRIPTEN_KEEPALIVE getSelectedEdges(unsigned int *edgesIds) {
-  for (size_t i = 0 ; i < selectedEdges.size() ; ++i) {
+  for (size_t i = 0; i < selectedEdges.size(); ++i) {
     *edgesIds++ = selectedEdges[i].getEdge().id;
   }
 }
@@ -689,7 +687,7 @@ void EMSCRIPTEN_KEEPALIVE endGraphViewUpdate(const char *canvasId) {
 
 //==============================================================
 
-GlGraphRenderingParameters* EMSCRIPTEN_KEEPALIVE getViewRenderingParameters(const char *canvasId) {
+GlGraphRenderingParameters *EMSCRIPTEN_KEEPALIVE getViewRenderingParameters(const char *canvasId) {
   return &(glGraph[canvasId]->getRenderingParameters());
 }
 
@@ -797,11 +795,11 @@ bool EMSCRIPTEN_KEEPALIVE GlGraphRenderingParameters_elementsOrderedDescending(G
   return glgrp->elementsOrderedDescending();
 }
 
-void EMSCRIPTEN_KEEPALIVE GlGraphRenderingParameters_setElementsOrderingProperty(GlGraphRenderingParameters *glgrp, tlp::NumericProperty* property) {
+void EMSCRIPTEN_KEEPALIVE GlGraphRenderingParameters_setElementsOrderingProperty(GlGraphRenderingParameters *glgrp, tlp::NumericProperty *property) {
   glgrp->setElementsOrderingProperty(property);
 }
 
-tlp::NumericProperty* EMSCRIPTEN_KEEPALIVE GlGraphRenderingParameters_elementsOrderingProperty(GlGraphRenderingParameters *glgrp) {
+tlp::NumericProperty *EMSCRIPTEN_KEEPALIVE GlGraphRenderingParameters_elementsOrderingProperty(GlGraphRenderingParameters *glgrp) {
   return glgrp->elementsOrderingProperty();
 }
 
@@ -820,9 +818,9 @@ void EMSCRIPTEN_KEEPALIVE fullScreen(const char *canvasId) {
 //==============================================================
 
 void EMSCRIPTEN_KEEPALIVE computeGraphHullVertices(tlp::Graph *graph, bool withHoles = false) {
-  std::vector<std::vector<tlp::Coord> > hullVertices = ConcaveHullBuilder::computeGraphHullVertices(graph, withHoles);
+  std::vector<std::vector<tlp::Coord>> hullVertices = ConcaveHullBuilder::computeGraphHullVertices(graph, withHoles);
   std::ostringstream oss;
-  for (size_t i = 0 ; i < hullVertices.size() ; ++i) {
+  for (size_t i = 0; i < hullVertices.size(); ++i) {
     oss.str("");
     oss << "hullVertices" << i;
     graph->setAttribute(oss.str(), hullVertices[i]);
@@ -831,11 +829,11 @@ void EMSCRIPTEN_KEEPALIVE computeGraphHullVertices(tlp::Graph *graph, bool withH
 
 //==============================================================
 
-GlGraphInputData* EMSCRIPTEN_KEEPALIVE getViewInputData(const char *canvasId) {
+GlGraphInputData *EMSCRIPTEN_KEEPALIVE getViewInputData(const char *canvasId) {
   return &(glGraph[canvasId]->getInputData());
 }
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementColor(GlGraphInputData *inputData) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementColor(GlGraphInputData *inputData) {
   return inputData->getElementColor();
 }
 
@@ -843,7 +841,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementColor(GlGraphInputData *inp
   inputData->setElementColor(property);
 }
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLabelColor(GlGraphInputData *inputData) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLabelColor(GlGraphInputData *inputData) {
   return inputData->getElementLabelColor();
 }
 
@@ -851,7 +849,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementLabelColor(GlGraphInputData
   inputData->setElementLabelColor(property);
 }
 
-tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSize(GlGraphInputData *inputData) {
+tlp::SizeProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSize(GlGraphInputData *inputData) {
   return inputData->getElementSize();
 }
 
@@ -859,7 +857,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementSize(GlGraphInputData *inpu
   inputData->setElementSize(property);
 }
 
-tlp::IntegerProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLabelPosition(GlGraphInputData *inputData) {
+tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLabelPosition(GlGraphInputData *inputData) {
   return inputData->getElementLabelPosition();
 }
 
@@ -867,7 +865,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementLabelPosition(GlGraphInputD
   inputData->setElementLabelPosition(property);
 }
 
-tlp::IntegerProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementShape(GlGraphInputData *inputData) {
+tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementShape(GlGraphInputData *inputData) {
   return inputData->getElementShape();
 }
 
@@ -875,7 +873,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementShape(GlGraphInputData *inp
   inputData->setElementShape(property);
 }
 
-tlp::DoubleProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementRotation(GlGraphInputData *inputData) {
+tlp::DoubleProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementRotation(GlGraphInputData *inputData) {
   return inputData->getElementRotation();
 }
 
@@ -883,7 +881,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementRotation(GlGraphInputData *
   inputData->setElementRotation(property);
 }
 
-tlp::BooleanProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSelection(GlGraphInputData *inputData) {
+tlp::BooleanProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSelection(GlGraphInputData *inputData) {
   return inputData->getElementSelection();
 }
 
@@ -891,7 +889,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementSelection(GlGraphInputData 
   inputData->setElementSelection(property);
 }
 
-tlp::StringProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFont(GlGraphInputData *inputData) {
+tlp::StringProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFont(GlGraphInputData *inputData) {
   return inputData->getElementFont();
 }
 
@@ -899,7 +897,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementFont(GlGraphInputData *inpu
   inputData->setElementFont(property);
 }
 
-tlp::IntegerProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFontSize(GlGraphInputData *inputData) {
+tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFontSize(GlGraphInputData *inputData) {
   return inputData->getElementFontSize();
 }
 
@@ -907,7 +905,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementFontSize(GlGraphInputData *
   inputData->setElementFontSize(property);
 }
 
-tlp::StringProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLabel(GlGraphInputData *inputData) {
+tlp::StringProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLabel(GlGraphInputData *inputData) {
   return inputData->getElementLabel();
 }
 
@@ -915,7 +913,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementLabel(GlGraphInputData *inp
   inputData->setElementLabel(property);
 }
 
-tlp::LayoutProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLayout(GlGraphInputData *inputData) {
+tlp::LayoutProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementLayout(GlGraphInputData *inputData) {
   return inputData->getElementLayout();
 }
 
@@ -923,7 +921,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementLayout(GlGraphInputData *in
   inputData->setElementLayout(property);
 }
 
-tlp::StringProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementTexture(GlGraphInputData *inputData) {
+tlp::StringProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementTexture(GlGraphInputData *inputData) {
   return inputData->getElementTexture();
 }
 
@@ -931,7 +929,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementTexture(GlGraphInputData *i
   inputData->setElementTexture(property);
 }
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementBorderColor(GlGraphInputData *inputData) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementBorderColor(GlGraphInputData *inputData) {
   return inputData->getElementBorderColor();
 }
 
@@ -939,7 +937,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementBorderColor(GlGraphInputDat
   inputData->setElementBorderColor(property);
 }
 
-tlp::DoubleProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementBorderWidth(GlGraphInputData *inputData) {
+tlp::DoubleProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementBorderWidth(GlGraphInputData *inputData) {
   return inputData->getElementBorderWidth();
 }
 
@@ -947,7 +945,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementBorderWidth(GlGraphInputDat
   inputData->setElementBorderWidth(property);
 }
 
-tlp::IntegerProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSrcAnchorShape(GlGraphInputData *inputData) {
+tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSrcAnchorShape(GlGraphInputData *inputData) {
   return inputData->getElementSrcAnchorShape();
 }
 
@@ -955,7 +953,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementSrcAnchorShape(GlGraphInput
   inputData->setElementSrcAnchorShape(property);
 }
 
-tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSrcAnchorSize(GlGraphInputData *inputData) {
+tlp::SizeProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementSrcAnchorSize(GlGraphInputData *inputData) {
   return inputData->getElementSrcAnchorSize();
 }
 
@@ -963,7 +961,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementSrcAnchorSize(GlGraphInputD
   inputData->setElementSrcAnchorSize(property);
 }
 
-tlp::IntegerProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementTgtAnchorShape(GlGraphInputData *inputData) {
+tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementTgtAnchorShape(GlGraphInputData *inputData) {
   return inputData->getElementTgtAnchorShape();
 }
 
@@ -971,7 +969,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementTgtAnchorShape(GlGraphInput
   inputData->setElementTgtAnchorShape(property);
 }
 
-tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementTgtAnchorSize(GlGraphInputData *inputData) {
+tlp::SizeProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementTgtAnchorSize(GlGraphInputData *inputData) {
   return inputData->getElementTgtAnchorSize();
 }
 
@@ -979,7 +977,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementTgtAnchorSize(GlGraphInputD
   inputData->setElementTgtAnchorSize(property);
 }
 
-tlp::StringProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFontAwesomeIcon(GlGraphInputData *inputData) {
+tlp::StringProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFontAwesomeIcon(GlGraphInputData *inputData) {
   return inputData->getElementFontAwesomeIcon();
 }
 
@@ -987,7 +985,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementFontAwesomeIcon(GlGraphInpu
   inputData->setElementFontAwesomeIcon(property);
 }
 
-tlp::BooleanProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementGlow(GlGraphInputData *inputData) {
+tlp::BooleanProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementGlow(GlGraphInputData *inputData) {
   return inputData->getElementGlow();
 }
 
@@ -995,7 +993,7 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementGlow(GlGraphInputData *inpu
   inputData->setElementGlow(property);
 }
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementGlowColor(GlGraphInputData *inputData) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementGlowColor(GlGraphInputData *inputData) {
   return inputData->getElementGlowColor();
 }
 
@@ -1009,31 +1007,31 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_reloadGraphProperties(GlGraphInputDat
 
 //==============================================================
 
-Camera* EMSCRIPTEN_KEEPALIVE getViewCamera(const char *canvasId) {
+Camera *EMSCRIPTEN_KEEPALIVE getViewCamera(const char *canvasId) {
   return glScene[canvasId]->getLayer("Main")->getCamera();
 }
 
 void EMSCRIPTEN_KEEPALIVE Camera_getViewport(Camera *camera, int *buffer) {
   tlp::Vec4i vp = camera->getViewport();
-  for (int i = 0 ; i < 4 ; ++i) {
+  for (int i = 0; i < 4; ++i) {
     buffer[i] = vp[i];
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE Camera_modelViewMatrix(Camera *camera, float *buffer) {
   const tlp::MatrixGL &mdvMat = camera->modelviewMatrix();
-  for (int i = 0 ; i < 4 ; ++i) {
-    for (int j = 0 ; j < 4 ; ++j) {
-      buffer[i*4+j] = mdvMat[i][j];
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      buffer[i * 4 + j] = mdvMat[i][j];
     }
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE Camera_setModelViewMatrix(Camera *camera, float *buffer) {
   tlp::MatrixGL mdvMat;
-  for (int i = 0 ; i < 4 ; ++i) {
-    for (int j = 0 ; j < 4 ; ++j) {
-      mdvMat[i][j] = buffer[i*4+j];
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      mdvMat[i][j] = buffer[i * 4 + j];
     }
   }
   camera->setModelViewMatrix(mdvMat);
@@ -1041,18 +1039,18 @@ void EMSCRIPTEN_KEEPALIVE Camera_setModelViewMatrix(Camera *camera, float *buffe
 
 void EMSCRIPTEN_KEEPALIVE Camera_projectionMatrix(Camera *camera, float *buffer) {
   const tlp::MatrixGL &projMat = camera->projectionMatrix();
-  for (int i = 0 ; i < 4 ; ++i) {
-    for (int j = 0 ; j < 4 ; ++j) {
-      buffer[i*4+j] = projMat[i][j];
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      buffer[i * 4 + j] = projMat[i][j];
     }
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE Camera_setProjectionMatrix(Camera *camera, float *buffer) {
   tlp::MatrixGL projMat;
-  for (int i = 0 ; i < 4 ; ++i) {
-    for (int j = 0 ; j < 4 ; ++j) {
-       projMat[i][j] = buffer[i*4+j];
+  for (int i = 0; i < 4; ++i) {
+    for (int j = 0; j < 4; ++j) {
+      projMat[i][j] = buffer[i * 4 + j];
     }
   }
   camera->setProjectionMatrix(projMat);
@@ -1061,14 +1059,11 @@ void EMSCRIPTEN_KEEPALIVE Camera_setProjectionMatrix(Camera *camera, float *buff
 //==============================================================
 
 void EMSCRIPTEN_KEEPALIVE setViewBackgroundColor(const char *canvasId, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
-  glScene[canvasId]->setBackgroundColor(tlp::Color(r, g, b , a));
+  glScene[canvasId]->setBackgroundColor(tlp::Color(r, g, b, a));
   glScene[canvasId]->requestDraw();
 }
 
 void EMSCRIPTEN_KEEPALIVE setViewBackupBackBuffer(const char *canvasId, bool backup) {
   glScene[canvasId]->setBackupBackBuffer(backup);
 }
-
-
 }
-

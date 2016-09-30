@@ -20,58 +20,59 @@
 #include "tulip/TulipMetaTypes.h"
 #include "tulip/TlpQtTools.h"
 
-
 using namespace tlp;
 
 // QStringListType
-void QStringListType::write(std::ostream& oss, const RealType& t) {
+void QStringListType::write(std::ostream &oss, const RealType &t) {
   tlp::StringVectorType::RealType stdVect(t.size());
-  int i=0;
-  foreach(QString s, t) {
+  int i = 0;
+  foreach (QString s, t) {
     stdVect[i] = tlp::QStringToTlpString(s);
     ++i;
   }
-  StringVectorType::write(oss,stdVect);
+  StringVectorType::write(oss, stdVect);
 }
 
-bool QStringListType::read(std::istream& iss, RealType& t) {
+bool QStringListType::read(std::istream &iss, RealType &t) {
   StringVectorType::RealType stdVect;
 
-  if (!StringVectorType::read(iss,stdVect))
+  if (!StringVectorType::read(iss, stdVect))
     return false;
 
-  for (unsigned int i=0; i<stdVect.size(); ++i)
+  for (unsigned int i = 0; i < stdVect.size(); ++i)
     t.push_back(tlp::tlpStringToQString(stdVect[i]));
 
   return true;
 }
 
-void QStringType::write(std::ostream& oss, const QString& t) {
-  StringType::write(oss,t.toStdString());
+void QStringType::write(std::ostream &oss, const QString &t) {
+  StringType::write(oss, t.toStdString());
 }
 
-bool QStringType::read(std::istream& iss, QString& t) {
+bool QStringType::read(std::istream &iss, QString &t) {
   std::string s;
 
-  if (!StringType::read(iss,s))
+  if (!StringType::read(iss, s))
     return false;
 
   t = tlp::tlpStringToQString(s);
   return true;
 }
 
-std::string QStringType::toString(const QString& s) {
+std::string QStringType::toString(const QString &s) {
   return tlp::QStringToTlpString(s);
 }
 
-bool QStringType::fromString(QString& s, const std::string& str) {
+bool QStringType::fromString(QString &s, const std::string &str) {
   s = tlp::tlpStringToQString(str);
   return true;
 }
 
-#define CHECK_QVARIANT(TYPE) if (v.userType() == qMetaTypeId<TYPE>()) return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
+#define CHECK_QVARIANT(TYPE)                                                                                                                         \
+  if (v.userType() == qMetaTypeId<TYPE>())                                                                                                           \
+    return new TypedData<TYPE>(new TYPE(v.value<TYPE>()));
 
-tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
+tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::GraphType::RealType);
   CHECK_QVARIANT(tlp::EdgeSetType::RealType);
   CHECK_QVARIANT(tlp::DoubleType::RealType);
@@ -81,10 +82,9 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::LongType::RealType);
   CHECK_QVARIANT(tlp::BooleanType::RealType);
 
-  //CHECK_QVARIANT(tlp::BooleanVectorType::RealType);
-  if (v.userType() == qMetaTypeId<QVector<bool> >())
-    return new TypedData<tlp::BooleanVectorType::RealType>(new tlp::BooleanVectorType::RealType(v.value<QVector<bool> >().toStdVector()));
-
+  // CHECK_QVARIANT(tlp::BooleanVectorType::RealType);
+  if (v.userType() == qMetaTypeId<QVector<bool>>())
+    return new TypedData<tlp::BooleanVectorType::RealType>(new tlp::BooleanVectorType::RealType(v.value<QVector<bool>>().toStdVector()));
 
   CHECK_QVARIANT(tlp::PointType::RealType);
   CHECK_QVARIANT(tlp::SizeType::RealType);
@@ -95,25 +95,25 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   CHECK_QVARIANT(tlp::DoubleVectorType::RealType);
   CHECK_QVARIANT(tlp::IntegerVectorType::RealType);
   // same as tlp::CoordVectorType::RealType
-  //CHECK_QVARIANT(tlp::SizeVectorType::RealType);
+  // CHECK_QVARIANT(tlp::SizeVectorType::RealType);
   CHECK_QVARIANT(tlp::StringVectorType::RealType);
 
-  CHECK_QVARIANT(tlp::BooleanProperty*);
-  CHECK_QVARIANT(tlp::DoubleProperty*);
-  CHECK_QVARIANT(tlp::LayoutProperty*);
-  CHECK_QVARIANT(tlp::StringProperty*);
-  CHECK_QVARIANT(tlp::IntegerProperty*);
-  CHECK_QVARIANT(tlp::SizeProperty*);
-  CHECK_QVARIANT(tlp::ColorProperty*);
-  CHECK_QVARIANT(tlp::BooleanVectorProperty*);
-  CHECK_QVARIANT(tlp::DoubleVectorProperty*);
-  CHECK_QVARIANT(tlp::CoordVectorProperty*);
-  CHECK_QVARIANT(tlp::StringVectorProperty*);
-  CHECK_QVARIANT(tlp::IntegerVectorProperty*);
-  CHECK_QVARIANT(tlp::SizeVectorProperty*);
-  CHECK_QVARIANT(tlp::ColorVectorProperty*);
-  CHECK_QVARIANT(tlp::NumericProperty*);
-  CHECK_QVARIANT(tlp::PropertyInterface*);
+  CHECK_QVARIANT(tlp::BooleanProperty *);
+  CHECK_QVARIANT(tlp::DoubleProperty *);
+  CHECK_QVARIANT(tlp::LayoutProperty *);
+  CHECK_QVARIANT(tlp::StringProperty *);
+  CHECK_QVARIANT(tlp::IntegerProperty *);
+  CHECK_QVARIANT(tlp::SizeProperty *);
+  CHECK_QVARIANT(tlp::ColorProperty *);
+  CHECK_QVARIANT(tlp::BooleanVectorProperty *);
+  CHECK_QVARIANT(tlp::DoubleVectorProperty *);
+  CHECK_QVARIANT(tlp::CoordVectorProperty *);
+  CHECK_QVARIANT(tlp::StringVectorProperty *);
+  CHECK_QVARIANT(tlp::IntegerVectorProperty *);
+  CHECK_QVARIANT(tlp::SizeVectorProperty *);
+  CHECK_QVARIANT(tlp::ColorVectorProperty *);
+  CHECK_QVARIANT(tlp::NumericProperty *);
+  CHECK_QVARIANT(tlp::PropertyInterface *);
 
   CHECK_QVARIANT(ColorScale);
 
@@ -133,11 +133,13 @@ tlp::DataType* TulipMetaTypes::qVariantToDataType(const QVariant &v) {
   return nullptr;
 }
 
-#define CHECK_DATATYPE(TYPE) if (type.compare(typeid(TYPE).name()) == 0) return typedVariant<TYPE>(dm);
+#define CHECK_DATATYPE(TYPE)                                                                                                                         \
+  if (type.compare(typeid(TYPE).name()) == 0)                                                                                                        \
+    return typedVariant<TYPE>(dm);
 
 #include <QDebug>
 
-QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string& paramName) {
+QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string &paramName) {
   std::string type = dm->getTypeName();
 
   // First, we set up some hack to provide custom types for string data whose name starts with file:: or dir::
@@ -145,8 +147,8 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
 
   if (type.compare(typeid(std::string).name()) == 0 && (name.startsWith("file::") || name.startsWith("anyfile::") || name.startsWith("dir::"))) {
     TulipFileDescriptor desc;
-    desc.absolutePath = tlpStringToQString(*(std::string*)dm->value);
-    desc.type = name.startsWith("dir::")?TulipFileDescriptor::Directory:TulipFileDescriptor::File;
+    desc.absolutePath = tlpStringToQString(*(std::string *)dm->value);
+    desc.type = name.startsWith("dir::") ? TulipFileDescriptor::Directory : TulipFileDescriptor::File;
     desc.mustExist = !name.startsWith("any");
     return QVariant::fromValue<TulipFileDescriptor>(desc);
   }
@@ -162,14 +164,14 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::LongType::RealType);
   CHECK_DATATYPE(tlp::BooleanType::RealType);
 
-  //CHECK_DATATYPE(tlp::BooleanVectorType::RealType);
+  // CHECK_DATATYPE(tlp::BooleanVectorType::RealType);
   if (type.compare(typeid(tlp::BooleanVectorType::RealType).name()) == 0) {
     tlp::BooleanVectorType::RealType result;
 
     if (dm)
-      result = *((tlp::BooleanVectorType::RealType*)dm->value);
+      result = *((tlp::BooleanVectorType::RealType *)dm->value);
 
-    return QVariant::fromValue<QVector<bool> >(QVector<bool>::fromStdVector(result));
+    return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(result));
   }
 
   CHECK_DATATYPE(tlp::PointType::RealType);
@@ -181,25 +183,25 @@ QVariant TulipMetaTypes::dataTypeToQvariant(tlp::DataType *dm, const std::string
   CHECK_DATATYPE(tlp::DoubleVectorType::RealType);
   CHECK_DATATYPE(tlp::IntegerVectorType::RealType);
   // same as tlp::CoordVectorType::RealType
-  //CHECK_DATATYPE(tlp::SizeVectorType::RealType);
+  // CHECK_DATATYPE(tlp::SizeVectorType::RealType);
   CHECK_DATATYPE(tlp::StringVectorType::RealType);
 
-  CHECK_DATATYPE(tlp::BooleanProperty*);
-  CHECK_DATATYPE(tlp::DoubleProperty*);
-  CHECK_DATATYPE(tlp::LayoutProperty*);
-  CHECK_DATATYPE(tlp::StringProperty*);
-  CHECK_DATATYPE(tlp::IntegerProperty*);
-  CHECK_DATATYPE(tlp::SizeProperty*);
-  CHECK_DATATYPE(tlp::ColorProperty*);
-  CHECK_DATATYPE(tlp::BooleanVectorProperty*);
-  CHECK_DATATYPE(tlp::DoubleVectorProperty*);
-  CHECK_DATATYPE(tlp::CoordVectorProperty*);
-  CHECK_DATATYPE(tlp::StringVectorProperty*);
-  CHECK_DATATYPE(tlp::IntegerVectorProperty*);
-  CHECK_DATATYPE(tlp::SizeVectorProperty*);
-  CHECK_DATATYPE(tlp::ColorProperty*);
-  CHECK_DATATYPE(tlp::NumericProperty*);
-  CHECK_DATATYPE(tlp::PropertyInterface*);
+  CHECK_DATATYPE(tlp::BooleanProperty *);
+  CHECK_DATATYPE(tlp::DoubleProperty *);
+  CHECK_DATATYPE(tlp::LayoutProperty *);
+  CHECK_DATATYPE(tlp::StringProperty *);
+  CHECK_DATATYPE(tlp::IntegerProperty *);
+  CHECK_DATATYPE(tlp::SizeProperty *);
+  CHECK_DATATYPE(tlp::ColorProperty *);
+  CHECK_DATATYPE(tlp::BooleanVectorProperty *);
+  CHECK_DATATYPE(tlp::DoubleVectorProperty *);
+  CHECK_DATATYPE(tlp::CoordVectorProperty *);
+  CHECK_DATATYPE(tlp::StringVectorProperty *);
+  CHECK_DATATYPE(tlp::IntegerVectorProperty *);
+  CHECK_DATATYPE(tlp::SizeVectorProperty *);
+  CHECK_DATATYPE(tlp::ColorProperty *);
+  CHECK_DATATYPE(tlp::NumericProperty *);
+  CHECK_DATATYPE(tlp::PropertyInterface *);
 
   CHECK_DATATYPE(tlp::ColorScale);
 

@@ -39,15 +39,14 @@ class GlProgressBar;
 
 class ParallelCoordinatesDrawing : public GlComposite, public Observable {
 
-public :
+public:
+  enum LayoutType { PARALLEL = 0, CIRCULAR };
 
-  enum LayoutType {PARALLEL=0, CIRCULAR};
+  enum LinesType { STRAIGHT = 0, CATMULL_ROM_SPLINE, CUBIC_BSPLINE_INTERPOLATION };
 
-  enum LinesType {STRAIGHT=0, CATMULL_ROM_SPLINE, CUBIC_BSPLINE_INTERPOLATION};
+  enum LinesThickness { THICK = 0, THIN };
 
-  enum LinesThickness {THICK=0, THIN};
-
-  enum HighlightedEltsSetOp {NONE=0, INTERSECTION, UNION};
+  enum HighlightedEltsSetOp { NONE = 0, INTERSECTION, UNION };
 
   ParallelCoordinatesDrawing(ParallelCoordinatesGraphProxy *graphProxy, Graph *axisPointsGraph);
 
@@ -57,7 +56,7 @@ public :
   bool getDataIdFromAxisPoint(node axisPoint, unsigned int &dataId);
 
   unsigned int nbParallelAxis() const;
-  const std::vector<std::string>& getAxisNames() const;
+  const std::vector<std::string> &getAxisNames() const;
   void swapAxis(ParallelAxis *axis1, ParallelAxis *axis2);
   void removeAxis(ParallelAxis *axis);
   void addAxis(ParallelAxis *axis);
@@ -80,7 +79,7 @@ public :
   void setLinesColorAlphaValue(const unsigned int linesColorAlphaValue) {
     this->linesColorAlphaValue = linesColorAlphaValue;
   }
-  void setLineTextureFilename(const std::string& lineTextureFilename) {
+  void setLineTextureFilename(const std::string &lineTextureFilename) {
     this->lineTextureFilename = lineTextureFilename;
   }
   void setBackgroundColor(const Color &backgroundColor) {
@@ -105,16 +104,15 @@ public :
 
   void resetAxisSlidersPosition();
 
-  void delNode(Graph *,const node );
-  void delEdge(Graph *,const edge );
-  void treatEvent(const tlp::Event&);
+  void delNode(Graph *, const node);
+  void delEdge(Graph *, const edge);
+  void treatEvent(const tlp::Event &);
 
-private :
-
+private:
   void computeResizeFactor();
-  void createAxis(GlMainWidget *glWidget, GlProgressBar* progressBar);
+  void createAxis(GlMainWidget *glWidget, GlProgressBar *progressBar);
   void destroyAxisIfNeeded();
-  void plotAllData(GlMainWidget *glWidget, GlProgressBar* progressBar);
+  void plotAllData(GlMainWidget *glWidget, GlProgressBar *progressBar);
   void plotData(const unsigned int dataIdx, const Color &color);
 
   void erase();
@@ -128,7 +126,6 @@ private :
   unsigned int spaceBetweenAxis;
   unsigned int linesColorAlphaValue;
   bool drawPointsOnAxis;
-
 
   std::vector<std::string> axisOrder;
   std::map<std::string, ParallelAxis *> parallelAxis;
@@ -164,7 +161,6 @@ private :
 
   bool resetAxisLayout;
 };
-
 }
 
 #endif // DOXYGEN_NOTFOR_DEVEL

@@ -30,10 +30,9 @@ namespace tlp {
 
 class FishEyeConfigWidget : public QWidget {
 
-  Ui::FishEyeConfigWidget* _ui;
+  Ui::FishEyeConfigWidget *_ui;
 
-public :
-
+public:
   FishEyeConfigWidget(QWidget *parent = nullptr);
   ~FishEyeConfigWidget();
 
@@ -45,7 +44,6 @@ public :
 
   float getFishEyeRadiusIncrementStep() const;
   float getFishEyeHeightIncrementStep() const;
-
 };
 }
 #endif /* FISHEYECONFIGWIDGET_H_ */

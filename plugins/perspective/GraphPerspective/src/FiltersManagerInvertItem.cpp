@@ -26,27 +26,26 @@
 
 using namespace tlp;
 
-FiltersManagerInvertItem::FiltersManagerInvertItem(QWidget* parent): AbstractFiltersManagerItem(parent), _ui(new Ui::FiltersManagerInvertItem) {
+FiltersManagerInvertItem::FiltersManagerInvertItem(QWidget *parent) : AbstractFiltersManagerItem(parent), _ui(new Ui::FiltersManagerInvertItem) {
   _ui->setupUi(this);
-  connect(_ui->elementCombo,SIGNAL(currentIndexChanged(int)),this,SIGNAL(titleChanged()));
+  connect(_ui->elementCombo, SIGNAL(currentIndexChanged(int)), this, SIGNAL(titleChanged()));
 }
 
 FiltersManagerInvertItem::~FiltersManagerInvertItem() {
   delete _ui;
 }
 
-
-void FiltersManagerInvertItem::applyFilter(BooleanProperty* prop) {
+void FiltersManagerInvertItem::applyFilter(BooleanProperty *prop) {
   int i = _ui->elementCombo->currentIndex();
 
   if (i == 0 || i == 2) {
-    for(node n : _graph->getNodes())
-      prop->setNodeValue(n,!(prop->getNodeValue(n)));
+    for (node n : _graph->getNodes())
+      prop->setNodeValue(n, !(prop->getNodeValue(n)));
   }
 
   if (i == 1 || i == 2) {
-    for(edge e : _graph->getEdges())
-      prop->setEdgeValue(e,!(prop->getEdgeValue(e)));
+    for (edge e : _graph->getEdges())
+      prop->setEdgeValue(e, !(prop->getEdgeValue(e)));
   }
 }
 QString FiltersManagerInvertItem::title() const {

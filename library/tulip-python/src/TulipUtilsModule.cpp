@@ -25,9 +25,8 @@
 
 using namespace tlp;
 
-static PyObject *
-tuliputils_updateVisualization(PyObject *, PyObject *args) {
-  tlp::Perspective* persp = tlp::Perspective::instance();
+static PyObject *tuliputils_updateVisualization(PyObject *, PyObject *args) {
+  tlp::Perspective *persp = tlp::Perspective::instance();
   int i;
 
   if (!PyArg_ParseTuple(args, "|i", &i))
@@ -42,14 +41,12 @@ tuliputils_updateVisualization(PyObject *, PyObject *args) {
   Py_RETURN_NONE;
 }
 
-static PyObject *
-tuliputils_pauseRunningScript(PyObject *, PyObject *) {
+static PyObject *tuliputils_pauseRunningScript(PyObject *, PyObject *) {
   PythonInterpreter::getInstance()->pauseCurrentScript();
   Py_RETURN_NONE;
 }
 
-static PyObject *
-tuliputils_runGraphScript(PyObject *, PyObject *args) {
+static PyObject *tuliputils_runGraphScript(PyObject *, PyObject *args) {
   char *s = nullptr;
   PyObject *o = nullptr;
 
@@ -60,7 +57,7 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
     if (PythonInterpreter::getInstance()->runString(QString("import ") + scriptName)) {
 
       // Getting proper sipWrapperType
-      const sipTypeDef* kpTypeDef = sipFindType("tlp::Graph");
+      const sipTypeDef *kpTypeDef = sipFindType("tlp::Graph");
 
       // Checking if the Python object wraps a tlp::Graph instance
       if (sipCanConvertToType(o, kpTypeDef, SIP_NOT_NONE)) {
@@ -75,18 +72,15 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
           return nullptr;
         }
 
-      }
-      else {
+      } else {
         PyErr_SetString(PyExc_TypeError, "Second parameter of the runGraphScript function must be of type tlp.Graph");
         return nullptr;
       }
-    }
-    else {
+    } else {
       PyErr_SetString(PyExc_Exception, (std::string("The script ") + std::string(s) + " does not exist").c_str());
       return nullptr;
     }
-  }
-  else {
+  } else {
     PyErr_SetString(PyExc_TypeError, "Parameters provided to the runGraphScript function have invalid types");
     return nullptr;
   }
@@ -94,8 +88,7 @@ tuliputils_runGraphScript(PyObject *, PyObject *args) {
   Py_RETURN_NONE;
 }
 
-static PyObject *
-tuliputils_removePlugin(PyObject *, PyObject *args) {
+static PyObject *tuliputils_removePlugin(PyObject *, PyObject *args) {
 
   char *buf;
 
@@ -109,11 +102,10 @@ tuliputils_removePlugin(PyObject *, PyObject *args) {
   Py_RETURN_NONE;
 }
 
-static PyObject *
-tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
+static PyObject *tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
   int i;
 
-  if(!PyArg_ParseTuple(o, "i", &i))
+  if (!PyArg_ParseTuple(o, "i", &i))
     return nullptr;
 
   PythonInterpreter::getInstance()->setProcessQtEventsDuringScriptExecution(i > 0);
@@ -122,30 +114,29 @@ tuliputils_setProcessQtEvents(PyObject *, PyObject *o) {
 }
 
 static PyMethodDef tulipUtilsMethods[] = {
-  {"updateVisualization",  tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
-  {"pauseRunningScript",  tuliputils_pauseRunningScript, METH_VARARGS, "Pause the execution of the current running script."},
-  {"removePlugin",  tuliputils_removePlugin, METH_VARARGS, ""},
-  {"runGraphScript",  tuliputils_runGraphScript, METH_VARARGS, "Allow to execute a script from a script."},
-  {"setProcessQtEvents",  tuliputils_setProcessQtEvents, METH_VARARGS, ""},
-  {nullptr, nullptr, 0, nullptr}        /* Sentinel */
+    {"updateVisualization", tuliputils_updateVisualization, METH_VARARGS, "Update views on current graph."},
+    {"pauseRunningScript", tuliputils_pauseRunningScript, METH_VARARGS, "Pause the execution of the current running script."},
+    {"removePlugin", tuliputils_removePlugin, METH_VARARGS, ""},
+    {"runGraphScript", tuliputils_runGraphScript, METH_VARARGS, "Allow to execute a script from a script."},
+    {"setProcessQtEvents", tuliputils_setProcessQtEvents, METH_VARARGS, ""},
+    {nullptr, nullptr, 0, nullptr} /* Sentinel */
 };
 
 #if PY_MAJOR_VERSION >= 3
 static struct PyModuleDef tulipUtilsModuleDef = {
-  PyModuleDef_HEAD_INIT,
-  "tuliputils",     /* m_name */
-  "",  /* m_doc */
-  -1,                  /* m_size */
-  tulipUtilsMethods,    /* m_methods */
-  nullptr,                /* m_reload */
-  nullptr,                /* m_traverse */
-  nullptr,                /* m_clear */
-  nullptr,                /* m_free */
+    PyModuleDef_HEAD_INIT,
+    "tuliputils",      /* m_name */
+    "",                /* m_doc */
+    -1,                /* m_size */
+    tulipUtilsMethods, /* m_methods */
+    nullptr,           /* m_reload */
+    nullptr,           /* m_traverse */
+    nullptr,           /* m_clear */
+    nullptr,           /* m_free */
 };
 #endif
 
-void
-inittuliputils(void) {
+void inittuliputils(void) {
 #if PY_MAJOR_VERSION >= 3
   PyObject *m = PyModule_Create(&tulipUtilsModuleDef);
   _PyImport_FixupBuiltin(m, const_cast<char *>("tuliputils"));
@@ -154,4 +145,3 @@ inittuliputils(void) {
   _PyImport_FixupExtension(const_cast<char *>("tuliputils"), const_cast<char *>("tuliputils"));
 #endif
 }
-

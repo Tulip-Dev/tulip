@@ -40,6 +40,7 @@ class SuperGraphTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testAttributes);
   CPPUNIT_TEST(testGetNodesEqualTo);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
 
@@ -59,6 +60,7 @@ public:
   void testDegree();
   void testAttributes();
   void testGetNodesEqualTo();
+
 private:
   void build(unsigned int, unsigned int);
 };

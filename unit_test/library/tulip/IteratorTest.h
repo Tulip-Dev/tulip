@@ -42,6 +42,7 @@ class IteratorTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testIteratorMap);
   CPPUNIT_TEST(testIteratorReduce);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
   tlp::DoubleProperty *idMetric;
@@ -58,7 +59,6 @@ public:
   void testIteratorCount();
   void testIteratorMap();
   void testIteratorReduce();
-
 };
 
 #endif // ITERATORTEST_H

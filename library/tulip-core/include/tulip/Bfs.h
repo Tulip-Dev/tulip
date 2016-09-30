@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef Bfs_H
 #define Bfs_H
 
@@ -29,21 +28,18 @@ namespace tlp {
 class Graph;
 class BooleanProperty;
 class TLP_SCOPE Bfs {
-public :
-
-  Bfs(Graph * G, BooleanProperty* resultatAlgoSelection);
+public:
+  Bfs(Graph *G, BooleanProperty *resultatAlgoSelection);
   ~Bfs();
 
   Graph *graph;
 
-private :
-
-  void computeBfs(Graph * G, BooleanProperty* resultatAlgoSelection, node root);
+private:
+  void computeBfs(Graph *G, BooleanProperty *resultatAlgoSelection, node root);
 
   unsigned int nbNodes;
   MutableContainer<bool> selectedNodes;
   MutableContainer<bool> selectedEdges;
-
 };
 }
 #endif

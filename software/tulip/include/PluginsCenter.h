@@ -32,21 +32,21 @@ class PluginsCenterData;
 
 class PluginInformationsListItem;
 
-class PluginsCenter: public QWidget {
+class PluginsCenter : public QWidget {
   Q_OBJECT
 
-  Ui::PluginsCenterData* _ui;
+  Ui::PluginsCenterData *_ui;
 
   QStringList _categoryFilters;
   QString _nameFilter;
 
-  PluginInformationsListItem* _currentItem;
+  PluginInformationsListItem *_currentItem;
 
 public:
-  explicit PluginsCenter(QWidget *parent=nullptr);
+  explicit PluginsCenter(QWidget *parent = nullptr);
 
 public slots:
-  void reportPluginErrors(const QMap<QString,QString>&errors);
+  void reportPluginErrors(const QMap<QString, QString> &errors);
 
   void showErrorsPage();
   void showWelcomePage();
@@ -60,9 +60,9 @@ public slots:
   void searchInteractors();
   void searchPerspectives();
 
-  void setNameFilter(const QString&filter);
-  void setCategoryFilter(const QString&filter);
-  void setCategoryFilters(const QStringList&filters);
+  void setNameFilter(const QString &filter);
+  void setCategoryFilter(const QString &filter);
+  void setCategoryFilters(const QStringList &filters);
 
   void refreshFilter();
 protected slots:
@@ -73,8 +73,6 @@ protected slots:
   void stableChecked(bool);
   void repoAdded();
   void repoRemoved();
-
 };
 
 #endif // PLUGINSCENTER_
-

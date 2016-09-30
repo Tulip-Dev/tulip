@@ -43,7 +43,6 @@ class GlFrameBufferObject;
 class FisheyeInteractor : public GlSceneInteractor {
 
 public:
-
   FisheyeInteractor(tlp::GlScene *scene = NULL);
 
   virtual void activate();
@@ -59,7 +58,6 @@ public:
   virtual void draw();
 
 private:
-
   int _curX, _curY;
 
   ZoomAndPanInteractor *_znpInteractor;
@@ -73,7 +71,6 @@ private:
   float _fisheyeHeight;
 
   int _maxTextureSize;
-
 };
 
 #endif // FISHEYEINTERACTOR_H

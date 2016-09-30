@@ -23,8 +23,7 @@
 
 #include <iostream>
 
-NavigableTableView::NavigableTableView(QWidget *parent) :
-  QTableView(parent) {
+NavigableTableView::NavigableTableView(QWidget *parent) : QTableView(parent) {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 #else
@@ -33,13 +32,11 @@ NavigableTableView::NavigableTableView(QWidget *parent) :
 }
 
 void NavigableTableView::keyPressEvent(QKeyEvent *event) {
-  if(event->key() == Qt::Key_Home) {
+  if (event->key() == Qt::Key_Home) {
     scrollToTop();
-  }
-  else if(event->key() == Qt::Key_End) {
+  } else if (event->key() == Qt::Key_End) {
     scrollToBottom();
-  }
-  else {
+  } else {
     QTableView::keyPressEvent(event);
   }
 }
@@ -52,7 +49,8 @@ int NavigableTableView::sizeHintForRow(int row) const {
   int left = qMax(0, horizontalHeader()->visualIndexAt(0));
   int right = horizontalHeader()->visualIndexAt(viewport()->width());
 
-  if (right < 0) right = model()->columnCount();
+  if (right < 0)
+    right = model()->columnCount();
 
   int hint = 0;
 
@@ -78,10 +76,9 @@ int NavigableTableView::sizeHintForColumn(int col) const {
 
   int hint = 0;
 
-  if (bottom == -1 || (bottom+10) >= model()->rowCount()) {
+  if (bottom == -1 || (bottom + 10) >= model()->rowCount()) {
     bottom = model()->rowCount() - 1;
-  }
-  else {
+  } else {
     bottom += 10;
   }
 
@@ -93,7 +90,7 @@ int NavigableTableView::sizeHintForColumn(int col) const {
   return hint;
 }
 
-void NavigableTableView::paintEvent(QPaintEvent * event) {
+void NavigableTableView::paintEvent(QPaintEvent *event) {
   resizeTableRows();
   QTableView::paintEvent(event);
 }
@@ -106,22 +103,21 @@ void NavigableTableView::resizeTableRows() {
   int top = qMax(0, verticalHeader()->visualIndexAt(0));
   int bottom = verticalHeader()->visualIndexAt(viewport()->height());
 
-  if (bottom == -1 || (bottom+10) >= model()->rowCount()) {
+  if (bottom == -1 || (bottom + 10) >= model()->rowCount()) {
     bottom = model()->rowCount() - 1;
-  }
-  else {
+  } else {
     bottom += 10;
   }
 
   int left = qMax(0, horizontalHeader()->visualIndexAt(0));
   int right = horizontalHeader()->visualIndexAt(viewport()->width());
 
-  if (right < 0) right = model()->columnCount();
+  if (right < 0)
+    right = model()->columnCount();
 
-  for (int i = top ; i <= bottom ; ++i)
+  for (int i = top; i <= bottom; ++i)
     resizeRowToContents(i);
 
-  for (int i = left ; i <= right ; ++i)
+  for (int i = left; i <= right; ++i)
     resizeColumnToContents(i);
-
 }

@@ -33,12 +33,12 @@ using namespace tlp;
 
 static string shaderSrcPrefix =
 #ifdef __EMSCRIPTEN__
-  "precision highp float;\n"
-  "precision highp int;\n"
+    "precision highp float;\n"
+    "precision highp int;\n"
 #else
-  "#version 120\n"
+    "#version 120\n"
 #endif
-  ;
+    ;
 
 static string defaultVertexShaderSrc = shaderSrcPrefix + R"(
   uniform mat4 u_modelviewMatrix;
@@ -87,7 +87,6 @@ static string defaultVertexShaderSrc = shaderSrcPrefix + R"(
     }
   }
 )";
-
 
 // original shader code can be found in the webgl-lines project (https://github.com/mattdesl/webgl-lines)
 // from Matt DesLauriers (MIT License)
@@ -431,10 +430,8 @@ static string fxaaFunctionsSrc = R"(
   }
 )";
 
-
 map<string, ShaderManager *> ShaderManager::_instances;
 string ShaderManager::_currentCanvasId("");
-
 
 ShaderManager *ShaderManager::getInstance(const string &canvasId) {
   if (_instances.find(canvasId) == _instances.end()) {
@@ -471,7 +468,6 @@ ShaderManager::ShaderManager() {
   if (!_lineRenderingShader->isLinked()) {
     _lineRenderingShader->printInfoLog();
   }
-
 }
 
 string ShaderManager::getFXAAFunctionsSource() {

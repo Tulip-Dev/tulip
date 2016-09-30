@@ -66,26 +66,23 @@ static const char *paramHelp[] = {
 class SvgExport : public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export",
-                    "Sami Gasri, Charles-Antoine Lami, Bruno Pinaud",
-                    "16/07/2013",
-                    "Exports a graph drawing in a SVG formatted file.", "1.9",
-                    "File")
+  PLUGININFORMATION("SVG Export", "Sami Gasri, Charles-Antoine Lami, Bruno Pinaud", "16/07/2013", "Exports a graph drawing in a SVG formatted file.",
+                    "1.9", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
   }
 
-  string fileExtension() const { return "svg"; }
+  string fileExtension() const {
+    return "svg";
+  }
 
   SvgExport(tlp::PluginContext *context) : tlp::ExportModule(context) {
     addInParameter<bool>("Edge color interpolation", paramHelp[0], "false");
     addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
-    addInParameter<Color>("Background color", paramHelp[3],
-                          "(255,255,255,255)");
-    addInParameter<bool>("Makes SVG output human readable", paramHelp[4],
-                         "true");
+    addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
+    addInParameter<bool>("Makes SVG output human readable", paramHelp[4], "true");
     addInParameter<bool>("Export node labels", paramHelp[5], "true");
     addInParameter<bool>("Export edge labels", paramHelp[6], "false");
     addInParameter<bool>("Export metanode labels", paramHelp[7], "false");
@@ -100,14 +97,12 @@ public:
       dataSet->get("Makes SVG output human readable", autoformatting);
       dataSet->get("Use Web Open Font Format v2", woff2);
     }
-    ExportSvg svg(pluginProgress, os, autoformatting,
-                  woff2); // We call our first concrete builder
+    ExportSvg svg(pluginProgress, os, autoformatting, woff2); // We call our first concrete builder
     bool ret = ReadGraph::readGraph(graph, dataSet, pluginProgress, svg);
     if (!ret && autoformatting) {
-      pluginProgress->setError(pluginProgress->getError() +
-                               "<br/><br/>Human readable output is on. This "
-                               "adds a large amount of data to the output "
-                               "file. Try to disable it and try again.");
+      pluginProgress->setError(pluginProgress->getError() + "<br/><br/>Human readable output is on. This "
+                                                            "adds a large amount of data to the output "
+                                                            "file. Try to disable it and try again.");
     }
     return ret;
   }

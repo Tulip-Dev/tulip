@@ -26,12 +26,13 @@
 
 namespace tlp {
 
-ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
+ScatterPlotCorrelCoeffSelectorOptionsWidget::ScatterPlotCorrelCoeffSelectorOptionsWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData) {
   _ui->setupUi(this);
 
-  setButtonBackgroundColor(_ui->minusOneColorButton, Color(0,0,255,150));
-  setButtonBackgroundColor(_ui->zeroColorButton, Color(255,0,0,150));
-  setButtonBackgroundColor(_ui->oneColorButton, Color(0,255,0,150));
+  setButtonBackgroundColor(_ui->minusOneColorButton, Color(0, 0, 255, 150));
+  setButtonBackgroundColor(_ui->zeroColorButton, Color(255, 0, 0, 150));
+  setButtonBackgroundColor(_ui->oneColorButton, Color(0, 255, 0, 150));
   updateColorScale();
 
   connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(pressMinusOneColorButton()));
@@ -51,7 +52,6 @@ Color ScatterPlotCorrelCoeffSelectorOptionsWidget::getButtonColor(QPushButton *b
   QStringList rgbaStr = backgroundColorCode.split(",");
   return Color(rgbaStr.at(0).toInt(&ok), rgbaStr.at(1).toInt(&ok), rgbaStr.at(2).toInt(&ok), rgbaStr.at(3).toInt(&ok));
 }
-
 
 Color ScatterPlotCorrelCoeffSelectorOptionsWidget::getMinusOneColor() const {
   return getButtonColor(_ui->minusOneColorButton);
@@ -80,7 +80,7 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::setButtonBackgroundColor(QPush
   str.setNum(color.getA());
   str.append(")");
   colorStr.append(str);
-  button->setStyleSheet("QPushButton { background-color: "+colorStr +"}");
+  button->setStyleSheet("QPushButton { background-color: " + colorStr + "}");
 }
 
 void ScatterPlotCorrelCoeffSelectorOptionsWidget::pressMinusOneColorButton() {
@@ -109,7 +109,8 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::changeButtonBackgroundColor(QP
 
 #else
   bool ok = true;
-  QRgb newColor = QColorDialog::getRgba(qRgba(currentButtonColor.red(), currentButtonColor.green(), currentButtonColor.blue(), currentButtonColor.alpha()), &ok, this);
+  QRgb newColor = QColorDialog::getRgba(
+      qRgba(currentButtonColor.red(), currentButtonColor.green(), currentButtonColor.blue(), currentButtonColor.alpha()), &ok, this);
 
   if (ok) {
     setButtonBackgroundColor(button, Color(qRed(newColor), qGreen(newColor), qBlue(newColor), qAlpha(newColor)));
@@ -126,17 +127,16 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::updateColorScale() {
   Color minusOneColor = getMinusOneColor();
   Color zeroColor = getZeroColor();
   Color oneColor = getOneColor();
-  QLinearGradient qLinearGradient(0, _ui->colorScaleLabel->height() / 2, _ui->colorScaleLabel->width()-1, _ui->colorScaleLabel->height() / 2);
+  QLinearGradient qLinearGradient(0, _ui->colorScaleLabel->height() / 2, _ui->colorScaleLabel->width() - 1, _ui->colorScaleLabel->height() / 2);
   qLinearGradient.setColorAt(0, QColor(minusOneColor.getR(), minusOneColor.getG(), minusOneColor.getB(), minusOneColor.getA()));
-  qLinearGradient.setColorAt(1./2., QColor(zeroColor.getR(), zeroColor.getG(), zeroColor.getB(), zeroColor.getA()));
+  qLinearGradient.setColorAt(1. / 2., QColor(zeroColor.getR(), zeroColor.getG(), zeroColor.getB(), zeroColor.getA()));
   qLinearGradient.setColorAt(1, QColor(oneColor.getR(), oneColor.getG(), oneColor.getB(), oneColor.getA()));
   painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(), qLinearGradient);
   painter.end();
   _ui->colorScaleLabel->setPixmap(pixmap.scaled(_ui->colorScaleLabel->width(), _ui->colorScaleLabel->height()));
 }
 
-void ScatterPlotCorrelCoeffSelectorOptionsWidget::showEvent(QShowEvent*) {
+void ScatterPlotCorrelCoeffSelectorOptionsWidget::showEvent(QShowEvent *) {
   updateColorScale();
 }
-
 }

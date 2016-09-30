@@ -19,8 +19,7 @@
 
 #include <math.h>
 
-template<class T>
-DynamicVector<T>& DynamicVector<T>::operator=(const DynamicVector<T>& vec) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator=(const DynamicVector<T> &vec) {
   if (this != &vec) {
     if (size != 0)
       delete[] array;
@@ -36,29 +35,25 @@ DynamicVector<T>& DynamicVector<T>::operator=(const DynamicVector<T>& vec) {
   return *this;
 }
 //=================================================================
-template<class T>
-T DynamicVector<T>::operator[](const unsigned int i) const {
+template <class T> T DynamicVector<T>::operator[](const unsigned int i) const {
 
   assert(i < size);
   return array[i];
 }
 //=================================================================
-template<class T>
-T& DynamicVector<T>::operator[](const unsigned int i) {
+template <class T> T &DynamicVector<T>::operator[](const unsigned int i) {
   assert(i < size);
   return array[i];
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator*=(const T &scalaire) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator*=(const T &scalaire) {
   for (unsigned int i = 0; i < size; ++i)
     DynamicVector<T>::array[i] *= scalaire;
 
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator*=(const DynamicVector<T> &vecto) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator*=(const DynamicVector<T> &vecto) {
   assert(vecto.size == size);
 
   for (unsigned int i = 0; i < size; ++i)
@@ -67,8 +62,7 @@ DynamicVector<T> & DynamicVector<T>::operator*=(const DynamicVector<T> &vecto) {
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator/=(const T &scalaire) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator/=(const T &scalaire) {
   assert(scalaire != 0);
 
   for (unsigned int i = 0; i < size; ++i)
@@ -77,8 +71,7 @@ DynamicVector<T> & DynamicVector<T>::operator/=(const T &scalaire) {
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator/=(const DynamicVector<T> &vecto) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator/=(const DynamicVector<T> &vecto) {
   assert(vecto.size == size);
 
   for (unsigned int i = 0; i < size; ++i) {
@@ -89,16 +82,14 @@ DynamicVector<T> & DynamicVector<T>::operator/=(const DynamicVector<T> &vecto) {
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator+=(const T &scalaire) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator+=(const T &scalaire) {
   for (unsigned int i = 0; i < size; ++i)
     DynamicVector<T>::array[i] += scalaire;
 
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator+=(const DynamicVector<T> &vecto) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator+=(const DynamicVector<T> &vecto) {
   assert(vecto.size == size);
 
   for (unsigned int i = 0; i < size; ++i)
@@ -107,8 +98,7 @@ DynamicVector<T> & DynamicVector<T>::operator+=(const DynamicVector<T> &vecto) {
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator-=(const T &scalaire) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator-=(const T &scalaire) {
 
   for (unsigned int i = 0; i < size; ++i)
     DynamicVector<T>::array[i] -= scalaire;
@@ -116,8 +106,7 @@ DynamicVector<T> & DynamicVector<T>::operator-=(const T &scalaire) {
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator-=(const DynamicVector<T> &vecto) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator-=(const DynamicVector<T> &vecto) {
   assert(vecto.size == size);
 
   for (unsigned int i = 0; i < size; ++i)
@@ -126,8 +115,7 @@ DynamicVector<T> & DynamicVector<T>::operator-=(const DynamicVector<T> &vecto) {
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::operator^=(const DynamicVector<T> &v) {
+template <class T> DynamicVector<T> &DynamicVector<T>::operator^=(const DynamicVector<T> &v) {
   assert(v.size == size);
   DynamicVector<T> tmp(*this);
 
@@ -139,65 +127,53 @@ DynamicVector<T> & DynamicVector<T>::operator^=(const DynamicVector<T> &v) {
     break;
 
   default:
-    std::cerr << "cross product not implemented for dimension :" << size
-              << std::endl;
+    std::cerr << "cross product not implemented for dimension :" << size << std::endl;
     break;
   }
 
   return (*this);
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator+(const DynamicVector<T> &v) const {
+template <class T> DynamicVector<T> DynamicVector<T>::operator+(const DynamicVector<T> &v) const {
   assert(v.size == size);
-  return DynamicVector<T> (*this) += v;
+  return DynamicVector<T>(*this) += v;
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator+(const T& scalaire) const {
-  return DynamicVector<T> (*this) += scalaire;
+template <class T> DynamicVector<T> DynamicVector<T>::operator+(const T &scalaire) const {
+  return DynamicVector<T>(*this) += scalaire;
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator-(const DynamicVector<T> &v) const {
+template <class T> DynamicVector<T> DynamicVector<T>::operator-(const DynamicVector<T> &v) const {
   assert(v.size == size);
-  return DynamicVector<T> (*this) -= v;
+  return DynamicVector<T>(*this) -= v;
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator-(const T& scalaire) const {
-  return DynamicVector<T> (*this) -= scalaire;
+template <class T> DynamicVector<T> DynamicVector<T>::operator-(const T &scalaire) const {
+  return DynamicVector<T>(*this) -= scalaire;
 }
 //======================================================
-template<class T>
-DynamicVector<T> operator*(const DynamicVector<T> &v1,
-                           const DynamicVector<T> &v2) {
+template <class T> DynamicVector<T> operator*(const DynamicVector<T> &v1, const DynamicVector<T> &v2) {
   assert(v1.size == v2.size);
-  return DynamicVector<T> (v1) *= v2;
+  return DynamicVector<T>(v1) *= v2;
 }
 //======================================================
-template<class T>
-DynamicVector<T> operator*(const DynamicVector<T> &v, const T& scalaire) {
-  return DynamicVector<T> (v) *= scalaire;
+template <class T> DynamicVector<T> operator*(const DynamicVector<T> &v, const T &scalaire) {
+  return DynamicVector<T>(v) *= scalaire;
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator/(const DynamicVector<T> &v) const {
-  return DynamicVector<T> (*this) /= v;
+template <class T> DynamicVector<T> DynamicVector<T>::operator/(const DynamicVector<T> &v) const {
+  return DynamicVector<T>(*this) /= v;
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator/(const T& scalaire) const {
-  return DynamicVector<T> (*this) /= scalaire;
+template <class T> DynamicVector<T> DynamicVector<T>::operator/(const T &scalaire) const {
+  return DynamicVector<T>(*this) /= scalaire;
 }
 //======================================================
-template<class T>
-DynamicVector<T> DynamicVector<T>::operator^(const DynamicVector<T> &v) const {
-  return DynamicVector<T> (*this) ^= v;
+template <class T> DynamicVector<T> DynamicVector<T>::operator^(const DynamicVector<T> &v) const {
+  return DynamicVector<T>(*this) ^= v;
 }
 //======================================================
-template<class T>
-bool DynamicVector<T>::operator!=(const DynamicVector<T> &vecto) const {
+template <class T> bool DynamicVector<T>::operator!=(const DynamicVector<T> &vecto) const {
   for (unsigned int i = 0; i < size; ++i)
     if (array[i] != vecto[i])
       return true;
@@ -205,8 +181,7 @@ bool DynamicVector<T>::operator!=(const DynamicVector<T> &vecto) const {
   return false;
 }
 //======================================================
-template<class T>
-bool DynamicVector<T>::operator==(const DynamicVector<T> &vecto) const {
+template <class T> bool DynamicVector<T>::operator==(const DynamicVector<T> &vecto) const {
   assert(size == vecto.size);
 
   for (unsigned int i = 0; i < size; ++i) {
@@ -218,8 +193,7 @@ bool DynamicVector<T>::operator==(const DynamicVector<T> &vecto) const {
   return true;
 }
 //======================================================
-template<class T>
-T DynamicVector<T>::dotProduct(const DynamicVector<T> &v) const {
+template <class T> T DynamicVector<T>::dotProduct(const DynamicVector<T> &v) const {
   assert(size > 0);
   T tmpO = DynamicVector<T>::array[0] * v[0];
 
@@ -229,29 +203,25 @@ T DynamicVector<T>::dotProduct(const DynamicVector<T> &v) const {
   return tmpO;
 }
 //======================================================
-template<class T>
-DynamicVector<T> & DynamicVector<T>::fill(const T& scalaire) {
+template <class T> DynamicVector<T> &DynamicVector<T>::fill(const T &scalaire) {
   for (unsigned int i = 0; i < size; ++i)
     DynamicVector<T>::array[i] = scalaire;
 
   return (*this);
 }
 //======================================================
-template<class T>
-T DynamicVector<T>::norm() const {
+template <class T> T DynamicVector<T>::norm() const {
   switch (size) {
   case 1:
     return DynamicVector<T>::array[0];
 
   case 2:
-    return sqrt(DynamicVector<T>::array[0] * DynamicVector<T>::array[0]
-                + DynamicVector<T>::array[1] * DynamicVector<T>::array[1]);
+    return sqrt(DynamicVector<T>::array[0] * DynamicVector<T>::array[0] + DynamicVector<T>::array[1] * DynamicVector<T>::array[1]);
     break;
 
   case 3:
-    return sqrt(DynamicVector<T>::array[0] * DynamicVector<T>::array[0]
-                + DynamicVector<T>::array[1] * DynamicVector<T>::array[1]
-                + DynamicVector<T>::array[2] * DynamicVector<T>::array[2]);
+    return sqrt(DynamicVector<T>::array[0] * DynamicVector<T>::array[0] + DynamicVector<T>::array[1] * DynamicVector<T>::array[1] +
+                DynamicVector<T>::array[2] * DynamicVector<T>::array[2]);
     break;
 
   default:
@@ -265,42 +235,34 @@ T DynamicVector<T>::norm() const {
   }
 }
 //======================================================
-template<class T>
-T DynamicVector<T>::dist(const DynamicVector<T> &c) const {
+template <class T> T DynamicVector<T>::dist(const DynamicVector<T> &c) const {
   switch (size) {
   case 1:
     return fabs(DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]);
 
   case 2:
-    return sqrt((DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0])
-                * (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0])
-                + (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1])
-                * (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]));
+    return sqrt((DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) * (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) +
+                (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) * (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]));
     break;
 
   case 3:
-    return sqrt((DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0])
-                * (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0])
-                + (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1])
-                * (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1])
-                + (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2])
-                * (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]));
+    return sqrt((DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) * (DynamicVector<T>::array[0] - c.DynamicVector<T>::array[0]) +
+                (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) * (DynamicVector<T>::array[1] - c.DynamicVector<T>::array[1]) +
+                (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]) * (DynamicVector<T>::array[2] - c.DynamicVector<T>::array[2]));
     break;
 
   default:
     T tmp = 0;
 
     for (unsigned int i = 0; i < size; ++i)
-      tmp += (DynamicVector<T>::array[i] - c.DynamicVector<T>::array[i])
-             * (DynamicVector<T>::array[i] - c.DynamicVector<T>::array[i]);
+      tmp += (DynamicVector<T>::array[i] - c.DynamicVector<T>::array[i]) * (DynamicVector<T>::array[i] - c.DynamicVector<T>::array[i]);
 
     return (sqrt(tmp));
     break;
   }
 }
 //=======================================================================
-template<class T>
-std::ostream& operator<<(std::ostream &os, const DynamicVector<T> &a) {
+template <class T> std::ostream &operator<<(std::ostream &os, const DynamicVector<T> &a) {
   os << "(";
 
   for (unsigned int i = 0; i < a.getSize(); ++i) {
@@ -314,8 +276,7 @@ std::ostream& operator<<(std::ostream &os, const DynamicVector<T> &a) {
   return os;
 }
 //=================================================================
-template<class T>
-std::istream & operator>>(std::istream &is, DynamicVector<T> & outA) {
+template <class T> std::istream &operator>>(std::istream &is, DynamicVector<T> &outA) {
   char c;
   int pos = is.tellg();
   is.clear();

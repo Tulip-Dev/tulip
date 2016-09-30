@@ -34,10 +34,10 @@ class QNetworkReply;
   @brief The widget containing the Welcome screen in tulip_app.
   This widget will allow a user to select an installed perspective, read latest news from the Tulip website, and display startup tips.
   */
-class TulipWelcomePage: public QWidget {
+class TulipWelcomePage : public QWidget {
   Q_OBJECT
 public:
-  explicit TulipWelcomePage(QWidget *parent=nullptr);
+  explicit TulipWelcomePage(QWidget *parent = nullptr);
   virtual ~TulipWelcomePage();
 
 signals:
@@ -48,7 +48,7 @@ signals:
 protected slots:
   void rssReply(QNetworkReply *);
   void openLink(const QString &link);
-  void recentFileLinkActivated(const QString&);
+  void recentFileLinkActivated(const QString &);
 
 private:
   Ui::TulipWelcomePageData *_ui;

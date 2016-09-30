@@ -42,7 +42,6 @@ class GlGraph;
 class TLP_GLES_SCOPE GlGraphRenderingParameters : public tlp::Observable {
 
 public:
-
   GlGraphRenderingParameters();
 
   void setGlGraph(GlGraph *glGraph);
@@ -52,7 +51,7 @@ public:
   void setParameters(const tlp::DataSet &);
 
   void setDisplayEdgesExtremities(const bool state);
-  bool displayEdgesExtremities()const;
+  bool displayEdgesExtremities() const;
 
   void setDisplayNodesLabels(const bool state);
   bool displayNodesLabels() const;
@@ -102,8 +101,8 @@ public:
   void setElementOrderedDescending(const bool state);
   bool elementsOrderedDescending() const;
 
-  void setElementsOrderingProperty(tlp::NumericProperty* property);
-  tlp::NumericProperty* elementsOrderingProperty() const;
+  void setElementsOrderingProperty(tlp::NumericProperty *property);
+  tlp::NumericProperty *elementsOrderingProperty() const;
 
   void setElementsZOrdered(const bool state);
   bool elementsZOrdered() const;
@@ -135,16 +134,15 @@ public:
   void setBillboardedNodes(bool billboardedNodes);
   bool billboardedNodes() const;
 
-  void setDisplayFilteringProperty(tlp::BooleanProperty* filteringProperty);
-  tlp::BooleanProperty* displayFilteringProperty() const;
+  void setDisplayFilteringProperty(tlp::BooleanProperty *filteringProperty);
+  tlp::BooleanProperty *displayFilteringProperty() const;
 
   void setBypassLodSystem(bool bypassLodSystem);
   bool bypassLodSystem() const;
 
-  GlGraphRenderingParameters& operator=(const GlGraphRenderingParameters &params);
+  GlGraphRenderingParameters &operator=(const GlGraphRenderingParameters &params);
 
 private:
-
   GlGraph *_glGraph;
   bool _displayEdgesExtremities;
   bool _displayNodesLabels;
@@ -173,7 +171,7 @@ private:
   bool _maxEdgesSizesToNodesSizes;
   tlp::Color _selectionColor;
   tlp::BooleanProperty *_displayFilteringProperty;
-  tlp::NumericProperty* _elementsOrderingProperty;
+  tlp::NumericProperty *_elementsOrderingProperty;
   bool _bypassLodSystem;
   bool _labelsFixedFontSize;
 };
@@ -181,40 +179,38 @@ private:
 class TLP_GLES_SCOPE GlGraphRenderingParametersEvent : public tlp::Event {
 
 public:
+  enum GlGraphRenderingParametersEventType {
+    RENDERING_PARAMETERS_MODIFIED = 0,
+    DISPLAY_EDGES_EXTREMITIES_TOGGLED,
+    INTERPOLATE_EDGES_COLORS_TOGGLED,
+    INTERPOLATE_EDGES_SIZES_TOGGLED
+  };
 
-  enum GlGraphRenderingParametersEventType {RENDERING_PARAMETERS_MODIFIED = 0,
-                                            DISPLAY_EDGES_EXTREMITIES_TOGGLED,
-                                            INTERPOLATE_EDGES_COLORS_TOGGLED,
-                                            INTERPOLATE_EDGES_SIZES_TOGGLED};
-
-  GlGraphRenderingParametersEvent(GlGraphRenderingParameters *renderingParameters,
-                                  GlGraphRenderingParametersEventType eventType) :
-    tlp::Event(*renderingParameters, tlp::Event::TLP_MODIFICATION), _eventType(eventType) {}
+  GlGraphRenderingParametersEvent(GlGraphRenderingParameters *renderingParameters, GlGraphRenderingParametersEventType eventType)
+      : tlp::Event(*renderingParameters, tlp::Event::TLP_MODIFICATION), _eventType(eventType) {
+  }
 
   GlGraphRenderingParametersEventType getType() const {
     return _eventType;
   }
 
   GlGraphRenderingParameters *getRenderingParameters() const {
-    return static_cast<GlGraphRenderingParameters*>(sender());
+    return static_cast<GlGraphRenderingParameters *>(sender());
   }
 
 private:
-
   GlGraphRenderingParametersEventType _eventType;
-
 };
 
 class TLP_GLES_SCOPE GlDefaultSelectionColorManager {
 public:
   static void setManager(GlDefaultSelectionColorManager *);
   static tlp::Color getDefaultSelectionColor();
-  virtual tlp::Color defaultSelectionColor()=0;
+  virtual tlp::Color defaultSelectionColor() = 0;
 
 private:
-  static GlDefaultSelectionColorManager* manager;
+  static GlDefaultSelectionColorManager *manager;
 };
-
 }
 
 #endif // GLGRAPHRENDERINGPARAMETERS_H

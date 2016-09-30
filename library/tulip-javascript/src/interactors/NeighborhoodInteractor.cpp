@@ -44,25 +44,27 @@ using namespace tlp;
 
 class GraphLayoutMorphing : public AdditionalGlSceneAnimation {
 
-public :
-  virtual ~GraphLayoutMorphing() {}
-  GraphLayoutMorphing(Graph *graph, LayoutProperty *srcLayout, LayoutProperty *destLayout, LayoutProperty *viewLayout) :
-    graph(graph), srcLayout(srcLayout), destLayout(destLayout), viewLayout(viewLayout) {}
+public:
+  virtual ~GraphLayoutMorphing() {
+  }
+  GraphLayoutMorphing(Graph *graph, LayoutProperty *srcLayout, LayoutProperty *destLayout, LayoutProperty *viewLayout)
+      : graph(graph), srcLayout(srcLayout), destLayout(destLayout), viewLayout(viewLayout) {
+  }
 
   void animationStep(double t) {
     Observable::holdObservers();
-    for(node n : graph->getNodes()) {
+    for (node n : graph->getNodes()) {
       const Coord &startPos = srcLayout->getNodeValue(n);
       const Coord &endPos = destLayout->getNodeValue(n);
       viewLayout->setNodeValue(n, startPos + static_cast<float>(t) * (endPos - startPos));
     }
 
-    for(edge e : graph->getEdges()) {
+    for (edge e : graph->getEdges()) {
       const vector<Coord> &srcBends = srcLayout->getEdgeValue(e);
       const vector<Coord> &destBends = destLayout->getEdgeValue(e);
       vector<Coord> newBends;
 
-      for (size_t i = 0 ; i < destBends.size() ; ++i) {
+      for (size_t i = 0; i < destBends.size(); ++i) {
         newBends.push_back(srcBends[i] + static_cast<float>(t) * (destBends[i] - srcBends[i]));
       }
 
@@ -71,8 +73,7 @@ public :
     Observable::unholdObservers();
   }
 
-private :
-
+private:
   Graph *graph;
   LayoutProperty *srcLayout, *destLayout, *viewLayout;
 };
@@ -86,7 +87,7 @@ static TimeMeasurer tm;
 static const unsigned int delay = 40;
 
 void animate(void *value) {
-  NeighborhoodInteractor *interactor = reinterpret_cast<NeighborhoodInteractor*>(value);
+  NeighborhoodInteractor *interactor = reinterpret_cast<NeighborhoodInteractor *>(value);
   GlScene *scene = interactor->getScene();
   double t = tm.getElapsedTime() / animDuration;
   if (t < 1.0) {
@@ -106,7 +107,8 @@ void animate(void *value) {
     if (interactor->_bringAndGoAnimation) {
       interactor->buildNeighborhoodGraph(interactor->_selectedNeighborNode);
 
-      layoutMorphing = new GraphLayoutMorphing(interactor->_neighborhoodGraph, interactor->_neighborhoodGraphOriginalLayout, interactor->_neighborhoodGraphCircleLayout, interactor->_neighborhoodGraphLayout);
+      layoutMorphing = new GraphLayoutMorphing(interactor->_neighborhoodGraph, interactor->_neighborhoodGraphOriginalLayout,
+                                               interactor->_neighborhoodGraphCircleLayout, interactor->_neighborhoodGraphLayout);
       interactor->_bringAndGoAnimation = false;
       interactor->_circleLayoutSet = false;
       interactor->performZoomAndPan(interactor->_neighborhoodGraphCircleLayoutBB, layoutMorphing);
@@ -122,9 +124,9 @@ void animate(void *value) {
 
 class NeighborNodesEdgeLengthOrdering : public binary_function<node, node, bool> {
 
-public :
-
-  NeighborNodesEdgeLengthOrdering(node centralNode, LayoutProperty *layout) : centralNode(centralNode), layout(layout) {}
+public:
+  NeighborNodesEdgeLengthOrdering(node centralNode, LayoutProperty *layout) : centralNode(centralNode), layout(layout) {
+  }
 
   bool operator()(node n1, node n2) const {
     Coord centralNodeCoord = layout->getNodeValue(centralNode);
@@ -135,14 +137,14 @@ public :
     return centralToN1Dist < centralToN2Dist;
   }
 
-private :
-
+private:
   node centralNode;
   LayoutProperty *layout;
 };
 
-NeighborhoodInteractor::NeighborhoodInteractor(GlScene *scene) : _glGraph(nullptr), _neighborhoodGraph(nullptr),
-_glNeighborhoodGraph(nullptr), _neighborhoodGraphColors(nullptr), _neighborhoodGraphBackupColors(nullptr) {
+NeighborhoodInteractor::NeighborhoodInteractor(GlScene *scene)
+    : _glGraph(nullptr), _neighborhoodGraph(nullptr), _glNeighborhoodGraph(nullptr), _neighborhoodGraphColors(nullptr),
+      _neighborhoodGraphBackupColors(nullptr) {
   _glScene = scene;
   _znpInteractor = new ZoomAndPanInteractor(scene);
 }
@@ -157,9 +159,11 @@ void NeighborhoodInteractor::setScene(GlScene *glScene) {
 }
 
 bool NeighborhoodInteractor::mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int &modifiers) {
-  if (!_glScene || animating) return false;
+  if (!_glScene || animating)
+    return false;
   Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
   if (button == LEFT_BUTTON && state == UP) {
     if (!_selectedNeighborNode.isValid()) {
       _circleLayoutSet = false;
@@ -177,10 +181,12 @@ bool NeighborhoodInteractor::mouseCallback(const MouseButton &button, const Mous
     } else {
       if (_selectedNeighborNode == _centralNode) {
         if (!_circleLayoutSet) {
-          layoutMorphing = new GraphLayoutMorphing(_neighborhoodGraph, _neighborhoodGraphOriginalLayout, _neighborhoodGraphCircleLayout, _neighborhoodGraphLayout);
+          layoutMorphing =
+              new GraphLayoutMorphing(_neighborhoodGraph, _neighborhoodGraphOriginalLayout, _neighborhoodGraphCircleLayout, _neighborhoodGraphLayout);
           performZoomAndPan(_neighborhoodGraphCircleLayoutBB, layoutMorphing);
         } else {
-          layoutMorphing = new GraphLayoutMorphing(_neighborhoodGraph, _neighborhoodGraphCircleLayout, _neighborhoodGraphOriginalLayout, _neighborhoodGraphLayout);
+          layoutMorphing =
+              new GraphLayoutMorphing(_neighborhoodGraph, _neighborhoodGraphCircleLayout, _neighborhoodGraphOriginalLayout, _neighborhoodGraphLayout);
           performZoomAndPan(_neighborhoodGraphOriginalLayoutBB, layoutMorphing);
         }
       } else {
@@ -188,8 +194,7 @@ bool NeighborhoodInteractor::mouseCallback(const MouseButton &button, const Mous
           buildNeighborhoodGraph(_selectedNeighborNode);
           _selectedNeighborNode = node();
           _glScene->requestDraw();
-        }
-        else {
+        } else {
           node currentCentralNode = _centralNode;
           buildNeighborhoodGraph(_selectedNeighborNode);
           BoundingBox destBB = _neighborhoodGraphCircleLayoutBB;
@@ -199,10 +204,10 @@ bool NeighborhoodInteractor::mouseCallback(const MouseButton &button, const Mous
           Observable::holdObservers();
           *_neighborhoodGraphLayout = *_neighborhoodGraphCircleLayout;
           Observable::unholdObservers();
-          layoutMorphing = new GraphLayoutMorphing(_neighborhoodGraph, _neighborhoodGraphCircleLayout, _neighborhoodGraphOriginalLayout, _neighborhoodGraphLayout);
+          layoutMorphing =
+              new GraphLayoutMorphing(_neighborhoodGraph, _neighborhoodGraphCircleLayout, _neighborhoodGraphOriginalLayout, _neighborhoodGraphLayout);
           _bringAndGoAnimation = true;
           performZoomAndPan(destBB, layoutMorphing);
-
         }
       }
     }
@@ -213,7 +218,8 @@ bool NeighborhoodInteractor::mouseCallback(const MouseButton &button, const Mous
 }
 
 bool NeighborhoodInteractor::mouseMoveCallback(int x, int y, const int &modifiers) {
-  if (!_glScene || animating) return false;
+  if (!_glScene || animating)
+    return false;
   if (!_centralNode.isValid()) {
     return _znpInteractor->mouseMoveCallback(x, y, modifiers);
   } else {
@@ -222,10 +228,9 @@ bool NeighborhoodInteractor::mouseMoveCallback(int x, int y, const int &modifier
     _selectedNeighborNode = selectNodeInAugmentedDisplayGraph(x, y);
     if (_selectedNeighborNode.isValid()) {
       if (_selectedNeighborNode != _centralNode) {
-        _neighborhoodGraphColors->setNodeValue(_selectedNeighborNode, Color(0,255,0));
-      }
-      else {
-        _neighborhoodGraphColors->setNodeValue(_selectedNeighborNode, Color(0,0,255));
+        _neighborhoodGraphColors->setNodeValue(_selectedNeighborNode, Color(0, 255, 0));
+      } else {
+        _neighborhoodGraphColors->setNodeValue(_selectedNeighborNode, Color(0, 0, 255));
       }
     }
     Observable::unholdObservers();
@@ -303,7 +308,7 @@ void NeighborhoodInteractor::computeNeighborhoodGraphCircleLayout() {
   _neighborhoodGraphCircleLayout->setNodeValue(_centralNode, centralNodeCoord);
 
   std::vector<node> neighborsNodes;
-  for(node n : _neighborhoodGraph->getNodes()) {
+  for (node n : _neighborhoodGraph->getNodes()) {
     if (n != _centralNode) {
       neighborsNodes.push_back(n);
     }
@@ -316,7 +321,7 @@ void NeighborhoodInteractor::computeNeighborhoodGraphCircleLayout() {
   vector<BoundingBox> neighborhoodNodesNewLayoutBB;
   neighborhoodNodesNewLayoutBB.resize(neighborsNodes.size());
 
-  for (size_t i = 0 ; i < neighborsNodes.size() ; ++i) {
+  for (size_t i = 0; i < neighborsNodes.size(); ++i) {
 
     Size neighborNodeSize = _glGraph->getInputData().getElementSize()->getNodeValue(neighborsNodes[i]);
     Coord neighborNodeCoord = _neighborhoodGraphLayout->getNodeValue(neighborsNodes[i]);
@@ -328,13 +333,15 @@ void NeighborhoodInteractor::computeNeighborhoodGraphCircleLayout() {
     while (!nodePosOk) {
       float ratio = ((centralNodeSize.getW() / 2) + j++ * neighborNodeSize.getW()) / edgeLength;
       Coord newNodeCoord = centralNodeCoord + ratio * (neighborNodeCoord - centralNodeCoord);
-      neighborhoodNodesNewLayoutBB[i] = BoundingBox(Coord(newNodeCoord.getX() - neighborNodeSize.getW() / 2, newNodeCoord.getY() - neighborNodeSize.getH() / 2, 0),
-                                        Coord(newNodeCoord.getX() + neighborNodeSize.getW() / 2, newNodeCoord.getY() + neighborNodeSize.getH() / 2, 0));
+      neighborhoodNodesNewLayoutBB[i] =
+          BoundingBox(Coord(newNodeCoord.getX() - neighborNodeSize.getW() / 2, newNodeCoord.getY() - neighborNodeSize.getH() / 2, 0),
+                      Coord(newNodeCoord.getX() + neighborNodeSize.getW() / 2, newNodeCoord.getY() + neighborNodeSize.getH() / 2, 0));
       nodePosOk = true;
 
       if (i > 0) {
-        for (unsigned int k = 0 ; k < i ; ++k) {
-          nodePosOk = nodePosOk && !neighborhoodNodesNewLayoutBB[i].intersects(neighborhoodNodesNewLayoutBB[k]) && !neighborhoodNodesNewLayoutBB[i].intersects(centralNodeBB);
+        for (unsigned int k = 0; k < i; ++k) {
+          nodePosOk = nodePosOk && !neighborhoodNodesNewLayoutBB[i].intersects(neighborhoodNodesNewLayoutBB[k]) &&
+                      !neighborhoodNodesNewLayoutBB[i].intersects(centralNodeBB);
         }
       }
 
@@ -344,8 +351,8 @@ void NeighborhoodInteractor::computeNeighborhoodGraphCircleLayout() {
     }
   }
 
-  for(edge e : _neighborhoodGraph->getEdges()) {
-    const std::pair<node, node>& eEnds = _neighborhoodGraph->ends(e);
+  for (edge e : _neighborhoodGraph->getEdges()) {
+    const std::pair<node, node> &eEnds = _neighborhoodGraph->ends(e);
     node srcNode = eEnds.first;
     node tgtNode = eEnds.second;
     Coord finalBendsCoord;
@@ -353,15 +360,14 @@ void NeighborhoodInteractor::computeNeighborhoodGraphCircleLayout() {
     if (srcNode != _centralNode) {
       Coord srcNodeCoord = _neighborhoodGraphCircleLayout->getNodeValue(srcNode);
       finalBendsCoord = _circleCenter + (srcNodeCoord - _circleCenter) / 2.f;
-    }
-    else {
+    } else {
       Coord tgtNodeCoord = _neighborhoodGraphCircleLayout->getNodeValue(tgtNode);
       finalBendsCoord = _circleCenter + (tgtNodeCoord - _circleCenter) / 2.f;
     }
 
     vector<Coord> edgesBends = _neighborhoodGraphLayout->getEdgeValue(e);
 
-    for (size_t i = 0 ; i < edgesBends.size() ; ++i) {
+    for (size_t i = 0; i < edgesBends.size(); ++i) {
       edgesBends[i] = finalBendsCoord;
     }
 
@@ -372,7 +378,7 @@ void NeighborhoodInteractor::computeNeighborhoodGraphCircleLayout() {
 float NeighborhoodInteractor::computeNeighborhoodGraphRadius(LayoutProperty *neighborhoodGraphLayoutProp) {
   float radius = 0;
   Coord centralNodeCoord = neighborhoodGraphLayoutProp->getNodeValue(_centralNode);
-  for(node n : _neighborhoodGraph->getNodes()) {
+  for (node n : _neighborhoodGraph->getNodes()) {
     Coord nodeCoord = neighborhoodGraphLayoutProp->getNodeValue(n);
     Size nodeSize = _glGraph->getInputData().getElementSize()->getNodeValue(n);
     float dist = centralNodeCoord.dist(nodeCoord) + nodeSize.getW();
@@ -404,14 +410,14 @@ void NeighborhoodInteractor::performZoomAndPan(const BoundingBox &destBB, Additi
 }
 
 void NeighborhoodInteractor::draw() {
-  if (!_glScene) return;
+  if (!_glScene)
+    return;
   if (_neighborhoodGraph) {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     Camera *camera = _glScene->getMainLayer()->getCamera();
     camera->initGl();
-    GlCircle circle(_circleCenter, computeNeighborhoodGraphRadius(_neighborhoodGraphLayout),
-                    Color (255, 255, 255, 200),  Color(0, 0 , 0));
+    GlCircle circle(_circleCenter, computeNeighborhoodGraphRadius(_neighborhoodGraphLayout), Color(255, 255, 255, 200), Color(0, 0, 0));
     glDisable(GL_DEPTH_TEST);
     circle.draw(*camera);
     glEnable(GL_DEPTH_TEST);

@@ -41,7 +41,6 @@ class GlShaderProgram;
 class TLP_GLES_SCOPE ShaderManager {
 
 public:
-
   static ShaderManager *getInstance(const std::string &canvasId);
 
   static ShaderManager *getInstance();
@@ -67,7 +66,6 @@ public:
   }
 
 private:
-
   ShaderManager();
 
   static std::map<std::string, ShaderManager *> _instances;
@@ -78,9 +76,7 @@ private:
   GlShaderProgram *_blinnPhongRenderingShader;
 
   GlShaderProgram *_lineRenderingShader;
-
 };
-
 }
 
 #endif // SHADERMANAGER_H

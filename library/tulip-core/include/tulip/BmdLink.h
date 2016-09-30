@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef BMDLINK_H
 #define BMDLINK_H
 
@@ -28,11 +27,11 @@ template <typename TYPE> class BmdList;
 template <typename TYPE> class BmdListTest;
 
 namespace tlp {
-template <typename TYPE>
-class BmdLink {
+template <typename TYPE> class BmdLink {
 
   friend class BmdList<TYPE>;
   friend class BmdListTest<TYPE>;
+
 public:
   TYPE getData() {
     return data;
@@ -43,7 +42,7 @@ public:
   BmdLink *succ() {
     return suc;
   }
-  //protected:
+  // protected:
   TYPE data;
   BmdLink *pre;
   BmdLink *suc;

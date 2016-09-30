@@ -23,13 +23,11 @@
 #include <string>
 #include "LayoutFunction.h"
 
-
 namespace pocore {
 class SpiralLayout : public LayoutFunction {
 public:
-  Vec2i  project (const unsigned int id) const;
-  unsigned int unproject (const Vec2i& ) const;
-
+  Vec2i project(const unsigned int id) const;
+  unsigned int unproject(const Vec2i &) const;
 };
 }
-#endif //SPIRALLAYOUT_H
+#endif // SPIRALLAYOUT_H

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef COLORSCALECONFIGDIALOG_H_
 #define COLORSCALECONFIGDIALOG_H_
 
@@ -40,19 +39,18 @@ class TLP_QT_SCOPE ColorScaleConfigDialog : public QDialog {
 
   Q_OBJECT
 
-public :
+public:
   ColorScaleConfigDialog(const ColorScale &colorScale = ColorScale(), QWidget *parent = nullptr);
   ~ColorScaleConfigDialog();
   void setColorScale(const ColorScale &colorScale);
-  const ColorScale& getColorScale() const;
-  static ColorScale getColorScaleFromImageFile(const std::string& imageFilePath, bool gradient = true);
+  const ColorScale &getColorScale() const;
+  static ColorScale getColorScaleFromImageFile(const std::string &imageFilePath, bool gradient = true);
 
-protected :
+protected:
+  void resizeEvent(QResizeEvent *event);
+  void showEvent(QShowEvent *event);
 
-  void resizeEvent(QResizeEvent * event);
-  void showEvent(QShowEvent * event);
-
-private slots :
+private slots:
 
   void accept();
   void pressButtonBrowse();
@@ -68,23 +66,22 @@ private slots :
   void invertEditedColorScale();
   void applyGlobalAlphaToColorScale();
 
-private :
+private:
   Ui::ColorScaleDialog *_ui;
 
   void setColorScaleFromImage(const QString &imageFilePath);
 
   void loadUserSavedColorScales();
   void displayGradientPreview(const QList<QColor> &colorsVector, bool gradient, QLabel *displayLabel);
-  void importColorScaleFromFile(const QString& currentDir);
+  void importColorScaleFromFile(const QString &currentDir);
 
   ColorScale colorScale;
   std::string gradientsImageDirectory;
 
-  static std::map<QString, std::vector<Color> > tulipImageColorScales;
+  static std::map<QString, std::vector<Color>> tulipImageColorScales;
   static void loadTulipImageColorScales();
   static std::vector<Color> getColorScaleFromImageFile(const QString &imageFilePath);
 };
-
 }
 
 #endif /* COLORSCALECONFIGDIALOG_H_ */

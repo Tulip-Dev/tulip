@@ -34,8 +34,7 @@ namespace tlp {
  * The convexHull vector is automatically cleared.
  *
  */
-TLP_SCOPE void convexHull(const std::vector<Coord> &points,
-                          std::vector<unsigned int> &convexHull);
+TLP_SCOPE void convexHull(const std::vector<Coord> &points, std::vector<unsigned int> &convexHull);
 
 /**
  * \brief function for computing a 2D/3D convex hull
@@ -49,11 +48,9 @@ TLP_SCOPE void convexHull(const std::vector<Coord> &points,
  *
  * The convexHullFacets and facetNeighbors vectors are automatically cleared.
  */
-TLP_SCOPE void convexHull(const std::vector<Coord> &points,
-                          std::vector<std::vector<unsigned int> > &convexHullFacets,
-                          std::vector<std::vector<unsigned int> > &facetNeighbors);
+TLP_SCOPE void convexHull(const std::vector<Coord> &points, std::vector<std::vector<unsigned int>> &convexHullFacets,
+                          std::vector<std::vector<unsigned int>> &facetNeighbors);
 
 /*@}*/
-
 }
 #endif

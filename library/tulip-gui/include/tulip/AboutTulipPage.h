@@ -43,7 +43,6 @@ public:
 private:
   Ui::AboutTulipPageData *_ui;
 };
-
 }
 
 #endif // ABOUTTULIPPAGE_H

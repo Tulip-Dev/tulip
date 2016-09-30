@@ -52,8 +52,7 @@ namespace tlp {
 * @endcode
 *
 **/
-template<class itType>
-struct StableIterator : public Iterator<itType> {
+template <class itType> struct StableIterator : public Iterator<itType> {
   //=============================
   /**
   * @brief Creates a stable Iterator, that allows to delete elements from a graph while iterating on them.
@@ -75,7 +74,8 @@ struct StableIterator : public Iterator<itType> {
     copyIterator = sequenceCopy.begin();
   }
   //=============================
-  ~StableIterator() {}
+  ~StableIterator() {
+  }
   //=============================
   itType next() {
     itType tmp(*copyIterator);
@@ -97,7 +97,7 @@ struct StableIterator : public Iterator<itType> {
     copyIterator = sequenceCopy.begin();
   }
   //=============================
-protected :
+protected:
   /**
   * @brief A copy of the sequence of the elements to iterate.
   **/
@@ -119,11 +119,9 @@ protected :
 * @param it a Tulip Iterator
 * @return a stable Iterator
 **/
-template<class itType>
-inline StableIterator<itType> *stableIterator(Iterator<itType> *it) {
+template <class itType> inline StableIterator<itType> *stableIterator(Iterator<itType> *it) {
   return new StableIterator<itType>(it);
 }
-
 }
 #endif
 ///@endcond

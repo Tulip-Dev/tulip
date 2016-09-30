@@ -29,16 +29,14 @@
 
 #include <QPropertyAnimation>
 
-static const QString setCurrentGraphFunction =
-  "graph = None\n"
-  "def setCurrentGraph(g):\n"
-  "	global graph\n"
-  "	graph = g\n"
-  ;
+static const QString setCurrentGraphFunction = "graph = None\n"
+                                               "def setCurrentGraph(g):\n"
+                                               "	global graph\n"
+                                               "	graph = g\n";
 
 PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPanel), _button(nullptr), _animation(nullptr) {
   _ui->setupUi(this);
-  connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphComboIndexChanged()));
+  connect(_ui->graphCombo, SIGNAL(currentItemChanged()), this, SLOT(graphComboIndexChanged()));
   tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
 }
 
@@ -46,29 +44,29 @@ PythonPanel::~PythonPanel() {
   delete _ui;
 }
 
-void PythonPanel::setModel(tlp::GraphHierarchiesModel* model) {
+void PythonPanel::setModel(tlp::GraphHierarchiesModel *model) {
   _ui->graphCombo->setModel(model);
 }
 
 void PythonPanel::graphComboIndexChanged() {
-  tlp::Graph* g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(),tlp::TulipModel::GraphRole).value<tlp::Graph*>();
+  tlp::Graph *g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(), tlp::TulipModel::GraphRole).value<tlp::Graph *>();
   tlp::PythonInterpreter::getInstance()->runGraphScript("__main__", "setCurrentGraph", g);
   _ui->pythonShellWidget->getAutoCompletionDb()->setGraph(g);
 }
 
 void PythonPanel::dragEnterEvent(QDragEnterEvent *dragEv) {
-  const tlp::GraphMimeType* mimeType = dynamic_cast<const tlp::GraphMimeType*>(dragEv->mimeData());
+  const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dragEv->mimeData());
 
   if (mimeType != nullptr) {
     dragEv->accept();
   }
 }
 
-void PythonPanel::dropEvent(QDropEvent* dropEv) {
-  const tlp::GraphMimeType* mimeType = dynamic_cast<const tlp::GraphMimeType*>(dropEv->mimeData());
+void PythonPanel::dropEvent(QDropEvent *dropEv) {
+  const tlp::GraphMimeType *mimeType = dynamic_cast<const tlp::GraphMimeType *>(dropEv->mimeData());
 
   if (mimeType != nullptr) {
-    tlp::GraphHierarchiesModel* model = static_cast<tlp::GraphHierarchiesModel*>(_ui->graphCombo->model());
+    tlp::GraphHierarchiesModel *model = static_cast<tlp::GraphHierarchiesModel *>(_ui->graphCombo->model());
     QModelIndex graphIndex = model->indexOf(mimeType->graph());
 
     if (graphIndex == _ui->graphCombo->selectedIndex())

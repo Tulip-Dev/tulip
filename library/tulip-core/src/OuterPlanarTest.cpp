@@ -24,10 +24,10 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-OuterPlanarTest * OuterPlanarTest::instance=nullptr;
+OuterPlanarTest *OuterPlanarTest::instance = nullptr;
 //=================================================================
-bool OuterPlanarTest::isOuterPlanar(tlp::Graph* graph) {
-  if(instance==nullptr)
+bool OuterPlanarTest::isOuterPlanar(tlp::Graph *graph) {
+  if (instance == nullptr)
     instance = new OuterPlanarTest();
 
   Observable::holdObservers();
@@ -36,11 +36,11 @@ bool OuterPlanarTest::isOuterPlanar(tlp::Graph* graph) {
   return result;
 }
 //=================================================================
-bool OuterPlanarTest::compute(tlp::Graph* graph) {
+bool OuterPlanarTest::compute(tlp::Graph *graph) {
 
-  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+  if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
-  else if(graph->numberOfNodes()==0) {
+  else if (graph->numberOfNodes() == 0) {
     resultsBuffer[graph] = true;
     return true;
   }
@@ -51,9 +51,9 @@ bool OuterPlanarTest::compute(tlp::Graph* graph) {
     return (resultsBuffer[graph] = false);
   else {
     node n = graph->addNode();
-    for(node current : graph->getNodes()) {
-      if(current != n)
-        graph->addEdge(n,current);
+    for (node current : graph->getNodes()) {
+      if (current != n)
+        graph->addEdge(n, current);
     }
     resultsBuffer[graph] = planarTest.isPlanar(true);
     graph->delNode(n);
@@ -62,17 +62,18 @@ bool OuterPlanarTest::compute(tlp::Graph* graph) {
   }
 }
 //=================================================================
-void OuterPlanarTest::treatEvent(const Event& evt) {
-  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+void OuterPlanarTest::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
-    Graph* graph = gEvt->getGraph();
+    Graph *graph = gEvt->getGraph();
 
-    switch(gEvt->getType()) {
+    switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (!resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (!resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -80,8 +81,9 @@ void OuterPlanarTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -89,8 +91,9 @@ void OuterPlanarTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_DEL_NODE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -102,14 +105,13 @@ void OuterPlanarTest::treatEvent(const Event& evt) {
       break;
 
     default:
-      //we don't care about other events
+      // we don't care about other events
       break;
     }
-  }
-  else {
+  } else {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
-    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    Graph *graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);

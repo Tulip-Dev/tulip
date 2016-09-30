@@ -29,7 +29,8 @@ class PreferencesDialog;
 class PreferencesDialog : public QDialog {
   Q_OBJECT
 
-  Ui::PreferencesDialog* _ui;
+  Ui::PreferencesDialog *_ui;
+
 public:
   explicit PreferencesDialog(QWidget *parent = 0);
   ~PreferencesDialog();

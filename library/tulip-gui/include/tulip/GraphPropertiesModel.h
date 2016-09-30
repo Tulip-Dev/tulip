@@ -31,8 +31,7 @@
 
 namespace tlp {
 
-template <typename PROPTYPE>
-class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
+template <typename PROPTYPE> class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   tlp::Graph *_graph;
   QString _placeholder;
   bool _checkable;
@@ -44,17 +43,16 @@ class GraphPropertiesModel : public tlp::TulipModel, public tlp::Observable {
   void rebuildCache();
 
 public:
-  explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false,
-                                QObject *parent = nullptr);
-  explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph,
-                                bool checkable = false,
-                                QObject *parent = nullptr);
+  explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false, QObject *parent = nullptr);
+  explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph, bool checkable = false, QObject *parent = nullptr);
   virtual ~GraphPropertiesModel() {
     if (_graph != NULL)
       _graph->removeListener(this);
   }
 
-  tlp::Graph *graph() const { return _graph; }
+  tlp::Graph *graph() const {
+    return _graph;
+  }
 
   void setGraph(tlp::Graph *graph) {
     if (_graph == graph)
@@ -74,11 +72,12 @@ public:
     endResetModel();
   }
 
-  QSet<PROPTYPE *> checkedProperties() const { return _checkedProperties; }
+  QSet<PROPTYPE *> checkedProperties() const {
+    return _checkedProperties;
+  }
 
   // Methods re-implemented from QAbstractItemModel
-  QModelIndex index(int row, int column,
-                    const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QModelIndex parent(const QModelIndex &child) const;
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -105,11 +104,9 @@ public:
       return;
 
     if (graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY ||
-        graphEvent->getType() ==
-            GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
+        graphEvent->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
 
-      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(
-          _graph->getProperty(graphEvent->getPropertyName()));
+      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != nullptr) {
         int row = rowOf(prop);
@@ -118,19 +115,14 @@ public:
         _removingRows = true;
         _checkedProperties.remove(prop);
       }
-    } else if (graphEvent->getType() ==
-                   GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
-               graphEvent->getType() ==
-                   GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
+    } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
+               graphEvent->getType() == GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
       if (_removingRows) {
         endRemoveRows();
         _removingRows = false;
       }
-    } else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY ||
-               graphEvent->getType() ==
-                   GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
-      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(
-          _graph->getProperty(graphEvent->getPropertyName()));
+    } else if (graphEvent->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY || graphEvent->getType() == GraphEvent::TLP_ADD_INHERITED_PROPERTY) {
+      PROPTYPE *prop = dynamic_cast<PROPTYPE *>(_graph->getProperty(graphEvent->getPropertyName()));
 
       if (prop != nullptr) {
         rebuildCache();
@@ -141,12 +133,10 @@ public:
           endInsertRows();
         }
       }
-    } else if (graphEvent->getType() ==
-               GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
+    } else if (graphEvent->getType() == GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY) {
       // force any needed sorting
       emit layoutAboutToBeChanged();
-      changePersistentIndex(createIndex(0, 0),
-                            createIndex(_properties.size() - 1, 0));
+      changePersistentIndex(createIndex(0, 0), createIndex(_properties.size() - 1, 0));
       emit layoutChanged();
     }
   }

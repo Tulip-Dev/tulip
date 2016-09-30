@@ -47,7 +47,7 @@ static TimeMeasurer tm;
 static const unsigned int delay = 40;
 
 static void animate(void *value) {
-  AnimateParams *animParams = reinterpret_cast<AnimateParams*>(value);
+  AnimateParams *animParams = reinterpret_cast<AnimateParams *>(value);
   double t = tm.getElapsedTime() / animDuration;
   if (t < 1.0) {
     zoomAndPanAnimation->zoomAndPanAnimationStep(t);
@@ -64,17 +64,18 @@ static void animate(void *value) {
   }
 }
 
-RectangleZoomInteractor::RectangleZoomInteractor(GlScene *glScene) :
-  _firstX(-1), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false) {
+RectangleZoomInteractor::RectangleZoomInteractor(GlScene *glScene) : _firstX(-1), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false) {
   setScene(glScene);
   _animParams.scene = glScene;
 }
 
 bool RectangleZoomInteractor::mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int & /*modifiers*/) {
-  if (!_glScene || animating) return false;
+  if (!_glScene || animating)
+    return false;
   Camera *camera = _glScene->getMainLayer()->getCamera();
   tlp::Vec4i viewport = camera->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3] || animating) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3] || animating)
+    return false;
   _mouseButton = button;
   if (button == LEFT_BUTTON) {
     if (state == DOWN) {
@@ -118,9 +119,11 @@ bool RectangleZoomInteractor::mouseCallback(const MouseButton &button, const Mou
 }
 
 bool RectangleZoomInteractor::mouseMoveCallback(int x, int y, const int & /*modifiers*/) {
-  if (!_glScene || animating) return false;
+  if (!_glScene || animating)
+    return false;
   tlp::Vec4i viewport = _glScene->getMainLayer()->getCamera()->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3] || animating) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3] || animating)
+    return false;
   if (_mouseButton == LEFT_BUTTON && _dragStarted) {
     _curX = x;
     _curY = y;
@@ -131,7 +134,8 @@ bool RectangleZoomInteractor::mouseMoveCallback(int x, int y, const int & /*modi
 }
 
 bool RectangleZoomInteractor::keyboardCallback(const std::string &keyStr, const int & /*modifiers*/) {
-  if (!_glScene || animating) return false;
+  if (!_glScene || animating)
+    return false;
 
   if (keyStr == "c") {
     Camera *camera = _glScene->getMainLayer()->getCamera();
@@ -153,7 +157,7 @@ void RectangleZoomInteractor::draw() {
     camera->initGl2D();
     tlp::Vec2f bl(std::min(_firstX, _curX), std::min(viewport[3] - _firstY, viewport[3] - _curY));
     tlp::Vec2f tr(std::max(_firstX, _curX), std::max(viewport[3] - _firstY, viewport[3] - _curY));
-    GlRect2D rect(bl, tr, tlp::Color(0,0,255,100), tlp::Color::Black);
+    GlRect2D rect(bl, tr, tlp::Color(0, 0, 255, 100), tlp::Color::Black);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     rect.draw(*camera);
@@ -161,4 +165,3 @@ void RectangleZoomInteractor::draw() {
     camera->initGl();
   }
 }
-

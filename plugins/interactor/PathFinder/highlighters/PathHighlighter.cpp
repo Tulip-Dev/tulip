@@ -26,8 +26,7 @@ using namespace std;
 #include <tulip/GlMainView.h>
 #include <tulip/GlGraphComposite.h>
 
-PathHighlighter::PathHighlighter(const string &name) :
-  name(name), backupScene(0), entityId(0) {
+PathHighlighter::PathHighlighter(const string &name) : name(name), backupScene(0), entityId(0) {
 }
 
 PathHighlighter::~PathHighlighter() {
@@ -93,7 +92,7 @@ void PathHighlighter::addGlEntity(GlScene *scene, GlSimpleEntity *entity, bool d
 }
 
 void PathHighlighter::treatEvent(const Event &ev) {
-  if (ev.type()==Event::TLP_DELETE) {
+  if (ev.type() == Event::TLP_DELETE) {
     if (ev.sender() == backupScene) {
       // reset backupScene to avoid segfault
       // on destructor invocation

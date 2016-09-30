@@ -28,18 +28,15 @@ using namespace tlp;
 
 class GeographicViewInteractor : public GLInteractorComposite {
 
-public :
-
+public:
   GeographicViewInteractor(const QString &iconPath, const QString &text);
 
   bool isCompatible(const std::string &viewName) const;
-
 };
 
 class GeographicViewNavigator : public MouseNKeysNavigator {
 
-public :
-
+public:
   GeographicViewNavigator();
   ~GeographicViewNavigator();
 
@@ -53,18 +50,15 @@ public :
   }
   void viewChanged(View *);
 
-protected :
-
-  int x,y;
+protected:
+  int x, y;
   bool inRotation;
-
 };
 
 class GeographicViewInteractorNavigation : public GeographicViewInteractor {
 
-public :
-
-  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009", " Geographic View Navigation Interactor", "1.0","Navigation")
+public:
+  PLUGININFORMATION("InteractorNavigationGeographicView", "Tulip Team", "01/04/2009", " Geographic View Navigation Interactor", "1.0", "Navigation")
 
   GeographicViewInteractorNavigation(const PluginContext *);
 

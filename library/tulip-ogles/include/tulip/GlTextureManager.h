@@ -46,7 +46,6 @@ namespace tlp {
 class TLP_GLES_SCOPE GlTextureManager {
 
 public:
-
   static GlTextureManager *instance(const std::string &canvasId);
 
   static GlTextureManager *instance();
@@ -62,17 +61,17 @@ public:
   void bindTexturesAtlas();
   void unbindTexturesAtlas();
 
-  void addTextureFromFile(const std::string &textureFile, bool addAlsoInAtlas=false);
-  void addTextureFromData(const std::string &textureName, const unsigned char *textureData, unsigned int width, unsigned int height, bool addAlsoInAtlas=false);
+  void addTextureFromFile(const std::string &textureFile, bool addAlsoInAtlas = false);
+  void addTextureFromData(const std::string &textureName, const unsigned char *textureData, unsigned int width, unsigned int height,
+                          bool addAlsoInAtlas = false);
   void addExternalTexture(const std::string &textureId, const GLuint glTextureId);
-  void bindTexture(const std::string &textureId, const unsigned int textureUnit=0);
+  void bindTexture(const std::string &textureId, const unsigned int textureUnit = 0);
   void unbindTexture(const std::string &textureId);
 
-  GLint getSamplerIdForTexture(const std::string &texture, bool forceUseAtlas=false);
-  tlp::Vec4f getCoordinatesOffsetsForTexture(const std::string &texture, bool forceUseAtlas=false);
+  GLint getSamplerIdForTexture(const std::string &texture, bool forceUseAtlas = false);
+  tlp::Vec4f getCoordinatesOffsetsForTexture(const std::string &texture, bool forceUseAtlas = false);
 
 private:
-
   static std::map<std::string, GlTextureManager *> _instances;
   static std::string _currentCanvasId;
 
@@ -86,10 +85,7 @@ private:
   std::map<std::string, tlp::Vec4f> _coordinatesOffsets;
 
   std::map<std::string, GLuint> _textures;
-
-
 };
-
 }
 
 #endif // GLTEXTUREMANAGER_H

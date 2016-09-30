@@ -48,7 +48,6 @@ public slots:
 signals:
 
   void refreshMapSignal();
-
 };
 
 #endif
@@ -61,8 +60,7 @@ class GoogleMaps : public QWebEngineView {
 
   Q_OBJECT
 
-public :
-
+public:
   GoogleMaps(QWidget *parent = 0);
 
   void setMapCenter(double latitude, double longitude);
@@ -85,7 +83,7 @@ public :
     return init;
   }
 
-  void setMapBounds(Graph *graph, const std::map<node, std::pair<double, double> > &nodesLatLngs);
+  void setMapBounds(Graph *graph, const std::map<node, std::pair<double, double>> &nodesLatLngs);
 
   void setMapBounds(Coord nw, Coord se);
 
@@ -97,10 +95,10 @@ public :
 
   int getWorldWidth();
 
-  void wheelEvent(QWheelEvent * ev);
+  void wheelEvent(QWheelEvent *ev);
 
-  void mouseMoveEvent(QMouseEvent * ev);
-  void mousePressEvent(QMouseEvent * ev);
+  void mouseMoveEvent(QMouseEvent *ev);
+  void mousePressEvent(QMouseEvent *ev);
 
   void switchToSatelliteView();
   void switchToRoadMapView();
@@ -108,12 +106,12 @@ public :
   void switchToHybridView();
 
   void setProgressWidget(ProgressWidgetGraphicsProxy *progressWidget) {
-    this->progressWidget=progressWidget;
+    this->progressWidget = progressWidget;
   }
 
-  void setAdresseSelectionDialog(AddressSelectionDialog *addressSelectionDialog,QGraphicsProxyWidget *addresseSelectionProxy) {
-    this->addressSelectionDialog=addressSelectionDialog;
-    this->addresseSelectionProxy=addresseSelectionProxy;
+  void setAdresseSelectionDialog(AddressSelectionDialog *addressSelectionDialog, QGraphicsProxyWidget *addresseSelectionProxy) {
+    this->addressSelectionDialog = addressSelectionDialog;
+    this->addresseSelectionProxy = addresseSelectionProxy;
   }
 
 signals:
@@ -121,12 +119,11 @@ signals:
   void currentZoomChanged();
   void refreshMap();
 
-private slots :
+private slots:
 
   void triggerLoading();
 
-private :
-
+private:
   QVariant executeJavascript(const QString &jsCode);
 
   bool init;
@@ -144,7 +141,6 @@ private :
 #ifdef QT_HAS_WEBENGINE
   MapRefresher *mapRefresher;
 #endif
-
 };
 
 #ifdef QT_HAS_WEBENGINE
@@ -156,7 +152,6 @@ class JsCallback : public QObject {
   Q_OBJECT
 
 public:
-
   JsCallback(QVariant *ret) : _ret(ret) {
     _lastCreatedInstance = this;
   }
@@ -182,15 +177,12 @@ signals:
   void called();
 
 private:
-
   QVariant *_ret;
 
   static JsCallback *_lastCreatedInstance;
-
 };
 
 #endif
-
 }
 
 #endif // GOOGLEMAPS_H

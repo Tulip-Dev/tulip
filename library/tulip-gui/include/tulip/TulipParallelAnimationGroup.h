@@ -30,10 +30,10 @@ namespace tlp {
 class TLP_QT_SCOPE TulipParallelAnimationGroup : public QParallelAnimationGroup {
 public:
   explicit TulipParallelAnimationGroup(QObject *parent = nullptr);
+
 protected:
   void updateCurrentTime(int currentTime);
 };
-
 }
 
 #endif // TULIPPARALLELANIMATIONGROUP_H

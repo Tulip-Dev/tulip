@@ -57,46 +57,42 @@ extern void initconsoleutils();
 extern void inittuliputils();
 
 #ifndef WIN32
-static PyThreadState*  mainThreadState;
+static PyThreadState *mainThreadState;
 #endif
 
 static PyGILState_STATE gilState;
 
-static const QString printObjectDictFunction =
-  "def printObjectDict(obj):\n"
-  "     if hasattr(obj, \"__dict__\"):\n"
-  "         for k in obj.__dict__.keys():\n"
+static const QString printObjectDictFunction = "def printObjectDict(obj):\n"
+                                               "     if hasattr(obj, \"__dict__\"):\n"
+                                               "         for k in obj.__dict__.keys():\n"
 #if PY_MAJOR_VERSION >= 3
-  "             print(k)\n"
+                                               "             print(k)\n"
 #else
-  "             print k\n"
+                                               "             print k\n"
 #endif
-  "     if hasattr(obj, \"__bases__\"):\n"
-  "         for k in obj.__bases__:\n"
-  "             printObjectDict(k)\n"
-  "     if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
-  "         printObjectDict(obj.__class__)\n"
-  ""
-  ;
+                                               "     if hasattr(obj, \"__bases__\"):\n"
+                                               "         for k in obj.__bases__:\n"
+                                               "             printObjectDict(k)\n"
+                                               "     if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
+                                               "         printObjectDict(obj.__class__)\n"
+                                               "";
 
-static const QString printObjectClassFunction =
-  "def printObjectClass(obj):\n"
-  "	type = \"\"\n"
-  "	if obj and hasattr(obj, \"__class__\"):\n"
-  "		if hasattr(obj.__class__, \"__module__\"):\n"
-  "			mod = obj.__class__.__module__\n"
-  "			if mod == \"_tulip\":"
-  "				mod = \"tlp\"\n"
-  "			type = mod + \".\"\n"
-  "		if hasattr(obj.__class__, \"__name__\"):\n"
-  "			type = type + obj.__class__.__name__\n"
+static const QString printObjectClassFunction = "def printObjectClass(obj):\n"
+                                                "	type = \"\"\n"
+                                                "	if obj and hasattr(obj, \"__class__\"):\n"
+                                                "		if hasattr(obj.__class__, \"__module__\"):\n"
+                                                "			mod = obj.__class__.__module__\n"
+                                                "			if mod == \"_tulip\":"
+                                                "				mod = \"tlp\"\n"
+                                                "			type = mod + \".\"\n"
+                                                "		if hasattr(obj.__class__, \"__name__\"):\n"
+                                                "			type = type + obj.__class__.__name__\n"
 #if PY_MAJOR_VERSION >= 3
-  "		print(type)\n"
+                                                "		print(type)\n"
 #else
-  "		print type\n"
+                                                "		print type\n"
 #endif
-  ""
-  ;
+                                                "";
 
 #if PY_MAJOR_VERSION >= 3
 static QString convertPythonUnicodeObjectToQString(PyObject *pyUnicodeObj) {
@@ -115,6 +111,7 @@ QTime timer;
 class SleepSimulator {
   QMutex localMutex;
   QWaitCondition sleepSimulator;
+
 public:
   SleepSimulator() {
     localMutex.lock();
@@ -138,7 +135,7 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
   if (what == PyTrace_LINE) {
     if (!scriptPaused && timer.elapsed() >= 50) {
-      if (processQtEvents && QApplication::hasPendingEvents())  {
+      if (processQtEvents && QApplication::hasPendingEvents()) {
         QApplication::processEvents();
       }
 
@@ -151,7 +148,6 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
       ss.sleep(30);
     }
-
   }
 
   return 0;
@@ -159,45 +155,40 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
 const QString PythonInterpreter::pythonPluginsPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "tulip/python/");
 
-const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath()+"/.Tulip-"+TULIP_MM_VERSION+"/plugins/python");
+const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath() + "/.Tulip-" + TULIP_MM_VERSION + "/plugins/python");
 
-const char PythonInterpreter::pythonReservedCharacters[] = {
-  '#', '%', '/', '+', '-', '&', '*', '<', '>',
-  '|', '~', '^', '=', '!', '\'', '\"', '{', '}',
-  '(', ')', '[', ']', '.', ':', '@', 0
-};
+const char PythonInterpreter::pythonReservedCharacters[] = {'#', '%',  '/',  '+', '-', '&', '*', '<', '>', '|', '~', '^', '=',
+                                                            '!', '\'', '\"', '{', '}', '(', ')', '[', ']', '.', ':', '@', 0};
 
-const char *PythonInterpreter::pythonKeywords[] = {
-  "def", "class","from", "in", "and", "or", "not", "is", "with", "assert",
-  "for", "while", "if", "elif", "import", "True", "False", "pass", "exec",
-  "else", "None", "print", "global", "return", "break", "continue", "as",
-  "lambda", "del", "try", "except", "raise", "finally", "yield", 0
-};
+const char *PythonInterpreter::pythonKeywords[] = {"def",    "class", "from",  "in",     "and",    "or",      "not",   "is",       "with",
+                                                   "assert", "for",   "while", "if",     "elif",   "import",  "True",  "False",    "pass",
+                                                   "exec",   "else",  "None",  "print",  "global", "return",  "break", "continue", "as",
+                                                   "lambda", "del",   "try",   "except", "raise",  "finally", "yield", 0};
 
 PythonInterpreter PythonInterpreter::_instance;
 
 #ifdef _MSC_VER
 extern "C" {
-  BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved) {
-    switch (ul_reason_for_call) {
-    case DLL_PROCESS_ATTACH:
+BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved) {
+  switch (ul_reason_for_call) {
+  case DLL_PROCESS_ATTACH:
 
-      if (QApplication::instance()) {
-        PythonInterpreter::getInstance()->initConsoleOutput();
-      }
-
-      break;
-
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-      break;
-
-    case DLL_PROCESS_DETACH:
-      break;
+    if (QApplication::instance()) {
+      PythonInterpreter::getInstance()->initConsoleOutput();
     }
 
-    return TRUE;
+    break;
+
+  case DLL_THREAD_ATTACH:
+  case DLL_THREAD_DETACH:
+    break;
+
+  case DLL_PROCESS_DETACH:
+    break;
   }
+
+  return TRUE;
+}
 }
 #endif
 
@@ -209,7 +200,7 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 
   if (!_wasInit) {
 
-    int argc=1;
+    int argc = 1;
 #if PY_MAJOR_VERSION >= 3
     static const std::wstring argv0 = L"tulip";
     wchar_t *argv[1];
@@ -223,21 +214,21 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
     Py_OptimizeFlag = 1;
     Py_NoSiteFlag = 1;
 
-    // Fix for GDB debugging on windows when compiling with MinGW.
-    // GDB contains an embedded Python interpreter that messes up Python Home value.
-    // When Tulip is compiled with a version of Python different from the one embedded in GDB,
-    // it crashes at startup when running it through GDB.
-    // So reset correct one to be able to debug it.
+// Fix for GDB debugging on windows when compiling with MinGW.
+// GDB contains an embedded Python interpreter that messes up Python Home value.
+// When Tulip is compiled with a version of Python different from the one embedded in GDB,
+// it crashes at startup when running it through GDB.
+// So reset correct one to be able to debug it.
 #ifdef __MINGW32__
     QString pythonHome = PythonVersionChecker::getPythonHome();
 
     if (!pythonHome.isEmpty()) {
 #if PY_MAJOR_VERSION >= 3
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
-      Py_SetPythonHome(const_cast<wchar_t*>(pythonHomeWString.c_str()));
+      Py_SetPythonHome(const_cast<wchar_t *>(pythonHomeWString.c_str()));
 #else
       static std::string pythonHomeString = pythonHome.toStdString();
-      Py_SetPythonHome(const_cast<char*>(pythonHomeString.c_str()));
+      Py_SetPythonHome(const_cast<char *>(pythonHomeString.c_str()));
 #endif
     }
 
@@ -251,7 +242,7 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #ifndef WIN32
     mainThreadState = PyEval_SaveThread();
 #else
-    PyThreadState* tcur = PyThreadState_Get() ;
+    PyThreadState *tcur = PyThreadState_Get();
     PyThreadState_Swap(nullptr);
 #if PY_MAJOR_VERSION != 3 && PY_MINOR_VERSION != 3
     PyThreadState_Clear(tcur);
@@ -262,7 +253,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
 #if defined(WIN32) || (PY_MAJOR_VERSION < 3 && PY_MINOR_VERSION < 6)
     PyEval_ReleaseLock();
 #endif
-
   }
 
   holdGIL();
@@ -294,7 +284,7 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
     runString("sys.setdefaultencoding('utf-8')");
 #endif
 
-    // hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)
+// hack for linux in order to be able to load dynamic python modules installed on the system (like numpy, matplotlib and other cool stuffs)
 #ifndef WIN32
     QString libPythonName = QString("libpython") + _pythonVersion;
 #ifdef __APPLE__
@@ -355,8 +345,8 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       runString("site.main()");
 #endif
       runString("from tulip import *");
-      //runString("from tulipogl import *");
-      //runString("from tulipgui import *");
+      // runString("from tulipogl import *");
+      // runString("from tulipgui import *");
 
       // When importing the tulip module, Tulip Python plugins and
       // startup scripts will be possibly loaded and other Python modules can be loaded as a side effect.
@@ -373,12 +363,11 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
                 "sys.stdout = consoleutils.ConsoleOutput(False);"
                 "sys.stderr = consoleutils.ConsoleOutput(True);"
                 "sys.stdin = consoleutils.ConsoleInput()\n");
-
     }
 
     PyEval_SetTrace(tracefunc, nullptr);
 
-    // remove exit and quit functions
+// remove exit and quit functions
 #if PY_MAJOR_VERSION >= 3
     PyObject *builtinModule = PyImport_ImportModule("builtins");
 #else
@@ -399,7 +388,6 @@ PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false),
       PyObject_DelAttrString(sysModule, "exit");
 
     Py_DECREF(sysModule);
-
   }
 
   releaseGIL();
@@ -459,7 +447,8 @@ PythonInterpreter *PythonInterpreter::getInstance() {
 void PythonInterpreter::initConsoleOutput() {
   consoleOuputHandler = new ConsoleOutputHandler();
   consoleOuputEmitter = new ConsoleOutputEmitter();
-  QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea*, const QString &, bool)), consoleOuputHandler, SLOT(writeToConsole(QAbstractScrollArea*, const QString &, bool)));
+  QObject::connect(consoleOuputEmitter, SIGNAL(consoleOutput(QAbstractScrollArea *, const QString &, bool)), consoleOuputHandler,
+                   SLOT(writeToConsole(QAbstractScrollArea *, const QString &, bool)));
 }
 
 bool PythonInterpreter::interpreterInit() {
@@ -482,10 +471,9 @@ bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName, c
     PyErr_Print();
     PyErr_Clear();
     ret = false;
-  }
-  else {
+  } else {
 
-    PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.toStdString().c_str()),pycomp);
+    PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.toStdString().c_str()), pycomp);
 
     if (pmod == nullptr) {
       PyErr_Print();
@@ -536,7 +524,7 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
   return ret != -1;
 }
 
-PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement, bool singleInput) {
+PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement, bool singleInput) {
   holdGIL();
 #if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString("__main__");
@@ -559,7 +547,7 @@ PyObject* PythonInterpreter::evalPythonStatement(const QString &pythonStatement,
   return ret;
 }
 
-PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
+PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters) {
   holdGIL();
   PyObject *ret = nullptr;
 #if PY_MAJOR_VERSION >= 3
@@ -580,7 +568,7 @@ PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QSt
     PyObject *argTup = PyTuple_New(parameters.size());
     int idx = 0;
     bool paramError = false;
-    for(const std::pair<std::string, DataType*> &param : parameters.getValues()) {
+    for (const std::pair<std::string, DataType *> &param : parameters.getValues()) {
       PyObject *pyParam = getPyObjectFromDataType(param.second);
 
       if (!pyParam) {
@@ -598,7 +586,6 @@ PyObject* PythonInterpreter::callPythonFunction(const QString &module, const QSt
         PyErr_Print();
         PyErr_Clear();
       }
-
     }
 
     decrefPyObject(argTup);
@@ -622,7 +609,6 @@ bool PythonInterpreter::callFunction(const QString &module, const QString &funct
   return ok;
 }
 
-
 void PythonInterpreter::addModuleSearchPath(const QString &path, const bool beforeOtherPaths) {
   if (_currentImportPaths.find(path) == _currentImportPaths.end()) {
     QString pythonCode;
@@ -631,8 +617,7 @@ void PythonInterpreter::addModuleSearchPath(const QString &path, const bool befo
 
     if (beforeOtherPaths) {
       oss << "sys.path.insert(0, \"" << path << "\")" << endl;
-    }
-    else {
+    } else {
       oss << "sys.path.append(\"" << path << "\")" << endl;
     }
 
@@ -655,7 +640,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
   bool ret = true;
   scriptPaused = false;
 
-  // Build the name object
+// Build the name object
 #if PY_MAJOR_VERSION >= 3
   PyObject *pName = PyUnicode_FromString(module.toStdString().c_str());
 #else
@@ -673,7 +658,6 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
     pModule = pModuleReloaded;
   }
 
-
   // pDict is a borrowed reference
   PyObject *pDict = PyModule_GetDict(pModule);
 
@@ -688,28 +672,26 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
     }
 
     // Getting proper sipWrapperType
-    const sipTypeDef* kpTypeDef = sipFindType("tlp::Graph");
+    const sipTypeDef *kpTypeDef = sipFindType("tlp::Graph");
 
     if (!kpTypeDef) {
       return false;
     }
 
     // Wrapping up C++ instance
-    PyObject* pArgs = sipConvertFromType(graph, kpTypeDef, nullptr);
+    PyObject *pArgs = sipConvertFromType(graph, kpTypeDef, nullptr);
 
     // Finally calling 'process'
-    PyObject* argTup = Py_BuildValue("(O)", pArgs);
+    PyObject *argTup = Py_BuildValue("(O)", pArgs);
     _runningScript = true;
 
     try {
       PyObject_CallObject(pFunc, argTup);
-    }
-    catch (std::exception &e) {
+    } catch (std::exception &e) {
       std::ostringstream oss;
       oss << "A C++ exception (" << e.what() << ") has been thrown while executing the script";
       PyErr_SetString(PyExc_Exception, oss.str().c_str());
-    }
-    catch(...) {
+    } catch (...) {
       PyErr_SetString(PyExc_Exception, "A C++ exception has been thrown while executing the script");
     }
 
@@ -724,11 +706,10 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
       ret = false;
     }
 
-  }
-  else {
+  } else {
     PyErr_Print();
     PyErr_Clear();
-    ret =  false;
+    ret = false;
   }
 
   releaseGIL();
@@ -836,28 +817,25 @@ QVector<QString> PythonInterpreter::getGlobalDictEntries(const QString &prefixFi
   runString("import __main__;printObjectDict(__main__)");
   QStringList objectDictList = consoleOuputString.split("\n");
 
-  for (int i = 0 ; i < objectDictList.count() ; ++i) {
+  for (int i = 0; i < objectDictList.count(); ++i) {
     if (objectDictList[i] != "") {
       if (objectDictList[i].startsWith("_")) {
         continue;
-      }
-      else {
+      } else {
         if (prefixFilter != "") {
           if (objectDictList[i].startsWith(prefixFilter)) {
             publicMembersSorted.insert(objectDictList[i]);
           }
-        }
-        else {
+        } else {
           publicMembersSorted.insert(objectDictList[i]);
         }
       }
-
     }
   }
 
   QSet<QString>::iterator it;
 
-  for (it = publicMembersSorted.begin() ; it != publicMembersSorted.end() ; ++it) {
+  for (it = publicMembersSorted.begin(); it != publicMembersSorted.end(); ++it) {
     ret.push_back(*it);
   }
 
@@ -872,7 +850,7 @@ QString PythonInterpreter::getVariableType(const QString &varName) {
 
   outputActivated = false;
   consoleOuputString = "";
-  bool ok = runString(QString("printObjectClass(")+varName+")");
+  bool ok = runString(QString("printObjectClass(") + varName + ")");
   outputActivated = true;
 
   if (ok)
@@ -888,31 +866,28 @@ QVector<QString> PythonInterpreter::getObjectDictEntries(const QString &objectNa
   consoleOuputString = "";
 
   if (runString(objectName)) {
-    runString(QString("printObjectDict(")+objectName+")");
+    runString(QString("printObjectDict(") + objectName + ")");
     QStringList objectDictList = consoleOuputString.split("\n");
 
-    for (int i = 0 ; i < objectDictList.count() ; ++i) {
+    for (int i = 0; i < objectDictList.count(); ++i) {
       if (objectDictList[i] != "") {
         if (objectDictList[i].startsWith("_")) {
           continue;
-        }
-        else {
+        } else {
           if (prefixFilter != "") {
             if (objectDictList[i].startsWith(prefixFilter)) {
               publicMembersSorted.insert(objectDictList[i]);
             }
-          }
-          else {
+          } else {
             publicMembersSorted.insert(objectDictList[i]);
           }
         }
-
       }
     }
 
     QSet<QString>::iterator it;
 
-    for (it = publicMembersSorted.begin() ; it != publicMembersSorted.end() ; ++it) {
+    for (it = publicMembersSorted.begin(); it != publicMembersSorted.end(); ++it) {
       ret.push_back(*it);
     }
   }
@@ -934,12 +909,11 @@ QVector<QString> PythonInterpreter::getImportedModulesList() {
 #endif
     QStringList modulesList = consoleOuputString.split("\n");
 
-    for (int i = 0 ; i < modulesList.count() ; ++i) {
+    for (int i = 0; i < modulesList.count(); ++i) {
       if (modulesList[i] != "") {
         if (modulesList[i].startsWith("_")) {
           continue;
-        }
-        else {
+        } else {
           ret.push_back(modulesList[i]);
         }
       }
@@ -956,9 +930,9 @@ QVector<QString> PythonInterpreter::getBaseTypesForType(const QString &typeName)
   QStringList modules = typeName.split(".");
   QString curModule = "";
 
-  for (int i = 0 ; i < modules.size() -1 ; ++i) {
+  for (int i = 0; i < modules.size() - 1; ++i) {
     curModule += modules[i];
-    runString(QString("import ")+curModule);
+    runString(QString("import ") + curModule);
     curModule += ".";
   }
 
@@ -975,10 +949,10 @@ QVector<QString> PythonInterpreter::getBaseTypesForType(const QString &typeName)
   if (runString(pythonCode)) {
     QStringList basesList = consoleOuputString.split("\n");
 
-    for (int i = 0 ; i < basesList.count() ; ++i) {
+    for (int i = 0; i < basesList.count(); ++i) {
       int pos = basesList[i].indexOf('\'');
       int pos2 = basesList[i].lastIndexOf('\'');
-      ret.push_back(basesList[i].mid(pos+1, pos2-pos-1));
+      ret.push_back(basesList[i].mid(pos + 1, pos2 - pos - 1));
     }
   }
 
@@ -1043,16 +1017,14 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
 
   if (consoleOuputEmitter) {
     consoleOuputEmitter->sendOutputToConsole(output, stdErr);
-  }
-  else {
+  } else {
     textOutput = true;
   }
 
   if (textOutput) {
     if (stdErr) {
       std::cerr << output.toStdString();
-    }
-    else {
+    } else {
       std::cout << output.toStdString();
     }
   }

@@ -45,8 +45,7 @@ class PythonScriptView : public tlp::ViewWidget {
   bool _scriptStopped;
   bool _runningScript;
 
-public :
-
+public:
   PLUGININFORMATION("Python Script view", "Antoine Lambert", "04/2010",
                     "<p>This view aims to manipulate and modify a Tulip graph through the use of Python scripts."
                     "Bindings for the Tulip-Core C++ library have been developed in order to offer its features "
@@ -58,8 +57,8 @@ public :
                     "Its graphical interface contains the following components :<ul>"
                     "   <li>a nice script editor with syntax highlighting and auto-completion</li>"
                     "   <li>some buttons to start / stop the current edited script</li>"
-                    "   <li>a console output widget</li></ul>"
-                    , "0.7", "")
+                    "   <li>a console output widget</li></ul>",
+                    "0.7", "")
 
   PythonScriptView(tlp::PluginContext *);
   ~PythonScriptView();
@@ -72,11 +71,11 @@ public :
 
   void graphChanged(tlp::Graph *);
 
-  void setState(const tlp::DataSet&);
+  void setState(const tlp::DataSet &);
 
   tlp::DataSet state() const;
 
-  tlp::Graph* getGraph() {
+  tlp::Graph *getGraph() {
     return _graph;
   }
 
@@ -86,9 +85,10 @@ public :
     return _runningScript;
   }
 
-  void draw() {}
+  void draw() {
+  }
 
-  void graphDeleted(tlp::Graph* parent) {
+  void graphDeleted(tlp::Graph *parent) {
     _graph = nullptr;
     ViewWidget::graphDeleted(parent);
   }
@@ -101,7 +101,7 @@ public slots:
   void pauseCurrentScript();
   void currentScriptPaused();
 
-private slots :
+private slots:
 
   void newScript();
   void loadScript();
@@ -113,22 +113,20 @@ private slots :
   void newFileModule();
   void loadModule();
   void saveModule();
-  void checkErrors(bool clear=true);
+  void checkErrors(bool clear = true);
 
-private :
-
-  bool loadScript(const QString &fileName, bool clear=true);
-  void saveScript(int tabIdx, bool clear=true);
-  bool loadModule(const QString &fileName, bool clear=true);
+private:
+  bool loadScript(const QString &fileName, bool clear = true);
+  void saveScript(int tabIdx, bool clear = true);
+  bool loadModule(const QString &fileName, bool clear = true);
   bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
 
-  void saveModule(int tabIdx, const bool reload=false);
+  void saveModule(int tabIdx, const bool reload = false);
   void saveAllModules();
   bool reloadAllModules() const;
   void indicateErrors() const;
   void clearErrorIndicators() const;
   QString findFile(const QString &filePath);
-
 };
 
 #endif /* PYTHONSCRIPTVIEW_H_ */

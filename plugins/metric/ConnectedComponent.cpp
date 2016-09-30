@@ -23,30 +23,32 @@ PLUGIN(ConnectedComponent)
 
 using namespace tlp;
 
-ConnectedComponent::ConnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+ConnectedComponent::ConnectedComponent(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+}
 //======================================================
-ConnectedComponent::~ConnectedComponent() {}
+ConnectedComponent::~ConnectedComponent() {
+}
 //======================================================
 bool ConnectedComponent::run() {
-  std::vector<std::set<node> > components;
+  std::vector<std::set<node>> components;
   ConnectedTest::computeConnectedComponents(graph, components);
 
   // assign the index of each component as value for its nodes
-  //unsigned int curComponent = 0;
-  for (unsigned int curComponent=0; curComponent < components.size(); ++curComponent) {
-    std::set<node>& component = components[curComponent];
+  // unsigned int curComponent = 0;
+  for (unsigned int curComponent = 0; curComponent < components.size(); ++curComponent) {
+    std::set<node> &component = components[curComponent];
 
-    for(std::set<node>::const_iterator itNode = component.begin(); itNode!=component.end(); ++itNode) {
+    for (std::set<node>::const_iterator itNode = component.begin(); itNode != component.end(); ++itNode) {
       result->setNodeValue(*itNode, curComponent);
     }
   }
 
   // propagate nodes computed value to edges
-  Iterator<edge> *itE=graph->getEdges();
+  Iterator<edge> *itE = graph->getEdges();
 
   while (itE->hasNext()) {
-    edge ite=itE->next();
-    node source= graph->source(ite);
+    edge ite = itE->next();
+    node source = graph->source(ite);
     //    node target= graph->target(ite);
     //    if (result->getNodeValue(source) == result->getNodeValue(target))
     result->setEdgeValue(ite, result->getNodeValue(source));
@@ -59,4 +61,3 @@ bool ConnectedComponent::run() {
   return true;
 }
 //======================================================
-

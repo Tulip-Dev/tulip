@@ -35,7 +35,7 @@ public:
   void tearDown();
   void testExistEdge();
 
-private :
+private:
   tlp::Graph *graph;
   tlp::node n0, n1;
   tlp::edge e0, e1;

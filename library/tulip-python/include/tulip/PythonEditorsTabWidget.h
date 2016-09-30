@@ -38,7 +38,6 @@ class TLP_PYTHON_SCOPE PythonEditorsTabWidget : public QTabWidget {
   bool reloadCodeInEditorIfNeeded(int index);
 
 public:
-
   explicit PythonEditorsTabWidget(QWidget *parent = 0);
 
   int addEditor(const QString &fileName = "");
@@ -47,7 +46,7 @@ public:
 
   PythonCodeEditor *getEditor(int) const;
 
-  void indicateErrors(const QMap<QString, QVector<int> > &errorLines);
+  void indicateErrors(const QMap<QString, QVector<int>> &errorLines);
 
   void clearErrorIndicators();
 
@@ -76,9 +75,7 @@ public slots:
   void reloadCodeInEditorsIfNeeded();
 
   void closeTabRequested(int tab);
-
 };
-
 }
 
 #endif // PYTHONEDITORSTABWIDGET_H

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIP_TREETEST_H
 #define TULIP_TREETEST_H
 
@@ -37,7 +36,6 @@ class PluginProgress;
  **/
 class TLP_SCOPE TreeTest : private Observable {
 public:
-
   /**
    * @brief Checks if the graph is a rooted tree (i.e. one node is designated as the root).
    *
@@ -76,13 +74,14 @@ public:
    * If the graph is a rooted tree, the input graph is returned as is.
    * If the graphs is a free tree, a rooted clone subgraph is returned.
    * If the graph is connected, a rooted spanning tree of a clone subgraph is returned
-   * If the graph is not connected, computes a tree for each of the connected components of a clone subgraph, adds a simple source and returns the clone.
+   * If the graph is not connected, computes a tree for each of the connected components of a clone subgraph, adds a simple source and returns the
+   *clone.
    *
    * @param graph The graph to compute a tree on.
    * @param pluginProgress reports progress on the computation. Defaults to 0.
    * @return :Graph* If the input graph is a rooted tree, returns it as is, otherwise a clone subgraph transformed into a rooted tree.
    **/
-  static Graph *computeTree(Graph* graph, PluginProgress *pluginProgress = 0);
+  static Graph *computeTree(Graph *graph, PluginProgress *pluginProgress = 0);
 
   /**
    * @brief Removes subgraphs created during tree computation.
@@ -98,24 +97,22 @@ public:
 private:
   TreeTest();
 
-  bool compute(const Graph * graph);
+  bool compute(const Graph *graph);
 
-  bool isFreeTree (const Graph *graph, node curRoot);
+  bool isFreeTree(const Graph *graph, node curRoot);
 
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   /**
    * @brief Singleton instance of this class.
    **/
-  static TreeTest * instance;
+  static TreeTest *instance;
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<const Graph*,bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
-
 }
 #endif
 ///@endcond

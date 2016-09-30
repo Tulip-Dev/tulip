@@ -49,31 +49,29 @@ class PythonPluginsIDE : public QWidget {
   QMap<QString, QString> _editedPluginsType;
   QMap<QString, QString> _editedPluginsName;
 
-  bool loadPythonPlugin(const QString &fileName, bool clear=true);
-  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode, bool clear=true);
+  bool loadPythonPlugin(const QString &fileName, bool clear = true);
+  bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode, bool clear = true);
   void savePythonPlugin(int tabIdx);
   bool indicateErrors() const;
   void clearErrorIndicators() const;
-  bool loadModule(const QString &fileName, bool clear=true);
-  void saveModule(int tabIdx, const bool reload=false);
+  bool loadModule(const QString &fileName, bool clear = true);
+  void saveModule(int tabIdx, const bool reload = false);
   bool reloadAllModules() const;
-  void writePluginsFilesList(int deleted=-1);
-  void writeModulesFilesList(int deleted=-1);
+  void writePluginsFilesList(int deleted = -1);
+  void writeModulesFilesList(int deleted = -1);
   QString readProjectFile(const QString &filePath);
   void writePluginFileToProject(const QString &fileName, const QString &fileContent);
   void writeModuleFileToProject(const QString &fileName, const QString &fileContent);
 
-public :
-
+public:
   explicit PythonPluginsIDE(QWidget *parent = 0);
   ~PythonPluginsIDE();
 
   void setProject(tlp::TulipProject *project);
 
-protected :
-
-  int addModuleEditor(const QString &fileName="");
-  int addPluginEditor(const QString &fileName="");
+protected:
+  int addModuleEditor(const QString &fileName = "");
+  int addPluginEditor(const QString &fileName = "");
 
   tlp::PythonCodeEditor *getModuleEditor(int idx) const;
   tlp::PythonCodeEditor *getCurrentModuleEditor() const;
@@ -86,7 +84,7 @@ protected slots:
   void currentTabChanged(int index);
   void loadPythonPlugin();
   void savePythonPlugin();
-  void registerPythonPlugin(bool clear=true);
+  void registerPythonPlugin(bool clear = true);
   void removePythonPlugin();
   void newFileModule();
   void loadModule();
@@ -98,7 +96,6 @@ protected slots:
   void decreaseFontSize();
   void pluginSaved(int);
   void moduleSaved(int);
-
 };
 
 #endif // PYTHONPLUGINSIDE_H

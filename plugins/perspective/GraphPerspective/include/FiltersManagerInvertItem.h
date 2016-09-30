@@ -26,13 +26,14 @@ namespace Ui {
 class FiltersManagerInvertItem;
 }
 
-class FiltersManagerInvertItem: public AbstractFiltersManagerItem {
+class FiltersManagerInvertItem : public AbstractFiltersManagerItem {
   Q_OBJECT
-  Ui::FiltersManagerInvertItem* _ui;
+  Ui::FiltersManagerInvertItem *_ui;
+
 public:
-  explicit FiltersManagerInvertItem(QWidget* parent = nullptr);
+  explicit FiltersManagerInvertItem(QWidget *parent = nullptr);
   ~FiltersManagerInvertItem();
-  void applyFilter(tlp::BooleanProperty*);
+  void applyFilter(tlp::BooleanProperty *);
   QString title() const;
 };
 

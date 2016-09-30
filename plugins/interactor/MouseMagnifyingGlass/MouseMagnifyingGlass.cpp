@@ -42,7 +42,9 @@
 using namespace std;
 using namespace tlp;
 
-MouseMagnifyingGlassInteractor::MouseMagnifyingGlassInteractor(const tlp::PluginContext*) : GLInteractorComposite(QIcon(":/i_magnifying_glass.png"), "Magnifying glass") {}
+MouseMagnifyingGlassInteractor::MouseMagnifyingGlassInteractor(const tlp::PluginContext *)
+    : GLInteractorComposite(QIcon(":/i_magnifying_glass.png"), "Magnifying glass") {
+}
 
 void MouseMagnifyingGlassInteractor::construct() {
   push_back(new MousePanNZoomNavigator());
@@ -50,20 +52,20 @@ void MouseMagnifyingGlassInteractor::construct() {
 }
 
 bool MouseMagnifyingGlassInteractor::isCompatible(const std::string &viewName) const {
-  return ((viewName==NodeLinkDiagramComponent::viewName)
-          ||(viewName==ViewName::HistogramViewName)
-          ||(viewName==ViewName::MatrixViewName)
-          ||(viewName==ViewName::ParallelCoordinatesViewName)
-          ||(viewName==ViewName::PixelOrientedViewName)
-          ||(viewName==ViewName::ScatterPlot2DViewName)
-         );
+  return ((viewName == NodeLinkDiagramComponent::viewName) || (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
+          (viewName == ViewName::ParallelCoordinatesViewName) || (viewName == ViewName::PixelOrientedViewName) ||
+          (viewName == ViewName::ScatterPlot2DViewName));
 }
 
 PLUGIN(MouseMagnifyingGlassInteractor)
 
-MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent() : fbo(nullptr), fbo2(nullptr), camera(nullptr),drawInteractor(false), radius(200), magnifyPower(2) {}
+MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent()
+    : fbo(nullptr), fbo2(nullptr), camera(nullptr), drawInteractor(false), radius(200), magnifyPower(2) {
+}
 
-MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent(const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent) : fbo(nullptr), fbo2(nullptr), drawInteractor(false) {
+MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent(
+    const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent)
+    : fbo(nullptr), fbo2(nullptr), drawInteractor(false) {
   boxCenter = mouseMagnifyingGlassInteractorComponent.boxCenter;
   radius = mouseMagnifyingGlassInteractorComponent.radius;
   magnifyPower = mouseMagnifyingGlassInteractorComponent.magnifyPower;
@@ -88,9 +90,8 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
     boxCenter = camera->viewportTo3DWorld(glWidget->screenToViewport(screenCoords));
 
     updateMagnifyingGlass = true;
-  }
-  else if (e->type() == QEvent::Wheel) {
-    QWheelEvent *wheelEvent = (QWheelEvent *) e;
+  } else if (e->type() == QEvent::Wheel) {
+    QWheelEvent *wheelEvent = (QWheelEvent *)e;
     float x = glWidget->width() - wheelEvent->x();
     float y = wheelEvent->y();
     screenCoords = Coord(x, y, 0);
@@ -102,18 +103,19 @@ bool MouseMagnifyingGlassInteractorComponent::eventFilter(QObject *, QEvent *e) 
       updateMagnifyingGlass = true;
       radius += numSteps;
 
-      if (radius < 1) radius = 1;
+      if (radius < 1)
+        radius = 1;
 
       delete fbo;
       delete fbo2;
       fbo = nullptr;
       fbo2 = nullptr;
-    }
-    else if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ShiftModifier)) {
+    } else if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ShiftModifier)) {
       updateMagnifyingGlass = true;
       magnifyPower += numSteps;
 
-      if (magnifyPower < 1) magnifyPower = 1;
+      if (magnifyPower < 1)
+        magnifyPower = 1;
     }
   }
 
@@ -158,8 +160,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
 
     if (!antialiased) {
       GlTextureManager::getInst().registerExternalTexture(textureName, fbo->texture());
-    }
-    else {
+    } else {
       GlTextureManager::getInst().registerExternalTexture(textureName, fbo2->texture());
     }
   }
@@ -190,7 +191,6 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
   camera->setEyes(camera->getEyes() + move);
   camera->setZoomFactor(magnifyPower * zoomFactor * zoomFactorBak);
 
-
   glPushAttrib(GL_ALL_ATTRIB_BITS);
 
   glMatrixMode(GL_PROJECTION);
@@ -210,7 +210,7 @@ void MouseMagnifyingGlassInteractorComponent::generateMagnifyingGlassTexture(con
   fbo->release();
 
   if (antialiased) {
-    QGLFramebufferObject::blitFramebuffer(fbo2, QRect(0,0,fboSize, fboSize), fbo, QRect(0,0,fboSize, fboSize));
+    QGLFramebufferObject::blitFramebuffer(fbo2, QRect(0, 0, fboSize, fboSize), fbo, QRect(0, 0, fboSize, fboSize));
   }
 
   // restore original camera parameters
@@ -253,16 +253,15 @@ bool MouseMagnifyingGlassInteractorComponent::draw(GlMainWidget *glWidget) {
   int bgV = glWidget->getScene()->getBackgroundColor().getV();
 
   if (bgV < 128) {
-    outlineColor = Color(255,255,255);
-  }
-  else {
-    outlineColor = Color(0,0,0);
+    outlineColor = Color(255, 255, 255);
+  } else {
+    outlineColor = Color(0, 0, 0);
   }
 
-  GlCircle circle(Coord(0,0,0), radius, outlineColor, Color::White, true, true, 0.0, 60);
+  GlCircle circle(Coord(0, 0, 0), radius, outlineColor, Color::White, true, true, 0.0, 60);
   circle.setOutlineSize(3);
   circle.setTextureName(textureName);
-  circle.draw(0,0);
+  circle.draw(0, 0);
 
   glPopMatrix();
   drawInteractor = false;

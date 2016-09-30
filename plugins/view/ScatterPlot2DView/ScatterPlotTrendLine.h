@@ -28,8 +28,7 @@ class ScatterPlot2DView;
 
 class ScatterPlotTrendLine : public GLInteractorComponent {
 
-public :
-
+public:
   ScatterPlotTrendLine();
   ~ScatterPlotTrendLine();
 
@@ -38,13 +37,10 @@ public :
   bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   ScatterPlot2DView *scatterView;
   float a, b;
-
 };
-
 }
 
 #endif /* SCATTERPLOTTRENDLINE_H_ */

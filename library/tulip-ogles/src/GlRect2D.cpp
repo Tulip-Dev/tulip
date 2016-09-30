@@ -46,14 +46,14 @@ GlRect2D::GlRect2D(const Vec2f &bottomLeftCorner, const Vec2f &topRightCorner, c
 }
 
 GlRect2D::GlRect2D(float bottom, float left, float width, float height, const Color &fillColor, float z) {
-  createContour(Vec2f(left, bottom), Vec2f(left+width, bottom+height), z);
+  createContour(Vec2f(left, bottom), Vec2f(left + width, bottom + height), z);
   setFilled(true);
   setFillColor(fillColor);
   setOutlined(false);
 }
 
 GlRect2D::GlRect2D(float bottom, float left, float width, float height, const Color &fillColor, const Color &outlineColor, float z) {
-  createContour(Vec2f(left, bottom), Vec2f(left+width, bottom+height), z);
+  createContour(Vec2f(left, bottom), Vec2f(left + width, bottom + height), z);
   setFilled(true);
   setFillColor(fillColor);
   setOutlined(true);
@@ -61,7 +61,7 @@ GlRect2D::GlRect2D(float bottom, float left, float width, float height, const Co
 }
 
 void GlRect2D::setCoordinatesAndSize(float bottom, float left, float width, float height, float z) {
-  createContour(Vec2f(left, bottom), Vec2f(left+width, bottom+height), z);
+  createContour(Vec2f(left, bottom), Vec2f(left + width, bottom + height), z);
 }
 
 void GlRect2D::createContour(const Vec2f &bottomLeftCorner, const Vec2f &topRightCorner, const float z) {
@@ -72,4 +72,3 @@ void GlRect2D::createContour(const Vec2f &bottomLeftCorner, const Vec2f &topRigh
   contour.push_back(Coord(bottomLeftCorner[0], topRightCorner[1], z));
   setPolygonContour(contour);
 }
-

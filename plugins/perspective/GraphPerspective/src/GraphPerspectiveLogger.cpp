@@ -27,15 +27,15 @@
 #include <QKeyEvent>
 #include <QClipboard>
 
-GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
+GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
+    : QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
   _ui->clearButton->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::broom, Qt::yellow));
   // we want to be able to select multiple rows in the logger list for copy/paste operations
   _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
   _ui->listWidget->installEventFilter(this);
   setWindowFlags(Qt::Popup);
-  connect(_ui->clearButton,SIGNAL(clicked()),this,SLOT(clear()));
+  connect(_ui->clearButton, SIGNAL(clicked()), this, SLOT(clear()));
 }
 
 GraphPerspectiveLogger::~GraphPerspectiveLogger() {
@@ -53,7 +53,7 @@ static QIcon iconForType(QtMsgType type) {
     icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2"), 0.9);
     break;
 
- case QtWarningMsg:
+  case QtWarningMsg:
     icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::alert, QColor("#E18D2B"), 0.9);
     break;
 
@@ -61,8 +61,6 @@ static QIcon iconForType(QtMsgType type) {
   case QtFatalMsg:
     icon = tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::minuscircle, QColor("#C42730"), 0.9);
     break;
-
-
   }
   return icon;
 }
@@ -85,17 +83,17 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
 
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
-    QString msgClean = msg.mid(14).mid(2, msg.length()-17);
-    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray, 0.9), msgClean));
+    QString msgClean = msg.mid(14).mid(2, msg.length() - 17);
+    _ui->listWidget->addItem(
+        new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray, 0.9), msgClean));
     _pythonOutput = true;
-  }
-  else {
+  } else {
     _ui->listWidget->addItem(new QListWidgetItem(iconForType(type), msg));
     _pythonOutput = false;
   }
 }
 #else
-void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
+void GraphPerspectiveLogger::log(QtMsgType type, const char *msg) {
 
   QString qmsg(QString::fromUtf8(msg));
 
@@ -117,11 +115,11 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 
   if (qmsg.startsWith("[Python")) {
     // remove quotes around message added by Qt
-    QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
-    _ui->listWidget->addItem(new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.9), msgClean));
+    QString msgClean = qmsg.mid(14).mid(2, qmsg.length() - 18);
+    _ui->listWidget->addItem(
+        new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.9), msgClean));
     _pythonOutput = true;
-  }
-  else {
+  } else {
     _ui->listWidget->addItem(new QListWidgetItem(iconForType(type), qmsg));
     _pythonOutput = false;
   }
@@ -130,10 +128,9 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 
 QPixmap GraphPerspectiveLogger::icon() {
   if (!_pythonOutput) {
-    return QPixmap(iconForType(_logSeverity).pixmap(QSize(16,16)));
-  }
-  else {
-    return tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray).pixmap(QSize(16,16));
+    return QPixmap(iconForType(_logSeverity).pixmap(QSize(16, 16)));
+  } else {
+    return tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray).pixmap(QSize(16, 16));
   }
 }
 
@@ -149,12 +146,12 @@ void GraphPerspectiveLogger::clear() {
 // its behaviour in order to be able to copy the text of all the selected rows
 // (only the text of the current item is copied otherwise)
 bool GraphPerspectiveLogger::eventFilter(QObject *, QEvent *event) {
-  QKeyEvent *ke = dynamic_cast<QKeyEvent*>(event);
+  QKeyEvent *ke = dynamic_cast<QKeyEvent *>(event);
 
   if (ke && ke->matches(QKeySequence::Copy)) {
     QStringList strings;
-    foreach(QListWidgetItem *item, _ui->listWidget->selectedItems())
-    strings << item->text();
+    foreach (QListWidgetItem *item, _ui->listWidget->selectedItems())
+      strings << item->text();
 
     QApplication::clipboard()->setText(strings.join("\n"));
     return true;

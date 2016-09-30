@@ -26,7 +26,8 @@ using namespace std;
 
 namespace tlp {
 
-ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::ViewGraphPropertiesSelectionWidgetData),graph(nullptr), lastDataLocation(NODE) {
+ViewGraphPropertiesSelectionWidget::ViewGraphPropertiesSelectionWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::ViewGraphPropertiesSelectionWidgetData), graph(nullptr), lastDataLocation(NODE) {
   _ui->setupUi(this);
 }
 
@@ -40,17 +41,17 @@ void ViewGraphPropertiesSelectionWidget::enableEdgesButton(const bool enable) {
 
 void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vector<string> graphPropertiesTypesFilter) {
 
-  bool notSameGraph=true;
+  bool notSameGraph = true;
 
-  if(graph==this->graph)
-    notSameGraph=false;
+  if (graph == this->graph)
+    notSameGraph = false;
 
-  if(notSameGraph && this->graph!=nullptr && graph!=nullptr)
+  if (notSameGraph && this->graph != nullptr && graph != nullptr)
     this->graph->removeListener(this);
 
   this->graph = graph;
 
-  if(graph!=nullptr && notSameGraph)
+  if (graph != nullptr && notSameGraph)
     graph->addListener(this);
 
   this->graphPropertiesTypesFilter = graphPropertiesTypesFilter;
@@ -63,8 +64,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
   if (!lastSelectedProperties.empty() && graph) {
     vector<string> stringList;
 
-
-    for (vector<string>::const_iterator it = lastSelectedProperties.begin() ; it != lastSelectedProperties.end() ; ++it) {
+    for (vector<string>::const_iterator it = lastSelectedProperties.begin(); it != lastSelectedProperties.end(); ++it) {
       string prop(*it);
 
       if (graph->existProperty(prop)) {
@@ -75,14 +75,14 @@ void ViewGraphPropertiesSelectionWidget::setWidgetParameters(Graph *graph, vecto
     _ui->graphPropertiesSelectionWidget->setOutputPropertiesList(stringList);
 
     stringList.clear();
-    for(const string &propertyName : graph->getProperties()) {
-      if (graph->existProperty(propertyName) && std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) == lastSelectedProperties.end()) {
+    for (const string &propertyName : graph->getProperties()) {
+      if (graph->existProperty(propertyName) &&
+          std::find(lastSelectedProperties.begin(), lastSelectedProperties.end(), propertyName) == lastSelectedProperties.end()) {
         stringList.push_back(propertyName);
       }
     }
     _ui->graphPropertiesSelectionWidget->setInputPropertiesList(stringList);
-  }
-  else {
+  } else {
     this->lastSelectedProperties.clear();
   }
 }
@@ -97,7 +97,7 @@ void ViewGraphPropertiesSelectionWidget::setWidgetEnabled(const bool enabled) {
 }
 
 void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> selectedProperties) {
-  if(!graph)
+  if (!graph)
     return;
 
   Iterator<string> *properties = graph->getProperties();
@@ -113,12 +113,12 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
 
   vector<string> selectedPropertiesCopy(selectedProperties);
 
-  for (unsigned int i = 0 ; i < stringList.size() ; ++i) {
+  for (unsigned int i = 0; i < stringList.size(); ++i) {
     if (std::find(selectedProperties.begin(), selectedProperties.end(), stringList[i]) != selectedProperties.end()) {
       finalStringList.push_back(selectedPropertiesCopy.front());
-      selectedPropertiesCopy.erase(remove(selectedPropertiesCopy.begin(), selectedPropertiesCopy.end(), selectedPropertiesCopy.front()), selectedPropertiesCopy.end());
-    }
-    else {
+      selectedPropertiesCopy.erase(remove(selectedPropertiesCopy.begin(), selectedPropertiesCopy.end(), selectedPropertiesCopy.front()),
+                                   selectedPropertiesCopy.end());
+    } else {
       finalStringList.push_back(stringList[i]);
     }
   }
@@ -131,8 +131,7 @@ void ViewGraphPropertiesSelectionWidget::setSelectedProperties(vector<string> se
 ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
   if (_ui->nodesButton->isChecked()) {
     return NODE;
-  }
-  else {
+  } else {
     return EDGE;
   }
 }
@@ -140,9 +139,8 @@ ElementType ViewGraphPropertiesSelectionWidget::getDataLocation() const {
 void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType location) {
   if (location == NODE) {
     _ui->edgesButton->setChecked(false);
-    _ui-> nodesButton->setChecked(true);
-  }
-  else {
+    _ui->nodesButton->setChecked(true);
+  } else {
     _ui->edgesButton->setChecked(true);
     _ui->nodesButton->setChecked(false);
   }
@@ -151,15 +149,15 @@ void ViewGraphPropertiesSelectionWidget::setDataLocation(const ElementType locat
 }
 
 void ViewGraphPropertiesSelectionWidget::treatEvent(const Event &evt) {
-  const GraphEvent* graphEvent = dynamic_cast<const GraphEvent*>(&evt);
+  const GraphEvent *graphEvent = dynamic_cast<const GraphEvent *>(&evt);
 
   if (graphEvent) {
-    switch(graphEvent->getType()) {
+    switch (graphEvent->getType()) {
 
     case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
     case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
     case GraphEvent::TLP_AFTER_RENAME_LOCAL_PROPERTY: {
-      setWidgetParameters(graph,graphPropertiesTypesFilter);
+      setWidgetParameters(graph, graphPropertiesTypesFilter);
       break;
     }
 
@@ -177,31 +175,30 @@ bool ViewGraphPropertiesSelectionWidget::configurationChanged() {
     return true;
   }
 
-  vector<string> selectedProperties=getSelectedGraphProperties();
+  vector<string> selectedProperties = getSelectedGraphProperties();
 
-  if(selectedProperties.size()!=lastSelectedProperties.size()) {
-    lastSelectedProperties=selectedProperties;
+  if (selectedProperties.size() != lastSelectedProperties.size()) {
+    lastSelectedProperties = selectedProperties;
     return true;
   }
 
-  bool sameSelectedProperties=true;
-  vector<string>::iterator itLast=lastSelectedProperties.begin();
+  bool sameSelectedProperties = true;
+  vector<string>::iterator itLast = lastSelectedProperties.begin();
 
-  for(vector<string>::iterator it=selectedProperties.begin(); it!=selectedProperties.end(); ++it) {
-    if((*it)!=(*itLast)) {
-      sameSelectedProperties=false;
+  for (vector<string>::iterator it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
+    if ((*it) != (*itLast)) {
+      sameSelectedProperties = false;
       break;
     }
 
     ++itLast;
   }
 
-  if(!sameSelectedProperties) {
-    lastSelectedProperties=selectedProperties;
+  if (!sameSelectedProperties) {
+    lastSelectedProperties = selectedProperties;
     return true;
   }
 
   return false;
 }
-
 }

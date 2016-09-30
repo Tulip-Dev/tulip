@@ -20,7 +20,6 @@ namespace tlp {
 class TLP_QT_SCOPE ColorScalesManager {
 
 public:
-
   /**
    * @brief Returns a list of the registered color scales names.
    *
@@ -48,9 +47,7 @@ public:
    *
    */
   static void removeColorScale(const std::string &colorScaleName);
-
 };
-
 }
 
 #endif

@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GLSIMPLEENTITYITEMMODEL_H
 #define GLSIMPLEENTITYITEMMODEL_H
 
@@ -32,9 +31,10 @@ class GlSimpleEntity;
 
 class TLP_QT_SCOPE GlSimpleEntityItemEditor {
 public:
-
-  GlSimpleEntityItemEditor(GlSimpleEntity* ent):entity(ent) {}
-  virtual ~GlSimpleEntityItemEditor() {}
+  GlSimpleEntityItemEditor(GlSimpleEntity *ent) : entity(ent) {
+  }
+  virtual ~GlSimpleEntityItemEditor() {
+  }
 
   /**
    * @brief Return properties names for this entity
@@ -69,22 +69,18 @@ public:
    */
   virtual void setProperty(const QString &name, const QVariant &value);
 
-protected :
-
+protected:
   GlSimpleEntity *entity;
 };
-
 
 class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
   Q_OBJECT
   Q_ENUMS(SimpleEntityRole)
 
 public:
-  enum SimpleEntityRole {
-    SimpleEntityRole = Qt::UserRole+1
-  };
+  enum SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
 
-  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent=nullptr);
+  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent = nullptr);
   virtual ~GlSimpleEntityItemModel();
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
@@ -92,7 +88,7 @@ public:
   QModelIndex parent(const QModelIndex &child) const;
 
   QVariant headerData(int section, Qt::Orientation orientation, int role) const;
-  QModelIndex index(int row, int column,const QModelIndex &parent = QModelIndex()) const;
+  QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
   QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
   QString headerText() const {
@@ -105,11 +101,9 @@ public:
     return QAbstractItemModel::flags(index) | Qt::ItemIsEditable;
   }
 
-protected :
-
+protected:
   GlSimpleEntityItemEditor *editor;
 };
-
 }
 
 #endif // GLSIMPLEENTITYITEMMODEL_H

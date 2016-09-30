@@ -30,11 +30,11 @@ namespace tlp {
 class Graph;
 class LayoutProperty;
 
-class TLP_QT_SCOPE MouseEdgeBuilder:public GLInteractorComponent, public Observable {
+class TLP_QT_SCOPE MouseEdgeBuilder : public GLInteractorComponent, public Observable {
 private:
   node _source;
   bool _started;
-  Coord _startPos,_curPos;
+  Coord _startPos, _curPos;
   std::vector<Coord> _bends;
   Graph *_graph;
   LayoutProperty *_layoutProperty;
@@ -50,21 +50,21 @@ protected:
    * @brief source gets the source node.
    * @return
    */
-  node source()const {
+  node source() const {
     return _source;
   }
   /**
    * @brief bends returns the bends list.
    * @return
    */
-  const std::vector<Coord>& bends()const {
+  const std::vector<Coord> &bends() const {
     return _bends;
   }
   /**
    * @brief setBends updates the bends list.
    * @param bends
    */
-  void setBends(const std::vector<Coord>& bends) {
+  void setBends(const std::vector<Coord> &bends) {
     _bends = bends;
   }
 
@@ -75,12 +75,10 @@ public:
   void initObserver(Graph *);
   void clearObserver();
 
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   void clear();
 };
-
-
 }
 #endif
 ///@endcond

@@ -41,7 +41,7 @@ class Graph;
   * @see EdgeMapIterator
   * @see PlanarConMap
   */
-TLP_SCOPE edge nextFaceEdge(Graph* g, edge source, node target);
+TLP_SCOPE edge nextFaceEdge(Graph *g, edge source, node target);
 
 /**
   * @class NodeMapIterator
@@ -62,12 +62,12 @@ struct TLP_SCOPE NodeMapIterator : public Iterator<node> {
   ///
   NodeMapIterator(Graph *sg, node source, node target);
   ~NodeMapIterator();
-  ///Return the next element
+  /// Return the next element
   node next();
-  ///Return true if it exist a next element
+  /// Return true if it exist a next element
   bool hasNext();
 
-private :
+private:
   std::list<node> cloneIt;
   std::list<node>::iterator itStl;
 };
@@ -90,21 +90,19 @@ private :
 struct TLP_SCOPE EdgeMapIterator : public Iterator<edge> {
   ///
   EdgeMapIterator(const Graph *sg, edge source, node target);
-  ///Return the next element
+  /// Return the next element
   edge next();
-  ///Return true if it exist a next element
+  /// Return true if it exist a next element
   bool hasNext();
 
-private :
+private:
   std::vector<edge> adj;
   edge start;
   int treat;
   unsigned int pos;
   bool finished;
 };
-
-
 }
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 ///@endcond

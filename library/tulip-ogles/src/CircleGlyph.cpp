@@ -37,13 +37,13 @@ CircleGlyph::CircleGlyph(PluginContext *context) : Glyph(context) {
   _vertices.push_back(Coord());
   vector<Coord> contour = computeRegularPolygon(nbContourPoints);
   _vertices.insert(_vertices.end(), contour.begin(), contour.end());
-  for (unsigned short i = 0 ; i < nbContourPoints-1 ; ++i) {
-    _indices.insert(_indices.end(), {0, ushort_cast(i+1), ushort_cast(i+2)});
+  for (unsigned short i = 0; i < nbContourPoints - 1; ++i) {
+    _indices.insert(_indices.end(), {0, ushort_cast(i + 1), ushort_cast(i + 2)});
   }
   _indices.insert(_indices.end(), {0, nbContourPoints, 1});
 
   vector<unsigned short> outlineIndices;
-  for (unsigned short i = 1 ; i < nbContourPoints + 1 ; ++i) {
+  for (unsigned short i = 1; i < nbContourPoints + 1; ++i) {
     outlineIndices.push_back(i);
   }
   outlineIndices.push_back(1);
@@ -56,5 +56,3 @@ void CircleGlyph::getIncludeBoundingBox(BoundingBox &boundingBox) {
 }
 
 PLUGIN(CircleGlyph)
-
-

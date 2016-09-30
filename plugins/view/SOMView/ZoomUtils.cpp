@@ -26,9 +26,8 @@
 using namespace std;
 
 namespace tlp {
-void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath,
-                        const double velocity, const double p) {
-  QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox,1000,"Main", optimalPath, velocity, p);
+void zoomOnScreenRegion(GlMainWidget *glWidget, const BoundingBox &boundingBox, const bool optimalPath, const double velocity, const double p) {
+  QtGlSceneZoomAndPanAnimator animator(glWidget, boundingBox, 1000, "Main", optimalPath, velocity, p);
   animator.animateZoomAndPan();
 }
 
@@ -47,8 +46,7 @@ void zoomOnScreenRegionWithoutAnimation(GlMainWidget *glWidget, const BoundingBo
   if (bbHeightScreen < bbWidthScreen) {
     startSize = glWidget->width();
     endSize = bbWidthScreen;
-  }
-  else {
+  } else {
     startSize = glWidget->height();
     endSize = bbHeightScreen;
   }

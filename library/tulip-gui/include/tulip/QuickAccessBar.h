@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef QUICKACCESSBAR_H
 #define QUICKACCESSBAR_H
 
@@ -46,39 +45,38 @@ class PropertyInterface;
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
   Q_OBJECT
 
-  Ui::QuickAccessBar* _ui;
+  Ui::QuickAccessBar *_ui;
   QGraphicsItem *_quickAccessBarItem;
-  GlMainView* _mainView;
-  TulipItemDelegate* delegate;
+  GlMainView *_mainView;
+  TulipItemDelegate *delegate;
   bool _resetting;
-  GlGraphInputData* inputData() const;
-  GlGraphRenderingParameters* renderingParameters() const;
-  GlScene* scene() const;
+  GlGraphInputData *inputData() const;
+  GlGraphRenderingParameters *renderingParameters() const;
+  GlScene *scene() const;
   double _oldFontScale;
   double _oldNodeScale;
   bool _captionsInitialized;
   CaptionItem *_captions[4];
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
-  void setAllValues(unsigned int eltType, PropertyInterface* prop);
-  void setAllColorValues(unsigned int eltType, ColorProperty* prop,
-                         const Color &color);
+  void setAllValues(unsigned int eltType, PropertyInterface *prop);
+  void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);
 
 public:
-  explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
+  explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem, QWidget *parent = 0);
   virtual ~QuickAccessBar();
 
 public slots:
-  void setGlMainView(tlp::GlMainView*);
+  void setGlMainView(tlp::GlMainView *);
   void reset();
 
-  void setBackgroundColor(const QColor&);
+  void setBackgroundColor(const QColor &);
   void setColorInterpolation(bool);
-  void setLabelColor(const QColor&);
-  void setNodeColor(const QColor&);
-  void setNodeBorderColor(const QColor&);
-  void setEdgeColor(const QColor&);
-  void setEdgeBorderColor(const QColor&);
+  void setLabelColor(const QColor &);
+  void setNodeColor(const QColor &);
+  void setNodeBorderColor(const QColor &);
+  void setEdgeColor(const QColor &);
+  void setEdgeBorderColor(const QColor &);
   void setNodeShape();
   void setEdgeShape();
   void setNodeSize();

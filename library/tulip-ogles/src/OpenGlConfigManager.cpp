@@ -33,26 +33,25 @@
 #include <cstdlib>
 
 //====================================================
-tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::_instance=nullptr;
+tlp::OpenGlConfigManager *tlp::OpenGlConfigManager::_instance = nullptr;
 
 using namespace std;
 
 namespace tlp {
 
-OpenGlConfigManager& OpenGlConfigManager::instance() {
-  if(!_instance)
-    _instance=new OpenGlConfigManager();
+OpenGlConfigManager &OpenGlConfigManager::instance() {
+  if (!_instance)
+    _instance = new OpenGlConfigManager();
 
   return *_instance;
 }
 
-OpenGlConfigManager::OpenGlConfigManager():
-  _glewIsInit(false), _antialiased(true) {
+OpenGlConfigManager::OpenGlConfigManager() : _glewIsInit(false), _antialiased(true) {
 }
 
 void OpenGlConfigManager::initExtensions() {
   if (!_glewIsInit) {
-    glewExperimental=true;
+    glewExperimental = true;
     GLenum err = glewInit();
     if (GLEW_OK != err) {
       std::cerr << "Error: " << glewGetErrorString(err) << std::endl;
@@ -66,7 +65,7 @@ double OpenGlConfigManager::getOpenGLVersion() {
 }
 
 string OpenGlConfigManager::getOpenGLVendor() {
-  return string(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
+  return string(reinterpret_cast<const char *>(glGetString(GL_VENDOR)));
 }
 
 bool OpenGlConfigManager::isExtensionSupported(const string &extensionName) {
@@ -102,7 +101,4 @@ int OpenGlConfigManager::maxNumberOfSamples() const {
 
   return maxSamples / 4;
 }
-
 }
-
-

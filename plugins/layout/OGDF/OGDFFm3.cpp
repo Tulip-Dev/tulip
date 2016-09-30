@@ -75,8 +75,7 @@ using namespace std;
 #define ELT_LANDSCAPE 2
 
 #define ELT_QUALITYVSSPEED "Quality vs Speed"
-#define ELT_QUALITYVSSPEEDLIST                                                 \
-  "BeautifulAndFast;NiceAndIncredibleSpeed;GorgeousAndEfficient"
+#define ELT_QUALITYVSSPEEDLIST "BeautifulAndFast;NiceAndIncredibleSpeed;GorgeousAndEfficient"
 #define ELT_BEAUTIFULANDFAST 0
 #define ELT_NICEANDINCREDIBLESPEED 1
 #define ELT_GORGEOUSANDEFFICIENT 2
@@ -104,8 +103,7 @@ using namespace std;
 #define ELT_DECREASINGWDTH 1
 
 #define ELT_GALAXYCHOICE "Galaxy Choice"
-#define ELT_GALAXYCHOICELIST                                                   \
-  "NonUniformProbLowerMass;NonUniformProbHigherMass;UniformProb"
+#define ELT_GALAXYCHOICELIST "NonUniformProbLowerMass;NonUniformProbHigherMass;UniformProb"
 #define ELT_NONUNIFORMPROBLOWERMASS 0
 #define ELT_NONUNIFORMPROBHIGHERMASS 1
 #define ELT_UNIFORMPROB 2
@@ -134,8 +132,7 @@ using namespace std;
 #define ELT_GRIDAPPROXIMATION 2
 
 #define ELT_INITIALPLACEMENTFORCES "Initial Placement Forces"
-#define ELT_INITIALPLACEMENTFORCESLIST                                         \
-  "RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
+#define ELT_INITIALPLACEMENTFORCESLIST "RandomRandIterNr;RandomTime;UniformGrid;KeepPositions"
 #define ELT_RANDOMRANDITERNR 0
 #define ELT_RANDOMTIME 1
 #define ELT_UNIFORMGRID 2
@@ -216,25 +213,21 @@ static const char *paramHelp[] = {
     "Specifies how to calculate the smallest quadratic cell surrounding "
     "particles of a node in the reduced bucket quadtree."};
 
-static const char *pageFormatValuesDescription =
-    "Portrait <i>(A4 portrait page)</i><br>"
-    "Landscape <i>(A4 landscape page)</i><br>"
-    "Square <i>(Square format)</i>";
+static const char *pageFormatValuesDescription = "Portrait <i>(A4 portrait page)</i><br>"
+                                                 "Landscape <i>(A4 landscape page)</i><br>"
+                                                 "Square <i>(Square format)</i>";
 
-static const char *qualityVsSpeedValuesDescription =
-    "GorgeousAndEfficient <i>(Best quality)</i><br>"
-    "BeautifulAndFast <i>(Medium quality and speed)</i><br>"
-    "NiceAndIncredibleSpeed <i>(Best speed</i>";
+static const char *qualityVsSpeedValuesDescription = "GorgeousAndEfficient <i>(Best quality)</i><br>"
+                                                     "BeautifulAndFast <i>(Medium quality and speed)</i><br>"
+                                                     "NiceAndIncredibleSpeed <i>(Best speed</i>";
 
-static const char *edgeLengthMeasurementValuesDescription =
-    "Midpoint <i>(Measure from center point of edge end points)</i><br>"
-    "BoundingCircle <i>(Measure from border of circle surrounding edge end "
-    "points)</i>";
+static const char *edgeLengthMeasurementValuesDescription = "Midpoint <i>(Measure from center point of edge end points)</i><br>"
+                                                            "BoundingCircle <i>(Measure from border of circle surrounding edge end "
+                                                            "points)</i>";
 
-static const char *presortValuesDescription =
-    "None <i>(Do not presort)</i><br>"
-    "DecreasingHeight <i>(Presort by decreasing height of components)</i><br>"
-    "DecreasingWidth <i>(Presort by decreasing width of components)</i>";
+static const char *presortValuesDescription = "None <i>(Do not presort)</i><br>"
+                                              "DecreasingHeight <i>(Presort by decreasing height of components)</i><br>"
+                                              "DecreasingWidth <i>(Presort by decreasing width of components)</i>";
 
 static const char *galaxyChoiceValuesDescription = "UniformProb<br>"
                                                    "NonUniformProbLowerMass<br>"
@@ -244,35 +237,30 @@ static const char *maxIterChangeValuesDescription = "Constant <br>"
                                                     "LinearlyDecreasing <br>"
                                                     "RapidlyDecreasing";
 
-static const char *forceModelValuesDescription =
-    "FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br>"
-    "Eades <i>(The force-model by Eades)</i><br>"
-    "New <i>(The new force-model)</i>";
+static const char *forceModelValuesDescription = "FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br>"
+                                                 "Eades <i>(The force-model by Eades)</i><br>"
+                                                 "New <i>(The new force-model)</i>";
 
-static const char *repulsiveForceValuesDescription =
-    "Exact <i>(Exact calculation)</i><br>"
-    "GridApproximation <i>(Grid approximation)</i><br>"
-    "NMM <i>(Calculation as for new multipole method)</i>";
+static const char *repulsiveForceValuesDescription = "Exact <i>(Exact calculation)</i><br>"
+                                                     "GridApproximation <i>(Grid approximation)</i><br>"
+                                                     "NMM <i>(Calculation as for new multipole method)</i>";
 
-static const char *initialPlacementValuesDescription =
-    "UniformGrid <i>(Uniform placement on a grid)</i><br>"
-    "RandomTime <i>(Random placement, based on current time)</i><br>"
-    "RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br>"
-    "KeepPositions <i>(No change in placement)</i>";
+static const char *initialPlacementValuesDescription = "UniformGrid <i>(Uniform placement on a grid)</i><br>"
+                                                       "RandomTime <i>(Random placement, based on current time)</i><br>"
+                                                       "RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br>"
+                                                       "KeepPositions <i>(No change in placement)</i>";
 
-static const char *smallestCellFindingValuesDescription =
-    "Iteratively <i>(Iteratively, in constant time)</i><br>"
-    "Aluru <i>(According to formula by Aluru et al., in constant time)</i>";
+static const char *smallestCellFindingValuesDescription = "Iteratively <i>(Iteratively, in constant time)</i><br>"
+                                                          "Aluru <i>(According to formula by Aluru et al., in constant time)</i>";
 
 class OGDFFm3 : public OGDFLayoutPluginBase {
 
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
-                    "Implements the FM³ layout algorithm by Hachul and Jünger. "
-                    "It is a multilevel, force-directed layout algorithm that "
-                    "can be applied to very large graphs.",
+  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implements the FM³ layout algorithm by Hachul and Jünger. "
+                                                                   "It is a multilevel, force-directed layout algorithm that "
+                                                                   "can be applied to very large graphs.",
                     "1.2", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
   ~OGDFFm3();
@@ -284,58 +272,34 @@ public:
  creation,informations, release, groupe*/
 PLUGIN(OGDFFm3)
 
-OGDFFm3::OGDFFm3(const tlp::PluginContext *context)
-    : OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
-  addInParameter<NumericProperty *>("Edge Length Property", paramHelp[0],
-                                    "viewMetric", false);
+OGDFFm3::OGDFFm3(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
+  addInParameter<NumericProperty *>("Edge Length Property", paramHelp[0], "viewMetric", false);
   addInParameter<SizeProperty>("Node Size", paramHelp[1], "viewSize", false);
   addInParameter<double>("Unit edge length", paramHelp[2], "10.0", false);
   addInParameter<bool>("New initial placement", paramHelp[3], "true");
   addInParameter<int>("Fixed iterations", paramHelp[4], "30");
   addInParameter<double>("Threshold", paramHelp[5], "0.01");
-  addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6],
-                                   ELT_PAGEFORMATLIST, true,
-                                   pageFormatValuesDescription);
-  addInParameter<StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7],
-                                   ELT_QUALITYVSSPEEDLIST, true,
-                                   qualityVsSpeedValuesDescription);
-  addInParameter<StringCollection>(ELT_EDGELENGTHMEASUREMENT, paramHelp[8],
-                                   ELT_EDGELENGTHMEASUREMENTLIST, true,
+  addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true, pageFormatValuesDescription);
+  addInParameter<StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true, qualityVsSpeedValuesDescription);
+  addInParameter<StringCollection>(ELT_EDGELENGTHMEASUREMENT, paramHelp[8], ELT_EDGELENGTHMEASUREMENTLIST, true,
                                    edgeLengthMeasurementValuesDescription);
-  addInParameter<StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9],
-                                   ELT_ALLOWEDPOSITIONSLIST, true,
-                                   "All<br> Integer <br> Exponent");
-  addInParameter<StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST,
-                                   true, "None<br> NoGrowingRow<br> Always");
-  addInParameter<StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST,
-                                   true, presortValuesDescription);
-  addInParameter<StringCollection>(ELT_GALAXYCHOICE, paramHelp[12],
-                                   ELT_GALAXYCHOICELIST, true,
-                                   galaxyChoiceValuesDescription);
-  addInParameter<StringCollection>(ELT_MAXITERCHANGE, paramHelp[13],
-                                   ELT_MAXITERCHANGELIST, true,
-                                   maxIterChangeValuesDescription);
-  addInParameter<StringCollection>(ELT_INITIALPLACEMENTMULT, paramHelp[14],
-                                   ELT_INITIALPLACEMENTMULTLIST, true,
-                                   "Simple <br> Advanced");
-  addInParameter<StringCollection>(ELT_FORCEMODEL, paramHelp[15],
-                                   ELT_FORCEMODELLIST, true,
-                                   forceModelValuesDescription);
-  addInParameter<StringCollection>(ELT_REPULSIVEFORCEMETHOD, paramHelp[16],
-                                   ELT_REPULSIVEFORCEMETHODLIST, true,
-                                   repulsiveForceValuesDescription);
-  addInParameter<StringCollection>(ELT_INITIALPLACEMENTFORCES, paramHelp[17],
-                                   ELT_INITIALPLACEMENTFORCESLIST, true,
+  addInParameter<StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST, true, "All<br> Integer <br> Exponent");
+  addInParameter<StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true, "None<br> NoGrowingRow<br> Always");
+  addInParameter<StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true, presortValuesDescription);
+  addInParameter<StringCollection>(ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true, galaxyChoiceValuesDescription);
+  addInParameter<StringCollection>(ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true, maxIterChangeValuesDescription);
+  addInParameter<StringCollection>(ELT_INITIALPLACEMENTMULT, paramHelp[14], ELT_INITIALPLACEMENTMULTLIST, true, "Simple <br> Advanced");
+  addInParameter<StringCollection>(ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true, forceModelValuesDescription);
+  addInParameter<StringCollection>(ELT_REPULSIVEFORCEMETHOD, paramHelp[16], ELT_REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
+  addInParameter<StringCollection>(ELT_INITIALPLACEMENTFORCES, paramHelp[17], ELT_INITIALPLACEMENTFORCESLIST, true,
                                    initialPlacementValuesDescription);
-  addInParameter<StringCollection>(ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18],
-                                   ELT_REDUCEDTREECONSTRCUCTIONLIST, true,
+  addInParameter<StringCollection>(ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18], ELT_REDUCEDTREECONSTRCUCTIONLIST, true,
                                    "PathByPath <br> SubtreeBySubtree");
-  addInParameter<StringCollection>(ELT_SMALLESTCELLFINDING, paramHelp[19],
-                                   ELT_SMALLESTCELLFINDINGLIST, true,
-                                   smallestCellFindingValuesDescription);
+  addInParameter<StringCollection>(ELT_SMALLESTCELLFINDING, paramHelp[19], ELT_SMALLESTCELLFINDINGLIST, true, smallestCellFindingValuesDescription);
 }
 
-OGDFFm3::~OGDFFm3() {}
+OGDFFm3::~OGDFFm3() {
+}
 
 void OGDFFm3::beforeCall() {
   ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
@@ -470,8 +434,7 @@ void OGDFFm3::beforeCall() {
       if (stringCollection.getCurrent() == ELT_EXACT) {
         fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcExact);
       } else if (stringCollection.getCurrent() == ELT_GRIDAPPROXIMATION) {
-        fmmm->repulsiveForcesCalculation(
-            ogdf::FMMMLayout::rfcGridApproximation);
+        fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcGridApproximation);
       } else {
         fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcNMM);
       }
@@ -516,8 +479,7 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
   if (dataSet->get("Edge Length Property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
     for (tlp::edge e : graph->getEdges()) {
-      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] =
-          length->getEdgeDoubleValue(e);
+      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] = length->getEdgeDoubleValue(e);
     }
     fmmm->call(gAttributes, edgeLength);
   } else {

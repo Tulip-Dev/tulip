@@ -37,36 +37,35 @@ struct IdManagerState {
   // the unused ids between the first and the next
   std::set<unsigned int> freeIds;
 
-  IdManagerState(): firstId(0), nextId(0) {}
+  IdManagerState() : firstId(0), nextId(0) {
+  }
 };
 
 // define a class to iterate through the non free ids
 // of an IdManagerState
-template <typename TYPE>
-class IdManagerIterator:public Iterator<TYPE> {
+template <typename TYPE> class IdManagerIterator : public Iterator<TYPE> {
 
 private:
   unsigned int current;
   unsigned int last;
-  const std::set<unsigned int>& freeIds;
+  const std::set<unsigned int> &freeIds;
   std::set<unsigned int>::const_iterator it;
 
 public:
-
-  IdManagerIterator(const IdManagerState& infos):
-    current(infos.firstId), last(infos.nextId), freeIds(infos.freeIds), it(freeIds.begin()) {
+  IdManagerIterator(const IdManagerState &infos) : current(infos.firstId), last(infos.nextId), freeIds(infos.freeIds), it(freeIds.begin()) {
 #ifdef TLP_NO_IDS_REUSE
     std::set<unsigned int>::const_reverse_iterator itr;
     itr = freeIds.rbegin();
 
-    while(itr != freeIds.rend() && (*itr) == last - 1) {
+    while (itr != freeIds.rend() && (*itr) == last - 1) {
       --last;
       ++itr;
     }
 
 #endif
   }
-  ~IdManagerIterator() {}
+  ~IdManagerIterator() {
+  }
 
   bool hasNext() {
     return (current < last);
@@ -76,14 +75,15 @@ public:
     unsigned int tmp = current;
     ++current;
 
-    while(it != freeIds.end()) {
-      if (current < *it) return (TYPE) tmp;
+    while (it != freeIds.end()) {
+      if (current < *it)
+        return (TYPE)tmp;
 
       ++current;
       ++it;
     }
 
-    return (TYPE) tmp;
+    return (TYPE)tmp;
   }
 };
 
@@ -94,7 +94,8 @@ class TLP_SCOPE IdManager {
   IdManagerState state;
 
 public:
-  IdManager() {}
+  IdManager() {
+  }
   /**
    * Returns true if the id is not used else false.
    */
@@ -110,9 +111,7 @@ public:
 #ifdef TLP_NO_IDS_REUSE
     return state.nextId++;
 #else
-    return state.firstId ?
-      --state.firstId :
-      (state.freeIds.empty() ? state.nextId++ : getFreeId());
+    return state.firstId ? --state.firstId : (state.freeIds.empty() ? state.nextId++ : getFreeId());
 #endif
   }
   /**
@@ -139,13 +138,13 @@ public:
   /**
    * return the current state of the Id manager
    */
-  const IdManagerState& getState() {
+  const IdManagerState &getState() {
     return state;
   }
   /**
    * restore a saved state, used by push/pop
    */
-  void restoreState(const IdManagerState& infos) {
+  void restoreState(const IdManagerState &infos) {
     state = infos;
   }
   /**
@@ -153,19 +152,17 @@ public:
    * the idManager is modified (free, get) this iterator
    * will be invalid.
    */
-  template<typename TYPE>
-  Iterator<TYPE>* getIds() const {
+  template <typename TYPE> Iterator<TYPE> *getIds() const {
     return new IdManagerIterator<TYPE>(state);
   }
 
-  friend std::ostream& operator<<(std::ostream &, const IdManager &);
+  friend std::ostream &operator<<(std::ostream &, const IdManager &);
   friend class IdManagerTest;
 };
 
-std::ostream& operator<<(std::ostream &,const IdManager &);
-
+std::ostream &operator<<(std::ostream &, const IdManager &);
 }
 
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
+#endif // DOXYGEN_NOTFOR_DEVEL
 ///@endcond

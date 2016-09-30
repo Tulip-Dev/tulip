@@ -36,16 +36,16 @@ public:
   void testAttributes();
   void testNanInfValuesImportExport();
 
-protected :
-  tlp::Graph* createSimpleGraph() const;
-  void importExportGraph(tlp::Graph* original);
+protected:
+  tlp::Graph *createSimpleGraph() const;
+  void importExportGraph(tlp::Graph *original);
   void exportGraph(tlp::Graph *graph, const std::string &exportPluginName, const std::string &filename);
   tlp::Graph *importGraph(const std::string &importPluginName, const std::string &filename);
 
-  void testGraphsTopologiesAreEqual(tlp::Graph* first, tlp::Graph* second);
-  void testGraphPropertiesAreEqual(tlp::Graph* first, tlp::Graph* second);
-  void testGraphsAreEqual(tlp::Graph* first, tlp::Graph* second);
-  void testGraphAttributesAreEqual(tlp::Graph* first, tlp::Graph* second);
+  void testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Graph *second);
+  void testGraphPropertiesAreEqual(tlp::Graph *first, tlp::Graph *second);
+  void testGraphsAreEqual(tlp::Graph *first, tlp::Graph *second);
+  void testGraphAttributesAreEqual(tlp::Graph *first, tlp::Graph *second);
   const std::string importAlgorithm;
   const std::string exportAlgorithm;
 };
@@ -57,6 +57,7 @@ class TlpImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST(testNanInfValuesImportExport);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   TlpImportExportTest();
 };
@@ -68,6 +69,7 @@ class TlpBImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST(testNanInfValuesImportExport);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   TlpBImportExportTest();
 };
@@ -79,6 +81,7 @@ class JsonImportExportTest : public ImportExportTest {
   CPPUNIT_TEST(testSubGraphsImportExport);
   CPPUNIT_TEST(testNanInfValuesImportExport);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   JsonImportExportTest();
 };
@@ -87,6 +90,7 @@ class TulipSaveLoadGraphFunctionsTest : public ImportExportTest {
   CPPUNIT_TEST_SUITE(TulipSaveLoadGraphFunctionsTest);
   CPPUNIT_TEST(testTulipSaveLoadGraphFunctions);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   TulipSaveLoadGraphFunctionsTest();
 

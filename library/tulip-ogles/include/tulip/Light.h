@@ -38,7 +38,6 @@ class Camera;
 class TLP_GLES_SCOPE Light {
 
 public:
-
   Light();
   Light(Camera *camera);
 
@@ -72,9 +71,7 @@ public:
   void setQuadraticAttenuation(const float quadraticAttenuation);
   float getQuadraticAttenuation() const;
 
-
 private:
-
   Camera *_camera;
   bool _directionnalLight;
   tlp::Color _modelAmbientColor;
@@ -84,9 +81,7 @@ private:
   float _constantAttenuation;
   float _linearAttenuation;
   float _quadraticAttenuation;
-
 };
-
 }
 
 #endif // LIGHT_H

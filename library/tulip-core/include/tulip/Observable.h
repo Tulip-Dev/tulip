@@ -44,20 +44,23 @@ class Observable;
   * @see Observer
   * @see Observable
   **/
-class  TLP_SCOPE Event {
+class TLP_SCOPE Event {
   friend class Observable;
   friend class Graph;
   friend class PropertyInterface;
+
 public:
-  enum EventType {TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID};
+  enum EventType { TLP_DELETE = 0, TLP_MODIFICATION, TLP_INFORMATION, TLP_INVALID };
   virtual ~Event();
-  Observable* sender() const;
+  Observable *sender() const;
   Event(const Observable &sender, EventType type);
   EventType type() const {
     return _type;
   }
+
 private:
-  Event() {}
+  Event() {
+  }
   tlp::node _sender;
   EventType _type;
 };
@@ -71,9 +74,9 @@ private:
   * @see Observer
   * @see Observable
   **/
-class  TLP_SCOPE ObservableException : public tlp::TulipException {
+class TLP_SCOPE ObservableException : public tlp::TulipException {
 public:
-  ObservableException(const std::string &desc):tlp::TulipException(desc) {
+  ObservableException(const std::string &desc) : tlp::TulipException(desc) {
   }
 };
 
@@ -89,11 +92,13 @@ public:
  * it will receive.
  *
  * The Listener is closer to the original pattern, where events are sent directly to the recipient.
- * The Observer is a twist for performance purposes, it can receive the events in a delayed fashion, and cannot know if the event was just sent or was delayed.
+ * The Observer is a twist for performance purposes, it can receive the events in a delayed fashion, and cannot know if the event was just sent or was
+ *delayed.
  *
  * The purpose of this twist is to allow algorithms that perform a high number of modifications (e.g. creating a grid to route edges,
  *  creating multiple subgraphs with metrics or layouts) to run smoothly without overcrowding the event queue.
- * As events are sent for every graph modification (e.g. adding a node, deleting a node, setting a value on a node), the sheer quantity of events sent by these
+ * As events are sent for every graph modification (e.g. adding a node, deleting a node, setting a value on a node), the sheer quantity of events sent
+ *by these
  * algorithms would cause a big performance hit.
  *
  * This can be avoided by using Observable::holdObservers().
@@ -120,7 +125,7 @@ public:
  * You will attach to the object you wish to receive events from using addObserver().
  *
  **/
-class  TLP_SCOPE Observable {
+class TLP_SCOPE Observable {
   friend class Event;
 
 public:
@@ -167,7 +172,7 @@ public:
    * The observer will receive events sent by this object, if there is no hold applied.
    * @param observer The object that will receive events.
    */
-  void addObserver(Observable * const observer) const;
+  void addObserver(Observable *const observer) const;
 
   /**
    * @brief Adds a Listener to this object.
@@ -175,7 +180,7 @@ public:
    * The Listener will receive events regardless of the state of holdObservers() and unholdObservers().
    * @param listener The object that will receive events.
    */
-  void addListener(Observable * const listener) const;
+  void addListener(Observable *const listener) const;
 
   /**
    * @brief Removes an observer from this object.
@@ -183,7 +188,7 @@ public:
    * The observer will no longer receive events from this object.
    * @param observer The observer to remove from this object.
    */
-  void  removeObserver(Observable  * const observerver) const;
+  void removeObserver(Observable *const observerver) const;
 
   /**
    * @brief Removes a listener from this object.
@@ -191,18 +196,18 @@ public:
    * The listener will no longer receive events from this object.
    * @param listener The listener to remove from this object.
    */
-  void  removeListener(Observable  * const listener) const;
+  void removeListener(Observable *const listener) const;
 
   /**
    * @brief gets the number of sent events.
    * @return the number of sent events (0 when compiling with -DNDEBUG).
    */
   unsigned int getSent() const;
-  \
-  /**
-   * @brief get the number of received events.
-   * @return the number of received events (0 when compiling with -DNDEBUG).
-   */
+
+      /**
+       * @brief get the number of received events.
+       * @return the number of received events (0 when compiling with -DNDEBUG).
+       */
   unsigned int getReceived() const;
 
   /**
@@ -234,7 +239,7 @@ public:
    * @param n The node representing the object to retrieve.
    * @return The object represented by the node.
   **/
-  static Observable* getObject(tlp::node n);
+  static Observable *getObject(tlp::node n);
 
   /**
    * @brief internal function for debugging purpose
@@ -250,19 +255,19 @@ public:
    * @param obs the Observable object
    * @return the node of the Observable object in the Observable Graph.
    */
-  static tlp::node getNode(const tlp::Observable* obs);
+  static tlp::node getNode(const tlp::Observable *obs);
 
   /**
    * @brief Gets the observation graph.
    * @return The graph containing a node for each Observable/Observer/Listener, and an edge between connected objects.
    */
-  static const tlp::VectorGraph& getObservableGraph();
+  static const tlp::VectorGraph &getObservableGraph();
 
 protected:
   Observable();
   Observable(const Observable &);
   virtual ~Observable();
-  Observable& operator=(const Observable &);
+  Observable &operator=(const Observable &);
 
   /**
    * @brief Sends an event to all the Observers/Listeners.
@@ -332,7 +337,7 @@ protected:
   /**
   * @brief use for old observer tulip compatibility
   */
-  _DEPRECATED  tlp::Iterator<tlp::Observable *> * getObservables() const;
+  _DEPRECATED tlp::Iterator<tlp::Observable *> *getObservables() const;
 
   /**
   * @brief use for old observer tulip compatibility
@@ -340,7 +345,7 @@ protected:
   _DEPRECATED void notifyObservers();
 
 private:
-  enum OBSERVABLEEDGETYPE {OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04};
+  enum OBSERVABLEEDGETYPE { OBSERVABLE = 0x01, OBSERVER = 0x02, LISTENER = 0x04 };
 
   /**
    * @brief deleteMsgSent This allows for calling observableDeleted() multiple times safely.
@@ -422,7 +427,7 @@ private:
    */
   tlp::node getNode() const;
 
-  //static members and methods
+  // static members and methods
   /**
    * @brief _oGraph the graph used to store all observers and connection between them.
    */
@@ -455,7 +460,7 @@ private:
    */
   static std::vector<tlp::node> _oDelayedDelNode;
 
-  static std::set<std::pair<tlp::node, tlp::node> > _oDelayedEvents;
+  static std::set<std::pair<tlp::node, tlp::node>> _oDelayedEvents;
 
   /**
    * @brief _oNotifying counter of nested notify calls
@@ -501,7 +506,8 @@ private:
 /**
  * @brief The ObserverHolder class is a convenience class to automatically hold and unhold observers.
  * It performs a call to Observable::holdObserver() at its creation and a call to Observable::unholdObserver() at its destruction.
- * You can use it if you have to hold observers in a function with multiple return points to avoid to call Observable::unholdObserver() for each of them.
+ * You can use it if you have to hold observers in a function with multiple return points to avoid to call Observable::unholdObserver() for each of
+ * them.
  * @code
  * void myFunc(){
  *  ObserverHolder holder;//Automatically call Observable::holdObserver()
@@ -516,7 +522,7 @@ private:
  *
  */
 class TLP_SCOPE ObserverHolder {
-public :
+public:
   ObserverHolder() {
     Observable::holdObservers();
   }
@@ -527,7 +533,6 @@ public :
 
 // deprecated name of this class
 _DEPRECATED_TYPEDEF(ObserverHolder, ObserverLocker);
-
 }
 
 #endif

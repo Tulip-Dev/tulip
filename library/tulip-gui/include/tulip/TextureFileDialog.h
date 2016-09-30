@@ -53,7 +53,9 @@ public:
 
   void setData(const TextureFile &tf);
 
-  const TextureFile &data() { return _data; }
+  const TextureFile &data() {
+    return _data;
+  }
 public slots:
   void browse();
 };

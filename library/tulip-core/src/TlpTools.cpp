@@ -61,7 +61,7 @@ using namespace tlp;
 #endif
 
 #ifndef __EMSCRIPTEN__
-static const char *TULIP_PLUGINS_PATH_VARIABLE="TLP_PLUGINS_PATH";
+static const char *TULIP_PLUGINS_PATH_VARIABLE = "TLP_PLUGINS_PATH";
 #endif
 
 string tlp::TulipLibDir;
@@ -78,55 +78,54 @@ const char tlp::PATH_DELIMITER = ':';
 // A function that retrieves the Tulip libraries directory based on
 // the path of the loaded shared library libtulip-core-X.Y.[dll, so, dylib]
 extern "C" {
-  char* getTulipLibDir(char* buf) {
-    std::string tulipLibDir;
-    std::string libTulipName;
+char *getTulipLibDir(char *buf) {
+  std::string tulipLibDir;
+  std::string libTulipName;
 
 #ifdef _WIN32
 #ifdef __MINGW32__
-    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dll";
+  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dll";
 #else
-    libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" + getMinor(TULIP_VERSION) + ".dll";
+  libTulipName = "tulip-core-" + getMajor(TULIP_VERSION) + "_" + getMinor(TULIP_VERSION) + ".dll";
 #endif
-    HMODULE hmod = GetModuleHandle(libTulipName.c_str());
+  HMODULE hmod = GetModuleHandle(libTulipName.c_str());
 
-    if (hmod != nullptr) {
-      TCHAR szPath[512 + 1];
-      DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
+  if (hmod != nullptr) {
+    TCHAR szPath[512 + 1];
+    DWORD dwLen = GetModuleFileName(hmod, szPath, 512);
 
-      if (dwLen > 0) {
-        std::string tmp = szPath;
-        std::replace(tmp.begin(), tmp.end(), '\\', '/');
-        tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
-      }
+    if (dwLen > 0) {
+      std::string tmp = szPath;
+      std::replace(tmp.begin(), tmp.end(), '\\', '/');
+      tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1) + "../lib";
     }
+  }
 
 #else
 #ifdef __APPLE__
-    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dylib";
+  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".dylib";
 #else
-    libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
+  libTulipName = "libtulip-core-" + getMajor(TULIP_VERSION) + "." + getMinor(TULIP_VERSION) + ".so";
 #endif
-    void *ptr;
-    Dl_info info;
+  void *ptr;
+  Dl_info info;
 
-    ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
+  ptr = dlopen(libTulipName.c_str(), RTLD_LAZY);
 
-    if (ptr != nullptr) {
-      void* symbol = dlsym(ptr, "getTulipLibDir");
+  if (ptr != nullptr) {
+    void *symbol = dlsym(ptr, "getTulipLibDir");
 
-      if (symbol != nullptr) {
-        if (dladdr(symbol, &info)) {
-          std::string tmp = info.dli_fname;
-          tulipLibDir = tmp.substr(0, tmp.rfind('/')+1) + "../lib";
-        }
+    if (symbol != nullptr) {
+      if (dladdr(symbol, &info)) {
+        std::string tmp = info.dli_fname;
+        tulipLibDir = tmp.substr(0, tmp.rfind('/') + 1) + "../lib";
       }
     }
-
-#endif
-    return strcpy(buf, tulipLibDir.c_str());
   }
 
+#endif
+  return strcpy(buf, tulipLibDir.c_str());
+}
 }
 
 // throw an exception if an expected directory does not exist
@@ -138,7 +137,7 @@ static void checkDirectory(std::string dir) {
 
   tlp_stat_t infoEntry;
 
-  if (statPath(dir,&infoEntry) != 0) {
+  if (statPath(dir, &infoEntry) != 0) {
     std::stringstream ess;
     ess << "Error - " << dir << ": " << std::endl << strerror(errno);
     ess << std::endl << "Check your TLP_DIR environment variable";
@@ -148,24 +147,22 @@ static void checkDirectory(std::string dir) {
 }
 
 //=========================================================
-void tlp::initTulipLib(const char* appDirPath) {
+void tlp::initTulipLib(const char *appDirPath) {
   if (!TulipShareDir.empty()) // already initialized
     return;
 
   char *getEnvTlp;
   string::size_type pos;
 
-  getEnvTlp=getenv("TLP_DIR");
+  getEnvTlp = getenv("TLP_DIR");
 
-  if (getEnvTlp==0) {
+  if (getEnvTlp == 0) {
     if (appDirPath) {
 #ifdef _WIN32
       TulipLibDir = std::string(appDirPath) + "/../lib";
 #else
       // one dir up to initialize the lib dir
-      TulipLibDir.append(appDirPath,
-                         strlen(appDirPath) -
-                         strlen(strrchr(appDirPath, '/') + 1));
+      TulipLibDir.append(appDirPath, strlen(appDirPath) - strlen(strrchr(appDirPath, '/') + 1));
 #ifdef X86_64
       // check for lib64
       string tlpPath64 = TulipLibDir + "lib64/tulip";
@@ -178,8 +175,7 @@ void tlp::initTulipLib(const char* appDirPath) {
         TulipLibDir.append("lib");
 
 #endif
-    }
-    else {
+    } else {
       char buf[1024];
       // if no appDirPath is provided, retrieve dynamically the Tulip lib dir
       TulipLibDir = getTulipLibDir(buf);
@@ -188,15 +184,14 @@ void tlp::initTulipLib(const char* appDirPath) {
       if (TulipLibDir.empty())
         TulipLibDir = string(_TULIP_LIB_DIR);
     }
-  }
-  else
-    TulipLibDir=string(getEnvTlp);
+  } else
+    TulipLibDir = string(getEnvTlp);
 
 #ifdef _WIN32
   // ensure it is a unix-style path
   pos = TulipLibDir.find('\\', 0);
 
-  while(pos != string::npos) {
+  while (pos != string::npos) {
     TulipLibDir[pos] = '/';
     pos = TulipLibDir.find('\\', pos);
   }
@@ -205,44 +200,42 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   // ensure it is '/' terminated
   if (TulipLibDir[TulipLibDir.length() - 1] != '/')
-    TulipLibDir+='/';
+    TulipLibDir += '/';
 
   // check TulipLibDir exists
-  bool tlpDirSet = (getEnvTlp!=nullptr);
+  bool tlpDirSet = (getEnvTlp != nullptr);
 
   if (tlpDirSet)
     checkDirectory(TulipLibDir);
 
-  getEnvTlp=getenv(TULIP_PLUGINS_PATH_VARIABLE);
+  getEnvTlp = getenv(TULIP_PLUGINS_PATH_VARIABLE);
 
-  if (getEnvTlp!=nullptr) {
-    TulipPluginsPath=string(getEnvTlp);
+  if (getEnvTlp != nullptr) {
+    TulipPluginsPath = string(getEnvTlp);
 #ifdef _WIN32
     // ensure it is a unix-style path
     pos = TulipPluginsPath.find('\\', 0);
 
-    while(pos != string::npos) {
+    while (pos != string::npos) {
       TulipPluginsPath[pos] = '/';
       pos = TulipPluginsPath.find('\\', pos);
     }
 
 #endif
-    TulipPluginsPath= TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
-  }
-  else
-    TulipPluginsPath= TulipLibDir + "tulip";
-
+    TulipPluginsPath = TulipLibDir + "tulip" + PATH_DELIMITER + TulipPluginsPath;
+  } else
+    TulipPluginsPath = TulipLibDir + "tulip";
 
   // one dir up to initialize the share dir
   pos = TulipLibDir.length() - 2;
   pos = TulipLibDir.rfind("/", pos);
-  TulipShareDir=TulipLibDir.substr(0, pos + 1)+"share/tulip/";
+  TulipShareDir = TulipLibDir.substr(0, pos + 1) + "share/tulip/";
 
   // check it exists
   if (tlpDirSet)
     checkDirectory(TulipShareDir);
 
-  TulipBitmapDir=TulipShareDir+"bitmaps/";
+  TulipBitmapDir = TulipShareDir + "bitmaps/";
 
   // check it exists
   if (tlpDirSet)
@@ -256,13 +249,11 @@ void tlp::initTulipLib(const char* appDirPath) {
 // tlp class names demangler
 #if defined(__GNUC__)
 #include <cxxabi.h>
-std::string tlp::demangleClassName(const char* className,
-                                   bool hideTlp) {
+std::string tlp::demangleClassName(const char *className, bool hideTlp) {
   static char demangleBuffer[1024];
   int status;
   size_t length = 1024;
-  abi::__cxa_demangle((char *) className, (char *) demangleBuffer,
-                      &length, &status);
+  abi::__cxa_demangle((char *)className, (char *)demangleBuffer, &length, &status);
 
   // skip tlp::
   if (hideTlp && strstr(demangleBuffer, "tlp::") == demangleBuffer)
@@ -274,9 +265,8 @@ std::string tlp::demangleClassName(const char* className,
 // With Visual Studio, typeid(tlp::T).name() does not return a mangled type name
 // but a human readable type name in the form "class tlp::T"
 // so just remove the first 11 characters to return T
-std::string tlp::demangleClassName(const char* className,
-                                   bool hideTlp) {
-  char* clName = const_cast<char*>(className);
+std::string tlp::demangleClassName(const char *className, bool hideTlp) {
+  char *clName = const_cast<char *>(className);
 
   if (strstr(className, "class ") == className)
     clName += 6;
@@ -292,12 +282,12 @@ std::string tlp::demangleClassName(const char* className,
 
 #else // __EMSCRIPTEN__
 
-void tlp::initTulipLib(const char*) {
+void tlp::initTulipLib(const char *) {
   TulipBitmapDir = "/resources/";
   initTypeSerializers();
 }
 
-std::string tlp::demangleClassName(const char* className, bool) {
+std::string tlp::demangleClassName(const char *className, bool) {
   return std::string(className);
 }
 
@@ -342,11 +332,10 @@ void tlp::initRandomSequence() {
     // init a sequence of rand() calls
     srand(seed);
 #ifndef WIN32
-    // init a sequence of random() calls 
+    // init a sequence of random() calls
     srandom(seed);
 #endif
-  }
-  else {
+  } else {
     srand(randomSeed);
 #ifndef WIN32
     srandom(randomSeed);
@@ -421,9 +410,10 @@ public:
       fclose(fp);
     }
   }
+
 private:
   FILE *fp;
-  __gnu_cxx::stdio_filebuf<char>* buffer;
+  __gnu_cxx::stdio_filebuf<char> *buffer;
 };
 
 // class to open a file for writing whose path contains non ascii characters (MinGW only)
@@ -445,9 +435,10 @@ public:
       fclose(fp);
     }
   }
+
 private:
   FILE *fp;
-  __gnu_cxx::stdio_filebuf<char>* buffer;
+  __gnu_cxx::stdio_filebuf<char> *buffer;
 };
 #endif
 
@@ -463,7 +454,7 @@ std::istream *tlp::getInputFileStream(const std::string &filename, std::ios_base
   utf8::utf8to16(filename.begin(), filename.end(), std::back_inserter(utf16filename));
 #ifdef __GLIBCXX__
   // With MinGW, it's a little bit tricky to get an input stream
-  return new wifilestream(utf16filename,mode);
+  return new wifilestream(utf16filename, mode);
 #elif defined(_MSC_VER)
   // Visual Studio has wide char version of std::ifstream
   return new std::ifstream(utf16filename.c_str(), mode);
@@ -499,7 +490,7 @@ std::ostream *tlp::getOutputFileStream(const std::string &filename, std::ios_bas
 
 //=========================================================
 
-std::string tlp::stringReplace(std::string subject, const std::string& search, const std::string& replace) {
+std::string tlp::stringReplace(std::string subject, const std::string &search, const std::string &replace) {
   size_t pos = 0;
   while ((pos = subject.find(search, pos)) != std::string::npos) {
     subject.replace(pos, search.length(), replace);
@@ -510,11 +501,10 @@ std::string tlp::stringReplace(std::string subject, const std::string& search, c
 
 //=========================================================
 
-void tlp::stringReplaceInPlace(std::string& subject, const std::string& search, const std::string& replace) {
+void tlp::stringReplaceInPlace(std::string &subject, const std::string &search, const std::string &replace) {
   size_t pos = 0;
   while ((pos = subject.find(search, pos)) != std::string::npos) {
     subject.replace(pos, search.length(), replace);
     pos += replace.length();
   }
 }
-

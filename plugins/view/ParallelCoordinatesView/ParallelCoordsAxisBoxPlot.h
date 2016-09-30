@@ -36,23 +36,23 @@ namespace tlp {
 
 class GlAxisBoxPlot : public GlSimpleEntity {
 
-public :
+public:
+  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color &fillColor, const Color &outlineColor);
+  ~GlAxisBoxPlot() {
+  }
 
-  GlAxisBoxPlot(QuantitativeParallelAxis *axis, const Color& fillColor, const Color& outlineColor);
-  ~GlAxisBoxPlot() {}
+  void draw(float lod, Camera *camera);
 
-  void draw(float lod,Camera* camera);
+  void getXML(std::string &) {
+  }
 
-  void getXML(std::string &) {}
-
-  void setWithXML(const std::string &, unsigned int &) {}
+  void setWithXML(const std::string &, unsigned int &) {
+  }
 
   void setHighlightRangeIfAny(Coord sceneCoords);
 
-
-private :
-
-  void drawLabel(const Coord& position, const std::string& labelName, Camera *camera);
+private:
+  void drawLabel(const Coord &position, const std::string &labelName, Camera *camera);
 
   QuantitativeParallelAxis *axis;
   Coord bottomOutlierCoord;
@@ -64,13 +64,11 @@ private :
   Color fillColor, outlineColor;
   Coord *highlightRangeLowBound;
   Coord *highlightRangeHighBound;
-
 };
 
 class ParallelCoordsAxisBoxPlot : public GLInteractorComponent {
 
-public :
-
+public:
   ParallelCoordsAxisBoxPlot();
   ~ParallelCoordsAxisBoxPlot();
   bool eventFilter(QObject *, QEvent *);
@@ -78,8 +76,7 @@ public :
   bool compute(GlMainWidget *glMainWidget);
   void viewChanged(View *view);
 
-private :
-
+private:
   void buildGlAxisPlot(std::vector<ParallelAxis *> currentAxis);
   void deleteGlAxisPlot();
 
@@ -90,9 +87,7 @@ private :
   std::map<QuantitativeParallelAxis *, GlAxisBoxPlot *> axisBoxPlotMap;
   ParallelAxis *selectedAxis;
   unsigned int lastNbAxis;
-
 };
-
 }
 
 #endif /* PARALLELCOORDSBOXPLOT_H_ */

@@ -33,11 +33,9 @@ using namespace tlp;
 class TLP_GLES_SCOPE TriangleGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Triangle", "2D - Arrow", "Antoine Lambert", "19/05/2016", "Triangle", "1.0", NodeShape::Triangle)
 
   TriangleGlyph(PluginContext *context = nullptr);
 
   void getIncludeBoundingBox(BoundingBox &boundingBox);
-
 };

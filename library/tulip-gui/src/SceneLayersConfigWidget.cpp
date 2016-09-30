@@ -24,10 +24,9 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/SceneLayersModel.h>
 
-
 using namespace tlp;
 
-SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent): QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
+SceneLayersConfigWidget::SceneLayersConfigWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::SceneLayersConfigWidget), _glMainWidget(nullptr) {
   _ui->setupUi(this);
 }
 
@@ -37,9 +36,9 @@ SceneLayersConfigWidget::~SceneLayersConfigWidget() {
 
 void SceneLayersConfigWidget::setGlMainWidget(GlMainWidget *glMainWidget) {
   _glMainWidget = glMainWidget;
-  SceneLayersModel* model = new SceneLayersModel(_glMainWidget->getScene(),_ui->treeView);
+  SceneLayersModel *model = new SceneLayersModel(_glMainWidget->getScene(), _ui->treeView);
   _ui->treeView->setModel(model);
-  connect(model,SIGNAL(drawNeeded(tlp::GlScene*)),this,SIGNAL(drawNeeded()));
+  connect(model, SIGNAL(drawNeeded(tlp::GlScene *)), this, SIGNAL(drawNeeded()));
   connect(_ui->treeView, SIGNAL(collapsed(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
   connect(_ui->treeView, SIGNAL(expanded(const QModelIndex &)), this, SLOT(resizeFirstColumn()));
   _ui->treeView->setColumnWidth(0, 110);
@@ -49,4 +48,3 @@ void SceneLayersConfigWidget::resizeFirstColumn() {
   _ui->treeView->resizeColumnToContents(0);
   _ui->treeView->resizeColumnToContents(1);
 }
-

@@ -33,8 +33,7 @@ using namespace tlp;
 
 std::map<GlBuffer::BufferType, GLuint> GlBuffer::_currentBoundBufferId;
 
-GlBuffer::GlBuffer(BufferType type, UsagePattern usagePattern) :
-  _type(type), _usagePattern(usagePattern), _bufferId(0), _allocated(false) {
+GlBuffer::GlBuffer(BufferType type, UsagePattern usagePattern) : _type(type), _usagePattern(usagePattern), _bufferId(0), _allocated(false) {
   glGenBuffers(1, &_bufferId);
   if (type == VertexBuffer) {
     _target = GL_ARRAY_BUFFER;
@@ -68,10 +67,12 @@ void GlBuffer::setUsagePattern(UsagePattern usagePattern) {
 void GlBuffer::allocate(unsigned int bytesCount, const void *data) {
   if (bytesCount > 0) {
     bool bound = isBound();
-    if (!bound) bind();
+    if (!bound)
+      bind();
     glBufferData(_target, bytesCount, data, _usage);
     _allocated = true;
-    if (!bound) release();
+    if (!bound)
+      release();
   }
 }
 
@@ -93,10 +94,12 @@ void GlBuffer::allocate(const std::vector<unsigned short> &data) {
 
 unsigned int GlBuffer::bytesCount() const {
   bool bound = isBound();
-  if (!bound) bind();
+  if (!bound)
+    bind();
   GLint bytesCount = 0;
   glGetBufferParameteriv(_target, GL_BUFFER_SIZE, &bytesCount);
-  if (!bound) release();
+  if (!bound)
+    release();
   return static_cast<unsigned int>(bytesCount);
 }
 
@@ -105,15 +108,17 @@ void GlBuffer::write(unsigned int offset, unsigned int bytesCount, const void *d
     std::cerr << "GlBuffer error : can't write to buffer " << _bufferId << " as it has not been allocated" << std::endl;
     return;
   } else if ((offset + bytesCount) > this->bytesCount()) {
-    std::cerr << "GlBuffer error : can't write " << bytesCount << " bytes in buffer " << _bufferId << " at offset "
-              << offset << " as the data will not entirely fit in (the buffer can contain up to " << this->bytesCount() << " bytes)" << std::endl;
+    std::cerr << "GlBuffer error : can't write " << bytesCount << " bytes in buffer " << _bufferId << " at offset " << offset
+              << " as the data will not entirely fit in (the buffer can contain up to " << this->bytesCount() << " bytes)" << std::endl;
     return;
   }
   if (bytesCount > 0) {
     bool bound = isBound();
-    if (!bound) bind();
+    if (!bound)
+      bind();
     glBufferSubData(_target, offset, bytesCount, data);
-    if (!bound) release();
+    if (!bound)
+      release();
   }
 }
 
@@ -146,7 +151,8 @@ void GlBuffer::write(const std::vector<unsigned short> &data) {
 }
 
 void GlBuffer::bind() const {
-  if (_currentBoundBufferId[_type] == _bufferId) return;
+  if (_currentBoundBufferId[_type] == _bufferId)
+    return;
   glBindBuffer(_target, _bufferId);
   _currentBoundBufferId[_type] = _bufferId;
 }
@@ -168,4 +174,3 @@ void GlBuffer::release(BufferType type) {
   }
   _currentBoundBufferId[type] = 0;
 }
-

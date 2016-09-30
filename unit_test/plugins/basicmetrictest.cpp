@@ -25,13 +25,10 @@ using namespace tlp;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BasicMetricTest);
 
-template<typename PropType>
-bool BasicMetricTest::computeProperty(const std::string &algorithm,
-                                      const std::string & graphType,
-                                      PropType* prop) {
+template <typename PropType> bool BasicMetricTest::computeProperty(const std::string &algorithm, const std::string &graphType, PropType *prop) {
 
   DataSet ds;
-  tlp::Graph* g = tlp::importGraph(graphType, ds, nullptr, graph);
+  tlp::Graph *g = tlp::importGraph(graphType, ds, nullptr, graph);
   CPPUNIT_ASSERT(g == graph);
 
   bool deleteProp = prop == nullptr;
@@ -127,8 +124,7 @@ void BasicMetricTest::testPathLengthMetric() {
   bool result = computeProperty<DoubleProperty>("Path Length");
   CPPUNIT_ASSERT(result == false);
   graph->clear();
-  result = computeProperty<DoubleProperty>("Path Length",
-           "Random General Tree");
+  result = computeProperty<DoubleProperty>("Path Length", "Random General Tree");
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
@@ -152,4 +148,3 @@ void BasicMetricTest::testStrongComponent() {
   CPPUNIT_ASSERT(result);
 }
 //==========================================================
-

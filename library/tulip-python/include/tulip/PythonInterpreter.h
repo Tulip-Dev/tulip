@@ -60,8 +60,7 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   QAbstractScrollArea *_defaultConsoleWidget;
   QString _pythonVersion;
 
-public :
-
+public:
   static const QString pythonPluginsPath;
   static const QString pythonPluginsPathHome;
   static const char pythonReservedCharacters[];
@@ -69,51 +68,50 @@ public :
 
   static PythonInterpreter *getInstance();
 
-  bool interpreterInit() ;
+  bool interpreterInit();
 
   bool importModule(const QString &moduleName);
 
   bool registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode);
 
-  bool runString(const QString &pyhtonCode, const QString &scriptFilePath="");
+  bool runString(const QString &pyhtonCode, const QString &scriptFilePath = "");
 
-  bool runGraphScript(const QString &module, const QString &function, tlp::Graph *graph, const QString &scriptFilePath="");
+  bool runGraphScript(const QString &module, const QString &function, tlp::Graph *graph, const QString &scriptFilePath = "");
 
-  template<typename T>
-  bool evalSingleStatementAndGetValue(const QString &pythonStatement, T &value);
+  template <typename T> bool evalSingleStatementAndGetValue(const QString &pythonStatement, T &value);
 
-  template<typename PARAM_TYPE>
-  bool callFunctionOneParam(const QString &module, const QString &function, const PARAM_TYPE &parameter);
+  template <typename PARAM_TYPE> bool callFunctionOneParam(const QString &module, const QString &function, const PARAM_TYPE &parameter);
 
-  template<typename PARAM1_TYPE, typename PARAM2_TYPE>
+  template <typename PARAM1_TYPE, typename PARAM2_TYPE>
   bool callFunctionTwoParams(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2);
 
-  template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE>
+  template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE>
   bool callFunctionThreeParams(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
                                const PARAM3_TYPE &parameter3);
 
-  template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE>
+  template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE>
   bool callFunctionFourParams(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
                               const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4);
 
   bool callFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
 
-  template<typename PARAM_TYPE, typename RETURN_TYPE>
+  template <typename PARAM_TYPE, typename RETURN_TYPE>
   bool callFunctionOneParamAndGetReturnValue(const QString &module, const QString &function, const PARAM_TYPE &parameter, RETURN_TYPE &returnValue);
 
-  template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename RETURN_TYPE>
-  bool callFunctionTwoParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
-      RETURN_TYPE &returnValue);
+  template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename RETURN_TYPE>
+  bool callFunctionTwoParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
+                                              const PARAM2_TYPE &parameter2, RETURN_TYPE &returnValue);
 
-  template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename RETURN_TYPE>
-  bool callFunctionThreeParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
-      const PARAM3_TYPE &parameter3, RETURN_TYPE &returnValue);
+  template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename RETURN_TYPE>
+  bool callFunctionThreeParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
+                                                const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, RETURN_TYPE &returnValue);
 
-  template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE, typename RETURN_TYPE>
-  bool callFunctionFourParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
-      const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4, RETURN_TYPE &returnValue);
+  template <typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE, typename RETURN_TYPE>
+  bool callFunctionFourParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
+                                               const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4,
+                                               RETURN_TYPE &returnValue);
 
-  template<typename RETURN_TYPE>
+  template <typename RETURN_TYPE>
   bool callFunctionAndGetReturnValue(const QString &module, const QString &function, const tlp::DataSet &parameters, RETURN_TYPE &returnValue);
 
   bool functionExists(const QString &moduleName, const QString &functionName);
@@ -126,7 +124,7 @@ public :
 
   void stopCurrentScript();
 
-  void pauseCurrentScript(const bool pause=true);
+  void pauseCurrentScript(const bool pause = true);
 
   bool isScriptPaused() const;
 
@@ -182,20 +180,18 @@ public :
 
   QString readLineFromConsole();
 
-  PyObject* callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
+  PyObject *callPythonFunction(const QString &module, const QString &function, const tlp::DataSet &parameters);
 
-  PyObject* evalPythonStatement(const QString &pythonStatement, bool singleInput = false);
+  PyObject *evalPythonStatement(const QString &pythonStatement, bool singleInput = false);
 
   void clearTracebacks();
 
 signals:
 
   void scriptExecutionPaused();
-
 };
 
 #include "PythonInterpreter.cxx"
-
 }
 
 #endif /* PYTHONINTERPRETER_H_ */

@@ -42,17 +42,10 @@ namespace tlp {
 class TLP_GLES_SCOPE GlFrameBufferObject {
 
 public:
+  enum Attachment { NoAttachment, Depth, Stencil, CombinedDepthStencil };
 
-  enum Attachment {
-    NoAttachment,
-    Depth,
-    Stencil,
-    CombinedDepthStencil
-  };
-
-  GlFrameBufferObject(int width, int height, Attachment attachement = Depth, unsigned int numberOfSamples = 0,
-                      GLint textureMagFilter = GL_NEAREST, GLint textureMinFilter = GL_NEAREST,
-                      GLint textureWrap = GL_CLAMP_TO_EDGE, bool generateMipmap = false);
+  GlFrameBufferObject(int width, int height, Attachment attachement = Depth, unsigned int numberOfSamples = 0, GLint textureMagFilter = GL_NEAREST,
+                      GLint textureMinFilter = GL_NEAREST, GLint textureWrap = GL_CLAMP_TO_EDGE, bool generateMipmap = false);
 
   ~GlFrameBufferObject();
 
@@ -80,25 +73,20 @@ public:
 
   static bool hasOpenGLFramebufferBlit();
 
-  static void blitFramebuffer(GlFrameBufferObject *target, const Vec2i &targetX0Y0, const Vec2i &targetX1Y1,
-                              GlFrameBufferObject *source, const Vec2i &sourceX0Y0, const Vec2i &sourceX1Y1,
-                              GLbitfield mask = GL_COLOR_BUFFER_BIT, GLenum filter = GL_NEAREST);
+  static void blitFramebuffer(GlFrameBufferObject *target, const Vec2i &targetX0Y0, const Vec2i &targetX1Y1, GlFrameBufferObject *source,
+                              const Vec2i &sourceX0Y0, const Vec2i &sourceX1Y1, GLbitfield mask = GL_COLOR_BUFFER_BIT, GLenum filter = GL_NEAREST);
 
 private:
-
   GLuint handle() const {
     return _fboHandle;
   }
-
 
   int _width, _height;
   GLuint _fboHandle;
   GLuint _texture;
   GLuint _attachmentRbo;
   bool _isValid;
-
 };
-
 }
 
 #endif // GLFRAMEBUFFEROBJECT_H

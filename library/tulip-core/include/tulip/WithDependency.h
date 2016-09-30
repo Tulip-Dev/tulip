@@ -32,7 +32,8 @@ namespace tlp {
  *
  * @brief Represents a plugin's dependency to another plugin.
  * In addition to maganing plugin registration, Tulip also handles a dependency mechanism between plugins.
- * Every Tulip plugin inherits from the tlp::WithDependency interface which allows to declare that another plugin should be loaded in order for this plugin to run.
+ * Every Tulip plugin inherits from the tlp::WithDependency interface which allows to declare that another plugin should be loaded in order for this
+ * plugin to run.
  * When declaring a dependency, a plugin state the name and the version of the dependecy. This is done by calling tlp::WithDependency::addDependency()
  *
  * @see tlp::WithDependency
@@ -53,9 +54,7 @@ struct Dependency {
    * @param pName The name of the plug-in, as registered in the Tulip plug-in system.
    * @param pRelease The required version of the plug-in.
    */
-  Dependency(std::string pName,
-             std::string pRelease):pluginName(pName),pluginRelease(pRelease) {
-
+  Dependency(std::string pName, std::string pRelease) : pluginName(pName), pluginRelease(pRelease) {
   }
 };
 
@@ -71,6 +70,7 @@ protected:
    * @brief The inner list of dependencies.
    */
   std::list<Dependency> _dependencies;
+
 public:
   /**
    * @brief Adds a dependency upon another plug-in.
@@ -79,7 +79,7 @@ public:
    * @param name The name of the plug-in, as registered in the Tulip plug-in system.
    * @param release The required version of the depended plug-in.
    */
-  void addDependency(const char *name,const char *release) {
+  void addDependency(const char *name, const char *release) {
     _dependencies.push_back(Dependency(name, release));
   }
 
@@ -88,12 +88,9 @@ public:
    *
    * @return list<Dependency> The list of dependencies of this plug-in.
    */
-  const std::list<Dependency>& dependencies() const {
+  const std::list<Dependency> &dependencies() const {
     return _dependencies;
   }
-
 };
-
-
 }
 #endif

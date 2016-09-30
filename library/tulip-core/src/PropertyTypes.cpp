@@ -43,15 +43,15 @@ void GraphType::write(ostream &oss, const RealType &v) {
 
 void GraphType::writeb(ostream &oss, const RealType &v) {
   unsigned int id = v ? v->getId() : 0;
-  oss.write((char *) &id, sizeof(id));
+  oss.write((char *)&id, sizeof(id));
 }
 
-bool GraphType::read(istream& iss, RealType& v) {
+bool GraphType::read(istream &iss, RealType &v) {
   uintptr_t lv = 0;
   bool ok = bool(iss >> lv);
 
   if (ok)
-    v = (RealType) lv;
+    v = (RealType)lv;
   else
     v = 0;
 
@@ -67,35 +67,36 @@ bool GraphType::readb(istream &, RealType &) {
 }
 
 // EdgeSetType
-void EdgeSetType::write(ostream& os, const RealType & v ) {
+void EdgeSetType::write(ostream &os, const RealType &v) {
   os << '(';
   set<edge>::const_iterator it;
 
-  for(it = v.begin() ; it != v.end() ; ++it)
+  for (it = v.begin(); it != v.end(); ++it)
     os << (*it).id << ' ';
 
   os << ')';
 }
 
-void EdgeSetType::writeb(ostream& oss, const RealType & v ) {
+void EdgeSetType::writeb(ostream &oss, const RealType &v) {
   unsigned int vSize = v.size();
   // write the size of the set
-  oss.write((char *) &vSize, sizeof(vSize));
+  oss.write((char *)&vSize, sizeof(vSize));
 
   set<edge>::const_iterator it;
 
   // loop to write the edges
-  for(it = v.begin() ; it != v.end() ; ++it)
-    oss.write((char *) &(it->id), sizeof(unsigned int));
+  for (it = v.begin(); it != v.end(); ++it)
+    oss.write((char *)&(it->id), sizeof(unsigned int));
 }
 
-bool EdgeSetType::read(istream& is, RealType & v) {
+bool EdgeSetType::read(istream &is, RealType &v) {
   v.clear();
-  char c  = ' ';
+  char c = ' ';
   bool ok;
 
   // go to first '('
-  while((ok = bool(is >> c)) && isspace(c)) {}
+  while ((ok = bool(is >> c)) && isspace(c)) {
+  }
 
   // for compatibility with older version (3.0)
   if (!ok)
@@ -106,44 +107,45 @@ bool EdgeSetType::read(istream& is, RealType & v) {
 
   edge e;
 
-  for( ;; ) {
-    if( !(is >> c) )
+  for (;;) {
+    if (!(is >> c))
       return false;
 
-    if (isspace(c)) continue;
+    if (isspace(c))
+      continue;
 
-    if( c == ')' )
+    if (c == ')')
       return true;
 
     is.unget();
 
-    if( !(is >> e.id) )
+    if (!(is >> e.id))
       return false;
 
-    v.insert( e );
+    v.insert(e);
   }
 }
 
-bool EdgeSetType::readb(istream& iss, RealType & s) {
+bool EdgeSetType::readb(istream &iss, RealType &s) {
   s.clear();
 
   unsigned int size;
 
   // get the set size
-  if (!bool(iss.read((char *) &size, sizeof(unsigned int))))
+  if (!bool(iss.read((char *)&size, sizeof(unsigned int))))
     return false;
 
   // use a vector to get the edges
   vector<edge> v;
   v.resize(size);
-  edge* data = v.data();
+  edge *data = v.data();
 
   // get the edges in one read
-  if (!bool(iss.read((char *) v.data(), size * sizeof(unsigned int))))
+  if (!bool(iss.read((char *)v.data(), size * sizeof(unsigned int))))
     return false;
 
   // insert edges in the set
-  while(size) {
+  while (size) {
     s.insert(*data);
     ++data;
     --size;
@@ -162,12 +164,13 @@ double DoubleType::defaultValue() {
 }
 
 // add support for inf, -inf and nan
-bool DoubleType::read(istream& iss, double& v) {
+bool DoubleType::read(istream &iss, double &v) {
   char c;
   char sign = 0;
 
   // go to first non space char
-  while((iss >> c) && isspace(c)) {}
+  while ((iss >> c) && isspace(c)) {
+  }
 
   if (c == '-' || c == '+') {
     sign = c;
@@ -178,8 +181,7 @@ bool DoubleType::read(istream& iss, double& v) {
 
   if (c == 'i') {
     // should be inf
-    if (!(iss >> c) || (c != 'n') ||
-        !(iss >> c) || (c != 'f'))
+    if (!(iss >> c) || (c != 'n') || !(iss >> c) || (c != 'f'))
       return false;
 
     if (sign == '-')
@@ -188,19 +190,16 @@ bool DoubleType::read(istream& iss, double& v) {
       v = numeric_limits<double>::infinity();
 
     return true;
-  }
-  else {
+  } else {
     if (c == 'n') {
       // should be nan
-      if (!(iss >> c) || (c != 'a') ||
-          !(iss >> c) || (c != 'n'))
+      if (!(iss >> c) || (c != 'a') || !(iss >> c) || (c != 'n'))
         return false;
 
       v = std::numeric_limits<double>::quiet_NaN();
 
       return true;
-    }
-    else {
+    } else {
       iss.unget();
 
       if (sign)
@@ -221,12 +220,13 @@ float FloatType::defaultValue() {
 }
 
 // add support for inf, -inf and nan
-bool FloatType::read(istream& iss, float& v) {
+bool FloatType::read(istream &iss, float &v) {
   char c;
   char sign = 0;
 
   // go to first non space char
-  while((iss >> c) && isspace(c)) {}
+  while ((iss >> c) && isspace(c)) {
+  }
 
   if (c == '-' || c == '+') {
     sign = c;
@@ -237,8 +237,7 @@ bool FloatType::read(istream& iss, float& v) {
 
   if (c == 'i') {
     // should be inf
-    if (!(iss >> c) || (c != 'n') ||
-        !(iss >> c) || (c != 'f'))
+    if (!(iss >> c) || (c != 'n') || !(iss >> c) || (c != 'f'))
       return false;
 
     if (sign == '-')
@@ -247,18 +246,15 @@ bool FloatType::read(istream& iss, float& v) {
       v = numeric_limits<float>::infinity();
 
     return true;
-  }
-  else {
+  } else {
     if (c == 'n') {
       // should be nan
-      if (!(iss >> c) || (c != 'a') ||
-          !(iss >> c) || (c != 'n'))
+      if (!(iss >> c) || (c != 'a') || !(iss >> c) || (c != 'n'))
         return false;
 
       v = std::numeric_limits<float>::quiet_NaN();
       return true;
-    }
-    else {
+    } else {
       iss.unget();
 
       if (sign)
@@ -305,17 +301,18 @@ bool BooleanType::defaultValue() {
   return false;
 }
 
-void BooleanType::write(ostream& os, const RealType &v) {
+void BooleanType::write(ostream &os, const RealType &v) {
   if (v)
     os << "true";
   else
     os << "false";
 }
 
-bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
+bool BooleanType::read(istream &is, RealType &v, bool untilEnd) {
   char c = ' ';
 
-  while((is >> c) && isspace(c)) {}
+  while ((is >> c) && isspace(c)) {
+  }
 
   c = ::tolower(c);
 
@@ -324,23 +321,19 @@ bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
   if (c == 't') {
     s.append("true");
     v = true;
-  }
-  else if (c == 'f') {
+  } else if (c == 'f') {
     s.append("false");
     v = false;
-  }
-  else if(c == '1') {
+  } else if (c == '1') {
     s.append("1");
     v = true;
-  }
-  else if (c == '0') {
+  } else if (c == '0') {
     s.append("0");
     v = false;
-  }
-  else
+  } else
     return false;
 
-  for(unsigned int i = 1; i < s.size(); ++i) {
+  for (unsigned int i = 1; i < s.size(); ++i) {
     if (!(is >> c))
       return false;
 
@@ -352,8 +345,8 @@ bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
 
   if (untilEnd) {
     // check if there is only space char until the end
-    for(;;) {
-      if( !(is >> c) )
+    for (;;) {
+      if (!(is >> c))
         return true;
 
       if (!isspace(c))
@@ -364,17 +357,16 @@ bool BooleanType::read(istream& is, RealType & v, bool untilEnd) {
   return true;
 }
 
-bool BooleanType::fromString(RealType &v, const std::string &s,
-                             bool untilEnd) {
+bool BooleanType::fromString(RealType &v, const std::string &s, bool untilEnd) {
   std::istringstream iss(s);
   return read(iss, v, untilEnd);
 }
 
 // BooleanVectorType
-void BooleanVectorType::write(ostream& os, const RealType & v) {
+void BooleanVectorType::write(ostream &os, const RealType &v) {
   os << '(';
 
-  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+  for (unsigned int i = 0; i < v.size(); i++) {
     if (i)
       os << ", ";
 
@@ -384,57 +376,55 @@ void BooleanVectorType::write(ostream& os, const RealType & v) {
   os << ')';
 }
 
-void BooleanVectorType::writeb(ostream& oss, const RealType & v) {
+void BooleanVectorType::writeb(ostream &oss, const RealType &v) {
   unsigned int vSize = v.size();
   // write the size of the vector
-  oss.write((char *) &vSize, sizeof(vSize));
+  oss.write((char *)&vSize, sizeof(vSize));
 
   vector<char> vc;
   vc.resize(vSize);
 
   // loop to write boolean as char
-  char* data = vc.data();
+  char *data = vc.data();
 
-  for(unsigned int i = 0; i < vSize; ++i, ++data) {
+  for (unsigned int i = 0; i < vSize; ++i, ++data) {
     *data = v[i] ? 1 : 0;
   }
 
   oss.write(vc.data(), vSize);
 }
 
-bool BooleanVectorType::read(istream& is,  RealType & v, char openChar,
-                             char sepChar, char closeChar) {
+bool BooleanVectorType::read(istream &is, RealType &v, char openChar, char sepChar, char closeChar) {
   v.clear();
 
-  char c =' ';
+  char c = ' ';
   bool firstVal = true;
 
   // go to first non space char
-  while((is >> c) && isspace(c)) {}
+  while ((is >> c) && isspace(c)) {
+  }
 
   if (openChar) {
     if (c != openChar)
       return false;
-  }
-  else
+  } else
     is.unget();
 
-  for(;;) {
-    if( !(is >> c) )
+  for (;;) {
+    if (!(is >> c))
       return !closeChar;
 
     if (isspace(c))
       continue;
 
-    if(c == closeChar) {
+    if (c == closeChar) {
       return true;
     }
 
     if (c == sepChar) {
       if (firstVal)
         return false;
-    }
-    else
+    } else
       is.unget();
 
     bool val;
@@ -447,23 +437,23 @@ bool BooleanVectorType::read(istream& is,  RealType & v, char openChar,
   }
 }
 
-bool BooleanVectorType::readb(istream& iss, RealType & v) {
+bool BooleanVectorType::readb(istream &iss, RealType &v) {
   unsigned int vSize = v.size();
 
   // read the size of the vector
-  if (!iss.read((char *) &vSize, sizeof(vSize)))
+  if (!iss.read((char *)&vSize, sizeof(vSize)))
     return false;
 
   vector<char> vc;
   vc.resize(vSize);
 
   // loop to write boolean as char
-  char* data = vc.data();
+  char *data = vc.data();
 
   if (!bool(iss.read(data, vSize)))
     return false;
 
-  for(unsigned int i = 0; i < vSize; ++i, ++data) {
+  for (unsigned int i = 0; i < vSize; ++i, ++data) {
     v[i] = *data ? true : false;
   }
 
@@ -471,16 +461,16 @@ bool BooleanVectorType::readb(istream& iss, RealType & v) {
 }
 
 // LineType
-bool LineType::read(istream& is, RealType& v, char openChar,
-                    char sepChar, char closeChar) {
+bool LineType::read(istream &is, RealType &v, char openChar, char sepChar, char closeChar) {
   v.clear();
 
-  char c =' ';
+  char c = ' ';
   bool firstVal = true;
   bool dbqFound = false;
 
   // go to first non space char
-  while((is >> c) && isspace(c)) {}
+  while ((is >> c) && isspace(c)) {
+  }
 
   // value may have been enclosed by double quotes
   if (c == '"') {
@@ -488,27 +478,28 @@ bool LineType::read(istream& is, RealType& v, char openChar,
     dbqFound = true;
 
     // skip space chars
-    while((is >> c) && isspace(c)) {}
+    while ((is >> c) && isspace(c)) {
+    }
   }
 
   if (openChar) {
     if (c != openChar)
       return false;
-  }
-  else
+  } else
     is.unget();
 
-  for(;;) {
-    if( !(is >> c) )
+  for (;;) {
+    if (!(is >> c))
       return !closeChar;
 
     if (isspace(c))
       continue;
 
-    if(c == closeChar) {
+    if (c == closeChar) {
       if (dbqFound) {
         // expect it is the next non space char
-        while((is >> c) && isspace(c)) {}
+        while ((is >> c) && isspace(c)) {
+        }
 
         if (c != '"')
           return false;
@@ -527,8 +518,7 @@ bool LineType::read(istream& is, RealType& v, char openChar,
         return false;
 
       v.push_back(val);
-    }
-    else {
+    } else {
       // , is not required between coords
       is.unget();
       Coord val;
@@ -545,7 +535,7 @@ bool LineType::read(istream& is, RealType& v, char openChar,
 // PointType
 Coord PointType::undefinedValue() {
   Coord tmp;
-  tmp.set(-FLT_MAX,-FLT_MAX,-FLT_MAX);
+  tmp.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
   return tmp;
 }
 
@@ -553,13 +543,14 @@ Coord PointType::defaultValue() {
   return Coord(0, 0, 0);
 }
 
-bool PointType::read(istream& is, RealType & v) {
+bool PointType::read(istream &is, RealType &v) {
   // value may have been enclosed by double quotes
   char c = ' ';
   bool ok;
 
   // skip spaces
-  while((ok = bool(is >> c)) && isspace(c)) {}
+  while ((ok = bool(is >> c)) && isspace(c)) {
+  }
 
   if (!ok)
     return false;
@@ -573,22 +564,25 @@ bool PointType::read(istream& is, RealType & v) {
     is.unget();
 
   // skip spaces
-  while(bool(is >> c) && isspace(c)) {}
+  while (bool(is >> c) && isspace(c)) {
+  }
 
   if (c != '(')
     return false;
 
-  for(unsigned int i=0; i<3; ++i) {
-    if (i>0 ) {
+  for (unsigned int i = 0; i < 3; ++i) {
+    if (i > 0) {
       // skip spaces
-      while((ok = bool(is >> c)) && isspace(c)) {}
+      while ((ok = bool(is >> c)) && isspace(c)) {
+      }
 
       if (!ok || c != ',')
         return false;
     }
 
     // skip spaces
-    while((ok = bool(is >> c)) && isspace(c)) {}
+    while ((ok = bool(is >> c)) && isspace(c)) {
+    }
 
     if (!ok)
       return false;
@@ -602,9 +596,10 @@ bool PointType::read(istream& is, RealType & v) {
   }
 
   // skip spaces
-  while(bool(is >> c) && isspace(c)) {}
+  while (bool(is >> c) && isspace(c)) {
+  }
 
-  if (c != ')' )
+  if (c != ')')
     return false;
 
   if (dbqFound) {
@@ -618,7 +613,7 @@ bool PointType::read(istream& is, RealType & v) {
   return true;
 }
 
-bool PointType::fromString( RealType & v, const string & s ) {
+bool PointType::fromString(RealType &v, const string &s) {
   istringstream iss(s);
   return read(iss, v);
 }
@@ -626,20 +621,21 @@ bool PointType::fromString( RealType & v, const string & s ) {
 //
 // SizeType
 Size SizeType::undefinedValue() {
-  return Size(-FLT_MAX,-FLT_MAX,-FLT_MAX);
+  return Size(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 }
 
 Size SizeType::defaultValue() {
-  return Size(1,1,0);
+  return Size(1, 1, 0);
 }
 
-bool SizeType::read(istream& is, RealType & v) {
+bool SizeType::read(istream &is, RealType &v) {
   // value may have been enclosed by double quotes
   char c = ' ';
   bool ok;
 
   // skip spaces
-  while((ok = bool(is >> c)) && isspace(c)) {}
+  while ((ok = bool(is >> c)) && isspace(c)) {
+  }
 
   bool dbqFound = false;
 
@@ -662,7 +658,7 @@ bool SizeType::read(istream& is, RealType & v) {
   return ok;
 }
 
-bool SizeType::fromString( RealType & v, const string & s ) {
+bool SizeType::fromString(RealType &v, const string &s) {
   istringstream iss(s);
   return bool(iss >> v);
 }
@@ -676,11 +672,11 @@ string StringType::defaultValue() {
   return string("");
 }
 
-void StringType::write(ostream& os, const RealType & v, char openCloseChar) {
+void StringType::write(ostream &os, const RealType &v, char openCloseChar) {
   if (openCloseChar)
     os << openCloseChar;
 
-  for(char* str = (char *) v.c_str(); *str; ++str) {
+  for (char *str = (char *)v.c_str(); *str; ++str) {
     char c = *str;
 
     if (c == '\\' || c == '"')
@@ -693,25 +689,25 @@ void StringType::write(ostream& os, const RealType & v, char openCloseChar) {
     os << openCloseChar;
 }
 
-void StringType::writeb(ostream& os, const RealType & str) {
+void StringType::writeb(ostream &os, const RealType &str) {
   // write size of str
   unsigned int size = str.size();
-  os.write((char *) &size, sizeof(size));
+  os.write((char *)&size, sizeof(size));
 
   // then write c_str()
-  os.write((char *) str.c_str(), size);
+  os.write((char *)str.c_str(), size);
 }
 
-string StringType::toString( const RealType & v ) {
+string StringType::toString(const RealType &v) {
   return v;
 }
 
-bool StringType::read(istream& is, RealType & v, char openChar,
-                      char closeChar) {
-  char c= ' ';
+bool StringType::read(istream &is, RealType &v, char openChar, char closeChar) {
+  char c = ' ';
 
   // go to first non space char
-  while((is >> c) && isspace(c)) {}
+  while ((is >> c) && isspace(c)) {
+  }
 
   // ensure space chars are not skipped
   // in the string to extract
@@ -726,8 +722,8 @@ bool StringType::read(istream& is, RealType & v, char openChar,
   bool bslashFound = false;
   string str;
 
-  for(;;) {
-    if ( !(is >> c) ) {
+  for (;;) {
+    if (!(is >> c)) {
       if (!openChar || !closeChar)
         break;
 
@@ -737,8 +733,7 @@ bool StringType::read(istream& is, RealType & v, char openChar,
     if (bslashFound) {
       str.push_back(c);
       bslashFound = false;
-    }
-    else {
+    } else {
       if (c == '\\')
         bslashFound = true;
       else {
@@ -754,13 +749,13 @@ bool StringType::read(istream& is, RealType & v, char openChar,
   std::size_t found = str.find_last_not_of(" \t\f\v\n\r");
 
   if (found != std::string::npos)
-    str.erase(found+1);
+    str.erase(found + 1);
 
   v = str;
   return true;
 }
 
-bool StringType::readb(istream& iss, RealType & str) {
+bool StringType::readb(istream &iss, RealType &str) {
   // read size of str
   unsigned int size;
 
@@ -769,19 +764,19 @@ bool StringType::readb(istream& iss, RealType & str) {
 
   // then read chars
   str.resize(size);
-  return bool(iss.read((char *) str.c_str(), size));
+  return bool(iss.read((char *)str.c_str(), size));
 }
 
-bool StringType::fromString( RealType & v, const string & s ) {
+bool StringType::fromString(RealType &v, const string &s) {
   v = s;
   return true;
 }
 
 // StringVectorType
-void StringVectorType::write(ostream& os, const RealType & v) {
+void StringVectorType::write(ostream &os, const RealType &v) {
   os << '(';
 
-  for( unsigned int i = 0 ; i < v.size() ; i++ ) {
+  for (unsigned int i = 0; i < v.size(); i++) {
     if (i)
       os << ", ";
 
@@ -791,43 +786,42 @@ void StringVectorType::write(ostream& os, const RealType & v) {
   os << ')';
 }
 
-void StringVectorType::writeb(ostream& os, const RealType & v) {
+void StringVectorType::writeb(ostream &os, const RealType &v) {
   // write size of vector
   unsigned int size = v.size();
-  os.write((char *) &size, sizeof(size));
+  os.write((char *)&size, sizeof(size));
 
   // loop to write strings
-  for(unsigned int i = 0; i < size; ++i)
+  for (unsigned int i = 0; i < size; ++i)
     StringType::writeb(os, v[i]);
 }
 
-bool StringVectorType::read(istream& is, RealType & v, char openChar,
-                            char sepChar, char closeChar) {
+bool StringVectorType::read(istream &is, RealType &v, char openChar, char sepChar, char closeChar) {
   v.clear();
   char c = ' ';
 
   // go to first non space char
-  while((is >> c) && isspace(c)) {}
+  while ((is >> c) && isspace(c)) {
+  }
 
   if (openChar) {
     if (c != openChar)
       return false;
-  }
-  else
+  } else
     is.unget();
 
   is.unsetf(ios_base::skipws);
   bool firstVal = true;
   bool sepFound = false;
 
-  for( ;; ) {
-    if( !(is >> c) )
+  for (;;) {
+    if (!(is >> c))
       return (!sepFound && !closeChar);
 
     if (isspace(c))
       continue;
 
-    if( c == closeChar) {
+    if (c == closeChar) {
       if (!closeChar || sepFound)
         return false;
 
@@ -839,14 +833,12 @@ bool StringVectorType::read(istream& is, RealType & v, char openChar,
         return false;
 
       sepFound = true;
-    }
-    else {
+    } else {
       if ((firstVal || sepFound) && (!openChar || c == '"')) {
         string str;
         is.unget();
 
-        if (!(openChar ? StringType::read(is, str) :
-              StringType::read(is, str, '\0', sepChar)))
+        if (!(openChar ? StringType::read(is, str) : StringType::read(is, str, '\0', sepChar)))
           return false;
 
         v.push_back(str);
@@ -857,24 +849,23 @@ bool StringVectorType::read(istream& is, RealType & v, char openChar,
 
         firstVal = false;
         sepFound = false;
-      }
-      else
+      } else
         return false;
     }
   }
 }
 
-bool StringVectorType::readb(istream& iss, RealType & v) {
+bool StringVectorType::readb(istream &iss, RealType &v) {
   // read size of vector
   unsigned int size;
 
-  if (!bool(iss.read((char *) &size, sizeof(size))))
+  if (!bool(iss.read((char *)&size, sizeof(size))))
     return false;
 
   v.resize(size);
 
   // loop to read strings
-  for(unsigned int i = 0; i < size; ++i) {
+  for (unsigned int i = 0; i < size; ++i) {
     if (!StringType::readb(iss, v[i]))
       return false;
   }
@@ -884,27 +875,28 @@ bool StringVectorType::readb(istream& iss, RealType & v) {
 
 // ColorType
 Color ColorType::undefinedValue() {
-  return Color(255,255,255,255);
+  return Color(255, 255, 255, 255);
 }
 
-void ColorType::write(ostream& os, const RealType & v) {
+void ColorType::write(ostream &os, const RealType &v) {
   // add double quotes to ensure compatibility in gui tests
   os << '"' << v << '"';
 }
 
-string ColorType::toString( const RealType & v ) {
+string ColorType::toString(const RealType &v) {
   ostringstream oss;
   oss << v;
   return oss.str();
 }
 
-bool ColorType::read(istream& is, RealType & v) {
+bool ColorType::read(istream &is, RealType &v) {
   // value may have been enclosed by double quotes
   char c = ' ';
   bool ok;
 
   // skip spaces
-  while((ok = bool(is >> c)) && isspace(c)) {}
+  while ((ok = bool(is >> c)) && isspace(c)) {
+  }
 
   bool dbqFound = false;
 
@@ -927,28 +919,29 @@ bool ColorType::read(istream& is, RealType & v) {
   return ok;
 }
 
-bool ColorType::fromString( RealType & v, const string & s ) {
+bool ColorType::fromString(RealType &v, const string &s) {
   istringstream iss(s);
   return bool(iss >> v);
 }
 
 // some special serializers
-struct DataSetTypeSerializer :public TypedDataSerializer<DataSet> {
-  DataSetTypeSerializer():TypedDataSerializer<DataSet>("DataSet") {}
+struct DataSetTypeSerializer : public TypedDataSerializer<DataSet> {
+  DataSetTypeSerializer() : TypedDataSerializer<DataSet>("DataSet") {
+  }
 
-  DataTypeSerializer* clone() const {
+  DataTypeSerializer *clone() const {
     return new DataSetTypeSerializer();
   }
 
-  void write(ostream& os, const DataSet& ds) {
+  void write(ostream &os, const DataSet &ds) {
     DataSet::write(os, ds);
   }
 
-  bool read(istream& is, DataSet& ds) {
+  bool read(istream &is, DataSet &ds) {
     return DataSet::read(is, ds);
   }
 
-  bool setData(tlp::DataSet&, const string&, const string&) {
+  bool setData(tlp::DataSet &, const string &, const string &) {
     // no sense
     return false;
   }
@@ -959,7 +952,7 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
 
   KnownTypeSerializer<UnsignedIntegerType> *uintSerializer;
 
-  NodeTypeSerializer():TypedDataSerializer<node>("node") {
+  NodeTypeSerializer() : TypedDataSerializer<node>("node") {
     uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
@@ -967,29 +960,29 @@ struct NodeTypeSerializer : public TypedDataSerializer<node> {
     delete uintSerializer;
   }
 
-  DataTypeSerializer* clone() const {
+  DataTypeSerializer *clone() const {
     return new NodeTypeSerializer();
   }
 
-  void write(ostream& os, const node& n) {
+  void write(ostream &os, const node &n) {
     uintSerializer->write(os, n.id);
   }
 
-  bool read(istream& is, node& n) {
+  bool read(istream &is, node &n) {
     return uintSerializer->read(is, n.id);
   }
 
-  bool setData(tlp::DataSet&, const string&, const string&) {
+  bool setData(tlp::DataSet &, const string &, const string &) {
     // no sense
     return false;
   }
 };
 
-struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> > {
+struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node>> {
 
   KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
 
-  NodeVectorTypeSerializer():TypedDataSerializer<vector<node> >("nodes") {
+  NodeVectorTypeSerializer() : TypedDataSerializer<vector<node>>("nodes") {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
@@ -997,19 +990,19 @@ struct NodeVectorTypeSerializer : public TypedDataSerializer<vector<node> > {
     delete uintVecSerializer;
   }
 
-  DataTypeSerializer* clone() const {
+  DataTypeSerializer *clone() const {
     return new NodeVectorTypeSerializer();
   }
 
-  void write(ostream& os, const vector<node>& vn) {
+  void write(ostream &os, const vector<node> &vn) {
     uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(vn));
   }
 
-  bool read(istream& is, vector<node>& vn) {
+  bool read(istream &is, vector<node> &vn) {
     return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(vn));
   }
 
-  bool setData(tlp::DataSet&, const string&, const string&) {
+  bool setData(tlp::DataSet &, const string &, const string &) {
     // no sense
     return false;
   }
@@ -1019,7 +1012,7 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
 
   KnownTypeSerializer<UnsignedIntegerType> *uintSerializer;
 
-  EdgeTypeSerializer():TypedDataSerializer<edge>("edge") {
+  EdgeTypeSerializer() : TypedDataSerializer<edge>("edge") {
     uintSerializer = new KnownTypeSerializer<UnsignedIntegerType>("");
   }
 
@@ -1027,29 +1020,29 @@ struct EdgeTypeSerializer : public TypedDataSerializer<edge> {
     delete uintSerializer;
   }
 
-  DataTypeSerializer* clone() const {
+  DataTypeSerializer *clone() const {
     return new EdgeTypeSerializer();
   }
 
-  void write(ostream& os, const edge& e) {
+  void write(ostream &os, const edge &e) {
     uintSerializer->write(os, e.id);
   }
 
-  bool read(istream& is, edge& e) {
+  bool read(istream &is, edge &e) {
     return uintSerializer->read(is, e.id);
   }
 
-  bool setData(tlp::DataSet&, const string&, const string&) {
+  bool setData(tlp::DataSet &, const string &, const string &) {
     // no sense
     return false;
   }
 };
 
-struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> > {
+struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge>> {
 
   KnownTypeSerializer<UnsignedIntegerVectorType> *uintVecSerializer;
 
-  EdgeVectorTypeSerializer():TypedDataSerializer<vector<edge> >("edges") {
+  EdgeVectorTypeSerializer() : TypedDataSerializer<vector<edge>>("edges") {
     uintVecSerializer = new KnownTypeSerializer<UnsignedIntegerVectorType>("");
   }
 
@@ -1057,37 +1050,37 @@ struct EdgeVectorTypeSerializer : public TypedDataSerializer<vector<edge> > {
     delete uintVecSerializer;
   }
 
-  DataTypeSerializer* clone() const {
+  DataTypeSerializer *clone() const {
     return new EdgeVectorTypeSerializer();
   }
 
-  void write(ostream& os, const vector<edge>& ve) {
+  void write(ostream &os, const vector<edge> &ve) {
     uintVecSerializer->write(os, reinterpret_cast<const vector<unsigned int> &>(ve));
   }
 
-  bool read(istream& is, vector<edge>& ve) {
+  bool read(istream &is, vector<edge> &ve) {
     return uintVecSerializer->read(is, reinterpret_cast<vector<unsigned int> &>(ve));
   }
 
-  bool setData(tlp::DataSet&, const string&, const string&) {
+  bool setData(tlp::DataSet &, const string &, const string &) {
     // no sense
     return false;
   }
-
 };
 
-struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> {
-  StringCollectionSerializer():TypedDataSerializer<StringCollection>("StringCollection") {}
+struct StringCollectionSerializer : public TypedDataSerializer<StringCollection> {
+  StringCollectionSerializer() : TypedDataSerializer<StringCollection>("StringCollection") {
+  }
 
-  DataTypeSerializer* clone() const {
+  DataTypeSerializer *clone() const {
     return new StringCollectionSerializer();
   }
 
-  void write(ostream& os, const StringCollection& sc) {
+  void write(ostream &os, const StringCollection &sc) {
     os << '"';
     std::vector<std::string> values = sc.getValues();
 
-    for(unsigned int i = 0; i < values.size(); ++i) {
+    for (unsigned int i = 0; i < values.size(); ++i) {
       if (i)
         os << ';';
 
@@ -1097,22 +1090,23 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
     os << '"';
   }
 
-  bool read(istream& is, StringCollection& sc) {
+  bool read(istream &is, StringCollection &sc) {
     char c = ' ';
 
     // go to first '"'
-    while((is >> c) && isspace(c)) {}
+    while ((is >> c) && isspace(c)) {
+    }
 
     if (c != '"')
       return false;
 
     string str;
 
-    for( ;; ) {
-      if( !(is >> c) )
+    for (;;) {
+      if (!(is >> c))
         return false;
 
-      if( c == '"' ) {
+      if (c == '"') {
         sc.push_back(str);
         return true;
       }
@@ -1120,17 +1114,16 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
       if (c == ';') {
         sc.push_back(str);
         str.clear();
-      }
-      else
+      } else
         str.push_back(c);
     }
   }
 
   std::string toString(const DataType *data) {
-    return ((StringCollection *) data->value)->getCurrentString();
+    return ((StringCollection *)data->value)->getCurrentString();
   }
 
-  bool setData(tlp::DataSet& dts, const string& prop, const string& val) {
+  bool setData(tlp::DataSet &dts, const string &prop, const string &val) {
     StringCollection col;
 
     string::size_type lastPos = val.find_first_not_of(";");
@@ -1185,12 +1178,11 @@ void tlp::initTypeSerializers() {
 
   DataSet::registerDataTypeSerializer<node>(NodeTypeSerializer());
 
-  DataSet::registerDataTypeSerializer<vector<node> >(NodeVectorTypeSerializer());
+  DataSet::registerDataTypeSerializer<vector<node>>(NodeVectorTypeSerializer());
 
   DataSet::registerDataTypeSerializer<edge>(EdgeTypeSerializer());
 
-  DataSet::registerDataTypeSerializer<vector<edge> >(EdgeVectorTypeSerializer());
+  DataSet::registerDataTypeSerializer<vector<edge>>(EdgeVectorTypeSerializer());
 
   DataSet::registerDataTypeSerializer<StringCollection>(StringCollectionSerializer());
-
 }

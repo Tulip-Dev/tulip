@@ -30,8 +30,7 @@ namespace tlp {
 
 class Graph;
 class DataSet;
-template<class itType >
-struct Iterator;
+template <class itType> struct Iterator;
 
 /**
  * @ingroup Plugins
@@ -43,7 +42,7 @@ struct Iterator;
  * @li INOUT_PARAM: The parameter is passed by reference.
  * @endlist
  */
-enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
+enum ParameterDirection { IN_PARAM = 0, OUT_PARAM = 1, INOUT_PARAM = 2 };
 
 /**
  * @ingroup Plugins
@@ -71,43 +70,43 @@ private:
   std::string defaultValue;
   bool mandatory;
   ParameterDirection direction;
+
 public:
-  ParameterDescription() {}
-  ParameterDescription(const std::string& name, const std::string& type,
-                       const std::string& help, const std::string& defaultValue,
-                       bool mandatory, ParameterDirection direction)
-    : name(name), type(type), help(help),
-      defaultValue(defaultValue), mandatory(mandatory),
-      direction(direction) {}
+  ParameterDescription() {
+  }
+  ParameterDescription(const std::string &name, const std::string &type, const std::string &help, const std::string &defaultValue, bool mandatory,
+                       ParameterDirection direction)
+      : name(name), type(type), help(help), defaultValue(defaultValue), mandatory(mandatory), direction(direction) {
+  }
 
   /**
    * @return The parameter's name
    */
-  const std::string& getName() const {
+  const std::string &getName() const {
     return name;
   }
   /**
    * @return The parameter's C++ type name
    */
-  const std::string& getTypeName() const {
+  const std::string &getTypeName() const {
     return type;
   }
   /**
    * @return The parameter's help string
    */
-  const std::string& getHelp() const {
+  const std::string &getHelp() const {
     return help;
   }
   /**
    * @return The parameter's default value.
    */
-  const std::string& getDefaultValue() const {
+  const std::string &getDefaultValue() const {
     return defaultValue;
   }
   /**
    * @brief Set the parameter's default value.
    */
-  void setDefaultValue(const std::string& defVal) {
+  void setDefaultValue(const std::string &defVal) {
     defaultValue = defVal;
   }
   /**
@@ -134,8 +133,8 @@ public:
   bool isEditable() const {
     // input parameters are editable
     return (direction != OUT_PARAM) ||
-      // only property output parameters are editable
-      (type.find("Property") != std::string::npos);
+           // only property output parameters are editable
+           (type.find("Property") != std::string::npos);
   }
 };
 
@@ -148,7 +147,8 @@ public:
   **/
 struct TLP_SCOPE ParameterDescriptionList {
 
-  ParameterDescriptionList() {}
+  ParameterDescriptionList() {
+  }
 
   /**
     * @brief Adds a new parameter of type T to the list.
@@ -160,12 +160,9 @@ struct TLP_SCOPE ParameterDescriptionList {
     * @param direction The parameter's direction (see tlp::ParameterDirection for details)
     * @return void
     **/
-  template<typename T> void add(const std::string& parameterName,
-                                const std::string& help,
-                                const std::string& defaultValue,
-                                bool isMandatory = true,
-                                ParameterDirection direction = IN_PARAM,
-                                const std::string &valuesDescription = std::string()) {
+  template <typename T>
+  void add(const std::string &parameterName, const std::string &help, const std::string &defaultValue, bool isMandatory = true,
+           ParameterDirection direction = IN_PARAM, const std::string &valuesDescription = std::string()) {
     for (unsigned int i = 0; i < parameters.size(); ++i) {
       if (parameters[i].getName() == parameterName) {
 #ifndef NDEBUG
@@ -175,11 +172,9 @@ struct TLP_SCOPE ParameterDescriptionList {
       }
     }
 
-    ParameterDescription newParameter(parameterName,
-                                      typeid(T).name(),
-                                      generateParameterHTMLDocumentation(parameterName, help, typeid(T).name(), defaultValue, valuesDescription, direction),
-                                      defaultValue,
-                                      isMandatory, direction);
+    ParameterDescription newParameter(parameterName, typeid(T).name(), generateParameterHTMLDocumentation(parameterName, help, typeid(T).name(),
+                                                                                                          defaultValue, valuesDescription, direction),
+                                      defaultValue, isMandatory, direction);
     parameters.push_back(newParameter);
   }
 
@@ -188,7 +183,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    *
    * @return An iterator over the parameters :Iterator<ParameterDescription>*
    **/
-  tlp::Iterator<ParameterDescription>* getParameters() const;
+  tlp::Iterator<ParameterDescription> *getParameters() const;
 
   /**
    * @brief retrieves the default value of a parameter.
@@ -196,7 +191,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param parameterName The name of the parameter to retrieve the default value of.
    * @return The default value of the parameter:string
    **/
-  const std::string& getDefaultValue(const std::string& parameterName) const;
+  const std::string &getDefaultValue(const std::string &parameterName) const;
 
   /**
    * @brief Sets the default value of a parameter.
@@ -205,8 +200,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param value The new value for this parameter.
    * @return void
    **/
-  void setDefaultValue(const std::string& parameterName,
-                       const std::string& value);
+  void setDefaultValue(const std::string &parameterName, const std::string &value);
 
   /**
    * @brief Sets the direction of a parameter.
@@ -215,8 +209,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param dir The new direction for this parameter.
    * @return void
    **/
-  void setDirection(const std::string& parameterName,
-                    ParameterDirection direction);
+  void setDirection(const std::string &parameterName, ParameterDirection direction);
 
   /**
    * @brief Retrieves whether a parameter is mandatory or optional.
@@ -224,7 +217,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param parameterName The name of the parameter for which to check if it is mandatory or optional.
    * @return bool true if the parameter is mandatory, false if it is optional.
    **/
-  bool isMandatory(const std::string& parameterName) const;
+  bool isMandatory(const std::string &parameterName) const;
 
   /**
    * @brief Builds a DataSet containing the default values for each parameter.
@@ -234,7 +227,7 @@ struct TLP_SCOPE ParameterDescriptionList {
    * @param inG A graph on which to create properties if any parameter is of a property type. Defaults to 0.
    * @return void
    **/
-  void buildDefaultDataSet(DataSet& ioDataSet, Graph* inG = nullptr) const;
+  void buildDefaultDataSet(DataSet &ioDataSet, Graph *inG = nullptr) const;
 
   /**
    * @brief Returns the number of parameters.
@@ -255,24 +248,22 @@ struct TLP_SCOPE ParameterDescriptionList {
   }
 
 private:
-  ParameterDescription* getParameter(const std::string& parameterName);
-  std::string generateParameterHTMLDocumentation(const std::string &name, const std::string &help,
-                                                 const std::string &type,
-                                                 const std::string &defaultValue,
-                                                 const std::string &valuesDescription,
+  ParameterDescription *getParameter(const std::string &parameterName);
+  std::string generateParameterHTMLDocumentation(const std::string &name, const std::string &help, const std::string &type,
+                                                 const std::string &defaultValue, const std::string &valuesDescription,
                                                  const ParameterDirection &direction);
   std::vector<ParameterDescription> parameters;
 };
 
-
-#define HTML_HELP_OPEN() "<!DOCTYPE html><html><head>\
+#define HTML_HELP_OPEN()                                                                                                                             \
+  "<!DOCTYPE html><html><head>\
 <style type=\"text/css\">.body { font-family: \"Segoe UI\", Candara, \"Bitstream Vera Sans\", \"DejaVu Sans\", \"Bitstream Vera Sans\", \"Trebuchet MS\", Verdana, \"Verdana Ref\", sans-serif; }\
     .paramtable { width: 100%; border: 0px; border-bottom: 1px solid #C9C9C9; padding: 5px; }\
     .help { font-style: italic; font-size: 90%; }\
     .b { padding-left: 5px; }</style>\
 </head><body><table border=\"0\" class=\"paramtable\">"
 
-#define HTML_HELP_DEF(A,B) "<tr><td><b>" A "</b><td class=\"b\">" B "</td></tr>"
+#define HTML_HELP_DEF(A, B) "<tr><td><b>" A "</b><td class=\"b\">" B "</td></tr>"
 
 #define HTML_HELP_BODY() "</table><p class=\"help\">"
 
@@ -292,7 +283,7 @@ struct TLP_SCOPE WithParameter {
    *
    * @return :ParameterDescriptionList the parameters of the plug-in.
    **/
-  const tlp::ParameterDescriptionList& getParameters() const;
+  const tlp::ParameterDescriptionList &getParameters() const;
 
   /**
    * @brief Adds an IN parameter to the plug-in.
@@ -301,14 +292,12 @@ struct TLP_SCOPE WithParameter {
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to "".
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
-   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults to "".
+   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults
+   *to "".
    * @return void
    **/
-  template<typename T>
-  void addInParameter(const std::string &name,
-                      const std::string &help,
-                      const std::string &defaultValue,
-                      bool isMandatory = true,
+  template <typename T>
+  void addInParameter(const std::string &name, const std::string &help, const std::string &defaultValue, bool isMandatory = true,
                       const std::string &valuesDescription = std::string()) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, IN_PARAM, valuesDescription);
   }
@@ -320,15 +309,13 @@ struct TLP_SCOPE WithParameter {
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to "".
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
-   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults to "".
+   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults
+   *to "".
    * @return void
    **/
-  template<typename T>
-  void addOutParameter(const std::string &name,
-                       const std::string &help=std::string(),
-                       const std::string &defaultValue = std::string(),
-                       bool isMandatory = true,
-                       const std::string &valuesDescription = std::string()) {
+  template <typename T>
+  void addOutParameter(const std::string &name, const std::string &help = std::string(), const std::string &defaultValue = std::string(),
+                       bool isMandatory = true, const std::string &valuesDescription = std::string()) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, OUT_PARAM, valuesDescription);
   }
 
@@ -339,15 +326,13 @@ struct TLP_SCOPE WithParameter {
    * @param help A description of the parameter, that will be displayed to the user. Defaults to "".
    * @param defaultValue The default value the parameter should take, to be the initial value in the GUI. Defaults to "".
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
-   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults to "".
+   * @param valuesDescription A description of the values the parameter can take (usually for detailing the content of a StringCollection). Defaults
+   *to "".
    * @return void
    **/
-  template<typename T>
-  void addInOutParameter(const std::string &name,
-                         const std::string &help=std::string(),
-                         const std::string &defaultValue = std::string(),
-                         bool isMandatory = true,
-                         const std::string &valuesDescription = std::string()) {
+  template <typename T>
+  void addInOutParameter(const std::string &name, const std::string &help = std::string(), const std::string &defaultValue = std::string(),
+                         bool isMandatory = true, const std::string &valuesDescription = std::string()) {
     parameters.template add<T>(name, help, defaultValue, isMandatory, INOUT_PARAM, valuesDescription);
   }
 
@@ -363,10 +348,8 @@ struct TLP_SCOPE WithParameter {
    * @param isMandatory Whether this parameter requires a value or not. Defaults to true.
    * @return void
    **/
-  template<typename T>
-  _DEPRECATED void addParameter(const std::string &name,
-                                const std::string &help=std::string(),
-                                const std::string &defaultValue = std::string(),
+  template <typename T>
+  _DEPRECATED void addParameter(const std::string &name, const std::string &help = std::string(), const std::string &defaultValue = std::string(),
                                 bool isMandatory = true) {
     addInParameter<T>(name, help, defaultValue, isMandatory);
   }
@@ -379,13 +362,10 @@ struct TLP_SCOPE WithParameter {
   bool inputRequired() const;
 
 protected:
-
   /**
    * @brief The internal structure storing the parameters.
    **/
   ParameterDescriptionList parameters;
 };
-
-
 }
 #endif

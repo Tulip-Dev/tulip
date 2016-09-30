@@ -45,11 +45,12 @@ struct SelectedEntity;
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 
-  Ui::ElementInformationsWidget* _ui;
+  Ui::ElementInformationsWidget *_ui;
+
 public:
   MouseShowElementInfos();
   ~MouseShowElementInfos();
-  virtual bool eventFilter(QObject* widget, QEvent* e);
+  virtual bool eventFilter(QObject *widget, QEvent *e);
 
   void viewChanged(View *);
 
@@ -58,12 +59,11 @@ public:
   virtual bool pick(int x, int y, SelectedEntity &selectedEntity);
 
 protected:
-
   ViewWidget *_view;
   QWidget *_informationsWidget;
   QGraphicsProxyWidget *_informationsWidgetItem;
 
-  QTableView* tableView() const;
+  QTableView *tableView() const;
 
   /**
    * @brief buildModel create and returns the model to visualize edit elements parameters.
@@ -72,19 +72,16 @@ protected:
    * @param parent the parent for the model creation.
    * @return
    */
-  virtual QAbstractItemModel* buildModel(ElementType elementType, unsigned int elementId, QObject *parent)const;
+  virtual QAbstractItemModel *buildModel(ElementType elementType, unsigned int elementId, QObject *parent) const;
   /**
    * @brief elementName returns the title of the element.
    * @param elementType the type of the element can be NODE or EDGE
    * @param elementId the id of the element
    * @return
    */
-  virtual QString elementName(ElementType elementType, unsigned int elementId)const;
+  virtual QString elementName(ElementType elementType, unsigned int elementId) const;
 };
-
 }
-
-
 
 #endif
 ///@endcond

@@ -44,7 +44,6 @@ namespace tlp {
 class TLP_GLES_SCOPE OpenGlConfigManager {
 
 public:
-
   /**
    * Return the current instance. If instance doesn't exist, create it.
    */
@@ -106,21 +105,18 @@ public:
   int maxNumberOfSamples() const;
 
 private:
-
   /**
    * Private constructor for singleton
    */
   OpenGlConfigManager();
 
-  static OpenGlConfigManager* _instance;
+  static OpenGlConfigManager *_instance;
 
   bool _glewIsInit;
   bool _antialiased;
 
   std::map<std::string, bool> _checkedExtensions;
-
 };
-
 }
 
 #endif

@@ -20,19 +20,20 @@
 #include "WebDavManager.h"
 #include <QDomDocument>
 
-WebDavManager::WebDavManager(const QString& host, const QString& url, const QString& base64credentials) : _host(host), _url(url), _credentials("Basic " + base64credentials), _ongoingRequests(0), _displayErrors(true) {
+WebDavManager::WebDavManager(const QString &host, const QString &url, const QString &base64credentials)
+    : _host(host), _url(url), _credentials("Basic " + base64credentials), _ongoingRequests(0), _displayErrors(true) {
   _credentials = _credentials.replace("\012", "");
-  connect(&_manager, SIGNAL(finished(QNetworkReply*)), this, SLOT(requestFinished(QNetworkReply*)));
+  connect(&_manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(requestFinished(QNetworkReply *)));
 }
 
-bool WebDavManager::folderExists(const QString& folder) {
+bool WebDavManager::folderExists(const QString &folder) {
   _displayErrors = false;
   _requestSucessFull = true;
   ++_ongoingRequests;
 
   _manager.sendCustomRequest(initRequest(folder), QString("PROPFIND").toUtf8());
 
-  while(_ongoingRequests > 0) {
+  while (_ongoingRequests > 0) {
     QCoreApplication::processEvents();
   }
 
@@ -41,9 +42,9 @@ bool WebDavManager::folderExists(const QString& folder) {
   return _requestSucessFull;
 }
 
-bool WebDavManager::mkdir(const QString& folder) {
+bool WebDavManager::mkdir(const QString &folder) {
 
-  if(folderExists(folder)) {
+  if (folderExists(folder)) {
     return true;
   }
 
@@ -53,21 +54,20 @@ bool WebDavManager::mkdir(const QString& folder) {
   std::cout << "creating fodler " << folder.toStdString() << std::endl;
   _manager.sendCustomRequest(initRequest(folder), QString("MKCOL").toUtf8());
 
-
-  while(_ongoingRequests > 0) {
+  while (_ongoingRequests > 0) {
     QCoreApplication::processEvents();
   }
 
   return _requestSucessFull;
 }
 
-bool WebDavManager::putFile(const QString& filename, QIODevice* data) {
+bool WebDavManager::putFile(const QString &filename, QIODevice *data) {
   _requestSucessFull = true;
   ++_ongoingRequests;
   std::cout << "uploading " << filename.toStdString() << std::endl;
   _manager.sendCustomRequest(initRequest(filename), QString("PUT").toUtf8(), data);
 
-  while(_ongoingRequests > 0) {
+  while (_ongoingRequests > 0) {
     QCoreApplication::processEvents();
   }
 
@@ -75,16 +75,16 @@ bool WebDavManager::putFile(const QString& filename, QIODevice* data) {
 }
 
 void WebDavManager::finish() {
-  while(_ongoingRequests > 0) {
+  while (_ongoingRequests > 0) {
     QCoreApplication::processEvents();
   }
 }
 
-void WebDavManager::requestFinished(QNetworkReply* reply) {
+void WebDavManager::requestFinished(QNetworkReply *reply) {
   --_ongoingRequests;
 
-  if(reply->error() != QNetworkReply::NoError) {
-    if(_displayErrors) {
+  if (reply->error() != QNetworkReply::NoError) {
+    if (_displayErrors) {
       std::cout << "error: " << reply->errorString().toStdString() << std::endl;
       std::cout << "reply: " << QString(reply->readAll()).toStdString() << std::endl;
       std::cout << "request: " << reply->request().url().toString().toStdString() << std::endl;
@@ -93,17 +93,17 @@ void WebDavManager::requestFinished(QNetworkReply* reply) {
     _requestSucessFull = false;
   }
 
-  if(!QString(reply->readAll()).contains("200")) {
+  if (!QString(reply->readAll()).contains("200")) {
     _requestSucessFull = false;
   }
 
   reply->deleteLater();
 }
 
-QUrl WebDavManager::initUrl(const QString& dest) {
+QUrl WebDavManager::initUrl(const QString &dest) {
   QUrl url("https://" + _host + ":" + "443" + "/" + _url + "/" + dest);
 
-  if(!url.isValid()) {
+  if (!url.isValid()) {
     std::cout << "URL not valid: " << url.toString().toStdString() << std::endl;
     assert(false);
   }
@@ -111,12 +111,12 @@ QUrl WebDavManager::initUrl(const QString& dest) {
   return url;
 }
 
-QNetworkRequest WebDavManager::initRequest(const QString& destination, QIODevice* data, QVariant mimetype) {
+QNetworkRequest WebDavManager::initRequest(const QString &destination, QIODevice *data, QVariant mimetype) {
   QNetworkRequest request(initUrl(destination));
   request.setRawHeader(QByteArray("Authorization"), _credentials.toLatin1());
   request.setRawHeader(QByteArray("Host"), _host.toUtf8());
 
-  if(data != nullptr) {
+  if (data != nullptr) {
     request.setHeader(QNetworkRequest::ContentLengthHeader, QVariant(data->size()));
   }
 
@@ -124,16 +124,16 @@ QNetworkRequest WebDavManager::initRequest(const QString& destination, QIODevice
   return request;
 }
 
-QDomDocument* WebDavManager::getRemoteDescription() {
+QDomDocument *WebDavManager::getRemoteDescription() {
   QNetworkRequest request = initRequest("archive/serverDescription.xml");
 
   QNetworkAccessManager manager;
-  QNetworkReply* reply = manager.get(request);
+  QNetworkReply *reply = manager.get(request);
 
-  QDomDocument* currentServerDescription = new QDomDocument();
+  QDomDocument *currentServerDescription = new QDomDocument();
   QString errorMsg;
   bool result = currentServerDescription->setContent(reply->readAll(), &errorMsg);
-  std::cout << result << ":"<< errorMsg.toStdString() << std::endl;
+  std::cout << result << ":" << errorMsg.toStdString() << std::endl;
 
   reply->deleteLater();
 

@@ -26,8 +26,7 @@
 
 using namespace tlp;
 
-AboutTulipPage::AboutTulipPage(QWidget *parent) :
-  QWidget(parent), _ui(new Ui::AboutTulipPageData()) {
+AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::AboutTulipPageData()) {
   _ui->setupUi(this);
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
@@ -51,5 +50,5 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 }
 
 AboutTulipPage::~AboutTulipPage() {
-    delete _ui;
+  delete _ui;
 }

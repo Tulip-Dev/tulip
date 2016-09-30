@@ -30,13 +30,12 @@ namespace tlp {
 
 class Graph;
 
-class GeolocalisationConfigWidget : public QWidget  {
+class GeolocalisationConfigWidget : public QWidget {
 
   Q_OBJECT
-  Ui::GeolocalisationConfigWidgetData* _ui;
+  Ui::GeolocalisationConfigWidgetData *_ui;
 
-public :
-
+public:
   GeolocalisationConfigWidget(QWidget *parent = 0);
   ~GeolocalisationConfigWidget();
 
@@ -60,14 +59,12 @@ public :
 
   std::string getEdgesPathsPropertyName() const;
 
-public slots :
+public slots:
 
   void enableDisableComboBoxes();
 
 signals:
   void computeGeoLayout();
-
-
 };
 }
 

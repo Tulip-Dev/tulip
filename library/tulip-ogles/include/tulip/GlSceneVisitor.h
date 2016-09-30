@@ -38,16 +38,16 @@ class GlLayer;
 class TLP_GLES_SCOPE GlSceneVisitor {
 
 public:
+  GlSceneVisitor() {
+  }
+  virtual ~GlSceneVisitor() {
+  }
 
-  GlSceneVisitor() {}
-  virtual ~GlSceneVisitor() {}
-
-  virtual void visit(GlEntity *) {}
-  virtual void visit(GlLayer *) {}
-
+  virtual void visit(GlEntity *) {
+  }
+  virtual void visit(GlLayer *) {
+  }
 };
-
 }
 
 #endif // GLSCENEVISITOR_H
-

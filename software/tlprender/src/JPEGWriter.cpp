@@ -35,15 +35,16 @@ struct jpeg_destination_handler {
   std::ostream *os_ptr;
 };
 
-static  void init_destination (j_compress_ptr);
-static  boolean empty_output_buffer (j_compress_ptr);
-static  void term_destination (j_compress_ptr);
+static void init_destination(j_compress_ptr);
+static boolean empty_output_buffer(j_compress_ptr);
+static void term_destination(j_compress_ptr);
 
 namespace tlprender {
-JPEGWriter::JPEGWriter(const GLubyte *imagebuffer, const int width, const int height) :
-  ImageWriter(imagebuffer, width, height) {}
+JPEGWriter::JPEGWriter(const GLubyte *imagebuffer, const int width, const int height) : ImageWriter(imagebuffer, width, height) {
+}
 
-JPEGWriter::~JPEGWriter() {}
+JPEGWriter::~JPEGWriter() {
+}
 
 bool JPEGWriter::writeImage(std::ostream &os) const {
   struct jpeg_compress_struct cinfo;
@@ -71,31 +72,36 @@ bool JPEGWriter::writeImage(std::ostream &os) const {
 
   stringstream ss;
 
-  if (titleState) ss << "Title: " << title << endl;
+  if (titleState)
+    ss << "Title: " << title << endl;
 
-  if (softwareState) ss << "Software: " << software << endl;
+  if (softwareState)
+    ss << "Software: " << software << endl;
 
-  if (sourceState) ss << "Source: " << source << endl;
+  if (sourceState)
+    ss << "Source: " << source << endl;
 
-  if (layoutState) ss << "Layout: " << layout << endl;
+  if (layoutState)
+    ss << "Layout: " << layout << endl;
 
-  if (commentState) ss << "Comment: " << comment << endl;
+  if (commentState)
+    ss << "Comment: " << comment << endl;
 
-  jpeg_write_marker(&cinfo, JPEG_COM, (const JOCTET *) ss.str().c_str(), ss.str().length());
+  jpeg_write_marker(&cinfo, JPEG_COM, (const JOCTET *)ss.str().c_str(), ss.str().length());
 
   JSAMPROW row_pointer = new JSAMPLE[width * 3];
 
   while (cinfo.next_scanline < cinfo.image_height) {
-    const GLubyte *offset = & buffer[width * (cinfo.image_height - cinfo.next_scanline) * 4 * sizeof(GLubyte)];
+    const GLubyte *offset = &buffer[width * (cinfo.image_height - cinfo.next_scanline) * 4 * sizeof(GLubyte)];
 
-    for (int i=0; i < width; ++i) {
-      memcpy(row_pointer+(i*3), offset+(i*4), 3);
+    for (int i = 0; i < width; ++i) {
+      memcpy(row_pointer + (i * 3), offset + (i * 4), 3);
     }
 
     jpeg_write_scanlines(&cinfo, &row_pointer, 1);
   }
 
-  delete [] row_pointer;
+  delete[] row_pointer;
 
   jpeg_finish_compress(&cinfo);
   jpeg_destroy_compress(&cinfo);
@@ -103,19 +109,19 @@ bool JPEGWriter::writeImage(std::ostream &os) const {
 }
 }
 
-static void init_destination (j_compress_ptr cinfo) {
+static void init_destination(j_compress_ptr cinfo) {
   struct jpeg_destination_handler *dest_handler = new struct jpeg_destination_handler;
   dest_handler->buffer = new JOCTET[JPEG_IOBUFFER_SIZE];
-  dest_handler->os_ptr = (std::ostream *) cinfo->client_data;
+  dest_handler->os_ptr = (std::ostream *)cinfo->client_data;
   cinfo->client_data = dest_handler;
   cinfo->dest->next_output_byte = dest_handler->buffer;
   cinfo->dest->free_in_buffer = JPEG_IOBUFFER_SIZE;
 }
 
-static boolean empty_output_buffer (j_compress_ptr cinfo) {
-  struct jpeg_destination_handler *dest_handler = (struct jpeg_destination_handler *) cinfo->client_data;
+static boolean empty_output_buffer(j_compress_ptr cinfo) {
+  struct jpeg_destination_handler *dest_handler = (struct jpeg_destination_handler *)cinfo->client_data;
 
-  for (int i=0; i < JPEG_IOBUFFER_SIZE; ++i) {
+  for (int i = 0; i < JPEG_IOBUFFER_SIZE; ++i) {
     *(dest_handler->os_ptr) << (dest_handler->buffer)[i];
   }
 
@@ -124,10 +130,10 @@ static boolean empty_output_buffer (j_compress_ptr cinfo) {
   return TRUE;
 }
 
-static void term_destination (j_compress_ptr cinfo) {
-  struct jpeg_destination_handler *dest_handler = (struct jpeg_destination_handler *) cinfo->client_data;
+static void term_destination(j_compress_ptr cinfo) {
+  struct jpeg_destination_handler *dest_handler = (struct jpeg_destination_handler *)cinfo->client_data;
 
-  for (size_t i=0; i < (JPEG_IOBUFFER_SIZE - cinfo->dest->free_in_buffer); ++i) {
+  for (size_t i = 0; i < (JPEG_IOBUFFER_SIZE - cinfo->dest->free_in_buffer); ++i) {
     *(dest_handler->os_ptr) << (dest_handler->buffer)[i];
   }
 

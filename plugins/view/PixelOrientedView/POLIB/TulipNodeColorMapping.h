@@ -26,22 +26,18 @@
 #include "ColorFunction.h"
 #include "potypes.h"
 
-
 namespace pocore {
 
 class TulipNodeColorMapping : public ColorFunction {
 
-public :
-
+public:
   TulipNodeColorMapping(tlp::Graph *graph);
 
-  RGBA getColor(const double&, const unsigned int itemId) const;
+  RGBA getColor(const double &, const unsigned int itemId) const;
 
-private :
-
+private:
   tlp::Graph *graph;
 };
-
 }
 
 #endif /* TULIPNODECOLORMAPPING_H_ */

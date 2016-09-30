@@ -33,24 +33,17 @@
 
 using namespace tlp;
 
-SceneConfigWidget::SceneConfigWidget(QWidget *parent)
-    : QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(nullptr),
-      _resetting(false) {
+SceneConfigWidget::SceneConfigWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::SceneConfigWidget), _glMainWidget(nullptr), _resetting(false) {
   _ui->setupUi(this);
 
-  connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this,
-          SLOT(dynamicFontRBToggled(bool)));
+  connect(_ui->dynamicFontSizeRB, SIGNAL(toggled(bool)), this, SLOT(dynamicFontRBToggled(bool)));
 
-  _ui->selectionColorButton->setDialogTitle(
-      "Choose the color of selected nodes or edges");
+  _ui->selectionColorButton->setDialogTitle("Choose the color of selected nodes or edges");
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
 
-  if (Perspective::instance() != nullptr &&
-      Perspective::instance()->mainWindow() != nullptr) {
-    _ui->selectionColorButton->setDialogParent(
-        Perspective::instance()->mainWindow());
-    _ui->backgroundColorButton->setDialogParent(
-        Perspective::instance()->mainWindow());
+  if (Perspective::instance() != nullptr && Perspective::instance()->mainWindow() != nullptr) {
+    _ui->selectionColorButton->setDialogParent(Perspective::instance()->mainWindow());
+    _ui->backgroundColorButton->setDialogParent(Perspective::instance()->mainWindow());
   }
 
   _ui->labelsDisabledLabel->installEventFilter(this);
@@ -58,14 +51,14 @@ SceneConfigWidget::SceneConfigWidget(QWidget *parent)
   _ui->labelsShowAllLabel->installEventFilter(this);
 }
 
-SceneConfigWidget::~SceneConfigWidget() { delete _ui; }
+SceneConfigWidget::~SceneConfigWidget() {
+  delete _ui;
+}
 
 void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget *glMainWidget) {
   if (_glMainWidget != nullptr) {
-    disconnect(_glMainWidget, SIGNAL(graphChanged()), this,
-               SLOT(resetChanges()));
-    disconnect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this,
-               SLOT(resetChanges()));
+    disconnect(_glMainWidget, SIGNAL(graphChanged()), this, SLOT(resetChanges()));
+    disconnect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(resetChanges()));
   }
 
   _glMainWidget = glMainWidget;
@@ -75,8 +68,7 @@ void SceneConfigWidget::setGlMainWidget(tlp::GlMainWidget *glMainWidget) {
     // we assume that if an outside action causes an update of one
     // of the rendering parameters managed in this widget, necessarily
     // a call to _glMainWidget->draw will follow
-    connect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this,
-            SLOT(resetChanges()));
+    connect(_glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(resetChanges()));
   }
 
   resetChanges();
@@ -87,55 +79,41 @@ void SceneConfigWidget::resetChanges() {
 
   _ui->scrollArea->setEnabled(_glMainWidget != nullptr);
 
-  if (_glMainWidget == nullptr ||
-      _glMainWidget->getScene()->getMainGlGraph() == nullptr ||
+  if (_glMainWidget == nullptr || _glMainWidget->getScene()->getMainGlGraph() == nullptr ||
       _glMainWidget->getScene()->getMainGlGraph()->getGraph() == nullptr)
     return;
 
   Graph *graph = _glMainWidget->getScene()->getMainGlGraph()->getGraph();
-  GlGraphRenderingParameters &renderingParameters =
-      _glMainWidget->getScene()->getMainGlGraph()->getRenderingParameters();
+  GlGraphRenderingParameters &renderingParameters = _glMainWidget->getScene()->getMainGlGraph()->getRenderingParameters();
 
   // NODES
   delete _ui->labelsOrderingCombo->model();
-  GraphPropertiesModel<NumericProperty> *model =
-      new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"),
-                                                graph);
+  GraphPropertiesModel<NumericProperty> *model = new GraphPropertiesModel<NumericProperty>(trUtf8("Disable ordering"), graph);
   _ui->labelsOrderingCombo->setModel(model);
 
   if (renderingParameters.elementsOrderingProperty() == nullptr)
     _ui->labelsOrderingCombo->setCurrentIndex(0);
   else
-    _ui->labelsOrderingCombo->setCurrentIndex(
-        model->rowOf(renderingParameters.elementsOrderingProperty()));
+    _ui->labelsOrderingCombo->setCurrentIndex(model->rowOf(renderingParameters.elementsOrderingProperty()));
 
-  _ui->descendingCB->setChecked(
-      renderingParameters.elementsOrderedDescending());
+  _ui->descendingCB->setChecked(renderingParameters.elementsOrderedDescending());
 
   _ui->labelsFitCheck->setChecked(renderingParameters.labelsScaled());
   _ui->fixedFontSizeRB->setChecked(renderingParameters.labelsFixedFontSize());
-  _ui->dynamicFontSizeRB->setChecked(
-      !renderingParameters.labelsFixedFontSize());
+  _ui->dynamicFontSizeRB->setChecked(!renderingParameters.labelsFixedFontSize());
   _ui->labelsDensitySlider->setValue(renderingParameters.labelsDensity());
-  _ui->labelSizesRangeSlider->setLowerValue(
-      renderingParameters.minSizeOfLabels());
-  _ui->labelSizesRangeSlider->setUpperValue(
-      renderingParameters.maxSizeOfLabels());
+  _ui->labelSizesRangeSlider->setLowerValue(renderingParameters.minSizeOfLabels());
+  _ui->labelSizesRangeSlider->setUpperValue(renderingParameters.maxSizeOfLabels());
 
   // EDGES
   _ui->edges3DCheck->setChecked(renderingParameters.edges3D());
-  _ui->edgesArrowCheck->setChecked(
-      renderingParameters.displayEdgesExtremities());
-  _ui->edgesColorInterpolationCheck->setChecked(
-      renderingParameters.interpolateEdgesColors());
-  _ui->edgesSizeInterpolationCheck->setChecked(
-      renderingParameters.interpolateEdgesSizes());
+  _ui->edgesArrowCheck->setChecked(renderingParameters.displayEdgesExtremities());
+  _ui->edgesColorInterpolationCheck->setChecked(renderingParameters.interpolateEdgesColors());
+  _ui->edgesSizeInterpolationCheck->setChecked(renderingParameters.interpolateEdgesSizes());
 
   // COLORS
-  _ui->backgroundColorButton->setTulipColor(
-      _glMainWidget->getScene()->getBackgroundColor());
-  _ui->selectionColorButton->setTulipColor(
-      renderingParameters.selectionColor());
+  _ui->backgroundColorButton->setTulipColor(_glMainWidget->getScene()->getBackgroundColor());
+  _ui->selectionColorButton->setTulipColor(renderingParameters.selectionColor());
 
   // PROJECTION
   if (_glMainWidget->getScene()->isViewOrtho())
@@ -175,56 +153,41 @@ void SceneConfigWidget::applySettings() {
   if (_resetting || !_glMainWidget->getScene()->getMainGlGraph())
     return;
 
-  GlGraphRenderingParameters &renderingParameters =
-      _glMainWidget->getScene()->getMainGlGraph()->getRenderingParameters();
+  GlGraphRenderingParameters &renderingParameters = _glMainWidget->getScene()->getMainGlGraph()->getRenderingParameters();
 
   // NODES
   if (_ui->labelsOrderingCombo->currentIndex() == 0) {
     renderingParameters.setElementsOrderingProperty(nullptr);
     renderingParameters.setElementsOrdered(false);
   } else {
-    GraphPropertiesModel<NumericProperty> *model =
-        static_cast<GraphPropertiesModel<NumericProperty> *>(
-            _ui->labelsOrderingCombo->model());
-    renderingParameters.setElementsOrderingProperty(
-        dynamic_cast<NumericProperty *>(
-            model->index(_ui->labelsOrderingCombo->currentIndex(), 0)
-                .data(TulipModel::PropertyRole)
-                .value<PropertyInterface *>()));
+    GraphPropertiesModel<NumericProperty> *model = static_cast<GraphPropertiesModel<NumericProperty> *>(_ui->labelsOrderingCombo->model());
+    renderingParameters.setElementsOrderingProperty(dynamic_cast<NumericProperty *>(
+        model->index(_ui->labelsOrderingCombo->currentIndex(), 0).data(TulipModel::PropertyRole).value<PropertyInterface *>()));
     renderingParameters.setElementsOrdered(true);
   }
 
-  renderingParameters.setElementOrderedDescending(
-      _ui->descendingCB->isChecked());
+  renderingParameters.setElementOrderedDescending(_ui->descendingCB->isChecked());
   renderingParameters.setLabelsFixedFontSize(_ui->fixedFontSizeRB->isChecked());
   renderingParameters.setLabelsScaled(_ui->labelsFitCheck->isChecked());
   renderingParameters.setLabelsDensity(_ui->labelsDensitySlider->value());
-  renderingParameters.setMinSizeOfLabels(
-      _ui->labelSizesRangeSlider->lowerValue());
-  renderingParameters.setMaxSizeOfLabels(
-      _ui->labelSizesRangeSlider->upperValue());
+  renderingParameters.setMinSizeOfLabels(_ui->labelSizesRangeSlider->lowerValue());
+  renderingParameters.setMaxSizeOfLabels(_ui->labelSizesRangeSlider->upperValue());
 
   // EDGES
   renderingParameters.setEdges3D(_ui->edges3DCheck->isChecked());
-  renderingParameters.setDisplayEdgesExtremities(
-      _ui->edgesArrowCheck->isChecked());
-  renderingParameters.setInterpolateEdgesColors(
-      _ui->edgesColorInterpolationCheck->isChecked());
-  renderingParameters.setInterpolateEdgesSizes(
-      _ui->edgesSizeInterpolationCheck->isChecked());
+  renderingParameters.setDisplayEdgesExtremities(_ui->edgesArrowCheck->isChecked());
+  renderingParameters.setInterpolateEdgesColors(_ui->edgesColorInterpolationCheck->isChecked());
+  renderingParameters.setInterpolateEdgesSizes(_ui->edgesSizeInterpolationCheck->isChecked());
 
   // COLORS
-  renderingParameters.setSelectionColor(
-      _ui->selectionColorButton->tulipColor());
-  _glMainWidget->getScene()->setBackgroundColor(
-      _ui->backgroundColorButton->tulipColor());
+  renderingParameters.setSelectionColor(_ui->selectionColorButton->tulipColor());
+  _glMainWidget->getScene()->setBackgroundColor(_ui->backgroundColorButton->tulipColor());
 
   // PROJECTION
   _glMainWidget->getScene()->setViewOrtho(_ui->orthoRadioButton->isChecked());
 
   // GRAPH CHANGINS
-  _glMainWidget->setKeepScenePointOfViewOnSubgraphChanging(
-      _ui->keepSceneRadioButton->isChecked());
+  _glMainWidget->setKeepScenePointOfViewOnSubgraphChanging(_ui->keepSceneRadioButton->isChecked());
 
   _glMainWidget->draw();
   emit settingsApplied();

@@ -38,30 +38,27 @@ typedef MinMaxProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> D
  * @brief A graph property that maps a double value to graph elements.
  */
 class TLP_SCOPE DoubleProperty : public DoubleMinMaxProperty {
-public :
-  DoubleProperty (Graph *, const std::string& n="");
+public:
+  DoubleProperty(Graph *, const std::string &n = "");
 
   virtual void clone_handler(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty> &);
 
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
 
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
-  virtual void setAllNodeValue(const double &v, Graph* graph = NULL);
+  virtual void setAllNodeValue(const double &v, Graph *graph = NULL);
   virtual void setAllEdgeValue(const double &v, Graph *graph = NULL);
 
-  enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
-                                      MAX_CALC = 3, MIN_CALC = 4
-                                     };
+  enum PredefinedMetaValueCalculator { NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2, MAX_CALC = 3, MIN_CALC = 4 };
 
   // setMetaValueCalculator overloading
-  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator* calc);
-  void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC,
-                              PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
+  virtual void setMetaValueCalculator(PropertyInterface::MetaValueCalculator *calc);
+  void setMetaValueCalculator(PredefinedMetaValueCalculator nodeCalc = AVG_CALC, PredefinedMetaValueCalculator edgeCalc = AVG_CALC);
 
   // NumericProperty interface
   virtual double getNodeDoubleValue(const node n) const {
@@ -70,10 +67,10 @@ public :
   virtual double getNodeDoubleDefaultValue() const {
     return getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(Graph* g = nullptr) {
+  virtual double getNodeDoubleMin(Graph *g = nullptr) {
     return getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(Graph* g = nullptr) {
+  virtual double getNodeDoubleMax(Graph *g = nullptr) {
     return getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
@@ -82,10 +79,10 @@ public :
   virtual double getEdgeDoubleDefaultValue() const {
     return getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(Graph* g = nullptr) {
+  virtual double getEdgeDoubleMin(Graph *g = nullptr) {
     return getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(Graph* g = nullptr) {
+  virtual double getEdgeDoubleMax(Graph *g = nullptr) {
     return getEdgeMax(g);
   }
 
@@ -93,8 +90,8 @@ public :
 
   void edgesUniformQuantification(unsigned int);
 
-  NumericProperty* copyProperty(Graph *g) {
-    DoubleProperty* newProp = new DoubleProperty(g);
+  NumericProperty *copyProperty(Graph *g) {
+    DoubleProperty *newProp = new DoubleProperty(g);
     newProp->copy(this);
 
     return newProp;
@@ -102,8 +99,7 @@ public :
 
 private:
   // override Observable::treatEvent
-  void treatEvent(const Event&);
-
+  void treatEvent(const Event &);
 };
 
 /**
@@ -111,18 +107,16 @@ private:
  * @brief A graph property that maps a std::vector<double> value to graph elements.
  */
 
-class TLP_SCOPE DoubleVectorProperty:public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
-public :
-  DoubleVectorProperty(Graph *g, const std::string& n=""):AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {}
+class TLP_SCOPE DoubleVectorProperty : public AbstractVectorProperty<tlp::DoubleVectorType, tlp::DoubleType> {
+public:
+  DoubleVectorProperty(Graph *g, const std::string &n = "") : AbstractVectorProperty<DoubleVectorType, tlp::DoubleType>(g, n) {
+  }
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
-
 };
-
-
 }
 #endif

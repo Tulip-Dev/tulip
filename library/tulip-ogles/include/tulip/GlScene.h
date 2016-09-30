@@ -47,12 +47,7 @@ class GlGraph;
 
 struct TLP_GLES_SCOPE SelectedEntity {
 
-  enum SelectedEntityType {
-    NO_ENTITY_SELECTED = 0,
-    ENTITY_SELECTED = 1,
-    NODE_SELECTED = 2,
-    EDGE_SELECTED = 3
-  };
+  enum SelectedEntityType { NO_ENTITY_SELECTED = 0, ENTITY_SELECTED = 1, NODE_SELECTED = 2, EDGE_SELECTED = 3 };
 
   SelectedEntity();
 
@@ -70,8 +65,7 @@ struct TLP_GLES_SCOPE SelectedEntity {
 
   edge getEdge() const;
 
-protected :
-
+protected:
   SelectedEntityType _entityType;
   GlEntity *_entity;
   unsigned int _graphEltId;
@@ -80,8 +74,7 @@ protected :
 class TLP_GLES_SCOPE GlScene : public tlp::Observable {
 
 public:
-
-  GlScene(GlLODCalculator *calculator=nullptr);
+  GlScene(GlLODCalculator *calculator = nullptr);
 
   ~GlScene();
 
@@ -103,7 +96,7 @@ public:
     return _viewport;
   }
 
-  void setBackgroundColor(const tlp::Color& color);
+  void setBackgroundColor(const tlp::Color &color);
 
   tlp::Color getBackgroundColor() const {
     return _backgroundColor;
@@ -131,13 +124,13 @@ public:
 
   bool addExistingLayerAfter(GlLayer *layer, GlLayer *afterLayer);
 
-  GlLayer *getLayer(const std::string& name) const;
+  GlLayer *getLayer(const std::string &name) const;
 
-  void removeLayer(const std::string& name, bool deleteLayer=false);
+  void removeLayer(const std::string &name, bool deleteLayer = false);
 
-  void removeLayer(GlLayer *layer, bool deleteLayer=false);
+  void removeLayer(GlLayer *layer, bool deleteLayer = false);
 
-  const std::vector<GlLayer*> &getLayersList() const {
+  const std::vector<GlLayer *> &getLayersList() const {
     return _layersList;
   }
 
@@ -163,21 +156,26 @@ public:
 
   void zoomFactor(float factor);
 
-  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, std::vector<SelectedEntity>& selectedEntities, GlLayer *layer = nullptr, bool singleSelection = false);
+  bool selectEntities(RenderingEntitiesFlag type, int x, int y, int width, int height, std::vector<SelectedEntity> &selectedEntities,
+                      GlLayer *layer = nullptr, bool singleSelection = false);
 
   bool selectEntity(RenderingEntitiesFlag type, int x, int y, SelectedEntity &selectedEntity, GlLayer *layer = nullptr);
 
-  std::set<GlEntity*> getEntities();
+  std::set<GlEntity *> getEntities();
 
-  void forceRedraw() { _sceneNeedRedraw = true;}
+  void forceRedraw() {
+    _sceneNeedRedraw = true;
+  }
 
   void setSceneNeedRedraw(bool sceneNeedRedraw) {
     _sceneNeedRedraw = sceneNeedRedraw;
   }
 
-  void initGlParameters(bool drawBackBufferBackup=false);
+  void initGlParameters(bool drawBackBufferBackup = false);
 
-  void setBackupBackBuffer(bool backup) {_backupBackBuffer = backup;}
+  void setBackupBackBuffer(bool backup) {
+    _backupBackBuffer = backup;
+  }
 
   unsigned int getBackBufferTexture() const {
     return _backBufferTexture;
@@ -196,11 +194,9 @@ public:
   GlGraph *getGlGraph(const std::string &glGraphName) const;
 
 protected:
-
   void treatEvent(const tlp::Event &message);
 
 private:
-
   void backupBackBuffer();
   void drawBackBufferBackup();
   void layerAddedInScene(GlLayer *layer);
@@ -219,21 +215,16 @@ private:
   bool _backupBackBuffer;
 
   BoundingBox _lastSceneBoundingBox;
-
 };
 
 class GlSceneEvent : public tlp::Event {
 public:
+  enum GlSceneEventType { DRAW_REQUEST = 0, LAYER_ADDED_IN_SCENE, LAYER_REMOVED_FROM_SCENE };
 
-  enum GlSceneEventType {DRAW_REQUEST=0,
-                         LAYER_ADDED_IN_SCENE,
-                         LAYER_REMOVED_FROM_SCENE
-                        };
+  GlSceneEvent(GlSceneEventType type, GlScene *scene, GlLayer *layer = nullptr, Event::EventType evtType = Event::TLP_MODIFICATION)
 
-  GlSceneEvent(GlSceneEventType type, GlScene *scene, GlLayer *layer = nullptr,
-               Event::EventType evtType = Event::TLP_MODIFICATION)
-
-    : Event(*scene, evtType), _type(type), _scene(scene), _layer(layer) {}
+      : Event(*scene, evtType), _type(type), _scene(scene), _layer(layer) {
+  }
 
   GlScene *getGlScene() const {
     return _scene;
@@ -248,12 +239,10 @@ public:
   }
 
 protected:
-
   GlSceneEventType _type;
   GlScene *_scene;
   GlLayer *_layer;
 };
-
 }
 
 #endif // GLSCENE_H

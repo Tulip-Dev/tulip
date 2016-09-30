@@ -33,33 +33,35 @@ class PluginProgress;
 class Graph;
 class DataSet;
 
-
 /**
  * @ingroup Plugins
  * @brief This abstract class describes a basic algorithm plugin.
  *
  * It inherits on WithParameter and WithDependency for convenience.
- * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?), running the algorithm and resetting the algorithm to re-apply it.
- * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, ...).
+ * Basic functionality consists in checking the algorithm can run on the current Graph (e.g. is the graph simple ?), running the algorithm and
+ * resetting the algorithm to re-apply it.
+ * The algorithm can and should report progress and which task it is performing if it is decomposed in multiple phases (e.g. layouting the graph,
+ * coloring it, ...).
  */
 class Algorithm : public tlp::Plugin {
-public :
+public:
   /**
    * @brief Constructs an algorithm and initializes members from the AlgorithmContext.
    *
    * @param context The context this algorithm runs in, containing the graph, a DataSet for the parameters, and a PluginProgress
    * to give feedback to the user about the tasks the algorithm is performing.
    */
-  Algorithm (const PluginContext* context) : graph(nullptr),pluginProgress(nullptr),dataSet(nullptr) {
-    if(context != nullptr) {
-      const AlgorithmContext* algorithmContext = dynamic_cast<const AlgorithmContext*>(context);
+  Algorithm(const PluginContext *context) : graph(nullptr), pluginProgress(nullptr), dataSet(nullptr) {
+    if (context != nullptr) {
+      const AlgorithmContext *algorithmContext = dynamic_cast<const AlgorithmContext *>(context);
       assert(algorithmContext != nullptr);
       graph = algorithmContext->graph;
       pluginProgress = algorithmContext->pluginProgress;
       dataSet = algorithmContext->dataSet;
     }
   }
-  virtual ~Algorithm() {}
+  virtual ~Algorithm() {
+  }
 
   std::string icon() const {
     return "chart-bar";
@@ -100,6 +102,5 @@ public :
    */
   DataSet *dataSet;
 };
-
 }
 #endif

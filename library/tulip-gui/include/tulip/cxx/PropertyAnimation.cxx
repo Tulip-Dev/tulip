@@ -18,11 +18,14 @@
  */
 #include <tulip/ForEach.h>
 
-template<typename PropType, typename NodeType, typename EdgeType>
+template <typename PropType, typename NodeType, typename EdgeType>
 PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-    tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges, QObject* parent) :
+                                                                   tlp::BooleanProperty *selection, int frameCount, bool computeNodes,
+                                                                   bool computeEdges, QObject *parent)
+    :
 
-  Animation(frameCount,parent), _graph(graph), _start(0), _end(0), _out(out), _computeNodes(computeNodes), _computeEdges(computeEdges) {
+      Animation(frameCount, parent),
+      _graph(graph), _start(0), _end(0), _out(out), _computeNodes(computeNodes), _computeEdges(computeEdges) {
 
   assert(out);
   assert(start);
@@ -41,31 +44,28 @@ PropertyAnimation<PropType, NodeType, EdgeType>::PropertyAnimation(tlp::Graph *g
     this->_selection = new tlp::BooleanProperty(graph);
     this->_selection->setAllNodeValue(true);
     this->_selection->setAllEdgeValue(true);
-  }
-  else {
+  } else {
     this->_selection = new tlp::BooleanProperty(selection->getGraph());
     *(this->_selection) = *selection;
   }
 }
 
-template<typename PropType, typename NodeType, typename EdgeType>
-PropertyAnimation<PropType, NodeType, EdgeType>::~PropertyAnimation() {
+template <typename PropType, typename NodeType, typename EdgeType> PropertyAnimation<PropType, NodeType, EdgeType>::~PropertyAnimation() {
   delete _start;
   delete _end;
   delete _selection;
 }
 
-template<typename PropType, typename NodeType, typename EdgeType>
-void PropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
+template <typename PropType, typename NodeType, typename EdgeType> void PropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
   if (_computeNodes) {
-    for(tlp::node n : _graph->getNodes()) {
+    for (tlp::node n : _graph->getNodes()) {
       if (_selection->getNodeValue(n))
         _out->setNodeValue(n, getNodeFrameValue(_start->getNodeValue(n), _end->getNodeValue(n), f));
     }
   }
 
   if (_computeEdges) {
-    for(tlp::edge e : _graph->getEdges()) {
+    for (tlp::edge e : _graph->getEdges()) {
       if (_selection->getEdgeValue(e))
         _out->setEdgeValue(e, getEdgeFrameValue(_start->getEdgeValue(e), _end->getEdgeValue(e), f));
     }

@@ -37,15 +37,12 @@
 
 namespace tlp {
 
-
 typedef Matrix<float, 4> MatrixGL;
 
 class TLP_GLES_SCOPE Camera : public tlp::Observable {
 public:
-
-  Camera(tlp::Coord center=tlp::Coord(0,0,0),
-         tlp::Coord eyes=tlp::Coord(0,0,10), tlp::Coord up=tlp::Coord(0,1,0),
-         double zoomFactor=1.0, double sceneRadius=10);
+  Camera(tlp::Coord center = tlp::Coord(0, 0, 0), tlp::Coord eyes = tlp::Coord(0, 0, 10), tlp::Coord up = tlp::Coord(0, 1, 0),
+         double zoomFactor = 1.0, double sceneRadius = 10);
 
   explicit Camera(bool is3d);
 
@@ -53,13 +50,13 @@ public:
 
   ~Camera();
 
-  Camera& operator=(const Camera &camera);
+  Camera &operator=(const Camera &camera);
 
   void setViewport(const tlp::Vec4i &viewport);
-  
+
   tlp::Vec4i getViewport() const;
-  
-  void setSceneRadius(double sceneRadius,const tlp::BoundingBox sceneBoundingBox=tlp::BoundingBox());
+
+  void setSceneRadius(double sceneRadius, const tlp::BoundingBox sceneBoundingBox = tlp::BoundingBox());
 
   tlp::BoundingBox getSceneBoundingBox() const {
     return _sceneBoundingBox;
@@ -88,25 +85,25 @@ public:
   }
 
   void setZoomFactor(double zoomFactor);
-  
+
   double getZoomFactor() const {
     return _zoomFactor;
   }
 
-  void setEyes(const tlp::Coord& eyes);
-  
+  void setEyes(const tlp::Coord &eyes);
+
   tlp::Coord getEyes() const {
     return _eyes;
   }
 
-  void setCenter(const tlp::Coord& center);
-  
+  void setCenter(const tlp::Coord &center);
+
   tlp::Coord getCenter() const {
     return _center;
   }
 
-  void setUp(const tlp::Coord& up);
-  
+  void setUp(const tlp::Coord &up);
+
   tlp::Coord getUp() const {
     return _up;
   }
@@ -140,9 +137,9 @@ public:
     return _normalMatrix;
   }
 
-  tlp::Coord viewportTo3DWorld(const tlp::Coord &point) ;
+  tlp::Coord viewportTo3DWorld(const tlp::Coord &point);
 
-  tlp::Coord worldTo2DViewport(const tlp::Coord &obj) ;
+  tlp::Coord worldTo2DViewport(const tlp::Coord &obj);
 
   void pushProjectionMatrix();
   void popProjectionMatrix();
@@ -151,7 +148,7 @@ public:
   void popModelViewMatrix();
 
   void centerScene(tlp::BoundingBox sceneBoundingBox = tlp::BoundingBox());
-  
+
   void translate(const tlp::Vec3f &move);
   void translate(float x, float y, float z);
 
@@ -162,15 +159,14 @@ public:
   bool hasRotation() const;
 
 private:
-
-  void initProjection(const tlp::Vec4i& viewport, bool threeD);
+  void initProjection(const tlp::Vec4i &viewport, bool threeD);
   void initProjection(bool threeD);
   void initModelView(bool threeD);
   void computeTransformMatrices();
 
-  void ortho(float  left,  float  right,  float  bottom,  float  top,  float  nearVal,  float  farVal);
-  void frustum(float  left,  float  right,  float  bottom,  float  top,  float  nearVal,  float  farVal);
-  void lookAt(float eyeX,  float eyeY,  float eyeZ,  float centerX,  float centerY,  float centerZ,  float upX,  float upY,  float upZ);
+  void ortho(float left, float right, float bottom, float top, float nearVal, float farVal);
+  void frustum(float left, float right, float bottom, float top, float nearVal, float farVal);
+  void lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ);
 
   void rotate(float angle, float x, float y, float z);
 
@@ -199,10 +195,7 @@ private:
   std::stack<tlp::Coord> _centerStack;
   std::stack<tlp::Coord> _eyesStack;
   std::stack<tlp::Coord> _upStack;
-
-
 };
-
 }
 
 #endif // CAMERA_H

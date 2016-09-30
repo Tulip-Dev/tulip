@@ -35,17 +35,15 @@ using namespace tlp;
 class SquareGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Square", "2D - Square extremity", "Antoine Lambert", "20/05/2016", "Square", "1.0", tlp::NodeShape::Square)
 
   SquareGlyph(PluginContext *context) : Glyph(context) {
-    _vertices = computeRegularPolygon(4, M_PI/4.f);
+    _vertices = computeRegularPolygon(4, M_PI / 4.f);
     _indices = {0, 1, 3, 1, 2, 3};
     _outlinesIndices.push_back({0, 1, 2, 3, 0});
   }
 
 protected:
-
   Coord getAnchor(const Coord &vector) const {
     Coord v(vector);
     float x, y, z, fmax;
@@ -58,7 +56,6 @@ protected:
     else
       return v;
   }
-
 };
 
 PLUGIN(SquareGlyph)

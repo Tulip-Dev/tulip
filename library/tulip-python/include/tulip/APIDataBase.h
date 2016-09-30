@@ -33,14 +33,13 @@ class TLP_PYTHON_SCOPE APIDataBase {
 
   APIDataBase();
 
-  QHash<QString, QSet<QString> > _dictContent;
+  QHash<QString, QSet<QString>> _dictContent;
   QHash<QString, QString> _returnType;
-  QHash<QString, QVector<QVector<QString> > > _paramTypes;
+  QHash<QString, QVector<QVector<QString>>> _paramTypes;
 
   static APIDataBase _instance;
 
-public :
-
+public:
   static APIDataBase *getInstance() {
     return &_instance;
   }
@@ -52,7 +51,7 @@ public :
   QSet<QString> getTypesList() const;
   QSet<QString> getDictContentForType(const QString &type, const QString &prefix = "") const;
   QString getReturnTypeForMethodOrFunction(const QString &funcName) const;
-  QVector<QVector<QString> > getParamTypesForMethodOrFunction(const QString &funcName) const;
+  QVector<QVector<QString>> getParamTypesForMethodOrFunction(const QString &funcName) const;
   bool functionExists(const QString &funcName) const;
   QVector<QString> findTypesContainingDictEntry(const QString &dictEntry) const;
   QSet<QString> getAllDictEntriesStartingWithPrefix(const QString &prefix) const;
@@ -60,9 +59,7 @@ public :
   bool typeExists(const QString &type) const;
   QString getFullTypeName(const QString &type) const;
   bool dictEntryExists(const QString &type, const QString &dictEntry) const;
-
 };
-
 }
 
 #endif /* APIDATABASE_H_ */

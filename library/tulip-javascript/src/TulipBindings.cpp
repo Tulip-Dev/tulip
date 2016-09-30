@@ -56,7 +56,7 @@ using namespace emscripten;
 
 // ==================================================================================================================
 
-//static std::string replaceString(std::string subject, const std::string& search,
+// static std::string replaceString(std::string subject, const std::string& search,
 //                                 const std::string& replace) {
 //  size_t pos = 0;
 //  while ((pos = subject.find(search, pos)) != std::string::npos) {
@@ -66,8 +66,7 @@ using namespace emscripten;
 //  return subject;
 //}
 
-static void replaceStringInPlace(std::string& subject, const std::string& search,
-                                 const std::string& replace) {
+static void replaceStringInPlace(std::string &subject, const std::string &search, const std::string &replace) {
   size_t pos = 0;
   while ((pos = subject.find(search, pos)) != std::string::npos) {
     subject.replace(pos, search.length(), replace);
@@ -77,24 +76,22 @@ static void replaceStringInPlace(std::string& subject, const std::string& search
 
 // ==================================================================================================================
 
-template <class StringContainer>
-static unsigned int getStringsNumberOfBytesFromContainer(const StringContainer &container, unsigned int *array) {
+template <class StringContainer> static unsigned int getStringsNumberOfBytesFromContainer(const StringContainer &container, unsigned int *array) {
   typename StringContainer::const_iterator it = container.begin();
   unsigned int ret = 0;
-  for(; it != container.end() ; ++it) {
-    *array++ = (it->length()+1);
-    ret += (it->length()+1);
+  for (; it != container.end(); ++it) {
+    *array++ = (it->length() + 1);
+    ret += (it->length() + 1);
   }
   return ret;
 }
 
-template<class StringContainer>
-static void fillBytesArrayFromStringsContainer(const StringContainer &container, unsigned char *array) {
+template <class StringContainer> static void fillBytesArrayFromStringsContainer(const StringContainer &container, unsigned char *array) {
   typename StringContainer::const_iterator it = container.begin();
   unsigned char *arrayPtr = array;
-  for(; it != container.end() ; ++it) {
-    memcpy(arrayPtr, it->c_str(), (it->length()+1));
-    arrayPtr += (it->length()+1);
+  for (; it != container.end(); ++it) {
+    memcpy(arrayPtr, it->c_str(), (it->length() + 1));
+    arrayPtr += (it->length() + 1);
   }
 }
 
@@ -102,8 +99,8 @@ static unsigned int getStringsNumberOfBytesFromStringIterator(tlp::Iterator<std:
   unsigned int ret = 0;
   std::string s;
   forEach(s, itS) {
-    *array++ = (s.length()+1);
-    ret += (s.length()+1);
+    *array++ = (s.length() + 1);
+    ret += (s.length() + 1);
   }
   return ret;
 }
@@ -112,16 +109,17 @@ static void fillBytesArrayFromStringIterator(tlp::Iterator<std::string> *itS, un
   unsigned char *arrayPtr = array;
   std::string s;
   forEach(s, itS) {
-    memcpy(arrayPtr, s.c_str(), (s.length()+1));
-    arrayPtr += (s.length()+1);
+    memcpy(arrayPtr, s.c_str(), (s.length() + 1));
+    arrayPtr += (s.length() + 1);
   }
 }
 
-static void fillStringVectorFromStringsBytes(std::vector<std::string> &vs, unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
+static void fillStringVectorFromStringsBytes(std::vector<std::string> &vs, unsigned char *stringsBytes, unsigned int *stringsNbBytes,
+                                             unsigned int nbStrings) {
   vs.resize(nbStrings);
-  char *start = reinterpret_cast<char*>(stringsBytes);
-  for (unsigned int i = 0 ; i < nbStrings ; ++i) {
-    vs[i] = std::string(start, stringsNbBytes[i]-1);
+  char *start = reinterpret_cast<char *>(stringsBytes);
+  for (unsigned int i = 0; i < nbStrings; ++i) {
+    vs[i] = std::string(start, stringsNbBytes[i] - 1);
     start += stringsNbBytes[i];
   }
 }
@@ -142,13 +140,13 @@ static val tulip() {
 }
 
 static val wrapPropertyToJs(tlp::PropertyInterface *prop) {
-  tlp::BooleanProperty *bp = dynamic_cast<tlp::BooleanProperty*>(prop);
-  tlp::ColorProperty *cp = dynamic_cast<tlp::ColorProperty*>(prop);
-  tlp::DoubleProperty *dp = dynamic_cast<tlp::DoubleProperty*>(prop);
-  tlp::IntegerProperty *ip = dynamic_cast<tlp::IntegerProperty*>(prop);
-  tlp::LayoutProperty *lp = dynamic_cast<tlp::LayoutProperty*>(prop);
-  tlp::SizeProperty *sp = dynamic_cast<tlp::SizeProperty*>(prop);
-  tlp::StringProperty *strp = dynamic_cast<tlp::StringProperty*>(prop);
+  tlp::BooleanProperty *bp = dynamic_cast<tlp::BooleanProperty *>(prop);
+  tlp::ColorProperty *cp = dynamic_cast<tlp::ColorProperty *>(prop);
+  tlp::DoubleProperty *dp = dynamic_cast<tlp::DoubleProperty *>(prop);
+  tlp::IntegerProperty *ip = dynamic_cast<tlp::IntegerProperty *>(prop);
+  tlp::LayoutProperty *lp = dynamic_cast<tlp::LayoutProperty *>(prop);
+  tlp::SizeProperty *sp = dynamic_cast<tlp::SizeProperty *>(prop);
+  tlp::StringProperty *strp = dynamic_cast<tlp::StringProperty *>(prop);
 
   val jsProp = val::null();
 
@@ -171,7 +169,6 @@ static val wrapPropertyToJs(tlp::PropertyInterface *prop) {
   }
 
   return jsProp;
-
 }
 
 static std::set<unsigned long> deletedPointers;
@@ -179,7 +176,6 @@ static std::set<unsigned long> deletedPointers;
 class TulipObjectsObserver : public tlp::Observable {
 
 public:
-
   void treatEvent(const tlp::Event &event) {
 
     if (!tulip().call<bool>("hasListener", reinterpret_cast<unsigned long>(event.sender()))) {
@@ -193,37 +189,32 @@ public:
       val graphEvent = tulip()["GraphEvent"].new_(jsGraph, static_cast<unsigned long>(ge->getType()));
       if (ge->getType() == tlp::GraphEvent::TLP_ADD_NODE || ge->getType() == tlp::GraphEvent::TLP_DEL_NODE) {
         graphEvent.set("node", tulip()["Node"].new_(ge->getNode().id));
-      } else if (ge->getType() == tlp::GraphEvent::TLP_ADD_EDGE ||
-                 ge->getType() == tlp::GraphEvent::TLP_DEL_EDGE ||
-                 ge->getType() == tlp::GraphEvent::TLP_REVERSE_EDGE ||
-                 ge->getType() == tlp::GraphEvent::TLP_BEFORE_SET_ENDS ||
+      } else if (ge->getType() == tlp::GraphEvent::TLP_ADD_EDGE || ge->getType() == tlp::GraphEvent::TLP_DEL_EDGE ||
+                 ge->getType() == tlp::GraphEvent::TLP_REVERSE_EDGE || ge->getType() == tlp::GraphEvent::TLP_BEFORE_SET_ENDS ||
                  ge->getType() == tlp::GraphEvent::TLP_AFTER_SET_ENDS) {
         graphEvent.set("edge", tulip()["Edge"].new_(ge->getEdge().id));
       } else if (ge->getType() == tlp::GraphEvent::TLP_ADD_NODES) {
         val nodesArray = val::array();
         const std::vector<tlp::node> &nodes = ge->getNodes();
-        for (size_t i = 0 ; i < nodes.size() ; ++i) {
+        for (size_t i = 0; i < nodes.size(); ++i) {
           nodesArray.call<void>("push", tulip()["Node"].new_(nodes[i].id));
         }
         graphEvent.set("nodes", nodesArray);
       } else if (ge->getType() == tlp::GraphEvent::TLP_ADD_EDGES) {
         val edgesArray = val::array();
         const std::vector<tlp::edge> &edges = ge->getEdges();
-        for (size_t i = 0 ; i < edges.size() ; ++i) {
+        for (size_t i = 0; i < edges.size(); ++i) {
           edgesArray.call<void>("push", tulip()["Edge"].new_(edges[i].id));
         }
         graphEvent.set("edges", edgesArray);
       } else if (ge->getType() == tlp::GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH ||
                  ge->getType() == tlp::GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH ||
                  ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH ||
-                 ge->getType() == tlp::GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH ||
-                 ge->getType() == tlp::GraphEvent::TLP_BEFORE_ADD_SUBGRAPH ||
-                 ge->getType() == tlp::GraphEvent::TLP_AFTER_ADD_SUBGRAPH ||
-                 ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_SUBGRAPH ||
+                 ge->getType() == tlp::GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH || ge->getType() == tlp::GraphEvent::TLP_BEFORE_ADD_SUBGRAPH ||
+                 ge->getType() == tlp::GraphEvent::TLP_AFTER_ADD_SUBGRAPH || ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_SUBGRAPH ||
                  ge->getType() == tlp::GraphEvent::TLP_AFTER_DEL_SUBGRAPH) {
         graphEvent.set("subgraph", tulip()["Graph"].new_(reinterpret_cast<unsigned long>(ge->getSubGraph())));
-      } else if (ge->getType() == tlp::GraphEvent::TLP_ADD_LOCAL_PROPERTY ||
-                 ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY ||
+      } else if (ge->getType() == tlp::GraphEvent::TLP_ADD_LOCAL_PROPERTY || ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY ||
                  ge->getType() == tlp::GraphEvent::TLP_ADD_INHERITED_PROPERTY ||
                  ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
         graphEvent.set("name", ge->getPropertyName());
@@ -233,8 +224,7 @@ public:
                  ge->getType() == tlp::GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
                  ge->getType() == tlp::GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY) {
         graphEvent.set("name", ge->getPropertyName());
-      } else if (ge->getType() == tlp::GraphEvent::TLP_BEFORE_SET_ATTRIBUTE ||
-                 ge->getType() == tlp::GraphEvent::TLP_AFTER_SET_ATTRIBUTE ||
+      } else if (ge->getType() == tlp::GraphEvent::TLP_BEFORE_SET_ATTRIBUTE || ge->getType() == tlp::GraphEvent::TLP_AFTER_SET_ATTRIBUTE ||
                  ge->getType() == tlp::GraphEvent::TLP_REMOVE_ATTRIBUTE) {
         graphEvent.set("name", ge->getAttributeName());
       }
@@ -246,23 +236,20 @@ public:
       val jsProp = wrapPropertyToJs(pe->getProperty());
 
       val propEvent = tulip()["PropertyEvent"].new_(jsProp, static_cast<unsigned long>(pe->getType()));
-      if (pe->getType() == tlp::PropertyEvent::TLP_BEFORE_SET_NODE_VALUE ||
-          pe->getType() == tlp::PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
+      if (pe->getType() == tlp::PropertyEvent::TLP_BEFORE_SET_NODE_VALUE || pe->getType() == tlp::PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
         propEvent.set("node", tulip()["Node"].new_(pe->getNode().id));
-      } else if (pe->getType() == tlp::PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE ||
-                 pe->getType() == tlp::PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
+      } else if (pe->getType() == tlp::PropertyEvent::TLP_BEFORE_SET_EDGE_VALUE || pe->getType() == tlp::PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
         propEvent.set("edge", tulip()["Edge"].new_(pe->getEdge().id));
       }
 
       tulip().call<void>("sendEventToListeners", reinterpret_cast<unsigned long>(event.sender()), propEvent);
     }
-
   }
 
   void treatEvents(const std::vector<tlp::Event> &events) {
     val jsEvents = val::array();
     unsigned int nbEvents = 0;
-    for (size_t i = 0 ; i < events.size() ; ++i) {
+    for (size_t i = 0; i < events.size(); ++i) {
       if (events[i].type() == tlp::Event::TLP_DELETE) {
         deletedPointers.insert(reinterpret_cast<unsigned long>(events[i].sender()));
       }
@@ -270,8 +257,8 @@ public:
         continue;
       }
       val jsEvent = val::null();
-      tlp::Graph *graph = dynamic_cast<tlp::Graph*>(events[i].sender());
-      tlp::PropertyInterface *prop = dynamic_cast<tlp::PropertyInterface*>(events[i].sender());
+      tlp::Graph *graph = dynamic_cast<tlp::Graph *>(events[i].sender());
+      tlp::PropertyInterface *prop = dynamic_cast<tlp::PropertyInterface *>(events[i].sender());
       if (graph) {
         val jsgraph = tulip()["Graph"].new_(reinterpret_cast<unsigned long>(graph));
         jsEvent = tulip()["Event"].new_(jsgraph, static_cast<unsigned long>(events[i].type()));
@@ -289,14 +276,14 @@ public:
       tulip().call<void>("sendEventsToObservers", jsEvents);
     }
   }
-
 };
 
 static TulipObjectsObserver tlpObjObs;
 
 void observeObject(tlp::Observable *observable) {
-  if (!observable || workerMode()) return;
-  //observable->addListener(&tlpObjObs);
+  if (!observable || workerMode())
+    return;
+  // observable->addListener(&tlpObjObs);
   observable->addObserver(&tlpObjObs);
   // emscripten often reuses previous freed address so ensure to remove it from the deleted pointers set
   unsigned long pointerValue = reinterpret_cast<unsigned long>(observable);
@@ -305,7 +292,7 @@ void observeObject(tlp::Observable *observable) {
 
 void observeGraphHierarchy(tlp::Graph *root) {
   observeObject(root);
-  for (tlp::Graph *sg: root->getSubGraphs()) {
+  for (tlp::Graph *sg : root->getSubGraphs()) {
     observeGraphHierarchy(sg);
   }
 }
@@ -336,13 +323,12 @@ void unobserveGraph(tlp::Graph *g) {
   }
 }
 
-template <typename T>
-std::list<std::string> getTulipPluginsList() {
+template <typename T> std::list<std::string> getTulipPluginsList() {
   if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
     std::list<std::string> algoList = tlp::PluginLister::instance()->availablePlugins<tlp::Algorithm>();
     std::list<std::string> propAlgoList = tlp::PluginLister::instance()->availablePlugins<tlp::PropertyAlgorithm>();
     std::list<std::string> realAlgoList;
-    for (std::list<std::string>::iterator it = algoList.begin() ; it != algoList.end() ; ++it) {
+    for (std::list<std::string>::iterator it = algoList.begin(); it != algoList.end(); ++it) {
       if (std::find(propAlgoList.begin(), propAlgoList.end(), *it) == propAlgoList.end()) {
         realAlgoList.push_back(*it);
       }
@@ -353,8 +339,7 @@ std::list<std::string> getTulipPluginsList() {
   }
 }
 
-template <typename T>
-bool pluginExists(const std::string &pluginName) {
+template <typename T> bool pluginExists(const std::string &pluginName) {
   std::list<std::string> pluginsList = getTulipPluginsList<T>();
   return std::find(pluginsList.begin(), pluginsList.end(), pluginName) != pluginsList.end();
 }
@@ -369,9 +354,7 @@ tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, tlp::Gra
 class AlgorithParametersJSONParser : public YajlParseFacade {
 
 public:
-
-  AlgorithParametersJSONParser(const std::string &algorithmName, tlp::Graph *graph=NULL) :
-    _algoName(algorithmName) {
+  AlgorithParametersJSONParser(const std::string &algorithmName, tlp::Graph *graph = NULL) : _algoName(algorithmName) {
     _dataSet = getDefaultAlgorithmParameters(algorithmName, graph);
     _pointer = 0;
     _parsingObject = false;
@@ -381,7 +364,7 @@ public:
     return &_dataSet;
   }
 
-  void parseMapKey(const std::string& value) {
+  void parseMapKey(const std::string &value) {
     if (!_parsingObject) {
       if (_dataSet.exist(value)) {
         _curParamName = value;
@@ -404,38 +387,32 @@ public:
     if (_parsingObject && _typename != "") {
 
       tlp::DataType *dt = _dataSet.getData(_curParamName);
-      if ((_typename == "tlp::PropertyInterface" ||
-           _typename == "tlp::BooleanProperty" ||
-           _typename == "tlp::ColorProperty" ||
-           _typename == "tlp::DoubleProperty" ||
-           _typename == "tlp::IntegerProperty" ||
-           _typename == "tlp::LayoutProperty" ||
-           _typename == "tlp::SizeProperty" ||
-           _typename == "tlp::StringProperty")
-          && dt->getTypeName() == std::string(typeid(tlp::PropertyInterface*).name())) {
-        _dataSet.set(_curParamName, reinterpret_cast<tlp::PropertyInterface*>(_pointer));
+      if ((_typename == "tlp::PropertyInterface" || _typename == "tlp::BooleanProperty" || _typename == "tlp::ColorProperty" ||
+           _typename == "tlp::DoubleProperty" || _typename == "tlp::IntegerProperty" || _typename == "tlp::LayoutProperty" ||
+           _typename == "tlp::SizeProperty" || _typename == "tlp::StringProperty") &&
+          dt->getTypeName() == std::string(typeid(tlp::PropertyInterface *).name())) {
+        _dataSet.set(_curParamName, reinterpret_cast<tlp::PropertyInterface *>(_pointer));
       }
 
-      if ((_typename == "tlp::DoubleProperty" ||
-           _typename == "tlp::IntegerProperty")
-          && dt->getTypeName() == std::string(typeid(tlp::NumericProperty*).name())) {
-        _dataSet.set(_curParamName, reinterpret_cast<tlp::NumericProperty*>(_pointer));
+      if ((_typename == "tlp::DoubleProperty" || _typename == "tlp::IntegerProperty") &&
+          dt->getTypeName() == std::string(typeid(tlp::NumericProperty *).name())) {
+        _dataSet.set(_curParamName, reinterpret_cast<tlp::NumericProperty *>(_pointer));
       }
 
       if (_typename == "tlp::ColorScale" && dt->getTypeName() == std::string(typeid(tlp::ColorScale).name())) {
-        _dataSet.set(_curParamName, *reinterpret_cast<tlp::ColorScale*>(_pointer));
+        _dataSet.set(_curParamName, *reinterpret_cast<tlp::ColorScale *>(_pointer));
       }
 
       _parsingObject = false;
       _curObjectKey = "";
       _typename = "";
       _pointer = 0;
-
     }
   }
 
   void parseBoolean(bool boolVal) {
-    if (_curParamName.empty()) return;
+    if (_curParamName.empty())
+      return;
     tlp::DataType *dt = _dataSet.getData(_curParamName);
     if (dt->getTypeName() == std::string(typeid(bool).name())) {
       _dataSet.set(_curParamName, boolVal);
@@ -443,7 +420,8 @@ public:
   }
 
   void parseInteger(long long integerVal) {
-    if (_curParamName.empty()) return;
+    if (_curParamName.empty())
+      return;
     if (_parsingObject && _curObjectKey == "cppPointer") {
       _pointer = static_cast<unsigned long>(integerVal);
       return;
@@ -465,7 +443,8 @@ public:
   }
 
   void parseDouble(double doubleVal) {
-    if (_curParamName.empty()) return;
+    if (_curParamName.empty())
+      return;
     tlp::DataType *dt = _dataSet.getData(_curParamName);
     if (dt->getTypeName() == std::string(typeid(float).name())) {
       _dataSet.set(_curParamName, static_cast<float>(doubleVal));
@@ -482,8 +461,9 @@ public:
     }
   }
 
-  void parseString(const std::string& value) {
-    if (_curParamName.empty()) return;
+  void parseString(const std::string &value) {
+    if (_curParamName.empty())
+      return;
     if (_parsingObject && _curObjectKey == "wrappedTypename") {
       _typename = value;
       return;
@@ -503,7 +483,6 @@ public:
   }
 
 private:
-
   std::string _algoName;
   tlp::DataSet _dataSet;
   std::string _curParamName;
@@ -511,19 +490,18 @@ private:
   std::string _curObjectKey;
   std::string _typename;
   unsigned long _pointer;
-
 };
 
 tlp::DataSet getAlgorithmParametersDataSet(const std::string &algoName, tlp::Graph *graph, const char *jsonParameters) {
   AlgorithParametersJSONParser apjp(algoName, graph);
-  apjp.parse(reinterpret_cast<const unsigned char*>(jsonParameters), strlen(jsonParameters));
+  apjp.parse(reinterpret_cast<const unsigned char *>(jsonParameters), strlen(jsonParameters));
   return *apjp.getParametersDataSet();
 }
 
 std::string convertDataSetToJSON(const tlp::DataSet &dataSet) {
   static std::string ret;
   unsigned int i = 1;
-  std::pair<std::string, tlp::DataType*> dataSetEntry;
+  std::pair<std::string, tlp::DataType *> dataSetEntry;
   std::ostringstream oss;
   oss << "{";
   forEach(dataSetEntry, dataSet.getValues()) {
@@ -535,20 +513,20 @@ std::string convertDataSetToJSON(const tlp::DataSet &dataSet) {
       tlp::StringCollection sc;
       dataSet.get(entryName, sc);
       oss << "\"" << sc.getCurrentString() << "\"";
-    } else if (dt->getTypeName() == std::string(typeid(tlp::BooleanProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::ColorProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::DoubleProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::IntegerProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::LayoutProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::SizeProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::StringProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::BooleanVectorProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::ColorVectorProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::DoubleProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::IntegerVectorProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::CoordVectorProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::SizeVectorProperty*).name()) ||
-               dt->getTypeName() == std::string(typeid(tlp::StringVectorProperty*).name())) {
+    } else if (dt->getTypeName() == std::string(typeid(tlp::BooleanProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::ColorProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::DoubleProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::IntegerProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::LayoutProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::SizeProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::StringProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::BooleanVectorProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::ColorVectorProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::DoubleProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::IntegerVectorProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::CoordVectorProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::SizeVectorProperty *).name()) ||
+               dt->getTypeName() == std::string(typeid(tlp::StringVectorProperty *).name())) {
       tlp::PropertyInterface *prop = NULL;
       dataSet.get(entryName, prop);
       if (prop) {
@@ -602,15 +580,17 @@ void createEdge(tlp::Graph *graph, unsigned int edgeId, unsigned int srcNodeId, 
 
 extern "C" {
 
-const char * EMSCRIPTEN_KEEPALIVE getDefaultAlgorithmParametersJSON(const char *algoName, tlp::Graph *graph) {
+const char *EMSCRIPTEN_KEEPALIVE getDefaultAlgorithmParametersJSON(const char *algoName, tlp::Graph *graph) {
   tlp::DataSet params = getDefaultAlgorithmParameters(algoName, graph);
   static std::string ret;
   ret = convertDataSetToJSON(params);
   return ret.c_str();
 }
 
-void EMSCRIPTEN_KEEPALIVE createGraphProperty(tlp::Graph *graph, const char *type, const char *name, const char *nodeDefaultStringValue, const char *edgeDefaultStringValue) {
-  if (!graph) return;
+void EMSCRIPTEN_KEEPALIVE createGraphProperty(tlp::Graph *graph, const char *type, const char *name, const char *nodeDefaultStringValue,
+                                              const char *edgeDefaultStringValue) {
+  if (!graph)
+    return;
   tlp::PropertyInterface *prop = NULL;
   std::string typeStr = type;
   if (typeStr == "bool") {
@@ -672,7 +652,7 @@ void setNodePropertyStringValue(tlp::Graph *graph, unsigned int nodeId, const st
       // fix what looks like an emscripten bug, some strings ends up corrupt in the property storage
       // to check if it is still present in future emscripten releases
       if (prop->getTypename() == "string") {
-        static_cast<tlp::StringProperty*>(prop)->setNodeValue(n, propertyStringValue);
+        static_cast<tlp::StringProperty *>(prop)->setNodeValue(n, propertyStringValue);
       } else {
         prop->setNodeStringValue(n, propertyStringValue);
       }
@@ -688,7 +668,7 @@ void setEdgePropertyStringValue(tlp::Graph *graph, unsigned int edgeId, const st
       // fix what looks like an emscripten bug, some strings ends up corrupt in the property storage
       // to check if it is still present in future emscripten releases
       if (prop->getTypename() == "string") {
-        static_cast<tlp::StringProperty*>(prop)->setEdgeValue(e, propertyStringValue);
+        static_cast<tlp::StringProperty *>(prop)->setEdgeValue(e, propertyStringValue);
       } else {
         prop->setEdgeStringValue(e, propertyStringValue);
       }
@@ -699,16 +679,15 @@ void setEdgePropertyStringValue(tlp::Graph *graph, unsigned int edgeId, const st
 class GraphAttributesJSONDataParser : public YajlParseFacade {
 
 public:
-
   GraphAttributesJSONDataParser(tlp::Graph *graph) {
-    _attributesDataset = &const_cast<tlp::DataSet&>(graph->getAttributes());
+    _attributesDataset = &const_cast<tlp::DataSet &>(graph->getAttributes());
   }
 
-  void parseMapKey(const std::string& value) {
+  void parseMapKey(const std::string &value) {
     _attributeName = value;
   }
 
-  void parseString(const std::string& value) {
+  void parseString(const std::string &value) {
     if (_attributeTypename.empty()) {
       _attributeTypename = value;
     } else {
@@ -719,11 +698,9 @@ public:
   }
 
 private:
-
   tlp::DataSet *_attributesDataset;
   std::string _attributeName;
   std::string _attributeTypename;
-
 };
 
 void EMSCRIPTEN_KEEPALIVE parseGraphAttributesJSONData(tlp::Graph *graph, const char *attributes) {
@@ -734,9 +711,9 @@ void EMSCRIPTEN_KEEPALIVE parseGraphAttributesJSONData(tlp::Graph *graph, const 
 class SubGraphPropertiesJSONDataParser : public YajlParseFacade {
 
 public:
-
-  SubGraphPropertiesJSONDataParser(tlp::Graph *subgraph) :
-    _subgraph(subgraph), _treeLevel(-1), _parsingNodesPropertyValues(false), _parsingEdgesPropertyValues(false) {}
+  SubGraphPropertiesJSONDataParser(tlp::Graph *subgraph)
+      : _subgraph(subgraph), _treeLevel(-1), _parsingNodesPropertyValues(false), _parsingEdgesPropertyValues(false) {
+  }
 
   void parseStartMap() {
     ++_treeLevel;
@@ -752,7 +729,7 @@ public:
     }
   }
 
-  void parseMapKey(const std::string& value) {
+  void parseMapKey(const std::string &value) {
     _lastMapKey = value;
     if (_treeLevel == 0) {
       _currentPropertyName = value;
@@ -766,10 +743,9 @@ public:
     if (_treeLevel == 2) {
       _elementId = strtoul(value.c_str(), NULL, 10);
     }
-
   }
 
-  void parseString(const std::string& value) {
+  void parseString(const std::string &value) {
     if (_lastMapKey == "type" && _treeLevel == 1) {
       _currentPropertyType = value;
     }
@@ -778,7 +754,8 @@ public:
     }
     if (_lastMapKey == "edgeDefault" && _treeLevel == 1) {
       _currentPropertyNodeDefaultValue = value;
-      createGraphProperty(_subgraph, _currentPropertyType.c_str(), _currentPropertyName.c_str(), _currentPropertyNodeDefaultValue.c_str(), _currentPropertyEdgeDefaultValue.c_str());
+      createGraphProperty(_subgraph, _currentPropertyType.c_str(), _currentPropertyName.c_str(), _currentPropertyNodeDefaultValue.c_str(),
+                          _currentPropertyEdgeDefaultValue.c_str());
     }
     if (_treeLevel == 2 && _parsingNodesPropertyValues) {
       setNodePropertyStringValue(_subgraph, _elementId, _currentPropertyName.c_str(), value.c_str());
@@ -788,9 +765,7 @@ public:
     }
   }
 
-
 private:
-
   tlp::Graph *_subgraph;
   int _treeLevel;
   std::string _lastMapKey;
@@ -801,11 +776,10 @@ private:
   bool _parsingNodesPropertyValues;
   bool _parsingEdgesPropertyValues;
   unsigned int _elementId;
-
 };
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE addSubGraph(tlp::Graph *graph, unsigned int parentGraphId, unsigned int subGraphId,
-                                              const char *nodesIds, const char *edgesIds, const char *attributes, const char *properties) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE addSubGraph(tlp::Graph *graph, unsigned int parentGraphId, unsigned int subGraphId, const char *nodesIds,
+                                             const char *edgesIds, const char *attributes, const char *properties) {
 
   tlp::Graph *parentGraph = graph;
   if (parentGraph->getId() != parentGraphId) {
@@ -814,7 +788,7 @@ tlp::Graph * EMSCRIPTEN_KEEPALIVE addSubGraph(tlp::Graph *graph, unsigned int pa
 
   tlp::Graph *sg = parentGraph->getSubGraph(subGraphId);
   if (!sg) {
-    sg = static_cast<tlp::GraphAbstract*>(parentGraph)->addSubGraph(subGraphId);
+    sg = static_cast<tlp::GraphAbstract *>(parentGraph)->addSubGraph(subGraphId);
     observeObject(sg);
   }
 
@@ -822,13 +796,13 @@ tlp::Graph * EMSCRIPTEN_KEEPALIVE addSubGraph(tlp::Graph *graph, unsigned int pa
   std::istringstream iss;
   iss.str(nodesIds);
   uintSerializer.read(iss, ids);
-  for (size_t i = 0 ; i < ids.size() ; ++i) {
+  for (size_t i = 0; i < ids.size(); ++i) {
     sg->addNode(tlp::node(ids[i]));
   }
 
   iss.str(edgesIds);
   uintSerializer.read(iss, ids);
-  for (size_t i = 0 ; i < ids.size() ; ++i) {
+  for (size_t i = 0; i < ids.size(); ++i) {
     sg->addEdge(tlp::edge(ids[i]));
   }
 
@@ -838,14 +812,13 @@ tlp::Graph * EMSCRIPTEN_KEEPALIVE addSubGraph(tlp::Graph *graph, unsigned int pa
   sgpjdp.parse(reinterpret_cast<const unsigned char *>(properties), strlen(properties));
 
   return sg;
-
 }
 
 class NodesJSONDataParser : public YajlParseFacade {
 
 public:
-
-  NodesJSONDataParser(tlp::Graph *graph) : _graph(graph), _parsingProperties(false) {}
+  NodesJSONDataParser(tlp::Graph *graph) : _graph(graph), _parsingProperties(false) {
+  }
 
   void parseInteger(long long integerVal) {
     if (_lastMapKey == "nodeId") {
@@ -853,7 +826,7 @@ public:
       createNode(_graph, _nodeId);
     }
   }
-  void parseString(const std::string& value) {
+  void parseString(const std::string &value) {
     if (_parsingProperties) {
       if (_lastMapKey != "viewMetaGraph") {
         setNodePropertyStringValue(_graph, _nodeId, _lastMapKey, value);
@@ -862,7 +835,7 @@ public:
       }
     }
   }
-  void parseMapKey(const std::string& value) {
+  void parseMapKey(const std::string &value) {
     _lastMapKey = value;
     if (value == "properties") {
       _parsingProperties = true;
@@ -875,13 +848,10 @@ public:
   }
 
 private:
-
   tlp::Graph *_graph;
   unsigned int _nodeId;
   bool _parsingProperties;
   std::string _lastMapKey;
-
-
 };
 
 void EMSCRIPTEN_KEEPALIVE parseNodesJSONData(tlp::Graph *graph, const char *jsonStr) {
@@ -892,8 +862,8 @@ void EMSCRIPTEN_KEEPALIVE parseNodesJSONData(tlp::Graph *graph, const char *json
 class EdgesJSONDataParser : public YajlParseFacade {
 
 public:
-
-  EdgesJSONDataParser(tlp::Graph *graph) : _graph(graph), _parsingProperties(false) {}
+  EdgesJSONDataParser(tlp::Graph *graph) : _graph(graph), _parsingProperties(false) {
+  }
 
   void parseInteger(long long integerVal) {
     if (_lastMapKey == "edgeId") {
@@ -905,7 +875,7 @@ public:
       createEdge(_graph, _edgeId, _srcNodeId, tgtNodeId);
     }
   }
-  void parseString(const std::string& value) {
+  void parseString(const std::string &value) {
     if (_parsingProperties) {
       if (_lastMapKey != "viewMetaGraph") {
         setEdgePropertyStringValue(_graph, _edgeId, _lastMapKey, value);
@@ -914,7 +884,7 @@ public:
       }
     }
   }
-  void parseMapKey(const std::string& value) {
+  void parseMapKey(const std::string &value) {
     _lastMapKey = value;
     if (value == "properties") {
       _parsingProperties = true;
@@ -927,13 +897,11 @@ public:
   }
 
 private:
-
   tlp::Graph *_graph;
   unsigned int _edgeId;
   unsigned int _srcNodeId;
   bool _parsingProperties;
   std::string _lastMapKey;
-
 };
 
 void EMSCRIPTEN_KEEPALIVE parseEdgesJSONData(tlp::Graph *graph, const char *jsonStr) {
@@ -941,19 +909,18 @@ void EMSCRIPTEN_KEEPALIVE parseEdgesJSONData(tlp::Graph *graph, const char *json
   ejdp.parse(reinterpret_cast<const unsigned char *>(jsonStr), strlen(jsonStr));
 }
 
-
 void EMSCRIPTEN_KEEPALIVE fillMetaGraphInfos(tlp::Graph *graph) {
   tlp::GraphProperty *viewMetaGraph = graph->getProperty<tlp::GraphProperty>("viewMetaGraph");
-  for (auto it = metaNodeValue.begin() ; it != metaNodeValue.end() ; ++it) {
+  for (auto it = metaNodeValue.begin(); it != metaNodeValue.end(); ++it) {
     viewMetaGraph->setNodeValue(it->first, graph->getDescendantGraph(it->second));
   }
   std::vector<unsigned int> ids;
   std::istringstream iss;
-  for (auto it = metaEdgeValue.begin() ; it != metaEdgeValue.end() ; ++it) {
+  for (auto it = metaEdgeValue.begin(); it != metaEdgeValue.end(); ++it) {
     iss.str(it->second);
     uintSerializer.read(iss, ids);
     std::set<tlp::edge> edges;
-    for (size_t i = 0 ; i < ids.size() ; ++i) {
+    for (size_t i = 0; i < ids.size(); ++i) {
       edges.insert(tlp::edge(ids[i]));
     }
     viewMetaGraph->setEdgeValue(it->first, edges);
@@ -962,7 +929,6 @@ void EMSCRIPTEN_KEEPALIVE fillMetaGraphInfos(tlp::Graph *graph) {
   metaNodeValue.clear();
   metaEdgeValue.clear();
 }
-
 }
 
 // ==================================================================================================================
@@ -975,7 +941,6 @@ void setProgressBarCommentWorker(unsigned long graphId, const char *comment);
 class EmscriptenPluginProgress : public tlp::SimplePluginProgress {
 
 public:
-
   void setGraphId(const unsigned long graphId) {
     _graphId = graphId;
   }
@@ -987,16 +952,14 @@ public:
   }
 
 protected:
-
   void progress_handler(int step, int max_step) {
-    double percent = (static_cast<double>(step)*100.0)/static_cast<double>(max_step);
+    double percent = (static_cast<double>(step) * 100.0) / static_cast<double>(max_step);
     if (workerMode()) {
       setProgressBarValueWorker(_graphId, static_cast<int>(percent));
     }
   }
 
   unsigned long _graphId;
-
 };
 
 static EmscriptenPluginProgress progress;
@@ -1014,7 +977,7 @@ void EMSCRIPTEN_KEEPALIVE setPluginProgressGraphId(unsigned long graphId) {
   progress.setGraphId(graphId);
 }
 
-const char * EMSCRIPTEN_KEEPALIVE getJSONGraph(tlp::Graph *graph) {
+const char *EMSCRIPTEN_KEEPALIVE getJSONGraph(tlp::Graph *graph) {
   static std::ostringstream oss;
   static std::string jsonGraph;
   oss.str("");
@@ -1026,7 +989,7 @@ const char * EMSCRIPTEN_KEEPALIVE getJSONGraph(tlp::Graph *graph) {
 
 // ==================================================================================================================
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE loadGraph(const char *filename, bool notifyProgress=false) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE loadGraph(const char *filename, bool notifyProgress = false) {
   tlp::PluginProgress *pluginProgress = notifyProgress ? &progress : &dummyProgress;
   tlp::Graph *g = tlp::loadGraph(filename, pluginProgress);
   if (!g) {
@@ -1039,9 +1002,9 @@ tlp::Graph * EMSCRIPTEN_KEEPALIVE loadGraph(const char *filename, bool notifyPro
   return g;
 }
 
-bool EMSCRIPTEN_KEEPALIVE saveGraph(tlp::Graph *graph, const char *filename, bool notifyProgress=false) {
+bool EMSCRIPTEN_KEEPALIVE saveGraph(tlp::Graph *graph, const char *filename, bool notifyProgress = false) {
   tlp::PluginProgress *pluginProgress = notifyProgress ? &progress : &dummyProgress;
-  bool ret =  tlp::saveGraph(graph, filename, pluginProgress);
+  bool ret = tlp::saveGraph(graph, filename, pluginProgress);
   if (!ret) {
     std::cerr << "Error : the export to the graph file " << filename << " failed." << std::endl;
     if (!pluginProgress->getError().empty()) {
@@ -1051,9 +1014,9 @@ bool EMSCRIPTEN_KEEPALIVE saveGraph(tlp::Graph *graph, const char *filename, boo
   return ret;
 }
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE Graph_newGraph() {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_newGraph() {
   tlp::Graph *g = tlp::newGraph();
-  //observeGraph(g);
+  // observeGraph(g);
   observeObject(g);
   return g;
 }
@@ -1062,7 +1025,7 @@ void EMSCRIPTEN_KEEPALIVE Graph_delete(tlp::Graph *graph) {
   delete graph;
 }
 
-bool EMSCRIPTEN_KEEPALIVE Graph_applyAlgorithm(tlp::Graph *graph, const char *algorithm, const char *jsonParameters, bool notifyProgress=false) {
+bool EMSCRIPTEN_KEEPALIVE Graph_applyAlgorithm(tlp::Graph *graph, const char *algorithm, const char *jsonParameters, bool notifyProgress = false) {
   std::string errMsg;
   tlp::Observable::holdObservers();
   tlp::DataSet parameters = getAlgorithmParametersDataSet(algorithm, graph, jsonParameters);
@@ -1080,25 +1043,25 @@ void EMSCRIPTEN_KEEPALIVE Graph_clear(tlp::Graph *graph) {
   tlp::Observable::unholdObservers();
 }
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE Graph_addSubGraph1(tlp::Graph *graph, tlp::BooleanProperty *selection, const char *name) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_addSubGraph1(tlp::Graph *graph, tlp::BooleanProperty *selection, const char *name) {
   tlp::Graph *sg = graph->addSubGraph(selection, name);
   observeObject(sg);
   return sg;
 }
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE Graph_addSubGraph2(tlp::Graph *graph, const char *name) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_addSubGraph2(tlp::Graph *graph, const char *name) {
   tlp::Graph *sg = graph->addSubGraph(name);
   observeObject(sg);
   return sg;
 }
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE Graph_addCloneSubGraph(tlp::Graph *graph, const char *name, bool addSibling) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_addCloneSubGraph(tlp::Graph *graph, const char *name, bool addSibling) {
   tlp::Graph *sg = graph->addCloneSubGraph(name, addSibling);
   observeObject(sg);
   return sg;
 }
 
-tlp::Graph * EMSCRIPTEN_KEEPALIVE Graph_inducedSubGraph(tlp::Graph *graph, unsigned int *nodesIds, tlp::Graph* parentSubGraph = NULL) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_inducedSubGraph(tlp::Graph *graph, unsigned int *nodesIds, tlp::Graph *parentSubGraph = NULL) {
   std::set<tlp::node> nodeSet;
   while (*nodesIds != UINT_MAX) {
     nodeSet.insert(tlp::node(*nodesIds++));
@@ -1143,27 +1106,27 @@ double EMSCRIPTEN_KEEPALIVE Graph_numberOfDescendantGraphs(tlp::Graph *graph) {
   return graph->numberOfDescendantGraphs();
 }
 
-bool EMSCRIPTEN_KEEPALIVE Graph_isSubGraph(tlp::Graph *graph, const tlp::Graph* subGraph) {
+bool EMSCRIPTEN_KEEPALIVE Graph_isSubGraph(tlp::Graph *graph, const tlp::Graph *subGraph) {
   return graph->isSubGraph(subGraph);
 }
 
-bool EMSCRIPTEN_KEEPALIVE Graph_isDescendantGraph(tlp::Graph *graph, const tlp::Graph* subGraph) {
+bool EMSCRIPTEN_KEEPALIVE Graph_isDescendantGraph(tlp::Graph *graph, const tlp::Graph *subGraph) {
   return graph->isDescendantGraph(subGraph);
 }
 
-tlp::Graph* EMSCRIPTEN_KEEPALIVE Graph_getSubGraph1(tlp::Graph *graph, unsigned int id) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_getSubGraph1(tlp::Graph *graph, unsigned int id) {
   return graph->getSubGraph(id);
 }
 
-tlp::Graph* EMSCRIPTEN_KEEPALIVE Graph_getSubGraph2(tlp::Graph *graph, const char *name) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_getSubGraph2(tlp::Graph *graph, const char *name) {
   return graph->getSubGraph(name);
 }
 
-tlp::Graph* EMSCRIPTEN_KEEPALIVE Graph_getDescendantGraph1(tlp::Graph *graph, unsigned int id) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_getDescendantGraph1(tlp::Graph *graph, unsigned int id) {
   return graph->getDescendantGraph(id);
 }
 
-tlp::Graph* EMSCRIPTEN_KEEPALIVE Graph_getDescendantGraph2(tlp::Graph *graph, const char *name) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_getDescendantGraph2(tlp::Graph *graph, const char *name) {
   return graph->getDescendantGraph(name);
 }
 
@@ -1185,14 +1148,14 @@ void EMSCRIPTEN_KEEPALIVE Graph_addNode2(tlp::Graph *graph, unsigned int nodeId)
 void EMSCRIPTEN_KEEPALIVE Graph_addNodes1(tlp::Graph *graph, unsigned int nbNodes, unsigned int *nodesIds) {
   std::vector<tlp::node> addedNodes;
   graph->addNodes(nbNodes, addedNodes);
-  for (size_t i = 0 ; i < addedNodes.size() ; ++i) {
+  for (size_t i = 0; i < addedNodes.size(); ++i) {
     *nodesIds++ = addedNodes[i].id;
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE Graph_addNodes2(tlp::Graph *graph, unsigned int nbNodes, unsigned int *nodesIds) {
   std::vector<tlp::node> nodesToAdd;
-  for (size_t i = 0 ; i < nbNodes ; ++i) {
+  for (size_t i = 0; i < nbNodes; ++i) {
     nodesToAdd.push_back(tlp::node(nodesIds[i]));
   }
   graph->addNodes(nodesToAdd);
@@ -1204,7 +1167,7 @@ void EMSCRIPTEN_KEEPALIVE Graph_delNode(tlp::Graph *graph, unsigned int nodeId, 
 
 void EMSCRIPTEN_KEEPALIVE Graph_delNodes(tlp::Graph *graph, unsigned int nbNodes, unsigned int *nodesIds, bool deleteInAllGraphs) {
   std::vector<tlp::node> nodesToRemove;
-  for (size_t i = 0 ; i < nbNodes ; ++i) {
+  for (size_t i = 0; i < nbNodes; ++i) {
     nodesToRemove.push_back(tlp::node(nodesIds[i]));
   }
   graph->delNodes(nodesToRemove, deleteInAllGraphs);
@@ -1219,20 +1182,20 @@ void EMSCRIPTEN_KEEPALIVE Graph_addEdge2(tlp::Graph *graph, unsigned int edgeId)
 }
 
 void EMSCRIPTEN_KEEPALIVE Graph_addEdges1(tlp::Graph *graph, unsigned int nbEdges, unsigned int *nodesIds, unsigned int *edgesIds) {
-  std::vector<std::pair<tlp::node, tlp::node> > edgesToAdd;
-  for (size_t i = 0 ; i < nbEdges ; ++i) {
-    edgesToAdd.push_back(std::make_pair(tlp::node(nodesIds[2*i]), tlp::node(nodesIds[2*i+1])));
+  std::vector<std::pair<tlp::node, tlp::node>> edgesToAdd;
+  for (size_t i = 0; i < nbEdges; ++i) {
+    edgesToAdd.push_back(std::make_pair(tlp::node(nodesIds[2 * i]), tlp::node(nodesIds[2 * i + 1])));
   }
   std::vector<tlp::edge> addedEdges;
   graph->addEdges(edgesToAdd, addedEdges);
-  for (size_t i = 0 ; i < addedEdges.size() ; ++i) {
+  for (size_t i = 0; i < addedEdges.size(); ++i) {
     *edgesIds++ = addedEdges[i].id;
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE Graph_addEdges2(tlp::Graph *graph, unsigned int nbEdges, unsigned int *edgesIds) {
   std::vector<tlp::edge> edgesToAdd;
-  for (size_t i = 0 ; i < nbEdges ; ++i) {
+  for (size_t i = 0; i < nbEdges; ++i) {
     edgesToAdd.push_back(tlp::edge(edgesIds[i]));
   }
   graph->addEdges(edgesToAdd);
@@ -1244,7 +1207,7 @@ void EMSCRIPTEN_KEEPALIVE Graph_delEdge(tlp::Graph *graph, unsigned int edgeId, 
 
 void EMSCRIPTEN_KEEPALIVE Graph_delEdges(tlp::Graph *graph, unsigned int nbEdges, unsigned int *edgesIds, bool deleteInAllGraphs) {
   std::vector<tlp::edge> edgesToRemove;
-  for (size_t i = 0 ; i < nbEdges ; ++i) {
+  for (size_t i = 0; i < nbEdges; ++i) {
     edgesToRemove.push_back(tlp::edge(edgesIds[i]));
   }
   graph->delEdges(edgesToRemove, deleteInAllGraphs);
@@ -1252,7 +1215,7 @@ void EMSCRIPTEN_KEEPALIVE Graph_delEdges(tlp::Graph *graph, unsigned int nbEdges
 
 void EMSCRIPTEN_KEEPALIVE Graph_setEdgeOrder(tlp::Graph *graph, unsigned int nodeId, unsigned int nbEdges, unsigned int *edgesIds) {
   std::vector<tlp::edge> edges;
-  for (size_t i = 0 ; i < nbEdges ; ++i) {
+  for (size_t i = 0; i < nbEdges; ++i) {
     edges.push_back(tlp::edge(edgesIds[i]));
   }
   graph->setEdgeOrder(tlp::node(nodeId), edges);
@@ -1410,9 +1373,10 @@ double EMSCRIPTEN_KEEPALIVE Graph_existEdge(tlp::Graph *graph, unsigned int sour
   return graph->existEdge(tlp::node(sourceNodeId), tlp::node(targetNodeId), directed).id;
 }
 
-void EMSCRIPTEN_KEEPALIVE Graph_getEdges2(tlp::Graph *graph, unsigned int sourceNodeId, unsigned int targetNodeId, bool directed, unsigned int *array) {
+void EMSCRIPTEN_KEEPALIVE Graph_getEdges2(tlp::Graph *graph, unsigned int sourceNodeId, unsigned int targetNodeId, bool directed,
+                                          unsigned int *array) {
   std::vector<tlp::edge> edges = graph->getEdges(tlp::node(sourceNodeId), tlp::node(targetNodeId), directed);
-  for (size_t i = 0 ; i < edges.size() ; ++i) {
+  for (size_t i = 0; i < edges.size(); ++i) {
     *array++ = edges[i].id;
   }
   if (edges.size() < graph->deg(tlp::node(sourceNodeId))) {
@@ -1447,31 +1411,31 @@ void EMSCRIPTEN_KEEPALIVE Graph_getProperties(tlp::Graph *graph, unsigned char *
   fillBytesArrayFromStringIterator(graph->getProperties(), array);
 }
 
-tlp::PropertyInterface* EMSCRIPTEN_KEEPALIVE Graph_getProperty(tlp::Graph *graph, const char *name) {
+tlp::PropertyInterface *EMSCRIPTEN_KEEPALIVE Graph_getProperty(tlp::Graph *graph, const char *name) {
   tlp::PropertyInterface *prop = graph->getProperty(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::BooleanProperty* EMSCRIPTEN_KEEPALIVE Graph_getBooleanProperty(tlp::Graph *graph, const char *name) {
+tlp::BooleanProperty *EMSCRIPTEN_KEEPALIVE Graph_getBooleanProperty(tlp::Graph *graph, const char *name) {
   tlp::BooleanProperty *prop = graph->getProperty<tlp::BooleanProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::BooleanProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalBooleanProperty(tlp::Graph *graph, const char *name) {
+tlp::BooleanProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalBooleanProperty(tlp::Graph *graph, const char *name) {
   tlp::BooleanProperty *prop = graph->getLocalProperty<tlp::BooleanProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE Graph_getColorProperty(tlp::Graph *graph, const char *name) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE Graph_getColorProperty(tlp::Graph *graph, const char *name) {
   tlp::ColorProperty *prop = graph->getProperty<tlp::ColorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalColorProperty(tlp::Graph *graph, const char *name) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalColorProperty(tlp::Graph *graph, const char *name) {
   tlp::ColorProperty *prop = graph->getLocalProperty<tlp::ColorProperty>(name);
   observeObject(prop);
   return prop;
@@ -1501,27 +1465,27 @@ tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalIntegerProperty(tlp::Gr
   return prop;
 }
 
-tlp::LayoutProperty* EMSCRIPTEN_KEEPALIVE Graph_getLayoutProperty(tlp::Graph *graph, const char *name) {
+tlp::LayoutProperty *EMSCRIPTEN_KEEPALIVE Graph_getLayoutProperty(tlp::Graph *graph, const char *name) {
   tlp::LayoutProperty *prop = graph->getProperty<tlp::LayoutProperty>(name);
   if (!workerMode())
     observeObject(prop);
   return prop;
 }
 
-tlp::LayoutProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalLayoutProperty(tlp::Graph *graph, const char *name) {
+tlp::LayoutProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalLayoutProperty(tlp::Graph *graph, const char *name) {
   tlp::LayoutProperty *prop = graph->getLocalProperty<tlp::LayoutProperty>(name);
   if (!workerMode())
     observeObject(prop);
   return prop;
 }
 
-tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE Graph_getSizeProperty(tlp::Graph *graph, const char *name) {
+tlp::SizeProperty *EMSCRIPTEN_KEEPALIVE Graph_getSizeProperty(tlp::Graph *graph, const char *name) {
   tlp::SizeProperty *prop = graph->getProperty<tlp::SizeProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalSizeProperty(tlp::Graph *graph, const char *name) {
+tlp::SizeProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalSizeProperty(tlp::Graph *graph, const char *name) {
   tlp::SizeProperty *prop = graph->getLocalProperty<tlp::SizeProperty>(name);
   observeObject(prop);
   return prop;
@@ -1539,25 +1503,25 @@ tlp::StringProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalStringProperty(tlp::Grap
   return prop;
 }
 
-tlp::BooleanVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getBooleanVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::BooleanVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getBooleanVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::BooleanVectorProperty *prop = graph->getProperty<tlp::BooleanVectorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::BooleanVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalBooleanVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::BooleanVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalBooleanVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::BooleanVectorProperty *prop = graph->getLocalProperty<tlp::BooleanVectorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::ColorVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getColorVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::ColorVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getColorVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::ColorVectorProperty *prop = graph->getProperty<tlp::ColorVectorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::ColorVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalColorVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::ColorVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalColorVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::ColorVectorProperty *prop = graph->getLocalProperty<tlp::ColorVectorProperty>(name);
   observeObject(prop);
   return prop;
@@ -1587,25 +1551,25 @@ tlp::IntegerVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalIntegerVectorProp
   return prop;
 }
 
-tlp::CoordVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getCoordVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::CoordVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getCoordVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::CoordVectorProperty *prop = graph->getProperty<tlp::CoordVectorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::CoordVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalCoordVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::CoordVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalCoordVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::CoordVectorProperty *prop = graph->getLocalProperty<tlp::CoordVectorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::SizeVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getSizeVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::SizeVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getSizeVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::SizeVectorProperty *prop = graph->getProperty<tlp::SizeVectorProperty>(name);
   observeObject(prop);
   return prop;
 }
 
-tlp::SizeVectorProperty* EMSCRIPTEN_KEEPALIVE Graph_getLocalSizeVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::SizeVectorProperty *EMSCRIPTEN_KEEPALIVE Graph_getLocalSizeVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::SizeVectorProperty *prop = graph->getLocalProperty<tlp::SizeVectorProperty>(name);
   observeObject(prop);
   return prop;
@@ -1627,7 +1591,8 @@ void EMSCRIPTEN_KEEPALIVE Graph_delLocalProperty(tlp::Graph *graph, const char *
   graph->delLocalProperty(name);
 }
 
-bool EMSCRIPTEN_KEEPALIVE Graph_applyPropertyAlgorithm(tlp::Graph *graph, const char *algorithm, tlp::PropertyInterface *result, const char *jsonParameters, bool notifyProgress) {
+bool EMSCRIPTEN_KEEPALIVE Graph_applyPropertyAlgorithm(tlp::Graph *graph, const char *algorithm, tlp::PropertyInterface *result,
+                                                       const char *jsonParameters, bool notifyProgress) {
   std::string errMsg;
   tlp::DataSet parameters = getAlgorithmParametersDataSet(algorithm, graph, jsonParameters);
   tlp::Observable::holdObservers();
@@ -1763,11 +1728,11 @@ void EMSCRIPTEN_KEEPALIVE PropertyInterface_delete(tlp::PropertyInterface *prope
   delete property;
 }
 
-const char* EMSCRIPTEN_KEEPALIVE PropertyInterface_getName(tlp::PropertyInterface *property) {
+const char *EMSCRIPTEN_KEEPALIVE PropertyInterface_getName(tlp::PropertyInterface *property) {
   return property->getName().c_str();
 }
 
-const char* EMSCRIPTEN_KEEPALIVE PropertyInterface_getTypename(tlp::PropertyInterface *property) {
+const char *EMSCRIPTEN_KEEPALIVE PropertyInterface_getTypename(tlp::PropertyInterface *property) {
   return property->getTypename().c_str();
 }
 
@@ -1793,7 +1758,7 @@ void EMSCRIPTEN_KEEPALIVE PropertyInterface_copy(tlp::PropertyInterface *propert
 
 // ==================================================================================================================
 
-tlp::BooleanProperty* EMSCRIPTEN_KEEPALIVE createBooleanProperty(tlp::Graph *graph, const char *name) {
+tlp::BooleanProperty *EMSCRIPTEN_KEEPALIVE createBooleanProperty(tlp::Graph *graph, const char *name) {
   tlp::BooleanProperty *prop = new tlp::BooleanProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -1857,39 +1822,43 @@ void EMSCRIPTEN_KEEPALIVE BooleanProperty_getEdgesEqualTo(tlp::BooleanProperty *
 
 // ==================================================================================================================
 
-tlp::BooleanVectorProperty* EMSCRIPTEN_KEEPALIVE createBooleanVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::BooleanVectorProperty *EMSCRIPTEN_KEEPALIVE createBooleanVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::BooleanVectorProperty *prop = new tlp::BooleanVectorProperty(graph, name);
   observeObject(prop);
   return prop;
 }
 
-void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setAllNodeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setAllNodeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned char *array,
+                                                                unsigned int arraySize) {
   std::vector<bool> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i] > 0;
   }
   boolVectorProperty->setAllNodeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setNodeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned int n, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setNodeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned int n, unsigned char *array,
+                                                             unsigned int arraySize) {
   std::vector<bool> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i] > 0;
   }
   boolVectorProperty->setNodeValue(tlp::node(n), v);
 }
 
-void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setAllEdgeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setAllEdgeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned char *array,
+                                                                unsigned int arraySize) {
   std::vector<bool> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i] > 0;
   }
   boolVectorProperty->setAllEdgeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setEdgeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned int e, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_setEdgeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned int e, unsigned char *array,
+                                                             unsigned int arraySize) {
   std::vector<bool> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i] > 0;
   }
   boolVectorProperty->setEdgeValue(tlp::edge(e), v);
@@ -1902,7 +1871,7 @@ double EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getNodeDefaultVectorSize(tlp::
 
 void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getNodeDefaultValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned char *array) {
   const std::vector<bool> &value = boolVectorProperty->getNodeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -1914,7 +1883,7 @@ double EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getNodeVectorSize(tlp::Boolean
 
 void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getNodeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned int n, unsigned char *array) {
   const std::vector<bool> &value = boolVectorProperty->getNodeValue(tlp::node(n));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -1926,7 +1895,7 @@ unsigned EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getEdgeDefaultVectorSize(tlp
 
 void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getEdgeDefaultValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned char *array) {
   const std::vector<bool> &value = boolVectorProperty->getEdgeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -1938,14 +1907,14 @@ double EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getEdgeVectorSize(tlp::Boolean
 
 void EMSCRIPTEN_KEEPALIVE BooleanVectorProperty_getEdgeValue(tlp::BooleanVectorProperty *boolVectorProperty, unsigned int e, unsigned char *array) {
   const std::vector<bool> &value = boolVectorProperty->getEdgeValue(tlp::edge(e));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
 
 // ==================================================================================================================
 
-tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE createColorProperty(tlp::Graph *graph, const char *name) {
+tlp::ColorProperty *EMSCRIPTEN_KEEPALIVE createColorProperty(tlp::Graph *graph, const char *name) {
   tlp::ColorProperty *prop = new tlp::ColorProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -1953,84 +1922,92 @@ tlp::ColorProperty* EMSCRIPTEN_KEEPALIVE createColorProperty(tlp::Graph *graph, 
 
 void EMSCRIPTEN_KEEPALIVE ColorProperty_getNodeDefaultValue(tlp::ColorProperty *colorProperty, unsigned char *array) {
   const tlp::Color &c = colorProperty->getNodeDefaultValue();
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
+  for (unsigned int i = 0; i < 4; ++i) {
     array[i] = c[i];
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE ColorProperty_getNodeValue(tlp::ColorProperty *colorProperty, unsigned int n, unsigned char *array) {
   const tlp::Color &c = colorProperty->getNodeValue(tlp::node(n));
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
+  for (unsigned int i = 0; i < 4; ++i) {
     array[i] = c[i];
   }
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorProperty_setNodeValue(tlp::ColorProperty *colorProperty, unsigned int n, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+void EMSCRIPTEN_KEEPALIVE ColorProperty_setNodeValue(tlp::ColorProperty *colorProperty, unsigned int n, unsigned char r, unsigned char g,
+                                                     unsigned char b, unsigned char a) {
   colorProperty->setNodeValue(tlp::node(n), tlp::Color(r, g, b, a));
 }
 
 void EMSCRIPTEN_KEEPALIVE ColorProperty_getEdgeDefaultValue(tlp::ColorProperty *colorProperty, unsigned char *array) {
   const tlp::Color &c = colorProperty->getEdgeDefaultValue();
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
+  for (unsigned int i = 0; i < 4; ++i) {
     array[i] = c[i];
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE ColorProperty_getEdgeValue(tlp::ColorProperty *colorProperty, unsigned int e, unsigned char *array) {
   const tlp::Color &c = colorProperty->getEdgeValue(tlp::edge(e));
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
+  for (unsigned int i = 0; i < 4; ++i) {
     array[i] = c[i];
   }
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorProperty_setEdgeValue(tlp::ColorProperty *colorProperty, unsigned int e, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+void EMSCRIPTEN_KEEPALIVE ColorProperty_setEdgeValue(tlp::ColorProperty *colorProperty, unsigned int e, unsigned char r, unsigned char g,
+                                                     unsigned char b, unsigned char a) {
   colorProperty->setEdgeValue(tlp::edge(e), tlp::Color(r, g, b, a));
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorProperty_setAllNodeValue(tlp::ColorProperty *colorProperty, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+void EMSCRIPTEN_KEEPALIVE ColorProperty_setAllNodeValue(tlp::ColorProperty *colorProperty, unsigned char r, unsigned char g, unsigned char b,
+                                                        unsigned char a) {
   colorProperty->setAllNodeValue(tlp::Color(r, g, b, a));
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorProperty_setAllEdgeValue(tlp::ColorProperty *colorProperty, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+void EMSCRIPTEN_KEEPALIVE ColorProperty_setAllEdgeValue(tlp::ColorProperty *colorProperty, unsigned char r, unsigned char g, unsigned char b,
+                                                        unsigned char a) {
   colorProperty->setAllEdgeValue(tlp::Color(r, g, b, a));
 }
 
 // ==================================================================================================================
 
-tlp::ColorVectorProperty* EMSCRIPTEN_KEEPALIVE createColorVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::ColorVectorProperty *EMSCRIPTEN_KEEPALIVE createColorVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::ColorVectorProperty *prop = new tlp::ColorVectorProperty(graph, name);
   observeObject(prop);
   return prop;
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setAllNodeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setAllNodeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned char *array,
+                                                              unsigned int arraySize) {
   std::vector<tlp::Color> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
-    v[i] = tlp::Color(array[4*i], array[4*i+1], array[4*i+2], array[4*i+3]);
+  for (unsigned int i = 0; i < arraySize; ++i) {
+    v[i] = tlp::Color(array[4 * i], array[4 * i + 1], array[4 * i + 2], array[4 * i + 3]);
   }
   colorVectorProperty->setAllNodeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setNodeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned int n, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setNodeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned int n, unsigned char *array,
+                                                           unsigned int arraySize) {
   std::vector<tlp::Color> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
-    v[i] = tlp::Color(array[4*i], array[4*i+1], array[4*i+2], array[4*i+3]);
+  for (unsigned int i = 0; i < arraySize; ++i) {
+    v[i] = tlp::Color(array[4 * i], array[4 * i + 1], array[4 * i + 2], array[4 * i + 3]);
   }
   colorVectorProperty->setNodeValue(tlp::node(n), v);
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setAllEdgeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setAllEdgeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned char *array,
+                                                              unsigned int arraySize) {
   std::vector<tlp::Color> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
-    v[i] = tlp::Color(array[4*i], array[4*i+1], array[4*i+2], array[4*i+3]);
+  for (unsigned int i = 0; i < arraySize; ++i) {
+    v[i] = tlp::Color(array[4 * i], array[4 * i + 1], array[4 * i + 2], array[4 * i + 3]);
   }
   colorVectorProperty->setAllEdgeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setEdgeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned int e, unsigned char *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_setEdgeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned int e, unsigned char *array,
+                                                           unsigned int arraySize) {
   std::vector<tlp::Color> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
-    v[i] = tlp::Color(array[4*i], array[4*i+1], array[4*i+2], array[4*i+3]);
+  for (unsigned int i = 0; i < arraySize; ++i) {
+    v[i] = tlp::Color(array[4 * i], array[4 * i + 1], array[4 * i + 2], array[4 * i + 3]);
   }
   colorVectorProperty->setEdgeValue(tlp::edge(e), v);
 }
@@ -2042,8 +2019,8 @@ double EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getNodeDefaultVectorSize(tlp::Co
 
 void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getNodeDefaultValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned char *array) {
   const std::vector<tlp::Color> &value = colorVectorProperty->getNodeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
-    for (size_t j = 0 ; j < 4 ; ++j)
+  for (size_t i = 0; i < value.size(); ++i) {
+    for (size_t j = 0; j < 4; ++j)
       *array++ = value[i][j];
   }
 }
@@ -2055,8 +2032,8 @@ double EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getNodeVectorSize(tlp::ColorVect
 
 void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getNodeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned int n, unsigned char *array) {
   const std::vector<tlp::Color> &value = colorVectorProperty->getNodeValue(tlp::node(n));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
-    for (size_t j = 0 ; j < 4 ; ++j)
+  for (size_t i = 0; i < value.size(); ++i) {
+    for (size_t j = 0; j < 4; ++j)
       *array++ = value[i][j];
   }
 }
@@ -2068,8 +2045,8 @@ unsigned EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getEdgeDefaultVectorSize(tlp::
 
 void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getEdgeDefaultValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned char *array) {
   const std::vector<tlp::Color> &value = colorVectorProperty->getEdgeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
-    for (size_t j = 0 ; j < 4 ; ++j)
+  for (size_t i = 0; i < value.size(); ++i) {
+    for (size_t j = 0; j < 4; ++j)
       *array++ = value[i][j];
   }
 }
@@ -2081,15 +2058,15 @@ double EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getEdgeVectorSize(tlp::ColorVect
 
 void EMSCRIPTEN_KEEPALIVE ColorVectorProperty_getEdgeValue(tlp::ColorVectorProperty *colorVectorProperty, unsigned int e, unsigned char *array) {
   const std::vector<tlp::Color> &value = colorVectorProperty->getEdgeValue(tlp::edge(e));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
-    for (size_t j = 0 ; j < 4 ; ++j)
+  for (size_t i = 0; i < value.size(); ++i) {
+    for (size_t j = 0; j < 4; ++j)
       *array++ = value[i][j];
   }
 }
 
 // ==================================================================================================================
 
-tlp::LayoutProperty* EMSCRIPTEN_KEEPALIVE createLayoutProperty(tlp::Graph *graph, const char *name) {
+tlp::LayoutProperty *EMSCRIPTEN_KEEPALIVE createLayoutProperty(tlp::Graph *graph, const char *name) {
   tlp::LayoutProperty *prop = new tlp::LayoutProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -2097,14 +2074,14 @@ tlp::LayoutProperty* EMSCRIPTEN_KEEPALIVE createLayoutProperty(tlp::Graph *graph
 
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_getNodeDefaultValue(tlp::LayoutProperty *layoutProperty, float *array) {
   const tlp::Coord &c = layoutProperty->getNodeDefaultValue();
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     array[i] = c[i];
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_getNodeValue(tlp::LayoutProperty *layoutProperty, unsigned int n, float *array) {
   const tlp::Coord &c = layoutProperty->getNodeValue(tlp::node(n));
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     array[i] = c[i];
   }
 }
@@ -2124,10 +2101,10 @@ double EMSCRIPTEN_KEEPALIVE LayoutProperty_getEdgeDefaultNumberOfBends(tlp::Layo
 
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_getEdgeDefaultValue(tlp::LayoutProperty *layoutProperty, float *array) {
   const std::vector<tlp::Coord> &vc = layoutProperty->getEdgeDefaultValue();
-  for (size_t i = 0 ; i < vc.size() ; ++i) {
+  for (size_t i = 0; i < vc.size(); ++i) {
     const tlp::Coord &c = vc[i];
-    for (unsigned int j = 0 ; j < 3 ; ++j) {
-      array[3*i+j] = c[j];
+    for (unsigned int j = 0; j < 3; ++j) {
+      array[3 * i + j] = c[j];
     }
   }
 }
@@ -2139,10 +2116,10 @@ double EMSCRIPTEN_KEEPALIVE LayoutProperty_getEdgeNumberOfBends(tlp::LayoutPrope
 
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_getEdgeValue(tlp::LayoutProperty *layoutProperty, unsigned int e, float *array) {
   const std::vector<tlp::Coord> &vc = layoutProperty->getEdgeValue(tlp::edge(e));
-  for (size_t i = 0 ; i < vc.size() ; ++i) {
+  for (size_t i = 0; i < vc.size(); ++i) {
     const tlp::Coord &c = vc[i];
-    for (unsigned int j = 0 ; j < 3 ; ++j) {
-      array[3*i+j] = c[j];
+    for (unsigned int j = 0; j < 3; ++j) {
+      array[3 * i + j] = c[j];
     }
   }
 }
@@ -2150,7 +2127,7 @@ void EMSCRIPTEN_KEEPALIVE LayoutProperty_getEdgeValue(tlp::LayoutProperty *layou
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_setAllEdgeValue(tlp::LayoutProperty *layoutProperty, float *array, unsigned int nbCoords) {
   std::vector<tlp::Coord> vc(nbCoords);
   for (unsigned i = 0; i < nbCoords; ++i) {
-    vc[i] = tlp::Coord(array[3*i], array[3*i+1], array[3*i+2]);
+    vc[i] = tlp::Coord(array[3 * i], array[3 * i + 1], array[3 * i + 2]);
   }
   layoutProperty->setAllEdgeValue(vc);
 }
@@ -2158,20 +2135,20 @@ void EMSCRIPTEN_KEEPALIVE LayoutProperty_setAllEdgeValue(tlp::LayoutProperty *la
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_setEdgeValue(tlp::LayoutProperty *layoutProperty, unsigned int e, float *array, unsigned int nbCoords) {
   std::vector<tlp::Coord> vc(nbCoords);
   for (unsigned i = 0; i < nbCoords; ++i) {
-    vc[i] = tlp::Coord(array[3*i], array[3*i+1], array[3*i+2]);
+    vc[i] = tlp::Coord(array[3 * i], array[3 * i + 1], array[3 * i + 2]);
   }
   layoutProperty->setEdgeValue(tlp::edge(e), vc);
 }
 
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_getMin(tlp::LayoutProperty *layoutProperty, tlp::Graph *sg, float *min) {
   tlp::Coord minPos = layoutProperty->getMin(sg);
-  for (unsigned int i = 0 ; i < 3 ; ++i)
+  for (unsigned int i = 0; i < 3; ++i)
     min[i] = minPos[i];
 }
 
 void EMSCRIPTEN_KEEPALIVE LayoutProperty_getMax(tlp::LayoutProperty *layoutProperty, tlp::Graph *sg, float *max) {
   tlp::Coord maxPos = layoutProperty->getMax(sg);
-  for (unsigned int i = 0 ; i < 3 ; ++i)
+  for (unsigned int i = 0; i < 3; ++i)
     max[i] = maxPos[i];
 }
 
@@ -2213,7 +2190,7 @@ void EMSCRIPTEN_KEEPALIVE LayoutProperty_perfectAspectRatio(tlp::LayoutProperty 
 
 // ==================================================================================================================
 
-tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE createSizeProperty(tlp::Graph *graph, const char *name) {
+tlp::SizeProperty *EMSCRIPTEN_KEEPALIVE createSizeProperty(tlp::Graph *graph, const char *name) {
   tlp::SizeProperty *prop = new tlp::SizeProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -2221,14 +2198,14 @@ tlp::SizeProperty* EMSCRIPTEN_KEEPALIVE createSizeProperty(tlp::Graph *graph, co
 
 void EMSCRIPTEN_KEEPALIVE SizeProperty_getNodeDefaultValue(tlp::SizeProperty *sizeProperty, float *array) {
   const tlp::Size &s = sizeProperty->getNodeDefaultValue();
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     array[i] = s[i];
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE SizeProperty_getNodeValue(tlp::SizeProperty *sizeProperty, unsigned int n, float *array) {
   const tlp::Size &s = sizeProperty->getNodeValue(tlp::node(n));
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     array[i] = s[i];
   }
 }
@@ -2243,14 +2220,14 @@ void EMSCRIPTEN_KEEPALIVE SizeProperty_setNodeValue(tlp::SizeProperty *sizePrope
 
 void EMSCRIPTEN_KEEPALIVE SizeProperty_getEdgeDefaultValue(tlp::SizeProperty *sizeProperty, float *array) {
   const tlp::Size &s = sizeProperty->getEdgeDefaultValue();
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     array[i] = s[i];
   }
 }
 
 void EMSCRIPTEN_KEEPALIVE SizeProperty_getEdgeValue(tlp::SizeProperty *sizeProperty, unsigned int e, float *array) {
   const tlp::Size &s = sizeProperty->getEdgeValue(tlp::edge(e));
-  for (unsigned int i = 0 ; i < 3 ; ++i) {
+  for (unsigned int i = 0; i < 3; ++i) {
     array[i] = s[i];
   }
 }
@@ -2269,19 +2246,19 @@ void EMSCRIPTEN_KEEPALIVE SizeProperty_scale(tlp::SizeProperty *sizeProperty, fl
 
 void EMSCRIPTEN_KEEPALIVE SizeProperty_getMin(tlp::SizeProperty *sizeProperty, tlp::Graph *sg, float *min) {
   tlp::Size minSize = sizeProperty->getMin(sg);
-  for (unsigned int i = 0 ; i < 3 ; ++i)
+  for (unsigned int i = 0; i < 3; ++i)
     min[i] = minSize[i];
 }
 
 void EMSCRIPTEN_KEEPALIVE SizeProperty_getMax(tlp::SizeProperty *sizeProperty, tlp::Graph *sg, float *max) {
   tlp::Size maxSize = sizeProperty->getMax(sg);
-  for (unsigned int i = 0 ; i < 3 ; ++i)
+  for (unsigned int i = 0; i < 3; ++i)
     max[i] = maxSize[i];
 }
 
 // ==================================================================================================================
 
-tlp::IntegerProperty* EMSCRIPTEN_KEEPALIVE createIntegerProperty(tlp::Graph *graph, const char *name) {
+tlp::IntegerProperty *EMSCRIPTEN_KEEPALIVE createIntegerProperty(tlp::Graph *graph, const char *name) {
   tlp::IntegerProperty *prop = new tlp::IntegerProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -2321,7 +2298,7 @@ int EMSCRIPTEN_KEEPALIVE IntegerProperty_getEdgeValue(tlp::IntegerProperty *inte
 
 // ==================================================================================================================
 
-tlp::DoubleProperty* EMSCRIPTEN_KEEPALIVE createDoubleProperty(tlp::Graph *graph, const char *name) {
+tlp::DoubleProperty *EMSCRIPTEN_KEEPALIVE createDoubleProperty(tlp::Graph *graph, const char *name) {
   tlp::DoubleProperty *prop = new tlp::DoubleProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -2359,13 +2336,14 @@ double EMSCRIPTEN_KEEPALIVE DoubleProperty_getEdgeValue(tlp::DoubleProperty *dou
   return doubleProperty->getEdgeValue(tlp::edge(e));
 }
 
-void EMSCRIPTEN_KEEPALIVE DoubleProperty_getSortedEdges(tlp::DoubleProperty *doubleProperty, tlp::Graph *sg, bool ascendingOrder, unsigned int *edgesIds) {
+void EMSCRIPTEN_KEEPALIVE DoubleProperty_getSortedEdges(tlp::DoubleProperty *doubleProperty, tlp::Graph *sg, bool ascendingOrder,
+                                                        unsigned int *edgesIds) {
   fillEdgesIds(doubleProperty->getSortedEdges(sg, ascendingOrder), edgesIds);
 }
 
 // ==================================================================================================================
 
-tlp::StringProperty* EMSCRIPTEN_KEEPALIVE createStringProperty(tlp::Graph *graph, const char *name) {
+tlp::StringProperty *EMSCRIPTEN_KEEPALIVE createStringProperty(tlp::Graph *graph, const char *name) {
   tlp::StringProperty *prop = new tlp::StringProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -2387,25 +2365,25 @@ void EMSCRIPTEN_KEEPALIVE StringProperty_setEdgeValue(tlp::StringProperty *strin
   stringProperty->setEdgeValue(tlp::edge(e), val);
 }
 
-const char * EMSCRIPTEN_KEEPALIVE StringProperty_getNodeDefaultValue(tlp::StringProperty *stringProperty) {
+const char *EMSCRIPTEN_KEEPALIVE StringProperty_getNodeDefaultValue(tlp::StringProperty *stringProperty) {
   static std::string s;
   s = stringProperty->getNodeDefaultValue();
   return s.c_str();
 }
 
-const char * EMSCRIPTEN_KEEPALIVE StringProperty_getNodeValue(tlp::StringProperty *stringProperty, unsigned int n) {
+const char *EMSCRIPTEN_KEEPALIVE StringProperty_getNodeValue(tlp::StringProperty *stringProperty, unsigned int n) {
   static std::string s;
   s = stringProperty->getNodeValue(tlp::node(n));
   return s.c_str();
 }
 
-const char * EMSCRIPTEN_KEEPALIVE StringProperty_getEdgeDefaultValue(tlp::StringProperty *stringProperty) {
+const char *EMSCRIPTEN_KEEPALIVE StringProperty_getEdgeDefaultValue(tlp::StringProperty *stringProperty) {
   static std::string s;
   s = stringProperty->getEdgeDefaultValue();
   return s.c_str();
 }
 
-const char * EMSCRIPTEN_KEEPALIVE StringProperty_getEdgeValue(tlp::StringProperty *stringProperty, unsigned int e) {
+const char *EMSCRIPTEN_KEEPALIVE StringProperty_getEdgeValue(tlp::StringProperty *stringProperty, unsigned int e) {
   static std::string s;
   s = stringProperty->getEdgeValue(tlp::edge(e));
   return s.c_str();
@@ -2413,31 +2391,35 @@ const char * EMSCRIPTEN_KEEPALIVE StringProperty_getEdgeValue(tlp::StringPropert
 
 // ==================================================================================================================
 
-tlp::StringVectorProperty* EMSCRIPTEN_KEEPALIVE createStringVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::StringVectorProperty *EMSCRIPTEN_KEEPALIVE createStringVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::StringVectorProperty *prop = new tlp::StringVectorProperty(graph, name);
   observeObject(prop);
   return prop;
 }
 
-void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setAllNodeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
+void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setAllNodeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned char *stringsBytes,
+                                                               unsigned int *stringsNbBytes, unsigned int nbStrings) {
   std::vector<std::string> vs;
   fillStringVectorFromStringsBytes(vs, stringsBytes, stringsNbBytes, nbStrings);
   stringVectorProperty->setAllNodeValue(vs);
 }
 
-void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setNodeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned int n, unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
+void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setNodeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned int n,
+                                                            unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
   std::vector<std::string> vs;
   fillStringVectorFromStringsBytes(vs, stringsBytes, stringsNbBytes, nbStrings);
   stringVectorProperty->setNodeValue(tlp::node(n), vs);
 }
 
-void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setAllEdgeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
+void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setAllEdgeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned char *stringsBytes,
+                                                               unsigned int *stringsNbBytes, unsigned int nbStrings) {
   std::vector<std::string> vs;
   fillStringVectorFromStringsBytes(vs, stringsBytes, stringsNbBytes, nbStrings);
   stringVectorProperty->setAllEdgeValue(vs);
 }
 
-void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setEdgeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned int e, unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
+void EMSCRIPTEN_KEEPALIVE StringVectorProperty_setEdgeValue(tlp::StringVectorProperty *stringVectorProperty, unsigned int e,
+                                                            unsigned char *stringsBytes, unsigned int *stringsNbBytes, unsigned int nbStrings) {
   std::vector<std::string> vs;
   fillStringVectorFromStringsBytes(vs, stringsBytes, stringsNbBytes, nbStrings);
   stringVectorProperty->setEdgeValue(tlp::edge(e), vs);
@@ -2459,7 +2441,8 @@ double EMSCRIPTEN_KEEPALIVE StringVectorProperty_getNodeVectorSize(tlp::StringVe
   return stringVectorProperty->getNodeValue(tlp::node(n)).size();
 }
 
-double EMSCRIPTEN_KEEPALIVE StringVectorProperty_getNodeStringsLengths(tlp::StringVectorProperty *stringVectorProperty, unsigned int n, unsigned int *array) {
+double EMSCRIPTEN_KEEPALIVE StringVectorProperty_getNodeStringsLengths(tlp::StringVectorProperty *stringVectorProperty, unsigned int n,
+                                                                       unsigned int *array) {
   return getStringsNumberOfBytesFromContainer(stringVectorProperty->getNodeValue(tlp::node(n)), array);
 }
 
@@ -2483,7 +2466,8 @@ double EMSCRIPTEN_KEEPALIVE StringVectorProperty_getEdgeVectorSize(tlp::StringVe
   return stringVectorProperty->getEdgeValue(tlp::edge(e)).size();
 }
 
-double EMSCRIPTEN_KEEPALIVE StringVectorProperty_getEdgeStringsLengths(tlp::StringVectorProperty *stringVectorProperty, unsigned int e, unsigned int *array) {
+double EMSCRIPTEN_KEEPALIVE StringVectorProperty_getEdgeStringsLengths(tlp::StringVectorProperty *stringVectorProperty, unsigned int e,
+                                                                       unsigned int *array) {
   return getStringsNumberOfBytesFromContainer(stringVectorProperty->getEdgeValue(tlp::edge(e)), array);
 }
 
@@ -2493,39 +2477,43 @@ void EMSCRIPTEN_KEEPALIVE StringVectorProperty_getEdgeValue(tlp::StringVectorPro
 
 // ==================================================================================================================
 
-tlp::DoubleVectorProperty* EMSCRIPTEN_KEEPALIVE createDoubleVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::DoubleVectorProperty *EMSCRIPTEN_KEEPALIVE createDoubleVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::DoubleVectorProperty *prop = new tlp::DoubleVectorProperty(graph, name);
   observeObject(prop);
   return prop;
 }
 
-void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setAllNodeValue(tlp::DoubleVectorProperty *doubleVectorProperty, double *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setAllNodeValue(tlp::DoubleVectorProperty *doubleVectorProperty, double *array,
+                                                               unsigned int arraySize) {
   std::vector<double> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   doubleVectorProperty->setAllNodeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setNodeValue(tlp::DoubleVectorProperty *doubleVectorProperty, unsigned int n, double *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setNodeValue(tlp::DoubleVectorProperty *doubleVectorProperty, unsigned int n, double *array,
+                                                            unsigned int arraySize) {
   std::vector<double> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   doubleVectorProperty->setNodeValue(tlp::node(n), v);
 }
 
-void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setAllEdgeValue(tlp::DoubleVectorProperty *doubleVectorProperty, double *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setAllEdgeValue(tlp::DoubleVectorProperty *doubleVectorProperty, double *array,
+                                                               unsigned int arraySize) {
   std::vector<double> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   doubleVectorProperty->setAllEdgeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setEdgeValue(tlp::DoubleVectorProperty *doubleVectorProperty, unsigned int e, double *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_setEdgeValue(tlp::DoubleVectorProperty *doubleVectorProperty, unsigned int e, double *array,
+                                                            unsigned int arraySize) {
   std::vector<double> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   doubleVectorProperty->setEdgeValue(tlp::edge(e), v);
@@ -2538,7 +2526,7 @@ double EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getNodeDefaultVectorSize(tlp::D
 
 void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getNodeDefaultValue(tlp::DoubleVectorProperty *doubleVectorProperty, double *array) {
   const std::vector<double> &value = doubleVectorProperty->getNodeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -2550,7 +2538,7 @@ double EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getNodeVectorSize(tlp::DoubleVe
 
 void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getNodeValue(tlp::DoubleVectorProperty *doubleVectorProperty, unsigned int n, double *array) {
   const std::vector<double> &value = doubleVectorProperty->getNodeValue(tlp::node(n));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -2562,7 +2550,7 @@ unsigned EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getEdgeDefaultVectorSize(tlp:
 
 void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getEdgeDefaultValue(tlp::DoubleVectorProperty *doubleVectorProperty, double *array) {
   const std::vector<double> &value = doubleVectorProperty->getEdgeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -2574,14 +2562,14 @@ double EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getEdgeVectorSize(tlp::DoubleVe
 
 void EMSCRIPTEN_KEEPALIVE DoubleVectorProperty_getEdgeValue(tlp::DoubleVectorProperty *doubleVectorProperty, unsigned int e, double *array) {
   const std::vector<double> &value = doubleVectorProperty->getEdgeValue(tlp::edge(e));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
 
 // ==================================================================================================================
 
-tlp::IntegerVectorProperty* EMSCRIPTEN_KEEPALIVE createIntegerVectorProperty(tlp::Graph *graph, const char *name) {
+tlp::IntegerVectorProperty *EMSCRIPTEN_KEEPALIVE createIntegerVectorProperty(tlp::Graph *graph, const char *name) {
   tlp::IntegerVectorProperty *prop = new tlp::IntegerVectorProperty(graph, name);
   observeObject(prop);
   return prop;
@@ -2589,15 +2577,16 @@ tlp::IntegerVectorProperty* EMSCRIPTEN_KEEPALIVE createIntegerVectorProperty(tlp
 
 void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setAllNodeValue(tlp::IntegerVectorProperty *intVectorProperty, int *array, unsigned int arraySize) {
   std::vector<int> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   intVectorProperty->setAllNodeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setNodeValue(tlp::IntegerVectorProperty *intVectorProperty, unsigned int n, int *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setNodeValue(tlp::IntegerVectorProperty *intVectorProperty, unsigned int n, int *array,
+                                                             unsigned int arraySize) {
   std::vector<int> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
 
@@ -2606,15 +2595,16 @@ void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setNodeValue(tlp::IntegerVectorP
 
 void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setAllEdgeValue(tlp::IntegerVectorProperty *intVectorProperty, int *array, unsigned int arraySize) {
   std::vector<int> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   intVectorProperty->setAllEdgeValue(v);
 }
 
-void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setEdgeValue(tlp::IntegerVectorProperty *intVectorProperty, unsigned int e, int *array, unsigned int arraySize) {
+void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_setEdgeValue(tlp::IntegerVectorProperty *intVectorProperty, unsigned int e, int *array,
+                                                             unsigned int arraySize) {
   std::vector<int> v(arraySize);
-  for (unsigned int i = 0 ; i < arraySize ; ++i) {
+  for (unsigned int i = 0; i < arraySize; ++i) {
     v[i] = array[i];
   }
   intVectorProperty->setEdgeValue(tlp::edge(e), v);
@@ -2627,7 +2617,7 @@ double EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getNodeDefaultVectorSize(tlp::
 
 void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getNodeDefaultValue(tlp::IntegerVectorProperty *intVectorProperty, int *array) {
   const std::vector<int> &value = intVectorProperty->getNodeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -2639,7 +2629,7 @@ double EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getNodeVectorSize(tlp::Integer
 
 void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getNodeValue(tlp::IntegerVectorProperty *intVectorProperty, unsigned int n, int *array) {
   const std::vector<int> &value = intVectorProperty->getNodeValue(tlp::node(n));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -2651,7 +2641,7 @@ unsigned EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getEdgeDefaultVectorSize(tlp
 
 void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getEdgeDefaultValue(tlp::IntegerVectorProperty *intVectorProperty, int *array) {
   const std::vector<int> &value = intVectorProperty->getEdgeDefaultValue();
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
@@ -2663,32 +2653,33 @@ double EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getEdgeVectorSize(tlp::Integer
 
 void EMSCRIPTEN_KEEPALIVE IntegerVectorProperty_getEdgeValue(tlp::IntegerVectorProperty *intVectorProperty, unsigned int e, int *array) {
   const std::vector<int> &value = intVectorProperty->getEdgeValue(tlp::edge(e));
-  for (size_t i = 0 ; i < value.size() ; ++i) {
+  for (size_t i = 0; i < value.size(); ++i) {
     *array++ = value[i];
   }
 }
 
 // ========================================================================================================================================================
 
-tlp::ColorScale* EMSCRIPTEN_KEEPALIVE ColorScale_newColorScale() {
+tlp::ColorScale *EMSCRIPTEN_KEEPALIVE ColorScale_newColorScale() {
   return new tlp::ColorScale();
 }
 
-void EMSCRIPTEN_KEEPALIVE ColorScale_setColorAtPos(tlp::ColorScale *colorScale, float pos, unsigned char r, unsigned char g, unsigned char b, unsigned char a) {
+void EMSCRIPTEN_KEEPALIVE ColorScale_setColorAtPos(tlp::ColorScale *colorScale, float pos, unsigned char r, unsigned char g, unsigned char b,
+                                                   unsigned char a) {
   colorScale->setColorAtPos(pos, tlp::Color(r, g, b, a));
 }
 
 void EMSCRIPTEN_KEEPALIVE ColorScale_setColorScale(tlp::ColorScale *colorScale, unsigned char *array, unsigned int nbColors) {
   std::vector<tlp::Color> colors(nbColors);
-  for (unsigned int i = 0 ; i < nbColors ; ++i) {
-    colors[i] = tlp::Color(array[4*i], array[4*i+1], array[4*i+2], array[4*i+3]);
+  for (unsigned int i = 0; i < nbColors; ++i) {
+    colors[i] = tlp::Color(array[4 * i], array[4 * i + 1], array[4 * i + 2], array[4 * i + 3]);
   }
   colorScale->setColorScale(colors);
 }
 
 void EMSCRIPTEN_KEEPALIVE ColorScale_getColorAtPos(tlp::ColorScale *colorScale, float pos, unsigned char *array) {
   tlp::Color color = colorScale->getColorAtPos(pos);
-  for (unsigned int i = 0 ; i < 4 ; ++i) {
+  for (unsigned int i = 0; i < 4; ++i) {
     array[i] = color[i];
   }
 }
@@ -2700,7 +2691,7 @@ double EMSCRIPTEN_KEEPALIVE ColorScale_numberOfColors(tlp::ColorScale *colorScal
 
 void EMSCRIPTEN_KEEPALIVE ColorScale_getOffsets(tlp::ColorScale *colorScale, float *array) {
   auto colorMap = colorScale->getColorMap();
-  for (auto it = colorMap.begin() ; it != colorMap.end() ; ++it) {
+  for (auto it = colorMap.begin(); it != colorMap.end(); ++it) {
     *array++ = it->first;
   }
 }
@@ -2708,12 +2699,11 @@ void EMSCRIPTEN_KEEPALIVE ColorScale_getOffsets(tlp::ColorScale *colorScale, flo
 void EMSCRIPTEN_KEEPALIVE ColorScale_getColors(tlp::ColorScale *colorScale, unsigned char *array) {
   auto colorMap = colorScale->getColorMap();
   unsigned int i = 0;
-  for (auto it = colorMap.begin() ; it != colorMap.end() ; ++it) {
-    for (unsigned int j = 0 ; j < 4 ; ++j) {
-      array[4*i+j] = it->second[j];
+  for (auto it = colorMap.begin(); it != colorMap.end(); ++it) {
+    for (unsigned int j = 0; j < 4; ++j) {
+      array[4 * i + j] = it->second[j];
     }
     ++i;
   }
 }
-
 }

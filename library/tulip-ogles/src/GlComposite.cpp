@@ -31,14 +31,15 @@ using namespace std;
 using namespace tlp;
 
 //============================================================
-GlComposite::GlComposite(bool deleteEntitiesInDestructor):_deleteEntitiesInDestructor(deleteEntitiesInDestructor) {}
+GlComposite::GlComposite(bool deleteEntitiesInDestructor) : _deleteEntitiesInDestructor(deleteEntitiesInDestructor) {
+}
 //============================================================
 GlComposite::~GlComposite() {
   reset(_deleteEntitiesInDestructor);
 }
 //============================================================
 void GlComposite::reset(bool deleteElems) {
-  for(const pair<string, GlEntity *> &entity : _entities) {
+  for (const pair<string, GlEntity *> &entity : _entities) {
     entity.second->setParent(nullptr);
     if (deleteElems) {
       delete entity.second;
@@ -56,7 +57,7 @@ void GlComposite::addGlEntity(GlEntity *entity, const string &key) {
 }
 //============================================================
 void GlComposite::deleteGlEntity(const string &key) {
-  if(_entities.count(key)==0)
+  if (_entities.count(key) == 0)
     return;
   _entities[key]->setParent(nullptr);
   _entities.erase(key);
@@ -65,8 +66,8 @@ void GlComposite::deleteGlEntity(const string &key) {
 //============================================================
 void GlComposite::deleteGlEntity(GlEntity *entity) {
   std::map<string, GlEntity *>::const_iterator it;
-  for(it = _entities.begin(); it != _entities.end(); ++it) {
-    if(entity == (*it).second) {
+  for (it = _entities.begin(); it != _entities.end(); ++it) {
+    if (entity == (*it).second) {
       entity->setParent(nullptr);
       _entities.erase(it->first);
       notifyModified();
@@ -76,15 +77,15 @@ void GlComposite::deleteGlEntity(GlEntity *entity) {
 }
 //============================================================
 string GlComposite::findKey(GlEntity *entity) {
-  for(const pair<string, GlEntity *> &ent : _entities) {
-    if(entity == ent.second) {
+  for (const pair<string, GlEntity *> &ent : _entities) {
+    if (entity == ent.second) {
       return ent.first;
     }
   }
   return string();
 }
 //============================================================
-GlEntity* GlComposite::findGlEntity(const string &key) {
+GlEntity *GlComposite::findGlEntity(const string &key) {
   std::map<string, GlEntity *>::const_iterator ite = _entities.find(key);
   if (ite == _entities.end())
     return nullptr;
@@ -93,7 +94,7 @@ GlEntity* GlComposite::findGlEntity(const string &key) {
 //============================================================
 void GlComposite::setStencil(int stencil) {
   GlEntity::setStencil(stencil);
-  for(const pair<string, GlEntity *> &entity : _entities) {
+  for (const pair<string, GlEntity *> &entity : _entities) {
     entity.second->setStencil(stencil);
   }
   notifyModified();
@@ -101,15 +102,15 @@ void GlComposite::setStencil(int stencil) {
 //============================================================
 void GlComposite::setVisible(bool visible) {
   GlEntity::setVisible(visible);
-  for(const pair<string, GlEntity *> &entity : _entities) {
+  for (const pair<string, GlEntity *> &entity : _entities) {
     entity.second->setVisible(visible);
   }
   notifyModified();
 }
 //============================================================
 void GlComposite::acceptVisitor(GlSceneVisitor *visitor) {
-  for(const pair<string, GlEntity *> &entity : _entities) {
-    if(entity.second->isVisible()) {
+  for (const pair<string, GlEntity *> &entity : _entities) {
+    if (entity.second->isVisible()) {
       entity.second->acceptVisitor(visitor);
     }
   }

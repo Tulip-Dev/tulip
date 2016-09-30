@@ -24,8 +24,8 @@
 
 using namespace std;
 
-OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext* context, ogdf::LayoutModule *ogdfLayoutAlgo) :
-  tlp::LayoutAlgorithm(context), tlpToOGDF(nullptr), ogdfLayoutAlgo(ogdfLayoutAlgo) {
+OGDFLayoutPluginBase::OGDFLayoutPluginBase(const tlp::PluginContext *context, ogdf::LayoutModule *ogdfLayoutAlgo)
+    : tlp::LayoutAlgorithm(context), tlpToOGDF(nullptr), ogdfLayoutAlgo(ogdfLayoutAlgo) {
   // convert Tulip Graph to OGDF Graph including attributes
   if (graph)
     tlpToOGDF = new TulipToOGDF(graph, false);
@@ -45,11 +45,10 @@ bool OGDFLayoutPluginBase::run() {
   try {
     // run the algorithm on the OGDF Graph with attributes
     callOGDFLayoutAlgorithm(gAttributes);
-  }
-  catch (PreconditionViolatedException& pvce) {
+  } catch (PreconditionViolatedException &pvce) {
     std::string msg;
 
-    switch(pvce.exceptionCode()) {
+    switch (pvce.exceptionCode()) {
     case pvcSelfLoop:
       msg = "graph contains a self-loop";
       break;
@@ -108,11 +107,10 @@ bool OGDFLayoutPluginBase::run() {
 
     pluginProgress->setError(std::string("Error\n") + msg);
     return false;
-  }
-  catch (AlgorithmFailureException& afce) {
+  } catch (AlgorithmFailureException &afce) {
     std::string msg;
 
-    switch(afce.exceptionCode()) {
+    switch (afce.exceptionCode()) {
     case afcIllegalParameter:
       msg = "function parameter is illegal";
       break;
@@ -155,15 +153,14 @@ bool OGDFLayoutPluginBase::run() {
 
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
   // and store it in the Tulip Layout Property
-  for(tlp::node nodeTlp : graph->getNodes()) {
+  for (tlp::node nodeTlp : graph->getNodes()) {
     tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(nodeTlp.id);
     result->setNodeValue(nodeTlp, nodeCoord);
   }
 
   // same operation as above but with edges
-  for(tlp::edge tlpEdge : graph->getEdges()) {
-    vector<tlp::Coord> edgeCoord =
-      tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(tlpEdge.id);
+  for (tlp::edge tlpEdge : graph->getEdges()) {
+    vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(tlpEdge.id);
     result->setEdgeValue(tlpEdge, edgeCoord);
   }
 
@@ -177,17 +174,18 @@ void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttri
 }
 
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
-  tlp::BoundingBox graphBB = tlp::computeBoundingBox(graph, result, graph->getProperty<SizeProperty>("viewSize"), graph->getProperty<DoubleProperty>("viewRotation"));
+  tlp::BoundingBox graphBB =
+      tlp::computeBoundingBox(graph, result, graph->getProperty<SizeProperty>("viewSize"), graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
-  for(tlp::node n : graph->getNodes()) {
+  for (tlp::node n : graph->getNodes()) {
     tlp::Coord nodeCoord = result->getNodeValue(n);
     nodeCoord[1] = midY - (nodeCoord[1] - midY);
     result->setNodeValue(n, nodeCoord);
   }
-  for(tlp::edge e : graph->getEdges()) {
+  for (tlp::edge e : graph->getEdges()) {
     std::vector<tlp::Coord> bends = result->getEdgeValue(e);
 
-    for (size_t i = 0 ; i < bends.size() ; ++i) {
+    for (size_t i = 0; i < bends.size(); ++i) {
       bends[i][1] = midY - (bends[i][1] - midY);
     }
 

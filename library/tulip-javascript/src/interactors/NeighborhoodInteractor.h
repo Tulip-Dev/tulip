@@ -38,7 +38,6 @@ class GlGraph;
 class AdditionalGlSceneAnimation;
 }
 
-
 class ZoomAndPanInteractor;
 
 class NeighborhoodInteractor : public GlSceneInteractor {
@@ -46,29 +45,26 @@ class NeighborhoodInteractor : public GlSceneInteractor {
   friend void animate(void *value);
 
 public:
-
   NeighborhoodInteractor(tlp::GlScene *scene = NULL);
 
   void setScene(tlp::GlScene *glScene);
 
-  bool mouseCallback(const MouseButton & button, const MouseButtonState &state, int x, int y, const int & modifiers);
+  bool mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int &modifiers);
 
-  bool mouseMoveCallback(int x, int y, const int & modifiers);
+  bool mouseMoveCallback(int x, int y, const int &modifiers);
 
   void draw();
 
   void desactivate();
 
-
 private:
-
   void buildNeighborhoodGraph(tlp::node centralNode);
   void destroyNeighborhoodGraph();
   tlp::node selectNodeInAugmentedDisplayGraph(int x, int y);
   void computeNeighborhoodGraphCircleLayout();
   float computeNeighborhoodGraphRadius(tlp::LayoutProperty *neighborhoodGraphLayoutProp);
   void computeNeighborhoodGraphBoundingBoxes();
-  void performZoomAndPan(const tlp::BoundingBox &destBB, tlp::AdditionalGlSceneAnimation *additionalAnimation=nullptr);
+  void performZoomAndPan(const tlp::BoundingBox &destBB, tlp::AdditionalGlSceneAnimation *additionalAnimation = nullptr);
 
   ZoomAndPanInteractor *_znpInteractor;
 

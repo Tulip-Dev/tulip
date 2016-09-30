@@ -24,27 +24,25 @@
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // selection
-  "Only edges selected in this property (or all edges if no property is given) will be reversed."
-};
+    // selection
+    "Only edges selected in this property (or all edges if no property is given) will be reversed."};
 
-ReverseEdges::ReverseEdges(tlp::PluginContext* context): Algorithm(context) {
+ReverseEdges::ReverseEdges(tlp::PluginContext *context) : Algorithm(context) {
   addInParameter<BooleanProperty>("selection", paramHelp[0], "viewSelection", false);
 }
 
 bool ReverseEdges::run() {
-  BooleanProperty* selection = nullptr;
+  BooleanProperty *selection = nullptr;
 
   if (dataSet)
-    dataSet->get<BooleanProperty*>("selection", selection);
+    dataSet->get<BooleanProperty *>("selection", selection);
 
-  Iterator<edge>* ite =
-    selection ? selection->getEdgesEqualTo(true) : graph->getEdges();
+  Iterator<edge> *ite = selection ? selection->getEdgesEqualTo(true) : graph->getEdges();
 
   pluginProgress->showPreview(false);
 
   int step = 0, max_step = graph->numberOfEdges();
-  for(edge e : ite) {
+  for (edge e : ite) {
     if ((++step % 100) == 0) {
       ProgressState state = pluginProgress->progress(step, max_step);
 

@@ -26,22 +26,23 @@ PLUGIN(SpanningTreeSelection)
 using namespace std;
 using namespace tlp;
 
-SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext* context):BooleanAlgorithm(context) {
+SpanningTreeSelection::SpanningTreeSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
 }
 
-SpanningTreeSelection::~SpanningTreeSelection() {}
+SpanningTreeSelection::~SpanningTreeSelection() {
+}
 
 ///===========================================================
-///Calcul l'arbre couvrant
+/// Calcul l'arbre couvrant
 bool SpanningTreeSelection::run() {
   if (graph->existProperty("viewSelection")) {
-    BooleanProperty *viewSelection=graph->getProperty<BooleanProperty>("viewSelection");
-    Iterator<node> *itN=graph->getNodes();
+    BooleanProperty *viewSelection = graph->getProperty<BooleanProperty>("viewSelection");
+    Iterator<node> *itN = graph->getNodes();
 
     for (; itN->hasNext();) {
-      node itn=itN->next();
+      node itn = itN->next();
 
-      if (viewSelection->getNodeValue(itn)==true) {
+      if (viewSelection->getNodeValue(itn) == true) {
         result->setNodeValue(itn, true);
       }
     }

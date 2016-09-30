@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef STRINGSLISTSELECTIONDIALOG_H
 #define STRINGSLISTSELECTIONDIALOG_H
 
@@ -70,8 +69,7 @@ public:
   /**
    * sets the strings list and the already selected strings
    */
-  void setStringsList(const std::vector<std::string>& strList,
-                      std::vector<std::string>& selList);
+  void setStringsList(const std::vector<std::string> &strList, std::vector<std::string> &selList);
 
   /**
     * @brief Constructs a strings list selection dialog with the given parent.
@@ -79,8 +77,7 @@ public:
     * \param listType this parameter defines the widget's look (see class description)
     * \param maxSelectedStringsListSize the maximum number of strings that can be selected (if 0, no size restriction)
     **/
-  explicit StringsListSelectionDialog(QString title,
-                                      QWidget *parent = nullptr,
+  explicit StringsListSelectionDialog(QString title, QWidget *parent = nullptr,
                                       const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST,
                                       const unsigned int maxSelectedStringsListSize = 0);
   ~StringsListSelectionDialog();
@@ -96,14 +93,10 @@ public:
     * @param listType the type of display for the strings to choose,
     * @param maxSize the maximum number of strings to select. 0 means this number is not limited.
     **/
-  static bool choose(QString title, const std::vector<std::string>& strList,
-                     std::vector<std::string>& selList,
-                     QWidget* parent=nullptr,
-                     const StringsListSelectionWidget::ListType listType =
-                       StringsListSelectionWidget::SIMPLE_LIST,
-                     const unsigned int maxSize = 0);
-private:
+  static bool choose(QString title, const std::vector<std::string> &strList, std::vector<std::string> &selList, QWidget *parent = nullptr,
+                     const StringsListSelectionWidget::ListType listType = StringsListSelectionWidget::SIMPLE_LIST, const unsigned int maxSize = 0);
 
+private:
   Ui::StringsListSelectionDialog *ui;
 };
 }

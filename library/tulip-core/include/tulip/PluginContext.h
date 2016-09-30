@@ -34,12 +34,14 @@ class PluginProgress;
  * tlp::PluginContext is a data structure containing a set of parameters required by a plugin.
  * Each tlp::Plugin subclass has its associated tlp::PluginContext subclass that contains specific parameters related to the Plugin.
  * For instance, the tlp::AlgorithmContext (related to tlp::Algorithm) contains the Graph on which the algorithm should be run
- * In essence, you will never have to access to a plugin's context since the base class constructor will copy its members into protected members of the plugin interface.
+ * In essence, you will never have to access to a plugin's context since the base class constructor will copy its members into protected members of
+ * the plugin interface.
  */
 class PluginContext {
 public:
   // Required for dynamic casting
-  virtual ~PluginContext() {}
+  virtual ~PluginContext() {
+  }
 };
 
 /**
@@ -49,7 +51,7 @@ public:
  * This class contains data required for a tlp::Algorithm to run. Each of its member is copied into a protected member at the object construction.
  */
 class AlgorithmContext : public tlp::PluginContext {
-public :
+public:
   /**
    * @brief The pointer to the tlp::Graph on which the algorithm will be run.
    */
@@ -68,10 +70,11 @@ public :
    */
   PluginProgress *pluginProgress;
 
-  AlgorithmContext (tlp::Graph* graph = nullptr, tlp::DataSet* dataSet = nullptr, tlp::PluginProgress* progress = nullptr): graph(graph), dataSet(dataSet), pluginProgress(progress) {}
-  ~AlgorithmContext() {}
+  AlgorithmContext(tlp::Graph *graph = nullptr, tlp::DataSet *dataSet = nullptr, tlp::PluginProgress *progress = nullptr)
+      : graph(graph), dataSet(dataSet), pluginProgress(progress) {
+  }
+  ~AlgorithmContext() {
+  }
 };
-
-
 }
 #endif

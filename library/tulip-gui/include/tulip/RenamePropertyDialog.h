@@ -46,14 +46,14 @@ public:
   ~RenamePropertyDialog();
 
   /**
-    * @brief This is a convenience static function to rename a property using a dialog. If the user presses Cancel or an error occurs, it returns false.
+    * @brief This is a convenience static function to rename a property using a dialog. If the user presses Cancel or an error occurs, it returns
+    *false.
     *
     * The function creates a modal property rename dialog with the given property, and parent widget.
     *
     * @param toRenameProp The property to rename.
     **/
-  static bool renameProperty(tlp::PropertyInterface* toRenameProp,
-                             QWidget* parent=nullptr);
+  static bool renameProperty(tlp::PropertyInterface *toRenameProp, QWidget *parent = nullptr);
 
 private:
   Ui::RenamePropertyDialogData *ui;

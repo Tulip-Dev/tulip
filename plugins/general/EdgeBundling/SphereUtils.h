@@ -23,10 +23,10 @@
 #include <tulip/Graph.h>
 #include <tulip/LayoutProperty.h>
 
-float centerOnOriginAndScale(tlp::Graph* graph, tlp::LayoutProperty * layout, float dist);
+float centerOnOriginAndScale(tlp::Graph *graph, tlp::LayoutProperty *layout, float dist);
 
 void addSphereGraph(tlp::Graph *graph, double radius);
 
-void moveBendsToSphere(tlp::Graph *graph, float ray, tlp::LayoutProperty * layout);
+void moveBendsToSphere(tlp::Graph *graph, float ray, tlp::LayoutProperty *layout);
 
-#endif //SPHERE_UTILS_H
+#endif // SPHERE_UTILS_H

@@ -34,12 +34,12 @@ using namespace tlp;
  */
 class AutoSize : public SizeAlgorithm {
 public:
-  PLUGININFORMATION("Auto Sizing", "Auber", "04/05/2001",
-                    "Resize the nodes and edges of a graph so that the graph "
-                    "gets easy to read. The size of a node will depend on the "
-                    "number of its sons.",
+  PLUGININFORMATION("Auto Sizing", "Auber", "04/05/2001", "Resize the nodes and edges of a graph so that the graph "
+                                                          "gets easy to read. The size of a node will depend on the "
+                                                          "number of its sons.",
                     "1.0", "Size")
-  AutoSize(const tlp::PluginContext *context) : SizeAlgorithm(context) {}
+  AutoSize(const tlp::PluginContext *context) : SizeAlgorithm(context) {
+  }
 
   bool run() {
     node n;
@@ -51,8 +51,7 @@ public:
 
 private:
   Size getNodeValue(const node n) {
-    LayoutProperty *entryLayout =
-        graph->getProperty<LayoutProperty>("viewLayout");
+    LayoutProperty *entryLayout = graph->getProperty<LayoutProperty>("viewLayout");
 
     // Compute the minimal distance to one neighbour.
     Iterator<node> *itN = graph->getNodes();
@@ -67,8 +66,7 @@ private:
 
       if (itn != n) {
         const Coord &tmp2 = entryLayout->getNodeValue(itn);
-        dist = sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) +
-                    (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
+        dist = sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) + (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
                     (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
       } else {
         dist = 10;
@@ -80,10 +78,8 @@ private:
 
       if (itn != n) {
         const Coord &tmp2 = entryLayout->getNodeValue(itn);
-        double tmpDist =
-            sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) +
-                 (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
-                 (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
+        double tmpDist = sqrt((tmp1.getX() - tmp2.getX()) * (tmp1.getX() - tmp2.getX()) + (tmp1.getY() - tmp2.getY()) * (tmp1.getY() - tmp2.getY()) +
+                              (tmp1.getZ() - tmp2.getZ()) * (tmp1.getZ() - tmp2.getZ()));
 
         if (tmpDist < dist)
           dist = tmpDist;

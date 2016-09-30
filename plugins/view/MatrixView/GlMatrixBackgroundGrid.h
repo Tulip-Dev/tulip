@@ -24,14 +24,16 @@
 
 class MatrixView;
 
-class GlMatrixBackgroundGrid: public tlp::GlSimpleEntity {
+class GlMatrixBackgroundGrid : public tlp::GlSimpleEntity {
 public:
   GlMatrixBackgroundGrid(MatrixView *view);
   virtual tlp::BoundingBox getBoundingBox();
-  virtual void draw(float lod,tlp::Camera* camera);
+  virtual void draw(float lod, tlp::Camera *camera);
 
-  void getXML(std::string &) {}
-  void setWithXML(const std::string &, unsigned int &) {}
+  void getXML(std::string &) {
+  }
+  void setWithXML(const std::string &, unsigned int &) {
+  }
 
 private:
   MatrixView *_view;

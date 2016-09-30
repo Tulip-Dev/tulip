@@ -26,8 +26,9 @@
 
 namespace tlp {
 
-QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration, const bool optimalPath, const double velocity, const double p) :
-  ZoomAndPanAnimation(glWidget->getScene()->getMainLayer()->getCamera(), boundingBox, duration, optimalPath, velocity, p), glWidget(glWidget) {
+QtGlSceneZoomAndPanAnimator::QtGlSceneZoomAndPanAnimator(GlMainWidget *glWidget, const BoundingBox &boundingBox, const double duration,
+                                                         const bool optimalPath, const double velocity, const double p)
+    : ZoomAndPanAnimation(glWidget->getScene()->getMainLayer()->getCamera(), boundingBox, duration, optimalPath, velocity, p), glWidget(glWidget) {
   nbAnimationSteps = _animationDuration / 40 + 1;
 }
 
@@ -45,11 +46,8 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
   }
 }
 
-
-
 void QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
-  zoomAndPanAnimationStep(animationStep/static_cast<double>(nbAnimationSteps));
+  zoomAndPanAnimationStep(animationStep / static_cast<double>(nbAnimationSteps));
   glWidget->draw();
 }
-
 }

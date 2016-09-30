@@ -47,43 +47,43 @@ static void getCameraParametersFromModelviewMatrix(const MatrixGL &mdvMat, Vec3f
   basisMat.inverse();
   eye = basisMat * -bvec;
   viewdir = -zdir;
-  up =  ydir;
+  up = ydir;
 }
 
 //====================================================
 static void identityMatrix(MatrixGL &m) {
   m.fill(0.0f);
-  for (int i = 0 ; i < 4 ; ++i) {
+  for (int i = 0; i < 4; ++i) {
     m[i][i] = 1.0f;
   }
 }
 //====================================================
-void Camera::ortho(float  left,  float  right,  float  bottom,  float  top,  float  nearVal,  float  farVal) {
-  float tx = -(right+left)/(right-left);
-  float ty = -(top+bottom)/(top-bottom);
-  float tz = -(farVal+nearVal)/(farVal-nearVal);
+void Camera::ortho(float left, float right, float bottom, float top, float nearVal, float farVal) {
+  float tx = -(right + left) / (right - left);
+  float ty = -(top + bottom) / (top - bottom);
+  float tz = -(farVal + nearVal) / (farVal - nearVal);
   MatrixGL tmp;
   tmp.fill(0.0f);
-  tmp[0][0] = 2.0f / (right-left);
+  tmp[0][0] = 2.0f / (right - left);
   tmp[3][0] = tx;
-  tmp[1][1] = 2.0f / (top-bottom);
+  tmp[1][1] = 2.0f / (top - bottom);
   tmp[3][1] = ty;
-  tmp[2][2] = -2.0f / (farVal-nearVal);
+  tmp[2][2] = -2.0f / (farVal - nearVal);
   tmp[3][2] = tz;
   tmp[3][3] = 1.0f;
   _projectionMatrix = tmp * _projectionMatrix;
 }
 //====================================================
-void Camera::frustum(float  left,  float  right,  float  bottom,  float  top,  float  nearVal,  float  farVal) {
-  float A = (right+left)/(right-left);
-  float B = (top+bottom)/(top-bottom);
-  float C = -(farVal+nearVal)/(farVal-nearVal);
-  float D = -(2*farVal*nearVal)/(farVal-nearVal);
+void Camera::frustum(float left, float right, float bottom, float top, float nearVal, float farVal) {
+  float A = (right + left) / (right - left);
+  float B = (top + bottom) / (top - bottom);
+  float C = -(farVal + nearVal) / (farVal - nearVal);
+  float D = -(2 * farVal * nearVal) / (farVal - nearVal);
   MatrixGL tmp;
   tmp.fill(0.0f);
-  tmp[0][0] = (2.0f*nearVal) / (right-left);
+  tmp[0][0] = (2.0f * nearVal) / (right - left);
   tmp[2][0] = A;
-  tmp[1][1] = (2.0f*nearVal) / (top-bottom);
+  tmp[1][1] = (2.0f * nearVal) / (top - bottom);
   tmp[2][1] = B;
   tmp[2][2] = C;
   tmp[3][2] = D;
@@ -91,8 +91,8 @@ void Camera::frustum(float  left,  float  right,  float  bottom,  float  top,  f
   _projectionMatrix = tmp * _projectionMatrix;
 }
 //====================================================
-void Camera::lookAt(float eyeX,  float eyeY,  float eyeZ,  float centerX,  float centerY,  float centerZ,  float upX,  float upY,  float upZ) {
-  Vec3f f(centerX-eyeX, centerY-eyeY, centerZ-eyeZ);
+void Camera::lookAt(float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+  Vec3f f(centerX - eyeX, centerY - eyeY, centerZ - eyeZ);
   Vec3f upN(upX, upY, upZ);
   f /= f.norm();
   Vec3f s = f ^ upN;
@@ -100,7 +100,7 @@ void Camera::lookAt(float eyeX,  float eyeY,  float eyeZ,  float centerX,  float
   Vec3f u = s ^ f;
   MatrixGL M;
   identityMatrix(M);
-  for (int i = 0 ; i < 3 ; ++i) {
+  for (int i = 0; i < 3; ++i) {
     M[i][0] = s[i];
     M[i][1] = u[i];
     M[i][2] = -f[i];
@@ -110,16 +110,9 @@ void Camera::lookAt(float eyeX,  float eyeY,  float eyeZ,  float centerX,  float
   translate(-eyeX, -eyeY, -eyeZ);
 }
 //====================================================
-Camera::Camera(Coord center,Coord eyes, Coord up, double zoomFactor, double sceneRadius):
-  _mdvMatCoherent(false),
-  _projectionMatCoherent(false),
-  _center(center),
-  _eyes(eyes),
-  _up(up),
-  _zoomFactor(zoomFactor),
-  _sceneRadius(sceneRadius),
-  _3d(true),
-  _viewOrtho(true) {
+Camera::Camera(Coord center, Coord eyes, Coord up, double zoomFactor, double sceneRadius)
+    : _mdvMatCoherent(false), _projectionMatCoherent(false), _center(center), _eyes(eyes), _up(up), _zoomFactor(zoomFactor),
+      _sceneRadius(sceneRadius), _3d(true), _viewOrtho(true) {
   identityMatrix(_modelviewMatrix);
   identityMatrix(_projectionMatrix);
   identityMatrix(_transformMatrix);
@@ -133,9 +126,10 @@ Camera::Camera(bool is3d) : Camera() {
   _3d = is3d;
 }
 //====================================================
-Camera::~Camera() {}
+Camera::~Camera() {
+}
 //===================================================
-Camera& Camera::operator=(const Camera &camera) {
+Camera &Camera::operator=(const Camera &camera) {
   _mdvMatCoherent = camera._mdvMatCoherent;
   _projectionMatCoherent = camera._projectionMatCoherent;
 
@@ -167,8 +161,8 @@ Camera& Camera::operator=(const Camera &camera) {
 //===================================================
 BoundingBox Camera::getBoundingBox() {
   BoundingBox bb;
-  bb.expand(viewportTo3DWorld(Coord(_viewport[0],_viewport[1],0)));
-  bb.expand(viewportTo3DWorld(Coord(_viewport[0]+_viewport[2],_viewport[1]+_viewport[3],0)));
+  bb.expand(viewportTo3DWorld(Coord(_viewport[0], _viewport[1], 0)));
+  bb.expand(viewportTo3DWorld(Coord(_viewport[0] + _viewport[2], _viewport[1] + _viewport[3], 0)));
   return bb;
 }
 //====================================================
@@ -195,16 +189,17 @@ void Camera::initGl2D() {
 void Camera::computeTransformMatrices() {
   _transformMatrix = _modelviewMatrix * _projectionMatrix;
   MatrixGL modelviewMatrixBillboard = _modelviewMatrix;
-  modelviewMatrixBillboard[0] = Vec4f(1,0,0,0);
-  modelviewMatrixBillboard[1] = Vec4f(0,1,0,0);
-  modelviewMatrixBillboard[2] = Vec4f(0,0,1,0);
+  modelviewMatrixBillboard[0] = Vec4f(1, 0, 0, 0);
+  modelviewMatrixBillboard[1] = Vec4f(0, 1, 0, 0);
+  modelviewMatrixBillboard[2] = Vec4f(0, 0, 1, 0);
   _transformMatrixBillboard = modelviewMatrixBillboard * _projectionMatrix;
 }
 
 //====================================================
-void Camera::initProjection(const Vec4i& viewport, bool threeD) {
+void Camera::initProjection(const Vec4i &viewport, bool threeD) {
 
-  if (_projectionMatCoherent) return;
+  if (_projectionMatCoherent)
+    return;
 
   identityMatrix(_projectionMatrix);
 
@@ -215,48 +210,39 @@ void Camera::initProjection(const Vec4i& viewport, bool threeD) {
   Vec3f v1 = _sceneBoundingBox[0];
   Vec3f v2 = _sceneBoundingBox[1];
 
-  if(valid && v1 != v2) {
-    Coord diagCoord(_sceneBoundingBox[1]-_sceneBoundingBox[0]);
-    double diag=2*sqrt(diagCoord[0]*diagCoord[0]+diagCoord[1]*diagCoord[1]+diagCoord[2]*diagCoord[2]);
-    _near=-diag;
-    _far=diag;
-  }
-  else {
-    _near=-_sceneRadius;
-    _far=_sceneRadius;
+  if (valid && v1 != v2) {
+    Coord diagCoord(_sceneBoundingBox[1] - _sceneBoundingBox[0]);
+    double diag = 2 * sqrt(diagCoord[0] * diagCoord[0] + diagCoord[1] * diagCoord[1] + diagCoord[2] * diagCoord[2]);
+    _near = -diag;
+    _far = diag;
+  } else {
+    _near = -_sceneRadius;
+    _far = _sceneRadius;
   }
 
-  if(threeD) {
-    float ratio = double(viewport[2])/double(viewport[3]);
+  if (threeD) {
+    float ratio = double(viewport[2]) / double(viewport[3]);
 
-    if(_viewOrtho) {
-      if (ratio>1)
-        ortho(-ratio*_sceneRadius/2.0/_zoomFactor, ratio*_sceneRadius/2.0/_zoomFactor,
-              -_sceneRadius/2.0/_zoomFactor, _sceneRadius/2.0/_zoomFactor,
-              _near,_far);
+    if (_viewOrtho) {
+      if (ratio > 1)
+        ortho(-ratio * _sceneRadius / 2.0 / _zoomFactor, ratio * _sceneRadius / 2.0 / _zoomFactor, -_sceneRadius / 2.0 / _zoomFactor,
+              _sceneRadius / 2.0 / _zoomFactor, _near, _far);
       else
-        ortho(-_sceneRadius/2.0/_zoomFactor, _sceneRadius/2.0/_zoomFactor,
-              1./ratio * - _sceneRadius/2.0/_zoomFactor, 1./ratio * _sceneRadius/2.0/_zoomFactor,
-              _near,_far);
-    }
-    else {
-      if (ratio>1)
-        frustum(-ratio/2.0/_zoomFactor, ratio/2.0/_zoomFactor,
-                -0.5/_zoomFactor, 0.5/_zoomFactor,
-                1.0 , _sceneRadius*2.0);
+        ortho(-_sceneRadius / 2.0 / _zoomFactor, _sceneRadius / 2.0 / _zoomFactor, 1. / ratio * -_sceneRadius / 2.0 / _zoomFactor,
+              1. / ratio * _sceneRadius / 2.0 / _zoomFactor, _near, _far);
+    } else {
+      if (ratio > 1)
+        frustum(-ratio / 2.0 / _zoomFactor, ratio / 2.0 / _zoomFactor, -0.5 / _zoomFactor, 0.5 / _zoomFactor, 1.0, _sceneRadius * 2.0);
       else
-        frustum(-0.5/_zoomFactor, 0.5/_zoomFactor,
-                -1.0/(ratio/0.5*_zoomFactor), 1.0/(ratio/0.5*_zoomFactor),
-                1.0 , _sceneRadius*2.0);
+        frustum(-0.5 / _zoomFactor, 0.5 / _zoomFactor, -1.0 / (ratio / 0.5 * _zoomFactor), 1.0 / (ratio / 0.5 * _zoomFactor), 1.0,
+                _sceneRadius * 2.0);
     }
 
-  }
-  else {
-    ortho(0,viewport[2],0,viewport[3], -100, 100);
+  } else {
+    ortho(0, viewport[2], 0, viewport[3], -100, 100);
   }
 
   _projectionMatCoherent = true;
-
 }
 //====================================================
 void Camera::initProjection(bool threeD) {
@@ -265,14 +251,13 @@ void Camera::initProjection(bool threeD) {
 //====================================================
 void Camera::initModelView(bool threeD) {
 
-  if (_mdvMatCoherent) return;
+  if (_mdvMatCoherent)
+    return;
 
   identityMatrix(_modelviewMatrix);
 
-  if(threeD) {
-    lookAt(_eyes[0], _eyes[1], _eyes[2],
-        _center[0], _center[1], _center[2],
-        _up[0], _up[1], _up[2]);
+  if (threeD) {
+    lookAt(_eyes[0], _eyes[1], _eyes[2], _center[0], _center[1], _center[2], _up[0], _up[1], _up[2]);
   }
 
   _normalMatrix = _modelviewMatrix;
@@ -290,45 +275,45 @@ void Camera::setViewport(const tlp::Vec4i &viewport) {
   }
 }
 //====================================================
-void Camera::setSceneRadius(double sceneRadius,const BoundingBox sceneBoundingBox) {
+void Camera::setSceneRadius(double sceneRadius, const BoundingBox sceneBoundingBox) {
   if (_sceneRadius != sceneRadius || _sceneBoundingBox[0] != sceneBoundingBox[0] || _sceneBoundingBox[1] != sceneBoundingBox[1]) {
-    _sceneRadius=sceneRadius;
-    _sceneBoundingBox=sceneBoundingBox;
-    _projectionMatCoherent=false;
+    _sceneRadius = sceneRadius;
+    _sceneBoundingBox = sceneBoundingBox;
+    _projectionMatCoherent = false;
     notifyModified();
   }
 }
 //====================================================
 void Camera::setZoomFactor(double zoomFactor) {
-  if(zoomFactor>1E10)
+  if (zoomFactor > 1E10)
     return;
   if (_zoomFactor != zoomFactor) {
-    _zoomFactor=zoomFactor;
-    _projectionMatCoherent=false;
+    _zoomFactor = zoomFactor;
+    _projectionMatCoherent = false;
     notifyModified();
   }
 }
 //====================================================
-void Camera::setEyes(const Coord& eyes) {
+void Camera::setEyes(const Coord &eyes) {
   if (_eyes != eyes) {
-    _eyes=eyes;
-    _mdvMatCoherent=false;
+    _eyes = eyes;
+    _mdvMatCoherent = false;
     notifyModified();
   }
 }
 //====================================================
-void Camera::setCenter(const Coord& center) {
+void Camera::setCenter(const Coord &center) {
   if (_center != center) {
-    _center=center;
-    _mdvMatCoherent=false;
+    _center = center;
+    _mdvMatCoherent = false;
     notifyModified();
   }
 }
 //====================================================
-void Camera::setUp(const Coord& up) {
+void Camera::setUp(const Coord &up) {
   if (_up != up) {
-    _up=up;
-    _mdvMatCoherent=false;
+    _up = up;
+    _mdvMatCoherent = false;
     notifyModified();
   }
 }
@@ -337,8 +322,8 @@ Coord Camera::viewportTo3DWorld(const Coord &point) {
 
   initGl();
 
-  //try to find a good z-coordinate for reverse projection
-  Coord pScr = projectPoint(Coord(0,0,0), _transformMatrix, _viewport);
+  // try to find a good z-coordinate for reverse projection
+  Coord pScr = projectPoint(Coord(0, 0, 0), _transformMatrix, _viewport);
 
   pScr[0] = _viewport[0] + _viewport[2] - point[0];
   pScr[1] = _viewport[1] + _viewport[3] - point[1];
@@ -393,7 +378,7 @@ void Camera::popModelViewMatrix() {
 }
 //====================================================
 void Camera::translate(const tlp::Vec3f &move) {
-  if (move != Vec3f(0,0,0)) {
+  if (move != Vec3f(0, 0, 0)) {
     MatrixGL translation;
     identityMatrix(translation);
     translation[3][0] = move[0];
@@ -439,35 +424,35 @@ void Camera::centerScene(tlp::BoundingBox sceneBoundingBox) {
   double dx = maxC[0] - minC[0];
   double dy = maxC[1] - minC[1];
 
-  Coord center=(maxC + minC) / 2.f;
+  Coord center = (maxC + minC) / 2.f;
 
-  if ((dx==0) && (dy==0))
+  if ((dx == 0) && (dy == 0))
     dx = dy = 10.0;
 
   int width = _viewport[2];
   int height = _viewport[3];
 
-  double wdx=width/dx;
-  double hdy=height/dy;
+  double wdx = width / dx;
+  double hdy = height / dy;
 
   float sceneRadius = 0;
-  if (dx<dy) {
-    if (wdx<hdy) {
-      sceneRadius=static_cast<float>(dx);
+  if (dx < dy) {
+    if (wdx < hdy) {
+      sceneRadius = static_cast<float>(dx);
     } else {
       if (width < height)
-        sceneRadius=static_cast<float>(dx*wdx/hdy);
+        sceneRadius = static_cast<float>(dx * wdx / hdy);
       else
-        sceneRadius=static_cast<float>(dy);
+        sceneRadius = static_cast<float>(dy);
     }
   } else {
-    if (wdx>hdy) {
-      sceneRadius=static_cast<float>(dy);
+    if (wdx > hdy) {
+      sceneRadius = static_cast<float>(dy);
     } else {
       if (height < width)
-        sceneRadius=static_cast<float>(dy*hdy/wdx);
+        sceneRadius = static_cast<float>(dy * hdy / wdx);
       else
-        sceneRadius=static_cast<float>(dx);
+        sceneRadius = static_cast<float>(dx);
     }
   }
 
@@ -477,7 +462,7 @@ void Camera::centerScene(tlp::BoundingBox sceneBoundingBox) {
   setCenter(center);
   setSceneRadius(sceneRadius, sceneBoundingBox);
   setEyes(eyes);
-  setUp(Coord(0,1,0));
+  setUp(Coord(0, 1, 0));
   setZoomFactor(1);
 }
 
@@ -486,17 +471,17 @@ void Camera::rotate(float angle, float x, float y, float z) {
   float s = sin(angle);
   MatrixGL rotMatrix;
   rotMatrix.fill(0);
-  rotMatrix[0][0] = x*x*(1-c)+c;
-  rotMatrix[1][1] = y*y*(1-c)+c;
-  rotMatrix[2][2] = z*z*(1-c)+c;
+  rotMatrix[0][0] = x * x * (1 - c) + c;
+  rotMatrix[1][1] = y * y * (1 - c) + c;
+  rotMatrix[2][2] = z * z * (1 - c) + c;
   rotMatrix[3][3] = 1;
 
-  rotMatrix[0][1] = y*x*(1-c)+z*s;
-  rotMatrix[0][2] = x*z*(1-c)-y*s;
-  rotMatrix[1][0] = x*y*(1-c)-z*s;
-  rotMatrix[1][2] = y*z*(1-c)+x*s;
-  rotMatrix[2][0] = x*z*(1-c)+y*s;
-  rotMatrix[2][1] = y*z*(1-c)-x*s;
+  rotMatrix[0][1] = y * x * (1 - c) + z * s;
+  rotMatrix[0][2] = x * z * (1 - c) - y * s;
+  rotMatrix[1][0] = x * y * (1 - c) - z * s;
+  rotMatrix[1][2] = y * z * (1 - c) + x * s;
+  rotMatrix[2][0] = x * z * (1 - c) + y * s;
+  rotMatrix[2][1] = y * z * (1 - c) - x * s;
 
   float dist = _eyes.dist(_center);
   _modelviewMatrix = rotMatrix * _modelviewMatrix;
@@ -508,9 +493,7 @@ void Camera::rotate(float angle, float x, float y, float z) {
 }
 
 bool Camera::hasRotation() const {
-  return _modelviewMatrix[0] != Vec4f(1,0,0,0) ||
-      _modelviewMatrix[1] != Vec4f(0,1,0,0) ||
-      _modelviewMatrix[2] != Vec4f(0,0,1,0);
+  return _modelviewMatrix[0] != Vec4f(1, 0, 0, 0) || _modelviewMatrix[1] != Vec4f(0, 1, 0, 0) || _modelviewMatrix[2] != Vec4f(0, 0, 1, 0);
 }
 
 void Camera::notifyModified() {

@@ -38,19 +38,18 @@ string GlTextureManager::_currentCanvasId("");
 
 static int maxTextureSize = 0;
 
-GlTextureManager::GlTextureManager() :
-  _currentUnit(0) {
+GlTextureManager::GlTextureManager() : _currentUnit(0) {
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
   if (maxTextureSize > 4096) {
     maxTextureSize = 4096;
   }
-  for (int i = 0 ; i < 4 ; ++i) {
+  for (int i = 0; i < 4; ++i) {
     _texturesAtlas[i] = nullptr;
   }
 }
 
 GlTextureManager::~GlTextureManager() {
-  for (int i = 0 ; i < 4 ; ++i) {
+  for (int i = 0; i < 4; ++i) {
     delete _texturesAtlas[i];
   }
 }
@@ -81,7 +80,8 @@ void GlTextureManager::addTextureInAtlasFromFile(const std::string &textureFile)
   delete textureData;
 }
 
-void GlTextureManager::addTextureInAtlasFromData(const std::string &textureName, const unsigned char *textureData, unsigned int width, unsigned int height) {
+void GlTextureManager::addTextureInAtlasFromData(const std::string &textureName, const unsigned char *textureData, unsigned int width,
+                                                 unsigned int height) {
   if (textureName.empty() || _textureAtlasUnit.find(textureName) != _textureAtlasUnit.end()) {
     return;
   }
@@ -91,16 +91,18 @@ void GlTextureManager::addTextureInAtlasFromData(const std::string &textureName,
       _texturesAtlas[_currentUnit] = new TextureAtlas(maxTextureSize, maxTextureSize, 4);
     }
     Vec4i region = _texturesAtlas[_currentUnit]->getRegion(width, height);
-    if (region.x() >= 0 && region.y() >=0) {
-      _texturesAtlas[_currentUnit]->setRegion(region.x(), region.y(), region.z(), region.w(), textureData, width*4);
+    if (region.x() >= 0 && region.y() >= 0) {
+      _texturesAtlas[_currentUnit]->setRegion(region.x(), region.y(), region.z(), region.w(), textureData, width * 4);
       ++nbTexturesInAtlas;
       _textureAtlasUnit[textureName] = _currentUnit;
       float offset = 0;
-      _coordinatesOffsets[textureName] = Vec4f((region.x()+offset)/static_cast<float>(maxTextureSize), (region.y()+offset)/static_cast<float>(maxTextureSize),
-                                               (region.x()+region.z()-offset)/static_cast<float>(maxTextureSize), (region.y()+region.w()-offset)/static_cast<float>(maxTextureSize));
+      _coordinatesOffsets[textureName] =
+          Vec4f((region.x() + offset) / static_cast<float>(maxTextureSize), (region.y() + offset) / static_cast<float>(maxTextureSize),
+                (region.x() + region.z() - offset) / static_cast<float>(maxTextureSize),
+                (region.y() + region.w() - offset) / static_cast<float>(maxTextureSize));
       ok = true;
     } else {
-      std::cout << "texture atlas " <<  _currentUnit << " is full ! " << nbTexturesInAtlas << std::endl;
+      std::cout << "texture atlas " << _currentUnit << " is full ! " << nbTexturesInAtlas << std::endl;
       ++_currentUnit;
       nbTexturesInAtlas = 0;
     }
@@ -181,7 +183,8 @@ void GlTextureManager::unbindTexturesAtlas() {
 }
 
 void GlTextureManager::addTextureFromFile(const std::string &textureFile, bool addAlsoInAtlas) {
-  if (textureFile.empty() || (!addAlsoInAtlas && _coordinatesOffsets.find(textureFile) != _coordinatesOffsets.end()) || _textures.find(textureFile) != _textures.end()) {
+  if (textureFile.empty() || (!addAlsoInAtlas && _coordinatesOffsets.find(textureFile) != _coordinatesOffsets.end()) ||
+      _textures.find(textureFile) != _textures.end()) {
     return;
   }
   TextureData *textureData = loadTextureData(textureFile.c_str());
@@ -205,8 +208,10 @@ void GlTextureManager::addTextureFromFile(const std::string &textureFile, bool a
   delete textureData;
 }
 
-void GlTextureManager::addTextureFromData(const std::string &textureName, const unsigned char *textureData, unsigned int width, unsigned int height, bool addAlsoInAtlas) {
-  if (textureName.empty() || (!addAlsoInAtlas && _coordinatesOffsets.find(textureName) != _coordinatesOffsets.end()) || _textures.find(textureName) != _textures.end()) {
+void GlTextureManager::addTextureFromData(const std::string &textureName, const unsigned char *textureData, unsigned int width, unsigned int height,
+                                          bool addAlsoInAtlas) {
+  if (textureName.empty() || (!addAlsoInAtlas && _coordinatesOffsets.find(textureName) != _coordinatesOffsets.end()) ||
+      _textures.find(textureName) != _textures.end()) {
     return;
   }
 
@@ -283,4 +288,3 @@ void GlTextureManager::unbindTexture(const std::string &textureId) {
   glBindTexture(GL_TEXTURE_2D, 0);
   _textureUnit.erase(textureId);
 }
-

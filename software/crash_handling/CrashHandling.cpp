@@ -54,17 +54,16 @@ static void dumpStackTrace(StackWalker &sw) {
 
     if (!ofs.is_open()) {
       std::cerr << "Could not open " << TULIP_DUMP_FILE << std::endl;
-    }
-    else {
+    } else {
       os = &ofs;
       std::cerr << "Writing dump stack to " << TULIP_DUMP_FILE << std::endl;
     }
   }
 
   *os << TLP_PLATEFORM_HEADER << " " << OS_PLATFORM << std::endl
-      << TLP_ARCH_HEADER << " "  << OS_ARCHITECTURE << std::endl
-      << TLP_COMPILER_HEADER << " "  << OS_COMPILER  << std::endl
-      << TLP_VERSION_HEADER << " " << TULIP_VERSION  << std::endl;
+      << TLP_ARCH_HEADER << " " << OS_ARCHITECTURE << std::endl
+      << TLP_COMPILER_HEADER << " " << OS_COMPILER << std::endl
+      << TLP_VERSION_HEADER << " " << TULIP_VERSION << std::endl;
   *os << TLP_STACK_BEGIN_HEADER << std::endl;
   sw.printCallStack(*os, 50);
   *os << TLP_STACK_END_HEADER << std::endl;
@@ -93,22 +92,22 @@ typedef ucontext_t sig_ucontext_t;
 
 // This structure mirrors the one found in /usr/include/asm/ucontext.h
 typedef struct _sig_ucontext {
-  unsigned long     uc_flags;
-  struct ucontext   *uc_link;
-  stack_t           uc_stack;
+  unsigned long uc_flags;
+  struct ucontext *uc_link;
+  stack_t uc_stack;
   struct sigcontext uc_mcontext;
-  sigset_t          uc_sigmask;
+  sigset_t uc_sigmask;
 } sig_ucontext_t;
 
 #endif
 
-void dumpStack(int sig, siginfo_t *, void * ucontext) {
+void dumpStack(int sig, siginfo_t *, void *ucontext) {
 
-  // Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
+// Get the address at the time the signal was raised from the EIP (x86) or RIP (x86_64)
 
 #ifndef __APPLE__
 
-  sig_ucontext_t * uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
+  sig_ucontext_t *uc = reinterpret_cast<sig_ucontext_t *>(ucontext);
 #if defined(__i386__)
 #ifdef __FreeBSD__
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext.mc_eip); // x86 specific;
@@ -125,7 +124,7 @@ void dumpStack(int sig, siginfo_t *, void * ucontext) {
 
 #else
 
-  ucontext_t * uc = reinterpret_cast<ucontext_t *>(ucontext);
+  ucontext_t *uc = reinterpret_cast<ucontext_t *>(ucontext);
 #if defined(__i386__)
   void *callerAddress = reinterpret_cast<void *>(uc->uc_mcontext->__ss.__eip);
 #else
@@ -154,7 +153,8 @@ void CrashHandling::installCrashHandler() {
 
 #else
 // architecture not supported
-void CrashHandling::installCrashHandler() {}
+void CrashHandling::installCrashHandler() {
+}
 #endif
 
 /*
@@ -162,8 +162,7 @@ void CrashHandling::installCrashHandler() {}
  */
 #elif defined(__MINGW32__)
 
-static LONG WINAPI
-exception_filter(LPEXCEPTION_POINTERS info) {
+static LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info) {
   StackWalkerMinGW sw;
   sw.setContext(info->ContextRecord);
 
@@ -178,8 +177,7 @@ void CrashHandling::installCrashHandler() {
 
 #elif defined(_MSC_VER)
 
-static LONG WINAPI
-exception_filter(LPEXCEPTION_POINTERS info) {
+static LONG WINAPI exception_filter(LPEXCEPTION_POINTERS info) {
   StackWalkerMSVC sw;
   sw.setExtraSymbolsSearchPaths(SYMBOLS_SEARCH_PATHS);
   sw.setContext(info->ContextRecord);
@@ -188,7 +186,6 @@ exception_filter(LPEXCEPTION_POINTERS info) {
 
   return 1;
 }
-
 
 void CrashHandling::installCrashHandler() {
   SetUnhandledExceptionFilter(exception_filter);

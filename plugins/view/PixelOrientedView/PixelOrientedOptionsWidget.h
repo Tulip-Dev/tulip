@@ -34,9 +34,9 @@ class PixelOrientedOptionsWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::PixelOrientedOptionsWidgetData* _ui;
-public :
+  Ui::PixelOrientedOptionsWidgetData *_ui;
 
+public:
   PixelOrientedOptionsWidget(QWidget *parent = 0);
   ~PixelOrientedOptionsWidget();
 
@@ -44,20 +44,18 @@ public :
   void setBackgroundColor(const Color &color);
 
   std::string getLayoutType() const;
-  void setLayoutType(const std::string& layoutType);
+  void setLayoutType(const std::string &layoutType);
 
   bool configurationChanged();
 
-private slots :
+private slots:
 
   void pressBackgroundColorButton();
 
-private :
-
+private:
   bool oldValuesInitialized;
   Color oldBackgroundColor;
   std::string oldLayoutType;
-
 };
 }
 #endif /* PIXELORIENTEDOPTIONSWIDGET_H_ */

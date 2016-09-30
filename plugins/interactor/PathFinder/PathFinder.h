@@ -49,10 +49,9 @@ class BooleanProperty;
 * You can thus display one or several shortest paths between two selected nodes, or you can even extend to non-shortest paths
 * with length limitations.
 */
-class PathFinder: public tlp::GLInteractorComposite {
+class PathFinder : public tlp::GLInteractorComposite {
   Q_OBJECT
 public:
-
   PLUGININFORMATION("PathFinder", "Tulip Team", "03/24/2010", "Path finding interactor", "1.0", "Information")
 
   PathFinder(const tlp::PluginContext *);
@@ -143,6 +142,5 @@ private:
   tlp::StringsListSelectionWidget *highlightersListWidget;
   QPushButton *configureHighlighterBtn;
 };
-
 }
 #endif /* PATHFINDER_H_ */

@@ -53,7 +53,9 @@ using namespace std;
 #define OUT_DIRECTION "output"
 #define INOUT_DIRECTION "input/output"
 
-static string html_help_def(const string &A, const string &B) { return "<tr><td><b>" + A + "</b><td class=\"b\">" + B + "</td></tr>"; }
+static string html_help_def(const string &A, const string &B) {
+  return "<tr><td><b>" + A + "</b><td class=\"b\">" + B + "</td></tr>";
+}
 
 static string getParameterTypename(const string &name, const string &typeId) {
   if (name.substr(0, 6) == "file::" || name.substr(0, 9) == "anyfile::") {
@@ -83,7 +85,8 @@ static string getParameterTypename(const string &name, const string &typeId) {
   }
 }
 
-string ParameterDescriptionList::generateParameterHTMLDocumentation(const string &name, const string &help, const string &type, const string &defaultValue, const string &valuesDescription,
+string ParameterDescriptionList::generateParameterHTMLDocumentation(const string &name, const string &help, const string &type,
+                                                                    const string &defaultValue, const string &valuesDescription,
                                                                     const ParameterDirection &direction) {
 
   static string htmlDocheader = HTML_HELP_OPEN();
@@ -121,7 +124,9 @@ string ParameterDescriptionList::generateParameterHTMLDocumentation(const string
   return doc;
 }
 
-const ParameterDescriptionList &tlp::WithParameter::getParameters() const { return parameters; }
+const ParameterDescriptionList &tlp::WithParameter::getParameters() const {
+  return parameters;
+}
 
 Iterator<ParameterDescription> *ParameterDescriptionList::getParameters() const {
   return new StlIterator<ParameterDescription, vector<ParameterDescription>::const_iterator>(parameters.begin(), parameters.end());
@@ -140,21 +145,29 @@ ParameterDescription *ParameterDescriptionList::getParameter(const string &name)
   return nullptr;
 }
 
-const string &ParameterDescriptionList::getDefaultValue(const string &name) const { return ((ParameterDescriptionList *)this)->getParameter(name)->getDefaultValue(); }
+const string &ParameterDescriptionList::getDefaultValue(const string &name) const {
+  return ((ParameterDescriptionList *)this)->getParameter(name)->getDefaultValue();
+}
 
-void ParameterDescriptionList::setDefaultValue(const string &name, const string &val) { getParameter(name)->setDefaultValue(val); }
+void ParameterDescriptionList::setDefaultValue(const string &name, const string &val) {
+  getParameter(name)->setDefaultValue(val);
+}
 
-void ParameterDescriptionList::setDirection(const string &name, ParameterDirection direction) { getParameter(name)->setDirection(direction); }
+void ParameterDescriptionList::setDirection(const string &name, ParameterDirection direction) {
+  getParameter(name)->setDirection(direction);
+}
 
-bool ParameterDescriptionList::isMandatory(const string &name) const { return ((ParameterDescriptionList *)this)->getParameter(name)->isMandatory(); }
+bool ParameterDescriptionList::isMandatory(const string &name) const {
+  return ((ParameterDescriptionList *)this)->getParameter(name)->isMandatory();
+}
 
-#define CHECK_PROPERTY(T)                                                                                                                                                                              \
-  if (type.compare(typeid(T).name()) == 0) {                                                                                                                                                           \
-    if (!g || defaultValue.empty() || !g->existProperty(defaultValue))                                                                                                                                 \
-      dataSet.set(name, (T *)nullptr);                                                                                                                                                                 \
-    else                                                                                                                                                                                               \
-      dataSet.set(name, (T *)g->getProperty<T>(defaultValue));                                                                                                                                         \
-    continue;                                                                                                                                                                                          \
+#define CHECK_PROPERTY(T)                                                                                                                            \
+  if (type.compare(typeid(T).name()) == 0) {                                                                                                         \
+    if (!g || defaultValue.empty() || !g->existProperty(defaultValue))                                                                               \
+      dataSet.set(name, (T *)nullptr);                                                                                                               \
+    else                                                                                                                                             \
+      dataSet.set(name, (T *)g->getProperty<T>(defaultValue));                                                                                       \
+    continue;                                                                                                                                        \
   }
 
 void ParameterDescriptionList::buildDefaultDataSet(DataSet &dataSet, Graph *g) const {

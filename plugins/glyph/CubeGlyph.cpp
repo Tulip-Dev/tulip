@@ -29,7 +29,6 @@
 #include <tulip/GlUtils.h>
 #include <tulip/TulipViewSettings.h>
 
-
 using namespace std;
 using namespace tlp;
 
@@ -38,105 +37,49 @@ class CubeGlyph : public Glyph {
   friend class CubeOutlinedGlyph;
 
 public:
-
   GLYPHINFORMATION("3D - Cube", "3D - Cube extremity", "Antoine Lambert", "20/05/2016", "Cube", "1.0", tlp::NodeShape::Cube)
 
-  CubeGlyph(PluginContext *context=nullptr) : Glyph(context) {
+  CubeGlyph(PluginContext *context = nullptr) : Glyph(context) {
 
-    _vertices = {Coord(0.5f, 0.5f, 0.5f),
-                 Coord(-0.5f, 0.5f, 0.5f),
-                 Coord(-0.5f, -0.5f, 0.5f),
-                 Coord(0.5f, -0.5f, 0.5f),
+    _vertices = {Coord(0.5f, 0.5f, 0.5f),    Coord(-0.5f, 0.5f, 0.5f),   Coord(-0.5f, -0.5f, 0.5f),  Coord(0.5f, -0.5f, 0.5f),
 
-                 Coord(0.5f, 0.5f, 0.5f),
-                 Coord(0.5f, -0.5f, 0.5f),
-                 Coord(0.5f, -0.5f, -0.5f),
-                 Coord(0.5f, 0.5f, -0.5f),
+                 Coord(0.5f, 0.5f, 0.5f),    Coord(0.5f, -0.5f, 0.5f),   Coord(0.5f, -0.5f, -0.5f),  Coord(0.5f, 0.5f, -0.5f),
 
-                 Coord(0.5f, 0.5f, 0.5f),
-                 Coord(0.5f, 0.5f, -0.5f),
-                 Coord(-0.5f, 0.5f, -0.5f),
-                 Coord(-0.5f, 0.5f, 0.5f),
+                 Coord(0.5f, 0.5f, 0.5f),    Coord(0.5f, 0.5f, -0.5f),   Coord(-0.5f, 0.5f, -0.5f),  Coord(-0.5f, 0.5f, 0.5f),
 
-                 Coord(-0.5f, 0.5f, 0.5f),
-                 Coord(-0.5f, 0.5f, -0.5f),
-                 Coord(-0.5f, -0.5f, -0.5f),
-                 Coord(-0.5f, -0.5f, 0.5f),
+                 Coord(-0.5f, 0.5f, 0.5f),   Coord(-0.5f, 0.5f, -0.5f),  Coord(-0.5f, -0.5f, -0.5f), Coord(-0.5f, -0.5f, 0.5f),
 
-                 Coord(-0.5f, -0.5f, -0.5f),
-                 Coord(0.5f, -0.5f, -0.5f),
-                 Coord(0.5f, -0.5f, 0.5f),
-                 Coord(-0.5f, -0.5f, 0.5f),
+                 Coord(-0.5f, -0.5f, -0.5f), Coord(0.5f, -0.5f, -0.5f),  Coord(0.5f, -0.5f, 0.5f),   Coord(-0.5f, -0.5f, 0.5f),
 
-                 Coord(0.5f, -0.5f, -0.5f),
-                 Coord(-0.5f, -0.5f, -0.5f),
-                 Coord(-0.5f, 0.5f, -0.5f),
-                 Coord(0.5f, 0.5f, -0.5f)};
+                 Coord(0.5f, -0.5f, -0.5f),  Coord(-0.5f, -0.5f, -0.5f), Coord(-0.5f, 0.5f, -0.5f),  Coord(0.5f, 0.5f, -0.5f)};
 
-    _texCoords = {Vec2f(1.0f, 1.0f),
-                  Vec2f(0.0f, 1.0f),
-                  Vec2f(0.0f, 0.0f),
-                  Vec2f(1.0f, 0.0f),
+    _texCoords = {Vec2f(1.0f, 1.0f), Vec2f(0.0f, 1.0f), Vec2f(0.0f, 0.0f), Vec2f(1.0f, 0.0f),
 
-                  Vec2f(1.0f, 1.0f),
-                  Vec2f(0.0f, 1.0f),
-                  Vec2f(0.0f, 0.0f),
-                  Vec2f(1.0f, 0.0f),
+                  Vec2f(1.0f, 1.0f), Vec2f(0.0f, 1.0f), Vec2f(0.0f, 0.0f), Vec2f(1.0f, 0.0f),
 
-                  Vec2f(1.0f, 1.0f),
-                  Vec2f(0.0f, 1.0f),
-                  Vec2f(0.0f, 0.0f),
-                  Vec2f(1.0f, 0.0f),
+                  Vec2f(1.0f, 1.0f), Vec2f(0.0f, 1.0f), Vec2f(0.0f, 0.0f), Vec2f(1.0f, 0.0f),
 
-                  Vec2f(1.0f, 1.0f),
-                  Vec2f(0.0f, 1.0f),
-                  Vec2f(0.0f, 0.0f),
-                  Vec2f(1.0f, 0.0f),
+                  Vec2f(1.0f, 1.0f), Vec2f(0.0f, 1.0f), Vec2f(0.0f, 0.0f), Vec2f(1.0f, 0.0f),
 
-                  Vec2f(1.0f, 1.0f),
-                  Vec2f(0.0f, 1.0f),
-                  Vec2f(0.0f, 0.0f),
-                  Vec2f(1.0f, 0.0f),
+                  Vec2f(1.0f, 1.0f), Vec2f(0.0f, 1.0f), Vec2f(0.0f, 0.0f), Vec2f(1.0f, 0.0f),
 
-                  Vec2f(1.0f, 1.0f),
-                  Vec2f(0.0f, 1.0f),
-                  Vec2f(0.0f, 0.0f),
-                  Vec2f(1.0f, 0.0f)};
+                  Vec2f(1.0f, 1.0f), Vec2f(0.0f, 1.0f), Vec2f(0.0f, 0.0f), Vec2f(1.0f, 0.0f)};
 
-    _normals = {Coord(0.0f, 0.0f, 1.0f),
-                Coord(0.0f, 0.0f, 1.0f),
-                Coord(0.0f, 0.0f, 1.0f),
-                Coord(0.0f, 0.0f, 1.0f),
+    _normals = {Coord(0.0f, 0.0f, 1.0f),  Coord(0.0f, 0.0f, 1.0f),  Coord(0.0f, 0.0f, 1.0f),  Coord(0.0f, 0.0f, 1.0f),
 
-                Coord(1.0f, 0.0f, 0.0f),
-                Coord(1.0f, 0.0f, 0.0f),
-                Coord(1.0f, 0.0f, 0.0f),
-                Coord(1.0f, 0.0f, 0.0f),
+                Coord(1.0f, 0.0f, 0.0f),  Coord(1.0f, 0.0f, 0.0f),  Coord(1.0f, 0.0f, 0.0f),  Coord(1.0f, 0.0f, 0.0f),
 
-                Coord(0.0f, 1.0f, 0.0f),
-                Coord(0.0f, 1.0f, 0.0f),
-                Coord(0.0f, 1.0f, 0.0f),
-                Coord(0.0f, 1.0f, 0.0f),
+                Coord(0.0f, 1.0f, 0.0f),  Coord(0.0f, 1.0f, 0.0f),  Coord(0.0f, 1.0f, 0.0f),  Coord(0.0f, 1.0f, 0.0f),
 
-                Coord(-1.0f, 0.0f, 0.0f),
-                Coord(-1.0f, 0.0f, 0.0f),
-                Coord(-1.0f, 0.0f, 0.0f),
-                Coord(-1.0f, 0.0f, 0.0f),
+                Coord(-1.0f, 0.0f, 0.0f), Coord(-1.0f, 0.0f, 0.0f), Coord(-1.0f, 0.0f, 0.0f), Coord(-1.0f, 0.0f, 0.0f),
 
-                Coord(0.0f, -1.0f, 0.0f),
-                Coord(0.0f, -1.0f, 0.0f),
-                Coord(0.0f, -1.0f, 0.0f),
-                Coord(0.0f, -1.0f, 0.0f),
+                Coord(0.0f, -1.0f, 0.0f), Coord(0.0f, -1.0f, 0.0f), Coord(0.0f, -1.0f, 0.0f), Coord(0.0f, -1.0f, 0.0f),
 
-                Coord(0.0f, 0.0f, -1.0f),
-                Coord(0.0f, 0.0f, -1.0f),
-                Coord(0.0f, 0.0f, -1.0f),
-                Coord(0.0f, 0.0f, -1.0f)};
+                Coord(0.0f, 0.0f, -1.0f), Coord(0.0f, 0.0f, -1.0f), Coord(0.0f, 0.0f, -1.0f), Coord(0.0f, 0.0f, -1.0f)};
 
-    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()) ; i+=4) {
-      _indices.insert(_indices.end(), {i, ushort_cast(i+1), ushort_cast(i+2), i, ushort_cast(i+2), ushort_cast(i+3)});
+    for (unsigned short i = 0; i < ushort_cast(_vertices.size()); i += 4) {
+      _indices.insert(_indices.end(), {i, ushort_cast(i + 1), ushort_cast(i + 2), i, ushort_cast(i + 2), ushort_cast(i + 3)});
     }
-
   }
 
   bool glyph2D() const {
@@ -144,8 +87,7 @@ public:
   }
 
 protected:
-
-  Coord getAnchor(const Coord & vector) const {
+  Coord getAnchor(const Coord &vector) const {
     float x, y, z, fmax;
     vector.get(x, y, z);
     fmax = std::max(std::max(fabsf(x), fabsf(y)), fabsf(z));
@@ -155,7 +97,6 @@ protected:
     else
       return vector;
   }
-
 };
 
 class CubeOutlinedGlyph : public Glyph {
@@ -163,10 +104,10 @@ class CubeOutlinedGlyph : public Glyph {
   friend class CubeOutlinedTransparentGlyph;
 
 public:
+  GLYPHINFORMATION("3D - Cube Outlined", "3D - Cube Outlined extremity", "Antoine Lambert", "20/05/2016", "Cube Outlined", "1.0",
+                   tlp::NodeShape::CubeOutlined)
 
-  GLYPHINFORMATION("3D - Cube Outlined", "3D - Cube Outlined extremity", "Antoine Lambert", "20/05/2016", "Cube Outlined", "1.0", tlp::NodeShape::CubeOutlined)
-
-  CubeOutlinedGlyph(PluginContext *context=nullptr) : Glyph(context) {
+  CubeOutlinedGlyph(PluginContext *context = nullptr) : Glyph(context) {
     _outlinesIndices.push_back({0, 1, 2, 3, 0});
     _outlinesIndices.push_back({20, 21, 22, 23, 20});
     _outlinesIndices.push_back({0, 23});
@@ -204,24 +145,22 @@ public:
   }
 
 protected:
-
   Coord getAnchor(const Coord &vector) const {
     return _cubeGlyph.getAnchor(vector);
   }
 
 private:
-
   CubeGlyph _cubeGlyph;
-
 };
 
 class CubeOutlinedTransparentGlyph : public Glyph {
 
 public:
+  GLYPHINFORMATION("3D - Cube Outlined Transparent", "3D - Cube Outlined Transparent extremity", "Antoine Lambert", "20/05/2016",
+                   "Cube Outlined Transparent", "1.0", NodeShape::CubeOutlinedTransparent)
 
-  GLYPHINFORMATION("3D - Cube Outlined Transparent", "3D - Cube Outlined Transparent extremity", "Antoine Lambert", "20/05/2016", "Cube Outlined Transparent", "1.0", NodeShape::CubeOutlinedTransparent)
-
-  CubeOutlinedTransparentGlyph(PluginContext *context) : Glyph(context) {}
+  CubeOutlinedTransparentGlyph(PluginContext *context) : Glyph(context) {
+  }
 
   const vector<Coord> &getGlyphVertices() const {
     return _cubeOutlinedGlyph.getGlyphVertices();
@@ -236,18 +175,14 @@ public:
   }
 
 protected:
-
   Coord getAnchor(const Coord &vector) const {
     return _cubeOutlinedGlyph.getAnchor(vector);
   }
 
 private:
-
   CubeOutlinedGlyph _cubeOutlinedGlyph;
-
 };
 
 PLUGIN(CubeGlyph)
 PLUGIN(CubeOutlinedGlyph)
 PLUGIN(CubeOutlinedTransparentGlyph)
-

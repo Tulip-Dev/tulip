@@ -26,17 +26,15 @@
 using namespace std;
 using namespace tlp;
 
-const string viewPropertiesName[] = {"viewBorderColor", "viewBorderWidth", "viewColor", "viewFont",
-                                     "viewLabelColor", "viewLabelPosition", "viewLayout", "viewMetaGraph",
-                                     "viewRotation", "viewSelection", "viewShape", "viewSize",
-                                     "viewTexture", "viewMetric"
-                                    };
+const string viewPropertiesName[] = {"viewBorderColor",   "viewBorderWidth", "viewColor",     "viewFont",     "viewLabelColor",
+                                     "viewLabelPosition", "viewLayout",      "viewMetaGraph", "viewRotation", "viewSelection",
+                                     "viewShape",         "viewSize",        "viewTexture",   "viewMetric"};
 
 const unsigned int nbViewProperties = sizeof(viewPropertiesName) / sizeof(string);
 
 const vector<string> graphViewProperties(viewPropertiesName, viewPropertiesName + nbViewProperties);
 
-static vector<string> getGraphPropertiesListAccordingToType(Graph *graph, const string& typeName) {
+static vector<string> getGraphPropertiesListAccordingToType(Graph *graph, const string &typeName) {
   Iterator<string> *propertiesIt = graph->getProperties();
   vector<string> ret;
 
@@ -53,7 +51,7 @@ static vector<string> getGraphPropertiesListAccordingToType(Graph *graph, const 
   return ret;
 }
 
-GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::GeolocalisationConfigWidgetData) {
+GeolocalisationConfigWidget::GeolocalisationConfigWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::GeolocalisationConfigWidgetData) {
   _ui->setupUi(this);
   connect(_ui->addressLocRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
   connect(_ui->latLngRB, SIGNAL(toggled(bool)), this, SLOT(enableDisableComboBoxes()));
@@ -68,7 +66,7 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   _ui->addressPropCB->clear();
   vector<string> stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
 
-  for (size_t i = 0 ; i < stringProperties.size() ; ++i) {
+  for (size_t i = 0; i < stringProperties.size(); ++i) {
     _ui->addressPropCB->addItem(QString::fromUtf8(stringProperties[i].c_str()));
   }
 
@@ -76,14 +74,14 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   _ui->lngPropCB->clear();
   vector<string> doubleProperties = getGraphPropertiesListAccordingToType(graph, "double");
 
-  for (unsigned int i = 0 ; i < doubleProperties.size() ; ++i) {
+  for (unsigned int i = 0; i < doubleProperties.size(); ++i) {
     _ui->latPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
     _ui->lngPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
   }
 
   _ui->edgesPathsPropertyCB->clear();
   vector<string> doubleVectorProperties = getGraphPropertiesListAccordingToType(graph, "vector<double>");
-  for (size_t i = 0 ; i < doubleVectorProperties.size() ; ++i) {
+  for (size_t i = 0; i < doubleVectorProperties.size(); ++i) {
     _ui->edgesPathsPropertyCB->addItem(QString::fromUtf8(doubleVectorProperties[i].c_str()));
   }
 }
@@ -132,8 +130,7 @@ void GeolocalisationConfigWidget::enableDisableComboBoxes() {
     _ui->addressPropCB->setEnabled(true);
     _ui->latPropCB->setEnabled(false);
     _ui->lngPropCB->setEnabled(false);
-  }
-  else {
+  } else {
     _ui->addressPropCB->setEnabled(false);
     _ui->latPropCB->setEnabled(true);
     _ui->lngPropCB->setEnabled(true);

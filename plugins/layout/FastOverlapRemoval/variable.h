@@ -17,9 +17,10 @@
 namespace vpsc {
 
 class Constraint;
-typedef std::vector<Constraint*> Constraints;
+typedef std::vector<Constraint *> Constraints;
 class Variable {
-  friend std::ostream& operator <<(std::ostream &os, const Variable &v);
+  friend std::ostream &operator<<(std::ostream &os, const Variable &v);
+
 public:
   double desiredPosition;
   const double weight;
@@ -30,16 +31,12 @@ public:
   Constraints out;
   char *toString();
   inline Variable(const double desiredPos = 0, const double weight = 1)
-    : desiredPosition(desiredPos)
-    , weight(weight)
-    , offset(0)
-    , block(nullptr)
-    , visited(false) {
+      : desiredPosition(desiredPos), weight(weight), offset(0), block(nullptr), visited(false) {
   }
   inline double position() const {
-    return block->posn+offset;
+    return block->posn + offset;
   }
-  //double position() const;
+  // double position() const;
   ~Variable(void) {
     in.clear();
     out.clear();

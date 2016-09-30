@@ -38,14 +38,12 @@ namespace tlp {
 class TLP_GLES_SCOPE GlComposite : public GlEntity {
 
 public:
-
-
   GlComposite(bool deleteEntitiesInDestructor = true);
 
   ~GlComposite();
 
   void setDeleteEntitiesInDestructor(bool deleteEntitiesInDestructor) {
-    _deleteEntitiesInDestructor=deleteEntitiesInDestructor;
+    _deleteEntitiesInDestructor = deleteEntitiesInDestructor;
   }
 
   void reset(bool deleteElements);
@@ -58,9 +56,9 @@ public:
 
   std::string findKey(GlEntity *entity);
 
-  GlEntity* findGlEntity(const std::string &key);
+  GlEntity *findGlEntity(const std::string &key);
 
-  const std::map<std::string, GlEntity*> &getGlEntities () const {
+  const std::map<std::string, GlEntity *> &getGlEntities() const {
     return _entities;
   }
 
@@ -70,15 +68,13 @@ public:
 
   void acceptVisitor(GlSceneVisitor *visitor);
 
-  virtual void draw(const Camera &, const Light &, bool) {}
+  virtual void draw(const Camera &, const Light &, bool) {
+  }
 
 protected:
-
-  std::map<std::string, GlEntity*> _entities;
+  std::map<std::string, GlEntity *> _entities;
   bool _deleteEntitiesInDestructor;
-
 };
-
 }
 
 #endif // GLCOMPOSITE_H

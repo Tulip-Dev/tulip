@@ -29,9 +29,12 @@
 using namespace tlp;
 
 // Abstract Graph model
-GraphModel::GraphModel(QObject *parent) : TulipModel(parent), _graph(nullptr) {}
+GraphModel::GraphModel(QObject *parent) : TulipModel(parent), _graph(nullptr) {
+}
 
-unsigned int GraphModel::elementAt(int row) const { return _elements[row]; }
+unsigned int GraphModel::elementAt(int row) const {
+  return _elements[row];
+}
 
 void GraphModel::setGraph(Graph *g) {
   if (_graph != nullptr) {
@@ -61,7 +64,9 @@ void GraphModel::setGraph(Graph *g) {
   }
 }
 
-Graph *GraphModel::graph() const { return _graph; }
+Graph *GraphModel::graph() const {
+  return _graph;
+}
 
 int GraphModel::rowCount(const QModelIndex &parent) const {
   if (_graph == nullptr || parent.isValid())
@@ -77,7 +82,9 @@ int GraphModel::columnCount(const QModelIndex &parent) const {
   return _properties.size();
 }
 
-QModelIndex GraphModel::parent(const QModelIndex & /*child*/) const { return QModelIndex(); }
+QModelIndex GraphModel::parent(const QModelIndex & /*child*/) const {
+  return QModelIndex();
+}
 
 Qt::ItemFlags GraphModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags iflags = QAbstractItemModel::flags(index) | Qt::ItemIsDragEnabled;
@@ -183,7 +190,8 @@ void GraphModel::treatEvent(const Event &ev) {
       _properties.insert(pos, prop);
       prop->addListener(this);
       endInsertColumns();
-    } else if (graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY || graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY) {
+    } else if (graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY ||
+               graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY) {
 #ifdef NDEBUG
 
       if (graphEv->getPropertyName() == "viewMetaGraph")
@@ -223,39 +231,40 @@ void GraphModel::treatEvent(const Event &ev) {
   }
 }
 
-#define STANDARD_NODE_CHECKS(MACRO)                                                                                                                                                                    \
-  MACRO(DoubleProperty, double);                                                                                                                                                                       \
-  MACRO(DoubleVectorProperty, std::vector<double>);                                                                                                                                                    \
-  MACRO(ColorProperty, tlp::Color);                                                                                                                                                                    \
-  MACRO(ColorVectorProperty, std::vector<tlp::Color>);                                                                                                                                                 \
-  MACRO(SizeProperty, tlp::Size);                                                                                                                                                                      \
-  MACRO(SizeVectorProperty, std::vector<tlp::Size>);                                                                                                                                                   \
-  /*MACRO(StringProperty,std::string);*/                                                                                                                                                               \
-  MACRO(StringVectorProperty, std::vector<std::string>);                                                                                                                                               \
-  MACRO(LayoutProperty, tlp::Coord);                                                                                                                                                                   \
-  MACRO(CoordVectorProperty, std::vector<tlp::Coord>);                                                                                                                                                 \
-  MACRO(GraphProperty, tlp::Graph *);                                                                                                                                                                  \
-  /*MACRO(IntegerProperty,int);*/                                                                                                                                                                      \
-  MACRO(IntegerVectorProperty, std::vector<int>);                                                                                                                                                      \
+#define STANDARD_NODE_CHECKS(MACRO)                                                                                                                  \
+  MACRO(DoubleProperty, double);                                                                                                                     \
+  MACRO(DoubleVectorProperty, std::vector<double>);                                                                                                  \
+  MACRO(ColorProperty, tlp::Color);                                                                                                                  \
+  MACRO(ColorVectorProperty, std::vector<tlp::Color>);                                                                                               \
+  MACRO(SizeProperty, tlp::Size);                                                                                                                    \
+  MACRO(SizeVectorProperty, std::vector<tlp::Size>);                                                                                                 \
+  /*MACRO(StringProperty,std::string);*/                                                                                                             \
+  MACRO(StringVectorProperty, std::vector<std::string>);                                                                                             \
+  MACRO(LayoutProperty, tlp::Coord);                                                                                                                 \
+  MACRO(CoordVectorProperty, std::vector<tlp::Coord>);                                                                                               \
+  MACRO(GraphProperty, tlp::Graph *);                                                                                                                \
+  /*MACRO(IntegerProperty,int);*/                                                                                                                    \
+  MACRO(IntegerVectorProperty, std::vector<int>);                                                                                                    \
   MACRO(BooleanProperty, bool);
 
-#define STANDARD_EDGE_CHECKS(MACRO)                                                                                                                                                                    \
-  MACRO(DoubleProperty, double);                                                                                                                                                                       \
-  MACRO(DoubleVectorProperty, std::vector<double>);                                                                                                                                                    \
-  MACRO(ColorProperty, tlp::Color);                                                                                                                                                                    \
-  MACRO(GraphProperty, std::set<tlp::edge>);                                                                                                                                                           \
-  MACRO(ColorVectorProperty, std::vector<tlp::Color>);                                                                                                                                                 \
-  MACRO(SizeProperty, tlp::Size);                                                                                                                                                                      \
-  MACRO(SizeVectorProperty, std::vector<tlp::Size>);                                                                                                                                                   \
-  /*MACRO(StringProperty,std::string);*/                                                                                                                                                               \
-  MACRO(StringVectorProperty, std::vector<std::string>);                                                                                                                                               \
-  MACRO(LayoutProperty, std::vector<tlp::Coord>);                                                                                                                                                      \
-  MACRO(CoordVectorProperty, std::vector<tlp::Coord>);                                                                                                                                                 \
-  /*MACRO(IntegerProperty,int);*/                                                                                                                                                                      \
-  MACRO(IntegerVectorProperty, std::vector<int>);                                                                                                                                                      \
+#define STANDARD_EDGE_CHECKS(MACRO)                                                                                                                  \
+  MACRO(DoubleProperty, double);                                                                                                                     \
+  MACRO(DoubleVectorProperty, std::vector<double>);                                                                                                  \
+  MACRO(ColorProperty, tlp::Color);                                                                                                                  \
+  MACRO(GraphProperty, std::set<tlp::edge>);                                                                                                         \
+  MACRO(ColorVectorProperty, std::vector<tlp::Color>);                                                                                               \
+  MACRO(SizeProperty, tlp::Size);                                                                                                                    \
+  MACRO(SizeVectorProperty, std::vector<tlp::Size>);                                                                                                 \
+  /*MACRO(StringProperty,std::string);*/                                                                                                             \
+  MACRO(StringVectorProperty, std::vector<std::string>);                                                                                             \
+  MACRO(LayoutProperty, std::vector<tlp::Coord>);                                                                                                    \
+  MACRO(CoordVectorProperty, std::vector<tlp::Coord>);                                                                                               \
+  /*MACRO(IntegerProperty,int);*/                                                                                                                    \
+  MACRO(IntegerVectorProperty, std::vector<int>);                                                                                                    \
   MACRO(BooleanProperty, bool);
 
-#define GET_NODE_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getNodeValue(n))
+#define GET_NODE_VALUE(PROP, TYPE)                                                                                                                   \
+  else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getNodeValue(n))
 QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
   node n(id);
 
@@ -264,7 +273,8 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
       return QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(static_cast<IntegerProperty *>(prop)->getNodeValue(n)));
 
     if (prop->getName() == "viewLabelPosition")
-      return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getNodeValue(n)));
+      return QVariant::fromValue<LabelPosition::LabelPositions>(
+          static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getNodeValue(n)));
 
     return QVariant::fromValue<int>(static_cast<IntegerProperty *>(prop)->getNodeValue(n));
   } else if (dynamic_cast<StringProperty *>(prop) != nullptr) {
@@ -272,10 +282,12 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
       return QVariant::fromValue<TulipFont>(TulipFont::fromFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeValue(n).c_str())));
 
     if (prop->getName() == "viewFontAwesomeIcon")
-      return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeValue(n).c_str())));
+      return QVariant::fromValue<TulipFontAwesomeIcon>(
+          TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeValue(n).c_str())));
 
     if (prop->getName() == "viewMaterialDesignIcon")
-      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeValue(n).c_str())));
+      return QVariant::fromValue<TulipMaterialDesignIcon>(
+          TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeValue(n).c_str())));
 
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeValue(n).c_str())));
@@ -288,25 +300,31 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
   return QVariant();
 }
 
-#define GET_NODE_DEFAULT_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getNodeDefaultValue())
+#define GET_NODE_DEFAULT_VALUE(PROP, TYPE)                                                                                                           \
+  else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getNodeDefaultValue())
 QVariant GraphModel::nodeDefaultValue(PropertyInterface *prop) {
   if (dynamic_cast<IntegerProperty *>(prop) != nullptr) {
     if (prop->getName() == "viewShape")
-      return QVariant::fromValue<NodeShape::NodeShapes>(static_cast<NodeShape::NodeShapes>(static_cast<IntegerProperty *>(prop)->getNodeDefaultValue()));
+      return QVariant::fromValue<NodeShape::NodeShapes>(
+          static_cast<NodeShape::NodeShapes>(static_cast<IntegerProperty *>(prop)->getNodeDefaultValue()));
 
     if (prop->getName() == "viewLabelPosition")
-      return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getNodeDefaultValue()));
+      return QVariant::fromValue<LabelPosition::LabelPositions>(
+          static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getNodeDefaultValue()));
 
     return QVariant::fromValue<int>(static_cast<IntegerProperty *>(prop)->getNodeDefaultValue());
   } else if (dynamic_cast<StringProperty *>(prop) != nullptr) {
     if (prop->getName() == "viewFont")
-      return QVariant::fromValue<TulipFont>(TulipFont::fromFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
+      return QVariant::fromValue<TulipFont>(
+          TulipFont::fromFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
 
     if (prop->getName() == "viewFontAwesomeIcon")
-      return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
+      return QVariant::fromValue<TulipFontAwesomeIcon>(
+          TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
 
     if (prop->getName() == "viewMaterialDesignIcon")
-      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
+      return QVariant::fromValue<TulipMaterialDesignIcon>(
+          TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
 
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getNodeDefaultValue().c_str())));
@@ -319,7 +337,8 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface *prop) {
   return QVariant();
 }
 
-#define SET_ALL_NODE_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != nullptr) static_cast<PROP *>(prop)->setAllNodeValue(v.value<TYPE>(), graph)
+#define SET_ALL_NODE_VALUE(PROP, TYPE)                                                                                                               \
+  else if (dynamic_cast<PROP *>(prop) != nullptr) static_cast<PROP *>(prop)->setAllNodeValue(v.value<TYPE>(), graph)
 bool GraphModel::setAllNodeValue(PropertyInterface *prop, QVariant v, Graph *graph) {
   if (dynamic_cast<IntegerProperty *>(prop) != nullptr) {
     if (prop->getName() == "viewShape")
@@ -332,9 +351,9 @@ bool GraphModel::setAllNodeValue(PropertyInterface *prop, QVariant v, Graph *gra
     if (prop->getName() == "viewFont")
       static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TulipFont>().fontFile().toUtf8().data()), graph);
     else if (prop->getName() == "viewFontAwesomeIcon")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
+      static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TulipFontAwesomeIcon>().iconName.toUtf8().data()), graph);
     else if (prop->getName() == "viewMaterialDesignIcon")
-      static_cast<StringProperty*>(prop)->setAllNodeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()), graph);
+      static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TulipMaterialDesignIcon>().iconName.toUtf8().data()), graph);
     else if (prop->getName() == "viewTexture")
       static_cast<StringProperty *>(prop)->setAllNodeValue(std::string(v.value<TextureFile>().texturePath.toUtf8().data()), graph);
     else
@@ -378,7 +397,8 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface *prop, QVariant
   return true;
 }
 
-#define GET_EDGE_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getEdgeValue(e))
+#define GET_EDGE_VALUE(PROP, TYPE)                                                                                                                   \
+  else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getEdgeValue(e))
 QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
   edge e(id);
 
@@ -387,13 +407,16 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
       return QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
 
     if (prop->getName() == "viewTgtAnchorShape")
-      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
+      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(
+          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
 
     if (prop->getName() == "viewSrcAnchorShape")
-      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
+      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(
+          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
 
     if (prop->getName() == "viewLabelPosition")
-      return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
+      return QVariant::fromValue<LabelPosition::LabelPositions>(
+          static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e)));
 
     return QVariant::fromValue<int>(static_cast<IntegerProperty *>(prop)->getEdgeValue(e));
   } else if (dynamic_cast<StringProperty *>(prop) != nullptr) {
@@ -401,10 +424,12 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
       return QVariant::fromValue<TulipFont>(TulipFont::fromFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeValue(e).c_str())));
 
     if (prop->getName() == "viewFontAwesomeIcon")
-      return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeValue(e).c_str())));
+      return QVariant::fromValue<TulipFontAwesomeIcon>(
+          TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeValue(e).c_str())));
 
     if (prop->getName() == "viewMaterialDesignIcon")
-      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeValue(e).c_str())));
+      return QVariant::fromValue<TulipMaterialDesignIcon>(
+          TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeValue(e).c_str())));
 
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeValue(e).c_str())));
@@ -417,20 +442,25 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
   return QVariant();
 }
 
-#define GET_EDGE_DEFAULT_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getEdgeDefaultValue())
+#define GET_EDGE_DEFAULT_VALUE(PROP, TYPE)                                                                                                           \
+  else if (dynamic_cast<PROP *>(prop) != nullptr) return QVariant::fromValue<TYPE>(static_cast<PROP *>(prop)->getEdgeDefaultValue())
 QVariant GraphModel::edgeDefaultValue(PropertyInterface *prop) {
   if (dynamic_cast<IntegerProperty *>(prop) != nullptr) {
     if (prop->getName() == "viewShape")
-      return QVariant::fromValue<EdgeShape::EdgeShapes>(static_cast<EdgeShape::EdgeShapes>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
+      return QVariant::fromValue<EdgeShape::EdgeShapes>(
+          static_cast<EdgeShape::EdgeShapes>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
 
     if (prop->getName() == "viewTgtAnchorShape")
-      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
+      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(
+          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
 
     if (prop->getName() == "viewSrcAnchorShape")
-      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
+      return QVariant::fromValue<EdgeExtremityShape::EdgeExtremityShapes>(
+          static_cast<EdgeExtremityShape::EdgeExtremityShapes>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
 
     if (prop->getName() == "viewLabelPosition")
-      return QVariant::fromValue<LabelPosition::LabelPositions>(static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
+      return QVariant::fromValue<LabelPosition::LabelPositions>(
+          static_cast<LabelPosition::LabelPositions>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue()));
 
     return QVariant::fromValue<int>(static_cast<IntegerProperty *>(prop)->getEdgeDefaultValue());
   } else if (dynamic_cast<StringProperty *>(prop) != nullptr) {
@@ -438,10 +468,12 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface *prop) {
       return QVariant::fromValue<TulipFont>(TulipFont::fromFile(static_cast<StringProperty *>(prop)->getEdgeDefaultValue().c_str()));
 
     if (prop->getName() == "viewFontAwesomeIcon")
-      return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeDefaultValue().c_str())));
+      return QVariant::fromValue<TulipFontAwesomeIcon>(
+          TulipFontAwesomeIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeDefaultValue().c_str())));
 
     if (prop->getName() == "viewMaterialDesignIcon")
-      return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeDefaultValue().c_str())));
+      return QVariant::fromValue<TulipMaterialDesignIcon>(
+          TulipMaterialDesignIcon(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeDefaultValue().c_str())));
 
     if (prop->getName() == "viewTexture")
       return QVariant::fromValue<TextureFile>(TextureFile(QString::fromUtf8(static_cast<StringProperty *>(prop)->getEdgeDefaultValue().c_str())));
@@ -493,9 +525,9 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface *prop, QVariant
   return true;
 }
 
-#define SET_ALL_EDGE_VALUE(PROP,TYPE) else if (dynamic_cast<PROP*>(prop) != NULL) static_cast<PROP*>(prop)->setAllEdgeValue(v.value< TYPE >(), graph)
-bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v, Graph *graph) {
-  if (dynamic_cast<IntegerProperty*>(prop) != NULL) {
+#define SET_ALL_EDGE_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != NULL) static_cast<PROP *>(prop)->setAllEdgeValue(v.value<TYPE>(), graph)
+bool GraphModel::setAllEdgeValue(PropertyInterface *prop, QVariant v, Graph *graph) {
+  if (dynamic_cast<IntegerProperty *>(prop) != NULL) {
     if (prop->getName() == "viewShape")
       static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>(), graph);
 
@@ -528,16 +560,18 @@ bool GraphModel::setAllEdgeValue(PropertyInterface* prop, QVariant v, Graph *gra
   }
 
   STANDARD_EDGE_CHECKS(SET_ALL_EDGE_VALUE)
-  else
-      return false;
+  else return false;
 
   return true;
 }
 
 // Nodes model
-NodesGraphModel::NodesGraphModel(QObject *parent) : GraphModel(parent), _nodesAdded(false), _nodesRemoved(false) {}
+NodesGraphModel::NodesGraphModel(QObject *parent) : GraphModel(parent), _nodesAdded(false), _nodesRemoved(false) {
+}
 
-bool NodesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface *prop) const { return prop->compare(node(a), node(b)) <= -1; }
+bool NodesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface *prop) const {
+  return prop->compare(node(a), node(b)) <= -1;
+}
 
 void NodesGraphModel::setGraph(Graph *g) {
   GraphModel::setGraph(g);
@@ -555,9 +589,13 @@ void NodesGraphModel::setGraph(Graph *g) {
   // reset();
 }
 
-QString NodesGraphModel::stringValue(unsigned int id, PropertyInterface *pi) const { return QString::fromUtf8(pi->getNodeStringValue(node(id)).c_str()); }
+QString NodesGraphModel::stringValue(unsigned int id, PropertyInterface *pi) const {
+  return QString::fromUtf8(pi->getNodeStringValue(node(id)).c_str());
+}
 
-QVariant NodesGraphModel::value(unsigned int id, PropertyInterface *prop) const { return nodeValue(id, prop); }
+QVariant NodesGraphModel::value(unsigned int id, PropertyInterface *prop) const {
+  return nodeValue(id, prop);
+}
 
 bool NodesGraphModel::setValue(unsigned int id, PropertyInterface *prop, QVariant v) const {
   prop->getGraph()->push();
@@ -570,8 +608,11 @@ bool NodesGraphModel::setValue(unsigned int id, PropertyInterface *prop, QVarian
 }
 
 // Edges model
-EdgesGraphModel::EdgesGraphModel(QObject *parent) : GraphModel(parent), _edgesAdded(false), _edgesRemoved(false) {}
-QString EdgesGraphModel::stringValue(unsigned int id, PropertyInterface *pi) const { return QString::fromUtf8(pi->getEdgeStringValue(edge(id)).c_str()); }
+EdgesGraphModel::EdgesGraphModel(QObject *parent) : GraphModel(parent), _edgesAdded(false), _edgesRemoved(false) {
+}
+QString EdgesGraphModel::stringValue(unsigned int id, PropertyInterface *pi) const {
+  return QString::fromUtf8(pi->getEdgeStringValue(edge(id)).c_str());
+}
 
 void EdgesGraphModel::setGraph(Graph *g) {
   GraphModel::setGraph(g);
@@ -585,7 +626,9 @@ void EdgesGraphModel::setGraph(Graph *g) {
     _elements[i++] = e.id;
 }
 
-QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface *prop) const { return edgeValue(id, prop); }
+QVariant EdgesGraphModel::value(unsigned int id, PropertyInterface *prop) const {
+  return edgeValue(id, prop);
+}
 bool EdgesGraphModel::setValue(unsigned int id, PropertyInterface *prop, QVariant v) const {
   prop->getGraph()->push();
 
@@ -596,16 +639,23 @@ bool EdgesGraphModel::setValue(unsigned int id, PropertyInterface *prop, QVarian
   return false;
 }
 
-bool EdgesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface *prop) const { return prop->compare(edge(a), edge(b)) <= -1; }
+bool EdgesGraphModel::lessThan(unsigned int a, unsigned int b, PropertyInterface *prop) const {
+  return prop->compare(edge(a), edge(b)) <= -1;
+}
 
 // Filter proxy
-GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent) : QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface *>()), _filterProperty(nullptr) {}
+GraphSortFilterProxyModel::GraphSortFilterProxyModel(QObject *parent)
+    : QSortFilterProxyModel(parent), _properties(QVector<PropertyInterface *>()), _filterProperty(nullptr) {
+}
 
 bool GraphSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelIndex &right) const {
   GraphModel *graphModel = static_cast<GraphModel *>(sourceModel());
-  return graphModel->lessThan(graphModel->elementAt(left.row()), graphModel->elementAt(right.row()), static_cast<PropertyInterface *>(left.internalPointer()));
+  return graphModel->lessThan(graphModel->elementAt(left.row()), graphModel->elementAt(right.row()),
+                              static_cast<PropertyInterface *>(left.internalPointer()));
 }
-void GraphSortFilterProxyModel::setProperties(QVector<PropertyInterface *> properties) { _properties = properties; }
+void GraphSortFilterProxyModel::setProperties(QVector<PropertyInterface *> properties) {
+  _properties = properties;
+}
 
 bool GraphSortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex &) const {
   GraphModel *graphModel = static_cast<GraphModel *>(sourceModel());
@@ -657,7 +707,9 @@ void GraphSortFilterProxyModel::treatEvent(const Event &e) {
     invalidateFilter();
 }
 
-BooleanProperty *GraphSortFilterProxyModel::filterProperty() const { return _filterProperty; }
+BooleanProperty *GraphSortFilterProxyModel::filterProperty() const {
+  return _filterProperty;
+}
 
 void GraphModel::addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add) {
   if (add) {

@@ -26,9 +26,9 @@
 using namespace tlp;
 using namespace std;
 
-SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string& propertyName, tlp::ColorProperty* colorProperty,
-    SOMMap *map, ColorScale* colorScale, double minValue, double maxValue) :
-  propertyName(propertyName), currentPosition(position) {
+SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, const std::string &propertyName, tlp::ColorProperty *colorProperty,
+                                         SOMMap *map, ColorScale *colorScale, double minValue, double maxValue)
+    : propertyName(propertyName), currentPosition(position) {
 
   double spacing = 1;
   double labelSizeRate = 0.1;
@@ -37,7 +37,7 @@ SOMPreviewComposite::SOMPreviewComposite(tlp::Coord position, tlp::Size size, co
 
   Coord frameTopLeft(position.getX(), position.getY() + size.getH(), 0);
   Coord frameBottomRight(position.getX() + size.getW(), position.getY(), 0);
-  //Creating the frame.
+  // Creating the frame.
   frame = new GlRect(frameTopLeft, frameBottomRight, Color(255, 255, 255, 0), Color(255, 255, 255, 0), true, true);
   addGlEntity(frame, "frame");
 
@@ -92,9 +92,8 @@ Size SOMPreviewComposite::computeAspectRatio(unsigned int width, unsigned int he
 
   if (width > height) {
     elementsSize.setW(maxWidth);
-    elementsSize.setH((elementsSize.getW() * height) / (float) width);
-  }
-  else {
+    elementsSize.setH((elementsSize.getW() * height) / (float)width);
+  } else {
     elementsSize.setH(maxHeight);
     elementsSize.setW((width * elementsSize.getH()) / height);
   }
@@ -102,24 +101,24 @@ Size SOMPreviewComposite::computeAspectRatio(unsigned int width, unsigned int he
   return elementsSize;
 }
 
-bool SOMPreviewComposite::isElement(GlEntity* entity) {
-  deque<GlComposite*> compositeToExplore;
-  //Search in the current composite and all internal composites to find the element.
+bool SOMPreviewComposite::isElement(GlEntity *entity) {
+  deque<GlComposite *> compositeToExplore;
+  // Search in the current composite and all internal composites to find the element.
   compositeToExplore.push_back(this);
 
   while (!compositeToExplore.empty()) {
     GlComposite *current = compositeToExplore.front();
     compositeToExplore.pop_front();
 
-    map<string, GlSimpleEntity*> displays = current->getGlEntities();
+    map<string, GlSimpleEntity *> displays = current->getGlEntities();
 
-    for (map<string, GlSimpleEntity*>::iterator itElements = displays.begin(); itElements != displays.end(); ++itElements) {
+    for (map<string, GlSimpleEntity *>::iterator itElements = displays.begin(); itElements != displays.end(); ++itElements) {
       if (itElements->second == entity) {
         return true;
       }
 
-      //If the element is a composite add it to the list of composite to explore.
-      GlComposite *composite = dynamic_cast<GlComposite*> (itElements->second);
+      // If the element is a composite add it to the list of composite to explore.
+      GlComposite *composite = dynamic_cast<GlComposite *>(itElements->second);
 
       if (composite) {
         compositeToExplore.push_back(composite);

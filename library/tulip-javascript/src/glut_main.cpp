@@ -57,10 +57,10 @@ using namespace tlp;
 static int CURRENT_WIDTH = 1024;
 static int CURRENT_HEIGHT = 768;
 
-static tlp::Color backgroundColor(255,255,255);
-static GlScene * glScene;
-static GlGraph * glGraph;
-static tlp::Graph * graph;
+static tlp::Color backgroundColor(255, 255, 255);
+static GlScene *glScene;
+static GlGraph *glGraph;
+static tlp::Graph *graph;
 
 static GlSceneInteractor *currentInteractor = NULL;
 
@@ -128,7 +128,7 @@ static void mouseCallback(int button, int state, int x, int y) {
   currentInteractor->mouseCallback(buttonVal, buttonStateVal, x, y, glutGetModifiers());
 }
 
-static tlp::Graph* loadGraph(const char *filename) {
+static tlp::Graph *loadGraph(const char *filename) {
   tlp::Graph *g = NULL;
   if (filename) {
     g = tlp::loadGraph(filename);
@@ -149,7 +149,7 @@ static tlp::Graph* loadGraph(const char *filename) {
   return g;
 }
 
-static void keyboardCallback(const unsigned char key, const int , const int ) {
+static void keyboardCallback(const unsigned char key, const int, const int) {
   if (key == '1') {
     activateInteractor("ZoomAndPan");
     glutPostRedisplay();
@@ -171,8 +171,7 @@ static void keyboardCallback(const unsigned char key, const int , const int ) {
   } else if (key == '7') {
     activateInteractor("Fisheye");
     glutPostRedisplay();
-  }
-  else if (key == 'o') {
+  } else if (key == 'o') {
     QString graphFile = QFileDialog::getOpenFileName(0, "open graph file", ".", "Tulip graph (*.tlp *.tlp.gz)");
     if (!graphFile.isEmpty()) {
       tlp::Graph *g = loadGraph(graphFile.toStdString().c_str());
@@ -191,7 +190,7 @@ static void keyboardCallback(const unsigned char key, const int , const int ) {
   }
 }
 
-static void specialKeyboardCallback(int special, int , int ) {
+static void specialKeyboardCallback(int special, int, int) {
 
   std::string specialKey;
 
@@ -281,7 +280,6 @@ static void specialKeyboardCallback(int special, int , int ) {
     specialKey = "Insert";
     break;
   }
-
   }
   currentInteractor->keyboardCallback(specialKey, glutGetModifiers());
 }
@@ -293,23 +291,21 @@ static void mouseMoveCallback(int x, int y) {
 class GlDrawObserver : public tlp::Observable {
 
 public:
-
   void treatEvent(const tlp::Event &event) {
-    const GlSceneEvent *glSceneEvent = dynamic_cast<const GlSceneEvent*>(&event);
+    const GlSceneEvent *glSceneEvent = dynamic_cast<const GlSceneEvent *>(&event);
 
     if (glSceneEvent) {
-      if(glSceneEvent->getType() == GlSceneEvent::DRAW_REQUEST) {
+      if (glSceneEvent->getType() == GlSceneEvent::DRAW_REQUEST) {
         glutPostRedisplay();
       }
     }
   }
-
 };
 
 static GlDrawObserver glDrawObserver;
 
 //==============================================================
-int  main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 
   QApplication app(argc, argv);
 
@@ -356,7 +352,6 @@ int  main(int argc, char *argv[]) {
     glScene->centerScene();
     glutMainLoop();
   }
-
 
   return 0;
 }

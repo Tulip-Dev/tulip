@@ -43,9 +43,9 @@ namespace tlp {
  */
 class TLP_GLES_SCOPE AdditionalGlSceneAnimation {
 
-public :
-
-  virtual ~AdditionalGlSceneAnimation() {}
+public:
+  virtual ~AdditionalGlSceneAnimation() {
+  }
 
   /**
    * Pure virtual method called at each step of the Zoom and Pan animation.
@@ -53,7 +53,6 @@ public :
    * Implement it in your derived class to perform any extra animation you want on the Tulip OpenGL scene.
    */
   virtual void animationStep(double t) = 0;
-
 };
 
 /** \brief A convenient class to perform Zoom and Pan animation on Tulip OpenGL scene
@@ -61,16 +60,18 @@ public :
  *  This class allow to perform a smooth and efficient zooming and panning on Tulip OpenGL scene.
  *  The algorithm used to perform this task is the one published in: Jarke J. van Wijk and Wim A.A. Nuij, "Smooth and efficient zooming and panning"
  *  For more details, the paper can be downloaded at the following url: http://www.win.tue.nl/~vanwijk/zoompan.pdf
- *  Even if this class contains the whole Zoom and Pan implementation, it is not aimed to be used directly because its role is only to compute new camera parameters.
+ *  Even if this class contains the whole Zoom and Pan implementation, it is not aimed to be used directly because its role is only to compute new
+ * camera parameters.
  *  Use the derived class QtGlSceneZoomAndPanAnimator in the tulip-gui library instead to perform the animation.
  */
-class TLP_GLES_SCOPE ZoomAndPanAnimation  {
+class TLP_GLES_SCOPE ZoomAndPanAnimation {
 
-public :
+public:
+  ZoomAndPanAnimation(Camera *camera, const tlp::BoundingBox &boundingBox, const unsigned int animationDuration = 1000, const bool optimalPath = true,
+                      const float velocity = 1.1f, const double p = sqrt(1.6));
 
-  ZoomAndPanAnimation(Camera *camera, const tlp::BoundingBox &boundingBox, const unsigned int animationDuration = 1000, const bool optimalPath = true, const float velocity = 1.1f, const double p = sqrt(1.6));
-
-  virtual ~ZoomAndPanAnimation() {}
+  virtual ~ZoomAndPanAnimation() {
+  }
 
   float getAnimationDuration() const {
     return _animationDuration;
@@ -91,8 +92,7 @@ public :
     _additionalAnimation = additionalAnimation;
   }
 
-protected :
-
+protected:
   Camera *_camera;
   tlp::Vec4i _viewport;
   unsigned int _animationDuration;
@@ -103,11 +103,9 @@ protected :
   float _zoomAreaWidth, _zoomAreaHeight;
   bool _doZoomAndPan;
   AdditionalGlSceneAnimation *_additionalAnimation;
-
 };
 
 void TLP_GLES_SCOPE adjustViewToBoundingBox(Camera *camera, const tlp::BoundingBox &boundingBox);
-
 }
 
 #endif /* ZOOMANDPANANIMATION_H */

@@ -40,18 +40,20 @@ namespace tlp {
 // we first define an interface
 // to make easier the iteration on values
 // stored in a MutableContainer for the GraphUpdatesRecorder
-class IteratorValue: public Iterator<unsigned int> {
+class IteratorValue : public Iterator<unsigned int> {
 public:
-  IteratorValue() {}
-  virtual ~IteratorValue() {}
-  virtual unsigned int nextValue(DataMem&) = 0;
+  IteratorValue() {
+  }
+  virtual ~IteratorValue() {
+  }
+  virtual unsigned int nextValue(DataMem &) = 0;
 };
 #endif // DOXYGEN_NOTFOR_DEVEL
 //===================================================================
-template <typename TYPE>
-class MutableContainer {
+template <typename TYPE> class MutableContainer {
   friend class MutableContainerTest;
   friend class GraphUpdatesRecorder;
+
 public:
   MutableContainer();
   ~MutableContainer();
@@ -74,7 +76,7 @@ public:
   /**
    * get the value associated to i and indicates if it is not the default one
    */
-  typename StoredType<TYPE>::ReturnedValue get(const unsigned int i, bool& isNotDefault) const;
+  typename StoredType<TYPE>::ReturnedValue get(const unsigned int i, bool &isNotDefault) const;
   /**
    * get the default value
    */
@@ -89,26 +91,30 @@ public:
    * A null pointer is returned in case of an iteration on all the elements
    * whose value is equal to the default value.
    */
-  Iterator<unsigned int>* findAll(const TYPE &value, bool equal = true) const;
+  Iterator<unsigned int> *findAll(const TYPE &value, bool equal = true) const;
   /**
    * return the number of non default values
    */
   unsigned int numberOfNonDefaultValues() const;
+
 private:
-  MutableContainer(const MutableContainer<TYPE> &) {}
-  void operator=(const MutableContainer<TYPE> &) {}
+  MutableContainer(const MutableContainer<TYPE> &) {
+  }
+  void operator=(const MutableContainer<TYPE> &) {
+  }
   typename StoredType<TYPE>::ReturnedConstValue operator[](const unsigned int i) const;
   void vecttohash();
   void hashtovect();
   void compress(unsigned int min, unsigned int max, unsigned int nbElements);
   inline void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
-  IteratorValue* findAllValues(const TYPE &value, bool equal = true) const;
+  IteratorValue *findAllValues(const TYPE &value, bool equal = true) const;
+
 private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
   TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
-  unsigned int minIndex,maxIndex;
+  unsigned int minIndex, maxIndex;
   typename StoredType<TYPE>::Value defaultValue;
-  enum State { VECT=0, HASH=1 };
+  enum State { VECT = 0, HASH = 1 };
   State state;
   unsigned int elementInserted;
   double ratio;
@@ -119,23 +125,17 @@ private:
 // we implement 2 templates with IteratorValue as parent class
 // for the two kinds of storage used in a MutableContainer
 // one for vector storage
-template <typename TYPE>
-class IteratorVect : public tlp::IteratorValue {
+template <typename TYPE> class IteratorVect : public tlp::IteratorValue {
 public:
-  IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredType<TYPE>::Value> *vData, unsigned int minIndex):
-    _value(value),
-    _equal(equal),
-    _pos(minIndex),
-    vData(vData),
-    it(vData->begin()) {
-    while (it!=(*vData).end() &&
-           StoredType<TYPE>::equal((*it), _value) != _equal) {
+  IteratorVect(const TYPE &value, bool equal, std::deque<typename StoredType<TYPE>::Value> *vData, unsigned int minIndex)
+      : _value(value), _equal(equal), _pos(minIndex), vData(vData), it(vData->begin()) {
+    while (it != (*vData).end() && StoredType<TYPE>::equal((*it), _value) != _equal) {
       ++it;
       ++_pos;
     }
   }
   bool hasNext() {
-    return (_pos<UINT_MAX && it!=(*vData).end());
+    return (_pos < UINT_MAX && it != (*vData).end());
   }
   unsigned int next() {
     unsigned int tmp = _pos;
@@ -143,25 +143,22 @@ public:
     do {
       ++it;
       ++_pos;
-    }
-    while (it!=(*vData).end() &&
-           StoredType<TYPE>::equal((*it), _value) != _equal);
+    } while (it != (*vData).end() && StoredType<TYPE>::equal((*it), _value) != _equal);
 
     return tmp;
   }
-  unsigned int nextValue(DataMem& val) {
-    ((TypedValueContainer<TYPE>&) val).value = StoredType<TYPE>::get(*it);
+  unsigned int nextValue(DataMem &val) {
+    ((TypedValueContainer<TYPE> &)val).value = StoredType<TYPE>::get(*it);
     unsigned int pos = _pos;
 
     do {
       ++it;
       ++_pos;
-    }
-    while (it!=(*vData).end() &&
-           StoredType<TYPE>::equal((*it), _value) != _equal);
+    } while (it != (*vData).end() && StoredType<TYPE>::equal((*it), _value) != _equal);
 
     return pos;
   }
+
 private:
   const TYPE _value;
   bool _equal;
@@ -171,46 +168,38 @@ private:
 };
 
 // one for hash storage
-template <typename TYPE>
-class IteratorHash : public IteratorValue {
+template <typename TYPE> class IteratorHash : public IteratorValue {
 public:
-  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData):
-    _value(value),
-    _equal(equal),
-    hData(hData) {
-    it=(*hData).begin();
+  IteratorHash(const TYPE &value, bool equal, TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData)
+      : _value(value), _equal(equal), hData(hData) {
+    it = (*hData).begin();
 
-    while (it!=(*hData).end() &&
-           StoredType<TYPE>::equal((*it).second,_value) != _equal)
+    while (it != (*hData).end() && StoredType<TYPE>::equal((*it).second, _value) != _equal)
       ++it;
   }
   bool hasNext() {
-    return (it!=(*hData).end());
+    return (it != (*hData).end());
   }
   unsigned int next() {
     unsigned int tmp = (*it).first;
 
     do {
       ++it;
-    }
-    while (it!=(*hData).end() &&
-           StoredType<TYPE>::equal((*it).second,_value) != _equal);
+    } while (it != (*hData).end() && StoredType<TYPE>::equal((*it).second, _value) != _equal);
 
     return tmp;
   }
-  unsigned int nextValue(DataMem& val) {
-    ((TypedValueContainer<TYPE>&) val).value =
-      StoredType<TYPE>::get((*it).second);
+  unsigned int nextValue(DataMem &val) {
+    ((TypedValueContainer<TYPE> &)val).value = StoredType<TYPE>::get((*it).second);
     unsigned int pos = (*it).first;
 
     do {
       ++it;
-    }
-    while (it!=(*hData).end() &&
-           StoredType<TYPE>::equal((*it).second,_value) != _equal);
+    } while (it != (*hData).end() && StoredType<TYPE>::equal((*it).second, _value) != _equal);
 
     return pos;
   }
+
 private:
   const TYPE _value;
   bool _equal;
@@ -219,7 +208,6 @@ private:
 };
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-
 }
 
 #include "cxx/MutableContainer.cxx"

@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include<stack>
+#include <stack>
 
 #include <tulip/Graph.h>
 #include <tulip/StableIterator.h>
@@ -27,16 +27,17 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-BiconnectedTest * BiconnectedTest::instance = nullptr;
+BiconnectedTest *BiconnectedTest::instance = nullptr;
 //=================================================================
 // structure below is used to implement dfs loop
 struct dfsBiconnectStruct {
   node from, u, first;
   unsigned int depth;
-  Iterator<node>* inOutNodes;
+  Iterator<node> *inOutNodes;
 
-  dfsBiconnectStruct(Graph* graph, node n, unsigned int d = 0, node u = node(), node first = node()):
-    from(n), u(u), first(first), depth(d), inOutNodes(new StableIterator<node>(graph->getInOutNodes(from))) {}
+  dfsBiconnectStruct(Graph *graph, node n, unsigned int d = 0, node u = node(), node first = node())
+      : from(n), u(u), first(first), depth(d), inOutNodes(new StableIterator<node>(graph->getInOutNodes(from))) {
+  }
 };
 
 static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
@@ -60,18 +61,18 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
   depth.set(from.id, 0);
   low.set(from.id, 0);
 
-  while(!dfsLevels.empty()) {
+  while (!dfsLevels.empty()) {
     dfsParams = dfsLevels.top();
     from = dfsParams.from;
     node u = dfsParams.first;
 
-    //for every node connected to from
-    Iterator<node>* itN = dfsParams.inOutNodes;
+    // for every node connected to from
+    Iterator<node> *itN = dfsParams.inOutNodes;
 
     while (itN->hasNext()) {
       node to = itN->next();
 
-      //if there is a loop, ignore it
+      // if there is a loop, ignore it
       if (from == to) {
         continue;
       }
@@ -80,7 +81,7 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
         dfsLevels.top().first = u = to;
       }
 
-      //if the destination node has not been visited, visit it
+      // if the destination node has not been visited, visit it
       if (depth.get(to.id) == -1) {
         supergraph.set(to.id, from);
         dfsParams.from = to;
@@ -92,8 +93,7 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
         low.set(to.id, currentDepth);
         dfsParams.inOutNodes = new StableIterator<node>(graph->getInOutNodes(to));
         break;
-      }
-      else {
+      } else {
         low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
       }
     }
@@ -124,23 +124,19 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
   }
 }
 
-void makeBiconnectedDFS(Graph *graph, node from,
-                        MutableContainer<int> &low,
-                        MutableContainer<int> &depth,
-                        MutableContainer<node> &supergraph,
-                        unsigned int &currentDepth,
-                        vector<edge> &addedEdges) {
+void makeBiconnectedDFS(Graph *graph, node from, MutableContainer<int> &low, MutableContainer<int> &depth, MutableContainer<node> &supergraph,
+                        unsigned int &currentDepth, vector<edge> &addedEdges) {
   node u;
   depth.set(from.id, currentDepth++);
   low.set(from.id, depth.get(from.id));
 
-  //for every node connected to this one, call this function so it runs on every node.
+  // for every node connected to this one, call this function so it runs on every node.
   StableIterator<node> itN(graph->getInOutNodes(from));
 
   while (itN.hasNext()) {
     node to = itN.next();
 
-    //if there is a loop, ignore it
+    // if there is a loop, ignore it
     if (from == to) {
       continue;
     }
@@ -149,7 +145,7 @@ void makeBiconnectedDFS(Graph *graph, node from,
       u = to;
     }
 
-    //if the destination node has not been visited, visit it
+    // if the destination node has not been visited, visit it
     if (depth.get(to.id) == -1) {
       supergraph.set(to.id, from);
       makeBiconnectedDFS(graph, to, low, depth, supergraph, currentDepth, addedEdges);
@@ -163,53 +159,46 @@ void makeBiconnectedDFS(Graph *graph, node from,
       }
 
       low.set(from.id, std::min(low.get(from.id), low.get(to.id)));
-    }
-    else {
+    } else {
       low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
     }
   }
 }
 //=================================================================
-bool biconnectedTest(const Graph *graph, node v,
-                     MutableContainer<bool> &mark,
-                     MutableContainer<unsigned int> &low,
-                     MutableContainer<unsigned int> &dfsNumber,
-                     MutableContainer<node> &supergraph,
-                     unsigned int &count) {
-  mark.set(v.id,true);
-  dfsNumber.set(v.id,count);
-  low.set(v.id,count);
+bool biconnectedTest(const Graph *graph, node v, MutableContainer<bool> &mark, MutableContainer<unsigned int> &low,
+                     MutableContainer<unsigned int> &dfsNumber, MutableContainer<node> &supergraph, unsigned int &count) {
+  mark.set(v.id, true);
+  dfsNumber.set(v.id, count);
+  low.set(v.id, count);
   ++count;
-  Iterator<node> *it=graph->getInOutNodes(v);
+  Iterator<node> *it = graph->getInOutNodes(v);
 
   while (it->hasNext()) {
-    node w=it->next();
+    node w = it->next();
 
     if (!mark.get(w.id)) {
-      if (dfsNumber.get(v.id)==1) {
+      if (dfsNumber.get(v.id) == 1) {
         if (count != 2) {
           delete it;
           return false;
         }
       }
 
-      supergraph.set(w.id,v);
+      supergraph.set(w.id, v);
 
-      if (!biconnectedTest(graph,w,mark,low,dfsNumber,supergraph,count)) {
+      if (!biconnectedTest(graph, w, mark, low, dfsNumber, supergraph, count)) {
         delete it;
         return false;
       }
 
-      if (dfsNumber.get(v.id)!=1) {
-        if (low.get(w.id)>=dfsNumber.get(v.id)) {
+      if (dfsNumber.get(v.id) != 1) {
+        if (low.get(w.id) >= dfsNumber.get(v.id)) {
           delete it;
           return false;
-        }
-        else
+        } else
           low.set(v.id, std::min(low.get(v.id), low.get(w.id)));
       }
-    }
-    else if (supergraph.get(v.id)!=w) {
+    } else if (supergraph.get(v.id) != w) {
       low.set(v.id, std::min(low.get(v.id), dfsNumber.get(w.id)));
     }
   }
@@ -221,7 +210,7 @@ bool biconnectedTest(const Graph *graph, node v,
 BiconnectedTest::BiconnectedTest() {
 }
 //=================================================================
-bool BiconnectedTest::isBiconnected(const tlp::Graph* graph) {
+bool BiconnectedTest::isBiconnected(const tlp::Graph *graph) {
   if (instance == nullptr) {
     instance = new BiconnectedTest();
   }
@@ -245,12 +234,12 @@ void BiconnectedTest::connect(Graph *graph, vector<edge> &addedEdges) {
   makeBiconnectedDFS(graph, addedEdges);
 }
 //=================================================================
-bool BiconnectedTest::compute(const tlp::Graph* graph) {
-  if(graph->numberOfNodes() == 0) {
+bool BiconnectedTest::compute(const tlp::Graph *graph) {
+  if (graph->numberOfNodes() == 0) {
     return true;
   }
 
-  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+  if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
   MutableContainer<bool> mark;
@@ -260,31 +249,31 @@ bool BiconnectedTest::compute(const tlp::Graph* graph) {
   MutableContainer<node> supergraph;
   unsigned int count = 1;
   bool result = false;
-  Iterator<node> *it=graph->getNodes();
+  Iterator<node> *it = graph->getNodes();
 
   if (it->hasNext())
-    result=(biconnectedTest(graph,it->next(),mark,low,dfsNumber,supergraph,count));
+    result = (biconnectedTest(graph, it->next(), mark, low, dfsNumber, supergraph, count));
 
   delete it;
 
-  if (count!=graph->numberOfNodes()+1) {
-    result=false;
-  } //connected test
+  if (count != graph->numberOfNodes() + 1) {
+    result = false;
+  } // connected test
 
-  resultsBuffer[graph]=result;
+  resultsBuffer[graph] = result;
   graph->addListener(this);
   return result;
 }
 //=================================================================
-void BiconnectedTest::treatEvent(const Event& evt) {
-  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+void BiconnectedTest::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
-    Graph* graph = gEvt->getGraph();
+    Graph *graph = gEvt->getGraph();
 
-    switch(gEvt->getType()) {
+    switch (gEvt->getType()) {
     case GraphEvent::TLP_ADD_NODE:
-      resultsBuffer[graph]=false;
+      resultsBuffer[graph] = false;
       break;
 
     case GraphEvent::TLP_DEL_NODE:
@@ -294,8 +283,9 @@ void BiconnectedTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -303,8 +293,9 @@ void BiconnectedTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (!resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (!resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -314,15 +305,13 @@ void BiconnectedTest::treatEvent(const Event& evt) {
       // we don't care about other events
       break;
     }
-  }
-  else {
+  } else {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
-    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    Graph *graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE) {
       resultsBuffer.erase(graph);
     }
   }
 }
-

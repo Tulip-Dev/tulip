@@ -21,20 +21,20 @@
 
 using namespace tlp;
 
-PluginProgress::PluginProgress(): _previewHandler(nullptr) {
+PluginProgress::PluginProgress() : _previewHandler(nullptr) {
 }
 
 PluginProgress::~PluginProgress() {
   delete _previewHandler;
 }
 
-void PluginProgress::setPreviewHandler(ProgressPreviewHandler* handler) {
+void PluginProgress::setPreviewHandler(ProgressPreviewHandler *handler) {
   delete _previewHandler;
   _previewHandler = handler;
 }
 ProgressState PluginProgress::progress(int step, int max_step) {
   if (_previewHandler != nullptr && isPreviewMode())
-    _previewHandler->progressStateChanged(step,max_step);
+    _previewHandler->progressStateChanged(step, max_step);
 
   return TLP_CONTINUE;
 }

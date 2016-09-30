@@ -39,12 +39,12 @@ namespace tlp {
 class TLP_GLES_SCOPE GlGrid : public GlEntity {
 
 public:
-
   /**
    * @brief Constructor
    * @warning Don't use this constructor : see other constructor
    */
-  GlGrid() {}
+  GlGrid() {
+  }
 
   /**
    * @brief Constructor
@@ -56,12 +56,11 @@ public:
    * @param displays The dimensions of the grid to display.
    * @param hollowGrid Indicates if the grid chould be hollowed.
    */
-  GlGrid(const Coord& frontTopLeft, const Coord& backBottomRight,
-         const Size& cell, const Color& color, bool displays[3]);
+  GlGrid(const Coord &frontTopLeft, const Coord &backBottomRight, const Size &cell, const Color &color, bool displays[3]);
   /**
    * @brief Virtual function used to draw the grid.
    */
-  virtual void draw(const Camera &camera, const Light &light, bool pickingMode=false);
+  virtual void draw(const Camera &camera, const Light &light, bool pickingMode = false);
   /**
    * @brief Accessor in reading to the dimensions to display.
    */
@@ -74,19 +73,16 @@ public:
   /**
    * @brief Translate entity
    */
-  void translate(const Coord& mouvement);
-
+  void translate(const Coord &mouvement);
 
 protected:
-
-  bool displayDim[3]; /**< Which dimensions should be displayed ? Note that only one dimension at most should be disabled*/
-  bool hollowGrid; /**< Should the grid be hollowed ?*/
-  Coord frontTopLeft; /**< Front top left point of the grid, the "minimum" */
+  bool displayDim[3];    /**< Which dimensions should be displayed ? Note that only one dimension at most should be disabled*/
+  bool hollowGrid;       /**< Should the grid be hollowed ?*/
+  Coord frontTopLeft;    /**< Front top left point of the grid, the "minimum" */
   Coord backBottomRight; /**< Back bottom right point of the grid, the "maximum" */
-  Color color; /**< The color of the grid */
-  Size cell; /**< The size of a cell of the grid */
+  Color color;           /**< The color of the grid */
+  Size cell;             /**< The size of a cell of the grid */
 };
-
 }
 
 #endif

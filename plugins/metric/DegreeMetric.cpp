@@ -48,10 +48,8 @@ static const char *paramHelp[] = {
 #define IN 1
 #define OUT 2
 //==============================================================================
-DegreeMetric::DegreeMetric(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES,
-                                   true, "InOut <br> In <br> Out");
+DegreeMetric::DegreeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
   addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
@@ -99,8 +97,7 @@ bool DegreeMetric::run() {
       double sum = 0;
       for (edge e : graph->getEdges())
         sum += fabs(weights->getEdgeDoubleValue(e));
-      normalization =
-          (sum / graph->numberOfEdges()) * (graph->numberOfNodes() - 1);
+      normalization = (sum / graph->numberOfEdges()) * (graph->numberOfNodes() - 1);
 
       if (fabs(normalization) < 1E-9)
         normalization = 1.0;

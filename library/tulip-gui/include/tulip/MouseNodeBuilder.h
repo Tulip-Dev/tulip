@@ -27,17 +27,19 @@
 
 namespace tlp {
 
-class TLP_QT_SCOPE MouseNodeBuilder:public InteractorComponent {
+class TLP_QT_SCOPE MouseNodeBuilder : public InteractorComponent {
 
 public:
-  MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress):_eventType(eventType) {}
-  ~MouseNodeBuilder() {}
+  MouseNodeBuilder(QEvent::Type eventType = QEvent::MouseButtonPress) : _eventType(eventType) {
+  }
+  ~MouseNodeBuilder() {
+  }
   bool eventFilter(QObject *, QEvent *);
   void clear();
+
 private:
   QEvent::Type _eventType;
 };
-
 }
 #endif
 ///@endcond

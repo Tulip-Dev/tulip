@@ -37,19 +37,16 @@ class GlLODCalculator;
 class TLP_GLES_SCOPE GlLODSceneVisitor : public GlSceneVisitor {
 
 public:
-
-  GlLODSceneVisitor(GlLODCalculator *calculator) : _layer(0), _calculator(calculator) {}
+  GlLODSceneVisitor(GlLODCalculator *calculator) : _layer(0), _calculator(calculator) {
+  }
 
   virtual void visit(GlLayer *);
   void visit(GlEntity *entity);
 
 private:
-
   GlLayer *_layer;
-  GlLODCalculator* _calculator;
-
+  GlLODCalculator *_calculator;
 };
-
 }
 
 #endif // GLLODSCENEVISITOR_H

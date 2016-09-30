@@ -37,8 +37,7 @@ using namespace std;
 const float DEFAULT_AXIS_LENGTH = 1000.0f;
 const unsigned int DEFAULT_NB_GRADS = 15;
 
-template <typename T>
-std::string getStringFromNumber(T number) {
+template <typename T> std::string getStringFromNumber(T number) {
   std::ostringstream oss;
   oss.precision(5);
   oss << number;
@@ -49,11 +48,11 @@ namespace tlp {
 
 int ScatterPlot2D::overviewCpt(0);
 
-static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
-  GlGraphRenderingParameters param = glGraph->getRenderingParameters ();
-  param.setAntialiasing (true);
-  param.setViewNodeLabel (true);
-  param.setFontsType (2);
+static void setGraphView(GlGraphComposite *glGraph, bool displayEdges) {
+  GlGraphRenderingParameters param = glGraph->getRenderingParameters();
+  param.setAntialiasing(true);
+  param.setViewNodeLabel(true);
+  param.setFontsType(2);
   param.setSelectedNodesStencil(1);
   param.setNodesStencil(0xFFFF);
   param.setNodesLabelStencil(0xFFFF);
@@ -62,15 +61,17 @@ static void setGraphView (GlGraphComposite *glGraph, bool displayEdges) {
   param.setSelectedEdgesStencil(1);
   param.setDisplayNodes(true);
   param.setDisplayMetaNodes(true);
-  glGraph->setRenderingParameters (param);
+  glGraph->setRenderingParameters(param);
 }
 
-ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph* edgeGraph,
-                             std::map<node, edge>& nodeMap,
-                             const string& xDim, const string& yDim, const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor, const Color &foregroundColor)
-  : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), scatterLayout(new LayoutProperty(graph)), scatterEdgeLayout(new LayoutProperty(graph)), xAxis(nullptr), yAxis(nullptr), overviewGen(false), backgroundColor(backgroundColor),
-    foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(edgeGraph), nodeToEdge(nodeMap), dataLocation(dataLocation), xAxisScaleDefined(false), yAxisScaleDefined(false),
-    xAxisScale(make_pair(0,0)), yAxisScale(make_pair(0,0)), initXAxisScale(make_pair(0,0)), initYAxisScale(make_pair(0,0)), displayEdges(false) {
+ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph *edgeGraph, std::map<node, edge> &nodeMap, const string &xDim, const string &yDim,
+                             const ElementType &dataLocation, Coord blCorner, unsigned int size, const Color &backgroundColor,
+                             const Color &foregroundColor)
+    : xDim(xDim), yDim(yDim), blCorner(blCorner), size(size), graph(graph), scatterLayout(new LayoutProperty(graph)),
+      scatterEdgeLayout(new LayoutProperty(graph)), xAxis(nullptr), yAxis(nullptr), overviewGen(false), backgroundColor(backgroundColor),
+      foregroundColor(foregroundColor), mapBackgroundColorToCoeff(false), edgeAsNodeGraph(edgeGraph), nodeToEdge(nodeMap), dataLocation(dataLocation),
+      xAxisScaleDefined(false), yAxisScaleDefined(false), xAxisScale(make_pair(0, 0)), yAxisScale(make_pair(0, 0)), initXAxisScale(make_pair(0, 0)),
+      initYAxisScale(make_pair(0, 0)), displayEdges(false) {
   edge e;
 
   if (dataLocation == NODE) {
@@ -78,8 +79,7 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph* edgeGraph,
     GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
     glGraphInputData->setElementLayout(scatterLayout);
     glGraphInputData->setElementSize(graph->getProperty<SizeProperty>("viewSize"));
-  }
-  else {
+  } else {
     glGraphComposite = new GlGraphComposite(edgeAsNodeGraph);
     GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
     glGraphInputData->setElementLayout(scatterEdgeLayout);
@@ -87,7 +87,8 @@ ScatterPlot2D::ScatterPlot2D(Graph *graph, Graph* edgeGraph,
   }
 
   setGraphView(glGraphComposite, (dataLocation == NODE) ? displayEdges : false);
-  backgroundRect = new GlRect(Coord(blCorner.getX(), blCorner.getY() + size), Coord(blCorner.getX() + size, blCorner.getY()), backgroundColor, backgroundColor, true, false);
+  backgroundRect = new GlRect(Coord(blCorner.getX(), blCorner.getY() + size), Coord(blCorner.getX() + size, blCorner.getY()), backgroundColor,
+                              backgroundColor, true, false);
   addGlEntity(backgroundRect, "background rect");
   clickLabel = new GlLabel(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), Size(size, size / 4.0f), foregroundColor);
   clickLabel->setText("Double Click to generate overview");
@@ -122,8 +123,7 @@ void ScatterPlot2D::setDataLocation(const ElementType &dataLocation) {
       GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
       glGraphInputData->setElementLayout(scatterLayout);
       glGraphInputData->setElementSize(graph->getProperty<SizeProperty>("viewSize"));
-    }
-    else {
+    } else {
       glGraphComposite = new GlGraphComposite(edgeAsNodeGraph);
       GlGraphInputData *glGraphInputData = glGraphComposite->getInputData();
       glGraphInputData->setElementLayout(scatterEdgeLayout);
@@ -139,7 +139,7 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
   clickLabel = nullptr;
   backgroundRect = nullptr;
   createAxis();
-  glProgressBar = new GlProgressBar(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), size, size, Color(0,0,255));
+  glProgressBar = new GlProgressBar(Coord(blCorner.getX() + size / 2.0f, blCorner.getY() + size / 2.0f), size, size, Color(0, 0, 255));
   glProgressBar->setComment("Generating overview ...");
   addGlEntity(glProgressBar, "progress bar");
   computeScatterPlotLayout(glWidget, reverseLayout);
@@ -149,22 +149,21 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
 
     if (correlationCoeff < 0) {
       endColor = minusOneColor;
-    }
-    else {
+    } else {
       endColor = oneColor;
     }
 
     for (unsigned int i = 0; i < 4; ++i) {
-      backgroundColor[i] = static_cast<unsigned char>((double(startColor[i]) + (double(endColor[i])- double(startColor[i])) * abs(correlationCoeff)));
+      backgroundColor[i] =
+          static_cast<unsigned char>((double(startColor[i]) + (double(endColor[i]) - double(startColor[i])) * abs(correlationCoeff)));
     }
 
     int bgV = backgroundColor.getV();
 
     if (bgV < 128) {
-      foregroundColor = Color(255,255,255);
-    }
-    else {
-      foregroundColor = Color(0,0,0);
+      foregroundColor = Color(255, 255, 255);
+    } else {
+      foregroundColor = Color(0, 0, 0);
     }
   }
 
@@ -176,8 +175,8 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
 
   if (mapBackgroundColorToCoeff) {
     GlLayer *backgroundLayer = scene->getLayer("Background");
-    Gl2DRect *background = new Gl2DRect(1.0f, 0.0f, 0.0f, 1.0f,"gaussian_tex_back", true);
-    backgroundLayer->addGlEntity(background,"background");
+    Gl2DRect *background = new Gl2DRect(1.0f, 0.0f, 0.0f, 1.0f, "gaussian_tex_back", true);
+    backgroundLayer->addGlEntity(background, "background");
   }
 
   setGraphView(glGraphComposite, displayEdges);
@@ -196,7 +195,7 @@ void ScatterPlot2D::generateOverview(GlMainWidget *glWidget, LayoutProperty *rev
 
   deleteGlEntity(glProgressBar);
   delete glProgressBar;
-  Gl2DRect *rectTextured = new Gl2DRect(blCorner.getY()+size, blCorner.getY(), blCorner.getX(), blCorner.getX() + size, textureName);
+  Gl2DRect *rectTextured = new Gl2DRect(blCorner.getY() + size, blCorner.getY(), blCorner.getX(), blCorner.getX() + size, textureName);
   addGlEntity(rectTextured, textureName + " overview");
   computeBoundingBox();
   overviewGen = true;
@@ -213,20 +212,19 @@ void ScatterPlot2D::clean() {
 void ScatterPlot2D::createAxis() {
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
-  NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
-  NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
+  NumericProperty *xProp = (NumericProperty *)graph->getProperty(xDim);
+  NumericProperty *yProp = (NumericProperty *)graph->getProperty(yDim);
   xType = graph->getProperty(xDim)->getTypename();
   yType = graph->getProperty(yDim)->getTypename();
 
   double xMin, xMax, yMin, yMax;
 
-  if(dataLocation == NODE) {
+  if (dataLocation == NODE) {
     xMin = xProp->getNodeDoubleMin(graph);
     xMax = xProp->getNodeDoubleMax(graph);
     yMin = yProp->getNodeDoubleMin(graph);
     yMax = yProp->getNodeDoubleMax(graph);
-  }
-  else {
+  } else {
     xMin = xProp->getEdgeDoubleMin(graph);
     xMax = xProp->getEdgeDoubleMax(graph);
     yMin = yProp->getEdgeDoubleMin(graph);
@@ -267,12 +265,10 @@ void ScatterPlot2D::createAxis() {
   xAxis = new GlQuantitativeAxis(xDim, Coord(0.0f, 0.0f, 0.0f), DEFAULT_AXIS_LENGTH, GlAxis::HORIZONTAL_AXIS, foregroundColor, true);
 
   if (xType == "double") {
-    xAxis->setAxisParameters(xMin ,xMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
-  }
-  else {
+    xAxis->setAxisParameters(xMin, xMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
+  } else {
     unsigned int step = static_cast<unsigned int>((xMax - xMin) / 20);
-    xAxis->setAxisParameters(static_cast<int>(xMin), static_cast<int>(xMax),
-                             step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
+    xAxis->setAxisParameters(static_cast<int>(xMin), static_cast<int>(xMax), step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
   xAxis->setAxisGraduationsMaxLabelWidth(300.0f);
@@ -282,22 +278,19 @@ void ScatterPlot2D::createAxis() {
   yAxis = new GlQuantitativeAxis(yDim, Coord(0.0f, 0.0f, 0.0f), DEFAULT_AXIS_LENGTH, GlAxis::VERTICAL_AXIS, foregroundColor, true);
 
   if (yType == "double") {
-    yAxis->setAxisParameters(yMin ,yMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
-  }
-  else {
+    yAxis->setAxisParameters(yMin, yMax, DEFAULT_NB_GRADS, GlAxis::LEFT_OR_BELOW, true);
+  } else {
     unsigned int step = static_cast<unsigned int>((yMax - yMin) / 20);
-    yAxis->setAxisParameters(static_cast<int>(yMin) ,static_cast<int>(yMax),
-                             step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
+    yAxis->setAxisParameters(static_cast<int>(yMin), static_cast<int>(yMax), step ? step : 1, GlAxis::LEFT_OR_BELOW, true);
   }
 
   yAxis->addCaption(GlAxis::LEFT, 100.0f, false, 300.0f, 155.0f);
   yAxis->updateAxis();
 
-  if(xAxis->getCaptionHeight()>yAxis->getCaptionHeight())
-    xAxis->setCaptionHeight(yAxis->getCaptionHeight(),false);
+  if (xAxis->getCaptionHeight() > yAxis->getCaptionHeight())
+    xAxis->setCaptionHeight(yAxis->getCaptionHeight(), false);
   else
-    yAxis->setCaptionHeight(xAxis->getCaptionHeight(),false);
-
+    yAxis->setCaptionHeight(xAxis->getCaptionHeight(), false);
 }
 
 void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutProperty *reverseLayout) {
@@ -309,23 +302,22 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
   maxStep = nbGraphNodes;
   drawStep = maxStep / 20;
 
-  if(!drawStep)
-    drawStep=1;
+  if (!drawStep)
+    drawStep = 1;
 
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(xDim)));
   assert(dynamic_cast<NumericProperty *>(graph->getProperty(yDim)));
-  NumericProperty* xProp = (NumericProperty *) graph->getProperty(xDim);
-  NumericProperty* yProp = (NumericProperty *) graph->getProperty(yDim);
+  NumericProperty *xProp = (NumericProperty *)graph->getProperty(xDim);
+  NumericProperty *yProp = (NumericProperty *)graph->getProperty(yDim);
 
-  for(node n : _graph->getNodes()) {
+  for (node n : _graph->getNodes()) {
     Coord nodeCoord;
     double xValue, yValue;
 
-    if(dataLocation == NODE) {
+    if (dataLocation == NODE) {
       xValue = xProp->getNodeDoubleValue(n);
       yValue = yProp->getNodeDoubleValue(n);
-    }
-    else {   //EDGE
+    } else { // EDGE
       xValue = xProp->getEdgeDoubleValue(nodeToEdge[n]);
       yValue = yProp->getEdgeDoubleValue(nodeToEdge[n]);
     }
@@ -341,16 +333,14 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
       Coord xValueAxisCoord = xAxis->getAxisPointCoordForValue(xValue);
       Coord yValueAxisCoord = yAxis->getAxisPointCoordForValue(yValue);
       nodeCoord = Coord(xValueAxisCoord.getX(), yValueAxisCoord.getY(), 0.0f);
-    }
-    else {
+    } else {
       Coord nodeCoordReverse = reverseLayout->getNodeValue(n);
       nodeCoord = Coord(nodeCoordReverse.getY(), nodeCoordReverse.getX(), 0.0f);
     }
 
     if (dataLocation == NODE) {
       scatterLayout->setNodeValue(n, nodeCoord);
-    }
-    else {
+    } else {
       scatterEdgeLayout->setNodeValue(n, nodeCoord);
     }
 
@@ -362,13 +352,12 @@ void ScatterPlot2D::computeScatterPlotLayout(GlMainWidget *glWidget, LayoutPrope
     }
   }
 
-  double numerator = sumxiyi - (1./nbGraphNodes) * sumxi * sumyi;
-  double denominator = sqrt(sumxi2 - (1./nbGraphNodes) * (sumxi * sumxi)) * sqrt(sumyi2 - (1./nbGraphNodes) * (sumyi * sumyi));
+  double numerator = sumxiyi - (1. / nbGraphNodes) * sumxi * sumyi;
+  double denominator = sqrt(sumxi2 - (1. / nbGraphNodes) * (sumxi * sumxi)) * sqrt(sumyi2 - (1. / nbGraphNodes) * (sumyi * sumyi));
 
   if (denominator == 0) {
     correlationCoeff = 0;
-  }
-  else {
+  } else {
     correlationCoeff = numerator / denominator;
   }
 }
@@ -387,7 +376,8 @@ void ScatterPlot2D::setUniformBackgroundColor(const Color &backgroundColor) {
   }
 }
 
-void ScatterPlot2D::mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor, const Color &zeroColor, const Color &oneColor) {
+void ScatterPlot2D::mapBackgroundColorToCorrelCoeff(const bool mapBackgroundColor, const Color &minusOneColor, const Color &zeroColor,
+                                                    const Color &oneColor) {
   mapBackgroundColorToCoeff = mapBackgroundColor;
   this->minusOneColor = minusOneColor;
   this->zeroColor = zeroColor;
@@ -401,5 +391,4 @@ void ScatterPlot2D::setForegroundColor(const Color &foregroundColor) {
     clickLabel->setColor(foregroundColor);
   }
 }
-
 }

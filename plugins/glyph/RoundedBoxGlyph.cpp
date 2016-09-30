@@ -37,8 +37,8 @@ static vector<Coord> createRoundedRect(const Size &size) {
   float radiusL = radius / size[0];
   float radiusH = radius / size[1];
 
-  float wi = 1.0 - 2*radiusL;
-  float hi = 1.0 - 2*radiusH;
+  float wi = 1.0 - 2 * radiusL;
+  float hi = 1.0 - 2 * radiusH;
 
   Coord P1 = Coord(-0.5, 0.5) + Coord(radiusL, -radiusH);
   Coord P2 = P1 + Coord(wi, 0);
@@ -46,12 +46,12 @@ static vector<Coord> createRoundedRect(const Size &size) {
   Coord P4 = P1 + Coord(0, -hi);
 
   int steps = 20;
-  float delta = (M_PI/2) / steps;
+  float delta = (M_PI / 2) / steps;
 
   vector<Coord> boxPoints;
   boxPoints.resize(steps * 4);
 
-  for (int i = 0 ; i < steps; ++i ) {
+  for (int i = 0; i < steps; ++i) {
     float w = delta + i * delta;
     float x = -cos(w);
     float y = sin(w);
@@ -64,7 +64,7 @@ static vector<Coord> createRoundedRect(const Size &size) {
     p = P2 + Coord(x, y) * Coord(radiusL, radiusH);
     boxPoints[steps + i] = p;
 
-    w = delta +  i * delta;
+    w = delta + i * delta;
     x = cos(w);
     y = -sin(w);
     p = P3 + Coord(x, y) * Coord(radiusL, radiusH);
@@ -82,8 +82,8 @@ static vector<Coord> createRoundedRect(const Size &size) {
 
 static Coord computeCircleArcMidPoint(const Coord &start, const Coord &end, const Coord &center) {
   float radius = start.dist(center);
-  float c = atan2(start[1]+end[1], start[0]+end[0]);
-  return Coord(center.x() + radius*cos(c), center.y() + radius*sin(c));
+  float c = atan2(start[1] + end[1], start[0] + end[0]);
+  return Coord(center.x() + radius * cos(c), center.y() + radius * sin(c));
 }
 
 static Coord minIncludeBBSquare = computeCircleArcMidPoint(Coord(-0.25, -0.5), Coord(-0.5, -0.25), Coord(-0.25, -0.25));
@@ -92,20 +92,20 @@ static Coord maxIncludeBBSquare = -minIncludeBBSquare;
 class RoundedBoxGlyph : public Glyph {
 
 public:
-
-  GLYPHINFORMATION("2D - Rounded Box", "2D - Rounded Box extremity", "Antoine Lambert", "20/05/2016", "Rounded Box", "1.0", tlp::NodeShape::RoundedBox)
+  GLYPHINFORMATION("2D - Rounded Box", "2D - Rounded Box extremity", "Antoine Lambert", "20/05/2016", "Rounded Box", "1.0",
+                   tlp::NodeShape::RoundedBox)
 
   RoundedBoxGlyph(PluginContext *context) : Glyph(context) {
     _vertices.push_back(Coord());
-    vector<Coord> contour = createRoundedRect(Size(1,1,1));
+    vector<Coord> contour = createRoundedRect(Size(1, 1, 1));
     _vertices.insert(_vertices.end(), contour.begin(), contour.end());
-    for (unsigned short i = 0 ; i < ushort_cast(contour.size()-1) ; ++i) {
-      _indices.insert(_indices.end(), {0, ushort_cast(i+1), ushort_cast(i+2)});
+    for (unsigned short i = 0; i < ushort_cast(contour.size() - 1); ++i) {
+      _indices.insert(_indices.end(), {0, ushort_cast(i + 1), ushort_cast(i + 2)});
     }
     _indices.insert(_indices.end(), {0, ushort_cast(contour.size()), 1});
 
     vector<unsigned short> outlineIndices;
-    for (unsigned short i = 1 ; i < ushort_cast(_vertices.size()) ; ++i) {
+    for (unsigned short i = 1; i < ushort_cast(_vertices.size()); ++i) {
       outlineIndices.push_back(i);
     }
     outlineIndices.push_back(1);
@@ -118,7 +118,6 @@ public:
   }
 
 protected:
-
   Coord getAnchor(const Coord &vector) const {
     Coord v(vector);
     float x, y, z, fmax;
@@ -131,7 +130,6 @@ protected:
     else
       return v;
   }
-
 };
 
 PLUGIN(RoundedBoxGlyph)

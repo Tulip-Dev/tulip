@@ -25,16 +25,17 @@ using namespace std;
 using namespace tlp;
 
 //=======================================================================
-LeafMetric::LeafMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {}
+LeafMetric::LeafMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
+}
 
 // structure below is used to implement dfs loop
 struct dfsLeafStruct {
   node current;
-  Iterator<node>* outNodes;
+  Iterator<node> *outNodes;
   double res;
 
-  dfsLeafStruct(node n, Iterator<node>* nodes):
-    current(n), outNodes(nodes), res(0.0) {}
+  dfsLeafStruct(node n, Iterator<node> *nodes) : current(n), outNodes(nodes), res(0.0) {
+  }
 };
 //=======================================================================
 double LeafMetric::getNodeValue(tlp::node current) {
@@ -45,12 +46,12 @@ double LeafMetric::getNodeValue(tlp::node current) {
 
   // dfs loop
   stack<dfsLeafStruct> dfsLevels;
-  Iterator<node>* outNodes = graph->getOutNodes(current);
+  Iterator<node> *outNodes = graph->getOutNodes(current);
   dfsLeafStruct dfsParams(current, outNodes);
   double res = 0.0;
   dfsLevels.push(dfsParams);
 
-  while(!dfsLevels.empty()) {
+  while (!dfsLevels.empty()) {
     while (outNodes->hasNext()) {
       node neighbour = outNodes->next();
       value = result->getNodeValue(neighbour);
@@ -102,7 +103,7 @@ double LeafMetric::getNodeValue(tlp::node current) {
 bool LeafMetric::run() {
   result->setAllNodeValue(0);
   result->setAllEdgeValue(0);
-  for(node n : graph->getNodes())
+  for (node n : graph->getNodes())
     result->setNodeValue(n, getNodeValue(n));
   return true;
 }
@@ -111,11 +112,8 @@ bool LeafMetric::check(std::string &erreurMsg) {
   if (AcyclicTest::isAcyclic(graph))
     return true;
   else {
-    erreurMsg="The graph must be a acyclic.";
+    erreurMsg = "The graph must be a acyclic.";
     return false;
   }
 }
 //=======================================================================
-
-
-

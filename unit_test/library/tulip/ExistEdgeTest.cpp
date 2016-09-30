@@ -26,7 +26,7 @@
 using namespace tlp;
 using namespace std;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( ExistEdgeTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(ExistEdgeTest);
 
 void ExistEdgeTest::setUp() {
   graph = newGraph();
@@ -50,4 +50,3 @@ void ExistEdgeTest::testExistEdge() {
   CPPUNIT_ASSERT(graph->existEdge(n1, n0) == e1);
   CPPUNIT_ASSERT(graph->existEdge(n1, n0, false) == e0);
 }
-

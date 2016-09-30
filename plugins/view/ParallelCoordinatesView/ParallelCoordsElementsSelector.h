@@ -25,15 +25,16 @@
 namespace tlp {
 
 class ParallelCoordsElementsSelector : public ParallelCoordsGlEntitiesSelector {
-public :
-  ParallelCoordsElementsSelector(Qt::MouseButton button = Qt::LeftButton,
-                                 Qt::KeyboardModifier modifier = Qt::NoModifier) : ParallelCoordsGlEntitiesSelector(button, modifier) {}
-  ~ParallelCoordsElementsSelector() {}
+public:
+  ParallelCoordsElementsSelector(Qt::MouseButton button = Qt::LeftButton, Qt::KeyboardModifier modifier = Qt::NoModifier)
+      : ParallelCoordsGlEntitiesSelector(button, modifier) {
+  }
+  ~ParallelCoordsElementsSelector() {
+  }
   void unselectAllEntitiesHandler(ParallelCoordinatesView *parallelView);
   void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, bool addToSelection);
   void selectedEntitiesHandler(ParallelCoordinatesView *parallelView, int x, int y, int w, int h, bool addToSelection);
 };
-
 }
 
 #endif /* PARALLELCOORDSELEMNTSSELECTOR_H_ */

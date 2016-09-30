@@ -38,30 +38,26 @@ namespace tlp {
 class TLP_GLES_SCOPE GlyphsManager {
 
 public:
-
   ~GlyphsManager();
 
-  static GlyphsManager* instance();
+  static GlyphsManager *instance();
 
   void loadGlyphPlugins();
 
-  const std::map<int, Glyph*> &getGlyphs() {
+  const std::map<int, Glyph *> &getGlyphs() {
     return _glyphs;
   }
 
   Glyph *getGlyph(int glyphId);
 
 private:
-
   GlyphsManager();
 
   static GlyphsManager *_instance;
 
-  std::map<int, Glyph*> _glyphs;
-  std::map<int, Glyph*> _iconGlyphs;
-
+  std::map<int, Glyph *> _glyphs;
+  std::map<int, Glyph *> _iconGlyphs;
 };
-
 }
 
 #endif // GLYPHSMANAGER_H

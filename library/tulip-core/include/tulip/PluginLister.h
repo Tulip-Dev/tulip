@@ -28,7 +28,6 @@
 #include <tulip/PluginLoader.h>
 #include <tulip/Observable.h>
 
-
 namespace tlp {
 class PluginContext;
 
@@ -36,12 +35,13 @@ class PluginContext;
  * @ingroup Plugins
  * @brief The base class for plugin factories.
  *
- * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never be used directly. See the PLUGIN macro for additional information.
+ * A plugin factory handles the creation process of a tlp::Plugin subclass. This class should never be used directly. See the PLUGIN macro for
+ *additional information.
  * @see PLUGIN
  **/
 class FactoryInterface {
 public:
-  virtual tlp::Plugin* createPluginObject(tlp::PluginContext* context) = 0;
+  virtual tlp::Plugin *createPluginObject(tlp::PluginContext *context) = 0;
 };
 
 /**
@@ -49,7 +49,8 @@ public:
  *
  * @brief The PluginLister class is a singleton used to list plugins currently loaded into Tulip and retrieve information about them.
  *
- * This class holds various methods to check information about plugins currently loaded into Tulip. You can use it to list plugins, get dependencies information or create an instance of a plugin.
+ * This class holds various methods to check information about plugins currently loaded into Tulip. You can use it to list plugins, get dependencies
+ * information or create an instance of a plugin.
  *
  * @note Since a plugin name is unique, Plugins are mainly identified by their name (tlp::Plugin::name()) when interfaced with the plugin lister.
  *
@@ -60,11 +61,12 @@ public:
 class TLP_SCOPE PluginLister : public Observable {
 private:
   struct PluginDescription {
-    FactoryInterface* factory;
+    FactoryInterface *factory;
     std::string library;
-    Plugin* infos;
+    Plugin *infos;
 
-    PluginDescription(): factory(nullptr), infos(nullptr) {}
+    PluginDescription() : factory(nullptr), infos(nullptr) {
+    }
     ~PluginDescription() {
       delete infos;
     }
@@ -79,14 +81,14 @@ public:
    * @param loader If there are errors, the loader is informed about them so they can be displayed.
    * @return void
    **/
-  static void checkLoadedPluginsDependencies(tlp::PluginLoader* loader);
+  static void checkLoadedPluginsDependencies(tlp::PluginLoader *loader);
 
   /**
    * @brief Gets the static instance of this class. If not already done, creates it beforehand.
    *
    * @return PluginLister< ObjectType, Context >* The only instance of this object that exists in the whole program.
    **/
-  static tlp::PluginLister* instance();
+  static tlp::PluginLister *instance();
 
   /**
    * @brief Constructs a plug-in.
@@ -95,7 +97,7 @@ public:
    * @param p The context to give to the plug-in.
    * @return ObjectType* The newly constructed plug-in.
    **/
-  static tlp::Plugin* getPluginObject(const std::string& name, tlp::PluginContext* context);
+  static tlp::Plugin *getPluginObject(const std::string &name, tlp::PluginContext *context);
 
   /**
    * @brief Checks if a plugin of a given type is loaded
@@ -104,12 +106,9 @@ public:
    * @param pluginName the name of the plugin
    * @return true if a matching plugin is currently loaded into Tulip.
    */
-  template<typename PluginType>
-  bool pluginExists(const std::string &pluginName) {
-    std::map<std::string, PluginDescription>::const_iterator it =
-      _plugins.find(pluginName);
-    return (it != _plugins.end() &&
-            (dynamic_cast<const PluginType*>(it->second.infos) != nullptr));
+  template <typename PluginType> bool pluginExists(const std::string &pluginName) {
+    std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(pluginName);
+    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.infos) != nullptr));
   }
 
   /**
@@ -122,17 +121,12 @@ public:
    *
    * @return The plugin instance. If there is no such plugin or if the plugin does not match the required type, this method returns nullptr
    */
-  template<typename PluginType>
-  PluginType* getPluginObject(const std::string& name,
-                              tlp::PluginContext* context) {
-    std::map<std::string, PluginDescription>::const_iterator it =
-      _plugins.find(name);
-    return (it != _plugins.end() &&
-            (dynamic_cast<const PluginType*>(it->second.infos) != nullptr))
-           ? static_cast<PluginType*>(it->second.factory->createPluginObject(context))
-           : nullptr;
+  template <typename PluginType> PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context) {
+    std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(name);
+    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.infos) != nullptr))
+               ? static_cast<PluginType *>(it->second.factory->createPluginObject(context))
+               : nullptr;
   }
-
 
   /**
    * @brief Gets the list of plugins of a given type (template parameter).
@@ -140,15 +134,13 @@ public:
    **/
   static std::list<std::string> availablePlugins();
 
-
-  template<typename PluginType>
-  std::list<std::string> availablePlugins() {
+  template <typename PluginType> std::list<std::string> availablePlugins() {
     std::list<std::string> keys;
 
-    for(std::map<std::string, PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
-      PluginType* plugin = dynamic_cast<PluginType*>(it->second.infos);
+    for (std::map<std::string, PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
+      PluginType *plugin = dynamic_cast<PluginType *>(it->second.infos);
 
-      if(plugin != nullptr) {
+      if (plugin != nullptr) {
         keys.push_back(it->first);
       }
     }
@@ -162,7 +154,7 @@ public:
    * @param name The name of the plugin to retrieve information for.
    * @return :const Plugin& The information on the plugin.
    **/
-  static const Plugin& pluginInformation(const std::string& name);
+  static const Plugin &pluginInformation(const std::string &name);
 
   /**
    * @brief Gets more detailed information about one specific plug-in.
@@ -171,7 +163,7 @@ public:
    * @param name The name of the plugin to retrieve information for.
    * @return :const Plugin& The information on the plugin.
    **/
-  static _DEPRECATED const Plugin& pluginInformations(const std::string& name);
+  static _DEPRECATED const Plugin &pluginInformations(const std::string &name);
 
   /**
    * @brief Checks if a given name is registered in this factory.
@@ -179,7 +171,7 @@ public:
    * @param pluginName The name of the plug-in to look for.
    * @return bool Whether there is a plug-in with the given name registered in this factory.
    **/
-  static bool pluginExists(const std::string& pluginName);
+  static bool pluginExists(const std::string &pluginName);
 
   /**
    * @brief Gets the list of parameters for the given plug-in.
@@ -187,7 +179,7 @@ public:
    * @param name The name of the plug-in to retrieve the parameters of.
    * @return :ParameterDescriptionList The parameters of the plug-in.
    **/
-  static const ParameterDescriptionList& getPluginParameters(const std::string& name);
+  static const ParameterDescriptionList &getPluginParameters(const std::string &name);
 
   /**
    * @brief Gets the dependencies of a plug-in.
@@ -195,7 +187,7 @@ public:
    * @param name The name of the plug-in to retrieve the dependencies of.
    * @return :list< tlp::Dependency, std::allocator< tlp::Dependency > > The list of dependencies of the plug-in.
    **/
-  static const std::list<tlp::Dependency>& getPluginDependencies(const std::string& name);
+  static const std::list<tlp::Dependency> &getPluginDependencies(const std::string &name);
 
   /**
    * @brief Gets the library from which a plug-in has been loaded.
@@ -203,7 +195,7 @@ public:
    * @param name The name of the plug-in to retrieve the library of.
    * @return std::string The library from which the plug-in was loaded.
    **/
-  static std::string getPluginLibrary(const std::string& name);
+  static std::string getPluginLibrary(const std::string &name);
 
   /**
    * @brief Removes a plug-in from this factory.
@@ -212,7 +204,7 @@ public:
    * @param name The name of the plug-in to remove.
    * @return void
    **/
-  static void removePlugin(const std::string& name);
+  static void removePlugin(const std::string &name);
 
   /**
    * @brief Registers a plugin into Tulip
@@ -220,20 +212,18 @@ public:
    * @warning This method should only be called by tlp::FactoryInterface subclasses
    * @see PLUGIN
    */
-  static void registerPlugin(FactoryInterface* objectFactory);
+  static void registerPlugin(FactoryInterface *objectFactory);
 
 protected:
-
-
   void sendPluginAddedEvent(const std::string &pluginName);
   void sendPluginRemovedEvent(const std::string &pluginName);
 
-  static PluginLister* _instance;
+  static PluginLister *_instance;
 
   /**
    * @brief Stores the factory, dependencies, and parameters of all the plugins that register into this factory.
    **/
-  std::map<std::string , PluginDescription> _plugins;
+  std::map<std::string, PluginDescription> _plugins;
 
   /**
    * @brief Gets the release number of the given plug-in.
@@ -241,21 +231,17 @@ protected:
    * @param name The name of the plug-in to retrieve the version number of.
    * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
    **/
-  static std::string getPluginRelease(const std::string& name);
+  static std::string getPluginRelease(const std::string &name);
 };
 
 class TLP_SCOPE PluginEvent : public Event {
 public:
-
-  enum PluginEventType {
-    TLP_ADD_PLUGIN = 0,
-    TLP_REMOVE_PLUGIN = 1
-  };
+  enum PluginEventType { TLP_ADD_PLUGIN = 0, TLP_REMOVE_PLUGIN = 1 };
 
   // constructor for node/edge events
-  PluginEvent(PluginEventType pluginEvtType, const std::string& pluginName)
-    : Event(*(tlp::PluginLister::instance()), Event::TLP_MODIFICATION),
-      evtType(pluginEvtType), pluginName(pluginName) {}
+  PluginEvent(PluginEventType pluginEvtType, const std::string &pluginName)
+      : Event(*(tlp::PluginLister::instance()), Event::TLP_MODIFICATION), evtType(pluginEvtType), pluginName(pluginName) {
+  }
 
   PluginEventType getType() const {
     return evtType;
@@ -266,12 +252,9 @@ public:
   }
 
 protected:
-
   PluginEventType evtType;
   std::string pluginName;
-
 };
-
 }
 
-#endif //TULIP_PLUGINLISTER_H
+#endif // TULIP_PLUGINLISTER_H

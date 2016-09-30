@@ -37,30 +37,27 @@ namespace tlp {
  */
 class MouseLassoNodesSelectorInteractor : public NodeLinkDiagramComponentInteractor { /* GLInteractorComposite*/
 
-public :
-
-  PLUGININFORMATION("MouseLassoNodesSelectorInteractor", "Antoine Lambert", "19/06/2009", "Mouse Lasso Nodes Selector Interactor", "1.0", "Modification")
+public:
+  PLUGININFORMATION("MouseLassoNodesSelectorInteractor", "Antoine Lambert", "19/06/2009", "Mouse Lasso Nodes Selector Interactor", "1.0",
+                    "Modification")
 
   MouseLassoNodesSelectorInteractor(const tlp::PluginContext *);
 
   void construct();
 
   bool isCompatible(const std::string &viewName) const;
-
 };
 
 class MouseLassoNodesSelectorInteractorComponent : public GLInteractorComponent {
 
-public :
-
+public:
   MouseLassoNodesSelectorInteractorComponent();
   ~MouseLassoNodesSelectorInteractorComponent();
 
   bool draw(GlMainWidget *glWidget);
   bool eventFilter(QObject *obj, QEvent *e);
 
-private :
-
+private:
   void selectGraphElementsUnderPolygon(GlMainWidget *glWidget);
 
   std::vector<Coord> polygon;
@@ -70,7 +67,6 @@ private :
   Graph *graph;
   BooleanProperty *viewSelection;
   bool dragStarted;
-
 };
 }
 

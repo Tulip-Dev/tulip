@@ -22,7 +22,7 @@
 
 namespace tlp {
 
-SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d):QDialog(d),_ui(new Ui::SizeScaleConfigDialogData) {
+SizeScaleConfigDialog::SizeScaleConfigDialog(QWidget *d) : QDialog(d), _ui(new Ui::SizeScaleConfigDialogData) {
   _ui->setupUi(this);
   connect(_ui->minSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(minSizeValueChanged(double)));
   connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(double)), this, SLOT(maxSizeValueChanged(double)));
@@ -34,11 +34,11 @@ SizeScaleConfigDialog::~SizeScaleConfigDialog() {
 }
 
 float SizeScaleConfigDialog::getMinSize() const {
-  return (float) _ui->minSizeSpinBox->value();
+  return (float)_ui->minSizeSpinBox->value();
 }
 
 float SizeScaleConfigDialog::getMaxSize() const {
-  return (float) _ui->maxSizeSpinBox->value();
+  return (float)_ui->maxSizeSpinBox->value();
 }
 
 bool SizeScaleConfigDialog::applySizeMappingOnX() const {

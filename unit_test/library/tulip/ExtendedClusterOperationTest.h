@@ -33,12 +33,14 @@ class ExtendedClusterOperationTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testOpenMetaNode);
   CPPUNIT_TEST(testOpenMetaNodes);
   CPPUNIT_TEST_SUITE_END();
+
 private:
-  tlp::Graph *graph,*quotient;
+  tlp::Graph *graph, *quotient;
   tlp::node meta;
   std::vector<tlp::node> nodes;
   std::vector<tlp::edge> edges;
   std::set<tlp::node> group;
+
 public:
   void setUp();
   void tearDown();

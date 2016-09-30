@@ -35,31 +35,19 @@ using namespace tlp;
 class CrossGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Cross", "2D - Cross extremity", "Antoine Lambert", "20/05/2016", "Cross", "1.0", NodeShape::Cross)
 
   CrossGlyph(PluginContext *context) : Glyph(context) {
     float bWidth = 0.1f;
-    _vertices = {Coord(-bWidth, 0.5, 0),
-                 Coord(bWidth, 0.5, 0),
-                 Coord(bWidth, bWidth, 0),
-                 Coord(0.5, bWidth, 0),
-                 Coord(0.5, -bWidth, 0),
-                 Coord(bWidth, -bWidth, 0),
-                 Coord(bWidth, -0.5, 0),
-                 Coord(-bWidth, -0.5, 0),
-                 Coord(-bWidth, -bWidth, 0),
-                 Coord(-0.5, -bWidth, 0),
-                 Coord(-0.5, bWidth, 0),
-                 Coord(-bWidth, bWidth, 0)};
+    _vertices = {Coord(-bWidth, 0.5, 0),     Coord(bWidth, 0.5, 0),     Coord(bWidth, bWidth, 0), Coord(0.5, bWidth, 0),
+                 Coord(0.5, -bWidth, 0),     Coord(bWidth, -bWidth, 0), Coord(bWidth, -0.5, 0),   Coord(-bWidth, -0.5, 0),
+                 Coord(-bWidth, -bWidth, 0), Coord(-0.5, -bWidth, 0),   Coord(-0.5, bWidth, 0),   Coord(-bWidth, bWidth, 0)};
 
-    _indices = {2, 1, 0, 0, 11, 2,
-                10, 9, 3, 9, 4, 3,
-                8, 7, 6, 8, 6, 5};
+    _indices = {2, 1, 0, 0, 11, 2, 10, 9, 3, 9, 4, 3, 8, 7, 6, 8, 6, 5};
 
     vector<unsigned short> outlineIndices;
 
-    for (unsigned short i = 0 ; i < ushort_cast(_vertices.size()) ; ++i) {
+    for (unsigned short i = 0; i < ushort_cast(_vertices.size()); ++i) {
       outlineIndices.push_back(i);
     }
     outlineIndices.push_back(0);
@@ -72,16 +60,15 @@ public:
   }
 
 protected:
-
   Coord getAnchor(const Coord &vector) const {
     Coord v(vector);
     float x, y, z;
     v.get(x, y, z);
     // initialize anchor as the middle of segment points[0], points[1]
     Coord anchor(0, 0.5, 0);
-    float distMin = x*x + ((y - 0.5) * (y - 0.5));
+    float distMin = x * x + ((y - 0.5) * (y - 0.5));
     // check with the middle of segment points[3], points[4]
-    float dist = ((x - 0.5) * (x - 0.5)) + y*y;
+    float dist = ((x - 0.5) * (x - 0.5)) + y * y;
 
     if (distMin > dist) {
       distMin = dist;
@@ -89,7 +76,7 @@ protected:
     }
 
     // check with the middle of segment points[7], points[6]
-    dist = x*x + ((y + 0.5)*(y + 0.5));
+    dist = x * x + ((y + 0.5) * (y + 0.5));
 
     if (distMin > dist) {
       distMin = dist;
@@ -97,12 +84,11 @@ protected:
     }
 
     // check with the middle of segment points[9], points[10]
-    if (distMin > ((x + 0.5) * (x + 0.5)) + y*y)
+    if (distMin > ((x + 0.5) * (x + 0.5)) + y * y)
       return Coord(-0.5, 0, 0);
 
     return anchor;
   }
-
 };
 
 PLUGIN(CrossGlyph)

@@ -24,31 +24,30 @@
 using namespace std;
 using namespace tlp;
 
-const string IntegerProperty::propertyTypename="int";
-const string IntegerVectorProperty::propertyTypename="vector<int>";
+const string IntegerProperty::propertyTypename = "int";
+const string IntegerVectorProperty::propertyTypename = "vector<int>";
 
 //==============================
-///Constructeur d'un IntegerProperty
-IntegerProperty::IntegerProperty (Graph *g, const std::string& n):IntegerMinMaxProperty(g, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
+/// Constructeur d'un IntegerProperty
+IntegerProperty::IntegerProperty(Graph *g, const std::string &n) : IntegerMinMaxProperty(g, n, -INT_MAX, INT_MAX, -INT_MAX, INT_MAX) {
 }
 //====================================================================
 void IntegerProperty::clone_handler(AbstractProperty<tlp::IntegerType, tlp::IntegerType, tlp::NumericProperty> &proxyC) {
-  if (typeid(this)==typeid(&proxyC)) {
-    IntegerProperty *proxy=(IntegerProperty *)&proxyC;
+  if (typeid(this) == typeid(&proxyC)) {
+    IntegerProperty *proxy = (IntegerProperty *)&proxyC;
     minMaxNode = proxy->minMaxNode;
     minMaxEdge = proxy->minMaxEdge;
   }
 }
 //=================================================================================
-PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *IntegerProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  IntegerProperty * p = n.empty()
-                        ? new IntegerProperty(g) : g->getLocalProperty<IntegerProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  IntegerProperty *p = n.empty() ? new IntegerProperty(g) : g->getLocalProperty<IntegerProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 //=================================================================================
@@ -72,39 +71,38 @@ void IntegerProperty::setAllEdgeValue(const int &v, Graph *graph) {
   IntegerMinMaxProperty::setAllEdgeValue(v, graph);
 }
 //=============================================================
-void IntegerProperty::treatEvent(const Event& evt) {
+void IntegerProperty::treatEvent(const Event &evt) {
   IntegerMinMaxProperty::treatEvent(evt);
 }
 //=================================================================================
-int IntegerProperty::compare(const node n1, const node n2)const {
+int IntegerProperty::compare(const node n1, const node n2) const {
   return getNodeValue(n1) - getNodeValue(n2);
 }
 //=================================================================================
-int IntegerProperty::compare(const edge e1, const edge e2)const {
+int IntegerProperty::compare(const edge e1, const edge e2) const {
   return getEdgeValue(e1) - getEdgeValue(e2);
 }
 //=================================================================================
-PropertyInterface* IntegerVectorProperty::clonePrototype(Graph * g, const std::string& n) const {
-  if( !g )
+PropertyInterface *IntegerVectorProperty::clonePrototype(Graph *g, const std::string &n) const {
+  if (!g)
     return 0;
 
   // allow to get an unregistered property (empty name)
-  IntegerVectorProperty * p = n.empty()
-                              ? new IntegerVectorProperty(g) : g->getLocalProperty<IntegerVectorProperty>( n );
-  p->setAllNodeValue( getNodeDefaultValue() );
-  p->setAllEdgeValue( getEdgeDefaultValue() );
+  IntegerVectorProperty *p = n.empty() ? new IntegerVectorProperty(g) : g->getLocalProperty<IntegerVectorProperty>(n);
+  p->setAllNodeValue(getNodeDefaultValue());
+  p->setAllEdgeValue(getEdgeDefaultValue());
   return p;
 }
 
 //===============================================================
 void IntegerProperty::nodesUniformQuantification(unsigned int k) {
-  std::map<double,int> nodeMapping;
+  std::map<double, int> nodeMapping;
   buildNodesUniformQuantification(graph, this, k, nodeMapping);
 
-  Iterator<node> *itN=graph->getNodes();
+  Iterator<node> *itN = graph->getNodes();
 
-  while(itN->hasNext()) {
-    node itn=itN->next();
+  while (itN->hasNext()) {
+    node itn = itN->next();
     setNodeValue(itn, nodeMapping[getNodeValue(itn)]);
   }
 
@@ -113,13 +111,13 @@ void IntegerProperty::nodesUniformQuantification(unsigned int k) {
 
 //===============================================================
 void IntegerProperty::edgesUniformQuantification(unsigned int k) {
-  std::map<double,int> edgeMapping;
+  std::map<double, int> edgeMapping;
   buildEdgesUniformQuantification(graph, this, k, edgeMapping);
 
-  Iterator<edge> *itE=graph->getEdges();
+  Iterator<edge> *itE = graph->getEdges();
 
-  while(itE->hasNext()) {
-    edge ite=itE->next();
+  while (itE->hasNext()) {
+    edge ite = itE->next();
     setEdgeValue(ite, edgeMapping[getEdgeValue(ite)]);
   }
 

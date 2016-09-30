@@ -38,7 +38,8 @@ protected:
   ImageWriter(const GLubyte *imagebuffer, const int width, const int height);
 
 public:
-  virtual ~ImageWriter() {}
+  virtual ~ImageWriter() {
+  }
   static ImageWriter *getImageWriter(std::string &type, const GLubyte *buffer, const int width, const int height);
   void setTitle(const std::string &);
   void setSoftware(const std::string &);
@@ -46,9 +47,9 @@ public:
   void setLayout(const std::string &);
   void setComment(const std::string &);
 
-  //an image writer will define this method and write date to the provided stream
+  // an image writer will define this method and write date to the provided stream
   virtual bool writeImage(std::ostream &) const = 0;
 };
 }
 
-#endif //IMAGE_WRITER_H
+#endif // IMAGE_WRITER_H

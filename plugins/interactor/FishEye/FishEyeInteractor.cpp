@@ -102,7 +102,8 @@ static std::string fisheyeFragmentShaderSrc() {
 }
 
 FishEyeInteractor::FishEyeInteractor(const PluginContext *)
-    : GLInteractorComposite(FontIconManager::instance()->getMaterialDesignIcon(md::web, Qt::white), "Fisheye"), _fisheyeConfigWidget(nullptr) {}
+    : GLInteractorComposite(FontIconManager::instance()->getMaterialDesignIcon(md::web, Qt::white), "Fisheye"), _fisheyeConfigWidget(nullptr) {
+}
 
 void FishEyeInteractor::construct() {
   _fisheyeConfigWidget = new FishEyeConfigWidget();
@@ -112,17 +113,18 @@ void FishEyeInteractor::construct() {
 }
 
 bool FishEyeInteractor::isCompatible(const std::string &viewName) const {
-  return ((viewName == NodeLinkDiagramComponent::viewName) ||
-          (viewName == ViewName::HistogramViewName) ||
-          (viewName == ViewName::MatrixViewName) ||
-          (viewName == ViewName::ParallelCoordinatesViewName) ||
-          (viewName == ViewName::PixelOrientedViewName) ||
+  return ((viewName == NodeLinkDiagramComponent::viewName) || (viewName == ViewName::HistogramViewName) || (viewName == ViewName::MatrixViewName) ||
+          (viewName == ViewName::ParallelCoordinatesViewName) || (viewName == ViewName::PixelOrientedViewName) ||
           (viewName == ViewName::ScatterPlot2DViewName));
 }
 
-void FishEyeInteractor::uninstall() { InteractorComposite::uninstall(); }
+void FishEyeInteractor::uninstall() {
+  InteractorComposite::uninstall();
+}
 
-FishEyeInteractor::~FishEyeInteractor() { delete _fisheyeConfigWidget; }
+FishEyeInteractor::~FishEyeInteractor() {
+  delete _fisheyeConfigWidget;
+}
 
 QWidget *FishEyeInteractor::configurationWidget() const {
   return _fisheyeConfigWidget;
@@ -135,14 +137,12 @@ GlBuffer *FishEyeInteractorComponent::_buffer(nullptr);
 GlBuffer *FishEyeInteractorComponent::_indicesBuffer(nullptr);
 int FishEyeInteractorComponent::_maxTextureSize(0);
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(
-    FishEyeConfigWidget *configWidget)
+FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget)
     : _configWidget(configWidget), _curX(-1), _curY(-1), _fbo(nullptr), _fbo2(nullptr) {
   _fboTextureId = "fisheyeTexture" + toString(reinterpret_cast<unsigned long long>(this));
 }
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(
-    const FishEyeInteractorComponent &fisheyeInteractorComponent)
+FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent)
     : _curX(-1), _curY(-1), _fbo(nullptr), _fbo2(nullptr) {
   _configWidget = fisheyeInteractorComponent._configWidget;
   _fboTextureId = "fisheyeTexture" + toString(reinterpret_cast<unsigned long long>(this));
@@ -186,7 +186,7 @@ bool FishEyeInteractorComponent::eventFilter(QObject *obj, QEvent *e) {
     return true;
   } else if (e->type() == QEvent::Wheel) {
     _activateFishEye = true;
-    QWheelEvent *wheelEvent = (QWheelEvent *) e;
+    QWheelEvent *wheelEvent = (QWheelEvent *)e;
     int numSteps = wheelEvent->delta() / 120;
 
     if (wheelEvent->orientation() == Qt::Vertical && (wheelEvent->modifiers() == Qt::ControlModifier)) {
@@ -249,7 +249,8 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
       delete _fbo;
       delete _fbo2;
       if (GlFrameBufferObject::hasOpenGLFramebufferBlit()) {
-        _fbo = new GlFrameBufferObject(fboSize, fboSize, GlFrameBufferObject::CombinedDepthStencil, OpenGlConfigManager::instance().maxNumberOfSamples());
+        _fbo = new GlFrameBufferObject(fboSize, fboSize, GlFrameBufferObject::CombinedDepthStencil,
+                                       OpenGlConfigManager::instance().maxNumberOfSamples());
         _fbo2 = new GlFrameBufferObject(fboSize, fboSize, GlFrameBufferObject::NoAttachment, 0, GL_LINEAR, GL_LINEAR);
         GlTextureManager::instance()->addExternalTexture(_fboTextureId, _fbo2->texture());
       } else {
@@ -282,7 +283,8 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     glScene->draw();
     _fbo->release();
     if (GlFrameBufferObject::hasOpenGLFramebufferBlit()) {
-      GlFrameBufferObject::blitFramebuffer(_fbo2, Vec2i(0, 0), Vec2i(fboSize, fboSize), _fbo, Vec2i(0, 0), Vec2i(fboSize, fboSize), GL_COLOR_BUFFER_BIT, GL_LINEAR);
+      GlFrameBufferObject::blitFramebuffer(_fbo2, Vec2i(0, 0), Vec2i(fboSize, fboSize), _fbo, Vec2i(0, 0), Vec2i(fboSize, fboSize),
+                                           GL_COLOR_BUFFER_BIT, GL_LINEAR);
     }
 
     glEntities = glScene->getEntities();
@@ -318,7 +320,7 @@ bool FishEyeInteractorComponent::draw(GlMainWidget *glWidget) {
     _buffer->bind();
     _buffer->allocate(quadData);
     _fisheyeShader->activate();
-    _fisheyeShader->setUniformMat4Float("u_modelviewMatrix",camera->modelviewMatrix());
+    _fisheyeShader->setUniformMat4Float("u_modelviewMatrix", camera->modelviewMatrix());
     _fisheyeShader->setUniformMat4Float("u_projectionMatrix", camera->projectionMatrix());
     _fisheyeShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), BUFFER_OFFSET(0));
     _fisheyeShader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), BUFFER_OFFSET(3 * sizeof(float)));

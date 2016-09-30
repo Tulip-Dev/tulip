@@ -28,7 +28,6 @@ class BooleanProperty;
 class DoubleProperty;
 class Graph;
 
-
 /**
  * @brief An facade for any path finding algorithm.
  * This class will initiate and run the correct path finding algorithm relative to the parameters given.
@@ -61,7 +60,8 @@ public:
    * @see Dikjstra
    * @see DFS
    */
-  static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation, tlp::node src, tlp::node tgt, tlp::BooleanProperty *result, tlp::DoubleProperty *weights=0, double tolerance=DBL_MAX);
+  static bool computePath(tlp::Graph *graph, PathType pathType, EdgeOrientation edgesOrientation, tlp::node src, tlp::node tgt,
+                          tlp::BooleanProperty *result, tlp::DoubleProperty *weights = 0, double tolerance = DBL_MAX);
 };
 }
 #endif /* PATHALGORITHM_H_ */

@@ -59,7 +59,6 @@ namespace tlp {
 class TLP_SCOPE ColorScale : public Observable {
 
 public:
-
   /**
    * Initializes a color scale with a default set of colors.
    *
@@ -77,15 +76,16 @@ public:
   /**
    * Initializes a color scale with a map of stop points and colors passed as parameter.
    * @since Tulip 4.10
-   * @param colorMap a map of stop points and colors defining the color scale (The keys of the map must be between 0.0 and 1.0, other ones will be ignored.)
+   * @param colorMap a map of stop points and colors defining the color scale (The keys of the map must be between 0.0 and 1.0, other ones will be
+   * ignored.)
    * @param gradient specifies if the color scale should be a gradient or not
    *
    */
   ColorScale(const std::map<float, Color> &colorMap, const bool gradient = true);
 
-  ColorScale(const ColorScale& scale);
+  ColorScale(const ColorScale &scale);
 
-  ColorScale& operator=(const ColorScale& scale);
+  ColorScale &operator=(const ColorScale &scale);
 
   virtual ~ColorScale();
 
@@ -164,7 +164,7 @@ public:
    * @warning The keys of the map must be between 0.0 and 1.0, other values will be ignored.
    *
    */
-  void setColorMap(const std::map<float, Color>& colorMap);
+  void setColorMap(const std::map<float, Color> &colorMap);
 
   /**
    * @brief Returns true if the color scale is a gradient.
@@ -191,7 +191,7 @@ public:
    * @brief Tests color scale equality with another one.
    *
    */
-  bool operator==(const ColorScale& cs) const {
+  bool operator==(const ColorScale &cs) const {
     return (gradient == cs.gradient) && (colorMap == cs.colorMap);
   }
 
@@ -213,7 +213,6 @@ protected:
   std::map<float, Color> colorMap;
   bool gradient;
 };
-
 }
 
 #endif /* COLORSCALE_H_ */

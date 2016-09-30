@@ -31,8 +31,9 @@ void PluginLoaderTxt::loading(const string &filename) {
   std::cout << "loading file : " << filename << endl;
 }
 
-void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& deps) {
-  std::cout << "Plug-in " << infos->name() << " loaded, Author: "<< infos->author() << ", Date: " << infos->date() << ", Release: " << infos->release() << ", Tulip Version: "<< infos->tulipRelease() <<  endl;
+void PluginLoaderTxt::loaded(const Plugin *infos, const std::list<Dependency> &deps) {
+  std::cout << "Plug-in " << infos->name() << " loaded, Author: " << infos->author() << ", Date: " << infos->date()
+            << ", Release: " << infos->release() << ", Tulip Version: " << infos->tulipRelease() << endl;
 
   // ouput dependencies if any
   if (deps.size()) {
@@ -41,7 +42,8 @@ void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& 
     list<Dependency>::const_iterator itD = deps.begin();
 
     for (i--; itD != deps.end(); ++itD, --i) {
-      std::cout << itD->pluginName;;
+      std::cout << itD->pluginName;
+      ;
 
       if (i > 0)
         std::cout << ", ";
@@ -51,11 +53,11 @@ void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& 
   }
 }
 
-void PluginLoaderTxt::aborted(const string &filename,const  string &erreurmsg) {
-  std::cout << "Aborted loading of "<< filename << " Error:" << erreurmsg << endl;
+void PluginLoaderTxt::aborted(const string &filename, const string &erreurmsg) {
+  std::cout << "Aborted loading of " << filename << " Error:" << erreurmsg << endl;
 }
 
-void PluginLoaderTxt::finished(bool state,const string &msg) {
+void PluginLoaderTxt::finished(bool state, const string &msg) {
   if (state)
     std::cout << "Loading complete" << endl;
   else

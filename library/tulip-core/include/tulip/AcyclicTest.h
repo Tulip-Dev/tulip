@@ -40,11 +40,10 @@ class BooleanProperty;
  **/
 struct SelfLoops {
 public:
-  SelfLoops(node n1,node n2,edge e1, edge e2,edge e3,edge old):
-    n1(n1),n2(n2),e1(e1),e2(e2),e3(e3),old(old) {
+  SelfLoops(node n1, node n2, edge e1, edge e2, edge e3, edge old) : n1(n1), n2(n2), e1(e1), e2(e2), e3(e3), old(old) {
   }
-  node n1,n2;
-  edge e1,e2,e3,old;
+  node n1, n2;
+  edge e1, e2, e3, old;
 };
 
 /**
@@ -57,7 +56,6 @@ public:
  **/
 class TLP_SCOPE AcyclicTest : private Observable {
 public:
-
   /**
    * @brief Checks whether the graph is acyclic or not.
    * The result is cached so subsequent calls are in O(1).
@@ -75,7 +73,7 @@ public:
    * @param selfLoops Sets of two nodes and three edges that were added in stead of self loops.
    * @return void
    **/
-  static void makeAcyclic(Graph* graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
+  static void makeAcyclic(Graph *graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);
 
   /**
    * @brief Returns whether the graph is acyclic.
@@ -85,22 +83,22 @@ public:
    * @param obstructionEdges If not null, will be filled with edges that cause the graph to be cyclic. Defaults to 0.
    * @return bool
    **/
-  static bool acyclicTest(const Graph * graph, std::vector<edge> *obstructionEdges = nullptr);
+  static bool acyclicTest(const Graph *graph, std::vector<edge> *obstructionEdges = nullptr);
 
 private:
   AcyclicTest();
   /**
    * @brief Singleton instance of this class.
    **/
-  static AcyclicTest * instance;
+  static AcyclicTest *instance;
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 
-  //override of Observable::treatEvent to remove the cached result for a graph if it is modified.
-  virtual void treatEvent(const Event&);
+  // override of Observable::treatEvent to remove the cached result for a graph if it is modified.
+  virtual void treatEvent(const Event &);
 };
 }
 
-#endif //TULIP_ACYCLICITY_TEST_H
+#endif // TULIP_ACYCLICITY_TEST_H

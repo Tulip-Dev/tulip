@@ -52,29 +52,26 @@
 using namespace tlp;
 using namespace std;
 
-const QString updateVisualizationFunc =
-  "import tuliputils\n"
-  "\n"
-  "def updateVisualization(centerViews = True):\n"
-  "\ttuliputils.updateVisualization(centerViews)\n"
-  "\n"
-  "\n";
+const QString updateVisualizationFunc = "import tuliputils\n"
+                                        "\n"
+                                        "def updateVisualization(centerViews = True):\n"
+                                        "\ttuliputils.updateVisualization(centerViews)\n"
+                                        "\n"
+                                        "\n";
 
-const QString pauseScriptFunc =
-  "import tuliputils\n"
-  "\n"
-  "def pauseScript():\n"
-  "\ttuliputils.pauseRunningScript()\n"
-  "\n"
-  "\n";
+const QString pauseScriptFunc = "import tuliputils\n"
+                                "\n"
+                                "def pauseScript():\n"
+                                "\ttuliputils.pauseRunningScript()\n"
+                                "\n"
+                                "\n";
 
-const QString runGraphScriptFunc =
-  "import tuliputils\n"
-  "\n"
-  "def runGraphScript(scriptFile, graph):\n"
-  "\ttuliputils.runGraphScript(scriptFile, graph)\n"
-  "\n"
-  "\n";
+const QString runGraphScriptFunc = "import tuliputils\n"
+                                   "\n"
+                                   "def runGraphScript(scriptFile, graph):\n"
+                                   "\ttuliputils.runGraphScript(scriptFile, graph)\n"
+                                   "\n"
+                                   "\n";
 
 QString cleanPropertyName(const QString &propertyName) {
   QString ret(propertyName);
@@ -103,7 +100,7 @@ QString cleanPropertyName(const QString &propertyName) {
   PythonInterpreter::getInstance()->importModule(builtinModName);
   static QVector<QString> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
 
-  for (i = 0 ; i < builtinDictContent.size() ; ++i) {
+  for (i = 0; i < builtinDictContent.size(); ++i) {
     if (ret == builtinDictContent[i]) {
       ret += "_";
       break;
@@ -133,7 +130,8 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
   oss << "#   * Ctrl + R  : replace selected text." << endl;
   oss << "#   * Ctrl + Space  : show auto-completion dialog." << endl << endl;
 
-  oss << "from tulip import *" << endl << endl;;
+  oss << "from tulip import *" << endl << endl;
+  ;
 
   oss << "# the updateVisualization(centerViews = True) function can be called" << endl;
   oss << "# during script execution to update the opened views" << endl << endl;
@@ -148,7 +146,7 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
   oss << "# to run the script on the current graph" << endl << endl;
 
   oss << "def main(graph): " << endl;
-  Iterator<PropertyInterface*> *itProps = graph->getObjectProperties();
+  Iterator<PropertyInterface *> *itProps = graph->getObjectProperties();
 
   while (itProps->hasNext()) {
     PropertyInterface *prop = itProps->next();
@@ -156,67 +154,77 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
     cleanPropName.replace("\"", "\\\"");
 
     if (dynamic_cast<DoubleProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<LayoutProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<StringProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<ColorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<GraphProperty *>(prop)) {
 #ifdef NDEBUG
 
-      if(cleanPropName!="viewMetaGraph")
+      if (cleanPropName != "viewMetaGraph")
 #endif
-        oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
+        oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getGraphProperty(\"" << cleanPropName << "\")"
+            << endl;
     }
 
     if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<CoordVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<SizeVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<ColorVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
 
     if (dynamic_cast<StringVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "\t" << cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")"
+          << endl;
     }
   }
 
@@ -230,14 +238,14 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
   return scriptCode;
 }
 
-
 PLUGIN(PythonScriptView)
 
-PythonScriptView::PythonScriptView(tlp::PluginContext *) : _viewWidget(nullptr), _pythonInterpreter(PythonInterpreter::getInstance()),
-  _graph(nullptr), _scriptStopped(false), _runningScript(false) {
+PythonScriptView::PythonScriptView(tlp::PluginContext *)
+    : _viewWidget(nullptr), _pythonInterpreter(PythonInterpreter::getInstance()), _graph(nullptr), _scriptStopped(false), _runningScript(false) {
 }
 
-PythonScriptView::~PythonScriptView() {}
+PythonScriptView::~PythonScriptView() {
+}
 
 void PythonScriptView::setupWidget() {
   _viewWidget = new PythonScriptViewWidget(this);
@@ -248,11 +256,11 @@ void PythonScriptView::setupWidget() {
   _pythonInterpreter->runString(runGraphScriptFunc);
 }
 
-string& replaceAll(string& context, const string& from, const string& to) {
+string &replaceAll(string &context, const string &from, const string &to) {
   size_t lookHere = 0;
   size_t foundHere;
 
-  while((foundHere = context.find(from, lookHere)) != string::npos) {
+  while ((foundHere = context.find(from, lookHere)) != string::npos) {
     context.replace(foundHere, from.size(), to);
     lookHere = foundHere + to.size();
   }
@@ -334,7 +342,8 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
             else
               _viewWidget->setScriptEditorTabText(mainScriptId, "[no file]");
 
-            _viewWidget->setScriptEditorTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
+            _viewWidget->setScriptEditorTabToolTip(mainScriptId, "string main script, don't forget to save the current graph or\n save the script to "
+                                                                 "a file to not lose your source code modifications.");
           }
         }
 
@@ -347,8 +356,7 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
 
       _viewWidget->setCurrentScriptEditor(mainScriptId);
 
-    }
-    else {
+    } else {
 
       if (dataSet.get("main script file", filename)) {
         mainScriptLoaded = loadScript(tlpStringToQString(filename), false);
@@ -364,21 +372,20 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
           replaceAll(scriptCode, "    ", "\t");
           codeEditor->setPlainText(tlpStringToQString(scriptCode));
 
-
           if (filename != "")
             _viewWidget->setScriptEditorTabText(0, fileInfo.fileName());
           else
             _viewWidget->setScriptEditorTabText(0, "[no file]");
 
-          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
-        }
-        else {
+          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to "
+                                                    "not lose your source code modifications.");
+        } else {
           codeEditor->setPlainText(getDefaultScriptCode(_pythonInterpreter->getPythonVersionStr(), _graph));
           _viewWidget->setScriptEditorTabText(0, "[no file]");
-          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
+          _viewWidget->setScriptEditorTabToolTip(0, "string main script, don't forget to save the current graph or\n save the script to a file to "
+                                                    "not lose your source code modifications.");
         }
       }
-
     }
   }
 }
@@ -397,11 +404,11 @@ DataSet PythonScriptView::state() const {
 
   DataSet mainScriptsDataSet;
 
-  for (int i = 0 ; i < _viewWidget->numberOfScriptEditors() ; ++i) {
+  for (int i = 0; i < _viewWidget->numberOfScriptEditors(); ++i) {
     string scriptFile = QStringToTlpString(_viewWidget->getMainScriptEditor(i)->getFileName());
 
     if (scriptFile != "")
-      const_cast<PythonScriptView*>(this)->saveScript(i);
+      const_cast<PythonScriptView *>(this)->saveScript(i);
 
     ostringstream oss;
     oss << "main_script" << i;
@@ -414,14 +421,13 @@ DataSet PythonScriptView::state() const {
   mainScriptsDataSet.set("main_script_id", _viewWidget->getCurrentMainScriptEditorIndex());
   dataSet->set("main_scripts", mainScriptsDataSet);
 
-
   DataSet modulesDataSet;
 
-  for (int i = 0 ; i < _viewWidget->numberOfModulesEditors() ; ++i) {
+  for (int i = 0; i < _viewWidget->numberOfModulesEditors(); ++i) {
     string moduleFile = QStringToTlpString(_viewWidget->getModuleEditor(i)->getFileName());
 
     if (moduleFile != "")
-      const_cast<PythonScriptView*>(this)->saveModule(i);
+      const_cast<PythonScriptView *>(this)->saveModule(i);
 
     ostringstream oss;
     oss << "module" << i;
@@ -436,8 +442,6 @@ DataSet PythonScriptView::state() const {
   return ret;
 }
 
-
-
 void PythonScriptView::executeCurrentScript() {
 
   if (_pythonInterpreter->isScriptPaused()) {
@@ -447,7 +451,7 @@ void PythonScriptView::executeCurrentScript() {
     _viewWidget->runScriptButton()->setToolTip("Run script (Ctrl + Return)");
     _viewWidget->pauseScriptButton()->setEnabled(true);
     _viewWidget->scriptStatusLabel()->setText("Executing script ...");
-    _viewWidget->progressBar()->setRange(0,0);
+    _viewWidget->progressBar()->setRange(0, 0);
     return;
   }
 
@@ -465,7 +469,6 @@ void PythonScriptView::executeCurrentScript() {
     if (scriptFileName == "") {
       scriptFileName = "<unnamed script>";
     }
-
 
     saveImportAllScripts();
 
@@ -486,7 +489,7 @@ void PythonScriptView::executeCurrentScript() {
     _pythonInterpreter->setProcessQtEventsDuringScriptExecution(true);
 
     _viewWidget->scriptStatusLabel()->setText("Executing script ...");
-    _viewWidget->progressBar()->setRange(0,0);
+    _viewWidget->progressBar()->setRange(0, 0);
 
     _viewWidget->runScriptButton()->setEnabled(false);
     _viewWidget->stopScriptButton()->setEnabled(true);
@@ -504,8 +507,7 @@ void PythonScriptView::executeCurrentScript() {
     if (scriptExecOk) {
       _viewWidget->scriptStatusLabel()->setText("Script execution has succeed");
       _pythonInterpreter->runString("del main");
-    }
-    else {
+    } else {
 
       _viewWidget->scriptStatusLabel()->setText("Script execution has failed");
 
@@ -517,7 +519,7 @@ void PythonScriptView::executeCurrentScript() {
       }
     }
 
-    _viewWidget->progressBar()->setRange(0,100);
+    _viewWidget->progressBar()->setRange(0, 100);
     _viewWidget->progressBar()->reset();
 
     _pythonInterpreter->resetConsoleWidget();
@@ -532,9 +534,10 @@ void PythonScriptView::executeCurrentScript() {
     _scriptStopped = false;
     _runningScript = false;
 
-  }
-  else {
-    QMessageBox::information(_viewWidget->getCurrentMainScriptEditor(), "Script execution not allowed", "The Python interpreter is executing a script. You must wait for its termination or stop its execution before running a new script.");
+  } else {
+    QMessageBox::information(
+        _viewWidget->getCurrentMainScriptEditor(), "Script execution not allowed",
+        "The Python interpreter is executing a script. You must wait for its termination or stop its execution before running a new script.");
   }
 }
 
@@ -542,11 +545,11 @@ void PythonScriptView::indicateErrors() const {
   QRegExp rx("^.*File.*\"(.*)\".*line.*(\\d+).*$");
   QRegExp rx2("^.*File.*\"(.*)\".*line.*(\\d+).*in (.*)$");
 
-  QMap<QString, QVector<int> > errorLines;
+  QMap<QString, QVector<int>> errorLines;
   QString consoleOutput = _pythonInterpreter->getStandardErrorOutput();
   QStringList outputLines = consoleOutput.split("\n");
 
-  for (int i = 0 ; i < outputLines.count() - 1 ; ++i) {
+  for (int i = 0; i < outputLines.count() - 1; ++i) {
     int pos = 0;
 
     while ((pos = rx.indexIn(outputLines[i], pos)) != -1) {
@@ -563,13 +566,12 @@ void PythonScriptView::indicateErrors() const {
 
       pos += rx.matchedLength();
     }
-
   }
 
   if (errorLines.find("<unnamed script>") != errorLines.end()) {
-    for (int i = 0 ; i < errorLines["<unnamed script>"].size() ; ++i) {
+    for (int i = 0; i < errorLines["<unnamed script>"].size(); ++i) {
       if (errorLines["<unnamed script>"][i] > 1) {
-        _viewWidget->getCurrentMainScriptEditor()->indicateScriptCurrentError(errorLines["<unnamed script>"][i]-1);
+        _viewWidget->getCurrentMainScriptEditor()->indicateScriptCurrentError(errorLines["<unnamed script>"][i] - 1);
       }
     }
   }
@@ -595,7 +597,7 @@ void PythonScriptView::currentScriptPaused() {
   _viewWidget->pauseScriptButton()->setEnabled(false);
   _viewWidget->runScriptButton()->setEnabled(true);
   _viewWidget->runScriptButton()->setToolTip("Resume script (Ctrl + Return)");
-  _viewWidget->progressBar()->setRange(0,100);
+  _viewWidget->progressBar()->setRange(0, 100);
   _viewWidget->progressBar()->reset();
   _viewWidget->scriptStatusLabel()->setText("Script execution is paused.");
 }
@@ -604,11 +606,13 @@ void PythonScriptView::newScript() {
   int editorId = _viewWidget->addMainScriptEditor();
   _viewWidget->getMainScriptEditor(editorId)->setPlainText(getDefaultScriptCode(_pythonInterpreter->getPythonVersionStr(), _graph));
   _viewWidget->setScriptEditorTabText(editorId, "[no file]");
-  _viewWidget->setScriptEditorTabToolTip(editorId, "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
+  _viewWidget->setScriptEditorTabToolTip(
+      editorId,
+      "string main script, don't forget to save the current graph or\n save the script to a file to not lose your source code modifications.");
 }
 
 void PythonScriptView::loadScript() {
-  QString fileName = QFileDialog::getOpenFileName(nullptr, "Open Main Script","", "Python script (*.py)");
+  QString fileName = QFileDialog::getOpenFileName(nullptr, "Open Main Script", "", "Python script (*.py)");
   loadScript(fileName);
 }
 
@@ -645,10 +649,9 @@ void PythonScriptView::saveScript() {
 }
 
 void PythonScriptView::saveScript(int tabIdx, bool clear) {
-  if (tabIdx >=0 && tabIdx < _viewWidget->numberOfScriptEditors()) {
+  if (tabIdx >= 0 && tabIdx < _viewWidget->numberOfScriptEditors()) {
     QString fileName;
     QString mainScriptFileName = _viewWidget->getMainScriptEditor(tabIdx)->getFileName();
-
 
     if (mainScriptFileName == "") {
       QString dir = "";
@@ -658,9 +661,8 @@ void PythonScriptView::saveScript(int tabIdx, bool clear) {
         dir = tabText;
       }
 
-      fileName = QFileDialog::getSaveFileName(nullptr, tr("Save Main Script"),dir,"Python script (*.py)");
-    }
-    else
+      fileName = QFileDialog::getSaveFileName(nullptr, tr("Save Main Script"), dir, "Python script (*.py)");
+    } else
       fileName = mainScriptFileName;
 
     if (fileName != "") {
@@ -688,19 +690,17 @@ void PythonScriptView::saveScript(int tabIdx, bool clear) {
       _pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", ""));
       indicateErrors();
       _pythonInterpreter->resetConsoleWidget();
-
     }
   }
 }
 
 void PythonScriptView::saveImportAllScripts() {
-  for (int i = 0 ; i < _viewWidget->numberOfScriptEditors() ; ++i) {
+  for (int i = 0; i < _viewWidget->numberOfScriptEditors(); ++i) {
     PythonCodeEditor *codeEditor = _viewWidget->getMainScriptEditor(i);
 
     if (codeEditor->getFileName() != "") {
       saveScript(i, false);
-    }
-    else {
+    } else {
       QString tabText = _viewWidget->getScriptEditorTabText(i);
 
       if (tabText.contains(".py")) {
@@ -724,8 +724,7 @@ QString PythonScriptView::findFile(const QString &filePath) {
 
   if (fileInfo.exists()) {
     return filePath;
-  }
-  else if (filename != "" && _graph) {
+  } else if (filename != "" && _graph) {
     std::string tlpFile;
 
     if (_graph->getRoot()->getAttribute("file", tlpFile)) {
@@ -735,19 +734,18 @@ QString PythonScriptView::findFile(const QString &filePath) {
 
       if (fileInfo.exists()) {
         return newfilepath;
-      }
-      else {
+      } else {
         QStringList pathSaved = filepath.split("/");
         QStringList pathTlp = fileInfoTlp.absolutePath().split("/");
         QString basePath = "";
 
-        for (int i = 0 ; i < pathTlp.size() ; ++i) {
+        for (int i = 0; i < pathTlp.size(); ++i) {
           basePath += (pathTlp[i] + "/");
 
-          for (int j = 0 ; j < pathSaved.size()-1 ; ++j) {
+          for (int j = 0; j < pathSaved.size() - 1; ++j) {
             QString testPath = basePath;
 
-            for (int k = j ; k < pathSaved.size() ; ++k) {
+            for (int k = j; k < pathSaved.size(); ++k) {
               testPath += (pathSaved[k] + "/");
             }
 
@@ -766,12 +764,10 @@ QString PythonScriptView::findFile(const QString &filePath) {
   return "";
 }
 
-
 void PythonScriptView::loadModule() {
-  QString fileName = QFileDialog::getOpenFileName(nullptr, "Open Module","", "Python script (*.py)");
+  QString fileName = QFileDialog::getOpenFileName(nullptr, "Open Module", "", "Python script (*.py)");
   loadModule(fileName);
 }
-
 
 bool PythonScriptView::loadModule(const QString &fileName, bool clear) {
   QFile file(findFile(fileName));
@@ -799,9 +795,10 @@ bool PythonScriptView::loadModuleFromSrcCode(const QString &moduleName, const QS
   codeEditor->setPlainText(moduleSrcCode);
 
   _viewWidget->setModuleEditorTabText(editorId, moduleName);
-  _viewWidget->setModuleEditorTabToolTip(editorId, "string module, don't forget to save the current graph or\n save the module to a file to not lose your source code modifications.");
+  _viewWidget->setModuleEditorTabToolTip(
+      editorId, "string module, don't forget to save the current graph or\n save the module to a file to not lose your source code modifications.");
 
-  bool ret = _pythonInterpreter->registerNewModuleFromString(QString(moduleName).replace(".py", ""),  moduleSrcCode);
+  bool ret = _pythonInterpreter->registerNewModuleFromString(QString(moduleName).replace(".py", ""), moduleSrcCode);
 
   if (ret) {
     codeEditor->analyseScriptCode(true);
@@ -811,7 +808,7 @@ bool PythonScriptView::loadModuleFromSrcCode(const QString &moduleName, const QS
 }
 
 void PythonScriptView::newFileModule() {
-  QString fileName = QFileDialog::getSaveFileName(nullptr, tr("Set Module filename"),"","Python script (*.py)");
+  QString fileName = QFileDialog::getSaveFileName(nullptr, tr("Set Module filename"), "", "Python script (*.py)");
 
   if (fileName.isEmpty())
     return;
@@ -834,12 +831,11 @@ void PythonScriptView::newFileModule() {
   _viewWidget->getModuleEditor(editorId)->saveCodeToFile();
 
   _pythonInterpreter->addModuleSearchPath(modulePath);
-
 }
 
 void PythonScriptView::newStringModule() {
   bool ok;
-  QString moduleName = QInputDialog::getText(nullptr, "New string module  ", "module name :", QLineEdit::Normal,"", &ok);
+  QString moduleName = QInputDialog::getText(nullptr, "New string module  ", "module name :", QLineEdit::Normal, "", &ok);
 
   if (ok && !moduleName.isEmpty()) {
 
@@ -848,7 +844,8 @@ void PythonScriptView::newStringModule() {
 
     int editorId = _viewWidget->addModuleEditor(moduleName);
     _viewWidget->getModuleEditor(editorId)->setFileName(moduleName);
-    _viewWidget->setModuleEditorTabToolTip(editorId, "string module, don't forget to save the current graph or\n save module to file to not lose your source code modifications.");
+    _viewWidget->setModuleEditorTabToolTip(
+        editorId, "string module, don't forget to save the current graph or\n save module to file to not lose your source code modifications.");
   }
 }
 
@@ -887,7 +884,7 @@ void PythonScriptView::saveModule(int tabIdx, const bool reload) {
       moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
 
     _pythonInterpreter->deleteModule(moduleName);
-    _viewWidget->setModuleEditorTabText(tabIdx, moduleName+".py");
+    _viewWidget->setModuleEditorTabText(tabIdx, moduleName + ".py");
     QFile file(_viewWidget->getModuleEditor(tabIdx)->getFileName());
     QFileInfo fileInfo(file);
 
@@ -902,7 +899,7 @@ void PythonScriptView::saveModule(int tabIdx, const bool reload) {
 }
 
 void PythonScriptView::saveAllModules() {
-  for (int i = 0 ; i < _viewWidget->numberOfModulesEditors() ; ++i) {
+  for (int i = 0; i < _viewWidget->numberOfModulesEditors(); ++i) {
     saveModule(i);
   }
 }
@@ -911,7 +908,7 @@ bool PythonScriptView::reloadAllModules() const {
 
   bool ret = true;
 
-  for (int i = 0 ; i < _viewWidget->numberOfModulesEditors() ; ++i) {
+  for (int i = 0; i < _viewWidget->numberOfModulesEditors(); ++i) {
     QString moduleNameExt = _viewWidget->getModuleEditorTabText(i);
     QString moduleName;
 
@@ -925,15 +922,13 @@ bool PythonScriptView::reloadAllModules() const {
 
     if (fileInfo.fileName() == _viewWidget->getModuleEditor(i)->getFileName()) {
       ret = ret && _pythonInterpreter->registerNewModuleFromString(moduleName, _viewWidget->getModuleEditor(i)->getCleanCode());
-    }
-    else {
+    } else {
       _pythonInterpreter->addModuleSearchPath(fileInfo.absolutePath());
       ret = ret && _pythonInterpreter->reloadModule(moduleName);
     }
   }
 
   return ret;
-
 }
 
 bool PythonScriptView::eventFilter(QObject *obj, QEvent *event) {

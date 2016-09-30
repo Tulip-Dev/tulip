@@ -31,17 +31,18 @@
 
 // Some utility class used in crash handler dialog designer form
 
-class SelectionButton: public QPushButton {
+class SelectionButton : public QPushButton {
 public:
-  explicit SelectionButton(QWidget *parent=nullptr);
+  explicit SelectionButton(QWidget *parent = nullptr);
   void paintEvent(QPaintEvent *e);
 };
 
 struct PerspectiveProcessInfos {
-  PerspectiveProcessInfos() {}
+  PerspectiveProcessInfos() {
+  }
 
-  PerspectiveProcessInfos(const QString &name, const QVariantMap &args, const QString &file, time_t id):
-    name(name), args(args), file(file), _perspectiveId(id) {
+  PerspectiveProcessInfos(const QString &name, const QVariantMap &args, const QString &file, time_t id)
+      : name(name), args(args), file(file), _perspectiveId(id) {
   }
 
   QString name;
@@ -51,7 +52,7 @@ struct PerspectiveProcessInfos {
   time_t _perspectiveId;
 };
 
-class TulipPerspectiveProcessHandler: public QTcpServer {
+class TulipPerspectiveProcessHandler : public QTcpServer {
   Q_OBJECT
 
   QMap<QProcess *, PerspectiveProcessInfos> _processInfos;
@@ -59,7 +60,7 @@ class TulipPerspectiveProcessHandler: public QTcpServer {
   static TulipPerspectiveProcessHandler *_instance;
   TulipPerspectiveProcessHandler();
 
-  QThread* _serverThread;
+  QThread *_serverThread;
 
   QProcess *fromId(unsigned int);
 
@@ -81,11 +82,10 @@ signals:
   void showProjectsAgent();
   void showAboutAgent();
   void showTrayMessage(QString);
-  void showErrorMessage(QString,QString);
+  void showErrorMessage(QString, QString);
   void openProject(QString);
-  void openProjectWith(QString,QString);
+  void openProjectWith(QString, QString);
   void openPerspective(QString);
-
 };
 
 #endif // TULIPPERSPECTIVEPROCESSHANDLER_H

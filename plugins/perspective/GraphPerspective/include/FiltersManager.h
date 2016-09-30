@@ -28,26 +28,20 @@ class FiltersManagerData;
 
 class QToolButton;
 
-class FiltersManager: public QWidget {
+class FiltersManager : public QWidget {
   Q_OBJECT
 
-  enum PreselectionModes {
-    None = 0,
-    Current = 1,
-    Nodes = 2,
-    Edges = 3,
-    All = 4
-  };
+  enum PreselectionModes { None = 0, Current = 1, Nodes = 2, Edges = 3, All = 4 };
 
   Ui::FiltersManagerData *_ui;
-  QList<FiltersManagerItem*> _items;
+  QList<FiltersManagerItem *> _items;
 
-  QToolButton* _playButton;
-  QToolButton* _saveButton;
-  QToolButton* _loadButton;
+  QToolButton *_playButton;
+  QToolButton *_saveButton;
+  QToolButton *_loadButton;
 
 public:
-  explicit FiltersManager(QWidget *parent=nullptr);
+  explicit FiltersManager(QWidget *parent = nullptr);
   virtual ~FiltersManager();
 
 public slots:
@@ -55,10 +49,10 @@ public slots:
 
 protected slots:
   void delItem();
-  void delItem(FiltersManagerItem* item);
+  void delItem(FiltersManagerItem *item);
   void addItem();
   void itemModeChanged(FiltersManagerItem::Mode);
-  void currentGraphChanged(tlp::Graph*);
+  void currentGraphChanged(tlp::Graph *);
 };
 
 #endif // FILTERSMANAGER_H

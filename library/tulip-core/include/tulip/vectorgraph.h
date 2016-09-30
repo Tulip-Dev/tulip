@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef VECTORGRAPH_H
 #define VECTORGRAPH_H
 #include <vector>
@@ -34,8 +33,7 @@
 
 namespace tlp {
 
-template<class itType >
-struct Iterator;
+template <class itType> struct Iterator;
 //===========================================
 /**
   * @class VectorGraph
@@ -57,7 +55,7 @@ struct Iterator;
   * @warning Use that class only if you need performance.
   * @todo split the file in .h .cpp
   */
-class  TLP_SCOPE VectorGraph {
+class TLP_SCOPE VectorGraph {
 
 public:
   //=======================================================
@@ -97,7 +95,7 @@ public:
         * \warning there is no test here, all edge in v must be element of star(e)
         * @remark o(v.size())
         */
-  void setEdgeOrder(const node n, const std::vector<edge> &v );
+  void setEdgeOrder(const node n, const std::vector<edge> &v);
   //=======================================================
   /**
         * \brief swap to edge in the ordered adjacency vector
@@ -161,42 +159,42 @@ public:
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark: o(1)
         */
-  Iterator<node> * getNodes() const;
+  Iterator<node> *getNodes() const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on edges of the graph
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark: o(1)
         */
-  Iterator<edge> * getEdges() const;
+  Iterator<edge> *getEdges() const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on adjacent edges of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark: o(1)
         */
-  Iterator<edge> * getInOutEdges(const node n) const;
+  Iterator<edge> *getInOutEdges(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on out edges of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark: o(1)
         */
-  Iterator<edge> * getOutEdges(const node n) const;
+  Iterator<edge> *getOutEdges(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on in edges of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark: o(1)
         */
-  Iterator<edge> * getInEdges(const node n) const;
+  Iterator<edge> *getInEdges(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on adjacent nodes of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark: o(1)
         */
-  Iterator<node> * getInOutNodes(const node n) const;
+  Iterator<node> *getInOutNodes(const node n) const;
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on in nodes of the node n
@@ -204,14 +202,14 @@ public:
         * @remark o(1)
         */
   //=======================================================
-  Iterator<node> * getInNodes(const node n) const;
+  Iterator<node> *getInNodes(const node n) const;
   /**
         * @brief Return a Tulip Iterator on out nodes of the node n
         * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
         * @remark o(1)
         */
   //=======================================================
-  Iterator<node> * getOutNodes(const node n) const;
+  Iterator<node> *getOutNodes(const node n) const;
   //=======================================================
   /**
        * @brief Return the degree of a node
@@ -390,14 +388,13 @@ public:
        * @endcode
        * \warning that function is not compatible with the Tulip Graph API
        */
-  template<typename Compare>
-  void sortEdges(Compare cmp, bool stable = false) {
+  template <typename Compare> void sortEdges(Compare cmp, bool stable = false) {
     if (stable)
       stable_sort(_edges.begin(), _edges.end(), cmp);
     else
       sort(_edges.begin(), _edges.end(), cmp);
 
-    //recompute indices of edges
+    // recompute indices of edges
     for (unsigned int i = 0; i < _edges.size(); ++i) {
       _eData[_edges[i]]._edgesId = i;
     }
@@ -416,14 +413,13 @@ public:
        * @remark dependant of stl::sort and stl::stable_sort algorithm (should be o(N log (N)))
        * \warning that function is not compatible with the Tulip Graph API
        */
-  template<typename Compare >
-  void sortNodes(Compare cmp, bool stable = false) {
+  template <typename Compare> void sortNodes(Compare cmp, bool stable = false) {
     if (stable)
       stable_sort(_nodes.begin(), _nodes.end(), cmp);
     else
       sort(_nodes.begin(), _nodes.end(), cmp);
 
-    //recompute indices of edges
+    // recompute indices of edges
     for (unsigned int i = 0; i < _nodes.size(); ++i) {
       _nData[_nodes[i]]._nodesId = i;
     }
@@ -464,8 +460,7 @@ public:
         * @remark  o(log(number of arrays) + new of a vector<TYPE> of size N)
         * \warning that function is not compatible with the Tulip Graph API
         */
-  template<typename TYPE>
-  void alloc(NodeProperty<TYPE> &prop) {
+  template <typename TYPE> void alloc(NodeProperty<TYPE> &prop) {
     ValArray<TYPE> *array = new ValArray<TYPE>(_nodes.size() + _freeNodes.size(), _nodes.capacity());
     _nodeArrays.insert(array);
     prop = NodeProperty<TYPE>(array, this);
@@ -477,8 +472,7 @@ public:
         * @remark  o(log(number of arrays) + free of a vector<TYPE> of size N)
         * \warning that function is not compatible with the Tulip Graph API
         */
-  template<typename TYPE>
-  void free(NodeProperty<TYPE> array) {
+  template <typename TYPE> void free(NodeProperty<TYPE> array) {
     assert(_nodeArrays.find(array._array) != _nodeArrays.end());
     delete array._array;
     _nodeArrays.erase(array._array);
@@ -491,8 +485,7 @@ public:
       * @remark  o(log(number of node arrays) + new of a vector<TYPE> of size E)
       * \warning that function is not compatible with the Tulip Graph API
       */
-  template<typename TYPE>
-  void alloc(EdgeProperty<TYPE> &prop) {
+  template <typename TYPE> void alloc(EdgeProperty<TYPE> &prop) {
     ValArray<TYPE> *array = new ValArray<TYPE>(_edges.size() + _freeEdges.size(), _edges.capacity());
     _edgeArrays.insert(array);
     prop = EdgeProperty<TYPE>(array, this);
@@ -504,8 +497,7 @@ public:
         * @remark  o(log(number of edge arrays) + free of a vector<TYPE> of size E)
         * \warning that function is not compatible with the Tulip Graph API
         */
-  template<typename TYPE>
-  void free(EdgeProperty<TYPE> array) {
+  template <typename TYPE> void free(EdgeProperty<TYPE> array) {
     assert(_edgeArrays.find(array._array) != _edgeArrays.end());
     delete array._array;
     _edgeArrays.erase(array._array);
@@ -522,7 +514,7 @@ public:
         * \see getInNodes
         * \see getOutNodes
         */
-  const std::vector<node>& adj(const node n) const;
+  const std::vector<node> &adj(const node n) const;
   //=======================================================
   /**
         * @brief Return a const reference on the vector of adjacent edges of n
@@ -535,7 +527,7 @@ public:
         * \see getInEdges
         * \see getOutEdges
         */
-  const std::vector<edge>& star(const node n) const;
+  const std::vector<edge> &star(const node n) const;
   //=======================================================
   /**
         * @brief Return a const reference on the vector of nodes of the graph
@@ -543,7 +535,7 @@ public:
         * \warning code that use that function won't be compatible with Tulip Graph API
         * @remark o(1)
         */
-  const std::vector<node>& nodes() const;
+  const std::vector<node> &nodes() const;
   //=======================================================
   /**
         * @brief Return a const reference on the vector of edges of the graph
@@ -551,19 +543,17 @@ public:
         * \warning code that use that function won't be compatible with Tulip Graph API
         * @remark o(1)
         */
-  const std::vector<edge>& edges() const;
-  //=======================================================
+  const std::vector<edge> &edges() const;
+//=======================================================
 #ifndef NDEBUG
   /**
         * these two function are used internally to insure that property has been allocated in debug mode
         * @warning never used these function directly even in debug mode !!!
         */
-  template<typename TYPE>
-  bool isNodeAttr(ValArray<TYPE> *array) {
+  template <typename TYPE> bool isNodeAttr(ValArray<TYPE> *array) {
     return (_nodeArrays.find(array) != _nodeArrays.end());
   }
-  template<typename TYPE>
-  bool isEdgeAttr(ValArray<TYPE> *array) {
+  template <typename TYPE> bool isEdgeAttr(ValArray<TYPE> *array) {
     return (_edgeArrays.find(array) != _edgeArrays.end());
   }
 #endif
@@ -579,9 +569,8 @@ public:
   void integrityTest();
 
 private:
-
   struct _iNodes {
-    _iNodes(unsigned int id = UINT_MAX): _nodesId(id), _outdeg(0) {
+    _iNodes(unsigned int id = UINT_MAX) : _nodesId(id), _outdeg(0) {
     }
 
     void clear() {
@@ -597,24 +586,24 @@ private:
       _adje.push_back(e);
     }
 
-    unsigned int _nodesId; /** index of a node in the _nodes vector*/
-    unsigned int _outdeg;  /** out degree of nodes */
+    unsigned int _nodesId;   /** index of a node in the _nodes vector*/
+    unsigned int _outdeg;    /** out degree of nodes */
     std::vector<bool> _adjt; /** orientation of the edge, used to separate in and out edges/nodes */
     std::vector<node> _adjn; /** inout nodes*/
     std::vector<edge> _adje; /** inout edges*/
   };
 
   struct _iEdges {
-    unsigned int _edgesId; /** index of a node in the _edges vector*/
-    std::pair<node, node> _edgeExtremities; /** source and target of an edge */
+    unsigned int _edgesId;                                     /** index of a node in the _edges vector*/
+    std::pair<node, node> _edgeExtremities;                    /** source and target of an edge */
     std::pair<unsigned int, unsigned int> _edgeExtremitiesPos; /** source and target of an edge */
   };
 
   std::vector<_iNodes> _nData; /** internal storage of nodes */
   std::vector<_iEdges> _eData; /** internal storage of edges */
 
-  std::vector< node > _nodes; /** vector of nodes element of the graph */
-  std::vector< edge > _edges; /** vector of edges element of the graph */
+  std::vector<node> _nodes; /** vector of nodes element of the graph */
+  std::vector<edge> _edges; /** vector of edges element of the graph */
 
   std::vector<node> _freeNodes; /** vector of nodes that has been deleted and that can be reused */
   std::vector<edge> _freeEdges; /** vector of edges that has been deleted and that can be reused */
@@ -656,22 +645,23 @@ private:
   //=======================================================
 };
 
+#ifndef NDEBUG // these two function are used to insure that property has been allocated in debug mode
+template <typename TYPE> bool NodeProperty<TYPE>::isValid() const {
+  if (this->_graph == 0)
+    return false;
 
-#ifndef NDEBUG //these two function are used to insure that property has been allocated in debug mode
-template <typename TYPE>
-bool NodeProperty<TYPE>::isValid() const {
-  if (this->_graph == 0) return false;
-
-  if (this->_array == 0) return false;
+  if (this->_array == 0)
+    return false;
 
   return this->_graph->isNodeAttr(this->_array);
 }
 
-template <typename TYPE>
-bool EdgeProperty<TYPE>::isValid() const {
-  if (this->_graph == 0) return false;
+template <typename TYPE> bool EdgeProperty<TYPE>::isValid() const {
+  if (this->_graph == 0)
+    return false;
 
-  if (this->_array == 0) return false;
+  if (this->_array == 0)
+    return false;
 
   return this->_graph->isEdgeAttr(this->_array);
 }

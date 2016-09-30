@@ -26,7 +26,6 @@
 #include <tulip/GlLayer.h>
 #include <tulip/GlGraph.h>
 
-
 using namespace std;
 using namespace tlp;
 
@@ -36,50 +35,48 @@ const quint32 META_NODES_ID = 3;
 const quint32 META_NODE_LABELS_ID = 4;
 const quint32 NODE_LABELS_ID = 5;
 const quint32 EDGE_LABELS_ID = 6;
-const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << EDGES_ID
-    << META_NODES_ID
-    << META_NODE_LABELS_ID << NODE_LABELS_ID << EDGE_LABELS_ID;
+const QVector<quint32> GRAPH_COMPOSITE_IDS = QVector<quint32>() << NODES_ID << EDGES_ID << META_NODES_ID << META_NODE_LABELS_ID << NODE_LABELS_ID
+                                                                << EDGE_LABELS_ID;
 const int NO_STENCIL = 0xFF;
 const int FULL_STENCIL = 0x02;
 
-SceneLayersModel::SceneLayersModel(GlScene* scene, QObject *parent): TulipModel(parent), _scene(scene) {
+SceneLayersModel::SceneLayersModel(GlScene *scene, QObject *parent) : TulipModel(parent), _scene(scene) {
   _scene->addListener(this);
-  for(const GlLayer *layer : _scene->getLayersList()) {
+  for (const GlLayer *layer : _scene->getLayersList()) {
     layer->addListener(this);
   }
 }
 
-QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &parent) const {
-  if(!hasIndex(row,column,parent))
+QModelIndex SceneLayersModel::index(int row, int column, const QModelIndex &parent) const {
+  if (!hasIndex(row, column, parent))
     return QModelIndex();
 
   if (!parent.isValid()) { // Top level: layers
-    GlLayer* layer = _scene->getLayersList()[row];
+    GlLayer *layer = _scene->getLayersList()[row];
     assert(layer != nullptr);
-    return createIndex(row,column,layer);
+    return createIndex(row, column, layer);
   }
 
-  GlComposite* composite = nullptr;
+  GlComposite *composite = nullptr;
 
-  if (!parent.parent().isValid())  {// 1st sublevel, parent is a layer
-    GlLayer *layer = reinterpret_cast<GlLayer*>(parent.internalPointer());
+  if (!parent.parent().isValid()) { // 1st sublevel, parent is a layer
+    GlLayer *layer = reinterpret_cast<GlLayer *>(parent.internalPointer());
     composite = layer->getComposite();
-  }
-  else {  // Deeper sublevel, the parent is a composite
-    GlEntity *entity = reinterpret_cast<GlEntity*>(parent.internalPointer());
-    GlGraph *glGraph = dynamic_cast<GlGraph*>(entity);
+  } else { // Deeper sublevel, the parent is a composite
+    GlEntity *entity = reinterpret_cast<GlEntity *>(parent.internalPointer());
+    GlGraph *glGraph = dynamic_cast<GlGraph *>(entity);
     if (glGraph) {
-      return createIndex(row,column,GRAPH_COMPOSITE_IDS[row]);
+      return createIndex(row, column, GRAPH_COMPOSITE_IDS[row]);
     }
-    composite = reinterpret_cast<GlComposite*>(parent.internalPointer());
+    composite = reinterpret_cast<GlComposite *>(parent.internalPointer());
   }
 
-  int i=0;
-  std::map<std::string, GlEntity*> entities = composite->getGlEntities();
+  int i = 0;
+  std::map<std::string, GlEntity *> entities = composite->getGlEntities();
 
-  for (std::map<std::string,GlEntity*>::iterator it = entities.begin(); it != entities.end(); ++it) {
+  for (std::map<std::string, GlEntity *>::iterator it = entities.begin(); it != entities.end(); ++it) {
     if (i++ == row) {
-      return createIndex(row,column,it->second);
+      return createIndex(row, column, it->second);
     }
   }
 
@@ -88,12 +85,12 @@ QModelIndex SceneLayersModel::index(int row, int column,const QModelIndex &paren
 
 QModelIndex SceneLayersModel::graphCompositeIndex() const {
 
-  for(GlLayer *layer : _scene->getLayersList()) {
-    GlComposite* composite = layer->getComposite();
+  for (GlLayer *layer : _scene->getLayersList()) {
+    GlComposite *composite = layer->getComposite();
     int row = 0;
-    for (const pair<std::string, GlEntity*>& entity : composite->getGlEntities()) {
+    for (const pair<std::string, GlEntity *> &entity : composite->getGlEntities()) {
       if (entity.second == _scene->getMainGlGraph())
-        return createIndex(row,0,_scene->getMainGlGraph());
+        return createIndex(row, 0, _scene->getMainGlGraph());
 
       row++;
     }
@@ -109,25 +106,25 @@ QModelIndex SceneLayersModel::parent(const QModelIndex &child) const {
   if (GRAPH_COMPOSITE_IDS.contains(child.internalId()))
     return graphCompositeIndex();
 
-  for(GlLayer *layer : _scene->getLayersList()) {
+  for (GlLayer *layer : _scene->getLayersList()) {
     if (layer == child.internalPointer())
       return QModelIndex(); // Item was a layer, aka. a top level item.
   }
 
-  GlEntity* entity = reinterpret_cast<GlEntity*>(child.internalPointer());
-  GlComposite* parent = entity->getParent();
+  GlEntity *entity = reinterpret_cast<GlEntity *>(child.internalPointer());
+  GlComposite *parent = entity->getParent();
 
   if (parent == nullptr)
     return QModelIndex();
 
-  GlComposite* ancestor = parent->getParent();
+  GlComposite *ancestor = parent->getParent();
 
   if (ancestor == nullptr) { // Parent is a layer composite
     int row = 0;
 
-    for(GlLayer *layer : _scene->getLayersList()) {
+    for (GlLayer *layer : _scene->getLayersList()) {
       if (layer->getComposite() == parent)
-        return createIndex(row,0,layer); // Item was a layer, aka. a top level item.
+        return createIndex(row, 0, layer); // Item was a layer, aka. a top level item.
 
       row++;
     }
@@ -135,9 +132,9 @@ QModelIndex SceneLayersModel::parent(const QModelIndex &child) const {
 
     int row = 0;
 
-    for (const pair<std::string, GlEntity*>& entity : ancestor->getGlEntities()) {
+    for (const pair<std::string, GlEntity *> &entity : ancestor->getGlEntities()) {
       if (entity.second == parent)
-        return createIndex(row,0,parent);
+        return createIndex(row, 0, parent);
 
       row++;
     }
@@ -151,21 +148,21 @@ int SceneLayersModel::rowCount(const QModelIndex &parent) const {
     return _scene->getLayersList().size();
   }
 
-  if (!parent.parent().isValid()) {// First sublevel: parent is a GlLayer
-    GlLayer* layer = reinterpret_cast<GlLayer*>(parent.internalPointer());
+  if (!parent.parent().isValid()) { // First sublevel: parent is a GlLayer
+    GlLayer *layer = reinterpret_cast<GlLayer *>(parent.internalPointer());
     return layer->getComposite()->getGlEntities().size();
   }
 
   if (GRAPH_COMPOSITE_IDS.contains(parent.internalId()))
     return 0;
 
-  GlEntity* entity = reinterpret_cast<GlEntity*>(parent.internalPointer());
+  GlEntity *entity = reinterpret_cast<GlEntity *>(parent.internalPointer());
 
   if (_scene->getMainGlGraph() == entity)
     return GRAPH_COMPOSITE_IDS.size();
 
-  if (dynamic_cast<GlComposite*>(entity) != nullptr)
-    return static_cast<GlComposite*>(entity)->getGlEntities().size();
+  if (dynamic_cast<GlComposite *>(entity) != nullptr)
+    return static_cast<GlComposite *>(entity)->getGlEntities().size();
 
   return 0;
 }
@@ -175,13 +172,13 @@ int SceneLayersModel::columnCount(const QModelIndex &) const {
 }
 
 QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
-  GlComposite* parent = nullptr;
-  GlEntity* entity = nullptr;
-  GlLayer* layer = nullptr;
+  GlComposite *parent = nullptr;
+  GlEntity *entity = nullptr;
+  GlLayer *layer = nullptr;
 
   if (GRAPH_COMPOSITE_IDS.contains(index.internalId())) {
     quint32 id = index.internalId();
-    GlGraphRenderingParameters& parameters = _scene->getMainGlGraph()->getRenderingParameters();
+    GlGraphRenderingParameters &parameters = _scene->getMainGlGraph()->getRenderingParameters();
     QString display;
     int stencil = NO_STENCIL;
     bool visible = false;
@@ -190,28 +187,23 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
       display = trUtf8("Nodes");
       stencil = parameters.nodesStencil();
       visible = parameters.displayNodes();
-    }
-    else if (id == EDGES_ID) {
+    } else if (id == EDGES_ID) {
       display = trUtf8("Edges");
       stencil = parameters.edgesStencil();
       visible = parameters.displayEdges();
-    }
-    else if (id == META_NODES_ID) {
+    } else if (id == META_NODES_ID) {
       display = trUtf8("Meta nodes content");
       stencil = parameters.metaNodesStencil();
       visible = parameters.displayMetaNodes();
-    }
-    else if (id == META_NODE_LABELS_ID) {
+    } else if (id == META_NODE_LABELS_ID) {
       display = trUtf8("Meta node content labels");
       stencil = parameters.metaNodesLabelsStencil();
       visible = parameters.displayMetaNodesLabels();
-    }
-    else if (id == NODE_LABELS_ID) {
+    } else if (id == NODE_LABELS_ID) {
       display = trUtf8("Node labels");
       stencil = parameters.nodesLabelsStencil();
       visible = parameters.displayNodesLabels();
-    }
-    else if (id == EDGE_LABELS_ID) {
+    } else if (id == EDGE_LABELS_ID) {
       display = trUtf8("Edge labels");
       stencil = parameters.edgesLabelsStencil();
       visible = parameters.displayEdgesLabels();
@@ -232,10 +224,9 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
   }
 
   if (!index.parent().isValid()) {
-    layer = reinterpret_cast<GlLayer*>(index.internalPointer());
-  }
-  else {
-    entity = reinterpret_cast<GlEntity*>(index.internalPointer());
+    layer = reinterpret_cast<GlLayer *>(index.internalPointer());
+  } else {
+    entity = reinterpret_cast<GlEntity *>(index.internalPointer());
     parent = entity->getParent();
   }
 
@@ -243,9 +234,9 @@ QVariant SceneLayersModel::data(const QModelIndex &index, int role) const {
     if (layer != nullptr)
       return layer->getName().c_str();
 
-    std::map<std::string, GlEntity*> siblings = parent->getGlEntities();
+    std::map<std::string, GlEntity *> siblings = parent->getGlEntities();
 
-    for(std::map<std::string, GlEntity*>::iterator it = siblings.begin(); it != siblings.end(); ++it) {
+    for (std::map<std::string, GlEntity *>::iterator it = siblings.begin(); it != siblings.end(); ++it) {
       if (it->second == entity)
         return it->first.c_str();
     }
@@ -286,7 +277,7 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
 
   if (GRAPH_COMPOSITE_IDS.contains(index.internalId())) {
     quint32 id = index.internalId();
-    GlGraphRenderingParameters& p = _scene->getMainGlGraph()->getRenderingParameters();
+    GlGraphRenderingParameters &p = _scene->getMainGlGraph()->getRenderingParameters();
 
     if (index.column() == 1) {
       bool visible = value.value<int>() == (int)(Qt::Checked);
@@ -303,8 +294,7 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
         p.setDisplayEdgesLabels(visible);
       else if (id == META_NODE_LABELS_ID)
         p.setDisplayMetaNodesLabels(visible);
-    }
-    else if (index.column() == 2) {
+    } else if (index.column() == 2) {
       int stencil = (value.value<int>() == (int)(Qt::Checked) ? FULL_STENCIL : NO_STENCIL);
 
       if (id == NODES_ID)
@@ -325,14 +315,13 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
     return true;
   }
 
-  GlEntity* entity = nullptr;
-  GlLayer* layer = nullptr;
+  GlEntity *entity = nullptr;
+  GlLayer *layer = nullptr;
 
   if (!index.parent().isValid()) {
-    layer = reinterpret_cast<GlLayer*>(index.internalPointer());
-  }
-  else
-    entity = reinterpret_cast<GlEntity*>(index.internalPointer());
+    layer = reinterpret_cast<GlLayer *>(index.internalPointer());
+  } else
+    entity = reinterpret_cast<GlEntity *>(index.internalPointer());
 
   bool val = value.value<int>() == (int)Qt::Checked;
 
@@ -342,8 +331,7 @@ bool SceneLayersModel::setData(const QModelIndex &index, const QVariant &value, 
 
     if (entity)
       entity->setVisible(val);
-  }
-  else if (index.column() == 2 && entity)
+  } else if (index.column() == 2 && entity)
     entity->setStencil(val ? FULL_STENCIL : 0xFFFF);
 
   emit drawNeeded(_scene);
@@ -365,7 +353,7 @@ QVariant SceneLayersModel::headerData(int section, Qt::Orientation orientation, 
       return Qt::AlignCenter;
   }
 
-  return TulipModel::headerData(section,orientation,role);
+  return TulipModel::headerData(section, orientation, role);
 }
 
 Qt::ItemFlags SceneLayersModel::flags(const QModelIndex &index) const {
@@ -395,7 +383,7 @@ void SceneLayersModel::treatEvent(const Event &e) {
       if (glle->getType() == GlLayerEvent::ENTITY_REMOVED_FROM_LAYER) {
         QModelIndexList persistentIndexes = persistentIndexList();
 
-        for (int i = 0 ; i < persistentIndexes.size() ; ++i) {
+        for (int i = 0; i < persistentIndexes.size(); ++i) {
           if (persistentIndexes.at(i).internalPointer() == glle->getGlEntity()) {
             changePersistentIndex(persistentIndexes.at(i), QModelIndex());
             break;
@@ -404,9 +392,6 @@ void SceneLayersModel::treatEvent(const Event &e) {
       }
 
       emit layoutChanged();
-
     }
   }
 }
-
-

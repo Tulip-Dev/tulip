@@ -48,7 +48,7 @@ void PythonPluginCreationDialog::validateForm() {
     return;
   }
 
-  QString moduleName = _ui->pluginFileName->text().mid(_ui->pluginFileName->text().lastIndexOf("/")+1);
+  QString moduleName = _ui->pluginFileName->text().mid(_ui->pluginFileName->text().lastIndexOf("/") + 1);
   moduleName = moduleName.mid(0, moduleName.length() - 3);
 
   if (moduleName.at(0).isNumber()) {
@@ -103,7 +103,7 @@ void PythonPluginCreationDialog::validateForm() {
 }
 
 void PythonPluginCreationDialog::selectPluginSourceFile() {
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source file"),"","Python script (*.py)");
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Set Plugin source file"), "", "Python script (*.py)");
 
   if (fileName.isEmpty())
     return;
@@ -149,4 +149,3 @@ QString PythonPluginCreationDialog::getPluginRelease() const {
 QString PythonPluginCreationDialog::getPluginGroup() const {
   return _ui->group->text();
 }
-

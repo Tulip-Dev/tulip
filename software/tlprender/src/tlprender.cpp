@@ -58,15 +58,10 @@
 using namespace std;
 using namespace tlp;
 using namespace tlprender;
-//EXIT CODES
-enum EXIT_CODES {LAYOUT_NOTFOUND = 2,
-                 LAYOUT_ERROR,
-                 IMAGE_ERROR,
-                 HTML_ERROR,
-                 OPENGL_ERROR
-                };
+// EXIT CODES
+enum EXIT_CODES { LAYOUT_NOTFOUND = 2, LAYOUT_ERROR, IMAGE_ERROR, HTML_ERROR, OPENGL_ERROR };
 //
-static const string DEFAULT_FILENAME("tlprender"); //default filename for output
+static const string DEFAULT_FILENAME("tlprender"); // default filename for output
 
 static string programName;
 static string graphFile;
@@ -79,7 +74,7 @@ static bool saveTLP(false);
 static string saveTLPFile;
 static string importPluginName("TLP Import");
 static string filename(DEFAULT_FILENAME);
-static string imageFormat(tlprender::SUPPORTED_IMAGE_FORMATS[0]); //default image format
+static string imageFormat(tlprender::SUPPORTED_IMAGE_FORMATS[0]); // default image format
 static tlprender::ImageWriter *imageWriter(nullptr);
 static int width(640), height(480);
 
@@ -88,19 +83,19 @@ static GLfloat *buffer;
 
 static void exitManager(void);
 static void parseCommandLine(int, char **);
-static void help() __attribute__ ((noreturn));
+static void help() __attribute__((noreturn));
 
 //==============================================================================
 class GLOffscreen {
 private:
-  int width,height;
+  int width, height;
   OSMesaContext osContext;
   GLubyte *buffer;
+
 public:
   GlScene scene;
-  //GlGraph *glgraph;
-  GLOffscreen(const int width=640, const int height=480):
-    width(width), height(height) {
+  // GlGraph *glgraph;
+  GLOffscreen(const int width = 640, const int height = 480) : width(width), height(height) {
     Vector<int, 4> viewport;
     viewport[0] = 0;
     viewport[1] = 0;
@@ -108,7 +103,7 @@ public:
     viewport[3] = height;
     scene.setViewport(viewport);
 
-    buffer = new GLubyte [width * height * 4];
+    buffer = new GLubyte[width * height * 4];
     osContext = OSMesaCreateContext(OSMESA_RGBA, nullptr);
 
     if (!osContext) {
@@ -124,7 +119,7 @@ public:
 
   virtual ~GLOffscreen() {
     OSMesaDestroyContext(osContext);
-    delete [] buffer;
+    delete[] buffer;
   }
   void makeCurrent() {
     //    cerr << __PRETTY_FUNCTION__ << endl;
@@ -142,18 +137,22 @@ public:
     makeCurrent();
   }
 
-  void setDoubleBuffering(bool b) {}
+  void setDoubleBuffering(bool b) {
+  }
 
   bool timerIsActive() {
     return false;
   }
-  int timerStart(int msec, bool sshot=false) {
+  int timerStart(int msec, bool sshot = false) {
     return 0;
   }
-  void timerStop() {}
+  void timerStop() {
+  }
 
-  void mPaint() {}
-  void outputSetText(const string &s) {}
+  void mPaint() {
+  }
+  void outputSetText(const string &s) {
+  }
   const string outputGetText() {
     return string("");
   }
@@ -161,37 +160,32 @@ public:
   const GLubyte *getImageBuffer() const {
     return buffer;
   }
-
 };
 //==============================================================================
-//a pluginLoader with less output than PluginLoaderTxt
-struct MyPluginLoader:public PluginLoader {
+// a pluginLoader with less output than PluginLoaderTxt
+struct MyPluginLoader : public PluginLoader {
 public:
-  virtual void start(const std::string &path,const std::string &type) {
+  virtual void start(const std::string &path, const std::string &type) {
     cout << "Loading " << type << " plugins: ";
   }
-  virtual void loading(const std::string &filename) {}
-  virtual void loaded(const std::string &name,
-                      const std::string &author,
-                      const std::string &date,
-                      const std::string &info,
-                      const std::string &release,
-                      const std::string &version,
-                      const std::list <Dependency> &deps) {
+  virtual void loading(const std::string &filename) {
+  }
+  virtual void loaded(const std::string &name, const std::string &author, const std::string &date, const std::string &info,
+                      const std::string &release, const std::string &version, const std::list<Dependency> &deps) {
     cout << "[" << name << "]";
   }
-  virtual void aborted(const std::string &filename,const  std::string &erreurmsg) {
+  virtual void aborted(const std::string &filename, const std::string &erreurmsg) {
     //    cout << "Error loading " << filename << ": " << erreurmsg << endl;
   }
-  virtual void finished(bool state,const std::string &msg) {
+  virtual void finished(bool state, const std::string &msg) {
     cout << endl << endl;
     // else cout << "Loading error " << msg << endl;
   }
 };
 
-//load software side plugins
+// load software side plugins
 static void loadGlyphPlugins(PluginLoader *plug) {
-  string getEnvVar=tlp::TulipLibDir + "/tlp/";
+  string getEnvVar = tlp::TulipLibDir + "/tlp/";
 
   tlp::loadPluginsFromDir(getEnvVar + "glyphs", "Glyph", plug);
 }
@@ -200,14 +194,13 @@ static void loadGlyphPlugins(PluginLoader *plug) {
 void importGraph(const string &filename, const string &importPluginName, GlScene *glScene) {
   DataSet dataSet;
 
-  StructDef parameter=
-    ImportModulelISTER::getPluginParameters(importPluginName);
-  Iterator<pair<string,string> > *itP=parameter.getField();
+  StructDef parameter = ImportModulelISTER::getPluginParameters(importPluginName);
+  Iterator<pair<string, string>> *itP = parameter.getField();
 
   for (; itP->hasNext();) {
-    pair<string,string> itp=itP->next();
+    pair<string, string> itp = itP->next();
 
-    if (itp.first=="file::filename") {
+    if (itp.first == "file::filename") {
       dataSet.set("file::filename", filename);
       continue;
     }
@@ -215,42 +208,40 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
 
   delete itP;
 
-  //Graph *newGraph=tlp::importGraph(importPluginName, dataSet, nullptr);
-  //Graph *newGraph=tlp::loadGraph(filename);
+  // Graph *newGraph=tlp::importGraph(importPluginName, dataSet, nullptr);
+  // Graph *newGraph=tlp::loadGraph(filename);
   Graph *newGraph = tlp::newGraph();
-  tlp::importGraph(importPluginName, dataSet, nullptr,newGraph);
+  tlp::importGraph(importPluginName, dataSet, nullptr, newGraph);
 
-  if (newGraph!=nullptr) {
+  if (newGraph != nullptr) {
     string sceneData;
     dataSet.get<std::string>("scene", sceneData);
 
-    if(!sceneData.empty()) {
-      string dir=TulipLibDir;
-      string name="TulipLibDir";
+    if (!sceneData.empty()) {
+      string dir = TulipLibDir;
+      string name = "TulipLibDir";
 
-      while(sceneData.find(name)!=-1) {
-        int pos=sceneData.find(name);
-        sceneData.replace(pos,name.length(),dir);
+      while (sceneData.find(name) != -1) {
+        int pos = sceneData.find(name);
+        sceneData.replace(pos, name.length(), dir);
       }
 
-      glScene->setWithXML(sceneData,newGraph);
-    }
-    else {
-      GlGraphComposite* glGraphComposite = new GlGraphComposite(newGraph);
+      glScene->setWithXML(sceneData, newGraph);
+    } else {
+      GlGraphComposite *glGraphComposite = new GlGraphComposite(newGraph);
       GlLayer *layer = new GlLayer("Main");
       glScene->addLayer(layer);
-      glScene->addGlGraphCompositeInfo(glScene->getLayer("Main"),glGraphComposite);
-      glScene->getLayer("Main")->addGlEntity(glGraphComposite,"graph");
+      glScene->addGlGraphCompositeInfo(glScene->getLayer("Main"), glGraphComposite);
+      glScene->getLayer("Main")->addGlEntity(glGraphComposite, "graph");
 
-      LayoutProperty *layout =
-        newGraph->getProperty<LayoutProperty>("viewLayout");
+      LayoutProperty *layout = newGraph->getProperty<LayoutProperty>("viewLayout");
       layout->resetBoundingBox();
       layout->center();
       layout->notifyObservers();
     }
 
     glScene->centerScene();
-    GlGraphRenderingParameters param =glScene->getGlGraphComposite()->getRenderingParameters();
+    GlGraphRenderingParameters param = glScene->getGlGraphComposite()->getRenderingParameters();
     DataSet glGraphData;
 
     if (dataSet.get<DataSet>("displaying", glGraphData)) {
@@ -260,7 +251,7 @@ void importGraph(const string &filename, const string &importPluginName, GlScene
   }
 }
 /***************************************************************************************************/
-int main (int argc, char **argv) {
+int main(int argc, char **argv) {
 
   atexit(exitManager);
 
@@ -268,17 +259,17 @@ int main (int argc, char **argv) {
 
   MyPluginLoader plug;
   tlp::initTulipLib();
-  tlp::loadPlugins(&plug);   // library side plugins
-  loadGlyphPlugins(&plug);   // software side plugins, i.e. glyphs
+  tlp::loadPlugins(&plug); // library side plugins
+  loadGlyphPlugins(&plug); // software side plugins, i.e. glyphs
 
   GLOffscreen glOffscreen(width, height);
 
   importGraph(graphFile, importPluginName, &glOffscreen.scene);
 
-  Graph *graph=glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph();
+  Graph *graph = glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph();
 
   if (layoutSpecified) {
-    bool resultBool=false;
+    bool resultBool = false;
     string errorMsg;
 
     if (LayoutProperty::factory->pluginExists(layoutName)) {
@@ -288,15 +279,13 @@ int main (int argc, char **argv) {
       if (!resultBool) {
         cerr << programName << ": layout error, reason: " << errorMsg << endl;
         exit(LAYOUT_ERROR);
-      }
-      else {
+      } else {
         myLayout->resetBoundingBox();
         myLayout->center();
         myLayout->notifyObservers();
         glOffscreen.scene.centerScene();
       }
-    }
-    else {
+    } else {
       cerr << programName << ": cannot find layout \"" << layoutName << "\"" << endl;
       exit(LAYOUT_NOTFOUND);
     }
@@ -316,29 +305,29 @@ int main (int argc, char **argv) {
   glOffscreen.setupOpenGlContext();
   glOffscreen.updateGL();
 
-  //write image
+  // write image
   imageWriter = tlprender::ImageWriter::getImageWriter(imageFormat, glOffscreen.getImageBuffer(), width, height);
 
   if (imageWriter != nullptr) {
     imageWriter->setSoftware(programName);
     imageWriter->setSource(graphFile);
 
-    if (layoutSpecified) imageWriter->setLayout(layoutName);
+    if (layoutSpecified)
+      imageWriter->setLayout(layoutName);
 
-    ofstream of((filename + "." + imageFormat).c_str(), ios::out|ios::trunc|ios::binary);
+    ofstream of((filename + "." + imageFormat).c_str(), ios::out | ios::trunc | ios::binary);
     imageWriter->writeImage(of);
     of.flush();
     of.close();
     delete imageWriter;
-  }
-  else {
+  } else {
     cerr << programName << ": No image written to disk: couldn't get a writer for format " << imageFormat << endl;
     exit(IMAGE_ERROR);
   }
 
-  //create HTML map
+  // create HTML map
   if (outputMap) {
-    ofstream of((filename+".html").c_str(), ios::out | ios::trunc);
+    ofstream of((filename + ".html").c_str(), ios::out | ios::trunc);
     buffer = new GLfloat[BUFFERSIZE];
     glFeedbackBuffer(BUFFERSIZE, GL_3D, buffer);
     glRenderMode(GL_FEEDBACK);
@@ -353,24 +342,23 @@ int main (int argc, char **argv) {
     if (size < 0) {
       cerr << programName << ": Problem during Feedback mode. Cannot compute HTML page" << endl;
       exit(HTML_ERROR);
-    }
-    else {
+    } else {
       StringProperty *hrefp = glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("href");
       StringProperty *altp = glOffscreen.scene.getGlGraphComposite()->getInputData()->getGraph()->getProperty<StringProperty>("alt");
 
-      GlHTMLFeedBackBuilder builder(false,filename+"."+imageFormat,hrefp,altp);
-      GlFeedBackRecorder recorder(&builder,3);
+      GlHTMLFeedBackBuilder builder(false, filename + "." + imageFormat, hrefp, altp);
+      GlFeedBackRecorder recorder(&builder, 3);
       Vector<int, 4> viewport;
       viewport[0] = 0;
       viewport[1] = 0;
       viewport[2] = width;
       viewport[3] = height;
 
-      builder.begin(viewport,nullptr,0,0);
-      recorder.record(false,size,buffer,viewport);
+      builder.begin(viewport, nullptr, 0, 0);
+      recorder.record(false, size, buffer, viewport);
       string str;
       builder.getResult(&str);
-      of << str ;
+      of << str;
     }
 
     of.close();
@@ -380,8 +368,7 @@ int main (int argc, char **argv) {
   if (saveTLP) {
     DataSet dataSet;
     ostream *os = new ofstream(saveTLPFile.c_str());
-    StructDef parameter =
-      ExportModuleLister::getPluginParameters("TLP Export");
+    StructDef parameter = ExportModuleLister::getPluginParameters("TLP Export");
 
     dataSet.set("displaying", glOffscreen.scene.getGlGraphComposite()->getRenderingParameters().getParameters());
 
@@ -404,31 +391,30 @@ void exitManager() {
  * command line parser and help() functions below this line, nothing else should be added after
  */
 void parseCommandLine(int argc, char **argv) {
-  static struct option long_options[] = {
-    {"format", 1, 0, 'f'},
-    {"help", 0, 0, 'h'},  //shows help
-    {"height", 1, 0, 0},  //height, in pixel
-    {"layout", 1, 0, 'l'},  //a layout to apply
-    {"no-htmlbody", 0 , 0, 0},          //do not ouput <html><body>, only <map>...</map>
-    {"no-map", 0, 0, 0},        //produce only an image, no html map
-    {"output", 1, 0, 'o'},  //output File
-    {"save", 1, 0, 's'},        //save graph in tlp FILE; required argument
-    {"type", 1, 0, 't'},  //format of imported file (tlp, GML, etc...)
-    {"width", 1, 0, 0},   //width, in pixels
-    {0,0,0,0}
-  };
+  static struct option long_options[] = {{"format", 1, 0, 'f'},
+                                         {"help", 0, 0, 'h'},      // shows help
+                                         {"height", 1, 0, 0},      // height, in pixel
+                                         {"layout", 1, 0, 'l'},    // a layout to apply
+                                         {"no-htmlbody", 0, 0, 0}, // do not ouput <html><body>, only <map>...</map>
+                                         {"no-map", 0, 0, 0},      // produce only an image, no html map
+                                         {"output", 1, 0, 'o'},    // output File
+                                         {"save", 1, 0, 's'},      // save graph in tlp FILE; required argument
+                                         {"type", 1, 0, 't'},      // format of imported file (tlp, GML, etc...)
+                                         {"width", 1, 0, 0},       // width, in pixels
+                                         {0, 0, 0, 0}};
 
-  //variables init
+  // variables init
   programName = string(basename(argv[0]));
 
-  if (argc < 2) help();
+  if (argc < 2)
+    help();
 
   char *endptr;
   char c;
-  int option_index=0;
+  int option_index = 0;
 
-  while ((c=getopt_long(argc, argv, "f:hl:o:s:t:", long_options, &option_index)) != -1) {
-    switch(c) {
+  while ((c = getopt_long(argc, argv, "f:hl:o:s:t:", long_options, &option_index)) != -1) {
+    switch (c) {
     case 0: {
       string option = long_options[option_index].name;
 
@@ -439,17 +425,17 @@ void parseCommandLine(int argc, char **argv) {
           cerr << programName << ": invalid width!" << endl;
           help();
         }
-      }
-      else if (option == "height") {
+      } else if (option == "height") {
         height = strtol(optarg, &endptr, 10);
 
         if ((*endptr != '\0') || (height < 1)) {
           cerr << programName << ": invalid height!" << endl;
           help();
         }
-      }
-      else if (option == "no-htmlbody") outputHtmlBody = false;
-      else if (option == "no-map") outputMap = false;
+      } else if (option == "no-htmlbody")
+        outputHtmlBody = false;
+      else if (option == "no-map")
+        outputMap = false;
 
       break;
     }
@@ -458,17 +444,19 @@ void parseCommandLine(int argc, char **argv) {
       imageFormat = optarg;
 #ifdef HAVE_LIBPNG
 
-      if (imageFormat == "png");
+      if (imageFormat == "png")
+        ;
       else
 #endif
 #ifdef HAVE_LIBJPEG
-        if (imageFormat == "jpeg");
-        else
+          if (imageFormat == "jpeg")
+        ;
+      else
 #endif
-        {
-          cerr << "Error: unsupported image format: " << imageFormat << endl;
-          help();
-        }
+      {
+        cerr << "Error: unsupported image format: " << imageFormat << endl;
+        help();
+      }
 
       break;
 
@@ -504,8 +492,7 @@ void parseCommandLine(int argc, char **argv) {
 
   if (optind < argc) {
     graphFile = argv[optind];
-  }
-  else {
+  } else {
     cerr << programName << ": no file specified!" << endl;
     help();
   }
@@ -528,7 +515,7 @@ void help() {
   cout << "  -f, --format=F     set image format to F" << endl;
   cout << "                     supported: [" << tlprender::SUPPORTED_IMAGE_FORMATS[0] << "] ";
 
-  for (int i=1; tlprender::SUPPORTED_IMAGE_FORMATS[i] != ""; ++i)
+  for (int i = 1; tlprender::SUPPORTED_IMAGE_FORMATS[i] != ""; ++i)
     cout << tlprender::SUPPORTED_IMAGE_FORMATS[i] << " ";
 
   cout << endl;

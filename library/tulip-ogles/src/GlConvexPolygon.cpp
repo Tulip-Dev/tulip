@@ -41,16 +41,17 @@
 using namespace tlp;
 using namespace std;
 
-GlConvexPolygon::GlConvexPolygon() :
-  _filled(true), _outlined(true), _fillColor(Color::Red), _outlineColor(Color::Black), _outlineWidth(1.f) {}
+GlConvexPolygon::GlConvexPolygon() : _filled(true), _outlined(true), _fillColor(Color::Red), _outlineColor(Color::Black), _outlineWidth(1.f) {
+}
 
-GlConvexPolygon::GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor) :
-  _filled(true), _outlined(false), _fillColor(fillColor), _outlineColor(Color::Black), _outlineWidth(1.f) {
+GlConvexPolygon::GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor)
+    : _filled(true), _outlined(false), _fillColor(fillColor), _outlineColor(Color::Black), _outlineWidth(1.f) {
   setPolygonContour(contour);
 }
 
-GlConvexPolygon::GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor, const tlp::Color &outlineColor, const float outlineWidth) :
-  _filled(true), _outlined(true), _fillColor(fillColor), _outlineColor(outlineColor), _outlineWidth(outlineWidth) {
+GlConvexPolygon::GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor, const tlp::Color &outlineColor,
+                                 const float outlineWidth)
+    : _filled(true), _outlined(true), _fillColor(fillColor), _outlineColor(outlineColor), _outlineWidth(outlineWidth) {
   setPolygonContour(contour);
 }
 
@@ -77,7 +78,7 @@ void GlConvexPolygon::uploadRenderingData() {
   _boundingBox = BoundingBox();
   polygonVertices = _contour;
   vector<Vec2f> projectedVertices;
-  for(size_t i = 0 ; i < _contour.size() ; ++i) {
+  for (size_t i = 0; i < _contour.size(); ++i) {
     Coord p = Coord(invTransformMatrix * _contour[i]);
     projectedVertices.push_back(Vec2f(p[0], p[1]));
     _boundingBox.expand(_contour[i]);
@@ -91,10 +92,10 @@ void GlConvexPolygon::uploadRenderingData() {
   Coord centroid = computePolygonCentroid(polygonVertices);
   polygonVertices.insert(polygonVertices.begin(), centroid);
 
-  for (size_t i = 0 ; i < _contour.size()-1 ; ++i) {
+  for (size_t i = 0; i < _contour.size() - 1; ++i) {
     polygonIndices.push_back(0);
-    polygonIndices.push_back(i+1);
-    polygonIndices.push_back(i+2);
+    polygonIndices.push_back(i + 1);
+    polygonIndices.push_back(i + 2);
   }
   polygonIndices.push_back(0);
   polygonIndices.push_back(_contour.size());
@@ -105,9 +106,11 @@ void GlConvexPolygon::uploadRenderingData() {
 
   vector<float> polygonData;
 
-  for(size_t i = 0 ; i < polygonVertices.size() ; ++i) {
+  for (size_t i = 0; i < polygonVertices.size(); ++i) {
     addTlpVecToVecFloat(polygonVertices[i], polygonData);
-    addTlpVecToVecFloat(Vec2f((polygonVertices[i][0] - _boundingBox[0][0])/_boundingBox.width(), (polygonVertices[i][1] - _boundingBox[0][1])/_boundingBox.height()), polygonData);
+    addTlpVecToVecFloat(Vec2f((polygonVertices[i][0] - _boundingBox[0][0]) / _boundingBox.width(),
+                              (polygonVertices[i][1] - _boundingBox[0][1]) / _boundingBox.height()),
+                        polygonData);
   }
 
   if (!_polygonDataBuffer) {
@@ -172,22 +175,19 @@ void GlConvexPolygon::draw(const Camera &camera, const Light &, bool pickingMode
       shader->setUniformColor("u_color", _pickingColor);
     }
     glLineWidth(_outlineWidth);
-    glDrawArrays(GL_LINE_LOOP, 1, _nbVertices-1);
+    glDrawArrays(GL_LINE_LOOP, 1, _nbVertices - 1);
   }
   _polygonDataBuffer->release();
 
   GlTextureManager::instance()->unbindTexture(_texture);
 
   shader->desactivate();
-
 }
 
 void GlConvexPolygon::translate(const Coord &move) {
-  for (size_t i = 0 ; i < _contour.size() ; ++i) {
+  for (size_t i = 0; i < _contour.size(); ++i) {
     _contour[i] += move;
   }
   setPolygonContour(_contour);
   notifyModified();
 }
-
-

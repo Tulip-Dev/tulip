@@ -32,9 +32,8 @@ namespace pocore {
 
 class TulipGraphDimension : public DimensionBase {
 
-public :
-
-  TulipGraphDimension(tlp::Graph *graph, const std::string& dimensionName);
+public:
+  TulipGraphDimension(tlp::Graph *graph, const std::string &dimensionName);
   ~TulipGraphDimension();
 
   unsigned int numberOfItems() const;
@@ -56,10 +55,8 @@ public :
   }
   void updateNodesRank();
 
-private :
-
-  template <typename PROPERTY>
-  double getNodeValue(const tlp::node n) const;
+private:
+  template <typename PROPERTY> double getNodeValue(const tlp::node n) const;
 
   tlp::Graph *graph;
   std::string dimName;
@@ -68,9 +65,7 @@ private :
 
   TulipNodeMetricSorter *nodeSorter;
   static std::map<tlp::Graph *, unsigned int> graphDimensionsMap;
-
 };
-
 }
 
 #endif /* TULIPGRAPHDIMENSION_H_ */

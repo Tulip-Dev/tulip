@@ -44,10 +44,9 @@ namespace tlp {
 class TLP_GLES_SCOPE GlBuffer {
 
 public:
+  enum BufferType { VertexBuffer, IndexBuffer };
 
-  enum BufferType {VertexBuffer, IndexBuffer};
-
-  enum UsagePattern {StreamDraw, StaticDraw, DynamicDraw};
+  enum UsagePattern { StreamDraw, StaticDraw, DynamicDraw };
 
   GlBuffer(BufferType type, UsagePattern usagePattern = StaticDraw);
   ~GlBuffer();
@@ -73,8 +72,7 @@ public:
   void allocate(const std::vector<unsigned int> &data);
   void allocate(const std::vector<unsigned short> &data);
 
-  template <unsigned int SIZE>
-  void allocate(const std::vector<tlp::Vector<float, SIZE> >&data) {
+  template <unsigned int SIZE> void allocate(const std::vector<tlp::Vector<float, SIZE>> &data) {
     allocate(data.size() * SIZE * sizeof(float), &data[0]);
   }
 
@@ -93,13 +91,11 @@ public:
   void write(const std::vector<unsigned int> &data);
   void write(const std::vector<unsigned short> &data);
 
-  template <unsigned int SIZE>
-  void write(unsigned int offset, const std::vector<tlp::Vector<float, SIZE> >&data) {
+  template <unsigned int SIZE> void write(unsigned int offset, const std::vector<tlp::Vector<float, SIZE>> &data) {
     write(offset, data.size() * SIZE * sizeof(float), &data[0]);
   }
 
-  template <unsigned int SIZE>
-  void write(const std::vector<tlp::Vector<float, SIZE> >&data) {
+  template <unsigned int SIZE> void write(const std::vector<tlp::Vector<float, SIZE>> &data) {
     write(data.size() * SIZE * sizeof(float), &data[0]);
   }
 
@@ -109,11 +105,9 @@ public:
   bool isBound() const;
   void release() const;
 
-
   static void release(BufferType type);
 
 private:
-
   BufferType _type;
   UsagePattern _usagePattern;
   GLenum _target;
@@ -122,9 +116,7 @@ private:
   bool _allocated;
 
   static std::map<BufferType, GLuint> _currentBoundBufferId;
-
 };
-
 }
 
 #endif // GLBUFFER_H

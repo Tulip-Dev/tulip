@@ -30,26 +30,23 @@
 
 using namespace tlp;
 
-View::View()
-  :_currentInteractor(nullptr), _graph(nullptr) {
+View::View() : _currentInteractor(nullptr), _graph(nullptr) {
 }
 
 View::~View() {
-  foreach(Interactor* i, _interactors) {
-    delete i;
-  }
+  foreach (Interactor *i, _interactors) { delete i; }
 }
 
-QList<Interactor*> View::interactors() const {
+QList<Interactor *> View::interactors() const {
   return _interactors;
 }
 void View::setInteractors(const QList<tlp::Interactor *> &inters) {
   _interactors = inters;
-  foreach(Interactor* i,inters)
-  i->setView(this);
+  foreach (Interactor *i, inters)
+    i->setView(this);
   interactorsInstalled(inters);
 }
-Interactor* View::currentInteractor() const {
+Interactor *View::currentInteractor() const {
   return _currentInteractor;
 }
 void View::setCurrentInteractor(tlp::Interactor *i) {
@@ -63,17 +60,18 @@ void View::setCurrentInteractor(tlp::Interactor *i) {
   _currentInteractor = i;
   currentInteractorChanged(i);
 
-  //We need a refresh here to clear last interactor displayed and init the next one
+  // We need a refresh here to clear last interactor displayed and init the next one
   refresh();
 }
 void View::currentInteractorChanged(tlp::Interactor *i) {
   i->install(graphicsView());
 }
 
-void View::showContextMenu(const QPoint &point,const QPointF &scenePoint) {
+void View::showContextMenu(const QPoint &point, const QPointF &scenePoint) {
   QMenu menu;
-  menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
-  fillContextMenu(&menu,scenePoint);
+  menu.setStyleSheet("QMenu::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), "
+                     "stop:1 rgb(60, 60, 60))}");
+  fillContextMenu(&menu, scenePoint);
 
   if (!menu.actions().empty()) {
     menu.move(point);
@@ -85,7 +83,7 @@ void View::undoCallback() {
   centerView();
 }
 
-Graph* View::graph() const {
+Graph *View::graph() const {
   return _graph;
 }
 void View::setGraph(tlp::Graph *g) {
@@ -114,12 +112,12 @@ void View::setGraph(tlp::Graph *g) {
     centerView();
 }
 
-void View::treatEvent(const Event& ev) {
-  const GraphEvent *gEv = dynamic_cast<const GraphEvent*>(&ev);
+void View::treatEvent(const Event &ev) {
+  const GraphEvent *gEv = dynamic_cast<const GraphEvent *>(&ev);
 
   if (ev.type() == Event::TLP_DELETE && ev.sender() == _graph) {
 #ifndef NDEBUG
-    Graph* old = _graph;
+    Graph *old = _graph;
 #endif // NDEBUG
 
     if (_graph->getRoot() == _graph)
@@ -134,8 +132,7 @@ void View::treatEvent(const Event& ev) {
     }
 
 #endif // NDEBUG
-  }
-  else if (gEv && gEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
+  } else if (gEv && gEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY) {
     QString propName = gEv->getPropertyName().c_str();
 
     if (propName.startsWith("view")) {
@@ -144,8 +141,8 @@ void View::treatEvent(const Event& ev) {
   }
 }
 
-QList<QWidget*> View::configurationWidgets() const {
-  return QList<QWidget*>();
+QList<QWidget *> View::configurationWidgets() const {
+  return QList<QWidget *>();
 }
 
 QString View::configurationWidgetsStyleSheet() const {
@@ -160,18 +157,18 @@ void View::interactorsInstalled(const QList<tlp::Interactor *> &) {
   emit interactorsChanged();
 }
 
-void View::centerView(bool/* graphChanged */) {
+void View::centerView(bool /* graphChanged */) {
   draw();
 }
 
 /*
   Triggers
   */
-QSet<tlp::Observable*> View::triggers() const {
+QSet<tlp::Observable *> View::triggers() const {
   return _triggers;
 }
 
-void View::removeRedrawTrigger(tlp::Observable* obs) {
+void View::removeRedrawTrigger(tlp::Observable *obs) {
   if (_triggers.remove(obs))
     obs->removeObserver(this);
 }
@@ -180,7 +177,7 @@ void View::emitDrawNeededSignal() {
   emit drawNeeded();
 }
 
-void View::addRedrawTrigger(tlp::Observable* obs) {
+void View::addRedrawTrigger(tlp::Observable *obs) {
   if (_triggers.contains(obs) || obs == nullptr)
     return;
 
@@ -189,7 +186,7 @@ void View::addRedrawTrigger(tlp::Observable* obs) {
 }
 
 void View::treatEvents(const std::vector<Event> &events) {
-  for(unsigned int i=0; i<events.size(); ++i) {
+  for (unsigned int i = 0; i < events.size(); ++i) {
     Event e = events[i];
 
     // ensure redraw trigger is removed from the triggers set when it is deleted
@@ -204,12 +201,13 @@ void View::treatEvents(const std::vector<Event> &events) {
   }
 }
 
-QGraphicsItem* View::centralItem() const {
+QGraphicsItem *View::centralItem() const {
   return nullptr;
 }
 
 void View::clearRedrawTriggers() {
-  foreach(Observable* t, triggers()) removeRedrawTrigger(t);
+  foreach (Observable *t, triggers())
+    removeRedrawTrigger(t);
 }
 
 void View::applySettings() {

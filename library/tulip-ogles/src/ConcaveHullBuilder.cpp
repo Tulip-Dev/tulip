@@ -67,7 +67,7 @@ static Paths clipHulls(const Paths &hull1, const Paths &hull2, bool withHoles) {
     clip.Execute(ctUnion, sol);
 
     solution.clear();
-    for (int i = 0 ; i < sol.ChildCount() ; ++i) {
+    for (int i = 0; i < sol.ChildCount(); ++i) {
       solution.push_back(sol.Childs[i]->Contour);
     }
   }
@@ -78,22 +78,22 @@ static Paths clipHulls(const Paths &hull1, const Paths &hull2, bool withHoles) {
 static Paths buildHull(const vector<Paths> &polygonsToClip, bool withHoles) {
   vector<Paths> polygonsCp(polygonsToClip);
   while (polygonsCp.size() > 1) {
-    vector<Paths> tmp(polygonsCp.size()/2);
+    vector<Paths> tmp(polygonsCp.size() / 2);
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-    for (size_t i = 0 ; i < polygonsCp.size() ; i+=2) {
-      if (i+1 < polygonsCp.size())
-        tmp[i/2] = clipHulls(polygonsCp[i], polygonsCp[i+1], withHoles);
+    for (size_t i = 0; i < polygonsCp.size(); i += 2) {
+      if (i + 1 < polygonsCp.size())
+        tmp[i / 2] = clipHulls(polygonsCp[i], polygonsCp[i + 1], withHoles);
     }
-    if (polygonsCp.size()%2==1)
+    if (polygonsCp.size() % 2 == 1)
       tmp.push_back(polygonsCp.back());
     polygonsCp = tmp;
   }
   return polygonsCp.front();
 }
 
-static vector<vector<vector<Coord> > > getFinalHulls(const Paths &hull, float scaling, float z) {
+static vector<vector<vector<Coord>>> getFinalHulls(const Paths &hull, float scaling, float z) {
   Clipper clip;
   Paths solution;
   PolyTree sol;
@@ -102,18 +102,18 @@ static vector<vector<vector<Coord> > > getFinalHulls(const Paths &hull, float sc
   clip.AddPaths(hull, ptClip, true);
   clip.Execute(ctUnion, sol);
 
-  vector<vector<vector<Coord> > > ret;
-  for (int i = 0 ; i < sol.ChildCount() ; ++i) {
-    vector<vector<Coord> > c;
+  vector<vector<vector<Coord>>> ret;
+  for (int i = 0; i < sol.ChildCount(); ++i) {
+    vector<vector<Coord>> c;
     PolyNode *polyNode = sol.Childs[i];
     while (polyNode) {
       vector<Coord> contour;
-      for (size_t j = 0 ; j < polyNode->Contour.size() ; ++j) {
+      for (size_t j = 0; j < polyNode->Contour.size(); ++j) {
         contour.push_back(Coord(polyNode->Contour[j].X / scaling, polyNode->Contour[j].Y / scaling, z));
       }
       c.push_back(contour);
       polyNode = polyNode->GetNext();
-      if (i < sol.ChildCount() - 1 && polyNode == sol.Childs[i+1]) {
+      if (i < sol.ChildCount() - 1 && polyNode == sol.Childs[i + 1]) {
         polyNode = NULL;
       }
     }
@@ -122,7 +122,8 @@ static vector<vector<vector<Coord> > > getFinalHulls(const Paths &hull, float sc
   return ret;
 }
 
-ConcaveHullBuilder::ConcaveHullBuilder() : _scalingFactor(100.0f), _hullWithHoles(true), _z(-1.0f) {}
+ConcaveHullBuilder::ConcaveHullBuilder() : _scalingFactor(100.0f), _hullWithHoles(true), _z(-1.0f) {
+}
 
 void ConcaveHullBuilder::setScalingFactor(const float scalingFactor) {
   _scalingFactor = scalingFactor;
@@ -133,7 +134,7 @@ void ConcaveHullBuilder::setHullWithHoles(const bool hullWithHoles) {
 }
 
 void ConcaveHullBuilder::setHullZValue(const float z) {
-  _z  = z;
+  _z = z;
 }
 
 void ConcaveHullBuilder::addPolygon(const vector<Coord> &polygon) {
@@ -142,10 +143,10 @@ void ConcaveHullBuilder::addPolygon(const vector<Coord> &polygon) {
 
 void ConcaveHullBuilder::computeHulls() {
   std::vector<Paths> clipperPolygons;
-  for (size_t i = 0 ; i < _polygons.size() ; ++i) {
+  for (size_t i = 0; i < _polygons.size(); ++i) {
     Paths poly(1);
-    for (size_t j = 0 ; j < _polygons[i].size() ; ++j) {
-      poly[0].push_back(IntPoint(myRound(_polygons[i][j][0]*_scalingFactor), myRound(_polygons[i][j][1]*_scalingFactor)));
+    for (size_t j = 0; j < _polygons[i].size(); ++j) {
+      poly[0].push_back(IntPoint(myRound(_polygons[i][j][0] * _scalingFactor), myRound(_polygons[i][j][1] * _scalingFactor)));
     }
     clipperPolygons.push_back(poly);
   }
@@ -162,7 +163,7 @@ unsigned int ConcaveHullBuilder::nbComputedHulls() const {
   return _computedHulls.size();
 }
 
-const vector<vector<Coord> > &ConcaveHullBuilder::getHullWithHoles(const unsigned int hullId) const {
+const vector<vector<Coord>> &ConcaveHullBuilder::getHullWithHoles(const unsigned int hullId) const {
   return _computedHulls[hullId];
 }
 
@@ -170,7 +171,8 @@ const vector<Coord> &ConcaveHullBuilder::getHullOuterContour(const unsigned int 
   return _computedHulls[hullId][0];
 }
 
-static vector<Coord> genNodePolygon(node n, const tlp::LayoutProperty* viewLayout, const tlp::SizeProperty* viewSize, const tlp::IntegerProperty *viewShape, const float spacing) {
+static vector<Coord> genNodePolygon(node n, const tlp::LayoutProperty *viewLayout, const tlp::SizeProperty *viewSize,
+                                    const tlp::IntegerProperty *viewShape, const float spacing) {
 
   const Coord &nCoord = viewLayout->getNodeValue(n);
 
@@ -182,14 +184,14 @@ static vector<Coord> genNodePolygon(node n, const tlp::LayoutProperty* viewLayou
   float startAngle = 0;
   float delta = (2.0f * M_PI) / numberOfSides;
 
-  for (int i = 0 ; i < numberOfSides ; ++i) {
+  for (int i = 0; i < numberOfSides; ++i) {
     float deltaX, deltaY;
     if (viewShape->getNodeValue(n) != NodeShape::Circle) {
-      deltaX = cos(i * delta + startAngle) * sqrt(nSize[0]*nSize[0]+nSize[1]*nSize[1])/2;
-      deltaY = sin(i * delta + startAngle) * sqrt(nSize[0]*nSize[0]+nSize[1]*nSize[1])/2;
+      deltaX = cos(i * delta + startAngle) * sqrt(nSize[0] * nSize[0] + nSize[1] * nSize[1]) / 2;
+      deltaY = sin(i * delta + startAngle) * sqrt(nSize[0] * nSize[0] + nSize[1] * nSize[1]) / 2;
     } else {
-      deltaX = cos(i * delta + startAngle) * max(nSize[0]/2, nSize[1]/2);
-      deltaY = sin(i * delta + startAngle) * max(nSize[0]/2, nSize[1]/2);
+      deltaX = cos(i * delta + startAngle) * max(nSize[0] / 2, nSize[1] / 2);
+      deltaY = sin(i * delta + startAngle) * max(nSize[0] / 2, nSize[1] / 2);
     }
     nodeShape.push_back(nCoord + Coord(deltaX, deltaY));
   }
@@ -197,7 +199,8 @@ static vector<Coord> genNodePolygon(node n, const tlp::LayoutProperty* viewLayou
   return nodeShape;
 }
 
-std::vector<std::vector<tlp::Coord> > ConcaveHullBuilder::computeGraphHullVertices(Graph *graph, const bool withHoles, const float spacing, const float z) {
+std::vector<std::vector<tlp::Coord>> ConcaveHullBuilder::computeGraphHullVertices(Graph *graph, const bool withHoles, const float spacing,
+                                                                                  const float z) {
 
   LayoutProperty *viewLayout = graph->getSuperGraph()->getProperty<LayoutProperty>("viewLayout");
   SizeProperty *viewSize = graph->getSuperGraph()->getProperty<SizeProperty>("viewSize");
@@ -251,19 +254,21 @@ std::vector<std::vector<tlp::Coord> > ConcaveHullBuilder::computeGraphHullVertic
       vector<float> sizes;
       bool interpolateEdgeSizes = true;
       if (interpolateEdgeSizes) {
-        sizes = getSizes(edgePoints, std::min(srcSize[0]/(2*divisor)+ spacing, srcSize[1]/(2*divisor)+ spacing), std::min(tgtSize[0]/(2*divisor)+ spacing, tgtSize[1]/(2*divisor)+ spacing));
+        sizes = getSizes(edgePoints, std::min(srcSize[0] / (2 * divisor) + spacing, srcSize[1] / (2 * divisor) + spacing),
+                         std::min(tgtSize[0] / (2 * divisor) + spacing, tgtSize[1] / (2 * divisor) + spacing));
       } else {
-        sizes = getSizes(edgePoints, viewSize->getEdgeValue(e)[0]/divisor + spacing, viewSize->getEdgeValue(e)[0]/divisor + spacing);
+        sizes = getSizes(edgePoints, viewSize->getEdgeValue(e)[0] / divisor + spacing, viewSize->getEdgeValue(e)[0] / divisor + spacing);
       }
 
-      vector<Coord> extrusion = buildCurvePoints(edgePoints, sizes, edgePoints[0] - (edgePoints[1] - edgePoints[0]), edgePoints.back() + (edgePoints.back() - edgePoints[edgePoints.size() - 2]));
+      vector<Coord> extrusion = buildCurvePoints(edgePoints, sizes, edgePoints[0] - (edgePoints[1] - edgePoints[0]),
+                                                 edgePoints.back() + (edgePoints.back() - edgePoints[edgePoints.size() - 2]));
 
       vector<Coord> extrusionPoly;
-      for (size_t i = 0 ; i < extrusion.size() / 2 ; ++i) {
-        extrusionPoly.push_back(extrusion[2*i]);
+      for (size_t i = 0; i < extrusion.size() / 2; ++i) {
+        extrusionPoly.push_back(extrusion[2 * i]);
       }
-      for (int i = static_cast<int>(extrusion.size() / 2) - 1 ; i >= 0  ; --i) {
-        extrusionPoly.push_back(extrusion[2*i+1]);
+      for (int i = static_cast<int>(extrusion.size() / 2) - 1; i >= 0; --i) {
+        extrusionPoly.push_back(extrusion[2 * i + 1]);
       }
       std::reverse(extrusionPoly.begin(), extrusionPoly.end());
       chb.addPolygon(extrusionPoly);
@@ -284,11 +289,11 @@ std::vector<std::vector<tlp::Coord> > ConcaveHullBuilder::computeGraphHullVertic
 
   chb.computeHulls();
 
-  std::vector<std::vector<tlp::Coord> > contours;
+  std::vector<std::vector<tlp::Coord>> contours;
 
-  for (unsigned int i = 0 ; i < chb.nbComputedHulls() ; ++i) {
+  for (unsigned int i = 0; i < chb.nbComputedHulls(); ++i) {
     if (withHoles) {
-      const std::vector<std::vector<tlp::Coord> > &hwo =  chb.getHullWithHoles(i);
+      const std::vector<std::vector<tlp::Coord>> &hwo = chb.getHullWithHoles(i);
       contours.insert(contours.end(), hwo.begin(), hwo.end());
     } else {
       contours.push_back(chb.getHullOuterContour(i));
@@ -296,5 +301,4 @@ std::vector<std::vector<tlp::Coord> > ConcaveHullBuilder::computeGraphHullVertic
   }
 
   return contours;
-
 }

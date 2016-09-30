@@ -18,23 +18,23 @@
  */
 //===================================================================
 template <typename TYPE>
-tlp::MutableContainer<TYPE>::MutableContainer(): vData(new std::deque<typename StoredType<TYPE>::Value>()),
-  hData(nullptr), minIndex(UINT_MAX), maxIndex(UINT_MAX), defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
-  ratio(double(sizeof(typename tlp::StoredType<TYPE>::Value)) / (3.0*double(sizeof(void *))+double(sizeof(typename tlp::StoredType<TYPE>::Value)))),
-  compressing(false) {
+tlp::MutableContainer<TYPE>::MutableContainer()
+    : vData(new std::deque<typename StoredType<TYPE>::Value>()), hData(nullptr), minIndex(UINT_MAX), maxIndex(UINT_MAX),
+      defaultValue(StoredType<TYPE>::defaultValue()), state(VECT), elementInserted(0),
+      ratio(double(sizeof(typename tlp::StoredType<TYPE>::Value)) /
+            (3.0 * double(sizeof(void *)) + double(sizeof(typename tlp::StoredType<TYPE>::Value)))),
+      compressing(false) {
 }
 //===================================================================
-template <typename TYPE>
-tlp::MutableContainer<TYPE>::~MutableContainer() {
+template <typename TYPE> tlp::MutableContainer<TYPE>::~MutableContainer() {
   switch (state) {
   case VECT:
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it =
-        vData->begin();
+      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it = vData->begin();
 
-      while (it!= vData->end()) {
+      while (it != vData->end()) {
         if ((*it) != defaultValue)
           StoredType<TYPE>::destroy(*it);
 
@@ -52,7 +52,7 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
       // delete stored values
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it = hData->begin();
 
-      while (it!= hData->end()) {
+      while (it != hData->end()) {
         StoredType<TYPE>::destroy((*it).second);
         ++it;
       }
@@ -71,17 +71,15 @@ tlp::MutableContainer<TYPE>::~MutableContainer() {
   StoredType<TYPE>::destroy(defaultValue);
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
   switch (state) {
   case VECT:
 
     if (StoredType<TYPE>::isPointer) {
       // delete stored values
-      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it =
-        vData->begin();
+      typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it = vData->begin();
 
-      while (it!= vData->end()) {
+      while (it != vData->end()) {
         if ((*it) != defaultValue)
           StoredType<TYPE>::destroy(*it);
 
@@ -98,7 +96,7 @@ void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
       // delete stored values
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it = hData->begin();
 
-      while (it!= hData->end()) {
+      while (it != hData->end()) {
         StoredType<TYPE>::destroy((*it).second);
         ++it;
       }
@@ -125,11 +123,8 @@ void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
 //===================================================================
 // this method is private and used as is by GraphUpdatesRecorder class
 // it is also used to implement findAll
-template <typename TYPE>
-tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value,
-    bool equal) const {
-  if (equal &&
-      StoredType<TYPE>::equal(defaultValue, value))
+template <typename TYPE> tlp::IteratorValue *tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value, bool equal) const {
+  if (equal && StoredType<TYPE>::equal(defaultValue, value))
     // error
     return nullptr;
   else {
@@ -151,22 +146,17 @@ tlp::IteratorValue* tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value
 }
 //===================================================================
 // this method is visible for any class
-template <typename TYPE>
-tlp::Iterator<unsigned int>* tlp::MutableContainer<TYPE>::findAll(const TYPE &value,
-    bool equal) const {
+template <typename TYPE> tlp::Iterator<unsigned int> *tlp::MutableContainer<TYPE>::findAll(const TYPE &value, bool equal) const {
   return findAllValues(value, equal);
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
-    typename StoredType<TYPE>::Value value) {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::vectset(const unsigned int i, typename StoredType<TYPE>::Value value) {
   if (minIndex == UINT_MAX) {
     minIndex = i;
     maxIndex = i;
     (*vData).push_back(value);
     ++elementInserted;
-  }
-  else {
+  } else {
     // the time performance of these two attempts of nicer coding
     // in this commented code seems worse than the loops below (about 15%)
     // if ( i > maxIndex ) {
@@ -179,12 +169,12 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
     //   vData->insert(vData->begin(), minIndex - i, defaultValue);
     //   minIndex = i;
     // }
-    while ( i > maxIndex ) {
+    while (i > maxIndex) {
       (*vData).push_back(defaultValue);
       ++maxIndex;
     }
 
-    while ( i < minIndex ) {
+    while (i < minIndex) {
       (*vData).push_front(defaultValue);
       --minIndex;
     }
@@ -199,26 +189,24 @@ void tlp::MutableContainer<TYPE>::vectset(const unsigned int i,
   }
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
-  //Test if after insertion we need to resize
-  if (!compressing &&
-      !StoredType<TYPE>::equal(defaultValue, value)) {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
+  // Test if after insertion we need to resize
+  if (!compressing && !StoredType<TYPE>::equal(defaultValue, value)) {
     compressing = true;
-    compress (std::min(i,minIndex), std::max(i,maxIndex), elementInserted);
+    compress(std::min(i, minIndex), std::max(i, maxIndex), elementInserted);
     compressing = false;
   }
 
   if (StoredType<TYPE>::equal(defaultValue, value)) {
 
     switch (state) {
-    case VECT :
+    case VECT:
 
-      if (i<=maxIndex && i>=minIndex) {
+      if (i <= maxIndex && i >= minIndex) {
         typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
 
         if (val != defaultValue) {
-          (*vData)[i - minIndex]= defaultValue;
+          (*vData)[i - minIndex] = defaultValue;
           StoredType<TYPE>::destroy(val);
           --elementInserted;
         }
@@ -226,10 +214,10 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
 
       return;
 
-    case HASH : {
+    case HASH: {
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-      if (it!=hData->end()) {
+      if (it != hData->end()) {
         StoredType<TYPE>::destroy((*it).second);
         hData->erase(i);
         --elementInserted;
@@ -243,27 +231,25 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
       tlp::error() << __PRETTY_FUNCTION__ << "unexpected state value (serious bug)" << std::endl;
       break;
     }
-  }
-  else {
-    typename StoredType<TYPE>::Value newVal =
-      StoredType<TYPE>::clone(value);
+  } else {
+    typename StoredType<TYPE>::Value newVal = StoredType<TYPE>::clone(value);
 
     switch (state) {
-    case VECT :
+    case VECT:
 
       vectset(i, newVal);
 
       return;
 
-    case HASH : {
+    case HASH: {
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-      if (it!=hData->end())
+      if (it != hData->end())
         StoredType<TYPE>::destroy((*it).second);
       else
         ++elementInserted;
 
-      (*hData)[i]= newVal;
+      (*hData)[i] = newVal;
       break;
     }
 
@@ -278,8 +264,7 @@ void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
   }
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
   if (tlp::StoredType<TYPE>::isPointer == false) {
     if (maxIndex == UINT_MAX) {
       assert(state == VECT);
@@ -297,7 +282,7 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
         return;
       }
 
-      TYPE& oldVal = (*vData)[i - minIndex];
+      TYPE &oldVal = (*vData)[i - minIndex];
 
       if (oldVal == defaultValue) {
         set(i, defaultValue + val);
@@ -312,17 +297,15 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
     case HASH: {
       typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-      if (it!=hData->end()) {
+      if (it != hData->end()) {
         // check default value
         if ((it->second + val) == defaultValue) {
           StoredType<TYPE>::destroy((*it).second);
           hData->erase(i);
           --elementInserted;
-        }
-        else
+        } else
           it->second += val;
-      }
-      else {
+      } else {
         set(i, defaultValue + val);
       }
 
@@ -339,15 +322,15 @@ void tlp::MutableContainer<TYPE>::add(const unsigned int i, TYPE val) {
   std::cerr << __PRETTY_FUNCTION__ << "not implemented" << std::endl;
 }
 //===================================================================
-template <typename TYPE>
-typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
+template <typename TYPE> typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::get(const unsigned int i) const {
   //  cerr << __PRETTY_FUNCTION__ << endl;
-  if (maxIndex == UINT_MAX) return StoredType<TYPE>::get(defaultValue);
+  if (maxIndex == UINT_MAX)
+    return StoredType<TYPE>::get(defaultValue);
 
   switch (state) {
   case VECT:
 
-    if (i>maxIndex || i<minIndex)
+    if (i > maxIndex || i < minIndex)
       return StoredType<TYPE>::get(defaultValue);
     else
       return StoredType<TYPE>::get((*vData)[i - minIndex]);
@@ -355,7 +338,7 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
   case HASH: {
     typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-    if (it!=hData->end())
+    if (it != hData->end())
       return StoredType<TYPE>::get((*it).second);
     else
       return StoredType<TYPE>::get(defaultValue);
@@ -369,22 +352,20 @@ typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::
   }
 }
 //===================================================================
-template <typename TYPE>
-typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDefault() const {
+template <typename TYPE> typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::getDefault() const {
   return StoredType<TYPE>::get(defaultValue);
 }
 //===================================================================
-template <typename TYPE>
-bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
-  if (maxIndex == UINT_MAX) return false;
+template <typename TYPE> bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const {
+  if (maxIndex == UINT_MAX)
+    return false;
 
   switch (state) {
   case VECT:
-    return (i<=maxIndex && i>=minIndex &&
-            (((*vData)[i - minIndex]) != defaultValue));
+    return (i <= maxIndex && i >= minIndex && (((*vData)[i - minIndex]) != defaultValue));
 
   case HASH:
-    return ((hData->find(i))!=hData->end());
+    return ((hData->find(i)) != hData->end());
 
   default:
     assert(false);
@@ -394,7 +375,7 @@ bool tlp::MutableContainer<TYPE>::hasNonDefaultValue(const unsigned int i) const
 }
 //===================================================================
 template <typename TYPE>
-typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(const unsigned int i, bool& notDefault) const {
+typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(const unsigned int i, bool &notDefault) const {
   if (maxIndex == UINT_MAX) {
     notDefault = false;
     return StoredType<TYPE>::get(defaultValue);
@@ -403,11 +384,10 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
   switch (state) {
   case VECT:
 
-    if (i>maxIndex || i<minIndex) {
+    if (i > maxIndex || i < minIndex) {
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
-    }
-    else {
+    } else {
       typename StoredType<TYPE>::Value val = (*vData)[i - minIndex];
       notDefault = val != defaultValue;
       return StoredType<TYPE>::get(val);
@@ -416,11 +396,10 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
   case HASH: {
     typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::iterator it = hData->find(i);
 
-    if (it!=hData->end()) {
+    if (it != hData->end()) {
       notDefault = true;
       return StoredType<TYPE>::get((*it).second);
-    }
-    else {
+    } else {
       notDefault = false;
       return StoredType<TYPE>::get(defaultValue);
     }
@@ -434,20 +413,18 @@ typename tlp::StoredType<TYPE>::ReturnedValue tlp::MutableContainer<TYPE>::get(c
   }
 }
 //===================================================================
-template <typename TYPE>
-unsigned int tlp::MutableContainer<TYPE>::numberOfNonDefaultValues() const {
+template <typename TYPE> unsigned int tlp::MutableContainer<TYPE>::numberOfNonDefaultValues() const {
   return elementInserted;
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::vecttohash() {
-  hData=new TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
+template <typename TYPE> void tlp::MutableContainer<TYPE>::vecttohash() {
+  hData = new TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>(elementInserted);
 
   unsigned int newMaxIndex = 0;
   unsigned int newMinIndex = UINT_MAX;
   elementInserted = 0;
 
-  for (unsigned int i=minIndex; i<=maxIndex; ++i) {
+  for (unsigned int i = minIndex; i <= maxIndex; ++i) {
     if ((*vData)[i - minIndex] != defaultValue) {
       (*hData)[i] = (*vData)[i - minIndex];
       newMaxIndex = std::max(newMaxIndex, i);
@@ -463,17 +440,16 @@ void tlp::MutableContainer<TYPE>::vecttohash() {
   state = HASH;
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::hashtovect() {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::hashtovect() {
   vData = new std::deque<typename StoredType<TYPE>::Value>();
   minIndex = UINT_MAX;
   maxIndex = UINT_MAX;
   elementInserted = 0;
-  state=VECT;
+  state = VECT;
   typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 
-  for (it=hData->begin(); it!=hData->end(); ++it) {
-    if (it->second  != defaultValue)
+  for (it = hData->begin(); it != hData->end(); ++it) {
+    if (it->second != defaultValue)
       vectset(it->first, it->second);
   }
 
@@ -481,16 +457,16 @@ void tlp::MutableContainer<TYPE>::hashtovect() {
   hData = nullptr;
 }
 //===================================================================
-template <typename TYPE>
-void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsigned int nbElements) {
-  if (max == UINT_MAX || (max - min) < 10) return;
+template <typename TYPE> void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, unsigned int nbElements) {
+  if (max == UINT_MAX || (max - min) < 10)
+    return;
 
-  double limitValue = ratio*(double(max - min + 1.0));
+  double limitValue = ratio * (double(max - min + 1.0));
 
   switch (state) {
   case VECT:
 
-    if ( double(nbElements) < limitValue) {
+    if (double(nbElements) < limitValue) {
       vecttohash();
     }
 
@@ -498,7 +474,7 @@ void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, u
 
   case HASH:
 
-    if ( double(nbElements) > limitValue*1.5) {
+    if (double(nbElements) > limitValue * 1.5) {
       hashtovect();
     }
 
@@ -511,7 +487,6 @@ void tlp::MutableContainer<TYPE>::compress(unsigned int min, unsigned int max, u
   }
 }
 
-template <typename TYPE>
-typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::operator[](const unsigned int i) const {
+template <typename TYPE> typename tlp::StoredType<TYPE>::ReturnedConstValue tlp::MutableContainer<TYPE>::operator[](const unsigned int i) const {
   return get(i);
 }

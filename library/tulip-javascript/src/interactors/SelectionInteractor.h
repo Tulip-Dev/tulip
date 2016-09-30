@@ -37,7 +37,6 @@ class ZoomAndPanInteractor;
 class SelectionInteractor : public GlSceneInteractor {
 
 public:
-
   SelectionInteractor(tlp::GlScene *scene = NULL);
 
   void setScene(tlp::GlScene *glScene);
@@ -53,7 +52,6 @@ public:
   }
 
 private:
-
   MouseButton _mouseButton;
   int _firstX, _firstY;
   int _curX, _curY;
@@ -64,7 +62,6 @@ private:
   std::vector<tlp::SelectedEntity> _selectedEntities;
 
   bool _selectOnlyEdgesConnectedToSelectedNodes;
-
 };
 
 #endif // SELECTIONINTERACTOR_H

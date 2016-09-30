@@ -78,7 +78,8 @@ TLP_SCOPE std::string getMinor(const std::string &release);
  */
 class TLP_SCOPE Plugin : public tlp::WithParameter, public tlp::WithDependency {
 public:
-  virtual ~Plugin() {}
+  virtual ~Plugin() {
+  }
 
   /**
     @brief The icon (preferably a thumbnail) of the plugin
@@ -90,7 +91,7 @@ public:
     @brief A string identifier for a plugin used for categorization purposes.
     @returns std::string the category of the plugin.
     */
-  virtual std::string category() const=0;
+  virtual std::string category() const = 0;
 
   /**
    * @brief Returns the name of the plug-in, as registered in the Tulip plug-in system.
@@ -98,7 +99,7 @@ public:
    * only the latest encountered will be considered.
    * @return string the name of the plug-in.
    */
-  virtual std::string name() const=0;
+  virtual std::string name() const = 0;
 
   /**
    * @brief Returns the name of the group this plug-in belongs to.
@@ -106,20 +107,20 @@ public:
    * e.g. trees::planar trees
    * @return the group name of this plug-in.
    */
-  virtual std::string group() const=0;
+  virtual std::string group() const = 0;
 
   /**
    * @brief The name of the author of this plug-in.
    * @return the name of the author.
    */
-  virtual std::string author() const=0;
+  virtual std::string author() const = 0;
 
   /**
    * @brief The creation date of the plug-in.
    * This date is in a free format, but most Tulip plug-ins use a DD/MM/YYYY
    * @return the creation date.
    */
-  virtual std::string date() const=0;
+  virtual std::string date() const = 0;
 
   /**
    * @brief Information about the plug-in, from the plug-in author.
@@ -127,14 +128,14 @@ public:
    * Most plug-ins by the Tulip team use an html format to generate help from these information.
    * @return string The information associated with this plug-in.
    */
-  virtual std::string info() const=0;
+  virtual std::string info() const = 0;
 
   /**
    * @brief The release version of the plug-in, including major and minor.
    * The version should be X.Y, X being the major, and Y the minor.
    * @return string The release version.
    */
-  virtual std::string release() const=0;
+  virtual std::string release() const = 0;
 
   /**
    * @brief The version of Tulip this plug-in was built with.
@@ -142,7 +143,7 @@ public:
    *
    * @return The Tulip version the plug-in was built with.
    */
-  virtual std::string tulipRelease() const=0;
+  virtual std::string tulipRelease() const = 0;
 
   /**
    * @brief Only the major of the plug-in version.
@@ -171,7 +172,6 @@ public:
   virtual std::string tulipMinor() const;
 
   virtual std::string programmingLanguage() const;
-
 };
 
 /**
@@ -179,7 +179,8 @@ public:
  * @def PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
  * @brief Declare meta-information for a plugin
  * This is an helper macro that defines every function related to a plugin meta-information (Plugin name, author, etc).
- * When creating a new plugin, this macro avoids having to define pure-virtual methods located into the Plugin interface and put them on the same line.
+ * When creating a new plugin, this macro avoids having to define pure-virtual methods located into the Plugin interface and put them on the same
+ * line.
  * @note PLUGINIFORMATION should be declared into the Plugin's class body into the public scope
  *
  * @param NAME The plugin name as it will be registered into the plugins system (tlp::Plugin::name())
@@ -192,20 +193,33 @@ public:
  * @see tlp::Plugin
  * @see PLUGIN
  */
-#define PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
-std::string name() const { return NAME; } \
-std::string author() const { return AUTHOR; }\
-std::string date() const { return DATE; }  \
-std::string info() const { return INFO; }  \
-std::string release() const { return RELEASE; }\
-std::string tulipRelease() const { return TULIP_VERSION; }\
-std::string group() const { return GROUP; }
+#define PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)                                                                                  \
+  std::string name() const {                                                                                                                         \
+    return NAME;                                                                                                                                     \
+  }                                                                                                                                                  \
+  std::string author() const {                                                                                                                       \
+    return AUTHOR;                                                                                                                                   \
+  }                                                                                                                                                  \
+  std::string date() const {                                                                                                                         \
+    return DATE;                                                                                                                                     \
+  }                                                                                                                                                  \
+  std::string info() const {                                                                                                                         \
+    return INFO;                                                                                                                                     \
+  }                                                                                                                                                  \
+  std::string release() const {                                                                                                                      \
+    return RELEASE;                                                                                                                                  \
+  }                                                                                                                                                  \
+  std::string tulipRelease() const {                                                                                                                 \
+    return TULIP_VERSION;                                                                                                                            \
+  }                                                                                                                                                  \
+  std::string group() const {                                                                                                                        \
+    return GROUP;                                                                                                                                    \
+  }
 
-#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
-PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
+#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP) PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
 }
 
-//This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.
+// This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.
 #include <tulip/PluginLister.h>
 namespace tlp {
 /**
@@ -230,24 +244,23 @@ PLUGIN(MyPlugin) // Register MyPlugin into Tulip
  * @see tlp::Plugin
  * @see PLUGININFORMATION
  */
-#define PLUGIN(C) \
-class C##Factory : public tlp::FactoryInterface { \
-public:            \
-  C##Factory() {          \
-  tlp::PluginLister::registerPlugin(this);     \
-}             \
-~C##Factory(){}          \
-tlp::Plugin* createPluginObject(tlp::PluginContext* context) { \
-C* tmp = new C(context);       \
-return tmp;       \
-}              \
-};                                                      \
-\
-extern "C" {                                            \
-C##Factory C##FactoryInitializer;               \
+#define PLUGIN(C)                                                                                                                                    \
+  class C##Factory : public tlp::FactoryInterface {                                                                                                  \
+  public:                                                                                                                                            \
+    C##Factory() {                                                                                                                                   \
+      tlp::PluginLister::registerPlugin(this);                                                                                                       \
+    }                                                                                                                                                \
+    ~C##Factory() {                                                                                                                                  \
+    }                                                                                                                                                \
+    tlp::Plugin *createPluginObject(tlp::PluginContext *context) {                                                                                   \
+      C *tmp = new C(context);                                                                                                                       \
+      return tmp;                                                                                                                                    \
+    }                                                                                                                                                \
+  };                                                                                                                                                 \
+                                                                                                                                                     \
+  extern "C" {                                                                                                                                       \
+  C##Factory C##FactoryInitializer;                                                                                                                  \
+  }
 }
 
-
-}
-
-#endif //TULIP_PLUGIN_H
+#endif // TULIP_PLUGIN_H

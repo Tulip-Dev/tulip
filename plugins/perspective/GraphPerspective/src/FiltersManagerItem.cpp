@@ -34,11 +34,11 @@
 using namespace tlp;
 using namespace std;
 
-FiltersManagerItem::FiltersManagerItem(QWidget *parent): QFrame(parent), _ui(new Ui::FiltersManagerItem) {
-  connect(Perspective::typedInstance<GraphPerspective>()->model(),SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(graphChanged(tlp::Graph*)));
+FiltersManagerItem::FiltersManagerItem(QWidget *parent) : QFrame(parent), _ui(new Ui::FiltersManagerItem) {
+  connect(Perspective::typedInstance<GraphPerspective>()->model(), SIGNAL(currentGraphChanged(tlp::Graph *)), this, SLOT(graphChanged(tlp::Graph *)));
 
   _ui->setupUi(this);
-  connect(_ui->delButton,SIGNAL(clicked()),this,SIGNAL(removed()));
+  connect(_ui->delButton, SIGNAL(clicked()), this, SIGNAL(removed()));
   setMode(Invalid);
 }
 
@@ -63,7 +63,7 @@ void FiltersManagerItem::setMode(Mode m) {
   _ui->addButton->setVisible(m == Invalid);
   _ui->dataBox->setVisible(m != Invalid);
 
-  AbstractFiltersManagerItem* w = nullptr;
+  AbstractFiltersManagerItem *w = nullptr;
 
   if (m == Compare)
     w = new FiltersManagerCompareItem;
@@ -75,7 +75,7 @@ void FiltersManagerItem::setMode(Mode m) {
   _ui->dataBox->setWidget(w);
 
   if (w != nullptr) {
-    connect(w,SIGNAL(titleChanged()),this,SLOT(dataBoxTitleChanged()));
+    connect(w, SIGNAL(titleChanged()), this, SLOT(dataBoxTitleChanged()));
     _ui->dataBox->setTitle(w->title());
 
     w->setGraph(Perspective::typedInstance<GraphPerspective>()->model()->currentGraph());
@@ -86,23 +86,23 @@ void FiltersManagerItem::setMode(Mode m) {
 
 void FiltersManagerItem::addButtonClicked() {
   QMenu addMenu;
-  addMenu.addAction(trUtf8("Invert selection"),this,SLOT(setInvertMode()));
-  addMenu.addAction(trUtf8("Compare values"),this,SLOT(setCompareMode()));
-  addMenu.addAction(trUtf8("Filtering algorithm"),this,SLOT(setAlgorithmMode()));
+  addMenu.addAction(trUtf8("Invert selection"), this, SLOT(setInvertMode()));
+  addMenu.addAction(trUtf8("Compare values"), this, SLOT(setCompareMode()));
+  addMenu.addAction(trUtf8("Filtering algorithm"), this, SLOT(setAlgorithmMode()));
   addMenu.exec(QCursor().pos());
 }
 
 void FiltersManagerItem::dataBoxTitleChanged() {
-  _ui->dataBox->setTitle(static_cast<AbstractFiltersManagerItem*>(sender())->title());
+  _ui->dataBox->setTitle(static_cast<AbstractFiltersManagerItem *>(sender())->title());
 }
 
 void FiltersManagerItem::graphChanged(Graph *g) {
   if (_ui->dataBox->widget() != nullptr)
-    static_cast<AbstractFiltersManagerItem*>(_ui->dataBox->widget())->setGraph(g);
+    static_cast<AbstractFiltersManagerItem *>(_ui->dataBox->widget())->setGraph(g);
 }
 
-void FiltersManagerItem::applyFilter(tlp::BooleanProperty* prop) {
+void FiltersManagerItem::applyFilter(tlp::BooleanProperty *prop) {
   if (_ui->dataBox->widget() != nullptr) {
-    static_cast<AbstractFiltersManagerItem*>(_ui->dataBox->widget())->applyFilter(prop);
+    static_cast<AbstractFiltersManagerItem *>(_ui->dataBox->widget())->applyFilter(prop);
   }
 }

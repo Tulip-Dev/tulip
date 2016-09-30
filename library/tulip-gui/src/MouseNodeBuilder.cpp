@@ -34,17 +34,17 @@ using namespace tlp;
 using namespace std;
 
 bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
-  QMouseEvent * qMouseEv = dynamic_cast<QMouseEvent *>(e);
+  QMouseEvent *qMouseEv = dynamic_cast<QMouseEvent *>(e);
 
-  if(qMouseEv != nullptr) {
+  if (qMouseEv != nullptr) {
     SelectedEntity selectedEntity;
     GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
 
-    if(e->type() == QEvent::MouseMove) {
-      if (glMainWidget->pickNodesEdges(qMouseEv->x(), glMainWidget->height() - qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+    if (e->type() == QEvent::MouseMove) {
+      if (glMainWidget->pickNodesEdges(qMouseEv->x(), glMainWidget->height() - qMouseEv->y(), selectedEntity) &&
+          selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
         glMainWidget->setCursor(Qt::ForbiddenCursor);
-      }
-      else {
+      } else {
         glMainWidget->setCursor(Qt::ArrowCursor);
       }
 
@@ -53,26 +53,28 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == _eventType) {
       if (qMouseEv->button() == Qt::LeftButton) {
-        if (glMainWidget->pickNodesEdges(qMouseEv->x(), glMainWidget->height() - qMouseEv->y(), selectedEntity) && selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+        if (glMainWidget->pickNodesEdges(qMouseEv->x(), glMainWidget->height() - qMouseEv->y(), selectedEntity) &&
+            selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
           return true;
         }
 
-        GlGraphInputData *inputData=&(glMainWidget->getScene()->getMainGlGraph()->getInputData());
-        Graph*_graph=inputData->getGraph();
-        LayoutProperty* mLayout=inputData->getElementLayout();
+        GlGraphInputData *inputData = &(glMainWidget->getScene()->getMainGlGraph()->getInputData());
+        Graph *_graph = inputData->getGraph();
+        LayoutProperty *mLayout = inputData->getElementLayout();
         // allow to undo
         _graph->push();
         Observable::holdObservers();
         node newNode;
         newNode = _graph->addNode();
-        Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(),0);
+        Coord point(glMainWidget->width() - qMouseEv->x(), qMouseEv->y(), 0);
         point = glMainWidget->getScene()->getMainLayer()->getCamera()->viewportTo3DWorld(glMainWidget->screenToViewport(point));
 
         // This code is here to block z coordinate to 0 when we are in "2D mode"
-        Coord cameraDirection=glMainWidget->getScene()->getMainLayer()->getCamera()->getEyes()-glMainWidget->getScene()->getMainLayer()->getCamera()->getCenter();
+        Coord cameraDirection =
+            glMainWidget->getScene()->getMainLayer()->getCamera()->getEyes() - glMainWidget->getScene()->getMainLayer()->getCamera()->getCenter();
 
-        if(cameraDirection[0]==0 && cameraDirection[1]==0)
-          point[2]=0;
+        if (cameraDirection[0] == 0 && cameraDirection[1] == 0)
+          point[2] = 0;
 
         mLayout->setNodeValue(newNode, point);
         Observable::unholdObservers();
@@ -86,6 +88,6 @@ bool MouseNodeBuilder::eventFilter(QObject *widget, QEvent *e) {
 }
 
 void MouseNodeBuilder::clear() {
-  GlMainView *glMainView=dynamic_cast<GlMainView*>(view());
+  GlMainView *glMainView = dynamic_cast<GlMainView *>(view());
   glMainView->getGlMainWidget()->setCursor(QCursor());
 }

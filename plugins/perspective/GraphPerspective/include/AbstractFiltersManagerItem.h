@@ -36,33 +36,34 @@ class QStandardItem;
 class QComboBox;
 
 // Combo box helper functions
-QStandardItem* itemAt(QComboBox* combo, int i);
-QStandardItem* lastItem(QComboBox* combo);
-void fillTitle(QComboBox* combo, const QString& s);
+QStandardItem *itemAt(QComboBox *combo, int i);
+QStandardItem *lastItem(QComboBox *combo);
+void fillTitle(QComboBox *combo, const QString &s);
 
-class AbstractFiltersManagerItem: public QWidget {
+class AbstractFiltersManagerItem : public QWidget {
   Q_OBJECT
 protected:
-  tlp::Graph* _graph;
+  tlp::Graph *_graph;
+
 public:
-  explicit AbstractFiltersManagerItem(QWidget* parent = nullptr);
-  virtual void applyFilter(tlp::BooleanProperty*)=0;
-  virtual QString title() const=0;
-  void setGraph(tlp::Graph*);
+  explicit AbstractFiltersManagerItem(QWidget *parent = nullptr);
+  virtual void applyFilter(tlp::BooleanProperty *) = 0;
+  virtual QString title() const = 0;
+  void setGraph(tlp::Graph *);
+
 protected:
   virtual void graphChanged();
 
-  void updateGraphModel(QTableView* table,const QString& algName, tlp::Graph* g) {
-    int h=0;
+  void updateGraphModel(QTableView *table, const QString &algName, tlp::Graph *g) {
+    int h = 0;
 
     if (!algName.isNull()) {
       tlp::ParameterDescriptionList params = tlp::PluginLister::getPluginParameters(algName.toStdString());
-      table->setModel(new tlp::ParameterListModel(params,g,table));
+      table->setModel(new tlp::ParameterListModel(params, g, table));
 
-      for (int i=0; i<table->model()->rowCount(); ++i)
+      for (int i = 0; i < table->model()->rowCount(); ++i)
         h += table->rowHeight(i);
-    }
-    else {
+    } else {
       if (table->model() != nullptr)
         table->model()->deleteLater();
 

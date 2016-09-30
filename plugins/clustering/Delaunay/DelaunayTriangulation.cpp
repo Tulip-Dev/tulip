@@ -30,12 +30,12 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
   vector<tlp::Coord> points;
   points.reserve(graph->numberOfNodes());
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-  for(tlp::node n : graph->getNodes()) {
+  for (tlp::node n : graph->getNodes()) {
     nodes.push_back(n);
     points.push_back(layout->getNodeValue(n));
   }
-  vector<pair<unsigned int, unsigned int> > edges;
-  vector<vector<unsigned int> > simplices;
+  vector<pair<unsigned int, unsigned int>> edges;
+  vector<vector<unsigned int>> simplices;
   bool ret = tlp::delaunayTriangulation(points, edges, simplices);
 
   if (ret) {
@@ -45,7 +45,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
     tlp::Graph *delaunaySg = graph->addCloneSubGraph("Delaunay");
     delaunaySg->delEdges(graph->getEdges());
 
-    for (size_t i = 0 ; i < edges.size() ; ++i) {
+    for (size_t i = 0; i < edges.size(); ++i) {
       delaunaySg->addEdge(nodes[edges[i].first], nodes[edges[i].second]);
     }
 
@@ -53,10 +53,10 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
       ostringstream oss;
       unsigned int simCpt = 0;
 
-      for (size_t i = 0 ; i < simplices.size() ; ++i) {
+      for (size_t i = 0; i < simplices.size(); ++i) {
         set<tlp::node> nodesSet;
 
-        for (size_t j = 0 ; j < simplices[i].size() ; ++j) {
+        for (size_t j = 0; j < simplices[i].size(); ++j) {
           nodesSet.insert(nodes[simplices[i][j]]);
         }
 
@@ -64,8 +64,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
 
         if (simplices[i].size() == 3) {
           oss << "triangle " << simCpt++;
-        }
-        else {
+        } else {
           oss << "tetrahedron " << simCpt++;
         }
 
@@ -79,20 +78,20 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
 }
 
 static const char *paramHelp[] = {
-  // simplices
-  "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d)."
-};
+    // simplices
+    "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d)."};
 
 class DelaunayTriangulation : public tlp::Algorithm {
 
-public :
-
+public:
   DelaunayTriangulation(tlp::PluginContext *context) : Algorithm(context) {
     addInParameter<bool>("simplices", paramHelp[0], "false");
   }
 
-  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "",
-                    "Performs a Delaunay triangulation, in considering the positions of the graph nodes as a set of points. The building of simplices (triangles in 2D or tetrahedrons in 3D) consists in adding edges between adjacent nodes.","1.0","Triangulation")
+  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "", "Performs a Delaunay triangulation, in considering the positions of the graph "
+                                                                     "nodes as a set of points. The building of simplices (triangles in 2D or "
+                                                                     "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
+                    "1.0", "Triangulation")
 
   bool run() {
     tlp::Observable::holdObservers();
@@ -108,7 +107,6 @@ public :
 
     return ret;
   }
-
 };
 
 PLUGIN(DelaunayTriangulation)

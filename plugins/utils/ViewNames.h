@@ -22,14 +22,13 @@
 
 namespace ViewName {
 
-const static char GeographicViewName[]="Geographic view";
-const static char HistogramViewName[]="Histogram view";
-const static char MatrixViewName[]="Adjacency Matrix view";
-const static char ParallelCoordinatesViewName[]="Parallel Coordinates view";
-const static char PixelOrientedViewName[]="Pixel Oriented view";
-const static char ScatterPlot2DViewName[]="Scatter Plot 2D view";
-const static char SOMViewName[]="Self Organizing Map view";
-
+const static char GeographicViewName[] = "Geographic view";
+const static char HistogramViewName[] = "Histogram view";
+const static char MatrixViewName[] = "Adjacency Matrix view";
+const static char ParallelCoordinatesViewName[] = "Parallel Coordinates view";
+const static char PixelOrientedViewName[] = "Pixel Oriented view";
+const static char ScatterPlot2DViewName[] = "Scatter Plot 2D view";
+const static char SOMViewName[] = "Self Organizing Map view";
 }
 
 #endif // VIEWNAMES_H

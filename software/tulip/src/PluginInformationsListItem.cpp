@@ -28,7 +28,8 @@
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
+PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, QWidget *parent)
+    : QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
   _ui->setupUi(this);
   _ui->progressFrame->hide();
   _ui->installFrame->hide();
@@ -42,8 +43,7 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
     versionInfos = infos.availableVersion;
     _ui->statusIcon->hide();
     _ui->installFrame->show();
-  }
-  else {
+  } else {
     if (infos.availableVersion.isValid && infos.availableVersion.version != versionInfos.version) {
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
       _ui->installFrame->show();
@@ -52,8 +52,8 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
     else
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
 
-    //only show the remove frame for downloaded plugins
-    if(!versionInfos.libraryLocation.isEmpty() && !versionInfos.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
+    // only show the remove frame for downloaded plugins
+    if (!versionInfos.libraryLocation.isEmpty() && !versionInfos.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
       _ui->removeFrame->show();
     }
   }
@@ -61,9 +61,13 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
   if (!versionInfos.icon.isEmpty()) {
     QPixmap pixmap(versionInfos.icon);
     if (!pixmap.isNull()) {
-      pixmap = pixmap.scaled(32,32);
+      pixmap = pixmap.scaled(32, 32);
     } else if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(QStringToTlpString(versionInfos.icon))) {
-      pixmap = FontIconManager::instance()->getMaterialDesignIcon(static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(versionInfos.icon))), Qt::black).pixmap(QSize(32, 32));
+      pixmap = FontIconManager::instance()
+                   ->getMaterialDesignIcon(static_cast<md::iconCodePoint>(
+                                               TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(versionInfos.icon))),
+                                           Qt::black)
+                   .pixmap(QSize(32, 32));
     }
     _ui->icon->setPixmap(pixmap);
   }
@@ -78,20 +82,20 @@ PluginInformationsListItem::~PluginInformationsListItem() {
 
 void PluginInformationsListItem::focusOut() {
   _ui->installationControls->hide();
-  _ui->contentsFrame->setProperty("highlighted",false);
+  _ui->contentsFrame->setProperty("highlighted", false);
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
 void PluginInformationsListItem::focusIn() {
   _ui->installationControls->show();
-  _ui->contentsFrame->setProperty("highlighted",true);
+  _ui->contentsFrame->setProperty("highlighted", true);
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
 void PluginInformationsListItem::install() {
   _ui->installFrame->hide();
   _ui->progressFrame->show();
-  PluginManager::markForInstallation(_infos.name,this,SLOT(downloadProgress(qint64,qint64)));
+  PluginManager::markForInstallation(_infos.name, this, SLOT(downloadProgress(qint64, qint64)));
   _ui->rebootFrame->show();
 }
 

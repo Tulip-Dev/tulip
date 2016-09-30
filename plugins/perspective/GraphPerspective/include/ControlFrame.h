@@ -25,10 +25,11 @@ namespace Ui {
 class ControlFrame;
 }
 
-class ControlFrame: public QFrame {
-  Ui::ControlFrame* _ui;
+class ControlFrame : public QFrame {
+  Ui::ControlFrame *_ui;
+
 public:
-  explicit ControlFrame(QWidget* parent = nullptr);
+  explicit ControlFrame(QWidget *parent = nullptr);
   virtual ~ControlFrame();
 };
 

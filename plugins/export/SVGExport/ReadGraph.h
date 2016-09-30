@@ -1,7 +1,6 @@
 #ifndef READGRAPH_H
 #define READGRAPH_H
 
-
 /**
  *
  * This file is part of Tulip (www.tulip-software.org)

@@ -28,12 +28,13 @@
 namespace tlp {
 
 class ParallelCoordsElementDeleter : public GLInteractorComponent {
-public :
-  ParallelCoordsElementDeleter() {}
-  ~ParallelCoordsElementDeleter() {}
+public:
+  ParallelCoordsElementDeleter() {
+  }
+  ~ParallelCoordsElementDeleter() {
+  }
   bool eventFilter(QObject *, QEvent *);
 };
-
 }
 
 #endif /* PARALLELCOORDSELEMENTDELETER_H_ */

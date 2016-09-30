@@ -33,13 +33,14 @@ class EnclosingCircleConfigurationData;
 
 namespace tlp {
 
-class EnclosingCircleConfigurationWidget: public QWidget {
+class EnclosingCircleConfigurationWidget : public QWidget {
 
   Q_OBJECT
 
-  Ui::EnclosingCircleConfigurationData* _ui;
+  Ui::EnclosingCircleConfigurationData *_ui;
+
 public:
-  EnclosingCircleConfigurationWidget(QWidget *parent=0);
+  EnclosingCircleConfigurationWidget(QWidget *parent = 0);
   ~EnclosingCircleConfigurationWidget();
 
   void circleColorBtnDisabled(const bool disabled);
@@ -54,7 +55,7 @@ signals:
   void alphaChanged(int);
 };
 
-class EnclosingCircleHighlighter: public QObject, public PathHighlighter {
+class EnclosingCircleHighlighter : public QObject, public PathHighlighter {
   Q_OBJECT
 
 public:

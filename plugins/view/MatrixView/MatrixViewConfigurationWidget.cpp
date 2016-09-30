@@ -30,7 +30,8 @@
 using namespace tlp;
 using namespace std;
 
-MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent): QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
+MatrixViewConfigurationWidget::MatrixViewConfigurationWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::MatrixViewConfigurationWidget()), _modifyingMetricList(false) {
   _ui->setupUi(this);
   connect(_ui->orderingMetricCombo, SIGNAL(currentIndexChanged(int)), this, SLOT(orderingMetricComboIndexChanged(int)));
   connect(_ui->backgroundColorBtn, SIGNAL(colorChanged(QColor)), this, SIGNAL(changeBackgroundColor(QColor)));
@@ -79,9 +80,9 @@ void MatrixViewConfigurationWidget::setGraph(tlp::Graph *g) {
   _ui->orderingMetricCombo->clear();
   _ui->orderingMetricCombo->addItem(firstString);
   int currentIndex = 0;
-  int i=0;
+  int i = 0;
 
-  for(const string &s : g->getProperties()) {
+  for (const string &s : g->getProperties()) {
     string type = g->getProperty(s)->getTypename();
 
     if (type != "double" && type != "int" && type != "string")

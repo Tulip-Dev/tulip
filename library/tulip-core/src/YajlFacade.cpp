@@ -31,28 +31,29 @@ extern "C" {
 #include <fstream>
 #include <sstream>
 
-YajlParseFacade::YajlParseFacade(tlp::PluginProgress* progress) : _progress(progress), _parsingSucceeded(true) {}
+YajlParseFacade::YajlParseFacade(tlp::PluginProgress *progress) : _progress(progress), _parsingSucceeded(true) {
+}
 
 static int parse_null(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseNull();
   return 1;
 }
 
-static int parse_boolean(void * ctx, int boolVal) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+static int parse_boolean(void *ctx, int boolVal) {
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseBoolean(boolVal);
   return 1;
 }
 
 static int parse_integer(void *ctx, long long integerVal) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseInteger(integerVal);
   return 1;
 }
 
 static int parse_double(void *ctx, double doubleVal) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseDouble(doubleVal);
   return 1;
 }
@@ -64,40 +65,40 @@ static int parse_double(void *ctx, double doubleVal) {
 //   return 1;
 // }
 
-static int parse_string(void *ctx, const unsigned char * stringVal, size_t stringLen) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
-  std::string key((char*)stringVal, stringLen);
+static int parse_string(void *ctx, const unsigned char *stringVal, size_t stringLen) {
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
+  std::string key((char *)stringVal, stringLen);
   facade->parseString(key);
   return 1;
 }
 
-static int parse_map_key(void *ctx, const unsigned char * stringVal, size_t stringLen) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
-  std::string key((char*)stringVal, stringLen);
+static int parse_map_key(void *ctx, const unsigned char *stringVal, size_t stringLen) {
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
+  std::string key((char *)stringVal, stringLen);
   facade->parseMapKey(key);
   return 1;
 }
 
 static int parse_start_map(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseStartMap();
   return 1;
 }
 
 static int parse_end_map(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseEndMap();
   return 1;
 }
 
 static int parse_start_array(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseStartArray();
   return 1;
 }
 
 static int parse_end_array(void *ctx) {
-  YajlParseFacade* facade = (YajlParseFacade*) ctx;
+  YajlParseFacade *facade = (YajlParseFacade *)ctx;
   facade->parseEndArray();
   return 1;
 }
@@ -105,7 +106,7 @@ static int parse_end_array(void *ctx) {
 void YajlParseFacade::parse(std::string filename) {
   // check if file exists
   tlp_stat_t infoEntry;
-  bool result = (tlp::statPath(filename,&infoEntry) == 0);
+  bool result = (tlp::statPath(filename, &infoEntry) == 0);
 
   if (!result) {
     std::stringstream ess;
@@ -116,49 +117,37 @@ void YajlParseFacade::parse(std::string filename) {
   }
 
   // open a stream
-  std::istream *ifs = tlp::getInputFileStream(filename.c_str(),
-                      std::ifstream::in |
-                      // consider file is binary
-                      // to avoid pb using tellg
-                      // on the input stream
-                      std::ifstream::binary);
+  std::istream *ifs = tlp::getInputFileStream(filename.c_str(), std::ifstream::in |
+                                                                    // consider file is binary
+                                                                    // to avoid pb using tellg
+                                                                    // on the input stream
+                                                                    std::ifstream::binary);
 
   // get length of file:
-  ifs->seekg (0, std::ios::end);
+  ifs->seekg(0, std::ios::end);
   int fileLength = ifs->tellg();
-  ifs->seekg (0, std::ios::beg);
+  ifs->seekg(0, std::ios::beg);
 
   // allocate memory:
-  char* fileData = new char[fileLength];
+  char *fileData = new char[fileLength];
 
   // read data as a block:
-  ifs->read (fileData, fileLength);
+  ifs->read(fileData, fileLength);
   delete ifs;
 
-  parse((const unsigned char *) fileData, fileLength);
+  parse((const unsigned char *)fileData, fileLength);
 
   delete[] fileData;
 }
 
-void YajlParseFacade::parse(const unsigned char* data, int length) {
-  const yajl_callbacks callbacks = {
-    parse_null,
-    parse_boolean,
-    parse_integer,
-    parse_double,
-    nullptr,
-    parse_string,
-    parse_start_map,
-    parse_map_key,
-    parse_end_map,
-    parse_start_array,
-    parse_end_array
-  };
+void YajlParseFacade::parse(const unsigned char *data, int length) {
+  const yajl_callbacks callbacks = {parse_null,      parse_boolean, parse_integer, parse_double,      nullptr,        parse_string,
+                                    parse_start_map, parse_map_key, parse_end_map, parse_start_array, parse_end_array};
   yajl_handle hand = yajl_alloc(&callbacks, nullptr, this);
-  yajl_status stat  = yajl_parse(hand, data, length);
+  yajl_status stat = yajl_parse(hand, data, length);
 
   if (stat != yajl_status_ok) {
-    unsigned char * str = yajl_get_error(hand, 1, data, length);
+    unsigned char *str = yajl_get_error(hand, 1, data, length);
     _parsingSucceeded = false;
     _errorMessage = std::string((const char *)str);
     yajl_free_error(hand, str);
@@ -176,7 +165,6 @@ std::string YajlParseFacade::errorMessage() const {
   return _errorMessage;
 }
 
-
 void YajlParseFacade::parseBoolean(bool) {
 }
 
@@ -192,13 +180,13 @@ void YajlParseFacade::parseEndMap() {
 void YajlParseFacade::parseInteger(long long) {
 }
 
-void YajlParseFacade::parseMapKey(const std::string&) {
+void YajlParseFacade::parseMapKey(const std::string &) {
 }
 
 void YajlParseFacade::parseNull() {
 }
 
-void YajlParseFacade::parseNumber(const char*, size_t) {
+void YajlParseFacade::parseNumber(const char *, size_t) {
 }
 
 void YajlParseFacade::parseStartArray() {
@@ -207,7 +195,7 @@ void YajlParseFacade::parseStartArray() {
 void YajlParseFacade::parseStartMap() {
 }
 
-void YajlParseFacade::parseString(const std::string&) {
+void YajlParseFacade::parseString(const std::string &) {
 }
 
 /** ============================================================= **/
@@ -222,8 +210,7 @@ void YajlWriteFacade::beautifyString(bool beautify) {
 
   if (beautify) {
     yajl_gen_config(_generator, yajl_gen_indent_string, "  ");
-  }
-  else {
+  } else {
     yajl_gen_config(_generator, yajl_gen_indent_string, "");
   }
 }
@@ -240,12 +227,12 @@ void YajlWriteFacade::writeDouble(double number) {
   yajl_gen_double(_generator, number);
 }
 
-void YajlWriteFacade::writeNumber(const char* str, size_t len) {
+void YajlWriteFacade::writeNumber(const char *str, size_t len) {
   yajl_gen_number(_generator, str, len);
 }
 
-void YajlWriteFacade::writeString(const std::string& text) {
-  yajl_gen_string(_generator, (unsigned char*)text.c_str(), text.size());
+void YajlWriteFacade::writeString(const std::string &text) {
+  yajl_gen_string(_generator, (unsigned char *)text.c_str(), text.size());
 }
 
 void YajlWriteFacade::writeNull() {
@@ -274,13 +261,13 @@ void YajlWriteFacade::writeArrayClose() {
 
 std::string YajlWriteFacade::generatedString() {
   size_t length;
-  const unsigned char* buffer;
+  const unsigned char *buffer;
   yajl_gen_status status = yajl_gen_get_buf(_generator, &buffer, &length);
 
-  if(status != yajl_gen_status_ok) {
+  if (status != yajl_gen_status_ok) {
     tlp::debug() << __PRETTY_FUNCTION__ << ": parse error.";
   }
 
-  std::string result((const char*)buffer);
+  std::string result((const char *)buffer);
   return result;
 }

@@ -24,7 +24,8 @@
 
 using namespace tlp;
 
-NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent) : QWidget(parent),_ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
+NeighborhoodHighlighterConfigWidget::NeighborhoodHighlighterConfigWidget(QWidget *parent)
+    : QWidget(parent), _ui(new Ui::NeighborhoodHighlighterConfigWidgetData) {
   _ui->setupUi(this);
   connect(_ui->applyButton, SIGNAL(clicked()), this, SIGNAL(updateNeighborhoodGraph()));
 }
@@ -36,11 +37,9 @@ NeighborhoodHighlighterConfigWidget::~NeighborhoodHighlighterConfigWidget() {
 NodeNeighborhoodView::NeighborNodesType NeighborhoodHighlighterConfigWidget::getNeighborsType() const {
   if (_ui->outputEdgesRB->isChecked()) {
     return NodeNeighborhoodView::OUT_NEIGHBORS;
-  }
-  else if (_ui->inputEdgesRB->isChecked()) {
+  } else if (_ui->inputEdgesRB->isChecked()) {
     return NodeNeighborhoodView::IN_NEIGHBORS;
-  }
-  else {
+  } else {
     return NodeNeighborhoodView::IN_OUT_NEIGHBORS;
   }
 }

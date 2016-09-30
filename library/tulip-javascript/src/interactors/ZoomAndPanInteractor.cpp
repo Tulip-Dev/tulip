@@ -40,9 +40,11 @@ ZoomAndPanInteractor::ZoomAndPanInteractor(GlScene *glScene) : _mouseButton(-1),
 }
 
 bool ZoomAndPanInteractor::mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int & /*modifiers*/) {
-  if (!_glScene) return false;
+  if (!_glScene)
+    return false;
   tlp::Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
   _mouseButton = button;
   if (button == LEFT_BUTTON) {
     if (state == DOWN) {
@@ -69,10 +71,13 @@ bool ZoomAndPanInteractor::mouseCallback(const MouseButton &button, const MouseB
 }
 
 bool ZoomAndPanInteractor::mouseMoveCallback(int x, int y, const int &modifiers) {
-  if (!_glScene) return false;
+  if (!_glScene)
+    return false;
   tlp::Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
-  if (_lastX < viewport[0] || _lastX > viewport[2] || _lastY < viewport[1] || _lastY > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
+  if (_lastX < viewport[0] || _lastX > viewport[2] || _lastY < viewport[1] || _lastY > viewport[3])
+    return false;
   if (_mouseButton == LEFT_BUTTON && !modifiers && _dragStarted) {
     _glScene->translate(_lastX - x, y - _lastY);
     _lastX = x;
@@ -87,17 +92,19 @@ bool ZoomAndPanInteractor::mouseMoveCallback(int x, int y, const int &modifiers)
     return true;
   } else if (_mouseButton == LEFT_BUTTON && modifiers == ACTIVE_SHIFT) {
 
-    int deltaX,deltaY;
-    deltaX=_lastX-x;
-    deltaY=_lastY-y;
+    int deltaX, deltaY;
+    deltaX = _lastX - x;
+    deltaY = _lastY - y;
 
-    if (abs(deltaX)>abs(deltaY))
-      deltaY=0;
+    if (abs(deltaX) > abs(deltaY))
+      deltaY = 0;
     else
-      deltaX=0;
+      deltaX = 0;
 
-    if (deltaY!=0) _glScene->rotate(deltaY,0,0);
-    if (deltaX!=0) _glScene->rotate(0,deltaX,0);
+    if (deltaY != 0)
+      _glScene->rotate(deltaY, 0, 0);
+    if (deltaX != 0)
+      _glScene->rotate(0, deltaX, 0);
 
     _lastX = x;
     _lastY = y;
@@ -108,8 +115,9 @@ bool ZoomAndPanInteractor::mouseMoveCallback(int x, int y, const int &modifiers)
 }
 
 bool ZoomAndPanInteractor::keyboardCallback(const std::string &keyStr, const int & /*modifiers*/) {
-  if (!_glScene) return false;
-  GlGraph *glGraph = dynamic_cast<GlGraph*>(_glScene->getMainLayer()->findGlEntity("graph"));
+  if (!_glScene)
+    return false;
+  GlGraph *glGraph = dynamic_cast<GlGraph *>(_glScene->getMainLayer()->findGlEntity("graph"));
   if (keyStr == "c") {
     _glScene->centerScene();
     _glScene->requestDraw();

@@ -42,7 +42,8 @@ void rotate(Coord &vec, double alpha) {
 
 class HullBuilder {
 public:
-  virtual ~HullBuilder() {}
+  virtual ~HullBuilder() {
+  }
   virtual void addPoint(const Coord &) = 0;
 };
 
@@ -51,21 +52,21 @@ public:
  * @todo take edge size into account
  * @todo create unit test to automatically chack that function
  */
-void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
-                        const BooleanProperty *selection, HullBuilder &builder) {
+void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size,
+                        const DoubleProperty *rotation, const BooleanProperty *selection, HullBuilder &builder) {
 
   if (itN != nullptr) {
 
-    for(node itn : itN) {
+    for (node itn : itN) {
       if (!selection || selection->getNodeValue(itn)) {
         Vec3f nSize(size->getNodeValue(itn));
         Vec3f point(layout->getNodeValue(itn));
         double rot(rotation->getNodeValue(itn));
         vector<Coord> points(4);
-        points[0].set( nSize[0]/2.,  nSize[1]/2.,  nSize[2]/2.);
-        points[1].set(-nSize[0]/2., -nSize[1]/2., -nSize[2]/2.);
-        points[2].set(+nSize[0]/2., -nSize[1]/2., -nSize[2]/2.);
-        points[3].set(-nSize[0]/2., +nSize[1]/2., +nSize[2]/2.);
+        points[0].set(nSize[0] / 2., nSize[1] / 2., nSize[2] / 2.);
+        points[1].set(-nSize[0] / 2., -nSize[1] / 2., -nSize[2] / 2.);
+        points[2].set(+nSize[0] / 2., -nSize[1] / 2., -nSize[2] / 2.);
+        points[3].set(-nSize[0] / 2., +nSize[1] / 2., +nSize[2] / 2.);
 
         for (unsigned int i = 0; i < 4; ++i) {
           rotate(points[i], rot);
@@ -74,12 +75,11 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
         }
       }
     }
-
   }
 
   if (itE != nullptr) {
 
-    for(edge ite : itE) {
+    for (edge ite : itE) {
       if (!selection || selection->getEdgeValue(ite)) {
         LineType::RealType::const_iterator itCoord;
         const LineType::RealType &bends = layout->getEdgeValue(ite);
@@ -88,12 +88,11 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
           builder.addPoint(*itCoord);
       }
     }
-
   }
 }
 }
 //===========================================================================
-class BoundingBoxCalculator: public HullBuilder {
+class BoundingBoxCalculator : public HullBuilder {
 public:
   inline virtual void addPoint(const Coord &point) {
     result.expand(point);
@@ -101,24 +100,27 @@ public:
   BoundingBox getResult() {
     return result;
   }
+
 private:
   BoundingBox result;
 };
 //===========================================================================
-BoundingBox tlp::computeBoundingBox(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation, const BooleanProperty *selection) {
+BoundingBox tlp::computeBoundingBox(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
+                                    const BooleanProperty *selection) {
   BoundingBoxCalculator calc;
   computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
   return calc.getResult();
 }
 //===========================================================================
-BoundingBox tlp::computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation, const BooleanProperty *selection) {
+BoundingBox tlp::computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size,
+                                    const DoubleProperty *rotation, const BooleanProperty *selection) {
   BoundingBoxCalculator calc;
   computeGraphPoints(itN, itE, layout, size, rotation, selection, calc);
   return calc.getResult();
 }
 //===========================================================================
 pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size,
-    const DoubleProperty *rotation, const BooleanProperty *selection) {
+                                              const DoubleProperty *rotation, const BooleanProperty *selection) {
   pair<Coord, Coord> result;
   result.first.set(0, 0, 0);
   result.second.set(0, 0, 0);
@@ -131,13 +133,13 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
   result.first = result.second = centre;
 
   double maxRad = 0;
-  for(node itn : graph->getNodes()) {
-    const Coord& curCoord = layout->getNodeValue(itn);
+  for (node itn : graph->getNodes()) {
+    const Coord &curCoord = layout->getNodeValue(itn);
     Size curSize(size->getNodeValue(itn) / 2.0f);
 
     if (selection == 0 || selection->getNodeValue(itn)) {
       double nodeRad = sqrt(curSize.getW() * curSize.getW() + curSize.getH() * curSize.getH());
-      Coord  radDir = curCoord - centre;
+      Coord radDir = curCoord - centre;
       double curRad = nodeRad + radDir.norm();
 
       if (radDir.norm() < 1e-6) {
@@ -151,10 +153,10 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
         radDir *= curRad;
         result.second = radDir + centre;
       }
-    }//end if
+    } // end if
   }
 
-  for(edge ite : graph->getEdges()) {
+  for (edge ite : graph->getEdges()) {
     if (selection == 0 || selection->getEdgeValue(ite)) {
       LineType::RealType::const_iterator itCoord;
       const LineType::RealType &bends = layout->getEdgeValue(ite);
@@ -165,29 +167,28 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
         if (curRad > maxRad) {
           maxRad = curRad;
           result.second = *itCoord;
-        }//end if
-      }//end for
-    }//end if
+        } // end if
+      }   // end for
+    }     // end if
   }
 
   return result;
 }
 //======================================================================================
-class ConvexHullCalculator: public HullBuilder {
+class ConvexHullCalculator : public HullBuilder {
 public:
-
   inline virtual void addPoint(const Coord &point) {
     allPoints.push_back(point);
   }
 
   vector<Coord> getResult() {
     vector<unsigned int> hullIndices;
-    convexHull(allPoints, hullIndices); //compute the convex hull
+    convexHull(allPoints, hullIndices); // compute the convex hull
     vector<unsigned int>::const_iterator it;
     vector<Coord> finalResult(hullIndices.size());
     vector<Coord>::iterator itR = finalResult.begin();
 
-    for(it = hullIndices.begin(); it != hullIndices.end(); ++it, ++itR) {
+    for (it = hullIndices.begin(); it != hullIndices.end(); ++it, ++itR) {
       (*itR) = allPoints[*it];
       (*itR)[2] = 0;
     }
@@ -201,7 +202,7 @@ private:
 //======================================================================================
 
 std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
-    const BooleanProperty *selection) {
+                                          const BooleanProperty *selection) {
 
   ConvexHullCalculator calc;
   computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
@@ -213,7 +214,7 @@ std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProper
 std::vector<Coord> tlp::computeConvexHull(const std::vector<tlp::Coord> &points) {
   ConvexHullCalculator calc;
 
-  for (size_t i = 0 ; i < points.size() ; ++i) {
+  for (size_t i = 0; i < points.size(); ++i) {
     calc.addPoint(points[i]);
   }
 
@@ -223,15 +224,15 @@ std::vector<Coord> tlp::computeConvexHull(const std::vector<tlp::Coord> &points)
 //======================================================================================
 
 // implementation based on http://mathworld.wolfram.com/Line-LineIntersection.html
-// reference : Hill, F. S. Jr. "The Pleasures of 'Perp Dot' Products." Ch. II.5 in Graphics Gems IV (Ed. P. S. Heckbert). San Diego: Academic Press, pp. 138-148, 1994.
-bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
-                                   const std::pair<tlp::Coord, tlp::Coord> &line2,
+// reference : Hill, F. S. Jr. "The Pleasures of 'Perp Dot' Products." Ch. II.5 in Graphics Gems IV (Ed. P. S. Heckbert). San Diego: Academic Press,
+// pp. 138-148, 1994.
+bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1, const std::pair<tlp::Coord, tlp::Coord> &line2,
                                    tlp::Coord &intersectionPoint) {
 
   Coord a = line1.second - line1.first;
   Coord b = line2.second - line2.first;
   Coord c = line2.first - line1.first;
-  Coord axb = a^b;
+  Coord axb = a ^ b;
   float axbnorm = axb.norm();
 
   // lines are parallel, no intersection
@@ -243,11 +244,10 @@ bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line
     return false;
 
   // lines intersects, compute the point
-  float s = (c^b).dotProduct(axb) / (axbnorm*axbnorm);
+  float s = (c ^ b).dotProduct(axb) / (axbnorm * axbnorm);
   intersectionPoint = line1.first + a * s;
 
   return true;
-
 }
 
 //======================================================================================================
@@ -255,7 +255,7 @@ bool tlp::computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line
 Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
   vector<Vec3d> pointsCp;
 
-  for (size_t i = 0 ; i < points.size() ; ++i) {
+  for (size_t i = 0; i < points.size(); ++i) {
     pointsCp.push_back(Vec3d(points[i][0], points[i][1], 0.0));
   }
 
@@ -264,15 +264,15 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
   double Cx = 0.0;
   double Cy = 0.0;
 
-  for (size_t i = 0 ; i < pointsCp.size() - 1 ; ++i) {
-    A += (pointsCp[i][0] * pointsCp[i+1][1] - pointsCp[i+1][0] * pointsCp[i][1]);
-    Cx += (pointsCp[i][0] + pointsCp[i+1][0])*(pointsCp[i][0]*pointsCp[i+1][1] - pointsCp[i+1][0]*pointsCp[i][1]);
-    Cy += (pointsCp[i][1] + pointsCp[i+1][1])*(pointsCp[i][0]*pointsCp[i+1][1] - pointsCp[i+1][0]*pointsCp[i][1]);
+  for (size_t i = 0; i < pointsCp.size() - 1; ++i) {
+    A += (pointsCp[i][0] * pointsCp[i + 1][1] - pointsCp[i + 1][0] * pointsCp[i][1]);
+    Cx += (pointsCp[i][0] + pointsCp[i + 1][0]) * (pointsCp[i][0] * pointsCp[i + 1][1] - pointsCp[i + 1][0] * pointsCp[i][1]);
+    Cy += (pointsCp[i][1] + pointsCp[i + 1][1]) * (pointsCp[i][0] * pointsCp[i + 1][1] - pointsCp[i + 1][0] * pointsCp[i][1]);
   }
 
   A *= 0.5;
-  Cx *= 1.0 / (6.0*A);
-  Cy *= 1.0 / (6.0*A);
+  Cx *= 1.0 / (6.0 * A);
+  Cy *= 1.0 / (6.0 * A);
   return Coord(static_cast<float>(Cx), static_cast<float>(Cy));
 }
 
@@ -290,53 +290,51 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
   bool BSet = false;
 
   // pick three points to define a plane
-  for (size_t i = 0 ; i < points.size() ; ++i) {
+  for (size_t i = 0; i < points.size(); ++i) {
     if (i == 0) {
       A = points[i];
-    }
-    else if (!BSet && points[i] != A) {
+    } else if (!BSet && points[i] != A) {
       B = points[i];
       BSet = true;
-    }
-    else if (BSet) {
+    } else if (BSet) {
       // pick a third point non aligned with the two others
       C = points[i];
 
-      if (((C-A)^(B-A)).norm() > 1e-3) {
+      if (((C - A) ^ (B - A)).norm() > 1e-3) {
         break;
       }
     }
   }
 
-  Coord a = B -A;
-  Coord b = C -A;
+  Coord a = B - A;
+  Coord b = C - A;
   normalize(a);
   normalize(b);
-  Coord c = a^b;
+  Coord c = a ^ b;
   normalize(c);
-  b = c^a;
+  b = c ^ a;
   normalize(b);
 
   // compute the distance of each point to the plane
-  for (size_t i = 0 ; i < points.size() ; ++i) {
+  for (size_t i = 0; i < points.size(); ++i) {
     const Coord &D = points[i];
 
     // if the point is too far from the plane, the layout is not coplanar
-    if (abs(c.dotProduct(D-A)) > 1e-3) {
+    if (abs(c.dotProduct(D - A)) > 1e-3) {
       return false;
     }
   }
 
   // compute the inverse transform matrix for projecting the points in the z = 0 plane
-  invTransformMatrix[0][0]=a[0];
-  invTransformMatrix[1][0]=a[1];
-  invTransformMatrix[2][0]=a[2];
-  invTransformMatrix[0][1]=b[0];
-  invTransformMatrix[1][1]=b[1];
-  invTransformMatrix[2][1]=b[2];
-  invTransformMatrix[0][2]=c[0];
-  invTransformMatrix[1][2]=c[1];
-  invTransformMatrix[2][2]=c[2];
+  invTransformMatrix[0][0] = a[0];
+  invTransformMatrix[1][0] = a[1];
+  invTransformMatrix[2][0] = a[2];
+  invTransformMatrix[0][1] = b[0];
+  invTransformMatrix[1][1] = b[1];
+  invTransformMatrix[2][1] = b[2];
+  invTransformMatrix[0][2] = c[0];
+  invTransformMatrix[1][2] = c[1];
+  invTransformMatrix[2][2] = c[2];
   invTransformMatrix.inverse();
 
   return true;
@@ -344,8 +342,7 @@ bool tlp::isLayoutCoPlanar(const vector<Coord> &points, Mat3f &invTransformMatri
 
 //======================================================================================================
 
-std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center,
-    const tlp::Size &size, float startAngle) {
+std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides, const tlp::Coord &center, const tlp::Size &size, float startAngle) {
 
   assert(numberOfSides > 2);
 
@@ -353,16 +350,16 @@ std::vector<tlp::Coord> tlp::computeRegularPolygon(unsigned int numberOfSides, c
   vector<Coord> points;
   float delta = (2.0f * M_PI) / static_cast<float>(numberOfSides);
 
-  for (unsigned int i = 0 ; i < numberOfSides ; ++i) {
+  for (unsigned int i = 0; i < numberOfSides; ++i) {
     float deltaX = cos(i * delta + startAngle);
     float deltaY = sin(i * delta + startAngle);
-    points.push_back(Coord(deltaX,deltaY,center[2]));
+    points.push_back(Coord(deltaX, deltaY, center[2]));
     box.expand(points.back());
   }
 
-  for(vector<Coord>::iterator it = points.begin() ; it != points.end() ; ++it) {
-    (*it)[0]=center[0]+(((*it)[0]-((box[1][0]+box[0][0])/2.))/((box[1][0]-box[0][0])/2.))*size[0];
-    (*it)[1]=center[1]+(((*it)[1]-((box[1][1]+box[0][1])/2.))/((box[1][1]-box[0][1])/2.))*size[1];
+  for (vector<Coord>::iterator it = points.begin(); it != points.end(); ++it) {
+    (*it)[0] = center[0] + (((*it)[0] - ((box[1][0] + box[0][0]) / 2.)) / ((box[1][0] - box[0][0]) / 2.)) * size[0];
+    (*it)[1] = center[1] + (((*it)[1] - ((box[1][1] + box[0][1]) / 2.)) / ((box[1][1] - box[0][1]) / 2.)) * size[1];
   }
 
   return points;

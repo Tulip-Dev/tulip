@@ -45,10 +45,12 @@ class BasicMetricTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testStrengthMetric);
   CPPUNIT_TEST(testStrongComponent);
   CPPUNIT_TEST_SUITE_END();
+
 private:
   tlp::Graph *graph;
-  template<typename PropType>
-  bool computeProperty(const std::string &algorithm, const std::string& graphType = "Planar Graph", PropType* prop = nullptr);
+  template <typename PropType>
+  bool computeProperty(const std::string &algorithm, const std::string &graphType = "Planar Graph", PropType *prop = nullptr);
+
 public:
   void setUp();
   void tearDown();

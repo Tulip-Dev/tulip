@@ -11,7 +11,6 @@
 
 namespace tlp {
 
-
 /**
   * @brief Helper class to download the content of a file referenced by an url
   **/
@@ -20,7 +19,6 @@ class TLP_QT_SCOPE FileDownloader : public QObject {
   Q_OBJECT
 
 public:
-
   FileDownloader();
 
   /**
@@ -36,15 +34,12 @@ signals:
 
 private slots:
 
-  void fileDownloaded(QNetworkReply* pReply);
+  void fileDownloaded(QNetworkReply *pReply);
 
 private:
-
   QNetworkAccessManager _webCtrl;
   QByteArray _downloadedData;
-
 };
-
 }
 
 #endif // FILEDOWNLOADER_H

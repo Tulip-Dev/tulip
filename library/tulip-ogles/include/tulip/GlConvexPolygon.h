@@ -49,12 +49,12 @@ class GlBuffer;
 class TLP_GLES_SCOPE GlConvexPolygon : public GlEntity {
 
 public:
-
   GlConvexPolygon();
 
   GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor);
 
-  GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor, const tlp::Color &outlineColor, const float outlineWidth=1.f);
+  GlConvexPolygon(const std::vector<tlp::Coord> &contour, const tlp::Color &fillColor, const tlp::Color &outlineColor,
+                  const float outlineWidth = 1.f);
 
   ~GlConvexPolygon();
 
@@ -88,14 +88,13 @@ public:
     _texture = texture;
   }
 
-  void draw(const Camera &camera, bool pickingMode=false);
+  void draw(const Camera &camera, bool pickingMode = false);
 
-  void draw(const Camera &camera, const Light &, bool pickingMode=false);
+  void draw(const Camera &camera, const Light &, bool pickingMode = false);
 
   void translate(const tlp::Coord &move);
 
 private:
-
   void uploadRenderingData();
 
   std::vector<tlp::Coord> _contour;
@@ -110,14 +109,12 @@ private:
   GlBuffer *_polygonIndicesBuffer = nullptr;
 
   unsigned int _nbVertices = 0;
-  unsigned int _nbIndices= 0;
+  unsigned int _nbIndices = 0;
 
   std::string _texture;
 
   bool _needRenderingDataUpload = true;
-
 };
-
 }
 
 #endif // GLCONVEXPOLYGON_H

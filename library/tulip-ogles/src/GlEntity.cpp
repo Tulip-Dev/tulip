@@ -32,7 +32,7 @@ using namespace std;
 using namespace tlp;
 
 unsigned int GlEntity::nextId(0);
-map<unsigned int, GlEntity*> GlEntity::idToEntity;
+map<unsigned int, GlEntity *> GlEntity::idToEntity;
 
 GlEntity::GlEntity() : _visible(true), _stencil(0xFF), _selected(false), _layer(nullptr), _parent(nullptr) {
   _id = ++nextId;

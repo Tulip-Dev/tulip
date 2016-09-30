@@ -35,74 +35,48 @@
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlUtils.h>
 
-typedef tlp::Vector<float,  5, double> Vec5f;
+typedef tlp::Vector<float, 5, double> Vec5f;
 
 using namespace std;
 using namespace tlp;
 
-GlConcavePolygon::GlConcavePolygon(const vector<Coord> &coords,Color fcolor, const string &textureName):
-  _currentVector(-1),
-  _outlined(false),
-  _fillColor(fcolor),
-  _outlineSize(1),
-  _polygonVerticesDataVBO(nullptr),
-  _polygonIndicesVBO(nullptr),
-  _nbIndices(0),
-  _texture(textureName) {
+GlConcavePolygon::GlConcavePolygon(const vector<Coord> &coords, Color fcolor, const string &textureName)
+    : _currentVector(-1), _outlined(false), _fillColor(fcolor), _outlineSize(1), _polygonVerticesDataVBO(nullptr), _polygonIndicesVBO(nullptr),
+      _nbIndices(0), _texture(textureName) {
   createPolygon(coords);
   runTesselation();
 }
 //=====================================================
-GlConcavePolygon::GlConcavePolygon(const vector<Coord> &coords,Color fcolor,Color ocolor,const string &textureName):
-  _currentVector(-1),
-  _outlined(true),
-  _fillColor(fcolor),
-  _outlineColor(ocolor),
-  _outlineSize(1),
-  _polygonVerticesDataVBO(nullptr),
-  _polygonIndicesVBO(nullptr),
-  _nbIndices(0),
-  _texture(textureName) {
+GlConcavePolygon::GlConcavePolygon(const vector<Coord> &coords, Color fcolor, Color ocolor, const string &textureName)
+    : _currentVector(-1), _outlined(true), _fillColor(fcolor), _outlineColor(ocolor), _outlineSize(1), _polygonVerticesDataVBO(nullptr),
+      _polygonIndicesVBO(nullptr), _nbIndices(0), _texture(textureName) {
   if (!coords.empty()) {
     createPolygon(coords);
     runTesselation();
   }
 }
 //=====================================================
-GlConcavePolygon::GlConcavePolygon(const vector<vector<Coord> >&coords,Color fcolor,const string &textureName):
-  _currentVector(-1),
-  _outlined(false),
-  _fillColor(fcolor),
-  _outlineSize(1),
-  _polygonVerticesDataVBO(nullptr),
-  _polygonIndicesVBO(nullptr),
-  _nbIndices(0),
-  _texture(textureName) {
-  for (size_t i = 0 ; i < coords.size() ; ++i) {
+GlConcavePolygon::GlConcavePolygon(const vector<vector<Coord>> &coords, Color fcolor, const string &textureName)
+    : _currentVector(-1), _outlined(false), _fillColor(fcolor), _outlineSize(1), _polygonVerticesDataVBO(nullptr), _polygonIndicesVBO(nullptr),
+      _nbIndices(0), _texture(textureName) {
+  for (size_t i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i]);
   }
 
   runTesselation();
 }
 //=====================================================
-GlConcavePolygon::GlConcavePolygon(const vector<vector<Coord> >&coords,Color fcolor,Color ocolor,const string &textureName):
-  _currentVector(-1),
-  _outlined(true),
-  _fillColor(fcolor),
-  _outlineColor(ocolor),
-  _outlineSize(1),
-  _polygonVerticesDataVBO(nullptr),
-  _polygonIndicesVBO(nullptr),
-  _nbIndices(0),
-  _texture(textureName) {
-  for(unsigned int i=0; i<coords.size(); ++i) {
+GlConcavePolygon::GlConcavePolygon(const vector<vector<Coord>> &coords, Color fcolor, Color ocolor, const string &textureName)
+    : _currentVector(-1), _outlined(true), _fillColor(fcolor), _outlineColor(ocolor), _outlineSize(1), _polygonVerticesDataVBO(nullptr),
+      _polygonIndicesVBO(nullptr), _nbIndices(0), _texture(textureName) {
+  for (unsigned int i = 0; i < coords.size(); ++i) {
     createPolygon(coords[i]);
   }
   runTesselation();
 }
 //=====================================================
 GlConcavePolygon::~GlConcavePolygon() {
-  for (size_t i = 0 ; i < _pointsVBOs.size() ; ++i) {
+  for (size_t i = 0; i < _pointsVBOs.size(); ++i) {
     delete _pointsVBOs[i];
   }
 }
@@ -111,14 +85,13 @@ GlConcavePolygon::~GlConcavePolygon() {
 void GlConcavePolygon::createPolygon(const vector<Coord> &coords) {
   beginNewHole();
 
-  for(vector<Coord>::const_iterator it=coords.begin(); it!=coords.end(); ++it) {
+  for (vector<Coord>::const_iterator it = coords.begin(); it != coords.end(); ++it) {
     addPoint(*it);
   }
 
   GlBuffer *pointsVBO = new GlBuffer(GlBuffer::VertexBuffer);
   pointsVBO->allocate(_points[_currentVector]);
   _pointsVBOs.push_back(pointsVBO);
-
 }
 //=====================================================
 void GlConcavePolygon::setOutlineMode(const bool outlined) {
@@ -126,10 +99,10 @@ void GlConcavePolygon::setOutlineMode(const bool outlined) {
 }
 //=====================================================
 void GlConcavePolygon::setOutlineSize(double size) {
-  _outlineSize=size;
+  _outlineSize = size;
 }
 //=====================================================
-void GlConcavePolygon::addPoint(const Coord& point) {
+void GlConcavePolygon::addPoint(const Coord &point) {
   _points[_currentVector].push_back(point);
   _boundingBox.expand(point);
 }
@@ -140,25 +113,25 @@ void GlConcavePolygon::beginNewHole() {
 }
 //=====================================================
 void GlConcavePolygon::runTesselation() {
-  TESStesselator* tess = tessNewTess(nullptr);
-  for (size_t i = 0 ; i < _points.size() ; ++i) {
-    tessAddContour(tess, 3, &_points[i][0], sizeof(float)*3, _points[i].size());
+  TESStesselator *tess = tessNewTess(nullptr);
+  for (size_t i = 0; i < _points.size(); ++i) {
+    tessAddContour(tess, 3, &_points[i][0], sizeof(float) * 3, _points[i].size());
   }
   const int nvp = 6;
   if (tessTesselate(tess, TESS_WINDING_ODD, TESS_POLYGONS, nvp, 3, 0)) {
-    const float* verts = tessGetVertices(tess);
-    const int* elems = tessGetElements(tess);
+    const float *verts = tessGetVertices(tess);
+    const int *elems = tessGetElements(tess);
     const int nelems = tessGetElementCount(tess);
     std::vector<Vec5f> vertices;
     std::vector<unsigned int> indices;
     std::map<Coord, unsigned int> vidx;
     for (int i = 0; i < nelems; ++i) {
       std::vector<tlp::Coord> verticesTmp;
-      const int* p = &elems[i*nvp];
+      const int *p = &elems[i * nvp];
       for (int j = 0; j < nvp && p[j] != TESS_UNDEF; ++j) {
-        int idxx = p[j]*3;
-        int idxy = p[j]*3+1;
-        int idxz = p[j]*3+2;
+        int idxx = p[j] * 3;
+        int idxy = p[j] * 3 + 1;
+        int idxz = p[j] * 3 + 2;
         Coord p(verts[idxx], verts[idxy], verts[idxz]);
         verticesTmp.push_back(p);
         if (vidx.find(p) == vidx.end()) {
@@ -173,10 +146,10 @@ void GlConcavePolygon::runTesselation() {
         }
       }
       Coord centerPoint = verticesTmp[0];
-      for (size_t j = 1 ; j < verticesTmp.size() - 1 ; ++j) {
+      for (size_t j = 1; j < verticesTmp.size() - 1; ++j) {
         indices.push_back(vidx[centerPoint]);
         indices.push_back(vidx[verticesTmp[j]]);
-        indices.push_back(vidx[verticesTmp[j+1]]);
+        indices.push_back(vidx[verticesTmp[j + 1]]);
       }
     }
 
@@ -193,7 +166,6 @@ void GlConcavePolygon::runTesselation() {
 }
 //=====================================================
 void GlConcavePolygon::draw(const Camera &camera, const Light &, bool pickingMode) {
-
 
   GlShaderProgram *shader = ShaderManager::getInstance()->getFlatRenderingShader();
   shader->activate();
@@ -219,8 +191,8 @@ void GlConcavePolygon::draw(const Camera &camera, const Light &, bool pickingMod
 
   if (_nbIndices > 0) {
     _polygonVerticesDataVBO->bind();
-    shader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 5*sizeof(float), BUFFER_OFFSET(0));
-    shader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, 5*sizeof(float), BUFFER_OFFSET(3*sizeof(float)));
+    shader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), BUFFER_OFFSET(0));
+    shader->setVertexAttribPointer("a_texCoord", 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), BUFFER_OFFSET(3 * sizeof(float)));
     _polygonIndicesVBO->bind();
     glDrawElements(GL_TRIANGLES, _nbIndices, GL_UNSIGNED_INT, BUFFER_OFFSET(0));
     _polygonIndicesVBO->release();
@@ -230,10 +202,10 @@ void GlConcavePolygon::draw(const Camera &camera, const Light &, bool pickingMod
   shader->disableAttributesArrays();
 
   if (_outlined) {
-    float lineWidth=_outlineSize;
+    float lineWidth = _outlineSize;
 
-    if(lineWidth < 1e-6f)
-      lineWidth=1e-6f;
+    if (lineWidth < 1e-6f)
+      lineWidth = 1e-6f;
 
     glLineWidth(lineWidth);
     if (!pickingMode) {
@@ -242,7 +214,7 @@ void GlConcavePolygon::draw(const Camera &camera, const Light &, bool pickingMod
       shader->setUniformColor("u_color", _pickingColor);
     }
 
-    for(size_t v = 0 ; v < _points.size() ; ++v) {
+    for (size_t v = 0; v < _points.size(); ++v) {
       _pointsVBOs[v]->bind();
       shader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 0, BUFFER_OFFSET(0));
       glDrawArrays(GL_LINE_LOOP, 0, _points[v].size());
@@ -259,10 +231,10 @@ void GlConcavePolygon::draw(const Camera &camera, bool pickingMode) {
   GlEntity::draw(camera, pickingMode);
 }
 //===========================================================
-void GlConcavePolygon::translate(const Coord& vec) {
+void GlConcavePolygon::translate(const Coord &vec) {
 
-  for(vector<vector<Coord> >::iterator it = _points.begin(); it != _points.end(); ++it) {
-    for(vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
+  for (vector<vector<Coord>>::iterator it = _points.begin(); it != _points.end(); ++it) {
+    for (vector<Coord>::iterator it2 = (*it).begin(); it2 != (*it).end(); ++it2) {
       (*it2) += vec;
     }
   }
@@ -271,5 +243,3 @@ void GlConcavePolygon::translate(const Coord& vec) {
 
   runTesselation();
 }
-
-

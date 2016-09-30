@@ -39,7 +39,7 @@
 using namespace std;
 using namespace tlp;
 
-static char sepChar[] = {' ', '\t', '=', '(', '[', '{' , ',', '*', '+', '/', '^', '-', 0};
+static char sepChar[] = {' ', '\t', '=', '(', '[', '{', ',', '*', '+', '/', '^', '-', 0};
 
 AutoCompletionDataBase::AutoCompletionDataBase(APIDataBase *apiDb) : _graph(nullptr), _apiDb(apiDb) {
   _iteratorType["tlp.IteratorNode"] = "tlp.node";
@@ -58,23 +58,20 @@ static bool tlpPluginExists(const QString &pluginName) {
 static QString getPythonTypeName(const QString &cppTypeName) {
   if (cppTypeName == "b") {
     return "boolean";
-  }
-  else if (cppTypeName == "i") {
+  } else if (cppTypeName == "i") {
     return "integer";
-  }
-  else if (cppTypeName == "d") {
+  } else if (cppTypeName == "d") {
     return "float";
   } else if (cppTypeName == typeid(std::string).name()) {
     return "string";
-  }
-  else {
+  } else {
     QString typeName = tlp::demangleTlpClassName(cppTypeName.toStdString().c_str()).c_str();
     typeName.replace("*", "");
     return "tlp." + typeName;
   }
 }
 
-static QSet<QString> getParametersListForPlugin(const QString &pluginName, const QString &prefix="") {
+static QSet<QString> getParametersListForPlugin(const QString &pluginName, const QString &prefix = "") {
   QSet<QString> ret;
 
   if (tlp::PluginLister::pluginExists(pluginName.toStdString())) {
@@ -108,7 +105,7 @@ static QSet<QString> getParametersListForPlugin(const QString &pluginName, const
   return ret;
 }
 
-static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginName, const QString &strCollectionName, const QString &prefix="") {
+static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginName, const QString &strCollectionName, const QString &prefix = "") {
   QSet<QString> ret;
 
   if (tlp::PluginLister::pluginExists(pluginName.toStdString())) {
@@ -118,7 +115,7 @@ static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginNa
     tlp::StringCollection sc;
     dataSet.get(strCollectionName.toStdString(), sc);
 
-    for (size_t i = 0 ; i < sc.size() ; ++i) {
+    for (size_t i = 0; i < sc.size(); ++i) {
       QString entry = "\"" + QString::fromUtf8(sc[i].c_str()) + "\"";
 
       if (entry.startsWith(prefix))
@@ -129,61 +126,46 @@ static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginNa
   return ret;
 }
 
-
 static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QString &propName) {
   if (graph->existLocalProperty(propName.toStdString())) {
     PropertyInterface *prop = graph->getProperty(propName.toStdString());
 
     if (prop->getTypename() == "bool") {
       return "tlp.BooleanProperty";
-    }
-    else if (prop->getTypename() == "vector<bool>") {
+    } else if (prop->getTypename() == "vector<bool>") {
       return "tlp.BooleanVectorProperty";
-    }
-    else if (prop->getTypename() == "int") {
+    } else if (prop->getTypename() == "int") {
       return "tlp.IntegerProperty";
-    }
-    else if (prop->getTypename() == "vector<int>") {
+    } else if (prop->getTypename() == "vector<int>") {
       return "tlp.IntegerVectorProperty";
-    }
-    else if (prop->getTypename() == "double") {
+    } else if (prop->getTypename() == "double") {
       return "tlp.DoubleProperty";
-    }
-    else if (prop->getTypename() == "vector<double>") {
+    } else if (prop->getTypename() == "vector<double>") {
       return "tlp.DoubleVectorProperty";
-    }
-    else if (prop->getTypename() == "color") {
+    } else if (prop->getTypename() == "color") {
       return "tlp.ColorProperty";
-    }
-    else if (prop->getTypename() == "vector<color>") {
+    } else if (prop->getTypename() == "vector<color>") {
       return "tlp.ColorVectorProperty";
-    }
-    else if (prop->getTypename() == "layout") {
+    } else if (prop->getTypename() == "layout") {
       return "tlp.LayoutProperty";
-    }
-    else if (prop->getTypename() == "vector<coord>") {
+    } else if (prop->getTypename() == "vector<coord>") {
       return "tlp.CoordVectorProperty";
-    }
-    else if (prop->getTypename() == "size") {
+    } else if (prop->getTypename() == "size") {
       return "tlp.SizeProperty";
-    }
-    else if (prop->getTypename() == "vector<size>") {
+    } else if (prop->getTypename() == "vector<size>") {
       return "tlp.SizeVectorProperty";
-    }
-    else if (prop->getTypename() == "string") {
+    } else if (prop->getTypename() == "string") {
       return "tlp.StringProperty";
-    }
-    else if (prop->getTypename() == "vector<string>") {
+    } else if (prop->getTypename() == "vector<string>") {
       return "tlp.StringVectorProperty";
-    }
-    else if (prop->getTypename() == "graph") {
+    } else if (prop->getTypename() == "graph") {
       return "tlp.GraphProperty";
     }
   }
 
   QString ret = "";
 
-  for(Graph *sg : graph->getSubGraphs()) {
+  for (Graph *sg : graph->getSubGraphs()) {
     ret = getPythonTypeNameForGraphProperty(sg, propName);
 
     if (ret != "") {
@@ -197,64 +179,49 @@ static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QStrin
 static QString getPythonTypeNameForPropertyType(const QString &propertyType, const bool nodes) {
   if (propertyType == "tlp.BooleanProperty") {
     return "boolean";
-  }
-  else if (propertyType == "tlp.BooleanVectorProperty") {
+  } else if (propertyType == "tlp.BooleanVectorProperty") {
     return "list-of-boolean";
-  }
-  else if (propertyType == "tlp.LayoutProperty") {
+  } else if (propertyType == "tlp.LayoutProperty") {
     if (nodes) {
       return "tlp.Coord";
-    }
-    else {
+    } else {
       return "list-of-tlp.Coord";
     }
-  }
-  else if (propertyType == "tlp.CoordVectorProperty") {
+  } else if (propertyType == "tlp.CoordVectorProperty") {
     return "list-of-tlp.Coord";
-  }
-  else if (propertyType == "tlp.SizeProperty") {
+  } else if (propertyType == "tlp.SizeProperty") {
     return "tlp.Size";
-  }
-  else if (propertyType == "tlp.SizeVectorProperty") {
+  } else if (propertyType == "tlp.SizeVectorProperty") {
     return "list-of-tlp.Size";
-  }
-  else if (propertyType == "tlp.ColorProperty") {
+  } else if (propertyType == "tlp.ColorProperty") {
     return "tlp.Color";
-  }
-  else if (propertyType == "tlp.ColorVectorProperty") {
+  } else if (propertyType == "tlp.ColorVectorProperty") {
     return "list-of-tlp.Color";
-  }
-  else if (propertyType == "tlp.DoubleProperty") {
+  } else if (propertyType == "tlp.DoubleProperty") {
     return "float";
-  }
-  else if (propertyType == "tlp.DoubleVectorProperty") {
+  } else if (propertyType == "tlp.DoubleVectorProperty") {
     return "list-of-float";
-  }
-  else if (propertyType == "tlp.IntegerProperty") {
+  } else if (propertyType == "tlp.IntegerProperty") {
     return "integer";
-  }
-  else if (propertyType == "tlp.IntegerVectorProperty") {
+  } else if (propertyType == "tlp.IntegerVectorProperty") {
     return "list-of-integer";
-  }
-  else if (propertyType == "tlp.GraphProperty") {
+  } else if (propertyType == "tlp.GraphProperty") {
     if (nodes) {
       return "tlp.Graph";
-    }
-    else {
+    } else {
       return "list-of-tlp.edge";
     }
-  }
-  else if (propertyType == "tlp.StringProperty") {
+  } else if (propertyType == "tlp.StringProperty") {
     return "string";
-  }
-  else if (propertyType == "tlp.StringVectorProperty") {
+  } else if (propertyType == "tlp.StringVectorProperty") {
     return "list-of-string";
   }
 
   return "";
 }
 
-void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession, const QString &moduleName) {
+void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const int currentLine, const bool interactiveSession,
+                                                      const QString &moduleName) {
 
   _globalAutoCompletionList.clear();
   _functionAutoCompletionList.clear();
@@ -287,20 +254,18 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   _classAttributeToType["tlp.StringAlgorithm"]["self.result"] = "tlp.StringProperty";
 
   QSet<QString> types = _apiDb->getTypesList();
-  foreach(QString type, types) {
+  foreach (QString type, types) {
     _globalAutoCompletionList.insert(type);
 
     if (type.indexOf(".") != -1) {
       QStringList types = type.split(".");
-      foreach(QString entry, types) {
-        _globalAutoCompletionList.insert(entry);
-      }
+      foreach (QString entry, types) { _globalAutoCompletionList.insert(entry); }
     }
   }
 
   QVector<QString> importedModules = PythonInterpreter::getInstance()->getImportedModulesList();
 
-  for (int i = 0 ; i < importedModules.size() ; ++i) {
+  for (int i = 0; i < importedModules.size(); ++i) {
     QString moduleName = importedModules[i];
     _globalAutoCompletionList.insert(moduleName);
 
@@ -318,7 +283,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
   if (PythonInterpreter::getInstance()->runString(QString("import ") + builtinModName)) {
     QVector<QString> builtinDictContent = PythonInterpreter::getInstance()->getObjectDictEntries(builtinModName);
 
-    for (int i = 0 ; i < builtinDictContent.size() ; ++i) {
+    for (int i = 0; i < builtinDictContent.size(); ++i) {
       _globalAutoCompletionList.insert(builtinDictContent[i]);
     }
   }
@@ -358,8 +323,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
     if (interactiveSession) {
       if (!(line.startsWith(">>> ") || line.startsWith("... "))) {
         continue;
-      }
-      else {
+      } else {
         line = line.replace(0, 4, "");
       }
     }
@@ -391,19 +355,19 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           int pos2 = line.indexOf(stringDelim, pos);
 
           if (pos2 != -1) {
-            QString pluginName = line.mid(pos, pos2-pos);
+            QString pluginName = line.mid(pos, pos2 - pos);
 
             if (tlpPluginExists(pluginName)) {
               if (_pluginParametersDataSet.find(fullName) == _pluginParametersDataSet.end()) {
-                _pluginParametersDataSet[fullName] = QHash<QString, QSet<QString> >();
+                _pluginParametersDataSet[fullName] = QHash<QString, QSet<QString>>();
                 _varToPluginName[fullName] = QHash<QString, QString>();
               }
 
               _varToPluginName[fullName][varName] = pluginName;
               _pluginParametersDataSet[fullName][varName] = getParametersListForPlugin(pluginName);
-              foreach(QString param, _pluginParametersDataSet[fullName][varName]) {
+              foreach (QString param, _pluginParametersDataSet[fullName][varName]) {
                 QString name = param.mid(0, param.indexOf("(") - 1);
-                QString type = param.mid(param.indexOf("(")+1, param.indexOf(")") - param.indexOf("(") - 1);
+                QString type = param.mid(param.indexOf("(") + 1, param.indexOf(")") - param.indexOf("(") - 1);
                 QString dataSetVarName = varName + "[" + name + "]";
 
                 if (_varToType.find(fullName) == _varToType.end()) {
@@ -440,14 +404,14 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
     if (ln < currentLine && varAssignRegexp.indexIn(line) != -1) {
       QString varName = line.mid(0, line.indexOf('=')).trimmed();
-      QString expr = line.mid(line.indexOf('=')+1).trimmed();
+      QString expr = line.mid(line.indexOf('=') + 1).trimmed();
 
       QString selfPattern = "self.";
       int pos = varName.indexOf(selfPattern);
 
       if (currentClassName != "") {
         if (pos != -1) {
-          QString classEntry = varName.mid(pos+selfPattern.size());
+          QString classEntry = varName.mid(pos + selfPattern.size());
 
           if (_classContents.find(currentClassName) == _classContents.end()) {
             _classContents[currentClassName] = QSet<QString>();
@@ -459,17 +423,13 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
       QString type = "";
 
-
       if (expr.length() > 1 && expr[0] == '\"' && expr[expr.length() - 1] == '\"') {
         type = "string";
-      }
-      else if (expr.length() > 1 && expr[0] == '[' && expr[expr.length() - 1] == ']') {
+      } else if (expr.length() > 1 && expr[0] == '[' && expr[expr.length() - 1] == ']') {
         type = "list";
-      }
-      else if (expr.length() > 1 && expr[0] == '{' && expr[expr.length() - 1] == '}') {
+      } else if (expr.length() > 1 && expr[0] == '{' && expr[expr.length() - 1] == '}') {
         type = "dict";
       }
-
 
       if (type == "") {
         type = findTypeForExpr(expr, fullName);
@@ -482,8 +442,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           }
 
           _varToType[fullName][varName] = type;
-        }
-        else {
+        } else {
           if (_classAttributeToType.find(currentClassName) == _classAttributeToType.end()) {
             _classAttributeToType[currentClassName] = QHash<QString, QString>();
           }
@@ -498,8 +457,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         if (moduleName != "") {
           _apiDb->addApiEntry(moduleName + "." + varName);
         }
-      }
-      else {
+      } else {
         _functionAutoCompletionList[fullName].insert(varName);
       }
 
@@ -512,12 +470,11 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
       if (currentFunctionName == "global") {
         _globalAutoCompletionList.insert(varName);
-      }
-      else {
+      } else {
         _functionAutoCompletionList[fullName].insert(varName);
       }
 
-      QString expr = line.mid(line.indexOf(QRegExp("\\bin\\b"))+3).trimmed();
+      QString expr = line.mid(line.indexOf(QRegExp("\\bin\\b")) + 3).trimmed();
       expr = expr.mid(0, expr.indexOf(":")).trimmed();
 
       QString type = findTypeForExpr(expr, fullName);
@@ -569,7 +526,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       }
 
       if (moduleName != "") {
-        QString withParams = line.mid(4, line.lastIndexOf(')')-3);
+        QString withParams = line.mid(4, line.lastIndexOf(')') - 3);
 
         if (currentClassName != "") {
           QString withParamsFull = currentClassName + "." + withParams;
@@ -577,8 +534,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
           if (!withParams.startsWith("__")) {
             withParamsFull = withParamsFull.replace(QRegExp("[ \t]*self[ \t]*,[ \t]*"), "");
             withParamsFull = withParamsFull.replace(QRegExp("[ \t]*self[ \t]*"), "");
-          }
-          else if (withParams.startsWith("__init__")) {
+          } else if (withParams.startsWith("__init__")) {
             _apiDb->addApiEntry(moduleName + "." + withParamsFull);
             withParamsFull = withParamsFull.replace(QRegExp(".__init__\\([ \t]*self[ \t]*,[ \t]*"), "(");
             withParamsFull = withParamsFull.replace(QRegExp(".__init__\\([ \t]*self[ \t]*"), "(");
@@ -594,7 +550,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         _functionAutoCompletionList[fullName] = QSet<QString>();
       }
 
-      QString params = line.mid(line.indexOf('(')+1, line.indexOf(')') - line.indexOf('(') - 1);
+      QString params = line.mid(line.indexOf('(') + 1, line.indexOf(')') - line.indexOf('(') - 1);
 
       if (params.indexOf(",") == -1) {
         QString paramClean = params;
@@ -604,10 +560,9 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
         }
 
         _functionAutoCompletionList[fullName].insert(paramClean.trimmed());
-      }
-      else {
+      } else {
         QStringList pList = params.split(",");
-        foreach(QString param, pList) {
+        foreach (QString param, pList) {
           QString paramClean = param;
 
           if (param.indexOf("=") != -1) {
@@ -638,11 +593,11 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       int pos = className.indexOf('(');
 
       if (pos != -1) {
-        className = className.mid(6, pos-6);
-        int pos2 = line.indexOf(')', pos+1);
+        className = className.mid(6, pos - 6);
+        int pos2 = line.indexOf(')', pos + 1);
 
         if (pos2 != -1) {
-          QString cType = line.mid(pos+1, pos2-pos-1);
+          QString cType = line.mid(pos + 1, pos2 - pos - 1);
 
           if (_classBases.find(className) == _classBases.end()) {
             _classBases[className] = QSet<QString>();
@@ -650,17 +605,14 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
           if (_apiDb->typeExists(cType)) {
             _classBases[className].insert(cType);
-          }
-          else if (_apiDb->getFullTypeName(cType) != "") {
+          } else if (_apiDb->getFullTypeName(cType) != "") {
             _classBases[className].insert(_apiDb->getFullTypeName(cType));
-          }
-          else {
+          } else {
             _classBases[className].insert(cType);
           }
         }
-      }
-      else {
-        className = className.mid(6, className.indexOf(':')-6);
+      } else {
+        className = className.mid(6, className.indexOf(':') - 6);
 
         if (_classBases.find(className) == _classBases.end()) {
           _classBases[className] = QSet<QString>();
@@ -680,7 +632,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
     if (_graph && graphPropRegexp.indexIn(line) != -1) {
       QString expr = line.mid(graphPropRegexp.indexIn(line), graphPropRegexp.matchedLength());
       QString varName = expr.mid(0, expr.indexOf("["));
-      QString propName = expr.mid(expr.indexOf("\"")+1, expr.lastIndexOf("\"") - expr.indexOf("\"") - 1);
+      QString propName = expr.mid(expr.indexOf("\"") + 1, expr.lastIndexOf("\"") - expr.indexOf("\"") - 1);
 
       if (findTypeForExpr(varName, fullName) == "tlp.Graph") {
         QString type = getPythonTypeNameForGraphProperty(_graph->getRoot(), propName);
@@ -695,14 +647,13 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       }
     }
 
-
     if (_graph && graphPropAccessRegexp.indexIn(line) != -1) {
       QString expr = line.mid(graphPropAccessRegexp.indexIn(line), graphPropAccessRegexp.matchedLength());
       int pos = expr.indexOf("[");
       QString varName = expr.mid(0, pos);
-      QString propName = expr.mid(expr.indexOf("\"")+1, expr.lastIndexOf("\"") - expr.indexOf("\"") - 1);
-      pos = expr.indexOf("[", pos+1);
-      QString varName2 = expr.mid(pos+1, expr.lastIndexOf("]") - pos - 1);
+      QString propName = expr.mid(expr.indexOf("\"") + 1, expr.lastIndexOf("\"") - expr.indexOf("\"") - 1);
+      pos = expr.indexOf("[", pos + 1);
+      QString varName2 = expr.mid(pos + 1, expr.lastIndexOf("]") - pos - 1);
 
       if (findTypeForExpr(varName, fullName) == "tlp.Graph") {
         QString type = getPythonTypeNameForGraphProperty(_graph->getRoot(), propName);
@@ -713,8 +664,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
           if (type2 == "tlp.node") {
             type3 = getPythonTypeNameForPropertyType(type, true);
-          }
-          else if (type2 == "tlp.edge") {
+          } else if (type2 == "tlp.edge") {
             type3 = getPythonTypeNameForPropertyType(type, false);
           }
 
@@ -733,7 +683,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       QString expr = line.mid(graphPropAccessRegexp2.indexIn(line), graphPropAccessRegexp2.matchedLength());
       int pos = expr.indexOf("[");
       QString varName = expr.mid(0, pos);
-      QString varName2 = expr.mid(pos+1, expr.lastIndexOf("]") - pos - 1);
+      QString varName2 = expr.mid(pos + 1, expr.lastIndexOf("]") - pos - 1);
       QString type = findTypeForExpr(varName, fullName);
 
       if (type != "") {
@@ -742,8 +692,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
         if (type2 == "tlp.node") {
           type3 = getPythonTypeNameForPropertyType(type, true);
-        }
-        else if (type2 == "tlp.edge") {
+        } else if (type2 == "tlp.edge") {
           type3 = getPythonTypeNameForPropertyType(type, false);
         }
 
@@ -768,11 +717,9 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
 
     if (_apiDb->typeExists(name)) {
       currentType = name;
-    }
-    else if (_apiDb->getFullTypeName(name) != "") {
+    } else if (_apiDb->getFullTypeName(name) != "") {
       currentType = _apiDb->getFullTypeName(name);
-    }
-    else if (_apiDb->getReturnTypeForMethodOrFunction(name) != "") {
+    } else if (_apiDb->getReturnTypeForMethodOrFunction(name) != "") {
       currentType = _apiDb->getReturnTypeForMethodOrFunction(name);
     }
   }
@@ -785,14 +732,12 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
   QString cleanExpr = expr;
   int parenLevel = 0;
 
-  for (int i = 0 ; i < cleanExpr.length() ; ++i) {
+  for (int i = 0; i < cleanExpr.length(); ++i) {
     if (cleanExpr[i] == '(') {
       parenLevel += 1;
-    }
-    else if (cleanExpr[i] == ')') {
+    } else if (cleanExpr[i] == ')') {
       parenLevel -= 1;
-    }
-    else if (cleanExpr[i] == '.') {
+    } else if (cleanExpr[i] == '.') {
       if (parenLevel > 0) {
         cleanExpr[i] = '_';
       }
@@ -802,8 +747,8 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
   if (currentType == "" && cleanExpr.indexOf(".") != -1) {
     QStringList parts = cleanExpr.split(".");
     int i = 0;
-    foreach(QString p, parts) {
-      if (i==0) {
+    foreach (QString p, parts) {
+      if (i == 0) {
         if (_varToType.find(funcName) != _varToType.end()) {
           if (_varToType[funcName].find(p) != _varToType[funcName].end()) {
             currentType = _varToType[funcName][p];
@@ -814,11 +759,9 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
 
         if (_apiDb->getDictContentForType(p).count() > 0) {
           currentType = p;
-        }
-        else if (_apiDb->getFullTypeName(p) != "" && _apiDb->getDictContentForType(_apiDb->getFullTypeName(p)).count() > 0) {
+        } else if (_apiDb->getFullTypeName(p) != "" && _apiDb->getDictContentForType(_apiDb->getFullTypeName(p)).count() > 0) {
           currentType = _apiDb->getFullTypeName(p);
-        }
-        else if (_varToType["global"].find(p) != _varToType["global"].end()) {
+        } else if (_varToType["global"].find(p) != _varToType["global"].end()) {
           currentType = _varToType["global"][p];
         }
 
@@ -826,8 +769,7 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
           currentType = PythonInterpreter::getInstance()->getVariableType(p);
         }
 
-      }
-      else {
+      } else {
         if (p.indexOf('(') != -1 && p.indexOf(')') != -1) {
           QString func = p.mid(0, p.indexOf('('));
 
@@ -836,14 +778,11 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
           if (_apiDb->getFullTypeName(currentType) != "") {
             currentType = _apiDb->getFullTypeName(currentType);
           }
-        }
-        else if (_apiDb->getDictContentForType(currentType + "." + p).count() > 0) {
+        } else if (_apiDb->getDictContentForType(currentType + "." + p).count() > 0) {
           currentType = currentType + "." + p;
-        }
-        else if (_apiDb->dictEntryExists(currentType, p)) {
+        } else if (_apiDb->dictEntryExists(currentType, p)) {
           currentType = currentType + "." + p;
-        }
-        else {
+        } else {
           currentType = "";
         }
       }
@@ -852,7 +791,6 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
 
       if (currentType == "")
         break;
-
     }
   }
 
@@ -860,14 +798,11 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
 
     if (_varToType.find(funcName) != _varToType.end() && _varToType[funcName].find(expr) != _varToType[funcName].end()) {
       currentType = _varToType[funcName][expr];
-    }
-    else if (_apiDb->typeExists(expr)) {
+    } else if (_apiDb->typeExists(expr)) {
       currentType = expr;
-    }
-    else if (_apiDb->getFullTypeName(expr) != "") {
+    } else if (_apiDb->getFullTypeName(expr) != "") {
       currentType = _apiDb->getFullTypeName(expr);
-    }
-    else if (_varToType["global"].find(expr) != _varToType["global"].end()) {
+    } else if (_varToType["global"].find(expr) != _varToType["global"].end()) {
       currentType = _varToType["global"][expr];
     }
 
@@ -879,12 +814,12 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
   return currentType;
 }
 
-static QVector<PropertyInterface*> getAllGraphPropertiesFromRoot(Graph *root) {
-  QVector<PropertyInterface*> ret;
-  for(const string &prop : root->getLocalProperties()) {
+static QVector<PropertyInterface *> getAllGraphPropertiesFromRoot(Graph *root) {
+  QVector<PropertyInterface *> ret;
+  for (const string &prop : root->getLocalProperties()) {
     ret.append(root->getProperty(prop));
   }
-  for(Graph *sg : root->getSubGraphs()) {
+  for (Graph *sg : root->getSubGraphs()) {
     ret += getAllGraphPropertiesFromRoot(sg);
   }
   return ret;
@@ -892,7 +827,7 @@ static QVector<PropertyInterface*> getAllGraphPropertiesFromRoot(Graph *root) {
 
 static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &prefix) {
   QSet<QString> ret;
-  for(Graph *sg : root->getSubGraphs()) {
+  for (Graph *sg : root->getSubGraphs()) {
     QString sgName = "\"" + QString::fromUtf8(sg->getName().c_str()) + "\"";
 
     if (sgName.startsWith(prefix))
@@ -903,16 +838,16 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
   }
-  for(Graph *sg : root->getSubGraphs()) {
+  for (Graph *sg : root->getSubGraphs()) {
     ret += getAllSubGraphsNamesFromRoot(sg, prefix);
   }
   return ret;
 }
 
-static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const QString &type="") {
+static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const QString &type = "") {
   QSet<QString> ret;
-  QVector<PropertyInterface*> properties = getAllGraphPropertiesFromRoot(graph);
-  foreach(PropertyInterface* prop, properties) {
+  QVector<PropertyInterface *> properties = getAllGraphPropertiesFromRoot(graph);
+  foreach (PropertyInterface *prop, properties) {
     if (type == "" || prop->getTypename() == type.toStdString()) {
       QString qProp = "\"" + QString::fromUtf8(prop->getName().c_str()) + "\"";
 
@@ -938,29 +873,28 @@ QSet<QString> AutoCompletionDataBase::getPluginParametersListIfContext(const QSt
     QString varName = context.mid(0, pos);
     QString strCollecExpr = "] =";
 
-    int pos2 = context.indexOf(strCollecExpr, pos+1);
+    int pos2 = context.indexOf(strCollecExpr, pos + 1);
 
     if (pos != -1 && pos2 == -1) {
-      QString prefix = context.mid(pos+1);
+      QString prefix = context.mid(pos + 1);
 
       if (_pluginParametersDataSet[editedFunction].find(varName) != _pluginParametersDataSet[editedFunction].end()) {
-        foreach(QString param, _pluginParametersDataSet[editedFunction][varName]) {
+        foreach (QString param, _pluginParametersDataSet[editedFunction][varName]) {
           if (param.startsWith(prefix)) {
             ret.insert(param);
           }
         }
       }
 
-    }
-    else if (pos != -1 && pos2 != -1) {
-      QString entryName = context.mid(pos+1, pos2 - pos - 1);
+    } else if (pos != -1 && pos2 != -1) {
+      QString entryName = context.mid(pos + 1, pos2 - pos - 1);
 
       entryName.replace("\"", "");
       entryName.replace("'", "");
-      QString prefix = context.mid(pos2+strCollecExpr.size());
+      QString prefix = context.mid(pos2 + strCollecExpr.size());
 
       if (_pluginParametersDataSet[editedFunction].find(varName) != _pluginParametersDataSet[editedFunction].end()) {
-        foreach(QString param, _pluginParametersDataSet[editedFunction][varName]) {
+        foreach (QString param, _pluginParametersDataSet[editedFunction][varName]) {
           if (param.indexOf(entryName) != -1 && param.indexOf("tlp.StringCollection") != -1) {
             ret = getStringCollectionEntriesForPlugin(_varToPluginName[editedFunction][varName], entryName, prefix);
           }
@@ -972,21 +906,22 @@ QSet<QString> AutoCompletionDataBase::getPluginParametersListIfContext(const QSt
   return ret;
 }
 
-QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &context, const QString &editedFunction) const  {
+QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &context, const QString &editedFunction) const {
 
   QString cleanContext = context;
   QSet<QString> ret;
 
   QStringList sgExprs;
-  sgExprs << ".getSubGraph(" << ".getDescendantGraph(";
+  sgExprs << ".getSubGraph("
+          << ".getDescendantGraph(";
 
-  for (int j = 0 ; j < sgExprs.count() ; ++j) {
+  for (int j = 0; j < sgExprs.count(); ++j) {
     if (_graph && cleanContext.lastIndexOf(sgExprs[j]) != -1) {
       int i = 0;
 
       while (sepChar[i]) {
         if (sepChar[i] != '(' && cleanContext.lastIndexOf(sepChar[i]) != -1) {
-          cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+          cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i]) + 1);
         }
 
         ++i;
@@ -996,7 +931,7 @@ QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &c
       QString type = findTypeForExpr(expr, editedFunction);
 
       if (type == "tlp.Graph") {
-        QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExprs[j])+sgExprs[j].size());
+        QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExprs[j]) + sgExprs[j].size());
         ret = getAllSubGraphsNamesFromRoot(_graph->getRoot(), prefix);
       }
 
@@ -1009,7 +944,7 @@ QSet<QString> AutoCompletionDataBase::getSubGraphsListIfContext(const QString &c
 
 static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QString &prefix) {
   QSet<QString> ret;
-  tlp::Iterator< std::pair<std::string, tlp::DataType*> > *it = rootGraph->getAttributes().getValues();
+  tlp::Iterator<std::pair<std::string, tlp::DataType *>> *it = rootGraph->getAttributes().getValues();
 
   while (it->hasNext()) {
     QString attrName = "\"" + QString::fromUtf8(it->next().first.c_str()) + "\"";
@@ -1024,13 +959,13 @@ static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QStr
   }
 
   delete it;
-  for(Graph *sg : rootGraph->getSubGraphs()) {
+  for (Graph *sg : rootGraph->getSubGraphs()) {
     ret += getAllGraphsAttributesFromRoot(sg, prefix);
   }
   return ret;
 }
 
-QSet<QString> AutoCompletionDataBase::getGraphsAttributesListIfContext(const QString &context, const QString &editedFunction) const  {
+QSet<QString> AutoCompletionDataBase::getGraphsAttributesListIfContext(const QString &context, const QString &editedFunction) const {
 
   QString cleanContext = context;
   QSet<QString> ret;
@@ -1042,7 +977,7 @@ QSet<QString> AutoCompletionDataBase::getGraphsAttributesListIfContext(const QSt
 
     while (sepChar[i]) {
       if (sepChar[i] != '(' && cleanContext.lastIndexOf(sepChar[i]) != -1) {
-        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i]) + 1);
       }
 
       ++i;
@@ -1052,7 +987,7 @@ QSet<QString> AutoCompletionDataBase::getGraphsAttributesListIfContext(const QSt
     QString type = findTypeForExpr(expr, editedFunction);
 
     if (type == "tlp.Graph") {
-      QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExpr)+sgExpr.size());
+      QString prefix = cleanContext.mid(cleanContext.lastIndexOf(sgExpr) + sgExpr.size());
       ret = getAllGraphsAttributesFromRoot(_graph->getRoot(), prefix);
     }
   }
@@ -1060,7 +995,7 @@ QSet<QString> AutoCompletionDataBase::getGraphsAttributesListIfContext(const QSt
   return ret;
 }
 
-QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const  {
+QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QString &context, const QString &editedFunction) const {
 
   QString cleanContext = context;
   QSet<QString> ret;
@@ -1070,7 +1005,7 @@ QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QStr
 
     while (sepChar[i]) {
       if (sepChar[i] != '[' && cleanContext.lastIndexOf(sepChar[i]) != -1) {
-        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i]) + 1);
       }
 
       ++i;
@@ -1080,23 +1015,22 @@ QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QStr
     QString type = findTypeForExpr(expr, editedFunction);
 
     if (type == "tlp.Graph") {
-      QString prefix = cleanContext.mid(cleanContext.lastIndexOf("[")+1);
+      QString prefix = cleanContext.mid(cleanContext.lastIndexOf("[") + 1);
       ret = getGraphPropertiesList(_graph->getRoot(), prefix);
     }
-  }
-  else if (_graph && cleanContext.lastIndexOf("(") != -1) {
+  } else if (_graph && cleanContext.lastIndexOf("(") != -1) {
     int i = 0;
 
     while (sepChar[i]) {
       if (sepChar[i] != '(' && cleanContext.lastIndexOf(sepChar[i]) != -1) {
-        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+        cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i]) + 1);
       }
 
       ++i;
     }
 
     QString expr = cleanContext.mid(0, cleanContext.lastIndexOf("("));
-    QString prefix = cleanContext.mid(cleanContext.lastIndexOf("(")+1);
+    QString prefix = cleanContext.mid(cleanContext.lastIndexOf("(") + 1);
     QString type = findTypeForExpr(expr, editedFunction);
 
     if (type == "tlp.Graph.getBooleanProperty" || type == "tlp.Graph.getLocalBooleanProperty") {
@@ -1163,11 +1097,11 @@ QSet<QString> AutoCompletionDataBase::getGraphPropertiesListIfContext(const QStr
   return ret;
 }
 
-static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QString &prefix) {
+static QSet<QString> getAlgorithmPluginsListOfType(const QString &type, const QString &prefix) {
   QSet<QString> ret;
   std::list<std::string> pluginNames = tlp::PluginLister::availablePlugins();
 
-  for (std::list<std::string>::iterator it = pluginNames.begin() ; it != pluginNames.end() ; ++it) {
+  for (std::list<std::string>::iterator it = pluginNames.begin(); it != pluginNames.end(); ++it) {
     tlp::Plugin *plugin = tlp::PluginLister::instance()->getPluginObject(*it, nullptr);
 
     if (plugin->category() != tlp::INTERACTOR_CATEGORY && plugin->category() != tlp::VIEW_CATEGORY &&
@@ -1185,7 +1119,6 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
         if (pluginName.startsWith(prefix)) {
           ret.insert(pluginName);
         }
-
       }
     }
 
@@ -1195,7 +1128,7 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString& type, const QS
   return ret;
 }
 
-static QSet<QString> tryAlgorithmContext(const QString &context, const QString &algoContext, const QString &algoType="") {
+static QSet<QString> tryAlgorithmContext(const QString &context, const QString &algoContext, const QString &algoType = "") {
   QSet<QString> ret;
 
   if (context.indexOf(algoContext) != -1) {
@@ -1230,7 +1163,6 @@ static QSet<QString> getTulipAlgorithmListIfContext(const QString &context) {
   if (!ret.empty()) {
     return ret;
   }
-
 
   ret = tryAlgorithmContext(context, ".getDefaultPluginParameters(");
 
@@ -1326,7 +1258,7 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   ret = _apiDb->getDictContentForType(type, prefix);
 
   if (!root) {
-    foreach(QString entry, ret) {
+    foreach (QString entry, ret) {
       if (entry[0].isUpper()) {
         ret.remove(entry);
       }
@@ -1335,7 +1267,7 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
 
   QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
 
-  for (int i = 0 ; i < baseTypes.size() ; ++i) {
+  for (int i = 0; i < baseTypes.size(); ++i) {
     QString baseType = baseTypes[i];
     baseType.replace("_tulipgui", "tlpgui");
     baseType.replace("_tulipogl", "tlpogl");
@@ -1346,14 +1278,14 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   }
 
   if (_classContents.find(type) != _classContents.end()) {
-    foreach(QString entry, _classContents[type]) {
+    foreach (QString entry, _classContents[type]) {
       if (entry.toLower().startsWith(prefix.toLower()))
         ret.insert(entry);
     }
   }
 
   if (_classBases.find(type) != _classBases.end()) {
-    foreach(QString baseType, _classBases[type]) {
+    foreach (QString baseType, _classBases[type]) {
       if (baseType != type)
         ret += getAllDictForType(baseType, prefix, false);
     }
@@ -1409,18 +1341,18 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
   while (sepChar[i]) {
     int pos = cleanContext.lastIndexOf(sepChar[i]);
 
-    if (sepChar[i] == '(' && pos != -1 && cleanContext.indexOf(')', pos+1) != -1) {
+    if (sepChar[i] == '(' && pos != -1 && cleanContext.indexOf(')', pos + 1) != -1) {
       ++i;
       continue;
     }
 
     if (pos != -1) {
-      if ((!(sepChar[i] == '[' && pos < cleanContext.size()-1 && cleanContext[pos+1] == '"')) &&
-          (!(sepChar[i] == '[' && cleanContext.indexOf(']', pos+1) != -1))) {
+      if ((!(sepChar[i] == '[' && pos < cleanContext.size() - 1 && cleanContext[pos + 1] == '"')) &&
+          (!(sepChar[i] == '[' && cleanContext.indexOf(']', pos + 1) != -1))) {
         int nbQuotes = 0;
         int nbDblQuotes = 0;
 
-        for (int j = pos-1 ; j >= 0 ; --j) {
+        for (int j = pos - 1; j >= 0; --j) {
           if (cleanContext[j] == '\'') {
             ++nbQuotes;
           }
@@ -1430,8 +1362,8 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
           }
         }
 
-        if (nbQuotes%2 == 0 && nbDblQuotes%2 == 0) {
-          cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i])+1);
+        if (nbQuotes % 2 == 0 && nbDblQuotes % 2 == 0) {
+          cleanContext = cleanContext.mid(cleanContext.lastIndexOf(sepChar[i]) + 1);
         }
       }
     }
@@ -1441,31 +1373,29 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
 
   if (cleanContext.indexOf('.') == -1) {
 
-    foreach(QString s, _globalAutoCompletionList) {
+    foreach (QString s, _globalAutoCompletionList) {
       if (s.toLower().startsWith(cleanContext.toLower())) {
         ret.insert(s);
       }
     }
 
     if (_functionAutoCompletionList.find(editedFunction) != _functionAutoCompletionList.end()) {
-      foreach(QString s, _functionAutoCompletionList[editedFunction]) {
+      foreach (QString s, _functionAutoCompletionList[editedFunction]) {
         if (s.toLower().startsWith(cleanContext.toLower())) {
           ret.insert(s);
         }
       }
     }
 
-  }
-  else {
+  } else {
 
     QString expr = cleanContext.mid(0, cleanContext.lastIndexOf('.'));
     QString type = findTypeForExpr(expr, editedFunction);
-    QString prefix = cleanContext.mid(cleanContext.lastIndexOf('.')+1);
+    QString prefix = cleanContext.mid(cleanContext.lastIndexOf('.') + 1);
 
     if (type.startsWith("list")) {
       type = "list";
-    }
-    else if (type.startsWith("dict")) {
+    } else if (type.startsWith("dict")) {
       type = "dict";
     }
 
@@ -1473,18 +1403,18 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
       _lastFoundType = type;
       ret = getAllDictForType(type, prefix);
 
-      if (type != "tlp" && ((_varToType.find(editedFunction) != _varToType.end() && _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
-                            (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr) == ""))) {
-        foreach(QString entry, ret) {
+      if (type != "tlp" &&
+          ((_varToType.find(editedFunction) != _varToType.end() && _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
+           (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr) == ""))) {
+        foreach (QString entry, ret) {
           if (entry[0].isUpper()) {
             ret.remove(entry);
           }
         }
       }
-    }
-    else if (!dotContext) {
+    } else if (!dotContext) {
       ret = _apiDb->getAllDictEntriesStartingWithPrefix(prefix);
-      foreach(QString s, _globalAutoCompletionList) {
+      foreach (QString s, _globalAutoCompletionList) {
         if (s.toLower().startsWith(prefix.toLower())) {
           ret.insert(s);
         }
@@ -1495,12 +1425,12 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
   return ret;
 }
 
-QVector<QVector<QString> > AutoCompletionDataBase::getParamTypesForMethodOrFunction(const QString &type, const QString &funcName) const {
+QVector<QVector<QString>> AutoCompletionDataBase::getParamTypesForMethodOrFunction(const QString &type, const QString &funcName) const {
   QString fullName = type + "." + funcName;
-  QVector<QVector<QString> > ret = _apiDb->getParamTypesForMethodOrFunction(fullName);
+  QVector<QVector<QString>> ret = _apiDb->getParamTypesForMethodOrFunction(fullName);
   QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
 
-  for (int i = 0 ; i < baseTypes.size() ; ++i) {
+  for (int i = 0; i < baseTypes.size(); ++i) {
     QString baseType = baseTypes[i];
     baseType.replace("_tulipgui", "tlpgui");
     baseType.replace("_tulipogl", "tlpogl");
@@ -1511,7 +1441,7 @@ QVector<QVector<QString> > AutoCompletionDataBase::getParamTypesForMethodOrFunct
   }
 
   if (_classBases.find(type) != _classBases.end()) {
-    foreach(QString baseType, _classBases[type]) {
+    foreach (QString baseType, _classBases[type]) {
       if (baseType != type)
         ret += getParamTypesForMethodOrFunction(baseType, funcName);
     }
@@ -1527,7 +1457,7 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
   if (ret == "") {
     QVector<QString> baseTypes = PythonInterpreter::getInstance()->getBaseTypesForType(type);
 
-    for (int i = 0 ; i < baseTypes.size() ; ++i) {
+    for (int i = 0; i < baseTypes.size(); ++i) {
       QString baseType = baseTypes[i];
       baseType.replace("_tulipgui", "tlpgui");
       baseType.replace("_tulipogl", "tlpogl");
@@ -1544,7 +1474,7 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
 
   if (ret == "") {
     if (_classBases.find(type) != _classBases.end()) {
-      foreach(QString baseType, _classBases[type]) {
+      foreach (QString baseType, _classBases[type]) {
         if (baseType != type)
           ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
@@ -1566,7 +1496,7 @@ QString AutoCompletionDataBase::getClassAttributeType(const QString &className, 
   }
 
   if (_classBases.find(className) != _classBases.end()) {
-    foreach(QString baseType, _classBases[className]) {
+    foreach (QString baseType, _classBases[className]) {
       if (baseType != className) {
         QString ret = getClassAttributeType(baseType, classAttribute);
 

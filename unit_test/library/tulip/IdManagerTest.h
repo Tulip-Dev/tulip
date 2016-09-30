@@ -35,6 +35,7 @@ class IdManagerTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testGetFree);
   CPPUNIT_TEST(testIterate);
   CPPUNIT_TEST_SUITE_END();
+
 public:
   void setUp() {
     idManager = new IdManager();
@@ -50,6 +51,5 @@ public:
 private:
   IdManager *idManager;
 };
-
 }
 #endif

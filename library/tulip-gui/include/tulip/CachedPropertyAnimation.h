@@ -29,11 +29,11 @@ namespace tlp {
 
 class BooleanProperty;
 
-template<typename PropType, typename NodeType, typename EdgeType>
-class CachedPropertyAnimation: public PropertyAnimation<PropType, NodeType, EdgeType> {
+template <typename PropType, typename NodeType, typename EdgeType>
+class CachedPropertyAnimation : public PropertyAnimation<PropType, NodeType, EdgeType> {
 public:
-  CachedPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out, tlp::BooleanProperty *selection = nullptr, int frameCount = 1,
-                          bool computeNodes = true, bool computeEdges = true, QObject* parent=nullptr);
+  CachedPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out, tlp::BooleanProperty *selection = nullptr,
+                          int frameCount = 1, bool computeNodes = true, bool computeEdges = true, QObject *parent = nullptr);
   virtual ~CachedPropertyAnimation();
 
   virtual void frameChanged(int frame);
@@ -44,7 +44,6 @@ protected:
 };
 
 #include "cxx/CachedPropertyAnimation.cxx"
-
 }
 
 #endif /* CACHEDPROPERTYANIMATION_H_ */

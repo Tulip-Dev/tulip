@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef SIMPLESTRINGSLISTSELECTIONWIDGET_H_
 #define SIMPLESTRINGSLISTSELECTIONWIDGET_H_
 
@@ -38,10 +37,9 @@ class TLP_QT_SCOPE SimpleStringsListSelectionWidget : public QWidget, public Str
 
   Q_OBJECT
 
-  Ui::SimpleStringsListSelectionData* _ui;
+  Ui::SimpleStringsListSelectionData *_ui;
 
-public :
-
+public:
   SimpleStringsListSelectionWidget(QWidget *parent = nullptr, const unsigned int maxSelectedStringsListSize = 0);
   ~SimpleStringsListSelectionWidget();
 
@@ -63,7 +61,7 @@ public :
 
   void unselectAllStrings();
 
-private slots :
+private slots:
 
   void pressButtonSelectAll();
   void pressButtonUnselectAll();
@@ -71,13 +69,11 @@ private slots :
   void pressButtonUp();
   void pressButtonDown();
 
-private :
-
+private:
   void qtWidgetsConnection();
 
   unsigned int maxSelectedStringsListSize;
 };
-
 }
 
 #endif /* SIMPLESTRINGSLISTSELECTIONWIDGET_H_ */

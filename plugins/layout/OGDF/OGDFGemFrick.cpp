@@ -72,59 +72,60 @@
 #define ELT_ATTRACTIONFORMULALIST "Fruchterman/Reingold;GEM"
 
 static const char *paramHelp[] = {
-  // number of rounds
-  "The maximal number of rounds per node.",
+    // number of rounds
+    "The maximal number of rounds per node.",
 
-  // minimal temperature
-  "The minimal temperature.",
+    // minimal temperature
+    "The minimal temperature.",
 
-  // initial temperature
-  "The initial temperature to x; must be >= minimalTemperature.",
+    // initial temperature
+    "The initial temperature to x; must be >= minimalTemperature.",
 
-  // gravitational constant
-  "Gravitational constant parameter.",
+    // gravitational constant
+    "Gravitational constant parameter.",
 
-  // desired length
-  "The desired edge length to x; must be >= 0.",
+    // desired length
+    "The desired edge length to x; must be >= 0.",
 
-  // maximal disturbance
-  "The maximal disturbance to x; must be >= 0.",
+    // maximal disturbance
+    "The maximal disturbance to x; must be >= 0.",
 
-  // rotation angle
-  "The opening angle for rotations to x (0 <= x <= pi / 2).",
+    // rotation angle
+    "The opening angle for rotations to x (0 <= x <= pi / 2).",
 
-  // oscillation angle
-  "Sets the opening angle for oscillations to x (0 <= x <= pi / 2).",
+    // oscillation angle
+    "Sets the opening angle for oscillations to x (0 <= x <= pi / 2).",
 
-  // rotation sensitivity
-  "The rotation sensitivity to x (0 <= x <= 1).",
+    // rotation sensitivity
+    "The rotation sensitivity to x (0 <= x <= 1).",
 
-  // oscillation sensitivity
-  "The oscillation sensitivity to x (0 <= x <= 1).",
+    // oscillation sensitivity
+    "The oscillation sensitivity to x (0 <= x <= 1).",
 
-  // Attraction formula
-  "The formula for attraction.",
+    // Attraction formula
+    "The formula for attraction.",
 
-  // minDistCC
-  "The minimal distance between connected components.",
+    // minDistCC
+    "The minimal distance between connected components.",
 
-  // pageRatio
-  "The page ratio used for packing connected components."
-};
+    // pageRatio
+    "The page ratio used for packing connected components."};
 
 class OGDFGemFrick : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("GEM Frick (OGDF)","Christoph Buchheim", "15/11/2007","Implements the GEM-2d layout algorithm first published as:<br/>"
-                    " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. Ludwig, and H. Mehldau, Graph Drawing'94, Volume 894 of Lecture Notes in Computer Science (1995).","1.1", "Force Directed")
-  OGDFGemFrick(const tlp::PluginContext* context);
+  PLUGININFORMATION("GEM Frick (OGDF)", "Christoph Buchheim", "15/11/2007",
+                    "Implements the GEM-2d layout algorithm first published as:<br/>"
+                    " <b>A fast, adaptive layout algorithm for undirected graphs</b>, A. Frick, A. Ludwig, and H. Mehldau, Graph Drawing'94, Volume "
+                    "894 of Lecture Notes in Computer Science (1995).",
+                    "1.1", "Force Directed")
+  OGDFGemFrick(const tlp::PluginContext *context);
   ~OGDFGemFrick();
 
   void beforeCall();
-
 };
 
-OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext* context) : OGDFLayoutPluginBase(context,new ogdf::GEMLayout()) {
+OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::GEMLayout()) {
   addInParameter<int>("number of rounds", paramHelp[0], "30000");
   addInParameter<double>("minimal temperature", paramHelp[1], "0.005");
   addInParameter<double>("initial temperature", paramHelp[2], "12.0");
@@ -141,11 +142,10 @@ OGDFGemFrick::OGDFGemFrick(const tlp::PluginContext* context) : OGDFLayoutPlugin
 }
 
 OGDFGemFrick::~OGDFGemFrick() {
-
 }
 
 void OGDFGemFrick::beforeCall() {
-  ogdf::GEMLayout *gem = static_cast<ogdf::GEMLayout*>(ogdfLayoutAlgo);
+  ogdf::GEMLayout *gem = static_cast<ogdf::GEMLayout *>(ogdfLayoutAlgo);
 
   if (dataSet != nullptr) {
     int ival = 0;
@@ -201,9 +201,7 @@ void OGDFGemFrick::beforeCall() {
 
     if (dataSet->get("pageRatio", dval))
       gem->pageRatio(dval);
-
   }
 }
 
 PLUGIN(OGDFGemFrick)
-

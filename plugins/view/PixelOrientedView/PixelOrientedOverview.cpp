@@ -28,39 +28,37 @@
 
 #include "PixelOrientedOverview.h"
 
-
 using namespace pocore;
 using namespace std;
 
-template <typename T>
-std::string getStringFromNumber(T number) {
+template <typename T> std::string getStringFromNumber(T number) {
   std::ostringstream oss;
   oss.precision(5);
   oss << number;
   return oss.str();
 }
 
-static void setGraphView (tlp::GlGraphComposite *glGraph) {
-  tlp::GlGraphRenderingParameters param = glGraph->getRenderingParameters ();
-  param.setAntialiasing (true);
-  param.setViewNodeLabel (false);
-  param.setFontsType (2);
+static void setGraphView(tlp::GlGraphComposite *glGraph) {
+  tlp::GlGraphRenderingParameters param = glGraph->getRenderingParameters();
+  param.setAntialiasing(true);
+  param.setViewNodeLabel(false);
+  param.setFontsType(2);
   param.setSelectedNodesStencil(1);
   param.setNodesStencil(0xFFFF);
   param.setNodesLabelStencil(0xFFFF);
   param.setDisplayEdges(false);
   param.setDisplayNodes(true);
-  glGraph->setRenderingParameters (param);
+  glGraph->setRenderingParameters(param);
 }
 
 namespace tlp {
 
 int PixelOrientedOverview::overviewCpt(0);
 
-PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data, PixelOrientedMediator *pixelOrientedMediator,
-    Coord blCornerPos, const std::string &dimName, const Color &backgroundColor, const Color &textColor)
-  : data(data), pixelOrientedMediator(pixelOrientedMediator), blCornerPos(blCornerPos),
-    dimName(dimName), frame(nullptr), frame2(nullptr), overviewGen(false), backgroundColor(backgroundColor), textColor(textColor) {
+PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data, PixelOrientedMediator *pixelOrientedMediator, Coord blCornerPos,
+                                             const std::string &dimName, const Color &backgroundColor, const Color &textColor)
+    : data(data), pixelOrientedMediator(pixelOrientedMediator), blCornerPos(blCornerPos), dimName(dimName), frame(nullptr), frame2(nullptr),
+      overviewGen(false), backgroundColor(backgroundColor), textColor(textColor) {
 
   if (this->dimName == "") {
     this->dimName = data->getDimensionName();
@@ -84,21 +82,19 @@ PixelOrientedOverview::PixelOrientedOverview(TulipGraphDimension *data, PixelOri
   glGraphInputData->setElementLayout(pixelLayout);
   glGraphInputData->setElementSize(pixelSize);
 
-  frame = new GlRect(Coord(blCornerPos.getX() - 3, blCornerPos.getY() + height + 3),
-                     Coord(blCornerPos.getX() + width + 3, blCornerPos.getY() - 3),
+  frame = new GlRect(Coord(blCornerPos.getX() - 3, blCornerPos.getY() + height + 3), Coord(blCornerPos.getX() + width + 3, blCornerPos.getY() - 3),
                      Color(0, 0, 0), Color(0, 0, 0), false, true);
   addGlEntity(frame, dimName + "frame");
-  frame2 = new GlRect(Coord(blCornerPos.getX() - 4, blCornerPos.getY() + height + 4),
-                      Coord(blCornerPos.getX() + width + 4, blCornerPos.getY() - 4),
+  frame2 = new GlRect(Coord(blCornerPos.getX() - 4, blCornerPos.getY() + height + 4), Coord(blCornerPos.getX() + width + 4, blCornerPos.getY() - 4),
                       Color(0, 0, 0), Color(0, 0, 0), false, true);
   addGlEntity(frame2, dimName + "frame 2");
 
-  backgroundRect = new GlRect(Coord(blCornerPos.getX(), blCornerPos.getY() + height), Coord(blCornerPos.getX() + width, blCornerPos.getY()), Color(255,255,255), Color(255,255,255), true, false);
+  backgroundRect = new GlRect(Coord(blCornerPos.getX(), blCornerPos.getY() + height), Coord(blCornerPos.getX() + width, blCornerPos.getY()),
+                              Color(255, 255, 255), Color(255, 255, 255), true, false);
   addGlEntity(backgroundRect, "background rect");
-  clickLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), Size(width, height / 4), Color(0,0,0));
+  clickLabel = new GlLabel(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), Size(width, height / 4), Color(0, 0, 0));
   clickLabel->setText("Double Click to generate overview");
   addGlEntity(clickLabel, "label");
-
 
   computeBoundingBox();
 
@@ -156,7 +152,7 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   GlProgressBar *glProgressBar = nullptr;
 
   if (glWidget != nullptr) {
-    glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0,0,255));
+    glProgressBar = new GlProgressBar(Coord(blCornerPos.getX() + width / 2, blCornerPos.getY() + height / 2), width, height, Color(0, 0, 255));
     glProgressBar->setComment("Generating overview ...");
     addGlEntity(glProgressBar, "progress bar");
   }
@@ -167,7 +163,7 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
 
   set<int> xCoordSet;
 
-  for (unsigned int i = 0 ; i < graph->numberOfNodes() ; ++i) {
+  for (unsigned int i = 0; i < graph->numberOfNodes(); ++i) {
     node n = node(data->getItemIdAtRank(i));
     pocore::Vec2i pos = pixelOrientedMediator->getPixelPosForRank(i);
     Coord nodeCoord = Coord(pos[0], pos[1], 0);
@@ -189,7 +185,7 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
   int x2 = *it;
   int size = x2 - x1;
 
-  pixelSize->setAllNodeValue(Size(size,size,size));
+  pixelSize->setAllNodeValue(Size(size, size, size));
 
   overviewLabel->setColor(textColor);
 
@@ -209,15 +205,14 @@ void PixelOrientedOverview::computePixelView(GlMainWidget *glWidget) {
     delete glProgressBar;
   }
 
-
   GLuint textureId = glOffscreenRenderer->getGLTexture(true);
   GlTextureManager::getInst().deleteTexture(textureName);
   GlTextureManager::getInst().registerExternalTexture(textureName, textureId);
 
   if (findGlEntity(dimName) == nullptr) {
-    addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight() , blCornerPos.getY()
-                             , blCornerPos.getX(), blCornerPos.getX()
-                             + pixelOrientedMediator->getImageWidth(), textureName), dimName);
+    addGlEntity(new Gl2DRect(blCornerPos.getY() + pixelOrientedMediator->getImageHeight(), blCornerPos.getY(), blCornerPos.getX(),
+                             blCornerPos.getX() + pixelOrientedMediator->getImageWidth(), textureName),
+                dimName);
     addGlEntity(overviewLabel, "overview label");
     computeBoundingBox();
   }
@@ -230,5 +225,4 @@ void PixelOrientedOverview::setBLCorner(const Coord &blCorner) {
   blCornerPos = blCorner;
   computeBoundingBox();
 }
-
 }

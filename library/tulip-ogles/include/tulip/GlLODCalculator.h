@@ -50,22 +50,18 @@ class GlLayer;
 class GlGraphRenderingParameters;
 class GlGraphInputData;
 
-enum RenderingEntitiesFlag {
-  RenderingGlEntities = 1,
-  RenderingNodes = 2,
-  RenderingEdges = 4,
-  RenderingNodesEdges = 6,
-  RenderingAll = 7
-};
+enum RenderingEntitiesFlag { RenderingGlEntities = 1, RenderingNodes = 2, RenderingEdges = 4, RenderingNodesEdges = 6, RenderingAll = 7 };
 
 struct TLP_GLES_SCOPE EntityLODUnit {
-  EntityLODUnit(const tlp::BoundingBox &boundingBox):boundingBox(boundingBox),lod(-1) {}
+  EntityLODUnit(const tlp::BoundingBox &boundingBox) : boundingBox(boundingBox), lod(-1) {
+  }
   tlp::BoundingBox boundingBox;
   float lod;
 };
 
 struct TLP_GLES_SCOPE GlEntityLODUnit : public EntityLODUnit {
-  GlEntityLODUnit(GlEntity *glEntity) : EntityLODUnit(glEntity->getBoundingBox()), glEntity(glEntity) {}
+  GlEntityLODUnit(GlEntity *glEntity) : EntityLODUnit(glEntity->getBoundingBox()), glEntity(glEntity) {
+  }
   GlEntity *glEntity;
 
   bool operator==(const GlEntityLODUnit &o) const {
@@ -74,40 +70,41 @@ struct TLP_GLES_SCOPE GlEntityLODUnit : public EntityLODUnit {
 };
 
 struct TLP_GLES_SCOPE NodeEntityLODUnit : public EntityLODUnit {
-  NodeEntityLODUnit(tlp::node n, const tlp::BoundingBox &boundingBox) : EntityLODUnit(boundingBox), n(n) {}
+  NodeEntityLODUnit(tlp::node n, const tlp::BoundingBox &boundingBox) : EntityLODUnit(boundingBox), n(n) {
+  }
   tlp::node n;
 
   bool operator==(const NodeEntityLODUnit &o) const {
     return n == o.n;
   }
-
 };
 
 struct TLP_GLES_SCOPE EdgeEntityLODUnit : public EntityLODUnit {
-  EdgeEntityLODUnit(tlp::edge e, const tlp::BoundingBox &boundingBox) : EntityLODUnit(boundingBox), e(e) {}
+  EdgeEntityLODUnit(tlp::edge e, const tlp::BoundingBox &boundingBox) : EntityLODUnit(boundingBox), e(e) {
+  }
   tlp::edge e;
   float lodSize;
 
   bool operator==(const EdgeEntityLODUnit &o) const {
     return e == o.e;
   }
-
 };
 
 class TLP_GLES_SCOPE GlLODCalculator {
 
 public:
-
-  GlLODCalculator() : _renderingEntitiesFlag(RenderingAll) {}
-  virtual ~GlLODCalculator() {}
+  GlLODCalculator() : _renderingEntitiesFlag(RenderingAll) {
+  }
+  virtual ~GlLODCalculator() {
+  }
 
   virtual void setRenderingEntitiesFlag(RenderingEntitiesFlag flag) {
-    _renderingEntitiesFlag=flag;
+    _renderingEntitiesFlag = flag;
   }
 
   virtual void setGraph(tlp::Graph *graph, GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters) = 0;
 
-  virtual void compute(Camera *camera, const tlp::Vec4i &selectionViewport = tlp::Vec4i(-1,-1,-1,-1)) = 0;
+  virtual void compute(Camera *camera, const tlp::Vec4i &selectionViewport = tlp::Vec4i(-1, -1, -1, -1)) = 0;
 
   const std::vector<GlEntityLODUnit> &getGlEntitiesResult(GlLayer *layer) {
     return _glEntitiesLODVector[layer];
@@ -127,33 +124,30 @@ public:
     _edgesLODVector.clear();
   }
 
-  virtual void setSceneBoundingBox(const tlp::BoundingBox &sceneBoundingBox)=0;
+  virtual void setSceneBoundingBox(const tlp::BoundingBox &sceneBoundingBox) = 0;
 
-  virtual tlp::BoundingBox getSceneBoundingBox()=0;
+  virtual tlp::BoundingBox getSceneBoundingBox() = 0;
 
-  virtual void addGlEntity(GlLayer *layer, GlEntity *glEntity)=0;
+  virtual void addGlEntity(GlLayer *layer, GlEntity *glEntity) = 0;
 
-  virtual void removeGlEntity(GlLayer *layer, GlEntity *glEntity)=0;
+  virtual void removeGlEntity(GlLayer *layer, GlEntity *glEntity) = 0;
 
   virtual void removeLayer(GlLayer *layer) {
     _glEntitiesLODVector.erase(layer);
   }
 
-  virtual void addNode(const tlp::node n)=0;
+  virtual void addNode(const tlp::node n) = 0;
 
-  virtual void addEdge(const tlp::edge e)=0;
+  virtual void addEdge(const tlp::edge e) = 0;
 
-protected :
-
+protected:
   RenderingEntitiesFlag _renderingEntitiesFlag;
 
-  std::map<GlLayer*, std::vector<GlEntityLODUnit> > _glEntitiesLODVector;
+  std::map<GlLayer *, std::vector<GlEntityLODUnit>> _glEntitiesLODVector;
 
   std::vector<NodeEntityLODUnit> _nodesLODVector;
   std::vector<EdgeEntityLODUnit> _edgesLODVector;
-
 };
-
 }
 
 #endif // GLLODCALCULATOR_H

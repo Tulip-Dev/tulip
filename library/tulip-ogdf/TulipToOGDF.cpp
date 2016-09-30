@@ -33,24 +33,24 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
 
   // needed to initialize some ogdfAttributes fields
   long attributes =
-    // x, y, width, height fields
-    ogdf::GraphAttributes::nodeGraphics |
-    // bends field
-    ogdf::GraphAttributes::edgeGraphics |
-    // doubleWeight field
-    ogdf::GraphAttributes::edgeDoubleWeight |
-    // weight field
-    ogdf::GraphAttributes::nodeWeight |
-    // z coordinate
-    ogdf::GraphAttributes::threeD;
+      // x, y, width, height fields
+      ogdf::GraphAttributes::nodeGraphics |
+      // bends field
+      ogdf::GraphAttributes::edgeGraphics |
+      // doubleWeight field
+      ogdf::GraphAttributes::edgeDoubleWeight |
+      // weight field
+      ogdf::GraphAttributes::nodeWeight |
+      // z coordinate
+      ogdf::GraphAttributes::threeD;
 
   ogdfAttributes = ogdf::GraphAttributes(ogdfGraph, attributes);
 
-  tlp::SizeProperty *sizeProp = tulipGraph->getProperty<tlp::SizeProperty> ("viewSize");
-  tlp::LayoutProperty *layoutProp = tulipGraph->getProperty<tlp::LayoutProperty> ("viewLayout");
+  tlp::SizeProperty *sizeProp = tulipGraph->getProperty<tlp::SizeProperty>("viewSize");
+  tlp::LayoutProperty *layoutProp = tulipGraph->getProperty<tlp::LayoutProperty>("viewLayout");
 
   ogdf::node nOGDF;
-  for(tlp::node nTlp : tulipGraph->getNodes()) {
+  for (tlp::node nTlp : tulipGraph->getNodes()) {
     ogdfNodes.set(nTlp.id, nOGDF = ogdfGraph.newNode(nTlp.id));
     const tlp::Coord &c = layoutProp->getNodeValue(nTlp);
     ogdfAttributes.x(nOGDF) = c.getX();
@@ -61,7 +61,7 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
     ogdfAttributes.height(nOGDF) = s.getH();
   }
 
-  for(tlp::edge eTlp : tulipGraph->getEdges()) {
+  for (tlp::edge eTlp : tulipGraph->getEdges()) {
     tlp::node srcTlp = tulipGraph->source(eTlp);
     tlp::node tgtTlp = tulipGraph->target(eTlp);
     ogdf::edge eogdf = ogdfGraph.newEdge(ogdfNodes.get(srcTlp.id), ogdfNodes.get(tgtTlp.id));
@@ -77,14 +77,13 @@ TulipToOGDF::TulipToOGDF(tlp::Graph *g, bool importEdgeBends) : tulipGraph(g) {
       }
 
       ogdfAttributes.bends(ogdfEdges.get(eTlp.id)) = bends;
-
     }
 
     ogdfAttributes.doubleWeight(eogdf) = 1.0;
   }
 }
 
-void TulipToOGDF::saveToGML(const char * fileName) {
+void TulipToOGDF::saveToGML(const char *fileName) {
   GraphIO::writeGML(ogdfAttributes, fileName);
 }
 
@@ -134,17 +133,19 @@ vector<tlp::Coord> TulipToOGDF::getEdgeCoordFromOGDFGraphAttr(unsigned int edgeI
 }
 
 void TulipToOGDF::copyTlpNumericPropertyToOGDFEdgeLength(tlp::NumericProperty *metric) {
-  if (!metric) return;
+  if (!metric)
+    return;
 
-  for(tlp::edge eTlp : tulipGraph->getEdges()) {
+  for (tlp::edge eTlp : tulipGraph->getEdges()) {
     ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = metric->getEdgeDoubleValue(eTlp);
   }
 }
 
 void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
-  if (!size) return;
+  if (!size)
+    return;
 
-  for(tlp::edge eTlp : tulipGraph->getEdges()) {
+  for (tlp::edge eTlp : tulipGraph->getEdges()) {
     tlp::node srcTlp = tulipGraph->source(eTlp);
     tlp::node tgtTlp = tulipGraph->target(eTlp);
     tlp::Size s = size->getNodeValue(srcTlp);
@@ -155,15 +156,15 @@ void TulipToOGDF::copyTlpNodeSizeToOGDF(tlp::SizeProperty *size) {
     ogdfAttributes.width(ogdfNodes.get(tgtTlp.id)) = s2.getW();
     ogdfAttributes.height(ogdfNodes.get(tgtTlp.id)) = s2.getH();
 
-    ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = ogdfAttributes.doubleWeight(ogdfEdges.get(
-          eTlp.id)) + s.getW() / 2. + s2.getW() / 2. - 1.;
+    ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) = ogdfAttributes.doubleWeight(ogdfEdges.get(eTlp.id)) + s.getW() / 2. + s2.getW() / 2. - 1.;
   }
 }
 
 void TulipToOGDF::copyTlpNumericPropertyToOGDFNodeWeight(tlp::NumericProperty *metric) {
-  if (!metric) return;
+  if (!metric)
+    return;
 
-  for(tlp::node nTlp : tulipGraph->getNodes()) {
+  for (tlp::node nTlp : tulipGraph->getNodes()) {
     ogdfAttributes.weight(ogdfNodes.get(nTlp.id)) = static_cast<int>(metric->getNodeDoubleValue(nTlp));
   }
 }

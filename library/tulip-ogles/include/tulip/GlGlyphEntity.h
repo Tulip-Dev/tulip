@@ -41,16 +41,15 @@ namespace tlp {
 class TLP_GLES_SCOPE GlGlyphEntity : public GlEntity {
 
 public:
-
   GlGlyphEntity(int glyphId);
 
-  GlGlyphEntity(int glyphId, const tlp::Coord &center, const tlp::Size &size, const tlp::Color &color,
-                const std::string &texture="", const float borderWidth=0, const tlp::Color &borderColor=tlp::Color::Black,
-                const tlp::Vec4f &rotationAxisAndAngle=tlp::Vec4f(0.0f,0.0f,1.0f,0.0f));
+  GlGlyphEntity(int glyphId, const tlp::Coord &center, const tlp::Size &size, const tlp::Color &color, const std::string &texture = "",
+                const float borderWidth = 0, const tlp::Color &borderColor = tlp::Color::Black,
+                const tlp::Vec4f &rotationAxisAndAngle = tlp::Vec4f(0.0f, 0.0f, 1.0f, 0.0f));
 
-  void draw(const Camera &camera, const Light &light, bool pickingMode=false);
+  void draw(const Camera &camera, const Light &light, bool pickingMode = false);
 
-  void draw(const Camera &camera, bool pickingMode=false);
+  void draw(const Camera &camera, bool pickingMode = false);
 
   void setCenter(const tlp::Coord &center);
 
@@ -112,9 +111,7 @@ public:
     _outlined = outlined;
   }
 
-
 private:
-
   void updateBoundingBox();
 
   int _glyphId;
@@ -127,10 +124,7 @@ private:
   tlp::Vec4f _rotationAxisAndAngle;
   bool _filled;
   bool _outlined;
-
-
 };
-
 }
 
 #endif // GLGLYPHENTITY_H

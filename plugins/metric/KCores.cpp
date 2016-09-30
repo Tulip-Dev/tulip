@@ -65,17 +65,16 @@ using namespace tlp;
  */
 class KCores : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("K-Cores", "David Auber", "28/05/2006",
-                    "Node partitioning measure based on the K-core "
-                    "decomposition of a graph.<br/>"
-                    "K-cores were first introduced in:<br/><b>Network "
-                    "structure and minimum degree</b>, S. B. Seidman, Social "
-                    "Networks 5:269-287 (1983).<br/>"
-                    "This is a method for simplifying a graph topology which "
-                    "helps in analysis and visualization of social "
-                    "networks.<br>"
-                    "<b>Note</b>: use the default parameters to compute simple "
-                    "K-Cores (undirected and unweighted).",
+  PLUGININFORMATION("K-Cores", "David Auber", "28/05/2006", "Node partitioning measure based on the K-core "
+                                                            "decomposition of a graph.<br/>"
+                                                            "K-cores were first introduced in:<br/><b>Network "
+                                                            "structure and minimum degree</b>, S. B. Seidman, Social "
+                                                            "Networks 5:269-287 (1983).<br/>"
+                                                            "This is a method for simplifying a graph topology which "
+                                                            "helps in analysis and visualization of social "
+                                                            "networks.<br>"
+                                                            "<b>Note</b>: use the default parameters to compute simple "
+                                                            "K-Cores (undirected and unweighted).",
                     "2.0", "Graph")
 
   KCores(const tlp::PluginContext *context);
@@ -97,13 +96,13 @@ static const char *paramHelp[] = {
 #define OUT 2
 //========================================================================================
 KCores::KCores(const PluginContext *context) : DoubleAlgorithm(context) {
-  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES,
-                                   true, "InOut <br> In <br> Out");
+  addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
   addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
   addDependency("Degree", "1.0");
 }
 //========================================================================================
-KCores::~KCores() {}
+KCores::~KCores() {
+}
 //========================================================================================
 // to maximize the locality of reference we will use a vector
 // holding the all the nodes needed infos in the structure below
@@ -126,8 +125,7 @@ bool KCores::run() {
   unsigned int degree_type = degreeTypes.getCurrent();
 
   string errMsg = "";
-  graph->applyPropertyAlgorithm("Degree", result, errMsg, pluginProgress,
-                                dataSet);
+  graph->applyPropertyAlgorithm("Degree", result, errMsg, pluginProgress, dataSet);
 
   // the number of non deleted nodes
   unsigned int nbNodes = graph->numberOfNodes();

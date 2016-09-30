@@ -19,18 +19,14 @@
 
 #include "TimeDecreasingFunctionSimple.h"
 
-TimeDecreasingFunctionSimple::TimeDecreasingFunctionSimple(double initialCoef) :
-  initialCoef(initialCoef) {
+TimeDecreasingFunctionSimple::TimeDecreasingFunctionSimple(double initialCoef) : initialCoef(initialCoef) {
 }
 
 TimeDecreasingFunctionSimple::~TimeDecreasingFunctionSimple() {
 }
 
-double TimeDecreasingFunctionSimple::computeCurrentTimeRate(
-  unsigned int currentIteration, unsigned int,
-  unsigned int inputSampleSize) {
+double TimeDecreasingFunctionSimple::computeCurrentTimeRate(unsigned int currentIteration, unsigned int, unsigned int inputSampleSize) {
 
-  //Learning rate
+  // Learning rate
   return initialCoef / (1 + (currentIteration / inputSampleSize));
 }
-

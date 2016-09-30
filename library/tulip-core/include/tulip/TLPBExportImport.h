@@ -66,19 +66,19 @@
  * \brief This plugin saves a Tulip graph using a binary format
  *
  */
-class TLPBExport: public tlp::ExportModule {
+class TLPBExport : public tlp::ExportModule {
 public:
-
-  PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary","13/07/2012",
-                    "Exports a graph in a file using the Tulip binary format",
-                    "1.2","File")
+  PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary", "13/07/2012", "Exports a graph in a file using the Tulip binary format", "1.2",
+                    "File")
 
   std::string fileExtension() const {
     return "tlpb";
   }
 
-  TLPBExport(const tlp::PluginContext *context) :ExportModule(context) {}
-  ~TLPBExport() {}
+  TLPBExport(const tlp::PluginContext *context) : ExportModule(context) {
+  }
+  ~TLPBExport() {
+  }
 
   bool exportGraph(std::ostream &);
 
@@ -97,9 +97,9 @@ public:
     return edgeIndex.get(e.id);
   }
 
-  void getSubGraphs(tlp::Graph*, std::vector<tlp::Graph*>&);
+  void getSubGraphs(tlp::Graph *, std::vector<tlp::Graph *> &);
 
-  void writeAttributes(std::ostream&, tlp::Graph*);
+  void writeAttributes(std::ostream &, tlp::Graph *);
 };
 
 /// Import plugin for TLPB format
@@ -108,13 +108,14 @@ public:
  * \brief This plugin reads a Tulip graph using a binary format
  *
  */
-class TLPBImport:public tlp::ImportModule {
+class TLPBImport : public tlp::ImportModule {
 public:
-  PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012",
-                    "Imports a graph recorded in a file using the Tulip binary format", "1.2", "File")
+  PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012", "Imports a graph recorded in a file using the Tulip binary format",
+                    "1.2", "File")
 
-  TLPBImport(tlp::PluginContext* context);
-  ~TLPBImport() {}
+  TLPBImport(tlp::PluginContext *context);
+  ~TLPBImport() {
+  }
 
   std::string icon() const {
     return ":/tulip/gui/icons/tlpb32x32.png";
@@ -132,7 +133,7 @@ public:
 
 /*@}*/
 
-//Don't ask why it is David favorite 9 digit number.
+// Don't ask why it is David favorite 9 digit number.
 #define TLPB_MAGIC_NUMBER 578374683
 #define TLPB_MAJOR 1
 #define TLPB_MINOR 2
@@ -146,12 +147,11 @@ struct TLPBHeader {
   unsigned int numEdges;
 
   TLPBHeader(unsigned int nbN = 0, unsigned int nbE = 0)
-    : magicNumber(TLPB_MAGIC_NUMBER), major(TLPB_MAJOR), minor(TLPB_MINOR), numNodes(nbN), numEdges(nbE) {}
+      : magicNumber(TLPB_MAGIC_NUMBER), major(TLPB_MAJOR), minor(TLPB_MINOR), numNodes(nbN), numEdges(nbE) {
+  }
 
   bool checkCompatibility() {
-    return ((magicNumber == TLPB_MAGIC_NUMBER) &&
-            (major == TLPB_MAJOR) &&
-            (minor <= TLPB_MINOR));
+    return ((magicNumber == TLPB_MAGIC_NUMBER) && (major == TLPB_MAJOR) && (minor <= TLPB_MINOR));
   }
 };
 

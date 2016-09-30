@@ -33,7 +33,7 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool c
 
   nodes.reserve(graph->numberOfNodes());
   sites.reserve(graph->numberOfNodes());
-  for(tlp::node n : graph->getNodes()) {
+  for (tlp::node n : graph->getNodes()) {
     nodes.push_back(n);
     sites.push_back(layout->getNodeValue(n));
   }
@@ -45,13 +45,13 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool c
     graph->addCloneSubGraph("Original graph");
     TLP_HASH_MAP<unsigned int, tlp::node> voronoiVertexToNode;
 
-    for (size_t i = 0 ; i < voronoiDiag.nbVertices() ; ++i) {
+    for (size_t i = 0; i < voronoiDiag.nbVertices(); ++i) {
       tlp::node n = voronoiSg->addNode();
       layout->setNodeValue(n, voronoiDiag.vertex(i));
       voronoiVertexToNode[i] = n;
     }
 
-    for (size_t i = 0 ; i < voronoiDiag.nbEdges() ; ++i) {
+    for (size_t i = 0; i < voronoiDiag.nbEdges(); ++i) {
       voronoiSg->addEdge(voronoiVertexToNode[voronoiDiag.edge(i).first], voronoiVertexToNode[voronoiDiag.edge(i).second]);
     }
 
@@ -59,12 +59,12 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool c
       ostringstream oss;
       unsigned int cellCpt = 0;
 
-      for (unsigned int i = 0 ; i < voronoiDiag.nbSites() ; ++i) {
+      for (unsigned int i = 0; i < voronoiDiag.nbSites(); ++i) {
         oss.str("");
         oss << "voronoi cell " << cellCpt++;
         set<tlp::node> nodesSet;
 
-        for (set<unsigned int>::iterator it2 = voronoiDiag.voronoiCellForSite(i).begin() ; it2 != voronoiDiag.voronoiCellForSite(i).end() ; ++it2) {
+        for (set<unsigned int>::iterator it2 = voronoiDiag.voronoiCellForSite(i).begin(); it2 != voronoiDiag.voronoiCellForSite(i).end(); ++it2) {
           nodesSet.insert(voronoiVertexToNode[*it2]);
         }
 
@@ -74,10 +74,10 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool c
     }
 
     if (connectNodeToCellBorder) {
-      for (unsigned int i = 0 ; i < voronoiDiag.nbSites() ; ++i) {
+      for (unsigned int i = 0; i < voronoiDiag.nbSites(); ++i) {
         voronoiSg->addNode(nodes[i]);
 
-        for (set<unsigned int>::iterator it2 = voronoiDiag.voronoiCellForSite(i).begin() ; it2 != voronoiDiag.voronoiCellForSite(i).end() ; ++it2) {
+        for (set<unsigned int>::iterator it2 = voronoiDiag.voronoiCellForSite(i).begin(); it2 != voronoiDiag.voronoiCellForSite(i).end(); ++it2) {
           voronoiSg->addEdge(nodes[i], voronoiVertexToNode[*it2]);
         }
       }
@@ -89,24 +89,25 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool c
 
 static const char *paramHelp[] = {
 
-  // voronoi cells
-  "If true, a subgraph will be added for each computed voronoi cell.",
+    // voronoi cells
+    "If true, a subgraph will be added for each computed voronoi cell.",
 
-  // connect
-  "If true, existing graph nodes will be connected to the vertices of their voronoi cell."
-};
+    // connect
+    "If true, existing graph nodes will be connected to the vertices of their voronoi cell."};
 
 class VoronoiDiagram : public tlp::Algorithm {
 
-public :
-
+public:
   VoronoiDiagram(tlp::PluginContext *context) : tlp::Algorithm(context) {
     addInParameter<bool>("voronoi cells", paramHelp[0], "false");
     addInParameter<bool>("connect", paramHelp[1], "false");
   }
 
-  PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "",
-                    "Performs a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.0","Triangulation")
+  PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "", "Performs a Voronoi decomposition, in considering the positions of the graph nodes as "
+                                                              "a set of points. These points define the seeds (or sites) of the voronoi cells. New "
+                                                              "nodes and edges are added to build the convex polygons defining the contours of these "
+                                                              "cells.",
+                    "1.0", "Triangulation")
 
   bool run() {
     tlp::Observable::holdObservers();

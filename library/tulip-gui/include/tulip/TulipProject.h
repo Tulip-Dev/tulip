@@ -50,31 +50,36 @@ class PluginProgress;
   @li version (QString): the version of the Tulip project format
   @endlist
 
-  Alongside this information, one can store any kind of file into a Tulip project. Since a project is meant to be associated to a specific perspective, the responisbility of those file
+  Alongside this information, one can store any kind of file into a Tulip project. Since a project is meant to be associated to a specific
+  perspective, the responisbility of those file
   is left to the perspective.
 
   A TulipProject DOES NOT automatically save to disk. One will have to call the write() method to serialize data.
   @warning Precise implementation of the TulipProject object should NOT be known or used by the user since it could be subject to changes.
 
-  If something wrong happens when calling a method from TulipProject, this method will return either false or a invalid result (see specific method documentation). The last error message can be retrieved with the lastError() method.
+  If something wrong happens when calling a method from TulipProject, this method will return either false or a invalid result (see specific method
+  documentation). The last error message can be retrieved with the lastError() method.
 
-  After opening and before saving a project, user will be able to list/delete files and directories available in the project and open them using std filestreams or Qt's QIODevice.
+  After opening and before saving a project, user will be able to list/delete files and directories available in the project and open them using std
+  filestreams or Qt's QIODevice.
   Files can be opened using the stdFileStram and fileStream methods. They will always be opened in Read/Write mode.
 
-  Files in a tulip project are identified by their path. Those path ar similar to the path of a standard file system and use the "/" character as a separator.
+  Files in a tulip project are identified by their path. Those path ar similar to the path of a standard file system and use the "/" character as a
+  separator.
   The root directory is identified by "/".
 
   @warning TulipProject paths ALWAYS use the "/" character as a directory separator. This is OS-independant.
 
-  @note A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in the "data" directory will be identified by "/data/graph.tlp".
+  @note A file called graph.tlp located at the top-level directory will be identified by the "/graph.tlp" path while the file "graph.tlp" located in
+  the "data" directory will be identified by "/data/graph.tlp".
   */
-class TLP_QT_SCOPE TulipProject: public QObject {
+class TLP_QT_SCOPE TulipProject : public QObject {
   Q_OBJECT
 
   TulipProject();
   TulipProject(const QString &);
-public:
 
+public:
   virtual ~TulipProject();
 
   /**
@@ -94,7 +99,7 @@ public:
     @param progress A progress handler.
     @return a pointer to a TulipProject object.
     */
-  static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress=nullptr);
+  static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Opens a previously saved tulip project file
@@ -105,17 +110,17 @@ public:
     @param progress A progress handler.
     @return true if the file has been successfully opened
     */
-  bool openProjectFile(const QString &file, tlp::PluginProgress *progress=nullptr);
+  bool openProjectFile(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Restores a project which has already been extracted into path
 
-    @warning Using several TulipProject instances on the same directory may result in undefined behavior. This method should only be used for crash handling purposes.
+    @warning Using several TulipProject instances on the same directory may result in undefined behavior. This method should only be used for crash
+    handling purposes.
     @param path The path where the archive was previously extracted
     @return a pointer to a TulipProject object.
     */
   static TulipProject *restoreProject(const QString &path);
-
 
   /**
     @brief Writes files in the TulipProject into a packed archive.
@@ -126,7 +131,7 @@ public:
     @param progress A progress handler
     @return False if method failed
     */
-  bool write(const QString &file,tlp::PluginProgress *progress=nullptr);
+  bool write(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
     @brief Lists entries in a directory
@@ -144,7 +149,8 @@ public:
     @param path The path to scan. @see TulipProject
     @return The list of files and directories present in the given directory
     */
-  QStringList entryList(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter, QDir::SortFlags sort = QDir::NoSort);
+  QStringList entryList(const QString &path, const QStringList &nameFilters, QDir::Filters filters = QDir::NoFilter,
+                        QDir::SortFlags sort = QDir::NoSort);
 
   /**
     @brief Checks if the specified file/folder exists
@@ -203,7 +209,7 @@ public:
     @param destination The project path where to copy the file
     @return false if copy failed
     */
-  bool copy(const QString& source, const QString& destination);
+  bool copy(const QString &source, const QString &destination);
 
   /**
     @brief Creates a empty file
@@ -212,7 +218,7 @@ public:
     @param file the file to create
     @return true if file creation was sucessful.
     */
-  bool touch(const QString& path);
+  bool touch(const QString &path);
 
   /**
     @brief Gets a STL file stream (default to R/W access mode) to the given path.
@@ -222,19 +228,20 @@ public:
     @param path The path to open. @see TulipProject
     @return an opened filestream on the given path.
     */
-  std::fstream *stdFileStream(const QString &path, std::ios_base::openmode=std::fstream::in | std::fstream::out | std::fstream::app);
+  std::fstream *stdFileStream(const QString &path, std::ios_base::openmode = std::fstream::in | std::fstream::out | std::fstream::app);
 
   /**
     @brief Gets a Qt I/O device (default to R/W access mode) to the given path.
 
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
-    @warning User SHOULD NOT cast the QIODevice returned by this method into any of its subclass since the implementation might change in future versions.
+    @warning User SHOULD NOT cast the QIODevice returned by this method into any of its subclass since the implementation might change in future
+    versions.
     @warning It is up to the user to delete the QIODevice returned.
     @param path The path to open. @see TulipProject
     @param mode The opening mode as described in the Qt documentation.
     @return an opened Qt device on the given path.
     */
-  QIODevice *fileStream(const QString &path, QIODevice::OpenMode mode=QIODevice::ReadWrite);
+  QIODevice *fileStream(const QString &path, QIODevice::OpenMode mode = QIODevice::ReadWrite);
 
   /**
     @brief Returns the last error raised.
@@ -257,7 +264,8 @@ public:
   /**
     @brief Return the archive file associated with this project.
 
-    If the project has been opened from an existing file or if the write method has already been called, this method will return the last file path specified.
+    If the project has been opened from an existing file or if the write method has already been called, this method will return the last file path
+    specified.
     In other cases, this method will return an empty string.
     */
   QString projectFile() const {
@@ -327,7 +335,7 @@ public:
   QString toAbsolutePath(const QString &relativePath);
 
 signals:
-  void projectFileChanged(const QString& projectFile);
+  void projectFileChanged(const QString &projectFile);
 
 public slots:
   /**
@@ -370,6 +378,5 @@ private:
   QString _lastError;
   bool _isValid;
 };
-
 }
 #endif // TULIPPROJECT_H

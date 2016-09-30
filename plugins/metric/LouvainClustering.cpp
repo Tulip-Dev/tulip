@@ -53,14 +53,13 @@ using namespace tlp;
 **/
 class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Louvain", "Patrick Mary", "09/06/15",
-                    "Nodes partitioning measure used for community detection."
-                    "This is an implementation of the Louvain clustering "
-                    "algorithm first published as:<br/>"
-                    "<b>Fast unfolding of communities in large networks</b>, "
-                    "Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and "
-                    "Lefebvre, E., Journal of Statistical Mechanics: Theory "
-                    "and Experiment, P10008 (2008).",
+  PLUGININFORMATION("Louvain", "Patrick Mary", "09/06/15", "Nodes partitioning measure used for community detection."
+                                                           "This is an implementation of the Louvain clustering "
+                                                           "algorithm first published as:<br/>"
+                                                           "<b>Fast unfolding of communities in large networks</b>, "
+                                                           "Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and "
+                                                           "Lefebvre, E., Journal of Statistical Mechanics: Theory "
+                                                           "and Experiment, P10008 (2008).",
                     "2.1", "Clustering")
   LouvainClustering(const tlp::PluginContext *);
   bool run();
@@ -103,8 +102,7 @@ private:
 
   // return the weighted degree and selfloops of a node
   // of the current quotient graph
-  void get_weighted_degree_and_selfloops(unsigned int n, double &wdg,
-                                         double &nsl) {
+  void get_weighted_degree_and_selfloops(unsigned int n, double &wdg, double &nsl) {
     wdg = nsl = 0;
     const std::vector<edge> &edges = quotient->star(node(n));
 
@@ -132,8 +130,7 @@ private:
   //       d(node,com) = number of links from node to comm
   //       deg(node)   = node degree
   //       m           = number of links
-  inline double modularity_gain(unsigned int /*node*/, unsigned int comm,
-                                double dnode_comm, double w_degree) {
+  inline double modularity_gain(unsigned int /*node*/, unsigned int comm, double dnode_comm, double w_degree) {
     return (dnode_comm - tot[comm] * w_degree * ootw);
   }
 
@@ -183,8 +180,7 @@ private:
   }
 
   // generates the quotient graph of communities as computed by one_level
-  void partitionToQuotient(VectorGraph *new_quotient,
-                           EdgeProperty<double> *new_weights) {
+  void partitionToQuotient(VectorGraph *new_quotient, EdgeProperty<double> *new_weights) {
     // Renumber communities
     vector<int> renumber(nb_qnodes, -1);
 
@@ -219,8 +215,7 @@ private:
       unsigned int src_comm = renumber[n2c[src]];
       unsigned int tgt_comm = renumber[n2c[tgt]];
       double weight = (*weights)[e];
-      edge e_comm =
-          new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
+      edge e_comm = new_quotient->existEdge(node(src_comm), node(tgt_comm), false);
       total_weight += weight;
       double *weight_comm = nullptr;
 
@@ -290,8 +285,7 @@ private:
         double best_increase = 0.;
 
         for (unsigned int i = 0; i < neigh_last; i++) {
-          double increase = modularity_gain(n, neigh_pos[i],
-                                            neigh_weight[neigh_pos[i]], n_wdg);
+          double increase = modularity_gain(n, neigh_pos[i], neigh_weight[neigh_pos[i]], n_wdg);
 
           if (increase > best_increase ||
               // keep the best cluster with the minimum id
@@ -344,18 +338,16 @@ private:
 
 //========================================================================================
 static const char *paramHelp[] = {
-  // metric
-  "An existing edge weight metric property. If it is not defined all edges have a weight of 1.0.",
+    // metric
+    "An existing edge weight metric property. If it is not defined all edges have a weight of 1.0.",
 
-  // precision
-  "A given pass stops when the modularity is increased by less than precision. Default value is <b>0.000001</b>"
-};
+    // precision
+    "A given pass stops when the modularity is increased by less than precision. Default value is <b>0.000001</b>"};
 //========================================================================================
 // same precision as the original code
 #define DEFAULT_PRECISION 0.000001
 
-LouvainClustering::LouvainClustering(const tlp::PluginContext *context)
-    : DoubleAlgorithm(context) {
+LouvainClustering::LouvainClustering(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "", false);
   addInParameter<double>("precision", paramHelp[1], "0.000001", false);
 }
@@ -416,9 +408,7 @@ bool LouvainClustering::run() {
   do {
     if (verbose) {
       std::cout << "level " << level << ':' << std::endl;
-      std::cout << "  network size: " << nb_qnodes << " nodes, "
-                << quotient->numberOfEdges() << " links, " << total_weight
-                << " weight." << endl
+      std::cout << "  network size: " << nb_qnodes << " nodes, " << quotient->numberOfEdges() << " links, " << total_weight << " weight." << endl
                 << std::flush;
     }
 
@@ -439,17 +429,13 @@ bool LouvainClustering::run() {
       weights = new_weights;
 
       if (verbose)
-        std::cout << " modularity increased from " << mod << " to " << new_mod
-                  << endl
-                  << std::flush;
+        std::cout << " modularity increased from " << mod << " to " << new_mod << endl << std::flush;
 
       mod = new_mod;
       init_level();
     } else {
       if (verbose)
-        std::cout << " modularity increased from " << mod << " to " << new_mod
-                  << endl
-                  << std::flush;
+        std::cout << " modularity increased from " << mod << " to " << new_mod << endl << std::flush;
 
       // update measure
       // Renumber communities

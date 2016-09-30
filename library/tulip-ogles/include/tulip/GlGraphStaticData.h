@@ -39,19 +39,16 @@ namespace tlp {
 class TLP_GLES_SCOPE GlGraphStaticData {
 
 public:
-
   static const int edgeShapesCount;
   static int edgeShapeIds[];
   static std::string labelPositionNames[];
 
   static std::string edgeShapeName(int id);
-  static int edgeShapeId(const std::string& name);
+  static int edgeShapeId(const std::string &name);
 
   static std::string labelPositionName(int id);
-  static int labelPositionId(const std::string& name);
-
+  static int labelPositionId(const std::string &name);
 };
-
 }
 
 #endif // GLGRAPHSTATICDATA_H

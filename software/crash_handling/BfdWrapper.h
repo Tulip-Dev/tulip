@@ -38,7 +38,7 @@
 // Those macro are needed for compiling a file including bfd.h, so define them as found in ansidecl.h
 #ifdef __FreeBSD__
 #ifndef ATTRIBUTE_UNUSED
-#define ATTRIBUTE_UNUSED __attribute__ ((__unused__))
+#define ATTRIBUTE_UNUSED __attribute__((__unused__))
 #endif
 #ifndef ENUM_BITFIELD
 #define ENUM_BITFIELD(TYPE) enum TYPE
@@ -49,7 +49,7 @@
 // libiberty from binutils v2.19.1 which doesn't contain all the symbols from
 // v2.24, in particular filename_ncmp required by libbfd.
 // So add the implementation from filename_ncmp as found in the libiberty source code.
-extern "C" int filename_ncmp (const char *s1, const char *s2, size_t n);
+extern "C" int filename_ncmp(const char *s1, const char *s2, size_t n);
 
 #endif
 
@@ -57,13 +57,13 @@ extern "C" int filename_ncmp (const char *s1, const char *s2, size_t n);
 
 class BfdWrapper {
 
-public :
-
+public:
   BfdWrapper(const char *dsoName);
   ~BfdWrapper();
 
 #ifndef __MINGW32__
-  std::pair<const char *, unsigned int> getFileAndLineForAddress(const char *unmangledFuncName, const int64_t runtimeAddr, const int64_t runtimeOffset);
+  std::pair<const char *, unsigned int> getFileAndLineForAddress(const char *unmangledFuncName, const int64_t runtimeAddr,
+                                                                 const int64_t runtimeOffset);
 #else
   std::pair<const char *, unsigned int> getFileAndLineForAddress(const int64_t runtimeAddr);
   const char *getFunctionForAddress(const int64_t runtimeAddr);
@@ -73,8 +73,7 @@ public :
     return filePath;
   }
 
-private :
-
+private:
   std::string filePath;
   bfd *abfd;
   asection *textSection;

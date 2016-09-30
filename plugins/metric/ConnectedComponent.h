@@ -30,13 +30,13 @@
  *  connected component they have the same value else they have a different value.
  *
  */
-class ConnectedComponent:public tlp::DoubleAlgorithm {
+class ConnectedComponent : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Connected Component","David Auber","01/07/2002",
+  PLUGININFORMATION("Connected Component", "David Auber", "01/07/2002",
                     "Implements the connected component decompostion."
-                    "Each node and edge that belongs to the same component receives the same value."
-                    ,"1.0","Component")
-  ConnectedComponent(const tlp::PluginContext* context);
+                    "Each node and edge that belongs to the same component receives the same value.",
+                    "1.0", "Component")
+  ConnectedComponent(const tlp::PluginContext *context);
   ~ConnectedComponent();
   bool run();
 };

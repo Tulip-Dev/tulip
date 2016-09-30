@@ -18,7 +18,7 @@
  */
 #include "PluginLoaderReporter.h"
 
-PluginLoaderReporter::PluginLoaderReporter(): tlp::PluginLoader() {
+PluginLoaderReporter::PluginLoaderReporter() : tlp::PluginLoader() {
 }
 
 void PluginLoaderReporter::aborted(const std::string &filename, const std::string &errormsg) {

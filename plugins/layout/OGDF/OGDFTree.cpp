@@ -104,42 +104,35 @@ static const char *paramHelp[] = {
     // Root selection
     "This parameter indicates how the root is selected."};
 
-static const char *orientationValuesDescription =
-    "topToBottom <i>(Edges are oriented from top to bottom)</i><br>"
-    "bottomToTop <i>(Edges are oriented from bottom to top)</i><br>"
-    "leftToRight <i>(Edges are oriented from left to right)</i><br>"
-    "rightToLeft <i>(Edges are oriented from right to left)</i>";
+static const char *orientationValuesDescription = "topToBottom <i>(Edges are oriented from top to bottom)</i><br>"
+                                                  "bottomToTop <i>(Edges are oriented from bottom to top)</i><br>"
+                                                  "leftToRight <i>(Edges are oriented from left to right)</i><br>"
+                                                  "rightToLeft <i>(Edges are oriented from right to left)</i>";
 
-static const char *rootSelectionValuesDescription =
-    "rootIsSource <i>(Select a source in the graph)</i><br>"
-    "rootIsSink <i>(Select a sink in the graph)</i><br>"
-    "rootByCoord <i>(Use the coordinates, e.g., select the topmost node if "
-    "orientation is topToBottom)</i>";
+static const char *rootSelectionValuesDescription = "rootIsSource <i>(Select a source in the graph)</i><br>"
+                                                    "rootIsSink <i>(Select a sink in the graph)</i><br>"
+                                                    "rootByCoord <i>(Use the coordinates, e.g., select the topmost node if "
+                                                    "orientation is topToBottom)</i>";
 
 class OGDFTree : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Improved Walker (OGDF)", "Christoph Buchheim",
-                    "12/11/2007", "Implements a linear-time tree layout "
-                                  "algorithm with straight-line or orthogonal "
-                                  "edge routing.",
+  PLUGININFORMATION("Improved Walker (OGDF)", "Christoph Buchheim", "12/11/2007", "Implements a linear-time tree layout "
+                                                                                  "algorithm with straight-line or orthogonal "
+                                                                                  "edge routing.",
                     "1.5", "Tree")
-  OGDFTree(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
+  OGDFTree(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
     addInParameter<double>("siblings distance", paramHelp[0], "20");
     addInParameter<double>("subtrees distance", paramHelp[1], "20");
     addInParameter<double>("levels distance", paramHelp[2], "50");
     addInParameter<double>("trees distance", paramHelp[3], "50");
     addInParameter<bool>("orthogonal layout", paramHelp[4], "false");
-    addInParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5],
-                                     ELT_ORIENTATIONLIST, true,
-                                     orientationValuesDescription);
-    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6],
-                                     ELT_ROOTSELECTIONLIST, true,
-                                     rootSelectionValuesDescription);
+    addInParameter<StringCollection>(ELT_ORIENTATION, paramHelp[5], ELT_ORIENTATIONLIST, true, orientationValuesDescription);
+    addInParameter<StringCollection>(ELT_ROOTSELECTION, paramHelp[6], ELT_ROOTSELECTIONLIST, true, rootSelectionValuesDescription);
   }
 
-  ~OGDFTree() {}
+  ~OGDFTree() {
+  }
 
   void beforeCall() {
     ogdf::TreeLayout *tree = static_cast<ogdf::TreeLayout *>(ogdfLayoutAlgo);

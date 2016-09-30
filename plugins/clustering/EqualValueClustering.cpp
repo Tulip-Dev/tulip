@@ -28,34 +28,33 @@ using namespace tlp;
 PLUGIN(EqualValueClustering)
 
 static const char *paramHelp[] = {
-  // Property
-  "Property used to partition the graph.",
+    // Property
+    "Property used to partition the graph.",
 
-  // Type
-  "The type of graph elements to partition.",
+    // Type
+    "The type of graph elements to partition.",
 
-  // Connected
-  "If true, the resulting subgraphs are guaranteed to be connected."
-};
+    // Connected
+    "If true, the resulting subgraphs are guaranteed to be connected."};
 
 #define ELT_TYPE "Type"
 #define ELT_TYPES "nodes;edges;"
 #define NODE_ELT 0
 #define EDGE_ELT 1
 //================================================================================
-EqualValueClustering::EqualValueClustering(tlp::PluginContext* context):Algorithm(context) {
-  addInParameter<PropertyInterface*>("Property", paramHelp[0], "viewMetric");
+EqualValueClustering::EqualValueClustering(tlp::PluginContext *context) : Algorithm(context) {
+  addInParameter<PropertyInterface *>("Property", paramHelp[0], "viewMetric");
   addInParameter<StringCollection>(ELT_TYPE, paramHelp[1], ELT_TYPES, true, "nodes <br> edges");
   addInParameter<bool>("Connected", paramHelp[2], "false");
 }
 //===============================================================================
 bool EqualValueClustering::run() {
-  PropertyInterface *property=nullptr;
+  PropertyInterface *property = nullptr;
   StringCollection eltTypes(ELT_TYPES);
   bool connected = false;
   eltTypes.setCurrent(0);
 
-  if (dataSet!=nullptr) {
+  if (dataSet != nullptr) {
     dataSet->get("Property", property);
     dataSet->get(ELT_TYPE, eltTypes);
     dataSet->get("Connected", connected);
@@ -67,15 +66,13 @@ bool EqualValueClustering::run() {
   const bool onNodes = eltTypes.getCurrent() == NODE_ELT;
 
   // try to work with NumericProperty
-  if (dynamic_cast<NumericProperty*>(property))
-    return computeClusters((NumericProperty *) property,
-                           onNodes, connected);
+  if (dynamic_cast<NumericProperty *>(property))
+    return computeClusters((NumericProperty *)property, onNodes, connected);
 
   return computeClusters(property, onNodes, connected);
 }
 
-bool EqualValueClustering::computeClusters(NumericProperty* prop,
-    bool onNodes, bool connected) {
+bool EqualValueClustering::computeClusters(NumericProperty *prop, bool onNodes, bool connected) {
   unsigned int step = 0;
   unsigned int maxSteps;
 
@@ -91,12 +88,12 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
       pluginProgress->setComment("Partitioning nodes...");
 
     // do a bfs traversal for each node
-    for(node curNode : graph->getNodes()) {
+    for (node curNode : graph->getNodes()) {
       // check if curNode has been already visited
       if (!visited.get(curNode.id)) {
         // get the value of the node
         double curValue = prop->getNodeDoubleValue(curNode);
-        Graph* sg;
+        Graph *sg;
 
         if (connected || (clusters.find(curValue) == clusters.end())) {
           // add a new cluster
@@ -109,22 +106,18 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
           sstr << curValue;
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
-              valuesCount.find(strVal);
+            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
               sstr << " [" << itv->second << ']';
-            }
-            else
+            } else
               valuesCount[strVal] = 0;
-          }
-          else
+          } else
             clusters[curValue] = sg;
 
           sg->setName(sstr.str());
-        }
-        else
+        } else
           sg = clusters[curValue];
 
         // add curNode in the cluster
@@ -133,8 +126,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
-          if (pluginProgress->state() !=TLP_CONTINUE)
-            return pluginProgress->state()!= TLP_CANCEL;
+          if (pluginProgress->state() != TLP_CONTINUE)
+            return pluginProgress->state() != TLP_CANCEL;
         }
 
         // do a bfs traversal for this node
@@ -142,10 +135,10 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         visited.set(curNode.id, true);
         nodesToVisit.push_front(curNode);
 
-        while(!nodesToVisit.empty()) {
+        while (!nodesToVisit.empty()) {
           curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          for(edge curEdge : graph->getInOutEdges(curNode)) {
+          for (edge curEdge : graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
 
             if (neighbour == curNode) {
@@ -169,11 +162,10 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
                 if (pluginProgress && (++step % 50 == 1)) {
                   pluginProgress->progress(step, maxSteps);
 
-                  if (pluginProgress->state() !=TLP_CONTINUE)
-                    return pluginProgress->state()!= TLP_CANCEL;
+                  if (pluginProgress->state() != TLP_CONTINUE)
+                    return pluginProgress->state() != TLP_CANCEL;
                 }
-              }
-              else {
+              } else {
                 // check if curEdge already exist in cluster
                 if (!sg->isElement(curEdge))
                   sg->addEdge(curEdge);
@@ -183,20 +175,19 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         }
       }
     }
-  }
-  else {
+  } else {
     maxSteps = graph->numberOfEdges();
 
     if (pluginProgress)
       pluginProgress->setComment("Partitioning edges...");
 
     // do a bfs traversal for each edge
-    for(edge curEdge : graph->getEdges()) {
+    for (edge curEdge : graph->getEdges()) {
       // check if curEdge has been already visited
       if (!visited.get(curEdge.id)) {
         // get the value of the edge
         double curValue = prop->getEdgeDoubleValue(curEdge);
-        Graph* sg;
+        Graph *sg;
 
         if (connected || (clusters.find(curValue) == clusters.end())) {
           // add a new cluster
@@ -209,22 +200,18 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
           sstr << curValue;
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
-              valuesCount.find(strVal);
+            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(strVal);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
               sstr << " [" << itv->second << ']';
-            }
-            else
+            } else
               valuesCount[strVal] = 0;
-          }
-          else
+          } else
             clusters[curValue] = sg;
 
           sg->setName(sstr.str());
-        }
-        else
+        } else
           sg = clusters[curValue];
 
         // add curEdge in cluster
@@ -236,8 +223,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
-          if (pluginProgress->state() !=TLP_CONTINUE)
-            return pluginProgress->state()!= TLP_CANCEL;
+          if (pluginProgress->state() != TLP_CONTINUE)
+            return pluginProgress->state() != TLP_CANCEL;
         }
 
         // do a bfs traversal for this edge
@@ -246,14 +233,13 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
         nodesToVisit.push_front(ends.second);
         visited.set(curEdge.id, true);
 
-        while(!nodesToVisit.empty()) {
+        while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          for(edge curEdge : graph->getInOutEdges(curNode)) {
+          for (edge curEdge : graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
-            if (!visited.get(curEdge.id) &&
-                curValue == prop->getEdgeDoubleValue(curEdge)) {
+            if (!visited.get(curEdge.id) && curValue == prop->getEdgeDoubleValue(curEdge)) {
               node neighbour = graph->opposite(curEdge, curNode);
 
               if (neighbour != curNode) {
@@ -270,8 +256,8 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
               if (pluginProgress && (++step % 50 == 1)) {
                 pluginProgress->progress(step, maxSteps);
 
-                if (pluginProgress->state() !=TLP_CONTINUE)
-                  return pluginProgress->state()!= TLP_CANCEL;
+                if (pluginProgress->state() != TLP_CONTINUE)
+                  return pluginProgress->state() != TLP_CANCEL;
               }
             }
           }
@@ -283,8 +269,7 @@ bool EqualValueClustering::computeClusters(NumericProperty* prop,
   return true;
 }
 
-bool EqualValueClustering::computeClusters(PropertyInterface* prop,
-    bool onNodes, bool connected) {
+bool EqualValueClustering::computeClusters(PropertyInterface *prop, bool onNodes, bool connected) {
   unsigned int step = 0;
   unsigned int maxSteps;
 
@@ -309,7 +294,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
       if (!visited.get(curNode.id)) {
         // get the value of the node
         string curValue = prop->getNodeStringValue(curNode);
-        Graph* sg;
+        Graph *sg;
 
         if (connected || (clusters.find(curValue) == clusters.end())) {
           // add a new cluster
@@ -319,22 +304,18 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
           sstr << prop->getName().c_str() << ": " << curValue.c_str();
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
-              valuesCount.find(curValue);
+            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(curValue);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
               sstr << " [" << itv->second << ']';
-            }
-            else
+            } else
               valuesCount[curValue] = 0;
-          }
-          else
+          } else
             clusters[curValue] = sg;
 
           sg->setName(sstr.str());
-        }
-        else
+        } else
           sg = clusters[curValue];
 
         // add curNode in cluster
@@ -343,8 +324,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
-          if (pluginProgress->state() !=TLP_CONTINUE)
-            return pluginProgress->state()!= TLP_CANCEL;
+          if (pluginProgress->state() != TLP_CONTINUE)
+            return pluginProgress->state() != TLP_CANCEL;
         }
 
         // do a bfs traversal for this node
@@ -352,10 +333,10 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         visited.set(curNode.id, true);
         nodesToVisit.push_front(curNode);
 
-        while(!nodesToVisit.empty()) {
+        while (!nodesToVisit.empty()) {
           curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          for(edge curEdge : graph->getInOutEdges(curNode)) {
+          for (edge curEdge : graph->getInOutEdges(curNode)) {
             node neighbour = graph->opposite(curEdge, curNode);
 
             if (neighbour == curNode) {
@@ -378,11 +359,10 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
                 if (pluginProgress && (++step % 50 == 1)) {
                   pluginProgress->progress(step, maxSteps);
 
-                  if (pluginProgress->state() !=TLP_CONTINUE)
-                    return pluginProgress->state()!= TLP_CANCEL;
+                  if (pluginProgress->state() != TLP_CONTINUE)
+                    return pluginProgress->state() != TLP_CANCEL;
                 }
-              }
-              else {
+              } else {
                 // check if curEdge already exist in cluster
                 if (!sg->isElement(curEdge))
                   sg->addEdge(curEdge);
@@ -392,8 +372,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         }
       }
     }
-  }
-  else {
+  } else {
     maxSteps = graph->numberOfEdges();
 
     if (pluginProgress)
@@ -410,7 +389,7 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
       if (!visited.get(curEdge.id)) {
         // get the value of the edge
         string curValue = prop->getEdgeStringValue(curEdge);
-        Graph* sg;
+        Graph *sg;
 
         if (connected || (clusters.find(curValue) == clusters.end())) {
           // add a new cluster
@@ -421,22 +400,18 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
           sstr << prop->getName().c_str() << ": " << curValue.c_str();
 
           if (connected) {
-            TLP_HASH_MAP<std::string, unsigned int>::iterator itv =
-              valuesCount.find(curValue);
+            TLP_HASH_MAP<std::string, unsigned int>::iterator itv = valuesCount.find(curValue);
 
             if (itv != valuesCount.end()) {
               itv->second += 1;
               sstr << " [" << itv->second << ']';
-            }
-            else
+            } else
               valuesCount[strVal] = 0;
-          }
-          else
+          } else
             clusters[curValue] = sg;
 
           sg->setName(sstr.str());
-        }
-        else
+        } else
           sg = clusters[curValue];
 
         // add curEdge in cluster
@@ -448,8 +423,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         if (pluginProgress && (++step % 50 == 1)) {
           pluginProgress->progress(step, maxSteps);
 
-          if (pluginProgress->state() !=TLP_CONTINUE)
-            return pluginProgress->state()!= TLP_CANCEL;
+          if (pluginProgress->state() != TLP_CONTINUE)
+            return pluginProgress->state() != TLP_CANCEL;
         }
 
         // do a bfs traversal for this edge
@@ -458,14 +433,13 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
         nodesToVisit.push_front(ends.second);
         visited.set(curEdge.id, true);
 
-        while(!nodesToVisit.empty()) {
+        while (!nodesToVisit.empty()) {
           node curNode = nodesToVisit.front();
           nodesToVisit.pop_front();
-          for(edge curEdge : graph->getInOutEdges(curNode)) {
+          for (edge curEdge : graph->getInOutEdges(curNode)) {
             // check if the edge has not been visited AND
             // if it has the same value
-            if (!visited.get(curEdge.id) &&
-                curValue == prop->getEdgeStringValue(curEdge)) {
+            if (!visited.get(curEdge.id) && curValue == prop->getEdgeStringValue(curEdge)) {
               node neighbour = graph->opposite(curEdge, curNode);
 
               if (neighbour != curNode) {
@@ -482,8 +456,8 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
               if (pluginProgress && (++step % 50 == 1)) {
                 pluginProgress->progress(step, maxSteps);
 
-                if (pluginProgress->state() !=TLP_CONTINUE)
-                  return pluginProgress->state()!= TLP_CANCEL;
+                if (pluginProgress->state() != TLP_CONTINUE)
+                  return pluginProgress->state() != TLP_CANCEL;
               }
             }
           }
@@ -494,10 +468,5 @@ bool EqualValueClustering::computeClusters(PropertyInterface* prop,
 
   return true;
 }
-
-
-
-
-
 
 //================================================================================

@@ -25,11 +25,11 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/DoubleProperty.h>
 
-
 /** \file
  *  \brief - Import Pajek format graph file.
  *  This plugin imports a graph from a file (.net) in Pajek input format,</br>
- *  as it is described in the Pajek manual (http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf) from the Pajek wiki page http://pajek.imfm.si/doku.php?id=download.
+ *  as it is described in the Pajek manual (http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf) from the Pajek wiki page
+ * http://pajek.imfm.si/doku.php?id=download.
  *  Warning: the description of the edges with *Matrix (adjacency lists)</br>
  *  is not yet supported.
  *  <b>HISTORY</b>
@@ -44,13 +44,12 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // filename
-  "This parameter indicates the pathname of the Pajek file (.net or .paj) to import.",
+    // filename
+    "This parameter indicates the pathname of the Pajek file (.net or .paj) to import.",
 };
 
-
 namespace {
-bool tokenize(const string& str, vector<string>& tokens, const string& delimiters) {
+bool tokenize(const string &str, vector<string> &tokens, const string &delimiters) {
   if (str.empty())
     return true;
 
@@ -75,8 +74,7 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
         if (bslashFound) {
           token.push_back(c);
           bslashFound = false;
-        }
-        else {
+        } else {
           if (c == '\\')
             bslashFound = true;
           else {
@@ -93,8 +91,7 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
 
       tokens.push_back(token);
       ++pos;
-    }
-    else
+    } else
       // Found a token, add it to the vector.
       tokens.push_back(str.substr(lastPos, pos - lastPos));
 
@@ -110,10 +107,13 @@ bool tokenize(const string& str, vector<string>& tokens, const string& delimiter
 
 class ImportPajek : public ImportModule {
 
-public :
-  PLUGININFORMATION("Pajek","Patrick Mary","09/05/2011",
-                    "Imports a new graph from a file (.net) in Pajek input format<br/>as it is described in the Pajek manual (<b>http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf</b>)<br/>from the Pajek wiki page <b>http://pajek.imfm.si/doku.php?id=download</b>.<br/>Warning: the description of the edges with Matrix (adjacency lists)<br/>is not yet supported.",
-                    "1.0","File")
+public:
+  PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011", "Imports a new graph from a file (.net) in Pajek input format<br/>as it is described in "
+                                                           "the Pajek manual "
+                                                           "(<b>http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf</b>)<br/>from the "
+                                                           "Pajek wiki page <b>http://pajek.imfm.si/doku.php?id=download</b>.<br/>Warning: the "
+                                                           "description of the edges with Matrix (adjacency lists)<br/>is not yet supported.",
+                    "1.0", "File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
     l.push_back("net");
@@ -121,58 +121,56 @@ public :
     return l;
   }
 
-  ImportPajek(const tlp::PluginContext* context):
-    ImportModule(context), nbNodes(0), weights(nullptr), labels(nullptr),
-    layout(nullptr), sizes(nullptr), expectedLine(NET_UNKNOWN), partition(nullptr),
-    curNodeId(0), vectorProp(nullptr) {
-    addInParameter<string>("file::filename", paramHelp[0],"");
+  ImportPajek(const tlp::PluginContext *context)
+      : ImportModule(context), nbNodes(0), weights(nullptr), labels(nullptr), layout(nullptr), sizes(nullptr), expectedLine(NET_UNKNOWN),
+        partition(nullptr), curNodeId(0), vectorProp(nullptr) {
+    addInParameter<string>("file::filename", paramHelp[0], "");
   }
 
-  ~ImportPajek() {}
+  ~ImportPajek() {
+  }
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/import_pajek.png";
   }
 
-  vector<node>    nodes;
+  vector<node> nodes;
   unsigned int nbNodes;
   DoubleProperty *weights;
   StringProperty *labels;
   LayoutProperty *layout;
   SizeProperty *sizes;
-  enum TypeOfLine {NET_UNKNOWN = 0, NET_NODE, NET_EDGE, NET_EDGESLIST, NET_PARTITION, NET_VECTOR, NET_MATRIX};
+  enum TypeOfLine { NET_UNKNOWN = 0, NET_NODE, NET_EDGE, NET_EDGESLIST, NET_PARTITION, NET_VECTOR, NET_MATRIX };
   TypeOfLine expectedLine;
   Graph *partition;
   unsigned int curNodeId;
-  map<string, set<node> > parts;
+  map<string, set<node>> parts;
   DoubleProperty *vectorProp;
 
-  bool getUnsignedInt(unsigned int& i, const string& str) {
-    const char* ptr = str.c_str();
-    char* endPtr;
+  bool getUnsignedInt(unsigned int &i, const string &str) {
+    const char *ptr = str.c_str();
+    char *endPtr;
     long int value = strtol(ptr, &endPtr, 10);
-    i = (unsigned int) value;
+    i = (unsigned int)value;
     return (value >= 0) && (*endPtr == 0);
   }
 
-  bool getFloat(float& f, const string& str) {
-    const char* ptr = str.c_str();
-    char* endPtr;
+  bool getFloat(float &f, const string &str) {
+    const char *ptr = str.c_str();
+    char *endPtr;
     double d = strtod(ptr, &endPtr);
-    f = (float) d;
+    f = (float)d;
     return (*endPtr == 0);
   }
 
-  bool getDouble(double& d, const string& str) {
-    const char* ptr = str.c_str();
-    char* endPtr;
+  bool getDouble(double &d, const string &str) {
+    const char *ptr = str.c_str();
+    char *endPtr;
     d = strtod(ptr, &endPtr);
     return (*endPtr == 0);
   }
 
-  bool treatLine(string& str) {
-
-
+  bool treatLine(string &str) {
 
     // empty line or comment line found
     if (str.empty() || str[0] == '%')
@@ -190,7 +188,7 @@ public :
     char c = tokens[0][0];
     string lineWoFirstToken;
 
-    for (size_t i = 1 ; i < nbTokens ; ++i) {
+    for (size_t i = 1; i < nbTokens; ++i) {
       lineWoFirstToken += tokens[i];
 
       if (i != nbTokens - 1) {
@@ -230,15 +228,13 @@ public :
         return true;
       }
 
-      if (tokens[0] == "*Arcslist" || tokens[0] == "*arcslist" ||
-          tokens[0] == "*Edgeslist" || tokens[0] == "*edgeslist") {
+      if (tokens[0] == "*Arcslist" || tokens[0] == "*arcslist" || tokens[0] == "*Edgeslist" || tokens[0] == "*edgeslist") {
         expectedLine = NET_EDGESLIST;
         // no more token for this line
         return true;
       }
 
-      if (tokens[0] == "*Arcs" || tokens[0] == "*arcs" ||
-          tokens[0] == "*Edges" || tokens[0] == "*edges") {
+      if (tokens[0] == "*Arcs" || tokens[0] == "*arcs" || tokens[0] == "*Edges" || tokens[0] == "*edges") {
         expectedLine = NET_EDGE;
         // no more token for this line
         return true;
@@ -285,7 +281,7 @@ public :
 
     if (expectedLine == NET_MATRIX) {
 
-      for (size_t i = 0 ; i < tokens.size() ; ++i) {
+      for (size_t i = 0; i < tokens.size(); ++i) {
         double val = 0;
         getDouble(val, tokens[i]);
 
@@ -304,9 +300,9 @@ public :
       parts[tokens[0]].insert(nodes[curNodeId++]);
 
       if (curNodeId == graph->numberOfNodes()) {
-        map<string, set<node> >::iterator it = parts.begin();
+        map<string, set<node>>::iterator it = parts.begin();
 
-        for (; it != parts.end() ; ++it) {
+        for (; it != parts.end(); ++it) {
           Graph *part = partition->inducedSubGraph(it->second);
           part->setName(it->first);
         }
@@ -320,8 +316,7 @@ public :
 
       if (!getDouble(val, tokens[0])) {
         return false;
-      }
-      else {
+      } else {
         vectorProp->setNodeValue(nodes[curNodeId++], val);
         return true;
       }
@@ -380,13 +375,12 @@ public :
       // check other parameters
       Size nSize(0.1f, 0.1f, 0);
 
-      for(; i < nbTokens; ++i) {
+      for (; i < nbTokens; ++i) {
         if (tokens[i] == "x_fact") {
           // next token must be a float
           float x_fact;
 
-          if ((nbTokens == i + 1) ||
-              !getFloat(x_fact, tokens[i + 1]))
+          if ((nbTokens == i + 1) || !getFloat(x_fact, tokens[i + 1]))
             return false;
 
           nSize[0] *= x_fact;
@@ -398,8 +392,7 @@ public :
           // next token must be a float
           float y_fact;
 
-          if ((nbTokens == i + 1) ||
-              !getFloat(y_fact, tokens[i + 1]))
+          if ((nbTokens == i + 1) || !getFloat(y_fact, tokens[i + 1]))
             return false;
 
           nSize[1] *= y_fact;
@@ -435,7 +428,7 @@ public :
       edge e = graph->addEdge(nodes[first], nodes[second]);
 
       if (expectedLine == NET_EDGE) {
-        if (nbTokens  > 2) {
+        if (nbTokens > 2) {
           // if it exists the next token is the edge weight
           double weight;
 
@@ -461,8 +454,7 @@ public :
               break;
             }
           }
-        }
-        else
+        } else
           // default edge weight is 1
           weights->setEdgeValue(e, 1.0);
 
@@ -487,10 +479,10 @@ public :
 
     std::istream *in = tlp::getInputFileStream(filename.c_str());
 
-    labels   = graph->getProperty<StringProperty>("viewLabel");
-    weights  = graph->getProperty<DoubleProperty>("weights");
-    layout   = graph->getProperty<LayoutProperty>("viewLayout");
-    sizes    = graph->getProperty<SizeProperty>("viewSize");
+    labels = graph->getProperty<StringProperty>("viewLabel");
+    weights = graph->getProperty<DoubleProperty>("weights");
+    layout = graph->getProperty<LayoutProperty>("viewLayout");
+    sizes = graph->getProperty<SizeProperty>("viewSize");
 
     // because when node's layout is provided
     // x,y,z coordinates are restricted to [0.0, 1.0]
@@ -511,7 +503,7 @@ public :
 
       ++lineNumber;
 
-      if(!treatLine(line)) {
+      if (!treatLine(line)) {
         errors << "An error occurs while parsing file : " << filename << endl;
         errors << "[ERROR] at line " << lineNumber << endl;
 
@@ -523,8 +515,7 @@ public :
         return false;
       }
 
-      if (pluginProgress && ((lineNumber % 100) == 0) &&
-          (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE)) {
+      if (pluginProgress && ((lineNumber % 100) == 0) && (pluginProgress->progress(lineNumber, 3 * nbNodes) != TLP_CONTINUE)) {
         delete in;
         return false;
       }

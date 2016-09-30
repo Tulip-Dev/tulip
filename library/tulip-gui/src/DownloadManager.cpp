@@ -32,25 +32,25 @@
 
 #include <cstdio>
 
-DownloadManager* DownloadManager::_instance = nullptr;
+DownloadManager *DownloadManager::_instance = nullptr;
 
-DownloadManager* DownloadManager::getInstance() {
-  if(!_instance) {
+DownloadManager *DownloadManager::getInstance() {
+  if (!_instance) {
     _instance = new DownloadManager();
   }
 
   return _instance;
 }
 
-DownloadManager::DownloadManager()  {
-  connect(this, SIGNAL(finished(QNetworkReply*)), SLOT(downloadFinished(QNetworkReply*)));
+DownloadManager::DownloadManager() {
+  connect(this, SIGNAL(finished(QNetworkReply *)), SLOT(downloadFinished(QNetworkReply *)));
 }
 
-QNetworkReply* DownloadManager::downloadPlugin(const QUrl &url, const QString& destination) {
+QNetworkReply *DownloadManager::downloadPlugin(const QUrl &url, const QString &destination) {
   downloadDestinations[url] = destination;
 
   QNetworkRequest request(url);
-  QNetworkReply* reply = get(request);
+  QNetworkReply *reply = get(request);
   currentDownloads.append(reply);
   return reply;
 }
@@ -72,15 +72,14 @@ bool DownloadManager::saveToDisk(const QString &filename, QIODevice *data) {
 void DownloadManager::downloadFinished(QNetworkReply *reply) {
   QUrl url = reply->url();
 
-  if(currentDownloads.contains(reply)) {
+  if (currentDownloads.contains(reply)) {
 
     if (reply->error() == QNetworkReply::NoError) {
       QString filename = downloadDestinations[url];
 
       if (saveToDisk(filename, reply))
         printf("Download of %s succeeded (saved to %s)\n", url.toEncoded().constData(), qPrintable(filename));
-    }
-    else {
+    } else {
       fprintf(stderr, "Download of %s failed: %s\n", url.toEncoded().constData(), qPrintable(reply->errorString()));
     }
 

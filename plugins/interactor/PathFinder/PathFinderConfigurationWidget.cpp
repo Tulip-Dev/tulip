@@ -23,7 +23,7 @@
 using namespace tlp;
 using namespace std;
 
-PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent): QWidget(parent),_ui(new Ui::PathFinderConfigurationData) {
+PathFinderConfigurationWidget::PathFinderConfigurationWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::PathFinderConfigurationData) {
   _ui->setupUi(this);
 
   connect(_ui->weightCombo, SIGNAL(activated(const QString &)), this, SIGNAL(setWeightMetric(const QString &)));

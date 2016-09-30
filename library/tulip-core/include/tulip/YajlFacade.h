@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #include <string>
 
 #include <tulip/tulipconf.h>
@@ -37,7 +36,7 @@ struct yajl_gen_t;
  **/
 class TLP_SCOPE YajlParseFacade {
 public:
-  YajlParseFacade(tlp::PluginProgress* progress=nullptr);
+  YajlParseFacade(tlp::PluginProgress *progress = nullptr);
 
   virtual ~YajlParseFacade() {
   }
@@ -49,15 +48,15 @@ public:
    * @return void
    **/
   void parse(std::string filename);
-  void parse(const unsigned char* data, int length);
+  void parse(const unsigned char *data, int length);
 
   virtual void parseNull();
   virtual void parseBoolean(bool boolVal);
   virtual void parseInteger(long long integerVal);
   virtual void parseDouble(double doubleVal);
-  virtual void parseNumber(const char * numberVal, size_t numberLen);
-  virtual void parseString(const std::string& value);
-  virtual void parseMapKey(const std::string& value);
+  virtual void parseNumber(const char *numberVal, size_t numberLen);
+  virtual void parseString(const std::string &value);
+  virtual void parseMapKey(const std::string &value);
   virtual void parseStartMap();
   virtual void parseEndMap();
   virtual void parseStartArray();
@@ -67,7 +66,7 @@ public:
   std::string errorMessage() const;
 
 protected:
-  tlp::PluginProgress* _progress;
+  tlp::PluginProgress *_progress;
   bool _parsingSucceeded;
   std::string _errorMessage;
 };
@@ -81,8 +80,8 @@ public:
 
   void writeInteger(long long int number);
   void writeDouble(double number);
-  void writeNumber(const char* str, size_t len);
-  void writeString(const std::string& text);
+  void writeNumber(const char *str, size_t len);
+  void writeString(const std::string &text);
   void writeNull();
   void writeBool(bool value);
   void writeMapOpen();
@@ -93,6 +92,6 @@ public:
   void beautifyString(bool beautify);
 
 protected:
-  yajl_gen_t* _generator;
+  yajl_gen_t *_generator;
 };
 ///@endcond

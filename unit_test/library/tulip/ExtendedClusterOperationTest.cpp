@@ -27,20 +27,20 @@
 using namespace std;
 using namespace tlp;
 
-static Graph* tlp_loadGraph(const std::string& filename) {
+static Graph *tlp_loadGraph(const std::string &filename) {
   DataSet dataSet;
   dataSet.set("file::filename", filename);
   Graph *sg = tlp::importGraph("TLP Import", dataSet);
   return sg;
 }
 
-CPPUNIT_TEST_SUITE_REGISTRATION( ExtendedClusterOperationTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(ExtendedClusterOperationTest);
 //==========================================================
 void ExtendedClusterOperationTest::setUp() {
   //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   graph = tlp::newGraph();
 
-  for (unsigned int i=0; i<5; ++i) {
+  for (unsigned int i = 0; i < 5; ++i) {
     nodes.push_back(graph->addNode());
   }
 
@@ -78,7 +78,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT(quotient->existEdge(meta, nodes[2]).isValid());
   std::vector<edge> mEdges = quotient->getEdges(meta, nodes[3]);
   CPPUNIT_ASSERT(mEdges.size() == 2);
-  Iterator<edge>* ite = quotient->getEdgeMetaInfo(mEdges[0]);
+  Iterator<edge> *ite = quotient->getEdgeMetaInfo(mEdges[0]);
   CPPUNIT_ASSERT(ite->next() == edges[2]);
   CPPUNIT_ASSERT(ite->hasNext() == false);
   delete ite;
@@ -86,7 +86,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT(ite->next() == edges[3]);
   CPPUNIT_ASSERT(ite->hasNext() == false);
   delete ite;
-  
+
   mEdges.clear();
   mEdges = quotient->getEdges(meta, nodes[4]);
   CPPUNIT_ASSERT(mEdges.size() == 1);
@@ -107,12 +107,12 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
   CPPUNIT_ASSERT(e == edges[4] || e == edges[6]);
   CPPUNIT_ASSERT(ite->hasNext() == false);
   delete ite;
-  
+
   CPPUNIT_ASSERT_EQUAL(6u, quotient->numberOfEdges());
   CPPUNIT_ASSERT_EQUAL(6u, graph->numberOfNodes());
 
   Graph *cluster = quotient->getNodeMetaInfo(meta);
-  CPPUNIT_ASSERT(cluster!=nullptr);
+  CPPUNIT_ASSERT(cluster != nullptr);
   CPPUNIT_ASSERT(cluster->isElement(nodes[0]));
   CPPUNIT_ASSERT(cluster->isElement(nodes[1]));
   CPPUNIT_ASSERT_EQUAL(1u, cluster->numberOfEdges());
@@ -121,7 +121,7 @@ void ExtendedClusterOperationTest::testCreateMetaNode() {
 //==========================================================
 void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
   edge e02 = quotient->addEdge(nodes[0], nodes[2]);
-  Iterator<edge>* ite = quotient->getInEdges(nodes[2]);
+  Iterator<edge> *ite = quotient->getInEdges(nodes[2]);
   unsigned nbEdges = 0;
 
   while (ite->hasNext()) {
@@ -161,11 +161,11 @@ void ExtendedClusterOperationTest::testBugCreateOpenMetaNode() {
 //==========================================================
 void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   tlp::warning() << __PRETTY_FUNCTION__ << endl;
-  Graph * graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
-  //take the quotient graph
+  Graph *graph = tlp_loadGraph("./DATA/graphs/openmetanode1.tlp.gz");
+  // take the quotient graph
   bool find = false;
-  Graph* subgraph = nullptr;
-  for(Graph* sg : graph->getSubGraphs()) {
+  Graph *subgraph = nullptr;
+  for (Graph *sg : graph->getSubGraphs()) {
     string name;
     sg->getAttribute("name", name);
 
@@ -178,8 +178,8 @@ void ExtendedClusterOperationTest::testBugOpenInSubgraph() {
   CPPUNIT_ASSERT(find && subgraph != nullptr);
   CPPUNIT_ASSERT_EQUAL(2u, subgraph->numberOfNodes());
   CPPUNIT_ASSERT_EQUAL(1u, subgraph->numberOfEdges());
-  //open all meta nodes
-  for(node n : stableIterator(subgraph->getNodes())) {
+  // open all meta nodes
+  for (node n : stableIterator(subgraph->getNodes())) {
     subgraph->openMetaNode(n);
   }
   CPPUNIT_ASSERT_EQUAL(6u, subgraph->numberOfNodes());
@@ -206,7 +206,6 @@ void ExtendedClusterOperationTest::testOpenMetaNode() {
   CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[3]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[4]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[2], nodes[3]).isValid());
-
 }
 //==========================================================
 void ExtendedClusterOperationTest::testOpenMetaNodes() {
@@ -235,5 +234,4 @@ void ExtendedClusterOperationTest::testOpenMetaNodes() {
   CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[3]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[1], nodes[4]).isValid());
   CPPUNIT_ASSERT(quotient->existEdge(nodes[2], nodes[3]).isValid());
-
 }

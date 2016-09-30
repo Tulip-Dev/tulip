@@ -91,15 +91,15 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
   int pos = apiEntry.indexOf('.');
 
   if (apiEntry.contains(QRegExp("^_tulipogl.*\\..+"))) {
-    apiEntry = apiEntry.mid(pos+1);
+    apiEntry = apiEntry.mid(pos + 1);
   }
 
   if (apiEntry.contains(QRegExp("^_tulipgui.*\\..+"))) {
-    apiEntry = apiEntry.mid(pos+1);
+    apiEntry = apiEntry.mid(pos + 1);
   }
 
   if (apiEntry.contains(QRegExp("^_tulip.*\\..+"))) {
-    apiEntry = apiEntry.mid(pos+1);
+    apiEntry = apiEntry.mid(pos + 1);
   }
 
   apiEntry.replace(QRegExp("\\?[0-9]+"), "");
@@ -111,19 +111,17 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
 
   if (func) {
     withoutParams = apiEntry.mid(0, parenPos);
-    QString parameters = apiEntry.mid(parenPos+1, apiEntry.lastIndexOf(')') - parenPos - 1);
+    QString parameters = apiEntry.mid(parenPos + 1, apiEntry.lastIndexOf(')') - parenPos - 1);
 
     if (parameters != "") {
       QStringList paramsList = parameters.split(',');
-      foreach(QString param, paramsList) {
-        params.append(param.trimmed());
-      }
+      foreach (QString param, paramsList) { params.append(param.trimmed()); }
     }
 
     int retPos = apiEntry.indexOf("->");
 
     if (retPos != -1) {
-      retType = apiEntry.mid(retPos+2).trimmed();
+      retType = apiEntry.mid(retPos + 2).trimmed();
     }
   }
 
@@ -136,22 +134,21 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
       _dictContent[type] = QSet<QString>();
     }
 
-    int newPos = withoutParams.indexOf('.', pos+1);
+    int newPos = withoutParams.indexOf('.', pos + 1);
 
     QString dictEntry;
 
     if (newPos != -1) {
-      dictEntry = withoutParams.mid(pos+1, newPos - pos - 1).trimmed();
-    }
-    else {
-      dictEntry = withoutParams.mid(pos+1).trimmed();
+      dictEntry = withoutParams.mid(pos + 1, newPos - pos - 1).trimmed();
+    } else {
+      dictEntry = withoutParams.mid(pos + 1).trimmed();
 
       if (func) {
 
         QString wholeFuncName = type + "." + dictEntry;
 
         if (_paramTypes.find(wholeFuncName) == _paramTypes.end()) {
-          _paramTypes[wholeFuncName] = QVector<QVector<QString> >();
+          _paramTypes[wholeFuncName] = QVector<QVector<QString>>();
         }
 
         _paramTypes[wholeFuncName].append(params);
@@ -162,7 +159,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
       }
     }
 
-    if (dictEntry != "" ) {
+    if (dictEntry != "") {
       _dictContent[type].insert(dictEntry);
     }
 
@@ -173,9 +170,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
 QSet<QString> APIDataBase::getTypesList() const {
   QSet<QString> ret;
   QList<QString> keys = _dictContent.keys();
-  foreach(QString type, keys) {
-    ret.insert(type);
-  }
+  foreach (QString type, keys) { ret.insert(type); }
   return ret;
 }
 
@@ -183,7 +178,7 @@ QSet<QString> APIDataBase::getDictContentForType(const QString &type, const QStr
   QSet<QString> ret;
 
   if (_dictContent.find(type) != _dictContent.end()) {
-    foreach(QString s, _dictContent[type]) {
+    foreach (QString s, _dictContent[type]) {
       if (s.toLower().startsWith(prefix.toLower())) {
         ret.insert(s);
       }
@@ -203,8 +198,8 @@ QString APIDataBase::getReturnTypeForMethodOrFunction(const QString &funcName) c
   return ret;
 }
 
-QVector<QVector<QString> > APIDataBase::getParamTypesForMethodOrFunction(const QString &funcName) const {
-  QVector<QVector<QString> > ret;
+QVector<QVector<QString>> APIDataBase::getParamTypesForMethodOrFunction(const QString &funcName) const {
+  QVector<QVector<QString>> ret;
 
   if (_paramTypes.find(funcName) != _paramTypes.end()) {
     ret = _paramTypes[funcName];
@@ -219,11 +214,11 @@ bool APIDataBase::functionExists(const QString &funcName) const {
 
 QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEntry) const {
   QVector<QString> ret;
-  QHashIterator<QString, QSet<QString> > i(_dictContent);
+  QHashIterator<QString, QSet<QString>> i(_dictContent);
 
   while (i.hasNext()) {
     i.next();
-    foreach(QString s, i.value()) {
+    foreach (QString s, i.value()) {
       if (s == dictEntry) {
         ret.append(i.key());
         break;
@@ -236,11 +231,11 @@ QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEn
 
 QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &prefix) const {
   QSet<QString> ret;
-  QHashIterator<QString, QSet<QString> > i(_dictContent);
+  QHashIterator<QString, QSet<QString>> i(_dictContent);
 
   while (i.hasNext()) {
     i.next();
-    foreach(QString s, i.value()) {
+    foreach (QString s, i.value()) {
       if (s.toLower().startsWith(prefix.toLower())) {
         ret.insert(s);
       }
@@ -256,10 +251,10 @@ bool APIDataBase::typeExists(const QString &type) const {
 
 QString APIDataBase::getFullTypeName(const QString &t) const {
   QList<QString> keys = _dictContent.keys();
-  foreach(QString type, keys) {
+  foreach (QString type, keys) {
     int pos = type.lastIndexOf(t);
 
-    if (pos != -1 && (pos + t.length()) == type.length() && (pos == 0 || type[pos-1] == '.')) {
+    if (pos != -1 && (pos + t.length()) == type.length() && (pos == 0 || type[pos - 1] == '.')) {
       return type;
     }
   }

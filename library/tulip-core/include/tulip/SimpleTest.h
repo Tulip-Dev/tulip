@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef TULIP_SIMPLETEST_H
 #define TULIP_SIMPLETEST_H
 
@@ -35,7 +34,6 @@ namespace tlp {
  **/
 class TLP_SCOPE SimpleTest : private Observable {
 public:
-
   /**
    * @brief Checks if the graph is simple (i.e. it contains no self loops or parallel edges).
    *
@@ -55,7 +53,7 @@ public:
    * @param removed The edges that were removed to make the graph simple.
    * @return void
    **/
-  static void makeSimple(Graph* graph, std::vector<edge> &removed);
+  static void makeSimple(Graph *graph, std::vector<edge> &removed);
 
   /**
    * Performs simple test and stores found parallel edges in the multipleEdges vector
@@ -70,12 +68,12 @@ public:
    * @param loops The self loops that need to be removed to make the graph simple. Defaults to 0.
    * @return bool True if the graph is simple, false otherwise.
    **/
-  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges=nullptr, std::vector<edge> *loops=nullptr);
+  static bool simpleTest(const Graph *graph, std::vector<edge> *multipleEdges = nullptr, std::vector<edge> *loops = nullptr);
 
 private:
   SimpleTest();
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
   void deleteResult(Graph *graph);
 
   /**
@@ -85,10 +83,8 @@ private:
   /**
    * @brief Stored results for graphs. When a graph is updated, its entry is removed from the hashmap.
    **/
-  TLP_HASH_MAP<const Graph*, bool> resultsBuffer;
+  TLP_HASH_MAP<const Graph *, bool> resultsBuffer;
 };
-
-
 }
 #endif
 ///@endcond

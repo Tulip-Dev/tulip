@@ -44,9 +44,8 @@
 using namespace std;
 using namespace tlp;
 
-SelectionInteractor::SelectionInteractor(GlScene *scene) :
-  _firstX(-1), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false),
-  _znpInteractor(NULL), _selectOnlyEdgesConnectedToSelectedNodes(false) {
+SelectionInteractor::SelectionInteractor(GlScene *scene)
+    : _firstX(-1), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false), _znpInteractor(NULL), _selectOnlyEdgesConnectedToSelectedNodes(false) {
   _glScene = scene;
   _znpInteractor = new ZoomAndPanInteractor(scene);
 }
@@ -57,9 +56,11 @@ void SelectionInteractor::setScene(GlScene *glScene) {
 }
 
 bool SelectionInteractor::mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int &modifiers) {
-  if (!_glScene) return false;
+  if (!_glScene)
+    return false;
   tlp::Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
   _mouseButton = button;
   if (button == LEFT_BUTTON) {
     if (state == DOWN) {
@@ -71,9 +72,9 @@ bool SelectionInteractor::mouseCallback(const MouseButton &button, const MouseBu
       _dragStarted = false;
       tlp::Observable::holdObservers();
 
-      set<GlEntity*> glEntities = _glScene->getEntities();
-      for (set<GlEntity*>::iterator it = glEntities.begin() ; it != glEntities.end() ; ++it) {
-        GlGraph *glGraph = dynamic_cast<GlGraph*>(*it);
+      set<GlEntity *> glEntities = _glScene->getEntities();
+      for (set<GlEntity *>::iterator it = glEntities.begin(); it != glEntities.end(); ++it) {
+        GlGraph *glGraph = dynamic_cast<GlGraph *>(*it);
         if (glGraph) {
           BooleanProperty *viewSelection = glGraph->getGraph()->getProperty<BooleanProperty>("viewSelection");
           if (!modifiers) {
@@ -114,7 +115,7 @@ bool SelectionInteractor::mouseCallback(const MouseButton &button, const MouseBu
         int width = std::max(_firstX, _curX) - x;
         int height = std::max(viewport[3] - _firstY, viewport[3] - _curY) - y;
         _glScene->selectEntities(RenderingNodesEdges, x, y, width, height, _selectedEntities);
-        for (size_t i = 0 ; i < _selectedEntities.size() ; ++i) {
+        for (size_t i = 0; i < _selectedEntities.size(); ++i) {
           if (_selectedEntities[i].getEntityType() == SelectedEntity::NODE_SELECTED) {
             BooleanProperty *viewSelection = _selectedEntities[i].getGlGraph()->getGraph()->getProperty<BooleanProperty>("viewSelection");
             if (modifiers & ACTIVE_SHIFT) {
@@ -124,7 +125,7 @@ bool SelectionInteractor::mouseCallback(const MouseButton &button, const MouseBu
             }
           }
         }
-        for (size_t i = 0 ; i < _selectedEntities.size() ; ++i) {
+        for (size_t i = 0; i < _selectedEntities.size(); ++i) {
           if (_selectedEntities[i].getEntityType() == SelectedEntity::EDGE_SELECTED) {
             BooleanProperty *viewSelection = _selectedEntities[i].getGlGraph()->getGraph()->getProperty<BooleanProperty>("viewSelection");
             if (modifiers & ACTIVE_SHIFT) {
@@ -156,9 +157,11 @@ bool SelectionInteractor::mouseCallback(const MouseButton &button, const MouseBu
 }
 
 bool SelectionInteractor::mouseMoveCallback(int x, int y, const int & /* modifiers */) {
-  if (!_glScene) return false;
+  if (!_glScene)
+    return false;
   tlp::Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
   if (_mouseButton == LEFT_BUTTON && _dragStarted) {
     _curX = x;
     _curY = y;
@@ -175,7 +178,7 @@ void SelectionInteractor::draw() {
     Vec4i viewport = camera->getViewport();
     tlp::Vec2f bl(std::min(_firstX, _curX), std::min(viewport[3] - _firstY, viewport[3] - _curY));
     tlp::Vec2f tr(std::max(_firstX, _curX), std::max(viewport[3] - _firstY, viewport[3] - _curY));
-    GlRect2D rect(bl, tr, tlp::Color(255,0,0,100), tlp::Color::Black);
+    GlRect2D rect(bl, tr, tlp::Color(255, 0, 0, 100), tlp::Color::Black);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     rect.draw(*camera);
@@ -183,4 +186,3 @@ void SelectionInteractor::draw() {
     camera->initGl();
   }
 }
-

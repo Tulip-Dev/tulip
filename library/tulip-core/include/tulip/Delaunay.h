@@ -38,10 +38,8 @@ namespace tlp {
  * Edges and simplices are defined using a indexes into the original
  * set of points.
  */
-TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
-                                     std::vector<std::pair<unsigned int, unsigned int> > &edges,
-                                     std::vector<std::vector<unsigned int> > &simplices,
-                                     bool voronoiMode = false);
+TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points, std::vector<std::pair<unsigned int, unsigned int>> &edges,
+                                     std::vector<std::vector<unsigned int>> &simplices, bool voronoiMode = false);
 
 /**
  * @ingroup Graph
@@ -49,7 +47,6 @@ TLP_SCOPE bool delaunayTriangulation(std::vector<Coord> &points,
  */
 class TLP_SCOPE VoronoiDiagram {
 public:
-
   // A voronoi site.
   typedef Coord Site;
 
@@ -106,7 +103,7 @@ public:
   std::vector<Edge> voronoiEdgesForSite(const unsigned int siteIdx) {
     std::vector<Edge> ret;
 
-    for (size_t i = 0 ; i < siteToCellEdges[siteIdx].size() ; ++i) {
+    for (size_t i = 0; i < siteToCellEdges[siteIdx].size(); ++i) {
       ret.push_back(edges[siteToCellEdges[siteIdx][i]]);
     }
 
@@ -123,7 +120,7 @@ public:
   std::vector<Vertex> vertices;
   std::vector<Edge> edges;
   std::vector<Cell> cells;
-  TLP_HASH_MAP<unsigned int, std::vector<unsigned int> > siteToCellEdges;
+  TLP_HASH_MAP<unsigned int, std::vector<unsigned int>> siteToCellEdges;
   TLP_HASH_MAP<unsigned int, unsigned int> siteToCell;
   TLP_HASH_MAP<unsigned int, unsigned int> verticesDegree;
 };
@@ -138,8 +135,6 @@ public:
  * for each input site.
  */
 TLP_SCOPE bool voronoiDiagram(std::vector<Coord> &sites, VoronoiDiagram &voronoiDiagram);
-
-
 }
 #endif
 ///@endcond

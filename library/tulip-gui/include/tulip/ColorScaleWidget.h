@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef COLORSCALEWIDGET_H_
 #define COLORSCALEWIDGET_H_
 
@@ -34,26 +33,26 @@ class ColorScale;
  */
 class TLP_QT_SCOPE ColorScaleWidget : public QWidget {
 public:
-  ColorScaleWidget(QWidget* parent=nullptr);
+  ColorScaleWidget(QWidget *parent = nullptr);
   virtual ~ColorScaleWidget();
 
   /**
    * @brief Set the color scale to display.
    */
   void setColorScale(ColorScale *colorScale);
-  inline tlp::ColorScale* getColorScale()const {
+  inline tlp::ColorScale *getColorScale() const {
     return colorScale;
   }
 
   void setOrientation(Qt::Orientation orientation);
-  QSize minimumSizeHint () const;
-  QSize sizeHint () const;
+  QSize minimumSizeHint() const;
+  QSize sizeHint() const;
+
 protected:
-  void paintEvent ( QPaintEvent * event );
+  void paintEvent(QPaintEvent *event);
 
 private:
-
-  void paintColorScale(QPainter& painter,const QRect& rect);
+  void paintColorScale(QPainter &painter, const QRect &rect);
   ColorScale *colorScale;
   Qt::Orientation orientation;
 };

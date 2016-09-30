@@ -28,7 +28,7 @@
 
 namespace tlp {
 
-/* 
+/*
    RangeSlider is a slider with two handles. It is
    handy for letting user to choose a range of integers between min/max.
    This class is totally inspired by the QxtSpanSlider class
@@ -42,16 +42,13 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   Q_PROPERTY(HandleMovementMode handleMovementMode READ handleMovementMode WRITE setHandleMovementMode)
   Q_ENUMS(HandleMovementMode)
 
- public:
-  explicit RangeSlider(QWidget* parent = 0);
-  explicit RangeSlider(Qt::Orientation orientation, QWidget* parent = 0);
-  ~RangeSlider() {}
+public:
+  explicit RangeSlider(QWidget *parent = 0);
+  explicit RangeSlider(Qt::Orientation orientation, QWidget *parent = 0);
+  ~RangeSlider() {
+  }
 
-  enum HandleMovementMode {
-    FreeMovement,
-    NoCrossing,
-    NoOverlapping
-  };
+  enum HandleMovementMode { FreeMovement, NoCrossing, NoOverlapping };
 
   HandleMovementMode handleMovementMode() const;
   void setHandleMovementMode(HandleMovementMode mode);
@@ -62,48 +59,44 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   int lowerPosition() const;
   int upperPosition() const;
 
- public slots:
-   void setLowerValue(int lower);
-   void setUpperValue(int upper);
-   void setRange(int lower, int upper);
-  
-   void setLowerPosition(int lower);
-   void setUpperPosition(int upper);
+public slots:
+  void setLowerValue(int lower);
+  void setUpperValue(int upper);
+  void setRange(int lower, int upper);
 
- signals:
-   void rangeChanged(int lower, int upper);
-   void lowerValueChanged(int lower);
-   void upperValueChanged(int upper);
-  
-   void lowerPositionChanged(int lower);
-   void upperPositionChanged(int upper);
+  void setLowerPosition(int lower);
+  void setUpperPosition(int upper);
 
-  protected:
-   virtual void keyPressEvent(QKeyEvent* event);
-   virtual void mousePressEvent(QMouseEvent* event);
-   virtual void mouseMoveEvent(QMouseEvent* event);
-   virtual void mouseReleaseEvent(QMouseEvent* event);
-   virtual void paintEvent(QPaintEvent* event);
+signals:
+  void rangeChanged(int lower, int upper);
+  void lowerValueChanged(int lower);
+  void upperValueChanged(int upper);
 
- private:
-  enum RangeHandle {
-    NoHandle,
-    LowerHandle,
-    UpperHandle
-  };
+  void lowerPositionChanged(int lower);
+  void upperPositionChanged(int upper);
+
+protected:
+  virtual void keyPressEvent(QKeyEvent *event);
+  virtual void mousePressEvent(QMouseEvent *event);
+  virtual void mouseMoveEvent(QMouseEvent *event);
+  virtual void mouseReleaseEvent(QMouseEvent *event);
+  virtual void paintEvent(QPaintEvent *event);
+
+private:
+  enum RangeHandle { NoHandle, LowerHandle, UpperHandle };
 
   Q_PROPERTY(int lowerPosition READ lowerPosition WRITE setLowerPosition)
   Q_PROPERTY(int upperPosition READ upperPosition WRITE setUpperPosition)
 
-  void initStyleOption(QStyleOptionSlider* option, RangeHandle handle = UpperHandle) const;
-  int pick(const QPoint& pt) const {
+  void initStyleOption(QStyleOptionSlider *option, RangeHandle handle = UpperHandle) const;
+  int pick(const QPoint &pt) const {
     return orientation() == Qt::Horizontal ? pt.x() : pt.y();
   }
   int pixelPosToRangeValue(int pos) const;
-  void handleMousePress(const QPoint& pos, QStyle::SubControl& control, int value, RangeHandle handle);
-  void drawHandle(QStylePainter* painter, RangeHandle handle) const;
-  void setupPainter(QPainter* painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const;
-  void drawRange(QStylePainter* painter, const QRect& rect) const;
+  void handleMousePress(const QPoint &pos, QStyle::SubControl &control, int value, RangeHandle handle);
+  void drawHandle(QStylePainter *painter, RangeHandle handle) const;
+  void setupPainter(QPainter *painter, Qt::Orientation orientation, qreal x1, qreal y1, qreal x2, qreal y2) const;
+  void drawRange(QStylePainter *painter, const QRect &rect) const;
   void triggerAction(QAbstractSlider::SliderAction action, bool main);
   void swapControls();
 
@@ -120,12 +113,11 @@ class TLP_QT_SCOPE RangeSlider : public QSlider {
   HandleMovementMode movement;
   bool firstMovement;
   bool blockTracking;
-  
- public slots:
-   void updateRange(int min, int max);
-   void movePressedHandle();
-};
 
+public slots:
+  void updateRange(int min, int max);
+  void movePressedHandle();
+};
 }
 
 #endif // RANGESLIDER_H

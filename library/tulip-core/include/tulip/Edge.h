@@ -45,7 +45,8 @@ struct edge {
   /**
    * @brief edge creates an invalid edge.
    */
-  edge():id(UINT_MAX) {}
+  edge() : id(UINT_MAX) {
+  }
 
   /**
    * @brief edge Create an edge of given identifier.
@@ -54,7 +55,8 @@ struct edge {
    *
    * @param j the identifier this edge will use.
    */
-  explicit edge(unsigned int j):id(j) {}
+  explicit edge(unsigned int j) : id(j) {
+  }
 
   /**
    * @brief operator unsigned int A convenience function to get the id of an edge.
@@ -69,7 +71,7 @@ struct edge {
    * @return Whether or not the two edges are different.
    */
   bool operator==(const edge e) const {
-    return id==e.id;
+    return id == e.id;
   }
 
   /**
@@ -78,7 +80,7 @@ struct edge {
    * @return Whether or not the two edges are the same.
    */
   bool operator!=(const edge e) const {
-    return id!=e.id;
+    return id != e.id;
   }
 
   /**
@@ -88,32 +90,31 @@ struct edge {
    * @return whether the edge is valid or not.
    */
   bool isValid() const {
-    return id!=UINT_MAX;
+    return id != UINT_MAX;
   }
 };
-
 }
 
 #ifndef DOXYGEN_NOTFOR_DEVEL
-//these three functions allow to use tlp::edge as a key in a hash-based data structure (e.g. hashmap).
+// these three functions allow to use tlp::edge as a key in a hash-based data structure (e.g. hashmap).
 TLP_BEGIN_HASH_NAMESPACE {
-  template<>
-  struct hash<tlp::edge>{
-    size_t operator()(const tlp::edge e) const {return e.id;}
+  template <> struct hash<tlp::edge> {
+    size_t operator()(const tlp::edge e) const {
+      return e.id;
+    }
   };
-} TLP_END_HASH_NAMESPACE
+}
+TLP_END_HASH_NAMESPACE
 
 namespace std {
-template<>
-struct equal_to<tlp::edge> {
-  size_t operator()(const tlp::edge e,const tlp::edge e2) const {
-    return e.id==e2.id;
+template <> struct equal_to<tlp::edge> {
+  size_t operator()(const tlp::edge e, const tlp::edge e2) const {
+    return e.id == e2.id;
   }
 };
-template<>
-struct less<tlp::edge> {
-  size_t operator()(const tlp::edge e,const tlp::edge e2) const {
-    return e.id<e2.id;
+template <> struct less<tlp::edge> {
+  size_t operator()(const tlp::edge e, const tlp::edge e2) const {
+    return e.id < e2.id;
   }
 };
 }

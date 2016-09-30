@@ -34,9 +34,9 @@ class TLP_QT_SCOPE MouseBoxZoomer : public GLInteractorComponent {
 private:
   Qt::MouseButton _mButton;
   Qt::KeyboardModifier _kModifier;
+
 public:
-  MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton,
-                 Qt::KeyboardModifier modifier = Qt::NoModifier);
+  MouseBoxZoomer(Qt::MouseButton button = Qt::LeftButton, Qt::KeyboardModifier modifier = Qt::NoModifier);
   ~MouseBoxZoomer();
   bool draw(GlMainWidget *);
   bool eventFilter(QObject *, QEvent *);
@@ -47,8 +47,6 @@ private:
   bool _dragStarted;
   Graph *_graph;
 };
-
-
 }
-#endif //MOUSEZOOMBOX_H
+#endif // MOUSEZOOMBOX_H
 ///@endcond

@@ -17,7 +17,6 @@
  *
  */
 
-
 #include "SOMPropertiesWidget.h"
 #include "SOMView.h"
 #include "ui_SOMPropertiesWidget.h"
@@ -32,12 +31,10 @@
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/PropertyTypes.h>
 
-
 using namespace std;
 using namespace tlp;
 
-SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
-  QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
+SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent) : QWidget(parent), _ui(new Ui::SOMPropertiesWidget), view(view) {
   _ui->setupUi(this);
   dimensionConfigurationWidget = new tlp::ComputeSOMWidget(parent);
 
@@ -64,7 +61,7 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView* view, QWidget *parent) :
   sizeMappingLayout->layout()->addWidget(realNodeSizeMappingRadioButton);
   realNodeSizeMappingRadioButton->setChecked(true);
 
-  //Display multiple properties at same time
+  // Display multiple properties at same time
   multiplePropertiesRepresentation = false;
 
   dimensionConfigurationWidget->setWindowTitle("Dimensions");
@@ -75,7 +72,7 @@ QList<QWidget *> SOMPropertiesWidget::configurationWidgets() const {
 
   QList<QWidget *> widgets;
 
-  widgets << dimensionConfigurationWidget << (QWidget *) this;
+  widgets << dimensionConfigurationWidget << (QWidget *)this;
 
   return widgets;
 }
@@ -155,11 +152,10 @@ SOMPropertiesWidget::~SOMPropertiesWidget() {
 void SOMPropertiesWidget::diffusionMethodChange() {
 }
 
-void SOMPropertiesWidget::scalingMethodChange(QAbstractButton * button) {
+void SOMPropertiesWidget::scalingMethodChange(QAbstractButton *button) {
   if (button == singleColorScale) {
     editGradients->setEnabled(false);
-  }
-  else {
+  } else {
     editGradients->setEnabled(true);
   }
 }
@@ -170,12 +166,11 @@ void SOMPropertiesWidget::graphChanged(tlp::Graph *graph) {
   types.push_back("double");
   tlp::GraphPropertiesSelectionWidget s;
   s.setWidgetParameters(graph, types);
-  //Init the set of colors with all the possible properties.
+  // Init the set of colors with all the possible properties.
   gradientManager.init(s.getCompleteStringsList());
-
 }
 
-tlp::ColorScale* SOMPropertiesWidget::getPropertyColorScale(const std::string&) {
+tlp::ColorScale *SOMPropertiesWidget::getPropertyColorScale(const std::string &) {
   return defaultScale;
 }
 
@@ -184,15 +179,13 @@ SOMPropertiesWidget::SizeMappingType SOMPropertiesWidget::getSizeMapping() const
     return NoSizeMapping;
   else
     return RealNodeSizeMapping;
-
 }
 
 void SOMPropertiesWidget::update(std::set<tlp::Observable *>::iterator, std::set<tlp::Observable *>::iterator) {
   view->updateDefaultColorProperty();
 }
 
-void SOMPropertiesWidget::observableDestroyed(tlp::Observable*) {
-
+void SOMPropertiesWidget::observableDestroyed(tlp::Observable *) {
 }
 
 void SOMPropertiesWidget::animationCheckBoxClicked() {
@@ -202,35 +195,35 @@ void SOMPropertiesWidget::animationCheckBoxClicked() {
 DataSet SOMPropertiesWidget::getData() const {
   DataSet data;
 
-  //Save grid state.
+  // Save grid state.
   data.set("gridWidth", getGridWidth());
   data.set("gridHeight", getGridHeight());
   data.set("oppositeConnected", getOppositeConnected());
   data.set("connectivity", _ui->nodeConnectivityComboBox->currentIndex());
-  //Learning rate properties.
+  // Learning rate properties.
   data.set("learningRate", getLearningRateValue());
 
-  //Diffusion rate properties.
+  // Diffusion rate properties.
   data.set("diffusionMethod", _ui->diffusionRateComputationMethodComboBox->currentIndex());
   data.set("maxDistance", getMaxDistanceValue());
   data.set("diffusionRate", getDiffusionRateValue());
 
-  //Representation properties
+  // Representation properties
   data.set("performMapping", getAutoMapping());
   data.set("linkColors", getLinkColor());
 
-  //SizeMapping
-  data.set("useSizeMapping", (bool) (getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping));
+  // SizeMapping
+  data.set("useSizeMapping", (bool)(getSizeMapping() == SOMPropertiesWidget::RealNodeSizeMapping));
 
-  //Animation
+  // Animation
   data.set("withAnimation", useAnimation());
   data.set("animationDuration", getAnimationDuration());
 
-  //Save current properties.
+  // Save current properties.
   vector<string> properties = dimensionConfigurationWidget->getSelectedProperties();
 
   if (!properties.empty()) {
-    //Use QStringList class to store a list in a string
+    // Use QStringList class to store a list in a string
     QStringList stringlist;
 
     for (vector<string>::iterator it = properties.begin(); it != properties.end(); ++it) {
@@ -240,10 +233,10 @@ DataSet SOMPropertiesWidget::getData() const {
     data.set("properties", string(stringlist.join(";").toUtf8().data()));
   }
 
-  //Save iteration number
+  // Save iteration number
   data.set("iterationNumber", dimensionConfigurationWidget->number());
 
-  //Save color scale
+  // Save color scale
   DataSet colorScaleDataSet;
   map<float, Color> colorScaleMap = defaultScale->getColorMap();
   QStringList colorsList;
@@ -259,13 +252,13 @@ DataSet SOMPropertiesWidget::getData() const {
   return data;
 }
 
-void SOMPropertiesWidget::setData(const DataSet& data) {
+void SOMPropertiesWidget::setData(const DataSet &data) {
 
   double doubleValue = 0;
   unsigned int uintValue = 0;
   bool boolValue = false;
   int intValue = 0;
-  //Restore grid state.
+  // Restore grid state.
   data.get("gridWidth", uintValue);
   _ui->gridWidthSpinBox->setValue(uintValue);
   data.get("gridHeight", uintValue);
@@ -275,11 +268,11 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   data.get("oppositeConnected", boolValue);
   _ui->opposedConnectedCheckBox->setChecked(boolValue);
 
-  //Learning rate properties.
+  // Learning rate properties.
   data.get("learningRate", doubleValue);
   _ui->baseLearningRateSpinBox->setValue(doubleValue);
 
-  //Diffusion rate properties.
+  // Diffusion rate properties.
   data.get("diffusionMethod", intValue);
   _ui->diffusionRateComputationMethodComboBox->setCurrentIndex(intValue);
 
@@ -288,39 +281,36 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   data.get("diffusionRate", doubleValue);
   _ui->baseDiffusionRateSpinBox->setValue(doubleValue);
 
-  //Representaion properties
+  // Representaion properties
   data.get("performMapping", boolValue);
   _ui->autoMappingCheckBox->setChecked(boolValue);
   data.get("linkColors", boolValue);
   _ui->colorLinkCheckBox->setChecked(boolValue);
 
-  //SizeMapping
+  // SizeMapping
   data.get("useSizeMapping", boolValue);
 
   if (boolValue) {
     realNodeSizeMappingRadioButton->setChecked(true);
-  }
-  else {
+  } else {
     noNodeSizeMappingRadioButton->setChecked(true);
   }
 
-  //Animation
+  // Animation
   data.get("withAnimation", boolValue);
   _ui->animationCheckBox->setChecked(boolValue);
   data.get("animationDuration", uintValue);
   _ui->animationStepsSpinBox->setValue(uintValue);
 
-  //If there is saved properties reload them.
+  // If there is saved properties reload them.
   if (data.exist("properties")) {
     string propertiesString;
     data.get("properties", propertiesString);
-    //Use QString split function to parse string.
+    // Use QString split function to parse string.
     QStringList list = QString::fromUtf8(propertiesString.c_str()).split(";", QString::SkipEmptyParts);
     vector<string> properties;
 
-    foreach(const QString &s, list) {
-      properties.push_back(s.toUtf8().data());
-    }
+    foreach (const QString &s, list) { properties.push_back(s.toUtf8().data()); }
 
     dimensionConfigurationWidget->setOutputPropertiesList(properties);
   }
@@ -328,7 +318,7 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   data.get("iterationNumber", uintValue);
   dimensionConfigurationWidget->setNumber(uintValue);
 
-  //Reload color scale
+  // Reload color scale
 
   DataSet colorScaleDataSet;
   data.get("defaultScale", colorScaleDataSet);
@@ -347,7 +337,7 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   }
 
   colorScaleDataSet.get("gradient", boolValue);
-  //Avoid calling update while data initialization causing segfault
+  // Avoid calling update while data initialization causing segfault
   defaultScale->removeObserver(this);
   defaultScale->setColorScale(colors, boolValue);
   defaultScale->addObserver(this);

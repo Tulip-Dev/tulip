@@ -37,7 +37,6 @@ static const unsigned short nbContourPoints = 30;
 class RingGlyph : public Glyph {
 
 public:
-
   GLYPHINFORMATION("2D - Ring", "2D - Ring extremity", "Antoine Lambert", "20/05/2016", "Ring", "1.0", tlp::NodeShape::Ring)
 
   RingGlyph(PluginContext *context) : Glyph(context) {
@@ -45,18 +44,17 @@ public:
     vector<Coord> innerContour = computeRegularPolygon(nbContourPoints, 0.f, Coord(0.f, 0.f, 0.f), Size(0.25f, 0.25f));
     _vertices.insert(_vertices.end(), innerContour.begin(), innerContour.end());
     _vertices.insert(_vertices.end(), outerContour.begin(), outerContour.end());
-    for (unsigned short i = 0 ; i < nbContourPoints - 1 ; ++i) {
-      _indices.insert(_indices.end(), {i, ushort_cast(i+1), ushort_cast(i+nbContourPoints),
-                                       ushort_cast(i+1), ushort_cast(i+nbContourPoints+1), ushort_cast(i+nbContourPoints)});
+    for (unsigned short i = 0; i < nbContourPoints - 1; ++i) {
+      _indices.insert(_indices.end(), {i, ushort_cast(i + 1), ushort_cast(i + nbContourPoints), ushort_cast(i + 1),
+                                       ushort_cast(i + nbContourPoints + 1), ushort_cast(i + nbContourPoints)});
     }
-    _indices.insert(_indices.end(), {nbContourPoints-1, 0, 2*nbContourPoints-1,
-                                     0, nbContourPoints, 2*nbContourPoints-1});
+    _indices.insert(_indices.end(), {nbContourPoints - 1, 0, 2 * nbContourPoints - 1, 0, nbContourPoints, 2 * nbContourPoints - 1});
 
     vector<unsigned short> firstOutlineIndices;
     vector<unsigned short> secondOutlineIndices;
-    for (unsigned short i = 0 ; i < ushort_cast(outerContour.size()) ; ++i) {
+    for (unsigned short i = 0; i < ushort_cast(outerContour.size()); ++i) {
       firstOutlineIndices.push_back(ushort_cast(i));
-      secondOutlineIndices.push_back(ushort_cast(nbContourPoints+i));
+      secondOutlineIndices.push_back(ushort_cast(nbContourPoints + i));
     }
     firstOutlineIndices.push_back(0);
     secondOutlineIndices.push_back(nbContourPoints);
@@ -68,8 +66,6 @@ public:
     boundingBox[0] = Coord(-0.35f, -0.35f, 0);
     boundingBox[1] = Coord(0.35f, 0.35f, 0);
   }
-
 };
 
 PLUGIN(RingGlyph)
-

@@ -29,9 +29,7 @@ using namespace tlp;
 using namespace std;
 
 // Current Python versions
-static const char *pythonVersion[]  = {
-  "3.5", "3.4", "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0
-};
+static const char *pythonVersion[] = {"3.5", "3.4", "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0};
 
 // Windows specific functions
 #ifdef WIN32
@@ -43,16 +41,16 @@ static const char *pythonVersion[]  = {
 static bool isWow64() {
   BOOL bIsWow64 = FALSE;
 
-  typedef BOOL (APIENTRY *LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
+  typedef BOOL(APIENTRY * LPFN_ISWOW64PROCESS)(HANDLE, PBOOL);
 
   LPFN_ISWOW64PROCESS fnIsWow64Process;
 
   HMODULE module = GetModuleHandle(TEXT("kernel32"));
   const char funcName[] = "IsWow64Process";
-  fnIsWow64Process = (LPFN_ISWOW64PROCESS) GetProcAddress(module, funcName);
+  fnIsWow64Process = (LPFN_ISWOW64PROCESS)GetProcAddress(module, funcName);
 
   if (fnIsWow64Process != nullptr) {
-    fnIsWow64Process(GetCurrentProcess(),&bIsWow64);
+    fnIsWow64Process(GetCurrentProcess(), &bIsWow64);
   }
 
   return bIsWow64 != FALSE;
@@ -68,11 +66,14 @@ static QString pythonHome(const QString &pythonVersion) {
 #ifndef X86_64
   // on windows 64 bit
   if (isWow64()) {
-    QString win64RegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    QString win64RegKeyAllUsers =
+        QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
     QSettings win64SettingsAllUsers(win64RegKeyAllUsers, QSettings::NativeFormat);
-    QString win64RegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    QString win64RegKeyCurrentUser =
+        QString("HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
     QSettings win64SettingsCurrentUser(win64RegKeyCurrentUser, QSettings::NativeFormat);
-    return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") + win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+    return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") +
+           win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
   }
   // on windows 32 bit
   else {
@@ -80,7 +81,8 @@ static QString pythonHome(const QString &pythonVersion) {
     QSettings win32SettingsAllUsers(win32RegKeyAllUsers, QSettings::NativeFormat);
     QString win32RegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
     QSettings win32SettingsCurrentUser(win32RegKeyCurrentUser, QSettings::NativeFormat);
-    return win32SettingsAllUsers.value("Default").toString().replace("\\", "/")+win32SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+    return win32SettingsAllUsers.value("Default").toString().replace("\\", "/") +
+           win32SettingsCurrentUser.value("Default").toString().replace("\\", "/");
   }
 
 // 64 bit Python
@@ -89,7 +91,8 @@ static QString pythonHome(const QString &pythonVersion) {
   QSettings win64SettingsAllUsers(win64RegKeyAllUsers, QSettings::NativeFormat);
   QString win64RegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
   QSettings win64SettingsCurrentUser(win64RegKeyCurrentUser, QSettings::NativeFormat);
-  return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") + win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+  return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") +
+         win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
 #endif
 }
 
@@ -99,7 +102,7 @@ static QString pythonHome(const QString &pythonVersion) {
 // Function which tries to run a specific version of the python interpreter.
 static bool runPython(const QString &version) {
   QProcess pythonProcess;
-  pythonProcess.start(QString("python")+version,QStringList() << "--version");
+  pythonProcess.start(QString("python") + version, QStringList() << "--version");
   return pythonProcess.waitForFinished(-1) && pythonProcess.exitStatus() == QProcess::NormalExit;
 }
 
@@ -151,7 +154,8 @@ static QString getDefaultPythonVersionIfAny() {
 #endif
 
       // Check the binary type of the python executable (32 or 64 bits)
-      pythonProcess.start(pythonCommand, QStringList() << "-c" << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
+      pythonProcess.start(pythonCommand, QStringList() << "-c"
+                                                       << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
       pythonProcess.waitForFinished(-1);
       QString arch = pythonProcess.readAll();
 
@@ -168,7 +172,6 @@ static QString getDefaultPythonVersionIfAny() {
       }
 
 #endif
-
     }
   }
 
@@ -220,7 +223,6 @@ QStringList PythonVersionChecker::installedVersions() {
     }
 
     _installedVersionsChecked = true;
-
   }
 
   return _installedVersions;

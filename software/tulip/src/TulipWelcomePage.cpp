@@ -41,18 +41,18 @@ static const unsigned RSS_LIMIT = 3;
 
 using namespace tlp;
 
-TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui::TulipWelcomePageData) {
+TulipWelcomePage::TulipWelcomePage(QWidget *parent) : QWidget(parent), _ui(new Ui::TulipWelcomePageData) {
   _ui->setupUi(this);
 
-  //Finalize Ui
-  connect(_ui->websiteLabel,SIGNAL(linkActivated(QString)),this,SLOT(openLink(QString)));
+  // Finalize Ui
+  connect(_ui->websiteLabel, SIGNAL(linkActivated(QString)), this, SLOT(openLink(QString)));
   _ui->openProjectButton->setIcon(QApplication::style()->standardIcon(QStyle::SP_DirHomeIcon));
-  connect(_ui->openProjectButton,SIGNAL(clicked()),this,SIGNAL(openProject()));
+  connect(_ui->openProjectButton, SIGNAL(clicked()), this, SIGNAL(openProject()));
 
   // Fetch RSS
   _ui->rssScroll->setVisible(false);
   QNetworkAccessManager *manager = new QNetworkAccessManager(this);
-  connect(manager,SIGNAL(finished(QNetworkReply*)),this,SLOT(rssReply(QNetworkReply*)));
+  connect(manager, SIGNAL(finished(QNetworkReply *)), this, SLOT(rssReply(QNetworkReply *)));
   manager->get(QNetworkRequest(QUrl(RSS_URL)));
 
   // Recent documents list
@@ -63,13 +63,10 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
     QString txt;
 
     foreach (const QString &txt2, recentDocs)
-      txt += "<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" +
-                     txt2 + "\">" + txt2 + "</a>" +
-                     "</span></p><p/>";
+      txt += "<p><span><img src=\":/tulip/gui/ui/list_bullet_arrow.png\"></img>   <a href=\"" + txt2 + "\">" + txt2 + "</a>" + "</span></p><p/>";
 
     _ui->recentDocumentsLabel->setText(txt);
   }
-
 
   std::list<std::string> perspectives = PluginLister::instance()->availablePlugins<tlp::Perspective>();
 
@@ -77,50 +74,50 @@ TulipWelcomePage::TulipWelcomePage(QWidget *parent): QWidget(parent), _ui(new Ui
     _ui->perspectivesFrame->layout()->addWidget(new PerspectiveItemWidget(it->c_str()));
   }
 
-  _ui->perspectivesFrame->layout()->addItem(new QSpacerItem(0,0,QSizePolicy::Maximum,QSizePolicy::Expanding));
+  _ui->perspectivesFrame->layout()->addItem(new QSpacerItem(0, 0, QSizePolicy::Maximum, QSizePolicy::Expanding));
 }
 
 TulipWelcomePage::~TulipWelcomePage() {
-    delete _ui;
+  delete _ui;
 }
 
 void TulipWelcomePage::rssReply(QNetworkReply *reply) {
   sender()->deleteLater();
   QXmlStreamReader xmlReader(reply);
-  unsigned i=0;
+  unsigned i = 0;
   QVBoxLayout *rssLayout = new QVBoxLayout;
-  rssLayout->setContentsMargins(0,0,0,0);
+  rssLayout->setContentsMargins(0, 0, 0, 0);
   rssLayout->setSpacing(30);
   _ui->rssScroll->widget()->setLayout(rssLayout);
-  while (!xmlReader.atEnd()&&i<RSS_LIMIT) {
-      if (xmlReader.readNextStartElement()) {
-          QString title, description;
-          if(xmlReader.name()=="item") {
-              ++i;
-              _ui->rssError->setVisible(false);
-              _ui->rssScroll->setVisible(true);
-              QXmlStreamReader::TokenType p(xmlReader.readNext());
-              while(xmlReader.name()!="item"&&p!=QXmlStreamReader::EndElement) {
-                  xmlReader.readNextStartElement();
-                  if(xmlReader.name()=="title")
-                      title = xmlReader.readElementText();
-                  if(xmlReader.name()=="description")
-                      description = xmlReader.readElementText();
-             }
-              QString text("<p><span style=\"color:#626262; font-size:large;\">");
-              text+=title+ "</span></p><p><span>" + description+ "</span></p>";
-              QLabel *label = new QLabel(text,0);
-              label->setMinimumWidth(1);
-              label->setWordWrap(true);
-              label->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-              connect(label,SIGNAL(linkActivated(QString)),this,SLOT(openLink(QString)));
-              rssLayout->addWidget(label);
-          }
+  while (!xmlReader.atEnd() && i < RSS_LIMIT) {
+    if (xmlReader.readNextStartElement()) {
+      QString title, description;
+      if (xmlReader.name() == "item") {
+        ++i;
+        _ui->rssError->setVisible(false);
+        _ui->rssScroll->setVisible(true);
+        QXmlStreamReader::TokenType p(xmlReader.readNext());
+        while (xmlReader.name() != "item" && p != QXmlStreamReader::EndElement) {
+          xmlReader.readNextStartElement();
+          if (xmlReader.name() == "title")
+            title = xmlReader.readElementText();
+          if (xmlReader.name() == "description")
+            description = xmlReader.readElementText();
+        }
+        QString text("<p><span style=\"color:#626262; font-size:large;\">");
+        text += title + "</span></p><p><span>" + description + "</span></p>";
+        QLabel *label = new QLabel(text, 0);
+        label->setMinimumWidth(1);
+        label->setWordWrap(true);
+        label->setSizePolicy(QSizePolicy::Preferred, QSizePolicy::Preferred);
+        connect(label, SIGNAL(linkActivated(QString)), this, SLOT(openLink(QString)));
+        rssLayout->addWidget(label);
       }
-      if(xmlReader.hasError()) {
-          _ui->rssError->setVisible(true);
-          _ui->rssScroll->setVisible(false);
-      }
+    }
+    if (xmlReader.hasError()) {
+      _ui->rssError->setVisible(true);
+      _ui->rssScroll->setVisible(false);
+    }
   }
 }
 
@@ -128,9 +125,9 @@ void TulipWelcomePage::openLink(const QString &link) {
   QDesktopServices::openUrl(link);
 }
 
-void TulipWelcomePage::recentFileLinkActivated(const QString& link) {
+void TulipWelcomePage::recentFileLinkActivated(const QString &link) {
   if (!QFileInfo(link).exists())
-    QMessageBox::critical(this,trUtf8("Error"),trUtf8("Selected recent project does not exist anymore"));
+    QMessageBox::critical(this, trUtf8("Error"), trUtf8("Selected recent project does not exist anymore"));
   else
     emit openFile(link);
 }

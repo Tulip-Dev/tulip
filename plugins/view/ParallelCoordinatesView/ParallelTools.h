@@ -17,8 +17,8 @@
  *
  */
 
-#ifndef     PARALLELTOOLS_H_
-#define     PARALLELTOOLS_H_
+#ifndef PARALLELTOOLS_H_
+#define PARALLELTOOLS_H_
 
 #include <tulip/Coord.h>
 #include <tulip/Color.h>
@@ -28,7 +28,6 @@
 #include <string>
 #include <sstream>
 #include <iostream>
-
 
 namespace tlp {
 
@@ -56,8 +55,7 @@ const float DEFAULT_CAPTION_HEIGHT = 30;
 
 const float DEFAULT_CAPTION_VERTICAl_OFFSET = 20;
 
-template <typename T>
-std::string getStringFromNumber(T number) {
+template <typename T> std::string getStringFromNumber(T number) {
   std::ostringstream oss;
   oss.precision(5);
   oss << number;
@@ -72,7 +70,6 @@ const int Z_ROT = 2;
 void rotateVector(Coord &vec, float alpha, int rot);
 
 Coord *computeStraightLineIntersection(const Coord line1[2], const Coord line2[2]);
-
 }
 
-#endif      /* !PARALLELTOOLS_H_ */
+#endif /* !PARALLELTOOLS_H_ */

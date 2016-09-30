@@ -23,20 +23,19 @@
 class ConnectedTest : public tlp::GraphTest {
 public:
   PLUGININFORMATION("Connected", "Tulip team", "18/04/2012", "Tests whether a graph is connected or not.", "1.0", "Topological Test")
-  ConnectedTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
+  ConnectedTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
   }
 
   virtual bool test() {
     return tlp::ConnectedTest::isConnected(graph);
   }
-
 };
 PLUGIN(ConnectedTest)
 
 class MakeConnected : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Make Connected", "Tulip team", "18/04/2012", "Makes a graph connected.", "1.0", "Topology Update")
-  MakeConnected(const tlp::PluginContext* context) : tlp::Algorithm(context) {
+  MakeConnected(const tlp::PluginContext *context) : tlp::Algorithm(context) {
   }
 
   virtual bool run() {
@@ -44,6 +43,5 @@ public:
     tlp::ConnectedTest::makeConnected(graph, edges);
     return true;
   }
-
 };
 PLUGIN(MakeConnected)

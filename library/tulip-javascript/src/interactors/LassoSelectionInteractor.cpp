@@ -51,7 +51,8 @@ void LassoSelectionInteractor::setScene(GlScene *glScene) {
 
 bool LassoSelectionInteractor::mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int &modifiers) {
   Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
   Coord screenCoord(x, viewport[3] - y);
   if (button == LEFT_BUTTON && state == DOWN) {
     if (!_dragStarted) {
@@ -76,7 +77,8 @@ bool LassoSelectionInteractor::mouseCallback(const MouseButton &button, const Mo
 
 bool LassoSelectionInteractor::mouseMoveCallback(int x, int y, const int & /* modifiers */) {
   Vec4i viewport = _glScene->getViewport();
-  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3]) return false;
+  if (x < viewport[0] || x > viewport[2] || y < viewport[1] || y > viewport[3])
+    return false;
   Coord screenCoord(x, viewport[3] - y);
   if (_dragStarted) {
     _polygon.push_back(screenCoord);
@@ -98,24 +100,25 @@ static bool pointInsidePolygon(const vector<Coord> &polygon, const Coord &point)
   unsigned int i, j;
   bool ret = false;
 
-  for (i = 0, j = polygon.size() - 1 ; i < polygon.size() ; j = i++) {
+  for (i = 0, j = polygon.size() - 1; i < polygon.size(); j = i++) {
     if ((((polygon[i].getY() <= point.getY()) && (point.getY() < polygon[j].getY())) ||
          ((polygon[j].getY() <= point.getY()) && (point.getY() < polygon[i].getY()))) &&
-        (point.getX() < (polygon[j].getX() - polygon[i].getX()) * (point.getY() - polygon[i].getY()) / (polygon[j].getY() - polygon[i].getY()) + polygon[i].getX()))
+        (point.getX() <
+         (polygon[j].getX() - polygon[i].getX()) * (point.getY() - polygon[i].getY()) / (polygon[j].getY() - polygon[i].getY()) + polygon[i].getX()))
       ret = !ret;
   }
 
   return ret;
 }
 
-
 static bool isPolygonAincludesInB(const vector<Coord> &A, const vector<Coord> &B) {
   bool ret = true;
 
-  for (unsigned int i = 0 ; i < A.size() ; ++i) {
+  for (unsigned int i = 0; i < A.size(); ++i) {
     ret = ret && pointInsidePolygon(B, A[i]);
 
-    if (!ret) break;
+    if (!ret)
+      break;
   }
 
   return ret;
@@ -126,7 +129,7 @@ void LassoSelectionInteractor::selectGraphElementsUnderPolygon() {
   vector<Coord> polygonScr;
   BoundingBox polygonScrBB;
 
-  for (size_t i = 0 ; i < _polygon.size() ; ++i) {
+  for (size_t i = 0; i < _polygon.size(); ++i) {
     polygonScr.push_back(_polygon[i]);
     polygonScrBB.expand(polygonScr[i]);
   }
@@ -144,9 +147,9 @@ void LassoSelectionInteractor::selectGraphElementsUnderPolygon() {
     return;
   }
 
-  set<GlEntity*> glEntities = _glScene->getEntities();
-  for (set<GlEntity*>::iterator it = glEntities.begin() ; it != glEntities.end() ; ++it) {
-    GlGraph *glGraph = dynamic_cast<GlGraph*>(*it);
+  set<GlEntity *> glEntities = _glScene->getEntities();
+  for (set<GlEntity *>::iterator it = glEntities.begin(); it != glEntities.end(); ++it) {
+    GlGraph *glGraph = dynamic_cast<GlGraph *>(*it);
     if (glGraph) {
       BooleanProperty *viewSelection = glGraph->getGraph()->getProperty<BooleanProperty>("viewSelection");
       viewSelection->setAllNodeValue(false);
@@ -160,9 +163,9 @@ void LassoSelectionInteractor::selectGraphElementsUnderPolygon() {
 
   if (!selectedEntities.empty()) {
 
-    map<Graph *, vector<node> > selectedNodes;
+    map<Graph *, vector<node>> selectedNodes;
 
-    for (size_t i = 0 ; i < selectedEntities.size() ; ++i) {
+    for (size_t i = 0; i < selectedEntities.size(); ++i) {
 
       node n = selectedEntities[i].getNode();
       tlp::Graph *graph = selectedEntities[i].getGlGraph()->getGraph();
@@ -218,24 +221,23 @@ void LassoSelectionInteractor::selectGraphElementsUnderPolygon() {
       }
     }
 
-    for (map<Graph*, vector<node> >::iterator it = selectedNodes.begin() ; it != selectedNodes.end() ; ++it) {
+    for (map<Graph *, vector<node>>::iterator it = selectedNodes.begin(); it != selectedNodes.end(); ++it) {
       tlp::BooleanProperty *viewSelection = it->first->getProperty<BooleanProperty>("viewSelection");
-      for (size_t i = 0 ; i < it->second.size() ; ++i) {
-        for (size_t j = i+1 ; j < it->second.size() ; ++j) {
+      for (size_t i = 0; i < it->second.size(); ++i) {
+        for (size_t j = i + 1; j < it->second.size(); ++j) {
           vector<edge> edges = it->first->getEdges(it->second[i], it->second[j], false);
-          for (size_t i = 0 ; i < edges.size() ; ++i) {
+          for (size_t i = 0; i < edges.size(); ++i) {
             viewSelection->setEdgeValue(edges[i], true);
           }
         }
       }
     }
-
   }
-
 }
 
 void LassoSelectionInteractor::draw() {
-  if (_polygon.empty()) return;
+  if (_polygon.empty())
+    return;
   Camera *camera = _glScene->getMainLayer()->getCamera();
   camera->initGl2D();
   glEnable(GL_BLEND);

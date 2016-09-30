@@ -31,9 +31,12 @@ class VectorTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testExternalOperation);
   CPPUNIT_TEST(testInternalOperation);
   CPPUNIT_TEST_SUITE_END();
+
 public:
-  void setUp() {}
-  void tearDown() {}
+  void setUp() {
+  }
+  void tearDown() {
+  }
   void testExternalOperation();
   void testInternalOperation();
 };

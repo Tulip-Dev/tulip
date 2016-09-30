@@ -28,23 +28,23 @@ namespace Ui {
 class GraphPerspectiveLogger;
 }
 
-class GraphPerspectiveLogger: public QFrame {
+class GraphPerspectiveLogger : public QFrame {
   Q_OBJECT
 
   QtMsgType _logSeverity;
   unsigned int _logCount;
-  Ui::GraphPerspectiveLogger* _ui;
+  Ui::GraphPerspectiveLogger *_ui;
   bool _pythonOutput;
 
 public:
-  GraphPerspectiveLogger(QWidget* parent = nullptr);
+  GraphPerspectiveLogger(QWidget *parent = nullptr);
   ~GraphPerspectiveLogger();
   QPixmap icon();
   unsigned int count() const;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
 #else
-  void log(QtMsgType, const char*);
+  void log(QtMsgType, const char *);
 #endif
 
   bool eventFilter(QObject *, QEvent *);

@@ -26,13 +26,13 @@
 
 using namespace tlp;
 
-TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::TulipFontDialog), previousFont(), ok(QDialog::Rejected) {
+TulipFontDialog::TulipFontDialog(QWidget *parent) : QDialog(parent), _ui(new Ui::TulipFontDialog), previousFont(), ok(QDialog::Rejected) {
   _ui->setupUi(this);
 
-  foreach(QString font, TulipFont::installedFontNames())
-  _ui->nameList->addItem(font);
+  foreach (QString font, TulipFont::installedFontNames())
+    _ui->nameList->addItem(font);
 
-  bool hasFont = _ui->nameList->count()>0;
+  bool hasFont = _ui->nameList->count() > 0;
   _ui->settingsWidget->setEnabled(hasFont);
   _ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(hasFont);
 
@@ -40,7 +40,6 @@ TulipFontDialog::TulipFontDialog(QWidget *parent): QDialog(parent), _ui(new Ui::
     _ui->nameList->setCurrentItem(_ui->nameList->item(0));
     fontChanged();
   }
-
 }
 
 TulipFontDialog::~TulipFontDialog() {
@@ -56,7 +55,7 @@ TulipFont TulipFontDialog::font() const {
 }
 
 void TulipFontDialog::fontChanged() {
-  if (_ui->nameList->currentItem()==nullptr || _ui->styleList->currentItem()==nullptr)
+  if (_ui->nameList->currentItem() == nullptr || _ui->styleList->currentItem() == nullptr)
     return;
 
   if (sender() == _ui->sizeList) {
@@ -65,18 +64,16 @@ void TulipFontDialog::fontChanged() {
   }
 
   TulipFont selectedFont = font();
-  _ui->preview->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; "
-                              + (selectedFont.isItalic() ? "font-style: italic; " : "")
-                              + (selectedFont.isBold() ? "font-weight: bold; " : "")
-                              + "font-size: " + QString::number(_ui->sizeSpin->value()) + "px; "
-                             );
+  _ui->preview->setStyleSheet("font-family: " + selectedFont.fontFamily() + "; " + (selectedFont.isItalic() ? "font-style: italic; " : "") +
+                              (selectedFont.isBold() ? "font-weight: bold; " : "") + "font-size: " + QString::number(_ui->sizeSpin->value()) +
+                              "px; ");
 }
 int TulipFontDialog::fontSize() const {
   return _ui->sizeSpin->value();
 }
 
-void TulipFontDialog::selectFont(const TulipFont& f) {
-  QList<QListWidgetItem*> items = _ui->nameList->findItems(f.fontName(),Qt::MatchExactly);
+void TulipFontDialog::selectFont(const TulipFont &f) {
+  QList<QListWidgetItem *> items = _ui->nameList->findItems(f.fontName(), Qt::MatchExactly);
 
   previousFont = f;
 
@@ -90,14 +87,13 @@ void TulipFontDialog::selectFont(const TulipFont& f) {
       _ui->styleList->setCurrentRow(3);
     else
       _ui->styleList->setCurrentRow(1);
-  }
-  else if (f.isItalic())
+  } else if (f.isItalic())
     _ui->styleList->setCurrentRow(2);
   else
     _ui->styleList->setCurrentRow(0);
 }
 
-TulipFont TulipFontDialog::getFont(QWidget* /*parent*/ ,const TulipFont& selectedFont) {
+TulipFont TulipFontDialog::getFont(QWidget * /*parent*/, const TulipFont &selectedFont) {
   TulipFontDialog dlg;
   dlg.selectFont(selectedFont);
 

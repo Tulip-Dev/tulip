@@ -32,4 +32,4 @@ public:
 };
 }
 
-#endif //JPEGWRITER_H
+#endif // JPEGWRITER_H

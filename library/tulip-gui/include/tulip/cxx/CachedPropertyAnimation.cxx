@@ -18,41 +18,40 @@
  */
 #include <tulip/ForEach.h>
 
-template<typename PropType, typename NodeType, typename EdgeType>
+template <typename PropType, typename NodeType, typename EdgeType>
 CachedPropertyAnimation<PropType, NodeType, EdgeType>::CachedPropertyAnimation(tlp::Graph *graph, PropType *start, PropType *end, PropType *out,
-    tlp::BooleanProperty *selection, int frameCount, bool computeNodes, bool computeEdges,QObject* parent) :
-  PropertyAnimation<PropType, NodeType, EdgeType> (graph, start, end, out, selection, frameCount, computeNodes, computeEdges,parent) {
+                                                                               tlp::BooleanProperty *selection, int frameCount, bool computeNodes,
+                                                                               bool computeEdges, QObject *parent)
+    : PropertyAnimation<PropType, NodeType, EdgeType>(graph, start, end, out, selection, frameCount, computeNodes, computeEdges, parent) {
 
   if (this->_computeNodes) {
-    for(tlp::node n : this->_graph->getNodes()) {
+    for (tlp::node n : this->_graph->getNodes()) {
       if (this->equalNodes(this->_end->getNodeValue(n), this->_start->getNodeValue(n))) {
         this->_selection->setNodeValue(n, false);
-        //Init the out properties with the default value.
-        this->_out->setNodeValue(n,this->_end->getNodeValue(n));
+        // Init the out properties with the default value.
+        this->_out->setNodeValue(n, this->_end->getNodeValue(n));
       }
     }
   }
 
   if (this->_computeEdges) {
-    for(tlp::edge e : this->_graph->getEdges()) {
+    for (tlp::edge e : this->_graph->getEdges()) {
       if (this->equalEdges(this->_end->getEdgeValue(e), this->_start->getEdgeValue(e))) {
         this->_selection->setEdgeValue(e, false);
-        //Init the out properties with the default value.
-        this->_out->setEdgeValue(e,end->getEdgeValue(e));
+        // Init the out properties with the default value.
+        this->_out->setEdgeValue(e, end->getEdgeValue(e));
       }
     }
   }
 }
 
-template<typename PropType, typename NodeType, typename EdgeType>
-CachedPropertyAnimation<PropType, NodeType, EdgeType>::~CachedPropertyAnimation() {
+template <typename PropType, typename NodeType, typename EdgeType> CachedPropertyAnimation<PropType, NodeType, EdgeType>::~CachedPropertyAnimation() {
 }
 
-template<typename PropType, typename NodeType, typename EdgeType>
-void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
+template <typename PropType, typename NodeType, typename EdgeType> void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) {
   if (this->_computeNodes) {
     computedNodeSteps.clear();
-    for(tlp::node n : this->_graph->getNodes()) {
+    for (tlp::node n : this->_graph->getNodes()) {
       if (this->_selection && !this->_selection->getNodeValue(n))
         continue;
 
@@ -62,8 +61,7 @@ void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) 
       if (computedNodeSteps.find(values) == computedNodeSteps.end()) {
         frameValue = this->getNodeFrameValue(values.first, values.second, f);
         computedNodeSteps[values] = frameValue;
-      }
-      else
+      } else
         frameValue = computedNodeSteps[values];
 
       this->_out->setNodeValue(n, frameValue);
@@ -72,7 +70,7 @@ void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) 
 
   if (this->_computeEdges) {
     computedEdgeSteps.clear();
-    for(tlp::edge e : this->_graph->getEdges()) {
+    for (tlp::edge e : this->_graph->getEdges()) {
       if (this->_selection && !this->_selection->getEdgeValue(e))
         continue;
 
@@ -82,8 +80,7 @@ void CachedPropertyAnimation<PropType, NodeType, EdgeType>::frameChanged(int f) 
       if (computedEdgeSteps.find(values) == computedEdgeSteps.end()) {
         frameValue = this->getEdgeFrameValue(values.first, values.second, f);
         computedEdgeSteps[values] = frameValue;
-      }
-      else
+      } else
         frameValue = computedEdgeSteps[values];
 
       this->_out->setEdgeValue(e, frameValue);

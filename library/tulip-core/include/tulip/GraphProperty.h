@@ -34,34 +34,34 @@ typedef AbstractProperty<tlp::GraphType, tlp::EdgeSetType> AbstractGraphProperty
  * @ingroup Graph
  * @brief A graph property that maps a tlp::Graph* value to graph elements.
  *
- * @warning This property is mainly used into the meta node engine. Using GraphProperty outside of this system is strongly discouraged since it could lead to unwanted behavior.
+ * @warning This property is mainly used into the meta node engine. Using GraphProperty outside of this system is strongly discouraged since it could
+ * lead to unwanted behavior.
  */
 class TLP_SCOPE GraphProperty : public AbstractGraphProperty {
   friend class GraphAbstract;
 
-public :
-  GraphProperty (Graph *, const std::string& n="");
+public:
+  GraphProperty(Graph *, const std::string &n = "");
   virtual ~GraphProperty();
   // override Observable::treatEvent
-  void treatEvent(const Event&);
+  void treatEvent(const Event &);
 
   // redefinition of some PropertyInterface methods
-  PropertyInterface* clonePrototype(Graph *, const std::string&) const;
-  bool setNodeStringValue(const node n, const std::string & v);
-  bool setAllNodeStringValue(const std::string & v, tlp::Graph *graph = nullptr);
-  bool setEdgeStringValue( const edge e, const std::string & v);
-  bool setAllEdgeStringValue(const std::string & v, tlp::Graph *graph = nullptr);
+  PropertyInterface *clonePrototype(Graph *, const std::string &) const;
+  bool setNodeStringValue(const node n, const std::string &v);
+  bool setAllNodeStringValue(const std::string &v, tlp::Graph *graph = nullptr);
+  bool setEdgeStringValue(const edge e, const std::string &v);
+  bool setAllEdgeStringValue(const std::string &v, tlp::Graph *graph = nullptr);
   static const std::string propertyTypename;
-  const std::string& getTypename() const {
+  const std::string &getTypename() const {
     return propertyTypename;
   }
 
-
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node n, const GraphType::RealType& g);
-  virtual void setAllNodeValue(const GraphType::RealType& g, Graph *graph = NULL);
-  virtual bool readNodeDefaultValue(std::istream& iss);
-  virtual bool readNodeValue(std::istream& iss, node n);
+  virtual void setNodeValue(const node n, const GraphType::RealType &g);
+  virtual void setAllNodeValue(const GraphType::RealType &g, Graph *graph = NULL);
+  virtual bool readNodeDefaultValue(std::istream &iss);
+  virtual bool readNodeValue(std::istream &iss, node n);
   // tlp::GraphType encapsulates a tlp::Graph pointer but that is the graph id
   // that gets serialized when using the TLPB format
   virtual unsigned int nodeValueSize() const {
@@ -75,15 +75,13 @@ public :
   bool hasNonDefaultValue(const node n) const {
     return nodeProperties.hasNonDefaultValue(n.id);
   }
-  bool hasNonDefaultValue(const edge e) const  {
+  bool hasNonDefaultValue(const edge e) const {
     return !edgeProperties.get(e.id).empty();
   }
 
 private:
-  MutableContainer<std::set<node> > referencedGraph;
-  const std::set<edge>& getReferencedEdges(const edge) const;
+  MutableContainer<std::set<node>> referencedGraph;
+  const std::set<edge> &getReferencedEdges(const edge) const;
 };
-
-
 }
 #endif

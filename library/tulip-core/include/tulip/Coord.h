@@ -26,8 +26,7 @@
 
 namespace tlp {
 
-typedef  Vec3f Coord;
-
+typedef Vec3f Coord;
 }
 
 #endif

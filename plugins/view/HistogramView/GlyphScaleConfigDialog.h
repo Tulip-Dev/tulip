@@ -32,12 +32,11 @@ class QWidget;
 
 namespace tlp {
 
-class GlyphScaleConfigDialog : public QDialog  {
+class GlyphScaleConfigDialog : public QDialog {
 
   Q_OBJECT
 
-public :
-
+public:
   GlyphScaleConfigDialog(QWidget *parent = 0);
   ~GlyphScaleConfigDialog();
 
@@ -45,14 +44,13 @@ public :
 
   void showEvent(QShowEvent *event);
 
-private slots :
+private slots:
 
   void nbGlyphsSpinBoxValueChanged(int value);
 
-private :
-
+private:
   QStringList glyphsNameList;
-  Ui::GlyphScaleConfigDialogData* _ui;
+  Ui::GlyphScaleConfigDialogData *_ui;
 };
 }
 #endif /* GLYPHSCALECONFIGDIALOG_H_ */

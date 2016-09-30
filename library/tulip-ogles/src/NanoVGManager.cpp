@@ -65,7 +65,7 @@ NanoVGManager::~NanoVGManager() {
   nvgDeleteGLES2(_vg);
 }
 
-NVGcontext* NanoVGManager::getNanoVGContext() const {
+NVGcontext *NanoVGManager::getNanoVGContext() const {
   return _vg;
 }
 

@@ -42,7 +42,7 @@ public:
   void testIntegerPropertyMinUpdateFromString();
   void testIntegerPropertyMaxUpdateFromString();
 
-private :
+private:
   tlp::Graph *graph;
   tlp::node n1, n4;
 };

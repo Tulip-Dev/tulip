@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 #define DOUBLESTRINGSLISTSELECTIONWIDGET_H_
 
@@ -38,8 +37,7 @@ class TLP_QT_SCOPE DoubleStringsListSelectionWidget : public QWidget, public Str
 
   Ui::DoubleStringsListSelectionData *_ui;
 
-public :
-
+public:
   DoubleStringsListSelectionWidget(QWidget *parent = nullptr, const unsigned int maxSelectedStringsListSize = 0);
   ~DoubleStringsListSelectionWidget();
 
@@ -74,12 +72,9 @@ private slots:
   void pressButtonUp();
   void pressButtonDown();
 
-private :
-
+private:
   void qtWidgetsConnection();
-
 };
-
 }
 
 #endif /* DOUBLESTRINGSLISTSELECTIONWIDGET_H_ */

@@ -18,14 +18,13 @@
  */
 
 //=======================================================================
-//DataSet implementation
-template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) const {
-  for (std::list< std::pair<std::string, tlp::DataType*> >::const_iterator it =
-         data.begin(); it != data.end(); ++it) {
-    const std::pair<std::string, tlp::DataType*> &p = *it;
+// DataSet implementation
+template <typename T> bool tlp::DataSet::get(const std::string &str, T &value) const {
+  for (std::list<std::pair<std::string, tlp::DataType *>>::const_iterator it = data.begin(); it != data.end(); ++it) {
+    const std::pair<std::string, tlp::DataType *> &p = *it;
 
     if (p.first == str) {
-      value = *((T*) p.second->value);
+      value = *((T *)p.second->value);
       return true;
     }
   }
@@ -33,13 +32,12 @@ template<typename T> bool tlp::DataSet::get(const std::string& str,T& value) con
   return false;
 }
 
-template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& value) {
-  for (std::list< std::pair<std::string, tlp::DataType*> >::iterator it =
-         data.begin(); it != data.end(); ++it) {
+template <typename T> bool tlp::DataSet::getAndFree(const std::string &str, T &value) {
+  for (std::list<std::pair<std::string, tlp::DataType *>>::iterator it = data.begin(); it != data.end(); ++it) {
     std::pair<std::string, tlp::DataType *> &p = *it;
 
     if (p.first == str) {
-      value = *((T*) p.second->value);
+      value = *((T *)p.second->value);
       delete p.second;
       data.erase(it);
       return true;
@@ -49,8 +47,7 @@ template<typename T> bool tlp::DataSet::getAndFree(const std::string &str,T& val
   return false;
 }
 
-template<typename T> void tlp::DataSet::set(const std::string &key,
-    const T& value) {
+template <typename T> void tlp::DataSet::set(const std::string &key, const T &value) {
   TypedData<T> dtc(new T(value));
   setData(key, &dtc);
 }

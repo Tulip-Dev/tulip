@@ -34,17 +34,18 @@ class DataSetTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testSetGetStruct);
   CPPUNIT_TEST(testDataSetSerialization);
   CPPUNIT_TEST_SUITE_END();
+
 public:
-  void setUp() {}
-  void tearDown() {}
+  void setUp() {
+  }
+  void tearDown() {
+  }
   void testSetGetBool();
   void testSetGetDouble();
   void testSetGetInt();
   void testSetGetString();
   void testSetGetStruct();
   void testDataSetSerialization();
-
 };
-
 }
 #endif

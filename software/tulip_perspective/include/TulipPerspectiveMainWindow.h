@@ -31,20 +31,19 @@ class TulipProject;
   */
 class TulipPerspectiveProcessMainWindow : public QMainWindow {
   Q_OBJECT
-  tlp::TulipProject* _project;
+  tlp::TulipProject *_project;
   QString _title;
 
 public:
-  explicit TulipPerspectiveProcessMainWindow(QString title,
-      QWidget *parent = nullptr);
-  void setProject(tlp::TulipProject* project);
+  explicit TulipPerspectiveProcessMainWindow(QString title, QWidget *parent = nullptr);
+  void setProject(tlp::TulipProject *project);
 
 signals:
 
 public slots:
   void clearMemoryChecker();
   void printMemoryChecker();
-  void projectFileChanged(const QString& projectFile);
+  void projectFileChanged(const QString &projectFile);
 
 protected:
   void closeEvent(QCloseEvent *);

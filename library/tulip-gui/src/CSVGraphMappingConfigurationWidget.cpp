@@ -36,11 +36,10 @@
 using namespace tlp;
 using namespace std;
 
-CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *parent) :
-  QWidget(parent),graph(nullptr),
-  ui(new Ui::CSVGraphMappingConfigurationWidget) {
+CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *parent)
+    : QWidget(parent), graph(nullptr), ui(new Ui::CSVGraphMappingConfigurationWidget) {
   ui->setupUi(this);
-  connect(ui->mappingConfigurationStackedWidget,SIGNAL(currentChanged(int)),this,SIGNAL(mappingChanged()));
+  connect(ui->mappingConfigurationStackedWidget, SIGNAL(currentChanged(int)), this, SIGNAL(mappingChanged()));
   connect(ui->nodeColumnsButton, SIGNAL(pressed()), this, SLOT(selectNodeColumns()));
   connect(ui->nodePropertiesButton, SIGNAL(pressed()), this, SLOT(selectNodeProperties()));
   connect(ui->edgeColumnsButton, SIGNAL(pressed()), this, SLOT(selectEdgeColumns()));
@@ -50,15 +49,15 @@ CSVGraphMappingConfigurationWidget::CSVGraphMappingConfigurationWidget(QWidget *
   connect(ui->srcPropertiesButton, SIGNAL(pressed()), this, SLOT(selectSrcProperties()));
   connect(ui->tgtPropertiesButton, SIGNAL(pressed()), this, SLOT(selectTgtProperties()));
 
-  connect(ui->newPropertyOnNodesButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
-  connect(ui->newPropertyOnEdgesButton,SIGNAL(clicked(bool)),this,SLOT(createNewProperty()),Qt::QueuedConnection);
+  connect(ui->newPropertyOnNodesButton, SIGNAL(clicked(bool)), this, SLOT(createNewProperty()), Qt::QueuedConnection);
+  connect(ui->newPropertyOnEdgesButton, SIGNAL(clicked(bool)), this, SLOT(createNewProperty()), Qt::QueuedConnection);
 }
 
 CSVGraphMappingConfigurationWidget::~CSVGraphMappingConfigurationWidget() {
   delete ui;
 }
 
-void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CSVImportParameters& importParameters) {
+void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph *graph, const CSVImportParameters &importParameters) {
   this->graph = graph;
 
   // initialize columns infos
@@ -69,7 +68,7 @@ void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CS
   edgeColumnIds.clear();
   int srcColumn = -1, tgtColumn = -1;
 
-  for(unsigned int i = 0 ; i< importParameters.columnNumber(); ++i) {
+  for (unsigned int i = 0; i < importParameters.columnNumber(); ++i) {
     if (importParameters.importColumn(i)) {
       columns.push_back(importParameters.getColumnName(i));
 
@@ -78,39 +77,37 @@ void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CS
         srcColumnIds.push_back(i);
         nodeColumnIds.push_back(i);
         edgeColumnIds.push_back(i);
-      }
-      else if (tgtColumn == -1) {
+      } else if (tgtColumn == -1) {
         tgtColumn = i;
         tgtColumnIds.push_back(i);
       }
-    }
-    else
+    } else
       columns.push_back("");
   }
 
-  //Init mapping widgets.
-  //Update node mapping widget
+  // Init mapping widgets.
+  // Update node mapping widget
   ui->nodeColumnsButton->setEnabled(false);
-  //update edge from source and target mapping widget
+  // update edge from source and target mapping widget
   ui->srcColumnsButton->setEnabled(false);
   ui->tgtColumnsButton->setEnabled(false);
-  //Update edge mapping widget
+  // Update edge mapping widget
   ui->edgeColumnsButton->setEnabled(false);
 
-  //Init default values
-  if(importParameters.columnNumber() >0) {
+  // Init default values
+  if (importParameters.columnNumber() > 0) {
     if (srcColumn != -1) {
       ui->nodeColumnsButton->setText(tlpStringToQString(importParameters.getColumnName(srcColumn)));
       ui->nodeColumnsButton->setEnabled(true);
       ui->edgeColumnsButton->setText(tlpStringToQString(importParameters.getColumnName(srcColumn)));
       ui->edgeColumnsButton->setEnabled(true);
 
-      //Select default columns for relations import
+      // Select default columns for relations import
       if (tgtColumn != -1) {
-        //Choose the first column as source id column
+        // Choose the first column as source id column
         ui->srcColumnsButton->setEnabled(true);
         ui->srcColumnsButton->setText(tlpStringToQString(importParameters.getColumnName(srcColumn)));
-        //Choose the second column as target id column
+        // Choose the second column as target id column
         ui->tgtColumnsButton->setEnabled(true);
         ui->tgtColumnsButton->setText(tlpStringToQString(importParameters.getColumnName(tgtColumn)));
       }
@@ -123,7 +120,7 @@ void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CS
   srcProperties.clear();
   tgtProperties.clear();
 
-  //Choose viewLabel as default property
+  // Choose viewLabel as default property
   ui->nodePropertiesButton->setText("viewLabel");
   nodeProperties.push_back("viewLabel");
   ui->edgePropertiesButton->setText("viewLabel");
@@ -135,29 +132,26 @@ void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph* graph,const CS
 }
 
 CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() const {
-  if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importNewNodesPage) {
+  if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importNewNodesPage) {
     return new CSVToNewNodeIdMapping(graph);
-  }
-  else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importNodesPage) {
+  } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importNodesPage) {
     if (nodeProperties.empty() || nodeColumnIds.empty()) {
       return nullptr;
     }
 
     bool createMissingElement = ui->createMissingNodesCheckBox->isChecked();
     return new CSVToGraphNodeIdMapping(graph, nodeColumnIds, nodeProperties, createMissingElement);
-  }
-  else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesPages) {
-    if(edgeProperties.empty() || edgeColumnIds.empty()) {
+  } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesPages) {
+    if (edgeProperties.empty() || edgeColumnIds.empty()) {
       return nullptr;
     }
 
     return new CSVToGraphEdgeIdMapping(graph, edgeColumnIds, edgeProperties);
-  }
-  else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesFromNodesPage) {
+  } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesFromNodesPage) {
     // src and tgt columns must be different
-    bool sameColumns =  true;
+    bool sameColumns = true;
 
-    for(unsigned int i = 0; i < srcColumnIds.size(); ++i) {
+    for (unsigned int i = 0; i < srcColumnIds.size(); ++i) {
       bool found = false;
 
       for (unsigned int j = 0; j < tgtColumnIds.size(); ++j) {
@@ -176,28 +170,24 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     }
 
     bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
-    return new CSVToGraphEdgeSrcTgtMapping(graph,srcColumnIds, tgtColumnIds, srcProperties, tgtProperties, createMissingElement);
-  }
-  else {
+    return new CSVToGraphEdgeSrcTgtMapping(graph, srcColumnIds, tgtColumnIds, srcProperties, tgtProperties, createMissingElement);
+  } else {
     return nullptr;
   }
 }
 
 bool CSVGraphMappingConfigurationWidget::isValid() const {
-  if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importNewNodesPage) {
+  if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importNewNodesPage) {
     return true;
-  }
-  else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importNodesPage) {
+  } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importNodesPage) {
     return !nodeProperties.empty() && !nodeColumnIds.empty();
-  }
-  else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesPages) {
+  } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesPages) {
     return !edgeProperties.empty() && !edgeColumnIds.empty();
-  }
-  else if(ui->mappingConfigurationStackedWidget->currentWidget()==ui->importEdgesFromNodesPage) {
+  } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesFromNodesPage) {
     // src and tgt columns must be different
     bool sameColumns = true;
 
-    for(unsigned int i = 0; i < srcColumnIds.size(); ++i) {
+    for (unsigned int i = 0; i < srcColumnIds.size(); ++i) {
       bool found = false;
 
       for (unsigned int j = 0; j < tgtColumnIds.size(); ++j) {
@@ -216,29 +206,26 @@ bool CSVGraphMappingConfigurationWidget::isValid() const {
     }
 
     return true;
-  }
-  else {
+  } else {
     return false;
   }
 }
 
 void CSVGraphMappingConfigurationWidget::createNewProperty() {
-  PropertyCreationDialog::createNewProperty(graph,this);
+  PropertyCreationDialog::createNewProperty(graph, this);
 }
 
-void CSVGraphMappingConfigurationWidget::selectProperties(const QString& title, std::vector<std::string>& selProperties, QPushButton* button) {
+void CSVGraphMappingConfigurationWidget::selectProperties(const QString &title, std::vector<std::string> &selProperties, QPushButton *button) {
   vector<string> graphProperties;
-  for(const string &propertyName : graph->getProperties()) {
+  for (const string &propertyName : graph->getProperties()) {
     graphProperties.push_back(propertyName);
   }
 
-  if (StringsListSelectionDialog::choose(title, graphProperties, selProperties,
-                                         this)) {
+  if (StringsListSelectionDialog::choose(title, graphProperties, selProperties, this)) {
     if (selProperties.size() == 0) {
       selProperties.push_back("viewLabel");
       button->setText("viewLabel");
-    }
-    else {
+    } else {
       QString buttonName;
 
       for (unsigned int i = 0; i < selProperties.size(); ++i) {
@@ -254,26 +241,22 @@ void CSVGraphMappingConfigurationWidget::selectProperties(const QString& title, 
 }
 
 void CSVGraphMappingConfigurationWidget::selectSrcProperties() {
-  selectProperties("Choose source node properties", srcProperties,
-                   ui->srcPropertiesButton);
+  selectProperties("Choose source node properties", srcProperties, ui->srcPropertiesButton);
 }
 
 void CSVGraphMappingConfigurationWidget::selectTgtProperties() {
-  selectProperties("Choose target node properties", tgtProperties,
-                   ui->tgtPropertiesButton);
+  selectProperties("Choose target node properties", tgtProperties, ui->tgtPropertiesButton);
 }
 
 void CSVGraphMappingConfigurationWidget::selectNodeProperties() {
-  selectProperties("Choose node identification properties", nodeProperties,
-                   ui->nodePropertiesButton);
+  selectProperties("Choose node identification properties", nodeProperties, ui->nodePropertiesButton);
 }
 
 void CSVGraphMappingConfigurationWidget::selectEdgeProperties() {
-  selectProperties("Choose edge identification properties", edgeProperties,
-                   ui->edgePropertiesButton);
+  selectProperties("Choose edge identification properties", edgeProperties, ui->edgePropertiesButton);
 }
 
-void CSVGraphMappingConfigurationWidget::selectColumns(const QString& title, std::vector<unsigned int>& columnIds, QPushButton* button) {
+void CSVGraphMappingConfigurationWidget::selectColumns(const QString &title, std::vector<unsigned int> &columnIds, QPushButton *button) {
   vector<string> tmpColumns;
   vector<string> selColumns;
 
@@ -282,7 +265,7 @@ void CSVGraphMappingConfigurationWidget::selectColumns(const QString& title, std
       tmpColumns.push_back(columns[i]);
   }
 
-  for (unsigned int i= 0; i < columnIds.size(); ++i) {
+  for (unsigned int i = 0; i < columnIds.size(); ++i) {
     selColumns.push_back(columns[columnIds[i]]);
   }
 
@@ -296,8 +279,7 @@ void CSVGraphMappingConfigurationWidget::selectColumns(const QString& title, std
           break;
         }
       }
-    }
-    else {
+    } else {
       columnIds.clear();
       QString buttonName;
 
@@ -321,21 +303,17 @@ void CSVGraphMappingConfigurationWidget::selectColumns(const QString& title, std
 }
 
 void CSVGraphMappingConfigurationWidget::selectNodeColumns() {
-  selectColumns("Choose columns for node identifier", nodeColumnIds,
-                ui->nodeColumnsButton);
+  selectColumns("Choose columns for node identifier", nodeColumnIds, ui->nodeColumnsButton);
 }
 
 void CSVGraphMappingConfigurationWidget::selectEdgeColumns() {
-  selectColumns("Choose columns for edge identifier", edgeColumnIds,
-                ui->edgeColumnsButton);
+  selectColumns("Choose columns for edge identifier", edgeColumnIds, ui->edgeColumnsButton);
 }
 
 void CSVGraphMappingConfigurationWidget::selectSrcColumns() {
-  selectColumns("Choose columns for source", srcColumnIds,
-                ui->srcColumnsButton);
+  selectColumns("Choose columns for source", srcColumnIds, ui->srcColumnsButton);
 }
 
 void CSVGraphMappingConfigurationWidget::selectTgtColumns() {
-  selectColumns("Choose columns for target", tgtColumnIds,
-                ui->tgtColumnsButton);
+  selectColumns("Choose columns for target", tgtColumnIds, ui->tgtColumnsButton);
 }

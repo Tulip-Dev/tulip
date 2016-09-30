@@ -25,7 +25,6 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
 
-
 #include "ParallelCoordinatesGraphProxy.h"
 #include "ParallelTools.h"
 
@@ -33,8 +32,8 @@ using namespace std;
 
 namespace tlp {
 
-ParallelCoordinatesGraphProxy::ParallelCoordinatesGraphProxy(Graph *g, const ElementType location):
-  GraphDecorator(g),  graphColorsChanged(false), dataLocation(location), unhighlightedEltsColorAlphaValue(20) {
+ParallelCoordinatesGraphProxy::ParallelCoordinatesGraphProxy(Graph *g, const ElementType location)
+    : GraphDecorator(g), graphColorsChanged(false), dataLocation(location), unhighlightedEltsColorAlphaValue(20) {
   dataColors = graph_component->getProperty<ColorProperty>("viewColor");
   dataColors->addObserver(this);
   originalDataColors = new ColorProperty(graph_component);
@@ -59,7 +58,7 @@ vector<string> ParallelCoordinatesGraphProxy::getSelectedProperties() {
   vector<string>::iterator it;
 
   // check if one of the selected properties has not been deleted by an undo operation
-  for (it = selectedProperties.begin() ; it != selectedProperties.end() ; ++it) {
+  for (it = selectedProperties.begin(); it != selectedProperties.end(); ++it) {
     if (existProperty(*it)) {
       selectedPropertiesTmp.push_back(*it);
     }
@@ -69,7 +68,7 @@ vector<string> ParallelCoordinatesGraphProxy::getSelectedProperties() {
   return selectedProperties;
 }
 
-void ParallelCoordinatesGraphProxy::setSelectedProperties(const vector<string>& properties) {
+void ParallelCoordinatesGraphProxy::setSelectedProperties(const vector<string> &properties) {
   selectedProperties = properties;
 }
 
@@ -78,7 +77,7 @@ void ParallelCoordinatesGraphProxy::removePropertyFromSelection(const std::strin
   vector<string>::iterator it;
   selectedProperties.clear();
 
-  for (it = selectedPropertiesCopy.begin() ; it != selectedPropertiesCopy.end() ; ++it) {
+  for (it = selectedPropertiesCopy.begin(); it != selectedPropertiesCopy.end(); ++it) {
     if (*it != propertyName) {
       selectedProperties.push_back(*it);
     }
@@ -92,8 +91,7 @@ ElementType ParallelCoordinatesGraphProxy::getDataLocation() const {
 unsigned int ParallelCoordinatesGraphProxy::getDataCount() const {
   if (getDataLocation() == NODE) {
     return numberOfNodes();
-  }
-  else {
+  } else {
     return numberOfEdges();
   }
 }
@@ -129,8 +127,7 @@ void ParallelCoordinatesGraphProxy::resetSelection() {
 void ParallelCoordinatesGraphProxy::deleteData(const unsigned int dataId) {
   if (getDataLocation() == NODE) {
     delNode(node(dataId));
-  }
-  else {
+  } else {
     delEdge(edge(dataId));
   }
 }
@@ -138,30 +135,27 @@ void ParallelCoordinatesGraphProxy::deleteData(const unsigned int dataId) {
 Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getDataIterator() {
   if (getDataLocation() == NODE) {
     return new ParallelCoordinatesDataIterator<node>(getNodes());
-  }
-  else {
+  } else {
     return new ParallelCoordinatesDataIterator<edge>(getEdges());
   }
 }
 
 Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getSelectedDataIterator() {
-  BooleanProperty *viewSelection = (BooleanProperty *) getProperty("viewSelection");
+  BooleanProperty *viewSelection = (BooleanProperty *)getProperty("viewSelection");
 
   if (getDataLocation() == NODE) {
     return new ParallelCoordinatesDataIterator<node>(viewSelection->getNodesEqualTo(true, graph_component));
-  }
-  else {
+  } else {
     return new ParallelCoordinatesDataIterator<edge>(viewSelection->getEdgesEqualTo(true, graph_component));
   }
 }
 
 Iterator<unsigned int> *ParallelCoordinatesGraphProxy::getUnselectedDataIterator() {
-  BooleanProperty *viewSelection = (BooleanProperty *) getProperty("viewSelection");
+  BooleanProperty *viewSelection = (BooleanProperty *)getProperty("viewSelection");
 
   if (getDataLocation() == NODE) {
     return new ParallelCoordinatesDataIterator<node>(viewSelection->getNodesEqualTo(false));
-  }
-  else {
+  } else {
     return new ParallelCoordinatesDataIterator<edge>(viewSelection->getEdgesEqualTo(false));
   }
 }
@@ -171,8 +165,7 @@ string ParallelCoordinatesGraphProxy::getToolTipTextforData(const unsigned int d
 
   if (getDataLocation() == NODE) {
     ttipText = "node ";
-  }
-  else {
+  } else {
     ttipText = "edge ";
   }
 
@@ -180,7 +173,7 @@ string ParallelCoordinatesGraphProxy::getToolTipTextforData(const unsigned int d
   string label = getDataLabel(dataId);
 
   if (!label.empty()) {
-    ttipText = label + " (" + ttipText +")";
+    ttipText = label + " (" + ttipText + ")";
   }
 
   return ttipText;
@@ -189,22 +182,20 @@ string ParallelCoordinatesGraphProxy::getToolTipTextforData(const unsigned int d
 void ParallelCoordinatesGraphProxy::addOrRemoveEltToHighlight(const unsigned int eltId) {
   if (isDataHighlighted(eltId)) {
     highlightedElts.erase(eltId);
-  }
-  else {
+  } else {
     highlightedElts.insert(eltId);
   }
 }
 
 void ParallelCoordinatesGraphProxy::unsetHighlightedElts() {
   highlightedElts.clear();
-
 }
 
 void ParallelCoordinatesGraphProxy::resetHighlightedElts(const set<unsigned int> &highlightedData) {
   highlightedElts.clear();
   set<unsigned int>::iterator it;
 
-  for (it = highlightedData.begin() ; it != highlightedData.end() ; ++it) {
+  for (it = highlightedData.begin(); it != highlightedData.end(); ++it) {
     addOrRemoveEltToHighlight(*it);
   }
 }
@@ -220,7 +211,7 @@ bool ParallelCoordinatesGraphProxy::highlightedEltsSet() const {
 void ParallelCoordinatesGraphProxy::selectHighlightedElements() {
   set<unsigned int>::iterator it;
 
-  for (it = highlightedElts.begin() ; it != highlightedElts.end() ; ++it) {
+  for (it = highlightedElts.begin(); it != highlightedElts.end(); ++it) {
     setDataSelected(*it, true);
   }
 }
@@ -247,16 +238,14 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
 
       if (getDataLocation() == NODE) {
         originalColor = originalDataColors->getNodeValue(node(dataId));
-      }
-      else {
+      } else {
         originalColor = originalDataColors->getEdgeValue(edge(dataId));
       }
 
       if (!isDataHighlighted(dataId) && currentColor.getA() != unhighlightedEltsColorAlphaValue) {
         if (getDataLocation() == NODE) {
           originalDataColors->setNodeValue(node(dataId), Color(currentColor.getR(), currentColor.getG(), currentColor.getB(), originalColor.getA()));
-        }
-        else {
+        } else {
           originalDataColors->setEdgeValue(edge(dataId), Color(currentColor.getR(), currentColor.getG(), currentColor.getB(), originalColor.getA()));
         }
 
@@ -268,8 +257,7 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
       if (highlightedEltsSet() && isDataHighlighted(dataId) && currentColor != originalColor) {
         if (getDataLocation() == NODE) {
           originalDataColors->setNodeValue(node(dataId), Color(currentColor.getR(), currentColor.getG(), currentColor.getB(), originalColor.getA()));
-        }
-        else {
+        } else {
           originalDataColors->setEdgeValue(edge(dataId), Color(currentColor.getR(), currentColor.getG(), currentColor.getB(), originalColor.getA()));
         }
 
@@ -279,23 +267,18 @@ void ParallelCoordinatesGraphProxy::colorDataAccordingToHighlightedElts() {
 
     delete dataIt;
     lastHighlightedElementsSet = true;
-  }
-  else if (lastHighlightedElementsSet) {
+  } else if (lastHighlightedElementsSet) {
     *(graph_component->getProperty<ColorProperty>("viewColor")) = *originalDataColors;
     lastHighlightedElementsSet = false;
-  }
-  else {
+  } else {
     *originalDataColors = *dataColors;
   }
-
-
 }
 
 Color ParallelCoordinatesGraphProxy::getOriginalDataColor(const unsigned int dataId) {
   if (getDataLocation() == NODE) {
     return originalDataColors->getNodeValue(node(dataId));
-  }
-  else {
+  } else {
     return originalDataColors->getEdgeValue(edge(dataId));
   }
 }
@@ -304,10 +287,9 @@ void ParallelCoordinatesGraphProxy::removeHighlightedElement(const unsigned int 
   highlightedElts.erase(dataId);
 }
 
-void ParallelCoordinatesGraphProxy::update(std::set<Observable *>::iterator begin ,std::set<Observable *>::iterator end) {
-  (void) begin;
-  (void) end;
+void ParallelCoordinatesGraphProxy::update(std::set<Observable *>::iterator begin, std::set<Observable *>::iterator end) {
+  (void)begin;
+  (void)end;
   graphColorsChanged = true;
 }
-
 }

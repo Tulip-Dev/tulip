@@ -27,20 +27,16 @@ class NavigableTableView : public QTableView {
   Q_OBJECT
 
 public:
-
   explicit NavigableTableView(QWidget *parent = 0);
   void keyPressEvent(QKeyEvent *event);
 
 protected:
-
   int sizeHintForRow(int row) const;
   int sizeHintForColumn(int col) const;
-  void paintEvent(QPaintEvent * event);
+  void paintEvent(QPaintEvent *event);
 
 private:
-
   void resizeTableRows();
-
 };
 
 #endif // NAVIGABLETABLEVIEW_H

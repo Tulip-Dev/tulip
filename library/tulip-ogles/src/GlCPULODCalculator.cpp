@@ -47,9 +47,11 @@
 using namespace std;
 using namespace tlp;
 
-GlCPULODCalculator::GlCPULODCalculator() : _graph(nullptr) {}
+GlCPULODCalculator::GlCPULODCalculator() : _graph(nullptr) {
+}
 
-GlCPULODCalculator::~GlCPULODCalculator() {}
+GlCPULODCalculator::~GlCPULODCalculator() {
+}
 
 void GlCPULODCalculator::setGraph(tlp::Graph *graph, class GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters) {
   clear();
@@ -66,11 +68,11 @@ void GlCPULODCalculator::setGraph(tlp::Graph *graph, class GlGraphInputData *inp
   _nodesBBCache.clear();
   _edgesBBCache.clear();
 
-  for(node n : graph->getNodes()) {
+  for (node n : graph->getNodes()) {
     addNode(n);
   }
 
-  for(edge e : graph->getEdges()) {
+  for (edge e : graph->getEdges()) {
     addEdge(e);
   }
 }
@@ -102,41 +104,41 @@ void GlCPULODCalculator::addEdge(const tlp::edge e) {
 
 BoundingBox GlCPULODCalculator::getNodeBoundingBox(node n) {
   double nodeRot = _viewRotation->getNodeValue(n);
-  const Size& nodeSize = _viewSize->getNodeValue(n);
-  const Coord& nodeCoord = _viewLayout->getNodeValue(n);
+  const Size &nodeSize = _viewSize->getNodeValue(n);
+  const Coord &nodeCoord = _viewLayout->getNodeValue(n);
 
   if (nodeRot == 0.0) {
     BoundingBox box;
-    box.expand(nodeCoord-nodeSize/2.f);
-    box.expand(nodeCoord+nodeSize/2.f);
+    box.expand(nodeCoord - nodeSize / 2.f);
+    box.expand(nodeCoord + nodeSize / 2.f);
     return box;
   } else {
-    float cosAngle=cos(nodeRot/180.*M_PI);
-    float sinAngle=sin(nodeRot/180.*M_PI);
-    Coord tmp1(nodeSize/2.f);
-    Coord tmp2(tmp1[0] ,-tmp1[1], tmp1[2]);
-    Coord tmp3(-tmp1[0],-tmp1[1],-tmp1[2]);
-    Coord tmp4(-tmp1[0], tmp1[1],-tmp1[2]);
-    tmp1=Coord(tmp1[0]*cosAngle-tmp1[1]*sinAngle,tmp1[0]*sinAngle+tmp1[1]*cosAngle,tmp1[2]);
-    tmp2=Coord(tmp2[0]*cosAngle-tmp2[1]*sinAngle,tmp2[0]*sinAngle+tmp2[1]*cosAngle,tmp2[2]);
-    tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
-    tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
+    float cosAngle = cos(nodeRot / 180. * M_PI);
+    float sinAngle = sin(nodeRot / 180. * M_PI);
+    Coord tmp1(nodeSize / 2.f);
+    Coord tmp2(tmp1[0], -tmp1[1], tmp1[2]);
+    Coord tmp3(-tmp1[0], -tmp1[1], -tmp1[2]);
+    Coord tmp4(-tmp1[0], tmp1[1], -tmp1[2]);
+    tmp1 = Coord(tmp1[0] * cosAngle - tmp1[1] * sinAngle, tmp1[0] * sinAngle + tmp1[1] * cosAngle, tmp1[2]);
+    tmp2 = Coord(tmp2[0] * cosAngle - tmp2[1] * sinAngle, tmp2[0] * sinAngle + tmp2[1] * cosAngle, tmp2[2]);
+    tmp3 = Coord(tmp3[0] * cosAngle - tmp3[1] * sinAngle, tmp3[0] * sinAngle + tmp3[1] * cosAngle, tmp3[2]);
+    tmp4 = Coord(tmp4[0] * cosAngle - tmp4[1] * sinAngle, tmp4[0] * sinAngle + tmp4[1] * cosAngle, tmp4[2]);
     BoundingBox bb;
-    bb.expand(nodeCoord+tmp1);
-    bb.expand(nodeCoord+tmp2);
-    bb.expand(nodeCoord+tmp3);
-    bb.expand(nodeCoord+tmp4);
+    bb.expand(nodeCoord + tmp1);
+    bb.expand(nodeCoord + tmp2);
+    bb.expand(nodeCoord + tmp3);
+    bb.expand(nodeCoord + tmp4);
     return bb;
   }
 }
 
 BoundingBox GlCPULODCalculator::getEdgeBoundingBox(edge e) {
   BoundingBox bb;
-  const std::pair<node, node>& eEnds = _graph->ends(e);
+  const std::pair<node, node> &eEnds = _graph->ends(e);
   const node source = eEnds.first;
   const node target = eEnds.second;
-  const Coord& srcCoord = _viewLayout->getNodeValue(source);
-  const Coord& tgtCoord = _viewLayout->getNodeValue(target);
+  const Coord &srcCoord = _viewLayout->getNodeValue(source);
+  const Coord &tgtCoord = _viewLayout->getNodeValue(target);
 
   const Size &srcSize = _viewSize->getNodeValue(source);
   const Size &tgtSize = _viewSize->getNodeValue(target);
@@ -155,7 +157,7 @@ BoundingBox GlCPULODCalculator::getEdgeBoundingBox(edge e) {
 
   int tgtGlyphId = _viewShape->getNodeValue(target);
   Glyph *targetGlyph = GlyphsManager::instance()->getGlyph(tgtGlyphId);
-  //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
+  // this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
   tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
   tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
@@ -181,20 +183,16 @@ void GlCPULODCalculator::compute(Camera *camera, const Vec4i &selectionViewport)
     currentViewport = camera->getViewport();
   }
 
-  if(camera->is3d()) {
-    Coord eye=camera->getEyes() + (camera->getEyes() - camera->getCenter()) / static_cast<float>(camera->getZoomFactor());
+  if (camera->is3d()) {
+    Coord eye = camera->getEyes() + (camera->getEyes() - camera->getCenter()) / static_cast<float>(camera->getZoomFactor());
     computeFor3DCamera(eye, camera->transformMatrix(), camera->getViewport(), currentViewport);
-  }
-  else {
+  } else {
     computeFor2DCamera(camera->getViewport(), currentViewport);
   }
-
 }
 
-void GlCPULODCalculator::computeFor3DCamera(const Coord &eye,
-                                            const Matrix<float, 4> &transformMatrix,
-                                            const Vector<int,4> &globalViewport,
-                                            const Vector<int,4> &currentViewport) {
+void GlCPULODCalculator::computeFor3DCamera(const Coord &eye, const Matrix<float, 4> &transformMatrix, const Vector<int, 4> &globalViewport,
+                                            const Vector<int, 4> &currentViewport) {
 
 #ifdef _OPENMP
   omp_set_num_threads(omp_get_num_procs());
@@ -202,42 +200,43 @@ void GlCPULODCalculator::computeFor3DCamera(const Coord &eye,
   omp_set_dynamic(false);
 #endif
 
-  size_t nb=0;
-  if((_renderingEntitiesFlag & RenderingGlEntities)!=0) {
-    map<GlLayer*, std::vector<GlEntityLODUnit> >::iterator it = _glEntitiesLODVector.begin();
-    for (; it != _glEntitiesLODVector.end() ; ++it) {
-      nb=it->second.size();
+  size_t nb = 0;
+  if ((_renderingEntitiesFlag & RenderingGlEntities) != 0) {
+    map<GlLayer *, std::vector<GlEntityLODUnit>>::iterator it = _glEntitiesLODVector.begin();
+    for (; it != _glEntitiesLODVector.end(); ++it) {
+      nb = it->second.size();
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
 
-      for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {
-        _glEntitiesLODVector[it->first][i].lod = calculateAABBSize(_glEntitiesLODVector[it->first][i].boundingBox, eye, transformMatrix, globalViewport, currentViewport);
+      for (int i = 0; i < static_cast<int>(nb); ++i) {
+        _glEntitiesLODVector[it->first][i].lod =
+            calculateAABBSize(_glEntitiesLODVector[it->first][i].boundingBox, eye, transformMatrix, globalViewport, currentViewport);
       }
     }
   }
 
-  if(_graph && (_renderingEntitiesFlag & RenderingNodes)!=0) {
-    nb=_nodesLODVector.size();
+  if (_graph && (_renderingEntitiesFlag & RenderingNodes) != 0) {
+    nb = _nodesLODVector.size();
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
 
-    for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {
+    for (int i = 0; i < static_cast<int>(nb); ++i) {
       _nodesLODVector[i].lod = calculateAABBSize(_nodesLODVector[i].boundingBox, eye, transformMatrix, globalViewport, currentViewport);
     }
 
     _edgeSizeLodCache.clear();
   }
 
-  if(_graph && (_renderingEntitiesFlag & RenderingEdges)!=0) {
-    nb=_edgesLODVector.size();
+  if (_graph && (_renderingEntitiesFlag & RenderingEdges) != 0) {
+    nb = _edgesLODVector.size();
 
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
 
-    for(int i = 0 ; i < static_cast<int>(nb) ; ++i) {
+    for (int i = 0; i < static_cast<int>(nb); ++i) {
       _edgesLODVector[i].lod = calculateAABBSize(_edgesLODVector[i].boundingBox, eye, transformMatrix, globalViewport, currentViewport);
       if (_edgesLODVector[i].lod > 0) {
 
@@ -251,11 +250,13 @@ void GlCPULODCalculator::computeFor3DCamera(const Coord &eye,
         const Coord &edgeCoord = _viewLayout->getNodeValue(_graph->source(_edgesLODVector[i].e));
 
         if (edgeSize[0] != edgeSize[1]) {
-          _edgesLODVector[i].lodSize = std::max(std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), camera->projectionMatrix(), camera->modelviewMatrix(), camera->getViewport())),
-              std::abs(projectSize(edgeCoord, Size(edgeSize[1], edgeSize[1], edgeSize[1]), camera->projectionMatrix(), camera->modelviewMatrix(), camera->getViewport())));
-        }
-        else {
-          _edgesLODVector[i].lodSize = std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), camera->projectionMatrix(), camera->modelviewMatrix(), camera->getViewport()));
+          _edgesLODVector[i].lodSize = std::max(std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]),
+                                                                     camera->projectionMatrix(), camera->modelviewMatrix(), camera->getViewport())),
+                                                std::abs(projectSize(edgeCoord, Size(edgeSize[1], edgeSize[1], edgeSize[1]),
+                                                                     camera->projectionMatrix(), camera->modelviewMatrix(), camera->getViewport())));
+        } else {
+          _edgesLODVector[i].lodSize = std::abs(projectSize(edgeCoord, Size(edgeSize[0], edgeSize[0], edgeSize[0]), camera->projectionMatrix(),
+                                                            camera->modelviewMatrix(), camera->getViewport()));
         }
 #pragma omp critical
         _edgeSizeLodCache[edgeSize] = _edgesLODVector[i].lodSize;
@@ -264,28 +265,26 @@ void GlCPULODCalculator::computeFor3DCamera(const Coord &eye,
   }
 }
 
-void GlCPULODCalculator::computeFor2DCamera(const Vector<int,4> &globalViewport,
-                                            const Vector<int,4> &currentViewport) {
+void GlCPULODCalculator::computeFor2DCamera(const Vector<int, 4> &globalViewport, const Vector<int, 4> &currentViewport) {
 
-  if((_renderingEntitiesFlag & RenderingGlEntities)!=0) {
-    map<GlLayer*, std::vector<GlEntityLODUnit> >::iterator it = _glEntitiesLODVector.begin();
-    for (; it != _glEntitiesLODVector.end() ; ++it) {
-      for(vector<GlEntityLODUnit>::iterator it2=it->second.begin(); it2!=it->second.end(); ++it2) {
-        (*it2).lod=calculate2DLod((*it2).boundingBox, globalViewport, currentViewport);
+  if ((_renderingEntitiesFlag & RenderingGlEntities) != 0) {
+    map<GlLayer *, std::vector<GlEntityLODUnit>>::iterator it = _glEntitiesLODVector.begin();
+    for (; it != _glEntitiesLODVector.end(); ++it) {
+      for (vector<GlEntityLODUnit>::iterator it2 = it->second.begin(); it2 != it->second.end(); ++it2) {
+        (*it2).lod = calculate2DLod((*it2).boundingBox, globalViewport, currentViewport);
       }
     }
   }
 
-  if(_graph && (_renderingEntitiesFlag & RenderingNodes)!=0) {
-    for(vector<NodeEntityLODUnit>::iterator it=_nodesLODVector.begin(); it!=_nodesLODVector.end(); ++it) {
-      (*it).lod=calculate2DLod((*it).boundingBox, globalViewport, currentViewport);
+  if (_graph && (_renderingEntitiesFlag & RenderingNodes) != 0) {
+    for (vector<NodeEntityLODUnit>::iterator it = _nodesLODVector.begin(); it != _nodesLODVector.end(); ++it) {
+      (*it).lod = calculate2DLod((*it).boundingBox, globalViewport, currentViewport);
     }
   }
 
-  if(_graph && (_renderingEntitiesFlag & RenderingNodes)!=0) {
-    for(vector<EdgeEntityLODUnit>::iterator it=_edgesLODVector.begin(); it!=_edgesLODVector.end(); ++it) {
-      (*it).lod=calculate2DLod((*it).boundingBox, globalViewport, currentViewport);
+  if (_graph && (_renderingEntitiesFlag & RenderingNodes) != 0) {
+    for (vector<EdgeEntityLODUnit>::iterator it = _edgesLODVector.begin(); it != _edgesLODVector.end(); ++it) {
+      (*it).lod = calculate2DLod((*it).boundingBox, globalViewport, currentViewport);
     }
   }
 }
-

@@ -30,16 +30,17 @@
 
 using namespace tlp;
 
-Light::Light() :
-  _camera(nullptr), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
-  _diffuseColor(255, 255, 255), _specularColor(255, 255, 255),
-  _constantAttenuation(1.0f), _linearAttenuation(0.00001f), _quadraticAttenuation(0.000001f) {}
+Light::Light()
+    : _camera(nullptr), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
+      _diffuseColor(255, 255, 255), _specularColor(255, 255, 255), _constantAttenuation(1.0f), _linearAttenuation(0.00001f),
+      _quadraticAttenuation(0.000001f) {
+}
 
-
-Light::Light(Camera *camera) :
-  _camera(camera), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
-  _diffuseColor(255, 255, 255), _specularColor(255, 255, 255),
-  _constantAttenuation(1.0f), _linearAttenuation(0.00001f), _quadraticAttenuation(0.000001f) {}
+Light::Light(Camera *camera)
+    : _camera(camera), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
+      _diffuseColor(255, 255, 255), _specularColor(255, 255, 255), _constantAttenuation(1.0f), _linearAttenuation(0.00001f),
+      _quadraticAttenuation(0.000001f) {
+}
 
 void Light::setDirectionnalLight(const bool directionnalLight) {
   _directionnalLight = directionnalLight;
@@ -56,9 +57,9 @@ Vec4f Light::getPosition() const {
     Vec3f center = _camera->getCenter();
     float zoomFactor = _camera->getZoomFactor();
     lightPos = Vec4f(eyes, 0);
-    lightPos[0] += (((eyes[0]-center[0])/zoomFactor) + (eyes[0]-center[0])*4);
-    lightPos[1] += (((eyes[1]-center[1])/zoomFactor) + (eyes[1]-center[1])*4);
-    lightPos[2] += (((eyes[2]-center[2])/zoomFactor) + (eyes[2]-center[2])*4);
+    lightPos[0] += (((eyes[0] - center[0]) / zoomFactor) + (eyes[0] - center[0]) * 4);
+    lightPos[1] += (((eyes[1] - center[1]) / zoomFactor) + (eyes[1] - center[1]) * 4);
+    lightPos[2] += (((eyes[2] - center[2]) / zoomFactor) + (eyes[2] - center[2]) * 4);
     lightPos[3] = 1;
   } else {
     lightPos[0] = 0;

@@ -58,7 +58,6 @@
 
 #include <tulip/GlyphsRenderer.h>
 
-
 #ifdef __EMSCRIPTEN__
 #include <emscripten/emscripten.h>
 #endif
@@ -361,7 +360,8 @@ const float alpha = 0.5f;
 
 struct NodesLabelsSorting {
 
-  NodesLabelsSorting(BooleanProperty *selection, NumericProperty *metric = nullptr) : _selection(selection), _metric(metric) {}
+  NodesLabelsSorting(BooleanProperty *selection, NumericProperty *metric = nullptr) : _selection(selection), _metric(metric) {
+  }
 
   bool operator()(const tlp::node &n1, const tlp::node &n2) const {
     if (_selection->getNodeValue(n1) && !_selection->getNodeValue(n2)) {
@@ -376,16 +376,14 @@ struct NodesLabelsSorting {
   }
 
 private:
-
   BooleanProperty *_selection;
   NumericProperty *_metric;
-
 };
-
 
 struct EdgesLabelsSorting {
 
-  EdgesLabelsSorting(BooleanProperty *selection, NumericProperty *metric = nullptr) : _selection(selection), _metric(metric) {}
+  EdgesLabelsSorting(BooleanProperty *selection, NumericProperty *metric = nullptr) : _selection(selection), _metric(metric) {
+  }
 
   bool operator()(const tlp::edge &e1, const tlp::edge &e2) const {
     if (_selection->getEdgeValue(e1) && !_selection->getEdgeValue(e2)) {
@@ -400,42 +398,36 @@ struct EdgesLabelsSorting {
   }
 
 private:
-
   BooleanProperty *_selection;
   NumericProperty *_metric;
-
 };
 
 class GreatThanNode {
 
 public:
+  GreatThanNode(NumericProperty *metric) : _metric(metric) {
+  }
 
-  GreatThanNode(NumericProperty *metric) : _metric(metric) {}
-
-  bool operator() (const node &n1, const node &n2) const {
+  bool operator()(const node &n1, const node &n2) const {
     return (_metric->getNodeDoubleValue(n1) > _metric->getNodeDoubleValue(n2));
   }
 
 private:
-
   NumericProperty *_metric;
-
 };
 
 class GreatThanEdge {
 
 public:
+  GreatThanEdge(NumericProperty *metric) : _metric(metric) {
+  }
 
-  GreatThanEdge(NumericProperty *metric) : _metric(metric) {}
-
-  bool operator() (const edge &e1, const edge &e2) const {
+  bool operator()(const edge &e1, const edge &e2) const {
     return (_metric->getEdgeDoubleValue(e1) > _metric->getEdgeDoubleValue(e2));
   }
 
 private:
-
   NumericProperty *_metric;
-
 };
 
 GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
@@ -461,19 +453,13 @@ GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
   return nullptr;
 }
 
-GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator) :
-  _graph(nullptr),
-  _graphElementsPickingMode(false),
-  _lodCalculator(lodCalculator),
-  _maxEdgePoints(0),
-  _updateQuadTree(true)
-{
+GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator)
+    : _graph(nullptr), _graphElementsPickingMode(false), _lodCalculator(lodCalculator), _maxEdgePoints(0), _updateQuadTree(true) {
 
-  const map<int, Glyph*> &glyphs = GlyphsManager::instance()->getGlyphs();
-  map<int, Glyph*>::const_iterator it = glyphs.begin();
-  for( ; it != glyphs.end() ; ++it) {
+  const map<int, Glyph *> &glyphs = GlyphsManager::instance()->getGlyphs();
+  map<int, Glyph *>::const_iterator it = glyphs.begin();
+  for (; it != glyphs.end(); ++it) {
     _nodesGlyphs[it->first] = vector<node>();
-
   }
 
   _labelsRenderer = LabelsRenderer::instance();
@@ -490,7 +476,6 @@ GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator) :
   _inputData.addListener(this);
 
   setGraph(graph);
-
 }
 
 void GlGraph::setRenderingParameters(const GlGraphRenderingParameters &renderingParameters) {
@@ -538,7 +523,6 @@ void GlGraph::setGraph(tlp::Graph *graph) {
   _updateQuadTree = true;
 
   notifyModified();
-
 }
 
 void GlGraph::initObservers() {
@@ -547,7 +531,7 @@ void GlGraph::initObservers() {
 
   _observedProperties = _inputData.getProperties();
 
-  for(PropertyInterface *prop : _observedProperties) {
+  for (PropertyInterface *prop : _observedProperties) {
     prop->addListener(this);
     prop->addObserver(this);
   }
@@ -557,27 +541,28 @@ void GlGraph::clearObservers() {
   _graph->removeListener(this);
   _graph->removeObserver(this);
 
-  for(PropertyInterface* prop : _observedProperties) {
+  for (PropertyInterface *prop : _observedProperties) {
     prop->removeListener(this);
     prop->removeObserver(this);
   }
 }
 
 void GlGraph::computeGraphBoundingBox() {
-  if (!_graph) return;
+  if (!_graph)
+    return;
   _boundingBox = tlp::computeBoundingBox(_graph, _inputData.getElementLayout(), _inputData.getElementSize(), _inputData.getElementRotation());
 }
 
 void GlGraph::prepareEdgesData() {
 
-  if (_graph->numberOfEdges() == 0) return;
+  if (_graph->numberOfEdges() == 0)
+    return;
 
   clearEdgesData();
 
-  for(edge e : _graph->getEdges()) {
+  for (edge e : _graph->getEdges()) {
     addEdgeData(e);
   }
-
 }
 
 void GlGraph::clearEdgesData() {
@@ -601,19 +586,19 @@ void GlGraph::uploadEdgesData() {
 
   vector<Coord> edgeVerticesData;
   vector<unsigned short> edgeIndices;
-  for (size_t i = 0 ; i < _maxEdgePoints ; ++i) {
+  for (size_t i = 0; i < _maxEdgePoints; ++i) {
     edgeVerticesData.push_back(Coord(i, -1));
     edgeVerticesData.push_back(Coord(i, 1));
   }
-  for (size_t i = 0 ; i < _maxEdgePoints ; ++i) {
-    edgeIndices.push_back(2*i);
-    edgeIndices.push_back(2*i+1);
+  for (size_t i = 0; i < _maxEdgePoints; ++i) {
+    edgeIndices.push_back(2 * i);
+    edgeIndices.push_back(2 * i + 1);
   }
-  for (size_t i = 0 ; i < _maxEdgePoints ; ++i) {
-    edgeIndices.push_back(2*i);
+  for (size_t i = 0; i < _maxEdgePoints; ++i) {
+    edgeIndices.push_back(2 * i);
   }
-  for (size_t i = 0 ; i < _maxEdgePoints ; ++i) {
-    edgeIndices.push_back(2*i+1);
+  for (size_t i = 0; i < _maxEdgePoints; ++i) {
+    edgeIndices.push_back(2 * i + 1);
   }
 
   _edgeRenderingDataBuffer->allocate(edgeVerticesData);
@@ -622,19 +607,19 @@ void GlGraph::uploadEdgesData() {
   edgeVerticesData.clear();
   edgeIndices.clear();
 
-  for (size_t i = 0 ; i < nbCurveInterpolationPoints ; ++i) {
-    edgeVerticesData.push_back(Coord(i/static_cast<float>(nbCurveInterpolationPoints-1), -1));
-    edgeVerticesData.push_back(Coord(i/static_cast<float>(nbCurveInterpolationPoints-1), 1));
+  for (size_t i = 0; i < nbCurveInterpolationPoints; ++i) {
+    edgeVerticesData.push_back(Coord(i / static_cast<float>(nbCurveInterpolationPoints - 1), -1));
+    edgeVerticesData.push_back(Coord(i / static_cast<float>(nbCurveInterpolationPoints - 1), 1));
   }
-  for (size_t i = 0 ; i < nbCurveInterpolationPoints ; ++i) {
-    edgeIndices.push_back(2*i);
-    edgeIndices.push_back(2*i+1);
+  for (size_t i = 0; i < nbCurveInterpolationPoints; ++i) {
+    edgeIndices.push_back(2 * i);
+    edgeIndices.push_back(2 * i + 1);
   }
-  for (size_t i = 0 ; i < nbCurveInterpolationPoints ; ++i) {
-    edgeIndices.push_back(2*i);
+  for (size_t i = 0; i < nbCurveInterpolationPoints; ++i) {
+    edgeIndices.push_back(2 * i);
   }
-  for (size_t i = 0 ; i < nbCurveInterpolationPoints ; ++i) {
-    edgeIndices.push_back(2*i+1);
+  for (size_t i = 0; i < nbCurveInterpolationPoints; ++i) {
+    edgeIndices.push_back(2 * i + 1);
   }
 
   _curveEdgeRenderingDataBuffer->allocate(edgeVerticesData);
@@ -642,7 +627,7 @@ void GlGraph::uploadEdgesData() {
 
   vector<float> edgesLinesRenderingData;
 
-  for(edge e : _graph->getEdges()) {
+  for (edge e : _graph->getEdges()) {
 
     Color edgeColor = _inputData.getElementColor()->getEdgeValue(e);
     const Color &srcColor = _inputData.getElementColor()->getNodeValue(_graph->source(e));
@@ -663,11 +648,11 @@ void GlGraph::uploadEdgesData() {
 
     std::vector<unsigned int> lineIndices;
 
-    for (size_t i = 0 ; i < edgePoints.size() ; ++i) {
+    for (size_t i = 0; i < edgePoints.size(); ++i) {
       unsigned int currentNbVertices = edgesLinesRenderingData.size() / 15;
       if (i != edgePoints.size() - 1) {
         lineIndices.push_back(currentNbVertices);
-        lineIndices.push_back(currentNbVertices+1);
+        lineIndices.push_back(currentNbVertices + 1);
       }
       addTlpVecToVecFloat(edgePoints[i], edgesLinesRenderingData);
       addColorToVecFloat(edgeColor, edgesLinesRenderingData);
@@ -680,12 +665,12 @@ void GlGraph::uploadEdgesData() {
 
   _updateQuadTree = true;
   _edgesDataNeedUpload = false;
-
 }
 
 void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
 
-  if (!_graph || _graph->numberOfNodes() == 0) return;
+  if (!_graph || _graph->numberOfNodes() == 0)
+    return;
 
   if (!_flatShader) {
     _flatShader = ShaderManager::getInstance()->getFlatRenderingShader();
@@ -702,8 +687,8 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
 
   if (pickingMode) {
     GlyphsRenderer::instance()->renderGlyph(camera, light, NodeShape::Cube, _boundingBox.center(),
-                                            Size(_boundingBox.width(), _boundingBox.height(), _boundingBox.depth()),
-                                            _pickingColor, "", 0, tlp::Color(), tlp::Vec4f(), true);
+                                            Size(_boundingBox.width(), _boundingBox.height(), _boundingBox.depth()), _pickingColor, "", 0,
+                                            tlp::Color(), tlp::Vec4f(), true);
 
     // ensure that at least one pixel is drawn for the graph bounding box (case when we have zoom out a lot)
     GlBuffer pointVertexBuffer(GlBuffer::VertexBuffer);
@@ -735,9 +720,9 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   }
 
   if (!_graphElementsPickingMode) {
-    _lodCalculator->compute(const_cast<Camera*>(&camera));
+    _lodCalculator->compute(const_cast<Camera *>(&camera));
   } else {
-    _lodCalculator->compute(const_cast<Camera*>(&camera), _selectionViewport);
+    _lodCalculator->compute(const_cast<Camera *>(&camera), _selectionViewport);
   }
 
   _nodesGlyphs.clear();
@@ -752,8 +737,9 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   pointsNodes.reserve(_graph->numberOfNodes());
   const vector<NodeEntityLODUnit> &nodesLodResult = _lodCalculator->getNodesResult();
 
-  for (size_t i = 0 ; i < nodesLodResult.size() ; ++i) {
-    if (nodesLodResult[i].lod < 0 || _nodesToDiscard.find(nodesLodResult[i].n) != _nodesToDiscard.end()) continue;
+  for (size_t i = 0; i < nodesLodResult.size(); ++i) {
+    if (nodesLodResult[i].lod < 0 || _nodesToDiscard.find(nodesLodResult[i].n) != _nodesToDiscard.end())
+      continue;
     if (nodesLodResult[i].lod < 10 && !_renderingParameters.bypassLodSystem()) {
       pointsNodes.push_back(nodesLodResult[i].n);
       if (!_renderingParameters.labelsScaled() && _renderingParameters.displayNodesLabels()) {
@@ -771,7 +757,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       glyphId = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
     } else if (glyphId == tlp::NodeShape::MaterialDesignIcon) {
       std::string icon = _inputData.getElementMaterialDesignIcon()->getNodeValue(nodesLodResult[i].n);
-      glyphId = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon)+0xf000;
+      glyphId = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
     }
     _nodesGlyphs[glyphId].push_back(nodesLodResult[i].n);
     if (_inputData.getElementSelection()->getNodeValue(nodesLodResult[i].n) && nodesLodResult[i].lod >= 10) {
@@ -792,8 +778,9 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   selectedLinesEdges.reserve(_graph->numberOfEdges());
   const vector<EdgeEntityLODUnit> &edgesLodResult = _lodCalculator->getEdgesResult();
 
-  for (size_t i = 0 ; i < edgesLodResult.size() ; ++i) {
-    if (edgesLodResult[i].lod < 0 || _edgesToDiscard.find(edgesLodResult[i].e) != _edgesToDiscard.end()) continue;
+  for (size_t i = 0; i < edgesLodResult.size(); ++i) {
+    if (edgesLodResult[i].lod < 0 || _edgesToDiscard.find(edgesLodResult[i].e) != _edgesToDiscard.end())
+      continue;
     if (edgesLodResult[i].lod < 5 && !_renderingParameters.bypassLodSystem()) {
       pointsEdges.push_back(edgesLodResult[i].e);
     } else if (abs(edgesLodResult[i].lodSize) < 5 && !_renderingParameters.bypassLodSystem()) {
@@ -805,8 +792,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       if (_renderingParameters.displayEdgesLabels()) {
         edgesLabelsToRender.push_back(edgesLodResult[i].e);
       }
-    }
-    else {
+    } else {
       if (_inputData.getElementSelection()->getEdgeValue(edgesLodResult[i].e)) {
         selectedQuadsEdges.push_back(edgesLodResult[i].e);
       } else {
@@ -839,7 +825,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       std::reverse(glyphsNodes.begin(), glyphsNodes.end());
       std::reverse(pointsNodes.begin(), pointsNodes.end());
     }
-
   }
 
   if (_renderingParameters.displayEdges()) {
@@ -857,7 +842,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       vector<edge> currentEdgesRenderingBash;
       currentEdgesRenderingBash.push_back(edgesToRender.front());
       bool lineEdges = lineEdgesSet.find(edgesToRender.front()) != lineEdgesSet.end();
-      for (size_t i = 1 ; i < edgesToRender.size() ; ++i) {
+      for (size_t i = 1; i < edgesToRender.size(); ++i) {
         bool lineEdge = lineEdgesSet.find(edgesToRender[i]) != lineEdgesSet.end();
         if (lineEdge == lineEdges) {
           currentEdgesRenderingBash.push_back(edgesToRender[i]);
@@ -895,7 +880,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       } else {
         renderEdges(camera, light, quadsEdges, false, true);
       }
-
     }
 
     renderEdges(camera, light, selectedLinesEdges, true);
@@ -905,7 +889,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     } else {
       renderEdges(camera, light, selectedQuadsEdges, false, true);
     }
-
   }
 
   renderNodesGlow(glyphsNodes, camera, light);
@@ -962,7 +945,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
 
   GlBuffer::release(GlBuffer::VertexBuffer);
   GlBuffer::release(GlBuffer::IndexBuffer);
-
 }
 
 void GlGraph::renderMetaNodes(const std::vector<tlp::node> &metaNodes, const Camera &camera, const Light &) {
@@ -976,43 +958,47 @@ void GlGraph::renderMetaNodes(const std::vector<tlp::node> &metaNodes, const Cam
   GlGraph *glMetaGraph = new GlGraph(nullptr, new GlCPULODCalculator());
   subScene.getMainLayer()->addGlEntity(glMetaGraph, "graph");
 
-  Coord eyeDirection = camera.getEyes()-camera.getCenter();
+  Coord eyeDirection = camera.getEyes() - camera.getCenter();
   eyeDirection /= eyeDirection.norm();
 
-  for (size_t i = 0 ; i < metaNodes.size() ; ++i) {
+  for (size_t i = 0; i < metaNodes.size(); ++i) {
     glMetaGraph->setGraph(_graph->getNodeMetaInfo(metaNodes[i]));
     const tlp::Coord &metaNodePos = _inputData.getElementLayout()->getNodeValue(metaNodes[i]);
     const tlp::Size &metaNodeSize = _inputData.getElementSize()->getNodeValue(metaNodes[i]);
-    tlp::BoundingBox metaNodeBB(metaNodePos - metaNodeSize/2.f, metaNodePos + metaNodeSize/2.f);
+    tlp::BoundingBox metaNodeBB(metaNodePos - metaNodeSize / 2.f, metaNodePos + metaNodeSize / 2.f);
     Glyph *metaNodeGlyph = GlyphsManager::instance()->getGlyph(_inputData.getElementShape()->getNodeValue(metaNodes[i]));
     tlp::BoundingBox includeBB;
     metaNodeGlyph->getIncludeBoundingBox(includeBB);
     tlp::BoundingBox metaNodeBBTmp;
-    metaNodeBBTmp[0]=metaNodeBB.center()-Coord((metaNodeBB.width()/2.f)*(includeBB[0][0]*-2.f),(metaNodeBB.height()/2.f)*(includeBB[0][1]*-2.f),(metaNodeBB.depth()/2.f)*(includeBB[0][2]*-2.f));
-    metaNodeBBTmp[1]=metaNodeBB.center()+Coord((metaNodeBB.width()/2.f)*(includeBB[1][0]*2.f),(metaNodeBB.height()/2.f)*(includeBB[1][1]*2.f),(metaNodeBB.depth()/2.f)*(includeBB[1][2]*2.f));
-    metaNodeBB=metaNodeBBTmp;
+    metaNodeBBTmp[0] =
+        metaNodeBB.center() - Coord((metaNodeBB.width() / 2.f) * (includeBB[0][0] * -2.f), (metaNodeBB.height() / 2.f) * (includeBB[0][1] * -2.f),
+                                    (metaNodeBB.depth() / 2.f) * (includeBB[0][2] * -2.f));
+    metaNodeBBTmp[1] =
+        metaNodeBB.center() + Coord((metaNodeBB.width() / 2.f) * (includeBB[1][0] * 2.f), (metaNodeBB.height() / 2.f) * (includeBB[1][1] * 2.f),
+                                    (metaNodeBB.depth() / 2.f) * (includeBB[1][2] * 2.f));
+    metaNodeBB = metaNodeBBTmp;
 
-    Camera newCamera2=camera;
-    newCamera2.setEyes(newCamera2.getCenter()+Coord(0,0,1)*(newCamera2.getEyes()-newCamera2.getCenter()).norm());
-    newCamera2.setUp(Coord(0,1,0));
+    Camera newCamera2 = camera;
+    newCamera2.setEyes(newCamera2.getCenter() + Coord(0, 0, 1) * (newCamera2.getEyes() - newCamera2.getCenter()).norm());
+    newCamera2.setUp(Coord(0, 1, 0));
 
-    Coord first=newCamera2.worldTo2DViewport(metaNodeBB[0]);
-    Coord second=newCamera2.worldTo2DViewport(metaNodeBB[1]);
-    Coord center=const_cast<Camera&>(camera).worldTo2DViewport(metaNodeBB.center());
-    Coord size=second-first;
+    Coord first = newCamera2.worldTo2DViewport(metaNodeBB[0]);
+    Coord second = newCamera2.worldTo2DViewport(metaNodeBB[1]);
+    Coord center = const_cast<Camera &>(camera).worldTo2DViewport(metaNodeBB.center());
+    Coord size = second - first;
 
     Vec4i viewport;
-    viewport[0]=center[0]-size[0]/2;
-    viewport[1]=center[1]-size[1]/2;
-    viewport[2]=size[0];
-    viewport[3]=size[1];
+    viewport[0] = center[0] - size[0] / 2;
+    viewport[1] = center[1] - size[1] / 2;
+    viewport[2] = size[0];
+    viewport[3] = size[1];
 
-    viewport[0]=camera.getViewport()[0]+viewport[0]-viewport[2]/2;
-    viewport[1]=camera.getViewport()[1]+viewport[1]-viewport[3]/2;
-    viewport[2]*=2;
-    viewport[3]*=2;
+    viewport[0] = camera.getViewport()[0] + viewport[0] - viewport[2] / 2;
+    viewport[1] = camera.getViewport()[1] + viewport[1] - viewport[3] / 2;
+    viewport[2] *= 2;
+    viewport[3] *= 2;
 
-    if(viewport[2]==0 || viewport[3]==0)
+    if (viewport[2] == 0 || viewport[3] == 0)
       continue;
 
     subScene.setViewport(viewport);
@@ -1021,10 +1007,10 @@ void GlGraph::renderMetaNodes(const std::vector<tlp::node> &metaNodes, const Cam
 
     Camera *subSceneCamera = subScene.getMainLayer()->getCamera();
 
-    float baseNorm = (subSceneCamera->getEyes()-subSceneCamera->getCenter()).norm();
+    float baseNorm = (subSceneCamera->getEyes() - subSceneCamera->getCenter()).norm();
     subSceneCamera->setUp(camera.getUp());
-    subSceneCamera->setEyes(subSceneCamera->getCenter()+(eyeDirection*baseNorm));
-    subSceneCamera->setZoomFactor(subSceneCamera->getZoomFactor()*0.5);
+    subSceneCamera->setEyes(subSceneCamera->getCenter() + (eyeDirection * baseNorm));
+    subSceneCamera->setZoomFactor(subSceneCamera->getZoomFactor() * 0.5);
 
     // small hack to avoid z-fighting between the rendering of the metanode content
     // and the rendering of the metanode that occurs afterwards
@@ -1039,7 +1025,6 @@ void GlGraph::renderMetaNodes(const std::vector<tlp::node> &metaNodes, const Cam
     subScene.setViewport(viewport);
     subScene.initGlParameters();
   }
-
 }
 
 void GlGraph::renderNodes(const Camera &camera, const Light &light) {
@@ -1062,8 +1047,8 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
   vector<float> borderWidthsSelected;
   vector<Color> borderColorsSelected;
 
-  map<int, vector<node> >::const_iterator it = _nodesGlyphs.begin();
-  for( ; it != _nodesGlyphs.end() ; ++it) {
+  map<int, vector<node>>::const_iterator it = _nodesGlyphs.begin();
+  for (; it != _nodesGlyphs.end(); ++it) {
     centers.reserve(it->second.size());
     sizes.reserve(it->second.size());
     rotationAngles.reserve(it->second.size());
@@ -1071,7 +1056,7 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
     textures.reserve(it->second.size());
     borderWidths.reserve(it->second.size());
     borderColors.reserve(it->second.size());
-    for (size_t i = 0 ; i < it->second.size(); ++i) {
+    for (size_t i = 0; i < it->second.size(); ++i) {
       centers.push_back(_inputData.getElementLayout()->getNodeValue(it->second[i]));
       sizes.push_back(_inputData.getElementSize()->getNodeValue(it->second[i]));
       rotationAngles.push_back(Vec4f(0.0f, 0.0f, 1.0f, _inputData.getElementRotation()->getNodeValue(it->second[i])));
@@ -1081,7 +1066,7 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
         textures.push_back(_inputData.getElementTexture()->getNodeValue(it->second[i]));
         GlTextureManager::instance()->addTextureInAtlasFromFile(textures.back());
       } else {
-        Color pickColor = uintToColor(it->second[i].id+1);
+        Color pickColor = uintToColor(it->second[i].id + 1);
         colors.push_back(pickColor);
         borderColors.push_back(pickColor);
         textures.push_back("");
@@ -1102,7 +1087,8 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
     if (_renderingParameters.billboardedNodes()) {
       GlyphsRenderer::instance()->setBillboardMode(true);
     }
-    GlyphsRenderer::instance()->renderGlyphs(camera, light, it->first, centers, sizes, colors, textures, borderWidths, borderColors, rotationAngles, _graphElementsPickingMode);
+    GlyphsRenderer::instance()->renderGlyphs(camera, light, it->first, centers, sizes, colors, textures, borderWidths, borderColors, rotationAngles,
+                                             _graphElementsPickingMode);
     GlyphsRenderer::instance()->setBillboardMode(false);
 
     centers.clear();
@@ -1116,10 +1102,10 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
 
   if (!_graphElementsPickingMode) {
     glDisable(GL_STENCIL_TEST);
-    GlyphsRenderer::instance()->renderGlyphs(camera, light, tlp::NodeShape::CubeOutlinedTransparent, centersSelected, sizesSelected, colorsSelected, texturesSelected, borderWidthsSelected, borderColorsSelected, rotationAnglesSelected);
+    GlyphsRenderer::instance()->renderGlyphs(camera, light, tlp::NodeShape::CubeOutlinedTransparent, centersSelected, sizesSelected, colorsSelected,
+                                             texturesSelected, borderWidthsSelected, borderColorsSelected, rotationAnglesSelected);
     glEnable(GL_STENCIL_TEST);
   }
-
 }
 
 void GlGraph::renderNodesGlow(const vector<node> &nodes, const Camera &camera, const Light &light) {
@@ -1141,19 +1127,18 @@ void GlGraph::renderNodesGlow(const vector<node> &nodes, const Camera &camera, c
   colors.reserve(_graph->numberOfNodes());
   textures.reserve(_graph->numberOfNodes());
 
-
-  for (size_t i = 0 ; i < nodes.size() ; ++i) {
+  for (size_t i = 0; i < nodes.size(); ++i) {
     node n = nodes[i];
-    if (!_inputData.getElementGlow()->getNodeValue(n)) continue;
+    if (!_inputData.getElementGlow()->getNodeValue(n))
+      continue;
     centers.push_back(_inputData.getElementLayout()->getNodeValue(n));
     sizes.push_back(_inputData.getElementSize()->getNodeValue(n) * 2.f);
     Color nodeColor = _inputData.getElementColor()->getNodeValue(n);
     nodeColor.setA(128);
     colors.push_back(nodeColor);
-    textures.push_back(TulipBitmapDir+"radialGradientTexture.png");
-    GlTextureManager::instance()->addTextureInAtlasFromFile(TulipBitmapDir+"radialGradientTexture.png");
+    textures.push_back(TulipBitmapDir + "radialGradientTexture.png");
+    GlTextureManager::instance()->addTextureInAtlasFromFile(TulipBitmapDir + "radialGradientTexture.png");
   }
-
 
   if (_renderingParameters.billboardedNodes()) {
     GlyphsRenderer::instance()->setBillboardMode(true);
@@ -1161,25 +1146,25 @@ void GlGraph::renderNodesGlow(const vector<node> &nodes, const Camera &camera, c
   GlyphsRenderer::instance()->renderGlyphs(camera, light, NodeShape::Square, centers, sizes, colors, textures);
   GlyphsRenderer::instance()->setBillboardMode(false);
 
-
   glStencilMask(0xFF);
   glDepthMask(GL_TRUE);
-
 }
-
 
 void GlGraph::renderPointsNodesAndEdges(const Camera &camera, const std::vector<tlp::node> &pointsNodes, const std::vector<tlp::edge> &pointsEdges) {
 
-  if (pointsNodes.empty() && pointsEdges.empty()) return;
+  if (pointsNodes.empty() && pointsEdges.empty())
+    return;
 
   std::vector<float> pointsData;
-  pointsData.reserve((pointsNodes.size()+pointsEdges.size()) * 8);
+  pointsData.reserve((pointsNodes.size() + pointsEdges.size()) * 8);
 
-  for (size_t i = 0 ; i < pointsEdges.size() ; ++i) {
-    Coord pointEdge = (_inputData.getElementLayout()->getNodeValue(_graph->source(pointsEdges[i])) + _inputData.getElementLayout()->getNodeValue(_graph->target(pointsEdges[i]))) / 2.f;
+  for (size_t i = 0; i < pointsEdges.size(); ++i) {
+    Coord pointEdge = (_inputData.getElementLayout()->getNodeValue(_graph->source(pointsEdges[i])) +
+                       _inputData.getElementLayout()->getNodeValue(_graph->target(pointsEdges[i]))) /
+                      2.f;
     if (_graphElementsPickingMode) {
       addTlpVecToVecFloat(Vec4f(pointEdge, 2.0f), pointsData);
-      addColorToVecFloat(uintToColor(_graph->getRoot()->numberOfNodes() + pointsEdges[i].id+1), pointsData);
+      addColorToVecFloat(uintToColor(_graph->getRoot()->numberOfNodes() + pointsEdges[i].id + 1), pointsData);
     } else if (_inputData.getElementSelection()->getEdgeValue(pointsEdges[i])) {
       addTlpVecToVecFloat(Vec4f(pointEdge, 4.0f), pointsData);
       addColorToVecFloat(_renderingParameters.selectionColor(), pointsData);
@@ -1193,10 +1178,10 @@ void GlGraph::renderPointsNodesAndEdges(const Camera &camera, const std::vector<
     }
   }
 
-  for (size_t i = 0 ; i < pointsNodes.size() ; ++i) {
+  for (size_t i = 0; i < pointsNodes.size(); ++i) {
     if (_graphElementsPickingMode) {
       addTlpVecToVecFloat(Vec4f(_inputData.getElementLayout()->getNodeValue(pointsNodes[i]), 3.0f), pointsData);
-      addColorToVecFloat(uintToColor(pointsNodes[i].id+1), pointsData);
+      addColorToVecFloat(uintToColor(pointsNodes[i].id + 1), pointsData);
     } else if (_inputData.getElementSelection()->getNodeValue(pointsNodes[i])) {
       addTlpVecToVecFloat(Vec4f(_inputData.getElementLayout()->getNodeValue(pointsNodes[i]), 4.0f), pointsData);
       addColorToVecFloat(_renderingParameters.selectionColor(), pointsData);
@@ -1224,8 +1209,8 @@ void GlGraph::renderPointsNodesAndEdges(const Camera &camera, const std::vector<
   _flatShader->setUniformBool("u_pointsRendering", true);
   _flatShader->setUniformBool("u_globalPointSize", false);
   _flatShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), BUFFER_OFFSET(0));
-  _flatShader->setVertexAttribPointer("a_pointSize", 1, GL_FLOAT, GL_FALSE, 8 * sizeof(float), BUFFER_OFFSET(3*sizeof(float)));
-  _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), BUFFER_OFFSET(4*sizeof(float)));
+  _flatShader->setVertexAttribPointer("a_pointSize", 1, GL_FLOAT, GL_FALSE, 8 * sizeof(float), BUFFER_OFFSET(3 * sizeof(float)));
+  _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 8 * sizeof(float), BUFFER_OFFSET(4 * sizeof(float)));
   if (_renderingParameters.displayEdges() && !pointsEdges.empty()) {
     glStencilFunc(GL_LEQUAL, _renderingParameters.edgesStencil(), 0xFF);
     glDrawArrays(GL_POINTS, 0, pointsEdges.size());
@@ -1240,16 +1225,18 @@ void GlGraph::renderPointsNodesAndEdges(const Camera &camera, const std::vector<
 void GlGraph::getEdgeExtremityData(edge e, bool srcGlyph, tlp::Coord &position, tlp::Size &size, tlp::Vec4f &rotationAxisAndAngle) {
   const vector<Vec3f> &eeData = srcGlyph ? _srcEdgeExtremitiesData[e] : _tgtEdgeExtremitiesData[e];
   Vec3f dir = eeData[1] - eeData[0];
-  if (dir.norm() > 0) dir /= dir.norm();
+  if (dir.norm() > 0)
+    dir /= dir.norm();
 
-  position = eeData[1] - eeData[2]/2.f * dir;
+  position = eeData[1] - eeData[2] / 2.f * dir;
   size = eeData[2];
 
-  Coord cross = dir^Coord(0,1,0);
+  Coord cross = dir ^ Coord(0, 1, 0);
 
-  if (cross.norm() > 0) cross /= cross.norm();
+  if (cross.norm() > 0)
+    cross /= cross.norm();
 
-  float rotationAngle = -acos(dir.dotProduct(Coord(0,1,0)));
+  float rotationAngle = -acos(dir.dotProduct(Coord(0, 1, 0)));
   rotationAxisAndAngle = Vec4f(cross, rotationAngle);
 }
 
@@ -1273,7 +1260,7 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
     srcShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
   } else if (srcShape == tlp::EdgeExtremityShape::MaterialDesignIcon) {
     std::string icon = _inputData.getElementMaterialDesignIcon()->getEdgeValue(e);
-    srcShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon)+0xf000;
+    srcShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
   }
 
   if (tgtShape == tlp::EdgeExtremityShape::FontAwesomeIcon) {
@@ -1281,7 +1268,7 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
     tgtShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
   } else if (tgtShape == tlp::EdgeExtremityShape::MaterialDesignIcon) {
     std::string icon = _inputData.getElementMaterialDesignIcon()->getEdgeValue(e);
-    tgtShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon)+0xf000;
+    tgtShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
   }
 
   if (srcShape != EdgeExtremityShape::None) {
@@ -1303,7 +1290,7 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
         borderColor = _renderingParameters.selectionColor();
       }
     } else {
-      tlp::Color pickColor = uintToColor(_graph->getRoot()->numberOfNodes()+e.id+1);
+      tlp::Color pickColor = uintToColor(_graph->getRoot()->numberOfNodes() + e.id + 1);
       color = pickColor;
       borderColor = pickColor;
       texture = "";
@@ -1311,14 +1298,13 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
 
     borderWidth = _inputData.getElementBorderWidth()->getEdgeValue(e);
 
-
     bool swapYZ = false;
     if (srcShape == EdgeExtremityShape::Cone || srcShape == EdgeExtremityShape::Cylinder) {
       swapYZ = true;
     }
 
-    GlyphsRenderer::instance()->renderGlyph(camera, light, srcShape, center, size, color, texture, borderWidth, borderColor, rotationAxisAndAngle, _graphElementsPickingMode, swapYZ);
-
+    GlyphsRenderer::instance()->renderGlyph(camera, light, srcShape, center, size, color, texture, borderWidth, borderColor, rotationAxisAndAngle,
+                                            _graphElementsPickingMode, swapYZ);
   }
 
   if (tgtShape != EdgeExtremityShape::None) {
@@ -1336,14 +1322,14 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
 
     if (!_graphElementsPickingMode) {
       if (_inputData.getElementSelection()->getEdgeValue(e)) {
-        color =_renderingParameters.selectionColor();
+        color = _renderingParameters.selectionColor();
         borderColor = _renderingParameters.selectionColor();
       }
     } else {
-      tlp::Color pickColor = uintToColor(_graph->getRoot()->numberOfNodes()+e.id+1);
+      tlp::Color pickColor = uintToColor(_graph->getRoot()->numberOfNodes() + e.id + 1);
       color = pickColor;
       borderColor = pickColor;
-      texture  = "";
+      texture = "";
     }
 
     borderWidth = _inputData.getElementBorderWidth()->getEdgeValue(e);
@@ -1353,8 +1339,8 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
       swapYZ = true;
     }
 
-    GlyphsRenderer::instance()->renderGlyph(camera, light, tgtShape, center, size, color, texture, borderWidth, borderColor, rotationAxisAndAngle, _graphElementsPickingMode, swapYZ);
-
+    GlyphsRenderer::instance()->renderGlyph(camera, light, tgtShape, center, size, color, texture, borderWidth, borderColor, rotationAxisAndAngle,
+                                            _graphElementsPickingMode, swapYZ);
   }
 }
 
@@ -1363,9 +1349,9 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
   glStencilFunc(GL_LEQUAL, _renderingParameters.edgesStencil(), 0xFF);
 
   std::vector<unsigned int> edgesLinesRenderingIndices;
-  set<GlShaderProgram*> globalUniformsSet;
+  set<GlShaderProgram *> globalUniformsSet;
 
-  for (size_t i = 0 ; i < edges.size() ; ++i) {
+  for (size_t i = 0; i < edges.size(); ++i) {
     edge e = edges[i];
     unsigned int nbCurvePoints = _edgePoints[e].size();
 
@@ -1388,13 +1374,12 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
     }
 
     if (_graphElementsPickingMode) {
-      srcColor = tgtColor = borderColor = uintToColor(_graph->getRoot()->numberOfNodes()+e.id+1);
+      srcColor = tgtColor = borderColor = uintToColor(_graph->getRoot()->numberOfNodes() + e.id + 1);
     } else if (_inputData.getElementSelection()->getEdgeValue(e)) {
       srcColor = tgtColor = borderColor = _renderingParameters.selectionColor();
     }
 
     int edgeShape = _inputData.getElementShape()->getEdgeValue(e);
-
 
     unsigned int indicesOffset = _maxEdgePoints;
     bool bezierMode = (_edgePoints[e].size() > 2) && (edgeShape == tlp::EdgeShape::BezierCurve);
@@ -1425,7 +1410,7 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
       float length = 0;
       if (lineMode) {
         edgePoints.push_back(Vec4f(srcCoord, length));
-        for (size_t j = 1 ; j < _edgePoints[e].size() - 1; ++j) {
+        for (size_t j = 1; j < _edgePoints[e].size() - 1; ++j) {
           if (j > 0) {
             if (!catmullMode) {
               length += _edgePoints[e][j].dist(edgePoints.back());
@@ -1442,12 +1427,12 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
         }
         edgePoints.push_back(Vec4f(tgtCoord, length));
       } else {
-        for (size_t j = 0 ; j < _edgePoints[e].size() ; ++j) {
+        for (size_t j = 0; j < _edgePoints[e].size(); ++j) {
           if (j > 0) {
             if (!catmullMode) {
-              length += _edgePoints[e][j].dist(_edgePoints[e][j-1]);
+              length += _edgePoints[e][j].dist(_edgePoints[e][j - 1]);
             } else {
-              length += pow(_edgePoints[e][j].dist(_edgePoints[e][j-1]), alpha);
+              length += pow(_edgePoints[e][j].dist(_edgePoints[e][j - 1]), alpha);
             }
           }
           edgePoints.push_back(Vec4f(_edgePoints[e][j], length));
@@ -1488,8 +1473,8 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
       edgeShader->setUniformFloat("u_stepKnots", stepKnots);
 
       if (!lineMode && billboard && !_graphElementsPickingMode) {
-        GlTextureManager::instance()->addTextureFromFile(TulipBitmapDir+"cylinderTexture.png");
-        GlTextureManager::instance()->bindTexture(TulipBitmapDir+"cylinderTexture.png");
+        GlTextureManager::instance()->addTextureFromFile(TulipBitmapDir + "cylinderTexture.png");
+        GlTextureManager::instance()->bindTexture(TulipBitmapDir + "cylinderTexture.png");
       }
 
       GlTextureManager::instance()->addTextureFromFile(edgeTexture, true);
@@ -1502,13 +1487,13 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
         _curveEdgeIndicesBuffer->bind();
         _curveEdgeRenderingDataBuffer->bind();
       }
-      edgeShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), BUFFER_OFFSET(0));
+      edgeShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), BUFFER_OFFSET(0));
 
       if (lineMode) {
         glLineWidth(2.0);
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, BUFFER_OFFSET(indicesOffset*2*sizeof(unsigned short)));
+        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, BUFFER_OFFSET(indicesOffset * 2 * sizeof(unsigned short)));
       } else {
-        glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints*2, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
+        glDrawElements(GL_TRIANGLE_STRIP, nbCurvePoints * 2, GL_UNSIGNED_SHORT, BUFFER_OFFSET(0));
       }
 
       GlTextureManager::instance()->unbindTexture(edgeTexture);
@@ -1524,8 +1509,8 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
         edgeShader->setUniformColor("u_endColor", tgtColor);
 
         glLineWidth(_inputData.getElementBorderWidth()->getEdgeValue(e));
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, BUFFER_OFFSET(indicesOffset*2*sizeof(unsigned short)));
-        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, BUFFER_OFFSET(indicesOffset*3*sizeof(unsigned short)));
+        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, BUFFER_OFFSET(indicesOffset * 2 * sizeof(unsigned short)));
+        glDrawElements(GL_LINE_STRIP, nbCurvePoints, GL_UNSIGNED_SHORT, BUFFER_OFFSET(indicesOffset * 3 * sizeof(unsigned short)));
       }
 
       if (!lineMode && _renderingParameters.displayEdgesExtremities()) {
@@ -1549,31 +1534,26 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
     _flatShader->setUniformBool("u_pointsRendering", false);
     _flatShader->setVertexAttribPointer("a_position", 3, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(0));
     if (_graphElementsPickingMode) {
-      _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(11*sizeof(float)));
+      _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(11 * sizeof(float)));
     } else if (_renderingParameters.interpolateEdgesColors()) {
-      _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(7*sizeof(float)));
+      _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(7 * sizeof(float)));
     } else {
-      _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(3*sizeof(float)));
+      _flatShader->setVertexAttribPointer("a_color", 4, GL_FLOAT, GL_FALSE, 15 * sizeof(float), BUFFER_OFFSET(3 * sizeof(float)));
     }
     glLineWidth(2.0);
     glDrawElements(GL_LINES, edgesLinesRenderingIndices.size(), GL_UNSIGNED_INT, BUFFER_OFFSET(0));
     _flatShader->desactivate();
-
   }
 
   GlBuffer::release(GlBuffer::VertexBuffer);
   GlBuffer::release(GlBuffer::IndexBuffer);
 
   if (!lineMode && billboard && !_graphElementsPickingMode) {
-    GlTextureManager::instance()->unbindTexture(TulipBitmapDir+"cylinderTexture.png");
+    GlTextureManager::instance()->unbindTexture(TulipBitmapDir + "cylinderTexture.png");
   }
-
 }
 
-bool GlGraph::pickNodesAndEdges(const Camera &camera,
-                                const int x, const int y,
-                                const int width, const int height,
-                                std::set<tlp::node> &selectedNodes,
+bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height, std::set<tlp::node> &selectedNodes,
                                 std::set<tlp::edge> &selectedEdges, bool singleSelection) {
 
   selectedNodes.clear();
@@ -1582,7 +1562,7 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera,
   GlFrameBufferObject *fbo = new GlFrameBufferObject(viewport[2], viewport[3], GlFrameBufferObject::NoAttachment);
   fbo->bind();
   glViewport(0, 0, viewport[2], viewport[3]);
-  unsigned int bufferSize = width*height*4;
+  unsigned int bufferSize = width * height * 4;
   unsigned char *buffer = new unsigned char[bufferSize];
   _selectionViewport = Vec4i(x, y, width, height);
   setGraphElementsPickingMode(true);
@@ -1594,10 +1574,11 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera,
     glClear(GL_COLOR_BUFFER_BIT);
     GlEntity::draw(camera);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
-    for (unsigned int i = 0 ; i < bufferSize ; i += 4) {
-      tlp::Color color(buffer[i], buffer[i+1], buffer[i+2], buffer[i+3]);
+    for (unsigned int i = 0; i < bufferSize; i += 4) {
+      tlp::Color color(buffer[i], buffer[i + 1], buffer[i + 2], buffer[i + 3]);
       unsigned int id = colorToUint(color);
-      if (id == 0) continue;
+      if (id == 0)
+        continue;
       id -= 1;
       if (id < _graph->getRoot()->numberOfNodes()) {
         tlp::node n = tlp::node(id);
@@ -1627,23 +1608,20 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera,
   setGraphElementsPickingMode(false);
   _nodesToDiscard.clear();
   _edgesToDiscard.clear();
-  delete [] buffer;
+  delete[] buffer;
   fbo->release();
   delete fbo;
 
   return !selectedNodes.empty() || !selectedEdges.empty();
 }
 
-bool GlGraph::pickNodeOrEdge(const Camera &camera,
-                             const int x, const int y,
-                             tlp::node &pickedNode,
-                             tlp::edge &pickedEdge) {
+bool GlGraph::pickNodeOrEdge(const Camera &camera, const int x, const int y, tlp::node &pickedNode, tlp::edge &pickedEdge) {
 
   pickedNode = tlp::node();
   pickedEdge = tlp::edge();
   std::set<tlp::node> selectedNodes;
   std::set<tlp::edge> selectedEdges;
-  bool ret = pickNodesAndEdges(camera, x-1, y-1, 3, 3, selectedNodes, selectedEdges, true);
+  bool ret = pickNodesAndEdges(camera, x - 1, y - 1, 3, 3, selectedNodes, selectedEdges, true);
   if (!selectedNodes.empty()) {
     pickedNode = *(selectedNodes.begin());
   } else if (!selectedEdges.empty()) {
@@ -1702,12 +1680,12 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
   float maxSrcSize = max(srcSize[0], srcSize[1]);
   float maxTgtSize = max(tgtSize[0], tgtSize[1]);
 
-  BoundingBox srcBB(srcCoord - srcSize/2.f, srcCoord + srcSize/2.f);
-  BoundingBox tgtBB(tgtCoord - tgtSize/2.f, tgtCoord + tgtSize/2.f);
+  BoundingBox srcBB(srcCoord - srcSize / 2.f, srcCoord + srcSize / 2.f);
+  BoundingBox tgtBB(tgtCoord - tgtSize / 2.f, tgtCoord + tgtSize / 2.f);
 
   const vector<Coord> &oribends = _inputData.getElementLayout()->getEdgeValue(e);
   vector<Coord> bends;
-  for (size_t i = 0 ; i < oribends.size() ; ++i) {
+  for (size_t i = 0; i < oribends.size(); ++i) {
     if (!srcBB.contains(oribends[i]) && !tgtBB.contains(oribends[i])) {
       if (bends.empty() || oribends[i] != bends.back()) {
         bends.push_back(oribends[i]);
@@ -1769,11 +1747,12 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
         Vec4f glyphRot;
 
         getEdgeExtremityData(e, true, glyphPos, glyphSize, glyphRot);
-        BoundingBox glyphBB(glyphPos-glyphSize/2.f, glyphPos+glyphSize/2.f);
+        BoundingBox glyphBB(glyphPos - glyphSize / 2.f, glyphPos + glyphSize / 2.f);
         if (glyphBB.contains(bends.front())) {
           while (glyphBB.contains(bends.front())) {
             bends.erase(bends.begin());
-            if (bends.empty()) break;
+            if (bends.empty())
+              break;
           }
         } else {
           srcGlyphOk = true;
@@ -1812,7 +1791,7 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
         lineAnchor *= eeData.back()[0];
         lineAnchor += tgtAnchor;
       }
-      edgePoints[edgePoints.size()-1] = lineAnchor;
+      edgePoints[edgePoints.size() - 1] = lineAnchor;
 
       if (!bends.empty()) {
         Coord glyphPos;
@@ -1820,11 +1799,12 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
         Vec4f glyphRot;
 
         getEdgeExtremityData(e, false, glyphPos, glyphSize, glyphRot);
-        BoundingBox glyphBB(glyphPos-glyphSize/2.f, glyphPos+glyphSize/2.f);
+        BoundingBox glyphBB(glyphPos - glyphSize / 2.f, glyphPos + glyphSize / 2.f);
         if (glyphBB.contains(bends.back())) {
           while (glyphBB.contains(bends.back())) {
             bends.erase(bends.end());
-            if (bends.empty()) break;
+            if (bends.empty())
+              break;
           }
         } else {
           tgtGlyphOk = true;
@@ -1837,7 +1817,6 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
     }
 
     glyphsOk = srcGlyphOk && tgtGlyphOk;
-
   }
 
   if (edgePoints.size() == 2 && srcAnchor.dist(tgtAnchor) < 1e-6) {
@@ -1851,7 +1830,6 @@ void GlGraph::prepareEdgeData(tlp::edge e) {
   _maxEdgePoints = std::max(_maxEdgePoints, edgePoints.size());
 
   _edgesDataNeedUpload = true;
-
 }
 
 void GlGraph::treatEvent(const tlp::Event &message) {
@@ -1860,12 +1838,13 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     return;
   }
   if (message.type() == Event::TLP_DELETE && dynamic_cast<tlp::PropertyInterface *>(message.sender())) {
-    _observedProperties.erase(static_cast<PropertyInterface*>(message.sender()));
+    _observedProperties.erase(static_cast<PropertyInterface *>(message.sender()));
     return;
   }
-  if (message.type() != Event::TLP_MODIFICATION) return;
+  if (message.type() != Event::TLP_MODIFICATION)
+    return;
 
-  if (dynamic_cast<GlGraphInputData*>(message.sender())) {
+  if (dynamic_cast<GlGraphInputData *>(message.sender())) {
     clearObservers();
     initObservers();
     return;
@@ -1878,29 +1857,28 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     if (gEvt->getType() == GraphEvent::TLP_ADD_NODE || gEvt->getType() == GraphEvent::TLP_DEL_NODE) {
       _updateQuadTree = true;
       _edgesDataNeedUpload = true;
-    } else if (gEvt->getType() == GraphEvent::TLP_ADD_EDGE ||
-               gEvt->getType() == GraphEvent::TLP_AFTER_SET_ENDS ||
+    } else if (gEvt->getType() == GraphEvent::TLP_ADD_EDGE || gEvt->getType() == GraphEvent::TLP_AFTER_SET_ENDS ||
                gEvt->getType() == GraphEvent::TLP_REVERSE_EDGE) {
       _edgesToUpdate.insert(gEvt->getEdge());
     } else if (gEvt->getType() == GraphEvent::TLP_ADD_EDGES) {
       const std::vector<edge> edges = gEvt->getEdges();
-      for (size_t i = 0 ; i < edges.size() ; ++i) {
+      for (size_t i = 0; i < edges.size(); ++i) {
         _edgesToUpdate.insert(edges[i]);
       }
     } else if (gEvt->getType() == GraphEvent::TLP_DEL_EDGE) {
       _updateQuadTree = true;
     }
-  }
-  else if (pEvt && (pEvt->getProperty() == _inputData.getElementLayout() || pEvt->getProperty() == _inputData.getElementSize() || pEvt->getProperty() == _inputData.getElementColor())) {
+  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementLayout() || pEvt->getProperty() == _inputData.getElementSize() ||
+                      pEvt->getProperty() == _inputData.getElementColor())) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && _graph->isElement(pEvt->getNode())) {
       _updateQuadTree = true;
-      for(edge e : _graph->getInOutEdges(pEvt->getNode())) {
+      for (edge e : _graph->getInOutEdges(pEvt->getNode())) {
         _edgesToUpdate.insert(e);
       }
     }
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
       _updateQuadTree = true;
-      for(edge e : _graph->getEdges()) {
+      for (edge e : _graph->getEdges()) {
         _edgesToUpdate.insert(e);
       }
     }
@@ -1911,13 +1889,14 @@ void GlGraph::treatEvent(const tlp::Event &message) {
     }
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE &&
         (pEvt->getProperty() == _inputData.getElementLayout() || pEvt->getProperty() == _inputData.getElementColor())) {
-      for(edge e : _graph->getEdges()) {
+      for (edge e : _graph->getEdges()) {
         _edgesToUpdate.insert(e);
       }
     }
-  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementShape() || pEvt->getProperty() == _inputData.getElementBorderWidth() || pEvt->getProperty() == _inputData.getElementBorderColor())) {
+  } else if (pEvt && (pEvt->getProperty() == _inputData.getElementShape() || pEvt->getProperty() == _inputData.getElementBorderWidth() ||
+                      pEvt->getProperty() == _inputData.getElementBorderColor())) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
-      for(edge e : _graph->getEdges()) {
+      for (edge e : _graph->getEdges()) {
         _edgesToUpdate.insert(e);
       }
     }
@@ -1935,7 +1914,7 @@ void GlGraph::treatEvent(const tlp::Event &message) {
       _labelsRenderer->initFont(_inputData.getElementFont()->getEdgeDefaultValue());
     }
   } else if (rpEvt && (rpEvt->getType() == GlGraphRenderingParametersEvent::DISPLAY_EDGES_EXTREMITIES_TOGGLED)) {
-    for(edge e : _graph->getEdges()) {
+    for (edge e : _graph->getEdges()) {
       _edgesToUpdate.insert(e);
     }
   }
@@ -1946,7 +1925,7 @@ void GlGraph::treatEvents(const std::vector<tlp::Event> &) {
   if (!_edgesToUpdate.empty()) {
 
     set<edge>::iterator itE;
-    for (itE = _edgesToUpdate.begin() ; itE != _edgesToUpdate.end() ; ++itE) {
+    for (itE = _edgesToUpdate.begin(); itE != _edgesToUpdate.end(); ++itE) {
       prepareEdgeData(*itE);
     }
 
@@ -1962,5 +1941,4 @@ void GlGraph::treatEvents(const std::vector<tlp::Event> &) {
   }
 
   notifyModified();
-
 }

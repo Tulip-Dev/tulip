@@ -24,10 +24,10 @@
 using namespace std;
 using namespace tlp;
 //=================================================================
-PlanarityTest * PlanarityTest::instance=nullptr;
+PlanarityTest *PlanarityTest::instance = nullptr;
 //=================================================================
-bool PlanarityTest::isPlanar(Graph* graph) {
-  if(instance==nullptr)
+bool PlanarityTest::isPlanar(Graph *graph) {
+  if (instance == nullptr)
     instance = new PlanarityTest();
 
   Observable::holdObservers();
@@ -35,7 +35,7 @@ bool PlanarityTest::isPlanar(Graph* graph) {
   Observable::unholdObservers();
   return result;
 }
-bool PlanarityTest::isPlanarEmbedding(const tlp::Graph* graph) {
+bool PlanarityTest::isPlanarEmbedding(const tlp::Graph *graph) {
   return PlanarityTestImpl::isPlanarEmbedding(graph);
 }
 //=================================================================
@@ -50,14 +50,14 @@ bool PlanarityTest::planarEmbedding(Graph *graph) {
   planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
 
-  for (; it!=addedEdges.end(); ++it)
+  for (; it != addedEdges.end(); ++it)
     graph->delEdge(*it, true);
 
   Observable::unholdObservers();
   return true;
 }
 //=================================================================
-list<edge> PlanarityTest::getObstructionsEdges(Graph* graph) {
+list<edge> PlanarityTest::getObstructionsEdges(Graph *graph) {
   if (PlanarityTest::isPlanar(graph))
     return list<edge>();
 
@@ -70,7 +70,7 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph* graph) {
   {
     vector<edge>::const_iterator it = addedEdges.begin();
 
-    for (; it!=addedEdges.end(); ++it)
+    for (; it != addedEdges.end(); ++it)
       graph->delEdge(*it, true);
   }
   Observable::unholdObservers();
@@ -85,14 +85,14 @@ list<edge> PlanarityTest::getObstructionsEdges(Graph* graph) {
   return result;
 }
 //=================================================================
-bool PlanarityTest::compute(Graph* graph) {
+bool PlanarityTest::compute(Graph *graph) {
 
-  if (resultsBuffer.find(graph)!=resultsBuffer.end())
+  if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
   unsigned int nbOfNodes = graph->numberOfNodes();
 
-  if (nbOfNodes==0) {
+  if (nbOfNodes == 0) {
     resultsBuffer[graph] = true;
     return true;
   }
@@ -109,24 +109,25 @@ bool PlanarityTest::compute(Graph* graph) {
   resultsBuffer[graph] = planarTest.isPlanar(true);
   vector<edge>::const_iterator it = addedEdges.begin();
 
-  for (; it!=addedEdges.end(); ++it)
+  for (; it != addedEdges.end(); ++it)
     graph->delEdge(*it, true);
 
   graph->addListener(this);
   return resultsBuffer[graph];
 }
 //=================================================================
-void PlanarityTest::treatEvent(const Event& evt) {
-  const GraphEvent* gEvt = dynamic_cast<const GraphEvent*>(&evt);
+void PlanarityTest::treatEvent(const Event &evt) {
+  const GraphEvent *gEvt = dynamic_cast<const GraphEvent *>(&evt);
 
   if (gEvt) {
-    Graph* graph = gEvt->getGraph();
+    Graph *graph = gEvt->getGraph();
 
-    switch(gEvt->getType()) {
+    switch (gEvt->getType()) {
     case GraphEvent::TLP_DEL_NODE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -134,8 +135,9 @@ void PlanarityTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_ADD_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (!resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (!resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -143,8 +145,9 @@ void PlanarityTest::treatEvent(const Event& evt) {
 
     case GraphEvent::TLP_DEL_EDGE:
 
-      if (resultsBuffer.find(graph)!=resultsBuffer.end())
-        if (resultsBuffer[graph]) return;
+      if (resultsBuffer.find(graph) != resultsBuffer.end())
+        if (resultsBuffer[graph])
+          return;
 
       graph->removeListener(this);
       resultsBuffer.erase(graph);
@@ -153,11 +156,10 @@ void PlanarityTest::treatEvent(const Event& evt) {
     default:
       break;
     }
-  }
-  else {
+  } else {
     // From my point of view the use of dynamic_cast should be correct
     // but it fails, so I use reinterpret_cast (pm)
-    Graph* graph = reinterpret_cast<Graph *>(evt.sender());
+    Graph *graph = reinterpret_cast<Graph *>(evt.sender());
 
     if (graph && evt.type() == Event::TLP_DELETE)
       resultsBuffer.erase(graph);

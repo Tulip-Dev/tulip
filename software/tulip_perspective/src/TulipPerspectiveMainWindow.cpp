@@ -24,18 +24,19 @@
 #include <tulip/Perspective.h>
 #include <tulip/TulipProject.h>
 
-TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent): QMainWindow(parent), _project(nullptr), _title(title) {
+TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
+    : QMainWindow(parent), _project(nullptr), _title(title) {
 #ifdef MEMORYCHECKER_ON
-  QAction* a1 = new QAction(this);
+  QAction *a1 = new QAction(this);
   a1->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
   a1->setShortcutContext(Qt::ApplicationShortcut);
-  connect(a1,SIGNAL(triggered()),this,SLOT(clearMemoryChecker()));
+  connect(a1, SIGNAL(triggered()), this, SLOT(clearMemoryChecker()));
   addAction(a1);
 
-  QAction* a2 = new QAction(this);
+  QAction *a2 = new QAction(this);
   a2->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_P));
   a2->setShortcutContext(Qt::ApplicationShortcut);
-  connect(a2,SIGNAL(triggered()),this,SLOT(printMemoryChecker()));
+  connect(a2, SIGNAL(triggered()), this, SLOT(printMemoryChecker()));
   addAction(a2);
 #endif // MEMORYCHECKER_ON
 }
@@ -52,21 +53,19 @@ void TulipPerspectiveProcessMainWindow::clearMemoryChecker() {
 #endif // MEMORYCHECKER_ON
 }
 
-void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent* event) {
+void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent *event) {
   if (tlp::Perspective::instance()->terminated()) {
     QMainWindow::closeEvent(event);
-  }
-  else
+  } else
     event->ignore();
 }
 
-void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject* project) {
+void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject *project) {
   _project = project;
-  connect(project, SIGNAL(projectFileChanged(const QString&)),
-          this, SLOT(projectFileChanged(const QString&)));
+  connect(project, SIGNAL(projectFileChanged(const QString &)), this, SLOT(projectFileChanged(const QString &)));
 }
 
-void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projectFile) {
+void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString &projectFile) {
   QString wTitle(_title);
 
   wTitle += QString(" [") + _project->perspective() + "]";

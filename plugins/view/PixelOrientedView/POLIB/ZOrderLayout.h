@@ -26,11 +26,12 @@ namespace pocore {
 class ZorderLayout : public LayoutFunction {
 public:
   ZorderLayout(unsigned char order);
-  Vec2i  project (const unsigned int id) const;
-  unsigned int unproject (const Vec2i& ) const;
+  Vec2i project(const unsigned int id) const;
+  unsigned int unproject(const Vec2i &) const;
+
 private:
   unsigned char order;
   int shift;
 };
 }
-#endif //ZORDERLAYOUT_H
+#endif // ZORDERLAYOUT_H

@@ -40,7 +40,6 @@
 
 namespace tlp {
 
-
 class DoubleProperty;
 class IntegerProperty;
 class LayoutProperty;
@@ -51,13 +50,12 @@ class GlGraphInputData;
 class TLP_GLES_SCOPE GlCPULODCalculator : public GlLODCalculator {
 
 public:
-
   GlCPULODCalculator();
   ~GlCPULODCalculator();
 
   void setGraph(tlp::Graph *graph, GlGraphInputData *inputData, GlGraphRenderingParameters *renderingParameters);
 
-  void compute(Camera *camera, const tlp::Vec4i &selectionViewport = tlp::Vec4i(-1,-1,-1,-1));
+  void compute(Camera *camera, const tlp::Vec4i &selectionViewport = tlp::Vec4i(-1, -1, -1, -1));
 
   void setSceneBoundingBox(const tlp::BoundingBox &sceneBoundingBox) {
     _sceneBoundingBox = sceneBoundingBox;
@@ -76,11 +74,11 @@ public:
   void addEdge(const tlp::edge e);
 
 protected:
-
   tlp::BoundingBox getNodeBoundingBox(tlp::node n);
   tlp::BoundingBox getEdgeBoundingBox(tlp::edge e);
 
-  virtual void computeFor3DCamera(const tlp::Coord &eye, const tlp::MatrixGL &transformMatrix, const tlp::Vec4i &globalViewport, const tlp::Vec4i &currentViewport);
+  virtual void computeFor3DCamera(const tlp::Coord &eye, const tlp::MatrixGL &transformMatrix, const tlp::Vec4i &globalViewport,
+                                  const tlp::Vec4i &currentViewport);
 
   virtual void computeFor2DCamera(const tlp::Vec4i &globalViewport, const tlp::Vec4i &currentViewport);
 
@@ -99,10 +97,7 @@ protected:
   std::map<tlp::Size, float> _edgeSizeLodCache;
 
   GlGraphRenderingParameters *_renderingParameters;
-
 };
-
 }
 
 #endif // GLCPULODCALCULATOR_H
-

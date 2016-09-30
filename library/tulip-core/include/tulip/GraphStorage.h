@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef GRAPHSTORAGE_H
 #define GRAPHSTORAGE_H
 #include <cassert>
@@ -40,7 +39,8 @@ namespace tlp {
   */
 class GraphStorageIdsMemento {
 public:
-  virtual ~GraphStorageIdsMemento() {}
+  virtual ~GraphStorageIdsMemento() {
+  }
 };
 //===========================================
 /**
@@ -98,7 +98,7 @@ public:
   /**
    * @brief restore adjacency edges of a given node
    */
-  void restoreAdj(const node n, const std::vector<edge>& edges);
+  void restoreAdj(const node n, const std::vector<edge> &edges);
   //=======================================================
   /**
    * @brief Return the first node of graph
@@ -110,50 +110,49 @@ public:
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    * @complexity: o(1)
    */
-  Iterator<node>* getNodes() const;
+  Iterator<node> *getNodes() const;
   //=======================================================
   /**
    * @brief Return the current state of the ids management
    * must be deleted by the caller
    * this can be used for push/pop
    */
-  const GraphStorageIdsMemento* getIdsMemento();
+  const GraphStorageIdsMemento *getIdsMemento();
   //=======================================================
   /**
    * @brief  restore a state of the ids management
    */
-  void restoreIdsMemento(const GraphStorageIdsMemento*);
+  void restoreIdsMemento(const GraphStorageIdsMemento *);
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on edges of the graph
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getEdges() const;
+  Iterator<edge> *getEdges() const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent edges of the node n
    * @warning: be careful that loops appear twice
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getInOutEdges(const node n) const;
+  Iterator<edge> *getInOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief get adjacency edges of a given node
    */
-  void getInOutEdges(const node n, std::vector<edge>& edges,
-                     bool loopsOnlyOnce = false) const;
+  void getInOutEdges(const node n, std::vector<edge> &edges, bool loopsOnlyOnce = false) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getOutEdges(const node n) const;
+  Iterator<edge> *getOutEdges(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in edges of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge>* getInEdges(const node n) const;
+  Iterator<edge> *getInEdges(const node n) const;
   //=======================================================
   /**
    * @brief Returns if edges exist between two nodes
@@ -164,27 +163,26 @@ public:
    * @param onlyFirst If true only the first edge found will be returned
    * @return true if an edge has been bound
    */
-  bool getEdges(const node source, const node target, bool directed,
-                std::vector<edge>& edges, bool onlyFirst = false) const;
+  bool getEdges(const node source, const node target, bool directed, std::vector<edge> &edges, bool onlyFirst = false) const;
 
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getInOutNodes(const node n) const;
+  Iterator<node> *getInOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on in nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getInNodes(const node n) const;
+  Iterator<node> *getInNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out nodes of the node n
    * @warning: The returned iterator must be deleted by the caller to prevent memory leaks
    */
-  Iterator<node>* getOutNodes(const node n) const;
+  Iterator<node> *getOutNodes(const node n) const;
   //=======================================================
   /**
    * @brief Return the degree of a node
@@ -214,7 +212,7 @@ public:
   /**
    * @brief Return the extremities of an edge (src, target)
    */
-  const std::pair<node, node>& ends(const edge e) const;
+  const std::pair<node, node> &ends(const edge e) const;
   //=======================================================
   /**
    * @brief return the first extremity (considered as source if the graph is directed) of an edge
@@ -262,7 +260,7 @@ public:
   /**
    * \brief Set the ordering of edges around n according to their order in v.
    */
-  void setEdgeOrder(const node n, const std::vector<edge> &v );
+  void setEdgeOrder(const node n, const std::vector<edge> &v);
   //=======================================================
   /**
    * \brief swap to edge in the ordered adjacency vector
@@ -294,7 +292,7 @@ public:
    * is cleared before adding nodes
    * @complexity: o(1)
    */
-  void addNodes(unsigned int nb, std::vector<node>* addedNodes = nullptr);
+  void addNodes(unsigned int nb, std::vector<node> *addedNodes = nullptr);
   //=======================================================
   /**
    * @brief Add the given nodes in the structure
@@ -302,7 +300,7 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  void restoreNodes(const std::vector<node>& addedNodes);
+  void restoreNodes(const std::vector<node> &addedNodes);
   //=======================================================
   /**
    * @brief remove a node from the nodes structure only
@@ -331,8 +329,7 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  edge addEdge(const node src, const node tgt,
-               const edge e, bool updateEndsEdges);
+  edge addEdge(const node src, const node tgt, const edge e, bool updateEndsEdges);
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it
@@ -349,8 +346,7 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  void addEdges(const std::vector<std::pair<node, node> >& edges,
-                std::vector<edge>* addedEdges = nullptr);
+  void addEdges(const std::vector<std::pair<node, node>> &edges, std::vector<edge> *addedEdges = nullptr);
   //=======================================================
   /**
    * @brief restore edges in the structure and returns them
@@ -359,9 +355,8 @@ public:
    * thus any iterators existing for
    * these structures will be devalidated.
    */
-  void restoreEdges(const std::vector<edge>& edgesToRestore,
-                    const std::vector<std::pair<node, node> >& ends);
-//=======================================================
+  void restoreEdges(const std::vector<edge> &edgesToRestore, const std::vector<std::pair<node, node>> &ends);
+  //=======================================================
   /**
    * @brief Delete an edge in the graph
    * @warning: That operation modify the array of edges
@@ -386,7 +381,7 @@ public:
    */
   void delAllNodes();
   //=======================================================
-private :
+private:
   // specific types
   typedef SimpleVector<edge> EdgeVector;
 
@@ -394,10 +389,11 @@ private :
     EdgeVector edges;
     unsigned int outDegree;
 
-    EdgeContainer():outDegree(0) {}
+    EdgeContainer() : outDegree(0) {
+    }
   };
   typedef std::vector<EdgeContainer> Nodes;
-  typedef std::vector<std::pair< node , node > > Edges;
+  typedef std::vector<std::pair<node, node>> Edges;
 
   // data members
   mutable Edges edges;

@@ -44,8 +44,7 @@ using namespace std;
 using namespace tlp;
 
 //=============================================================================
-RenamePropertyDialog::RenamePropertyDialog(QWidget* parent)
-  : QDialog(parent),ui(new Ui::RenamePropertyDialogData()) {
+RenamePropertyDialog::RenamePropertyDialog(QWidget *parent) : QDialog(parent), ui(new Ui::RenamePropertyDialogData()) {
   ui->setupUi(this);
   ui->buttonBox->button(QDialogButtonBox::Ok)->setText("&Rename");
 }
@@ -54,10 +53,9 @@ RenamePropertyDialog::~RenamePropertyDialog() {
   delete ui;
 }
 
-bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
-    QWidget* parent) {
+bool RenamePropertyDialog::renameProperty(PropertyInterface *prop, QWidget *parent) {
   if (prop == nullptr) {
-    QMessageBox::critical(parent,tr("Error during the renaming"), "The property is nullptr");
+    QMessageBox::critical(parent, tr("Error during the renaming"), "The property is nullptr");
     return false;
   }
 
@@ -69,14 +67,13 @@ bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
     std::string propertyName;
     bool valid = true;
 
-    //Check if parameters are valid.
+    // Check if parameters are valid.
     propertyName = QStringToTlpString(dialog.ui->propertyNameLineEdit->text());
 
     if (propertyName.empty()) {
       valid = false;
       errorMsg = tr("Cannot rename a property with an empty name");
-    }
-    else if (prop->getGraph()->existLocalProperty(propertyName)) {
+    } else if (prop->getGraph()->existLocalProperty(propertyName)) {
       valid = false;
       errorMsg = tr("A local property named '") + tlpStringToQString(propertyName) + "'\n already exists";
     }
@@ -87,7 +84,7 @@ bool RenamePropertyDialog::renameProperty(PropertyInterface* prop,
     }
 
     if (!valid)
-      QMessageBox::critical(parent,tr("Error during the renaming"),errorMsg);
+      QMessageBox::critical(parent, tr("Error during the renaming"), errorMsg);
     else
       return true;
   }

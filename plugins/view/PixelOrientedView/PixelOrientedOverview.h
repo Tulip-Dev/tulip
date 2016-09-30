@@ -39,13 +39,9 @@ class LayoutProperty;
 
 class PixelOrientedOverview : public GlComposite {
 
-public :
-
-  PixelOrientedOverview(pocore::TulipGraphDimension *data,
-                        pocore::PixelOrientedMediator *pixelOrientedMediator,
-                        Coord blCornerPos,
-                        const std::string &dimName,
-                        const Color &backgroundColor, const Color &textColor);
+public:
+  PixelOrientedOverview(pocore::TulipGraphDimension *data, pocore::PixelOrientedMediator *pixelOrientedMediator, Coord blCornerPos,
+                        const std::string &dimName, const Color &backgroundColor, const Color &textColor);
 
   ~PixelOrientedOverview();
 
@@ -66,7 +62,7 @@ public :
 
   void computePixelView(GlMainWidget *glWidget = nullptr);
 
-  bool overviewGenerated() const  {
+  bool overviewGenerated() const {
     return overviewGen;
   }
 
@@ -77,8 +73,7 @@ public :
     textColor = color;
   }
 
-private :
-
+private:
   void computeBoundingBox() {
     GlBoundingBoxSceneVisitor glBBSV(nullptr);
     acceptVisitor(&glBBSV);
@@ -108,8 +103,6 @@ private :
   bool overviewGen;
 
   Color backgroundColor, textColor;
-
 };
-
 }
 #endif /* PIXELORIENTEDDRAWING_H_ */

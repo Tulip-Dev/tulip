@@ -35,23 +35,20 @@ namespace tlp {
 class TLP_GLES_SCOPE GlRect2D : public GlConvexPolygon {
 
 public:
+  GlRect2D(const tlp::Vec2f &bottomLeftCorner, const tlp::Vec2f &topRightCorner, const tlp::Color &fillColor, float z = 0);
 
-  GlRect2D(const tlp::Vec2f &bottomLeftCorner, const tlp::Vec2f &topRightCorner, const tlp::Color &fillColor, float z=0);
+  GlRect2D(const tlp::Vec2f &bottomLeftCorner, const tlp::Vec2f &topRightCorner, const tlp::Color &fillColor, const tlp::Color &outlineColor,
+           float z = 0);
 
-  GlRect2D(const tlp::Vec2f &bottomLeftCorner, const tlp::Vec2f &topRightCorner, const tlp::Color &fillColor, const tlp::Color &outlineColor, float z=0);
+  GlRect2D(float bottom, float left, float width, float height, const tlp::Color &fillColor, float z = 0);
 
-  GlRect2D(float bottom, float left, float width, float height, const tlp::Color &fillColor, float z=0);
+  GlRect2D(float bottom, float left, float width, float height, const tlp::Color &fillColor, const tlp::Color &outlineColor, float z = 0);
 
-  GlRect2D(float bottom, float left, float width, float height, const tlp::Color &fillColor, const tlp::Color &outlineColor, float z=0);
-
-  void setCoordinatesAndSize(float bottom, float left, float width, float height, float z=0);
+  void setCoordinatesAndSize(float bottom, float left, float width, float height, float z = 0);
 
 private:
-
   void createContour(const tlp::Vec2f &bottomLeftCorner, const tlp::Vec2f &topRightCorner, const float z);
-
 };
-
 }
 
 #endif // GLRECT2D_H
