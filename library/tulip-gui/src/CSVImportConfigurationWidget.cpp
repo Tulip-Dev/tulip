@@ -198,6 +198,7 @@ CSVImportConfigurationWidget::CSVImportConfigurationWidget(QWidget *parent)
 
   // Import line number change
   // connect(ui->toLineSpinBox,SIGNAL(valueChanged(int)),this,SLOT(toLineValueChanged(int)));
+  connect(ui->useFirstLineAsPropertyNamecheckBox, SIGNAL(clicked(bool)), this, SLOT(useFirstLineAsHeaderUpdated()));
   connect(ui->limitPreviewLineNumberCheckBox, SIGNAL(clicked(bool)), this, SLOT(filterPreviewLineNumber(bool)));
   connect(ui->previewLineNumberSpinBox, SIGNAL(valueChanged(int)), this, SLOT(previewLineNumberChanged(int)));
 
@@ -556,60 +557,61 @@ string CSVImportConfigurationWidget::combinePropertyDataType(const string &previ
     return newType;
   } else if (previousType == newType) {
     return newType;
-  } else if ((previousType == IntegerProperty::propertyTypename && newType == DoubleProperty::propertyTypename) ||
-             (previousType == DoubleProperty::propertyTypename && newType == IntegerProperty::propertyTypename)) {
-    // If both types are numeric return the more generic numeric type : double
+  } else if (newType.empty())
+    return previousType;
+  // If both types are numeric return the more generic numeric type : double
+  else if (previousType == BooleanProperty::propertyTypename &&
+           (newType == DoubleProperty::propertyTypename || newType == IntegerProperty::propertyTypename))
+    return newType;
+  else if (previousType == IntegerProperty::propertyTypename) {
+    if (newType == DoubleProperty::propertyTypename)
+      return DoubleProperty::propertyTypename;
+    if (newType == BooleanProperty::propertyTypename)
+      return IntegerProperty::propertyTypename;
+  } else if (previousType == DoubleProperty::propertyTypename &&
+             (newType == BooleanProperty::propertyTypename || newType == IntegerProperty::propertyTypename))
     return DoubleProperty::propertyTypename;
-  } else if ((previousType == IntegerProperty::propertyTypename && newType == BooleanProperty::propertyTypename) ||
-             (previousType == BooleanProperty::propertyTypename && newType == IntegerProperty::propertyTypename)) {
-    // If both types are numeric return the more generic numeric type : integer
-    return IntegerProperty::propertyTypename;
-  } else {
-    return StringProperty::propertyTypename;
-  }
+
+  return StringProperty::propertyTypename;
 }
 
 string CSVImportConfigurationWidget::guessDataType(const string &data) const {
-  bool b;
-
-  if (BooleanType::fromString(b, data, true)) {
-    // The type is boolean
-    return BooleanProperty::propertyTypename;
-  }
-
-  // Qt framework is the best way to detect numerals in string.
-  QString str = QString::fromUtf8(data.c_str());
-  bool isInt = false;
-  str.toInt(&isInt);
-
-  // The type is int
-  if (isInt) {
-    return IntegerProperty::propertyTypename;
-  }
-
-  char *prevLocale = setlocale(LC_NUMERIC, nullptr);
-
-  if (parser->decimalMark() == ',')
-    setlocale(LC_NUMERIC, "fr_FR");
-
-  char *endptr;
   char *ptr = (char *)data.c_str();
 
   while (isspace(*ptr))
     ++ptr;
 
-  strtod(ptr, &endptr);
-  bool isDouble = ((size_t)(endptr - ptr) == data.size() || isspace(*endptr));
+  if (!*ptr)
+    return "";
 
-  setlocale(LC_NUMERIC, prevLocale);
+  bool b;
+
+  if (BooleanType::fromString(b, std::string(ptr), true)) {
+    // The type is boolean
+    return BooleanProperty::propertyTypename;
+  }
+
+  // Qt framework is the best way to detect numerals in string.
+  QString str = QString::fromUtf8(ptr);
+  bool ok = false;
+  str.toInt(&ok);
+
+  // The type is int
+  if (ok)
+    return IntegerProperty::propertyTypename;
+
+  QLocale prevLocale;
+  if (parser->decimalMark() == ',')
+    QLocale::setDefault(QLocale::French);
+  str.toDouble(&ok);
+  QLocale::setDefault(prevLocale);
 
   // The type is double
-  if (isDouble) {
+  if (ok)
     return DoubleProperty::propertyTypename;
-  } else {
-    // All the other case are treated as string.
+  else
+    // All the other cases are treated as string.
     return StringProperty::propertyTypename;
-  }
 }
 
 bool CSVImportConfigurationWidget::eventFilter(QObject *obj, QEvent *evt) {
