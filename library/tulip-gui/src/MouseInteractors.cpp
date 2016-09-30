@@ -341,7 +341,7 @@ public:
   }
 
 protected:
-  virtual void zoomAndPanAnimStepSlot(double t);
+  virtual void zoomAndPanAnimStepSlot(int animationStep);
 
 protected:
   tlp::View *view;
@@ -351,12 +351,13 @@ protected:
   float alphaBegin;
 };
 
-void MyQtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(double t) {
+void MyQtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(int animationStep) {
+  double t = animationStep / static_cast<double>(nbAnimationSteps);
   ColorProperty *colorProp = graph->getProperty<ColorProperty>("viewColor");
   Color color = colorProp->getNodeValue(n);
   color[3] = alphaBegin + t * (alphaEnd - alphaBegin);
   colorProp->setNodeValue(n, color);
-  QtGlSceneZoomAndPanAnimator::zoomAndPanAnimationStep(t);
+  QtGlSceneZoomAndPanAnimator::zoomAndPanAnimStepSlot(animationStep);
   view->draw();
 }
 //===============================================================
