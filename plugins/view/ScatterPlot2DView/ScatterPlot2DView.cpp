@@ -361,7 +361,7 @@ DataSet ScatterPlot2DView::state() const {
   dataSet.set("generated scatter plots", generatedScatterPlotDataSet);
   dataSet.set("min Size Mapping", static_cast<int>(optionsWidget->getMinSizeMapping().getW()));
   dataSet.set("max Size Mapping", static_cast<int>(optionsWidget->getMaxSizeMapping().getW()));
-  dataSet.set("background color", optionsWidget->getUniformBackgroundColor());
+  dataSet.set("background color", optionsWidget->getBackgroundColor());
   dataSet.set("display graph edges", optionsWidget->displayGraphEdges());
   dataSet.set("lastViewWindowWidth", getGlMainWidget()->width());
   dataSet.set("lastViewWindowHeight", getGlMainWidget()->height());
@@ -435,7 +435,7 @@ void ScatterPlot2DView::computeNodeSizes() {
 void ScatterPlot2DView::buildScatterPlotsMatrix() {
 
   dataLocation = propertiesSelectionWidget->getDataLocation();
-  Color backgroundColor(optionsWidget->getUniformBackgroundColor());
+  Color backgroundColor(optionsWidget->getBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
 
   Color foregroundColor;
@@ -555,7 +555,7 @@ void ScatterPlot2DView::buildScatterPlotsMatrix() {
 }
 
 void ScatterPlot2DView::addEmptyViewLabel() {
-  Color backgroundColor(optionsWidget->getUniformBackgroundColor());
+  Color backgroundColor(optionsWidget->getBackgroundColor());
   getGlMainWidget()->getScene()->setBackgroundColor(backgroundColor);
 
   Color foregroundColor;
@@ -594,7 +594,7 @@ void ScatterPlot2DView::removeEmptyViewLabel() {
 }
 
 void ScatterPlot2DView::viewConfigurationChanged() {
-  getGlMainWidget()->getScene()->setBackgroundColor(optionsWidget->getUniformBackgroundColor());
+  getGlMainWidget()->getScene()->setBackgroundColor(optionsWidget->getBackgroundColor());
   bool dataLocationChanged = propertiesSelectionWidget->getDataLocation() != dataLocation;
 
   if (dataLocationChanged) {
@@ -898,7 +898,7 @@ void ScatterPlot2DView::switchFromDetailViewToMatrixView() {
   getGlMainWidget()->getScene()->getGraphCamera().setEyes(eyesBak);
   getGlMainWidget()->getScene()->getGraphCamera().setCenter(centerBak);
   getGlMainWidget()->getScene()->getGraphCamera().setUp(upBak);
-  getGlMainWidget()->getScene()->setBackgroundColor(optionsWidget->getUniformBackgroundColor());
+  getGlMainWidget()->getScene()->setBackgroundColor(optionsWidget->getBackgroundColor());
   matrixView = true;
   detailedScatterPlot = nullptr;
   detailedScatterPlotPropertyName = make_pair("", "");

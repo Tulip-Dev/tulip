@@ -20,21 +20,25 @@
 #include <QColorDialog>
 #include <QPainter>
 #include <QLinearGradient>
+#include <QMainWindow>
 
 #include "ScatterPlot2DOptionsWidget.h"
 #include "ui_ScatterPlot2DOptionsWidget.h"
+
+#include <tulip/Perspective.h>
 
 namespace tlp {
 
 ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent)
     : QWidget(parent), oldValuesInitialized(false), _ui(new Ui::ScatterPlot2DOptionsWidgetData) {
   _ui->setupUi(this);
+  _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->backColorButton->setDialogTitle("Choose the background color");
   setBackgroundColor(Color(255, 255, 255));
   setButtonBackgroundColor(_ui->minusOneColorButton, Color(0, 0, 255));
   setButtonBackgroundColor(_ui->zeroColorButton, Color(255, 255, 255));
   setButtonBackgroundColor(_ui->oneColorButton, Color(0, 255, 0));
   updateColorScale();
-  connect(_ui->backColorButton, SIGNAL(clicked()), this, SLOT(pressBackgroundColorButton()));
   connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(pressMinusOneColorButton()));
   connect(_ui->zeroColorButton, SIGNAL(clicked()), this, SLOT(pressZeroColorButton()));
   connect(_ui->oneColorButton, SIGNAL(clicked()), this, SLOT(pressOneColorButton()));
@@ -62,10 +66,6 @@ Color ScatterPlot2DOptionsWidget::getButtonColor(QPushButton *button) const {
   return Color(rgbaStr.at(0).toInt(&ok), rgbaStr.at(1).toInt(&ok), rgbaStr.at(2).toInt(&ok), rgbaStr.at(3).toInt(&ok));
 }
 
-Color ScatterPlot2DOptionsWidget::getUniformBackgroundColor() const {
-  return getButtonColor(_ui->backColorButton);
-}
-
 Color ScatterPlot2DOptionsWidget::getMinusOneColor() const {
   return getButtonColor(_ui->minusOneColorButton);
 }
@@ -78,8 +78,12 @@ Color ScatterPlot2DOptionsWidget::getOneColor() const {
   return getButtonColor(_ui->oneColorButton);
 }
 
+Color ScatterPlot2DOptionsWidget::getBackgroundColor() const {
+  return _ui->backColorButton->tulipColor();
+}
+
 void ScatterPlot2DOptionsWidget::setBackgroundColor(const Color &color) {
-  setButtonBackgroundColor(_ui->backColorButton, color);
+  _ui->backColorButton->setTulipColor(color);
 }
 
 void ScatterPlot2DOptionsWidget::setButtonBackgroundColor(QPushButton *button, const Color &color) {
@@ -98,10 +102,6 @@ void ScatterPlot2DOptionsWidget::setButtonBackgroundColor(QPushButton *button, c
   str.append(")");
   colorStr.append(str);
   button->setStyleSheet("QPushButton { background-color: " + colorStr + "}");
-}
-
-void ScatterPlot2DOptionsWidget::pressBackgroundColorButton() {
-  changeButtonBackgroundColor(_ui->backColorButton);
 }
 
 void ScatterPlot2DOptionsWidget::pressMinusOneColorButton() {
@@ -283,10 +283,10 @@ bool ScatterPlot2DOptionsWidget::configurationChanged() {
       confChanged = confChanged || useCustomYAxisScale();
     }
 
-    if (oldUniformBackground != uniformBackground() || oldUniformBackgroundColor != getUniformBackgroundColor() ||
-        oldMinusOneColor != getMinusOneColor() || oldZeroColor != getZeroColor() || oldOneColor != getOneColor() ||
-        oldMinSizeMapping != getMinSizeMapping() || oldMaxSizeMapping != getMaxSizeMapping() || oldDisplayGraphEdges != displayGraphEdges() ||
-        oldUseCustomXAxisScale != useCustomXAxisScale() || oldUseCustomYAxisScale != useCustomYAxisScale()) {
+    if (oldUniformBackground != uniformBackground() || oldUniformBackgroundColor != getBackgroundColor() || oldMinusOneColor != getMinusOneColor() ||
+        oldZeroColor != getZeroColor() || oldOneColor != getOneColor() || oldMinSizeMapping != getMinSizeMapping() ||
+        oldMaxSizeMapping != getMaxSizeMapping() || oldDisplayGraphEdges != displayGraphEdges() || oldUseCustomXAxisScale != useCustomXAxisScale() ||
+        oldUseCustomYAxisScale != useCustomYAxisScale()) {
       confChanged = true;
     }
   } else {
@@ -296,7 +296,7 @@ bool ScatterPlot2DOptionsWidget::configurationChanged() {
 
   if (confChanged) {
     oldUniformBackground = uniformBackground();
-    oldUniformBackgroundColor = getUniformBackgroundColor();
+    oldUniformBackgroundColor = getBackgroundColor();
     oldMinusOneColor = getMinusOneColor();
     oldZeroColor = getZeroColor();
     oldOneColor = getOneColor();
