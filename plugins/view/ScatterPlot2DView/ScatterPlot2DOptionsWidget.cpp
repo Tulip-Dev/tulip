@@ -82,7 +82,7 @@ void ScatterPlot2DOptionsWidget::setBackgroundColor(const Color &color) {
 }
 
 void ScatterPlot2DOptionsWidget::setButtonColor(ColorButton *button, const Color &color) {
-    button->setTulipColor(color);
+  button->setTulipColor(color);
 }
 
 Size ScatterPlot2DOptionsWidget::getMinSizeMapping() const {

@@ -37,7 +37,7 @@ QColor ChooseColorButton::color() const {
 }
 
 QString ChooseColorButton::text() const {
-    return _text;
+  return _text;
 }
 
 void ChooseColorButton::setDialogParent(QWidget *w) {
@@ -53,7 +53,7 @@ tlp::Color ChooseColorButton::tulipColor() const {
 }
 
 void ChooseColorButton::setText(const QString& text) {
-    _text = text;
+  _text = text;
 }
 
 void ChooseColorButton::setColor(const QColor& c) {
@@ -73,6 +73,7 @@ void ChooseColorButton::chooseColor() {
                                     ? QString("Choose a color")
                                     : _dialogTitle,
                                     QColorDialog::ShowAlphaChannel);
+
   if (c.isValid())
     setColor(c);
 }
@@ -87,7 +88,8 @@ void ColorButton::paintEvent(QPaintEvent *event) {
   QRectF r(tickW, tickH, tickW * 2, tickH * 2);
   p.drawRect(r);
   p.setPen(QColor(255^_color.red(),255^_color.green(),255^_color.blue(),255));
+
   if(!_text.isEmpty())
-      p.drawText(r, Qt::AlignCenter, _text);
+    p.drawText(r, Qt::AlignCenter, _text);
 }
 
