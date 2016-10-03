@@ -32,6 +32,7 @@ class ScatterPlotCorrelCoeffSelectorOptionsWidgetData;
 
 namespace tlp {
 
+class ColorButton;
 class ScatterPlotCorrelCoeffSelectorOptionsWidget : public QWidget {
 
   Q_OBJECT
@@ -50,17 +51,10 @@ protected :
   void showEvent(QShowEvent * event);
 
 private slots :
-
-  void pressMinusOneColorButton();
-  void pressZeroColorButton();
-  void pressOneColorButton();
+   void updateColorScale();
 
 private :
-
-  void setButtonBackgroundColor(QPushButton *button, const Color &color);
-  void changeButtonBackgroundColor(QPushButton *button);
-  void updateColorScale();
-  Color getButtonColor(QPushButton *button) const;
+  void setButtonColor(tlp::ColorButton *button, const Color &color);
   Ui::ScatterPlotCorrelCoeffSelectorOptionsWidgetData* _ui;
 
 };

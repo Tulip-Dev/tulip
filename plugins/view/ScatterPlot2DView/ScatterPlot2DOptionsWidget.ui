@@ -135,7 +135,7 @@
    <item>
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
-      <string>Scatterplot background color</string>
+      <string>Scatterplot matrix cells background color</string>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_3">
       <property name="bottomMargin">
@@ -146,7 +146,7 @@
         <item>
          <widget class="QRadioButton" name="uniformBackgroundRB">
           <property name="text">
-           <string>same as scene</string>
+           <string>Same as scene</string>
           </property>
           <property name="checked">
            <bool>false</bool>
@@ -161,8 +161,7 @@
          <string>use a color scale to show the computed plot correlation between the current properties</string>
         </property>
         <property name="text">
-         <string>map background color to 
-correlation coefficient &amp;value</string>
+         <string>Mapped  to correlation coefficient &amp;value</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -174,7 +173,7 @@ correlation coefficient &amp;value</string>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout">
           <item>
-           <widget class="QPushButton" name="minusOneColorButton">
+           <widget class="tlp::ColorButton" name="minusOneColorButton">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -203,7 +202,7 @@ correlation coefficient &amp;value</string>
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="zeroColorButton">
+           <widget class="tlp::ColorButton" name="zeroColorButton">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -232,7 +231,7 @@ correlation coefficient &amp;value</string>
            </spacer>
           </item>
           <item>
-           <widget class="QPushButton" name="oneColorButton">
+           <widget class="tlp::ColorButton" name="oneColorButton">
             <property name="maximumSize">
              <size>
               <width>40</width>
@@ -251,14 +250,11 @@ correlation coefficient &amp;value</string>
         </item>
         <item>
          <widget class="QLabel" name="colorScaleLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
           <property name="text">
            <string/>
+          </property>
+          <property name="textInteractionFlags">
+           <set>Qt::NoTextInteraction</set>
           </property>
          </widget>
         </item>

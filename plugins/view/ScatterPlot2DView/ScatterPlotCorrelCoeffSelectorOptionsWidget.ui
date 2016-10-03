@@ -44,7 +44,7 @@
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QPushButton" name="minusOneColorButton">
+        <widget class="tlp::ColorButton" name="minusOneColorButton">
          <property name="maximumSize">
           <size>
            <width>40</width>
@@ -70,7 +70,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="zeroColorButton">
+        <widget class="tlp::ColorButton" name="zeroColorButton">
          <property name="maximumSize">
           <size>
            <width>40</width>
@@ -96,7 +96,7 @@
         </spacer>
        </item>
        <item>
-        <widget class="QPushButton" name="oneColorButton">
+        <widget class="tlp::ColorButton" name="oneColorButton">
          <property name="maximumSize">
           <size>
            <width>40</width>
@@ -140,6 +140,16 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
