@@ -33,6 +33,8 @@ class QPushButton;
 
 namespace tlp {
 
+class ColorButton;
+
 class ScatterPlot2DOptionsWidget : public QWidget {
 
   Q_OBJECT
@@ -77,28 +79,17 @@ public :
   bool configurationChanged();
 
 protected :
-
   void showEvent(QShowEvent * event);
 
 private slots :
-  void setButtonBackgroundColor(QPushButton *button, const Color &color);
-  void pressMinusOneColorButton();
-  void pressZeroColorButton();
-  void pressOneColorButton();
+  void setButtonColor(tlp::ColorButton *button, const Color &color);
   void minSizeSpinBoxValueChanged(int);
   void maxSizeSpinBoxValueChanged(int);
   void pressXScaleCheckBox(bool checked);
   void pressYScaleCheckBox(bool checked);
-
-private :
-
-  void setBackgroundColor(QPushButton *button, const Color &color);
-  void changeButtonBackgroundColor(QPushButton *button);
   void updateColorScale();
-  Color getButtonColor(QPushButton *button) const;
 
 private :
-
   bool oldValuesInitialized;
   bool oldUniformBackground;
   Color oldUniformBackgroundColor;

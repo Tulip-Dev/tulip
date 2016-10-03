@@ -17,7 +17,6 @@
  *
  */
 
-#include <QColorDialog>
 #include <QPainter>
 #include <QLinearGradient>
 #include <QMainWindow>
@@ -32,15 +31,21 @@ namespace tlp {
 ScatterPlot2DOptionsWidget::ScatterPlot2DOptionsWidget(QWidget *parent) : QWidget(parent),oldValuesInitialized(false),_ui(new Ui::ScatterPlot2DOptionsWidgetData) {
   _ui->setupUi(this);
   _ui->backColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->minusOneColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->zeroColorButton->setDialogParent(Perspective::instance()->mainWindow());
+  _ui->oneColorButton->setDialogParent(Perspective::instance()->mainWindow());
   _ui->backColorButton->setDialogTitle("Choose the background color");
+  _ui->minusOneColorButton->setDialogTitle("Choose the color for -1");
+  _ui->zeroColorButton->setDialogTitle("Choose the color for 0");
+  _ui->oneColorButton->setDialogTitle("Choose the color for 1");
   setBackgroundColor(Color(255,255,255));
-  setButtonBackgroundColor(_ui->minusOneColorButton, Color(0,0,255));
-  setButtonBackgroundColor(_ui->zeroColorButton, Color(255,255,255));
-  setButtonBackgroundColor(_ui->oneColorButton, Color(0,255,0));
+  setButtonColor(_ui->minusOneColorButton, Color(0,0,255));
+  setButtonColor(_ui->zeroColorButton, Color(255,255,255));
+  setButtonColor(_ui->oneColorButton, Color(0,255,0));
   updateColorScale();
-  connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(pressMinusOneColorButton()));
-  connect(_ui->zeroColorButton, SIGNAL(clicked()), this, SLOT(pressZeroColorButton()));
-  connect(_ui->oneColorButton, SIGNAL(clicked()), this, SLOT(pressOneColorButton()));
+  connect(_ui->minusOneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
+  connect(_ui->zeroColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
+  connect(_ui->oneColorButton, SIGNAL(clicked()), this, SLOT(updateColorScale()));
   connect(_ui->minSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(minSizeSpinBoxValueChanged(int)));
   connect(_ui->maxSizeSpinBox, SIGNAL(valueChanged(int)), this, SLOT(maxSizeSpinBoxValueChanged(int)));
   connect(_ui->useXScaleCheckBox, SIGNAL(toggled(bool)), this, SLOT(pressXScaleCheckBox(bool)));
@@ -56,25 +61,16 @@ void ScatterPlot2DOptionsWidget::setWidgetEnabled(const bool enabled) {
   _ui->yAxisGroupBox->setEnabled(enabled);
 }
 
-Color ScatterPlot2DOptionsWidget::getButtonColor(QPushButton *button) const {
-  QString buttonStyleSheet = button->styleSheet();
-  int pos = buttonStyleSheet.indexOf("rgba(") + 5;
-  QString backgroundColorCode = buttonStyleSheet.mid(pos, buttonStyleSheet.length() - pos - 2);
-  bool ok;
-  QStringList rgbaStr = backgroundColorCode.split(",");
-  return Color(rgbaStr.at(0).toInt(&ok), rgbaStr.at(1).toInt(&ok), rgbaStr.at(2).toInt(&ok), rgbaStr.at(3).toInt(&ok));
-}
-
 Color ScatterPlot2DOptionsWidget::getMinusOneColor() const {
-  return getButtonColor(_ui->minusOneColorButton);
+  return _ui->minusOneColorButton->tulipColor();
 }
 
 Color ScatterPlot2DOptionsWidget::getZeroColor() const {
-  return getButtonColor(_ui->zeroColorButton);
+  return _ui->zeroColorButton->tulipColor();
 }
 
 Color ScatterPlot2DOptionsWidget::getOneColor() const {
-  return getButtonColor(_ui->oneColorButton);
+  return _ui->oneColorButton->tulipColor();
 }
 
 Color ScatterPlot2DOptionsWidget::getBackgroundColor() const {
@@ -85,37 +81,8 @@ void ScatterPlot2DOptionsWidget::setBackgroundColor(const Color &color) {
   _ui->backColorButton->setTulipColor(color);
 }
 
-void ScatterPlot2DOptionsWidget::setButtonBackgroundColor(QPushButton *button, const Color &color) {
-  QString colorStr = "rgba(";
-  QString str;
-  str.setNum(color.getR());
-  str.append(",");
-  colorStr.append(str);
-  str.setNum(color.getG());
-  str.append(",");
-  colorStr.append(str);
-  str.setNum(color.getB());
-  str.append(",");
-  colorStr.append(str);
-  str.setNum(color.getA());
-  str.append(")");
-  colorStr.append(str);
-  button->setStyleSheet("QPushButton { background-color: "+colorStr +"}");
-}
-
-void ScatterPlot2DOptionsWidget::pressMinusOneColorButton() {
-  changeButtonBackgroundColor(_ui->minusOneColorButton);
-  updateColorScale();
-}
-
-void ScatterPlot2DOptionsWidget::pressZeroColorButton() {
-  changeButtonBackgroundColor(_ui->zeroColorButton);
-  updateColorScale();
-}
-
-void ScatterPlot2DOptionsWidget::pressOneColorButton() {
-  changeButtonBackgroundColor(_ui->oneColorButton);
-  updateColorScale();
+void ScatterPlot2DOptionsWidget::setButtonColor(ColorButton *button, const Color &color) {
+    button->setTulipColor(color);
 }
 
 Size ScatterPlot2DOptionsWidget::getMinSizeMapping() const {
@@ -190,26 +157,6 @@ void ScatterPlot2DOptionsWidget::resetAxisScale() {
   oldUseCustomYAxisScale = false;
 }
 
-void ScatterPlot2DOptionsWidget::changeButtonBackgroundColor(QPushButton *button) {
-  QColor currentButtonColor = button->palette().color(QPalette::Button);
-#if (QT_VERSION >= QT_VERSION_CHECK(4, 5, 0))
-  QColor newColor = QColorDialog::getColor(currentButtonColor, NULL, "Select Color", QColorDialog::ShowAlphaChannel);
-
-  if (newColor.isValid()) {
-    setButtonBackgroundColor(button, Color(newColor.red(), newColor.green(), newColor.blue(), newColor.alpha()));
-  }
-
-#else
-  bool ok = true;
-  QRgb newColor = QColorDialog::getRgba(qRgba(currentButtonColor.red(), currentButtonColor.green(), currentButtonColor.blue(), currentButtonColor.alpha()), &ok);
-
-  if (ok) {
-    setButtonBackgroundColor(button, Color(qRed(newColor), qGreen(newColor), qBlue(newColor), qAlpha(newColor)));
-  }
-
-#endif
-}
-
 void ScatterPlot2DOptionsWidget::minSizeSpinBoxValueChanged(int newValue) {
   if (_ui->maxSizeSpinBox->value() < newValue) {
     _ui->maxSizeSpinBox->setValue(newValue + 1);
@@ -231,13 +178,10 @@ void ScatterPlot2DOptionsWidget::updateColorScale() {
   pixmap.fill(Qt::transparent);
   QPainter painter;
   painter.begin(&pixmap);
-  Color minusOneColor = getMinusOneColor();
-  Color zeroColor = getZeroColor();
-  Color oneColor = getOneColor();
   QLinearGradient qLinearGradient(0, _ui->colorScaleLabel->height() / 2, _ui->colorScaleLabel->width()-1, _ui->colorScaleLabel->height() / 2);
-  qLinearGradient.setColorAt(0, QColor(minusOneColor.getR(), minusOneColor.getG(), minusOneColor.getB(), minusOneColor.getA()));
-  qLinearGradient.setColorAt(1./2., QColor(zeroColor.getR(), zeroColor.getG(), zeroColor.getB(), zeroColor.getA()));
-  qLinearGradient.setColorAt(1, QColor(oneColor.getR(), oneColor.getG(), oneColor.getB(), oneColor.getA()));
+  qLinearGradient.setColorAt(0, _ui->minusOneColorButton->color());
+  qLinearGradient.setColorAt(1./2., _ui->zeroColorButton->color());
+  qLinearGradient.setColorAt(1, _ui->oneColorButton->color());
   painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(), qLinearGradient);
   painter.end();
   _ui->colorScaleLabel->setPixmap(pixmap.scaled(_ui->colorScaleLabel->width(), _ui->colorScaleLabel->height()));
