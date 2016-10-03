@@ -38,12 +38,14 @@ public:
   explicit ChooseColorButton(QWidget *parent = NULL);
 
   QColor color() const;
+  QString text() const;
   Color tulipColor() const;
 
   void setDialogParent(QWidget* w);
 
 protected:
   QColor _color;
+  QString _text;
   QWidget* _dialogParent;
   QString _dialogTitle;
 
@@ -53,6 +55,7 @@ signals:
 
 public slots:
   void setColor(const QColor&);
+  void setText(const QString& text);
   void setTulipColor(const Color&);
   void setDialogTitle(const QString&);
 
