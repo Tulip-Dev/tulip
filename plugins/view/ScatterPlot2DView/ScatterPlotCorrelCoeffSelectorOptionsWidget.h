@@ -51,7 +51,7 @@ protected :
   void showEvent(QShowEvent * event);
 
 private slots :
-   void updateColorScale();
+  void updateColorScale();
 
 private :
   void setButtonColor(tlp::ColorButton *button, const Color &color);
