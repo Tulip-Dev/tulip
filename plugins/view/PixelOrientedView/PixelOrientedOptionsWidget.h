@@ -48,10 +48,6 @@ public :
 
   bool configurationChanged();
 
-private slots :
-
-  void pressBackgroundColorButton();
-
 private :
 
   bool oldValuesInitialized;

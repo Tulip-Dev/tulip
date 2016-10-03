@@ -46,7 +46,7 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="backColorButton">
+         <widget class="tlp::ColorButton" name="backColorButton">
           <property name="palette">
            <palette>
             <active>
@@ -199,6 +199,16 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
