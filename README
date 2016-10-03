@@ -4,7 +4,7 @@ from LaBRI, University of Bordeaux.
 
 Requirements:
 
-- cmake >= 2.8.3
+- cmake >= 2.8.3 on Linux, cmake>=2.8.11 on Windows, cmake>=2.8.12 on MacOS.
 - freetype2
 - zlib
 - libjpeg
