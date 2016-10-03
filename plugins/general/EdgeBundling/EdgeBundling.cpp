@@ -59,27 +59,27 @@ static const char *paramHelp[] = {
     "If true, a subgraph corresponding to the grid used for routing edges will be added.",
 
     // 3D_layout
-    "If true, it is assumed that the input layout is in 3d and 3d edge bundling will be performed.",
+    "If true, it is assumed that the input layout is in 3D and 3D edge bundling will be performed.",
 
     // sphere_layout
-    "If true, it is assumed that the nodes have been originally laid out on a sphere surface."
+    "If true, it is assumed that nodes have originally been laid out on a sphere surface."
     "Edges will be routed along the sphere surface. The 3D_layout parameter needs also to be set to true"
     " for that feature to work.",
 
     // long_edges
-    "That parameter defines the way long edges will be routed. A value less than 1.0 "
+    "This parameter defines how long edges will be routed. A value less than 1.0 "
     "will promote paths outside dense regions of the input graph drawing.",
 
     // split_ratio
-    "That parameter defines the granularity of the grid that will be generated for routing the edges. "
-    "The higher its value is, the more precise the grid is.",
+    "This parameter defines the granularity of the grid that will be generated for routing edges. "
+    "The higher its value, the more precise the grid is.",
 
     // iterations
-    "That parameter defines the number of iterations for the edge bundling process. "
-    "The higher is its value, the more edges will be bundled.",
+    "This parameter defines the number of iterations of the edge bundling process. "
+    "The higher its value, the more edges will be bundled.",
 
     // max_thread
-    "That parameter defines the number of threads to use for speeding up the edge bundling process. "
+    "This parameter defines the number of threads to use for speeding up the edge bundling process. "
     "A value of 0 will use as much threads as processors on the host machine.",
 
     // edge_node_overlap
