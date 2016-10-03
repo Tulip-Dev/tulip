@@ -44,7 +44,7 @@ public :
 
   void setWidgetEnabled(const bool enabled);
   bool uniformBackground() const;
-  Color getUniformBackgroundColor() const;
+  Color getBackgroundColor() const;
   Color getMinusOneColor() const;
   Color getZeroColor() const;
   Color getOneColor() const;
@@ -81,8 +81,7 @@ protected :
   void showEvent(QShowEvent * event);
 
 private slots :
-
-  void pressBackgroundColorButton();
+  void setButtonBackgroundColor(QPushButton *button, const Color &color);
   void pressMinusOneColorButton();
   void pressZeroColorButton();
   void pressOneColorButton();
@@ -93,7 +92,7 @@ private slots :
 
 private :
 
-  void setButtonBackgroundColor(QPushButton *button, const Color &color);
+  void setBackgroundColor(QPushButton *button, const Color &color);
   void changeButtonBackgroundColor(QPushButton *button);
   void updateColorScale();
   Color getButtonColor(QPushButton *button) const;

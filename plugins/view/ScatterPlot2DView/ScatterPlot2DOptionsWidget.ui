@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>566</height>
+    <width>404</width>
+    <height>688</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -30,7 +30,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="backColorButton">
+      <widget class="tlp::ColorButton" name="backColorButton">
        <property name="palette">
         <palette>
          <active>
@@ -162,7 +162,7 @@
         </property>
         <property name="text">
          <string>map background color to 
-correlation coefficient value</string>
+correlation coefficient &amp;value</string>
         </property>
         <property name="checked">
          <bool>true</bool>
@@ -564,6 +564,16 @@ correlation coefficient value</string>
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::ColorButton</class>
+   <extends>QPushButton</extends>
+   <header location="global">tulip/ColorButton.h</header>
+   <slots>
+    <signal>colorChanged(QColor)</signal>
+   </slots>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
