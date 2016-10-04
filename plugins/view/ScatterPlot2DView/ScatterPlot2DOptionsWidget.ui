@@ -161,7 +161,7 @@
          <string>use a color scale to show the computed plot correlation between the current properties</string>
         </property>
         <property name="text">
-         <string>map background color to 
+         <string>map background color to
 correlation coefficient &amp;value</string>
         </property>
         <property name="checked">
@@ -251,14 +251,8 @@ correlation coefficient &amp;value</string>
         </item>
         <item>
          <widget class="QLabel" name="colorScaleLabel">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="text">
-           <string/>
+          <property name="scaledContents">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
