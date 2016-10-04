@@ -172,7 +172,6 @@ QList<QWidget *> ScatterPlot2DView::configurationWidgets() const {
 }
 
 void ScatterPlot2DView::setState(const DataSet &dataSet) {
-
   if(!initialized) {
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
     optionsWidget = new ScatterPlot2DOptionsWidget();
@@ -205,10 +204,8 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
       lastGraph->getProperty<ColorProperty>("viewTexture")->removeListener(this);
     }
 
-    if (edgeAsNodeGraph) {
-      delete edgeAsNodeGraph;
-    }
-
+    delete edgeAsNodeGraph;
+    
     if (scatterPlotGraph) {
       edgeAsNodeGraph = tlp::newGraph();
       ColorProperty* edgeAsNodeGraphColor = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
@@ -259,12 +256,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     }
   }
 
-  if (lastGraph == NULL) {
-    center = true;
-  }
-  else {
-    center = false;
-  }
+  center = lastGraph?false:true;
 
   dataSet.get("lastViewWindowWidth", lastViewWindowWidth);
   dataSet.get("lastViewWindowHeight", lastViewWindowHeight);
@@ -787,7 +779,7 @@ void ScatterPlot2DView::generateScatterPlots() {
     mainLayer->deleteGlEntity("coeffLabel");
   }
 
-  unsigned int nbOverviews = (selectedGraphProperties.size() - 1) * selectedGraphProperties.size();
+  unsigned int nbOverviews = (selectedGraphProperties.size() - 1) * selectedGraphProperties.size()/2;
   unsigned currentStep = 0;
 
   double sceneRadiusBak = getGlMainWidget()->getScene()->getGraphCamera().getSceneRadius();
