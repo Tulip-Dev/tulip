@@ -250,8 +250,8 @@
         </item>
         <item>
          <widget class="QLabel" name="colorScaleLabel">
-          <property name="text">
-           <string/>
+          <property name="scaledContents">
+           <bool>true</bool>
           </property>
           <property name="textInteractionFlags">
            <set>Qt::NoTextInteraction</set>
