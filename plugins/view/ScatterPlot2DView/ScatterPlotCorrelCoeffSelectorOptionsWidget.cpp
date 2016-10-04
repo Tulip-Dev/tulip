@@ -75,7 +75,7 @@ void ScatterPlotCorrelCoeffSelectorOptionsWidget::updateColorScale() {
   qLinearGradient.setColorAt(1, _ui->oneColorButton->color());
   painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(), qLinearGradient);
   painter.end();
-  _ui->colorScaleLabel->setPixmap(pixmap.scaled(_ui->colorScaleLabel->width(), _ui->colorScaleLabel->height()));
+  _ui->colorScaleLabel->setPixmap(pixmap);
 }
 
 void ScatterPlotCorrelCoeffSelectorOptionsWidget::showEvent(QShowEvent*) {
