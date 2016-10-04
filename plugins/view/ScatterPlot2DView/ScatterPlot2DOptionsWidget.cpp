@@ -242,7 +242,7 @@ void ScatterPlot2DOptionsWidget::updateColorScale() {
   qLinearGradient.setColorAt(1, QColor(oneColor.getR(), oneColor.getG(), oneColor.getB(), oneColor.getA()));
   painter.fillRect(0, 0, _ui->colorScaleLabel->width(), _ui->colorScaleLabel->height(), qLinearGradient);
   painter.end();
-  _ui->colorScaleLabel->setPixmap(pixmap.scaled(_ui->colorScaleLabel->width(), _ui->colorScaleLabel->height()));
+  _ui->colorScaleLabel->setPixmap(pixmap);
 }
 
 void ScatterPlot2DOptionsWidget::showEvent(QShowEvent *) {
