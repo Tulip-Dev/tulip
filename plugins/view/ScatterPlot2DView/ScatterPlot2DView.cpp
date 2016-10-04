@@ -205,7 +205,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     }
 
     delete edgeAsNodeGraph;
-    
+
     if (scatterPlotGraph) {
       edgeAsNodeGraph = tlp::newGraph();
       ColorProperty* edgeAsNodeGraphColor = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
