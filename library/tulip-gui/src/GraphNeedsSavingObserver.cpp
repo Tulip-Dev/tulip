@@ -49,6 +49,10 @@ bool GraphNeedsSavingObserver::needsSaving() const {
   return _needsSaving;
 }
 
+void GraphNeedsSavingObserver::forceToSave() {
+    _needsSaving=true;
+}
+
 /**
     * @brief Listen all the observable objects in the graph (subgraphs, properties).
     **/
