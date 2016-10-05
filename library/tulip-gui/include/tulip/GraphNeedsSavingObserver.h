@@ -69,6 +69,12 @@ public :
     */
   bool needsSaving() const;
 
+  /**
+    *
+    * @brief forceToSave Even if there is no modification on the graph, this method can be used to force to save the graph.
+    */
+  void forceToSave();
+
 protected :
   /**
     * @see Listener
