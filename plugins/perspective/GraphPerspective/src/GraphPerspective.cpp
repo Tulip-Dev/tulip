@@ -1312,8 +1312,9 @@ void GraphPerspective::openPreferences() {
 
       if (glMainView != nullptr) {
         if (glMainView->getGlMainWidget() != nullptr) {
-          glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(
+          glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setSelectionColor(
               TulipSettings::instance().defaultSelectionColor());
+          glMainView->refresh();
         }
       }
     }
