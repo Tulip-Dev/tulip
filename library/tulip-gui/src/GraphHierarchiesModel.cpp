@@ -37,6 +37,7 @@
 #include <tulip/EdgeExtremityGlyphManager.h>
 #include <tulip/GraphNeedsSavingObserver.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/Perspective.h>
 
 #include <fstream>
 
@@ -314,7 +315,7 @@ Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
 
   if (index.column() == 0)
-    result |= Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
+    result = result | Qt::ItemIsEditable | Qt::ItemIsDragEnabled;
 
   return result;
 }
@@ -420,7 +421,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
   beginInsertRows(QModelIndex(),rowCount(),rowCount());
 
-  _saveNeeded[g] = new GraphNeedsSavingObserver(g);
+  _saveNeeded[g] = new GraphNeedsSavingObserver(g,Perspective::instance()->mainWindow());
 
   _graphs.push_back(g);
 
