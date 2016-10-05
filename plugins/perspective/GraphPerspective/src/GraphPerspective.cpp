@@ -1289,6 +1289,7 @@ void GraphPerspective::openPreferences() {
       if (glMainView != NULL) {
         if (glMainView->getGlMainWidget() != NULL) {
           glMainView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParametersPointer()->setSelectionColor(TulipSettings::instance().defaultSelectionColor());
+          glMainView->refresh();
         }
       }
     }
