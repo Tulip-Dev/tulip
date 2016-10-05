@@ -24,6 +24,8 @@
 
 #include <QObject>
 
+class QMainWindow;
+
 namespace tlp {
 
 class Graph;
@@ -45,6 +47,7 @@ class TLP_QT_SCOPE GraphNeedsSavingObserver : public QObject, Observable {
 
   bool _needsSaving;
   Graph* _graph;
+  QMainWindow* _mainWindow;
 
   void addObserver();
   void removeObservers();
@@ -52,9 +55,10 @@ class TLP_QT_SCOPE GraphNeedsSavingObserver : public QObject, Observable {
 public :
   /**
    * @brief GraphNeedsSavingObserver Class constructor
-   * @param graph the graph which needs to be observed for modifications
+   * @param graph The graph which needs to be observed for modifications
+   * @param mainWindow The Qt QMainWindow object behin the perspective
    */
-  GraphNeedsSavingObserver(Graph* graph);
+  GraphNeedsSavingObserver(Graph* graph,QMainWindow* mainWindow=NULL);
 
   /**
     * @brief saved If the graph has been saved, one has to call this method to reset the status of the graph (it does not need to be saved).
