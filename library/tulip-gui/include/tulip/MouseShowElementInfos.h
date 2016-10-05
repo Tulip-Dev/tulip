@@ -41,7 +41,7 @@ class ViewWidget;
 struct SelectedEntity;
 
 /**
- * We define a specific interactor to show element graph infos in eltProperties
+ * We define a specific interactor to show element graph information in eltProperties
  */
 class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
 
@@ -66,7 +66,7 @@ protected:
   QTableView* tableView() const;
 
   /**
-   * @brief buildModel create and returns the model to visualize edit elements parameters.
+   * @brief buildModel creates and returns the model to visualize edit element parameters.
    * @param elementType the type of the element can be NODE or EDGE
    * @param elementId elementId the id of the element
    * @param parent the parent for the model creation.
