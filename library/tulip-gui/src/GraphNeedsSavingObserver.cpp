@@ -34,14 +34,8 @@ GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph *graph, QMainWindow *ma
 }
 
 void GraphNeedsSavingObserver::treatEvents(const vector<Event> &) {
-  if (!_needsSaving) {
-    // Stop listening graphs.
-    removeObservers();
-    _needsSaving = true;
-    if (_mainWindow)
-      _mainWindow->setWindowModified(true);
-    emit(savingNeeded());
-  }
+  if (!_needsSaving)
+    forceToSave();
 }
 
 void GraphNeedsSavingObserver::saved() {
@@ -58,8 +52,11 @@ bool GraphNeedsSavingObserver::needsSaving() const {
 
 void GraphNeedsSavingObserver::forceToSave() {
   _needsSaving = true;
+  // No need to listen to the graph anymore
+  removeObservers();
   if (_mainWindow)
     _mainWindow->setWindowModified(true);
+  emit(savingNeeded());
 }
 
 /**
