@@ -23,10 +23,13 @@
 
 #include <deque>
 
+#include <QMainWindow>
+
 using namespace tlp;
 using namespace std;
 
-GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph *graph) : _needsSaving(false), _graph(graph) {
+GraphNeedsSavingObserver::GraphNeedsSavingObserver(Graph *graph, QMainWindow *mainWindow)
+    : _needsSaving(false), _graph(graph), _mainWindow(mainWindow) {
   addObserver();
 }
 
@@ -35,6 +38,8 @@ void GraphNeedsSavingObserver::treatEvents(const vector<Event> &) {
     // Stop listening graphs.
     removeObservers();
     _needsSaving = true;
+    if (_mainWindow)
+      _mainWindow->setWindowModified(true);
     emit(savingNeeded());
   }
 }
@@ -43,6 +48,8 @@ void GraphNeedsSavingObserver::saved() {
   _needsSaving = false;
   removeObservers();
   addObserver();
+  if (_mainWindow)
+    _mainWindow->setWindowModified(false);
 }
 
 bool GraphNeedsSavingObserver::needsSaving() const {
@@ -50,7 +57,9 @@ bool GraphNeedsSavingObserver::needsSaving() const {
 }
 
 void GraphNeedsSavingObserver::forceToSave() {
-    _needsSaving=true;
+  _needsSaving = true;
+  if (_mainWindow)
+    _mainWindow->setWindowModified(true);
 }
 
 /**

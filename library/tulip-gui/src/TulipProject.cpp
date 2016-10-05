@@ -83,8 +83,7 @@ bool TulipProject::openProjectFile(const QString &file, tlp::PluginProgress *pro
     _isValid = false;
     _lastError = "Failed to unzip project.";
 
-    if (deleteProgress)
-      delete progress;
+    delete progress;
 
     return false;
   }
