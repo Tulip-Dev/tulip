@@ -364,7 +364,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   // display spent time
   if (TulipSettings::instance().isRunningTimeComputed())
-    qDebug() << algoAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+    qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
 
   // Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 

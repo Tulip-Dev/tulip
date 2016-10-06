@@ -598,7 +598,7 @@ void GraphPerspective::exportGraph(Graph *g) {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string moduleAndParams = exportPluginName + " - " + data.toString();
-      qDebug() << moduleAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
     }
     addRecentDocument(wizard.outputFile());
   }
@@ -674,7 +674,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string moduleAndParams = module + " import - " + data.toString();
-      qDebug() << moduleAndParams << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
     }
 
     if (g->getName().empty()) {
