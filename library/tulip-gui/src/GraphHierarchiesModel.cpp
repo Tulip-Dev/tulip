@@ -125,8 +125,8 @@ QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *
     if (!project->exists(file)) {
       file = GRAPHS_PATH + entry + "/graph.tlpb";
 
-    if (!project->exists(file))
-      continue;
+      if (!project->exists(file))
+        continue;
 
     }
 
