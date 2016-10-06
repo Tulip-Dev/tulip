@@ -116,13 +116,12 @@ QMap<QString, tlp::Graph *> GraphHierarchiesModel::readProject(tlp::TulipProject
   foreach (QString entry, project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
-    //    if (!project->exists(file)) {
-    //      file = GRAPHS_PATH + entry + "/graph.json";
+    if (!project->exists(file)) {
+      file = GRAPHS_PATH + entry + "/graph.tlpb";
 
-    if (!project->exists(file))
-      continue;
-
-    //    }
+      if (!project->exists(file))
+        continue;
+    }
 
     QString absolutePath = project->toAbsolutePath(file);
     Graph *g = loadGraph(std::string(absolutePath.toUtf8().data()), progress);
@@ -408,7 +407,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-  _saveNeeded[g] = new GraphNeedsSavingObserver(g,Perspective::instance()->mainWindow());
+  _saveNeeded[g] = new GraphNeedsSavingObserver(g, Perspective::instance()->mainWindow());
 
   _graphs.push_back(g);
 
