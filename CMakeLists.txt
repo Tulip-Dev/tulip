@@ -243,6 +243,7 @@ IF(MINGW)
 ELSE(MINGW)
   FIND_LIBRARY(INTL_LIBRARY intl)
 ENDIF(MINGW)
+MARK_AS_ADVANCED(INTL_LIBRARY)
 
 # Don't need to find zlib when compiling with emscripten as there is an available emscripten port of it
 IF(NOT EMSCRIPTEN)
