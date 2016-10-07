@@ -17,7 +17,7 @@
  *
  */
 #ifndef TLPOBSERVABLEPROPERTYTEST
-#define TLPOSERVABLEPROPERTYTEST
+#define TLPOBSERVABLEPROPERTYTEST
 
 #include <tulip/Graph.h>
 #include <tulip/TlpTools.h>

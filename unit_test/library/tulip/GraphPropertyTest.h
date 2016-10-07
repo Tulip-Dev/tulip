@@ -35,7 +35,6 @@ class GraphPropertyTest : public CppUnit::TestFixture {
 
 private:
   tlp::Graph *graph;
-  tlp::GraphProperty *metaGraph;
 
 public:
   void setUp();
