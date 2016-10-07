@@ -378,7 +378,7 @@ In some cases, algorithms
 can also use this dictionnary in order to return some external information.
 To determine a plugin's parameters, you can either:
 
-  * refer to its documentation
+  * refer to its :ref:`documentation <algorithmpluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -3140,7 +3140,7 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-  * refer to its documentation
+  * refer to its :ref:`documentation <doublepluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -3210,7 +3210,7 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-  * refer to its documentation
+  * refer to its :ref:`documentation <layoutpluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -3280,7 +3280,7 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-  * refer to its documentation
+  * refer to its :ref:`documentation <booleanpluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -3351,7 +3351,7 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-  * refer to its documentation
+  * refer to its :ref:`documentation <sizepluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -3421,7 +3421,7 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-  * refer to its documentation
+  * refer to its :ref:`documentation <colorpluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -3490,7 +3490,7 @@ can also use this dictionnary in order to return some external information
 (not stored in result).
 To determine a plugin's parameters, you can either:
     
-  * refer to its documentation
+  * refer to its :ref:`documentation <stringpluginsdoc>`
   * call the :func:`tlp.getDefaultPluginParameters` with the name of the plugin
 
 Returns a tuple whose first member is a boolean indicating if the 
@@ -4171,7 +4171,7 @@ tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSe
 %Docstring
 tlp.importGraph(importPluginName[, params, newGraph = None])
 
-Imports a graph using a Tulip import plugin (must be loaded).
+Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>` (must be loaded).
 Returns a new graph or None if the import fails.
 
 :param importPluginName: the name of the Tulip import plugin
@@ -4209,7 +4209,7 @@ tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataS
 %Docstring
 tlp.importGraph(importPluginName, params[, newGraph = None])
 
-Imports a graph using a Tulip import plugin (must be loaded).
+Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>` (must be loaded).
 Import plugins are objects implementing the tlp::ImportModule interface
 in C++ or the :class:`tlp.ImportModule` interface in Python.
 The list of currently loaded import plugins can be
@@ -4254,7 +4254,7 @@ bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const s
 %Docstring
 tlp.exportGraph(exportPluginName, graph, outputFilePath[, params])
 
-Exports a graph to a file using a Tulip export plugin (must be loaded).
+Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>` (must be loaded).
 
 :param graph: the graph to export
 :type graph: :class:`tlp.Graph`

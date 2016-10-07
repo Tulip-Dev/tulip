@@ -35,7 +35,7 @@ PLUGIN(PlanarityTest)
 
 class PlanarEmbeddingTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Planar Embedding", "Tulip team", "18/04/2012", "Tests whether a graph is planar embedding or not.", "1.0", "Topological Test")
+  PLUGININFORMATION("Planar Embedding", "Tulip team", "18/04/2012", "Tests whether a graph is a planar embedding or not.", "1.0", "Topological Test")
   PlanarEmbeddingTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
