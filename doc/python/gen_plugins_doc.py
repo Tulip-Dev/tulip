@@ -195,15 +195,20 @@ for cat in sorted(plugins.keys()):
 				paramDefValue = paramDefValue.replace('false', ':const:`False`')
 				paramDefValue = paramDefValue.replace('true', ':const:`True`')
 			if len(paramValues) > 0:
-				paramDefValue += ' |br| |br| Values\xa0for\xa0that\xa0parameter: |br| ' + paramValues
+				paramDefValue += u' |br| |br| Values\xa0for\xa0that\xa0parameter: |br| ' + paramValues
 			valuesDoc = False
-			nonBreakingSpace = '\xa0'
+			nonBreakingSpace = u'\xa0'
 			paramName = param.getName().replace('file::', '').replace('dir::', '')
-			paramsTable.append([paramName.replace(' ', nonBreakingSpace), 
-			                    getTulipPythonType(paramType.replace(' ', nonBreakingSpace)), 
-			                    paramDefValue, 
-			                    paramDir.replace(' ', nonBreakingSpace), 
-			                    paramHelp])
+			paramName = paramName.replace(' ', nonBreakingSpace)
+			paramType = getTulipPythonType(paramType.replace(' ', nonBreakingSpace))
+			paramDir = paramDir.replace(' ', nonBreakingSpace)
+			if sys.version_info[0] == 2:
+				paramName = paramName.decode('utf-8')
+				paramType = paramType.decode('utf-8')
+				paramDefValue = paramDefValue.decode('utf-8')
+				paramDir = paramDir.decode('utf-8')
+				paramHelp = paramHelp.decode('utf-8')
+			paramsTable.append([paramName, paramType, paramDefValue, paramDir, paramHelp])
 		if len(paramsTable) > 0:
 			writeSection('Parameters', '"')
 			print(tabulate.tabulate(paramsTable, headers, tablefmt="grid")+'\n', file=f)
