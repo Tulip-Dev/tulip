@@ -9,6 +9,15 @@ case $1 in
 		;;
 
 	run)
-		docker run --rm -i -t t $TAG
+		docker run \
+			-t  \
+			--privileged \
+			--rm=true \
+			-v "/tmp/.X11-unix:/tmp/.X11-unix:rw" \
+			-e "DISPLAY=unix$DISPLAY" \
+			-i \
+			-e "TERM=xterm-256color" \
+			-t \
+			$TAG
 	;;
 esac
