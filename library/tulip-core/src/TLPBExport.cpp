@@ -152,19 +152,21 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     for(unsigned int i = 0; i < numSubGraphs; ++i) {
       Graph* sg = vSubGraphs[i];
       unsigned int parentId = sg->getSuperGraph()->getId();
+
       if (parentId == graph->getId())
-	parentId = 0;
+        parentId = 0;
+
       std::pair<unsigned int, unsigned int> ids(sg->getId(), parentId);
       // write ids
       os.write((char *) &ids, sizeof(ids));
       // loop to write sg nodes ranges
       {
-	// first sort sg nodes
-	std::set<node> sgNodes;
+        // first sort sg nodes
+        std::set<node> sgNodes;
         node current;
-	forEach(current, sg->getNodes()) {
-	  sgNodes.insert(getNode(current));
-	}
+        forEach(current, sg->getNodes()) {
+          sgNodes.insert(getNode(current));
+        }
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<node, node> > > vRangesVec;
@@ -176,9 +178,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         bool pendingWrite = false;
         node beginNode, lastNode;
-	std::set<node>::const_iterator ite = sgNodes.end();
-	for(std::set<node>::const_iterator it = sgNodes.begin();
-	    it != ite; ++it) {
+        std::set<node>::const_iterator ite = sgNodes.end();
+
+        for(std::set<node>::const_iterator it = sgNodes.begin();
+            it != ite; ++it) {
           current = *it;
           pendingWrite = true;
 
@@ -225,12 +228,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       }
       // loop to write sg edges ranges
       {
-	// first sort sg edges
-	std::set<edge> sgEdges;
+        // first sort sg edges
+        std::set<edge> sgEdges;
         edge current;
-	forEach(current, sg->getEdges()) {
-	  sgEdges.insert(getEdge(current));
-	}
+        forEach(current, sg->getEdges()) {
+          sgEdges.insert(getEdge(current));
+        }
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<edge, edge> > > vRangesVec;
@@ -242,9 +245,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
 
         bool pendingWrite = false;
         edge beginEdge, lastEdge;
-	std::set<edge>::const_iterator ite = sgEdges.end();
-	for(std::set<edge>::const_iterator it = sgEdges.begin();
-	    it != ite; ++it) {
+        std::set<edge>::const_iterator ite = sgEdges.end();
+
+        for(std::set<edge>::const_iterator it = sgEdges.begin();
+            it != ite; ++it) {
           current = *it;
           pendingWrite = true;
 
@@ -328,8 +332,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       os.write((char *) nameOrType.data(), size);
       // write graph id
       unsigned int propGraphId = prop->getGraph()->getId();
+
       if (propGraphId == graph->getId())
-	propGraphId = 0;
+        propGraphId = 0;
+
       os.write((char *) &propGraphId, sizeof(propGraphId));
       // special treament for pathnames view properties
       bool pnViewProp = (nameOrType == string("viewFont") ||
@@ -550,9 +556,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   }
   // write graph and sub graphs attributes
   writeAttributes(os, graph);
+
   for (unsigned int i = 0; i < numSubGraphs; ++i)
     writeAttributes(os, vSubGraphs[i]);
-      
+
   graph->setSuperGraph(superGraph);
   return true;
 }
