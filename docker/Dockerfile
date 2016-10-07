@@ -81,4 +81,4 @@ RUN apt-get update && apt-get upgrade -qy nvidia-352
 USER docker
 
 
-CMD tulip --perspective Tulip
+CMD tulip --perspective=Tulip
