@@ -24,6 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
+namespace tlp {
+  typedef tlp::Iterator<tlp::ParameterDescription> IteratorParameter;
+}
+
 template <typename T>
 void addParameter(tlp::WithParameter *withParam,
                   const std::string & str,
@@ -55,6 +59,39 @@ namespace tlp {
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 %End
+
+enum ParameterDirection { IN_PARAM=0, OUT_PARAM = 1, INOUT_PARAM = 2 };
+
+class ParameterDescription {
+
+public:
+
+  const std::string& getName() const;
+
+  const std::string& getTypeName() const;
+
+  const std::string& getHelp() const;
+
+  const std::string& getDefaultValue() const;
+
+  bool isMandatory() const;
+
+  tlp::ParameterDirection getDirection() const;
+
+};
+
+typedef tlp::Iterator<tlp::ParameterDescription> IteratorParameter;
+
+struct ParameterDescriptionList {
+
+  tlp::IteratorParameter* getParameters() const;
+
+  unsigned int size() const;
+
+  bool empty() const;
+
+};
+
 
 struct WithParameter {
 
