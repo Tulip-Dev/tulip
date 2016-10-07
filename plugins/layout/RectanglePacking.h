@@ -53,11 +53,10 @@ public:
   float maxWidthOfBoundingBox;  /**< Width of the rectangle including all the packed rectangles and a new rectangle to pack, for a tested position. */
   float maxHeightOfBoundingBox; /**< Width of the rectangle including all the packed rectangles and a new rectangle to pack, for a tested position. */
 
-  float bestWidthOfBoundingBox; /**< Best width of the rectangle including all the packed rectangles and a new rectangle to pack since the beginning
-                                   of the position tests. */
-  float
-      bestHeightOfBoundingBox; /**< Best height of the rectangle including all the packed rectangles and a new rectangle to pack since the beginning
-                                  of the position tests. */
+  float bestWidthOfBoundingBox;  /**< Best width of the rectangle including all the packed rectangles and a new rectangle to pack since the beginning
+                                    of the position tests. */
+  float bestHeightOfBoundingBox; /**< Best height of the rectangle including all the packed rectangles and a new rectangle to pack since the beginning
+                                    of the position tests. */
 
   /**
    *constructor of the RectanglePacking class.
