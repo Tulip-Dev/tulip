@@ -88,6 +88,10 @@ std::vector<tlp::Vec3f> *copyValue(const std::vector<tlp::Vec3f> &value);
 
 std::vector<tlp::Vec3f> getValue(const std::vector<tlp::Vec3f> *value);
 
+tlp::ParameterDescription *copyValue(const tlp::ParameterDescription &value);
+
+tlp::ParameterDescription getValue(const tlp::ParameterDescription *value);
+
 template <typename T>
 bool pluginExists(std::string pluginName) {
   if (typeid(T).name() == typeid(tlp::Algorithm).name()) {
@@ -193,6 +197,14 @@ tlp::Color *copyValue(const tlp::Color &value) {
 }
 
 tlp::Color getValue(const tlp::Color *value) {
+  return *value;
+}
+
+tlp::ParameterDescription *copyValue(const tlp::ParameterDescription &value) {
+  return new tlp::ParameterDescription(value);
+}
+
+tlp::ParameterDescription getValue(const tlp::ParameterDescription *value) {
   return *value;
 }
 
@@ -368,6 +380,7 @@ PyObject* evalPythonStatement(const std::string &pythonStatement) {
 %Include Delaunay.sip
 %Include ConvexHull.sip
 %Include TulipFontAwesome.sip
+%Include PluginLister.sip
 
 // force generation of wrappers for specialized template classes
 typedef std::vector<tlp::Graph*> vectorGraphType;
