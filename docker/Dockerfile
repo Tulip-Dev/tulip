@@ -31,20 +31,15 @@ RUN apt-get update && \
 	libquazip1 \
 	libquazip-dev \
 	mesa-utils \
-	python-dev  \
-	python-qt4 \
-	python-qt4-dev \
-	qt4-default \
-	qt4-dev-tools \
+	qt5-default \
+	pyqt5-dev-tools \
+	python-dev \
     	subversion \
 	wget \
 	xserver-xorg-video-all\
 	x-window-system \
 	zlib1g \
-	zlib1g-dev \
-	python-sklearn \
-	python-pandas \
-	python-pip  
+	zlib1g-dev 
 
 
 # Work with a user named docker
