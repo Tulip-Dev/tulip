@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#ifndef TLPIMPORTEXPPORT
-#define TLPIMPPORTEXPORT
+#ifndef TLPIMPORTEXPORT
+#define TLPIMPORTEXPORT
 
 #include <string>
 #include <tulip/Graph.h>
