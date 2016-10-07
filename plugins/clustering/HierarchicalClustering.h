@@ -32,7 +32,7 @@ public:
                                                                  "the nodes which have their viewMetric value below the mean, and, the other one, in "
                                                                  "which nodes have their viewMetric value above that mean value. Then, the algorithm "
                                                                  "is recursively applied to this subgraph (the one with the values above the "
-                                                                 "threshold) until one sub-graph contains less than 10 nodes",
+                                                                 "threshold) until one sub-graph contains less than 10 nodes.",
                     "1.0", "Clustering")
   HierarchicalClustering(tlp::PluginContext *context);
   ~HierarchicalClustering();

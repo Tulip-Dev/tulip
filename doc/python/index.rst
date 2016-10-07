@@ -29,7 +29,8 @@ Contents
    gettingstarted
    apichanges
    manual
-   pythonplugins 
+   pythonplugins
+   tulippluginsdocumentation
    tulipreference
    tulipoglreference
    tulipguireference

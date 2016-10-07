@@ -24,6 +24,8 @@ but also how to transmit parameters to the algorithms.
 	you use the bindings from the Tulip GUI, all installed plugins are already loaded. If you 
 	use the bindings from the Python shell, you need to manually load the plugins (see :ref:`Using the bindings from the Python Interpreter <usingBindingsInShell>`).
 
+.. _callGeneralAlgorithm:
+
 Calling a general algorithm on a graph
 --------------------------------------- 
 
@@ -68,7 +70,9 @@ is bound to a "graph" variable and this graph contains a double property called 
 
   # now we call the algorithm
   graph.applyAlgorithm("Equal Value", params)
-	
+
+.. _callPropertyAlgorithm:
+
 Calling a property algorithm on a graph
 --------------------------------------- 
 
