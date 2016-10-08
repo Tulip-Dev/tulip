@@ -301,6 +301,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   // write properties
   {
     pluginProgress->setComment("writing properties...");
+    unsigned int numGraphProperties = 0;
     unsigned int numProperties = 0;
     std::vector<PropertyInterface*> props;
     PropertyInterface* prop;
@@ -308,6 +309,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
     forEach(prop, graph->getObjectProperties()) {
       props.push_back(prop);
       ++numProperties;
+      ++numGraphProperties;
     }
 
     // get subgraphs local properties too
@@ -333,7 +335,7 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // write graph id
       unsigned int propGraphId = prop->getGraph()->getId();
 
-      if (propGraphId == graph->getId())
+      if (i < numGraphProperties || propGraphId == graph->getId())
         propGraphId = 0;
 
       os.write((char *) &propGraphId, sizeof(propGraphId));
