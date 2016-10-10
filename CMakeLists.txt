@@ -483,8 +483,12 @@ IF(NOT BUILD_CORE_ONLY)
             # in order to ease that patching task, so install its latest version with pip first.
             # The tool is only compatible with Python 3.X, so we will use Python 3.5 installed
             # in the docker image provided by the manylinux project (see https://github.com/pypa/manylinux).
-            EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip install --upgrade auditwheel)
 
+            # Use a patched version of the auditwheel tool as the official one does not
+            # repair Tulip-Python wheels correctly
+            EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip uninstall -y auditwheel)
+            EXECUTE_PROCESS(COMMAND git clone -b purelib_fixes https://github.com/anlambert/auditwheel.git ERROR_QUIET)
+            EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip install auditwheel/)
 
             ADD_CUSTOM_TARGET(tulip-core-wheel
                               COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
