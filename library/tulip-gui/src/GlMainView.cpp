@@ -195,9 +195,12 @@ void GlMainView::updateShowOverviewButton() {
     proxy->setZValue(10);
     connect(_showOvButton, SIGNAL(toggled(bool)), this, SLOT(setOverviewVisible(bool)));
   }
+
   _showOvButton->setVisible(_overviewPosition == OVERVIEW_BOTTOM_RIGHT);
+
   if (_showOvButton->isVisible()) {
     QRectF rect(QPoint(0, 0), graphicsView()->size());
+
     if (isOverviewVisible) {
       _showOvButton->setText("x");
       _showOvButton->setToolTip("Hide overview display");
@@ -245,7 +248,9 @@ void GlMainView::updateShowQuickAccessBarButton() {
     proxy->setZValue(10);
     connect(_showQabButton, SIGNAL(toggled(bool)), this, SLOT(setQuickAccessBarVisible(bool)));
   }
+
   QRectF rect(QPoint(0, 0), graphicsView()->size());
+
   if (quickAccessBarVisible()) {
     _showQabButton->setText("x");
     _showQabButton->setToolTip("Hide quick access bar");
@@ -294,6 +299,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
+
   updateShowQuickAccessBarButton();
 
   if (_overviewItem != NULL) {
@@ -307,6 +313,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
       _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
   }
+
   updateShowOverviewButton();
 
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
