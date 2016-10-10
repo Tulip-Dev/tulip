@@ -159,35 +159,40 @@ features have been included to ease the use of the Tulip Python API:
 Using the bindings from the Python Interpreter
 ----------------------------------------------
 
-The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell. 
+The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell.
 
-Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_ 
+Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_
 for Windows and MacOS users.
 
-The modules are also located within the Tulip software installation, but some setup has to be done before being able to import them. 
+The modules are also located within the Tulip software installation, but some setup has to be done before being able to import them.
 
 Installing the Tulip-Python modules from the Python Packaging Index
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Windows and MacOS users can easily obtain the Tulip-Python modules by using the pip tool.
+Tulip-Python modules can be easily otained by using the pip tool for Windows, MacOS and Linux users.
+For that latter case, pip >= 8.1 has to be used, be sure to upgrade it first through that command.
+
+.. code:: shell
+
+    $ pip install --upgrade pip
 
 To install the :mod:`tulip` module, issue the following command from a terminal prompt:
 
 .. code:: shell
-	
-	$ pip install tulip-python
 
-To install the :mod:`tulipogl` and :mod:`tulipgui` modules, issue the following command from a terminal prompt:	
-	
+    $ pip install tulip-python
+
+To install the :mod:`tulipogl` and :mod:`tulipgui` modules, issue the following command from a terminal prompt:
+
 .. code:: shell
-	
-	$ pip install tulipgui-python
+
+    $ pip install tulipgui-python
 
 And you're done, you can now import the modules in your Python session.
-	
+
 Setting up the environment from the Tulip software installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
+
 First, the path to the :mod:`tulip` module must be provided to Python.
 In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
 The Tulip Python module is installed in the following directory according to your system :
@@ -200,7 +205,7 @@ The Tulip Python module is installed in the following directory according to you
                    <tulip_install_dir>/lib/python if you compiled and installed Tulip yourself.
 
 This path has to be added to the list of Python module search path. To do so, you can add it in the **PYTHONPATH**
-environment variable or add it to the :data:`sys.path` list.	
+environment variable or add it to the :data:`sys.path` list.
 
 Since Tulip 4.8, the second step is no longer necessary for MacOS users.
 
@@ -215,50 +220,21 @@ These libraries are installed in the following directory according to your syste
                    <tulip_install_dir>/lib if you compiled and installed Tulip yourself.
 
 You have to add this path to :
-	
-	* the **LD_LIBRARY_PATH** environment variable on Linux
 
-        * the **DYLD_LIBRARY_PATH** environment variable on Mac OS
+    * the **LD_LIBRARY_PATH** environment variable on Linux
 
-	* the **PATH** environment variable on Windows.
+    * the **DYLD_LIBRARY_PATH** environment variable on Mac OS
+
+    * the **PATH** environment variable on Windows.
 
 You should now be able to import the :mod:`tulip` module through the Python shell. Issue the following command
 at the shell prompt to perform that task::
 
-	>>> from tulip import *
+    >>> from tulip import *
 
-.. note:: 
+.. note::
   If you have installed Tulip from a bundle (Windows or Mac OS), the Tulip bindings were built against Python 2.7
   and you need to use the same Python version to be able to import the :mod:`tulip` module.
-
-.. _loading-plugins:
-
-Loading Tulip plugins
-^^^^^^^^^^^^^^^^^^^^^
-
-If you want to use Tulip algorithms implemented as plugins written in C++ or Python (e.g. graph layout algorithms),
-you have to load them before being able to call them (see :meth:`tlp.Graph.applyAlgorithm`, :meth:`tlp.Graph.applyLayoutAlgorithm`, ...).
-
-**Since Tulip 3.8, all plugins should be automatically loaded when you import the tulip module.**
-
-If you use a Tulip version prior to the 3.8 release, you have to proceed as described below to load the plugins.
-
-To load all the Tulip plugins written in C++, you have to execute the :func:`tlp.initTulipLib` and :func:`tlp.loadPlugins` functions
-the following way if you compiled Tulip yourself::
-
-        >>> tlp.initTulipLib()
-        >>> tlp.loadPlugins()
-
-If you installed Tulip from a bundle, you need to specify the path to the Tulip binary as parameter of the :func:`tlp.initTulipLib` because some paths were hardcoded during the compilation::
-
-        >>> tlp.initTulipLib("<path_to_tulip_binary>")
-        >>> tlp.loadPlugins()
-
-The path to the Tulip binary is given below according to your system:
-
-        * Linux and Windows : <tulip_install_dir>/bin
-
-        * Mac OS : <tulip_install_dir>/Contents/MacOS
 
 Customizing the Python environment
 ----------------------------------
