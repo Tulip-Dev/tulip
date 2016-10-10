@@ -23,6 +23,7 @@
 #include <QGraphicsView>
 #include <QAction>
 #include <QMenu>
+#include <QPushButton>
 #include <QTimer>
 
 #include <tulip/GlMainWidgetGraphicsItem.h>
@@ -41,7 +42,8 @@ using namespace tlp;
 
 GlMainView::GlMainView():
   _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true),
-  _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
+  _quickAccessBarItem(NULL), _showOvButton(NULL), _showQabButton(NULL),
+  _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
   _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
 
 GlMainView::~GlMainView() {
@@ -181,6 +183,34 @@ QList<QWidget*> GlMainView::configurationWidgets() const {
   return QList<QWidget*>() << _sceneConfigurationWidget << _sceneLayersConfigurationWidget;
 }
 
+void GlMainView::updateShowOverviewButton() {
+  if (_showOvButton == NULL) {
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget();
+    _showOvButton = new QPushButton();
+    _showOvButton->setMaximumSize(10, 10);
+    _showOvButton->setCheckable(true);
+    _showOvButton->setChecked(true);
+    proxy->setWidget(_showOvButton);
+    addToScene(proxy);
+    proxy->setZValue(10);
+    connect(_showOvButton, SIGNAL(toggled(bool)), this, SLOT(setOverviewVisible(bool)));
+  }
+  _showOvButton->setVisible(_overviewPosition == OVERVIEW_BOTTOM_RIGHT);
+  if (_showOvButton->isVisible()) {
+    QRectF rect(QPoint(0, 0), graphicsView()->size());
+    if (isOverviewVisible) {
+      _showOvButton->setText("x");
+      _showOvButton->setToolTip("Hide overview display");
+      _showOvButton->move(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+    }
+    else {
+      _showOvButton->setText("<");
+      _showOvButton->setToolTip("Show overview display");
+      _showOvButton->move(rect.width() - _showOvButton->width(), rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+    }
+  }
+}
+
 void GlMainView::setOverviewVisible(bool display) {
   isOverviewVisible=display;
 
@@ -190,6 +220,8 @@ void GlMainView::setOverviewVisible(bool display) {
   }
   else if(_overviewItem)
     _overviewItem->setVisible(false);
+
+  updateShowOverviewButton();
 }
 
 bool GlMainView::overviewVisible() const {
@@ -199,6 +231,31 @@ bool GlMainView::overviewVisible() const {
 void GlMainView::setViewOrtho(bool viewOrtho) {
   getGlMainWidget()->getScene()->setViewOrtho(viewOrtho);
   _glMainWidget->draw(false);
+}
+
+void GlMainView::updateShowQuickAccessBarButton() {
+  if (_showQabButton == NULL) {
+    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget();
+    _showQabButton = new QPushButton();
+    _showQabButton->setMaximumSize(10, 10);
+    _showQabButton->setCheckable(true);
+    _showQabButton->setChecked(true);
+    proxy->setWidget(_showQabButton);
+    addToScene(proxy);
+    proxy->setZValue(10);
+    connect(_showQabButton, SIGNAL(toggled(bool)), this, SLOT(setQuickAccessBarVisible(bool)));
+  }
+  QRectF rect(QPoint(0, 0), graphicsView()->size());
+  if (quickAccessBarVisible()) {
+    _showQabButton->setText("x");
+    _showQabButton->setToolTip("Hide quick access bar");
+    _showQabButton->move(0, rect.height() -_quickAccessBarItem->size().height() - 4);
+  }
+  else {
+    _showQabButton->setText("^");
+    _showQabButton->setToolTip("Show quick access bar");
+    _showQabButton->move(0, rect.height() - _showQabButton->height());
+  }
 }
 
 void GlMainView::setQuickAccessBarVisible(bool visible) {
@@ -237,6 +294,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     _quickAccessBarItem->setPos(0,rect.height()-_quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(),_quickAccessBarItem->size().height());
   }
+  updateShowQuickAccessBarButton();
 
   if (_overviewItem != NULL) {
     // put overview in the bottom right corner
@@ -249,8 +307,7 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
       _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
   }
-
-
+  updateShowOverviewButton();
 
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
