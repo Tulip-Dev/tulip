@@ -192,7 +192,7 @@ setup(
     # installed, specify them here.  If using Python 2.6 or less, then these
     # have to be included in MANIFEST.in as well.
     package_data={
-        'tulipogl': tulip_native_libs + ['share/bitmaps/*'],
+        'tulipogl': tulip_native_libs + ['share/bitmaps/*'] + ['share/bitmaps/colorscales/*'],
         'tulipgui': tulip_native_libs,
     },
 
