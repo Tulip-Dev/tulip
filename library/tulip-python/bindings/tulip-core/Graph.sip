@@ -3107,9 +3107,6 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call integer algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
-
 %End
 
 %MethodCode
@@ -3158,8 +3155,6 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call double algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3228,8 +3223,6 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call layout algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3297,9 +3290,6 @@ which can contain an error message.
 :throws: an exception if the requested boolean algorithm plugin is not registered in the plugins database.
 
 .. warning:: Previous values stored in result will be deleted.
-
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call boolean algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 
 %End
 
@@ -3369,8 +3359,6 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call size algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3439,8 +3427,6 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call color algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -3508,8 +3494,6 @@ which can contain an error message.
 
 .. warning:: Previous values stored in result will be deleted.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call string algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -4171,7 +4155,7 @@ tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet dataSe
 %Docstring
 tlp.importGraph(importPluginName[, params, newGraph = None])
 
-Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>` (must be loaded).
+Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>`.
 Returns a new graph or None if the import fails.
 
 :param importPluginName: the name of the Tulip import plugin
@@ -4209,7 +4193,7 @@ tlp::Graph *importGraph(const std::string &importPluginName, tlp::DataSet &dataS
 %Docstring
 tlp.importGraph(importPluginName, params[, newGraph = None])
 
-Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>` (must be loaded).
+Imports a graph using a Tulip :ref:`import plugin <importpluginsdoc>`.
 Import plugins are objects implementing the tlp::ImportModule interface
 in C++ or the :class:`tlp.ImportModule` interface in Python.
 The list of currently loaded import plugins can be
@@ -4225,8 +4209,6 @@ Returns a new graph or None if the import fails.
 :rtype: :class:`tlp.Graph`
 :throws: an exception if the requested import plugin is not registered in the plugins database.
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call import modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode
@@ -4254,7 +4236,7 @@ bool exportGraph(const std::string &exportPluginName, tlp::Graph *graph, const s
 %Docstring
 tlp.exportGraph(exportPluginName, graph, outputFilePath[, params])
 
-Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>` (must be loaded).
+Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>`.
 
 :param graph: the graph to export
 :type graph: :class:`tlp.Graph`
@@ -4267,8 +4249,6 @@ Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>` 
 :rtype: boolean
 :throws: an exception if the requested export plugin is not registered in the plugins database. 
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call import modules (see :ref:`Loading Tulip plugins <loading-plugins>`)).
 %End
 
 %MethodCode

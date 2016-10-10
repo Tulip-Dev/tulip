@@ -1,28 +1,21 @@
 .. py:currentmodule:: tulip
 
-.. warning:: If you are using the bindings through the classical Python interpreter, Tulip plugins must be loaded in order to be
-             able to call algorithms (see :ref:`Loading Tulip plugins <loading-plugins>`)).
-
 .. _applyGraphAlgorithm:
 
 Applying an algorithm on a graph
 ================================ 
 
-In Tulip, algorithms are implemented as plugins. There is two main type of algorithms :
+In Tulip, algorithms are implemented as plugins (automatically loaded when importing the :mod:`tulip` module).
+There is two main type of algorithms :
 
-	* *General* : algorithms of this type can work on the input graph in a free manner and perform a variety of tasks
+    * *General* : algorithms of this type can work on the input graph in a free manner and perform a variety of tasks
 	  (modifying the graph structure, creating graph properties, ...).
 
-	* *Property* : algorithms of this type can only compute data to attach on the graph elements and fill an output
+    * *Property* : algorithms of this type can only compute data to attach on the graph elements and fill an output
 	  graph property (e.g. layout algorithm, metric algorithm, ...).
 
 In the remaining of this section, you will learn how to call each type of algorithm from Python 
 but also how to transmit parameters to the algorithms. 
-
-.. important:: 
-	As algorithms are plugins, they must be loaded before you can call them.  If
-	you use the bindings from the Tulip GUI, all installed plugins are already loaded. If you 
-	use the bindings from the Python shell, you need to manually load the plugins (see :ref:`Using the bindings from the Python Interpreter <usingBindingsInShell>`).
 
 .. _callGeneralAlgorithm:
 
