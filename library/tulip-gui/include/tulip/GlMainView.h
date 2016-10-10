@@ -24,6 +24,7 @@
 
 class QGraphicsProxyWidget;
 class QAction;
+class QPushButton;
 class QRectF;
 
 namespace tlp {
@@ -74,6 +75,8 @@ class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
   QAction *_forceRedrawAction;
   QAction *_advAntiAliasingAction;
   QAction *_snapshotAction;
+
+  QPushButton *_showOvButton, *_showQabButton;
 
 protected:
   tlp::QuickAccessBar *_quickAccessBar;
@@ -163,6 +166,8 @@ protected:
   bool eventFilter(QObject *obj, QEvent *event);
 
   tlp::GlOverviewGraphicsItem *overviewItem() const;
+  void updateShowOverviewButton();
+  void updateShowQuickAccessBarButton();
 
   OverviewPosition _overviewPosition;
 
