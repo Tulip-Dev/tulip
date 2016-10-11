@@ -64,7 +64,8 @@ void GlSphere::generateBuffers(int space) {
       indices[n+1]=n+1;
       indices[n+2]=n+2;
       indices[n+3]=n+3;
-      indices[verticesCount*2-n]=n+verticesCount;
+      if (n) 
+	indices[verticesCount*2-n]=n+verticesCount;
       indices[verticesCount*2-n-1]=n+verticesCount+1;
       indices[verticesCount*2-n-2]=n+verticesCount+2;
       indices[verticesCount*2-n-3]=n+verticesCount+3;
