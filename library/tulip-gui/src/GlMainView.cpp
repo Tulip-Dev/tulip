@@ -298,8 +298,9 @@ void GlMainView::sceneRectChanged(const QRectF &rect) {
       _overviewItem->setPos(0, 0);
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
       _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, 0);
+
+    updateShowOverviewButton();
   }
-  updateShowOverviewButton();
 
   GlLayer *fgLayer = getGlMainWidget()->getScene()->getLayer("Foreground");
 
