@@ -202,6 +202,7 @@ void GlMainView::updateShowOverviewButton() {
     QRectF rect(QPoint(0, 0), graphicsView()->size());
 
     _showOvButton->blockSignals(true);
+
     if (_overviewItem&&_overviewItem->isVisible()) {
       _showOvButton->setText("x");
       _showOvButton->setChecked(true);
@@ -214,6 +215,7 @@ void GlMainView::updateShowOverviewButton() {
       _showOvButton->setToolTip("Show overview display");
       _showOvButton->move(rect.width() - _showOvButton->width(), rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
     }
+
     _showOvButton->blockSignals(false);
   }
 }
@@ -247,8 +249,9 @@ void GlMainView::updateShowQuickAccessBarButton() {
   }
 
   QRectF rect(QPoint(0, 0), graphicsView()->size());
-  
+
   _showQabButton->blockSignals(true);
+
   if (quickAccessBarVisible()) {
     _showQabButton->setText("x");
     _showQabButton->setChecked(true);
@@ -261,6 +264,7 @@ void GlMainView::updateShowQuickAccessBarButton() {
     _showQabButton->setToolTip("Show quick access bar");
     _showQabButton->move(0, rect.height() - _showQabButton->height());
   }
+
   _showQabButton->blockSignals(false);
 }
 
