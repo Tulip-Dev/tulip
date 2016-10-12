@@ -41,7 +41,7 @@
 using namespace tlp;
 
 GlMainView::GlMainView():
-  _glMainWidget(NULL), _overviewItem(NULL), isOverviewVisible(true),
+  _glMainWidget(NULL), _overviewItem(NULL),
   _quickAccessBarItem(NULL), _showOvButton(NULL), _showQabButton(NULL),
   _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
   _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
@@ -166,7 +166,7 @@ void GlMainView::centerView(bool graphChanged) {
   // to ensure the scene will not be drawn under the configuration tabs title
   getGlMainWidget()->centerScene(graphChanged, (gvWidth - 50) / gvWidth);
 
-  if(isOverviewVisible)
+  if(_overviewItem&&_overviewItem->isVisible())
     drawOverview(graphChanged);
 }
 
@@ -175,7 +175,7 @@ void GlMainView::delayedCenterView() {
 }
 
 void GlMainView::glMainViewDrawn(bool graphChanged) {
-  if(isOverviewVisible)
+  if(_overviewItem&&_overviewItem->isVisible())
     drawOverview(graphChanged);
 }
 
@@ -202,7 +202,7 @@ void GlMainView::updateShowOverviewButton() {
     QRectF rect(QPoint(0, 0), graphicsView()->size());
 
     _showOvButton->blockSignals(true);
-    if (isOverviewVisible) {
+    if (_overviewItem&&_overviewItem->isVisible()) {
       _showOvButton->setText("x");
       _showOvButton->setChecked(true);
       _showOvButton->setToolTip("Hide overview display");
@@ -219,14 +219,13 @@ void GlMainView::updateShowOverviewButton() {
 }
 
 void GlMainView::setOverviewVisible(bool display) {
-  isOverviewVisible=display;
   drawOverview(true);
   _overviewItem->setVisible(display);
   updateShowOverviewButton();
 }
 
 bool GlMainView::overviewVisible() const {
-  return isOverviewVisible;
+  return (_overviewItem&&_overviewItem->isVisible());
 }
 
 void GlMainView::setViewOrtho(bool viewOrtho) {
