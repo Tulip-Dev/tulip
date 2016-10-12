@@ -220,14 +220,8 @@ void GlMainView::updateShowOverviewButton() {
 
 void GlMainView::setOverviewVisible(bool display) {
   isOverviewVisible=display;
-
-  if(display) {
-    drawOverview(true);
-    _overviewItem->setVisible(true);
-  }
-  else if(_overviewItem)
-    _overviewItem->setVisible(false);
-
+  drawOverview(true);
+  _overviewItem->setVisible(display);
   updateShowOverviewButton();
 }
 
