@@ -68,7 +68,6 @@ class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
 
   tlp::GlMainWidget *_glMainWidget;
   tlp::GlOverviewGraphicsItem *_overviewItem;
-  bool isOverviewVisible;
   QGraphicsProxyWidget *_quickAccessBarItem;
 
   QAction *_centerViewAction;
