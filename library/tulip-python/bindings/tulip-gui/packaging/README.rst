@@ -25,14 +25,16 @@ Release notes
 
 Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **4.10.0**: based on Tulip 4.10.0 released on ???
+
     * **4.9.0** : based on Tulip 4.9.0 released on 08/07/2016
 
     * **4.8.1** : based on Tulip 4.8.1 released on 16/02/2016
 
     * **4.8.0.post1** :
 
-        * Fix crash on MacOS when calling OGDF layout algorithms
-        * minor fixes
+      * Fix crash on MacOS when calling OGDF layout algorithms
+      * minor fixes
 
     * **4.8.0** : Initial release based on Tulip 4.8
 
@@ -108,7 +110,7 @@ References
        Data. Technical report RR-7860, INRIA, January 2012
 
 .. [2] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python.
-           EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
+       EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
 
 .. [3] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
        C and C++ libraries. http://www.riverbankcomputing.co.uk/software/sip
