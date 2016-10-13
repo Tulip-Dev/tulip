@@ -201,9 +201,9 @@ private:
 
     total_weight = 0;
     const std::vector<edge>& edges = quotient->edges();
-   // unsigned int nb_edges = edges.size();
+    // unsigned int nb_edges = edges.size();
 
-    for(std::vector<edge>::const_iterator it=edges.begin();it!=edges.end();++it) {
+    for(std::vector<edge>::const_iterator it=edges.begin(); it!=edges.end(); ++it) {
 //    for(unsigned int i = 0; i < nb_edges; ++i) {
       edge e = *it;
       std::pair<node, node> ends = quotient->ends(e);
@@ -423,7 +423,7 @@ bool LouvainClustering::run() {
 //    }
 
     improvement = one_level();
-   // new_mod = modularity();
+    // new_mod = modularity();
 
     if (improvement) {
       ++level;

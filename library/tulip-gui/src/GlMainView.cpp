@@ -386,7 +386,7 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QAction* a = menu->addAction(trUtf8("Show overview"),this,SLOT(setOverviewVisible(bool)));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
-  
+
   if (needQuickAccessBar) {
     QAction* quickbarAction = menu->addAction(trUtf8("Show quick access bar"),this,SLOT(setQuickAccessBarVisible(bool)));
     quickbarAction->setCheckable(true);
