@@ -41,7 +41,7 @@
 using namespace tlp;
 
 GlMainView::GlMainView():
-  _glMainWidget(NULL), _overviewItem(NULL),
+  _glMainWidget(NULL), _overviewItem(NULL), needQuickAccessBar(false),
   _quickAccessBarItem(NULL), _showOvButton(NULL), _showQabButton(NULL),
   _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
   _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
@@ -236,36 +236,38 @@ void GlMainView::setViewOrtho(bool viewOrtho) {
 }
 
 void GlMainView::updateShowQuickAccessBarButton() {
-  if (_showQabButton == NULL) {
-    QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget();
-    _showQabButton = new QPushButton();
-    _showQabButton->setMaximumSize(10, 10);
-    _showQabButton->setCheckable(true);
-    _showQabButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 10pt; border:none};");
-    proxy->setWidget(_showQabButton);
-    addToScene(proxy);
-    proxy->setZValue(10);
-    connect(_showQabButton, SIGNAL(toggled(bool)), this, SLOT(setQuickAccessBarVisible(bool)));
+  if (needQuickAccessBar) {
+    if (_showQabButton == NULL) {
+      QGraphicsProxyWidget* proxy = new QGraphicsProxyWidget();
+      _showQabButton = new QPushButton();
+      _showQabButton->setMaximumSize(10, 10);
+      _showQabButton->setCheckable(true);
+      _showQabButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 10pt; border:none};");
+      proxy->setWidget(_showQabButton);
+      addToScene(proxy);
+      proxy->setZValue(10);
+      connect(_showQabButton, SIGNAL(toggled(bool)), this, SLOT(setQuickAccessBarVisible(bool)));
+    }
+
+    QRectF rect(QPoint(0, 0), graphicsView()->size());
+
+    _showQabButton->blockSignals(true);
+
+    if (quickAccessBarVisible()) {
+      _showQabButton->setText("x");
+      _showQabButton->setChecked(true);
+      _showQabButton->setToolTip("Hide quick access bar");
+      _showQabButton->move(0, rect.height() -_quickAccessBarItem->size().height() - 4);
+    }
+    else {
+      _showQabButton->setText("^");
+      _showQabButton->setChecked(false);
+      _showQabButton->setToolTip("Show quick access bar");
+      _showQabButton->move(0, rect.height() - _showQabButton->height());
+    }
+
+    _showQabButton->blockSignals(false);
   }
-
-  QRectF rect(QPoint(0, 0), graphicsView()->size());
-
-  _showQabButton->blockSignals(true);
-
-  if (quickAccessBarVisible()) {
-    _showQabButton->setText("x");
-    _showQabButton->setChecked(true);
-    _showQabButton->setToolTip("Hide quick access bar");
-    _showQabButton->move(0, rect.height() -_quickAccessBarItem->size().height() - 4);
-  }
-  else {
-    _showQabButton->setText("^");
-    _showQabButton->setChecked(false);
-    _showQabButton->setToolTip("Show quick access bar");
-    _showQabButton->move(0, rect.height() - _showQabButton->height());
-  }
-
-  _showQabButton->blockSignals(false);
 }
 
 void GlMainView::setQuickAccessBarVisible(bool visible) {
@@ -276,6 +278,7 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
   }
 
   else if (!quickAccessBarVisible()) {
+    needQuickAccessBar = true;
     _quickAccessBarItem = new QGraphicsProxyWidget();
     _quickAccessBar = new QuickAccessBar(_quickAccessBarItem);
 // workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
@@ -310,9 +313,9 @@ void GlMainView::sceneRectChanged(const QRectF& rect) {
   if (_overviewItem != NULL) {
     // put overview in the bottom right corner
     if (_overviewPosition == OVERVIEW_BOTTOM_RIGHT)
-      _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1, rect.height() - _overviewItem->getHeight() - ((_quickAccessBarItem != NULL) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_BOTTOM_LEFT)
-      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != NULL) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBarItem != NULL) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_TOP_LEFT)
       _overviewItem->setPos(0, 0);
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
@@ -383,10 +386,12 @@ void GlMainView::fillContextMenu(QMenu *menu, const QPointF &) {
   QAction* a = menu->addAction(trUtf8("Show overview"),this,SLOT(setOverviewVisible(bool)));
   a->setCheckable(true);
   a->setChecked(overviewVisible());
-
-  QAction* quickbarAction = menu->addAction(trUtf8("Show quick access bar"),this,SLOT(setQuickAccessBarVisible(bool)));
-  quickbarAction->setCheckable(true);
-  quickbarAction->setChecked(quickAccessBarVisible());
+  
+  if (needQuickAccessBar) {
+    QAction* quickbarAction = menu->addAction(trUtf8("Show quick access bar"),this,SLOT(setQuickAccessBarVisible(bool)));
+    quickbarAction->setCheckable(true);
+    quickbarAction->setChecked(quickAccessBarVisible());
+  }
 }
 
 void GlMainView::applySettings() {
