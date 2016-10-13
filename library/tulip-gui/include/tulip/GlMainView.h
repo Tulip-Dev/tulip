@@ -65,6 +65,7 @@ class TLP_QT_SCOPE GlMainView: public tlp::ViewWidget {
 
   tlp::GlMainWidget* _glMainWidget;
   tlp::GlOverviewGraphicsItem* _overviewItem;
+  bool needQuickAccessBar;
   QGraphicsProxyWidget* _quickAccessBarItem;
 
   QAction *_centerViewAction;
