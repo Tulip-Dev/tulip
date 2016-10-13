@@ -172,6 +172,7 @@ void ColorScale::setColorMap(const map<float, Color> &newColorMap) {
         colorMap[1.f] = c;
       }
     }
+    sendEvent(Event(*this, Event::TLP_MODIFICATION));
   }
 }
 
