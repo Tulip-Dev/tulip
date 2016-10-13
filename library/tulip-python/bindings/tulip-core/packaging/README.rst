@@ -33,6 +33,8 @@ Release notes
 
 Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
+    * **4.10.0**: based on Tulip 4.10.0 released on ???
+
     * **4.9.0** : based on Tulip 4.9.0 released on 08/07/2016
 
       * add a mechanism to ease the creation of graph properties through type inference (see updated documentation)
@@ -43,15 +45,15 @@ Some informations regarding the Tulip-Python releases pushed on the Python Packa
 
     * **4.8.1** : based on Tulip 4.8.1 released on 16/02/2016
 
-        * add new convenient methods for getting / setting multiple properties values of nodes and edges,
-          trough the use of a dictionnary, in the tlp.Graph class (see updated documentation)
+      * add new convenient methods for getting / setting multiple properties values of nodes and edges,
+        trough the use of a dictionnary, in the tlp.Graph class (see updated documentation)
 
-        * some bugs fixes
+      * some bugs fixes
 
     * **4.8.0.post1** :
 
-        * Fix crash on MacOS when calling OGDF layout algorithms
-        * minor fixes
+      * Fix crash on MacOS when calling OGDF layout algorithms
+      * minor fixes
 
     * **4.8.0** : Initial release based on Tulip 4.8
 	  
@@ -117,10 +119,11 @@ References
        Data. Technical report RR-7860, INRIA, January 2012
 	   
 .. [2] Antoine Lambert and David Auber. Graph analysis and visualization with Tulip-Python. 
-	   EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
+       EuroSciPy 2012 - 5th European meeting on Python in Science, Bruxelles
 	   
 .. [3] Riverbank Computing Limited. SIP - a tool for automatically generating Python bindings for
        C and C++ libraries. http://www.riverbankcomputing.co.uk/software/sip
 	   
-.. [4] M. Chimani, C. Gutwenger, M. Jünger, K. Klein, P. Mutzel, and M. Schulz. The Open Graph
-       Drawing Framework. 15th International Symposium on Graph Drawing 2007, Sydney (GD07), 2007.
+.. [4] M. Chimani, C. Gutwenger, M. Jünger, G. W. Klau, K. Klein, P. Mutzel.
+       The Open Graph Drawing Framework (OGDF).
+       Chapter 17 in: R. Tamassia (ed.), Handbook of Graph Drawing and Visualization, CRC Press, 2014.
