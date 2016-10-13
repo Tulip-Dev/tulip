@@ -409,7 +409,7 @@ bool LouvainClustering::run() {
   init_level();
   bool improvement = true;
 //  double mod = modularity(),
-  double new_mod;
+//  double new_mod;
   int level = 0;
 //  bool verbose = false;
 
@@ -423,7 +423,7 @@ bool LouvainClustering::run() {
 //    }
 
     improvement = one_level();
-    new_mod = modularity();
+   // new_mod = modularity();
 
     if (improvement) {
       ++level;
