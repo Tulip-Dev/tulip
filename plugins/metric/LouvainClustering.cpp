@@ -201,10 +201,11 @@ private:
 
     total_weight = 0;
     const std::vector<edge>& edges = quotient->edges();
-    unsigned int nb_edges = edges.size();
+   // unsigned int nb_edges = edges.size();
 
-    for(unsigned int i = 0; i < nb_edges; ++i) {
-      edge e = edges[i];
+    for(std::vector<edge>::const_iterator it=edges.begin();it!=edges.end();++it) {
+//    for(unsigned int i = 0; i < nb_edges; ++i) {
+      edge e = *it;
       std::pair<node, node> ends = quotient->ends(e);
       node src = ends.first;
       node tgt = ends.second;
@@ -312,7 +313,7 @@ private:
         improvement=true;
 
     }
-    while ((nb_moves>0) && ((new_mod-cur_mod)>min_modularity));
+    while (improvement && ((new_mod-cur_mod)>min_modularity));
 
     return improvement;
   }
@@ -386,7 +387,7 @@ bool LouvainClustering::run() {
   // init total_weight, weights and quotient edges
   forEach(e, graph->getEdges()) {
     double weight = metric ? metric->getEdgeDoubleValue(e) : 1;
-    std::pair<node, node> ends = graph->ends(e);
+    const std::pair<node, node> &ends = graph->ends(e);
     node q_src(clusters.get(ends.first.id));
     node q_tgt(clusters.get(ends.second.id));
     // self loops are counted only once
@@ -407,18 +408,19 @@ bool LouvainClustering::run() {
   // init other vectors
   init_level();
   bool improvement = true;
-  double mod = modularity(), new_mod;
+//  double mod = modularity(),
+  double new_mod;
   int level = 0;
-  bool verbose = false;
+//  bool verbose = false;
 
-  do {
-    if (verbose) {
-      std::cout << "level " << level << ':' << std::endl;
-      std::cout << "  network size: "
-                << nb_qnodes << " nodes, "
-                << quotient->numberOfEdges() << " links, "
-                << total_weight << " weight." << endl << std::flush;
-    }
+  while(improvement) {
+//    if (verbose) {
+//      std::cout << "level " << level << ':' << std::endl;
+//      std::cout << "  network size: "
+//                << nb_qnodes << " nodes, "
+//                << quotient->numberOfEdges() << " links, "
+//                << total_weight << " weight." << endl << std::flush;
+//    }
 
     improvement = one_level();
     new_mod = modularity();
@@ -436,17 +438,17 @@ bool LouvainClustering::run() {
       quotient = new_quotient;
       weights = new_weights;
 
-      if (verbose)
-        std::cout << " modularity increased from " << mod
-                  << " to " << new_mod << endl << std::flush;
+//      if (verbose)
+//        std::cout << " modularity increased from " << mod
+//                  << " to " << new_mod << endl << std::flush;
 
-      mod=new_mod;
+//      mod=new_mod;
       init_level();
     }
     else {
-      if (verbose)
-        std::cout << " modularity increased from " << mod
-                  << " to " << new_mod << endl << std::flush;
+//      if (verbose)
+//        std::cout << " modularity increased from " << mod
+//                  << " to " << new_mod << endl << std::flush;
 
       // update measure
       // Renumber communities
@@ -471,7 +473,6 @@ bool LouvainClustering::run() {
       delete weights;
     }
   }
-  while(improvement);
 
   return true;
 }
