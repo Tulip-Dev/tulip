@@ -31,6 +31,7 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUti
 DISABLE_COMPILER_WARNINGS()
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
 CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
 ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in

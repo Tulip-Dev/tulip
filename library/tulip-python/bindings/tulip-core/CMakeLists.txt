@@ -113,6 +113,7 @@ ADD_DEPENDENCIES(tulip-core-wheel copyTulipInitPy)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
 CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
 ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIP_PYTHON_FOLDER}/../setup.cfg
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
