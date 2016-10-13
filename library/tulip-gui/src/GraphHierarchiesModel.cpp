@@ -407,7 +407,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
 
   beginInsertRows(QModelIndex(), rowCount(), rowCount());
 
-  _saveNeeded[g] = new GraphNeedsSavingObserver(g, Perspective::instance()->mainWindow());
+  _saveNeeded[g] = new GraphNeedsSavingObserver(g, Perspective::instance() ? Perspective::instance()->mainWindow() : nullptr);
 
   _graphs.push_back(g);
 
