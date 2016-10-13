@@ -1060,11 +1060,11 @@ void ScatterPlot2DView::afterSetAllEdgeValue(PropertyInterface *p) {
   if (p->getName() == "viewColor") {
     ColorProperty *edgeAsNodeGraphColors = edgeAsNodeGraph->getProperty<ColorProperty>("viewColor");
     ColorProperty *viewColor = static_cast<ColorProperty *>(p);
-    edgeAsNodeGraphColors->setAllNodeValue(viewColor->getEdgeValue(scatterPlotGraph->getOneEdge()));
+    edgeAsNodeGraphColors->setAllNodeValue(viewColor->getEdgeDefaultValue());
   } else if (p->getName() == "viewLabel") {
     StringProperty *edgeAsNodeGraphLabels = edgeAsNodeGraph->getProperty<StringProperty>("viewLabel");
     StringProperty *viewLabel = static_cast<StringProperty *>(p);
-    edgeAsNodeGraphLabels->setAllNodeValue(viewLabel->getEdgeValue(scatterPlotGraph->getOneEdge()));
+    edgeAsNodeGraphLabels->setAllNodeValue(viewLabel->getEdgeDefaultValue());
   } else if (p->getName() == "viewSelection") {
     BooleanProperty *edgeAsNodeGraphSelection = edgeAsNodeGraph->getProperty<BooleanProperty>("viewSelection");
     BooleanProperty *viewSelection = static_cast<BooleanProperty *>(p);
