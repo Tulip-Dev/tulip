@@ -86,6 +86,7 @@ SOMView::~SOMView() {
 
   delete graphLayoutProperty;
   delete properties;
+
   if (previewWidget&&previewWidget == getGlMainWidget())
     delete mapWidget;
   else

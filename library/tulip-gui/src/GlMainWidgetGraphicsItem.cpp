@@ -60,7 +60,7 @@ void GlMainWidgetGraphicsItem::setGlMainWidget(GlMainWidget *glmw) {
     glMainWidget = glmw;
     connect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
     connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
-    glMainWidget->installEventFilter(this);    
+    glMainWidget->installEventFilter(this);
   }
 }
 

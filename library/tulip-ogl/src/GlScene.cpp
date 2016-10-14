@@ -414,7 +414,7 @@ void GlScene::removeLayer(const std::string& name,bool deleteLayer) {
       if(deleteLayer)
         delete it->second;
       else
-	it->second->setScene(NULL);
+        it->second->setScene(NULL);
 
       layersList.erase(it);
       return;
@@ -431,7 +431,7 @@ void GlScene::removeLayer(GlLayer *layer,bool deleteLayer) {
       if(deleteLayer)
         delete it->second;
       else
-	it->second->setScene(NULL);
+        it->second->setScene(NULL);
 
       layersList.erase(it);
       return;

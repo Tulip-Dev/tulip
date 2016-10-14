@@ -578,11 +578,12 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
 
   if(!filename.isEmpty()) {
     bool result=tlp::saveGraph(g, tlp::QStringToTlpString(filename));
+
     if (!result)
       QMessageBox::critical(_mainWindow,trUtf8("Save error"),trUtf8("Failed to save graph hierarchy"));
     else {
-        savedFile=filename;
-        addRecentDocument(filename);
+      savedFile=filename;
+      addRecentDocument(filename);
     }
   }
 }
