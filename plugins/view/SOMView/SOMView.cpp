@@ -86,6 +86,10 @@ SOMView::~SOMView() {
 
   delete graphLayoutProperty;
   delete properties;
+  if (previewWidget == getGlMainWidget())
+    delete mapWidget;
+  else
+    delete previewWidget;
 }
 
 ColorScale *SOMView::getColorScale() {
