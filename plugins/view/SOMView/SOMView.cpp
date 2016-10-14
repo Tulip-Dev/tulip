@@ -1075,10 +1075,14 @@ void SOMView::applySettings() {
 void SOMView::switchToDetailledMode(SOMPreviewComposite* preview) {
   assert(preview);
   internalSwitchToDetailledMode(preview, properties->useAnimation());
+  // hide configuration widgets
+  properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(false);
 }
 
 void SOMView::switchToPreviewMode() {
   internalSwitchToPreviewMode(properties->useAnimation());
+  // show configuration widgets
+  properties->configurationWidgets()[0]->parentWidget()->parentWidget()->setVisible(true);
 }
 
 void SOMView::copyToGlMainWidget(GlMainWidget *widget) {
