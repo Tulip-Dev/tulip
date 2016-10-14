@@ -80,6 +80,7 @@ class CustomTabBar : public QTabBar {
 
 public:
   CustomTabBar(QWidget *parent = 0) : QTabBar(parent) {
+    setDrawBase(false);
   }
 
 protected:
