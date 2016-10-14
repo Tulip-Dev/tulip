@@ -26,6 +26,8 @@
 #include <QSortFilterProxyModel>
 #include <QTextDocument>
 #include <QToolButton>
+#include <QSortFilterProxyModel>
+#include <QMessageBox>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/Perspective.h>
@@ -232,7 +234,7 @@ void GraphHierarchiesEditor::cloneSubGraph() {
 }
 
 void GraphHierarchiesEditor::cloneSibling() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   _contextGraph->push();
@@ -241,7 +243,7 @@ void GraphHierarchiesEditor::cloneSibling() {
 }
 
 void GraphHierarchiesEditor::cloneSiblingWithProperties() {
-  if (_contextGraph == NULL)
+  if (_contextGraph == nullptr)
     return;
 
   _contextGraph->push();
@@ -288,13 +290,17 @@ void GraphHierarchiesEditor::delAllGraph() {
   if (_contextGraph == nullptr)
     return;
 
-  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
-  _contextGraph->push();
-
   if (_contextGraph->getRoot() == _contextGraph) {
-    delete _contextGraph;
-    _model->setCurrentGraph(nullptr);
+    if (QMessageBox::question(parentWidget(), "Delete a whole hierarchy",
+                              "You are going to delete a complete graph hierarchy. This operation cannot be undone. Do you really want to continue?",
+                              QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
+      GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
+      delete _contextGraph;
+      _model->setCurrentGraph(nullptr);
+    }
   } else {
+    _contextGraph->push();
+    GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
     tlp::Graph *sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
     _model->setCurrentGraph(sg);

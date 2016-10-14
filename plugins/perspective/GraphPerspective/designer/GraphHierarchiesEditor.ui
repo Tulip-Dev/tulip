@@ -194,6 +194,9 @@
    <property name="text">
     <string>Create clone sibling</string>
    </property>
+   <property name="text">
+    <string>Create clone sibling</string>
+   </property>
    <property name="toolTip">
     <string>Clone the selected graph into a sibling of that graph </string>
    </property>
@@ -202,6 +205,9 @@
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
      <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+   </property>
+   <property name="text">
+    <string>Create clone sibling (with properties)</string>
    </property>
    <property name="text">
     <string>Create clone sibling (with properties)</string>
@@ -215,7 +221,7 @@
     <string>Delete</string>
    </property>
    <property name="toolTip">
-    <string>Deletes the selected graph</string>
+    <string>Delete the selected graph</string>
    </property>
   </action>
   <action name="actionDelete_All">
@@ -223,13 +229,17 @@
     <string>Delete All</string>
    </property>
    <property name="toolTip">
-    <string>Deletes the selected graph and its subgraphs</string>
+    <string>Delete the selected graph and all its subgraphs</string>
    </property>
    <property name="shortcut">
     <string>Shift+Del</string>
    </property>
   </action>
   <action name="actionCreate_panel">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/view-add.png</normaloff>:/tulip/graphperspective/icons/16/view-add.png</iconset>
+   </property>
    <property name="text">
     <string>Add panel</string>
    </property>
@@ -238,6 +248,10 @@
    </property>
   </action>
   <action name="actionExport">
+   <property name="icon">
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/64/document-export.png</normaloff>:/tulip/gui/icons/64/document-export.png</iconset>
+   </property>
    <property name="text">
     <string>Export</string>
    </property>
@@ -251,23 +265,27 @@
    </property>
   </action>
   <action name="actionSave_to_file">
+   <property name="icon">
+    <iconset resource="../resources/GraphPerspective.qrc">
+     <normaloff>:/tulip/graphperspective/icons/16/document-save.png</normaloff>:/tulip/graphperspective/icons/16/document-save.png</iconset>
+   </property>
    <property name="text">
     <string>Save</string>
    </property>
    <property name="toolTip">
-    <string>Writes the whole hierarchy (from the root graph) into a file using the tlp format</string>
+    <string>Export the whole hierarchy (from the root graph) into a file using the tlp/tlpb file format</string>
    </property>
   </action>
   <action name="actionCreate_induced_sub_graph">
    <property name="icon">
     <iconset resource="../resources/GraphPerspective.qrc">
-     <normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy.png</iconset>
+     <normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</normaloff>:/tulip/graphperspective/icons/22/hierarchy-select.png</iconset>
    </property>
    <property name="text">
     <string>Create sub-graph from selection</string>
    </property>
    <property name="toolTip">
-    <string>Creates a subgraph from the selected elements</string>
+    <string>Create a subgraph from the selected elements</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+G</string>
@@ -289,6 +307,7 @@
  </customwidgets>
  <resources>
   <include location="../resources/GraphPerspective.qrc"/>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>
  <connections>
   <connection>
