@@ -44,6 +44,8 @@ public:
     return glMainWidget;
   }
 
+  void setGlMainWidget(tlp::GlMainWidget *);
+
   bool eventFilter(QObject *, QEvent *evt);
 
 signals:

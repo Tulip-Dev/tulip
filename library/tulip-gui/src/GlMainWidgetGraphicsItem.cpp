@@ -50,6 +50,18 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
   setHandlesChildEvents(false);
 }
 
+void GlMainWidgetGraphicsItem::setGlMainWidget(GlMainWidget *glmw) {
+  if (glmw) {
+    disconnect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
+    disconnect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
+    glMainWidget->removeEventFilter(this);
+    glMainWidget = glmw;
+    connect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
+    connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
+    glMainWidget->installEventFilter(this);    
+  }
+}
+
 GlMainWidgetGraphicsItem::~GlMainWidgetGraphicsItem() {
   delete glMainWidget;
 }

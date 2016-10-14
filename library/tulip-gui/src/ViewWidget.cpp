@@ -104,9 +104,6 @@ void ViewWidget::setCentralWidget(QWidget *w, bool deleteOldCentralWidget) {
   if (currentInteractor())
     currentInteractor()->install(w);
 
-  if (_centralWidgetItem)
-    _graphicsView->scene()->removeItem(_centralWidgetItem);
-
   GlMainWidget *glMainWidget = dynamic_cast<GlMainWidget *>(w);
 
   if (glMainWidget) {
@@ -114,9 +111,18 @@ void ViewWidget::setCentralWidget(QWidget *w, bool deleteOldCentralWidget) {
     _graphicsView->setViewport(new GlMainWidget());
     _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
-    GlMainWidgetGraphicsItem *glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
-    _centralWidgetItem = glMainWidgetItem;
-    _graphicsView->scene()->addItem(_centralWidgetItem);
+    GlMainWidgetGraphicsItem *glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem);
+    if (glMainWidgetItem) {
+      deleteOldCentralWidget = false;
+      glMainWidgetItem->setGlMainWidget(glMainWidget);
+    } else {
+      glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
+      if (_centralWidgetItem)
+        _graphicsView->scene()->removeItem(_centralWidgetItem);
+
+      _centralWidgetItem = glMainWidgetItem;
+      _graphicsView->scene()->addItem(_centralWidgetItem);
+    }
     glMainWidgetItem->resize(_graphicsView->width(), _graphicsView->height());
   } else {
     _graphicsView->setRenderHints(QPainter::TextAntialiasing);
