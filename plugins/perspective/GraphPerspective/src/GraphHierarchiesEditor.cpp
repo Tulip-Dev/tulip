@@ -26,6 +26,7 @@
 #include <QTextDocument>
 #include <QToolButton>
 #include <QSortFilterProxyModel>
+#include <QMessageBox>
 
 #include <tulip/Perspective.h>
 #include <tulip/BooleanProperty.h>
@@ -286,14 +287,16 @@ void GraphHierarchiesEditor::delAllGraph() {
   if (_contextGraph == NULL)
     return;
 
-  GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
-  _contextGraph->push();
-
   if (_contextGraph->getRoot() == _contextGraph) {
-    delete _contextGraph;
-    _model->setCurrentGraph(NULL);
+    if(QMessageBox::question(parentWidget(), "Delete a whole hierarchy", "You are going to delete a complete graph hierarchy. This operation cannot be undone. Do you really want to continue?",QMessageBox::Ok,QMessageBox::Cancel)==QMessageBox::Ok) {
+        GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
+        delete _contextGraph;
+        _model->setCurrentGraph(NULL);
+    }
   }
   else {
+      _contextGraph->push();
+      GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
     tlp::Graph* sg = _contextGraph->getSuperGraph();
     _contextGraph->getSuperGraph()->delAllSubGraphs(_contextGraph);
     _model->setCurrentGraph(sg);
