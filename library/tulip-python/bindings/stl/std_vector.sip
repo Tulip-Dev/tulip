@@ -32,7 +32,7 @@
 // we are forced to provide a specialization.
 
 template<TYPE>
-%MappedType std::vector<TYPE> /DocType="list-of-TYPE"/ {
+%MappedType std::vector<TYPE> /TypeHint="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -121,7 +121,7 @@ template<TYPE>
 };
 
 template<TYPE*>
-%MappedType std::vector<TYPE*> /DocType="list-of-TYPE"/ {
+%MappedType std::vector<TYPE*> /TypeHint="list-of-TYPE"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -213,7 +213,7 @@ template<TYPE*>
 // Specialization for std::vector<double>
 // ****************************************************
 
-%MappedType std::vector<double> /DocType="list-of-double"/ {
+%MappedType std::vector<double> /TypeHint="list-of-double"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -271,7 +271,7 @@ template<TYPE*>
 // Specialization for std::vector<float>
 // ****************************************************
 
-%MappedType std::vector<float> /DocType="list-of-float"/ {
+%MappedType std::vector<float> /TypeHint="list-of-float"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -330,7 +330,7 @@ template<TYPE*>
 // Specialization for std::vector<int>
 // ****************************************************
 
-%MappedType std::vector<int> /DocType="list-of-int"/ {
+%MappedType std::vector<int> /TypeHint="list-of-int"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -400,7 +400,7 @@ template<TYPE*>
 // Specialization for std::vector<unsigned int>
 // ****************************************************
 
-%MappedType std::vector<unsigned int> /DocType="list-of-uint"/ {
+%MappedType std::vector<unsigned int> /TypeHint="list-of-uint"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -470,7 +470,7 @@ template<TYPE*>
 // Specialization for std::vector<long>
 // ****************************************************
 
-%MappedType std::vector<long> /DocType="list-of-long"/ {
+%MappedType std::vector<long> /TypeHint="list-of-long"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -540,7 +540,7 @@ template<TYPE*>
 // Specialization for std::vector<unsigned long>
 // ****************************************************
 
-%MappedType std::vector<unsigned long> /DocType="list-of-ulong"/ {
+%MappedType std::vector<unsigned long> /TypeHint="list-of-ulong"/ {
 %TypeHeaderCode
 #include <vector>
 %End
@@ -610,7 +610,7 @@ template<TYPE*>
 // Specialization for std::vector<bool>
 // ****************************************************
 
-%MappedType std::vector<bool> /DocType="list-of-bool"/{
+%MappedType std::vector<bool> /TypeHint="list-of-bool"/{
 %TypeHeaderCode
 #include <vector>
 %End
