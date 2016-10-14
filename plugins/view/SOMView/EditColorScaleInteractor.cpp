@@ -77,12 +77,13 @@ bool EditColorScaleInteractor::eventFilter(QObject *obj, QEvent *event) {
           ColorScaleConfigDialog dialog(*colorScale->getGlColorScale()->getColorScale(),
                                         glMainWidget);
           foundGlColorScale = true;
+
           if (dialog.exec()) {
-	    SOMView *somView = dynamic_cast<SOMView*> (view());
-	    // update shared color scale
-	    somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
-	    somView->updateDefaultColorProperty();
-	  }
+            SOMView *somView = dynamic_cast<SOMView*> (view());
+            // update shared color scale
+            somView->getColorScale()->setColorMap(dialog.getColorScale().getColorMap());
+            somView->updateDefaultColorProperty();
+          }
         }
       }
     }

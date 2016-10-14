@@ -113,18 +113,21 @@ void ViewWidget::setCentralWidget(QWidget* w,bool deleteOldCentralWidget) {
     _graphicsView->setViewportUpdateMode(QGraphicsView::FullViewportUpdate);
 
     GlMainWidgetGraphicsItem* glMainWidgetItem = dynamic_cast<GlMainWidgetGraphicsItem *>(_centralWidgetItem);
+
     if (glMainWidgetItem) {
       deleteOldCentralWidget = false;
       glMainWidgetItem->setGlMainWidget(glMainWidget);
     }
     else {
       glMainWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, _graphicsView->width(), _graphicsView->height());
+
       if (_centralWidgetItem)
-	_graphicsView->scene()->removeItem(_centralWidgetItem);
+        _graphicsView->scene()->removeItem(_centralWidgetItem);
 
       _centralWidgetItem = glMainWidgetItem;
       _graphicsView->scene()->addItem(_centralWidgetItem);
     }
+
     glMainWidgetItem->resize(_graphicsView->width(),_graphicsView->height());
   }
   else {
