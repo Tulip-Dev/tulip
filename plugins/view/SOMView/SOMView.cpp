@@ -58,7 +58,7 @@ PLUGIN(SOMView)
 
 
 SOMView::SOMView(PluginContext *) :
-  graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL), somMask(NULL), mapCompositeElements(NULL), som(NULL), properties(NULL), somMapIsBuild(false),isConstruct(false) {
+  graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL), somMask(NULL), mapCompositeElements(NULL), som(NULL), previewWidget(NULL), properties(NULL), somMapIsBuild(false),isConstruct(false) {
   addDependency("Grid", "2.0");
 }
 
@@ -86,7 +86,7 @@ SOMView::~SOMView() {
 
   delete graphLayoutProperty;
   delete properties;
-  if (previewWidget == getGlMainWidget())
+  if (previewWidget&&previewWidget == getGlMainWidget())
     delete mapWidget;
   else
     delete previewWidget;
