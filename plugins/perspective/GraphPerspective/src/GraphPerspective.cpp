@@ -572,43 +572,18 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     return;
 
   static QString savedFile;
-  QString filter("TLP (*.tlp *.tlp.gz)");
-  std::string filename =
-    QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp file"),
-                                 savedFile, filter).toUtf8().data();
+  QString filter("Tlp format (*.tlp *.tlp.gz);;Tlpb format (*.tlpb *.tlpb.gz)");
+  QString filename =
+    QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp/tlpb file"),savedFile, filter);
 
-  if(!filename.empty()) {
-    std::ostream *os;
-
-    if (filename.rfind(".tlp.gz") == (filename.length() - 7))
-      os = tlp::getOgzstream(filename);
-    else {
-      if (filename.rfind(".tlp") != (filename.length() - 4))
-        // force file extension
-        filename += ".tlp";
-
-      os = tlp::getOutputFileStream(filename);
-    }
-
-    if (os->fail()) {
-      QMessageBox::critical(_mainWindow,trUtf8("File error"),trUtf8("Cannot open output file for writing: ") + QString::fromUtf8(filename.c_str()));
-      delete os;
-      return;
-    }
-
-    // remember for the next call
-    savedFile = QString::fromUtf8(filename.c_str());
-
-    DataSet params;
-    params.set("file", filename);
-    bool result = tlp::exportGraph(g, *os, "TLP Export", params);
-
+  if(!filename.isEmpty()) {
+    bool result=tlp::saveGraph(g, tlp::QStringToTlpString(filename));
     if (!result)
       QMessageBox::critical(_mainWindow,trUtf8("Save error"),trUtf8("Failed to save graph hierarchy"));
-    else
-      addRecentDocument(savedFile);
-
-    delete os;
+    else {
+        savedFile=filename;
+        addRecentDocument(filename);
+    }
   }
 }
 
