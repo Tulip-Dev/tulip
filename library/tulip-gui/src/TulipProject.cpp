@@ -28,7 +28,7 @@
 #include <QXmlStreamWriter>
 
 #include <tulip/QuaZIPFacade.h>
-#include <tulip/SimplePluginProgress.h>
+#include <tulip/TlpQtTools.h>
 
 #include <cstdlib>
 

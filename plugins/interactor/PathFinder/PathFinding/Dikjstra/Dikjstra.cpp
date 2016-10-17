@@ -169,12 +169,13 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
     vNodes.push_back(n);
     ok = false;
     map<double, edge> validEdge;
+
     for (edge e : graph->getInOutEdges(n)) {
       if (!usedEdges.get(e.id))
-        continue; // that edge do not belongs to the shortest path edges
+        continue; // edge does not belong to the shortest path
 
       if (result->getEdgeValue(e))
-        continue; // that edge has already been treated
+        continue; // edge already treated
 
       node tgt = graph->opposite(e, n);
 
@@ -194,7 +195,7 @@ bool Dikjstra::searchPath(node n, BooleanProperty *result, vector<node> &vNodes,
 
   if (n != src) {
 #ifndef NDEBUG
-    cout << "Path do not exist !" << endl;
+    cout << "Path does not exist !" << endl;
 #endif /* NDEBUG */
     return false;
   }
