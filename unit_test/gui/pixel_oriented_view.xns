@@ -2581,6 +2581,22 @@ NEW-WINDOW:8384,0:58720542,58720542,747,510,142,0:6928x0+30281048+0:826037368,82
 0,21,0,0,0,0,0,25056449
 0,21,0,0,0,0,0,25056449
 0,21,0,0,0,0,0,25056449
+NEW-WINDOW:650,318:62914816,62914816,23314792,0,0,0:0x0+500+94:0,0:Delete a whole hierarchy
+0,21,0,0,0,0,0,25056449
+0,21,0,0,0,0,0,25056449
+0,21,0,0,0,0,0,25056449
+7,3,0,0,0,36,0,25056549,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,25056549,3,Virtual core keyboard
+7,2,0,0,0,64,0,25056649,10,AT Translated Set 2 keyboard
+6,2,0,0,0,64,0,25056649,3,Virtual core keyboard
+7,2,0,0,0,32,0,25056749,10,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,25056749,3,Virtual core keyboard
+7,3,0,0,0,32,0,25056849,10,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,25056849,3,Virtual core keyboard
+7,3,0,0,0,64,0,25056949,10,AT Translated Set 2 keyboard
+6,3,0,0,0,64,0,25056949,3,Virtual core keyboard
+0,21,0,0,0,0,0,25056949
+NEW-WINDOW:5,49:62914779,62914779,748,0,0,0:91x110+0+0:0,0:
 7,2,0,0,0,37,0,25058625,10,AT Translated Set 2 keyboard
 6,2,0,0,0,37,0,25058625,3,Virtual core keyboard
 7,2,0,0,0,32,0,25059596,10,AT Translated Set 2 keyboard

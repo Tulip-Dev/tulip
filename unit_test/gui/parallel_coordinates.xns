@@ -1944,6 +1944,23 @@ NEW-WINDOW:651,390:65011960,65011960,21136951,0,0,0:1x28+500+46:0,0:tulip_perspe
 6,4,0,0,1,0,0,25203580,2,Virtual core pointer
 7,5,0,0,1,0,0,25203708,14,USB Optical Mouse
 6,5,0,0,1,0,0,25203708,2,Virtual core pointer
+0,21,0,0,0,0,0,25203708
+NEW-WINDOW:650,318:62914816,62914816,23314792,0,0,0:0x0+500+94:0,0:Delete a whole hierarchy
+0,21,0,0,0,0,0,25203708
+0,21,0,0,0,0,0,25203708
+0,21,0,0,0,0,0,25203708
+7,3,0,0,0,36,0,25203758,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,25203758,3,Virtual core keyboard
+7,2,0,0,0,64,0,25203808,10,AT Translated Set 2 keyboard
+6,2,0,0,0,64,0,25203808,3,Virtual core keyboard
+7,2,0,0,0,32,0,25203858,10,AT Translated Set 2 keyboard
+6,2,0,0,0,32,0,25203858,3,Virtual core keyboard
+7,3,0,0,0,32,0,25203908,10,AT Translated Set 2 keyboard
+6,3,0,0,0,32,0,25203908,3,Virtual core keyboard
+7,3,0,0,0,64,0,25203958,10,AT Translated Set 2 keyboard
+6,3,0,0,0,64,0,25203958,3,Virtual core keyboard
+0,21,0,0,0,0,0,25203958
+NEW-WINDOW:5,49:62914779,62914779,748,0,0,0:91x110+0+0:0,0:
 7,2,0,0,0,37,0,25207284,10,AT Translated Set 2 keyboard
 6,2,0,0,0,37,0,25207284,3,Virtual core keyboard
 7,2,0,0,0,32,0,25207543,10,AT Translated Set 2 keyboard
