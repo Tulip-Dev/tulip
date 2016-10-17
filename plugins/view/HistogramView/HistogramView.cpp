@@ -158,7 +158,6 @@ void HistogramView::setState(const DataSet &dataSet) {
   if(!isConstruct) {
     isConstruct=true;
     gl->installEventFilter(this);
-
     setOverviewVisible(true);
 
     propertiesSelectionWidget = new ViewGraphPropertiesSelectionWidget();
@@ -172,6 +171,8 @@ void HistogramView::setState(const DataSet &dataSet) {
     binTextureId = gl->getFirstQGLWidget()->bindTexture(QImage(":/histo_texture.png").transformed(QTransform().rotate(90)), GL_TEXTURE_2D);
     GlTextureManager::getInst().registerExternalTexture(BIN_RECT_TEXTURE, binTextureId);
   }
+
+  GlMainView::setState(dataSet);
 
   Graph *lastGraph = _histoGraph;
   _histoGraph = graph();
@@ -349,7 +350,7 @@ DataSet HistogramView::state() const {
   vector<string> selectedPropertiesTmp=vector<string>(selectedProperties);
   map<string, Histogram *> histogramsMapTmp=map<string, Histogram *>(histogramsMap);
 
-  DataSet dataSet;
+  DataSet dataSet = GlMainView::state();
 
   for (size_t i = 0 ; i < selectedPropertiesTmp.size() ; ++i) {
     std::stringstream ss;

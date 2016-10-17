@@ -193,17 +193,9 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
   grid_ui->tableView->setItemDelegate(new TulipItemDelegate);
   connect(grid_ui->tableView, SIGNAL(destroyed()), grid_ui->tableView->itemDelegate(), SLOT(deleteLater()));
 
-  bool overviewVisible=true;
-
-  if(data.exist("overviewVisible")) {
-    data.get<bool>("overviewVisible",overviewVisible);
-  }
-
-  bool quickAccessBarVisible = true;
-
-  if(data.exist("quickAccessBarVisible")) {
-    data.get<bool>("quickAccessBarVisible",quickAccessBarVisible);
-  }
+  setOverviewVisible(true);
+  setQuickAccessBarVisible(true);
+  GlMainView::setState(data);
 
   bool keepSPOV = false;
   data.get<bool>("keepScenePointOfViewOnSubgraphChanging", keepSPOV);
@@ -211,12 +203,9 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet& data) {
 
   createScene(graph(), data);
   registerTriggers();
-  setOverviewVisible(overviewVisible);
 
   if(overviewItem())
     overviewItem()->setLayerVisible("Foreground",false);
-
-  setQuickAccessBarVisible(quickAccessBarVisible);
 }
 
 void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
@@ -237,8 +226,6 @@ void NodeLinkDiagramComponent::graphChanged(tlp::Graph* graph) {
 
 tlp::DataSet NodeLinkDiagramComponent::state() const {
   DataSet data=sceneData();
-  data.set("overviewVisible",overviewVisible());
-  data.set("quickAccessBarVisible",quickAccessBarVisible());
   data.set("keepScenePointOfViewOnSubgraphChanging",
            getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging());
   return data;
@@ -329,7 +316,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph,DataSet dataSet) {
 //==================================================
 DataSet NodeLinkDiagramComponent::sceneData() const {
   GlScene *scene=getGlMainWidget()->getScene();
-  DataSet outDataSet;
+  DataSet outDataSet = GlMainView::state();
   outDataSet.set("Display",scene->getGlGraphComposite()->getRenderingParameters().getParameters());
   std::string out;
   scene->getXML(out);
