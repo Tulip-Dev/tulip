@@ -124,28 +124,28 @@ static const char *paramHelp[] = {
   "If true, the distance between neighboring layers is fixed, otherwise variable (only for FastHierarchyLayout).",
 
   // transpose
-  "Determines whether the transpose step is performed after each 2-layer crossing minimization; this step tries to reduce the number of crossings by switching neighbored nodes on a layer.",
+  "Determine whether the transpose step is performed after each 2-layer crossing minimization; this step tries to reduce the number of crossings by switching neighbored nodes on a layer.",
 
   // arrangeCCs
   "If set to true connected components are laid out separately and the resulting layouts are arranged afterwards using the packer module.",
 
   // minDistCC
-  "Specifies the spacing between connected components of the graph.",
+  "Specifie the spacing between connected components of the graph.",
 
   // pageRatio
   "The page ratio used for packing connected components.",
 
   // alignBaseClasses
-  "Determines if base classes of inheritance hierarchies shall be aligned.",
+  "Determine if base classes of inheritance hierarchies shall be aligned.",
 
   // alignSiblings
-  "Sets the option alignSiblings.",
+  "Set the option alignSiblings.",
 
   // Ranking
-  "Sets the option for the node ranking (layer assignment).",
+  "Set the option for the node ranking (layer assignment).",
 
   // Two-layer crossing minimization
-  "Sets the module option for the two-layer crossing minimization.",
+  "Set the module option for the two-layer crossing minimization.",
 
   // Layout
   "The hierarchy layout module that computes the final layout."
@@ -195,7 +195,7 @@ public:
   ~OGDFSugiyama() {}
 
   PLUGININFORMATION("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007",
-                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.6","Hierarchical")
+                    "Implement the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.6","Hierarchical")
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);

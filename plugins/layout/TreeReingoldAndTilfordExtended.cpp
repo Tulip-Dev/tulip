@@ -38,10 +38,10 @@ static const char *paramHelp[] = {
   "This parameter enables to choose if the tree is drawn orthogonally or not.",
 
   // bounding circles
-  "Indicates if the node bounding objects are boxes or bounding circles.",
+  "Indicate if the node bounding objects are boxes or bounding circles.",
 
   // compact layout
-  "Indicates if a compact layout is computed."
+  "Indicate if a compact layout is computed."
 };
 //=============================================================================
 #define ORIENTATION "vertical;horizontal;"

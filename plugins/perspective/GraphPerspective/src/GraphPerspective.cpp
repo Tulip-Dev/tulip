@@ -473,7 +473,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // fill menu with recent documents
   buildRecentDocumentsMenu();
 
-  showTrayMessage("GraphPerspective started");
+  showTrayMessage("Graph Perspective started");
 }
 
 void GraphPerspective::openExternalFile() {

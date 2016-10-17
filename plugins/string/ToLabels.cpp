@@ -29,7 +29,7 @@ static const char *paramHelp[] = {
   "Set of elements for which to set the labels.",
 
   // nodes
-  "Sets labels on nodes.",
+  "Set labels on nodes.",
 
   // edges
   "Set labels on edges."
@@ -37,7 +37,7 @@ static const char *paramHelp[] = {
 
 class ToLabels: public tlp::StringAlgorithm {
 public:
-  PLUGININFORMATION("To labels","Ludwig Fiolka","2012/03/16","Maps the labels of the graph elements onto the values of a given property.","1.0","")
+  PLUGININFORMATION("To labels","Ludwig Fiolka","2012/03/16","Map graph elements labels onto the values of a given property.","1.0","")
   ToLabels(const tlp::PluginContext* context): StringAlgorithm(context) {
     addInParameter<PropertyInterface*>("input", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);

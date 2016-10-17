@@ -19,7 +19,7 @@
 #ifndef Tulip_LoopSelection_H
 #define Tulip_LoopSelection_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/BooleanProperty.h>
 
 /** \addtogroup selection */
 
@@ -34,7 +34,7 @@
 class LoopSelection:public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION("Loop Selection","David Auber","20/01/2003",
-                    "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.",
+                    "Select all edge loops in a graph.<br/>A loop is an edge that has the same source and target node.",
                     "1.0", "Selection")
   LoopSelection(const tlp::PluginContext* context);
   bool run();

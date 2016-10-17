@@ -209,7 +209,7 @@ class ImportUCINET : public ImportModule {
 
 public :
   PLUGININFORMATION("UCINET","Patrick Mary","12/09/2011",
-                    "Imports a new graph from a text file (.txt) in UCINET DL input format<br/>as it is described in the UCINET reference manual (<b>http://www.analytictech.com/ucinet/documentation/reference.rtf</b>)",
+                    "Import a new graph from a text file (.txt) in UCINET DL input format<br/>as it is described in the UCINET reference manual (<b>http://www.analytictech.com/ucinet/documentation/reference.rtf</b>)",
                     "1.0","File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;

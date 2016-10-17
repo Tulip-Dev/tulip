@@ -180,7 +180,7 @@ static const char *paramHelp[] = {
   "If true, for each node the Strahler number is computed from a spanning tree having that node as root: complexity o(n^2). If false the Strahler number is computed from a spanning tree having the heuristicly estimated graph center as root.",
 
   // Type
-  "Sets the type of computation."
+  "Set the type of computation."
 };
 
 #define COMPUTATION_TYPE "Type"

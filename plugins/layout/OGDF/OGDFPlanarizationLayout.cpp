@@ -91,7 +91,7 @@ static const char *embedderValuesDescription =
 
 static const char *paramHelp[] = {
   // page ratio
-  "Sets the option page ratio.",
+  "Set the option page ratio.",
 
   // Embedder
   "The result of the crossing minimization step is a planar graph, in which crossings are replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph."

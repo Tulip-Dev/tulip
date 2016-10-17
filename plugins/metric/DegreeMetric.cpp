@@ -32,7 +32,7 @@ static const char *paramHelp[] = {
   "The weighted degree of a node is the sum of weights of "
   "all its in/out/inout edges. "
   "If no metric is specified, using a uniform metric value of 1 for all edges "
-  "returns the usual degree for nodes (number of neighbors).",
+  "return the usual degree for nodes (number of neighbors).",
 
   // norm
   "If true, the measure is normalized in the following way."

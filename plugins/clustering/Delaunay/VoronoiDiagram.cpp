@@ -107,7 +107,7 @@ public :
   }
 
   PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "",
-                    "Performs a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.0","Triangulation")
+                    "Perform a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.0","Triangulation")
 
   bool run() {
     tlp::Observable::holdObservers();

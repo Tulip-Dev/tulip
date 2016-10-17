@@ -27,10 +27,10 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
   // d
-  "Enables to choose a damping factor in ]0,1[.",
+  "Enable to choose a damping factor in ]0,1[.",
 
   // directed
-  "Indicates if the graph should be considered as directed or not."
+  "Indicate if the graph should be considered as directed or not."
 };
 
 /*@{*/
@@ -58,7 +58,7 @@ static const char *paramHelp[] = {
 struct PageRank : public DoubleAlgorithm {
 
   PLUGININFORMATION("Page Rank","Mohamed Bouklit & David Auber","16/12/10",
-                    "Nodes measure used for links analysis.<br/>"
+                    "Node measure used for links analysis.<br/>"
                     "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm that assigns a measure to each node of an 'hyperlinked' graph.",
                     "2.0","Graph")
 

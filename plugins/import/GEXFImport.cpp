@@ -52,7 +52,7 @@ static const char *paramHelp[] = {
   "This parameter defines the pathname of the GEXF file to import.",
 
   // curved edges
-  "Indicates if Bézier curves should be used to draw the edges."
+  "Indicate if Bézier curves should be used to draw the edges."
 };
 
 class GEXFImport : public ImportModule {
@@ -60,7 +60,7 @@ class GEXFImport : public ImportModule {
 public :
 
   PLUGININFORMATION("GEXF","Antoine LAMBERT","05/05/2010",
-                    "Imports a new graph from a file in the GEXF input format<br/>as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet supported.",
+                    "Import a new graph from a file in the GEXF input format<br/>as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet supported.",
                     "1.0","File")
   GEXFImport(const PluginContext*  context):ImportModule(context),
     viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),
