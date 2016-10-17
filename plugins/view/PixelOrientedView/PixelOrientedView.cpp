@@ -825,6 +825,7 @@ void PixelOrientedView::applySettings() {
   if(propertiesSelectionWidget->configurationChanged() || optionsWidget->configurationChanged()) {
     updateOverviews(true);
     draw();
+
     if (!smallMultiplesView) {
       mainLayer->deleteGlEntity(detailViewLabel);
       GlGraphInputData *inputData = graphComposite->getInputData();

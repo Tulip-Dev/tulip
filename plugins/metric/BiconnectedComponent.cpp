@@ -122,6 +122,7 @@ static void bicoTestAndLabeling(const Graph & graph, node v,
           w = current.top();
           current.pop();
           it = graph.getInOutEdges(w);
+
           while(it->hasNext()) {
             edge e = it->next();
 
