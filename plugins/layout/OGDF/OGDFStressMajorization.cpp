@@ -70,28 +70,28 @@
 
 static const char *paramHelp[] = {
   // terminationCriterion
-  "Tells which TERMINATION_CRITERIA should be used.",
+  "Tell which TERMINATION_CRITERIA should be used.",
 
   // fixXCoordinates
-  "Tells whether the x coordinates are allowed to be modified or not.",
+  "Tell whether the x coordinates are allowed to be modified or not.",
 
   // fixYCoordinates
-  "Tells whether the y coordinates are allowed to be modified or not.",
+  "Tell whether the y coordinates are allowed to be modified or not.",
 
   // hasInitialLayout
-  "Tells whether the current layout should be used or the initial layout needs to be computed.",
+  "Tell whether the current layout should be used or the initial layout needs to be computed.",
 
   // layoutComponentsSeparately
-  "Sets whether the graph components should be layouted separately or a dummy distance should be used for nodes within different components.",
+  "Set whether the graph components should be layouted separately or a dummy distance should be used for nodes within different components.",
 
   // numberOfIterations
-  "Sets a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used.",
+  "Set a fixed number of iterations for stress majorization. If the new value is smaller or equal 0 the default value (200) is used.",
 
   // edgeCosts
-  "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used.",
+  "Set the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used.",
 
   // useEdgeCostsProperty
-  "Tells whether the edge costs are uniform or defined in an edge costs property.",
+  "Tell whether the edge costs are uniform or defined in an edge costs property.",
 
   // edgeCostsProperty
   "The numeric property that holds the desired cost for each edge."
@@ -102,7 +102,7 @@ class OGDFStressMajorization : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Stress Majorization (OGDF)","Karsten Klein","12/11/2007",
-                    "Implements an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","2.0","Force Directed")
+                    "Implement an alternative to force-directed layout which is a distance-based layout realized by the stress majorization approach. ","2.0","Force Directed")
   OGDFStressMajorization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::StressMinimization()) {
     addInParameter<StringCollection>("terminationCriterion", paramHelp[0], "None;PositionDifference;Stress",
                                      true, "None <br> PositionDifference <br> Stress");

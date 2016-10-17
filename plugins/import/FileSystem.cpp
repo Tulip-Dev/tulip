@@ -108,7 +108,7 @@ static tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, t
  */
 class FileSystem:public tlp::ImportModule {
 public:
-  PLUGININFORMATION( "File System Directory", "Auber", "16/12/2002", "Imports a tree representation of a file system directory.", "2.2", "Misc")
+  PLUGININFORMATION( "File System Directory", "Auber", "16/12/2002", "Import a tree representation of a file system directory.", "2.2", "Misc")
   FileSystem(tlp::PluginContext* context):ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL),
     _fileNames(NULL), _isDir(NULL), _isExecutable(NULL), _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL),
     _lastReadDates(NULL), _owners(NULL), _permissions(NULL), _suffixes(NULL), _sizes(NULL), _fontAwesomeIcon(NULL), _useIcons(true), _treeLayout(true), dirColor(255, 255, 127, 128) {

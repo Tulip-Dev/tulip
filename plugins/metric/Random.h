@@ -11,7 +11,7 @@
 class RandomMetric: public tlp::DoubleAlgorithm {
 
 public:
-  PLUGININFORMATION("Random metric","David Auber","04/10/2001","Assigns random values to nodes and edges.","1.1","Misc")
+  PLUGININFORMATION("Random metric","David Auber","04/10/2001","Assign random values to nodes and edges.","1.1","Misc")
   RandomMetric(const tlp::PluginContext* context);
   bool run();
 };

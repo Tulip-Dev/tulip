@@ -80,7 +80,7 @@ static const char *paramHelp[] = {
 class AdjacencyMatrixImport:public ImportModule {
 public:
   PLUGININFORMATION("Adjacency Matrix", "Auber David", "05/09/2008",
-                    "Imports a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
+                    "Import a graph from a file coding an adjacency matrix.<br/>File format:<br/>\
 The input format of this plugin is an ascii file where each line represents a row of the matrix.\
 In each row, cells must be separated by a space.<br/>Let M(i,j) be a cell of the matrix :<br/>\
      - if i==j we define the value of a node.<br/>\

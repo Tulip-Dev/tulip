@@ -62,7 +62,7 @@
 
 static const char *paramHelp[] = {
   // impred
-  "Sets impred option.",
+  "Set impred option.",
 
   // iterno
   "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes.",
@@ -74,7 +74,7 @@ static const char *paramHelp[] = {
 class OGDFBertaultLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Bertault (OGDF)","Smit Sanghavi","29/05/2015","Computes a force directed layout (Bertault Layout) for preserving the planar embedding in the graph.","1.0","Force Directed")
+  PLUGININFORMATION("Bertault (OGDF)","Smit Sanghavi","29/05/2015","Compute a force directed layout (Bertault Layout) for preserving the planar embedding in the graph.","1.0","Force Directed")
   OGDFBertaultLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BertaultLayout()) {
     addInParameter<bool> ("impred", paramHelp[0], "false", false);
     addInParameter<int> ("iterno", paramHelp[1], "20", false);

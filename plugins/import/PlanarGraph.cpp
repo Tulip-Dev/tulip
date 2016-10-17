@@ -46,7 +46,7 @@ struct Triangle {
  */
 class PlanarGraph:public ImportModule {
 public:
-  PLUGININFORMATION("Planar Graph","Auber","25/06/2005","Imports a new randomly generated planar graph.","1.0","Graph")
+  PLUGININFORMATION("Planar Graph","Auber","25/06/2005","Import a new randomly generated planar graph.","1.0","Graph")
   PlanarGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes", paramHelp[0], "30");
   }

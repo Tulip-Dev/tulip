@@ -22,7 +22,7 @@
 
 class SimpleTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Simple", "Tulip team", "18/04/2012", "Tests whether a graph is simple or not.<br/>A simple graph is an undirected graph with no loops and no multiple edges.", "1.0", "Topological Test")
+  PLUGININFORMATION("Simple", "Tulip team", "18/04/2012", "Test whether a graph is simple or not.<br/>A simple graph is an undirected graph with no loops and no multiple edges.", "1.0", "Topological Test")
   SimpleTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
@@ -35,7 +35,7 @@ PLUGIN(SimpleTest)
 
 class MakeSimple : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Make Simple", "Tulip team", "18/04/2012", "Makes a graph simple.<br/>A simple graph is an undirected graph with no loops and no multiple edges.", "1.0", "Topology Update")
+  PLUGININFORMATION("Make Simple", "Tulip team", "18/04/2012", "Make a graph simple.<br/>A simple graph is an undirected graph with no loops and no multiple edges.", "1.0", "Topology Update")
   MakeSimple(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
 

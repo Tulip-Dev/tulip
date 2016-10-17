@@ -36,6 +36,19 @@ struct less<edgeS> {
 };
 }
 
+//see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
+static int random_number(const int n) {
+    int x = rand();
+
+    // Keep searching for an x in a range divisible by n
+    while (x >= RAND_MAX - (RAND_MAX % n)) {
+      x = rand();
+    }
+
+   return  x % n;
+}
+
+
 static const char *paramHelp[] = {
   // nodes
   "Number of nodes in the final graph.",
@@ -53,7 +66,7 @@ static const char *paramHelp[] = {
  */
 class RandomGraph:public ImportModule {
 public:
-  PLUGININFORMATION("Random General Graph","Auber","16/06/2002","Imports a new randomly generated graph.","1.0","Graph")
+  PLUGININFORMATION("Random General Graph","Auber","16/06/2002","Import a new randomly generated graph with a maximum of one edge in each direction between two nodes. The graph may contain edge loop (edge from and to a same node)","1.0","Graph")
   RandomGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"500");
     addInParameter<unsigned int>("edges",paramHelp[1],"1000");
@@ -65,8 +78,8 @@ public:
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    unsigned int nbNodes  = 5;
-    unsigned int nbEdges  = 9;
+    unsigned int nbNodes  = 500;
+    unsigned int nbEdges  = 1000;
 
     if (dataSet!=NULL) {
       dataSet->get("nodes", nbNodes);
@@ -92,8 +105,8 @@ public:
           return pluginProgress->state()!=TLP_CANCEL;
 
       edgeS tmp;
-      tmp.source=rand()%nbNodes;
-      tmp.target=rand()%nbNodes;
+      tmp.source=random_number(nbNodes);
+      tmp.target=random_number(nbNodes);
 
       if (myGraph.find(tmp)!=myGraph.end())
         myGraph.erase(tmp);

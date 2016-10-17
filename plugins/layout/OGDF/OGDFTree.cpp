@@ -96,7 +96,7 @@ static const char *paramHelp[] = {
   "The minimal required horizontal distance between trees in the forest.",
 
   // orthogonal layout
-  "Indicates whether orthogonal edge routing style is used or not.",
+  "Indicate whether orthogonal edge routing style is used or not.",
 
   // Orientation
   "This parameter indicates the orientation of the layout.",
@@ -121,7 +121,7 @@ class OGDFTree : public OGDFLayoutPluginBase {
 
 public:
   PLUGININFORMATION("Improved Walker (OGDF)","Christoph Buchheim","12/11/2007",
-                    "Implements a linear-time tree layout algorithm with straight-line or orthogonal edge routing.","1.5","Tree")
+                    "Implement a linear-time tree layout algorithm with straight-line or orthogonal edge routing.","1.5","Tree")
   OGDFTree(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::TreeLayout()) {
     addInParameter<double>("siblings distance", paramHelp[0], "20");
     addInParameter<double>("subtrees distance", paramHelp[1], "20");
