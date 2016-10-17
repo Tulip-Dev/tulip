@@ -244,6 +244,8 @@ void SOMView::setState(const DataSet &dataSet) {
     addEmptyViewLabel();
 
   registerTriggers();
+
+  GlMainView::setState(dataSet);
 }
 
 void SOMView::changeMapViewGraph(tlp::Graph *graph) {
@@ -280,7 +282,7 @@ void SOMView::changeMapViewGraph(tlp::Graph *graph) {
 }
 
 DataSet SOMView::state() const {
-  DataSet dataSet;
+  DataSet dataSet = GlMainView::state();
   //Store configurationWidget state.
   dataSet.set("propertiesWidget", properties->getData());
   return dataSet;

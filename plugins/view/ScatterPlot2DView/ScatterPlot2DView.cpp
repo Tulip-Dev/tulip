@@ -179,6 +179,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     ++scatterplotViewInstancesCount;
     initialized=true;
     setOverviewVisible(true);
+    needQuickAccessBar = true;
   }
 
   if (backgroundTextureId == 0) {
@@ -316,7 +317,8 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   draw();
 
-  drawOverview(true);
+  if (overviewVisible())
+    drawOverview(true);
 
   string detailScatterPlotX = "";
   string detailScatterPlotY = "";
@@ -336,10 +338,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
   registerTriggers();
 
+  GlMainView::setState(dataSet);
 }
 
 DataSet ScatterPlot2DView::state() const {
-  DataSet dataSet;
+  DataSet dataSet = GlMainView::state();
   DataSet selectedGraphPropertiesDataSet;
 
   for (size_t i = 0 ; i < selectedGraphProperties.size() ; ++i) {
