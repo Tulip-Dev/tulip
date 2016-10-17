@@ -40,8 +40,8 @@
 using namespace tlp;
 
 GlMainView::GlMainView()
-    : _glMainWidget(nullptr), _overviewItem(nullptr), needQuickAccessBar(false), _quickAccessBarItem(nullptr), _showOvButton(nullptr),
-      _showQabButton(nullptr), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr), _sceneLayersConfigurationWidget(nullptr),
+    : _glMainWidget(nullptr), _overviewItem(nullptr), _quickAccessBarItem(nullptr), _showOvButton(nullptr), _showQabButton(nullptr),
+      needQuickAccessBar(false), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr), _sceneLayersConfigurationWidget(nullptr),
       _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {
 }
 
@@ -78,6 +78,31 @@ void GlMainView::setUpdateOverview(bool updateOverview) {
 
 bool GlMainView::updateOverview() const {
   return _updateOverview;
+}
+
+void GlMainView::setState(const tlp::DataSet& data) {
+  bool overviewVisible=true;
+
+  if(data.exist("overviewVisible")) {
+    data.get<bool>("overviewVisible", overviewVisible);
+    setOverviewVisible(overviewVisible);
+  }
+
+  bool quickAccessBarVisible = true;
+
+  if(data.exist("quickAccessBarVisible")) {
+    needQuickAccessBar = true;
+    data.get<bool>("quickAccessBarVisible", quickAccessBarVisible);
+    setQuickAccessBarVisible(quickAccessBarVisible);
+  }
+}
+
+tlp::DataSet GlMainView::state() const {
+  DataSet data;
+  data.set("overviewVisible", overviewVisible());
+  if (needQuickAccessBar)
+    data.set("quickAccessBarVisible", quickAccessBarVisible());
+  return data;
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {

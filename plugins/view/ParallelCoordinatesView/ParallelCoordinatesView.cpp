@@ -161,6 +161,8 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
     isConstruct = true;
   }
 
+  GlMainView::setState(dataSet);
+
   removeTriggers();
 
   vector<string> selectedPropertiesBak;
@@ -333,7 +335,7 @@ void ParallelCoordinatesView::setState(const DataSet &dataSet) {
 
 DataSet ParallelCoordinatesView::state() const {
 
-  DataSet dataSet;
+  DataSet dataSet = GlMainView::state();
 
   string sceneOut;
   getGlMainWidget()->getScene()->getXMLOnlyForCameras(sceneOut);

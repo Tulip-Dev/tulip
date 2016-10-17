@@ -68,7 +68,6 @@ class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
 
   tlp::GlMainWidget *_glMainWidget;
   tlp::GlOverviewGraphicsItem *_overviewItem;
-  bool needQuickAccessBar;
   QGraphicsProxyWidget *_quickAccessBarItem;
 
   QAction *_centerViewAction;
@@ -79,6 +78,7 @@ class TLP_QT_SCOPE GlMainView : public tlp::ViewWidget {
   QPushButton *_showOvButton, *_showQabButton;
 
 protected:
+  bool needQuickAccessBar;
   tlp::QuickAccessBar *_quickAccessBar;
   tlp::SceneConfigWidget *_sceneConfigurationWidget;
   tlp::SceneLayersConfigWidget *_sceneLayersConfigurationWidget;
@@ -98,6 +98,9 @@ public:
 
   void setUpdateOverview(bool updateOverview);
   bool updateOverview() const;
+
+  void setState(const tlp::DataSet &);
+  tlp::DataSet state() const;
 
 public slots:
   /**

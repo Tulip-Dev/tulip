@@ -164,6 +164,8 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
     setOverviewVisible(true);
   }
 
+  GlMainView::setState(dataSet);
+
   Graph *lastGraph = this->pixelOrientedGraph;
 
   if (graph() == nullptr) {
@@ -285,7 +287,7 @@ void PixelOrientedView::setState(const DataSet &dataSet) {
 }
 
 DataSet PixelOrientedView::state() const {
-  DataSet dataSet;
+  DataSet dataSet = GlMainView::state();
   DataSet selectedGraphPropertiesDataSet;
 
   for (size_t i = 0; i < selectedGraphProperties.size(); ++i) {
