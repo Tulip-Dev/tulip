@@ -8,7 +8,7 @@ This file is part of QuaZIP.
 
 QuaZIP is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+the Free Software Foundation, either version 2.1 of the License, or
 (at your option) any later version.
 
 QuaZIP is distributed in the hope that it will be useful,
@@ -180,6 +180,12 @@ class QUAZIP_EXPORT QuaZip {
      * \note If the zip64 support is needed, the ioApi argument \em must be NULL
      * because due to the backwards compatibility issues it can be used to
      * provide a 32-bit API only.
+     *
+     * \note If the \ref QuaZip::setAutoClose() "no-auto-close" feature is used,
+     * then the \a ioApi argument \em should be NULL because the old API
+     * doesn't support the 'fake close' operation, causing slight memory leaks
+     * and other possible troubles (like closing the output device in case
+     * when an error occurs during opening).
      *
      * In short: just forget about the \a ioApi argument and you'll be
      * fine.
@@ -427,10 +433,14 @@ class QUAZIP_EXPORT QuaZip {
 
       The data descriptor writing mode is enabled by default.
 
+      Note that if the ZIP archive is written into a QIODevice for which
+      QIODevice::isSequential() returns \c true, then the data descriptor
+      is mandatory and will be written even if this flag is set to false.
+
       \param enabled If \c true, enable local descriptor writing,
       disable it otherwise.
 
-      \sa QuaZipFile::setDataDescriptorWritingEnabled()
+      \sa QuaZipFile::isDataDescriptorWritingEnabled()
       */
     void setDataDescriptorWritingEnabled(bool enabled);
     /// Returns the data descriptor default writing mode.
