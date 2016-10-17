@@ -23,7 +23,7 @@
 /** \addtogroup selection */
 
 /**
- * This selection plugins enables to find the multiple-edges and parallel-edges in a graph.
+ * This selection plugin enables to find the multiple-edges and parallel-edges in a graph.
  * Let e1, e2 two edges, e1 and e2 are parallel edges if source(e1)=source(e2) and
  * target(e1) = target(e2).
  * If it exists n edges between two nodes, only n-1 edges will be selected.
@@ -33,10 +33,11 @@
  */
 class MultipleEdgeSelection : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION("Multiple Edge", "David Auber", "20/01/2003", "Selects the multiple or parallel edges of a graph.<br/>Two edges are considered "
-                                                                  "as parallel if they have the same source/origin and the same target/destination."
-                                                                  "If it exists n edges between two nodes, only n-1 edges will be selected.",
-                    "1.0", "Selection")
+  PLUGININFORMATION(
+      "Multiple Edge", "David Auber", "20/01/2003",
+      "Select the multiple or parallel edges of a graph.<br/>Two edges are considered parallel if they have the same source and the same target node."
+      "If it exists n edges between two nodes, only n-1 edges will be selected.",
+      "1.0", "Selection")
   MultipleEdgeSelection(const tlp::PluginContext *context);
   bool run();
 };

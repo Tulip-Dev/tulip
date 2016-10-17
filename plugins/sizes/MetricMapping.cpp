@@ -33,10 +33,10 @@ static const char *paramHelp[] = {
     "Each checked dimension is adjusted to represent property, each unchecked dimension is copied from input.",
 
     // min
-    "Gives the minimum value of the range of computed sizes.",
+    "Give the minimum value of the range of computed sizes.",
 
     // max
-    "Gives the maximum value of the range of computed sizes.",
+    "Give the maximum value of the range of computed sizes.",
 
     // Mapping type
     "Type of mapping."
@@ -65,10 +65,9 @@ static const string AREA_PROPORTIONAL = "Area Proportional";
  */
 class MetricSizeMapping : public SizeAlgorithm {
 public:
-  PLUGININFORMATION("Size Mapping", "Auber", "08/08/2003", "Maps the sizes of the graph elements onto the values of a given numeric property.", "2.0",
-                    "Size")
+  PLUGININFORMATION("Size Mapping", "Auber", "08/08/2003", "Map graph element sizes onto the values of a given numeric property.", "2.0", "Size")
   MetricSizeMapping(const PluginContext *context)
-      : SizeAlgorithm(context), entryMetric(nullptr), entrySize(nullptr), xaxis(true), yaxis(true), zaxis(true), mappingType(true), min(1), max(10),
+      : SizeAlgorithm(context), entryMetric(NULL), entrySize(NULL), xaxis(true), yaxis(true), zaxis(true), mappingType(true), min(1), max(10),
         range(0), shift(0), nodeoredge(true) {
     addInParameter<NumericProperty *>("property", paramHelp[0], "viewMetric");
     addInParameter<SizeProperty>("input", paramHelp[1], "viewSize");
@@ -95,12 +94,12 @@ public:
     max = 10;
     nodeoredge = true;
     proportional = "Area Proportional";
-    entryMetric = nullptr;
-    entrySize = nullptr;
+    entryMetric = NULL;
+    entrySize = NULL;
     mappingType = true;
     StringCollection proportionalType;
 
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       dataSet->get("property", entryMetric);
       dataSet->get("input", entrySize);
       dataSet->get("width", xaxis);
@@ -148,7 +147,7 @@ public:
   }
 
   bool run() {
-    NumericProperty *tmp = nullptr;
+    NumericProperty *tmp = NULL;
 
     if (!mappingType) {
       tmp = entryMetric->copyProperty(graph);

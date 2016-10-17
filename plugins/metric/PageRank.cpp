@@ -19,6 +19,7 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
 
 using namespace std;
@@ -26,10 +27,10 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // d
-    "Enables to choose a damping factor in ]0,1[.",
+    "Enable to choose a damping factor in ]0,1[.",
 
     // directed
-    "Indicates if the graph should be considered as directed or not."};
+    "Indicate if the graph should be considered as directed or not."};
 
 /*@{*/
 /** \file
@@ -55,11 +56,11 @@ static const char *paramHelp[] = {
 /*@}*/
 struct PageRank : public DoubleAlgorithm {
 
-  PLUGININFORMATION("Page Rank", "Mohamed Bouklit & David Auber", "16/12/10", "Nodes measure used for links analysis.<br/>"
-                                                                              "First designed by Larry Page and Sergey Brin, it is a "
-                                                                              "link analysis algorithm that assigns a measure to each "
-                                                                              "node of an 'hyperlinked' graph.",
-                    "2.0", "Graph")
+  PLUGININFORMATION(
+      "Page Rank", "Mohamed Bouklit & David Auber", "16/12/10",
+      "Node measure used for links analysis.<br/>"
+      "First designed by Larry Page and Sergey Brin, it is a link analysis algorithm that assigns a measure to each node of an 'hyperlinked' graph.",
+      "2.0", "Graph")
 
   PageRank(const PluginContext *context) : DoubleAlgorithm(context) {
     addInParameter<double>("d", paramHelp[0], "0.85");
@@ -86,8 +87,9 @@ struct PageRank : public DoubleAlgorithm {
     std::vector<double> next_pr(nbNodes);
 
     std::vector<node> nodes(nbNodes);
+    node n;
     unsigned int i = 0;
-    for (node n : graph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       nodeMap.set(n, i);
       nodes[i] = n;
       ++i;
@@ -96,36 +98,42 @@ struct PageRank : public DoubleAlgorithm {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
+
     for (i = 0; i < nbNodes; ++i)
       pr[i] = oon;
 
     const double one_minus_d = (1 - d) / nbNodes;
     const unsigned int kMax = (unsigned int)(15 * log(nbNodes));
+
     for (unsigned int k = 0; k < kMax + 1; ++k) {
       if (directed) {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
+
         for (i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
-          for (node n : graph->getInNodes(nodes[i]))
-            n_sum += pr[nodeMap.get(n)] / graph->outdeg(n);
+          node n;
+          forEach(n, graph->getInNodes(nodes[i])) n_sum += pr[nodeMap.get(n)] / graph->outdeg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       } else {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
+
         for (i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
-          for (node n : graph->getInOutNodes(nodes[i]))
-            n_sum += pr[nodeMap.get(n)] / graph->deg(n);
+          node n;
+          forEach(n, graph->getInOutNodes(nodes[i])) n_sum += pr[nodeMap.get(n)] / graph->deg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       }
+
       // swap pr and next_pr
       pr.swap(next_pr);
     }
+
     for (i = 0; i < nbNodes; ++i)
       result->setNodeValue(nodes[i], pr[i]);
 

@@ -1,34 +1,34 @@
 /**
-*
-* This file is part of Tulip (www.tulip-software.org)
-*
-* Authors: David Auber and the Tulip development Team
-* from LaBRI, University of Bordeaux
-*
-* Tulip is free software; you can redistribute it and/or modify
-* it under the terms of the GNU Lesser General Public License
-* as published by the Free Software Foundation, either version 3
-* of the License, or (at your option) any later version.
-*
-* Tulip is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-* See the GNU General Public License for more details.
-*
-*/
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
 #include <algorithm>
-#include <queue>
 #include <sstream>
 #include <string>
-#include <tulip/ForEach.h>
-#include <tulip/Graph.h>
-#include <tulip/GraphMeasure.h>
+#include <queue>
 #include <tulip/MutableContainer.h>
-#include <tulip/SimpleTest.h>
-#include <tulip/StableIterator.h>
-#include <tulip/StableIterator.h>
+#include <tulip/Graph.h>
 #include <tulip/TlpTools.h>
+#include <tulip/GraphMeasure.h>
+#include <tulip/StableIterator.h>
+#include <tulip/SimpleTest.h>
+#include <tulip/ForEach.h>
 #include <tulip/TulipPluginHeaders.h>
+#include <tulip/StableIterator.h>
 
 using namespace tlp;
 using namespace std;
@@ -54,21 +54,21 @@ using namespace std;
 *
 *
 **/
-class MCLClustering : public tlp::DoubleAlgorithm {
+class MCLClustering:public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("MCL Clustering", "D. Auber & R. Bourqui", "10/10/2005", "Nodes partitioning measure of Markov Cluster algorithm<br/>used for "
-                                                                             "community detection."
-                                                                             "This is an implementation of the MCL algorithm first published as:<br/>"
-                                                                             "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD "
-                                                                             "Thesis, University of Utrecht (2000).",
-                    "1.0", "Clustering")
+
+  PLUGININFORMATION("MCL Clustering", "D. Auber & R. Bourqui","10/10/2005",
+                    "Nodes partitioning measure of Markov Cluster algorithm<br/>used for community detection."
+                    "This is an implementation of the MCL algorithm first published as:<br/>"
+                    "<b>Graph Clustering by Flow Simulation</b>, Stijn van Dongen PhD Thesis, University of Utrecht (2000).",
+                    "1.0","Clustering")
 
   MCLClustering(const tlp::PluginContext *);
   ~MCLClustering();
   bool run();
-  bool inflate(double r, unsigned int k, node n, bool equal /*, bool noprune*/);
+  bool inflate(double r, unsigned int k, node n, bool equal/*, bool noprune*/);
   void prune(node n);
-  // void pruneT(node n);
+  //void pruneT(node n);
 
   bool equal();
   void init();
@@ -90,12 +90,14 @@ const double epsilon = 1E-9;
 //=================================================
 void MCLClustering::power(node n) {
   TLP_HASH_MAP<node, double> newTargets;
+  edge e1;
 
-  for (edge e1 : g.getOutEdges(n)) {
+  forEach(e1, g.getOutEdges(n)) {
     double v1 = inW[e1];
 
     if (v1 > epsilon) {
-      for (edge e2 : g.getOutEdges(g.target(e1))) {
+      edge e2;
+      forEach(e2, g.getOutEdges(g.target(e1))) {
         double v2 = inW[e2] * v1;
 
         if (v2 > epsilon) {
@@ -106,6 +108,7 @@ void MCLClustering::power(node n) {
             outW[ne] += v2;
           else {
             TLP_HASH_MAP<node, double>::iterator it = newTargets.find(tgt);
+
             if (it != newTargets.end())
               newTargets[tgt] += v2;
             else
@@ -115,7 +118,9 @@ void MCLClustering::power(node n) {
       }
     }
   }
-  for (TLP_HASH_MAP<node, double>::iterator it = newTargets.begin(); it != newTargets.end(); ++it) {
+
+  for(TLP_HASH_MAP<node, double>::iterator it = newTargets.begin();
+      it != newTargets.end(); ++it) {
     edge ne;
     ne = g.addEdge(n, it->first);
     inW[ne] = 0.;
@@ -124,7 +129,8 @@ void MCLClustering::power(node n) {
 }
 //==================================================
 struct pvectCmp {
-  bool operator()(const std::pair<double, edge> &p1, const std::pair<double, edge> &p2) {
+  bool operator()(const std::pair<double, edge>& p1,
+                  const std::pair<double, edge>& p2) {
     return p1.first < p2.first;
   }
 };
@@ -132,18 +138,17 @@ struct pvectCmp {
 void MCLClustering::prune(node n) {
   unsigned int outdeg = g.outdeg(n);
 
-  if (outdeg == 0)
-    return;
+  if (outdeg == 0) return;
 
   // we use a specific vector to hold out edges needed infos
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
-  // - avoid a costly stable iterator use when deleting edges
-  std::vector<pair<double, edge>> pvect;
+  // - avoid a costly stableForEach when deleting edges
+  std::vector<pair<double, edge> > pvect;
   pvect.reserve(outdeg);
-
-  for (edge e : g.getOutEdges(n)) {
+  edge e;
+  forEach(e, g.getOutEdges(n)) {
     pvect.push_back(pair<double, edge>(outW[e], e));
   }
 
@@ -151,7 +156,7 @@ void MCLClustering::prune(node n) {
   double t = pvect[outdeg - 1].first;
 
   for (unsigned int i = 0; i < outdeg; ++i) {
-    pair<double, edge> &p = pvect[i];
+    pair<double, edge>& p = pvect[i];
 
     if (p.first < t || inW[p.second] < epsilon)
       g.delEdge(p.second);
@@ -165,27 +170,29 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
-  // - avoid a costly stable iterator use when deleting edges
-  std::vector<pair<double, edge>> pvect;
+  // - avoid a costly stableForEach when deleting edges
+  std::vector<pair<double, edge> > pvect;
   pvect.reserve(sz);
 
-  double sum = 0.;
-  for (edge e : g.getOutEdges(n)) {
+  edge e;
+  double sum  = 0.;
+  forEach(e, g.getOutEdges(n)) {
     double outVal = outW[e];
     sum += pow(outVal, r);
     pvect.push_back(pair<double, edge>(outVal, e));
   }
 
   if (sum > 0.) {
-    double oos = 1. / sum;
-    for (unsigned int i = 0; i < sz; ++i) {
-      pair<double, edge> &p = pvect[i];
+    double oos = 1./sum;
+
+    for(unsigned int i = 0; i < sz; ++i) {
+      pair<double, edge>& p = pvect[i];
       p.first = outW[p.second] = pow(p.first, r) * oos;
     }
   }
 
   /*if (noprune)
-  return;*/
+    return;*/
 
   // pruneK step
   std::sort(pvect.begin(), pvect.end(), pvectCmp());
@@ -194,16 +201,17 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   unsigned int outdeg = sz;
 
   for (int i = sz - 2; i > 0; --i) {
-    pair<double, edge> &p = pvect[i];
+    pair<double, edge>& p = pvect[i];
 
     if (k) {
       if (p.first < t) {
         --k;
         t = p.first;
       }
-    } else if (p.first < t) {
-      edge e = p.second;
-      inW[e] = 0.;
+    }
+    else if (p.first < t) {
+      e = p.second;
+      inW[e]  = 0.;
       outW[e] = 0.;
       g.delEdge(e);
       // put an invalid edge
@@ -218,17 +226,18 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
   sum = 0.;
 
   for (unsigned int i = 0; i < sz; ++i) {
-    pair<double, edge> &p = pvect[i];
+    pair<double, edge>& p = pvect[i];
 
     if (p.second.isValid())
       sum += p.first;
   }
 
   if (sum > 0.) {
-    double oos = 1. / sum;
+    double oos = 1./sum;
+
     for (unsigned int i = 0; i < sz; ++i) {
-      pair<double, edge> &p = pvect[i];
-      edge e = p.second;
+      pair<double, edge>& p = pvect[i];
+      e = p.second;
 
       if (e.isValid()) {
         double outVal = outW[e] = p.first * oos;
@@ -238,11 +247,13 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
           equal = false;
       }
     }
-  } else {
-    double ood = 1. / outdeg;
+  }
+  else {
+    double ood = 1./outdeg;
+
     for (unsigned int i = 0; i < sz; ++i) {
-      pair<double, edge> &p = pvect[i];
-      edge e = p.second;
+      pair<double, edge>& p = pvect[i];
+      e = p.second;
 
       if (e.isValid()) {
         double outVal = outW[e] = ood;
@@ -258,19 +269,19 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 }
 //=================================================
 static const char *paramHelp[] = {
-    // inflate
-    "Determines the random walk length at each step.",
+  // inflate
+  "Determine the random walk length at each step.",
 
-    // weights
-    "Edges' weights to use.",
+  // weights
+  "Edge weights to use.",
 
-    // pruning
-    "Determines, for each node, the number of strongest link kept at each "
-    "iteration."};
+  // pruning
+  "Determines, for each node, the number of strongest link kept at each iteration."
+};
 //=================================================
-MCLClustering::MCLClustering(const tlp::PluginContext *context) : DoubleAlgorithm(context), weights(nullptr), _r(2.0), _k(5) {
+MCLClustering::MCLClustering(const tlp::PluginContext *context):DoubleAlgorithm(context), weights(NULL), _r(2.0), _k(5) {
   addInParameter<double>("inflate", paramHelp[0], "2.", false);
-  addInParameter<NumericProperty *>("weights", paramHelp[1], "", false);
+  addInParameter<NumericProperty*>("weights", paramHelp[1], "", false);
   addInParameter<unsigned int>("pruning", paramHelp[2], "5", false);
 }
 //===================================================================================
@@ -282,22 +293,24 @@ void MCLClustering::init() {
   g.reserveNodes(nbNodes);
   g.reserveEdges(nbNodes + 2 * graph->numberOfEdges());
   tlpNodes.resize(nbNodes);
+  node n;
   node newNode;
-  for (node n : graph->getNodes()) {
+  forEach(n, graph->getNodes()) {
     newNode = g.addNode();
     nodeMapping.set(n.id, newNode);
     tlpNodes[newNode] = n;
     g.reserveAdj(newNode, 2 * graph->deg(n) + 1);
   }
 
-  for (edge e : graph->getEdges()) {
+  edge e;
+  forEach(e, graph->getEdges()) {
     std::pair<node, node> eEnds = graph->ends(e);
     node src = eEnds.first = nodeMapping.get(eEnds.first.id);
     node tgt = eEnds.second = nodeMapping.get(eEnds.second.id);
     edge tmp = g.addEdge(src, tgt);
     edgeMapping.set(e.id, tmp);
 
-    double weight = (weights != nullptr) ? weights->getEdgeDoubleValue(e) : 1.0;
+    double weight = (weights != NULL) ? weights->getEdgeDoubleValue(e) : 1.0;
     inW[tmp] = weight;
     outW[tmp] = 0.;
     // add reverse edge
@@ -308,15 +321,15 @@ void MCLClustering::init() {
 
   // add loops (Set the maximum of out-edges weights to self-loops weight)
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n = g[i];
+    n = g[i];
     edge tmp = g.addEdge(n, n);
     edge e;
     double sum = 0.;
     outW[tmp] = 0.;
 
-    if (weights != 0) {
-      double tmpVal = inW[tmp] = 0.;
-      for (edge e : g.getOutEdges(n)) {
+    if(weights!=0) {
+      double tmpVal = inW[tmp]=0.;
+      forEach(e, g.getOutEdges(n)) {
         double eVal = inW[e];
         sum += eVal;
 
@@ -324,19 +337,20 @@ void MCLClustering::init() {
           tmpVal = eVal;
       }
       sum += (inW[tmp] = tmpVal);
-    } else {
-      inW[tmp] = 1.;
-      sum = double(g.outdeg(n));
     }
-    double oos = 1. / sum;
-    for (edge e : g.getOutEdges(n))
-      inW[e] *= oos;
+    else {
+      inW[tmp] = 1.;
+      sum=double(g.outdeg(n));
+    }
+
+    double oos = 1./sum;
+    forEach(e, g.getOutEdges(n))
+    inW[e] *= oos;
   }
 }
 //================================================================================
 struct DegreeSort {
-  DegreeSort(VectorGraph &g) : g(g) {
-  }
+  DegreeSort(VectorGraph &g):g(g) {}
   bool operator()(node a, node b) {
     unsigned int da = g.deg(a), db = g.deg(b);
 
@@ -350,14 +364,15 @@ struct DegreeSort {
 //==============================================================================
 bool MCLClustering::run() {
 
+
   g.alloc(inW);
   g.alloc(outW);
 
-  weights = nullptr;
+  weights = NULL;
   _r = 2.;
   _k = 5;
 
-  if (dataSet != 0) {
+  if(dataSet!=0) {
     dataSet->get("weights", weights);
     dataSet->get("inflate", _r);
     dataSet->get("pruning", _k);
@@ -366,9 +381,17 @@ bool MCLClustering::run() {
   init();
   unsigned int nbNodes = g.numberOfNodes();
 
+  edge e;
+  //output for mcl
+  /*
+  forEach(e, graph->getEdges()) {
+      cout << graph->source(e).id << "\t" << graph->target(e).id << endl;
+  }
+  */
+
   int iteration = 15. * log(g.numberOfNodes() + 1);
 
-  while (iteration-- > 0) {
+  while(iteration-- > 0) {
     bool equal = true;
 
     for (unsigned int i = 0; i < nbNodes; ++i) {
@@ -376,7 +399,7 @@ bool MCLClustering::run() {
       power(n);
 
       // comment the next line to have exact MCL
-      if (inflate(_r, _k, n, equal /*, false*/) == false)
+      if (inflate(_r, _k,  n, equal /*, false*/) == false)
         equal = false;
     }
 
@@ -385,19 +408,18 @@ bool MCLClustering::run() {
     * deletion of edge that does exist in the previous graph
     * however that impletenation doesn't change the result too much.
     */
-    // uncomment that block to have correct MCL
+    //uncomment that block to have correct MCL
 
-    //        for(node n : g.getNodes()) {
-    //            inflate(_r, _k,  n, false);
-    //        }
+//        forEach(n, g.getNodes()) {
+//            inflate(_r, _k,  n, false);
+//        }
 
     EdgeProperty<double> tmp;
     tmp = inW;
     inW = outW;
     outW = tmp;
 
-    if (equal)
-      break;
+    if (equal) break;
 
     outW.setAll(0.);
   }
@@ -412,7 +434,7 @@ bool MCLClustering::run() {
   }
 
   DegreeSort sortFunc(g);
-  g.sortNodes(sortFunc); // sort nodes in decreasing order of their degree
+  g.sortNodes(sortFunc); //sort nodes in decreasing order of their degree
 
   NodeProperty<bool> visited;
   g.alloc(visited);
@@ -430,17 +452,17 @@ bool MCLClustering::run() {
       fifo.push(n);
       visited[n] = true;
 
-      while (!fifo.empty()) {
+      while(!fifo.empty()) {
         node n = fifo.front();
         result->setNodeValue(tlpNodes[n], curVal);
         fifo.pop();
         const std::vector<node> &neighbours = g.adj(n);
         unsigned int nbNeighbours = neighbours.size();
 
-        for (unsigned int i = 0; i < nbNeighbours; ++i) {
+        for (unsigned int i = 0; i <  nbNeighbours; ++i) {
           node ni = neighbours[i];
 
-          if (!visited[ni]) {
+          if(!visited[ni]) {
             fifo.push(ni);
             visited[ni] = true;
           }

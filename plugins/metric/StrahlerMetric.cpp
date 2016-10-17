@@ -173,7 +173,7 @@ static const char *paramHelp[] = {
     "number is computed from a spanning tree having the heuristicly estimated graph center as root.",
 
     // Type
-    "Sets the type of computation."};
+    "Set the type of computation."};
 
 #define COMPUTATION_TYPE "Type"
 #define COMPUTATION_TYPES "all;ramification;nested cycles;"
@@ -191,7 +191,7 @@ bool StrahlerMetric::run() {
   StringCollection computationTypes(COMPUTATION_TYPES);
   computationTypes.setCurrent(0);
 
-  if (dataSet != nullptr) {
+  if (dataSet != NULL) {
     dataSet->get("All nodes", allNodes);
     dataSet->get(COMPUTATION_TYPE, computationTypes);
   }

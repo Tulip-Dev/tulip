@@ -68,8 +68,7 @@
  */
 class TLPBExport : public tlp::ExportModule {
 public:
-  PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary", "13/07/2012", "Exports a graph in a file using the Tulip binary format", "1.2",
-                    "File")
+  PLUGININFORMATION("TLPB Export", "David Auber, Patrick Mary", "13/07/2012", "Export a graph in a file using the Tulip binary format", "1.2", "File")
 
   std::string fileExtension() const {
     return "tlpb";
@@ -110,7 +109,7 @@ public:
  */
 class TLPBImport : public tlp::ImportModule {
 public:
-  PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012", "Imports a graph recorded in a file using the Tulip binary format",
+  PLUGININFORMATION("TLPB Import", "David Auber, Patrick Mary", "13/07/2012", "Import a graph recorded in a file using the Tulip binary format",
                     "1.2", "File")
 
   TLPBImport(tlp::PluginContext *context);

@@ -38,7 +38,7 @@ struct NodeInfo {
  */
 class StrongComponent : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Strongly Connected Component", "David Auber", "12/06/2001", "Implements a strongly connected components decomposition.", "1.0",
+  PLUGININFORMATION("Strongly Connected Component", "David Auber", "12/06/2001", "Implement a strongly connected components decomposition.", "1.0",
                     "Component")
   StrongComponent(const tlp::PluginContext *context);
   ~StrongComponent();

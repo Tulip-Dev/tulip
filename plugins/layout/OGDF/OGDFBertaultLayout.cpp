@@ -61,32 +61,31 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-    // impred
-    "Sets impred option.",
+  // impred
+  "Set impred option.",
 
-    // iterno
-    "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes.",
+  // iterno
+  "The number of iterations. If 0, the number of iterations will be set as 10 times the number of nodes.",
 
-    // reqlength
-    "The required edge length."};
+  // reqlength
+  "The required edge length."
+};
 
 class OGDFBertaultLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Bertault (OGDF)", "Smit Sanghavi", "29/05/2015",
-                    "Computes a force directed layout (Bertault Layout) for preserving the planar embedding in the graph.", "1.0", "Force Directed")
-  OGDFBertaultLayout(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::BertaultLayout()) {
-    addInParameter<bool>("impred", paramHelp[0], "false", false);
-    addInParameter<int>("iterno", paramHelp[1], "20", false);
-    addInParameter<double>("reqlength", paramHelp[2], "0.0", false);
+  PLUGININFORMATION("Bertault (OGDF)","Smit Sanghavi","29/05/2015","Compute a force directed layout (Bertault Layout) for preserving the planar embedding in the graph.","1.0","Force Directed")
+  OGDFBertaultLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::BertaultLayout()) {
+    addInParameter<bool> ("impred", paramHelp[0], "false", false);
+    addInParameter<int> ("iterno", paramHelp[1], "20", false);
+    addInParameter<double> ("reqlength", paramHelp[2], "0.0", false);
   }
-  ~OGDFBertaultLayout() {
-  }
+  ~OGDFBertaultLayout() {}
 
   void beforeCall() {
-    ogdf::BertaultLayout *bertault = static_cast<ogdf::BertaultLayout *>(ogdfLayoutAlgo);
+    ogdf::BertaultLayout *bertault = static_cast<ogdf::BertaultLayout*>(ogdfLayoutAlgo);
 
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       bool bval = false;
       int ival = 20;
       double val = 0;
@@ -101,6 +100,8 @@ public:
         bertault->reqlength(val);
     }
   }
+
 };
+
 
 PLUGIN(OGDFBertaultLayout)

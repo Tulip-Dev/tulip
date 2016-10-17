@@ -68,34 +68,31 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-    // minimum grid distance
-    "The minimum grid distance.",
+  // minimum grid distance
+  "The minimum grid distance.",
 
-    // transpose
-    "If true, transpose the layout vertically."};
+  // transpose
+  "If true, transpose the layout vertically."
+};
 
 class OGDFVisibility : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Visibility (OGDF)", "Hoi-Ming Wong", "12/11/2007", "Implements a simple upward drawing algorithm based on visibility "
-                                                                        "representations (horizontal segments for nodes, vectical segments for "
-                                                                        "edges).",
-                    "1.1", "Hierarchical")
-  OGDFVisibility(const tlp::PluginContext *context)
-      : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), visibility(new ogdf::VisibilityLayout()) {
+  PLUGININFORMATION("Visibility (OGDF)","Hoi-Ming Wong","12/11/2007",
+                    "Implement a simple upward drawing algorithm based on visibility representations (horizontal segments for nodes, vectical segments for edges).","1.1","Hierarchical")
+  OGDFVisibility(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()), visibility(new ogdf::VisibilityLayout()) {
     addInParameter<int>("minimum grid distance", paramHelp[0], "1");
     addInParameter<bool>("transpose", paramHelp[1], "false");
-    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl = reinterpret_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     // ComponentSplitterLayout takes ownership of the VisibilityLayout instance
     csl->setLayoutModule(visibility);
   }
 
-  ~OGDFVisibility() {
-  }
+  ~OGDFVisibility() {}
 
   void beforeCall() {
 
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       int ival = 0;
 
       if (dataSet->get("minimum grid distance", ival))
@@ -104,7 +101,7 @@ public:
   }
 
   void afterCall() {
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       bool bval = false;
 
       if (dataSet->get("transpose", bval)) {
@@ -116,7 +113,10 @@ public:
   }
 
 private:
+
   ogdf::VisibilityLayout *visibility;
+
 };
+
 
 PLUGIN(OGDFVisibility)

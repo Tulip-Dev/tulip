@@ -65,27 +65,25 @@
  ***************************************************************/
 
 static const char *paramHelp[] = {
-    // transpose
-    "If true, transpose the layout vertically."};
+  // transpose
+  "If true, transpose the layout vertically."
+};
 
 class OGDFUpwardPlanarization : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Upward Planarization (OGDF)", "Hoi-Ming Wong", "12/11/2007", "Implements an alternative to the classical Sugiyama approach. It "
-                                                                                  "adapts the planarization approach for hierarchical graphs and "
-                                                                                  "produces significantly less crossings than Sugiyama layout.",
-                    "1.1", "Hierarchical")
-  OGDFUpwardPlanarization(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
+  PLUGININFORMATION("Upward Planarization (OGDF)","Hoi-Ming Wong","12/11/2007",
+                    "Implement an alternative to the classical Sugiyama approach. It adapts the planarization approach for hierarchical graphs and produces significantly less crossings than Sugiyama layout.","1.1","Hierarchical")
+  OGDFUpwardPlanarization(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::ComponentSplitterLayout()) {
     addInParameter<bool>("transpose", paramHelp[0], "false");
-    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout *>(ogdfLayoutAlgo);
+    ogdf::ComponentSplitterLayout *csl = static_cast<ogdf::ComponentSplitterLayout*>(ogdfLayoutAlgo);
     csl->setLayoutModule(new ogdf::UpwardPlanarizationLayout());
   }
 
-  ~OGDFUpwardPlanarization() {
-  }
+  ~OGDFUpwardPlanarization() {}
 
   void afterCall() {
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       bool bval = false;
 
       if (dataSet->get("transpose", bval)) {
@@ -95,6 +93,8 @@ public:
       }
     }
   }
+
 };
+
 
 PLUGIN(OGDFUpwardPlanarization)

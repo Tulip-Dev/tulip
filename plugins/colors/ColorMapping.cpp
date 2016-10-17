@@ -92,10 +92,10 @@ private:
   bool overrideMinInput;
 
 public:
-  PLUGININFORMATION("Color Mapping", "Mathiaut", "16/09/2010", "Colorizes the nodes or edges of a graph according to the values of a given property.",
+  PLUGININFORMATION("Color Mapping", "Mathiaut", "16/09/2010", "Colorize nodes or edges of a graph according to the values of a given property.",
                     "2.2", "Color")
   ColorMapping(const tlp::PluginContext *context)
-      : ColorAlgorithm(context), entryMetric(nullptr), eltTypes(ELT_TYPES), maxInput(std::numeric_limits<double>::quiet_NaN()),
+      : ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES), maxInput(std::numeric_limits<double>::quiet_NaN()),
         minInput(std::numeric_limits<double>::quiet_NaN()), overrideMaxInput(false), overrideMinInput(false) {
     addInParameter<StringCollection>(ELT_TYPE, paramHelp[0], ELT_TYPES, true, "linear <br> uniform <br> enumerated <br> logarithmic");
     addInParameter<PropertyInterface *>("input property", paramHelp[1], "viewMetric");

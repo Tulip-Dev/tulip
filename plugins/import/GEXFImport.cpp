@@ -29,8 +29,10 @@
 #include <QXmlStreamReader>
 #include <QFile>
 
+
 using namespace tlp;
 using namespace std;
+
 
 /** \file
  *  \brief - Import GEXF format graph file.
@@ -46,29 +48,29 @@ using namespace std;
  */
 
 static const char *paramHelp[] = {
-    // filename
-    "This parameter defines the pathname of the GEXF file to import.",
+  // filename
+  "This parameter defines the pathname of the GEXF file to import.",
 
-    // curved edges
-    "Indicates if Bézier curves should be used to draw the edges."};
+  // curved edges
+  "Indicate if Bézier curves should be used to draw the edges."
+};
 
 class GEXFImport : public ImportModule {
 
-public:
-  PLUGININFORMATION("GEXF", "Antoine LAMBERT", "05/05/2010", "Imports a new graph from a file in the GEXF input format<br/>as it is described in the "
-                                                             "XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet "
-                                                             "supported.",
-                    "1.0", "File")
-  GEXFImport(const PluginContext *context)
-      : ImportModule(context), viewLayout(nullptr), viewSize(nullptr), viewColor(nullptr), viewLabel(nullptr), viewShape(nullptr),
-        nodesHaveCoordinates(false) {
+public :
+
+  PLUGININFORMATION("GEXF","Antoine LAMBERT","05/05/2010",
+                    "Import a new graph from a file in the GEXF input format<br/>as it is described in the XML Schema 1.2 draft (http://gexf.net/format/schema.html).<br/>Dynamic mode is not yet supported.",
+                    "1.0","File")
+  GEXFImport(const PluginContext*  context):ImportModule(context),
+    viewLayout(NULL), viewSize(NULL), viewColor(NULL), viewLabel(NULL),
+    viewShape(NULL), nodesHaveCoordinates(false) {
     // add a file parameter for the plugin
-    addInParameter<string>("file::filename", paramHelp[0], "");
-    addInParameter<bool>("Curved edges", paramHelp[1], "false");
+    addInParameter<string>("file::filename", paramHelp[0],"");
+    addInParameter<bool>("Curved edges",paramHelp[1], "false");
   }
 
-  ~GEXFImport() {
-  }
+  ~GEXFImport() {}
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/import_gephi.png";
@@ -121,7 +123,8 @@ public:
       if (xmlReader.readNextStartElement()) {
         // only static graph are supported
         if (xmlReader.name() == "graph") {
-          string mode = xmlReader.attributes().value("mode").toString().toStdString();
+          string mode =
+            xmlReader.attributes().value("mode").toString().toStdString();
 
           if (mode == "dynamic") {
             pluginProgress->setError("dynamic graph is not yet supported");
@@ -142,11 +145,12 @@ public:
         }
       }
     }
+
     xmlFile.close();
 
     // Special case : some GEXF files declare edges before nodes
     // so we have to add edges once nodes have been parsed
-    for (size_t i = 0; i < edgesTmp.size(); ++i) {
+    for (size_t i = 0 ; i < edgesTmp.size() ; ++i) {
       graph->addEdge(nodesMap[edgesTmp[i].first], nodesMap[edgesTmp[i].second]);
     }
 
@@ -154,7 +158,7 @@ public:
     viewShape->setAllNodeValue(NodeShape::Circle);
 
     // add subgraph nodes, edges and meta nodes if needed
-    Graph *quotientGraph = addSubGraphsNodes();
+    Graph*quotientGraph = addSubGraphsNodes();
 
     if (quotientGraph) {
       addSubGraphsEdges();
@@ -175,11 +179,12 @@ public:
   // according to data types
   void createPropertiesFromAttributes(QXmlStreamReader &xmlReader) {
     bool nodeProperties = xmlReader.attributes().value("class") == "node";
-    map<string, PropertyInterface *> *propertiesMap = nullptr;
+    map<string, PropertyInterface *> *propertiesMap = NULL;
 
     if (nodeProperties) {
       propertiesMap = &nodePropertiesMap;
-    } else {
+    }
+    else {
       propertiesMap = &edgePropertiesMap;
     }
 
@@ -194,11 +199,14 @@ public:
 
         if (attributeType == "string") {
           (*propertiesMap)[attributeId] = graph->getProperty<StringProperty>(attributeName);
-        } else if (attributeType == "float" || attributeType == "double") {
+        }
+        else if (attributeType == "float" || attributeType == "double") {
           (*propertiesMap)[attributeId] = graph->getProperty<DoubleProperty>(attributeName);
-        } else if (attributeType == "integer") {
+        }
+        else if (attributeType == "integer") {
           (*propertiesMap)[attributeId] = graph->getProperty<IntegerProperty>(attributeName);
-        } else if (attributeType == "boolean") {
+        }
+        else if (attributeType == "boolean") {
           (*propertiesMap)[attributeId] = graph->getProperty<BooleanProperty>(attributeName);
         }
       }
@@ -206,7 +214,7 @@ public:
   }
 
   // create nodes
-  void createNodes(QXmlStreamReader &xmlReader, Graph *g) {
+  void createNodes(QXmlStreamReader &xmlReader, Graph* g) {
     while (!(xmlReader.isEndElement() && xmlReader.name() == "nodes")) {
       xmlReader.readNext();
 
@@ -227,7 +235,7 @@ public:
     }
   }
 
-  Graph *addInParent(node n, const string &pid) {
+  Graph* addInParent(node n, const string& pid) {
     // get the parent node
     // to find the corresponding sub graph
     // in which the current node must be added
@@ -237,18 +245,19 @@ public:
       // create a fake meta node
       pn = graph->addNode();
       nodesMap[pid] = pn;
-    } else
+    }
+    else
       pn = nodesMap[pid];
 
-    Graph *sg = (Graph *)nodeToSubgraph.get(pn.id);
+    Graph* sg = (Graph*) nodeToSubgraph.get(pn.id);
 
-    if (sg == nullptr) {
+    if (sg == NULL) {
       // add a subgraph for the fake meta node
       sg = graph->addSubGraph();
       // record pn as its fake meta node
       sg->setAttribute<node>("meta-node", pn);
       // and vice-versa
-      nodeToSubgraph.set(pn.id, (size_t)sg);
+      nodeToSubgraph.set(pn.id, (size_t) sg);
     }
 
     // add n in the subgraph found
@@ -258,7 +267,7 @@ public:
   }
 
   // Parse node data
-  void parseNode(QXmlStreamReader &xmlReader, Graph *g) {
+  void parseNode(QXmlStreamReader &xmlReader, Graph* g) {
     node n;
     string nodeId = xmlReader.attributes().value("id").toString().toStdString();
 
@@ -267,18 +276,21 @@ public:
       n = g->addNode();
       // save mapping between gexf node id and created Tulip node
       nodesMap[nodeId] = n;
-    } else
+    }
+    else
       n = nodesMap[nodeId];
 
     // parse node label
     if (xmlReader.attributes().hasAttribute("label")) {
-      string nodeLabel = xmlReader.attributes().value("label").toString().toUtf8().data();
+      string nodeLabel =
+        xmlReader.attributes().value("label").toString().toUtf8().data();
       viewLabel->setNodeValue(n, nodeLabel);
     }
 
     // parse node pid
     if (xmlReader.attributes().hasAttribute("pid")) {
-      string pid = xmlReader.attributes().value("pid").toString().toStdString();
+      string pid =
+        xmlReader.attributes().value("pid").toString().toStdString();
 
       if (g == graph)
         g = addInParent(n, pid);
@@ -300,7 +312,9 @@ public:
           a = xmlReader.attributes().value("a").toString().toFloat();
         }
 
-        viewColor->setNodeValue(n, Color((unsigned char)r, (unsigned char)g, (unsigned char)b, (unsigned char)(a * 255)));
+        viewColor->setNodeValue(n, Color((unsigned char) r, (unsigned char) g,
+                                         (unsigned char) b,
+                                         (unsigned char) (a * 255)));
       }
       // parse node coordinates
       else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "viz:position") {
@@ -321,7 +335,8 @@ public:
 
         if (xmlReader.attributes().hasAttribute("id")) {
           attributeId = xmlReader.attributes().value("id").toString().toStdString();
-        } else if (xmlReader.attributes().hasAttribute("for")) {
+        }
+        else if (xmlReader.attributes().hasAttribute("for")) {
           attributeId = xmlReader.attributes().value("for").toString().toStdString();
         }
 
@@ -333,33 +348,37 @@ public:
       }
       // check for subgraph
       else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "nodes") {
-        Graph *sg = (Graph *)nodeToSubgraph.get(n.id);
+        Graph* sg = (Graph *) nodeToSubgraph.get(n.id);
 
-        if (sg == nullptr) {
+        if (sg == NULL) {
           // add subgraph
           sg = graph->addSubGraph();
           // record the current node as its fake meta node
           sg->setAttribute<node>("meta-node", n);
           // and vice-versa
-          nodeToSubgraph.set(n.id, (size_t)sg);
+          nodeToSubgraph.set(n.id, (size_t) sg);
         }
 
         // create its nodes
         createNodes(xmlReader, sg);
-      } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "edges") {
+      }
+      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "edges") {
         // create its edges
         createEdges(xmlReader);
-      } else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "parents") {
+      }
+      else if (xmlReader.isStartElement() && xmlReader.qualifiedName() == "parents") {
         while (!(xmlReader.isEndElement() && xmlReader.name() == "parents")) {
           xmlReader.readNext();
 
           // must be a parent
           if (xmlReader.isStartElement() && xmlReader.name() == "parent") {
-            string pid = xmlReader.attributes().value("for").toString().toStdString();
+            string pid =
+              xmlReader.attributes().value("for").toString().toStdString();
 
             if (g == graph) {
               g = addInParent(n, pid);
-            } else
+            }
+            else
               cerr << "multiple parents are not supported: " << pid.c_str() << " will be not added as parent of " << nodeId.c_str() << endl;
           }
         }
@@ -394,7 +413,8 @@ public:
 
           if (xmlReader.attributes().hasAttribute("id")) {
             attributeId = xmlReader.attributes().value("id").toString().toStdString();
-          } else if (xmlReader.attributes().hasAttribute("for")) {
+          }
+          else if (xmlReader.attributes().hasAttribute("for")) {
             attributeId = xmlReader.attributes().value("for").toString().toStdString();
           }
 
@@ -409,35 +429,37 @@ public:
       }
 
       // Store edge extremities information to add them to the graph once nodes will be parsed
-    } else {
+    }
+    else {
       edgesTmp.push_back(make_pair(srcId, tgtId));
     }
   }
 
-  Graph *addSubGraphsNodes() {
+  Graph* addSubGraphsNodes() {
     // quotientGraph will be created
     // as soon as there is a subgraph
-    Graph *quotientGraph = nullptr;
+    Graph* quotientGraph = NULL;
     // iterate on each subgraph of graph
     // and add missing nodes
-    StableIterator<Graph *> itg(graph->getSubGraphs());
+    StableIterator<Graph*> itg(graph->getSubGraphs());
 
-    while (itg.hasNext()) {
+    while(itg.hasNext()) {
       if (!quotientGraph)
         quotientGraph = graph->addCloneSubGraph("quotient graph");
 
-      Graph *sg = itg.next();
+      Graph* sg = itg.next();
       // iterate on nodes
       StableIterator<node> itn(sg->getNodes());
 
-      while (itn.hasNext()) {
+      while(itn.hasNext()) {
         node n = itn.next();
-        Graph *msg = (Graph *)nodeToSubgraph.get(n.id);
+        Graph* msg = (Graph*) nodeToSubgraph.get(n.id);
 
         if (msg) {
           // if the current node is a fake meta node
           // add the nodes of the pointed subgraph
-          for (node msn : msg->getNodes()) {
+          node msn;
+          forEach(msn, msg->getNodes()) {
             sg->addNode(msn);
             // the nodes in a pointed subgraph have to be removed
             // from quotientGraph
@@ -453,14 +475,16 @@ public:
   void addSubGraphsEdges() {
     // iterate on each subgraph of graph
     // and add needed edges
-    Iterator<Graph *> *itg = graph->getSubGraphs();
+    Iterator<Graph*>* itg = graph->getSubGraphs();
 
-    while (itg->hasNext()) {
-      Graph *sg = itg->next();
+    while(itg->hasNext()) {
+      Graph* sg = itg->next();
+      node n;
       // iterate on nodes
-      for (node n : sg->getNodes()) {
+      forEach(n, sg->getNodes()) {
         // add its out edges
-        for (edge e : graph->getOutEdges(n)) {
+        edge e;
+        forEach(e, graph->getOutEdges(n)) {
           if (sg->isElement(graph->target(e)))
             sg->addEdge(e);
         }
@@ -468,21 +492,21 @@ public:
     }
   }
 
-  void computeMetaNodes(Graph *quotientGraph) {
+  void computeMetaNodes(Graph* quotientGraph) {
     // iterate on each subgraph of g
     // and add needed meta nodes
-    Iterator<Graph *> *itg = graph->getSubGraphs();
+    Iterator<Graph*>* itg = graph->getSubGraphs();
 
-    while (itg->hasNext()) {
-      Graph *sg = itg->next();
+    while(itg->hasNext()) {
+      Graph* sg = itg->next();
       // iterate on nodes
       StableIterator<node> itn(sg->getNodes());
 
-      while (itn.hasNext()) {
+      while(itn.hasNext()) {
         node n = itn.next();
-        Graph *msg = (Graph *)nodeToSubgraph.get(n.id);
+        Graph* msg = (Graph*) nodeToSubgraph.get(n.id);
 
-        if (msg != nullptr) {
+        if (msg != NULL) {
           // n is a fake meta node
           // create the real meta node
           // pointing to msg
@@ -496,7 +520,8 @@ public:
 
           // set meta node properties values to the ones
           // of the fake meta node
-          for (PropertyInterface *prop : graph->getObjectProperties()) {
+          PropertyInterface* prop;
+          forEach(prop, graph->getObjectProperties()) {
             prop->copy(mn, n, prop, true);
           }
 
@@ -505,18 +530,22 @@ public:
             quotientGraph->addNode(mn);
 
           // replace n by mn
-          for (edge e : graph->getInOutEdges(n)) {
+          edge e;
+          forEach(e, graph->getInOutEdges(n)) {
             pair<node, node> eEnds = graph->ends(e);
 
             if (eEnds.first == n) {
               graph->setEnds(e, mn, eEnds.second);
 
-              if ((sg != quotientGraph) && quotientGraph->isElement(eEnds.second))
+              if ((sg != quotientGraph) &&
+                  quotientGraph->isElement(eEnds.second))
                 quotientGraph->addEdge(e);
-            } else {
+            }
+            else {
               graph->setEnds(e, eEnds.first, mn);
 
-              if ((sg != quotientGraph) && quotientGraph->isElement(eEnds.first))
+              if ((sg != quotientGraph) &&
+                  quotientGraph->isElement(eEnds.first))
                 quotientGraph->addEdge(e);
             }
           }
@@ -531,7 +560,8 @@ public:
 
   // Methods which compute Cubic Bézier control points for each edge
   void curveGraphEdges() {
-    for (edge e : graph->getEdges()) {
+    edge e;
+    forEach(e, graph->getEdges()) {
       node src = graph->source(e);
       node tgt = graph->target(e);
       Coord srcCoord = viewLayout->getNodeValue(src);
@@ -562,7 +592,8 @@ public:
     }
   }
 
-private:
+private :
+
   // maps associating attribute id to Tulip property
   map<string, PropertyInterface *> nodePropertiesMap;
   map<string, PropertyInterface *> edgePropertiesMap;
@@ -571,7 +602,7 @@ private:
   map<string, node> nodesMap;
 
   // vector to store edge information in case edges are declared before nodes in GEXF file
-  vector<pair<string, string>> edgesTmp;
+  vector<pair<string, string> > edgesTmp;
 
   // Visual attributes properties pointers to the graph we are building
   LayoutProperty *viewLayout;
@@ -584,6 +615,7 @@ private:
   MutableContainer<size_t> nodeToSubgraph;
 
   bool nodesHaveCoordinates;
+
 };
 
 // Macro for declaring import plugin in Tulip, it will then be accessible since the File -> Import -> File menu entry in Tulip

@@ -29,15 +29,14 @@ static const char *paramHelp[] = {
     "Set of elements for which to set the labels.",
 
     // nodes
-    "Sets labels on nodes.",
+    "Set labels on nodes.",
 
     // edges
     "Set labels on edges."};
 
 class ToLabels : public tlp::StringAlgorithm {
 public:
-  PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16", "Maps the labels of the graph elements onto the values of a given property.", "1.0",
-                    "")
+  PLUGININFORMATION("To labels", "Ludwig Fiolka", "2012/03/16", "Map graph elements labels onto the values of a given property.", "1.0", "")
   ToLabels(const tlp::PluginContext *context) : StringAlgorithm(context) {
     addInParameter<PropertyInterface *>("input", paramHelp[0], "viewMetric", true);
     addInParameter<BooleanProperty>("selection", paramHelp[1], "", false);
@@ -46,12 +45,12 @@ public:
   }
 
   bool run() {
-    PropertyInterface *input = nullptr;
-    BooleanProperty *selection = nullptr;
+    PropertyInterface *input = NULL;
+    BooleanProperty *selection = NULL;
     bool onNodes = true;
     bool onEdges = true;
 
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       dataSet->get("input", input);
       dataSet->get("selection", selection);
       dataSet->get("nodes", onNodes);
@@ -63,8 +62,8 @@ public:
     if (onNodes) {
       pluginProgress->setComment("Copying nodes values");
       int step = 0, max_step = graph->numberOfNodes();
-
-      for (node n : selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
+      node n;
+      forEach(n, selection ? selection->getNonDefaultValuatedNodes() : graph->getNodes()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 
@@ -75,8 +74,8 @@ public:
     if (onEdges) {
       pluginProgress->setComment("Copying edges values");
       int step = 0, max_step = graph->numberOfEdges();
-
-      for (edge e : selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
+      edge e;
+      forEach(e, selection ? selection->getNonDefaultValuatedEdges() : graph->getEdges()) {
         if ((++step % 100) == 0)
           pluginProgress->progress(step, max_step);
 

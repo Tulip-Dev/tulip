@@ -150,163 +150,166 @@ using namespace std;
 
 static const char *paramHelp[] = {
 
-    // Edge Length Property
-    "A numeric property containing unit edge length to use.",
+  // Edge Length Property
+  "A numeric property containing unit edge length to use.",
 
-    // Node Size
-    "The node sizes.",
+  // Node Size
+  "The node sizes.",
 
-    // Unit edge length
-    "The unit edge length.",
+  // Unit edge length
+  "The unit edge length.",
 
-    // New initial placement
-    "Indicates the initial placement before running algorithm.",
+  // New initial placement
+  "Indicate the initial placement before running algorithm.",
 
-    // Fixed iterations
-    "The fixed number of iterations for the stop criterion.",
+  // Fixed iterations
+  "The fixed number of iterations for the stop criterion.",
 
-    // Threshold
-    "The threshold for the stop criterion.",
+  // Threshold
+  "The threshold for the stop criterion.",
 
-    // Page Format
-    "Possible page formats.",
+  // Page Format
+  "Possible page formats.",
 
-    // Quality vs Speed
-    "Trade-off between run-time and quality.",
+  // Quality vs Speed
+  "Trade-off between run-time and quality.",
 
-    // Edge Length Measurement
-    "Specifies how the length of an edge is measured.",
+  // Edge Length Measurement
+  "Specify how the length of an edge is measured.",
 
-    // Allowed Positions
-    "Specifies which positions for a node are allowed.",
+  // Allowed Positions
+  "Specify which positions for a node are allowed.",
 
-    // Tip Over
-    "Specifies in which case it is allowed to tip over drawings of connected "
-    "components.",
+  // Tip Over
+  "Specify in which case it is allowed to tip over drawings of connected components.",
 
-    // Pre Sort
-    "Specifies how connected components are sorted before the packing "
-    "algorithm is applied.",
+  // Pre Sort
+  "Specify how connected components are sorted before the packing algorithm is applied.",
 
-    // Galaxy Choice
-    "Specifies how sun nodes of galaxies are selected.",
+  // Galaxy Choice
+  "Specify how sun nodes of galaxies are selected.",
 
-    // Max Iter Change
-    "Specifies how MaxIterations is changed in subsequent multilevels.",
+  // Max Iter Change
+  "Specify how MaxIterations is changed in subsequent multilevels.",
 
-    // Initial Placement
-    "Specifies how the initial placement is generated.",
+  // Initial Placement
+  "Specify how the initial placement is generated.",
 
-    // Force Model
-    "Specifies the force-model.",
+  // Force Model
+  "Specify the force-model.",
 
-    // Repulsive Force Model
-    "Specifies how to calculate repulsive forces.",
+  // Repulsive Force Model
+  "Specify how to calculate repulsive forces.",
 
-    // Initial Placement Forces
-    "Specifies how the initial placement is done.",
+  // Initial Placement Forces
+  "Specify how the initial placement is done.",
 
-    // Reduced Tree Construction
-    "Specifies how the reduced bucket quadtree is constructed.",
+  // Reduced Tree Construction
+  "Specify how the reduced bucket quadtree is constructed.",
 
-    // Smallest Cell Finding
-    "Specifies how to calculate the smallest quadratic cell surrounding "
-    "particles of a node in the reduced bucket quadtree."};
+  // Smallest Cell Finding
+  "Specify how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+};
 
-static const char *pageFormatValuesDescription = "Portrait <i>(A4 portrait page)</i><br>"
-                                                 "Landscape <i>(A4 landscape page)</i><br>"
-                                                 "Square <i>(Square format)</i>";
+static const char *pageFormatValuesDescription =
+  "Portrait <i>(A4 portrait page)</i><br>"
+  "Landscape <i>(A4 landscape page)</i><br>"
+  "Square <i>(Square format)</i>";
 
-static const char *qualityVsSpeedValuesDescription = "GorgeousAndEfficient <i>(Best quality)</i><br>"
-                                                     "BeautifulAndFast <i>(Medium quality and speed)</i><br>"
-                                                     "NiceAndIncredibleSpeed <i>(Best speed</i>";
+static const char *qualityVsSpeedValuesDescription =
+  "GorgeousAndEfficient <i>(Best quality)</i><br>"
+  "BeautifulAndFast <i>(Medium quality and speed)</i><br>"
+  "NiceAndIncredibleSpeed <i>(Best speed</i>";
 
-static const char *edgeLengthMeasurementValuesDescription = "Midpoint <i>(Measure from center point of edge end points)</i><br>"
-                                                            "BoundingCircle <i>(Measure from border of circle surrounding edge end "
-                                                            "points)</i>";
+static const char *edgeLengthMeasurementValuesDescription =
+  "Midpoint <i>(Measure from center point of edge end points)</i><br>"
+  "BoundingCircle <i>(Measure from border of circle surrounding edge end points)</i>";
 
-static const char *presortValuesDescription = "None <i>(Do not presort)</i><br>"
-                                              "DecreasingHeight <i>(Presort by decreasing height of components)</i><br>"
-                                              "DecreasingWidth <i>(Presort by decreasing width of components)</i>";
+static const char *presortValuesDescription =
+  "None <i>(Do not presort)</i><br>"
+  "DecreasingHeight <i>(Presort by decreasing height of components)</i><br>"
+  "DecreasingWidth <i>(Presort by decreasing width of components)</i>";
 
-static const char *galaxyChoiceValuesDescription = "UniformProb<br>"
-                                                   "NonUniformProbLowerMass<br>"
-                                                   "NonUniformProbHigherMass";
+static const char *galaxyChoiceValuesDescription =
+  "UniformProb<br>"
+  "NonUniformProbLowerMass<br>"
+  "NonUniformProbHigherMass";
 
-static const char *maxIterChangeValuesDescription = "Constant <br>"
-                                                    "LinearlyDecreasing <br>"
-                                                    "RapidlyDecreasing";
+static const char *maxIterChangeValuesDescription =
+  "Constant <br>"
+  "LinearlyDecreasing <br>"
+  "RapidlyDecreasing";
 
-static const char *forceModelValuesDescription = "FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br>"
-                                                 "Eades <i>(The force-model by Eades)</i><br>"
-                                                 "New <i>(The new force-model)</i>";
+static const char *forceModelValuesDescription =
+  "FruchtermanReingold <i>(The force-model by Fruchterman, Reingold)</i><br>"
+  "Eades <i>(The force-model by Eades)</i><br>"
+  "New <i>(The new force-model)</i>";
 
-static const char *repulsiveForceValuesDescription = "Exact <i>(Exact calculation)</i><br>"
-                                                     "GridApproximation <i>(Grid approximation)</i><br>"
-                                                     "NMM <i>(Calculation as for new multipole method)</i>";
+static const char *repulsiveForceValuesDescription =
+  "Exact <i>(Exact calculation)</i><br>"
+  "GridApproximation <i>(Grid approximation)</i><br>"
+  "NMM <i>(Calculation as for new multipole method)</i>";
 
-static const char *initialPlacementValuesDescription = "UniformGrid <i>(Uniform placement on a grid)</i><br>"
-                                                       "RandomTime <i>(Random placement, based on current time)</i><br>"
-                                                       "RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br>"
-                                                       "KeepPositions <i>(No change in placement)</i>";
+static const char *initialPlacementValuesDescription =
+  "UniformGrid <i>(Uniform placement on a grid)</i><br>"
+  "RandomTime <i>(Random placement, based on current time)</i><br>"
+  "RandomRandIterNr <i>(Random placement, based on randIterNr())</i><br>"
+  "KeepPositions <i>(No change in placement)</i>";
 
-static const char *smallestCellFindingValuesDescription = "Iteratively <i>(Iteratively, in constant time)</i><br>"
-                                                          "Aluru <i>(According to formula by Aluru et al., in constant time)</i>";
+static const char *smallestCellFindingValuesDescription =
+  "Iteratively <i>(Iteratively, in constant time)</i><br>"
+  "Aluru <i>(According to formula by Aluru et al., in constant time)</i>";
 
-class OGDFFm3 : public OGDFLayoutPluginBase {
+class OGDFFm3: public OGDFLayoutPluginBase {
 
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implements the FM³ layout algorithm by Hachul and Jünger. "
-                                                                   "It is a multilevel, force-directed layout algorithm that "
-                                                                   "can be applied to very large graphs.",
-                    "1.2", "Force Directed")
-  OGDFFm3(const tlp::PluginContext *context);
+  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implement the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, force-directed layout algorithm that can be applied to very large graphs.", "1.2" ,"Force Directed")
+  OGDFFm3(const tlp::PluginContext* context);
   ~OGDFFm3();
   void beforeCall();
   void callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes);
 };
 
+
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
  creation,informations, release, groupe*/
 PLUGIN(OGDFFm3)
 
-OGDFFm3::OGDFFm3(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
-  addInParameter<NumericProperty *>("Edge Length Property", paramHelp[0], "viewMetric", false);
-  addInParameter<SizeProperty>("Node Size", paramHelp[1], "viewSize", false);
-  addInParameter<double>("Unit edge length", paramHelp[2], "10.0", false);
-  addInParameter<bool>("New initial placement", paramHelp[3], "true");
+OGDFFm3::OGDFFm3(const tlp::PluginContext* context) :
+  OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {
+  addInParameter<NumericProperty*> ("Edge Length Property", paramHelp[0], "viewMetric", false);
+  addInParameter<SizeProperty> ("Node Size", paramHelp[1], "viewSize", false);
+  addInParameter<double> ("Unit edge length", paramHelp[2], "10.0", false);
+  addInParameter<bool> ("New initial placement", paramHelp[3], "true");
   addInParameter<int>("Fixed iterations", paramHelp[4], "30");
   addInParameter<double>("Threshold", paramHelp[5], "0.01");
-  addInParameter<StringCollection>(ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true, pageFormatValuesDescription);
-  addInParameter<StringCollection>(ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true, qualityVsSpeedValuesDescription);
-  addInParameter<StringCollection>(ELT_EDGELENGTHMEASUREMENT, paramHelp[8], ELT_EDGELENGTHMEASUREMENTLIST, true,
-                                   edgeLengthMeasurementValuesDescription);
-  addInParameter<StringCollection>(ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST, true, "All<br> Integer <br> Exponent");
-  addInParameter<StringCollection>(ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true, "None<br> NoGrowingRow<br> Always");
-  addInParameter<StringCollection>(ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true, presortValuesDescription);
-  addInParameter<StringCollection>(ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true, galaxyChoiceValuesDescription);
-  addInParameter<StringCollection>(ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true, maxIterChangeValuesDescription);
-  addInParameter<StringCollection>(ELT_INITIALPLACEMENTMULT, paramHelp[14], ELT_INITIALPLACEMENTMULTLIST, true, "Simple <br> Advanced");
-  addInParameter<StringCollection>(ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true, forceModelValuesDescription);
-  addInParameter<StringCollection>(ELT_REPULSIVEFORCEMETHOD, paramHelp[16], ELT_REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
-  addInParameter<StringCollection>(ELT_INITIALPLACEMENTFORCES, paramHelp[17], ELT_INITIALPLACEMENTFORCESLIST, true,
-                                   initialPlacementValuesDescription);
-  addInParameter<StringCollection>(ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18], ELT_REDUCEDTREECONSTRCUCTIONLIST, true,
-                                   "PathByPath <br> SubtreeBySubtree");
-  addInParameter<StringCollection>(ELT_SMALLESTCELLFINDING, paramHelp[19], ELT_SMALLESTCELLFINDINGLIST, true, smallestCellFindingValuesDescription);
+  addInParameter<StringCollection> (ELT_PAGEFORMAT, paramHelp[6], ELT_PAGEFORMATLIST, true, pageFormatValuesDescription);
+  addInParameter<StringCollection> (ELT_QUALITYVSSPEED, paramHelp[7], ELT_QUALITYVSSPEEDLIST, true, qualityVsSpeedValuesDescription);
+  addInParameter<StringCollection> (ELT_EDGELENGTHMEASUREMENT, paramHelp[8], ELT_EDGELENGTHMEASUREMENTLIST, true, edgeLengthMeasurementValuesDescription);
+  addInParameter<StringCollection> (ELT_ALLOWEDPOSITIONS, paramHelp[9], ELT_ALLOWEDPOSITIONSLIST, true, "All<br> Integer <br> Exponent");
+  addInParameter<StringCollection> (ELT_TIPOVER, paramHelp[10], ELT_TIPOVERLIST, true, "None<br> NoGrowingRow<br> Always");
+  addInParameter<StringCollection> (ELT_PRESORT, paramHelp[11], ELT_PRESORTLIST, true, presortValuesDescription);
+  addInParameter<StringCollection> (ELT_GALAXYCHOICE, paramHelp[12], ELT_GALAXYCHOICELIST, true, galaxyChoiceValuesDescription);
+  addInParameter<StringCollection> (ELT_MAXITERCHANGE, paramHelp[13], ELT_MAXITERCHANGELIST, true, maxIterChangeValuesDescription);
+  addInParameter<StringCollection> (ELT_INITIALPLACEMENTMULT, paramHelp[14], ELT_INITIALPLACEMENTMULTLIST, true, "Simple <br> Advanced");
+  addInParameter<StringCollection> (ELT_FORCEMODEL, paramHelp[15], ELT_FORCEMODELLIST, true, forceModelValuesDescription);
+  addInParameter<StringCollection> (ELT_REPULSIVEFORCEMETHOD, paramHelp[16], ELT_REPULSIVEFORCEMETHODLIST, true, repulsiveForceValuesDescription);
+  addInParameter<StringCollection> (ELT_INITIALPLACEMENTFORCES, paramHelp[17], ELT_INITIALPLACEMENTFORCESLIST, true, initialPlacementValuesDescription);
+  addInParameter<StringCollection> (ELT_REDUCEDTREECONSTRCUCTION, paramHelp[18], ELT_REDUCEDTREECONSTRCUCTIONLIST, true, "PathByPath <br> SubtreeBySubtree");
+  addInParameter<StringCollection> (ELT_SMALLESTCELLFINDING, paramHelp[19], ELT_SMALLESTCELLFINDINGLIST, true, smallestCellFindingValuesDescription);
 }
 
 OGDFFm3::~OGDFFm3() {
 }
 
 void OGDFFm3::beforeCall() {
-  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
+  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout*> (ogdfLayoutAlgo);
 
   if (dataSet != 0) {
     fmmm->useHighLevelOptions(true);
-    SizeProperty *size = nullptr;
+    SizeProperty * size = NULL;
 
     if (dataSet->get("Node Size", size))
       tlpToOGDF->copyTlpNodeSizeToOGDF(size);
@@ -321,6 +324,7 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get("New initial placement", bval)) {
       fmmm->newInitialPlacement(bval);
     }
+
 
     int ival = 0;
 
@@ -337,19 +341,24 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_PAGEFORMAT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_PORTRAIT) {
         fmmm->pageFormat(ogdf::FMMMLayout::pfPortrait);
-      } else if (stringCollection.getCurrent() == ELT_LANDSCAPE) {
+      }
+      else if (stringCollection.getCurrent() == ELT_LANDSCAPE) {
         fmmm->pageFormat(ogdf::FMMMLayout::pfLandscape);
-      } else {
+      }
+      else {
         fmmm->pageFormat(ogdf::FMMMLayout::pfSquare);
       }
     }
 
     if (dataSet->get(ELT_QUALITYVSSPEED, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NICEANDINCREDIBLESPEED) {
-        fmmm->qualityVersusSpeed(ogdf::FMMMLayout::qvsNiceAndIncredibleSpeed);
-      } else if (stringCollection.getCurrent() == ELT_GORGEOUSANDEFFICIENT) {
+        fmmm->qualityVersusSpeed(
+          ogdf::FMMMLayout::qvsNiceAndIncredibleSpeed);
+      }
+      else if (stringCollection.getCurrent() == ELT_GORGEOUSANDEFFICIENT) {
         fmmm->qualityVersusSpeed(ogdf::FMMMLayout::qvsGorgeousAndEfficient);
-      } else {
+      }
+      else {
         fmmm->qualityVersusSpeed(ogdf::FMMMLayout::qvsBeautifulAndFast);
       }
     }
@@ -357,7 +366,8 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_EDGELENGTHMEASUREMENT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_BOUNDINGCIRCLE) {
         fmmm->edgeLengthMeasurement(ogdf::FMMMLayout::elmBoundingCircle);
-      } else {
+      }
+      else {
         fmmm->edgeLengthMeasurement(ogdf::FMMMLayout::elmMidpoint);
       }
     }
@@ -365,9 +375,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_ALLOWEDPOSITIONS, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_INTEGER) {
         fmmm->allowedPositions(ogdf::FMMMLayout::apInteger);
-      } else if (stringCollection.getCurrent() == ELT_EXPONENT) {
+      }
+      else if (stringCollection.getCurrent() == ELT_EXPONENT) {
         fmmm->allowedPositions(ogdf::FMMMLayout::apExponent);
-      } else {
+      }
+      else {
         fmmm->allowedPositions(ogdf::FMMMLayout::apAll);
       }
     }
@@ -375,9 +387,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_TIPOVER, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NONE) {
         fmmm->tipOverCCs(ogdf::FMMMLayout::toNone);
-      } else if (stringCollection.getCurrent() == ELT_NOGROWINGROW) {
+      }
+      else if (stringCollection.getCurrent() == ELT_NOGROWINGROW) {
         fmmm->tipOverCCs(ogdf::FMMMLayout::toNoGrowingRow);
-      } else {
+      }
+      else {
         fmmm->tipOverCCs(ogdf::FMMMLayout::toAlways);
       }
     }
@@ -385,9 +399,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_PRESORT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_NONE) {
         fmmm->presortCCs(ogdf::FMMMLayout::psNone);
-      } else if (stringCollection.getCurrent() == ELT_DECREASINGHEIGHT) {
+      }
+      else if (stringCollection.getCurrent() == ELT_DECREASINGHEIGHT) {
         fmmm->presortCCs(ogdf::FMMMLayout::psDecreasingHeight);
-      } else {
+      }
+      else {
         fmmm->presortCCs(ogdf::FMMMLayout::psDecreasingWidth);
       }
     }
@@ -395,9 +411,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_GALAXYCHOICE, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_UNIFORMPROB) {
         fmmm->galaxyChoice(ogdf::FMMMLayout::gcUniformProb);
-      } else if (stringCollection.getCurrent() == ELT_NONUNIFORMPROBLOWERMASS) {
+      }
+      else if (stringCollection.getCurrent() == ELT_NONUNIFORMPROBLOWERMASS) {
         fmmm->galaxyChoice(ogdf::FMMMLayout::gcNonUniformProbLowerMass);
-      } else {
+      }
+      else {
         fmmm->galaxyChoice(ogdf::FMMMLayout::gcNonUniformProbHigherMass);
       }
     }
@@ -405,9 +423,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_MAXITERCHANGE, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_CONSTANT) {
         fmmm->maxIterChange(ogdf::FMMMLayout::micConstant);
-      } else if (stringCollection.getCurrent() == ELT_LINEARLYDECREASING) {
+      }
+      else if (stringCollection.getCurrent() == ELT_LINEARLYDECREASING) {
         fmmm->maxIterChange(ogdf::FMMMLayout::micLinearlyDecreasing);
-      } else {
+      }
+      else {
         fmmm->maxIterChange(ogdf::FMMMLayout::micRapidlyDecreasing);
       }
     }
@@ -415,7 +435,8 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_INITIALPLACEMENTMULT, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_ADVANCED) {
         fmmm->initialPlacementMult(ogdf::FMMMLayout::ipmAdvanced);
-      } else {
+      }
+      else {
         fmmm->initialPlacementMult(ogdf::FMMMLayout::ipmSimple);
       }
     }
@@ -423,9 +444,11 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_FORCEMODEL, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_FRUCHTERMANNREINGOLD) {
         fmmm->forceModel(ogdf::FMMMLayout::fmFruchtermanReingold);
-      } else if (stringCollection.getCurrent() == ELT_EADES) {
+      }
+      else if (stringCollection.getCurrent() == ELT_EADES) {
         fmmm->forceModel(ogdf::FMMMLayout::fmEades);
-      } else {
+      }
+      else {
         fmmm->forceModel(ogdf::FMMMLayout::fmNew);
       }
     }
@@ -433,9 +456,12 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_REPULSIVEFORCEMETHOD, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_EXACT) {
         fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcExact);
-      } else if (stringCollection.getCurrent() == ELT_GRIDAPPROXIMATION) {
-        fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcGridApproximation);
-      } else {
+      }
+      else if (stringCollection.getCurrent() == ELT_GRIDAPPROXIMATION) {
+        fmmm->repulsiveForcesCalculation(
+          ogdf::FMMMLayout::rfcGridApproximation);
+      }
+      else {
         fmmm->repulsiveForcesCalculation(ogdf::FMMMLayout::rfcNMM);
       }
     }
@@ -443,11 +469,14 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_INITIALPLACEMENTFORCES, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_UNIFORMGRID) {
         fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfUniformGrid);
-      } else if (stringCollection.getCurrent() == ELT_RANDOMTIME) {
+      }
+      else if (stringCollection.getCurrent() == ELT_RANDOMTIME) {
         fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfRandomTime);
-      } else if (stringCollection.getCurrent() == ELT_RANDOMRANDITERNR) {
+      }
+      else if (stringCollection.getCurrent() == ELT_RANDOMRANDITERNR) {
         fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfRandomRandIterNr);
-      } else {
+      }
+      else {
         fmmm->initialPlacementForces(ogdf::FMMMLayout::ipfKeepPositions);
       }
     }
@@ -455,7 +484,8 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_REDUCEDTREECONSTRCUCTION, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_SUBTREEBYSUBTREE) {
         fmmm->nmTreeConstruction(ogdf::FMMMLayout::rtcSubtreeBySubtree);
-      } else {
+      }
+      else {
         fmmm->nmTreeConstruction(ogdf::FMMMLayout::rtcPathByPath);
       }
     }
@@ -463,26 +493,32 @@ void OGDFFm3::beforeCall() {
     if (dataSet->get(ELT_SMALLESTCELLFINDING, stringCollection)) {
       if (stringCollection.getCurrent() == ELT_ITERATIVELY) {
         fmmm->nmSmallCell(ogdf::FMMMLayout::scfIteratively);
-      } else {
+      }
+      else {
         fmmm->nmSmallCell(ogdf::FMMMLayout::scfAluru);
       }
     }
   }
 }
 
+
 void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
-  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout *>(ogdfLayoutAlgo);
+  ogdf::FMMMLayout *fmmm = static_cast<ogdf::FMMMLayout*> (ogdfLayoutAlgo);
 
-  NumericProperty *length = nullptr;
+  NumericProperty *length = NULL;
 
   if (dataSet->get("Edge Length Property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
-    for (tlp::edge e : graph->getEdges()) {
-      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] = length->getEdgeDoubleValue(e);
+    tlp::edge e;
+    forEach(e, graph->getEdges()) {
+      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] =
+        length->getEdgeDoubleValue(e);
     }
     fmmm->call(gAttributes, edgeLength);
-  } else {
+  }
+  else {
     OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(gAttributes);
   }
 }
+
