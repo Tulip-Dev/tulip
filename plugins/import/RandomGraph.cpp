@@ -38,14 +38,14 @@ struct less<edgeS> {
 
 //see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
 static int random_number(const int n) {
-    int x = rand();
+  int x = rand();
 
-    // Keep searching for an x in a range divisible by n
-    while (x >= RAND_MAX - (RAND_MAX % n)) {
-      x = rand();
-    }
+  // Keep searching for an x in a range divisible by n
+  while (x >= RAND_MAX - (RAND_MAX % n)) {
+    x = rand();
+  }
 
-   return  x % n;
+  return  x % n;
 }
 
 

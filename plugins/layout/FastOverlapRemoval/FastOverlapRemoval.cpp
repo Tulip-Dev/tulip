@@ -87,9 +87,10 @@ bool FastOverlapRemoval::run () {
 
   if (dataSet != NULL) {
     if(dataSet->exist("overlaps removal type"))
-        dataSet->get("overlaps removal type", stringCollection);
+      dataSet->get("overlaps removal type", stringCollection);
     else
-        dataSet->get("overlap removal type", stringCollection);
+      dataSet->get("overlap removal type", stringCollection);
+
     dataSet->get("layout", viewLayout);
 
     if (!dataSet->get("bounding box", viewSize))
