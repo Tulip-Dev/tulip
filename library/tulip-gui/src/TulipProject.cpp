@@ -29,6 +29,7 @@
 
 #include <tulip/SimplePluginProgress.h>
 #include <tulip/QuaZIPFacade.h>
+#include <tulip/TlpQtTools.h>
 
 #include <cstdlib>
 

@@ -122,8 +122,6 @@ static void bicoTestAndLabeling(const Graph & graph, node v,
           w = current.top();
           current.pop();
           it = graph.getInOutEdges(w);
-          edge e;
-
           while(it->hasNext()) {
             edge e = it->next();
 
@@ -162,18 +160,14 @@ int biconnectedComponents(const Graph& graph, MutableContainer<int>& compnum) {
     if (dfsnum.get(v.id) == -1) {
       dfsnum.set(v.id, ++count1);
       bool is_isolated = true;
-      Iterator<edge> *it = graph.getInOutEdges(v);
 
-      while (it->hasNext()) {
-        edge e = it->next();
-
+      edge e;
+      forEach(e, graph.getInOutEdges(v)) {
         if ( graph.opposite(e,v) != v ) {
           is_isolated = false;
           break;
         }
       }
-
-      delete it;
 
       if ( is_isolated ) {
         num_isolated++;
@@ -190,9 +184,6 @@ int biconnectedComponents(const Graph& graph, MutableContainer<int>& compnum) {
   return(count2 + num_isolated);
 }
 //=============================================================================================
-#include <tulip/TulipPluginHeaders.h>
-using namespace std;
-using namespace tlp;
 
 /** \addtogroup metric */
 
