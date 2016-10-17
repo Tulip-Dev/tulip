@@ -27,8 +27,8 @@
 #include <quazip.h>
 #include <quazipfile.h>
 
-QuaZIPFacade::QuaZIPFacade() {
-}
+//QuaZIPFacade::QuaZIPFacade() {
+//}
 
 void copy(QIODevice &in,QIODevice &out) {
   char buffer[40960];
@@ -124,7 +124,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
   QFile archiveFile(archivePath);
 
   if(!archiveFile.exists()) {
-    progress->setError(QString("No such file : " + archivePath).toUtf8().data());
+    progress->setError(QString("No such file: " + archivePath).toUtf8().data());
     return false;
   }
 

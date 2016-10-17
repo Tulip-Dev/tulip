@@ -28,7 +28,7 @@ void PluginLoaderTxt::start(const string &path) {
 }
 
 void PluginLoaderTxt::loading(const string &filename) {
-  std::cout << "loading file : " << filename << endl;
+  std::cout << "loading file: " << filename << endl;
 }
 
 void PluginLoaderTxt::loaded(const Plugin* infos, const std::list <Dependency>& deps) {

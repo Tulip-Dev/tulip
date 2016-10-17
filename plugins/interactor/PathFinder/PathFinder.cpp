@@ -49,8 +49,8 @@ PathFinder::PathFinder(const tlp::PluginContext *) :
   edgeOrientationLabels[PathAlgorithm::Oriented] = "Consider edges as oriented";
   edgeOrientationLabels[PathAlgorithm::NonOriented] = "Consider edges as non-oriented";
   edgeOrientationLabels[PathAlgorithm::Reversed] = "Consider edges as reversed";
-  pathsTypesLabels[PathAlgorithm::AllPaths] = "Select all the paths";
-  pathsTypesLabels[PathAlgorithm::AllShortest] = "Select all the shortest paths";
+  pathsTypesLabels[PathAlgorithm::AllPaths] = "Select all paths";
+  pathsTypesLabels[PathAlgorithm::AllShortest] = "Select all shortest paths";
   pathsTypesLabels[PathAlgorithm::OneShortest] = "Select one of the shortest paths";
 }
 
