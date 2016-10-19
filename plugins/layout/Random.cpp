@@ -49,9 +49,9 @@ bool Random::run() {
     node itn=itN->next();
 
     if(is3D)
-      result->setNodeValue(itn,Coord(rand()%1024,rand()%1024,rand()%1024));
+      result->setNodeValue(itn,Coord(randomInteger(1024),randomInteger(1024),randomInteger(1024)));
     else
-      result->setNodeValue(itn,Coord(rand()%1024,rand()%1024,0));
+      result->setNodeValue(itn,Coord(randomInteger(1024),randomInteger(1024),0));
   }
 
   delete itN;

@@ -25,6 +25,7 @@
 #include <tulip/GraphImpl.h>
 #include <tulip/ConcatIterator.h>
 #include <tulip/GraphTools.h>
+#include <tulip/TlpTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -306,7 +307,7 @@ node GraphAbstract::getOneNode() const {
 }
 //=========================================================================
 node GraphAbstract::getRandomNode() const {
-  unsigned int nodeIdx = static_cast<unsigned int>((rand() / static_cast<double>(RAND_MAX)) * numberOfNodes());
+  unsigned int nodeIdx = randomUnsignedInteger(numberOfNodes());
   unsigned int i = 0;
   node n;
   forEach(n, getNodes()) {
@@ -329,7 +330,7 @@ edge GraphAbstract::getOneEdge() const {
 }
 //=========================================================================
 edge GraphAbstract::getRandomEdge() const {
-  unsigned int edgeIdx = static_cast<unsigned int>((rand() / static_cast<double>(RAND_MAX)) * numberOfEdges());
+  unsigned int edgeIdx = randomUnsignedInteger(numberOfEdges());
   unsigned int i = 0;
   edge e;
   forEach(e, getEdges()) {

@@ -190,7 +190,7 @@ void Grip::firstNodesPlacement() {
     g->addNode(n1);
     g->addNode(n2);
     g->addNode(n3);
-    result->rotateX(3.14159/2. - (3.14159 * (double)(rand()%2)), g->getNodes(), g->getEdges());
+    result->rotateX(3.14159/2. - (3.14159 * (double)(randomInteger(2))), g->getNodes(), g->getEdges());
     currentGraph->delSubGraph(g);
 
     Coord c1 = result->getNodeValue(n1);
@@ -269,8 +269,8 @@ void Grip::initialPlacement(unsigned int start, unsigned int end) {
       nbConsidered += 1.;
     }
 
-    double alpha = edgeLength / 6.0 * (double) rand()/ (double) RAND_MAX;
-    Coord  alea  = Coord(alpha - (2. * alpha* (double)(rand()%2)), alpha - (2. * alpha * double(rand()%2)), (alpha - (2. * alpha* (double)(rand()%2))));
+    double alpha = edgeLength / 6.0 * randomDouble();
+    Coord  alea  = Coord(alpha - (2. * alpha* (double)(randomInteger(2))), alpha - (2. * alpha * double(randomInteger(2))), (alpha - (2. * alpha* (double)(randomInteger(2)))));
 
     if(_dim == 2) alea[2] = 0.;
 
@@ -390,8 +390,8 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
         if(_dim == 3) euclidian_dist_sqr += c_tmp[2] * c_tmp[2];
 
         if(!(euclidian_dist_sqr > 1E-4)) {
-          double alpha = 2. * (double) rand()/ (double) RAND_MAX;
-          c_tmp = Coord (alpha - (2. * alpha* (double)(rand()%2)),alpha -(2. * alpha * double(rand()%2)),alpha - (2. * alpha* (double)(rand()%2)));
+          double alpha = randomDouble(2.0);
+          c_tmp = Coord (alpha - (2. * alpha* (double)(randomInteger(2))),alpha -(2. * alpha * double(randomInteger(2))),alpha - (2. * alpha* (double)(randomInteger(2))));
 
           if(_dim == 2) c_tmp[2] = 0.;
 
@@ -464,7 +464,7 @@ void Grip::init() {
   double diam = sqrt(currentGraph->numberOfNodes());
   node n;
   forEach(n,currentGraph->getNodes()) {
-    Coord  alea  = Coord(diam - (2. * diam * (double)(rand()%2)), diam - (2. * diam * double(rand()%2)), diam - (2. * diam * double(rand()%2)));
+    Coord  alea  = Coord(diam - (2. * diam * (double)(randomInteger(2))), diam - (2. * diam * double(randomInteger(2))), diam - (2. * diam * double(randomInteger(2))));
 
     if(_dim == 2) alea[2] = 0.;
 

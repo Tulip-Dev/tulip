@@ -59,7 +59,7 @@ void PushPopTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
 
   for (unsigned int i=0; i< NB_EDGES; ++i)
-    edges.push_back(graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]));
+    edges.push_back(graph->addEdge(nodes[randomUnsignedInteger(NB_ADD)], nodes[randomUnsignedInteger(NB_ADD)]));
 }
 //==========================================================
 void PushPopTest::testAddDel() {

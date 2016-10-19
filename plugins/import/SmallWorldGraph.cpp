@@ -98,7 +98,7 @@ public:
     graph->reserveEdges(nbNodes * avgDegree);
 
     for (unsigned int i=0; i<nbNodes; ++i) {
-      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(rand()%WIDTH), static_cast<float>(rand()%HEIGHT), 0));
+      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(randomInteger(WIDTH)), static_cast<float>(randomInteger(HEIGHT)), 0));
     }
 
     //double minSize = DBL_MAX;
@@ -115,7 +115,7 @@ public:
           if ( distance  < (double)maxDistance)
             graph->addEdge(sg[i],sg[j]);
           else if (!longEdge && enableLongEdge) {
-            double distrand = (double)rand()/(double)RAND_MAX;
+            double distrand = randomDouble();
 
             if (distrand < 1.0/(2.0+double(nbNodes-i-1))) {
               longEdge = true;

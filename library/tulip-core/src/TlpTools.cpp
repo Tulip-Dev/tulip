@@ -351,6 +351,26 @@ void tlp::initRandomSequence() {
   }
 }
 
+int tlp::randomInteger(int bound) {
+  int x = rand();
+
+  // keep searching for an x in a range divisible by n
+  // see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
+  while (x >= RAND_MAX - (RAND_MAX % bound)) {
+    x = rand();
+  }
+
+  return x % bound;
+}
+
+unsigned int tlp::randomUnsignedInteger(unsigned int bound) {
+  return static_cast<unsigned int>(randomInteger(static_cast<int>(bound)));
+}
+
+double tlp::randomDouble(double max) {
+  return max * rand() / static_cast<double>(RAND_MAX);
+}
+
 //=========================================================
 
 int tlp::statPath(const std::string &pathname, tlp_stat_t *buf) {

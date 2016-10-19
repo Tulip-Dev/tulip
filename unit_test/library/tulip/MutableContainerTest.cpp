@@ -21,6 +21,7 @@
 #include <cppunit/TestCaller.h>
 #include "MutableContainerTest.h"
 #include <tulip/Iterator.h>
+#include <tulip/TlpTools.h>
 #include <fstream>
 
 using namespace std;
@@ -223,7 +224,7 @@ void MutableContainerTest::testSetGet() {
   mutString->setAll("Sophie");
 
   for (unsigned int i=0; i<NBTEST*10; ++i) {
-    unsigned int rando=rand()%NBTEST;
+    unsigned int rando=randomUnsignedInteger(NBTEST);
     mutBool->set(rando,true);
     mutDouble->set(rando, rando);
     mutString->set(rando, string("David"));
@@ -235,13 +236,13 @@ void MutableContainerTest::testSetGet() {
   mutBool->setAll(true);
 
   for (unsigned int i=0; i<NBTEST*10; ++i) {
-    unsigned int rando=rand()%NBTEST;
+    unsigned int rando=randomUnsignedInteger(NBTEST);
     mutBool->set(rando, false);
     CPPUNIT_ASSERT(!mutBool->get(rando));
   }
 
   for (unsigned int i=0; i<NBTEST*10; ++i) {
-    unsigned int rando=rand()%NBTEST;
+    unsigned int rando=randomUnsignedInteger(NBTEST);
     bool isNotDefault = true;
     mutBool->set(rando, true);
     CPPUNIT_ASSERT(mutBool->get(rando, isNotDefault));
