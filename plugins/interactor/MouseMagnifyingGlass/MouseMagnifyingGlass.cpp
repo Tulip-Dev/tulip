@@ -20,7 +20,7 @@
 #include <GL/glew.h>
 
 #include "MouseMagnifyingGlass.h"
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 #include <tulip/GlRect.h>
 #include <tulip/GlMainView.h>

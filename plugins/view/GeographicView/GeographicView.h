@@ -39,7 +39,7 @@
 #include "GoogleMaps.h"
 #include "GeographicViewGraphicsView.h"
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 

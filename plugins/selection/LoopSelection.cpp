@@ -28,10 +28,16 @@ LoopSelection::LoopSelection(const tlp::PluginContext* context):BooleanAlgorithm
 bool LoopSelection::run() {
   result->setAllNodeValue(false);
   edge e;
+  unsigned cpt=0;
   forEach(e, graph->getEdges()) {
     const std::pair<node, node>& eEnds = graph->ends(e);
-    result->setEdgeValue(e, eEnds.first == eEnds.second);
+    if(eEnds.first == eEnds.second) {
+        result->setEdgeValue(e, true);
+        ++cpt;
+    }
   }
+  //output some useful information (will be displayed in the log window in the graph perspective)
+  tlp::debug() << tlp::SelectionAlgorithm::LoopSelection << ": " << cpt << " edges selected." << endl;
   return true;
 }
 //============================================

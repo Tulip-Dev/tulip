@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <tulip/BooleanProperty.h>
+
 #include <tulip/AcyclicTest.h>
 
 #include "SpanningDagSelection.h"
@@ -35,10 +35,13 @@ bool SpanningDagSelection::run() {
   vector<edge> obstructions;
   AcyclicTest::acyclicTest(graph, &obstructions);
 
+  unsigned num=0;
   for (vector<edge>::const_iterator it = obstructions.begin(); it != obstructions.end(); ++it) {
     result->setEdgeValue(*it, false);
+    ++num;
   }
-
+  unsigned num_selected = graph->numberOfEdges()-num;
+  tlp::debug() << tlp::SelectionAlgorithm::SpanningDagSelection << ": " << num_selected << " edges selected." << endl;
   return true;
 }
 //=================================================================

@@ -19,7 +19,7 @@
 #ifndef CONNECTEDCOMPONNENTPACKING_H
 #define CONNECTEDCOMPONNENTPACKING_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/LayoutProperty.h>
 
 class ConnectedComponentPacking: public tlp::LayoutAlgorithm {
 public:

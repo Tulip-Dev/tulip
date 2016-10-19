@@ -26,7 +26,7 @@
 #include <SOMAlgorithm.h>
 #include <InputSample.h>
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 class SOMPreviewComposite;

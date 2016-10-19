@@ -24,6 +24,8 @@
 #include <tulip/BooleanProperty.h>
 #include <tulip/DoubleProperty.h>
 
+#include "../../utils/PluginNames.h"
+
 using namespace std;
 
 template <typename T>
@@ -125,7 +127,7 @@ void NodeNeighborhoodView::getNeighbors(node n, unsigned int dist, bool noRecurs
 
     BooleanProperty result(graph_component);
     string errorMsg;
-    graph_component->applyPropertyAlgorithm("Reachable Sub-Graph", &result, errorMsg, NULL, &dataSet);
+    graph_component->applyPropertyAlgorithm(tlp::SelectionAlgorithm::ReachableSubGraphSelection, &result, errorMsg, NULL, &dataSet);
 
     graphViewNodes.clear();
     graphViewEdges.clear();

@@ -21,7 +21,7 @@
 
 #include "FishEyeInteractor.h"
 #include "FishEyeConfigWidget.h"
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 #include <QMouseEvent>
 
