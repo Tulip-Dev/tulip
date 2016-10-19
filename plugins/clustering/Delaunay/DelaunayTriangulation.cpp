@@ -29,8 +29,9 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
   nodes.reserve(graph->numberOfNodes());
   vector<tlp::Coord> points;
   points.reserve(graph->numberOfNodes());
+  tlp::node n;
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-  for (tlp::node n : graph->getNodes()) {
+  forEach(n, graph->getNodes()) {
     nodes.push_back(n);
     points.push_back(layout->getNodeValue(n));
   }
@@ -88,7 +89,7 @@ public:
     addInParameter<bool>("simplices", paramHelp[0], "false");
   }
 
-  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "", "Perform a Delaunay triangulation, in considering the positions of the graph "
+  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "", "Performs a Delaunay triangulation, in considering the positions of the graph "
                                                                      "nodes as a set of points. The building of simplices (triangles in 2D or "
                                                                      "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
                     "1.0", "Triangulation")

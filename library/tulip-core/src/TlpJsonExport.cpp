@@ -81,7 +81,7 @@ private:
  **/
 class TlpJsonExport : public ExportModule {
 public:
-  PLUGININFORMATION("JSON Export", "Charles Huet", "18/05/2011", "Export a graph in a file using the Tulip JSON format", "1.0", "File")
+  PLUGININFORMATION("JSON Export", "Charles Huet", "18/05/2011", "Exports a graph in a file using the Tulip JSON format", "1.0", "File")
 
   std::string fileExtension() const {
     return "json";
@@ -109,11 +109,12 @@ public:
     }
 
     // initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
+    node n;
     int i = 0;
     // the export only works for the root graph
     Graph *superGraph = graph->getSuperGraph();
     graph->setSuperGraph(graph);
-    for (node n : graph->getNodes()) {
+    forEach(n, graph->getNodes()) {
       _newNodeId.set(n.id, i++);
     }
 
@@ -145,7 +146,7 @@ public:
    * @return void
    **/
   void saveMetaData_V4() {
-    time_t ostime = time(nullptr);
+    time_t ostime = time(NULL);
     // get local time
     struct tm *currTime = localtime(&ostime);
     // format date
@@ -167,6 +168,8 @@ public:
    * @return void
    **/
   void saveGraph_V4(Graph *graph) {
+    node n;
+    edge e;
 
     _writer.writeString(GraphIDToken);
 
@@ -190,7 +193,7 @@ public:
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
       unsigned int i = 0;
-      for (edge e : graph->getEdges()) {
+      forEach(e, graph->getEdges()) {
         _newEdgeId.set(e.id, i++);
 
         unsigned int source = _newNodeId.get(graph->source(e).id);
@@ -211,7 +214,7 @@ public:
     _writer.writeString(PropertiesToken);
     _writer.writeMapOpen();
     // saving properties
-    Iterator<PropertyInterface *> *itP = nullptr;
+    Iterator<PropertyInterface *> *itP = NULL;
 
     if (graph->getSuperGraph() == graph) {
       itP = graph->getObjectProperties();
@@ -219,7 +222,8 @@ public:
       itP = graph->getLocalObjectProperties();
     }
 
-    for (PropertyInterface *property : itP) {
+    PropertyInterface *property;
+    forEach(property, itP) {
       _writer.writeString(property->getName());
       _writer.writeMapOpen();
 
@@ -255,7 +259,7 @@ public:
       if (property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        for (node n : property->getNonDefaultValuatedNodes(graph)) {
+        forEach(n, property->getNonDefaultValuatedNodes(graph)) {
           stringstream temp;
           temp << _newNodeId.get(n.id);
           _writer.writeString(temp.str());
@@ -276,7 +280,7 @@ public:
       if (property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        for (edge e : property->getNonDefaultValuatedEdges(graph)) {
+        forEach(e, property->getNonDefaultValuatedEdges(graph)) {
           stringstream temp;
           temp << _newEdgeId.get(e.id);
           _writer.writeString(temp.str());
@@ -302,7 +306,8 @@ public:
     _writer.writeMapOpen();
     // saving attributes
     DataSet attributes = graph->getAttributes();
-    for (const pair<string, DataType *> &attribute : attributes.getValues()) {
+    pair<string, DataType *> attribute;
+    forEach(attribute, attributes.getValues()) {
       // If nodes and edges are stored as graph attributes
       // we need to update their id before serializing them
       // as nodes and edges have been reindexed
@@ -341,7 +346,8 @@ public:
     // saving subgraphs
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
-    for (Graph *sub : graph->getSubGraphs()) {
+    Graph *sub;
+    forEach(sub, graph->getSubGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
       _writer.writeMapClose();
@@ -364,8 +370,9 @@ public:
     unsigned int intervalBegin = UINT_MAX;
     unsigned int intervalEnd = UINT_MAX;
     unsigned int previousId = UINT_MAX;
+    unsigned int currentId = UINT_MAX;
     unsigned int nbIdsIterated = 0;
-    for (unsigned int currentId : iterator) {
+    forEach(currentId, iterator) {
       // we don't need/want to do all this on the first time we loop
       if (previousId != UINT_MAX) {
 
@@ -392,7 +399,7 @@ public:
           }
         }
 
-        if (!iterator->hasNext()) {
+        if (!_it_foreach._it->hasNext()) {
           if (intervalBegin != UINT_MAX) {
             _writer.writeArrayOpen();
             _writer.writeInteger(intervalBegin);
@@ -410,7 +417,7 @@ public:
 
     // handle the case where there is only one id to write
     if (nbIdsIterated == 1) {
-      _writer.writeInteger(previousId);
+      _writer.writeInteger(currentId);
     }
 
     _writer.writeArrayClose();

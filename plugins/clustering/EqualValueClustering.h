@@ -25,7 +25,7 @@
 class EqualValueClustering : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Equal Value", "Patrick Mary", "16/04/2014",
-                    "Perform a graph clusterization grouping in the same cluster the nodes or edges having the same value for a given property.",
+                    "Performs a graph clusterization grouping in the same cluster the nodes or edges having the same value for a given property.",
                     "1.1", "Clustering")
   EqualValueClustering(tlp::PluginContext *context);
   bool run();

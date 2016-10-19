@@ -19,10 +19,11 @@
 #ifndef Tulip_LoopSelection_H
 #define Tulip_LoopSelection_H
 
-#include <tulip/BooleanProperty.h>
+#include <tulip/TulipPluginHeaders.h>
 #include "../utils/PluginNames.h"
 
 /** \addtogroup selection */
+
 
 /**
  * This selection plugins enables to find loops in a graph
@@ -31,12 +32,17 @@
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
-class LoopSelection : public tlp::BooleanAlgorithm {
+class LoopSelection:public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION(tlp::SelectionAlgorithm::LoopSelection, "David Auber", "20/01/2003",
-                    "Select all edge loops in a graph.<br/>A loop is an edge that has the same source and target node.", "1.0", "Selection")
-  LoopSelection(const tlp::PluginContext *context);
+  PLUGININFORMATION(tlp::SelectionAlgorithm::LoopSelection,"David Auber","20/01/2003",
+                    "Selects loops in a graph.<br/>A loop is an edge that has the same source and target.",
+                    "1.0", "Selection")
+  LoopSelection(const tlp::PluginContext* context);
   bool run();
 };
 
 #endif
+
+
+
+

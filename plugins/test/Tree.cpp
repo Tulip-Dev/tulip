@@ -24,43 +24,46 @@
 
 class DirectedTreeTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Directed Tree", "Tulip team", "18/04/2012", "Test whether a graph is a directed tree or not.", "1.0", "Topological Test")
-  DirectedTreeTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
+  PLUGININFORMATION("Directed Tree", "Tulip team", "18/04/2012", "Tests whether a graph is a directed tree or not.", "1.0", "Topological Test")
+  DirectedTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
   virtual bool test() {
     return tlp::TreeTest::isTree(graph);
   }
+
 };
 PLUGIN(DirectedTreeTest)
 
 class FreeTreeTest : public tlp::GraphTest {
 public:
-  PLUGININFORMATION("Free Tree", "Tulip team", "18/04/2012", "Test whether a graph is a free tree or not.", "1.0", "Topological Test")
-  FreeTreeTest(const tlp::PluginContext *context) : tlp::GraphTest(context) {
+  PLUGININFORMATION("Free Tree", "Tulip team", "18/04/2012", "Tests whether a graph is a free tree or not.", "1.0", "Topological Test")
+  FreeTreeTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
   }
 
   virtual bool test() {
     return tlp::TreeTest::isFreeTree(graph);
   }
+
 };
 PLUGIN(FreeTreeTest)
 
 class MakeDirectedTree : public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Make Directed Tree", "Tulip team", "18/04/2012", "Make a graph a directed tree.", "1.0", "Topology Update")
-  MakeDirectedTree(const tlp::PluginContext *context) : tlp::Algorithm(context) {
+  PLUGININFORMATION("Make Directed Tree", "Tulip team", "18/04/2012", "Makes a graph a directed tree.", "1.0", "Topology Update")
+  MakeDirectedTree(const tlp::PluginContext* context) : tlp::Algorithm(context) {
   }
 
   tlp::node root;
 
-  virtual bool check(std::string &errorMsg) {
+  virtual bool check(std::string& errorMsg) {
     if (!tlp::TreeTest::isFreeTree(graph)) {
       errorMsg = "The graph is not topologically a tree";
       return false;
     }
 
-    for (tlp::node n : graph->getProperty<tlp::BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
+    tlp::node n;
+    forEach(n, graph->getProperty<tlp::BooleanProperty>("viewSelection")->getNodesEqualTo(true)) {
       if (root.isValid()) {
         tlp::error() << "Only one root node must be selected." << std::endl;
         return false;
@@ -79,5 +82,6 @@ public:
     tlp::TreeTest::makeRootedTree(graph, root);
     return true;
   }
+
 };
 PLUGIN(MakeDirectedTree)

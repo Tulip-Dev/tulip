@@ -24,7 +24,7 @@
 
 /** \addtogroup selection */
 
-/// This selection plugin enables to find a subgraph induced by a set of nodes.
+/// This selection plugins enables to find a subgraph induced by a set of nodes.
 /**
  * Let V' a subset of nodes, G' is an induced subgraph of G if all edges
  * (and only these ones) element of G that link
@@ -33,12 +33,16 @@
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
-class InducedSubGraphSelection : public tlp::BooleanAlgorithm {
+class InducedSubGraphSelection:public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION(tlp::SelectionAlgorithm::InducedSubGraphSelection, "David Auber", "08/08/2001",
-                    "Select all nodes/edges of the subgraph induced by a set of selected nodes.", "1.0", "Selection")
-  InducedSubGraphSelection(const tlp::PluginContext *context);
+  PLUGININFORMATION(tlp::SelectionAlgorithm::InducedSubGraphSelection,"David Auber","08/08/2001",
+                    "Selects all the nodes/edges of the subgraph induced by a set of selected nodes.","1.0", "Selection")
+  InducedSubGraphSelection(const tlp::PluginContext* context);
   bool run();
 };
 
 #endif
+
+
+
+

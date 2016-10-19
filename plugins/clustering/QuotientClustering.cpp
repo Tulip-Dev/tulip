@@ -101,7 +101,7 @@ public:
 class QuotientClustering : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Quotient Clustering", "David Auber", "13/06/2001",
-                    "Compute a quotient sub-graph (meta-nodes pointing on sub-graphs) using an already existing sub-graphs hierarchy.", "1.5",
+                    "Computes a quotient sub-graph (meta-nodes pointing on sub-graphs) using an already existing sub-graphs hierarchy.", "1.5",
                     "Clustering")
   //================================================================================
   QuotientClustering(PluginContext *context) : Algorithm(context) {
@@ -122,13 +122,13 @@ public:
   bool run() {
     bool oriented = true, edgeCardinality = true, clustersLayout = false;
     bool recursive = false, quotientLayout = true, useSubGraphName = false;
-    StringProperty *metaLabel = nullptr;
+    StringProperty *metaLabel = NULL;
     StringCollection nodeFunctions(AGGREGATION_FUNCTIONS);
     nodeFunctions.setCurrent(0);
     StringCollection edgeFunctions(AGGREGATION_FUNCTIONS);
     edgeFunctions.setCurrent(0);
 
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       dataSet->get("oriented", oriented);
       dataSet->get("node function", nodeFunctions);
       dataSet->get("edge function", edgeFunctions);
@@ -156,21 +156,21 @@ public:
     DataSet layoutParams;
 
     if (clustersLayout) {
-      for (tlp::Graph *cluster : graph->getSubGraphs()) {
+      tlp::Graph *cluster = NULL;
+      forEach(cluster, graph->getSubGraphs()) {
         SizeProperty *viewSize = cluster->getProperty<SizeProperty>("viewSize");
         Size minSize = viewSize->getMin(cluster);
         Size maxSize = viewSize->getMax(cluster);
         layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 5.0);
-        cluster->applyPropertyAlgorithm(layoutName, cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, nullptr, &layoutParams);
+        cluster->applyPropertyAlgorithm(layoutName, cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
         double border = std::min(minSize[0], minSize[1]);
         layoutParams.set("x border", border);
         layoutParams.set("y border", border);
-        cluster->applyPropertyAlgorithm("Fast Overlap Removal", cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, nullptr,
-                                        &layoutParams);
+        cluster->applyPropertyAlgorithm("Fast Overlap Removal", cluster->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
       }
     }
 
-    IntegerProperty *opProp = nullptr, *cardProp = nullptr;
+    IntegerProperty *opProp = NULL, *cardProp = NULL;
     Graph *quotientGraph = graph->getRoot()->addSubGraph();
     stringstream sstr;
     sstr << "quotient of ";
@@ -206,7 +206,8 @@ public:
     DoubleProperty::PredefinedMetaValueCalculator edgeFn = (DoubleProperty::PredefinedMetaValueCalculator)edgeFunctions.getCurrent();
     QuotientLabelCalculator viewLabelCalc(metaLabel, useSubGraphName);
     TLP_HASH_MAP<PropertyInterface *, PropertyInterface::MetaValueCalculator *> prevCalcs;
-    for (const string &pName : quotientGraph->getProperties()) {
+    string pName;
+    forEach(pName, quotientGraph->getProperties()) {
       PropertyInterface *prop = quotientGraph->getProperty(pName);
 
       // do nothing for viewBorderWidth
@@ -249,7 +250,8 @@ public:
     if (!oriented) {
       // for each edge
       // store opposite edge in opProp
-      for (edge mE : quotientGraph->getEdges()) {
+      edge mE;
+      forEach(mE, quotientGraph->getEdges()) {
         const std::pair<node, node> &eEnds = quotientGraph->ends(mE);
         edge op = quotientGraph->existEdge(eEnds.second, eEnds.first);
 
@@ -272,7 +274,7 @@ public:
           bool opOK = viewMetric->getEdgeValue(mE) < viewMetric->getEdgeValue(op);
 
           if (edgeFn != DoubleProperty::NO_CALC) {
-            for (const string &pName : graph->getProperties()) {
+            forEach(pName, graph->getProperties()) {
               PropertyInterface *property = graph->getProperty(pName);
 
               if (dynamic_cast<DoubleProperty *>(property) &&
@@ -355,7 +357,7 @@ public:
     if (opProp)
       delete opProp;
 
-    if (dataSet != nullptr) {
+    if (dataSet != NULL) {
       dataSet->set("quotientGraph", quotientGraph);
     }
 
@@ -365,12 +367,11 @@ public:
       Size minSize = viewSize->getMin(quotientGraph);
       Size maxSize = viewSize->getMax(quotientGraph);
       layoutParams.set("Unit edge length", std::max(maxSize[0], maxSize[1]) * 2.0);
-      quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, nullptr,
-                                            &layoutParams);
+      quotientGraph->applyPropertyAlgorithm(layoutName, quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL, &layoutParams);
       double border = std::min(minSize[0], minSize[1]);
       layoutParams.set("x border", border);
       layoutParams.set("y border", border);
-      quotientGraph->applyPropertyAlgorithm("Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, nullptr,
+      quotientGraph->applyPropertyAlgorithm("Fast Overlap Removal", quotientGraph->getLocalProperty<LayoutProperty>("viewLayout"), errMsg, NULL,
                                             &layoutParams);
     }
 

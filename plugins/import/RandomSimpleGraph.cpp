@@ -55,18 +55,6 @@ struct less<edgeS> {
 };
 }
 
-//see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
-static int random_number(const int n) {
-    int x = rand();
-
-    // Keep searching for an x in a range divisible by n
-    while (x >= RAND_MAX - (RAND_MAX % n)) {
-      x = rand();
-    }
-
-   return  x % n;
-}
-
 static const char *paramHelp[] = {
   // nodes
   "Number of nodes in the final graph.",
@@ -84,7 +72,7 @@ static const char *paramHelp[] = {
  */
 class RandomSimpleGraph:public ImportModule {
 public:
-  PLUGININFORMATION("Random Simple Graph","Auber","16/06/2002","Import a new randomly generated simple graph with only one edge between two nodes.","1.0","Graph")
+  PLUGININFORMATION("Random Simple Graph","Auber","16/06/2002","Imports a new randomly generated simple graph.","1.0","Graph")
   RandomSimpleGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"500");
     addInParameter<unsigned int>("edges",paramHelp[1],"1000");
@@ -94,8 +82,8 @@ public:
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    unsigned int nbNodes  = 500;
-    unsigned int nbEdges  = 1000;
+    unsigned int nbNodes  = 5;
+    unsigned int nbEdges  = 9;
 
     if (dataSet!=NULL) {
       dataSet->get("nodes", nbNodes);
@@ -104,7 +92,7 @@ public:
 
     if (nbNodes == 0) {
       if (pluginProgress)
-        pluginProgress->setError("The number of nodes must be greater than 0");
+        pluginProgress->setError(string("Error: the number of nodes cannot be null"));
 
       return false;
     }
@@ -121,12 +109,12 @@ public:
           return pluginProgress->state()!=TLP_CANCEL;
 
       edgeS tmp;
-      tmp.source=random_number(nbNodes);
-      tmp.target=random_number(nbNodes);
+      tmp.source=rand()%nbNodes;
+      tmp.target=rand()%nbNodes;
 
       while (tmp.source==tmp.target) {
-        tmp.source=random_number(nbNodes);
-        tmp.target=random_number(nbNodes);
+        tmp.source=rand()%nbNodes;
+        tmp.target=rand()%nbNodes;
       }
 
       if (myGraph.find(tmp)==myGraph.end()) {

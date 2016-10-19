@@ -84,7 +84,7 @@
 
 static const char *paramHelp[] = {
   // page ratio
-  "Set the option pageRatio."
+  "Sets the option pageRatio."
 };
 
 class OGDFPlanarizationGrid : public OGDFLayoutPluginBase {

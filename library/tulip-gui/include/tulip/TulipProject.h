@@ -83,7 +83,7 @@ public:
   virtual ~TulipProject();
 
   /**
-    @brief Start a new TulipProject from scratch
+    @brief Starts a new TulipProject from scratch
 
     This method builds up a new TulipProject file without taking any input.
     @see openProject()
@@ -91,7 +91,7 @@ public:
   static TulipProject *newProject();
 
   /**
-    @brief Open a previously saved tulip project file and returns the corresponding project
+    @brief Opens a previously saved tulip project file and returns the corresponding project
 
     This method will unpack a tulip project file into some directory and allow the user to manipulate the files.
     @see TulipProject::save()
@@ -102,7 +102,7 @@ public:
   static TulipProject *openProject(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
-    @brief Open a previously saved tulip project file
+    @brief Opens a previously saved tulip project file
 
     This method unpacks a tulip project file into some directory and allow the user to manipulate the files.
     @see TulipProject::save()
@@ -113,7 +113,7 @@ public:
   bool openProjectFile(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
-    @brief Restore a project which has already been extracted into path
+    @brief Restores a project which has already been extracted into path
 
     @warning Using several TulipProject instances on the same directory may result in undefined behavior. This method should only be used for crash
     handling purposes.
@@ -123,7 +123,7 @@ public:
   static TulipProject *restoreProject(const QString &path);
 
   /**
-    @brief Write files in the TulipProject into a packed archive.
+    @brief Writes files in the TulipProject into a packed archive.
 
     This method packs every file in the project into a single archive.
     @note This method DOES NOT close the project. It only  commits changes to the specified file. A TulipProject is only closed when destroyed.
@@ -134,7 +134,7 @@ public:
   bool write(const QString &file, tlp::PluginProgress *progress = nullptr);
 
   /**
-    @brief List entries in a directory
+    @brief Lists entries in a directory
 
     @see QDir documentation for a complete description of filtering arguments
     @param path The path to scan. @see TulipProject
@@ -143,7 +143,7 @@ public:
   QStringList entryList(const QString &path, QDir::Filters filters = QDir::NoFilter, QDir::SortFlags sort = QDir::NoSort);
 
   /**
-    @brief List entries in a directory
+    @brief Lists entries in a directory
 
     @see QDir documentation for a complete description of filtering arguments
     @param path The path to scan. @see TulipProject
@@ -153,7 +153,7 @@ public:
                         QDir::SortFlags sort = QDir::NoSort);
 
   /**
-    @brief Check if the specified file/folder exists
+    @brief Checks if the specified file/folder exists
 
     @param path The path to check.
     @return true if the path exists.
@@ -161,7 +161,7 @@ public:
   bool exists(const QString &path);
 
   /**
-    @brief Recursively create the specified path.
+    @brief Recursively creates the specified path.
 
     Created folders will be empty
     @return true if path was successfully created.
@@ -169,7 +169,7 @@ public:
   bool mkpath(const QString &path);
 
   /**
-    @brief Check if the given path is a directory.
+    @brief Checks if the given path is a directory.
 
     @param path The path to check. @see TulipProject
     @return true/false wether the path is a directory.
@@ -177,7 +177,7 @@ public:
   bool isDir(const QString &path);
 
   /**
-    @brief Remove a file from the project.
+    @brief Removes a file from the project.
 
     If the given path points to a directory, or if the file does not exist, this method will fail and return false
     @param path The path to delete. @see TulipProject
@@ -185,7 +185,7 @@ public:
   bool removeFile(const QString &path);
 
   /**
-    @brief Remove a directory from the project.
+    @brief Removes a directory from the project.
 
     If the given file points to a file, or if the directory does not exist, or if the directory is not empty, this method will fail and return false.
     @see removeAllDir to remove a non-empty directory.
@@ -194,7 +194,7 @@ public:
   bool removeDir(const QString &path);
 
   /**
-    @brief Remove a directory and all its content from the project.
+    @brief Removes a directory and all its content from the project.
 
     If the given file points to a file, or if the directory does not exist, this method will fail and return false.
     @warning This will remove every file stored in the specified directory.
@@ -203,7 +203,7 @@ public:
   bool removeAllDir(const QString &path);
 
   /**
-    @brief Copy a file from the local filesystem into the project
+    @brief Copies a file from the local filesystem into the project
 
     @param source The absolute path of the file to copy
     @param destination The project path where to copy the file
@@ -212,7 +212,7 @@ public:
   bool copy(const QString &source, const QString &destination);
 
   /**
-    @brief Create a empty file
+    @brief Creates an empty file
 
     This method is similar to the UNIX's touch shell command. Except it won't renew the file's creation date if the file already exists.
     @param file the file to create
@@ -221,7 +221,7 @@ public:
   bool touch(const QString &path);
 
   /**
-    @brief Get a STL file stream (default to R/W access mode) to the given path.
+    @brief Gets a STL file stream (default to R/W access mode) to the given path.
 
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
     @warning It is up to the user to delete the std::fstream returned.
@@ -231,7 +231,7 @@ public:
   std::fstream *stdFileStream(const QString &path, std::ios_base::openmode = std::fstream::in | std::fstream::out | std::fstream::app);
 
   /**
-    @brief Get a Qt I/O device (default to R/W access mode) to the given path.
+    @brief Gets a Qt I/O device (default to R/W access mode) to the given path.
 
     @warning This method does not check if the given path is a directory or a file. User might get an invalid filestream.
     @warning User SHOULD NOT cast the QIODevice returned by this method into any of its subclass since the implementation might change in future
@@ -244,7 +244,7 @@ public:
   QIODevice *fileStream(const QString &path, QIODevice::OpenMode mode = QIODevice::ReadWrite);
 
   /**
-    @brief Return the last error raised.
+    @brief Returns the last error raised.
 
     @note The returned string is empty if no error was raised.
     */
@@ -253,7 +253,7 @@ public:
   }
 
   /**
-    @brief Check if the object is a valid TulipProject.
+    @brief Checks if the object is a valid TulipProject.
 
     @warning Calling methods on invalid TulipProject instances may result in undefined behavior.
     */
@@ -262,7 +262,7 @@ public:
   }
 
   /**
-    @brief Return the archive file associated with this project.
+    @brief Returns the archive file associated with this project.
 
     If the project has been opened from an existing file or if the write method has already been called, this method will return the last file path
     specified.
@@ -329,7 +329,7 @@ public:
   QString version() const;
 
   /**
-    @brief Return the absolute filesystem path used to store the file
+    @brief Returns the absolute filesystem path used to store the file
     @warning Be cautious though since directly modifying project files without using TulipProject methods could result in undefined behavior.
     */
   QString toAbsolutePath(const QString &relativePath);

@@ -27,13 +27,14 @@ using namespace std;
 static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs, bool connectNodeToCellBorder) {
   vector<tlp::node> nodes;
   vector<tlp::Coord> sites;
+  tlp::node n;
   tlp::VoronoiDiagram voronoiDiag;
 
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
 
   nodes.reserve(graph->numberOfNodes());
   sites.reserve(graph->numberOfNodes());
-  for (tlp::node n : graph->getNodes()) {
+  forEach(n, graph->getNodes()) {
     nodes.push_back(n);
     sites.push_back(layout->getNodeValue(n));
   }
@@ -103,8 +104,8 @@ public:
     addInParameter<bool>("connect", paramHelp[1], "false");
   }
 
-  PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "", "Perform a Voronoi decomposition, in considering the positions of the graph nodes as a "
-                                                              "set of points. These points define the seeds (or sites) of the voronoi cells. New "
+  PLUGININFORMATION("Voronoi diagram", "Antoine Lambert", "", "Performs a Voronoi decomposition, in considering the positions of the graph nodes as "
+                                                              "a set of points. These points define the seeds (or sites) of the voronoi cells. New "
                                                               "nodes and edges are added to build the convex polygons defining the contours of these "
                                                               "cells.",
                     "1.0", "Triangulation")
