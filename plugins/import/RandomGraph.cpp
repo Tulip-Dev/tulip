@@ -92,8 +92,8 @@ public:
           return pluginProgress->state()!=TLP_CANCEL;
 
       edgeS tmp;
-      tmp.source=rand()%nbNodes;
-      tmp.target=rand()%nbNodes;
+      tmp.source = randomUnsignedInteger(nbNodes);
+      tmp.target = randomUnsignedInteger(nbNodes);
 
       if (myGraph.find(tmp)!=myGraph.end())
         myGraph.erase(tmp);

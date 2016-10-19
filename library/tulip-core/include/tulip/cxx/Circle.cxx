@@ -17,6 +17,7 @@
  *
  */
 #include <cstdlib>
+#include <tulip/TlpTools.h>
 
 template<typename Obj, typename OTYPE>
 tlp::Circle<Obj, OTYPE> & tlp::Circle<Obj, OTYPE>::merge(const tlp::Circle<Obj, OTYPE> &c) {
@@ -270,7 +271,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
         enclosedCircles[i]=i;
 
       for (unsigned i=circlesSet.size(); i>0;) {
-        unsigned idx=(unsigned)(1.0*rand()*i/RAND_MAX);
+        unsigned idx = tlp::randomUnsignedInteger(i);
         --i;
         std::swap(enclosedCircles[idx],enclosedCircles[i]);
       }

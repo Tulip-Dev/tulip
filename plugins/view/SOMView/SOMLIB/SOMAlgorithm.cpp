@@ -53,8 +53,6 @@ SOMAlgorithm::~SOMAlgorithm() {
 
 }
 
-#define RANDNUM(max) (int)(max*(rand()/(RAND_MAX+1.0)))
-
 void SOMAlgorithm::run(SOMMap* map, InputSample& inputSample, unsigned int nTimes,
                        tlp::PluginProgress *pluginProgress) {
   //Map initialisation
@@ -180,7 +178,7 @@ node SOMAlgorithm::findBMU(SOMMap* map, const DynamicVector<double>& input, doub
   }
   else {
     //Take randomly a vector in the matchlist.
-    unsigned int num = RANDNUM(matchList.size()-1);
+    unsigned int num = randomUnsignedInteger(matchList.size());
     assert(num < matchList.size());
     n = matchList[num];
   }

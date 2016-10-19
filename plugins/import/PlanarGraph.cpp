@@ -88,7 +88,7 @@ public:
 
     while(nb<nbNodes) {
       //choose a Triangle randomly
-      unsigned int i = rand()%faces.size();
+      unsigned int i = randomUnsignedInteger(faces.size());
       Triangle f = faces[i];
       node n = graph->addNode();
       Coord tmp = newLayout->getNodeValue(f.a) +

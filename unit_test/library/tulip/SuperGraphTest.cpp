@@ -50,7 +50,7 @@ void SuperGraphTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
 
   for (unsigned int i=0; i< NB_EDGES; ++i)
-    graph->addEdge(nodes[rand()%NB_ADD], nodes[rand()%NB_ADD]);
+    graph->addEdge(nodes[randomUnsignedInteger(NB_ADD)], nodes[randomUnsignedInteger(NB_ADD)]);
 }
 //==========================================================
 void SuperGraphTest::testIterators() {
@@ -66,7 +66,7 @@ void SuperGraphTest::testIterators() {
   unsigned int NB_EDGES = EDGE_RATIO * NB_NODES;
 
   for (unsigned int i=0; i< NB_EDGES; ++i)
-    edges.push_back(graph->addEdge(nodes[rand()%NB_NODES], nodes[rand()%NB_NODES]));
+    edges.push_back(graph->addEdge(nodes[randomUnsignedInteger(NB_NODES)], nodes[randomUnsignedInteger(NB_NODES)]));
 
   {
     Iterator<node> *itN = graph->getNodes();
@@ -321,7 +321,7 @@ void SuperGraphTest::testAddDel() {
   CPPUNIT_ASSERT(graph->numberOfNodes() == NB_ADD);
 
   for (unsigned int i=0; i< NB_EDGES; ++i) {
-    edges.push_back(graph->addEdge(nodes[rand()%NB_ADD],nodes[rand()%NB_ADD]));
+    edges.push_back(graph->addEdge(nodes[randomUnsignedInteger(NB_ADD)],nodes[randomUnsignedInteger(NB_ADD)]));
     CPPUNIT_ASSERT(graph->isElement(edges[i]));
     edgePresent[i] = true;
   }
@@ -338,7 +338,7 @@ void SuperGraphTest::testAddDel() {
   vector<pair<node, node> > ends;
 
   for (unsigned int i=0; i< NB_EDGES; ++i) {
-    ends.push_back(pair<node, node>(nodes[rand()%NB_ADD],nodes[rand()%NB_ADD]));
+    ends.push_back(pair<node, node>(nodes[randomUnsignedInteger(NB_ADD)],nodes[randomUnsignedInteger(NB_ADD)]));
   }
 
   graph->addEdges(ends, edges);
@@ -395,8 +395,8 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
 
   //change order
   for (unsigned int j=0; j < NB_EDGES; ++j) {
-    unsigned int u = rand()%NB_EDGES;
-    unsigned int v = rand()%NB_EDGES;
+    unsigned int u = randomUnsignedInteger(NB_EDGES);
+    unsigned int v = randomUnsignedInteger(NB_EDGES);
     edge tmp = edges[u];
     edges[u] = edges[v];
     edges[v] = tmp;
@@ -417,8 +417,8 @@ void SuperGraphTest::testOrderEdgeAndSwap() {
 
   //Swap two edge
   for (unsigned int j=0; j < NB_EDGES; ++j) {
-    unsigned int u = rand()%NB_EDGES;
-    unsigned int v = rand()%NB_EDGES;
+    unsigned int u = randomUnsignedInteger(NB_EDGES);
+    unsigned int v = randomUnsignedInteger(NB_EDGES);
     graph->swapEdgeOrder(nodes[0],edges[u],edges[v]);
     edge tmp = edges[u];
     edges[u] = edges[v];
