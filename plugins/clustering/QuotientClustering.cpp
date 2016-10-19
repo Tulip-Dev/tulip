@@ -102,7 +102,7 @@ public:
 #define AGGREGATION_FUNCTIONS "none;average;sum;max;min"
 class QuotientClustering:public tlp::Algorithm {
 public:
-  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Compute a quotient sub-graph (meta-nodes pointing on sub-graphs) using an already existing sub-graphs hierarchy.","1.5", "Clustering")
+  PLUGININFORMATION("Quotient Clustering","David Auber","13/06/2001","Computes a quotient sub-graph (meta-nodes pointing on sub-graphs) using an already existing sub-graphs hierarchy.","1.5", "Clustering")
 //================================================================================
   QuotientClustering(PluginContext* context):Algorithm(context) {
     addDependency("FM^3 (OGDF)", "1.2");

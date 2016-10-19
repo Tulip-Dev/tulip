@@ -26,18 +26,6 @@ using namespace tlp;
 static const int WIDTH = 1024;
 static const int HEIGHT = 1024;
 
-//see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
-static int random_number(const int n) {
-  int x = rand();
-
-  // Keep searching for an x in a range divisible by n
-  while (x >= RAND_MAX - (RAND_MAX % n)) {
-    x = rand();
-  }
-
-  return  x % n;
-}
-
 static const char *paramHelp[] = {
   // nodes
   "Number of nodes in the final graph.",
@@ -63,7 +51,7 @@ static const char *paramHelp[] = {
  */
 class SmallWorldGraph:public ImportModule {
 public:
-  PLUGININFORMATION("Grid Approximation","Auber","25/06/2002","Import a new grid approximation graph.","1.0","Graph")
+  PLUGININFORMATION("Grid Approximation","Auber","25/06/2002","Imports a new grid approximation graph.","1.0","Graph")
   SmallWorldGraph(tlp::PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"200");
     addInParameter<unsigned int>("degree",paramHelp[1],"10");
@@ -110,7 +98,7 @@ public:
     graph->reserveEdges(nbNodes * avgDegree);
 
     for (unsigned int i=0; i<nbNodes; ++i) {
-      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(random_number(WIDTH)), static_cast<float>(random_number(HEIGHT)), 0));
+      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(rand()%WIDTH), static_cast<float>(rand()%HEIGHT), 0));
     }
 
     //double minSize = DBL_MAX;

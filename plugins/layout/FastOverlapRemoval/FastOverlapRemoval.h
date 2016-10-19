@@ -43,7 +43,7 @@ class FastOverlapRemoval:public tlp::LayoutAlgorithm {
 public:
 
   PLUGININFORMATION("Fast Overlap Removal" ,"Daniel Archambault", "08/12/2006",
-                    "Implement a layout algorithm removing the nodes overlaps. It was first published as:<br/>"
+                    "Implements a layout algorithm removing the nodes overlaps. It was first published as:<br/>"
                     "<b>Fast Node Overlap Removal</b>, Tim Dwyer, Kim Marriot, Peter J. Stuckey, Graph Drawing, Vol. 3843 (2006), pp. 153-164.",
                     "1.3", "Misc")
 

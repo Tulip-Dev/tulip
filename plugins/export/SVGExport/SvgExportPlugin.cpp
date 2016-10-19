@@ -32,40 +32,40 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
   // color interpolation
-  "Indicate if edge color interpolation has to be used.",
+  "Indicates if edge color interpolation has to be used.",
 
   // size interpolation
-  "Indicate if edge size interpolation has to be used.",
+  "Indicates if edge size interpolation has to be used.",
 
   // edge extremities
-  "Indicate if edge extremities have to be exported.",
+  "Indicates if edge extremities have to be exported.",
 
   // Background color
-  "Specifie the background color of the SVG file.",
+  "Specifies the background color of the SVG file.",
 
   // human readable
-  "Add line-breaks and indentation to empty sections between elements"
+  "Adds line-breaks and indentation to empty sections between elements"
   " (ignorable whitespace). The main purpose of this parameter is to split"
   " the data into several lines, and to increase readability for a human reader."
   " Be careful, this adds a large amount of data to the output file.",
 
   // node labels
-  "Indicate if node labels have to be exported.",
+  "Specifies if node labels have to be exported.",
 
   // edge labels
-  "Indicate if edge labels have to be exported.",
+  "Specifies if edge labels have to be exported.",
 
   // metanode labels
-  "Indicate if node and edge labels inside metanodes have to be exported.",
+  "Specifies if node and edge labels inside metanodes have to be exported.",
 
   //woff2
-  "Use Web Open Font Format version 2 (woff2) to reduce generated file length. This format is supported in almost all recent Internet browsers."
+  "Uses Web Open Font Format version 2 (woff2) to reduce generated file length. This format is supported in almost all recent Internet browsers."
 };
 
 class SvgExport:public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Export a graph drawing in a SVG formatted file.","1.9", "File")
+  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.9", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
@@ -80,7 +80,7 @@ public:
     addInParameter<bool>("Edge size interpolation", paramHelp[1], "true");
     addInParameter<bool>("Edge extremities", paramHelp[2], "false");
     addInParameter<Color>("Background color", paramHelp[3], "(255,255,255,255)");
-    addInParameter<bool>("Make SVG output human readable", paramHelp[4], "true");
+    addInParameter<bool>("Makes SVG output human readable", paramHelp[4], "true");
     addInParameter<bool>("Export node labels", paramHelp[5], "true");
     addInParameter<bool>("Export edge labels", paramHelp[6], "false");
     addInParameter<bool>("Export metanode labels", paramHelp[7], "false");
@@ -92,7 +92,7 @@ public:
     bool autoformatting(true), woff2(false);
 
     if(dataSet!=NULL) {
-      dataSet->get("Make SVG output human readable", autoformatting);
+      dataSet->get("Makes SVG output human readable", autoformatting);
       dataSet->get("Use Web Open Font Format v2", woff2);
     }
 

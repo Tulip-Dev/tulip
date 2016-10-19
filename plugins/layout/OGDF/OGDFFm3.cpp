@@ -160,7 +160,7 @@ static const char *paramHelp[] = {
   "The unit edge length.",
 
   // New initial placement
-  "Indicate the initial placement before running algorithm.",
+  "Indicates the initial placement before running algorithm.",
 
   // Fixed iterations
   "The fixed number of iterations for the stop criterion.",
@@ -175,40 +175,40 @@ static const char *paramHelp[] = {
   "Trade-off between run-time and quality.",
 
   // Edge Length Measurement
-  "Specify how the length of an edge is measured.",
+  "Specifies how the length of an edge is measured.",
 
   // Allowed Positions
-  "Specify which positions for a node are allowed.",
+  "Specifies which positions for a node are allowed.",
 
   // Tip Over
-  "Specify in which case it is allowed to tip over drawings of connected components.",
+  "Specifies in which case it is allowed to tip over drawings of connected components.",
 
   // Pre Sort
-  "Specify how connected components are sorted before the packing algorithm is applied.",
+  "Specifies how connected components are sorted before the packing algorithm is applied.",
 
   // Galaxy Choice
-  "Specify how sun nodes of galaxies are selected.",
+  "Specifies how sun nodes of galaxies are selected.",
 
   // Max Iter Change
-  "Specify how MaxIterations is changed in subsequent multilevels.",
+  "Specifies how MaxIterations is changed in subsequent multilevels.",
 
   // Initial Placement
-  "Specify how the initial placement is generated.",
+  "Specifies how the initial placement is generated.",
 
   // Force Model
-  "Specify the force-model.",
+  "Specifies the force-model.",
 
   // Repulsive Force Model
-  "Specify how to calculate repulsive forces.",
+  "Specifies how to calculate repulsive forces.",
 
   // Initial Placement Forces
-  "Specify how the initial placement is done.",
+  "Specifies how the initial placement is done.",
 
   // Reduced Tree Construction
-  "Specify how the reduced bucket quadtree is constructed.",
+  "Specifies how the reduced bucket quadtree is constructed.",
 
   // Smallest Cell Finding
-  "Specify how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
+  "Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree."
 };
 
 static const char *pageFormatValuesDescription =
@@ -265,7 +265,7 @@ class OGDFFm3: public OGDFLayoutPluginBase {
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implement the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, force-directed layout algorithm that can be applied to very large graphs.", "1.2" ,"Force Directed")
+  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, force-directed layout algorithm that can be applied to very large graphs.", "1.2" ,"Force Directed")
   OGDFFm3(const tlp::PluginContext* context);
   ~OGDFFm3();
   void beforeCall();

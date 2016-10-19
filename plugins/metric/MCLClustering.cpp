@@ -270,7 +270,7 @@ bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
 //=================================================
 static const char *paramHelp[] = {
   // inflate
-  "Determine the random walk length at each step.",
+  "Determines the random walk length at each step.",
 
   // weights
   "Edge weights to use.",

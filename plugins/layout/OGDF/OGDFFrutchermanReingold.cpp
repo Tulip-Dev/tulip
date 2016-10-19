@@ -76,16 +76,16 @@ static const char *paramHelp[] = {
   "The number of iterations.",
 
   // noise
-  "Set the parameter noise.",
+  "Sets the parameter noise.",
 
   // use node weights
-  "Indicate if the node weights have to be used.",
+  "Indicates if the node weights have to be used.",
 
   // node weights
   "The metric containing node weights.",
 
   // Cooling function
-  "Set the parameter cooling function",
+  "Sets the parameter cooling function",
 
   // ideal edge length
   "The ideal edge length.",
@@ -97,7 +97,7 @@ static const char *paramHelp[] = {
   "The page ratio used for packing connected components.",
 
   // check convergence
-  "Indicate if the convergence has to be checked.",
+  "Indicates if the convergence has to be checked.",
 
   // convergence tolerance
   "The convergence tolerance parameter."
@@ -106,7 +106,7 @@ static const char *paramHelp[] = {
 class OGDFFrutchermanReingold: public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Implement the Fruchterman and Reingold layout algorithm, first published as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume 21, Issue 11, pages 1129–1164, (1991)", "1.1","Force Directed")
+  PLUGININFORMATION("Frutcherman Reingold (OGDF)","Stephan Hachul","15/11/2007", "Implements the Fruchterman and Reingold layout algorithm, first published as:<br/><b>Graph Drawing by Force-Directed Placement</b>, Fruchterman, Thomas M. J., Reingold, Edward M., Software – Practice & Experience (Wiley) Volume 21, Issue 11, pages 1129–1164, (1991)", "1.1","Force Directed")
   OGDFFrutchermanReingold(const tlp::PluginContext* context);
   ~OGDFFrutchermanReingold();
 

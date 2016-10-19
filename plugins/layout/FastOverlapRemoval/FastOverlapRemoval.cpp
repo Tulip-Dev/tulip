@@ -30,7 +30,7 @@ using namespace tlp;
 PLUGIN(FastOverlapRemoval)
 
 static const char* paramHelp[] = {
-  // overlaps removal type
+  // overlap removal type
   "Overlap removal type.",
 
   // layout
@@ -86,6 +86,7 @@ bool FastOverlapRemoval::run () {
   int nbPasses = 5;
 
   if (dataSet != NULL) {
+
     if(dataSet->exist("overlaps removal type"))
       dataSet->get("overlaps removal type", stringCollection);
     else

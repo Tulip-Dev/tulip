@@ -27,7 +27,7 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
   // directed
-  "Indicate if the graph should be considered as directed or not.",
+  "Indicates if the graph should be considered as directed or not.",
 
   // norm
   "If true the node measure will be normalized<br>"
@@ -71,7 +71,7 @@ static const char *paramHelp[] = {
  */
 class BetweennessCentrality:public DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Betweenness Centrality","David Auber","03/01/2005","Compute the betweenness centrality.","1.2","Graph")
+  PLUGININFORMATION("Betweenness Centrality","David Auber","03/01/2005","Computes the betweenness centrality.","1.2","Graph")
   BetweennessCentrality(const PluginContext* context):DoubleAlgorithm(context) {
     addInParameter<bool>("directed", paramHelp[0], "false");
     addInParameter<bool>("norm", paramHelp[1], "false", false);
