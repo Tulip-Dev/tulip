@@ -95,7 +95,7 @@ TLP_SCOPE std::istream *getIgzstream(const std::string &name, int open_mode = st
 TLP_SCOPE std::ostream *getOgzstream(const std::string &name, int open_mode = std::ios::out);
 
 /**
- * @brief give the value of the seed used for further initialization
+ * @brief Gives the value of the seed used for further initialization
  * of a random sequence (with further calls to rand() or random()).
  * @param seed the value of the seed.
  * Set seed to UINT_MAX if you need a random choice of the seed.
@@ -103,17 +103,32 @@ TLP_SCOPE std::ostream *getOgzstream(const std::string &name, int open_mode = st
 TLP_SCOPE void setSeedOfRandomSequence(unsigned int seed = UINT_MAX);
 
 /**
- * @brief return the value of the seed used for further initialization
+ * @brief Returns the value of the seed used for further initialization
  * of a random sequence
  */
 TLP_SCOPE unsigned int getSeedOfRandomSequence();
 
 /**
- * @brief initialize a random sequence with the seed previously set
+ * @brief Initializes a random sequence with the seed previously set
  * Further calls to rand() or random() will return the elements of
  * that sequence
  */
 TLP_SCOPE void initRandomSequence();
+
+/**
+ * @brief Returns a random integer in the range [0, bound[
+ */
+TLP_SCOPE int randomInteger(int bound);
+
+/**
+ * @brief Returns a random unsigned integer in the range [0, bound[
+ */
+TLP_SCOPE unsigned int randomUnsignedInteger(unsigned int bound);
+
+/**
+ * @brief Returns a random double in the range [0, max]
+ */
+TLP_SCOPE double randomDouble(double max = 1.0);
 
 /**
  * @brief Cross-platform function to stat a path on a filesystem. Its purpose is to support

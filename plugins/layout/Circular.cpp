@@ -89,7 +89,7 @@ void dfs(node n, const Graph *sg, deque<node> &st, vector<node> &maxCycle, Mutab
     ++nbCalls;
 
     if (nbCalls % 10000 == 0) {
-      pluginProgress->progress(rand() % 100, 100);
+      pluginProgress->progress(randomInteger(100), 100);
       nbCalls = 0;
     }
 

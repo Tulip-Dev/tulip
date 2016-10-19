@@ -93,7 +93,7 @@ GEMLayout::~GEMLayout() {
 }
 //=========================================================
 unsigned int GEMLayout::select() {
-  return rand() % graph->numberOfNodes();
+  return randomInteger(graph->numberOfNodes());
 }
 //=========================================================
 void GEMLayout::vertexdata_init(const float starttemp) {
@@ -131,7 +131,7 @@ Coord GEMLayout::computeForces(unsigned int v, float shake, float gravity, bool 
 
   // Init force in a random position
   for (unsigned int cnt = 0; cnt < _dim; ++cnt) {
-    force[cnt] = shake - static_cast<float>(((double(rand()) * (2. * shake))) / double(RAND_MAX));
+    force[cnt] = shake - static_cast<float>(randomDouble(2. * shake));
   }
 
   // Add central force
