@@ -438,7 +438,7 @@ static const char *paramHelp[] = {
 };
 
 struct WebImport:public ImportModule {
-  PLUGININFORMATION("Web Site","Auber","15/11/2004","Import a new graph from Web site structure (one node per page).","1.1","Misc")
+  PLUGININFORMATION("Web Site","Auber","15/11/2004","Imports a new graph from Web site structure (one node per page).","1.1","Misc")
 
   std::deque<UrlElement> toVisit;
   std::set<UrlElement> visited;

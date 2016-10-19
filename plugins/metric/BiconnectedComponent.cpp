@@ -195,7 +195,7 @@ int biconnectedComponents(const Graph& graph, MutableContainer<int>& compnum) {
 class BiconnectedComponent:public DoubleAlgorithm {
 public:
   PLUGININFORMATION("Biconnected Component","David Auber","03/01/2005",
-                    "Implement a biconnected component decomposition."
+                    "Implements a biconnected component decomposition."
                     "It assigns the same value to all the edges in the same component.",
                     "1.0","Component")
   BiconnectedComponent(const tlp::PluginContext* context):DoubleAlgorithm(context) {}

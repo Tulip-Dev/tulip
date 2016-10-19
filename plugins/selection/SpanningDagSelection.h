@@ -38,7 +38,7 @@ class SpanningDagSelection:public tlp::BooleanAlgorithm {
 
 public:
   PLUGININFORMATION(tlp::SelectionAlgorithm::SpanningDagSelection,"David Auber","01/12/1999",
-                    "Select an acyclic subgraph of a graph.","1.0", "Selection")
+                    "Selects an acyclic subgraph of a graph.","1.0", "Selection")
   SpanningDagSelection(const tlp::PluginContext* context);
   bool run();
 };

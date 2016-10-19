@@ -76,7 +76,7 @@ namespace tlp {
 class TLPExport:public ExportModule {
 public:
   PLUGININFORMATION("TLP Export","Auber David","31/07/2001",
-                    "Export a graph in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for description.",
+                    "Exports a graph in a file using the TLP format (Tulip Software Graph Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for description.",
                     "1.1", "File")
 
   string fileExtension() const {

@@ -35,7 +35,7 @@ using namespace tlp;
 class TreeRadial:public LayoutAlgorithm {
 public:
   PLUGININFORMATION("Tree Radial","Patrick Mary","14/05/2007",
-                    "Implement the radial tree layout algorithm first published as:<br/>"
+                    "Implements the radial tree layout algorithm first published as:<br/>"
                     "T. J. Jankun-Kelly, Kwan-Liu Ma <b>MoireGraphs: Radial Focus+Context Visualization and Interaction for Graphs with Visual Nodes</b> Proc. IEEE Symposium on Information Visualization, INFOVIS pages 59--66 (2003).",
                     "1.0","Tree")
   Graph *tree;

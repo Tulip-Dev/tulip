@@ -63,13 +63,13 @@
 
 static const char *paramHelp[] = {
   // number of pivots
-  "Set the number of pivots. If the new value is smaller or equal 0 the default value (250) is used.",
+  "Sets the number of pivots. If the new value is smaller or equal 0 the default value (250) is used.",
 
   // use edge costs
-  "Set if the edge costs attribute has to be used.",
+  "Sets if the edge costs attribute has to be used.",
 
   // edge costs
-  "Set the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
+  "Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used."
 };
 
 class OGDFPivotMDS : public OGDFLayoutPluginBase {

@@ -51,7 +51,7 @@ static const char *paramHelp[] = {
  */
 class Grid: public ImportModule {
 public:
-  PLUGININFORMATION("Grid","Jonathan Dubois","02/12/2003","Import a new grid structured graph.","2.0","Graph")
+  PLUGININFORMATION("Grid","Jonathan Dubois","02/12/2003","Imports a new grid structured graph.","2.0","Graph")
   Grid(tlp::PluginContext* context) :
     ImportModule(context) {
     addInParameter<unsigned int> ("width", paramHelp[0], "10");

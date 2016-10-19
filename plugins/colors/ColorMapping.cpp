@@ -90,7 +90,7 @@ private:
 
 
 public:
-  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorize nodes or edges of a graph according to the values of a given property.","2.2", "Color")
+  PLUGININFORMATION("Color Mapping","Mathiaut","16/09/2010","Colorizes the nodes or edges of a graph according to the values of a given property.","2.2", "Color")
   ColorMapping(const tlp::PluginContext* context):ColorAlgorithm(context), entryMetric(NULL), eltTypes(ELT_TYPES),
     maxInput(std::numeric_limits<double>::quiet_NaN()), minInput(std::numeric_limits<double>::quiet_NaN()),
     overrideMaxInput(false), overrideMinInput(false) {
