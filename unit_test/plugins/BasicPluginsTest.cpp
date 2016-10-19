@@ -324,7 +324,7 @@ void BasicPluginsTest::testLoopSelection() {
 //==========================================================
 void BasicPluginsTest::testMultipleEdgeSelection() {
   BooleanProperty selection(graph);
-  bool result = computeProperty<BooleanProperty>("Multiple Edge", "Planar Graph", &selection);
+  bool result = computeProperty<BooleanProperty>("Multiple Edges Selection", "Planar Graph", &selection);
   CPPUNIT_ASSERT(result);
   for (node n : graph->getNodes()) {
     CPPUNIT_ASSERT(selection.getNodeValue(n) == false);
@@ -397,13 +397,13 @@ void BasicPluginsTest::testEqualValueClustering() {
 
   for (unsigned int i = 0; i < NB_ADD; ++i) {
     nodes.push_back(graph->addNode());
-    metric->setNodeValue(nodes[i], (double)(rand() % NB_ADD));
+    metric->setNodeValue(nodes[i], (double)(randomUnsignedInteger(NB_ADD)));
   }
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
 
   for (unsigned int i = 0; i < NB_EDGES; ++i)
-    graph->addEdge(nodes[rand() % NB_ADD], nodes[rand() % NB_ADD]);
+    graph->addEdge(nodes[randomUnsignedInteger(NB_ADD)], nodes[randomUnsignedInteger(NB_ADD)]);
 
   // check dcall to computeEqualValueClustering
   result = graph->applyAlgorithm(algorithmName, errorMsg, &ds);
