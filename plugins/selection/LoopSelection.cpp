@@ -31,9 +31,10 @@ bool LoopSelection::run() {
   unsigned cpt=0;
   forEach(e, graph->getEdges()) {
     const std::pair<node, node>& eEnds = graph->ends(e);
+
     if(eEnds.first == eEnds.second) {
-        result->setEdgeValue(e, true);
-        ++cpt;
+      result->setEdgeValue(e, true);
+      ++cpt;
     }
   }
   //output some useful information (will be displayed in the log window in the graph perspective)
