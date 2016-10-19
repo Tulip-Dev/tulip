@@ -26,7 +26,7 @@
 #include "QuantitativeParallelAxis.h"
 #include "ParallelCoordsDrawConfigWidget.h"
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 #include <tulip/GlMainView.h>
 

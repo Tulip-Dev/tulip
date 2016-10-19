@@ -19,9 +19,9 @@
 
 #include <GL/glew.h>
 
-#include "../../utils/ViewNames.h"
-#include "FishEyeConfigWidget.h"
 #include "FishEyeInteractor.h"
+#include "FishEyeConfigWidget.h"
+#include "../../utils/PluginNames.h"
 
 #include <QMouseEvent>
 

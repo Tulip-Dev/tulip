@@ -25,7 +25,7 @@
 #include <vector>
 #include <map>
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 #include "Histogram.h"
 
 #if defined(_MSC_VER)

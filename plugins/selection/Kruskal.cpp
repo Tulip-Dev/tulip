@@ -18,6 +18,10 @@
  */
 #include "Kruskal.h"
 
+#include <tulip/GraphTools.h>
+#include <tulip/ConnectedTest.h>
+#include <tulip/DoubleProperty.h>
+
 PLUGIN(Kruskal)
 
 using namespace std;
@@ -34,7 +38,7 @@ Kruskal::Kruskal(const tlp::PluginContext *context) : BooleanAlgorithm(context) 
 Kruskal::~Kruskal() {
 }
 //======================================================
-#include <tulip/ConnectedTest.h>
+
 bool Kruskal::check(std::string &erreurMsg) {
   if (ConnectedTest::isConnected(graph)) {
     erreurMsg = "";

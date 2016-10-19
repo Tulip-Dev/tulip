@@ -41,7 +41,7 @@
 #include <tulip/FontIconManager.h>
 
 #include "NeighborhoodHighlighterInteractor.h"
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 #include <algorithm>
 

@@ -29,7 +29,7 @@
 #include "HistogramView.h"
 
 #include "../../utils/StandardInteractorPriority.h"
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 

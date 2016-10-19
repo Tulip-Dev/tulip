@@ -19,7 +19,8 @@
 #ifndef Tulip_InducedSubGraphSelection_H
 #define Tulip_InducedSubGraphSelection_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/BooleanProperty.h>
+#include "../utils/PluginNames.h"
 
 /** \addtogroup selection */
 
@@ -34,8 +35,8 @@
  */
 class InducedSubGraphSelection : public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION("Induced Sub-Graph", "David Auber", "08/08/2001", "Select all nodes/edges of the subgraph induced by a set of selected nodes.",
-                    "1.0", "Selection")
+  PLUGININFORMATION(tlp::SelectionAlgorithm::InducedSubGraphSelection, "David Auber", "08/08/2001",
+                    "Select all nodes/edges of the subgraph induced by a set of selected nodes.", "1.0", "Selection")
   InducedSubGraphSelection(const tlp::PluginContext *context);
   bool run();
 };

@@ -19,7 +19,9 @@
 #ifndef Tulip_ParaSelection_H
 #define Tulip_ParaSelection_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/BooleanProperty.h>
+#include "../utils/PluginNames.h"
+
 /** \addtogroup selection */
 
 /**
@@ -34,7 +36,7 @@
 class MultipleEdgeSelection : public tlp::BooleanAlgorithm {
 public:
   PLUGININFORMATION(
-      "Multiple Edge", "David Auber", "20/01/2003",
+      tlp::SelectionAlgorithm::MultipleEdgeSelection, "David Auber", "20/01/2003",
       "Select the multiple or parallel edges of a graph.<br/>Two edges are considered parallel if they have the same source and the same target node."
       "If it exists n edges between two nodes, only n-1 edges will be selected.",
       "1.0", "Selection")

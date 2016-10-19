@@ -26,7 +26,7 @@ PLUGIN(InducedSubGraphSelection)
 //=================================================================================
 static const char *paramHelp[] = {
     // Nodes
-    "Set of nodes for which the induced sub-graph is computed."};
+    "Set of nodes from which the induced sub-graph is computed."};
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
   addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
@@ -44,6 +44,7 @@ bool InducedSubGraphSelection::run() {
   // as the input selection property and the result property can be the same one,
   // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
   // of the result property are reseted to false below
+  // delete done by the forEach macro
   Iterator<node> *itN =
       (result == entrySelection) ? new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) : entrySelection->getNodesEqualTo(true);
 
@@ -57,14 +58,17 @@ bool InducedSubGraphSelection::run() {
   }
 
   // now add edges whose extremities are selected to result selection
+  unsigned sel = 0;
   for (node current : result->getNodesEqualTo(true)) {
     for (edge e : graph->getOutEdges(current)) {
       if (result->getNodeValue(graph->target(e))) {
         result->setEdgeValue(e, true);
+        ++sel;
       }
     }
   }
 
+  tlp::debug() << tlp::SelectionAlgorithm::InducedSubGraphSelection << ": " << sel << " edges selected." << std::endl;
   return true;
 }
 //=================================================================================

@@ -232,5 +232,5 @@ void Dijkstra::searchPath(node ntlp, vector<node> &vNodes) {
   }
 
   if (n != src)
-    cout << "Path do not exist between node " << src.id << " and node " << tgte.id << " !" << endl;
+    cout << "A path does not exist between node " << src.id << " and node " << tgte.id << "!" << endl;
 }
