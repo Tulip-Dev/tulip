@@ -19,7 +19,8 @@
 #ifndef Tulip_REACHABLESUBGRAPHELECTION_H
 #define Tulip_REACHABLESUBGRAPHELECTION_H
 
-#include <tulip/TulipPluginHeaders.h>
+#include <tulip/BooleanProperty.h>
+#include "../utils/PluginNames.h"
 
 /** \addtogroup selection */
 
@@ -36,8 +37,8 @@
  */
 class ReachableSubGraphSelection:public tlp::BooleanAlgorithm {
 public:
-  PLUGININFORMATION("Reachable Sub-Graph","David Auber","01/12/1999",
-                    "Select all the nodes and edges at a maximum distance of one of the node of a given set of selected nodes.","1.1", "Selection")
+  PLUGININFORMATION(tlp::SelectionAlgorithm::ReachableSubGraphSelection,"David Auber","01/12/1999",
+                    "Select all nodes and edges at a maximum distance of 1 of the node of a given set of selected nodes.","1.1", "Selection")
   ReachableSubGraphSelection(const tlp::PluginContext* context);
   ~ReachableSubGraphSelection();
   bool run();

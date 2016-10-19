@@ -24,7 +24,7 @@
 #include <set>
 #include "MatrixViewConfigurationWidget.h"
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 class IntegerVectorProperty;
@@ -49,8 +49,8 @@ class MatrixView: public tlp::NodeLinkDiagramComponent {
   Q_OBJECT
 public:
 
-  PLUGININFORMATION(ViewName::MatrixViewName, "Ludwig Fiolka", "07/01/2011",
-                    "<p>In mathematics and computer science, an adjacency matrix is a means of representing which vertices of a graph are adjacent to which other vertices. Another matrix representation for a graph is the incidence matrix.</p>"
+  PLUGININFORMATION(tlp::ViewName::MatrixViewName, "Ludwig Fiolka", "07/01/2011",
+                    "<p>In Mathematics and Computer Science, an adjacency matrix is used to represent which vertices of a graph are adjacents to each other. Another matrix representation for a graph is the incidence matrix.</p>"
                     "<p>Specifically, the adjacency matrix of a finite graph G on n vertices is the n x n matrix where the non-diagonal entry aij is the number of edges from vertex i to vertex j, and the diagonal entry aii, depending on the convention, is either once or twice the number of edges (loops) from vertex i to itself."
                     "Undirected graphs often use the former convention of counting loops twice, whereas directed graphs typically use the latter convention.</p>"
                     "<p>There exists a unique adjacency matrix for each isomorphism class of graphs (up to permuting rows and columns), and it is not the adjacency matrix of any other isomorphism class of graphs. In the special case of a finite simple graph, the adjacency matrix is a (0,1)-matrix with zeros on its diagonal.</p>"

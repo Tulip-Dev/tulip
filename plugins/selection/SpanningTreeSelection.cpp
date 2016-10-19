@@ -17,7 +17,6 @@
  *
  */
 #include "SpanningTreeSelection.h"
-#include <tulip/BooleanProperty.h>
 
 #include <tulip/GraphTools.h>
 
@@ -38,7 +37,7 @@ bool SpanningTreeSelection::run() {
     BooleanProperty *viewSelection=graph->getProperty<BooleanProperty>("viewSelection");
     Iterator<node> *itN=graph->getNodes();
 
-    for (; itN->hasNext();) {
+    while (itN->hasNext()) {
       node itn=itN->next();
 
       if (viewSelection->getNodeValue(itn)==true) {

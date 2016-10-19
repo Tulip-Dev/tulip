@@ -35,7 +35,7 @@
 #include "POLIB/LinearMappingColor.h"
 #include "POLIB/TulipGraphDimension.h"
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 #include "PixelOrientedOverview.h"
 #include "PixelOrientedOptionsWidget.h"

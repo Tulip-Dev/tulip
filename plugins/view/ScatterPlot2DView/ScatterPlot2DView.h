@@ -35,7 +35,7 @@
 #include <GL/gl.h>
 #endif
 
-#include "../../utils/ViewNames.h"
+#include "../../utils/PluginNames.h"
 
 namespace tlp {
 

@@ -24,7 +24,7 @@
 #include <tulip/NodeLinkDiagramComponent.h>
 
 #include "../utils/StandardInteractorPriority.h"
-#include "../utils/ViewNames.h"
+#include "../utils/PluginNames.h"
 
 using namespace tlp;
 
