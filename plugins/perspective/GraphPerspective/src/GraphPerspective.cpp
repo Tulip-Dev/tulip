@@ -637,8 +637,8 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     QDateTime start = QDateTime::currentDateTime();
     g = tlp::importGraph(module, data, prg);
 
-    if (g == nullptr) {
-      QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + module.c_str() +
+    if (g == NULL) {
+      QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
                                                                      trUtf8("</i> failed to import data.<br/><br/><b>") +
                                                                      tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
