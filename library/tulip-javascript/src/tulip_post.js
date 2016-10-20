@@ -313,18 +313,18 @@ function createPropertyProxyIfAvailable(prop) {
   if (typeof Proxy == 'function') {
     var handler = {
       get: function(target, p) {
-        if (p.startsWith('[Node')) {
+        if (typeOf(p) == 'string' && p.startsWith('[Node')) {
           return target.getNodeValue(tulip.Node(parseInt(p.substr(6, p.length-7))));
-        } else if (p.startsWith('[Edge')) {
+        } else if (typeOf(p) == 'string' && p.startsWith('[Edge')) {
           return target.getEdgeValue(tulip.Edge(parseInt(p.substr(6, p.length-7))));
         } else {
           return target[p];
         }
       },
       set: function(target, p, value){
-        if (p.startsWith('[Node')) {
+        if (typeOf(p) == 'string' && p.startsWith('[Node')) {
           target.setNodeValue(tulip.Node(parseInt(p.substr(6, p.length-7))), value);
-        } else if (p.startsWith('[Edge')) {
+        } else if (typeOf(p) == 'string' && p.startsWith('[Edge')) {
           target.setEdgeValue(tulip.Edge(parseInt(p.substr(6, p.length-7))), value);
         } else {
           target[p] = value;
