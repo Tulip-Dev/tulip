@@ -477,7 +477,7 @@ void GlScene::removeLayer(const string &name, bool deleteLayer) {
       if (deleteLayer)
         delete *it;
       else
-        layer->setScene(nullptr);
+        (*it)->setScene(nullptr);
 
       return;
     }
@@ -496,7 +496,7 @@ void GlScene::removeLayer(GlLayer *layer, bool deleteLayer) {
       if (deleteLayer)
         delete *it;
       else
-        layer->setScene(nullptr);
+        (*it)->setScene(nullptr);
 
       return;
     }

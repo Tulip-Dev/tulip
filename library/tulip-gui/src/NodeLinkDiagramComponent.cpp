@@ -271,21 +271,7 @@ void NodeLinkDiagramComponent::createScene(Graph *graph, DataSet dataSet) {
 DataSet NodeLinkDiagramComponent::sceneData() const {
   GlScene *scene = getGlMainWidget()->getScene();
   DataSet outDataSet = GlMainView::state();
-  outDataSet.set("Display", scene->getGlGraphComposite()->getRenderingParameters().getParameters());
-  std::string out;
-  scene->getXML(out);
-  size_t pos = out.find(TulipBitmapDir);
-
-  while (pos != std::string::npos) {
-    out.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-    pos = out.find(TulipBitmapDir);
-  }
-
-  outDataSet.set("scene", out);
-
-  if (_hasHulls && manager->isVisible()) {
-    outDataSet.set("Hulls", manager->getData());
-  }
+  outDataSet.set("Display", scene->getMainGlGraph()->getRenderingParameters().getParameters());
 
   return outDataSet;
 }
