@@ -25,19 +25,19 @@ PLUGIN(DegreeMetric)
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // type
-  "Type of degree to compute (in/out/inout).",
+    // type
+    "Type of degree to compute (in/out/inout).",
 
-  // metric
-  "The weighted degree of a node is the sum of weights of "
-  "all its in/out/inout edges. "
-  "If no metric is specified, using a uniform metric value of 1 for all edges "
-  "returns the usual degree for nodes (number of neighbors).",
+    // metric
+    "The weighted degree of a node is the sum of weights of "
+    "all its in/out/inout edges. "
+    "If no metric is specified, using a uniform metric value of 1 for all edges "
+    "returns the usual degree for nodes (number of neighbors).",
 
-  // norm
-  "If true, the measure is normalized in the following way."
-  "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "
-  "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>"
+    // norm
+    "If true, the measure is normalized in the following way."
+    "<ul><li>Unweighted case: m(n) = deg(n) / (#V - 1)</li> "
+    "<li>Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)] </li></ul>"
 
 };
 
@@ -47,68 +47,63 @@ static const char *paramHelp[] = {
 #define IN 1
 #define OUT 2
 //==============================================================================
-DegreeMetric::DegreeMetric(const tlp::PluginContext* context):DoubleAlgorithm(context) {
+DegreeMetric::DegreeMetric(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
-  addInParameter<NumericProperty*>("metric", paramHelp[1], "", false);
+  addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
   addInParameter<bool>("norm", paramHelp[2], "false", false);
 }
 //==================================================================
 bool DegreeMetric::run() {
   StringCollection degreeTypes(DEGREE_TYPES);
   degreeTypes.setCurrent(0);
-  NumericProperty* weights = NULL;
+  NumericProperty *weights = NULL;
   bool norm = false;
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get(DEGREE_TYPE, degreeTypes);
     dataSet->get("metric", weights);
     dataSet->get("norm", norm);
   }
 
-  //sum w_e = E_w/#E, sum d_n = 2E_w
+  // sum w_e = E_w/#E, sum d_n = 2E_w
   double normalization = 1.;
 
   if (norm && graph->numberOfNodes() > 1 && graph->numberOfEdges())
-    normalization = 1./(double) (graph->numberOfNodes() - 1);
+    normalization = 1. / (double)(graph->numberOfNodes() - 1);
 
   node n;
 
   if (!weights) {
-    switch(degreeTypes.getCurrent()) {
+    switch (degreeTypes.getCurrent()) {
     case INOUT:
-      forEach(n, graph->getNodes())
-      result->setNodeValue(n, normalization * graph->deg(n));
+      forEach(n, graph->getNodes()) result->setNodeValue(n, normalization * graph->deg(n));
       break;
 
     case IN:
-      forEach(n, graph->getNodes())
-      result->setNodeValue(n, normalization * graph->indeg(n));
+      forEach(n, graph->getNodes()) result->setNodeValue(n, normalization * graph->indeg(n));
       break;
 
     case OUT:
-      forEach(n, graph->getNodes())
-      result->setNodeValue(n, normalization * graph->outdeg(n));
+      forEach(n, graph->getNodes()) result->setNodeValue(n, normalization * graph->outdeg(n));
       break;
     }
 
     // null value for edges
     result->setAllEdgeValue(0);
-  }
-  else {
+  } else {
     if (norm && graph->numberOfNodes() > 1 && graph->numberOfEdges() > 0) {
       double sum = 0;
       edge e;
-      forEach(e, graph->getEdges())
-      sum += fabs(weights->getEdgeDoubleValue(e));
+      forEach(e, graph->getEdges()) sum += fabs(weights->getEdgeDoubleValue(e));
       normalization = (sum / graph->numberOfEdges()) * (graph->numberOfNodes() - 1);
 
       if (fabs(normalization) < 1E-9)
         normalization = 1.0;
       else
-        normalization = 1.0/normalization;
+        normalization = 1.0 / normalization;
     }
 
-    switch(degreeTypes.getCurrent()) {
+    switch (degreeTypes.getCurrent()) {
     case INOUT:
       forEach(n, graph->getNodes()) {
         edge e;
@@ -147,11 +142,11 @@ bool DegreeMetric::run() {
   return true;
 }
 //==================================================================
-bool DegreeMetric::check(std::string& errorMsg) {
+bool DegreeMetric::check(std::string &errorMsg) {
   // check weights validity if it exists
-  DoubleProperty* weights = NULL;
+  DoubleProperty *weights = NULL;
 
-  if (dataSet!=NULL) {
+  if (dataSet != NULL) {
     dataSet->get("metric", weights);
 
     if (weights && !weights->getEdgeDefaultValue()) {
@@ -169,5 +164,3 @@ bool DegreeMetric::check(std::string& errorMsg) {
 
   return true;
 }
-
-

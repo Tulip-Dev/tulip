@@ -72,11 +72,14 @@
 class OGDFMMMExampleFastLayout : public OGDFLayoutPluginBase {
 
 public:
-  PLUGININFORMATION("MMM Example Fast Layout (OGDF)","Gereon Bartel","01/09/2010","Implements a fast multilevel graph layout using the OGDF modular multilevel-mixer. SolarMerger and SolarPlacer are used as merging and placement strategies.","1.0","Multilevel")
-  OGDFMMMExampleFastLayout(const tlp::PluginContext* context) :OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {}
-  ~OGDFMMMExampleFastLayout() {}
-
+  PLUGININFORMATION("MMM Example Fast Layout (OGDF)", "Gereon Bartel", "01/09/2010", "Implements a fast multilevel graph layout using the OGDF "
+                                                                                     "modular multilevel-mixer. SolarMerger and SolarPlacer are used "
+                                                                                     "as merging and placement strategies.",
+                    "1.0", "Multilevel")
+  OGDFMMMExampleFastLayout(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::MMMExampleFastLayout()) {
+  }
+  ~OGDFMMMExampleFastLayout() {
+  }
 };
-
 
 PLUGIN(OGDFMMMExampleFastLayout)

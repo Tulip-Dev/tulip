@@ -21,15 +21,14 @@
 #include <tulip/LayoutProperty.h>
 
 static const char *paramHelp[] = {
-  // layout
-  "The layout property from which a perfect aspect ratio has to be computed."
-};
+    // layout
+    "The layout property from which a perfect aspect ratio has to be computed."};
 
-class PerfectLayout: public tlp::LayoutAlgorithm {
+class PerfectLayout : public tlp::LayoutAlgorithm {
 public:
-  PLUGININFORMATION("Perfect aspect ratio","Tulip team","09/19/2010","Scales the graph layout to get an aspect ratio of 1.","1.0","")
+  PLUGININFORMATION("Perfect aspect ratio", "Tulip team", "09/19/2010", "Scales the graph layout to get an aspect ratio of 1.", "1.0", "")
 
-  PerfectLayout(const tlp::PluginContext* context): LayoutAlgorithm(context) {
+  PerfectLayout(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
     addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout", false);
   }
 
@@ -39,7 +38,7 @@ public:
   bool run() {
     tlp::LayoutProperty *layout = NULL;
 
-    if ( dataSet!=NULL ) {
+    if (dataSet != NULL) {
       dataSet->get("layout", layout);
     }
 

@@ -34,31 +34,31 @@
 using namespace std;
 using namespace tlp;
 
-CPPUNIT_TEST_SUITE_REGISTRATION( PushPopTest );
+CPPUNIT_TEST_SUITE_REGISTRATION(PushPopTest);
 
 //==========================================================
 void PushPopTest::setUp() {
-  graph = //tlp::newGraph();
-    new GraphImpl();
+  graph = // tlp::newGraph();
+      new GraphImpl();
 }
 //==========================================================
 void PushPopTest::tearDown() {
-  //graph->pop();
+  // graph->pop();
   delete graph;
 }
 //==========================================================
 void PushPopTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
   vector<node> nodes;
   vector<edge> edges;
-  unsigned int NB_ADD  = nbNodes;
+  unsigned int NB_ADD = nbNodes;
   unsigned int EDGE_RATIO = edgeRatio;
 
-  for (unsigned int i=0; i<NB_ADD; ++i)
+  for (unsigned int i = 0; i < NB_ADD; ++i)
     nodes.push_back(graph->addNode());
 
   unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
 
-  for (unsigned int i=0; i< NB_EDGES; ++i)
+  for (unsigned int i = 0; i < NB_EDGES; ++i)
     edges.push_back(graph->addEdge(nodes[randomUnsignedInteger(NB_ADD)], nodes[randomUnsignedInteger(NB_ADD)]));
 }
 //==========================================================
@@ -83,7 +83,7 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(!graph->isElement(e0));
 
   vector<node> nodes;
-  vector<pair <node, node> > ends;
+  vector<pair<node, node>> ends;
   vector<edge> edges;
 
   graph->addNodes(3, nodes);
@@ -159,7 +159,6 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(!graph->isElement(e1));
   CPPUNIT_ASSERT(!graph->isElement(n2));
   CPPUNIT_ASSERT(graph->isElement(n3));
-
 }
 
 //==========================================================
@@ -195,7 +194,7 @@ void PushPopTest::testSetEnds() {
   CPPUNIT_ASSERT(graph->isElement(e0));
   CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
 
-  Graph* g1 = graph->addSubGraph();
+  Graph *g1 = graph->addSubGraph();
   g1->addNode(n0);
   g1->addNode(n1);
   g1->addEdge(e0);
@@ -253,7 +252,7 @@ void PushPopTest::testSetValue() {
 
   edge e0 = graph->addEdge(n0, n1);
 
-  DoubleProperty* prop = graph->getProperty<DoubleProperty>("prop");
+  DoubleProperty *prop = graph->getProperty<DoubleProperty>("prop");
 
   prop->setNodeValue(n1, 1.0);
   prop->setEdgeValue(e0, 1.0);
@@ -340,8 +339,7 @@ void PushPopTest::testSetEltValue() {
 
   edge e0 = graph->addEdge(n0, n1);
 
-  DoubleVectorProperty* prop =
-    graph->getProperty<DoubleVectorProperty>("prop");
+  DoubleVectorProperty *prop = graph->getProperty<DoubleVectorProperty>("prop");
 
   vector<double> vv;
   vv.push_back(1.0);
@@ -448,8 +446,7 @@ void PushPopTest::testVectorValue() {
 
   edge e0 = graph->addEdge(n0, n1);
 
-  StringVectorProperty* sprop =
-    graph->getProperty<StringVectorProperty>("sprop");
+  StringVectorProperty *sprop = graph->getProperty<StringVectorProperty>("sprop");
   vector<std::string> svv;
   svv.push_back("a");
   svv.push_back("b");
@@ -463,8 +460,7 @@ void PushPopTest::testVectorValue() {
   CPPUNIT_ASSERT(sprop->getNodeEltValue(n1, 2) == "c");
   CPPUNIT_ASSERT(sprop->getEdgeEltValue(e0, 2) == "c");
 
-  DoubleVectorProperty* prop =
-    graph->getProperty<DoubleVectorProperty>("prop");
+  DoubleVectorProperty *prop = graph->getProperty<DoubleVectorProperty>("prop");
 
   vector<double> vv;
   vv.push_back(1.0);
@@ -581,7 +577,7 @@ void PushPopTest::testCopyProperty() {
   edge e0 = graph->addEdge(n0, n1);
   edge e1 = graph->addEdge(n1, n0);
 
-  DoubleProperty* prop = graph->getProperty<DoubleProperty>("prop");
+  DoubleProperty *prop = graph->getProperty<DoubleProperty>("prop");
 
   prop->setNodeValue(n0, 1.0);
   prop->setEdgeValue(e0, 1.0);
@@ -655,36 +651,36 @@ void PushPopTest::testSubgraph() {
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
 
-  Iterator<Graph *> *it= g2->getSubGraphs();
-  Graph *a,*b;
+  Iterator<Graph *> *it = g2->getSubGraphs();
+  Graph *a, *b;
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
   b = it->next();
-  CPPUNIT_ASSERT((a==g3 && b==g4) || (a==g4 && b==g3));
+  CPPUNIT_ASSERT((a == g3 && b == g4) || (a == g4 && b == g3));
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 
   graph->pop();
 
-  it= g2->getSubGraphs();
+  it = g2->getSubGraphs();
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 
   graph->unpop();
 
-  it= g2->getSubGraphs();
+  it = g2->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
   b = it->next();
-  CPPUNIT_ASSERT((a==g3 && b==g4) || (a==g4 && b==g3));
+  CPPUNIT_ASSERT((a == g3 && b == g4) || (a == g4 && b == g3));
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 
   node n2 = g3->addNode();
   node n3 = g3->addNode();
-  edge e = g2->addEdge(n2,n3);
+  edge e = g2->addEdge(n2, n3);
 
   CPPUNIT_ASSERT(g3->isElement(n2));
   CPPUNIT_ASSERT(g3->isElement(n3));
@@ -792,18 +788,18 @@ void PushPopTest::testSubgraph() {
   g2->delSubGraph(g3);
   g2->delSubGraph(g4);
 
-  it= g2->getSubGraphs();
+  it = g2->getSubGraphs();
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 
   graph->pop();
 
-  it= g2->getSubGraphs();
+  it = g2->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
   b = it->next();
-  CPPUNIT_ASSERT((a==g3 && b==g4) || (a==g4 && b==g3));
+  CPPUNIT_ASSERT((a == g3 && b == g4) || (a == g4 && b == g3));
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 
@@ -812,7 +808,7 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(g3->isElement(n2));
 
   g2->delSubGraph(g4);
-  it= g2->getSubGraphs();
+  it = g2->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(!it->hasNext());
@@ -821,22 +817,22 @@ void PushPopTest::testSubgraph() {
 
   graph->push();
   graph->delSubGraph(g2);
-  it= graph->getSubGraphs();
+  it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
   b = it->next();
-  CPPUNIT_ASSERT((a==g1 && b==g3) || (a==g3 && b==g1));
+  CPPUNIT_ASSERT((a == g1 && b == g3) || (a == g3 && b == g1));
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 
   graph->pop();
-  it= graph->getSubGraphs();
+  it = graph->getSubGraphs();
   CPPUNIT_ASSERT(it->hasNext());
   a = it->next();
   CPPUNIT_ASSERT(it->hasNext());
   b = it->next();
-  CPPUNIT_ASSERT((a==g1 && b==g2) || (a==g2 && b==g1));
+  CPPUNIT_ASSERT((a == g1 && b == g2) || (a == g2 && b == g1));
   CPPUNIT_ASSERT(!it->hasNext());
   delete it;
 }
@@ -847,33 +843,33 @@ void PushPopTest::testPushAddSubgraphsPop() {
   Graph *g1, *g2;
   g1 = graph->addSubGraph();
   g2 = g1->addSubGraph();
-  CPPUNIT_ASSERT(g2->getSuperGraph()==g1);
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(g2->getSuperGraph() == g1);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 1);
   graph->pop();
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 0);
   graph->unpop();
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 1);
   graph->delSubGraph(g1);
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
-  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 1);
+  CPPUNIT_ASSERT(g2->getSuperGraph() == graph);
   graph->pop();
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 0);
   graph->unpop();
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
-  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 1);
+  CPPUNIT_ASSERT(g2->getSuperGraph() == graph);
 
   // non regression test for sf bug #835
   node n1 = g2->addNode();
   edge e1 = g2->addEdge(n1, n1);
-  Graph* g3 = g2->addCloneSubGraph();
+  Graph *g3 = g2->addCloneSubGraph();
   graph->delEdge(e1);
   graph->pop();
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==0);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 0);
   graph->unpop();
-  CPPUNIT_ASSERT(graph->numberOfSubGraphs()==1);
-  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g2->numberOfSubGraphs()==1);
-  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 1);
+  CPPUNIT_ASSERT(g2->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g2->numberOfSubGraphs() == 1);
+  CPPUNIT_ASSERT(g3->getSuperGraph() == g2);
 }
 
 //==========================================================
@@ -884,91 +880,90 @@ void PushPopTest::testDelSubgraph() {
   g3 = g2->addSubGraph();
   g4 = g2->addSubGraph();
 
-  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph() == graph);
   CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g2);
-  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g3->getSuperGraph() == g2);
   CPPUNIT_ASSERT(g2->getNthSubGraph(0) == g3);
-  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph() == g2);
   CPPUNIT_ASSERT(g2->getNthSubGraph(1) == g4);
 
-  CPPUNIT_ASSERT(graph->getRoot()==graph);
-  CPPUNIT_ASSERT(g1->getRoot()==graph);
-  CPPUNIT_ASSERT(g2->getRoot()==graph);
-  CPPUNIT_ASSERT(g3->getRoot()==graph);
-  CPPUNIT_ASSERT(g4->getRoot()==graph);
+  CPPUNIT_ASSERT(graph->getRoot() == graph);
+  CPPUNIT_ASSERT(g1->getRoot() == graph);
+  CPPUNIT_ASSERT(g2->getRoot() == graph);
+  CPPUNIT_ASSERT(g3->getRoot() == graph);
+  CPPUNIT_ASSERT(g4->getRoot() == graph);
 
   graph->push();
 
   graph->delSubGraph(g2);
-  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g3->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph() == graph);
   CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g3);
-  CPPUNIT_ASSERT(g4->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g4->getSuperGraph() == graph);
   CPPUNIT_ASSERT(graph->getNthSubGraph(2) == g4);
 
   graph->pop();
 
-  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g2->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g2->getSuperGraph() == graph);
   CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g2);
-  CPPUNIT_ASSERT(g3->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g3->getSuperGraph() == g2);
   CPPUNIT_ASSERT(g2->getNthSubGraph(0) == g3);
-  CPPUNIT_ASSERT(g4->getSuperGraph()==g2);
+  CPPUNIT_ASSERT(g4->getSuperGraph() == g2);
   CPPUNIT_ASSERT(g2->getNthSubGraph(1) == g4);
 
   graph->unpop();
-  CPPUNIT_ASSERT(graph->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g1->getSuperGraph()==graph);
-  CPPUNIT_ASSERT(g3->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(graph->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g1->getSuperGraph() == graph);
+  CPPUNIT_ASSERT(g3->getSuperGraph() == graph);
   CPPUNIT_ASSERT(graph->getNthSubGraph(1) == g3);
-  CPPUNIT_ASSERT(g4->getSuperGraph()==graph);
+  CPPUNIT_ASSERT(g4->getSuperGraph() == graph);
   CPPUNIT_ASSERT(graph->getNthSubGraph(2) == g4);
 }
 
 static void createSubgraphs(Graph *graph, int m, int n) {
-    if (n == 0)
-        return;
-    for (int i = 0 ; i < m ; ++i) {
-        Graph *sg = graph->addCloneSubGraph();
-        createSubgraphs(sg, m, n-1);
-    }
+  if (n == 0)
+    return;
+  for (int i = 0; i < m; ++i) {
+    Graph *sg = graph->addCloneSubGraph();
+    createSubgraphs(sg, m, n - 1);
+  }
 }
 
 void PushPopTest::testDelAllSgPopUnpop() {
-    // create a hierarchy of sub-graphs
-    // the hierachy has 3 levels with 4 sub-graph per level
-    createSubgraphs(graph, 4, 3);
+  // create a hierarchy of sub-graphs
+  // the hierachy has 3 levels with 4 sub-graph per level
+  createSubgraphs(graph, 4, 3);
 
-    // We should have 4 subgraphs for the root graph
-    CPPUNIT_ASSERT(graph->numberOfSubGraphs()==4);
+  // We should have 4 subgraphs for the root graph
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 4);
 
-    graph->push();
+  graph->push();
 
-    Graph *sg = graph->getNthSubGraph(3);
-    graph->delAllSubGraphs(sg);
+  Graph *sg = graph->getNthSubGraph(3);
+  graph->delAllSubGraphs(sg);
 
-    // We should have 3 subgraphs for the root graph
-    CPPUNIT_ASSERT(graph->numberOfSubGraphs()==3);
+  // We should have 3 subgraphs for the root graph
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 3);
 
-    graph->pop();
+  graph->pop();
 
-    // We should have 4 subgraphs for the root graph
-    CPPUNIT_ASSERT(graph->numberOfSubGraphs()==4);
+  // We should have 4 subgraphs for the root graph
+  CPPUNIT_ASSERT(graph->numberOfSubGraphs() == 4);
 
-    graph->unpop();
+  graph->unpop();
 
-    // need to grab the value and pop otherwise segfault when tearing down
-    unsigned int nbSg = graph->numberOfSubGraphs();
-    graph->pop();
+  // need to grab the value and pop otherwise segfault when tearing down
+  unsigned int nbSg = graph->numberOfSubGraphs();
+  graph->pop();
 
-    // We should have 3 subgraphs for the root graph before the last call to pop
-    CPPUNIT_ASSERT(nbSg==3);
+  // We should have 3 subgraphs for the root graph before the last call to pop
+  CPPUNIT_ASSERT(nbSg == 3);
 }
-
 
 void PushPopTest::testTests() {
   node n0 = graph->addNode();
@@ -994,13 +989,13 @@ void PushPopTest::testTests() {
 void PushPopTest::testAddDelProps() {
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
 
-  BooleanProperty* bProp = graph->getProperty<BooleanProperty>("boolean");
+  BooleanProperty *bProp = graph->getProperty<BooleanProperty>("boolean");
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
   CPPUNIT_ASSERT(!graph->existProperty("double"));
 
   graph->push();
 
-  DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
+  DoubleProperty *dProp = graph->getProperty<DoubleProperty>("double");
   CPPUNIT_ASSERT(graph->existProperty("double"));
   node n = graph->addNode();
   dProp->setNodeValue(n, 123456789.);
@@ -1046,13 +1041,13 @@ void PushPopTest::testAddDelProps() {
 void PushPopTest::testRenameProps() {
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
 
-  BooleanProperty* bProp = graph->getProperty<BooleanProperty>("boolean");
+  BooleanProperty *bProp = graph->getProperty<BooleanProperty>("boolean");
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
   CPPUNIT_ASSERT(!graph->existProperty("double"));
 
   graph->push();
 
-  DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
+  DoubleProperty *dProp = graph->getProperty<DoubleProperty>("double");
   CPPUNIT_ASSERT(graph->existProperty("double"));
   node n = graph->addNode();
   dProp->setNodeValue(n, 123456789.);
@@ -1060,7 +1055,7 @@ void PushPopTest::testRenameProps() {
   dProp->rename("dbl");
   CPPUNIT_ASSERT(!graph->existProperty("double"));
   CPPUNIT_ASSERT(graph->existProperty("dbl"));
-  
+
   graph->pop();
 
   CPPUNIT_ASSERT(!graph->existProperty("double"));
@@ -1116,16 +1111,17 @@ void PushPopTest::testRenameProps() {
   CPPUNIT_ASSERT(!graph->existProperty("dbl"));
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
   CPPUNIT_ASSERT(graph->existProperty("bool"));
-  CPPUNIT_ASSERT(dProp == graph->getProperty("bool"));  
+  CPPUNIT_ASSERT(dProp == graph->getProperty("bool"));
 }
 
 // this class will capture
 // everything that will happen to our properties
-class PropertyObserverForTest :public Observable {
+class PropertyObserverForTest : public Observable {
 public:
-  std::set<PropertyInterface*> properties;
+  std::set<PropertyInterface *> properties;
 
-  PropertyObserverForTest() {}
+  PropertyObserverForTest() {
+  }
 
   void reset() {
     properties.clear();
@@ -1139,23 +1135,22 @@ public:
     return properties.find(prop) != properties.end();
   }
 
-  virtual void destroy(PropertyInterface* prop) {
+  virtual void destroy(PropertyInterface *prop) {
     properties.insert(prop);
   }
 
-  virtual void treatEvent(const Event& evt) {
-    PropertyInterface* prop = dynamic_cast<PropertyInterface *>(evt.sender());
+  virtual void treatEvent(const Event &evt) {
+    PropertyInterface *prop = dynamic_cast<PropertyInterface *>(evt.sender());
 
     if (prop && evt.type() == Event::TLP_DELETE)
       destroy(prop);
   }
-
 };
 
 void PushPopTest::testObserveDelProps() {
   CPPUNIT_ASSERT(!graph->existProperty("boolean"));
 
-  BooleanProperty* bProp = graph->getProperty<BooleanProperty>("boolean");
+  BooleanProperty *bProp = graph->getProperty<BooleanProperty>("boolean");
   CPPUNIT_ASSERT(graph->existProperty("boolean"));
   CPPUNIT_ASSERT(!graph->existProperty("double"));
 
@@ -1171,7 +1166,7 @@ void PushPopTest::testObserveDelProps() {
   CPPUNIT_ASSERT_EQUAL(1u, pObserver.nbProperties());
   CPPUNIT_ASSERT(pObserver.found(bProp));
 
-  DoubleProperty* dProp = graph->getProperty<DoubleProperty>("double");
+  DoubleProperty *dProp = graph->getProperty<DoubleProperty>("double");
   dProp->addListener(&pObserver);
   pObserver.reset();
   CPPUNIT_ASSERT_EQUAL(0u, pObserver.nbProperties());
@@ -1200,7 +1195,6 @@ void PushPopTest::testObserveDelProps() {
   CPPUNIT_ASSERT(!graph->existProperty("double"));
 }
 
-
 void PushPopTest::testAddSubgraphProp() {
   Graph *sg;
 
@@ -1217,7 +1211,7 @@ void PushPopTest::testAddSubgraphProp() {
   delete it;
 
   sg->push();
-  DoubleProperty* prop = sg->getLocalProperty<DoubleProperty>("test");
+  DoubleProperty *prop = sg->getLocalProperty<DoubleProperty>("test");
   CPPUNIT_ASSERT(sg->existProperty("test"));
 
   sg->pop();
@@ -1273,7 +1267,7 @@ void PushPopTest::testAddSubgraphProp() {
 
 void PushPopTest::testMetaNode() {
   node n0 = graph->addNode();
-  LayoutProperty* layout = graph->getProperty<LayoutProperty>("viewLayout");
+  LayoutProperty *layout = graph->getProperty<LayoutProperty>("viewLayout");
   Coord coord0(-1, -1, -1);
   layout->setNodeValue(n0, coord0);
 
@@ -1283,18 +1277,18 @@ void PushPopTest::testMetaNode() {
   graph->push();
 
   // create clone graph
-  Graph* clone = graph->addCloneSubGraph("groups");
+  Graph *clone = graph->addCloneSubGraph("groups");
 
   // create meta node
   node metaNode = clone->createMetaNode(tmp);
   Color mColor(255, 255, 255, 127);
-  ColorProperty* color = graph->getProperty<ColorProperty>("viewColor");
+  ColorProperty *color = graph->getProperty<ColorProperty>("viewColor");
   color->setNodeValue(metaNode, mColor);
 
   CPPUNIT_ASSERT(graph->isElement(metaNode));
   CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
-  CPPUNIT_ASSERT_EQUAL(coord0,  layout->getNodeValue(metaNode));
-  CPPUNIT_ASSERT_EQUAL(mColor,  color->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(coord0, layout->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(mColor, color->getNodeValue(metaNode));
 
   graph->pop();
   CPPUNIT_ASSERT(!graph->isElement(metaNode));
@@ -1303,60 +1297,57 @@ void PushPopTest::testMetaNode() {
   graph->unpop();
   CPPUNIT_ASSERT(graph->isElement(metaNode));
   CPPUNIT_ASSERT(graph->isMetaNode(metaNode));
-  CPPUNIT_ASSERT_EQUAL(coord0,  layout->getNodeValue(metaNode));
-  CPPUNIT_ASSERT_EQUAL(mColor,  color->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(coord0, layout->getNodeValue(metaNode));
+  CPPUNIT_ASSERT_EQUAL(mColor, color->getNodeValue(metaNode));
 }
 
 class DeleteObjectsObserver : public Observable {
 
-public :
+public:
+  vector<Graph *> deletedGraphs;
+  vector<PropertyInterface *> deletedProperties;
 
-    vector<Graph *> deletedGraphs;
-    vector<PropertyInterface *> deletedProperties;
-
-
-    void treatEvent(const Event &e) {
-        if (e.type() == Event::TLP_DELETE) {
-            Graph* graph = dynamic_cast<Graph *>(e.sender());
-            if (graph) {
-                deletedGraphs.push_back(graph);
-            }
-            PropertyInterface *prop = dynamic_cast<PropertyInterface *>(e.sender());
-            if (prop) {
-                deletedProperties.push_back(prop);
-            }
-        }
+  void treatEvent(const Event &e) {
+    if (e.type() == Event::TLP_DELETE) {
+      Graph *graph = dynamic_cast<Graph *>(e.sender());
+      if (graph) {
+        deletedGraphs.push_back(graph);
+      }
+      PropertyInterface *prop = dynamic_cast<PropertyInterface *>(e.sender());
+      if (prop) {
+        deletedProperties.push_back(prop);
+      }
     }
-
+  }
 };
 
 void PushPopTest::testDeletePushPopFalse() {
 
-    // to track object deletion
-    DeleteObjectsObserver delObserver;
+  // to track object deletion
+  DeleteObjectsObserver delObserver;
 
-    // create a new subgraph in graph and a local property to it
-    // create a new subgraph in the previously created one and a local property to it
-    graph->push();
-    Graph *g1 = graph->addSubGraph("toto");
-    g1->addListener(&delObserver);
-    DoubleProperty *testProp = g1->getLocalProperty<DoubleProperty>("test1");
-    testProp->addListener(&delObserver);
-    Graph *g2 = g1->addSubGraph("titi");
-    g2->addListener(&delObserver);
-    LayoutProperty *testProp2 = g2->getLocalProperty<LayoutProperty>("test2");
-    testProp2->addListener(&delObserver);
+  // create a new subgraph in graph and a local property to it
+  // create a new subgraph in the previously created one and a local property to it
+  graph->push();
+  Graph *g1 = graph->addSubGraph("toto");
+  g1->addListener(&delObserver);
+  DoubleProperty *testProp = g1->getLocalProperty<DoubleProperty>("test1");
+  testProp->addListener(&delObserver);
+  Graph *g2 = g1->addSubGraph("titi");
+  g2->addListener(&delObserver);
+  LayoutProperty *testProp2 = g2->getLocalProperty<LayoutProperty>("test2");
+  testProp2->addListener(&delObserver);
 
-    // this call should delete the two created sub-graphs
-    // and the two created properties
-    graph->pop(false);
+  // this call should delete the two created sub-graphs
+  // and the two created properties
+  graph->pop(false);
 
-    // should be equal to 4 as two delete events are sent by deleted sub-graphs : the first one when
-    // the GraphUpdatesRecorder do the updates (removing the newly added sub-graph from the hierarchy),
-    // the second one when the GraphUpdatedsRecorder destructor is called (as we forbid to unpop) as it
-    // will really delete the sub-graph
-    CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedGraphs.size());
+  // should be equal to 4 as two delete events are sent by deleted sub-graphs : the first one when
+  // the GraphUpdatesRecorder do the updates (removing the newly added sub-graph from the hierarchy),
+  // the second one when the GraphUpdatedsRecorder destructor is called (as we forbid to unpop) as it
+  // will really delete the sub-graph
+  CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedGraphs.size());
 
-    // same thing for the two deleted properties
-    CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedProperties.size());
+  // same thing for the two deleted properties
+  CPPUNIT_ASSERT_EQUAL(size_t(4), delObserver.deletedProperties.size());
 }

@@ -52,13 +52,13 @@ GlMainWidgetGraphicsItem::GlMainWidgetGraphicsItem(GlMainWidget *glMainWidget, i
 
 void GlMainWidgetGraphicsItem::setGlMainWidget(GlMainWidget *glmw) {
   if (glmw) {
-    disconnect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
-    disconnect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
+    disconnect(glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(glMainWidgetDraw(GlMainWidget *, bool)));
+    disconnect(glMainWidget, SIGNAL(viewRedrawn(GlMainWidget *)), this, SLOT(glMainWidgetRedraw(GlMainWidget *)));
     glMainWidget->removeEventFilter(this);
     glMainWidget = glmw;
-    connect(glMainWidget,SIGNAL(viewDrawn(GlMainWidget *,bool)),this,SLOT(glMainWidgetDraw(GlMainWidget *,bool)));
-    connect(glMainWidget,SIGNAL(viewRedrawn(GlMainWidget *)),this,SLOT(glMainWidgetRedraw(GlMainWidget *)));
-    glMainWidget->installEventFilter(this);    
+    connect(glMainWidget, SIGNAL(viewDrawn(GlMainWidget *, bool)), this, SLOT(glMainWidgetDraw(GlMainWidget *, bool)));
+    connect(glMainWidget, SIGNAL(viewRedrawn(GlMainWidget *)), this, SLOT(glMainWidgetRedraw(GlMainWidget *)));
+    glMainWidget->installEventFilter(this);
   }
 }
 

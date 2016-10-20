@@ -31,41 +31,41 @@ using namespace std;
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // color interpolation
-  "Indicates if edge color interpolation has to be used.",
+    // color interpolation
+    "Indicates if edge color interpolation has to be used.",
 
-  // size interpolation
-  "Indicates if edge size interpolation has to be used.",
+    // size interpolation
+    "Indicates if edge size interpolation has to be used.",
 
-  // edge extremities
-  "Indicates if edge extremities have to be exported.",
+    // edge extremities
+    "Indicates if edge extremities have to be exported.",
 
-  // Background color
-  "Specifies the background color of the SVG file.",
+    // Background color
+    "Specifies the background color of the SVG file.",
 
-  // human readable
-  "Adds line-breaks and indentation to empty sections between elements"
-  " (ignorable whitespace). The main purpose of this parameter is to split"
-  " the data into several lines, and to increase readability for a human reader."
-  " Be careful, this adds a large amount of data to the output file.",
+    // human readable
+    "Adds line-breaks and indentation to empty sections between elements"
+    " (ignorable whitespace). The main purpose of this parameter is to split"
+    " the data into several lines, and to increase readability for a human reader."
+    " Be careful, this adds a large amount of data to the output file.",
 
-  // node labels
-  "Specifies if node labels have to be exported.",
+    // node labels
+    "Specifies if node labels have to be exported.",
 
-  // edge labels
-  "Specifies if edge labels have to be exported.",
+    // edge labels
+    "Specifies if edge labels have to be exported.",
 
-  // metanode labels
-  "Specifies if node and edge labels inside metanodes have to be exported.",
+    // metanode labels
+    "Specifies if node and edge labels inside metanodes have to be exported.",
 
-  //woff2
-  "Uses Web Open Font Format version 2 (woff2) to reduce generated file length. This format is supported in almost all recent Internet browsers."
-};
+    // woff2
+    "Uses Web Open Font Format version 2 (woff2) to reduce generated file length. This format is supported in almost all recent Internet browsers."};
 
 class SvgExport : public tlp::ExportModule {
 
 public:
-  PLUGININFORMATION("SVG Export","Sami Gasri, Charles-Antoine Lami, Bruno Pinaud","16/07/2013","Exports a graph drawing in a SVG formatted file.","1.9", "File")
+  PLUGININFORMATION("SVG Export", "Sami Gasri, Charles-Antoine Lami, Bruno Pinaud", "16/07/2013", "Exports a graph drawing in a SVG formatted file.",
+                    "1.9", "File")
 
   std::string icon() const {
     return ":/tulip/graphperspective/icons/32/export_svg.png";
@@ -91,7 +91,7 @@ public:
     pluginProgress->showPreview(false);
     bool autoformatting(true), woff2(false);
 
-    if(dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("Makes SVG output human readable", autoformatting);
       dataSet->get("Use Web Open Font Format v2", woff2);
     }

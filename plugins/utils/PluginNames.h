@@ -33,14 +33,12 @@ const static char SOMViewName[] = "Self Organizing Map view";
 
 namespace SelectionAlgorithm {
 
-const static char LoopSelection[]="Loop Selection";
-const static char MultipleEdgeSelection[]="Multiple Edges Selection";
-const static char InducedSubGraphSelection[]="Induced Sub-Graph";
-const static char ReachableSubGraphSelection[]="Reachable Sub-Graph";
-const static char SpanningDagSelection[]="Spanning Dag";
+const static char LoopSelection[] = "Loop Selection";
+const static char MultipleEdgeSelection[] = "Multiple Edges Selection";
+const static char InducedSubGraphSelection[] = "Induced Sub-Graph";
+const static char ReachableSubGraphSelection[] = "Reachable Sub-Graph";
+const static char SpanningDagSelection[] = "Spanning Dag";
 }
-
 }
-
 
 #endif // VIEWNAMES_H

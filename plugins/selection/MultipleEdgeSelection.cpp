@@ -34,12 +34,12 @@ bool MultipleEdgeSelection::run() {
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
   vector<edge>::const_iterator it;
-  unsigned cpt=0;
+  unsigned cpt = 0;
   for (it = multipleEdges.begin(); it != multipleEdges.end(); ++it) {
     result->setEdgeValue(*it, true);
     ++cpt;
   }
-  //output some useful information (will be displayed in the log window in the graph perspective)
+  // output some useful information (will be displayed in the log window in the graph perspective)
   tlp::debug() << tlp::SelectionAlgorithm::MultipleEdgeSelection << ": " << cpt << " edges selected." << endl;
   return true;
 }

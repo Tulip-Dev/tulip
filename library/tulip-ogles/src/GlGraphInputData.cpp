@@ -50,7 +50,7 @@ void GlGraphInputData::setGraph(tlp::Graph *graph) {
 
 std::string GlGraphInputData::getViewPropertyName(ViewPropertyType viewPropertyType) {
   const auto &it = std::find_if(_propertiesNameMap.begin(), _propertiesNameMap.end(),
-                         [&](const std::pair<std::string, ViewPropertyType> &mapEntry) { return mapEntry.second == viewPropertyType; });
+                                [&](const std::pair<std::string, ViewPropertyType> &mapEntry) { return mapEntry.second == viewPropertyType; });
   return it->first;
 }
 

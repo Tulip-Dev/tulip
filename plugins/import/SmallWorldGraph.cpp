@@ -27,15 +27,14 @@ static const int WIDTH = 1024;
 static const int HEIGHT = 1024;
 
 static const char *paramHelp[] = {
-  // nodes
-  "Number of nodes in the final graph.",
+    // nodes
+    "Number of nodes in the final graph.",
 
-  // degree
-  "Average degree of the nodes in the final graph.",
+    // degree
+    "Average degree of the nodes in the final graph.",
 
-  // degree
-  "If true, long distance edges are added in the grid approximation."
-};
+    // degree
+    "If true, long distance edges are added in the grid approximation."};
 
 /*
  * TODO :
@@ -49,22 +48,23 @@ static const char *paramHelp[] = {
  *
  *  User can specify the number of nodes and their average degree.
  */
-class SmallWorldGraph:public ImportModule {
+class SmallWorldGraph : public ImportModule {
 public:
-  PLUGININFORMATION("Grid Approximation","Auber","25/06/2002","Imports a new grid approximation graph.","1.0","Graph")
-  SmallWorldGraph(tlp::PluginContext* context):ImportModule(context) {
-    addInParameter<unsigned int>("nodes",paramHelp[0],"200");
-    addInParameter<unsigned int>("degree",paramHelp[1],"10");
-    addInParameter<bool>("long edge",paramHelp[2],"false");
+  PLUGININFORMATION("Grid Approximation", "Auber", "25/06/2002", "Imports a new grid approximation graph.", "1.0", "Graph")
+  SmallWorldGraph(tlp::PluginContext *context) : ImportModule(context) {
+    addInParameter<unsigned int>("nodes", paramHelp[0], "200");
+    addInParameter<unsigned int>("degree", paramHelp[1], "10");
+    addInParameter<bool>("long edge", paramHelp[2], "false");
   }
-  ~SmallWorldGraph() {}
+  ~SmallWorldGraph() {
+  }
 
   bool importGraph() {
-    unsigned int nbNodes  = 200;
+    unsigned int nbNodes = 200;
     unsigned int avgDegree = 10;
     bool enableLongEdge = false;
 
-    if (dataSet!=NULL) {
+    if (dataSet != NULL) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("degree", avgDegree);
       dataSet->get("long edge", enableLongEdge);
@@ -84,12 +84,11 @@ public:
       return false;
     }
 
-    double maxDistance = sqrt(double(avgDegree)*double(WIDTH)*double(HEIGHT)
-                              / (double (nbNodes) * M_PI));
+    double maxDistance = sqrt(double(avgDegree) * double(WIDTH) * double(HEIGHT) / (double(nbNodes) * M_PI));
     // initialize a random sequence according the given seed
     tlp::initRandomSequence();
 
-    LayoutProperty *newLayout=graph->getLocalProperty<LayoutProperty>("viewLayout");
+    LayoutProperty *newLayout = graph->getLocalProperty<LayoutProperty>("viewLayout");
     vector<node> sg(nbNodes);
 
     pluginProgress->showPreview(false);
@@ -97,40 +96,39 @@ public:
     graph->addNodes(nbNodes, sg);
     graph->reserveEdges(nbNodes * avgDegree);
 
-    for (unsigned int i=0; i<nbNodes; ++i) {
-      newLayout->setNodeValue(sg[i],Coord(static_cast<float>(randomInteger(WIDTH)), static_cast<float>(randomInteger(HEIGHT)), 0));
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      newLayout->setNodeValue(sg[i], Coord(static_cast<float>(randomInteger(WIDTH)), static_cast<float>(randomInteger(HEIGHT)), 0));
     }
 
-    //double minSize = DBL_MAX;
+    // double minSize = DBL_MAX;
 
-    for (unsigned int i=0; i<nbNodes-1; ++i) {
-      bool longEdge =false;
+    for (unsigned int i = 0; i < nbNodes - 1; ++i) {
+      bool longEdge = false;
 
-      for (unsigned int j=i+1; j<nbNodes; ++j) {
-        if (i!=j) {
+      for (unsigned int j = i + 1; j < nbNodes; ++j) {
+        if (i != j) {
           double distance = newLayout->getNodeValue(sg[i]).dist(newLayout->getNodeValue(sg[j]));
-          //minSize = std::min(distance, minSize);
+          // minSize = std::min(distance, minSize);
 
-          //newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
-          if ( distance  < (double)maxDistance)
-            graph->addEdge(sg[i],sg[j]);
+          // newSize->setAllNodeValue(Size(minSize/2.0, minSize/2.0, 1));
+          if (distance < (double)maxDistance)
+            graph->addEdge(sg[i], sg[j]);
           else if (!longEdge && enableLongEdge) {
             double distrand = randomDouble();
 
-            if (distrand < 1.0/(2.0+double(nbNodes-i-1))) {
+            if (distrand < 1.0 / (2.0 + double(nbNodes - i - 1))) {
               longEdge = true;
-              graph->addEdge(sg[i],sg[j]);
+              graph->addEdge(sg[i], sg[j]);
             }
           }
         }
       }
 
-      if (((i % 100) == 0) &&
-          (pluginProgress->progress(i, nbNodes - 1)!=TLP_CONTINUE))
+      if (((i % 100) == 0) && (pluginProgress->progress(i, nbNodes - 1) != TLP_CONTINUE))
         break;
     }
 
-    return  pluginProgress->state()!=TLP_CANCEL;
+    return pluginProgress->state() != TLP_CANCEL;
   }
 };
 

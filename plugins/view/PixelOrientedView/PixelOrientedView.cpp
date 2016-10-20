@@ -808,7 +808,8 @@ void PixelOrientedView::applySettings() {
       graphComposite->acceptVisitor(&glBBSV);
       BoundingBox graphBoundingBox = glBBSV.getBoundingBox();
 
-      detailViewLabel->setPosition(Coord((graphBoundingBox[0][0] + graphBoundingBox[1][0])/ 2.f, graphBoundingBox[0][1] - (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f));
+      detailViewLabel->setPosition(Coord((graphBoundingBox[0][0] + graphBoundingBox[1][0]) / 2.f,
+                                         graphBoundingBox[0][1] - (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 8.f));
 
       detailViewLabel->setSize(Size((graphBoundingBox[1][0] - graphBoundingBox[0][0]), (graphBoundingBox[1][1] - graphBoundingBox[0][1]) / 4.f));
 

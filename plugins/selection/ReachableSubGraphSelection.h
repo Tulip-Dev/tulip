@@ -35,18 +35,14 @@
  *  \author David Auber, LaBRI University Bordeaux I France:
  *   auber@tulip-software.org
  */
-class ReachableSubGraphSelection:public tlp::BooleanAlgorithm {
+class ReachableSubGraphSelection : public tlp::BooleanAlgorithm {
 public:
+  PLUGININFORMATION(tlp::SelectionAlgorithm::ReachableSubGraphSelection, "David Auber", "01/12/1999",
+                    "Selects all nodes and edges at a maximum distance of 1 of the node of a given set of selected nodes.", "1.1", "Selection")
 
-  PLUGININFORMATION(tlp::SelectionAlgorithm::ReachableSubGraphSelection,"David Auber","01/12/1999",
-                    "Selects all nodes and edges at a maximum distance of 1 of the node of a given set of selected nodes.","1.1", "Selection")
-
-  ReachableSubGraphSelection(const tlp::PluginContext* context);
+  ReachableSubGraphSelection(const tlp::PluginContext *context);
   ~ReachableSubGraphSelection();
   bool run();
 };
 
 #endif
-
-
-
