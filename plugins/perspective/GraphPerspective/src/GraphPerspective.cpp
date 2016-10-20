@@ -601,7 +601,7 @@ void GraphPerspective::importGraph(const std::string& module,
 
     if (g == NULL) {
       QMessageBox::critical(_mainWindow,trUtf8("Import error"),
-                            QString("<i>") + module.c_str() + trUtf8("</i> failed to import data.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
+                            QString("<i>") + tlp::tlpStringToQString(module) + trUtf8("</i> failed to import data.<br/><br/><b>") + tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
     }
