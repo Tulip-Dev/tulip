@@ -218,7 +218,6 @@ public:
                  ge->getType() == tlp::GraphEvent::TLP_ADD_INHERITED_PROPERTY ||
                  ge->getType() == tlp::GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY) {
         graphEvent.set("name", ge->getPropertyName());
-        graphEvent.set("property", wrapPropertyToJs(ge->getProperty()));
       } else if (ge->getType() == tlp::GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY ||
                  ge->getType() == tlp::GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY ||
                  ge->getType() == tlp::GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||
