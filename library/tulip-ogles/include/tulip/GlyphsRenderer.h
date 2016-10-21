@@ -62,11 +62,13 @@ public:
   renderGlyphs(const Camera &camera, const Light &light, int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
                const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures = std::vector<std::string>(),
                const std::vector<float> &borderWidths = std::vector<float>(), const std::vector<tlp::Color> &borderColors = std::vector<tlp::Color>(),
-               const std::vector<tlp::Vec4f> &rotationAxisAndAngles = std::vector<tlp::Vec4f>(), bool forceFlatShading = false, bool swapYZ = false);
+               const std::vector<tlp::Vec4f> &rotationData = std::vector<tlp::Vec4f>(), bool forceFlatShading = false, bool swapYZ = false,
+               bool rotationAxisAndAngle = true);
 
   void renderGlyph(const Camera &camera, const Light &light, int glyphId, const tlp::Coord &center, const tlp::Size &size, const tlp::Color &color,
                    const std::string &texture = "", const float &borderWidth = 0, const tlp::Color &borderColor = tlp::Color(),
-                   const tlp::Vec4f &rotationAxisAndAngle = tlp::Vec4f(0.f, 0.f, 1.f, 0.f), bool forceFlatShading = false, bool swapYZ = false);
+                   const tlp::Vec4f &rotationData = tlp::Vec4f(0.f, 0.f, 1.f, 0.f), bool forceFlatShading = false, bool swapYZ = false,
+                   bool rotationAxisAndAngle = true);
 
 private:
   GlyphsRenderer();
@@ -79,12 +81,12 @@ private:
   void renderGlyphsHardwareInstancing(int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
                                       const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures,
                                       const std::vector<float> &borderWidths, const std::vector<tlp::Color> &borderColors,
-                                      const std::vector<tlp::Vec4f> &rotationAngles, bool forceFlatShading, bool swapYZ);
+                                      const std::vector<tlp::Vec4f> &rotationData, bool forceFlatShading, bool swapYZ);
 
   void renderGlyphsPseudoInstancing(int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
                                     const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures,
                                     const std::vector<float> &borderWidths, const std::vector<tlp::Color> &borderColors,
-                                    const std::vector<tlp::Vec4f> &rotationAngles, bool forceFlatShading, bool swapYZ);
+                                    const std::vector<tlp::Vec4f> &rotationData, bool forceFlatShading, bool swapYZ);
 
   bool _canUseUIntIndices;
   bool _canUseHardwareInstancing;

@@ -48,6 +48,7 @@ static std::string glyphVertexShaderSrcCommonCode = R"(
   uniform bool u_flatShading;
   uniform bool u_swapYZ;
   uniform bool u_billboarding;
+  uniform bool u_rotationAxisAndAngle;
 
   uniform vec3 u_eyePosition;
   uniform vec4 u_lightPosition;
@@ -91,7 +92,7 @@ static std::string glyphVertexShaderSrcCommonCode = R"(
      return ret;
   }
 
-  mat4 rotationMatrix(vec3 rotationVector, float rotationAngle) {
+  mat4 rotationMatrixFromAxisAndAngle(vec3 rotationVector, float rotationAngle) {
      mat4 ret = mat4(1.0);
      float c = cos(rotationAngle);
      float s = sin(rotationAngle);
@@ -105,6 +106,18 @@ static std::string glyphVertexShaderSrcCommonCode = R"(
      ret[1][2] = rotationVector[1]*rotationVector[2]*(1.0 - c) + rotationVector[0]*s;
      ret[2][2] = rotationVector[2]*rotationVector[2]*(1.0 - c) + c;
      return ret;
+  }
+
+  mat4 rotationMatrix(vec4 rotationData) {
+    if (u_rotationAxisAndAngle) {
+      return rotationMatrixFromAxisAndAngle(rotationData.xyz, rotationData.w);
+    } else {
+      mat4 ret = mat4(1.0);
+      ret *= rotationMatrixFromAxisAndAngle(vec3(1.0, 0.0, 0.0), rotationData.x);
+      ret *= rotationMatrixFromAxisAndAngle(vec3(0.0, 1.0, 0.0), rotationData.y);
+      ret *= rotationMatrixFromAxisAndAngle(vec3(0.0, 0.0, 1.0), rotationData.z);
+      return ret;
+    }
   }
 
   mat4 billboardMatrix(mat4 originalMdvMatrix, vec3 size) {
@@ -134,9 +147,9 @@ static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRend
 
        void main() {
          int id = int(a_position.w);
-         mat4 mdv = u_modelviewMatrix * translationMatrix(u_center[id]) * rotationMatrix(u_rotation[id].xyz, u_rotation[id].w) * scaleMatrix(u_scale[id]);
+         mat4 mdv = u_modelviewMatrix * translationMatrix(u_center[id]) * rotationMatrix(u_rotation[id]) * scaleMatrix(u_scale[id]);
          if (u_billboarding) {
-           mdv = billboardMatrix(mdv, u_scale[id]) * rotationMatrix(u_rotation[id].xyz, u_rotation[id].w);
+           mdv = billboardMatrix(mdv, u_scale[id]) * rotationMatrix(u_rotation[id]);
          }
          vec4 pos;
          if (u_swapYZ) {
@@ -194,9 +207,9 @@ static std::string glyphsVertexShaderHardwareInstancingSrc() {
       attribute vec4 a_texCoordOffsets;
 
       void main() {
-        mat4 mdv = u_modelviewMatrix * translationMatrix(a_center) * rotationMatrix(a_rotation.xyz, a_rotation.w) * scaleMatrix(a_scale);
+        mat4 mdv = u_modelviewMatrix * translationMatrix(a_center) * rotationMatrix(a_rotation) * scaleMatrix(a_scale);
         if (u_billboarding) {
-          mdv = billboardMatrix(mdv, a_scale) * rotationMatrix(a_rotation.xyz, a_rotation.w);
+          mdv = billboardMatrix(mdv, a_scale) * rotationMatrix(a_rotation);
         }
         vec4 pos;
         if (u_swapYZ) {
@@ -356,6 +369,7 @@ GlyphsRenderer::GlyphsRenderer() : _billboardMode(false) {
     _glyphShader->addShaderFromSourceCode(GlShader::Fragment, glyphsFragmentShaderSrc());
 
     _glyphShader->link();
+    _glyphShader->printInfoLog();
     if (!_glyphShader->isLinked()) {
       --maxNbGlyphsByRenderingBatch;
       delete _glyphShader;
@@ -527,8 +541,8 @@ void GlyphsRenderer::prepareGlyphDataHardwareInstancing(int glyphId) {
 void GlyphsRenderer::renderGlyphs(const Camera &camera, const Light &light, int glyphId, const std::vector<tlp::Coord> &centers,
                                   const std::vector<tlp::Size> &sizes, const std::vector<tlp::Color> &colors,
                                   const std::vector<std::string> &textures, const std::vector<float> &borderWidths,
-                                  const std::vector<tlp::Color> &borderColors, const std::vector<Vec4f> &rotationAxisAndAngles, bool forceFlatShading,
-                                  bool swapYZ) {
+                                  const std::vector<tlp::Color> &borderColors, const std::vector<Vec4f> &rotationData, bool forceFlatShading,
+                                  bool swapYZ, bool rotationAxisAndAngle) {
 
   if (centers.empty()) {
     return;
@@ -538,15 +552,16 @@ void GlyphsRenderer::renderGlyphs(const Camera &camera, const Light &light, int 
   assert(textures.empty() || centers.size() == textures.size());
   assert(borderWidths.empty() || centers.size() == borderWidths.size());
   assert(borderColors.empty() || centers.size() == borderColors.size());
-  assert(rotationAxisAndAngles.empty() || centers.size() == rotationAxisAndAngles.size());
+  assert(rotationData.empty() || centers.size() == rotationData.size());
 
   GlTextureManager::instance()->bindTexturesAtlas();
   setupGlyphsShader(camera, light);
+  _glyphShader->setUniformBool("u_rotationAxisAndAngle", rotationAxisAndAngle);
   if (_canUseHardwareInstancing) {
-    renderGlyphsHardwareInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationAxisAndAngles, forceFlatShading,
+    renderGlyphsHardwareInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationData, forceFlatShading,
                                    swapYZ);
   } else {
-    renderGlyphsPseudoInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationAxisAndAngles, forceFlatShading,
+    renderGlyphsPseudoInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationData, forceFlatShading,
                                  swapYZ);
   }
   GlTextureManager::instance()->unbindTexturesAtlas();
@@ -560,9 +575,10 @@ template <typename T> vector<T> putValInVector(const T &val) {
 
 void GlyphsRenderer::renderGlyph(const Camera &camera, const Light &light, int glyphId, const tlp::Coord &center, const tlp::Size &size,
                                  const tlp::Color &color, const std::string &texture, const float &borderWidth, const tlp::Color &borderColor,
-                                 const tlp::Vec4f &rotationAxisAndAngle, bool forceFlatShading, bool swapYZ) {
+                                 const tlp::Vec4f &rotationData, bool forceFlatShading, bool swapYZ, bool rotationAxisAndAngle) {
   renderGlyphs(camera, light, glyphId, putValInVector(center), putValInVector(size), putValInVector(color), putValInVector(texture),
-               putValInVector(borderWidth), putValInVector(borderColor), putValInVector(rotationAxisAndAngle), forceFlatShading, swapYZ);
+               putValInVector(borderWidth), putValInVector(borderColor), putValInVector(rotationData), forceFlatShading, swapYZ,
+               rotationAxisAndAngle);
 }
 
 void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light) {
@@ -597,7 +613,7 @@ const unsigned int glyphsAttributesDataStride = 19;
 void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
                                                     const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures,
                                                     const std::vector<float> &borderWidths, const std::vector<tlp::Color> &borderColors,
-                                                    const std::vector<Vec4f> &rotationAxisAndAngles, bool forceFlatShading, bool swapYZ) {
+                                                    const std::vector<Vec4f> &rotationData, bool forceFlatShading, bool swapYZ) {
 
   prepareGlyphDataHardwareInstancing(glyphId);
   Glyph *glyph = GlyphsManager::instance()->getGlyph(glyphId);
@@ -642,10 +658,10 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId, const std::vect
 
       addTlpVecToVecFloat(centers[idx], glyphsData);
       addTlpVecToVecFloat(sizes[idx], glyphsData);
-      if (rotationAxisAndAngles.empty()) {
+      if (rotationData.empty()) {
         addTlpVecToVecFloat(Vec4f(0.0f, 0.0f, 1.0f, 0.0f), glyphsData);
       } else {
-        addTlpVecToVecFloat(rotationAxisAndAngles[idx], glyphsData);
+        addTlpVecToVecFloat(rotationData[idx], glyphsData);
       }
       addColorToVecFloat(colors[idx], glyphsData);
       if (borderColors.empty()) {
@@ -714,7 +730,7 @@ void GlyphsRenderer::renderGlyphsHardwareInstancing(int glyphId, const std::vect
 void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId, const std::vector<tlp::Coord> &centers, const std::vector<tlp::Size> &sizes,
                                                   const std::vector<tlp::Color> &colors, const std::vector<std::string> &textures,
                                                   const std::vector<float> &borderWidths, const std::vector<tlp::Color> &borderColors,
-                                                  const std::vector<Vec4f> &rotationAxisAndAngles, bool forceFlatShading, bool swapYZ) {
+                                                  const std::vector<Vec4f> &rotationData, bool forceFlatShading, bool swapYZ) {
 
   GLenum indicesType = GL_UNSIGNED_SHORT;
   if (_canUseUIntIndices) {
@@ -784,10 +800,10 @@ void GlyphsRenderer::renderGlyphsPseudoInstancing(int glyphId, const std::vector
 
       addTlpVecToVecFloat(centers[idx], centersData);
       addTlpVecToVecFloat(sizes[idx], scalesData);
-      if (rotationAxisAndAngles.empty()) {
+      if (rotationData.empty()) {
         addTlpVecToVecFloat(Vec4f(0.0f, 0.0f, 0.0f, 1.0f), rotationAnglesData);
       } else {
-        addTlpVecToVecFloat(rotationAxisAndAngles[idx], rotationAnglesData);
+        addTlpVecToVecFloat(rotationData[idx], rotationAnglesData);
       }
       addColorToVecFloat(colors[idx], colorsData);
       if (borderColors.empty()) {
