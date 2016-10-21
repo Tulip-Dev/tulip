@@ -40,6 +40,7 @@
 #include <tulip/IntegerProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/TulipMetaTypes.h>
+#include <tulip/ColorScalesManager.h>
 
 using namespace tlp;
 
@@ -601,6 +602,11 @@ void AlgorithmRunnerItem::initModel() {
     return;
 
   ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),_graph,_ui->parameters);
+  if (_pluginName == "Color Mapping") {
+    tlp::DataSet data = model->parametersValues();
+    data.set<ColorScale>("color scale", ColorScalesManager::getLatestColorScale());
+    model->setParametersValues(data);
+  }
   _ui->parameters->setModel(model);
   int h = 10;
 

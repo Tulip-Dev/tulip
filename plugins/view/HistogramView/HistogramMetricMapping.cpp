@@ -25,6 +25,7 @@
 #include <tulip/GlLabel.h>
 #include <tulip/GlNode.h>
 #include <tulip/GlMainWidget.h>
+#include <tulip/ColorScalesManager.h>
 
 #include <QToolTip>
 #include <QMenu>
@@ -576,7 +577,7 @@ void GlGlyphScale::translate(const Coord &move) {
 
 HistogramMetricMapping::HistogramMetricMapping() :
   histoView(NULL), curve(NULL), curveDragStarted(false), selectedAnchor(NULL),
-  colorScale(new ColorScale()), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
+  colorScale(new ColorScale(ColorScalesManager::getLatestColorScale())), glColorScale(NULL), glSizeScale(NULL), glGlyphScale(NULL),
   colorScaleConfigDialog(NULL), sizeScaleConfigDialog(NULL), glyphScaleConfigDialog(NULL), lastXAxisLength(0), histoXAxis(NULL),
   mappinqPolyQuad(NULL), scaleAxisOffset(0), glyphMappingGraph(newGraph()), glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)),
   mappingType(VIEWCOLOR_MAPPING), popupMenu(NULL), colorMappingMenu(NULL), viewColorMappingAction(NULL), viewBorderColorMappingAction(NULL), sizeMapping(NULL), glyphMapping(NULL) {

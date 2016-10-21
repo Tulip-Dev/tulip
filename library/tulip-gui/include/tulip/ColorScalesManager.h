@@ -49,6 +49,10 @@ public:
    */
   static void removeColorScale(const std::string &colorScaleName);
 
+  static ColorScale getLatestColorScale();
+  static void setLatestColorScale(ColorScale& cs);
+
+
 };
 
 }
