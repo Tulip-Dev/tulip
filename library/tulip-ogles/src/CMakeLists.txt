@@ -38,6 +38,7 @@ SET(tulip-ogles_LIB_SRCS
   GlLine.cpp
   ConcaveHullBuilder.cpp
   GlCircle.cpp
+  GlSphere.cpp
 )
 
 INCLUDE_DIRECTORIES(${OPENGL_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${Tess2Include} ${STBInclude} ${ClipperInclude})

@@ -45,7 +45,7 @@ public:
 
   GlGlyphEntity(int glyphId, const tlp::Coord &center, const tlp::Size &size, const tlp::Color &color, const std::string &texture = "",
                 const float borderWidth = 0, const tlp::Color &borderColor = tlp::Color::Black,
-                const tlp::Vec4f &rotationAxisAndAngle = tlp::Vec4f(0.0f, 0.0f, 1.0f, 0.0f));
+                const tlp::Vec4f &rotationData = tlp::Vec4f(0.0f, 0.0f, 1.0f, 0.0f), bool rotationAxisAndAngle = true);
 
   void draw(const Camera &camera, const Light &light, bool pickingMode = false);
 
@@ -95,11 +95,19 @@ public:
     return _borderColor;
   }
 
-  void setRotationAxisAndAngle(const tlp::Vec4f &rotationAxisAndAngle) {
+  void setRotationData(const tlp::Vec4f &rotationData) {
+    _rotationData = rotationData;
+  }
+
+  const tlp::Vec4f &rotationData() const {
+    return _rotationData;
+  }
+
+  void setRotationAxisAndAngle(bool rotationAxisAndAngle) {
     _rotationAxisAndAngle = rotationAxisAndAngle;
   }
 
-  const tlp::Vec4f &rotationAxisAndAngle() const {
+  bool rotationAxisAndAngle() const {
     return _rotationAxisAndAngle;
   }
 
@@ -121,7 +129,8 @@ private:
   std::string _texture;
   float _borderWidth;
   tlp::Color _borderColor;
-  tlp::Vec4f _rotationAxisAndAngle;
+  tlp::Vec4f _rotationData;
+  bool _rotationAxisAndAngle;
   bool _filled;
   bool _outlined;
 };

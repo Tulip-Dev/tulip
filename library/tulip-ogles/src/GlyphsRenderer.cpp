@@ -558,11 +558,9 @@ void GlyphsRenderer::renderGlyphs(const Camera &camera, const Light &light, int 
   setupGlyphsShader(camera, light);
   _glyphShader->setUniformBool("u_rotationAxisAndAngle", rotationAxisAndAngle);
   if (_canUseHardwareInstancing) {
-    renderGlyphsHardwareInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationData, forceFlatShading,
-                                   swapYZ);
+    renderGlyphsHardwareInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationData, forceFlatShading, swapYZ);
   } else {
-    renderGlyphsPseudoInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationData, forceFlatShading,
-                                 swapYZ);
+    renderGlyphsPseudoInstancing(glyphId, centers, sizes, colors, textures, borderWidths, borderColors, rotationData, forceFlatShading, swapYZ);
   }
   GlTextureManager::instance()->unbindTexturesAtlas();
 }
