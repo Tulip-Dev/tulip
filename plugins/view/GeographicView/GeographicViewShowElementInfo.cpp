@@ -28,8 +28,10 @@
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/TulipItemDelegate.h>
 #include <tulip/GraphElementModel.h>
-#include <tulip/GlSimpleEntityItemModel.h>
-#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlEntityItemModel.h>
+#include <tulip/GlConcavePolygon.h>
+#include <tulip/MouseShowElementInfos.h>
+#include <tulip/GlComposite.h>
 
 #include <QPropertyAnimation>
 #include <QLayout>
@@ -40,28 +42,28 @@ using namespace std;
 using namespace tlp;
 
 // this class is needed to allow interactive settings
-// of some GlComplexPolygon rendering properties
-class tlp::GlComplexPolygonItemEditor : public GlSimpleEntityItemEditor {
+// of some GlConcavePolygon rendering properties
+class tlp::GlConcavePolygonItemEditor : public GlEntityItemEditor {
 public:
-  GlComplexPolygonItemEditor(GlComplexPolygon *poly) : GlSimpleEntityItemEditor(poly) {
+  GlConcavePolygonItemEditor(GlConcavePolygon *poly) : GlEntityItemEditor(poly) {
   }
 
-  // redefined inherited methods from GlSimpleEntityItemEditor
+  // redefined inherited methods from GlEntityItemEditor
   QStringList propertiesNames() const {
     return QStringList() << "fillColor"
                          << "outlineColor";
   }
 
   QVariantList propertiesQVariant() const {
-    return QVariantList() << QVariant::fromValue<Color>(((GlComplexPolygon *)entity)->getFillColor())
-                          << QVariant::fromValue<Color>(((GlComplexPolygon *)entity)->getOutlineColor());
+    return QVariantList() << QVariant::fromValue<Color>(((GlConcavePolygon *)entity)->getFillColor())
+                          << QVariant::fromValue<Color>(((GlConcavePolygon *)entity)->getOutlineColor());
   }
 
   void setProperty(const QString &name, const QVariant &value) {
     if (name == "fillColor")
-      ((GlComplexPolygon *)entity)->setFillColor(value.value<Color>());
+      ((GlConcavePolygon *)entity)->setFillColor(value.value<Color>());
     else if (name == "outlineColor")
-      ((GlComplexPolygon *)entity)->setOutlineColor(value.value<Color>());
+      ((GlConcavePolygon *)entity)->setOutlineColor(value.value<Color>());
   }
 };
 
@@ -74,7 +76,7 @@ public:
    * Default constructor
    */
   GeographicViewInteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(":/tulip/gui/icons/i_select.png", "Get information on nodes/edges") {
+      : NodeLinkDiagramComponentInteractor(MouseShowElementInfos::getInteractorIcon(), "Get information on nodes/edges") {
     setConfigurationWidgetText(QString("<h3>Get information interactor</h3>") + "<b>Mouse left</b> click on an element to display its properties");
     setPriority(StandardInteractorPriority::GetInformation);
   }
@@ -154,13 +156,13 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
             if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
               title->setText(trUtf8("Node"));
-              tableView()->setModel(new GraphNodeElementModel(_view->graph(), selectedEntity.getComplexEntityId(), _informationsWidget));
+              tableView()->setModel(new GraphNodeElementModel(_view->graph(), selectedEntity.getNode(), _informationsWidget));
+              title->setText(title->text() + " #" + QString::number(selectedEntity.getNode().id));
             } else {
               title->setText(trUtf8("Edge"));
-              tableView()->setModel(new GraphEdgeElementModel(_view->graph(), selectedEntity.getComplexEntityId(), _informationsWidget));
+              tableView()->setModel(new GraphEdgeElementModel(_view->graph(), selectedEntity.getEdge(), _informationsWidget));
+              title->setText(title->text() + " #" + QString::number(selectedEntity.getNode().id));
             }
-
-            title->setText(title->text() + " #" + QString::number(selectedEntity.getComplexEntityId()));
 
             QPoint position = qMouseEv->pos();
 
@@ -178,22 +180,22 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
             animation->start();
 
             return true;
-          } else if (selectedEntity.getEntityType() == SelectedEntity::SIMPLE_ENTITY_SELECTED) {
+          } else if (selectedEntity.getEntityType() == SelectedEntity::ENTITY_SELECTED) {
 
-            GlComplexPolygon *polygon = dynamic_cast<GlComplexPolygon *>(selectedEntity.getSimpleEntity());
+            GlConcavePolygon *polygon = dynamic_cast<GlConcavePolygon *>(selectedEntity.getGlEntity());
 
             if (!polygon)
               return false;
 
             _informationsWidgetItem->setVisible(true);
             QLabel *title = _informationsWidget->findChild<QLabel *>();
-            title->setText(selectedEntity.getSimpleEntity()->getParent()->findKey(selectedEntity.getSimpleEntity()).c_str());
+            title->setText(selectedEntity.getGlEntity()->getParent()->findKey(selectedEntity.getGlEntity()).c_str());
 
             delete _editor;
 
-            _editor = new GlComplexPolygonItemEditor(polygon);
+            _editor = new GlConcavePolygonItemEditor(polygon);
 
-            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationsWidget));
+            tableView()->setModel(new GlEntityItemModel(_editor, _informationsWidget));
             int size = title->height() + _informationsWidget->layout()->spacing() + tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
             _informationsWidget->setMaximumHeight(size);
 

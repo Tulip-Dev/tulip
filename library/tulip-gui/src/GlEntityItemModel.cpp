@@ -17,51 +17,51 @@
  *
  */
 
-#include <tulip/GlSimpleEntityItemModel.h>
-#include <tulip/GlSimpleEntity.h>
+#include <tulip/GlEntityItemModel.h>
+#include <tulip/GlEntity.h>
 
 #include <QStringList>
 #include <QFont>
 
 namespace tlp {
 
-QStringList GlSimpleEntityItemEditor::propertiesNames() const {
+QStringList GlEntityItemEditor::propertiesNames() const {
   return QStringList();
 }
 
-QVariantList GlSimpleEntityItemEditor::propertiesQVariant() const {
+QVariantList GlEntityItemEditor::propertiesQVariant() const {
   return QVariantList();
 }
 
-void GlSimpleEntityItemEditor::setProperty(const QString &, const QVariant &) {
+void GlEntityItemEditor::setProperty(const QString &, const QVariant &) {
 }
 
-GlSimpleEntityItemModel::GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent)
+GlEntityItemModel::GlEntityItemModel(GlEntityItemEditor *itemEditor, QObject *parent)
     : QAbstractItemModel(parent), editor(itemEditor) {
 }
 
-GlSimpleEntityItemModel::~GlSimpleEntityItemModel() {
+GlEntityItemModel::~GlEntityItemModel() {
 }
 
-int GlSimpleEntityItemModel::rowCount(const QModelIndex &parent) const {
+int GlEntityItemModel::rowCount(const QModelIndex &parent) const {
   if (parent.isValid())
     return 0;
 
   return editor->propertiesNames().size();
 }
 
-int GlSimpleEntityItemModel::columnCount(const QModelIndex &parent) const {
+int GlEntityItemModel::columnCount(const QModelIndex &parent) const {
   if (parent.isValid())
     return 0;
 
   return 1;
 }
 
-QModelIndex GlSimpleEntityItemModel::parent(const QModelIndex &) const {
+QModelIndex GlEntityItemModel::parent(const QModelIndex &) const {
   return QModelIndex();
 }
 
-QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orientation, int role) const {
+QVariant GlEntityItemModel::headerData(int section, Qt::Orientation orientation, int role) const {
   if (orientation == Qt::Horizontal) {
     if (role == Qt::DisplayRole || role == Qt::ToolTipRole)
       return headerText();
@@ -81,14 +81,14 @@ QVariant GlSimpleEntityItemModel::headerData(int section, Qt::Orientation orient
   return QVariant();
 }
 
-QModelIndex GlSimpleEntityItemModel::index(int row, int column, const QModelIndex &parent) const {
+QModelIndex GlEntityItemModel::index(int row, int column, const QModelIndex &parent) const {
   if (!hasIndex(row, column, parent))
     return QModelIndex();
 
   return QAbstractItemModel::createIndex(row, column, (void *)(nullptr));
 }
 
-QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const {
+QVariant GlEntityItemModel::data(const QModelIndex &index, int role) const {
   if (role == Qt::DisplayRole) {
     return editor->propertiesQVariant()[index.row()];
   }
@@ -96,7 +96,7 @@ QVariant GlSimpleEntityItemModel::data(const QModelIndex &index, int role) const
   return QVariant();
 }
 
-bool GlSimpleEntityItemModel::setData(const QModelIndex &index, const QVariant &value, int role) {
+bool GlEntityItemModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
     editor->setProperty(editor->propertiesNames()[index.row()], value);
     return true;

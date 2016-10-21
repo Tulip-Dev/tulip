@@ -18,19 +18,18 @@
  */
 
 #include <GL/glew.h>
-#include <tulip/GlDisplayListManager.h>
 #include <tulip/GlTextureManager.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/ForEach.h>
 #include <tulip/Camera.h>
-#include <tulip/GlTools.h>
+#include <tulip/GlUtils.h>
 #include <tulip/Interactor.h>
 #include <tulip/DataSet.h>
-#include <tulip/GlVertexArrayManager.h>
-#include <tulip/GlComplexPolygon.h>
+#include <tulip/GlConcavePolygon.h>
 #include <tulip/SnapshotDialog.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/GlComposite.h>
 
 #include <QMenu>
 #include <QThread>
@@ -183,18 +182,18 @@ void GeographicView::setState(const DataSet &dataSet) {
   }
 
   if (dataSet.exist("renderingParameters")) {
-    GlGraphComposite *graphComposite = geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite();
+    GlGraph *glGraph = geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph();
     DataSet renderingParameters;
     dataSet.get("renderingParameters", renderingParameters);
-    GlGraphRenderingParameters rp = graphComposite->getRenderingParameters();
+    GlGraphRenderingParameters rp = glGraph->getRenderingParameters();
     rp.setParameters(renderingParameters);
     string s;
 
     if (renderingParameters.get("elementsOrderingPropertyName", s) && !s.empty()) {
-      rp.setElementOrderingProperty(dynamic_cast<tlp::NumericProperty *>(graph()->getProperty(s)));
+      rp.setElementsOrderingProperty(dynamic_cast<tlp::NumericProperty *>(graph()->getProperty(s)));
     }
 
-    graphComposite->setRenderingParameters(rp);
+    glGraph->setRenderingParameters(rp);
     sceneConfigurationWidget->resetChanges();
   }
 
@@ -223,7 +222,7 @@ DataSet GeographicView::state() const {
   dataSet.set("mapCenterLongitude", mapCenter.second);
   dataSet.set("mapZoom", geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapZoom());
   dataSet.set("renderingParameters",
-              geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getRenderingParameters().getParameters());
+              geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().getParameters());
 
   saveStoredPolyInformations(dataSet);
 
@@ -308,7 +307,6 @@ void GeographicView::applySettings() {
 }
 
 void GeographicView::updateSharedProperties() {
-  GlGraphInputData *inputData = geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData();
 
   if (useSharedLayoutProperty != geoViewConfigWidget->useSharedLayoutProperty()) {
     useSharedLayoutProperty = geoViewConfigWidget->useSharedLayoutProperty();
@@ -336,8 +334,6 @@ void GeographicView::updateSharedProperties() {
     else
       geoViewGraphicsView->setGeoSizes(new SizeProperty(graph()));
   }
-
-  inputData->getGlVertexArrayManager()->setHaveToComputeAll(true);
 }
 
 void GeographicView::updatePoly(bool force) {
@@ -366,18 +362,18 @@ void GeographicView::loadStoredPolyInformations(const DataSet &dataset) {
     DataSet polyConf;
     dataset.get("polygons", polyConf);
     GlComposite *composite = geoViewGraphicsView->getPolygon();
-    const map<string, GlSimpleEntity *> &entities = composite->getGlEntities();
+    const map<string, GlEntity *> &entities = composite->getGlEntities();
 
-    for (map<string, GlSimpleEntity *>::const_iterator it = entities.begin(); it != entities.end(); ++it) {
+    for (map<string, GlEntity *>::const_iterator it = entities.begin(); it != entities.end(); ++it) {
       DataSet entityData;
 
       if (polyConf.exist((*it).first)) {
         polyConf.get((*it).first, entityData);
         Color color;
         entityData.get("color", color);
-        ((GlComplexPolygon *)(*it).second)->setFillColor(color);
+        ((GlConcavePolygon *)(*it).second)->setFillColor(color);
         entityData.get("outlineColor", color);
-        ((GlComplexPolygon *)(*it).second)->setOutlineColor(color);
+        ((GlConcavePolygon *)(*it).second)->setOutlineColor(color);
       }
     }
   }
@@ -386,12 +382,12 @@ void GeographicView::loadStoredPolyInformations(const DataSet &dataset) {
 void GeographicView::saveStoredPolyInformations(DataSet &dataset) const {
   GlComposite *composite = geoViewGraphicsView->getPolygon();
   DataSet polyConf;
-  const map<string, GlSimpleEntity *> &entities = composite->getGlEntities();
+  const map<string, GlEntity *> &entities = composite->getGlEntities();
 
-  for (map<string, GlSimpleEntity *>::const_iterator it = entities.begin(); it != entities.end(); ++it) {
+  for (map<string, GlEntity *>::const_iterator it = entities.begin(); it != entities.end(); ++it) {
     DataSet entityData;
-    entityData.set("color", ((GlComplexPolygon *)(*it).second)->getFillColor());
-    entityData.set("outlineColor", ((GlComplexPolygon *)(*it).second)->getOutlineColor());
+    entityData.set("color", ((GlConcavePolygon *)(*it).second)->getFillColor());
+    entityData.set("outlineColor", ((GlConcavePolygon *)(*it).second)->getOutlineColor());
     polyConf.set((*it).first, entityData);
   }
 
@@ -416,9 +412,9 @@ void GeographicView::registerTriggers() {
   if (graph() == nullptr)
     return;
 
-  addRedrawTrigger(geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getGraph());
+  addRedrawTrigger(geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph()->getGraph());
   std::set<tlp::PropertyInterface *> properties =
-      geoViewGraphicsView->getGlMainWidget()->getScene()->getGlGraphComposite()->getInputData()->properties();
+      geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph()->getInputData().getProperties();
 
   for (std::set<tlp::PropertyInterface *>::iterator it = properties.begin(); it != properties.end(); ++it) {
     addRedrawTrigger(*it);
@@ -443,7 +439,7 @@ QPixmap GeographicView::snapshot(const QSize &size) const {
 
   QGLFramebufferObjectFormat fboFormat;
   fboFormat.setAttachment(QGLFramebufferObject::CombinedDepthStencil);
-  fboFormat.setSamples(OpenGlConfigManager::getInst().maxNumberOfSamples());
+  fboFormat.setSamples(OpenGlConfigManager::instance().maxNumberOfSamples());
 
   int width = geoViewGraphicsView->width();
   int height = geoViewGraphicsView->height();

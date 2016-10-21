@@ -86,7 +86,7 @@ SET(SRCS
     SceneLayersModel.cpp
     SceneLayersConfigWidget.cpp
     TreeViewComboBox.cpp
-  #  GlSimpleEntityItemModel.cpp
+    GlEntityItemModel.cpp
     PluginModel.cpp
     GraphNeedsSavingObserver.cpp
     FileDownloader.cpp
@@ -217,7 +217,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipMimes.h
   ../include/tulip/TreeViewComboBox.h
   ../include/tulip/TulipItemDelegate.h
-  #../include/tulip/GlSimpleEntityItemModel.h
+  ../include/tulip/GlEntityItemModel.h
   ../include/tulip/FileDownloader.h
 )
 

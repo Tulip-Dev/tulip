@@ -757,3 +757,10 @@ void GlScene::addGlGraph(tlp::Graph *graph, const std::string &glGraphName) {
 GlGraph *GlScene::getGlGraph(const std::string &glGraphName) const {
   return dynamic_cast<GlGraph *>(getMainLayer()->findGlEntity(glGraphName));
 }
+
+void GlScene::setLODCalculator(GlLODCalculator *calculator) {
+  if (_lodCalculator != calculator) {
+    delete _lodCalculator;
+  }
+  _lodCalculator = calculator;
+}

@@ -29,7 +29,7 @@ class QTableView;
 namespace tlp {
 
 class View;
-class GlComplexPolygonItemEditor;
+class GlConcavePolygonItemEditor;
 
 /**
  * We define a specific interactor to show element graph infos in eltProperties
@@ -49,7 +49,7 @@ protected:
   GeographicView *_view;
   QWidget *_informationsWidget;
   QGraphicsProxyWidget *_informationsWidgetItem;
-  GlComplexPolygonItemEditor *_editor;
+  GlConcavePolygonItemEditor *_editor;
 
   QTableView *tableView() const;
 };

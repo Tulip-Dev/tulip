@@ -20,7 +20,6 @@
 #ifndef GOOGLEMAPSVIEW_H_
 #define GOOGLEMAPSVIEW_H_
 
-#include <tulip/OcclusionTest.h>
 #include <tulip/SceneConfigWidget.h>
 #include <tulip/SceneLayersConfigWidget.h>
 #include <tulip/Interactor.h>

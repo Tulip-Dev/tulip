@@ -19,6 +19,8 @@
 
 #include <QApplication>
 
+#include <tulip/GlLayer.h>
+
 #include "GeographicViewInteractors.h"
 
 #include "../../utils/StandardInteractorPriority.h"
@@ -143,13 +145,13 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     if (e->type() == QEvent::MouseMove && inRotation) {
       GlMainWidget *g = (GlMainWidget *)widget;
-      Camera &camera = g->getScene()->getGraphCamera();
-      Coord c1 = camera.getEyes() - camera.getCenter();
-      Coord c2 = camera.getEyes() - camera.getCenter() + camera.getUp();
+      Camera *camera = g->getScene()->getMainLayer()->getCamera();
+      Coord c1 = camera->getEyes() - camera->getCenter();
+      Coord c2 = camera->getEyes() - camera->getCenter() + camera->getUp();
       trans(c1, c2, -0.005 * (((QMouseEvent *)e)->y() - y), -0.005 * (((QMouseEvent *)e)->x() - x));
-      camera.setCenter(Coord(0, 0, 0));
-      camera.setEyes(c1);
-      camera.setUp(c2 - camera.getEyes());
+      camera->setCenter(Coord(0, 0, 0));
+      camera->setEyes(c1);
+      camera->setUp(c2 - camera->getEyes());
 
       x = ((QMouseEvent *)e)->x();
       y = ((QMouseEvent *)e)->y();
@@ -182,13 +184,13 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
         break;
       }
 
-      Camera &camera = g->getScene()->getGraphCamera();
-      Coord c1 = camera.getEyes() - camera.getCenter();
-      Coord c2 = camera.getEyes() - camera.getCenter() + camera.getUp();
+      Camera *camera = g->getScene()->getMainLayer()->getCamera();
+      Coord c1 = camera->getEyes() - camera->getCenter();
+      Coord c2 = camera->getEyes() - camera->getCenter() + camera->getUp();
       trans(c1, c2, angle1, angle2);
-      camera.setCenter(Coord(0, 0, 0));
-      camera.setEyes(c1);
-      camera.setUp(c2 - camera.getEyes());
+      camera->setCenter(Coord(0, 0, 0));
+      camera->setEyes(c1);
+      camera->setUp(c2 - camera->getEyes());
 
       view()->draw();
 

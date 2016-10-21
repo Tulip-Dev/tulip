@@ -74,6 +74,7 @@ protected:
 class TLP_GLES_SCOPE GlScene : public tlp::Observable {
 
 public:
+
   GlScene(GlLODCalculator *calculator = nullptr);
 
   ~GlScene();
@@ -192,6 +193,8 @@ public:
   void addGlGraph(tlp::Graph *graph, const std::string &glGraphName);
 
   GlGraph *getGlGraph(const std::string &glGraphName) const;
+
+  void setLODCalculator(GlLODCalculator *calculator);
 
 protected:
   void treatEvent(const tlp::Event &message);

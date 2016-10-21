@@ -18,8 +18,8 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef GLSIMPLEENTITYITEMMODEL_H
-#define GLSIMPLEENTITYITEMMODEL_H
+#ifndef GlEntityITEMMODEL_H
+#define GlEntityITEMMODEL_H
 
 #include <QAbstractItemModel>
 
@@ -27,20 +27,20 @@
 
 namespace tlp {
 
-class GlSimpleEntity;
+class GlEntity;
 
-class TLP_QT_SCOPE GlSimpleEntityItemEditor {
+class TLP_QT_SCOPE GlEntityItemEditor {
 public:
-  GlSimpleEntityItemEditor(GlSimpleEntity *ent) : entity(ent) {
+  GlEntityItemEditor(GlEntity *ent) : entity(ent) {
   }
-  virtual ~GlSimpleEntityItemEditor() {
+  virtual ~GlEntityItemEditor() {
   }
 
   /**
    * @brief Return properties names for this entity
    * These properties names are used to dynamically configure the embedded entity
    * for example these function can be used by Mouse information interactor
-   * If you create a class that inherits of GlSimpleEntityItemEditor : you can reimplement this function to return your properties names
+   * If you create a class that inherits of GlEntityItemEditor : you can reimplement this function to return your properties names
    * for example : return QStringList() << "fillColor" << "outlineColor";
    * @return QList of properties names
    */
@@ -50,7 +50,7 @@ public:
    * @brief Return properties (in  QVariant format) for this entity
    * These properties QVariant are used to dynamically configure the entity
    * for example these function can be used by Mouse information interactor
-   * If you create a class that inherits of GlSimpleEntity : you can reimplement this function to return your properties
+   * If you create a class that inherits of GlEntity : you can reimplement this function to return your properties
    * for example : return QVariantList() << QVariant::fromValue<Color>(getFillColor()) << QVariant::fromValue<Color>(getOutlineColor());
    * @return QList of properties (in QVariant format)
    */
@@ -60,7 +60,7 @@ public:
    * @brief Set value for a property previously returned by propertiesNames() and properties() functions
    * This function is call when we want to set value of a property
    * this parameter is returned in list by propertiesNames() and properties funtions
-   * If you create a class that inherits of GlSimpleEntityItemEditor : you can reimplement this function to set your properties
+   * If you create a class that inherits of GlEntityItemEditor : you can reimplement this function to set your properties
    * For example :
    * if(name=="fillColor")
    *   setFillColor(value.value<Color>());
@@ -70,18 +70,18 @@ public:
   virtual void setProperty(const QString &name, const QVariant &value);
 
 protected:
-  GlSimpleEntity *entity;
+  GlEntity *entity;
 };
 
-class TLP_QT_SCOPE GlSimpleEntityItemModel : public QAbstractItemModel {
+class TLP_QT_SCOPE GlEntityItemModel : public QAbstractItemModel {
   Q_OBJECT
   Q_ENUMS(SimpleEntityRole)
 
 public:
   enum SimpleEntityRole { SimpleEntityRole = Qt::UserRole + 1 };
 
-  GlSimpleEntityItemModel(GlSimpleEntityItemEditor *itemEditor, QObject *parent = nullptr);
-  virtual ~GlSimpleEntityItemModel();
+  GlEntityItemModel(GlEntityItemEditor *itemEditor, QObject *parent = nullptr);
+  virtual ~GlEntityItemModel();
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const;
   int columnCount(const QModelIndex &parent = QModelIndex()) const;
@@ -102,9 +102,9 @@ public:
   }
 
 protected:
-  GlSimpleEntityItemEditor *editor;
+  GlEntityItemEditor *editor;
 };
 }
 
-#endif // GLSIMPLEENTITYITEMMODEL_H
+#endif // GlEntityITEMMODEL_H
 ///@endcond

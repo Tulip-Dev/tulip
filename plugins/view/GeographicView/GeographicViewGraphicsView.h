@@ -22,7 +22,7 @@
 
 #include "GoogleMaps.h"
 
-#include <tulip/GlGraphComposite.h>
+#include <tulip/GlGraph.h>
 #include <tulip/GlMainWidget.h>
 #include <tulip/GlMainWidgetGraphicsItem.h>
 #include <tulip/Camera.h>
@@ -48,7 +48,7 @@ public:
   void createLayoutWithLatLngs(const std::string &latitudePropertyName, const std::string &longitudePropertyName,
                                const std::string &edgesPathsPropertyName);
 
-  GlGraphComposite *getGlGraphComposite() const;
+  GlGraph *getGlGraph() const;
 
   std::pair<double, double> getLatLngForNode(node n) {
     return nodeLatLng[n];
@@ -63,7 +63,7 @@ public:
   }
 
   void draw() {
-    glWidgetItem->setRedrawNeeded(true);
+    glWidgetItem->getGlMainWidget()->getScene()->forceRedraw();
     scene()->update();
   }
 
@@ -179,7 +179,7 @@ private:
   QPushButton *zoomInButton;
 
   GlComposite *polygonEntity;
-  GlSimpleEntity *planisphereEntity;
+  GlEntity *planisphereEntity;
 
   AddressSelectionDialog *addressSelectionDialog;
   QGraphicsProxyWidget *addresseSelectionProxy;

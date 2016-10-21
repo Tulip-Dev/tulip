@@ -28,12 +28,6 @@
 
 using namespace tlp;
 
-static QIcon getInteractorIcon() {
-  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(md::cursordefault, Qt::white, 1.0, QPointF(-20, 0));
-  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(md::help, Qt::white, 0.7, QPointF(40, -20));
-  return FontIconManager::stackIcons(backIcon, frontIcon);
-}
-
 /** \brief Tulip interactor to get information about an element of the graph
  *
  */
@@ -44,7 +38,7 @@ public:
   /**
    * Default constructor
    */
-  InteractorGetInformation(const tlp::PluginContext *) : NodeLinkDiagramComponentInteractor(getInteractorIcon(), "Display node or edge properties") {
+  InteractorGetInformation(const tlp::PluginContext *) : NodeLinkDiagramComponentInteractor(MouseShowElementInfos::getInteractorIcon(), "Display node or edge properties") {
     setPriority(StandardInteractorPriority::GetInformation);
     setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") + "<b>Mouse left click</b> on an element to display its "
                                                                                      "properties.<br/>then <b>Mouse left click</b> on a row to edit "
