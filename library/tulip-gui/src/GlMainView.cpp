@@ -36,6 +36,7 @@
 #include <tulip/GlRect2D.h>
 #include <tulip/OpenGlConfigManager.h>
 #include <tulip/GlLayer.h>
+#include <tulip/FontIconManager.h>
 
 using namespace tlp;
 
@@ -205,7 +206,7 @@ void GlMainView::updateShowOverviewButton() {
     _showOvButton = new QPushButton();
     _showOvButton->setMaximumSize(10, 10);
     _showOvButton->setCheckable(true);
-    _showOvButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 10pt; border:none};");
+    _showOvButton->setStyleSheet("QPushButton {border:none};");
     proxy->setWidget(_showOvButton);
     addToScene(proxy);
     proxy->setZValue(10);
@@ -217,13 +218,13 @@ void GlMainView::updateShowOverviewButton() {
 
     _showOvButton->blockSignals(true);
     if (_overviewItem && _overviewItem->isVisible()) {
-      _showOvButton->setText("x");
+      _showOvButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close));
       _showOvButton->setChecked(true);
       _showOvButton->setToolTip("Hide overview display");
       _showOvButton->move(rect.width() - _overviewItem->getWidth() - 1,
                           rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
     } else {
-      _showOvButton->setText("<");
+      _showOvButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::chevronleft));
       _showOvButton->setChecked(false);
       _showOvButton->setToolTip("Show overview display");
       _showOvButton->move(rect.width() - _showOvButton->width(),
@@ -255,7 +256,7 @@ void GlMainView::updateShowQuickAccessBarButton() {
       _showQabButton = new QPushButton();
       _showQabButton->setMaximumSize(10, 10);
       _showQabButton->setCheckable(true);
-      _showQabButton->setStyleSheet("QPushButton {font-family: Arial; font-size: 10pt; border:none};");
+      _showQabButton->setStyleSheet("QPushButton {border:none};");
       proxy->setWidget(_showQabButton);
       addToScene(proxy);
       proxy->setZValue(10);
@@ -267,12 +268,12 @@ void GlMainView::updateShowQuickAccessBarButton() {
     _showQabButton->blockSignals(true);
 
     if (quickAccessBarVisible()) {
-      _showQabButton->setText("x");
+      _showQabButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close));
       _showQabButton->setChecked(true);
       _showQabButton->setToolTip("Hide quick access bar");
       _showQabButton->move(0, rect.height() - _quickAccessBarItem->size().height() - 4);
     } else {
-      _showQabButton->setText("^");
+      _showQabButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::chevronup));
       _showQabButton->setChecked(false);
       _showQabButton->setToolTip("Show quick access bar");
       _showQabButton->move(0, rect.height() - _showQabButton->height());
