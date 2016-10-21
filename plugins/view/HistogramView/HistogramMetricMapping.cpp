@@ -25,6 +25,10 @@
 #include <tulip/GlQuantitativeAxis.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/tulipconf.h>
+#include <tulip/GlLabel.h>
+#include <tulip/GlNode.h>
+#include <tulip/GlMainWidget.h>
+#include <tulip/ColorScalesManager.h>
 
 #include <QMenu>
 #include <QToolTip>
@@ -551,9 +555,10 @@ void GlGlyphScale::translate(const Coord &move) {
 }
 
 HistogramMetricMapping::HistogramMetricMapping()
-    : histoView(nullptr), curve(nullptr), curveDragStarted(false), selectedAnchor(nullptr), colorScale(new ColorScale()), glColorScale(nullptr),
-      glSizeScale(nullptr), glGlyphScale(nullptr), colorScaleConfigDialog(nullptr), sizeScaleConfigDialog(nullptr), glyphScaleConfigDialog(nullptr),
-      lastXAxisLength(0), histoXAxis(nullptr), mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
+    : histoView(nullptr), curve(nullptr), curveDragStarted(false), selectedAnchor(nullptr),
+      colorScale(new ColorScale(ColorScalesManager::getLatestColorScale())), glColorScale(nullptr), glSizeScale(nullptr), glGlyphScale(nullptr),
+      colorScaleConfigDialog(nullptr), sizeScaleConfigDialog(nullptr), glyphScaleConfigDialog(nullptr), lastXAxisLength(0), histoXAxis(nullptr),
+      mappinqPolyQuad(nullptr), scaleAxisOffset(0), glyphMappingGraph(newGraph()),
       glyphMappingGraphInputData(new GlGraphInputData(glyphMappingGraph, &glyphMapppingGraphRenderingParameters)), mappingType(VIEWCOLOR_MAPPING),
       popupMenu(nullptr), colorMappingMenu(nullptr), viewColorMappingAction(nullptr), viewBorderColorMappingAction(nullptr), sizeMapping(nullptr),
       glyphMapping(nullptr) {

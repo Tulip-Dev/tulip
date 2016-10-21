@@ -31,8 +31,8 @@
 
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/ColorScalesManager.h>
-#include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 #include <tulip/TulipSettings.h>
 
 #include "ui_ColorScaleConfigDialog.h"
@@ -120,6 +120,8 @@ void ColorScaleConfigDialog::accept() {
   if (!colors.empty()) {
     colorScale.setColorScale(colors, gradient);
   }
+
+  ColorScalesManager::setLatestColorScale(colorScale);
 
   QDialog::accept();
 }
@@ -474,8 +476,8 @@ void ColorScaleConfigDialog::setColorScale(const ColorScale &colorScale) {
     _ui->tabWidget->setCurrentIndex(0);
     applyGlobalAlphaToColorScale();
   } else
-    // use default ColorScale
-    setColorScale(ColorScale());
+    // use latest ColorScale
+    setColorScale(ColorScalesManager::getLatestColorScale());
 }
 
 const ColorScale &ColorScaleConfigDialog::getColorScale() const {

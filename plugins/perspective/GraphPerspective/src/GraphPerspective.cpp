@@ -59,8 +59,10 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipProject.h>
+#include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/AboutTulipPage.h>
+#include <tulip/ColorScalesManager.h>
 #include <tulip/TulipSettings.h>
-#include <tulip/View.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -376,7 +378,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _mainWindow->setAcceptDrops(true);
   connect(_logger, SIGNAL(cleared()), this, SLOT(logCleared()));
 
-  _colorScalesDialog = new ColorScaleConfigDialog(ColorScale(), mainWindow());
+  _colorScalesDialog = new ColorScaleConfigDialog(ColorScalesManager::getLatestColorScale(), mainWindow());
 
   // redirection of various output
   redirectDebugOutputToQDebug();

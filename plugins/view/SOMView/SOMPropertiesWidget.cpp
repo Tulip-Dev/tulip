@@ -28,7 +28,7 @@
 #include <QPushButton>
 
 #include <tulip/GraphPropertiesSelectionWidget.h>
-#include <tulip/ColorScaleConfigDialog.h>
+#include <tulip/ColorScalesManager.h>
 #include <tulip/PropertyTypes.h>
 
 using namespace std;
@@ -38,13 +38,7 @@ SOMPropertiesWidget::SOMPropertiesWidget(SOMView *view, QWidget *parent) : QWidg
   _ui->setupUi(this);
   dimensionConfigurationWidget = new tlp::ComputeSOMWidget(parent);
 
-  defaultScale = new ColorScale();
-
-  vector<Color> colors;
-  colors.push_back(Color(0, 0, 255));
-  colors.push_back(Color(255, 255, 0));
-  colors.push_back(Color(255, 0, 0));
-  defaultScale->setColorScale(colors);
+  defaultScale = new ColorScale(ColorScalesManager::getLatestColorScale());
 
   defaultScale->addObserver(this);
 

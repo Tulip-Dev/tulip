@@ -76,6 +76,7 @@ private:
   void importColorScaleFromFile(const QString &currentDir);
 
   ColorScale colorScale;
+  ColorScale latestColorScale;
   std::string gradientsImageDirectory;
 
   static std::map<QString, std::vector<Color>> tulipImageColorScales;
