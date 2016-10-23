@@ -186,7 +186,7 @@ ADD_CUSTOM_TARGET(copy-tulipjs-resources ALL
                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/textures/radialGradientTexture.png ${CMAKE_CURRENT_BINARY_DIR}/resources)
 ADD_DEPENDENCIES(tulip.js copy-tulipjs-resources)
 
-IF(NOT CMAKE_DEBUG_MODE)
+IF(NOT CMAKE_DEBUG_MODE AND NOT USE_WASM)
 
 ADD_CUSTOM_TARGET(copy-tulipjs-to-demos ALL
                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos
@@ -201,7 +201,7 @@ INSTALL(FILES
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 
-ELSE(NOT CMAKE_DEBUG_MODE)
+ELSE(NOT CMAKE_DEBUG_MODE AND NOT USE_WASM)
 
 ADD_CUSTOM_TARGET(copy-tulipjs-to-demos ALL
                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos
@@ -214,14 +214,13 @@ INSTALL(FILES
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
 
-ENDIF(NOT CMAKE_DEBUG_MODE)
+ENDIF(NOT CMAKE_DEBUG_MODE AND NOT USE_WASM)
 
 ADD_DEPENDENCIES(copy-tulipjs-to-demos tulip.js)
 
 IF(USE_WASM)
 INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm
-  ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm.mappedGlobals
   demos/tulip_web.html
   demos/spinner.css
   DESTINATION ${CMAKE_INSTALL_PREFIX}
