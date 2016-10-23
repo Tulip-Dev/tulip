@@ -9,8 +9,8 @@
       <link rel="stylesheet" href="http://css-spinners.com/css/spinner/spinner.css" type="text/css">
       <style type="text/css">
         #tulip-view {
-          width: 1024px;
-          height: 768px;
+          width: 800px;
+          height: 600px;
           background: white;
           border: 1px solid #c3c6cf;
           display: table-cell;
@@ -44,7 +44,7 @@
    graph = g;
    viewColor = graph.getColorProperty('viewColor');
    viewLabel = graph.getStringProperty('viewLabel');
-   viewColor.setAllNodeValue(new tulip.Color(255,0,0));
+   viewColor.setAllNodeValue(tulip.Color(255,0,0));
    viewLabel.setAllNodeValue('');
    dfsNodes = graph.dfs();
    bfsNodes = graph.bfs();
@@ -53,8 +53,8 @@
  function traversalStep(nodes) {
    var n = nodes[curIdx];
    curIdx = curIdx + 1;
-   viewColor.setNodeValue(n, new tulip.Color(0,255,0));
-   viewLabel.setNodeValue(n, curIdx.toString());
+   viewColor[n] = tulip.Color(0,255,0);
+   viewLabel[n] = curIdx.toString();
    if (curIdx == graph.numberOfNodes()) {
      clearInterval(timerId);
      timerId = null;
@@ -66,7 +66,7 @@
      clearInterval(timerId);
      timerId = null;
    }
-   viewColor.setAllNodeValue(new tulip.Color(255,0,0));
+   viewColor.setAllNodeValue(tulip.Color(255,0,0));
    viewLabel.setAllNodeValue('');
    tulipView.draw();
    curIdx = 0;
@@ -83,7 +83,7 @@
      for (var i = 0 ; i < spinners.length ; ++i) {
        spinners[i].style.display = 'none';
      }
-     tulipView = new tulip.View('tulip-view');
+     tulipView = tulip.View('tulip-view');
      tulipView.loadGraphFromFile('data/complete_tree.tlp.gz', false, graphLoadedCallback);
    }
  }

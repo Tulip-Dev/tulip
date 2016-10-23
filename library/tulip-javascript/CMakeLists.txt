@@ -197,6 +197,9 @@ INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js.mem
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.data
   demos/tulip_web.html
+  demos/tulip_web_multi.html
+  demos/tulip_js_test.html
+  demos/tulip_graph_traversals.html
   demos/spinner.css
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
@@ -210,6 +213,9 @@ INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.data
   demos/tulip_web.html
+  demos/tulip_web_multi.html
+  demos/tulip_js_test.html
+  demos/tulip_graph_traversals.html
   demos/spinner.css
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
@@ -222,6 +228,9 @@ IF(USE_WASM)
 INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm
   demos/tulip_web.html
+  demos/tulip_web_multi.html
+  demos/tulip_js_test.html
+  demos/tulip_graph_traversals.html
   demos/spinner.css
   DESTINATION ${CMAKE_INSTALL_PREFIX}
 )
