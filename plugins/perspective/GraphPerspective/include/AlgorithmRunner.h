@@ -46,6 +46,7 @@ class AlgorithmRunner : public QWidget {
   QAction *_resultAsLocalPropAction;
 
   QList<AlgorithmRunnerItem *> _favorites;
+  bool _droppingFavorite;
 
   void refreshTreeUi(QWidget *w);
   void buildTreeUi(QWidget *w, tlp::PluginModel<tlp::Algorithm> *model, const QModelIndex &parent, bool root = false);

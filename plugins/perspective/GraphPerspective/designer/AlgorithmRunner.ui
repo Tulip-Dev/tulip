@@ -32,9 +32,6 @@ subcontrol-origin: margin;
 subcontrol-position: top left;
 padding: 0 3px;
 }
-#favoritesBox::title {
-spacing: 24px;
-}
 ExpandableGroupBox::indicator:unchecked {
 image: url(:/tulip/gui/ui/right_arrow-black.png);
 }
@@ -213,7 +210,7 @@ border: 1px solid &quot;#C9C9C9&quot;;
            <number>6</number>
           </property>
           <item>
-           <widget class="FavoriteBox" name="favoritesBox">
+           <widget class="ExpandableGroupBox" name="favoritesBox">
             <property name="styleSheet">
              <string notr="true">#favoritesBox {
 border: 0px;
@@ -249,7 +246,7 @@ border: 0px;
    <header location="global">tulip/ClearableLineEdit.h</header>
   </customwidget>
   <customwidget>
-   <class>FavoriteBox</class>
+   <class>ExpandableGroupBox</class>
    <extends>QGroupBox</extends>
    <header>ExpandableGroupBox.h</header>
    <container>1</container>

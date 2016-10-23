@@ -29,22 +29,6 @@
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipSettings.h>
 
-struct FavoriteBox : public ExpandableGroupBox {
-  bool _droppingFavorite;
-
-  explicit FavoriteBox(QWidget *parent = nullptr, const QString &title = QString()) : ExpandableGroupBox(parent, title), _droppingFavorite(false) {
-  }
-
-protected:
-  void paintEvent(QPaintEvent *event) {
-    ExpandableGroupBox::paintEvent(event);
-    QPainter painter(this);
-    QPixmap px = QIcon((_droppingFavorite ? ":/tulip/graphperspective/icons/star.svg" : ":/tulip/graphperspective/icons/star-outline.svg"))
-                     .pixmap(QSize(24, 24));
-    painter.drawPixmap(20, 0, px);
-  }
-};
-
 #include "ui_AlgorithmRunner.h"
 
 using namespace tlp;
@@ -173,13 +157,13 @@ void AlgorithmRunner::refreshTreeUi(QWidget *w) {
   }
 }
 
-AlgorithmRunner::AlgorithmRunner(QWidget *parent) : QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr) {
+AlgorithmRunner::AlgorithmRunner(QWidget *parent) : QWidget(parent), _ui(new Ui::AlgorithmRunner), _graph(nullptr), _droppingFavorite(false) {
   _ui->setupUi(this);
   _ui->favoritesBox->setWidget(new QWidget());
   _ui->favoritesBox->widget()->setAcceptDrops(true);
   _ui->favoritesBox->widget()->setMinimumHeight(45);
   _ui->favoritesBox->widget()->setLayout(new QVBoxLayout);
-  _ui->favoritesBox->widget()->layout()->setContentsMargins(0, 15, 0, 5);
+  _ui->favoritesBox->widget()->layout()->setContentsMargins(0, 15, 0, 6);
   _ui->favoritesBox->widget()->layout()->setSpacing(5);
   _ui->favoritesBox->widget()->installEventFilter(this);
 
@@ -303,8 +287,8 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::Paint) {
     if (obj == _ui->favoritesBox->widget() && _favorites.empty()) {
       QPainter painter(_ui->favoritesBox->widget());
-      QPixmap px = QIcon((_ui->favoritesBox->_droppingFavorite ? ":/tulip/graphperspective/icons/star.svg"
-                                                               : ":/tulip/graphperspective/icons/star-outline.svg"))
+      QPixmap px = QIcon(_droppingFavorite ? ":/tulip/graphperspective/icons/star.svg"
+                                                               : ":/tulip/graphperspective/icons/star-outline.svg")
                        .pixmap(QSize(40, 40));
       painter.drawPixmap(_ui->favoritesBox->widget()->width() - px.width() - 8, 8, px);
       QFont f;
@@ -319,14 +303,14 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
     QDropEvent *dropEv = static_cast<QDropEvent *>(ev);
 
     if (dynamic_cast<const AlgorithmMimeType *>(dropEv->mimeData()) != nullptr) {
-      _ui->favoritesBox->_droppingFavorite = true;
+      _droppingFavorite = true;
       ev->accept();
       _ui->favoritesBox->repaint();
     }
 
     return true;
   } else if (ev->type() == QEvent::DragLeave && draggableObject) {
-    _ui->favoritesBox->_droppingFavorite = false;
+    _droppingFavorite = false;
     _ui->favoritesBox->repaint();
   } else if (ev->type() == QEvent::Drop && draggableObject) {
     QDropEvent *dropEv = static_cast<QDropEvent *>(ev);
@@ -335,7 +319,7 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
     if (mime != nullptr)
       addFavorite(mime->algorithm(), mime->params());
 
-    _ui->favoritesBox->_droppingFavorite = false;
+    _droppingFavorite = false;
     _ui->favoritesBox->repaint();
   }
 
