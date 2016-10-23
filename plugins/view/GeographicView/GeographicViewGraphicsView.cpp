@@ -409,7 +409,6 @@ GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView, 
   glMainWidget = new GlMainWidget(0, geoView);
   glMainWidget->getScene()->setLODCalculator(new GlCPULODCalculator());
   glMainWidget->getScene()->setClearBufferAtDraw(false);
-  glMainWidget->getScene()->setBackupBackBuffer(false);
 
   glWidgetItem = new GlMainWidgetGraphicsItem(glMainWidget, 512, 512);
   glWidgetItem->setPos(0, 0);
@@ -1139,8 +1138,6 @@ void GeographicViewGraphicsView::switchViewType() {
     geoLayoutBackup = nullptr;
   }
 
-  GlLayer *layer = glMainWidget->getScene()->getLayer("Main");
-
   if (geoLayout == graph->getProperty<LayoutProperty>("viewLayout") && geoLayoutComputed)
     graph->push();
 
@@ -1150,8 +1147,6 @@ void GeographicViewGraphicsView::switchViewType() {
 
   if (polygonEntity)
     polygonEntity->setVisible(enablePolygon);
-
-  layer->setCamera(new Camera(glMainWidget->getScene()));
 
   if (viewType != GeographicView::Globe && geoLayoutComputed) {
     SizeProperty *viewSize = graph->getProperty<SizeProperty>("viewSize");

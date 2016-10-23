@@ -119,12 +119,15 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
 
     return false;
   } else if (geoView->viewType() == GeographicView::Globe) {
-    if (e->type() == QEvent::Wheel && (((QWheelEvent *)e)->orientation() == Qt::Vertical)) {
+    if (e->type() == QEvent::Wheel) {
+      QWheelEvent *we = static_cast<QWheelEvent*>(e);
+      if (we->orientation() == Qt::Vertical) {
 #define WHEEL_DELTA 120
-      GlMainWidget *g = (GlMainWidget *)widget;
-      g->getScene()->zoomXY(((QWheelEvent *)e)->delta() / WHEEL_DELTA, g->width() / 2., g->height() / 2.);
-      view()->draw();
-      return true;
+        GlMainWidget *g = static_cast<GlMainWidget *>(widget);
+        g->getScene()->zoomXY(g->screenToViewport(we->x()), g->screenToViewport(we->y()), we->delta() / WHEEL_DELTA);
+        view()->draw();
+        return true;
+      }
     }
 
     if (e->type() == QEvent::MouseButtonPress && !inRotation) {
