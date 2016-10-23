@@ -883,3 +883,11 @@ std::vector<tlp::Coord> tlp::simplifyCurve(const std::vector<Coord> &in) {
   result.push_back(in[in.size() - 1]);
   return result;
 }
+
+double tlp::degreeToRadian(double degree) {
+  return degree * M_PI / 180.0;
+}
+
+double tlp::radianToDegree(double radian) {
+  return radian * 180.0 / M_PI;
+}

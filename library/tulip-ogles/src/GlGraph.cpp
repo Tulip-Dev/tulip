@@ -1059,7 +1059,7 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
     for (size_t i = 0; i < it->second.size(); ++i) {
       centers.push_back(_inputData.getElementLayout()->getNodeValue(it->second[i]));
       sizes.push_back(_inputData.getElementSize()->getNodeValue(it->second[i]));
-      rotationAngles.push_back(Vec4f(0.0f, 0.0f, 1.0f, _inputData.getElementRotation()->getNodeValue(it->second[i])));
+      rotationAngles.push_back(Vec4f(0.0f, 0.0f, 1.0f, degreeToRadian(_inputData.getElementRotation()->getNodeValue(it->second[i]))));
       if (!_graphElementsPickingMode) {
         colors.push_back(_inputData.getElementColor()->getNodeValue(it->second[i]));
         borderColors.push_back(_inputData.getElementBorderColor()->getNodeValue(it->second[i]));

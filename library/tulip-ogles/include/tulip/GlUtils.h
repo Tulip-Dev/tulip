@@ -146,6 +146,10 @@ TLP_GLES_SCOPE void tokenize(const std::string &str, std::vector<std::string> &t
 TLP_GLES_SCOPE tlp::Size getEdgeSize(tlp::Graph *graph, tlp::edge e, tlp::SizeProperty *viewSize, GlGraphRenderingParameters *renderingParameters);
 
 TLP_GLES_SCOPE std::vector<tlp::Coord> simplifyCurve(const std::vector<tlp::Coord> &in);
+
+TLP_GLES_SCOPE double degreeToRadian(double degree);
+
+TLP_GLES_SCOPE double radianToDegree(double degree);
 }
 
 #endif // GLUTILS_H

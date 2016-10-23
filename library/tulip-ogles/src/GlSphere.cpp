@@ -1,4 +1,5 @@
 #include <tulip/GlSphere.h>
+#include <tulip/GlUtils.h>
 #include <tulip/TulipViewSettings.h>
 
 using namespace tlp;
@@ -7,7 +8,7 @@ GlSphere::GlSphere(const Coord &position, float radius, const Color &color, floa
   setCenter(position);
   setSize(Size(radius * 2, radius * 2, radius * 2));
   setColor(color);
-  setRotationData(Vec4f(rotX, rotY, rotZ));
+  setRotationData(Vec4f(degreeToRadian(rotX), degreeToRadian(rotY), degreeToRadian(rotZ)));
   setRotationAxisAndAngle(false);
 }
 
@@ -17,6 +18,6 @@ GlSphere::GlSphere(const Coord &position, float radius, const std::string &textu
   setSize(Size(radius * 2, radius * 2, radius * 2));
   setColor(Color(255, 255, 255, alpha));
   setTexture(textureFile);
-  setRotationData(Vec4f(rotX, rotY, rotZ));
+  setRotationData(Vec4f(degreeToRadian(rotX), degreeToRadian(rotY), degreeToRadian(rotZ)));
   setRotationAxisAndAngle(false);
 }
