@@ -1647,10 +1647,6 @@ double EMSCRIPTEN_KEEPALIVE Graph_getRandomEdge(tlp::Graph *graph) {
 
 // ==================================================================================================================
 
-bool EMSCRIPTEN_KEEPALIVE algorithmExists(const char *algoName) {
-  return pluginExists<tlp::Algorithm>(algoName);
-}
-
 double EMSCRIPTEN_KEEPALIVE numberOfPlugins() {
   return tlp::PluginLister::instance()->availablePlugins().size();
 }
@@ -1659,7 +1655,7 @@ double EMSCRIPTEN_KEEPALIVE pluginsNamesLengths(unsigned int *array) {
   return getStringsNumberOfBytesFromContainer(tlp::PluginLister::instance()->availablePlugins(), array);
 }
 
-void EMSCRIPTEN_KEEPALIVE pluginsList(unsigned char *array) {
+void EMSCRIPTEN_KEEPALIVE getPluginsList(unsigned char *array) {
   fillBytesArrayFromStringsContainer(tlp::PluginLister::instance()->availablePlugins(), array);
 }
 
@@ -1671,8 +1667,108 @@ double EMSCRIPTEN_KEEPALIVE algorithmsNamesLengths(unsigned int *array) {
   return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::Algorithm>(), array);
 }
 
-void EMSCRIPTEN_KEEPALIVE algorithmsList(unsigned char *array) {
+void EMSCRIPTEN_KEEPALIVE getAlgorithmPluginsList(unsigned char *array) {
   fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::Algorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfBooleanAlgorithms() {
+  return getTulipPluginsList<tlp::BooleanAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE booleanAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::BooleanAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getBooleanAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::BooleanAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfColorAlgorithms() {
+  return getTulipPluginsList<tlp::ColorAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE colorAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::ColorAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getColorAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::ColorAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfDoubleAlgorithms() {
+  return getTulipPluginsList<tlp::DoubleAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE doubleAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::DoubleAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getDoubleAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::DoubleAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfIntegerAlgorithms() {
+  return getTulipPluginsList<tlp::IntegerAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE integerAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::IntegerAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getIntegerAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::IntegerAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfLayoutAlgorithms() {
+  return getTulipPluginsList<tlp::LayoutAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE layoutAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::LayoutAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getLayoutAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::LayoutAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfSizeAlgorithms() {
+  return getTulipPluginsList<tlp::SizeAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE sizeAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::SizeAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getSizeAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::SizeAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfStringAlgorithms() {
+  return getTulipPluginsList<tlp::StringAlgorithm>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE stringAlgorithmsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::StringAlgorithm>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getStringAlgorithmPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::StringAlgorithm>(), array);
+}
+
+double EMSCRIPTEN_KEEPALIVE numberOfImportPlugins() {
+  return getTulipPluginsList<tlp::ImportModule>().size();
+}
+
+double EMSCRIPTEN_KEEPALIVE importPluginsNamesLengths(unsigned int *array) {
+  return getStringsNumberOfBytesFromContainer(getTulipPluginsList<tlp::ImportModule>(), array);
+}
+
+void EMSCRIPTEN_KEEPALIVE getImportPluginsList(unsigned char *array) {
+  fillBytesArrayFromStringsContainer(getTulipPluginsList<tlp::ImportModule>(), array);
+}
+
+bool EMSCRIPTEN_KEEPALIVE algorithmExists(const char *algoName) {
+  return pluginExists<tlp::Algorithm>(algoName);
 }
 
 bool EMSCRIPTEN_KEEPALIVE propertyAlgorithmExists(const char *algoName) {

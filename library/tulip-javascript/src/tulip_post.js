@@ -2267,13 +2267,37 @@ tulip.getDefaultAlgorithmParameters = function tulip_getDefaultAlgorithmParamete
 
 // ==================================================================================================================
 
-var _algorithmExists = Module.cwrap('algorithmExists', 'number', ['string']);
-var _numberOfAlgorithms = Module.cwrap('numberOfAlgorithms', 'number', []);
-var _algorithmsNamesLengths = Module.cwrap('algorithmsNamesLengths', 'number', ['number']);
-var _algorithmsList = Module.cwrap('algorithmsList', null, ['number']);
 var _numberOfPlugins = Module.cwrap('numberOfPlugins', 'number', []);
 var _pluginsNamesLengths = Module.cwrap('pluginsNamesLengths', 'number', ['number']);
-var _pluginsList = Module.cwrap('pluginsList', null, ['number']);
+var _getPluginsList = Module.cwrap('getPluginsList', null, ['number']);
+var _numberOfAlgorithms = Module.cwrap('numberOfAlgorithms', 'number', []);
+var _algorithmsNamesLengths = Module.cwrap('algorithmsNamesLengths', 'number', ['number']);
+var _getAlgorithmPluginsList = Module.cwrap('getAlgorithmPluginsList', null, ['number']);
+var _numberOfBooleanAlgorithms = Module.cwrap('numberOfBooleanAlgorithms', 'number', []);
+var _booleanAlgorithmsNamesLengths = Module.cwrap('booleanAlgorithmsNamesLengths', 'number', ['number']);
+var _getBooleanAlgorithmPluginsList = Module.cwrap('getBooleanAlgorithmPluginsList', null, ['number']);
+var _numberOfColorAlgorithms = Module.cwrap('numberOfColorAlgorithms', 'number', []);
+var _colorAlgorithmsNamesLengths = Module.cwrap('colorAlgorithmsNamesLengths', 'number', ['number']);
+var _getColorAlgorithmPluginsList = Module.cwrap('getColorAlgorithmPluginsList', null, ['number']);
+var _numberOfDoubleAlgorithms = Module.cwrap('numberOfDoubleAlgorithms', 'number', []);
+var _doubleAlgorithmsNamesLengths = Module.cwrap('doubleAlgorithmsNamesLengths', 'number', ['number']);
+var _getDoubleAlgorithmPluginsList = Module.cwrap('getDoubleAlgorithmPluginsList', null, ['number']);
+var _numberOfIntegerAlgorithms = Module.cwrap('numberOfIntegerAlgorithms', 'number', []);
+var _integerAlgorithmsNamesLengths = Module.cwrap('integerAlgorithmsNamesLengths', 'number', ['number']);
+var _getIntegerAlgorithmPluginsList = Module.cwrap('getIntegerAlgorithmPluginsList', null, ['number']);
+var _numberOfLayoutAlgorithms = Module.cwrap('numberOfLayoutAlgorithms', 'number', []);
+var _layoutAlgorithmsNamesLengths = Module.cwrap('layoutAlgorithmsNamesLengths', 'number', ['number']);
+var _getLayoutAlgorithmPluginsList = Module.cwrap('getLayoutAlgorithmPluginsList', null, ['number']);
+var _numberOfSizeAlgorithms = Module.cwrap('numberOfSizeAlgorithms', 'number', []);
+var _sizeAlgorithmsNamesLengths = Module.cwrap('sizeAlgorithmsNamesLengths', 'number', ['number']);
+var _getSizeAlgorithmPluginsList = Module.cwrap('getSizeAlgorithmPluginsList', null, ['number']);
+var _numberOfStringAlgorithms = Module.cwrap('numberOfStringAlgorithms', 'number', []);
+var _stringAlgorithmsNamesLengths = Module.cwrap('stringAlgorithmsNamesLengths', 'number', ['number']);
+var _getStringAlgorithmPluginsList = Module.cwrap('getStringAlgorithmPluginsList', null, ['number']);
+var _numberOfImportPlugins = Module.cwrap('numberOfImportPlugins', 'number', []);
+var _importPluginsNamesLengths = Module.cwrap('importPluginsNamesLengths', 'number', ['number']);
+var _getImportPluginsList = Module.cwrap('getImportPluginsList', null, ['number']);
+var _algorithmExists = Module.cwrap('algorithmExists', 'number', ['string']);
 var _propertyAlgorithmExists = Module.cwrap('propertyAlgorithmExists', 'number', ['string']);
 var _booleanAlgorithmExists = Module.cwrap('booleanAlgorithmExists', 'number', ['string']);
 var _colorAlgorithmExists = Module.cwrap('colorAlgorithmExists', 'number', ['string']);
@@ -2284,32 +2308,56 @@ var _stringAlgorithmExists = Module.cwrap('stringAlgorithmExists', 'number', ['s
 var _sizeAlgorithmExists = Module.cwrap('sizeAlgorithmExists', 'number', ['string']);
 var _importPluginExists = Module.cwrap('importPluginExists', 'number', ['string']);
 
-tulip.pluginsList = function() {
-  var nbPlugins = _numberOfPlugins();
+var _pluginsListImpl = function(numberOfPlugins, pluginsNamesLengths, getPluginsList) {
+  var nbPlugins = numberOfPlugins();
   var uintArray = allocArrayInEmHeap(Uint32Array, nbPlugins);
-  var nbBytes = _pluginsNamesLengths(uintArray.byteOffset);
+  var nbBytes = pluginsNamesLengths(uintArray.byteOffset);
   var ucharArray = allocArrayInEmHeap(Uint8Array, nbBytes);
-  _pluginsList(ucharArray.byteOffset);
+  getPluginsList(ucharArray.byteOffset);
   var ret = bytesTypedArrayToStringArray(ucharArray, uintArray, nbPlugins);
   freeArrayInEmHeap(ucharArray);
   freeArrayInEmHeap(uintArray);
   return ret;
 };
 
-tulip.algorithmsList = function() {
-  var nbAlgorithms = _numberOfAlgorithms();
-  var uintArray = allocArrayInEmHeap(Uint32Array, nbAlgorithms);
-  var nbBytes = _pluginsNamesLengths(uintArray.byteOffset);
-  var ucharArray = allocArrayInEmHeap(Uint8Array, nbBytes);
-  _algorithmsList(ucharArray.byteOffset);
-  var ret = bytesTypedArrayToStringArray(ucharArray, uintArray, nbAlgorithms);
-  freeArrayInEmHeap(ucharArray);
-  freeArrayInEmHeap(uintArray);
-  return ret;
+tulip.getPluginsList = function() {
+  return _pluginsListImpl(_numberOfPlugins, _pluginsNamesLengths, _getPluginsList);
+};
+
+tulip.getAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfAlgorithms, _algorithmsNamesLengths, _getAlgorithmPluginsList);
+};
+
+tulip.getColorAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfColorAlgorithms, _colorAlgorithmsNamesLengths, _getColorAlgorithmPluginsList);
+};
+
+tulip.getDoubleAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfDoubleAlgorithms, _doubleAlgorithmsNamesLengths, _getDoubleAlgorithmPluginsList);
+};
+
+tulip.getIntegerAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfIntegerAlgorithms, _integerAlgorithmsNamesLengths, _getIntegerAlgorithmPluginsList);
+};
+
+tulip.getLayoutAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfLayoutAlgorithms, _layoutAlgorithmsNamesLengths, _getLayoutAlgorithmPluginsList);
+};
+
+tulip.getSizeAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfSizeAlgorithms, _sizeAlgorithmsNamesLengths, _getSizeAlgorithmPluginsList);
+};
+
+tulip.getStringAlgorithmPluginsList = function() {
+  return _pluginsListImpl(_numberOfStringAlgorithms, _stringAlgorithmsNamesLengths, _getStringAlgorithmPluginsList);
+};
+
+tulip.getImportPluginsList = function() {
+  return _pluginsListImpl(_numberOfImportPlugins, _importPluginsNamesLengths, _getImportPluginsList);
 };
 
 tulip.pluginExists = function tulip_pluginExists(pluginName) {
-  return tulip.pluginsList().indexOf(pluginName) != -1;
+  return tulip.getPluginsList().indexOf(pluginName) != -1;
 };
 
 tulip.algorithmExists = function tulip_algoritmExists(algoName) {
