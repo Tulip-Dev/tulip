@@ -111,12 +111,12 @@ public:
  *
  * Events are always sent to Listeners first, and then to Observers, even when there is no hold.
  *
- * If you wish to receive events, you must inherit from Observable, and implement one of two virtual functions.
+ * If you wish to receive events, you must inherit from Observable, and implement at least one of the two virtual functions below.
  *
- * If you need to received events without delay, you will be a Listener, and need to implement treatEvent().
+ * If you need to receive events without delay, you will be a Listener, and need to implement treatEvent(const Event &message).
  * You will attach to the object you wish to receive events from using addListener().
  *
- * If you can receive events after a delay, you will be an Observer, and need to implement treatEvents().
+ * If you can receive events after a delay, you will be an Observer, and need to implement treatEvents(const std::vector<Event> &events).
  * You will attach to the object you wish to receive events from using addObserver().
  *
  **/
