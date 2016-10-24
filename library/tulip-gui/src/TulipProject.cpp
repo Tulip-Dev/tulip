@@ -40,13 +40,12 @@
 namespace tlp {
 
 TulipProject::TulipProject(): _isValid(false) {
-  // This private constructer should never been called. It has been privately declared to prevent use of default constructor
+  // This private constructor should never been called. It has been privately declared to prevent use of default constructor
 }
 
 TulipProject::TulipProject(const QString &path)
   : _rootDir(path),
     _dataDir(_rootDir.absoluteFilePath(DATA_DIR_NAME)), _isValid(true) {
-  writeMetaInfo();
 }
 
 TulipProject::~TulipProject() {
