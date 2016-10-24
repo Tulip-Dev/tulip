@@ -118,6 +118,8 @@ Q_DECLARE_METATYPE(tlp::BooleanVectorProperty*)
 //Q_DECLARE_METATYPE(std::vector<bool>)
 Q_DECLARE_METATYPE(QVector<bool>)
 
+Q_DECLARE_METATYPE(tlp::node)
+Q_DECLARE_METATYPE(tlp::edge)
 Q_DECLARE_METATYPE(std::set<tlp::edge>)
 
 Q_DECLARE_METATYPE(tlp::NumericProperty*)
