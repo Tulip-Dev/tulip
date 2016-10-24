@@ -64,18 +64,18 @@ struct edge {
   }
 
   /**
-   * @brief operator != Compares two edges, checking that they are different..
+   * @brief operator == checks if two edges are equals.
    * @param n The other edge to compare this one to.
-   * @return Whether or not the two edges are different.
+   * @return Whether or not the two edges are equal.
    */
   bool operator==(const edge e) const {
     return id==e.id;
   }
 
   /**
-   * @brief operator != Compares two edges, checking that they are identical.
+   * @brief operator != checks if two edges are differents.
    * @param n The other edge to compare this one to.
-   * @return Whether or not the two edges are the same.
+   * @return Whether or not the two edges are different.
    */
   bool operator!=(const edge e) const {
     return id!=e.id;
