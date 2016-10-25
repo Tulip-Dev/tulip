@@ -69,6 +69,31 @@ template <typename T> const T &clamp(const T &n, const T &lower, const T &upper)
   return std::max(lower, std::min(n, upper));
 }
 
+struct TLP_GLES_SCOPE GlTextureData {
+
+  GlTextureData(unsigned int width, unsigned int height, unsigned char *pixels)
+      : width(width), height(height), pixels(pixels) {
+  }
+
+  ~GlTextureData() {
+    free(pixels);
+  }
+
+  unsigned int width;
+  unsigned int height;
+  unsigned char *pixels;
+};
+
+
+class TLP_GLES_SCOPE GlTextureLoader {
+
+public:
+
+  virtual GlTextureData *loadTexture(const std::string& filename);
+
+  virtual ~GlTextureLoader() {}
+};
+
 TLP_GLES_SCOPE void addColorToVecFloat(const tlp::Color &c, std::vector<float> &v);
 
 TLP_GLES_SCOPE std::vector<float> getSizes(const std::vector<tlp::Coord> &line, float s1, float s2);
@@ -91,26 +116,6 @@ TLP_GLES_SCOPE bool isConvexPolygon(const std::vector<tlp::Vec2f> &vertices);
 TLP_GLES_SCOPE bool convexPolygonsIntersect(const std::vector<tlp::Vec2f> &convexPolygonA, const std::vector<tlp::Vec2f> &convexPolygonB);
 
 TLP_GLES_SCOPE unsigned int nearestPOT(unsigned int x);
-
-struct TLP_GLES_SCOPE TextureData {
-
-  TextureData(unsigned int width, unsigned int height, unsigned int nbBytesPerPixel, unsigned char *pixels)
-      : width(width), height(height), nbBytesPerPixel(nbBytesPerPixel), pixels(pixels) {
-  }
-
-  ~TextureData() {
-    free(pixels);
-  }
-
-  unsigned int width;
-  unsigned int height;
-  unsigned int nbBytesPerPixel;
-  unsigned char *pixels;
-};
-
-TLP_GLES_SCOPE TextureData *loadTextureData(const char *file);
-
-TLP_GLES_SCOPE GLuint loadTexture(const char *file);
 
 TLP_GLES_SCOPE tlp::Color uintToColor(const unsigned int n);
 
@@ -150,6 +155,7 @@ TLP_GLES_SCOPE std::vector<tlp::Coord> simplifyCurve(const std::vector<tlp::Coor
 TLP_GLES_SCOPE double degreeToRadian(double degree);
 
 TLP_GLES_SCOPE double radianToDegree(double degree);
+
 }
 
 #endif // GLUTILS_H

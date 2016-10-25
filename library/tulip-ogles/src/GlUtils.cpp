@@ -386,13 +386,13 @@ unsigned int tlp::nearestPOT(unsigned int x) {
   return pow(2, ceil(log(x) / log(2)));
 }
 //===========================================================================================================
-TextureData *tlp::loadTextureData(const char *file) {
+tlp::GlTextureData *tlp::GlTextureLoader::loadTexture(const std::string& filename) {
   tlp_stat_t buf;
-  if (tlp::statPath(file, &buf) < 0)
+  if (tlp::statPath(filename.c_str(), &buf) < 0)
     return nullptr;
   int w, h, n;
   static const unsigned int nbBytesPerPixel = 4;
-  unsigned char *pixels = stbi_load(file, &w, &h, &n, nbBytesPerPixel);
+  unsigned char *pixels = stbi_load(filename.c_str(), &w, &h, &n, nbBytesPerPixel);
   if (pixels) {
     int nearestpotW = nearestPOT(w);
     int nearestpotH = nearestPOT(h);
@@ -404,34 +404,11 @@ TextureData *tlp::loadTextureData(const char *file) {
       w = nearestpotW;
       h = nearestpotH;
     }
-    return new TextureData(w, h, nbBytesPerPixel, invertImage(w * nbBytesPerPixel, h, pixels));
+    return new GlTextureData(w, h, invertImage(w * nbBytesPerPixel, h, pixels));
   } else {
-    std::cerr << "Unable to load image file " << file << std::endl;
+    std::cerr << "Unable to load image file " << filename << std::endl;
     return nullptr;
   }
-}
-//===========================================================================================================
-GLuint tlp::loadTexture(const char *file) {
-  TextureData *textureData = loadTextureData(file);
-  if (!textureData) {
-    return 0;
-  }
-  GLuint texture;
-  glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
-  glGenTextures(1, &texture);
-  glBindTexture(GL_TEXTURE_2D, texture);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  if (textureData->nbBytesPerPixel == 4) {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, textureData->width, textureData->height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  } else {
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textureData->width, textureData->height, 0, GL_RGB, GL_UNSIGNED_BYTE, textureData->pixels);
-    glGenerateMipmap(GL_TEXTURE_2D);
-  }
-  glBindTexture(GL_TEXTURE_2D, 0);
-  delete textureData;
-  return texture;
 }
 //===========================================================================================================
 tlp::Color tlp::uintToColor(const unsigned int n) {

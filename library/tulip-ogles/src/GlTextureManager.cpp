@@ -38,11 +38,7 @@ string GlTextureManager::_currentCanvasId("");
 
 static int maxTextureSize = 0;
 
-GlTextureManager::GlTextureManager() : _currentUnit(0) {
-  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
-  if (maxTextureSize > 4096) {
-    maxTextureSize = 4096;
-  }
+GlTextureManager::GlTextureManager() : _currentUnit(0), _textureLoader(new GlTextureLoader()) {
   for (int i = 0; i < 4; ++i) {
     _texturesAtlas[i] = nullptr;
   }
@@ -51,6 +47,14 @@ GlTextureManager::GlTextureManager() : _currentUnit(0) {
 GlTextureManager::~GlTextureManager() {
   for (int i = 0; i < 4; ++i) {
     delete _texturesAtlas[i];
+  }
+}
+
+void GlTextureManager::initMaxTextureSize() {
+  if (maxTextureSize > 0) return;
+  glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
+  if (maxTextureSize > 4096) {
+    maxTextureSize = 4096;
   }
 }
 
@@ -72,7 +76,7 @@ void GlTextureManager::addTextureInAtlasFromFile(const std::string &textureFile)
   if (textureFile.empty() || _textureAtlasUnit.find(textureFile) != _textureAtlasUnit.end()) {
     return;
   }
-  TextureData *textureData = loadTextureData(textureFile.c_str());
+  GlTextureData *textureData = _textureLoader->loadTexture(textureFile);
   if (!textureData) {
     return;
   }
@@ -85,12 +89,15 @@ void GlTextureManager::addTextureInAtlasFromData(const std::string &textureName,
   if (textureName.empty() || _textureAtlasUnit.find(textureName) != _textureAtlasUnit.end()) {
     return;
   }
+
   bool ok = false;
   while (!ok && _currentUnit < 4) {
     if (!_texturesAtlas[_currentUnit]) {
+      initMaxTextureSize();
       _texturesAtlas[_currentUnit] = new TextureAtlas(maxTextureSize, maxTextureSize, 4);
     }
     Vec4i region = _texturesAtlas[_currentUnit]->getRegion(width, height);
+
     if (region.x() >= 0 && region.y() >= 0) {
       _texturesAtlas[_currentUnit]->setRegion(region.x(), region.y(), region.z(), region.w(), textureData, width * 4);
       ++nbTexturesInAtlas;
@@ -187,7 +194,7 @@ void GlTextureManager::addTextureFromFile(const std::string &textureFile, bool a
       _textures.find(textureFile) != _textures.end()) {
     return;
   }
-  TextureData *textureData = loadTextureData(textureFile.c_str());
+  GlTextureData *textureData = _textureLoader->loadTexture(textureFile);
   if (!textureData) {
     return;
   }
@@ -233,8 +240,7 @@ void GlTextureManager::addTextureFromData(const std::string &textureName, const 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
   }
-  GLenum format = GL_RGBA;
-  glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, textureData);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, textureData);
   if (canMipmap) {
     glGenerateMipmap(GL_TEXTURE_2D);
   }
@@ -287,4 +293,9 @@ void GlTextureManager::unbindTexture(const std::string &textureId) {
   }
   glBindTexture(GL_TEXTURE_2D, 0);
   _textureUnit.erase(textureId);
+}
+
+void GlTextureManager::setTextureLoader(GlTextureLoader *textureLoader) {
+  delete _textureLoader;
+  _textureLoader = textureLoader;
 }

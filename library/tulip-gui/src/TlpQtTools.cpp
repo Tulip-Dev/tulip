@@ -64,6 +64,7 @@
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/FileDownloader.h>
 #include <tulip/GlyphsManager.h>
+#include <tulip/GlUtils.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -164,7 +165,7 @@ string propertyTypeLabelToPropertyType(const QString &typeNameLabel) {
 
 QString getPluginPackageName(const QString &pluginName) {
   return pluginName.simplified().remove(' ').toLower() + /*"-" + info->getRelease().c_str() +*/ "-" + TULIP_VERSION + "-" + OS_PLATFORM +
-         OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
+      OS_ARCHITECTURE + "-" + OS_COMPILER + ".zip";
 }
 
 QString getPluginStagingDirectory() {
@@ -191,6 +192,68 @@ QString localPluginsPath() {
 #endif
 }
 
+// we define a specific GlTextureLoader allowing to load a GlTexture
+// from a QImage
+class GlTextureFromQImageLoader : public GlTextureLoader {
+public:
+  // redefine the inherited method
+  GlTextureData *loadTexture(const std::string& filename) {
+
+    QImage image;
+
+    QString qFilename = tlpStringToQString(filename);
+
+    if (qFilename.startsWith("http")) {
+      FileDownloader fileDownloader;
+      QByteArray imageData = fileDownloader.download(QUrl(qFilename));
+
+      if (imageData.isEmpty()) {
+        tlp::error() << "Error when donwloading texture from url " << filename.c_str() << std::endl;
+        return nullptr;
+      }
+      else {
+        bool imageLoaded = image.loadFromData(imageData);
+
+        if (!imageLoaded) {
+          tlp::error() << "Error when loading texture from url " << filename.c_str() << std::endl;
+          return nullptr;
+        }
+      }
+    }
+    else {
+
+      QFile imageFile(qFilename);
+
+      if (imageFile.open(QIODevice::ReadOnly)) {
+        image.loadFromData(imageFile.readAll());
+      }
+
+      if (image.isNull()) {
+        if (!imageFile.exists())
+          tlp::error() << "Error when loading texture, the file named \"" << filename.c_str() << "\" does not exist" << std::endl;
+        else
+          tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
+
+        return nullptr;
+      }
+
+    }
+
+    int nearestpotW = nearestPOT(image.width());
+    int nearestpotH = nearestPOT(image.height());
+    if (nearestpotW != image.width() || nearestpotH != image.height()) {
+      image = image.scaled(nearestpotW, nearestpotH);
+    }
+
+    QImage imageGL = QGLWidget::convertToGLFormat(image);
+
+    unsigned char *pixels = reinterpret_cast<unsigned char*>(malloc(imageGL.byteCount()));
+    memcpy(pixels, imageGL.bits(), imageGL.byteCount());
+
+    return new GlTextureData(imageGL.width(), imageGL.height(), pixels);
+  }
+};
+
 void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 
   QLocale::setDefault(QLocale(QLocale::English));
@@ -212,7 +275,7 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
 #endif
 
 #ifdef BUILD_PYTHON_COMPONENTS
-// MS stated that SetDllDirectory only exists since WinXP SP1
+  // MS stated that SetDllDirectory only exists since WinXP SP1
 #if defined(WIN32) && (_WIN32_WINNT >= 0x0502)
 
   // Python on windows can be installed for current user only.
@@ -237,15 +300,16 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   initQTypeSerializers();
 
   tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
-                          tlp::PATH_DELIMITER + tlp::TulipPluginsPath + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/glyph" + tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/interactor" + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/view" + tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/perspective" + tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toUtf8().data();
+      tlp::PATH_DELIMITER + tlp::TulipPluginsPath + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/glyph" + tlp::PATH_DELIMITER +
+      tlp::TulipPluginsPath + "/interactor" + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/view" + tlp::PATH_DELIMITER +
+      tlp::TulipPluginsPath + "/perspective" + tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toUtf8().data();
 
   // Load plugins
   tlp::PluginLibraryLoader::loadPlugins(loader);
   tlp::PluginLister::checkLoadedPluginsDependencies(loader);
   tlp::InteractorLister::initInteractorsDependencies();
   tlp::GlyphsManager::instance()->loadGlyphPlugins();
+  tlp::GlTextureManager::instance()->setTextureLoader(new GlTextureFromQImageLoader());
 }
 
 // tlp::debug redirection

@@ -35,7 +35,7 @@
 #include <GL/gl.h>
 
 #include <tulip/Vector.h>
-
+#include <tulip/GlUtils.h>
 #include <tulip/TextureAtlas.h>
 
 #include <map>
@@ -71,7 +71,10 @@ public:
   GLint getSamplerIdForTexture(const std::string &texture, bool forceUseAtlas = false);
   tlp::Vec4f getCoordinatesOffsetsForTexture(const std::string &texture, bool forceUseAtlas = false);
 
+  void setTextureLoader(GlTextureLoader *textureLoader);
+
 private:
+  void initMaxTextureSize();
   static std::map<std::string, GlTextureManager *> _instances;
   static std::string _currentCanvasId;
 
@@ -85,6 +88,8 @@ private:
   std::map<std::string, tlp::Vec4f> _coordinatesOffsets;
 
   std::map<std::string, GLuint> _textures;
+
+  GlTextureLoader *_textureLoader;
 };
 }
 
