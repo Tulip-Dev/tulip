@@ -386,7 +386,7 @@ unsigned int tlp::nearestPOT(unsigned int x) {
   return pow(2, ceil(log(x) / log(2)));
 }
 //===========================================================================================================
-tlp::GlTextureData *tlp::GlTextureLoader::loadTexture(const std::string& filename) {
+tlp::GlTextureData *tlp::GlTextureLoader::loadTexture(const std::string &filename) {
   tlp_stat_t buf;
   if (tlp::statPath(filename.c_str(), &buf) < 0)
     return nullptr;

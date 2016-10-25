@@ -221,8 +221,7 @@ DataSet GeographicView::state() const {
   dataSet.set("mapCenterLatitude", mapCenter.first);
   dataSet.set("mapCenterLongitude", mapCenter.second);
   dataSet.set("mapZoom", geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapZoom());
-  dataSet.set("renderingParameters",
-              geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().getParameters());
+  dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().getParameters());
 
   saveStoredPolyInformations(dataSet);
 

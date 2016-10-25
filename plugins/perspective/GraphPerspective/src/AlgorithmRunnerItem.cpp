@@ -452,7 +452,9 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   const Plugin &p = PluginLister::pluginInformation(_pluginName.toStdString().c_str());
   QPixmap icon(QPixmap(p.icon().c_str()).scaled(64, 64));
   if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(p.icon())) {
-    icon = FontIconManager::instance()->getMaterialDesignIcon(static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(p.icon())), Qt::black).pixmap(QSize(64, 64));
+    icon = FontIconManager::instance()
+               ->getMaterialDesignIcon(static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(p.icon())), Qt::black)
+               .pixmap(QSize(64, 64));
   }
   QFont f;
   f.setBold(true);

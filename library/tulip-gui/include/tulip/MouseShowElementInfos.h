@@ -82,7 +82,6 @@ protected:
    * @return
    */
   virtual QString elementName(ElementType elementType, unsigned int elementId) const;
-
 };
 }
 

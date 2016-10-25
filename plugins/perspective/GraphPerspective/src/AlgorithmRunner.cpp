@@ -287,8 +287,7 @@ bool AlgorithmRunner::eventFilter(QObject *obj, QEvent *ev) {
   if (ev->type() == QEvent::Paint) {
     if (obj == _ui->favoritesBox->widget() && _favorites.empty()) {
       QPainter painter(_ui->favoritesBox->widget());
-      QPixmap px = QIcon(_droppingFavorite ? ":/tulip/graphperspective/icons/star.svg"
-                                                               : ":/tulip/graphperspective/icons/star-outline.svg")
+      QPixmap px = QIcon(_droppingFavorite ? ":/tulip/graphperspective/icons/star.svg" : ":/tulip/graphperspective/icons/star-outline.svg")
                        .pixmap(QSize(40, 40));
       painter.drawPixmap(_ui->favoritesBox->widget()->width() - px.width() - 8, 8, px);
       QFont f;

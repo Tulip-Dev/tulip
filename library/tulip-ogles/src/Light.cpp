@@ -31,13 +31,11 @@
 using namespace tlp;
 
 Light::Light()
-    : _camera(nullptr), _directionnalLight(false), _ambientColor(Color(127, 127, 127)),
-      _diffuseColor(127, 127, 127), _specularColor(0, 0, 0) {
+    : _camera(nullptr), _directionnalLight(false), _ambientColor(Color(127, 127, 127)), _diffuseColor(127, 127, 127), _specularColor(0, 0, 0) {
 }
 
 Light::Light(Camera *camera)
-    : _camera(camera), _directionnalLight(false), _ambientColor(Color(127, 127, 127)),
-      _diffuseColor(127, 127, 127), _specularColor(0, 0, 0) {
+    : _camera(camera), _directionnalLight(false), _ambientColor(Color(127, 127, 127)), _diffuseColor(127, 127, 127), _specularColor(0, 0, 0) {
 }
 
 void Light::setDirectionnalLight(const bool directionnalLight) {

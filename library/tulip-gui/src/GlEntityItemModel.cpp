@@ -36,8 +36,7 @@ QVariantList GlEntityItemEditor::propertiesQVariant() const {
 void GlEntityItemEditor::setProperty(const QString &, const QVariant &) {
 }
 
-GlEntityItemModel::GlEntityItemModel(GlEntityItemEditor *itemEditor, QObject *parent)
-    : QAbstractItemModel(parent), editor(itemEditor) {
+GlEntityItemModel::GlEntityItemModel(GlEntityItemEditor *itemEditor, QObject *parent) : QAbstractItemModel(parent), editor(itemEditor) {
 }
 
 GlEntityItemModel::~GlEntityItemModel() {

@@ -157,7 +157,7 @@ Vec4i TextureAtlas::getRegion(const size_t width, const size_t height) {
   int best_height = INT_MAX;
   int best_index = -1;
   int best_width = INT_MAX;
-  for (size_t i = 0 ; i < _nodes.size() ; ++i) {
+  for (size_t i = 0; i < _nodes.size(); ++i) {
     int y = fit(i, width, height);
     if (y >= 0) {
       Vec3i &node = _nodes[i];

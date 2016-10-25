@@ -120,7 +120,7 @@ bool GeographicViewNavigator::eventFilter(QObject *widget, QEvent *e) {
     return false;
   } else if (geoView->viewType() == GeographicView::Globe) {
     if (e->type() == QEvent::Wheel) {
-      QWheelEvent *we = static_cast<QWheelEvent*>(e);
+      QWheelEvent *we = static_cast<QWheelEvent *>(e);
       if (we->orientation() == Qt::Vertical) {
 #define WHEEL_DELTA 120
         GlMainWidget *g = static_cast<GlMainWidget *>(widget);

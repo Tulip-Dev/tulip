@@ -358,10 +358,10 @@ QGraphicsProxyWidget *proxyGM = nullptr;
 unsigned int GeographicViewGraphicsView::planisphereTextureId = 0;
 
 GeographicViewGraphicsView::GeographicViewGraphicsView(GeographicView *geoView, QGraphicsScene *graphicsScene, QWidget *parent)
-    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), googleMaps(nullptr), currentMapZoom(0),
-      globeCameraBackup(true), mapCameraBackup(true), geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr),
-      geoLayoutBackup(nullptr), mapTranslationBlocked(false), geocodingActive(false), cancelGeocoding(false), polygonEntity(nullptr),
-      planisphereEntity(nullptr), noLayoutMsgBox(nullptr), firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false) {
+    : QGraphicsView(graphicsScene, parent), _geoView(geoView), graph(nullptr), googleMaps(nullptr), currentMapZoom(0), globeCameraBackup(true),
+      mapCameraBackup(true), geoLayout(nullptr), geoViewSize(nullptr), geoViewShape(nullptr), geoLayoutBackup(nullptr), mapTranslationBlocked(false),
+      geocodingActive(false), cancelGeocoding(false), polygonEntity(nullptr), planisphereEntity(nullptr), noLayoutMsgBox(nullptr),
+      firstGlobeSwitch(true), firstMapSwitch(true), geoLayoutComputed(false) {
   setRenderHints(QPainter::SmoothPixmapTransform | QPainter::Antialiasing | QPainter::TextAntialiasing);
   glWidget = new GlMainWidget();
   setViewport(glWidget);

@@ -51,7 +51,8 @@ GlTextureManager::~GlTextureManager() {
 }
 
 void GlTextureManager::initMaxTextureSize() {
-  if (maxTextureSize > 0) return;
+  if (maxTextureSize > 0)
+    return;
   glGetIntegerv(GL_MAX_TEXTURE_SIZE, &maxTextureSize);
   if (maxTextureSize > 4096) {
     maxTextureSize = 4096;

@@ -71,8 +71,7 @@ template <typename T> const T &clamp(const T &n, const T &lower, const T &upper)
 
 struct TLP_GLES_SCOPE GlTextureData {
 
-  GlTextureData(unsigned int width, unsigned int height, unsigned char *pixels)
-      : width(width), height(height), pixels(pixels) {
+  GlTextureData(unsigned int width, unsigned int height, unsigned char *pixels) : width(width), height(height), pixels(pixels) {
   }
 
   ~GlTextureData() {
@@ -84,14 +83,13 @@ struct TLP_GLES_SCOPE GlTextureData {
   unsigned char *pixels;
 };
 
-
 class TLP_GLES_SCOPE GlTextureLoader {
 
 public:
+  virtual GlTextureData *loadTexture(const std::string &filename);
 
-  virtual GlTextureData *loadTexture(const std::string& filename);
-
-  virtual ~GlTextureLoader() {}
+  virtual ~GlTextureLoader() {
+  }
 };
 
 TLP_GLES_SCOPE void addColorToVecFloat(const tlp::Color &c, std::vector<float> &v);
@@ -155,7 +153,6 @@ TLP_GLES_SCOPE std::vector<tlp::Coord> simplifyCurve(const std::vector<tlp::Coor
 TLP_GLES_SCOPE double degreeToRadian(double degree);
 
 TLP_GLES_SCOPE double radianToDegree(double degree);
-
 }
 
 #endif // GLUTILS_H

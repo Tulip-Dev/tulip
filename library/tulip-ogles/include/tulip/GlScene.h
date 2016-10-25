@@ -74,7 +74,6 @@ protected:
 class TLP_GLES_SCOPE GlScene : public tlp::Observable {
 
 public:
-
   GlScene(GlLODCalculator *calculator = nullptr);
 
   ~GlScene();
