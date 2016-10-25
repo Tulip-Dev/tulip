@@ -138,11 +138,10 @@ int TextureAtlas::fit(const size_t index, const size_t width, const size_t heigh
 }
 //=================================================================================================
 void TextureAtlas::merge() {
-  Vec3i node, next;
 
   for (size_t i = 0; i < _nodes.size() - 1; ++i) {
-    node = _nodes[i];
-    next = _nodes[i + 1];
+    Vec3i &node = _nodes[i];
+    Vec3i &next = _nodes[i + 1];
     if (node.y() == next.y()) {
       node.z() += next.z();
       _nodes.erase(_nodes.begin() + i + 1);
@@ -153,16 +152,15 @@ void TextureAtlas::merge() {
 //=================================================================================================
 Vec4i TextureAtlas::getRegion(const size_t width, const size_t height) {
 
-  Vec3i node, prev;
   Vec4i region(0, 0, width, height);
 
   int best_height = INT_MAX;
   int best_index = -1;
   int best_width = INT_MAX;
-  for (size_t i = 0; i < _nodes.size(); ++i) {
+  for (size_t i = 0 ; i < _nodes.size() ; ++i) {
     int y = fit(i, width, height);
     if (y >= 0) {
-      node = _nodes[i];
+      Vec3i &node = _nodes[i];
       if (((y + int(height)) < best_height) || (((y + int(height)) == best_height) && (node.z() < best_width))) {
         best_height = y + height;
         best_index = i;
@@ -181,7 +179,7 @@ Vec4i TextureAtlas::getRegion(const size_t width, const size_t height) {
     return region;
   }
 
-  node = Vec3i();
+  Vec3i node;
 
   node.x() = region.x();
   node.y() = region.y() + height;
@@ -189,8 +187,8 @@ Vec4i TextureAtlas::getRegion(const size_t width, const size_t height) {
   _nodes.insert(_nodes.begin() + best_index, node);
 
   for (size_t i = best_index + 1; i < _nodes.size(); ++i) {
-    node = _nodes[i];
-    prev = _nodes[i - 1];
+    Vec3i &node = _nodes[i];
+    Vec3i &prev = _nodes[i - 1];
 
     if (node.x() < (prev.x() + prev.z())) {
       int shrink = prev.x() + prev.z() - node.x();
