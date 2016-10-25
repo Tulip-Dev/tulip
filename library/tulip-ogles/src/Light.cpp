@@ -31,15 +31,13 @@
 using namespace tlp;
 
 Light::Light()
-    : _camera(nullptr), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
-      _diffuseColor(255, 255, 255), _specularColor(255, 255, 255), _constantAttenuation(1.0f), _linearAttenuation(0.00001f),
-      _quadraticAttenuation(0.000001f) {
+    : _camera(nullptr), _directionnalLight(false), _ambientColor(Color(127, 127, 127)),
+      _diffuseColor(127, 127, 127), _specularColor(0, 0, 0) {
 }
 
 Light::Light(Camera *camera)
-    : _camera(camera), _directionnalLight(false), _modelAmbientColor(Color(25, 25, 25)), _ambientColor(Color(204, 204, 204)),
-      _diffuseColor(255, 255, 255), _specularColor(255, 255, 255), _constantAttenuation(1.0f), _linearAttenuation(0.00001f),
-      _quadraticAttenuation(0.000001f) {
+    : _camera(camera), _directionnalLight(false), _ambientColor(Color(127, 127, 127)),
+      _diffuseColor(127, 127, 127), _specularColor(0, 0, 0) {
 }
 
 void Light::setDirectionnalLight(const bool directionnalLight) {
@@ -70,14 +68,6 @@ Vec4f Light::getPosition() const {
   return lightPos;
 }
 
-void Light::setModelAmbientColor(const Color &modelAmbient) {
-  _modelAmbientColor = modelAmbient;
-}
-
-Color Light::getModelAmbientColor() const {
-  return _modelAmbientColor;
-}
-
 void Light::setAmbientColor(const Color &ambient) {
   _ambientColor = ambient;
 }
@@ -100,28 +90,4 @@ void Light::setSpecularColor(const Color &specular) {
 
 Color Light::getSpecularColor() const {
   return _specularColor;
-}
-
-void Light::setConstantAttenuation(const float constantAttenuation) {
-  _constantAttenuation = constantAttenuation;
-}
-
-float Light::getConstantAttenuation() const {
-  return _constantAttenuation;
-}
-
-void Light::setLinearAttenuation(const float linearAttenuation) {
-  _linearAttenuation = linearAttenuation;
-}
-
-float Light::getLinearAttenuation() const {
-  return _linearAttenuation;
-}
-
-void Light::setQuadraticAttenuation(const float quadraticAttenuation) {
-  _quadraticAttenuation = quadraticAttenuation;
-}
-
-float Light::getQuadraticAttenuation() const {
-  return _quadraticAttenuation;
 }

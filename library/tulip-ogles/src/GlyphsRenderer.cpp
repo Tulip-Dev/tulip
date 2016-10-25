@@ -52,28 +52,15 @@ static std::string glyphVertexShaderSrcCommonCode = R"(
 
   uniform vec3 u_eyePosition;
   uniform vec4 u_lightPosition;
-  uniform float u_lightConstantAttenuation;
-  uniform float u_lightLinearAttenuation;
-  uniform float u_lightQuadraticAttenuation;
-  uniform vec4 u_lightModelAmbientColor;
-  uniform vec4 u_lightAmbientColor;
-  uniform vec4 u_lightDiffuseColor;
-
-  uniform vec4 u_materialAmbientColor;
 
   attribute vec4 a_position;
   attribute vec2 a_texCoord;
   attribute vec3 a_normal;
 
-  varying vec4 v_diffuseColor;
-  varying vec4 v_ambientGlobalColor;
-  varying vec4 v_ambientColor;
-
+  varying vec4 v_color;
   varying vec3 v_normal;
-  varying vec3 v_lightDir;
-  varying vec3 v_halfVector;
-  varying float v_attenuation;
-
+  varying vec3 v_toLight;
+  varying vec3 v_toEye;
   varying vec4 v_texData;
 
   mat4 scaleMatrix(vec3 scale) {
@@ -165,8 +152,8 @@ static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRend
            v_texData.z = u_textureUnit[id];
          }
 
+         v_color = u_color[id];
          if (u_flatShading) {
-            v_diffuseColor = u_color[id];
             return;
          }
 
@@ -175,23 +162,11 @@ static std::string genGlyphsVertexShaderSrc(const unsigned int maxNbGlyphsByRend
          } else {
            v_normal = normalize(mat3(u_normalMatrix) * a_normal);
          }
-         vec3 lightVec = u_lightPosition.xyz-pos.xyz;
+         v_toLight = normalize(u_lightPosition.xyz-pos.xyz);
          if (u_lightPosition.w == 0.0) {
-           lightVec = -u_lightPosition.xyz;
+           v_toLight = normalize(-u_lightPosition.xyz);
          }
-         v_lightDir = normalize(lightVec);
-         float dist = length(lightVec);
-         v_attenuation = 1.0 / (u_lightConstantAttenuation +
-                         u_lightLinearAttenuation * dist +
-                         u_lightQuadraticAttenuation * dist * dist);
-
-         v_halfVector = u_eyePosition + u_lightPosition.xyz;
-         v_halfVector = normalize(v_halfVector);
-
-         v_diffuseColor = u_lightDiffuseColor * u_color[id];
-
-         v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;
-         v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;
+         v_toEye = normalize(u_eyePosition-pos.xyz);
        }
     )";
   return shaderSrc;
@@ -226,8 +201,8 @@ static std::string glyphsVertexShaderHardwareInstancingSrc() {
           v_texData.z = a_textureUnit;
         }
 
+        v_color = a_color;
         if (u_flatShading) {
-          v_diffuseColor = a_color;
           return;
         }
 
@@ -237,23 +212,11 @@ static std::string glyphsVertexShaderHardwareInstancingSrc() {
           v_normal = normalize(mat3(u_normalMatrix) * a_normal);
         }
 
-        vec3 lightVec = u_lightPosition.xyz-pos.xyz;
+        v_toLight = normalize(u_lightPosition.xyz-pos.xyz);
         if (u_lightPosition.w == 0.0) {
-          lightVec = -u_lightPosition.xyz;
+          v_toLight = normalize(-u_lightPosition.xyz);
         }
-        v_lightDir = normalize(lightVec);
-        float dist = length(lightVec);
-        v_attenuation = 1.0 / (u_lightConstantAttenuation +
-                        u_lightLinearAttenuation * dist +
-                        u_lightQuadraticAttenuation * dist * dist);
-
-        v_halfVector = u_eyePosition + u_lightPosition.xyz;
-        v_halfVector = normalize(v_halfVector);
-
-        v_diffuseColor = u_lightDiffuseColor * a_color;
-
-        v_ambientColor = u_lightAmbientColor * u_materialAmbientColor;
-        v_ambientGlobalColor = u_lightModelAmbientColor * u_materialAmbientColor;
+        v_toEye = normalize(u_eyePosition.xyz-pos.xyz);
       }
     )";
 }
@@ -264,20 +227,32 @@ static std::string glyphsFragmentShaderSrc() {
     uniform bool u_textureActivated;
     uniform sampler2D u_textures[4];
 
+    uniform vec4 u_lightAmbientColor;
+    uniform vec4 u_lightDiffuseColor;
     uniform vec4 u_lightSpecularColor;
-    uniform vec4 u_materialSpecularColor;
     uniform float u_materialShininess;
 
-    varying vec4 v_diffuseColor;
-    varying vec4 v_ambientGlobalColor;
-    varying vec4 v_ambientColor;
-
+    varying vec4 v_color;
     varying vec3 v_normal;
-    varying vec3 v_lightDir;
-    varying vec3 v_halfVector;
-    varying float v_attenuation;
-
+    varying vec3 v_toLight;
+    varying vec3 v_toEye;
     varying vec4 v_texData;
+
+    vec4 diffuseLighting(vec3 N, vec3 L) {
+      float diffuseTerm = clamp(dot(N, L), 0.0, 1.0);
+      return u_lightDiffuseColor * diffuseTerm;
+    }
+
+    vec4 specularLighting(vec3 N, vec3 L, vec3 V) {
+      float specularTerm = 0.0;
+
+      // the surface is oriented to the light source
+      if(dot(N, L) > 0.0) {
+         vec3 H = normalize(L + V);
+         specularTerm = pow(dot(N, H), u_materialShininess);
+      }
+      return u_lightSpecularColor * specularTerm;
+    }
 
     vec4 getTexel(int samplerId) {
       vec2 v_texCoord = v_texData.xy;
@@ -297,22 +272,21 @@ static std::string glyphsFragmentShaderSrc() {
     void main() {
       int samplerId = int(v_texData.z);
       if (u_flatShading) {
-        gl_FragColor = v_diffuseColor;
+        gl_FragColor = v_color;
         if (u_textureActivated && samplerId != -1) {
           gl_FragColor *= getTexel(samplerId);
         }
         return;
       }
       vec3 normal = normalize(v_normal);
-      vec4 color = v_ambientGlobalColor + v_ambientColor;
-      //   float NdotL = max(dot(normal,normalize(v_lightDir)),0.0);
-      float NdotL = abs(dot(normal,normalize(v_lightDir)));
-      if (NdotL > 0.0) {
-        color += (v_attenuation * v_diffuseColor * NdotL);
-        vec3 halfV = normalize(v_halfVector);
-        float NdotHV = max(dot(normal, halfV), 0.0);
-        color += v_attenuation * u_materialSpecularColor * u_lightSpecularColor * pow(NdotHV, u_materialShininess);
-      }
+      vec3 light = normalize(v_toLight);
+      vec3 eye = normalize(v_toEye);
+
+      vec4 ambient = u_lightAmbientColor;
+      vec4 diffuse = diffuseLighting(normal, light);
+      vec4 specular = specularLighting(normal, light, eye);
+
+      vec4 color = v_color * (ambient + diffuse + specular);
 
       if (u_textureActivated && samplerId != -1) {
         color *= getTexel(samplerId);
@@ -587,16 +561,10 @@ void GlyphsRenderer::setupGlyphsShader(const Camera &camera, const Light &light)
   _glyphShader->setUniformMat4Float("u_normalMatrix", camera.normalMatrix());
   _glyphShader->setUniformVec3Float("u_eyePosition", camera.getEyes());
   _glyphShader->setUniformVec4Float("u_lightPosition", light.getPosition());
-  _glyphShader->setUniformFloat("u_lightConstantAttenuation", light.getConstantAttenuation());
-  _glyphShader->setUniformFloat("u_lightLinearAttenuation", light.getLinearAttenuation());
-  _glyphShader->setUniformFloat("u_lightQuadraticAttenuation", light.getQuadraticAttenuation());
-  _glyphShader->setUniformColor("u_lightModelAmbientColor", light.getModelAmbientColor());
   _glyphShader->setUniformColor("u_lightAmbientColor", light.getAmbientColor());
   _glyphShader->setUniformColor("u_lightDiffuseColor", light.getDiffuseColor());
   _glyphShader->setUniformColor("u_lightSpecularColor", light.getSpecularColor());
-  _glyphShader->setUniformColor("u_materialAmbientColor", Color(0, 0, 0));
-  _glyphShader->setUniformColor("u_materialSpecularColor", Color(0, 0, 0));
-  _glyphShader->setUniformFloat("u_materialShininess", 16);
+  _glyphShader->setUniformFloat("u_materialShininess", 64);
 
   _glyphShader->setUniformTextureSampler("u_textures[0]", 0);
   _glyphShader->setUniformTextureSampler("u_textures[1]", 1);
