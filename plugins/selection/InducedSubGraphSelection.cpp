@@ -75,7 +75,8 @@ bool InducedSubGraphSelection::run() {
       result->setNodeValue(graph->source(e), true);
       result->setNodeValue(graph->target(e), true);
     }
-  } else{
+  }
+  else {
     delete itE;
   }
 
