@@ -277,7 +277,7 @@ template <typename Obj, typename OTYPE> tlp::Circle<Obj, OTYPE> tlp::enclosingCi
         enclosedCircles[i] = i;
 
       for (unsigned i = circlesSet.size(); i > 0;) {
-        unsigned idx = tlp::randomUnsignedInteger(i);
+        unsigned idx = tlp::randomUnsignedInteger(i - 1);
         --i;
         std::swap(enclosedCircles[idx], enclosedCircles[i]);
       }

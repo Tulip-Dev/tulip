@@ -127,13 +127,13 @@ void BooleanPropertyTest::testSetGet(bool value) {
   selection->setAllEdgeValue(value);
 
   for (unsigned int i = 0; i < graph->numberOfNodes() * 10; ++i) {
-    unsigned int rando = randomUnsignedInteger(graph->numberOfNodes());
+    unsigned int rando = randomUnsignedInteger(graph->numberOfNodes() - 1);
     selection->setNodeValue(nodes[rando], !value);
     CPPUNIT_ASSERT_EQUAL(!value, selection->getNodeValue(nodes[rando]));
   }
 
   for (unsigned int i = 0; i < graph->numberOfEdges() * 10; ++i) {
-    unsigned int rando = randomUnsignedInteger(graph->numberOfEdges());
+    unsigned int rando = randomUnsignedInteger(graph->numberOfEdges() - 1);
     selection->setEdgeValue(edges[rando], !value);
     CPPUNIT_ASSERT_EQUAL(!value, selection->getEdgeValue(edges[rando]));
   }
@@ -163,13 +163,13 @@ void BooleanPropertyTest::testCopy() {
   selection->setAllEdgeValue(value);
 
   for (unsigned int i = 0; i < graph->numberOfNodes() * 10; ++i) {
-    unsigned int rando = randomUnsignedInteger(graph->numberOfNodes());
+    unsigned int rando = randomUnsignedInteger(graph->numberOfNodes() - 1);
     selection->setNodeValue(nodes[rando], !value);
     CPPUNIT_ASSERT_EQUAL(!value, selection->getNodeValue(nodes[rando]));
   }
 
   for (unsigned int i = 0; i < graph->numberOfEdges() * 10; ++i) {
-    unsigned int rando = randomUnsignedInteger(graph->numberOfEdges());
+    unsigned int rando = randomUnsignedInteger(graph->numberOfEdges() - 1);
     selection->setEdgeValue(edges[rando], !value);
     CPPUNIT_ASSERT_EQUAL(!value, selection->getEdgeValue(edges[rando]));
   }

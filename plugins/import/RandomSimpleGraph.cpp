@@ -106,12 +106,12 @@ public:
           return pluginProgress->state() != TLP_CANCEL;
 
       edgeS tmp;
-      tmp.source = randomUnsignedInteger(nbNodes);
-      tmp.target = randomUnsignedInteger(nbNodes);
+      tmp.source = randomUnsignedInteger(nbNodes - 1);
+      tmp.target = randomUnsignedInteger(nbNodes - 1);
 
       while (tmp.source == tmp.target) {
-        tmp.source = randomUnsignedInteger(nbNodes);
-        tmp.target = randomUnsignedInteger(nbNodes);
+        tmp.source = randomUnsignedInteger(nbNodes - 1);
+        tmp.target = randomUnsignedInteger(nbNodes - 1);
       }
 
       if (myGraph.find(tmp) == myGraph.end()) {

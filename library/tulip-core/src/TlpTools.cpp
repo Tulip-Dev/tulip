@@ -351,23 +351,23 @@ void tlp::initRandomSequence() {
   }
 }
 
-int tlp::randomInteger(int bound) {
-  if (bound == 0) {
+int tlp::randomInteger(int max) {
+  if (max == 0) {
     return 0;
-  } else if (bound > 0) {
-    std::uniform_int_distribution<int> dist(0, bound-1);
+  } else if (max > 0) {
+    std::uniform_int_distribution<int> dist(0, max);
     return dist(mt);
   } else {
-    std::uniform_int_distribution<int> dist(bound+1, 0);
+    std::uniform_int_distribution<int> dist(max, 0);
     return dist(mt);
   }
 }
 
-unsigned int tlp::randomUnsignedInteger(unsigned int bound) {
-  if (bound == 0) {
+unsigned int tlp::randomUnsignedInteger(unsigned int max) {
+  if (max == 0) {
     return 0;
   } else {
-    std::uniform_int_distribution<unsigned int> dist(0, bound-1);
+    std::uniform_int_distribution<unsigned int> dist(0, max);
     return dist(mt);
   }
 }
