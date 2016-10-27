@@ -250,6 +250,9 @@ void tlp::initTulipLib(const char* appDirPath) {
 
   // initialize serializers
   initTypeSerializers();
+
+  // initialize pseudo random number generator seed
+  initRandomSequence();
 }
 //=========================================================
 
