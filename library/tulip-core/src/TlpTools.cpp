@@ -23,6 +23,10 @@
 #include <sstream>
 #include <clocale>
 #include <cerrno>
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+#include <random>
+#include <chrono>
+#endif
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -324,10 +328,17 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 #endif
 }
 
+// random sequence management
 //=========================================================
 
-// random sequence management
 static unsigned int randomSeed = UINT_MAX;
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+// uniformly-distributed integer random number generator that produces non-deterministic random numbers
+static std::random_device rd;
+// Mersenne Twister pseudo-random generator of 32-bit numbers
+static std::mt19937 mt;
+#endif
+
 void tlp::setSeedOfRandomSequence(unsigned int seed) {
   randomSeed = seed;
 }
@@ -337,6 +348,19 @@ unsigned int tlp::getSeedOfRandomSequence() {
 }
 
 void tlp::initRandomSequence() {
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+  // init seed from random sequence with std::random_device
+  if (randomSeed == UINT_MAX) {
+#ifndef __MINGW32__
+    mt.seed(rd());
+#else
+    // std::random_device implementation is deterministic in MinGW so initialize seed with current time (microsecond precision)
+    mt.seed(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
+#endif
+  } else {
+    mt.seed(randomSeed);
+  }
+#else
   if (randomSeed == UINT_MAX) {
     unsigned int seed = (unsigned int) time(NULL);
     // init a sequence of rand() calls
@@ -352,9 +376,21 @@ void tlp::initRandomSequence() {
     srandom(randomSeed);
 #endif
   }
+#endif
 }
 
 int tlp::randomInteger(int bound) {
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+  if (bound == 0) {
+    return 0;
+  } else if (bound > 0) {
+    std::uniform_int_distribution<int> dist(0, bound-1);
+    return dist(mt);
+  } else {
+    std::uniform_int_distribution<int> dist(bound+1, 0);
+    return dist(mt);
+  }
+#else
   int x = rand();
 
   // keep searching for an x in a range divisible by n
@@ -364,14 +400,29 @@ int tlp::randomInteger(int bound) {
   }
 
   return x % bound;
+#endif
 }
 
 unsigned int tlp::randomUnsignedInteger(unsigned int bound) {
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+  if (bound == 0) {
+    return 0;
+  } else {
+    std::uniform_int_distribution<unsigned int> dist(0, bound-1);
+    return dist(mt);
+  }
+#else
   return static_cast<unsigned int>(randomInteger(static_cast<int>(bound)));
+#endif
 }
 
 double tlp::randomDouble(double max) {
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+  std::uniform_real_distribution<double> dist(0, std::nextafter(max, DBL_MAX));
+  return dist(mt);
+#else
   return max * rand() / static_cast<double>(RAND_MAX);
+#endif
 }
 
 //=========================================================
