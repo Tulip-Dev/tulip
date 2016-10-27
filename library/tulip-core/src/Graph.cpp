@@ -51,11 +51,10 @@ ostream & operator << (ostream &os,const Graph *sp) {
   os << ";(nodes <node_id> <node_id> ...)" << endl;
   os << "(nodes ";
   node beginNode, previousNode;
-  Iterator<node> *itn=sp->getNodes();
 
-  while (itn->hasNext()) {
-    node current = itn->next();
-
+  node current;
+  unsigned int i = 0;
+  forEach(current, sp->getNodes()) {
     if (!beginNode.isValid()) {
       beginNode = previousNode = current;
       os << beginNode.id;
@@ -64,7 +63,7 @@ ostream & operator << (ostream &os,const Graph *sp) {
       if (current.id == previousNode.id + 1) {
         previousNode = current;
 
-        if (!itn->hasNext())
+        if (++i == sp->numberOfNodes())
           os << ".." << current.id;
       }
       else {
@@ -78,20 +77,14 @@ ostream & operator << (ostream &os,const Graph *sp) {
     }
   }
 
-  delete itn;
   os << ")" << endl;
   os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
-  Iterator<edge> *ite=sp->getEdges();
 
-  for (; ite->hasNext();) {
-    edge e=ite->next();
-    os << "(edge " << e.id << " " << sp->source(e).id << " " << sp->target(e).id << ")";
-
-    if (ite->hasNext()) os << endl;
+  edge e;
+  forEach(e, sp->getEdges()) {
+    os << "(edge " << e.id << " " << sp->source(e).id << " " << sp->target(e).id << ")" << endl;
   }
 
-  delete ite;
-  os << endl;
   return os;
 }
 
@@ -397,11 +390,8 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   vector<edge>  edgeA;
 
   // Get edges
-  Iterator<edge> * edgeIt = ioG->getEdges();
-
-  while( edgeIt->hasNext() ) {
-    edge e = edgeIt->next();
-
+  edge e;
+  forEach(e, ioG->getEdges()) {
     if( !inSel || inSel->getEdgeValue(e) ) {
       // selected edge -> remove it !
       edgeA.push_back( e );
@@ -416,26 +406,16 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
     }
   }
 
-  delete edgeIt;
-
-  // Get nodes
-  Iterator<node> * nodeIt = ioG->getNodes();
-
-  while( nodeIt->hasNext() ) {
-    node n = nodeIt->next();
-
+  node n;
+  forEach(n, ioG->getNodes()) {
     if( !inSel || inSel->getNodeValue(n) )
       nodeA.push_back( n );
   }
 
-  delete nodeIt;
-
   // Clean properties
-  Iterator<std::string> * propIt = ioG->getProperties();
-
-  while( propIt->hasNext() ) {
-    std::string n = propIt->next();
-    PropertyInterface * p = ioG->getProperty( n );
+  std::string prop;
+  forEach(prop, ioG->getProperties()) {
+    PropertyInterface * p = ioG->getProperty( prop );
 
     for( unsigned int in = 0 ; in < nodeA.size() ; in++ )
       p->erase( nodeA[in] );
@@ -443,8 +423,6 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
     for( unsigned int ie = 0 ; ie < edgeA.size() ; ie++ )
       p->erase( edgeA[ie] );
   }
-
-  delete propIt;
 
   // Remove edges
   for( unsigned int ie = 0 ; ie < edgeA.size() ; ie++ )
@@ -467,16 +445,12 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 
   // extend the selection to edge ends
   if( inSel ) {
-    Iterator<edge> *itE = inSel->getNonDefaultValuatedEdges(inG);
-
-    while (itE->hasNext()) {
-      edge e = itE->next();
+    edge e;
+    forEach(e, inSel->getNonDefaultValuatedEdges(inG)) {
       const pair<node, node>& eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
     }
-
-    delete itE;
   }
 
   MutableContainer<node> nodeTrl;
@@ -485,8 +459,8 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
   Iterator<node> * nodeIt =
     inSel ? inSel->getNonDefaultValuatedNodes(inG) : inG->getNodes();
 
-  while( nodeIt->hasNext() ) {
-    node nIn = nodeIt->next();
+  node nIn;
+  forEach(nIn, nodeIt) {
     // add outG corresponding node
     node nOut = outG->addNode();
 
@@ -496,12 +470,10 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
 
     // add to translation tab
     nodeTrl.set(nIn.id, nOut);
+
     // copy node properties
-    Iterator<PropertyInterface *>* propIt = inG->getObjectProperties();
-
-    while (propIt->hasNext()) {
-      PropertyInterface *src = propIt->next();
-
+    PropertyInterface *src = NULL;
+    forEach(src, inG->getObjectProperties()) {
       if (dynamic_cast<GraphProperty *>(src) == NULL) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
@@ -510,18 +482,14 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
         dst->copy( nOut, nIn, src );
       }
     }
-
-    delete propIt;
   }
-
-  delete nodeIt;
 
   // loop on selected edges
   Iterator<edge> * edgeIt =
     inSel ? inSel->getNonDefaultValuatedEdges(inG) : inG->getEdges();
 
-  while( edgeIt->hasNext() ) {
-    edge eIn = edgeIt->next();
+  edge eIn;
+  forEach(eIn, edgeIt) {
     const pair<node, node>& eEnds = inG->ends(eIn);
     // add outG correponding edge
     edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id),
@@ -532,11 +500,8 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
       outSel->setEdgeValue( eOut, true );
 
     // copy edge properties
-    Iterator<PropertyInterface *>* propIt = inG->getObjectProperties();
-
-    while (propIt->hasNext()) {
-      PropertyInterface *src = propIt->next();
-
+    PropertyInterface *src = NULL;
+    forEach(src, inG->getObjectProperties()) {
       if (dynamic_cast<GraphProperty *>(src) == NULL) {
         const std::string& pName = src->getName();
         PropertyInterface *dst =
@@ -545,11 +510,7 @@ void tlp::copyToGraph (Graph *outG, const Graph* inG,
         dst->copy( eOut, eIn, src );
       }
     }
-
-    delete propIt;
   }
-
-  delete edgeIt;
 }
 
 // define a class of Iterator to iterate the root graphs
@@ -1079,25 +1040,18 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
   clusterLayout->translate(pos, cluster);
   clusterSize->scale(Size(scale, scale, size[2]/depth), cluster);
 
-  Iterator<node> *itN = cluster->getNodes();
-
-  while(itN->hasNext()) {
-    node itn = itN->next();
+  node itn;
+  forEach(itn, cluster->getNodes()) {
     graphLayout->setNodeValue(itn, clusterLayout->getNodeValue(itn));
     graphSize->setNodeValue(itn, clusterSize->getNodeValue(itn));
     graphRot->setNodeValue(itn, clusterRot->getNodeValue(itn) + rot);
   }
 
-  delete itN;
-  Iterator<edge> *itE= cluster->getEdges();
-
-  while (itE->hasNext()) {
-    edge ite = itE->next();
+  edge ite;
+  forEach(ite, cluster->getEdges()) {
     graphLayout->setEdgeValue(ite, clusterLayout->getEdgeValue(ite));
     graphSize->setEdgeValue(ite, clusterSize->getEdgeValue(ite));
   }
-
-  delete itE;
 
   // propagate all cluster local properties
   PropertyInterface* property;
@@ -1115,22 +1069,13 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
     else
       graphProp = property->clonePrototype(graph, property->getName());
 
-    itN = cluster->getNodes();
-
-    while(itN->hasNext()) {
-      node itn = itN->next();
+    forEach(itn, cluster->getNodes()) {
       graphProp->setNodeStringValue(itn, property->getNodeStringValue(itn));
     }
 
-    delete itN;
-    itE= cluster->getEdges();
-
-    while (itE->hasNext()) {
-      edge ite = itE->next();
+    forEach(ite, cluster->getEdges()) {
       graphProp->setEdgeStringValue(ite, property->getEdgeStringValue(ite));
     }
-
-    delete itE;
   }
 }
 //=========================================================
@@ -1157,17 +1102,13 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling,
   Graph* clone = parentSubGraph->addSubGraph(&selection, name);
 
   if (addSibling && addSiblingProperties) {
-    Iterator<PropertyInterface*>* itp = getLocalObjectProperties();
-
-    while(itp->hasNext()) {
-      PropertyInterface* prop = itp->next();
+    PropertyInterface* prop = NULL;
+    forEach(prop, getLocalObjectProperties()) {
       PropertyInterface* cloneProp =
         prop->clonePrototype(clone, prop->getName());
       tlp::debug() << "clone property " << prop->getName().c_str() << std::endl;
       cloneProp->copy(prop);
     }
-
-    delete itp;
   }
 
   return clone;
@@ -1183,23 +1124,15 @@ Graph* Graph::inducedSubGraph(const std::set<node> &nodes,
   StlIterator<node, std::set<node>::const_iterator> it(nodes.begin(), nodes.end());
   result->addNodes(&it);
 
-  Iterator<node> *itN=result->getNodes();
-
-  while (itN->hasNext()) {
-    node itn=itN->next();
-    Iterator<edge> *itE=getOutEdges(itn);
-
-    while (itE->hasNext()) {
-      edge ite = itE->next();
-
+  node itn;
+  forEach(itn, result->getNodes()) {
+    edge ite;
+    forEach(ite, getOutEdges(itn)) {
       if (result->isElement(target(ite)))
         result->addEdge(ite);
     }
-
-    delete itE;
   }
 
-  delete itN;
   return result;
 }
 //=========================================================
@@ -1277,12 +1210,10 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   // keep track of graph existing edges
   MutableContainer<bool> graphEdges;
   graphEdges.setAll(false);
-  Iterator<edge>* itE = getEdges();
 
-  while(itE->hasNext())
-    graphEdges.set(itE->next().id, true);
-
-  delete itE;
+  edge e;
+  forEach(e, getEdges())
+    graphEdges.set(e.id, true);
 
   //we can now Remove nodes from graph
   StableIterator<node> itN(subGraph->getNodes());
@@ -1294,14 +1225,11 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
   TLP_HASH_MAP<node, edge> metaEdges;
   TLP_HASH_MAP<edge, set<edge> > subEdges;
-  Iterator<node> *subGraphNodes = subGraph->getNodes();
 
-  while (subGraphNodes->hasNext()) {
-    node n = subGraphNodes->next();
-    StableIterator<edge> it(getSuperGraph()->getInOutEdges(n));
-
-    while (it.hasNext()) {
-      edge e = it.next();
+  node n;
+  forEach(n, subGraph->getNodes()) {
+    edge e;
+    stableForEach(e, getSuperGraph()->getInOutEdges(n)) {
       pair<node, node> eEnds  = ends(e);
       node src = eEnds.first;
       node tgt = eEnds.second;
@@ -1371,7 +1299,6 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
     }
   }
 
-  delete subGraphNodes;
   // update metaInfo of new meta edges
   TLP_HASH_MAP<edge, set<edge> >::const_iterator it;
 
@@ -1457,7 +1384,7 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
   bool hasSubEdges = super->isMetaEdge(metaEdges->next());
   delete metaEdges;
-  metaEdges = new StableIterator<edge>(super->getInOutEdges(metaNode));
+
   ColorProperty *graphColors =
     getProperty<ColorProperty>(colorProperty);
 
@@ -1470,24 +1397,20 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
       Graph *mnGraph = metaInfo->getNodeValue(mn);
 
       if (mnGraph != NULL) {
-        Iterator<node> *it = mnGraph->getNodes();
-
-        while(it->hasNext()) {
-          mappingM.set(it->next().id, mn);
+        node mnn;
+        forEach(mnn, mnGraph->getNodes()) {
+          mappingM.set(mnn.id, mn);
         }
-
-        delete it;
       }
     }
 
-    while (metaEdges->hasNext()) {
-      edge metaEdge = metaEdges->next();
+    edge metaEdge;
+    stableForEach(metaEdge, super->getInOutEdges(metaNode)) {
       Color metaColor = graphColors->getEdgeValue(metaEdge);
-      Iterator<edge>* subEdges = getEdgeMetaInfo(metaEdge);
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge> > > newMetaEdges;
 
-      while(subEdges->hasNext()) {
-        edge e = subEdges->next();
+      edge e;
+      forEach(e, getEdgeMetaInfo(metaEdge)) {
         const std::pair<node, node>& eEnds = super->ends(e);
 
         if (isElement(eEnds.first)) {
@@ -1524,7 +1447,6 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
         }
       }
 
-      delete subEdges;
       // iterate on newMetaEdges
       TLP_HASH_MAP<node, TLP_HASH_MAP<node, set<edge> > >::iterator itme =
         newMetaEdges.begin();
@@ -1572,8 +1494,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
 
     TLP_HASH_MAP<node, Color> metaEdgeToColor;
 
-    while (metaEdges->hasNext()) {
-      edge metaEdge = metaEdges->next();
+    edge metaEdge;
+    forEach(metaEdge, super->getInOutEdges(metaNode)) {
       metaEdgeToColor[opposite (metaEdge, metaNode)] =
         graphColors->getEdgeValue(metaEdge);
     }
@@ -1582,10 +1504,8 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
     root->delNode(metaNode, true);
     TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
     //=================================
-    StableIterator<edge> it(root->getEdges());
-
-    while(it.hasNext()) {
-      edge e = it.next();
+    edge e;
+    stableForEach(e, root->getEdges()) {
 
       if (isElement(e)) continue;
 
@@ -1631,11 +1551,9 @@ void Graph::openMetaNode(node metaNode, bool updateProperties) {
           tlp::error() << __PRETTY_FUNCTION__<< ": bug exist edge 1" << std::endl;
       }
 
-      // }
     }
   }
 
-  delete metaEdges;
   Observable::unholdObservers();
 }
 //====================================================================================
@@ -1756,18 +1674,12 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
 
 Graph *Graph::getNthSubGraph(unsigned int n) const {
   unsigned int i=0;
-  Iterator<Graph *> *it = getSubGraphs();
-
-  while (it->hasNext()) {
-    Graph *result = it->next();
-
+  tlp::Graph *sg = NULL;
+  forEach(sg, getSubGraphs()) {
     if (i++ == n) {
-      delete it;
-      return result;
+      return sg;
     }
   }
-
-  delete it;
   return NULL;
 }
 
