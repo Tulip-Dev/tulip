@@ -72,31 +72,37 @@ enabling to create the OpenGL visualizations available in Tulip from Python.
   import re
 
   from tulip import *
-	
+
   # create a new empty graph
   graph = tlp.newGraph()
 
   # dictionnary mapping package name to graph node
   packageNode = {}
-	
+
+  def addPackageNode(package):
+    if not package in packageNode:
+      n = graph.addNode()
+      packageNode[package] = n
+      # set node label for use with Tulip visualizations components
+      graph['viewLabel'][n] = package
+
   # iterate over locally installed pip packages
   for d in pip.get_installed_distributions():
     # add a node associated to the package
-    n = graph.addNode()
-    packageNode[d.key] = n
-    # set node label for use with Tulip visualizations components 
-    graph['viewLabel'][n] = d.key
+    addPackageNode(d.key)
 
   # iterate over locally installed pip packages
   for d in pip.get_installed_distributions():
     # iterate over package requirements
     for r in d.requires():
-      # process requirement name to get its pip package name : 
+      # process requirement name to get its pip package name :
       # switch to lower case and remove version infos if any
       s = str(r).lower()
-      match = re.search('|'.join(map(re.escape, '<=>')), s)
+      match = re.search('|'.join(map(re.escape, '<=>;!')), s)
       if match:
         s = s[:match.start()]
+      # add dependency package node if it does not exist yet
+      addPackageNode(s)
       # add an edge between the pip package and its dependency in the graph
       graph.addEdge(packageNode[d.key], packageNode[s])
 
@@ -105,10 +111,9 @@ enabling to create the OpenGL visualizations available in Tulip from Python.
   # resulting layout will be stored in the defaut graph layout property named 'viewLayout'
   graph.applyLayoutAlgorithm('Fast Multipole Multilevel Embedder (OGDF)')
   graph.applyLayoutAlgorithm('Connected Component Packing (Polyomino)')
-	
-  # serializes the graph to a file using the TLP graph format, 
-  # that file can then be opened with the Tulip software for visualization purposes.
+
   tlp.saveGraph(graph, 'pip_deps.tlp')
+
 
 References
 ==========
