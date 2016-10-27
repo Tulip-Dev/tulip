@@ -1140,6 +1140,20 @@ Graph *Graph::inducedSubGraph(const std::set<node> &nodes, Graph *parentSubGraph
   delete itN;
   return result;
 }
+//=========================================================
+Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph) {
+  set<node> nodesSet;
+  node n;
+  forEach(n, selection->getNodesEqualTo(true)) {
+    nodesSet.insert(n);
+  }
+  edge e;
+  forEach(e, selection->getEdgesEqualTo(true)) {
+    nodesSet.insert(source(e));
+    nodesSet.insert(target(e));
+  }
+  return inducedSubGraph(nodesSet, parentSubGraph);
+}
 //====================================================================================
 node Graph::createMetaNode(const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
   if (getRoot() == this) {

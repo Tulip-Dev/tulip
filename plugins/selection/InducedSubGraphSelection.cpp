@@ -26,17 +26,23 @@ PLUGIN(InducedSubGraphSelection)
 //=================================================================================
 static const char *paramHelp[] = {
     // Nodes
-    "Set of nodes from which the induced sub-graph is computed."};
+    "Set of nodes from which the induced sub-graph is computed.",
+    // Use edges
+    "If true, source and target nodes of selected edges will also be added in the input set of nodes."};
 //=================================================================================
 InducedSubGraphSelection::InducedSubGraphSelection(const tlp::PluginContext *context) : BooleanAlgorithm(context) {
   addInParameter<BooleanProperty>("Nodes", paramHelp[0], "viewSelection");
+  addInParameter<bool>("Use edges", paramHelp[1], "false");
 }
 //=================================================================================
 bool InducedSubGraphSelection::run() {
   BooleanProperty *entrySelection = nullptr;
+  bool useEdges = false;
 
-  if (dataSet != nullptr)
+  if (dataSet != nullptr) {
     dataSet->get("Nodes", entrySelection);
+    dataSet->get("Use edges", useEdges);
+  }
 
   if (entrySelection == nullptr)
     entrySelection = graph->getProperty<BooleanProperty>("viewSelection");
@@ -47,6 +53,8 @@ bool InducedSubGraphSelection::run() {
   // delete done by the forEach macro
   Iterator<node> *itN =
       (result == entrySelection) ? new StableIterator<tlp::node>(entrySelection->getNodesEqualTo(true)) : entrySelection->getNodesEqualTo(true);
+  Iterator<edge> *itE =
+      (result == entrySelection) ? new StableIterator<tlp::edge>(entrySelection->getEdgesEqualTo(true)) : entrySelection->getEdgesEqualTo(true);
 
   result->setAllNodeValue(false);
   result->setAllEdgeValue(false);
@@ -55,6 +63,16 @@ bool InducedSubGraphSelection::run() {
 
   for (node current : itN) {
     result->setNodeValue(current, true);
+  }
+
+  if (useEdges) {
+    edge e;
+    forEach(e, itE) {
+      result->setNodeValue(graph->source(e), true);
+      result->setNodeValue(graph->target(e), true);
+    }
+  } else {
+    delete itE;
   }
 
   // now add edges whose extremities are selected to result selection

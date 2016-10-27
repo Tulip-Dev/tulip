@@ -205,6 +205,8 @@ Creation and Modification of the sub-graph hierarchy
 
 .. automethod:: tulip::tlp.Graph.inducedSubGraph
 
+.. automethod:: tulip::tlp.Graph.inducedSubGraph
+
 .. automethod:: tulip::tlp.Graph.delSubGraph
 
 .. automethod:: tulip::tlp.Graph.delAllSubGraphs

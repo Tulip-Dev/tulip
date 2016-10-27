@@ -370,6 +370,19 @@ public:
   Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = nullptr);
 
   /**
+   * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.
+   * @since Tulip 4.10
+   * Every node contained in the selection is added to the subgraph.
+   * Every edge and its source and target node contained in the selection is added to the subgraph.
+   * Every edge connecting any two nodes in the resulting set of nodes is also added.
+   * @param selection a selection of nodes and edges.
+   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @return The newly created subgraph.
+   */
+  Graph *inducedSubGraph(BooleanProperty *selection,
+                         Graph* parentSubGraph = NULL);
+
+  /**
    * @brief Deletes a sub-graph of this graph.
    * All subgraphs of the removed graph are re-parented to this graph.
    * For instance, with a graph hierarchy as follows :
