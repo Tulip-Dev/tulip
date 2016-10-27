@@ -341,13 +341,14 @@ void tlp::initRandomSequence() {
   // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
 #ifndef __MINGW32__
-    randomSeed = rd();
+    mt.seed(rd());
 #else
     // std::random_device implementation is deterministic in MinGW so initialize seed with current time (microsecond precision)
-    randomSeed = static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+    mt.seed(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 #endif
+  } else {
+    mt.seed(randomSeed);
   }
-  mt.seed(randomSeed);
 }
 
 int tlp::randomInteger(int bound) {
