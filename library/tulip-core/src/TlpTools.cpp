@@ -23,8 +23,8 @@
 #include <sstream>
 #include <random>
 #include <chrono>
-#include <locale.h>
-#include <errno.h>
+#include <clocale>
+#include <cerrno>
 
 #ifndef _WIN32
 #include <unistd.h>
@@ -340,7 +340,12 @@ unsigned int tlp::getSeedOfRandomSequence() {
 void tlp::initRandomSequence() {
   // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
+#ifndef __MINGW32__
     randomSeed = rd();
+#else
+    // std::random_device implementation is deterministic in MinGW so initialize seed with current time (microsecond precision)
+    randomSeed = static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count());
+#endif
   }
   mt.seed(randomSeed);
 }
