@@ -48,7 +48,7 @@ class RandomTreeGeneral:public ImportModule {
     if (graph->numberOfNodes()>=sizeM) return true;
 
     bool result=true;
-    int randNumber=rand();
+    int randNumber=randomInteger(RAND_MAX);
     int i = 0;
 
     while (randNumber < RAND_MAX/pow(2.0,1.0+i))
