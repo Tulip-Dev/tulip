@@ -349,6 +349,7 @@ unsigned int tlp::getSeedOfRandomSequence() {
 
 void tlp::initRandomSequence() {
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
+
   // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
 #ifndef __MINGW32__
@@ -357,10 +358,13 @@ void tlp::initRandomSequence() {
     // std::random_device implementation is deterministic in MinGW so initialize seed with current time (microsecond precision)
     mt.seed(static_cast<unsigned int>(std::chrono::high_resolution_clock::now().time_since_epoch().count()));
 #endif
-  } else {
+  }
+  else {
     mt.seed(randomSeed);
   }
+
 #else
+
   if (randomSeed == UINT_MAX) {
     unsigned int seed = (unsigned int) time(NULL);
     // init a sequence of rand() calls
@@ -376,27 +380,32 @@ void tlp::initRandomSequence() {
     srandom(randomSeed);
 #endif
   }
+
 #endif
 }
 
 int tlp::randomInteger(int max) {
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
+
   if (max == 0) {
     return 0;
-  } else if (max > 0) {
+  }
+  else if (max > 0) {
     std::uniform_int_distribution<int> dist(0, max);
     return dist(mt);
-  } else {
+  }
+  else {
     std::uniform_int_distribution<int> dist(max, 0);
     return dist(mt);
   }
+
 #else
   int x = rand();
 
   // keep searching for an x in a range divisible by n
   // see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
   while (x >= RAND_MAX - (RAND_MAX % (max+1)) {
-    x = rand();
+  x = rand();
   }
 
   return x % (max+1);
@@ -405,12 +414,15 @@ int tlp::randomInteger(int max) {
 
 unsigned int tlp::randomUnsignedInteger(unsigned int max) {
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
+
   if (max == 0) {
     return 0;
-  } else {
+  }
+  else {
     std::uniform_int_distribution<unsigned int> dist(0, max);
     return dist(mt);
   }
+
 #else
   return static_cast<unsigned int>(randomInteger(static_cast<int>(max)));
 #endif

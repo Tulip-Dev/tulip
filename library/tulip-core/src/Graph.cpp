@@ -1213,7 +1213,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
   edge e;
   forEach(e, getEdges())
-    graphEdges.set(e.id, true);
+  graphEdges.set(e.id, true);
 
   //we can now Remove nodes from graph
   StableIterator<node> itN(subGraph->getNodes());
