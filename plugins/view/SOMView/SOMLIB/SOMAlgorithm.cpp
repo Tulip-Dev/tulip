@@ -178,7 +178,7 @@ node SOMAlgorithm::findBMU(SOMMap* map, const DynamicVector<double>& input, doub
   }
   else {
     //Take randomly a vector in the matchlist.
-    unsigned int num = randomUnsignedInteger(matchList.size());
+    unsigned int num = randomUnsignedInteger(matchList.size()-1);
     assert(num < matchList.size());
     n = matchList[num];
   }

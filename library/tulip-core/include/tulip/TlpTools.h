@@ -117,14 +117,14 @@ TLP_SCOPE unsigned int getSeedOfRandomSequence();
 TLP_SCOPE void initRandomSequence();
 
 /**
- * @brief Returns a random integer in the range [0, bound[
+ * @brief Returns a random integer in the range [0, max] if max is positive or in the range [max, 0] if max is negative
  */
-TLP_SCOPE int randomInteger(int bound);
+TLP_SCOPE int randomInteger(int max);
 
 /**
- * @brief Returns a random unsigned integer in the range [0, bound[
+ * @brief Returns a random unsigned integer in the range [0, max]
  */
-TLP_SCOPE unsigned int randomUnsignedInteger(unsigned int bound);
+TLP_SCOPE unsigned int randomUnsignedInteger(unsigned int max);
 
 /**
  * @brief Returns a random double in the range [0, max]

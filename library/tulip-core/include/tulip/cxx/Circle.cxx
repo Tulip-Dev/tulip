@@ -271,7 +271,7 @@ tlp::Circle<Obj, OTYPE> tlp::enclosingCircle(const std::vector<tlp::Circle<Obj, 
         enclosedCircles[i]=i;
 
       for (unsigned i=circlesSet.size(); i>0;) {
-        unsigned idx = tlp::randomUnsignedInteger(i);
+        unsigned idx = tlp::randomUnsignedInteger(i-1);
         --i;
         std::swap(enclosedCircles[idx],enclosedCircles[i]);
       }

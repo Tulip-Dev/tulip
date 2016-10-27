@@ -184,7 +184,7 @@ void ObservablePropertyTest::setUp() {
     nodes.push_back(graph->addNode());
 
   for (unsigned int i=0; i< NB_EDGES; ++i)
-    graph->addEdge(nodes[randomUnsignedInteger(NB_NODES)], nodes[randomUnsignedInteger(NB_NODES)]);
+    graph->addEdge(nodes[randomUnsignedInteger(NB_NODES-1)], nodes[randomUnsignedInteger(NB_NODES-1)]);
 
   observer = new ObserverPTest();
   pObserver = new PropertyObserverTest();

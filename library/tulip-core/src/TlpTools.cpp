@@ -379,15 +379,15 @@ void tlp::initRandomSequence() {
 #endif
 }
 
-int tlp::randomInteger(int bound) {
+int tlp::randomInteger(int max) {
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
-  if (bound == 0) {
+  if (max == 0) {
     return 0;
-  } else if (bound > 0) {
-    std::uniform_int_distribution<int> dist(0, bound-1);
+  } else if (max > 0) {
+    std::uniform_int_distribution<int> dist(0, max);
     return dist(mt);
   } else {
-    std::uniform_int_distribution<int> dist(bound+1, 0);
+    std::uniform_int_distribution<int> dist(max, 0);
     return dist(mt);
   }
 #else
@@ -395,24 +395,24 @@ int tlp::randomInteger(int bound) {
 
   // keep searching for an x in a range divisible by n
   // see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
-  while (x >= RAND_MAX - (RAND_MAX % bound)) {
+  while (x >= RAND_MAX - (RAND_MAX % (max+1)) {
     x = rand();
   }
 
-  return x % bound;
+  return x % (max+1);
 #endif
 }
 
-unsigned int tlp::randomUnsignedInteger(unsigned int bound) {
+unsigned int tlp::randomUnsignedInteger(unsigned int max) {
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
-  if (bound == 0) {
+  if (max == 0) {
     return 0;
   } else {
-    std::uniform_int_distribution<unsigned int> dist(0, bound-1);
+    std::uniform_int_distribution<unsigned int> dist(0, max);
     return dist(mt);
   }
 #else
-  return static_cast<unsigned int>(randomInteger(static_cast<int>(bound)));
+  return static_cast<unsigned int>(randomInteger(static_cast<int>(max)));
 #endif
 }
 
