@@ -21,8 +21,8 @@
 #include <ctime>
 #include <string>
 #include <sstream>
-#include <locale.h>
-#include <errno.h>
+#include <clocale>
+#include <cerrno>
 
 #ifndef _WIN32
 #include <unistd.h>
