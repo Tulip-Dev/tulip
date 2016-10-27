@@ -126,7 +126,11 @@ bool KCores::run() {
   unsigned int nbNodes = graph->numberOfNodes();
 
   node n;
+#ifdef _MSC_VER
+  int i = 0;
+#else
   unsigned int i = 0;
+#endif
   // the famous k
   double k = DBL_MAX;
   // record nodes infos in a vector to improve

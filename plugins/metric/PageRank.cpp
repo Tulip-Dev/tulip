@@ -88,7 +88,11 @@ struct PageRank : public DoubleAlgorithm {
 
     std::vector<node> nodes(nbNodes);
     node n;
+#ifdef _MSC_VER
+	int i = 0;
+#else
     unsigned int i = 0;
+#endif
     forEach(n , graph->getNodes()) {
       nodeMap.set(n, i);
       nodes[i] = n;
