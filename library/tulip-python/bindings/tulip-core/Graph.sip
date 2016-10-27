@@ -485,23 +485,44 @@ Creates and returns a subgraph of this graph (or the parent of this graph) that 
 
 //=========================================================================================== 
 
-  tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet);
+  tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL);
 %Docstring
-tlp.Graph.inducedSubGraph(nodeSet)
+tlp.Graph.inducedSubGraph(nodeSet[, parentSubGraph])
 
 Creates and returns a new sub-graph of the graph induced by a set of nodes. 
-The sub-graph contains all the nodes of the set and all the existing edges 
-between two nodes of the set including self-loops.
+The sub-graph contains all the nodes from the set and all the existing edges
+between two nodes in the set including self-loops.
 
 :param nodeSet: the set of nodes from which to build the induced sub-graph
 :type nodeSet: list or set of :class:`tlp.node`
+:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+:type parentSubGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph` 
 %End
 
-// For code compatibility with Tulip-Python 3.X
-  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet);
+// Allow to use a Python list of tlp.node instead of a Python set of tlp.node
+  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL);
 %MethodCode
   sipRes = sipCpp->inducedSubGraph(std::set<tlp::node>(a0->begin(), a0->end()));
+%End
+
+//===========================================================================================
+
+  tlp::Graph *inducedSubGraph(tlp::BooleanProperty *selection, tlp::Graph *parentSubGraph = NULL);
+%Docstring
+tlp.Graph.inducedSubGraph(selection[, parentSubGraph])
+
+.. versionadded:: 4.10
+
+Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.
+The sub-graph contains all the nodes of the set induced by the selected nodes but also the source and target nodes from
+the selected edges and all the existing edges between two nodes in the set including self-loops.
+
+:param selection: a selection of nodes and edges
+:type selection: :class:`tlp.BooleanProperty`
+:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+:type parentSubGraph: :class:`tlp.Graph`
+:rtype: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
