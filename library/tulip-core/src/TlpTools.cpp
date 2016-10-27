@@ -21,6 +21,8 @@
 #include <ctime>
 #include <string>
 #include <sstream>
+#include <random>
+#include <chrono>
 #include <locale.h>
 #include <errno.h>
 
@@ -243,6 +245,8 @@ void tlp::initTulipLib(const char *appDirPath) {
 
   // initialize serializers
   initTypeSerializers();
+
+  initRandomSequence();
 }
 //=========================================================
 
@@ -285,6 +289,7 @@ std::string tlp::demangleClassName(const char *className, bool hideTlp) {
 void tlp::initTulipLib(const char *) {
   TulipBitmapDir = "/resources/";
   initTypeSerializers();
+  initRandomSequence();
 }
 
 std::string tlp::demangleClassName(const char *className, bool) {
@@ -314,10 +319,16 @@ std::ostream *tlp::getOgzstream(const std::string &name, int open_mode) {
 #endif
 }
 
+// random sequence management
 //=========================================================
 
-// random sequence management
+// variable holding the seed value for the pseudo random number generator
 static unsigned int randomSeed = UINT_MAX;
+// uniformly-distributed integer random number generator that produces non-deterministic random numbers
+static std::random_device rd;
+// Mersenne Twister pseudo-random generator of 32-bit numbers
+static std::mt19937 mt;
+
 void tlp::setSeedOfRandomSequence(unsigned int seed) {
   randomSeed = seed;
 }
@@ -327,40 +338,37 @@ unsigned int tlp::getSeedOfRandomSequence() {
 }
 
 void tlp::initRandomSequence() {
+  // init seed from random sequence with std::random_device
   if (randomSeed == UINT_MAX) {
-    unsigned int seed = static_cast<unsigned int>(time(nullptr));
-    // init a sequence of rand() calls
-    srand(seed);
-#ifndef WIN32
-    // init a sequence of random() calls
-    srandom(seed);
-#endif
-  } else {
-    srand(randomSeed);
-#ifndef WIN32
-    srandom(randomSeed);
-#endif
+    randomSeed = rd();
   }
+  mt.seed(randomSeed);
 }
 
 int tlp::randomInteger(int bound) {
-  int x = rand();
-
-  // keep searching for an x in a range divisible by n
-  // see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
-  while (x >= RAND_MAX - (RAND_MAX % bound)) {
-    x = rand();
+  if (bound == 0) {
+    return 0;
+  } else if (bound > 0) {
+    std::uniform_int_distribution<int> dist(0, bound-1);
+    return dist(mt);
+  } else {
+    std::uniform_int_distribution<int> dist(bound+1, 0);
+    return dist(mt);
   }
-
-  return x % bound;
 }
 
 unsigned int tlp::randomUnsignedInteger(unsigned int bound) {
-  return static_cast<unsigned int>(randomInteger(static_cast<int>(bound)));
+  if (bound == 0) {
+    return 0;
+  } else {
+    std::uniform_int_distribution<unsigned int> dist(0, bound-1);
+    return dist(mt);
+  }
 }
 
 double tlp::randomDouble(double max) {
-  return max * rand() / static_cast<double>(RAND_MAX);
+  std::uniform_real_distribution<double> dist(0, std::nextafter(max, DBL_MAX));
+  return dist(mt);
 }
 
 //=========================================================

@@ -116,7 +116,8 @@ TLP_SCOPE unsigned int getSeedOfRandomSequence();
 TLP_SCOPE void initRandomSequence();
 
 /**
- * @brief Returns a random integer in the range [0, bound[
+ * @brief Returns a random integer in the range [0, bound[ if bound is positive
+ *        or ]bound, 0] if bound is negative
  */
 TLP_SCOPE int randomInteger(int bound);
 

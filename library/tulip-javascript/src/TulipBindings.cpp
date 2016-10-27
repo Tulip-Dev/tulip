@@ -2801,4 +2801,31 @@ void EMSCRIPTEN_KEEPALIVE ColorScale_getColors(tlp::ColorScale *colorScale, unsi
     ++i;
   }
 }
+
+// ========================================================================================================================================================
+
+void EMSCRIPTEN_KEEPALIVE setSeedOfRandomSequence(unsigned int seed = UINT_MAX) {
+  tlp::setSeedOfRandomSequence(seed);
+}
+
+double EMSCRIPTEN_KEEPALIVE getSeedOfRandomSequence() {
+  return tlp::getSeedOfRandomSequence();
+}
+
+void EMSCRIPTEN_KEEPALIVE initRandomSequence() {
+  tlp::initRandomSequence();
+}
+
+int EMSCRIPTEN_KEEPALIVE randomInteger(int bound) {
+  return tlp::randomInteger(bound);
+}
+
+double EMSCRIPTEN_KEEPALIVE randomUnsignedInteger(unsigned int bound) {
+  return tlp::randomUnsignedInteger(bound);
+}
+
+double EMSCRIPTEN_KEEPALIVE randomDouble(double max = 1.0) {
+  return tlp::randomDouble(max);
+}
+
 }

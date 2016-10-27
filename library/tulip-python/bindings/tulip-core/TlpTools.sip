@@ -477,4 +477,44 @@ Further calls to rand() or rand_r(...) will return the elements of that sequence
 
 %End
 
+//=====================================================================
+
+int randomInteger(int bound);
+%Docstring
+tlp.randomInteger(bound)
+
+Returns a random integer in the range [0, bound[
+
+:param bound: the upper bound (not included) of the range
+:type bound: integer
+:rtype: integer
+%End
+
+//=====================================================================
+
+unsigned int randomUnsignedInteger(unsigned int bound);
+%Docstring
+tlp.randomUnsignedInteger(bound)
+
+Returns a random unsigned integer in the range [0, bound[
+
+:param bound: the upper bound (not included) of the range
+:type bound: integer
+:rtype: integer
+%End
+
+//=====================================================================
+
+double randomDouble(double max = 1.0);
+%Docstring
+tlp.randomDouble([max = 1.0])
+
+Returns a random float in the range [0, max]
+
+:param max: the upper bound of the range
+:type bound: float
+:rtype: float
+%End
+
+
 };

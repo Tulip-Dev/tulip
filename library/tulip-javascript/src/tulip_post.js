@@ -6306,6 +6306,48 @@ tulip.sendEventsToObservers = function(events) {
 
 // ==================================================================================================================
 
+var _setSeedOfRandomSequence = Module.cwrap('setSeedOfRandomSequence', null, ['number']);
+
+var _getSeedOfRandomSequence = Module.cwrap('getSeedOfRandomSequence', 'number', []);
+
+var _initRandomSequence = Module.cwrap('initRandomSequence', null, []);
+
+var _randomInteger = Module.cwrap('randomInteger', 'number', ['number']);
+
+var _randomUnsignedInteger = Module.cwrap('randomUnsignedInteger', 'number', ['number']);
+
+var _randomDouble = Module.cwrap('randomDouble', 'number', ['number']);
+
+tulip.setSeedOfRandomSequence = function(seed) {
+  checkArgumentsTypes(arguments, ['number'], 1);
+  _setSeedOfRandomSequence(seed | 0);
+};
+
+tulip.getSeedOfRandomSequence = function() {
+  return _getSeedOfRandomSequence();
+};
+
+tulip.initRandomSequence = function() {
+  _initRandomSequence();
+};
+
+tulip.randomInteger = function(bound) {
+  checkArgumentsTypes(arguments, ['number'], 1);
+  return _randomInteger(bound | 0);
+};
+
+tulip.randomUnsigedInteger = function(bound) {
+  checkArgumentsTypes(arguments, ['number'], 1);
+  return _randomUnsignedInteger(bound | 0);
+};
+
+tulip.randomDouble = function(max) {
+  checkArgumentsTypes(arguments, ['number'], 1);
+  return _randomDouble(max);
+};
+
+// ==================================================================================================================
+
 if (workerMode) {
 
   var graphObject = {};
