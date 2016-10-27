@@ -40,7 +40,7 @@ it and set some rendering parameters::
         europeSg = graph.inducedSubGraph(europeNodes)
         europeSg.setName("Europe")
 
-        nlvEurope = tlpgui.createView("Node Link Diagram view", europeSg)
+        nlvEurope = tlpgui.createNodeLinkDiagramView(europeSg)
 
         # set labels scaled to node sizes mode
         renderingParameters = nlvEurope.getRenderingParameters()
@@ -66,7 +66,7 @@ and then changes the nodes colors. The Node Link Diagram view will be updated au
     >>> from tulip import *
     >>> from tulipgui import *
     >>> grid = tlp.importGraph("Grid")
-    >>> view = tlp.createNodeLinkDiagramView(grid)
+    >>> view = tlpgui.createNodeLinkDiagramView(grid)
     >>> viewColor = graph.getColorProperty("viewColor")
     >>> for n in graph.getNodes():
     ...     viewColor[n] = tlp.Color(0, 255, 0)
