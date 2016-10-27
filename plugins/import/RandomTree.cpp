@@ -46,7 +46,7 @@ class RandomTree : public ImportModule {
       return false;
 
     bool result = true;
-    int randNumber = rand();
+    int randNumber = randomInteger(RAND_MAX);
 
     if (randNumber > RAND_MAX / 2) {
       node n1, n2;
