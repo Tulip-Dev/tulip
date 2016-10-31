@@ -400,8 +400,15 @@ int tlp::randomInteger(int max) {
   }
 
 #else
+  assert(max >= 0 && max <= RAND_MAX);
+  
+  if (max == 0)
+    return 0;
+  
   int x = rand();
-
+  if (max == RAND_MAX)
+    return x;
+  
   // keep searching for an x in a range divisible by n
   // see http://stackoverflow.com/questions/10984974/why-do-people-say-there-is-modulo-bias-when-using-a-random-number-generator
   while (x >= RAND_MAX - (RAND_MAX % (max+1))) {
