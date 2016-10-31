@@ -162,7 +162,8 @@
           <div data-role = "controlgroup" data-type = "vertical" >
             <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Fast Overlap Removal' algorithm" onclick ="computeFastOverlapRemoval()" > Fast Overlap Removal </a>
             <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Auto-Sizing' algorithm" onclick ="computeAutoSizing()" > Auto-Sizing </a>
-            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Edge bundling' algorithm" onclick ="computeEdgeBundling()" > Edge bundling </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Curve edges' algorithm" onclick ="computeCurveEdges()" > Curve edges </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Edge bundling' algorithm" onclick ="computeEdgeBundling()" > Edge bundling </a>         
             <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="" onclick ="applyGraphScript()" > Magic script </a>
             <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="" onclick ="computeLouvainClustering()" > Louvain clustering </a>
             <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="" onclick ="computeMCLClustering()" > MCL clustering </a>
@@ -369,6 +370,11 @@
     start = new Date().getTime();
     graphProperties.viewShape.setAllEdgeValue(tulip.EdgeShape.BezierCurve);
     graph.applyAlgorithmInWorker('Edge bundling', {}, algoFinishedCallback);
+  }
+
+  function computeCurveEdges() {
+    graphProperties.viewShape.setAllEdgeValue(tulip.EdgeShape.BezierCurve);
+    graph.applyAlgorithm('Curve edges');
   }
 
   function computeLayout(layoutAlgoName) {
