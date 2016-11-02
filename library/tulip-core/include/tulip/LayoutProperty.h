@@ -33,7 +33,7 @@ template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
 
 template <>
-MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
+std::pair<tlp::Coord, tlp::Coord> tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
 
 class PropertyContext;
 class Graph;
