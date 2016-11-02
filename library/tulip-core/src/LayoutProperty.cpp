@@ -42,7 +42,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
+std::pair<tlp::Coord, tlp::Coord> tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
 #ifndef NDEBUG
   tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
 #endif
@@ -95,7 +95,7 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
     graph->addListener(this);
   }
 
-  MINMAX_PAIR(tlp::PointType) minmax(minT, maxT);
+  std::pair<tlp::Coord, tlp::Coord> minmax(minT, maxT);
   return minMaxNode[sgi] = minmax;
 }
 
@@ -104,11 +104,7 @@ MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::
  **/
 template <>
 void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue) {
-#if defined(_MSC_VER)
-  TLP_HASH_MAP<unsigned int, MINMAX_PAIR(tlp::PointType) >::const_iterator it = minMaxNode.begin();
-#else
-  MINMAX_MAP(tlp::PointType)::const_iterator it = minMaxNode.begin();
-#endif
+  TLP_HASH_MAP<unsigned int, std::pair<tlp::Coord, tlp::Coord> >::const_iterator it = minMaxNode.begin();
 
   const std::vector<Coord>& oldV = this->getEdgeValue(e);
 
