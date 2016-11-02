@@ -223,6 +223,12 @@ public:
   void addEdge(Graph *g, edge e) {
     graphs.push_back(g), edges.push_back(e);
   }
+  void addEdges(Graph *g, const vector<edge> &ve) {
+    graphs.push_back(g);
+    for (size_t i = 0; i < ve.size(); ++i) {
+      edges.push_back(ve[i]);
+    }
+  }
   void delNode(Graph *g, const node n) {
     graphs.push_back(g), nodes.push_back(n);
   }
@@ -272,6 +278,10 @@ public:
         addEdge(graph, gEvt->getEdge());
         break;
 
+      case GraphEvent::TLP_ADD_EDGES:
+        addEdges(graph, gEvt->getEdges());
+        break;
+
       case GraphEvent::TLP_DEL_EDGE:
         delEdge(graph, gEvt->getEdge());
         break;
@@ -305,55 +315,55 @@ public:
         return;
 
       /*case GraphEvent::TLP_BEFORE_SET_ENDS:
-        beforeSetEnds(graph, gEvt->getEdge());
-        break;
+beforeSetEnds(graph, gEvt->getEdge());
+break;
 
-      case GraphEvent::TLP_AFTER_SET_ENDS:
-        afterSetEnds(graph, gEvt->getEdge());
-        break;
+    case GraphEvent::TLP_AFTER_SET_ENDS:
+afterSetEnds(graph, gEvt->getEdge());
+break;
 
-      case GraphEvent::TLP_ADD_NODES: {
-        const std::vector<node>& nodes = gEvt->getNodes();
+    case GraphEvent::TLP_ADD_NODES: {
+const std::vector<node>& nodes = gEvt->getNodes();
 
-        for (unsigned int i = 0; i < nodes.size(); ++i)
-          addNode(graph, nodes[i]);
+for (unsigned int i = 0; i < nodes.size(); ++i)
+  addNode(graph, nodes[i]);
 
-        break;
-      }
+break;
+    }
 
-      case GraphEvent::TLP_ADD_EDGES: {
-        const std::vector<edge>& edges = gEvt->getEdges();
+    case GraphEvent::TLP_ADD_EDGES: {
+const std::vector<edge>& edges = gEvt->getEdges();
 
-        for (unsigned int i = 0; i < edges.size(); ++i)
-          addEdge(graph, edges[i]);
+for (unsigned int i = 0; i < edges.size(); ++i)
+  addEdge(graph, edges[i]);
 
-        break;
-      }
+break;
+    }
 
-      case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
-        beforeSetAttribute(graph, gEvt->getAttributeName());
-        break;
+    case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
+beforeSetAttribute(graph, gEvt->getAttributeName());
+break;
 
-      case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
-        afterSetAttribute(graph, gEvt->getAttributeName());
-        break;
+    case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
+afterSetAttribute(graph, gEvt->getAttributeName());
+break;
 
-      case GraphEvent::TLP_REMOVE_ATTRIBUTE:
-        removeAttribute(graph, gEvt->getAttributeName());
+    case GraphEvent::TLP_REMOVE_ATTRIBUTE:
+removeAttribute(graph, gEvt->getAttributeName());
 
-      case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
-      case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
-      case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
-      case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
-      case GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH:
-      case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
-      case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
-      case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
-      case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
-      case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
-      case GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY:
-      case GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY:
-      break;*/
+    case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
+    case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
+    case GraphEvent::TLP_AFTER_DEL_INHERITED_PROPERTY:
+    case GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY:
+    case GraphEvent::TLP_BEFORE_ADD_DESCENDANTGRAPH:
+    case GraphEvent::TLP_AFTER_ADD_DESCENDANTGRAPH:
+    case GraphEvent::TLP_BEFORE_DEL_DESCENDANTGRAPH:
+    case GraphEvent::TLP_AFTER_DEL_DESCENDANTGRAPH:
+    case GraphEvent::TLP_BEFORE_ADD_SUBGRAPH:
+    case GraphEvent::TLP_BEFORE_DEL_SUBGRAPH:
+    case GraphEvent::TLP_BEFORE_ADD_LOCAL_PROPERTY:
+    case GraphEvent::TLP_BEFORE_ADD_INHERITED_PROPERTY:
+    break;*/
 
       default:
         break;
@@ -369,8 +379,8 @@ public:
           delete observer;
           GraphObserverTest *obs = new GraphObserverTest();
           addListener(obs);
-          observer = nullptr;
-          ObservableGraphTest::setGraph(nullptr);
+          observer = NULL;
+          ObservableGraphTest::setGraph(NULL);
         } else
           destroy(graph);
       }
@@ -1015,4 +1025,21 @@ void ObservableGraphTest::testDeleteBug747() {
 
   CPPUNIT_ASSERT(observer == nullptr);
   CPPUNIT_ASSERT(graph == nullptr);
+}
+
+void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
+  // create a simple graph and export it to the TLPB format
+  Graph *testGraph = tlp::newGraph();
+  node n1 = testGraph->addNode();
+  node n2 = testGraph->addNode();
+  testGraph->addEdge(n1, n2);
+  string tlpbFile = "test.tlpb.gz";
+  saveGraph(testGraph, tlpbFile);
+
+  // import the previously saved graph by populating the already created empty graph
+  DataSet params;
+  params.set<string>("file::filename", tlpbFile);
+  importGraph("TLPB Import", params, NULL, graph);
+  // check that the graph event TLP_ADD_EDGES has been correctly received
+  CPPUNIT_ASSERT(!gObserver->edges.empty());
 }

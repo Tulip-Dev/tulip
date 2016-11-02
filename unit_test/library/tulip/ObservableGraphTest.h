@@ -37,6 +37,7 @@ class ObservableGraphTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend);
   CPPUNIT_TEST(testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted);
   CPPUNIT_TEST(testDeleteBug747);
+  CPPUNIT_TEST(testAddEdgesEventForTLPBImport);
   CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -59,6 +60,7 @@ public:
   void testDelInheritedPropertyExistWhenDelInheritedPropertyIsSend();
   void testNotifyDelInheritedPropertyIsSendWhenLocalPropertyIsDeleted();
   void testDeleteBug747();
+  void testAddEdgesEventForTLPBImport();
 };
 
 #endif

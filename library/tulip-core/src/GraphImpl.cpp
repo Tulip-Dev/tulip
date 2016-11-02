@@ -228,7 +228,8 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node>> &edges, std::v
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdges(const std::vector<std::pair<node, node>> &edges) {
-  storage.addEdges(edges);
+  std::vector<edge> addedEdges;
+  addEdges(edges, addedEdges);
 }
 //----------------------------------------------------------------
 void GraphImpl::restoreEdges(const std::vector<edge> &edges, const std::vector<std::pair<node, node>> &ends) {
