@@ -1024,6 +1024,15 @@ void EMSCRIPTEN_KEEPALIVE Graph_delete(tlp::Graph *graph) {
   delete graph;
 }
 
+void EMSCRIPTEN_KEEPALIVE Graph_loadFromTLPBFile(tlp::Graph *graph, const char *filename) {
+  tlp::DataSet params;
+  params.set<std::string>("file::filename", filename);
+  tlp::Observable::holdObservers();
+  graph->clear();
+  tlp::importGraph("TLPB Import", params, nullptr, graph);
+  tlp::Observable::unholdObservers();
+}
+
 bool EMSCRIPTEN_KEEPALIVE Graph_applyAlgorithm(tlp::Graph *graph, const char *algorithm, const char *jsonParameters, bool notifyProgress = false) {
   std::string errMsg;
   tlp::Observable::holdObservers();

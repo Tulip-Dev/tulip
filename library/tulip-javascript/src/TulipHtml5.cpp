@@ -662,28 +662,6 @@ void EMSCRIPTEN_KEEPALIVE getSelectedEdges(unsigned int *edgesIds) {
   }
 }
 
-void EMSCRIPTEN_KEEPALIVE startGraphViewData(const char *canvasId) {
-  glGraph[canvasId]->setGraph(graph[canvasId]);
-  glGraph[canvasId]->clearObservers();
-}
-
-void EMSCRIPTEN_KEEPALIVE endGraphViewData(const char *canvasId) {
-  glGraph[canvasId]->initObservers();
-  glGraph[canvasId]->prepareEdgesData();
-  glGraph[canvasId]->computeGraphBoundingBox();
-}
-
-void EMSCRIPTEN_KEEPALIVE startGraphViewUpdate(const char *canvasId, bool clearGraph = false) {
-  if (clearGraph) {
-    graph[canvasId]->clear();
-  }
-}
-
-void EMSCRIPTEN_KEEPALIVE endGraphViewUpdate(const char *canvasId) {
-  addSubGraphsHull(canvasId, graph[canvasId]);
-  setGraphHullsToDisplay(canvasId);
-}
-
 //==============================================================
 
 GlGraphRenderingParameters *EMSCRIPTEN_KEEPALIVE getViewRenderingParameters(const char *canvasId) {
