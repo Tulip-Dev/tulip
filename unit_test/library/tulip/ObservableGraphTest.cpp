@@ -226,6 +226,12 @@ public:
   void addEdge(Graph* g, edge e) {
     graphs.push_back(g), edges.push_back(e);
   }
+  void addEdges(Graph* g, const vector<edge> &ve) {
+    graphs.push_back(g);
+    for (size_t i = 0 ; i < ve.size() ; ++i) {
+      edges.push_back(ve[i]);
+    }
+  }
   void delNode(Graph* g, const node n) {
     graphs.push_back(g), nodes.push_back(n);
   }
@@ -264,40 +270,44 @@ public:
 
       switch (gEvt->getType()) {
       case GraphEvent::TLP_ADD_NODE:
-	addNode(graph, gEvt->getNode());
-	break;
+        addNode(graph, gEvt->getNode());
+        break;
 
       case GraphEvent::TLP_DEL_NODE:
-	delNode(graph, gEvt->getNode());
-	break;
+        delNode(graph, gEvt->getNode());
+        break;
 
       case GraphEvent::TLP_ADD_EDGE:
-	addEdge(graph, gEvt->getEdge());
-	break;
+        addEdge(graph, gEvt->getEdge());
+        break;
+
+      case GraphEvent::TLP_ADD_EDGES:
+        addEdges(graph, gEvt->getEdges());
+        break;
 
       case GraphEvent::TLP_DEL_EDGE:
-	delEdge(graph, gEvt->getEdge());
-	break;
+        delEdge(graph, gEvt->getEdge());
+        break;
 
       case GraphEvent::TLP_REVERSE_EDGE:
-	reverseEdge(graph, gEvt->getEdge());
-	break;
+        reverseEdge(graph, gEvt->getEdge());
+        break;
 
       case GraphEvent::TLP_AFTER_ADD_SUBGRAPH:
-	addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
-	break;
+        addSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+        break;
 
       case GraphEvent::TLP_AFTER_DEL_SUBGRAPH:
-	delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
-	break;
+        delSubGraph(graph, const_cast<Graph *>(gEvt->getSubGraph()));
+        break;
 
       case GraphEvent::TLP_ADD_LOCAL_PROPERTY:
-	addLocalProperty(graph, gEvt->getPropertyName());
-	break;
+        addLocalProperty(graph, gEvt->getPropertyName());
+        break;
 
       case GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY:
-	delLocalProperty(graph, gEvt->getPropertyName());
-	break;
+        delLocalProperty(graph, gEvt->getPropertyName());
+        break;
 
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
         addInheritedProperty(graph, gEvt->getPropertyName());
@@ -307,42 +317,42 @@ public:
         afterDelInheritedProperty(graph, gEvt->getPropertyName());
         return;
 
-      /*case GraphEvent::TLP_BEFORE_SET_ENDS:
-	beforeSetEnds(graph, gEvt->getEdge());
-	break;
+        /*case GraphEvent::TLP_BEFORE_SET_ENDS:
+  beforeSetEnds(graph, gEvt->getEdge());
+  break;
 
       case GraphEvent::TLP_AFTER_SET_ENDS:
-	afterSetEnds(graph, gEvt->getEdge());
-	break;
+  afterSetEnds(graph, gEvt->getEdge());
+  break;
 
       case GraphEvent::TLP_ADD_NODES: {
-	const std::vector<node>& nodes = gEvt->getNodes();
+  const std::vector<node>& nodes = gEvt->getNodes();
 
-	for (unsigned int i = 0; i < nodes.size(); ++i)
-	  addNode(graph, nodes[i]);
+  for (unsigned int i = 0; i < nodes.size(); ++i)
+    addNode(graph, nodes[i]);
 
-	break;
+  break;
       }
 
       case GraphEvent::TLP_ADD_EDGES: {
-	const std::vector<edge>& edges = gEvt->getEdges();
+  const std::vector<edge>& edges = gEvt->getEdges();
 
-	for (unsigned int i = 0; i < edges.size(); ++i)
-	  addEdge(graph, edges[i]);
+  for (unsigned int i = 0; i < edges.size(); ++i)
+    addEdge(graph, edges[i]);
 
-	break;
+  break;
       }
 
       case GraphEvent::TLP_BEFORE_SET_ATTRIBUTE:
-	beforeSetAttribute(graph, gEvt->getAttributeName());
-	break;
+  beforeSetAttribute(graph, gEvt->getAttributeName());
+  break;
 
       case GraphEvent::TLP_AFTER_SET_ATTRIBUTE:
-	afterSetAttribute(graph, gEvt->getAttributeName());
-	break;
+  afterSetAttribute(graph, gEvt->getAttributeName());
+  break;
 
       case GraphEvent::TLP_REMOVE_ATTRIBUTE:
-	removeAttribute(graph, gEvt->getAttributeName());
+  removeAttribute(graph, gEvt->getAttributeName());
 
       case GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY:
       case GraphEvent::TLP_ADD_INHERITED_PROPERTY:
@@ -364,20 +374,20 @@ public:
     }
     else {
       Graph* graph =
-	// From my point of view the use of dynamic_cast should be correct
-	// but it fails, so I use reinterpret_cast (pm)
-	reinterpret_cast<Graph *>(evt.sender());
+          // From my point of view the use of dynamic_cast should be correct
+          // but it fails, so I use reinterpret_cast (pm)
+          reinterpret_cast<Graph *>(evt.sender());
 
       if (graph && evt.type() == Event::TLP_DELETE) {
-	if (deleteBug747) {
-	  delete observer;
-	  GraphObserverTest* obs = new GraphObserverTest();
-	  addListener(obs);
-	  observer = NULL;
-	  ObservableGraphTest::setGraph(NULL);
-	}
-	else
-	  destroy(graph);
+        if (deleteBug747) {
+          delete observer;
+          GraphObserverTest* obs = new GraphObserverTest();
+          addListener(obs);
+          observer = NULL;
+          ObservableGraphTest::setGraph(NULL);
+        }
+        else
+          destroy(graph);
       }
     }
   }
@@ -1031,4 +1041,21 @@ void ObservableGraphTest::testDeleteBug747() {
   CPPUNIT_ASSERT(observer == NULL);
   CPPUNIT_ASSERT(graph == NULL);
 }
-  
+
+void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
+  // create a simple graph and export it to the TLPB format
+  Graph *testGraph = tlp::newGraph();
+  node n1 = testGraph->addNode();
+  node n2 = testGraph->addNode();
+  testGraph->addEdge(n1, n2);
+  string tlpbFile = "test.tlpb.gz";
+  saveGraph(testGraph, tlpbFile);
+
+  // import the previously saved graph by populating the already created empty graph
+  DataSet params;
+  params.set<string>("file::filename", tlpbFile);
+  importGraph("TLPB Import", params, NULL, graph);
+  // check that the graph event TLP_ADD_EDGES has been correctly received
+  CPPUNIT_ASSERT(!gObserver->edges.empty());
+}
+
