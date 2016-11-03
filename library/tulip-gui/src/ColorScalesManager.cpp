@@ -20,7 +20,7 @@ list<string> ColorScalesManager::getColorScalesList() {
 
   if(colorscaleDirectory.exists() && colorscaleDirectory.isDir()) {
     QDir dir(colorscaleDirectory.absoluteFilePath());
-    dir.setFilter(QDir::Files | QDir::NoDot | QDir::NoDotDot);
+    dir.setFilter(QDir::Files | QDir::NoDotAndDotDot);
     QFileInfoList list = dir.entryInfoList();
 
     for (int i = 0; i < list.size(); ++i) {
