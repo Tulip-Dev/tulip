@@ -21,6 +21,8 @@
 #ifndef CSVPARSERCONFIGURATIONWIDGET_H
 #define CSVPARSERCONFIGURATIONWIDGET_H
 
+#include <climits>
+
 #include <QWidget>
 
 #include <tulip/tulipconf.h>
