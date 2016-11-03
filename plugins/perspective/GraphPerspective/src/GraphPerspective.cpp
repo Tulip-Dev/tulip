@@ -545,7 +545,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   PluginProgress* prg = progress(NoProgressOption);
   prg->setTitle(exportPluginName);
   // take time before run
-  QDateTime start = QDateTime::currentDateTime();
+  QTime start = QTime::currentTime();
   bool result = tlp::exportGraph(g,*os,exportPluginName,data,prg);
   delete os;
 
@@ -556,7 +556,7 @@ void GraphPerspective::exportGraph(Graph* g) {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string moduleAndParams = exportPluginName + " - " + data.toString();
-      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QTime::currentTime()) << "ms";
     }
 
     addRecentDocument(wizard.outputFile());
@@ -597,7 +597,7 @@ void GraphPerspective::importGraph(const std::string& module,
     PluginProgress* prg = progress(IsStoppable | IsCancellable);
     prg->setTitle(module);
     // take time before run
-    QDateTime start = QDateTime::currentDateTime();
+    QTime start = QTime::currentTime();
     g = tlp::importGraph(module,data,prg);
 
     if (g == NULL) {
@@ -612,7 +612,7 @@ void GraphPerspective::importGraph(const std::string& module,
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
       std::string moduleAndParams = module + " import - " + data.toString();
-      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QTime::currentTime()) << "ms";
     }
 
     if (g->getName().empty()) {
