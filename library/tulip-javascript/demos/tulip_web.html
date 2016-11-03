@@ -470,10 +470,15 @@
     });
   }
 
+  function hullsComputingFinishedCallback(graph, succeed) {
+    algoFinishedCallback(graph, succeed);
+    tulipView.addSubGraphsHulls();
+  }
+
   function computeSubGraphsHulls() {
     if (graph.numberOfSubGraphs() > 0) {
       start = new Date().getTime();
-      graph.executeScriptInWorker(computeSgHulls, algoFinishedCallback);
+      graph.executeScriptInWorker(computeSgHulls, hullsComputingFinishedCallback);
     }
   }
 

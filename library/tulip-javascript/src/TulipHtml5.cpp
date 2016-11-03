@@ -1043,4 +1043,10 @@ void EMSCRIPTEN_KEEPALIVE setViewBackgroundColor(const char *canvasId, unsigned 
 void EMSCRIPTEN_KEEPALIVE setViewBackupBackBuffer(const char *canvasId, bool backup) {
   glScene[canvasId]->setBackupBackBuffer(backup);
 }
+
+void EMSCRIPTEN_KEEPALIVE addSubGraphsHulls(const char *canvasId) {
+  addSubGraphsHull(canvasId, graph[canvasId]);
+  setGraphHullsToDisplay(canvasId);
+}
+
 }
