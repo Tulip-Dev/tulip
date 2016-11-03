@@ -94,7 +94,7 @@ int main(int argc, char **argv) {
   QDir pluginServerDir(argv[1]);
   PluginLister::currentLoader = &collector;
 
-  foreach (const QFileInfo &component, pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDot | QDir::NoDotDot)) {
+  foreach (const QFileInfo &component, pluginServerDir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot)) {
     collector._currentDirectory = component.fileName();
     QDir pluginDir(component.absoluteFilePath());
     QDir::home().mkpath(outputDir.absoluteFilePath(component.fileName()));

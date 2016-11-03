@@ -600,8 +600,9 @@ void Workspace::writeProject(TulipProject *project, QMap<Graph *, QString> rootI
 }
 
 void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootIds, PluginProgress *progress) {
-  QStringList entries = project->entryList("views", QDir::Dirs | QDir::NoDot | QDir::NoDotDot, QDir::Name);
+  QStringList entries = project->entryList("views", QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name);
   int step = 0, max_step = entries.size();
+
   foreach (const QString &entry, entries) {
     progress->progress(step++, max_step);
     QIODevice *xmlFile = project->fileStream("views/" + entry + "/view.xml");

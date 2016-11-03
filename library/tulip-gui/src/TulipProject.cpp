@@ -355,7 +355,7 @@ bool TulipProject::removeAllDirPrivate(const QString &path) {
     return false;
 
   QDir dir(pathInfo.absoluteFilePath());
-  QFileInfoList entries(dir.entryInfoList(QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::Hidden | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
+  QFileInfoList entries(dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden | QDir::AllDirs | QDir::Files, QDir::DirsFirst));
 
   for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
     QFileInfo info(*it);

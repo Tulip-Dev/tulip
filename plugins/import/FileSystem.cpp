@@ -174,7 +174,7 @@ public:
       QDir currentDir(QDir(elem.first));
 
       tlp::node parentNode(elem.second);
-      QFlags<QDir::Filter> filter = QDir::NoDot | QDir::NoDotDot | QDir::System | QDir::AllDirs | QDir::Files;
+      QFlags<QDir::Filter> filter = QDir::NoDotAndDotDot | QDir::System | QDir::AllDirs | QDir::Files;
 
       if (hiddenFiles)
         filter |= QDir::Hidden;
