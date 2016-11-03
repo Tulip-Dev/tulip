@@ -379,8 +379,7 @@ public:
    * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(BooleanProperty *selection,
-                         Graph* parentSubGraph = NULL);
+  Graph *inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph = NULL);
 
   /**
    * @brief Deletes a sub-graph of this graph.

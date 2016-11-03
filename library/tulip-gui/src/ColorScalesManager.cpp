@@ -179,16 +179,15 @@ void ColorScalesManager::removeColorScale(const string &colorScaleName) {
   TulipSettings::instance().endGroup();
 }
 
-
-void ColorScalesManager::setLatestColorScale(ColorScale& cs) {
+void ColorScalesManager::setLatestColorScale(ColorScale &cs) {
   QList<QVariant> colors;
   QList<QVariant> stops;
 
   std::map<float, Color> cm = cs.getColorMap();
   std::map<float, Color>::iterator it = cm.begin();
-  
-  for (; it !=  cm.end(); ++it) {
-    Color& c = it->second;
+
+  for (; it != cm.end(); ++it) {
+    Color &c = it->second;
     QColor qc(c.getR(), c.getG(), c.getB(), c.getA());
     colors.push_back(QVariant(qc));
     stops.push_back(QVariant(it->first));
@@ -204,14 +203,12 @@ void ColorScalesManager::setLatestColorScale(ColorScale& cs) {
 ColorScale ColorScalesManager::getLatestColorScale() {
   TulipSettings::instance().beginGroup("viewLatestColorScale");
   if (TulipSettings::instance().contains("colors")) {
-    QList<QVariant> colorsListv = 
-      TulipSettings::instance().value("colors").toList();
-    QList<QVariant> stopsListv = 
-      TulipSettings::instance().value("stops").toList();
+    QList<QVariant> colorsListv = TulipSettings::instance().value("colors").toList();
+    QList<QVariant> stopsListv = TulipSettings::instance().value("stops").toList();
     bool gradient = TulipSettings::instance().value("gradient?").toBool();
-  
+
     std::map<float, Color> cm;
-    for (int i = 0 ; i < colorsListv.size() ; ++i) {
+    for (int i = 0; i < colorsListv.size(); ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
       float stop = stopsListv.at(i).value<float>();
       cm[stop] = QColorToColor(color);
@@ -221,5 +218,4 @@ ColorScale ColorScalesManager::getLatestColorScale() {
   }
   TulipSettings::instance().endGroup();
   return ColorScale();
-}  
-  
+}

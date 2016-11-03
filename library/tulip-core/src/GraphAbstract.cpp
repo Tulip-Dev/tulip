@@ -301,7 +301,7 @@ node GraphAbstract::getOneNode() const {
 }
 //=========================================================================
 node GraphAbstract::getRandomNode() const {
-  unsigned int nodeIdx = randomUnsignedInteger(numberOfNodes()-1);
+  unsigned int nodeIdx = randomUnsignedInteger(numberOfNodes() - 1);
   unsigned int i = 0;
   node ret;
   for (node n : getNodes()) {
@@ -325,7 +325,7 @@ edge GraphAbstract::getOneEdge() const {
 }
 //=========================================================================
 edge GraphAbstract::getRandomEdge() const {
-  unsigned int edgeIdx = randomUnsignedInteger(numberOfEdges()-1);
+  unsigned int edgeIdx = randomUnsignedInteger(numberOfEdges() - 1);
   unsigned int i = 0;
   edge ret;
   for (edge e : getEdges()) {

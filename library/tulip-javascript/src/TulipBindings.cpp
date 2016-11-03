@@ -567,7 +567,6 @@ const char *EMSCRIPTEN_KEEPALIVE getDefaultAlgorithmParametersJSON(const char *a
 
 void setProgressBarValueWorker(unsigned long graphId, int value);
 void setProgressBarCommentWorker(unsigned long graphId, const char *comment);
-
 }
 
 class EmscriptenPluginProgress : public tlp::SimplePluginProgress {
@@ -2469,5 +2468,4 @@ double EMSCRIPTEN_KEEPALIVE randomUnsignedInteger(unsigned int bound) {
 double EMSCRIPTEN_KEEPALIVE randomDouble(double max = 1.0) {
   return tlp::randomDouble(max);
 }
-
 }

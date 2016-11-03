@@ -93,7 +93,7 @@ GEMLayout::~GEMLayout() {
 }
 //=========================================================
 unsigned int GEMLayout::select() {
-  return randomInteger(graph->numberOfNodes()-1);
+  return randomInteger(graph->numberOfNodes() - 1);
 }
 //=========================================================
 void GEMLayout::vertexdata_init(const float starttemp) {

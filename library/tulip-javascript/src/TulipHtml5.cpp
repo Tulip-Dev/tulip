@@ -1048,5 +1048,4 @@ void EMSCRIPTEN_KEEPALIVE addSubGraphsHulls(const char *canvasId) {
   addSubGraphsHull(canvasId, graph[canvasId]);
   setGraphHullsToDisplay(canvasId);
 }
-
 }
