@@ -83,16 +83,16 @@ function stringArrayToBytesAndOffsetsTypedArray(stringArray) {
 Function.prototype.inheritsFrom = function(parentClassOrObject) {
   this.prototype = Object.create(parentClassOrObject.prototype);
   this.prototype.constructor = this;
-}
+};
 
 if (typeOf(String.prototype.startsWith) == 'undefined') {
 
   String.prototype.startsWith = function(prefix) {
     return this.indexOf(prefix) === 0;
-  }
+  };
 
   String.prototype.endsWith = function(suffix) {
-    return this.match(suffix+"$") == suffix;
+    return this.match(suffix+'$') == suffix;
   };
 
 }
@@ -114,52 +114,52 @@ if (workerMode) {
 function checkArgumentsTypes(argList, typeList, nbRequiredArguments) {
   if (!tulip.debugChecks) return;
   var callerName = checkArgumentsTypes.caller.name;
-  if (callerName.startsWith("tulip_")) {
+  if (callerName.startsWith('tulip_')) {
     callerName = callerName.replace(/_/g, '.');
   }
   var nbArgs = argList.length;
   if (nbRequiredArguments && nbRequiredArguments > nbArgs) nbArgs = nbRequiredArguments;
   for (var i = 0 ; i < nbArgs ; ++i) {
-    if (typeOf(typeList[i]) == "string" && typeOf(argList[i]) != typeList[i]) {
-      throw new TypeError("Error when calling function '" + callerName + "', parameter "+ i + " must be of type '"+ typeList[i] +"' (found '" + typeOf(argList[i]) + "' instead)");
-    } else if (typeOf(typeList[i]) == "function") {
-      if (typeOf(argList[i]) != "object" || !(argList[i] instanceof typeList[i])) {
+    if (typeOf(typeList[i]) == 'string' && typeOf(argList[i]) != typeList[i]) {
+      throw new TypeError('Error when calling function \'' + callerName + '\', parameter '+ i + ' must be of type \''+ typeList[i] +'\' (found \'' + typeOf(argList[i]) + '\' instead)');
+    } else if (typeOf(typeList[i]) == 'function') {
+      if (typeOf(argList[i]) != 'object' || !(argList[i] instanceof typeList[i])) {
         var typename = typeList[i].name;
-        if (typename.startsWith("tulip_")) {
+        if (typename.startsWith('tulip_')) {
           typename = typename.replace(/_/g, '.');
         }
-        throw new TypeError("Error when calling function '" + callerName + "', parameter "+ i + " must be an instance of a '"+ typename +"' object (found '" + typeOf(argList[i]) + "' instead)");
+        throw new TypeError('Error when calling function \'' + callerName + '\', parameter '+ i + ' must be an instance of a \''+ typename +'\' object (found \'' + typeOf(argList[i]) + '\' instead)');
       }
-    } else if (typeOf(typeList[i]) == "array") {
+    } else if (typeOf(typeList[i]) == 'array') {
       var typeOk = false;
       for (var j = 0 ; j < typeList[i].length ; ++j) {
-        if (typeOf(typeList[i][j]) == "string" && typeOf(argList[i]) == typeList[i][j]) {
+        if (typeOf(typeList[i][j]) == 'string' && typeOf(argList[i]) == typeList[i][j]) {
           typeOk = true;
           break;
-        } else if (typeOf(typeList[i][j]) == "function") {
-          if (typeOf(argList[i]) == "object" && argList[i] instanceof typeList[i][j]) {
+        } else if (typeOf(typeList[i][j]) == 'function') {
+          if (typeOf(argList[i]) == 'object' && argList[i] instanceof typeList[i][j]) {
             typeOk = true;
             break;
           }
         }
       }
       if (!typeOk) {
-        var errMsg = "Error when calling function '" + callerName + "', parameter "+ i + " must be of one of the following types : ";
+        var errMsg = 'Error when calling function \'' + callerName + '\', parameter '+ i + ' must be of one of the following types : ';
         for (var j = 0 ; j < typeList[i].length ; ++j) {
-          if (typeOf(typeList[i][j]) == "string") {
+          if (typeOf(typeList[i][j]) == 'string') {
             errMsg += typeList[i][j];
-          } else if (typeOf(typeList[i][j]) == "function") {
+          } else if (typeOf(typeList[i][j]) == 'function') {
             var typename = typeList[i][j].name;
-            if (typename.startsWith("tulip_")) {
+            if (typename.startsWith('tulip_')) {
               typename = typename.replace(/_/g, '.');
             }
-            errMsg += "an instance of a '"+ typename +"' object";
+            errMsg += 'an instance of a \''+ typename +'\' object';
           }
           if (j != typeList[i].length - 1) {
-            errMsg += ", ";
+            errMsg += ', ';
           }
         }
-        errMsg += ", found '" + typeOf(argList[i]) + "' instead";
+        errMsg += ', found \'' + typeOf(argList[i]) + '\' instead';
         throw new TypeError(errMsg);
       }
     }
@@ -169,7 +169,7 @@ function checkArgumentsTypes(argList, typeList, nbRequiredArguments) {
 function checkArrayOfType(array, type, i) {
   if (!tulip.debugChecks) return;
   var callerName = checkArrayOfType.caller.name;
-  if (callerName.startsWith("tulip_")) {
+  if (callerName.startsWith('tulip_')) {
     callerName = callerName.replace(/_/g, '.');
   }
   var types = [];
@@ -180,13 +180,13 @@ function checkArrayOfType(array, type, i) {
     checkArgumentsTypes(array, types);
   } catch (e) {
     var typename = type;
-    if (typeOf(typename) == "function") {
+    if (typeOf(typename) == 'function') {
       typename = type.name;
-      if (typename.startsWith("tulip_")) {
+      if (typename.startsWith('tulip_')) {
         typename = typename.replace(/_/g, '.');
       }
     }
-    throw new TypeError("Error when calling function '" + callerName + "', parameter "+ i + " must be an array of "+ typename);
+    throw new TypeError('Error when calling function \'' + callerName + '\', parameter '+ i + ' must be an array of '+ typename);
   }
 }
 
@@ -196,10 +196,10 @@ function checkWrappedCppPointer(cppPointer) {
   //if (!tulip.debugChecks) return;
   if (cppPointer == 0 || _isPointerDeleted(cppPointer)) {
     var callerName = checkWrappedCppPointer.caller.name;
-    if (callerName.startsWith("tulip_")) {
+    if (callerName.startsWith('tulip_')) {
       callerName = callerName.replace(/_/g, '.');
     }
-    throw "Runtime error when calling function '" + callerName +"' : wrapped C++ object is null or has been deleted";
+    throw 'Runtime error when calling function \'' + callerName +'\' : wrapped C++ object is null or has been deleted';
   }
 }
 
@@ -217,7 +217,7 @@ function getArrayOfTulipType(arraySize, arrayFillFunc, tulipType) {
   }
   freeArrayInEmHeap(result);
   return tulipTypeArray;
-};
+}
 
 tulip.CppObjectWrapper = function(cppPointer, wrappedTypename) {
   this.cppPointer = cppPointer;
@@ -242,13 +242,13 @@ tulip.CppObjectWrapper.prototype.setWrappedTypename = function(typename) {
 
 // ==================================================================================================================
 
-var _PropertyInterface_delete = Module.cwrap('PropertyInterface_delete', null, ["number"]);
+var _PropertyInterface_delete = Module.cwrap('PropertyInterface_delete', null, ['number']);
 var _PropertyInterface_getName = Module.cwrap('PropertyInterface_getName', 'string', ['number']);
 var _PropertyInterface_getTypename = Module.cwrap('PropertyInterface_getTypename', 'string', ['number']);
 var _PropertyInterface_getGraph = Module.cwrap('PropertyInterface_getGraph', 'number', ['number']);
 var _PropertyInterface_getNodeStringValue = Module.cwrap('PropertyInterface_getNodeStringValue', 'string', ['number', 'number']);
 var _PropertyInterface_getEdgeStringValue = Module.cwrap('PropertyInterface_getEdgeStringValue', 'string', ['number', 'number']);
-var _PropertyInterface_copy = Module.cwrap('PropertyInterface_copy', null, ["number", "number"]);
+var _PropertyInterface_copy = Module.cwrap('PropertyInterface_copy', null, ['number', 'number']);
 
 /**
 * This is the description for the tulip.node class.
@@ -257,8 +257,8 @@ var _PropertyInterface_copy = Module.cwrap('PropertyInterface_copy', null, ["num
 */
 tulip.PropertyInterface = function tulip_PropertyInterface(cppPointer, graphManaged) {
   var newObject = createObject(tulip.PropertyInterface, this);
-  if (tulip_PropertyInterface.caller == null || tulip_PropertyInterface.caller.name != "createObject") {
-    tulip.CppObjectWrapper.call(newObject, cppPointer, "tlp::PropertyInterface");
+  if (tulip_PropertyInterface.caller == null || tulip_PropertyInterface.caller.name != 'createObject') {
+    tulip.CppObjectWrapper.call(newObject, cppPointer, 'tlp::PropertyInterface');
     newObject.graphManaged = graphManaged;
   }
   return newObject;
@@ -270,7 +270,7 @@ tulip.PropertyInterface.prototype.destroy = function tulip_PropertyInterface_pro
     _PropertyInterface_delete(this.cppPointer);
     this.cppPointer = 0;
   } else {
-    console.log("Not destroying property named '" + this.getName() + "' as it is managed by the graph named '" + this.getGraph().getName() + "'");
+    console.log('Not destroying property named \'' + this.getName() + '\' as it is managed by the graph named \'' + this.getGraph().getName() + '\'');
   }
 };
 tulip.PropertyInterface.prototype.getName = function tulip_PropertyInterface_prototype_getName() {
@@ -353,20 +353,20 @@ var _BooleanProperty_getEdgesEqualTo = Module.cwrap('BooleanProperty_getEdgesEqu
 
 tulip.BooleanProperty = function tulip_BooleanProperty() {
   var newObject = createObject(tulip.BooleanProperty, this);
-  if (tulip_BooleanProperty.caller == null || tulip_BooleanProperty.caller.name != "createObject") {
+  if (tulip_BooleanProperty.caller == null || tulip_BooleanProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createBooleanProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::BooleanProperty");
+    newObject.setWrappedTypename('tlp::BooleanProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -382,7 +382,7 @@ tulip.BooleanProperty.prototype.getNodeValue = function tulip_BooleanProperty_pr
 };
 tulip.BooleanProperty.prototype.setNodeValue = function tulip_BooleanProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "boolean"]);
+  checkArgumentsTypes(arguments, [tulip.Node, 'boolean']);
   _BooleanProperty_setNodeValue(this.cppPointer, node.id, val);
 };
 tulip.BooleanProperty.prototype.getEdgeDefaultValue = function tulip_BooleanProperty_prototype_getEdgeDefaultValue() {
@@ -396,30 +396,30 @@ tulip.BooleanProperty.prototype.getEdgeValue = function tulip_BooleanProperty_pr
 };
 tulip.BooleanProperty.prototype.setEdgeValue = function tulip_BooleanProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "boolean"]);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'boolean']);
   _BooleanProperty_setEdgeValue(this.cppPointer, edge.id, val);
 };
 tulip.BooleanProperty.prototype.setAllNodeValue = function tulip_BooleanProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["boolean"]);
+  checkArgumentsTypes(arguments, ['boolean']);
   _BooleanProperty_setAllNodeValue(this.cppPointer, val);
 };
 tulip.BooleanProperty.prototype.setAllEdgeValue = function tulip_BooleanProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["boolean"]);
+  checkArgumentsTypes(arguments, ['boolean']);
   _BooleanProperty_setAllEdgeValue(this.cppPointer, val);
 };
 tulip.BooleanProperty.prototype.getNodesEqualTo = function tulip_BooleanProperty_prototype_getNodesEqualTo(val, graph) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["boolean", tulip.Graph]);
+  checkArgumentsTypes(arguments, ['boolean', tulip.Graph]);
   var propObject = this;
-  return getArrayOfTulipType(propObject.getGraph().numberOfNodes(), function(byteOffset){_BooleanProperty_getNodesEqualTo(propObject.cppPointer, val, graph ? graph.cppPointer : 0, byteOffset)}, tulip.Node);
+  return getArrayOfTulipType(propObject.getGraph().numberOfNodes(), function(byteOffset){_BooleanProperty_getNodesEqualTo(propObject.cppPointer, val, graph ? graph.cppPointer : 0, byteOffset);}, tulip.Node);
 };
 tulip.BooleanProperty.prototype.getEdgesEqualTo = function tulip_BooleanProperty_prototype_getEdgesEqualTo(val, graph) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["boolean", tulip.Graph]);
+  checkArgumentsTypes(arguments, ['boolean', tulip.Graph]);
   var propObject = this;
-  return getArrayOfTulipType(propObject.getGraph().numberOfEdges(), function(byteOffset){_BooleanProperty_getEdgesEqualTo(propObject.cppPointer, val, graph ? graph.cppPointer : 0, byteOffset)}, tulip.Edge);
+  return getArrayOfTulipType(propObject.getGraph().numberOfEdges(), function(byteOffset){_BooleanProperty_getEdgesEqualTo(propObject.cppPointer, val, graph ? graph.cppPointer : 0, byteOffset);}, tulip.Edge);
 };
 // ==================================================================================================================
 
@@ -441,20 +441,20 @@ var _BooleanVectorProperty_getEdgeValue = Module.cwrap('BooleanVectorProperty_ge
 
 tulip.BooleanVectorProperty = function tulip_BooleanVectorProperty() {
   var newObject = createObject(tulip.BooleanVectorProperty, this);
-  if (tulip_BooleanVectorProperty.caller == null || tulip_BooleanVectorProperty.caller.name != "createObject") {
+  if (tulip_BooleanVectorProperty.caller == null || tulip_BooleanVectorProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createBooleanVectorProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::BooleanVectorProperty");
+    newObject.setWrappedTypename('tlp::BooleanVectorProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -480,8 +480,8 @@ tulip.BooleanVectorProperty.prototype.getNodeValue = function tulip_BooleanVecto
 };
 tulip.BooleanVectorProperty.prototype.setNodeValue = function tulip_BooleanVectorProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "array"], 2);
-  checkArrayOfType(val, "boolean", 1);
+  checkArgumentsTypes(arguments, [tulip.Node, 'array'], 2);
+  checkArrayOfType(val, 'boolean', 1);
   var booleanArray = allocArrayInEmHeap(Uint8Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     booleanArray[i] = val[i];
@@ -510,8 +510,8 @@ tulip.BooleanVectorProperty.prototype.getEdgeValue = function tulip_BooleanVecto
 };
 tulip.BooleanVectorProperty.prototype.setEdgeValue = function tulip_BooleanVectorProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "array"], 2);
-  checkArrayOfType(val, "boolean", 1);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'array'], 2);
+  checkArrayOfType(val, 'boolean', 1);
   var booleanArray = allocArrayInEmHeap(Uint8Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     booleanArray[i] = val[i];
@@ -521,8 +521,8 @@ tulip.BooleanVectorProperty.prototype.setEdgeValue = function tulip_BooleanVecto
 };
 tulip.BooleanVectorProperty.prototype.setAllNodeValue = function tulip_BooleanVectorProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "boolean", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'boolean', 0);
   var booleanArray = allocArrayInEmHeap(Uint8Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     booleanArray[i] = val[i];
@@ -532,8 +532,8 @@ tulip.BooleanVectorProperty.prototype.setAllNodeValue = function tulip_BooleanVe
 };
 tulip.BooleanVectorProperty.prototype.setAllEdgeValue = function tulip_BooleanVectorProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "boolean", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'boolean', 0);
   var booleanArray = allocArrayInEmHeap(Uint8Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     booleanArray[i] = val[i];
@@ -556,20 +556,20 @@ var _DoubleProperty_getSortedEdges = Module.cwrap('DoubleProperty_getSortedEdges
 
 tulip.DoubleProperty = function tulip_DoubleProperty() {
   var newObject = createObject(tulip.DoubleProperty, this);
-  if (tulip_DoubleProperty.caller == null || tulip_DoubleProperty.caller.name != "createObject") {
+  if (tulip_DoubleProperty.caller == null || tulip_DoubleProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createDoubleProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::DoubleProperty");
+    newObject.setWrappedTypename('tlp::DoubleProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -585,7 +585,7 @@ tulip.DoubleProperty.prototype.getNodeValue = function tulip_DoubleProperty_prot
 };
 tulip.DoubleProperty.prototype.setNodeValue = function tulip_DoubleProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "number"]);
+  checkArgumentsTypes(arguments, [tulip.Node, 'number']);
   _DoubleProperty_setNodeValue(this.cppPointer, node.id, val);
 };
 tulip.DoubleProperty.prototype.getEdgeDefaultValue = function tulip_DoubleProperty_prototype_getEdgeDefaultValue() {
@@ -599,26 +599,26 @@ tulip.DoubleProperty.prototype.getEdgeValue = function tulip_DoubleProperty_prot
 };
 tulip.DoubleProperty.prototype.setEdgeValue = function tulip_DoubleProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "number"]);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'number']);
   _DoubleProperty_setEdgeValue(this.cppPointer, edge.id, val);
 };
 tulip.DoubleProperty.prototype.setAllNodeValue = function tulip_DoubleProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   _DoubleProperty_setAllNodeValue(this.cppPointer, val);
 };
 tulip.DoubleProperty.prototype.setAllEdgeValue = function tulip_DoubleProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   _DoubleProperty_setAllEdgeValue(this.cppPointer, val);
 };
 tulip.DoubleProperty.prototype.getSortedEdges = function tulip_DoubleProperty_prototype_getSortedEdges(sg, ascendingOrder) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Graph, "boolean"]);
-  if (typeOf(sg) == "undefined") sg = this.getGraph();
-  if (typeOf(ascendingOrder) == "undefined") ascendingOrder = true;
+  checkArgumentsTypes(arguments, [tulip.Graph, 'boolean']);
+  if (typeOf(sg) == 'undefined') sg = this.getGraph();
+  if (typeOf(ascendingOrder) == 'undefined') ascendingOrder = true;
   var propertyObject = this;
-  return getArrayOfTulipType(sg.numberOfEdges(), function(byteOffset){_DoubleProperty_getSortedEdges(propertyObject.cppPointer, sg.cppPointer, ascendingOrder, byteOffset)}, tulip.Edge);
+  return getArrayOfTulipType(sg.numberOfEdges(), function(byteOffset){_DoubleProperty_getSortedEdges(propertyObject.cppPointer, sg.cppPointer, ascendingOrder, byteOffset);}, tulip.Edge);
 };
 
 // ==================================================================================================================
@@ -641,20 +641,20 @@ var _DoubleVectorProperty_getEdgeValue = Module.cwrap('DoubleVectorProperty_getE
 
 tulip.DoubleVectorProperty = function tulip_DoubleVectorProperty() {
   var newObject = createObject(tulip.DoubleVectorProperty, this);
-  if (tulip_DoubleVectorProperty.caller == null || tulip_DoubleVectorProperty.caller.name != "createObject") {
+  if (tulip_DoubleVectorProperty.caller == null || tulip_DoubleVectorProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createDoubleVectorProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::DoubleVectorProperty");
+    newObject.setWrappedTypename('tlp::DoubleVectorProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -680,8 +680,8 @@ tulip.DoubleVectorProperty.prototype.getNodeValue = function tulip_DoubleVectorP
 };
 tulip.DoubleVectorProperty.prototype.setNodeValue = function tulip_DoubleVectorProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "array"], 2);
-  checkArrayOfType(val, "number", 1);
+  checkArgumentsTypes(arguments, [tulip.Node, 'array'], 2);
+  checkArrayOfType(val, 'number', 1);
   var doubleArray = allocArrayInEmHeap(Float64Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     doubleArray[i] = val[i];
@@ -710,8 +710,8 @@ tulip.DoubleVectorProperty.prototype.getEdgeValue = function tulip_DoubleVectorP
 };
 tulip.DoubleVectorProperty.prototype.setEdgeValue = function tulip_DoubleVectorProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "array"], 2);
-  checkArrayOfType(val, "number", 1);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'array'], 2);
+  checkArrayOfType(val, 'number', 1);
   var doubleArray = allocArrayInEmHeap(Float64Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     doubleArray[i] = val[i];
@@ -721,8 +721,8 @@ tulip.DoubleVectorProperty.prototype.setEdgeValue = function tulip_DoubleVectorP
 };
 tulip.DoubleVectorProperty.prototype.setAllNodeValue = function tulip_DoubleVectorProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "number", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'number', 0);
   var doubleArray = allocArrayInEmHeap(Float64Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     doubleArray[i] = val[i];
@@ -732,8 +732,8 @@ tulip.DoubleVectorProperty.prototype.setAllNodeValue = function tulip_DoubleVect
 };
 tulip.DoubleVectorProperty.prototype.setAllEdgeValue = function tulip_DoubleVectorProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "number", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'number', 0);
   var doubleArray = allocArrayInEmHeap(Float64Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     doubleArray[i] = val[i];
@@ -756,20 +756,20 @@ var _IntegerProperty_getEdgeValue = Module.cwrap('IntegerProperty_getEdgeValue',
 
 tulip.IntegerProperty = function tulip_IntegerProperty() {
   var newObject = createObject(tulip.IntegerProperty, this);
-  if (tulip_IntegerProperty.caller == null || tulip_IntegerProperty.caller.name != "createObject") {
+  if (tulip_IntegerProperty.caller == null || tulip_IntegerProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createIntegerProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::IntegerProperty");
+    newObject.setWrappedTypename('tlp::IntegerProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -785,7 +785,7 @@ tulip.IntegerProperty.prototype.getNodeValue = function tulip_IntegerProperty_pr
 };
 tulip.IntegerProperty.prototype.setNodeValue = function tulip_IntegerProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "number"]);
+  checkArgumentsTypes(arguments, [tulip.Node, 'number']);
   _IntegerProperty_setNodeValue(this.cppPointer, node.id, val);
 };
 tulip.IntegerProperty.prototype.getEdgeDefaultValue = function tulip_IntegerProperty_prototype_getEdgeDefaultValue() {
@@ -799,17 +799,17 @@ tulip.IntegerProperty.prototype.getEdgeValue = function tulip_IntegerProperty_pr
 };
 tulip.IntegerProperty.prototype.setEdgeValue = function tulip_IntegerProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "number"]);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'number']);
   _IntegerProperty_setEdgeValue(this.cppPointer, edge.id, val);
 };
 tulip.IntegerProperty.prototype.setAllNodeValue = function tulip_IntegerProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   _IntegerProperty_setAllNodeValue(this.cppPointer, val);
 };
 tulip.IntegerProperty.prototype.setAllEdgeValue = function tulip_IntegerProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   _IntegerProperty_setAllEdgeValue(this.cppPointer, val);
 };
 
@@ -833,20 +833,20 @@ var _IntegerVectorProperty_getEdgeValue = Module.cwrap('IntegerVectorProperty_ge
 
 tulip.IntegerVectorProperty = function tulip_IntegerVectorProperty() {
   var newObject = createObject(tulip.IntegerVectorProperty, this);
-  if (tulip_IntegerVectorProperty.caller == null || tulip_IntegerVectorProperty.caller.name != "createObject") {
+  if (tulip_IntegerVectorProperty.caller == null || tulip_IntegerVectorProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createIntegerVectorProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::IntegerVectorProperty");
+    newObject.setWrappedTypename('tlp::IntegerVectorProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -872,8 +872,8 @@ tulip.IntegerVectorProperty.prototype.getNodeValue = function tulip_IntegerVecto
 };
 tulip.IntegerVectorProperty.prototype.setNodeValue = function tulip_IntegerVectorProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "array"], 2);
-  checkArrayOfType(val, "number", 1);
+  checkArgumentsTypes(arguments, [tulip.Node, 'array'], 2);
+  checkArrayOfType(val, 'number', 1);
   var integerArray = allocArrayInEmHeap(Int32Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     integerArray[i] = val[i];
@@ -902,8 +902,8 @@ tulip.IntegerVectorProperty.prototype.getEdgeValue = function tulip_IntegerVecto
 };
 tulip.IntegerVectorProperty.prototype.setEdgeValue = function tulip_IntegerVectorProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "array"], 2);
-  checkArrayOfType(val, "number", 1);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'array'], 2);
+  checkArrayOfType(val, 'number', 1);
   var integerArray = allocArrayInEmHeap(Int32Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     integerArray[i] = val[i];
@@ -913,8 +913,8 @@ tulip.IntegerVectorProperty.prototype.setEdgeValue = function tulip_IntegerVecto
 };
 tulip.IntegerVectorProperty.prototype.setAllNodeValue = function tulip_IntegerVectorProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "number", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'number', 0);
   var integerArray = allocArrayInEmHeap(Int32Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     integerArray[i] = val[i];
@@ -924,8 +924,8 @@ tulip.IntegerVectorProperty.prototype.setAllNodeValue = function tulip_IntegerVe
 };
 tulip.IntegerVectorProperty.prototype.setAllEdgeValue = function tulip_IntegerVectorProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "number", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'number', 0);
   var integerArray = allocArrayInEmHeap(Int32Array, val.length);
   for (var i = 0 ; i < val.length ; ++i) {
     integerArray[i] = val[i];
@@ -948,20 +948,20 @@ var _StringProperty_getEdgeValue = Module.cwrap('StringProperty_getEdgeValue', '
 
 tulip.StringProperty = function tulip_StringProperty() {
   var newObject = createObject(tulip.StringProperty, this);
-  if (tulip_StringProperty.caller == null || tulip_StringProperty.caller.name != "createObject") {
+  if (tulip_StringProperty.caller == null || tulip_StringProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createStringProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::StringProperty");
+    newObject.setWrappedTypename('tlp::StringProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -977,7 +977,7 @@ tulip.StringProperty.prototype.getNodeValue = function tulip_StringProperty_prot
 };
 tulip.StringProperty.prototype.setNodeValue = function tulip_StringProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "string"]);
+  checkArgumentsTypes(arguments, [tulip.Node, 'string']);
   _StringProperty_setNodeValue(this.cppPointer, node.id, val);
 };
 tulip.StringProperty.prototype.getEdgeDefaultValue = function tulip_StringProperty_prototype_getEdgeDefaultValue() {
@@ -991,17 +991,17 @@ tulip.StringProperty.prototype.getEdgeValue = function tulip_StringProperty_prot
 };
 tulip.StringProperty.prototype.setEdgeValue = function tulip_StringProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "string"]);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'string']);
   _StringProperty_setEdgeValue(this.cppPointer, edge.id, val);
 };
 tulip.StringProperty.prototype.setAllNodeValue = function tulip_StringProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   _StringProperty_setAllNodeValue(this.cppPointer, val);
 };
 tulip.StringProperty.prototype.setAllEdgeValue = function tulip_StringProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   _StringProperty_setAllEdgeValue(this.cppPointer, val);
 };
 
@@ -1031,20 +1031,20 @@ var _StringVectorProperty_getEdgeDefaultValue = Module.cwrap('StringVectorProper
 
 tulip.StringVectorProperty = function tulip_StringVectorProperty() {
   var newObject = createObject(tulip.StringVectorProperty, this);
-  if (tulip_StringVectorProperty.caller == null || tulip_StringVectorProperty.caller.name != "createObject") {
+  if (tulip_StringVectorProperty.caller == null || tulip_StringVectorProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createStringVectorProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::StringVectorProperty");
+    newObject.setWrappedTypename('tlp::StringVectorProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -1077,8 +1077,8 @@ tulip.StringVectorProperty.prototype.getNodeValue = function tulip_StringVectorP
 };
 tulip.StringVectorProperty.prototype.setNodeValue = function tulip_StringVectorProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "array"]);
-  checkArrayOfType(val, "string", 1);
+  checkArgumentsTypes(arguments, [tulip.Node, 'array']);
+  checkArrayOfType(val, 'string', 1);
   var data = stringArrayToBytesAndOffsetsTypedArray(val);
   _StringVectorProperty_setNodeValue(this.cppPointer, node.id, data.bytesArray.byteOffset, data.offsetsArray.byteOffset, val.length);
   freeArrayInEmHeap(data.bytesArray);
@@ -1111,8 +1111,8 @@ tulip.StringVectorProperty.prototype.getEdgeValue = function tulip_StringVectorP
 };
 tulip.StringVectorProperty.prototype.setEdgeValue = function tulip_StringVectorProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "array"]);
-  checkArrayOfType(val, "string", 1);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'array']);
+  checkArrayOfType(val, 'string', 1);
   var data = stringArrayToBytesAndOffsetsTypedArray(val);
   _StringVectorProperty_setEdgeValue(this.cppPointer, edge.id, data.bytesArray.byteOffset, data.offsetsArray.byteOffset, val.length);
   freeArrayInEmHeap(data.bytesArray);
@@ -1120,8 +1120,8 @@ tulip.StringVectorProperty.prototype.setEdgeValue = function tulip_StringVectorP
 };
 tulip.StringVectorProperty.prototype.setAllNodeValue = function tulip_StringVectorProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"]);
-  checkArrayOfType(val, "string", 0);
+  checkArgumentsTypes(arguments, ['array']);
+  checkArrayOfType(val, 'string', 0);
   var data = stringArrayToBytesAndOffsetsTypedArray(val);
   _StringVectorProperty_setAllNodeValue(this.cppPointer, data.bytesArray.byteOffset, data.offsetsArray.byteOffset, val.length);
   freeArrayInEmHeap(data.bytesArray);
@@ -1129,8 +1129,8 @@ tulip.StringVectorProperty.prototype.setAllNodeValue = function tulip_StringVect
 };
 tulip.StringVectorProperty.prototype.setAllEdgeValue = function tulip_StringVectorProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"]);
-  checkArrayOfType(val, "string", 0);
+  checkArgumentsTypes(arguments, ['array']);
+  checkArrayOfType(val, 'string', 0);
   var data = stringArrayToBytesAndOffsetsTypedArray(val);
   _StringVectorProperty_setAllEdgeValue(this.cppPointer, data.bytesArray.byteOffset, data.offsetsArray.byteOffset, val.length);
   freeArrayInEmHeap(data.bytesArray);
@@ -1152,7 +1152,7 @@ tulip.Color = function tulip_Color() {
         newObject.a = 255;
       }
     } else {
-      checkArgumentsTypes(arguments, ["number", "number", "number", "number"], 3);
+      checkArgumentsTypes(arguments, ['number', 'number', 'number', 'number'], 3);
       newObject.r = arguments[0];
       newObject.g = arguments[1];
       newObject.b = arguments[2];
@@ -1184,20 +1184,20 @@ var _ColorProperty_getEdgeValue = Module.cwrap('ColorProperty_getEdgeValue', nul
 
 tulip.ColorProperty = function tulip_ColorProperty() {
   var newObject = createObject(tulip.ColorProperty, this);
-  if (tulip_ColorProperty.caller == null || tulip_ColorProperty.caller.name != "createObject") {
+  if (tulip_ColorProperty.caller == null || tulip_ColorProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createColorProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::ColorProperty");
+    newObject.setWrappedTypename('tlp::ColorProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -1276,20 +1276,20 @@ var _ColorVectorProperty_getEdgeValue = Module.cwrap('ColorVectorProperty_getEdg
 
 tulip.ColorVectorProperty = function tulip_ColorVectorProperty() {
   var newObject = createObject(tulip.ColorVectorProperty, this);
-  if (tulip_ColorVectorProperty.caller == null || tulip_ColorVectorProperty.caller.name != "createObject") {
+  if (tulip_ColorVectorProperty.caller == null || tulip_ColorVectorProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createColorVectorProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::ColorVectorProperty");
+    newObject.setWrappedTypename('tlp::ColorVectorProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -1321,7 +1321,7 @@ tulip.ColorVectorProperty.prototype.getNodeValue = function tulip_ColorVectorPro
 };
 tulip.ColorVectorProperty.prototype.setNodeValue = function tulip_ColorVectorProperty_prototype_setNodeValue(node, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "array"], 2);
+  checkArgumentsTypes(arguments, [tulip.Node, 'array'], 2);
   checkArrayOfType(val, tulip.Color, 1);
   var colorArray = allocArrayInEmHeap(Uint8Array, val.length*4);
   for (var i = 0 ; i < val.length ; ++i) {
@@ -1360,7 +1360,7 @@ tulip.ColorVectorProperty.prototype.getEdgeValue = function tulip_ColorVectorPro
 };
 tulip.ColorVectorProperty.prototype.setEdgeValue = function tulip_ColorVectorProperty_prototype_setEdgeValue(edge, val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "array"], 2);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'array'], 2);
   checkArrayOfType(val, tulip.Color, 1);
   var colorArray = allocArrayInEmHeap(Uint8Array, val.length*4);
   for (var i = 0 ; i < val.length ; ++i) {
@@ -1374,7 +1374,7 @@ tulip.ColorVectorProperty.prototype.setEdgeValue = function tulip_ColorVectorPro
 };
 tulip.ColorVectorProperty.prototype.setAllNodeValue = function tulip_ColorVectorProperty_prototype_setAllNodeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
+  checkArgumentsTypes(arguments, ['array'], 1);
   checkArrayOfType(val, tulip.Color, 0);
   var colorArray = allocArrayInEmHeap(Uint8Array, val.length*4);
   for (var i = 0 ; i < val.length ; ++i) {
@@ -1388,8 +1388,8 @@ tulip.ColorVectorProperty.prototype.setAllNodeValue = function tulip_ColorVector
 };
 tulip.ColorVectorProperty.prototype.setAllEdgeValue = function tulip_ColorVectorProperty_prototype_setAllEdgeValue(val) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
-  checkArrayOfType(val, "color", 0);
+  checkArgumentsTypes(arguments, ['array'], 1);
+  checkArrayOfType(val, 'color', 0);
   var colorArray = allocArrayInEmHeap(Uint8Array, val.length*4);
   for (var i = 0 ; i < val.length ; ++i) {
     colorArray[4*i] = val[i].r;
@@ -1403,7 +1403,7 @@ tulip.ColorVectorProperty.prototype.setAllEdgeValue = function tulip_ColorVector
 // ==================================================================================================================
 
 tulip.Vec3f = function tulip_Vec3f(x, y, z) {
-  checkArgumentsTypes(arguments, ["number", "number", "number"])
+  checkArgumentsTypes(arguments, ['number', 'number', 'number']);
   var newObject = createObject(tulip.Vec3f, this);
   newObject.x = 0;
   newObject.y = 0;
@@ -1674,15 +1674,15 @@ tulip.Vec3f.prototype.getZ = function tulip_Vec3f_prototype_getZ() {
   return this.z;
 };
 tulip.Vec3f.prototype.setX = function tulip_Vec3f_prototype_setX(x) {
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   this.x = x;
 };
 tulip.Vec3f.prototype.setY = function tulip_Vec3f_prototype_setY(y) {
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   this.y = y;
 };
 tulip.Vec3f.prototype.setZ = function tulip_Vec3f_prototype_setZ(z) {
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   this.z = z;
 };
 tulip.Vec3f.prototype.getWidth = function tulip_Vec3f_prototype_getWidth() {
@@ -1695,15 +1695,15 @@ tulip.Vec3f.prototype.getDepth = function tulip_Vec3f_prototype_getDepth() {
   return this.z;
 };
 tulip.Vec3f.prototype.setWidth = function tulip_Vec3f_prototype_setWidth(w) {
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   this.x = w;
 };
 tulip.Vec3f.prototype.setHeight = function tulip_Vec3f_prototype_setHeight(h) {
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   this.y = h;
 };
 tulip.Vec3f.prototype.setDepth = function tulip_Vec3f_prototype_setDepth(d) {
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   this.z = d;
 };
 
@@ -1738,20 +1738,20 @@ var _LayoutProperty_perfectAspectRatio = Module.cwrap('LayoutProperty_perfectAsp
 
 tulip.LayoutProperty = function tulip_LayoutProperty() {
   var newObject = createObject(tulip.LayoutProperty, this);
-  if (tulip_LayoutProperty.caller == null || tulip_LayoutProperty.caller.name != "createObject") {
+  if (tulip_LayoutProperty.caller == null || tulip_LayoutProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createLayoutProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::LayoutProperty");
+    newObject.setWrappedTypename('tlp::LayoutProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -1811,7 +1811,7 @@ tulip.LayoutProperty.prototype.getEdgeValue = function tulip_LayoutProperty_prot
 };
 tulip.LayoutProperty.prototype.setEdgeValue = function tulip_LayoutProperty_prototype_setEdgeValue(edge, bends) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "array"]);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'array']);
   checkArrayOfType(bends, tulip.Coord, 1);
   if (bends.length == 0) return;
   var floatArray = allocArrayInEmHeap(Float32Array, bends.length*3);
@@ -1825,7 +1825,7 @@ tulip.LayoutProperty.prototype.setEdgeValue = function tulip_LayoutProperty_prot
 };
 tulip.LayoutProperty.prototype.setAllEdgeValue = function tulip_LayoutProperty_prototype_setAllEdgeValue(bends) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"]);
+  checkArgumentsTypes(arguments, ['array']);
   if (bends.length == 0) return;
   checkArrayOfType(bends, tulip.Coord, 0);
   var floatArray = allocArrayInEmHeap(Float32Array, bends.length*3);
@@ -1883,7 +1883,7 @@ tulip.LayoutProperty.prototype.scale = function tulip_LayoutProperty_prototype_s
 };
 tulip.LayoutProperty.prototype.rotateX = function tulip_LayoutProperty_prototype_rotateX(alpha, subgraph) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number", tulip.Graph], 1);
+  checkArgumentsTypes(arguments, ['number', tulip.Graph], 1);
   var sgPointer = 0;
   if (arguments.length == 2) {
     sgPointer = subgraph.cppPointer;
@@ -1892,7 +1892,7 @@ tulip.LayoutProperty.prototype.rotateX = function tulip_LayoutProperty_prototype
 };
 tulip.LayoutProperty.prototype.rotateY = function tulip_LayoutProperty_prototype_rotateY(alpha, subgraph) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number", tulip.Graph], 1);
+  checkArgumentsTypes(arguments, ['number', tulip.Graph], 1);
   var sgPointer = 0;
   if (arguments.length == 2) {
     sgPointer = subgraph.cppPointer;
@@ -1901,7 +1901,7 @@ tulip.LayoutProperty.prototype.rotateY = function tulip_LayoutProperty_prototype
 };
 tulip.LayoutProperty.prototype.rotateZ = function tulip_LayoutProperty_prototype_rotateZ(alpha, subgraph) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number", tulip.Graph], 1);
+  checkArgumentsTypes(arguments, ['number', tulip.Graph], 1);
   var sgPointer = 0;
   if (arguments.length == 2) {
     sgPointer = subgraph.cppPointer;
@@ -1954,20 +1954,20 @@ var _SizeProperty_getMax = Module.cwrap('SizeProperty_getMax', null, ['number', 
 
 tulip.SizeProperty = function tulip_SizeProperty() {
   var newObject = createObject(tulip.SizeProperty, this);
-  if (tulip_SizeProperty.caller == null || tulip_SizeProperty.caller.name != "createObject") {
+  if (tulip_SizeProperty.caller == null || tulip_SizeProperty.caller.name != 'createObject') {
     var cppPointer = 0;
     var graphManaged = false;
-    if (arguments.length == 1 && typeOf(arguments[0]) == "number") {
+    if (arguments.length == 1 && typeOf(arguments[0]) == 'number') {
       cppPointer = arguments[0];
       graphManaged = true;
     } else {
-      checkArgumentsTypes(arguments, [tulip.Graph, "string"], 1);
-      var propName = "";
+      checkArgumentsTypes(arguments, [tulip.Graph, 'string'], 1);
+      var propName = '';
       if (arguments.length > 1) propName = arguments[1];
       cppPointer = _createSizeProperty(arguments[0].cppPointer, propName);
     }
     tulip.PropertyInterface.call(newObject, cppPointer, graphManaged);
-    newObject.setWrappedTypename("tlp::SizeProperty");
+    newObject.setWrappedTypename('tlp::SizeProperty');
   }
   return createPropertyProxyIfAvailable(newObject);
 };
@@ -2147,7 +2147,7 @@ tulip.BoundingBox.prototype.intersect = function tulip_BoundingBox_prototype_int
 * @constructor
 */
 tulip.Node = function tulip_Node(id) {
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   var newObject = createObject(tulip.Node, this);
   if (arguments.length == 0) {
     newObject.id = UINT_MAX;
@@ -2171,7 +2171,7 @@ tulip.Node.prototype.toString = function() {
 * @constructor
 */
 tulip.Edge = function tulip_Edge(id) {
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   var newObject = createObject(tulip.Edge, this);
   if (arguments.length == 0) {
     newObject.id = UINT_MAX;
@@ -2199,7 +2199,7 @@ var _getDefaultAlgorithmParametersJSON = Module.cwrap('getDefaultAlgorithmParame
 
 
 tulip.loadGraph = function tulip_loadGraph(filename, notifyProgress) {
-  checkArgumentsTypes(arguments, ["string", "boolean"]);
+  checkArgumentsTypes(arguments, ['string', 'boolean']);
   var graphPointer = _loadGraph(filename, notifyProgress);
   if (graphPointer) {
     return tulip.Graph(graphPointer);
@@ -2209,20 +2209,20 @@ tulip.loadGraph = function tulip_loadGraph(filename, notifyProgress) {
 };
 
 tulip.loadGraphAsync = function tulip_loadGraphAsync(graphFileUrl, graphLoadedCallback) {
-  checkArgumentsTypes(arguments, ["string", "function"]);
+  checkArgumentsTypes(arguments, ['string', 'function']);
   var graphReq = new XMLHttpRequest();
-  graphReq.open("GET", graphFileUrl, true);
-  graphReq.responseType = "arraybuffer";
+  graphReq.open('GET', graphFileUrl, true);
+  graphReq.responseType = 'arraybuffer';
   graphReq.onload = function (oEvent) {
     var arrayBuffer = graphReq.response;
     var paths = graphFileUrl.split('/');
 
     var file = FS.findObject(graphFileUrl);
     if (!file) {
-      var filePath = "/";
+      var filePath = '/';
       for (var i = 0; i < paths.length - 1; ++i) {
         filePath += paths[i];
-        filePath += "/";
+        filePath += '/';
       }
       FS.createPath('/', filePath, true, true);
       FS.createFile('/', graphFileUrl, {}, true, true);
@@ -2238,25 +2238,25 @@ tulip.loadGraphAsync = function tulip_loadGraphAsync(graphFileUrl, graphLoadedCa
 };
 
 tulip.saveGraph = function tulip_saveGraph(graph, filename, notifyProgress) {
-  checkArgumentsTypes(arguments, [tulip.Graph, "string"]);
+  checkArgumentsTypes(arguments, [tulip.Graph, 'string']);
   return _saveGraph(graph.cppPointer, filename, notifyProgress) > 0;
 };
 
 tulip.getDefaultAlgorithmParameters = function tulip_getDefaultAlgorithmParameters(algoName, graph) {
-  checkArgumentsTypes(arguments, ["string", tulip.Graph], 1);
+  checkArgumentsTypes(arguments, ['string', tulip.Graph], 1);
   var gPointer = 0;
   if (graph) {
     gPointer = graph.cppPointer;
   }
   if (!tulip.pluginExists(algoName)) {
-    console.log("Error : no Tulip algorithm named '" + algoName + "'");
+    console.log('Error : no Tulip algorithm named \'' + algoName + '\'');
     return {};
   }
   var params = JSON.parse(_getDefaultAlgorithmParametersJSON(algoName, gPointer));
   for (var property in params) {
     if (params.hasOwnProperty(property)) {
-      if (typeOf(params[property]) == "object") {
-        if (params[property].type == "property") {
+      if (typeOf(params[property]) == 'object') {
+        if (params[property].type == 'property') {
           params[property] = graph.getProperty(params[property].name);
         }
       }
@@ -2533,9 +2533,9 @@ var _Graph_isConnected = Module.cwrap('Graph_isConnected', 'number', ['number'])
 tulip.Graph = function tulip_Graph(cppPointer) {
   var newObject = createObject(tulip.Graph, this);
   if (arguments.length == 0) {
-    tulip.CppObjectWrapper.call(newObject, _Graph_newGraph(), "tlp::Graph");
+    tulip.CppObjectWrapper.call(newObject, _Graph_newGraph(), 'tlp::Graph');
   } else {
-    tulip.CppObjectWrapper.call(newObject, cppPointer, "tlp::Graph");
+    tulip.CppObjectWrapper.call(newObject, cppPointer, 'tlp::Graph');
   }
   if (!workerMode) {
     graphHierarchyIdToWrapper[newObject.getCppPointer()] = newObject;
@@ -2549,9 +2549,9 @@ tulip.Graph.prototype.destroy = function() {
 };
 tulip.Graph.prototype.applyAlgorithm = function tulip_Graph_prototype_applyAlgorithm(algorithmName, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", "object", "boolean"], 1);
+  checkArgumentsTypes(arguments, ['string', 'object', 'boolean'], 1);
   if (!tulip.algorithmExists(algorithmName)) {
-    console.log("Error : no Tulip algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters == undefined) algoParameters = {};
@@ -2566,26 +2566,26 @@ tulip.Graph.prototype.addSubGraph = function tulip_Graph_prototype_addSubGraph()
   checkWrappedCppPointer(this.cppPointer);
   // addSubGraph(selection, name)
   if (arguments.length == 2) {
-    checkArgumentsTypes(arguments, [tulip.BooleanProperty, "string"]);
+    checkArgumentsTypes(arguments, [tulip.BooleanProperty, 'string']);
     return tulip.Graph(_Graph_addSubGraph1(this.cppPointer, arguments[0].cppPointer, arguments[1]));
     // addSubGraph(name)
   } else if (arguments.length == 1) {
-    checkArgumentsTypes(arguments, ["string"]);
+    checkArgumentsTypes(arguments, ['string']);
     return tulip.Graph(_Graph_addSubGraph2(this.cppPointer, arguments[0]));
   } else if (arguments.length == 0) {
-    return tulip.Graph(_Graph_addSubGraph2(this.cppPointer, ""));
+    return tulip.Graph(_Graph_addSubGraph2(this.cppPointer, ''));
   } else {
     return null;
   }
 };
 tulip.Graph.prototype.addCloneSubGraph = function tulip_Graph_prototype_addCloneSubGraph(name, addSibling) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", "boolean"]);
+  checkArgumentsTypes(arguments, ['string', 'boolean']);
   return tulip.Graph(_Graph_addCloneSubGraph(this.cppPointer, name, addSibling));
 };
 tulip.Graph.prototype.inducedSubGraph = function tulip_Graph_prototype_inducedSubGraph(nodes, parentSubGraph) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array", tulip.Graph]);
+  checkArgumentsTypes(arguments, ['array', tulip.Graph]);
   checkArrayOfType(nodes, tulip.Node, 0);
   var nodesIdsArray = allocArrayInEmHeap(Uint32Array, nodes.length+1);
   for (var i = 0 ; i < nodes.length ; ++i) {
@@ -2617,11 +2617,11 @@ tulip.Graph.prototype.getRoot = function tulip_Graph_prototype_getRoot() {
 tulip.Graph.prototype.getSubGraphs = function tulip_Graph_prototype_getSubGraphs() {
   checkWrappedCppPointer(this.cppPointer);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.numberOfSubGraphs(), function(byteOffset){_Graph_getSubGraphs(graphObject.cppPointer, byteOffset)}, tulip.Graph);
+  return getArrayOfTulipType(graphObject.numberOfSubGraphs(), function(byteOffset){_Graph_getSubGraphs(graphObject.cppPointer, byteOffset);}, tulip.Graph);
 };
 tulip.Graph.prototype.getNthSubGraph = function tulip_Graph_prototype_getNthSubGraph(n) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number"]);
+  checkArgumentsTypes(arguments, ['number']);
   return tulip.Graph(_Graph_getNthSubGraph(this.cppPointer, n));
 };
 tulip.Graph.prototype.numberOfSubGraphs = function tulip_Graph_prototype_numberOfSubGraphs() {
@@ -2644,8 +2644,8 @@ tulip.Graph.prototype.isDescendantGraph = function tulip_Graph_prototype_isDesce
 };
 tulip.Graph.prototype.getSubGraph = function tulip_Graph_prototype_getSubGraph() {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [["number", "string"]], 1);
-  if (typeOf(arguments[0]) == "string") {
+  checkArgumentsTypes(arguments, [['number', 'string']], 1);
+  if (typeOf(arguments[0]) == 'string') {
     var sgPointer = _Graph_getSubGraph2(this.cppPointer, arguments[0]);
     return sgPointer ? tulip.Graph(sgPointer) : null;
   } else {
@@ -2655,8 +2655,8 @@ tulip.Graph.prototype.getSubGraph = function tulip_Graph_prototype_getSubGraph()
 };
 tulip.Graph.prototype.getDescendantGraph = function tulip_Graph_prototype_getDescendantGraph() {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [["number", "string"]], 1);
-  if (typeOf(arguments[0]) == "string") {
+  checkArgumentsTypes(arguments, [['number', 'string']], 1);
+  if (typeOf(arguments[0]) == 'string') {
     var sgPointer = _Graph_getDescendantGraph2(this.cppPointer, arguments[0]);
     return sgPointer ? tulip.Graph(sgPointer) : null;
   } else {
@@ -2667,7 +2667,7 @@ tulip.Graph.prototype.getDescendantGraph = function tulip_Graph_prototype_getDes
 tulip.Graph.prototype.getDescendantGraphs = function tulip_Graph_prototype_getDescendantGraphs() {
   checkWrappedCppPointer(this.cppPointer);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.numberOfDescendantGraphs(), function(byteOffset){_Graph_getDescendantGraphs(graphObject.cppPointer, byteOffset)}, tulip.Graph);
+  return getArrayOfTulipType(graphObject.numberOfDescendantGraphs(), function(byteOffset){_Graph_getDescendantGraphs(graphObject.cppPointer, byteOffset);}, tulip.Graph);
 };
 tulip.Graph.prototype.addNode = function tulip_Graph_prototype_addNode() {
   checkWrappedCppPointer(this.cppPointer);
@@ -2685,7 +2685,7 @@ tulip.Graph.prototype.addNodes = function tulip_Graph_prototype_addNodes() {
   if (typeOf(arguments[0]) == 'number') {
     var nbNodes = arguments[0];
     var graphObject = this;
-    return getArrayOfTulipType(nbNodes, function(byteOffset){_Graph_addNodes1(graphObject.cppPointer, nbNodes, byteOffset)}, tulip.Node);
+    return getArrayOfTulipType(nbNodes, function(byteOffset){_Graph_addNodes1(graphObject.cppPointer, nbNodes, byteOffset);}, tulip.Node);
 
     // addNodes(array of tulip.Node)
   } else {
@@ -2701,7 +2701,7 @@ tulip.Graph.prototype.addNodes = function tulip_Graph_prototype_addNodes() {
 };
 tulip.Graph.prototype.delNode = function tulip_Graph_prototype_delNode(node, deleteInAllGraphs) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "boolean"], 1);
+  checkArgumentsTypes(arguments, [tulip.Node, 'boolean'], 1);
   if (arguments.length == 1) {
     deleteInAllGraphs = false;
   }
@@ -2709,7 +2709,7 @@ tulip.Graph.prototype.delNode = function tulip_Graph_prototype_delNode(node, del
 };
 tulip.Graph.prototype.delNodes = function tulip_Graph_prototype_delNodes(nodes, deleteInAllGraphs) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array", "boolean"], 1);
+  checkArgumentsTypes(arguments, ['array', 'boolean'], 1);
   checkArrayOfType(nodes, tulip.Node, 0);
   if (arguments.length == 1) {
     deleteInAllGraphs = false;
@@ -2746,15 +2746,15 @@ tulip.Graph.prototype.addEdge = function tulip_Graph_prototype_addEdge() {
 };
 tulip.Graph.prototype.addEdges = function tulip_Graph_prototype_addEdges() {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
+  checkArgumentsTypes(arguments, ['array'], 1);
   try {
     // addEdge(array of [tulip.Node, tulip.Node])
-    checkArrayOfType(arguments[0], "array");
+    checkArrayOfType(arguments[0], 'array');
     try {
       var nodes = arguments[0];
       for (var i = 0 ; i < nodes.length ; ++i) {
         if (nodes[i].length != 2) {
-          throw "error";
+          throw 'error';
         } else {
           checkArrayOfType(nodes[i], tulip.Node);
         }
@@ -2765,11 +2765,11 @@ tulip.Graph.prototype.addEdges = function tulip_Graph_prototype_addEdges() {
         nodesIdsArray[2*i+1] = nodes[i][1].id;
       }
       var graphObject = this;
-      var edges = getArrayOfTulipType(nodes.length, function(byteOffset){_Graph_addEdges1(graphObject.cppPointer, nodes.length, nodesIdsArray.byteOffset, byteOffset)}, tulip.Edge);
+      var edges = getArrayOfTulipType(nodes.length, function(byteOffset){_Graph_addEdges1(graphObject.cppPointer, nodes.length, nodesIdsArray.byteOffset, byteOffset);}, tulip.Edge);
       freeArrayInEmHeap(nodesIdsArray);
       return edges;
     } catch (err) {
-      throw new TypeError("Error when calling function 'tulip.Graph.prototype.addEdges', parameter 0 must be an array of arrays containing two instances of tulip.Node objects");
+      throw new TypeError('Error when calling function \'tulip.Graph.prototype.addEdges\', parameter 0 must be an array of arrays containing two instances of tulip.Node objects');
     }
   } catch (err) {
     // addEdge(array of tulip.Edge)
@@ -2785,7 +2785,7 @@ tulip.Graph.prototype.addEdges = function tulip_Graph_prototype_addEdges() {
 };
 tulip.Graph.prototype.delEdge = function tulip_Graph_prototype_delEdge(edge, deleteInAllGraphs) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "boolean"], 1);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'boolean'], 1);
   if (arguments.length == 1) {
     deleteInAllGraphs = false;
   }
@@ -2793,7 +2793,7 @@ tulip.Graph.prototype.delEdge = function tulip_Graph_prototype_delEdge(edge, del
 };
 tulip.Graph.prototype.delEdges = function tulip_Graph_prototype_delEdges(edges, deleteInAllGraphs) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array", "boolean"], 1);
+  checkArgumentsTypes(arguments, ['array', 'boolean'], 1);
   checkArrayOfType(edges, tulip.Edge, 0);
   if (arguments.length == 1) {
     deleteInAllGraphs = false;
@@ -2807,7 +2807,7 @@ tulip.Graph.prototype.delEdges = function tulip_Graph_prototype_delEdges(edges, 
 };
 tulip.Graph.prototype.setEdgeOrder = function tulip_Graph_prototype_setEdgeOrder(node, edges) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "array"], 2);
+  checkArgumentsTypes(arguments, [tulip.Node, 'array'], 2);
   checkArrayOfType(edges, tulip.Edge);
   var edgesIdsArray = allocArrayInEmHeap(Uint32Array, edges.length);
   for (var i = 0 ; i < edges.length ; ++i) {
@@ -2848,7 +2848,7 @@ tulip.Graph.prototype.getSource = function tulip_Graph_prototype_getSource() {
 tulip.Graph.prototype.getNodes = function tulip_Graph_prototype_getNodes() {
   checkWrappedCppPointer(this.cppPointer);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_getNodes(graphObject.cppPointer, byteOffset)}, tulip.Node);
+  return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_getNodes(graphObject.cppPointer, byteOffset);}, tulip.Node);
 };
 tulip.Graph.prototype.getRandomNode = function tulip_Graph_prototype_getRandomNode() {
   checkWrappedCppPointer(this.cppPointer);
@@ -2858,28 +2858,28 @@ tulip.Graph.prototype.getInNodes = function tulip_Graph_prototype_getInNodes(nod
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.indeg(node), function(byteOffset){_Graph_getInNodes(graphObject.cppPointer, node.id, byteOffset)}, tulip.Node);
+  return getArrayOfTulipType(graphObject.indeg(node), function(byteOffset){_Graph_getInNodes(graphObject.cppPointer, node.id, byteOffset);}, tulip.Node);
 };
 tulip.Graph.prototype.getOutNodes = function tulip_Graph_prototype_getOutNodes(node) {
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.outdeg(node), function(byteOffset){_Graph_getOutNodes(graphObject.cppPointer, node.id, byteOffset)}, tulip.Node);
+  return getArrayOfTulipType(graphObject.outdeg(node), function(byteOffset){_Graph_getOutNodes(graphObject.cppPointer, node.id, byteOffset);}, tulip.Node);
 };
 tulip.Graph.prototype.getInOutNodes = function tulip_Graph_prototype_getInOutNodes(node) {
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.deg(node), function(byteOffset){_Graph_getInOutNodes(graphObject.cppPointer, node.id, byteOffset)}, tulip.Node);
+  return getArrayOfTulipType(graphObject.deg(node), function(byteOffset){_Graph_getInOutNodes(graphObject.cppPointer, node.id, byteOffset);}, tulip.Node);
 };
 tulip.Graph.prototype.bfs = function tulip_Graph_prototype_bfs(root) {
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
   if (arguments.length == 0) {
-    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_bfs(graphObject.cppPointer, UINT_MAX, byteOffset)}, tulip.Node);
+    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_bfs(graphObject.cppPointer, UINT_MAX, byteOffset);}, tulip.Node);
   } else {
-    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_bfs(graphObject.cppPointer, root.id, byteOffset)}, tulip.Node);
+    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_bfs(graphObject.cppPointer, root.id, byteOffset);}, tulip.Node);
   }
 };
 tulip.Graph.prototype.dfs = function tulip_Graph_prototype_dfs(root) {
@@ -2887,9 +2887,9 @@ tulip.Graph.prototype.dfs = function tulip_Graph_prototype_dfs(root) {
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
   if (arguments.length == 0) {
-    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_dfs(graphObject.cppPointer, UINT_MAX, byteOffset)}, tulip.Node);
+    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_dfs(graphObject.cppPointer, UINT_MAX, byteOffset);}, tulip.Node);
   } else {
-    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_dfs(graphObject.cppPointer, root.id, byteOffset)}, tulip.Node);
+    return getArrayOfTulipType(graphObject.numberOfNodes(), function(byteOffset){_Graph_dfs(graphObject.cppPointer, root.id, byteOffset);}, tulip.Node);
   }
 };
 tulip.Graph.prototype.getEdges = function tulip_Graph_prototype_getEdges() {
@@ -2897,13 +2897,13 @@ tulip.Graph.prototype.getEdges = function tulip_Graph_prototype_getEdges() {
   // getEdges()
   if (arguments.length == 0) {
     var graphObject = this;
-    return getArrayOfTulipType(graphObject.numberOfEdges(), function(byteOffset){_Graph_getEdges(graphObject.cppPointer, byteOffset)}, tulip.Edge);
+    return getArrayOfTulipType(graphObject.numberOfEdges(), function(byteOffset){_Graph_getEdges(graphObject.cppPointer, byteOffset);}, tulip.Edge);
     // getEdges(tulip.Node, tulip.Node, boolean)
   } else {
-    checkArgumentsTypes(arguments, [tulip.Node, tulip.Node, "boolean"], 2);
+    checkArgumentsTypes(arguments, [tulip.Node, tulip.Node, 'boolean'], 2);
     var directed = true;
     if (arguments.length > 2) directed = arguments[2];
-    return getArrayOfTulipType(graphObject.deg(arguments[0]), function(byteOffset){_Graph_getEdges2(this.cppPointer, arguments[0].id, arguments[1].id, directed, byteOffset)}, tulip.Edge);
+    return getArrayOfTulipType(graphObject.deg(arguments[0]), function(byteOffset){_Graph_getEdges2(this.cppPointer, arguments[0].id, arguments[1].id, directed, byteOffset);}, tulip.Edge);
   }
 };
 tulip.Graph.prototype.getRandomEdge = function tulip_Graph_prototype_getRandomEdge() {
@@ -2914,19 +2914,19 @@ tulip.Graph.prototype.getOutEdges = function tulip_Graph_prototype_getOutEdges(n
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.outdeg(node), function(byteOffset){_Graph_getOutEdges(graphObject.cppPointer, node.id, byteOffset)}, tulip.Edge);
+  return getArrayOfTulipType(graphObject.outdeg(node), function(byteOffset){_Graph_getOutEdges(graphObject.cppPointer, node.id, byteOffset);}, tulip.Edge);
 };
 tulip.Graph.prototype.getInOutEdges = function tulip_Graph_prototype_getInOutEdges(node) {
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.deg(node), function(byteOffset){_Graph_getInOutEdges(graphObject.cppPointer, node.id, byteOffset)}, tulip.Edge);
+  return getArrayOfTulipType(graphObject.deg(node), function(byteOffset){_Graph_getInOutEdges(graphObject.cppPointer, node.id, byteOffset);}, tulip.Edge);
 };
 tulip.Graph.prototype.getInEdges = function tulip_Graph_prototype_getInEdges(node) {
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Node]);
   var graphObject = this;
-  return getArrayOfTulipType(graphObject.indeg(node), function(byteOffset){_Graph_getInEdges(graphObject.cppPointer, node.id, byteOffset)}, tulip.Edge);
+  return getArrayOfTulipType(graphObject.indeg(node), function(byteOffset){_Graph_getInEdges(graphObject.cppPointer, node.id, byteOffset);}, tulip.Edge);
 };
 tulip.Graph.prototype.getId = function tulip_Graph_prototype_getId() {
   checkWrappedCppPointer(this.cppPointer);
@@ -2967,7 +2967,7 @@ tulip.Graph.prototype.target = function tulip_Graph_prototype_target(edge) {
 tulip.Graph.prototype.ends = function tulip_Graph_prototype_ends(edge) {
   checkWrappedCppPointer(this.cppPointer);
   checkArgumentsTypes(arguments, [tulip.Edge]);
-  return getArrayOfTulipType(2, function(byteOffset){_Graph_ends(graphObject.cppPointer, edge.id, byteOffset)}, tulip.Node);
+  return getArrayOfTulipType(2, function(byteOffset){_Graph_ends(graphObject.cppPointer, edge.id, byteOffset);}, tulip.Node);
 };
 tulip.Graph.prototype.opposite = function tulip_Graph_prototype_opposite(edge, node) {
   checkWrappedCppPointer(this.cppPointer);
@@ -2985,13 +2985,13 @@ tulip.Graph.prototype.isElement = function tulip_Graph_prototype_isElement(elem)
 };
 tulip.Graph.prototype.hasEdge = function tulip_Graph_prototype_hasEdge(sourceNode, targetNode, directed) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, tulip.Node, "boolean"], 2);
+  checkArgumentsTypes(arguments, [tulip.Node, tulip.Node, 'boolean'], 2);
   if (directed == undefined) directed = true;
   return _Graph_hasEdge(this.cppPointer, sourceNode.id, targetNode.id, directed) > 0;
 };
 tulip.Graph.prototype.existEdge = function tulip_Graph_prototype_existEdge(sourceNode, targetNode, directed) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, tulip.Node, "boolean"], 2);
+  checkArgumentsTypes(arguments, [tulip.Node, tulip.Node, 'boolean'], 2);
   if (directed == undefined) directed = true;
   return tulip.Edge(_Graph_existEdge(this.cppPointer, sourceNode.id, targetNode.id, directed));
 };
@@ -3001,7 +3001,7 @@ tulip.Graph.prototype.getName = function tulip_Graph_prototype_getName() {
 };
 tulip.Graph.prototype.setName = function tulip_Graph_prototype_setName(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   _Graph_setName(this.cppPointer, name);
 };
 tulip.Graph.prototype.getProperties = function tulip_Graph_prototype_getProperties() {
@@ -3018,7 +3018,7 @@ tulip.Graph.prototype.getProperties = function tulip_Graph_prototype_getProperti
 };
 tulip.Graph.prototype.getProperty = function tulip_Graph_prototype_getPropery(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   var typedProperty = null;
   var propertyPointer = _Graph_getProperty(this.cppPointer, name);
   if (propertyPointer) {
@@ -3075,147 +3075,147 @@ tulip.Graph.prototype.getProperty = function tulip_Graph_prototype_getPropery(na
 };
 tulip.Graph.prototype.getBooleanProperty = function tulip_Graph_prototype_getBooleanProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.BooleanProperty(_Graph_getBooleanProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalBooleanProperty = function tulip_Graph_prototype_getLocalBooleanProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.BooleanProperty(_Graph_getLocalBooleanProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getBooleanVectorProperty = function tulip_Graph_prototype_getBooleanVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.BooleanVectorProperty(_Graph_getBooleanVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalBooleanVectorProperty = function tulip_Graph_prototype_getLocalBooleanVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.BooleanVectorProperty(_Graph_getLocalBooleanVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getColorProperty = function tulip_Graph_prototype_getColorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.ColorProperty(_Graph_getColorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalColorProperty = function tulip_Graph_prototype_getLocalColorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.ColorProperty(_Graph_getLocalColorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getColorVectorProperty = function tulip_Graph_prototype_getColorVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.ColorVectorProperty(_Graph_getColorVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalColorVectorProperty = function tulip_Graph_prototype_getLocalColorVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.ColorVectorProperty(_Graph_getLocalColorVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getDoubleProperty = function tulip_Graph_prototype_getDoubleProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.DoubleProperty(_Graph_getDoubleProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalDoubleProperty = function tulip_Graph_prototype_getLocalDoubleProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.DoubleProperty(_Graph_getLocalDoubleProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getDoubleVectorProperty = function tulip_Graph_prototype_getDoubleVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.DoubleVectorProperty(_Graph_getDoubleVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalDoubleVectorProperty = function tulip_Graph_prototype_getLocalDoubleVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.DoubleVectorProperty(_Graph_getLocalDoubleVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getIntegerProperty = function tulip_Graph_prototype_getIntegerProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.IntegerProperty(_Graph_getIntegerProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalIntegerProperty = function tulip_Graph_prototype_getLocalIntegerProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.IntegerProperty(_Graph_getLocalIntegerProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getIntegerVectorProperty = function tulip_Graph_prototype_getIntegerVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.IntegerVectorProperty(_Graph_getIntegerVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalIntegerVectorProperty = function tulip_Graph_prototype_getLocalIntegerVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.IntegerVectorProperty(_Graph_getLocalIntegerVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLayoutProperty = function tulip_Graph_prototype_getLayoutProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.LayoutProperty(_Graph_getLayoutProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalLayoutProperty = function tulip_Graph_prototype_getLocalLayoutProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.LayoutProperty(_Graph_getLocalLayoutProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getCoordVectorProperty = function tulip_Graph_prototype_getCoordVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.CoordVectorProperty(_Graph_getCoordVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalCoordVectorProperty = function tulip_Graph_prototype_getLocalCoordVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.CoordVectorProperty(_Graph_getLocalCoordVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getSizeProperty = function tulip_Graph_prototype_getSizeProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.SizeProperty(_Graph_getSizeProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalSizeProperty = function tulip_Graph_prototype_getLocalSizeProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.SizeProperty(_Graph_getLocalSizeProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getSizeVectorProperty = function tulip_Graph_prototype_getSizeVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.SizeVectorProperty(_Graph_getSizeVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalSizeVectorProperty = function tulip_Graph_prototype_getLocalSizeVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.SizeVectorProperty(_Graph_getLocalSizeVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getStringProperty = function tulip_Graph_prototype_getStringProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.StringProperty(_Graph_getStringProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalStringProperty = function tulip_Graph_prototype_getLocalStringProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.StringProperty(_Graph_getLocalStringProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getStringVectorProperty = function tulip_Graph_prototype_getStringVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.StringVectorProperty(_Graph_getStringVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.getLocalStringVectorProperty = function tulip_Graph_prototype_getLocalStringVectorProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"]);
+  checkArgumentsTypes(arguments, ['string']);
   return tulip.StringVectorProperty(_Graph_getLocalStringVectorProperty(this.cppPointer, name));
 };
 tulip.Graph.prototype.delLocalProperty = function tulip_Graph_prototype_delLocalProperty(name) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string"], 1);
+  checkArgumentsTypes(arguments, ['string'], 1);
   _Graph_delLocalProperty(this.cppPointer, name);
 };
 tulip.Graph.prototype.toJSON = function tulip_Graph_prototype_toJSON() {
@@ -3229,7 +3229,7 @@ tulip.Graph.prototype.getNodePropertiesValues = function tulip_Graph_prototype_g
   var properties = this.getProperties();
   for (var i = 0 ; i < properties.length ; ++i) {
     var propName = properties[i];
-    if (propName == "viewMetaGraph") {
+    if (propName == 'viewMetaGraph') {
       continue;
     }
     var prop = graph.getProperty(propName);
@@ -3239,12 +3239,12 @@ tulip.Graph.prototype.getNodePropertiesValues = function tulip_Graph_prototype_g
 };
 tulip.Graph.prototype.setNodePropertiesValues = function tulip_Graph_prototype_setNodePropertiesValues(node, values) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Node, "object"], 2);
+  checkArgumentsTypes(arguments, [tulip.Node, 'object'], 2);
   for (var propertyName in values) {
     if (values.hasOwnProperty(propertyName)) {
       var prop = this.getProperty(propertyName);
       if (!prop) {
-        console.log("Error : no graph property named '" + propertyName + "'");
+        console.log('Error : no graph property named \'' + propertyName + '\'');
       }
       prop.setNodeValue(node, values[propertyName]);
     }
@@ -3252,12 +3252,12 @@ tulip.Graph.prototype.setNodePropertiesValues = function tulip_Graph_prototype_s
 };
 tulip.Graph.prototype.setAllNodePropertiesValues = function tulip_Graph_prototype_setAllNodePropertiesValues(values) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["object"], 2);
+  checkArgumentsTypes(arguments, ['object'], 2);
   for (var propertyName in values) {
     if (values.hasOwnProperty(propertyName)) {
       var prop = this.getProperty(propertyName);
       if (!prop) {
-        console.log("Error : no graph property named '" + propertyName + "'");
+        console.log('Error : no graph property named \'' + propertyName + '\'');
       }
       prop.setAllNodeValue(values[propertyName]);
     }
@@ -3270,7 +3270,7 @@ tulip.Graph.prototype.getEdgePropertiesValues = function tulip_Graph_prototype_g
   var properties = this.getProperties();
   for (var i = 0 ; i < properties.length ; ++i) {
     var propName = properties[i];
-    if (propName == "viewMetaGraph") {
+    if (propName == 'viewMetaGraph') {
       continue;
     }
     var prop = graph.getProperty(propName);
@@ -3280,12 +3280,12 @@ tulip.Graph.prototype.getEdgePropertiesValues = function tulip_Graph_prototype_g
 };
 tulip.Graph.prototype.setEdgePropertiesValues = function tulip_Graph_prototype_setEdgePropertiesValues(edge, values) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, [tulip.Edge, "object"], 2);
+  checkArgumentsTypes(arguments, [tulip.Edge, 'object'], 2);
   for (var propertyName in values) {
     if (values.hasOwnProperty(propertyName)) {
       var prop = this.getProperty(propertyName);
       if (!prop) {
-        console.log("Error : no graph property named '" + propertyName + "'");
+        console.log('Error : no graph property named \'' + propertyName + '\'');
       }
       prop.setEdgeValue(edge, values[propertyName]);
     }
@@ -3293,12 +3293,12 @@ tulip.Graph.prototype.setEdgePropertiesValues = function tulip_Graph_prototype_s
 };
 tulip.Graph.prototype.setAllEdgePropertiesValues = function tulip_Graph_prototype_setAllEdgePropertiesValues(values) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["object"], 2);
+  checkArgumentsTypes(arguments, ['object'], 2);
   for (var propertyName in values) {
     if (values.hasOwnProperty(propertyName)) {
       var prop = this.getProperty(propertyName);
       if (!prop) {
-        console.log("Error : no graph property named '" + propertyName + "'");
+        console.log('Error : no graph property named \'' + propertyName + '\'');
       }
       prop.setAllEdgeValue(values[propertyName]);
     }
@@ -3306,9 +3306,9 @@ tulip.Graph.prototype.setAllEdgePropertiesValues = function tulip_Graph_prototyp
 };
 tulip.Graph.prototype.applyPropertyAlgorithm = function tulip_Graph_prototype_applyPropertyAlgorithm(algorithmName, resultProperty, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", tulip.PropertyInterface, "object", "boolean"], 2);
+  checkArgumentsTypes(arguments, ['string', tulip.PropertyInterface, 'object', 'boolean'], 2);
   if (!tulip.propertyAlgorithmExists(algorithmName)) {
-    console.log("Error : no Tulip property algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip property algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters === undefined) algoParameters = {};
@@ -3318,9 +3318,9 @@ tulip.Graph.prototype.applyPropertyAlgorithm = function tulip_Graph_prototype_ap
 
 tulip.Graph.prototype.applyBooleanAlgorithm = function tulip_Graph_prototype_applyBooleanAlgorithm(algorithmName, resultProperty, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", tulip.BooleanProperty, "object", "boolean"], 2);
+  checkArgumentsTypes(arguments, ['string', tulip.BooleanProperty, 'object', 'boolean'], 2);
   if (!tulip.booleanAlgorithmExists(algorithmName)) {
-    console.log("Error : no Tulip boolean algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip boolean algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters === undefined) algoParameters = {};
@@ -3330,9 +3330,9 @@ tulip.Graph.prototype.applyBooleanAlgorithm = function tulip_Graph_prototype_app
 
 tulip.Graph.prototype.applyColorAlgorithm = function tulip_Graph_prototype_applyColorAlgorithm(algorithmName, resultProperty, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", tulip.ColorProperty, "object", "boolean"], 2);
+  checkArgumentsTypes(arguments, ['string', tulip.ColorProperty, 'object', 'boolean'], 2);
   if (!tulip.colorAlgorithmExists(algorithmName)) {
-    console.log("Error : no Tulip color algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip color algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters === undefined) algoParameters = {};
@@ -3342,9 +3342,9 @@ tulip.Graph.prototype.applyColorAlgorithm = function tulip_Graph_prototype_apply
 
 tulip.Graph.prototype.applyDoubleAlgorithm = function tulip_Graph_prototype_applyDoubleAlgorithm(algorithmName, resultProperty, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", tulip.DoubleProperty, "object", "boolean"], 2);
+  checkArgumentsTypes(arguments, ['string', tulip.DoubleProperty, 'object', 'boolean'], 2);
   if (!tulip.doubleAlgorithmExists(algorithmName)) {
-    console.log("Error : no Tulip double algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip double algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters === undefined) algoParameters = {};
@@ -3354,9 +3354,9 @@ tulip.Graph.prototype.applyDoubleAlgorithm = function tulip_Graph_prototype_appl
 
 tulip.Graph.prototype.applyLayoutAlgorithm = function tulip_Graph_prototype_applyLayoutAlgorithm(algorithmName, resultProperty, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", tulip.LayoutProperty, "object", "boolean"], 2);
+  checkArgumentsTypes(arguments, ['string', tulip.LayoutProperty, 'object', 'boolean'], 2);
   if (!tulip.layoutAlgorithmExists(algorithmName)) {
-    console.log("Error : no Tulip layout algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip layout algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters === undefined) algoParameters = {};
@@ -3366,9 +3366,9 @@ tulip.Graph.prototype.applyLayoutAlgorithm = function tulip_Graph_prototype_appl
 
 tulip.Graph.prototype.applySizeAlgorithm = function tulip_Graph_prototype_applySizeAlgorithm(algorithmName, resultProperty, algoParameters, notifyProgress) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["string", tulip.SizeProperty, "object", "boolean"], 2);
+  checkArgumentsTypes(arguments, ['string', tulip.SizeProperty, 'object', 'boolean'], 2);
   if (!tulip.sizeAlgorithmExists(algorithmName)) {
-    console.log("Error : no Tulip size algorithm named '" + algorithmName + "'");
+    console.log('Error : no Tulip size algorithm named \'' + algorithmName + '\'');
     return false;
   }
   if (algoParameters === undefined) algoParameters = {};
@@ -3425,14 +3425,14 @@ tulip.Graph.prototype.isConnected = function tulip_Graph_prototype_isConnected()
 
 if (!nodejs) {
 
-var _computeGraphHullVertices = Module.cwrap('computeGraphHullVertices', null, ['number', 'number']);
+  var _computeGraphHullVertices = Module.cwrap('computeGraphHullVertices', null, ['number', 'number']);
 
-tulip.Graph.prototype.computeGraphHullVertices = function(withHoles) {
-  if (!withHoles) {
-    withHoles = false;
-  }
-  _computeGraphHullVertices(this.cppPointer, withHoles);
-};
+  tulip.Graph.prototype.computeGraphHullVertices = function(withHoles) {
+    if (!withHoles) {
+      withHoles = false;
+    }
+    _computeGraphHullVertices(this.cppPointer, withHoles);
+  };
 
 }
 
@@ -3448,9 +3448,9 @@ var _ColorScale_getColors = Module.cwrap('ColorScale_getColors', null, ['number'
 
 tulip.ColorScale = function tulip_ColorScale() {
   var newObject = createObject(tulip.ColorScale, this);
-  tulip.CppObjectWrapper.call(newObject, _ColorScale_newColorScale(), "tlp::ColorScale");
+  tulip.CppObjectWrapper.call(newObject, _ColorScale_newColorScale(), 'tlp::ColorScale');
   if (arguments.length == 1) {
-    checkArgumentsTypes(arguments, ["array"]);
+    checkArgumentsTypes(arguments, ['array']);
     checkArrayOfType(arguments[0], tulip.Color);
     newObject.setColorScale(arguments[0]);
   }
@@ -3460,7 +3460,7 @@ tulip.ColorScale = function tulip_ColorScale() {
 
 tulip.ColorScale.prototype.setColorScale = function tulip_ColorScale_prototype_setColorScale(colors) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["array"], 1);
+  checkArgumentsTypes(arguments, ['array'], 1);
   checkArrayOfType(colors, tulip.Color, 0);
   var ucharArray = allocArrayInEmHeap(Uint8Array, colors.length * 4);
   for (var i = 0 ; i < colors.length ; ++i) {
@@ -3475,13 +3475,13 @@ tulip.ColorScale.prototype.setColorScale = function tulip_ColorScale_prototype_s
 
 tulip.ColorScale.prototype.setColorAtPos = function tulip_ColorScale_prototype_setColorAtPos(pos, color) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number", tulip.Color], 2);
+  checkArgumentsTypes(arguments, ['number', tulip.Color], 2);
   _ColorScale_setColorAtPos(this.cppPointer, pos, color.r, color.g, color.b, color.a);
 };
 
 tulip.ColorScale.prototype.getColorAtPos = function tulip_ColorScale_prototype_setColorAtPos(pos) {
   checkWrappedCppPointer(this.cppPointer);
-  checkArgumentsTypes(arguments, ["number"], 1);
+  checkArgumentsTypes(arguments, ['number'], 1);
   var ucharArray = allocArrayInEmHeap(Uint8Array, 4);
   _ColorScale_getColorAtPos(this.cppPointer, pos, ucharArray.byteOffset);
   var ret = tulip.Color(ucharArray[0], ucharArray[1], ucharArray[2], ucharArray[3]);
@@ -3572,2461 +3572,2461 @@ tulip.EdgeExtremityShape = {
 };
 
 tulip.FontAwesomeIcon = {
-  Adjust : "adjust",
-  Adn : "adn",
-  AlignCenter : "align-center",
-  AlignJustify : "align-justify",
-  AlignLeft : "align-left",
-  AlignRight : "align-right",
-  Amazon : "amazon",
-  Ambulance : "ambulance",
-  Anchor : "anchor",
-  Android : "android",
-  Angellist : "angellist",
-  AngleDoubleDown : "angle-double-down",
-  AngleDoubleLeft : "angle-double-left",
-  AngleDoubleRight : "angle-double-right",
-  AngleDoubleUp : "angle-double-up",
-  AngleDown : "angle-down",
-  AngleLeft : "angle-left",
-  AngleRight : "angle-right",
-  AngleUp : "angle-up",
-  Apple : "apple",
-  Archive : "archive",
-  AreaChart : "area-chart",
-  ArrowCircleDown : "arrow-circle-down",
-  ArrowCircleLeft : "arrow-circle-left",
-  ArrowCircleODown : "arrow-circle-o-down",
-  ArrowCircleOLeft : "arrow-circle-o-left",
-  ArrowCircleORight : "arrow-circle-o-right",
-  ArrowCircleOUp : "arrow-circle-o-up",
-  ArrowCircleRight : "arrow-circle-right",
-  ArrowCircleUp : "arrow-circle-up",
-  ArrowDown : "arrow-down",
-  ArrowLeft : "arrow-left",
-  ArrowRight : "arrow-right",
-  ArrowUp : "arrow-up",
-  Arrows : "arrows",
-  ArrowsAlt : "arrows-alt",
-  ArrowsH : "arrows-h",
-  ArrowsV : "arrows-v",
-  Asterisk : "asterisk",
-  At : "at",
-  Automobile : "automobile",
-  Backward : "backward",
-  BalanceScale : "balance-scale",
-  Ban : "ban",
-  Bank : "bank",
-  BarChart : "bar-chart",
-  BarChartO : "bar-chart-o",
-  Barcode : "barcode",
-  Bars : "bars",
-  Battery0 : "battery-0",
-  Battery1 : "battery-1",
-  Battery2 : "battery-2",
-  Battery3 : "battery-3",
-  Battery4 : "battery-4",
-  BatteryEmpty : "battery-empty",
-  BatteryFull : "battery-full",
-  BatteryHalf : "battery-half",
-  BatteryQuarter : "battery-quarter",
-  BatteryThreeQuarters : "battery-three-quarters",
-  Bed : "bed",
-  Beer : "beer",
-  Behance : "behance",
-  BehanceSquare : "behance-square",
-  Bell : "bell",
-  BellO : "bell-o",
-  BellSlash : "bell-slash",
-  BellSlashO : "bell-slash-o",
-  Bicycle : "bicycle",
-  Binoculars : "binoculars",
-  BirthdayCake : "birthday-cake",
-  Bitbucket : "bitbucket",
-  BitbucketSquare : "bitbucket-square",
-  Bitcoin : "bitcoin",
-  BlackTie : "black-tie",
-  Bluetooth : "bluetooth",
-  BluetoothB : "bluetooth-b",
-  Bold : "bold",
-  Bolt : "bolt",
-  Bomb : "bomb",
-  Book : "book",
-  Bookmark : "bookmark",
-  BookmarkO : "bookmark-o",
-  Briefcase : "briefcase",
-  Btc : "btc",
-  Bug : "bug",
-  Building : "building",
-  BuildingO : "building-o",
-  Bullhorn : "bullhorn",
-  Bullseye : "bullseye",
-  Bus : "bus",
-  Buysellads : "buysellads",
-  Cab : "cab",
-  Calculator : "calculator",
-  Calendar : "calendar",
-  CalendarCheckO : "calendar-check-o",
-  CalendarMinusO : "calendar-minus-o",
-  CalendarO : "calendar-o",
-  CalendarPlusO : "calendar-plus-o",
-  CalendarTimesO : "calendar-times-o",
-  Camera : "camera",
-  CameraRetro : "camera-retro",
-  Car : "car",
-  CaretDown : "caret-down",
-  CaretLeft : "caret-left",
-  CaretRight : "caret-right",
-  CaretSquareODown : "caret-square-o-down",
-  CaretSquareOLeft : "caret-square-o-left",
-  CaretSquareORight : "caret-square-o-right",
-  CaretSquareOUp : "caret-square-o-up",
-  CaretUp : "caret-up",
-  CartArrowDown : "cart-arrow-down",
-  CartPlus : "cart-plus",
-  Cc : "cc",
-  CcAmex : "cc-amex",
-  CcDinersClub : "cc-diners-club",
-  CcDiscover : "cc-discover",
-  CcJcb : "cc-jcb",
-  CcMastercard : "cc-mastercard",
-  CcPaypal : "cc-paypal",
-  CcStripe : "cc-stripe",
-  CcVisa : "cc-visa",
-  Certificate : "certificate",
-  Chain : "chain",
-  ChainBroken : "chain-broken",
-  Check : "check",
-  CheckCircle : "check-circle",
-  CheckCircleO : "check-circle-o",
-  CheckSquare : "check-square",
-  CheckSquareO : "check-square-o",
-  ChevronCircleDown : "chevron-circle-down",
-  ChevronCircleLeft : "chevron-circle-left",
-  ChevronCircleRight : "chevron-circle-right",
-  ChevronCircleUp : "chevron-circle-up",
-  ChevronDown : "chevron-down",
-  ChevronLeft : "chevron-left",
-  ChevronRight : "chevron-right",
-  ChevronUp : "chevron-up",
-  Child : "child",
-  Chrome : "chrome",
-  Circle : "circle",
-  CircleO : "circle-o",
-  CircleONotch : "circle-o-notch",
-  CircleThin : "circle-thin",
-  Clipboard : "clipboard",
-  ClockO : "clock-o",
-  Clone : "clone",
-  Close : "close",
-  Cloud : "cloud",
-  CloudDownload : "cloud-download",
-  CloudUpload : "cloud-upload",
-  Cny : "cny",
-  Code : "code",
-  CodeFork : "code-fork",
-  Codepen : "codepen",
-  Codiepie : "codiepie",
-  Coffee : "coffee",
-  Cog : "cog",
-  Cogs : "cogs",
-  Columns : "columns",
-  Comment : "comment",
-  CommentO : "comment-o",
-  Commenting : "commenting",
-  CommentingO : "commenting-o",
-  Comments : "comments",
-  CommentsO : "comments-o",
-  Compass : "compass",
-  Compress : "compress",
-  Connectdevelop : "connectdevelop",
-  Contao : "contao",
-  Copy : "copy",
-  Copyright : "copyright",
-  CreativeCommons : "creative-commons",
-  CreditCard : "credit-card",
-  CreditCardAlt : "credit-card-alt",
-  Crop : "crop",
-  Crosshairs : "crosshairs",
-  Css3 : "css3",
-  Cube : "cube",
-  Cubes : "cubes",
-  Cut : "cut",
-  Cutlery : "cutlery",
-  Dashboard : "dashboard",
-  Dashcube : "dashcube",
-  Database : "database",
-  Dedent : "dedent",
-  Delicious : "delicious",
-  Desktop : "desktop",
-  Deviantart : "deviantart",
-  Diamond : "diamond",
-  Digg : "digg",
-  Dollar : "dollar",
-  DotCircleO : "dot-circle-o",
-  Download : "download",
-  Dribbble : "dribbble",
-  Dropbox : "dropbox",
-  Drupal : "drupal",
-  Edge : "edge",
-  Edit : "edit",
-  Eject : "eject",
-  EllipsisH : "ellipsis-h",
-  EllipsisV : "ellipsis-v",
-  Empire : "empire",
-  Envelope : "envelope",
-  EnvelopeO : "envelope-o",
-  EnvelopeSquare : "envelope-square",
-  Eraser : "eraser",
-  Eur : "eur",
-  Euro : "euro",
-  Exchange : "exchange",
-  Exclamation : "exclamation",
-  ExclamationCircle : "exclamation-circle",
-  ExclamationTriangle : "exclamation-triangle",
-  Expand : "expand",
-  Expeditedssl : "expeditedssl",
-  ExternalLink : "external-link",
-  ExternalLinkSquare : "external-link-square",
-  Eye : "eye",
-  EyeSlash : "eye-slash",
-  Eyedropper : "eyedropper",
-  Facebook : "facebook",
-  FacebookF : "facebook-f",
-  FacebookOfficial : "facebook-official",
-  FacebookSquare : "facebook-square",
-  FastBackward : "fast-backward",
-  FastForward : "fast-forward",
-  Fax : "fax",
-  Feed : "feed",
-  Female : "female",
-  FighterJet : "fighter-jet",
-  File : "file",
-  FileArchiveO : "file-archive-o",
-  FileAudioO : "file-audio-o",
-  FileCodeO : "file-code-o",
-  FileExcelO : "file-excel-o",
-  FileImageO : "file-image-o",
-  FileMovieO : "file-movie-o",
-  FileO : "file-o",
-  FilePdfO : "file-pdf-o",
-  FilePhotoO : "file-photo-o",
-  FilePictureO : "file-picture-o",
-  FilePowerpointO : "file-powerpoint-o",
-  FileSoundO : "file-sound-o",
-  FileText : "file-text",
-  FileTextO : "file-text-o",
-  FileVideoO : "file-video-o",
-  FileWordO : "file-word-o",
-  FileZipO : "file-zip-o",
-  FilesO : "files-o",
-  Film : "film",
-  Filter : "filter",
-  Fire : "fire",
-  FireExtinguisher : "fire-extinguisher",
-  Firefox : "firefox",
-  Flag : "flag",
-  FlagCheckered : "flag-checkered",
-  FlagO : "flag-o",
-  Flash : "flash",
-  Flask : "flask",
-  Flickr : "flickr",
-  FloppyO : "floppy-o",
-  Folder : "folder",
-  FolderO : "folder-o",
-  FolderOpen : "folder-open",
-  FolderOpenO : "folder-open-o",
-  Font : "font",
-  Fonticons : "fonticons",
-  FortAwesome : "fort-awesome",
-  Forumbee : "forumbee",
-  Forward : "forward",
-  Foursquare : "foursquare",
-  FrownO : "frown-o",
-  FutbolO : "futbol-o",
-  Gamepad : "gamepad",
-  Gavel : "gavel",
-  Gbp : "gbp",
-  Ge : "ge",
-  Gear : "gear",
-  Gears : "gears",
-  Genderless : "genderless",
-  GetPocket : "get-pocket",
-  Gg : "gg",
-  GgCircle : "gg-circle",
-  Gift : "gift",
-  Git : "git",
-  GitSquare : "git-square",
-  Github : "github",
-  GithubAlt : "github-alt",
-  GithubSquare : "github-square",
-  Gittip : "gittip",
-  Glass : "glass",
-  Globe : "globe",
-  Google : "google",
-  GooglePlus : "google-plus",
-  GooglePlusSquare : "google-plus-square",
-  GoogleWallet : "google-wallet",
-  GraduationCap : "graduation-cap",
-  Gratipay : "gratipay",
-  Group : "group",
-  HSquare : "h-square",
-  HackerNews : "hacker-news",
-  HandGrabO : "hand-grab-o",
-  HandLizardO : "hand-lizard-o",
-  HandODown : "hand-o-down",
-  HandOLeft : "hand-o-left",
-  HandORight : "hand-o-right",
-  HandOUp : "hand-o-up",
-  HandPaperO : "hand-paper-o",
-  HandPeaceO : "hand-peace-o",
-  HandPointerO : "hand-pointer-o",
-  HandRockO : "hand-rock-o",
-  HandScissorsO : "hand-scissors-o",
-  HandSpockO : "hand-spock-o",
-  HandStopO : "hand-stop-o",
-  Hashtag : "hashtag",
-  HddO : "hdd-o",
-  Header : "header",
-  Headphones : "headphones",
-  Heart : "heart",
-  HeartO : "heart-o",
-  Heartbeat : "heartbeat",
-  History : "history",
-  Home : "home",
-  HospitalO : "hospital-o",
-  Hotel : "hotel",
-  Hourglass : "hourglass",
-  Hourglass1 : "hourglass-1",
-  Hourglass2 : "hourglass-2",
-  Hourglass3 : "hourglass-3",
-  HourglassEnd : "hourglass-end",
-  HourglassHalf : "hourglass-half",
-  HourglassO : "hourglass-o",
-  HourglassStart : "hourglass-start",
-  Houzz : "houzz",
-  Html5 : "html5",
-  ICursor : "i-cursor",
-  Ils : "ils",
-  Image : "image",
-  Inbox : "inbox",
-  Indent : "indent",
-  Industry : "industry",
-  Info : "info",
-  InfoCircle : "info-circle",
-  Inr : "inr",
-  Instagram : "instagram",
-  Institution : "institution",
-  InternetExplorer : "internet-explorer",
-  Intersex : "intersex",
-  Ioxhost : "ioxhost",
-  Italic : "italic",
-  Joomla : "joomla",
-  Jpy : "jpy",
-  Jsfiddle : "jsfiddle",
-  Key : "key",
-  KeyboardO : "keyboard-o",
-  Krw : "krw",
-  Language : "language",
-  Laptop : "laptop",
-  Lastfm : "lastfm",
-  LastfmSquare : "lastfm-square",
-  Leaf : "leaf",
-  Leanpub : "leanpub",
-  Legal : "legal",
-  LemonO : "lemon-o",
-  LevelDown : "level-down",
-  LevelUp : "level-up",
-  LifeBouy : "life-bouy",
-  LifeBuoy : "life-buoy",
-  LifeRing : "life-ring",
-  LifeSaver : "life-saver",
-  LightbulbO : "lightbulb-o",
-  LineChart : "line-chart",
-  Link : "link",
-  Linkedin : "linkedin",
-  LinkedinSquare : "linkedin-square",
-  Linux : "linux",
-  List : "list",
-  ListAlt : "list-alt",
-  ListOl : "list-ol",
-  ListUl : "list-ul",
-  LocationArrow : "location-arrow",
-  Lock : "lock",
-  LongArrowDown : "long-arrow-down",
-  LongArrowLeft : "long-arrow-left",
-  LongArrowRight : "long-arrow-right",
-  LongArrowUp : "long-arrow-up",
-  Magic : "magic",
-  Magnet : "magnet",
-  MailForward : "mail-forward",
-  MailReply : "mail-reply",
-  MailReplyAll : "mail-reply-all",
-  Male : "male",
-  Map : "map",
-  MapMarker : "map-marker",
-  MapO : "map-o",
-  MapPin : "map-pin",
-  MapSigns : "map-signs",
-  Mars : "mars",
-  MarsDouble : "mars-double",
-  MarsStroke : "mars-stroke",
-  MarsStrokeH : "mars-stroke-h",
-  MarsStrokeV : "mars-stroke-v",
-  Maxcdn : "maxcdn",
-  Meanpath : "meanpath",
-  Medium : "medium",
-  Medkit : "medkit",
-  MehO : "meh-o",
-  Mercury : "mercury",
-  Microphone : "microphone",
-  MicrophoneSlash : "microphone-slash",
-  Minus : "minus",
-  MinusCircle : "minus-circle",
-  MinusSquare : "minus-square",
-  MinusSquareO : "minus-square-o",
-  Mixcloud : "mixcloud",
-  Mobile : "mobile",
-  MobilePhone : "mobile-phone",
-  Modx : "modx",
-  Money : "money",
-  MoonO : "moon-o",
-  MortarBoard : "mortar-board",
-  Motorcycle : "motorcycle",
-  MousePointer : "mouse-pointer",
-  Music : "music",
-  Navicon : "navicon",
-  Neuter : "neuter",
-  NewspaperO : "newspaper-o",
-  ObjectGroup : "object-group",
-  ObjectUngroup : "object-ungroup",
-  Odnoklassniki : "odnoklassniki",
-  OdnoklassnikiSquare : "odnoklassniki-square",
-  Opencart : "opencart",
-  Openid : "openid",
-  Opera : "opera",
+  Adjust : 'adjust',
+  Adn : 'adn',
+  AlignCenter : 'align-center',
+  AlignJustify : 'align-justify',
+  AlignLeft : 'align-left',
+  AlignRight : 'align-right',
+  Amazon : 'amazon',
+  Ambulance : 'ambulance',
+  Anchor : 'anchor',
+  Android : 'android',
+  Angellist : 'angellist',
+  AngleDoubleDown : 'angle-double-down',
+  AngleDoubleLeft : 'angle-double-left',
+  AngleDoubleRight : 'angle-double-right',
+  AngleDoubleUp : 'angle-double-up',
+  AngleDown : 'angle-down',
+  AngleLeft : 'angle-left',
+  AngleRight : 'angle-right',
+  AngleUp : 'angle-up',
+  Apple : 'apple',
+  Archive : 'archive',
+  AreaChart : 'area-chart',
+  ArrowCircleDown : 'arrow-circle-down',
+  ArrowCircleLeft : 'arrow-circle-left',
+  ArrowCircleODown : 'arrow-circle-o-down',
+  ArrowCircleOLeft : 'arrow-circle-o-left',
+  ArrowCircleORight : 'arrow-circle-o-right',
+  ArrowCircleOUp : 'arrow-circle-o-up',
+  ArrowCircleRight : 'arrow-circle-right',
+  ArrowCircleUp : 'arrow-circle-up',
+  ArrowDown : 'arrow-down',
+  ArrowLeft : 'arrow-left',
+  ArrowRight : 'arrow-right',
+  ArrowUp : 'arrow-up',
+  Arrows : 'arrows',
+  ArrowsAlt : 'arrows-alt',
+  ArrowsH : 'arrows-h',
+  ArrowsV : 'arrows-v',
+  Asterisk : 'asterisk',
+  At : 'at',
+  Automobile : 'automobile',
+  Backward : 'backward',
+  BalanceScale : 'balance-scale',
+  Ban : 'ban',
+  Bank : 'bank',
+  BarChart : 'bar-chart',
+  BarChartO : 'bar-chart-o',
+  Barcode : 'barcode',
+  Bars : 'bars',
+  Battery0 : 'battery-0',
+  Battery1 : 'battery-1',
+  Battery2 : 'battery-2',
+  Battery3 : 'battery-3',
+  Battery4 : 'battery-4',
+  BatteryEmpty : 'battery-empty',
+  BatteryFull : 'battery-full',
+  BatteryHalf : 'battery-half',
+  BatteryQuarter : 'battery-quarter',
+  BatteryThreeQuarters : 'battery-three-quarters',
+  Bed : 'bed',
+  Beer : 'beer',
+  Behance : 'behance',
+  BehanceSquare : 'behance-square',
+  Bell : 'bell',
+  BellO : 'bell-o',
+  BellSlash : 'bell-slash',
+  BellSlashO : 'bell-slash-o',
+  Bicycle : 'bicycle',
+  Binoculars : 'binoculars',
+  BirthdayCake : 'birthday-cake',
+  Bitbucket : 'bitbucket',
+  BitbucketSquare : 'bitbucket-square',
+  Bitcoin : 'bitcoin',
+  BlackTie : 'black-tie',
+  Bluetooth : 'bluetooth',
+  BluetoothB : 'bluetooth-b',
+  Bold : 'bold',
+  Bolt : 'bolt',
+  Bomb : 'bomb',
+  Book : 'book',
+  Bookmark : 'bookmark',
+  BookmarkO : 'bookmark-o',
+  Briefcase : 'briefcase',
+  Btc : 'btc',
+  Bug : 'bug',
+  Building : 'building',
+  BuildingO : 'building-o',
+  Bullhorn : 'bullhorn',
+  Bullseye : 'bullseye',
+  Bus : 'bus',
+  Buysellads : 'buysellads',
+  Cab : 'cab',
+  Calculator : 'calculator',
+  Calendar : 'calendar',
+  CalendarCheckO : 'calendar-check-o',
+  CalendarMinusO : 'calendar-minus-o',
+  CalendarO : 'calendar-o',
+  CalendarPlusO : 'calendar-plus-o',
+  CalendarTimesO : 'calendar-times-o',
+  Camera : 'camera',
+  CameraRetro : 'camera-retro',
+  Car : 'car',
+  CaretDown : 'caret-down',
+  CaretLeft : 'caret-left',
+  CaretRight : 'caret-right',
+  CaretSquareODown : 'caret-square-o-down',
+  CaretSquareOLeft : 'caret-square-o-left',
+  CaretSquareORight : 'caret-square-o-right',
+  CaretSquareOUp : 'caret-square-o-up',
+  CaretUp : 'caret-up',
+  CartArrowDown : 'cart-arrow-down',
+  CartPlus : 'cart-plus',
+  Cc : 'cc',
+  CcAmex : 'cc-amex',
+  CcDinersClub : 'cc-diners-club',
+  CcDiscover : 'cc-discover',
+  CcJcb : 'cc-jcb',
+  CcMastercard : 'cc-mastercard',
+  CcPaypal : 'cc-paypal',
+  CcStripe : 'cc-stripe',
+  CcVisa : 'cc-visa',
+  Certificate : 'certificate',
+  Chain : 'chain',
+  ChainBroken : 'chain-broken',
+  Check : 'check',
+  CheckCircle : 'check-circle',
+  CheckCircleO : 'check-circle-o',
+  CheckSquare : 'check-square',
+  CheckSquareO : 'check-square-o',
+  ChevronCircleDown : 'chevron-circle-down',
+  ChevronCircleLeft : 'chevron-circle-left',
+  ChevronCircleRight : 'chevron-circle-right',
+  ChevronCircleUp : 'chevron-circle-up',
+  ChevronDown : 'chevron-down',
+  ChevronLeft : 'chevron-left',
+  ChevronRight : 'chevron-right',
+  ChevronUp : 'chevron-up',
+  Child : 'child',
+  Chrome : 'chrome',
+  Circle : 'circle',
+  CircleO : 'circle-o',
+  CircleONotch : 'circle-o-notch',
+  CircleThin : 'circle-thin',
+  Clipboard : 'clipboard',
+  ClockO : 'clock-o',
+  Clone : 'clone',
+  Close : 'close',
+  Cloud : 'cloud',
+  CloudDownload : 'cloud-download',
+  CloudUpload : 'cloud-upload',
+  Cny : 'cny',
+  Code : 'code',
+  CodeFork : 'code-fork',
+  Codepen : 'codepen',
+  Codiepie : 'codiepie',
+  Coffee : 'coffee',
+  Cog : 'cog',
+  Cogs : 'cogs',
+  Columns : 'columns',
+  Comment : 'comment',
+  CommentO : 'comment-o',
+  Commenting : 'commenting',
+  CommentingO : 'commenting-o',
+  Comments : 'comments',
+  CommentsO : 'comments-o',
+  Compass : 'compass',
+  Compress : 'compress',
+  Connectdevelop : 'connectdevelop',
+  Contao : 'contao',
+  Copy : 'copy',
+  Copyright : 'copyright',
+  CreativeCommons : 'creative-commons',
+  CreditCard : 'credit-card',
+  CreditCardAlt : 'credit-card-alt',
+  Crop : 'crop',
+  Crosshairs : 'crosshairs',
+  Css3 : 'css3',
+  Cube : 'cube',
+  Cubes : 'cubes',
+  Cut : 'cut',
+  Cutlery : 'cutlery',
+  Dashboard : 'dashboard',
+  Dashcube : 'dashcube',
+  Database : 'database',
+  Dedent : 'dedent',
+  Delicious : 'delicious',
+  Desktop : 'desktop',
+  Deviantart : 'deviantart',
+  Diamond : 'diamond',
+  Digg : 'digg',
+  Dollar : 'dollar',
+  DotCircleO : 'dot-circle-o',
+  Download : 'download',
+  Dribbble : 'dribbble',
+  Dropbox : 'dropbox',
+  Drupal : 'drupal',
+  Edge : 'edge',
+  Edit : 'edit',
+  Eject : 'eject',
+  EllipsisH : 'ellipsis-h',
+  EllipsisV : 'ellipsis-v',
+  Empire : 'empire',
+  Envelope : 'envelope',
+  EnvelopeO : 'envelope-o',
+  EnvelopeSquare : 'envelope-square',
+  Eraser : 'eraser',
+  Eur : 'eur',
+  Euro : 'euro',
+  Exchange : 'exchange',
+  Exclamation : 'exclamation',
+  ExclamationCircle : 'exclamation-circle',
+  ExclamationTriangle : 'exclamation-triangle',
+  Expand : 'expand',
+  Expeditedssl : 'expeditedssl',
+  ExternalLink : 'external-link',
+  ExternalLinkSquare : 'external-link-square',
+  Eye : 'eye',
+  EyeSlash : 'eye-slash',
+  Eyedropper : 'eyedropper',
+  Facebook : 'facebook',
+  FacebookF : 'facebook-f',
+  FacebookOfficial : 'facebook-official',
+  FacebookSquare : 'facebook-square',
+  FastBackward : 'fast-backward',
+  FastForward : 'fast-forward',
+  Fax : 'fax',
+  Feed : 'feed',
+  Female : 'female',
+  FighterJet : 'fighter-jet',
+  File : 'file',
+  FileArchiveO : 'file-archive-o',
+  FileAudioO : 'file-audio-o',
+  FileCodeO : 'file-code-o',
+  FileExcelO : 'file-excel-o',
+  FileImageO : 'file-image-o',
+  FileMovieO : 'file-movie-o',
+  FileO : 'file-o',
+  FilePdfO : 'file-pdf-o',
+  FilePhotoO : 'file-photo-o',
+  FilePictureO : 'file-picture-o',
+  FilePowerpointO : 'file-powerpoint-o',
+  FileSoundO : 'file-sound-o',
+  FileText : 'file-text',
+  FileTextO : 'file-text-o',
+  FileVideoO : 'file-video-o',
+  FileWordO : 'file-word-o',
+  FileZipO : 'file-zip-o',
+  FilesO : 'files-o',
+  Film : 'film',
+  Filter : 'filter',
+  Fire : 'fire',
+  FireExtinguisher : 'fire-extinguisher',
+  Firefox : 'firefox',
+  Flag : 'flag',
+  FlagCheckered : 'flag-checkered',
+  FlagO : 'flag-o',
+  Flash : 'flash',
+  Flask : 'flask',
+  Flickr : 'flickr',
+  FloppyO : 'floppy-o',
+  Folder : 'folder',
+  FolderO : 'folder-o',
+  FolderOpen : 'folder-open',
+  FolderOpenO : 'folder-open-o',
+  Font : 'font',
+  Fonticons : 'fonticons',
+  FortAwesome : 'fort-awesome',
+  Forumbee : 'forumbee',
+  Forward : 'forward',
+  Foursquare : 'foursquare',
+  FrownO : 'frown-o',
+  FutbolO : 'futbol-o',
+  Gamepad : 'gamepad',
+  Gavel : 'gavel',
+  Gbp : 'gbp',
+  Ge : 'ge',
+  Gear : 'gear',
+  Gears : 'gears',
+  Genderless : 'genderless',
+  GetPocket : 'get-pocket',
+  Gg : 'gg',
+  GgCircle : 'gg-circle',
+  Gift : 'gift',
+  Git : 'git',
+  GitSquare : 'git-square',
+  Github : 'github',
+  GithubAlt : 'github-alt',
+  GithubSquare : 'github-square',
+  Gittip : 'gittip',
+  Glass : 'glass',
+  Globe : 'globe',
+  Google : 'google',
+  GooglePlus : 'google-plus',
+  GooglePlusSquare : 'google-plus-square',
+  GoogleWallet : 'google-wallet',
+  GraduationCap : 'graduation-cap',
+  Gratipay : 'gratipay',
+  Group : 'group',
+  HSquare : 'h-square',
+  HackerNews : 'hacker-news',
+  HandGrabO : 'hand-grab-o',
+  HandLizardO : 'hand-lizard-o',
+  HandODown : 'hand-o-down',
+  HandOLeft : 'hand-o-left',
+  HandORight : 'hand-o-right',
+  HandOUp : 'hand-o-up',
+  HandPaperO : 'hand-paper-o',
+  HandPeaceO : 'hand-peace-o',
+  HandPointerO : 'hand-pointer-o',
+  HandRockO : 'hand-rock-o',
+  HandScissorsO : 'hand-scissors-o',
+  HandSpockO : 'hand-spock-o',
+  HandStopO : 'hand-stop-o',
+  Hashtag : 'hashtag',
+  HddO : 'hdd-o',
+  Header : 'header',
+  Headphones : 'headphones',
+  Heart : 'heart',
+  HeartO : 'heart-o',
+  Heartbeat : 'heartbeat',
+  History : 'history',
+  Home : 'home',
+  HospitalO : 'hospital-o',
+  Hotel : 'hotel',
+  Hourglass : 'hourglass',
+  Hourglass1 : 'hourglass-1',
+  Hourglass2 : 'hourglass-2',
+  Hourglass3 : 'hourglass-3',
+  HourglassEnd : 'hourglass-end',
+  HourglassHalf : 'hourglass-half',
+  HourglassO : 'hourglass-o',
+  HourglassStart : 'hourglass-start',
+  Houzz : 'houzz',
+  Html5 : 'html5',
+  ICursor : 'i-cursor',
+  Ils : 'ils',
+  Image : 'image',
+  Inbox : 'inbox',
+  Indent : 'indent',
+  Industry : 'industry',
+  Info : 'info',
+  InfoCircle : 'info-circle',
+  Inr : 'inr',
+  Instagram : 'instagram',
+  Institution : 'institution',
+  InternetExplorer : 'internet-explorer',
+  Intersex : 'intersex',
+  Ioxhost : 'ioxhost',
+  Italic : 'italic',
+  Joomla : 'joomla',
+  Jpy : 'jpy',
+  Jsfiddle : 'jsfiddle',
+  Key : 'key',
+  KeyboardO : 'keyboard-o',
+  Krw : 'krw',
+  Language : 'language',
+  Laptop : 'laptop',
+  Lastfm : 'lastfm',
+  LastfmSquare : 'lastfm-square',
+  Leaf : 'leaf',
+  Leanpub : 'leanpub',
+  Legal : 'legal',
+  LemonO : 'lemon-o',
+  LevelDown : 'level-down',
+  LevelUp : 'level-up',
+  LifeBouy : 'life-bouy',
+  LifeBuoy : 'life-buoy',
+  LifeRing : 'life-ring',
+  LifeSaver : 'life-saver',
+  LightbulbO : 'lightbulb-o',
+  LineChart : 'line-chart',
+  Link : 'link',
+  Linkedin : 'linkedin',
+  LinkedinSquare : 'linkedin-square',
+  Linux : 'linux',
+  List : 'list',
+  ListAlt : 'list-alt',
+  ListOl : 'list-ol',
+  ListUl : 'list-ul',
+  LocationArrow : 'location-arrow',
+  Lock : 'lock',
+  LongArrowDown : 'long-arrow-down',
+  LongArrowLeft : 'long-arrow-left',
+  LongArrowRight : 'long-arrow-right',
+  LongArrowUp : 'long-arrow-up',
+  Magic : 'magic',
+  Magnet : 'magnet',
+  MailForward : 'mail-forward',
+  MailReply : 'mail-reply',
+  MailReplyAll : 'mail-reply-all',
+  Male : 'male',
+  Map : 'map',
+  MapMarker : 'map-marker',
+  MapO : 'map-o',
+  MapPin : 'map-pin',
+  MapSigns : 'map-signs',
+  Mars : 'mars',
+  MarsDouble : 'mars-double',
+  MarsStroke : 'mars-stroke',
+  MarsStrokeH : 'mars-stroke-h',
+  MarsStrokeV : 'mars-stroke-v',
+  Maxcdn : 'maxcdn',
+  Meanpath : 'meanpath',
+  Medium : 'medium',
+  Medkit : 'medkit',
+  MehO : 'meh-o',
+  Mercury : 'mercury',
+  Microphone : 'microphone',
+  MicrophoneSlash : 'microphone-slash',
+  Minus : 'minus',
+  MinusCircle : 'minus-circle',
+  MinusSquare : 'minus-square',
+  MinusSquareO : 'minus-square-o',
+  Mixcloud : 'mixcloud',
+  Mobile : 'mobile',
+  MobilePhone : 'mobile-phone',
+  Modx : 'modx',
+  Money : 'money',
+  MoonO : 'moon-o',
+  MortarBoard : 'mortar-board',
+  Motorcycle : 'motorcycle',
+  MousePointer : 'mouse-pointer',
+  Music : 'music',
+  Navicon : 'navicon',
+  Neuter : 'neuter',
+  NewspaperO : 'newspaper-o',
+  ObjectGroup : 'object-group',
+  ObjectUngroup : 'object-ungroup',
+  Odnoklassniki : 'odnoklassniki',
+  OdnoklassnikiSquare : 'odnoklassniki-square',
+  Opencart : 'opencart',
+  Openid : 'openid',
+  Opera : 'opera',
 //  OptinMonster : "optin-monster",
-  Outdent : "outdent",
-  Pagelines : "pagelines",
-  PaintBrush : "paint-brush",
-  PaperPlane : "paper-plane",
-  PaperPlaneO : "paper-plane-o",
-  Paperclip : "paperclip",
-  Paragraph : "paragraph",
-  Paste : "paste",
-  Pause : "pause",
-  PauseCircle : "pause-circle",
-  PauseCircleO : "pause-circle-o",
-  Paw : "paw",
-  Paypal : "paypal",
-  Pencil : "pencil",
-  PencilSquare : "pencil-square",
-  PencilSquareO : "pencil-square-o",
-  Percent : "percent",
-  Phone : "phone",
-  PhoneSquare : "phone-square",
-  Photo : "photo",
-  PictureO : "picture-o",
-  PieChart : "pie-chart",
-  PiedPiper : "pied-piper",
-  PiedPiperAlt : "pied-piper-alt",
-  Pinterest : "pinterest",
-  PinterestP : "pinterest-p",
-  PinterestSquare : "pinterest-square",
-  Plane : "plane",
-  Play : "play",
-  PlayCircle : "play-circle",
-  PlayCircleO : "play-circle-o",
-  Plug : "plug",
-  Plus : "plus",
-  PlusCircle : "plus-circle",
-  PlusSquare : "plus-square",
-  PlusSquareO : "plus-square-o",
-  PowerOff : "power-off",
-  Print : "print",
-  ProductHunt : "product-hunt",
-  PuzzlePiece : "puzzle-piece",
-  Px500 : "500px",
-  Qq : "qq",
-  Qrcode : "qrcode",
-  Question : "question",
-  QuestionCircle : "question-circle",
-  QuoteLeft : "quote-left",
-  QuoteRight : "quote-right",
-  Ra : "ra",
-  Random : "random",
-  Rebel : "rebel",
-  Recycle : "recycle",
-  Reddit : "reddit",
-  RedditAlien : "reddit-alien",
-  RedditSquare : "reddit-square",
-  Refresh : "refresh",
-  Registered : "registered",
-  Remove : "remove",
-  Renren : "renren",
-  Reorder : "reorder",
-  Repeat : "repeat",
-  Reply : "reply",
-  ReplyAll : "reply-all",
-  Retweet : "retweet",
-  Rmb : "rmb",
-  Road : "road",
-  Rocket : "rocket",
-  RotateLeft : "rotate-left",
-  RotateRight : "rotate-right",
-  Rouble : "rouble",
-  Rss : "rss",
-  RssSquare : "rss-square",
-  Rub : "rub",
-  Ruble : "ruble",
-  Rupee : "rupee",
-  Safari : "safari",
-  Save : "save",
-  Scissors : "scissors",
-  Scribd : "scribd",
-  Search : "search",
-  SearchMinus : "search-minus",
-  SearchPlus : "search-plus",
-  Sellsy : "sellsy",
-  Send : "send",
-  SendO : "send-o",
-  Server : "server",
-  Share : "share",
-  ShareAlt : "share-alt",
-  ShareAltSquare : "share-alt-square",
-  ShareSquare : "share-square",
-  ShareSquareO : "share-square-o",
-  Shekel : "shekel",
-  Sheqel : "sheqel",
-  Shield : "shield",
-  Ship : "ship",
-  Shirtsinbulk : "shirtsinbulk",
-  ShoppingBag : "shopping-bag",
-  ShoppingBasket : "shopping-basket",
-  ShoppingCart : "shopping-cart",
-  SignIn : "sign-in",
-  SignOut : "sign-out",
-  Signal : "signal",
-  Simplybuilt : "simplybuilt",
-  Sitemap : "sitemap",
-  Skyatlas : "skyatlas",
-  Skype : "skype",
-  Slack : "slack",
-  Sliders : "sliders",
-  Slideshare : "slideshare",
-  SmileO : "smile-o",
-  SoccerBallO : "soccer-ball-o",
-  Sort : "sort",
-  SortAlphaAsc : "sort-alpha-asc",
-  SortAlphaDesc : "sort-alpha-desc",
-  SortAmountAsc : "sort-amount-asc",
-  SortAmountDesc : "sort-amount-desc",
-  SortAsc : "sort-asc",
-  SortDesc : "sort-desc",
-  SortDown : "sort-down",
-  SortNumericAsc : "sort-numeric-asc",
-  SortNumericDesc : "sort-numeric-desc",
-  SortUp : "sort-up",
-  Soundcloud : "soundcloud",
-  SpaceShuttle : "space-shuttle",
-  Spinner : "spinner",
-  Spoon : "spoon",
-  Spotify : "spotify",
-  Square : "square",
-  SquareO : "square-o",
-  StackExchange : "stack-exchange",
-  StackOverflow : "stack-overflow",
-  Star : "star",
-  StarHalf : "star-half",
-  StarHalfEmpty : "star-half-empty",
-  StarHalfFull : "star-half-full",
-  StarHalfO : "star-half-o",
-  StarO : "star-o",
-  Steam : "steam",
-  SteamSquare : "steam-square",
-  StepBackward : "step-backward",
-  StepForward : "step-forward",
-  Stethoscope : "stethoscope",
-  StickyNote : "sticky-note",
-  StickyNoteO : "sticky-note-o",
-  Stop : "stop",
-  StopCircle : "stop-circle",
-  StopCircleO : "stop-circle-o",
-  StreetView : "street-view",
-  Strikethrough : "strikethrough",
-  Stumbleupon : "stumbleupon",
-  StumbleuponCircle : "stumbleupon-circle",
-  Subscript : "subscript",
-  Subway : "subway",
-  Suitcase : "suitcase",
-  SunO : "sun-o",
-  Superscript : "superscript",
-  Support : "support",
-  Table : "table",
-  Tablet : "tablet",
-  Tachometer : "tachometer",
-  Tag : "tag",
-  Tags : "tags",
-  Tasks : "tasks",
-  Taxi : "taxi",
-  Television : "television",
-  TencentWeibo : "tencent-weibo",
-  Terminal : "terminal",
-  TextHeight : "text-height",
-  TextWidth : "text-width",
-  Th : "th",
-  ThLarge : "th-large",
-  ThList : "th-list",
-  ThumbTack : "thumb-tack",
-  ThumbsDown : "thumbs-down",
-  ThumbsODown : "thumbs-o-down",
-  ThumbsOUp : "thumbs-o-up",
-  ThumbsUp : "thumbs-up",
-  Ticket : "ticket",
-  Times : "times",
-  TimesCircle : "times-circle",
-  TimesCircleO : "times-circle-o",
-  Tint : "tint",
-  ToggleDown : "toggle-down",
-  ToggleLeft : "toggle-left",
-  ToggleOff : "toggle-off",
-  ToggleOn : "toggle-on",
-  ToggleRight : "toggle-right",
-  ToggleUp : "toggle-up",
-  Trademark : "trademark",
-  Train : "train",
-  Transgender : "transgender",
-  TransgenderAlt : "transgender-alt",
-  Trash : "trash",
-  TrashO : "trash-o",
-  Tree : "tree",
-  Trello : "trello",
-  Tripadvisor : "tripadvisor",
-  Trophy : "trophy",
-  Truck : "truck",
-  Try : "try",
-  Tty : "tty",
-  Tumblr : "tumblr",
-  TumblrSquare : "tumblr-square",
-  TurkishLira : "turkish-lira",
-  Tv : "tv",
-  Twitch : "twitch",
-  Twitter : "twitter",
-  TwitterSquare : "twitter-square",
-  Umbrella : "umbrella",
-  Underline : "underline",
-  Undo : "undo",
-  University : "university",
-  Unlink : "unlink",
-  Unlock : "unlock",
-  UnlockAlt : "unlock-alt",
-  Unsorted : "unsorted",
-  Upload : "upload",
-  Usb : "usb",
-  Usd : "usd",
-  User : "user",
-  UserMd : "user-md",
-  UserPlus : "user-plus",
-  UserSecret : "user-secret",
-  UserTimes : "user-times",
-  Users : "users",
-  Venus : "venus",
-  VenusDouble : "venus-double",
-  VenusMars : "venus-mars",
-  Viacoin : "viacoin",
-  VideoCamera : "video-camera",
-  Vimeo : "vimeo",
-  VimeoSquare : "vimeo-square",
-  Vine : "vine",
-  Vk : "vk",
-  VolumeDown : "volume-down",
-  VolumeOff : "volume-off",
-  VolumeUp : "volume-up",
-  Warning : "warning",
-  Wechat : "wechat",
-  Weibo : "weibo",
-  Weixin : "weixin",
-  Whatsapp : "whatsapp",
-  Wheelchair : "wheelchair",
-  Wifi : "wifi",
-  WikipediaW : "wikipedia-w",
-  Windows : "windows",
-  Won : "won",
-  Wordpress : "wordpress",
-  Wrench : "wrench",
-  Xing : "xing",
-  XingSquare : "xing-square",
-  YCombinator : "y-combinator",
-  YCombinatorSquare : "y-combinator-square",
-  Yahoo : "yahoo",
-  Yc : "yc",
-  YcSquare : "yc-square",
-  Yelp : "yelp",
-  Yen : "yen",
-  Youtube : "youtube",
-  YoutubePlay : "youtube-play",
-  YoutubeSquare : "youtube-square"
+  Outdent : 'outdent',
+  Pagelines : 'pagelines',
+  PaintBrush : 'paint-brush',
+  PaperPlane : 'paper-plane',
+  PaperPlaneO : 'paper-plane-o',
+  Paperclip : 'paperclip',
+  Paragraph : 'paragraph',
+  Paste : 'paste',
+  Pause : 'pause',
+  PauseCircle : 'pause-circle',
+  PauseCircleO : 'pause-circle-o',
+  Paw : 'paw',
+  Paypal : 'paypal',
+  Pencil : 'pencil',
+  PencilSquare : 'pencil-square',
+  PencilSquareO : 'pencil-square-o',
+  Percent : 'percent',
+  Phone : 'phone',
+  PhoneSquare : 'phone-square',
+  Photo : 'photo',
+  PictureO : 'picture-o',
+  PieChart : 'pie-chart',
+  PiedPiper : 'pied-piper',
+  PiedPiperAlt : 'pied-piper-alt',
+  Pinterest : 'pinterest',
+  PinterestP : 'pinterest-p',
+  PinterestSquare : 'pinterest-square',
+  Plane : 'plane',
+  Play : 'play',
+  PlayCircle : 'play-circle',
+  PlayCircleO : 'play-circle-o',
+  Plug : 'plug',
+  Plus : 'plus',
+  PlusCircle : 'plus-circle',
+  PlusSquare : 'plus-square',
+  PlusSquareO : 'plus-square-o',
+  PowerOff : 'power-off',
+  Print : 'print',
+  ProductHunt : 'product-hunt',
+  PuzzlePiece : 'puzzle-piece',
+  Px500 : '500px',
+  Qq : 'qq',
+  Qrcode : 'qrcode',
+  Question : 'question',
+  QuestionCircle : 'question-circle',
+  QuoteLeft : 'quote-left',
+  QuoteRight : 'quote-right',
+  Ra : 'ra',
+  Random : 'random',
+  Rebel : 'rebel',
+  Recycle : 'recycle',
+  Reddit : 'reddit',
+  RedditAlien : 'reddit-alien',
+  RedditSquare : 'reddit-square',
+  Refresh : 'refresh',
+  Registered : 'registered',
+  Remove : 'remove',
+  Renren : 'renren',
+  Reorder : 'reorder',
+  Repeat : 'repeat',
+  Reply : 'reply',
+  ReplyAll : 'reply-all',
+  Retweet : 'retweet',
+  Rmb : 'rmb',
+  Road : 'road',
+  Rocket : 'rocket',
+  RotateLeft : 'rotate-left',
+  RotateRight : 'rotate-right',
+  Rouble : 'rouble',
+  Rss : 'rss',
+  RssSquare : 'rss-square',
+  Rub : 'rub',
+  Ruble : 'ruble',
+  Rupee : 'rupee',
+  Safari : 'safari',
+  Save : 'save',
+  Scissors : 'scissors',
+  Scribd : 'scribd',
+  Search : 'search',
+  SearchMinus : 'search-minus',
+  SearchPlus : 'search-plus',
+  Sellsy : 'sellsy',
+  Send : 'send',
+  SendO : 'send-o',
+  Server : 'server',
+  Share : 'share',
+  ShareAlt : 'share-alt',
+  ShareAltSquare : 'share-alt-square',
+  ShareSquare : 'share-square',
+  ShareSquareO : 'share-square-o',
+  Shekel : 'shekel',
+  Sheqel : 'sheqel',
+  Shield : 'shield',
+  Ship : 'ship',
+  Shirtsinbulk : 'shirtsinbulk',
+  ShoppingBag : 'shopping-bag',
+  ShoppingBasket : 'shopping-basket',
+  ShoppingCart : 'shopping-cart',
+  SignIn : 'sign-in',
+  SignOut : 'sign-out',
+  Signal : 'signal',
+  Simplybuilt : 'simplybuilt',
+  Sitemap : 'sitemap',
+  Skyatlas : 'skyatlas',
+  Skype : 'skype',
+  Slack : 'slack',
+  Sliders : 'sliders',
+  Slideshare : 'slideshare',
+  SmileO : 'smile-o',
+  SoccerBallO : 'soccer-ball-o',
+  Sort : 'sort',
+  SortAlphaAsc : 'sort-alpha-asc',
+  SortAlphaDesc : 'sort-alpha-desc',
+  SortAmountAsc : 'sort-amount-asc',
+  SortAmountDesc : 'sort-amount-desc',
+  SortAsc : 'sort-asc',
+  SortDesc : 'sort-desc',
+  SortDown : 'sort-down',
+  SortNumericAsc : 'sort-numeric-asc',
+  SortNumericDesc : 'sort-numeric-desc',
+  SortUp : 'sort-up',
+  Soundcloud : 'soundcloud',
+  SpaceShuttle : 'space-shuttle',
+  Spinner : 'spinner',
+  Spoon : 'spoon',
+  Spotify : 'spotify',
+  Square : 'square',
+  SquareO : 'square-o',
+  StackExchange : 'stack-exchange',
+  StackOverflow : 'stack-overflow',
+  Star : 'star',
+  StarHalf : 'star-half',
+  StarHalfEmpty : 'star-half-empty',
+  StarHalfFull : 'star-half-full',
+  StarHalfO : 'star-half-o',
+  StarO : 'star-o',
+  Steam : 'steam',
+  SteamSquare : 'steam-square',
+  StepBackward : 'step-backward',
+  StepForward : 'step-forward',
+  Stethoscope : 'stethoscope',
+  StickyNote : 'sticky-note',
+  StickyNoteO : 'sticky-note-o',
+  Stop : 'stop',
+  StopCircle : 'stop-circle',
+  StopCircleO : 'stop-circle-o',
+  StreetView : 'street-view',
+  Strikethrough : 'strikethrough',
+  Stumbleupon : 'stumbleupon',
+  StumbleuponCircle : 'stumbleupon-circle',
+  Subscript : 'subscript',
+  Subway : 'subway',
+  Suitcase : 'suitcase',
+  SunO : 'sun-o',
+  Superscript : 'superscript',
+  Support : 'support',
+  Table : 'table',
+  Tablet : 'tablet',
+  Tachometer : 'tachometer',
+  Tag : 'tag',
+  Tags : 'tags',
+  Tasks : 'tasks',
+  Taxi : 'taxi',
+  Television : 'television',
+  TencentWeibo : 'tencent-weibo',
+  Terminal : 'terminal',
+  TextHeight : 'text-height',
+  TextWidth : 'text-width',
+  Th : 'th',
+  ThLarge : 'th-large',
+  ThList : 'th-list',
+  ThumbTack : 'thumb-tack',
+  ThumbsDown : 'thumbs-down',
+  ThumbsODown : 'thumbs-o-down',
+  ThumbsOUp : 'thumbs-o-up',
+  ThumbsUp : 'thumbs-up',
+  Ticket : 'ticket',
+  Times : 'times',
+  TimesCircle : 'times-circle',
+  TimesCircleO : 'times-circle-o',
+  Tint : 'tint',
+  ToggleDown : 'toggle-down',
+  ToggleLeft : 'toggle-left',
+  ToggleOff : 'toggle-off',
+  ToggleOn : 'toggle-on',
+  ToggleRight : 'toggle-right',
+  ToggleUp : 'toggle-up',
+  Trademark : 'trademark',
+  Train : 'train',
+  Transgender : 'transgender',
+  TransgenderAlt : 'transgender-alt',
+  Trash : 'trash',
+  TrashO : 'trash-o',
+  Tree : 'tree',
+  Trello : 'trello',
+  Tripadvisor : 'tripadvisor',
+  Trophy : 'trophy',
+  Truck : 'truck',
+  Try : 'try',
+  Tty : 'tty',
+  Tumblr : 'tumblr',
+  TumblrSquare : 'tumblr-square',
+  TurkishLira : 'turkish-lira',
+  Tv : 'tv',
+  Twitch : 'twitch',
+  Twitter : 'twitter',
+  TwitterSquare : 'twitter-square',
+  Umbrella : 'umbrella',
+  Underline : 'underline',
+  Undo : 'undo',
+  University : 'university',
+  Unlink : 'unlink',
+  Unlock : 'unlock',
+  UnlockAlt : 'unlock-alt',
+  Unsorted : 'unsorted',
+  Upload : 'upload',
+  Usb : 'usb',
+  Usd : 'usd',
+  User : 'user',
+  UserMd : 'user-md',
+  UserPlus : 'user-plus',
+  UserSecret : 'user-secret',
+  UserTimes : 'user-times',
+  Users : 'users',
+  Venus : 'venus',
+  VenusDouble : 'venus-double',
+  VenusMars : 'venus-mars',
+  Viacoin : 'viacoin',
+  VideoCamera : 'video-camera',
+  Vimeo : 'vimeo',
+  VimeoSquare : 'vimeo-square',
+  Vine : 'vine',
+  Vk : 'vk',
+  VolumeDown : 'volume-down',
+  VolumeOff : 'volume-off',
+  VolumeUp : 'volume-up',
+  Warning : 'warning',
+  Wechat : 'wechat',
+  Weibo : 'weibo',
+  Weixin : 'weixin',
+  Whatsapp : 'whatsapp',
+  Wheelchair : 'wheelchair',
+  Wifi : 'wifi',
+  WikipediaW : 'wikipedia-w',
+  Windows : 'windows',
+  Won : 'won',
+  Wordpress : 'wordpress',
+  Wrench : 'wrench',
+  Xing : 'xing',
+  XingSquare : 'xing-square',
+  YCombinator : 'y-combinator',
+  YCombinatorSquare : 'y-combinator-square',
+  Yahoo : 'yahoo',
+  Yc : 'yc',
+  YcSquare : 'yc-square',
+  Yelp : 'yelp',
+  Yen : 'yen',
+  Youtube : 'youtube',
+  YoutubePlay : 'youtube-play',
+  YoutubeSquare : 'youtube-square'
 
 };
 
 tulip.MaterialDesignIcons = {
-  AccessPoint : "access-point",
-  AccessPointNetwork : "access-point-network",
-  Account : "account",
-  AccountAlert : "account-alert",
-  AccountBox : "account-box",
-  AccountBoxOutline : "account-box-outline",
-  AccountCardDetails : "account-card-details",
-  AccountCheck : "account-check",
-  AccountCircle : "account-circle",
-  AccountConvert : "account-convert",
-  AccountKey : "account-key",
-  AccountLocation : "account-location",
-  AccountMinus : "account-minus",
-  AccountMultiple : "account-multiple",
-  AccountMultipleMinus : "account-multiple-minus",
-  AccountMultipleOutline : "account-multiple-outline",
-  AccountMultiplePlus : "account-multiple-plus",
-  AccountNetwork : "account-network",
-  AccountOff : "account-off",
-  AccountOutline : "account-outline",
-  AccountPlus : "account-plus",
-  AccountRemove : "account-remove",
-  AccountSearch : "account-search",
-  AccountSettings : "account-settings",
-  AccountSettingsVariant : "account-settings-variant",
-  AccountStar : "account-star",
-  AccountStarVariant : "account-star-variant",
-  AccountSwitch : "account-switch",
-  Adjust : "adjust",
-  AirConditioner : "air-conditioner",
-  Airballoon : "airballoon",
-  Airplane : "airplane",
-  AirplaneLanding : "airplane-landing",
-  AirplaneOff : "airplane-off",
-  AirplaneTakeoff : "airplane-takeoff",
-  Airplay : "airplay",
-  Alarm : "alarm",
-  AlarmCheck : "alarm-check",
-  AlarmMultiple : "alarm-multiple",
-  AlarmOff : "alarm-off",
-  AlarmPlus : "alarm-plus",
-  AlarmSnooze : "alarm-snooze",
-  Album : "album",
-  Alert : "alert",
-  AlertBox : "alert-box",
-  AlertCircle : "alert-circle",
-  AlertCircleOutline : "alert-circle-outline",
-  AlertOctagon : "alert-octagon",
-  AlertOutline : "alert-outline",
-  Alpha : "alpha",
-  Alphabetical : "alphabetical",
-  Altimeter : "altimeter",
-  Amazon : "amazon",
-  AmazonClouddrive : "amazon-clouddrive",
-  Ambulance : "ambulance",
-  Amplifier : "amplifier",
-  Anchor : "anchor",
-  Android : "android",
-  AndroidDebugBridge : "android-debug-bridge",
-  AndroidStudio : "android-studio",
-  Angular : "angular",
-  Animation : "animation",
-  Apple : "apple",
-  AppleFinder : "apple-finder",
-  AppleIos : "apple-ios",
-  AppleKeyboardCaps : "apple-keyboard-caps",
-  AppleKeyboardCommand : "apple-keyboard-command",
-  AppleKeyboardControl : "apple-keyboard-control",
-  AppleKeyboardOption : "apple-keyboard-option",
-  AppleKeyboardShift : "apple-keyboard-shift",
-  AppleMobileme : "apple-mobileme",
-  AppleSafari : "apple-safari",
-  Application : "application",
-  Appnet : "appnet",
-  Apps : "apps",
-  Archive : "archive",
-  ArrangeBringForward : "arrange-bring-forward",
-  ArrangeBringToFront : "arrange-bring-to-front",
-  ArrangeSendBackward : "arrange-send-backward",
-  ArrangeSendToBack : "arrange-send-to-back",
-  ArrowAll : "arrow-all",
-  ArrowBottomLeft : "arrow-bottom-left",
-  ArrowBottomRight : "arrow-bottom-right",
-  ArrowCompress : "arrow-compress",
-  ArrowCompressAll : "arrow-compress-all",
-  ArrowDown : "arrow-down",
-  ArrowDownBold : "arrow-down-bold",
-  ArrowDownBoldCircle : "arrow-down-bold-circle",
-  ArrowDownBoldCircleOutline : "arrow-down-bold-circle-outline",
-  ArrowDownBoldHexagonOutline : "arrow-down-bold-hexagon-outline",
-  ArrowDownDropCircle : "arrow-down-drop-circle",
-  ArrowDownDropCircleOutline : "arrow-down-drop-circle-outline",
-  ArrowExpand : "arrow-expand",
-  ArrowExpandAll : "arrow-expand-all",
-  ArrowLeft : "arrow-left",
-  ArrowLeftBold : "arrow-left-bold",
-  ArrowLeftBoldCircle : "arrow-left-bold-circle",
-  ArrowLeftBoldCircleOutline : "arrow-left-bold-circle-outline",
-  ArrowLeftBoldHexagonOutline : "arrow-left-bold-hexagon-outline",
-  ArrowLeftDropCircle : "arrow-left-drop-circle",
-  ArrowLeftDropCircleOutline : "arrow-left-drop-circle-outline",
-  ArrowRight : "arrow-right",
-  ArrowRightBold : "arrow-right-bold",
-  ArrowRightBoldCircle : "arrow-right-bold-circle",
-  ArrowRightBoldCircleOutline : "arrow-right-bold-circle-outline",
-  ArrowRightBoldHexagonOutline : "arrow-right-bold-hexagon-outline",
-  ArrowRightDropCircle : "arrow-right-drop-circle",
-  ArrowRightDropCircleOutline : "arrow-right-drop-circle-outline",
-  ArrowTopLeft : "arrow-top-left",
-  ArrowTopRight : "arrow-top-right",
-  ArrowUp : "arrow-up",
-  ArrowUpBold : "arrow-up-bold",
-  ArrowUpBoldCircle : "arrow-up-bold-circle",
-  ArrowUpBoldCircleOutline : "arrow-up-bold-circle-outline",
-  ArrowUpBoldHexagonOutline : "arrow-up-bold-hexagon-outline",
-  ArrowUpDropCircle : "arrow-up-drop-circle",
-  ArrowUpDropCircleOutline : "arrow-up-drop-circle-outline",
-  Assistant : "assistant",
-  At : "at",
-  Attachment : "attachment",
-  Audiobook : "audiobook",
-  AutoFix : "auto-fix",
-  AutoUpload : "auto-upload",
-  Autorenew : "autorenew",
-  AvTimer : "av-timer",
-  Baby : "baby",
-  BabyBuggy : "baby-buggy",
-  Backburger : "backburger",
-  Backspace : "backspace",
-  BackupRestore : "backup-restore",
-  Bandcamp : "bandcamp",
-  Bank : "bank",
-  Barcode : "barcode",
-  BarcodeScan : "barcode-scan",
-  Barley : "barley",
-  Barrel : "barrel",
-  Basecamp : "basecamp",
-  Basket : "basket",
-  BasketFill : "basket-fill",
-  BasketUnfill : "basket-unfill",
-  Battery : "battery",
-  Battery10 : "battery-10",
-  Battery20 : "battery-20",
-  Battery30 : "battery-30",
-  Battery40 : "battery-40",
-  Battery50 : "battery-50",
-  Battery60 : "battery-60",
-  Battery70 : "battery-70",
-  Battery80 : "battery-80",
-  Battery90 : "battery-90",
-  BatteryAlert : "battery-alert",
-  BatteryCharging : "battery-charging",
-  BatteryCharging100 : "battery-charging-100",
-  BatteryCharging20 : "battery-charging-20",
-  BatteryCharging30 : "battery-charging-30",
-  BatteryCharging40 : "battery-charging-40",
-  BatteryCharging60 : "battery-charging-60",
-  BatteryCharging80 : "battery-charging-80",
-  BatteryCharging90 : "battery-charging-90",
-  BatteryMinus : "battery-minus",
-  BatteryNegative : "battery-negative",
-  BatteryOutline : "battery-outline",
-  BatteryPlus : "battery-plus",
-  BatteryPositive : "battery-positive",
-  BatteryUnknown : "battery-unknown",
-  Beach : "beach",
-  Beaker : "beaker",
-  Beats : "beats",
-  Beer : "beer",
-  Behance : "behance",
-  Bell : "bell",
-  BellOff : "bell-off",
-  BellOutline : "bell-outline",
-  BellPlus : "bell-plus",
-  BellRing : "bell-ring",
-  BellRingOutline : "bell-ring-outline",
-  BellSleep : "bell-sleep",
-  Beta : "beta",
-  Bible : "bible",
-  Bike : "bike",
-  Bing : "bing",
-  Binoculars : "binoculars",
-  Bio : "bio",
-  Biohazard : "biohazard",
-  Bitbucket : "bitbucket",
-  BlackMesa : "black-mesa",
-  Blackberry : "blackberry",
-  Blender : "blender",
-  Blinds : "blinds",
-  BlockHelper : "block-helper",
-  Blogger : "blogger",
-  Bluetooth : "bluetooth",
-  BluetoothAudio : "bluetooth-audio",
-  BluetoothConnect : "bluetooth-connect",
-  BluetoothOff : "bluetooth-off",
-  BluetoothSettings : "bluetooth-settings",
-  BluetoothTransfer : "bluetooth-transfer",
-  Blur : "blur",
-  BlurLinear : "blur-linear",
-  BlurOff : "blur-off",
-  BlurRadial : "blur-radial",
-  Bomb : "bomb",
-  Bone : "bone",
-  Book : "book",
-  BookMinus : "book-minus",
-  BookMultiple : "book-multiple",
-  BookMultipleVariant : "book-multiple-variant",
-  BookOpen : "book-open",
-  BookOpenPageVariant : "book-open-page-variant",
-  BookOpenVariant : "book-open-variant",
-  BookPlus : "book-plus",
-  BookVariant : "book-variant",
-  Bookmark : "bookmark",
-  BookmarkCheck : "bookmark-check",
-  BookmarkMusic : "bookmark-music",
-  BookmarkOutline : "bookmark-outline",
-  BookmarkPlus : "bookmark-plus",
-  BookmarkPlusOutline : "bookmark-plus-outline",
-  BookmarkRemove : "bookmark-remove",
-  Boombox : "boombox",
-  BorderAll : "border-all",
-  BorderBottom : "border-bottom",
-  BorderColor : "border-color",
-  BorderHorizontal : "border-horizontal",
-  BorderInside : "border-inside",
-  BorderLeft : "border-left",
-  BorderNone : "border-none",
-  BorderOutside : "border-outside",
-  BorderRight : "border-right",
-  BorderStyle : "border-style",
-  BorderTop : "border-top",
-  BorderVertical : "border-vertical",
-  BowTie : "bow-tie",
-  Bowl : "bowl",
-  Bowling : "bowling",
-  Box : "box",
-  BoxCutter : "box-cutter",
-  BoxShadow : "box-shadow",
-  Bridge : "bridge",
-  Briefcase : "briefcase",
-  BriefcaseCheck : "briefcase-check",
-  BriefcaseDownload : "briefcase-download",
-  BriefcaseUpload : "briefcase-upload",
-  Brightness1 : "brightness-1",
-  Brightness2 : "brightness-2",
-  Brightness3 : "brightness-3",
-  Brightness4 : "brightness-4",
-  Brightness5 : "brightness-5",
-  Brightness6 : "brightness-6",
-  Brightness7 : "brightness-7",
-  BrightnessAuto : "brightness-auto",
-  Broom : "broom",
-  Brush : "brush",
-  Buffer : "buffer",
-  Bug : "bug",
-  BulletinBoard : "bulletin-board",
-  Bullhorn : "bullhorn",
-  Bullseye : "bullseye",
-  BurstMode : "burst-mode",
-  Bus : "bus",
-  Cached : "cached",
-  Cake : "cake",
-  CakeLayered : "cake-layered",
-  CakeVariant : "cake-variant",
-  Calculator : "calculator",
-  Calendar : "calendar",
-  CalendarBlank : "calendar-blank",
-  CalendarCheck : "calendar-check",
-  CalendarClock : "calendar-clock",
-  CalendarMultiple : "calendar-multiple",
-  CalendarMultipleCheck : "calendar-multiple-check",
-  CalendarPlus : "calendar-plus",
-  CalendarQuestion : "calendar-question",
-  CalendarRange : "calendar-range",
-  CalendarRemove : "calendar-remove",
-  CalendarText : "calendar-text",
-  CalendarToday : "calendar-today",
-  CallMade : "call-made",
-  CallMerge : "call-merge",
-  CallMissed : "call-missed",
-  CallReceived : "call-received",
-  CallSplit : "call-split",
-  Camcorder : "camcorder",
-  CamcorderBox : "camcorder-box",
-  CamcorderBoxOff : "camcorder-box-off",
-  CamcorderOff : "camcorder-off",
-  Camera : "camera",
-  CameraBurst : "camera-burst",
-  CameraEnhance : "camera-enhance",
-  CameraFront : "camera-front",
-  CameraFrontVariant : "camera-front-variant",
-  CameraIris : "camera-iris",
-  CameraOff : "camera-off",
-  CameraPartyMode : "camera-party-mode",
-  CameraRear : "camera-rear",
-  CameraRearVariant : "camera-rear-variant",
-  CameraSwitch : "camera-switch",
-  CameraTimer : "camera-timer",
-  Candle : "candle",
-  Candycane : "candycane",
-  Car : "car",
-  CarBattery : "car-battery",
-  CarConnected : "car-connected",
-  CarWash : "car-wash",
-  Cards : "cards",
-  CardsOutline : "cards-outline",
-  CardsPlayingOutline : "cards-playing-outline",
-  Carrot : "carrot",
-  Cart : "cart",
-  CartOff : "cart-off",
-  CartOutline : "cart-outline",
-  CartPlus : "cart-plus",
-  CaseSensitiveAlt : "case-sensitive-alt",
-  Cash : "cash",
-  Cash100 : "cash-100",
-  CashMultiple : "cash-multiple",
-  CashUsd : "cash-usd",
-  Cast : "cast",
-  CastConnected : "cast-connected",
-  Castle : "castle",
-  Cat : "cat",
-  Cellphone : "cellphone",
-  CellphoneAndroid : "cellphone-android",
-  CellphoneBasic : "cellphone-basic",
-  CellphoneDock : "cellphone-dock",
-  CellphoneIphone : "cellphone-iphone",
-  CellphoneLink : "cellphone-link",
-  CellphoneLinkOff : "cellphone-link-off",
-  CellphoneSettings : "cellphone-settings",
-  Certificate : "certificate",
-  ChairSchool : "chair-school",
-  ChartArc : "chart-arc",
-  ChartAreaspline : "chart-areaspline",
-  ChartBar : "chart-bar",
-  ChartBubble : "chart-bubble",
-  ChartGantt : "chart-gantt",
-  ChartHistogram : "chart-histogram",
-  ChartLine : "chart-line",
-  ChartPie : "chart-pie",
-  ChartScatterplotHexbin : "chart-scatterplot-hexbin",
-  ChartTimeline : "chart-timeline",
-  Check : "check",
-  CheckAll : "check-all",
-  CheckCircle : "check-circle",
-  CheckCircleOutline : "check-circle-outline",
-  CheckboxBlank : "checkbox-blank",
-  CheckboxBlankCircle : "checkbox-blank-circle",
-  CheckboxBlankCircleOutline : "checkbox-blank-circle-outline",
-  CheckboxBlankOutline : "checkbox-blank-outline",
-  CheckboxMarked : "checkbox-marked",
-  CheckboxMarkedCircle : "checkbox-marked-circle",
-  CheckboxMarkedCircleOutline : "checkbox-marked-circle-outline",
-  CheckboxMarkedOutline : "checkbox-marked-outline",
-  CheckboxMultipleBlank : "checkbox-multiple-blank",
-  CheckboxMultipleBlankCircle : "checkbox-multiple-blank-circle",
-  CheckboxMultipleBlankCircleOutline : "checkbox-multiple-blank-circle-outline",
-  CheckboxMultipleBlankOutline : "checkbox-multiple-blank-outline",
-  CheckboxMultipleMarked : "checkbox-multiple-marked",
-  CheckboxMultipleMarkedCircle : "checkbox-multiple-marked-circle",
-  CheckboxMultipleMarkedCircleOutline : "checkbox-multiple-marked-circle-outline",
-  CheckboxMultipleMarkedOutline : "checkbox-multiple-marked-outline",
-  Checkerboard : "checkerboard",
-  ChemicalWeapon : "chemical-weapon",
-  ChevronDoubleDown : "chevron-double-down",
-  ChevronDoubleLeft : "chevron-double-left",
-  ChevronDoubleRight : "chevron-double-right",
-  ChevronDoubleUp : "chevron-double-up",
-  ChevronDown : "chevron-down",
-  ChevronLeft : "chevron-left",
-  ChevronRight : "chevron-right",
-  ChevronUp : "chevron-up",
-  Chip : "chip",
-  Church : "church",
-  CiscoWebex : "cisco-webex",
-  City : "city",
-  Clipboard : "clipboard",
-  ClipboardAccount : "clipboard-account",
-  ClipboardAlert : "clipboard-alert",
-  ClipboardArrowDown : "clipboard-arrow-down",
-  ClipboardArrowLeft : "clipboard-arrow-left",
-  ClipboardCheck : "clipboard-check",
-  ClipboardOutline : "clipboard-outline",
-  ClipboardText : "clipboard-text",
-  Clippy : "clippy",
-  Clock : "clock",
-  ClockAlert : "clock-alert",
-  ClockEnd : "clock-end",
-  ClockFast : "clock-fast",
-  ClockIn : "clock-in",
-  ClockOut : "clock-out",
-  ClockStart : "clock-start",
-  Close : "close",
-  CloseBox : "close-box",
-  CloseBoxOutline : "close-box-outline",
-  CloseCircle : "close-circle",
-  CloseCircleOutline : "close-circle-outline",
-  CloseNetwork : "close-network",
-  CloseOctagon : "close-octagon",
-  CloseOctagonOutline : "close-octagon-outline",
-  ClosedCaption : "closed-caption",
-  Cloud : "cloud",
-  CloudCheck : "cloud-check",
-  CloudCircle : "cloud-circle",
-  CloudDownload : "cloud-download",
-  CloudOutline : "cloud-outline",
-  CloudOutlineOff : "cloud-outline-off",
-  CloudPrint : "cloud-print",
-  CloudPrintOutline : "cloud-print-outline",
-  CloudSync : "cloud-sync",
-  CloudUpload : "cloud-upload",
-  CodeArray : "code-array",
-  CodeBraces : "code-braces",
-  CodeBrackets : "code-brackets",
-  CodeEqual : "code-equal",
-  CodeGreaterThan : "code-greater-than",
-  CodeGreaterThanOrEqual : "code-greater-than-or-equal",
-  CodeLessThan : "code-less-than",
-  CodeLessThanOrEqual : "code-less-than-or-equal",
-  CodeNotEqual : "code-not-equal",
-  CodeNotEqualVariant : "code-not-equal-variant",
-  CodeParentheses : "code-parentheses",
-  CodeString : "code-string",
-  CodeTags : "code-tags",
-  CodeTagsCheck : "code-tags-check",
-  Codepen : "codepen",
-  Coffee : "coffee",
-  CoffeeToGo : "coffee-to-go",
-  Coin : "coin",
-  Coins : "coins",
-  Collage : "collage",
-  ColorHelper : "color-helper",
-  Comment : "comment",
-  CommentAccount : "comment-account",
-  CommentAccountOutline : "comment-account-outline",
-  CommentAlert : "comment-alert",
-  CommentAlertOutline : "comment-alert-outline",
-  CommentCheck : "comment-check",
-  CommentCheckOutline : "comment-check-outline",
-  CommentMultipleOutline : "comment-multiple-outline",
-  CommentOutline : "comment-outline",
-  CommentPlusOutline : "comment-plus-outline",
-  CommentProcessing : "comment-processing",
-  CommentProcessingOutline : "comment-processing-outline",
-  CommentQuestionOutline : "comment-question-outline",
-  CommentRemoveOutline : "comment-remove-outline",
-  CommentText : "comment-text",
-  CommentTextOutline : "comment-text-outline",
-  Compare : "compare",
-  Compass : "compass",
-  CompassOutline : "compass-outline",
-  Console : "console",
-  ContactMail : "contact-mail",
-  ContentCopy : "content-copy",
-  ContentCut : "content-cut",
-  ContentDuplicate : "content-duplicate",
-  ContentPaste : "content-paste",
-  ContentSave : "content-save",
-  ContentSaveAll : "content-save-all",
-  ContentSaveSettings : "content-save-settings",
-  Contrast : "contrast",
-  ContrastBox : "contrast-box",
-  ContrastCircle : "contrast-circle",
-  Cookie : "cookie",
-  Copyright : "copyright",
-  Counter : "counter",
-  Cow : "cow",
-  Creation : "creation",
-  CreditCard : "credit-card",
-  CreditCardMultiple : "credit-card-multiple",
-  CreditCardOff : "credit-card-off",
-  CreditCardPlus : "credit-card-plus",
-  CreditCardScan : "credit-card-scan",
-  Crop : "crop",
-  CropFree : "crop-free",
-  CropLandscape : "crop-landscape",
-  CropPortrait : "crop-portrait",
-  CropRotate : "crop-rotate",
-  CropSquare : "crop-square",
-  Crosshairs : "crosshairs",
-  CrosshairsGps : "crosshairs-gps",
-  Crown : "crown",
-  Cube : "cube",
-  CubeOutline : "cube-outline",
-  CubeSend : "cube-send",
-  CubeUnfolded : "cube-unfolded",
-  Cup : "cup",
-  CupOff : "cup-off",
-  CupWater : "cup-water",
-  CurrencyBtc : "currency-btc",
-  CurrencyEur : "currency-eur",
-  CurrencyGbp : "currency-gbp",
-  CurrencyInr : "currency-inr",
-  CurrencyNgn : "currency-ngn",
-  CurrencyRub : "currency-rub",
-  CurrencyTry : "currency-try",
-  CurrencyUsd : "currency-usd",
-  CurrencyUsdOff : "currency-usd-off",
-  CursorDefault : "cursor-default",
-  CursorDefaultOutline : "cursor-default-outline",
-  CursorMove : "cursor-move",
-  CursorPointer : "cursor-pointer",
-  CursorText : "cursor-text",
-  Database : "database",
-  DatabaseMinus : "database-minus",
-  DatabasePlus : "database-plus",
-  DebugStepInto : "debug-step-into",
-  DebugStepOut : "debug-step-out",
-  DebugStepOver : "debug-step-over",
-  DecimalDecrease : "decimal-decrease",
-  DecimalIncrease : "decimal-increase",
-  Delete : "delete",
-  DeleteCircle : "delete-circle",
-  DeleteForever : "delete-forever",
-  DeleteSweep : "delete-sweep",
-  DeleteVariant : "delete-variant",
-  Delta : "delta",
-  Deskphone : "deskphone",
-  DesktopMac : "desktop-mac",
-  DesktopTower : "desktop-tower",
-  Details : "details",
-  DeveloperBoard : "developer-board",
-  Deviantart : "deviantart",
-  Dialpad : "dialpad",
-  Diamond : "diamond",
-  Dice1 : "dice-1",
-  Dice2 : "dice-2",
-  Dice3 : "dice-3",
-  Dice4 : "dice-4",
-  Dice5 : "dice-5",
-  Dice6 : "dice-6",
-  DiceD20 : "dice-d20",
-  DiceD4 : "dice-d4",
-  DiceD6 : "dice-d6",
-  DiceD8 : "dice-d8",
-  Dictionary : "dictionary",
-  Directions : "directions",
-  DirectionsFork : "directions-fork",
-  Discord : "discord",
-  Disk : "disk",
-  DiskAlert : "disk-alert",
-  Disqus : "disqus",
-  DisqusOutline : "disqus-outline",
-  Division : "division",
-  DivisionBox : "division-box",
-  Dna : "dna",
-  Dns : "dns",
-  DoNotDisturb : "do-not-disturb",
-  DoNotDisturbOff : "do-not-disturb-off",
-  Dolby : "dolby",
-  Domain : "domain",
-  DotsHorizontal : "dots-horizontal",
-  DotsVertical : "dots-vertical",
-  Douban : "douban",
-  Download : "download",
-  Drag : "drag",
-  DragHorizontal : "drag-horizontal",
-  DragVertical : "drag-vertical",
-  Drawing : "drawing",
-  DrawingBox : "drawing-box",
-  Dribbble : "dribbble",
-  DribbbleBox : "dribbble-box",
-  Drone : "drone",
-  Dropbox : "dropbox",
-  Drupal : "drupal",
-  Duck : "duck",
-  Dumbbell : "dumbbell",
-  Earth : "earth",
-  EarthOff : "earth-off",
-  Edge : "edge",
-  Eject : "eject",
-  ElevationDecline : "elevation-decline",
-  ElevationRise : "elevation-rise",
-  Elevator : "elevator",
-  Email : "email",
-  EmailOpen : "email-open",
-  EmailOpenOutline : "email-open-outline",
-  EmailOutline : "email-outline",
-  EmailSecure : "email-secure",
-  EmailVariant : "email-variant",
-  Emby : "emby",
-  Emoticon : "emoticon",
-  EmoticonCool : "emoticon-cool",
-  EmoticonDead : "emoticon-dead",
-  EmoticonDevil : "emoticon-devil",
-  EmoticonExcited : "emoticon-excited",
-  EmoticonHappy : "emoticon-happy",
-  EmoticonNeutral : "emoticon-neutral",
-  EmoticonPoop : "emoticon-poop",
-  EmoticonSad : "emoticon-sad",
-  EmoticonTongue : "emoticon-tongue",
-  Engine : "engine",
-  EngineOutline : "engine-outline",
-  Equal : "equal",
-  EqualBox : "equal-box",
-  Eraser : "eraser",
-  EraserVariant : "eraser-variant",
-  Escalator : "escalator",
-  Ethernet : "ethernet",
-  EthernetCable : "ethernet-cable",
-  EthernetCableOff : "ethernet-cable-off",
-  Etsy : "etsy",
-  EvStation : "ev-station",
-  Evernote : "evernote",
-  Exclamation : "exclamation",
-  ExitToApp : "exit-to-app",
-  Export : "export",
-  Eye : "eye",
-  EyeOff : "eye-off",
-  Eyedropper : "eyedropper",
-  EyedropperVariant : "eyedropper-variant",
-  Face : "face",
-  FaceProfile : "face-profile",
-  Facebook : "facebook",
-  FacebookBox : "facebook-box",
-  FacebookMessenger : "facebook-messenger",
-  Factory : "factory",
-  Fan : "fan",
-  FastForward : "fast-forward",
-  Fax : "fax",
-  Ferry : "ferry",
-  File : "file",
-  FileChart : "file-chart",
-  FileCheck : "file-check",
-  FileCloud : "file-cloud",
-  FileDelimited : "file-delimited",
-  FileDocument : "file-document",
-  FileDocumentBox : "file-document-box",
-  FileExcel : "file-excel",
-  FileExcelBox : "file-excel-box",
-  FileExport : "file-export",
-  FileFind : "file-find",
-  FileHidden : "file-hidden",
-  FileImage : "file-image",
-  FileImport : "file-import",
-  FileLock : "file-lock",
-  FileMultiple : "file-multiple",
-  FileMusic : "file-music",
-  FileOutline : "file-outline",
-  FilePdf : "file-pdf",
-  FilePdfBox : "file-pdf-box",
-  FilePowerpoint : "file-powerpoint",
-  FilePowerpointBox : "file-powerpoint-box",
-  FilePresentationBox : "file-presentation-box",
-  FileRestore : "file-restore",
-  FileSend : "file-send",
-  FileTree : "file-tree",
-  FileVideo : "file-video",
-  FileWord : "file-word",
-  FileWordBox : "file-word-box",
-  FileXml : "file-xml",
-  Film : "film",
-  Filmstrip : "filmstrip",
-  FilmstripOff : "filmstrip-off",
-  Filter : "filter",
-  FilterOutline : "filter-outline",
-  FilterRemove : "filter-remove",
-  FilterRemoveOutline : "filter-remove-outline",
-  FilterVariant : "filter-variant",
-  Fingerprint : "fingerprint",
-  Fire : "fire",
-  Firefox : "firefox",
-  Fish : "fish",
-  Flag : "flag",
-  FlagCheckered : "flag-checkered",
-  FlagOutline : "flag-outline",
-  FlagOutlineVariant : "flag-outline-variant",
-  FlagTriangle : "flag-triangle",
-  FlagVariant : "flag-variant",
-  Flash : "flash",
-  FlashAuto : "flash-auto",
-  FlashOff : "flash-off",
-  FlashRedEye : "flash-red-eye",
-  Flashlight : "flashlight",
-  FlashlightOff : "flashlight-off",
-  Flask : "flask",
-  FlaskEmpty : "flask-empty",
-  FlaskEmptyOutline : "flask-empty-outline",
-  FlaskOutline : "flask-outline",
-  Flattr : "flattr",
-  FlipToBack : "flip-to-back",
-  FlipToFront : "flip-to-front",
-  Floppy : "floppy",
-  Flower : "flower",
-  Folder : "folder",
-  FolderAccount : "folder-account",
-  FolderDownload : "folder-download",
-  FolderGoogleDrive : "folder-google-drive",
-  FolderImage : "folder-image",
-  FolderLock : "folder-lock",
-  FolderLockOpen : "folder-lock-open",
-  FolderMove : "folder-move",
-  FolderMultiple : "folder-multiple",
-  FolderMultipleImage : "folder-multiple-image",
-  FolderMultipleOutline : "folder-multiple-outline",
-  FolderOutline : "folder-outline",
-  FolderPlus : "folder-plus",
-  FolderRemove : "folder-remove",
-  FolderStar : "folder-star",
-  FolderUpload : "folder-upload",
-  Food : "food",
-  FoodApple : "food-apple",
-  FoodForkDrink : "food-fork-drink",
-  FoodOff : "food-off",
-  FoodVariant : "food-variant",
-  Football : "football",
-  FootballAustralian : "football-australian",
-  FootballHelmet : "football-helmet",
-  FormatAlignCenter : "format-align-center",
-  FormatAlignJustify : "format-align-justify",
-  FormatAlignLeft : "format-align-left",
-  FormatAlignRight : "format-align-right",
-  FormatAnnotationPlus : "format-annotation-plus",
-  FormatBold : "format-bold",
-  FormatClear : "format-clear",
-  FormatColorFill : "format-color-fill",
-  FormatColorText : "format-color-text",
-  FormatFloatCenter : "format-float-center",
-  FormatFloatLeft : "format-float-left",
-  FormatFloatNone : "format-float-none",
-  FormatFloatRight : "format-float-right",
-  FormatHeader1 : "format-header-1",
-  FormatHeader2 : "format-header-2",
-  FormatHeader3 : "format-header-3",
-  FormatHeader4 : "format-header-4",
-  FormatHeader5 : "format-header-5",
-  FormatHeader6 : "format-header-6",
-  FormatHeaderDecrease : "format-header-decrease",
-  FormatHeaderEqual : "format-header-equal",
-  FormatHeaderIncrease : "format-header-increase",
-  FormatHeaderPound : "format-header-pound",
-  FormatHorizontalAlignCenter : "format-horizontal-align-center",
-  FormatHorizontalAlignLeft : "format-horizontal-align-left",
-  FormatHorizontalAlignRight : "format-horizontal-align-right",
-  FormatIndentDecrease : "format-indent-decrease",
-  FormatIndentIncrease : "format-indent-increase",
-  FormatItalic : "format-italic",
-  FormatLineSpacing : "format-line-spacing",
-  FormatLineStyle : "format-line-style",
-  FormatLineWeight : "format-line-weight",
-  FormatListBulleted : "format-list-bulleted",
-  FormatListBulletedType : "format-list-bulleted-type",
-  FormatListNumbers : "format-list-numbers",
-  FormatPaint : "format-paint",
-  FormatParagraph : "format-paragraph",
-  FormatQuote : "format-quote",
-  FormatSection : "format-section",
-  FormatSize : "format-size",
-  FormatStrikethrough : "format-strikethrough",
-  FormatStrikethroughVariant : "format-strikethrough-variant",
-  FormatSubscript : "format-subscript",
-  FormatSuperscript : "format-superscript",
-  FormatText : "format-text",
-  FormatTextdirectionLToR : "format-textdirection-l-to-r",
-  FormatTextdirectionRToL : "format-textdirection-r-to-l",
-  FormatTitle : "format-title",
-  FormatUnderline : "format-underline",
-  FormatVerticalAlignBottom : "format-vertical-align-bottom",
-  FormatVerticalAlignCenter : "format-vertical-align-center",
-  FormatVerticalAlignTop : "format-vertical-align-top",
-  FormatWrapInline : "format-wrap-inline",
-  FormatWrapSquare : "format-wrap-square",
-  FormatWrapTight : "format-wrap-tight",
-  FormatWrapTopBottom : "format-wrap-top-bottom",
-  Forum : "forum",
-  Forward : "forward",
-  Foursquare : "foursquare",
-  Fridge : "fridge",
-  FridgeFilled : "fridge-filled",
-  FridgeFilledBottom : "fridge-filled-bottom",
-  FridgeFilledTop : "fridge-filled-top",
-  Fullscreen : "fullscreen",
-  FullscreenExit : "fullscreen-exit",
-  Function : "function",
-  Gamepad : "gamepad",
-  GamepadVariant : "gamepad-variant",
-  GasCylinder : "gas-cylinder",
-  GasStation : "gas-station",
-  Gate : "gate",
-  Gauge : "gauge",
-  Gavel : "gavel",
-  GenderFemale : "gender-female",
-  GenderMale : "gender-male",
-  GenderMaleFemale : "gender-male-female",
-  GenderTransgender : "gender-transgender",
-  Ghost : "ghost",
-  Gift : "gift",
-  Git : "git",
-  GithubBox : "github-box",
-  GithubCircle : "github-circle",
-  GlassFlute : "glass-flute",
-  GlassMug : "glass-mug",
-  GlassStange : "glass-stange",
-  GlassTulip : "glass-tulip",
-  Glassdoor : "glassdoor",
-  Glasses : "glasses",
-  Gmail : "gmail",
-  Gnome : "gnome",
-  Gondola : "gondola",
-  Google : "google",
-  GoogleCardboard : "google-cardboard",
-  GoogleChrome : "google-chrome",
-  GoogleCircles : "google-circles",
-  GoogleCirclesCommunities : "google-circles-communities",
-  GoogleCirclesExtended : "google-circles-extended",
-  GoogleCirclesGroup : "google-circles-group",
-  GoogleController : "google-controller",
-  GoogleControllerOff : "google-controller-off",
-  GoogleDrive : "google-drive",
-  GoogleEarth : "google-earth",
-  GoogleGlass : "google-glass",
-  GoogleMaps : "google-maps",
-  GoogleNearby : "google-nearby",
-  GooglePages : "google-pages",
-  GooglePhysicalWeb : "google-physical-web",
-  GooglePlay : "google-play",
-  GooglePlus : "google-plus",
-  GooglePlusBox : "google-plus-box",
-  GoogleTranslate : "google-translate",
-  GoogleWallet : "google-wallet",
-  Gradient : "gradient",
-  GreasePencil : "grease-pencil",
-  Grid : "grid",
-  GridOff : "grid-off",
-  Group : "group",
-  GuitarElectric : "guitar-electric",
-  GuitarPick : "guitar-pick",
-  GuitarPickOutline : "guitar-pick-outline",
-  Hackernews : "hackernews",
-  Hamburger : "hamburger",
-  HandPointingRight : "hand-pointing-right",
-  Hanger : "hanger",
-  Hangouts : "hangouts",
-  Harddisk : "harddisk",
-  Headphones : "headphones",
-  HeadphonesBox : "headphones-box",
-  HeadphonesSettings : "headphones-settings",
-  Headset : "headset",
-  HeadsetDock : "headset-dock",
-  HeadsetOff : "headset-off",
-  Heart : "heart",
-  HeartBox : "heart-box",
-  HeartBoxOutline : "heart-box-outline",
-  HeartBroken : "heart-broken",
-  HeartOutline : "heart-outline",
-  HeartPulse : "heart-pulse",
-  Help : "help",
-  HelpCircle : "help-circle",
-  HelpCircleOutline : "help-circle-outline",
-  Hexagon : "hexagon",
-  HexagonOutline : "hexagon-outline",
-  Highway : "highway",
-  History : "history",
-  Hololens : "hololens",
-  Home : "home",
-  HomeMapMarker : "home-map-marker",
-  HomeModern : "home-modern",
-  HomeOutline : "home-outline",
-  HomeVariant : "home-variant",
-  Hops : "hops",
-  Hospital : "hospital",
-  HospitalBuilding : "hospital-building",
-  HospitalMarker : "hospital-marker",
-  Hotel : "hotel",
-  Houzz : "houzz",
-  HouzzBox : "houzz-box",
-  Human : "human",
-  HumanChild : "human-child",
-  HumanFemale : "human-female",
-  HumanGreeting : "human-greeting",
-  HumanHandsdown : "human-handsdown",
-  HumanHandsup : "human-handsup",
-  HumanMale : "human-male",
-  HumanMaleFemale : "human-male-female",
-  HumanPregnant : "human-pregnant",
-  Image : "image",
-  ImageAlbum : "image-album",
-  ImageArea : "image-area",
-  ImageAreaClose : "image-area-close",
-  ImageBroken : "image-broken",
-  ImageBrokenVariant : "image-broken-variant",
-  ImageFilter : "image-filter",
-  ImageFilterBlackWhite : "image-filter-black-white",
-  ImageFilterCenterFocus : "image-filter-center-focus",
-  ImageFilterCenterFocusWeak : "image-filter-center-focus-weak",
-  ImageFilterDrama : "image-filter-drama",
-  ImageFilterFrames : "image-filter-frames",
-  ImageFilterHdr : "image-filter-hdr",
-  ImageFilterNone : "image-filter-none",
-  ImageFilterTiltShift : "image-filter-tilt-shift",
-  ImageFilterVintage : "image-filter-vintage",
-  ImageMultiple : "image-multiple",
-  Import : "import",
-  Inbox : "inbox",
-  InboxArrowDown : "inbox-arrow-down",
-  InboxArrowUp : "inbox-arrow-up",
-  Incognito : "incognito",
-  Information : "information",
-  InformationOutline : "information-outline",
-  InformationVariant : "information-variant",
-  Instagram : "instagram",
-  Instapaper : "instapaper",
-  InternetExplorer : "internet-explorer",
-  InvertColors : "invert-colors",
-  Itunes : "itunes",
-  Jeepney : "jeepney",
-  Jira : "jira",
-  Jsfiddle : "jsfiddle",
-  Json : "json",
-  Keg : "keg",
-  Kettle : "kettle",
-  Key : "key",
-  KeyChange : "key-change",
-  KeyMinus : "key-minus",
-  KeyPlus : "key-plus",
-  KeyRemove : "key-remove",
-  KeyVariant : "key-variant",
-  Keyboard : "keyboard",
-  KeyboardBackspace : "keyboard-backspace",
-  KeyboardCaps : "keyboard-caps",
-  KeyboardClose : "keyboard-close",
-  KeyboardOff : "keyboard-off",
-  KeyboardReturn : "keyboard-return",
-  KeyboardTab : "keyboard-tab",
-  KeyboardVariant : "keyboard-variant",
-  Kodi : "kodi",
-  Label : "label",
-  LabelOutline : "label-outline",
-  Lambda : "lambda",
-  Lamp : "lamp",
-  Lan : "lan",
-  LanConnect : "lan-connect",
-  LanDisconnect : "lan-disconnect",
-  LanPending : "lan-pending",
-  LanguageC : "language-c",
-  LanguageCpp : "language-cpp",
-  LanguageCsharp : "language-csharp",
-  LanguageCss3 : "language-css3",
-  LanguageHtml5 : "language-html5",
-  LanguageJavascript : "language-javascript",
-  LanguagePhp : "language-php",
-  LanguagePython : "language-python",
-  LanguagePythonText : "language-python-text",
-  Laptop : "laptop",
-  LaptopChromebook : "laptop-chromebook",
-  LaptopMac : "laptop-mac",
-  LaptopWindows : "laptop-windows",
-  Lastfm : "lastfm",
-  Launch : "launch",
-  Layers : "layers",
-  LayersOff : "layers-off",
-  LeadPencil : "lead-pencil",
-  Leaf : "leaf",
-  LedOff : "led-off",
-  LedOn : "led-on",
-  LedOutline : "led-outline",
-  LedVariantOff : "led-variant-off",
-  LedVariantOn : "led-variant-on",
-  LedVariantOutline : "led-variant-outline",
-  Library : "library",
-  LibraryBooks : "library-books",
-  LibraryMusic : "library-music",
-  LibraryPlus : "library-plus",
-  Lightbulb : "lightbulb",
-  LightbulbOutline : "lightbulb-outline",
-  Link : "link",
-  LinkOff : "link-off",
-  LinkVariant : "link-variant",
-  LinkVariantOff : "link-variant-off",
-  Linkedin : "linkedin",
-  LinkedinBox : "linkedin-box",
-  Linux : "linux",
-  Lock : "lock",
-  LockOpen : "lock-open",
-  LockOpenOutline : "lock-open-outline",
-  LockOutline : "lock-outline",
-  LockPlus : "lock-plus",
-  Login : "login",
-  LoginVariant : "login-variant",
-  Logout : "logout",
-  LogoutVariant : "logout-variant",
-  Looks : "looks",
-  Loupe : "loupe",
-  Lumx : "lumx",
-  Magnet : "magnet",
-  MagnetOn : "magnet-on",
-  Magnify : "magnify",
-  MagnifyMinus : "magnify-minus",
-  MagnifyPlus : "magnify-plus",
-  MailRu : "mail-ru",
-  Map : "map",
-  MapMarker : "map-marker",
-  MapMarkerCircle : "map-marker-circle",
-  MapMarkerMinus : "map-marker-minus",
-  MapMarkerMultiple : "map-marker-multiple",
-  MapMarkerOff : "map-marker-off",
-  MapMarkerPlus : "map-marker-plus",
-  MapMarkerRadius : "map-marker-radius",
-  Margin : "margin",
-  Markdown : "markdown",
-  Marker : "marker",
-  MarkerCheck : "marker-check",
-  Martini : "martini",
-  MaterialUi : "material-ui",
-  MathCompass : "math-compass",
-  Matrix : "matrix",
-  Maxcdn : "maxcdn",
-  Medium : "medium",
-  Memory : "memory",
-  Menu : "menu",
-  MenuDown : "menu-down",
-  MenuDownOutline : "menu-down-outline",
-  MenuLeft : "menu-left",
-  MenuRight : "menu-right",
-  MenuUp : "menu-up",
-  MenuUpOutline : "menu-up-outline",
-  Message : "message",
-  MessageAlert : "message-alert",
-  MessageBulleted : "message-bulleted",
-  MessageBulletedOff : "message-bulleted-off",
-  MessageDraw : "message-draw",
-  MessageImage : "message-image",
-  MessageOutline : "message-outline",
-  MessagePlus : "message-plus",
-  MessageProcessing : "message-processing",
-  MessageReply : "message-reply",
-  MessageReplyText : "message-reply-text",
-  MessageText : "message-text",
-  MessageTextOutline : "message-text-outline",
-  MessageVideo : "message-video",
-  Meteor : "meteor",
-  Microphone : "microphone",
-  MicrophoneOff : "microphone-off",
-  MicrophoneOutline : "microphone-outline",
-  MicrophoneSettings : "microphone-settings",
-  MicrophoneVariant : "microphone-variant",
-  MicrophoneVariantOff : "microphone-variant-off",
-  Microscope : "microscope",
-  Microsoft : "microsoft",
-  Minecraft : "minecraft",
-  Minus : "minus",
-  MinusBox : "minus-box",
-  MinusCircle : "minus-circle",
-  MinusCircleOutline : "minus-circle-outline",
-  MinusNetwork : "minus-network",
-  Mixcloud : "mixcloud",
-  Monitor : "monitor",
-  MonitorMultiple : "monitor-multiple",
-  More : "more",
-  Motorbike : "motorbike",
-  Mouse : "mouse",
-  MouseOff : "mouse-off",
-  MouseVariant : "mouse-variant",
-  MouseVariantOff : "mouse-variant-off",
-  MoveResize : "move-resize",
-  MoveResizeVariant : "move-resize-variant",
-  Movie : "movie",
-  Multiplication : "multiplication",
-  MultiplicationBox : "multiplication-box",
-  MusicBox : "music-box",
-  MusicBoxOutline : "music-box-outline",
-  MusicCircle : "music-circle",
-  MusicNote : "music-note",
-  MusicNoteBluetooth : "music-note-bluetooth",
-  MusicNoteBluetoothOff : "music-note-bluetooth-off",
-  MusicNoteEighth : "music-note-eighth",
-  MusicNoteHalf : "music-note-half",
-  MusicNoteOff : "music-note-off",
-  MusicNoteQuarter : "music-note-quarter",
-  MusicNoteSixteenth : "music-note-sixteenth",
-  MusicNoteWhole : "music-note-whole",
-  Nature : "nature",
-  NaturePeople : "nature-people",
-  Navigation : "navigation",
-  NearMe : "near-me",
-  Needle : "needle",
-  NestProtect : "nest-protect",
-  NestThermostat : "nest-thermostat",
-  NewBox : "new-box",
-  Newspaper : "newspaper",
-  Nfc : "nfc",
-  NfcTap : "nfc-tap",
-  NfcVariant : "nfc-variant",
-  Nodejs : "nodejs",
-  Note : "note",
-  NoteMultiple : "note-multiple",
-  NoteMultipleOutline : "note-multiple-outline",
-  NoteOutline : "note-outline",
-  NotePlus : "note-plus",
-  NotePlusOutline : "note-plus-outline",
-  NoteText : "note-text",
-  NotificationClearAll : "notification-clear-all",
-  Nuke : "nuke",
-  Numeric : "numeric",
-  Numeric0Box : "numeric-0-box",
-  Numeric0BoxMultipleOutline : "numeric-0-box-multiple-outline",
-  Numeric0BoxOutline : "numeric-0-box-outline",
-  Numeric1Box : "numeric-1-box",
-  Numeric1BoxMultipleOutline : "numeric-1-box-multiple-outline",
-  Numeric1BoxOutline : "numeric-1-box-outline",
-  Numeric2Box : "numeric-2-box",
-  Numeric2BoxMultipleOutline : "numeric-2-box-multiple-outline",
-  Numeric2BoxOutline : "numeric-2-box-outline",
-  Numeric3Box : "numeric-3-box",
-  Numeric3BoxMultipleOutline : "numeric-3-box-multiple-outline",
-  Numeric3BoxOutline : "numeric-3-box-outline",
-  Numeric4Box : "numeric-4-box",
-  Numeric4BoxMultipleOutline : "numeric-4-box-multiple-outline",
-  Numeric4BoxOutline : "numeric-4-box-outline",
-  Numeric5Box : "numeric-5-box",
-  Numeric5BoxMultipleOutline : "numeric-5-box-multiple-outline",
-  Numeric5BoxOutline : "numeric-5-box-outline",
-  Numeric6Box : "numeric-6-box",
-  Numeric6BoxMultipleOutline : "numeric-6-box-multiple-outline",
-  Numeric6BoxOutline : "numeric-6-box-outline",
-  Numeric7Box : "numeric-7-box",
-  Numeric7BoxMultipleOutline : "numeric-7-box-multiple-outline",
-  Numeric7BoxOutline : "numeric-7-box-outline",
-  Numeric8Box : "numeric-8-box",
-  Numeric8BoxMultipleOutline : "numeric-8-box-multiple-outline",
-  Numeric8BoxOutline : "numeric-8-box-outline",
-  Numeric9Box : "numeric-9-box",
-  Numeric9BoxMultipleOutline : "numeric-9-box-multiple-outline",
-  Numeric9BoxOutline : "numeric-9-box-outline",
-  Numeric9PlusBox : "numeric-9-plus-box",
-  Numeric9PlusBoxMultipleOutline : "numeric-9-plus-box-multiple-outline",
-  Numeric9PlusBoxOutline : "numeric-9-plus-box-outline",
-  Nutrition : "nutrition",
-  Oar : "oar",
-  Octagon : "octagon",
-  OctagonOutline : "octagon-outline",
-  Odnoklassniki : "odnoklassniki",
-  Office : "office",
-  Oil : "oil",
-  OilTemperature : "oil-temperature",
-  Omega : "omega",
-  Onedrive : "onedrive",
-  Opacity : "opacity",
-  OpenInApp : "open-in-app",
-  OpenInNew : "open-in-new",
-  Openid : "openid",
-  Opera : "opera",
-  Ornament : "ornament",
-  OrnamentVariant : "ornament-variant",
-  Owl : "owl",
-  Package : "package",
-  PackageDown : "package-down",
-  PackageUp : "package-up",
-  PackageVariant : "package-variant",
-  PackageVariantClosed : "package-variant-closed",
-  PageFirst : "page-first",
-  PageLast : "page-last",
-  Palette : "palette",
-  PaletteAdvanced : "palette-advanced",
-  Panda : "panda",
-  Pandora : "pandora",
-  Panorama : "panorama",
-  PanoramaFisheye : "panorama-fisheye",
-  PanoramaHorizontal : "panorama-horizontal",
-  PanoramaVertical : "panorama-vertical",
-  PanoramaWideAngle : "panorama-wide-angle",
-  PaperCutVertical : "paper-cut-vertical",
-  Paperclip : "paperclip",
-  Parking : "parking",
-  Pause : "pause",
-  PauseCircle : "pause-circle",
-  PauseCircleOutline : "pause-circle-outline",
-  PauseOctagon : "pause-octagon",
-  PauseOctagonOutline : "pause-octagon-outline",
-  Paw : "paw",
-  PawOff : "paw-off",
-  Pen : "pen",
-  Pencil : "pencil",
-  PencilBox : "pencil-box",
-  PencilBoxOutline : "pencil-box-outline",
-  PencilLock : "pencil-lock",
-  PencilOff : "pencil-off",
-  Percent : "percent",
-  Pharmacy : "pharmacy",
-  Phone : "phone",
-  PhoneBluetooth : "phone-bluetooth",
-  PhoneClassic : "phone-classic",
-  PhoneForward : "phone-forward",
-  PhoneHangup : "phone-hangup",
-  PhoneInTalk : "phone-in-talk",
-  PhoneIncoming : "phone-incoming",
-  PhoneLocked : "phone-locked",
-  PhoneLog : "phone-log",
-  PhoneMinus : "phone-minus",
-  PhoneMissed : "phone-missed",
-  PhoneOutgoing : "phone-outgoing",
-  PhonePaused : "phone-paused",
-  PhonePlus : "phone-plus",
-  PhoneSettings : "phone-settings",
-  PhoneVoip : "phone-voip",
-  Pi : "pi",
-  PiBox : "pi-box",
-  Piano : "piano",
-  Pig : "pig",
-  Pill : "pill",
-  Pin : "pin",
-  PinOff : "pin-off",
-  PineTree : "pine-tree",
-  PineTreeBox : "pine-tree-box",
-  Pinterest : "pinterest",
-  PinterestBox : "pinterest-box",
-  Pizza : "pizza",
-  PlaneShield : "plane-shield",
-  Play : "play",
-  PlayBoxOutline : "play-box-outline",
-  PlayCircle : "play-circle",
-  PlayCircleOutline : "play-circle-outline",
-  PlayPause : "play-pause",
-  PlayProtectedContent : "play-protected-content",
-  PlaylistCheck : "playlist-check",
-  PlaylistMinus : "playlist-minus",
-  PlaylistPlay : "playlist-play",
-  PlaylistPlus : "playlist-plus",
-  PlaylistRemove : "playlist-remove",
-  Playstation : "playstation",
-  Plex : "plex",
-  Plus : "plus",
-  PlusBox : "plus-box",
-  PlusCircle : "plus-circle",
-  PlusCircleMultipleOutline : "plus-circle-multiple-outline",
-  PlusCircleOutline : "plus-circle-outline",
-  PlusNetwork : "plus-network",
-  PlusOne : "plus-one",
-  Pocket : "pocket",
-  Pokeball : "pokeball",
-  Polaroid : "polaroid",
-  Poll : "poll",
-  PollBox : "poll-box",
-  Polymer : "polymer",
-  Pool : "pool",
-  Popcorn : "popcorn",
-  Pot : "pot",
-  PotMix : "pot-mix",
-  Pound : "pound",
-  PoundBox : "pound-box",
-  Power : "power",
-  PowerPlug : "power-plug",
-  PowerPlugOff : "power-plug-off",
-  PowerSettings : "power-settings",
-  PowerSocket : "power-socket",
-  Presentation : "presentation",
-  PresentationPlay : "presentation-play",
-  Printer : "printer",
-  Printer3d : "printer-3d",
-  PrinterAlert : "printer-alert",
-  PriorityHigh : "priority-high",
-  PriorityLow : "priority-low",
-  ProfessionalHexagon : "professional-hexagon",
-  Projector : "projector",
-  ProjectorScreen : "projector-screen",
-  Publish : "publish",
-  Pulse : "pulse",
-  Puzzle : "puzzle",
-  Qqchat : "qqchat",
-  Qrcode : "qrcode",
-  QrcodeScan : "qrcode-scan",
-  Quadcopter : "quadcopter",
-  QualityHigh : "quality-high",
-  Quicktime : "quicktime",
-  Radar : "radar",
-  Radiator : "radiator",
-  Radio : "radio",
-  RadioHandheld : "radio-handheld",
-  RadioTower : "radio-tower",
-  Radioactive : "radioactive",
-  RadioboxBlank : "radiobox-blank",
-  RadioboxMarked : "radiobox-marked",
-  Raspberrypi : "raspberrypi",
-  RayEnd : "ray-end",
-  RayEndArrow : "ray-end-arrow",
-  RayStart : "ray-start",
-  RayStartArrow : "ray-start-arrow",
-  RayStartEnd : "ray-start-end",
-  RayVertex : "ray-vertex",
-  Rdio : "rdio",
-  Read : "read",
-  Readability : "readability",
-  Receipt : "receipt",
-  Record : "record",
-  RecordRec : "record-rec",
-  Recycle : "recycle",
-  Reddit : "reddit",
-  Redo : "redo",
-  RedoVariant : "redo-variant",
-  Refresh : "refresh",
-  Regex : "regex",
-  RelativeScale : "relative-scale",
-  Reload : "reload",
-  Remote : "remote",
-  RenameBox : "rename-box",
-  ReorderHorizontal : "reorder-horizontal",
-  ReorderVertical : "reorder-vertical",
-  Repeat : "repeat",
-  RepeatOff : "repeat-off",
-  RepeatOnce : "repeat-once",
-  Replay : "replay",
-  Reply : "reply",
-  ReplyAll : "reply-all",
-  Reproduction : "reproduction",
-  ResizeBottomRight : "resize-bottom-right",
-  Responsive : "responsive",
-  Restore : "restore",
-  Rewind : "rewind",
-  Ribbon : "ribbon",
-  Road : "road",
-  RoadVariant : "road-variant",
-  Robot : "robot",
-  Rocket : "rocket",
-  Rotate3d : "rotate-3d",
-  Rotate90 : "rotate-90",
-  RotateLeft : "rotate-left",
-  RotateLeftVariant : "rotate-left-variant",
-  RotateRight : "rotate-right",
-  RotateRightVariant : "rotate-right-variant",
-  RoundedCorner : "rounded-corner",
-  RouterWireless : "router-wireless",
-  Routes : "routes",
-  Rowing : "rowing",
-  Rss : "rss",
-  RssBox : "rss-box",
-  Ruler : "ruler",
-  Run : "run",
-  Sale : "sale",
-  Satellite : "satellite",
-  SatelliteVariant : "satellite-variant",
-  Saxophone : "saxophone",
-  Scale : "scale",
-  ScaleBalance : "scale-balance",
-  ScaleBathroom : "scale-bathroom",
-  Scanner : "scanner",
-  School : "school",
-  ScreenRotation : "screen-rotation",
-  ScreenRotationLock : "screen-rotation-lock",
-  Screwdriver : "screwdriver",
-  Script : "script",
-  Sd : "sd",
-  Seal : "seal",
-  SeatFlat : "seat-flat",
-  SeatFlatAngled : "seat-flat-angled",
-  SeatIndividualSuite : "seat-individual-suite",
-  SeatLegroomExtra : "seat-legroom-extra",
-  SeatLegroomNormal : "seat-legroom-normal",
-  SeatLegroomReduced : "seat-legroom-reduced",
-  SeatReclineExtra : "seat-recline-extra",
-  SeatReclineNormal : "seat-recline-normal",
-  Security : "security",
-  SecurityHome : "security-home",
-  SecurityNetwork : "security-network",
-  Select : "select",
-  SelectAll : "select-all",
-  SelectInverse : "select-inverse",
-  SelectOff : "select-off",
-  Selection : "selection",
-  Send : "send",
-  SerialPort : "serial-port",
-  Server : "server",
-  ServerMinus : "server-minus",
-  ServerNetwork : "server-network",
-  ServerNetworkOff : "server-network-off",
-  ServerOff : "server-off",
-  ServerPlus : "server-plus",
-  ServerRemove : "server-remove",
-  ServerSecurity : "server-security",
-  Settings : "settings",
-  SettingsBox : "settings-box",
-  ShapeCirclePlus : "shape-circle-plus",
-  ShapePlus : "shape-plus",
-  ShapePolygonPlus : "shape-polygon-plus",
-  ShapeRectanglePlus : "shape-rectangle-plus",
-  ShapeSquarePlus : "shape-square-plus",
-  Share : "share",
-  ShareVariant : "share-variant",
-  Shield : "shield",
-  ShieldOutline : "shield-outline",
-  Shopping : "shopping",
-  ShoppingMusic : "shopping-music",
-  Shredder : "shredder",
-  Shuffle : "shuffle",
-  ShuffleDisabled : "shuffle-disabled",
-  ShuffleVariant : "shuffle-variant",
-  Sigma : "sigma",
-  SigmaLower : "sigma-lower",
-  SignCaution : "sign-caution",
-  Signal : "signal",
-  SignalVariant : "signal-variant",
-  Silverware : "silverware",
-  SilverwareFork : "silverware-fork",
-  SilverwareSpoon : "silverware-spoon",
-  SilverwareVariant : "silverware-variant",
-  Sim : "sim",
-  SimAlert : "sim-alert",
-  SimOff : "sim-off",
-  Sitemap : "sitemap",
-  SkipBackward : "skip-backward",
-  SkipForward : "skip-forward",
-  SkipNext : "skip-next",
-  SkipNextCircle : "skip-next-circle",
-  SkipNextCircleOutline : "skip-next-circle-outline",
-  SkipPrevious : "skip-previous",
-  SkipPreviousCircle : "skip-previous-circle",
-  SkipPreviousCircleOutline : "skip-previous-circle-outline",
-  Skull : "skull",
-  Skype : "skype",
-  SkypeBusiness : "skype-business",
-  Slack : "slack",
-  Sleep : "sleep",
-  SleepOff : "sleep-off",
-  Smoking : "smoking",
-  SmokingOff : "smoking-off",
-  Snapchat : "snapchat",
-  Snowman : "snowman",
-  Soccer : "soccer",
-  Sofa : "sofa",
-  Solid : "solid",
-  Sort : "sort",
-  SortAlphabetical : "sort-alphabetical",
-  SortAscending : "sort-ascending",
-  SortDescending : "sort-descending",
-  SortNumeric : "sort-numeric",
-  SortVariant : "sort-variant",
-  Soundcloud : "soundcloud",
-  SourceBranch : "source-branch",
-  SourceFork : "source-fork",
-  SourceMerge : "source-merge",
-  SourcePull : "source-pull",
-  Speaker : "speaker",
-  SpeakerOff : "speaker-off",
-  Speedometer : "speedometer",
-  Spellcheck : "spellcheck",
-  Spotify : "spotify",
-  Spotlight : "spotlight",
-  SpotlightBeam : "spotlight-beam",
-  Spray : "spray",
-  SquareInc : "square-inc",
-  SquareIncCash : "square-inc-cash",
-  Stackexchange : "stackexchange",
-  Stackoverflow : "stackoverflow",
-  Stairs : "stairs",
-  Star : "star",
-  StarCircle : "star-circle",
-  StarHalf : "star-half",
-  StarOff : "star-off",
-  StarOutline : "star-outline",
-  Steam : "steam",
-  Steering : "steering",
-  StepBackward : "step-backward",
-  StepBackward2 : "step-backward-2",
-  StepForward : "step-forward",
-  StepForward2 : "step-forward-2",
-  Stethoscope : "stethoscope",
-  Sticker : "sticker",
-  Stocking : "stocking",
-  Stop : "stop",
-  StopCircle : "stop-circle",
-  StopCircleOutline : "stop-circle-outline",
-  Store : "store",
-  Store24Hour : "store-24-hour",
-  Stove : "stove",
-  SubdirectoryArrowLeft : "subdirectory-arrow-left",
-  SubdirectoryArrowRight : "subdirectory-arrow-right",
-  Subway : "subway",
-  SubwayVariant : "subway-variant",
-  Sunglasses : "sunglasses",
-  SurroundSound : "surround-sound",
-  SwapHorizontal : "swap-horizontal",
-  SwapVertical : "swap-vertical",
-  Swim : "swim",
-  Switch : "switch",
-  Sword : "sword",
-  Sync : "sync",
-  SyncAlert : "sync-alert",
-  SyncOff : "sync-off",
-  Tab : "tab",
-  TabUnselected : "tab-unselected",
-  Table : "table",
-  TableColumnPlusAfter : "table-column-plus-after",
-  TableColumnPlusBefore : "table-column-plus-before",
-  TableColumnRemove : "table-column-remove",
-  TableColumnWidth : "table-column-width",
-  TableEdit : "table-edit",
-  TableLarge : "table-large",
-  TableRowHeight : "table-row-height",
-  TableRowPlusAfter : "table-row-plus-after",
-  TableRowPlusBefore : "table-row-plus-before",
-  TableRowRemove : "table-row-remove",
-  Tablet : "tablet",
-  TabletAndroid : "tablet-android",
-  TabletIpad : "tablet-ipad",
-  Tag : "tag",
-  TagFaces : "tag-faces",
-  TagHeart : "tag-heart",
-  TagMultiple : "tag-multiple",
-  TagOutline : "tag-outline",
-  TagTextOutline : "tag-text-outline",
-  Target : "target",
-  Taxi : "taxi",
-  Teamviewer : "teamviewer",
-  Telegram : "telegram",
-  Television : "television",
-  TelevisionGuide : "television-guide",
-  TemperatureCelsius : "temperature-celsius",
-  TemperatureFahrenheit : "temperature-fahrenheit",
-  TemperatureKelvin : "temperature-kelvin",
-  Tennis : "tennis",
-  Tent : "tent",
-  Terrain : "terrain",
-  TestTube : "test-tube",
-  TextShadow : "text-shadow",
-  TextToSpeech : "text-to-speech",
-  TextToSpeechOff : "text-to-speech-off",
-  Textbox : "textbox",
-  Texture : "texture",
-  Theater : "theater",
-  ThemeLightDark : "theme-light-dark",
-  Thermometer : "thermometer",
-  ThermometerLines : "thermometer-lines",
-  ThumbDown : "thumb-down",
-  ThumbDownOutline : "thumb-down-outline",
-  ThumbUp : "thumb-up",
-  ThumbUpOutline : "thumb-up-outline",
-  ThumbsUpDown : "thumbs-up-down",
-  Ticket : "ticket",
-  TicketAccount : "ticket-account",
-  TicketConfirmation : "ticket-confirmation",
-  Tie : "tie",
-  Timelapse : "timelapse",
-  Timer : "timer",
-  Timer10 : "timer-10",
-  Timer3 : "timer-3",
-  TimerOff : "timer-off",
-  TimerSand : "timer-sand",
-  TimerSandEmpty : "timer-sand-empty",
-  Timetable : "timetable",
-  ToggleSwitch : "toggle-switch",
-  ToggleSwitchOff : "toggle-switch-off",
-  Tooltip : "tooltip",
-  TooltipEdit : "tooltip-edit",
-  TooltipImage : "tooltip-image",
-  TooltipOutline : "tooltip-outline",
-  TooltipOutlinePlus : "tooltip-outline-plus",
-  TooltipText : "tooltip-text",
-  Tooth : "tooth",
-  Tor : "tor",
-  TowerBeach : "tower-beach",
-  TowerFire : "tower-fire",
-  TrafficLight : "traffic-light",
-  Train : "train",
-  Tram : "tram",
-  Transcribe : "transcribe",
-  TranscribeClose : "transcribe-close",
-  Transfer : "transfer",
-  TransitTransfer : "transit-transfer",
-  Translate : "translate",
-  Tree : "tree",
-  Trello : "trello",
-  TrendingDown : "trending-down",
-  TrendingNeutral : "trending-neutral",
-  TrendingUp : "trending-up",
-  Triangle : "triangle",
-  TriangleOutline : "triangle-outline",
-  Trophy : "trophy",
-  TrophyAward : "trophy-award",
-  TrophyOutline : "trophy-outline",
-  TrophyVariant : "trophy-variant",
-  TrophyVariantOutline : "trophy-variant-outline",
-  Truck : "truck",
-  TruckDelivery : "truck-delivery",
-  TshirtCrew : "tshirt-crew",
-  TshirtV : "tshirt-v",
-  Tumblr : "tumblr",
-  TumblrReblog : "tumblr-reblog",
-  Tune : "tune",
-  TuneVertical : "tune-vertical",
-  Twitch : "twitch",
-  Twitter : "twitter",
-  TwitterBox : "twitter-box",
-  TwitterCircle : "twitter-circle",
-  TwitterRetweet : "twitter-retweet",
-  Ubuntu : "ubuntu",
-  Umbraco : "umbraco",
-  Umbrella : "umbrella",
-  UmbrellaOutline : "umbrella-outline",
-  Undo : "undo",
-  UndoVariant : "undo-variant",
-  UnfoldLess : "unfold-less",
-  UnfoldMore : "unfold-more",
-  Ungroup : "ungroup",
-  Unity : "unity",
-  Untappd : "untappd",
-  Update : "update",
-  Upload : "upload",
-  Usb : "usb",
-  VectorArrangeAbove : "vector-arrange-above",
-  VectorArrangeBelow : "vector-arrange-below",
-  VectorCircle : "vector-circle",
-  VectorCircleVariant : "vector-circle-variant",
-  VectorCombine : "vector-combine",
-  VectorCurve : "vector-curve",
-  VectorDifference : "vector-difference",
-  VectorDifferenceAb : "vector-difference-ab",
-  VectorDifferenceBa : "vector-difference-ba",
-  VectorIntersection : "vector-intersection",
-  VectorLine : "vector-line",
-  VectorPoint : "vector-point",
-  VectorPolygon : "vector-polygon",
-  VectorPolyline : "vector-polyline",
-  VectorRectangle : "vector-rectangle",
-  VectorSelection : "vector-selection",
-  VectorSquare : "vector-square",
-  VectorTriangle : "vector-triangle",
-  VectorUnion : "vector-union",
-  Verified : "verified",
-  Vibrate : "vibrate",
-  Video : "video",
-  VideoOff : "video-off",
-  VideoSwitch : "video-switch",
-  ViewAgenda : "view-agenda",
-  ViewArray : "view-array",
-  ViewCarousel : "view-carousel",
-  ViewColumn : "view-column",
-  ViewDashboard : "view-dashboard",
-  ViewDay : "view-day",
-  ViewGrid : "view-grid",
-  ViewHeadline : "view-headline",
-  ViewList : "view-list",
-  ViewModule : "view-module",
-  ViewQuilt : "view-quilt",
-  ViewStream : "view-stream",
-  ViewWeek : "view-week",
-  Vimeo : "vimeo",
-  Vine : "vine",
-  Violin : "violin",
-  Visualstudio : "visualstudio",
-  Vk : "vk",
-  VkBox : "vk-box",
-  VkCircle : "vk-circle",
-  Vlc : "vlc",
-  Voice : "voice",
-  Voicemail : "voicemail",
-  VolumeHigh : "volume-high",
-  VolumeLow : "volume-low",
-  VolumeMedium : "volume-medium",
-  VolumeOff : "volume-off",
-  Vpn : "vpn",
-  Walk : "walk",
-  Wallet : "wallet",
-  WalletGiftcard : "wallet-giftcard",
-  WalletMembership : "wallet-membership",
-  WalletTravel : "wallet-travel",
-  Wan : "wan",
-  Watch : "watch",
-  WatchExport : "watch-export",
-  WatchImport : "watch-import",
-  WatchVibrate : "watch-vibrate",
-  Water : "water",
-  WaterOff : "water-off",
-  WaterPercent : "water-percent",
-  WaterPump : "water-pump",
-  Watermark : "watermark",
-  WeatherCloudy : "weather-cloudy",
-  WeatherFog : "weather-fog",
-  WeatherHail : "weather-hail",
-  WeatherLightning : "weather-lightning",
-  WeatherLightningRainy : "weather-lightning-rainy",
-  WeatherNight : "weather-night",
-  WeatherPartlycloudy : "weather-partlycloudy",
-  WeatherPouring : "weather-pouring",
-  WeatherRainy : "weather-rainy",
-  WeatherSnowy : "weather-snowy",
-  WeatherSnowyRainy : "weather-snowy-rainy",
-  WeatherSunny : "weather-sunny",
-  WeatherSunset : "weather-sunset",
-  WeatherSunsetDown : "weather-sunset-down",
-  WeatherSunsetUp : "weather-sunset-up",
-  WeatherWindy : "weather-windy",
-  WeatherWindyVariant : "weather-windy-variant",
-  Web : "web",
-  Webcam : "webcam",
-  Webhook : "webhook",
-  Wechat : "wechat",
-  Weight : "weight",
-  WeightKilogram : "weight-kilogram",
-  Whatsapp : "whatsapp",
-  WheelchairAccessibility : "wheelchair-accessibility",
-  WhiteBalanceAuto : "white-balance-auto",
-  WhiteBalanceIncandescent : "white-balance-incandescent",
-  WhiteBalanceIridescent : "white-balance-iridescent",
-  WhiteBalanceSunny : "white-balance-sunny",
-  Wifi : "wifi",
-  WifiOff : "wifi-off",
-  Wii : "wii",
-  Wikipedia : "wikipedia",
-  WindowClose : "window-close",
-  WindowClosed : "window-closed",
-  WindowMaximize : "window-maximize",
-  WindowMinimize : "window-minimize",
-  WindowOpen : "window-open",
-  WindowRestore : "window-restore",
-  Windows : "windows",
-  Wordpress : "wordpress",
-  Worker : "worker",
-  Wrap : "wrap",
-  Wrench : "wrench",
-  Wunderlist : "wunderlist",
-  Xaml : "xaml",
-  Xbox : "xbox",
-  XboxController : "xbox-controller",
-  XboxControllerOff : "xbox-controller-off",
-  Xda : "xda",
-  Xing : "xing",
-  XingBox : "xing-box",
-  XingCircle : "xing-circle",
-  Xml : "xml",
-  Yeast : "yeast",
-  Yelp : "yelp",
-  YinYang : "yin-yang",
-  YoutubePlay : "youtube-play",
-  ZipBox : "zip-box",
+  AccessPoint : 'access-point',
+  AccessPointNetwork : 'access-point-network',
+  Account : 'account',
+  AccountAlert : 'account-alert',
+  AccountBox : 'account-box',
+  AccountBoxOutline : 'account-box-outline',
+  AccountCardDetails : 'account-card-details',
+  AccountCheck : 'account-check',
+  AccountCircle : 'account-circle',
+  AccountConvert : 'account-convert',
+  AccountKey : 'account-key',
+  AccountLocation : 'account-location',
+  AccountMinus : 'account-minus',
+  AccountMultiple : 'account-multiple',
+  AccountMultipleMinus : 'account-multiple-minus',
+  AccountMultipleOutline : 'account-multiple-outline',
+  AccountMultiplePlus : 'account-multiple-plus',
+  AccountNetwork : 'account-network',
+  AccountOff : 'account-off',
+  AccountOutline : 'account-outline',
+  AccountPlus : 'account-plus',
+  AccountRemove : 'account-remove',
+  AccountSearch : 'account-search',
+  AccountSettings : 'account-settings',
+  AccountSettingsVariant : 'account-settings-variant',
+  AccountStar : 'account-star',
+  AccountStarVariant : 'account-star-variant',
+  AccountSwitch : 'account-switch',
+  Adjust : 'adjust',
+  AirConditioner : 'air-conditioner',
+  Airballoon : 'airballoon',
+  Airplane : 'airplane',
+  AirplaneLanding : 'airplane-landing',
+  AirplaneOff : 'airplane-off',
+  AirplaneTakeoff : 'airplane-takeoff',
+  Airplay : 'airplay',
+  Alarm : 'alarm',
+  AlarmCheck : 'alarm-check',
+  AlarmMultiple : 'alarm-multiple',
+  AlarmOff : 'alarm-off',
+  AlarmPlus : 'alarm-plus',
+  AlarmSnooze : 'alarm-snooze',
+  Album : 'album',
+  Alert : 'alert',
+  AlertBox : 'alert-box',
+  AlertCircle : 'alert-circle',
+  AlertCircleOutline : 'alert-circle-outline',
+  AlertOctagon : 'alert-octagon',
+  AlertOutline : 'alert-outline',
+  Alpha : 'alpha',
+  Alphabetical : 'alphabetical',
+  Altimeter : 'altimeter',
+  Amazon : 'amazon',
+  AmazonClouddrive : 'amazon-clouddrive',
+  Ambulance : 'ambulance',
+  Amplifier : 'amplifier',
+  Anchor : 'anchor',
+  Android : 'android',
+  AndroidDebugBridge : 'android-debug-bridge',
+  AndroidStudio : 'android-studio',
+  Angular : 'angular',
+  Animation : 'animation',
+  Apple : 'apple',
+  AppleFinder : 'apple-finder',
+  AppleIos : 'apple-ios',
+  AppleKeyboardCaps : 'apple-keyboard-caps',
+  AppleKeyboardCommand : 'apple-keyboard-command',
+  AppleKeyboardControl : 'apple-keyboard-control',
+  AppleKeyboardOption : 'apple-keyboard-option',
+  AppleKeyboardShift : 'apple-keyboard-shift',
+  AppleMobileme : 'apple-mobileme',
+  AppleSafari : 'apple-safari',
+  Application : 'application',
+  Appnet : 'appnet',
+  Apps : 'apps',
+  Archive : 'archive',
+  ArrangeBringForward : 'arrange-bring-forward',
+  ArrangeBringToFront : 'arrange-bring-to-front',
+  ArrangeSendBackward : 'arrange-send-backward',
+  ArrangeSendToBack : 'arrange-send-to-back',
+  ArrowAll : 'arrow-all',
+  ArrowBottomLeft : 'arrow-bottom-left',
+  ArrowBottomRight : 'arrow-bottom-right',
+  ArrowCompress : 'arrow-compress',
+  ArrowCompressAll : 'arrow-compress-all',
+  ArrowDown : 'arrow-down',
+  ArrowDownBold : 'arrow-down-bold',
+  ArrowDownBoldCircle : 'arrow-down-bold-circle',
+  ArrowDownBoldCircleOutline : 'arrow-down-bold-circle-outline',
+  ArrowDownBoldHexagonOutline : 'arrow-down-bold-hexagon-outline',
+  ArrowDownDropCircle : 'arrow-down-drop-circle',
+  ArrowDownDropCircleOutline : 'arrow-down-drop-circle-outline',
+  ArrowExpand : 'arrow-expand',
+  ArrowExpandAll : 'arrow-expand-all',
+  ArrowLeft : 'arrow-left',
+  ArrowLeftBold : 'arrow-left-bold',
+  ArrowLeftBoldCircle : 'arrow-left-bold-circle',
+  ArrowLeftBoldCircleOutline : 'arrow-left-bold-circle-outline',
+  ArrowLeftBoldHexagonOutline : 'arrow-left-bold-hexagon-outline',
+  ArrowLeftDropCircle : 'arrow-left-drop-circle',
+  ArrowLeftDropCircleOutline : 'arrow-left-drop-circle-outline',
+  ArrowRight : 'arrow-right',
+  ArrowRightBold : 'arrow-right-bold',
+  ArrowRightBoldCircle : 'arrow-right-bold-circle',
+  ArrowRightBoldCircleOutline : 'arrow-right-bold-circle-outline',
+  ArrowRightBoldHexagonOutline : 'arrow-right-bold-hexagon-outline',
+  ArrowRightDropCircle : 'arrow-right-drop-circle',
+  ArrowRightDropCircleOutline : 'arrow-right-drop-circle-outline',
+  ArrowTopLeft : 'arrow-top-left',
+  ArrowTopRight : 'arrow-top-right',
+  ArrowUp : 'arrow-up',
+  ArrowUpBold : 'arrow-up-bold',
+  ArrowUpBoldCircle : 'arrow-up-bold-circle',
+  ArrowUpBoldCircleOutline : 'arrow-up-bold-circle-outline',
+  ArrowUpBoldHexagonOutline : 'arrow-up-bold-hexagon-outline',
+  ArrowUpDropCircle : 'arrow-up-drop-circle',
+  ArrowUpDropCircleOutline : 'arrow-up-drop-circle-outline',
+  Assistant : 'assistant',
+  At : 'at',
+  Attachment : 'attachment',
+  Audiobook : 'audiobook',
+  AutoFix : 'auto-fix',
+  AutoUpload : 'auto-upload',
+  Autorenew : 'autorenew',
+  AvTimer : 'av-timer',
+  Baby : 'baby',
+  BabyBuggy : 'baby-buggy',
+  Backburger : 'backburger',
+  Backspace : 'backspace',
+  BackupRestore : 'backup-restore',
+  Bandcamp : 'bandcamp',
+  Bank : 'bank',
+  Barcode : 'barcode',
+  BarcodeScan : 'barcode-scan',
+  Barley : 'barley',
+  Barrel : 'barrel',
+  Basecamp : 'basecamp',
+  Basket : 'basket',
+  BasketFill : 'basket-fill',
+  BasketUnfill : 'basket-unfill',
+  Battery : 'battery',
+  Battery10 : 'battery-10',
+  Battery20 : 'battery-20',
+  Battery30 : 'battery-30',
+  Battery40 : 'battery-40',
+  Battery50 : 'battery-50',
+  Battery60 : 'battery-60',
+  Battery70 : 'battery-70',
+  Battery80 : 'battery-80',
+  Battery90 : 'battery-90',
+  BatteryAlert : 'battery-alert',
+  BatteryCharging : 'battery-charging',
+  BatteryCharging100 : 'battery-charging-100',
+  BatteryCharging20 : 'battery-charging-20',
+  BatteryCharging30 : 'battery-charging-30',
+  BatteryCharging40 : 'battery-charging-40',
+  BatteryCharging60 : 'battery-charging-60',
+  BatteryCharging80 : 'battery-charging-80',
+  BatteryCharging90 : 'battery-charging-90',
+  BatteryMinus : 'battery-minus',
+  BatteryNegative : 'battery-negative',
+  BatteryOutline : 'battery-outline',
+  BatteryPlus : 'battery-plus',
+  BatteryPositive : 'battery-positive',
+  BatteryUnknown : 'battery-unknown',
+  Beach : 'beach',
+  Beaker : 'beaker',
+  Beats : 'beats',
+  Beer : 'beer',
+  Behance : 'behance',
+  Bell : 'bell',
+  BellOff : 'bell-off',
+  BellOutline : 'bell-outline',
+  BellPlus : 'bell-plus',
+  BellRing : 'bell-ring',
+  BellRingOutline : 'bell-ring-outline',
+  BellSleep : 'bell-sleep',
+  Beta : 'beta',
+  Bible : 'bible',
+  Bike : 'bike',
+  Bing : 'bing',
+  Binoculars : 'binoculars',
+  Bio : 'bio',
+  Biohazard : 'biohazard',
+  Bitbucket : 'bitbucket',
+  BlackMesa : 'black-mesa',
+  Blackberry : 'blackberry',
+  Blender : 'blender',
+  Blinds : 'blinds',
+  BlockHelper : 'block-helper',
+  Blogger : 'blogger',
+  Bluetooth : 'bluetooth',
+  BluetoothAudio : 'bluetooth-audio',
+  BluetoothConnect : 'bluetooth-connect',
+  BluetoothOff : 'bluetooth-off',
+  BluetoothSettings : 'bluetooth-settings',
+  BluetoothTransfer : 'bluetooth-transfer',
+  Blur : 'blur',
+  BlurLinear : 'blur-linear',
+  BlurOff : 'blur-off',
+  BlurRadial : 'blur-radial',
+  Bomb : 'bomb',
+  Bone : 'bone',
+  Book : 'book',
+  BookMinus : 'book-minus',
+  BookMultiple : 'book-multiple',
+  BookMultipleVariant : 'book-multiple-variant',
+  BookOpen : 'book-open',
+  BookOpenPageVariant : 'book-open-page-variant',
+  BookOpenVariant : 'book-open-variant',
+  BookPlus : 'book-plus',
+  BookVariant : 'book-variant',
+  Bookmark : 'bookmark',
+  BookmarkCheck : 'bookmark-check',
+  BookmarkMusic : 'bookmark-music',
+  BookmarkOutline : 'bookmark-outline',
+  BookmarkPlus : 'bookmark-plus',
+  BookmarkPlusOutline : 'bookmark-plus-outline',
+  BookmarkRemove : 'bookmark-remove',
+  Boombox : 'boombox',
+  BorderAll : 'border-all',
+  BorderBottom : 'border-bottom',
+  BorderColor : 'border-color',
+  BorderHorizontal : 'border-horizontal',
+  BorderInside : 'border-inside',
+  BorderLeft : 'border-left',
+  BorderNone : 'border-none',
+  BorderOutside : 'border-outside',
+  BorderRight : 'border-right',
+  BorderStyle : 'border-style',
+  BorderTop : 'border-top',
+  BorderVertical : 'border-vertical',
+  BowTie : 'bow-tie',
+  Bowl : 'bowl',
+  Bowling : 'bowling',
+  Box : 'box',
+  BoxCutter : 'box-cutter',
+  BoxShadow : 'box-shadow',
+  Bridge : 'bridge',
+  Briefcase : 'briefcase',
+  BriefcaseCheck : 'briefcase-check',
+  BriefcaseDownload : 'briefcase-download',
+  BriefcaseUpload : 'briefcase-upload',
+  Brightness1 : 'brightness-1',
+  Brightness2 : 'brightness-2',
+  Brightness3 : 'brightness-3',
+  Brightness4 : 'brightness-4',
+  Brightness5 : 'brightness-5',
+  Brightness6 : 'brightness-6',
+  Brightness7 : 'brightness-7',
+  BrightnessAuto : 'brightness-auto',
+  Broom : 'broom',
+  Brush : 'brush',
+  Buffer : 'buffer',
+  Bug : 'bug',
+  BulletinBoard : 'bulletin-board',
+  Bullhorn : 'bullhorn',
+  Bullseye : 'bullseye',
+  BurstMode : 'burst-mode',
+  Bus : 'bus',
+  Cached : 'cached',
+  Cake : 'cake',
+  CakeLayered : 'cake-layered',
+  CakeVariant : 'cake-variant',
+  Calculator : 'calculator',
+  Calendar : 'calendar',
+  CalendarBlank : 'calendar-blank',
+  CalendarCheck : 'calendar-check',
+  CalendarClock : 'calendar-clock',
+  CalendarMultiple : 'calendar-multiple',
+  CalendarMultipleCheck : 'calendar-multiple-check',
+  CalendarPlus : 'calendar-plus',
+  CalendarQuestion : 'calendar-question',
+  CalendarRange : 'calendar-range',
+  CalendarRemove : 'calendar-remove',
+  CalendarText : 'calendar-text',
+  CalendarToday : 'calendar-today',
+  CallMade : 'call-made',
+  CallMerge : 'call-merge',
+  CallMissed : 'call-missed',
+  CallReceived : 'call-received',
+  CallSplit : 'call-split',
+  Camcorder : 'camcorder',
+  CamcorderBox : 'camcorder-box',
+  CamcorderBoxOff : 'camcorder-box-off',
+  CamcorderOff : 'camcorder-off',
+  Camera : 'camera',
+  CameraBurst : 'camera-burst',
+  CameraEnhance : 'camera-enhance',
+  CameraFront : 'camera-front',
+  CameraFrontVariant : 'camera-front-variant',
+  CameraIris : 'camera-iris',
+  CameraOff : 'camera-off',
+  CameraPartyMode : 'camera-party-mode',
+  CameraRear : 'camera-rear',
+  CameraRearVariant : 'camera-rear-variant',
+  CameraSwitch : 'camera-switch',
+  CameraTimer : 'camera-timer',
+  Candle : 'candle',
+  Candycane : 'candycane',
+  Car : 'car',
+  CarBattery : 'car-battery',
+  CarConnected : 'car-connected',
+  CarWash : 'car-wash',
+  Cards : 'cards',
+  CardsOutline : 'cards-outline',
+  CardsPlayingOutline : 'cards-playing-outline',
+  Carrot : 'carrot',
+  Cart : 'cart',
+  CartOff : 'cart-off',
+  CartOutline : 'cart-outline',
+  CartPlus : 'cart-plus',
+  CaseSensitiveAlt : 'case-sensitive-alt',
+  Cash : 'cash',
+  Cash100 : 'cash-100',
+  CashMultiple : 'cash-multiple',
+  CashUsd : 'cash-usd',
+  Cast : 'cast',
+  CastConnected : 'cast-connected',
+  Castle : 'castle',
+  Cat : 'cat',
+  Cellphone : 'cellphone',
+  CellphoneAndroid : 'cellphone-android',
+  CellphoneBasic : 'cellphone-basic',
+  CellphoneDock : 'cellphone-dock',
+  CellphoneIphone : 'cellphone-iphone',
+  CellphoneLink : 'cellphone-link',
+  CellphoneLinkOff : 'cellphone-link-off',
+  CellphoneSettings : 'cellphone-settings',
+  Certificate : 'certificate',
+  ChairSchool : 'chair-school',
+  ChartArc : 'chart-arc',
+  ChartAreaspline : 'chart-areaspline',
+  ChartBar : 'chart-bar',
+  ChartBubble : 'chart-bubble',
+  ChartGantt : 'chart-gantt',
+  ChartHistogram : 'chart-histogram',
+  ChartLine : 'chart-line',
+  ChartPie : 'chart-pie',
+  ChartScatterplotHexbin : 'chart-scatterplot-hexbin',
+  ChartTimeline : 'chart-timeline',
+  Check : 'check',
+  CheckAll : 'check-all',
+  CheckCircle : 'check-circle',
+  CheckCircleOutline : 'check-circle-outline',
+  CheckboxBlank : 'checkbox-blank',
+  CheckboxBlankCircle : 'checkbox-blank-circle',
+  CheckboxBlankCircleOutline : 'checkbox-blank-circle-outline',
+  CheckboxBlankOutline : 'checkbox-blank-outline',
+  CheckboxMarked : 'checkbox-marked',
+  CheckboxMarkedCircle : 'checkbox-marked-circle',
+  CheckboxMarkedCircleOutline : 'checkbox-marked-circle-outline',
+  CheckboxMarkedOutline : 'checkbox-marked-outline',
+  CheckboxMultipleBlank : 'checkbox-multiple-blank',
+  CheckboxMultipleBlankCircle : 'checkbox-multiple-blank-circle',
+  CheckboxMultipleBlankCircleOutline : 'checkbox-multiple-blank-circle-outline',
+  CheckboxMultipleBlankOutline : 'checkbox-multiple-blank-outline',
+  CheckboxMultipleMarked : 'checkbox-multiple-marked',
+  CheckboxMultipleMarkedCircle : 'checkbox-multiple-marked-circle',
+  CheckboxMultipleMarkedCircleOutline : 'checkbox-multiple-marked-circle-outline',
+  CheckboxMultipleMarkedOutline : 'checkbox-multiple-marked-outline',
+  Checkerboard : 'checkerboard',
+  ChemicalWeapon : 'chemical-weapon',
+  ChevronDoubleDown : 'chevron-double-down',
+  ChevronDoubleLeft : 'chevron-double-left',
+  ChevronDoubleRight : 'chevron-double-right',
+  ChevronDoubleUp : 'chevron-double-up',
+  ChevronDown : 'chevron-down',
+  ChevronLeft : 'chevron-left',
+  ChevronRight : 'chevron-right',
+  ChevronUp : 'chevron-up',
+  Chip : 'chip',
+  Church : 'church',
+  CiscoWebex : 'cisco-webex',
+  City : 'city',
+  Clipboard : 'clipboard',
+  ClipboardAccount : 'clipboard-account',
+  ClipboardAlert : 'clipboard-alert',
+  ClipboardArrowDown : 'clipboard-arrow-down',
+  ClipboardArrowLeft : 'clipboard-arrow-left',
+  ClipboardCheck : 'clipboard-check',
+  ClipboardOutline : 'clipboard-outline',
+  ClipboardText : 'clipboard-text',
+  Clippy : 'clippy',
+  Clock : 'clock',
+  ClockAlert : 'clock-alert',
+  ClockEnd : 'clock-end',
+  ClockFast : 'clock-fast',
+  ClockIn : 'clock-in',
+  ClockOut : 'clock-out',
+  ClockStart : 'clock-start',
+  Close : 'close',
+  CloseBox : 'close-box',
+  CloseBoxOutline : 'close-box-outline',
+  CloseCircle : 'close-circle',
+  CloseCircleOutline : 'close-circle-outline',
+  CloseNetwork : 'close-network',
+  CloseOctagon : 'close-octagon',
+  CloseOctagonOutline : 'close-octagon-outline',
+  ClosedCaption : 'closed-caption',
+  Cloud : 'cloud',
+  CloudCheck : 'cloud-check',
+  CloudCircle : 'cloud-circle',
+  CloudDownload : 'cloud-download',
+  CloudOutline : 'cloud-outline',
+  CloudOutlineOff : 'cloud-outline-off',
+  CloudPrint : 'cloud-print',
+  CloudPrintOutline : 'cloud-print-outline',
+  CloudSync : 'cloud-sync',
+  CloudUpload : 'cloud-upload',
+  CodeArray : 'code-array',
+  CodeBraces : 'code-braces',
+  CodeBrackets : 'code-brackets',
+  CodeEqual : 'code-equal',
+  CodeGreaterThan : 'code-greater-than',
+  CodeGreaterThanOrEqual : 'code-greater-than-or-equal',
+  CodeLessThan : 'code-less-than',
+  CodeLessThanOrEqual : 'code-less-than-or-equal',
+  CodeNotEqual : 'code-not-equal',
+  CodeNotEqualVariant : 'code-not-equal-variant',
+  CodeParentheses : 'code-parentheses',
+  CodeString : 'code-string',
+  CodeTags : 'code-tags',
+  CodeTagsCheck : 'code-tags-check',
+  Codepen : 'codepen',
+  Coffee : 'coffee',
+  CoffeeToGo : 'coffee-to-go',
+  Coin : 'coin',
+  Coins : 'coins',
+  Collage : 'collage',
+  ColorHelper : 'color-helper',
+  Comment : 'comment',
+  CommentAccount : 'comment-account',
+  CommentAccountOutline : 'comment-account-outline',
+  CommentAlert : 'comment-alert',
+  CommentAlertOutline : 'comment-alert-outline',
+  CommentCheck : 'comment-check',
+  CommentCheckOutline : 'comment-check-outline',
+  CommentMultipleOutline : 'comment-multiple-outline',
+  CommentOutline : 'comment-outline',
+  CommentPlusOutline : 'comment-plus-outline',
+  CommentProcessing : 'comment-processing',
+  CommentProcessingOutline : 'comment-processing-outline',
+  CommentQuestionOutline : 'comment-question-outline',
+  CommentRemoveOutline : 'comment-remove-outline',
+  CommentText : 'comment-text',
+  CommentTextOutline : 'comment-text-outline',
+  Compare : 'compare',
+  Compass : 'compass',
+  CompassOutline : 'compass-outline',
+  Console : 'console',
+  ContactMail : 'contact-mail',
+  ContentCopy : 'content-copy',
+  ContentCut : 'content-cut',
+  ContentDuplicate : 'content-duplicate',
+  ContentPaste : 'content-paste',
+  ContentSave : 'content-save',
+  ContentSaveAll : 'content-save-all',
+  ContentSaveSettings : 'content-save-settings',
+  Contrast : 'contrast',
+  ContrastBox : 'contrast-box',
+  ContrastCircle : 'contrast-circle',
+  Cookie : 'cookie',
+  Copyright : 'copyright',
+  Counter : 'counter',
+  Cow : 'cow',
+  Creation : 'creation',
+  CreditCard : 'credit-card',
+  CreditCardMultiple : 'credit-card-multiple',
+  CreditCardOff : 'credit-card-off',
+  CreditCardPlus : 'credit-card-plus',
+  CreditCardScan : 'credit-card-scan',
+  Crop : 'crop',
+  CropFree : 'crop-free',
+  CropLandscape : 'crop-landscape',
+  CropPortrait : 'crop-portrait',
+  CropRotate : 'crop-rotate',
+  CropSquare : 'crop-square',
+  Crosshairs : 'crosshairs',
+  CrosshairsGps : 'crosshairs-gps',
+  Crown : 'crown',
+  Cube : 'cube',
+  CubeOutline : 'cube-outline',
+  CubeSend : 'cube-send',
+  CubeUnfolded : 'cube-unfolded',
+  Cup : 'cup',
+  CupOff : 'cup-off',
+  CupWater : 'cup-water',
+  CurrencyBtc : 'currency-btc',
+  CurrencyEur : 'currency-eur',
+  CurrencyGbp : 'currency-gbp',
+  CurrencyInr : 'currency-inr',
+  CurrencyNgn : 'currency-ngn',
+  CurrencyRub : 'currency-rub',
+  CurrencyTry : 'currency-try',
+  CurrencyUsd : 'currency-usd',
+  CurrencyUsdOff : 'currency-usd-off',
+  CursorDefault : 'cursor-default',
+  CursorDefaultOutline : 'cursor-default-outline',
+  CursorMove : 'cursor-move',
+  CursorPointer : 'cursor-pointer',
+  CursorText : 'cursor-text',
+  Database : 'database',
+  DatabaseMinus : 'database-minus',
+  DatabasePlus : 'database-plus',
+  DebugStepInto : 'debug-step-into',
+  DebugStepOut : 'debug-step-out',
+  DebugStepOver : 'debug-step-over',
+  DecimalDecrease : 'decimal-decrease',
+  DecimalIncrease : 'decimal-increase',
+  Delete : 'delete',
+  DeleteCircle : 'delete-circle',
+  DeleteForever : 'delete-forever',
+  DeleteSweep : 'delete-sweep',
+  DeleteVariant : 'delete-variant',
+  Delta : 'delta',
+  Deskphone : 'deskphone',
+  DesktopMac : 'desktop-mac',
+  DesktopTower : 'desktop-tower',
+  Details : 'details',
+  DeveloperBoard : 'developer-board',
+  Deviantart : 'deviantart',
+  Dialpad : 'dialpad',
+  Diamond : 'diamond',
+  Dice1 : 'dice-1',
+  Dice2 : 'dice-2',
+  Dice3 : 'dice-3',
+  Dice4 : 'dice-4',
+  Dice5 : 'dice-5',
+  Dice6 : 'dice-6',
+  DiceD20 : 'dice-d20',
+  DiceD4 : 'dice-d4',
+  DiceD6 : 'dice-d6',
+  DiceD8 : 'dice-d8',
+  Dictionary : 'dictionary',
+  Directions : 'directions',
+  DirectionsFork : 'directions-fork',
+  Discord : 'discord',
+  Disk : 'disk',
+  DiskAlert : 'disk-alert',
+  Disqus : 'disqus',
+  DisqusOutline : 'disqus-outline',
+  Division : 'division',
+  DivisionBox : 'division-box',
+  Dna : 'dna',
+  Dns : 'dns',
+  DoNotDisturb : 'do-not-disturb',
+  DoNotDisturbOff : 'do-not-disturb-off',
+  Dolby : 'dolby',
+  Domain : 'domain',
+  DotsHorizontal : 'dots-horizontal',
+  DotsVertical : 'dots-vertical',
+  Douban : 'douban',
+  Download : 'download',
+  Drag : 'drag',
+  DragHorizontal : 'drag-horizontal',
+  DragVertical : 'drag-vertical',
+  Drawing : 'drawing',
+  DrawingBox : 'drawing-box',
+  Dribbble : 'dribbble',
+  DribbbleBox : 'dribbble-box',
+  Drone : 'drone',
+  Dropbox : 'dropbox',
+  Drupal : 'drupal',
+  Duck : 'duck',
+  Dumbbell : 'dumbbell',
+  Earth : 'earth',
+  EarthOff : 'earth-off',
+  Edge : 'edge',
+  Eject : 'eject',
+  ElevationDecline : 'elevation-decline',
+  ElevationRise : 'elevation-rise',
+  Elevator : 'elevator',
+  Email : 'email',
+  EmailOpen : 'email-open',
+  EmailOpenOutline : 'email-open-outline',
+  EmailOutline : 'email-outline',
+  EmailSecure : 'email-secure',
+  EmailVariant : 'email-variant',
+  Emby : 'emby',
+  Emoticon : 'emoticon',
+  EmoticonCool : 'emoticon-cool',
+  EmoticonDead : 'emoticon-dead',
+  EmoticonDevil : 'emoticon-devil',
+  EmoticonExcited : 'emoticon-excited',
+  EmoticonHappy : 'emoticon-happy',
+  EmoticonNeutral : 'emoticon-neutral',
+  EmoticonPoop : 'emoticon-poop',
+  EmoticonSad : 'emoticon-sad',
+  EmoticonTongue : 'emoticon-tongue',
+  Engine : 'engine',
+  EngineOutline : 'engine-outline',
+  Equal : 'equal',
+  EqualBox : 'equal-box',
+  Eraser : 'eraser',
+  EraserVariant : 'eraser-variant',
+  Escalator : 'escalator',
+  Ethernet : 'ethernet',
+  EthernetCable : 'ethernet-cable',
+  EthernetCableOff : 'ethernet-cable-off',
+  Etsy : 'etsy',
+  EvStation : 'ev-station',
+  Evernote : 'evernote',
+  Exclamation : 'exclamation',
+  ExitToApp : 'exit-to-app',
+  Export : 'export',
+  Eye : 'eye',
+  EyeOff : 'eye-off',
+  Eyedropper : 'eyedropper',
+  EyedropperVariant : 'eyedropper-variant',
+  Face : 'face',
+  FaceProfile : 'face-profile',
+  Facebook : 'facebook',
+  FacebookBox : 'facebook-box',
+  FacebookMessenger : 'facebook-messenger',
+  Factory : 'factory',
+  Fan : 'fan',
+  FastForward : 'fast-forward',
+  Fax : 'fax',
+  Ferry : 'ferry',
+  File : 'file',
+  FileChart : 'file-chart',
+  FileCheck : 'file-check',
+  FileCloud : 'file-cloud',
+  FileDelimited : 'file-delimited',
+  FileDocument : 'file-document',
+  FileDocumentBox : 'file-document-box',
+  FileExcel : 'file-excel',
+  FileExcelBox : 'file-excel-box',
+  FileExport : 'file-export',
+  FileFind : 'file-find',
+  FileHidden : 'file-hidden',
+  FileImage : 'file-image',
+  FileImport : 'file-import',
+  FileLock : 'file-lock',
+  FileMultiple : 'file-multiple',
+  FileMusic : 'file-music',
+  FileOutline : 'file-outline',
+  FilePdf : 'file-pdf',
+  FilePdfBox : 'file-pdf-box',
+  FilePowerpoint : 'file-powerpoint',
+  FilePowerpointBox : 'file-powerpoint-box',
+  FilePresentationBox : 'file-presentation-box',
+  FileRestore : 'file-restore',
+  FileSend : 'file-send',
+  FileTree : 'file-tree',
+  FileVideo : 'file-video',
+  FileWord : 'file-word',
+  FileWordBox : 'file-word-box',
+  FileXml : 'file-xml',
+  Film : 'film',
+  Filmstrip : 'filmstrip',
+  FilmstripOff : 'filmstrip-off',
+  Filter : 'filter',
+  FilterOutline : 'filter-outline',
+  FilterRemove : 'filter-remove',
+  FilterRemoveOutline : 'filter-remove-outline',
+  FilterVariant : 'filter-variant',
+  Fingerprint : 'fingerprint',
+  Fire : 'fire',
+  Firefox : 'firefox',
+  Fish : 'fish',
+  Flag : 'flag',
+  FlagCheckered : 'flag-checkered',
+  FlagOutline : 'flag-outline',
+  FlagOutlineVariant : 'flag-outline-variant',
+  FlagTriangle : 'flag-triangle',
+  FlagVariant : 'flag-variant',
+  Flash : 'flash',
+  FlashAuto : 'flash-auto',
+  FlashOff : 'flash-off',
+  FlashRedEye : 'flash-red-eye',
+  Flashlight : 'flashlight',
+  FlashlightOff : 'flashlight-off',
+  Flask : 'flask',
+  FlaskEmpty : 'flask-empty',
+  FlaskEmptyOutline : 'flask-empty-outline',
+  FlaskOutline : 'flask-outline',
+  Flattr : 'flattr',
+  FlipToBack : 'flip-to-back',
+  FlipToFront : 'flip-to-front',
+  Floppy : 'floppy',
+  Flower : 'flower',
+  Folder : 'folder',
+  FolderAccount : 'folder-account',
+  FolderDownload : 'folder-download',
+  FolderGoogleDrive : 'folder-google-drive',
+  FolderImage : 'folder-image',
+  FolderLock : 'folder-lock',
+  FolderLockOpen : 'folder-lock-open',
+  FolderMove : 'folder-move',
+  FolderMultiple : 'folder-multiple',
+  FolderMultipleImage : 'folder-multiple-image',
+  FolderMultipleOutline : 'folder-multiple-outline',
+  FolderOutline : 'folder-outline',
+  FolderPlus : 'folder-plus',
+  FolderRemove : 'folder-remove',
+  FolderStar : 'folder-star',
+  FolderUpload : 'folder-upload',
+  Food : 'food',
+  FoodApple : 'food-apple',
+  FoodForkDrink : 'food-fork-drink',
+  FoodOff : 'food-off',
+  FoodVariant : 'food-variant',
+  Football : 'football',
+  FootballAustralian : 'football-australian',
+  FootballHelmet : 'football-helmet',
+  FormatAlignCenter : 'format-align-center',
+  FormatAlignJustify : 'format-align-justify',
+  FormatAlignLeft : 'format-align-left',
+  FormatAlignRight : 'format-align-right',
+  FormatAnnotationPlus : 'format-annotation-plus',
+  FormatBold : 'format-bold',
+  FormatClear : 'format-clear',
+  FormatColorFill : 'format-color-fill',
+  FormatColorText : 'format-color-text',
+  FormatFloatCenter : 'format-float-center',
+  FormatFloatLeft : 'format-float-left',
+  FormatFloatNone : 'format-float-none',
+  FormatFloatRight : 'format-float-right',
+  FormatHeader1 : 'format-header-1',
+  FormatHeader2 : 'format-header-2',
+  FormatHeader3 : 'format-header-3',
+  FormatHeader4 : 'format-header-4',
+  FormatHeader5 : 'format-header-5',
+  FormatHeader6 : 'format-header-6',
+  FormatHeaderDecrease : 'format-header-decrease',
+  FormatHeaderEqual : 'format-header-equal',
+  FormatHeaderIncrease : 'format-header-increase',
+  FormatHeaderPound : 'format-header-pound',
+  FormatHorizontalAlignCenter : 'format-horizontal-align-center',
+  FormatHorizontalAlignLeft : 'format-horizontal-align-left',
+  FormatHorizontalAlignRight : 'format-horizontal-align-right',
+  FormatIndentDecrease : 'format-indent-decrease',
+  FormatIndentIncrease : 'format-indent-increase',
+  FormatItalic : 'format-italic',
+  FormatLineSpacing : 'format-line-spacing',
+  FormatLineStyle : 'format-line-style',
+  FormatLineWeight : 'format-line-weight',
+  FormatListBulleted : 'format-list-bulleted',
+  FormatListBulletedType : 'format-list-bulleted-type',
+  FormatListNumbers : 'format-list-numbers',
+  FormatPaint : 'format-paint',
+  FormatParagraph : 'format-paragraph',
+  FormatQuote : 'format-quote',
+  FormatSection : 'format-section',
+  FormatSize : 'format-size',
+  FormatStrikethrough : 'format-strikethrough',
+  FormatStrikethroughVariant : 'format-strikethrough-variant',
+  FormatSubscript : 'format-subscript',
+  FormatSuperscript : 'format-superscript',
+  FormatText : 'format-text',
+  FormatTextdirectionLToR : 'format-textdirection-l-to-r',
+  FormatTextdirectionRToL : 'format-textdirection-r-to-l',
+  FormatTitle : 'format-title',
+  FormatUnderline : 'format-underline',
+  FormatVerticalAlignBottom : 'format-vertical-align-bottom',
+  FormatVerticalAlignCenter : 'format-vertical-align-center',
+  FormatVerticalAlignTop : 'format-vertical-align-top',
+  FormatWrapInline : 'format-wrap-inline',
+  FormatWrapSquare : 'format-wrap-square',
+  FormatWrapTight : 'format-wrap-tight',
+  FormatWrapTopBottom : 'format-wrap-top-bottom',
+  Forum : 'forum',
+  Forward : 'forward',
+  Foursquare : 'foursquare',
+  Fridge : 'fridge',
+  FridgeFilled : 'fridge-filled',
+  FridgeFilledBottom : 'fridge-filled-bottom',
+  FridgeFilledTop : 'fridge-filled-top',
+  Fullscreen : 'fullscreen',
+  FullscreenExit : 'fullscreen-exit',
+  Function : 'function',
+  Gamepad : 'gamepad',
+  GamepadVariant : 'gamepad-variant',
+  GasCylinder : 'gas-cylinder',
+  GasStation : 'gas-station',
+  Gate : 'gate',
+  Gauge : 'gauge',
+  Gavel : 'gavel',
+  GenderFemale : 'gender-female',
+  GenderMale : 'gender-male',
+  GenderMaleFemale : 'gender-male-female',
+  GenderTransgender : 'gender-transgender',
+  Ghost : 'ghost',
+  Gift : 'gift',
+  Git : 'git',
+  GithubBox : 'github-box',
+  GithubCircle : 'github-circle',
+  GlassFlute : 'glass-flute',
+  GlassMug : 'glass-mug',
+  GlassStange : 'glass-stange',
+  GlassTulip : 'glass-tulip',
+  Glassdoor : 'glassdoor',
+  Glasses : 'glasses',
+  Gmail : 'gmail',
+  Gnome : 'gnome',
+  Gondola : 'gondola',
+  Google : 'google',
+  GoogleCardboard : 'google-cardboard',
+  GoogleChrome : 'google-chrome',
+  GoogleCircles : 'google-circles',
+  GoogleCirclesCommunities : 'google-circles-communities',
+  GoogleCirclesExtended : 'google-circles-extended',
+  GoogleCirclesGroup : 'google-circles-group',
+  GoogleController : 'google-controller',
+  GoogleControllerOff : 'google-controller-off',
+  GoogleDrive : 'google-drive',
+  GoogleEarth : 'google-earth',
+  GoogleGlass : 'google-glass',
+  GoogleMaps : 'google-maps',
+  GoogleNearby : 'google-nearby',
+  GooglePages : 'google-pages',
+  GooglePhysicalWeb : 'google-physical-web',
+  GooglePlay : 'google-play',
+  GooglePlus : 'google-plus',
+  GooglePlusBox : 'google-plus-box',
+  GoogleTranslate : 'google-translate',
+  GoogleWallet : 'google-wallet',
+  Gradient : 'gradient',
+  GreasePencil : 'grease-pencil',
+  Grid : 'grid',
+  GridOff : 'grid-off',
+  Group : 'group',
+  GuitarElectric : 'guitar-electric',
+  GuitarPick : 'guitar-pick',
+  GuitarPickOutline : 'guitar-pick-outline',
+  Hackernews : 'hackernews',
+  Hamburger : 'hamburger',
+  HandPointingRight : 'hand-pointing-right',
+  Hanger : 'hanger',
+  Hangouts : 'hangouts',
+  Harddisk : 'harddisk',
+  Headphones : 'headphones',
+  HeadphonesBox : 'headphones-box',
+  HeadphonesSettings : 'headphones-settings',
+  Headset : 'headset',
+  HeadsetDock : 'headset-dock',
+  HeadsetOff : 'headset-off',
+  Heart : 'heart',
+  HeartBox : 'heart-box',
+  HeartBoxOutline : 'heart-box-outline',
+  HeartBroken : 'heart-broken',
+  HeartOutline : 'heart-outline',
+  HeartPulse : 'heart-pulse',
+  Help : 'help',
+  HelpCircle : 'help-circle',
+  HelpCircleOutline : 'help-circle-outline',
+  Hexagon : 'hexagon',
+  HexagonOutline : 'hexagon-outline',
+  Highway : 'highway',
+  History : 'history',
+  Hololens : 'hololens',
+  Home : 'home',
+  HomeMapMarker : 'home-map-marker',
+  HomeModern : 'home-modern',
+  HomeOutline : 'home-outline',
+  HomeVariant : 'home-variant',
+  Hops : 'hops',
+  Hospital : 'hospital',
+  HospitalBuilding : 'hospital-building',
+  HospitalMarker : 'hospital-marker',
+  Hotel : 'hotel',
+  Houzz : 'houzz',
+  HouzzBox : 'houzz-box',
+  Human : 'human',
+  HumanChild : 'human-child',
+  HumanFemale : 'human-female',
+  HumanGreeting : 'human-greeting',
+  HumanHandsdown : 'human-handsdown',
+  HumanHandsup : 'human-handsup',
+  HumanMale : 'human-male',
+  HumanMaleFemale : 'human-male-female',
+  HumanPregnant : 'human-pregnant',
+  Image : 'image',
+  ImageAlbum : 'image-album',
+  ImageArea : 'image-area',
+  ImageAreaClose : 'image-area-close',
+  ImageBroken : 'image-broken',
+  ImageBrokenVariant : 'image-broken-variant',
+  ImageFilter : 'image-filter',
+  ImageFilterBlackWhite : 'image-filter-black-white',
+  ImageFilterCenterFocus : 'image-filter-center-focus',
+  ImageFilterCenterFocusWeak : 'image-filter-center-focus-weak',
+  ImageFilterDrama : 'image-filter-drama',
+  ImageFilterFrames : 'image-filter-frames',
+  ImageFilterHdr : 'image-filter-hdr',
+  ImageFilterNone : 'image-filter-none',
+  ImageFilterTiltShift : 'image-filter-tilt-shift',
+  ImageFilterVintage : 'image-filter-vintage',
+  ImageMultiple : 'image-multiple',
+  Import : 'import',
+  Inbox : 'inbox',
+  InboxArrowDown : 'inbox-arrow-down',
+  InboxArrowUp : 'inbox-arrow-up',
+  Incognito : 'incognito',
+  Information : 'information',
+  InformationOutline : 'information-outline',
+  InformationVariant : 'information-variant',
+  Instagram : 'instagram',
+  Instapaper : 'instapaper',
+  InternetExplorer : 'internet-explorer',
+  InvertColors : 'invert-colors',
+  Itunes : 'itunes',
+  Jeepney : 'jeepney',
+  Jira : 'jira',
+  Jsfiddle : 'jsfiddle',
+  Json : 'json',
+  Keg : 'keg',
+  Kettle : 'kettle',
+  Key : 'key',
+  KeyChange : 'key-change',
+  KeyMinus : 'key-minus',
+  KeyPlus : 'key-plus',
+  KeyRemove : 'key-remove',
+  KeyVariant : 'key-variant',
+  Keyboard : 'keyboard',
+  KeyboardBackspace : 'keyboard-backspace',
+  KeyboardCaps : 'keyboard-caps',
+  KeyboardClose : 'keyboard-close',
+  KeyboardOff : 'keyboard-off',
+  KeyboardReturn : 'keyboard-return',
+  KeyboardTab : 'keyboard-tab',
+  KeyboardVariant : 'keyboard-variant',
+  Kodi : 'kodi',
+  Label : 'label',
+  LabelOutline : 'label-outline',
+  Lambda : 'lambda',
+  Lamp : 'lamp',
+  Lan : 'lan',
+  LanConnect : 'lan-connect',
+  LanDisconnect : 'lan-disconnect',
+  LanPending : 'lan-pending',
+  LanguageC : 'language-c',
+  LanguageCpp : 'language-cpp',
+  LanguageCsharp : 'language-csharp',
+  LanguageCss3 : 'language-css3',
+  LanguageHtml5 : 'language-html5',
+  LanguageJavascript : 'language-javascript',
+  LanguagePhp : 'language-php',
+  LanguagePython : 'language-python',
+  LanguagePythonText : 'language-python-text',
+  Laptop : 'laptop',
+  LaptopChromebook : 'laptop-chromebook',
+  LaptopMac : 'laptop-mac',
+  LaptopWindows : 'laptop-windows',
+  Lastfm : 'lastfm',
+  Launch : 'launch',
+  Layers : 'layers',
+  LayersOff : 'layers-off',
+  LeadPencil : 'lead-pencil',
+  Leaf : 'leaf',
+  LedOff : 'led-off',
+  LedOn : 'led-on',
+  LedOutline : 'led-outline',
+  LedVariantOff : 'led-variant-off',
+  LedVariantOn : 'led-variant-on',
+  LedVariantOutline : 'led-variant-outline',
+  Library : 'library',
+  LibraryBooks : 'library-books',
+  LibraryMusic : 'library-music',
+  LibraryPlus : 'library-plus',
+  Lightbulb : 'lightbulb',
+  LightbulbOutline : 'lightbulb-outline',
+  Link : 'link',
+  LinkOff : 'link-off',
+  LinkVariant : 'link-variant',
+  LinkVariantOff : 'link-variant-off',
+  Linkedin : 'linkedin',
+  LinkedinBox : 'linkedin-box',
+  Linux : 'linux',
+  Lock : 'lock',
+  LockOpen : 'lock-open',
+  LockOpenOutline : 'lock-open-outline',
+  LockOutline : 'lock-outline',
+  LockPlus : 'lock-plus',
+  Login : 'login',
+  LoginVariant : 'login-variant',
+  Logout : 'logout',
+  LogoutVariant : 'logout-variant',
+  Looks : 'looks',
+  Loupe : 'loupe',
+  Lumx : 'lumx',
+  Magnet : 'magnet',
+  MagnetOn : 'magnet-on',
+  Magnify : 'magnify',
+  MagnifyMinus : 'magnify-minus',
+  MagnifyPlus : 'magnify-plus',
+  MailRu : 'mail-ru',
+  Map : 'map',
+  MapMarker : 'map-marker',
+  MapMarkerCircle : 'map-marker-circle',
+  MapMarkerMinus : 'map-marker-minus',
+  MapMarkerMultiple : 'map-marker-multiple',
+  MapMarkerOff : 'map-marker-off',
+  MapMarkerPlus : 'map-marker-plus',
+  MapMarkerRadius : 'map-marker-radius',
+  Margin : 'margin',
+  Markdown : 'markdown',
+  Marker : 'marker',
+  MarkerCheck : 'marker-check',
+  Martini : 'martini',
+  MaterialUi : 'material-ui',
+  MathCompass : 'math-compass',
+  Matrix : 'matrix',
+  Maxcdn : 'maxcdn',
+  Medium : 'medium',
+  Memory : 'memory',
+  Menu : 'menu',
+  MenuDown : 'menu-down',
+  MenuDownOutline : 'menu-down-outline',
+  MenuLeft : 'menu-left',
+  MenuRight : 'menu-right',
+  MenuUp : 'menu-up',
+  MenuUpOutline : 'menu-up-outline',
+  Message : 'message',
+  MessageAlert : 'message-alert',
+  MessageBulleted : 'message-bulleted',
+  MessageBulletedOff : 'message-bulleted-off',
+  MessageDraw : 'message-draw',
+  MessageImage : 'message-image',
+  MessageOutline : 'message-outline',
+  MessagePlus : 'message-plus',
+  MessageProcessing : 'message-processing',
+  MessageReply : 'message-reply',
+  MessageReplyText : 'message-reply-text',
+  MessageText : 'message-text',
+  MessageTextOutline : 'message-text-outline',
+  MessageVideo : 'message-video',
+  Meteor : 'meteor',
+  Microphone : 'microphone',
+  MicrophoneOff : 'microphone-off',
+  MicrophoneOutline : 'microphone-outline',
+  MicrophoneSettings : 'microphone-settings',
+  MicrophoneVariant : 'microphone-variant',
+  MicrophoneVariantOff : 'microphone-variant-off',
+  Microscope : 'microscope',
+  Microsoft : 'microsoft',
+  Minecraft : 'minecraft',
+  Minus : 'minus',
+  MinusBox : 'minus-box',
+  MinusCircle : 'minus-circle',
+  MinusCircleOutline : 'minus-circle-outline',
+  MinusNetwork : 'minus-network',
+  Mixcloud : 'mixcloud',
+  Monitor : 'monitor',
+  MonitorMultiple : 'monitor-multiple',
+  More : 'more',
+  Motorbike : 'motorbike',
+  Mouse : 'mouse',
+  MouseOff : 'mouse-off',
+  MouseVariant : 'mouse-variant',
+  MouseVariantOff : 'mouse-variant-off',
+  MoveResize : 'move-resize',
+  MoveResizeVariant : 'move-resize-variant',
+  Movie : 'movie',
+  Multiplication : 'multiplication',
+  MultiplicationBox : 'multiplication-box',
+  MusicBox : 'music-box',
+  MusicBoxOutline : 'music-box-outline',
+  MusicCircle : 'music-circle',
+  MusicNote : 'music-note',
+  MusicNoteBluetooth : 'music-note-bluetooth',
+  MusicNoteBluetoothOff : 'music-note-bluetooth-off',
+  MusicNoteEighth : 'music-note-eighth',
+  MusicNoteHalf : 'music-note-half',
+  MusicNoteOff : 'music-note-off',
+  MusicNoteQuarter : 'music-note-quarter',
+  MusicNoteSixteenth : 'music-note-sixteenth',
+  MusicNoteWhole : 'music-note-whole',
+  Nature : 'nature',
+  NaturePeople : 'nature-people',
+  Navigation : 'navigation',
+  NearMe : 'near-me',
+  Needle : 'needle',
+  NestProtect : 'nest-protect',
+  NestThermostat : 'nest-thermostat',
+  NewBox : 'new-box',
+  Newspaper : 'newspaper',
+  Nfc : 'nfc',
+  NfcTap : 'nfc-tap',
+  NfcVariant : 'nfc-variant',
+  Nodejs : 'nodejs',
+  Note : 'note',
+  NoteMultiple : 'note-multiple',
+  NoteMultipleOutline : 'note-multiple-outline',
+  NoteOutline : 'note-outline',
+  NotePlus : 'note-plus',
+  NotePlusOutline : 'note-plus-outline',
+  NoteText : 'note-text',
+  NotificationClearAll : 'notification-clear-all',
+  Nuke : 'nuke',
+  Numeric : 'numeric',
+  Numeric0Box : 'numeric-0-box',
+  Numeric0BoxMultipleOutline : 'numeric-0-box-multiple-outline',
+  Numeric0BoxOutline : 'numeric-0-box-outline',
+  Numeric1Box : 'numeric-1-box',
+  Numeric1BoxMultipleOutline : 'numeric-1-box-multiple-outline',
+  Numeric1BoxOutline : 'numeric-1-box-outline',
+  Numeric2Box : 'numeric-2-box',
+  Numeric2BoxMultipleOutline : 'numeric-2-box-multiple-outline',
+  Numeric2BoxOutline : 'numeric-2-box-outline',
+  Numeric3Box : 'numeric-3-box',
+  Numeric3BoxMultipleOutline : 'numeric-3-box-multiple-outline',
+  Numeric3BoxOutline : 'numeric-3-box-outline',
+  Numeric4Box : 'numeric-4-box',
+  Numeric4BoxMultipleOutline : 'numeric-4-box-multiple-outline',
+  Numeric4BoxOutline : 'numeric-4-box-outline',
+  Numeric5Box : 'numeric-5-box',
+  Numeric5BoxMultipleOutline : 'numeric-5-box-multiple-outline',
+  Numeric5BoxOutline : 'numeric-5-box-outline',
+  Numeric6Box : 'numeric-6-box',
+  Numeric6BoxMultipleOutline : 'numeric-6-box-multiple-outline',
+  Numeric6BoxOutline : 'numeric-6-box-outline',
+  Numeric7Box : 'numeric-7-box',
+  Numeric7BoxMultipleOutline : 'numeric-7-box-multiple-outline',
+  Numeric7BoxOutline : 'numeric-7-box-outline',
+  Numeric8Box : 'numeric-8-box',
+  Numeric8BoxMultipleOutline : 'numeric-8-box-multiple-outline',
+  Numeric8BoxOutline : 'numeric-8-box-outline',
+  Numeric9Box : 'numeric-9-box',
+  Numeric9BoxMultipleOutline : 'numeric-9-box-multiple-outline',
+  Numeric9BoxOutline : 'numeric-9-box-outline',
+  Numeric9PlusBox : 'numeric-9-plus-box',
+  Numeric9PlusBoxMultipleOutline : 'numeric-9-plus-box-multiple-outline',
+  Numeric9PlusBoxOutline : 'numeric-9-plus-box-outline',
+  Nutrition : 'nutrition',
+  Oar : 'oar',
+  Octagon : 'octagon',
+  OctagonOutline : 'octagon-outline',
+  Odnoklassniki : 'odnoklassniki',
+  Office : 'office',
+  Oil : 'oil',
+  OilTemperature : 'oil-temperature',
+  Omega : 'omega',
+  Onedrive : 'onedrive',
+  Opacity : 'opacity',
+  OpenInApp : 'open-in-app',
+  OpenInNew : 'open-in-new',
+  Openid : 'openid',
+  Opera : 'opera',
+  Ornament : 'ornament',
+  OrnamentVariant : 'ornament-variant',
+  Owl : 'owl',
+  Package : 'package',
+  PackageDown : 'package-down',
+  PackageUp : 'package-up',
+  PackageVariant : 'package-variant',
+  PackageVariantClosed : 'package-variant-closed',
+  PageFirst : 'page-first',
+  PageLast : 'page-last',
+  Palette : 'palette',
+  PaletteAdvanced : 'palette-advanced',
+  Panda : 'panda',
+  Pandora : 'pandora',
+  Panorama : 'panorama',
+  PanoramaFisheye : 'panorama-fisheye',
+  PanoramaHorizontal : 'panorama-horizontal',
+  PanoramaVertical : 'panorama-vertical',
+  PanoramaWideAngle : 'panorama-wide-angle',
+  PaperCutVertical : 'paper-cut-vertical',
+  Paperclip : 'paperclip',
+  Parking : 'parking',
+  Pause : 'pause',
+  PauseCircle : 'pause-circle',
+  PauseCircleOutline : 'pause-circle-outline',
+  PauseOctagon : 'pause-octagon',
+  PauseOctagonOutline : 'pause-octagon-outline',
+  Paw : 'paw',
+  PawOff : 'paw-off',
+  Pen : 'pen',
+  Pencil : 'pencil',
+  PencilBox : 'pencil-box',
+  PencilBoxOutline : 'pencil-box-outline',
+  PencilLock : 'pencil-lock',
+  PencilOff : 'pencil-off',
+  Percent : 'percent',
+  Pharmacy : 'pharmacy',
+  Phone : 'phone',
+  PhoneBluetooth : 'phone-bluetooth',
+  PhoneClassic : 'phone-classic',
+  PhoneForward : 'phone-forward',
+  PhoneHangup : 'phone-hangup',
+  PhoneInTalk : 'phone-in-talk',
+  PhoneIncoming : 'phone-incoming',
+  PhoneLocked : 'phone-locked',
+  PhoneLog : 'phone-log',
+  PhoneMinus : 'phone-minus',
+  PhoneMissed : 'phone-missed',
+  PhoneOutgoing : 'phone-outgoing',
+  PhonePaused : 'phone-paused',
+  PhonePlus : 'phone-plus',
+  PhoneSettings : 'phone-settings',
+  PhoneVoip : 'phone-voip',
+  Pi : 'pi',
+  PiBox : 'pi-box',
+  Piano : 'piano',
+  Pig : 'pig',
+  Pill : 'pill',
+  Pin : 'pin',
+  PinOff : 'pin-off',
+  PineTree : 'pine-tree',
+  PineTreeBox : 'pine-tree-box',
+  Pinterest : 'pinterest',
+  PinterestBox : 'pinterest-box',
+  Pizza : 'pizza',
+  PlaneShield : 'plane-shield',
+  Play : 'play',
+  PlayBoxOutline : 'play-box-outline',
+  PlayCircle : 'play-circle',
+  PlayCircleOutline : 'play-circle-outline',
+  PlayPause : 'play-pause',
+  PlayProtectedContent : 'play-protected-content',
+  PlaylistCheck : 'playlist-check',
+  PlaylistMinus : 'playlist-minus',
+  PlaylistPlay : 'playlist-play',
+  PlaylistPlus : 'playlist-plus',
+  PlaylistRemove : 'playlist-remove',
+  Playstation : 'playstation',
+  Plex : 'plex',
+  Plus : 'plus',
+  PlusBox : 'plus-box',
+  PlusCircle : 'plus-circle',
+  PlusCircleMultipleOutline : 'plus-circle-multiple-outline',
+  PlusCircleOutline : 'plus-circle-outline',
+  PlusNetwork : 'plus-network',
+  PlusOne : 'plus-one',
+  Pocket : 'pocket',
+  Pokeball : 'pokeball',
+  Polaroid : 'polaroid',
+  Poll : 'poll',
+  PollBox : 'poll-box',
+  Polymer : 'polymer',
+  Pool : 'pool',
+  Popcorn : 'popcorn',
+  Pot : 'pot',
+  PotMix : 'pot-mix',
+  Pound : 'pound',
+  PoundBox : 'pound-box',
+  Power : 'power',
+  PowerPlug : 'power-plug',
+  PowerPlugOff : 'power-plug-off',
+  PowerSettings : 'power-settings',
+  PowerSocket : 'power-socket',
+  Presentation : 'presentation',
+  PresentationPlay : 'presentation-play',
+  Printer : 'printer',
+  Printer3d : 'printer-3d',
+  PrinterAlert : 'printer-alert',
+  PriorityHigh : 'priority-high',
+  PriorityLow : 'priority-low',
+  ProfessionalHexagon : 'professional-hexagon',
+  Projector : 'projector',
+  ProjectorScreen : 'projector-screen',
+  Publish : 'publish',
+  Pulse : 'pulse',
+  Puzzle : 'puzzle',
+  Qqchat : 'qqchat',
+  Qrcode : 'qrcode',
+  QrcodeScan : 'qrcode-scan',
+  Quadcopter : 'quadcopter',
+  QualityHigh : 'quality-high',
+  Quicktime : 'quicktime',
+  Radar : 'radar',
+  Radiator : 'radiator',
+  Radio : 'radio',
+  RadioHandheld : 'radio-handheld',
+  RadioTower : 'radio-tower',
+  Radioactive : 'radioactive',
+  RadioboxBlank : 'radiobox-blank',
+  RadioboxMarked : 'radiobox-marked',
+  Raspberrypi : 'raspberrypi',
+  RayEnd : 'ray-end',
+  RayEndArrow : 'ray-end-arrow',
+  RayStart : 'ray-start',
+  RayStartArrow : 'ray-start-arrow',
+  RayStartEnd : 'ray-start-end',
+  RayVertex : 'ray-vertex',
+  Rdio : 'rdio',
+  Read : 'read',
+  Readability : 'readability',
+  Receipt : 'receipt',
+  Record : 'record',
+  RecordRec : 'record-rec',
+  Recycle : 'recycle',
+  Reddit : 'reddit',
+  Redo : 'redo',
+  RedoVariant : 'redo-variant',
+  Refresh : 'refresh',
+  Regex : 'regex',
+  RelativeScale : 'relative-scale',
+  Reload : 'reload',
+  Remote : 'remote',
+  RenameBox : 'rename-box',
+  ReorderHorizontal : 'reorder-horizontal',
+  ReorderVertical : 'reorder-vertical',
+  Repeat : 'repeat',
+  RepeatOff : 'repeat-off',
+  RepeatOnce : 'repeat-once',
+  Replay : 'replay',
+  Reply : 'reply',
+  ReplyAll : 'reply-all',
+  Reproduction : 'reproduction',
+  ResizeBottomRight : 'resize-bottom-right',
+  Responsive : 'responsive',
+  Restore : 'restore',
+  Rewind : 'rewind',
+  Ribbon : 'ribbon',
+  Road : 'road',
+  RoadVariant : 'road-variant',
+  Robot : 'robot',
+  Rocket : 'rocket',
+  Rotate3d : 'rotate-3d',
+  Rotate90 : 'rotate-90',
+  RotateLeft : 'rotate-left',
+  RotateLeftVariant : 'rotate-left-variant',
+  RotateRight : 'rotate-right',
+  RotateRightVariant : 'rotate-right-variant',
+  RoundedCorner : 'rounded-corner',
+  RouterWireless : 'router-wireless',
+  Routes : 'routes',
+  Rowing : 'rowing',
+  Rss : 'rss',
+  RssBox : 'rss-box',
+  Ruler : 'ruler',
+  Run : 'run',
+  Sale : 'sale',
+  Satellite : 'satellite',
+  SatelliteVariant : 'satellite-variant',
+  Saxophone : 'saxophone',
+  Scale : 'scale',
+  ScaleBalance : 'scale-balance',
+  ScaleBathroom : 'scale-bathroom',
+  Scanner : 'scanner',
+  School : 'school',
+  ScreenRotation : 'screen-rotation',
+  ScreenRotationLock : 'screen-rotation-lock',
+  Screwdriver : 'screwdriver',
+  Script : 'script',
+  Sd : 'sd',
+  Seal : 'seal',
+  SeatFlat : 'seat-flat',
+  SeatFlatAngled : 'seat-flat-angled',
+  SeatIndividualSuite : 'seat-individual-suite',
+  SeatLegroomExtra : 'seat-legroom-extra',
+  SeatLegroomNormal : 'seat-legroom-normal',
+  SeatLegroomReduced : 'seat-legroom-reduced',
+  SeatReclineExtra : 'seat-recline-extra',
+  SeatReclineNormal : 'seat-recline-normal',
+  Security : 'security',
+  SecurityHome : 'security-home',
+  SecurityNetwork : 'security-network',
+  Select : 'select',
+  SelectAll : 'select-all',
+  SelectInverse : 'select-inverse',
+  SelectOff : 'select-off',
+  Selection : 'selection',
+  Send : 'send',
+  SerialPort : 'serial-port',
+  Server : 'server',
+  ServerMinus : 'server-minus',
+  ServerNetwork : 'server-network',
+  ServerNetworkOff : 'server-network-off',
+  ServerOff : 'server-off',
+  ServerPlus : 'server-plus',
+  ServerRemove : 'server-remove',
+  ServerSecurity : 'server-security',
+  Settings : 'settings',
+  SettingsBox : 'settings-box',
+  ShapeCirclePlus : 'shape-circle-plus',
+  ShapePlus : 'shape-plus',
+  ShapePolygonPlus : 'shape-polygon-plus',
+  ShapeRectanglePlus : 'shape-rectangle-plus',
+  ShapeSquarePlus : 'shape-square-plus',
+  Share : 'share',
+  ShareVariant : 'share-variant',
+  Shield : 'shield',
+  ShieldOutline : 'shield-outline',
+  Shopping : 'shopping',
+  ShoppingMusic : 'shopping-music',
+  Shredder : 'shredder',
+  Shuffle : 'shuffle',
+  ShuffleDisabled : 'shuffle-disabled',
+  ShuffleVariant : 'shuffle-variant',
+  Sigma : 'sigma',
+  SigmaLower : 'sigma-lower',
+  SignCaution : 'sign-caution',
+  Signal : 'signal',
+  SignalVariant : 'signal-variant',
+  Silverware : 'silverware',
+  SilverwareFork : 'silverware-fork',
+  SilverwareSpoon : 'silverware-spoon',
+  SilverwareVariant : 'silverware-variant',
+  Sim : 'sim',
+  SimAlert : 'sim-alert',
+  SimOff : 'sim-off',
+  Sitemap : 'sitemap',
+  SkipBackward : 'skip-backward',
+  SkipForward : 'skip-forward',
+  SkipNext : 'skip-next',
+  SkipNextCircle : 'skip-next-circle',
+  SkipNextCircleOutline : 'skip-next-circle-outline',
+  SkipPrevious : 'skip-previous',
+  SkipPreviousCircle : 'skip-previous-circle',
+  SkipPreviousCircleOutline : 'skip-previous-circle-outline',
+  Skull : 'skull',
+  Skype : 'skype',
+  SkypeBusiness : 'skype-business',
+  Slack : 'slack',
+  Sleep : 'sleep',
+  SleepOff : 'sleep-off',
+  Smoking : 'smoking',
+  SmokingOff : 'smoking-off',
+  Snapchat : 'snapchat',
+  Snowman : 'snowman',
+  Soccer : 'soccer',
+  Sofa : 'sofa',
+  Solid : 'solid',
+  Sort : 'sort',
+  SortAlphabetical : 'sort-alphabetical',
+  SortAscending : 'sort-ascending',
+  SortDescending : 'sort-descending',
+  SortNumeric : 'sort-numeric',
+  SortVariant : 'sort-variant',
+  Soundcloud : 'soundcloud',
+  SourceBranch : 'source-branch',
+  SourceFork : 'source-fork',
+  SourceMerge : 'source-merge',
+  SourcePull : 'source-pull',
+  Speaker : 'speaker',
+  SpeakerOff : 'speaker-off',
+  Speedometer : 'speedometer',
+  Spellcheck : 'spellcheck',
+  Spotify : 'spotify',
+  Spotlight : 'spotlight',
+  SpotlightBeam : 'spotlight-beam',
+  Spray : 'spray',
+  SquareInc : 'square-inc',
+  SquareIncCash : 'square-inc-cash',
+  Stackexchange : 'stackexchange',
+  Stackoverflow : 'stackoverflow',
+  Stairs : 'stairs',
+  Star : 'star',
+  StarCircle : 'star-circle',
+  StarHalf : 'star-half',
+  StarOff : 'star-off',
+  StarOutline : 'star-outline',
+  Steam : 'steam',
+  Steering : 'steering',
+  StepBackward : 'step-backward',
+  StepBackward2 : 'step-backward-2',
+  StepForward : 'step-forward',
+  StepForward2 : 'step-forward-2',
+  Stethoscope : 'stethoscope',
+  Sticker : 'sticker',
+  Stocking : 'stocking',
+  Stop : 'stop',
+  StopCircle : 'stop-circle',
+  StopCircleOutline : 'stop-circle-outline',
+  Store : 'store',
+  Store24Hour : 'store-24-hour',
+  Stove : 'stove',
+  SubdirectoryArrowLeft : 'subdirectory-arrow-left',
+  SubdirectoryArrowRight : 'subdirectory-arrow-right',
+  Subway : 'subway',
+  SubwayVariant : 'subway-variant',
+  Sunglasses : 'sunglasses',
+  SurroundSound : 'surround-sound',
+  SwapHorizontal : 'swap-horizontal',
+  SwapVertical : 'swap-vertical',
+  Swim : 'swim',
+  Switch : 'switch',
+  Sword : 'sword',
+  Sync : 'sync',
+  SyncAlert : 'sync-alert',
+  SyncOff : 'sync-off',
+  Tab : 'tab',
+  TabUnselected : 'tab-unselected',
+  Table : 'table',
+  TableColumnPlusAfter : 'table-column-plus-after',
+  TableColumnPlusBefore : 'table-column-plus-before',
+  TableColumnRemove : 'table-column-remove',
+  TableColumnWidth : 'table-column-width',
+  TableEdit : 'table-edit',
+  TableLarge : 'table-large',
+  TableRowHeight : 'table-row-height',
+  TableRowPlusAfter : 'table-row-plus-after',
+  TableRowPlusBefore : 'table-row-plus-before',
+  TableRowRemove : 'table-row-remove',
+  Tablet : 'tablet',
+  TabletAndroid : 'tablet-android',
+  TabletIpad : 'tablet-ipad',
+  Tag : 'tag',
+  TagFaces : 'tag-faces',
+  TagHeart : 'tag-heart',
+  TagMultiple : 'tag-multiple',
+  TagOutline : 'tag-outline',
+  TagTextOutline : 'tag-text-outline',
+  Target : 'target',
+  Taxi : 'taxi',
+  Teamviewer : 'teamviewer',
+  Telegram : 'telegram',
+  Television : 'television',
+  TelevisionGuide : 'television-guide',
+  TemperatureCelsius : 'temperature-celsius',
+  TemperatureFahrenheit : 'temperature-fahrenheit',
+  TemperatureKelvin : 'temperature-kelvin',
+  Tennis : 'tennis',
+  Tent : 'tent',
+  Terrain : 'terrain',
+  TestTube : 'test-tube',
+  TextShadow : 'text-shadow',
+  TextToSpeech : 'text-to-speech',
+  TextToSpeechOff : 'text-to-speech-off',
+  Textbox : 'textbox',
+  Texture : 'texture',
+  Theater : 'theater',
+  ThemeLightDark : 'theme-light-dark',
+  Thermometer : 'thermometer',
+  ThermometerLines : 'thermometer-lines',
+  ThumbDown : 'thumb-down',
+  ThumbDownOutline : 'thumb-down-outline',
+  ThumbUp : 'thumb-up',
+  ThumbUpOutline : 'thumb-up-outline',
+  ThumbsUpDown : 'thumbs-up-down',
+  Ticket : 'ticket',
+  TicketAccount : 'ticket-account',
+  TicketConfirmation : 'ticket-confirmation',
+  Tie : 'tie',
+  Timelapse : 'timelapse',
+  Timer : 'timer',
+  Timer10 : 'timer-10',
+  Timer3 : 'timer-3',
+  TimerOff : 'timer-off',
+  TimerSand : 'timer-sand',
+  TimerSandEmpty : 'timer-sand-empty',
+  Timetable : 'timetable',
+  ToggleSwitch : 'toggle-switch',
+  ToggleSwitchOff : 'toggle-switch-off',
+  Tooltip : 'tooltip',
+  TooltipEdit : 'tooltip-edit',
+  TooltipImage : 'tooltip-image',
+  TooltipOutline : 'tooltip-outline',
+  TooltipOutlinePlus : 'tooltip-outline-plus',
+  TooltipText : 'tooltip-text',
+  Tooth : 'tooth',
+  Tor : 'tor',
+  TowerBeach : 'tower-beach',
+  TowerFire : 'tower-fire',
+  TrafficLight : 'traffic-light',
+  Train : 'train',
+  Tram : 'tram',
+  Transcribe : 'transcribe',
+  TranscribeClose : 'transcribe-close',
+  Transfer : 'transfer',
+  TransitTransfer : 'transit-transfer',
+  Translate : 'translate',
+  Tree : 'tree',
+  Trello : 'trello',
+  TrendingDown : 'trending-down',
+  TrendingNeutral : 'trending-neutral',
+  TrendingUp : 'trending-up',
+  Triangle : 'triangle',
+  TriangleOutline : 'triangle-outline',
+  Trophy : 'trophy',
+  TrophyAward : 'trophy-award',
+  TrophyOutline : 'trophy-outline',
+  TrophyVariant : 'trophy-variant',
+  TrophyVariantOutline : 'trophy-variant-outline',
+  Truck : 'truck',
+  TruckDelivery : 'truck-delivery',
+  TshirtCrew : 'tshirt-crew',
+  TshirtV : 'tshirt-v',
+  Tumblr : 'tumblr',
+  TumblrReblog : 'tumblr-reblog',
+  Tune : 'tune',
+  TuneVertical : 'tune-vertical',
+  Twitch : 'twitch',
+  Twitter : 'twitter',
+  TwitterBox : 'twitter-box',
+  TwitterCircle : 'twitter-circle',
+  TwitterRetweet : 'twitter-retweet',
+  Ubuntu : 'ubuntu',
+  Umbraco : 'umbraco',
+  Umbrella : 'umbrella',
+  UmbrellaOutline : 'umbrella-outline',
+  Undo : 'undo',
+  UndoVariant : 'undo-variant',
+  UnfoldLess : 'unfold-less',
+  UnfoldMore : 'unfold-more',
+  Ungroup : 'ungroup',
+  Unity : 'unity',
+  Untappd : 'untappd',
+  Update : 'update',
+  Upload : 'upload',
+  Usb : 'usb',
+  VectorArrangeAbove : 'vector-arrange-above',
+  VectorArrangeBelow : 'vector-arrange-below',
+  VectorCircle : 'vector-circle',
+  VectorCircleVariant : 'vector-circle-variant',
+  VectorCombine : 'vector-combine',
+  VectorCurve : 'vector-curve',
+  VectorDifference : 'vector-difference',
+  VectorDifferenceAb : 'vector-difference-ab',
+  VectorDifferenceBa : 'vector-difference-ba',
+  VectorIntersection : 'vector-intersection',
+  VectorLine : 'vector-line',
+  VectorPoint : 'vector-point',
+  VectorPolygon : 'vector-polygon',
+  VectorPolyline : 'vector-polyline',
+  VectorRectangle : 'vector-rectangle',
+  VectorSelection : 'vector-selection',
+  VectorSquare : 'vector-square',
+  VectorTriangle : 'vector-triangle',
+  VectorUnion : 'vector-union',
+  Verified : 'verified',
+  Vibrate : 'vibrate',
+  Video : 'video',
+  VideoOff : 'video-off',
+  VideoSwitch : 'video-switch',
+  ViewAgenda : 'view-agenda',
+  ViewArray : 'view-array',
+  ViewCarousel : 'view-carousel',
+  ViewColumn : 'view-column',
+  ViewDashboard : 'view-dashboard',
+  ViewDay : 'view-day',
+  ViewGrid : 'view-grid',
+  ViewHeadline : 'view-headline',
+  ViewList : 'view-list',
+  ViewModule : 'view-module',
+  ViewQuilt : 'view-quilt',
+  ViewStream : 'view-stream',
+  ViewWeek : 'view-week',
+  Vimeo : 'vimeo',
+  Vine : 'vine',
+  Violin : 'violin',
+  Visualstudio : 'visualstudio',
+  Vk : 'vk',
+  VkBox : 'vk-box',
+  VkCircle : 'vk-circle',
+  Vlc : 'vlc',
+  Voice : 'voice',
+  Voicemail : 'voicemail',
+  VolumeHigh : 'volume-high',
+  VolumeLow : 'volume-low',
+  VolumeMedium : 'volume-medium',
+  VolumeOff : 'volume-off',
+  Vpn : 'vpn',
+  Walk : 'walk',
+  Wallet : 'wallet',
+  WalletGiftcard : 'wallet-giftcard',
+  WalletMembership : 'wallet-membership',
+  WalletTravel : 'wallet-travel',
+  Wan : 'wan',
+  Watch : 'watch',
+  WatchExport : 'watch-export',
+  WatchImport : 'watch-import',
+  WatchVibrate : 'watch-vibrate',
+  Water : 'water',
+  WaterOff : 'water-off',
+  WaterPercent : 'water-percent',
+  WaterPump : 'water-pump',
+  Watermark : 'watermark',
+  WeatherCloudy : 'weather-cloudy',
+  WeatherFog : 'weather-fog',
+  WeatherHail : 'weather-hail',
+  WeatherLightning : 'weather-lightning',
+  WeatherLightningRainy : 'weather-lightning-rainy',
+  WeatherNight : 'weather-night',
+  WeatherPartlycloudy : 'weather-partlycloudy',
+  WeatherPouring : 'weather-pouring',
+  WeatherRainy : 'weather-rainy',
+  WeatherSnowy : 'weather-snowy',
+  WeatherSnowyRainy : 'weather-snowy-rainy',
+  WeatherSunny : 'weather-sunny',
+  WeatherSunset : 'weather-sunset',
+  WeatherSunsetDown : 'weather-sunset-down',
+  WeatherSunsetUp : 'weather-sunset-up',
+  WeatherWindy : 'weather-windy',
+  WeatherWindyVariant : 'weather-windy-variant',
+  Web : 'web',
+  Webcam : 'webcam',
+  Webhook : 'webhook',
+  Wechat : 'wechat',
+  Weight : 'weight',
+  WeightKilogram : 'weight-kilogram',
+  Whatsapp : 'whatsapp',
+  WheelchairAccessibility : 'wheelchair-accessibility',
+  WhiteBalanceAuto : 'white-balance-auto',
+  WhiteBalanceIncandescent : 'white-balance-incandescent',
+  WhiteBalanceIridescent : 'white-balance-iridescent',
+  WhiteBalanceSunny : 'white-balance-sunny',
+  Wifi : 'wifi',
+  WifiOff : 'wifi-off',
+  Wii : 'wii',
+  Wikipedia : 'wikipedia',
+  WindowClose : 'window-close',
+  WindowClosed : 'window-closed',
+  WindowMaximize : 'window-maximize',
+  WindowMinimize : 'window-minimize',
+  WindowOpen : 'window-open',
+  WindowRestore : 'window-restore',
+  Windows : 'windows',
+  Wordpress : 'wordpress',
+  Worker : 'worker',
+  Wrap : 'wrap',
+  Wrench : 'wrench',
+  Wunderlist : 'wunderlist',
+  Xaml : 'xaml',
+  Xbox : 'xbox',
+  XboxController : 'xbox-controller',
+  XboxControllerOff : 'xbox-controller-off',
+  Xda : 'xda',
+  Xing : 'xing',
+  XingBox : 'xing-box',
+  XingCircle : 'xing-circle',
+  Xml : 'xml',
+  Yeast : 'yeast',
+  Yelp : 'yelp',
+  YinYang : 'yin-yang',
+  YoutubePlay : 'youtube-play',
+  ZipBox : 'zip-box',
 
-  AmericanSignLanguageInterpreting : "american-sign-language-interpreting",
-  AslInterpreting : "asl-interpreting",
-  AssistiveListeningSystems : "assistive-listening-systems",
-  AudioDescription : "audio-description",
-  Blind : "blind",
-  Braille : "braille",
-  Deaf : "deaf",
-  Deafness : "deafness",
-  Envira : "envira",
-  Fa : "fa",
-  FirstOrder : "first-order",
-  FontAwesome : "font-awesome",
-  Gitlab : "gitlab",
-  Glide : "glide",
-  GlideG : "glide-g",
-  GooglePlusCircle : "google-plus-circle",
-  GooglePlusOfficial : "google-plus-official",
-  HardOfHearing : "hard-of-hearing",
-  LowVision : "low-vision",
-  QuestionCircleO : "question-circle-o",
-  SignLanguage : "sign-language",
-  Signing : "signing",
-  Snapchat : "snapchat",
-  SnapchatGhost : "snapchat-ghost",
-  SnapchatSquare : "snapchat-square",
-  Themeisle : "themeisle",
-  UniversalAccess : "universal-access",
-  Viadeo : "viadeo",
-  ViadeoSquare : "viadeo-square",
-  VolumeControlPhone : "volume-control-phone",
-  WheelchairAlt : "wheelchair-alt",
-  Wpbeginner : "wpbeginner",
-  Wpforms : "wpforms",
-  Yoast : "yoast"
+  AmericanSignLanguageInterpreting : 'american-sign-language-interpreting',
+  AslInterpreting : 'asl-interpreting',
+  AssistiveListeningSystems : 'assistive-listening-systems',
+  AudioDescription : 'audio-description',
+  Blind : 'blind',
+  Braille : 'braille',
+  Deaf : 'deaf',
+  Deafness : 'deafness',
+  Envira : 'envira',
+  Fa : 'fa',
+  FirstOrder : 'first-order',
+  FontAwesome : 'font-awesome',
+  Gitlab : 'gitlab',
+  Glide : 'glide',
+  GlideG : 'glide-g',
+  GooglePlusCircle : 'google-plus-circle',
+  GooglePlusOfficial : 'google-plus-official',
+  HardOfHearing : 'hard-of-hearing',
+  LowVision : 'low-vision',
+  QuestionCircleO : 'question-circle-o',
+  SignLanguage : 'sign-language',
+  Signing : 'signing',
+  Snapchat : 'snapchat',
+  SnapchatGhost : 'snapchat-ghost',
+  SnapchatSquare : 'snapchat-square',
+  Themeisle : 'themeisle',
+  UniversalAccess : 'universal-access',
+  Viadeo : 'viadeo',
+  ViadeoSquare : 'viadeo-square',
+  VolumeControlPhone : 'volume-control-phone',
+  WheelchairAlt : 'wheelchair-alt',
+  Wpbeginner : 'wpbeginner',
+  Wpforms : 'wpforms',
+  Yoast : 'yoast'
 
 };
 
@@ -6041,7 +6041,7 @@ tulip.EventType = {
 
 tulip.Event = function tulip_Event(sender, type) {
   var newObject = createObject(tulip.Event, this);
-  if (tulip_Event.caller == null || tulip_Event.caller.name != "createObject") {
+  if (tulip_Event.caller == null || tulip_Event.caller.name != 'createObject') {
     newObject.sender = sender;
     newObject.type = type;
   }
@@ -6089,7 +6089,7 @@ tulip.GraphEventType = {
 
 tulip.GraphEvent = function tulip_GraphEvent(graph, eventType) {
   var newObject = createObject(tulip.GraphEvent, this);
-  if (tulip_GraphEvent.caller == null || tulip_GraphEvent.caller.name != "createObject") {
+  if (tulip_GraphEvent.caller == null || tulip_GraphEvent.caller.name != 'createObject') {
     newObject.graph = graph;
     newObject.eventType = eventType;
     newObject.node = null;
@@ -6160,7 +6160,7 @@ tulip.PropertyEventType = {
 
 tulip.PropertyEvent = function tulip_PropertyEvent(prop, eventType) {
   var newObject = createObject(tulip.PropertyEvent, this);
-  if (tulip_PropertyEvent.caller == null || tulip_PropertyEvent.caller.name != "createObject") {
+  if (tulip_PropertyEvent.caller == null || tulip_PropertyEvent.caller.name != 'createObject') {
     newObject.property = prop;
     newObject.eventType = eventType;
     newObject.node = null;
@@ -6194,7 +6194,7 @@ var tulipListeners = {};
 var tulipObservers = {};
 
 tulip.addListener = function(sender, listener) {
-  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ["function", "object"]], 2);
+  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ['function', 'object']], 2);
   if (!tulipListeners.hasOwnProperty(sender.cppPointer)) {
     tulipListeners[sender.cppPointer] = [];
   }
@@ -6202,7 +6202,7 @@ tulip.addListener = function(sender, listener) {
 };
 
 tulip.removeListener = function(sender, listener) {
-  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ["function", "object"]], 2);
+  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ['function', 'object']], 2);
   if (!tulipListeners.hasOwnProperty(sender.cppPointer)) {
     return;
   }
@@ -6222,7 +6222,7 @@ tulip.hasListener = function(senderId) {
 };
 
 tulip.addObserver = function(sender, observer) {
-  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ["function", "object"]], 2);
+  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ['function', 'object']], 2);
   if (!tulipObservers.hasOwnProperty(sender.cppPointer)) {
     tulipObservers[sender.cppPointer] = [];
   }
@@ -6230,7 +6230,7 @@ tulip.addObserver = function(sender, observer) {
 };
 
 tulip.removeObserver = function(sender, observer) {
-  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ["function", "object"]], 2);
+  checkArgumentsTypes(arguments, [[tulip.Graph, tulip.PropertyInterface], ['function', 'object']], 2);
   if (!tulipObservers.hasOwnProperty(sender.cppPointer)) {
     return;
   }
@@ -6254,9 +6254,9 @@ tulip.sendEventToListeners = function(senderId, event) {
     return;
   }
   for (var i = 0, len = tulipListeners[senderId].length ; i < len ; i++) {
-    if (typeOf(tulipListeners[senderId][i]) == "function") {
+    if (typeOf(tulipListeners[senderId][i]) == 'function') {
       tulipListeners[senderId][i](event);
-    } else if (typeOf(tulipListeners[senderId][i]) == "object" && typeOf(tulipListeners[senderId][i].treatEvent) == "function") {
+    } else if (typeOf(tulipListeners[senderId][i]) == 'object' && typeOf(tulipListeners[senderId][i].treatEvent) == 'function') {
       tulipListeners[senderId][i].treatEvent(event);
     }
   }
@@ -6295,9 +6295,9 @@ tulip.sendEventsToObservers = function(events) {
 
   for (var observerIdx in observerEvents) {
     var observer = observers[parseInt(observerIdx)];
-    if (typeOf(observer) == "function") {
+    if (typeOf(observer) == 'function') {
       observer(observerEvents[observerIdx]);
-    } else if (typeOf(observer) == "object" && typeOf(observer.treatEvents) == "function") {
+    } else if (typeOf(observer) == 'object' && typeOf(observer.treatEvents) == 'function') {
       observer.treatEvents(observerEvents[observerIdx]);
     }
   }
@@ -6354,30 +6354,30 @@ if (workerMode) {
   var graphs = {};
 
   var sendGraphToMainThread = function(graph, graphHierarchyId, graphId, algoSucceed) {
-     var graphFilePath = "/";
-     var graphFileName = "graph.tlpb.gz";
-     var graphFileCompletePath = graphFilePath + graphFileName;
-     var file = FS.findObject(graphFileCompletePath);
-     if (!file) {
-       FS.createFile(graphFilePath, graphFileName, {}, true, true);
-     }
-     var saved = tulip.saveGraph(graph, graphFileCompletePath);
-     var graphFileData = FS.readFile(graphFileCompletePath);
-     FS.unlink(graphFileCompletePath);
-     graph.destroy();
-     delete graphs[graphHierarchyId];
+    var graphFilePath = '/';
+    var graphFileName = 'graph.tlpb.gz';
+    var graphFileCompletePath = graphFilePath + graphFileName;
+    var file = FS.findObject(graphFileCompletePath);
+    if (!file) {
+      FS.createFile(graphFilePath, graphFileName, {}, true, true);
+    }
+    var saved = tulip.saveGraph(graph, graphFileCompletePath);
+    var graphFileData = FS.readFile(graphFileCompletePath);
+    FS.unlink(graphFileCompletePath);
+    graph.destroy();
+    delete graphs[graphHierarchyId];
 
-     var messageData = {
-       eventType: 'loadGraph',
-       graphHierarchyId: graphHierarchyId,
-       graphId: graphId,
-       graphFile: graphFileCompletePath,
-       graphFileData : graphFileData.buffer,
-       algoSucceed : algoSucceed
-     };
+    var messageData = {
+      eventType: 'loadGraph',
+      graphHierarchyId: graphHierarchyId,
+      graphId: graphId,
+      graphFile: graphFileCompletePath,
+      graphFileData : graphFileData.buffer,
+      algoSucceed : algoSucceed
+    };
 
-     self.postMessage(messageData, [messageData.graphFileData]);
-   };
+    self.postMessage(messageData, [messageData.graphFileData]);
+  };
 
   function loadGraph(graphHierarchyId, graphFilePath, sendData) {
     _setPluginProgressGraphId(graphHierarchyId);
@@ -6393,17 +6393,17 @@ if (workerMode) {
     case 'loadGraph':
       if (!data.graphFileData) {
         var graphReq = new XMLHttpRequest();
-        graphReq.open("GET", data.graphFile, true);
-        graphReq.responseType = "arraybuffer";
+        graphReq.open('GET', data.graphFile, true);
+        graphReq.responseType = 'arraybuffer';
         graphReq.onload = function (oEvent) {
           var arrayBuffer = graphReq.response;
           var file = FS.findObject(data.graphFile);
           if (!file) {
             var paths = data.graphFile.split('/');
-            var filePath = "/";
+            var filePath = '/';
             for (var i = 0; i < paths.length - 1; ++i) {
               filePath += paths[i];
-              filePath += "/";
+              filePath += '/';
             }
             FS.createPath('/', filePath, true, true);
             FS.createFile('/', data.graphFile, {}, true, true);
@@ -6421,10 +6421,10 @@ if (workerMode) {
         var file = FS.findObject('/' + data.graphFile);
         if (!file) {
           var paths = data.graphFile.split('/');
-          var filePath = "/";
+          var filePath = '/';
           for (var i = 0; i < paths.length - 1; ++i) {
             filePath += paths[i];
-            filePath += "/";
+            filePath += '/';
           }
           FS.createPath('/', filePath, true, true);
           FS.createFile('/', data.graphFile, {}, true, true);
@@ -6466,15 +6466,15 @@ if (workerMode) {
       }
       var scriptSucceed = true;
       try {
-        eval("f = " + data.scriptCode + "; f(graph, data.graphHierarchyId, " + JSON.stringify(data.scriptParameters) + " );");
+        eval('f = ' + data.scriptCode + '; f(graph, data.graphHierarchyId, ' + JSON.stringify(data.scriptParameters) + ' );');
       } catch (e) {
-        console.log("exception caught");
+        console.log('exception caught');
         console.log(e);
         scriptSucceed = false;
       }
       sendGraphToMainThread(graph.getRoot(), data.graphHierarchyId, data.graphId, scriptSucceed);
       break;
-    };
+    }
   }, false);
 
   tulip.sendProgressValue = function(graphHierarchyId, val) {
@@ -6483,7 +6483,7 @@ if (workerMode) {
 
   tulip.sendProgressComment = function(graphHierarchyId, text) {
     self.postMessage({eventType: 'progressComment', graphHierarchyId : graphHierarchyId, comment: text});
-  }
+  };
 
 } else {
 
@@ -6532,109 +6532,109 @@ if (workerMode) {
 
     function createTulipWebWorker() {
 
-        var tulipWorkerInit = false;
+      var tulipWorkerInit = false;
 
-        var tulipWorker = new Worker(tulip.modulePrefixURL + scriptName);
+      var tulipWorker = new Worker(tulip.modulePrefixURL + scriptName);
 
-        tulipWorker.addEventListener('message', function (event) {
-          var delay = 0;
-          var view = null;
-          var graphHierarchyId = null;
-          var graphId = null;
-          var graph = null;
-          if ('graphHierarchyId' in event.data) {
-            graphHierarchyId = event.data.graphHierarchyId;
-            graphId = event.data.graphId;
-            graph = graphHierarchyIdToWrapper[graphHierarchyId];
-          }
-          if (tulip.vizFeatures && graphHierarchyId) {
-            view = graphHierarchyIdToView[graphHierarchyId];
-          }
-          switch (event.data.eventType) {
-            case 'tulipWorkerInit':
-              tulipWorkerInit = true;
-              break;
-            case 'print':
-              console.log(event.data.text);
-              break;
-            case 'progressValue':
-              if (tulip.vizFeatures && view) {
-                view.stopBusyAnimation();
-                view.setProgressBarPercent(event.data.value);
-                if (event.data.value >= 0) {
-                  view.draw();
-                } else {
-                  view.startBusyAnimation();
-                }
-              }
-              break;
-            case 'progressComment':
-              if (tulip.vizFeatures && view) {
-                view.setProgressBarComment(event.data.comment);
-                view.draw();
-              }
-              break;
-            case 'loadGraph':
-              var file = FS.findObject(event.data.graphFile);
-              if (!file) {
-                var paths = event.data.graphFile.split('/');
-                var filePath = "/";
-                for (var i = 0; i < paths.length - 1; ++i) {
-                  filePath += paths[i];
-                  filePath += "/";
-                }
-                FS.createPath('/', filePath, true, true);
-                FS.createFile('/', event.data.graphFile, {}, true, true);
-              }
-              FS.writeFile('/' + event.data.graphFile, new Uint8Array(event.data.graphFileData), {'encoding' : 'binary'});
-              _Graph_loadFromTLPBFile(graph.cppPointer, event.data.graphFile);
-              FS.unlink(event.data.graphFile);
-              if (tulip.vizFeatures && view) {
-                view.stopBusyAnimation();
-                view.setGraphRenderingDataReady(true);
-                view.centerScene();
-                view.draw();
-              }
-              if (graphHierarchyId in graphLoadedCallbacks) {
-                graphLoadedCallbacks[graphHierarchyId](graph);
-                delete graphLoadedCallbacks[graphHierarchyId];
-              }
-              if (graphHierarchyId in algorithmFinishedCallbacks) {
-                var g = graph;
-                if (graphId != 0) {
-                  g = graph.getDescendantGraph(graphId);
-                }
-                algorithmFinishedCallbacks[graphHierarchyId](g, event.data.algoSucceed);
-                delete algorithmFinishedCallbacks[graphHierarchyId];
-              }
-              tulipWorker.terminate();
-              tulipWorker = null;
-              break;
-          };
-        }, false);
-
-        return new Promise(function(resolve, reject) {
-          function checkWorkerInit() {
-            if (tulipWorkerInit) {
-              resolve(tulipWorker);
+      tulipWorker.addEventListener('message', function (event) {
+        var delay = 0;
+        var view = null;
+        var graphHierarchyId = null;
+        var graphId = null;
+        var graph = null;
+        if ('graphHierarchyId' in event.data) {
+          graphHierarchyId = event.data.graphHierarchyId;
+          graphId = event.data.graphId;
+          graph = graphHierarchyIdToWrapper[graphHierarchyId];
+        }
+        if (tulip.vizFeatures && graphHierarchyId) {
+          view = graphHierarchyIdToView[graphHierarchyId];
+        }
+        switch (event.data.eventType) {
+        case 'tulipWorkerInit':
+          tulipWorkerInit = true;
+          break;
+        case 'print':
+          console.log(event.data.text);
+          break;
+        case 'progressValue':
+          if (tulip.vizFeatures && view) {
+            view.stopBusyAnimation();
+            view.setProgressBarPercent(event.data.value);
+            if (event.data.value >= 0) {
+              view.draw();
             } else {
-              setTimeout(checkWorkerInit);
+              view.startBusyAnimation();
             }
           }
-          checkWorkerInit();
-        });
+          break;
+        case 'progressComment':
+          if (tulip.vizFeatures && view) {
+            view.setProgressBarComment(event.data.comment);
+            view.draw();
+          }
+          break;
+        case 'loadGraph':
+          var file = FS.findObject(event.data.graphFile);
+          if (!file) {
+            var paths = event.data.graphFile.split('/');
+            var filePath = '/';
+            for (var i = 0; i < paths.length - 1; ++i) {
+              filePath += paths[i];
+              filePath += '/';
+            }
+            FS.createPath('/', filePath, true, true);
+            FS.createFile('/', event.data.graphFile, {}, true, true);
+          }
+          FS.writeFile('/' + event.data.graphFile, new Uint8Array(event.data.graphFileData), {'encoding' : 'binary'});
+          _Graph_loadFromTLPBFile(graph.cppPointer, event.data.graphFile);
+          FS.unlink(event.data.graphFile);
+          if (tulip.vizFeatures && view) {
+            view.stopBusyAnimation();
+            view.setGraphRenderingDataReady(true);
+            view.centerScene();
+            view.draw();
+          }
+          if (graphHierarchyId in graphLoadedCallbacks) {
+            graphLoadedCallbacks[graphHierarchyId](graph);
+            delete graphLoadedCallbacks[graphHierarchyId];
+          }
+          if (graphHierarchyId in algorithmFinishedCallbacks) {
+            var g = graph;
+            if (graphId != 0) {
+              g = graph.getDescendantGraph(graphId);
+            }
+            algorithmFinishedCallbacks[graphHierarchyId](g, event.data.algoSucceed);
+            delete algorithmFinishedCallbacks[graphHierarchyId];
+          }
+          tulipWorker.terminate();
+          tulipWorker = null;
+          break;
+        }
+      }, false);
+
+      return new Promise(function(resolve, reject) {
+        function checkWorkerInit() {
+          if (tulipWorkerInit) {
+            resolve(tulipWorker);
+          } else {
+            setTimeout(checkWorkerInit);
+          }
+        }
+        checkWorkerInit();
+      });
     }
 
     function sendGraphToWorker(graph, graphFilePath, graphFileData, sendDataBack) {
       if (arguments.length == 1) {
-        var file = FS.findObject("/graph.tlpb.gz");
+        var file = FS.findObject('/graph.tlpb.gz');
         if (!file) {
-          FS.createFile('/', "graph.tlpb.gz", {}, true, true);
+          FS.createFile('/', 'graph.tlpb.gz', {}, true, true);
         }
-        var saved = tulip.saveGraph(graph, "/graph.tlpb.gz");
-        var graphData = FS.readFile("/graph.tlpb.gz");
-        FS.unlink("/graph.tlpb.gz");
-        return sendGraphToWorker(graph, "graph.tlpb.gz", graphData.buffer, false);
+        var saved = tulip.saveGraph(graph, '/graph.tlpb.gz');
+        var graphData = FS.readFile('/graph.tlpb.gz');
+        FS.unlink('/graph.tlpb.gz');
+        return sendGraphToWorker(graph, 'graph.tlpb.gz', graphData.buffer, false);
       } else {
         var messageData = {
           eventType: 'loadGraph',
@@ -6687,7 +6687,7 @@ if (workerMode) {
         view.canvasOverlayDiv.style.height = view.canvas.height + 'px';
       }
 
-      view.canvasOverlayDiv.style.display = "none";
+      view.canvasOverlayDiv.style.display = 'none';
       view.container.appendChild(view.canvasOverlayDiv);
 
       view.progress = document.createElement('progress');
@@ -6733,7 +6733,7 @@ if (workerMode) {
           var currentId = nextCanvasId++;
 
           newObject.canvasId = 'tulip-canvas-' + currentId;
-          newObject.canvas = document.createElement("canvas");
+          newObject.canvas = document.createElement('canvas');
           newObject.canvas.style.outline = 'none';
           newObject.canvas.style.position = 'absolute';
           newObject.canvas.style.top = '0';
@@ -6753,7 +6753,7 @@ if (workerMode) {
         } else if (newObject.container.tagName == 'CANVAS') {
           newObject.canvas = newObject.container;
           newObject.container = null;
-          if (newObject.canvas.id != "") {
+          if (newObject.canvas.id != '') {
             newObject.canvasId = newObject.canvas.id;
           } else {
             newObject.canvas.id = 'tulip-canvas-' + nextCanvasId++;
@@ -6781,21 +6781,21 @@ if (workerMode) {
 
     tulip.View.prototype.makeCurrent = function() {
       _setCurrentCanvas(this.canvasId);
-    }
+    };
 
     tulip.View.prototype.updateGlScene = function() {
       _updateGlScene(this.canvasId);
-    }
+    };
 
     tulip.View.prototype.setBackgroundColor = function(color) {
       checkArgumentsTypes(arguments, [tulip.Color]);
       _setViewBackgroundColor(this.canvasId, color.r, color.g, color.b, color.a);
-    }
+    };
 
     tulip.View.prototype.setBackupBackBuffer = function(backup) {
-      checkArgumentsTypes(arguments, ["boolean"]);
+      checkArgumentsTypes(arguments, ['boolean']);
       _setViewBackupBackBuffer(this.canvasId, backup);
-    }
+    };
 
     tulip.View.prototype.draw = function() {
       if (this.sizeRelativeToContainer && !this.fullScreenActivated) {
@@ -6810,14 +6810,14 @@ if (workerMode) {
 
     tulip.View.prototype.setProgressBarComment = function(comment) {
       if (this.canvasOverlayDiv) {
-        this.canvasOverlayDiv.style.display = "";
+        this.canvasOverlayDiv.style.display = '';
         this.progressComment.innerHTML = comment;
       }
     };
 
     tulip.View.prototype.setProgressBarPercent = function(percent) {
       if (this.canvasOverlayDiv) {
-        this.canvasOverlayDiv.style.display = "";
+        this.canvasOverlayDiv.style.display = '';
         this.progress.value = percent;
       }
     };
@@ -6828,7 +6828,7 @@ if (workerMode) {
       }
 
       if (this.canvasOverlayDiv) {
-        this.canvasOverlayDiv.style.display = "";
+        this.canvasOverlayDiv.style.display = '';
         this.progress.removeAttribute('value');
         this.busyAnimationStarted = true;
       }
@@ -6836,7 +6836,7 @@ if (workerMode) {
 
     tulip.View.prototype.stopBusyAnimation = function(canvasId) {
       this.busyAnimationStarted = false;
-      this.canvasOverlayDiv.style.display = "none";
+      this.canvasOverlayDiv.style.display = 'none';
     };
 
     tulip.View.prototype.activateInteractor = function(interactorName) {
@@ -6893,8 +6893,8 @@ if (workerMode) {
 
       var view = this;
       var graphReq = new XMLHttpRequest();
-      graphReq.open("GET", graphFilePath, true);
-      graphReq.responseType = "arraybuffer";
+      graphReq.open('GET', graphFilePath, true);
+      graphReq.responseType = 'arraybuffer';
       graphReq.onload = function (oEvent) {
         var arrayBuffer = graphReq.response;
         var paths = graphFilePath.split('/');
@@ -6903,10 +6903,10 @@ if (workerMode) {
         } else {
           var file = FS.findObject(graphFilePath);
           if (!file) {
-            var filePath = "/";
+            var filePath = '/';
             for (var i = 0; i < paths.length - 1; ++i) {
               filePath += paths[i];
-              filePath += "/";
+              filePath += '/';
             }
             FS.createPath('/', filePath, true, true);
             FS.createFile('/', graphFilePath, {}, true, true);
@@ -6937,10 +6937,10 @@ if (workerMode) {
         var file = FS.findObject(graphFilePath);
         if (!file) {
           var paths = graphFilePath.split('/');
-          var filePath = "/";
+          var filePath = '/';
           for (var i = 0; i < paths.length - 1; ++i) {
             filePath += paths[i];
-            filePath += "/";
+            filePath += '/';
           }
           FS.createPath('/', filePath, true, true);
           FS.createFile('/', graphFilePath, {}, true, true);
@@ -6957,7 +6957,7 @@ if (workerMode) {
 
     tulip.View.prototype.setGraphRenderingDataReady = function(ready) {
       _setGraphRenderingDataReady(this.canvasId, ready);
-      this.canvasOverlayDiv.style.display = ready ? "none" : "";
+      this.canvasOverlayDiv.style.display = ready ? 'none' : '';
     };
 
     tulip.View.prototype.selectNodesEdges = function(x, y, w, h) {
@@ -6971,11 +6971,11 @@ if (workerMode) {
       var selectedEdges = [];
 
       if (nbNodes > 0) {
-        selectedNodes = getArrayOfTulipType(nbNodes, function(byteOffset) {_getSelectedNodes(byteOffset)}, tulip.Node);
+        selectedNodes = getArrayOfTulipType(nbNodes, function(byteOffset) {_getSelectedNodes(byteOffset);}, tulip.Node);
       }
 
       if (nbEdges > 0) {
-        selectedEdges = getArrayOfTulipType(nbEdges, function(byteOffset) {_getSelectedEdges(byteOffset)}, tulip.Edge);
+        selectedEdges = getArrayOfTulipType(nbEdges, function(byteOffset) {_getSelectedEdges(byteOffset);}, tulip.Edge);
       }
 
       return {nodes: selectedNodes, edges: selectedEdges};
@@ -7012,7 +7012,7 @@ if (workerMode) {
       _clearGraphsHulls(this.canvasId);
       var view = this;
       var subgraphs = this.graph.getSubGraphs();
-      if (typeOf(subgraphsList) == "array") {
+      if (typeOf(subgraphsList) == 'array') {
         subgraphs = subgraphsList;
       }
       subgraphs.forEach(function(sg) {
@@ -7022,7 +7022,7 @@ if (workerMode) {
               return function() {
                 view.addGraphHull(g);
                 view.draw();
-              }
+              };
             }(sg)
           );
         }
@@ -7102,13 +7102,13 @@ if (workerMode) {
 
     tulip.GlGraphRenderingParameters = function tulip_GlGraphRenderingParameters(cppPointer) {
       var newObject = createObject(tulip.GlGraphRenderingParameters, this);
-      tulip.CppObjectWrapper.call(newObject, cppPointer, "GlGraphRenderingParameters");
+      tulip.CppObjectWrapper.call(newObject, cppPointer, 'GlGraphRenderingParameters');
       return newObject;
     };
     tulip.GlGraphRenderingParameters.inheritsFrom(tulip.CppObjectWrapper);
 
     tulip.GlGraphRenderingParameters.prototype.setDisplayNodes = function tulip_GlGraphRenderingParameters_prototype_setDisplayNodes(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setDisplayNodes(this.cppPointer, state);
     };
 
@@ -7117,7 +7117,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setBillboardedNodes = function tulip_GlGraphRenderingParameters_prototype_setBillboardedNodes(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setBillboardedNodes(this.cppPointer, state);
     };
 
@@ -7126,7 +7126,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setDisplayNodesLabels = function tulip_GlGraphRenderingParameters_prototype_setDisplayNodesLabels(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setDisplayNodesLabels(this.cppPointer, state);
     };
 
@@ -7135,7 +7135,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setLabelsScaled = function tulip_GlGraphRenderingParameters_prototype_setLabelsScaled(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setLabelsScaled(this.cppPointer, state);
     };
 
@@ -7144,7 +7144,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setDisplayEdges = function tulip_GlGraphRenderingParameters_prototype_setDisplayEdges(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setDisplayEdges(this.cppPointer, state);
     };
 
@@ -7153,7 +7153,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setInterpolateEdgesColors = function tulip_GlGraphRenderingParameters_prototype_setInterpolateEdgesColors(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setInterpolateEdgesColors(this.cppPointer, state);
     };
 
@@ -7162,7 +7162,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setInterpolateEdgesSizes = function tulip_GlGraphRenderingParameters_prototype_setInterpolateEdgesSizes(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setInterpolateEdgesSizes(this.cppPointer, state);
     };
 
@@ -7171,7 +7171,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setDisplayEdgesExtremities = function tulip_GlGraphRenderingParameters_prototype_setDisplayEdgesExtremities(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setDisplayEdgesExtremities(this.cppPointer, state);
     };
 
@@ -7180,7 +7180,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setEdges3D = function tulip_GlGraphRenderingParameters_prototype_setEdges3D(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setEdges3D(this.cppPointer, state);
     };
 
@@ -7189,7 +7189,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setMinSizeOfLabels = function tulip_GlGraphRenderingParameters_prototype_setMinSizeOfLabels(minSize) {
-      checkArgumentsTypes(arguments, ["number"], 1);
+      checkArgumentsTypes(arguments, ['number'], 1);
       _GlGraphRenderingParameters_setMinSizeOfLabels(this.cppPointer, minSize);
     };
 
@@ -7198,7 +7198,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setMaxSizeOfLabels = function tulip_GlGraphRenderingParameters_prototype_setMaxSizeOfLabels(maxSize) {
-      checkArgumentsTypes(arguments, ["number"], 1);
+      checkArgumentsTypes(arguments, ['number'], 1);
       _GlGraphRenderingParameters_setMaxSizeOfLabels(this.cppPointer, maxSize);
     };
 
@@ -7207,22 +7207,22 @@ if (workerMode) {
     };
 
     tulip.GlGraphRenderingParameters.prototype.setElementsOrdered = function tulip_GlGraphRenderingParameters_prototype_setElementsOrdered(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setElementsOrdered(this.cppPointer, state);
     };
 
     tulip.GlGraphRenderingParameters.prototype.elementsOrdered = function tulip_GlGraphRenderingParameters_prototype_elementsOrdered() {
       return _GlGraphRenderingParameters_elementsOrdered(this.cppPointer) > 0;
-    }
+    };
 
     tulip.GlGraphRenderingParameters.prototype.setElementsOrderedDescending = function tulip_GlGraphRenderingParameters_prototype_setElementsOrderedDescending(state) {
-      checkArgumentsTypes(arguments, ["boolean"], 1);
+      checkArgumentsTypes(arguments, ['boolean'], 1);
       _GlGraphRenderingParameters_setElementOrderedDescending(this.cppPointer, state);
     };
 
     tulip.GlGraphRenderingParameters.prototype.elementsOrderedDescending = function tulip_GlGraphRenderingParameters_prototype_elementsOrderedDescending() {
       return _GlGraphRenderingParameters_elementsOrderedDescending(this.cppPointer) > 0;
-    }
+    };
 
     tulip.GlGraphRenderingParameters.prototype.setElementsOrderingProperty = function tulip_GlGraphRenderingParameters_prototype_setElementsOrderingProperty(prop) {
       if (!prop) {
@@ -7281,7 +7281,7 @@ if (workerMode) {
 
     tulip.GlGraphInputData = function tulip_GlGraphInputData(cppPointer) {
       var newObject = createObject(tulip.GlGraphInputData, this);
-      tulip.CppObjectWrapper.call(newObject, cppPointer, "GlGraphInputData");
+      tulip.CppObjectWrapper.call(newObject, cppPointer, 'GlGraphInputData');
       return newObject;
     };
     tulip.GlGraphInputData.inheritsFrom(tulip.CppObjectWrapper);
@@ -7476,7 +7476,7 @@ if (workerMode) {
     };
 
     tulip.GlGraphInputData.prototype.reloadGraphProperties = function tulip_GlGraphInputData_prototype_reloadGraphProperties(reset) {
-      checkArgumentsTypes(arguments, ["boolean"], 0);
+      checkArgumentsTypes(arguments, ['boolean'], 0);
       _GlGraphInputData_reloadGraphProperties(this.cppPointer, reset);
     };
 
@@ -7490,7 +7490,7 @@ if (workerMode) {
 
     tulip.Camera = function tulip_Camera(cppPointer) {
       var newObject = createObject(tulip.Camera, this);
-      tulip.CppObjectWrapper.call(newObject, cppPointer, "Camera");
+      tulip.CppObjectWrapper.call(newObject, cppPointer, 'Camera');
       return newObject;
     };
     tulip.Camera.inheritsFrom(tulip.CppObjectWrapper);
@@ -7512,8 +7512,8 @@ if (workerMode) {
     };
 
     tulip.Camera.prototype.setModelViewMatrix = function tulip_Camera_prototype_setModelViewMatrix(mdvMat) {
-      checkArgumentsTypes(arguments, ["array"]);
-      checkArrayOfType(mdvMat, "number", 0);
+      checkArgumentsTypes(arguments, ['array']);
+      checkArrayOfType(mdvMat, 'number', 0);
       if (mdvMat.length == 16) {
         var floatBuffer = allocArrayInEmHeap(Float32Array, 16);
         floatBuffer.set(mdvMat);
@@ -7531,8 +7531,8 @@ if (workerMode) {
     };
 
     tulip.Camera.prototype.setProjectionMatrix = function tulip_Camera_prototype_setProjectionMatrix(projMat) {
-      checkArgumentsTypes(arguments, ["array"]);
-      checkArrayOfType(projMat, "number", 0);
+      checkArgumentsTypes(arguments, ['array']);
+      checkArrayOfType(projMat, 'number', 0);
       if (projMat.length == 16) {
         var floatBuffer = allocArrayInEmHeap(Float32Array, 16);
         floatBuffer.set(projMat);
@@ -7544,9 +7544,9 @@ if (workerMode) {
     // ==================================================================================================
 
     tulip.Graph.prototype.getTlpFileBlob = function(gzip) {
-      var filename = "/graph.tlp";
+      var filename = '/graph.tlp';
       if (gzip) {
-        filename += ".gz";
+        filename += '.gz';
       }
       tulip.saveGraph(this, filename);
       var graphData = FS.readFile(filename);
@@ -7561,13 +7561,13 @@ if (workerMode) {
 
   tulip.isLoaded = function() {
     return tulip.mainCalled;
-  }
+  };
 
   if (!nodejs) {
 
     tulip.Graph.prototype.applyAlgorithmInWorker = function(algorithmName, algoParameters, algoFinishedCallback) {
       if (!tulip.algorithmExists(algorithmName)) {
-        console.log("Error : no Tulip algorithm named '" + algorithmName + "'");
+        console.log('Error : no Tulip algorithm named \'' + algorithmName + '\'');
         return;
       }
       if (algoParameters === undefined) {
@@ -7578,7 +7578,7 @@ if (workerMode) {
         var view = graphHierarchyIdToView[graphHierarchyId];
         view.setGraphRenderingDataReady(false);
         view.startBusyAnimation();
-        view.setProgressBarComment("Applying " + algorithmName + " algorithm ...");
+        view.setProgressBarComment('Applying ' + algorithmName + ' algorithm ...');
       }
       var graph = this;
       sendGraphToWorker(this.getRoot()).then(function(tulipWorker) {
@@ -7618,44 +7618,44 @@ if (workerMode) {
           var view = graphHierarchyIdToView[graphHierarchyId];
           view.setGraphRenderingDataReady(false);
           view.startBusyAnimation();
-          view.setProgressBarComment("Applying " + algorithmName + " " + resultProperty.getTypename() + " algorithm ...");
+          view.setProgressBarComment('Applying ' + algorithmName + ' ' + resultProperty.getTypename() + ' algorithm ...');
         }
       });
     }
 
     tulip.Graph.prototype.applyDoubleAlgorithmInWorker = function(algorithmName, resultProperty, algoParameters, algoFinishedCallback) {
       if (!tulip.doubleAlgorithmExists(algorithmName)) {
-        console.log("Error : no Tulip double algorithm named '" + algorithmName + "'");
+        console.log('Error : no Tulip double algorithm named \'' + algorithmName + '\'');
         return;
       }
       if (resultProperty instanceof tulip.DoubleProperty) {
         applyPropertyAlgorithmInWorker(this, algorithmName, resultProperty, algoParameters, algoFinishedCallback);
       } else {
-        console.log("Error : Second parameter of tulip.Graph.applyDoubleAlgorithm method must be an instance of tulip.DoubleProperty type.");
+        console.log('Error : Second parameter of tulip.Graph.applyDoubleAlgorithm method must be an instance of tulip.DoubleProperty type.');
       }
     };
 
     tulip.Graph.prototype.applyLayoutAlgorithmInWorker = function(algorithmName, resultProperty, algoParameters, algoFinishedCallback) {
       if (!tulip.layoutAlgorithmExists(algorithmName)) {
-        console.log("Error : no Tulip layout algorithm named '" + algorithmName + "'");
+        console.log('Error : no Tulip layout algorithm named \'' + algorithmName + '\'');
         return;
       }
       if (resultProperty instanceof tulip.LayoutProperty) {
         applyPropertyAlgorithmInWorker(this, algorithmName, resultProperty, algoParameters, algoFinishedCallback);
       } else {
-        console.log("Error : Second parameter of tulip.Graph.applyLayoutAlgorithm method must be an instance of tulip.LayoutProperty type.");
+        console.log('Error : Second parameter of tulip.Graph.applyLayoutAlgorithm method must be an instance of tulip.LayoutProperty type.');
       }
     };
 
     tulip.Graph.prototype.applySizeAlgorithmInWorker = function(algorithmName, resultProperty, algoParameters, algoFinishedCallback) {
       if (!tulip.sizeAlgorithmExists(algorithmName)) {
-        console.log("Error : no Tulip size algorithm named '" + algorithmName + "'");
+        console.log('Error : no Tulip size algorithm named \'' + algorithmName + '\'');
         return;
       }
       if (resultProperty instanceof tulip.SizeProperty) {
         applyPropertyAlgorithmInWorker(this, algorithmName, resultProperty, algoParameters, algoFinishedCallback);
       } else {
-        console.log("Error : Second parameter of tulip.Graph.applySizeAlgorithm method must be an instance of tulip.SizeProperty type.");
+        console.log('Error : Second parameter of tulip.Graph.applySizeAlgorithm method must be an instance of tulip.SizeProperty type.');
       }
     };
 
@@ -7670,15 +7670,15 @@ if (workerMode) {
           var view = graphHierarchyIdToView[graphHierarchyId];
           view.setGraphRenderingDataReady(false);
           view.startBusyAnimation();
-          view.setProgressBarComment("Executing script on graph ...");
+          view.setProgressBarComment('Executing script on graph ...');
         }
         tulipWorker.postMessage({
-                                   graphHierarchyId: graphHierarchyId,
-                                   graphId : graph.getId(),
-                                   eventType: 'executeGraphScript',
-                                   scriptCode: graphFunction.toString(),
-                                   scriptParameters: scriptParameters
-                                 });
+          graphHierarchyId: graphHierarchyId,
+          graphId : graph.getId(),
+          eventType: 'executeGraphScript',
+          scriptCode: graphFunction.toString(),
+          scriptParameters: scriptParameters
+        });
       });
     };
 

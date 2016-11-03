@@ -45,5 +45,5 @@ if (nodejs) {
     FS.mkdir('root');
     FS.mount(NODEFS, { root: process.cwd() }, 'root');
     FS.chdir('root');
-  }
+  };
 }

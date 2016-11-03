@@ -26,7 +26,7 @@
  */
 
 var workerMode = typeof importScripts === 'function';
-var nodejs = typeof process == "object";
+var nodejs = typeof process == 'object';
 
 function getScriptName() {
 
@@ -80,8 +80,8 @@ function getScriptPath() {
   }
 
   var origin = location.origin;
-  if (location.protocol == "file:") {
-    origin = "file://";
+  if (location.protocol == 'file:') {
+    origin = 'file://';
   }
 
   var scriptPath
@@ -98,7 +98,7 @@ function getScriptPath() {
     else if((source = currentStackFrameRegex.exec(error.stack.trim())))
       scriptPath = source[1];
 
-    if (location.protocol == "file:") {
+    if (location.protocol == 'file:') {
       var scriptPathTokens = scriptPath.split('/');
       var pathnameTokens = location.pathname.split('/');
       for (var i = 0 ; i < scriptPathTokens.length ; ++i) {
@@ -108,7 +108,7 @@ function getScriptPath() {
       }
       scriptPath = '';
       for (var j = i ; j < scriptPathTokens.length ; ++j) {
-        if (scriptPathTokens[j] == "") {
+        if (scriptPathTokens[j] == '') {
           break;
         }
         scriptPath += (scriptPathTokens[j] + '/');

@@ -38,9 +38,9 @@ var LibraryTulipUtils = {
       var width;
       var height;
       var tulipView = tulip.getViewForCanvasId(TulipUtils.fullScreenCanvasId);
-      if (document["fullScreen"] || document["mozFullScreen"] || document["webkitIsFullScreen"]) {
-        width = screen["width"];
-        height = screen["height"];
+      if (document['fullScreen'] || document['mozFullScreen'] || document['webkitIsFullScreen']) {
+        width = screen['width'];
+        height = screen['height'];
         tulipView.fullScreenActivated = true;
       } else {
         width = TulipUtils.canvasFSOldWidth;
@@ -115,7 +115,7 @@ var LibraryTulipUtils = {
   },
 
   canXhrOnUrl : function(url) {
-    if (window.location.protocol == "http:") {
+    if (window.location.protocol == 'http:') {
       return true;
     }
     var fileOk = true;
@@ -139,15 +139,15 @@ var LibraryTulipUtils = {
   loadImageFromUrl: function(url, imageLoadedCallback, errorCallback) {
 
     if (!TulipUtils.textureCanvas) {
-      TulipUtils.textureCanvas = document.createElement("canvas");
+      TulipUtils.textureCanvas = document.createElement('canvas');
     }
 
     var img = new Image,
-        canvas = TulipUtils.textureCanvas,
-        ctx = canvas.getContext("2d"),
-        src = Pointer_stringify(url);
+      canvas = TulipUtils.textureCanvas,
+      ctx = canvas.getContext('2d'),
+      src = Pointer_stringify(url);
 
-    img.crossOrigin = "anonymous";
+    img.crossOrigin = 'anonymous';
 
     img.onload = function() {
       canvas.width = img.width;
@@ -163,13 +163,13 @@ var LibraryTulipUtils = {
       imageDataHeap.set(imageData.data);
       Runtime.dynCall('viiii', imageLoadedCallback, [url, imageDataHeap.byteOffset, img.width, img.height]);
       Module._free(imageDataHeap.byteOffset);
-    }
+    };
     img.onerror = function() {
       Runtime.dynCall('viii', errorCallback, [0, url, 0]);
     };
     img.src = src;
     if (img.complete || img.complete === undefined) {
-      img.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+      img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
       img.src = src;
     }
   },
