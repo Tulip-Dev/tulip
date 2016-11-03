@@ -420,7 +420,7 @@ void FindReplaceDialog::doReplaceAll() {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
     int startIndex = _editor->textCursor().positionInBlock();
 #else
-    int startIndex = editor->textCursor().position() - editor->textCursor().block().position();
+    int startIndex = _editor->textCursor().position() - _editor->textCursor().block().position();
 #endif
     int nbReplacements = 0;
 
@@ -432,7 +432,7 @@ void FindReplaceDialog::doReplaceAll() {
 #if (QT_VERSION >= QT_VERSION_CHECK(4, 7, 0))
       int index = _editor->textCursor().positionInBlock();
 #else
-      int index = editor->textCursor().position() - editor->textCursor().block().position();
+      int index = _editor->textCursor().position() - _editor->textCursor().block().position();
 #endif
 
       // when replacing a pattern P by a pattern following this regexp .*P.*

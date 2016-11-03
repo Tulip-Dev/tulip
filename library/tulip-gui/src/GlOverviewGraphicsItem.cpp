@@ -249,11 +249,9 @@ void GlOverviewGraphicsItem::draw(bool generatePixmap) {
 
   if(generatePixmap) {
     // Load scene pixmap to the item
-    QPixmap pixmap;
     QImage img = GlOffscreenRenderer::getInstance()->getImage();
-    pixmap.convertFromImage(img);
     overview.setPos(_frameWidth, _frameWidth);
-    overview.setPixmap(pixmap);
+    overview.setPixmap(QPixmap::fromImage(img));
   }
 
   // set lines and polygons coordinates

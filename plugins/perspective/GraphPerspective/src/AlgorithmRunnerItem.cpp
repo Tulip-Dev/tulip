@@ -20,7 +20,7 @@
 #include <QMouseEvent>
 #include <QMessageBox>
 #include <QDrag>
-#include <QtCore/QDateTime>
+#include <QtCore/QTime>
 
 #include "GraphPerspective.h"
 #include "AlgorithmRunnerItem.h"
@@ -397,7 +397,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
     progress->showPreview(false);
 
   // take time before run
-  QDateTime start = QDateTime::currentDateTime();
+  QTime start = QTime::currentTime();
   bool result = g->applyAlgorithm(algorithm,errorMessage,&dataSet,progress);
 
   if (!outPropertyParams.empty())
@@ -405,7 +405,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   // display spent time
   if (TulipSettings::instance().isRunningTimeComputed())
-    qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
+    qDebug() << tlp::tlpStringToQString(algoAndParams) << ": " << start.msecsTo(QTime::currentTime()) << "ms";
 
   //Perspective::typedInstance<GraphPerspective>()->setAutoCenterPanelsOnDraw(false);
 
