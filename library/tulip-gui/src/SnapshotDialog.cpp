@@ -111,16 +111,17 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent):QDialog(parent),u
 }
 
 void SnapshotDialog::clicked(QAbstractButton* b) {
-    if(ui->buttonBox->buttonRole(b)==QDialogButtonBox::ResetRole) {
-        ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
-        ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
-        ui->qualitySpinBox->setValue(100);
-    }
-    if(ui->buttonBox->buttonRole(b)==QDialogButtonBox::ActionRole) {
-        QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
-        QClipboard *clipboard = QApplication::clipboard();
-        clipboard->setPixmap(pixmap);
-    }
+  if(ui->buttonBox->buttonRole(b)==QDialogButtonBox::ResetRole) {
+    ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
+    ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
+    ui->qualitySpinBox->setValue(100);
+  }
+
+  if(ui->buttonBox->buttonRole(b)==QDialogButtonBox::ActionRole) {
+    QPixmap pixmap=view->snapshot(QSize(ui->widthSpinBox->value(),ui->heightSpinBox->value()));
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setPixmap(pixmap);
+  }
 }
 
 SnapshotDialog::~SnapshotDialog() {
@@ -136,37 +137,41 @@ static const QString default_filter("png");
 
 void SnapshotDialog::accept() {
   QString formatedFormatList;
+
   //Put the default save format as the first choice (selectedFilter not supported under MacOSX and some Linux window managers)
   foreach(QString ext, QImageWriter::supportedImageFormats()) {
-      ext = ext.toLower();
-      if ((formatedFormatList.indexOf(ext) == -1)&&(ext!=default_filter)) {
-          formatedFormatList+=ext+" (*."+ext+");;";
-      }
+    ext = ext.toLower();
+
+    if ((formatedFormatList.indexOf(ext) == -1)&&(ext!=default_filter)) {
+      formatedFormatList+=ext+" (*."+ext+");;";
+    }
   }
+
   QString selectedFilter(default_filter+" (*." + default_filter + ")");
   formatedFormatList = selectedFilter+";;"+formatedFormatList;
   // remove last ;;
   formatedFormatList.resize(formatedFormatList.size() - 2);
 
   QString fileName=
-          QFileDialog::getSaveFileName(this,tr("Save image as..."),
-                                       QDir::homePath(),
-                                       formatedFormatList,
-                                       &selectedFilter
-                                       // on MacOSX selectedFilter is ignored by the
-                                       // native dialog
-                                     #ifdef __APPLE__
-                                       , QFileDialog::DontUseNativeDialog
-                                     #endif
-                                       );
+    QFileDialog::getSaveFileName(this,tr("Save image as..."),
+                                 QDir::homePath(),
+                                 formatedFormatList,
+                                 &selectedFilter
+                                 // on MacOSX selectedFilter is ignored by the
+                                 // native dialog
+#ifdef __APPLE__
+                                 , QFileDialog::DontUseNativeDialog
+#endif
+                                );
 
   if(fileName.isEmpty())
-      return;
+    return;
 
   // force file extension
   QString selectedExtension = QString('.') + selectedFilter.section(' ', 0, 0);
+
   if (!fileName.endsWith(selectedExtension))
-      fileName += selectedExtension;
+    fileName += selectedExtension;
 
   this->setEnabled(false);
 
