@@ -31,6 +31,7 @@ class SnapshotDialogData;
 
 class QGraphicsScene;
 class QGraphicsPixmapItem;
+class QAbstractButton;
 
 namespace tlp {
 
@@ -58,9 +59,7 @@ protected slots :
 
   void widthSpinBoxValueChanged(int value);
   void heightSpinBoxValueChanged(int value);
-
-  void fileNameTextChanged(const QString &);
-  void copyClicked();
+  void clicked(QAbstractButton* b);
 
 protected :
 
