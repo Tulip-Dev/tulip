@@ -32,6 +32,7 @@
 #include <QClipboard>
 #include <QGraphicsScene>
 #include <QPixmap>
+#include <QPushButton>
 
 #include <tulip/View.h>
 
@@ -46,7 +47,7 @@ public:
     setPixmap(QPixmap(":/tulip/gui/icons/i_locked.png"));
   }
 
-  bool isLocked() {
+  bool isLocked() const {
     return locked || alwaysLocked;
   }
 
@@ -95,15 +96,29 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
 
   connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthSpinBoxValueChanged(int)));
   connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightSpinBoxValueChanged(int)));
-  connect(ui->copybutton, SIGNAL(clicked()), this, SLOT(copyClicked()));
+
+  QPushButton *copybutton = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), tr("&Copy"), this);
+  ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
+  connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(accept()));
+  connect(ui->buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+  connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 
   lockLabel = new LockLabel();
   ui->horizontalLayout_2->addWidget(lockLabel);
-  lockLabel->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+  ui->horizontalLayout_2->setAlignment(lockLabel, Qt::AlignLeft | Qt::AlignTop);
+}
 
-  ui->copybutton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy));
-  ui->okButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimage));
-  ui->cancelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close));
+void SnapshotDialog::clicked(QAbstractButton *b) {
+  if (ui->buttonBox->buttonRole(b) == QDialogButtonBox::ResetRole) {
+    ui->widthSpinBox->setValue(view->centralItem()->scene()->sceneRect().width());
+    ui->heightSpinBox->setValue(view->centralItem()->scene()->sceneRect().height());
+    ui->qualitySpinBox->setValue(100);
+  }
+  if (ui->buttonBox->buttonRole(b) == QDialogButtonBox::ActionRole) {
+    QPixmap pixmap = view->snapshot(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard->setPixmap(pixmap);
+  }
 }
 
 SnapshotDialog::~SnapshotDialog() {
@@ -115,21 +130,23 @@ void SnapshotDialog::resizeEvent(QResizeEvent *) {
   sizeSpinBoxValueChanged();
 }
 
+static const QString default_filter("png");
+
 void SnapshotDialog::accept() {
-  QList<QByteArray> formatList = QImageWriter::supportedImageFormats();
   QString formatedFormatList;
-
-  for (QList<QByteArray>::iterator it = formatList.begin(); it != formatList.end(); ++it) {
-    if (formatedFormatList.indexOf(QString(*it).toLower()) == -1)
-      formatedFormatList += QString(*it).toLower() + " (*." + QString(*it).toLower() + ");;";
+  // Put the default save format as the first choice (selectedFilter not supported under MacOSX and some Linux window managers)
+  foreach (QString ext, QImageWriter::supportedImageFormats()) {
+    ext = ext.toLower();
+    if ((formatedFormatList.indexOf(ext) == -1) && (ext != default_filter)) {
+      formatedFormatList += ext + " (*." + ext + ");;";
+    }
   }
-
+  QString selectedFilter(default_filter + " (*." + default_filter + ")");
+  formatedFormatList = selectedFilter + ";;" + formatedFormatList;
   // remove last ;;
   formatedFormatList.resize(formatedFormatList.size() - 2);
 
-  QString selectedFilter("jpeg (*.jpeg)");
-  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QDir::homePath(),
-                                                  tr(QString(formatedFormatList).toStdString().c_str()), &selectedFilter
+  QString fileName = QFileDialog::getSaveFileName(this, tr("Save image as..."), QDir::homePath(), formatedFormatList, &selectedFilter
 // on MacOSX selectedFilter is ignored by the
 // native dialog
 #ifdef __APPLE__
@@ -138,12 +155,11 @@ void SnapshotDialog::accept() {
 #endif
                                                   );
 
-  if (fileName == "")
+  if (fileName.isEmpty())
     return;
 
   // force file extension
   QString selectedExtension = QString('.') + selectedFilter.section(' ', 0, 0);
-
   if (!fileName.endsWith(selectedExtension))
     fileName += selectedExtension;
 
@@ -151,8 +167,10 @@ void SnapshotDialog::accept() {
 
   QPixmap image = view->snapshot(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
 
+  QImage image(pixmap.toImage());
+
   if (!image.save(fileName, 0, ui->qualitySpinBox->value())) {
-    QMessageBox::critical(this, "Snapshot cannot be saved", "Snapshot cannot be saved in file : " + fileName);
+    QMessageBox::critical(this, "Snapshot cannot be saved", "Snapshot cannot be saved in file: " + fileName);
     this->setEnabled(true);
   } else {
     QDialog::accept();
@@ -187,10 +205,6 @@ void SnapshotDialog::heightSpinBoxValueChanged(int value) {
   }
 
   inSizeSpinBoxValueChanged = false;
-}
-
-void SnapshotDialog::fileNameTextChanged(const QString &text) {
-  ui->okButton->setEnabled(!text.isEmpty());
 }
 
 void SnapshotDialog::sizeSpinBoxValueChanged() {
@@ -231,12 +245,6 @@ void SnapshotDialog::sizeSpinBoxValueChanged() {
     pixmapItem = scene->addPixmap(pixmap);
     pixmapItem->setPos(ui->graphicsView->sceneRect().center() - pixmapItem->boundingRect().center());
   }
-}
-
-void SnapshotDialog::copyClicked() {
-  QPixmap pixmap = view->snapshot(QSize(ui->widthSpinBox->value(), ui->heightSpinBox->value()));
-  QClipboard *clipboard = QApplication::clipboard();
-  clipboard->setPixmap(pixmap);
 }
 
 void SnapshotDialog::setSnapshotHasViewSizeRatio(bool snapshotHasViewSizeRatio) {
