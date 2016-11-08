@@ -18,11 +18,8 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
 #ifndef Tulip_SUPERGRAPHVIEW_H
 #define Tulip_SUPERGRAPHVIEW_H
-
-#ifndef DOXYGEN_NOTFOR_USER
 
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphImpl.h>
@@ -122,9 +119,5 @@ private:
 
 }
 #endif
-
-#endif
-
-
 
 ///@endcond

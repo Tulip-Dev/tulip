@@ -18,10 +18,9 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef Tulip_PlanarConMap_H
 #define Tulip_PlanarConMap_H
+
 #include <vector>
 #include <tulip/tuliphash.h>
 #include <tulip/Face.h>
@@ -202,5 +201,5 @@ TLP_SCOPE PlanarConMap* computePlanarConMap(Graph* graph);
 TLP_SCOPE std::ostream& operator<< (std::ostream &, tlp::PlanarConMap *);
 
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

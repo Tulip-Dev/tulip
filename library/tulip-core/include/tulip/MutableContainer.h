@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef _TLPMUTABLECONTAINER_
 #define _TLPMUTABLECONTAINER_
@@ -35,7 +34,7 @@
 
 namespace tlp {
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 //===================================================================
 // we first define an interface
 // to make easier the iteration on values
@@ -46,7 +45,7 @@ public:
   virtual ~IteratorValue() {}
   virtual unsigned int nextValue(DataMem&) = 0;
 };
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 //===================================================================
 template <typename TYPE>
 class MutableContainer {
@@ -170,6 +169,7 @@ private:
   typename std::deque<typename StoredType<TYPE>::Value>::const_iterator it;
 };
 
+///@cond DOXYGEN_HIDDEN
 // one for hash storage
 template <typename TYPE>
 class IteratorHash : public IteratorValue {
@@ -217,14 +217,12 @@ private:
   TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value> *hData;
   typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 };
-
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 }
 
+///@cond DOXYGEN_HIDDEN
 #include "cxx/MutableContainer.cxx"
-
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 #endif
-///@endcond

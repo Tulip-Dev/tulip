@@ -130,7 +130,7 @@ public:
    */
   inline Vector<Obj,SIZE> powerIteration(const unsigned int nIterations) const;
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
   /**
    * Simplifies a 3x3 matrix in 2x2 matrix to be used with computeEigenVector
    */
@@ -141,7 +141,7 @@ public:
    *           /!\ This can only be used with a 2x2 matrix !!! /!\
    */
   inline bool computeEigenVector(const float x, Vector<Obj, 3> &eigenVector) const;
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 };
 

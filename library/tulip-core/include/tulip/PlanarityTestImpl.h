@@ -22,8 +22,6 @@
 #ifndef TULIP_PLANARITYIMPL_H
 #define TULIP_PLANARITYIMPL_H
 
-#ifndef DOXYGEN_NOTFOR_USER
-
 #include <list>
 #include <vector>
 
@@ -239,5 +237,5 @@ private:
 std::list<tlp::edge> posDFS(tlp::Graph *sG, tlp::MutableContainer<int> &dfsPos);
 
 #endif
-#endif
+
 ///@endcond

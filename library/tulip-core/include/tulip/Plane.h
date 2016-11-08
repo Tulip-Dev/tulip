@@ -18,8 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _TLP_PLANE_H_
 #define _TLP_PLANE_H_
 
@@ -30,10 +28,6 @@ namespace tlp {
  *
  * This class is used to represent a plane with it's coordinates.
  * it follows the basic plane equation aX + bY + cZ + d = 0
- *
- * \author Delorme Maxime
- * \date 23/07/2005
- * \version 1.0
  */
 class TLP_SCOPE Plane {
 public:
@@ -76,5 +70,5 @@ public:
 
 }
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

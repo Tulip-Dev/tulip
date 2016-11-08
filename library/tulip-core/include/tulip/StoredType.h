@@ -21,7 +21,6 @@
 #ifndef _TLPRETURNTYPE_
 #define _TLPRETURNTYPE_
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
 // the template below defines how are returned and stored
@@ -131,7 +130,6 @@ struct StoredType {
     }               \
   };
 }
-#endif
 #endif
 #endif
 ///@endcond

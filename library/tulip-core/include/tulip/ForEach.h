@@ -25,7 +25,7 @@
 #include <tulip/StableIterator.h>
 #include <tulip/tulipconf.h>
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 namespace tlp {
 /**
 * @brief Encapsulation of a Tulip Iterator intended to be allocated on the stack instead of the heap,
@@ -58,7 +58,7 @@ inline bool _tlp_if_test(TYPE &n, _TLP_IT<TYPE> &_it) {
   }
 }
 }
-#endif //DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 /**
  * @brief Allows to iterate the nodes or edges of a Graph in a clear and concise way.

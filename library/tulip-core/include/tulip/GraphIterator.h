@@ -29,7 +29,6 @@
 #include <tulip/tulipconf.h>
 #include <iostream>
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
 class Graph;
@@ -259,6 +258,6 @@ public:
 //============================================================
 
 }
-#endif // DOXYGEN_NOTFOR_DEVEL
 #endif
+
 ///@endcond

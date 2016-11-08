@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
 
 #ifndef TULIP_SIMPLETEST_H
 #define TULIP_SIMPLETEST_H
@@ -91,4 +89,3 @@ private:
 
 }
 #endif
-///@endcond
