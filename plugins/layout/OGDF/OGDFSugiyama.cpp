@@ -124,7 +124,7 @@ static const char *paramHelp[] = {
   "If true, the distance between neighboring layers is fixed, otherwise variable (only for FastHierarchyLayout).",
 
   // transpose
-  "Determines whether the transpose step is performed after each 2-layer crossing minimization; this step tries to reduce the number of crossings by switching neighbored nodes on a layer.",
+  "If this option is set to true an additional fine tuning step is performed after each traversal, which tries to reduce the total number of crossings by switching adjacent vertices on the same layer.",
 
   // arrangeCCs
   "If set to true connected components are laid out separately and the resulting layouts are arranged afterwards using the packer module.",
@@ -148,7 +148,10 @@ static const char *paramHelp[] = {
   "Sets the module option for the two-layer crossing minimization.",
 
   // Layout
-  "The hierarchy layout module that computes the final layout."
+  "The hierarchy layout module that computes the final layout.",
+
+    //transpose vertically
+    "Transpose the layout vertically from top to bottom."
 };
 
 static const char *eltRankingValuesDescription =
@@ -190,12 +193,13 @@ public:
     addInParameter<StringCollection>(ELT_RANKING, paramHelp[11], ELT_RANKINGLIST, true, eltRankingValuesDescription);
     addInParameter<StringCollection>(ELT_TWOLAYERCROSS, paramHelp[12], ELT_TWOLAYERCROSSLIST, true, twoLayerCrossValuesDescription);
     addInParameter<StringCollection>(ELT_HIERARCHYLAYOUT, paramHelp[13], ELT_HIERARCHYLAYOUTLIST, true, hierarchyLayoutValuesDescription);
+    addInParameter<bool>("transpose vertically", paramHelp[14], "true");
   }
 
   ~OGDFSugiyama() {}
 
   PLUGININFORMATION("Sugiyama (OGDF)","Carsten Gutwenger","12/11/2007",
-                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.6","Hierarchical")
+                    "Implements the classical layout algorithm by Sugiyama, Tagawa, and Toda. It is a layer-based approach for producing upward drawings.","1.7","Hierarchical")
 
   void beforeCall() {
     ogdf::SugiyamaLayout *sugiyama = static_cast<ogdf::SugiyamaLayout*>(ogdfLayoutAlgo);
@@ -226,6 +230,9 @@ public:
 
       if (dataSet->get("alignSiblings", bval))
         sugiyama->alignSiblings(bval);
+
+      if(dataSet->get("transpose", bval))
+          sugiyama->transpose(bval);
 
       if (dataSet->get(ELT_RANKING, sc)) {
         if (sc.getCurrent() == ELT_LONGESTPATHRANKING) {
@@ -309,7 +316,7 @@ public:
     if (dataSet != NULL) {
       bool bval = false;
 
-      if (dataSet->get("transpose", bval)) {
+      if (dataSet->get("transpose vertically", bval)) {
         if (bval) {
           transposeLayoutVertically();
         }
