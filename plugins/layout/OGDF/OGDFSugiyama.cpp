@@ -150,8 +150,8 @@ static const char *paramHelp[] = {
   // Layout
   "The hierarchy layout module that computes the final layout.",
 
-    //transpose vertically
-    "Transpose the layout vertically from top to bottom."
+  //transpose vertically
+  "Transpose the layout vertically from top to bottom."
 };
 
 static const char *eltRankingValuesDescription =
@@ -232,7 +232,7 @@ public:
         sugiyama->alignSiblings(bval);
 
       if(dataSet->get("transpose", bval))
-          sugiyama->transpose(bval);
+        sugiyama->transpose(bval);
 
       if (dataSet->get(ELT_RANKING, sc)) {
         if (sc.getCurrent() == ELT_LONGESTPATHRANKING) {
