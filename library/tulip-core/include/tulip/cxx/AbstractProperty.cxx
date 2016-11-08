@@ -116,7 +116,7 @@ int tlp::AbstractProperty<Tnode,Tedge,Tprop>::compare(const edge e1,const edge e
 // define template iterator class to iterate over graph elts
 // belonging to a given graph instance
 // used by the two methods below
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 template <typename ELT_TYPE>
 class GraphEltIterator :public tlp::Iterator<ELT_TYPE> {
 public:
@@ -153,7 +153,8 @@ private:
   ELT_TYPE curElt;
   bool _hasnext;
 };
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
+
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
 tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNonDefaultValuatedNodes(const Graph* g) const {

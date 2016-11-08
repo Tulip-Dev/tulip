@@ -378,12 +378,14 @@ struct TLP_SCOPE WithParameter {
    **/
   bool inputRequired() const;
 
+///@cond DOXYGEN_HIDDEN
 protected:
 
   /**
    * @brief The internal structure storing the parameters.
    **/
   ParameterDescriptionList parameters;
+///@endcond
 };
 
 

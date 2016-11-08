@@ -16,6 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
 
 #ifndef PROPERTYWRAPPER_H
 #define PROPERTYWRAPPER_H
@@ -253,3 +254,4 @@ typedef PropertyWrapper<tlp::SizeProperty, tlp::Size> SizePropertyWrapper;
 typedef ComplexPropertyWrapper<tlp::LayoutProperty, tlp::Coord, tlp::LineType> LayoutPropertyWrapper;
 
 #endif // PROPERTYWRAPPER_H
+///@endcond

@@ -83,8 +83,6 @@
 
 using namespace tlp;
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
-
 namespace tlp {
 //=================================================================================
 struct TLPGraphBuilder:public TLPTrue {
@@ -931,7 +929,6 @@ static int getUncompressedSizeOfGzipFile(const std::string &gzipFilePath) {
 
 //================================================================================
 
-#endif //DOXYGEN_NOTFOR_DEVEL
 namespace tlp {
 
 /**

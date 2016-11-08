@@ -24,7 +24,6 @@
 #include <list>
 #include <vector>
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TULIP_NODEMAPITERATOR_H
 #define TULIP_NODEMAPITERATOR_H
 
@@ -106,5 +105,5 @@ private :
 
 }
 #endif
-#endif //DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

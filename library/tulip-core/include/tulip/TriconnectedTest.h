@@ -16,8 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
-
 
 #ifndef TULIP_TRICONNECTEDTEST_H
 #define TULIP_TRICONNECTEDTEST_H
@@ -30,15 +28,11 @@ namespace tlp {
 
 /**
  * @ingroup Checks
- * @brief Provides functions to test if a graph is Triconnected.
+ * @brief Provides functions to test if a graph is triconnected.
  **/
 class TLP_SCOPE TriconnectedTest : private Observable {
 public:
 
-  /**
-   * Returns true if the graph is triconnected (i.e. a connected graph such that deleting any two nodes (and incident edges)
-   * results in a graph that is still connected), false otherwise.
-   */
   /**
    * @brief Checks if the graph is triconnected.
    * Creates a clone sugraph in which to operate, then iterates over the nodes, and deletes them.
@@ -71,4 +65,3 @@ private:
 
 }
 #endif
-///@endcond

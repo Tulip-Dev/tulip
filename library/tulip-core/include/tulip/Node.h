@@ -94,7 +94,7 @@ struct node {
 
 }
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 //these three functions allow to use tlp::node as a key in a hash-based data structure (e.g. hashmap).
 TLP_BEGIN_HASH_NAMESPACE {
   template<> struct hash<tlp::node> {
@@ -115,6 +115,6 @@ template<> struct less<tlp::node> {
   }
 };
 }
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 #endif
