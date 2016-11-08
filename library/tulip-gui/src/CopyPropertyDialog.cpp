@@ -53,8 +53,9 @@ using namespace tlp;
 //=============================================================================
 CopyPropertyDialog::CopyPropertyDialog(QWidget *parent) : QDialog(parent), ui(new Ui::CopyPropertyDialogData()), _graph(nullptr), _source(nullptr) {
   ui->setupUi(this);
-  connect(ui->buttonOK, SIGNAL(clicked()), this, SLOT(accept()));
-  connect(ui->buttonCancel, SIGNAL(clicked()), this, SLOT(reject()));
+
+  ui->buttonBox->button(QDialogButtonBox::Ok)->setText("&Copy");
+
   ui->errorIconLabel->setPixmap(QApplication::style()->standardIcon(QStyle::SP_MessageBoxWarning).pixmap(16, 16));
   connect(ui->newPropertyNameLineEdit, SIGNAL(textChanged(QString)), this, SLOT(checkValidity()));
   connect(ui->buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(checkValidity()));
@@ -74,7 +75,7 @@ void CopyPropertyDialog::init(Graph *graph, PropertyInterface *source) {
     Graph *parent = _graph->getSuperGraph();
 
     if (parent == graph) {
-      parent = 0;
+      parent = NULL;
     }
 
     for (PropertyInterface *property : _graph->getObjectProperties()) {
@@ -247,7 +248,7 @@ void CopyPropertyDialog::checkValidity() {
 
   ui->errorNotificationWidget->setVisible(!errorMsg.isEmpty());
   ui->errorLabel->setText(errorMsg);
-  ui->buttonOK->setEnabled(valid);
+  ui->buttonBox->button(QDialogButtonBox::Ok)->setEnabled(valid);
 }
 
 QString CopyPropertyDialog::destinationPropertyName() const {
