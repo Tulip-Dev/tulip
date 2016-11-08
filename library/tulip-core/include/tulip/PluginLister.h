@@ -31,6 +31,7 @@
 namespace tlp {
 class PluginContext;
 
+///@cond DOXYGEN_HIDDEN
 /**
  * @ingroup Plugins
  * @brief The base class for plugin factories.
@@ -43,6 +44,7 @@ class FactoryInterface {
 public:
   virtual tlp::Plugin *createPluginObject(tlp::PluginContext *context) = 0;
 };
+///@endcond
 
 /**
  * @ingroup Plugins
@@ -214,6 +216,7 @@ public:
    */
   static void registerPlugin(FactoryInterface *objectFactory);
 
+  ///@cond DOXYGEN_HIDDEN
 protected:
   void sendPluginAddedEvent(const std::string &pluginName);
   void sendPluginRemovedEvent(const std::string &pluginName);
@@ -232,8 +235,10 @@ protected:
    * @return :string The version number, ussually formatted as X[.Y], where X is the major, and Y the minor.
    **/
   static std::string getPluginRelease(const std::string &name);
+  ///@endcond
 };
 
+///@cond DOXYGEN_HIDDEN
 class TLP_SCOPE PluginEvent : public Event {
 public:
   enum PluginEventType { TLP_ADD_PLUGIN = 0, TLP_REMOVE_PLUGIN = 1 };
@@ -255,6 +260,7 @@ protected:
   PluginEventType evtType;
   std::string pluginName;
 };
+///@endcond
 }
 
 #endif // TULIP_PLUGINLISTER_H

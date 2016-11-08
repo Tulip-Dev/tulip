@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
+
 #ifndef TLPBIMPORTEXPORT_H
 #define TLPBIMPORTEXPORT_H
 
@@ -163,3 +165,4 @@ struct TLPBHeader {
 #define MAX_VALUES_TO_READ MAX_VALUES_TO_WRITE
 
 #endif // TLPBIMPORTEXPORT_H
+///@endcond

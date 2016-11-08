@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TLP_PROPERTYMANAGER_H
 #define TLP_PROPERTYMANAGER_H
 
@@ -67,5 +66,5 @@ protected:
 }
 
 #endif
-#endif // DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

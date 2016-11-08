@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef TLPGRAPHRECORDER_H
 #define TLPGRAPHRECORDER_H
 
@@ -282,5 +281,5 @@ protected:
 }
 
 #endif // TLPGRAPHRECORDER_H
-#endif // DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

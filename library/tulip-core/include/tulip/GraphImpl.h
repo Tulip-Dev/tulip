@@ -21,8 +21,6 @@
 #ifndef Tulip_SUPERGRAPHIMPL_H
 #define Tulip_SUPERGRAPHIMPL_H
 
-#ifndef DOXYGEN_NOTFOR_USER
-
 #include <set>
 
 #include <vector>
@@ -144,5 +142,4 @@ private:
 }
 #endif
 
-#endif
 ///@endcond

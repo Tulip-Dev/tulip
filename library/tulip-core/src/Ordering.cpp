@@ -27,12 +27,10 @@
 using namespace std;
 using namespace tlp;
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 struct tlp::augmentableAndNodes_ {
   bool augmentable;
   vector<node> Nodes;
 };
-#endif // DOXYGEN_NOTFOR_DEVEL
 
 //==========================================================
 /**

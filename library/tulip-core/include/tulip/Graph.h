@@ -1974,6 +1974,7 @@ public:
    */
   void openMetaNode(node n, bool updateProperties = true);
 
+  ///@cond DOXYGEN_HIDDEN
 protected:
   virtual DataSet &getNonConstAttributes() = 0;
   // designed to reassign an id to a previously deleted elt
@@ -2083,6 +2084,7 @@ protected:
 
   unsigned int id;
   TLP_HASH_MAP<std::string, tlp::PropertyInterface *> circularCalls;
+  ///@endcond
 };
 
 /**
@@ -2243,8 +2245,7 @@ TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
 // these functions allow to use tlp::Graph as a key in a hash-based data
 // structure (e.g. hashmap).
 //================================================================================
-#ifndef DOXYGEN_NOTFOR_DEVEL
-
+///@cond DOXYGEN_HIDDEN
 TLP_BEGIN_HASH_NAMESPACE {
   template <> struct TLP_SCOPE hash<const tlp::Graph *> {
     size_t operator()(const tlp::Graph *s) const {
@@ -2258,7 +2259,7 @@ TLP_BEGIN_HASH_NAMESPACE {
   };
 }
 TLP_END_HASH_NAMESPACE
+///@endcond
 
-#endif // DOXYGEN_NOTFOR_DEVEL
 #include "cxx/Graph.cxx"
 #endif

@@ -21,8 +21,6 @@
 #ifndef Tulip_SUPERGRAPHVIEW_H
 #define Tulip_SUPERGRAPHVIEW_H
 
-#ifndef DOXYGEN_NOTFOR_USER
-
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/MutableContainer.h>
@@ -114,8 +112,6 @@ private:
   void setEndsInternal(const edge, const node src, const node tgt, const node newSrc, const node newTgt);
 };
 }
-#endif
-
 #endif
 
 ///@endcond

@@ -30,7 +30,7 @@ namespace tlp {
  * @brief The ProgressPreviewHandler class handles the way a process handled by a PluginProgress is handled
  *
  * When PluginProgress::setPreview() is called, the associated ProgressPreviewHandler will be enabled. Allowing it to implement custom behavior to
- * allow the user to preview the result of the underleying process
+ * allow the user to preview the result of the underlaying process
  * Once enabled, the progressStateChanged method will be called back each time PluginProgress::progress is called to allow synchronizing the preview
  * with progression.
  */
@@ -47,7 +47,7 @@ public:
 /**
  * @ingroup Plugins
  *
- * @brief This enum describes callback actions for the underleying system when calling tlp::PluginProgress::progress();
+ * @brief This enum describes callback actions for the underlaying system when calling tlp::PluginProgress::progress();
  * @list
  * @li TLP_CONTINUE: tells that the process monitored by the the progress should continue.
  * @li TLP_CANCEL: The process should be cancelled, reverting all changes since it was started.
@@ -71,9 +71,9 @@ enum ProgressState {
  *
  * PluginProgress are mainly used alongside with tlp::Plugin instances to give user a visual feedback about the progress of the plugin.
  * Every plugin in tulip got a pluginProgress member they can call to give progress feedbacks. When running, the plugin should make a call to
- *tlp::PluginProgress::progress() indicating the current state of the compuation.
- * The tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underleying system should have (see tlp::ProgressState for
- *details)
+ * tlp::PluginProgress::progress() indicating the current state of the compuation.
+ * The tlp::PluginProgress returns a tlp::ProgressState indicating what behavior the underlaying system should have (see tlp::ProgressState for
+ * details)
  **/
 class TLP_SCOPE PluginProgress {
   ProgressPreviewHandler *_previewHandler;

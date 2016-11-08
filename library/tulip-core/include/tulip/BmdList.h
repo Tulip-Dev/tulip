@@ -21,8 +21,6 @@
 #ifndef BMDLIST_H
 #define BMDLIST_H
 
-#ifndef DOXYGEN_NOTFOR_USER
-
 #include <cassert>
 #include <tulip/BmdLink.h>
 
@@ -105,5 +103,5 @@ private:
 };
 }
 #endif
-#endif
+
 ///@endcond

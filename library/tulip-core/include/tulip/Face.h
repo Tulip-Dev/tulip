@@ -45,8 +45,6 @@ struct Face {
 };
 }
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
-
 TLP_BEGIN_HASH_NAMESPACE {
   template <> struct hash<tlp::Face> {
     size_t operator()(const tlp::Face f) const {
@@ -68,7 +66,6 @@ template <> struct less<tlp::Face> {
   }
 };
 }
-#endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif
 ///@endcond

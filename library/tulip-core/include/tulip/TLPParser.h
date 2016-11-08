@@ -18,7 +18,8 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+#ifndef TLPPARSER_H
+#define TLPPARSER_H
 
 #include <sstream>
 #include <string>
@@ -488,6 +489,6 @@ template <bool displayComment> struct TLPParser {
 };
 }
 //=====================================================================================
+#endif // TLPPARSER_H
 
-#endif // DOXYGEN_NOTFOR_DEVEL
 ///@endcond

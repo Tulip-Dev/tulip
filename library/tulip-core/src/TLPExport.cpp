@@ -30,8 +30,6 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/PropertyTypes.h>
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
-
 #define TLP_FILE_VERSION "2.3"
 
 using namespace std;
@@ -63,8 +61,6 @@ static const char *paramHelp[] = {
 
     // comments
     "Description of the graph."};
-
-#endif // DOXYGEN_NOTFOR_DEVEL
 
 namespace tlp {
 /**

@@ -25,11 +25,11 @@
 
 namespace tlp {
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 extern TLP_SCOPE void incrNumIterators();
 extern TLP_SCOPE void decrNumIterators();
 extern TLP_SCOPE int getNumIterators();
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 /**
 * @brief Interface for Tulip iterators.

@@ -21,8 +21,6 @@
 #ifndef TULIP_SUPERGRAPHABSTRACT_H
 #define TULIP_SUPERGRAPHABSTRACT_H
 
-#ifndef DOXYGEN_NOTFOR_USER
-
 #include <set>
 #include <vector>
 #include <tulip/Graph.h>
@@ -146,7 +144,6 @@ private:
   void notifyAfterRenameLocalProperty(PropertyInterface *prop, const std::string &oldName);
 };
 }
-#endif // DOXYGEN_NOTFOR_USER
-
 #endif
+
 ///@endcond

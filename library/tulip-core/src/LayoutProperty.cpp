@@ -607,7 +607,6 @@ double LayoutProperty::averageAngularResolution(const Graph *sg) const {
   return result / (double)sg->numberOfNodes();
 }
 //=================================================================================
-#ifndef DOXYGEN_NOTFOR_DEVEL
 struct AngularOrder {
   bool operator()(const Coord &c1, const Coord &c2) {
     return atan2(c1[1], c1[0]) < atan2(c2[1], c2[0]);
@@ -616,8 +615,6 @@ struct AngularOrder {
     return this->operator()(c1.first, c2.first);
   }
 };
-
-#endif // DOXYGEN_NOTFOR_DEVEL
 
 /*
  * TODO check code duplication with angularresolution function

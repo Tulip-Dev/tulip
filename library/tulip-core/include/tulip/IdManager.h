@@ -18,8 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
-
 #ifndef _TULIPIDMANAGER_H
 #define _TULIPIDMANAGER_H
 #include <set>
@@ -164,5 +162,5 @@ std::ostream &operator<<(std::ostream &, const IdManager &);
 }
 
 #endif
-#endif // DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

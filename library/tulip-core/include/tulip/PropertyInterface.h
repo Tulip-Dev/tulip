@@ -568,8 +568,8 @@ protected:
 //================================================================================
 // these functions allow to use tlp::PropertyInterface as a key in a hash-based data structure (e.g. hashmap).
 //================================================================================
-#ifndef DOXYGEN_NOTFOR_DEVEL
 
+///@cond DOXYGEN_HIDDEN
 TLP_BEGIN_HASH_NAMESPACE {
   template <> struct TLP_SCOPE hash<const tlp::PropertyInterface *> {
     size_t operator()(const tlp::PropertyInterface *prop) const {
@@ -583,7 +583,6 @@ TLP_BEGIN_HASH_NAMESPACE {
   };
 }
 TLP_END_HASH_NAMESPACE
-
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 #endif // PROPERTY_INTERFACE_H

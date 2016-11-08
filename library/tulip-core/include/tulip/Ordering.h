@@ -29,8 +29,6 @@
 
 #include <tulip/MutableContainer.h>
 
-#ifndef DOXYGEN_NOTFOR_USER
-
 namespace tlp {
 class PluginProgress;
 class PlanarConMap;
@@ -114,5 +112,5 @@ private:
 };
 }
 #endif
-#endif
+
 ///@endcond

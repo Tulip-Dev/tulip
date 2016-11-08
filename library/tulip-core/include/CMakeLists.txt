@@ -1,6 +1,5 @@
 IF(NOT EMSCRIPTEN)
 INSTALL(FILES
-  tulip/Plugin.h
   tulip/AbstractProperty.h
   tulip/AcyclicTest.h
   tulip/Algorithm.h
@@ -53,6 +52,7 @@ INSTALL(FILES
   tulip/ParametricCurves.h
   tulip/PlanarConMap.h
   tulip/PlanarityTest.h
+  tulip/Plugin.h
   tulip/PluginContext.h
   tulip/PluginLibraryLoader.h
   tulip/PluginLister.h
@@ -63,7 +63,6 @@ INSTALL(FILES
   tulip/PropertyAlgorithm.h
   tulip/PropertyInterface.h
   tulip/PropertyTypes.h
-  tulip/PropertyWrapper.h
   tulip/QuadTree.h
   tulip/Rectangle.h
   tulip/SimplePluginProgress.h
@@ -77,7 +76,6 @@ INSTALL(FILES
   tulip/StoredType.h
   tulip/StringCollection.h
   tulip/StringProperty.h
-  tulip/SystemDefinition.h
   tulip/TlpTools.h
   tulip/TreeTest.h
   tulip/TriconnectedTest.h
@@ -88,8 +86,6 @@ INSTALL(FILES
   tulip/tuliphash.h
   tulip/TulipPluginHeaders.h
   tulip/TulipViewSettings.h
-  tulip/UniqueIterator.h
-  tulip/VectorCast.h
   tulip/vectorgraph.h
   tulip/vectorgraphproperty.h
   tulip/Vector.h

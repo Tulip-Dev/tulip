@@ -16,11 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+///@cond DOXYGEN_HIDDEN
 
 #ifndef PLUGINLIBLOADER_H
 #define PLUGINLIBLOADER_H
-
-#ifndef DOXYGEN_NOTFOR_USER
 
 #include <set>
 #include <string>
@@ -111,5 +110,7 @@ private:
   std::string currentPluginLibrary;
 };
 }
-#endif // DOXYGEN_NOTFOR_USER
+
 #endif // PLUGINLIBLOADER_H
+
+///@endcond

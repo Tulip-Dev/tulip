@@ -95,7 +95,7 @@ struct edge {
 };
 }
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 // these three functions allow to use tlp::edge as a key in a hash-based data structure (e.g. hashmap).
 TLP_BEGIN_HASH_NAMESPACE {
   template <> struct hash<tlp::edge> {
@@ -118,5 +118,6 @@ template <> struct less<tlp::edge> {
   }
 };
 }
-#endif
+///@endcond
+
 #endif

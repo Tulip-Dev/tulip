@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef OUTERPLANARTEST_H
 #define OUTERPLANARTEST_H
@@ -75,4 +74,3 @@ private:
 }
 
 #endif
-///@endcond

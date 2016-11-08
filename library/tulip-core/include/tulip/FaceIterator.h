@@ -28,7 +28,6 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 //============================================================
 /// Face iterator for PlanarConMap
 namespace tlp {
@@ -100,5 +99,5 @@ private:
 };
 }
 #endif
-#endif
+
 ///@endcond

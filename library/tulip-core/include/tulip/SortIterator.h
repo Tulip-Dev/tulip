@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_SORTITERATOR_H
 #define TULIP_SORTITERATOR_H
@@ -31,7 +30,7 @@
 namespace tlp {
 class Graph;
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
+///@cond DOXYGEN_HIDDEN
 struct LessThan {
   LessThan(tlp::NumericProperty *m) : metric(m) {
   }
@@ -81,8 +80,7 @@ private:
   tlp::NumericProperty *metric;
   Graph *sg;
 };
-
-#endif // DOXYGEN_NOTFOR_DEVEL
+///@endcond
 
 /**
 * @brief This Iterator sorts the nodes in a sequence based on their values in a NumericProperty.
@@ -220,4 +218,3 @@ template <typename T, class CompareFunction> inline SortIterator<T, CompareFunct
 }
 }
 #endif
-///@endcond

@@ -70,7 +70,7 @@ public:
    *
    * @param graph The graph to make acyclic.
    * @param reversed The edges that were reversed during the process.
-   * @param selfLoops Sets of two nodes and three edges that were added in stead of self loops.
+   * @param selfLoops Sets of two nodes and three edges that were added instead of self loops.
    * @return void
    **/
   static void makeAcyclic(Graph *graph, std::vector<edge> &reversed, std::vector<tlp::SelfLoops> &selfLoops);

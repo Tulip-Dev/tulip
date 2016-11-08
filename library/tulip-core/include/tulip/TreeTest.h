@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-///@cond DOXYGEN_HIDDEN
 
 #ifndef TULIP_TREETEST_H
 #define TULIP_TREETEST_H
@@ -115,4 +114,3 @@ private:
 };
 }
 #endif
-///@endcond

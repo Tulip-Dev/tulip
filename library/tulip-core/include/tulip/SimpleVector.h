@@ -18,7 +18,6 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef DOXYGEN_NOTFOR_DEVEL
 #ifndef _SIMPLE_VECTOR_H_
 #define _SIMPLE_VECTOR_H_
 #include <cstdlib>
@@ -132,5 +131,5 @@ protected:
 };
 }
 #endif
-#endif // DOXYGEN_NOTFOR_DEVEL
+
 ///@endcond

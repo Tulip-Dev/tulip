@@ -232,7 +232,7 @@ namespace tlp {
  *
 @code{.cpp}
 // This sample shows a basic skeleton for a plugin class declaration:
-class MyPlugin: public tlp::PluginBase { // tlp::PluginBase is replaced by the acutal Plugin interface (tlp::Algorithm, tlp::View, etc)
+class MyPlugin: public tlp::PluginBase { // tlp::PluginBase is replaced by the actual Plugin interface (tlp::Algorithm, tlp::View, etc)
   public:
   PLUGININFORMATION("My plugin", "Me", "28/09/2012", "My first plugin example", "1.0", "")
   // Class declaration and extra methods
