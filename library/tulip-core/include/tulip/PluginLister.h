@@ -277,7 +277,7 @@ protected:
 
 };
 ///@endcond
- 
+
 }
 
 #endif //TULIP_PLUGINLISTER_H
