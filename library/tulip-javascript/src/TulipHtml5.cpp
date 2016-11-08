@@ -361,6 +361,24 @@ public:
 
 static GlDrawObserver glDrawObserver;
 
+class GraphDeletedObserver : public Observable {
+
+public:
+
+  void treatEvent(const tlp::Event &event) {
+    if (event.type() == tlp::Event::TLP_DELETE) {
+      tlp::Graph *g = reinterpret_cast<tlp::Graph*>(event.sender());
+      if (graphToCanvas.find(g) != graphToCanvas.end()) {
+        graph.erase(graphToCanvas[g]);
+        graphToCanvas.erase(g);
+      }
+    }
+  }
+
+};
+
+static GraphDeletedObserver graphDeletedObserver;
+
 extern "C" {
 
 void EMSCRIPTEN_KEEPALIVE activateInteractor(const char *canvasId, const char *interactorName) {
@@ -399,7 +417,6 @@ void cleanManagedCanvasIfNeeded() {
     }
     emscripten_webgl_destroy_context(webGlContextHandle[removedCanvas[i]]);
     glScene.erase(removedCanvas[i]);
-    graph.erase(removedCanvas[i]);
     glGraph.erase(removedCanvas[i]);
     graphToCanvas.erase(graph[removedCanvas[i]]);
     graph.erase(removedCanvas[i]);
@@ -606,6 +623,7 @@ void EMSCRIPTEN_KEEPALIVE setCanvasGraph(const char *canvasId, tlp::Graph *g, bo
   canDeleteGraph[canvasId] = viewTakesGraphOwnership;
   graphToCanvas[g] = canvasId;
   glGraph[canvasId]->setGraph(g);
+  g->addListener(&graphDeletedObserver);
 
   glScene[canvasId]->centerScene(tlp::computeBoundingBox(g, viewLayout, viewSize, viewRotation));
   setGraphHullsToDisplay(canvasId);
