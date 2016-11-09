@@ -150,7 +150,7 @@
    <item row="4" column="5">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <widget class="QLineEdit" name="customValueEdit">
+      <widget class="tlp::TulipLineEdit" name="customValueEdit">
        <property name="placeholderText">
         <string>Input custom value</string>
        </property>
@@ -190,4 +190,11 @@
  </widget>
  <resources/>
  <connections/>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
 </ui>

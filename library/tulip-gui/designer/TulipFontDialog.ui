@@ -279,7 +279,7 @@
        </layout>
       </item>
       <item>
-       <widget class="QLineEdit" name="preview">
+       <widget class="tlp::TulipLineEdit" name="preview">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
           <horstretch>0</horstretch>
@@ -426,4 +426,11 @@
  <slots>
   <slot>fontChanged()</slot>
  </slots>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
 </ui>
