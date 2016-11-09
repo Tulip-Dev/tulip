@@ -270,7 +270,7 @@ color: #595959;</string>
             </widget>
            </item>
            <item>
-            <widget class="QLineEdit" name="proxyAddr">
+            <widget class="tlp::TulipLineEdit" name="proxyAddr">
              <property name="placeholderText">
               <string>address</string>
              </property>
@@ -855,4 +855,11 @@ If not, a new random seed will be set to initialize each new random sequence.</s
   <slot>settingsChanged()</slot>
   <slot>applySettings()</slot>
  </slots>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
 </ui>

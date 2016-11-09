@@ -18,31 +18,28 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
+#ifndef TULIPLINEEDIT_H
+#define TULIPLINEEDIT_H
 
-#ifndef CLEARABLELINEEDIT_H
-#define CLEARABLELINEEDIT_H
+#include <QLineEdit>
 
-#include <tulip/TulipLineEdit.h>
+namespace tlp {
 
-#include <tulip/tulipconf.h>
-
-
-class TLP_QT_SCOPE ClearableLineEdit : public tlp::TulipLineEdit {
-  static QPixmap* CLEAR_PIXMAP;
-
-  bool _clearButtonHovered;
-  static void initPixmap();
-  QRect pixmapRect();
-public:
-  explicit ClearableLineEdit(QWidget *parent = NULL);
-
-protected:
-  void paintEvent(QPaintEvent *);
-  void mouseMoveEvent(QMouseEvent *);
-  void mousePressEvent(QMouseEvent *);
+class TulipLineEdit :public QLineEdit {
+ public:
+ TulipLineEdit(QWidget* parent = NULL) :QLineEdit(parent) {}
+  
+#if (QT_VERSION < QT_VERSION_CHECK(4, 7, 0))
+  // the method below exists only since Qt 4.7
+  // so we define it to ensure compatibility with
+  // older versions
+  void setPlaceholderText(const QString &) {}
+#endif
 
 };
 
+}
 
-#endif // CLEARABLELINEEDIT_H
+#endif
+
 ///@endcond

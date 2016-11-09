@@ -50,7 +50,7 @@
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="propertyNameLineEdit">
+      <widget class="tlp::TulipLineEdit" name="propertyNameLineEdit">
        <property name="minimumSize">
         <size>
          <width>183</width>
@@ -155,4 +155,11 @@
    </hints>
   </connection>
  </connections>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
 </ui>

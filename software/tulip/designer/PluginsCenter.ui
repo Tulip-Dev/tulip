@@ -724,7 +724,7 @@ p, li { white-space: pre-wrap; }
                <number>0</number>
               </property>
               <item>
-               <widget class="QLineEdit" name="remoteLocationText">
+               <widget class="tlp::TulipLineEdit" name="remoteLocationText">
                 <property name="placeholderText">
                  <string>Add your custom repository URL here</string>
                 </property>
@@ -901,6 +901,11 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
    <class>ClearableLineEdit</class>
    <extends>QLineEdit</extends>
    <header location="global">tulip/ClearableLineEdit.h</header>
+  </customwidget>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
   </customwidget>
  </customwidgets>
  <resources>

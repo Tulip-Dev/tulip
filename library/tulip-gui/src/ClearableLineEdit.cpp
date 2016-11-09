@@ -30,7 +30,7 @@ void ClearableLineEdit::initPixmap() {
   }
 }
 
-ClearableLineEdit::ClearableLineEdit(QWidget *parent): QLineEdit(parent), _clearButtonHovered(false) {
+ClearableLineEdit::ClearableLineEdit(QWidget *parent): tlp::TulipLineEdit(parent), _clearButtonHovered(false) {
   setMouseTracking(true);
 }
 
