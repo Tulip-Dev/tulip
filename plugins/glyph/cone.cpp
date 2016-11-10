@@ -86,7 +86,7 @@ static void drawCone() {
     glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
     glBufferData(GL_ARRAY_BUFFER, coneTexCoords.size() * 2 * sizeof(float), &coneTexCoords[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, coneIndices.size() * 3 * sizeof(unsigned short), &coneIndices[0], GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, coneIndices.size() * sizeof(unsigned short), &coneIndices[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
   }
 
