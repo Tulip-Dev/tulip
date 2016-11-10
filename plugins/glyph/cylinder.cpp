@@ -115,7 +115,7 @@ public:
       glBindBuffer(GL_ARRAY_BUFFER, buffers[2]);
       glBufferData(GL_ARRAY_BUFFER, cylinderTexCoords.size() * 2 * sizeof(float), &cylinderTexCoords[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, buffers[3]);
-      glBufferData(GL_ELEMENT_ARRAY_BUFFER, cylinderIndices.size() * 3 * sizeof(unsigned short), &cylinderIndices[0], GL_STATIC_DRAW);
+      glBufferData(GL_ELEMENT_ARRAY_BUFFER, cylinderIndices.size() * sizeof(unsigned short), &cylinderIndices[0], GL_STATIC_DRAW);
       glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 
