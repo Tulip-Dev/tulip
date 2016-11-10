@@ -699,7 +699,7 @@ typedef enum {
     imatmul_slot,       /* __imatmul__ (for Python v3.5 and later) */
     await_slot,         /* __await__ (for Python v3.5 and later) */
     aiter_slot,         /* __aiter__ (for Python v3.5 and later) */
-    anext_slot,         /* __anext__ (for Python v3.5 and later) */
+    anext_slot         /* __anext__ (for Python v3.5 and later) */
 } sipPySlotType;
 
 
