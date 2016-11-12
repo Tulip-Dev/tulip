@@ -1245,15 +1245,21 @@ static void setHierarchy(sipSpec *pt, classDef *base, classDef *cd,
             {
                 mroDef *new_mro = appendToMRO(cd->mro, &tailp, mro->cd);
 
-                if (cl != cd->supers || needsCast(mro))
-                {
+                //===========================================================================================
+                // Tulip patch : temporary workaround forcing the generation of class cast function
+                // in order to fix segfaults when writing Tulip Python plugins that declare parameters.
+                // The segfault occured due to the missing cast function for wrapped class tlp::WithParameter.
+
+                //if (cl != cd->supers || needsCast(mro))
+                //{
                     /*
                      * It's not the class's first super-class so it will need a
                      * cast function.
                      */
                     setNeedsCast(new_mro);
                     setNeedsCastFunction(cd);
-                }
+                //}
+                //===========================================================================================
 
                 if (isDeprecatedClass(mro->cd))
                     setIsDeprecatedClass(cd);
