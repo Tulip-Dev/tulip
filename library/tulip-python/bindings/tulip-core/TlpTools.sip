@@ -101,7 +101,7 @@ std::string TulipBitmapDir;
 std::string TulipShareDir;
 
 void setTulipGlobalVar(const std::string &varName, const std::string &value);
-void getTulipGlobalVar(const std::string &varName);
+std::string getTulipGlobalVar(const std::string &varName);
 
 //=====================================================================
 
