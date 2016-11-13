@@ -120,13 +120,11 @@ class ConsoleOutputEmitter : public QObject {
   Q_OBJECT
 
 public:
-  ConsoleOutputEmitter() : _consoleWidget(nullptr), _outputActivated(true) {
+  ConsoleOutputEmitter() : _consoleWidget(nullptr) {
   }
 
   void sendOutputToConsole(const QString &output, bool errorOutput) {
-    if (_outputActivated) {
-      emit consoleOutput(_consoleWidget, output, errorOutput);
-    }
+    emit consoleOutput(_consoleWidget, output, errorOutput);
   }
 
   void setConsoleWidget(QAbstractScrollArea *consoleWidget) {
@@ -137,17 +135,12 @@ public:
     return _consoleWidget;
   }
 
-  void setOutputActivated(bool outputActivated) {
-    _outputActivated = outputActivated;
-  }
-
 signals:
 
   void consoleOutput(QAbstractScrollArea *consoleWidget, const QString &output, bool errorOutput);
 
 private:
   QAbstractScrollArea *_consoleWidget;
-  bool _outputActivated;
 };
 
 class ConsoleInputHandler : public QObject {

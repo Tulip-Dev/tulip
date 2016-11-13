@@ -59,6 +59,8 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   QSet<QString> _currentImportPaths;
   QAbstractScrollArea *_defaultConsoleWidget;
   QString _pythonVersion;
+  bool _outputEnabled;
+  bool _errorOutputEnabled;
 
 public:
   static const QString pythonPluginsPath;
@@ -175,6 +177,10 @@ public:
   void setOutputEnabled(const bool enableOutput);
 
   bool outputEnabled() const;
+
+  void setErrorOutputEnabled(const bool enableOutput);
+
+  bool errorOutputEnabled() const;
 
   void sendOutputToConsole(const QString &output, bool stdErr);
 

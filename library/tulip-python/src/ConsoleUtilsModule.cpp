@@ -27,7 +27,6 @@ using namespace tlp;
 QString consoleOuputString = "";
 QString consoleErrorOuputString = "";
 QString mainScriptFileName = "";
-bool outputActivated = true;
 
 QString currentConcatOutput = "";
 
@@ -73,7 +72,9 @@ static PyObject *consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
 
   QString output(QString::fromUtf8(buf));
 
-  if (reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag) {
+  bool stdErr = reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag;
+
+  if (stdErr) {
     if (mainScriptFileName != "") {
       output.replace("<string>", mainScriptFileName);
     }
@@ -83,7 +84,7 @@ static PyObject *consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
     consoleOuputString += output;
   }
 
-  if (outputActivated) {
+  if ((PythonInterpreter::getInstance()->outputEnabled() && !stdErr) || (PythonInterpreter::getInstance()->errorOutputEnabled() && stdErr)) {
 
     if (buf != nullptr && reinterpret_cast<consoleutils_ConsoleOutput *>(self)->writeToConsole) {
 
@@ -92,7 +93,7 @@ static PyObject *consoleutils_ConsoleOutput_write(PyObject *self, PyObject *o) {
       QStringList lines = currentConcatOutput.split('\n');
 
       for (int i = 0; i < lines.count() - 1; ++i) {
-        PythonInterpreter::getInstance()->sendOutputToConsole(lines[i], reinterpret_cast<consoleutils_ConsoleOutput *>(self)->stderrflag);
+        PythonInterpreter::getInstance()->sendOutputToConsole(lines[i], stdErr);
       }
 
       currentConcatOutput = lines[lines.size() - 1];

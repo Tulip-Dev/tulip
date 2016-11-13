@@ -51,7 +51,6 @@ static ConsoleOutputEmitter *consoleOuputEmitter = nullptr;
 extern QString consoleOuputString;
 extern QString consoleErrorOuputString;
 extern QString mainScriptFileName;
-extern bool outputActivated;
 
 extern void initconsoleutils();
 extern void inittuliputils();
@@ -192,7 +191,8 @@ BOOL APIENTRY DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserve
 }
 #endif
 
-PythonInterpreter::PythonInterpreter() : _wasInit(false), _runningScript(false), _defaultConsoleWidget(nullptr) {
+PythonInterpreter::PythonInterpreter()
+    : _wasInit(false), _runningScript(false), _defaultConsoleWidget(nullptr), _outputEnabled(true), _errorOutputEnabled(true) {
 
   if (Py_IsInitialized()) {
     _wasInit = true;
@@ -410,6 +410,7 @@ PythonInterpreter::~PythonInterpreter() {
       // So reset the sipQtSupport pointer to nullptr, this way the problematic function will no
       // more be called when the Python interpreter is finalized.
       setOutputEnabled(false);
+      setErrorOutputEnabled(false);
 #ifdef TULIP_SIP
       runString("import tulipsip; sys.stdout.write(tulipsip.__file__)");
 #else
@@ -775,31 +776,31 @@ void PythonInterpreter::setDefaultConsoleWidget(QAbstractScrollArea *console) {
 }
 
 void PythonInterpreter::setConsoleWidget(QAbstractScrollArea *console) {
-  if (consoleOuputHandler) {
-    consoleOuputEmitter->setOutputActivated(true);
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
+  if (consoleOuputEmitter) {
     consoleOuputEmitter->setConsoleWidget(console);
   }
 }
 
 void PythonInterpreter::resetConsoleWidget() {
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
   if (consoleOuputEmitter) {
-    consoleOuputEmitter->setOutputActivated(true);
     consoleOuputEmitter->setConsoleWidget(nullptr);
   }
 }
 
 void PythonInterpreter::setDefaultSIGINTHandler() {
-  if (consoleOuputEmitter) {
-    consoleOuputEmitter->setOutputActivated(false);
-  }
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
 
   if (runString("import signal")) {
     runString("signal.signal(signal.SIGINT, signal.SIG_DFL)");
   }
 
-  if (consoleOuputEmitter) {
-    consoleOuputEmitter->setOutputActivated(true);
-  }
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
 }
 
 QString PythonInterpreter::getPythonShellBanner() {
@@ -812,7 +813,8 @@ QString PythonInterpreter::getPythonShellBanner() {
 QVector<QString> PythonInterpreter::getGlobalDictEntries(const QString &prefixFilter) {
   QVector<QString> ret;
   QSet<QString> publicMembersSorted;
-  outputActivated = false;
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
   consoleOuputString = "";
   runString("import __main__;printObjectDict(__main__)");
   QStringList objectDictList = consoleOuputString.split("\n");
@@ -839,7 +841,8 @@ QVector<QString> PythonInterpreter::getGlobalDictEntries(const QString &prefixFi
     ret.push_back(*it);
   }
 
-  outputActivated = true;
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
   return ret;
 }
 
@@ -848,10 +851,12 @@ QString PythonInterpreter::getVariableType(const QString &varName) {
   if (varName.contains('('))
     return "";
 
-  outputActivated = false;
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
   consoleOuputString = "";
   bool ok = runString(QString("printObjectClass(") + varName + ")");
-  outputActivated = true;
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
 
   if (ok)
     return consoleOuputString.mid(0, consoleOuputString.size() - 1);
@@ -862,7 +867,8 @@ QString PythonInterpreter::getVariableType(const QString &varName) {
 QVector<QString> PythonInterpreter::getObjectDictEntries(const QString &objectName, const QString &prefixFilter) {
   QVector<QString> ret;
   QSet<QString> publicMembersSorted;
-  outputActivated = false;
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
   consoleOuputString = "";
 
   if (runString(objectName)) {
@@ -892,13 +898,15 @@ QVector<QString> PythonInterpreter::getObjectDictEntries(const QString &objectNa
     }
   }
 
-  outputActivated = true;
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
   return ret;
 }
 
 QVector<QString> PythonInterpreter::getImportedModulesList() {
   QVector<QString> ret;
-  outputActivated = false;
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
   consoleOuputString = "";
 #if PY_MAJOR_VERSION >= 3
 
@@ -920,13 +928,15 @@ QVector<QString> PythonInterpreter::getImportedModulesList() {
     }
   }
 
-  outputActivated = true;
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
   return ret;
 }
 
 QVector<QString> PythonInterpreter::getBaseTypesForType(const QString &typeName) {
   QVector<QString> ret;
-  outputActivated = false;
+  setOutputEnabled(false);
+  setErrorOutputEnabled(false);
   QStringList modules = typeName.split(".");
   QString curModule = "";
 
@@ -956,7 +966,8 @@ QVector<QString> PythonInterpreter::getBaseTypesForType(const QString &typeName)
     }
   }
 
-  outputActivated = true;
+  setOutputEnabled(true);
+  setErrorOutputEnabled(true);
   return ret;
 }
 
@@ -1001,11 +1012,19 @@ void PythonInterpreter::setProcessQtEventsDuringScriptExecution(bool processEven
 }
 
 void PythonInterpreter::setOutputEnabled(const bool enableOutput) {
-  outputActivated = enableOutput;
+  _outputEnabled = enableOutput;
 }
 
 bool PythonInterpreter::outputEnabled() const {
-  return outputActivated;
+  return _outputEnabled;
+}
+
+void PythonInterpreter::setErrorOutputEnabled(const bool enableOutput) {
+  _errorOutputEnabled = enableOutput;
+}
+
+bool PythonInterpreter::errorOutputEnabled() const {
+  return _errorOutputEnabled;
 }
 
 double PythonInterpreter::getPythonVersion() const {
@@ -1016,15 +1035,17 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
   bool textOutput = false;
 
   if (consoleOuputEmitter) {
-    consoleOuputEmitter->sendOutputToConsole(output, stdErr);
+    if ((outputEnabled() && !stdErr) || (errorOutputEnabled() && stdErr)) {
+      consoleOuputEmitter->sendOutputToConsole(output, stdErr);
+    }
   } else {
     textOutput = true;
   }
 
   if (textOutput) {
-    if (stdErr) {
+    if (errorOutputEnabled() && stdErr) {
       std::cerr << output.toStdString();
-    } else {
+    } else if (outputEnabled() && !stdErr) {
       std::cout << output.toStdString();
     }
   }
