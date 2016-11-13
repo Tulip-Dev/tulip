@@ -798,6 +798,7 @@ void PythonInterpreter::setDefaultConsoleWidget(QAbstractScrollArea *console) {
 void PythonInterpreter::setConsoleWidget(QAbstractScrollArea *console) {
   setOutputEnabled(true);
   setErrorOutputEnabled(true);
+
   if (consoleOuputEmitter) {
     consoleOuputEmitter->setConsoleWidget(console);
   }
@@ -806,6 +807,7 @@ void PythonInterpreter::setConsoleWidget(QAbstractScrollArea *console) {
 void PythonInterpreter::resetConsoleWidget() {
   setOutputEnabled(true);
   setErrorOutputEnabled(true);
+
   if (consoleOuputEmitter) {
     consoleOuputEmitter->setConsoleWidget(NULL);
   }

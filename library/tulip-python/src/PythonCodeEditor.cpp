@@ -1609,13 +1609,16 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
   // two spaces for indentation by default
   _indentPattern = "  ";
   bool tabIndent = false;
+
   while (!file.atEnd()) {
     QString line = QString::fromUtf8(file.readLine().data());
+
     // for backward compatibility in case of tab characters are used for indentation
     if (!tabIndent && line.startsWith("\t")) {
       _indentPattern = "\t";
       tabIndent = true;
     }
+
     scriptCode += line;
   }
 
