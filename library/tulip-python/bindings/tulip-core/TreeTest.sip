@@ -82,9 +82,9 @@ tlp.TreeTest.computeTree(graph)
 Computes a rooted tree from the graph. The algorithm is the following :
 
 * if the graph is a rooted tree, returns the graph
-* if the graph is a free tree, returns a rooted clone subgraph
-* if the graph is connected, makes a clone subgraph and returns a rooted spanning tree of that clone
-* if the graph is not connected, makes a clone subgraph, computes a tree for each of its connected components, adds a simple source and returns the clone.
+* if the graph is a free tree, returns a rooted clone sub-graph
+* if the graph is connected, makes a clone sub-graph and returns a rooted spanning tree of that clone
+* if the graph is not connected, makes a clone sub-graph, computes a tree for each of its connected components, adds a simple source and returns the clone.
 
 :param graph: the graph on which to compute a rooted tree
 :type graph: :class:`tlp.Graph`

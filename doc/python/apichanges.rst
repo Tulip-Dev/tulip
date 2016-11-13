@@ -1,10 +1,47 @@
 .. py:currentmodule:: tulip
 
-Important API changes
-======================
+Release notes and API changes
+=============================
 
-Since Tulip 4.10
-----------------
+Tulip-Python 4.10
+-----------------
+
+Bugs fixes
+^^^^^^^^^^
+
+The following bugs have been fixed since the 4.9 release:
+
+  * When calling a graph property algorithm trough dedicated methods of the :class:`tlp.Graph` class,
+    for instance :meth:`tlp.Graph.applyDoubleAlgorithm`, ensure values stored in the result property
+    of the algorithm are not resetted to the default ones before calling the algorithm.
+
+  * Regression when writing a Tulip plugin in Python, it was no more possible to modify the content of the dictionnary
+    storing the plugin parameters (and thus, output plugin parameters were no more taken into account).
+
+  * On Linux platform, a side effect that could lead to a segmentation fault when importing some dynamic
+    Python modules (for instance those internally used by scikit-learn) after the Tulip ones.
+
+New methods and API improvements
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The following methods have been added to the API:
+
+   * :meth:`tlp.WithParameter.addNumericPropertyParameter`
+
+   * a new signature for the method :meth:`tlp.Graph.inducedSubGraph` taking an input selection of nodes and edges
+     in parameter instead of a set of nodes
+
+The signatures of the methods for setting all nodes / edges values in a graph property,
+for instance :meth:`tlp.BooleanProperty.setAllNodeValue`, :meth:`tlp.DoubleProperty.setAllEdgeValue`,
+have been updated. They now take an optionnal :class:`tlp.Graph` parameter, enabling to only
+set the nodes / edges values contained in that sub-graph.
+
+Documentation for Tulip C++ plugins
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+A :ref:`new section <tulippluginsdoc>` in that documentation has been added detailing the C++ plugins
+bundled with Tulip that can be called from Python (for instance the great force directed layout algorithms
+from OGDF). The purpose of each plugin is given but also an exhaustive list of its parameters.
 
 Improvements for working with Tulip color scales
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -65,8 +102,8 @@ the instruction below can now be used::
   colorMappingParams['color scale'] = tlpgui.ColorScalesManager.getColorScale('OrRd_9')
 
 
-Since Tulip 4.9
----------------
+Tulip-Python 4.9
+----------------
 
 Special syntax for automatic creation of graph properties through type inference
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -168,7 +205,7 @@ the "file::" prefix is no more required to be written.
 
 Nevertheless for backward compatibility, the old mechanism can still be used.
 
-Since Tulip 4.8.1
+Tulip-Python 4.8.1
 ------------------
 
 New methods for getting / setting graph properties values for nodes and edges added
@@ -208,8 +245,8 @@ For instance, the sample code below sets multiple graph view properties values f
                 'viewFontAwesomeIcon' : getRandomFontAwesomeIcon()}
       graph.setNodePropertiesValues(n, values)
 
-Since Tulip 4.8
------------------
+Tulip-Python 4.8
+----------------
 
 .. _deprecatedDataSet:
 
