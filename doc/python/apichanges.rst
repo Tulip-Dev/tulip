@@ -239,11 +239,11 @@ For instance, the sample code below sets multiple graph view properties values f
     return minSize + random.random() * (maxSize - minSize)
 
   for n in graph.getNodes():
-      values = {'viewShape': tlp.NodeShape.FontAwesomeIcon,
-                'viewColor' : getRandomColor(),
-                'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
-                'viewFontAwesomeIcon' : getRandomFontAwesomeIcon()}
-      graph.setNodePropertiesValues(n, values)
+    values = {'viewShape': tlp.NodeShape.FontAwesomeIcon,
+              'viewColor' : getRandomColor(),
+              'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
+              'viewFontAwesomeIcon' : getRandomFontAwesomeIcon()}
+    graph.setNodePropertiesValues(n, values)
 
 Tulip-Python 4.8
 ----------------

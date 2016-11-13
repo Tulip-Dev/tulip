@@ -453,7 +453,8 @@ void FindReplaceDialog::hideEvent(QHideEvent *) {
   _editor->setFocus();
 }
 
-PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _highlighter(NULL), _tooltipActive(false) {
+PythonCodeEditor::PythonCodeEditor(QWidget *parent) :
+  QPlainTextEdit(parent), _highlighter(NULL), _tooltipActive(false), _indentPattern("  ") {
   installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);
@@ -629,7 +630,7 @@ static float clamp(float f, float minV, float maxV) {
 }
 
 void PythonCodeEditor::updateTabStopWidth() {
-  setTabStopWidth(3 * fontMetrics().width(QLatin1Char(' ')));
+  setTabStopWidth(2 * fontMetrics().width(QLatin1Char(' ')));
 }
 
 void PythonCodeEditor::zoomIn() {
@@ -1072,7 +1073,7 @@ void PythonCodeEditor::keyPressEvent (QKeyEvent * e) {
         text = text.trimmed();
 
         if (text.length() > 0 && text[text.length()-1] == ':')
-          textCursor().insertText("\t");
+          textCursor().insertText(_indentPattern);
       }
     }
 
@@ -1547,14 +1548,14 @@ void PythonCodeEditor::indentSelectedCode() {
     getSelection(lineFrom, indexFrom, lineTo, indexTo);
 
     for (int i = lineFrom ; i <= lineTo ; ++i) {
-      insertAt("\t", i, 0);
+      insertAt(_indentPattern, i, 0);
     }
 
     setSelection(lineFrom, 0, lineTo, lineLength(lineTo));
   }
   else {
     QTextCursor currentCursor = textCursor();
-    insertAt("\t", currentCursor.blockNumber(), 0);
+    insertAt(_indentPattern, currentCursor.blockNumber(), 0);
     setTextCursor(currentCursor);
   }
 }
@@ -1605,8 +1606,17 @@ bool PythonCodeEditor::loadCodeFromFile(const QString &filePath) {
 
   QString scriptCode;
 
+  // two spaces for indentation by default
+  _indentPattern = "  ";
+  bool tabIndent = false;
   while (!file.atEnd()) {
-    scriptCode += QString::fromUtf8(file.readLine().data());
+    QString line = QString::fromUtf8(file.readLine().data());
+    // for backward compatibility in case of tab characters are used for indentation
+    if (!tabIndent && line.startsWith("\t")) {
+      _indentPattern = "\t";
+      tabIndent = true;
+    }
+    scriptCode += line;
   }
 
   file.close();

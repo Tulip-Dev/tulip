@@ -31,21 +31,21 @@ it and set some rendering parameters::
 
     def main(graph):
 
-        # extraction and creation of the european sub-graph
-        continent =  graph.getStringProperty("continent")
-        europeNodes = []
-        for n in graph.getNodes():
-            if continent[n] == "Europe":
-                europeNodes.append(n)
-        europeSg = graph.inducedSubGraph(europeNodes)
-        europeSg.setName("Europe")
+      # extraction and creation of the european sub-graph
+      continent =  graph.getStringProperty("continent")
+      europeNodes = []
+      for n in graph.getNodes():
+        if continent[n] == "Europe":
+          europeNodes.append(n)
+      europeSg = graph.inducedSubGraph(europeNodes)
+      europeSg.setName("Europe")
 
-        nlvEurope = tlpgui.createNodeLinkDiagramView(europeSg)
+      nlvEurope = tlpgui.createNodeLinkDiagramView(europeSg)
 
-        # set labels scaled to node sizes mode
-        renderingParameters = nlvEurope.getRenderingParameters()
-        renderingParameters.setLabelScaled(True)
-        nlvEurope.setRenderingParameters(renderingParameters)
+      # set labels scaled to node sizes mode
+      renderingParameters = nlvEurope.getRenderingParameters()
+      renderingParameters.setLabelScaled(True)
+      nlvEurope.setRenderingParameters(renderingParameters)
 
 
 Using the module with the classical Python interpreter
@@ -69,7 +69,7 @@ and then changes the nodes colors. The Node Link Diagram view will be updated au
     >>> view = tlpgui.createNodeLinkDiagramView(grid)
     >>> viewColor = graph.getColorProperty("viewColor")
     >>> for n in graph.getNodes():
-    ...     viewColor[n] = tlp.Color(0, 255, 0)
+    ...   viewColor[n] = tlp.Color(0, 255, 0)
     ...
 
 .. warning:: When working on Windows platforms, you have to use the Python command line utility (not the IDLE one)
@@ -131,9 +131,9 @@ the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the cre
     # Map the node colors to their degree using the heat map color scale
     # Also set the nodes labels to their id
     for n in graph.getNodes():
-        pos = (degree[n] - degree.getNodeMin()) / (degree.getNodeMax() - degree.getNodeMin())
-        viewColor[n] = heatMap.getColorAtPos(pos)
-        viewLabel[n] = str(n.id)
+      pos = (degree[n] - degree.getNodeMin()) / (degree.getNodeMax() - degree.getNodeMin())
+      viewColor[n] = heatMap.getColorAtPos(pos)
+      viewLabel[n] = str(n.id)
 
     # Set border colors values
     viewBorderColor.setAllNodeValue(tlp.Color.Black)
@@ -153,9 +153,6 @@ the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the cre
     renderingParameters.setViewArrow(True)
     renderingParameters.setMinSizeOfLabel(10)
     nodeLinkView.setRenderingParameters(renderingParameters)
-
-
-
 
 .. _fig1a:
 .. figure:: tulipguiViewWindow.png
@@ -204,10 +201,10 @@ visual attributes on graph elements and finally it creates a node link diagram v
 	# if the node represents a directory, ensure that its label will be visible (as we will activate the "no labels overlaps" mode)
 	# also change its label color to blue
 	if graph.deg(n) > 1:
-	    renderingOrderingProp[n] = 1
-	    viewLabelColor[n] = viewLabelBorderColor[n] = tlp.Color(0, 0, 255)
+      renderingOrderingProp[n] = 1
+      viewLabelColor[n] = viewLabelBorderColor[n] = tlp.Color(0, 0, 255)
 	else:
-	    renderingOrderingProp[n] = 0
+      renderingOrderingProp[n] = 0
 
     viewBorderWidth.setAllEdgeValue(1)
 

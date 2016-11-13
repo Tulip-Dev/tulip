@@ -299,6 +299,8 @@ protected:
 
   QMainWindow *_mainWindow;
 
+  QString _indentPattern;
+
 };
 
 }

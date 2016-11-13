@@ -56,7 +56,7 @@ const QString updateVisualizationFunc =
   "import tuliputils\n"
   "\n"
   "def updateVisualization(centerViews = True):\n"
-  "\ttuliputils.updateVisualization(centerViews)\n"
+  "  tuliputils.updateVisualization(centerViews)\n"
   "\n"
   "\n";
 
@@ -64,7 +64,7 @@ const QString pauseScriptFunc =
   "import tuliputils\n"
   "\n"
   "def pauseScript():\n"
-  "\ttuliputils.pauseRunningScript()\n"
+  "  tuliputils.pauseRunningScript()\n"
   "\n"
   "\n";
 
@@ -72,7 +72,7 @@ const QString runGraphScriptFunc =
   "import tuliputils\n"
   "\n"
   "def runGraphScript(scriptFile, graph):\n"
-  "\ttuliputils.runGraphScript(scriptFile, graph)\n"
+  "  tuliputils.runGraphScript(scriptFile, graph)\n"
   "\n"
   "\n";
 
@@ -156,31 +156,31 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
     cleanPropName.replace("\"", "\\\"");
 
     if (dynamic_cast<DoubleProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<LayoutProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getLayoutProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<StringProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<ColorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<GraphProperty *>(prop)) {
@@ -188,44 +188,44 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
 
       if(cleanPropName!="viewMetaGraph")
 #endif
-        oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
+        oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getGraphProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<DoubleVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getDoubleVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<CoordVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getCoordVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<IntegerVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getIntegerVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<SizeVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getSizeVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<BooleanVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getBooleanVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<ColorVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getColorVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
 
     if (dynamic_cast<StringVectorProperty *>(prop)) {
-      oss << "\t"<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
+      oss << "  "<< cleanPropertyName(tlp::tlpStringToQString(prop->getName())) << " = graph.getStringVectorProperty(\"" << cleanPropName << "\")" << endl;
     }
   }
 
-  oss << "\n\tfor n in graph.getNodes():" << endl;
+  oss << "\n  for n in graph.getNodes():" << endl;
 
   if (PythonInterpreter::getInstance()->getPythonVersion() >= 3.0)
-    oss << "\t\tprint(n)" << endl;
+    oss << "    print(n)" << endl;
   else
-    oss << "\t\tprint n" << endl;
+    oss << "    print n" << endl;
 
   return scriptCode;
 }
@@ -246,18 +246,6 @@ void PythonScriptView::setupWidget() {
   _pythonInterpreter->runString(updateVisualizationFunc);
   _pythonInterpreter->runString(pauseScriptFunc);
   _pythonInterpreter->runString(runGraphScriptFunc);
-}
-
-string& replaceAll(string& context, const string& from, const string& to) {
-  size_t lookHere = 0;
-  size_t foundHere;
-
-  while((foundHere = context.find(from, lookHere)) != string::npos) {
-    context.replace(foundHere, from.size(), to);
-    lookHere = foundHere + to.size();
-  }
-
-  return context;
 }
 
 void PythonScriptView::graphChanged(Graph *graph) {
@@ -288,7 +276,6 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
           oss << "module_src" << i;
 
           if (modulesDataSet.get(oss.str(), moduleSrc)) {
-            replaceAll(moduleSrc, "    ", "\t");
             QFileInfo fileInfo(tlpStringToQString(module));
             loadModuleFromSrcCode(fileInfo.fileName(), tlpStringToQString(moduleSrc));
           }
@@ -324,9 +311,6 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
           if (mainScriptsDataSet.get(oss.str(), mainScriptSrc)) {
             int mainScriptId = _viewWidget->addMainScriptEditor();
             PythonCodeEditor *codeEditor = _viewWidget->getMainScriptEditor(mainScriptId);
-            // TLPParser seems to replace the tab character with four white spaces when reading the content of the TLP file, don't know why
-            // Anyway, replace the original tab character in order to have a correct indentation when setting the script text to the code editor
-            replaceAll(mainScriptSrc, "    ", "\t");
             codeEditor->setPlainText(tlpStringToQString(mainScriptSrc));
 
             if (mainScript != "")
@@ -361,7 +345,6 @@ void PythonScriptView::setState(const tlp::DataSet &dataSet) {
         QFileInfo fileInfo(tlpStringToQString(filename));
 
         if (dataSet.get("script code", scriptCode)) {
-          replaceAll(scriptCode, "    ", "\t");
           codeEditor->setPlainText(tlpStringToQString(scriptCode));
 
 
