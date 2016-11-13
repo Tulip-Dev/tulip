@@ -157,11 +157,14 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
       if (quoteStartPos == -1) {
         quoteStartPos = i;
+        setFormat(quoteStartPos, 1, _quotationFormat);
       }
       else {
         setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
         quoteStartPos = -1;
       }
+    } else if (quoteStartPos != -1) {
+      setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
     }
   }
 
@@ -184,11 +187,14 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 
       if (quoteStartPos == -1) {
         quoteStartPos = i;
+        setFormat(quoteStartPos, 1, _quotationFormat);
       }
       else {
         setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
         quoteStartPos = -1;
       }
+    } else if (quoteStartPos != -1) {
+      setFormat(quoteStartPos, i-quoteStartPos+1, _quotationFormat);
     }
   }
 
