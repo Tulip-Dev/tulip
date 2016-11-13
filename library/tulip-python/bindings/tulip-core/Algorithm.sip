@@ -48,7 +48,8 @@ if it is decomposed in multiple phases (e.g. layouting the graph, coloring it, .
 
 .. py:attribute:: dataSet
 
-   A dictionnary containing parameters for this algorithm, if any.
+   A dictionnary containing input parameters for this algorithm, if any. It can also be used to write
+   output parameters computed by the algorithm that will remain available after its execution.
 
 .. py:attribute:: pluginProgress
 

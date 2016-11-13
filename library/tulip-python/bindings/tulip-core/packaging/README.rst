@@ -35,6 +35,12 @@ Some informations regarding the Tulip-Python releases pushed on the Python Packa
 
     * **4.10.0**: based on Tulip 4.10.0 released on ???
 
+      * some new methods added and API improvements (see updated documentation)
+
+      * add a new section in the documentation detailing the C++ plugins bundled with Tulip that can be called from Python
+
+      * improvements for working with Tulip color scales (see updated documentation)
+
     * **4.9.0** : based on Tulip 4.9.0 released on 08/07/2016
 
       * add a mechanism to ease the creation of graph properties through type inference (see updated documentation)
