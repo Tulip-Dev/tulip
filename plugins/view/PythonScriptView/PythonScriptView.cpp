@@ -618,7 +618,9 @@ bool PythonScriptView::loadScript(const QString &fileName, bool clear) {
   }
 
   clearErrorIndicators();
+  _pythonInterpreter->setOutputEnabled(false);
   _pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", ""));
+  _pythonInterpreter->setOutputEnabled(true);
   indicateErrors();
   _pythonInterpreter->resetConsoleWidget();
 
@@ -670,7 +672,9 @@ void PythonScriptView::saveScript(int tabIdx, bool clear) {
       }
 
       clearErrorIndicators();
+      _pythonInterpreter->setOutputEnabled(false);
       _pythonInterpreter->reloadModule(fileInfo.fileName().replace(".py", ""));
+      _pythonInterpreter->setOutputEnabled(true);
       indicateErrors();
       _pythonInterpreter->resetConsoleWidget();
 
@@ -690,8 +694,10 @@ void PythonScriptView::saveImportAllScripts() {
 
       if (tabText.contains(".py")) {
         tabText.replace(".py", "");
+        _pythonInterpreter->setOutputEnabled(false);
         _pythonInterpreter->registerNewModuleFromString(tabText, _viewWidget->getMainScriptEditor(i)->getCleanCode());
         _pythonInterpreter->importModule(tabText);
+        _pythonInterpreter->setOutputEnabled(true);
       }
     }
   }
