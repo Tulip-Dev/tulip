@@ -286,6 +286,8 @@ protected:
   bool _moduleEditor;
 
   QMainWindow *_mainWindow;
+
+  QString _indentPattern;
 };
 }
 

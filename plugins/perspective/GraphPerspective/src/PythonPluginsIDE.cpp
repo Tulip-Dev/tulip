@@ -74,83 +74,83 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
   textStream << "import tulipplugins" << endl << endl;
 
   textStream << "class " << pluginClassName << "(" << pluginClass << "):" << endl;
-  textStream << "\tdef __init__(self, context):" << endl;
-  textStream << "\t\t" << pluginClass << ".__init__(self, context)" << endl;
-  textStream << "\t\t# You can add parameters to the plugin here through the following syntax:" << endl;
-  textStream << "\t\t# self.add<Type>Parameter(\"<paramName>\", \"<paramDoc>\", \"<paramDefaultValue>\")" << endl;
-  textStream << "\t\t# (see the documentation of class tlp.WithParameter to see what parameter types are supported)." << endl << endl;
+  textStream << "  def __init__(self, context):" << endl;
+  textStream << "    " << pluginClass << ".__init__(self, context)" << endl;
+  textStream << "    # You can add parameters to the plugin here through the following syntax:" << endl;
+  textStream << "    # self.add<Type>Parameter(\"<paramName>\", \"<paramDoc>\", \"<paramDefaultValue>\")" << endl;
+  textStream << "    # (see the documentation of class tlp.WithParameter to see what parameter types are supported)." << endl << endl;
 
   if (pluginType != "Import" && pluginType != "Export") {
 
-    textStream << "\tdef check(self):" << endl;
-    textStream << "\t\t# This method is called before applying the algorithm on the input graph." << endl;
-    textStream << "\t\t# You can perform some precondition checks here." << endl;
-    textStream << "\t\t# See comments in the run method to know how to have access to the input graph." << endl << endl;
-    textStream << "\t\t# Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied" << endl;
-    textStream << "\t\t# and the second one can be used to provide an error message." << endl;
-    textStream << "\t\treturn (True, \"\")" << endl << endl;
-    textStream << "\tdef run(self):" << endl;
-    textStream << "\t\t# This method is the entry point of the algorithm when it is called" << endl;
-    textStream << "\t\t# and must contain its implementation." << endl << endl;
-    textStream << "\t\t# The graph on which the algorithm is applied can be accessed through" << endl;
-    textStream << "\t\t# the \"graph\" class attribute (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "\t\t# The parameters provided by the user are stored in a dictionnary" << endl;
-    textStream << "\t\t# that can be accessed through the \"dataSet\" class attribute." << endl << endl;
+    textStream << "  def check(self):" << endl;
+    textStream << "    # This method is called before applying the algorithm on the input graph." << endl;
+    textStream << "    # You can perform some precondition checks here." << endl;
+    textStream << "    # See comments in the run method to know how to have access to the input graph." << endl << endl;
+    textStream << "    # Must return a tuple (Boolean, string). First member indicates if the algorithm can be applied" << endl;
+    textStream << "    # and the second one can be used to provide an error message." << endl;
+    textStream << "    return (True, \"\")" << endl << endl;
+    textStream << "  def run(self):" << endl;
+    textStream << "    # This method is the entry point of the algorithm when it is called" << endl;
+    textStream << "    # and must contain its implementation." << endl << endl;
+    textStream << "    # The graph on which the algorithm is applied can be accessed through" << endl;
+    textStream << "    # the \"graph\" class attribute (see documentation of class tlp.Graph)." << endl << endl;
+    textStream << "    # The parameters provided by the user are stored in a dictionnary" << endl;
+    textStream << "    # that can be accessed through the \"dataSet\" class attribute." << endl << endl;
 
     if (pluginType == "Layout") {
-      textStream << "\t\t# The result of this layout algorithm must be stored in the" << endl;
-      textStream << "\t\t# layout property accessible through the \"result\" class attribute" << endl;
-      textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
+      textStream << "    # The result of this layout algorithm must be stored in the" << endl;
+      textStream << "    # layout property accessible through the \"result\" class attribute" << endl;
+      textStream << "    # (see documentation to know how to work with graph properties)." << endl << endl;
     } else if (pluginType == "Size") {
-      textStream << "\t\t# The result of this size algorithm must be stored in the" << endl;
-      textStream << "\t\t# size property accessible through the \"result\" class attribute" << endl;
-      textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
+      textStream << "    # The result of this size algorithm must be stored in the" << endl;
+      textStream << "    # size property accessible through the \"result\" class attribute" << endl;
+      textStream << "    # (see documentation to know how to work with graph properties)." << endl << endl;
     } else if (pluginType == "Measure") {
-      textStream << "\t\t# The result of this measure algorithm must be stored in the" << endl;
-      textStream << "\t\t# double property accessible through the \"result\" class attribute" << endl;
-      textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
+      textStream << "    # The result of this measure algorithm must be stored in the" << endl;
+      textStream << "    # double property accessible through the \"result\" class attribute" << endl;
+      textStream << "    # (see documentation to know how to work with graph properties)." << endl << endl;
     } else if (pluginType == "Color") {
-      textStream << "\t\t# The result of this color algorithm must be stored in the" << endl;
-      textStream << "\t\t# color property accessible through the \"result\" class attribute" << endl;
-      textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
+      textStream << "    # The result of this color algorithm must be stored in the" << endl;
+      textStream << "    # color property accessible through the \"result\" class attribute" << endl;
+      textStream << "    # (see documentation to know how to work with graph properties)." << endl << endl;
     } else if (pluginType == "Selection") {
-      textStream << "\t\t# The result of this selection algorithm must be stored in the" << endl;
-      textStream << "\t\t# boolean property accessible through the \"result\" class attribute" << endl;
-      textStream << "\t\t# (see documentation to know how to work with graph properties)." << endl << endl;
+      textStream << "    # The result of this selection algorithm must be stored in the" << endl;
+      textStream << "    # boolean property accessible through the \"result\" class attribute" << endl;
+      textStream << "    # (see documentation to know how to work with graph properties)." << endl << endl;
     }
 
-    textStream << "\t\t# The method must return a boolean indicating if the algorithm" << endl;
-    textStream << "\t\t# has been successfully applied on the input graph." << endl;
-    textStream << "\t\treturn True" << endl << endl;
+    textStream << "    # The method must return a boolean indicating if the algorithm" << endl;
+    textStream << "    # has been successfully applied on the input graph." << endl;
+    textStream << "    return True" << endl << endl;
 
   } else if (pluginType == "Import") {
-    textStream << "\tdef importGraph(self):" << endl;
-    textStream << "\t\t# This method is called to import a new graph." << endl;
-    textStream << "\t\t# An empty graph to populate is accessible through the \"graph\" class attribute" << endl;
-    textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "\t\t# The parameters provided by the user are stored in a dictionnary" << endl;
-    textStream << "\t\t# that can be accessed through the \"dataSet\" class attribute." << endl << endl;
+    textStream << "  def importGraph(self):" << endl;
+    textStream << "    # This method is called to import a new graph." << endl;
+    textStream << "    # An empty graph to populate is accessible through the \"graph\" class attribute" << endl;
+    textStream << "    # (see documentation of class tlp.Graph)." << endl << endl;
+    textStream << "    # The parameters provided by the user are stored in a dictionnary" << endl;
+    textStream << "    # that can be accessed through the \"dataSet\" class attribute." << endl << endl;
 
-    textStream << "\t\t# The method must return a Boolean indicating if the" << endl;
-    textStream << "\t\t# graph has been successfully imported." << endl;
-    textStream << "\t\treturn True" << endl << endl;
+    textStream << "    # The method must return a Boolean indicating if the" << endl;
+    textStream << "    # graph has been successfully imported." << endl;
+    textStream << "    return True" << endl << endl;
   } else if (pluginType == "Export") {
-    textStream << "\tdef exportGraph(self, os):" << endl;
-    textStream << "\t\t# This method is called to export a graph." << endl;
-    textStream << "\t\t# The graph to export is accessible through the \"graph\" class attribute" << endl;
-    textStream << "\t\t# (see documentation of class tlp.Graph)." << endl << endl;
-    textStream << "\t\t# The parameters provided by the user are stored in dictionnary" << endl;
-    textStream << "\t\t# that can be accessed through the \"dataSet\" class attribute." << endl << endl;
+    textStream << "  def exportGraph(self, os):" << endl;
+    textStream << "    # This method is called to export a graph." << endl;
+    textStream << "    # The graph to export is accessible through the \"graph\" class attribute" << endl;
+    textStream << "    # (see documentation of class tlp.Graph)." << endl << endl;
+    textStream << "    # The parameters provided by the user are stored in dictionnary" << endl;
+    textStream << "    # that can be accessed through the \"dataSet\" class attribute." << endl << endl;
 
-    textStream << "\t\t# The os parameter is an output file stream (initialized by the Tulip GUI" << endl;
-    textStream << "\t\t# or by the tlp.exportGraph function.)." << endl;
-    textStream << "\t\t# To write data to the file, you have to use the following syntax:" << endl << endl;
-    textStream << "\t\t# write the number of nodes and edges to the file" << endl;
-    textStream << "\t\t# os << self.graph.numberOfNodes() << \"\\n\"" << endl;
-    textStream << "\t\t# os << self.graph.numberOfEdges() << \"\\n\"" << endl << endl;
-    textStream << "\t\t# The method must return a Boolean indicating if the" << endl;
-    textStream << "\t\t# graph has been successfully exported." << endl;
-    textStream << "\t\treturn True" << endl << endl;
+    textStream << "    # The os parameter is an output file stream (initialized by the Tulip GUI" << endl;
+    textStream << "    # or by the tlp.exportGraph function.)." << endl;
+    textStream << "    # To write data to the file, you have to use the following syntax:" << endl << endl;
+    textStream << "    # write the number of nodes and edges to the file" << endl;
+    textStream << "    # os << self.graph.numberOfNodes() << \"\\n\"" << endl;
+    textStream << "    # os << self.graph.numberOfEdges() << \"\\n\"" << endl << endl;
+    textStream << "    # The method must return a Boolean indicating if the" << endl;
+    textStream << "    # graph has been successfully exported." << endl;
+    textStream << "    return True" << endl << endl;
   }
 
   textStream << "# The line below does the magic to register the plugin into the plugin database" << endl;
