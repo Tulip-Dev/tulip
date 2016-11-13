@@ -206,7 +206,7 @@ void PythonShellWidget::keyPressEvent(QKeyEvent * e) {
       if (line != "") {
         if(_currentPs == ps2 || line.endsWith(":")) {
           _currentPs = ps2;
-          insert(ps2+"\t");
+          insert(ps2+"  ");
         }
         else {
           executeCurrentLines();

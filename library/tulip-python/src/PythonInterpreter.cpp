@@ -759,7 +759,7 @@ void PythonInterpreter::deleteModule(const QString &moduleName) {
   QTextStream oss(&pythonCode);
   oss << "import sys" << endl;
   oss << "if \"" << moduleName << "\" in sys.modules:" << endl;
-  oss << "\tdel sys.modules[\"" << moduleName << "\"]" << endl;
+  oss << "  del sys.modules[\"" << moduleName << "\"]" << endl;
   runString(pythonCode);
 }
 

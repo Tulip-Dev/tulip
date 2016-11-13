@@ -38,34 +38,34 @@ A general algorithm must implement the :class:`tlp.Algorithm` interface as illus
   import tulipplugins
 
   class GeneralAlgorithmExample(tlp.Algorithm):
-      def __init__(self, context):
-          tlp.Algorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.Algorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -80,38 +80,38 @@ A selection algorithm must implement the :class:`tlp.BooleanAlgorithm` interface
   import tulipplugins
 
   class SelectionAlgorithmExample(tlp.BooleanAlgorithm):
-      def __init__(self, context):
-          tlp.BooleanAlgorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.BooleanAlgorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The result of this selection algorithm must be stored in the
-          # boolean property accessible through the "result" class attribute
-          # (see documentation to know how to work with graph properties).
+      # The result of this selection algorithm must be stored in the
+      # boolean property accessible through the "result" class attribute
+      # (see documentation to know how to work with graph properties).
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -126,38 +126,38 @@ A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as il
   import tulipplugins
 
   class ColorAlgorithmExample(tlp.ColorAlgorithm):
-      def __init__(self, context):
-          tlp.ColorAlgorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.ColorAlgorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The result of this color algorithm must be stored in the
-          # color property accessible through the "result" class attribute
-          # (see documentation to know how to work with graph properties).
+      # The result of this color algorithm must be stored in the
+      # color property accessible through the "result" class attribute
+      # (see documentation to know how to work with graph properties).
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -172,38 +172,38 @@ A measure algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as
   import tulipplugins
 
   class MeasureAlgorithmExample(tlp.DoubleAlgorithm):
-      def __init__(self, context):
-          tlp.DoubleAlgorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.DoubleAlgorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The result of this measure algorithm must be stored in the
-          # double property accessible through the "result" class attribute
-          # (see documentation to know how to work with graph properties).
+      # The result of this measure algorithm must be stored in the
+      # double property accessible through the "result" class attribute
+      # (see documentation to know how to work with graph properties).
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -218,38 +218,38 @@ An integer algorithm must implement the :class:`tlp.IntegerAlgorithm` interface 
   import tulipplugins
 
   class IntegerAlgorithmExample(tlp.IntegerAlgorithm):
-      def __init__(self, context):
-          tlp.IntegerAlgorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.IntegerAlgorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The result of this integer algorithm must be stored in the
-          # integer property accessible through the "result" class attribute
-          # (see documentation to know how to work with graph properties).
+      # The result of this integer algorithm must be stored in the
+      # integer property accessible through the "result" class attribute
+      # (see documentation to know how to work with graph properties).
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -264,38 +264,38 @@ A layout algorithm must implement the :class:`tlp.LayoutAlgorithm` interface as 
   import tulipplugins
 
   class LayoutAlgorithmExample(tlp.LayoutAlgorithm):
-      def __init__(self, context):
-          tlp.LayoutAlgorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.LayoutAlgorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The result of this layout algorithm must be stored in the
-          # layout property accessible through the "result" class attribute
-          # (see documentation to know how to work with graph properties).
+      # The result of this layout algorithm must be stored in the
+      # layout property accessible through the "result" class attribute
+      # (see documentation to know how to work with graph properties).
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -310,38 +310,38 @@ A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illu
   import tulipplugins
 
   class SizeAlgorithmExample(tlp.SizeAlgorithm):
-      def __init__(self, context):
-          tlp.SizeAlgorithm.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.SizeAlgorithm.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def check(self):
-          # This method is called before applying the algorithm on the input graph.
-          # You can perform some precondition checks here.
-          # See comments in the run method to know how to access to the input graph.
+    def check(self):
+      # This method is called before applying the algorithm on the input graph.
+      # You can perform some precondition checks here.
+      # See comments in the run method to know how to access to the input graph.
 
-          # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
-          # and the second one can be used to provide an error message
-          return (True, "Ok")
+      # Must return a tuple (boolean, string). First member indicates if the algorithm can be applied
+      # and the second one can be used to provide an error message
+      return (True, "Ok")
 
-      def run(self):
-          # This method is the entry point of the algorithm when it is called
-          # and must contain its implementation.
+    def run(self):
+      # This method is the entry point of the algorithm when it is called
+      # and must contain its implementation.
 
-          # The graph on which the algorithm is applied can be accessed through
-          # the "graph" class attribute (see documentation of class tlp.Graph).
+      # The graph on which the algorithm is applied can be accessed through
+      # the "graph" class attribute (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The result of this size algorithm must be stored in the
-          # size property accessible through the "result" class attribute
-          # (see documentation to know how to work with graph properties).
+      # The result of this size algorithm must be stored in the
+      # size property accessible through the "result" class attribute
+      # (see documentation to know how to work with graph properties).
 
-          # The method must return a boolean indicating if the algorithm
-          # has been successfully applied on the input graph.
-          return True
+      # The method must return a boolean indicating if the algorithm
+      # has been successfully applied on the input graph.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -356,31 +356,31 @@ An export module must implement the :class:`tlp.ExportModule` interface as illus
   import tulipplugins
 
   class ExportModuleExample(tlp.ExportModule):
-      def __init__(self, context):
-          tlp.ExportModule.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.ExportModule.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def exportGraph(self, os):
-          # This method is called to export a graph.
-          # The graph to export is accessible through the "graph" class attribute
-          # (see documentation of class tlp.Graph).
+    def exportGraph(self, os):
+      # This method is called to export a graph.
+      # The graph to export is accessible through the "graph" class attribute
+      # (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute.
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute.
 
-          # The os parameter is an output file stream (initialized by the Tulip GUI
-          # or by the tlp.exportGraph function.).
-          # To write data to the file, you have to use the following syntax :
+      # The os parameter is an output file stream (initialized by the Tulip GUI
+      # or by the tlp.exportGraph function.).
+      # To write data to the file, you have to use the following syntax :
 
-          # write the number of nodes and edges to the file
-          os << self.graph.numberOfNodes() << "\n"
-          os << self.graph.numberOfEdges() << "\n"
+      # write the number of nodes and edges to the file
+      os << self.graph.numberOfNodes() << "\n"
+      os << self.graph.numberOfEdges() << "\n"
 
-          # The method must return a boolean indicating if the
-          # graph has been successfully exported.
-          return True
+      # The method must return a boolean indicating if the
+      # graph has been successfully exported.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.
@@ -395,23 +395,23 @@ An import module must implement the :class:`tlp.ImportModule` interface as illus
   import tulipplugins
 
   class ImportModuleExample(tlp.ImportModule):
-      def __init__(self, context):
-          tlp.ImportModule.__init__(self, context)
-          # you can add parameters to the plugin here through the following syntax
-          # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
-          # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
+    def __init__(self, context):
+      tlp.ImportModule.__init__(self, context)
+      # you can add parameters to the plugin here through the following syntax
+      # self.add<Type>Parameter("<paramName>", "<paramDoc>", "<paramDefaultValue>")
+      # (see documentation of class tlp.WithParameter to see what types of parameters are supported)
 
-      def importGraph(self):
-          # This method is called to import a new graph.
-          # An empty graph to populate is accessible through the "graph" class attribute
-          # (see documentation of class tlp.Graph).
+    def importGraph(self):
+      # This method is called to import a new graph.
+      # An empty graph to populate is accessible through the "graph" class attribute
+      # (see documentation of class tlp.Graph).
 
-          # The parameters provided by the user are stored in a dictionnary
-          # that can be accessed through the "dataSet" class attribute
+      # The parameters provided by the user are stored in a dictionnary
+      # that can be accessed through the "dataSet" class attribute
 
-          # The method must return a boolean indicating if the
-          # graph has been successfully imported.
-          return True
+      # The method must return a boolean indicating if the
+      # graph has been successfully imported.
+      return True
 
   # The line below does the magic to register the plugin to the plugin database
   # and updates the GUI to make it accessible through the menus.

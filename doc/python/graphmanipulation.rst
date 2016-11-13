@@ -49,9 +49,9 @@ Iterating over graph elements
 The :class:`tlp.Graph` class provides several iterators on the graph structure (see :ref:`Iterators on the graph structure <graph-class.iterators>`). 
 The sample code below illustrates the syntax to perform an iteration over all the nodes of a graph.::
 
-      for n in graph.getNodes():
-	degree = graph.deg(n)
-	print "the degree of ", n, "is ", degree
+    for n in graph.getNodes():
+      degree = graph.deg(n)
+      print("the degree of", n, "is", degree)
 
 
 

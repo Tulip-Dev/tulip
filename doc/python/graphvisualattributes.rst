@@ -39,9 +39,9 @@ The sample code below shows how to set a random layout from Python::
     viewLayout = graph.getLayoutProperty("viewLayout")
 
     for n in graph.getNodes():
-        x = random.random() * size
-        y = random.random() * size
-        viewLayout[n] = tlp.Coord(x, y, 0)
+      x = random.random() * size
+      y = random.random() * size
+      viewLayout[n] = tlp.Coord(x, y, 0)
 
 .. _nodes-rotations:
 
@@ -56,8 +56,8 @@ The sample code below rotates of 90 degrees the nodes whose degree is greater th
     viewRotation = graph.getDoubleProperty("viewRotation")
 
     for n in graph.getNodes():
-        if graph.deg(n) > 10:
-            viewRotation[n] = 90
+      if graph.deg(n) > 10:
+        viewRotation[n] = 90
 
 .. _graph-selection:
 
@@ -75,12 +75,12 @@ The sample code below select nodes whose degree is greater than 3 and the edges 
     viewSelection.setAllEdgeValue(False)
 
     for n in graph.getNodes():
-        if graph.deg(n) > 3:
-            viewSelection[n] = True
+      if graph.deg(n) > 3:
+        viewSelection[n] = True
 
     for e in graph.getEdges():
-        if viewSelection[graph.source(e)] and viewSelection[graph.target(e)]:
-            viewSelection[e] = True
+      if viewSelection[graph.source(e)] and viewSelection[graph.target(e)]:
+        viewSelection[e] = True
 
 .. _graph-colors:
 
@@ -99,10 +99,10 @@ The sample code below colors nodes whose degree is greater than 3 in blue and th
     viewColor = graph.getColorProperty("viewColor")
 
     for n in graph.getNodes():
-        if graph.deg(n) > 3:
-            viewColor[n] = blue
-        else:
-            viewColor[n] = green
+      if graph.deg(n) > 3:
+        viewColor[n] = blue
+      else:
+        viewColor[n] = green
 
 Some predefined colors constants are also available in the :class:`tlp.Color`. Below is the exhaustive list of these constants:
 
@@ -272,8 +272,8 @@ The sample code below set the shape of the selected nodes to a circle::
     viewSelection = graph.getBooleanProperty("viewSelection")
 
     for n in graph.getNodes():
-        if viewSelection[n]:
-            viewShape[n] = tlp.NodeShape.Circle
+      if viewSelection[n]:
+        viewShape[n] = tlp.NodeShape.Circle
 
 .. _graph-labels:
 
@@ -289,7 +289,7 @@ The sample code below labels nodes according to their id::
     viewLabel = graph.getStringProperty("viewLabel")
 
     for n in graph.getNodes():
-        viewLabel[n] = "Node " + str(n.id)
+      viewLabel[n] = "Node " + str(n.id)
 
 
 The position of the label relative to the associated elements can also be modified through the **"viewLabelPosition"** graph property (of type :class:`tlp.IntegerProperty`).
