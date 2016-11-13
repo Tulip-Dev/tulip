@@ -417,7 +417,7 @@ which can contain an error message.
 %Docstring
 tlp.Graph.clear()
 
-Remove all nodes, edges and subgraphs from the graph .
+Remove all nodes, edges and sub-graphs from the graph .
 %End
 
 //===========================================================================================
@@ -431,7 +431,7 @@ selected in the selection. If there is no selection an empty sub-graph is return
 
 :param selection: a Boolean property whose selected elements will be added to the sub-graph
 :type selection: :class:`tlp.BooleanProperty`
-:param name: The name of the newly created subgraph. Defaults to "unnamed".
+:param name: The name of the newly created sub-graph. Defaults to "unnamed".
 :type name: string
 :rtype: :class:`tlp.Graph`
 %End
@@ -459,7 +459,7 @@ tlp.Graph.addSubGraph(name)
 
 Creates and returns a new named sub-graph of this graph.
 
-:param name: The name of the newly created subgraph.
+:param name: The name of the newly created sub-graph.
 :type name: string
 :rtype: :class:`tlp.Graph`
 %End
@@ -472,11 +472,11 @@ tlp.Graph.addCloneSubGraph(name = "unnamed", addSibling = false, addSiblinProper
 
 .. versionadded:: 4.5
 
-Creates and returns a subgraph of this graph (or the parent of this graph) that contains all its elements.
+Creates and returns a sub-graph of this graph (or the parent of this graph) that contains all its elements.
 
-:param name: The name of the newly created subgraph. Defaults to "unnamed".
+:param name: The name of the newly created sub-graph. Defaults to "unnamed".
 :type name: string
-:param addSibling: if true a sibling of this graph will be created; a subgraph of this graph if not. Defaults to false
+:param addSibling: if true a sibling of this graph will be created; a sub-graph of this graph if not. Defaults to false
 :type addSibling: bool
 :param addSiblingProperties: if true all the local properties of this graph will be copied into its clone sibling. Defaults to false
 :type addSiblingProperties: bool
@@ -495,7 +495,7 @@ between two nodes in the set including self-loops.
 
 :param nodeSet: the set of nodes from which to build the induced sub-graph
 :type nodeSet: list or set of :class:`tlp.node`
-:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+:param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph` 
 %End
@@ -520,7 +520,7 @@ the selected edges and all the existing edges between two nodes in the set inclu
 
 :param selection: a selection of nodes and edges
 :type selection: :class:`tlp.BooleanProperty`
-:param parentSubGraph: If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+:param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.Graph`
 %End
@@ -731,7 +731,7 @@ tlp.Graph.getNthSubGraph(n)
 
 .. versionadded:: 3.7
 
-Returns the nth subgraph or :const:`None` if there is no such sub-graph.
+Returns the nth sub-graph or :const:`None` if there is no such sub-graph.
 Since order cannot be ensured in every implementation, this method should be equivalent to::
 
   i = 0
@@ -3668,25 +3668,25 @@ edges from the metanode to the other nodes.
 %Docstring
 tlp.Graph.createMetaNode(subgraph[, multiEdges=True, delAllEdge=True])
 
-Closes a subgraph into a metanode and returns it. Edges from nodes
-in the subgraph to nodes outside the subgraph are replaced with
-edges from the metanode to the nodes outside the subgraph.
+Closes a sub-graph into a metanode and returns it. Edges from nodes
+in the sub-graph to nodes outside the sub-graph are replaced with
+edges from the metanode to the nodes outside the sub-graph.
 
-The provided subgraph can not be a descendant of the current graph in the graph hierarchy.
+The provided sub-graph can not be a descendant of the current graph in the graph hierarchy.
 When creating a metanode, all nodes that are closed in it are first deleted
-from the graph. These nodes are also deleted in the subgraphs of the graph and
-in all descendant subgraphs. So if the provided subgraph is a descendant of
+from the graph. These nodes are also deleted in the sub-graphs of the graph and
+in all descendant sub-graphs. So if the provided sub-graph is a descendant of
 the graph, all its nodes and edges will be deleted and the meta-node will
-point to an empty subgraph.
+point to an empty sub-graph.
 
-:param subgraph: an existing subgraph
+:param subgraph: an existing sub-graph
 :type subgraph: :class:`tlp.Graph`
 :param multiEdges: indicates if a meta edge will be created for each underlying edge
 :type multiEdges: boolean
 :param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
 :type delAllEdge: boolean
 :rtype: :class:`tlp.node`
-:throws: an exception if the provided subgraph is a descandent of the graph in the graph hierarchy or if one of the element in the subgraph does not belong to the graph.
+:throws: an exception if the provided sub-graph is a descandent of the graph in the graph hierarchy or if one of the element in the sub-graph does not belong to the graph.
 
 .. warning:: This method will fail when called on the root graph.
 
@@ -3733,7 +3733,7 @@ tlp.Graph.createMetaNodes(itGraph, quotientGraph)
 Populates a quotient graph with one meta node for each iterated graph.
 Returns a list of created meta-nodes.
 
-:param itGraph: a graph iterator, (typically a subgraph iterator)
+:param itGraph: a graph iterator, (typically a sub-graph iterator)
 :type itGraph: a Tulip iterator on :class:`tlp.Graph` objects
 :param quotientGraph: the graph that will contain the meta nodes
 :type quotientGraph: :class:`tlp.Graph`
@@ -4099,7 +4099,7 @@ bool saveGraph(tlp::Graph *graph, const std::string &filename);
 %Docstring
 tlp.saveGraph(graph, filename)
 
-Serializes the corresponding graph and all its subgraphs (depending on the format) to a file
+Serializes the corresponding graph and all its sub-graphs (depending on the format) to a file
 through the available Tulip export plugins.
 
 Since Tulip 4.8, the selection of the export plugin is based on the provided filename extension.
