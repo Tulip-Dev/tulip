@@ -140,7 +140,7 @@ bool GraphProperty::setNodeStringValue(const node, const std::string &) {
 }
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &) {
+bool GraphProperty::setAllNodeStringValue(const std::string &, tlp::Graph*) {
   return false;
 }
 //=============================================================
@@ -150,7 +150,7 @@ bool GraphProperty::setEdgeStringValue(const edge, const std::string&) {
 }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string&) {
+bool GraphProperty::setAllEdgeStringValue(const std::string&, tlp::Graph*) {
   return false;
 }
 //=============================================================

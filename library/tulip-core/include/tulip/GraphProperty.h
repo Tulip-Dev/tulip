@@ -48,9 +48,9 @@ public :
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   bool setNodeStringValue(const node n, const std::string & v);
-  bool setAllNodeStringValue(const std::string & v);
+  bool setAllNodeStringValue(const std::string & v, tlp::Graph *graph = NULL);
   bool setEdgeStringValue( const edge e, const std::string & v);
-  bool setAllEdgeStringValue(const std::string & v);
+  bool setAllEdgeStringValue(const std::string & v, tlp::Graph *graph = NULL);
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
