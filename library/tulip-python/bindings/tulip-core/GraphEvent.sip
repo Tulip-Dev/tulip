@@ -64,6 +64,8 @@ Below is an exhaustive list of those types :
   * :const:`tlp.GraphEvent.TLP_BEFORE_SET_ATTRIBUTE` : an attribute of the graph is about to be set/modified. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
   * :const:`tlp.GraphEvent.TLP_AFTER_SET_ATTRIBUTE` : an attribute of the graph has been set/modified. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
   * :const:`tlp.GraphEvent.TLP_REMOVE_ATTRIBUTE` : an attribute of the graph has been removed. Use :meth:`tlp.GraphEvent.getAttributeName` to get the name of the concerned attribute.
+  * :const:`tlp.GraphEvent.TLP_BEFORE_RENAME_LOCAL_PROPERTY` : a local property of the graph is about to be renamed. Use :meth:`tlp.GraphEvent.getProperty` to get the concerned property and :meth:`tlp.GraphEvent.getPropertyNewName` to get the new property name.
+  * :const:`tlp.GraphEvent.TLP_AFTER_RENAME_LOCAL_PROPERTY` : a local property of the graph has been renamed. Use :meth:`tlp.GraphEvent.getProperty` to get the concerned property and :meth:`tlp.GraphEvent.getPropertyOldName` to get the old property name.
 
 %End
 
@@ -101,11 +103,13 @@ public:
     TLP_ADD_INHERITED_PROPERTY = 20,
     TLP_BEFORE_DEL_INHERITED_PROPERTY = 21,
     TLP_AFTER_DEL_INHERITED_PROPERTY = 22,
-    TLP_BEFORE_SET_ATTRIBUTE = 23,
-    TLP_AFTER_SET_ATTRIBUTE = 24,
-    TLP_REMOVE_ATTRIBUTE = 25,
-    TLP_BEFORE_ADD_LOCAL_PROPERTY = 26,
-    TLP_BEFORE_ADD_INHERITED_PROPERTY = 27
+    TLP_BEFORE_RENAME_LOCAL_PROPERTY = 23,
+    TLP_AFTER_RENAME_LOCAL_PROPERTY = 24,
+    TLP_BEFORE_SET_ATTRIBUTE = 25,
+    TLP_AFTER_SET_ATTRIBUTE = 26,
+    TLP_REMOVE_ATTRIBUTE = 27,
+    TLP_BEFORE_ADD_LOCAL_PROPERTY = 28,
+    TLP_BEFORE_ADD_INHERITED_PROPERTY = 29
   };
 
   GraphEvent(const tlp::Graph& g, GraphEventType graphEvtType, unsigned int id,
@@ -199,7 +203,7 @@ Returns the name of the attribute concerned by the event (if any, otherwise retu
 
     const std::string& getPropertyName() const;
 %Docstring
-tlp.Graph.getPropertyName()
+tlp.GraphEvent.getPropertyName()
 
 Returns the name of the property concerned by the event (if any, otherwise returns an empty string)
 
@@ -210,11 +214,44 @@ Returns the name of the property concerned by the event (if any, otherwise retur
 
     GraphEventType getType() const;
 %Docstring
-tlp.Graph.getType()
+tlp.GraphEvent.getType()
 
 Returns the type of graph event.
 
 :rtype: :const:`tlp.GraphEvent.TLP_*` (cf. class description above)
+%End
+
+// ========================================================================================
+
+  tlp::PropertyInterface* getProperty() const;
+%Docstring
+tlp.GraphEvent.getProperty()
+
+Returns the property that is about to be or has been renamed.
+
+:rtype: :class:`tlp.PropertyInterface`
+%End
+
+// ========================================================================================
+
+    const std::string& getPropertyOldName() const;
+%Docstring
+tlp.GraphEvent.getPropertyOldName()
+
+Returns the old name of the property when it has been renamed.
+
+:rtype: string
+%End
+
+// ========================================================================================
+
+  const std::string& getPropertyNewName() const;
+%Docstring
+tlp.GraphEvent.getPropertyNewName()
+
+Returns the new name of the property that it is about to be renamed.
+
+:rtype: string
 %End
 
 };
