@@ -79,6 +79,19 @@ Parameters
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Acyclic', graph)
+
+  success = graph.applyAlgorithm('Acyclic', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Biconnected
 ^^^^^^^^^^^
 
@@ -96,6 +109,19 @@ Parameters
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Biconnected', graph)
+
+  success = graph.applyAlgorithm('Biconnected', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Connected
 ^^^^^^^^^
 
@@ -112,6 +138,19 @@ Parameters
 +========+=========+===========+=============+==================================+
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Connected', graph)
+
+  success = graph.applyAlgorithm('Connected', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Curve edges
 ^^^^^^^^^^^
@@ -136,6 +175,25 @@ Parameters
 | bezier edges    | Boolean                       | :const:`True`                                                                                                                                                                                                                                                                                                                                                                           | input       | If activated, set all edge shapes to Bézier curves.                                                         |
 +-----------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+-------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Curve edges', graph)
+
+  # set any input parameter value if needed
+  # params['layout'] = ...
+  # params['curve roundness'] = ...
+  # params['curve type'] = ...
+  # params['bezier edges'] = ...
+
+  success = graph.applyAlgorithm('Curve edges', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Delaunay triangulation
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -153,6 +211,22 @@ Parameters
 | simplices | Boolean | :const:`False` | input       | If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d). |
 +-----------+---------+----------------+-------------+------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Delaunay triangulation', graph)
+
+  # set any input parameter value if needed
+  # params['simplices'] = ...
+
+  success = graph.applyAlgorithm('Delaunay triangulation', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Directed Tree
 ^^^^^^^^^^^^^
 
@@ -169,6 +243,19 @@ Parameters
 +========+=========+===========+=============+==================================+
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Directed Tree', graph)
+
+  success = graph.applyAlgorithm('Directed Tree', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Edge bundling
 ^^^^^^^^^^^^^
@@ -205,6 +292,31 @@ Parameters
 | edge_node_overlap | Boolean                     | :const:`False` | input       | If true, edges can be routed on original nodes.                                                                                                                                                                   |
 +-------------------+-----------------------------+----------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Edge bundling', graph)
+
+  # set any input parameter value if needed
+  # params['layout'] = ...
+  # params['size'] = ...
+  # params['grid_graph'] = ...
+  # params['3D_layout'] = ...
+  # params['sphere_layout'] = ...
+  # params['long_edges'] = ...
+  # params['split_ratio'] = ...
+  # params['iterations'] = ...
+  # params['max_thread'] = ...
+  # params['edge_node_overlap'] = ...
+
+  success = graph.applyAlgorithm('Edge bundling', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Equal Value
 ^^^^^^^^^^^
 
@@ -226,6 +338,24 @@ Parameters
 | Connected | Boolean                        | :const:`False`                                                     | input       | If true, the resulting subgraphs are guaranteed to be connected. |
 +-----------+--------------------------------+--------------------------------------------------------------------+-------------+------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Equal Value', graph)
+
+  # set any input parameter value if needed
+  # params['Property'] = ...
+  # params['Type'] = ...
+  # params['Connected'] = ...
+
+  success = graph.applyAlgorithm('Equal Value', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Free Tree
 ^^^^^^^^^
 
@@ -243,6 +373,19 @@ Parameters
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Free Tree', graph)
+
+  success = graph.applyAlgorithm('Free Tree', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Hierarchical
 ^^^^^^^^^^^^
 
@@ -250,6 +393,19 @@ Description
 """""""""""
 
 This algorithm divides the graph in 2 different sub-graphs; the first one contains the nodes which have their viewMetric value below the mean, and, the other one, in which nodes have their viewMetric value above that mean value. Then, the algorithm is recursively applied to this subgraph (the one with the values above the threshold) until one sub-graph contains less than 10 nodes.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Hierarchical', graph)
+
+  success = graph.applyAlgorithm('Hierarchical', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Make Acyclic
 ^^^^^^^^^^^^
@@ -259,6 +415,19 @@ Description
 
 Makes a graph acyclic.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Make Acyclic', graph)
+
+  success = graph.applyAlgorithm('Make Acyclic', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Make Biconnected
 ^^^^^^^^^^^^^^^^
 
@@ -266,6 +435,19 @@ Description
 """""""""""
 
 Makes a graph biconnected.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Make Biconnected', graph)
+
+  success = graph.applyAlgorithm('Make Biconnected', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Make Connected
 ^^^^^^^^^^^^^^
@@ -275,6 +457,19 @@ Description
 
 Makes a graph connected.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Make Connected', graph)
+
+  success = graph.applyAlgorithm('Make Connected', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Make Directed Tree
 ^^^^^^^^^^^^^^^^^^
 
@@ -282,6 +477,19 @@ Description
 """""""""""
 
 Makes a graph a directed tree.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Make Directed Tree', graph)
+
+  success = graph.applyAlgorithm('Make Directed Tree', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Make Planar Embedding
 ^^^^^^^^^^^^^^^^^^^^^
@@ -291,6 +499,19 @@ Description
 
 Makes the graph a planar embedding if it is planar.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Make Planar Embedding', graph)
+
+  success = graph.applyAlgorithm('Make Planar Embedding', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Make Simple
 ^^^^^^^^^^^
 
@@ -298,6 +519,19 @@ Description
 """""""""""
 
 Makes a graph simple. |br| A simple graph is an undirected graph with no loops and no multiple edges.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Make Simple', graph)
+
+  success = graph.applyAlgorithm('Make Simple', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Outer Planar
 ^^^^^^^^^^^^
@@ -316,6 +550,19 @@ Parameters
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Outer Planar', graph)
+
+  success = graph.applyAlgorithm('Outer Planar', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Planar
 ^^^^^^
 
@@ -333,6 +580,19 @@ Parameters
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Planar', graph)
+
+  success = graph.applyAlgorithm('Planar', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Planar Embedding
 ^^^^^^^^^^^^^^^^
 
@@ -349,6 +609,19 @@ Parameters
 +========+=========+===========+=============+==================================+
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Planar Embedding', graph)
+
+  success = graph.applyAlgorithm('Planar Embedding', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Quotient Clustering
 ^^^^^^^^^^^^^^^^^^^
@@ -383,6 +656,30 @@ Parameters
 | edge cardinality         | Boolean                       | :const:`False`                                                                                      | input       | If true, the property edgeCardinality is created for each meta-edge of the quotient graph (and store the number of edges it represents).               |
 +--------------------------+-------------------------------+-----------------------------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Quotient Clustering', graph)
+
+  # set any input parameter value if needed
+  # params['oriented'] = ...
+  # params['node function'] = ...
+  # params['edge function'] = ...
+  # params['meta-node label'] = ...
+  # params['use name of subgraph'] = ...
+  # params['recursive'] = ...
+  # params['layout quotient graph(s)'] = ...
+  # params['layout clusters'] = ...
+  # params['edge cardinality'] = ...
+
+  success = graph.applyAlgorithm('Quotient Clustering', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Reverse edges
 ^^^^^^^^^^^^^
 
@@ -399,6 +696,22 @@ Parameters
 +===========+==============================+===============+=============+===============================================================================================+
 | selection | :class:`tlp.BooleanProperty` | viewSelection | input       | Only edges selected in this property (or all edges if no property is given) will be reversed. |
 +-----------+------------------------------+---------------+-------------+-----------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Reverse edges', graph)
+
+  # set any input parameter value if needed
+  # params['selection'] = ...
+
+  success = graph.applyAlgorithm('Reverse edges', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Simple
 ^^^^^^
@@ -417,6 +730,19 @@ Parameters
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Simple', graph)
+
+  success = graph.applyAlgorithm('Simple', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Triconnected
 ^^^^^^^^^^^^
 
@@ -433,6 +759,19 @@ Parameters
 +========+=========+===========+=============+==================================+
 | result | Boolean |           | output      | Whether the test succeed or not. |
 +--------+---------+-----------+-------------+----------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Triconnected', graph)
+
+  success = graph.applyAlgorithm('Triconnected', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Voronoi diagram
 ^^^^^^^^^^^^^^^
@@ -452,6 +791,23 @@ Parameters
 +---------------+---------+----------------+-------------+----------------------------------------------------------------------------------------+
 | connect       | Boolean | :const:`False` | input       | If true, existing graph nodes will be connected to the vertices of their voronoi cell. |
 +---------------+---------+----------------+-------------+----------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Voronoi diagram', graph)
+
+  # set any input parameter value if needed
+  # params['voronoi cells'] = ...
+  # params['connect'] = ...
+
+  success = graph.applyAlgorithm('Voronoi diagram', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Coloring
 --------
@@ -491,6 +847,34 @@ Parameters
 | maximum value          | floating point number          |                                                                                                             | input       | That value will be used to override the maximum one of the input property.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 +------------------------+--------------------------------+-------------------------------------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Color Mapping', graph)
+
+  # set any input parameter value if needed
+  # params['type'] = ...
+  # params['input property'] = ...
+  # params['target'] = ...
+  # params['color scale'] = ...
+  # params['override minimum value'] = ...
+  # params['minimum value'] = ...
+  # params['override maximum value'] = ...
+  # params['maximum value'] = ...
+
+  # either create or get a color property from the graph to store the result of the algorithm
+  resultColor = graph.getColorProperty('resultColor')
+  success = graph.applyColorAlgorithm('Color Mapping', resultColor, params)
+
+  # or store the result of the algorithm in the default Tulip color property named 'viewColor'
+  success = graph.applyColorAlgorithm('Color Mapping', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Export
 ------
 
@@ -505,6 +889,19 @@ Description
 """""""""""
 
 Exports a Tulip graph in a file using the GML format (used by Graphlet). |br| See  |bstart| www.infosun.fmi.uni-passau.de/Graphlet/GML/ |bend|  for details.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('GML Export', graph)
+
+  outputFile = '<path to a file>'
+  success = tlp.exportGraph('GML Export', graph, outputFile, params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 JSON Export
 ^^^^^^^^^^^
@@ -522,6 +919,22 @@ Parameters
 +======================+=========+================+=============+===================================================================+
 | Beautify JSON string | Boolean | :const:`False` | input       | If true, generate a JSON string with indentation and line breaks. |
 +----------------------+---------+----------------+-------------+-------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('JSON Export', graph)
+
+  # set any input parameter value if needed
+  # params['Beautify JSON string'] = ...
+
+  outputFile = '<path to a file>'
+  success = tlp.exportGraph('JSON Export', graph, outputFile, params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 SVG Export
 ^^^^^^^^^^
@@ -556,6 +969,30 @@ Parameters
 | Use Web Open Font Format v2     | Boolean            | :const:`False`    | input       | Uses Web Open Font Format version 2 (woff2) to reduce generated file length. This format is supported in almost all recent Internet browsers.                                                                                                                                            |
 +---------------------------------+--------------------+-------------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('SVG Export', graph)
+
+  # set any input parameter value if needed
+  # params['Edge color interpolation'] = ...
+  # params['Edge size interpolation'] = ...
+  # params['Edge extremities'] = ...
+  # params['Background color'] = ...
+  # params['Makes SVG output human readable'] = ...
+  # params['Export node labels'] = ...
+  # params['Export edge labels'] = ...
+  # params['Export metanode labels'] = ...
+  # params['Use Web Open Font Format v2'] = ...
+
+  outputFile = '<path to a file>'
+  success = tlp.exportGraph('SVG Export', graph, outputFile, params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 TLP Export
 ^^^^^^^^^^
 
@@ -577,6 +1014,24 @@ Parameters
 | text::comments | string | This file was generated by Tulip. | input       | Description of the graph.         |
 +----------------+--------+-----------------------------------+-------------+-----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('TLP Export', graph)
+
+  # set any input parameter value if needed
+  # params['name'] = ...
+  # params['author'] = ...
+  # params['text::comments'] = ...
+
+  outputFile = '<path to a file>'
+  success = tlp.exportGraph('TLP Export', graph, outputFile, params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 TLPB Export
 ^^^^^^^^^^^
 
@@ -584,6 +1039,19 @@ Description
 """""""""""
 
 Exports a graph in a file using the Tulip binary format
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('TLPB Export', graph)
+
+  outputFile = '<path to a file>'
+  success = tlp.exportGraph('TLPB Export', graph, outputFile, params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Import
 ------
@@ -609,6 +1077,20 @@ Parameters
 | filename | file pathname |           | input       | This parameter defines the pathname of the file to import. |
 +----------+---------------+-----------+-------------+------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Adjacency Matrix')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('Adjacency Matrix', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Complete General Graph
 ^^^^^^^^^^^^^^^^^^^^^^
 
@@ -627,6 +1109,21 @@ Parameters
 +------------+------------------+---------------+-------------+---------------------------------------------------------------------------------------------------------+
 | undirected | Boolean          | :const:`True` | input       | If true, the generated graph is undirected. If false, two edges are created between each pair of nodes. |
 +------------+------------------+---------------+-------------+---------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Complete General Graph')
+
+  # set any input parameter value if needed
+  # params['nodes'] = ...
+  # params['undirected'] = ...
+
+  graph = tlp.importGraph('Complete General Graph', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Complete Tree
 ^^^^^^^^^^^^^
@@ -649,6 +1146,22 @@ Parameters
 | tree layout | Boolean          | :const:`False` | input       | If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm. |
 +-------------+------------------+----------------+-------------+-----------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Complete Tree')
+
+  # set any input parameter value if needed
+  # params['depth'] = ...
+  # params['degree'] = ...
+  # params['tree layout'] = ...
+
+  graph = tlp.importGraph('Complete Tree', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Empty graph
 ^^^^^^^^^^^
 
@@ -656,6 +1169,17 @@ Description
 """""""""""
 
 A no-op plugin to import empty graphs
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Empty graph')
+
+  graph = tlp.importGraph('Empty graph', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 File System Directory
 ^^^^^^^^^^^^^^^^^^^^^
@@ -686,6 +1210,26 @@ Parameters
 | other color          | :class:`tlp.Color` | (85, 170, 255,128)   | input       | This parameter indicates the color used to display other files.                |
 +----------------------+--------------------+----------------------+-------------+--------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('File System Directory')
+
+  # set any input parameter value if needed
+  # params['directory'] = ...
+  # params['include hidden files'] = ...
+  # params['follow symlinks'] = ...
+  # params['icons'] = ...
+  # params['tree layout'] = ...
+  # params['directory color'] = ...
+  # params['other color'] = ...
+
+  graph = tlp.importGraph('File System Directory', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 GEXF
 ^^^^
 
@@ -705,6 +1249,21 @@ Parameters
 | Curved edges | Boolean       | :const:`False` | input       | Indicates if Bézier curves should be used to draw the edges.    |
 +--------------+---------------+----------------+-------------+-----------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('GEXF')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+  # params['Curved edges'] = ...
+
+  graph = tlp.importGraph('GEXF', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 GML
 ^^^
 
@@ -721,6 +1280,20 @@ Parameters
 +==========+===============+===========+=============+=========================================+
 | filename | file pathname |           | input       | The pathname of the GML file to import. |
 +----------+---------------+-----------+-------------+-----------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('GML')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('GML', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Grid
 ^^^^
@@ -747,6 +1320,24 @@ Parameters
 | spacing                | floating point number         | 1.0                                                             | input       | Spacing between nodes.                                                                                               |
 +------------------------+-------------------------------+-----------------------------------------------------------------+-------------+----------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Grid')
+
+  # set any input parameter value if needed
+  # params['width'] = ...
+  # params['height'] = ...
+  # params['connectivity'] = ...
+  # params['oppositeNodesConnected'] = ...
+  # params['spacing'] = ...
+
+  graph = tlp.importGraph('Grid', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Grid Approximation
 ^^^^^^^^^^^^^^^^^^
 
@@ -768,6 +1359,22 @@ Parameters
 | long edge | Boolean          | :const:`False` | input       | If true, long distance edges are added in the grid approximation. |
 +-----------+------------------+----------------+-------------+-------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Grid Approximation')
+
+  # set any input parameter value if needed
+  # params['nodes'] = ...
+  # params['degree'] = ...
+  # params['long edge'] = ...
+
+  graph = tlp.importGraph('Grid Approximation', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 JSON Import
 ^^^^^^^^^^^
 
@@ -784,6 +1391,20 @@ Parameters
 +==========+===============+===========+=============+==============================================+
 | filename | file pathname |           | input       | The pathname of the TLP JSON file to import. |
 +----------+---------------+-----------+-------------+----------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('JSON Import')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('JSON Import', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Pajek
 ^^^^^
@@ -802,6 +1423,20 @@ Parameters
 | filename | file pathname |           | input       | This parameter indicates the pathname of the Pajek file (.net or .paj) to import. |
 +----------+---------------+-----------+-------------+-----------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Pajek')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('Pajek', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Planar Graph
 ^^^^^^^^^^^^
 
@@ -818,6 +1453,20 @@ Parameters
 +========+==================+===========+=============+=====================================+
 | nodes  | unsigned integer |        30 | input       | Number of nodes in the final graph. |
 +--------+------------------+-----------+-------------+-------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Planar Graph')
+
+  # set any input parameter value if needed
+  # params['nodes'] = ...
+
+  graph = tlp.importGraph('Planar Graph', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Random General Graph
 ^^^^^^^^^^^^^^^^^^^^
@@ -837,6 +1486,21 @@ Parameters
 +--------+------------------+-----------+-------------+-------------------------------------+
 | edges  | unsigned integer |      1000 | input       | Number of edges in the final graph. |
 +--------+------------------+-----------+-------------+-------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Random General Graph')
+
+  # set any input parameter value if needed
+  # params['nodes'] = ...
+  # params['edges'] = ...
+
+  graph = tlp.importGraph('Random General Graph', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Random General Tree
 ^^^^^^^^^^^^^^^^^^^
@@ -861,6 +1525,23 @@ Parameters
 | tree layout           | Boolean          | :const:`False` | input       | If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm. |
 +-----------------------+------------------+----------------+-------------+-----------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Random General Tree')
+
+  # set any input parameter value if needed
+  # params['Minimum size'] = ...
+  # params['Maximum size'] = ...
+  # params['Maximal node's degree'] = ...
+  # params['tree layout'] = ...
+
+  graph = tlp.importGraph('Random General Tree', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Random Simple Graph
 ^^^^^^^^^^^^^^^^^^^
 
@@ -880,6 +1561,21 @@ Parameters
 | edges  | unsigned integer |      1000 | input       | Number of edges in the final graph. |
 +--------+------------------+-----------+-------------+-------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Random Simple Graph')
+
+  # set any input parameter value if needed
+  # params['nodes'] = ...
+  # params['edges'] = ...
+
+  graph = tlp.importGraph('Random Simple Graph', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 TLP Import
 ^^^^^^^^^^
 
@@ -897,6 +1593,20 @@ Parameters
 | filename | file pathname |           | input       | The pathname of the TLP file to import. |
 +----------+---------------+-----------+-------------+-----------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('TLP Import')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('TLP Import', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 TLPB Import
 ^^^^^^^^^^^
 
@@ -913,6 +1623,20 @@ Parameters
 +==========+===============+===========+=============+==========================================+
 | filename | file pathname |           | input       | The pathname of the TLPB file to import. |
 +----------+---------------+-----------+-------------+------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('TLPB Import')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('TLPB Import', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 UCINET
 ^^^^^^
@@ -932,6 +1656,21 @@ Parameters
 +----------------+---------------+-----------+-------------+----------------------------------------------------------------------------------+
 | Default metric | string        | weight    | input       | This parameter indicates the name of the default metric.                         |
 +----------------+---------------+-----------+-------------+----------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('UCINET')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+  # params['Default metric'] = ...
+
+  graph = tlp.importGraph('UCINET', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Uniform Random Binary Tree
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -953,6 +1692,22 @@ Parameters
 +--------------+------------------+----------------+-------------+-----------------------------------------------------------------------------+
 | tree layout  | Boolean          | :const:`False` | input       | If true, the generated tree is drawn with the 'Tree Leaf' layout algorithm. |
 +--------------+------------------+----------------+-------------+-----------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Uniform Random Binary Tree')
+
+  # set any input parameter value if needed
+  # params['Minimum size'] = ...
+  # params['Maximum size'] = ...
+  # params['tree layout'] = ...
+
+  graph = tlp.importGraph('Uniform Random Binary Tree', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Web Site
 ^^^^^^^^
@@ -987,6 +1742,28 @@ Parameters
 | redirection color | :class:`tlp.Color` | (191,175,96,128)   | input       | This parameter indicates the color used to display redirections.                                                                                                 |
 +-------------------+--------------------+--------------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('Web Site')
+
+  # set any input parameter value if needed
+  # params['server'] = ...
+  # params['web page'] = ...
+  # params['max size'] = ...
+  # params['non http links'] = ...
+  # params['other server'] = ...
+  # params['compute layout'] = ...
+  # params['page color'] = ...
+  # params['link color'] = ...
+  # params['redirection color'] = ...
+
+  graph = tlp.importGraph('Web Site', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 graphviz
 ^^^^^^^^
 
@@ -1003,6 +1780,20 @@ Parameters
 +==========+===============+===========+=============+=========================+
 | filename | file pathname |           | input       | The dot file to import. |
 +----------+---------------+-----------+-------------+-------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  params = tlp.getDefaultPluginParameters('graphviz')
+
+  # set any input parameter value if needed
+  # params['filename'] = ...
+
+  graph = tlp.importGraph('graphviz', params)
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Labeling
 --------
@@ -1034,6 +1825,30 @@ Parameters
 | edges     | Boolean                        | :const:`True` | input       | Set labels on edges.                         |
 +-----------+--------------------------------+---------------+-------------+----------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('To labels', graph)
+
+  # set any input parameter value if needed
+  # params['input'] = ...
+  # params['selection'] = ...
+  # params['nodes'] = ...
+  # params['edges'] = ...
+
+  # either create or get a string property from the graph to store the result of the algorithm
+  resultString = graph.getStringProperty('resultString')
+  success = graph.applyStringAlgorithm('To labels', resultString, params)
+
+  # or store the result of the algorithm in the default Tulip string property named 'viewLabel'
+  success = graph.applyStringAlgorithm('To labels', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Layout
 ------
 
@@ -1048,6 +1863,24 @@ Description
 """""""""""
 
 Implements the Tutte layout for 3-Connected graph algorithm first published as: |br|  |bstart| How to Draw a Graph |bend| , W.T. Tutte, Proc. London Math. Soc. pages 743--768 (1963).
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('3-Connected (Tutte)', graph)
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('3-Connected (Tutte)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('3-Connected (Tutte)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Balloon (OGDF)
 ^^^^^^^^^^^^^^
@@ -1065,6 +1898,27 @@ Parameters
 +=============+=========+================+=============+=========================================================================+
 | Even angles | Boolean | :const:`False` | input       | Subtrees may be assigned even angles or angles depending on their size. |
 +-------------+---------+----------------+-------------+-------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Balloon (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['Even angles'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Balloon (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Balloon (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Bertault (OGDF)
 ^^^^^^^^^^^^^^^
@@ -1087,6 +1941,29 @@ Parameters
 | reqlength | floating point number | 0.0            | input       | The required edge length.                                                                             |
 +-----------+-----------------------+----------------+-------------+-------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Bertault (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['impred'] = ...
+  # params['iterno'] = ...
+  # params['reqlength'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Bertault (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Bertault (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Bubble Tree
 ^^^^^^^^^^^
 
@@ -1106,6 +1983,28 @@ Parameters
 | complexity | Boolean                   | :const:`True` | input       | This parameter enables to choose the complexity of the algorithm.If true, the complexity is O(n.log(n)), if false it is O(n). |
 +------------+---------------------------+---------------+-------------+-------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Bubble Tree', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['complexity'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Bubble Tree', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Bubble Tree', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Circular
 ^^^^^^^^
 
@@ -1124,6 +2023,28 @@ Parameters
 +--------------+---------------------------+----------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
 | search cycle | Boolean                   | :const:`False` | input       | If true, search first for the maximum length cycle (be careful, this problem is NP-Complete). If false, nodes are ordered using a depth first search. |
 +--------------+---------------------------+----------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Circular', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['search cycle'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Circular', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Circular', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Circular (OGDF)
 ^^^^^^^^^^^^^^^
@@ -1150,6 +2071,31 @@ Parameters
 | pageRatio      | floating point number |         1 | input       | The page ratio used for packing connected components. |
 +----------------+-----------------------+-----------+-------------+-------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Circular (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['minDistCircle'] = ...
+  # params['minDistLevel'] = ...
+  # params['minDistSibling'] = ...
+  # params['minDistCC'] = ...
+  # params['pageRatio'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Circular (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Circular (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Cone Tree
 ^^^^^^^^^
 
@@ -1170,6 +2116,29 @@ Parameters
 +----------------------+-------------------------------+-------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------+
 | space between levels | floating point number         | 1.0                                                                           | input       | This parameter enables to add extra spacing between the different levels of the tree |
 +----------------------+-------------------------------+-------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Cone Tree', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['orientation'] = ...
+  # params['space between levels'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Cone Tree', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Cone Tree', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Connected Component Packing
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1193,6 +2162,30 @@ Parameters
 +-------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+------------------------------------------------------------------------------------------+
 | complexity  | :class:`tlp.StringCollection` | auto |br| |br| Values for that parameter: |br| auto  |br|  n5  |br|  n4logn  |br|  n4  |br|  n3logn  |br|  n3  |br|  n2logn  |br|  n2  |br|  nlogn  |br|  n | input       | Complexity of the algorithm. |br|  n is the number of connected components in the graph. |
 +-------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Connected Component Packing', graph)
+
+  # set any input parameter value if needed
+  # params['coordinates'] = ...
+  # params['node size'] = ...
+  # params['rotation'] = ...
+  # params['complexity'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Connected Component Packing', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Connected Component Packing', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Connected Component Packing (Polyomino)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1219,6 +2212,31 @@ Parameters
 | increment   | unsigned integer            | 1            | input       | The polyomino packing tries to find a place where the next polyomino will fit by following a square.If there is no place where the polyomino fits, the square gets bigger and every place gets tried again. |
 +-------------+-----------------------------+--------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Connected Component Packing (Polyomino)', graph)
+
+  # set any input parameter value if needed
+  # params['coordinates'] = ...
+  # params['node size'] = ...
+  # params['rotation'] = ...
+  # params['margin'] = ...
+  # params['increment'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Connected Component Packing (Polyomino)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Connected Component Packing (Polyomino)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Davidson Harel (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -1241,6 +2259,30 @@ Parameters
 +-------------------------------+-------------------------------+------------------------------------------------------------------------------------------+-------------+-------------------------------------------------------+
 | preferredEdgeLengthMultiplier | floating point number         | 2.0                                                                                      | input       | The preferred edge length multiplier for attraction.  |
 +-------------------------------+-------------------------------+------------------------------------------------------------------------------------------+-------------+-------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Davidson Harel (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['Settings'] = ...
+  # params['Speed'] = ...
+  # params['preferredEdgeLength'] = ...
+  # params['preferredEdgeLengthMultiplier'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Davidson Harel (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Davidson Harel (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Dendrogram
 ^^^^^^^^^^
@@ -1265,6 +2307,30 @@ Parameters
 | node spacing  | floating point number         | 18.                                                                                                                         | input       | This parameter enables to set up the minimum space between two nodes in the same layer. |
 +---------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Dendrogram', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['orientation'] = ...
+  # params['layer spacing'] = ...
+  # params['node spacing'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Dendrogram', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Dendrogram', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Dominance (OGDF)
 ^^^^^^^^^^^^^^^^
 
@@ -1283,6 +2349,28 @@ Parameters
 +-----------------------+---------+----------------+-------------+-------------------------------------------+
 | transpose             | Boolean | :const:`False` | input       | If true, transpose the layout vertically. |
 +-----------------------+---------+----------------+-------------+-------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Dominance (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['minimum grid distance'] = ...
+  # params['transpose'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Dominance (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Dominance (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 FM^3 (OGDF)
 ^^^^^^^^^^^
@@ -1339,6 +2427,46 @@ Parameters
 | Smallest Cell Finding     | :class:`tlp.StringCollection` | Iteratively |br| |br| Values for that parameter: |br| Iteratively  |istart| (Iteratively, in constant time) |iend|  |br| Aluru  |istart| (According to formula by Aluru et al., in constant time) |iend|                                                                                                                                          | input       | Specifies how to calculate the smallest quadratic cell surrounding particles of a node in the reduced bucket quadtree. |
 +---------------------------+-------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('FM^3 (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['Edge Length Property'] = ...
+  # params['Node Size'] = ...
+  # params['Unit edge length'] = ...
+  # params['New initial placement'] = ...
+  # params['Fixed iterations'] = ...
+  # params['Threshold'] = ...
+  # params['Page Format'] = ...
+  # params['Quality vs Speed'] = ...
+  # params['Edge Length Measurement'] = ...
+  # params['Allowed Positions'] = ...
+  # params['Tip Over'] = ...
+  # params['Pre Sort'] = ...
+  # params['Galaxy Choice'] = ...
+  # params['Max Iter Change'] = ...
+  # params['Initial Placement Mult'] = ...
+  # params['Force Model'] = ...
+  # params['Repulsive Force Method'] = ...
+  # params['Initial Placement Forces'] = ...
+  # params['Reduced Tree Construction'] = ...
+  # params['Smallest Cell Finding'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('FM^3 (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('FM^3 (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Fast Multipole Embedder (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1366,6 +2494,32 @@ Parameters
 | number of threads      | integer               | 3             | input       | The number of threads to use during the computation of the layout. |
 +------------------------+-----------------------+---------------+-------------+--------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Fast Multipole Embedder (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['number of iterations'] = ...
+  # params['number of coefficients'] = ...
+  # params['randomize layout'] = ...
+  # params['default node size'] = ...
+  # params['default edge length'] = ...
+  # params['number of threads'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Fast Multipole Embedder (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Fast Multipole Embedder (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Fast Multipole Multilevel Embedder (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1384,6 +2538,28 @@ Parameters
 +------------------------+---------+-----------+-------------+--------------------------------------------------------------------+
 | multilevel nodes bound | integer |        10 | input       | The bound for the number of nodes in a multilevel step.            |
 +------------------------+---------+-----------+-------------+--------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Fast Multipole Multilevel Embedder (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['number of threads'] = ...
+  # params['multilevel nodes bound'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Fast Multipole Multilevel Embedder (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Fast Multipole Multilevel Embedder (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Fast Overlap Removal
 ^^^^^^^^^^^^^^^^^^^^
@@ -1413,6 +2589,33 @@ Parameters
 +----------------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
 | y border             | floating point number         | 0.0                                                                                                                                                                                                                                           | input       | The minimal y border value that will separate the graph nodes after application of the algorithm.                                                       |
 +----------------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Fast Overlap Removal', graph)
+
+  # set any input parameter value if needed
+  # params['overlap removal type'] = ...
+  # params['layout'] = ...
+  # params['bounding box'] = ...
+  # params['rotation'] = ...
+  # params['number of passes'] = ...
+  # params['x border'] = ...
+  # params['y border'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Fast Overlap Removal', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Fast Overlap Removal', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Frutcherman Reingold (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1449,6 +2652,36 @@ Parameters
 | convergence tolerance | floating point number         | 0.01                                                                      | input       | The convergence tolerance parameter.                  |
 +-----------------------+-------------------------------+---------------------------------------------------------------------------+-------------+-------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Frutcherman Reingold (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['iterations'] = ...
+  # params['noise'] = ...
+  # params['use node weights'] = ...
+  # params['node weights'] = ...
+  # params['Cooling function'] = ...
+  # params['ideal edge length'] = ...
+  # params['minDistCC'] = ...
+  # params['pageRatio'] = ...
+  # params['check convergence'] = ...
+  # params['convergence tolerance'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Frutcherman Reingold (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Frutcherman Reingold (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 GEM (Frick)
 ^^^^^^^^^^^
 
@@ -1473,6 +2706,31 @@ Parameters
 +-----------------+------------------------------+----------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | max iterations  | unsigned integer             | 0              | input       | This parameter allows to choose the number of iterations. The default value of 0 corresponds to (3 * nb_nodes * nb_nodes) if the graph has more than 100 nodes. For smaller graph, the number of iterations is set to 30 000.                                    |
 +-----------------+------------------------------+----------------+-------------+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('GEM (Frick)', graph)
+
+  # set any input parameter value if needed
+  # params['3D layout'] = ...
+  # params['edge length'] = ...
+  # params['initial layout'] = ...
+  # params['unmovable nodes'] = ...
+  # params['max iterations'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('GEM (Frick)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('GEM (Frick)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 GEM Frick (OGDF)
 ^^^^^^^^^^^^^^^^
@@ -1515,6 +2773,39 @@ Parameters
 | pageRatio               | floating point number         | 1.0                                                                                            | input       | The page ratio used for packing connected components.            |
 +-------------------------+-------------------------------+------------------------------------------------------------------------------------------------+-------------+------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('GEM Frick (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['number of rounds'] = ...
+  # params['minimal temperature'] = ...
+  # params['initial temperature'] = ...
+  # params['gravitational constant'] = ...
+  # params['desired length'] = ...
+  # params['maximal disturbance'] = ...
+  # params['rotation angle'] = ...
+  # params['oscillation angle'] = ...
+  # params['rotation sensitivity'] = ...
+  # params['oscillation sensitivity'] = ...
+  # params['Attraction formula'] = ...
+  # params['minDistCC'] = ...
+  # params['pageRatio'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('GEM Frick (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('GEM Frick (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 GRIP
 ^^^^
 
@@ -1531,6 +2822,27 @@ Parameters
 +===========+=========+================+=============+=======================================================+
 | 3D layout | Boolean | :const:`False` | input       | If true the layout is in 3D else it is computed in 2D |
 +-----------+---------+----------------+-------------+-------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('GRIP', graph)
+
+  # set any input parameter value if needed
+  # params['3D layout'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('GRIP', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('GRIP', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Hierarchical Graph
 ^^^^^^^^^^^^^^^^^^
@@ -1554,6 +2866,30 @@ Parameters
 +---------------+-------------------------------+---------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------+
 | node spacing  | floating point number         | 18.                                                                             | input       | This parameter enables to set up the minimum space between two nodes in the same layer. |
 +---------------+-------------------------------+---------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Hierarchical Graph', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['orientation'] = ...
+  # params['layer spacing'] = ...
+  # params['node spacing'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Hierarchical Graph', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Hierarchical Graph', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Hierarchical Tree (R-T Extended)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1586,6 +2922,34 @@ Parameters
 | compact layout   | Boolean                       | :const:`True`                                                                 | input       | Indicates if a compact layout is computed.                                              |
 +------------------+-------------------------------+-------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Hierarchical Tree (R-T Extended)', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['edge length'] = ...
+  # params['orientation'] = ...
+  # params['orthogonal'] = ...
+  # params['layer spacing'] = ...
+  # params['node spacing'] = ...
+  # params['bounding circles'] = ...
+  # params['compact layout'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Hierarchical Tree (R-T Extended)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Hierarchical Tree (R-T Extended)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Improved Walker
 ^^^^^^^^^^^^^^^
 
@@ -1610,6 +2974,31 @@ Parameters
 +---------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------+
 | node spacing  | floating point number         | 18.                                                                                                                         | input       | This parameter enables to set up the minimum space between two nodes in the same layer. |
 +---------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Improved Walker', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['orientation'] = ...
+  # params['orthogonal'] = ...
+  # params['layer spacing'] = ...
+  # params['node spacing'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Improved Walker', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Improved Walker', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Improved Walker (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -1640,6 +3029,33 @@ Parameters
 | Root selection    | :class:`tlp.StringCollection` | rootIsSource |br| |br| Values for that parameter: |br| rootIsSource  |istart| (Select a source in the graph) |iend|  |br| rootIsSink  |istart| (Select a sink in the graph) |iend|  |br| rootByCoord  |istart| (Use the coordinates, e.g., select the topmost node if orientation is topToBottom) |iend|                                                    | input       | This parameter indicates how the root is selected.                    |
 +-------------------+-------------------------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Improved Walker (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['siblings distance'] = ...
+  # params['subtrees distance'] = ...
+  # params['levels distance'] = ...
+  # params['trees distance'] = ...
+  # params['orthogonal layout'] = ...
+  # params['Orientation'] = ...
+  # params['Root selection'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Improved Walker (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Improved Walker (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Kamada Kawai (OGDF)
 ^^^^^^^^^^^^^^^^^^^
 
@@ -1668,6 +3084,33 @@ Parameters
 +------------------------+-----------------------+---------------+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 | local iterations       | integer               | 50            | input       | The number of local iterations.                                                                                                                                                        |
 +------------------------+-----------------------+---------------+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Kamada Kawai (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['stop tolerance'] = ...
+  # params['used layout'] = ...
+  # params['zero length'] = ...
+  # params['edge length'] = ...
+  # params['compute max iterations'] = ...
+  # params['global iterations'] = ...
+  # params['local iterations'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Kamada Kawai (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Kamada Kawai (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 LinLog
 ^^^^^^
@@ -1702,6 +3145,35 @@ Parameters
 | initial layout      | :class:`tlp.LayoutProperty`  |                | input       | The layout property used to compute the initial position of the graph elements. If none is given the initial position will be computed by the algorithm. |
 +---------------------+------------------------------+----------------+-------------+----------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('LinLog', graph)
+
+  # set any input parameter value if needed
+  # params['3D layout'] = ...
+  # params['octtree'] = ...
+  # params['edge weight'] = ...
+  # params['max iterations'] = ...
+  # params['repulsion exponent'] = ...
+  # params['attraction exponent'] = ...
+  # params['gravitation factor'] = ...
+  # params['skip nodes'] = ...
+  # params['initial layout'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('LinLog', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('LinLog', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 MMM Example Fast Layout (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1709,6 +3181,24 @@ Description
 """""""""""
 
 Implements a fast multilevel graph layout using the OGDF modular multilevel-mixer. SolarMerger and SolarPlacer are used as merging and placement strategies.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('MMM Example Fast Layout (OGDF)', graph)
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('MMM Example Fast Layout (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('MMM Example Fast Layout (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 MMM Example Nice Layout (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1718,6 +3208,24 @@ Description
 
 Implements a nice multilevel graph layout using the OGDF modular multilevel-mixer. EdgeCoverMerger and BarycenterPlacer are used as merging and placement strategies.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('MMM Example Nice Layout (OGDF)', graph)
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('MMM Example Nice Layout (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('MMM Example Nice Layout (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 MMM Example No Twist Layout (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1725,6 +3233,24 @@ Description
 """""""""""
 
 Implements a multilevel graph layout with using the OGDF modular multilevel-mixer. It is tuned to reduce twists in the final drawing and uses LocalBiconnectedMerger and BarycenterPlacer as merging and placement strategies.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('MMM Example No Twist Layout (OGDF)', graph)
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('MMM Example No Twist Layout (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('MMM Example No Twist Layout (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Mixed Model
 ^^^^^^^^^^^
@@ -1751,6 +3277,31 @@ Parameters
 | node shape                        | :class:`tlp.IntegerProperty`  | viewShape                                                                     | output         | This parameter defines the property holding node shapes.                                          |
 +-----------------------------------+-------------------------------+-------------------------------------------------------------------------------+----------------+---------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Mixed Model', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['orientation'] = ...
+  # params['y node-node spacing'] = ...
+  # params['x node-node and edge-node spacing'] = ...
+  # params['node shape'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Mixed Model', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Mixed Model', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Perfect aspect ratio
 ^^^^^^^^^^^^^^^^^^^^
 
@@ -1767,6 +3318,27 @@ Parameters
 +========+=============================+============+=============+===========================================================================+
 | layout | :class:`tlp.LayoutProperty` | viewLayout | input       | The layout property from which a perfect aspect ratio has to be computed. |
 +--------+-----------------------------+------------+-------------+---------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Perfect aspect ratio', graph)
+
+  # set any input parameter value if needed
+  # params['layout'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Perfect aspect ratio', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Perfect aspect ratio', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Pivot MDS (OGDF)
 ^^^^^^^^^^^^^^^^
@@ -1789,6 +3361,29 @@ Parameters
 | edge costs       | floating point number | 100            | input       | Sets the desired distance between adjacent nodes. If the new value is smaller or equal 0 the default value (100) is used. |
 +------------------+-----------------------+----------------+-------------+---------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Pivot MDS (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['number of pivots'] = ...
+  # params['use edge costs'] = ...
+  # params['edge costs'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Pivot MDS (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Pivot MDS (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Planarization Grid (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1805,6 +3400,27 @@ Parameters
 +============+=======================+===========+=============+============================+
 | page ratio | floating point number |       1.1 | input       | Sets the option pageRatio. |
 +------------+-----------------------+-----------+-------------+----------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Planarization Grid (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['page ratio'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Planarization Grid (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Planarization Grid (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Planarization Layout (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1825,6 +3441,28 @@ Parameters
 | Embedder   | :class:`tlp.StringCollection` | SimpleEmbedder |br| |br| Values for that parameter: |br| SimpleEmbedder  |istart| (Planar graph embedding from the algorithm of Boyer and Myrvold) |iend|  |br| EmbedderMaxFace  |istart| (Planar graph embedding with maximum external face) |iend|  |br| EmbedderMaxFaceLayers  |istart| (Planar graph embedding with maximum external face, plus layers approach) |iend|  |br| EmbedderMinDepth  |istart| (Planar graph embedding with minimum block-nesting depth) |iend|  |br| EmbedderMinDepthMaxFace  |istart| (Planar graph embedding with minimum block-nesting depth and maximum external face) |iend|  |br| EmbedderMinDepthMaxFaceLayers  |istart| (Planar graph embedding with minimum block-nesting depth and maximum external face, plus layers approach) |iend|  |br| EmbedderMinDepthPiTa  |istart| (Planar graph embedding with minimum block-nesting depth for given embedded blocks) |iend| | input       | The result of the crossing minimization step is a planar graph, in which crossings are replaced by dummy nodes. The embedder then computes a planar embedding of this planar graph. |
 +------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Planarization Layout (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['page ratio'] = ...
+  # params['Embedder'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Planarization Layout (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Planarization Layout (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Random layout
 ^^^^^^^^^^^^^
 
@@ -1841,6 +3479,27 @@ Parameters
 +===========+=========+================+=============+===================================================================+
 | 3D layout | Boolean | :const:`False` | input       | If true, the layout is computed in 3D, else it is computed in 2D. |
 +-----------+---------+----------------+-------------+-------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Random layout', graph)
+
+  # set any input parameter value if needed
+  # params['3D layout'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Random layout', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Random layout', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Squarified Tree Map
 ^^^^^^^^^^^^^^^^^^^
@@ -1866,6 +3525,31 @@ Parameters
 +--------------+------------------------------+----------------+-------------+--------------------------------------------------------------------------------------------------------------------+
 | Node Shape   | :class:`tlp.IntegerProperty` | viewShape      | output      | This parameter defines the property used as node shapes.                                                           |
 +--------------+------------------------------+----------------+-------------+--------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Squarified Tree Map', graph)
+
+  # set any input parameter value if needed
+  # params['metric'] = ...
+  # params['Aspect Ratio'] = ...
+  # params['Treemap Type'] = ...
+  # params['Node Size'] = ...
+  # params['Node Shape'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Squarified Tree Map', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Squarified Tree Map', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Stress Majorization (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -1899,6 +3583,35 @@ Parameters
 +----------------------------+-------------------------------+---------------------------------------------------------------------------------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+
 | edgeCostsProperty          | :class:`tlp.NumericProperty`  | viewMetric                                                                                  | input       | The numeric property that holds the desired cost for each edge.                                                                           |
 +----------------------------+-------------------------------+---------------------------------------------------------------------------------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Stress Majorization (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['terminationCriterion'] = ...
+  # params['fixXCoordinates'] = ...
+  # params['fixYCoordinates'] = ...
+  # params['hasInitialLayout'] = ...
+  # params['layoutComponentsSeparately'] = ...
+  # params['numberOfIterations'] = ...
+  # params['edgeCosts'] = ...
+  # params['useEdgeCostsProperty'] = ...
+  # params['edgeCostsProperty'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Stress Majorization (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Stress Majorization (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Sugiyama (OGDF)
 ^^^^^^^^^^^^^^^
@@ -1945,6 +3658,41 @@ Parameters
 | transpose vertically            | Boolean                       | :const:`True`                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       | input       | Transpose the layout vertically from top to bottom.                                                                                                                                                                       |
 +---------------------------------+-------------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Sugiyama (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['fails'] = ...
+  # params['runs'] = ...
+  # params['node distance'] = ...
+  # params['layer distance'] = ...
+  # params['fixed layer distance'] = ...
+  # params['transpose'] = ...
+  # params['arrangeCCs'] = ...
+  # params['minDistCC'] = ...
+  # params['pageRatio'] = ...
+  # params['alignBaseClasses'] = ...
+  # params['alignSiblings'] = ...
+  # params['Ranking'] = ...
+  # params['Two-layer crossing minimization'] = ...
+  # params['Layout'] = ...
+  # params['transpose vertically'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Sugiyama (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Sugiyama (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Tile To Rows Packing (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -1952,6 +3700,24 @@ Description
 """""""""""
 
 The tile-to-rows algorithm for packing drawings of connected components.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Tile To Rows Packing (OGDF)', graph)
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Tile To Rows Packing (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Tile To Rows Packing (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Tree Leaf
 ^^^^^^^^^
@@ -1978,6 +3744,31 @@ Parameters
 | node spacing          | floating point number         | 18.                                                                                                                         | input       | This parameter enables to set up the minimum space between two nodes in the same layer.       |
 +-----------------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Tree Leaf', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['orientation'] = ...
+  # params['uniform layer spacing'] = ...
+  # params['layer spacing'] = ...
+  # params['node spacing'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Tree Leaf', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Tree Leaf', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Tree Radial
 ^^^^^^^^^^^
 
@@ -1999,6 +3790,29 @@ Parameters
 | node spacing  | floating point number     | 18.       | input       | This parameter enables to set up the minimum space between two nodes in the same layer. |
 +---------------+---------------------------+-----------+-------------+-----------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Tree Radial', graph)
+
+  # set any input parameter value if needed
+  # params['node size'] = ...
+  # params['layer spacing'] = ...
+  # params['node spacing'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Tree Radial', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Tree Radial', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Upward Planarization (OGDF)
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2015,6 +3829,27 @@ Parameters
 +===========+=========+================+=============+===========================================+
 | transpose | Boolean | :const:`False` | input       | If true, transpose the layout vertically. |
 +-----------+---------+----------------+-------------+-------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Upward Planarization (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['transpose'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Upward Planarization (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Upward Planarization (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Visibility (OGDF)
 ^^^^^^^^^^^^^^^^^
@@ -2034,6 +3869,28 @@ Parameters
 +-----------------------+---------+----------------+-------------+-------------------------------------------+
 | transpose             | Boolean | :const:`False` | input       | If true, transpose the layout vertically. |
 +-----------------------+---------+----------------+-------------+-------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Visibility (OGDF)', graph)
+
+  # set any input parameter value if needed
+  # params['minimum grid distance'] = ...
+  # params['transpose'] = ...
+
+  # either create or get a layout property from the graph to store the result of the algorithm
+  resultLayout = graph.getLayoutProperty('resultLayout')
+  success = graph.applyLayoutAlgorithm('Visibility (OGDF)', resultLayout, params)
+
+  # or store the result of the algorithm in the default Tulip layout property named 'viewLayout'
+  success = graph.applyLayoutAlgorithm('Visibility (OGDF)', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Measure
 -------
@@ -2061,6 +3918,28 @@ Parameters
 | norm     | Boolean | :const:`False` | input       | If true the node measure will be normalized |br|  - if not directed : m(n) = 2*c(n) / (#V - 1)(#V - 2) |br|  - if directed     : m(n) = c(n) / (#V - 1)(#V - 2) |br| If true the edge measure will be normalized |br|  - if not directed : m(e) = 2*c(e) / (#V / 2)(#V / 2) |br|  - if directed     : m(e) = c(e) / (#V / 2)(#V / 2) |
 +----------+---------+----------------+-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Betweenness Centrality', graph)
+
+  # set any input parameter value if needed
+  # params['directed'] = ...
+  # params['norm'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Betweenness Centrality', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Betweenness Centrality', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Biconnected Component
 ^^^^^^^^^^^^^^^^^^^^^
 
@@ -2068,6 +3947,24 @@ Description
 """""""""""
 
 Implements a biconnected component decomposition.It assigns the same value to all the edges in the same component.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Biconnected Component', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Biconnected Component', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Biconnected Component', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Cluster
 ^^^^^^^
@@ -2086,6 +3983,27 @@ Parameters
 | depth  | unsigned integer |         1 | input       | Maximal depth of a computed cluster. |
 +--------+------------------+-----------+-------------+--------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Cluster', graph)
+
+  # set any input parameter value if needed
+  # params['depth'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Cluster', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Cluster', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Connected Component
 ^^^^^^^^^^^^^^^^^^^
 
@@ -2093,6 +4011,24 @@ Description
 """""""""""
 
 Implements the connected component decompostion.Each node and edge that belongs to the same component receives the same value.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Connected Component', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Connected Component', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Connected Component', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Convolution
 ^^^^^^^^^^^
@@ -2111,6 +4047,27 @@ Parameters
 | metric | :class:`tlp.NumericProperty` | viewMetric | input       | An existing node metric property. |
 +--------+------------------------------+------------+-------------+-----------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Convolution', graph)
+
+  # set any input parameter value if needed
+  # params['metric'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Convolution', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Convolution', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Dag Level
 ^^^^^^^^^
 
@@ -2118,6 +4075,24 @@ Description
 """""""""""
 
 Implements a DAG layer decomposition.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Dag Level', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Dag Level', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Dag Level', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Degree
 ^^^^^^
@@ -2140,6 +4115,29 @@ Parameters
 | norm   | Boolean                       | :const:`False`                                                             | input       | If true, the measure is normalized in the following way. |ulstart|  |listart| Unweighted case: m(n) = deg(n) / (#V - 1) |liend|   |listart| Weighted case: m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)]  |liend|  |ulend|  |
 +--------+-------------------------------+----------------------------------------------------------------------------+-------------+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Degree', graph)
+
+  # set any input parameter value if needed
+  # params['type'] = ...
+  # params['metric'] = ...
+  # params['norm'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Degree', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Degree', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Depth
 ^^^^^
 
@@ -2156,6 +4154,27 @@ Parameters
 +=============+==============================+===========+=============+==========================================================+
 | edge weight | :class:`tlp.NumericProperty` |           | input       | This parameter defines the metric used for edge weights. |
 +-------------+------------------------------+-----------+-------------+----------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Depth', graph)
+
+  # set any input parameter value if needed
+  # params['edge weight'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Depth', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Depth', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Eccentricity
 ^^^^^^^^^^^^
@@ -2178,6 +4197,29 @@ Parameters
 | directed             | Boolean | :const:`False` | input       | If true, the graph is considered directed.                                                                                                                                                                                                                                                                    |
 +----------------------+---------+----------------+-------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Eccentricity', graph)
+
+  # set any input parameter value if needed
+  # params['closeness centrality'] = ...
+  # params['norm'] = ...
+  # params['directed'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Eccentricity', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Eccentricity', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Id
 ^^
 
@@ -2194,6 +4236,27 @@ Parameters
 +========+===============================+===============================================================================+=============+=======================================================================+
 | target | :class:`tlp.StringCollection` | both |br| |br| Values for that parameter: |br| both  |br|  nodes  |br|  edges | input       | Whether the id is copied only for nodes, only for edges, or for both. |
 +--------+-------------------------------+-------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Id', graph)
+
+  # set any input parameter value if needed
+  # params['target'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Id', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Id', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 K-Cores
 ^^^^^^^
@@ -2214,6 +4277,28 @@ Parameters
 | metric | :class:`tlp.NumericProperty`  |                                                                            | input       | An existing edge metric property.                                      |
 +--------+-------------------------------+----------------------------------------------------------------------------+-------------+------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('K-Cores', graph)
+
+  # set any input parameter value if needed
+  # params['type'] = ...
+  # params['metric'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('K-Cores', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('K-Cores', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Leaf
 ^^^^
 
@@ -2221,6 +4306,24 @@ Description
 """""""""""
 
 Computes the number of leaves in the subtree induced by each node. |br|  |bstart| The graph must be acyclic |bend| .
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Leaf', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Leaf', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Leaf', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Link Communities
 ^^^^^^^^^^^^^^^^
@@ -2243,6 +4346,29 @@ Parameters
 | Number of steps | unsigned integer             | 200           | input       | This parameter indicates the number of thresholds to be compared.                  |
 +-----------------+------------------------------+---------------+-------------+------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Link Communities', graph)
+
+  # set any input parameter value if needed
+  # params['metric'] = ...
+  # params['Group isthmus'] = ...
+  # params['Number of steps'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Link Communities', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Link Communities', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Louvain
 ^^^^^^^
 
@@ -2261,6 +4387,28 @@ Parameters
 +-----------+------------------------------+-----------+-------------+------------------------------------------------------------------------------------------------------------------------+
 | precision | floating point number        | 0.000001  | input       | A given pass stops when the modularity is increased by less than precision. Default value is  |bstart| 0.000001 |bend| |
 +-----------+------------------------------+-----------+-------------+------------------------------------------------------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Louvain', graph)
+
+  # set any input parameter value if needed
+  # params['metric'] = ...
+  # params['precision'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Louvain', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Louvain', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 MCL Clustering
 ^^^^^^^^^^^^^^
@@ -2283,6 +4431,29 @@ Parameters
 | pruning | unsigned integer             | 5         | input       | Determines, for each node, the number of strongest link kept at each iteration. |
 +---------+------------------------------+-----------+-------------+---------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('MCL Clustering', graph)
+
+  # set any input parameter value if needed
+  # params['inflate'] = ...
+  # params['weights'] = ...
+  # params['pruning'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('MCL Clustering', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('MCL Clustering', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Node
 ^^^^
 
@@ -2290,6 +4461,24 @@ Description
 """""""""""
 
 Computes the number of nodes in the subtree induced by each node. |br|  |bstart| The graph must be acyclic |bend| .
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Node', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Node', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Node', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Page Rank
 ^^^^^^^^^
@@ -2310,6 +4499,28 @@ Parameters
 | directed | Boolean               | :const:`True` | input       | Indicates if the graph should be considered as directed or not. |
 +----------+-----------------------+---------------+-------------+-----------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Page Rank', graph)
+
+  # set any input parameter value if needed
+  # params['d'] = ...
+  # params['directed'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Page Rank', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Page Rank', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Path Length
 ^^^^^^^^^^^
 
@@ -2317,6 +4528,24 @@ Description
 """""""""""
 
 Assigns to each node the number of paths that goes through it. |br|  |bstart| The graph must be acyclic |bend| .
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Path Length', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Path Length', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Path Length', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Random metric
 ^^^^^^^^^^^^^
@@ -2334,6 +4563,27 @@ Parameters
 +========+===============================+===============================================================================+=============+=========================================================================+
 | target | :class:`tlp.StringCollection` | both |br| |br| Values for that parameter: |br| both  |br|  nodes  |br|  edges | input       | Whether metric is computed only for nodes, only for edges, or for both. |
 +--------+-------------------------------+-------------------------------------------------------------------------------+-------------+-------------------------------------------------------------------------+
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Random metric', graph)
+
+  # set any input parameter value if needed
+  # params['target'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Random metric', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Random metric', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Strahler
 ^^^^^^^^
@@ -2354,6 +4604,28 @@ Parameters
 | Type      | :class:`tlp.StringCollection` | all |br| |br| Values for that parameter: |br| all  |br|  ramification  |br|  nested cycles | input       | Sets the type of computation.                                                                                                                                                                                                                 |
 +-----------+-------------------------------+--------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Strahler', graph)
+
+  # set any input parameter value if needed
+  # params['All nodes'] = ...
+  # params['Type'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Strahler', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Strahler', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Strength
 ^^^^^^^^
 
@@ -2361,6 +4633,24 @@ Description
 """""""""""
 
 Computes the Strength metric described in |br|  |bstart| Software component capture using graph clustering |bend| , Y. Chiricota. F.Jourdan, an G.Melancon, IWPC (2002).
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Strength', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Strength', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Strength', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Strength Clustering
 ^^^^^^^^^^^^^^^^^^^
@@ -2379,6 +4669,27 @@ Parameters
 | metric | :class:`tlp.NumericProperty` |           | input       | Metric used in order to multiply strength metric computed values.If one is given, the complexity is O(n log(n)), O(n) neither. |
 +--------+------------------------------+-----------+-------------+--------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Strength Clustering', graph)
+
+  # set any input parameter value if needed
+  # params['metric'] = ...
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Strength Clustering', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Strength Clustering', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Strongly Connected Component
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2387,6 +4698,24 @@ Description
 
 Implements a strongly connected components decomposition.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Strongly Connected Component', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Strongly Connected Component', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Strongly Connected Component', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Welsh & Powell
 ^^^^^^^^^^^^^^
 
@@ -2394,6 +4723,24 @@ Description
 """""""""""
 
 Nodes coloring measure, |br| values assigned to adjacent nodes are always different.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Welsh & Powell', graph)
+
+  # either create or get a double property from the graph to store the result of the algorithm
+  resultMetric = graph.getDoubleProperty('resultMetric')
+  success = graph.applyDoubleAlgorithm('Welsh & Powell', resultMetric, params)
+
+  # or store the result of the algorithm in the default Tulip metric property named 'viewMetric'
+  success = graph.applyDoubleAlgorithm('Welsh & Powell', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Resizing
 --------
@@ -2409,6 +4756,24 @@ Description
 """""""""""
 
 Resize the nodes and edges of a graph so that the graph gets easy to read. The size of a node will depend on the number of its sons.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Auto Sizing', graph)
+
+  # either create or get a size property from the graph to store the result of the algorithm
+  resultSize = graph.getSizeProperty('resultSize')
+  success = graph.applySizeAlgorithm('Auto Sizing', resultSize, params)
+
+  # or store the result of the algorithm in the default Tulip size property named 'viewSize'
+  success = graph.applySizeAlgorithm('Auto Sizing', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Size Mapping
 ^^^^^^^^^^^^
@@ -2445,6 +4810,36 @@ Parameters
 | area proportional | :class:`tlp.StringCollection` | Area Proportional |br| |br| Values for that parameter: |br| Area Proportional  |br|  Quadratic/Cubic | input       | The mapping can either be area/volume proportional, or square/cubic;i.e. the areas/volumes will be proportional, or the dimensions (width, height and depth) will be.                                                                                                                                                                            |
 +-------------------+-------------------------------+------------------------------------------------------------------------------------------------------+-------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Size Mapping', graph)
+
+  # set any input parameter value if needed
+  # params['property'] = ...
+  # params['input'] = ...
+  # params['width'] = ...
+  # params['height'] = ...
+  # params['depth'] = ...
+  # params['min size'] = ...
+  # params['max size'] = ...
+  # params['type'] = ...
+  # params['node/edge'] = ...
+  # params['area proportional'] = ...
+
+  # either create or get a size property from the graph to store the result of the algorithm
+  resultSize = graph.getSizeProperty('resultSize')
+  success = graph.applySizeAlgorithm('Size Mapping', resultSize, params)
+
+  # or store the result of the algorithm in the default Tulip size property named 'viewSize'
+  success = graph.applySizeAlgorithm('Size Mapping', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Selection
 ---------
 
@@ -2471,6 +4866,28 @@ Parameters
 | Use edges | Boolean                      | :const:`False` | input       | If true, source and target nodes of selected edges will also be added in the input set of nodes. |
 +-----------+------------------------------+----------------+-------------+--------------------------------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Induced Sub-Graph', graph)
+
+  # set any input parameter value if needed
+  # params['Nodes'] = ...
+  # params['Use edges'] = ...
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Induced Sub-Graph', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Induced Sub-Graph', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Kruskal
 ^^^^^^^
 
@@ -2488,6 +4905,27 @@ Parameters
 | edge weight | :class:`tlp.NumericProperty` | viewMetric | input       | Metric containing the edge weights. |
 +-------------+------------------------------+------------+-------------+-------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Kruskal', graph)
+
+  # set any input parameter value if needed
+  # params['edge weight'] = ...
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Kruskal', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Kruskal', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Loop Selection
 ^^^^^^^^^^^^^^
 
@@ -2496,6 +4934,24 @@ Description
 
 Selects loops in a graph. |br| A loop is an edge that has the same source and target.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Loop Selection', graph)
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Loop Selection', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Loop Selection', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Multiple Edges Selection
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -2503,6 +4959,24 @@ Description
 """""""""""
 
 Selects the multiple or parallel edges of a graph. |br| Two edges are considered as parallel if they have the same source/origin and the same target/destination.If it exists n edges between two nodes, only n-1 edges will be selected.
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Multiple Edges Selection', graph)
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Multiple Edges Selection', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Multiple Edges Selection', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
 Reachable Sub-Graph
 ^^^^^^^^^^^^^^^^^^^
@@ -2525,6 +4999,29 @@ Parameters
 | distance        | integer                       | 5                                                                                                                                                                                                                                                         | input       | This parameter defines the maximal distance of reachable nodes.             |
 +-----------------+-------------------------------+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+-------------+-----------------------------------------------------------------------------+
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Reachable Sub-Graph', graph)
+
+  # set any input parameter value if needed
+  # params['edges direction'] = ...
+  # params['starting nodes'] = ...
+  # params['distance'] = ...
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Reachable Sub-Graph', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Reachable Sub-Graph', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Spanning Dag
 ^^^^^^^^^^^^
 
@@ -2533,6 +5030,24 @@ Description
 
 Selects an acyclic subgraph of a graph.
 
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Spanning Dag', graph)
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Spanning Dag', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Spanning Dag', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
+
 Spanning Forest
 ^^^^^^^^^^^^^^^
 
@@ -2540,4 +5055,22 @@ Description
 """""""""""
 
 Selects a subgraph of a graph that is a forest (a set of trees).
+
+Calling the plugin from Python
+""""""""""""""""""""""""""""""
+
+To call that plugin from Python, use the following code snippet::
+
+  # get a dictionnary filled with the default plugin parameters values
+  # graph is an instance of the tlp.Graph class
+  params = tlp.getDefaultPluginParameters('Spanning Forest', graph)
+
+  # either create or get a boolean property from the graph to store the result of the algorithm
+  resultSelection = graph.getBooleanProperty('resultSelection')
+  success = graph.applyBooleanAlgorithm('Spanning Forest', resultSelection, params)
+
+  # or store the result of the algorithm in the default Tulip boolean property named 'viewSelection'
+  success = graph.applyBooleanAlgorithm('Spanning Forest', params)
+
+  # if the plugin declare any output parameter, its value can now be retrieved in the 'params' dictionnary
 
