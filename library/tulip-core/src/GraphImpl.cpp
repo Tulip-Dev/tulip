@@ -17,7 +17,7 @@
  *
  */
 
-#include <queue>
+#include <stack>
 
 #include <tulip/Graph.h>
 #include <tulip/GraphImpl.h>
@@ -268,13 +268,12 @@ void GraphImpl::removeNode(const node n) {
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
   assert (isElement(n));
-  notifyDelNode(n);
   // get edges vector with loops appearing only once
   std::vector<edge> edges;
   storage.getInOutEdges(n, edges, true);
 
   // use a queue for a dfs subgraphs propagation
-  std::queue<Graph*> sgq;
+  std::stack<Graph*> sgq;
   Iterator<Graph*>* sgs = getSubGraphs();
 
   while (sgs->hasNext()) {
@@ -288,7 +287,7 @@ void GraphImpl::delNode(const node n, bool) {
 
   // subgraphs loop
   while(!sgq.empty()) {
-    Graph* sg = sgq.front();
+    Graph* sg = sgq.top();
 
     sgs = sg->getSubGraphs();
 
@@ -301,7 +300,7 @@ void GraphImpl::delNode(const node n, bool) {
 
     delete sgs;
 
-    if (sg == sgq.front()) {
+    if (sg == sgq.top()) {
       ((GraphView *) sg)->removeNode(n, edges);
       sgq.pop();
     }
@@ -316,6 +315,7 @@ void GraphImpl::delNode(const node n, bool) {
     ++ite;
   }
 
+  notifyDelNode(n);
   // delete n from storage
   storage.delNode(n);
 
