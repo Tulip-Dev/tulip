@@ -268,7 +268,7 @@ void GraphImpl::delNode(const node n, bool) {
   std::vector<edge> edges;
   storage.getInOutEdges(n, edges, true);
 
-  // use a queue for a dfs subgraphs propagation
+  // use a stack for a dfs subgraphs propagation
   std::stack<Graph *> sgq;
   Iterator<Graph *> *sgs = getSubGraphs();
 
