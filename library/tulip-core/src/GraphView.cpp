@@ -16,7 +16,7 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <queue>
+#include <stack>
 
 #include <tulip/StableIterator.h>
 #include <tulip/ForEach.h>
@@ -346,22 +346,17 @@ void GraphView::addEdges(Iterator<edge>* addedEdges) {
     restoreEdges(edges, std::vector<pair<node, node> >());
 }
 //----------------------------------------------------------------
-void GraphView::delNodeInternal(const node n) {
+void GraphView::removeNode(const node n) {
+  assert(isElement(n));
+  notifyDelNode(n);
   nodeAdaptativeFilter.set(n.id, false);
   propertyContainer->erase(n);
   --nNodes;
 }
 //----------------------------------------------------------------
-void GraphView::removeNode(const node n) {
-  notifyDelNode(n);
-  delNodeInternal(n);
-}
-//----------------------------------------------------------------
 void GraphView::removeNode(const node n, const std::vector<edge>& edges) {
-  assert(isElement(n));
-  notifyDelNode(n);
   removeEdges(edges);
-  delNodeInternal(n);
+  removeNode(n);
 }
 //----------------------------------------------------------------
 void GraphView::delNode(const node n, bool deleteInAllGraphs) {
@@ -369,15 +364,14 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     getRoot()->delNode(n, true);
   }
   else {
-    assert (isElement(n));
-    notifyDelNode(n);
+    assert(isElement(n));
 
     // get edges vector with loops appearing only once
     std::vector<edge> edges;
     ((GraphImpl *)getRoot())->getInOutEdges(n, edges, true);
 
-    // use a queue for a dfs subgraphs propagation
-    std::queue<Graph*> sgq;
+    // use a stack for a dfs subgraphs propagation
+    std::stack<Graph*> sgq;
     Iterator<Graph*>* sgs = getSubGraphs();
 
     while (sgs->hasNext()) {
@@ -391,7 +385,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
 
     // subgraphs loop
     while(!sgq.empty()) {
-      Graph* sg = sgq.front();
+      Graph* sg = sgq.top();
 
       sgs = sg->getSubGraphs();
 
@@ -404,19 +398,20 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
 
       delete sgs;
 
-      if (sg == sgq.front()) {
+      if (sg == sgq.top()) {
         ((GraphView *) sg)->removeNode(n, edges);
         sgq.pop();
       }
     }
 
-    removeEdges(edges);
-
-    delNodeInternal(n);
+    removeNode(n, edges);
   }
 }
 //----------------------------------------------------------------
-void GraphView::delEdgeInternal(const edge e) {
+void GraphView::removeEdge(const edge e) {
+  assert(isElement(e));
+  notifyDelEdge(e);
+  
   edgeAdaptativeFilter.set(e.id,false);
   propertyContainer->erase(e);
   --nEdges;
@@ -425,12 +420,6 @@ void GraphView::delEdgeInternal(const edge e) {
   node tgt = eEnds.second;
   outDegree.add(src.id, -1);
   inDegree.add(tgt.id, -1);
-}
-//----------------------------------------------------------------
-void GraphView::removeEdge(const edge e) {
-  assert(isElement(e));
-  notifyDelEdge(e);
-  delEdgeInternal(e);
 }
 //----------------------------------------------------------------
 void GraphView::removeEdges(const std::vector<edge>& edges) {
@@ -452,7 +441,6 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   }
   else {
     assert(isElement(e));
-    notifyDelEdge(e);
     // propagate to subgraphs
     Iterator<Graph *>*itS=getSubGraphs();
 
@@ -464,7 +452,7 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
     }
 
     delete itS;
-    delEdgeInternal(e);
+    removeEdge(e);
   }
 }
 //----------------------------------------------------------------
