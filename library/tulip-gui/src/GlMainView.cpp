@@ -88,6 +88,7 @@ void GlMainView::setState(const tlp::DataSet& data) {
     setOverviewVisible(overviewVisible);
 
   bool quickAccessBarVisible = true;
+
   if (data.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
     setQuickAccessBarVisible(quickAccessBarVisible);

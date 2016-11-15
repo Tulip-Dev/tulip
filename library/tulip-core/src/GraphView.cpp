@@ -411,7 +411,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
 void GraphView::removeEdge(const edge e) {
   assert(isElement(e));
   notifyDelEdge(e);
-  
+
   edgeAdaptativeFilter.set(e.id,false);
   propertyContainer->erase(e);
   --nEdges;
