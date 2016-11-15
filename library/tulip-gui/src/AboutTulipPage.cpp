@@ -42,11 +42,13 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 
   if (authorsFile.open(QFile::ReadOnly | QFile::Text)) {
     QTextStream in(&authorsFile);
+    in.setCodec("UTF-8");
     _ui->authorsTextEdit->setText(in.readAll());
   }
 
   if (licenseFile.open(QFile::ReadOnly | QFile::Text)) {
     QTextStream in(&licenseFile);
+    in.setCodec("UTF-8");
     _ui->licenseTextEdit->setText(in.readAll());
   }
 }
