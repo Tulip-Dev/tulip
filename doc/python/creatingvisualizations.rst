@@ -170,17 +170,15 @@ visual attributes on graph elements and finally it creates a node link diagram v
     from tulipogl import *
     from tulipgui import *
 
-    # Create an empty graph
-    graph = tlp.newGraph()
-
     # Set the parameters for the "File System Directory" Import module
     fsImportParams = tlp.getDefaultPluginParameters("File System Directory", graph)
     fsImportParams["directory"] = "/home/antoine/tulip_install"
 
     # Import a file system directory content as a tree
-    tlp.importGraph("File System Directory", fsImportParams, graph)
+    graph = tlp.importGraph("File System Directory", fsImportParams)
 
     # Get some visual attributes properties
+    viewColor = graph.getColorProperty('viewColor')
     viewLabel =  graph.getStringProperty("viewLabel")
     viewLabelColor =  graph.getColorProperty("viewLabelColor")
     viewLabelBorderColor =  graph.getColorProperty("viewLabelBorderColor")
@@ -196,17 +194,18 @@ visual attributes on graph elements and finally it creates a node link diagram v
     renderingOrderingProp = graph.getDoubleProperty("rendering ordering")
 
     for n in graph.getNodes():
-	# the "File System Directory" import plugin adds a "File name" property containg the file name
-	viewLabel[n] = graph["File name"][n]
-	# if the node represents a directory, ensure that its label will be visible (as we will activate the "no labels overlaps" mode)
-	# also change its label color to blue
-	if graph.deg(n) > 1:
-      renderingOrderingProp[n] = 1
-      viewLabelColor[n] = viewLabelBorderColor[n] = tlp.Color(0, 0, 255)
-	else:
-      renderingOrderingProp[n] = 0
+      # the "File System Directory" import plugin adds a "File name" property containg the file name
+      viewLabel[n] = graph["File name"][n]
+      # if the node represents a directory, ensure that its label will be visible (as we will activate the "no labels overlaps" mode)
+      # also change its label color to blue
+      if graph.deg(n) > 1:
+        renderingOrderingProp[n] = 1
+        viewLabelColor[n] = viewLabelBorderColor[n] = tlp.Color.Blue
+      else:
+        renderingOrderingProp[n] = 0
 
     viewBorderWidth.setAllEdgeValue(1)
+    viewColor.setAllNodeValue(tlp.Color.Red)
 
     # Create a Node Link Diagram view without displaying it
     nodeLinkView = tlpgui.createView("Node Link Diagram view", graph, {}, False)
@@ -219,7 +218,7 @@ visual attributes on graph elements and finally it creates a node link diagram v
 
     # Activate the "no labels overlaps" mode
     renderingParams.setLabelsDensity(0)
-    renderingParams.setMinSizeOfLabel(7)
+    renderingParams.setMinSizeOfLabel(4)
     nodeLinkView.setRenderingParameters(renderingParams)
 
     # Save a snapshot of the view to an image file on disk
