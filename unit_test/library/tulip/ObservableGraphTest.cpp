@@ -699,8 +699,8 @@ void ObservableGraphTest::testSubgraph() {
   Observable::holdObservers();
   g2->delNode(n2);
   CPPUNIT_ASSERT_EQUAL(size_t(3), graphs.size());
-  CPPUNIT_ASSERT_EQUAL(g2, graphs[0]);
-  CPPUNIT_ASSERT_EQUAL(g4, graphs[1]);
+  CPPUNIT_ASSERT_EQUAL(g4, graphs[0]);
+  CPPUNIT_ASSERT_EQUAL(g2, graphs[1]);
   CPPUNIT_ASSERT_EQUAL(g2, graphs[2]);
   CPPUNIT_ASSERT_EQUAL(0u, observer->nbObservables());
   Observable::unholdObservers();
