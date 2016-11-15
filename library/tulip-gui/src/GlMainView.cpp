@@ -84,16 +84,12 @@ bool GlMainView::updateOverview() const {
 void GlMainView::setState(const tlp::DataSet& data) {
   bool overviewVisible=true;
 
-  if(data.exist("overviewVisible")) {
-    data.get<bool>("overviewVisible", overviewVisible);
+  if (data.get<bool>("overviewVisible", overviewVisible))
     setOverviewVisible(overviewVisible);
-  }
 
   bool quickAccessBarVisible = true;
-
-  if(data.exist("quickAccessBarVisible")) {
+  if (data.get<bool>("quickAccessBarVisible", quickAccessBarVisible)) {
     needQuickAccessBar = true;
-    data.get<bool>("quickAccessBarVisible", quickAccessBarVisible);
     setQuickAccessBarVisible(quickAccessBarVisible);
   }
 }

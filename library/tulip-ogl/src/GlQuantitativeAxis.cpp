@@ -107,7 +107,7 @@ void GlQuantitativeAxis::buildAxisGraduations() {
     }
   }
 
-  if (!integerScale || (integerScale && logScale)) {
+  if (!integerScale || logScale) {
     increment = (maxV - minV) / (nbGraduations - 1);
   }
   else {

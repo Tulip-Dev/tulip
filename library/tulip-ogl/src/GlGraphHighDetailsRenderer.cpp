@@ -408,7 +408,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     BoundingBox bb;
     double dist;
 
-    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingNodes)!=0)) {
+    if(!selectionDrawActivate || ((selectionType & RenderingNodes)!=0)) {
       // Colect complex entities
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].nodesLODVector.begin(); it!=layersLODVector[0].nodesLODVector.end(); ++it) {
 
@@ -429,7 +429,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
       }
     }
 
-    if(!selectionDrawActivate || (selectionDrawActivate && (selectionType & RenderingEdges)!=0)) {
+    if(!selectionDrawActivate || ((selectionType & RenderingEdges)!=0)) {
       for(vector<ComplexEntityLODUnit>::iterator it=layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
         if(it->lod<0)
           continue;
