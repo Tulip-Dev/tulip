@@ -1,5 +1,8 @@
 from __future__ import print_function
 import sys
+if sys.version_info[0] == 2:
+  reload(sys)
+  sys.setdefaultencoding('utf8')
 from tulip import *
 from tulipgui import *
 # pip install tabulate
@@ -167,8 +170,6 @@ for cat in sorted(plugins.keys()):
         pos2 = paramHelpHtml.rfind('</p>')
         paramHelp = paramHelpHtml[pos+len(pattern):pos2]
         paramHelp = formatSphinxDoc(paramHelp)
-      if sys.version_info[0] == 2:
-        paramHelp = paramHelp.decode('utf-8')
       pattern = '<b>type</b><td class="b">'
       pos = paramHelpHtml.find(pattern)
       paramType = ''
