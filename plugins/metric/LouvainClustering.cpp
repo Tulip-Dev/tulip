@@ -250,7 +250,6 @@ private:
   // return true if some nodes have been moved
   bool one_level() {
     bool improvement = false;
-    int nb_moves;
     double new_mod = modularity();
     double cur_mod = new_mod;
 
@@ -261,7 +260,7 @@ private:
     // or there is an improvement of modularity greater than a given epsilon
     do {
       cur_mod = new_mod;
-      nb_moves = 0;
+      int nb_moves = 0;
 
       // for each node:
       // remove the node from its community

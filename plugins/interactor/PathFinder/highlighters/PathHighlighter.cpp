@@ -56,13 +56,12 @@ void PathHighlighter::clear() {
 
     for (map<string, bool>::iterator it = entities.begin(); it != entities.end(); ++it) {
       string entityName(it->first);
-      bool deleteOnExit(it->second);
       GlSimpleEntity *entity(layer->findGlEntity(entityName));
 
       if (entity) {
         layer->deleteGlEntity(entity);
 
-        if (deleteOnExit)
+        if (it->second)
           delete entity;
       }
     }
