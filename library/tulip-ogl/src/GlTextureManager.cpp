@@ -461,11 +461,15 @@ bool GlTextureLoader::loadTexture(const string& filename,
   return result;
 }
 //====================================================================
-GlTextureManager::GlTextureManager():animationFrame(0) {
+GlTextureManager::GlTextureManager() : currentContext(0), animationFrame(0) {
+  texturesMap[currentContext] = TextureUnit();
 }
 //====================================================================
 void GlTextureManager::changeContext(uintptr_t context) {
   currentContext=context;
+  if (texturesMap.find(currentContext) == texturesMap.end()) {
+    texturesMap[currentContext] = TextureUnit();
+  }
 }
 //====================================================================
 void GlTextureManager::removeContext(uintptr_t context) {
