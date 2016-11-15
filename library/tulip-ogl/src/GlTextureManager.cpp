@@ -467,6 +467,7 @@ GlTextureManager::GlTextureManager() : currentContext(0), animationFrame(0) {
 //====================================================================
 void GlTextureManager::changeContext(uintptr_t context) {
   currentContext=context;
+
   if (texturesMap.find(currentContext) == texturesMap.end()) {
     texturesMap[currentContext] = TextureUnit();
   }
