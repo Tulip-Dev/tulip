@@ -264,7 +264,7 @@ static bool loadPNG(const string &filename, TextureInfo *texture) {
   {
     png_destroy_read_struct(&png_ptr, &info_ptr, &end_info);
     fclose(file);
-    return file != NULL;
+    return true;
   }
 
   png_init_io(png_ptr, file);

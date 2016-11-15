@@ -389,7 +389,7 @@ bool MCLClustering::run() {
   }
   */
 
-  int iteration = 15. * log(g.numberOfNodes() + 1);
+  int iteration = 15. * log1p(g.numberOfNodes());
 
   while(iteration-- > 0) {
     bool equal = true;

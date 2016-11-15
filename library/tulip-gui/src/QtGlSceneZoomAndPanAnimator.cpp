@@ -39,7 +39,7 @@ void QtGlSceneZoomAndPanAnimator::animateZoomAndPan() {
   timeLine.setFrameRange(0, nbAnimationSteps);
   connect(&timeLine, SIGNAL(frameChanged(int)), this, SLOT(zoomAndPanAnimStepSlot(int)));
 
-  if (doZoomAndPan || (!doZoomAndPan && additionalAnimation != NULL)) {
+  if (doZoomAndPan || (additionalAnimation != NULL)) {
     timeLine.start();
 
     while (timeLine.state() != QTimeLine::NotRunning) {

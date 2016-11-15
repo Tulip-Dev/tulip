@@ -273,7 +273,6 @@ void PythonCodeHighlighter::highlightBlock(const QString &text) {
 bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const QRegExp &delimiter, const int inState, const QTextCharFormat &style) {
   int start = -1;
   int add = -1;
-  int length = 0;
   int commentPos = -1;
 
   if (previousBlockState() == inState) {
@@ -290,6 +289,7 @@ bool PythonCodeHighlighter::highlightMultilineString(const QString &text, const 
 
     while (start >= 0) {
       int end = delimiter.indexIn(text, start + add);
+      int length;
 
       if (end >= add) {
         length = end - start + add + delimiter.matchedLength();
