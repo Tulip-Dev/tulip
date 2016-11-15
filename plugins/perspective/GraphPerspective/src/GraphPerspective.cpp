@@ -471,6 +471,9 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
 #endif
 
+  // show the 'Find plugins' menu entry only if connected to the Tulip agent
+  _ui->actionFind_plugins->setVisible(checkSocketConnected());
+
   // fill menu with recent documents
   buildRecentDocumentsMenu();
 
