@@ -110,8 +110,6 @@ private:
   mutable int nNodes;
   mutable int nEdges;
   edge addEdgeInternal(edge);
-  void delEdgeInternal(const edge);
-  void delNodeInternal(const node);
   void reverseInternal(const edge, const node src, const node tgt);
   void setEndsInternal(const edge, const node src, const node tgt,
                        const node newSrc, const node newTgt);
