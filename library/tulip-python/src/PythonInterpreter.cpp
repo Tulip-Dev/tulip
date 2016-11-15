@@ -63,36 +63,36 @@ static PyGILState_STATE gilState;
 
 static const QString printObjectDictFunction =
   "def printObjectDict(obj):\n"
-  "     if hasattr(obj, \"__dict__\"):\n"
-  "         for k in obj.__dict__.keys():\n"
+  "  if hasattr(obj, \"__dict__\"):\n"
+  "    for k in obj.__dict__.keys():\n"
 #if PY_MAJOR_VERSION >= 3
-  "             print(k)\n"
+  "      print(k)\n"
 #else
-  "             print k\n"
+  "      print k\n"
 #endif
-  "     if hasattr(obj, \"__bases__\"):\n"
-  "         for k in obj.__bases__:\n"
-  "             printObjectDict(k)\n"
-  "     if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
-  "         printObjectDict(obj.__class__)\n"
+  "  if hasattr(obj, \"__bases__\"):\n"
+  "    for k in obj.__bases__:\n"
+  "      printObjectDict(k)\n"
+  "  if hasattr(obj, \"__class__\") and obj.__class__ != type(type):\n"
+  "    printObjectDict(obj.__class__)\n"
   ""
   ;
 
 static const QString printObjectClassFunction =
   "def printObjectClass(obj):\n"
-  "	type = \"\"\n"
-  "	if obj and hasattr(obj, \"__class__\"):\n"
-  "		if hasattr(obj.__class__, \"__module__\"):\n"
-  "			mod = obj.__class__.__module__\n"
-  "			if mod == \"_tulip\":"
-  "				mod = \"tlp\"\n"
-  "			type = mod + \".\"\n"
-  "		if hasattr(obj.__class__, \"__name__\"):\n"
-  "			type = type + obj.__class__.__name__\n"
+  "  type = \"\"\n"
+  "  if obj and hasattr(obj, \"__class__\"):\n"
+  "    if hasattr(obj.__class__, \"__module__\"):\n"
+  "      mod = obj.__class__.__module__\n"
+  "      if mod == \"_tulip\":"
+  "        mod = \"tlp\"\n"
+  "      type = mod + \".\"\n"
+  "    if hasattr(obj.__class__, \"__name__\"):\n"
+  "      type = type + obj.__class__.__name__\n"
 #if PY_MAJOR_VERSION >= 3
-  "		print(type)\n"
+  "    print(type)\n"
 #else
-  "		print type\n"
+  "    print type\n"
 #endif
   ""
   ;
