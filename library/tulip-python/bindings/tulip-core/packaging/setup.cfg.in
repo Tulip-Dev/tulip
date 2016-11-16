@@ -7,4 +7,4 @@ universal=0
 # Force tulip wheels to be installed in install_platlib and not install_purelib
 # as extension modules are not compiled through setuptools
 [install]
-install_lib=/
+install_lib=${WHEEL_INSTALL_PATH}
