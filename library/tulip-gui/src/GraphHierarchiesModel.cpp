@@ -104,7 +104,6 @@ QModelIndex GraphHierarchiesModel::forceGraphIndex(Graph* g) {
 
 // Serialization
 static QString GRAPHS_PATH("/graphs/");
-//static QString GRAPH_FILE("graph.json");
 
 bool GraphHierarchiesModel::needsSaving() {
   bool saveNeeded = false;
@@ -119,7 +118,7 @@ bool GraphHierarchiesModel::needsSaving() {
 QMap<QString,tlp::Graph*> GraphHierarchiesModel::readProject(tlp::TulipProject *project, tlp::PluginProgress *progress) {
   QMap<QString,tlp::Graph*> rootIds;
 
-  foreach(QString entry, project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
+  foreach(const QString &entry, project->entryList(GRAPHS_PATH, QDir::Dirs | QDir::NoDotAndDotDot, QDir::Name)) {
     QString file = GRAPHS_PATH + entry + "/graph.tlp";
 
     if (!project->exists(file)) {
@@ -166,7 +165,10 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
-    tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
+    if(!TulipSettings::instance().isUseTlpbFileFormat())
+        tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
+    else
+        tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlpb").toStdString(),progress);
   }
 
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
@@ -323,7 +325,7 @@ Qt::ItemFlags GraphHierarchiesModel::flags(const QModelIndex &index) const {
 QMimeData* GraphHierarchiesModel::mimeData(const QModelIndexList &indexes) const {
   QSet<Graph*> graphs;
 
-  foreach(QModelIndex index, indexes) {
+  foreach(const QModelIndex& index, indexes) {
     Graph *g = data(index,GraphRole).value<Graph*>();
 
     if (g != NULL)
@@ -412,9 +414,7 @@ void GraphHierarchiesModel::addGraph(tlp::Graph *g) {
   if (_graphs.contains(g) || g == NULL)
     return;
 
-  Graph *i;
-
-  foreach(i,_graphs) {
+  foreach(Graph* i,_graphs) {
     if (i->isDescendantGraph(g))
       return;
   }

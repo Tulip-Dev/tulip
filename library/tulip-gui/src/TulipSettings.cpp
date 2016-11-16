@@ -64,7 +64,7 @@ static const QString TS_AutomaticMapMetricEntry = "graph/auto/colors";
 static const QString TS_ResultPropertyStoredEntry = "graph/auto/result";
 
 static const QString TS_RunningTimeComputedEntry = "graph/auto/time";
-
+static const QString TS_UseTlpbFileFormat = "graph/auto/usetlpb";
 static const QString TS_SeedForRandomSequenceEntry = "graph/auto/seed";
 
 static const QString TS_WarnUserAboutGraphicsCardEntry = "app/warn_about_graphics_card";
@@ -389,6 +389,14 @@ bool TulipSettings::isRunningTimeComputed() const {
 
 void TulipSettings::setRunningTimeComputed(bool f) {
   setValue(TS_RunningTimeComputedEntry,f);
+}
+
+bool TulipSettings::isUseTlpbFileFormat() const {
+    return value(TS_UseTlpbFileFormat,false).toBool();
+}
+
+void TulipSettings::setUseTlpFileFormat(bool f) {
+    setValue(TS_UseTlpbFileFormat,f);
 }
 
 unsigned int TulipSettings::seedOfRandomSequence() const {
