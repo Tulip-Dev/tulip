@@ -62,6 +62,10 @@ static bool isWow64() {
 // The path to the Python home directory is retrieved from the windows registry.
 // On windows, Python can be installed for all users or for the current user only. That function handles both cases
 static QString pythonHome(const QString &pythonVersion) {
+#ifdef MSYS2_PYTHON
+    (void) pythonVersion;
+    return PYTHON_HOME_PATH;
+#else
 // 32 bit Python
 #ifndef X86_64
   // on windows 64 bit
@@ -93,6 +97,7 @@ static QString pythonHome(const QString &pythonVersion) {
   QSettings win64SettingsCurrentUser(win64RegKeyCurrentUser, QSettings::NativeFormat);
   return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") +
          win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+#endif
 #endif
 }
 
