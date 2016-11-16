@@ -39,6 +39,9 @@ public slots:
   void readSettings();
   void cellChanged(int row, int column);
   void randomSeedCheckChanged(int);
+
+private slots:
+  void usetlpbformat(int state);
 };
 
 #endif // PREFERENCESDIALOG_H

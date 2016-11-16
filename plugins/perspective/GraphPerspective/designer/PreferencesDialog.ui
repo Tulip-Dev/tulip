@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
+    <width>822</width>
     <height>732</height>
    </rect>
   </property>
@@ -26,7 +26,7 @@
    <string>Tulip preferences</string>
   </property>
   <property name="windowIcon">
-   <iconset>
+   <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
     <normaloff>:/tulip/gui/icons/logo32x32.png</normaloff>:/tulip/gui/icons/logo32x32.png</iconset>
   </property>
   <property name="styleSheet">
@@ -92,7 +92,16 @@ background-color: #F4F4F4;
    <property name="spacing">
     <number>0</number>
    </property>
-   <property name="margin">
+   <property name="leftMargin">
+    <number>10</number>
+   </property>
+   <property name="topMargin">
+    <number>10</number>
+   </property>
+   <property name="rightMargin">
+    <number>10</number>
+   </property>
+   <property name="bottomMargin">
     <number>10</number>
    </property>
    <item>
@@ -662,6 +671,16 @@ font: 10pt;
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="usetlpbformat">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will loose compatibility with older verstion of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Use Tulip binary graph file format when saving a Tulip project</string>
+          </property>
+         </widget>
+        </item>
+        <item>
          <layout class="QHBoxLayout" name="horizontalLayout_7">
           <item>
            <widget class="QCheckBox" name="randomSeedCheck">
@@ -720,7 +739,16 @@ If not, a new random seed will be set to initialize each new random sequence.</s
    </item>
   </layout>
  </widget>
- <resources/>
+ <customwidgets>
+  <customwidget>
+   <class>tlp::TulipLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header location="global">tulip/TulipLineEdit.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources>
+  <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>proxyCheck</sender>
@@ -855,11 +883,4 @@ If not, a new random seed will be set to initialize each new random sequence.</s
   <slot>settingsChanged()</slot>
   <slot>applySettings()</slot>
  </slots>
- <customwidgets>
-  <customwidget>
-   <class>tlp::TulipLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/TulipLineEdit.h</header>
-  </customwidget>
- </customwidgets>
 </ui>
