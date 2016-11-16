@@ -17,6 +17,10 @@ GET_PREREQUISITES(${TULIPOGL_NATIVE_PYTHON_MODULE} TULIPOGL_NATIVE_PYTHON_MODULE
 
 GET_PREREQUISITES(${TULIPGUI_NATIVE_PYTHON_MODULE} TULIPGUI_NATIVE_PYTHON_MODULE_TL_DEPS 1 0 "" ${DIRS})
 
+GET_PREREQUISITES("${TULIPGUI_NATIVE_PYTHON_PATH}/plugins/libGeographicView-${TulipVersion}.dll" GEOVIEW_DEPS 1 0 "" ${DIRS})
+
+SET(TULIPGUI_NATIVE_PYTHON_MODULE_TL_DEPS ${TULIPGUI_NATIVE_PYTHON_MODULE_TL_DEPS} ${GEOVIEW_DEPS})
+
 # The DLL_DEP_RESOLVED variable is not set when calling GP_RESOLVE_ITEM
 # even if the item is correctly resolved (I added some debug messages to GetPrerequisites.cmake to verify).
 # My guess is PARENT_SCOPE is not honored when executing cmake in script mode ($ cmake -P ...).

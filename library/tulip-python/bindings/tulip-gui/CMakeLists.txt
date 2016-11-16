@@ -32,11 +32,31 @@ DISABLE_COMPILER_WARNINGS()
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
-CONFIGURE_FILE(packaging/setup.py.in ${TULIPGUI_PYTHON_FOLDER}/../setup.py)
-ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
-                                                   COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
+
+IF(WIN32)
+SET(WHEEL_INSTALL_PATH "\\")
+ELSE(WIN32)
+SET(WHEEL_INSTALL_PATH "/")
+ENDIF(WIN32)
+
+ADD_CUSTOM_COMMAND(OUTPUT ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
+  COMMAND ${CMAKE_COMMAND} -DINPUT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/packaging/
+                           -DOUTPUT_DIR=${TULIPGUI_PYTHON_FOLDER}/../
+                           -DTulipVersion=${TulipVersion}
+                           -DTulipVersionClean=${TulipVersionClean}
+                           -DPythonWheelVersionSuffix=${PythonWheelVersionSuffix}
+                           -DWHEEL_INSTALL_PATH=${WHEEL_INSTALL_PATH}
+                           -P ${CMAKE_CURRENT_SOURCE_DIR}/packaging/configure_tulipgui_python_setup.cmake
+  DEPENDS
+    packaging/setup.py.in
+    packaging/setup.cfg.in
+  COMMENT "Generating tulipgui-python packaging files"
+  VERBATIM)
+
+ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIPGUI_PYTHON_FOLDER}/../MANIFEST.in
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIPGUI_PYTHON_FOLDER}/../README.rst
                                                    COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipGuiDllDependencies.cmake ${TULIPGUI_PYTHON_FOLDER}/../copyTulipGuiDllDependencies.cmake
+                                                   DEPENDS ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
 )
 ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)

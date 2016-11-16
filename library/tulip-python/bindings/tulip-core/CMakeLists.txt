@@ -114,11 +114,31 @@ ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
 STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
-CONFIGURE_FILE(packaging/setup.py.in ${TULIP_PYTHON_FOLDER}/../setup.py)
-ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/setup.cfg ${TULIP_PYTHON_FOLDER}/../setup.cfg
-                                                COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
+
+IF(WIN32)
+SET(WHEEL_INSTALL_PATH "\\")
+ELSE(WIN32)
+SET(WHEEL_INSTALL_PATH "/")
+ENDIF(WIN32)
+
+ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_FOLDER}/../setup.py ${TULIP_PYTHON_FOLDER}/../setup.cfg
+  COMMAND ${CMAKE_COMMAND} -DINPUT_DIR=${CMAKE_CURRENT_SOURCE_DIR}/packaging/
+                           -DOUTPUT_DIR=${TULIP_PYTHON_FOLDER}/../
+                           -DTulipVersionClean=${TulipVersionClean}
+                           -DPythonWheelVersionSuffix=${PythonWheelVersionSuffix}
+                           -DWHEEL_INSTALL_PATH=${WHEEL_INSTALL_PATH}
+                           -P ${CMAKE_CURRENT_SOURCE_DIR}/packaging/configure_tulip_python_setup.cmake
+  DEPENDS
+    packaging/setup.py.in
+    packaging/setup.cfg.in
+  COMMENT "Generating tulip-python packaging files"
+  VERBATIM)
+
+
+ADD_CUSTOM_TARGET(copyTulipPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/MANIFEST.in ${TULIP_PYTHON_FOLDER}/../MANIFEST.in
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/README.rst ${TULIP_PYTHON_FOLDER}/../README.rst
                                                 COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/packaging/copyTulipCoreDllDependencies.cmake ${TULIP_PYTHON_FOLDER}/../copyTulipCoreDllDependencies.cmake
+                                                DEPENDS ${TULIP_PYTHON_FOLDER}/../setup.py ${TULIP_PYTHON_FOLDER}/../setup.cfg
 )
 ADD_DEPENDENCIES(tulip-core-wheel copyTulipPythonPackagingFiles)
 ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
