@@ -490,7 +490,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
 
-  PythonInterpreter::getInstance()->setOutputEnabled(false);
+  PythonInterpreter::getInstance()->setErrorOutputEnabled(false);
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
 
@@ -500,7 +500,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
 #endif
 
-  PythonInterpreter::getInstance()->setOutputEnabled(true);
+  PythonInterpreter::getInstance()->setErrorOutputEnabled(true);
 #endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
