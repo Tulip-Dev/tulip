@@ -165,10 +165,11 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
+
     if(!TulipSettings::instance().isUseTlpbFileFormat())
-        tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
+      tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlp").toStdString(),progress);
     else
-        tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlpb").toStdString(),progress);
+      tlp::saveGraph(g,project->toAbsolutePath(folder + "graph.tlpb").toStdString(),progress);
   }
 
   foreach(GraphNeedsSavingObserver* observer, _saveNeeded)
