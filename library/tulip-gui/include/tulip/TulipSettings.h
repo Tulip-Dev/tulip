@@ -163,6 +163,9 @@ public:
   bool isRunningTimeComputed() const;
   void setRunningTimeComputed(bool);
 
+  bool isUseTlpbFileFormat() const;
+  void setUseTlpFileFormat(bool);
+
   unsigned int seedOfRandomSequence() const;
   void setSeedOfRandomSequence(unsigned int);
   void initSeedOfRandomSequence();
