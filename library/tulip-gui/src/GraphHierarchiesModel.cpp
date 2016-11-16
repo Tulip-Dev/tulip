@@ -624,9 +624,7 @@ void GraphHierarchiesModel::treatEvents(const std::vector<tlp::Event> &) {
 
   emit layoutAboutToBeChanged();
 
-  const Graph *graph = NULL;
-
-  foreach (graph, _graphsChanged) {
+  foreach (const Graph* graph, _graphsChanged) {
     QModelIndex graphIndex = indexOf(graph);
     QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
     emit dataChanged(graphIndex, graphEdgesIndex);

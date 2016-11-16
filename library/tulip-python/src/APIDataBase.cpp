@@ -116,7 +116,7 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
     if (parameters != "") {
       QStringList paramsList = parameters.split(',');
 
-      foreach(QString param, paramsList) {
+      foreach(const QString& param, paramsList) {
         params.append(param.trimmed());
       }
     }
@@ -175,7 +175,7 @@ QSet<QString> APIDataBase::getTypesList() const {
   QSet<QString> ret;
   QList<QString> keys = _dictContent.keys();
 
-  foreach(QString type, keys) {
+  foreach(const QString& type, keys) {
     ret.insert(type);
   }
 
@@ -186,7 +186,7 @@ QSet<QString> APIDataBase::getDictContentForType(const QString &type, const QStr
   QSet<QString> ret;
 
   if (_dictContent.find(type) != _dictContent.end()) {
-    foreach(QString s, _dictContent[type]) {
+    foreach(const QString& s, _dictContent[type]) {
       if (s.toLower().startsWith(prefix.toLower())) {
         ret.insert(s);
       }
@@ -227,7 +227,7 @@ QVector<QString> APIDataBase::findTypesContainingDictEntry(const QString &dictEn
   while (i.hasNext()) {
     i.next();
 
-    foreach(QString s, i.value()) {
+    foreach(const QString& s, i.value()) {
       if (s == dictEntry) {
         ret.append(i.key());
         break;
@@ -245,7 +245,7 @@ QSet<QString> APIDataBase::getAllDictEntriesStartingWithPrefix(const QString &pr
   while (i.hasNext()) {
     i.next();
 
-    foreach(QString s, i.value()) {
+    foreach(const QString& s, i.value()) {
       if (s.toLower().startsWith(prefix.toLower())) {
         ret.insert(s);
       }
@@ -262,7 +262,7 @@ bool APIDataBase::typeExists(const QString &type) const {
 QString APIDataBase::getFullTypeName(const QString &t) const {
   QList<QString> keys = _dictContent.keys();
 
-  foreach(QString type, keys) {
+  foreach(const QString& type, keys) {
     int pos = type.lastIndexOf(t);
 
     if (pos != -1 && (pos + t.length()) == type.length() && (pos == 0 || type[pos-1] == '.')) {

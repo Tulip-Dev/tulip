@@ -115,7 +115,7 @@ void GraphPerspective::reserveDefaultProperties() {
 void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->clear();
 
-  foreach(QString s, TulipSettings::instance().recentDocuments()) {
+  foreach(const QString& s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
 
@@ -124,7 +124,7 @@ void GraphPerspective::buildRecentDocumentsMenu() {
 
   _ui->menuOpen_recent_file->addSeparator();
 
-  foreach(QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
+  foreach(const QString& s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
 
@@ -1161,7 +1161,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View* firstPanel = NULL;
   View* secondPanel = NULL;
 
-  foreach(QString panelName, QStringList() << "Spreadsheet view" << "Node Link Diagram view") {
+  foreach(const QString& panelName, QStringList() << "Spreadsheet view" << "Node Link Diagram view") {
     View* view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(),NULL);
 
     if (firstPanel == NULL)

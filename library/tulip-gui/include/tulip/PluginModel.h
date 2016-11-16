@@ -86,10 +86,10 @@ class PluginModel : public tlp::TulipModel {
       pluginTree[tlp::tlpStringToQString(plugin.category())][tlp::tlpStringToQString(plugin.group())].append(tlp::tlpStringToQString(name));
     }
 
-    foreach(QString cat, pluginTree.keys()) {
+    foreach(const QString& cat, pluginTree.keys()) {
       TreeItem* catItem = _root->addChild(cat);
 
-      foreach(QString group, pluginTree[cat].keys()) {
+      foreach(const QString& group, pluginTree[cat].keys()) {
         TreeItem* groupItem = catItem;
 
         if ((group != "") && (pluginTree[cat].keys().size() > 1))
@@ -99,7 +99,7 @@ class PluginModel : public tlp::TulipModel {
         qSort(pluginTree[cat][group].begin(),
               pluginTree[cat][group].end(), QStringCaseCmp);
 
-        foreach(QString alg, pluginTree[cat][group]) {
+        foreach(const QString& alg, pluginTree[cat][group]) {
           const Plugin& plugin =
             PluginLister::instance()->pluginInformation(tlp::QStringToTlpString(alg));
           std::string infos = plugin.info();

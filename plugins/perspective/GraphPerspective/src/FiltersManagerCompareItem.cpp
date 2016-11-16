@@ -215,10 +215,10 @@ void FiltersManagerCompareItem::elementChanged() {
   }
 }
 void FiltersManagerCompareItem::setNumerics(bool f) {
-  foreach(int i,NUMERIC_OPERATOR_INDEXES)
+  foreach(const int i,NUMERIC_OPERATOR_INDEXES)
     itemAt(_ui->operatorCombo,i)->setEnabled(f);
 
-  foreach(int i,STRING_OPERATOR_INDEXES)
+  foreach(const int i,STRING_OPERATOR_INDEXES)
     itemAt(_ui->operatorCombo,i)->setEnabled(!f);
 }
 void FiltersManagerCompareItem::graphChanged() {

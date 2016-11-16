@@ -99,7 +99,7 @@ QStringList TulipSettings::recentDocuments() const {
 void TulipSettings::checkRecentDocuments() {
   QList<QVariant> recentDocumentsValue = value(TS_RecentDocumentsConfigEntry).toList();
 
-  foreach(QVariant doc, recentDocumentsValue) {
+  foreach(const QVariant &doc, recentDocumentsValue) {
     if (!QFileInfo(doc.toString()).exists())
       recentDocumentsValue.removeAll(doc);
   }

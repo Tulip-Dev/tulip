@@ -121,8 +121,8 @@ int main(int argc,char **argv) {
   stream.writeAttribute("release",TULIP_VERSION);
   stream.writeStartElement("plugins");
 
-  foreach(QString component, collector._directoryPlugins.keys()) {
-    foreach(QString plugin, collector._directoryPlugins[component]) {
+  foreach(const QString &component, collector._directoryPlugins.keys()) {
+    foreach(const QString& plugin, collector._directoryPlugins[component]) {
       // Server description
       stream.writeStartElement("plugin");
       stream.writeAttribute("name",plugin);
