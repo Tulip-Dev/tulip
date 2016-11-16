@@ -389,24 +389,33 @@ IF(NOT BUILD_CORE_ONLY)
 
       IF(PYTHONLIBS_FOUND)
 
+        # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
+        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print sys.version" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
+        STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
+
         # Python 64bits does not provide a dll import library for MinGW.
         # Fortunately, we can directly link to the Python dll with that compiler.
         # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
         IF(MINGW)
           STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
-
           STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
-          # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
-          IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-            SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-          # If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
-          ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-            IF(NOT WIN_AMD64 OR X64)
-              SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-            ELSE(NOT WIN_AMD64 OR X64)
-              SET(PYTHON_LIBRARY ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-            ENDIF(NOT WIN_AMD64 OR X64)
-          ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+
+          IF(MSYS2_PYTHON)
+            SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
+          ELSE(MSYS2_PYTHON)
+            # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
+            IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+              SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            #If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
+            ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+              IF(NOT WIN_AMD64 OR X64)
+                SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+              ELSE(NOT WIN_AMD64 OR X64)
+                SET(PYTHON_LIBRARY ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+              ENDIF(NOT WIN_AMD64 OR X64)
+            ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+           ENDIF(MSYS2_PYTHON)
+
         ENDIF(MINGW)
 
         # Ensure headers correspond to the ones associated to the detected Python library on MacOS
