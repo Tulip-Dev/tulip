@@ -889,7 +889,7 @@ QVector<QString> TulipLabelPositionEditorCreator::POSITION_LABEL = QVector<QStri
 QWidget* TulipLabelPositionEditorCreator::createWidget(QWidget* parent) const {
   QComboBox* result = new QComboBox(parent);
 
-  foreach(QString s, POSITION_LABEL)
+  foreach(const QString& s, POSITION_LABEL)
     result->addItem(s);
 
   return result;
@@ -992,7 +992,7 @@ QVariant QVectorBoolEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
   QVector<bool> result;
   QVector<QVariant> editorData = static_cast<VectorEditor*>(editor)->vector();
 
-  foreach(QVariant v, editorData)
+  foreach(const QVariant& v, editorData)
     result.push_back(v.value<bool>());
 
   return QVariant::fromValue<QVector<bool> >(result);
@@ -1100,7 +1100,7 @@ void QStringListEditorCreator::setEditorData(QWidget *w, const QVariant &var, bo
   QVector<QVariant> vect(strList.length());
   int i=0;
 
-  foreach(QString s, strList) {
+  foreach(const QString& s, strList) {
     vect[i++] = s;
   }
 
@@ -1111,7 +1111,7 @@ QVariant QStringListEditorCreator::editorData(QWidget* w, Graph*) {
   QVector<QVariant> vect = static_cast<VectorEditor*>(w)->vector();
   QStringList lst;
 
-  foreach(QVariant v, vect)
+  foreach(const QVariant& v, vect)
     lst.push_back(v.toString());
 
   return lst;

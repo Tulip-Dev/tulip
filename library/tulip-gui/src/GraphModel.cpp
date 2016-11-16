@@ -720,7 +720,7 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
   bool lastAdded = false;
   typedef QPair<unsigned int,bool> PUB;
 
-  foreach(PUB e, _elementsToModify) {
+  foreach(const PUB& e, _elementsToModify) {
     bool add = e.second;
     unsigned int id = e.first;
 

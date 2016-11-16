@@ -55,7 +55,7 @@ PluginsCenter::PluginsCenter(QWidget *parent): QWidget(parent), _ui(new Ui::Plug
   _ui->stableCheck->setChecked(remoteLocs.contains(PluginManager::STABLE_LOCATION));
   _ui->testingCheck->setChecked(remoteLocs.contains(PluginManager::TESTING_LOCATION));
 
-  foreach(QString s,remoteLocs) {
+  foreach(const QString& s,remoteLocs) {
     if (s != PluginManager::STABLE_LOCATION && s != PluginManager::TESTING_LOCATION)
       _ui->remoteLocationsList->addItem(s);
   }
@@ -65,7 +65,7 @@ void PluginsCenter::reportPluginErrors(const QMap<QString, QString>& errors) {
   if (!errors.empty())
     _ui->pluginsSideList->item(ERRORS_ROW)->setFlags(Qt::ItemIsEnabled | _ui->pluginsSideList->item(ERRORS_ROW)->flags());
 
-  foreach(QString k, errors.keys()) {
+  foreach(const QString& k, errors.keys()) {
     _ui->errorsLogAreaLayout->addWidget(new PluginErrorReport(k,errors[k]));
   }
 
@@ -146,8 +146,8 @@ void PluginsCenter::refreshFilter() {
 
   QVBoxLayout* lyt = new QVBoxLayout();
 
-  foreach(QString cf,_categoryFilters) {
-    foreach(PluginInformation info,PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local,_nameFilter,cf)) {
+  foreach(const QString &cf,_categoryFilters) {
+    foreach(const PluginInformation& info,PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local,_nameFilter,cf)) {
       PluginInformationsListItem* item = new PluginInformationsListItem(info);
       connect(item,SIGNAL(focused()),this,SLOT(itemFocused()));
       lyt->addWidget(item);

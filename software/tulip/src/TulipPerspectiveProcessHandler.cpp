@@ -92,9 +92,7 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   if (!file.isEmpty())
     args << file;
 
-  QString k;
-
-  foreach(k,parameters.keys())
+  foreach(const QString& k,parameters.keys())
     args << "--" + k + "=" + parameters[k].toString();
 
   args << "--port=" + QString::number(serverPort());
@@ -161,9 +159,7 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
       stackTrace += line;
     }
     else {
-      QRegExp *re;
-
-      foreach(re,envInfos.keys()) {
+      foreach(QRegExp *re,envInfos.keys()) {
         if (re->exactMatch(line)) {
           envInfos[re] = re->cap(1);
           break;

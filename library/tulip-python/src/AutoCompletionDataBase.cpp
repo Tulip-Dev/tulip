@@ -290,13 +290,13 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
 
   QSet<QString> types = _apiDb->getTypesList();
 
-  foreach(QString type, types) {
+  foreach(const QString& type, types) {
     _globalAutoCompletionList.insert(type);
 
     if (type.indexOf(".") != -1) {
       QStringList types = type.split(".");
 
-      foreach(QString entry, types) {
+      foreach(const QString& entry, types) {
         _globalAutoCompletionList.insert(entry);
       }
     }
@@ -406,7 +406,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
               _varToPluginName[fullName][varName] = pluginName;
               _pluginParametersDataSet[fullName][varName] = getParametersListForPlugin(pluginName);
 
-              foreach(QString param, _pluginParametersDataSet[fullName][varName]) {
+              foreach(const QString& param, _pluginParametersDataSet[fullName][varName]) {
                 QString name = param.mid(0, param.indexOf("(") - 1);
                 QString type = param.mid(param.indexOf("(")+1, param.indexOf(")") - param.indexOf("(") - 1);
                 QString dataSetVarName = varName + "[" + name + "]";
@@ -613,7 +613,7 @@ void AutoCompletionDataBase::analyseCurrentScriptCode(const QString &code, const
       else {
         QStringList pList = params.split(",");
 
-        foreach(QString param, pList) {
+        foreach(const QString& param, pList) {
           QString paramClean = param;
 
           if (param.indexOf("=") != -1) {
@@ -809,7 +809,7 @@ QString AutoCompletionDataBase::findTypeForExpr(const QString &expr, const QStri
     QStringList parts = cleanExpr.split(".");
     int i = 0;
 
-    foreach(QString p, parts) {
+    foreach(const QString& p, parts) {
       if (i==0) {
         if (_varToType.find(funcName) != _varToType.end()) {
           if (_varToType[funcName].find(p) != _varToType[funcName].end()) {
@@ -956,7 +956,7 @@ QSet<QString> AutoCompletionDataBase::getPluginParametersListIfContext(const QSt
       QString prefix = context.mid(pos+1);
 
       if (_pluginParametersDataSet[editedFunction].find(varName) != _pluginParametersDataSet[editedFunction].end()) {
-        foreach(QString param, _pluginParametersDataSet[editedFunction][varName]) {
+        foreach(const QString& param, _pluginParametersDataSet[editedFunction][varName]) {
           if (param.startsWith(prefix)) {
             ret.insert(param);
           }
@@ -972,7 +972,7 @@ QSet<QString> AutoCompletionDataBase::getPluginParametersListIfContext(const QSt
       QString prefix = context.mid(pos2+strCollecExpr.size());
 
       if (_pluginParametersDataSet[editedFunction].find(varName) != _pluginParametersDataSet[editedFunction].end()) {
-        foreach(QString param, _pluginParametersDataSet[editedFunction][varName]) {
+        foreach(const QString& param, _pluginParametersDataSet[editedFunction][varName]) {
           if (param.indexOf(entryName) != -1 && param.indexOf("tlp.StringCollection") != -1) {
             ret = getStringCollectionEntriesForPlugin(_varToPluginName[editedFunction][varName], entryName, prefix);
           }
@@ -1340,7 +1340,7 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   ret = _apiDb->getDictContentForType(type, prefix);
 
   if (!root) {
-    foreach(QString entry, ret) {
+    foreach(const QString& entry, ret) {
       if (entry[0].isUpper()) {
         ret.remove(entry);
       }
@@ -1360,14 +1360,14 @@ QSet<QString> AutoCompletionDataBase::getAllDictForType(const QString &type, con
   }
 
   if (_classContents.find(type) != _classContents.end()) {
-    foreach(QString entry, _classContents[type]) {
+    foreach(const QString& entry, _classContents[type]) {
       if (entry.toLower().startsWith(prefix.toLower()))
         ret.insert(entry);
     }
   }
 
   if (_classBases.find(type) != _classBases.end()) {
-    foreach(QString baseType, _classBases[type]) {
+    foreach(const QString& baseType, _classBases[type]) {
       if (baseType != type)
         ret += getAllDictForType(baseType, prefix, false);
     }
@@ -1455,14 +1455,14 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
 
   if (cleanContext.indexOf('.') == -1) {
 
-    foreach(QString s, _globalAutoCompletionList) {
+    foreach(const QString& s, _globalAutoCompletionList) {
       if (s.toLower().startsWith(cleanContext.toLower())) {
         ret.insert(s);
       }
     }
 
     if (_functionAutoCompletionList.find(editedFunction) != _functionAutoCompletionList.end()) {
-      foreach(QString s, _functionAutoCompletionList[editedFunction]) {
+      foreach(const QString& s, _functionAutoCompletionList[editedFunction]) {
         if (s.toLower().startsWith(cleanContext.toLower())) {
           ret.insert(s);
         }
@@ -1489,7 +1489,7 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
 
       if (type != "tlp" && ((_varToType.find(editedFunction) != _varToType.end() && _varToType[editedFunction].find(expr) != _varToType[editedFunction].end()) ||
                             (!_apiDb->typeExists(expr) && _apiDb->getFullTypeName(expr) == ""))) {
-        foreach(QString entry, ret) {
+        foreach(const QString& entry, ret) {
           if (entry[0].isUpper()) {
             ret.remove(entry);
           }
@@ -1499,7 +1499,7 @@ QSet<QString> AutoCompletionDataBase::getAutoCompletionListForContext(const QStr
     else if (!dotContext) {
       ret = _apiDb->getAllDictEntriesStartingWithPrefix(prefix);
 
-      foreach(QString s, _globalAutoCompletionList) {
+      foreach(const QString& s, _globalAutoCompletionList) {
         if (s.toLower().startsWith(prefix.toLower())) {
           ret.insert(s);
         }
@@ -1526,7 +1526,7 @@ QVector<QVector<QString> > AutoCompletionDataBase::getParamTypesForMethodOrFunct
   }
 
   if (_classBases.find(type) != _classBases.end()) {
-    foreach(QString baseType, _classBases[type]) {
+    foreach(const QString& baseType, _classBases[type]) {
       if (baseType != type)
         ret += getParamTypesForMethodOrFunction(baseType, funcName);
     }
@@ -1559,7 +1559,7 @@ QString AutoCompletionDataBase::getReturnTypeForMethodOrFunction(const QString &
 
   if (ret == "") {
     if (_classBases.find(type) != _classBases.end()) {
-      foreach(QString baseType, _classBases[type]) {
+      foreach(const QString& baseType, _classBases[type]) {
         if (baseType != type)
           ret = getReturnTypeForMethodOrFunction(baseType, funcName);
 
@@ -1581,7 +1581,7 @@ QString AutoCompletionDataBase::getClassAttributeType(const QString &className, 
   }
 
   if (_classBases.find(className) != _classBases.end()) {
-    foreach(QString baseType, _classBases[className]) {
+    foreach(const QString& baseType, _classBases[className]) {
       if (baseType != className) {
         QString ret = getClassAttributeType(baseType, classAttribute);
 

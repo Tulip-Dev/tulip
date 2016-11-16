@@ -28,7 +28,7 @@ void QStringListType::write(std::ostream& oss, const RealType& t) {
   tlp::StringVectorType::RealType stdVect(t.size());
   int i=0;
 
-  foreach(QString s, t) {
+  foreach(const QString& s, t) {
     stdVect[i] = tlp::QStringToTlpString(s);
     ++i;
   }
