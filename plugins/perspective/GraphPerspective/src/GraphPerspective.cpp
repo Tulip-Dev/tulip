@@ -128,14 +128,16 @@ void GraphPerspective::reserveDefaultProperties() {
 
 void GraphPerspective::buildRecentDocumentsMenu() {
   _ui->menuOpen_recent_file->clear();
-  foreach (QString s, TulipSettings::instance().recentDocuments()) {
+
+  foreach (const QString &s, TulipSettings::instance().recentDocuments()) {
     if (!QFileInfo(s).exists())
       continue;
     _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::archive, menuIconColor), s, this,
                                          SLOT(openRecentFile()));
   }
   _ui->menuOpen_recent_file->addSeparator();
-  foreach (QString s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
+
+  foreach (const QString &s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
     _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor), s, this,
@@ -1194,11 +1196,12 @@ void GraphPerspective::showStartPanels(Graph *g) {
   _ui->workspace->hideExposeMode();
   View *firstPanel = nullptr;
   View *secondPanel = nullptr;
-  foreach (QString panelName, QStringList() << "Spreadsheet view"
-                                            << "Node Link Diagram view") {
+
+  foreach (const QString &panelName, QStringList() << "Spreadsheet view"
+                                                   << "Node Link Diagram view") {
     View *view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(), nullptr);
 
-    if (firstPanel == nullptr)
+    if (firstPanel == NULL)
       firstPanel = view;
     else
       secondPanel = view;

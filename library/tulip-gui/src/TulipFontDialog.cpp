@@ -29,7 +29,7 @@ using namespace tlp;
 TulipFontDialog::TulipFontDialog(QWidget *parent) : QDialog(parent), _ui(new Ui::TulipFontDialog), previousFont(), ok(QDialog::Rejected) {
   _ui->setupUi(this);
 
-  foreach (QString font, TulipFont::installedFontNames())
+  foreach (const QString &font, TulipFont::installedFontNames())
     _ui->nameList->addItem(font);
 
   bool hasFont = _ui->nameList->count() > 0;

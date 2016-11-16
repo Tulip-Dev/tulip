@@ -61,8 +61,8 @@ QStringList HeaderFrame::menus() const {
 void HeaderFrame::setMenus(const QStringList &menus) {
   _ui->menusCombo->clear();
   switchToLabel(_ui, menus.empty());
-  QString s;
-  foreach (s, menus)
+
+  foreach (const QString &s, menus)
     _ui->menusCombo->addItem(s);
 }
 

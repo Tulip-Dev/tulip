@@ -90,7 +90,8 @@ QLineEdit *PropertiesEditor::getPropertiesFilterEdit() {
 void PropertiesEditor::showCustomContextMenu(const QPoint &p) {
   _contextProperty = _ui->tableView->indexAt(p).data(TulipModel::PropertyRole).value<PropertyInterface *>();
   _contextPropertyList.clear();
-  foreach (QModelIndex sidx, _ui->tableView->selectionModel()->selectedRows()) {
+
+  foreach (const QModelIndex &sidx, _ui->tableView->selectionModel()->selectedRows()) {
     _contextPropertyList += sidx.data(TulipModel::PropertyRole).value<PropertyInterface *>();
   }
 

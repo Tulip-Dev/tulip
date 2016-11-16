@@ -39,7 +39,7 @@ void VectorEditor::setVector(const QVector<QVariant> &d, int userType) {
   _userType = userType;
   _ui->list->clear();
 
-  foreach (QVariant v, d) {
+  foreach (const QVariant &v, d) {
     QListWidgetItem *i = new QListWidgetItem();
 
     if (_userType == qMetaTypeId<std::string>())

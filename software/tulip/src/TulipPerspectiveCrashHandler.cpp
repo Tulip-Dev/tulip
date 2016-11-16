@@ -140,8 +140,8 @@ void TulipPerspectiveCrashHandler::setPerspectiveData(const PerspectiveProcessIn
   _perspectiveInfos = infos;
   _ui->perspectiveNameValue->setText(infos.name);
   QString args;
-  QString a;
-  foreach (a, infos.args.keys())
+
+  foreach (const QString &a, infos.args.keys())
     args += "--" + a + "=" + infos.args[a].toString() + " ";
   _ui->perspectiveArgumentsValue->setText(args);
 }

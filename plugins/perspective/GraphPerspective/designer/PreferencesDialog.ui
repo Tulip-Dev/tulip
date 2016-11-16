@@ -70,7 +70,7 @@ image: url(:/tulip/gui/ui/combobox_arrow.png);
 QComboBox:drop-down {
 subcontrol-origin: padding;
 subcontrol-position: top right;
-border-left-style: none; 
+border-left-style: none;
 border-top-right-radius: 1px;
 border-bottom-right-radius: 1px;
 }
@@ -739,13 +739,6 @@ If not, a new random seed will be set to initialize each new random sequence.</s
    </item>
   </layout>
  </widget>
- <customwidgets>
-  <customwidget>
-   <class>tlp::TulipLineEdit</class>
-   <extends>QLineEdit</extends>
-   <header location="global">tulip/TulipLineEdit.h</header>
-  </customwidget>
- </customwidgets>
  <resources>
   <include location="../../../../library/tulip-gui/resources/TulipGUIResource.qrc"/>
  </resources>

@@ -97,7 +97,8 @@ QStringList TulipSettings::recentDocuments() const {
 
 void TulipSettings::checkRecentDocuments() {
   QList<QVariant> recentDocumentsValue = value(TS_RecentDocumentsConfigEntry).toList();
-  foreach (QVariant doc, recentDocumentsValue) {
+
+  foreach (const QVariant &doc, recentDocumentsValue) {
     if (!QFileInfo(doc.toString()).exists())
       recentDocumentsValue.removeAll(doc);
   }
@@ -388,11 +389,11 @@ void TulipSettings::setRunningTimeComputed(bool f) {
 }
 
 bool TulipSettings::isUseTlpbFileFormat() const {
-    return value(TS_UseTlpbFileFormat,false).toBool();
+  return value(TS_UseTlpbFileFormat, false).toBool();
 }
 
 void TulipSettings::setUseTlpFileFormat(bool f) {
-    setValue(TS_UseTlpbFileFormat,f);
+  setValue(TS_UseTlpbFileFormat, f);
 }
 
 unsigned int TulipSettings::seedOfRandomSequence() const {

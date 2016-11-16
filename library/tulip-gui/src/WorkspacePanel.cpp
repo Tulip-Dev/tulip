@@ -179,7 +179,9 @@ void WorkspacePanel::setView(tlp::View *view) {
 
   QList<Interactor *> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
-  foreach (std::string name, interactorNames) { compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, nullptr); }
+
+  foreach (const std::string &name, interactorNames) { compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, NULL); }
+
   _view->setInteractors(compatibleInteractors);
   _ui->scrollArea->setVisible(!compatibleInteractors.empty());
   _view->graphicsView()->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);

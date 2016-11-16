@@ -81,7 +81,7 @@ void PanelSelectionWizard::clearView() {
   delete _view;
   _view = nullptr;
 
-  foreach (int id, pageIds()) {
+  foreach (const int id, pageIds()) {
     if (id == startId() || id == currentId())
       continue;
 

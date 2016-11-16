@@ -305,7 +305,8 @@ void TableView::setMatchProperty() {
   QMenu menu;
   QAction *action = menu.addAction("-- Any --");
   menu.setActiveAction(action);
-  foreach (QString prop, props) {
+
+  foreach (const QString &prop, props) {
     if (_ui->matchPropertyButton->text() == prop) {
       action = menu.addAction(prop);
       menu.setActiveAction(action);
@@ -386,14 +387,16 @@ void TableView::mapToGraphSelection() {
   if (NODES_DISPLAYED) {
     out->setAllNodeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
-    foreach (QModelIndex idx, selectionModel->selectedRows()) {
+
+    foreach (const QModelIndex &idx, selectionModel->selectedRows()) {
       node n(idx.data(TulipModel::ElementIdRole).toUInt());
       out->setNodeValue(n, true);
     }
   } else {
     out->setAllEdgeValue(false);
     QItemSelectionModel *selectionModel = _ui->table->selectionModel();
-    foreach (QModelIndex idx, selectionModel->selectedRows()) {
+
+    foreach (const QModelIndex &idx, selectionModel->selectedRows()) {
       edge e(idx.data(TulipModel::ElementIdRole).toUInt());
       out->setEdgeValue(e, true);
     }

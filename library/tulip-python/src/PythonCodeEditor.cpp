@@ -1111,7 +1111,8 @@ void PythonCodeEditor::keyPressEvent(QKeyEvent *e) {
 
         toolTipTxt = "";
         int i = 0;
-        foreach (QString txt, toolTipTxts) {
+
+        foreach (const QString &txt, toolTipTxts) {
           toolTipTxt += txt;
 
           if (i != toolTipTxts.size() - 1) {
@@ -1237,7 +1238,8 @@ void PythonCodeEditor::updateAutoCompletionList(bool dotContext) {
 
   QSet<QString> stringList = _autoCompletionDb->getAutoCompletionListForContext(textBeforeCursorTrimmed, getEditedFunctionName(), dotContext);
 
-  foreach (QString s, stringList) { _autoCompletionList->addItem(s); }
+  foreach (const QString &s, stringList) { _autoCompletionList->addItem(s); }
+
   _autoCompletionList->sortItems();
 
   _autoCompletionList->setCurrentRow(0);
