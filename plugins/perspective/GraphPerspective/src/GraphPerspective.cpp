@@ -517,6 +517,10 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // Hide plugins center when not on MacOS or Windows
   _ui->pluginsButton->hide();
   _ui->menuHelp->removeAction(_ui->actionPlugins_Center);
+#else
+  // show the 'Plugins center' menu entry and button only if connected to the Tulip agent
+  _ui->pluginsButton->setVisible(checkSocketConnected());
+  _ui->actionPlugins_Center->setVisible(checkSocketConnected());
 #endif
 
   // show the 'Find plugins' menu entry only if connected to the Tulip agent
