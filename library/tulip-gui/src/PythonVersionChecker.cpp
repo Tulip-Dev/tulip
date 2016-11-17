@@ -65,11 +65,12 @@ static bool isWow64() {
 // On windows, Python can be installed for all users or for the current user only. That function handles both cases
 static QString pythonHome(const QString &pythonVersion) {
 #ifdef MSYS2_PYTHON
-    (void) pythonVersion;
-    return PYTHON_HOME_PATH;
+  (void) pythonVersion;
+  return PYTHON_HOME_PATH;
 #else
 // 32 bit Python
 #ifndef X86_64
+
   // on windows 64 bit
   if (isWow64()) {
     QString win64RegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");

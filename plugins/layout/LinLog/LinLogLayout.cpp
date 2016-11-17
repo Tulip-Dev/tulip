@@ -823,7 +823,7 @@ void LinLogLayout::initWeights () {
     forEach(u, graph->getNodes()) {
       double weight = 0.0;
       forEach(e,  graph->getInOutEdges(u)) {
-	weight+= linLogWeight->getEdgeValue(e);
+        weight+= linLogWeight->getEdgeValue(e);
       }
 
       linLogWeight->setNodeValue (u, weight);
