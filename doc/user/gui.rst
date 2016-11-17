@@ -95,7 +95,7 @@ Algorithms panel
 .. |icon_link| image:: _images/i_link.png
 .. |icon_unlink| image:: _images/i_unlink.png
 
-Tulip proposes several ready-to-use algorithms, offering - among others - coloration, labeling and presentation solutions.
+Tulip proposes several ready-to-use algorithms, offering - among others - colorization, labeling and presentation solutions.
 
 .. image:: _images/i_algorithm.png
     :width: 300
@@ -213,6 +213,6 @@ Tulip can be configured in several ways. The quickest way is to access to the se
 
 You can here change the proxy settings (soon available) such as: the socket, the host address and the port to use. 
 
-The drawing defaults, such as the color, shape and size, are used for to every new nodes and edges, however, the selection colour is only used in the node-link diagram based views.
+The drawing defaults, such as the color, shape and size, are used every new nodes and edges, however, the selection color is only used in the node-link diagram based views.
 
-The third part of settings, concerning the automatic actions, contains a few specific options. You can, for instance, adjust the aspect when updating the layout, indicate the default projection type, automatically adapt the colour according the metric being computed or display the time used to run an algorithm.
+The third part of settings, concerning the automatic actions, contains a few specific options. You can, for instance, adjust the aspect ratio when updating the layout, indicate the default projection type, automatically adapt the color according the metric being computed, display the time used to run an algorithm or indicate the graph file format to be used when saving a Tulip project.
