@@ -30,6 +30,8 @@ public:
   bool initAlgo(tlp::LayoutProperty *_layoutResult, tlp::NumericProperty *_weight, double _attrExponent, double _repuExponent, double _gravFactor,
                 unsigned int _max_iter, bool _is3D, bool _useOctTree, tlp::BooleanProperty *_skipNodes);
 
+  bool startAlgo();
+
   void setAttrExp(double);
   void setGravFact(double);
   void setRepExp(double);
@@ -82,7 +84,6 @@ private:
   void setComputationalWeigths();
 
   void initWeights();
-  void initWeights2(); // old initialization
 
   OctTree *buildOctTree();
   bool minimizeEnergy(int nrIterations);

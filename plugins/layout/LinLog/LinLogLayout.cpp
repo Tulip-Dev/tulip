@@ -733,62 +733,41 @@ void LinLogLayout::computeBaryCenter() {
   }
 }
 
-void LinLogLayout::initWeights2() {
-  linLogWeight = new tlp::DoubleProperty(graph);
-  linLogWeight->setAllNodeValue(0.0);
-
-  double weight = 0.0;
-
-  if (edgeWeight == nullptr)
-    for (node u : graph->getNodes()) {
-      weight = 0.0;
-      for (edge e : graph->getInOutEdges(u)) {
-        ++weight;
-        linLogWeight->setEdgeValue(e, 1.0);
-      }
-
-      linLogWeight->setNodeValue(u, weight);
-    }
-  else
-    for (node u : graph->getNodes()) {
-      weight = 0.0;
-      for (edge e : graph->getInOutEdges(u)) {
-        double tmpweight = edgeWeight->getEdgeDoubleValue(e) * 100.0 + 1.0;
-        weight += tmpweight;
-        linLogWeight->setEdgeValue(e, tmpweight);
-      }
-
-      linLogWeight->setNodeValue(u, weight);
-    }
-}
-
 void LinLogLayout::initWeights() {
   linLogWeight = new tlp::DoubleProperty(graph);
   linLogWeight->setAllNodeValue(0.0);
-  linLogWeight->setAllEdgeValue(0.0);
 
-  if (edgeWeight == nullptr) {
-    for (edge e : graph->getEdges()) {
+  node u;
+
+  if (edgeWeight == NULL) {
+    linLogWeight->setAllEdgeValue(1.0);
+    edge e;
+    forEach(e, graph->getEdges()) {
       const std::pair<node, node> &eEnds = graph->ends(e);
       node u = eEnds.first;
       node v = eEnds.second;
       double wu = linLogWeight->getNodeValue(u);
       double wv = linLogWeight->getNodeValue(v);
 
-      linLogWeight->setEdgeValue(e, 1.0);
       linLogWeight->setNodeValue(u, wu + 1.0);
       linLogWeight->setNodeValue(v, wv + 1.0);
     }
-  } else
-    for (node u : graph->getNodes()) {
+  } else {
+    edge e;
+    forEach(e, graph->getEdges()) {
+      double tmpweight = edgeWeight->getEdgeDoubleValue(e) * 100.0 + 1.0;
+      linLogWeight->setEdgeValue(e, tmpweight);
+    }
+
+    forEach(u, graph->getNodes()) {
       double weight = 0.0;
-      for (edge e : graph->getInOutEdges(u)) {
-        double tmpweight = edgeWeight->getEdgeDoubleValue(e) * 100.0 + 1.0;
-        weight += tmpweight;
-        linLogWeight->setEdgeValue(e, tmpweight);
+      forEach(e, graph->getInOutEdges(u)) {
+        weight += linLogWeight->getEdgeValue(e);
       }
+
       linLogWeight->setNodeValue(u, weight);
     }
+  }
 }
 
 OctTree *LinLogLayout::buildOctTree() {
@@ -820,16 +799,4 @@ OctTree *LinLogLayout::buildOctTree() {
     result->addNode(u, layoutResult->getNodeValue(u), 0);
   }
   return result;
-}
-
-void LinLogLayout::setAttrExp(double d) {
-  attrExponent = d;
-}
-
-void LinLogLayout::setRepExp(double d) {
-  repuExponent = d;
-}
-
-void LinLogLayout::setGravFact(double d) {
-  gravFactor = d;
 }
