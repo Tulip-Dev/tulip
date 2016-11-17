@@ -37,9 +37,6 @@ public:
                  bool _useOctTree,
                  tlp::BooleanProperty* _skipNodes);
 
-  void setAttrExp (double);
-  void setGravFact (double);
-  void setRepExp (double);
   bool startAlgo ();
 
 private:
@@ -91,7 +88,6 @@ private:
   void setComputationalWeigths ();
 
   void initWeights ();
-  void initWeights2 (); //old initialization
 
   OctTree* buildOctTree ();
   bool minimizeEnergy (int nrIterations);
