@@ -115,10 +115,13 @@ public slots:
   void addGraph(tlp::Graph *);
   void removeGraph(tlp::Graph *);
 
-  QMap<QString,tlp::Graph*> readProject(tlp::TulipProject *,tlp::PluginProgress *);
+  QMap<QString,tlp::Graph*> readProject(tlp::TulipProject *, tlp::PluginProgress *);
   QMap<tlp::Graph*,QString> writeProject(tlp::TulipProject *, tlp::PluginProgress *);
 
 private:
+
+  void writeTextureFilesInProject(tlp::TulipProject *, tlp::PluginProgress *);
+  void restoreTextureFilesFromProjectIfNeeded(tlp::TulipProject *, tlp::PluginProgress *);
 
   QSet<const Graph *> _graphsChanged;
 
