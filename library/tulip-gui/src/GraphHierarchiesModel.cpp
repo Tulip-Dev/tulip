@@ -165,6 +165,7 @@ QMap<tlp::Graph*,QString> GraphHierarchiesModel::writeProject(tlp::TulipProject 
   project->mkpath(GRAPHS_PATH);
 
   int i = 0;
+
   foreach(tlp::Graph* g, _graphs) {
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
@@ -648,6 +649,7 @@ static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipP
   // It enables to copy textures with the same filename but located in different folders.
   QCryptographicHash hasher(QCryptographicHash::Md5);
   QFileInfo fileInfo(textureFilePath);
+
   // If the texture file path exists, we copy the texture in the project
   if (fileInfo.exists()) {
     // Generate a MD5 sum from the absolute texture file path
@@ -656,14 +658,17 @@ static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipP
     // Compute texture folder and texture file path in the project
     QString textureProjectFolder = TEXTURES_PATH + hasher.result().toHex() + "/";
     QString textureProjectFile = textureProjectFolder + fileInfo.fileName();
+
     if (!projectTexturesFiles.contains(textureProjectFile)) {
       // The texture file may have not already been copied in the project,
       // so create its folder if needed and copy the file
       if (!project->exists(textureProjectFolder)) {
         project->mkpath(textureProjectFolder);
       }
+
       project->copy(fileInfo.absoluteFilePath(), textureProjectFile);
-    } else {
+    }
+    else {
       // The texture file has already been copied in the project,
       // recopy the file as it may have changed and remove texture folder and project path
       // from the lists of folders and files to remove afterwards
@@ -724,6 +729,7 @@ void GraphHierarchiesModel::writeTextureFilesInProject(tlp::TulipProject *projec
   foreach(const QString &textureProjectFileToRemove, projectTexturesFiles) {
     project->removeFile(textureProjectFileToRemove);
   }
+
   foreach(const QString &textureProjectFolderToRemove, projectTexturesFolders) {
     project->removeDir(textureProjectFolderToRemove);
   }
@@ -736,10 +742,12 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
     progress->progress(0, 0);
     progress->setComment("Checking if texture files can be restored from project if needed ...");
   }
+
   // We use QCryptographicHash to generate a MD5 sum for each value in the viewTexture property.
   // It enables to copy textures with the same filename but located in different folders.
   // Each texture may have been copied to the following project path : /textures/<md5_sum>/<texture filename> .
   QCryptographicHash hasher(QCryptographicHash::Md5);
+
   foreach(tlp::Graph *g, _graphs) {
     StringProperty *viewTexture = g->getProperty<StringProperty>("viewTexture");
 
@@ -755,22 +763,27 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
     // Get a stable iterator on non default valuated nodes as their value can be reseted to the default one
     // by the possible call to setAllNodeValue afterwards
     StableIterator<node> *nonDefaultValuatedNodesIt = new StableIterator<node>(viewTexture->getNonDefaultValuatedNodes());
+
     while (nonDefaultValuatedNodesIt->hasNext()) {
       n = nonDefaultValuatedNodesIt->next();
       nonDefaultValuatedNodes[n] = tlpStringToQString(viewTexture->getNodeValue(n));
     }
+
     // Generate a MD5 sum from the absolute texture file path
     hasher.reset();
     hasher.addData(defaultNodeTextureFileInfo.absoluteFilePath().toUtf8());
     // Compute texture file path in the project
     QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + defaultNodeTextureFileInfo.fileName();
+
     // If the original texture file is not present in the computer but is present in the project
     // change the value of the default node texture path in the viewTexture property
     if (!defaultNodeTextureFileInfo.exists() && project->exists(textureProjectFile)) {
       viewTexture->setAllNodeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
     }
+
     // Iterate once again on non default valuated nodes
     nonDefaultValuatedNodesIt->restart();
+
     while (nonDefaultValuatedNodesIt->hasNext()) {
       // Get the node texture file previously backuped
       n = nonDefaultValuatedNodesIt->next();
@@ -781,14 +794,17 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
       hasher.addData(fileInfo.absoluteFilePath().toUtf8());
       // Compute texture file path in the project
       QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
+
       // If the original texture file is not present in the computer but is present in the project
       // change the texture path for the node in the viewTexture property
       if (!fileInfo.exists() && project->exists(textureProjectFile)) {
         viewTexture->setNodeValue(n, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
-      } else if (fileInfo.exists()) {
+      }
+      else if (fileInfo.exists()) {
         viewTexture->setNodeValue(n, QStringToTlpString(fileInfo.absoluteFilePath()));
       }
     }
+
     delete nonDefaultValuatedNodesIt;
 
     // Apply the same process for edges
@@ -803,22 +819,27 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
     // Get a stable iterator on non default valuated edges as their value can be reset to the default one
     // by the possible call to setAllEdgeValue afterwards
     StableIterator<edge> *nonDefaultValuatedEdgesIt = new StableIterator<edge>(viewTexture->getNonDefaultValuatedEdges());
+
     while (nonDefaultValuatedEdgesIt->hasNext()) {
       e = nonDefaultValuatedEdgesIt->next();
       nonDefaultValuatedEdges[e] = tlpStringToQString(viewTexture->getEdgeValue(e));
     }
+
     // Generate a MD5 sum from the absolute texture file path
     hasher.reset();
     hasher.addData(defaultEdgeTextureFileInfo.absoluteFilePath().toUtf8());
     // Compute texture file path in the project
     textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + defaultEdgeTextureFileInfo.fileName();
+
     // If the original texture file is not present in the computer but is present in the project
     // change the value of the default edge texture path in the viewTexture property
     if (!defaultEdgeTextureFileInfo.exists() && project->exists(textureProjectFile)) {
       viewTexture->setAllEdgeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
     }
+
     // Iterate once again on non default valuated edges
     nonDefaultValuatedEdgesIt->restart();
+
     while (nonDefaultValuatedEdgesIt->hasNext()) {
       // Get the node texture file previously backuped
       e = nonDefaultValuatedEdgesIt->next();
@@ -829,14 +850,17 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
       hasher.addData(fileInfo.absoluteFilePath().toUtf8());
       // Compute texture file path in the project
       QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
+
       // If the original texture file is not present in the computer but is present in the project
       // change the texture path for the edge in the viewTexture property
       if (!fileInfo.exists() && project->exists(textureProjectFile)) {
         viewTexture->setEdgeValue(e, QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
-      } else if (fileInfo.exists()) {
+      }
+      else if (fileInfo.exists()) {
         viewTexture->setEdgeValue(e, QStringToTlpString(fileInfo.absoluteFilePath()));
       }
     }
+
     delete nonDefaultValuatedEdgesIt;
 
   }

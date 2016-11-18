@@ -50,6 +50,7 @@ using namespace tlp;
 
 static void truncateText(QString &text, int maxChars=45) {
   static QString dots = " ...";
+
   if (text.size() > maxChars) {
     text.truncate(maxChars - dots.length());
     text.append(dots);
@@ -564,6 +565,7 @@ bool TextureFileEditorCreator::paint(QPainter* painter, const QStyleOptionViewIt
 
   QIcon icon;
   QString text = fileInfo.fileName();
+
   if (tf.texturePath.startsWith("http")) {
     imageFilePath = tf.texturePath;
   }
