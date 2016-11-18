@@ -779,6 +779,10 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
     // change the value of the default node texture path in the viewTexture property
     if (!defaultNodeTextureFileInfo.exists() && project->exists(textureProjectFile)) {
       viewTexture->setAllNodeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
+    } else if (defaultNodeTextureFileInfo.exists()) {
+      viewTexture->setAllNodeValue(QStringToTlpString(defaultNodeTextureFileInfo.absoluteFilePath()));
+    } else if (defaultNodeTextureFile.startsWith("http")) {
+      viewTexture->setAllNodeValue(QStringToTlpString(defaultNodeTextureFile));
     }
 
     // Iterate once again on non default valuated nodes
@@ -802,6 +806,8 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
       }
       else if (fileInfo.exists()) {
         viewTexture->setNodeValue(n, QStringToTlpString(fileInfo.absoluteFilePath()));
+      } else if (textureFile.startsWith("http")) {
+        viewTexture->setNodeValue(n, QStringToTlpString(textureFile));
       }
     }
 
@@ -835,6 +841,10 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
     // change the value of the default edge texture path in the viewTexture property
     if (!defaultEdgeTextureFileInfo.exists() && project->exists(textureProjectFile)) {
       viewTexture->setAllEdgeValue(QStringToTlpString(project->toAbsolutePath(textureProjectFile)));
+    } else if (defaultEdgeTextureFileInfo.exists()) {
+      viewTexture->setAllEdgeValue(QStringToTlpString(defaultEdgeTextureFileInfo.absoluteFilePath()));
+    } else if (defaultEdgeTextureFile.startsWith("http")) {
+      viewTexture->setAllEdgeValue(QStringToTlpString(defaultEdgeTextureFile));
     }
 
     // Iterate once again on non default valuated edges
@@ -858,6 +868,8 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
       }
       else if (fileInfo.exists()) {
         viewTexture->setEdgeValue(e, QStringToTlpString(fileInfo.absoluteFilePath()));
+      } else if (textureFile.startsWith("http")) {
+        viewTexture->setEdgeValue(e, QStringToTlpString(textureFile));
       }
     }
 
