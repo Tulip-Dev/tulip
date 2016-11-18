@@ -278,6 +278,8 @@ public:
   QString displayText(const QVariant &) const;
 };
 
+TLP_QT_SCOPE void addIconToPool(const QString &iconName, const QIcon &icon);
+
 }
 
 

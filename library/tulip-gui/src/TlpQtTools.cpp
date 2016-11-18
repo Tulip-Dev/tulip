@@ -66,6 +66,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/FileDownloader.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -240,6 +241,11 @@ public:
         return false;
       }
 
+    }
+
+    // store icon preview of the loaded texture in the icon pool used by the Tulip spreadsheet view
+    if (!image.isNull()) {
+      addIconToPool(qFilename, QIcon(QPixmap::fromImage(image)));
     }
 
     bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
