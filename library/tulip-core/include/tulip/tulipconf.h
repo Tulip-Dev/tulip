@@ -71,7 +71,7 @@
 
 #include <cmath>
 
-static double fabs(int i) {
+inline double fabs(int i) {
   return std::fabs(static_cast<double>(i));
 }
 
@@ -80,35 +80,35 @@ static double fabs(int i) {
 // MSVC needs explicit casting of ints ot double, float or long double. Let's just pretend he does not.
 #include <cstdlib>
 
-static double sqrt(int i) {
+inline double sqrt(int i) {
   return std::sqrt(static_cast<double>(i));
 }
 
-static double sqrt(unsigned int i) {
+inline double sqrt(unsigned int i) {
   return std::sqrt(static_cast<double>(i));
 }
 
-static double log(int i) {
+inline double log(int i) {
   return std::log(static_cast<double>(i));
 }
 
-static double log(unsigned int i) {
+inline double log(unsigned int i) {
   return std::log(static_cast<double>(i));
 }
 
-static double floor(int i) {
+inline double floor(int i) {
   return std::floor(static_cast<double>(i));
 }
 
-static double floor(unsigned int i) {
+inline double floor(unsigned int i) {
   return std::floor(static_cast<double>(i));
 }
 
-static double round(double d) {
+inline double round(double d) {
   return std::floor(d + 0.5);
 }
 
-static float strtof(const char *cptr, char **endptr) {
+inline float strtof(const char *cptr, char **endptr) {
   return std::strtod(cptr, endptr);
 }
 
@@ -116,6 +116,12 @@ static float strtof(const char *cptr, char **endptr) {
 #define rint(arg)                                                                                                                                    \
   arg > 0 ? static_cast<int>(std::floor(static_cast<double>(arg))) : static_cast<int>(std::ceil(static_cast<double>(arg))) // Hey, nother C99 feature
                                                                                                                            // !
+
+#if _MSC_VER <= 1600
+inline double log1p(double x) {
+  return log(x + 1);
+}
+#endif
 
 #else // _MSC_VER < 1800
 
