@@ -201,9 +201,11 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _ui->splitter->setCollapsible(0, false);
 
 #if defined(__APPLE__)
+
   if (!PythonInterpreter::pythonPluginsPath.contains(".app/Contents/"))
 #endif
     infosMsg += QString(" or <b>") + PythonInterpreter::pythonPluginsPath +"</b>";
+
   infosMsg += QString("<br/> and it will be automatically loaded at Tulip startup");
   _ui->pluginsInfosWidget->setText(infosMsg);
 

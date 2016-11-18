@@ -38,7 +38,8 @@ void TextureFileDialog::done(int res) {
   if (res) {
     if (ui->localFilesystemRB->isChecked()) {
       _data.texturePath = ui->fileOrDirLineEdit->text();
-    } else {
+    }
+    else {
       _data.texturePath = ui->urlLineEdit->text();
     }
   }
@@ -49,13 +50,16 @@ void TextureFileDialog::done(int res) {
 void TextureFileDialog::setData(const TextureFile& tf) {
   _data = tf;
   setWindowTitle("Choose a texture file");
+
   if (tf.texturePath.startsWith("http")) {
     ui->httpUrlRB->setChecked(true);
     ui->urlLineEdit->setText(tf.texturePath);
-  } else {
+  }
+  else {
     ui->localFilesystemRB->setChecked(true);
     ui->fileOrDirLineEdit->setText(tf.texturePath);
   }
+
   setModal(true);
   move(QCursor::pos() - QPoint(250, 40));
 }
