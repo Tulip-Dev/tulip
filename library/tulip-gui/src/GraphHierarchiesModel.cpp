@@ -654,7 +654,7 @@ static void copyTextureFileInProject(const QString &textureFilePath, tlp::TulipP
   if (fileInfo.exists()) {
     // Generate a MD5 sum from the absolute texture file path
     hasher.reset();
-    hasher.addData(fileInfo.absoluteFilePath().toUtf8());
+    hasher.addData(textureFilePath.toUtf8());
     // Compute texture folder and texture file path in the project
     QString textureProjectFolder = TEXTURES_PATH + hasher.result().toHex() + "/";
     QString textureProjectFile = textureProjectFolder + fileInfo.fileName();
@@ -771,7 +771,7 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
 
     // Generate a MD5 sum from the absolute texture file path
     hasher.reset();
-    hasher.addData(defaultNodeTextureFileInfo.absoluteFilePath().toUtf8());
+    hasher.addData(defaultNodeTextureFile.toUtf8());
     // Compute texture file path in the project
     QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + defaultNodeTextureFileInfo.fileName();
 
@@ -791,7 +791,7 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
       QFileInfo fileInfo(textureFile);
       // Generate a MD5 sum from the absolute texture file path
       hasher.reset();
-      hasher.addData(fileInfo.absoluteFilePath().toUtf8());
+      hasher.addData(textureFile.toUtf8());
       // Compute texture file path in the project
       QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
 
@@ -827,7 +827,7 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
 
     // Generate a MD5 sum from the absolute texture file path
     hasher.reset();
-    hasher.addData(defaultEdgeTextureFileInfo.absoluteFilePath().toUtf8());
+    hasher.addData(defaultEdgeTextureFile.toUtf8());
     // Compute texture file path in the project
     textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + defaultEdgeTextureFileInfo.fileName();
 
@@ -847,7 +847,7 @@ void GraphHierarchiesModel::restoreTextureFilesFromProjectIfNeeded(tlp::TulipPro
       QFileInfo fileInfo(textureFile);
       // Generate a MD5 sum from the absolute texture file path
       hasher.reset();
-      hasher.addData(fileInfo.absoluteFilePath().toUtf8());
+      hasher.addData(textureFile.toUtf8());
       // Compute texture file path in the project
       QString textureProjectFile = TEXTURES_PATH + hasher.result().toHex() + "/" + fileInfo.fileName();
 
