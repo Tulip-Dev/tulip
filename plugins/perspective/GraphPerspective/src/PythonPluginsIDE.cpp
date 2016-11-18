@@ -184,8 +184,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
 }
 
 static QString infosMsg = QString("When the plugin development is finished, you can copy the associated Python file ")
-                          + "to <br> <b>" + PythonInterpreter::pythonPluginsPath + "</b> or <b> "
-                          + PythonInterpreter::pythonPluginsPathHome +"</b> <br> and it will be automatically loaded at Tulip startup";
+                          + "to <br> <b>" + PythonInterpreter::pythonPluginsPathHome + "</b>";
 
 PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPluginsIDE),
   _pythonInterpreter(PythonInterpreter::getInstance()),
@@ -201,6 +200,11 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _ui->splitter->setSizes(sizes);
   _ui->splitter->setCollapsible(0, false);
 
+#if defined(__APPLE__)
+  if (!PythonInterpreter::pythonPluginsPath.contains(".app/Contents/"))
+#endif
+    infosMsg += QString(" or <b>") + PythonInterpreter::pythonPluginsPath +"</b>";
+  infosMsg += QString("<br/> and it will be automatically loaded at Tulip startup");
   _ui->pluginsInfosWidget->setText(infosMsg);
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
