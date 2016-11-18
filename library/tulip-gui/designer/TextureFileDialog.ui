@@ -6,14 +6,20 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>589</width>
-    <height>80</height>
+    <width>581</width>
+    <height>179</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>500</width>
-    <height>80</height>
+    <height>160</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>16777215</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -28,6 +34,16 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
+    <widget class="QRadioButton" name="localFilesystemRB">
+     <property name="text">
+      <string>from the local filesystem</string>
+     </property>
+     <property name="checked">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <property name="leftMargin">
       <number>0</number>
@@ -41,7 +57,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>File name</string>
+        <string>File path</string>
        </property>
        <property name="textFormat">
         <enum>Qt::PlainText</enum>
@@ -79,6 +95,34 @@
     </layout>
    </item>
    <item>
+    <widget class="QRadioButton" name="httpUrlRB">
+     <property name="text">
+      <string>from a http or https url</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>File url </string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="urlLineEdit">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="text">
+        <string>http://</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
@@ -92,18 +136,18 @@
  </resources>
  <connections>
   <connection>
-   <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>TextureFileDialogData</receiver>
-   <slot>accept()</slot>
+   <sender>localFilesystemRB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>fileOrDirLabel</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>243</x>
-     <y>47</y>
+     <x>290</x>
+     <y>21</y>
     </hint>
     <hint type="destinationlabel">
-     <x>243</x>
-     <y>33</y>
+     <x>40</x>
+     <y>54</y>
     </hint>
    </hints>
   </connection>
@@ -120,6 +164,54 @@
     <hint type="destinationlabel">
      <x>243</x>
      <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>localFilesystemRB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>urlLineEdit</receiver>
+   <slot>setDisabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>319</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>localFilesystemRB</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>chooseFileOrDirButton</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>21</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>554</x>
+     <y>54</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>TextureFileDialogData</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>290</x>
+     <y>155</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>290</x>
+     <y>89</y>
     </hint>
    </hints>
   </connection>

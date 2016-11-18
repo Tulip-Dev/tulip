@@ -48,6 +48,14 @@
 
 using namespace tlp;
 
+static void truncateText(QString &text, int maxChars=45) {
+  static QString dots = " ...";
+  if (text.size() > maxChars) {
+    text.truncate(maxChars - dots.length());
+    text.append(dots);
+  }
+}
+
 class CustomComboBox : public QComboBox {
 
 public:
@@ -444,14 +452,19 @@ public:
     return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName.toStdString())));
   }
 
+  QMap<QString, QIcon> iconPool;
+
 private:
 
   QtAwesome qtAwesome;
-  QMap<QString, QIcon> iconPool;
   QIcon nullIcon;
 };
 
 static QImageIconPool imageIconPool;
+
+void tlp::addIconToPool(const QString &iconName, const QIcon &icon) {
+  imageIconPool.iconPool[iconName] = icon;
+}
 
 bool TulipFileDescriptorEditorCreator::paint(QPainter* painter, const QStyleOptionViewItem& option, const QVariant& v) const {
   TulipItemEditorCreator::paint(painter,option,v);
@@ -551,6 +564,11 @@ bool TextureFileEditorCreator::paint(QPainter* painter, const QStyleOptionViewIt
 
   QIcon icon;
   QString text = fileInfo.fileName();
+  if (tf.texturePath.startsWith("http")) {
+    imageFilePath = tf.texturePath;
+  }
+
+  truncateText(text);
 
   const QIcon &imageIcon = imageIconPool.getIconForImageFile(imageFilePath);
 
@@ -583,11 +601,13 @@ QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option, con
   QFileInfo fileInfo(tf.texturePath);
   QString text = fileInfo.fileName();
 
+  truncateText(text);
+
   const int pixmapWidth = 32;
 
   QFontMetrics fontMetrics(option.font);
 
-  return QSize(pixmapWidth+fontMetrics.boundingRect(text).width(), pixmapWidth);
+  return QSize(pixmapWidth+fontMetrics.boundingRect(text).width()+20, pixmapWidth);
 }
 
 class FontAwesomeDialog : public QDialog {
@@ -1051,10 +1071,7 @@ QVariant QStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
 QString QStringEditorCreator::displayText(const QVariant& var) const {
   QString qstr = var.toString();
 
-  if (qstr.size() > 45) {
-    qstr.truncate(41);
-    qstr.append(" ...");
-  }
+  truncateText(qstr);
 
   return qstr;
 }
@@ -1079,10 +1096,7 @@ QVariant StdStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
 QString StdStringEditorCreator::displayText(const QVariant& var) const {
   QString qstr = tlpStringToQString(var.value<std::string>());
 
-  if (qstr.size() > 45) {
-    qstr.truncate(41);
-    qstr.append(" ...");
-  }
+  truncateText(qstr);
 
   return qstr;
 }
