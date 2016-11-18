@@ -63,8 +63,7 @@
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/PythonVersionChecker.h>
 #include <tulip/FileDownloader.h>
-#include <tulip/GlyphsManager.h>
-#include <tulip/GlUtils.h>
+#include <tulip/TulipItemEditorCreators.h>
 
 /**
  * For openDataSetDialog function : see OpenDataSet.cpp
@@ -232,7 +231,80 @@ public:
         else
           tlp::error() << "Error when loading texture from " << filename.c_str() << std::endl;
 
-        return nullptr;
+        return false;
+      }
+    }
+
+    // store icon preview of the loaded texture in the icon pool used by the Tulip spreadsheet view
+    if (!image.isNull()) {
+      addIconToPool(qFilename, QIcon(QPixmap::fromImage(image)));
+    }
+
+    bool canUseMipmaps = OpenGlConfigManager::getInst().isExtensionSupported("GL_ARB_framebuffer_object") ||
+                         OpenGlConfigManager::getInst().isExtensionSupported("GL_EXT_framebuffer_object");
+
+    unsigned int width = image.width();
+    unsigned int height = image.height();
+
+    bool isSprite = false;
+
+    if (width != height) {
+      bool widthPowerOfTwo = false;
+      bool heightPowerOfTwo = false;
+
+      for (unsigned int i = 1; i <= width; i *= 2) {
+        if (i == width)
+          widthPowerOfTwo = true;
+      }
+
+      for (unsigned int i = 1; i <= height; i *= 2) {
+        if (i == height)
+          heightPowerOfTwo = true;
+      }
+
+      if (widthPowerOfTwo && heightPowerOfTwo) {
+        isSprite = true;
+      }
+    }
+
+    int spriteNumber = 1;
+
+    if (isSprite) {
+      if (width > height) {
+        spriteNumber = width / height;
+      } else {
+        spriteNumber = height / width;
+      }
+    }
+
+    GLuint *textureNum = new GLuint[spriteNumber];
+
+    image = QGLWidget::convertToGLFormat(image);
+
+    glTexture.width = width;
+    glTexture.height = height;
+    glTexture.spriteNumber = spriteNumber;
+    glTexture.id = new GLuint[spriteNumber];
+
+    glGenTextures(spriteNumber, textureNum); // FIXME: handle case where no memory is available to load texture
+
+    glEnable(GL_TEXTURE_2D);
+
+    if (!isSprite) {
+      glBindTexture(GL_TEXTURE_2D, textureNum[0]);
+
+      glTexture.id[0] = textureNum[0];
+
+      int GLFmt = image.hasAlphaChannel() ? GL_RGBA : GL_RGB;
+      glTexImage2D(GL_TEXTURE_2D, 0, GLFmt, width, height, 0, GLFmt, GL_UNSIGNED_BYTE, image.bits());
+
+      glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+      if (canUseMipmaps) {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+        glGenerateMipmap(GL_TEXTURE_2D);
+      } else {
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
       }
     }
 
