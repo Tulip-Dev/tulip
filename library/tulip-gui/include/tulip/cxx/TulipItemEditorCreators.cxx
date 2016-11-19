@@ -96,7 +96,7 @@ QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & opti
 
   for (int i = 0 ; i < lines.count() ; ++i) {
     QRect textBB = fontMetrics.boundingRect(lines.at(i));
-    height += textBB.height();
+    height += fontMetrics.boundingRect("|").height();
     width = std::max(width, textBB.width());
   }
 
@@ -124,7 +124,7 @@ bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOption
   }
 
   for (int i = 0 ; i < lines.count() ; ++i) {
-    painter->drawText(rect.x(), rect.y() + i * rect.height()/lines.count(), rect.width(), rect.height()/lines.count(),Qt::AlignLeft | Qt::AlignVCenter | Qt::TextWordWrap, lines.at(i));
+    painter->drawText(rect.x(), rect.y() + i * rect.height()/lines.count(), rect.width(), rect.height()/lines.count(),Qt::AlignLeft | Qt::AlignVCenter, lines.at(i));
   }
 
   return true;
