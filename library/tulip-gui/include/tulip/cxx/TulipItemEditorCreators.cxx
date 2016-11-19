@@ -227,12 +227,7 @@ template <typename ElementType> QString VectorEditorCreator<ElementType>::displa
 
     QString qstr = tlpStringToQString(str);
 
-    if (qstr.size() > 45) {
-      qstr.truncate(41);
-      qstr.append(" ...");
-    }
-
-    return qstr;
+    return truncateText(qstr);
   }
 
   if (v.size() == 1)

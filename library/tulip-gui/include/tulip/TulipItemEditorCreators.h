@@ -291,6 +291,14 @@ template class tlp::StringDisplayEditorCreator<tlp::PointType>;
 template class tlp::StringDisplayEditorCreator<tlp::SizeType>;
 #endif
 
+inline QString &truncateText(QString &text, const QString &trailingChars = " ...", int maxChars = 45) {
+  if (text.size() > maxChars) {
+    text.truncate(maxChars - trailingChars.length());
+    text.append(trailingChars);
+  }
+  return text;
+}
+
 #include "cxx/TulipItemEditorCreators.cxx"
 
 #endif // TULIPITEMEDITORCREATORS_H
