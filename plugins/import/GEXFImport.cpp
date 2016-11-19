@@ -25,6 +25,7 @@
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/ForEach.h>
 #include <tulip/TulipViewSettings.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QXmlStreamReader>
 #include <QFile>
@@ -90,7 +91,7 @@ public :
     dataSet->get<string>("file::filename", filename);
     dataSet->get<bool>("Curved edges", curvedEdges);
 
-    QString qfilename = QString::fromUtf8(filename.c_str());
+    QString qfilename = tlpStringToQString(filename);
 
     // if wrong extension, abort
     if (!qfilename.endsWith(".gexf")) {
@@ -111,7 +112,7 @@ public :
 
     if (!xmlFile.open(QIODevice::ReadOnly | QIODevice::Text)) {
       // get error
-      pluginProgress->setError(xmlFile.errorString().toUtf8().data());
+      pluginProgress->setError(QStringToTlpString(xmlFile.errorString()));
       return false;
     }
 
@@ -124,7 +125,7 @@ public :
         // only static graph are supported
         if (xmlReader.name() == "graph") {
           string mode =
-            xmlReader.attributes().value("mode").toString().toStdString();
+            QStringToTlpString(xmlReader.attributes().value("mode").toString());
 
           if (mode == "dynamic") {
             pluginProgress->setError("dynamic graph is not yet supported");
@@ -193,9 +194,9 @@ public :
 
       // create a Tulip property and store mapping between attribute id and property
       if (xmlReader.isStartElement() && xmlReader.name() == "attribute") {
-        string attributeId = xmlReader.attributes().value("id").toString().toStdString();
-        string attributeName = xmlReader.attributes().value("title").toString().toUtf8().data();
-        string attributeType = xmlReader.attributes().value("type").toString().toStdString();
+        string attributeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
+        string attributeName = QStringToTlpString(xmlReader.attributes().value("title").toString());
+        string attributeType = QStringToTlpString(xmlReader.attributes().value("type").toString());
 
         if (attributeType == "string") {
           (*propertiesMap)[attributeId] = graph->getProperty<StringProperty>(attributeName);
@@ -269,7 +270,7 @@ public :
   // Parse node data
   void parseNode(QXmlStreamReader &xmlReader, Graph* g) {
     node n;
-    string nodeId = xmlReader.attributes().value("id").toString().toStdString();
+    string nodeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
 
     if (nodesMap.find(nodeId) == nodesMap.end()) {
       // if needed, add a node in the graph we are building
@@ -283,14 +284,14 @@ public :
     // parse node label
     if (xmlReader.attributes().hasAttribute("label")) {
       string nodeLabel =
-        xmlReader.attributes().value("label").toString().toUtf8().data();
+        QStringToTlpString(xmlReader.attributes().value("label").toString());
       viewLabel->setNodeValue(n, nodeLabel);
     }
 
     // parse node pid
     if (xmlReader.attributes().hasAttribute("pid")) {
       string pid =
-        xmlReader.attributes().value("pid").toString().toStdString();
+        QStringToTlpString(xmlReader.attributes().value("pid").toString());
 
       if (g == graph)
         g = addInParent(n, pid);
@@ -334,13 +335,13 @@ public :
         string attributeId = "";
 
         if (xmlReader.attributes().hasAttribute("id")) {
-          attributeId = xmlReader.attributes().value("id").toString().toStdString();
+          attributeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
         }
         else if (xmlReader.attributes().hasAttribute("for")) {
-          attributeId = xmlReader.attributes().value("for").toString().toStdString();
+          attributeId = QStringToTlpString(xmlReader.attributes().value("for").toString());
         }
 
-        string attributeStrValue = xmlReader.attributes().value("value").toString().toUtf8().data();
+        string attributeStrValue = QStringToTlpString(xmlReader.attributes().value("value").toString());
 
         if (nodePropertiesMap.find(attributeId) != nodePropertiesMap.end()) {
           nodePropertiesMap[attributeId]->setNodeStringValue(n, attributeStrValue);
@@ -373,7 +374,7 @@ public :
           // must be a parent
           if (xmlReader.isStartElement() && xmlReader.name() == "parent") {
             string pid =
-              xmlReader.attributes().value("for").toString().toStdString();
+              QStringToTlpString(xmlReader.attributes().value("for").toString());
 
             if (g == graph) {
               g = addInParent(n, pid);
@@ -391,8 +392,8 @@ public :
   // Parse edge data
   void parseEdge(QXmlStreamReader &xmlReader) {
     // parse the source node id and target node id
-    string srcId = xmlReader.attributes().value("source").toString().toStdString();
-    string tgtId = xmlReader.attributes().value("target").toString().toStdString();
+    string srcId = QStringToTlpString(xmlReader.attributes().value("source").toString());
+    string tgtId = QStringToTlpString(xmlReader.attributes().value("target").toString());
 
     // Check if nodes have been parsed
     if (!nodesMap.empty()) {
@@ -400,7 +401,7 @@ public :
       edge e = graph->addEdge(nodesMap[srcId], nodesMap[tgtId]);
 
       if (xmlReader.attributes().hasAttribute("label")) {
-        string edgeLabel = xmlReader.attributes().value("label").toString().toUtf8().data();
+        string edgeLabel = QStringToTlpString(xmlReader.attributes().value("label").toString());
         viewLabel->setEdgeValue(e, edgeLabel);
       }
 
@@ -412,13 +413,13 @@ public :
           string attributeId = "";
 
           if (xmlReader.attributes().hasAttribute("id")) {
-            attributeId = xmlReader.attributes().value("id").toString().toStdString();
+            attributeId = QStringToTlpString(xmlReader.attributes().value("id").toString());
           }
           else if (xmlReader.attributes().hasAttribute("for")) {
-            attributeId = xmlReader.attributes().value("for").toString().toStdString();
+            attributeId = QStringToTlpString(xmlReader.attributes().value("for").toString());
           }
 
-          string attributeStrValue = xmlReader.attributes().value("value").toString().toUtf8().data();
+          string attributeStrValue = QStringToTlpString(xmlReader.attributes().value("value").toString());
 
           if (edgePropertiesMap.find(attributeId) != edgePropertiesMap.end()) {
             edgePropertiesMap[attributeId]->setEdgeStringValue(e, attributeStrValue);

@@ -205,7 +205,7 @@ public:
 
     QImage image;
 
-    QString qFilename = QString::fromUtf8(filename.c_str());
+    QString qFilename = tlpStringToQString(filename);
 
     if (qFilename.startsWith("http")) {
       FileDownloader fileDownloader;
@@ -399,7 +399,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   // In that case, the Python dll is not located in system path but in the Python home directory.
   // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
   if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
-    SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
+    SetDllDirectory(tlp::QStringToTlpString(tlp::PythonVersionChecker::getPythonHome()).c_str());
   }
 
 #endif
@@ -418,7 +418,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   // initialize Texture loader
   GlTextureManager::setTextureLoader(new GlTextureFromQImageLoader());
 
-  tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
+  tlp::TulipPluginsPath = QStringToTlpString((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip")) +
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath +
                           tlp::PATH_DELIMITER +
@@ -430,7 +430,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
                           tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath + "/perspective" +
                           tlp::PATH_DELIMITER +
-                          tlp::getPluginLocalInstallationDir().toUtf8().data();
+                          QStringToTlpString(tlp::getPluginLocalInstallationDir());
 
   // Load plugins
   tlp::PluginLibraryLoader::loadPlugins(loader);

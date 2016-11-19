@@ -22,6 +22,7 @@
 
 #include <tulip/ImportModule.h>
 #include <tulip/Graph.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -69,7 +70,7 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   vector<string> stringProperties = getGraphPropertiesListAccordingToType(graph, "string");
 
   for (size_t i = 0 ; i < stringProperties.size() ; ++i) {
-    _ui->addressPropCB->addItem(QString::fromUtf8(stringProperties[i].c_str()));
+    _ui->addressPropCB->addItem(tlpStringToQString(stringProperties[i]));
   }
 
   _ui->latPropCB->clear();
@@ -77,22 +78,22 @@ void GeolocalisationConfigWidget::setGraph(Graph *graph) {
   vector<string> doubleProperties = getGraphPropertiesListAccordingToType(graph, "double");
 
   for (unsigned int i = 0 ; i < doubleProperties.size() ; ++i) {
-    _ui->latPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
-    _ui->lngPropCB->addItem(QString::fromUtf8(doubleProperties[i].c_str()));
+    _ui->latPropCB->addItem(tlpStringToQString(doubleProperties[i]));
+    _ui->lngPropCB->addItem(tlpStringToQString(doubleProperties[i]));
   }
 
   _ui->edgesPathsPropertyCB->clear();
   vector<string> doubleVectorProperties = getGraphPropertiesListAccordingToType(graph, "vector<double>");
 
   for (size_t i = 0 ; i < doubleVectorProperties.size() ; ++i) {
-    _ui->edgesPathsPropertyCB->addItem(QString::fromUtf8(doubleVectorProperties[i].c_str()));
+    _ui->edgesPathsPropertyCB->addItem(tlpStringToQString(doubleVectorProperties[i]));
   }
 }
 
 void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latitudePropertyName, const std::string &longitudePropertyName) {
   _ui->latLngRB->setChecked(true);
-  int latPropIndex = _ui->latPropCB->findText(QString::fromUtf8(latitudePropertyName.c_str()));
-  int lngPropIndex = _ui->lngPropCB->findText(QString::fromUtf8(longitudePropertyName.c_str()));
+  int latPropIndex = _ui->latPropCB->findText(tlpStringToQString(latitudePropertyName));
+  int lngPropIndex = _ui->lngPropCB->findText(tlpStringToQString(longitudePropertyName));
 
   if (latPropIndex != -1 && lngPropIndex != -1) {
     _ui->latPropCB->setCurrentIndex(latPropIndex);
@@ -101,7 +102,7 @@ void GeolocalisationConfigWidget::setLatLngGeoLocMethod(const std::string &latit
 }
 
 void GeolocalisationConfigWidget::setEdgesPathsPropertyName(const std::string &edgesPathsPropertyName) {
-  int edgesPathsPropertyIndex = _ui->edgesPathsPropertyCB->findText(QString::fromUtf8(edgesPathsPropertyName.c_str()));
+  int edgesPathsPropertyIndex = _ui->edgesPathsPropertyCB->findText(tlpStringToQString(edgesPathsPropertyName));
 
   if (edgesPathsPropertyIndex != -1) {
     _ui->edgesControlPointsGB->setChecked(true);
@@ -114,15 +115,15 @@ bool GeolocalisationConfigWidget::geolocateByAddress() const {
 }
 
 string GeolocalisationConfigWidget::getAddressGraphPropertyName() const {
-  return string(_ui->addressPropCB->currentText().toUtf8().data());
+  return QStringToTlpString(_ui->addressPropCB->currentText());
 }
 
 string GeolocalisationConfigWidget::getLatitudeGraphPropertyName() const {
-  return string(_ui->latPropCB->currentText().toUtf8().data());
+  return QStringToTlpString(_ui->latPropCB->currentText());
 }
 
 string GeolocalisationConfigWidget::getLongitudeGraphPropertyName() const {
-  return string(_ui->lngPropCB->currentText().toUtf8().data());
+  return QStringToTlpString(_ui->lngPropCB->currentText());
 }
 
 bool GeolocalisationConfigWidget::createLatAndLngProperties() const {
@@ -147,5 +148,5 @@ bool GeolocalisationConfigWidget::useEdgesPaths() const {
 }
 
 std::string GeolocalisationConfigWidget::getEdgesPathsPropertyName() const {
-  return std::string(_ui->edgesPathsPropertyCB->currentText().toUtf8().data());
+  return QStringToTlpString(_ui->edgesPathsPropertyCB->currentText());
 }

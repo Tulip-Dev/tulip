@@ -24,6 +24,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
+#include <tulip/TlpQtTools.h>
+
 using namespace std;
 using namespace tlp;
 
@@ -114,12 +116,12 @@ bool GeographicViewConfigWidget::polyOptionsChanged() {
     }
 
     case CsvFile: {
-      _oldFileLoaded=_ui->csvFile->text().toUtf8().data();
+      _oldFileLoaded=QStringToTlpString(_ui->csvFile->text());
       break;
     }
 
     case PolyFile: {
-      _oldFileLoaded=_ui->polyFile->text().toUtf8().data();
+      _oldFileLoaded=QStringToTlpString(_ui->polyFile->text());
       break;
     }
 
@@ -132,8 +134,9 @@ bool GeographicViewConfigWidget::polyOptionsChanged() {
   else {
     switch(_oldPolyFileType) {
     case CsvFile: {
-      if(_oldFileLoaded!=_ui->csvFile->text().toUtf8().data()) {
-        _oldFileLoaded=_ui->csvFile->text().toUtf8().data();
+      string file = QStringToTlpString(_ui->csvFile->text());
+      if(_oldFileLoaded!=file) {
+        _oldFileLoaded=file;
         return true;
       }
 
@@ -141,8 +144,9 @@ bool GeographicViewConfigWidget::polyOptionsChanged() {
     }
 
     case PolyFile: {
-      if(_oldFileLoaded!=_ui->polyFile->text().toUtf8().data()) {
-        _oldFileLoaded=_ui->polyFile->text().toUtf8().data();
+      string file = QStringToTlpString(_ui->polyFile->text());
+      if(_oldFileLoaded!=file) {
+        _oldFileLoaded=file;
         return true;
       }
 
@@ -171,13 +175,13 @@ void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
   if(dataSet.exist("csvFileName")) {
     string fileName;
     dataSet.get("csvFileName",fileName);
-    _ui->csvFile->setText(QString::fromUtf8(fileName.c_str()));
+    _ui->csvFile->setText(tlpStringToQString(fileName));
   }
 
   if(dataSet.exist("polyFileName")) {
     string fileName;
     dataSet.get("polyFileName",fileName);
-    _ui->polyFile->setText(QString::fromUtf8(fileName.c_str()));
+    _ui->polyFile->setText(tlpStringToQString(fileName));
   }
 
   bool useShared = false;
@@ -195,8 +199,8 @@ void GeographicViewConfigWidget::setState(const DataSet &dataSet) {
 DataSet GeographicViewConfigWidget::state() const {
   DataSet data;
   data.set("polyFileType",(int)polyFileType());
-  data.set("csvFileName",std::string(_ui->csvFile->text().toUtf8().data()));
-  data.set("polyFileName",std::string(_ui->polyFile->text().toUtf8().data()));
+  data.set("csvFileName",QStringToTlpString(_ui->csvFile->text()));
+  data.set("polyFileName",QStringToTlpString(_ui->polyFile->text()));
   data.set("useSharedLayout",useSharedLayoutProperty());
   data.set("useSharedSize",useSharedSizeProperty());
   data.set("useSharedShape",useSharedShapeProperty());

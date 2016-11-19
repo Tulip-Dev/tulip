@@ -21,6 +21,7 @@
 #include <qtimer.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/DownloadManager.h>
+#include <tulip/TlpQtTools.h>
 #include "WebImport.h"
 
 using namespace std;
@@ -151,7 +152,7 @@ void HttpContext::headerReceived() {
         QVariant redirectionTarget = reply->attribute(QNetworkRequest::RedirectionTargetAttribute);
 
         if (!redirectionTarget.isNull())
-          data = redirectionTarget.toUrl().toString().toStdString();
+          data = QStringToTlpString(redirectionTarget.toUrl().toString());
         else
           data = "";
 

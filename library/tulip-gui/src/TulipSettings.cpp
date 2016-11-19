@@ -26,6 +26,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TulipViewSettings.h>
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QtCore/QFileInfo>
 #include <QtCore/QStringList>
@@ -177,7 +178,7 @@ QString TulipSettings::elementKey(const QString& configEntry, tlp::ElementType e
 tlp::Color TulipSettings::defaultColor(tlp::ElementType elem) {
   QString val = value(elementKey(TS_DefaultColorConfigEntry,elem),(elem == tlp::NODE ? "(255, 95, 95)" : "(180,180,180)")).toString();
   Color result;
-  ColorType::fromString(result,val.toStdString());
+  ColorType::fromString(result, QStringToTlpString(val));
   return result;
 }
 
@@ -190,7 +191,7 @@ void TulipSettings::setDefaultColor(tlp::ElementType elem, const tlp::Color& col
 Color TulipSettings::defaultLabelColor() {
   QString val = value(TS_DefaultLabelColorConfigEntry,"(0, 0, 0)").toString();
   Color result;
-  ColorType::fromString(result,val.toStdString());
+  ColorType::fromString(result, QStringToTlpString(val));
   return result;
 }
 
@@ -203,7 +204,7 @@ void TulipSettings::setDefaultLabelColor(const Color &color) {
 tlp::Size TulipSettings::defaultSize(tlp::ElementType elem) {
   QString val = value(elementKey(TS_DefaultSizeConfigEntry,elem),(elem == tlp::NODE ? "(1,1,1)" : "(0.125,0.125,0.5)")).toString();
   Size result;
-  SizeType::fromString(result,val.toStdString());
+  SizeType::fromString(result, QStringToTlpString(val));
   return result;
 }
 
@@ -225,7 +226,7 @@ void TulipSettings::setDefaultShape(tlp::ElementType elem, int shape) {
 tlp::Color TulipSettings::defaultSelectionColor() {
   QString val = value(TS_DefaultSelectionColorEntry,"(23, 81, 228)").toString();
   Color result;
-  ColorType::fromString(result,val.toStdString());
+  ColorType::fromString(result, QStringToTlpString(val));
   return result;
 }
 

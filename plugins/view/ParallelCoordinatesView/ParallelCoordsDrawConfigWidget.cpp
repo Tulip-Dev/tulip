@@ -23,6 +23,7 @@
 
 #include <tulip/TlpTools.h>
 #include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ParallelTools.h"
 #include "ParallelCoordsDrawConfigWidget.h"
@@ -73,7 +74,7 @@ string ParallelCoordsDrawConfigWidget::getLinesTextureFilename() const {
       return DEFAULT_TEXTURE_FILE;
     }
     else {
-      return _ui->userTextureFile->text().toUtf8().data();
+      return QStringToTlpString(_ui->userTextureFile->text());
     }
   }
   else {
@@ -90,7 +91,7 @@ void ParallelCoordsDrawConfigWidget::setLinesTextureFilename(const std::string &
     }
     else {
       _ui->userTexture->setChecked(true);
-      _ui->userTextureFile->setText(QString::fromUtf8(linesTextureFileName.c_str()));
+      _ui->userTextureFile->setText(tlpStringToQString(linesTextureFileName));
     }
   }
   else {

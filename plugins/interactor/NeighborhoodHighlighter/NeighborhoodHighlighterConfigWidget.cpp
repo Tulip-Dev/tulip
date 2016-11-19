@@ -70,8 +70,8 @@ void NeighborhoodHighlighterConfigWidget::setNumberOfNodes(int nodesNb) {
 }
 
 void NeighborhoodHighlighterConfigWidget::setPropertyToUse(std::string &propertyName) {
-  _ui->propertyName->addItem(QString::fromUtf8(propertyName.c_str()));
-  _ui->propertyName->setCurrentIndex(_ui->propertyName->findText(QString::fromUtf8(propertyName.c_str())));
+  _ui->propertyName->addItem(tlpStringToQString(propertyName));
+  _ui->propertyName->setCurrentIndex(_ui->propertyName->findText(tlpStringToQString(propertyName)));
 }
 
 bool NeighborhoodHighlighterConfigWidget::isdisplayEdgesCBChecked() const {

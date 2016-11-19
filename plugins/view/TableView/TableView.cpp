@@ -171,7 +171,7 @@ void TableView::graphChanged(tlp::Graph* g) {
   if (g && propertiesEditor->getGraph() &&
       (g->getRoot() == propertiesEditor->getGraph()->getRoot())) {
     foreach(tlp::PropertyInterface* pi, propertiesEditor->visibleProperties()) {
-      visibleProperties.insert(QString::fromUtf8(pi->getName().c_str()));
+      visibleProperties.insert(tlpStringToQString(pi->getName()));
     }
   }
 
@@ -510,7 +510,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   unsigned int eltId = idx.data(TulipModel::ElementIdRole).toUInt();
 
   QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
-  std::string propName = _model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString().toUtf8().data();
+  std::string propName = QStringToTlpString(_model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString());
 
   if (propName.empty())
     return;
@@ -526,7 +526,7 @@ void TableView::showCustomContextMenu(const QPoint & pos) {
   // as "title" items
   contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
 
-  QAction* action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
+  QAction* action = contextMenu.addAction(tlpStringToQString(propName));
   action->setEnabled(false);
   contextMenu.addSeparator();
 
@@ -645,7 +645,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   QModelIndex idx = _ui->table->indexAt(pos);
 
   QString eltsName(NODES_DISPLAYED ? trUtf8("nodes") : trUtf8("edges"));
-  std::string propName = _model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString().toUtf8().data();
+  std::string propName = QStringToTlpString(_model->headerData(idx.column(), Qt::Horizontal, Qt::DisplayRole).toString());
 
   if (propName.empty())
     return;
@@ -661,7 +661,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint & pos) {
   // as "title" items
   contextMenu.setStyleSheet("QMenu[mainMenu = \"true\"]::item:disabled {color: white; background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:, y2:1, stop:0 rgb(75,75,75), stop:1 rgb(60, 60, 60))}");
 
-  QAction* action = contextMenu.addAction(QString::fromUtf8(propName.c_str()));
+  QAction* action = contextMenu.addAction(tlpStringToQString(propName));
   action->setEnabled(false);
   contextMenu.addSeparator();
 

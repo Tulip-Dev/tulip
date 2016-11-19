@@ -29,6 +29,7 @@
 #include <tulip/CaptionGraphicsItem.h>
 #include <tulip/CaptionGraphicsSubItems.h>
 #include <tulip/View.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 
@@ -110,7 +111,7 @@ void CaptionGraphicsItem::constructConfigWidget() {
 }
 
 string CaptionGraphicsItem::usedProperty() {
-  return _confPropertySelectionWidget->toolTip().toStdString();
+  return QStringToTlpString(_confPropertySelectionWidget->toolTip());
 }
 
 CaptionGraphicsItem::~CaptionGraphicsItem() {
@@ -155,7 +156,7 @@ void CaptionGraphicsItem::propertySelectedSlot() {
   QAction* action = static_cast<QAction*>(sender());
   _confPropertySelectionWidget->setText(wrappedPropName(action->text()));
   _confPropertySelectionWidget->setToolTip(action->text());
-  emit selectedPropertyChanged(action->text().toStdString());
+  emit selectedPropertyChanged(QStringToTlpString(action->text()));
 }
 
 QString CaptionGraphicsItem::wrappedPropName(const QString &originalName) const {
