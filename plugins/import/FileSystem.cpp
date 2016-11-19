@@ -116,7 +116,7 @@ public:
 
     std::string rootPathStr;
     dataSet->get("dir::directory", rootPathStr);
-    QFileInfo rootInfo(QString::fromUtf8(rootPathStr.c_str()));
+    QFileInfo rootInfo(tlpStringToQString(rootPathStr));
 
     dataSet->get("icons", _useIcons);
     dataSet->get("tree layout", _treeLayout);
@@ -241,7 +241,7 @@ private:
     _sizes->setNodeValue(n, infos.size());
 
     if (_useIcons) {
-      std::string extension = infos.suffix().toStdString();
+      std::string extension = QStringToTlpString(infos.suffix());
 
       if (infos.isDir()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);

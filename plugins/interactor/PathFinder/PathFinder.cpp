@@ -24,6 +24,7 @@
 #include <tulip/StringsListSelectionWidget.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/Graph.h>
+#include <tulip/TlpQtTools.h>
 
 #include "PathFinderComponent.h"
 #include "PathFinderConfigurationWidget.h"
@@ -134,11 +135,11 @@ QWidget *PathFinder::configurationWidget() const {
 }
 
 void PathFinder::setWeightMetric(const QString &metric) {
-  weightMetric = metric.toUtf8().data();
+  weightMetric = QStringToTlpString(metric);
 }
 
 void PathFinder::setEdgeOrientation(const QString &metric) {
-  string cmp(metric.toUtf8().data());
+  string cmp(QStringToTlpString(metric));
 
   for (map<PathAlgorithm::EdgeOrientation, string>::iterator it = edgeOrientationLabels.begin(); it != edgeOrientationLabels.end(); ++it) {
     if (it->second.compare(cmp) == 0)
@@ -151,7 +152,7 @@ void PathFinder::setSelectAllPaths(bool s) {
 }
 
 void PathFinder::setPathsType(const QString &pathType) {
-  string cmp(pathType.toStdString());
+  string cmp(QStringToTlpString(pathType));
 
   for (map<PathAlgorithm::PathType, string>::iterator it = pathsTypesLabels.begin(); it != pathsTypesLabels.end(); ++it) {
     if (it->second.compare(cmp) == 0)
@@ -208,7 +209,7 @@ void PathFinder::configureHighlighterButtonPressed() {
   string text("");
 
   for (QList<QListWidgetItem *>::iterator it = lst.begin(); it != lst.end(); ++it)
-    text = (*it)->text().toStdString();
+    text = QStringToTlpString((*it)->text());
 
   QSet<PathHighlighter *> highlighters(getPathFinderComponent()->getHighlighters());
   PathHighlighter *hler(0);
@@ -221,14 +222,14 @@ void PathFinder::configureHighlighterButtonPressed() {
   if (hler && hler->isConfigurable()) {
     QDialog *dialog = new QDialog;
     QVBoxLayout *verticalLayout = new QVBoxLayout(dialog);
-    verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+    verticalLayout->setObjectName("verticalLayout");
     QVBoxLayout *mainLayout = new QVBoxLayout();
-    mainLayout->setObjectName(QString::fromUtf8("mainLayout"));
+    mainLayout->setObjectName("mainLayout");
 
     verticalLayout->addLayout(mainLayout);
 
     QDialogButtonBox *buttonBox = new QDialogButtonBox(dialog);
-    buttonBox->setObjectName(QString::fromUtf8("buttonBox"));
+    buttonBox->setObjectName("buttonBox");
     buttonBox->setOrientation(Qt::Horizontal);
     buttonBox->setStandardButtons(QDialogButtonBox::Ok);
 

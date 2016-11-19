@@ -164,7 +164,7 @@ PropertyInterface *FiltersManagerCompareItem::comboProperty(QComboBox *combo) co
   return data.value<tlp::PropertyInterface *>();
 }
 ParameterDescriptionList FiltersManagerCompareItem::comboAlgorithmParams(QComboBox *combo) const {
-  return PluginLister::getPluginParameters(combo->currentText().toStdString());
+  return PluginLister::getPluginParameters(QStringToTlpString(combo->currentText()));
 }
 bool FiltersManagerCompareItem::isComparisonNumeric(QComboBox *combo) const {
   ComboElementType elType = comboElementType(combo);
@@ -289,12 +289,12 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty *out) {
     else if (elType == E_DoubleAlgorithm) {
       DoubleProperty *prop = new DoubleProperty(_graph);
       string msg;
-      _graph->applyPropertyAlgorithm(combo->currentText().toStdString(), prop, msg);
+      _graph->applyPropertyAlgorithm(QStringToTlpString(combo->currentText()), prop, msg);
       comparisonProperties << prop;
     } else if (elType == E_StringAlgorithm) {
       StringProperty *prop = new StringProperty(_graph);
       string msg;
-      _graph->applyPropertyAlgorithm(combo->currentText().toStdString(), prop, msg);
+      _graph->applyPropertyAlgorithm(QStringToTlpString(combo->currentText()), prop, msg);
       comparisonProperties << prop;
     } else if (elType == E_CustomValue) {
       QString customText = _ui->customValueEdit->text();
@@ -308,8 +308,8 @@ void FiltersManagerCompareItem::applyFilter(BooleanProperty *out) {
         comparisonProperties << prop;
       } else {
         StringProperty *prop = new StringProperty(_graph);
-        prop->setAllNodeValue(customText.toStdString());
-        prop->setAllEdgeValue(customText.toStdString());
+        prop->setAllNodeValue(QStringToTlpString(customText));
+        prop->setAllEdgeValue(QStringToTlpString(customText));
         comparisonProperties << prop;
       }
     }

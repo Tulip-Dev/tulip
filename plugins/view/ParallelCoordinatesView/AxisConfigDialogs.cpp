@@ -21,6 +21,7 @@
 
 #include <tulip/IntegerProperty.h>
 #include <tulip/DoubleProperty.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QGridLayout>
 #include <QVBoxLayout>
@@ -160,7 +161,7 @@ NominalAxisConfigDialog::NominalAxisConfigDialog(NominalParallelAxis *axis) : QD
   vector<string>::reverse_iterator it;
 
   for (it = labelsOrder.rbegin(); it != labelsOrder.rend(); ++it) {
-    axisLabelsOrder->addItem(QString::fromUtf8((*it).c_str()));
+    axisLabelsOrder->addItem(tlpStringToQString(*it));
   }
 
   setLayout(dialogLayout);
@@ -175,7 +176,7 @@ void NominalAxisConfigDialog::closeEvent(QCloseEvent *) {
   vector<string> labelsOrder;
 
   for (int i = 0; i < axisLabelsOrder->count(); ++i) {
-    labelsOrder.push_back(axisLabelsOrder->item(i)->text().toUtf8().data());
+    labelsOrder.push_back(QStringToTlpString(axisLabelsOrder->item(i)->text()));
   }
 
   reverse(labelsOrder.begin(), labelsOrder.end());
@@ -225,13 +226,13 @@ void NominalAxisConfigDialog::pressButtonLexOrder() {
     vector<string>::iterator it;
 
     for (it = labelsOrder.begin(); it != labelsOrder.end(); ++it) {
-      axisLabelsOrder->addItem(QString::fromUtf8((*it).c_str()));
+      axisLabelsOrder->addItem(tlpStringToQString(*it));
     }
   } else {
     vector<string>::reverse_iterator it;
 
     for (it = labelsOrder.rbegin(); it != labelsOrder.rend(); ++it) {
-      axisLabelsOrder->addItem(QString::fromUtf8((*it).c_str()));
+      axisLabelsOrder->addItem(tlpStringToQString(*it));
     }
   }
 }

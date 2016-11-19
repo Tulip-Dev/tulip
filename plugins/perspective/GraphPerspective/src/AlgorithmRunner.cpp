@@ -63,7 +63,7 @@ void AlgorithmRunner::buildTreeUi(QWidget *w, PluginModel<tlp::Algorithm> *model
 
 void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 
-  const Plugin &plugin = PluginLister::pluginInformation(name.toStdString());
+  const Plugin &plugin = PluginLister::pluginInformation(QStringToTlpString(name));
   QString category = plugin.category().c_str();
   QString group = plugin.group().c_str();
 
@@ -131,8 +131,9 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 
 void AlgorithmRunner::refreshTreeUi(QWidget *w) {
   QStringList visibleItems;
+
   foreach (AlgorithmRunnerItem *i, w->findChildren<AlgorithmRunnerItem *>()) {
-    if (PluginLister::instance()->pluginExists(i->name().toStdString()))
+    if (PluginLister::instance()->pluginExists(QStringToTlpString(i->name())))
       visibleItems.push_back(i->name());
     else {
       _favorites.removeAll(i);
@@ -345,7 +346,7 @@ void AlgorithmRunner::removeFavorite(const QString &algName) {
 }
 
 void AlgorithmRunner::addFavorite(const QString &algName, const DataSet &data) {
-  if (!PluginLister::pluginExists(algName.toStdString()))
+  if (!PluginLister::pluginExists(QStringToTlpString(algName)))
     return;
 
   TulipSettings::instance().addFavoriteAlgorithm(algName);

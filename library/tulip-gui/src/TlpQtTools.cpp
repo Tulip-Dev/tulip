@@ -351,7 +351,7 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   // In that case, the Python dll is not located in system path but in the Python home directory.
   // So add the Python home directory in the Dll search paths in order to be able to load plugins depending on Python.
   if (tlp::PythonVersionChecker::isPythonVersionMatching()) {
-    SetDllDirectory(tlp::PythonVersionChecker::getPythonHome().toStdString().c_str());
+    SetDllDirectory(tlp::QStringToTlpString(tlp::PythonVersionChecker::getPythonHome()).c_str());
   }
 
 #endif
@@ -368,10 +368,10 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   tlp::initTulipLib();
   initQTypeSerializers();
 
-  tlp::TulipPluginsPath = std::string((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip").toUtf8().data()) +
+  tlp::TulipPluginsPath = QStringToTlpString((tlp::localPluginsPath() + QDir::separator() + "lib" + QDir::separator() + "tulip")) +
                           tlp::PATH_DELIMITER + tlp::TulipPluginsPath + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/glyph" + tlp::PATH_DELIMITER +
                           tlp::TulipPluginsPath + "/interactor" + tlp::PATH_DELIMITER + tlp::TulipPluginsPath + "/view" + tlp::PATH_DELIMITER +
-                          tlp::TulipPluginsPath + "/perspective" + tlp::PATH_DELIMITER + tlp::getPluginLocalInstallationDir().toUtf8().data();
+                          tlp::TulipPluginsPath + "/perspective" + tlp::PATH_DELIMITER + QStringToTlpString(tlp::getPluginLocalInstallationDir());
 
   // Load plugins
   tlp::PluginLibraryLoader::loadPlugins(loader);

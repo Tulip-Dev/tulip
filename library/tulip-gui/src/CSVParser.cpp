@@ -42,7 +42,7 @@ CSVSimpleParser::~CSVSimpleParser() {
 }
 
 string CSVSimpleParser::convertStringEncoding(const std::string &toConvert, QTextCodec *encoder) {
-  return string(encoder->toUnicode(toConvert.c_str()).toUtf8().data());
+  return QStringToTlpString(encoder->toUnicode(toConvert.c_str()));
 }
 
 bool CSVSimpleParser::parse(CSVContentHandler *handler, PluginProgress *progress) {
@@ -192,7 +192,7 @@ void CSVSimpleParser::tokenize(const string &str, vector<string> &tokens, const 
   string::size_type pos = 0;
   bool quit = false;
 
-  string delim(delimiters.toStdString());
+  string delim(QStringToTlpString(delimiters));
 
   while (!quit) {
     // Don't search tokens in chars sourrounded by text delimiters.

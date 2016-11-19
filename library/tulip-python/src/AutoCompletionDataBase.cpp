@@ -34,7 +34,8 @@
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
 #include <tulip/Perspective.h>
-//#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/EdgeExtremityGlyph.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 using namespace tlp;
@@ -52,7 +53,7 @@ AutoCompletionDataBase::AutoCompletionDataBase(APIDataBase *apiDb) : _graph(null
 
 static bool tlpPluginExists(const QString &pluginName) {
 
-  return tlp::PluginLister::pluginExists(pluginName.toStdString());
+  return tlp::PluginLister::pluginExists(QStringToTlpString(pluginName));
 }
 
 static QString getPythonTypeName(const QString &cppTypeName) {
@@ -65,7 +66,7 @@ static QString getPythonTypeName(const QString &cppTypeName) {
   } else if (cppTypeName == typeid(std::string).name()) {
     return "string";
   } else {
-    QString typeName = tlp::demangleTlpClassName(cppTypeName.toStdString().c_str()).c_str();
+    QString typeName = tlp::demangleTlpClassName(QStringToTlpString(cppTypeName).c_str()).c_str();
     typeName.replace("*", "");
     return "tlp." + typeName;
   }
@@ -74,14 +75,14 @@ static QString getPythonTypeName(const QString &cppTypeName) {
 static QSet<QString> getParametersListForPlugin(const QString &pluginName, const QString &prefix = "") {
   QSet<QString> ret;
 
-  if (tlp::PluginLister::pluginExists(pluginName.toStdString())) {
+  if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
 
-    const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(pluginName.toStdString());
+    const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(QStringToTlpString(pluginName));
     tlp::Iterator<ParameterDescription> *it = parameters.getParameters();
 
     while (it->hasNext()) {
       ParameterDescription pd = it->next();
-      QString param = QString::fromUtf8(pd.getName().c_str());
+      QString param = tlpStringToQString(pd.getName());
       // remove the special prefixes for files parameters used internally by the Tulip GUI
       param = param.replace("anyfile::", "");
       param = param.replace("file::", "");
@@ -108,15 +109,15 @@ static QSet<QString> getParametersListForPlugin(const QString &pluginName, const
 static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginName, const QString &strCollectionName, const QString &prefix = "") {
   QSet<QString> ret;
 
-  if (tlp::PluginLister::pluginExists(pluginName.toStdString())) {
-    const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(pluginName.toStdString());
+  if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
+    const tlp::ParameterDescriptionList &parameters = tlp::PluginLister::getPluginParameters(QStringToTlpString(pluginName));
     tlp::DataSet dataSet;
     parameters.buildDefaultDataSet(dataSet);
     tlp::StringCollection sc;
-    dataSet.get(strCollectionName.toStdString(), sc);
+    dataSet.get(QStringToTlpString(strCollectionName), sc);
 
     for (size_t i = 0; i < sc.size(); ++i) {
-      QString entry = "\"" + QString::fromUtf8(sc[i].c_str()) + "\"";
+      QString entry = "\"" + tlpStringToQString(sc[i]) + "\"";
 
       if (entry.startsWith(prefix))
         ret.insert(entry);
@@ -127,8 +128,8 @@ static QSet<QString> getStringCollectionEntriesForPlugin(const QString &pluginNa
 }
 
 static QString getPythonTypeNameForGraphProperty(tlp::Graph *graph, const QString &propName) {
-  if (graph->existLocalProperty(propName.toStdString())) {
-    PropertyInterface *prop = graph->getProperty(propName.toStdString());
+  if (graph->existLocalProperty(QStringToTlpString(propName))) {
+    PropertyInterface *prop = graph->getProperty(QStringToTlpString(propName));
 
     if (prop->getTypename() == "bool") {
       return "tlp.BooleanProperty";
@@ -832,13 +833,14 @@ static QVector<PropertyInterface *> getAllGraphPropertiesFromRoot(Graph *root) {
 
 static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &prefix) {
   QSet<QString> ret;
-  for (Graph *sg : root->getSubGraphs()) {
-    QString sgName = "\"" + QString::fromUtf8(sg->getName().c_str()) + "\"";
+  tlp::Graph *sg = NULL;
+  forEach(sg, root->getSubGraphs()) {
+    QString sgName = "\"" + tlpStringToQString(sg->getName()) + "\"";
 
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
 
-    sgName = "'" + QString::fromUtf8(sg->getName().c_str()) + "'";
+    sgName = "'" + tlpStringToQString(sg->getName()) + "'";
 
     if (sgName.startsWith(prefix))
       ret.insert(sgName);
@@ -852,15 +854,16 @@ static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &pr
 static QSet<QString> getGraphPropertiesList(Graph *graph, const QString &prefix, const QString &type = "") {
   QSet<QString> ret;
   QVector<PropertyInterface *> properties = getAllGraphPropertiesFromRoot(graph);
+
   foreach (PropertyInterface *prop, properties) {
-    if (type == "" || prop->getTypename() == type.toStdString()) {
-      QString qProp = "\"" + QString::fromUtf8(prop->getName().c_str()) + "\"";
+    if (type == "" || prop->getTypename() == QStringToTlpString(type)) {
+      QString qProp = "\"" + tlpStringToQString(prop->getName()) + "\"";
 
       if (qProp.startsWith(prefix)) {
         ret.insert(qProp);
       }
 
-      qProp = "'" + QString::fromUtf8(prop->getName().c_str()) + "'";
+      qProp = "'" + tlpStringToQString(prop->getName()) + "'";
 
       if (qProp.startsWith(prefix)) {
         ret.insert(qProp);
@@ -952,12 +955,12 @@ static QSet<QString> getAllGraphsAttributesFromRoot(Graph *rootGraph, const QStr
   tlp::Iterator<std::pair<std::string, tlp::DataType *>> *it = rootGraph->getAttributes().getValues();
 
   while (it->hasNext()) {
-    QString attrName = "\"" + QString::fromUtf8(it->next().first.c_str()) + "\"";
+    QString attrName = "\"" + tlpStringToQString(it->next().first) + "\"";
 
     if (attrName.startsWith(prefix))
       ret.insert(attrName);
 
-    attrName = "'" + QString::fromUtf8(it->next().first.c_str()) + "'";
+    attrName = "'" + tlpStringToQString(it->next().first) + "'";
 
     if (attrName.startsWith(prefix))
       ret.insert(attrName);
@@ -1112,14 +1115,14 @@ static QSet<QString> getAlgorithmPluginsListOfType(const QString &type, const QS
     if (plugin->category() != tlp::INTERACTOR_CATEGORY && plugin->category() != tlp::VIEW_CATEGORY &&
         plugin->category() != tlp::PERSPECTIVE_CATEGORY) {
 
-      if (type.isEmpty() || plugin->category() == type.toStdString()) {
-        QString pluginName = "\"" + QString::fromUtf8((*it).c_str()) + "\"";
+      if (type.isEmpty() || plugin->category() == QStringToTlpString(type)) {
+        QString pluginName = "\"" + tlpStringToQString(*it) + "\"";
 
         if (pluginName.startsWith(prefix)) {
           ret.insert(pluginName);
         }
 
-        pluginName = "'" + QString::fromUtf8((*it).c_str()) + "'";
+        pluginName = "'" + tlpStringToQString(*it) + "'";
 
         if (pluginName.startsWith(prefix)) {
           ret.insert(pluginName);

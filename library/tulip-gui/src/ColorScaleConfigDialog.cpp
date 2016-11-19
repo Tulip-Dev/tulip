@@ -152,7 +152,7 @@ vector<Color> ColorScaleConfigDialog::getColorScaleFromImageFile(const QString &
 }
 
 ColorScale ColorScaleConfigDialog::getColorScaleFromImageFile(const std::string &imageFilePath, bool gradient) {
-  return ColorScale(getColorScaleFromImageFile(QString::fromUtf8(imageFilePath.c_str())), gradient);
+  return ColorScale(getColorScaleFromImageFile(tlpStringToQString(imageFilePath)), gradient);
 }
 
 void ColorScaleConfigDialog::loadTulipImageColorScales() {

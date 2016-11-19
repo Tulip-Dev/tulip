@@ -367,9 +367,9 @@ void QuickAccessBar::selectFont() {
 
   Observable::holdObservers();
 
-  inputData()->getElementFont()->setAllNodeValue(dlg.font().fontFile().toStdString(), _mainView->graph());
+  inputData()->getElementFont()->setAllNodeValue(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
 
-  inputData()->getElementFont()->setAllEdgeValue(dlg.font().fontFile().toStdString(), _mainView->graph());
+  inputData()->getElementFont()->setAllEdgeValue(QStringToTlpString(dlg.font().fontFile()), _mainView->graph());
 
   Observable::unholdObservers();
   updateFontButtonStyle();

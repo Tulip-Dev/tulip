@@ -27,6 +27,7 @@
 #endif
 
 #include <tulip/PluginLister.h>
+#include <tulip/TlpQtTools.h>
 #include "TulipMainWindow.h"
 
 using namespace tlp;
@@ -35,7 +36,7 @@ PerspectiveItemWidget::PerspectiveItemWidget(const QString &perspectiveName, QWi
     : QWidget(parent), _perspectiveName(perspectiveName), _ui(new Ui::PerspectiveItemData) {
   _ui->setupUi(this);
   _ui->name->setText(_perspectiveName);
-  const tlp::Plugin &info = PluginLister::instance()->pluginInformation(_perspectiveName.toStdString());
+  const tlp::Plugin &info = PluginLister::instance()->pluginInformation(QStringToTlpString(_perspectiveName));
   _ui->description->setText(info.info().c_str());
 
   QPixmap px(info.icon().c_str());

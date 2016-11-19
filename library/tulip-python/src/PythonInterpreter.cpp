@@ -35,6 +35,7 @@
 #include <tulip/TulipRelease.h>
 #include <tulip/TlpTools.h>
 #include <tulip/PythonVersionChecker.h>
+#include <tulip/TlpQtTools.h>
 
 #include <cstdio>
 #ifndef WIN32
@@ -152,7 +153,7 @@ int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
   return 0;
 }
 
-const QString PythonInterpreter::pythonPluginsPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "tulip/python/");
+const QString PythonInterpreter::pythonPluginsPath(tlpStringToQString(tlp::TulipLibDir) + "tulip/python/");
 
 const QString PythonInterpreter::pythonPluginsPathHome(QDir::homePath() + "/.Tulip-" + TULIP_MM_VERSION + "/plugins/python");
 
@@ -227,7 +228,7 @@ PythonInterpreter::PythonInterpreter()
       static std::wstring pythonHomeWString = pythonHome.toStdWString();
       Py_SetPythonHome(const_cast<wchar_t *>(pythonHomeWString.c_str()));
 #else
-      static std::string pythonHomeString = pythonHome.toStdString();
+      static std::string pythonHomeString = QStringToTlpString(pythonHome);
       Py_SetPythonHome(const_cast<char *>(pythonHomeString.c_str()));
 #endif
     }
@@ -293,7 +294,7 @@ PythonInterpreter::PythonInterpreter()
     libPythonName += QString(".so.1.0");
 #endif
 
-    if (!dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
+    if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
 
       // for Python 3.2
       libPythonName = QString("libpython") + _pythonVersion + QString("mu");
@@ -303,7 +304,7 @@ PythonInterpreter::PythonInterpreter()
       libPythonName += QString(".so.1.0");
 #endif
 
-      if (!dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
+      if (!dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL)) {
         // for Python 3.3
         libPythonName = QString("libpython") + _pythonVersion + QString("m");
 #ifdef __APPLE__
@@ -311,7 +312,7 @@ PythonInterpreter::PythonInterpreter()
 #else
         libPythonName += QString(".so.1.0");
 #endif
-        dlopen(libPythonName.toStdString().c_str(), RTLD_LAZY | RTLD_GLOBAL);
+        dlopen(QStringToTlpString(libPythonName).c_str(), RTLD_LAZY | RTLD_GLOBAL);
       }
     }
 
@@ -327,11 +328,11 @@ PythonInterpreter::PythonInterpreter()
       addModuleSearchPath(pythonPluginsPathHome);
 
 #if defined(__APPLE__)
-      addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "../lib/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "../lib/python", true);
 #elif defined(WIN32)
-      addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "../bin/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "../bin/python", true);
 #else
-      addModuleSearchPath(QString::fromUtf8(tlp::TulipLibDir.c_str()) + "/python", true);
+      addModuleSearchPath(tlpStringToQString(tlp::TulipLibDir) + "/python", true);
 #endif
 
       initconsoleutils();
@@ -466,7 +467,7 @@ bool PythonInterpreter::importModule(const QString &moduleName) {
 bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName, const QString &moduleSrcCode) {
   bool ret = true;
   holdGIL();
-  PyObject *pycomp = Py_CompileString(moduleSrcCode.toUtf8().data(), QString(moduleName + ".py").toStdString().c_str(), Py_file_input);
+  PyObject *pycomp = Py_CompileString(QStringToTlpString(moduleSrcCode).c_str(), QStringToTlpString(moduleName + ".py").c_str(), Py_file_input);
 
   if (pycomp == nullptr) {
     PyErr_Print();
@@ -474,7 +475,7 @@ bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName, c
     ret = false;
   } else {
 
-    PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(moduleName.toStdString().c_str()), pycomp);
+    PyObject *pmod = PyImport_ExecCodeModule(const_cast<char *>(QStringToTlpString(moduleName).c_str()), pycomp);
 
     if (pmod == nullptr) {
       PyErr_Print();
@@ -490,15 +491,15 @@ bool PythonInterpreter::registerNewModuleFromString(const QString &moduleName, c
 bool PythonInterpreter::functionExists(const QString &moduleName, const QString &functionName) {
   holdGIL();
 #if PY_MAJOR_VERSION >= 3
-  PyObject *pName = PyUnicode_FromString(moduleName.toStdString().c_str());
+  PyObject *pName = PyUnicode_FromString(QStringToTlpString(moduleName).c_str());
 #else
-  PyObject *pName = PyString_FromString(moduleName.toStdString().c_str());
+  PyObject *pName = PyString_FromString(QStringToTlpString(moduleName).c_str());
 #endif
   PyObject *pModule = PyImport_Import(pName);
   decrefPyObject(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
-  PyObject *pFunc = PyDict_GetItemString(pDict, functionName.toStdString().c_str());
-  bool ret = (pFunc != nullptr && PyCallable_Check(pFunc));
+  PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(functionName).c_str());
+  bool ret = (pFunc != NULL && PyCallable_Check(pFunc));
   releaseGIL();
   return ret;
 }
@@ -510,7 +511,7 @@ bool PythonInterpreter::runString(const QString &pythonCode, const QString &scri
   timer.start();
   int ret = 0;
   holdGIL();
-  ret = PyRun_SimpleString(pythonCode.toUtf8().data());
+  ret = PyRun_SimpleString(QStringToTlpString(pythonCode).c_str());
 
   if (PyErr_Occurred()) {
     PyErr_Print();
@@ -536,7 +537,7 @@ PyObject *PythonInterpreter::evalPythonStatement(const QString &pythonStatement,
   decrefPyObject(pName);
   PyObject *pMainDict = PyModule_GetDict(pMainModule);
 
-  PyObject *ret = PyRun_String(pythonStatement.toUtf8().data(), singleInput ? Py_single_input : Py_eval_input, pMainDict, pMainDict);
+  PyObject *ret = PyRun_String(QStringToTlpString(pythonStatement).c_str(), singleInput ? Py_single_input : Py_eval_input, pMainDict, pMainDict);
 
   if (PyErr_Occurred()) {
     PyErr_Print();
@@ -552,9 +553,9 @@ PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QSt
   holdGIL();
   PyObject *ret = nullptr;
 #if PY_MAJOR_VERSION >= 3
-  PyObject *pName = PyUnicode_FromString(module.toStdString().c_str());
+  PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
 #else
-  PyObject *pName = PyString_FromString(module.toStdString().c_str());
+  PyObject *pName = PyString_FromString(QStringToTlpString(module).c_str());
 #endif
 
   PyObject *pModule = PyImport_Import(pName);
@@ -563,7 +564,7 @@ PyObject *PythonInterpreter::callPythonFunction(const QString &module, const QSt
   PyObject *pDict = PyModule_GetDict(pModule);
   decrefPyObject(pModule);
 
-  PyObject *pFunc = PyDict_GetItemString(pDict, function.toStdString().c_str());
+  PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(function).c_str());
 
   if (PyCallable_Check(pFunc)) {
     PyObject *argTup = PyTuple_New(parameters.size());
@@ -643,9 +644,9 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
 // Build the name object
 #if PY_MAJOR_VERSION >= 3
-  PyObject *pName = PyUnicode_FromString(module.toStdString().c_str());
+  PyObject *pName = PyUnicode_FromString(QStringToTlpString(module).c_str());
 #else
-  PyObject *pName = PyString_FromString(module.toStdString().c_str());
+  PyObject *pName = PyString_FromString(QStringToTlpString(module).c_str());
 #endif
   // Load the module object
   PyObject *pModule = PyImport_Import(pName);
@@ -663,7 +664,7 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
   PyObject *pDict = PyModule_GetDict(pModule);
 
   // pFunc is also a borrowed reference
-  PyObject *pFunc = PyDict_GetItemString(pDict, function.toStdString().c_str());
+  PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(function).c_str());
 
   if (PyCallable_Check(pFunc)) {
 
@@ -1028,7 +1029,7 @@ bool PythonInterpreter::errorOutputEnabled() const {
 }
 
 double PythonInterpreter::getPythonVersion() const {
-  return atof(_pythonVersion.toStdString().c_str());
+  return atof(QStringToTlpString(_pythonVersion).c_str());
 }
 
 void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) {
@@ -1044,9 +1045,9 @@ void PythonInterpreter::sendOutputToConsole(const QString &output, bool stdErr) 
 
   if (textOutput) {
     if (errorOutputEnabled() && stdErr) {
-      std::cerr << output.toStdString();
+      std::cerr << QStringToTlpString(output);
     } else if (outputEnabled() && !stdErr) {
-      std::cout << output.toStdString();
+      std::cout << QStringToTlpString(output);
     }
   }
 }

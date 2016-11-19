@@ -320,7 +320,7 @@ QVariant StringCollectionEditorCreator::editorData(QWidget *widget, tlp::Graph *
   StringCollection col;
 
   for (int i = 0; i < combo->count(); ++i)
-    col.push_back(combo->itemText(i).toStdString());
+    col.push_back(QStringToTlpString(combo->itemText(i)));
 
   col.setCurrent(combo->currentIndex());
   return QVariant::fromValue<StringCollection>(col);
@@ -435,17 +435,17 @@ public:
     return FontIconManager::instance()->getFontAwesomeIcon(icon);
   }
 
-  QIcon getMaterialDesignIcon(const QString &iconName) {
-    md::iconCodePoint icon = static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName.toStdString()));
-    return FontIconManager::instance()->getMaterialDesignIcon(icon);
-  }
+  return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(QStringToTlpString(iconName))));
+}
 
-  QMap<QString, QIcon> iconPool;
+QMap<QString, QIcon>
+    iconPool;
 
 private:
-  QtAwesome qtAwesome;
-  QIcon nullIcon;
-};
+QtAwesome qtAwesome;
+QIcon nullIcon;
+}
+;
 
 static QImageIconPool imageIconPool;
 
@@ -1045,7 +1045,7 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
     if (str.size() > 45)
       str.replace(str.begin() + 41, str.end(), " ...)");
 
-    return QString::fromUtf8(str.c_str());
+    return tlpStringToQString(str);
   }
 
   if (v.size() == 1)

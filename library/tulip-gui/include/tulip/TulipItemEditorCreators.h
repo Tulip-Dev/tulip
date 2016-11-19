@@ -23,6 +23,7 @@
 
 #include <tulip/tulipconf.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QVariant>
 #include <QSize>
@@ -57,7 +58,7 @@ public:
 template <typename T> class TLP_QT_SCOPE StringDisplayEditorCreator : public TulipItemEditorCreator {
 public:
   inline QString displayText(const QVariant &v) const {
-    return QString::fromUtf8(T::toString(v.value<typename T::RealType>()).c_str());
+    return tlpStringToQString(T::toString(v.value<typename T::RealType>()));
   }
 };
 

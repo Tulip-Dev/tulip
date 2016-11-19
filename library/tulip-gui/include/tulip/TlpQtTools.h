@@ -43,13 +43,13 @@ inline Color QColorToColor(const QColor &color) {
   return Color(color.red(), color.green(), color.blue(), color.alpha());
 }
 /**
-  * @brief Convert a string from Tulip to QString.
+  * @brief Convert a QString to a Tulip UTF-8 encoded std::string.
   **/
 inline std::string QStringToTlpString(const QString &toConvert) {
   return std::string(toConvert.toUtf8());
 }
 /**
-  * @brief Convert a QString to tulip string.
+  * @brief Convert a Tulip UTF-8 encoded std::string to a QString
   **/
 inline QString tlpStringToQString(const std::string &toConvert) {
   return QString::fromUtf8(toConvert.c_str());

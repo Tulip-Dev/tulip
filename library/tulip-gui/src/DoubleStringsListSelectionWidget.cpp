@@ -42,13 +42,13 @@ DoubleStringsListSelectionWidget::~DoubleStringsListSelectionWidget() {
 
 void DoubleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
   for (unsigned int i = 0; i < unselectedStringsList.size(); ++i) {
-    _ui->inputList->addItemList(QString::fromUtf8(unselectedStringsList[i].c_str()));
+    _ui->inputList->addItemList(tlpStringToQString(unselectedStringsList[i]));
   }
 }
 
 void DoubleStringsListSelectionWidget::setSelectedStringsList(const std::vector<std::string> &selectedStringsList) {
   for (unsigned int i = 0; i < selectedStringsList.size(); ++i) {
-    _ui->outputList->addItemList(QString::fromUtf8(selectedStringsList[i].c_str()));
+    _ui->outputList->addItemList(tlpStringToQString(selectedStringsList[i]));
   }
 }
 
@@ -61,11 +61,11 @@ void DoubleStringsListSelectionWidget::clearSelectedStringsList() {
 }
 
 void DoubleStringsListSelectionWidget::setUnselectedStringsListLabel(const std::string &unselectedStringsListLabel) {
-  _ui->inputListLabel->setText(QString::fromUtf8(unselectedStringsListLabel.c_str()));
+  _ui->inputListLabel->setText(tlpStringToQString(unselectedStringsListLabel));
 }
 
 void DoubleStringsListSelectionWidget::setSelectedStringsListLabel(const std::string &selectedStringsListLabel) {
-  _ui->outputListLabel->setText(QString::fromUtf8(selectedStringsListLabel.c_str()));
+  _ui->outputListLabel->setText(tlpStringToQString(selectedStringsListLabel));
 }
 
 void DoubleStringsListSelectionWidget::setMaxSelectedStringsListSize(const unsigned int maxSelectedStringsListSize) {

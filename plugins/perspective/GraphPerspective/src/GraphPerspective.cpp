@@ -169,12 +169,12 @@ void graphPerspectiveLogger(QtMsgType type, const QMessageLogContext &context, c
     QString msgClean = msg.mid(14).mid(2, msg.length() - 17);
 
     if (msg.startsWith("[PythonStdOut]")) {
-      std::cout << msgClean.toStdString() << std::endl;
+      std::cout << QStringToTlpString(msgClean) << std::endl;
     } else {
-      std::cerr << msgClean.toStdString() << std::endl;
+      std::cerr << QStringToTlpString(msgClean) << std::endl;
     }
   } else {
-    std::cerr << msg.toStdString() << std::endl;
+    std::cerr << QStringToTlpString(msg) << std::endl;
   }
 
   static_cast<GraphPerspective *>(Perspective::instance())->log(type, context, msg);
@@ -196,12 +196,12 @@ void graphPerspectiveLogger(QtMsgType type, const char *msg) {
     QString msgClean = qmsg.mid(14).mid(2, qmsg.length() - 18);
 
     if (qmsg.startsWith("[PythonStdOut]")) {
-      std::cout << msgClean.toStdString() << std::endl;
+      std::cout << QStringToTlpString(msgClean) << std::endl;
     } else {
-      std::cerr << msgClean.toStdString() << std::endl;
+      std::cerr << QStringToTlpString(msgClean) << std::endl;
     }
   } else {
-    std::cerr << qmsg.toStdString() << std::endl;
+    std::cerr << QStringToTlpString(qmsg) << std::endl;
   }
 
   static_cast<GraphPerspective *>(Perspective::instance())->log(type, msg);
@@ -441,7 +441,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutPage()));
   connect(_ui->actionAbout_us, SIGNAL(triggered()), this, SLOT(showAboutTulipPage()));
 
-  if (QFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html").exists()) {
+  if (QFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-user/html/index.html").exists()) {
     connect(_ui->actionShowUserDocumentation, SIGNAL(triggered()), this, SLOT(showUserDocumentation()));
     connect(_ui->actionShowDevelDocumentation, SIGNAL(triggered()), this, SLOT(showDevelDocumentation()));
     connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this, SLOT(showPythonDocumentation()));
@@ -570,8 +570,8 @@ void GraphPerspective::exportGraph(Graph *g) {
     return;
 
   std::ostream *os;
-  std::string filename = (exportFile = wizard.outputFile()).toUtf8().data();
-  std::string exportPluginName = wizard.algorithm().toStdString();
+  std::string filename = QStringToTlpString(exportFile = wizard.outputFile());
+  std::string exportPluginName = QStringToTlpString(wizard.algorithm());
 
   if (filename.rfind(".gz") == (filename.length() - 3)) {
     if (exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
@@ -679,7 +679,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
   if (data.get("file::filename", fileName))
     // set current directory to the directory of the loaded file
     // to ensure a correct loading of the associated texture files if any
-    QDir::setCurrent(QFileInfo(QString::fromUtf8(fileName.c_str())).absolutePath());
+    QDir::setCurrent(QFileInfo(tlpStringToQString(fileName)).absolutePath());
 
   applyRandomLayout(g);
   showStartPanels(g);
@@ -822,7 +822,7 @@ void GraphPerspective::open(QString fileName) {
         break;
       } else if (fileName.endsWith(QString::fromStdString(extension))) {
         DataSet params;
-        params.set("file::filename", std::string(fileName.toUtf8().data()));
+        params.set("file::filename", QStringToTlpString(fileName));
         addRecentDocument(fileName);
         importGraph(modules[extension], params);
         break;
@@ -842,7 +842,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
 #endif
 
     for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin(); it != rootIds.end(); ++it) {
-      it.value()->setAttribute("file", std::string(path.toUtf8().data()));
+      it.value()->setAttribute("file", QStringToTlpString(path));
     }
 
     delete prg;
@@ -1007,7 +1007,7 @@ void GraphPerspective::group() {
 
   if (groupedNodes.empty()) {
     Observable::unholdObservers();
-    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection").toUtf8().data();
+    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
     return;
   }
 
@@ -1016,10 +1016,7 @@ void GraphPerspective::group() {
   bool changeGraph = false;
 
   if (graph == graph->getRoot()) {
-    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. "
-                         "A subgraph has automatically been created")
-                      .toUtf8()
-                      .data();
+    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
     graph = graph->addCloneSubGraph("groups");
     changeGraph = true;
   }
@@ -1203,7 +1200,7 @@ void GraphPerspective::showStartPanels(Graph *g) {
 
   foreach (const QString &panelName, QStringList() << "Spreadsheet view"
                                                    << "Node Link Diagram view") {
-    View *view = PluginLister::instance()->getPluginObject<View>(panelName.toStdString(), nullptr);
+    View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
 
     if (firstPanel == NULL)
       firstPanel = view;
@@ -1358,15 +1355,15 @@ void GraphPerspective::setDevelopMode() {
 }
 
 void GraphPerspective::showUserDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-user/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-user/html/index.html"));
 }
 
 void GraphPerspective::showDevelDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-dev/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-dev/html/index.html"));
 }
 
 void GraphPerspective::showPythonDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(QString::fromUtf8(tlp::TulipShareDir.c_str()) + "doc/tulip-python/html/index.html"));
+  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-python/html/index.html"));
 }
 
 void GraphPerspective::showHideSideBar() {

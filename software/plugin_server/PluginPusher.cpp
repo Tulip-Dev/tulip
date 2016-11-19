@@ -22,6 +22,7 @@
 #include <QDir>
 #include <QDomDocument>
 #include <tulip/PluginManager.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace std;
 
@@ -71,7 +72,7 @@ int main(int argc, char **argv) {
   QFile description(path + "/serverDescription.xml");
 
   if (!description.open(QIODevice::ReadOnly)) {
-    std::cout << "could not open " << path.toStdString() << "/serverDescription.xml in Read mode." << std::endl;
+    std::cout << "could not open " << tlp::QStringToTlpString(path) << "/serverDescription.xml in Read mode." << std::endl;
     exit(0);
   }
 
@@ -104,7 +105,7 @@ int main(int argc, char **argv) {
   if (!remoteDescription.isNull()) {
     QDomDocument remoteDocument;
     remoteDocument.setContent(remoteDescription);
-    std::cout << remoteDescription.toStdString() << std::endl;
+    std::cout << tlp::QStringToTlpString(remoteDescription) << std::endl;
     QDomNodeList remotePlugins(remoteDocument.elementsByTagName("plugin"));
 
     for (int i = 0; i < remotePlugins.count(); ++i) {
@@ -114,9 +115,9 @@ int main(int argc, char **argv) {
 
       if (!pluginList.contains(pluginName)) {
         localDocument.documentElement().appendChild(currentNode);
-        std::cout << "keeping remote plugin: " << pluginName.toStdString() << std::endl;
+        std::cout << "keeping remote plugin: " << tlp::QStringToTlpString(pluginName) << std::endl;
       } else {
-        std::cout << "discarding remote plugin: " << pluginName.toStdString() << std::endl;
+        std::cout << "discarding remote plugin: " << tlp::QStringToTlpString(pluginName) << std::endl;
       }
     }
   }

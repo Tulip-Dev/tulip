@@ -25,13 +25,14 @@
 #include <QDebug>
 
 #include <tulip/TlpTools.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
 QMap<QString, int> TulipFont::FONT_IDS = QMap<QString, int>();
 
 QString TulipFont::tulipFontsDirectory() {
-  return QString::fromUtf8(TulipBitmapDir.c_str()) + "fonts/";
+  return tlpStringToQString(TulipBitmapDir) + "fonts/";
 }
 
 QStringList TulipFont::installedFontNames() {

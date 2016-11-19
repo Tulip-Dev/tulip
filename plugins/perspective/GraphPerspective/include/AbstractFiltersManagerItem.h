@@ -27,6 +27,7 @@
 #include <tulip/WithParameter.h>
 #include <tulip/ParameterListModel.h>
 #include <tulip/PluginLister.h>
+#include <tulip/TlpQtTools.h>
 
 namespace tlp {
 class BooleanProperty;
@@ -58,7 +59,7 @@ protected:
     int h = 0;
 
     if (!algName.isNull()) {
-      tlp::ParameterDescriptionList params = tlp::PluginLister::getPluginParameters(algName.toStdString());
+      tlp::ParameterDescriptionList params = tlp::PluginLister::getPluginParameters(tlp::QStringToTlpString(algName));
       table->setModel(new tlp::ParameterListModel(params, g, table));
 
       for (int i = 0; i < table->model()->rowCount(); ++i)

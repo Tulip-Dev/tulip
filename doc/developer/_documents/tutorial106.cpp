@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
 std::cout << "pouet pouet" << std::endl;
     DataSet data;
 
-    data.set<std::string>("file::filename",_project->toAbsolutePath("/data/graphs/0/graph.tlp").toStdString());
+    data.set<std::string>("file::filename",QStringToTlpString(_project->toAbsolutePath("/data/graphs/0/graph.tlp")));
 
     g = tlp::importGraph("TLP Import",data);
 std::cout << g << std::endl;

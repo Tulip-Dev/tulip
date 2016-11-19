@@ -99,7 +99,7 @@ void PropertyConfigurationWidget::fillPropertyTypeComboBox() {
 
 string PropertyConfigurationWidget::getPropertyType() const {
   // Return the real type in the
-  return propertyTypeComboBox->itemData(propertyTypeComboBox->currentIndex()).toString().toStdString();
+  return QStringToTlpString(propertyTypeComboBox->itemData(propertyTypeComboBox->currentIndex()).toString());
 }
 
 void PropertyConfigurationWidget::setPropertyType(const string &propertyType) {
@@ -592,7 +592,7 @@ string CSVImportConfigurationWidget::guessDataType(const string &data) const {
   }
 
   // Qt framework is the best way to detect numerals in string.
-  QString str = QString::fromUtf8(ptr);
+  QString str = tlpStringToQString(ptr);
   bool ok = false;
   str.toInt(&ok);
 

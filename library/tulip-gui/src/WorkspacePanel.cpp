@@ -603,13 +603,22 @@ void WorkspacePanel::setHighlightMode(bool hm) {
   static QString headerStyleSheet = _ui->headerFrame->styleSheet();
 
   if (hm)
-    _ui->headerFrame->setStyleSheet(headerStyleSheet + QString::fromUtf8("QFrame[header = \"true\"], QComboBox, QLabel, "
-                                                                         "QToolButton, QPushButton, #interactorsFrame {\n"
-                                                                         "background-color: #262829;\n"
-                                                                         "}"));
+    _ui->borderFrame->setStyleSheet("QFrame[border = \"true\"] {\n"
+                                    "border-image:none;\n"
+                                    "background-color: #CBDE5D;\n"
+                                    "color: white;\n"
+                                    "}");
   else
     // restore the style sheet as described in WorkspacePanel.ui
-    _ui->headerFrame->setStyleSheet(headerStyleSheet);
+    _ui->borderFrame->setStyleSheet("QFrame[border = \"true\"] {\n"
+                                    "border-image:none;\n"
+                                    "background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,\n"
+                                    "stop: 0 #838383,\n"
+                                    "stop: 0.4 #707070,\n"
+                                    "stop: 0.401 #636363,\n"
+                                    "stop: 1 #4a4a4a);\n"
+                                    "color: white;\n"
+                                    "}");
 }
 
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent *evt) {

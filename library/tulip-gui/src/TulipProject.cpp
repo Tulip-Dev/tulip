@@ -207,7 +207,7 @@ bool TulipProject::copy(const QString &source, const QString &destination) {
 std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::openmode mode) {
   QString filePath(toAbsolutePath(path));
   std::fstream *result = new std::fstream();
-  result->open(filePath.toUtf8().data(), mode);
+  result->open(QStringToTlpString(filePath), mode);
 
   if (!result->is_open()) {
     delete result;
@@ -305,17 +305,19 @@ bool TulipProject::readMetaInfo() {
 
   if (doc.hasError()) {
     in.close();
-    tlp::debug() << "Error opening xml meta information file: " << doc.errorString().toStdString() << std::endl;
+    tlp::debug() << "Error opening xml meta information file: " << QStringToTlpString(doc.errorString()) << std::endl;
     return false;
   }
   while (!doc.atEnd()) {
     if (doc.readNextStartElement()) {
       if (doc.hasError()) {
-        tlp::debug() << "Error reading xml meta information: " << doc.errorString().toStdString() << std::endl;
+        tlp::debug() << "Error reading xml meta information: " << QStringToTlpString(doc.errorString()) << std::endl;
         in.close();
         return false;
       }
-      const char *name(doc.name().toString().toStdString().data());
+
+      const char *name(QStringToTlpString(doc.name().toString()).c_str());
+
       if (property(name).isValid())
         setProperty(name, doc.readElementText());
     }

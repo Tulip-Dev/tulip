@@ -21,6 +21,7 @@
 #define SIMPLESTRINGSLISTSELECTIONWIDGET_CPP_
 
 #include <tulip/SimpleStringsListSelectionWidget.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ui_SimpleStringsListSelectionWidget.h"
 
@@ -56,13 +57,13 @@ void SimpleStringsListSelectionWidget::qtWidgetsConnection() {
 
 void SimpleStringsListSelectionWidget::setUnselectedStringsList(const std::vector<std::string> &unselectedStringsList) {
   for (unsigned int i = 0; i < unselectedStringsList.size(); ++i) {
-    QList<QListWidgetItem *> items = _ui->listWidget->findItems(QString::fromUtf8(unselectedStringsList[i].c_str()), Qt::MatchExactly);
+    QList<QListWidgetItem *> items = _ui->listWidget->findItems(tlpStringToQString(unselectedStringsList[i]), Qt::MatchExactly);
 
     if (items.size() > 0) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Unchecked);
     } else {
-      QListWidgetItem *item = new QListWidgetItem(QString::fromUtf8(unselectedStringsList[i].c_str()));
+      QListWidgetItem *item = new QListWidgetItem(tlpStringToQString(unselectedStringsList[i]));
       item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
       item->setCheckState(Qt::Unchecked);
       _ui->listWidget->addItem(item);
@@ -76,13 +77,13 @@ void SimpleStringsListSelectionWidget::setSelectedStringsList(const std::vector<
       break;
     }
 
-    QList<QListWidgetItem *> items = _ui->listWidget->findItems(QString::fromUtf8(selectedStringsList[i].c_str()), Qt::MatchExactly);
+    QList<QListWidgetItem *> items = _ui->listWidget->findItems(tlpStringToQString(selectedStringsList[i]), Qt::MatchExactly);
 
     if (items.size() > 0) {
       items[0]->setFlags(items[0]->flags() | Qt::ItemIsUserCheckable);
       items[0]->setCheckState(Qt::Checked);
     } else {
-      QListWidgetItem *item = new QListWidgetItem(QString::fromUtf8(selectedStringsList[i].c_str()));
+      QListWidgetItem *item = new QListWidgetItem(tlpStringToQString(selectedStringsList[i]));
       item->setFlags(item->flags() | Qt::ItemIsUserCheckable);
       item->setCheckState(Qt::Checked);
       _ui->listWidget->addItem(item);
@@ -139,7 +140,7 @@ vector<string> SimpleStringsListSelectionWidget::getSelectedStringsList() const 
     QListWidgetItem *item = _ui->listWidget->item(i);
 
     if (item->checkState() == Qt::Checked) {
-      ret.push_back(string(item->text().toUtf8().data()));
+      ret.push_back(QStringToTlpString(item->text()));
     }
   }
 
@@ -153,7 +154,7 @@ vector<string> SimpleStringsListSelectionWidget::getUnselectedStringsList() cons
     QListWidgetItem *item = _ui->listWidget->item(i);
 
     if (item->checkState() == Qt::Unchecked) {
-      ret.push_back(string(item->text().toUtf8().data()));
+      ret.push_back(QStringToTlpString(item->text()));
     }
   }
 

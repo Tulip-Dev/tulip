@@ -162,7 +162,11 @@ QMap<tlp::Graph *, QString> GraphHierarchiesModel::writeProject(tlp::TulipProjec
     rootIds[g] = QString::number(i);
     QString folder = GRAPHS_PATH + "/" + QString::number(i++) + "/";
     project->mkpath(folder);
-    tlp::saveGraph(g, project->toAbsolutePath(folder + "graph.tlp").toStdString(), progress);
+
+    if (!TulipSettings::instance().isUseTlpbFileFormat())
+      tlp::saveGraph(g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlp")), progress);
+    else
+      tlp::saveGraph(g, QStringToTlpString(project->toAbsolutePath(folder + "graph.tlpb")), progress);
   }
   foreach (GraphNeedsSavingObserver *observer, _saveNeeded)
     observer->saved();
@@ -240,7 +244,7 @@ int GraphHierarchiesModel::columnCount(const QModelIndex &) const {
 bool GraphHierarchiesModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (index.column() == NAME_SECTION) {
     Graph *graph = reinterpret_cast<Graph *>(index.internalPointer());
-    graph->setName(std::string(value.toString().toUtf8().data()));
+    graph->setName(QStringToTlpString(value.toString()));
     return true;
   }
 

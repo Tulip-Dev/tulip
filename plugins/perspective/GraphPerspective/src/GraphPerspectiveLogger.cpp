@@ -27,6 +27,8 @@
 #include <QKeyEvent>
 #include <QClipboard>
 
+#include <tulip/TlpQtTools.h>
+
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget *parent)
     : QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
@@ -72,7 +74,7 @@ unsigned int GraphPerspectiveLogger::count() const {
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, const QString &msg) {
   if (type == QtFatalMsg) {
-    std::cerr << msg.toUtf8().data() << std::endl;
+    std::cerr << tlp::QStringToTlpString(msg) << std::endl;
     abort();
   }
 
@@ -104,7 +106,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char *msg) {
     return;
 
   if (type == QtFatalMsg) {
-    std::cerr << qmsg.toUtf8().data() << std::endl;
+    std::cerr << QStringToTlpString(qmsg) << std::endl;
     abort();
   }
 

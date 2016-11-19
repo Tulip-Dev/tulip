@@ -286,9 +286,8 @@ void SearchWidget::search() {
 
       DataTypeSerializer *serializer = DataSet::typenameToSerializer(tulipData->getTypeName());
 
-      if (serializer == nullptr) {
-        qCritical() << QString::fromUtf8("no type serializer found for ") << tlp::tlpStringToQString(tulipData->getTypeName())
-                    << ", please report this as a bug";
+      if (serializer == NULL) {
+        qCritical() << "no type serializer found for " << tlp::tlpStringToQString(tulipData->getTypeName()) << ", please report this as a bug";
 #ifdef NDEBUG
         delete stringProp;
         return;

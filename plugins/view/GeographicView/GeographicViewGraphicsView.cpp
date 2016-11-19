@@ -116,7 +116,7 @@ GlComposite *readPolyFile(QString fileName) {
         }
       }
 
-      polygonName = line.toStdString();
+      polygonName = QStringToTlpString(line);
       continue;
     }
 
@@ -267,7 +267,7 @@ void simplifyPolyFile(QString fileName, float definition) {
         }
       }
 
-      polygonName = line.toStdString();
+      polygonName = QStringToTlpString(line);
       continue;
     }
 
@@ -292,7 +292,7 @@ void simplifyPolyFile(QString fileName, float definition) {
 
   QString newName(fileName);
   newName.replace(".poly", QString("_") + QString::number(definition) + ".poly");
-  cout << "create : " << newName.toStdString() << endl;
+  cout << "create : " << QStringToTlpString(newName) << endl;
   QFile fileW(newName);
 
   if (!fileW.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -760,7 +760,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
       if (addr == "")
         continue;
 
-      progressWidget->setComment("Retrieving latitude and longitude for address : \n" + QString::fromUtf8(addr.c_str()));
+      progressWidget->setComment("Retrieving latitude and longitude for address : \n" + tlpStringToQString(addr));
 
       if (nodeLatLng.find(n) == nodeLatLng.end()) {
 
@@ -772,7 +772,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             longitudeProperty->setNodeValue(n, nodeLatLng[n].second);
           }
         } else {
-          string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng, true);
+          string geocodingRequestStatus = googleMaps->getLatLngForAddress(tlpStringToQString(addr), latLng, true);
 
           if (geocodingRequestStatus == "OK") {
             nodeLatLng[n] = latLng;
@@ -810,7 +810,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             grabNextNode = false;
           } else {
             progressWidget->hide();
-            QMessageBox::warning(nullptr, "Geolocation failed", "No results were found for address : \n" + QString::fromUtf8(addr.c_str()));
+            QMessageBox::warning(NULL, "Geolocation failed", "No results were found for address : \n" + tlpStringToQString(addr));
             progressWidget->show();
           }
         }
@@ -838,7 +838,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
           longitudeProperty->setNodeValue(n, latLng.second);
         }
       } else {
-        string geocodingRequestStatus = googleMaps->getLatLngForAddress(QString::fromUtf8(addr.c_str()), latLng);
+        string geocodingRequestStatus = googleMaps->getLatLngForAddress(tlpStringToQString(addr), latLng);
 
         if (geocodingRequestStatus != "OK") {
           QTimeLine timeLine(3500);
