@@ -48,15 +48,6 @@
 
 using namespace tlp;
 
-static void truncateText(QString &text, int maxChars=45) {
-  static QString dots = " ...";
-
-  if (text.size() > maxChars) {
-    text.truncate(maxChars - dots.length());
-    text.append(dots);
-  }
-}
-
 class CustomComboBox : public QComboBox {
 
 public:
@@ -1036,12 +1027,9 @@ QString QVectorBoolEditorCreator::displayText(const QVariant &data) const {
     std::stringstream sstr;
     dts->writeData(sstr, &dt);
 
-    std::string str = sstr.str();
+    QString str = tlpStringToQString(sstr.str());
 
-    if (str.size() > 45)
-      str.replace(str.begin() + 41, str.end(), " ...)");
-
-    return tlpStringToQString(str);
+    return truncateText(str, " ...)");
   }
 
   if (v.size() == 1)
@@ -1072,10 +1060,7 @@ QVariant QStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
 
 QString QStringEditorCreator::displayText(const QVariant& var) const {
   QString qstr = var.toString();
-
-  truncateText(qstr);
-
-  return qstr;
+  return truncateText(qstr);
 }
 
 void QStringEditorCreator::setPropertyToEdit(tlp::PropertyInterface* prop) {
@@ -1097,10 +1082,7 @@ QVariant StdStringEditorCreator::editorData(QWidget* editor, tlp::Graph*) {
 
 QString StdStringEditorCreator::displayText(const QVariant& var) const {
   QString qstr = tlpStringToQString(var.value<std::string>());
-
-  truncateText(qstr);
-
-  return qstr;
+  return truncateText(qstr);
 }
 
 //QStringListEditorCreator

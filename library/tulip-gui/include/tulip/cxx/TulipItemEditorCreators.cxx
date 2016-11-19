@@ -249,12 +249,7 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
 
     QString qstr = tlpStringToQString(str);
 
-    if (qstr.size() > 45) {
-      qstr.truncate(41);
-      qstr.append(" ...");
-    }
-
-    return qstr;
+    return truncateText(qstr);
   }
 
   if (v.size() == 1)
