@@ -55,8 +55,8 @@ If the descendant graph is different from the one associated to that property, t
 
 :param val: the value to set on the nodes.
 :type val: @PYTHON_NODE_TYPE@
-  :param graph: an optional descendant graph
-  :type graph: :class:`tlp.Graph`
+:param graph: an optional descendant graph
+:type graph: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
