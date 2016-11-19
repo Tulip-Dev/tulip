@@ -135,6 +135,7 @@ bool GeographicViewConfigWidget::polyOptionsChanged() {
     switch(_oldPolyFileType) {
     case CsvFile: {
       string file = QStringToTlpString(_ui->csvFile->text());
+
       if(_oldFileLoaded!=file) {
         _oldFileLoaded=file;
         return true;
@@ -145,6 +146,7 @@ bool GeographicViewConfigWidget::polyOptionsChanged() {
 
     case PolyFile: {
       string file = QStringToTlpString(_ui->polyFile->text());
+
       if(_oldFileLoaded!=file) {
         _oldFileLoaded=file;
         return true;
