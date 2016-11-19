@@ -27,6 +27,7 @@
 #include <tulip/DataSet.h>
 #include <tulip/VectorEditor.h>
 #include <tulip/GraphPropertiesModel.h>
+#include <tulip/TlpQtTools.h>
 
 
 namespace tlp {
@@ -39,13 +40,13 @@ QWidget* LineEditEditorCreator<T>::createWidget(QWidget *parent) const {
 template<typename T>
 void LineEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,bool,tlp::Graph*) {
   typename T::RealType val = data.value<typename T::RealType>();
-  static_cast<QLineEdit*>(editor)->setText(QString::fromUtf8(T::toString(val).c_str()));
+  static_cast<QLineEdit*>(editor)->setText(tlpStringToQString(T::toString(val)));
   static_cast<QLineEdit*>(editor)->selectAll();
 }
 
 template<typename T>
 QVariant LineEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
-  std::string strVal = std::string(static_cast<QLineEdit*>(editor)->text().toUtf8().data());
+  std::string strVal = QStringToTlpString(static_cast<QLineEdit*>(editor)->text());
   QVariant result;
   typename T::RealType val;
 
@@ -67,13 +68,13 @@ QWidget* MultiLinesEditEditorCreator<T>::createWidget(QWidget *parent) const {
 template<typename T>
 void MultiLinesEditEditorCreator<T>::setEditorData(QWidget* editor, const QVariant &data,bool,tlp::Graph*) {
   typename T::RealType val = data.value<typename T::RealType>();
-  static_cast<QTextEdit*>(editor)->setPlainText(QString::fromUtf8(T::toString(val).c_str()));
+  static_cast<QTextEdit*>(editor)->setPlainText(tlpStringToQString(T::toString(val)));
   static_cast<QTextEdit*>(editor)->selectAll();
 }
 
 template<typename T>
 QVariant MultiLinesEditEditorCreator<T>::editorData(QWidget* editor,tlp::Graph*) {
-  std::string strVal = std::string(static_cast<QTextEdit*>(editor)->toPlainText().toUtf8().data());
+  std::string strVal = QStringToTlpString(static_cast<QTextEdit*>(editor)->toPlainText());
   QVariant result;
   typename T::RealType val;
 
@@ -87,7 +88,7 @@ template<typename T>
 QSize MultiLinesEditEditorCreator<T>::sizeHint(const QStyleOptionViewItem & option, const QModelIndex &index) const {
   QVariant data = index.model()->data(index);
   typename T::RealType val = data.value<typename T::RealType>();
-  QString valS = QString::fromUtf8(T::toString(val).c_str());
+  QString valS = tlpStringToQString(T::toString(val));
   QStringList lines = valS.split(QLatin1Char('\n'));
   QFontMetrics fontMetrics(option.font);
   int height = 0;
@@ -110,7 +111,7 @@ bool MultiLinesEditEditorCreator<T>::paint(QPainter* painter, const QStyleOption
   TulipItemEditorCreator::paint(painter,option,data);
   QRect rect = option.rect;
   typename T::RealType val = data.value<typename T::RealType>();
-  QString valS = QString::fromUtf8(T::toString(val).c_str());
+  QString valS = tlpStringToQString(T::toString(val));
   QStringList lines = valS.split(QLatin1Char('\n'));
 
   if (option.state.testFlag(QStyle::State_Selected) && option.showDecorationSelected) {
@@ -174,7 +175,7 @@ QString PropertyEditorCreator<PROPTYPE>::displayText(const QVariant& v) const {
   if (prop==NULL)
     return QObject::trUtf8("Select a property");
 
-  return QString::fromUtf8(prop->getName().c_str());
+  return tlpStringToQString(prop->getName());
 }
 
 template<typename ElementType>
@@ -246,7 +247,7 @@ QString VectorEditorCreator<ElementType>::displayText(const QVariant &data) cons
 
     std::string str = sstr.str();
 
-    QString qstr = QString::fromUtf8(str.c_str());
+    QString qstr = tlpStringToQString(str);
 
     if (qstr.size() > 45) {
       qstr.truncate(41);

@@ -47,7 +47,7 @@ using namespace tlp;
 AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent): QWidget(parent), _ui(new Ui::AlgorithmRunnerItem), _pluginName(pluginName), _graph(NULL), _storeResultAsLocal(true) {
   _ui->setupUi(this);
   connect(_ui->favoriteCheck,SIGNAL(toggled(bool)),this,SIGNAL(favorized(bool)));
-  const Plugin& plugin = PluginLister::instance()->pluginInformation(pluginName.toStdString());
+  const Plugin& plugin = PluginLister::instance()->pluginInformation(QStringToTlpString(pluginName));
   // split pluginName after the second word if needed
   QStringList words = pluginName.split(' ');
 
@@ -266,7 +266,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
   // ensure each input property
   // is a local one when it exits
-  std::string algorithm = _pluginName.toStdString();
+  std::string algorithm = QStringToTlpString(_pluginName);
   ParameterDescriptionList paramList =
     PluginLister::getPluginParameters(algorithm);
   ParameterDescription desc;
@@ -495,7 +495,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
   }
 
   QDrag *drag = new QDrag(this);
-  const Plugin& p = PluginLister::pluginInformation(_pluginName.toStdString().c_str());
+  const Plugin& p = PluginLister::pluginInformation(QStringToTlpString(_pluginName).c_str());
   QPixmap icon(QPixmap(p.icon().c_str()).scaled(64,64));
   QFont f;
   f.setBold(true);
@@ -521,7 +521,7 @@ void AlgorithmRunnerItem::mouseMoveEvent(QMouseEvent *ev) {
 
 void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
   PluginLister* pluginLister = PluginLister::instance();
-  std::string stdName = name().toStdString();
+  std::string stdName = QStringToTlpString(name());
 
   if (pluginLister->pluginExists<LayoutAlgorithm>(stdName)) {
     if (TulipSettings::instance().isAutomaticRatio()) {
@@ -601,7 +601,7 @@ void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != NULL)
     return;
 
-  ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(_pluginName.toStdString()),_graph,_ui->parameters);
+  ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(QStringToTlpString(_pluginName)),_graph,_ui->parameters);
 
   if (_pluginName == "Color Mapping") {
     tlp::DataSet data = model->parametersValues();

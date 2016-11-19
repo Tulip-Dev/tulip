@@ -18,6 +18,7 @@
  */
 
 #include <tulip/Graph.h>
+#include <tulip/TlpQtTools.h>
 
 namespace tlp {
 
@@ -128,11 +129,11 @@ QVariant GraphPropertiesModel<PROPTYPE>::data(const QModelIndex &index, int role
       return QString();
 
     if (index.column() == 0)
-      return QString::fromUtf8(pi->getName().c_str());
+      return tlpStringToQString(pi->getName());
     else if (index.column() == 1)
       return pi->getTypename().c_str();
     else if (index.column() == 2)
-      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" + QString::fromUtf8(pi->getGraph()->getName().c_str()) + ')');
+      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" + tlpStringToQString(pi->getGraph()->getName()) + ')');
   }
 
   else if (role == Qt::DecorationRole && index.column() == 0 && pi != NULL && !_graph->existLocalProperty(pi->getName()))
@@ -169,7 +170,7 @@ int GraphPropertiesModel<PROPTYPE>::rowOf(PROPTYPE* pi) const {
 template<typename PROPTYPE>
 int GraphPropertiesModel<PROPTYPE>::rowOf(const QString& pName) const {
   for(int i = 0; i < _properties.size(); ++i) {
-    if (pName == QString::fromUtf8(_properties[i]->getName().c_str()))
+    if (pName == tlpStringToQString(_properties[i]->getName()))
       return i;
   }
 

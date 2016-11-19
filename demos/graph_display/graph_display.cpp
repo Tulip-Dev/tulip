@@ -54,7 +54,7 @@ void setTreeVisualProperties(Graph *tree) {
     StringProperty *viewLabel = tree->getProperty<StringProperty>("viewLabel");
     node n;
     forEach(n, tree->getNodes()) {
-        viewLabel->setNodeValue(n, QString::number(n.id).toStdString());
+        viewLabel->setNodeValue(n, QStringToTlpString(QString::number(n.id)));
     }
 
     // Add a border to the nodes, keep the default color who is black
@@ -122,10 +122,10 @@ int main(int argc, char** argv) {
       // This method will select the default Tulip algorithm plugin (TLP)
       QString filename = QApplication::arguments()[1];
       if(!((filename.endsWith(".tlp"))||(filename.endsWith(".tlp.gz")))) {
-          cout << "File " << filename.toStdString() << " not compatible. Use a tlp file or a tlp.gz file" << endl;
+          cout << "File " << QStringToTlpString(filename) << " not compatible. Use a tlp file or a tlp.gz file" << endl;
           exit(EXIT_FAILURE);
       }
-      g = tlp::loadGraph(filename.toStdString());
+      g = tlp::loadGraph(QStringToTlpString(filename));
   } else {
       // If no arguments were given to the command, create a complete tree of depth 5
       // and degree 2 for demo purpose

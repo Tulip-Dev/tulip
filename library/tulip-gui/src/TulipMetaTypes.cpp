@@ -49,7 +49,7 @@ bool QStringListType::read(std::istream& iss, RealType& t) {
 }
 
 void QStringType::write(std::ostream& oss, const QString& t) {
-  StringType::write(oss,t.toStdString());
+  StringType::write(oss, QStringToTlpString(t));
 }
 
 bool QStringType::read(std::istream& iss, QString& t) {

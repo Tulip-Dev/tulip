@@ -27,6 +27,7 @@
 
 #include <tulip/Interactor.h>
 #include <tulip/Graph.h>
+#include <tulip/TlpQtTools.h>
 
 using namespace tlp;
 
@@ -141,7 +142,7 @@ void View::treatEvent(const Event& ev) {
     QString propName = gEv->getPropertyName().c_str();
 
     if (propName.startsWith("view")) {
-      addRedrawTrigger(_graph->getProperty(propName.toStdString()));
+      addRedrawTrigger(_graph->getProperty(QStringToTlpString(propName)));
     }
   }
 }

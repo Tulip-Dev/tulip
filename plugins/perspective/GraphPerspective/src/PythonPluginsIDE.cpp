@@ -28,6 +28,7 @@
 #include <tulip/PythonCodeEditor.h>
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
+#include <tulip/TlpQtTools.h>
 
 #include "PythonPluginsIDE.h"
 #include "PythonPluginCreationDialog.h"
@@ -683,8 +684,8 @@ void PythonPluginsIDE::registerPythonPlugin(bool clear) {
 
   QString oldPluginName = _editedPluginsName[pluginFile];
 
-  if (tlp::PluginLister::pluginExists(oldPluginName.toStdString())) {
-    tlp::PluginLister::removePlugin(oldPluginName.toStdString());
+  if (tlp::PluginLister::pluginExists(QStringToTlpString(oldPluginName))) {
+    tlp::PluginLister::removePlugin(QStringToTlpString(oldPluginName));
   }
 
   _pythonInterpreter->setConsoleWidget(_ui->pluginsInfosWidget);
@@ -751,8 +752,8 @@ void PythonPluginsIDE::removePythonPlugin() {
 
   QString pluginName = _editedPluginsName[getCurrentPluginEditor()->getFileName()];
 
-  if (tlp::PluginLister::pluginExists(pluginName.toStdString())) {
-    tlp::PluginLister::removePlugin(pluginName.toStdString());
+  if (tlp::PluginLister::pluginExists(QStringToTlpString(pluginName))) {
+    tlp::PluginLister::removePlugin(QStringToTlpString(pluginName));
     _ui->pluginStatusLabel->setText("Plugin has been successfully removed.");
   }
   else {

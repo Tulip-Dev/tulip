@@ -605,14 +605,14 @@ void WorkspacePanel::setHighlightMode(bool hm) {
   // on top of this panel
   // (only top margin has a non null value in WorkspacePanel.ui)
   if (hm)
-    _ui->borderFrame->setStyleSheet(QString::fromUtf8("QFrame[border = \"true\"] {\n"
+    _ui->borderFrame->setStyleSheet("QFrame[border = \"true\"] {\n"
                                     "border-image:none;\n"
                                     "background-color: #CBDE5D;\n"
                                     "color: white;\n"
-                                    "}"));
+                                    "}");
   else
     // restore the style sheet as described in WorkspacePanel.ui
-    _ui->borderFrame->setStyleSheet(QString::fromUtf8("QFrame[border = \"true\"] {\n"
+    _ui->borderFrame->setStyleSheet("QFrame[border = \"true\"] {\n"
                                     "border-image:none;\n"
                                     "background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,\n"
                                     "stop: 0 #838383,\n"
@@ -620,7 +620,7 @@ void WorkspacePanel::setHighlightMode(bool hm) {
                                     "stop: 0.401 #636363,\n"
                                     "stop: 1 #4a4a4a);\n"
                                     "color: white;\n"
-                                    "}"));
+                                    "}");
 }
 
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent * evt) {

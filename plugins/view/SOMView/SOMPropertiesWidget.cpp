@@ -31,6 +31,7 @@
 #include <tulip/GraphPropertiesSelectionWidget.h>
 #include <tulip/ColorScalesManager.h>
 #include <tulip/PropertyTypes.h>
+#include <tulip/TlpQtTools.h>
 
 
 using namespace std;
@@ -228,10 +229,10 @@ DataSet SOMPropertiesWidget::getData() const {
     QStringList stringlist;
 
     for (vector<string>::iterator it = properties.begin(); it != properties.end(); ++it) {
-      stringlist.push_back(QString::fromUtf8(it->c_str()));
+      stringlist.push_back(tlpStringToQString(*it));
     }
 
-    data.set("properties", string(stringlist.join(";").toUtf8().data()));
+    data.set("properties", QStringToTlpString(stringlist.join(";")));
   }
 
   //Save iteration number
@@ -243,10 +244,10 @@ DataSet SOMPropertiesWidget::getData() const {
   QStringList colorsList;
 
   for (map<float, Color>::iterator it = colorScaleMap.begin(); it != colorScaleMap.end(); ++it) {
-    colorsList.push_back(QString::fromUtf8(ColorType::toString(it->second).c_str()));
+    colorsList.push_back(tlpStringToQString(ColorType::toString(it->second)));
   }
 
-  colorScaleDataSet.set("colorList", std::string(colorsList.join(";").toUtf8().data()));
+  colorScaleDataSet.set("colorList", QStringToTlpString(colorsList.join(";")));
   colorScaleDataSet.set("gradient", defaultScale->isGradient());
   data.set("defaultScale", colorScaleDataSet);
 
@@ -309,11 +310,11 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
     string propertiesString;
     data.get("properties", propertiesString);
     //Use QString split function to parse string.
-    QStringList list = QString::fromUtf8(propertiesString.c_str()).split(";", QString::SkipEmptyParts);
+    QStringList list = tlpStringToQString(propertiesString).split(";", QString::SkipEmptyParts);
     vector<string> properties;
 
     foreach(const QString &s, list) {
-      properties.push_back(s.toUtf8().data());
+      properties.push_back(QStringToTlpString(s));
     }
 
     dimensionConfigurationWidget->setOutputPropertiesList(properties);
@@ -328,14 +329,14 @@ void SOMPropertiesWidget::setData(const DataSet& data) {
   data.get("defaultScale", colorScaleDataSet);
   string colorsList;
   colorScaleDataSet.get("colorList", colorsList);
-  QString colorListQString = QString::fromUtf8(colorsList.c_str());
+  QString colorListQString = tlpStringToQString(colorsList);
   QStringList colorStringList = colorListQString.split(";");
   vector<Color> colors;
 
   for (QStringList::iterator it = colorStringList.begin(); it != colorStringList.end(); ++it) {
     Color c;
 
-    if (ColorType::fromString(c, it->toStdString())) {
+    if (ColorType::fromString(c, QStringToTlpString(*it))) {
       colors.push_back(c);
     }
   }

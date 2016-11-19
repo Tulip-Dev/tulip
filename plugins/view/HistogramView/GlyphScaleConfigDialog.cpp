@@ -19,6 +19,7 @@
 
 #include <tulip/Glyph.h>
 #include <tulip/Iterator.h>
+#include <tulip/TlpQtTools.h>
 
 #include <QComboBox>
 #include <QPushButton>
@@ -57,7 +58,7 @@ vector<int> GlyphScaleConfigDialog::getSelectedGlyphsId() const {
   vector<int> ret;
 
   for (int i = 0 ; i < _ui->tableWidget->rowCount() ; ++i) {
-    string glyphName = ((QComboBox *)_ui->tableWidget->cellWidget(i, 0))->currentText().toStdString();
+    string glyphName = QStringToTlpString(((QComboBox *)_ui->tableWidget->cellWidget(i, 0))->currentText());
     ret.push_back(PluginLister::pluginInformation(glyphName).id());
   }
 

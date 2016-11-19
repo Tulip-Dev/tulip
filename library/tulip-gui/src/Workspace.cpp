@@ -641,7 +641,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
         xmlFile->close();
         delete xmlFile;
 
-        View* view = PluginLister::instance()->getPluginObject<View>(viewName.toStdString(),NULL);
+        View* view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(viewName),NULL);
 
         if (view == NULL)
           continue;
@@ -656,7 +656,7 @@ void Workspace::readProject(TulipProject* project, QMap<QString, Graph *> rootId
 
         view->setGraph(g);
         DataSet dataSet;
-        std::istringstream iss(data.toStdString());
+        std::istringstream iss(QStringToTlpString(data));
         DataSet::read(iss,dataSet);
         view->setState(dataSet);
         addPanel(view);

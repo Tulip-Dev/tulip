@@ -21,6 +21,7 @@
 #include <QMainWindow>
 
 #include <tulip/Perspective.h>
+#include <tulip/TlpQtTools.h>
 
 #include "PixelOrientedOptionsWidget.h"
 #include "ui_PixelOrientedOptionsWidget.h"
@@ -48,7 +49,7 @@ void PixelOrientedOptionsWidget::setBackgroundColor(const Color &color) {
 }
 
 string PixelOrientedOptionsWidget::getLayoutType() const {
-  return _ui->layoutTypeCB->currentText().toStdString();
+  return QStringToTlpString(_ui->layoutTypeCB->currentText());
 }
 
 void PixelOrientedOptionsWidget::setLayoutType(const string& layoutType) {

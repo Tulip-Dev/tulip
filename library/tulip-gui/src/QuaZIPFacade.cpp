@@ -23,6 +23,7 @@
 #include <QFileInfo>
 
 #include <tulip/SimplePluginProgress.h>
+#include <tulip/TlpQtTools.h>
 
 #include <quazip.h>
 #include <quazipfile.h>
@@ -44,7 +45,7 @@ void copy(QIODevice &in,QIODevice &out) {
 
 bool zipDirContent(QDir &currentDir, QuaZip &archive, const QString &archivePath, tlp::PluginProgress *progress) {
   QFileInfoList entries = currentDir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst);
-  progress->setComment(("Compressing directory " + currentDir.absolutePath()).toStdString());
+  progress->setComment(tlp::QStringToTlpString("Compressing directory " + currentDir.absolutePath()));
   int i=0;
   progress->progress(i,entries.size());
 
@@ -123,7 +124,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
   QFile archiveFile(archivePath);
 
   if(!archiveFile.exists()) {
-    progress->setError(QString("No such file: " + archivePath).toUtf8().data());
+    progress->setError(tlp::QStringToTlpString("No such file: " + archivePath));
     return false;
   }
 
@@ -141,7 +142,7 @@ bool QuaZIPFacade::unzip(const QString &rootPath, const QString &archivePath, tl
     deleteProgress = true;
   }
 
-  progress->setComment(("Uncompressing archive " + archivePath).toUtf8().data());
+  progress->setComment(tlp::QStringToTlpString("Uncompressing archive " + archivePath));
   int i=0,n=archive.getEntriesCount();
   progress->progress(i,n);
 

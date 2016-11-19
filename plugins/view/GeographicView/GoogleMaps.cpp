@@ -366,7 +366,7 @@ string GoogleMaps::getLatLngForAddress(const QString &address, pair<double, doub
 
   ret = executeJavascript(code);
 
-  return ret.toString().toStdString();
+  return QStringToTlpString(ret.toString());
 }
 
 int GoogleMaps::getCurrentMapZoom() {

@@ -50,7 +50,7 @@ PanelSelectionWizard::~PanelSelectionWizard() {
 
 void PanelSelectionWizard::panelSelected (const QModelIndex& index) {
   _currentItem = index.data().toString();
-  _ui->panelDescription->setHtml(PluginLister::pluginInformation(_currentItem.toStdString()).info().c_str());
+  _ui->panelDescription->setHtml(PluginLister::pluginInformation(QStringToTlpString(_currentItem)).info().c_str());
   // NexButton is temporarily hidden
   // QWizard::HaveNextButtonOnLastPage has been removed
   // from options property in PanelSelectionWizard.ui
@@ -70,7 +70,7 @@ tlp::View* PanelSelectionWizard::panel() const {
 }
 
 void PanelSelectionWizard::createView() {
-  _view = PluginLister::instance()->getPluginObject<View>(_currentItem.toStdString(),NULL);
+  _view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(_currentItem),NULL);
   _view->setupUi();
   _view->setGraph(graph());
   _view->setState(DataSet());

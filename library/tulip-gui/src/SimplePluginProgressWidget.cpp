@@ -26,6 +26,8 @@
 
 #include <iostream>
 
+#include <tulip/TlpQtTools.h>
+
 using namespace tlp;
 
 SimplePluginProgressWidget::SimplePluginProgressWidget(QWidget *parent, Qt::WindowFlags f)
@@ -49,7 +51,7 @@ void SimplePluginProgressWidget::checkLastUpdate() {
 }
 
 void SimplePluginProgressWidget::setComment(const std::string& s) {
-  setComment(QString::fromUtf8(s.c_str()));
+  setComment(tlpStringToQString(s));
 }
 
 void SimplePluginProgressWidget::setComment(const QString &s) {
@@ -58,7 +60,7 @@ void SimplePluginProgressWidget::setComment(const QString &s) {
 }
 
 void SimplePluginProgressWidget::setComment(const char *s) {
-  setComment(QString::fromUtf8(s));
+  setComment(tlpStringToQString(s));
 }
 
 ProgressState SimplePluginProgressWidget::progress(int step, int max_step) {
@@ -152,7 +154,7 @@ void SimplePluginProgressDialog::setComment(const char* s) {
 }
 
 void SimplePluginProgressDialog::setTitle(const std::string &title) {
-  setWindowTitle(QString::fromUtf8(title.c_str()));
+  setWindowTitle(tlpStringToQString(title));
   QApplication::processEvents();
 }
 
