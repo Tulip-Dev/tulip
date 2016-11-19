@@ -294,6 +294,7 @@ inline QString& truncateText(QString &text, const QString &trailingChars = " ...
     text.truncate(maxChars - trailingChars.length());
     text.append(trailingChars);
   }
+
   return text;
 }
 
