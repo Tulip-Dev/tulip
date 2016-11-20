@@ -112,7 +112,7 @@ class OGDF_EXPORT DynamicBacktrack {
 		enum enumKuratowskiFlag {
 			externalPath		= 0x00001, // external paths, e.g. stopX->Ancestor
 			pertinentPath		= 0x00002, // pertinent paths, e.g. wNode->V
-			singlePath			= 0x00004, // marker for one single path
+			singlePath			= 0x00004 // marker for one single path
 		};
 
 	protected:
