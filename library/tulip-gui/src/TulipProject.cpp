@@ -207,7 +207,7 @@ bool TulipProject::copy(const QString &source, const QString &destination) {
 std::fstream *TulipProject::stdFileStream(const QString &path, std::ios_base::openmode mode) {
   QString filePath(toAbsolutePath(path));
   std::fstream *result = new std::fstream();
-  result->open(QStringToTlpString(filePath), mode);
+  result->open(QStringToTlpString(filePath).c_str(), mode);
 
   if (!result->is_open()) {
     delete result;
