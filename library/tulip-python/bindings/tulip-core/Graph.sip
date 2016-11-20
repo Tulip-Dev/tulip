@@ -42,7 +42,7 @@ typedef tlp::Graph* GraphPointer;
 typedef tlp::Iterator<tlp::GraphPointer> IteratorGraph;
 typedef tlp::PropertyInterface* PropertyPointer;
 typedef tlp::Iterator<tlp::PropertyPointer> IteratorProperty;
-};
+}
 typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 
 extern void releaseGraphWrapper(tlp::Graph *graph);

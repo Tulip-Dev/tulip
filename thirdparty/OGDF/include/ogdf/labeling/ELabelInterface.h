@@ -74,7 +74,7 @@ enum eUsedLabels {
 	lName  = (1 << elName),         //  4
 	lEnd2  = (1 << elEnd2),         //  8
 	lMult2 = (1 << elMult2),        // 16
-	lAll   = (1 << elNumLabels) -1, // 31
+	lAll   = (1 << elNumLabels) -1 // 31
 };
 
 
