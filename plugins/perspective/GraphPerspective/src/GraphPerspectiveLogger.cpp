@@ -108,7 +108,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
     return;
 
   if (type == QtFatalMsg) {
-    std::cerr << QStringToTlpString(qmsg) << std::endl;
+    std::cerr << tlp::QStringToTlpString(qmsg) << std::endl;
     abort();
   }
 
