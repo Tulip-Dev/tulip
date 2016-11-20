@@ -28,7 +28,7 @@
 #include <tulip/Matrix.h>
 namespace tlp {
 typedef tlp::Matrix<float, 4> Mat4f;
-};
+}
 typedef std::vector<float> vectorFloat;
 %End
 

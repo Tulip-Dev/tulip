@@ -62,7 +62,7 @@ tlp::Graph* copyValue(tlp::Graph* value);
 
 std::string* copyValue(const std::string &value);
 
-std::string getValue(const std::string *value);;
+std::string getValue(const std::string *value);
 
 tlp::node* copyValue(const tlp::node &value);
 

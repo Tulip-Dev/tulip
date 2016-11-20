@@ -21,8 +21,10 @@ MACRO(SET_COMPILER_OPTIONS)
     IF(BSD)
       # That compiler flag is required on FreeBSD in order to get a backtrace when Tulip crashes
       SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fno-omit-frame-pointer")
-      # Those flags are required to compile Tulip with gcc48 or clang on FreeBSD 9.x and 10.x
-      SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_C99 -std=c++11 -fno-omit-frame-pointer")
+      IF(GCXX_VERSION VERSION_GREATER 4.8.0 OR GCXX_VERSION VERSION_EQUAL 4.8.0)
+        # Those flags are required to compile Tulip with gcc >= 4.8 or clang on FreeBSD 9.x and 10.x
+        SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_GLIBCXX_USE_C99 -std=c++11 -fno-omit-frame-pointer")
+      ENDIF(GCXX_VERSION VERSION_GREATER 4.8.0 OR GCXX_VERSION VERSION_EQUAL 4.8.0)
       # Need to set rpath for the right libstdc++ to use
       IF(GCXX_VERSION VERSION_GREATER 4.7.0 AND GCXX_VERSION VERSION_LESS 4.9.0)
         SET(CMAKE_EXE_LINKER_FLAGS "-Wl,-rpath=/usr/local/lib/gcc48")
