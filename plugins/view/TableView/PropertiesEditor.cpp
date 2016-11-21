@@ -147,28 +147,28 @@ void PropertiesEditor::showCustomContextMenu(const QPoint& p) {
   menu.addSeparator();
 
   QMenu* subMenu = menu.addMenu(trUtf8("Set values of"));
-  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes in the property"));
-  QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes in the current graph"));
-  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges in the property"));
-  QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges in the current graph"));
-  QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
-  QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges in the current graph"));
+  QAction* nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY);
+  QAction* edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY);
+  QAction* nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+  QAction* edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+  QAction* selectedNodesSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+  QAction* selectedEdgesSetAll = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
 
   enabled = (pname != "viewLabel");
 
   if (enabled) {
     subMenu = menu.addMenu(trUtf8("To labels of"));
-    QAction* action = subMenu->addAction(trUtf8("All elements in the current graph"));
+    QAction* action = subMenu->addAction(trUtf8("All elements") + OF_GRAPH);
     connect(action,SIGNAL(triggered()),this,SLOT(toLabels()));
-    action = subMenu->addAction(trUtf8("All nodes in the current graph"));
+    action = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
     connect(action,SIGNAL(triggered()),this,SLOT(toNodesLabels()));
-    action = subMenu->addAction(trUtf8("All edges in the current graph"));
+    action = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
     connect(action,SIGNAL(triggered()),this,SLOT(toEdgesLabels()));
-    action = subMenu->addAction(trUtf8("All selected elements in the current graph"));
+    action = subMenu->addAction(trUtf8("All selected elements") + OF_GRAPH);
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedLabels()));
-    action = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
+    action = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedNodesLabels()));
-    action = subMenu->addAction(trUtf8("Selected edges in the current graph"));
+    action = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
     connect(action,SIGNAL(triggered()),this,SLOT(toSelectedEdgesLabels()));
   }
 
