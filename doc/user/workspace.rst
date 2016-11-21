@@ -483,14 +483,14 @@ The value stored in the table can be modified by several ways. A double click on
 .. image:: _images/i_workspace_rclick_elements.png
     :width: 159
 
-Two types of action can be done, the ones concerning the property values and the ones concerning the selection of the element. The property values can be set for all nodes, the ones selected (where *viewSelection = true*) or the ones highlighted (current element and the ones clicked on while maintaining *Ctrl* pushed). The values of the current property (corresponding to the current cell column) can also be copied into *viewLabel* in order to display them in the graph.
+Two types of action can be done, the ones concerning the property values and the ones concerning the selection of the element. The property values can be set for all nodes or edges (having the property or belonging to the current graph), the ones selected (where *viewSelection = true*) or the ones  corresponding to the highlighted rows (current element and the ones clicked on while maintaining *Ctrl* pushed). The values of the current property (corresponding to the current cell column) can also be copied into *viewLabel* in order to display them in the graph.
 
 A right click in the column header will open the following menu :
 
 .. image:: _images/i_workspace_rclick_header.png
 
 
-The first set of actions in that menu allows to add a new property or to manage the current property; the *Copy* action allows to copy the property values into an already existing property or a new one, the *Delete* and *Rename* actions cannot be applied to "view" prefixed properties. The second set allows to set the property values.
+The first set of actions in that menu allows to add a new property or to manage the current property; the *Copy* action allows to copy the property values into an already existing property or a new one, the *Delete* and *Rename* actions cannot be applied to "view" prefixed properties. As for the previous contextual menu, the second set allows to manage the property values.
 
 .. _workspace_spreadsheet_properties:
 
@@ -501,11 +501,15 @@ In the top right of the panel, you can find the tab *Properties*.
 
 .. image:: _images/i_workspace_properties.png
 
-Here you can manage the properties. The eye-shaped check boxes make visible/not visible the properties in the table in the main window. A right click will open a contextual menu offering to create new properties (can also be performed by using the [+ Add new] button) and to *Copy*, *Delete* or *Rename* existing ones.
+
+Here you can manage the properties. The eye-shaped check boxes make visible/not visible the properties in the table in the main window. The [+ Add new] button allows to create new properties.
+	   
+A right click will open a contextual menu :
 
 .. image:: _images/i_workspace_rclick_properties.png
-    :width: 248
 
+
+The first menu actions allows to create new properties (same as [+ Add new] button) and to *Copy*, *Delete* or *Rename* existing ones. As for the previous menus, the second set of actions allows to manage the property values.
 
 .. _workspace_adjacency:
 
