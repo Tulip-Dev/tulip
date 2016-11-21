@@ -565,11 +565,13 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
       // to the user defined value
       tlp::DataSet data;
       ColorScale cs;
+
       if (colorMappingModel)
-	colorMappingModel->parametersValues().get<ColorScale>("color scale", cs);
+        colorMappingModel->parametersValues().get<ColorScale>("color scale", cs);
       else
-	cs = ColorScalesManager::getLatestColorScale();
-	data.set<ColorScale>("color scale", cs);
+        cs = ColorScalesManager::getLatestColorScale();
+
+      data.set<ColorScale>("color scale", cs);
       g->applyPropertyAlgorithm("Color Mapping", color, errMsg, NULL, &data);
     }
   }

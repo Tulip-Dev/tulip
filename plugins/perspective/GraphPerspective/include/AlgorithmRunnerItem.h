@@ -29,7 +29,7 @@ class AlgorithmRunnerItem;
 }
 namespace tlp {
 class Graph;
- class ParameterListModel;
+class ParameterListModel;
 }
 
 class AlgorithmRunnerItem: public QWidget {
