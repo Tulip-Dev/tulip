@@ -36,6 +36,9 @@ class Graph;
 class TulipItemDelegate;
 }
 
+#define OF_PROPERTY trUtf8(" having the property")
+#define OF_GRAPH trUtf8(" of the current graph")
+
 class PropertiesEditor : public QWidget {
   Q_OBJECT
 

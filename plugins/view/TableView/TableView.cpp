@@ -511,9 +511,9 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
   contextMenu.addSeparator();
 
   QMenu *subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction *setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + " in the property");
-  QAction *setAllGraph = subMenu->addAction(trUtf8("All") + ' ' + eltsName + " in the current graph");
-  QAction *selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + " in the current graph");
+  QAction *setAll = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_PROPERTY);
+  QAction *setAllGraph = subMenu->addAction(trUtf8("All") + ' ' + eltsName + OF_GRAPH);
+  QAction *selectedSetAll = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + OF_GRAPH);
 
   QAction *highlightedSetAll = subMenu->addAction(
       (trUtf8("Rows highlighted") + ' ' + eltsName) +
@@ -522,8 +522,8 @@ void TableView::showCustomContextMenu(const QPoint &pos) {
            : QString(NODES_DISPLAYED ? " (Node #%1)" : " (Edge #%1)").arg(highlightedRows[0].data(TulipModel::ElementIdRole).toUInt())));
 
   subMenu = contextMenu.addMenu(trUtf8("To labels of "));
-  QAction *toLabels = subMenu->addAction(trUtf8("All ") + eltsName + " in the current graph");
-  QAction *selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + " in the current graph");
+  QAction *toLabels = subMenu->addAction(trUtf8("All ") + eltsName + OF_GRAPH);
+  QAction *selectedToLabels = subMenu->addAction(trUtf8("Selected") + ' ' + eltsName + OF_GRAPH);
 
   QAction *highlightedToLabels = subMenu->addAction(
       (trUtf8("Rows highlighted") + ' ' + eltsName) +
@@ -666,13 +666,13 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
     renameProp = contextMenu.addAction("Rename");
 
   QMenu *subMenu = contextMenu.addMenu(trUtf8("Set values of "));
-  QAction *nodesSetAll = subMenu->addAction(trUtf8("All nodes in the property"));
-  QAction *nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes in the current graph"));
-  QAction *edgesSetAll = subMenu->addAction(trUtf8("All edges in the property"));
-  QAction *edgesSetAllGraph = subMenu->addAction(trUtf8("All edges in the current graph"));
-  QAction *nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes in the current graph"));
-  QAction *edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges in the current graph"));
-  QAction *highlightedSetAll = nullptr;
+  QAction *nodesSetAll = subMenu->addAction(trUtf8("All nodes") + OF_PROPERTY);
+  QAction *edgesSetAll = subMenu->addAction(trUtf8("All edges") + OF_PROPERTY);
+  QAction *nodesSetAllGraph = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+  QAction *edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+  QAction *nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+  QAction *edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
+  QAction *highlightedSetAll = NULL;
 
   if (highlightedRows.size() != 0)
     highlightedSetAll = subMenu->addAction(
@@ -691,12 +691,12 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
 
   if (propName != "viewLabel") {
     subMenu = contextMenu.addMenu(trUtf8("To labels of "));
-    toLabels = subMenu->addAction("All elements in the current graph");
-    nodesToLabels = subMenu->addAction("All nodes in the current graph");
-    edgesToLabels = subMenu->addAction("All edges in the current graph");
-    selectedToLabels = subMenu->addAction("All selected elements in the current graph");
-    nodesSelectedToLabels = subMenu->addAction("Selected nodes in the current graph");
-    edgesSelectedToLabels = subMenu->addAction("Selected edges in the current graph");
+    toLabels = subMenu->addAction(trUtf8("All elements") + OF_GRAPH);
+    nodesToLabels = subMenu->addAction(trUtf8("All nodes") + OF_GRAPH);
+    edgesToLabels = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
+    selectedToLabels = subMenu->addAction(trUtf8("Selected elements") + OF_GRAPH);
+    nodesSelectedToLabels = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
+    edgesSelectedToLabels = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
 
     if (highlightedRows.size() != 0)
       highlightedToLabels = subMenu->addAction(
