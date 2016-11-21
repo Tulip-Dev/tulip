@@ -29,6 +29,7 @@ class AlgorithmRunnerItem;
 }
 namespace tlp {
 class Graph;
+ class ParameterListModel;
 }
 
 class AlgorithmRunnerItem: public QWidget {
@@ -39,7 +40,7 @@ class AlgorithmRunnerItem: public QWidget {
   bool _storeResultAsLocal;
   QPointF _dragStartPosition;
   tlp::DataSet _initData;
-
+  static tlp::ParameterListModel* colorMappingModel;
 
 public:
   explicit AlgorithmRunnerItem(QString pluginName, QWidget* parent = NULL);
