@@ -561,7 +561,16 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
         color->setAllEdgeDataMemValue(ancestorColor->getEdgeDefaultDataMemValue());
       }
 
-      g->applyPropertyAlgorithm("Color Mapping", color, errMsg);
+      // set value of "color scale" parameter of "Color Mapping" plugin
+      // to the user defined value
+      tlp::DataSet data;
+      ColorScale cs;
+      if (colorMappingModel)
+	colorMappingModel->parametersValues().get<ColorScale>("color scale", cs);
+      else
+	cs = ColorScalesManager::getLatestColorScale();
+	data.set<ColorScale>("color scale", cs);
+      g->applyPropertyAlgorithm("Color Mapping", color, errMsg, NULL, &data);
     }
   }
   else if (pluginLister->pluginExists<GraphTest>(stdName)) {
@@ -596,6 +605,7 @@ tlp::DataSet AlgorithmRunnerItem::data() const {
   return static_cast<ParameterListModel*>(_ui->parameters->model())->parametersValues();
 }
 
+ParameterListModel* AlgorithmRunnerItem::colorMappingModel = NULL;
 
 void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != NULL)
@@ -604,6 +614,7 @@ void AlgorithmRunnerItem::initModel() {
   ParameterListModel* model = new ParameterListModel(PluginLister::getPluginParameters(QStringToTlpString(_pluginName)),_graph,_ui->parameters);
 
   if (_pluginName == "Color Mapping") {
+    colorMappingModel = model;
     tlp::DataSet data = model->parametersValues();
     data.set<ColorScale>("color scale", ColorScalesManager::getLatestColorScale());
     model->setParametersValues(data);
