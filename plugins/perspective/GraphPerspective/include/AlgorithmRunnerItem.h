@@ -29,6 +29,7 @@ class AlgorithmRunnerItem;
 }
 namespace tlp {
 class Graph;
+class ParameterListModel;
 }
 
 class QCheckBox;
@@ -41,6 +42,7 @@ class AlgorithmRunnerItem : public QWidget {
   bool _storeResultAsLocal;
   QPointF _dragStartPosition;
   tlp::DataSet _initData;
+  static tlp::ParameterListModel *colorMappingModel;
 
 public:
   explicit AlgorithmRunnerItem(QString pluginName, QWidget *parent = nullptr);
