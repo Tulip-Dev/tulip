@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>347</height>
+    <height>418</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -405,7 +405,6 @@ font: 10pt;
         </layout>
        </item>
       </layout>
-      <zorder>graphDefaultsTable</zorder>
      </widget>
      <widget class="QWidget" name="tab_3">
       <attribute name="title">
@@ -707,6 +706,22 @@ font: 10pt;
     <hint type="destinationlabel">
      <x>538</x>
      <y>173</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>randomSeedCheck</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>randomSeedEdit</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>158</x>
+     <y>336</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>405</x>
+     <y>336</y>
     </hint>
    </hints>
   </connection>
