@@ -1547,7 +1547,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Developer HandBook</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+?</string>
+    <string>Ctrl+D</string>
    </property>
   </action>
   <action name="actionShowPythonDocumentation">
@@ -1555,7 +1555,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <string>&amp;Python Documentation</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+?</string>
+    <string>Ctrl+P</string>
    </property>
   </action>
   <action name="actionAbout_us">
