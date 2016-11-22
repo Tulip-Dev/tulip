@@ -203,13 +203,13 @@ Though the component is not entirely identical to the Python script view, they b
 Preferences
 ===========
 
-Tulip can be configured in several ways. The quickest way is to access to the settings window through the *Edit* menu, and the *Preferences* element.
+Tulip can be configured in several ways. The simpliest way is to display the settings dialog through the *Preferences* item of *Edit* menu.
 
 .. image:: _images/i_settings.png
-    :width: 600
 
-You can here change the proxy settings (soon available) such as: the socket, the host address and the port to use. 
 
-The drawing defaults, such as the color, shape and size, are used every new nodes and edges, however, the selection color is only used in the node-link diagram based views.
+The *Automatic actions* settings, contains a few specific options. You can, for instance, adjust the aspect ratio when updating the layout, indicate the default projection type, automatically adapt the color according the metric being computed, display the time used to run an algorithm or indicate the graph file format to be used when saving a Tulip project.
 
-The third part of settings, concerning the automatic actions, contains a few specific options. You can, for instance, adjust the aspect ratio when updating the layout, indicate the default projection type, automatically adapt the color according the metric being computed, display the time used to run an algorithm or indicate the graph file format to be used when saving a Tulip project.
+The *Drawing defaults* settings, such as the color, shape and size, are used for every new nodes and edges. The selection color is used to enhance the selected elements in the 3D views.
+
+You can also change the *Proxy settings* such as: the socket, the host address and the port to use. 
