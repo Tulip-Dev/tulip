@@ -62,9 +62,9 @@ Build a Graph
 Save or Export your Work
 ========================
 
-Tulip allows you to save your whole project with its own file format (\*.tlpx). To do so, select *File → Save* or *File → Save as*.
+Tulip allows you to save your whole project (all opened graphs and displayed views) with its own file format (\*.tlpx). To do so, select *File → Save* or *File → Save as*.
 
-If you are interested to only save the graph, Tulip proposes to save it in its own TLP format, do a right click on the graph's name in the graph list and select *Save* in the contextual menu then displayed. You can also export it in the GML format (other plugins can offer more possibilities) by selecting *Export* in the same contextual menu.
+If you are interested to only save one graph, Tulip proposes to save it in its own TLP or TLPB formats; do a right click on the graph's name in the graph list and select *Save* in the contextual menu then displayed. You can also export it in the GML format (other plugins can offer more possibilities) by selecting *Export* in the same contextual menu.
 
 
 .. _first_algo:
@@ -72,19 +72,19 @@ If you are interested to only save the graph, Tulip proposes to save it in its o
 Apply an Algorithm
 ==================
 
-As a visualization tool, Tulip offered several algorithms to adapt your graph layout. You can use them very simply.
+As a visualization tool, Tulip offers several algorithms to adapt your graph layout. You can use them very simply.
 
-* Following the steps mentioned above, let us generate a *Random General Graph* (*[File →] Import → Random General Graph* in the *Graph* category). We will specify here the *nodes* and *edges* settings (*Random General Graph* specific fields displayed in the import wizard) by typing *50* in both of the fields.
+* Following the steps mentioned above, let us generate a *Random General Graph* (*[File →] Import → Random General Graph* in the *Graph* category). We will specify here the *nodes* and *edges* parameters (*Random General Graph* specific fields displayed in the import wizard) by typing *50* in both of the fields.
 
 .. image:: _images/tutorial_beginner-random_graph.png
      :width: 600
 
-* Once the button *Finish* is pressed, you can see a graph similar to this one :
+* Once the button *OK* is pressed, you can see a graph similar to this one :
    
 .. image:: _images/tutorial_beginner-graph_tangled.png
      :width: 600
 
-Since node positions are choose randomly upon generation, the layout is tangled and not really clear.
+Since node positions are choosen randomly upon generation, the layout is tangled and not really clear.
 
 * To improve it, we can apply a *Layout algorithm*. In the Algorithm window, select *Layout → Force directed → GEM (Frick)*. A new position for each node will be computed in order to get a better layout:
 
@@ -93,7 +93,7 @@ Since node positions are choose randomly upon generation, the layout is tangled 
 
 Some *layout* algorithms can only be applied to graphs belonging to a specific graph class. For instance, the *Mixed Model* algorithm can only be applied to a simple graph. The *Tree layout* algorithms are dedicated to trees but most of them can be applied to graph of any type (using a spanning tree of the graph); so do not hesitate to experiment in order to find the perfect layout for your data.
 
-There are many algorithms for testing, coloring, resizing... more information on them can be find in :ref:`the Algorithm section <algo>`.
+There are many algorithms for testing, coloring, resizing... more information on them can be found in :ref:`the Algorithm section <algo>`.
 
 .. |icon_import| image:: ../../library/tulip-gui/resources/icons/64/document-import.png
      :width: 32
