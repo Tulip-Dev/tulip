@@ -214,7 +214,7 @@ border: 0px;
                 </size>
                </property>
                <property name="text">
-                <string>&lt;b&gt;Settings&lt;b&gt;</string>
+                <string>&lt;b&gt;Parameters&lt;b&gt;</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignCenter</set>
