@@ -433,7 +433,7 @@ font: 10pt;
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="labeltype">
               <property name="text">
                <string>Type:</string>
               </property>
@@ -486,7 +486,7 @@ font: 10pt;
            </property>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <item>
-             <widget class="QLabel" name="label">
+             <widget class="QLabel" name="labelhost">
               <property name="text">
                <string>Host:</string>
               </property>
