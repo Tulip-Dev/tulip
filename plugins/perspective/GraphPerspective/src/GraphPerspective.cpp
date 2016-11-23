@@ -624,774 +624,777 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
     return;
 
   static QString savedFile;
-  QString filter("Tlp format (*.tlp *.tlp.gz);;Tlpb format (*.tlpb *.tlpb.gz)");
+  QString filter("TLP format (*.tlp *.tlp.gz);;TLPB format (*.tlpb *.tlpb.gz)");
   QString filename = QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp/tlpb file"), savedFile, filter);
 
   if (!filename.isEmpty()) {
     bool result = tlp::saveGraph(g, tlp::QStringToTlpString(filename));
-    if (!result)
-      QMessageBox::critical(_mainWindow, trUtf8("Save error"), trUtf8("Failed to save graph hierarchy"));
-    else {
-      savedFile = filename;
-      addRecentDocument(filename);
+
+    if (!filename.isEmpty()) {
+      bool result = tlp::saveGraph(g, tlp::QStringToTlpString(filename));
+      if (!result)
+        QMessageBox::critical(_mainWindow, trUtf8("Save error"), trUtf8("Failed to save graph hierarchy"));
+      else {
+        savedFile = filename;
+        addRecentDocument(filename);
+      }
     }
   }
-}
 
-void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
-  Graph *g;
+  void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
+    Graph *g;
 
-  if (!module.empty()) {
-    PluginProgress *prg = progress(IsStoppable | IsCancellable);
-    prg->setTitle(module);
-    // take time before run
-    QDateTime start = QDateTime::currentDateTime();
-    g = tlp::importGraph(module, data, prg);
+    if (!module.empty()) {
+      PluginProgress *prg = progress(IsStoppable | IsCancellable);
+      prg->setTitle(module);
+      // take time before run
+      QDateTime start = QDateTime::currentDateTime();
+      g = tlp::importGraph(module, data, prg);
 
-    if (g == NULL) {
-      QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
-                                                                     trUtf8("</i> failed to import data.<br/><br/><b>") +
-                                                                     tlp::tlpStringToQString(prg->getError()) + "</b>");
+      if (g == NULL) {
+        QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
+                                                                       trUtf8("</i> failed to import data.<br/><br/><b>") +
+                                                                       tlp::tlpStringToQString(prg->getError()) + "</b>");
+        delete prg;
+        return;
+      }
+
       delete prg;
-      return;
-    }
 
-    delete prg;
-
-    // display spent time
-    if (TulipSettings::instance().isRunningTimeComputed()) {
-      std::string moduleAndParams = module + " import - " + data.toString();
-      qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
-    }
-
-    if (g->getName().empty()) {
-      QString n = tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
-      n.replace(QRegExp("[\\w]*::"), ""); // remove words before "::"
-      g->setName(tlp::QStringToTlpString(n));
-    }
-  } else {
-    g = tlp::newGraph();
-  }
-
-  _graphs->addGraph(g);
-  std::string fileName;
-
-  if (data.get("file::filename", fileName))
-    // set current directory to the directory of the loaded file
-    // to ensure a correct loading of the associated texture files if any
-    QDir::setCurrent(QFileInfo(tlpStringToQString(fileName)).absolutePath());
-
-  applyRandomLayout(g);
-  showStartPanels(g);
-}
-
-void GraphPerspective::importGraph() {
-  ImportWizard wizard(_mainWindow);
-
-  if (wizard.exec() == QDialog::Accepted) {
-    DataSet data = wizard.parameters();
-    importGraph(tlp::QStringToTlpString(wizard.algorithm()), data);
-  }
-}
-
-void GraphPerspective::createPanel(tlp::Graph *g) {
-  if (_graphs->empty())
-    return;
-
-  PanelSelectionWizard wizard(_graphs, _mainWindow);
-
-  if (g != nullptr)
-    wizard.setSelectedGraph(g);
-  else
-    wizard.setSelectedGraph(_graphs->currentGraph());
-
-  int result = wizard.exec();
-
-  if (result == QDialog::Accepted && wizard.panel() != nullptr) {
-    // expose mode is not safe to add a new panel
-    // so hide it if needed
-    _ui->workspace->hideExposeMode();
-    _ui->workspace->addPanel(wizard.panel());
-    _ui->workspace->setActivePanel(wizard.panel());
-    wizard.panel()->applySettings();
-  }
-}
-
-void GraphPerspective::panelFocused(tlp::View *view) {
-  disconnect(this, SLOT(focusedPanelGraphSet(tlp::Graph *)));
-
-  if (!_ui->graphHierarchiesEditor->synchronized())
-    return;
-
-  connect(view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(focusedPanelGraphSet(tlp::Graph *)));
-  focusedPanelGraphSet(view->graph());
-}
-
-void GraphPerspective::changeSynchronization(bool s) {
-  _ui->workspace->setFocusedPanelHighlighting(s);
-}
-
-void GraphPerspective::focusedPanelGraphSet(Graph *g) {
-  _graphs->setCurrentGraph(g);
-}
-
-void GraphPerspective::focusedPanelSynchronized() {
-  _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph());
-}
-
-bool GraphPerspective::save() {
-  return saveAs(_project->projectFile());
-}
-
-bool GraphPerspective::saveAs(const QString &path) {
-  if (path.isEmpty()) {
-    QString path = QFileDialog::getSaveFileName(_mainWindow, trUtf8("Save project"), QString(), "Tulip Project (*.tlpx)");
-
-    if (!path.isEmpty()) {
-      if (!path.endsWith(".tlpx"))
-        path += ".tlpx";
-
-      return saveAs(path);
-    }
-
-    return false;
-  }
-
-  SimplePluginProgressDialog progress(_mainWindow);
-  progress.showPreview(false);
-  progress.show();
-  QMap<Graph *, QString> rootIds = _graphs->writeProject(_project, &progress);
-  _ui->workspace->writeProject(_project, rootIds, &progress);
-  _project->write(path, &progress);
-  TulipSettings::instance().addToRecentDocuments(path);
-
-  return true;
-}
-
-void GraphPerspective::open(QString fileName) {
-  QMap<std::string, std::string> modules;
-  std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
-
-  std::string filters("Tulip project (*.tlpx);;");
-  std::string filterAny("Any supported format (");
-
-  for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
-    ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
-    std::list<std::string> fileExtension(m->fileExtensions());
-
-    std::string currentFilter;
-
-    for (std::list<std::string>::const_iterator listIt = fileExtension.begin(); listIt != fileExtension.end(); ++listIt) {
-      if (listIt->empty())
-        continue;
-
-      filterAny += "*." + *listIt + " ";
-      currentFilter += "*." + *listIt + " ";
-
-      modules[*listIt] = *it;
-    }
-
-    if (!currentFilter.empty())
-      filters += *it + "(" + currentFilter + ");;";
-
-    delete m;
-  }
-
-  filterAny += " *.tlpx);;";
-
-  filters += "All files (*)";
-  filters.insert(0, filterAny);
-
-  if (fileName.isNull()) // If open() was called without a parameter, open the
-                         // file dialog
-    fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"), _lastOpenLocation, filters.c_str());
-
-  if (!fileName.isEmpty()) {
-    QFileInfo fileInfo(fileName);
-
-    // we must ensure that choosing a file is relative to
-    // the current directory to allow to run the gui tests
-    // from any relative unit_test/gui directory
-    if (!tlp::inGuiTestingMode())
-      _lastOpenLocation = fileInfo.absolutePath();
-
-    foreach (const std::string &extension, modules.keys()) {
-      if (fileName.endsWith(".tlpx")) {
-        openProjectFile(fileName);
-        TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
-        break;
-      } else if (fileName.endsWith(QString::fromStdString(extension))) {
-        DataSet params;
-        params.set("file::filename", QStringToTlpString(fileName));
-        addRecentDocument(fileName);
-        importGraph(modules[extension], params);
-        break;
+      // display spent time
+      if (TulipSettings::instance().isRunningTimeComputed()) {
+        std::string moduleAndParams = module + " import - " + data.toString();
+        qDebug() << tlp::tlpStringToQString(moduleAndParams) << ": " << start.msecsTo(QDateTime::currentDateTime()) << "ms";
       }
-    }
-  }
-}
 
-void GraphPerspective::openProjectFile(const QString &path) {
-  if (_graphs->empty()) {
-    PluginProgress *prg = progress(NoProgressOption);
-    _project->openProjectFile(path, prg);
-    QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
-    _ui->workspace->readProject(_project, rootIds, prg);
-#ifdef BUILD_PYTHON_COMPONENTS
-    _developFrame->setProject(_project);
-#endif
-
-    for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin(); it != rootIds.end(); ++it) {
-      it.value()->setAttribute("file", QStringToTlpString(path));
-    }
-
-    delete prg;
-  } else {
-    Perspective::openProjectFile(path);
-  }
-}
-
-void GraphPerspective::deleteSelectedElements() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-
-  graph->push();
-  tlp::Iterator<edge> *itEdges = selection->getEdgesEqualTo(true);
-  graph->delEdges(itEdges, false);
-  delete itEdges;
-
-  tlp::Iterator<node> *itNodes = selection->getNodesEqualTo(true);
-  graph->delNodes(itNodes, false);
-  delete itNodes;
-
-  Observable::unholdObservers();
-}
-
-void GraphPerspective::invertSelection() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-  graph->push();
-  selection->reverse();
-  Observable::unholdObservers();
-}
-
-void GraphPerspective::cancelSelection() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-  graph->push();
-
-  for (node n : selection->getNodesEqualTo(true)) {
-    selection->setNodeValue(n, false);
-  }
-
-  for (edge e : selection->getEdgesEqualTo(true)) {
-    selection->setEdgeValue(e, false);
-  }
-  Observable::unholdObservers();
-}
-
-void GraphPerspective::selectAll() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-  graph->push();
-
-  for (node n : graph->getNodes()) {
-    selection->setNodeValue(n, true);
-  }
-
-  for (edge e : graph->getEdges()) {
-    selection->setEdgeValue(e, true);
-  }
-
-  Observable::unholdObservers();
-}
-
-void GraphPerspective::undo() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-
-  if (graph != nullptr)
-    graph->pop();
-
-  Observable::unholdObservers();
-
-  foreach (View *v, _ui->workspace->panels()) {
-    if (v->graph() == graph)
-      v->undoCallback();
-  }
-}
-
-void GraphPerspective::redo() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-
-  if (graph != nullptr)
-    graph->unpop();
-
-  Observable::unholdObservers();
-
-  foreach (View *v, _ui->workspace->panels()) {
-    if (v->graph() == graph)
-      v->undoCallback();
-  }
-}
-
-void GraphPerspective::cut() {
-  copy(_graphs->currentGraph(), true);
-}
-
-void GraphPerspective::paste() {
-  if (_graphs->currentGraph() == nullptr)
-    return;
-
-  Graph *outGraph = _graphs->currentGraph();
-  std::stringstream ss;
-  ss << QStringToTlpString(QApplication::clipboard()->text());
-
-  Observable::holdObservers();
-  outGraph->push();
-  DataSet data;
-  data.set("file::data", ss.str());
-  Graph *inGraph = tlp::importGraph("TLP Import", data);
-  tlp::copyToGraph(outGraph, inGraph);
-  delete inGraph;
-  Observable::unholdObservers();
-  centerPanelsForGraph(outGraph);
-}
-
-void GraphPerspective::copy() {
-  copy(_graphs->currentGraph());
-}
-
-void GraphPerspective::copy(Graph *g, bool deleteAfter) {
-  if (g == nullptr)
-    return;
-
-  Observable::holdObservers();
-  g->push();
-
-  BooleanProperty *selection = g->getProperty<BooleanProperty>("viewSelection");
-
-  Graph *copyGraph = tlp::newGraph();
-  tlp::copyToGraph(copyGraph, g, selection);
-
-  std::stringstream ss;
-  DataSet data;
-  tlp::exportGraph(copyGraph, ss, "TLP Export", data);
-  QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
-
-  if (deleteAfter) {
-    for (node n : stableIterator(selection->getNodesEqualTo(true)))
-      g->delNode(n);
-  }
-
-  delete copyGraph;
-
-  Observable::unholdObservers();
-}
-
-void GraphPerspective::group() {
-  Observable::holdObservers();
-  tlp::Graph *graph = _graphs->currentGraph();
-  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-  std::set<node> groupedNodes;
-
-  for (node n : selection->getNodesEqualTo(true)) {
-    if (graph->isElement(n))
-      groupedNodes.insert(n);
-  }
-
-  if (groupedNodes.empty()) {
-    Observable::unholdObservers();
-    qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
-    return;
-  }
-
-  graph->push();
-
-  bool changeGraph = false;
-
-  if (graph == graph->getRoot()) {
-    qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
-    graph = graph->addCloneSubGraph("groups");
-    changeGraph = true;
-  }
-
-  graph->createMetaNode(groupedNodes, false);
-
-  selection->setAllNodeValue(false);
-  selection->setAllEdgeValue(false);
-
-  Observable::unholdObservers();
-
-  if (!changeGraph)
-    return;
-
-  foreach (View *v, _ui->workspace->panels()) {
-    if (v->graph() == graph->getRoot())
-      v->setGraph(graph);
-  }
-}
-
-Graph *GraphPerspective::createSubGraph(Graph *graph) {
-  if (graph == nullptr)
-    return nullptr;
-
-  graph->push();
-
-  Observable::holdObservers();
-
-  tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-
-  for (edge e : selection->getEdgesEqualTo(true)) {
-    const pair<node, node> &ends = graph->ends(e);
-
-    if (!selection->getNodeValue(ends.first)) {
-#ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id)
-               << trUtf8(" automatically added to selection.");
-#endif
-      selection->setNodeValue(ends.first, true);
-    }
-
-    if (!selection->getNodeValue(ends.second)) {
-#ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id)
-               << trUtf8(" automatically added to selection.");
-#endif
-      selection->setNodeValue(ends.second, true);
-    }
-  }
-  Graph *result = graph->addSubGraph(selection, "selection sub-graph");
-  Observable::unholdObservers();
-  return result;
-}
-
-void GraphPerspective::createSubGraph() {
-  createSubGraph(_graphs->currentGraph());
-}
-
-void GraphPerspective::cloneSubGraph() {
-  if (_graphs->currentGraph() == nullptr)
-    return;
-
-  tlp::BooleanProperty prop(_graphs->currentGraph());
-  prop.setAllNodeValue(true);
-  prop.setAllEdgeValue(true);
-  _graphs->currentGraph()->push();
-  _graphs->currentGraph()->addSubGraph(&prop, "clone sub-graph");
-}
-
-void GraphPerspective::addEmptySubGraph() {
-  if (_graphs->currentGraph() == nullptr)
-    return;
-
-  _graphs->currentGraph()->push();
-  _graphs->currentGraph()->addSubGraph(nullptr, "empty sub-graph");
-}
-
-void GraphPerspective::currentGraphChanged(Graph *graph) {
-  bool enabled(graph != nullptr);
-  _ui->actionUndo->setEnabled(enabled);
-  _ui->actionRedo->setEnabled(enabled);
-  _ui->actionCut->setEnabled(enabled);
-  _ui->actionCopy->setEnabled(enabled);
-  _ui->actionPaste->setEnabled(enabled);
-  _ui->actionDelete->setEnabled(enabled);
-  _ui->actionInvert_selection->setEnabled(enabled);
-  _ui->actionSelect_All->setEnabled(enabled);
-  _ui->actionCancel_selection->setEnabled(enabled);
-  _ui->actionGroup_elements->setEnabled(enabled);
-  _ui->actionCreate_sub_graph->setEnabled(enabled);
-  _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
-  _ui->actionClone_sub_graph->setEnabled(enabled);
-  _ui->actionExport->setEnabled(enabled);
-  _ui->singleModeButton->setEnabled(enabled);
-  _ui->splitModeButton->setEnabled(enabled);
-  _ui->splitHorizontalModeButton->setEnabled(enabled);
-  _ui->split3ModeButton->setEnabled(enabled);
-  _ui->split32ModeButton->setEnabled(enabled);
-  _ui->split33ModeButton->setEnabled(enabled);
-  _ui->gridModeButton->setEnabled(enabled);
-  _ui->sixModeButton->setEnabled(enabled);
-  _ui->exposeModeButton->setEnabled(enabled);
-  _ui->searchButton->setEnabled(enabled);
-  _ui->pythonButton->setEnabled(enabled);
-  _ui->previousPageButton->setVisible(enabled);
-  _ui->pageCountLabel->setVisible(enabled);
-  _ui->nextPageButton->setVisible(enabled);
-
-  if (graph == nullptr) {
-    _ui->workspace->switchToStartupMode();
-    _ui->exposeModeButton->setChecked(false);
-    _ui->searchButton->setChecked(false);
-    _ui->pythonButton->setChecked(false);
-    setSearchOutput(false);
-  } else {
-    _ui->workspace->setGraphForFocusedPanel(graph);
-  }
-}
-
-void GraphPerspective::CSVImport() {
-  bool mustDeleteGraph = false;
-
-  if (_graphs->size() == 0) {
-    _graphs->addGraph(tlp::newGraph());
-    mustDeleteGraph = true;
-  }
-
-  Graph *g = _graphs->currentGraph();
-
-  if (g == nullptr)
-    return;
-
-  CSVImportWizard wizard(_mainWindow);
-
-  if (mustDeleteGraph) {
-    wizard.setWindowTitle("Import CSV data into a new graph");
-    wizard.setButtonText(QWizard::FinishButton, QString("Import into a new graph"));
-  } else {
-    wizard.setWindowTitle(QString("Import CSV data into current graph: ") + g->getName().c_str());
-    wizard.setButtonText(QWizard::FinishButton, QString("Import into current graph"));
-  }
-
-  wizard.setGraph(g);
-  g->push();
-  Observable::holdObservers();
-  int result = wizard.exec();
-
-  if (result == QDialog::Rejected) {
-    if (mustDeleteGraph) {
-      _graphs->removeGraph(g);
-      delete g;
+      if (g->getName().empty()) {
+        QString n = tlp::tlpStringToQString(module) + " - " + tlp::tlpStringToQString(data.toString());
+        n.replace(QRegExp("[\\w]*::"), ""); // remove words before "::"
+        g->setName(tlp::QStringToTlpString(n));
+      }
     } else {
-      g->pop();
+      g = tlp::newGraph();
     }
-  } else {
+
+    _graphs->addGraph(g);
+    std::string fileName;
+
+    if (data.get("file::filename", fileName))
+      // set current directory to the directory of the loaded file
+      // to ensure a correct loading of the associated texture files if any
+      QDir::setCurrent(QFileInfo(tlpStringToQString(fileName)).absolutePath());
+
     applyRandomLayout(g);
-    bool openPanels = true;
-    foreach (View *v, _ui->workspace->panels()) {
-      if (v->graph() == g) {
-        openPanels = false;
-        break;
-      }
-    }
-
-    if (openPanels)
-      showStartPanels(g);
+    showStartPanels(g);
   }
 
-  Observable::unholdObservers();
-}
+  void GraphPerspective::importGraph() {
+    ImportWizard wizard(_mainWindow);
 
-void GraphPerspective::showStartPanels(Graph *g) {
-  if (TulipSettings::instance().displayDefaultViews() == false)
-    return;
+    if (wizard.exec() == QDialog::Accepted) {
+      DataSet data = wizard.parameters();
+      importGraph(tlp::QStringToTlpString(wizard.algorithm()), data);
+    }
+  }
 
-  // expose mode is not safe to add a new panel
-  // so hide it if needed
-  _ui->workspace->hideExposeMode();
-  View *firstPanel = nullptr;
-  View *secondPanel = nullptr;
+  void GraphPerspective::createPanel(tlp::Graph * g) {
+    if (_graphs->empty())
+      return;
 
-  foreach (const QString &panelName, QStringList() << "Spreadsheet view"
-                                                   << "Node Link Diagram view") {
-    View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
+    PanelSelectionWizard wizard(_graphs, _mainWindow);
 
-    if (firstPanel == NULL)
-      firstPanel = view;
+    if (g != nullptr)
+      wizard.setSelectedGraph(g);
     else
-      secondPanel = view;
+      wizard.setSelectedGraph(_graphs->currentGraph());
 
-    view->setupUi();
-    view->setGraph(g);
-    view->setState(DataSet());
-    _ui->workspace->addPanel(view);
-  }
-  _ui->workspace->setActivePanel(firstPanel);
-  _ui->workspace->switchToSplitMode();
-  secondPanel->centerView(false);
-}
+    int result = wizard.exec();
 
-void GraphPerspective::applyRandomLayout(Graph *g) {
-  Observable::holdObservers();
-  LayoutProperty *viewLayout = g->getProperty<LayoutProperty>("viewLayout");
-  Iterator<node> *it = viewLayout->getNonDefaultValuatedNodes();
-
-  if (!it->hasNext()) {
-    std::string str;
-    g->applyPropertyAlgorithm("Random layout", viewLayout, str);
-  }
-
-  delete it;
-
-  Observable::unholdObservers();
-}
-
-void GraphPerspective::centerPanelsForGraph(tlp::Graph *g, bool graphChanged, bool onlyGlMainView) {
-  foreach (View *v, _ui->workspace->panels()) {
-    if ((v->graph() == g) && (!onlyGlMainView || dynamic_cast<tlp::GlMainView *>(v)))
-      v->centerView(graphChanged);
-  }
-}
-
-void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
-  QVector<View *> viewsToDelete;
-  foreach (View *v, _ui->workspace->panels()) {
-    if (v->graph() == g || g->isDescendantGraph(v->graph()))
-      viewsToDelete += v;
-  }
-
-  if (!viewsToDelete.empty()) {
-    // expose mode is not safe to add a delete a panel
-    // so hide it if needed
-    _ui->workspace->hideExposeMode();
-    foreach (View *v, viewsToDelete) { _ui->workspace->delView(v); }
-  }
-}
-
-bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph *g, const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
-  bool result = false;
-  foreach (View *v, _ui->workspace->panels()) {
-    GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
-
-    if (v->graph() == g && glMainView != nullptr) {
-      if (glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getInputData().installProperties(propsMap))
-        result = true;
+    if (result == QDialog::Accepted && wizard.panel() != nullptr) {
+      // expose mode is not safe to add a new panel
+      // so hide it if needed
+      _ui->workspace->hideExposeMode();
+      _ui->workspace->addPanel(wizard.panel());
+      _ui->workspace->setActivePanel(wizard.panel());
+      wizard.panel()->applySettings();
     }
   }
-  return result;
-}
 
-void GraphPerspective::setSearchOutput(bool f) {
-  if (f) {
-    _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
-    _ui->pythonButton->setChecked(false);
+  void GraphPerspective::panelFocused(tlp::View * view) {
+    disconnect(this, SLOT(focusedPanelGraphSet(tlp::Graph *)));
+
+    if (!_ui->graphHierarchiesEditor->synchronized())
+      return;
+
+    connect(view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(focusedPanelGraphSet(tlp::Graph *)));
+    focusedPanelGraphSet(view->graph());
   }
 
-  _ui->outputFrame->setVisible(f);
-}
-
-void GraphPerspective::setPythonPanel(bool f) {
-  if (f) {
-    _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
-    _ui->searchButton->setChecked(false);
+  void GraphPerspective::changeSynchronization(bool s) {
+    _ui->workspace->setFocusedPanelHighlighting(s);
   }
 
-  _ui->outputFrame->setVisible(f);
-}
+  void GraphPerspective::focusedPanelGraphSet(Graph * g) {
+    _graphs->setCurrentGraph(g);
+  }
 
-void GraphPerspective::openPreferences() {
-  PreferencesDialog dlg(_ui->mainWidget);
-  dlg.readSettings();
+  void GraphPerspective::focusedPanelSynchronized() {
+    _ui->workspace->setGraphForFocusedPanel(_graphs->currentGraph());
+  }
 
-  if (dlg.exec() == QDialog::Accepted) {
-    dlg.writeSettings();
+  bool GraphPerspective::save() {
+    return saveAs(_project->projectFile());
+  }
 
-    foreach (tlp::View *v, _ui->workspace->panels()) {
-      GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
+  bool GraphPerspective::saveAs(const QString &path) {
+    if (path.isEmpty()) {
+      QString path = QFileDialog::getSaveFileName(_mainWindow, trUtf8("Save project"), QString(), "Tulip Project (*.tlpx)");
 
-      if (glMainView != nullptr) {
-        if (glMainView->getGlMainWidget() != nullptr) {
-          glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(
-              TulipSettings::instance().defaultSelectionColor());
-          glMainView->refresh();
+      if (!path.isEmpty()) {
+        if (!path.endsWith(".tlpx"))
+          path += ".tlpx";
+
+        return saveAs(path);
+      }
+
+      return false;
+    }
+
+    SimplePluginProgressDialog progress(_mainWindow);
+    progress.showPreview(false);
+    progress.show();
+    QMap<Graph *, QString> rootIds = _graphs->writeProject(_project, &progress);
+    _ui->workspace->writeProject(_project, rootIds, &progress);
+    _project->write(path, &progress);
+    TulipSettings::instance().addToRecentDocuments(path);
+
+    return true;
+  }
+
+  void GraphPerspective::open(QString fileName) {
+    QMap<std::string, std::string> modules;
+    std::list<std::string> imports = PluginLister::instance()->availablePlugins<ImportModule>();
+
+    std::string filters("Tulip project (*.tlpx);;");
+    std::string filterAny("Any supported format (");
+
+    for (std::list<std::string>::const_iterator it = imports.begin(); it != imports.end(); ++it) {
+      ImportModule *m = PluginLister::instance()->getPluginObject<ImportModule>(*it, nullptr);
+      std::list<std::string> fileExtension(m->fileExtensions());
+
+      std::string currentFilter;
+
+      for (std::list<std::string>::const_iterator listIt = fileExtension.begin(); listIt != fileExtension.end(); ++listIt) {
+        if (listIt->empty())
+          continue;
+
+        filterAny += "*." + *listIt + " ";
+        currentFilter += "*." + *listIt + " ";
+
+        modules[*listIt] = *it;
+      }
+
+      if (!currentFilter.empty())
+        filters += *it + "(" + currentFilter + ");;";
+
+      delete m;
+    }
+
+    filterAny += " *.tlpx);;";
+
+    filters += "All files (*)";
+    filters.insert(0, filterAny);
+
+    if (fileName.isNull()) // If open() was called without a parameter, open the
+                           // file dialog
+      fileName = QFileDialog::getOpenFileName(_mainWindow, tr("Open graph"), _lastOpenLocation, filters.c_str());
+
+    if (!fileName.isEmpty()) {
+      QFileInfo fileInfo(fileName);
+
+      // we must ensure that choosing a file is relative to
+      // the current directory to allow to run the gui tests
+      // from any relative unit_test/gui directory
+      if (!tlp::inGuiTestingMode())
+        _lastOpenLocation = fileInfo.absolutePath();
+
+      foreach (const std::string &extension, modules.keys()) {
+        if (fileName.endsWith(".tlpx")) {
+          openProjectFile(fileName);
+          TulipSettings::instance().addToRecentDocuments(fileInfo.absoluteFilePath());
+          break;
+        } else if (fileName.endsWith(QString::fromStdString(extension))) {
+          DataSet params;
+          params.set("file::filename", QStringToTlpString(fileName));
+          addRecentDocument(fileName);
+          importGraph(modules[extension], params);
+          break;
         }
       }
     }
   }
-}
 
-void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) {
-  _ui->workspace->setAutoCenterPanelsOnDraw(f);
-}
+  void GraphPerspective::openProjectFile(const QString &path) {
+    if (_graphs->empty()) {
+      PluginProgress *prg = progress(NoProgressOption);
+      _project->openProjectFile(path, prg);
+      QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
+      _ui->workspace->readProject(_project, rootIds, prg);
+#ifdef BUILD_PYTHON_COMPONENTS
+      _developFrame->setProject(_project);
+#endif
 
-void GraphPerspective::pluginsListChanged() {
-  _ui->algorithmRunner->refreshPluginsList();
-}
+      for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin(); it != rootIds.end(); ++it) {
+        it.value()->setAttribute("file", QStringToTlpString(path));
+      }
 
-void GraphPerspective::addNewGraph() {
-  Graph *g = tlp::newGraph();
-  _graphs->addGraph(g);
-  showStartPanels(g);
-}
-
-void GraphPerspective::newProject() {
-  createPerspective(name().c_str());
-}
-
-void GraphPerspective::openRecentFile() {
-  QAction *action = static_cast<QAction *>(sender());
-  // workaround a Qt5 bug (seems only Linux related) when upgrading the Qt
-  // version :
-  // the path of a recently opened file stored in Tulip QSettings got a '&'
-  // character
-  // added to it, making it invalid and thus the file is not loaded.
-  open(action->text().replace("&", ""));
-}
-
-void GraphPerspective::treatEvent(const tlp::Event &ev) {
-  if (dynamic_cast<const tlp::PluginEvent *>(&ev)) {
-    pluginsListChanged();
+      delete prg;
+    } else {
+      Perspective::openProjectFile(path);
+    }
   }
-}
 
-void GraphPerspective::setWorkspaceMode() {
-  _ui->workspaceButton->setChecked(true);
-  _ui->developButton->setChecked(false);
-  _ui->centralWidget->widget(1)->setVisible(false);
-  _ui->centralWidget->setCurrentIndex(0);
-}
+  void GraphPerspective::deleteSelectedElements() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+    tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
 
-void GraphPerspective::setDevelopMode() {
-  _ui->workspaceButton->setChecked(false);
-  _ui->developButton->setChecked(true);
-  _ui->centralWidget->widget(1)->setVisible(true);
-  _ui->centralWidget->setCurrentIndex(1);
-}
+    graph->push();
+    tlp::Iterator<edge> *itEdges = selection->getEdgesEqualTo(true);
+    graph->delEdges(itEdges, false);
+    delete itEdges;
 
-void GraphPerspective::showUserDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-user/html/index.html"));
-}
+    tlp::Iterator<node> *itNodes = selection->getNodesEqualTo(true);
+    graph->delNodes(itNodes, false);
+    delete itNodes;
 
-void GraphPerspective::showDevelDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-dev/html/index.html"));
-}
-
-void GraphPerspective::showPythonDocumentation() {
-  QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-python/html/index.html"));
-}
-
-void GraphPerspective::showHideSideBar() {
-  if (_ui->docksWidget->isVisible()) {
-    _ui->docksWidget->setVisible(false);
-    _ui->sidebarButton->setToolTip("Show Sidebar");
-  } else {
-    _ui->docksWidget->setVisible(true);
-    _ui->sidebarButton->setToolTip("Hide Sidebar");
+    Observable::unholdObservers();
   }
-}
 
-void GraphPerspective::displayColorScalesDialog() {
-  _colorScalesDialog->show();
-}
-
-void GraphPerspective::showAboutTulipPage() {
-  if (!checkSocketConnected()) {
-    tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
-    QDialog aboutDialog(mainWindow(), Qt::Window);
-    aboutDialog.setWindowTitle("About Tulip");
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(aboutPage);
-    layout->setContentsMargins(0, 0, 0, 0);
-    aboutDialog.setLayout(layout);
-    aboutDialog.resize(800, 600);
-    aboutDialog.exec();
+  void GraphPerspective::invertSelection() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+    tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+    graph->push();
+    selection->reverse();
+    Observable::unholdObservers();
   }
-}
 
-PLUGIN(GraphPerspective)
+  void GraphPerspective::cancelSelection() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+    tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+    graph->push();
+
+    for (node n : selection->getNodesEqualTo(true)) {
+      selection->setNodeValue(n, false);
+    }
+
+    for (edge e : selection->getEdgesEqualTo(true)) {
+      selection->setEdgeValue(e, false);
+    }
+    Observable::unholdObservers();
+  }
+
+  void GraphPerspective::selectAll() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+    tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+    graph->push();
+
+    for (node n : graph->getNodes()) {
+      selection->setNodeValue(n, true);
+    }
+
+    for (edge e : graph->getEdges()) {
+      selection->setEdgeValue(e, true);
+    }
+
+    Observable::unholdObservers();
+  }
+
+  void GraphPerspective::undo() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+
+    if (graph != nullptr)
+      graph->pop();
+
+    Observable::unholdObservers();
+
+    foreach (View *v, _ui->workspace->panels()) {
+      if (v->graph() == graph)
+        v->undoCallback();
+    }
+  }
+
+  void GraphPerspective::redo() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+
+    if (graph != nullptr)
+      graph->unpop();
+
+    Observable::unholdObservers();
+
+    foreach (View *v, _ui->workspace->panels()) {
+      if (v->graph() == graph)
+        v->undoCallback();
+    }
+  }
+
+  void GraphPerspective::cut() {
+    copy(_graphs->currentGraph(), true);
+  }
+
+  void GraphPerspective::paste() {
+    if (_graphs->currentGraph() == nullptr)
+      return;
+
+    Graph *outGraph = _graphs->currentGraph();
+    std::stringstream ss;
+    ss << QStringToTlpString(QApplication::clipboard()->text());
+
+    Observable::holdObservers();
+    outGraph->push();
+    DataSet data;
+    data.set("file::data", ss.str());
+    Graph *inGraph = tlp::importGraph("TLP Import", data);
+    tlp::copyToGraph(outGraph, inGraph);
+    delete inGraph;
+    Observable::unholdObservers();
+    centerPanelsForGraph(outGraph);
+  }
+
+  void GraphPerspective::copy() {
+    copy(_graphs->currentGraph());
+  }
+
+  void GraphPerspective::copy(Graph * g, bool deleteAfter) {
+    if (g == nullptr)
+      return;
+
+    Observable::holdObservers();
+    g->push();
+
+    BooleanProperty *selection = g->getProperty<BooleanProperty>("viewSelection");
+
+    Graph *copyGraph = tlp::newGraph();
+    tlp::copyToGraph(copyGraph, g, selection);
+
+    std::stringstream ss;
+    DataSet data;
+    tlp::exportGraph(copyGraph, ss, "TLP Export", data);
+    QApplication::clipboard()->setText(tlpStringToQString(ss.str()));
+
+    if (deleteAfter) {
+      for (node n : stableIterator(selection->getNodesEqualTo(true)))
+        g->delNode(n);
+    }
+
+    delete copyGraph;
+
+    Observable::unholdObservers();
+  }
+
+  void GraphPerspective::group() {
+    Observable::holdObservers();
+    tlp::Graph *graph = _graphs->currentGraph();
+    tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+    std::set<node> groupedNodes;
+
+    for (node n : selection->getNodesEqualTo(true)) {
+      if (graph->isElement(n))
+        groupedNodes.insert(n);
+    }
+
+    if (groupedNodes.empty()) {
+      Observable::unholdObservers();
+      qCritical() << trUtf8("[Group] Cannot create meta-nodes from empty selection");
+      return;
+    }
+
+    graph->push();
+
+    bool changeGraph = false;
+
+    if (graph == graph->getRoot()) {
+      qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
+      graph = graph->addCloneSubGraph("groups");
+      changeGraph = true;
+    }
+
+    graph->createMetaNode(groupedNodes, false);
+
+    selection->setAllNodeValue(false);
+    selection->setAllEdgeValue(false);
+
+    Observable::unholdObservers();
+
+    if (!changeGraph)
+      return;
+
+    foreach (View *v, _ui->workspace->panels()) {
+      if (v->graph() == graph->getRoot())
+        v->setGraph(graph);
+    }
+  }
+
+  Graph *GraphPerspective::createSubGraph(Graph * graph) {
+    if (graph == nullptr)
+      return nullptr;
+
+    graph->push();
+
+    Observable::holdObservers();
+
+    tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+
+    for (edge e : selection->getEdgesEqualTo(true)) {
+      const pair<node, node> &ends = graph->ends(e);
+
+      if (!selection->getNodeValue(ends.first)) {
+#ifndef NDEBUG
+        qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id)
+                 << trUtf8(" automatically added to selection.");
+#endif
+        selection->setNodeValue(ends.first, true);
+      }
+
+      if (!selection->getNodeValue(ends.second)) {
+#ifndef NDEBUG
+        qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id)
+                 << trUtf8(" automatically added to selection.");
+#endif
+        selection->setNodeValue(ends.second, true);
+      }
+    }
+    Graph *result = graph->addSubGraph(selection, "selection sub-graph");
+    Observable::unholdObservers();
+    return result;
+  }
+
+  void GraphPerspective::createSubGraph() {
+    createSubGraph(_graphs->currentGraph());
+  }
+
+  void GraphPerspective::cloneSubGraph() {
+    if (_graphs->currentGraph() == nullptr)
+      return;
+
+    tlp::BooleanProperty prop(_graphs->currentGraph());
+    prop.setAllNodeValue(true);
+    prop.setAllEdgeValue(true);
+    _graphs->currentGraph()->push();
+    _graphs->currentGraph()->addSubGraph(&prop, "clone sub-graph");
+  }
+
+  void GraphPerspective::addEmptySubGraph() {
+    if (_graphs->currentGraph() == nullptr)
+      return;
+
+    _graphs->currentGraph()->push();
+    _graphs->currentGraph()->addSubGraph(nullptr, "empty sub-graph");
+  }
+
+  void GraphPerspective::currentGraphChanged(Graph * graph) {
+    bool enabled(graph != nullptr);
+    _ui->actionUndo->setEnabled(enabled);
+    _ui->actionRedo->setEnabled(enabled);
+    _ui->actionCut->setEnabled(enabled);
+    _ui->actionCopy->setEnabled(enabled);
+    _ui->actionPaste->setEnabled(enabled);
+    _ui->actionDelete->setEnabled(enabled);
+    _ui->actionInvert_selection->setEnabled(enabled);
+    _ui->actionSelect_All->setEnabled(enabled);
+    _ui->actionCancel_selection->setEnabled(enabled);
+    _ui->actionGroup_elements->setEnabled(enabled);
+    _ui->actionCreate_sub_graph->setEnabled(enabled);
+    _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
+    _ui->actionClone_sub_graph->setEnabled(enabled);
+    _ui->actionExport->setEnabled(enabled);
+    _ui->singleModeButton->setEnabled(enabled);
+    _ui->splitModeButton->setEnabled(enabled);
+    _ui->splitHorizontalModeButton->setEnabled(enabled);
+    _ui->split3ModeButton->setEnabled(enabled);
+    _ui->split32ModeButton->setEnabled(enabled);
+    _ui->split33ModeButton->setEnabled(enabled);
+    _ui->gridModeButton->setEnabled(enabled);
+    _ui->sixModeButton->setEnabled(enabled);
+    _ui->exposeModeButton->setEnabled(enabled);
+    _ui->searchButton->setEnabled(enabled);
+    _ui->pythonButton->setEnabled(enabled);
+    _ui->previousPageButton->setVisible(enabled);
+    _ui->pageCountLabel->setVisible(enabled);
+    _ui->nextPageButton->setVisible(enabled);
+
+    if (graph == nullptr) {
+      _ui->workspace->switchToStartupMode();
+      _ui->exposeModeButton->setChecked(false);
+      _ui->searchButton->setChecked(false);
+      _ui->pythonButton->setChecked(false);
+      setSearchOutput(false);
+    } else {
+      _ui->workspace->setGraphForFocusedPanel(graph);
+    }
+  }
+
+  void GraphPerspective::CSVImport() {
+    bool mustDeleteGraph = false;
+
+    if (_graphs->size() == 0) {
+      _graphs->addGraph(tlp::newGraph());
+      mustDeleteGraph = true;
+    }
+
+    Graph *g = _graphs->currentGraph();
+
+    if (g == nullptr)
+      return;
+
+    CSVImportWizard wizard(_mainWindow);
+
+    if (mustDeleteGraph) {
+      wizard.setWindowTitle("Import CSV data into a new graph");
+      wizard.setButtonText(QWizard::FinishButton, QString("Import into a new graph"));
+    } else {
+      wizard.setWindowTitle(QString("Import CSV data into current graph: ") + g->getName().c_str());
+      wizard.setButtonText(QWizard::FinishButton, QString("Import into current graph"));
+    }
+
+    wizard.setGraph(g);
+    g->push();
+    Observable::holdObservers();
+    int result = wizard.exec();
+
+    if (result == QDialog::Rejected) {
+      if (mustDeleteGraph) {
+        _graphs->removeGraph(g);
+        delete g;
+      } else {
+        g->pop();
+      }
+    } else {
+      applyRandomLayout(g);
+      bool openPanels = true;
+      foreach (View *v, _ui->workspace->panels()) {
+        if (v->graph() == g) {
+          openPanels = false;
+          break;
+        }
+      }
+
+      if (openPanels)
+        showStartPanels(g);
+    }
+
+    Observable::unholdObservers();
+  }
+
+  void GraphPerspective::showStartPanels(Graph * g) {
+    if (TulipSettings::instance().displayDefaultViews() == false)
+      return;
+
+    // expose mode is not safe to add a new panel
+    // so hide it if needed
+    _ui->workspace->hideExposeMode();
+    View *firstPanel = nullptr;
+    View *secondPanel = nullptr;
+
+    foreach (const QString &panelName, QStringList() << "Spreadsheet view"
+                                                     << "Node Link Diagram view") {
+      View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
+
+      if (firstPanel == NULL)
+        firstPanel = view;
+      else
+        secondPanel = view;
+
+      view->setupUi();
+      view->setGraph(g);
+      view->setState(DataSet());
+      _ui->workspace->addPanel(view);
+    }
+    _ui->workspace->setActivePanel(firstPanel);
+    _ui->workspace->switchToSplitMode();
+    secondPanel->centerView(false);
+  }
+
+  void GraphPerspective::applyRandomLayout(Graph * g) {
+    Observable::holdObservers();
+    LayoutProperty *viewLayout = g->getProperty<LayoutProperty>("viewLayout");
+    Iterator<node> *it = viewLayout->getNonDefaultValuatedNodes();
+
+    if (!it->hasNext()) {
+      std::string str;
+      g->applyPropertyAlgorithm("Random layout", viewLayout, str);
+    }
+
+    delete it;
+
+    Observable::unholdObservers();
+  }
+
+  void GraphPerspective::centerPanelsForGraph(tlp::Graph * g, bool graphChanged, bool onlyGlMainView) {
+    foreach (View *v, _ui->workspace->panels()) {
+      if ((v->graph() == g) && (!onlyGlMainView || dynamic_cast<tlp::GlMainView *>(v)))
+        v->centerView(graphChanged);
+    }
+  }
+
+  void GraphPerspective::closePanelsForGraph(tlp::Graph * g) {
+    QVector<View *> viewsToDelete;
+    foreach (View *v, _ui->workspace->panels()) {
+      if (v->graph() == g || g->isDescendantGraph(v->graph()))
+        viewsToDelete += v;
+    }
+
+    if (!viewsToDelete.empty()) {
+      // expose mode is not safe to add a delete a panel
+      // so hide it if needed
+      _ui->workspace->hideExposeMode();
+      foreach (View *v, viewsToDelete) { _ui->workspace->delView(v); }
+    }
+  }
+
+  bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph * g, const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
+    bool result = false;
+    foreach (View *v, _ui->workspace->panels()) {
+      GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
+
+      if (v->graph() == g && glMainView != nullptr) {
+        if (glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getInputData().installProperties(propsMap))
+          result = true;
+      }
+    }
+    return result;
+  }
+
+  void GraphPerspective::setSearchOutput(bool f) {
+    if (f) {
+      _ui->outputFrame->setCurrentWidget(_ui->searchPanel);
+      _ui->pythonButton->setChecked(false);
+    }
+
+    _ui->outputFrame->setVisible(f);
+  }
+
+  void GraphPerspective::setPythonPanel(bool f) {
+    if (f) {
+      _ui->outputFrame->setCurrentWidget(_ui->pythonPanel);
+      _ui->searchButton->setChecked(false);
+    }
+
+    _ui->outputFrame->setVisible(f);
+  }
+
+  void GraphPerspective::openPreferences() {
+    PreferencesDialog dlg(_ui->mainWidget);
+    dlg.readSettings();
+
+    if (dlg.exec() == QDialog::Accepted) {
+      dlg.writeSettings();
+
+      foreach (tlp::View *v, _ui->workspace->panels()) {
+        GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
+
+        if (glMainView != nullptr) {
+          if (glMainView->getGlMainWidget() != nullptr) {
+            glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(
+                TulipSettings::instance().defaultSelectionColor());
+            glMainView->refresh();
+          }
+        }
+      }
+    }
+  }
+
+  void GraphPerspective::setAutoCenterPanelsOnDraw(bool f) {
+    _ui->workspace->setAutoCenterPanelsOnDraw(f);
+  }
+
+  void GraphPerspective::pluginsListChanged() {
+    _ui->algorithmRunner->refreshPluginsList();
+  }
+
+  void GraphPerspective::addNewGraph() {
+    Graph *g = tlp::newGraph();
+    _graphs->addGraph(g);
+    showStartPanels(g);
+  }
+
+  void GraphPerspective::newProject() {
+    createPerspective(name().c_str());
+  }
+
+  void GraphPerspective::openRecentFile() {
+    QAction *action = static_cast<QAction *>(sender());
+    // workaround a Qt5 bug (seems only Linux related) when upgrading the Qt
+    // version :
+    // the path of a recently opened file stored in Tulip QSettings got a '&'
+    // character
+    // added to it, making it invalid and thus the file is not loaded.
+    open(action->text().replace("&", ""));
+  }
+
+  void GraphPerspective::treatEvent(const tlp::Event &ev) {
+    if (dynamic_cast<const tlp::PluginEvent *>(&ev)) {
+      pluginsListChanged();
+    }
+  }
+
+  void GraphPerspective::setWorkspaceMode() {
+    _ui->workspaceButton->setChecked(true);
+    _ui->developButton->setChecked(false);
+    _ui->centralWidget->widget(1)->setVisible(false);
+    _ui->centralWidget->setCurrentIndex(0);
+  }
+
+  void GraphPerspective::setDevelopMode() {
+    _ui->workspaceButton->setChecked(false);
+    _ui->developButton->setChecked(true);
+    _ui->centralWidget->widget(1)->setVisible(true);
+    _ui->centralWidget->setCurrentIndex(1);
+  }
+
+  void GraphPerspective::showUserDocumentation() {
+    QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-user/html/index.html"));
+  }
+
+  void GraphPerspective::showDevelDocumentation() {
+    QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-dev/html/index.html"));
+  }
+
+  void GraphPerspective::showPythonDocumentation() {
+    QDesktopServices::openUrl(QUrl::fromLocalFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-python/html/index.html"));
+  }
+
+  void GraphPerspective::showHideSideBar() {
+    if (_ui->docksWidget->isVisible()) {
+      _ui->docksWidget->setVisible(false);
+      _ui->sidebarButton->setToolTip("Show Sidebar");
+    } else {
+      _ui->docksWidget->setVisible(true);
+      _ui->sidebarButton->setToolTip("Hide Sidebar");
+    }
+  }
+
+  void GraphPerspective::displayColorScalesDialog() {
+    _colorScalesDialog->show();
+  }
+
+  void GraphPerspective::showAboutTulipPage() {
+    if (!checkSocketConnected()) {
+      tlp::AboutTulipPage *aboutPage = new tlp::AboutTulipPage;
+      QDialog aboutDialog(mainWindow(), Qt::Window);
+      aboutDialog.setWindowTitle("About Tulip");
+      QVBoxLayout *layout = new QVBoxLayout;
+      layout->addWidget(aboutPage);
+      layout->setContentsMargins(0, 0, 0, 0);
+      aboutDialog.setLayout(layout);
+      aboutDialog.resize(800, 600);
+      aboutDialog.exec();
+    }
+  }
+
+  PLUGIN(GraphPerspective)

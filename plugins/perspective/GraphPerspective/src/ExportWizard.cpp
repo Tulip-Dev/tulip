@@ -55,6 +55,8 @@ ExportWizard::ExportWizard(Graph *g, const QString &exportFile, QWidget *parent)
 #endif
   connect(_ui->exportModules, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
 
+  // display OK instead of Finish
+  setButtonText(QWizard::FinishButton, "OK");
   _ui->parametersFrame->hide();
   updateFinishButton();
 
