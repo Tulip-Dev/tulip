@@ -5,7 +5,7 @@ set DEST_DIR=%3
 if [%4] NEQ [] (
   if "%4" == "TRUE" (
     set DEBUG_MODE=%4
-  ) else (
+  ) else if NOT "%4" == "FALSE" (
     set OUT_FILE=%4
   )
 )
@@ -41,9 +41,9 @@ echo 'Running NSIS installer generator'
 cd "%DEST_DIR%"
 set PATH=%NSIS_PATH%;%PATH%
 if "%OUT_FILE%" == "" (
-  makensis Tulip.nsi
+  makensis /V4 Tulip.nsi
 ) else (
-  makensis /DOUT_FILE=%OUT_FILE% Tulip.nsi
+  makensis /V4 /DOUT_FILE=%OUT_FILE% Tulip.nsi
 )
 
 echo 'NSIS installer generator completed !'
