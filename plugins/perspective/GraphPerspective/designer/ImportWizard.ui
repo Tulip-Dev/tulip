@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="label">
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;Import a graph hierarchy into your project. First, select an import method, then adjust its parameters if needed. Click &lt;span style=&quot; font-weight:600;&quot;&gt;Ok&lt;/span&gt; to import your graph and visualize it using the &lt;span style=&quot; font-weight:600;&quot;&gt;Node Link Diagram&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;Spreadsheet&lt;/span&gt; views.&lt;br/&gt;&lt;br/&gt;See &lt;span style=&quot; font-weight:600;&quot;&gt;Edit&lt;/span&gt; menu, then &lt;span style=&quot; font-weight:600;&quot;&gt;Preferences &lt;/span&gt;for more options when importing a graph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;Import a graph hierarchy into your project. First, select an import method, then adjust its parameters if needed.&lt;br/&gt;Click &lt;span style=&quot; font-weight:600;&quot;&gt;Ok&lt;/span&gt; to import your graph and visualize it using the &lt;span style=&quot; font-weight:600;&quot;&gt;Node Link Diagram&lt;/span&gt; and &lt;span style=&quot; font-weight:600;&quot;&gt;Spreadsheet&lt;/span&gt; views.&lt;br/&gt;&lt;br/&gt;See &lt;span style=&quot; font-weight:600;&quot;&gt;Edit&lt;/span&gt; menu, then &lt;span style=&quot; font-weight:600;&quot;&gt;Preferences &lt;/span&gt;for more options when importing a graph.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
