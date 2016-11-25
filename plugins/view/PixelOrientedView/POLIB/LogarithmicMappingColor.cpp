@@ -20,9 +20,9 @@
 #include "LogarithmicMappingColor.h"
 
 namespace pocore {
-LogarithmicMappingColor::LogarithmicMappingColor(const double &min, const double &max) : LinearMappingColor(log(1. + min), log(1. + max)) {
+LogarithmicMappingColor::LogarithmicMappingColor(const double &min, const double &max) : LinearMappingColor(log1p(min), log1p(max)) {
 }
 RGBA LogarithmicMappingColor::getColor(const double &value, const unsigned int idColor) const {
-  return LinearMappingColor::getColor(log(1. + value), idColor);
+  return LinearMappingColor::getColor(log1p(value), idColor);
 }
 }

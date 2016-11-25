@@ -32,7 +32,7 @@
 using namespace std;
 using namespace tlp;
 
-PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false), timerId(0), glMW(nullptr) {
+PathFinderComponent::PathFinderComponent(PathFinder *parent) : parent(parent), graphPopable(false), timerId(0), lastX(0), lastY(0), glMW(NULL) {
 }
 
 PathFinderComponent::~PathFinderComponent() {

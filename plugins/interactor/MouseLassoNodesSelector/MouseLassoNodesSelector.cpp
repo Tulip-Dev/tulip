@@ -57,7 +57,7 @@ void MouseLassoNodesSelectorInteractor::construct() {
 PLUGIN(MouseLassoNodesSelectorInteractor)
 
 MouseLassoNodesSelectorInteractorComponent::MouseLassoNodesSelectorInteractorComponent()
-    : drawInteractor(false), camera(nullptr), dragStarted(false) {
+    : drawInteractor(false), camera(NULL), graph(NULL), viewSelection(NULL), dragStarted(false) {
 }
 
 MouseLassoNodesSelectorInteractorComponent::~MouseLassoNodesSelectorInteractorComponent() {

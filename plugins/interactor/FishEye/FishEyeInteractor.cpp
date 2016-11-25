@@ -142,15 +142,13 @@ FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *conf
   _fboTextureId = "fisheyeTexture" + toString(reinterpret_cast<unsigned long long>(this));
 }
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent)
-    : _curX(-1), _curY(-1), _fbo(nullptr), _fbo2(nullptr) {
-  _configWidget = fisheyeInteractorComponent._configWidget;
-  _fboTextureId = "fisheyeTexture" + toString(reinterpret_cast<unsigned long long>(this));
+FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget) : configWidget(configWidget), activateFishEye(false) {
 }
 
-FishEyeInteractorComponent::~FishEyeInteractorComponent() {
-  delete _fbo;
-  delete _fbo2;
+FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) {
+  fisheyeCenter = fisheyeInteractorComponent.fisheyeCenter;
+  configWidget = fisheyeInteractorComponent.configWidget;
+  activateFishEye = false;
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {

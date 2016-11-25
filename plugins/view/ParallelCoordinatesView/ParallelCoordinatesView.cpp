@@ -735,7 +735,7 @@ void ParallelCoordinatesView::setDataUnderPointerSelectFlag(const int x, const i
   set<unsigned int>::iterator it;
 
   for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
-    if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
+    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
       graphProxy->setDataSelected(*it, selectFlag);
   }
 }
@@ -746,7 +746,7 @@ void ParallelCoordinatesView::setDataInRegionSelectFlag(const int x, const int y
   set<unsigned int>::iterator it;
 
   for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
-    if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
+    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
       graphProxy->setDataSelected(*it, selectFlag);
   }
 }
@@ -760,7 +760,7 @@ void ParallelCoordinatesView::deleteDataUnderPointer(const int x, const int y) {
   set<unsigned int>::iterator it;
 
   for (it = dataUnderPointer.begin(); it != dataUnderPointer.end(); ++it) {
-    if (!graphProxy->highlightedEltsSet() || (graphProxy->highlightedEltsSet() && graphProxy->isDataHighlighted(*it)))
+    if (!graphProxy->highlightedEltsSet() || graphProxy->isDataHighlighted(*it))
       graphProxy->deleteData(*it);
   }
 }
