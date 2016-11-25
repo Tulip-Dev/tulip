@@ -888,7 +888,12 @@ QVariant TulipFontEditorCreator::editorData(QWidget* editor,tlp::Graph*) {
 
 QString TulipFontEditorCreator::displayText(const QVariant & data) const {
   TulipFont font =data.value<TulipFont>();
-  return font.fontName();
+  QString text(font.fontName());
+  if (font.isBold())
+    text += " bold";
+  if (font.isItalic())
+    text += " italic";
+  return text;
 }
 
 //TulipLabelPositionEditorCreator
