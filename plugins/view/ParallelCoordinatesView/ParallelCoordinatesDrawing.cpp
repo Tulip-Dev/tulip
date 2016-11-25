@@ -327,8 +327,8 @@ void ParallelCoordinatesDrawing::plotData(const unsigned int dataId, const Color
 
     if (drawPointsOnAxis) {
 
-      if (!graphProxy->highlightedEltsSet() || 
-	  graphProxy->isDataSelected(dataId)) {
+      if (!graphProxy->highlightedEltsSet() ||
+          graphProxy->isDataSelected(dataId)) {
         node n = axisPointsGraph->addNode();
         axisPointsDataMap[n] = dataId;
         axisPointsGraphLayout->setNodeValue(n, pointCoord);
