@@ -77,7 +77,6 @@ int main(int argc,char **argv) {
 
   // First we initialize Tulip with basic plugins to ensure dependencies consistency
   tlp::initTulipLib(tlp::QStringToTlpString(QApplication::applicationDirPath()).c_str());
-  tlp::TulipPluginsPath = tlp::TulipPluginsPath;
   tlp::PluginLibraryLoader::loadPlugins();
   tlp::PluginLister::checkLoadedPluginsDependencies(0);
   tlp::InteractorLister::initInteractorsDependencies();
