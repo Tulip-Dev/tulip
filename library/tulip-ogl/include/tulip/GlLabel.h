@@ -48,6 +48,12 @@ struct OcclusionTest;
  * @endcode
  */
 class TLP_GL_SCOPE GlLabel : public GlSimpleEntity {
+  /**
+   * @brief Set default parameters of GlLabel
+   *
+   */
+  void init();
+
 public :
 
   /**
@@ -69,13 +75,6 @@ public :
    * @brief Destructor
    */
   ~GlLabel();
-
-  /**
-   * @brief Set default parameters of GlLabel
-   *
-   * This function is call by constructor, so you don't have to call it
-   */
-  void init();
 
   /**
    * @brief Set the text of the label
