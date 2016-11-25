@@ -1135,8 +1135,15 @@ public:
    * @param name The name of the attribute to check for.
    * @return Whether the attribute exists.
    */
-  bool attributeExist(const std::string &name) {
+  bool existAttribute(const std::string &name) const {
     return getAttributes().exist(name);
+  }
+  
+  /**
+   * @brief deprecated, use existAttribute instead.
+   */
+  _DEPRECATED bool attributeExist(const std::string &name) const {
+    return existAttribute(name);
   }
 
   /**
