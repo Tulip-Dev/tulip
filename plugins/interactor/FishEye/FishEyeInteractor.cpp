@@ -106,11 +106,12 @@ PLUGIN(FishEyeInteractor)
 
 GlShaderProgram *FishEyeInteractorComponent::fisheyeShader(NULL);
 
-FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget) : configWidget(configWidget) {}
+FishEyeInteractorComponent::FishEyeInteractorComponent(FishEyeConfigWidget *configWidget) : configWidget(configWidget), activateFishEye(false) {}
 
 FishEyeInteractorComponent::FishEyeInteractorComponent(const FishEyeInteractorComponent &fisheyeInteractorComponent) {
   fisheyeCenter = fisheyeInteractorComponent.fisheyeCenter;
   configWidget = fisheyeInteractorComponent.configWidget;
+  activateFishEye = false;
 }
 
 void FishEyeInteractorComponent::viewChanged(View *view) {
