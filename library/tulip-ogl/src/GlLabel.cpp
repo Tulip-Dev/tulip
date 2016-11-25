@@ -65,6 +65,22 @@ static FTGLOutlineFont* getOutlineFont(const std::string& name) {
   return OutlineFonts[name] = new FTGLOutlineFont(name.c_str());
 }
 
+static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font,
+			  FTOutlineFont *&borderFont, int &fontSize) {
+#ifdef _OPENMP
+#pragma omp critical(init_tulip_font)
+  {
+    fontName =TulipBitmapDir + "font.ttf";
+    font = getPolygonFont(fontName);
+    if (font->Error()==0) //no error
+      borderFont = getOutlineFont(fontName);
+    else
+      tlp::error() << "Error when loading font file (" << fontName << ") for rendering labels" << endl;
+    fontSize=20;
+  }
+#endif
+}
+
 static const int SpaceBetweenLine=5;
 
 GlLabel::GlLabel(): leftAlign(false), oldCamera(NULL) {
@@ -78,18 +94,7 @@ GlLabel::~GlLabel() {
 }
 //============================================================
 void GlLabel::init() {
-  fontName=TulipBitmapDir + "font.ttf";
-  font=getPolygonFont(fontName);
-
-  if(font->Error()==0) { //no error
-    borderFont=getOutlineFont(fontName);
-    fontSize=20;
-    font->FaceSize(fontSize);
-    borderFont->FaceSize(fontSize);
-  }
-  else {
-    tlp::warning() << "Error when loading font file (" << fontName << ") for rendering labels" << endl;
-  }
+  initTulipFont(fontName, font, borderFont, fontSize);
 
   outlineColor=Color(0,0,0,255);
   outlineSize=1.;
