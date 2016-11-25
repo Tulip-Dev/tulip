@@ -58,7 +58,7 @@ PLUGIN(SOMView)
 
 
 SOMView::SOMView(PluginContext *) :
-graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL), somMask(NULL), mapCompositeElements(NULL), som(NULL), previewWidget(NULL), mapWidget(NULL), isDetailledMode(false), mappingIsVisible(false), hideMappingAction(NULL), showMappingAction(NULL), computeMappingAction(NULL), updateNodesColorAction(NULL), addSelectionToMaskAction(NULL), clearMaskAction(NULL), invertMaskAction(NULL), selectNodesInMaskAction(NULL), properties(NULL), destruct(false), somMapIsBuild(false), isConstruct(false) {
+  graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL), somMask(NULL), mapCompositeElements(NULL), som(NULL), previewWidget(NULL), mapWidget(NULL), isDetailledMode(false), mappingIsVisible(false), hideMappingAction(NULL), showMappingAction(NULL), computeMappingAction(NULL), updateNodesColorAction(NULL), addSelectionToMaskAction(NULL), clearMaskAction(NULL), invertMaskAction(NULL), selectNodesInMaskAction(NULL), properties(NULL), destruct(false), somMapIsBuild(false), isConstruct(false) {
   addDependency("Grid", "2.0");
 }
 

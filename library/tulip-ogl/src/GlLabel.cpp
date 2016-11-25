@@ -66,16 +66,18 @@ static FTGLOutlineFont* getOutlineFont(const std::string& name) {
 }
 
 static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font,
-			  FTOutlineFont *&borderFont, int &fontSize) {
+                          FTOutlineFont *&borderFont, int &fontSize) {
 #ifdef _OPENMP
-#pragma omp critical(init_tulip_font)
+  #pragma omp critical(init_tulip_font)
   {
     fontName =TulipBitmapDir + "font.ttf";
     font = getPolygonFont(fontName);
+
     if (font->Error()==0) //no error
       borderFont = getOutlineFont(fontName);
     else
       tlp::error() << "Error when loading font file (" << fontName << ") for rendering labels" << endl;
+
     fontSize=20;
   }
 #endif

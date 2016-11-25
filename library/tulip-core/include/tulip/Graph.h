@@ -1138,7 +1138,7 @@ public:
   bool existAttribute(const std::string &name) const {
     return getAttributes().exist(name);
   }
-  
+
   /**
    * @brief deprecated, use existAttribute instead.
    */
