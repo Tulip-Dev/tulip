@@ -97,13 +97,35 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
   tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
   tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
-  if (!bends.empty()) {
+  vector<Coord> tmp;
+  tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,tgtAnchor, tmp);
 
-    vector<Coord> tmp;
-    tlp::computeCleanVertices(bends, srcCoord, tgtCoord, srcAnchor,tgtAnchor, tmp);
+  if (!tmp.empty()) {
 
-    for (vector<Coord>::iterator it = tmp.begin(); it != tmp.end(); ++it)
-      bb.expand(*it);
+    Size edgeSize;
+    float maxSrcSize, maxTgtSize;
+
+    if(srcSize[0]>=srcSize[1])
+      maxSrcSize=srcSize[0];
+    else
+      maxSrcSize=srcSize[1];
+
+    if(tgtSize[0]>=tgtSize[1])
+      maxTgtSize=tgtSize[0];
+    else
+      maxTgtSize=tgtSize[1];
+
+    getEdgeSize(data, e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
+
+    vector<float> edgeSizes;
+    getSizes(tmp, edgeSize[0]/2.0f, edgeSize[1]/2.0f, edgeSizes);
+
+    vector<Coord> quadVertices;
+    buildCurvePoints(tmp, edgeSizes, data->getElementLayout()->getNodeValue(source), data->getElementLayout()->getNodeValue(target), quadVertices);
+
+    for (size_t i = 0 ; i < quadVertices.size() ; ++i) {
+      bb.expand(quadVertices[i]);
+    }
   }
 
   bb.expand(srcAnchor);
