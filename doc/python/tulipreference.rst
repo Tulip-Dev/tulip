@@ -302,6 +302,8 @@ Information about the graph stucture
 
 .. automethod:: tulip::tlp.Graph.removeAttribute
 
+.. automethod:: tulip::tlp.Graph.existAttribute
+
 .. automethod:: tulip::tlp.Graph.attributeExist
 
 .. automethod:: tulip::tlp.Graph.numberOfNodes
