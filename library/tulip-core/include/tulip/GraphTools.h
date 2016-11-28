@@ -130,6 +130,13 @@ TLP_SCOPE void buildNodesUniformQuantification(const Graph* graph, const Numeric
  */
 TLP_SCOPE void buildEdgesUniformQuantification(const Graph* graph, const NumericProperty* prop, unsigned int k, std::map<double, int>& mapping);
 
+/**
+ * @brief Extends selection to have a graph (no dangling edge)
+ * @param graph The graphe to compute on.
+ * @param selection The Boolean property to consider. The selection will be extend using this property.
+ * @return The number of element added to the selection property.
+ */
+ TLP_SCOPE unsigned makeSelectionGraph(const Graph* graph, BooleanProperty* selection);
 }
 #endif
 ///@endcond

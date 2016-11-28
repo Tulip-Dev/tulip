@@ -57,6 +57,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TlpQtTools.h>
 #include <tulip/TulipProject.h>
+#include <tulip/GraphTools.h>
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/AboutTulipPage.h>
 #include <tulip/ColorScalesManager.h>
@@ -365,6 +366,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionDelete,SIGNAL(triggered()),this,SLOT(deleteSelectedElements()));
   connect(_ui->actionInvert_selection,SIGNAL(triggered()),this,SLOT(invertSelection()));
   connect(_ui->actionCancel_selection,SIGNAL(triggered()),this,SLOT(cancelSelection()));
+  connect(_ui->actionMake_selection_a_graph, SIGNAL(triggered()), this, SLOT(make_graph()));
   connect(_ui->actionSelect_All,SIGNAL(triggered()),this,SLOT(selectAll()));
   connect(_ui->actionUndo,SIGNAL(triggered()),this,SLOT(undo()));
   connect(_ui->actionRedo,SIGNAL(triggered()),this,SLOT(redo()));
@@ -1001,33 +1003,19 @@ void GraphPerspective::group() {
   }
 }
 
+void GraphPerspective::make_graph() {
+    Graph* graph = _graphs->currentGraph();
+    makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+}
+
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
   if (graph == NULL)
     return NULL;
 
   graph->push();
-
   Observable::holdObservers();
-
-  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
-  edge e;
-  forEach(e,selection->getEdgesEqualTo(true)) {
-    const pair<node, node> &ends = graph->ends(e);
-
-    if (!selection->getNodeValue(ends.first)) {
-#ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
-#endif
-      selection->setNodeValue(ends.first,true);
-    }
-
-    if (!selection->getNodeValue(ends.second)) {
-#ifndef NDEBUG
-      qDebug() << trUtf8("[Create subgraph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
-#endif
-      selection->setNodeValue(ends.second,true);
-    }
-  }
+  BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  makeSelectionGraph(graph, selection);
   Graph* result = graph->addSubGraph(selection, "selection sub-graph");
   Observable::unholdObservers();
   return result;
@@ -1067,6 +1055,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionInvert_selection->setEnabled(enabled);
   _ui->actionSelect_All->setEnabled(enabled);
   _ui->actionCancel_selection->setEnabled(enabled);
+  _ui->actionMake_selection_a_graph->setEnabled(enabled);
   _ui->actionGroup_elements->setEnabled(enabled);
   _ui->actionCreate_sub_graph->setEnabled(enabled);
   _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
