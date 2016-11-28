@@ -435,6 +435,22 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
     menu->addSeparator();
 
+    QMenu* selectMenu = menu->addMenu("Select");
+
+    if (isNode) {
+      selectMenu->addAction(tr("node"),this,SLOT(addItemToSelection()));
+      selectMenu->addAction(tr("predecessor nodes"),this,SLOT(addInNodesToSelection()));
+      selectMenu->addAction(tr("successor nodes"),this,SLOT(addOutNodesToSelection()));
+      selectMenu->addAction(tr("input edges"),this,SLOT(addInEdgesToSelection()));
+      selectMenu->addAction(tr("output edges"),this,SLOT(addOutEdgesToSelection()));
+      selectMenu->addAction(tr("node and all its neighbour nodes (including edges)"),this,SLOT(addNodeAndAllNeighbourNodesAndEdges()));
+    }
+    else {
+      selectMenu->addAction(tr("edge"),this,SLOT(addItemToSelection()));
+      selectMenu->addAction(tr("edge extremities"),this,SLOT(addExtremitiesToSelection()));
+      selectMenu->addAction(tr("edge and its extremities"),this,SLOT(addEdgeAndExtremitiesToSelection()));
+    }
+
     QMenu* toggleMenu = menu->addMenu("Toggle selection");
 
     if (isNode) {
@@ -443,14 +459,16 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
       toggleMenu->addAction(tr("of successor nodes"),this,SLOT(addRemoveOutNodesToSelection()));
       toggleMenu->addAction(tr("of input edges"),this,SLOT(addRemoveInEdgesToSelection()));
       toggleMenu->addAction(tr("of output edges"),this,SLOT(addRemoveOutEdgesToSelection()));
+      toggleMenu->addAction(tr("of node and all its neighbour nodes (including edges)"),this,SLOT(addRemoveNodeAndAllNeighbourNodesAndEdges()));
     }
     else {
       toggleMenu->addAction(tr("of edge"),this,SLOT(addRemoveItemToSelection()));
       toggleMenu->addAction(tr("of edge extremities"),this,SLOT(addRemoveExtremitiesToSelection()));
+      toggleMenu->addAction(tr("of edge and its extremities"),this,SLOT(addRemoveEdgeAndExtremitiesToSelection()));
     }
 
 
-    menu->addAction(tr("Select"),this,SLOT(selectItem()));
+
     menu->addAction(tr("Delete"),this,SLOT(deleteItem()));
 
     QMenu* updateMenu = menu->addMenu("Edit");
@@ -484,15 +502,21 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveItemToSelection() {
+void NodeLinkDiagramComponent::addRemoveItemToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
-  graph()->push();
+  if (pushGraph) {
+    graph()->push();
+  }
 
   // selection add/remove graph item
   if (isNode)
-    elementSelected->setNodeValue(node(itemId), !elementSelected->getNodeValue(node(itemId)));
+    elementSelected->setNodeValue(node(itemId), forceSelect || !elementSelected->getNodeValue(node(itemId)));
   else
-    elementSelected->setEdgeValue(edge(itemId), !elementSelected->getEdgeValue(edge(itemId)));
+    elementSelected->setEdgeValue(edge(itemId), forceSelect || !elementSelected->getEdgeValue(edge(itemId)));
+}
+
+void NodeLinkDiagramComponent::addItemToSelection() {
+  addRemoveItemToSelection(true, true);
 }
 
 void NodeLinkDiagramComponent::selectItem() {
@@ -510,60 +534,113 @@ void NodeLinkDiagramComponent::selectItem() {
     elementSelected->setEdgeValue(edge(itemId), true);
 }
 
-void NodeLinkDiagramComponent::addRemoveInNodesToSelection() {
+void NodeLinkDiagramComponent::addRemoveInNodesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
-  graph()->push();
+  if (pushGraph) {
+    graph()->push();
+  }
   node neigh;
   MutableContainer<bool> inNodes;
   forEach(neigh, graph()->getInNodes(node(itemId))) {
     if (inNodes.get(neigh.id) == false) {
-      elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+      elementSelected->setNodeValue(neigh, forceSelect || !elementSelected->getNodeValue(neigh));
       inNodes.set(neigh.id, true);
     }
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveOutNodesToSelection() {
+void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
-  graph()->push();
+  if (pushGraph) {
+    graph()->push();
+  }
   node neigh;
   MutableContainer<bool> outNodes;
   forEach(neigh, graph()->getOutNodes(node(itemId))) {
     if (outNodes.get(neigh.id) == false) {
-      elementSelected->setNodeValue(neigh, !elementSelected->getNodeValue(neigh));
+      elementSelected->setNodeValue(neigh, forceSelect || !elementSelected->getNodeValue(neigh));
       outNodes.set(neigh.id, true);
     }
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveInEdgesToSelection() {
+void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
-  graph()->push();
+  if (pushGraph) {
+    graph()->push();
+  }
   edge e;
   forEach(e, graph()->getInEdges(node(itemId))) {
-    elementSelected->setEdgeValue(e, !elementSelected->getEdgeValue(e));
+    elementSelected->setEdgeValue(e, forceSelect || !elementSelected->getEdgeValue(e));
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection() {
+void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
-  graph()->push();
+  if (pushGraph) {
+    graph()->push();
+  }
   edge e;
   forEach(e, graph()->getOutEdges(node(itemId))) {
-    elementSelected->setEdgeValue(e, !elementSelected->getEdgeValue(e));
+    elementSelected->setEdgeValue(e, forceSelect || !elementSelected->getEdgeValue(e));
   }
 }
 
-void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection() {
-  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+void NodeLinkDiagramComponent::addRemoveNodeAndAllNeighbourNodesAndEdges(bool forceSelect) {
   graph()->push();
+  addRemoveItemToSelection(false, forceSelect);
+  addRemoveInEdgesToSelection(false, forceSelect);
+  addRemoveOutEdgesToSelection(false, forceSelect);
+  addRemoveInNodesToSelection(false, forceSelect);
+  addRemoveOutNodesToSelection(false, forceSelect);
+}
+
+void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection(bool pushGraph, bool forceSelect) {
+  BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+  if (pushGraph) {
+    graph()->push();
+  }
   node src = graph()->source(edge(itemId));
   node tgt = graph()->target(edge(itemId));
-  elementSelected->setNodeValue(src, !elementSelected->getNodeValue(src));
+  elementSelected->setNodeValue(src, forceSelect || !elementSelected->getNodeValue(src));
 
   if (src != tgt) {
-    elementSelected->setNodeValue(tgt, !elementSelected->getNodeValue(tgt));
+    elementSelected->setNodeValue(tgt, forceSelect || !elementSelected->getNodeValue(tgt));
   }
+}
+
+void NodeLinkDiagramComponent::addRemoveEdgeAndExtremitiesToSelection(bool forceSelect) {
+  graph()->push();
+  addRemoveItemToSelection(false, forceSelect);
+  addRemoveExtremitiesToSelection(false, forceSelect);
+}
+
+void NodeLinkDiagramComponent::addInNodesToSelection(bool pushGraph) {
+  addRemoveInNodesToSelection(pushGraph, true);
+}
+
+void NodeLinkDiagramComponent::addOutNodesToSelection(bool pushGraph) {
+  addRemoveOutNodesToSelection(pushGraph, true);
+}
+
+void NodeLinkDiagramComponent::addInEdgesToSelection(bool pushGraph) {
+  addRemoveInEdgesToSelection(pushGraph, true);
+}
+
+void NodeLinkDiagramComponent::addOutEdgesToSelection(bool pushGraph) {
+  addRemoveOutEdgesToSelection(pushGraph, true);
+}
+
+void NodeLinkDiagramComponent::addNodeAndAllNeighbourNodesAndEdges() {
+  addRemoveNodeAndAllNeighbourNodesAndEdges(true);
+}
+
+void NodeLinkDiagramComponent::addExtremitiesToSelection(bool pushGraph) {
+  addRemoveExtremitiesToSelection(pushGraph, true);
+}
+
+void NodeLinkDiagramComponent::addEdgeAndExtremitiesToSelection() {
+  addRemoveEdgeAndExtremitiesToSelection(true);
 }
 
 void NodeLinkDiagramComponent::deleteItem() {
