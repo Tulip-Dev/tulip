@@ -149,30 +149,19 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     return new CSVToGraphEdgeIdMapping(graph, edgeColumnIds, edgeProperties);
   } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesFromNodesPage) {
     // src and tgt columns must be different
-    bool sameColumns = true;
-
     for (unsigned int i = 0; i < srcColumnIds.size(); ++i) {
-      bool found = false;
-
       for (unsigned int j = 0; j < tgtColumnIds.size(); ++j) {
         if (srcColumnIds[i] == tgtColumnIds[j]) {
-          sameColumns = true;
-          break;
+          QMessageBox::critical(parentWidget(), "Import of new relations failed", "Source columns and destination columns are not different.");
+          return NULL;
         }
       }
-
-      if ((sameColumns = found) == false)
-        break;
-    }
-
-    if (sameColumns) {
-      return nullptr;
     }
 
     bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
     return new CSVToGraphEdgeSrcTgtMapping(graph, srcColumnIds, tgtColumnIds, srcProperties, tgtProperties, createMissingElement);
   } else {
-    return nullptr;
+    return NULL;
   }
 }
 
@@ -185,24 +174,12 @@ bool CSVGraphMappingConfigurationWidget::isValid() const {
     return !edgeProperties.empty() && !edgeColumnIds.empty();
   } else if (ui->mappingConfigurationStackedWidget->currentWidget() == ui->importEdgesFromNodesPage) {
     // src and tgt columns must be different
-    bool sameColumns = true;
-
     for (unsigned int i = 0; i < srcColumnIds.size(); ++i) {
-      bool found = false;
-
       for (unsigned int j = 0; j < tgtColumnIds.size(); ++j) {
         if (srcColumnIds[i] == tgtColumnIds[j]) {
-          sameColumns = true;
-          break;
+          return false;
         }
       }
-
-      if ((sameColumns = found) == false)
-        break;
-    }
-
-    if (sameColumns) {
-      return false;
     }
 
     return true;

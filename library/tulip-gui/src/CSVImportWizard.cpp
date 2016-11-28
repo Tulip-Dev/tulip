@@ -201,7 +201,5 @@ void CSVImportWizard::accept() {
   if (processIsValid) {
     // Call QDialog accept
     QWizard::accept();
-  } else {
-    QWizard::reject();
   }
 }
