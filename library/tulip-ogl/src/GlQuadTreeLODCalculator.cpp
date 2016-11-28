@@ -395,6 +395,9 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
   vector<unsigned int> resEdges;
   vector<GlSimpleEntity *> resEntities;
 
+  static GlNode glNode(0);
+  static GlEdge glEdge(0);
+
   // Get result of quadtrees
 #ifdef _OPENMP
   #pragma omp parallel
@@ -424,7 +427,6 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
               nodesQuadTree[quadTreesVectorPosition]->getElements(resNodes);
           }
 
-          GlNode glNode(0);
           layerLODUnit->nodesLODVector.reserve(resNodes.size());
 
           for(size_t i=0; i<resNodes.size(); ++i) {
@@ -453,7 +455,6 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
               edgesQuadTree[quadTreesVectorPosition]->getElements(resEdges);
           }
 
-          GlEdge glEdge(0);
           layerLODUnit->edgesLODVector.reserve(resEdges.size());
 
           for(size_t i=0; i<resEdges.size(); ++i) {
