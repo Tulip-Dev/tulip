@@ -132,7 +132,7 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph* graph, const Numeric
 
 /**
  * @brief Extends selection to have a graph (no dangling edge)
- * @param graph The graphe to compute on.
+ * @param graph The graph to compute on.
  * @param selection The Boolean property to consider. The selection will be extend using this property.
  * @return The number of element added to the selection property.
  */
