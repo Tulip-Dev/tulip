@@ -44,11 +44,28 @@ class Color;
 class PropertyInterface;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
+    Q_OBJECT
+
+protected:
+    GlMainView* _mainView;
+
+public:
+    QuickAccessBar(QWidget *parent=0);
+
+public slots:
+    void setGlMainView(tlp::GlMainView*);
+    virtual void reset()=0;
+
+signals:
+  void settingsChanged();
+};
+
+class TLP_QT_SCOPE QuickAccessBarImpl : public QuickAccessBar {
   Q_OBJECT
 
   Ui::QuickAccessBar* _ui;
   QGraphicsItem *_quickAccessBarItem;
-  GlMainView* _mainView;
+
   TulipItemDelegate* delegate;
   bool _resetting;
   GlGraphInputData* inputData() const;
@@ -65,11 +82,10 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
                          const Color &color);
 
 public:
-  explicit QuickAccessBar(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
-  virtual ~QuickAccessBar();
+  explicit QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem,QWidget *parent = 0);
+  virtual ~QuickAccessBarImpl();
 
 public slots:
-  void setGlMainView(tlp::GlMainView*);
   void reset();
 
   void setBackgroundColor(const QColor&);
@@ -94,9 +110,6 @@ public slots:
   void setLabelsScaled(bool);
   void selectFont();
   void setNodeLabelPosition();
-
-signals:
-  void settingsChanged();
 };
 }
 
