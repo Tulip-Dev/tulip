@@ -133,6 +133,7 @@ protected slots:
   void deleteSelectedElements();
   void invertSelection();
   void cancelSelection();
+  void make_graph();
   void selectAll();
   void undo();
   void redo();

@@ -59,6 +59,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TulipProject.h>
+#include <tulip/GraphTools.h>
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/AboutTulipPage.h>
 #include <tulip/ColorScalesManager.h>
@@ -414,6 +415,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionDelete, SIGNAL(triggered()), this, SLOT(deleteSelectedElements()));
   connect(_ui->actionInvert_selection, SIGNAL(triggered()), this, SLOT(invertSelection()));
   connect(_ui->actionCancel_selection, SIGNAL(triggered()), this, SLOT(cancelSelection()));
+  connect(_ui->actionMake_selection_a_graph, SIGNAL(triggered()), this, SLOT(make_graph()));
   connect(_ui->actionSelect_All, SIGNAL(triggered()), this, SLOT(selectAll()));
   connect(_ui->actionUndo, SIGNAL(triggered()), this, SLOT(undo()));
   connect(_ui->actionRedo, SIGNAL(triggered()), this, SLOT(redo()));
@@ -1037,22 +1039,23 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
         return;
       }
 
-      graph->push();
-
-      bool changeGraph = false;
-
-      if (graph == graph->getRoot()) {
-        qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. A subgraph has automatically been created");
-        graph = graph->addCloneSubGraph("groups");
-        changeGraph = true;
+      void GraphPerspective::make_graph() {
+        Graph *graph = _graphs->currentGraph();
+        makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
       }
 
-      graph->createMetaNode(groupedNodes, false);
+      Graph *GraphPerspective::createSubGraph(Graph * graph) {
+        if (graph == NULL)
+          return NULL;
 
-      selection->setAllNodeValue(false);
-      selection->setAllEdgeValue(false);
-
-      Observable::unholdObservers();
+        graph->push();
+        Observable::holdObservers();
+        BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+        makeSelectionGraph(graph, selection);
+        Graph *result = graph->addSubGraph(selection, "selection sub-graph");
+        Observable::unholdObservers();
+        return result;
+      }
 
       if (!changeGraph)
         return;
@@ -1071,7 +1074,48 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
 
       Observable::holdObservers();
 
-      tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
+      void GraphPerspective::currentGraphChanged(Graph * graph) {
+        bool enabled(graph != NULL);
+        _ui->actionUndo->setEnabled(enabled);
+        _ui->actionRedo->setEnabled(enabled);
+        _ui->actionCut->setEnabled(enabled);
+        _ui->actionCopy->setEnabled(enabled);
+        _ui->actionPaste->setEnabled(enabled);
+        _ui->actionDelete->setEnabled(enabled);
+        _ui->actionInvert_selection->setEnabled(enabled);
+        _ui->actionSelect_All->setEnabled(enabled);
+        _ui->actionCancel_selection->setEnabled(enabled);
+        _ui->actionMake_selection_a_graph->setEnabled(enabled);
+        _ui->actionGroup_elements->setEnabled(enabled);
+        _ui->actionCreate_sub_graph->setEnabled(enabled);
+        _ui->actionCreate_empty_sub_graph->setEnabled(enabled);
+        _ui->actionClone_sub_graph->setEnabled(enabled);
+        _ui->actionExport->setEnabled(enabled);
+        _ui->singleModeButton->setEnabled(enabled);
+        _ui->splitModeButton->setEnabled(enabled);
+        _ui->splitHorizontalModeButton->setEnabled(enabled);
+        _ui->split3ModeButton->setEnabled(enabled);
+        _ui->split32ModeButton->setEnabled(enabled);
+        _ui->split33ModeButton->setEnabled(enabled);
+        _ui->gridModeButton->setEnabled(enabled);
+        _ui->sixModeButton->setEnabled(enabled);
+        _ui->exposeModeButton->setEnabled(enabled);
+        _ui->searchButton->setEnabled(enabled);
+        _ui->pythonButton->setEnabled(enabled);
+        _ui->previousPageButton->setVisible(enabled);
+        _ui->pageCountLabel->setVisible(enabled);
+        _ui->nextPageButton->setVisible(enabled);
+
+        if (graph == NULL) {
+          _ui->workspace->switchToStartupMode();
+          _ui->exposeModeButton->setChecked(false);
+          _ui->searchButton->setChecked(false);
+          _ui->pythonButton->setChecked(false);
+          setSearchOutput(false);
+        } else {
+          _ui->workspace->setGraphForFocusedPanel(graph);
+        }
+      }
 
       for (edge e : selection->getEdgesEqualTo(true)) {
         const pair<node, node> &ends = graph->ends(e);
