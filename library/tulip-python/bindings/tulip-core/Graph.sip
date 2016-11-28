@@ -3835,7 +3835,7 @@ Returns a reference on an attribute of the graph or :const:`None` if it does not
 
 %MethodCode
   sipRes = NULL;
-  if (sipCpp->attributeExist(*a0)) {
+  if (sipCpp->existAttribute(*a0)) {
     tlp::DataType* dataType = sipCpp->getAttribute(*a0);
     sipRes = getPyObjectFromDataType(dataType);
     delete dataType;
@@ -3866,7 +3866,7 @@ Removes an attribute of the graph.
 %End
 
 %MethodCode
-  if (sipCpp->attributeExist(*a0)) {
+  if (sipCpp->existAttribute(*a0)) {
     sipCpp->removeAttribute(*a0);
   } else {
     std::ostringstream oss;
@@ -3887,6 +3887,7 @@ tlp.Graph.attributeExist(name)
 .. deprecated:: 4.10
 
 Checks if an attribute with a specific name exists in the graph.
+That method is now deprecated, use :meth:`tlp.Graph.existAttribute` instead.
 
 :param name: the name of the attribute to test existence.
 :type name: string
@@ -4158,7 +4159,7 @@ Returns :const:`True` if the graph has been successfully saved.
 %MethodCode
   bool ok = false;
   std::string tlpFilePath;
-  if (a0->attributeExist("file")) {
+  if (a0->existAttribute("file")) {
     a0->getAttribute("file", tlpFilePath);
     ok = true;
   }

@@ -36,6 +36,9 @@ for instance :meth:`tlp.BooleanProperty.setAllNodeValue`, :meth:`tlp.DoublePrope
 have been updated. They now take an optionnal :class:`tlp.Graph` parameter, enabling to only
 set the nodes / edges values contained in that sub-graph.
 
+The method :meth:`tlp.Graph.attributeExist` is now deprecated, :meth:`tlp.Graph.existAttribute`
+should now be used instead.
+
 Documentation for Tulip C++ plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
