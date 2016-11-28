@@ -93,7 +93,7 @@ public:
 
 };
 
-QuickAccessBar::QuickAccessBar(QWidget *parent):QWidget(parent),_mainView(NULL){
+QuickAccessBar::QuickAccessBar(QWidget *parent):QWidget(parent),_mainView(NULL) {
 
 }
 
@@ -294,7 +294,7 @@ void QuickAccessBarImpl::setLabelColor(const QColor& c) {
 }
 
 void QuickAccessBarImpl::setAllColorValues(unsigned int eltType,
-                                       ColorProperty* prop, const Color &color) {
+    ColorProperty* prop, const Color &color) {
   BooleanProperty* selected = inputData()->getElementSelected();
   bool hasSelected = false;
 
@@ -344,7 +344,7 @@ void QuickAccessBarImpl::setEdgeBorderColor(const QColor& c) {
 }
 
 void QuickAccessBarImpl::setAllValues(unsigned int eltType,
-                                  PropertyInterface* prop) {
+                                      PropertyInterface* prop) {
   QVariant val =
     TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
                                         prop, _mainView->graph(),

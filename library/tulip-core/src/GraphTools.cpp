@@ -626,29 +626,29 @@ void buildEdgesUniformQuantification(const Graph* graph,
   }
 }
 unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection) {
-    Observable::holdObservers();
-    edge e;
-    unsigned added=0;
-    forEach(e,selection->getEdgesEqualTo(true)) {
-      const pair<node, node> &ends = graph->ends(e);
+  Observable::holdObservers();
+  edge e;
+  unsigned added=0;
+  forEach(e,selection->getEdgesEqualTo(true)) {
+    const pair<node, node> &ends = graph->ends(e);
 
-      if (!selection->getNodeValue(ends.first)) {
-  #ifndef NDEBUG
-        tlp::debug() << trUtf8("[Make selection a graph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
-  #endif
-        selection->setNodeValue(ends.first,true);
-        added++;
-      }
-
-      if (!selection->getNodeValue(ends.second)) {
-  #ifndef NDEBUG
-        tlp::debug() << trUtf8("[Make selection a graph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
-  #endif
-        selection->setNodeValue(ends.second,true);
-        added++;
-      }
+    if (!selection->getNodeValue(ends.first)) {
+#ifndef NDEBUG
+      tlp::debug() << trUtf8("[Make selection a graph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+#endif
+      selection->setNodeValue(ends.first,true);
+      added++;
     }
-    Observable::unholdObservers();
-    return added;
+
+    if (!selection->getNodeValue(ends.second)) {
+#ifndef NDEBUG
+      tlp::debug() << trUtf8("[Make selection a graph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+#endif
+      selection->setNodeValue(ends.second,true);
+      added++;
+    }
+  }
+  Observable::unholdObservers();
+  return added;
 }
 }

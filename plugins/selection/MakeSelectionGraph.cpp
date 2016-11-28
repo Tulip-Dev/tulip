@@ -28,17 +28,19 @@ static const char *paramHelp[] = {
 };
 
 MakeSelectionGraph::MakeSelectionGraph(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-     addInParameter<BooleanProperty> ("Current selection", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty> ("Current selection", paramHelp[0], "viewSelection");
 }
 
 bool MakeSelectionGraph::run() {
-    BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
-    if(dataSet!=NULL)
-        dataSet->get("Current selection", sel);
-    result->copy(sel);
-    unsigned added = makeSelectionGraph(graph,result);
-    tlp::debug() << added << " elements added to the selection." << std::endl;
-    return true;
+  BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
+
+  if(dataSet!=NULL)
+    dataSet->get("Current selection", sel);
+
+  result->copy(sel);
+  unsigned added = makeSelectionGraph(graph,result);
+  tlp::debug() << added << " elements added to the selection." << std::endl;
+  return true;
 }
 
 PLUGIN(MakeSelectionGraph)

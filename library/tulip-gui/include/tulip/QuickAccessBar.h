@@ -44,17 +44,17 @@ class Color;
 class PropertyInterface;
 
 class TLP_QT_SCOPE QuickAccessBar : public QWidget {
-    Q_OBJECT
+  Q_OBJECT
 
 protected:
-    GlMainView* _mainView;
+  GlMainView* _mainView;
 
 public:
-    QuickAccessBar(QWidget *parent=0);
+  QuickAccessBar(QWidget *parent=0);
 
 public slots:
-    void setGlMainView(tlp::GlMainView*);
-    virtual void reset()=0;
+  void setGlMainView(tlp::GlMainView*);
+  virtual void reset()=0;
 
 signals:
   void settingsChanged();
