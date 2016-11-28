@@ -70,7 +70,8 @@ public slots:
   const Camera &goInsideItem(node meta);
 
 protected slots:
-  void addRemoveItemToSelection();
+  void addRemoveItemToSelection(bool pushGraph = true, bool forceSelect = false);
+  void addItemToSelection();
   void selectItem();
   void deleteItem();
   void editColor();
@@ -83,11 +84,20 @@ protected slots:
   void showGridControl();
   void fillContextMenu(QMenu *menu, const QPointF &point);
   void displayToolTips(bool display);
-  void addRemoveInNodesToSelection();
-  void addRemoveOutNodesToSelection();
-  void addRemoveInEdgesToSelection();
-  void addRemoveOutEdgesToSelection();
-  void addRemoveExtremitiesToSelection();
+  void addRemoveInNodesToSelection(bool pushGraph = true, bool forceSelect = false);
+  void addRemoveOutNodesToSelection(bool pushGraph = true, bool forceSelect = false);
+  void addRemoveInEdgesToSelection(bool pushGraph = true, bool forceSelect = false);
+  void addRemoveOutEdgesToSelection(bool pushGraph = true, bool forceSelect = false);
+  void addRemoveNodeAndAllNeighbourNodesAndEdges(bool forceSelect = false);
+  void addRemoveExtremitiesToSelection(bool pushGraph = true, bool forceSelect = false);
+  void addRemoveEdgeAndExtremitiesToSelection(bool forceSelect = false);
+  void addInNodesToSelection(bool pushGraph = true);
+  void addOutNodesToSelection(bool pushGraph = true);
+  void addInEdgesToSelection(bool pushGraph = true);
+  void addOutEdgesToSelection(bool pushGraph = true);
+  void addNodeAndAllNeighbourNodesAndEdges();
+  void addExtremitiesToSelection(bool pushGraph = true);
+  void addEdgeAndExtremitiesToSelection();
 
 protected:
   bool isNode;
