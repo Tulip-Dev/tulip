@@ -200,7 +200,4 @@ void CSVImportWizard::accept() {
     //Call QDialog accept
     QWizard::accept();
   }
-  else {
-    QWizard::reject();
-  }
 }
