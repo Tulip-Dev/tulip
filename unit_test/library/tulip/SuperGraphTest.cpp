@@ -805,7 +805,7 @@ void SuperGraphTest::testAttributes() {
   delete dt;
   TypedData<string> dtc(new string("test"));
   graph->setAttribute("name", (const DataType *) &dtc);
-  CPPUNIT_ASSERT(graph->attributeExist("name"));
+  CPPUNIT_ASSERT(graph->existAttribute("name"));
   dt = graph->getAttribute("name");
   CPPUNIT_ASSERT_EQUAL(0, dt->getTypeName().compare(typeid(string).name()));
   delete dt;
