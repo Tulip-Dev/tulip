@@ -171,6 +171,7 @@ protected:
   tlp::GlOverviewGraphicsItem *overviewItem() const;
   void updateShowOverviewButton();
   void updateShowQuickAccessBarButton();
+  virtual QuickAccessBar* getQuickAccessBarImpl();
 
   OverviewPosition _overviewPosition;
 

@@ -279,6 +279,10 @@ void GlMainView::updateShowQuickAccessBarButton() {
   }
 }
 
+QuickAccessBar* GlMainView::getQuickAccessBarImpl() {
+    return new QuickAccessBarImpl(_quickAccessBarItem);
+}
+
 void GlMainView::setQuickAccessBarVisible(bool visible) {
   if (!visible) {
     delete _quickAccessBar;
@@ -289,7 +293,7 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
   else if (!quickAccessBarVisible()) {
     needQuickAccessBar = true;
     _quickAccessBarItem = new QGraphicsProxyWidget();
-    _quickAccessBar = new QuickAccessBar(_quickAccessBarItem);
+    _quickAccessBar = getQuickAccessBarImpl();
 // workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
