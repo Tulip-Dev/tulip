@@ -3884,6 +3884,23 @@ tlp.Graph.attributeExist(name)
 
 .. versionadded:: 4.4
 
+.. deprecated:: 4.10
+
+Checks if an attribute with a specific name exists in the graph.
+
+:param name: the name of the attribute to test existence.
+:type name: string
+:rtype: boolean
+%End
+
+//===========================================================================================
+
+  bool existAttribute(const std::string &name);
+%Docstring
+tlp.Graph.existAttribute(name)
+
+.. versionadded:: 4.10
+
 Checks if an attribute with a specific name exists in the graph.
 
 :param name: the name of the attribute to test existence.
