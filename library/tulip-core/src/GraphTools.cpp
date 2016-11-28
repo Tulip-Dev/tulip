@@ -634,7 +634,7 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection) {
 
     if (!selection->getNodeValue(ends.first)) {
 #ifndef NDEBUG
-      tlp::debug() << trUtf8("[Make selection a graph] node #") << QString::number(ends.first.id) << trUtf8(" source of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+      tlp::debug() << "[Make selection a graph] node #" << ends.first.id << " source of edge #" << e.id << " automatically added to selection.";
 #endif
       selection->setNodeValue(ends.first,true);
       added++;
@@ -642,7 +642,7 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection) {
 
     if (!selection->getNodeValue(ends.second)) {
 #ifndef NDEBUG
-      tlp::debug() << trUtf8("[Make selection a graph] node #") << QString::number(ends.second.id) << trUtf8(" target of edge #") << QString::number(e.id) << trUtf8(" automatically added to selection.");
+      tlp::debug() << "[Make selection a graph] node #" << ends.second.id << " target of edge #" << e.id << " automatically added to selection.";
 #endif
       selection->setNodeValue(ends.second,true);
       added++;
