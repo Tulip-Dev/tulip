@@ -32,15 +32,14 @@
  *  \author Bruno Pinaud, LaBRI University of Bordeaux France:
  */
 
-class MakeSelectionGraph : public tlp::BooleanAlgorithm
-{
+class MakeSelectionGraph : public tlp::BooleanAlgorithm {
 public:
-    MakeSelectionGraph(const tlp::PluginContext* context);
-    PLUGININFORMATION(tlp::SelectionAlgorithm::MakeSelectionGraph,"Bruno Pinaud","28/11/2016",
-                      "Extends the selection to have a graph.<br/>"
-                      "All selected edges will have their extremities selected (no dangling edges)",
-                      "1.0", "Selection")
-    bool run();
+  MakeSelectionGraph(const tlp::PluginContext* context);
+  PLUGININFORMATION(tlp::SelectionAlgorithm::MakeSelectionGraph,"Bruno Pinaud","28/11/2016",
+                    "Extends the selection to have a graph.<br/>"
+                    "All selected edges will have their extremities selected (no dangling edges)",
+                    "1.0", "Selection")
+  bool run();
 };
 
 #endif // MAKESELECTIONGRAPH_H

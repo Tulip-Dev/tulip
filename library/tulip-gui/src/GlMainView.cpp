@@ -295,7 +295,7 @@ void GlMainView::updateShowQuickAccessBarButton() {
 }
 
 QuickAccessBar* GlMainView::getQuickAccessBarImpl() {
-    return new QuickAccessBarImpl(_quickAccessBarItem);
+  return new QuickAccessBarImpl(_quickAccessBarItem);
 }
 
 void GlMainView::setQuickAccessBarVisible(bool visible) {

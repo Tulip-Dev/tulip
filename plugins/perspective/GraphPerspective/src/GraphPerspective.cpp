@@ -1004,8 +1004,8 @@ void GraphPerspective::group() {
 }
 
 void GraphPerspective::make_graph() {
-    Graph* graph = _graphs->currentGraph();
-    makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+  Graph* graph = _graphs->currentGraph();
+  makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {

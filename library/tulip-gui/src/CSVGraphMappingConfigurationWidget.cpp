@@ -158,8 +158,8 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     for(unsigned int i = 0; i < srcColumnIds.size(); ++i) {
       for (unsigned int j = 0; j < tgtColumnIds.size(); ++j) {
         if (srcColumnIds[i] == tgtColumnIds[j]) {
-	  QMessageBox::critical(parentWidget(), "Import of new relations failed", "Source columns and destination columns are not different.");
-	  return NULL;
+          QMessageBox::critical(parentWidget(), "Import of new relations failed", "Source columns and destination columns are not different.");
+          return NULL;
         }
       }
     }
