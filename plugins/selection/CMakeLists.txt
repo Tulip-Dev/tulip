@@ -31,6 +31,10 @@ ADD_LIBRARY(Kruskal-${TulipVersion} SHARED Kruskal.cpp Kruskal.h)
 TARGET_LINK_LIBRARIES(Kruskal-${TulipVersion} ${LibTulipCoreName})
 
 ##----------------------------------------------------------------------------------------------------------------------------
+ADD_LIBRARY(MakeGraph-${TulipVersion} SHARED MakeSelectionGraph.cpp MakeSelectionGraph.h)
+TARGET_LINK_LIBRARIES(MakeGraph-${TulipVersion} ${LibTulipCoreName})
+
+##----------------------------------------------------------------------------------------------------------------------------
 INSTALL_TULIP_PLUGIN(SpanningDagSelection-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(ReachableSubGraphSelection-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(SpanningTreeSelection-${TulipVersion} ${TulipPluginsInstallDir})
@@ -38,3 +42,4 @@ INSTALL_TULIP_PLUGIN(InducedSubGraphSelection-${TulipVersion} ${TulipPluginsInst
 INSTALL_TULIP_PLUGIN(LoopSelection-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(MultipleSelection-${TulipVersion} ${TulipPluginsInstallDir})
 INSTALL_TULIP_PLUGIN(Kruskal-${TulipVersion} ${TulipPluginsInstallDir})
+INSTALL_TULIP_PLUGIN(MakeGraph-${TulipVersion} ${TulipPluginsInstallDir})
