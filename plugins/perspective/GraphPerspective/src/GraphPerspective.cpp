@@ -819,11 +819,11 @@ void GraphPerspective::deleteSelectedElements() {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
 
   graph->push();
-  tlp::Iterator<edge>* itEdges = selection->getEdgesEqualTo(true);
+  tlp::Iterator<edge>* itEdges = selection->getEdgesEqualTo(true, graph);
   graph->delEdges(itEdges, false);
   delete itEdges;
 
-  tlp::Iterator<node>* itNodes = selection->getNodesEqualTo(true);
+  tlp::Iterator<node>* itNodes = selection->getNodesEqualTo(true,graph);
   graph->delNodes(itNodes, false);
   delete itNodes;
 
@@ -845,11 +845,11 @@ void GraphPerspective::cancelSelection() {
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
   node n;
-  forEach(n, selection->getNodesEqualTo(true)) {
+  forEach(n, selection->getNodesEqualTo(true,graph)) {
     selection->setNodeValue(n, false);
   }
   edge e;
-  forEach(e, selection->getEdgesEqualTo(true)) {
+  forEach(e, selection->getEdgesEqualTo(true,graph)) {
     selection->setEdgeValue(e, false);
   }
   Observable::unholdObservers();
