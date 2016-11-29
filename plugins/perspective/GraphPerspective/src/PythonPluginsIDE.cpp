@@ -195,6 +195,8 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent)
 
 #if defined(__APPLE__)
   if (!PythonInterpreter::pythonPluginsPath.contains(".app/Contents/"))
+#elif defined(_LINUX)
+  if (!PythonInterpreter::pythonPluginsPath.startsWith("/tmp/.mount"))
 #endif
     infosMsg += QString(" or <b>") + PythonInterpreter::pythonPluginsPath + "</b>";
   infosMsg += QString("<br/> and it will be automatically loaded at Tulip startup");
