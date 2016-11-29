@@ -1005,7 +1005,8 @@ void GraphPerspective::group() {
 
 void GraphPerspective::make_graph() {
   Graph* graph = _graphs->currentGraph();
-  makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+  unsigned added = makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+  tlp::debug() << "Make selection a graph: " << added << " elements added to the selection.";
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
