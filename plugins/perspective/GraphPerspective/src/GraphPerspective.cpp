@@ -32,8 +32,10 @@
 #include <QDesktopServices>
 #include <QDropEvent>
 #include <QFileDialog>
-#include <QMessageBox>
-#include <QMessageBox>
+#include <QCloseEvent>
+#include <QClipboard>
+#include <QDropEvent>
+#include <QUrl>
 #include <QMimeData>
 #include <QTimer>
 #include <QUrl>
