@@ -44,17 +44,18 @@ bool MakeSelectionGraph::run() {
 }
 
 isGraphTest::isGraphTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
-    addInParameter<BooleanProperty> ("Current selection", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty> ("Current selection", paramHelp[0], "viewSelection");
 }
 
 bool isGraphTest::test() {
-    BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
+  BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
 
-    if(dataSet!=NULL)
-      dataSet->get("Current selection", sel);
-    bool test;
-    makeSelectionGraph(graph,sel,&test);
-    return test;
+  if(dataSet!=NULL)
+    dataSet->get("Current selection", sel);
+
+  bool test;
+  makeSelectionGraph(graph,sel,&test);
+  return test;
 }
 
 PLUGIN(MakeSelectionGraph)

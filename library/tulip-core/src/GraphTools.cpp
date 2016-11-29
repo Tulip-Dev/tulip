@@ -638,9 +638,10 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 #endif
       selection->setNodeValue(ends.first,true);
       added++;
+
       if(test) {
-          *test = false;
-          return -1;
+        *test = false;
+        return -1;
       }
     }
 
@@ -650,15 +651,18 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
 #endif
       selection->setNodeValue(ends.second,true);
       added++;
+
       if(test) {
-          *test = false;
-          return -1;
+        *test = false;
+        return -1;
       }
     }
   }
   Observable::unholdObservers();
+
   if(test)
-      *test = true;
+    *test = true;
+
   return added;
 }
 }

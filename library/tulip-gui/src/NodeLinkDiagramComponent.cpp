@@ -504,6 +504,7 @@ void NodeLinkDiagramComponent::fillContextMenu(QMenu *menu, const QPointF &point
 
 void NodeLinkDiagramComponent::addRemoveItemToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (pushGraph) {
     graph()->push();
   }
@@ -536,9 +537,11 @@ void NodeLinkDiagramComponent::selectItem() {
 
 void NodeLinkDiagramComponent::addRemoveInNodesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (pushGraph) {
     graph()->push();
   }
+
   node neigh;
   MutableContainer<bool> inNodes;
   forEach(neigh, graph()->getInNodes(node(itemId))) {
@@ -551,9 +554,11 @@ void NodeLinkDiagramComponent::addRemoveInNodesToSelection(bool pushGraph, bool 
 
 void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (pushGraph) {
     graph()->push();
   }
+
   node neigh;
   MutableContainer<bool> outNodes;
   forEach(neigh, graph()->getOutNodes(node(itemId))) {
@@ -566,9 +571,11 @@ void NodeLinkDiagramComponent::addRemoveOutNodesToSelection(bool pushGraph, bool
 
 void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (pushGraph) {
     graph()->push();
   }
+
   edge e;
   forEach(e, graph()->getInEdges(node(itemId))) {
     elementSelected->setEdgeValue(e, forceSelect || !elementSelected->getEdgeValue(e));
@@ -577,9 +584,11 @@ void NodeLinkDiagramComponent::addRemoveInEdgesToSelection(bool pushGraph, bool 
 
 void NodeLinkDiagramComponent::addRemoveOutEdgesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (pushGraph) {
     graph()->push();
   }
+
   edge e;
   forEach(e, graph()->getOutEdges(node(itemId))) {
     elementSelected->setEdgeValue(e, forceSelect || !elementSelected->getEdgeValue(e));
@@ -597,9 +606,11 @@ void NodeLinkDiagramComponent::addRemoveNodeAndAllNeighbourNodesAndEdges(bool fo
 
 void NodeLinkDiagramComponent::addRemoveExtremitiesToSelection(bool pushGraph, bool forceSelect) {
   BooleanProperty *elementSelected = graph()->getProperty<BooleanProperty>("viewSelection");
+
   if (pushGraph) {
     graph()->push();
   }
+
   node src = graph()->source(edge(itemId));
   node tgt = graph()->target(edge(itemId));
   elementSelected->setNodeValue(src, forceSelect || !elementSelected->getNodeValue(src));
