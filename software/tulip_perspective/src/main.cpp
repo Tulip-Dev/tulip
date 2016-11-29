@@ -248,6 +248,19 @@ int main(int argc, char **argv) {
   TulipProject *project = nullptr;
   QString error;
 
+  // Init tulip
+  PluginLoaderToProgress *loader = new PluginLoaderToProgress();
+  loader->_progress = progress;
+
+  try {
+    tlp::initTulipSoftware(loader);
+  } catch (tlp::TulipException &e) {
+    QMessageBox::warning(0, "Error", e.what());
+    exit(1);
+  }
+
+  delete loader;
+
   if (!projectFilePath.isEmpty() && !QFileInfo(projectFilePath).exists()) {
     usage("File " + projectFilePath + " not found");
   }
@@ -277,19 +290,6 @@ int main(int argc, char **argv) {
   context->project = project;
   context->parameters = extraParams;
   project->setPerspective(perspectiveName);
-
-  // Init tulip
-  PluginLoaderToProgress *loader = new PluginLoaderToProgress();
-  loader->_progress = progress;
-
-  try {
-    tlp::initTulipSoftware(loader);
-  } catch (tlp::TulipException &e) {
-    QMessageBox::warning(0, "Error", e.what());
-    exit(1);
-  }
-
-  delete loader;
 
   // Initialize main window.
   progress->progress(100, 100);
