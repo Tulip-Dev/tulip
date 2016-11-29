@@ -579,14 +579,15 @@ void AlgorithmRunnerItem::afterRun(Graph* g, const tlp::DataSet& dataSet) {
     bool result = true;
     dataSet.get<bool>("result",result);
     std::string str = "\"" + stdName + "\" test " + (result?"succeed":"failed") + " on:\n" +  g->getName()+".";
+
     if (result) {
       tlp::debug() << str << std::endl;
       QMessageBox::information(parentWidget(), "Tulip test result",
                                tlp::tlpStringToQString(str));
     }
     else {
-        tlp::warning() << str << std::endl;
-        QMessageBox::warning(parentWidget(), "Tulip test result",
+      tlp::warning() << str << std::endl;
+      QMessageBox::warning(parentWidget(), "Tulip test result",
                            tlp::tlpStringToQString(str));
     }
   }

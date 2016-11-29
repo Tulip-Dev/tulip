@@ -35,19 +35,19 @@
 
 class MakeSelectionGraph : public tlp::BooleanAlgorithm {
 public:
-    MakeSelectionGraph(const tlp::PluginContext* context);
-    PLUGININFORMATION(tlp::SelectionAlgorithm::MakeSelectionGraph,"Bruno Pinaud","28/11/2016",
-                      "Extends the selection to have a graph.<br/>"
-                      "All selected edges will have their extremities selected (no dangling edges)",
-                      "1.0", "Selection")
-    bool run();
+  MakeSelectionGraph(const tlp::PluginContext* context);
+  PLUGININFORMATION(tlp::SelectionAlgorithm::MakeSelectionGraph,"Bruno Pinaud","28/11/2016",
+                    "Extends the selection to have a graph.<br/>"
+                    "All selected edges will have their extremities selected (no dangling edges)",
+                    "1.0", "Selection")
+  bool run();
 };
 
 class isGraphTest: public tlp::GraphTest {
-    PLUGININFORMATION("Is a graph?", "Bruno Pinaud", "29/11/2016", "Tests whether the selection is a graph or not (no dangling edge).", "1.0", "Selection Test")
-    public:
-        isGraphTest(const tlp::PluginContext* context);
-    bool test();
+  PLUGININFORMATION("Is a graph?", "Bruno Pinaud", "29/11/2016", "Tests whether the selection is a graph or not (no dangling edge).", "1.0", "Selection Test")
+public:
+  isGraphTest(const tlp::PluginContext* context);
+  bool test();
 };
 
 #endif // MAKESELECTIONGRAPH_H
