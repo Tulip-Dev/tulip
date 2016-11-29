@@ -31,7 +31,6 @@
 #include <QDesktopServices>
 #include <QFileDialog>
 #include <QCloseEvent>
-#include <QMessageBox>
 #include <QClipboard>
 #include <QDropEvent>
 #include <QUrl>
