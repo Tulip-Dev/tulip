@@ -117,7 +117,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char *msg) {
     // remove quotes around message added by Qt
     QString msgClean = qmsg.mid(14).mid(2, qmsg.length() - 18);
     _ui->listWidget->addItem(
-        new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(mdi::languagepython, Qt::gray, 0.9), msgClean));
+        new QListWidgetItem(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray, 0.9), msgClean));
     _pythonOutput = true;
   } else {
     _ui->listWidget->addItem(new QListWidgetItem(iconForType(type), qmsg));
