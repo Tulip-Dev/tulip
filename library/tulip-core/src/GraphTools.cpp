@@ -608,7 +608,7 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
       ++k2;
   }
 }
-unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection) {
+unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test) {
   Observable::holdObservers();
   edge e;
   unsigned added = 0;
@@ -621,6 +621,10 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection) {
 #endif
       selection->setNodeValue(ends.first, true);
       added++;
+      if(test) {
+          *test = false;
+          return -1;
+      }
     }
 
     if (!selection->getNodeValue(ends.second)) {
@@ -629,9 +633,15 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection) {
 #endif
       selection->setNodeValue(ends.second, true);
       added++;
+      if(test) {
+          *test = false;
+          return -1;
+      }
     }
   }
   Observable::unholdObservers();
+  if(test)
+      *test = true;
   return added;
 }
 }

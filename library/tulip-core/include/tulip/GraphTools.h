@@ -129,7 +129,7 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const Numeric
  * @param selection The Boolean property to consider. The selection will be extend using this property.
  * @return The number of element added to the selection property.
  */
-TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection);
+TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test = NULL);
 }
 #endif
 ///@endcond

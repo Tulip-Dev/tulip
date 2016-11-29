@@ -89,8 +89,8 @@ static QIcon getFileNewIcon() {
 }
 
 GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
-  : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"),
-    _logger(nullptr) {
+    : Perspective(c), _ui(nullptr), _graphs(new GraphHierarchiesModel(this)), _recentDocumentsSettingsKey("perspective/recent_files"),
+      _logger(nullptr) {
   Q_INIT_RESOURCE(GraphPerspective);
 
   if (c && ((PerspectiveContext *)c)->parameters.contains("gui_testing")) {
@@ -605,8 +605,8 @@ void GraphPerspective::exportGraph(Graph *g) {
 
   if (!result) {
     QMessageBox::critical(_mainWindow, trUtf8("Export error"), QString("<i>") + wizard.algorithm() +
-                          trUtf8("</i> failed to export graph.<br/><br/><b>") +
-                          tlp::tlpStringToQString(prg->getError()) + "</b>");
+                                                                   trUtf8("</i> failed to export graph.<br/><br/><b>") +
+                                                                   tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
@@ -628,7 +628,6 @@ void GraphPerspective::saveGraphHierarchyInTlpFile(Graph *g) {
   static QString savedFile;
   QString filter("TLP format (*.tlp *.tlp.gz);;TLPB format (*.tlpb *.tlpb.gz)");
   QString filename = QFileDialog::getSaveFileName(_mainWindow, tr("Save graph hierarchy in tlp/tlpb file"), savedFile, filter);
-
 
   if (!filename.isEmpty()) {
     bool result = tlp::saveGraph(g, tlp::QStringToTlpString(filename));
@@ -653,8 +652,8 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
 
     if (g == NULL) {
       QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
-                            trUtf8("</i> failed to import data.<br/><br/><b>") +
-                            tlp::tlpStringToQString(prg->getError()) + "</b>");
+                                                                     trUtf8("</i> failed to import data.<br/><br/><b>") +
+                                                                     tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
     }
@@ -697,7 +696,7 @@ void GraphPerspective::importGraph() {
   }
 }
 
-void GraphPerspective::createPanel(tlp::Graph * g) {
+void GraphPerspective::createPanel(tlp::Graph *g) {
   if (_graphs->empty())
     return;
 
@@ -720,7 +719,7 @@ void GraphPerspective::createPanel(tlp::Graph * g) {
   }
 }
 
-void GraphPerspective::panelFocused(tlp::View * view) {
+void GraphPerspective::panelFocused(tlp::View *view) {
   disconnect(this, SLOT(focusedPanelGraphSet(tlp::Graph *)));
 
   if (!_ui->graphHierarchiesEditor->synchronized())
@@ -734,7 +733,7 @@ void GraphPerspective::changeSynchronization(bool s) {
   _ui->workspace->setFocusedPanelHighlighting(s);
 }
 
-void GraphPerspective::focusedPanelGraphSet(Graph * g) {
+void GraphPerspective::focusedPanelGraphSet(Graph *g) {
   _graphs->setCurrentGraph(g);
 }
 
@@ -970,7 +969,7 @@ void GraphPerspective::copy() {
   copy(_graphs->currentGraph());
 }
 
-void GraphPerspective::copy(Graph * g, bool deleteAfter) {
+void GraphPerspective::copy(Graph *g, bool deleteAfter) {
   if (g == nullptr)
     return;
 
@@ -1021,8 +1020,8 @@ void GraphPerspective::group() {
   if (graph == graph->getRoot()) {
     qWarning() << trUtf8("[Group] Grouping can not be done on the root graph. "
                          "A subgraph has automatically been created")
-                  .toUtf8()
-                  .data();
+                      .toUtf8()
+                      .data();
     graph = graph->addCloneSubGraph("groups");
     changeGraph = true;
   }
@@ -1045,10 +1044,11 @@ void GraphPerspective::group() {
 
 void GraphPerspective::make_graph() {
   Graph *graph = _graphs->currentGraph();
-  makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+  unsigned added = makeSelectionGraph(_graphs->currentGraph(), graph->getProperty<BooleanProperty>("viewSelection"));
+  tlp::debug() << "Make selection a graph: " << added << " elements added to the selection.";
 }
 
-Graph *GraphPerspective::createSubGraph(Graph * graph) {
+Graph *GraphPerspective::createSubGraph(Graph *graph) {
   if (graph == NULL)
     return NULL;
 
@@ -1084,7 +1084,7 @@ void GraphPerspective::addEmptySubGraph() {
   _graphs->currentGraph()->addSubGraph(nullptr, "empty sub-graph");
 }
 
-void GraphPerspective::currentGraphChanged(Graph * graph) {
+void GraphPerspective::currentGraphChanged(Graph *graph) {
   bool enabled(graph != nullptr);
   _ui->actionUndo->setEnabled(enabled);
   _ui->actionRedo->setEnabled(enabled);
@@ -1179,7 +1179,7 @@ void GraphPerspective::CSVImport() {
   Observable::unholdObservers();
 }
 
-void GraphPerspective::showStartPanels(Graph * g) {
+void GraphPerspective::showStartPanels(Graph *g) {
   if (TulipSettings::instance().displayDefaultViews() == false)
     return;
 
@@ -1190,7 +1190,7 @@ void GraphPerspective::showStartPanels(Graph * g) {
   View *secondPanel = nullptr;
 
   foreach (const QString &panelName, QStringList() << "Spreadsheet view"
-           << "Node Link Diagram view") {
+                                                   << "Node Link Diagram view") {
     View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
 
     if (firstPanel == NULL)
@@ -1208,7 +1208,7 @@ void GraphPerspective::showStartPanels(Graph * g) {
   secondPanel->centerView(false);
 }
 
-void GraphPerspective::applyRandomLayout(Graph * g) {
+void GraphPerspective::applyRandomLayout(Graph *g) {
   Observable::holdObservers();
   LayoutProperty *viewLayout = g->getProperty<LayoutProperty>("viewLayout");
   Iterator<node> *it = viewLayout->getNonDefaultValuatedNodes();
@@ -1223,14 +1223,14 @@ void GraphPerspective::applyRandomLayout(Graph * g) {
   Observable::unholdObservers();
 }
 
-void GraphPerspective::centerPanelsForGraph(tlp::Graph * g, bool graphChanged, bool onlyGlMainView) {
+void GraphPerspective::centerPanelsForGraph(tlp::Graph *g, bool graphChanged, bool onlyGlMainView) {
   foreach (View *v, _ui->workspace->panels()) {
     if ((v->graph() == g) && (!onlyGlMainView || dynamic_cast<tlp::GlMainView *>(v)))
       v->centerView(graphChanged);
   }
 }
 
-void GraphPerspective::closePanelsForGraph(tlp::Graph * g) {
+void GraphPerspective::closePanelsForGraph(tlp::Graph *g) {
   QVector<View *> viewsToDelete;
   foreach (View *v, _ui->workspace->panels()) {
     if (v->graph() == g || g->isDescendantGraph(v->graph()))
@@ -1245,7 +1245,7 @@ void GraphPerspective::closePanelsForGraph(tlp::Graph * g) {
   }
 }
 
-bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph * g, const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
+bool GraphPerspective::setGlMainViewPropertiesForGraph(tlp::Graph *g, const std::map<std::string, tlp::PropertyInterface *> &propsMap) {
   bool result = false;
   foreach (View *v, _ui->workspace->panels()) {
     GlMainView *glMainView = dynamic_cast<tlp::GlMainView *>(v);
@@ -1289,7 +1289,7 @@ void GraphPerspective::openPreferences() {
       if (glMainView != nullptr) {
         if (glMainView->getGlMainWidget() != nullptr) {
           glMainView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().setSelectionColor(
-                TulipSettings::instance().defaultSelectionColor());
+              TulipSettings::instance().defaultSelectionColor());
           glMainView->refresh();
         }
       }
