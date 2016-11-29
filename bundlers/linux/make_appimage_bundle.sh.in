@@ -1,0 +1,126 @@
+#!/bin/bash
+
+# This script is centos 6.8 specific:
+# it intends to create a tulip bundle suitable to build a portable app
+# (using AppImageKit) runable on most linux distributions
+
+TULIP_INSTALL_DIR=@CMAKE_INSTALL_PREFIX@
+# if a parameter is given it is the parent directory
+# of the bundle dir to create
+if [ $# -eq 1 ]; then
+  OUTPUT_DIR=$1
+else
+  OUTPUT_DIR=/tmp
+fi
+
+BUNDLE_DIR=$OUTPUT_DIR/Tulip.AppDir
+
+# if BUNDLE_DIR already exist
+# remove it
+if [ -d $BUNDLE_DIR ]; then
+  rm -rf $BUNDLE_DIR
+fi
+
+# create BUNDLE_DIR
+mkdir $BUNDLE_DIR
+BUNDLE_BIN_DIR=$BUNDLE_DIR/usr/bin
+mkdir -p $BUNDLE_BIN_DIR
+BUNDLE_LIB_DIR=$BUNDLE_DIR/usr/lib
+mkdir -p $BUNDLE_LIB_DIR
+BUNDLE_SHARE_DIR=$BUNDLE_DIR/usr/share
+mkdir -p $BUNDLE_SHARE_DIR
+BUNDLE_USR_DIR=$BUNDLE_DIR/usr
+
+# create AppRun executable file
+APPRUN_FILE=$BUNDLE_DIR/AppRun
+echo "#!/bin/sh" > $APPRUN_FILE
+echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
+echo "export LD_LIBRARY_PATH=\${BUNDLE_DIR}/usr/lib:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
+echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
+echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -style plastique" >> $APPRUN_FILE
+chmod 755 $APPRUN_FILE
+
+# create desktop file
+DESKTOP_FILE=$BUNDLE_DIR/tulip.desktop
+echo "[Desktop Entry]" > $DESKTOP_FILE
+echo "Name=Tulip" >> $DESKTOP_FILE
+echo "Version=@TulipVersion@" >> $DESKTOP_FILE
+echo "Type=Application" >> $DESKTOP_FILE
+echo "Exec=tulip_perspective" >> $DESKTOP_FILE
+echo "Icon=Tulip" >> $DESKTOP_FILE
+
+# copy Tulip.png
+cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
+
+# copy tulip_perspective exe
+cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR
+# copy all lib and share installed files (no include)
+cp -v -Rp $TULIP_INSTALL_DIR/lib $BUNDLE_USR_DIR
+cp -v -R --preserve=mode $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
+
+# remove not needed files
+rm $BUNDLE_USR_DIR/share/tulip/*.cmake
+rm -rf $BUNDLE_USR_DIR/share/tulip/doc/doxygen
+
+# add qt plugins directory
+mkdir $BUNDLE_BIN_DIR/plugins
+cp -v -R --preserve=mode @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR/plugins
+
+# copy tulip_perspective needed libs
+pushd $BUNDLE_DIR > /dev/null 2>&1
+ldd $BUNDLE_BIN_DIR/tulip_perspective | grep "=> /" | awk '{print $3}' | grep -v tulip | xargs -I '{}' cp -v '{}' ./usr/lib || true
+popd > /dev/null 2>&1
+
+# add Python environment
+PYTHON_LIB=$(ldd $(ls $BUNDLE_LIB_DIR/tulip/view/libPython*) | grep libpython | awk '{print $3}')
+# we need to create a symlink as the Tulip Python Script View plugin
+# performs a dlopen on libpythonX.Y.so when it is loaded
+if [ "$PYTHON_LIB" != "" ]; then
+    cp -v --preserve=mode $PYTHON_LIB $BUNDLE_LIB_DIR	
+#    PYTHON_LIB_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\)$/libpython\1/')
+    PYTHON_LIB_NAME=$(basename $PYTHON_LIB)
+    PYTHON_LIB_SYMLINK_NAME=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\.so\).*$/libpython\1/')
+    ln -s $BUNDLE_LIB_DIR/$PYTHON_LIB_NAME $BUNDLE_LIB_DIR/$PYTHON_LIB_SYMLINK_NAME 	
+    PYTHON_PACKAGE_DIR=$(echo $PYTHON_LIB | sed 's/^.*libpython\(.*\).so.*$/python\1/')
+    PYTHON_PACKAGE_BUNDLE_DIR=$BUNDLE_USR_DIR/$(dirname $PYTHON_LIB | sed 's/^.*\(lib64\|lib\).*$/\1/')/$PYTHON_PACKAGE_DIR/
+    pushd $(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR > /dev/null 2>&1
+    PYTHON_PACKAGE_LIST=$(find . \( -type f \) \( ! -name "*.pyc" \) \( ! -name "*.pyo" \) -print)
+    echo "copying $(dirname $PYTHON_LIB)/$PYTHON_PACKAGE_DIR files into $PYTHON_PACKAGE_BUNDLE_DIR"
+    for file in $PYTHON_PACKAGE_LIST ;do
+	mkdir -p $PYTHON_PACKAGE_BUNDLE_DIR/$(dirname $file)
+	cp --preserve=mode $file $PYTHON_PACKAGE_BUNDLE_DIR/$file
+    done 		
+    popd > /dev/null 2>&1
+fi	 
+
+function copy_to_usr_lib() {
+  LIB_TO_COPY=$1
+  if [ ! -e $BUNDLE_LIB_DIR/$(basename $LIB_TO_COPY) ]; then
+    cp -v --preserve=mode $LIB_TO_COPY $BUNDLE_LIB_DIR
+  fi
+}
+
+# copy other common libs needed by plugins
+for PLUGIN in $(find $BUNDLE_LIB_DIR/tulip -name "*.so")
+do
+echo "Search dependencies for $(basename $PLUGIN)"
+for LIB in $(ldd $PLUGIN | grep "=> /" | awk '{print $3}')
+do
+ copy_to_usr_lib $LIB
+done;
+done;
+
+pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
+# remove unneeded libs
+rm libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* librt.* libstdc++.* libutil.* libxcb*.* libX*.* libresolv.* libuuid.*
+# copy some missing libs
+cp -v --preserve=mode $(ldconfig -p | grep libffi.so | cut -d ">" -f 2 | xargs) .
+popd > /dev/null 2>&1
+
+# tweak OS/ABI header part of libraries (System V instead of Linux)
+for LIB in $(find $BUNDLE_LIB_DIR -name '*.so*')
+do
+    #Some libs are in read only make it writable before stripping it 
+    chmod +w $LIB
+    strip --strip-unneeded $LIB
+done;
