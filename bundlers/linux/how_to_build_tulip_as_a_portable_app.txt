@@ -1,0 +1,58 @@
+# This script intends to build tulip to get
+# a portable app (using AppImageKit)
+# runable on most linux distributions
+# it has only been tested on CentOS 6.8
+
+# install epel-release to get extras devel packages
+yum -y install epel-release
+
+# needed by tulip
+yum -y install binutils cmake doxygen freetype-devel gcc-c++ glew-devel graphviz libjpeg-turbo-devel libpng-devel python-devel python-pip qt-devel qtwebkit-devel zlib-devel 
+
+# install sphinx latest version
+pip install -U Sphinx
+
+# get tulip latest source
+wget -O tulip_latest_src.zip https://sourceforge.net/projects/auber/files/latest/download
+
+# create a directory to decompress tulip source
+mkdir tulip
+pushd tulip
+unzip ../tulip_latest_src.zip
+
+# create build dir
+mkdir build
+cd build
+
+# cmake configuration using the decompressed source
+cmake -D CMAKE_BUILD_TYPE:STRING=Release -D CMAKE_INSTALL_PREFIX:PATH=$PWD/../install $(ls -d ../tulip-*)
+
+# build and install
+make install
+
+# build a bundle dir suitable for AppImageKit
+sh bundlers/linux/make_appimage_bundle.sh Tulip.AppDir
+popd
+
+# install fuse needed by AppImageKit
+yum -y install fuse
+
+# allow execution mode for fusermount
+chmod +x /bin/fusermount
+
+# add current user in fuse group
+usermod +a +G fuse $USER
+
+# get appimagetool
+wget "https://github.com/probonopd/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+chmod a+x appimagetool-x86_64.AppImage
+
+# finally build the portable app
+./appappimagetool-x86_64.AppImage ~/build/Tulip.AppDir Tulip-$(install/bin/tulip-config --version)
+
+
+
+
+
+
+

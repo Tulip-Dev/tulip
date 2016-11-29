@@ -869,6 +869,10 @@ IF(NOT BUILD_CORE_ONLY)
 
   ENDIF(APPLE)
 
+  IF(LINUX)
+    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/linux/make_appimage_bundle.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/bundlers/linux/mac_appimage_bundle.sh" @ONLY)
+  ENDIF(LINUX)
+
 ELSE(NOT BUILD_CORE_ONLY)
 
   IF(LINUX)
