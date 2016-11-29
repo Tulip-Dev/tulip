@@ -202,8 +202,9 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new U
   _ui->splitter->setCollapsible(0, false);
 
 #if defined(__APPLE__)
-
   if (!PythonInterpreter::pythonPluginsPath.contains(".app/Contents/"))
+#elif defined(_LINUX)
+  if (!PythonInterpreter::pythonPluginsPath.startsWith("/tmp/.mount"))
 #endif
     infosMsg += QString(" or <b>") + PythonInterpreter::pythonPluginsPath +"</b>";
 
