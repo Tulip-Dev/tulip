@@ -52,7 +52,7 @@ bool isGraphTest::test() {
 
   if(dataSet!=NULL)
     dataSet->get("selection", sel);
-  
+
   bool test;
   makeSelectionGraph(graph,sel,&test);
   return test;
