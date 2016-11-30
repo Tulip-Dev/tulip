@@ -330,10 +330,15 @@ void HistogramView::setState(const DataSet &dataSet) {
     }
   }
 
-  draw();
+  unsigned nodes = NODE;
+  dataSet.get("Nodes/Edges", nodes);
+  dataLocation = static_cast<ElementType>(nodes);
+  propertiesSelectionWidget->setDataLocation(dataLocation);
+  viewConfigurationChanged();
+
   registerTriggers();
 
-  if (detailedHistogramPropertyName != "") {
+  if (!detailedHistogramPropertyName.empty()) {
     Histogram *histo = histogramsMap[detailedHistogramPropertyName];
     histo->update();
     switchFromSmallMultiplesToDetailedView(histo);
@@ -345,7 +350,7 @@ DataSet HistogramView::state() const {
   map<string, Histogram *> histogramsMapTmp = map<string, Histogram *>(histogramsMap);
 
   DataSet dataSet = GlMainView::state();
-
+  dataSet.set("Nodes/Edges", static_cast<unsigned>(dataLocation));
   for (size_t i = 0; i < selectedPropertiesTmp.size(); ++i) {
     std::stringstream ss;
     ss << i;
