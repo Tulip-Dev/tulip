@@ -833,17 +833,17 @@ NEW-WINDOW:680,318:62914839,62914839,16816137,0,0,0:0x0+440+96:0,0:Tulip test re
 7,6,909,337,0,0,0,2907000,11,'SynPS/2 Synaptics TouchPad'
 7,6,909,337,0,0,0,2907017,11,'SynPS/2 Synaptics TouchPad'
 7,6,910,337,0,0,0,2907035,11,'SynPS/2 Synaptics TouchPad'
-7,6,910,337,0,0,0,2907069,11,'SynPS/2 Synaptics TouchPad'
-7,6,910,337,0,0,0,2907087,11,'SynPS/2 Synaptics TouchPad'
-7,6,911,337,0,0,0,2907104,11,'SynPS/2 Synaptics TouchPad'
+7,6,917,337,0,0,0,2907069,11,'SynPS/2 Synaptics TouchPad'
+7,6,917,337,0,0,0,2907087,11,'SynPS/2 Synaptics TouchPad'
+7,6,917,337,0,0,0,2907104,11,'SynPS/2 Synaptics TouchPad'
 7,5,0,0,1,0,0,2907174,11,SynPS/2 Synaptics TouchPad
 6,5,0,0,1,0,0,2907174,2,Virtual core pointer
-7,6,911,337,0,0,0,2907312,11,'SynPS/2 Synaptics TouchPad'
+7,6,917,337,0,0,0,2907312,11,'SynPS/2 Synaptics TouchPad'
 7,2,0,0,0,37,0,2907829,9,AT Translated Set 2 keyboard
 6,2,0,0,0,37,0,2907829,3,Virtual core keyboard
 7,2,0,0,0,54,0,2908176,9,AT Translated Set 2 keyboard
 6,2,0,0,0,54,0,2908176,3,Virtual core keyboard
-7,6,912,337,0,0,0,2908301,11,'SynPS/2 Synaptics TouchPad'
+7,6,917,337,0,0,0,2908301,11,'SynPS/2 Synaptics TouchPad'
 7,3,0,0,0,54,0,2908340,9,AT Translated Set 2 keyboard
 6,3,0,0,0,54,0,2908340,3,Virtual core keyboard
 7,3,0,0,0,37,0,2908381,9,AT Translated Set 2 keyboard

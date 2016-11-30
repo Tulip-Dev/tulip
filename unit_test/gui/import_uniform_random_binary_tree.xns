@@ -1696,11 +1696,11 @@ NEW-WINDOW:650,314:41943299,41943299,17047509,0,0,0:0x0+500+108:0,0:Tulip test r
 7,6,864,336,0,0,0,78439550,9,'Logitech USB-PS/2 Optical Mouse'
 7,2,0,0,0,23,0,78439562,5,Virtual core XTEST keyboard
 7,6,865,336,0,0,0,78439574,9,'Logitech USB-PS/2 Optical Mouse'
-7,6,866,336,0,0,0,78439590,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,880,336,0,0,0,78439590,9,'Logitech USB-PS/2 Optical Mouse'
 7,2,0,0,0,23,0,78439592,5,Virtual core XTEST keyboard
-7,6,867,336,0,0,0,78439614,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,880,336,0,0,0,78439614,9,'Logitech USB-PS/2 Optical Mouse'
 7,2,0,0,0,23,0,78439622,5,Virtual core XTEST keyboard
-7,6,868,336,0,0,0,78439630,9,'Logitech USB-PS/2 Optical Mouse'
+7,6,880,336,0,0,0,78439630,9,'Logitech USB-PS/2 Optical Mouse'
 7,2,0,0,0,23,0,78439652,5,Virtual core XTEST keyboard
 7,2,0,0,0,23,0,78439682,5,Virtual core XTEST keyboard
 7,2,0,0,0,23,0,78439712,5,Virtual core XTEST keyboard
