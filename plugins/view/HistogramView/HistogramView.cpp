@@ -357,6 +357,7 @@ DataSet HistogramView::state() const {
 
   DataSet dataSet = GlMainView::state();
   dataSet.set("Nodes/Edges", static_cast<unsigned>(dataLocation));
+
   for (size_t i = 0 ; i < selectedPropertiesTmp.size() ; ++i) {
     std::stringstream ss;
     ss << i;
