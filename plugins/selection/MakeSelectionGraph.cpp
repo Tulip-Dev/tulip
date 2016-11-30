@@ -23,19 +23,19 @@
 using namespace tlp;
 
 static const char *paramHelp[] = {
-  // Current selection
-  "Initial elements of the graph."
+  // selection
+  "The property indicating the selected elements"
 };
 
 MakeSelectionGraph::MakeSelectionGraph(const tlp::PluginContext* context):BooleanAlgorithm(context) {
-  addInParameter<BooleanProperty> ("Current selection", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty> ("selection", paramHelp[0], "viewSelection");
 }
 
 bool MakeSelectionGraph::run() {
   BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
 
   if(dataSet!=NULL)
-    dataSet->get("Current selection", sel);
+    dataSet->get("selection", sel);
 
   result->copy(sel);
   unsigned added = makeSelectionGraph(graph,result);
@@ -44,15 +44,15 @@ bool MakeSelectionGraph::run() {
 }
 
 isGraphTest::isGraphTest(const tlp::PluginContext* context) : tlp::GraphTest(context) {
-  addInParameter<BooleanProperty> ("Current selection", paramHelp[0], "viewSelection");
+  addInParameter<BooleanProperty> ("selection", paramHelp[0], "viewSelection");
 }
 
 bool isGraphTest::test() {
   BooleanProperty* sel = graph->getProperty<BooleanProperty>("viewSelection");
 
   if(dataSet!=NULL)
-    dataSet->get("Current selection", sel);
-
+    dataSet->get("selection", sel);
+  
   bool test;
   makeSelectionGraph(graph,sel,&test);
   return test;
