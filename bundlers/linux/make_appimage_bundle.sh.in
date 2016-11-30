@@ -5,15 +5,43 @@
 # (using AppImageKit) runable on most linux distributions
 
 TULIP_INSTALL_DIR=@CMAKE_INSTALL_PREFIX@
-# if a parameter is given it is the parent directory
-# of the bundle dir to create
-if [ $# -eq 1 ]; then
-  OUTPUT_DIR=$1
-else
-  OUTPUT_DIR=/tmp
+OUTPUT_DIR=/tmp
+PERSPECTIVE=Tulip
+
+usage()
+{
+echo "Usage: $(basename $0) [OPTIONS]"
+    cat <<EOF
+Options:
+	--appdir <dir> (indicate the directory where the Tulip.AppDir will be created, default is /tmp)
+	--perspective <name> (indicate the perspective the AppImage will launch, default is Tulip)
+	
+EOF
+    exit $1
+}
+
+if test $# -eq 0; then
+	usage 1 1>&2
 fi
 
-BUNDLE_DIR=$OUTPUT_DIR/Tulip.AppDir
+while test $# -gt 0; do
+  case $1 in
+    --appdir)
+      shift
+      OUTPUT_DIR=$1
+      ;;
+    --perspective)
+      shift
+      PERSPECTIVE=$1
+      ;;
+    *)
+      usage
+      ;;
+  esac
+  shift
+done
+
+BUNDLE_DIR=$OUTPUT_DIR/$PERSPECTIVE.AppDir
 
 # if BUNDLE_DIR already exist
 # remove it
@@ -37,7 +65,7 @@ echo "#!/bin/sh" > $APPRUN_FILE
 echo "BUNDLE_DIR=\"\$(dirname \$0)\"" >> $APPRUN_FILE
 echo "export LD_LIBRARY_PATH=\${BUNDLE_DIR}/usr/lib:\${LD_LIBRARY_PATH}" >> $APPRUN_FILE
 echo "export PYTHONHOME=\${BUNDLE_DIR}/usr" >> $APPRUN_FILE
-echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -style plastique" >> $APPRUN_FILE
+echo "\${BUNDLE_DIR}/usr/bin/tulip_perspective -p $PERSPECTIVE -style plastique" >> $APPRUN_FILE
 chmod 755 $APPRUN_FILE
 
 # create desktop file
@@ -55,8 +83,10 @@ cp @tulip_SOURCE_DIR@/bundlers/linux/Tulip.png $BUNDLE_DIR
 # copy tulip_perspective exe
 cp -v -p $TULIP_INSTALL_DIR/bin/tulip_perspective $BUNDLE_BIN_DIR
 # copy all lib and share installed files (no include)
-cp -v -Rp $TULIP_INSTALL_DIR/lib $BUNDLE_USR_DIR
-cp -v -R --preserve=mode $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
+echo "copying $TULIP_INSTALL_DIR/lib files into $BUNDLE_USR_DIR/lib"
+cp -Rp $TULIP_INSTALL_DIR/lib $BUNDLE_USR_DIR
+echo "copying $TULIP_INSTALL_DIR/share files into $BUNDLE_USR_DIR/share"
+cp -Rp $TULIP_INSTALL_DIR/share $BUNDLE_USR_DIR
 
 # remove not needed files
 rm $BUNDLE_USR_DIR/share/tulip/*.cmake
@@ -64,7 +94,7 @@ rm -rf $BUNDLE_USR_DIR/share/tulip/doc/doxygen
 
 # add qt plugins directory
 mkdir $BUNDLE_BIN_DIR/plugins
-cp -v -R --preserve=mode @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR/plugins
+cp -v -Rp @QT_PLUGINS_DIR@/imageformats $BUNDLE_BIN_DIR/plugins
 
 # copy tulip_perspective needed libs
 pushd $BUNDLE_DIR > /dev/null 2>&1
@@ -112,9 +142,16 @@ done;
 
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
-rm libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* librt.* libstdc++.* libutil.* libxcb*.* libX*.* libresolv.* libuuid.*
+LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* librt.* libstdc++.* libutil.* libxcb*.* libX*.* libresolv.* libuuid.* 2> /dev/null)
+if [ "$LIBS" != "" ]; then
+  rm $LIBS
+fi
+
 # copy some missing libs
-cp -v --preserve=mode $(ldconfig -p | grep libffi.so | cut -d ">" -f 2 | xargs) .
+ls libffi.so* > /dev/null 2>&1
+if [ ! $? -eq 0 ]; then
+    cp -v --preserve=mode $(ldconfig -p | grep libffi.so | cut -d ">" -f 2 | xargs) .
+fi
 popd > /dev/null 2>&1
 
 # tweak OS/ABI header part of libraries (System V instead of Linux)
