@@ -315,7 +315,11 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     }
   }
 
-  draw();
+  unsigned nodes=NODE;
+  dataSet.get("Nodes/Edges", nodes);
+  dataLocation = static_cast<ElementType>(nodes);
+  propertiesSelectionWidget->setDataLocation(dataLocation);
+  viewConfigurationChanged();
 
   if (overviewVisible())
     drawOverview(true);
@@ -368,6 +372,7 @@ DataSet ScatterPlot2DView::state() const {
   dataSet.set("lastViewWindowHeight",  getGlMainWidget()->height());
   dataSet.set("detailed scatterplot x dim", detailedScatterPlotPropertyName.first);
   dataSet.set("detailed scatterplot y dim", detailedScatterPlotPropertyName.second);
+  dataSet.set("Nodes/Edges", static_cast<unsigned>(dataLocation));
   return dataSet;
 }
 
