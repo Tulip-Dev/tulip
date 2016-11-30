@@ -87,7 +87,7 @@
 (default "18" "18")
 )
 (property  0 string "viewLabel"
-(default "Directed Tree test succeed" "")
+(default "\"Directed Tree\" test succeed" "")
 )
 (property  0 color "viewLabelBorderColor"
 (default "(0,0,0,255)" "(0,0,0,255)")
