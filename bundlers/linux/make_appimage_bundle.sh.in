@@ -20,10 +20,6 @@ EOF
     exit $1
 }
 
-if test $# -eq 0; then
-	usage 1 1>&2
-fi
-
 while test $# -gt 0; do
   case $1 in
     --appdir)
@@ -34,8 +30,11 @@ while test $# -gt 0; do
       shift
       PERSPECTIVE=$1
       ;;
+    --help)
+      usage 0
+      ;;
     *)
-      usage
+      usage 1
       ;;
   esac
   shift
@@ -142,7 +141,7 @@ done;
 
 pushd $BUNDLE_LIB_DIR > /dev/null 2>&1
 # remove unneeded libs
-LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* librt.* libstdc++.* libutil.* libxcb*.* libX*.* libresolv.* libuuid.* 2> /dev/null)
+LIBS=$(ls libc.* libdbus*.* libdl.* libdrm.* libexpat.* libfontconfig.* libglib-*.* libgobject-*.* libgcc_s.* libGL.* libm.* libnsl.* libpthread.* libresolv.* librt.* libstdc++.* libutil.*  libuuid.* libxcb*.* libX*.* libz.* 2> /dev/null)
 if [ "$LIBS" != "" ]; then
   rm $LIBS
 fi
