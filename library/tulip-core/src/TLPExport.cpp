@@ -349,16 +349,17 @@ public:
 
           if (pos != string::npos)
             tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
-        } 
-	else 
-	  if (g->getId() != 0 && // if it is not the real root graph
-	      prop->getTypename() == GraphProperty::propertyTypename) {
-	    unsigned int id = strtoul(tmp.c_str(), NULL, 10);
-	    // we must check if the pointed subgraph
-	    // is a descendant of the currently export graph
-	    if (!graph->getDescendantGraph(id))
-	      continue;
-	  }
+        }
+        else if (g->getId() != 0 && // if it is not the real root graph
+                 prop->getTypename() == GraphProperty::propertyTypename) {
+          unsigned int id = strtoul(tmp.c_str(), NULL, 10);
+
+          // we must check if the pointed subgraph
+          // is a descendant of the currently export graph
+          if (!graph->getDescendantGraph(id))
+            continue;
+        }
+
         os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl ;
       }
 
