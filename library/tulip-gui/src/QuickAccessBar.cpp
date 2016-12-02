@@ -91,7 +91,7 @@ public:
   }
 };
 
-QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(NULL) {
+QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(nullptr) {
 }
 
 #include "ui_QuickAccessBar.h"

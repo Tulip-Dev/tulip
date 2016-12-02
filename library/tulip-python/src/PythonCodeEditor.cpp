@@ -435,7 +435,7 @@ void FindReplaceDialog::hideEvent(QHideEvent *) {
   _editor->setFocus();
 }
 
-PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _highlighter(NULL), _tooltipActive(false), _indentPattern("  ") {
+PythonCodeEditor::PythonCodeEditor(QWidget *parent) : QPlainTextEdit(parent), _highlighter(nullptr), _tooltipActive(false), _indentPattern("  ") {
   installEventFilter(&keyboardFocusEventFilter);
   setAutoIndentation(true);
   setIndentationGuides(true);

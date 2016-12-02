@@ -350,7 +350,7 @@ public:
    * @param addSiblingProperties if true the local properties will be cloned
    *into the sibling of this graph, if false (the default) the local properties
    *will not be cloned
-   * @return :Graph* The newly created clone subgraph. NULL will be returned if
+   * @return :Graph* The newly created clone subgraph. nullptr will be returned if
    *addSibling is set to true and this graph is a root graph.
    **/
   virtual Graph *addCloneSubGraph(const std::string &name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
@@ -379,7 +379,7 @@ public:
    * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph = NULL);
+  Graph *inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph = nullptr);
 
   /**
    * @brief Deletes a sub-graph of this graph.

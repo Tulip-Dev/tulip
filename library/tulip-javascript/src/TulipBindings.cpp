@@ -353,7 +353,7 @@ tlp::DataSet getDefaultAlgorithmParameters(const std::string &algoName, tlp::Gra
 class AlgorithParametersJSONParser : public YajlParseFacade {
 
 public:
-  AlgorithParametersJSONParser(const std::string &algorithmName, tlp::Graph *graph = NULL) : _algoName(algorithmName) {
+  AlgorithParametersJSONParser(const std::string &algorithmName, tlp::Graph *graph = nullptr) : _algoName(algorithmName) {
     _dataSet = getDefaultAlgorithmParameters(algorithmName, graph);
     _pointer = 0;
     _parsingObject = false;
@@ -526,7 +526,7 @@ std::string convertDataSetToJSON(const tlp::DataSet &dataSet) {
                dt->getTypeName() == std::string(typeid(tlp::CoordVectorProperty *).name()) ||
                dt->getTypeName() == std::string(typeid(tlp::SizeVectorProperty *).name()) ||
                dt->getTypeName() == std::string(typeid(tlp::StringVectorProperty *).name())) {
-      tlp::PropertyInterface *prop = NULL;
+      tlp::PropertyInterface *prop = nullptr;
       dataSet.get(entryName, prop);
       if (prop) {
         oss << "{\"type\" : \"property\", \"name\" : \"" << prop->getName() << "\", \"pointer\" : " << reinterpret_cast<unsigned long>(prop) << "}";
@@ -669,7 +669,7 @@ bool EMSCRIPTEN_KEEPALIVE Graph_applyAlgorithm(tlp::Graph *graph, const char *al
   std::string errMsg;
   tlp::Observable::holdObservers();
   tlp::DataSet parameters = getAlgorithmParametersDataSet(algorithm, graph, jsonParameters);
-  bool ret = graph->applyAlgorithm(algorithm, errMsg, &parameters, notifyProgress ? &progress : NULL);
+  bool ret = graph->applyAlgorithm(algorithm, errMsg, &parameters, notifyProgress ? &progress : nullptr);
   tlp::Observable::unholdObservers();
   if (!ret && !errMsg.empty()) {
     std::cerr << "Error when executing Tulip algorithm named '" << algorithm << "' : " << errMsg << std::endl;
@@ -701,7 +701,7 @@ tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_addCloneSubGraph(tlp::Graph *graph, const
   return sg;
 }
 
-tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_inducedSubGraph(tlp::Graph *graph, unsigned int *nodesIds, tlp::Graph *parentSubGraph = NULL) {
+tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_inducedSubGraph(tlp::Graph *graph, unsigned int *nodesIds, tlp::Graph *parentSubGraph = nullptr) {
   std::set<tlp::node> nodeSet;
   while (*nodesIds != UINT_MAX) {
     nodeSet.insert(tlp::node(*nodesIds++));
@@ -728,7 +728,7 @@ tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_getRoot(tlp::Graph *graph) {
 }
 
 void EMSCRIPTEN_KEEPALIVE Graph_getSubGraphs(tlp::Graph *graph, unsigned int *sgPointers) {
-  tlp::Graph *sg = NULL;
+  tlp::Graph *sg = nullptr;
   forEach(sg, graph->getSubGraphs()) {
     *sgPointers++ = reinterpret_cast<unsigned int>(sg);
   }
@@ -771,7 +771,7 @@ tlp::Graph *EMSCRIPTEN_KEEPALIVE Graph_getDescendantGraph2(tlp::Graph *graph, co
 }
 
 void EMSCRIPTEN_KEEPALIVE Graph_getDescendantGraphs(tlp::Graph *graph, unsigned int *sgPointers) {
-  tlp::Graph *sg = NULL;
+  tlp::Graph *sg = nullptr;
   forEach(sg, graph->getDescendantGraphs()) {
     *sgPointers++ = reinterpret_cast<unsigned int>(sg);
   }
@@ -1236,7 +1236,7 @@ bool EMSCRIPTEN_KEEPALIVE Graph_applyPropertyAlgorithm(tlp::Graph *graph, const 
   std::string errMsg;
   tlp::DataSet parameters = getAlgorithmParametersDataSet(algorithm, graph, jsonParameters);
   tlp::Observable::holdObservers();
-  bool ret = graph->applyPropertyAlgorithm(algorithm, result, errMsg, notifyProgress ? &progress : NULL, &parameters);
+  bool ret = graph->applyPropertyAlgorithm(algorithm, result, errMsg, notifyProgress ? &progress : nullptr, &parameters);
   tlp::Observable::unholdObservers();
   if (!ret && !errMsg.empty()) {
     std::cerr << "Error when executing Tulip " << result->getTypename() << " algorithm named '" << algorithm << "' : " << errMsg << std::endl;

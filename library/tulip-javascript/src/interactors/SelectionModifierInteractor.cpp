@@ -44,7 +44,7 @@
 using namespace tlp;
 
 SelectionModifierInteractor::SelectionModifierInteractor(GlScene *glScene)
-    : _lastX(-1), _lastY(-1), _selectionInteractor(NULL), _dragStarted(false), _selectedGraph(NULL) {
+    : _lastX(-1), _lastY(-1), _selectionInteractor(nullptr), _dragStarted(false), _selectedGraph(nullptr) {
   _glScene = glScene;
   _selectionInteractor = new SelectionInteractor(glScene);
   _selectionInteractor->setSelectOnlyEdgesConnectedToSelectedNodes(true);
@@ -90,7 +90,7 @@ bool SelectionModifierInteractor::mouseCallback(const MouseButton &button, const
       _dragStarted = false;
       _lastX = -1;
       _lastY = -1;
-      _selectedGraph = NULL;
+      _selectedGraph = nullptr;
       return true;
     }
   }
@@ -150,7 +150,7 @@ bool SelectionModifierInteractor::hasSelection() {
     if (glGraph && glGraph->getGraph()) {
       Graph *graph = glGraph->getGraph()->getSuperGraph();
       if (_selectionSg.find(graph) == _selectionSg.end()) {
-        _selectionSg[graph] = NULL;
+        _selectionSg[graph] = nullptr;
       }
       _viewSelection[graph] = graph->getProperty<BooleanProperty>("viewSelection");
       _viewLayout[graph] = graph->getProperty<LayoutProperty>("viewLayout");
@@ -172,7 +172,7 @@ bool SelectionModifierInteractor::hasSelection() {
 
         _previousSelection = setNodes;
 
-        if (_selectionSg[graph] != NULL) {
+        if (_selectionSg[graph] != nullptr) {
           graph->delSubGraph(_selectionSg[graph]);
         }
         _selectionSg[graph] = graph->inducedSubGraph(setNodes);
@@ -204,7 +204,7 @@ bool SelectionModifierInteractor::hasSelection() {
 
       } else {
         delete selectedNodes;
-        if (_selectionSg[graph] != NULL) {
+        if (_selectionSg[graph] != nullptr) {
           tlp::node n;
           forEach(n, _displayGraph[graph]->getNodes()) {
             glGraph->getGraph()->addNode(n);
@@ -216,7 +216,7 @@ bool SelectionModifierInteractor::hasSelection() {
           _displayGraph[graph]->clear();
           graph->delSubGraph(_selectionSg[graph]);
         }
-        _selectionSg[graph] = NULL;
+        _selectionSg[graph] = nullptr;
         _previousSelection.clear();
       }
     }
@@ -229,7 +229,7 @@ void SelectionModifierInteractor::updateSelectionBoundingBox() {
   hasSelection();
   std::map<tlp::Graph *, tlp::Graph *>::iterator it = _selectionSg.begin();
   for (; it != _selectionSg.end(); ++it) {
-    if (it->second != NULL) {
+    if (it->second != nullptr) {
       _selectionBoundingBox[it->first] = computeBoundingBox(it->second, _viewLayout[it->first], _viewSize[it->first], _viewRotation[it->first]);
       Coord center = _selectionBoundingBox[it->first].center();
       float hWidth = _selectionBoundingBox[it->first].width() / 2;

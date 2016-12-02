@@ -75,7 +75,7 @@ void CopyPropertyDialog::init(Graph *graph, PropertyInterface *source) {
     Graph *parent = _graph->getSuperGraph();
 
     if (parent == graph) {
-      parent = NULL;
+      parent = nullptr;
     }
 
     for (PropertyInterface *property : _graph->getObjectProperties()) {

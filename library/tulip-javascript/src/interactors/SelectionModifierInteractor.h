@@ -50,7 +50,7 @@ class GlGraph;
 class SelectionModifierInteractor : public GlSceneInteractor {
 
 public:
-  SelectionModifierInteractor(tlp::GlScene *glScene = NULL);
+  SelectionModifierInteractor(tlp::GlScene *glScene = nullptr);
 
   void setScene(tlp::GlScene *glScene);
 

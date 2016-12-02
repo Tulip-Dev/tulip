@@ -48,8 +48,8 @@ using namespace std;
 using namespace tlp;
 
 GeographicView::GeographicView(PluginContext *)
-    : geoViewGraphicsView(NULL), geoViewConfigWidget(NULL), geolocalisationConfigWidget(NULL), sceneConfigurationWidget(NULL),
-      sceneLayersConfigurationWidget(NULL), centerViewAction(NULL), showConfPanelAction(NULL), useSharedLayoutProperty(true),
+    : geoViewGraphicsView(nullptr), geoViewConfigWidget(nullptr), geolocalisationConfigWidget(nullptr), sceneConfigurationWidget(nullptr),
+      sceneLayersConfigurationWidget(nullptr), centerViewAction(nullptr), showConfPanelAction(nullptr), useSharedLayoutProperty(true),
       useSharedSizeProperty(true), useSharedShapeProperty(true), mapCenterLatitudeInit(0), mapCenterLongitudeInit(0), mapZoomInit(0) {
   _viewType = GoogleRoadMap;
 }

@@ -180,7 +180,9 @@ void WorkspacePanel::setView(tlp::View *view) {
   QList<Interactor *> compatibleInteractors;
   QList<std::string> interactorNames = InteractorLister::compatibleInteractors(view->name());
 
-  foreach (const std::string &name, interactorNames) { compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, NULL); }
+  foreach (const std::string &name, interactorNames) {
+    compatibleInteractors << PluginLister::instance()->getPluginObject<Interactor>(name, nullptr);
+  }
 
   _view->setInteractors(compatibleInteractors);
   _ui->scrollArea->setVisible(!compatibleInteractors.empty());
@@ -538,7 +540,7 @@ void WorkspacePanel::resizeEvent(QResizeEvent *ev) {
 
 void WorkspacePanel::setConfigurationTabExpanded(bool expanded, bool animate) {
 
-  if (_view != NULL) {
+  if (_view != nullptr) {
     _viewConfigurationWidgets->setMinimumHeight(_view->graphicsView()->height());
     _viewConfigurationWidgets->setMaximumHeight(_view->graphicsView()->height());
     _viewConfigurationWidgets->setMaximumWidth(_view->graphicsView()->width());

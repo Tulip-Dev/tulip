@@ -92,7 +92,7 @@ class CurveEdges : public tlp::Algorithm {
 public:
   PLUGININFORMATION("Curve edges", "Antoine Lambert", "16/01/2015", "Computes quadratic or cubic bezier paths for edges", "1.0", "")
 
-  CurveEdges(tlp::PluginContext *context) : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(NULL), bezierEdges(true) {
+  CurveEdges(tlp::PluginContext *context) : tlp::Algorithm(context), curveType(0), curveRoundness(0.5), layout(nullptr), bezierEdges(true) {
     addInParameter<tlp::LayoutProperty>("layout", paramHelp[0], "viewLayout");
     addInParameter<float>("curve roundness", paramHelp[1], "0.5");
     addInParameter<tlp::StringCollection>("curve type", paramHelp[2], CURVE_TYPE_LIST, true, curveTypeValues);
@@ -319,7 +319,7 @@ public:
       dataSet->get("bezier edges", bezierEdges);
     }
 
-    if (layout == NULL) {
+    if (layout == nullptr) {
       layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
     }
 

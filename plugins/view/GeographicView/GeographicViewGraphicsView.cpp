@@ -532,9 +532,9 @@ void GeographicViewGraphicsView::cleanup() {
       delete geoViewShape;
 
     // those entities have been deleted by the prior call to GlScene::clearLayersList,
-    // so reset the pointers to NULL value
-    polygonEntity = NULL;
-    planisphereEntity = NULL;
+    // so reset the pointers to nullptr value
+    polygonEntity = nullptr;
+    planisphereEntity = nullptr;
   }
 }
 
@@ -810,7 +810,7 @@ void GeographicViewGraphicsView::createLayoutWithAddresses(const string &address
             grabNextNode = false;
           } else {
             progressWidget->hide();
-            QMessageBox::warning(NULL, "Geolocation failed", "No results were found for address : \n" + tlpStringToQString(addr));
+            QMessageBox::warning(nullptr, "Geolocation failed", "No results were found for address : \n" + tlpStringToQString(addr));
             progressWidget->show();
           }
         }

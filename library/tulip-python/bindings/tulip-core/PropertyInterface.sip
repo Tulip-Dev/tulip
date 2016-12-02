@@ -201,7 +201,7 @@ Returns a newly created property of the same type in the graph g.
 
 //===========================================================================================
 
-  virtual bool setAllNodeStringValue( const std::string & strVal , tlp::Graph *graph = NULL ) = 0;
+  virtual bool setAllNodeStringValue( const std::string & strVal , tlp::Graph *graph = nullptr ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllNodeStringValue(str[, graph])
 
@@ -224,7 +224,7 @@ Returns :const:`True` if the given string representation has been successfully c
 
 //===========================================================================================
 
-  virtual bool setAllEdgeStringValue( const std::string & strVal , tlp::Graph *graph = NULL ) = 0;
+  virtual bool setAllEdgeStringValue( const std::string & strVal , tlp::Graph *graph = nullptr ) = 0;
 %Docstring
 tlp.PropertyInterface.setAllEdgeStringValue(str[, graph])
 

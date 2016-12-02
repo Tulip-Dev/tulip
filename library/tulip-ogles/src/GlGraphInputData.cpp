@@ -137,7 +137,7 @@ tlp::PropertyInterface *GlGraphInputData::getProperty(const std::string &name) c
   if (it != _propertiesNameMap.end())
     return _propertiesMap[it->second];
 
-  return NULL;
+  return nullptr;
 }
 
 bool GlGraphInputData::setProperty(const std::string &name, PropertyInterface *property) {
@@ -175,7 +175,7 @@ bool GlGraphInputData::installProperties(const std::map<std::string, tlp::Proper
 void GlGraphInputData::treatEvent(const Event &ev) {
   if (ev.type() == Event::TLP_DELETE) {
     _graph = nullptr;
-  } else if (dynamic_cast<const GraphEvent *>(&ev) != NULL) {
+  } else if (dynamic_cast<const GraphEvent *>(&ev) != nullptr) {
     const GraphEvent *graphEv = static_cast<const GraphEvent *>(&ev);
 
     if (graphEv->getType() == GraphEvent::TLP_ADD_LOCAL_PROPERTY || graphEv->getType() == GraphEvent::TLP_AFTER_DEL_LOCAL_PROPERTY ||

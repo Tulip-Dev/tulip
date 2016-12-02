@@ -46,7 +46,7 @@ public:
   explicit GraphPropertiesModel(tlp::Graph *graph, bool checkable = false, QObject *parent = nullptr);
   explicit GraphPropertiesModel(QString placeholder, tlp::Graph *graph, bool checkable = false, QObject *parent = nullptr);
   virtual ~GraphPropertiesModel() {
-    if (_graph != NULL)
+    if (_graph != nullptr)
       _graph->removeListener(this);
   }
 

@@ -45,7 +45,7 @@ using namespace std;
 using namespace tlp;
 
 SelectionInteractor::SelectionInteractor(GlScene *scene)
-    : _firstX(-1), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false), _znpInteractor(NULL), _selectOnlyEdgesConnectedToSelectedNodes(false) {
+    : _firstX(-1), _firstY(-1), _curX(-1), _curY(-1), _dragStarted(false), _znpInteractor(nullptr), _selectOnlyEdgesConnectedToSelectedNodes(false) {
   _glScene = scene;
   _znpInteractor = new ZoomAndPanInteractor(scene);
 }

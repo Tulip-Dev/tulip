@@ -114,7 +114,7 @@ static vector<vector<vector<Coord>>> getFinalHulls(const Paths &hull, float scal
       c.push_back(contour);
       polyNode = polyNode->GetNext();
       if (i < sol.ChildCount() - 1 && polyNode == sol.Childs[i + 1]) {
-        polyNode = NULL;
+        polyNode = nullptr;
       }
     }
     ret.push_back(c);

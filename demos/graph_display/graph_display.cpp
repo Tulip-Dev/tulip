@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
   // Initialize the library and load all plugins
   tlp::initTulipSoftware();
 
-  Graph *g = NULL;
+  Graph *g = nullptr;
   if (QApplication::arguments().size() == 2) {
     // Load the file passed as first argument into a graph.
     // This method will select the default Tulip algorithm plugin (TLP)

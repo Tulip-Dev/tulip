@@ -298,7 +298,7 @@ static void loadTexture(const std::string &texture) {
         }
         emscripten_async_wget2(cachedTextureName.back().c_str(), cachedTextureName.back().c_str(), "GET", "",
                                reinterpret_cast<void *>(const_cast<char *>(cachedTextureName.back().c_str())), onTextureLoaded, onTextureLoadError,
-                               NULL);
+                               nullptr);
       }
     }
   }
@@ -351,7 +351,7 @@ public:
     bool drawNeeded = false;
     for (size_t i = 0; i < events.size(); ++i) {
       GlEntity *glEntity = dynamic_cast<GlEntity *>(events[i].sender());
-      drawNeeded = drawNeeded || (glEntity != NULL);
+      drawNeeded = drawNeeded || (glEntity != nullptr);
     }
     if (drawNeeded) {
       draw();
@@ -396,7 +396,7 @@ void EMSCRIPTEN_KEEPALIVE desactivateInteractor(const char *canvasId) {
   if (currentCanvasInteractor[canvasId]) {
     currentCanvasInteractor[canvasId]->desactivate();
   }
-  currentCanvasInteractor[canvasId] = NULL;
+  currentCanvasInteractor[canvasId] = nullptr;
 }
 
 void cleanManagedCanvasIfNeeded() {
@@ -555,7 +555,7 @@ void EMSCRIPTEN_KEEPALIVE addGraphHull(const char *canvasId, tlp::Graph *g, bool
 }
 
 void addSubGraphsHull(const char *canvasId, tlp::Graph *g) {
-  tlp::Graph *sg = NULL;
+  tlp::Graph *sg = nullptr;
   forEach(sg, g->getSubGraphs()) {
     addGraphHull(canvasId, sg);
     addSubGraphsHull(canvasId, sg);
@@ -566,7 +566,7 @@ void setGraphHullsToDisplay(const char *canvasId) {
   tlp::Graph *g = graph[canvasId];
   std::set<unsigned int> sgIds;
 
-  tlp::Graph *sg = NULL;
+  tlp::Graph *sg = nullptr;
   forEach(sg, g->getSubGraphs()) {
     sgIds.insert(sg->getId());
   }

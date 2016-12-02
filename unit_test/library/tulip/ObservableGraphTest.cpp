@@ -379,8 +379,8 @@ removeAttribute(graph, gEvt->getAttributeName());
           delete observer;
           GraphObserverTest *obs = new GraphObserverTest();
           addListener(obs);
-          observer = NULL;
-          ObservableGraphTest::setGraph(NULL);
+          observer = nullptr;
+          ObservableGraphTest::setGraph(nullptr);
         } else
           destroy(graph);
       }
@@ -1039,7 +1039,7 @@ void ObservableGraphTest::testAddEdgesEventForTLPBImport() {
   // import the previously saved graph by populating the already created empty graph
   DataSet params;
   params.set<string>("file::filename", tlpbFile);
-  importGraph("TLPB Import", params, NULL, graph);
+  importGraph("TLPB Import", params, nullptr, graph);
   // check that the graph event TLP_ADD_EDGES has been correctly received
   CPPUNIT_ASSERT(!gObserver->edges.empty());
 }

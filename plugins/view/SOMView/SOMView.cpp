@@ -57,10 +57,11 @@ using namespace tlp;
 PLUGIN(SOMView)
 
 SOMView::SOMView(PluginContext *)
-    : graphComposite(NULL), graphLayoutProperty(NULL), graphSizeProperty(NULL), mask(NULL), somMask(NULL), mapCompositeElements(NULL), som(NULL),
-      previewWidget(NULL), mapWidget(NULL), isDetailledMode(false), mappingIsVisible(false), hideMappingAction(NULL), showMappingAction(NULL),
-      computeMappingAction(NULL), updateNodesColorAction(NULL), addSelectionToMaskAction(NULL), clearMaskAction(NULL), invertMaskAction(NULL),
-      selectNodesInMaskAction(NULL), properties(NULL), destruct(false), somMapIsBuild(false), isConstruct(false) {
+    : graphComposite(nullptr), graphLayoutProperty(nullptr), graphSizeProperty(nullptr), mask(nullptr), somMask(nullptr),
+      mapCompositeElements(nullptr), som(nullptr), previewWidget(nullptr), mapWidget(nullptr), isDetailledMode(false), mappingIsVisible(false),
+      hideMappingAction(nullptr), showMappingAction(nullptr), computeMappingAction(nullptr), updateNodesColorAction(nullptr),
+      addSelectionToMaskAction(nullptr), clearMaskAction(nullptr), invertMaskAction(nullptr), selectNodesInMaskAction(nullptr), properties(nullptr),
+      destruct(false), somMapIsBuild(false), isConstruct(false) {
   addDependency("Grid", "2.0");
 }
 

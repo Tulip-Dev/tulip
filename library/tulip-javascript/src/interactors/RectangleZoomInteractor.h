@@ -32,7 +32,7 @@
 
 struct AnimateParams {
 
-  AnimateParams() : scene(NULL) {
+  AnimateParams() : scene(nullptr) {
   }
   tlp::GlScene *scene;
 };
@@ -40,7 +40,7 @@ struct AnimateParams {
 class RectangleZoomInteractor : public GlSceneInteractor {
 
 public:
-  RectangleZoomInteractor(tlp::GlScene *glScene = NULL);
+  RectangleZoomInteractor(tlp::GlScene *glScene = nullptr);
 
   virtual bool mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int &modifiers);
 

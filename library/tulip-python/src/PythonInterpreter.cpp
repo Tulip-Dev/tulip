@@ -499,7 +499,7 @@ bool PythonInterpreter::functionExists(const QString &moduleName, const QString 
   decrefPyObject(pName);
   PyObject *pDict = PyModule_GetDict(pModule);
   PyObject *pFunc = PyDict_GetItemString(pDict, QStringToTlpString(functionName).c_str());
-  bool ret = (pFunc != NULL && PyCallable_Check(pFunc));
+  bool ret = (pFunc != nullptr && PyCallable_Check(pFunc));
   releaseGIL();
   return ret;
 }

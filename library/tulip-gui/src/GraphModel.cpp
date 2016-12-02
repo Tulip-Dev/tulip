@@ -290,7 +290,7 @@ QVariant GraphModel::nodeValue(unsigned int id, PropertyInterface *prop) {
       return QVariant::fromValue<TextureFile>(TextureFile(tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeValue(n))));
 
     return QVariant::fromValue<QString>(tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeValue(n)));
-  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != NULL)
+  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr)
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty *>(prop)->getNodeValue(n)));
 
   STANDARD_NODE_CHECKS(GET_NODE_VALUE)
@@ -322,7 +322,7 @@ QVariant GraphModel::nodeDefaultValue(PropertyInterface *prop) {
       return QVariant::fromValue<TextureFile>(TextureFile(tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeDefaultValue())));
 
     return QVariant::fromValue<QString>(tlpStringToQString(static_cast<StringProperty *>(prop)->getNodeDefaultValue()));
-  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != NULL)
+  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr)
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty *>(prop)->getNodeDefaultValue()));
 
   STANDARD_NODE_CHECKS(GET_NODE_DEFAULT_VALUE)
@@ -376,7 +376,7 @@ bool GraphModel::setNodeValue(unsigned int id, PropertyInterface *prop, QVariant
       static_cast<StringProperty *>(prop)->setNodeValue(n, QStringToTlpString(v.value<TextureFile>().texturePath));
     else
       static_cast<StringProperty *>(prop)->setNodeValue(n, QStringToTlpString(v.value<QString>()));
-  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != NULL)
+  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr)
     static_cast<BooleanVectorProperty *>(prop)->setNodeValue(n, v.value<QVector<bool>>().toStdVector());
 
   STANDARD_NODE_CHECKS(SET_NODE_VALUE)
@@ -419,7 +419,7 @@ QVariant GraphModel::edgeValue(unsigned int id, PropertyInterface *prop) {
       return QVariant::fromValue<TextureFile>(TextureFile(tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeValue(e))));
 
     return QVariant::fromValue<QString>(tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeValue(e)));
-  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != NULL)
+  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr)
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty *>(prop)->getEdgeValue(e)));
 
   STANDARD_EDGE_CHECKS(GET_EDGE_VALUE)
@@ -459,7 +459,7 @@ QVariant GraphModel::edgeDefaultValue(PropertyInterface *prop) {
       return QVariant::fromValue<TextureFile>(TextureFile(tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeDefaultValue())));
 
     return QVariant::fromValue<QString>(tlpStringToQString(static_cast<StringProperty *>(prop)->getEdgeDefaultValue()));
-  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != NULL)
+  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr)
     return QVariant::fromValue<QVector<bool>>(QVector<bool>::fromStdVector(static_cast<BooleanVectorProperty *>(prop)->getEdgeDefaultValue()));
 
   STANDARD_EDGE_CHECKS(GET_EDGE_DEFAULT_VALUE)
@@ -494,7 +494,7 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface *prop, QVariant
       static_cast<StringProperty *>(prop)->setEdgeValue(e, QStringToTlpString(v.value<TextureFile>().texturePath));
     else
       static_cast<StringProperty *>(prop)->setEdgeValue(e, QStringToTlpString(v.value<QString>()));
-  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != NULL)
+  } else if (dynamic_cast<BooleanVectorProperty *>(prop) != nullptr)
     static_cast<BooleanVectorProperty *>(prop)->setEdgeValue(e, v.value<QVector<bool>>().toStdVector());
 
   STANDARD_EDGE_CHECKS(SET_EDGE_VALUE)
@@ -503,9 +503,10 @@ bool GraphModel::setEdgeValue(unsigned int id, PropertyInterface *prop, QVariant
   return true;
 }
 
-#define SET_ALL_EDGE_VALUE(PROP, TYPE) else if (dynamic_cast<PROP *>(prop) != NULL) static_cast<PROP *>(prop)->setAllEdgeValue(v.value<TYPE>(), graph)
+#define SET_ALL_EDGE_VALUE(PROP, TYPE)                                                                                                               \
+  else if (dynamic_cast<PROP *>(prop) != nullptr) static_cast<PROP *>(prop)->setAllEdgeValue(v.value<TYPE>(), graph)
 bool GraphModel::setAllEdgeValue(PropertyInterface *prop, QVariant v, Graph *graph) {
-  if (dynamic_cast<IntegerProperty *>(prop) != NULL) {
+  if (dynamic_cast<IntegerProperty *>(prop) != nullptr) {
     if (prop->getName() == "viewShape")
       static_cast<IntegerProperty *>(prop)->setAllEdgeValue(v.value<EdgeShape::EdgeShapes>(), graph);
 

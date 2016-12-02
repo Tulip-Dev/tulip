@@ -45,7 +45,7 @@ class NeighborhoodInteractor : public GlSceneInteractor {
   friend void animate(void *value);
 
 public:
-  NeighborhoodInteractor(tlp::GlScene *scene = NULL);
+  NeighborhoodInteractor(tlp::GlScene *scene = nullptr);
 
   void setScene(tlp::GlScene *glScene);
 

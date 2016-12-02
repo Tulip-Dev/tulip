@@ -284,7 +284,7 @@ void SliderBar::draw(float lod, tlp::Camera *camera) {
   glDisable(GL_BLEND);
 }
 ThresholdInteractor::ThresholdInteractor()
-    : layer(new GlLayer("Threshold")), mouvingSlider(NULL), rSlider(NULL), lSlider(NULL), bar(NULL), startDrag(false), XPosCursor(0),
+    : layer(new GlLayer("Threshold")), mouvingSlider(nullptr), rSlider(nullptr), lSlider(nullptr), bar(nullptr), startDrag(false), XPosCursor(0),
       textureName("") {
 }
 

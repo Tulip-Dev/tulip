@@ -64,7 +64,7 @@ public:
     unsigned int avgDegree = 10;
     bool enableLongEdge = false;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
       dataSet->get("degree", avgDegree);
       dataSet->get("long edge", enableLongEdge);

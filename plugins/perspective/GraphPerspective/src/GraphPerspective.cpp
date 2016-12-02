@@ -653,7 +653,7 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     QDateTime start = QDateTime::currentDateTime();
     g = tlp::importGraph(module, data, prg);
 
-    if (g == NULL) {
+    if (g == nullptr) {
       QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
                                                                      trUtf8("</i> failed to import data.<br/><br/><b>") +
                                                                      tlp::tlpStringToQString(prg->getError()) + "</b>");
@@ -1052,8 +1052,8 @@ void GraphPerspective::make_graph() {
 }
 
 Graph *GraphPerspective::createSubGraph(Graph *graph) {
-  if (graph == NULL)
-    return NULL;
+  if (graph == nullptr)
+    return nullptr;
 
   graph->push();
   Observable::holdObservers();
@@ -1194,9 +1194,9 @@ void GraphPerspective::showStartPanels(Graph *g) {
 
   foreach (const QString &panelName, QStringList() << "Spreadsheet view"
                                                    << "Node Link Diagram view") {
-    View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), NULL);
+    View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
 
-    if (firstPanel == NULL)
+    if (firstPanel == nullptr)
       firstPanel = view;
     else
       secondPanel = view;

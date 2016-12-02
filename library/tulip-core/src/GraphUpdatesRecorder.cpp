@@ -283,7 +283,7 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
 
     // get ids memento
     GraphImpl *root = (GraphImpl *)g;
-    assert(newIdsState == NULL);
+    assert(newIdsState == nullptr);
     // record ids memento only if needed
     if (graphAddedNodes.get(g->getId()) || graphAddedEdges.get(g->getId()))
       newIdsState = root->storage.getIdsMemento();

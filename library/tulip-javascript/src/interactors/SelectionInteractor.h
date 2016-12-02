@@ -37,7 +37,7 @@ class ZoomAndPanInteractor;
 class SelectionInteractor : public GlSceneInteractor {
 
 public:
-  SelectionInteractor(tlp::GlScene *scene = NULL);
+  SelectionInteractor(tlp::GlScene *scene = nullptr);
 
   void setScene(tlp::GlScene *glScene);
 

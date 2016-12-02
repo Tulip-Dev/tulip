@@ -30,7 +30,7 @@ static const char *paramHelp[] = {
 
 namespace tlp {
 
-ConvolutionClustering::ConvolutionClustering(PluginContext *context) : DoubleAlgorithm(context), metric(NULL) {
+ConvolutionClustering::ConvolutionClustering(PluginContext *context) : DoubleAlgorithm(context), metric(nullptr) {
   addInParameter<NumericProperty *>("metric", paramHelp[0], "viewMetric", false);
 }
 

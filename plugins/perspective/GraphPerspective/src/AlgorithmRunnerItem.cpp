@@ -519,7 +519,7 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
       else
         cs = ColorScalesManager::getLatestColorScale();
       data.set<ColorScale>("color scale", cs);
-      g->applyPropertyAlgorithm("Color Mapping", color, errMsg, NULL, &data);
+      g->applyPropertyAlgorithm("Color Mapping", color, errMsg, nullptr, &data);
     }
   } else if (pluginLister->pluginExists<GraphTest>(stdName)) {
     bool result = true;
@@ -546,7 +546,7 @@ tlp::DataSet AlgorithmRunnerItem::data() const {
   return static_cast<ParameterListModel *>(_ui->parameters->model())->parametersValues();
 }
 
-ParameterListModel *AlgorithmRunnerItem::colorMappingModel = NULL;
+ParameterListModel *AlgorithmRunnerItem::colorMappingModel = nullptr;
 
 void AlgorithmRunnerItem::initModel() {
   if (_ui->parameters->model() != nullptr)

@@ -186,7 +186,7 @@ public:
    * @warning If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
    *
    **/
-  virtual void setAllNodeValue(const typename Tnode::RealType &v, Graph *graph = NULL);
+  virtual void setAllNodeValue(const typename Tnode::RealType &v, Graph *graph = nullptr);
 
   /**
    * @brief Sets the value of all edges and notify the observers.
@@ -199,7 +199,7 @@ public:
    * @param v The value to set to all edges.
    *
    **/
-  virtual void setAllEdgeValue(const typename Tedge::RealType &v, Graph *graph = NULL);
+  virtual void setAllEdgeValue(const typename Tedge::RealType &v, Graph *graph = nullptr);
   //=================================================================================
 
   /**
@@ -380,7 +380,7 @@ public:
     setEdgeValue(inE, v);
     return true;
   }
-  virtual bool setAllNodeStringValue(const std::string &inV, Graph *graph = NULL) {
+  virtual bool setAllNodeStringValue(const std::string &inV, Graph *graph = nullptr) {
     typename Tnode::RealType v;
 
     if (!Tnode::fromString(v, inV))
@@ -389,7 +389,7 @@ public:
     setAllNodeValue(v, graph);
     return true;
   }
-  virtual bool setAllEdgeStringValue(const std::string &inV, Graph *graph = NULL) {
+  virtual bool setAllEdgeStringValue(const std::string &inV, Graph *graph = nullptr) {
     typename Tedge::RealType v;
 
     if (!Tedge::fromString(v, inV))

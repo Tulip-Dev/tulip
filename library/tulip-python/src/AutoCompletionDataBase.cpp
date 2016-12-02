@@ -831,7 +831,7 @@ static QVector<PropertyInterface *> getAllGraphPropertiesFromRoot(Graph *root) {
 
 static QSet<QString> getAllSubGraphsNamesFromRoot(Graph *root, const QString &prefix) {
   QSet<QString> ret;
-  tlp::Graph *sg = NULL;
+  tlp::Graph *sg = nullptr;
   forEach(sg, root->getSubGraphs()) {
     QString sgName = "\"" + tlpStringToQString(sg->getName()) + "\"";
 

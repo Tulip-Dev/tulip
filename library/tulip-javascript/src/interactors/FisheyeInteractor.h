@@ -43,7 +43,7 @@ class GlFrameBufferObject;
 class FisheyeInteractor : public GlSceneInteractor {
 
 public:
-  FisheyeInteractor(tlp::GlScene *scene = NULL);
+  FisheyeInteractor(tlp::GlScene *scene = nullptr);
 
   virtual void activate();
 

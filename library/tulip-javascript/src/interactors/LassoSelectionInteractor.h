@@ -39,7 +39,7 @@ class ZoomAndPanInteractor;
 class LassoSelectionInteractor : public GlSceneInteractor {
 
 public:
-  LassoSelectionInteractor(tlp::GlScene *scene = NULL);
+  LassoSelectionInteractor(tlp::GlScene *scene = nullptr);
 
   void setScene(tlp::GlScene *glScene);
 

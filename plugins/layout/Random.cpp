@@ -34,7 +34,7 @@ Random::Random(const tlp::PluginContext *context) : LayoutAlgorithm(context) {
 bool Random::run() {
   bool is3D = false;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     dataSet->get("3D layout", is3D);
   }
 

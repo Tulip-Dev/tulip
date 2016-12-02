@@ -36,9 +36,9 @@ public:
   }
 
   bool run() {
-    tlp::LayoutProperty *layout = NULL;
+    tlp::LayoutProperty *layout = nullptr;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("layout", layout);
     }
 

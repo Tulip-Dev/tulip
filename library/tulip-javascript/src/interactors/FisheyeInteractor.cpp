@@ -93,7 +93,7 @@ static std::string fisheyeFragmentShaderSrc() {
 }
 
 FisheyeInteractor::FisheyeInteractor(GlScene *scene)
-    : _curX(-1), _curY(-1), _znpInteractor(NULL), _fisheyeShader(NULL), _buffer(NULL), _fbo(NULL), _fisheyeRadius(200), _fisheyeHeight(0.5),
+    : _curX(-1), _curY(-1), _znpInteractor(nullptr), _fisheyeShader(nullptr), _buffer(nullptr), _fbo(nullptr), _fisheyeRadius(200), _fisheyeHeight(0.5),
       _maxTextureSize(0) {
   _glScene = scene;
   _znpInteractor = new ZoomAndPanInteractor(scene);
@@ -107,7 +107,7 @@ void FisheyeInteractor::activate() {
   _fisheyeShader->printInfoLog();
   _buffer = new GlBuffer(GlBuffer::VertexBuffer);
   _indicesBuffer = new GlBuffer(GlBuffer::IndexBuffer);
-  _fbo = NULL;
+  _fbo = nullptr;
 
   if (_maxTextureSize == 0) {
     glGetIntegerv(GL_MAX_TEXTURE_SIZE, &_maxTextureSize);
@@ -187,7 +187,7 @@ void FisheyeInteractor::draw() {
   int fboSize = factor * 2 * _fisheyeRadius;
   fboSize = std::min(fboSize, _maxTextureSize);
 
-  if (_fbo == NULL || _fbo->width() != fboSize) {
+  if (_fbo == nullptr || _fbo->width() != fboSize) {
     delete _fbo;
     _fbo = new GlFrameBufferObject(fboSize, fboSize, GlFrameBufferObject::CombinedDepthStencil, GL_LINEAR, GL_LINEAR);
     GlTextureManager::instance()->addExternalTexture("fisheyeTexture", _fbo->texture());

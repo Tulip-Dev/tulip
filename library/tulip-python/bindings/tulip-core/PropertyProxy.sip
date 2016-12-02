@@ -176,7 +176,7 @@ private:
 %ModuleCode
 
 tlp::PropertyProxy::PropertyProxy(tlp::Graph *graph, const std::string &propertyName) :
-  _graph(graph), _propertyName(propertyName), _property(NULL) {}
+  _graph(graph), _propertyName(propertyName), _property(nullptr) {}
 
 void tlp::PropertyProxy::setNodeValue(const tlp::node &n, bool val) {
   _property = _graph->getProperty<tlp::BooleanProperty>(_propertyName);
@@ -897,7 +897,7 @@ void setAllEdgeValue(SIP_PYOBJECT val);
   SIP_PYOBJECT __getitem__(const tlp::node n /GetWrapper/);
 %MethodCode
   if (sipCpp->getProperty()) {
-    PyObject *pyProp = sipConvertFromType(sipCpp->getProperty(), sipFindType("tlp::PropertyInterface"), NULL);
+    PyObject *pyProp = sipConvertFromType(sipCpp->getProperty(), sipFindType("tlp::PropertyInterface"), nullptr);
   #if PY_MAJOR_VERSION >= 3
     PyObject *pName = PyUnicode_FromString("__getitem__");
   #else
@@ -915,7 +915,7 @@ void setAllEdgeValue(SIP_PYOBJECT val);
   SIP_PYOBJECT __getitem__(const tlp::edge e /GetWrapper/);
 %MethodCode
   if (sipCpp->getProperty()) {
-    PyObject *pyProp = sipConvertFromType(sipCpp->getProperty(), sipFindType("tlp::PropertyInterface"), NULL);
+    PyObject *pyProp = sipConvertFromType(sipCpp->getProperty(), sipFindType("tlp::PropertyInterface"), nullptr);
   #if PY_MAJOR_VERSION >= 3
     PyObject *pName = PyUnicode_FromString("__getitem__");
   #else

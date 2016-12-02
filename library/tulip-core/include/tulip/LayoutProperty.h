@@ -284,8 +284,8 @@ public:
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node, const Coord &v);
   virtual void setEdgeValue(const edge, const std::vector<Coord> &v);
-  virtual void setAllNodeValue(const Coord &v, Graph *graph = NULL);
-  virtual void setAllEdgeValue(const std::vector<Coord> &v, Graph *graph = NULL);
+  virtual void setAllNodeValue(const Coord &v, Graph *graph = nullptr);
+  virtual void setAllEdgeValue(const std::vector<Coord> &v, Graph *graph = nullptr);
 
 protected:
   virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);

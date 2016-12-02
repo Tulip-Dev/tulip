@@ -39,7 +39,7 @@
 
 using namespace tlp;
 
-static ZoomAndPanAnimation *zoomAndPanAnimation = NULL;
+static ZoomAndPanAnimation *zoomAndPanAnimation = nullptr;
 static const unsigned int baseAnimDuration = 1000;
 static bool animating = false;
 static double animDuration = 0;
@@ -59,7 +59,7 @@ static void animate(void *value) {
     animParams->scene->setBackupBackBuffer(true);
     animParams->scene->requestDraw();
     delete zoomAndPanAnimation;
-    zoomAndPanAnimation = NULL;
+    zoomAndPanAnimation = nullptr;
     animating = false;
   }
 }
@@ -106,7 +106,7 @@ bool RectangleZoomInteractor::mouseCallback(const MouseButton &button, const Mou
         timerFunc(delay, animate, &_animParams);
       } else {
         delete zoomAndPanAnimation;
-        zoomAndPanAnimation = NULL;
+        zoomAndPanAnimation = nullptr;
       }
 
       _firstX = _curX = -1;

@@ -33,7 +33,7 @@
 class ZoomAndPanInteractor : public GlSceneInteractor {
 
 public:
-  ZoomAndPanInteractor(tlp::GlScene *glScene = NULL);
+  ZoomAndPanInteractor(tlp::GlScene *glScene = nullptr);
 
   bool mouseCallback(const MouseButton &button, const MouseButtonState &state, int x, int y, const int &modifiers);
 

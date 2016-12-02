@@ -739,7 +739,7 @@ void LinLogLayout::initWeights() {
 
   node u;
 
-  if (edgeWeight == NULL) {
+  if (edgeWeight == nullptr) {
     linLogWeight->setAllEdgeValue(1.0);
     edge e;
     forEach(e, graph->getEdges()) {

@@ -110,7 +110,7 @@ and the second one can be used to provide an error message
       }
     }
   }
-  sipPy = sipConvertFromType(sipCpp->dataSet, sipFindType("tlp::DataSet"), NULL);
+  sipPy = sipConvertFromType(sipCpp->dataSet, sipFindType("tlp::DataSet"), nullptr);
 %End
   };
 

@@ -672,7 +672,7 @@ void TableView::showHorizontalHeaderCustomContextMenu(const QPoint &pos) {
   QAction *edgesSetAllGraph = subMenu->addAction(trUtf8("All edges") + OF_GRAPH);
   QAction *nodesSelectedSetAll = subMenu->addAction(trUtf8("Selected nodes") + OF_GRAPH);
   QAction *edgesSelectedSetAll = subMenu->addAction(trUtf8("Selected edges") + OF_GRAPH);
-  QAction *highlightedSetAll = NULL;
+  QAction *highlightedSetAll = nullptr;
 
   if (highlightedRows.size() != 0)
     highlightedSetAll = subMenu->addAction(

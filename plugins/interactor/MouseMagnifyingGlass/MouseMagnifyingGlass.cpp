@@ -60,12 +60,12 @@ bool MouseMagnifyingGlassInteractor::isCompatible(const std::string &viewName) c
 PLUGIN(MouseMagnifyingGlassInteractor)
 
 MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent()
-    : fbo(NULL), fbo2(NULL), glWidget(NULL), camera(NULL), drawInteractor(false), radius(200), magnifyPower(2) {
+    : fbo(nullptr), fbo2(nullptr), glWidget(nullptr), camera(nullptr), drawInteractor(false), radius(200), magnifyPower(2) {
 }
 
 MouseMagnifyingGlassInteractorComponent::MouseMagnifyingGlassInteractorComponent(
     const MouseMagnifyingGlassInteractorComponent &mouseMagnifyingGlassInteractorComponent)
-    : fbo(NULL), fbo2(NULL), glWidget(NULL), camera(NULL), drawInteractor(false) {
+    : fbo(nullptr), fbo2(nullptr), glWidget(nullptr), camera(nullptr), drawInteractor(false) {
   boxCenter = mouseMagnifyingGlassInteractorComponent.boxCenter;
   radius = mouseMagnifyingGlassInteractorComponent.radius;
   magnifyPower = mouseMagnifyingGlassInteractorComponent.magnifyPower;

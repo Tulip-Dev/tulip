@@ -53,7 +53,7 @@ public:
   bool importGraph() {
     unsigned int nbNodes = 30;
 
-    if (dataSet != NULL) {
+    if (dataSet != nullptr) {
       dataSet->get("nodes", nbNodes);
     }
 

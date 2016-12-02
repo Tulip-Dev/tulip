@@ -570,7 +570,7 @@ void GraphImpl::push(bool unpopAllowed, std::vector<PropertyInterface *> *propsT
   if (hasRecorders)
     // stop recording for current recorder
     recorders.front()->stopRecording(this);
-  const GraphStorageIdsMemento *prevIdsMemento = hasRecorders ? recorders.front()->newIdsState : NULL;
+  const GraphStorageIdsMemento *prevIdsMemento = hasRecorders ? recorders.front()->newIdsState : nullptr;
 
   GraphUpdatesRecorder *recorder = new GraphUpdatesRecorder(unpopAllowed, prevIdsMemento);
   recorder->startRecording(this);

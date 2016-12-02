@@ -153,7 +153,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
       for (unsigned int j = 0; j < tgtColumnIds.size(); ++j) {
         if (srcColumnIds[i] == tgtColumnIds[j]) {
           QMessageBox::critical(parentWidget(), "Import of new relations failed", "Source columns and destination columns are not different.");
-          return NULL;
+          return nullptr;
         }
       }
     }
@@ -161,7 +161,7 @@ CSVToGraphDataMapping *CSVGraphMappingConfigurationWidget::buildMappingObject() 
     bool createMissingElement = ui->addMissingEdgeAndNodeCheckBox->isChecked();
     return new CSVToGraphEdgeSrcTgtMapping(graph, srcColumnIds, tgtColumnIds, srcProperties, tgtProperties, createMissingElement);
   } else {
-    return NULL;
+    return nullptr;
   }
 }
 

@@ -36,7 +36,7 @@ class ColorScale {
   std::map<float, tlp::Color>::const_iterator it;
   for(it = colorMap.begin() ; it != colorMap.end() ; ++it) {
     PyObject *key = PyFloat_FromDouble(it->first);
-    PyObject *val = sipConvertFromNewType(new tlp::Color(it->second), sipFindType("tlp::Color"), NULL);
+    PyObject *val = sipConvertFromNewType(new tlp::Color(it->second), sipFindType("tlp::Color"), nullptr);
     PyDict_SetItem(dict, key, val);
   }
   return dict;
@@ -44,11 +44,11 @@ class ColorScale {
 
 %ConvertToTypeCode
 
-  PyObject *key = NULL;
-  PyObject *val = NULL;
+  PyObject *key = nullptr;
+  PyObject *val = nullptr;
   Py_ssize_t pos = 0;
 
-  if (sipIsErr == NULL) {
+  if (sipIsErr == nullptr) {
     if (sipCanConvertToType(sipPy, sipFindType("tlp::ColorScale"), SIP_NOT_NONE|SIP_NO_CONVERTORS)) {
       return 1;
     } else if (PyDict_Check(sipPy)) {

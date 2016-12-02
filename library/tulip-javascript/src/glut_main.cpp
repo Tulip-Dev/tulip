@@ -62,7 +62,7 @@ static GlScene *glScene;
 static GlGraph *glGraph;
 static tlp::Graph *graph;
 
-static GlSceneInteractor *currentInteractor = NULL;
+static GlSceneInteractor *currentInteractor = nullptr;
 
 static void (*animFunc)(void *);
 static void *animFuncParam;
@@ -129,7 +129,7 @@ static void mouseCallback(int button, int state, int x, int y) {
 }
 
 static tlp::Graph *loadGraph(const char *filename) {
-  tlp::Graph *g = NULL;
+  tlp::Graph *g = nullptr;
   if (filename) {
     g = tlp::loadGraph(filename);
   }

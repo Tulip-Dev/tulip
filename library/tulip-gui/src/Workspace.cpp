@@ -617,9 +617,9 @@ void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootId
         xmlFile->close();
         delete xmlFile;
 
-        View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(viewName), NULL);
+        View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(viewName), nullptr);
 
-        if (view == NULL)
+        if (view == nullptr)
           continue;
 
         view->setupUi();
@@ -627,7 +627,7 @@ void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootId
         assert(rootGraph);
         Graph *g = rootGraph->getDescendantGraph(id.toInt());
 
-        if (g == NULL)
+        if (g == nullptr)
           g = rootGraph;
 
         view->setGraph(g);
@@ -641,7 +641,7 @@ void Workspace::readProject(TulipProject *project, QMap<QString, Graph *> rootId
   }
 
   QIODevice *workspaceXml = project->fileStream("/workspace.xml");
-  if (workspaceXml == NULL)
+  if (workspaceXml == nullptr)
     return;
 
   QXmlStreamReader doc(workspaceXml);

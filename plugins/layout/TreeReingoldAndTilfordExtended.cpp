@@ -99,8 +99,8 @@ double TreeReingoldAndTilfordExtended::calcDecal(const std::list<LR> &arbreG, co
 }
 //=============================================================================
 list<LR> *TreeReingoldAndTilfordExtended::mergeLRList(std::list<LR> *L, std::list<LR> *R, double decal) {
-  assert(L != NULL);
-  assert(R != NULL);
+  assert(L != nullptr);
+  assert(R != nullptr);
   list<LR>::iterator itL, itR;
   int iL = 0, iR = 0;
   itL = L->begin();
@@ -355,13 +355,13 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   getSpacingParameters(dataSet, nodeSpacing, spacing);
   orientation = "horizontal";
-  lengthMetric = NULL;
+  lengthMetric = nullptr;
   ortho = true;
   useLength = false;
   compactLayout = true;
   bool boundingCircles = false;
 
-  if (dataSet != NULL) {
+  if (dataSet != nullptr) {
     useLength = dataSet->get("edge length", lengthMetric);
     dataSet->get("orthogonal", ortho);
     dataSet->get("bounding circles", boundingCircles);
@@ -377,7 +377,7 @@ bool TreeReingoldAndTilfordExtended::run() {
 
   bool deleteLenghtMetric = false;
 
-  if (lengthMetric == NULL) {
+  if (lengthMetric == nullptr) {
     lengthMetric = new IntegerProperty(graph);
     lengthMetric->setAllNodeValue(1);
     lengthMetric->setAllEdgeValue(1);
