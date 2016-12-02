@@ -364,17 +364,15 @@ static GlDrawObserver glDrawObserver;
 class GraphDeletedObserver : public Observable {
 
 public:
-
   void treatEvent(const tlp::Event &event) {
     if (event.type() == tlp::Event::TLP_DELETE) {
-      tlp::Graph *g = reinterpret_cast<tlp::Graph*>(event.sender());
+      tlp::Graph *g = reinterpret_cast<tlp::Graph *>(event.sender());
       if (graphToCanvas.find(g) != graphToCanvas.end()) {
         graph.erase(graphToCanvas[g]);
         graphToCanvas.erase(g);
       }
     }
   }
-
 };
 
 static GraphDeletedObserver graphDeletedObserver;

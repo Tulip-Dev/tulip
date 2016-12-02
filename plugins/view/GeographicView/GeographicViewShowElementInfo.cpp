@@ -98,7 +98,7 @@ PLUGIN(GeographicViewInteractorGetInformation)
 
 GeographicViewShowElementInfo::GeographicViewShowElementInfo() : _editor(nullptr) {
   Ui::ElementInformationsWidget ui;
-  _informationsWidget=new QWidget();
+  _informationsWidget = new QWidget();
   _informationsWidget->installEventFilter(this);
   ui.setupUi(_informationsWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));

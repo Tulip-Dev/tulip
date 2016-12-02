@@ -311,7 +311,7 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
     }
   }
 
-  unsigned nodes=NODE;
+  unsigned nodes = NODE;
   dataSet.get("Nodes/Edges", nodes);
   dataLocation = static_cast<ElementType>(nodes);
   propertiesSelectionWidget->setDataLocation(dataLocation);

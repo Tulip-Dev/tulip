@@ -56,7 +56,7 @@ protected slots:
 
   void widthSpinBoxValueChanged(int value);
   void heightSpinBoxValueChanged(int value);
-  void clicked(QAbstractButton* b);
+  void clicked(QAbstractButton *b);
 
 protected:
   void resizeEvent(QResizeEvent *);

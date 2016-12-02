@@ -63,8 +63,8 @@ static bool isWow64() {
 // On windows, Python can be installed for all users or for the current user only. That function handles both cases
 static QString pythonHome(const QString &pythonVersion) {
 #ifdef MSYS2_PYTHON
-    (void) pythonVersion;
-    return PYTHON_HOME_PATH;
+  (void)pythonVersion;
+  return PYTHON_HOME_PATH;
 #else
 // 32 bit Python
 #ifndef X86_64

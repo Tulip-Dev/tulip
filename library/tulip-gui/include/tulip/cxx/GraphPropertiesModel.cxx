@@ -128,9 +128,8 @@ template <typename PROPTYPE> QVariant GraphPropertiesModel<PROPTYPE>::data(const
     else if (index.column() == 1)
       return pi->getTypename().c_str();
     else if (index.column() == 2)
-      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local")
-                                                        : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) + " (" +
-                                                              tlpStringToQString(pi->getGraph()->getName()) + ')');
+      return (_graph->existLocalProperty(pi->getName()) ? trUtf8("Local") : tr("Inherited from graph ") + QString::number(pi->getGraph()->getId()) +
+                                                                                " (" + tlpStringToQString(pi->getGraph()->getName()) + ')');
   }
 
   else if (role == Qt::DecorationRole && index.column() == 0 && pi != nullptr && !_graph->existLocalProperty(pi->getName()))

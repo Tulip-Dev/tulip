@@ -435,9 +435,7 @@ public:
   QMap<QString, QIcon> iconPool;
 
 private:
-
   QIcon nullIcon;
-
 };
 
 static QImageIconPool imageIconPool;

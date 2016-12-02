@@ -34,7 +34,7 @@ PreferencesDialog::PreferencesDialog(QWidget *parent) : QDialog(parent), _ui(new
   _ui->setupUi(this);
   _ui->graphDefaultsTable->setItemDelegate(new tlp::TulipItemDelegate(_ui->graphDefaultsTable));
   connect(_ui->graphDefaultsTable, SIGNAL(cellChanged(int, int)), this, SLOT(cellChanged(int, int)));
-  connect(_ui->randomSeedCheck, SIGNAL(stateChanged(int)), this, SLOT(randomSeedCheckChanged(int)));  
+  connect(_ui->randomSeedCheck, SIGNAL(stateChanged(int)), this, SLOT(randomSeedCheckChanged(int)));
   // disable edition for title items (in column 0)
   for (int i = 0; i < _ui->graphDefaultsTable->rowCount(); ++i)
     _ui->graphDefaultsTable->item(i, 0)->setFlags(Qt::ItemIsEnabled);
@@ -51,9 +51,10 @@ PreferencesDialog::~PreferencesDialog() {
 }
 
 void PreferencesDialog::usetlpbformat(int state) {
-    if(state==Qt::Checked) {
-        QMessageBox::warning(this, "Use tlpb file format", "Be careful: using the tlpb file format means faster Tulip project loading/saving but you will loose compatibility with previous versions of Tulip.");
-    }
+  if (state == Qt::Checked) {
+    QMessageBox::warning(this, "Use tlpb file format", "Be careful: using the tlpb file format means faster Tulip project loading/saving but you "
+                                                       "will loose compatibility with previous versions of Tulip.");
+  }
 }
 
 void PreferencesDialog::writeSettings() {
@@ -182,12 +183,10 @@ void PreferencesDialog::readSettings() {
   _ui->resultPropertyStoredCheck->setChecked(TulipSettings::instance().isResultPropertyStored());
   _ui->colorMappingCheck->setChecked(TulipSettings::instance().isAutomaticMapMetric());
   _ui->runningTimeComputedCheck->setChecked(TulipSettings::instance().isRunningTimeComputed());
-  if(TulipSettings::instance().isUseTlpbFileFormat()) {
-      _ui->usetlpbformat->setChecked(true);
-  }
-  else
-      connect(_ui->usetlpbformat, SIGNAL(stateChanged(int)), this, SLOT(usetlpbformat(int)));
-
+  if (TulipSettings::instance().isUseTlpbFileFormat()) {
+    _ui->usetlpbformat->setChecked(true);
+  } else
+    connect(_ui->usetlpbformat, SIGNAL(stateChanged(int)), this, SLOT(usetlpbformat(int)));
 
   // initialize seed according to settings
   unsigned int seed;

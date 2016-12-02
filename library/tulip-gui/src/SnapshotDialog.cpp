@@ -107,7 +107,6 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
 
   ui->buttonBox->button(QDialogButtonBox::Save)->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimage));
   ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close));
-
 }
 
 void SnapshotDialog::clicked(QAbstractButton *b) {
