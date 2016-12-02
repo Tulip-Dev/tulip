@@ -390,7 +390,7 @@ IF(NOT BUILD_CORE_ONLY)
       IF(PYTHONLIBS_FOUND)
 
         # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print sys.version" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
+        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
         STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
 
         # Python 64bits does not provide a dll import library for MinGW.
