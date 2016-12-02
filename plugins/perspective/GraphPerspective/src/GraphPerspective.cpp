@@ -40,6 +40,7 @@
 #include <QTimer>
 #include <QUrl>
 #include <QVBoxLayout>
+#include <QMessageBox>
 
 #include <tulip/AboutTulipPage.h>
 #include <tulip/CSVImportWizard.h>
