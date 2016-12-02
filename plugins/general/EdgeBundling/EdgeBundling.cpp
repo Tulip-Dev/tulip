@@ -688,22 +688,23 @@ bool EdgeBundling::run() {
   // Reinsert multiple edges if any and update their layout
   for (size_t i = 0 ; i < removedEdges.size() ; ++i) {
     const std::pair<node, node>& eEnds = graph->ends(removedEdges[i]);
+
     if (eEnds.first == eEnds.second)
       oriGraph->addEdge(removedEdges[i]);
     else {
       tlp::edge origEdge = oriGraph->existEdge(eEnds.first, eEnds.second);
 
       if (origEdge.isValid()) {
-	oriGraph->addEdge(removedEdges[i]);
-	layout->setEdgeValue(removedEdges[i], layout->getEdgeValue(origEdge));
+        oriGraph->addEdge(removedEdges[i]);
+        layout->setEdgeValue(removedEdges[i], layout->getEdgeValue(origEdge));
       }
       else {
-	origEdge = oriGraph->existEdge(eEnds.second, eEnds.first);
-	assert(origEdge.isValid());
-	oriGraph->addEdge(removedEdges[i]);
-	std::vector<tlp::Coord> bends = layout->getEdgeValue(origEdge);
-	std::reverse(bends.begin(), bends.end());
-	layout->setEdgeValue(removedEdges[i], bends);
+        origEdge = oriGraph->existEdge(eEnds.second, eEnds.first);
+        assert(origEdge.isValid());
+        oriGraph->addEdge(removedEdges[i]);
+        std::vector<tlp::Coord> bends = layout->getEdgeValue(origEdge);
+        std::reverse(bends.begin(), bends.end());
+        layout->setEdgeValue(removedEdges[i], bends);
       }
     }
   }
