@@ -383,9 +383,20 @@ bool TLPBExport::exportGraph(std::ostream &os) {
               sVal.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
 
             StringType::writeb(s, sVal);
-          } else
-            prop->writeNodeValue(s, n);
-
+          } else {
+            if (propGraphId && // if it is not the real root graph
+                prop->getTypename() == GraphProperty::propertyTypename) {
+              string tmp = prop->getNodeStringValue(n);
+              unsigned int id = strtoul(tmp.c_str(), NULL, 10);
+              // we must check if the pointed subgraph
+              // is a descendant of the currently export graph
+              if (!graph->getDescendantGraph(id)) {
+                unsigned int id = 0;
+                UnsignedIntegerType::writeb(s, id);
+              }
+            } else
+              prop->writeNodeValue(s, n);
+          }
           ++nbValues;
 
           if (nbValues == MAX_VALUES_TO_WRITE && !emscripten) {

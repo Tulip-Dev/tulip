@@ -105,22 +105,22 @@ public:
     return edgeIndex.get(e.id);
   }
   //=====================================================
-  void saveGraphElements(ostream &os, Graph *graph) {
+  void saveGraphElements(ostream &os, Graph *g) {
     pluginProgress->setComment("Saving Graph Elements");
-    pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
+    pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
 
-    if (graph->getSuperGraph() != graph) {
-      os << "(cluster " << graph->getId() << endl;
-      Iterator<node> *itN = graph->getNodes();
+    if (g->getSuperGraph() != g) {
+      os << "(cluster " << g->getId() << endl;
+      Iterator<node> *itN = g->getNodes();
       node beginNode, previousNode;
-      unsigned int progupdate = 1 + (graph->numberOfEdges() + graph->numberOfNodes()) / 100;
+      unsigned int progupdate = 1 + (g->numberOfEdges() + g->numberOfNodes()) / 100;
 
       if (itN->hasNext()) {
         os << "(nodes";
 
         while (itN->hasNext()) {
           if (progress % progupdate == 0)
-            pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
+            pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
 
           ++progress;
           node current = getNode(itN->next());
@@ -149,7 +149,7 @@ public:
       }
 
       delete itN;
-      Iterator<edge> *itE = graph->getEdges();
+      Iterator<edge> *itE = g->getEdges();
       edge beginEdge, previousEdge;
 
       if (itE->hasNext()) {
@@ -157,7 +157,7 @@ public:
 
         while (itE->hasNext()) {
           if (progress % progupdate == 0)
-            pluginProgress->progress(progress, graph->numberOfEdges() + graph->numberOfNodes());
+            pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
 
           ++progress;
           edge current = getEdge(itE->next());
@@ -187,7 +187,7 @@ public:
 
       delete itE;
     } else {
-      unsigned int nbElts = graph->numberOfNodes();
+      unsigned int nbElts = g->numberOfNodes();
 
       os << "(nb_nodes " << nbElts << ")" << endl;
 
@@ -210,21 +210,21 @@ public:
         os << "(nodes 0.." << nbElts - 1 << ")" << endl;
       }
 
-      nbElts = graph->numberOfEdges();
+      nbElts = g->numberOfEdges();
       os << "(nb_edges " << nbElts << ")" << endl;
 
       os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
-      unsigned int progupdate = 1 + graph->numberOfEdges() / 100;
-      Iterator<edge> *ite = graph->getEdges();
+      unsigned int progupdate = 1 + g->numberOfEdges() / 100;
+      Iterator<edge> *ite = g->getEdges();
       unsigned int id = 0;
 
       for (; ite->hasNext();) {
         if (progress % progupdate == 0)
-          pluginProgress->progress(progress, graph->numberOfEdges());
+          pluginProgress->progress(progress, g->numberOfEdges());
 
         ++progress;
         edge e = ite->next();
-        const pair<node, node> &ends = graph->ends(e);
+        const pair<node, node> &ends = g->ends(e);
         os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
 
         if (ite->hasNext())
@@ -237,26 +237,26 @@ public:
       os << endl;
     }
 
-    Iterator<Graph *> *itS = graph->getSubGraphs();
+    Iterator<Graph *> *itS = g->getSubGraphs();
 
     while (itS->hasNext())
       saveGraphElements(os, itS->next());
 
     delete itS;
 
-    if (graph->getSuperGraph() != graph)
+    if (g->getSuperGraph() != g)
       os << ")" << endl;
   }
   //=====================================================
-  void saveLocalProperties(ostream &os, Graph *graph) {
+  void saveLocalProperties(ostream &os, Graph *g) {
     pluginProgress->setComment("Saving Graph Properties");
     progress = 0;
     Iterator<PropertyInterface *> *itP = NULL;
 
-    if (graph->getSuperGraph() == graph) {
-      itP = graph->getObjectProperties();
+    if (g->getSuperGraph() == g) {
+      itP = g->getObjectProperties();
     } else {
-      itP = graph->getLocalObjectProperties();
+      itP = g->getLocalObjectProperties();
     }
 
     int nonDefaultvaluatedElementCount = 1;
@@ -264,7 +264,7 @@ public:
     while (itP->hasNext()) {
       PropertyInterface *prop = itP->next();
 
-      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
+      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(g);
 
       while (itN->hasNext()) {
         ++nonDefaultvaluatedElementCount;
@@ -273,7 +273,7 @@ public:
 
       delete itN;
 
-      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
+      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
 
       while (itE->hasNext()) {
         ++nonDefaultvaluatedElementCount;
@@ -285,10 +285,10 @@ public:
 
     delete itP;
 
-    if (graph->getSuperGraph() == graph) {
-      itP = graph->getObjectProperties();
+    if (g->getSuperGraph() == g) {
+      itP = g->getObjectProperties();
     } else {
-      itP = graph->getLocalObjectProperties();
+      itP = g->getLocalObjectProperties();
     }
 
     PropertyInterface *prop;
@@ -299,12 +299,12 @@ public:
       tmp << "Saving Property [" << prop->getName() << "]";
       pluginProgress->setComment(tmp.str());
 
-      if (graph->getSuperGraph() == graph) {
+      if (g->getSuperGraph() == g) {
         os << "(property "
            << " 0 " << prop->getTypename() << " ";
       } else {
         os << "(property "
-           << " " << graph->getId() << " " << prop->getTypename() << " ";
+           << " " << g->getId() << " " << prop->getTypename() << " ";
       }
 
       os << "\"" << convert(prop->getName()) << "\"" << endl;
@@ -327,7 +327,7 @@ public:
       }
 
       os << "(default \"" << convert(nDefault) << "\" \"" << convert(eDefault) << "\")" << endl;
-      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(graph);
+      Iterator<node> *itN = prop->getNonDefaultValuatedNodes(g);
 
       while (itN->hasNext()) {
         if (progress % (1 + nonDefaultvaluatedElementCount / 100) == 0)
@@ -343,14 +343,20 @@ public:
 
           if (pos != string::npos)
             tmp.replace(pos, TulipBitmapDir.size(), "TulipBitmapDir/");
+        } else if (g->getId() != 0 && // if it is not the real root graph
+                   prop->getTypename() == GraphProperty::propertyTypename) {
+          unsigned int id = strtoul(tmp.c_str(), NULL, 10);
+          // we must check if the pointed subgraph
+          // is a descendant of the currently export graph
+          if (!graph->getDescendantGraph(id))
+            continue;
         }
-
         os << "(node " << getNode(itn).id << " \"" << convert(tmp) << "\")" << endl;
       }
 
       delete itN;
 
-      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(graph);
+      Iterator<edge> *itE = prop->getNonDefaultValuatedEdges(g);
 
       if (prop->getTypename() == GraphProperty::propertyTypename) {
         while (itE->hasNext()) {
@@ -404,9 +410,9 @@ public:
     delete itP;
   }
   //=====================================================
-  void saveProperties(ostream &os, Graph *graph) {
-    saveLocalProperties(os, graph);
-    Iterator<Graph *> *itS = graph->getSubGraphs();
+  void saveProperties(ostream &os, Graph *g) {
+    saveLocalProperties(os, g);
+    Iterator<Graph *> *itS = g->getSubGraphs();
 
     while (itS->hasNext())
       saveProperties(os, itS->next());
@@ -414,8 +420,8 @@ public:
     delete itS;
   }
   //=====================================================
-  void saveAttributes(ostream &os, Graph *graph) {
-    const DataSet &attributes = graph->getAttributes();
+  void saveAttributes(ostream &os, Graph *g) {
+    const DataSet &attributes = g->getAttributes();
 
     if (!attributes.empty()) {
 
@@ -445,10 +451,10 @@ public:
         }
       }
 
-      if (graph->getSuperGraph() == graph) {
+      if (g->getSuperGraph() == g) {
         os << "(graph_attributes 0 ";
       } else {
-        os << "(graph_attributes " << graph->getId() << " ";
+        os << "(graph_attributes " << g->getId() << " ";
       }
 
       DataSet::write(os, attributes);
@@ -456,7 +462,7 @@ public:
     }
 
     // save subgraph attributes
-    Iterator<Graph *> *itS = graph->getSubGraphs();
+    Iterator<Graph *> *itS = g->getSubGraphs();
 
     while (itS->hasNext())
       saveAttributes(os, itS->next());
