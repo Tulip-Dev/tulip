@@ -103,8 +103,8 @@ public:
 // ========================
 
 WorkspacePanel::WorkspacePanel(tlp::View *view, QWidget *parent)
-    : QFrame(parent), _ui(new Ui::WorkspacePanel), _view(nullptr), _overlayRect(nullptr), _viewConfigurationWidgets(nullptr),
-      _viewConfigurationExpanded(false), _currentInteractorConfigurationItem(nullptr) {
+  : QFrame(parent), _ui(new Ui::WorkspacePanel), _view(nullptr), _overlayRect(nullptr), _viewConfigurationWidgets(nullptr),
+    _viewConfigurationExpanded(false), _currentInteractorConfigurationItem(nullptr) {
   _ui->setupUi(this);
   _ui->linkButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::linkvariantoff, Qt::white, 0.8));
   _ui->dragHandle->setPixmap(FontIconManager::instance()->getMaterialDesignIcon(md::cursormove, Qt::white, 0.8).pixmap(QSize(20, 20)));
@@ -213,9 +213,9 @@ void WorkspacePanel::setView(tlp::View *view) {
   viewConfigurationTabs->setTabPosition(QTabWidget::West);
   viewConfigurationTabs->setStyleSheet(_view->configurationWidgetsStyleSheet());
   viewConfigurationTabs->findChild<QTabBar *>()->installEventFilter(this);
-// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported
-// painter devtype type 1"
-// see https://bugreports.qt.io/browse/QTBUG-32639
+  // workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported
+  // painter devtype type 1"
+  // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   viewConfigurationTabs->setWindowOpacity(0.99);
 #endif
@@ -236,17 +236,17 @@ void WorkspacePanel::setView(tlp::View *view) {
 
 void WorkspacePanel::showEvent(QShowEvent *event) {
   QFrame::showEvent(event);
-// Workaround to avoid a Qt5 bug :
-// After the panels containing QGraphicsView objects were rearranged in the
-// workspace,
-// some events were no more sent to the QGraphicsWidget objects embedded in the
-// asoociated QGraphicScene objects.
-// Those events are necessary for important parts of the view GUI (context menu,
-// keyboard focus) to work correctly.
-// So add a hack that, each time a view is shown, creates a new QGraphicsScene
-// object
-// and refill it with QGraphicsItem objects contained in the previous one.
-// Seems to be the only way to workaround that issue.
+  // Workaround to avoid a Qt5 bug :
+  // After the panels containing QGraphicsView objects were rearranged in the
+  // workspace,
+  // some events were no more sent to the QGraphicsWidget objects embedded in the
+  // asoociated QGraphicScene objects.
+  // Those events are necessary for important parts of the view GUI (context menu,
+  // keyboard focus) to work correctly.
+  // So add a hack that, each time a view is shown, creates a new QGraphicsScene
+  // object
+  // and refill it with QGraphicsItem objects contained in the previous one.
+  // Seems to be the only way to workaround that issue.
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 
   if (_view->graphicsView()->scene()) {
@@ -603,22 +603,13 @@ void WorkspacePanel::setHighlightMode(bool hm) {
   static QString headerStyleSheet = _ui->headerFrame->styleSheet();
 
   if (hm)
-    _ui->borderFrame->setStyleSheet("QFrame[border = \"true\"] {\n"
-                                    "border-image:none;\n"
-                                    "background-color: #CBDE5D;\n"
-                                    "color: white;\n"
-                                    "}");
+    _ui->headerFrame->setStyleSheet(headerStyleSheet + QString::fromUtf8("QFrame[header = \"true\"], QComboBox, QLabel, "
+                                                                         "QToolButton, QPushButton, #interactorsFrame {\n"
+                                                                         "background-color: #262829;\n"
+                                                                         "}"));
   else
     // restore the style sheet as described in WorkspacePanel.ui
-    _ui->borderFrame->setStyleSheet("QFrame[border = \"true\"] {\n"
-                                    "border-image:none;\n"
-                                    "background-color: qlineargradient(x1: 0, y1: 0, x2: 0.0, y2: 1.0,\n"
-                                    "stop: 0 #838383,\n"
-                                    "stop: 0.4 #707070,\n"
-                                    "stop: 0.401 #636363,\n"
-                                    "stop: 1 #4a4a4a);\n"
-                                    "color: white;\n"
-                                    "}");
+    _ui->headerFrame->setStyleSheet(headerStyleSheet);
 }
 
 void WorkspacePanel::dragEnterEvent(QDragEnterEvent *evt) {

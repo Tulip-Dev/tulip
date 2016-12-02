@@ -427,17 +427,18 @@ public:
     return FontIconManager::instance()->getFontAwesomeIcon(icon);
   }
 
-  return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(QStringToTlpString(iconName))));
-}
+  QIcon getMaterialDesignIcon(const QString &iconName) {
+    md::iconCodePoint icon = static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName.toStdString()));
+    return FontIconManager::instance()->getMaterialDesignIcon(icon);
+  }
 
-QMap<QString, QIcon>
-    iconPool;
+  QMap<QString, QIcon> iconPool;
 
 private:
-QtAwesome qtAwesome;
-QIcon nullIcon;
-}
-;
+
+  QIcon nullIcon;
+
+};
 
 static QImageIconPool imageIconPool;
 

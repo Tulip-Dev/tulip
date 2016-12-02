@@ -30,11 +30,9 @@
 #include <tulip/PropertyAlgorithm.h>
 #include <tulip/ImportModule.h>
 #include <tulip/ExportModule.h>
-//#include <tulip/Glyph.h>
 #include <tulip/Interactor.h>
 #include <tulip/View.h>
 #include <tulip/Perspective.h>
-#include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/TlpQtTools.h>
 
 using namespace std;

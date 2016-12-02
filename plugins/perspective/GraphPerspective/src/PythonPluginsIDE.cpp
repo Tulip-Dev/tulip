@@ -29,6 +29,7 @@
 #include <tulip/PluginLister.h>
 #include <tulip/TulipProject.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/FontIconManager.h>
 
 #include "PythonPluginsIDE.h"
 #include "PythonPluginCreationDialog.h"

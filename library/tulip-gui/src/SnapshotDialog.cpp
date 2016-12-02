@@ -97,13 +97,17 @@ SnapshotDialog::SnapshotDialog(const View *v, QWidget *parent)
   connect(ui->widthSpinBox, SIGNAL(valueChanged(int)), this, SLOT(widthSpinBoxValueChanged(int)));
   connect(ui->heightSpinBox, SIGNAL(valueChanged(int)), this, SLOT(heightSpinBoxValueChanged(int)));
 
-  QPushButton *copybutton = new QPushButton(QIcon(":/tulip/gui/icons/16/clipboard.png"), tr("&Copy in clipboard"), this);
+  QPushButton *copybutton = new QPushButton(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy), tr("&Copy in clipboard"), this);
   ui->buttonBox->addButton(copybutton, QDialogButtonBox::ActionRole);
   connect(ui->buttonBox, SIGNAL(clicked(QAbstractButton *)), this, SLOT(clicked(QAbstractButton *)));
 
   lockLabel = new LockLabel();
   ui->horizontalLayout_2->addWidget(lockLabel);
   ui->horizontalLayout_2->setAlignment(lockLabel, Qt::AlignLeft | Qt::AlignVCenter);
+
+  ui->buttonBox->button(QDialogButtonBox::Save)->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimage));
+  ui->buttonBox->button(QDialogButtonBox::Cancel)->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::close));
+
 }
 
 void SnapshotDialog::clicked(QAbstractButton *b) {
