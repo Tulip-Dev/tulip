@@ -70,6 +70,7 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font,
 #ifdef _OPENMP
   #pragma omp critical(init_tulip_font)
   {
+#endif
     fontName =TulipBitmapDir + "font.ttf";
     font = getPolygonFont(fontName);
 
@@ -79,8 +80,10 @@ static void initTulipFont(std::string &fontName, FTGLPolygonFont *&font,
       tlp::error() << "Error when loading font file (" << fontName << ") for rendering labels" << endl;
 
     fontSize=20;
+#ifdef _OPENMP
   }
 #endif
+
 }
 
 static const int SpaceBetweenLine=5;
