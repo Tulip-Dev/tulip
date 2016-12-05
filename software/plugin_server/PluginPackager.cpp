@@ -132,7 +132,7 @@ int main(int argc,char **argv) {
       stream.writeAttribute("date",info.date().c_str());
       stream.writeAttribute("desc", tlp::tlpStringToQString(info.info()));
       stream.writeAttribute("release",info.release().c_str());
-      stream.writeAttribute("tulip",info.tulipRelease().c_str());
+      stream.writeAttribute("tulip",(info.tulipMajor()+'.'+info.tulipMinor()).c_str());
       stream.writeStartElement("dependencies");
       const std::list<Dependency> &deps = PluginLister::getPluginDependencies(info.name());
 
