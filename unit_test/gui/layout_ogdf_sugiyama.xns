@@ -653,15 +653,15 @@ NEW-WINDOW:0,0:62914780,62914780,747,650,356,0:0x0+-1399200097+32767:-1399200056
 6,3,0,0,0,116,0,12411501,3,Virtual core keyboard
 7,2,0,0,0,36,0,12412071,10,AT Translated Set 2 keyboard
 6,2,0,0,0,36,0,12412071,3,Virtual core keyboard
-7,3,0,0,0,36,0,12412142,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,12412142,3,Virtual core keyboard
-0,21,0,0,0,0,0,12412142
+7,3,0,0,0,36,0,12412100,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,12412100,3,Virtual core keyboard
+0,21,0,0,0,0,0,12412100
 NEW-WINDOW:650,318:62914816,62914816,23314792,0,0,0:0x0+500+94:0,0:Delete a whole hierarchy
-0,21,0,0,0,0,0,12412142
-0,21,0,0,0,0,0,12412142
-0,21,0,0,0,0,0,12412142
-7,3,0,0,0,36,0,12412152,10,AT Translated Set 2 keyboard
-6,3,0,0,0,36,0,12412152,3,Virtual core keyboard
+0,21,0,0,0,0,0,12412100
+0,21,0,0,0,0,0,12412100
+0,21,0,0,0,0,0,12412100
+7,3,0,0,0,36,0,12412132,10,AT Translated Set 2 keyboard
+6,3,0,0,0,36,0,12412132,3,Virtual core keyboard
 7,2,0,0,0,64,0,12412162,10,AT Translated Set 2 keyboard
 6,2,0,0,0,64,0,12412162,3,Virtual core keyboard
 7,2,0,0,0,32,0,12412172,10,AT Translated Set 2 keyboard
