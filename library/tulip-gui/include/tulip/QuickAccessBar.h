@@ -48,6 +48,7 @@ class TLP_QT_SCOPE QuickAccessBar : public QWidget {
 
 protected:
   GlMainView* _mainView;
+  GlScene* scene() const;
 
 public:
   QuickAccessBar(QWidget *parent=0);
@@ -70,7 +71,6 @@ class TLP_QT_SCOPE QuickAccessBarImpl : public QuickAccessBar {
   bool _resetting;
   GlGraphInputData* inputData() const;
   GlGraphRenderingParameters* renderingParameters() const;
-  GlScene* scene() const;
   double _oldFontScale;
   double _oldNodeScale;
   bool _captionsInitialized;
