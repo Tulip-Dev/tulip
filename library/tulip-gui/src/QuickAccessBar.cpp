@@ -355,7 +355,7 @@ GlGraphInputData *QuickAccessBarImpl::inputData() const {
   return &scene()->getMainGlGraph()->getInputData();
 }
 
-GlScene *QuickAccessBarImpl::scene() const {
+GlScene *QuickAccessBar::scene() const {
   return _mainView->getGlMainWidget()->getScene();
 }
 
