@@ -442,7 +442,7 @@ GlGraphInputData* QuickAccessBarImpl::inputData() const {
   return scene()->getGlGraphComposite()->getInputData();
 }
 
-GlScene* QuickAccessBarImpl::scene() const {
+GlScene* QuickAccessBar::scene() const {
   return _mainView->getGlMainWidget()->getScene();
 }
 
