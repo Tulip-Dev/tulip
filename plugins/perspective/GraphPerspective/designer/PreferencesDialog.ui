@@ -273,12 +273,12 @@ border: 0px;
 QHeaderView::section {
 background-color: white;
 height: 30px;
-font: bold 10pt;
+font: bold 12px;
 color: black;
 border: 0px;
 }
 QTableView {
-font: 10pt;
+font: 12px;
 }
 </string>
            </property>

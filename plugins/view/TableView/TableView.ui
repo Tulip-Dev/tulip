@@ -127,7 +127,7 @@ stop:0 rgb(105,105,105),
 stop:1 rgb(90, 90, 90));
 }
 QTableView {
-font: 10pt;
+font: 12px;
 }
 </string>
   </property>

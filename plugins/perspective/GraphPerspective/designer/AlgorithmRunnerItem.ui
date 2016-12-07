@@ -205,11 +205,11 @@ font: bold;
 }
 QHeaderView {
 background-color: white;
-font: bold 10pt;
+font: bold 12px;
 }
 QTableView {
 background-color: white;
-font: 10pt;
+font: 12px;
 }
 </string>
      </property>

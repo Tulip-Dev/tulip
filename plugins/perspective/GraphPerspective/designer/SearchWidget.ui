@@ -327,7 +327,7 @@ font: bold;
 background-color: #F9F9F9;
 border: 1px solid #C9C9C9;
 color: black;
-font: 10pt;
+font: 12px;
 }</string>
                 </property>
                 <property name="frameShape">

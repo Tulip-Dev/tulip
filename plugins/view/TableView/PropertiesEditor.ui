@@ -89,7 +89,7 @@ font-size: 12px;
 background-color: transparent;
 }
 QTableView {
-font: 10pt;
+font: 12px;
 }
 QTableView::indicator:checked {
 image: url(:/tulip/gui/icons/eye.svg);
