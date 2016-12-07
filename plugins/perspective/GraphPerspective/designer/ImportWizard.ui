@@ -232,14 +232,14 @@ padding-right: 4px;
 margin-bottom: -1px;
 border: 1px solid #C9C9C9;
 border-bottom: 0px;
-font: bold 10pt;
+font: bold 12px;
 }
 QHeaderView {
 background-color: white;
 }
 QTableView {
 background-color: white;
-font: 10pt;
+font: 12px;
 }</string>
                </property>
                <property name="frameShape">
