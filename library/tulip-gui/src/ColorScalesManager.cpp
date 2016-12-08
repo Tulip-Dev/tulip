@@ -12,6 +12,13 @@
 using namespace std;
 using namespace tlp;
 
+template <typename T>
+void reverseQList(QList<T> &list) {
+  for (int k = 0 ; k < (list.size()/2) ; ++k) {
+    list.swap(k, list.size()-(1+k));
+  }
+}
+
 list<string> ColorScalesManager::getColorScalesList() {
 
   list<string> ret;
@@ -104,7 +111,7 @@ ColorScale ColorScalesManager::getColorScale(const string &colorScaleName) {
   if (TulipSettings::instance().contains(colorScaleName.c_str())) {
     QList<QVariant> colorsListv =
       TulipSettings::instance().value(colorScaleName.c_str()).toList();
-    reverse(colorsListv.begin(), colorsListv.end());
+    reverseQList(colorsListv);
 
     for (int i = 0 ; i < colorsListv.size() ; ++i) {
       QColor color = colorsListv.at(i).value<QColor>();
@@ -146,7 +153,7 @@ void ColorScalesManager::registerColorScale(const string &colorScaleName, const 
         colorsVector.push_back(QVariant(colorToQColor(color)));
       }
 
-      reverse(colorsVector.begin(), colorsVector.end());
+      reverseQList(colorsVector);
       TulipSettings::instance().beginGroup("ColorScales");
       TulipSettings::instance().setValue(tlpStringToQString(colorScaleName), colorsVector);
       QString gradientId = tlpStringToQString(colorScaleName) + "_gradient?";
