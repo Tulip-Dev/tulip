@@ -33,7 +33,7 @@ Release notes
 
 Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
-    * **4.10.0**: based on Tulip 4.10.0 released on ???
+    * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
 
       * some new methods added and API improvements (see updated documentation)
 
