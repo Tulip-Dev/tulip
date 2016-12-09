@@ -29,7 +29,7 @@ const string BooleanVectorProperty::propertyTypename = "vector<bool>";
 
 //=================================================================================
 Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val,
-						 const Graph *sg) {
+    const Graph *sg) {
   if (sg == NULL) sg = graph;
 
   Iterator<unsigned int> *it = NULL;
@@ -44,7 +44,7 @@ Iterator<node>* BooleanProperty::getNodesEqualTo(const bool val,
 }
 //=================================================================================
 Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val,
-						 const Graph *sg) {
+    const Graph *sg) {
   if (sg == NULL) sg = graph;
 
   Iterator<unsigned int> *it=0;

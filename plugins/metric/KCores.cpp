@@ -100,8 +100,7 @@ KCores::~KCores() {}
 //========================================================================================
 // to maximize the locality of reference we will use a vector
 // holding the all the nodes needed info in the structure below
-struct nodeInfo
-{
+struct nodeInfo {
   node n;
   double k;
   bool deleted;

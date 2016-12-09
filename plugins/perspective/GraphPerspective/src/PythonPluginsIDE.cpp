@@ -185,7 +185,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
 }
 
 static QString infoMsg = QString("When the plugin development is finished, you can copy the associated Python file ")
-                          + "to <br> <b>" + PythonInterpreter::pythonPluginsPathHome + "</b>";
+                         + "to <br> <b>" + PythonInterpreter::pythonPluginsPathHome + "</b>";
 
 PythonPluginsIDE::PythonPluginsIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPluginsIDE),
   _pythonInterpreter(PythonInterpreter::getInstance()),
