@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-  tlp::Size getMax(tlp::Graph *sg=0);
+  tlp::Size getMax(const tlp::Graph *sg=0);
 %Docstring
 tlp.SizeProperty.getMax([subgraph = None])
 
@@ -36,7 +36,7 @@ Returns the maximum value on the nodes for that size property.
 
 //===========================================================================================
 
-  tlp::Size getMin(tlp::Graph *sg=0);
+  tlp::Size getMin(const tlp::Graph *sg=0);
 %Docstring
 tlp.SizeProperty.getMin([subgraph = None])
 
@@ -49,7 +49,7 @@ Returns the minimum value on the nodes for that size property.
 
 //===========================================================================================
 
-  void scale(const tlp::Size&, tlp::Graph *sg=0);
+  void scale(const tlp::Size&, const tlp::Graph *sg=0);
 %Docstring
 tlp.SizeProperty.scale(scaleFactors, [subgraph = None])
 

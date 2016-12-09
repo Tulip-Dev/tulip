@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-  double getNodeMin(tlp::Graph *subgraph=0);
+  double getNodeMin(const tlp::Graph *subgraph=0);
 %Docstring
 tlp.DoubleProperty.getNodeMin([subgraph = None])
 
@@ -36,7 +36,7 @@ Returns the minimum value on the nodes for that double property.
 
 //===========================================================================================
 
-  double getNodeMax(tlp::Graph *subgraph=0);
+  double getNodeMax(const tlp::Graph *subgraph=0);
 %Docstring
 tlp.DoubleProperty.getNodeMax([subgraph = None])
 
@@ -49,7 +49,7 @@ Returns the maximum value on the nodes for that double property.
 
 //===========================================================================================
 
-  double getEdgeMin(tlp::Graph *subgraph=0);
+  double getEdgeMin(const tlp::Graph *subgraph=0);
 %Docstring
 tlp.DoubleProperty.getEdgeMin([subgraph = None])
 
@@ -62,7 +62,7 @@ Returns the minimum value on the edges for that double property.
 
 //===========================================================================================
 
-  double getEdgeMax(tlp::Graph *subgraph=0);
+  double getEdgeMax(const tlp::Graph *subgraph=0);
 %Docstring
 tlp.DoubleProperty.getEdgeMax([subgraph = None])
 
