@@ -118,7 +118,7 @@ You must start by indicating the source code path and the file in which the bina
 
 In the example, we are showing the steps for a *Release* type build. The given paths must be modified according to your own preferences.
 
-Then press on the *Configure* button, select the project generator (*Unix Makefiles* by default), use the default compilers or specify new ones and validate. *cmake-gui* will create empty folders in the build directory. We can now specify the installation informations.
+Then press on the *Configure* button, select the project generator (*Unix Makefiles* by default), use the default compilers or specify new ones and validate. *cmake-gui* will create empty folders in the build directory. We can now specify the installation information.
 
 .. image:: _images/install_cmakegui_build_generate.png
     :width: 600

@@ -51,8 +51,8 @@ private:
 
 public:
 
-  IdManagerIterator(const IdManagerState& infos):
-    current(infos.firstId), last(infos.nextId), freeIds(infos.freeIds), it(freeIds.begin()) {
+  IdManagerIterator(const IdManagerState& info):
+    current(info.firstId), last(info.nextId), freeIds(info.freeIds), it(freeIds.begin()) {
 #ifdef TLP_NO_IDS_REUSE
     std::set<unsigned int>::const_reverse_iterator itr;
     itr = freeIds.rbegin();
@@ -143,8 +143,8 @@ public:
   /**
    * restore a saved state, used by push/pop
    */
-  void restoreState(const IdManagerState& infos) {
-    state = infos;
+  void restoreState(const IdManagerState& info) {
+    state = info;
   }
   /**
    * Returns an iterator on all the used ids. Warning, if

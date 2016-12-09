@@ -129,20 +129,20 @@ public:
   }
 
   virtual void parseEndMap() {
-    PluginInformation infos;
-    infos.name = _currentMap["name"];
-    infos.category = _currentMap["category"];
+    PluginInformation info;
+    info.name = _currentMap["name"];
+    info.category = _currentMap["category"];
 
-    PluginVersionInformation versionInfos;
-    versionInfos.description = _currentMap["desc"];
-    versionInfos.libraryLocation = _location;
-    versionInfos.version = _currentMap["release"];
-    versionInfos.author = _currentMap["author"];
-    versionInfos.date = _currentMap["date"];
-    versionInfos.isValid = true;
+    PluginVersionInformation versionInfo;
+    versionInfo.description = _currentMap["desc"];
+    versionInfo.libraryLocation = _location;
+    versionInfo.version = _currentMap["release"];
+    versionInfo.author = _currentMap["author"];
+    versionInfo.date = _currentMap["date"];
+    versionInfo.isValid = true;
     // TODO fill icon
-    infos.availableVersion = versionInfos;
-    _result.push_back(infos);
+    info.availableVersion = versionInfo;
+    _result.push_back(info);
   }
 };
 
@@ -161,7 +161,7 @@ QStringList PluginManager::remoteLocations() {
 QStringList PluginManager::_markedForInstallation = QStringList();
 
 PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations locations, const QString &nameFilter, const QString &categoryFilter) {
-  QMap<QString,PluginInformation> nameToInfos;
+  QMap<QString,PluginInformation> nameToInfo;
 
   if (locations.testFlag(Local)) {
     std::list<std::string> localResults = PluginLister::instance()->availablePlugins();
@@ -170,7 +170,7 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
       const Plugin& info = PluginLister::instance()->pluginInformation(*it);
 
       if (QString(info.category().c_str()).contains(categoryFilter) && QString(info.name().c_str()).contains(nameFilter, Qt::CaseInsensitive)) {
-        nameToInfos[info.name().c_str()].fillLocalInfos(info);
+        nameToInfo[info.name().c_str()].fillLocalInfo(info);
       }
     }
   }
@@ -179,19 +179,19 @@ PluginManager::PluginInformationList PluginManager::listPlugins(PluginLocations 
     foreach(const QString& loc, remoteLocations()) {
       PluginServerClient client(loc);
 
-      foreach(const PluginInformation& infos, client.list(nameFilter,categoryFilter)) {
-        PluginInformation storedInfos = nameToInfos[infos.name];
-        storedInfos.name = infos.name;
-        storedInfos.category = infos.category;
-        storedInfos.availableVersion = infos.availableVersion;
-        nameToInfos[infos.name] = storedInfos;
+      foreach(const PluginInformation& info, client.list(nameFilter,categoryFilter)) {
+        PluginInformation storedInfo = nameToInfo[info.name];
+        storedInfo.name = info.name;
+        storedInfo.category = info.category;
+        storedInfo.availableVersion = info.availableVersion;
+        nameToInfo[info.name] = storedInfo;
       }
     }
   }
 
   PluginInformationList result;
 
-  foreach(const PluginInformation& i, nameToInfos.values()) {
+  foreach(const PluginInformation& i, nameToInfo.values()) {
     result.push_back(i);
   }
 
@@ -236,7 +236,7 @@ PluginInformation::PluginInformation(const PluginInformation &copy) {
   availableVersion = copy.availableVersion;
 }
 
-void PluginInformation::fillLocalInfos(const Plugin& info) {
+void PluginInformation::fillLocalInfo(const Plugin& info) {
   name = tlp::tlpStringToQString(info.name());
   category = tlp::tlpStringToQString(info.category());
   installedVersion.description = tlp::tlpStringToQString(info.info());

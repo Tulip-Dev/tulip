@@ -20,7 +20,7 @@
 #include "GeographicViewShowElementInfo.h"
 
 
-#include "ui_ElementInformationsWidget.h"
+#include "ui_ElementInformationWidget.h"
 #include "GeographicViewInteractors.h"
 #include "../../utils/StandardInteractorPriority.h"
 #include "../../utils/PluginNames.h"
@@ -94,31 +94,31 @@ public:
 PLUGIN(GeographicViewInteractorGetInformation)
 
 GeographicViewShowElementInfo::GeographicViewShowElementInfo(): _editor(NULL) {
-  Ui::ElementInformationsWidget ui;
-  _informationsWidget=new QWidget();
-  _informationsWidget->installEventFilter(this);
-  ui.setupUi(_informationsWidget);
+  Ui::ElementInformationWidget ui;
+  _informationWidget=new QWidget();
+  _informationWidget->installEventFilter(this);
+  ui.setupUi(_informationWidget);
   tableView()->setItemDelegate(new TulipItemDelegate(tableView()));
-  _informationsWidgetItem=new QGraphicsProxyWidget();
-  _informationsWidgetItem->setWidget(_informationsWidget);
-  _informationsWidgetItem->setVisible(false);
+  _informationWidgetItem=new QGraphicsProxyWidget();
+  _informationWidgetItem->setWidget(_informationWidget);
+  _informationWidgetItem->setVisible(false);
 }
 
 void GeographicViewShowElementInfo::clear() {
   dynamic_cast<GeographicView*>(view())->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
-  _informationsWidgetItem->setVisible(false);
+  _informationWidgetItem->setVisible(false);
 }
 
 QTableView* GeographicViewShowElementInfo::tableView() const {
-  return _informationsWidget->findChild<QTableView*>();
+  return _informationWidget->findChild<QTableView*>();
 }
 
 bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
-  if (widget == _informationsWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
+  if (widget == _informationWidget && (e->type() == QEvent::Wheel || e->type() == QEvent::MouseButtonPress))
     return true;
 
-  if(_informationsWidget->isVisible() && e->type()==QEvent::Wheel) {
-    _informationsWidgetItem->setVisible(false);
+  if(_informationWidget->isVisible() && e->type()==QEvent::Wheel) {
+    _informationWidgetItem->setVisible(false);
     return false;
   }
 
@@ -139,42 +139,42 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
       return false;
     }
     else if (e->type() == QEvent::MouseButtonPress && qMouseEv->button() == Qt::LeftButton) {
-      if(_informationsWidgetItem->isVisible()) {
+      if(_informationWidgetItem->isVisible()) {
         // Hide widget if we click outside it
-        _informationsWidgetItem->setVisible(false);
+        _informationWidgetItem->setVisible(false);
       }
 
-      if(!_informationsWidgetItem->isVisible()) {
+      if(!_informationWidgetItem->isVisible()) {
 
         // Show widget if we click on node or edge
         if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
           if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ||
               selectedEntity.getEntityType() == SelectedEntity::EDGE_SELECTED) {
-            _informationsWidgetItem->setVisible(true);
+            _informationWidgetItem->setVisible(true);
 
-            QLabel* title = _informationsWidget->findChild<QLabel*>();
+            QLabel* title = _informationWidget->findChild<QLabel*>();
 
             if(selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
               title->setText(trUtf8("Node"));
-              tableView()->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+              tableView()->setModel(new GraphNodeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationWidget));
             }
             else {
               title->setText(trUtf8("Edge"));
-              tableView()->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationsWidget));
+              tableView()->setModel(new GraphEdgeElementModel(_view->graph(),selectedEntity.getComplexEntityId(),_informationWidget));
             }
 
             title->setText(title->text() + " #" + QString::number(selectedEntity.getComplexEntityId()));
 
             QPoint position=qMouseEv->pos();
 
-            if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width() - 5)
-              position.setX(_view->graphicsView()->sceneRect().width()-_informationsWidgetItem->rect().width() - 5);
+            if(position.x()+_informationWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width() - 5)
+              position.setX(_view->graphicsView()->sceneRect().width()-_informationWidgetItem->rect().width() - 5);
 
-            if(position.y()+_informationsWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
-              position.setY(_view->graphicsView()->sceneRect().height()-_informationsWidgetItem->rect().height() - 5);
+            if(position.y()+_informationWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
+              position.setY(_view->graphicsView()->sceneRect().height()-_informationWidgetItem->rect().height() - 5);
 
-            _informationsWidgetItem->setPos(position);
-            QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
+            _informationWidgetItem->setPos(position);
+            QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
             animation->setDuration(100);
             animation->setStartValue(0.);
             animation->setEndValue(1.);
@@ -189,8 +189,8 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
             if(!polygon)
               return false;
 
-            _informationsWidgetItem->setVisible(true);
-            QLabel* title = _informationsWidget->findChild<QLabel*>();
+            _informationWidgetItem->setVisible(true);
+            QLabel* title = _informationWidget->findChild<QLabel*>();
             title->setText(selectedEntity.getSimpleEntity()->getParent()->findKey(selectedEntity.getSimpleEntity()).c_str());
 
 
@@ -198,20 +198,20 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 
             _editor = new GlComplexPolygonItemEditor(polygon);
 
-            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationsWidget));
-            int size = title->height()+_informationsWidget->layout()->spacing()+tableView()->rowHeight(0)+tableView()->rowHeight(1)+10;
-            _informationsWidget->setMaximumHeight(size);
+            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationWidget));
+            int size = title->height()+_informationWidget->layout()->spacing()+tableView()->rowHeight(0)+tableView()->rowHeight(1)+10;
+            _informationWidget->setMaximumHeight(size);
 
             QPoint position=qMouseEv->pos();
 
-            if(position.x()+_informationsWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
-              position.setX(qMouseEv->pos().x()-_informationsWidgetItem->rect().width());
+            if(position.x()+_informationWidgetItem->rect().width()>_view->graphicsView()->sceneRect().width())
+              position.setX(qMouseEv->pos().x()-_informationWidgetItem->rect().width());
 
-            if(position.y()+_informationsWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
-              position.setY(qMouseEv->pos().y()-_informationsWidgetItem->rect().height());
+            if(position.y()+_informationWidgetItem->rect().height()>_view->graphicsView()->sceneRect().height())
+              position.setY(qMouseEv->pos().y()-_informationWidgetItem->rect().height());
 
-            _informationsWidgetItem->setPos(position);
-            QPropertyAnimation *animation = new QPropertyAnimation(_informationsWidgetItem, "opacity");
+            _informationWidgetItem->setPos(position);
+            QPropertyAnimation *animation = new QPropertyAnimation(_informationWidgetItem, "opacity");
             animation->setDuration(100);
             animation->setStartValue(0.);
             animation->setEndValue(1.);
@@ -252,6 +252,6 @@ void GeographicViewShowElementInfo::viewChanged(View * view) {
 
   GeographicView *geoView=dynamic_cast<GeographicView*>(view);
   _view=geoView;
-  connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationsWidgetItem,SLOT(close()));
-  _view->getGoogleMapGraphicsView()->scene()->addItem(_informationsWidgetItem);
+  connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationWidgetItem,SLOT(close()));
+  _view->getGoogleMapGraphicsView()->scene()->addItem(_informationWidgetItem);
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>PluginInformationsListItemData</class>
- <widget class="QWidget" name="PluginInformationsListItemData">
+ <class>PluginInformationListItemData</class>
+ <widget class="QWidget" name="PluginInformationListItemData">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -404,7 +404,7 @@ background-color: #bed452;
   <connection>
    <sender>installButton</sender>
    <signal>clicked()</signal>
-   <receiver>PluginInformationsListItemData</receiver>
+   <receiver>PluginInformationListItemData</receiver>
    <slot>install()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -420,7 +420,7 @@ background-color: #bed452;
   <connection>
    <sender>removeButton</sender>
    <signal>clicked()</signal>
-   <receiver>PluginInformationsListItemData</receiver>
+   <receiver>PluginInformationListItemData</receiver>
    <slot>remove()</slot>
    <hints>
     <hint type="sourcelabel">

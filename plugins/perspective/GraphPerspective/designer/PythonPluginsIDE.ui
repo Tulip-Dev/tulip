@@ -793,7 +793,7 @@ background-color: white;
         </widget>
        </item>
        <item>
-        <widget class="QTextBrowser" name="pluginsInfosWidget">
+        <widget class="QTextBrowser" name="pluginsInfoWidget">
          <property name="openLinks">
           <bool>false</bool>
          </property>

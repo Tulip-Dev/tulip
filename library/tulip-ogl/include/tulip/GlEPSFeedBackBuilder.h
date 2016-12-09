@@ -41,7 +41,7 @@ public:
     :stream_out(std::stringstream::in | std::stringstream::out) {}
 
   /**
-   * Begin new EPS document with viewport, clearColor, pointSize and lineWidth informations
+   * Begin new EPS document with viewport, clearColor, pointSize and lineWidth information
    */
   virtual void begin(const Vector<int, 4> &viewport,GLfloat *clearColor,GLfloat pointSize,GLfloat lineWidth);
   /**

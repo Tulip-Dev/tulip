@@ -45,7 +45,7 @@ Sphinx proposes a very helpful script called *sphinx-quickstart* creating everyt
 Doxygen
 =======
 
-*Doxygen* is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages, an off-line reference manual (in LaTeX) and/or others from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find informations about the code. It is not a way to explain how it is implemented but which possibilities you have. Doxygen is available for the most common OS and distributions like Windows, MacOs, Debian, Gentoo...
+*Doxygen* is a documentation system for several languages like C++. It can generate an on-line documentation browser (in HTML), a set of manpages, an off-line reference manual (in LaTeX) and/or others from the set of documented source files of your project. This kind of documentation is a necessary tool for developers to find information about the code. It is not a way to explain how it is implemented but which possibilities you have. Doxygen is available for the most common OS and distributions like Windows, MacOs, Debian, Gentoo...
 	
 
 .. _doc_doxygen_install:

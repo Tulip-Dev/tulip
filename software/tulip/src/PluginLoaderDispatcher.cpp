@@ -43,11 +43,11 @@ void PluginLoaderDispatcher::loading(const std::string &filename) {
     ldr->loading(filename);
 }
 
-void PluginLoaderDispatcher::loaded(const tlp::Plugin* infos, const std::list <tlp::Dependency>& dependencies) {
+void PluginLoaderDispatcher::loaded(const tlp::Plugin* info, const std::list <tlp::Dependency>& dependencies) {
   tlp::PluginLoader *ldr;
 
   Q_FOREACH(ldr,_loaders)
-    ldr->loaded(infos,dependencies);
+    ldr->loaded(info,dependencies);
 }
 
 void PluginLoaderDispatcher::aborted(const std::string &filename,const  std::string &errormsg) {

@@ -17,21 +17,21 @@
  *
  */
 
-#ifndef PARALLELCOORDSELEMENTSHOWINFOS_H_
-#define PARALLELCOORDSELEMENTSHOWINFOS_H_
+#ifndef PARALLELCOORDSELEMENTSHOWINFO_H_
+#define PARALLELCOORDSELEMENTSHOWINFO_H_
 
 #include <QCursor>
 #include <QMouseEvent>
 
-#include <tulip/MouseShowElementInfos.h>
+#include <tulip/MouseShowElementInfo.h>
 #include <tulip/GlScene.h>
 
 namespace tlp {
 
-class ParallelCoordsElementShowInfos : public MouseShowElementInfos {
+class ParallelCoordsElementShowInfo : public MouseShowElementInfo {
 public :
   bool pick(int x, int y, SelectedEntity &selectedEntity);
 };
 
 }
-#endif /* PARALLELCOORDSELEMENTSHOWINFOS_H_ */
+#endif /* PARALLELCOORDSELEMENTSHOWINFO_H_ */

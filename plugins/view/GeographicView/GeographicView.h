@@ -167,9 +167,9 @@ private :
 
   void updatePoly(bool force=false);
 
-  void loadStoredPolyInformations(const DataSet &dataset);
+  void loadStoredPolyInformation(const DataSet &dataset);
 
-  void saveStoredPolyInformations(DataSet &dataset) const;
+  void saveStoredPolyInformation(DataSet &dataset) const;
 
   GeographicViewGraphicsView *geoViewGraphicsView;
   GeographicViewConfigWidget *geoViewConfigWidget;

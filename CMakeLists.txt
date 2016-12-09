@@ -20,7 +20,7 @@ PROJECT(tulip)
 
 SET(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${PROJECT_SOURCE_DIR}/cmake)
 
-# Force build type to release with debug infos if none has been provided
+# Force build type to release with debug info if none has been provided
 IF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")
   SET(CMAKE_BUILD_TYPE "RelWithDebInfo" CACHE STRING "" FORCE)
 ENDIF(NOT MSVC AND "${CMAKE_BUILD_TYPE}" STREQUAL "")

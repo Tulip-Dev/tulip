@@ -24,18 +24,18 @@
 
 class QNetworkReply;
 namespace Ui {
-class PluginInformationsListItemData;
+class PluginInformationListItemData;
 }
 
-class PluginInformationsListItem: public QWidget {
+class PluginInformationListItem: public QWidget {
   Q_OBJECT
-  Ui::PluginInformationsListItemData *_ui;
+  Ui::PluginInformationListItemData *_ui;
 
-  tlp::PluginInformation _infos;
+  tlp::PluginInformation _info;
 
 public:
-  explicit PluginInformationsListItem(tlp::PluginInformation, QWidget *parent = NULL);
-  virtual ~PluginInformationsListItem();
+  explicit PluginInformationListItem(tlp::PluginInformation, QWidget *parent = NULL);
+  virtual ~PluginInformationListItem();
 
 public slots:
   void focusOut();

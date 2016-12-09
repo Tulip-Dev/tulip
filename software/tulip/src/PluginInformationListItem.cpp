@@ -16,8 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
-#include "PluginInformationsListItem.h"
-#include "ui_PluginInformationsListItem.h"
+#include "PluginInformationListItem.h"
+#include "ui_PluginInformationListItem.h"
 
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
@@ -27,7 +27,7 @@
 
 using namespace tlp;
 
-PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationsListItemData), _infos(infos) {
+PluginInformationListItem::PluginInformationListItem(PluginInformation info, QWidget *parent): QWidget(parent), _ui(new Ui::PluginInformationListItemData), _info(info) {
   _ui->setupUi(this);
   _ui->progressFrame->hide();
   _ui->installFrame->hide();
@@ -35,15 +35,15 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
   _ui->rebootFrame->hide();
   _ui->installationControls->hide();
 
-  PluginVersionInformation versionInfos(infos.installedVersion);
+  PluginVersionInformation versionInfo(info.installedVersion);
 
-  if (!versionInfos.isValid) {
-    versionInfos = infos.availableVersion;
+  if (!versionInfo.isValid) {
+    versionInfo = info.availableVersion;
     _ui->statusIcon->hide();
     _ui->installFrame->show();
   }
   else {
-    if (infos.availableVersion.isValid && infos.availableVersion.version != versionInfos.version) {
+    if (info.availableVersion.isValid && info.availableVersion.version != versionInfo.version) {
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-upgrade.png"));
       _ui->installFrame->show();
     }
@@ -52,53 +52,53 @@ PluginInformationsListItem::PluginInformationsListItem(PluginInformation infos, 
       _ui->statusIcon->setPixmap(QPixmap(":/tulip/app/icons/16/package-installed-updated.png"));
 
     //only show the remove frame for downloaded plugins
-    if(!versionInfos.libraryLocation.isEmpty() && !versionInfos.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
+    if(!versionInfo.libraryLocation.isEmpty() && !versionInfo.libraryLocation.contains(tlp::TulipLibDir.c_str())) {
       _ui->removeFrame->show();
     }
   }
 
-  if (!versionInfos.icon.isEmpty())
-    _ui->icon->setPixmap(QPixmap(versionInfos.icon).scaled(32,32));
+  if (!versionInfo.icon.isEmpty())
+    _ui->icon->setPixmap(QPixmap(versionInfo.icon).scaled(32,32));
 
-  _ui->name->setText(infos.name + " " + versionInfos.version);
-  _ui->desc->setText(versionInfos.description + "\n\n" + trUtf8("Author: ") + versionInfos.author);
-  _ui->installButton->setText(trUtf8("Install ") + infos.availableVersion.version);
+  _ui->name->setText(info.name + " " + versionInfo.version);
+  _ui->desc->setText(versionInfo.description + "\n\n" + trUtf8("Author: ") + versionInfo.author);
+  _ui->installButton->setText(trUtf8("Install ") + info.availableVersion.version);
 }
 
-PluginInformationsListItem::~PluginInformationsListItem() {
+PluginInformationListItem::~PluginInformationListItem() {
   delete _ui;
 }
 
-void PluginInformationsListItem::focusOut() {
+void PluginInformationListItem::focusOut() {
   _ui->installationControls->hide();
   _ui->contentsFrame->setProperty("highlighted",false);
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
-void PluginInformationsListItem::focusIn() {
+void PluginInformationListItem::focusIn() {
   _ui->installationControls->show();
   _ui->contentsFrame->setProperty("highlighted",true);
   _ui->contentsFrame->setStyleSheet(_ui->contentsFrame->styleSheet());
 }
 
-void PluginInformationsListItem::install() {
+void PluginInformationListItem::install() {
   _ui->installFrame->hide();
   _ui->progressFrame->show();
-  PluginManager::markForInstallation(_infos.name,this,SLOT(downloadProgress(qint64,qint64)));
+  PluginManager::markForInstallation(_info.name,this,SLOT(downloadProgress(qint64,qint64)));
   _ui->rebootFrame->show();
 }
 
-void PluginInformationsListItem::remove() {
+void PluginInformationListItem::remove() {
   _ui->removeFrame->hide();
-  PluginManager::markForRemoval(_infos.installedVersion.libraryLocation);
+  PluginManager::markForRemoval(_info.installedVersion.libraryLocation);
   _ui->rebootFrame->show();
 }
 
-void PluginInformationsListItem::focusInEvent(QFocusEvent *) {
+void PluginInformationListItem::focusInEvent(QFocusEvent *) {
   emit focused();
 }
 
-void PluginInformationsListItem::downloadProgress(qint64 received, qint64 total) {
+void PluginInformationListItem::downloadProgress(qint64 received, qint64 total) {
   _ui->progressBar->setMaximum(total);
   _ui->progressBar->setValue(received);
 }

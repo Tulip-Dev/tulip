@@ -105,13 +105,13 @@ void HeaderFrame::setExpanded(bool e) {
   int maxH,minH;
 
   if (!e) {
-    _oldHeightInfos = QPair<int,int>(pw->minimumHeight(),pw->maximumHeight());
+    _oldHeightInfo = QPair<int,int>(pw->minimumHeight(),pw->maximumHeight());
     maxH = height();
     minH = height();
   }
   else {
-    minH = _oldHeightInfos.first;
-    maxH = _oldHeightInfos.second;
+    minH = _oldHeightInfo.first;
+    maxH = _oldHeightInfo.second;
   }
 
   pw->setMinimumSize(pw->minimumWidth(),minH);

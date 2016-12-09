@@ -18,14 +18,14 @@
  */
 ///@cond DOXYGEN_HIDDEN
 
-#ifndef _Tulip_MOUSESHOWELEMENTINFOS_H
-#define _Tulip_MOUSESHOWELEMENTINFOS_H
+#ifndef _Tulip_MOUSESHOWELEMENTINFO_H
+#define _Tulip_MOUSESHOWELEMENTINFO_H
 
 #include <tulip/InteractorComposite.h>
 #include <tulip/Graph.h>
 
 namespace Ui {
-class ElementInformationsWidget;
+class ElementInformationWidget;
 }
 
 class QWidget;
@@ -43,12 +43,12 @@ struct SelectedEntity;
 /**
  * We define a specific interactor to show element graph information in eltProperties
  */
-class TLP_QT_SCOPE MouseShowElementInfos : public InteractorComponent {
+class TLP_QT_SCOPE MouseShowElementInfo : public InteractorComponent {
 
-  Ui::ElementInformationsWidget* _ui;
+  Ui::ElementInformationWidget* _ui;
 public:
-  MouseShowElementInfos();
-  ~MouseShowElementInfos();
+  MouseShowElementInfo();
+  ~MouseShowElementInfo();
   virtual bool eventFilter(QObject* widget, QEvent* e);
 
   void viewChanged(View *);
@@ -60,8 +60,8 @@ public:
 protected:
 
   ViewWidget *_view;
-  QWidget *_informationsWidget;
-  QGraphicsProxyWidget *_informationsWidgetItem;
+  QWidget *_informationWidget;
+  QGraphicsProxyWidget *_informationWidgetItem;
 
   QTableView* tableView() const;
 

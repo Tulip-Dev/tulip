@@ -48,8 +48,6 @@ struct TLP_QT_SCOPE PluginVersionInformation {
   PluginVersionInformation(const PluginVersionInformation& copy);
 };
 
-// deprecated name
-_DEPRECATED_TYPEDEF(PluginVersionInformation, PluginVersionInformations);
 
 struct TLP_QT_SCOPE PluginInformation {
   QString name;
@@ -60,11 +58,8 @@ struct TLP_QT_SCOPE PluginInformation {
   PluginInformation();
   PluginInformation(const PluginInformation& copy);
 
-  void fillLocalInfos(const tlp::Plugin& info);
+  void fillLocalInfo(const tlp::Plugin& info);
 };
-
-// deprecated name
-_DEPRECATED_TYPEDEF(PluginInformation, PluginInformations);
 
 class TLP_QT_SCOPE PluginManager {
   static QStringList _markedForInstallation;
@@ -80,10 +75,8 @@ public:
   static const QString TESTING_LOCATION;
 
   typedef QList<PluginVersionInformation> PluginVersionInformationList;
-  _DEPRECATED_TYPEDEF(QList<PluginVersionInformation>, PluginVersionInformationsList);
 
   typedef QList<PluginInformation> PluginInformationList;
-  _DEPRECATED_TYPEDEF(QList<PluginInformation>, PluginInformationsList);
 
   static void addRemoteLocation(const QString& location);
   static void removeRemoteLocation(const QString& location);
