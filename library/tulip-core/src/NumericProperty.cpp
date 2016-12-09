@@ -22,35 +22,35 @@
 
 using namespace tlp;
 
-Iterator<node> *NumericProperty::getSortedNodes(Graph *sg, bool ascendingOrder) {
+Iterator<node> *NumericProperty::getSortedNodes(const Graph *sg, bool ascendingOrder) {
   if (!sg)
     sg = getGraph();
 
   return new SortNodeIterator(sg->getNodes(), this, ascendingOrder);
 }
 
-Iterator<edge> *NumericProperty::getSortedEdges(Graph *sg, bool ascendingOrder) {
+Iterator<edge> *NumericProperty::getSortedEdges(const Graph *sg, bool ascendingOrder) {
   if (!sg)
     sg = getGraph();
 
   return new SortEdgeIterator(sg->getEdges(), this, ascendingOrder);
 }
 
-Iterator<edge> *NumericProperty::getSortedEdgesBySourceValue(Graph *sg, bool ascendingOrder) {
+Iterator<edge> *NumericProperty::getSortedEdgesBySourceValue(const Graph *sg, bool ascendingOrder) {
   if (!sg)
     sg = getGraph();
 
   return new SortSourceEdgeIterator(sg->getEdges(), sg, this, ascendingOrder);
 }
 
-Iterator<edge> *NumericProperty::getSortedEdgesByTargetValue(Graph *sg, bool ascendingOrder) {
+Iterator<edge> *NumericProperty::getSortedEdgesByTargetValue(const Graph *sg, bool ascendingOrder) {
   if (!sg)
     sg = getGraph();
 
   return new SortTargetEdgeIterator(sg->getEdges(), sg, this, ascendingOrder);
 }
 
-Iterator<edge> *NumericProperty::getSortedEdgesByExtremitiesValues(Graph *sg, bool ascendingOrder) {
+Iterator<edge> *NumericProperty::getSortedEdgesByExtremitiesValues(const Graph *sg, bool ascendingOrder) {
   if (!sg)
     sg = getGraph();
 

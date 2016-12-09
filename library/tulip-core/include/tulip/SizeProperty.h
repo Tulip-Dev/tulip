@@ -40,9 +40,9 @@ class TLP_SCOPE SizeProperty : public AbstractSizeProperty {
 public:
   SizeProperty(Graph *, const std::string &n = "");
 
-  Size getMax(Graph *sg = nullptr);
-  Size getMin(Graph *sg = nullptr);
-  void scale(const tlp::Vector<float, 3> &, Graph *sg = nullptr);
+  Size getMax(const Graph *sg = nullptr);
+  Size getMin(const Graph *sg = nullptr);
+  void scale(const tlp::Vector<float, 3> &, const Graph *sg = nullptr);
   void scale(const tlp::Vector<float, 3> &, Iterator<node> *, Iterator<edge> *);
 
   // redefinition of some PropertyInterface methods
@@ -54,7 +54,7 @@ public:
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const Size &v);
-  virtual void setAllNodeValue(const Size &v, Graph *graph = nullptr);
+  virtual void setAllNodeValue(const Size &v, const Graph *graph = nullptr);
 
   int compare(const node n1, const node n2) const;
 
@@ -64,7 +64,7 @@ protected:
 private:
   TLP_HASH_MAP<unsigned int, Size> max, min;
   TLP_HASH_MAP<unsigned int, bool> minMaxOk;
-  void computeMinMax(Graph *sg = nullptr);
+  void computeMinMax(const Graph *sg = nullptr);
 };
 
 /**

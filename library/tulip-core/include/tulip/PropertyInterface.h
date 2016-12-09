@@ -212,7 +212,7 @@ public:
    * @warning If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
-  virtual bool setAllNodeStringValue(const std::string &value, Graph *graph = nullptr) = 0;
+  virtual bool setAllNodeStringValue(const std::string &value, const Graph *graph = nullptr) = 0;
 
   /**
    * @brief Sets all the edges value to the value represented by the string. For some types, some parsing will be necessary (e.g. LayoutPorperty).
@@ -224,7 +224,7 @@ public:
    * @warning If the provided graph is not a descendant of the one associated to that property, no edge value will be modified in it.
    * @return Whether the given string was a correct representation for this property's type. If not, the values are not set.
    */
-  virtual bool setAllEdgeStringValue(const std::string &value, Graph *graph = nullptr) = 0;
+  virtual bool setAllEdgeStringValue(const std::string &value, const Graph *graph = nullptr) = 0;
 
   /**
    * @brief Gets a pointer to the tlp::DataMem structure that contains the node default value.
@@ -407,7 +407,7 @@ public:
    * @param subgraph The subgraph pointed by the metanode.
    * @param metaGraph The graph who owns the meta node.
    */
-  virtual void computeMetaValue(node metaNode, Graph *subgraph, Graph *metaGraph) = 0;
+  virtual void computeMetaValue(node metaNode, const Graph *subgraph, const Graph *metaGraph) = 0;
 
   /**
    * @brief Sets the value of the metaedge to a computed value.
@@ -415,7 +415,7 @@ public:
    * @param it The edges represented by the meta edge.
    * @param metaGraph The graph who owns the meta edge.
    */
-  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge> *it, Graph *metaGraph) = 0;
+  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge> *it, const Graph *metaGraph) = 0;
 
   /**
    * @brief Base class for computing values on meta nodes and edges.

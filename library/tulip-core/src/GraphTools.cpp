@@ -612,7 +612,7 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
   Observable::holdObservers();
   edge e;
   unsigned added = 0;
-  forEach(e, selection->getEdgesEqualTo(true)) {
+  forEach(e, selection->getEdgesEqualTo(true, graph)) {
     const pair<node, node> &ends = graph->ends(e);
 
     if (!selection->getNodeValue(ends.first)) {

@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-  tlp::Coord getMax(tlp::Graph *subgraph=nullptr);
+  tlp::Coord getMax(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.getMax([subgraph = None])
 
@@ -53,7 +53,7 @@ i.e. the top-right corner of the graph drawing bounding box.
 
 //===========================================================================================
 
-  tlp::Coord getMin(tlp::Graph *subgraph=nullptr);
+  tlp::Coord getMin(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.getMin([subgraph = None])
 
@@ -83,7 +83,7 @@ i.e. the bottom-left corner of the graph drawing bounding box.
 
 //===========================================================================================
 
-  void translate(const tlp::Vec3f &move, tlp::Graph *subgraph=nullptr);
+  void translate(const tlp::Vec3f &move, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.translate(move[, subgraph = None])
 
@@ -129,7 +129,7 @@ Translates the layout of a set of nodes and edges provided through iterators acc
 
 //===========================================================================================
 
-  void scale(const tlp::Vec3f &scaleFactors, tlp::Graph *subgraph=nullptr);
+  void scale(const tlp::Vec3f &scaleFactors, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.scale(scaleFactors[, subgraph = None])
 
@@ -175,7 +175,7 @@ Scales the layout of the nodes and edges provided through iterators according to
 
 //===========================================================================================
 
-  void rotateX(const double &alpha, tlp::Graph *subgraph=nullptr);
+  void rotateX(const double &alpha, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateX(alpha[, subgraph = None])
 
@@ -207,7 +207,7 @@ Rotates the layout around the X-axis according to an angle in degrees.
 
 //===========================================================================================
 
-        void rotateY(const double &alpha, tlp::Graph *subgraph=nullptr);
+        void rotateY(const double &alpha, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateY(alpha[, subgraph = None])
 
@@ -239,7 +239,7 @@ Rotates the layout around the Y-axis according to an angle in degrees.
 
 //===========================================================================================
 
-  void rotateZ(const double &alpha, tlp::Graph *subgraph=nullptr);
+  void rotateZ(const double &alpha, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.rotateZ(alpha[, subgraph = None])
 
@@ -317,7 +317,7 @@ Rotates the layout around the Z-axis of the nodes and edges provided through ite
 
 //===========================================================================================
 
-  void center(tlp::Graph *subgraph=nullptr);
+  void center(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.center([subgraph = None])
 
@@ -345,7 +345,7 @@ Centers the layout, meaning translating it in order that the center of its bound
 
 //===========================================================================================
 
-  void center(const tlp::Vec3f &newCenter, tlp::Graph *subgraph=nullptr);
+  void center(const tlp::Vec3f &newCenter, const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.center(newCenter[, subgraph = None])
 
@@ -378,7 +378,7 @@ the center of its bounding box is equal to newCenter.
 
 //===========================================================================================
 
-  void normalize(tlp::Graph *subgraph=nullptr);
+  void normalize(const tlp::Graph *subgraph=nullptr);
 %Docstring
 tlp.LayoutProperty.normalize([subgraph = None])
 

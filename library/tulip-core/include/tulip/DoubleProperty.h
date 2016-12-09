@@ -51,8 +51,8 @@ public:
 
   virtual void setNodeValue(const node n, const double &v);
   virtual void setEdgeValue(const edge e, const double &v);
-  virtual void setAllNodeValue(const double &v, Graph *graph = nullptr);
-  virtual void setAllEdgeValue(const double &v, Graph *graph = nullptr);
+  virtual void setAllNodeValue(const double &v, const Graph *graph = nullptr);
+  virtual void setAllEdgeValue(const double &v, const Graph *graph = nullptr);
 
   enum PredefinedMetaValueCalculator { NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2, MAX_CALC = 3, MIN_CALC = 4 };
 
@@ -67,10 +67,10 @@ public:
   virtual double getNodeDoubleDefaultValue() const {
     return getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(Graph *g = nullptr) {
+  virtual double getNodeDoubleMin(const Graph *g = nullptr) {
     return getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(Graph *g = nullptr) {
+  virtual double getNodeDoubleMax(const Graph *g = nullptr) {
     return getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
@@ -79,10 +79,10 @@ public:
   virtual double getEdgeDoubleDefaultValue() const {
     return getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(Graph *g = nullptr) {
+  virtual double getEdgeDoubleMin(const Graph *g = nullptr) {
     return getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(Graph *g = nullptr) {
+  virtual double getEdgeDoubleMax(const Graph *g = nullptr) {
     return getEdgeMax(g);
   }
 

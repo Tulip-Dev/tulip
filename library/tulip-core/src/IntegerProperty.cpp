@@ -61,12 +61,12 @@ void IntegerProperty::setEdgeValue(const edge e, const int &v) {
   IntegerMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void IntegerProperty::setAllNodeValue(const int &v, Graph *graph) {
+void IntegerProperty::setAllNodeValue(const int &v, const Graph *graph) {
   IntegerMinMaxProperty::updateAllNodesValues(v);
   IntegerMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void IntegerProperty::setAllEdgeValue(const int &v, Graph *graph) {
+void IntegerProperty::setAllEdgeValue(const int &v, const Graph *graph) {
   IntegerMinMaxProperty::updateAllEdgesValues(v);
   IntegerMinMaxProperty::setAllEdgeValue(v, graph);
 }

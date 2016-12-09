@@ -31,7 +31,7 @@ namespace tlp {
 
 template <> void tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::updateEdgeValue(tlp::edge e, tlp::LineType::RealType newValue);
 
-template <> MINMAX_PAIR(tlp::PointType) tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg);
+template <> std::pair<tlp::Coord, tlp::Coord> tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Graph *sg);
 
 class PropertyContext;
 class Graph;
@@ -63,14 +63,14 @@ public:
   *
   * @param subgraph If not null, returns the maximum coordinate for a sub-graph layout
   **/
-  Coord getMax(Graph *subgraph = nullptr);
+  Coord getMax(const Graph *subgraph = nullptr);
 
   /**
   * Returns the minimum coordinate of the layout, i.e. the bottom-left corner of the induced bounding box
   *
   * @param subgraph If not null, returns the minimum coordinate for a sub-graph layout
   **/
-  Coord getMin(Graph *subgraph = nullptr);
+  Coord getMin(const Graph *subgraph = nullptr);
 
   //============================================
   // Functions for layout modification
@@ -82,7 +82,7 @@ public:
   * @param move a movement vector
   * @param subgraph If not null, only translates the layout of that sub-graph
   **/
-  void translate(const Vec3f &move, Graph *subgraph = nullptr);
+  void translate(const Vec3f &move, const Graph *subgraph = nullptr);
 
   /**
   * Translates the layout of a set of nodes and edges provided through iterators
@@ -102,7 +102,7 @@ public:
   * @param scaleFactors a vector of scale factors
   * @param subgraph If not null, only scales the layout of that sub-graph
   **/
-  void scale(const Vec3f &scaleFactors, Graph *subgraph = nullptr);
+  void scale(const Vec3f &scaleFactors, const Graph *subgraph = nullptr);
 
   /**
   * Scales the layout of a set of nodes and edges provided through iterators
@@ -122,7 +122,7 @@ public:
   * @param alpha an angle in degrees
   * @param subgraph If not null, only rotates the layout of that sub-graph
   **/
-  void rotateX(const double &alpha, Graph *subgraph = nullptr);
+  void rotateX(const double &alpha, const Graph *subgraph = nullptr);
 
   /**
   * Rotates the layout around the Y-axis according to an angle in degrees.
@@ -130,7 +130,7 @@ public:
   * @param alpha an angle in degrees
   * @param subgraph If not null, only rotates the layout of that sub-graph
   **/
-  void rotateY(const double &alpha, Graph *subgraph = nullptr);
+  void rotateY(const double &alpha, const Graph *subgraph = nullptr);
 
   /**
   * Rotates the layout around the Z-axis according to an angle in degrees.
@@ -138,7 +138,7 @@ public:
   * @param alpha an angle in degrees
   * @param subgraph If not null, only rotates the layout of that sub-graph
   **/
-  void rotateZ(const double &alpha, Graph *subgraph = nullptr);
+  void rotateZ(const double &alpha, const Graph *subgraph = nullptr);
 
   /**
   * Rotates the layout around the X-axis of the nodes and edges provided
@@ -182,7 +182,7 @@ public:
   *
   * @param subgraph If not null, only centers the layout of that sub-graph
   **/
-  void center(Graph *subgraph = nullptr);
+  void center(const Graph *subgraph = nullptr);
 
   /**
   * Centers the layout to newCenter, meaning translating it in order that
@@ -191,14 +191,14 @@ public:
   * @param newCenter the coordinate of the new layout center
   * @param subgraph If not null, only centers the layout of that sub-graph
   **/
-  void center(const Vec3f &newCenter, Graph *subgraph = nullptr);
+  void center(const Vec3f &newCenter, const Graph *subgraph = nullptr);
 
   /**
   * Normalizes the layout, meaning dividing each nodes and edges coordinate by the maximum magnitude of the whole coordinates set
   *
   * @param subgraph If not null, only normalizes the layout of that sub-graph
   **/
-  void normalize(Graph *subgraph = nullptr);
+  void normalize(const Graph *subgraph = nullptr);
 
   /**
   * Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
@@ -284,8 +284,8 @@ public:
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node, const Coord &v);
   virtual void setEdgeValue(const edge, const std::vector<Coord> &v);
-  virtual void setAllNodeValue(const Coord &v, Graph *graph = nullptr);
-  virtual void setAllEdgeValue(const std::vector<Coord> &v, Graph *graph = nullptr);
+  virtual void setAllNodeValue(const Coord &v, const Graph *graph = nullptr);
+  virtual void setAllEdgeValue(const std::vector<Coord> &v, const Graph *graph = nullptr);
 
 protected:
   virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);

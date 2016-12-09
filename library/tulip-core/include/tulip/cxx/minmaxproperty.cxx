@@ -28,7 +28,7 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::MinMaxProperty(tlp::Graph *gr
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMin(tlp::Graph *graph) {
+typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMin(const tlp::Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -43,7 +43,7 @@ typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::g
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMax(tlp::Graph *graph) {
+typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getNodeMax(const tlp::Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -58,7 +58,7 @@ typename nodeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::g
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMin(tlp::Graph *graph) {
+typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMin(const tlp::Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -73,7 +73,7 @@ typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::g
 }
 
 template <typename nodeType, typename edgeType, typename propType>
-typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMax(tlp::Graph *graph) {
+typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::getEdgeMax(const tlp::Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -89,7 +89,7 @@ typename edgeType::RealType tlp::MinMaxProperty<nodeType, edgeType, propType>::g
 
 template <typename nodeType, typename edgeType, typename propType>
 MINMAX_PAIR(nodeType)
-tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(Graph *graph) {
+tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(const Graph *graph) {
   if (!graph) {
     graph = this->propType::graph;
   }
@@ -137,7 +137,7 @@ tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxNode(Graph *grap
 
 template <typename nodeType, typename edgeType, typename propType>
 MINMAX_PAIR(edgeType)
-tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(Graph *graph) {
+tlp::MinMaxProperty<nodeType, edgeType, propType>::computeMinMaxEdge(const Graph *graph) {
   typename edgeType::RealType maxE2 = _edgeMin, minE2 = _edgeMax;
 
   if (AbstractProperty<nodeType, edgeType, propType>::numberOfNonDefaultValuatedEdges() == 0)

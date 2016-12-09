@@ -43,7 +43,7 @@ which are set to :const:`True` in this boolean property.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node> *getNodesEqualTo(const bool val, tlp::Graph *graph = 0);
+  tlp::Iterator<tlp::node> *getNodesEqualTo(const bool val, const tlp::Graph *graph = 0);
 %Docstring
 tlp.BooleanProperty.getNodesEqualTo(val[, graph = None])
 
@@ -59,7 +59,7 @@ whose associated value is equal to the one given in parameter.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge> *getEdgesEqualTo(const bool val, tlp::Graph *graph = 0);
+  tlp::Iterator<tlp::edge> *getEdgesEqualTo(const bool val, const tlp::Graph *graph = 0);
 %Docstring
 tlp.BooleanProperty.getEdgesEqualTo(val[, graph = None])
 

@@ -89,8 +89,8 @@ void SizeProperty::scale(const tlp::Vector<float, 3> &v, Iterator<node> *itN, It
   Observable::unholdObservers();
 }
 //=============================================================================
-void SizeProperty::scale(const tlp::Vector<float, 3> &v, Graph *sg) {
-  if (sg == nullptr)
+void SizeProperty::scale(const tlp::Vector<float, 3> &v, const Graph *sg) {
+  if (sg == NULL)
     sg = graph;
 
   if (sg->numberOfNodes() == 0)
@@ -103,8 +103,8 @@ void SizeProperty::scale(const tlp::Vector<float, 3> &v, Graph *sg) {
   delete itE;
 }
 //=============================================================================
-Size SizeProperty::getMax(Graph *sg) {
-  if (sg == nullptr)
+Size SizeProperty::getMax(const Graph *sg) {
+  if (sg == NULL)
     sg = graph;
 
   unsigned int sgi = sg->getId();
@@ -118,8 +118,8 @@ Size SizeProperty::getMax(Graph *sg) {
   return max[sgi];
 }
 //=============================================================================
-Size SizeProperty::getMin(Graph *sg) {
-  if (sg == nullptr)
+Size SizeProperty::getMin(const Graph *sg) {
+  if (sg == NULL)
     sg = graph;
 
   unsigned int sgi = sg->getId();
@@ -133,7 +133,7 @@ Size SizeProperty::getMin(Graph *sg) {
   return min[sgi];
 }
 //=============================================================================
-void SizeProperty::computeMinMax(Graph *sg) {
+void SizeProperty::computeMinMax(const Graph *sg) {
   Size maxS, minS;
   Iterator<node> *itN = sg->getNodes();
 
@@ -195,7 +195,7 @@ void SizeProperty::setNodeValue(const node n, const Size &v) {
   AbstractSizeProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void SizeProperty::setAllNodeValue(const Size &v, Graph *graph) {
+void SizeProperty::setAllNodeValue(const Size &v, const Graph *graph) {
   resetMinMax();
   AbstractSizeProperty::setAllNodeValue(v, graph);
 }

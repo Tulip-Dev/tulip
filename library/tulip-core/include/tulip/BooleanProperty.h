@@ -60,14 +60,14 @@ public:
    * whose associated value is equal to val.
    * If g is nullptr, the graph given when creating the property is considered.
    */
-  Iterator<node> *getNodesEqualTo(const bool val, Graph *g = nullptr);
+  Iterator<node> *getNodesEqualTo(const bool val, const Graph *g = nullptr);
 
   /**
    * Returns an iterator through all edges belonging to g
    * whose associated value is equal to val.
    * If g is nullptr, the graph given when creating the property is considered.
    */
-  Iterator<edge> *getEdgesEqualTo(const bool val, Graph *g = nullptr);
+  Iterator<edge> *getEdgesEqualTo(const bool val, const Graph *g = nullptr);
 };
 
 /**
