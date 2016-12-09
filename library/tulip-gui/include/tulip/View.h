@@ -95,7 +95,7 @@ public:
 
   /**
     @brief Destructor
-    View's GUI components (graphics view, configuration widgets) responisbility belongs to the overleying system. Thus, the View is not in charge of
+    View's GUI components (graphics view, configuration widgets) responsibility belongs to the overleying system. Thus, the View is not in charge of
     deleting its graphcis view.
     View's interactors are already deleted in the top class.
     */
@@ -113,6 +113,13 @@ public:
     @note This method MUST ALWAYS return the same instance of a QGraphicsView.
     */
   virtual QGraphicsView *graphicsView() const = 0;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  // Following commit #10531 (see void WorkspacePanel::showEvent(QShowEvent *event);)
+  // this method is called when creating a new QGraphicsScene
+  // to restore any specific behaviour in user made graph views
+  virtual void resetGraphicsScene() {
+  }
+#endif
 
   /**
     @return The list of interactors installed on this view.
