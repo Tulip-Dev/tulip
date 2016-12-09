@@ -235,8 +235,7 @@ void WorkspacePanel::setView(tlp::View* view) {
   resetInteractorsScrollButtonsVisibility();
 }
 
-void WorkspacePanel::showEvent(QShowEvent *event) {
-  QFrame::showEvent(event);
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
 // Workaround to avoid a Qt5 bug :
 // After the panels containing QGraphicsView objects were rearranged in the workspace,
 // some events were no more sent to the QGraphicsWidget objects embedded in the asoociated QGraphicScene objects.
@@ -244,7 +243,8 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 // So add a hack that, each time a view is shown, creates a new QGraphicsScene object
 // and refill it with QGraphicsItem objects contained in the previous one.
 // Seems to be the only way to workaround that issue.
-#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+void WorkspacePanel::showEvent(QShowEvent *event) {
+  QFrame::showEvent(event);
 
   if (_view->graphicsView()->scene()) {
     // first remove central item of the scene and its children
@@ -273,12 +273,15 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 
     // set event filter for the new scene
     _view->graphicsView()->scene()->installEventFilter(this);
+    //restore any specific behavior of the QGraphicsScene
+    _view->resetGraphicsScene();
+
     // delete old scene
     delete oldScene;
   }
 
-#endif
 }
+#endif
 
 void WorkspacePanel::closeEvent(QCloseEvent* event) {
   if (_view->checkOnClose())
