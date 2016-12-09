@@ -215,8 +215,6 @@ public:
   std::string group() const {                                                                                                                        \
     return GROUP;                                                                                                                                    \
   }
-
-#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP) PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
 }
 
 // This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.

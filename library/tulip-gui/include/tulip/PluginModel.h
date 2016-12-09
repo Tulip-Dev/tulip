@@ -53,20 +53,20 @@ public:
 
 template <typename PLUGIN> class PluginModel : public tlp::TulipModel {
   struct TreeItem {
-    TreeItem(QString name, QString infos = QString::null, TreeItem *parent = nullptr) : name(name), infos(infos), parent(parent) {
+    TreeItem(QString name, QString info = QString::null, TreeItem *parent = nullptr) : name(name), info(info), parent(parent) {
     }
     virtual ~TreeItem() {
       foreach (TreeItem *c, children)
         delete c;
     }
-    TreeItem *addChild(QString name, QString infos = QString::null) {
-      TreeItem *result = new TreeItem(name, infos, this);
+    TreeItem *addChild(QString name, QString info = QString::null) {
+      TreeItem *result = new TreeItem(name, info, this);
       children.push_back(result);
       return result;
     }
 
     QString name;
-    QString infos;
+    QString info;
     TreeItem *parent;
     QList<TreeItem *> children;
   };
@@ -99,11 +99,11 @@ template <typename PLUGIN> class PluginModel : public tlp::TulipModel {
 
         foreach (const QString &alg, pluginTree[cat][group]) {
           const Plugin &plugin = PluginLister::instance()->pluginInformation(tlp::QStringToTlpString(alg));
-          std::string infos = plugin.info();
+          std::string info = plugin.info();
 
-          // set infos only if they contain more than one word
-          if (infos.find(' ') != std::string::npos)
-            groupItem->addChild(alg, tlp::tlpStringToQString(infos));
+          // set info only if they contain more than one word
+          if (info.find(' ') != std::string::npos)
+            groupItem->addChild(alg, tlp::tlpStringToQString(info));
           else
             groupItem->addChild(alg);
         }
@@ -179,10 +179,10 @@ public:
     if (role == Qt::DisplayRole)
       return item->name;
     else if (role == Qt::ToolTipRole) {
-      if (item->infos.isNull())
+      if (item->info.isNull())
         return item->name;
       else
-        return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>").arg(item->name + ":").arg(item->infos);
+        return QString("<table><tr><td>%1</td></tr><tr><td><i>%2</i></td></tr></table>").arg(item->name + ":").arg(item->info);
     } else if (role == Qt::FontRole && !index.parent().parent().isValid()) {
       QFont f;
       f.setBold(true);

@@ -68,7 +68,7 @@ public:
  * into the tulip-gui API like pre-made widgets, Qt models, etc.
  *
  * Perspective's data is stored into a TulipProject. A TulipProject is an archive capable of containing heterogeneous data (like multiple graphs,
- * textures, extra files, etc). When a TulipProject gets saved by a perspective, it is linked to it in its meta-informations.
+ * textures, extra files, etc). When a TulipProject gets saved by a perspective, it is linked to it in its meta-information.
  * Creating a Perspective primarily into implementing the start() method that builds the GUI. This method will be called by the overleying system when
  * a new perspective is launched. The rest of the logic implementation is left to the developer.
  */

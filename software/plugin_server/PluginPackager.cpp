@@ -40,7 +40,7 @@
 using namespace std;
 using namespace tlp;
 
-struct PluginInformationsCollector : public PluginLoader {
+struct PluginInformationCollector : public PluginLoader {
 
   virtual void loaded(const tlp::Plugin *info, const std::list<Dependency> &) {
     _directoryPlugins[_currentDirectory].push_back(tlp::tlpStringToQString(info->name()));
@@ -87,9 +87,8 @@ int main(int argc, char **argv) {
 
   QDir outputDir(destinationDir);
 
-  // Next: we load additional plugins from external project and ZIP data into
-  // output directory
-  PluginInformationsCollector collector;
+  // Next: we load additional plugins from external project and ZIP data into output directory
+  PluginInformationCollector collector;
   QDir pluginServerDir(argv[1]);
   PluginLister::currentLoader = &collector;
 

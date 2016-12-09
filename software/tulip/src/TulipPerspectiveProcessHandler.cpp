@@ -68,8 +68,8 @@ TulipPerspectiveProcessHandler::TulipPerspectiveProcessHandler() {
 }
 
 QProcess *TulipPerspectiveProcessHandler::fromId(unsigned int id) {
-  foreach (QProcess *k, _processInfos.keys()) {
-    if (_processInfos[k]._perspectiveId == (time_t)id)
+  foreach (QProcess *k, _processInfo.keys()) {
+    if (_processInfo[k]._perspectiveId == (time_t)id)
       return k;
   }
   return nullptr;
@@ -111,13 +111,13 @@ void TulipPerspectiveProcessHandler::createPerspective(const QString &perspectiv
   connect(process, SIGNAL(finished(int, QProcess::ExitStatus)), this, SLOT(perspectiveFinished(int, QProcess::ExitStatus)));
   process->setProcessChannelMode(QProcess::ForwardedChannels);
   process->start(appDir.absoluteFilePath("tulip_perspective"), args);
-  _processInfos[process] = PerspectiveProcessInfos(perspective, parameters, file, perspectiveId);
+  _processInfo[process] = PerspectiveProcessInfo(perspective, parameters, file, perspectiveId);
 }
 
 void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) {
   QProcess *process = static_cast<QProcess *>(sender());
   process->setReadChannel(QProcess::StandardError);
-  PerspectiveProcessInfos infos = _processInfos[process];
+  PerspectiveProcessInfo info = _processInfo[process];
 
   TulipPerspectiveCrashHandler crashHandler;
 
@@ -127,18 +127,18 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
 // TODO: replace reading process by reading file
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0))
-              .filePath("tulip_perspective-" + QString::number(infos._perspectiveId) + ".log"));
+              .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
 #else
   QFile f(QDir(QDesktopServices::storageLocation(QDesktopServices::TempLocation))
-              .filePath("tulip_perspective-" + QString::number(infos._perspectiveId) + ".log"));
+              .filePath("tulip_perspective-" + QString::number(info._perspectiveId) + ".log"));
 #endif
   f.open(QIODevice::ReadOnly);
 
-  QMap<QRegExp *, QString> envInfos;
-  envInfos[&plateform] = "";
-  envInfos[&arch] = "";
-  envInfos[&compiler] = "";
-  envInfos[&version] = "";
+  QMap<QRegExp *, QString> envInfo;
+  envInfo[&plateform] = "";
+  envInfo[&arch] = "";
+  envInfo[&compiler] = "";
+  envInfo[&version] = "";
 
   QString stackTrace;
   bool grabStackTrace = false;
@@ -157,9 +157,9 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
     if (grabStackTrace) {
       stackTrace += line;
     } else {
-      foreach (QRegExp *re, envInfos.keys()) {
+      foreach (QRegExp *re, envInfo.keys()) {
         if (re->exactMatch(line)) {
-          envInfos[re] = re->cap(1);
+          envInfo[re] = re->cap(1);
           break;
         }
       }
@@ -174,15 +174,15 @@ void TulipPerspectiveProcessHandler::perspectiveCrashed(QProcess::ProcessError) 
   if (stackTrace.isEmpty())
     return;
 
-  crashHandler.setEnvData(envInfos[&plateform], envInfos[&arch], envInfos[&compiler], envInfos[&version], stackTrace);
-  crashHandler.setPerspectiveData(infos);
+  crashHandler.setEnvData(envInfo[&plateform], envInfo[&arch], envInfo[&compiler], envInfo[&version], stackTrace);
+  crashHandler.setPerspectiveData(info);
   crashHandler.exec();
 }
 
 void TulipPerspectiveProcessHandler::perspectiveFinished(int, QProcess::ExitStatus) {
   QProcess *process = static_cast<QProcess *>(sender());
   delete process;
-  _processInfos.remove(process);
+  _processInfo.remove(process);
 }
 
 void TulipPerspectiveProcessHandler::acceptConnection() {
@@ -218,10 +218,10 @@ void TulipPerspectiveProcessHandler::perspectiveReadyRead() {
   else if (tokens[0] == "PROJECT_LOCATION") {
     QProcess *p = fromId(tokens[1].toUInt());
 
-    if (p != nullptr) {
-      PerspectiveProcessInfos infos = _processInfos[p];
-      infos.projectPath = args2;
-      _processInfos[p] = infos;
+    if (p != NULL) {
+      PerspectiveProcessInfo info = _processInfo[p];
+      info.projectPath = args2;
+      _processInfo[p] = info;
     }
   }
 }

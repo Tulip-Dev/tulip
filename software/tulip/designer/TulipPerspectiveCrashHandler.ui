@@ -542,7 +542,7 @@ border-top: 1px solid &quot;#C9C9C9&quot;;
       <item>
        <widget class="QLabel" name="detailsLink">
         <property name="toolTip">
-         <string>The collected informations about the running perspective&lt;br/&gt;will be automatically sent with your report</string>
+         <string>The collected information about the running perspective&lt;br/&gt;will be automatically sent with your report</string>
         </property>
         <property name="text">
          <string>&lt;a href=&quot;Show details&quot;&gt;View details&lt;/a&gt;</string>

@@ -133,7 +133,7 @@ void PluginsTest::availablePlugins() {
   CPPUNIT_ASSERT_MESSAGE("The 'Test2' plugin is not listed by the PluginLister", PluginLister::pluginExists("Test2"));
 }
 
-void PluginsTest::pluginInformations() {
+void PluginsTest::pluginInformation() {
   CPPUNIT_ASSERT_MESSAGE("'Test' plugin must be loaded", PluginLister::pluginExists("Test"));
 
   std::list<Dependency> dependencies = PluginLister::instance()->getPluginDependencies("Test");

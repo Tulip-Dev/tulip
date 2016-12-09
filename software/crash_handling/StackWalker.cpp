@@ -256,7 +256,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       if (runtimeAddr == 1 && i == (size - 1))
         break;
 
-      std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
+      std::pair<const char *, unsigned int> info = std::make_pair("", 0);
 
 #ifdef HAVE_BFD
 
@@ -266,7 +266,7 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 
       if (bfdMap[dsoNameStr]) {
         dsoName = const_cast<char *>(bfdMap[dsoNameStr]->getDsoAbsolutePath().c_str());
-        infos = bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
+        info = bfdMap[dsoNameStr]->getFileAndLineForAddress(mangled_name, runtimeAddr, runtimeOffset);
       }
 
 #endif
@@ -284,22 +284,22 @@ void StackWalkerGCC::printCallStack(std::ostream &os, unsigned int maxDepth) {
 #endif
         oss << "0x" << std::hex << exOffset;
         std::string atos = pOpen(oss.str());
-        infos = extractFileAndLine(atos);
+        info = extractFileAndLine(atos);
       }
 
 #endif
 
       if (status == 0) {
-        if (std::string(infos.first) == "") {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
+        if (std::string(info.first) == "") {
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset);
         } else {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, infos.first, infos.second);
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, real_name, runtimeOffset, info.first, info.second);
         }
       } else {
-        if (std::string(infos.first) == "") {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
+        if (std::string(info.first) == "") {
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset);
         } else {
-          printFrameInfos(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, infos.first, infos.second);
+          printFrameInfo(os, i - offset, runtimeAddr, dsoName, mangled_name, runtimeOffset, info.first, info.second);
         }
       }
 
@@ -435,15 +435,15 @@ void StackWalkerMinGW::printCallStack(std::ostream &os, unsigned int maxDepth) {
     }
 
 #ifdef HAVE_BFD
-    std::pair<const char *, unsigned int> infos = bfdMap[moduleNameStr]->getFileAndLineForAddress(frame.AddrPC.Offset);
+    std::pair<const char *, unsigned int> info = bfdMap[moduleNameStr]->getFileAndLineForAddress(frame.AddrPC.Offset);
 #else
-    std::pair<const char *, unsigned int> infos = std::make_pair("", 0);
+    std::pair<const char *, unsigned int> info = std::make_pair("", 0);
 #endif
 
-    if (infos.first == nullptr || infos.second == 0) {
-      printFrameInfos(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset);
+    if (info.first == NULL || info.second == 0) {
+      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset);
     } else {
-      printFrameInfos(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset, infos.first, infos.second);
+      printFrameInfo(os, maxDepth - depth - 1, frame.AddrPC.Offset, module_name, func, symbolOffset, info.first, info.second);
     }
   }
 
@@ -551,7 +551,7 @@ void StackWalkerMSVC::printCallStack(std::ostream &os, unsigned int maxDepth) {
       line = image_line.LineNumber;
     }
 
-    printFrameInfos(os, frame, stack.AddrPC.Offset, module_name, symbol_name, stack.AddrPC.Offset - module_base, file_name, line);
+    printFrameInfo(os, frame, stack.AddrPC.Offset, module_name, symbol_name, stack.AddrPC.Offset - module_base, file_name, line);
   }
 }
 

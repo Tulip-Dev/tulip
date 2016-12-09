@@ -34,7 +34,7 @@
 #include <cstdlib>
 
 #define DATA_DIR_NAME "data"
-#define INFOS_FILE_NAME "project.xml"
+#define INFO_FILE_NAME "project.xml"
 #define TLPPROJ_VERSION "1.0"
 
 namespace tlp {
@@ -119,7 +119,7 @@ bool TulipProject::write(const QString &file, tlp::PluginProgress *progress) {
   }
 
   if (!writeMetaInfo()) {
-    _lastError = "Failed to save meta-informations.";
+    _lastError = "Failed to save meta-information.";
     return false;
   }
 
@@ -228,7 +228,7 @@ QString TulipProject::absoluteRootPath() const {
 }
 
 // ==============================
-//      META-INFORMATIONS
+//      META-INFORMATION
 // ==============================
 QString TulipProject::name() const {
   return _name;
@@ -267,7 +267,7 @@ QString TulipProject::version() const {
 }
 
 bool TulipProject::writeMetaInfo() {
-  QFile out(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
+  QFile out(_rootDir.absoluteFilePath(INFO_FILE_NAME));
 
   if (!out.open(QIODevice::WriteOnly | QIODevice::Truncate))
     return false;
@@ -296,7 +296,7 @@ bool TulipProject::writeMetaInfo() {
 }
 
 bool TulipProject::readMetaInfo() {
-  QFile in(_rootDir.absoluteFilePath(INFOS_FILE_NAME));
+  QFile in(_rootDir.absoluteFilePath(INFO_FILE_NAME));
 
   if (!in.open(QIODevice::ReadOnly))
     return false;

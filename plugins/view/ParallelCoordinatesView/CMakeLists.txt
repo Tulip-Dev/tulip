@@ -12,7 +12,7 @@ SET(LIB_SRCS
       NominalParallelAxis.cpp
       AxisConfigDialogs.cpp
       QuantitativeParallelAxis.cpp
-      ParallelCoordsElementShowInfos.cpp
+      ParallelCoordsElementShowInfo.cpp
       ParallelCoordsElementsSelector.cpp
       ParallelCoordsGlEntitiesSelector.cpp
       ParallelCoordsElementDeleter.cpp

@@ -60,7 +60,7 @@ CSVGraphMappingConfigurationWidget::~CSVGraphMappingConfigurationWidget() {
 void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph *graph, const CSVImportParameters &importParameters) {
   this->graph = graph;
 
-  // initialize columns infos
+  // initialize columns info
   columns.clear();
   srcColumnIds.clear();
   tgtColumnIds.clear();
@@ -114,7 +114,7 @@ void CSVGraphMappingConfigurationWidget::updateWidget(tlp::Graph *graph, const C
     }
   }
 
-  // initialize properties infos
+  // initialize properties info
   nodeProperties.clear();
   edgeProperties.clear();
   srcProperties.clear();

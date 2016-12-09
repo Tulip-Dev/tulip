@@ -188,12 +188,12 @@ public:
       pluginProgress->progress(i, entries.count());
 
       for (QFileInfoList::iterator it = entries.begin(); it != entries.end(); ++it) {
-        QFileInfo fileInfos(*it);
-        tlp::node fileNode = addFileNode(fileInfos, graph);
+        QFileInfo fileInfo(*it);
+        tlp::node fileNode = addFileNode(fileInfo, graph);
         graph->addEdge(parentNode, fileNode);
 
-        if (fileInfos.isDir() && (!fileInfos.isSymLink() || symlinks))
-          fsStack.push_back(QPair<QString, tlp::node>(fileInfos.absoluteFilePath(), fileNode));
+        if (fileInfo.isDir() && (!fileInfo.isSymLink() || symlinks))
+          fsStack.push_back(QPair<QString, tlp::node>(fileInfo.absoluteFilePath(), fileNode));
 
         if ((++i % 100) == 0)
           pluginProgress->progress(i, entries.count());
@@ -223,28 +223,28 @@ public:
   }
 
 private:
-  tlp::node addFileNode(const QFileInfo &infos, tlp::Graph *g) {
+  tlp::node addFileNode(const QFileInfo &info, tlp::Graph *g) {
     tlp::node n = g->addNode();
-    _absolutePaths->setNodeValue(n, tlp::QStringToTlpString(infos.absoluteFilePath()));
-    _baseNames->setNodeValue(n, tlp::QStringToTlpString(infos.baseName()));
-    _createdDates->setNodeValue(n, tlp::QStringToTlpString(infos.created().toString()));
-    _fileNames->setNodeValue(n, tlp::QStringToTlpString(infos.fileName()));
-    _isDir->setNodeValue(n, infos.isDir());
-    _isExecutable->setNodeValue(n, infos.isExecutable());
-    _isReadable->setNodeValue(n, infos.isReadable());
-    _isSymlink->setNodeValue(n, infos.isSymLink());
-    _isWritable->setNodeValue(n, infos.isWritable());
-    _lastModifiedDates->setNodeValue(n, tlp::QStringToTlpString(infos.lastModified().toString()));
-    _lastReadDates->setNodeValue(n, tlp::QStringToTlpString(infos.lastRead().toString()));
-    _owners->setNodeValue(n, tlp::QStringToTlpString(infos.owner()));
-    _permissions->setNodeValue(n, (int)(infos.permissions()));
-    _suffixes->setNodeValue(n, tlp::QStringToTlpString(infos.suffix()));
-    _sizes->setNodeValue(n, infos.size());
+    _absolutePaths->setNodeValue(n, tlp::QStringToTlpString(info.absoluteFilePath()));
+    _baseNames->setNodeValue(n, tlp::QStringToTlpString(info.baseName()));
+    _createdDates->setNodeValue(n, tlp::QStringToTlpString(info.created().toString()));
+    _fileNames->setNodeValue(n, tlp::QStringToTlpString(info.fileName()));
+    _isDir->setNodeValue(n, info.isDir());
+    _isExecutable->setNodeValue(n, info.isExecutable());
+    _isReadable->setNodeValue(n, info.isReadable());
+    _isSymlink->setNodeValue(n, info.isSymLink());
+    _isWritable->setNodeValue(n, info.isWritable());
+    _lastModifiedDates->setNodeValue(n, tlp::QStringToTlpString(info.lastModified().toString()));
+    _lastReadDates->setNodeValue(n, tlp::QStringToTlpString(info.lastRead().toString()));
+    _owners->setNodeValue(n, tlp::QStringToTlpString(info.owner()));
+    _permissions->setNodeValue(n, (int)(info.permissions()));
+    _suffixes->setNodeValue(n, tlp::QStringToTlpString(info.suffix()));
+    _sizes->setNodeValue(n, info.size());
 
     if (_useIcons) {
-      std::string extension = QStringToTlpString(infos.suffix());
+      std::string extension = QStringToTlpString(info.suffix());
 
-      if (infos.isDir()) {
+      if (info.isDir()) {
         _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
         tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
         viewColor->setNodeValue(n, dirColor);

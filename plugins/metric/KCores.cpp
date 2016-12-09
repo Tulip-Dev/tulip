@@ -105,8 +105,8 @@ KCores::~KCores() {
 }
 //========================================================================================
 // to maximize the locality of reference we will use a vector
-// holding the all the nodes needed infos in the structure below
-struct nodeInfos {
+// holding the all the nodes needed info in the structure below
+struct nodeInfo {
   node n;
   double k;
   bool deleted;
@@ -138,18 +138,18 @@ bool KCores::run() {
 #endif
   // the famous k
   double k = DBL_MAX;
-  // record nodes infos in a vector to improve
+  // record nodes info in a vector to improve
   // the locality of reference during the multiple
   // needed nodes loop
-  std::vector<nodeInfos> nodesInfos(nbNodes);
-  MutableContainer<unsigned int> toNodesInfos;
+  std::vector<nodeInfo> nodesInfo(nbNodes);
+  MutableContainer<unsigned int> toNodesInfo;
   forEach(n, graph->getNodes()) {
-    nodeInfos &nInfos = nodesInfos[i];
-    nInfos.n = n;
-    nInfos.k = result->getNodeValue(n);
-    k = std::min(k, nInfos.k);
-    nInfos.deleted = false;
-    toNodesInfos.set(n.id, i++);
+    nodeInfo &nInfo = nodesInfo[i];
+    nInfo.n = n;
+    nInfo.k = result->getNodeValue(n);
+    k = std::min(k, nInfo.k);
+    nInfo.deleted = false;
+    toNodesInfo.set(n.id, i++);
   }
 
   // loop on remaining nodes
@@ -160,18 +160,20 @@ bool KCores::run() {
     while (modify) {
       modify = false;
       // finally set the values
-      for (i = 0; i < nodesInfos.size(); ++i) {
-        nodeInfos &nInfos = nodesInfos[i];
+      for (i = 0; i < nodesInfo.size(); ++i) {
+        nodeInfo &nInfo = nodesInfo[i];
+
         // nothing to do if the node
         // is already deleted
-        if (nInfos.deleted)
+        if (nInfo.deleted)
           continue;
-        node n = nInfos.n;
 
-        unsigned int current_k = nInfos.k;
+        node n = nInfo.n;
+
+        unsigned int current_k = nInfo.k;
 
         if (current_k <= k) {
-          nInfos.k = k;
+          nInfo.k = k;
           Iterator<edge> *ite;
 
           switch (degree_type) {
@@ -193,18 +195,19 @@ bool KCores::run() {
             edge ee = ite->next();
             node m = graph->opposite(ee, n);
 
-            nodeInfos &mInfos = nodesInfos[toNodesInfos.get(m.id)];
-            if (mInfos.deleted)
+            nodeInfo &mInfo = nodesInfo[toNodesInfo.get(m.id)];
+
+            if (mInfo.deleted)
               continue;
             if (metric)
-              mInfos.k -= metric->getEdgeDoubleValue(ee);
+              mInfo.k -= metric->getEdgeDoubleValue(ee);
             else
-              mInfos.k -= 1;
+              mInfo.k -= 1;
           }
           delete ite;
 
           // mark node as deleted
-          nInfos.deleted = true;
+          nInfo.deleted = true;
           --nbNodes;
           modify = true;
         } else if (current_k < next_k)
@@ -219,9 +222,10 @@ bool KCores::run() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-  for (i = 0; i < nodesInfos.size(); ++i) {
-    nodeInfos &nInfos = nodesInfos[i];
-    result->setNodeValue(nInfos.n, nInfos.k);
+
+  for (i = 0; i < nodesInfo.size(); ++i) {
+    nodeInfo &nInfo = nodesInfo[i];
+    result->setNodeValue(nInfo.n, nInfo.k);
   }
 
   return true;

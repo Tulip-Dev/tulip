@@ -32,7 +32,7 @@ class TulipPerspectiveCrashHandler : public QDialog {
   Q_OBJECT
 
   Ui::TulipPerspectiveCrashHandlerData *_ui;
-  PerspectiveProcessInfos _perspectiveInfos;
+  PerspectiveProcessInfo _perspectiveInfo;
   bool _isDetailedView;
   FormPost *_poster;
 
@@ -50,7 +50,7 @@ public slots:
   void sendReport();
   void saveData();
   void setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &stackTrace);
-  void setPerspectiveData(const PerspectiveProcessInfos &infos);
+  void setPerspectiveData(const PerspectiveProcessInfo &info);
 };
 
 #endif // TULIPPERSPECTIVECRASHHANDLER_H

@@ -53,8 +53,8 @@ void TulipSplashScreen::loading(const std::string &filename) {
   repaint();
 }
 
-void TulipSplashScreen::loaded(const Plugin *infos, const std::list<Dependency> &) {
-  _message = infos->name().c_str() + trUtf8(" loaded.");
+void TulipSplashScreen::loaded(const Plugin *info, const std::list<Dependency> &) {
+  _message = info->name().c_str() + trUtf8(" loaded.");
 }
 
 void TulipSplashScreen::aborted(const std::string &filename, const std::string &erreurmsg) {

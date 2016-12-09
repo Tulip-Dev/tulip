@@ -17,14 +17,14 @@
  *
  */
 
-#include "ParallelCoordsElementShowInfos.h"
+#include "ParallelCoordsElementShowInfo.h"
 #include "ParallelCoordinatesView.h"
 
 using namespace std;
 
 namespace tlp {
 
-bool ParallelCoordsElementShowInfos::pick(int x, int y, SelectedEntity &selectedEntity) {
+bool ParallelCoordsElementShowInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
   ParallelCoordinatesView *parallelView = dynamic_cast<ParallelCoordinatesView *>(view());
   return parallelView->getDataUnderPointerProperties(x, y, selectedEntity);
 }

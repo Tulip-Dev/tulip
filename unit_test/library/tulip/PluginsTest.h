@@ -33,7 +33,7 @@ class PluginsTest : public CppUnit::TestFixture {
   CPPUNIT_TEST(testCircularPlugin);
   CPPUNIT_TEST(testAncestorGraph);
   CPPUNIT_TEST(availablePlugins);
-  CPPUNIT_TEST(pluginInformations);
+  CPPUNIT_TEST(pluginInformation);
   CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -46,7 +46,7 @@ public:
   void testCircularPlugin();
   void testAncestorGraph();
   void availablePlugins();
-  void pluginInformations();
+  void pluginInformation();
 };
 
 #endif

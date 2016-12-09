@@ -20,7 +20,7 @@
 #include "SOMViewInteractor.h"
 #include <tulip/MouseInteractors.h>
 #include <tulip/MouseSelector.h>
-#include <tulip/MouseShowElementInfos.h>
+#include <tulip/MouseShowElementInfo.h>
 #include "EditColorScaleInteractor.h"
 #include "ThresholdInteractor.h"
 
@@ -66,7 +66,7 @@ SOMViewProperties::SOMViewProperties(PluginContext *) : SOMViewInteractor(":/tul
 }
 
 void SOMViewProperties::construct() {
-  push_back(new MouseShowElementInfos());
+  push_back(new MouseShowElementInfo());
   push_back(new MousePanNZoomNavigator());
   push_back(new EditColorScaleInteractor());
 }

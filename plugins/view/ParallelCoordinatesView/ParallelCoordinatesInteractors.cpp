@@ -27,7 +27,7 @@
 #include "ParallelCoordsAxisSliders.h"
 #include "ParallelCoordsAxisBoxPlot.h"
 #include "ParallelCoordsElementsSelector.h"
-#include "ParallelCoordsElementShowInfos.h"
+#include "ParallelCoordsElementShowInfo.h"
 #include "ParallelCoordinatesView.h"
 #include "ParallelCoordsAxisSpacer.h"
 
@@ -50,7 +50,7 @@ PLUGIN(InteractorAxisSwapper)
 PLUGIN(InteractorAxisSliders)
 PLUGIN(InteractorBoxPlot)
 PLUGIN(InteractorParallelCoordsSelection)
-PLUGIN(InteractorShowElementInfos)
+PLUGIN(InteractorShowElementInfo)
 PLUGIN(InteractorAxisSpacer)
 
 InteractorParallelCoordsSelection::InteractorParallelCoordsSelection(const tlp::PluginContext *)
@@ -169,7 +169,7 @@ void InteractorBoxPlot::construct() {
   push_back(new MousePanNZoomNavigator);
 }
 
-InteractorShowElementInfos::InteractorShowElementInfos(const tlp::PluginContext *)
+InteractorShowElementInfo::InteractorShowElementInfo(const tlp::PluginContext *)
     : ParallelCoordinatesInteractor(":/tulip/gui/icons/i_select.png", "Get information on nodes/edges") {
   setConfigurationWidgetText(QString("<html>") + "<head>" + "<title></title>" + "</head>" + "<body>" + "<h3>Show element properties interactor</h3>" +
                              "<p>This interactor allows to view the properties associated to an element by clicking on it. Tulip will display all "
@@ -178,8 +178,8 @@ InteractorShowElementInfos::InteractorShowElementInfos(const tlp::PluginContext 
   setPriority(StandardInteractorPriority::GetInformation);
 }
 
-void InteractorShowElementInfos::construct() {
-  push_back(new ParallelCoordsElementShowInfos);
+void InteractorShowElementInfo::construct() {
+  push_back(new ParallelCoordsElementShowInfo);
   push_back(new MousePanNZoomNavigator);
 }
 

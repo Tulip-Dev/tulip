@@ -117,7 +117,7 @@ public:
 };
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
- creation,informations, realease, groupe*/
+ creation,information, realease, groupe*/
 PLUGIN(OGDFFrutchermanReingold)
 
 OGDFFrutchermanReingold::OGDFFrutchermanReingold(const tlp::PluginContext *context)

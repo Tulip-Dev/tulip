@@ -110,7 +110,7 @@ void TulipPerspectiveCrashHandler::reportPosted() {
 }
 
 void TulipPerspectiveCrashHandler::saveData() {
-  tlp::TulipProject *project = tlp::TulipProject::restoreProject(_perspectiveInfos.projectPath);
+  tlp::TulipProject *project = tlp::TulipProject::restoreProject(_perspectiveInfo.projectPath);
 
   if (!project->isValid())
     QMessageBox::critical(this, trUtf8("Error while saving data"), trUtf8("The perspective data could not be retrieved."));
@@ -136,12 +136,13 @@ void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QS
   _ui->dumpEdit->setPlainText(stackTrace);
 }
 
-void TulipPerspectiveCrashHandler::setPerspectiveData(const PerspectiveProcessInfos &infos) {
-  _perspectiveInfos = infos;
-  _ui->perspectiveNameValue->setText(infos.name);
+void TulipPerspectiveCrashHandler::setPerspectiveData(const PerspectiveProcessInfo &info) {
+  _perspectiveInfo = info;
+  _ui->perspectiveNameValue->setText(info.name);
   QString args;
 
-  foreach (const QString &a, infos.args.keys())
-    args += "--" + a + "=" + infos.args[a].toString() + " ";
+  foreach (const QString &a, info.args.keys())
+    args += "--" + a + "=" + info.args[a].toString() + " ";
+
   _ui->perspectiveArgumentsValue->setText(args);
 }

@@ -76,12 +76,12 @@ AlgorithmRunnerItem::AlgorithmRunnerItem(QString pluginName, QWidget *parent)
     _ui->settingsButton->setVisible(false);
   }
 
-  std::string infos = plugin.info();
+  std::string info = plugin.info();
 
-  // show infos in tooltip only if it contains more than one word
-  if (infos.find(' ') != std::string::npos)
+  // show info in tooltip only if it contains more than one word
+  if (info.find(' ') != std::string::npos)
     _ui->playButton->setToolTip(
-        QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>").arg(tooltip).arg(tlp::tlpStringToQString(infos)));
+        QString("<table><tr><td>%1:</td></tr><tr><td><i>%2</i></td></tr></table>").arg(tooltip).arg(tlp::tlpStringToQString(info)));
   else
     _ui->playButton->setToolTip(tooltip);
 

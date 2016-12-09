@@ -18,7 +18,7 @@
 */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/MouseShowElementInfos.h>
+#include <tulip/MouseShowElementInfo.h>
 #include <tulip/GraphElementModel.h>
 
 #include "HistogramMetricMapping.h"
@@ -152,10 +152,16 @@ void HistogramInteractorStatistics::install(QObject *target) {
 }
 
 /**
- * We define a specific interactor to show element graph infos
+ * We define a specific interactor to show element graph info
  */
-class HistogramMouseShowElementInfos : public MouseShowElementInfos {
+class HistogramMouseShowElementInfo : public MouseShowElementInfo {
   HistogramView *hView;
+
+public:
+  HistogramMouseShowElementInfo() : MouseShowElementInfo(), hView(NULL) {
+  }
+  ~HistogramMouseShowElementInfo() {
+  }
 
 public:
   HistogramMouseShowElementInfos() : MouseShowElementInfos(), hView(nullptr) {
@@ -165,7 +171,7 @@ public:
 
   void viewChanged(View *v) {
     hView = (HistogramView *)v;
-    MouseShowElementInfos::viewChanged(v);
+    MouseShowElementInfo::viewChanged(v);
   }
 
 protected:
@@ -182,7 +188,7 @@ protected:
       return new GraphEdgeElementModel(hView->graph(), elementId, parent);
     }
 
-    return MouseShowElementInfos::buildModel(elementType, elementId, parent);
+    return MouseShowElementInfo::buildModel(elementType, elementId, parent);
   }
 
   /**
@@ -197,7 +203,7 @@ protected:
       return QString("Edge") + " #" + QString::number(elementId);
     }
 
-    return MouseShowElementInfos::elementName(elementType, elementId);
+    return MouseShowElementInfo::elementName(elementType, elementId);
   }
 };
 
@@ -211,7 +217,7 @@ HistogramInteractorGetInformation::HistogramInteractorGetInformation(const tlp::
 
 void HistogramInteractorGetInformation::construct() {
   push_back(new MousePanNZoomNavigator);
-  push_back(new HistogramMouseShowElementInfos);
+  push_back(new HistogramMouseShowElementInfo);
 }
 
 bool HistogramInteractorGetInformation::isCompatible(const std::string &viewName) const {

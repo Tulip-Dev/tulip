@@ -244,7 +244,7 @@ Toolbar
 
 .. |icon_wst_navigate_graph| image:: ../../library/tulip-gui/resources/icons/i_navigation.png
     :width: 20
-.. |icon_wst_get_edit_infos| image:: ../../library/tulip-gui/resources/icons/i_select.png
+.. |icon_wst_get_edit_info| image:: ../../library/tulip-gui/resources/icons/i_select.png
     :width: 20
 .. |icon_wst_select_rect| image:: ../../library/tulip-gui/resources/icons/i_selection.png
     :width: 20
@@ -289,7 +289,7 @@ The use of the tools will not be explained in detail here. More information abou
 
 * |icon_wst_navigate_graph|: navigate in graph.
 
-* |icon_wst_get_edit_infos|: get/edit node or edge information.
+* |icon_wst_get_edit_info|: get/edit node or edge information.
 
 * |icon_wst_select_rect|: select nodes/edges in a rectangle.
 
@@ -390,7 +390,7 @@ The Node-Link Diagram being one of the mostly used view, it is also the one we a
 
 * *I am sure my graph is oriented, but I do not see any arrow displayed, did I forget something?*
 
-  By default, the arrows are not displayed in Tulip. You can address this issue by checking the option *Show arrows* in the scene rendering settings (see :ref:`workspace_diagram_scene`). If your graph is quite large, they may also be too small, in that case, you should try to enlarge them using the |icon_wst_get_edit_infos| interactor.
+  By default, the arrows are not displayed in Tulip. You can address this issue by checking the option *Show arrows* in the scene rendering settings (see :ref:`workspace_diagram_scene`). If your graph is quite large, they may also be too small, in that case, you should try to enlarge them using the |icon_wst_get_edit_info| interactor.
 
 * *I have change the source/target anchor shape/size but I still do not see them, what is the problem?*
 
@@ -590,7 +590,7 @@ The tools available in this view represent a subset of those introduced in the N
 
 * |icon_wst_navigate_graph|: navigate in graph.
 
-* |icon_wst_get_edit_infos|: get/edit node or edge information.
+* |icon_wst_get_edit_info|: get/edit node or edge information.
 
 * |icon_wst_select_rect|: select nodes/edges in a rectangle.
 
@@ -837,7 +837,7 @@ A right click anywhere but on the axis in the view will display the standard con
 
 * *Options*: the sole option *Tooltips* allows to display directly some information like the id of the hovered node.
 
-When you perform a right click on one of the axis, Tulip proposes to either *Remove  [the] axis* or to enter a configuration panel:
+When you perform a right click on one of the axis, Tulip proposes to either *Remove  [the] axis* or to enter a configuration panel:
 
 .. image:: _images/i_parallel_main_axis_conf.png
 

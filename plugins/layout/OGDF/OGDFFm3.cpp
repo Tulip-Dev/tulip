@@ -264,7 +264,7 @@ public:
 };
 
 /*Nom de la classe, Nom du plugins, nom de l'auteur,date de
- creation,informations, release, groupe*/
+ creation,information, release, groupe*/
 PLUGIN(OGDFFm3)
 
 OGDFFm3::OGDFFm3(const tlp::PluginContext *context) : OGDFLayoutPluginBase(context, new ogdf::FMMMLayout()) {

@@ -61,6 +61,10 @@ public:
     @note This method should not be reimplemented as a subclass of ViewWidget
     */
   virtual QGraphicsView *graphicsView() const;
+#if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
+  virtual void resetGraphicsScene() {
+  }
+#endif
 
 public slots:
   /**

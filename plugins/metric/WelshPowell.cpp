@@ -59,15 +59,15 @@ public:
 */
 class WelshPowell : public DoubleAlgorithm {
   // to maximize the locality of reference we will use a vector
-  // holding the all the nodes needed infos in the structure below
-  struct nodeInfos {
+  // holding the all the nodes needed info in the structure below
+  struct nodeInfo {
     node n;
     int val;
   };
 
   // a comparator used to sort the vector
-  struct nodesInfosCmp {
-    bool operator()(const nodeInfos &u, const nodeInfos &v) {
+  struct nodesInfoCmp {
+    bool operator()(const nodeInfo &u, const nodeInfo &v) {
       int du = u.val, dv = v.val;
       if (du == dv)
         return u.n.id > v.n.id;
@@ -85,21 +85,23 @@ public:
 
   bool run() {
     unsigned int nbNodes = graph->numberOfNodes();
-    vector<nodeInfos> nodesInfos(nbNodes);
+    vector<nodeInfo> nodesInfo(nbNodes);
+    node n;
     unsigned int i = 0;
-    for (node n : graph->getNodes()) {
-      nodeInfos &nInfos = nodesInfos[i++];
-      nInfos.n = n, nInfos.val = graph->deg(n);
+    forEach(n, graph->getNodes()) {
+      nodeInfo &nInfo = nodesInfo[i++];
+      nInfo.n = n, nInfo.val = graph->deg(n);
     }
     // sort the nodes in descending order of their degrees
-    sort(nodesInfos.begin(), nodesInfos.end(), nodesInfosCmp());
+    sort(nodesInfo.begin(), nodesInfo.end(), nodesInfoCmp());
     // build a map
-    MutableContainer<unsigned int> toNodesInfos;
+    MutableContainer<unsigned int> toNodesInfo;
+
     for (i = 0; i < nbNodes; ++i) {
-      nodeInfos &nInfos = nodesInfos[i];
+      nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
-      nInfos.val = -1;
-      toNodesInfos.set(nInfos.n.id, i);
+      nInfo.val = -1;
+      toNodesInfo.set(nInfo.n.id, i);
     }
 
     int currentColor = 0;
@@ -117,12 +119,13 @@ public:
 #ifndef NDEBUG
         cout << "i:" << i << endl;
 #endif
-        nodeInfos &nInfos = nodesInfos[i];
-        if (nInfos.val == -1) {
+        nodeInfo &nInfo = nodesInfo[i];
+
+        if (nInfo.val == -1) {
           bool sameColor = false;
           node u;
-          forEach(u, graph->getInOutNodes(nInfos.n)) {
-            if (nodesInfos[toNodesInfos.get(u.id)].val == currentColor) {
+          forEach(u, graph->getInOutNodes(nInfo.n)) {
+            if (nodesInfo[toNodesInfo.get(u.id)].val == currentColor) {
               sameColor = true;
               break;
             }
@@ -131,7 +134,7 @@ public:
 #ifndef NDEBUG
             cout << "new node found color : " << currentColor << endl;
 #endif
-            nInfos.val = currentColor;
+            nInfo.val = currentColor;
             ++numberOfColoredNodes;
 
             if (i == minIndex)
@@ -147,8 +150,8 @@ public:
     }
     // finally set the values
     for (i = 0; i < nbNodes; ++i) {
-      nodeInfos &nInfos = nodesInfos[i];
-      result->setNodeValue(nInfos.n, nInfos.val);
+      nodeInfo &nInfo = nodesInfo[i];
+      result->setNodeValue(nInfo.n, nInfo.val);
     }
     return true;
   }

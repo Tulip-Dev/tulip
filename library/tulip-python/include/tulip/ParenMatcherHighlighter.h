@@ -36,14 +36,14 @@ struct ParenInfo {
 
 class ParenInfoTextBlockData : public QTextBlockUserData {
 
-  QVector<ParenInfo> _parenInfos;
+  QVector<ParenInfo> _parenInfo;
 
 public:
   ParenInfoTextBlockData();
 
   QVector<ParenInfo> parens();
   void insert(const ParenInfo &parenInfo);
-  void sortParenInfos();
+  void sortParenInfo();
 };
 
 class ParenMatcherHighlighter : public QSyntaxHighlighter {

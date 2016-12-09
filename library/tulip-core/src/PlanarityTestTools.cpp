@@ -708,7 +708,7 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
       }
     } else {
       nl2.push_back(v);
-      b[v] = labelB.get(v.id); // saves infos;
+      b[v] = labelB.get(v.id); // saves info
 
       if (embed) // needed to calculate obstruction edges;
         nb[v] = nodeLabelB.get(v.id);

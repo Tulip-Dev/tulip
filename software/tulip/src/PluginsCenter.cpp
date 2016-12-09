@@ -20,7 +20,7 @@
 #include "PluginsCenter.h"
 
 #include "PluginErrorReport.h"
-#include "PluginInformationsListItem.h"
+#include "PluginInformationListItem.h"
 
 #include <tulip/Algorithm.h>
 #include <tulip/TemplateAlgorithm.h>
@@ -136,7 +136,7 @@ void PluginsCenter::refreshFilter() {
 
   foreach (const QString &cf, _categoryFilters) {
     foreach (const PluginInformation &info, PluginManager::listPlugins(PluginManager::Remote | PluginManager::Local, _nameFilter, cf)) {
-      PluginInformationsListItem *item = new PluginInformationsListItem(info);
+      PluginInformationListItem *item = new PluginInformationListItem(info);
       connect(item, SIGNAL(focused()), this, SLOT(itemFocused()));
       lyt->addWidget(item);
     }
@@ -193,7 +193,7 @@ void PluginsCenter::itemFocused() {
     _currentItem->focusOut();
   }
 
-  _currentItem = static_cast<PluginInformationsListItem *>(sender());
+  _currentItem = static_cast<PluginInformationListItem *>(sender());
   _currentItem->focusIn();
 }
 

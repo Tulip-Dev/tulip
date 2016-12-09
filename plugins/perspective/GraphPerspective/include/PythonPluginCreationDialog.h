@@ -46,7 +46,7 @@ public:
 
   QString getPluginDate() const;
 
-  QString getPluginInfos() const;
+  QString getPluginInfo() const;
 
   QString getPluginRelease() const;
 

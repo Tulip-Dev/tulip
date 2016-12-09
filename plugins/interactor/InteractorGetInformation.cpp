@@ -18,7 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/MouseShowElementInfos.h>
+#include <tulip/MouseShowElementInfo.h>
 #include <tulip/NodeLinkDiagramComponentInteractor.h>
 #include <tulip/NodeLinkDiagramComponent.h>
 #include <tulip/FontIconManager.h>
@@ -51,7 +51,7 @@ public:
    */
   void construct() {
     push_back(new MousePanNZoomNavigator);
-    push_back(new MouseShowElementInfos);
+    push_back(new MouseShowElementInfo);
   }
 
   bool isCompatible(const std::string &viewName) const {

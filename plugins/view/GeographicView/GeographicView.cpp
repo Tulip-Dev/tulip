@@ -138,7 +138,7 @@ void GeographicView::setState(const DataSet &dataSet) {
     updateSharedProperties();
   }
 
-  loadStoredPolyInformations(dataSet);
+  loadStoredPolyInformation(dataSet);
 
   if (dataSet.exist("viewType")) {
     int viewType = 0;
@@ -224,7 +224,7 @@ DataSet GeographicView::state() const {
   dataSet.set("mapZoom", geoViewGraphicsView->getGoogleMapsPage()->getCurrentMapZoom());
   dataSet.set("renderingParameters", geoViewGraphicsView->getGlMainWidget()->getScene()->getMainGlGraph()->getRenderingParameters().getParameters());
 
-  saveStoredPolyInformations(dataSet);
+  saveStoredPolyInformation(dataSet);
 
   std::string latitudePropName = geolocalisationConfigWidget->getLatitudeGraphPropertyName();
   std::string longitudePropName = geolocalisationConfigWidget->getLongitudeGraphPropertyName();
@@ -357,7 +357,7 @@ void GeographicView::updatePoly(bool force) {
   }
 }
 
-void GeographicView::loadStoredPolyInformations(const DataSet &dataset) {
+void GeographicView::loadStoredPolyInformation(const DataSet &dataset) {
   if (dataset.exist("polygons")) {
     DataSet polyConf;
     dataset.get("polygons", polyConf);
@@ -379,7 +379,7 @@ void GeographicView::loadStoredPolyInformations(const DataSet &dataset) {
   }
 }
 
-void GeographicView::saveStoredPolyInformations(DataSet &dataset) const {
+void GeographicView::saveStoredPolyInformation(DataSet &dataset) const {
   GlComposite *composite = geoViewGraphicsView->getPolygon();
   DataSet polyConf;
   const map<string, GlEntity *> &entities = composite->getGlEntities();

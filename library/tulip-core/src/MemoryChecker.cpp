@@ -40,10 +40,10 @@ public:
   }
 
   inline void insert(void *ptr, char **strings, size_t size) {
-    StackInfo infos;
-    infos._strings = strings;
-    infos._size = size;
-    _stacks[ptr] = infos;
+    StackInfo info;
+    info._strings = strings;
+    info._size = size;
+    _stacks[ptr] = info;
   }
 
   inline void remove(void *ptr) {
@@ -57,13 +57,13 @@ public:
 
   inline void print() {
     for (std::map<void *, StackInfo>::iterator it = _stacks.begin(); it != _stacks.end(); ++it) {
-      StackInfo &infos = it->second;
+      StackInfo &info = it->second;
 
       tlp::warning() << " ======================== " << std::endl;
       tlp::warning() << "Possible memory leak at " << it->first << ": " << std::endl;
 
-      for (size_t i = 0; i < infos._size; ++i)
-        tlp::warning() << infos._strings[i] << std::endl;
+      for (size_t i = 0; i < info._size; ++i)
+        tlp::warning() << info._strings[i] << std::endl;
 
       tlp::warning() << " ======================== " << std::endl << std::endl;
     }

@@ -132,7 +132,7 @@ QTabBar::close-button:pressed {
        </size>
       </property>
       <property name="styleSheet">
-       <string notr="true">QTabWidget::pane { 
+       <string notr="true">QTabWidget::pane {
      border-top: none;
      border-bottom: none;
  }
@@ -868,16 +868,7 @@ background-color: white;
         </widget>
        </item>
        <item>
-        <widget class="QTextBrowser" name="pluginsInfosWidget">
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>100</height>
-          </size>
-         </property>
-         <property name="styleSheet">
-          <string notr="true">border: 0px;</string>
-         </property>
+        <widget class="QTextBrowser" name="pluginsInfoWidget">
          <property name="openLinks">
           <bool>false</bool>
          </property>

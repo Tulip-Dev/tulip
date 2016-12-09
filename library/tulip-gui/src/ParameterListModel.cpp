@@ -67,28 +67,28 @@ QVariant ParameterListModel::data(const QModelIndex &index, int role) const {
   if (role == GraphRole)
     return QVariant::fromValue<tlp::Graph *>(_graph);
 
-  const ParameterDescription &infos = _params[index.row()];
+  const ParameterDescription &info = _params[index.row()];
 
   if (role == Qt::ToolTipRole)
-    return tlp::tlpStringToQString(infos.getHelp());
+    return tlp::tlpStringToQString(info.getHelp());
   else if (role == Qt::WhatsThisRole)
-    return tlp::tlpStringToQString(infos.getHelp());
+    return tlp::tlpStringToQString(info.getHelp());
   else if (role == Qt::BackgroundRole) {
-    if (infos.isMandatory())
+    if (info.isMandatory())
       return QColor(255, 255, 222);
     else
       return QColor(222, 255, 222);
   } else if (role == Qt::DisplayRole) {
-    tlp::DataType *dataType = _data.getData(infos.getName());
+    tlp::DataType *dataType = _data.getData(info.getName());
 
     if (!dataType)
-      return infos.getTypeName().c_str();
+      return info.getTypeName().c_str();
 
-    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType, infos.getName());
+    QVariant result = TulipMetaTypes::dataTypeToQvariant(dataType, info.getName());
     delete dataType;
     return result;
   } else if (role == MandatoryRole) {
-    return infos.isMandatory();
+    return info.isMandatory();
   }
 
   return QVariant();
@@ -104,27 +104,27 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
   }
 
   if (orientation == Qt::Vertical) {
-    const ParameterDescription &infos = _params[section];
+    const ParameterDescription &info = _params[section];
 
     if (role == Qt::DisplayRole) {
       // remove prefix if any
-      size_t pos = infos.getName().find("::");
+      size_t pos = info.getName().find("::");
 
       if (pos != std::string::npos)
-        return tlp::tlpStringToQString(infos.getName().c_str() + pos + 2);
+        return tlp::tlpStringToQString(info.getName().c_str() + pos + 2);
 
-      return tlp::tlpStringToQString(infos.getName().c_str());
+      return tlp::tlpStringToQString(info.getName().c_str());
     } else if (role == Qt::BackgroundRole) {
-      if (infos.isMandatory())
+      if (info.isMandatory())
         return QColor(255, 255, 222);
       else
         return QColor(222, 255, 222);
     } else if (role == Qt::ToolTipRole) {
-      return tlp::tlpStringToQString(infos.getHelp());
+      return tlp::tlpStringToQString(info.getHelp());
     } else if (role == Qt::DecorationRole) {
-      if (infos.getDirection() == IN_PARAM) {
+      if (info.getDirection() == IN_PARAM) {
         return QIcon(":/tulip/gui/icons/32/input.png");
-      } else if (infos.getDirection() == OUT_PARAM || infos.getName() == "result") {
+      } else if (info.getDirection() == OUT_PARAM || info.getName() == "result") {
         return QIcon(":/tulip/gui/icons/32/output.png");
       } else {
         return QIcon(":/tulip/gui/icons/32/input-output.png");
@@ -137,8 +137,8 @@ QVariant ParameterListModel::headerData(int section, Qt::Orientation orientation
 
 Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
   Qt::ItemFlags result = QAbstractItemModel::flags(index);
-  const ParameterDescription &infos = _params[index.row()];
-  bool editable = infos.isEditable();
+  const ParameterDescription &info = _params[index.row()];
+  bool editable = info.isEditable();
 
   if (index.column() == 0) {
     if (editable)
@@ -151,12 +151,12 @@ Qt::ItemFlags ParameterListModel::flags(const QModelIndex &index) const {
 
 bool ParameterListModel::setData(const QModelIndex &index, const QVariant &value, int role) {
   if (role == Qt::EditRole) {
-    const ParameterDescription &infos = _params[index.row()];
+    const ParameterDescription &info = _params[index.row()];
 
     DataType *dataType = TulipMetaTypes::qVariantToDataType(value);
 
     if (dataType)
-      _data.setData(infos.getName(), dataType);
+      _data.setData(info.getName(), dataType);
 
     return (dataType != nullptr);
   }

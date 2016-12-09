@@ -32,7 +32,7 @@ class View;
 class GlConcavePolygonItemEditor;
 
 /**
- * We define a specific interactor to show element graph infos in eltProperties
+ * We define a specific interactor to show element graph info in eltProperties
  */
 class GeographicViewShowElementInfo : public InteractorComponent {
 public:
@@ -47,9 +47,9 @@ public:
 
 protected:
   GeographicView *_view;
-  QWidget *_informationsWidget;
-  QGraphicsProxyWidget *_informationsWidgetItem;
-  GlConcavePolygonItemEditor *_editor;
+  QWidget *_informationWidget;
+  QGraphicsProxyWidget *_informationWidgetItem;
+  GlComplexPolygonItemEditor *_editor;
 
   QTableView *tableView() const;
 };

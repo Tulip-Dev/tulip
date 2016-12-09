@@ -5,7 +5,7 @@ SET(SRCS
   src/PluginLoaderDispatcher.cpp
   src/PluginLoaderReporter.cpp
   src/PluginsCenter.cpp
-  src/PluginInformationsListItem.cpp
+  src/PluginInformationListItem.cpp
   src/TulipMainWindow.cpp
   src/TulipSplashScreen.cpp
   src/TulipWelcomePage.cpp
@@ -21,7 +21,7 @@ QTX_WRAP_UI(UI_HEADERS
   designer/PluginsCenter.ui
   designer/TulipMainWindow.ui
   designer/TulipWelcomePage.ui
-  designer/PluginInformationsListItem.ui
+  designer/PluginInformationListItem.ui
   designer/TulipPerspectiveCrashHandler.ui
   designer/PerspectiveSelectionDialog.ui
 )
@@ -32,7 +32,7 @@ QTX_WRAP_CPP(MOC_SRCS
   include/PluginsCenter.h
   include/TulipMainWindow.h
   include/TulipWelcomePage.h
-  include/PluginInformationsListItem.h
+  include/PluginInformationListItem.h
   include/TulipPerspectiveProcessHandler.h
   include/TulipPerspectiveCrashHandler.h
   include/FormPost.h

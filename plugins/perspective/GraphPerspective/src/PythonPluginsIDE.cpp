@@ -45,7 +45,7 @@ static QString PYTHON_PLUGINS_FILES(PYTHON_PLUGINS_PATH + "/files");
 static QString PYTHON_MODULES_FILES(PYTHON_MODULES_PATH + "/files");
 
 static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, const QString &pluginType, const QString &pluginName,
-                                            const QString &pluginAuthor, const QString &pluginDate, const QString &pluginInfos,
+                                            const QString &pluginAuthor, const QString &pluginDate, const QString &pluginInfo,
                                             const QString &pluginRelease, const QString &pluginGroup) {
 
   QString pluginClass;
@@ -159,17 +159,17 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
 
   if (pluginGroup == "") {
     textStream << "tulipplugins.registerPlugin(\"" << pluginClassName << "\", \"" << pluginName << "\", \"" << pluginAuthor << "\", \"" << pluginDate
-               << "\", \"" << pluginInfos << "\", \"" << pluginRelease << "\")" << endl;
+               << "\", \"" << pluginInfo << "\", \"" << pluginRelease << "\")" << endl;
   } else {
     textStream << "tulipplugins.registerPluginOfGroup(\"" << pluginClassName << "\", \"" << pluginName << "\", \"" << pluginAuthor << "\", \""
-               << pluginDate << "\", \"" << pluginInfos << "\", \"" << pluginRelease << "\", \"" << pluginGroup << "\")" << endl;
+               << pluginDate << "\", \"" << pluginInfo << "\", \"" << pluginRelease << "\", \"" << pluginGroup << "\")" << endl;
   }
 
   return pluginSkeleton;
 }
 
-static QString infosMsg = QString("When the plugin development is finished, you can copy the associated Python file ") + "to <br> <b>" +
-                          PythonInterpreter::pythonPluginsPathHome + "</b>";
+static QString infoMsg = QString("When the plugin development is finished, you can copy the associated Python file ") + "to <br> <b>" +
+                         PythonInterpreter::pythonPluginsPathHome + "</b>";
 
 PythonPluginsIDE::PythonPluginsIDE(QWidget *parent)
     : QWidget(parent), _ui(new Ui::PythonPluginsIDE), _pythonInterpreter(PythonInterpreter::getInstance()), _dontTreatFocusIn(false),
@@ -198,9 +198,10 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent)
 #elif defined(_LINUX)
   if (!PythonInterpreter::pythonPluginsPath.startsWith("/tmp/.mount"))
 #endif
-    infosMsg += QString(" or <b>") + PythonInterpreter::pythonPluginsPath + "</b>";
-  infosMsg += QString("<br/> and it will be automatically loaded at Tulip startup");
-  _ui->pluginsInfosWidget->setText(infosMsg);
+    infoMsg += QString(" or <b>") + PythonInterpreter::pythonPluginsPath + "</b>";
+
+  infoMsg += QString("<br/> and it will be automatically loaded at Tulip startup");
+  _ui->pluginsInfoWidget->setText(infoMsg);
 
   connect(_ui->tabWidget, SIGNAL(currentChanged(int)), this, SLOT(currentTabChanged(int)));
 
@@ -212,7 +213,7 @@ PythonPluginsIDE::PythonPluginsIDE(QWidget *parent)
   connect(_ui->savePluginButton, SIGNAL(clicked()), this, SLOT(savePythonPlugin()));
   connect(_ui->registerPluginButton, SIGNAL(clicked()), this, SLOT(registerPythonPlugin()));
   connect(_ui->removePluginButton, SIGNAL(clicked()), this, SLOT(removePythonPlugin()));
-  connect(_ui->pluginsInfosWidget, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(scrollToEditorLine(const QUrl &)));
+  connect(_ui->pluginsInfoWidget, SIGNAL(anchorClicked(const QUrl &)), this, SLOT(scrollToEditorLine(const QUrl &)));
   connect(_ui->decreaseFontSizeButton, SIGNAL(clicked()), this, SLOT(decreaseFontSize()));
   connect(_ui->increaseFontSizeButton, SIGNAL(clicked()), this, SLOT(increaseFontSize()));
   connect(_ui->modulesTabWidget, SIGNAL(fileSaved(int)), this, SLOT(moduleSaved(int)));
@@ -266,10 +267,10 @@ bool PythonPluginsIDE::loadModule(const QString &fileName, bool clear) {
 
   int editorId = addModuleEditor(fileInfo.absoluteFilePath());
 
-  _pythonInterpreter->setConsoleWidget(_ui->pluginsInfosWidget);
+  _pythonInterpreter->setConsoleWidget(_ui->pluginsInfoWidget);
 
   if (clear) {
-    _ui->pluginsInfosWidget->clear();
+    _ui->pluginsInfoWidget->clear();
     _pythonInterpreter->clearOutputBuffers();
   }
 
@@ -277,7 +278,7 @@ bool PythonPluginsIDE::loadModule(const QString &fileName, bool clear) {
   reloadAllModules();
 
   if (!indicateErrors()) {
-    _ui->pluginsInfosWidget->setText(infosMsg);
+    _ui->pluginsInfoWidget->setText(infoMsg);
   }
 
   _pythonInterpreter->resetConsoleWidget();
@@ -309,14 +310,14 @@ void PythonPluginsIDE::saveModule(int tabIdx, const bool reload) {
   }
 
   if (reload && !_pythonInterpreter->isRunningScript()) {
-    _pythonInterpreter->setConsoleWidget(_ui->pluginsInfosWidget);
-    _ui->pluginsInfosWidget->clear();
+    _pythonInterpreter->setConsoleWidget(_ui->pluginsInfoWidget);
+    _ui->pluginsInfoWidget->clear();
     _pythonInterpreter->clearOutputBuffers();
     clearErrorIndicators();
     reloadAllModules();
 
     if (!indicateErrors()) {
-      _ui->pluginsInfosWidget->setText(infosMsg);
+      _ui->pluginsInfoWidget->setText(infoMsg);
     }
 
     _pythonInterpreter->resetConsoleWidget();
@@ -410,7 +411,7 @@ void PythonPluginsIDE::newPythonPlugin() {
     _editedPluginsName[pluginFile] = pluginCreationDialog.getPluginName();
     QString pluginSkeleton = getTulipPythonPluginSkeleton(pluginCreationDialog.getPluginClassName(), pluginCreationDialog.getPluginType(),
                                                           pluginCreationDialog.getPluginName(), pluginCreationDialog.getPluginAuthor(),
-                                                          pluginCreationDialog.getPluginDate(), pluginCreationDialog.getPluginInfos(),
+                                                          pluginCreationDialog.getPluginDate(), pluginCreationDialog.getPluginInfo(),
                                                           pluginCreationDialog.getPluginRelease(), pluginCreationDialog.getPluginGroup());
 
     getPluginEditor(editorId)->setPlainText(pluginSkeleton);
@@ -422,8 +423,8 @@ void PythonPluginsIDE::currentTabChanged(int index) {
   _ui->pluginControlFrame->setVisible(index <= 1);
 }
 
-static bool checkAndGetPluginInfosFromSrcCode(const QString &pluginCode, QString &pluginName, QString &pluginClassName, QString &pluginType,
-                                              QString &pluginClass) {
+static bool checkAndGetPluginInfoFromSrcCode(const QString &pluginCode, QString &pluginName, QString &pluginClassName, QString &pluginType,
+                                             QString &pluginClass) {
   pluginClass = "";
   pluginClassName = "";
   pluginName = "";
@@ -514,7 +515,7 @@ bool PythonPluginsIDE::loadPythonPlugin(const QString &fileName, bool clear) {
 
   file.close();
 
-  if (checkAndGetPluginInfosFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType, pluginClass)) {
+  if (checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType, pluginClass)) {
     if (pluginClassName == "" || pluginName == "") {
       QMessageBox::critical(this, "Error", "Unable to retrieve the plugin class name and the plugin name from the source code\n.");
       return false;
@@ -543,7 +544,7 @@ bool PythonPluginsIDE::loadPythonPluginFromSrcCode(const QString &moduleName, co
   QString pluginClassName = "";
   QString pluginName = "";
 
-  if (checkAndGetPluginInfosFromSrcCode(pluginSrcCode, pluginName, pluginClassName, pluginType, pluginClass)) {
+  if (checkAndGetPluginInfoFromSrcCode(pluginSrcCode, pluginName, pluginClassName, pluginType, pluginClass)) {
     if (pluginName != "" && pluginClassName != "") {
       int editorId = addPluginEditor(moduleName);
       PythonCodeEditor *codeEditor = getPluginEditor(editorId);
@@ -653,7 +654,7 @@ void PythonPluginsIDE::registerPythonPlugin(bool clear) {
   QString pluginClassName = "";
   QString pluginName = "";
 
-  checkAndGetPluginInfosFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType, pluginClass);
+  checkAndGetPluginInfoFromSrcCode(pluginCode, pluginName, pluginClassName, pluginType, pluginClass);
 
   QString oldPluginName = _editedPluginsName[pluginFile];
 
@@ -661,10 +662,10 @@ void PythonPluginsIDE::registerPythonPlugin(bool clear) {
     tlp::PluginLister::removePlugin(QStringToTlpString(oldPluginName));
   }
 
-  _pythonInterpreter->setConsoleWidget(_ui->pluginsInfosWidget);
+  _pythonInterpreter->setConsoleWidget(_ui->pluginsInfoWidget);
 
   if (clear) {
-    _ui->pluginsInfosWidget->clear();
+    _ui->pluginsInfoWidget->clear();
     _pythonInterpreter->clearOutputBuffers();
   }
 
@@ -701,7 +702,7 @@ void PythonPluginsIDE::registerPythonPlugin(bool clear) {
     }
 
     _ui->pluginStatusLabel->setText("Plugin has been successfully registered.");
-    _ui->pluginsInfosWidget->setText(infosMsg);
+    _ui->pluginsInfoWidget->setText(infoMsg);
     _editedPluginsClassName[pluginFile] = pluginClassName;
     _editedPluginsType[pluginFile] = pluginType;
     _editedPluginsName[pluginFile] = pluginName;

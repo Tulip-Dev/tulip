@@ -135,15 +135,15 @@ public:
 /** \brief Parallel coordinates interactor to show element properties when clicking on it
    *
    */
-class InteractorShowElementInfos : public ParallelCoordinatesInteractor {
+class InteractorShowElementInfo : public ParallelCoordinatesInteractor {
 
 public:
-  PLUGININFORMATION("InteractorShowElementInfos", "Tulip Team", "02/04/2009", "Show Element Infos Interactor", "1.0", "Information")
+  PLUGININFORMATION("InteractorShowElementInfo", "Tulip Team", "02/04/2009", "Show Element Info Interactor", "1.0", "Information")
 
   /**
    * Default constructor
    */
-  InteractorShowElementInfos(const tlp::PluginContext *);
+  InteractorShowElementInfo(const tlp::PluginContext *);
 
   /**
    * Construct chain of responsibility

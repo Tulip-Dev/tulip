@@ -138,8 +138,8 @@ QString PythonPluginCreationDialog::getPluginDate() const {
   return _ui->date->text();
 }
 
-QString PythonPluginCreationDialog::getPluginInfos() const {
-  return _ui->infos->text();
+QString PythonPluginCreationDialog::getPluginInfo() const {
+  return _ui->info->text();
 }
 
 QString PythonPluginCreationDialog::getPluginRelease() const {

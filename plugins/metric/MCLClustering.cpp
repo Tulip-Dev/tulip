@@ -138,7 +138,7 @@ void MCLClustering::prune(node n) {
   if (outdeg == 0)
     return;
 
-  // we use a specific vector to hold out edges needed infos
+  // we use a specific vector to hold out edges needed info
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value
@@ -164,7 +164,7 @@ void MCLClustering::prune(node n) {
 bool MCLClustering::inflate(double r, unsigned int k, node n, bool equal
                             /*, bool noprune */) {
   unsigned int sz = g.outdeg(n);
-  // we use a specific vector to hold out edges needed infos
+  // we use a specific vector to hold out edges needed info
   // in order to
   // - improve the locality of reference
   // - ease the sort of the out edges according to their outW value

@@ -65,12 +65,12 @@ private:
   struct PluginDescription {
     FactoryInterface *factory;
     std::string library;
-    Plugin *infos;
+    Plugin *info;
 
-    PluginDescription() : factory(nullptr), infos(nullptr) {
+    PluginDescription() : factory(nullptr), info(nullptr) {
     }
     ~PluginDescription() {
-      delete infos;
+      delete info;
     }
   };
 
@@ -110,7 +110,7 @@ public:
    */
   template <typename PluginType> bool pluginExists(const std::string &pluginName) {
     std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(pluginName);
-    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.infos) != nullptr));
+    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr));
   }
 
   /**
@@ -125,7 +125,7 @@ public:
    */
   template <typename PluginType> PluginType *getPluginObject(const std::string &name, tlp::PluginContext *context) {
     std::map<std::string, PluginDescription>::const_iterator it = _plugins.find(name);
-    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.infos) != nullptr))
+    return (it != _plugins.end() && (dynamic_cast<const PluginType *>(it->second.info) != nullptr))
                ? static_cast<PluginType *>(it->second.factory->createPluginObject(context))
                : nullptr;
   }
@@ -140,7 +140,7 @@ public:
     std::list<std::string> keys;
 
     for (std::map<std::string, PluginDescription>::const_iterator it = _plugins.begin(); it != _plugins.end(); ++it) {
-      PluginType *plugin = dynamic_cast<PluginType *>(it->second.infos);
+      PluginType *plugin = dynamic_cast<PluginType *>(it->second.info);
 
       if (plugin != nullptr) {
         keys.push_back(it->first);
@@ -157,15 +157,6 @@ public:
    * @return :const Plugin& The information on the plugin.
    **/
   static const Plugin &pluginInformation(const std::string &name);
-
-  /**
-   * @brief Gets more detailed information about one specific plug-in.
-   * @deprecated this function should not be used anymore, please use PluginLister::pluginInformation() instead.
-   *
-   * @param name The name of the plugin to retrieve information for.
-   * @return :const Plugin& The information on the plugin.
-   **/
-  static _DEPRECATED const Plugin &pluginInformations(const std::string &name);
 
   /**
    * @brief Checks if a given name is registered in this factory.

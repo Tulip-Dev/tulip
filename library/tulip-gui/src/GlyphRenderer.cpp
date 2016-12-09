@@ -122,8 +122,8 @@ EdgeExtremityGlyphRenderer::EdgeExtremityGlyphRenderer() : _graph(newGraph()) {
 
   for (std::list<std::string>::const_iterator it = glyphs.begin(); it != glyphs.end(); ++it) {
     std::string glyphName(*it);
-    const tlp::Plugin &infos = PluginLister::pluginInformation(glyphName);
-    int glyphIndex = infos.id();
+    const tlp::Plugin &info = PluginLister::pluginInformation(glyphName);
+    int glyphIndex = info.id();
     // Create the glyph preview
     render(glyphIndex);
   }

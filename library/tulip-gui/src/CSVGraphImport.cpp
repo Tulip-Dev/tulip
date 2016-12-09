@@ -80,7 +80,7 @@ AbstractCSVToGraphDataMapping::AbstractCSVToGraphDataMapping(Graph *graph, Eleme
 }
 
 void AbstractCSVToGraphDataMapping::init(unsigned int) {
-  // Clean old informations.
+  // Clean old information.
   valueToId.clear();
 
   // Fill map with graph values.

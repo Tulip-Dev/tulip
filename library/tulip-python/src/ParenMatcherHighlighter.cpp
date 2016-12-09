@@ -25,15 +25,15 @@ ParenInfoTextBlockData::ParenInfoTextBlockData() {
 }
 
 QVector<ParenInfo> ParenInfoTextBlockData::parens() {
-  return _parenInfos;
+  return _parenInfo;
 }
 
 void ParenInfoTextBlockData::insert(const ParenInfo &parenInfo) {
-  _parenInfos.append(parenInfo);
+  _parenInfo.append(parenInfo);
 }
 
-void ParenInfoTextBlockData::sortParenInfos() {
-  std::sort(_parenInfos.begin(), _parenInfos.end());
+void ParenInfoTextBlockData::sortParenInfo() {
+  std::sort(_parenInfo.begin(), _parenInfo.end());
 }
 
 ParenMatcherHighlighter::ParenMatcherHighlighter(QTextDocument *parent) : QSyntaxHighlighter(parent) {
@@ -96,6 +96,6 @@ void ParenMatcherHighlighter::highlightBlock(const QString &text) {
     }
   }
 
-  data->sortParenInfos();
+  data->sortParenInfo();
   setCurrentBlockUserData(data);
 }
