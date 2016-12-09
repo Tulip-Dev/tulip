@@ -39,7 +39,7 @@ public:
    * Default constructor
    */
   InteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(MouseShowElementInfos::getInteractorIcon(), "Display node or edge properties") {
+      : NodeLinkDiagramComponentInteractor(MouseShowElementInfo::getInteractorIcon(), "Display node or edge properties") {
     setPriority(StandardInteractorPriority::GetInformation);
     setConfigurationWidgetText(QString("<h3>Display node or edge properties</h3>") + "<b>Mouse left click</b> on an element to display its "
                                                                                      "properties.<br/>then <b>Mouse left click</b> on a row to edit "

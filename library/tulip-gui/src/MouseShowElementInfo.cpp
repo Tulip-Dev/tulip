@@ -99,8 +99,13 @@ bool MouseShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
             ElementType eltType = selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED ? NODE : EDGE;
 
-            tableView()->setModel(buildModel(eltType, selectedEntity.getComplexEntityId(), _informationWidget));
-            title->setText(elementName(eltType, selectedEntity.getComplexEntityId()));
+            if (eltType == NODE) {
+              tableView()->setModel(buildModel(eltType, selectedEntity.getNode().id, _informationWidget));
+              title->setText(elementName(eltType, selectedEntity.getNode().id));
+            } else {
+              tableView()->setModel(buildModel(eltType, selectedEntity.getEdge().id, _informationWidget));
+              title->setText(elementName(eltType, selectedEntity.getEdge().id));
+            }
 
             QPoint position = qMouseEv->pos();
 

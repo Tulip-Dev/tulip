@@ -49,7 +49,7 @@ protected:
   GeographicView *_view;
   QWidget *_informationWidget;
   QGraphicsProxyWidget *_informationWidgetItem;
-  GlComplexPolygonItemEditor *_editor;
+  GlConcavePolygonItemEditor *_editor;
 
   QTableView *tableView() const;
 };

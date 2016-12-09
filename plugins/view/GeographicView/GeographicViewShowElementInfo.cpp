@@ -30,7 +30,7 @@
 #include <tulip/GraphElementModel.h>
 #include <tulip/GlEntityItemModel.h>
 #include <tulip/GlConcavePolygon.h>
-#include <tulip/MouseShowElementInfos.h>
+#include <tulip/MouseShowElementInfo.h>
 #include <tulip/GlComposite.h>
 
 #include <QPropertyAnimation>
@@ -76,7 +76,7 @@ public:
    * Default constructor
    */
   GeographicViewInteractorGetInformation(const tlp::PluginContext *)
-      : NodeLinkDiagramComponentInteractor(MouseShowElementInfos::getInteractorIcon(), "Get information on nodes/edges") {
+      : NodeLinkDiagramComponentInteractor(MouseShowElementInfo::getInteractorIcon(), "Get information on nodes/edges") {
     setConfigurationWidgetText(QString("<h3>Get information interactor</h3>") + "<b>Mouse left</b> click on an element to display its properties");
     setPriority(StandardInteractorPriority::GetInformation);
   }
@@ -156,10 +156,10 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
             if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
               title->setText(trUtf8("Node"));
-              tableView()->setModel(new GraphNodeElementModel(_view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+              tableView()->setModel(new GraphNodeElementModel(_view->graph(), selectedEntity.getNode().id, _informationWidget));
             } else {
               title->setText(trUtf8("Edge"));
-              tableView()->setModel(new GraphEdgeElementModel(_view->graph(), selectedEntity.getComplexEntityId(), _informationWidget));
+              tableView()->setModel(new GraphEdgeElementModel(_view->graph(), selectedEntity.getEdge().id, _informationWidget));
             }
 
             QPoint position = qMouseEv->pos();
@@ -187,13 +187,13 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent *e) {
 
             _informationWidgetItem->setVisible(true);
             QLabel *title = _informationWidget->findChild<QLabel *>();
-            title->setText(selectedEntity.getSimpleEntity()->getParent()->findKey(selectedEntity.getSimpleEntity()).c_str());
+            title->setText(selectedEntity.getGlEntity()->getParent()->findKey(selectedEntity.getGlEntity()).c_str());
 
             delete _editor;
 
             _editor = new GlConcavePolygonItemEditor(polygon);
 
-            tableView()->setModel(new GlSimpleEntityItemModel(_editor, _informationWidget));
+            tableView()->setModel(new GlEntityItemModel(_editor, _informationWidget));
             int size = title->height() + _informationWidget->layout()->spacing() + tableView()->rowHeight(0) + tableView()->rowHeight(1) + 10;
             _informationWidget->setMaximumHeight(size);
 
