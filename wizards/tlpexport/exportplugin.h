@@ -5,7 +5,7 @@
 
 class %ProjectName:c%: public tlp::ExportModule {
 public:
-  PLUGININFORMATION("%PluginName%", "%Author%", "%Date%", "%Informations%", "%Version%", "%Group%")
+  PLUGININFORMATION("%PluginName%", "%Author%", "%Date%", "%Information%", "%Version%", "%Group%")
 
   %ProjectName:c%(tlp::PluginContext* context);
   virtual ~%ProjectName:c%();

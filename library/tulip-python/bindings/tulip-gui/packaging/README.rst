@@ -23,7 +23,7 @@ The main features provided by the bindings are the following ones:
 Release notes
 ==============
 
-Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
+Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
     * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
 

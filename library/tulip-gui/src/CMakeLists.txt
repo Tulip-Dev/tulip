@@ -26,7 +26,7 @@ SET(SRCS
   MouseNodeBuilder.cpp
   MouseSelectionEditor.cpp
   MouseSelector.cpp
-  MouseShowElementInfos.cpp
+  MouseShowElementInfo.cpp
   NodeLinkDiagramComponent.cpp
   NodeLinkDiagramComponentInteractor.cpp
   Perspective.cpp
@@ -141,7 +141,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/VectorEditor.ui
   ../designer/TulipFontWidget.ui
   ../designer/GridOptionsWidget.ui
-  ../designer/ElementInformationsWidget.ui
+  ../designer/ElementInformationWidget.ui
   ../designer/SnapshotDialog.ui
   ../designer/SceneLayersConfigWidget.ui
   ../designer/AboutTulipPage.ui

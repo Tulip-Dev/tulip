@@ -17,7 +17,7 @@ QTX_WRAP_UI(LIB_UI_HEADERS
     GeographicViewConfigWidget.ui
     ProgressWidget.ui
     AddressSelectionDialog.ui
-    ElementInformationsWidget.ui
+    ElementInformationWidget.ui
 )
 
 QTX_ADD_RESOURCES(LIB_RCC_SRCS

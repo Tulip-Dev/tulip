@@ -110,10 +110,6 @@ protected:
 PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")\
 int id() const { return ID; }
 
-#define GLYPHINFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, ID) \
-PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, "")\
-int id() const { return ID; }
-
 #endif // DOXYGEN_NOTFOR_DEVEL
 
 #endif //GLYPH_H

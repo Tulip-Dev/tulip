@@ -95,11 +95,7 @@ std::list<std::string> tlp::PluginLister::availablePlugins() {
 }
 
 const tlp::Plugin& tlp::PluginLister::pluginInformation(const std::string& name) {
-  return *(instance()->_plugins.find(name)->second.infos);
-}
-
-const tlp::Plugin& tlp::PluginLister::pluginInformations(const std::string& name) {
-  return pluginInformation(name);
+  return *(instance()->_plugins.find(name)->second.info);
 }
 
 void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
@@ -110,7 +106,7 @@ void tlp::PluginLister::registerPlugin(FactoryInterface *objectFactory) {
     PluginDescription& description = instance()->_plugins[pluginName];
     description.factory = objectFactory;
     description.library = PluginLibraryLoader::getCurrentPluginFileName();
-    description.infos = information;
+    description.info = information;
 
     if (currentLoader!=NULL) {
       currentLoader->loaded(information, information->dependencies());

@@ -768,16 +768,16 @@ static int matchLeftParenthesis(const QTextBlock &block, const std::pair<char, c
   }
 
   ParenInfoTextBlockData *data = static_cast<ParenInfoTextBlockData *>(block.userData());
-  QVector<ParenInfo> infos = data->parens();
+  QVector<ParenInfo> info = data->parens();
 
-  for (int i = dataStartIndex ; i < infos.size() ; ++i) {
-    if (infos.at(i).character == parens.second) {
+  for (int i = dataStartIndex ; i < info.size() ; ++i) {
+    if (info.at(i).character == parens.second) {
       if (dec == 0)
-        return infos.at(i).position;
+        return info.at(i).position;
       else
         --dec;
     }
-    else if (infos.at(i).character == parens.first) {
+    else if (info.at(i).character == parens.first) {
       ++dec;
     }
   }
@@ -791,18 +791,18 @@ static int matchRightParenthesis(const QTextBlock &block, const std::pair<char, 
   }
 
   ParenInfoTextBlockData *data = static_cast<ParenInfoTextBlockData *>(block.userData());
-  QVector<ParenInfo> infos = data->parens();
+  QVector<ParenInfo> info = data->parens();
 
-  int startIdx = (dataStartIndex == -1) ? infos.size()-1 : dataStartIndex;
+  int startIdx = (dataStartIndex == -1) ? info.size()-1 : dataStartIndex;
 
   for (int i = startIdx ; i >= 0 ; --i) {
-    if (infos.at(i).character == parens.first) {
+    if (info.at(i).character == parens.first) {
       if (dec == 0)
-        return infos.at(i).position;
+        return info.at(i).position;
       else
         --dec;
     }
-    else if (infos.at(i).character == parens.second) {
+    else if (info.at(i).character == parens.second) {
       ++dec;
     }
   }
@@ -820,86 +820,86 @@ void PythonCodeEditor::matchParens() {
 
   if (data) {
     int curPos = textCursor().position();
-    QVector<ParenInfo> infos = data->parens();
+    QVector<ParenInfo> info = data->parens();
 
-    for (int i = 0; i < infos.size(); ++i) {
-      ParenInfo info = infos.at(i);
+    for (int i = 0; i < info.size(); ++i) {
+      ParenInfo pinfo = info.at(i);
 
-      if (info.position == curPos - 1) {
+      if (pinfo.position == curPos - 1) {
         int match = -1;
 
-        if (info.character == ')') {
+        if (pinfo.character == ')') {
           match = matchRightParenthesis(textCursor().block(), std::make_pair('(', ')'), i, -1);
         }
-        else if (info.character == ']') {
+        else if (pinfo.character == ']') {
           match = matchRightParenthesis(textCursor().block(), std::make_pair('[', ']'), i, -1);
         }
-        else if (info.character == '}') {
+        else if (pinfo.character == '}') {
           match = matchRightParenthesis(textCursor().block(), std::make_pair('{', '}'), i, -1);
         }
 
         if (match != -1) {
-          createParenSelection(info.position);
+          createParenSelection(pinfo.position);
           createParenSelection(match);
           return;
         }
       }
 
-      if (info.position == curPos) {
+      if (pinfo.position == curPos) {
         int match = -1;
 
-        if (info.character == ')') {
+        if (pinfo.character == ')') {
           match = matchRightParenthesis(textCursor().block(), std::make_pair('(', ')'), i, -1);
         }
-        else if (info.character == ']') {
+        else if (pinfo.character == ']') {
           match = matchRightParenthesis(textCursor().block(), std::make_pair('[', ']'), i, -1);
         }
-        else if (info.character == '}') {
+        else if (pinfo.character == '}') {
           match = matchRightParenthesis(textCursor().block(), std::make_pair('{', '}'), i, -1);
         }
 
         if (match != -1) {
-          createParenSelection(info.position);
+          createParenSelection(pinfo.position);
           createParenSelection(match);
           return;
         }
       }
 
-      if (info.position == curPos) {
+      if (pinfo.position == curPos) {
         int match = -1;
 
-        if (info.character == '(') {
+        if (pinfo.character == '(') {
           match = matchLeftParenthesis(textCursor().block(), std::make_pair('(', ')'), i + 1);
         }
-        else if (info.character == '[') {
+        else if (pinfo.character == '[') {
           match = matchLeftParenthesis(textCursor().block(), std::make_pair('[', ']'), i + 1);
         }
-        else if (info.character == '{') {
+        else if (pinfo.character == '{') {
           match = matchLeftParenthesis(textCursor().block(), std::make_pair('{', '}'), i + 1);
         }
 
         if (match != -1) {
-          createParenSelection(info.position);
+          createParenSelection(pinfo.position);
           createParenSelection(match);
           return;
         }
       }
 
-      if (info.position == curPos-1) {
+      if (pinfo.position == curPos-1) {
         int match = -1;
 
-        if (info.character == '(') {
+        if (pinfo.character == '(') {
           match = matchLeftParenthesis(textCursor().block(), std::make_pair('(', ')'), i + 1);
         }
-        else if (info.character == '[') {
+        else if (pinfo.character == '[') {
           match = matchLeftParenthesis(textCursor().block(), std::make_pair('[', ']'), i + 1);
         }
-        else if (info.character == '{') {
+        else if (pinfo.character == '{') {
           match = matchLeftParenthesis(textCursor().block(), std::make_pair('{', '}'), i + 1);
         }
 
         if (match != -1) {
-          createParenSelection(info.position);
+          createParenSelection(pinfo.position);
           createParenSelection(match);
         }
       }

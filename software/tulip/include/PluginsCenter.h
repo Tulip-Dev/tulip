@@ -30,7 +30,7 @@ namespace Ui {
 class PluginsCenterData;
 }
 
-class PluginInformationsListItem;
+class PluginInformationListItem;
 
 class PluginsCenter: public QWidget {
   Q_OBJECT
@@ -40,7 +40,7 @@ class PluginsCenter: public QWidget {
   QStringList _categoryFilters;
   QString _nameFilter;
 
-  PluginInformationsListItem* _currentItem;
+  PluginInformationListItem* _currentItem;
 
 public:
   explicit PluginsCenter(QWidget *parent=NULL);

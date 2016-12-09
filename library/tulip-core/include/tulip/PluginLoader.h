@@ -60,12 +60,12 @@ struct TLP_SCOPE PluginLoader {
 
   /**
    * @brief Indicates that a plugin has been loaded sucessfully
-   * @param infos The Plugin object that has just been loaded
+   * @param info The Plugin object that has just been loaded
    * @param dependencies The plugin dependencies
    *
    * @see tlp::Dependency
    */
-  virtual void loaded(const Plugin* infos, const std::list <Dependency>& dependencies)=0;
+  virtual void loaded(const Plugin* info, const std::list <Dependency>& dependencies)=0;
 
   /**
    * @brief Indicates that an error occurred when trying to load a file.

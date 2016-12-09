@@ -208,9 +208,6 @@ std::string info() const { return INFO; }  \
 std::string release() const { return RELEASE; }\
 std::string tulipRelease() const { return TULIP_VERSION; }\
 std::string group() const { return GROUP; }
-
-#define PLUGININFORMATIONS(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)\
-PLUGININFORMATION(NAME, AUTHOR, DATE, INFO, RELEASE, GROUP)
 }
 
 //This include is here because the PluginLister needs to know the Plugin type, and the PLUGIN macro needs to know the PluginLister.

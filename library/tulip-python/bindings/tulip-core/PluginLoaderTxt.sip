@@ -36,7 +36,7 @@ public:
   
   virtual void loading(const std::string &filename);
   
-  virtual void loaded(const tlp::Plugin* infos, const std::list <tlp::Dependency>&);
+  virtual void loaded(const tlp::Plugin* info, const std::list <tlp::Dependency>&);
   
   virtual void aborted(const std::string &filename,const  std::string &erreurmsg);
   

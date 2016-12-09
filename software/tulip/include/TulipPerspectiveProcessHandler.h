@@ -37,10 +37,10 @@ public:
   void paintEvent(QPaintEvent *e);
 };
 
-struct PerspectiveProcessInfos {
-  PerspectiveProcessInfos() {}
+struct PerspectiveProcessInfo {
+  PerspectiveProcessInfo() {}
 
-  PerspectiveProcessInfos(const QString &name, const QVariantMap &args, const QString &file, time_t id):
+  PerspectiveProcessInfo(const QString &name, const QVariantMap &args, const QString &file, time_t id):
     name(name), args(args), file(file), _perspectiveId(id) {
   }
 
@@ -54,7 +54,7 @@ struct PerspectiveProcessInfos {
 class TulipPerspectiveProcessHandler: public QTcpServer {
   Q_OBJECT
 
-  QMap<QProcess *, PerspectiveProcessInfos> _processInfos;
+  QMap<QProcess *, PerspectiveProcessInfo> _processInfo;
 
   static TulipPerspectiveProcessHandler *_instance;
   TulipPerspectiveProcessHandler();

@@ -31,7 +31,7 @@ The main features provided by the bindings are the following ones:
 Release notes
 ==============
 
-Some informations regarding the Tulip-Python releases pushed on the Python Packaging Index:
+Some information regarding the Tulip-Python releases pushed on the Python Packaging Index:
 
     * **4.10.0**: based on Tulip 4.10.0 released on 08/12/2016
 
@@ -102,7 +102,7 @@ enabling to create the OpenGL visualizations available in Tulip from Python.
     # iterate over package requirements
     for r in d.requires():
       # process requirement name to get its pip package name :
-      # switch to lower case and remove version infos if any
+      # switch to lower case and remove version info if any
       s = str(r).lower()
       match = re.search('|'.join(map(re.escape, '<=>;!')), s)
       if match:

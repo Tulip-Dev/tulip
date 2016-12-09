@@ -18,7 +18,7 @@
  */
 
 #include <tulip/MouseInteractors.h>
-#include <tulip/MouseShowElementInfos.h>
+#include <tulip/MouseShowElementInfo.h>
 #include <tulip/GraphElementModel.h>
 
 #include "ScatterPlot2DInteractors.h"
@@ -103,19 +103,19 @@ QWidget *ScatterPlot2DInteractorCorrelCoeffSelector::configurationWidget() const
 }
 
 /**
- * We define a specific interactor to show element graph infos
+ * We define a specific interactor to show element graph info
  */
-class ScatterPlot2DMouseShowElementInfos : public MouseShowElementInfos {
+class ScatterPlot2DMouseShowElementInfo : public MouseShowElementInfo {
   ScatterPlot2DView* scp2DView;
 public:
-  ScatterPlot2DMouseShowElementInfos()
-    :MouseShowElementInfos(), scp2DView(NULL) {}
-  ~ScatterPlot2DMouseShowElementInfos() {}
+  ScatterPlot2DMouseShowElementInfo()
+    :MouseShowElementInfo(), scp2DView(NULL) {}
+  ~ScatterPlot2DMouseShowElementInfo() {}
 
 
   void viewChanged(View *v) {
     scp2DView = (ScatterPlot2DView *) v;
-    MouseShowElementInfos::viewChanged(v);
+    MouseShowElementInfo::viewChanged(v);
   }
 
 protected:
@@ -132,7 +132,7 @@ protected:
       return new GraphEdgeElementModel(scp2DView->graph(), elementId, parent);
     }
 
-    return MouseShowElementInfos::buildModel(elementType, elementId, parent);
+    return MouseShowElementInfo::buildModel(elementType, elementId, parent);
   }
 
   /**
@@ -147,7 +147,7 @@ protected:
       return QString("Edge") + " #" + QString::number(elementId);
     }
 
-    return MouseShowElementInfos::elementName(elementType, elementId);
+    return MouseShowElementInfo::elementName(elementType, elementId);
   }
 };
 
@@ -159,7 +159,7 @@ ScatterPlot2DInteractorGetInformation::ScatterPlot2DInteractorGetInformation(con
 
 void ScatterPlot2DInteractorGetInformation::construct() {
   push_back(new MousePanNZoomNavigator);
-  push_back(new ScatterPlot2DMouseShowElementInfos);
+  push_back(new ScatterPlot2DMouseShowElementInfo);
 }
 
 bool ScatterPlot2DInteractorGetInformation::isCompatible(const std::string &viewName) const {

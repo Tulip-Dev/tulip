@@ -28,7 +28,7 @@ INSTALL(FILES
   tulip/MouseNodeBuilder.h
   tulip/MouseSelectionEditor.h
   tulip/MouseSelector.h
-  tulip/MouseShowElementInfos.h
+  tulip/MouseShowElementInfo.h
   tulip/NodeLinkDiagramComponent.h
   tulip/NodeLinkDiagramComponentInteractor.h
   tulip/Perspective.h
