@@ -42,7 +42,7 @@ public :
 
 //===========================================================================================
 
-  void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val, tlp::Graph *graph = NULL);
+  void setAllNodeValue(const @PROPERTY_NODE_TYPE@ &val, const tlp::Graph *graph = NULL);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllNodeValue(val[, graph])
 
@@ -61,7 +61,7 @@ If the descendant graph is different from the one associated to that property, t
 
 //===========================================================================================
 
-  void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val, tlp::Graph *graph = NULL);
+  void setAllEdgeValue(const @PROPERTY_EDGE_TYPE@ &val, const tlp::Graph *graph = NULL);
 %Docstring
 tlp.@PROPERTY_TYPE@Property.setAllEdgeValue(val[, graph])
 
@@ -500,7 +500,7 @@ Sets the list of values of a particular edge.
 %End
 
 //==========================================================================================
-  void setAllNodeValue(const std::vector<@CPP_TYPE@> &val, tlp::Graph *graph = NULL);
+  void setAllNodeValue(const std::vector<@CPP_TYPE@> &val, const tlp::Graph *graph = NULL);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllNodeValue(val[, graph])
 
@@ -519,7 +519,7 @@ If the descendant graph is different from the one associated to that property, t
 
 //===========================================================================================
 
-  void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val, tlp::Graph *graph = NULL);
+  void setAllEdgeValue(const std::vector<@CPP_TYPE@> &val, const tlp::Graph *graph = NULL);
 %Docstring
 tlp.@VEC_PROPERTY_TYPE@VectorProperty.setAllEdgeValue(val[, graph])
 
@@ -945,11 +945,11 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-  virtual bool setAllNodeStringValue(const std::string & val);
+  virtual bool setAllNodeStringValue(const std::string & val, const tlp::Graph *graph = NULL);
 
 //===========================================================================================
 
-  virtual bool setAllEdgeStringValue(const std::string & val);
+  virtual bool setAllEdgeStringValue(const std::string & val, const tlp::Graph *graph = NULL);
 
 //===========================================================================================
 

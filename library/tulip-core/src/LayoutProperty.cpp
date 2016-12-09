@@ -42,7 +42,7 @@ void minV(tlp::Coord &res, const tlp::Coord &cmp) {
  * @brief This template specialization provides specific computation for min and max values of Layout properties (they are specific in that they use the control points of the edges)
  **/
 template <>
-std::pair<tlp::Coord, tlp::Coord> tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(Graph *sg) {
+std::pair<tlp::Coord, tlp::Coord> tlp::MinMaxProperty<tlp::PointType, tlp::LineType>::computeMinMaxNode(const Graph *sg) {
 #ifndef NDEBUG
   tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
 #endif
@@ -187,7 +187,7 @@ const string CoordVectorProperty::propertyTypename="vector<coord>";
 class LayoutMetaValueCalculator : public AbstractLayoutProperty::MetaValueCalculator {
 public:
   void computeMetaValue(AbstractLayoutProperty* layout,
-                        node mN, Graph* sg, Graph*) {
+                        node mN, const Graph* sg, const Graph*) {
     // nothing to do if the subgraph is not linked to the property graph
     if (sg!=layout->getGraph() && !layout->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -222,14 +222,14 @@ LayoutProperty::LayoutProperty(Graph *sg, const std::string& n) : LayoutMinMaxPr
   setMetaValueCalculator(&mvLayoutCalculator);
 }
 //======================================================
-Coord LayoutProperty::getMax(Graph *sg) {
+Coord LayoutProperty::getMax(const Graph *sg) {
   if (sg==NULL) sg=graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
   return LayoutMinMaxProperty::getNodeMax(sg);
 }
 //======================================================
-Coord  LayoutProperty::getMin(Graph *sg) {
+Coord  LayoutProperty::getMin(const Graph *sg) {
   if (sg==NULL) sg=graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -305,7 +305,7 @@ void LayoutProperty::rotateZ(const double& alpha,  Iterator<node> *itN, Iterator
   rotate(alpha, Z_ROT, itN, itE);
 }
 //=================================================================================
-void LayoutProperty::rotateX(const double &alpha, Graph *sg) {
+void LayoutProperty::rotateX(const double &alpha, const Graph *sg) {
   if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -319,7 +319,7 @@ void LayoutProperty::rotateX(const double &alpha, Graph *sg) {
   delete itE;
 }
 //=================================================================================
-void LayoutProperty::rotateY(const double &alpha, Graph *sg) {
+void LayoutProperty::rotateY(const double &alpha, const Graph *sg) {
   if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -333,7 +333,7 @@ void LayoutProperty::rotateY(const double &alpha, Graph *sg) {
   delete itE;
 }
 //=================================================================================
-void LayoutProperty::rotateZ(const double& alpha, Graph *sg) {
+void LayoutProperty::rotateZ(const double& alpha, const Graph *sg) {
   if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -377,7 +377,7 @@ void LayoutProperty::scale(const tlp::Vec3f& v, Iterator<node> *itN, Iterator<ed
   Observable::unholdObservers();
 }
 //=================================================================================
-void LayoutProperty::scale(const tlp::Vec3f& v, Graph *sg) {
+void LayoutProperty::scale(const tlp::Vec3f& v, const Graph *sg) {
   if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -435,7 +435,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Iterator<node> *itN, Iterato
   Observable::unholdObservers();
 }
 //=================================================================================
-void LayoutProperty::translate(const tlp::Vec3f& v, Graph *sg) {
+void LayoutProperty::translate(const tlp::Vec3f& v, const Graph *sg) {
   if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -449,7 +449,7 @@ void LayoutProperty::translate(const tlp::Vec3f& v, Graph *sg) {
   delete itE;
 }
 //=================================================================================
-void LayoutProperty::center(Graph *sg) {
+void LayoutProperty::center(const Graph *sg) {
 
   if (sg==NULL) sg = graph;
 
@@ -464,7 +464,7 @@ void LayoutProperty::center(Graph *sg) {
   Observable::unholdObservers();
 }
 //=================================================================================
-void LayoutProperty::center(const Vec3f &newCenter, Graph *sg) {
+void LayoutProperty::center(const Vec3f &newCenter, const Graph *sg) {
   if (sg==NULL) sg = graph;
 
   assert(sg==graph || graph->isDescendantGraph(sg));
@@ -477,7 +477,7 @@ void LayoutProperty::center(const Vec3f &newCenter, Graph *sg) {
   Observable::unholdObservers();
 }
 //=================================================================================
-void LayoutProperty::normalize(Graph *sg) {
+void LayoutProperty::normalize(const Graph *sg) {
 
   if (sg==NULL) sg = graph;
 
@@ -555,12 +555,12 @@ void LayoutProperty::setEdgeValue(const edge e, const std::vector<Coord>& v) {
   LayoutMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void LayoutProperty::setAllNodeValue(const Coord &v, Graph *graph) {
+void LayoutProperty::setAllNodeValue(const Coord &v, const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v, Graph *graph) {
+void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v, const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllEdgeValue(v, graph);
 }

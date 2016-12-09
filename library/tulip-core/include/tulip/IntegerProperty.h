@@ -51,8 +51,8 @@ public :
   }
   virtual void setNodeValue(const node n, const int &v);
   virtual void setEdgeValue(const edge e, const int &v);
-  virtual void setAllNodeValue(const int &v, Graph *graph = NULL);
-  virtual void setAllEdgeValue(const int &v, Graph *graph = NULL);
+  virtual void setAllNodeValue(const int &v, const Graph *graph = NULL);
+  virtual void setAllEdgeValue(const int &v, const Graph *graph = NULL);
 
   int compare(const node n1, const node n2) const;
   int compare(const edge e1, const edge e2) const;
@@ -64,10 +64,10 @@ public :
   virtual double getNodeDoubleDefaultValue() const {
     return (double) getNodeDefaultValue();
   }
-  virtual double getNodeDoubleMin(Graph* g = NULL) {
+  virtual double getNodeDoubleMin(const Graph* g = NULL) {
     return (double) getNodeMin(g);
   }
-  virtual double getNodeDoubleMax(Graph* g = NULL) {
+  virtual double getNodeDoubleMax(const Graph* g = NULL) {
     return (double) getNodeMax(g);
   }
   virtual double getEdgeDoubleValue(const edge e) const {
@@ -76,10 +76,10 @@ public :
   virtual double getEdgeDoubleDefaultValue() const {
     return (double) getEdgeDefaultValue();
   }
-  virtual double getEdgeDoubleMin(Graph* g = NULL) {
+  virtual double getEdgeDoubleMin(const Graph* g = NULL) {
     return (double) getEdgeMin(g);
   }
-  virtual double getEdgeDoubleMax(Graph* g = NULL) {
+  virtual double getEdgeDoubleMax(const Graph* g = NULL) {
     return (double) getEdgeMax(g);
   }
 
