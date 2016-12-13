@@ -408,7 +408,7 @@ public:
    * @param subgraph The subgraph pointed by the metanode.
    * @param metaGraph The graph who owns the meta node.
    */
-  virtual void computeMetaValue(node metaNode, const Graph* subgraph, const Graph* metaGraph)=0;
+  virtual void computeMetaValue(node metaNode, Graph* subgraph, Graph* metaGraph)=0;
 
   /**
    * @brief Sets the value of the metaedge to a computed value.
@@ -416,7 +416,7 @@ public:
    * @param it The edges represented by the meta edge.
    * @param metaGraph The graph who owns the meta edge.
    */
-  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge>* it, const Graph* metaGraph)=0;
+  virtual void computeMetaValue(edge metaEdge, tlp::Iterator<edge>* it, Graph* metaGraph)=0;
 
   /**
    * @brief Base class for computing values on meta nodes and edges.

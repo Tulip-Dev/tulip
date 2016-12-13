@@ -373,14 +373,14 @@ public:
   // PropertyInterface methods
   // mN is the meta node, sg is the corresponding subgraph
   // and mg is the graph owning mN
-  virtual void computeMetaValue(node n, const Graph* sg, const Graph* mg) {
+  virtual void computeMetaValue(node n, Graph* sg, Graph* mg) {
     if (Tprop::metaValueCalculator)
       ((typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *)
        Tprop::metaValueCalculator)->computeMetaValue(this, n, sg, mg);
   }
   // mE is the meta edge, itE is an iterator on the underlying edges
   // mg is the graph owning mE
-  virtual void computeMetaValue(edge e, tlp::Iterator<edge>* itE, const Graph* mg) {
+  virtual void computeMetaValue(edge e, tlp::Iterator<edge>* itE, Graph* mg) {
     if (Tprop::metaValueCalculator)
       ((typename tlp::AbstractProperty<Tnode,Tedge,Tprop>::MetaValueCalculator *) Tprop::metaValueCalculator)->computeMetaValue(this, e, itE, mg);
   }
@@ -406,15 +406,13 @@ public:
     // for the property prop, according to the values associated
     // to the underlying nodes i.e the nodes of the subgraph sg.
     virtual void computeMetaValue(AbstractProperty<Tnode,Tedge,Tprop>*,
-                                  node,
-                                  const Graph*, const Graph*) {}
+                                  node, Graph*, Graph*) {}
     // computes the value of the meta node mE of the graph mg
     // for the property prop, according to the values associated
     // to the underlying edges given by the iterator itE.
     // The method do not have to delete the iterator
     virtual void computeMetaValue(AbstractProperty<Tnode,Tedge,Tprop>*,
-                                  edge, tlp::Iterator<edge>*,
-                                  const Graph*) {}
+                                  edge, tlp::Iterator<edge>*, Graph*) {}
   };
 
 protected:

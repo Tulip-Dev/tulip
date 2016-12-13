@@ -31,12 +31,12 @@ const string DoubleVectorProperty::propertyTypename="vector<double>";
 //=============================================================
 // Predefined Meta Value Calculators
 //=============================================================
-typedef void (*DoubleNodePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, node mN, const Graph* sg);
+typedef void (*DoubleNodePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg);
 
-typedef void (*DoubleEdgePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE);
+typedef void (*DoubleEdgePredefinedCalculator) (AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE);
 
 // average values
-static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, node mN, const Graph* sg) {
+static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -57,7 +57,7 @@ static void computeNodeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
     metric->setNodeValue(mN, value/nbNodes);
 }
 
-static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
   unsigned int nbEdges = 0;
 
@@ -72,7 +72,7 @@ static void computeEdgeAvgValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 }
 
 // sum values
-static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, node mN, const Graph* sg) {
+static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -89,7 +89,7 @@ static void computeNodeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   metric->setNodeValue(mN, value);
 }
 
-static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
   double value = 0;
 
   while(itE->hasNext()) {
@@ -101,7 +101,7 @@ static void computeEdgeSumValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 }
 
 // max values
-static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, node mN, const Graph* sg) {
+static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -121,7 +121,7 @@ static void computeNodeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   metric->setNodeValue(mN, value);
 }
 
-static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType,  const tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
   double value = -DBL_MAX;
 
   while(itE->hasNext()) {
@@ -135,7 +135,7 @@ static void computeEdgeMaxValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
 }
 
 // min values
-static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, node mN, const Graph* sg) {
+static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg) {
   // nothing to do if the subgraph is not linked to the property graph
   if (sg!=metric->getGraph() && !metric->getGraph()->isDescendantGraph(sg)) {
 #ifndef NDEBUG
@@ -155,7 +155,7 @@ static void computeNodeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleTyp
   metric->setNodeValue(mN, value);
 }
 
-static void computeEdgeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
+static void computeEdgeMinValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE) {
   double value = DBL_MAX;
 
   while(itE->hasNext()) {
@@ -198,12 +198,12 @@ public:
      nodeCalc(nodeCalculators[(int) nCalc]),
      edgeCalc(edgeCalculators[(int) eCalc]) {}
 
-  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, node mN, const Graph* sg, Graph*) {
+  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, node mN, Graph* sg, Graph*) {
     if (nodeCalc)
       nodeCalc(metric, mN, sg);
   }
 
-  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, const tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE, const Graph*) {
+  void computeMetaValue(AbstractProperty<tlp::DoubleType, tlp::DoubleType, tlp::NumericProperty>* metric, edge mE, Iterator<edge>* itE, Graph*) {
     if (edgeCalc)
       edgeCalc(metric, mE, itE);
   }
@@ -214,7 +214,7 @@ static DoublePropertyPredefinedCalculator avgCalculator;
 
 class ViewBorderWidthCalculator :public DoubleMinMaxProperty::MetaValueCalculator {
 public:
-  virtual void computeMetaValue(AbstractProperty<DoubleType, DoubleType, const NumericProperty>* width, node mN, const Graph*, const Graph*) {
+  virtual void computeMetaValue(AbstractProperty<DoubleType, DoubleType, NumericProperty>* width, node mN, Graph*, Graph*) {
     // meta node border width is 1
     width->setNodeValue(mN, 1);
   }
