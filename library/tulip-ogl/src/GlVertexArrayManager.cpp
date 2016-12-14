@@ -935,24 +935,32 @@ void GlVertexArrayManager::propertyValueChanged(PropertyInterface *property) {
       srcAnchorShapeProperty==property || tgtAnchorShapeProperty==property || srcAnchorSizeProperty==property || tgtAnchorSizeProperty==property) {
     setHaveToComputeLayout(true);
     clearLayoutData();
+
     if (layoutProperty)
       layoutProperty->removeListener(this);
+
     if (sizeProperty)
       sizeProperty->removeListener(this);
+
     if (shapeProperty)
       shapeProperty->removeListener(this);
+
     if (rotationProperty)
       rotationProperty->removeListener(this);
+
     layoutObserverActivated=false;
   }
 
   if(edgesModified || layoutProperty==property || colorProperty==property || borderColorProperty==property || borderWidthProperty==property) {
     setHaveToComputeColor(true);
     clearColorData();
+
     if (colorProperty)
       colorProperty->removeListener(this);
+
     if (borderColorProperty)
       borderColorProperty->removeListener(this);
+
     colorObserverActivated=false;
   }
 
