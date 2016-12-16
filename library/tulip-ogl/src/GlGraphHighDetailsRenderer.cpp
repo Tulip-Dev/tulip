@@ -359,7 +359,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         if (!metric) {
           if(selectionDrawActivate) {
             if((selectionType & RenderingEdges)==0)
-              continue;        
+              continue;
 
             (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::EDGE_SELECTED);
             glLoadName(*selectionCurrentId);
