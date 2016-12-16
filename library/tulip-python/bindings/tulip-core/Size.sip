@@ -35,7 +35,7 @@ class PySize : public tlp::Vec3f {
 
   PySize(const float a0=1, const float a1=1, const float a2=1) : tlp::Vec3f(a0, a1, a2) {}
 
-  PySize(const tlp::PySize &s) : tlp::Vec3f(s) {}
+  PySize(const tlp::Vec3f &v) : tlp::Vec3f(v) {}
 
 };
 
@@ -50,7 +50,7 @@ class PySize : tlp::Vec3f /PyName=Size/ {
 
   PySize(const float a0=1, const float a1=1, const float a2=1);
 
-  PySize(const tlp::PySize &s);
+  PySize(const tlp::Vec3f &v);
 
 };
 
