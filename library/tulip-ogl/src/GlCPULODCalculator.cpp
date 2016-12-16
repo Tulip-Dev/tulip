@@ -68,26 +68,17 @@ void GlCPULODCalculator::addSimpleEntityBoundingBox(GlSimpleEntity * entity,cons
     sceneBoundingBox.expand(bb[0]);
     sceneBoundingBox.expand(bb[1]);
   }
-
-  // check if we have to render simple entities
-  if(renderingEntitiesFlag & RenderingSimpleEntities)
-    currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity,bb));
+  currentLayerLODUnit->simpleEntitiesLODVector.push_back(SimpleEntityLODUnit(entity,bb));
 }
 void GlCPULODCalculator::addNodeBoundingBox(unsigned int id,const BoundingBox& bb) {
   sceneBoundingBox.expand(bb[0]);
   sceneBoundingBox.expand(bb[1]);
-
-  // check if we have to render nodes
-  if(renderingEntitiesFlag & RenderingNodes)
-    currentLayerLODUnit->nodesLODVector.push_back(ComplexEntityLODUnit(id,bb));
+  currentLayerLODUnit->nodesLODVector.push_back(ComplexEntityLODUnit(id,bb));
 }
 void GlCPULODCalculator::addEdgeBoundingBox(unsigned int id,const BoundingBox& bb) {
   sceneBoundingBox.expand(bb[0]);
   sceneBoundingBox.expand(bb[1]);
-
-  // check if we have to render edges
-  if(renderingEntitiesFlag & RenderingEdges)
-    currentLayerLODUnit->edgesLODVector.push_back(ComplexEntityLODUnit(id,bb));
+  currentLayerLODUnit->edgesLODVector.push_back(ComplexEntityLODUnit(id,bb));
 }
 
 void GlCPULODCalculator::reserveMemoryForNodes(unsigned int numberOfNodes) {
@@ -127,7 +118,7 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
     const Matrix<float, 4>& transformMatrix,
     const Vector<int,4>& globalViewport,
     const Vector<int,4>& currentViewport) {
-  OMP_ITER_TYPE nb=layerLODUnit->simpleEntitiesLODVector.size();
+
 
 #ifdef _OPENMP
   omp_set_num_threads(omp_get_num_procs());
@@ -135,41 +126,45 @@ void GlCPULODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
   omp_set_dynamic(false);
 #endif
 
-#ifdef _OPENMP
-  #pragma omp parallel for
-#endif
+  OMP_ITER_TYPE nb=0;
 
-  for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
-    layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
-  }
-
-  nb=layerLODUnit->nodesLODVector.size();
-#ifdef _OPENMP
-  #pragma omp parallel for
-#endif
-
-  for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
-    layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
-  }
-
-  nb=layerLODUnit->edgesLODVector.size();
-
-  if(computeEdgesLOD) {
+  if((renderingEntitiesFlag & RenderingSimpleEntities)!=0) {
+    nb=layerLODUnit->simpleEntitiesLODVector.size();
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
     for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
-      layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+      layerLODUnit->simpleEntitiesLODVector[i].lod=calculateAABBSize(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
     }
   }
-  else {
+
+  if((renderingEntitiesFlag & RenderingNodes)!=0) {
+    nb=layerLODUnit->nodesLODVector.size();
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
     for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
-      layerLODUnit->edgesLODVector[i].lod=10;
+      layerLODUnit->nodesLODVector[i].lod=calculateAABBSize(layerLODUnit->nodesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+    }
+  }
+
+  if((renderingEntitiesFlag & RenderingEdges)!=0) {
+    nb=layerLODUnit->edgesLODVector.size();
+
+    if(computeEdgesLOD) {
+#ifdef _OPENMP
+      #pragma omp parallel for
+#endif
+      for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
+        layerLODUnit->edgesLODVector[i].lod=calculateAABBSize(layerLODUnit->edgesLODVector[i].boundingBox,eye,transformMatrix,globalViewport,currentViewport);
+      }
+    } else {
+#ifdef _OPENMP
+      #pragma omp parallel for
+#endif
+      for(OMP_ITER_TYPE i = 0 ; i < nb ; ++i) {
+        layerLODUnit->edgesLODVector[i].lod=10;
+      }
     }
   }
 }
