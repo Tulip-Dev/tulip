@@ -416,6 +416,20 @@ private:
   NumericProperty *_metric;
 };
 
+class GreatThanNodeEntityLODUnit {
+
+public:
+  GreatThanNodeEntityLODUnit(NumericProperty *metric) : _metric(metric) {
+  }
+
+  bool operator()(const NodeEntityLODUnit &n1, const NodeEntityLODUnit &n2) const {
+    return (_metric->getNodeDoubleValue(n1.n) > _metric->getNodeDoubleValue(n2.n));
+  }
+
+private:
+  NumericProperty *_metric;
+};
+
 class GreatThanEdge {
 
 public:
@@ -456,11 +470,6 @@ GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
 GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator)
     : _graph(nullptr), _graphElementsPickingMode(false), _lodCalculator(lodCalculator), _maxEdgePoints(0), _updateQuadTree(true) {
 
-  const map<int, Glyph *> &glyphs = GlyphsManager::instance()->getGlyphs();
-  map<int, Glyph *>::const_iterator it = glyphs.begin();
-  for (; it != glyphs.end(); ++it) {
-    _nodesGlyphs[it->first] = vector<node>();
-  }
 
   _labelsRenderer = LabelsRenderer::instance();
 
@@ -712,6 +721,11 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     return;
   }
 
+  NumericProperty *orderingProperty = _renderingParameters.elementsOrderingProperty();
+  GreatThanEdge gte(orderingProperty);
+  GreatThanNode gtn(orderingProperty);
+  GreatThanNodeEntityLODUnit gtnlod(orderingProperty);
+
   if (_updateQuadTree) {
     _lodCalculator->setSceneBoundingBox(_boundingBox);
     _lodCalculator->setGraph(_graph, &_inputData, &_renderingParameters);
@@ -726,6 +740,8 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   }
 
   _nodesGlyphs.clear();
+  int currentGlyphId = -1;
+  vector<node> currentGlyphNodes;
 
   vector<node> nodesLabelsToRender;
   vector<edge> edgesLabelsToRender;
@@ -735,7 +751,14 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   vector<node> metaNodes;
   selectedNodes.reserve(_graph->numberOfNodes());
   pointsNodes.reserve(_graph->numberOfNodes());
-  const vector<NodeEntityLODUnit> &nodesLodResult = _lodCalculator->getNodesResult();
+  vector<NodeEntityLODUnit> nodesLodResult = _lodCalculator->getNodesResult();
+
+  if (_renderingParameters.elementsOrdered() && orderingProperty) {
+    std::sort(nodesLodResult.begin(), nodesLodResult.end(), gtnlod);
+    if (!_renderingParameters.elementsOrderedDescending()) {
+      std::reverse(nodesLodResult.begin(), nodesLodResult.end());
+    }
+  }
 
   for (size_t i = 0; i < nodesLodResult.size(); ++i) {
     if (nodesLodResult[i].lod < 0 || _nodesToDiscard.find(nodesLodResult[i].n) != _nodesToDiscard.end())
@@ -759,13 +782,25 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
       std::string icon = _inputData.getElementMaterialDesignIcon()->getNodeValue(nodesLodResult[i].n);
       glyphId = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
     }
-    _nodesGlyphs[glyphId].push_back(nodesLodResult[i].n);
+
+    if (currentGlyphId != -1 && currentGlyphId != glyphId && !currentGlyphNodes.empty()) {
+      _nodesGlyphs.push_back(make_pair(currentGlyphId, currentGlyphNodes));
+      currentGlyphNodes.clear();
+    }
+    currentGlyphNodes.push_back(nodesLodResult[i].n);
+
     if (_inputData.getElementSelection()->getNodeValue(nodesLodResult[i].n) && nodesLodResult[i].lod >= 10) {
       selectedNodes.push_back(nodesLodResult[i].n);
     }
     if (_graph->isMetaNode(nodesLodResult[i].n)) {
       metaNodes.push_back(nodesLodResult[i].n);
     }
+    currentGlyphId = glyphId;
+  }
+
+  if (!currentGlyphNodes.empty()) {
+    _nodesGlyphs.push_back(make_pair(currentGlyphId, currentGlyphNodes));
+    currentGlyphNodes.clear();
   }
 
   vector<edge> pointsEdges;
@@ -810,10 +845,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     renderMetaNodes(metaNodes, camera, light);
   }
 
-  NumericProperty *orderingProperty = _renderingParameters.elementsOrderingProperty();
-  GreatThanEdge gte(orderingProperty);
-  GreatThanNode gtn(orderingProperty);
-
   if (_renderingParameters.elementsOrdered() && orderingProperty) {
 
     std::sort(pointsEdges.begin(), pointsEdges.end(), gte);
@@ -827,7 +858,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     }
   }
 
-  if (_renderingParameters.displayEdges()) {
+  if (_renderingParameters.displayEdges() && _graph->numberOfEdges() > 0) {
 
     uploadEdgesData();
 
@@ -1047,35 +1078,35 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
   vector<float> borderWidthsSelected;
   vector<Color> borderColorsSelected;
 
-  map<int, vector<node>>::const_iterator it = _nodesGlyphs.begin();
-  for (; it != _nodesGlyphs.end(); ++it) {
-    centers.reserve(it->second.size());
-    sizes.reserve(it->second.size());
-    rotationAngles.reserve(it->second.size());
-    colors.reserve(it->second.size());
-    textures.reserve(it->second.size());
-    borderWidths.reserve(it->second.size());
-    borderColors.reserve(it->second.size());
-    for (size_t i = 0; i < it->second.size(); ++i) {
-      centers.push_back(_inputData.getElementLayout()->getNodeValue(it->second[i]));
-      sizes.push_back(_inputData.getElementSize()->getNodeValue(it->second[i]));
-      rotationAngles.push_back(Vec4f(0.0f, 0.0f, 1.0f, degreeToRadian(_inputData.getElementRotation()->getNodeValue(it->second[i]))));
+
+  for (const auto &it : _nodesGlyphs) {
+    centers.reserve(it.second.size());
+    sizes.reserve(it.second.size());
+    rotationAngles.reserve(it.second.size());
+    colors.reserve(it.second.size());
+    textures.reserve(it.second.size());
+    borderWidths.reserve(it.second.size());
+    borderColors.reserve(it.second.size());
+    for (size_t i = 0; i < it.second.size(); ++i) {
+      centers.push_back(_inputData.getElementLayout()->getNodeValue(it.second[i]));
+      sizes.push_back(_inputData.getElementSize()->getNodeValue(it.second[i]));
+      rotationAngles.push_back(Vec4f(0.0f, 0.0f, 1.0f, degreeToRadian(_inputData.getElementRotation()->getNodeValue(it.second[i]))));
       if (!_graphElementsPickingMode) {
-        colors.push_back(_inputData.getElementColor()->getNodeValue(it->second[i]));
-        borderColors.push_back(_inputData.getElementBorderColor()->getNodeValue(it->second[i]));
-        textures.push_back(_inputData.getElementTexture()->getNodeValue(it->second[i]));
+        colors.push_back(_inputData.getElementColor()->getNodeValue(it.second[i]));
+        borderColors.push_back(_inputData.getElementBorderColor()->getNodeValue(it.second[i]));
+        textures.push_back(_inputData.getElementTexture()->getNodeValue(it.second[i]));
         GlTextureManager::instance()->addTextureInAtlasFromFile(textures.back());
       } else {
-        Color pickColor = uintToColor(it->second[i].id + 1);
+        Color pickColor = uintToColor(it.second[i].id + 1);
         colors.push_back(pickColor);
         borderColors.push_back(pickColor);
         textures.push_back("");
       }
-      borderWidths.push_back(_inputData.getElementBorderWidth()->getNodeValue(it->second[i]));
+      borderWidths.push_back(_inputData.getElementBorderWidth()->getNodeValue(it.second[i]));
 
-      if (!_graphElementsPickingMode && _inputData.getElementSelection()->getNodeValue(it->second[i])) {
-        centersSelected.push_back(_inputData.getElementLayout()->getNodeValue(it->second[i]));
-        sizesSelected.push_back(_inputData.getElementSize()->getNodeValue(it->second[i]));
+      if (!_graphElementsPickingMode && _inputData.getElementSelection()->getNodeValue(it.second[i])) {
+        centersSelected.push_back(_inputData.getElementLayout()->getNodeValue(it.second[i]));
+        sizesSelected.push_back(_inputData.getElementSize()->getNodeValue(it.second[i]));
         rotationAnglesSelected.push_back(Vec4f(0.0f, 0.0f, 1.0f, 0.0f));
         colorsSelected.push_back(Color());
         texturesSelected.push_back("");
@@ -1087,7 +1118,7 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
     if (_renderingParameters.billboardedNodes()) {
       GlyphsRenderer::instance()->setBillboardMode(true);
     }
-    GlyphsRenderer::instance()->renderGlyphs(camera, light, it->first, centers, sizes, colors, textures, borderWidths, borderColors, rotationAngles,
+    GlyphsRenderer::instance()->renderGlyphs(camera, light, it.first, centers, sizes, colors, textures, borderWidths, borderColors, rotationAngles,
                                              _graphElementsPickingMode);
     GlyphsRenderer::instance()->setBillboardMode(false);
 

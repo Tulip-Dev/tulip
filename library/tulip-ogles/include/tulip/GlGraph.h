@@ -150,7 +150,7 @@ private:
 
   GlBuffer *_pointsDataBuffer = nullptr;
 
-  std::map<int, std::vector<tlp::node>> _nodesGlyphs;
+  std::vector<std::pair<int, std::vector<tlp::node>>> _nodesGlyphs;
 
   LabelsRenderer *_labelsRenderer = nullptr;
 
