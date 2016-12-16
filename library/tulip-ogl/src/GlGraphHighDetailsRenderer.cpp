@@ -206,7 +206,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     lodCalculator->setRenderingEntitiesFlag(RenderingAll);
   }
   else {
-    lodCalculator->setRenderingEntitiesFlag(static_cast<RenderingEntitiesFlag>(RenderingAll|RenderingWithoutRemove));
+    lodCalculator->setRenderingEntitiesFlag(static_cast<RenderingEntitiesFlag>(selectionType|RenderingWithoutRemove));
   }
 
   // Fake scene creation
@@ -342,6 +342,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
     }
 
     if(!renderOnlyOneNode) {
+
       //draw edges
       for(vector<ComplexEntityLODUnit>::iterator it = layersLODVector[0].edgesLODVector.begin(); it!=layersLODVector[0].edgesLODVector.end(); ++it) {
         if(it->lod<=0)
@@ -358,7 +359,7 @@ void GlGraphHighDetailsRenderer::draw(float,Camera* camera) {
         if (!metric) {
           if(selectionDrawActivate) {
             if((selectionType & RenderingEdges)==0)
-              continue;
+              continue;        
 
             (*selectionIdMap)[*selectionCurrentId]=SelectedEntity(graph,it->id,SelectedEntity::EDGE_SELECTED);
             glLoadName(*selectionCurrentId);

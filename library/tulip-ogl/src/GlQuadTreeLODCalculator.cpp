@@ -330,30 +330,36 @@ void GlQuadTreeLODCalculator::computeFor3DCamera(LayerLODUnit *layerLODUnit,
         #pragma omp section
 #endif
         {
-          for(size_t i=0; i<nbSimples; ++i) {
-            entitiesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].entity);
-          }
-        }
-#ifdef _OPENMP
-        #pragma omp section
-#endif
-        {
-          for(size_t i=0; i<nbNodes; ++i) {
-            nodesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
-          }
-        }
-#ifdef _OPENMP
-        #pragma omp section
-#endif
-        {
-          for(size_t i=0; i<nbEdges; ++i) {
-            // This code is here to expand edge bonding box when we have an edge with direction (0,0,x)
-            if(layerLODUnit->edgesLODVector[i].boundingBox[0][0] == layerLODUnit->edgesLODVector[i].boundingBox[1][0] &&
-            layerLODUnit->edgesLODVector[i].boundingBox[0][1] == layerLODUnit->edgesLODVector[i].boundingBox[1][1]) {
-              layerLODUnit->edgesLODVector[i].boundingBox.expand(layerLODUnit->edgesLODVector[i].boundingBox[1]+Coord(0.01,0.01,0));
+          if((renderingEntitiesFlag & RenderingSimpleEntities)!=0) {
+            for(size_t i=0; i<nbSimples; ++i) {
+              entitiesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->simpleEntitiesLODVector[i].boundingBox,layerLODUnit->simpleEntitiesLODVector[i].entity);
             }
+          }
+        }
+#ifdef _OPENMP
+        #pragma omp section
+#endif
+        {
+          if((renderingEntitiesFlag & RenderingNodes)!=0) {
+            for(size_t i=0; i<nbNodes; ++i) {
+              nodesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->nodesLODVector[i].boundingBox,layerLODUnit->nodesLODVector[i].id);
+            }
+          }
+        }
+#ifdef _OPENMP
+        #pragma omp section
+#endif
+        {
+          if((renderingEntitiesFlag & RenderingEdges)!=0) {
+            for(size_t i=0; i<nbEdges; ++i) {
+              // This code is here to expand edge bonding box when we have an edge with direction (0,0,x)
+              if(layerLODUnit->edgesLODVector[i].boundingBox[0][0] == layerLODUnit->edgesLODVector[i].boundingBox[1][0] &&
+              layerLODUnit->edgesLODVector[i].boundingBox[0][1] == layerLODUnit->edgesLODVector[i].boundingBox[1][1]) {
+                layerLODUnit->edgesLODVector[i].boundingBox.expand(layerLODUnit->edgesLODVector[i].boundingBox[1]+Coord(0.01,0.01,0));
+              }
 
-            edgesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
+              edgesQuadTree[quadTreesVectorPosition]->insert(layerLODUnit->edgesLODVector[i].boundingBox,layerLODUnit->edgesLODVector[i].id);
+            }
           }
         }
       }
@@ -669,5 +675,7 @@ void GlQuadTreeLODCalculator::setHaveToCompute() {
   haveToInitObservers=true;
   removeObservers();
 }
+
+
 }
 
