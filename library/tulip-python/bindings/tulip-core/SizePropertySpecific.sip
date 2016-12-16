@@ -78,26 +78,4 @@ Scales the sizes of the nodes and edges provided through iterators according to 
 :type itEdges: :class:`tlp.IteratorEdge`
 %End
 
-//===========================================================================================
-
-  void __setitem__(const tlp::node node, const tlp::Vec3f &val) const;
-%MethodCode
-  if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setNodeValue(*a0, getValue(a1));
-  } else {
-    sipIsErr = throwInvalidNodeException(sipCpp->getGraph(), *a0);
-  }
-%End
-
-//===========================================================================================
-
-  void __setitem__(const tlp::edge edge, const tlp::Vec3f &val) const;
-%MethodCode
-  if (sipCpp->getGraph()->isElement(*a0)) {
-    sipCpp->setEdgeValue(*a0, getValue(a1));
-  } else {
-    sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
-  }
-%End
-
 
