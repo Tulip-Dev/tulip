@@ -166,3 +166,9 @@ QString MouseShowElementInfo::elementName(ElementType elementType, unsigned int 
   QString elementTypeLabel = elementType == NODE ? QString("Node") : QString("Edge");
   return elementTypeLabel + " #" + QString::number(elementId);
 }
+
+QIcon MouseShowElementInfo::getInteractorIcon() {
+  QIcon backIcon = FontIconManager::instance()->getMaterialDesignIcon(md::cursordefault, Qt::white, 1.0, QPointF(-20, 0));
+  QIcon frontIcon = FontIconManager::instance()->getMaterialDesignIcon(md::help, Qt::white, 0.7, QPointF(40, -20));
+  return FontIconManager::stackIcons(backIcon, frontIcon);
+}
