@@ -444,6 +444,20 @@ private:
   NumericProperty *_metric;
 };
 
+class GreatThanEdgeEntityLODUnit {
+
+public:
+  GreatThanEdgeEntityLODUnit(NumericProperty *metric) : _metric(metric) {
+  }
+
+  bool operator()(const EdgeEntityLODUnit &e1, const EdgeEntityLODUnit &e2) const {
+    return (_metric->getEdgeDoubleValue(e1.e) > _metric->getEdgeDoubleValue(e2.e));
+  }
+
+private:
+  NumericProperty *_metric;
+};
+
 GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
   if (_edgesShaders.find(edgeShape) == _edgesShaders.end()) {
     string preproDefine = ShaderManager::getShaderSrcPrefix();
@@ -468,7 +482,7 @@ GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
 }
 
 GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator)
-    : _graph(nullptr), _graphElementsPickingMode(false), _lodCalculator(lodCalculator), _maxEdgePoints(0), _updateQuadTree(true) {
+    : _graph(nullptr), _graphElementsPickingMode(false), _lodCalculator(lodCalculator), _maxEdgePoints(0), _updateLODCalculator(true) {
 
 
   _labelsRenderer = LabelsRenderer::instance();
@@ -529,7 +543,7 @@ void GlGraph::setGraph(tlp::Graph *graph) {
 
   prepareEdgesData();
 
-  _updateQuadTree = true;
+  _updateLODCalculator = true;
 
   notifyModified();
 }
@@ -672,7 +686,7 @@ void GlGraph::uploadEdgesData() {
   }
   _edgeLineRenderingDataBuffer->allocate(edgesLinesRenderingData);
 
-  _updateQuadTree = true;
+  _updateLODCalculator = true;
   _edgesDataNeedUpload = false;
 }
 
@@ -725,18 +739,12 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   GreatThanEdge gte(orderingProperty);
   GreatThanNode gtn(orderingProperty);
   GreatThanNodeEntityLODUnit gtnlod(orderingProperty);
+  GreatThanEdgeEntityLODUnit gtelod(orderingProperty);
 
-  if (_updateQuadTree) {
-    _lodCalculator->setSceneBoundingBox(_boundingBox);
-    _lodCalculator->setGraph(_graph, &_inputData, &_renderingParameters);
-    _lastGraphBoundingBox = _boundingBox;
-    _updateQuadTree = false;
-  }
+  initLODCalculator();
 
   if (!_graphElementsPickingMode) {
     _lodCalculator->compute(const_cast<Camera *>(&camera));
-  } else {
-    _lodCalculator->compute(const_cast<Camera *>(&camera), _selectionViewport);
   }
 
   _nodesGlyphs.clear();
@@ -1584,8 +1592,8 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
   }
 }
 
-bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height, std::set<tlp::node> &selectedNodes,
-                                std::set<tlp::edge> &selectedEdges, bool singleSelection) {
+bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height, std::vector<tlp::node> &selectedNodes,
+                                std::vector<tlp::edge> &selectedEdges, bool singleSelection) {
 
   selectedNodes.clear();
   selectedEdges.clear();
@@ -1595,13 +1603,51 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, 
   glViewport(0, 0, viewport[2], viewport[3]);
   unsigned int bufferSize = width * height * 4;
   unsigned char *buffer = new unsigned char[bufferSize];
-  _selectionViewport = Vec4i(x, y, width, height);
+  Vec4i selectionViewport = Vec4i(x, y, width, height);
   setGraphElementsPickingMode(true);
-  bool done = false;
-  while (!done) {
-    std::set<tlp::node> tmpNodeSet;
-    std::set<tlp::edge> tmpEdgeSet;
-    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+  initLODCalculator();
+  _lodCalculator->compute(const_cast<Camera *>(&camera), selectionViewport);
+  vector<NodeEntityLODUnit> nodesLodResult = _lodCalculator->getNodesResult();
+  vector<EdgeEntityLODUnit> edgesLodResult = _lodCalculator->getEdgesResult();
+
+  NumericProperty *orderingProperty = _renderingParameters.elementsOrderingProperty();
+
+  if (_renderingParameters.elementsOrdered() && orderingProperty) {
+    GreatThanNodeEntityLODUnit gtnlod(orderingProperty);
+    GreatThanEdgeEntityLODUnit gtelod(orderingProperty);
+    std::sort(nodesLodResult.begin(), nodesLodResult.end(), gtnlod);
+    std::sort(edgesLodResult.begin(), edgesLodResult.end(), gtelod);
+    if (!_renderingParameters.elementsOrderedDescending()) {
+      std::reverse(nodesLodResult.begin(), nodesLodResult.end());
+      std::reverse(edgesLodResult.begin(), edgesLodResult.end());
+    }
+  }
+
+  list<node> nodesInSelectionViewport;
+  set<node> nodesInSelectionViewportSet;
+  for (const NodeEntityLODUnit &nodeLod: nodesLodResult) {
+    if (nodeLod.lod >= 0) {
+      nodesInSelectionViewport.push_front(nodeLod.n);
+      nodesInSelectionViewportSet.insert(nodeLod.n);
+    }
+  }
+
+  list<edge> edgesInSelectionViewport;
+  set<edge> edgesInSelectionViewportSet;
+  for (const EdgeEntityLODUnit &edgeLod: edgesLodResult) {
+    if (edgeLod.lod >= 0) {
+      edgesInSelectionViewport.push_front(edgeLod.e);
+      edgesInSelectionViewportSet.insert(edgeLod.e);
+    }
+  }
+
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+  _edgesToDiscard = edgesInSelectionViewportSet;
+  _nodesToDiscard = nodesInSelectionViewportSet;
+
+  for (const node &n : nodesInSelectionViewport) {
+    _nodesToDiscard.erase(n);
     glClear(GL_COLOR_BUFFER_BIT);
     GlEntity::draw(camera);
     glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
@@ -1611,37 +1657,51 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, 
       if (id == 0)
         continue;
       id -= 1;
-      if (id < _graph->getRoot()->numberOfNodes()) {
-        tlp::node n = tlp::node(id);
-        if (n.isValid()) {
-          tmpNodeSet.insert(n);
-        }
-      } else {
+      tlp::node n = tlp::node(id);
+      if (n.isValid()) {
+        selectedNodes.push_back(n);
+        break;
+      }
+    }
+    _nodesToDiscard.insert(n);
+    if (!selectedNodes.empty() && singleSelection) {
+      break;
+    }
+  }
+
+  if (!singleSelection || selectedNodes.empty()) {
+    for (const edge &e : edgesInSelectionViewport) {
+      _edgesToDiscard.erase(e);
+      glClear(GL_COLOR_BUFFER_BIT);
+      GlEntity::draw(camera);
+      glReadPixels(x, y, width, height, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+      for (unsigned int i = 0; i < bufferSize; i += 4) {
+        tlp::Color color(buffer[i], buffer[i + 1], buffer[i + 2], buffer[i + 3]);
+        unsigned int id = colorToUint(color);
+        if (id == 0)
+          continue;
+        id -= 1;
         id -= _graph->getRoot()->numberOfNodes();
         tlp::edge e = tlp::edge(id);
         if (e.isValid()) {
-          tmpEdgeSet.insert(e);
+          selectedEdges.push_back(e);
+          break;
         }
       }
-    }
-    if (tmpNodeSet.empty() && tmpEdgeSet.empty()) {
-      done = true;
-    } else {
-      selectedNodes.insert(tmpNodeSet.begin(), tmpNodeSet.end());
-      selectedEdges.insert(tmpEdgeSet.begin(), tmpEdgeSet.end());
-      _nodesToDiscard = selectedNodes;
-      _edgesToDiscard = selectedEdges;
-      if (singleSelection) {
-        done = true;
+      _edgesToDiscard.insert(e);
+      if (!selectedEdges.empty() && singleSelection) {
+        break;
       }
     }
   }
+
   setGraphElementsPickingMode(false);
   _nodesToDiscard.clear();
   _edgesToDiscard.clear();
   delete[] buffer;
   fbo->release();
   delete fbo;
+
 
   return !selectedNodes.empty() || !selectedEdges.empty();
 }
@@ -1650,13 +1710,13 @@ bool GlGraph::pickNodeOrEdge(const Camera &camera, const int x, const int y, tlp
 
   pickedNode = tlp::node();
   pickedEdge = tlp::edge();
-  std::set<tlp::node> selectedNodes;
-  std::set<tlp::edge> selectedEdges;
+  std::vector<tlp::node> selectedNodes;
+  std::vector<tlp::edge> selectedEdges;
   bool ret = pickNodesAndEdges(camera, x - 1, y - 1, 3, 3, selectedNodes, selectedEdges, true);
   if (!selectedNodes.empty()) {
-    pickedNode = *(selectedNodes.begin());
+    pickedNode = selectedNodes.front();
   } else if (!selectedEdges.empty()) {
-    pickedEdge = *(selectedEdges.begin());
+    pickedEdge = selectedEdges.front();
   }
   return ret;
 }
@@ -1886,7 +1946,7 @@ void GlGraph::treatEvent(const tlp::Event &message) {
   const GlGraphRenderingParametersEvent *rpEvt = dynamic_cast<const GlGraphRenderingParametersEvent *>(&message);
   if (gEvt) {
     if (gEvt->getType() == GraphEvent::TLP_ADD_NODE || gEvt->getType() == GraphEvent::TLP_DEL_NODE) {
-      _updateQuadTree = true;
+      _updateLODCalculator = true;
       _edgesDataNeedUpload = true;
     } else if (gEvt->getType() == GraphEvent::TLP_ADD_EDGE || gEvt->getType() == GraphEvent::TLP_AFTER_SET_ENDS ||
                gEvt->getType() == GraphEvent::TLP_REVERSE_EDGE) {
@@ -1897,18 +1957,18 @@ void GlGraph::treatEvent(const tlp::Event &message) {
         _edgesToUpdate.insert(edges[i]);
       }
     } else if (gEvt->getType() == GraphEvent::TLP_DEL_EDGE) {
-      _updateQuadTree = true;
+      _updateLODCalculator = true;
     }
   } else if (pEvt && (pEvt->getProperty() == _inputData.getElementLayout() || pEvt->getProperty() == _inputData.getElementSize() ||
                       pEvt->getProperty() == _inputData.getElementColor())) {
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE && _graph->isElement(pEvt->getNode())) {
-      _updateQuadTree = true;
+      _updateLODCalculator = true;
       for (edge e : _graph->getInOutEdges(pEvt->getNode())) {
         _edgesToUpdate.insert(e);
       }
     }
     if (pEvt->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
-      _updateQuadTree = true;
+      _updateLODCalculator = true;
       for (edge e : _graph->getEdges()) {
         _edgesToUpdate.insert(e);
       }
@@ -1964,12 +2024,21 @@ void GlGraph::treatEvents(const std::vector<tlp::Event> &) {
 
     _edgesToUpdate.clear();
 
-    _updateQuadTree = true;
+    _updateLODCalculator = true;
   }
 
-  if (_updateQuadTree) {
+  if (_updateLODCalculator) {
     computeGraphBoundingBox();
   }
 
   notifyModified();
+}
+
+void GlGraph::initLODCalculator() {
+  if (_updateLODCalculator) {
+    _lodCalculator->setSceneBoundingBox(_boundingBox);
+    _lodCalculator->setGraph(_graph, &_inputData, &_renderingParameters);
+    _lastGraphBoundingBox = _boundingBox;
+    _updateLODCalculator = false;
+  }
 }

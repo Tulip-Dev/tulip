@@ -288,33 +288,55 @@ void GlMainWidget::pickNodesEdges(const int x, const int y, const int width, con
                                   std::vector<SelectedEntity> &selectedEdges, GlLayer *layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
 
-  if (pickNodes) {
-    scene.selectEntities(RenderingNodes, screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), selectedNodes,
-                         layer);
+  RenderingEntitiesFlag renderingFlags = NoRendering;
+
+  if (pickNodes && pickEdges) {
+    renderingFlags = RenderingNodesEdges;
+  } else if (pickNodes) {
+    renderingFlags = RenderingNodes;
+  } else if (pickEdges) {
+    renderingFlags = RenderingEdges;
   }
 
-  if (pickEdges) {
-    scene.selectEntities(RenderingEdges, screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height), selectedEdges,
-                         layer);
+  selectedNodes.clear();
+  selectedEdges.clear();
+
+  if (renderingFlags != NoRendering) {
+    std::vector<SelectedEntity> selectedEntities;
+    if (scene.selectEntities(renderingFlags, screenToViewport(x), screenToViewport(y),
+                             screenToViewport(width), screenToViewport(height), selectedEntities, layer)) {
+
+      for (const SelectedEntity &selectedEntity : selectedEntities) {
+        if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
+          selectedNodes.push_back(selectedEntity);
+        } else {
+          selectedEdges.push_back(selectedEntity);
+        }
+      }
+    }
   }
+
 }
 //=====================================================
 bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity, GlLayer *layer, bool pickNodes, bool pickEdges) {
   makeCurrent();
   vector<SelectedEntity> selectedEntities;
+  RenderingEntitiesFlag renderingFlags = NoRendering;
 
-  if (pickNodes &&
-      scene.selectEntities(RenderingNodes, screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3), screenToViewport(3),
-                           selectedEntities, layer)) {
-    selectedEntity = selectedEntities[0];
-    return true;
+  if (pickNodes && pickEdges) {
+    renderingFlags = RenderingNodesEdges;
+  } else if (pickNodes) {
+    renderingFlags = RenderingNodes;
+  } else if (pickEdges) {
+    renderingFlags = RenderingEdges;
   }
 
-  if (pickEdges &&
-      scene.selectEntities(RenderingEdges, screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3), screenToViewport(3),
-                           selectedEntities, layer)) {
-    selectedEntity = selectedEntities[0];
-    return true;
+  if (renderingFlags != NoRendering) {
+    if (scene.selectEntities(renderingFlags, screenToViewport(x - 1), screenToViewport(y - 1), screenToViewport(3), screenToViewport(3),
+                             selectedEntities, layer, true)) {
+      selectedEntity = selectedEntities.front();
+      return true;
+    }
   }
 
   return false;

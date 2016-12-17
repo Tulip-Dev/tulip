@@ -652,6 +652,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
   fbo->bind();
 
   bool done = false;
+  set<GlEntity *> currentSelectedEntities;
   while (!done) {
     set<GlEntity *> tmpSelectedEntities;
     draw();
@@ -663,19 +664,17 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
         continue;
       GlEntity *entity = GlEntity::fromId(id);
       if (entity) {
+        if (currentSelectedEntities.find(entity) == currentSelectedEntities.end() && tmpSelectedEntities.find(entity) == tmpSelectedEntities.end()) {
+          selectedEntitiesInternal.push_back(SelectedEntity(entity));
+        }
         tmpSelectedEntities.insert(entity);
         entity->setVisible(false);
       }
     }
-    if (tmpSelectedEntities.empty()) {
+    if (tmpSelectedEntities.empty() || singleSelection) {
       done = true;
     } else {
-      for (set<GlEntity *>::iterator it = tmpSelectedEntities.begin(); it != tmpSelectedEntities.end(); ++it) {
-        selectedEntitiesInternal.push_back(SelectedEntity(*it));
-      }
-      if (singleSelection) {
-        done = true;
-      }
+      currentSelectedEntities.insert(tmpSelectedEntities.begin(), tmpSelectedEntities.end());
     }
   }
   delete[] buffer;
@@ -687,25 +686,28 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
     GlEntity *entity = selectedEntitiesInternal[i].getGlEntity();
     entity->setVisible(true);
     GlGraph *glGraph = dynamic_cast<GlGraph *>(entity);
+
     if (!glGraph && (type & RenderingGlEntities)) {
       selectedEntities.push_back(selectedEntitiesInternal[i]);
     } else if (glGraph && ((type & RenderingNodes) || (type & RenderingEdges))) {
-      set<node> selectedNodes;
-      set<edge> selectedEdges;
+      vector<node> selectedNodes;
+      vector<edge> selectedEdges;
       Camera *camera = glGraph->getLayer()->getCamera();
       camera->initGl();
+      glGraph->getLODCalculator()->setRenderingEntitiesFlag(type);
       glGraph->pickNodesAndEdges(*camera, x, y, width, height, selectedNodes, selectedEdges, singleSelection);
       if (!selectedNodes.empty() && (type & RenderingNodes)) {
-        for (set<node>::iterator it = selectedNodes.begin(); it != selectedNodes.end(); ++it) {
-          selectedEntities.push_back(SelectedEntity(SelectedEntity::NODE_SELECTED, glGraph, it->id));
+        for (const node &n : selectedNodes) {
+          selectedEntities.push_back(SelectedEntity(SelectedEntity::NODE_SELECTED, glGraph, n.id));
         }
       }
       if (!selectedEdges.empty() && (type & RenderingEdges)) {
-        for (set<edge>::iterator it = selectedEdges.begin(); it != selectedEdges.end(); ++it) {
-          selectedEntities.push_back(SelectedEntity(SelectedEntity::EDGE_SELECTED, glGraph, it->id));
+        for (const edge &e : selectedEdges) {
+          selectedEntities.push_back(SelectedEntity(SelectedEntity::EDGE_SELECTED, glGraph, e.id));
         }
       }
     }
+    glGraph->getLODCalculator()->setRenderingEntitiesFlag(RenderingNodesEdges);
   }
 
   if (layer && layer->getScene() == this) {

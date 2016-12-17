@@ -74,8 +74,8 @@ public:
 
   void draw(const Camera &camera, const Light &light, bool pickingMode = false);
 
-  bool pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height, std::set<tlp::node> &selectedNodes,
-                         std::set<tlp::edge> &selectedEdges, bool singleSelection = false);
+  bool pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height, std::vector<tlp::node> &selectedNodes,
+                         std::vector<tlp::edge> &selectedEdges, bool singleSelection = false);
 
   bool pickNodeOrEdge(const Camera &camera, const int x, const int y, tlp::node &pickedNode, tlp::edge &pickedEdge);
 
@@ -127,6 +127,8 @@ private:
 
   tlp::Size getEdgeSize(tlp::edge e);
 
+  void initLODCalculator();
+
   tlp::Graph *_graph = nullptr;
 
   GlShaderProgram *_flatShader = nullptr;
@@ -162,7 +164,6 @@ private:
   std::set<tlp::node> _nodesToDiscard;
 
   GlLODCalculator *_lodCalculator;
-  tlp::Vec4i _selectionViewport;
 
   std::map<tlp::edge, std::vector<tlp::Vec3f>> _srcEdgeExtremitiesData;
   std::map<tlp::edge, std::vector<tlp::Vec3f>> _tgtEdgeExtremitiesData;
@@ -174,7 +175,7 @@ private:
   GlGraphInputData _inputData;
   GlGraphRenderingParameters _renderingParameters;
 
-  bool _updateQuadTree = true;
+  bool _updateLODCalculator = true;
   bool _edgesDataNeedUpload = true;
 
   std::set<PropertyInterface *> _observedProperties;
