@@ -25,6 +25,7 @@
 
 #include <tulip/Color.h>
 #include <tulip/Coord.h>
+#include <tulip/Size.h>
 #include <tulip/GlComplexeEntity.h>
 
 #include <vector>
@@ -96,10 +97,19 @@ public:
   void getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray);
 
 protected :
+  unsigned int oldId;
+  
+  // initialize the data member below
+  void init(const GlGraphInputData* data);
+  
+  tlp::Coord coord;
+  int glyph;
+  tlp::Size size;
+  float rot;
+  bool selected;
 
   static GlLabel *label;
   static GlBox* selectionBox;
-
 };
 
 }

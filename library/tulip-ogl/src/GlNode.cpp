@@ -17,6 +17,7 @@
  *
  */
 
+#include <climits>
 #include <tulip/GlNode.h>
 
 #include <tulip/Coord.h>
@@ -48,7 +49,7 @@ using namespace std;
 
 namespace tlp {
 
-GlNode::GlNode(unsigned int id):id(id) {
+  GlNode::GlNode(unsigned int id):id(id),oldId(UINT_MAX) {
   if(!label)
     label=new GlLabel();
 
@@ -58,23 +59,33 @@ GlNode::GlNode(unsigned int id):id(id) {
   }
 }
 
-BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
-  node n(id);
-  int nodeRot = data->getElementRotation()->getNodeValue(n);
-  const Size& nodeSize = data->getElementSize()->getNodeValue(n);
-  const Coord& nodeCoord = data->getElementLayout()->getNodeValue(n);
+void GlNode::init(const GlGraphInputData* data) {
+  if (id != oldId) {
+    node n(id);
+    oldId = id;
+    coord = data->getElementLayout()->getNodeValue(n);
+    glyph = data->getElementShape()->getNodeValue(n);
+    size = data->getElementSize()->getNodeValue(n);
+    rot = data->getElementRotation()->getNodeValue(n);
+    selected = data->getElementSelected()->getNodeValue(n);
+  }
+}
 
-  if(nodeRot==0) {
+
+BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
+  init(data);
+
+  if(rot==0) {
     BoundingBox box;
-    box.expand(nodeCoord-nodeSize/2.f);
-    box.expand(nodeCoord+nodeSize/2.f);
+    box.expand(coord-size/2.f);
+    box.expand(coord+size/2.f);
     assert(box.isValid());
     return box;
   }
   else {
-    float cosAngle=cos((float)nodeRot/180.*M_PI);
-    float sinAngle=sin((float)nodeRot/180.*M_PI);
-    Coord tmp1(nodeSize/2.f);
+    float cosAngle=cos(rot/180.*M_PI);
+    float sinAngle=sin(rot/180.*M_PI);
+    Coord tmp1(size/2.f);
     Coord tmp2(tmp1[0] ,-tmp1[1], tmp1[2]);
     Coord tmp3(-tmp1[0],-tmp1[1],-tmp1[2]);
     Coord tmp4(-tmp1[0], tmp1[1],-tmp1[2]);
@@ -83,10 +94,10 @@ BoundingBox GlNode::getBoundingBox(const GlGraphInputData* data) {
     tmp3=Coord(tmp3[0]*cosAngle-tmp3[1]*sinAngle,tmp3[0]*sinAngle+tmp3[1]*cosAngle,tmp3[2]);
     tmp4=Coord(tmp4[0]*cosAngle-tmp4[1]*sinAngle,tmp4[0]*sinAngle+tmp4[1]*cosAngle,tmp4[2]);
     BoundingBox bb;
-    bb.expand(nodeCoord+tmp1);
-    bb.expand(nodeCoord+tmp2);
-    bb.expand(nodeCoord+tmp3);
-    bb.expand(nodeCoord+tmp4);
+    bb.expand(coord+tmp1);
+    bb.expand(coord+tmp2);
+    bb.expand(coord+tmp3);
+    bb.expand(coord+tmp4);
     return bb;
   }
 }
@@ -96,23 +107,18 @@ void GlNode::acceptVisitor(GlSceneVisitor *visitor) {
 }
 
 void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
+  init(data);
   const Color& colorSelect2=data->parameters->getSelectionColor();
 
   glEnable(GL_CULL_FACE);
 
   node n=node(id);
 
-  ColorProperty *colP=data->getElementColor();
-
   if(data->getGraph()->isMetaNode(n)) {
     data->getMetaNodeRenderer()->render(n,lod,camera);
   }
 
-  const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
-
-  Size nodeSize = data->getElementSize()->getNodeValue(n);
-
-  const Color& fillColor = colP->getNodeValue(n);
+  const Color& fillColor = data->getElementColor()->getNodeValue(n);
 
   const Color& strokeColor = data->getElementBorderColor()->getNodeValue(n);
 
@@ -139,8 +145,6 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     glPassThrough(id); //id of the node for the feed back mode
   }
 
-  bool selected = data->getElementSelected()->getNodeValue(n);
-
   if (lod < 10.0) { //less than four pixel on screen, we use points instead of glyphs
     if (lod < 1) lod = 1;
 
@@ -148,18 +152,12 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
       data->getGlVertexArrayManager()->activatePointNodeDisplay(this, selected);
     }
     else {
-
-      Color pointColor = data->getElementColor()->getNodeValue(n);
-
-      if (data->getElementBorderWidth()->getNodeValue(n) > 0) {
-        pointColor = data->getElementBorderColor()->getNodeValue(n);
-      }
-
       glDisable(GL_LIGHTING);
-      setColor(selected ? colorSelect2 : pointColor);
+      setColor(selected ? colorSelect2 :
+	       ((data->getElementBorderWidth()->getNodeValue(n) > 0) ? data->getElementBorderColor()->getNodeValue(n) : data->getElementColor()->getNodeValue(n)));
       glPointSize(4);
       glBegin(GL_POINTS);
-      glVertex3f(nodeCoord[0], nodeCoord[1], nodeCoord[2]+nodeSize[2]/2.);
+      glVertex3f(coord[0], coord[1], coord[2]+size[2]/2.);
       glEnd();
       glEnable(GL_LIGHTING);
     }
@@ -171,8 +169,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
   if (!data->parameters->isDisplayNodes())
     return;
 
-  float rot = data->getElementRotation()->getNodeValue(n);
-
+  Size nodeSize(size);
   // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
   // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after scale will be (0,0,0) and we will have light problem)
   if(nodeSize[2]==0)
@@ -195,15 +192,13 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     noShaderGlyphs.insert(NodeShape::FontAwesomeIcon);
   }
 
-  int glyph = data->getElementShape()->getNodeValue(n);
-
   if (data->getGlGlyphRenderer()->renderingHasStarted() && noShaderGlyphs.find(glyph) == noShaderGlyphs.end()) {
     data->getGlGlyphRenderer()->addNodeGlyphRendering(data->glyphs.get(glyph),
-        n, lod, nodeCoord, nodeSize, rot, selected);
+        n, lod, coord, nodeSize, rot, selected);
   }
   else {
 
-    if (data->getElementSelected()->getNodeValue(n)) {
+    if (selected) {
       glStencilFunc(GL_LEQUAL,data->parameters->getSelectedNodesStencil(),0xFFFF);
     }
     else {
@@ -212,7 +207,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 
     //draw a glyph or make recursive call for meta nodes
     glPushMatrix();
-    glTranslatef(nodeCoord[0], nodeCoord[1], nodeCoord[2]);
+    glTranslatef(coord[0], coord[1], coord[2]);
     glRotatef(rot, 0., 0., 1.);
 
     glScalef(nodeSize[0], nodeSize[1],nodeSize[2]);
@@ -223,7 +218,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
       selectionBox->draw(10,NULL);
     }
 
-    data->glyphs.get(data->getElementShape()->getNodeValue(n))->draw(n,lod);
+    data->glyphs.get(glyph)->draw(n,lod);
 
     glPopMatrix();
 
@@ -237,8 +232,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
 }
 
 void GlNode::drawLabel(bool drawSelect,OcclusionTest* test,const GlGraphInputData* data,float lod) {
-  node n=node(id);
-  bool selected=data->getElementSelected()->getNodeValue(n);
+  init(data);
 
   if(drawSelect!=selected)
     return;
@@ -251,15 +245,13 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data) {
 }
 
 void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lod,Camera *camera) {
-
+  init(data);
   node n(id);
 
   // If glyph cannot render label: return
-  if(data->glyphs.get(data->getElementShape()->getNodeValue(n))->renderLabel())
+  if(data->glyphs.get(glyph)->renderLabel())
     return;
 
-  // node is selected
-  bool selected=data->getElementSelected()->getNodeValue(n);
   // Color of the label : selected or not
   const Color& fontColor = selected ? data->parameters->getSelectionColor() :data->getElementLabelColor()->getNodeValue(n);
   const Color& fontBorderColor = selected ? data->parameters->getSelectionColor() : data->getElementLabelBorderColor()->getNodeValue(n);
@@ -287,12 +279,10 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   if(selected)
     fontSize+=2;
 
-  const Coord &nodeCoord = data->getElementLayout()->getNodeValue(n);
-  const Size  &nodeSize  = data->getElementSize()->getNodeValue(n);
   int labelPos = data->getElementLabelPosition()->getNodeValue(n);
 
   BoundingBox includeBB;
-  data->glyphs.get(data->getElementShape()->getNodeValue(n))->getTextBoundingBox(includeBB,n);
+  data->glyphs.get(glyph)->getTextBoundingBox(includeBB,n);
   Coord centerBB(includeBB.center());
   Vec3f sizeBB = includeBB[1]-includeBB[0];
 
@@ -300,10 +290,10 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   label->setOutlineColor(fontBorderColor);
   label->setOutlineSize(fontBorderWidth);
   label->setText(tmp);
-  label->setTranslationAfterRotation(centerBB*nodeSize);
-  label->setSize(Size(nodeSize[0]*sizeBB[0],nodeSize[1]*sizeBB[1],0));
-  label->setSizeForOutAlign(Size(nodeSize[0],nodeSize[1],0));
-  label->rotate(0,0,data->getElementRotation()->getNodeValue(n));
+  label->setTranslationAfterRotation(centerBB*size);
+  label->setSize(Size(size[0]*sizeBB[0],size[1]*sizeBB[1],0));
+  label->setSizeForOutAlign(Size(size[0],size[1],0));
+  label->rotate(0,0,rot);
   label->setAlignment(labelPos);
   label->setScaleToSize(data->parameters->isLabelScaled());
   label->setUseLODOptimisation(true,this->getBoundingBox(data));
@@ -315,38 +305,34 @@ void GlNode::drawLabel(OcclusionTest* test,const GlGraphInputData* data,float lo
   label->setBillboarded(data->parameters->getLabelsAreBillboarded());
 
   if(includeBB[1][2]!=0 && !data->parameters->getLabelsAreBillboarded())
-    label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]+nodeSize[2]/2.));
+    label->setPosition(Coord(coord[0],coord[1],coord[2]+size[2]/2.));
   else
-    label->setPosition(Coord(nodeCoord[0],nodeCoord[1],nodeCoord[2]));
+    label->setPosition(Coord(coord[0],coord[1],coord[2]));
 
   label->drawWithStencil(lod,camera);
 }
 
 void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &pointsCoordsArray,std::vector<Color> &pointsColorsArray) {
-  node n=node(id);
-  const Coord &nodeCoord = inputData->getElementLayout()->getNodeValue(n);
-  const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
-  const Color& borderColor = inputData->getElementBorderColor()->getNodeValue(n);
-  pointsCoordsArray.push_back(nodeCoord);
+  init(inputData);
+  pointsCoordsArray.push_back(coord);
 
+  node n=node(id);
   if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
-    pointsColorsArray.push_back(borderColor);
+    pointsColorsArray.push_back(inputData->getElementBorderColor()->getNodeValue(n));
   }
   else {
-    pointsColorsArray.push_back(fillColor);
+    pointsColorsArray.push_back(inputData->getElementColor()->getNodeValue(n));
   }
 }
 
 void GlNode::getColor(GlGraphInputData *inputData,std::vector<Color> &pointsColorsArray) {
   node n=node(id);
-  const Color& fillColor = inputData->getElementColor()->getNodeValue(n);
-  const Color& borderColor = inputData->getElementBorderColor()->getNodeValue(n);
 
   if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
-    pointsColorsArray.push_back(borderColor);
+    pointsColorsArray.push_back(inputData->getElementBorderColor()->getNodeValue(n));
   }
   else {
-    pointsColorsArray.push_back(fillColor);
+    pointsColorsArray.push_back(inputData->getElementColor()->getNodeValue(n));
   }
 }
 }
