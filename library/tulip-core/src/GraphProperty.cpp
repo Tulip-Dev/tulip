@@ -52,7 +52,7 @@ GraphProperty::~GraphProperty() {
   }
 }
 //==============================
-void GraphProperty::setAllNodeValue(const GraphType::RealType &g, Graph *graph) {
+void GraphProperty::setAllNodeValue(const GraphType::RealType &g, const Graph *graph) {
   // remove all observed graphs if any
   Iterator<node> *it = getNonDefaultValuatedNodes(graph);
 
@@ -137,7 +137,7 @@ bool GraphProperty::setNodeStringValue(const node, const std::string &) {
 }
 //=============================================================
 // disabled use setAllNodeValue instead
-bool GraphProperty::setAllNodeStringValue(const std::string &, tlp::Graph *) {
+bool GraphProperty::setAllNodeStringValue(const std::string &, const tlp::Graph *) {
   return false;
 }
 //=============================================================
@@ -147,7 +147,7 @@ bool GraphProperty::setEdgeStringValue(const edge, const std::string &) {
 }
 //=============================================================
 // disabled use setAllEdgeValue instead
-bool GraphProperty::setAllEdgeStringValue(const std::string &, tlp::Graph *) {
+bool GraphProperty::setAllEdgeStringValue(const std::string &, const tlp::Graph *) {
   return false;
 }
 //=============================================================
