@@ -98,10 +98,10 @@ public:
 
 protected :
   unsigned int oldId;
-  
+
   // initialize the data member below
   void init(const GlGraphInputData* data);
-  
+
   tlp::Coord coord;
   int glyph;
   tlp::Size size;

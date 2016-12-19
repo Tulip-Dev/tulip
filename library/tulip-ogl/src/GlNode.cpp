@@ -49,7 +49,7 @@ using namespace std;
 
 namespace tlp {
 
-  GlNode::GlNode(unsigned int id):id(id),oldId(UINT_MAX) {
+GlNode::GlNode(unsigned int id):id(id),oldId(UINT_MAX) {
   if(!label)
     label=new GlLabel();
 
@@ -154,7 +154,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     else {
       glDisable(GL_LIGHTING);
       setColor(selected ? colorSelect2 :
-	       ((data->getElementBorderWidth()->getNodeValue(n) > 0) ? data->getElementBorderColor()->getNodeValue(n) : data->getElementColor()->getNodeValue(n)));
+               ((data->getElementBorderWidth()->getNodeValue(n) > 0) ? data->getElementBorderColor()->getNodeValue(n) : data->getElementColor()->getNodeValue(n)));
       glPointSize(4);
       glBegin(GL_POINTS);
       glVertex3f(coord[0], coord[1], coord[2]+size[2]/2.);
@@ -170,6 +170,7 @@ void GlNode::draw(float lod,const GlGraphInputData* data,Camera* camera) {
     return;
 
   Size nodeSize(size);
+
   // If node size in z is equal to 0 we have to scale with FLT_EPSILON to preserve normal
   // (because if we do a scale of (x,y,0) and if we have a normal like (0,0,1) the new normal after scale will be (0,0,0) and we will have light problem)
   if(nodeSize[2]==0)
@@ -317,6 +318,7 @@ void GlNode::getPointAndColor(GlGraphInputData *inputData,std::vector<Coord> &po
   pointsCoordsArray.push_back(coord);
 
   node n=node(id);
+
   if (inputData->getElementBorderWidth()->getNodeValue(n) > 0) {
     pointsColorsArray.push_back(inputData->getElementBorderColor()->getNodeValue(n));
   }
