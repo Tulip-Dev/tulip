@@ -17,7 +17,6 @@ FILE(WRITE ${JSFILE} "
   if(!tulip.modulePrefixURL) tulip.modulePrefixURL = scriptPath;
   if(!tulip.filePackagePrefixURL) tulip.filePackagePrefixURL = scriptPath;
   if(!tulip.memoryInitializerPrefixURL) tulip.memoryInitializerPrefixURL = scriptPath;
-  tulip.loadingFailed = false;
   tulip.wasm = false;
   tulip.vizFeatures = false;
   tulip.isLoaded = function() {return false;};
@@ -35,6 +34,9 @@ ENDIF(USE_WASM)
 FILE(APPEND ${JSFILE} "
   tulip.init = function() {
     return new Promise(function(resolve, reject) {
+      if (tulip.isLoaded()) {
+        resolve();
+      }
       function checkTulipIsLoaded() {
         if (tulip.isLoaded()) {
           resolve();
@@ -65,5 +67,8 @@ FILE(APPEND ${JSFILE} "
       checkTulipIsLoaded();
     });
   };
+  if (workerMode) {
+    tulip.init();
+  }
   if (typeof define === 'function' && define.amd) define(tulip); else if (typeof module === 'object' && module.exports) module.exports = tulip;
 }();")
