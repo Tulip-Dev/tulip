@@ -642,7 +642,7 @@ Module['FS_createPath']('/', 'resources', true, true);
   }
 
  }
- loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 152796, "filename": "/resources/fontawesome-webfont.ttf"}, {"audio": 0, "start": 152796, "crunched": 0, "end": 153594, "filename": "/resources/cylinderTexture.png"}, {"audio": 0, "start": 153594, "crunched": 0, "end": 166107, "filename": "/resources/radialGradientTexture.png"}, {"audio": 0, "start": 166107, "crunched": 0, "end": 923183, "filename": "/resources/font.ttf"}, {"audio": 0, "start": 923183, "crunched": 0, "end": 1168859, "filename": "/resources/materialdesignicons-webfont.ttf"}], "remote_package_size": 891997, "package_uuid": "4268d60b-9673-4303-a746-85dbe4fa8249"});
+ loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 152796, "filename": "/resources/fontawesome-webfont.ttf"}, {"audio": 0, "start": 152796, "crunched": 0, "end": 153594, "filename": "/resources/cylinderTexture.png"}, {"audio": 0, "start": 153594, "crunched": 0, "end": 166107, "filename": "/resources/radialGradientTexture.png"}, {"audio": 0, "start": 166107, "crunched": 0, "end": 923183, "filename": "/resources/font.ttf"}, {"audio": 0, "start": 923183, "crunched": 0, "end": 1168859, "filename": "/resources/materialdesignicons-webfont.ttf"}], "remote_package_size": 891997, "package_uuid": "9bf9afea-6f8d-4644-8aa5-a66a3d9d25fb"});
 
 })();
 
@@ -20348,43 +20348,48 @@ if (workerMode) {
 
   tulip.wasm = true;
 
+  var tulipInit = false;
+  var tulipInitError = null;
   tulip.init = function() {
     return new Promise(function(resolve, reject) {
-      if (tulip.isLoaded()) {
-        resolve();
+      if (!tulipInit) {
+        tulipInit = true;
+        if (!tulip.wasm) {
+          try {
+            tulip = tulipjs(tulip);
+          } catch (e) {
+            tulipInitError = e;
+            reject(e);
+          }
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', tulip.modulePrefixURL + 'tulip.wasm');
+          xhr.responseType = 'arraybuffer';
+          xhr.onload = function() {
+            tulip.wasmBinary = xhr.response;
+            try {
+              tulip = tulipjs(tulip);
+            } catch (e) {
+              tulipInitError = e;
+              reject(e);
+            }
+          };
+          xhr.send(null);
+        }
       }
       function checkTulipIsLoaded() {
-        if (tulip.isLoaded()) {
+        if (tulipInitError) {
+          reject(tulipInitError);
+        } else if (tulip.isLoaded()) {
           resolve();
         } else {
           setTimeout(checkTulipIsLoaded);
         }
       }
-      if (!tulip.wasm) {
-        try {
-          tulip = tulipjs(tulip);
-        } catch (e) {
-          reject(e);
-        }
-      } else {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', tulip.modulePrefixURL + 'tulip.wasm');
-        xhr.responseType = 'arraybuffer';
-        xhr.onload = function() {
-          tulip.wasmBinary = xhr.response;
-          try {
-            tulip = tulipjs(tulip);
-          } catch (e) {
-            reject(e);
-          }
-        };
-        xhr.send(null);
-      }
       checkTulipIsLoaded();
     });
   };
-  if (workerMode) {
-    tulip.init();
-  }
+
   if (typeof define === 'function' && define.amd) define(tulip); else if (typeof module === 'object' && module.exports) module.exports = tulip;
+
 }();

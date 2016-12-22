@@ -32,43 +32,48 @@ FILE(APPEND ${JSFILE} "
 ")
 ENDIF(USE_WASM)
 FILE(APPEND ${JSFILE} "
+  var tulipInit = false;
+  var tulipInitError = null;
   tulip.init = function() {
     return new Promise(function(resolve, reject) {
-      if (tulip.isLoaded()) {
-        resolve();
+      if (!tulipInit) {
+        tulipInit = true;
+        if (!tulip.wasm) {
+          try {
+            tulip = tulipjs(tulip);
+          } catch (e) {
+            tulipInitError = e;
+            reject(e);
+          }
+        } else {
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', tulip.modulePrefixURL + 'tulip.wasm');
+          xhr.responseType = 'arraybuffer';
+          xhr.onload = function() {
+            tulip.wasmBinary = xhr.response;
+            try {
+              tulip = tulipjs(tulip);
+            } catch (e) {
+              tulipInitError = e;
+              reject(e);
+            }
+          };
+          xhr.send(null);
+        }
       }
       function checkTulipIsLoaded() {
-        if (tulip.isLoaded()) {
+        if (tulipInitError) {
+          reject(tulipInitError);
+        } else if (tulip.isLoaded()) {
           resolve();
         } else {
           setTimeout(checkTulipIsLoaded);
         }
       }
-      if (!tulip.wasm) {
-        try {
-          tulip = tulipjs(tulip);
-        } catch (e) {
-          reject(e);
-        }
-      } else {
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', tulip.modulePrefixURL + 'tulip.wasm');
-        xhr.responseType = 'arraybuffer';
-        xhr.onload = function() {
-          tulip.wasmBinary = xhr.response;
-          try {
-            tulip = tulipjs(tulip);
-          } catch (e) {
-            reject(e);
-          }
-        };
-        xhr.send(null);
-      }
       checkTulipIsLoaded();
     });
   };
-  if (workerMode) {
-    tulip.init();
-  }
+
   if (typeof define === 'function' && define.amd) define(tulip); else if (typeof module === 'object' && module.exports) module.exports = tulip;
+
 }();")
