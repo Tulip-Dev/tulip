@@ -96,9 +96,9 @@ QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(nul
 
 #include "ui_QuickAccessBar.h"
 
-QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QWidget *parent)
+QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickAccessButtons buttons, QWidget *parent)
     : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), delegate(new TulipItemDelegate(this)),
-      _oldFontScale(1), _oldNodeScale(1) {
+      _oldFontScale(1), _oldNodeScale(1), _captionsInitialized(false) {
   _ui->setupUi(this);
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
@@ -106,6 +106,60 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QWidge
   _ui->nodeBorderColorButton->setDialogTitle("Choose the default color for the border of nodes");
   _ui->edgeBorderColorButton->setDialogTitle("Choose the default color for the border of edges");
   _ui->labelColorButton->setDialogTitle("Choose the default color for the label of nodes or edges");
+
+  if (buttons.testFlag(ALLBUTTONS))
+    return;
+  if (!buttons.testFlag(NODESCOLORCAPTION))
+    _ui->nodesColorCaptionButton->hide();
+  if (!buttons.testFlag(NODESSIZECAPTION))
+    _ui->nodesSizeCaptionButton->hide();
+  if (!buttons.testFlag(EDGESCOLORCAPTION))
+    _ui->edgesColorCaptionButton->hide();
+  if (!buttons.testFlag(EDGESIZECAPTION))
+    _ui->edgesSizeCaptionButton->hide();
+  if (!buttons.testFlag(SCREENSHOT))
+    _ui->screenshotButton->hide();
+  if (!buttons.testFlag(BACKGROUNDCOLOR))
+    _ui->backgroundColorButton->hide();
+  if (!buttons.testFlag(NODECOLOR))
+    _ui->nodeColorButton->hide();
+  if (!buttons.testFlag(EDGECOLOR))
+    _ui->edgeColorButton->hide();
+  if (!buttons.testFlag(NODEBORDERCOLOR))
+    _ui->nodeBorderColorButton->hide();
+  if (!buttons.testFlag(EDGEBORDERCOLOR))
+    _ui->edgeBorderColorButton->hide();
+  if (!buttons.testFlag(LABELCOLOR))
+    _ui->labelColorButton->hide();
+  if (!buttons.testFlag(COLORINTERPOLATION))
+    _ui->colorInterpolationToggle->hide();
+  if (!buttons.testFlag(SIZEINTERPOLATION))
+    _ui->sizeInterpolationToggle->hide();
+  if (!buttons.testFlag(SHOWEDGES))
+    _ui->showEdgesToggle->hide();
+  if (!buttons.testFlag(SHOWLABELS))
+    _ui->showLabelsToggle->hide();
+  if (!buttons.testFlag(LABELSSCALED))
+    _ui->labelsScaledToggle->hide();
+  if (!buttons.testFlag(NODESHAPE))
+    _ui->nodeShapeButton->hide();
+  if (!buttons.testFlag(EDGESHAPE))
+    _ui->edgeShapeButton->hide();
+  if (!buttons.testFlag(NODESIZE))
+    _ui->nodeSizeButton->hide();
+  if (!buttons.testFlag(EDGESIZE))
+    _ui->edgeSizeButton->hide();
+  if (!buttons.testFlag(NODELABELPOSITION))
+    _ui->labelPositionButton->hide();
+  if (!buttons.testFlag(SELECTFONT))
+    _ui->fontButton->hide();
+}
+
+void QuickAccessBarImpl::addButtonAtEnd(QAbstractButton *button) {
+  QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count() - 1);
+  _ui->horizontalLayout->removeItem(spacer);
+  _ui->horizontalLayout->addWidget(button);
+  _ui->horizontalLayout->addItem(spacer);
 }
 
 QuickAccessBarImpl::~QuickAccessBarImpl() {
@@ -347,12 +401,12 @@ void QuickAccessBarImpl::setLabelsScaled(bool v) {
   }
 }
 
-GlGraphRenderingParameters *QuickAccessBarImpl::renderingParameters() const {
-  return &scene()->getMainGlGraph()->getRenderingParameters();
+GlGraphRenderingParameters *QuickAccessBar::renderingParameters() const {
+  return scene()->getGlGraphComposite()->getRenderingParametersPointer();
 }
 
-GlGraphInputData *QuickAccessBarImpl::inputData() const {
-  return &scene()->getMainGlGraph()->getInputData();
+GlGraphInputData *QuickAccessBar::inputData() const {
+  return scene()->getGlGraphComposite()->getInputData();
 }
 
 GlScene *QuickAccessBar::scene() const {
