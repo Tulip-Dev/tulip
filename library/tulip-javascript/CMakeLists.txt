@@ -186,60 +186,53 @@ ADD_CUSTOM_TARGET(copy-tulipjs-resources ALL
                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_SOURCE_DIR}/textures/radialGradientTexture.png ${CMAKE_CURRENT_BINARY_DIR}/resources)
 ADD_DEPENDENCIES(tulip.js copy-tulipjs-resources)
 
-IF(NOT CMAKE_DEBUG_MODE AND NOT USE_WASM)
+IF(NOT USE_WASM)
 
 ADD_CUSTOM_TARGET(copy-tulipjs-to-demos ALL
-                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos
-                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js.mem ${CMAKE_CURRENT_SOURCE_DIR}/demos
-                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.data ${CMAKE_CURRENT_SOURCE_DIR}/demos)
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos/asmjs
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js.mem ${CMAKE_CURRENT_SOURCE_DIR}/demos/asmjs
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.data ${CMAKE_CURRENT_SOURCE_DIR}/demos/asmjs)
 INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js.mem
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.data
-  demos/tulip_web.html
-  demos/tulip_web_multi.html
-  demos/tulip_js_test.html
-  demos/tulip_graph_traversals.html
-  demos/spinner.css
-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+  demos/asmjs/tulip_web.html
+  demos/asmjs/tulip_web_multi.html
+  demos/asmjs/tulip_js_test.html
+  demos/asmjs/tulip_graph_traversals.html
+  demos/asmjs/spinner.css
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/asmjs
 )
-
-ELSE(NOT CMAKE_DEBUG_MODE AND NOT USE_WASM)
-
+INSTALL(DIRECTORY
+  demos/asmjs/data
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/asmjs
+)
+ELSE(NOT USE_WASM)
 ADD_CUSTOM_TARGET(copy-tulipjs-to-demos ALL
-                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos
-                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.data ${CMAKE_CURRENT_SOURCE_DIR}/demos)
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.js ${CMAKE_CURRENT_SOURCE_DIR}/demos/wasm
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm ${CMAKE_CURRENT_SOURCE_DIR}/demos/wasm
+                  COMMAND ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_BINARY_DIR}/tulip.data ${CMAKE_CURRENT_SOURCE_DIR}/demos/wasm)
+
 INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.js
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.data
-  demos/tulip_web.html
-  demos/tulip_web_multi.html
-  demos/tulip_js_test.html
-  demos/tulip_graph_traversals.html
-  demos/spinner.css
-  DESTINATION ${CMAKE_INSTALL_PREFIX}
-)
-
-ENDIF(NOT CMAKE_DEBUG_MODE AND NOT USE_WASM)
-
-ADD_DEPENDENCIES(copy-tulipjs-to-demos tulip.js)
-
-IF(USE_WASM)
-INSTALL(FILES
   ${CMAKE_CURRENT_BINARY_DIR}/tulip.wasm
-  demos/tulip_web.html
-  demos/tulip_web_multi.html
-  demos/tulip_js_test.html
-  demos/tulip_graph_traversals.html
-  demos/spinner.css
-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+  demos/wasm/tulip_web.html
+  demos/wasm/tulip_web_multi.html
+  demos/wasm/tulip_js_test.html
+  demos/wasm/tulip_graph_traversals.html
+  demos/wasm/spinner.css
+  demos/wasm/error.png
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/wasm
 )
-ENDIF(USE_WASM)
 
 INSTALL(DIRECTORY
-  demos/data
-  DESTINATION ${CMAKE_INSTALL_PREFIX}
+  demos/wasm/data
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/wasm
 )
+ENDIF(NOT USE_WASM)
+
+ADD_DEPENDENCIES(copy-tulipjs-to-demos tulip.js)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.js.mem;tulip.data;tulip.asm.js;tulip.wast;tulip.wasm;tulip.wast.mappedGlobals;tulip.wasm.mappedGlobals")
 

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=yes">
+    <title>Tulip Web demo</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+    <link rel="stylesheet" href="spinner.css" />
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/eligrey/FileSaver.js/master/FileSaver.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/themes/default/style.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/deitch/jstree-grid/master/jstreegrid.js"></script>
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css">
+
+    <style type="text/css">
+     .ui-icon-interactor-navigation,
+     .ui-icon-interactor-zoom,
+     .ui-icon-interactor-selection,
+     .ui-icon-interactor-selection-modifier,
+     .ui-icon-interactor-lasso-selection,
+     .ui-icon-interactor-neighborhood,
+     .ui-icon-interactor-fisheye
+     {
+        background-color: transparent;
+        box-shadow: none;
+        -moz-border-radius: 0px;
+        -webkit-border-radius:0px;
+        border-radius:0px;
+     }
+    .ui-focus,
+    .ui-btn:focus {
+      -moz-box-shadow: none;
+      -webkit-box-shadow: none;
+      box-shadow: none ;
+    }
+
+    #tulip-view {
+      display: table-cell;
+      text-align: center;
+      vertical-align: middle;
+      height:100%;
+    }
+
+    #error-div {
+      position: absolute;
+      top: 40%;
+      left: 20%;
+      right: 20%;
+      text-align: center;
+      vertical-align: middle;
+      height:100%;
+    }
+
+    </style>
+
+  </head>
+
+  <body>
+  <!-- page #one -->
+  <div data-role="page" id="one" align="center" class="ui-responsive-panel" >
+    <!-- header -->
+    <div data-role="header">
+      <!-- <h1>Tulip Web</h> -->
+      <a href="#computepanel" class="ui-btn-left">Menu</a>
+      <div data-role="controlgroup" data-type="horizontal" style="display: inline-block;">
+
+      <a id="navigation-button" href=# class="ui-icon-nodisc ui-btn-active interactor-button" data-role="button"><i class="mdi mdi-18px mdi-cursor-pointer"></i></a>
+      <a id="zoom-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-magnify-plus"></i></a>
+      <a id="selection-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-selection"></i></a>
+      <a id="lasso-selection-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-vector-polygon"></i></a>
+      <a id="neighborhood-highlighter-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-google-circles-extended"></i></a>
+      <a id="fisheye-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-web"></i></a>
+      <a id="selection-modifier-button" href=# class="ui-icon-nodisc interactor-button" data-role="button"><i class="mdi mdi-18px mdi-cursor-move"></i></a>
+
+      </div>
+
+      <a href="#renderingparamspanel" class="ui-btn-right">Rendering parameters</a>
+
+      </div>
+      <!-- content -->
+      <div id ="main-content" data-role="content" data-theme="a" style='min-height:60px'>
+        <div id="tulip-view">
+          <div id='spinner-div'>
+            <div class="cssload-preloader cssload-loading">
+              <span class="cssload-slice"></span>
+              <span class="cssload-slice"></span>
+              <span class="cssload-slice"></span>
+              <span class="cssload-slice"></span>
+              <span class="cssload-slice"></span>
+              <span class="cssload-slice"></span>
+            </div>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p id='spinner-caption'> Downloading and initializing tulip.js ... </p>
+          </div>
+        </div>
+        <div id="error-div" style="visibility:hidden">
+          <img src="error.png" style="width:80px;height:80px">
+          <p id="error-caption"></p>
+        </div>
+      </div>
+
+      <!-- footer -->
+      <!--<div data-role="footer" data-theme="d">
+        <a href="http://www.tulip-software.org" data-role="dialog">www.tulip-software.org</a>
+      </div>-->
+
+
+      <!-- Left panel -->
+      <div data-role="panel" id="computepanel" data-position="left" data-theme="a" data-display="overlay">
+
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Graph datasets </h3>
+          <label><input id="load-in-worker" type="checkbox" name="checkbox-0" data-mini="false" checked="false"> Load graphs in Web Worker (slower but with loading feeback) </label>
+
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Programming Languages network" onclick ="loadGraphFromDataFolder('programming_language_network.tlpb.gz')" > Programming Languages network </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="FIFA World Cup 2014 players network" onclick ="loadGraphFromDataFolder('world_cup_network.tlpb.gz')" > FIFA World Cup 2014 players network </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="IMDB graph" onclick ="loadGraphFromDataFolder('imdb_middle.tlpb.gz')" > IMDB graph </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Paris Rail Transportation network" onclick ="loadGraphFromDataFolder('paris_rail_transportation_network.tlpb.gz', setSubGraphToVisualize('whole network with hubs'))" > Paris Rail Transportation network </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Qt 5.4 Linux install" onclick ="loadGraphFromDataFolder('qt54_linux64_dist.tlpb.gz')" > Qt 5.4 Linux install </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Graph with metanodes" onclick ="loadGraphFromDataFolder('world_cup_network_mcl_quotient.tlpb.gz', setSubGraphToVisualize('quotient'))" > Graph with metaNodes </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Sample Tree" onclick ="loadGraphFromDataFolder('tree.tlpb.gz')" > Sample Tree </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Hacking Team mails network" onclick ="loadGraphFromDataFolder('HT_mails_network.tlpb.gz', setHTMailsNetworkOrderingProperty)" > Hacking Team mails network </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Cat 3D Model" onclick ="loadGraphFromDataFolder('cat.tlpb.gz')" > Cat 3D Model </a>
+          <a data-role = "button" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Relations between Linux distributions" onclick ="loadGraphFromDataFolder('linux_distributions_relations.tlpb.gz')" > Relations between Linux distributions </a>
+
+          <div data-role="controlgroup">
+            <input type="file" id="graph_file"/>
+          </div>
+        </div>
+
+        <div data-role = "collapsible" data-theme = "a" align="left" data-mini="true" data-content-theme ="a">
+          <h3> Graphs hierarchy </h3>
+          <div id="jstree_div" style="overflow: scroll;"></div>
+        </div>
+
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Force directed layouts </h3>
+          <div data-role = "controlgroup" data-type = "vertical" >
+            <a data-role = "button" class = "show-page-loading-msg" data-icon = "star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Fast Multipole Embedder (OGDF)' graph layout" onclick ="computeLayout('Fast Multipole Embedder (OGDF)')" > Fast Multipole Embedder (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'FM^3 (OGDF)' graph layout" onclick ="computeLayout('FM^3 (OGDF)')" > FM^3 (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'GEM (Frick)' graph layout" onclick ="computeLayout('GEM Frick (OGDF)')" > GEM Frick (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Frutcherman Reingold (OGDF)' graph layout" onclick ="computeLayout('Frutcherman Reingold (OGDF)')" > Frutcherman Reingold (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Kamada Kawai (OGDF)' graph layout" onclick ="computeLayout('Kamada Kawai (OGDF)')" > Kamada Kawai (OGDF) </a>
+          </div>
+        </div>
+
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Multilevel layouts </h3>
+          <div data-role = "controlgroup" data-type = "vertical" >
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'GRIP' graph layout" onclick ="computeLayout('GRIP')" > GRIP </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Fast Multipole Multilevel Embedder (OGDF)' graph layout" onclick ="computeLayout('Fast Multipole Multilevel Embedder (OGDF)')" > Fast Multipole Multilevel Embedder (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'MMM Example Fast Layout (OGDF)' graph layout" onclick ="computeLayout('MMM Example Fast Layout (OGDF)')" > MMM Example Fast Layout (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'MMM Example Nice Layout (OGDF)' graph layout" onclick ="computeLayout('MMM Example Nice Layout (OGDF)')" > MMM Example Nice Layout (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'MMM Example No Twist Layout (OGDF)' graph layout" onclick ="computeLayout('MMM Example No Twist Layout (OGDF)')" > MMM Example No Twist Layout (OGDF) </a>
+          </div>
+        </div>
+
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Tree layouts </h3>
+          <div data-role = "controlgroup" data-type = "vertical" >
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Bubble Tree' graph layout" onclick ="computeLayout('Bubble Tree')" > Bubble Tree </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Cone Tree' graph layout" onclick ="computeLayout('Cone Tree')" > Cone Tree </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Hierarchical Tree (R-T Extended)' graph layout" onclick ="computeLayout('Hierarchical Tree (R-T Extended)')" > Hierarchical Tree (R-T Extended) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Tree Radial' graph layout" onclick ="computeLayout('Tree Radial')" > Tree Radial </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Sugiyama (OGDF)' graph layout" onclick ="computeLayout('Sugiyama (OGDF)')" > Sugiyama (OGDF) </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Computing 'Balloon (OGDF)' graph layout" onclick ="computeLayout('Balloon (OGDF)')" > Balloon (OGDF) </a>
+          </div>
+        </div>
+
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Miscellaneous algorithms </h3>
+          <div data-role = "controlgroup" data-type = "vertical" >
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Fast Overlap Removal' algorithm" onclick ="computeFastOverlapRemoval()" > Fast Overlap Removal </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Auto-Sizing' algorithm" onclick ="computeAutoSizing()" > Auto-Sizing </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Curve edges' algorithm" onclick ="computeCurveEdges()" > Curve edges </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="Applying 'Edge bundling' algorithm" onclick ="computeEdgeBundling()" > Edge bundling </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="" onclick ="applyGraphScript()" > Magic script </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="" onclick ="computeLouvainClustering()" > Louvain clustering </a>
+            <a data-role = "button" class = "show-page-loading-msg" data-icon ="star" data-mini = "true" data-textonly="false" data-textvisible="true" data-msgtext="" onclick ="computeMCLClustering()" > MCL clustering </a>
+          </div>
+        </div>
+
+        <a data-role = "button" data-icon = "star" data-mini = "true" onclick ="saveAs(graph.getTlpFileBlob(), 'graph.tlp');">Save graph to TLP format</a>
+        <a data-role = "button" data-icon = "star" data-mini = "true" onclick ="saveAs(tulipView.getViewSnapshotBlob(), 'graph.png');">Save visualization snapshot</a>
+        <a data-role = "button" data-icon = "refresh" data-mini = "true" onclick ="tulipView.centerScene();">Center</a>
+        <a data-role="button" data-icon="grid" data-mini = "true" onclick="tulipView.fullScreen();">Fullscreen</a>
+        <a data-role = "button" data-icon = "close" data-mini = "true" data-rel="close">Close panel</a>
+
+      </div><!-- /panel left-->
+
+      <!-- /panel right-->
+      <div data-role="panel" id="renderingparamspanel" data-position="right" data-theme="a" data-display="overlay">
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Nodes </h3>
+          <label><input id="display-nodes" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Display </label>
+          <label><input id="billboard-nodes" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Billboard </label>
+          <label><input id="glow-nodes" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Glow </label>
+        </div>
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Edges </h3>
+          <label><input id="display-edges" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Display </label>
+          <label><input id="color-interpolation" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="false"> Color interpolation </label>
+          <label><input id="size-interpolation" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Size interpolation </label>
+          <label><input id="edge-extremities" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true">  Display extremities </label>
+          <label><input id="edges-3d" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="false">  3D mode </label>
+        </div>
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Nodes Labels </h3>
+          <label><input id="display-nodes-labels" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Display </label>
+          <label><input id="scale-nodes-labels" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="false"> Scale to Nodes Sizes </label>
+          <div data-role="rangeslider">
+            <label for="range-1a">Sizes range:</label>
+            <input name="range-1a" id="labels-min-size" class="rendering-params-modifier" min="0" max="100" value="12" type="range" />
+            <label for="range-1b">Rangeslider:</label>
+            <input name="range-1b" id="labels-max-size" class="rendering-params-modifier" min="0" max="100" value="72" type="range" />
+          </div>
+        </div>
+        <div data-role = "collapsible" data-theme = "a" data-mini="true" data-content-theme ="a" >
+          <h3> Subgraphs Hulls </h3>
+          <label><input id="display-hulls" class="rendering-params-modifier" type="checkbox" data-mini="true" checked="true"> Display </label>
+          <a data-role = "button" data-icon = "refresh" data-mini = "true" onclick ="computeSubGraphsHulls();"> Compute Hulls </a>
+        </div>
+      </div>
+
+    </div> <!-- /page one -->
+
+  </body>
+
+  <script type='text/javascript'>
+
+  var tulipView = null;
+
+  function activateInteractor(interactorName) {
+   return function() {
+     $('.interactor-button').removeClass('ui-btn-active');
+     $(this).addClass('ui-btn-active');
+     tulipView.activateInteractor(interactorName);
+     tulipView.draw();
+   }
+  }
+
+  $('#navigation-button').button().bind('click', activateInteractor('ZoomAndPan'));
+  $('#navigation-button').attr('title', 'Navigate in graph');
+
+  $('#zoom-button').button().bind('click', activateInteractor('RectangleZoom'));
+  $('#zoom-button').attr('title', 'Zoom on rectangle');
+
+  $('#selection-button').button().bind('click', activateInteractor('Selection'));
+  $('#selection-button').attr('title', 'Select nodes/edges in a rectangle');
+
+  $('#selection-modifier-button').button().bind('click', activateInteractor('SelectionModifier'));
+  $('#selection-modifier-button').attr('title', 'Move rectangle selection');
+
+  $('#lasso-selection-button').button().bind('click', activateInteractor('LassoSelection'));
+  $('#lasso-selection-button').attr('title', 'Select nodes in a freehand drawn region');
+
+  $('#neighborhood-highlighter-button').button().bind('click', activateInteractor('Neighborhood'));
+  $('#neighborhood-highlighter-button').attr('title', 'Highlight node neighborhood');
+
+  $('#fisheye-button').button().bind('click', activateInteractor('Fisheye'));
+  $('#fisheye-button').attr('title', 'Fisheye lens');
+
+
+  var start = null;
+  var graph = null;
+  var subgraph = null;
+
+  function applyRenderingParameters() {
+    tulip.holdObservers();
+    renderingParameters.setDisplayNodes($('#display-nodes').prop('checked'));
+    renderingParameters.setBillboardedNodes($('#billboard-nodes').prop('checked'));
+    renderingParameters.setDisplayNodesLabels($('#display-nodes-labels').prop('checked'));
+    renderingParameters.setLabelsScaled($('#scale-nodes-labels').prop('checked'));
+    renderingParameters.setDisplayEdges($('#display-edges').prop('checked'));
+    renderingParameters.setInterpolateEdgesColors($('#color-interpolation').prop('checked'));
+    renderingParameters.setInterpolateEdgesSizes($('#size-interpolation').prop('checked'));
+    renderingParameters.setDisplayEdgesExtremities($('#edge-extremities').prop('checked'));
+    renderingParameters.setEdges3D($('#edges-3d').prop('checked'));
+    renderingParameters.setMinSizeOfLabels(parseInt($('#labels-min-size').prop('value')));
+    renderingParameters.setElementsOrdered(false);
+    renderingParameters.setElementsOrderingProperty(null);
+    renderingParameters.setMaxSizeOfLabels(parseInt($('#labels-max-size').prop('value')));
+    tulipView.setGraphsHullsVisible($('#display-hulls').prop('checked'), true);
+    var viewGlow = graph.getBooleanProperty('viewGlow');
+    viewGlow.setAllNodeValue($('#glow-nodes').prop('checked'));
+    tulip.unholdObservers();
+  }
+
+  function getSubgraphsHierarchyJsTreeData(rootGraph, sgHierarchyData) {
+    var ret = {};
+    if (!sgHierarchyData) {
+      ret["text"] = rootGraph.getName();
+      ret["data"] = {nodes: rootGraph.numberOfNodes().toString(), edges: rootGraph.numberOfEdges().toString()};
+      ret["id"] = rootGraph.getId();
+      ret["children"] = [];
+      sgHierarchyData = ret["children"];
+    }
+    rootGraph.getSubGraphs().forEach(function(sg) {
+      var sgData = {};
+      sgData["text"] = sg.getName();
+      sgData["data"] = {nodes: sg.numberOfNodes().toString(), edges: sg.numberOfEdges().toString()};
+      sgData["id"] = sg.getId();
+      if (sg.numberOfSubGraphs() > 0) {
+        sgData["children"] = [];
+        getSubgraphsHierarchyJsTreeData(sg, sgData["children"]);
+      }
+      sgHierarchyData.push(sgData);
+    });
+
+    return ret;
+  }
+
+  function setGlobalVars(g) {
+    graph = g;
+    graphProperties = {};
+    graph.getProperties().forEach(function(propName) {
+     graphProperties[propName] = graph.getProperty(propName);
+    });
+  }
+
+  function initGraphData(g) {
+    var end = new Date().getTime();
+    var time = (end - start) / 1000;
+    console.log('Time for loading graph: ' + time + 's');
+
+    setGlobalVars(g);
+
+    applyRenderingParameters();
+
+    var tree = $('#jstree_div').jstree(true);
+
+    if (tree) tree.destroy();
+
+    var treeData = getSubgraphsHierarchyJsTreeData(graph.getRoot());
+
+    $('#jstree_div').jstree({
+      plugins: ["grid"],
+      grid: {
+        columns: [
+          {header: "Name", title:"_DATA_"},
+          {cellClass: "col1", value: "nodes", header: "Nodes", title:"nodes", valueClass:"spanclass"},
+          {cellClass: "col2", value: "edges", header: "Edges", title:"edges",valueClass:"spanclass"}
+        ],
+        resizable:true
+      },
+      core : {
+        themes: {icons : false},
+        data : [treeData]
+      }
+    }).on('changed.jstree', function (e, data) {
+      if (data.action = "select_node") {
+        var sgId = parseInt(data.node.id);
+        if (isNaN(sgId)) {
+          tulipView.setGraph(graph.getRoot());
+          setGlobalVars(graph.getRoot());
+        } else {
+          var sg = graph.getRoot().getDescendantGraph(sgId);
+          tulipView.setGraph(sg);
+          setGlobalVars(sg);
+        }
+        tulipView.setGraphsHullsVisible(graph.numberOfSubGraphs() > 0);
+      }
+    });
+  }
+
+  function setHTMailsNetworkOrderingProperty(graph) {
+    initGraphData(graph);
+    tulip.holdObservers();
+    renderingParameters.setElementsOrdered(true);
+    renderingParameters.setElementsOrderingProperty(graphProperties.count);
+    tulip.unholdObservers();
+  }
+
+  function algoFinishedCallback(graph, succeed) {
+    initGraphData(graph);
+    tulipView.setGraph(graph);
+  }
+
+  function computeEdgeBundling() {
+    start = new Date().getTime();
+    graphProperties.viewShape.setAllEdgeValue(tulip.EdgeShape.BezierCurve);
+    graph.applyAlgorithmInWorker('Edge bundling', {}, algoFinishedCallback);
+  }
+
+  function computeCurveEdges() {
+    graphProperties.viewShape.setAllEdgeValue(tulip.EdgeShape.BezierCurve);
+    graph.applyAlgorithm('Curve edges');
+  }
+
+  function computeLayout(layoutAlgoName) {
+    start = new Date().getTime();
+    graph.applyLayoutAlgorithmInWorker(layoutAlgoName, graph.getLocalLayoutProperty('viewLayout'), {}, algoFinishedCallback);
+  }
+
+  function computeFastOverlapRemoval() {
+    start = new Date().getTime();
+    graph.applyLayoutAlgorithmInWorker('Fast Overlap Removal', graph.getLocalLayoutProperty('viewLayout'), {'x border' : 2.0, 'y border' : 2.0}, algoFinishedCallback);
+  }
+
+  function computeAutoSizing() {
+    start = new Date().getTime();
+    graph.applySizeAlgorithmInWorker('Auto Sizing', graphProperties.viewSize, {}, algoFinishedCallback);
+  }
+
+  function graphScript(graph) {
+    var viewLayout = graph.getLayoutProperty('viewLayout');
+    var viewSize = graph.getSizeProperty('viewSize');
+    var viewShape = graph.getIntegerProperty('viewShape');
+    viewShape.setAllEdgeValue(tulip.EdgeShape.BezierCurve);
+    graph.applyLayoutAlgorithm('FM^3 (OGDF)', viewLayout);
+    graph.applySizeAlgorithm('Auto Sizing', viewSize);
+    graph.applyLayoutAlgorithm('Fast Overlap Removal', viewLayout);
+    graph.applyAlgorithm('Edge bundling', {}, true);
+  }
+
+  function applyGraphScript() {
+    start = new Date().getTime();
+    graph.executeScriptInWorker(graphScript, algoFinishedCallback);
+  }
+
+  function applyClustering(graph, graphId, parameters) {
+    var clusteringAlgo = parameters['clusteringAlgo']
+    var clusteringSgName = clusteringAlgo;
+    var prevClustering = graph.getSubGraph(clusteringSgName);
+    if (prevClustering) {
+      graph.delAllSubGraphs(prevClustering);
+    }
+    var clone = graph.addCloneSubGraph(clusteringSgName);
+    var clusteringProp = graph.getDoubleProperty(clusteringAlgo);
+    tulip.sendProgressComment(graphId, 'Applying ' + clusteringAlgo + ' ...');
+    clone.applyDoubleAlgorithm(clusteringAlgo, clusteringProp);
+    clone.applyAlgorithm('Equal Value', {'Property' : clusteringProp}, true);
+
+    var quotientClusteringParams = tulip.getDefaultAlgorithmParameters('Quotient Clustering', clone);
+    quotientClusteringParams['layout quotient graph(s)'] = true;
+    quotientClusteringParams['layout clusters'] = true;
+
+    clone.getLocalLayoutProperty('viewLayout');
+
+    clone.applyAlgorithm('Quotient Clustering', quotientClusteringParams);
+
+    var quotient = null;
+    clone.getRoot().getSubGraphs().forEach(function(sg) {
+      if (sg.getName().startsWith('quotient')) {
+        quotient = sg;
+      }
+    });
+
+    quotient.getNodes().forEach(function(n) {
+      if (quotient.isMetaNode(n)) {
+        quotient.openMetaNode(n);
+      }
+    });
+
+    var mainLayout = clone.getLayoutProperty('viewLayout');
+    var quotientLayout = quotient.getLayoutProperty('viewLayout');
+
+    mainLayout.copy(quotientLayout);
+
+    clone.getRoot().delSubGraph(quotient);
+  }
+
+  function computeLouvainClustering() {
+    start = new Date().getTime();
+    graph.executeScriptInWorker(applyClustering, algoFinishedCallback, {clusteringAlgo: 'Louvain'});
+  }
+
+  function computeMCLClustering() {
+    start = new Date().getTime();
+    graph.executeScriptInWorker(applyClustering, algoFinishedCallback, {clusteringAlgo: 'MCL Clustering'});
+  }
+
+  function computeSgHulls(graph, graphId) {
+    var nbClusters = graph.numberOfSubGraphs();
+    var i = 0;
+    tulip.sendProgressComment(graphId, 'Computing subgraphs hulls ...');
+    graph.getSubGraphs().forEach(function(sg) {
+      sg.computeGraphHullVertices();
+      tulip.sendProgressValue(graphId, ((i++/(nbClusters-1))*100)|0);
+    });
+  }
+
+  function hullsComputingFinishedCallback(graph, succeed) {
+    algoFinishedCallback(graph, succeed);
+    tulipView.addSubGraphsHulls();
+  }
+
+  function computeSubGraphsHulls() {
+    if (graph.numberOfSubGraphs() > 0) {
+      start = new Date().getTime();
+      graph.executeScriptInWorker(computeSgHulls, hullsComputingFinishedCallback);
+    }
+  }
+
+  function genRandomColor() {
+    var r = (Math.random() * 256) | 0;
+    var g = (Math.random() * 256) | 0;
+    var b = (Math.random() * 256) | 0;
+    return tulip.Color(r, g, b);
+  }
+
+  function computeGraphStats() {
+    var sum = 0;
+    graph.getNodes().forEach(function(node) {
+     sum += graph.deg(node);
+    });
+
+    var avgEdgeLength = 0;
+    graph.getEdges().forEach(function(edge) {
+    var srcCoord = graphProperties.viewLayout.getNodeValue(graph.source(edge));
+    var tgtCoord = graphProperties.viewLayout.getNodeValue(graph.target(edge));
+    var bends = graphProperties.viewLayout.getEdgeValue(edge);
+    if (bends.length == 0) {
+      avgEdgeLength += srcCoord.dist(tgtCoord);
+    } else {
+      avgEdgeLength += srcCoord.dist(bends[0]);
+      for (var i = 1 ; i < bends.length ; ++i) {
+        avgEdgeLength += bends[i-1].dist(bends[i]);
+      }
+      avgEdgeLength += bends[bends.length-1].dist(tgtCoord);
+    }
+    });
+    console.log("average node degree = ", sum / graph.numberOfNodes());
+    console.log("average edge length = ", avgEdgeLength / graph.numberOfEdges());
+  }
+
+  function setRandomGlyphsAndColors() {
+    var iconNames = [];
+    for (var key in tulip.FontAwesomeIcon) {
+      if (tulip.FontAwesomeIcon.hasOwnProperty(key)) {
+        iconNames.push(tulip.FontAwesomeIcon[key]);
+      }
+    }
+
+    tulip.holdObservers();
+    graphProperties.viewRotation.setAllNodeValue(0);
+
+    graphProperties.viewShape.setAllNodeValue(tulip.NodeShape.FontAwesomeIcon);
+    graph.getNodes().forEach(function(n) {
+      var idx = (Math.random() * iconNames.length) | 0;
+      graphProperties.viewFontAwesomeIcon.setNodeValue(n, iconNames[idx]);
+      graphProperties.viewColor.setNodeValue(n, genRandomColor());
+    });
+    tulip.unholdObservers();
+  }
+
+  function handleFileSelect(evt) {
+    var files = evt.target.files;
+    if (files[0]) {
+      var reader = new FileReader();
+      // Closure to capture the file information.
+      reader.onload = (function(theFile) {
+        return function(e) {
+          $('#navigation-button').trigger('click');
+          start = new Date().getTime();
+          tulipView.loadGraphFromData(theFile.name, e.target.result, $('#load-in-worker').prop('checked'), initGraphData);
+        };
+      })(files[0]);
+      reader.readAsArrayBuffer(files[0]);
+    }
+  }
+
+  document.getElementById('graph_file').addEventListener('change', handleFileSelect, false);
+
+  function setSubGraphToVisualize(sgName) {
+    return function(graph) {
+      var sg = graph.getDescendantGraph(sgName);
+      initGraphData(sg);
+      tulipView.setGraph(sg);
+    }
+  }
+
+  function loadGraphFromDataFolder(tlpFilename, graphLoadedCallback) {
+    $('#navigation-button').trigger('click');
+    start = new Date().getTime();
+    if (graphLoadedCallback) {
+      tulipView.loadGraphFromFile("data/" + tlpFilename, $('#load-in-worker').prop('checked'), graphLoadedCallback);
+    } else {
+      tulipView.loadGraphFromFile("data/" + tlpFilename, $('#load-in-worker').prop('checked'), initGraphData);
+    }
+  }
+
+  function initTulipView() {
+    tulip.init().then(function() {
+      $('#spinner-div').hide();
+      $('#tulip-view').css('vertical-align', 'baseline');
+      var container = document.getElementById("tulip-view");
+      tulipView = tulip.View(container, window.innerWidth-50, window.innerHeight-80);
+      renderingParameters = tulipView.getRenderingParameters();
+      loadGraphFromDataFolder("programming_language_network.tlp.gz");
+    }).catch(function(err) {
+      $('#spinner-div').hide();
+      $("#error-div").css("visibility", "visible");
+      $("#error-caption").text("Error while loading tulip.js : " + err);
+    });
+  }
+
+  function resize() {
+    if (tulipView && tulipView.fullScreenActivated) return;
+    if (tulipView) {
+      tulipView.resize(window.innerWidth-50, window.innerHeight-80);
+    }
+  }
+
+  $( document ).ready(function() {
+
+    $('#tulip-view').width(window.innerWidth-50);
+    $('#tulip-view').height(window.innerHeight-80);
+    window.addEventListener('resize', resize, false);
+
+    $('#load-in-worker').prop('checked', false).checkboxradio('refresh');
+    $('#display-nodes').prop('checked', true).checkboxradio('refresh');
+    $('#display-nodes-labels').prop('checked', true).checkboxradio('refresh');
+    $('#display-edges').prop('checked', true).checkboxradio('refresh');
+    $('#edge-extremities').prop('checked', true).checkboxradio('refresh');
+    $('#size-interpolation').prop('checked', true).checkboxradio('refresh');
+
+    $('#edges-3d').prop('checked', false).checkboxradio('refresh');
+    $('#color-interpolation').prop('checked', false).checkboxradio('refresh');
+    $('#scale-nodes-labels').prop('checked', false).checkboxradio('refresh');
+    $('#billboard-nodes').prop('checked', false).checkboxradio('refresh');
+    $('#glow-nodes').prop('checked', false).checkboxradio('refresh');
+
+    $('#display-hulls').prop('checked', true).checkboxradio('refresh');
+
+    $(".rendering-params-modifier").change(function(){
+      applyRenderingParameters();
+    });
+  });
+
+  </script>
+  <script async type="text/javascript" src="tulip.js" onload="initTulipView()"></script>
+
+</html>
