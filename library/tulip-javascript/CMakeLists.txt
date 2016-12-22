@@ -201,6 +201,7 @@ INSTALL(FILES
   demos/asmjs/tulip_js_test.html
   demos/asmjs/tulip_graph_traversals.html
   demos/asmjs/spinner.css
+  demos/asmjs/error.png
   DESTINATION ${CMAKE_INSTALL_PREFIX}/asmjs
 )
 INSTALL(DIRECTORY
