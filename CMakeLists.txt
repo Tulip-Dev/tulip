@@ -748,6 +748,7 @@ IF(BUILD_TESTS)
   ADD_SUBDIRECTORY(unit_test)
 ENDIF(BUILD_TESTS)
 
+IF(NOT EMSCRIPTEN)
 INSTALL(FILES AUTHORS
               COPYING.LESSER
               cmake/FindTULIP.cmake
@@ -755,6 +756,7 @@ INSTALL(FILES AUTHORS
               cmake/FindQtX.cmake
               cmake/TulipUseFile.cmake
         DESTINATION ${TulipShareInstallDir})
+ENDIF(NOT EMSCRIPTEN)
 
 IF(NOT BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(bundlers)
