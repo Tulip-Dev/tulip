@@ -110,58 +110,80 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickA
   _ui->labelColorButton->setDialogTitle("Choose the default color for the label of nodes or edges");
 
   if(buttons.testFlag(ALLBUTTONS))
-      return;
+    return;
+
   if(!buttons.testFlag(NODESCOLORCAPTION))
-      _ui->nodesColorCaptionButton->hide();
+    _ui->nodesColorCaptionButton->hide();
+
   if(!buttons.testFlag(NODESSIZECAPTION))
-      _ui->nodesSizeCaptionButton->hide();
+    _ui->nodesSizeCaptionButton->hide();
+
   if(!buttons.testFlag(EDGESCOLORCAPTION))
-      _ui->edgesColorCaptionButton->hide();
+    _ui->edgesColorCaptionButton->hide();
+
   if(!buttons.testFlag(EDGESIZECAPTION))
-      _ui->edgesSizeCaptionButton->hide();
+    _ui->edgesSizeCaptionButton->hide();
+
   if(!buttons.testFlag(SCREENSHOT))
-      _ui->screenshotButton->hide();
+    _ui->screenshotButton->hide();
+
   if(!buttons.testFlag(BACKGROUNDCOLOR))
-      _ui->backgroundColorButton->hide();
+    _ui->backgroundColorButton->hide();
+
   if(!buttons.testFlag(NODECOLOR))
-      _ui->nodeColorButton->hide();
+    _ui->nodeColorButton->hide();
+
   if(!buttons.testFlag(EDGECOLOR))
-      _ui->edgeColorButton->hide();
+    _ui->edgeColorButton->hide();
+
   if(!buttons.testFlag(NODEBORDERCOLOR))
-      _ui->nodeBorderColorButton->hide();
+    _ui->nodeBorderColorButton->hide();
+
   if(!buttons.testFlag(EDGEBORDERCOLOR))
-      _ui->edgeBorderColorButton->hide();
+    _ui->edgeBorderColorButton->hide();
+
   if(!buttons.testFlag(LABELCOLOR))
-      _ui->labelColorButton->hide();
+    _ui->labelColorButton->hide();
+
   if(!buttons.testFlag(COLORINTERPOLATION))
-      _ui->colorInterpolationToggle->hide();
+    _ui->colorInterpolationToggle->hide();
+
   if(!buttons.testFlag(SIZEINTERPOLATION))
-      _ui->sizeInterpolationToggle->hide();
+    _ui->sizeInterpolationToggle->hide();
+
   if(!buttons.testFlag(SHOWEDGES))
-      _ui->showEdgesToggle->hide();
+    _ui->showEdgesToggle->hide();
+
   if(!buttons.testFlag(SHOWLABELS))
-      _ui->showLabelsToggle->hide();
+    _ui->showLabelsToggle->hide();
+
   if(!buttons.testFlag(LABELSSCALED))
-      _ui->labelsScaledToggle->hide();
+    _ui->labelsScaledToggle->hide();
+
   if(!buttons.testFlag(NODESHAPE))
-      _ui->nodeShapeButton->hide();
+    _ui->nodeShapeButton->hide();
+
   if(!buttons.testFlag(EDGESHAPE))
-      _ui->edgeShapeButton->hide();
+    _ui->edgeShapeButton->hide();
+
   if(!buttons.testFlag(NODESIZE))
-      _ui->nodeSizeButton->hide();
+    _ui->nodeSizeButton->hide();
+
   if(!buttons.testFlag(EDGESIZE))
-      _ui->edgeSizeButton->hide();
+    _ui->edgeSizeButton->hide();
+
   if(!buttons.testFlag(NODELABELPOSITION))
-      _ui->labelPositionButton->hide();
+    _ui->labelPositionButton->hide();
+
   if(!buttons.testFlag(SELECTFONT))
-      _ui->fontButton->hide();
-  }
+    _ui->fontButton->hide();
+}
 
 void QuickAccessBarImpl::addButtonAtEnd(QAbstractButton *button) {
-    QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count()-1);
-    _ui->horizontalLayout->removeItem(spacer);
-    _ui->horizontalLayout->addWidget(button);
-    _ui->horizontalLayout->addItem(spacer);
+  QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count()-1);
+  _ui->horizontalLayout->removeItem(spacer);
+  _ui->horizontalLayout->addWidget(button);
+  _ui->horizontalLayout->addItem(spacer);
 }
 
 QuickAccessBarImpl::~QuickAccessBarImpl() {
