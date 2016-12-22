@@ -4,7 +4,7 @@
 <head>
  <meta charset="utf-8">
  <title>Tulip Web Multiple Views</title>
- <script async type="text/javascript" src="tulip.js"></script>
+ <script async type="text/javascript" src="tulip.js" onload="initTulipViews()"></script>
  <link rel="icon" type="image/x-icon" href="favicon.ico" />
  <link rel="stylesheet" href="http://css-spinners.com/css/spinner/spinner.css" type="text/css">
  <style>
@@ -82,16 +82,11 @@
  }
 
  function initTulipViews() {
-
-   if (typeof tulip == 'undefined' || !tulip.isLoaded()) {
-     setTimeout(initTulipViews, 1000);
-   } else {
-
+   tulip.init().then(function() {
      var spinners = document.getElementsByClassName("spinner-loader");
      for (var i = 0 ; i < spinners.length ; ++i) {
        spinners[i].style.display = 'none';
      }
-
      var tlpContainers = document.getElementsByClassName("tlpContainers");
      for (var i = 0 ; i < tlpContainers.length ; ++i) {
        tlpContainers[i].style.verticalAlign = 'baseline';
@@ -106,12 +101,10 @@
      tulipView2.loadGraphFromFile('data/tree.tlpb.gz');
      tulipView3.loadGraphFromFile('data/qt54_linux64_dist.tlpb.gz');
      tulipView4.loadGraphFromFile('data/programming_language_network.tlpb.gz');
-   }
-
+   });
  }
 
  resizeViews();
- initTulipViews();
 
  window.addEventListener('resize', resizeViews, false);
 

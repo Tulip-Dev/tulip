@@ -15,6 +15,7 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.3.2/jstree.min.js"></script>
     <script type="text/javascript" src="https://cdn.rawgit.com/deitch/jstree-grid/master/jstreegrid.js"></script>
     <link rel="stylesheet" href="https://cdn.materialdesignicons.com/1.7.22/css/materialdesignicons.min.css">
+    <script async type="text/javascript" src="tulip.js" onload="initTulipView()"></script>
 
     <style type="text/css">
      .ui-icon-interactor-navigation,
@@ -573,16 +574,16 @@
   }
 
   function initTulipView() {
-    if (typeof tulip == 'undefined' || !tulip.isLoaded()) {
-      setTimeout(initTulipView, 1000);
-    } else {
+    tulip.init().then(function() {
       $('#spinner-div').hide();
       $('#tulip-view').css('vertical-align', 'baseline');
       var container = document.getElementById("tulip-view");
       tulipView = tulip.View(container, window.innerWidth-50, window.innerHeight-80);
       renderingParameters = tulipView.getRenderingParameters();
       loadGraphFromDataFolder("programming_language_network.tlp.gz");
-    }
+    }).catch(function(err) {
+      console.log("Error loading Tulip : " + err);
+    });
   }
 
   function resize() {
@@ -593,6 +594,7 @@
   }
 
   $( document ).ready(function() {
+
     $('#tulip-view').width(window.innerWidth-50);
     $('#tulip-view').height(window.innerHeight-80);
     window.addEventListener('resize', resize, false);
@@ -615,14 +617,6 @@
     $(".rendering-params-modifier").change(function(){
       applyRenderingParameters();
     });
-
-    var oHead = document.head || document.getElementsByTagName("head")[0];
-    var oScript = document.createElement("script");
-    oScript.type = "text\/javascript";
-    oHead.appendChild(oScript);
-    oScript.src = "tulip.js";
-
-    initTulipView();
   });
 
   </script>

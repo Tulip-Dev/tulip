@@ -5,7 +5,7 @@
      <meta charset="utf-8">
      <title>Tulip Javascript Bindings Test</title>
      <link rel="icon" type="image/x-icon" href="favicon.ico" />
-     <script async type="text/javascript" src="tulip.js"></script>
+     <script async type="text/javascript" src="tulip.js" onload="initTulip()"></script>
     </head>
 
     <body>
@@ -63,10 +63,7 @@
 
  function initTulip() {
 
-   if (typeof tulip == 'undefined' || !tulip.isLoaded()) {
-     setTimeout(initTulip, 1000);
-   } else {
-
+   tulip.init().then(function() {
     graph = tulip.Graph();
     graph.setEventsActivated(true);
 
@@ -120,10 +117,8 @@
     tulipView = tulip.View('tulip-view');
     tulipView.setGraph(graph);
 
-  }
+  });
 }
-
-initTulip();
 
 </script>
 
