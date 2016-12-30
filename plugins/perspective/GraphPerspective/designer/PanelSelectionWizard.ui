@@ -33,7 +33,7 @@ background-color: white;
 }
 
 #panelListTitle,#panelDescriptionTitle {
-background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1, 
+background-color: qlineargradient(spread:pad, x1:0, y1:0, x2:0, y2:1,
 stop:1 rgba(0,0,0,0),
 stop:0 #F0F0F0);
 border: 0px;
@@ -56,7 +56,7 @@ border: 0px;
   </property>
   <widget class="QWizardPage" name="choosePanelPage">
    <property name="title">
-    <string>Panel creation dialog</string>
+    <string>&lt;img src=&quot;:/tulip/graphperspective/icons/32/view-open.png&quot; width=32 height=32/&gt; Panel Creation Dialog</string>
    </property>
    <attribute name="pageId">
     <string notr="true">0</string>
@@ -68,7 +68,7 @@ border: 0px;
     <item>
      <widget class="QLabel" name="page1HelpLabel">
       <property name="text">
-       <string>&lt;br/&gt;Select a type of a new panel to add into the workspace for the data of the selected graph.</string>
+          <string>Select a new panel to add into the workspace for displaying the selected graph.</string>
       </property>
       <property name="wordWrap">
        <bool>true</bool>
@@ -157,7 +157,7 @@ border: 0px;
             </font>
            </property>
            <property name="text">
-            <string>Panel types</string>
+            <string>Available Panels</string>
            </property>
            <property name="alignment">
             <set>Qt::AlignCenter</set>
