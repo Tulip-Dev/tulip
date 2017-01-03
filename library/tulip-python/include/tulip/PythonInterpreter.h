@@ -63,7 +63,7 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   bool _errorOutputEnabled;
 
 #if __cplusplus >= 201103L || _MSC_VER >= 1800
- template<typename T, typename... Param>
+  template<typename T, typename... Param>
   void buildParamDataSet(DataSet* ds, T a, Param... param);
   template<typename T>
   void buildParamDataSet(DataSet* ds, T a);

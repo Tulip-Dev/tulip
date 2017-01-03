@@ -119,34 +119,34 @@ bool PythonInterpreter::callFunctionFourParamsAndGetReturnValue(const QString &m
 //use c++11 variadic template for more convenience
 template<typename RETURN_TYPE, typename... Param>
 bool PythonInterpreter::callFunctionWithParamsAndGetReturnValue(const QString &module, const QString &function, RETURN_TYPE &returnValue, Param... param) {
-    tlp::DataSet ds;
-    buildParamDataSet(&ds, param...);
-    return callFunctionAndGetReturnValue(module, function, ds, returnValue);
+  tlp::DataSet ds;
+  buildParamDataSet(&ds, param...);
+  return callFunctionAndGetReturnValue(module, function, ds, returnValue);
 }
 
 template<typename... Param>
 bool PythonInterpreter::callFunctionWithParams(const QString &module, const QString &function, Param... param) {
-    tlp::DataSet ds;
-    buildParamDataSet(&ds, param...);
-    return callFunction(module, function, ds);
+  tlp::DataSet ds;
+  buildParamDataSet(&ds, param...);
+  return callFunction(module, function, ds);
 }
 
 template<typename T, typename... Param>
 void PythonInterpreter::buildParamDataSet(DataSet* ds, T a, Param... param) {
-    addParameter(ds,a);
-    buildParamDataSet(ds, param...);
+  addParameter(ds,a);
+  buildParamDataSet(ds, param...);
 }
 
 template<typename T>
 void PythonInterpreter::buildParamDataSet(DataSet* ds, T a) {
-    addParameter(ds,a);
+  addParameter(ds,a);
 }
 
 template<typename T>
-void PythonInterpreter::addParameter(DataSet* ds, T a){
-    std::string st("param_");
-    st+=std::to_string(ds->size()+1);
-    ds->set(st, a);
+void PythonInterpreter::addParameter(DataSet* ds, T a) {
+  std::string st("param_");
+  st+=std::to_string(ds->size()+1);
+  ds->set(st, a);
 }
 
 #endif
