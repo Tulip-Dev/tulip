@@ -149,7 +149,7 @@ fi
 # copy some missing libs
 ls libffi.so* > /dev/null 2>&1
 if [ ! $? -eq 0 ]; then
-    cp -v --preserve=mode $(ldconfig -p | grep libffi.so | cut -d ">" -f 2 | xargs) .
+    cp -v --preserve=mode $(/sbin/ldconfig -p | grep libffi.so | cut -d ">" -f 2 | xargs) .
 fi
 popd > /dev/null 2>&1
 
