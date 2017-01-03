@@ -62,8 +62,16 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   bool _outputEnabled;
   bool _errorOutputEnabled;
 
-public :
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+ template<typename T, typename... Param>
+  void buildParamDataSet(DataSet* ds, T a, Param... param);
+  template<typename T>
+  void buildParamDataSet(DataSet* ds, T a);
+  template<typename T>
+  void addParameter(DataSet* ds, T a);
+#endif
 
+public :
   static const QString pythonPluginsPath;
   static const QString pythonPluginsPathHome;
   static const char pythonReservedCharacters[];
@@ -114,6 +122,14 @@ public :
   template<typename PARAM1_TYPE, typename PARAM2_TYPE, typename PARAM3_TYPE, typename PARAM4_TYPE, typename RETURN_TYPE>
   bool callFunctionFourParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1, const PARAM2_TYPE &parameter2,
       const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4, RETURN_TYPE &returnValue);
+
+#if __cplusplus >= 201103L || _MSC_VER >= 1800
+  //use c++11 variadic template for more convenience
+  template<typename RETURN_TYPE, typename... Param>
+  bool callFunctionWithParamsAndGetReturnValue(const QString &module, const QString &function, RETURN_TYPE &returnValue, Param... param);
+  template<typename... Param>
+  bool callFunctionWithParams(const QString &module, const QString &function, Param... param);
+#endif
 
   template<typename RETURN_TYPE>
   bool callFunctionAndGetReturnValue(const QString &module, const QString &function, const tlp::DataSet &parameters, RETURN_TYPE &returnValue);
