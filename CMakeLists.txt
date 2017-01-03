@@ -433,11 +433,9 @@ IF(NOT BUILD_CORE_ONLY)
           ENDIF()
         ENDIF(APPLE)
 
-        SET(SIP_VERSION_THIRDPARTY 4.18.1)
+        SET(SIP_VERSION_THIRDPARTY 4.19)
         SET(SIP_OK FALSE CACHE INTERNAL "")
-        # temporarily disable the used of system sip as there is a critical bug in it since version 4.18
-        # that leads to segfaults when writing Tulip Python plugins that declare parameters
-        # FIND_PACKAGE(SIP)
+        FIND_PACKAGE(SIP)
         SET(SIP_OK ${SIP_FOUND})
         IF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
           SET(SIP_EXE "${SIP_EXECUTABLE}")
