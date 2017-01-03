@@ -62,6 +62,10 @@ class TLP_PYTHON_SCOPE PythonInterpreter : public QObject {
   bool _outputEnabled;
   bool _errorOutputEnabled;
 
+  template <typename T, typename... Param> void buildParamDataSet(DataSet *ds, T a, Param... param);
+  template <typename T> void buildParamDataSet(DataSet *ds, T a);
+  template <typename T> void addParameter(DataSet *ds, T a);
+
 public:
   static const QString pythonPluginsPath;
   static const QString pythonPluginsPathHome;
@@ -112,6 +116,11 @@ public:
   bool callFunctionFourParamsAndGetReturnValue(const QString &module, const QString &function, const PARAM1_TYPE &parameter1,
                                                const PARAM2_TYPE &parameter2, const PARAM3_TYPE &parameter3, const PARAM4_TYPE &parameter4,
                                                RETURN_TYPE &returnValue);
+
+  // use c++11 variadic template for more convenience
+  template <typename RETURN_TYPE, typename... Param>
+  bool callFunctionWithParamsAndGetReturnValue(const QString &module, const QString &function, RETURN_TYPE &returnValue, Param... param);
+  template <typename... Param> bool callFunctionWithParams(const QString &module, const QString &function, Param... param);
 
   template <typename RETURN_TYPE>
   bool callFunctionAndGetReturnValue(const QString &module, const QString &function, const tlp::DataSet &parameters, RETURN_TYPE &returnValue);
