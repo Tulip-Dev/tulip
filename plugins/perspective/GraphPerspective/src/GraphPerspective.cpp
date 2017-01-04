@@ -18,7 +18,7 @@
  *
  */
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 #include <tulip/PythonInterpreter.h>
 #include <tulip/APIDataBase.h>
 #include "PythonPanel.h"
@@ -281,7 +281,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
   layout->addWidget(_pythonPanel);
@@ -431,7 +431,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   _ui->searchPanel->setModel(_graphs);
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   _pythonPanel->setModel(_graphs);
@@ -799,7 +799,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
     _project->openProjectFile(path,prg);
     QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
     _ui->workspace->readProject(_project,rootIds,prg);
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
     _developFrame->setProject(_project);
 #endif
 

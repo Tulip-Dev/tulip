@@ -135,7 +135,7 @@ INCLUDE(cmake/TulipUseFile.cmake)
 ## ========================================================
 ## Profiling
 ## ========================================================
-SET(BUILD_CODE_COVERAGE OFF CACHE BOOL "Do you want to build for code coverage ? [OFF|ON]")
+SET(TULIP_BUILD_CODE_COVERAGE OFF CACHE BOOL "Do you want to build for code coverage ? [OFF|ON]")
 
 ## ========================================================
 ## Compiler-specific options
@@ -143,7 +143,7 @@ SET(BUILD_CODE_COVERAGE OFF CACHE BOOL "Do you want to build for code coverage ?
 
 SET_COMPILER_OPTIONS()
 
-IF(BUILD_CODE_COVERAGE)
+IF(TULIP_BUILD_CODE_COVERAGE)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
   SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
   SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
@@ -156,13 +156,13 @@ ENDIF()
 ## any of the opengl, qt or python components
 ## ========================================================
 IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/cmake/FindQtX.cmake OR EMSCRIPTEN)
-  SET(BUILD_CORE_ONLY ON)
+  SET(TULIP_BUILD_CORE_ONLY ON)
   MESSAGE("You can only configure a core build of Tulip.")
 ELSE()
-  SET(BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip ? [ON|OFF]")
+  SET(TULIP_BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip ? [ON|OFF]")
 ENDIF()
 
-IF(BUILD_CORE_ONLY AND LINUX)
+IF(TULIP_BUILD_CORE_ONLY AND LINUX)
 # the macro ADD_CORE_FILES will be used
 # to collect the files needed to build a minimal Tulip
 # in the directory pointed by CMAKE_CURRENT_SOURCE_DIR
@@ -205,8 +205,8 @@ ELSE()
   ENDMACRO()
 ENDIF()
 
-SET(BUILD_PYTHON_COMPONENTS ON CACHE BOOL "Do you want to build Tulip Python components ? [ON|OFF]")
-IF(BUILD_PYTHON_COMPONENTS)
+SET(TULIP_BUILD_PYTHON_COMPONENTS ON CACHE BOOL "Do you want to build Tulip Python components ? [ON|OFF]")
+IF(TULIP_BUILD_PYTHON_COMPONENTS)
   SET(TULIP_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-core/tulip_module/tulip)
   SET(TULIPOGL_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module/tulipogl)
   SET(TULIPGUI_PYTHON_FOLDER ${CMAKE_BINARY_DIR}/library/tulip-python/bindings/tulip-gui/tulipgui_module/tulipgui)
@@ -229,7 +229,7 @@ IF(BUILD_PYTHON_COMPONENTS)
     # as we don't install the project in that case
     SET(CMAKE_BUILD_WITH_INSTALL_RPATH ON)
   ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND APPLE)
-ENDIF(BUILD_PYTHON_COMPONENTS)
+ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 ## ========================================================
 ## Required packages
@@ -321,7 +321,7 @@ IF(NOT CLANG)
   ENDIF(NOT TULIP_CHECK_MEMORY AND NOT CMAKE_BUILD_TYPE STREQUAL "")
 ENDIF(NOT CLANG)
 
-IF(NOT BUILD_CORE_ONLY)
+IF(NOT TULIP_BUILD_CORE_ONLY)
 
   # OpenGL
   FIND_PACKAGE(OpenGL REQUIRED)
@@ -344,7 +344,7 @@ IF(NOT BUILD_CORE_ONLY)
   # Quazip
   FIND_PACKAGE(QuaZip)
 
-  IF(BUILD_PYTHON_COMPONENTS)
+  IF(TULIP_BUILD_PYTHON_COMPONENTS)
   # Python
   # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
   # If not, compile the SIP version located in thirdparty.
@@ -573,16 +573,16 @@ IF(NOT BUILD_CORE_ONLY)
 
       ENDIF(PYTHONLIBS_FOUND)
     ENDIF(PYTHONINTERP_FOUND)
-  ENDIF(BUILD_PYTHON_COMPONENTS)
+  ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-ENDIF(NOT BUILD_CORE_ONLY)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 ## ========================================================
 ## Include paths
 ## ========================================================
 SET(GZStreamInclude ${PROJECT_SOURCE_DIR}/thirdparty/gzstream/)
 SET(GZStreamLibrary gzstream-tulip-${TulipMMVersion})
-IF(NOT BUILD_CORE_ONLY)
+IF(NOT TULIP_BUILD_CORE_ONLY)
   IF(QUAZIP_FOUND)
     SET(QuazipInclude ${QUAZIP_INCLUDE_DIR})
     SET(QuazipLibrary ${QUAZIP_LIBRARIES})
@@ -595,7 +595,7 @@ IF(NOT BUILD_CORE_ONLY)
   SET(FTGLLibrary ftgl-tulip-${TulipMMVersion})
   SET(Tess2Include ${PROJECT_SOURCE_DIR}/thirdparty/libtess2/Include)
   SET(Tess2Library tess2-tulip-${TulipMMVersion})
-ENDIF(NOT BUILD_CORE_ONLY)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 SET(OGDFInclude ${PROJECT_SOURCE_DIR}/thirdparty/OGDF/include)
 SET(OGDFLibrary OGDF-tulip-${TulipMMVersion})
@@ -717,7 +717,7 @@ CONFIGURE_FILE("library/tulip-core/include/tulip/TulipRelease.h.in" "library/tul
 ADD_SUBDIRECTORY(thirdparty)
 ADD_SUBDIRECTORY(library)
 ADD_SUBDIRECTORY(plugins)
-IF(NOT BUILD_CORE_ONLY)
+IF(NOT TULIP_BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(doc)
   ADD_SUBDIRECTORY(textures)
   IF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
@@ -727,7 +727,7 @@ IF(NOT BUILD_CORE_ONLY)
   ELSE(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
     ADD_CUSTOM_TARGET(copyTulipColorScales ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/software/bitmaps/colorscales ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/colorscales)
   ENDIF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-ENDIF(NOT BUILD_CORE_ONLY)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(tlpscripten)
 
 IF(TULIP_BUILD_TESTS)
@@ -750,7 +750,7 @@ INSTALL(FILES AUTHORS
               cmake/FindSphinx.cmake
         DESTINATION ${TulipShareInstallDir})
 
-IF(NOT BUILD_CORE_ONLY)
+IF(NOT TULIP_BUILD_CORE_ONLY)
   ADD_SUBDIRECTORY(bundlers)
 
   ## ========================================================
@@ -820,7 +820,7 @@ IF(NOT BUILD_CORE_ONLY)
 
     IF(NOT NSIS_PATH_EMPTY)
 
-      IF(NOT BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
+      IF(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
         STRING(REPLACE "/" "\\" NSIS_PATH "${NSIS_PATH}")
         STRING(REPLACE "/" "\\" BINARY_DIR "${CMAKE_CURRENT_BINARY_DIR}")
@@ -841,12 +841,12 @@ IF(NOT BUILD_CORE_ONLY)
                           COMMAND cmd /C "\"win_bundle.bat \\\"${NSIS_PATH}\\\" \\\"${TLP_DIR}\\\" \\\"${BINARY_DIR}\\\" ${DEBUG_MODE}\""
                           WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bundlers/win)
 
-      ELSE(NOT BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
+      ELSE(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
         MESSAGE("NSIS Inetc plugin is required to build the Tulip installer.")
         MESSAGE("Download the plugin archive from http://nsis.sourceforge.net/Inetc_plug-in and extract it in ${NSIS_PATH}.")
 
-      ENDIF(NOT BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
+      ENDIF(NOT TULIP_BUILD_PYTHON_COMPONENTS OR EXISTS "${NSIS_PATH}/Plugins/inetc.dll" OR EXISTS "${NSIS_PATH}/Plugins/x86-ansi/inetc.dll")
 
     ELSE(NOT NSIS_PATH_EMPTY)
 
@@ -871,7 +871,7 @@ IF(NOT BUILD_CORE_ONLY)
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/bundlers/linux/make_appimage_bundle.sh.in" "${CMAKE_CURRENT_BINARY_DIR}/bundlers/linux/make_appimage_bundle.sh" @ONLY)
   ENDIF(LINUX)
 
-ELSE(NOT BUILD_CORE_ONLY)
+ELSE(NOT TULIP_BUILD_CORE_ONLY)
 
   IF(LINUX)
   # generate script to make a tar archive of minimal set of tulip core files
@@ -890,4 +890,4 @@ echo archive \${TAR_FILE} successfully generated" OUTPUT_FILE ${make_tar_file})
     MESSAGE(STATUS "${make_tar_file} successfully generated")
   ENDIF(LINUX)
 
-ENDIF(NOT BUILD_CORE_ONLY)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY)

@@ -391,7 +391,7 @@ void initTulipSoftware(tlp::PluginLoader* loader, bool removeDiscardedPlugins) {
   QApplication::addLibraryPath(QApplication::applicationDirPath() + "/../lib/");
 #endif
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 // MS stated that SetDllDirectory only exists since WinXP SP1
 #if defined(WIN32) && (_WIN32_WINNT >= 0x0502)
 

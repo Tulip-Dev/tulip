@@ -122,7 +122,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openProjectWith(QString,QString)),this,SLOT(openProjectWith(QString,QString)));
   connect(TulipPerspectiveProcessHandler::instance(),SIGNAL(openPerspective(QString)),this,SLOT(createPerspective(QString)));
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   checkPython();
 #endif
 }
@@ -130,7 +130,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent): QMainWindow(parent), _ui(new 
 TulipMainWindow::~TulipMainWindow() {
 }
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 void TulipMainWindow::checkPython() {
   if (!PythonVersionChecker::isPythonVersionMatching()) {
 

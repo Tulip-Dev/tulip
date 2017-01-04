@@ -90,7 +90,7 @@ private:
 
   void bringWindowToFront();
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   void checkPython();
 #endif
 
