@@ -1,7 +1,7 @@
-SET(BUILD_DOC ON CACHE BOOL "Do you want to build the documentation ? [ON|OFF]")
+SET(TULIP_BUILD_DOC ON CACHE BOOL "Do you want to build the documentation ? [ON|OFF]")
 
 #Only
-IF(BUILD_DOC)
+IF(TULIP_BUILD_DOC)
   # Unset the previous values of the CMake cache variable SPHINX_EXECUTABLE
   # in case the value of PYTHON_EXECUTABLE CMake variable changed
   UNSET(SPHINX_EXECUTABLE CACHE)
@@ -28,4 +28,4 @@ IF(BUILD_DOC)
       ENDIF(DOXYGEN_FOUND)
     ENDIF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   ENDIF(LINUX OR APPLE)
-ENDIF(BUILD_DOC)
+ENDIF(TULIP_BUILD_DOC)
