@@ -697,9 +697,9 @@ ENDFUNCTION()
 ## Unit tests
 ## ========================================================
 IF(EXISTS ${CMAKE_SOURCE_DIR}/unit_test/CMakeLists.txt)
-  SET(BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
+  SET(TULIP_BUILD_TESTS OFF CACHE BOOL "Do you want to build the tests ? [OFF|ON]")
 ELSE()
-  SET(BUILD_TESTS OFF)
+  SET(TULIP_BUILD_TESTS OFF)
 ENDIF()
 
 ## ========================================================
@@ -730,7 +730,7 @@ IF(NOT BUILD_CORE_ONLY)
 ENDIF(NOT BUILD_CORE_ONLY)
 ADD_SUBDIRECTORY(tlpscripten)
 
-IF(BUILD_TESTS)
+IF(TULIP_BUILD_TESTS)
   INCLUDE(CTest)
   ENABLE_TESTING()
   IF(CMAKE_CONFIGURATION_TYPES)
@@ -739,7 +739,7 @@ IF(BUILD_TESTS)
     ADD_CUSTOM_TARGET(runTests COMMAND ${CMAKE_CTEST_COMMAND} --force-new-ctest-process --output-on-failure)
   ENDIF(CMAKE_CONFIGURATION_TYPES)
   ADD_SUBDIRECTORY(unit_test)
-ENDIF(BUILD_TESTS)
+ENDIF(TULIP_BUILD_TESTS)
 
 INSTALL(FILES AUTHORS
               COPYING.LESSER
