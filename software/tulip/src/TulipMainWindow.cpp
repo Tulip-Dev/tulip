@@ -39,6 +39,7 @@
 #include <tulip/TulipSettings.h>
 #include <tulip/TulipProject.h>
 #include <tulip/PluginModel.h>
+#include <tulip/TlpQtTools.h>
 
 #include "ui_TulipMainWindow.h"
 #include "TulipPerspectiveProcessHandler.h"
@@ -67,7 +68,7 @@ TulipMainWindow::TulipMainWindow(QWidget *parent) : QMainWindow(parent), _ui(new
   _pageChoosers.push_back(_ui->pluginsPageChooser);
   _pageChoosers.push_back(_ui->aboutPageChooser);
 
-  QPixmap logo((tlp::TulipBitmapDir + "/welcomelogo.bmp").c_str());
+  QPixmap logo(tlpStringToQString(TulipBitmapDir + "/welcomelogo.bmp"));
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
   // take care of the devicePixelRatio
   // before setting the logo

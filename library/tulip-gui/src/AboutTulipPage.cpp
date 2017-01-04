@@ -19,15 +19,25 @@
 #include <tulip/AboutTulipPage.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/TulipRelease.h>
+
 #include "ui_AboutTulipPage.h"
 
 #include <QFile>
+#include <QDir>
 #include <QTextStream>
 
 using namespace tlp;
 
 AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::AboutTulipPageData()) {
   _ui->setupUi(this);
+
+  QString title("Tulip ");
+  title += TULIP_VERSION;
+  _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir+"/logo.bmp")));
+  _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p></body></html>");
+  _ui->QtVersionLabel->setText(QString("<span style=\"font-size:12pt;\"> "+QString(QT_VERSION_STR)+"</span>"));
+  _ui->QtRunningVersionLabel->setText(QString("<span style=\"font-size:12pt;\">(currently running ")+qVersion()+")</span>");
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
   _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
