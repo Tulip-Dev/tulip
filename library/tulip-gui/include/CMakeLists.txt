@@ -104,13 +104,13 @@ DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
 
-IF(BUILD_PYTHON_COMPONENTS)
+IF(TULIP_BUILD_PYTHON_COMPONENTS)
 INSTALL(FILES
   tulip/PythonVersionChecker.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_gui_dev
 )
-ENDIF(BUILD_PYTHON_COMPONENTS)
+ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 INSTALL(FILES
   tulip/cxx/TulipItemDelegate.cxx

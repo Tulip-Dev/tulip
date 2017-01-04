@@ -69,9 +69,9 @@ include/PreferencesDialog.h
 include/SearchWidget.h
 )
 
-IF(BUILD_PYTHON_COMPONENTS)
+IF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DBUILD_PYTHON_COMPONENTS")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTULIP_BUILD_PYTHON_COMPONENTS")
 
 INCLUDE_DIRECTORIES(${TulipPythonInclude})
 
@@ -94,7 +94,7 @@ include/PythonPluginCreationDialog.h
 include/PythonPluginsIDE.h
 )
 
-ENDIF(BUILD_PYTHON_COMPONENTS)
+ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 SET(QT_USE_QTWEBKIT true)
 
@@ -102,9 +102,9 @@ ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI
 
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName})
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${QT_LIBRARIES})
-IF(BUILD_PYTHON_COMPONENTS)
+IF(TULIP_BUILD_PYTHON_COMPONENTS)
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipPythonName})
-ENDIF(BUILD_PYTHON_COMPONENTS)
+ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 INSTALL_TULIP_PLUGIN(GraphPerspective-${TulipVersion} ${TulipPerspectivePluginsInstallDir})
 
