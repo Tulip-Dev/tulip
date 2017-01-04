@@ -10,7 +10,6 @@ IF(WIN32)
                          "${BIN_DIR}/../../library/tulip-ogdf/src/"
                          "${BIN_DIR}/../../library/tulip-python/src/"
                          "${BIN_DIR}/../../thirdparty/gzstream"
-                         "${BIN_DIR}/../../thirdparty/qxt"
                          "${BIN_DIR}/../../thirdparty/quazip"
                          "${BIN_DIR}/../../thirdparty/ftgl"
                          "${BIN_DIR}/../../thirdparty/OGDF"

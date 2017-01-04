@@ -1,4 +1,4 @@
-SET(USE_QT5 ON CACHE BOOL "Use Qt5 to build the project.")
+SET(TULIP_USE_QT5 ON CACHE BOOL "Use Qt5 to build the project.")
 
 SET(Qt5Widgets_FOUND false)
 SET(Qt5OpenGL_FOUND false)
@@ -14,7 +14,7 @@ SET(QT_HAS_WEBENGINE FALSE)
 # of the Qt5 installation must be provided in the CMAKE_PREFIX_PATH variable.
 
 # Also, when building Tulip Python wheels, force the use of Qt4 (more lightweight, easier to deploy)
-IF(USE_QT5 AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
   # Unset related CMake variables in order to change the Qt5 version (by modifying the root Qt5 directory through the CMAKE_PREFIX_PATH variable)
   # without having to delete the current CMake cache
@@ -62,7 +62,7 @@ IF(USE_QT5 AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
   FIND_PACKAGE(Qt5OpenGL)
   FIND_PACKAGE(Qt5Network)
 
-ENDIF(USE_QT5 AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
  # Qt5 and all the required modules are present, do global setup
 IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
@@ -175,10 +175,10 @@ IF(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
 # Use Qt4 otherwise
 ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
 
-  IF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+  IF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
     MESSAGE("Qt 5 required components or the CMake modules to locate them have not been found.")
     MESSAGE("Falling back to Qt 4.")
-  ENDIF(USE_QT5_IF_INSTALLED AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+  ENDIF(TULIP_USE_QT5 AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
   FIND_PACKAGE(Qt4 4.7.0 REQUIRED)
   SET(QT_USE_QTOPENGL true)
@@ -196,11 +196,11 @@ ELSE(${Qt5Widgets_FOUND} AND ${Qt5OpenGL_FOUND} AND ${Qt5Network_FOUND})
 
   SET(QT_VERSION "${QT_VERSION_MAJOR}.${QT_VERSION_MINOR}")
 
-  IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
+  IF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
     MESSAGE(SEND_ERROR "When building Tulip python wheels on MacOS, Qt version must be lesser than 4.8."
                        "Indeed we need universal binaries (i386;x86_64) to build a binary wheel and Qt 4.7 "
                        "is the last Qt version to provide bundles with universal binaries.")
-  ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
+  ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND ${QT_VERSION_MAJOR}.${QT_VERSION_MINOR} VERSION_GREATER 4.7)
 
    # define aliases for Qt macros
   MACRO(QTX_WRAP_CPP outfiles)
