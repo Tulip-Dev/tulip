@@ -30,7 +30,7 @@ SET(TULIP_GUI_PYTHON_BINDINGS_SRC ${TULIP_GUI_PYTHON_BINDINGS_SRC} TulipViewsUti
            
 DISABLE_COMPILER_WARNINGS()
 
-IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 STRING(REGEX REPLACE "[^0-9.]" "" TulipVersionClean ${TulipVersion})
 
 IF(WIN32)
@@ -59,7 +59,7 @@ ADD_CUSTOM_TARGET(copyTulipGuiPythonPackagingFiles ALL ${CMAKE_COMMAND} -E copy_
                                                    DEPENDS ${TULIPGUI_PYTHON_FOLDER}/../setup.py ${TULIPGUI_PYTHON_FOLDER}/../setup.cfg
 )
 ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiPythonPackagingFiles)
-ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 # Force to use SIP headers located in thirdparty
 # instead of those installed in the system
@@ -81,9 +81,9 @@ ADD_CUSTOM_TARGET(create-tulipgui-python-native-folder ALL
 ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} create-tulipgui-python-native-folder)
 
 ADD_CUSTOM_TARGET(copyTulipGuiInitPy ALL ${CMAKE_COMMAND} -E copy_if_different ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py ${TULIPGUI_PYTHON_FOLDER}/__init__.py)
-IF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ADD_DEPENDENCIES(tulip-gui-wheel copyTulipGuiInitPy)
-ENDIF(ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 IF(NOT SYSTEM_SIP)
 ADD_DEPENDENCIES(${LibTulipGUIPythonBindingsName} ${SIP_LIB})
@@ -103,23 +103,23 @@ ENDIF(WIN32)
 # On MacOS, add the paths of dependencies dylibs in install rpaths of the _tulipgui.so binary
 # That way, the tulipgui module can be imported in a classical Python shell without having to
 # modify the content of the DYLD_LIBRARY_PATH environment variable
-IF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   GET_TARGET_PROPERTY(CURRENT_INSTALL_RPATHS ${LibTulipGUIPythonBindingsName} INSTALL_RPATH)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES INSTALL_RPATH "${CURRENT_INSTALL_RPATHS};@loader_path/../../../;@loader_path/../../../../Frameworks")
-ENDIF(APPLE AND NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(APPLE AND NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${QT_LIBRARIES})
 # When building Python wheel for MacOS, don't link the C extension module with the Python library
 # and use dynamic lookup for retrieving its symbols.
 # That way, we can produce a C extension module that can be imported through the Python interpreter
 # provided by Apple with the System and the one provided by Python.org
-IF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
+IF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
   SET_TARGET_PROPERTIES(${LibTulipGUIPythonBindingsName} PROPERTIES LINK_FLAGS "-undefined dynamic_lookup")
-ELSE(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
-  IF(NOT LINUX OR NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
+ELSE(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+  IF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
     TARGET_LINK_LIBRARIES(${LibTulipGUIPythonBindingsName} ${PYTHON_LIBRARY})
-  ENDIF(NOT LINUX OR NOT ACTIVATE_PYTHON_WHEELS_TARGETS)
-ENDIF(APPLE AND ACTIVATE_PYTHON_WHEELS_TARGETS)
+  ENDIF(NOT LINUX OR NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+ENDIF(APPLE AND TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
 
 IF(NOT PYTHON_DIST_PACKAGE)

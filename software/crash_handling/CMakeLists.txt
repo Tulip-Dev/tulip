@@ -55,11 +55,11 @@ IF(BFD_FOUND)
   TARGET_LINK_LIBRARIES(crash_handling ${BFD_LIBRARY})
 
   # some build environments requires the need to link against the intl library
-  IF(INTL_LIBRARY)
+  IF(TULIP_INTL_LIBRARY)
 
-    TARGET_LINK_LIBRARIES(crash_handling ${INTL_LIBRARY})
+    TARGET_LINK_LIBRARIES(crash_handling ${TULIP_INTL_LIBRARY})
 
-  ENDIF(INTL_LIBRARY)
+  ENDIF(TULIP_INTL_LIBRARY)
 
 ENDIF(BFD_FOUND)
 
