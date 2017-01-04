@@ -137,26 +137,19 @@ int main(int argc,char **argv) {
 
   CrashHandling::installCrashHandler();
 
-  QString appName("Tulip ");
+  QString title("Tulip");
   QString iconPath;
-
-  // show patch number only if needed
-  if (TULIP_INT_VERSION % 10)
-    appName += TULIP_VERSION;
-  else
-    appName += TULIP_MM_VERSION;
 
   QApplication tulip_perspective(argc, argv);
   // the applicationName below is used to identify the location
   // of downloaded plugins, so it must be the same as in
   // tulip/main.cpp
-  tulip_perspective.setApplicationName(appName);
+  tulip_perspective.setApplicationName(title);
 
   // Check arguments
   QString perspectiveName,projectFilePath;
   QVariantMap extraParams;
   QRect windowGeometry;
-  QString title = appName;
   PerspectiveContext* context = new PerspectiveContext();
 
   QRegExp perspectiveRegexp("^\\-\\-perspective=(.*)");
