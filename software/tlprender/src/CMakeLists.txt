@@ -1,14 +1,10 @@
 
-include_directories(${KDE4_INCLUDES} ${KDE4_INCLUDE_DIR})
-
-
 ########### next target ###############
 
 set(@CONFIGURE_tlprender@_SRCS ${CMAKE_CURRENT_BINARY_DIR}/dummy.cpp)
 
-kde4_add_executable(@CONFIGURE_tlprender@ ${@CONFIGURE_tlprender@_SRCS})
 
-target_link_libraries(@CONFIGURE_tlprender@ ${KDE4_KDECORE_LIBS})
+target_link_libraries(@CONFIGURE_tlprender@)
 
 install(TARGETS @CONFIGURE_tlprender@ ${INSTALL_TARGETS_DEFAULT_ARGS} COMPONENT tlprender)
 
@@ -26,13 +22,6 @@ set(tlprender_SRCS
     $(PNG)
     $(JPEG))
 
-if(KDE4_BUILD_TESTS)
-
-kde4_add_executable(tlprender ${tlprender_SRCS})
-
-target_link_libraries(tlprender ${KDE4_KDECORE_LIBS} OSMesa)
-
-endif(KDE4_BUILD_TESTS)
 
 ########### install files ###############
 

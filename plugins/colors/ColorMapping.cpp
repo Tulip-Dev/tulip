@@ -25,7 +25,7 @@
 #include <tulip/ColorScale.h>
 #include <tulip/StringCollection.h>
 
-#ifndef BUILD_CORE_ONLY
+#ifndef TULIP_BUILD_CORE_ONLY
 #include "DoubleStringsListRelationDialog.h"
 #endif
 
@@ -305,7 +305,7 @@ public:
     if (metric == nullptr)
       metric = graph->getProperty<DoubleProperty>("viewMetric");
 
-#ifndef BUILD_CORE_ONLY
+#ifndef TULIP_BUILD_CORE_ONLY
 
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
       if (targetType.getCurrent() == NODES_TARGET) {
@@ -365,7 +365,7 @@ public:
         return false;
       }
 
-#ifndef BUILD_CORE_ONLY
+#ifndef TULIP_BUILD_CORE_ONLY
     }
 
 #endif

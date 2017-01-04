@@ -18,7 +18,9 @@
  *
  */
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+#include <tulip/PythonInterpreter.h>
+#include <tulip/APIDataBase.h>
 #include "PythonPanel.h"
 #include "PythonPluginsIDE.h"
 #include <tulip/APIDataBase.h>
@@ -295,46 +297,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
-
-  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, sideBarIconColor));
-  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::televisionguide, sideBarIconColor));
-  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, sideBarIconColor));
-  _ui->exportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, sideBarIconColor));
-  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::tablelarge, sideBarIconColor));
-  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, sideBarIconColor));
-  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, sideBarIconColor));
-  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, sideBarIconColor));
-  _ui->actionNewProject->setIcon(getFileNewIcon());
-  _ui->actionOpen_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, menuIconColor));
-  _ui->menuOpen_recent_file->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::clock, menuIconColor));
-  _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
-  _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
-  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, menuIconColor));
-  _ui->actionExport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, menuIconColor));
-  _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::table, menuIconColor));
-  _ui->actionNew_graph->setIcon(getFileNewIcon());
-  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::closecircle, menuIconColor));
-  _ui->actionUndo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, menuIconColor));
-  _ui->actionRedo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, menuIconColor));
-  _ui->actionCut->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcut, menuIconColor));
-  _ui->actionPaste->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentpaste, menuIconColor));
-  _ui->actionCopy->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy, menuIconColor));
-  _ui->actionDelete->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::delete_, menuIconColor));
-  _ui->actionSelect_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectall, menuIconColor));
-  _ui->actionInvert_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectinverse, menuIconColor));
-  _ui->actionCancel_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectoff, menuIconColor));
-  _ui->actionGroup_elements->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::group, menuIconColor));
-  _ui->actionPreferences->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, menuIconColor));
-  _ui->actionFull_screen->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fullscreen, menuIconColor));
-  _ui->action_Close_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::windowclose, menuIconColor));
-  _ui->actionMessages_log->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2")));
-  _ui->actionFind_plugins->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::magnify, menuIconColor));
-  _ui->actionAbout_us->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::star, QColor("#F9AA3A")));
-  _ui->actionShowUserDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
-  _ui->actionShowDevelDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
-  _ui->actionShowPythonDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
-  _ui->actionColor_scales_management->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::palette, menuIconColor));
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
   layout->addWidget(_pythonPanel);
@@ -482,7 +445,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
   _ui->searchPanel->setModel(_graphs);
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   connect(_ui->pythonButton, SIGNAL(clicked(bool)), this, SLOT(setPythonPanel(bool)));
   connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
   _pythonPanel->setModel(_graphs);
@@ -607,9 +570,9 @@ void GraphPerspective::exportGraph(Graph *g) {
   delete os;
 
   if (!result) {
-    QMessageBox::critical(_mainWindow, trUtf8("Export error"), QString("<i>") + wizard.algorithm() +
-                                                                   trUtf8("</i> failed to export graph.<br/><br/><b>") +
-                                                                   tlp::tlpStringToQString(prg->getError()) + "</b>");
+    QMessageBox::critical(_mainWindow, trUtf8("Export error"),
+                          QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") +
+                              tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
@@ -654,9 +617,9 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::importGraph(module, data, prg);
 
     if (g == nullptr) {
-      QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
-                                                                     trUtf8("</i> failed to import data.<br/><br/><b>") +
-                                                                     tlp::tlpStringToQString(prg->getError()) + "</b>");
+      QMessageBox::critical(_mainWindow, trUtf8("Import error"),
+                            QString("<i>") + tlp::tlpStringToQString(module) + trUtf8("</i> failed to import data.<br/><br/><b>") +
+                                tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
     }
@@ -842,7 +805,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
     _project->openProjectFile(path, prg);
     QMap<QString, tlp::Graph *> rootIds = _graphs->readProject(_project, prg);
     _ui->workspace->readProject(_project, rootIds, prg);
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
     _developFrame->setProject(_project);
 #endif
 
@@ -1192,8 +1155,9 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View *firstPanel = nullptr;
   View *secondPanel = nullptr;
 
-  foreach (const QString &panelName, QStringList() << "Spreadsheet view"
-                                                   << "Node Link Diagram view") {
+  foreach (const QString &panelName,
+           QStringList() << "Spreadsheet view"
+                         << "Node Link Diagram view") {
     View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
 
     if (firstPanel == nullptr)

@@ -41,7 +41,7 @@ namespace Ui {
 class GraphPerspectiveMainWindowData;
 }
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
 class PythonPanel;
 class PythonPluginsIDE;
 #endif
@@ -158,7 +158,7 @@ protected:
   bool eventFilter(QObject *, QEvent *);
   void importGraph(const std::string &module, tlp::DataSet &data);
 
-#ifdef BUILD_PYTHON_COMPONENTS
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
   PythonPanel *_pythonPanel;
   PythonPluginsIDE *_developFrame;
 #endif
