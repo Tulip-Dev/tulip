@@ -116,10 +116,10 @@ void usage(const QString &error) {
        << endl
        << "List of OPTIONS:" << endl
        << "  --perspective=<perspective_name> (-p perspective_name)\tStart the perspective specified by perspective_name." << endl
-       << "  --geometry=<X,Y,width,height>\tSets the given rectangle as geometry for the main window." << endl
+       << "  --geometry=<X,Y,width,height>\tSet the given rectangle as geometry for the main window." << endl
        << "  --title=<title>\tDisplay a specific name in the loading dialog." << endl
        << "  --icon=<relative path>\tChoose the icon in the loading dialog by providing a path relative to Tulip bitmap directory." << endl
-       << "  --help (-h)\tDisplays this help message and ignores other options." << endl
+       << "  --help (-h)\tDisplay this help message and ignore other options." << endl
        << endl
        << "Available perspectives:" << endl;
   list<string> perspectives = PluginLister::instance()->availablePlugins<Perspective>();
