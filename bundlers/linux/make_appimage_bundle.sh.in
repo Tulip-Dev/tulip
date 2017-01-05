@@ -156,7 +156,7 @@ popd > /dev/null 2>&1
 # tweak OS/ABI header part of libraries (System V instead of Linux)
 for LIB in $(find $BUNDLE_LIB_DIR -name '*.so*')
 do
-    #Some libs are in read only make it writable before stripping it 
+    # LIB may be in read only mode, make it writable before stripping it 
     chmod +w $LIB
     strip --strip-unneeded $LIB
 done;
