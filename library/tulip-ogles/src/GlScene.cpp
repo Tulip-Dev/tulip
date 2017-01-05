@@ -595,11 +595,12 @@ void GlScene::zoomFactor(float factor) {
 }
 
 void GlScene::treatEvent(const Event &message) {
-  if (message.type() != Event::TLP_MODIFICATION)
+  if (_pickingMode || message.type() != Event::TLP_MODIFICATION)
     return;
   Camera *camera = dynamic_cast<Camera *>(message.sender());
   GlEntity *entity = dynamic_cast<GlEntity *>(message.sender());
   GlLayer *layer = dynamic_cast<GlLayer *>(message.sender());
+
   if (camera || entity || layer) {
     _sceneNeedRedraw = true;
   }
@@ -679,8 +680,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
   }
   delete[] buffer;
   fbo->release();
-  delete fbo;
-  _pickingMode = false;
+  delete fbo;  
 
   for (size_t i = 0; i < selectedEntitiesInternal.size(); ++i) {
     GlEntity *entity = selectedEntitiesInternal[i].getGlEntity();
@@ -715,6 +715,8 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
       layer->setVisible(layersVisibility[layer]);
     }
   }
+
+  _pickingMode = false;
 
   return !selectedEntities.empty();
 }
