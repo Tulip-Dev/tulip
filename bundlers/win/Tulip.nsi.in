@@ -1,5 +1,5 @@
 !define ARCH "@PROCESSOR_ARCHITECTURE@"
-!define CHECK_PYTHON "@BUILD_PYTHON_COMPONENTS@"
+!define CHECK_PYTHON "@TULIP_BUILD_PYTHON_COMPONENTS@"
 
 !include "MUI.nsh"
 !include "x64.nsh"
@@ -29,7 +29,7 @@ Function .onInit
 NoAbort:
   ${Endif}
 FunctionEnd
-  InstallDir $PROGRAMFILES\Tulip-@TulipVersion@
+  InstallDir "$PROGRAMFILES\Tulip-@TulipVersion@"
   !if ${CHECK_PYTHON} == "ON"
     Name "Tulip-@TulipVersion@"
   !else
