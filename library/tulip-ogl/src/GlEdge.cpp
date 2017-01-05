@@ -165,7 +165,9 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   getEdgeSize(data,e,srcSize,tgtSize,maxSrcSize,maxTgtSize,edgeSize);
 
-  float lodSize = getEdgeWidthLod(data->getElementLayout()->getNodeValue(source),edgeSize,camera);
+  const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
+
+  float lodSize = getEdgeWidthLod(srcCoord,edgeSize,camera);
 
   bool selected = data->getElementSelected()->getEdgeValue(e);
 
@@ -174,7 +176,6 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
       data->getGlVertexArrayManager()->activatePointEdgeDisplay(this,selected);
     }
     else {
-      const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
       Color srcCol, tgtCol;
       getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
 
@@ -208,8 +209,6 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
       data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
     }
   }
-
-  const Coord& srcCoord = data->getElementLayout()->getNodeValue(source);
 
   const Coord& tgtCoord = data->getElementLayout()->getNodeValue(target);
 
