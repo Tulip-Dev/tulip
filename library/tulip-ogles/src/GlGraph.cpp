@@ -866,7 +866,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     }
   }
 
-  if (_renderingParameters.displayEdges() && _graph->numberOfEdges() > 0) {
+  if (_renderingParameters.displayEdges() && _graph->numberOfEdges() > 0 && (lineEdges.size() + quadsEdges.size()) > 0) {
 
     uploadEdgesData();
 
