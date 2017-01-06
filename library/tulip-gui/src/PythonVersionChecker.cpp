@@ -29,7 +29,7 @@ using namespace tlp;
 using namespace std;
 
 // Current Python versions
-static const char *pythonVersion[] = {"3.5", "3.4", "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0};
+static const char *pythonVersion[] = {"3.6", "3.5", "3.4", "3.3", "3.2", "3.1", "3.0", "2.7", "2.6", "2.5", 0};
 
 // Windows specific functions
 #ifdef WIN32
@@ -159,8 +159,9 @@ static QString getDefaultPythonVersionIfAny() {
 #endif
 
       // Check the binary type of the python executable (32 or 64 bits)
-      pythonProcess.start(pythonCommand, QStringList() << "-c"
-                                                       << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
+      pythonProcess.start(pythonCommand,
+                          QStringList() << "-c"
+                                        << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
       pythonProcess.waitForFinished(-1);
       QString arch = pythonProcess.readAll();
 
