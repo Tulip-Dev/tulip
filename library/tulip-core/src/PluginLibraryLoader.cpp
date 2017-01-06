@@ -207,6 +207,9 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
         ++nbFiles;
       }
 
+      if (hFind != INVALID_HANDLE_VALUE)
+        FindClose(hFind);
+
       loader->numberOfFiles(nbFiles);
       hFind = FindFirstFile ("*.dll", &findData);
     }
@@ -234,6 +237,10 @@ bool PluginLibraryLoader::initPluginDir(PluginLoader *loader) {
         loader->aborted(currentPluginLibrary, currentPluginLibrary + " is not a Tulip plugin library");
 
       success = FindNextFile (hFind, &findData);
+    }
+
+    if (hFind != INVALID_HANDLE_VALUE) {
+      FindClose(hFind);
     }
 
     SetCurrentDirectory(currentDirectory);
