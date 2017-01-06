@@ -48,9 +48,9 @@ public :
   // redefinition of some PropertyInterface methods
   PropertyInterface* clonePrototype(Graph *, const std::string&) const;
   bool setNodeStringValue(const node n, const std::string & v);
-  bool setAllNodeStringValue(const std::string & v, tlp::Graph *graph = NULL);
+  bool setAllNodeStringValue(const std::string & v, const tlp::Graph *graph = NULL);
   bool setEdgeStringValue( const edge e, const std::string & v);
-  bool setAllEdgeStringValue(const std::string & v, tlp::Graph *graph = NULL);
+  bool setAllEdgeStringValue(const std::string & v, const tlp::Graph *graph = NULL);
   static const std::string propertyTypename;
   const std::string& getTypename() const {
     return propertyTypename;
@@ -59,7 +59,7 @@ public :
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node n, const GraphType::RealType& g);
-  virtual void setAllNodeValue(const GraphType::RealType& g, Graph *graph = NULL);
+  virtual void setAllNodeValue(const GraphType::RealType& g, const Graph *graph = NULL);
   virtual bool readNodeDefaultValue(std::istream& iss);
   virtual bool readNodeValue(std::istream& iss, node n);
   // tlp::GraphType encapsulates a tlp::Graph pointer but that is the graph id
