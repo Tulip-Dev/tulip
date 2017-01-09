@@ -201,38 +201,36 @@ void WorkspacePanel::setView(tlp::View *view) {
   connect(_view, SIGNAL(graphSet(tlp::Graph *)), this, SLOT(viewGraphSet(tlp::Graph *)));
   connect(_view, SIGNAL(drawNeeded()), this, SIGNAL(drawNeeded()));
   connect(_view, SIGNAL(interactorsChanged()), this, SLOT(refreshInteractorsToolbar()));
+  _view->graphicsView()->scene()->installEventFilter(this);
 
-  if (_view->configurationWidgets().empty())
-    return;
-
+  if (!_view->configurationWidgets().empty()) {
 #ifdef WIN32
-  QTabWidget *viewConfigurationTabs = new CustomTabWidget();
+    QTabWidget *viewConfigurationTabs = new CustomTabWidget();
 #else
-  QTabWidget *viewConfigurationTabs = new QTabWidget();
+    QTabWidget *viewConfigurationTabs = new QTabWidget();
 #endif
-  viewConfigurationTabs->setTabsClosable(true);
-  connect(viewConfigurationTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(hideConfigurationTab()));
-  viewConfigurationTabs->setTabPosition(QTabWidget::West);
-  viewConfigurationTabs->setStyleSheet(_view->configurationWidgetsStyleSheet());
-  viewConfigurationTabs->findChild<QTabBar *>()->installEventFilter(this);
-// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported
-// painter devtype type 1"
+    viewConfigurationTabs->setTabsClosable(true);
+    connect(viewConfigurationTabs, SIGNAL(tabCloseRequested(int)), this, SLOT(hideConfigurationTab()));
+    viewConfigurationTabs->setTabPosition(QTabWidget::West);
+    viewConfigurationTabs->setStyleSheet(_view->configurationWidgetsStyleSheet());
+    viewConfigurationTabs->findChild<QTabBar *>()->installEventFilter(this);
+// workaround to get rid of Qt5 warning messages : "QMacCGContext:: Unsupported painter devtype type 1"
 // see https://bugreports.qt.io/browse/QTBUG-32639
 #if defined(__APPLE__) && QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-  viewConfigurationTabs->setWindowOpacity(0.99);
+    viewConfigurationTabs->setWindowOpacity(0.99);
 #endif
 
-  foreach (QWidget *w, _view->configurationWidgets()) {
-    w->installEventFilter(this);
-    w->resize(w->width(), w->sizeHint().height());
-    viewConfigurationTabs->addTab(w, w->windowTitle());
-  }
+    foreach (QWidget *w, _view->configurationWidgets()) {
+      w->installEventFilter(this);
+      w->resize(w->width(), w->sizeHint().height());
+      viewConfigurationTabs->addTab(w, w->windowTitle());
+    }
 
-  _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
-  _viewConfigurationWidgets->installEventFilter(this);
-  _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
-  _viewConfigurationWidgets->setZValue(DBL_MAX);
-  _view->graphicsView()->scene()->installEventFilter(this);
+    _viewConfigurationWidgets = new QGraphicsProxyWidget(_view->centralItem());
+    _viewConfigurationWidgets->installEventFilter(this);
+    _viewConfigurationWidgets->setWidget(viewConfigurationTabs);
+    _viewConfigurationWidgets->setZValue(DBL_MAX);
+  }
   resetInteractorsScrollButtonsVisibility();
 }
 
@@ -278,13 +276,12 @@ void WorkspacePanel::showEvent(QShowEvent *event) {
 
     // set event filter for the new scene
     _view->graphicsView()->scene()->installEventFilter(this);
-    //restore any specific behavior of the QGraphicsScene
+    // restore any specific behavior of the QGraphicsScene
     _view->resetGraphicsScene();
 
     // delete old scene
     delete oldScene;
   }
-
 }
 #endif
 
@@ -296,17 +293,15 @@ void WorkspacePanel::closeEvent(QCloseEvent *event) {
 }
 
 bool WorkspacePanel::eventFilter(QObject *obj, QEvent *ev) {
-  if (_viewConfigurationWidgets != nullptr && _view != nullptr) {
+  if (_view != NULL) {
     if (ev->type() == QEvent::GraphicsSceneContextMenu) {
       _view->showContextMenu(QCursor::pos(), static_cast<QGraphicsSceneContextMenuEvent *>(ev)->scenePos());
-    }
-
-    else if (_view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
+    } else if (_viewConfigurationWidgets != NULL && _view->configurationWidgets().contains(qobject_cast<QWidget *>(obj)))
       return true;
 
-    else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded && qobject_cast<QTabBar *>(obj) != nullptr) {
+    else if (ev->type() == QEvent::MouseButtonPress && !_viewConfigurationExpanded && qobject_cast<QTabBar *>(obj) != NULL) {
       setConfigurationTabExpanded(true);
-    } else if (ev->type() == QEvent::Wheel && qobject_cast<QTabBar *>(obj) != nullptr) {
+    } else if (ev->type() == QEvent::Wheel && qobject_cast<QTabBar *>(obj) != NULL) {
       return true;
     }
   }
