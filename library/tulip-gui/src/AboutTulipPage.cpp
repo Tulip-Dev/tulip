@@ -19,7 +19,9 @@
 #include <tulip/AboutTulipPage.h>
 #include <tulip/TlpTools.h>
 #include <tulip/TlpQtTools.h>
+#include <tulip/GlMainWidget.h>
 #include <tulip/TulipRelease.h>
+#include <tulip/OpenGlConfigManager.h>
 
 #include "ui_AboutTulipPage.h"
 
@@ -37,8 +39,22 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
   title += TULIP_VERSION;
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir+"/logo.bmp")));
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p></body></html>");
-  _ui->QtVersionLabel->setText(QString("<span style=\"font-size:12pt;\"> "+QString(QT_VERSION_STR)+"</span>"));
-  _ui->QtRunningVersionLabel->setText(QString("<span style=\"font-size:12pt;\">(currently running ")+qVersion()+")</span>");
+
+  GlMainWidget::getFirstQGLWidget()->makeCurrent();
+  QString tulipDependenciesInfo = "<p style=\"font-size:12pt\">"
+                                  "This open source software is powered by:"
+                                  "<ul>"
+                                  "  <li> <b> Qt </b> " + tlpStringToQString(qVersion()) + ": <a href=\"https://wwww.qt.io\">https://wwww.qt.io</a></li>"
+                                  "  <li> <b> OpenGL </b> " + QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) + " (from vendor " + tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) + "): <a href=\"https://wwww.opengl.org\">https://wwww.opengl.org</a> </li>"
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+                                  "  <li> <b> Python </b> " + TLP_PYTHON + ": <a href=\"https://wwww.python.org\">https://wwww.python.org</a> </li>"
+#endif
+                                  "</ul>"
+                                  "</p>"
+                                  ;
+  GlMainWidget::getFirstQGLWidget()->doneCurrent();
+
+  _ui->dependenciesInfo->setText(tulipDependenciesInfo);
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
   _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
