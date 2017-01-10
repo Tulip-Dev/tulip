@@ -34,6 +34,8 @@ static const char *pythonVersion[] = {"3.6", "3.5", "3.4", "3.3", "3.2", "3.1", 
 // Windows specific functions
 #ifdef WIN32
 
+#include <QFileInfo>
+
 #include <windows.h>
 
 #ifndef X86_64
@@ -57,47 +59,62 @@ static bool isWow64() {
 }
 #endif
 
+// Check if a path is a valid Python Home, meaning it is not empty and contains the python executable
+static bool validPythonHome(const QString &pythonHome) {
+  return !pythonHome.isEmpty() && QFileInfo(pythonHome + "/python.exe").exists();
+}
+
 // Function to get the path to Python home directory for a specific Python version.
 // Returns an empty string if the provided version is not installed on the host system.
 // The path to the Python home directory is retrieved from the windows registry.
-// On windows, Python can be installed for all users or for the current user only. That function handles both cases
+// On windows, Python can be installed for all users or for the current user only. That function handles both cases.
+// The current user installation will be prefered over the all users one.
 static QString pythonHome(const QString &pythonVersion) {
+
+// special case when using Python provided by MSYS2
 #ifdef MSYS2_PYTHON
   (void)pythonVersion;
   return PYTHON_HOME_PATH;
+
+// standard Python installation on Windows
 #else
+
+  QString winRegKeyAllUsers, winRegKeyCurrentUser;
+
 // 32 bit Python
 #ifndef X86_64
   // on windows 64 bit
   if (isWow64()) {
-    QString win64RegKeyAllUsers =
-        QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-    QSettings win64SettingsAllUsers(win64RegKeyAllUsers, QSettings::NativeFormat);
-    QString win64RegKeyCurrentUser =
-        QString("HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-    QSettings win64SettingsCurrentUser(win64RegKeyCurrentUser, QSettings::NativeFormat);
-    return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") +
-           win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+    winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Wow6432Node\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
   }
   // on windows 32 bit
   else {
-    QString win32RegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-    QSettings win32SettingsAllUsers(win32RegKeyAllUsers, QSettings::NativeFormat);
-    QString win32RegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-    QSettings win32SettingsCurrentUser(win32RegKeyCurrentUser, QSettings::NativeFormat);
-    return win32SettingsAllUsers.value("Default").toString().replace("\\", "/") +
-           win32SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+    winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+    winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
   }
 
 // 64 bit Python
 #else
-  QString win64RegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-  QSettings win64SettingsAllUsers(win64RegKeyAllUsers, QSettings::NativeFormat);
-  QString win64RegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
-  QSettings win64SettingsCurrentUser(win64RegKeyCurrentUser, QSettings::NativeFormat);
-  return win64SettingsAllUsers.value("Default").toString().replace("\\", "/") +
-         win64SettingsCurrentUser.value("Default").toString().replace("\\", "/");
+
+  winRegKeyAllUsers = QString("HKEY_LOCAL_MACHINE\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+  winRegKeyCurrentUser = QString("HKEY_CURRENT_USER\\SOFTWARE\\Python\\PythonCore\\") + pythonVersion + QString("\\InstallPath");
+
 #endif
+
+  QSettings winSettingsAllUsers(winRegKeyAllUsers, QSettings::NativeFormat);
+  QSettings winSettingsCurrentUser(winRegKeyCurrentUser, QSettings::NativeFormat);
+  QString pythonHomeAllUsers = winSettingsAllUsers.value("Default").toString().replace("\\", "/");
+  QString pythonHomeCurrentUser = winSettingsCurrentUser.value("Default").toString().replace("\\", "/");
+
+  if (validPythonHome(pythonHomeCurrentUser)) {
+    return pythonHomeCurrentUser;
+  } else if (validPythonHome(pythonHomeAllUsers)) {
+    return pythonHomeAllUsers;
+  } else {
+    return "";
+  }
+
 #endif
 }
 
