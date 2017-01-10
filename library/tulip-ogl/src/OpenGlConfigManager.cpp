@@ -22,7 +22,8 @@
 #include <tulip/OpenGlConfigManager.h>
 
 #include <iostream>
-#include <cstdlib>
+#include <sstream>
+
 
 //====================================================
 tlp::OpenGlConfigManager* tlp::OpenGlConfigManager::inst=NULL;
@@ -49,11 +50,18 @@ void OpenGlConfigManager::initExtensions() {
   }
 }
 
-double OpenGlConfigManager::getOpenGLVersion() {
-  return atof(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
+string OpenGlConfigManager::getOpenGLVersionString() const {
+  return reinterpret_cast<const char *>(glGetString(GL_VERSION));
 }
 
-string OpenGlConfigManager::getOpenGLVendor() {
+double OpenGlConfigManager::getOpenGLVersion() const {
+  double ret = 0;
+  std::istringstream iss(getOpenGLVersionString());//.substr(0,3));
+  iss >> ret;
+  return ret;
+}
+
+string OpenGlConfigManager::getOpenGLVendor() const {
   return string(reinterpret_cast<const char*>(glGetString(GL_VENDOR)));
 }
 
