@@ -290,13 +290,6 @@ background-color: white
           </property>
          </spacer>
         </item>
-        <item>
-         <widget class="QLabel" name="addMorePluginsLink">
-          <property name="text">
-           <string>&lt;a href=&quot;tulip://plugins&quot;&gt;More panels...&lt;/a&gt;</string>
-          </property>
-         </widget>
-        </item>
        </layout>
       </item>
      </layout>

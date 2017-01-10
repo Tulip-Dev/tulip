@@ -43,11 +43,6 @@ PanelSelectionWizard::PanelSelectionWizard(GraphHierarchiesModel *model, QWidget
   connect(_ui->panelList->selectionModel(), SIGNAL(currentChanged(QModelIndex, QModelIndex)), this, SLOT(panelSelected(QModelIndex)));
   connect(_ui->panelList, SIGNAL(doubleClicked(QModelIndex)), button(QWizard::FinishButton), SLOT(click()));
   _ui->panelList->setCurrentIndex(_ui->panelList->model()->index(0, 0));
-
-// hide  "more panels" link when not on windows or macos
-#if !defined(__APPLE__) && !defined(_WIN32)
-  _ui->addMorePluginsLink->hide();
-#endif
 }
 
 PanelSelectionWizard::~PanelSelectionWizard() {
