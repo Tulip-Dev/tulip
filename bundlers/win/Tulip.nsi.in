@@ -77,11 +77,19 @@ OutFile "${OUT_FILE}"
 !if ${CHECK_PYTHON} == "ON"
 Function CheckAndInstallPython 
   ${If} ${RunningX64} 
-	ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+        ReadRegStr $0 HKCU SOFTWARE\Wow6432Node\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
   ${Else}
-	ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+        ReadRegStr $0 HKCU SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
   ${EndIf}
-  IfErrors install end
+  IfErrors +2 0
+  IfFileExists $0\python.exe end 0
+  ${If} ${RunningX64}
+        ReadRegStr $0 HKLM SOFTWARE\Wow6432Node\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+  ${Else}
+        ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+  ${EndIf}
+  IfErrors +2 0
+  IfFileExists $0\python.exe end install
   install:
         MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi$\n$\nand install Python @PYTHON_VERSION@ (x86)."
         inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.msi" "python-@PYTHON_VERSION_WITH_PATCH@.msi"
@@ -96,8 +104,12 @@ FunctionEnd
 
 Function CheckAndInstallPython64 
   SetRegView 64
+  ReadRegStr $0 HKCU SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
+  IfErrors +2 0
+  IfFileExists $0\python.exe end 0
   ReadRegStr $0 HKLM SOFTWARE\Python\PythonCore\@PYTHON_VERSION@\InstallPath ""
-  IfErrors install end
+  IfErrors install 0
+  IfFileExists $0\python.exe end install
   install:
         MessageBox MB_OK "Your system does not appear to have Python @PYTHON_VERSION@ (x86-64) installed.$\n$\nIt is now required to run Tulip @TulipVersion@.$\n$\nPress OK to download https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi$\n$\nand install Python @PYTHON_VERSION@ (x86-64)."
         inetc::get "https://www.python.org/ftp/python/@PYTHON_VERSION_WITH_PATCH@/python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi" "python-@PYTHON_VERSION_WITH_PATCH@.amd64.msi"
