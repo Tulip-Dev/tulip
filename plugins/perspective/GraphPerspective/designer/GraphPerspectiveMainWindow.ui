@@ -849,7 +849,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                <item>
                 <widget class="QPushButton" name="addPanelButton">
                  <property name="text">
-                  <string>Add Panel</string>
+                  <string>Add panel</string>
                  </property>
                  <property name="icon">
                   <iconset resource="../resources/GraphPerspective.qrc">
@@ -861,7 +861,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 <widget class="OutputPanelButton" name="exposeModeButton">
                  <property name="minimumSize">
                   <size>
-                   <width>120</width>
+                   <width>85</width>
                    <height>20</height>
                   </size>
                  </property>
@@ -889,7 +889,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 <widget class="OutputPanelButton" name="searchButton">
                  <property name="minimumSize">
                   <size>
-                   <width>120</width>
+                   <width>85</width>
                    <height>20</height>
                   </size>
                  </property>
@@ -917,7 +917,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 <widget class="OutputPanelButton" name="pythonButton">
                  <property name="minimumSize">
                   <size>
-                   <width>120</width>
+                   <width>85</width>
                    <height>20</height>
                   </size>
                  </property>
@@ -958,13 +958,13 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 <widget class="QPushButton" name="previousPageButton">
                  <property name="minimumSize">
                   <size>
-                   <width>24</width>
+                   <width>20</width>
                    <height>24</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>24</width>
+                   <width>20</width>
                    <height>24</height>
                   </size>
                  </property>
@@ -987,13 +987,13 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 <widget class="QPushButton" name="nextPageButton">
                  <property name="minimumSize">
                   <size>
-                   <width>24</width>
+                   <width>20</width>
                    <height>24</height>
                   </size>
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>24</width>
+                   <width>20</width>
                    <height>24</height>
                   </size>
                  </property>
