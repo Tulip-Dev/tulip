@@ -112,9 +112,11 @@ static QString pythonHome(const QString &pythonVersion) {
 
   if (validPythonHome(pythonHomeCurrentUser)) {
     return pythonHomeCurrentUser;
-  } else if (validPythonHome(pythonHomeAllUsers)) {
+  }
+  else if (validPythonHome(pythonHomeAllUsers)) {
     return pythonHomeAllUsers;
-  } else {
+  }
+  else {
     return "";
   }
 
