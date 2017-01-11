@@ -177,7 +177,6 @@ void QuadTreeBundle::createQuadTree(Graph *graph, tlp::LayoutProperty *lay, tlp:
     size = siz;
 
   rot = graph->getProperty<DoubleProperty>("viewRotation");
-  ntype = graph->getProperty<DoubleProperty>("nodetype");
   this->graph = graph;
 
   BoundingBox bb = tlp::computeBoundingBox(graph, layout, size, rot);
