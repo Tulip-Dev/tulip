@@ -54,8 +54,8 @@ public:
   bool run();
 
 private:
-  tlp::DoubleProperty *computeWeights(tlp::Graph *);
-  void fixEdgeType();
+  // tlp::DoubleProperty* computeWeights(tlp::Graph *);
+  void fixEdgeType(tlp::IntegerProperty *);
   void computeDistances();
   void computeDistance(tlp::node);
   double longEdges;
@@ -65,9 +65,6 @@ private:
   bool forceEdgeTest;
   bool edgeNodeOverlap;
   bool layout3D;
-  tlp::DoubleProperty *coloration;
-  tlp::DoubleProperty *distance;
-  tlp::DoubleProperty *ntype;
   tlp::LayoutProperty *layout;
   tlp::Graph *vertexCoverGraph, *oriGraph, *gridGraph;
 };

@@ -112,10 +112,10 @@ public:
     return dist->getNodeValue(a) > dist->getNodeValue(b);
   }
 };
-DoubleProperty *SortNodes::dist = 0;
-Graph *SortNodes::g = 0;
+DoubleProperty *SortNodes::dist = nullptr;
+Graph *SortNodes::g = nullptr;
 //============================================
-DoubleProperty *EdgeBundling::computeWeights(Graph *graph) {
+/*DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
   for (edge e : graph->getEdges()) {
     const pair<node, node> &ends = graph->ends(e);
@@ -130,7 +130,7 @@ DoubleProperty *EdgeBundling::computeWeights(Graph *graph) {
     weights->setEdgeValue(e, initialWeight);
   }
   return weights;
-}
+  }*/
 //============================================
 void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const vector<node> &nBends, bool layout3D) {
   if (nBends.size() < 3)
@@ -172,7 +172,8 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
 }
 //============================================
 // fix all graph edge to 1 and all grid edge to 0 graph-grid edge 2 edge on the contour of a node 3
-void EdgeBundling::fixEdgeType() {
+void EdgeBundling::fixEdgeType(IntegerProperty *ntype) {
+  node n;
   ntype->setAllEdgeValue(0);
   for (edge e : graph->getEdges()) {
     if (oriGraph->isElement(e)) {
@@ -224,7 +225,7 @@ void EdgeBundling::computeDistance(node n) {
     double dist = (nPos - n2Pos).norm();
     maxDist += dist;
   }
-  distance->setNodeValue(n, maxDist);
+  SortNodes::dist->setNodeValue(n, maxDist);
 }
 //============================================
 bool EdgeBundling::run() {
@@ -243,7 +244,7 @@ bool EdgeBundling::run() {
   SizeProperty *size = graph->getProperty<SizeProperty>("viewSize");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
 
-  if (dataSet != nullptr) {
+  if (dataSet != nullptrptr) {
     dataSet->get("long_edges", longEdges);
     dataSet->get("split_ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);
@@ -267,13 +268,6 @@ bool EdgeBundling::run() {
   omp_set_nested(true);
   omp_set_dynamic(false);
 #endif
-
-  ntype = graph->getProperty<DoubleProperty>("nodetype");
-  coloration = graph->getProperty<DoubleProperty>("coloration");
-
-  distance = graph->getProperty<DoubleProperty>("distance");
-  ntype->setAllNodeValue(0);
-  ntype->setAllEdgeValue(0);
 
   string err;
   oriGraph = graph->addCloneSubGraph("Original Graph");
@@ -370,15 +364,16 @@ bool EdgeBundling::run() {
     }
   }
 
-  fixEdgeType();
+  IntegerProperty ntype(graph);
+  fixEdgeType(&ntype);
 
   // remove all original graph edges
   //==========================================================
   gridGraph = graph->getSubGraph("Voronoi");
   gridGraph->setName("Grid Graph");
-
-  for (edge e : stableIterator(gridGraph->getEdges())) {
-    if (ntype->getEdgeValue(e) == 1) {
+  edge e;
+  stableForEach(e, gridGraph->getEdges()) {
+    if (ntype.getEdgeValue(e) == 1) {
       gridGraph->delEdge(e);
     }
   }
@@ -406,7 +401,7 @@ bool EdgeBundling::run() {
           continue;
 
         tlp::edge e = gridGraph->addEdge(samePositionNodes[i][j], n);
-        ntype->setEdgeValue(e, 2);
+        ntype.setEdgeValue(e, 2);
       }
     }
   }
@@ -423,7 +418,7 @@ bool EdgeBundling::run() {
       double abNorm = (double)(a - b).norm();
       double initialWeight = pow(abNorm, longEdges);
 
-      if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap)
+      if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap)
         initialWeight = abNorm;
 
       mWeights.set(e.id, initialWeight);
@@ -433,10 +428,10 @@ bool EdgeBundling::run() {
 
   //==========================================================
 
-  DoubleProperty *depth = graph->getProperty<DoubleProperty>("Depth");
+  IntegerProperty depth(graph);
   // unsigned int nbDijkstraComputed = 0;
-  DoubleProperty *preference = gridGraph->getProperty<DoubleProperty>("edgeTaken");
-  preference->setAllNodeValue(0);
+  DoubleProperty preference(gridGraph);
+  preference.setAllNodeValue(0);
 
   // Load the grid graph into an optimized structure for graph traversal
   Dijkstra::loadGraph(gridGraph);
@@ -445,8 +440,8 @@ bool EdgeBundling::run() {
   for (unsigned int iteration = 0; iteration < MAX_ITER; iteration++) {
 
     if (iteration < MAX_ITER - 1) {
-      depth->setAllNodeValue(0);
-      depth->setAllEdgeValue(0);
+      depth.setAllNodeValue(0);
+      depth.setAllEdgeValue(0);
     }
 
     vertexCoverGraph = oriGraph->addCloneSubGraph("vertexCoverGraph"); // used for optimizing the vertex cover problem
@@ -454,12 +449,13 @@ bool EdgeBundling::run() {
     MutableContainer<bool> edgeTreated;
     edgeTreated.setAll(false);
     SortNodes::g = vertexCoverGraph;
-    SortNodes::dist = distance;
+    DoubleProperty distance(graph);
+    SortNodes::dist = &distance;
     set<node, SortNodes> orderedNodes;
     computeDistances();
     {
-      for (node n : vertexCoverGraph->getNodes())
-        orderedNodes.insert(n);
+      node n;
+      forEach(n, vertexCoverGraph->getNodes()) orderedNodes.insert(n);
     }
 
     while (vertexCoverGraph->numberOfNodes() > 0) {
@@ -563,7 +559,7 @@ bool EdgeBundling::run() {
             BooleanProperty tmpP(gridGraph);
             tmpP.setAllNodeValue(false);
             tmpP.setAllEdgeValue(false);
-            dijkstra.searchPaths(n2, depth);
+            dijkstra.searchPaths(n2, &depth);
           }
         }
       } else {
@@ -610,11 +606,11 @@ bool EdgeBundling::run() {
               // update preference property (if their is two shortest path try to use the
               // one with high preference)
               for (size_t ii = 0; ii < tmpV.size(); ++ii) {
-                double res = preference->getNodeValue(tmpV[ii]) + 1;
+                double res = preference.getNodeValue(tmpV[ii]) + 1;
 #ifdef _OPENMP
 #pragma omp critical(PREF)
 #endif
-                preference->setNodeValue(tmpV[ii], res);
+                preference.setNodeValue(tmpV[ii], res);
               }
 
               if (!layout3D)
@@ -650,12 +646,12 @@ bool EdgeBundling::run() {
       for (edge e : gridGraph->getEdges()) {
         mWeights.set(e.id, mWeightsInit.get(e.id));
 
-        if (ntype->getEdgeValue(e) == 2 && !edgeNodeOverlap) {
+        if (ntype.getEdgeValue(e) == 2 && !edgeNodeOverlap) {
           continue;
         }
 
-        // double avgdepth = weightFactor * depth->getEdgeValue(e) + 1.;
-        double avgdepth = depth->getEdgeValue(e);
+        // double avgdepth = weightFactor * depth.getEdgeValue(e) + 1.;
+        double avgdepth = depth.getEdgeValue(e);
 
         if (avgdepth > 0)
           mWeights.set(e.id, (mWeightsInit.get(e.id) / (log(avgdepth) + 1)));

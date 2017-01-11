@@ -27,7 +27,7 @@
 #include <tulip/Vector.h>
 #include <tulip/ForEach.h>
 #include <tulip/LayoutProperty.h>
-#include <tulip/DoubleProperty.h>
+#include <tulip/IntegerProperty.h>
 
 #include <tulip/vectorgraph.h>
 
@@ -96,7 +96,7 @@ public:
                     const std::set<tlp::node> &focus);
 
   //========================================================
-  void searchPaths(tlp::node n, tlp::DoubleProperty *depth);
+  void searchPaths(tlp::node n, tlp::IntegerProperty *depth);
   void searchPath(tlp::node n, std::vector<tlp::node> &vNodes);
   //=============================================================
 private:

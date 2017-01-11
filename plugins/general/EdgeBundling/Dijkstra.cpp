@@ -152,7 +152,7 @@ void Dijkstra::initDijkstra(const tlp::Graph *const forbidden, tlp::node srcTlp,
   resultEdges.setAll(false);
 }
 //=======================================================================
-void Dijkstra::searchPaths(node ntlp, DoubleProperty *depth) {
+void Dijkstra::searchPaths(node ntlp, IntegerProperty *depth) {
 
   node n = ntlp2dik.get(ntlp);
 
@@ -178,7 +178,7 @@ void Dijkstra::searchPaths(node ntlp, DoubleProperty *depth) {
       continue;
 
     resultEdges[e] = true;
-    double dep = depth->getEdgeValue(edik2tlp[e]) + 1.;
+    int dep = depth->getEdgeValue(edik2tlp[e]) + 1;
 #ifdef _OPENMP
 #pragma omp critical(DEPTH)
 #endif
