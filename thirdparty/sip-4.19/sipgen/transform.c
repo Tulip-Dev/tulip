@@ -3860,20 +3860,7 @@ static void createSortedNumberedTypesTable(sipSpec *pt, moduleDef *mod)
  */
 static int compareTypes(const void *t1, const void *t2)
 {
-    scopedNameDef *snd1, *snd2;
-
-    snd1 = getFQCNameOfType((argDef *)t1);
-    snd2 = getFQCNameOfType((argDef *)t2);
-
-    /*
-     * This is a lazy hack.  All names should have an explicit scope.  However
-     * mapped type templates don't (yet), so for the moment we just strip the
-     * global scope.
-     */
-    if (snd1->name[0] == '\0') snd1 = snd1->next;
-    if (snd2->name[0] == '\0') snd2 = snd2->next;
-
-    return compareScopedNames(snd1, snd2);
+    return strcmp(((argDef *)t1)->name->text, ((argDef *)t2)->name->text);
 }
 
 
