@@ -38,7 +38,6 @@ private:
   tlp::LayoutProperty *layout;
   tlp::SizeProperty   *size;
   tlp::DoubleProperty *rot;
-  tlp::DoubleProperty *ntype;
   tlp::Graph * graph;
   double splitRatio;
   typedef tlp::Vector<double, 3> Vec3D;
