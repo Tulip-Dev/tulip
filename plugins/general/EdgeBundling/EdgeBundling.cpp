@@ -196,7 +196,7 @@ void EdgeBundling::fixEdgeType(IntegerProperty* ntype) {
 }
 //============================================
 void computeDik(Dijkstra &dijkstra, const Graph * const vertexCoverGraph,
-		const Graph * const oriGraph,
+                const Graph * const oriGraph,
                 const node n, const MutableContainer<double> &mWeights,
                 unsigned int optimizatioLevel) {
   set<node> focus;
