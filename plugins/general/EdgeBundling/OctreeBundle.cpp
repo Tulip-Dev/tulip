@@ -257,8 +257,7 @@ void OctreeBundle::createOctree(Graph *graph, tlp::LayoutProperty *lay, tlp::Siz
   layout = graph->getProperty<LayoutProperty>("viewLayout");
   size   = graph->getProperty<SizeProperty>("viewSize");
   rot = graph->getProperty<DoubleProperty>("viewRotation");
-  ntype = graph->getProperty<DoubleProperty>("nodetype");
-
+  
   if (lay)
     layout = lay;
 
