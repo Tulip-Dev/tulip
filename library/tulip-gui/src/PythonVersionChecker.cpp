@@ -176,9 +176,8 @@ static QString getDefaultPythonVersionIfAny() {
 #endif
 
       // Check the binary type of the python executable (32 or 64 bits)
-      pythonProcess.start(pythonCommand,
-                          QStringList() << "-c"
-                                        << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
+      pythonProcess.start(pythonCommand, QStringList() << "-c"
+                                                       << "import struct;import sys;sys.stdout.write(str(struct.calcsize('P')*8))");
       pythonProcess.waitForFinished(-1);
       QString arch = pythonProcess.readAll();
 

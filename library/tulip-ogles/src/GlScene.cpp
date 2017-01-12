@@ -680,7 +680,7 @@ bool GlScene::selectEntities(RenderingEntitiesFlag type, int x, int y, int width
   }
   delete[] buffer;
   fbo->release();
-  delete fbo;  
+  delete fbo;
 
   for (size_t i = 0; i < selectedEntitiesInternal.size(); ++i) {
     GlEntity *entity = selectedEntitiesInternal[i].getGlEntity();

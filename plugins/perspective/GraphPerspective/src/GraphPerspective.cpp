@@ -607,9 +607,9 @@ void GraphPerspective::exportGraph(Graph *g) {
   delete os;
 
   if (!result) {
-    QMessageBox::critical(_mainWindow, trUtf8("Export error"),
-                          QString("<i>") + wizard.algorithm() + trUtf8("</i> failed to export graph.<br/><br/><b>") +
-                              tlp::tlpStringToQString(prg->getError()) + "</b>");
+    QMessageBox::critical(_mainWindow, trUtf8("Export error"), QString("<i>") + wizard.algorithm() +
+                                                                   trUtf8("</i> failed to export graph.<br/><br/><b>") +
+                                                                   tlp::tlpStringToQString(prg->getError()) + "</b>");
   } else {
     // display spent time
     if (TulipSettings::instance().isRunningTimeComputed()) {
@@ -654,9 +654,9 @@ void GraphPerspective::importGraph(const std::string &module, DataSet &data) {
     g = tlp::importGraph(module, data, prg);
 
     if (g == nullptr) {
-      QMessageBox::critical(_mainWindow, trUtf8("Import error"),
-                            QString("<i>") + tlp::tlpStringToQString(module) + trUtf8("</i> failed to import data.<br/><br/><b>") +
-                                tlp::tlpStringToQString(prg->getError()) + "</b>");
+      QMessageBox::critical(_mainWindow, trUtf8("Import error"), QString("<i>") + tlp::tlpStringToQString(module) +
+                                                                     trUtf8("</i> failed to import data.<br/><br/><b>") +
+                                                                     tlp::tlpStringToQString(prg->getError()) + "</b>");
       delete prg;
       return;
     }
@@ -1192,9 +1192,8 @@ void GraphPerspective::showStartPanels(Graph *g) {
   View *firstPanel = nullptr;
   View *secondPanel = nullptr;
 
-  foreach (const QString &panelName,
-           QStringList() << "Spreadsheet view"
-                         << "Node Link Diagram view") {
+  foreach (const QString &panelName, QStringList() << "Spreadsheet view"
+                                                   << "Node Link Diagram view") {
     View *view = PluginLister::instance()->getPluginObject<View>(QStringToTlpString(panelName), nullptr);
 
     if (firstPanel == nullptr)

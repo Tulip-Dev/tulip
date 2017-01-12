@@ -303,8 +303,8 @@ void GlMainWidget::pickNodesEdges(const int x, const int y, const int width, con
 
   if (renderingFlags != NoRendering) {
     std::vector<SelectedEntity> selectedEntities;
-    if (scene.selectEntities(renderingFlags, screenToViewport(x), screenToViewport(y),
-                             screenToViewport(width), screenToViewport(height), selectedEntities, layer)) {
+    if (scene.selectEntities(renderingFlags, screenToViewport(x), screenToViewport(y), screenToViewport(width), screenToViewport(height),
+                             selectedEntities, layer)) {
 
       for (const SelectedEntity &selectedEntity : selectedEntities) {
         if (selectedEntity.getEntityType() == SelectedEntity::NODE_SELECTED) {
@@ -315,7 +315,6 @@ void GlMainWidget::pickNodesEdges(const int x, const int y, const int width, con
       }
     }
   }
-
 }
 //=====================================================
 bool GlMainWidget::pickNodesEdges(const int x, const int y, SelectedEntity &selectedEntity, GlLayer *layer, bool pickNodes, bool pickEdges) {

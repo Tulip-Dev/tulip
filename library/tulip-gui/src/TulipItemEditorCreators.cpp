@@ -796,10 +796,10 @@ QWidget *EdgeExtremityShapeEditorCreator::createWidget(QWidget *parent) const {
   const std::map<int, Glyph *> &glyphs = GlyphsManager::instance()->getGlyphs();
 
   for (const std::pair<int, Glyph *> &glyph : glyphs) {
-      if (glyph.second->edgeExtremityGlyph()) {
-        combobox->addItem(EdgeExtremityGlyphPreviewRenderer::instance().render(glyph.first), tlpStringToQString(glyph.second->edgeExtremityGlyphName()),
-                          glyph.first);
-      }
+    if (glyph.second->edgeExtremityGlyph()) {
+      combobox->addItem(EdgeExtremityGlyphPreviewRenderer::instance().render(glyph.first), tlpStringToQString(glyph.second->edgeExtremityGlyphName()),
+                        glyph.first);
+    }
   }
 
   return combobox;

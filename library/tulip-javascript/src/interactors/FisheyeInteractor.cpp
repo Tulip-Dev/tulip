@@ -93,8 +93,8 @@ static std::string fisheyeFragmentShaderSrc() {
 }
 
 FisheyeInteractor::FisheyeInteractor(GlScene *scene)
-    : _curX(-1), _curY(-1), _znpInteractor(nullptr), _fisheyeShader(nullptr), _buffer(nullptr), _fbo(nullptr), _fisheyeRadius(200), _fisheyeHeight(0.5),
-      _maxTextureSize(0) {
+    : _curX(-1), _curY(-1), _znpInteractor(nullptr), _fisheyeShader(nullptr), _buffer(nullptr), _fbo(nullptr), _fisheyeRadius(200),
+      _fisheyeHeight(0.5), _maxTextureSize(0) {
   _glScene = scene;
   _znpInteractor = new ZoomAndPanInteractor(scene);
 }

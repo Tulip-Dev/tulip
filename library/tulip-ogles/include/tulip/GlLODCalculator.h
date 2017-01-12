@@ -50,7 +50,14 @@ class GlLayer;
 class GlGraphRenderingParameters;
 class GlGraphInputData;
 
-enum RenderingEntitiesFlag { NoRendering = 0, RenderingGlEntities = 1, RenderingNodes = 2, RenderingEdges = 4, RenderingNodesEdges = 6, RenderingAll = 7 };
+enum RenderingEntitiesFlag {
+  NoRendering = 0,
+  RenderingGlEntities = 1,
+  RenderingNodes = 2,
+  RenderingEdges = 4,
+  RenderingNodesEdges = 6,
+  RenderingAll = 7
+};
 
 struct TLP_GLES_SCOPE EntityLODUnit {
   EntityLODUnit(const tlp::BoundingBox &boundingBox) : boundingBox(boundingBox), lod(-1) {

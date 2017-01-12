@@ -329,8 +329,8 @@ void GlMainView::sceneRectChanged(const QRectF &rect) {
                             rect.height() - _overviewItem->getHeight() -
                                 ((_quickAccessBarItem != nullptr) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_BOTTOM_LEFT)
-      _overviewItem->setPos(
-          0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBarItem != nullptr) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() -
+                                   ((_quickAccessBarItem != nullptr) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_TOP_LEFT)
       _overviewItem->setPos(0, 0);
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)

@@ -484,7 +484,6 @@ GlShaderProgram *GlGraph::getEdgeShader(int edgeShape) {
 GlGraph::GlGraph(Graph *graph, GlLODCalculator *lodCalculator)
     : _graph(nullptr), _graphElementsPickingMode(false), _lodCalculator(lodCalculator), _maxEdgePoints(0), _updateLODCalculator(true) {
 
-
   _labelsRenderer = LabelsRenderer::instance();
 
   if (!_lodCalculator)
@@ -1086,7 +1085,6 @@ void GlGraph::renderNodes(const Camera &camera, const Light &light) {
   vector<float> borderWidthsSelected;
   vector<Color> borderColorsSelected;
 
-
   for (const auto &it : _nodesGlyphs) {
     centers.reserve(it.second.size());
     sizes.reserve(it.second.size());
@@ -1592,8 +1590,8 @@ void GlGraph::renderEdges(const Camera &camera, const Light &light, const std::v
   }
 }
 
-bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height, std::vector<tlp::node> &selectedNodes,
-                                std::vector<tlp::edge> &selectedEdges, bool singleSelection) {
+bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, const int width, const int height,
+                                std::vector<tlp::node> &selectedNodes, std::vector<tlp::edge> &selectedEdges, bool singleSelection) {
 
   selectedNodes.clear();
   selectedEdges.clear();
@@ -1625,7 +1623,7 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, 
 
   list<node> nodesInSelectionViewport;
   set<node> nodesInSelectionViewportSet;
-  for (const NodeEntityLODUnit &nodeLod: nodesLodResult) {
+  for (const NodeEntityLODUnit &nodeLod : nodesLodResult) {
     if (nodeLod.lod >= 0) {
       nodesInSelectionViewport.push_front(nodeLod.n);
       nodesInSelectionViewportSet.insert(nodeLod.n);
@@ -1634,7 +1632,7 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, 
 
   list<edge> edgesInSelectionViewport;
   set<edge> edgesInSelectionViewportSet;
-  for (const EdgeEntityLODUnit &edgeLod: edgesLodResult) {
+  for (const EdgeEntityLODUnit &edgeLod : edgesLodResult) {
     if (edgeLod.lod >= 0) {
       edgesInSelectionViewport.push_front(edgeLod.e);
       edgesInSelectionViewportSet.insert(edgeLod.e);
@@ -1701,7 +1699,6 @@ bool GlGraph::pickNodesAndEdges(const Camera &camera, const int x, const int y, 
   delete[] buffer;
   fbo->release();
   delete fbo;
-
 
   return !selectedNodes.empty() || !selectedEdges.empty();
 }
