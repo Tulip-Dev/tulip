@@ -70,8 +70,6 @@ class TLP_QT_SCOPE QuickAccessBarImpl : public QuickAccessBar {
   bool _resetting;
   double _oldFontScale;
   double _oldNodeScale;
-  bool _captionsInitialized;
-  CaptionItem *_captions[4];
 
 public:
   enum QuickAccessButton {

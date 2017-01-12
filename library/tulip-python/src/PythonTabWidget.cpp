@@ -44,9 +44,9 @@ void PythonTabWidget::paintEvent(QPaintEvent *event) {
 #else
   painter.setFont(QFont("Arial", static_cast<int>(18 * tabBar()->height() / 27.0)));
 #endif
-  int firstLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
+  int firstLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(30 * tabBar()->height() / 27.0);
-  int secondLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
+  int secondLabelWidth = static_cast<int>(120 * tabBar()->height() / 27.0);
   QRectF rect(width() - (firstLabelWidth + imageWidth + secondLabelWidth), tabBar()->pos().y(), firstLabelWidth, tabBar()->height());
   QRect rect2(width() - (imageWidth + secondLabelWidth), tabBar()->pos().y(), imageWidth, tabBar()->height());
   QRectF rect3(width() - secondLabelWidth, tabBar()->pos().y(), secondLabelWidth, tabBar()->height());

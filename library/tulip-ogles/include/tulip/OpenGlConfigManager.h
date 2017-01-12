@@ -50,14 +50,21 @@ public:
   static OpenGlConfigManager &instance();
 
   /**
-   * Returns the OpenGL version number supported by the host system.
+   * Returns the OpenGL version number supported by the host system as a string.
+   *
+   * \since Tulip 4.11
    */
-  double getOpenGLVersion();
+  std::string getOpenGLVersionString() const;
+
+  /**
+   * Returns the OpenGL version number supported by the host system as a number.
+   */
+  double getOpenGLVersion() const;
 
   /**
    * Return the vendor name of the OpenGL driver installed on the host system.
    */
-  std::string getOpenGLVendor();
+  std::string getOpenGLVendor() const;
 
   void initExtensions();
 

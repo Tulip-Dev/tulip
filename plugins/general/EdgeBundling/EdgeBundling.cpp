@@ -244,7 +244,7 @@ bool EdgeBundling::run() {
   SizeProperty *size = graph->getProperty<SizeProperty>("viewSize");
   layout = graph->getProperty<LayoutProperty>("viewLayout");
 
-  if (dataSet != nullptrptr) {
+  if (dataSet != nullptr) {
     dataSet->get("long_edges", longEdges);
     dataSet->get("split_ratio", splitRatio);
     dataSet->get("iterations", MAX_ITER);

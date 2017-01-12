@@ -98,7 +98,7 @@ QuickAccessBar::QuickAccessBar(QWidget *parent) : QWidget(parent), _mainView(nul
 
 QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickAccessButtons buttons, QWidget *parent)
     : QuickAccessBar(parent), _ui(new Ui::QuickAccessBar), _quickAccessBarItem(quickAccessBarItem), delegate(new TulipItemDelegate(this)),
-      _oldFontScale(1), _oldNodeScale(1), _captionsInitialized(false) {
+      _oldFontScale(1), _oldNodeScale(1) {
   _ui->setupUi(this);
   _ui->backgroundColorButton->setDialogTitle("Choose the background color");
   _ui->nodeColorButton->setDialogTitle("Choose the node's default color");
@@ -109,14 +109,7 @@ QuickAccessBarImpl::QuickAccessBarImpl(QGraphicsItem *quickAccessBarItem, QuickA
 
   if (buttons.testFlag(ALLBUTTONS))
     return;
-  if (!buttons.testFlag(NODESCOLORCAPTION))
-    _ui->nodesColorCaptionButton->hide();
-  if (!buttons.testFlag(NODESSIZECAPTION))
-    _ui->nodesSizeCaptionButton->hide();
-  if (!buttons.testFlag(EDGESCOLORCAPTION))
-    _ui->edgesColorCaptionButton->hide();
-  if (!buttons.testFlag(EDGESIZECAPTION))
-    _ui->edgesSizeCaptionButton->hide();
+
   if (!buttons.testFlag(SCREENSHOT))
     _ui->screenshotButton->hide();
   if (!buttons.testFlag(BACKGROUNDCOLOR))
@@ -402,11 +395,11 @@ void QuickAccessBarImpl::setLabelsScaled(bool v) {
 }
 
 GlGraphRenderingParameters *QuickAccessBar::renderingParameters() const {
-  return scene()->getGlGraphComposite()->getRenderingParametersPointer();
+  return &(scene()->getMainGlGraph()->getRenderingParameters());
 }
 
 GlGraphInputData *QuickAccessBar::inputData() const {
-  return scene()->getGlGraphComposite()->getInputData();
+  return &(scene()->getMainGlGraph()->getInputData());
 }
 
 GlScene *QuickAccessBar::scene() const {

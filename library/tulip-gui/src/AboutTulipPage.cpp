@@ -36,21 +36,26 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 
   QString title("Tulip ");
   title += TULIP_VERSION;
-  _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir+"/logo.bmp")));
-  _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p></body></html>");
+  _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
+  _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" + title +
+                           "</span></p></body></html>");
 
   GlMainWidget::getFirstQGLWidget()->makeCurrent();
   QString tulipDependenciesInfo = "<p style=\"font-size:12pt\">"
                                   "This open source software is powered by:"
                                   "<ul>"
-                                  "  <li> <b> Qt </b> " + tlpStringToQString(qVersion()) + ": <a href=\"https://wwww.qt.io\">https://wwww.qt.io</a></li>"
-                                  "  <li> <b> OpenGL </b> " + QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) + " (from vendor " + tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) + "): <a href=\"https://wwww.opengl.org\">https://wwww.opengl.org</a> </li>"
+                                  "  <li> <b> Qt </b> " +
+                                  tlpStringToQString(qVersion()) + ": <a href=\"https://wwww.qt.io\">https://wwww.qt.io</a></li>"
+                                                                   "  <li> <b> OpenGL </b> " +
+                                  QString::number(OpenGlConfigManager::instance().getOpenGLVersion()) + " (from vendor " +
+                                  tlpStringToQString(OpenGlConfigManager::instance().getOpenGLVendor()) +
+                                  "): <a href=\"https://wwww.opengl.org\">https://wwww.opengl.org</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-                                  "  <li> <b> Python </b> " + TLP_PYTHON + ": <a href=\"https://wwww.python.org\">https://wwww.python.org</a> </li>"
+                                  "  <li> <b> Python </b> " +
+                                  TLP_PYTHON + ": <a href=\"https://wwww.python.org\">https://wwww.python.org</a> </li>"
 #endif
-                                  "</ul>"
-                                  "</p>"
-                                  ;
+                                               "</ul>"
+                                               "</p>";
   GlMainWidget::getFirstQGLWidget()->doneCurrent();
 
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);

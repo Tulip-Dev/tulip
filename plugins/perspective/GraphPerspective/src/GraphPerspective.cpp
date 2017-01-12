@@ -19,8 +19,6 @@
  */
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-#include <tulip/PythonInterpreter.h>
-#include <tulip/APIDataBase.h>
 #include "PythonPanel.h"
 #include "PythonPluginsIDE.h"
 #include <tulip/APIDataBase.h>
@@ -297,6 +295,45 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
   _ui->setupUi(_mainWindow);
+
+  _ui->developButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::languagepython, sideBarIconColor));
+  _ui->workspaceButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::televisionguide, sideBarIconColor));
+  _ui->importButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, sideBarIconColor));
+  _ui->exportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, sideBarIconColor));
+  _ui->csvImportButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::tablelarge, sideBarIconColor));
+  _ui->undoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, sideBarIconColor));
+  _ui->redoButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, sideBarIconColor));
+  _ui->addPanelButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::plusbox, sideBarIconColor));
+  _ui->actionNewProject->setIcon(getFileNewIcon());
+  _ui->actionOpen_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileimport, menuIconColor));
+  _ui->menuOpen_recent_file->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::clock, menuIconColor));
+  _ui->actionSave_Project->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
+  _ui->actionSave_Project_as->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fileexport, menuIconColor));
+  _ui->actionImport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::import, menuIconColor));
+  _ui->actionExport->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::export_, menuIconColor));
+  _ui->actionImport_CSV->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::table, menuIconColor));
+  _ui->actionNew_graph->setIcon(getFileNewIcon());
+  _ui->actionExit->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::closecircle, menuIconColor));
+  _ui->actionUndo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::reply, menuIconColor));
+  _ui->actionRedo->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::share, menuIconColor));
+  _ui->actionCut->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcut, menuIconColor));
+  _ui->actionPaste->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentpaste, menuIconColor));
+  _ui->actionCopy->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::contentcopy, menuIconColor));
+  _ui->actionDelete->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::delete_, menuIconColor));
+  _ui->actionSelect_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectall, menuIconColor));
+  _ui->actionInvert_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectinverse, menuIconColor));
+  _ui->actionCancel_selection->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::selectoff, menuIconColor));
+  _ui->actionGroup_elements->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::group, menuIconColor));
+  _ui->actionPreferences->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::settings, menuIconColor));
+  _ui->actionFull_screen->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::fullscreen, menuIconColor));
+  _ui->action_Close_All->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::windowclose, menuIconColor));
+  _ui->actionMessages_log->setIcon(tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::information, QColor("#407FB2")));
+  _ui->actionFind_plugins->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::magnify, menuIconColor));
+  _ui->actionAbout_us->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::star, QColor("#F9AA3A")));
+  _ui->actionShowUserDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
+  _ui->actionShowDevelDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
+  _ui->actionShowPythonDocumentation->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::bookopenvariant, menuIconColor));
+  _ui->actionColor_scales_management->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::palette, menuIconColor));
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonPanel = new PythonPanel();
   QVBoxLayout *layout = new QVBoxLayout();
