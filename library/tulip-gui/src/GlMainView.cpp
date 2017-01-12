@@ -42,8 +42,8 @@ using namespace tlp;
 
 GlMainView::GlMainView():
   _glMainWidget(NULL), _overviewItem(NULL),
-  _quickAccessBarItem(NULL), _showOvButton(NULL), _showQabButton(NULL),
-  needQuickAccessBar(false), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
+  _showOvButton(NULL), _showQabButton(NULL),
+  needQuickAccessBar(false), _quickAccessBarItem(NULL), _quickAccessBar(NULL), _sceneConfigurationWidget(NULL),
   _sceneLayersConfigurationWidget(NULL), _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {}
 
 GlMainView::~GlMainView() {
