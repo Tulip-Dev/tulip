@@ -118,29 +118,30 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
 void connectedTest(const Graph * const graph, node n,
                    MutableContainer<bool> &visited,
                    unsigned int &count) {
-
-  unsigned int i = 0;
-  vector<node> next_roots;
-  next_roots.push_back(n);
+  list<node> nodesToVisit;
   visited.set(n.id,true);
-  count++;
+  nodesToVisit.push_front(n);
+  ++count;
 
-  while(i < next_roots.size()) {
-    node r = next_roots[i];
+  while(!nodesToVisit.empty()) {
+    node r = nodesToVisit.front();
+    nodesToVisit.pop_front();
+    // loop on all neighbours
     Iterator<node> * itn = graph->getInOutNodes(r);
 
     while(itn->hasNext()) {
-      node n = itn->next();
+      n = itn->next();
 
+      // check if neighbour has been visited
       if(!visited.get(n.id)) {
+	// mark neighbour as already visited
         visited.set(n.id,true);
-        next_roots.push_back(n);
-        count++;
+	// push it for further deeper exploration
+	nodesToVisit.push_back(n);
+        ++count;
       }
     }
-
     delete itn;
-    i++;
   }
 }
 //=================================================================
