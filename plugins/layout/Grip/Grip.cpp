@@ -38,12 +38,81 @@ static const char *paramHelp[] = {
 Grip::Grip(const tlp::PluginContext *context) : LayoutAlgorithm(context),
   misf(NULL), edgeLength(0), level(0), currentGraph(NULL), _dim(0) {
   addInParameter<bool>("3D layout", paramHelp[0], "false");
-  addDependency("Connected Component", "1.0");
-  addDependency("Equal Value", "1.1");
   addDependency("Connected Component Packing", "1.0");
 }
 Grip::~Grip() {}
 
+void Grip::computeCurrentGraphLayout() {
+  if(currentGraph->numberOfNodes() <= 3) {
+    unsigned int nb_nodes = currentGraph->numberOfNodes();
+
+    if(nb_nodes == 1) {
+      node n = currentGraph->getOneNode();
+      result->setNodeValue(n, Coord(0,0,0));
+    }
+
+    if(nb_nodes == 2) {
+      Iterator<node>*itn = currentGraph->getNodes();
+      node n1 = itn->next();
+      node n2 = itn->next();
+      delete itn;
+      result->setNodeValue(n1, Coord(0,0,0));
+      result->setNodeValue(n2, Coord(1,0,0));
+    }
+    else if(nb_nodes == 3) {
+      if(currentGraph->numberOfEdges() == 3) {
+	Iterator<node>*itn = currentGraph->getNodes();
+	node n1 = itn->next();
+	node n2 = itn->next();
+	node n3 = itn->next();
+	delete itn;
+	result->setNodeValue(n1, Coord(0,0,0));
+	result->setNodeValue(n2, Coord(1,0,0));
+	result->setNodeValue(n3, Coord(0.5,sqrt(0.5),0));
+      }
+      else {
+	Iterator<edge>*ite = currentGraph->getEdges();
+	edge e1 = ite->next();
+	edge e2 = ite->next();
+	delete ite;
+
+	const std::pair<node, node>& ends1 = currentGraph->ends(e1);
+	const std::pair<node, node>& ends2 = currentGraph->ends(e2);
+	node n1 = ends1.first;
+	node n2 = ends1.second;
+	node n3;
+
+	if(ends2.second== n1) {
+	  n1 = ends2.first;
+	  n3 = n2;
+	  n2 = ends2.second;
+	}
+	else if(ends2.first==n1) {
+	  n1 = ends2.second;
+	  n3 = n2;
+	  n2 = ends2.first;
+	}
+	else
+	  n3 = (ends2.first==n2) ? ends2.second : ends2.first;
+
+	result->setNodeValue(n1, Coord(0,0,0));
+	result->setNodeValue(n2, Coord(1,0,0));
+	result->setNodeValue(n3, Coord(2,0,0));
+      }
+    }
+  }
+  else {
+    // initialize a random sequence according the given seed
+    tlp::initRandomSequence();
+
+    misf = new MISFiltering(currentGraph);
+    computeOrdering();
+    init();
+    firstNodesPlacement();
+    placement();
+    delete misf;
+  }
+}
 //======================================================
 bool Grip::run() {
   bool is3D = false;
@@ -56,94 +125,20 @@ bool Grip::run() {
   if(is3D) _dim = 3;
   else _dim = 2;
 
-  DoubleProperty connectedComponent(graph);
-  string err;
-  graph->applyPropertyAlgorithm("Connected Component", &connectedComponent, err);
-  DataSet tmp;
-  tmp.set("Property", &connectedComponent);
-  graph->applyAlgorithm("Equal Value", err, &tmp);
-  unsigned int nbComp = 0;
+  std::vector<std::set<node> > components;
+  ConnectedTest::computeConnectedComponents(graph, components);
 
-  stableForEach(currentGraph , graph->getSubGraphs()) {
-    nbComp++;
-
-    if(currentGraph->numberOfNodes() <= 3) {
-      unsigned int nb_nodes = currentGraph->numberOfNodes();
-
-      if(nb_nodes == 1) {
-        node n = currentGraph->getOneNode();
-        result->setNodeValue(n, Coord(0,0,0));
-      }
-
-      if(nb_nodes == 2) {
-        Iterator<node>*itn = currentGraph->getNodes();
-        node n1 = itn->next();
-        node n2 = itn->next();
-        delete itn;
-        result->setNodeValue(n1, Coord(0,0,0));
-        result->setNodeValue(n2, Coord(1,0,0));
-      }
-      else if(nb_nodes == 3) {
-        if(currentGraph->numberOfEdges() == 3) {
-          Iterator<node>*itn = currentGraph->getNodes();
-          node n1 = itn->next();
-          node n2 = itn->next();
-          node n3 = itn->next();
-          delete itn;
-          result->setNodeValue(n1, Coord(0,0,0));
-          result->setNodeValue(n2, Coord(1,0,0));
-          result->setNodeValue(n3, Coord(0.5,sqrt(0.5),0));
-        }
-        else {
-          Iterator<edge>*ite = currentGraph->getEdges();
-          edge e1 = ite->next();
-          edge e2 = ite->next();
-          delete ite;
-
-          const std::pair<node, node>& ends1 = currentGraph->ends(e1);
-          const std::pair<node, node>& ends2 = currentGraph->ends(e2);
-          node n1 = ends1.first;
-          node n2 = ends1.second;
-          node n3;
-
-          if(ends2.second== n1) {
-            n1 = ends2.first;
-            n3 = n2;
-            n2 = ends2.second;
-          }
-          else if(ends2.first==n1) {
-            n1 = ends2.second;
-            n3 = n2;
-            n2 = ends2.first;
-          }
-          else
-            n3 = (ends2.first==n2) ? ends2.second : ends2.first;
-
-          result->setNodeValue(n1, Coord(0,0,0));
-          result->setNodeValue(n2, Coord(1,0,0));
-          result->setNodeValue(n3, Coord(2,0,0));
-        }
-      }
-    }
-    else {
-      // initialize a random sequence according the given seed
-      tlp::initRandomSequence();
-
-      misf = new MISFiltering(currentGraph);
-      computeOrdering();
-      init();
-      firstNodesPlacement();
-      placement();
-      delete misf;
+  if (components.size() > 1) {
+    for(unsigned int i = 0; i < components.size(); ++i) {
+      currentGraph = graph->inducedSubGraph(components[i]);
+      computeCurrentGraphLayout();
+      graph->delSubGraph(currentGraph);
     }
 
-    graph->delAllSubGraphs(currentGraph);
-  }
-
-  if(nbComp >1) {
-    err ="";
-    LayoutProperty layout(graph);
+    string err;
+    DataSet tmp;
     tmp.set("coordinates", result);
+    LayoutProperty layout(graph);
     graph->applyPropertyAlgorithm("Connected Component Packing",&layout,
                                   err,NULL,&tmp);
     Iterator<node> *itN = graph->getNodes();
@@ -155,6 +150,10 @@ bool Grip::run() {
 
     delete itN;
   }
+  else {
+    currentGraph = graph;
+    computeCurrentGraphLayout();
+  }    
 
   return true;
 }
@@ -193,9 +192,9 @@ void Grip::firstNodesPlacement() {
     result->rotateX(3.14159/2. - (3.14159 * (double)(randomInteger(1))), g->getNodes(), g->getEdges());
     currentGraph->delSubGraph(g);
 
-    Coord c1 = result->getNodeValue(n1);
-    Coord c2 = result->getNodeValue(n2);
-    Coord c3 = result->getNodeValue(n3);
+    const Coord& c1 = result->getNodeValue(n1);
+    const Coord& c2 = result->getNodeValue(n2);
+    const Coord& c3 = result->getNodeValue(n3);
     oldDisp[n1] = c1;
     oldDisp[n2] = c2;
     oldDisp[n3] = c3;
@@ -291,11 +290,11 @@ void Grip::kk_local_reffinement(node currNode) {
 
   while(cpt > 1) {
     disp[currNode] = Coord(0,0,0);
-    Coord c = result->getNodeValue(currNode);
+    const Coord& c = result->getNodeValue(currNode);
 
     for(unsigned int j = 0; j < neighbors[currNode].size() /*&& j < 3*/ ; ++j) {
       node n = neighbors[currNode][j];
-      Coord c_n = result->getNodeValue(n);
+      const Coord& c_n = result->getNodeValue(n);
       Coord c_tmp = c_n - c;
       float euclidian_dist_sqr = c_tmp[0] * c_tmp[0] + c_tmp[1] * c_tmp[1];
 
@@ -331,11 +330,11 @@ void Grip::kk_reffinement(unsigned int start, unsigned int end) {
     for(unsigned int i = start; i <= end; ++i) {
       node currNode = misf->ordering[i];
       disp[currNode] = Coord(0,0,0);
-      Coord c = result->getNodeValue(currNode);
+      const Coord& c = result->getNodeValue(currNode);
 
       for(unsigned int j = 0; j < neighbors[currNode].size(); ++j) {
         node  n = neighbors[currNode][j];
-        Coord c_n = result->getNodeValue(n);
+        const Coord& c_n = result->getNodeValue(n);
         Coord c_tmp = c_n - c;
         float euclidian_dist_sqr = c_tmp[0] * c_tmp[0] + c_tmp[1] * c_tmp[1];
 
@@ -364,13 +363,13 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
   while(cpt >= 1) {
     for(unsigned int i = start; i <= end; ++i) {
       node  currNode = misf->ordering[i];
-      Coord curCoord = result->getNodeValue(currNode);
+      const Coord& curCoord = result->getNodeValue(currNode);
       disp[currNode] = Coord(0,0,0);
 
       // attractive force calculation
       node n;
       forEach(n,currentGraph->getInOutNodes(currNode)) {
-        Coord c_n = result->getNodeValue(n);
+        const Coord& c_n = result->getNodeValue(n);
         Coord c_tmp = c_n - curCoord;
         float euclidian_dist_sqr = c_tmp[0] * c_tmp[0] + c_tmp[1] * c_tmp[1];
 
@@ -383,7 +382,7 @@ void Grip::fr_reffinement(unsigned int start, unsigned int end) {
       // repulsive force calculation
       for(unsigned int j = 0; j < neighbors[currNode].size(); ++j) {
         node  n     = neighbors[currNode][j];
-        Coord c_n   = result->getNodeValue(n);
+        const Coord& c_n   = result->getNodeValue(n);
         Coord c_tmp = curCoord - c_n;
         double euclidian_dist_sqr = (double)c_tmp[0] * (double)c_tmp[0] + (double)c_tmp[1] * (double)c_tmp[1];
 
