@@ -134,13 +134,14 @@ void connectedTest(const Graph * const graph, node n,
 
       // check if neighbour has been visited
       if(!visited.get(n.id)) {
-	// mark neighbour as already visited
+        // mark neighbour as already visited
         visited.set(n.id,true);
-	// push it for further deeper exploration
-	nodesToVisit.push_back(n);
+        // push it for further deeper exploration
+        nodesToVisit.push_back(n);
         ++count;
       }
     }
+
     delete itn;
   }
 }

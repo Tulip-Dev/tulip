@@ -61,43 +61,43 @@ void Grip::computeCurrentGraphLayout() {
     }
     else if(nb_nodes == 3) {
       if(currentGraph->numberOfEdges() == 3) {
-	Iterator<node>*itn = currentGraph->getNodes();
-	node n1 = itn->next();
-	node n2 = itn->next();
-	node n3 = itn->next();
-	delete itn;
-	result->setNodeValue(n1, Coord(0,0,0));
-	result->setNodeValue(n2, Coord(1,0,0));
-	result->setNodeValue(n3, Coord(0.5,sqrt(0.5),0));
+        Iterator<node>*itn = currentGraph->getNodes();
+        node n1 = itn->next();
+        node n2 = itn->next();
+        node n3 = itn->next();
+        delete itn;
+        result->setNodeValue(n1, Coord(0,0,0));
+        result->setNodeValue(n2, Coord(1,0,0));
+        result->setNodeValue(n3, Coord(0.5,sqrt(0.5),0));
       }
       else {
-	Iterator<edge>*ite = currentGraph->getEdges();
-	edge e1 = ite->next();
-	edge e2 = ite->next();
-	delete ite;
+        Iterator<edge>*ite = currentGraph->getEdges();
+        edge e1 = ite->next();
+        edge e2 = ite->next();
+        delete ite;
 
-	const std::pair<node, node>& ends1 = currentGraph->ends(e1);
-	const std::pair<node, node>& ends2 = currentGraph->ends(e2);
-	node n1 = ends1.first;
-	node n2 = ends1.second;
-	node n3;
+        const std::pair<node, node>& ends1 = currentGraph->ends(e1);
+        const std::pair<node, node>& ends2 = currentGraph->ends(e2);
+        node n1 = ends1.first;
+        node n2 = ends1.second;
+        node n3;
 
-	if(ends2.second== n1) {
-	  n1 = ends2.first;
-	  n3 = n2;
-	  n2 = ends2.second;
-	}
-	else if(ends2.first==n1) {
-	  n1 = ends2.second;
-	  n3 = n2;
-	  n2 = ends2.first;
-	}
-	else
-	  n3 = (ends2.first==n2) ? ends2.second : ends2.first;
+        if(ends2.second== n1) {
+          n1 = ends2.first;
+          n3 = n2;
+          n2 = ends2.second;
+        }
+        else if(ends2.first==n1) {
+          n1 = ends2.second;
+          n3 = n2;
+          n2 = ends2.first;
+        }
+        else
+          n3 = (ends2.first==n2) ? ends2.second : ends2.first;
 
-	result->setNodeValue(n1, Coord(0,0,0));
-	result->setNodeValue(n2, Coord(1,0,0));
-	result->setNodeValue(n3, Coord(2,0,0));
+        result->setNodeValue(n1, Coord(0,0,0));
+        result->setNodeValue(n2, Coord(1,0,0));
+        result->setNodeValue(n3, Coord(2,0,0));
       }
     }
   }
@@ -153,7 +153,7 @@ bool Grip::run() {
   else {
     currentGraph = graph;
     computeCurrentGraphLayout();
-  }    
+  }
 
   return true;
 }
