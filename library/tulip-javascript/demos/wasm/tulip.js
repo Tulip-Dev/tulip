@@ -125,6 +125,472 @@ function getScriptPath() {
   tulipjs = tulipjs || {};
   var Module = tulipjs;
 
+
+var Module;
+
+if (typeof Module === 'undefined') Module = {};
+
+if (!Module.expectedDataFileDownloads) {
+  Module.expectedDataFileDownloads = 0;
+  Module.finishedDataFileDownloads = 0;
+}
+Module.expectedDataFileDownloads++;
+(function() {
+ var loadPackage = function(metadata) {
+
+    var PACKAGE_PATH;
+    if (typeof window === 'object') {
+      PACKAGE_PATH = window['encodeURIComponent'](window.location.pathname.toString().substring(0, window.location.pathname.toString().lastIndexOf('/')) + '/');
+    } else if (typeof location !== 'undefined') {
+      // worker
+      PACKAGE_PATH = encodeURIComponent(location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf('/')) + '/');
+    } else {
+      throw 'using preloaded data can only be done on a web page or in a web worker';
+    }
+    var PACKAGE_NAME = 'tulip.data';
+    var REMOTE_PACKAGE_BASE = 'tulip.data';
+    if (typeof Module['locateFilePackage'] === 'function' && !Module['locateFile']) {
+      Module['locateFile'] = Module['locateFilePackage'];
+      Module.printErr('warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)');
+    }
+    var REMOTE_PACKAGE_NAME = typeof Module['locateFile'] === 'function' ?
+                              Module['locateFile'](REMOTE_PACKAGE_BASE) :
+                              ((Module['filePackagePrefixURL'] || '') + REMOTE_PACKAGE_BASE);
+  
+    var REMOTE_PACKAGE_SIZE = metadata.remote_package_size;
+    var PACKAGE_UUID = metadata.package_uuid;
+  
+    function fetchRemotePackage(packageName, packageSize, callback, errback) {
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', packageName, true);
+      xhr.responseType = 'arraybuffer';
+      xhr.onprogress = function(event) {
+        var url = packageName;
+        var size = packageSize;
+        if (event.total) size = event.total;
+        if (event.loaded) {
+          if (!xhr.addedTotal) {
+            xhr.addedTotal = true;
+            if (!Module.dataFileDownloads) Module.dataFileDownloads = {};
+            Module.dataFileDownloads[url] = {
+              loaded: event.loaded,
+              total: size
+            };
+          } else {
+            Module.dataFileDownloads[url].loaded = event.loaded;
+          }
+          var total = 0;
+          var loaded = 0;
+          var num = 0;
+          for (var download in Module.dataFileDownloads) {
+          var data = Module.dataFileDownloads[download];
+            total += data.total;
+            loaded += data.loaded;
+            num++;
+          }
+          total = Math.ceil(total * Module.expectedDataFileDownloads/num);
+          if (Module['setStatus']) Module['setStatus']('Downloading data... (' + loaded + '/' + total + ')');
+        } else if (!Module.dataFileDownloads) {
+          if (Module['setStatus']) Module['setStatus']('Downloading data...');
+        }
+      };
+      xhr.onerror = function(event) {
+        throw new Error("NetworkError for: " + packageName);
+      }
+      xhr.onload = function(event) {
+        if (xhr.status == 200 || xhr.status == 304 || xhr.status == 206 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
+          var packageData = xhr.response;
+          callback(packageData);
+        } else {
+          throw new Error(xhr.statusText + " : " + xhr.responseURL);
+        }
+      };
+      xhr.send(null);
+    };
+
+    function handleError(error) {
+      console.error('package error:', error);
+    };
+  
+      var fetched = null, fetchedCallback = null;
+      fetchRemotePackage(REMOTE_PACKAGE_NAME, REMOTE_PACKAGE_SIZE, function(data) {
+        if (fetchedCallback) {
+          fetchedCallback(data);
+          fetchedCallback = null;
+        } else {
+          fetched = data;
+        }
+      }, handleError);
+    
+  function runWithFS() {
+
+    function assert(check, msg) {
+      if (!check) throw msg + new Error().stack;
+    }
+Module['FS_createPath']('/', 'resources', true, true);
+
+    function DataRequest(start, end, crunched, audio) {
+      this.start = start;
+      this.end = end;
+      this.crunched = crunched;
+      this.audio = audio;
+    }
+    DataRequest.prototype = {
+      requests: {},
+      open: function(mode, name) {
+        this.name = name;
+        this.requests[name] = this;
+        Module['addRunDependency']('fp ' + this.name);
+      },
+      send: function() {},
+      onload: function() {
+        var byteArray = this.byteArray.subarray(this.start, this.end);
+
+          this.finish(byteArray);
+
+      },
+      finish: function(byteArray) {
+        var that = this;
+
+        Module['FS_createDataFile'](this.name, null, byteArray, true, true, true); // canOwn this data in the filesystem, it is a slide into the heap that will never change
+        Module['removeRunDependency']('fp ' + that.name);
+
+        this.requests[this.name] = null;
+      }
+    };
+
+  
+    function processPackageData(arrayBuffer) {
+      Module.finishedDataFileDownloads++;
+      assert(arrayBuffer, 'Loading data file failed.');
+      assert(arrayBuffer instanceof ArrayBuffer, 'bad input to processPackageData');
+      var byteArray = new Uint8Array(arrayBuffer);
+      var curr;
+      
+          var compressedData = {"data":null,"cachedOffset":887901,"cachedIndexes":[-1,-1],"cachedChunks":[null,null],"offsets":[0,1602,2667,4371,5970,7640,8924,10398,11653,13141,14950,16655,18397,20166,22075,23746,25524,27311,28965,30549,32313,34109,35022,36332,37882,39251,40939,42629,44269,45909,47381,49008,50829,52724,54651,56670,58334,60174,62144,63342,65178,66897,68355,70263,72099,73790,75601,77537,79245,81000,82874,84678,86320,87838,89552,91374,92887,94500,96201,97929,99928,101814,103252,105176,106836,108737,110292,112246,114049,115572,116984,119022,120739,122455,124108,125838,127885,129933,131981,134029,136077,138125,139919,141171,142784,143949,144895,146588,147716,148871,150103,151447,152864,154472,156167,157394,159100,160065,160653,161118,161549,162795,164555,165999,167743,169235,170774,172718,174709,176642,178602,180547,182402,184371,186297,188167,190045,191994,193774,195592,197401,199223,200884,202730,204409,206331,208299,210294,212233,214139,215811,217577,219315,221306,223124,224895,226683,228398,230242,232201,233957,235612,237297,239069,240850,242686,244460,246442,248387,250376,252292,254122,255982,257784,259706,261603,263457,265171,266890,268595,270419,272093,273749,275341,277176,278991,280827,282654,284473,286294,288150,290018,291839,293590,295169,296852,298722,300483,302408,304208,306061,307861,309726,311568,313522,315471,317420,319163,320597,321976,323494,324949,326439,328133,329729,331406,332528,334346,336173,337969,339826,341623,343448,344878,346451,347665,348733,349847,351274,352854,354660,356453,358395,360298,362097,364020,365985,367918,369899,371285,372664,374328,375911,377525,379113,380957,382769,383991,385298,386967,388543,390195,391258,392649,394435,396041,397597,399410,400596,402168,403415,404681,405996,407121,408606,409761,411239,412658,414042,415431,417068,418915,420852,422822,424820,426589,428523,430459,432264,434181,436168,436976,438466,439465,441413,443375,444973,446535,448205,450000,451937,453474,454878,456624,458175,459905,461470,463206,464969,466468,467805,468981,470448,472200,473958,475153,475669,476106,476579,477016,477378,478946,480301,481628,482808,484016,485597,487554,489459,491281,493059,494958,496630,498312,499471,501337,502899,504568,506386,508281,510001,510629,512516,514459,515952,517148,518696,520113,521535,523078,524511,526190,528013,529811,530545,531806,533722,535528,537323,538938,540387,541181,541997,542949,543519,544421,545038,545619,546233,546855,547502,548453,549180,549970,550755,551458,552170,552959,553687,554473,555086,556008,556997,557993,558996,560112,561149,562058,563655,565466,566605,567763,568712,569682,571022,572491,573993,575318,577005,578640,580272,581926,583262,584668,586104,587454,588679,589980,591431,592775,594412,595831,597527,599197,600459,601637,603217,604161,605395,606123,607448,608616,609632,611190,612774,614376,615860,617397,618958,620551,622116,624164,626212,628260,630308,632365,634304,636352,638400,640448,642496,644482,646530,647837,649026,650411,651643,652962,654442,656042,657794,659842,661890,663938,665986,668034,670064,671239,672318,673487,674538,675586,676750,677800,678860,679926,680982,682142,683331,684460,685575,686661,687713,688795,689960,691075,692131,693410,694706,695672,696484,697995,698023,698051,698079,699199,701247,703295,705343,706984,708653,710487,712268,713275,714981,716141,717315,719111,720769,722274,723589,725139,726835,728425,730152,731848,733400,734780,736134,737627,738811,740405,742101,743716,744973,746468,748293,749765,751645,753044,754728,756603,758100,759631,761144,762805,764508,766315,768148,769868,771627,773280,775056,776535,778131,779717,781278,783094,784583,786257,787950,789310,790351,791994,793680,795402,796885,798642,800240,801963,803694,805398,807231,809060,810897,812307,814042,815836,817581,819373,821182,822692,824451,826113,827748,829310,831115,832678,834282,836013,837602,839052,840805,842648,844456,846261,847968,849867,851657,853357,855052,856795,858504,860083,861789,863529,865290,867079,868826,870823,872767,874007,875283,876660,878009,879414,880695,882109,883664,885138,886683],"sizes":[1602,1065,1704,1599,1670,1284,1474,1255,1488,1809,1705,1742,1769,1909,1671,1778,1787,1654,1584,1764,1796,913,1310,1550,1369,1688,1690,1640,1640,1472,1627,1821,1895,1927,2019,1664,1840,1970,1198,1836,1719,1458,1908,1836,1691,1811,1936,1708,1755,1874,1804,1642,1518,1714,1822,1513,1613,1701,1728,1999,1886,1438,1924,1660,1901,1555,1954,1803,1523,1412,2038,1717,1716,1653,1730,2047,2048,2048,2048,2048,2048,1794,1252,1613,1165,946,1693,1128,1155,1232,1344,1417,1608,1695,1227,1706,965,588,465,431,1246,1760,1444,1744,1492,1539,1944,1991,1933,1960,1945,1855,1969,1926,1870,1878,1949,1780,1818,1809,1822,1661,1846,1679,1922,1968,1995,1939,1906,1672,1766,1738,1991,1818,1771,1788,1715,1844,1959,1756,1655,1685,1772,1781,1836,1774,1982,1945,1989,1916,1830,1860,1802,1922,1897,1854,1714,1719,1705,1824,1674,1656,1592,1835,1815,1836,1827,1819,1821,1856,1868,1821,1751,1579,1683,1870,1761,1925,1800,1853,1800,1865,1842,1954,1949,1949,1743,1434,1379,1518,1455,1490,1694,1596,1677,1122,1818,1827,1796,1857,1797,1825,1430,1573,1214,1068,1114,1427,1580,1806,1793,1942,1903,1799,1923,1965,1933,1981,1386,1379,1664,1583,1614,1588,1844,1812,1222,1307,1669,1576,1652,1063,1391,1786,1606,1556,1813,1186,1572,1247,1266,1315,1125,1485,1155,1478,1419,1384,1389,1637,1847,1937,1970,1998,1769,1934,1936,1805,1917,1987,808,1490,999,1948,1962,1598,1562,1670,1795,1937,1537,1404,1746,1551,1730,1565,1736,1763,1499,1337,1176,1467,1752,1758,1195,516,437,473,437,362,1568,1355,1327,1180,1208,1581,1957,1905,1822,1778,1899,1672,1682,1159,1866,1562,1669,1818,1895,1720,628,1887,1943,1493,1196,1548,1417,1422,1543,1433,1679,1823,1798,734,1261,1916,1806,1795,1615,1449,794,816,952,570,902,617,581,614,622,647,951,727,790,785,703,712,789,728,786,613,922,989,996,1003,1116,1037,909,1597,1811,1139,1158,949,970,1340,1469,1502,1325,1687,1635,1632,1654,1336,1406,1436,1350,1225,1301,1451,1344,1637,1419,1696,1670,1262,1178,1580,944,1234,728,1325,1168,1016,1558,1584,1602,1484,1537,1561,1593,1565,2048,2048,2048,2048,2057,1939,2048,2048,2048,2048,1986,2048,1307,1189,1385,1232,1319,1480,1600,1752,2048,2048,2048,2048,2048,2030,1175,1079,1169,1051,1048,1164,1050,1060,1066,1056,1160,1189,1129,1115,1086,1052,1082,1165,1115,1056,1279,1296,966,812,1511,28,28,28,1120,2048,2048,2048,1641,1669,1834,1781,1007,1706,1160,1174,1796,1658,1505,1315,1550,1696,1590,1727,1696,1552,1380,1354,1493,1184,1594,1696,1615,1257,1495,1825,1472,1880,1399,1684,1875,1497,1531,1513,1661,1703,1807,1833,1720,1759,1653,1776,1479,1596,1586,1561,1816,1489,1674,1693,1360,1041,1643,1686,1722,1483,1757,1598,1723,1731,1704,1833,1829,1837,1410,1735,1794,1745,1792,1809,1510,1759,1662,1635,1562,1805,1563,1604,1731,1589,1450,1753,1843,1808,1805,1707,1899,1790,1700,1695,1743,1709,1579,1706,1740,1761,1789,1747,1997,1944,1240,1276,1377,1349,1405,1281,1414,1555,1474,1545,1218],"successes":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}
+;
+          compressedData.data = byteArray;
+          assert(typeof LZ4 === 'object', 'LZ4 not present - was your app build with  -s LZ4=1  ?');
+          LZ4.loadPackage({ 'metadata': metadata, 'compressedData': compressedData });
+          Module['removeRunDependency']('datafile_tulip.data');
+    
+    };
+    Module['addRunDependency']('datafile_tulip.data');
+  
+    if (!Module.preloadResults) Module.preloadResults = {};
+  
+      Module.preloadResults[PACKAGE_NAME] = {fromCache: false};
+      if (fetched) {
+        processPackageData(fetched);
+        fetched = null;
+      } else {
+        fetchedCallback = processPackageData;
+      }
+    
+  }
+  if (Module['calledRun']) {
+    runWithFS();
+  } else {
+    if (!Module['preRun']) Module['preRun'] = [];
+    Module["preRun"].push(runWithFS); // FS is not initialized yet, wait for it
+  }
+
+ }
+ loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 152796, "filename": "/resources/fontawesome-webfont.ttf"}, {"audio": 0, "start": 152796, "crunched": 0, "end": 153594, "filename": "/resources/cylinderTexture.png"}, {"audio": 0, "start": 153594, "crunched": 0, "end": 166107, "filename": "/resources/radialGradientTexture.png"}, {"audio": 0, "start": 166107, "crunched": 0, "end": 923183, "filename": "/resources/font.ttf"}, {"audio": 0, "start": 923183, "crunched": 0, "end": 1168859, "filename": "/resources/materialdesignicons-webfont.ttf"}], "remote_package_size": 891997, "package_uuid": "7d7c0c1f-e43b-4960-a932-7a984ddfd4b9"});
+
+})();
+
+/**
+ *
+ * This file is part of Tulip (www.tulip-software.org)
+ *
+ * Authors: David Auber and the Tulip development Team
+ * from LaBRI, University of Bordeaux
+ *
+ * Tulip is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License
+ * as published by the Free Software Foundation, either version 3
+ * of the License, or (at your option) any later version.
+ *
+ * Tulip is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ * See the GNU General Public License for more details.
+ *
+ */
+
+/**
+ *
+ * tulip.js : port of the Tulip framework to JavaScript through emscripten
+ * Copyright (c) 2016 Antoine Lambert, Thales Services SAS
+ * antoine-e.lambert@thalesgroup.com / antoine.lambert33@gmail.com
+ *
+ */
+
+Module.workerMode = workerMode;
+
+if (workerMode) {
+
+  Module.print = function(msg) {
+    self.postMessage({eventType: 'print', text: msg});
+  };
+
+  Module.printErr = function(msg) {
+    self.postMessage({eventType: 'print', text: msg});
+  };
+}
+
+Module.noExitRuntime = true;
+
+if (nodejs) {
+  Module.preRun = function() {
+    FS.mkdir('root');
+    FS.mount(NODEFS, { root: process.cwd() }, 'root');
+    FS.chdir('root');
+  };
+}
+
+// The Module object: Our interface to the outside world. We import
+// and export values on it, and do the work to get that through
+// closure compiler if necessary. There are various ways Module can be used:
+// 1. Not defined. We create it here
+// 2. A function parameter, function(Module) { ..generated code.. }
+// 3. pre-run appended it, var Module = {}; ..generated code..
+// 4. External script tag defines var Module.
+// We need to do an eval in order to handle the closure compiler
+// case, where this code here is minified but Module was defined
+// elsewhere (e.g. case 4 above). We also need to check if Module
+// already exists (e.g. case 3 above).
+// Note that if you want to run closure, and also to use Module
+// after the generated code, you will need to define   var Module = {};
+// before the code. Then that object will be used in the code, and you
+// can continue to use Module afterwards as well.
+var Module;
+if (!Module) Module = (typeof tulipjs !== 'undefined' ? tulipjs : null) || {};
+
+// Sometimes an existing Module object exists with properties
+// meant to overwrite the default module functionality. Here
+// we collect those properties and reapply _after_ we configure
+// the current environment's defaults to avoid having to be so
+// defensive during initialization.
+var moduleOverrides = {};
+for (var key in Module) {
+  if (Module.hasOwnProperty(key)) {
+    moduleOverrides[key] = Module[key];
+  }
+}
+
+// The environment setup code below is customized to use Module.
+// *** Environment setup code ***
+var ENVIRONMENT_IS_WEB = false;
+var ENVIRONMENT_IS_WORKER = false;
+var ENVIRONMENT_IS_NODE = false;
+var ENVIRONMENT_IS_SHELL = false;
+
+// Three configurations we can be running in:
+// 1) We could be the application main() thread running in the main JS UI thread. (ENVIRONMENT_IS_WORKER == false and ENVIRONMENT_IS_PTHREAD == false)
+// 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
+// 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
+
+if (Module['ENVIRONMENT']) {
+  if (Module['ENVIRONMENT'] === 'WEB') {
+    ENVIRONMENT_IS_WEB = true;
+  } else if (Module['ENVIRONMENT'] === 'WORKER') {
+    ENVIRONMENT_IS_WORKER = true;
+  } else if (Module['ENVIRONMENT'] === 'NODE') {
+    ENVIRONMENT_IS_NODE = true;
+  } else if (Module['ENVIRONMENT'] === 'SHELL') {
+    ENVIRONMENT_IS_SHELL = true;
+  } else {
+    throw new Error('The provided Module[\'ENVIRONMENT\'] value is not valid. It must be one of: WEB|WORKER|NODE|SHELL.');
+  }
+} else {
+  ENVIRONMENT_IS_WEB = typeof window === 'object';
+  ENVIRONMENT_IS_WORKER = typeof importScripts === 'function';
+  ENVIRONMENT_IS_NODE = typeof process === 'object' && typeof require === 'function' && !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_WORKER;
+  ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIRONMENT_IS_WORKER;
+}
+
+
+if (ENVIRONMENT_IS_NODE) {
+  // Expose functionality in the same simple way that the shells work
+  // Note that we pollute the global namespace here, otherwise we break in node
+  if (!Module['print']) Module['print'] = console.log;
+  if (!Module['printErr']) Module['printErr'] = console.warn;
+
+  var nodeFS;
+  var nodePath;
+
+  Module['read'] = function read(filename, binary) {
+    if (!nodeFS) nodeFS = require('fs');
+    if (!nodePath) nodePath = require('path');
+    filename = nodePath['normalize'](filename);
+    var ret = nodeFS['readFileSync'](filename);
+    return binary ? ret : ret.toString();
+  };
+
+  Module['readBinary'] = function readBinary(filename) {
+    var ret = Module['read'](filename, true);
+    if (!ret.buffer) {
+      ret = new Uint8Array(ret);
+    }
+    assert(ret.buffer);
+    return ret;
+  };
+
+  Module['load'] = function load(f) {
+    globalEval(read(f));
+  };
+
+  if (!Module['thisProgram']) {
+    if (process['argv'].length > 1) {
+      Module['thisProgram'] = process['argv'][1].replace(/\\/g, '/');
+    } else {
+      Module['thisProgram'] = 'unknown-program';
+    }
+  }
+
+  Module['arguments'] = process['argv'].slice(2);
+
+  if (typeof module !== 'undefined') {
+    module['exports'] = Module;
+  }
+
+  process['on']('uncaughtException', function(ex) {
+    // suppress ExitStatus exceptions from showing an error
+    if (!(ex instanceof ExitStatus)) {
+      throw ex;
+    }
+  });
+
+  Module['inspect'] = function () { return '[Emscripten Module object]'; };
+}
+else if (ENVIRONMENT_IS_SHELL) {
+  if (!Module['print']) Module['print'] = print;
+  if (typeof printErr != 'undefined') Module['printErr'] = printErr; // not present in v8 or older sm
+
+  if (typeof read != 'undefined') {
+    Module['read'] = read;
+  } else {
+    Module['read'] = function read() { throw 'no read() available' };
+  }
+
+  Module['readBinary'] = function readBinary(f) {
+    if (typeof readbuffer === 'function') {
+      return new Uint8Array(readbuffer(f));
+    }
+    var data = read(f, 'binary');
+    assert(typeof data === 'object');
+    return data;
+  };
+
+  if (typeof scriptArgs != 'undefined') {
+    Module['arguments'] = scriptArgs;
+  } else if (typeof arguments != 'undefined') {
+    Module['arguments'] = arguments;
+  }
+
+}
+else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
+  Module['read'] = function read(url) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, false);
+    xhr.send(null);
+    return xhr.responseText;
+  };
+
+  Module['readAsync'] = function readAsync(url, onload, onerror) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function xhr_onload() {
+      if (xhr.status == 200 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
+        onload(xhr.response);
+      } else {
+        onerror();
+      }
+    };
+    xhr.onerror = onerror;
+    xhr.send(null);
+  };
+
+  if (typeof arguments != 'undefined') {
+    Module['arguments'] = arguments;
+  }
+
+  if (typeof console !== 'undefined') {
+    if (!Module['print']) Module['print'] = function print(x) {
+      console.log(x);
+    };
+    if (!Module['printErr']) Module['printErr'] = function printErr(x) {
+      console.warn(x);
+    };
+  } else {
+    // Probably a worker, and without console.log. We can do very little here...
+    var TRY_USE_DUMP = false;
+    if (!Module['print']) Module['print'] = (TRY_USE_DUMP && (typeof(dump) !== "undefined") ? (function(x) {
+      dump(x);
+    }) : (function(x) {
+      // self.postMessage(x); // enable this if you want stdout to be sent as messages
+    }));
+  }
+
+  if (ENVIRONMENT_IS_WORKER) {
+    Module['load'] = importScripts;
+  }
+
+  if (typeof Module['setWindowTitle'] === 'undefined') {
+    Module['setWindowTitle'] = function(title) { document.title = title };
+  }
+}
+else {
+  // Unreachable because SHELL is dependant on the others
+  throw 'Unknown runtime environment. Where are we?';
+}
+
+function globalEval(x) {
+  eval.call(null, x);
+}
+if (!Module['load'] && Module['read']) {
+  Module['load'] = function load(f) {
+    globalEval(Module['read'](f));
+  };
+}
+if (!Module['print']) {
+  Module['print'] = function(){};
+}
+if (!Module['printErr']) {
+  Module['printErr'] = Module['print'];
+}
+if (!Module['arguments']) {
+  Module['arguments'] = [];
+}
+if (!Module['thisProgram']) {
+  Module['thisProgram'] = './this.program';
+}
+
+// *** Environment setup code ***
+
+// Closure helpers
+Module.print = Module['print'];
+Module.printErr = Module['printErr'];
+
+// Callbacks
+Module['preRun'] = [];
+Module['postRun'] = [];
+
+// Merge back in the overrides
+for (var key in moduleOverrides) {
+  if (moduleOverrides.hasOwnProperty(key)) {
+    Module[key] = moduleOverrides[key];
+  }
+}
+// Free the object hierarchy contained in the overrides, this lets the GC
+// reclaim data used e.g. in memoryInitializerRequest, which is a large typed array.
+moduleOverrides = undefined;
+
+
+
 /*
  * Copyright 2015 WebAssembly Community Group participants
  *
@@ -425,11 +891,17 @@ function integrateWasmJS(Module) {
     if (!env['table']) {
       var TABLE_SIZE = Module['wasmTableSize'];
       if (TABLE_SIZE === undefined) TABLE_SIZE = 1024; // works in binaryen interpreter at least
+      var MAX_TABLE_SIZE = Module['wasmMaxTableSize'];
       if (typeof WebAssembly === 'object' && typeof WebAssembly.Table === 'function') {
-        env['table'] = new WebAssembly.Table({ initial: TABLE_SIZE, maximum: TABLE_SIZE, element: 'anyfunc' });
+        if (MAX_TABLE_SIZE !== undefined) {
+          env['table'] = new WebAssembly.Table({ initial: TABLE_SIZE, maximum: MAX_TABLE_SIZE, element: 'anyfunc' });
+        } else {
+          env['table'] = new WebAssembly.Table({ initial: TABLE_SIZE, element: 'anyfunc' });
+        }
       } else {
         env['table'] = new Array(TABLE_SIZE); // works in binaryen interpreter at least
       }
+      Module['wasmTable'] = env['table'];
     }
 
     if (!env['memoryBase']) {
@@ -471,473 +943,8 @@ function integrateWasmJS(Module) {
 }
 
 
-
-var Module;
-
-if (typeof Module === 'undefined') Module = {};
-
-if (!Module.expectedDataFileDownloads) {
-  Module.expectedDataFileDownloads = 0;
-  Module.finishedDataFileDownloads = 0;
-}
-Module.expectedDataFileDownloads++;
-(function() {
- var loadPackage = function(metadata) {
-
-    var PACKAGE_PATH;
-    if (typeof window === 'object') {
-      PACKAGE_PATH = window['encodeURIComponent'](window.location.pathname.toString().substring(0, window.location.pathname.toString().lastIndexOf('/')) + '/');
-    } else if (typeof location !== 'undefined') {
-      // worker
-      PACKAGE_PATH = encodeURIComponent(location.pathname.toString().substring(0, location.pathname.toString().lastIndexOf('/')) + '/');
-    } else {
-      throw 'using preloaded data can only be done on a web page or in a web worker';
-    }
-    var PACKAGE_NAME = 'tulip.data';
-    var REMOTE_PACKAGE_BASE = 'tulip.data';
-    if (typeof Module['locateFilePackage'] === 'function' && !Module['locateFile']) {
-      Module['locateFile'] = Module['locateFilePackage'];
-      Module.printErr('warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)');
-    }
-    var REMOTE_PACKAGE_NAME = typeof Module['locateFile'] === 'function' ?
-                              Module['locateFile'](REMOTE_PACKAGE_BASE) :
-                              ((Module['filePackagePrefixURL'] || '') + REMOTE_PACKAGE_BASE);
-  
-    var REMOTE_PACKAGE_SIZE = metadata.remote_package_size;
-    var PACKAGE_UUID = metadata.package_uuid;
-  
-    function fetchRemotePackage(packageName, packageSize, callback, errback) {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', packageName, true);
-      xhr.responseType = 'arraybuffer';
-      xhr.onprogress = function(event) {
-        var url = packageName;
-        var size = packageSize;
-        if (event.total) size = event.total;
-        if (event.loaded) {
-          if (!xhr.addedTotal) {
-            xhr.addedTotal = true;
-            if (!Module.dataFileDownloads) Module.dataFileDownloads = {};
-            Module.dataFileDownloads[url] = {
-              loaded: event.loaded,
-              total: size
-            };
-          } else {
-            Module.dataFileDownloads[url].loaded = event.loaded;
-          }
-          var total = 0;
-          var loaded = 0;
-          var num = 0;
-          for (var download in Module.dataFileDownloads) {
-          var data = Module.dataFileDownloads[download];
-            total += data.total;
-            loaded += data.loaded;
-            num++;
-          }
-          total = Math.ceil(total * Module.expectedDataFileDownloads/num);
-          if (Module['setStatus']) Module['setStatus']('Downloading data... (' + loaded + '/' + total + ')');
-        } else if (!Module.dataFileDownloads) {
-          if (Module['setStatus']) Module['setStatus']('Downloading data...');
-        }
-      };
-      xhr.onerror = function(event) {
-        throw new Error("NetworkError for: " + packageName);
-      }
-      xhr.onload = function(event) {
-        if (xhr.status == 200 || xhr.status == 304 || xhr.status == 206 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
-          var packageData = xhr.response;
-          callback(packageData);
-        } else {
-          throw new Error(xhr.statusText + " : " + xhr.responseURL);
-        }
-      };
-      xhr.send(null);
-    };
-
-    function handleError(error) {
-      console.error('package error:', error);
-    };
-  
-      var fetched = null, fetchedCallback = null;
-      fetchRemotePackage(REMOTE_PACKAGE_NAME, REMOTE_PACKAGE_SIZE, function(data) {
-        if (fetchedCallback) {
-          fetchedCallback(data);
-          fetchedCallback = null;
-        } else {
-          fetched = data;
-        }
-      }, handleError);
-    
-  function runWithFS() {
-
-    function assert(check, msg) {
-      if (!check) throw msg + new Error().stack;
-    }
-Module['FS_createPath']('/', 'resources', true, true);
-
-    function DataRequest(start, end, crunched, audio) {
-      this.start = start;
-      this.end = end;
-      this.crunched = crunched;
-      this.audio = audio;
-    }
-    DataRequest.prototype = {
-      requests: {},
-      open: function(mode, name) {
-        this.name = name;
-        this.requests[name] = this;
-        Module['addRunDependency']('fp ' + this.name);
-      },
-      send: function() {},
-      onload: function() {
-        var byteArray = this.byteArray.subarray(this.start, this.end);
-
-          this.finish(byteArray);
-
-      },
-      finish: function(byteArray) {
-        var that = this;
-
-        Module['FS_createDataFile'](this.name, null, byteArray, true, true, true); // canOwn this data in the filesystem, it is a slide into the heap that will never change
-        Module['removeRunDependency']('fp ' + that.name);
-
-        this.requests[this.name] = null;
-      }
-    };
-
-  
-    function processPackageData(arrayBuffer) {
-      Module.finishedDataFileDownloads++;
-      assert(arrayBuffer, 'Loading data file failed.');
-      assert(arrayBuffer instanceof ArrayBuffer, 'bad input to processPackageData');
-      var byteArray = new Uint8Array(arrayBuffer);
-      var curr;
-      
-          var compressedData = {"data":null,"cachedOffset":887901,"cachedIndexes":[-1,-1],"cachedChunks":[null,null],"offsets":[0,1602,2667,4371,5970,7640,8924,10398,11653,13141,14950,16655,18397,20166,22075,23746,25524,27311,28965,30549,32313,34109,35022,36332,37882,39251,40939,42629,44269,45909,47381,49008,50829,52724,54651,56670,58334,60174,62144,63342,65178,66897,68355,70263,72099,73790,75601,77537,79245,81000,82874,84678,86320,87838,89552,91374,92887,94500,96201,97929,99928,101814,103252,105176,106836,108737,110292,112246,114049,115572,116984,119022,120739,122455,124108,125838,127885,129933,131981,134029,136077,138125,139919,141171,142784,143949,144895,146588,147716,148871,150103,151447,152864,154472,156167,157394,159100,160065,160653,161118,161549,162795,164555,165999,167743,169235,170774,172718,174709,176642,178602,180547,182402,184371,186297,188167,190045,191994,193774,195592,197401,199223,200884,202730,204409,206331,208299,210294,212233,214139,215811,217577,219315,221306,223124,224895,226683,228398,230242,232201,233957,235612,237297,239069,240850,242686,244460,246442,248387,250376,252292,254122,255982,257784,259706,261603,263457,265171,266890,268595,270419,272093,273749,275341,277176,278991,280827,282654,284473,286294,288150,290018,291839,293590,295169,296852,298722,300483,302408,304208,306061,307861,309726,311568,313522,315471,317420,319163,320597,321976,323494,324949,326439,328133,329729,331406,332528,334346,336173,337969,339826,341623,343448,344878,346451,347665,348733,349847,351274,352854,354660,356453,358395,360298,362097,364020,365985,367918,369899,371285,372664,374328,375911,377525,379113,380957,382769,383991,385298,386967,388543,390195,391258,392649,394435,396041,397597,399410,400596,402168,403415,404681,405996,407121,408606,409761,411239,412658,414042,415431,417068,418915,420852,422822,424820,426589,428523,430459,432264,434181,436168,436976,438466,439465,441413,443375,444973,446535,448205,450000,451937,453474,454878,456624,458175,459905,461470,463206,464969,466468,467805,468981,470448,472200,473958,475153,475669,476106,476579,477016,477378,478946,480301,481628,482808,484016,485597,487554,489459,491281,493059,494958,496630,498312,499471,501337,502899,504568,506386,508281,510001,510629,512516,514459,515952,517148,518696,520113,521535,523078,524511,526190,528013,529811,530545,531806,533722,535528,537323,538938,540387,541181,541997,542949,543519,544421,545038,545619,546233,546855,547502,548453,549180,549970,550755,551458,552170,552959,553687,554473,555086,556008,556997,557993,558996,560112,561149,562058,563655,565466,566605,567763,568712,569682,571022,572491,573993,575318,577005,578640,580272,581926,583262,584668,586104,587454,588679,589980,591431,592775,594412,595831,597527,599197,600459,601637,603217,604161,605395,606123,607448,608616,609632,611190,612774,614376,615860,617397,618958,620551,622116,624164,626212,628260,630308,632365,634304,636352,638400,640448,642496,644482,646530,647837,649026,650411,651643,652962,654442,656042,657794,659842,661890,663938,665986,668034,670064,671239,672318,673487,674538,675586,676750,677800,678860,679926,680982,682142,683331,684460,685575,686661,687713,688795,689960,691075,692131,693410,694706,695672,696484,697995,698023,698051,698079,699199,701247,703295,705343,706984,708653,710487,712268,713275,714981,716141,717315,719111,720769,722274,723589,725139,726835,728425,730152,731848,733400,734780,736134,737627,738811,740405,742101,743716,744973,746468,748293,749765,751645,753044,754728,756603,758100,759631,761144,762805,764508,766315,768148,769868,771627,773280,775056,776535,778131,779717,781278,783094,784583,786257,787950,789310,790351,791994,793680,795402,796885,798642,800240,801963,803694,805398,807231,809060,810897,812307,814042,815836,817581,819373,821182,822692,824451,826113,827748,829310,831115,832678,834282,836013,837602,839052,840805,842648,844456,846261,847968,849867,851657,853357,855052,856795,858504,860083,861789,863529,865290,867079,868826,870823,872767,874007,875283,876660,878009,879414,880695,882109,883664,885138,886683],"sizes":[1602,1065,1704,1599,1670,1284,1474,1255,1488,1809,1705,1742,1769,1909,1671,1778,1787,1654,1584,1764,1796,913,1310,1550,1369,1688,1690,1640,1640,1472,1627,1821,1895,1927,2019,1664,1840,1970,1198,1836,1719,1458,1908,1836,1691,1811,1936,1708,1755,1874,1804,1642,1518,1714,1822,1513,1613,1701,1728,1999,1886,1438,1924,1660,1901,1555,1954,1803,1523,1412,2038,1717,1716,1653,1730,2047,2048,2048,2048,2048,2048,1794,1252,1613,1165,946,1693,1128,1155,1232,1344,1417,1608,1695,1227,1706,965,588,465,431,1246,1760,1444,1744,1492,1539,1944,1991,1933,1960,1945,1855,1969,1926,1870,1878,1949,1780,1818,1809,1822,1661,1846,1679,1922,1968,1995,1939,1906,1672,1766,1738,1991,1818,1771,1788,1715,1844,1959,1756,1655,1685,1772,1781,1836,1774,1982,1945,1989,1916,1830,1860,1802,1922,1897,1854,1714,1719,1705,1824,1674,1656,1592,1835,1815,1836,1827,1819,1821,1856,1868,1821,1751,1579,1683,1870,1761,1925,1800,1853,1800,1865,1842,1954,1949,1949,1743,1434,1379,1518,1455,1490,1694,1596,1677,1122,1818,1827,1796,1857,1797,1825,1430,1573,1214,1068,1114,1427,1580,1806,1793,1942,1903,1799,1923,1965,1933,1981,1386,1379,1664,1583,1614,1588,1844,1812,1222,1307,1669,1576,1652,1063,1391,1786,1606,1556,1813,1186,1572,1247,1266,1315,1125,1485,1155,1478,1419,1384,1389,1637,1847,1937,1970,1998,1769,1934,1936,1805,1917,1987,808,1490,999,1948,1962,1598,1562,1670,1795,1937,1537,1404,1746,1551,1730,1565,1736,1763,1499,1337,1176,1467,1752,1758,1195,516,437,473,437,362,1568,1355,1327,1180,1208,1581,1957,1905,1822,1778,1899,1672,1682,1159,1866,1562,1669,1818,1895,1720,628,1887,1943,1493,1196,1548,1417,1422,1543,1433,1679,1823,1798,734,1261,1916,1806,1795,1615,1449,794,816,952,570,902,617,581,614,622,647,951,727,790,785,703,712,789,728,786,613,922,989,996,1003,1116,1037,909,1597,1811,1139,1158,949,970,1340,1469,1502,1325,1687,1635,1632,1654,1336,1406,1436,1350,1225,1301,1451,1344,1637,1419,1696,1670,1262,1178,1580,944,1234,728,1325,1168,1016,1558,1584,1602,1484,1537,1561,1593,1565,2048,2048,2048,2048,2057,1939,2048,2048,2048,2048,1986,2048,1307,1189,1385,1232,1319,1480,1600,1752,2048,2048,2048,2048,2048,2030,1175,1079,1169,1051,1048,1164,1050,1060,1066,1056,1160,1189,1129,1115,1086,1052,1082,1165,1115,1056,1279,1296,966,812,1511,28,28,28,1120,2048,2048,2048,1641,1669,1834,1781,1007,1706,1160,1174,1796,1658,1505,1315,1550,1696,1590,1727,1696,1552,1380,1354,1493,1184,1594,1696,1615,1257,1495,1825,1472,1880,1399,1684,1875,1497,1531,1513,1661,1703,1807,1833,1720,1759,1653,1776,1479,1596,1586,1561,1816,1489,1674,1693,1360,1041,1643,1686,1722,1483,1757,1598,1723,1731,1704,1833,1829,1837,1410,1735,1794,1745,1792,1809,1510,1759,1662,1635,1562,1805,1563,1604,1731,1589,1450,1753,1843,1808,1805,1707,1899,1790,1700,1695,1743,1709,1579,1706,1740,1761,1789,1747,1997,1944,1240,1276,1377,1349,1405,1281,1414,1555,1474,1545,1218],"successes":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}
-;
-          compressedData.data = byteArray;
-          assert(typeof LZ4 === 'object', 'LZ4 not present - was your app build with  -s LZ4=1  ?');
-          LZ4.loadPackage({ 'metadata': metadata, 'compressedData': compressedData });
-          Module['removeRunDependency']('datafile_tulip.data');
-    
-    };
-    Module['addRunDependency']('datafile_tulip.data');
-  
-    if (!Module.preloadResults) Module.preloadResults = {};
-  
-      Module.preloadResults[PACKAGE_NAME] = {fromCache: false};
-      if (fetched) {
-        processPackageData(fetched);
-        fetched = null;
-      } else {
-        fetchedCallback = processPackageData;
-      }
-    
-  }
-  if (Module['calledRun']) {
-    runWithFS();
-  } else {
-    if (!Module['preRun']) Module['preRun'] = [];
-    Module["preRun"].push(runWithFS); // FS is not initialized yet, wait for it
-  }
-
- }
- loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 152796, "filename": "/resources/fontawesome-webfont.ttf"}, {"audio": 0, "start": 152796, "crunched": 0, "end": 153594, "filename": "/resources/cylinderTexture.png"}, {"audio": 0, "start": 153594, "crunched": 0, "end": 166107, "filename": "/resources/radialGradientTexture.png"}, {"audio": 0, "start": 166107, "crunched": 0, "end": 923183, "filename": "/resources/font.ttf"}, {"audio": 0, "start": 923183, "crunched": 0, "end": 1168859, "filename": "/resources/materialdesignicons-webfont.ttf"}], "remote_package_size": 891997, "package_uuid": "2b9b83e3-4457-43e0-83e5-3c34896e55fa"});
-
-})();
-
-/**
- *
- * This file is part of Tulip (www.tulip-software.org)
- *
- * Authors: David Auber and the Tulip development Team
- * from LaBRI, University of Bordeaux
- *
- * Tulip is free software; you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License
- * as published by the Free Software Foundation, either version 3
- * of the License, or (at your option) any later version.
- *
- * Tulip is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
- * See the GNU General Public License for more details.
- *
- */
-
-/**
- *
- * tulip.js : port of the Tulip framework to JavaScript through emscripten
- * Copyright (c) 2016 Antoine Lambert, Thales Services SAS
- * antoine-e.lambert@thalesgroup.com / antoine.lambert33@gmail.com
- *
- */
-
-Module.workerMode = workerMode;
-
-if (workerMode) {
-
-  Module.print = function(msg) {
-    self.postMessage({eventType: 'print', text: msg});
-  };
-
-  Module.printErr = function(msg) {
-    self.postMessage({eventType: 'print', text: msg});
-  };
-}
-
-Module.noExitRuntime = true;
-
-if (nodejs) {
-  Module.preRun = function() {
-    FS.mkdir('root');
-    FS.mount(NODEFS, { root: process.cwd() }, 'root');
-    FS.chdir('root');
-  };
-}
-
-// The Module object: Our interface to the outside world. We import
-// and export values on it, and do the work to get that through
-// closure compiler if necessary. There are various ways Module can be used:
-// 1. Not defined. We create it here
-// 2. A function parameter, function(Module) { ..generated code.. }
-// 3. pre-run appended it, var Module = {}; ..generated code..
-// 4. External script tag defines var Module.
-// We need to do an eval in order to handle the closure compiler
-// case, where this code here is minified but Module was defined
-// elsewhere (e.g. case 4 above). We also need to check if Module
-// already exists (e.g. case 3 above).
-// Note that if you want to run closure, and also to use Module
-// after the generated code, you will need to define   var Module = {};
-// before the code. Then that object will be used in the code, and you
-// can continue to use Module afterwards as well.
-var Module;
-if (!Module) Module = (typeof tulipjs !== 'undefined' ? tulipjs : null) || {};
-
-// Sometimes an existing Module object exists with properties
-// meant to overwrite the default module functionality. Here
-// we collect those properties and reapply _after_ we configure
-// the current environment's defaults to avoid having to be so
-// defensive during initialization.
-var moduleOverrides = {};
-for (var key in Module) {
-  if (Module.hasOwnProperty(key)) {
-    moduleOverrides[key] = Module[key];
-  }
-}
-
-// The environment setup code below is customized to use Module.
-// *** Environment setup code ***
-var ENVIRONMENT_IS_WEB = false;
-var ENVIRONMENT_IS_WORKER = false;
-var ENVIRONMENT_IS_NODE = false;
-var ENVIRONMENT_IS_SHELL = false;
-
-// Three configurations we can be running in:
-// 1) We could be the application main() thread running in the main JS UI thread. (ENVIRONMENT_IS_WORKER == false and ENVIRONMENT_IS_PTHREAD == false)
-// 2) We could be the application main() thread proxied to worker. (with Emscripten -s PROXY_TO_WORKER=1) (ENVIRONMENT_IS_WORKER == true, ENVIRONMENT_IS_PTHREAD == false)
-// 3) We could be an application pthread running in a worker. (ENVIRONMENT_IS_WORKER == true and ENVIRONMENT_IS_PTHREAD == true)
-
-if (Module['ENVIRONMENT']) {
-  if (Module['ENVIRONMENT'] === 'WEB') {
-    ENVIRONMENT_IS_WEB = true;
-  } else if (Module['ENVIRONMENT'] === 'WORKER') {
-    ENVIRONMENT_IS_WORKER = true;
-  } else if (Module['ENVIRONMENT'] === 'NODE') {
-    ENVIRONMENT_IS_NODE = true;
-  } else if (Module['ENVIRONMENT'] === 'SHELL') {
-    ENVIRONMENT_IS_SHELL = true;
-  } else {
-    throw new Error('The provided Module[\'ENVIRONMENT\'] value is not valid. It must be one of: WEB|WORKER|NODE|SHELL.');
-  }
-} else {
-  ENVIRONMENT_IS_WEB = typeof window === 'object';
-  ENVIRONMENT_IS_WORKER = typeof importScripts === 'function';
-  ENVIRONMENT_IS_NODE = typeof process === 'object' && typeof require === 'function' && !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_WORKER;
-  ENVIRONMENT_IS_SHELL = !ENVIRONMENT_IS_WEB && !ENVIRONMENT_IS_NODE && !ENVIRONMENT_IS_WORKER;
-}
-
-
-if (ENVIRONMENT_IS_NODE) {
-  // Expose functionality in the same simple way that the shells work
-  // Note that we pollute the global namespace here, otherwise we break in node
-  if (!Module['print']) Module['print'] = console.log;
-  if (!Module['printErr']) Module['printErr'] = console.warn;
-
-  var nodeFS;
-  var nodePath;
-
-  Module['read'] = function read(filename, binary) {
-    if (!nodeFS) nodeFS = require('fs');
-    if (!nodePath) nodePath = require('path');
-    filename = nodePath['normalize'](filename);
-    var ret = nodeFS['readFileSync'](filename);
-    return binary ? ret : ret.toString();
-  };
-
-  Module['readBinary'] = function readBinary(filename) {
-    var ret = Module['read'](filename, true);
-    if (!ret.buffer) {
-      ret = new Uint8Array(ret);
-    }
-    assert(ret.buffer);
-    return ret;
-  };
-
-  Module['load'] = function load(f) {
-    globalEval(read(f));
-  };
-
-  if (!Module['thisProgram']) {
-    if (process['argv'].length > 1) {
-      Module['thisProgram'] = process['argv'][1].replace(/\\/g, '/');
-    } else {
-      Module['thisProgram'] = 'unknown-program';
-    }
-  }
-
-  Module['arguments'] = process['argv'].slice(2);
-
-  if (typeof module !== 'undefined') {
-    module['exports'] = Module;
-  }
-
-  process['on']('uncaughtException', function(ex) {
-    // suppress ExitStatus exceptions from showing an error
-    if (!(ex instanceof ExitStatus)) {
-      throw ex;
-    }
-  });
-
-  Module['inspect'] = function () { return '[Emscripten Module object]'; };
-}
-else if (ENVIRONMENT_IS_SHELL) {
-  if (!Module['print']) Module['print'] = print;
-  if (typeof printErr != 'undefined') Module['printErr'] = printErr; // not present in v8 or older sm
-
-  if (typeof read != 'undefined') {
-    Module['read'] = read;
-  } else {
-    Module['read'] = function read() { throw 'no read() available' };
-  }
-
-  Module['readBinary'] = function readBinary(f) {
-    if (typeof readbuffer === 'function') {
-      return new Uint8Array(readbuffer(f));
-    }
-    var data = read(f, 'binary');
-    assert(typeof data === 'object');
-    return data;
-  };
-
-  if (typeof scriptArgs != 'undefined') {
-    Module['arguments'] = scriptArgs;
-  } else if (typeof arguments != 'undefined') {
-    Module['arguments'] = arguments;
-  }
-
-}
-else if (ENVIRONMENT_IS_WEB || ENVIRONMENT_IS_WORKER) {
-  Module['read'] = function read(url) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, false);
-    xhr.send(null);
-    return xhr.responseText;
-  };
-
-  Module['readAsync'] = function readAsync(url, onload, onerror) {
-    var xhr = new XMLHttpRequest();
-    xhr.open('GET', url, true);
-    xhr.responseType = 'arraybuffer';
-    xhr.onload = function xhr_onload() {
-      if (xhr.status == 200 || (xhr.status == 0 && xhr.response)) { // file URLs can return 0
-        onload(xhr.response);
-      } else {
-        onerror();
-      }
-    };
-    xhr.onerror = onerror;
-    xhr.send(null);
-  };
-
-  if (typeof arguments != 'undefined') {
-    Module['arguments'] = arguments;
-  }
-
-  if (typeof console !== 'undefined') {
-    if (!Module['print']) Module['print'] = function print(x) {
-      console.log(x);
-    };
-    if (!Module['printErr']) Module['printErr'] = function printErr(x) {
-      console.warn(x);
-    };
-  } else {
-    // Probably a worker, and without console.log. We can do very little here...
-    var TRY_USE_DUMP = false;
-    if (!Module['print']) Module['print'] = (TRY_USE_DUMP && (typeof(dump) !== "undefined") ? (function(x) {
-      dump(x);
-    }) : (function(x) {
-      // self.postMessage(x); // enable this if you want stdout to be sent as messages
-    }));
-  }
-
-  if (ENVIRONMENT_IS_WORKER) {
-    Module['load'] = importScripts;
-  }
-
-  if (typeof Module['setWindowTitle'] === 'undefined') {
-    Module['setWindowTitle'] = function(title) { document.title = title };
-  }
-}
-else {
-  // Unreachable because SHELL is dependant on the others
-  throw 'Unknown runtime environment. Where are we?';
-}
-
-function globalEval(x) {
-  eval.call(null, x);
-}
-if (!Module['load'] && Module['read']) {
-  Module['load'] = function load(f) {
-    globalEval(Module['read'](f));
-  };
-}
-if (!Module['print']) {
-  Module['print'] = function(){};
-}
-if (!Module['printErr']) {
-  Module['printErr'] = Module['print'];
-}
-if (!Module['arguments']) {
-  Module['arguments'] = [];
-}
-if (!Module['thisProgram']) {
-  Module['thisProgram'] = './this.program';
-}
-
-// *** Environment setup code ***
-
-// Closure helpers
-Module.print = Module['print'];
-Module.printErr = Module['printErr'];
-
-// Callbacks
-Module['preRun'] = [];
-Module['postRun'] = [];
-
-// Merge back in the overrides
-for (var key in moduleOverrides) {
-  if (moduleOverrides.hasOwnProperty(key)) {
-    Module[key] = moduleOverrides[key];
-  }
-}
-// Free the object hierarchy contained in the overrides, this lets the GC
-// reclaim data used e.g. in memoryInitializerRequest, which is a large typed array.
-moduleOverrides = undefined;
-
-
-
 integrateWasmJS(Module);
+
 // {{PREAMBLE_ADDITIONS}}
 
 // === Preamble library stuff ===
@@ -1494,7 +1501,7 @@ Module["UTF8ToString"] = UTF8ToString;
 
 // Copies the given Javascript String object 'str' to the given byte array at address 'outIdx',
 // encoded in UTF8 form and null-terminated. The copy will require at most str.length*4+1 bytes of space in the HEAP.
-// Use the function lengthBytesUTF8() to compute the exact number of bytes (excluding null terminator) that this function will write.
+// Use the function lengthBytesUTF8 to compute the exact number of bytes (excluding null terminator) that this function will write.
 // Parameters:
 //   str: the Javascript string to copy.
 //   outU8Array: the array to copy to. Each index in this array is assumed to be one 8-byte element.
@@ -1559,7 +1566,7 @@ Module["stringToUTF8Array"] = stringToUTF8Array;
 
 // Copies the given Javascript String object 'str' to the emscripten HEAP at address 'outPtr',
 // null-terminated and encoded in UTF8 form. The copy will require at most str.length*4+1 bytes of space in the HEAP.
-// Use the function lengthBytesUTF8() to compute the exact number of bytes (excluding null terminator) that this function will write.
+// Use the function lengthBytesUTF8 to compute the exact number of bytes (excluding null terminator) that this function will write.
 // Returns the number of bytes written, EXCLUDING the null terminator.
 
 function stringToUTF8(str, outPtr, maxBytesToWrite) {
@@ -1737,15 +1744,16 @@ function lengthBytesUTF32(str) {
 
 
 function demangle(func) {
-  var hasLibcxxabi = !!Module['___cxa_demangle'];
-  if (hasLibcxxabi) {
+  var __cxa_demangle_func = Module['___cxa_demangle'] || Module['__cxa_demangle'];
+  if (__cxa_demangle_func) {
     try {
-      var s = func.substr(1);
+      var s =
+        func.substr(1);
       var len = lengthBytesUTF8(s)+1;
       var buf = _malloc(len);
       stringToUTF8(s, buf, len);
       var status = _malloc(4);
-      var ret = Module['___cxa_demangle'](buf, 0, 0, status);
+      var ret = __cxa_demangle_func(buf, 0, 0, status);
       if (getValue(status, 'i32') === 0 && ret) {
         return Pointer_stringify(ret);
       }
@@ -1765,7 +1773,13 @@ function demangle(func) {
 }
 
 function demangleAll(text) {
-  return text.replace(/__Z[\w\d_]+/g, function(x) { var y = demangle(x); return x === y ? x : (x + ' [' + y + ']') });
+  var regex =
+    /__Z[\w\d_]+/g;
+  return text.replace(regex,
+    function(x) {
+      var y = demangle(x);
+      return x === y ? x : (x + ' [' + y + ']');
+    });
 }
 
 function jsStackTrace() {
@@ -2097,7 +2111,7 @@ function writeStringToMemory(string, buffer, dontAddNull) {
 Module["writeStringToMemory"] = writeStringToMemory;
 
 function writeArrayToMemory(array, buffer) {
-  HEAP8.set(array, buffer);    
+  HEAP8.set(array, buffer);
 }
 Module["writeArrayToMemory"] = writeArrayToMemory;
 
@@ -2245,8 +2259,8 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = 1024;
 
-STATICTOP = STATIC_BASE + 592688;
-  /* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__I_000101() } }, { func: function() { __Z7my_loadv() } }, { func: function() { __GLOBAL__sub_I_ShaderManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlTextureManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Glyph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_CircleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TriangleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_FontIconGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_ConcaveHullBuilder_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipToOGDF_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFLayoutPluginBase_cpp() } }, { func: function() { __GLOBAL__sub_I_CoinParamUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_unitTest_cpp() } }, { func: function() { __GLOBAL__sub_I_OsiNames_cpp() } }, { func: function() { __GLOBAL__sub_I_CglLandPValidator_cpp() } }, { func: function() { __GLOBAL__sub_I_LabelsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_Logger_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutStandards_cpp() } }, { func: function() { __GLOBAL__sub_I_config_cpp() } }, { func: function() { __GLOBAL__sub_I_Ogml_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphIO_svg_cpp() } }, { func: function() { __GLOBAL__sub_I_Bfs_cpp() } }, { func: function() { ___cxx_global_var_init_21() } }, { func: function() { ___cxx_global_var_init_22() } }, { func: function() { __GLOBAL__sub_I_BooleanProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_DataSet_cpp() } }, { func: function() { __GLOBAL__sub_I_Delaunay_cpp() } }, { func: function() { __GLOBAL__sub_I_DoubleProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_Triconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningDagSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_ReachableSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningTreeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_InducedSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_LoopSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_MultipleEdgeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_Kruskal_cpp() } }, { func: function() { __GLOBAL__sub_I_MetricMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_AutoSize_cpp() } }, { func: function() { __GLOBAL__sub_I_Planarity_cpp() } }, { func: function() { __GLOBAL__sub_I_Simple_cpp() } }, { func: function() { __GLOBAL__sub_I_Tree_cpp() } }, { func: function() { __GLOBAL__sub_I_Connected_cpp() } }, { func: function() { __GLOBAL__sub_I_Biconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_NanoVGManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Outerplanar_cpp() } }, { func: function() { __GLOBAL__sub_I_Acyclic_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_ToLabels_cpp() } }, { func: function() { __GLOBAL__sub_I_GlBuffer_cpp() } }, { func: function() { __GLOBAL__sub_I_GlCPULODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlEntity_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphInputData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphStaticData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlQuadTreeLODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlScene_cpp() } }, { func: function() { __GLOBAL__sub_I_GlUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_DrawingTools_cpp() } }, { func: function() { __GLOBAL__sub_I_WithParameter_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyTypes_cpp() } }, { func: function() { __GLOBAL__sub_I_SizeProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_StlFunctions_cpp() } }, { func: function() { __GLOBAL__sub_I_StringProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpTools_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeTest_cpp() } }, { func: function() { ___cxx_global_var_init_1380() } }, { func: function() { ___cxx_global_var_init_27() } }, { func: function() { ___cxx_global_var_init_29() } }, { func: function() { ___cxx_global_var_init_31() } }, { func: function() { ___cxx_global_var_init_33() } }, { func: function() { ___cxx_global_var_init_35() } }, { func: function() { __GLOBAL__sub_I_PropertyManager_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipFontAwesome_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipMaterialDesignIcons_cpp() } }, { func: function() { __GLOBAL__sub_I_DatasetTools_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableCoord_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSize_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSizeProxy_cpp() } }, { func: function() { __GLOBAL__sub_I_Orientation_cpp() } }, { func: function() { __GLOBAL__sub_I_bind_cpp() } }, { func: function() { __GLOBAL__sub_I_iostream_cpp() } }, { func: function() { ___cxx_global_var_init_3_328() } }, { func: function() { __GLOBAL__sub_I_GraphAbstract_cpp() } }, { func: function() { __GLOBAL__sub_I_Graph_cpp() } }, { func: function() { ___cxx_global_var_init() } }, { func: function() { ___cxx_global_var_init_8() } }, { func: function() { ___cxx_global_var_init_1() } }, { func: function() { ___cxx_global_var_init_3() } }, { func: function() { ___cxx_global_var_init_5() } }, { func: function() { ___cxx_global_var_init_7() } }, { func: function() { ___cxx_global_var_init_9() } }, { func: function() { ___cxx_global_var_init_11() } }, { func: function() { __GLOBAL__sub_I_GraphMeasure_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphProperty_cpp() } }, { func: function() { ___cxx_global_var_init_326() } }, { func: function() { ___cxx_global_var_init_1_327() } }, { func: function() { __GLOBAL__sub_I_WelshPowell_cpp() } }, { func: function() { ___cxx_global_var_init_5_329() } }, { func: function() { ___cxx_global_var_init_7_330() } }, { func: function() { ___cxx_global_var_init_9_331() } }, { func: function() { ___cxx_global_var_init_11_332() } }, { func: function() { __GLOBAL__sub_I_GraphTools_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphView_cpp() } }, { func: function() { __GLOBAL__sub_I_IntegerProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutProperty_cpp() } }, { func: function() { ___cxx_global_var_init_24() } }, { func: function() { ___cxx_global_var_init_25() } }, { func: function() { __GLOBAL__sub_I_Observable_cpp() } }, { func: function() { __GLOBAL__sub_I_ParametricCurves_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTree_cpp() } }, { func: function() { __GLOBAL__sub_I_BendsTools_cpp() } }, { func: function() { __GLOBAL__sub_I_Dijkstra_cpp() } }, { func: function() { __GLOBAL__sub_I_EdgeBundling_cpp() } }, { func: function() { __GLOBAL__sub_I_OctreeBundle_cpp() } }, { func: function() { __GLOBAL__sub_I_QuadTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_PlanarGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_dotImport_cpp() } }, { func: function() { __GLOBAL__sub_I_Grid_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLImport_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomSimpleGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_AdjacencyMatrixImport_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ReverseEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTreeGeneral_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SmallWorldGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportPajek_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportUCINET_cpp() } }, { func: function() { __GLOBAL__sub_I_EmptyGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFm3_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFUpwardPlanarization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFrutchermanReingold_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleMultilevelEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFVisibility_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFKamadaKawai_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFCircular_cpp() } }, { func: function() { __GLOBAL__sub_I_HexagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipBindings_cpp() } }, { func: function() { __GLOBAL__sub_I_main_cpp() } }, { func: function() { __GLOBAL__sub_I_FisheyeInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_LassoSelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_NeighborhoodInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_RectangleZoomInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionModifierInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ZoomAndPanInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CrossGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CubeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CylinderGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DiamondGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBalloon_cpp() } }, { func: function() { __GLOBAL__sub_I_PentagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RingGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RoundedBoxGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SquareGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_StarGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DelaunayTriangulation_cpp() } }, { func: function() { __GLOBAL__sub_I_VoronoiDiagram_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_EqualValueClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_QuotientClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLExport_cpp() } }, { func: function() { __GLOBAL__sub_I_CurveEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_StrongComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_Circular_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_Tutte_cpp() } }, { func: function() { __GLOBAL__sub_I_Dendrogram_cpp() } }, { func: function() { __GLOBAL__sub_I_ImprovedWalker_cpp() } }, { func: function() { __GLOBAL__sub_I_SquarifiedTreeMap_cpp() } }, { func: function() { __GLOBAL__sub_I_PerfectLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_PolyominoPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Eccentricity_cpp() } }, { func: function() { __GLOBAL__sub_I_DegreeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_ClusterMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_BiconnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_BubbleTree_cpp() } }, { func: function() { __GLOBAL__sub_I_DagLevelMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_IdMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_LeafMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_NodeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_DepthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_PathLengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrahlerMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp_4072() } }, { func: function() { __GLOBAL__sub_I_BetweennessCentrality_cpp() } }, { func: function() { __GLOBAL__sub_I_KCores_cpp() } }, { func: function() { __GLOBAL__sub_I_LouvainClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_LinkCommunities_cpp() } }, { func: function() { __GLOBAL__sub_I_MCLClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_PageRank_cpp() } }, { func: function() { __GLOBAL__sub_I_FastOverlapRemoval_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDavidsonHarel_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNoTwistLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTree_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleFastLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFGemFrick_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFStressMajorization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFSugiyama_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDominance_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNiceLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationGrid_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBertaultLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPivotMDS_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTileToRowsPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipHtml5_cpp() } }, { func: function() { __GLOBAL__sub_I_Grip_cpp() } }, { func: function() { __GLOBAL__sub_I_MISFiltering_cpp() } }, { func: function() { __GLOBAL__sub_I_Distances_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OctTree_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_MixedModel_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponentPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp() } }, { func: function() { __GLOBAL__sub_I_GEMLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeReingoldAndTilfordExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeTreeExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeRadial_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeLeaf_cpp() } });
+STATICTOP = STATIC_BASE + 592640;
+  /* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__I_000101() } }, { func: function() { __Z7my_loadv() } }, { func: function() { __GLOBAL__sub_I_ShaderManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlTextureManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Glyph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_CircleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TriangleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_FontIconGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_ConcaveHullBuilder_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipToOGDF_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFLayoutPluginBase_cpp() } }, { func: function() { __GLOBAL__sub_I_CoinParamUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_unitTest_cpp() } }, { func: function() { __GLOBAL__sub_I_OsiNames_cpp() } }, { func: function() { __GLOBAL__sub_I_CglLandPValidator_cpp() } }, { func: function() { __GLOBAL__sub_I_LabelsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_Logger_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutStandards_cpp() } }, { func: function() { __GLOBAL__sub_I_config_cpp() } }, { func: function() { __GLOBAL__sub_I_Ogml_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphIO_svg_cpp() } }, { func: function() { __GLOBAL__sub_I_Bfs_cpp() } }, { func: function() { ___cxx_global_var_init_21() } }, { func: function() { ___cxx_global_var_init_22() } }, { func: function() { __GLOBAL__sub_I_BooleanProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_DataSet_cpp() } }, { func: function() { __GLOBAL__sub_I_Delaunay_cpp() } }, { func: function() { __GLOBAL__sub_I_DoubleProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_Triconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningDagSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_ReachableSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningTreeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_InducedSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_LoopSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_MultipleEdgeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_Kruskal_cpp() } }, { func: function() { __GLOBAL__sub_I_MetricMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_AutoSize_cpp() } }, { func: function() { __GLOBAL__sub_I_Planarity_cpp() } }, { func: function() { __GLOBAL__sub_I_Simple_cpp() } }, { func: function() { __GLOBAL__sub_I_Tree_cpp() } }, { func: function() { __GLOBAL__sub_I_Connected_cpp() } }, { func: function() { __GLOBAL__sub_I_Biconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_NanoVGManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Outerplanar_cpp() } }, { func: function() { __GLOBAL__sub_I_Acyclic_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_ToLabels_cpp() } }, { func: function() { __GLOBAL__sub_I_GlBuffer_cpp() } }, { func: function() { __GLOBAL__sub_I_GlCPULODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlEntity_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphInputData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphStaticData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlQuadTreeLODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlScene_cpp() } }, { func: function() { __GLOBAL__sub_I_GlUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_DrawingTools_cpp() } }, { func: function() { __GLOBAL__sub_I_WithParameter_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyTypes_cpp() } }, { func: function() { __GLOBAL__sub_I_SizeProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_StlFunctions_cpp() } }, { func: function() { __GLOBAL__sub_I_StringProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpTools_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeTest_cpp() } }, { func: function() { ___cxx_global_var_init_1380() } }, { func: function() { ___cxx_global_var_init_27() } }, { func: function() { ___cxx_global_var_init_29() } }, { func: function() { ___cxx_global_var_init_31() } }, { func: function() { ___cxx_global_var_init_33() } }, { func: function() { ___cxx_global_var_init_35() } }, { func: function() { __GLOBAL__sub_I_PropertyManager_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipFontAwesome_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipMaterialDesignIcons_cpp() } }, { func: function() { __GLOBAL__sub_I_DatasetTools_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableCoord_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSize_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSizeProxy_cpp() } }, { func: function() { __GLOBAL__sub_I_Orientation_cpp() } }, { func: function() { __GLOBAL__sub_I_bind_cpp() } }, { func: function() { __GLOBAL__sub_I_iostream_cpp() } }, { func: function() { ___cxx_global_var_init_3_328() } }, { func: function() { __GLOBAL__sub_I_GraphAbstract_cpp() } }, { func: function() { __GLOBAL__sub_I_Graph_cpp() } }, { func: function() { ___cxx_global_var_init() } }, { func: function() { ___cxx_global_var_init_8() } }, { func: function() { ___cxx_global_var_init_1() } }, { func: function() { ___cxx_global_var_init_3() } }, { func: function() { ___cxx_global_var_init_5() } }, { func: function() { ___cxx_global_var_init_7() } }, { func: function() { ___cxx_global_var_init_9() } }, { func: function() { ___cxx_global_var_init_11() } }, { func: function() { __GLOBAL__sub_I_GraphMeasure_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphProperty_cpp() } }, { func: function() { ___cxx_global_var_init_326() } }, { func: function() { ___cxx_global_var_init_1_327() } }, { func: function() { __GLOBAL__sub_I_WelshPowell_cpp() } }, { func: function() { ___cxx_global_var_init_5_329() } }, { func: function() { ___cxx_global_var_init_7_330() } }, { func: function() { ___cxx_global_var_init_9_331() } }, { func: function() { ___cxx_global_var_init_11_332() } }, { func: function() { __GLOBAL__sub_I_GraphTools_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphView_cpp() } }, { func: function() { __GLOBAL__sub_I_IntegerProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutProperty_cpp() } }, { func: function() { ___cxx_global_var_init_24() } }, { func: function() { ___cxx_global_var_init_25() } }, { func: function() { __GLOBAL__sub_I_Observable_cpp() } }, { func: function() { __GLOBAL__sub_I_ParametricCurves_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTree_cpp() } }, { func: function() { __GLOBAL__sub_I_BendsTools_cpp() } }, { func: function() { __GLOBAL__sub_I_Dijkstra_cpp() } }, { func: function() { __GLOBAL__sub_I_EdgeBundling_cpp() } }, { func: function() { __GLOBAL__sub_I_OctreeBundle_cpp() } }, { func: function() { __GLOBAL__sub_I_QuadTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_PlanarGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_dotImport_cpp() } }, { func: function() { __GLOBAL__sub_I_Grid_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLImport_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomSimpleGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_AdjacencyMatrixImport_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ReverseEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTreeGeneral_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SmallWorldGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportPajek_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportUCINET_cpp() } }, { func: function() { __GLOBAL__sub_I_EmptyGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFm3_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFUpwardPlanarization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFrutchermanReingold_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleMultilevelEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFVisibility_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFKamadaKawai_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFCircular_cpp() } }, { func: function() { __GLOBAL__sub_I_HexagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipBindings_cpp() } }, { func: function() { __GLOBAL__sub_I_main_cpp() } }, { func: function() { __GLOBAL__sub_I_FisheyeInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_LassoSelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_NeighborhoodInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_RectangleZoomInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionModifierInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ZoomAndPanInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CrossGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CubeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CylinderGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DiamondGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBalloon_cpp() } }, { func: function() { __GLOBAL__sub_I_PentagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RingGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RoundedBoxGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SquareGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_StarGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DelaunayTriangulation_cpp() } }, { func: function() { __GLOBAL__sub_I_VoronoiDiagram_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_EqualValueClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_QuotientClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLExport_cpp() } }, { func: function() { __GLOBAL__sub_I_CurveEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_StrongComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_Circular_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_Tutte_cpp() } }, { func: function() { __GLOBAL__sub_I_Dendrogram_cpp() } }, { func: function() { __GLOBAL__sub_I_ImprovedWalker_cpp() } }, { func: function() { __GLOBAL__sub_I_SquarifiedTreeMap_cpp() } }, { func: function() { __GLOBAL__sub_I_PerfectLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_PolyominoPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Eccentricity_cpp() } }, { func: function() { __GLOBAL__sub_I_DegreeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_ClusterMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_BiconnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_BubbleTree_cpp() } }, { func: function() { __GLOBAL__sub_I_DagLevelMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_IdMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_LeafMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_NodeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_DepthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_PathLengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrahlerMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp_4065() } }, { func: function() { __GLOBAL__sub_I_BetweennessCentrality_cpp() } }, { func: function() { __GLOBAL__sub_I_KCores_cpp() } }, { func: function() { __GLOBAL__sub_I_LouvainClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_LinkCommunities_cpp() } }, { func: function() { __GLOBAL__sub_I_MCLClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_PageRank_cpp() } }, { func: function() { __GLOBAL__sub_I_FastOverlapRemoval_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDavidsonHarel_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNoTwistLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTree_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleFastLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFGemFrick_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFStressMajorization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFSugiyama_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDominance_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNiceLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationGrid_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBertaultLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPivotMDS_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTileToRowsPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipHtml5_cpp() } }, { func: function() { __GLOBAL__sub_I_Grip_cpp() } }, { func: function() { __GLOBAL__sub_I_MISFiltering_cpp() } }, { func: function() { __GLOBAL__sub_I_Distances_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OctTree_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_MixedModel_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponentPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp() } }, { func: function() { __GLOBAL__sub_I_GEMLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeReingoldAndTilfordExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeTreeExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeRadial_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeLeaf_cpp() } });
   
 
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "tulip.js.mem" : null;
@@ -2254,7 +2268,7 @@ memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasm
 
 
 
-var STATIC_BUMP = 592688;
+var STATIC_BUMP = 592640;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -10957,6 +10971,8 @@ staticSealed = true; // seal the static portion of memory
 
 Module['wasmTableSize'] = 467968;
 
+Module['wasmMaxTableSize'] = 467968;
+
 function invoke_iiiiiiii(index,a1,a2,a3,a4,a5,a6,a7) {
   try {
     return Module["dynCall_iiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7);
@@ -11652,7 +11668,7 @@ function invoke_viiii(index,a1,a2,a3,a4) {
 
 Module.asmGlobalArg = { "Math": Math, "Int8Array": Int8Array, "Int16Array": Int16Array, "Int32Array": Int32Array, "Uint8Array": Uint8Array, "Uint16Array": Uint16Array, "Uint32Array": Uint32Array, "Float32Array": Float32Array, "Float64Array": Float64Array, "NaN": NaN, "Infinity": Infinity, "byteLength": byteLength };
 
-Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "invoke_iiiiiiii": invoke_iiiiiiii, "invoke_iiiiiid": invoke_iiiiiid, "invoke_iiiddi": invoke_iiiddi, "invoke_vif": invoke_vif, "invoke_vid": invoke_vid, "invoke_viiiii": invoke_viiiii, "invoke_vij": invoke_vij, "invoke_iiiiiiiiii": invoke_iiiiiiiiii, "invoke_iiidd": invoke_iiidd, "invoke_vii": invoke_vii, "invoke_iiiiiii": invoke_iiiiiii, "invoke_iiiiiiid": invoke_iiiiiiid, "invoke_viijii": invoke_viijii, "invoke_ii": invoke_ii, "invoke_viidddi": invoke_viidddi, "invoke_viidiii": invoke_viidiii, "invoke_viidd": invoke_viidd, "invoke_viiiiiiiii": invoke_viiiiiiiii, "invoke_viidi": invoke_viidi, "invoke_fff": invoke_fff, "invoke_iidi": invoke_iidi, "invoke_viiidd": invoke_viiidd, "invoke_vidii": invoke_vidii, "invoke_iiiidid": invoke_iiiidid, "invoke_iiiiii": invoke_iiiiii, "invoke_vidiiiii": invoke_vidiiiii, "invoke_vidiiii": invoke_vidiiii, "invoke_viiddii": invoke_viiddii, "invoke_viiidiidi": invoke_viiidiidi, "invoke_viiiiiiiiiiii": invoke_viiiiiiiiiiii, "invoke_diiiii": invoke_diiiii, "invoke_viiiiiiiiiii": invoke_viiiiiiiiiii, "invoke_viiid": invoke_viiid, "invoke_iiii": invoke_iiii, "invoke_viiiiiddiid": invoke_viiiiiddiid, "invoke_viiiiddd": invoke_viiiiddd, "invoke_viifff": invoke_viifff, "invoke_viiiiid": invoke_viiiiid, "invoke_vi": invoke_vi, "invoke_vifi": invoke_vifi, "invoke_iij": invoke_iij, "invoke_diiii": invoke_diiii, "invoke_viid": invoke_viid, "invoke_viiiiiii": invoke_viiiiiii, "invoke_di": invoke_di, "invoke_viiidi": invoke_viiidi, "invoke_viiiid": invoke_viiiid, "invoke_diiiidiii": invoke_diiiidiii, "invoke_viiiidd": invoke_viiiidd, "invoke_iiidiiii": invoke_iiidiiii, "invoke_iid": invoke_iid, "invoke_viiddd": invoke_viiddd, "invoke_dd": invoke_dd, "invoke_viiiiii": invoke_viiiiii, "invoke_ff": invoke_ff, "invoke_iiiiiiiiiiii": invoke_iiiiiiiiiiii, "invoke_fi": invoke_fi, "invoke_iii": invoke_iii, "invoke_diii": invoke_diii, "invoke_viidiidi": invoke_viidiidi, "invoke_dii": invoke_dii, "invoke_viiifiii": invoke_viiifiii, "invoke_viiiiiiddiid": invoke_viiiiiiddiid, "invoke_viiiffii": invoke_viiiffii, "invoke_viiiddi": invoke_viiiddi, "invoke_iiid": invoke_iiid, "invoke_iiiii": invoke_iiiii, "invoke_viiddi": invoke_viiddi, "invoke_iiiiij": invoke_iiiiij, "invoke_viii": invoke_viii, "invoke_v": invoke_v, "invoke_iiiiiiiii": invoke_iiiiiiiii, "invoke_viif": invoke_viif, "invoke_viiiiiiii": invoke_viiiiiiii, "invoke_iiiiid": invoke_iiiiid, "invoke_viiiidddi": invoke_viiiidddi, "invoke_viiii": invoke_viiii, "_glClearStencil": _glClearStencil, "_glUseProgram": _glUseProgram, "_emscripten_set_mouseleave_callback": _emscripten_set_mouseleave_callback, "_strftime_l": _strftime_l, "_pthread_join": _pthread_join, "floatReadValueFromPointer": floatReadValueFromPointer, "simpleReadValueFromPointer": simpleReadValueFromPointer, "__emval_call_void_method": __emval_call_void_method, "_glStencilFunc": _glStencilFunc, "throwInternalError": throwInternalError, "get_first_emval": get_first_emval, "_glUniformMatrix4fv": _glUniformMatrix4fv, "_requestFullScreenCanvas": _requestFullScreenCanvas, "_glLineWidth": _glLineWidth, "_safeSetTimeout": _safeSetTimeout, "_pthread_setspecific": _pthread_setspecific, "__embind_register_void": __embind_register_void, "__emval_register": __emval_register, "___assert_fail": ___assert_fail, "_glDeleteProgram": _glDeleteProgram, "__ZSt18uncaught_exceptionv": __ZSt18uncaught_exceptionv, "extendError": extendError, "_longjmp": _longjmp, "getShiftFromSize": getShiftFromSize, "_glBindBuffer": _glBindBuffer, "_glCullFace": _glCullFace, "_glGetShaderInfoLog": _glGetShaderInfoLog, "__addDays": __addDays, "_signal": _signal, "_llvm_pow_f32": _llvm_pow_f32, "_emscripten_webgl_create_context": _emscripten_webgl_create_context, "_glBlendFunc": _glBlendFunc, "_glGetAttribLocation": _glGetAttribLocation, "_glDisableVertexAttribArray": _glDisableVertexAttribArray, "___cxa_begin_catch": ___cxa_begin_catch, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_set_mousedown_callback": _emscripten_set_mousedown_callback, "_sysconf": _sysconf, "__embind_register_std_string": __embind_register_std_string, "__emval_get_global": __emval_get_global, "_clock": _clock, "emscriptenWebGLComputeImageSize": emscriptenWebGLComputeImageSize, "___syscall221": ___syscall221, "_glUniform4f": _glUniform4f, "getStringOrSymbol": getStringOrSymbol, "_refreshWebGLCanvas": _refreshWebGLCanvas, "___syscall77": ___syscall77, "___syscall63": ___syscall63, "_glewGetErrorString": _glewGetErrorString, "_glFramebufferTexture2D": _glFramebufferTexture2D, "___cxa_pure_virtual": ___cxa_pure_virtual, "whenDependentTypesAreResolved": whenDependentTypesAreResolved, "_emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current, "_glGenBuffers": _glGenBuffers, "_glShaderSource": _glShaderSource, "_glFramebufferRenderbuffer": _glFramebufferRenderbuffer, "___syscall330": ___syscall330, "___cxa_atexit": ___cxa_atexit, "__emval_allocateDestructors": __emval_allocateDestructors, "_pthread_cleanup_push": _pthread_cleanup_push, "_glGetBooleanv": _glGetBooleanv, "getTypeName": getTypeName, "___syscall140": ___syscall140, "__emval_new": __emval_new, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "_pthread_cleanup_pop": _pthread_cleanup_pop, "_glGenerateMipmap": _glGenerateMipmap, "_glVertexAttribPointer": _glVertexAttribPointer, "_canXhrOnUrl": _canXhrOnUrl, "craftEmvalAllocator": craftEmvalAllocator, "_glGetProgramInfoLog": _glGetProgramInfoLog, "throwBindingError": throwBindingError, "__emval_incref": __emval_incref, "__arraySum": __arraySum, "_setProgressBarValueWorker": _setProgressBarValueWorker, "___cxa_find_matching_catch": ___cxa_find_matching_catch, "_glBindRenderbuffer": _glBindRenderbuffer, "_glDrawElements": _glDrawElements, "__embind_register_emval": __embind_register_emval, "_glBufferSubData": _glBufferSubData, "_glViewport": _glViewport, "___setErrNo": ___setErrNo, "readLatin1String": readLatin1String, "_glDeleteTextures": _glDeleteTextures, "_glDepthFunc": _glDepthFunc, "_glStencilOpSeparate": _glStencilOpSeparate, "__embind_register_bool": __embind_register_bool, "___resumeException": ___resumeException, "_focusCanvas": _focusCanvas, "createNamedFunction": createNamedFunction, "embind_init_charCodes": embind_init_charCodes, "_emscripten_set_mouseenter_callback": _emscripten_set_mouseenter_callback, "__emval_decref": __emval_decref, "_pthread_once": _pthread_once, "_glGenTextures": _glGenTextures, "_glGetIntegerv": _glGetIntegerv, "_glGetString": _glGetString, "_localtime": _localtime, "__emval_addMethodCaller": __emval_addMethodCaller, "__emval_get_property": __emval_get_property, "__emval_lookupTypes": __emval_lookupTypes, "_emscripten_set_mouseup_callback": _emscripten_set_mouseup_callback, "_emscripten_get_now": _emscripten_get_now, "__emval_call_method": __emval_call_method, "_glAttachShader": _glAttachShader, "_glCreateProgram": _glCreateProgram, "_glVertexAttribDivisorARB": _glVertexAttribDivisorARB, "___syscall3": ___syscall3, "___lock": ___lock, "emscriptenWebGLGetTexPixelData": emscriptenWebGLGetTexPixelData, "___syscall6": ___syscall6, "___syscall5": ___syscall5, "___syscall4": ___syscall4, "_isChrome": _isChrome, "_glDepthRange": _glDepthRange, "_glBindFramebuffer": _glBindFramebuffer, "_glDetachShader": _glDetachShader, "_gettimeofday": _gettimeofday, "new_": new_, "_glGenFramebuffers": _glGenFramebuffers, "_glUniform2f": _glUniform2f, "_emscripten_run_script": _emscripten_run_script, "_glUniform1fv": _glUniform1fv, "_llvm_pow_f64": _llvm_pow_f64, "_emscripten_set_keypress_callback": _emscripten_set_keypress_callback, "_glDeleteFramebuffers": _glDeleteFramebuffers, "___syscall54": ___syscall54, "_emscripten_async_wget2": _emscripten_async_wget2, "_glCheckFramebufferStatus": _glCheckFramebufferStatus, "_emscripten_set_main_loop_timing": _emscripten_set_main_loop_timing, "emscriptenWebGLGet": emscriptenWebGLGet, "__embind_register_integer": __embind_register_integer, "___cxa_allocate_exception": ___cxa_allocate_exception, "_glGetBufferParameteriv": _glGetBufferParameteriv, "___buildEnvironment": ___buildEnvironment, "__isLeapYear": __isLeapYear, "_glUniform3fv": _glUniform3fv, "_localtime_r": _localtime_r, "_tzset": _tzset, "_glClearColor": _glClearColor, "_glFinish": _glFinish, "_glUniform1f": _glUniform1f, "___syscall195": ___syscall195, "___syscall10": ___syscall10, "_glUniform1i": _glUniform1i, "_embind_repr": _embind_repr, "_strftime": _strftime, "_glDrawArrays": _glDrawArrays, "_glReadPixels": _glReadPixels, "_glCreateShader": _glCreateShader, "__emval_run_destructors": __emval_run_destructors, "_loadImageFromUrl": _loadImageFromUrl, "_pthread_mutex_destroy": _pthread_mutex_destroy, "_emscripten_webgl_init_context_attributes": _emscripten_webgl_init_context_attributes, "runDestructors": runDestructors, "requireRegisteredType": requireRegisteredType, "makeLegalFunctionName": makeLegalFunctionName, "_pthread_key_create": _pthread_key_create, "__emval_set_property": __emval_set_property, "_glActiveTexture": _glActiveTexture, "init_emval": init_emval, "___syscall39": ___syscall39, "_emscripten_longjmp": _emscripten_longjmp, "_glFrontFace": _glFrontFace, "_glCompileShader": _glCompileShader, "_glEnableVertexAttribArray": _glEnableVertexAttribArray, "registerType": registerType, "_abort": _abort, "requireHandle": requireHandle, "___syscall183": ___syscall183, "_setProgressBarCommentWorker": _setProgressBarCommentWorker, "_workerMode": _workerMode, "_glDeleteBuffers": _glDeleteBuffers, "_glBufferData": _glBufferData, "_glTexImage2D": _glTexImage2D, "_glewInit": _glewInit, "__emval_take_value": __emval_take_value, "__emval_get_method_caller": __emval_get_method_caller, "_pthread_getspecific": _pthread_getspecific, "_pthread_cond_wait": _pthread_cond_wait, "_glDeleteShader": _glDeleteShader, "_glGetProgramiv": _glGetProgramiv, "__embind_register_memory_view": __embind_register_memory_view, "_glScissor": _glScissor, "___syscall40": ___syscall40, "_glStencilOp": _glStencilOp, "___gxx_personality_v0": ___gxx_personality_v0, "_emscripten_set_mousemove_callback": _emscripten_set_mousemove_callback, "_glDeleteRenderbuffers": _glDeleteRenderbuffers, "__emval_new_array": __emval_new_array, "_domElementExists": _domElementExists, "_glDisable": _glDisable, "_glLinkProgram": _glLinkProgram, "_time": _time, "_times": _times, "_glGetError": _glGetError, "_resizeWebGLCanvas": _resizeWebGLCanvas, "_glGenRenderbuffers": _glGenRenderbuffers, "_blurCanvas": _blurCanvas, "_glGetUniformLocation": _glGetUniformLocation, "_glClear": _glClear, "_glUniform4fv": _glUniform4fv, "_glRenderbufferStorage": _glRenderbufferStorage, "_glBindTexture": _glBindTexture, "__exit": __exit, "_glBindAttribLocation": _glBindAttribLocation, "_glPixelStorei": _glPixelStorei, "_glGetShaderiv": _glGetShaderiv, "_glCopyTexImage2D": _glCopyTexImage2D, "_emscripten_webgl_destroy_context": _emscripten_webgl_destroy_context, "_glEnable": _glEnable, "__embind_register_float": __embind_register_float, "_emscripten_set_wheel_callback": _emscripten_set_wheel_callback, "integerReadValueFromPointer": integerReadValueFromPointer, "___unlock": ___unlock, "__embind_register_std_wstring": __embind_register_std_wstring, "_pthread_create": _pthread_create, "_emscripten_set_main_loop": _emscripten_set_main_loop, "_exit": _exit, "_glDepthMask": _glDepthMask, "emval_get_global": emval_get_global, "_getenv": _getenv, "___cxa_throw": ___cxa_throw, "_glColorMask": _glColorMask, "__emval_new_cstring": __emval_new_cstring, "count_emval_handles": count_emval_handles, "_glTexParameteri": _glTexParameteri, "_glDrawElementsInstancedARB": _glDrawElementsInstancedARB, "_atexit": _atexit, "_glStencilMask": _glStencilMask, "_pthread_mutex_init": _pthread_mutex_init, "_glTexSubImage2D": _glTexSubImage2D, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "___dso_handle": ___dso_handle };
+Module.asmLibraryArg = { "abort": abort, "assert": assert, "enlargeMemory": enlargeMemory, "getTotalMemory": getTotalMemory, "abortOnCannotGrowMemory": abortOnCannotGrowMemory, "invoke_iiiiiiii": invoke_iiiiiiii, "invoke_iiiiiid": invoke_iiiiiid, "invoke_iiiddi": invoke_iiiddi, "invoke_vif": invoke_vif, "invoke_vid": invoke_vid, "invoke_viiiii": invoke_viiiii, "invoke_vij": invoke_vij, "invoke_iiiiiiiiii": invoke_iiiiiiiiii, "invoke_iiidd": invoke_iiidd, "invoke_vii": invoke_vii, "invoke_iiiiiii": invoke_iiiiiii, "invoke_iiiiiiid": invoke_iiiiiiid, "invoke_viijii": invoke_viijii, "invoke_ii": invoke_ii, "invoke_viidddi": invoke_viidddi, "invoke_viidiii": invoke_viidiii, "invoke_viidd": invoke_viidd, "invoke_viiiiiiiii": invoke_viiiiiiiii, "invoke_viidi": invoke_viidi, "invoke_fff": invoke_fff, "invoke_iidi": invoke_iidi, "invoke_viiidd": invoke_viiidd, "invoke_vidii": invoke_vidii, "invoke_iiiidid": invoke_iiiidid, "invoke_iiiiii": invoke_iiiiii, "invoke_vidiiiii": invoke_vidiiiii, "invoke_vidiiii": invoke_vidiiii, "invoke_viiddii": invoke_viiddii, "invoke_viiidiidi": invoke_viiidiidi, "invoke_viiiiiiiiiiii": invoke_viiiiiiiiiiii, "invoke_diiiii": invoke_diiiii, "invoke_viiiiiiiiiii": invoke_viiiiiiiiiii, "invoke_viiid": invoke_viiid, "invoke_iiii": invoke_iiii, "invoke_viiiiiddiid": invoke_viiiiiddiid, "invoke_viiiiddd": invoke_viiiiddd, "invoke_viifff": invoke_viifff, "invoke_viiiiid": invoke_viiiiid, "invoke_vi": invoke_vi, "invoke_vifi": invoke_vifi, "invoke_iij": invoke_iij, "invoke_diiii": invoke_diiii, "invoke_viid": invoke_viid, "invoke_viiiiiii": invoke_viiiiiii, "invoke_di": invoke_di, "invoke_viiidi": invoke_viiidi, "invoke_viiiid": invoke_viiiid, "invoke_diiiidiii": invoke_diiiidiii, "invoke_viiiidd": invoke_viiiidd, "invoke_iiidiiii": invoke_iiidiiii, "invoke_iid": invoke_iid, "invoke_viiddd": invoke_viiddd, "invoke_dd": invoke_dd, "invoke_viiiiii": invoke_viiiiii, "invoke_ff": invoke_ff, "invoke_iiiiiiiiiiii": invoke_iiiiiiiiiiii, "invoke_fi": invoke_fi, "invoke_iii": invoke_iii, "invoke_diii": invoke_diii, "invoke_viidiidi": invoke_viidiidi, "invoke_dii": invoke_dii, "invoke_viiifiii": invoke_viiifiii, "invoke_viiiiiiddiid": invoke_viiiiiiddiid, "invoke_viiiffii": invoke_viiiffii, "invoke_viiiddi": invoke_viiiddi, "invoke_iiid": invoke_iiid, "invoke_iiiii": invoke_iiiii, "invoke_viiddi": invoke_viiddi, "invoke_iiiiij": invoke_iiiiij, "invoke_viii": invoke_viii, "invoke_v": invoke_v, "invoke_iiiiiiiii": invoke_iiiiiiiii, "invoke_viif": invoke_viif, "invoke_viiiiiiii": invoke_viiiiiiii, "invoke_iiiiid": invoke_iiiiid, "invoke_viiiidddi": invoke_viiiidddi, "invoke_viiii": invoke_viiii, "_glClearStencil": _glClearStencil, "_glUseProgram": _glUseProgram, "_emscripten_set_mouseleave_callback": _emscripten_set_mouseleave_callback, "_strftime_l": _strftime_l, "_pthread_join": _pthread_join, "floatReadValueFromPointer": floatReadValueFromPointer, "simpleReadValueFromPointer": simpleReadValueFromPointer, "__emval_call_void_method": __emval_call_void_method, "_glStencilFunc": _glStencilFunc, "throwInternalError": throwInternalError, "get_first_emval": get_first_emval, "_glUniformMatrix4fv": _glUniformMatrix4fv, "_requestFullScreenCanvas": _requestFullScreenCanvas, "_glLineWidth": _glLineWidth, "_safeSetTimeout": _safeSetTimeout, "_pthread_setspecific": _pthread_setspecific, "__embind_register_void": __embind_register_void, "__emval_register": __emval_register, "___assert_fail": ___assert_fail, "_glDeleteProgram": _glDeleteProgram, "__ZSt18uncaught_exceptionv": __ZSt18uncaught_exceptionv, "extendError": extendError, "_longjmp": _longjmp, "getShiftFromSize": getShiftFromSize, "_glBindBuffer": _glBindBuffer, "_glCullFace": _glCullFace, "_glGetShaderInfoLog": _glGetShaderInfoLog, "__addDays": __addDays, "_signal": _signal, "_llvm_pow_f32": _llvm_pow_f32, "_emscripten_webgl_create_context": _emscripten_webgl_create_context, "_glBlendFunc": _glBlendFunc, "_glGetAttribLocation": _glGetAttribLocation, "_glDisableVertexAttribArray": _glDisableVertexAttribArray, "___cxa_begin_catch": ___cxa_begin_catch, "_emscripten_memcpy_big": _emscripten_memcpy_big, "_emscripten_set_mousedown_callback": _emscripten_set_mousedown_callback, "_sysconf": _sysconf, "__embind_register_std_string": __embind_register_std_string, "__emval_get_global": __emval_get_global, "_clock": _clock, "emscriptenWebGLComputeImageSize": emscriptenWebGLComputeImageSize, "___syscall221": ___syscall221, "_glUniform4f": _glUniform4f, "getStringOrSymbol": getStringOrSymbol, "_refreshWebGLCanvas": _refreshWebGLCanvas, "___syscall77": ___syscall77, "___syscall63": ___syscall63, "_glewGetErrorString": _glewGetErrorString, "_glFramebufferTexture2D": _glFramebufferTexture2D, "___cxa_pure_virtual": ___cxa_pure_virtual, "whenDependentTypesAreResolved": whenDependentTypesAreResolved, "_emscripten_webgl_make_context_current": _emscripten_webgl_make_context_current, "_glGenBuffers": _glGenBuffers, "_glShaderSource": _glShaderSource, "_glFramebufferRenderbuffer": _glFramebufferRenderbuffer, "___syscall330": ___syscall330, "___cxa_atexit": ___cxa_atexit, "__emval_allocateDestructors": __emval_allocateDestructors, "_pthread_cleanup_push": _pthread_cleanup_push, "_glGetBooleanv": _glGetBooleanv, "getTypeName": getTypeName, "___syscall140": ___syscall140, "__emval_new": __emval_new, "___syscall145": ___syscall145, "___syscall146": ___syscall146, "_pthread_cleanup_pop": _pthread_cleanup_pop, "_glGenerateMipmap": _glGenerateMipmap, "_glVertexAttribPointer": _glVertexAttribPointer, "_canXhrOnUrl": _canXhrOnUrl, "craftEmvalAllocator": craftEmvalAllocator, "_glGetProgramInfoLog": _glGetProgramInfoLog, "throwBindingError": throwBindingError, "__emval_incref": __emval_incref, "__arraySum": __arraySum, "_setProgressBarValueWorker": _setProgressBarValueWorker, "___cxa_find_matching_catch": ___cxa_find_matching_catch, "_glBindRenderbuffer": _glBindRenderbuffer, "_glDrawElements": _glDrawElements, "__embind_register_emval": __embind_register_emval, "_glBufferSubData": _glBufferSubData, "_glViewport": _glViewport, "___setErrNo": ___setErrNo, "readLatin1String": readLatin1String, "_glDeleteTextures": _glDeleteTextures, "_glDepthFunc": _glDepthFunc, "_glStencilOpSeparate": _glStencilOpSeparate, "__embind_register_bool": __embind_register_bool, "___resumeException": ___resumeException, "_focusCanvas": _focusCanvas, "createNamedFunction": createNamedFunction, "embind_init_charCodes": embind_init_charCodes, "_emscripten_set_mouseenter_callback": _emscripten_set_mouseenter_callback, "__emval_decref": __emval_decref, "_pthread_once": _pthread_once, "_glGenTextures": _glGenTextures, "_glGetIntegerv": _glGetIntegerv, "_glGetString": _glGetString, "_localtime": _localtime, "__emval_addMethodCaller": __emval_addMethodCaller, "__emval_get_property": __emval_get_property, "__emval_lookupTypes": __emval_lookupTypes, "_emscripten_set_mouseup_callback": _emscripten_set_mouseup_callback, "_emscripten_get_now": _emscripten_get_now, "__emval_call_method": __emval_call_method, "_glAttachShader": _glAttachShader, "_glCreateProgram": _glCreateProgram, "_glVertexAttribDivisorARB": _glVertexAttribDivisorARB, "___syscall3": ___syscall3, "___lock": ___lock, "emscriptenWebGLGetTexPixelData": emscriptenWebGLGetTexPixelData, "___syscall6": ___syscall6, "___syscall5": ___syscall5, "___syscall4": ___syscall4, "_isChrome": _isChrome, "_glDepthRange": _glDepthRange, "_glBindFramebuffer": _glBindFramebuffer, "_glDetachShader": _glDetachShader, "_gettimeofday": _gettimeofday, "new_": new_, "_glGenFramebuffers": _glGenFramebuffers, "_glUniform2f": _glUniform2f, "_emscripten_run_script": _emscripten_run_script, "_glUniform1fv": _glUniform1fv, "_llvm_pow_f64": _llvm_pow_f64, "_emscripten_set_keypress_callback": _emscripten_set_keypress_callback, "_glDeleteFramebuffers": _glDeleteFramebuffers, "___syscall54": ___syscall54, "_emscripten_async_wget2": _emscripten_async_wget2, "_glCheckFramebufferStatus": _glCheckFramebufferStatus, "_emscripten_set_main_loop_timing": _emscripten_set_main_loop_timing, "emscriptenWebGLGet": emscriptenWebGLGet, "__embind_register_integer": __embind_register_integer, "___cxa_allocate_exception": ___cxa_allocate_exception, "_glGetBufferParameteriv": _glGetBufferParameteriv, "___buildEnvironment": ___buildEnvironment, "__isLeapYear": __isLeapYear, "_glUniform3fv": _glUniform3fv, "_localtime_r": _localtime_r, "_tzset": _tzset, "_glClearColor": _glClearColor, "_glFinish": _glFinish, "_glUniform1f": _glUniform1f, "___syscall195": ___syscall195, "___syscall10": ___syscall10, "_glUniform1i": _glUniform1i, "_embind_repr": _embind_repr, "_strftime": _strftime, "_glDrawArrays": _glDrawArrays, "_glReadPixels": _glReadPixels, "_glCreateShader": _glCreateShader, "__emval_run_destructors": __emval_run_destructors, "_loadImageFromUrl": _loadImageFromUrl, "_pthread_mutex_destroy": _pthread_mutex_destroy, "_emscripten_webgl_init_context_attributes": _emscripten_webgl_init_context_attributes, "runDestructors": runDestructors, "requireRegisteredType": requireRegisteredType, "makeLegalFunctionName": makeLegalFunctionName, "_pthread_key_create": _pthread_key_create, "__emval_set_property": __emval_set_property, "_glActiveTexture": _glActiveTexture, "init_emval": init_emval, "___syscall39": ___syscall39, "_emscripten_longjmp": _emscripten_longjmp, "_glFrontFace": _glFrontFace, "_glCompileShader": _glCompileShader, "_glEnableVertexAttribArray": _glEnableVertexAttribArray, "registerType": registerType, "_abort": _abort, "requireHandle": requireHandle, "___syscall183": ___syscall183, "_setProgressBarCommentWorker": _setProgressBarCommentWorker, "_workerMode": _workerMode, "_glDeleteBuffers": _glDeleteBuffers, "_glBufferData": _glBufferData, "_glTexImage2D": _glTexImage2D, "_glewInit": _glewInit, "__emval_take_value": __emval_take_value, "__emval_get_method_caller": __emval_get_method_caller, "_pthread_getspecific": _pthread_getspecific, "_pthread_cond_wait": _pthread_cond_wait, "_glDeleteShader": _glDeleteShader, "_glGetProgramiv": _glGetProgramiv, "__embind_register_memory_view": __embind_register_memory_view, "_glScissor": _glScissor, "___syscall40": ___syscall40, "_glStencilOp": _glStencilOp, "___gxx_personality_v0": ___gxx_personality_v0, "_emscripten_set_mousemove_callback": _emscripten_set_mousemove_callback, "_glDeleteRenderbuffers": _glDeleteRenderbuffers, "__emval_new_array": __emval_new_array, "_domElementExists": _domElementExists, "_glDisable": _glDisable, "_glLinkProgram": _glLinkProgram, "_time": _time, "_times": _times, "_glGetError": _glGetError, "_resizeWebGLCanvas": _resizeWebGLCanvas, "_glGenRenderbuffers": _glGenRenderbuffers, "_blurCanvas": _blurCanvas, "_glGetUniformLocation": _glGetUniformLocation, "_glClear": _glClear, "_glUniform4fv": _glUniform4fv, "_glRenderbufferStorage": _glRenderbufferStorage, "_glBindTexture": _glBindTexture, "__exit": __exit, "_glBindAttribLocation": _glBindAttribLocation, "_glPixelStorei": _glPixelStorei, "_glGetShaderiv": _glGetShaderiv, "_glCopyTexImage2D": _glCopyTexImage2D, "_emscripten_webgl_destroy_context": _emscripten_webgl_destroy_context, "_glEnable": _glEnable, "__embind_register_float": __embind_register_float, "_emscripten_set_wheel_callback": _emscripten_set_wheel_callback, "integerReadValueFromPointer": integerReadValueFromPointer, "___unlock": ___unlock, "__embind_register_std_wstring": __embind_register_std_wstring, "_pthread_create": _pthread_create, "_emscripten_set_main_loop": _emscripten_set_main_loop, "_exit": _exit, "_glDepthMask": _glDepthMask, "emval_get_global": emval_get_global, "_getenv": _getenv, "___cxa_throw": ___cxa_throw, "_glColorMask": _glColorMask, "__emval_new_cstring": __emval_new_cstring, "count_emval_handles": count_emval_handles, "_glTexParameteri": _glTexParameteri, "_glDrawElementsInstancedARB": _glDrawElementsInstancedARB, "_atexit": _atexit, "_glStencilMask": _glStencilMask, "_pthread_mutex_init": _pthread_mutex_init, "_glTexSubImage2D": _glTexSubImage2D, "DYNAMICTOP_PTR": DYNAMICTOP_PTR, "tempDoublePtr": tempDoublePtr, "ABORT": ABORT, "STACKTOP": STACKTOP, "STACK_MAX": STACK_MAX, "___dso_handle": ___dso_handle };
 // EMSCRIPTEN_START_ASM
 var asm =Module["asm"]// EMSCRIPTEN_END_ASM
 (Module.asmGlobalArg, Module.asmLibraryArg, buffer);
@@ -11824,6 +11840,7 @@ var __GLOBAL__sub_I_CircleGlyph_cpp = Module["__GLOBAL__sub_I_CircleGlyph_cpp"] 
 var __GLOBAL__sub_I_GlEntity_cpp = Module["__GLOBAL__sub_I_GlEntity_cpp"] = asm["__GLOBAL__sub_I_GlEntity_cpp"];
 var _saveGraph = Module["_saveGraph"] = asm["_saveGraph"];
 var _pthread_self = Module["_pthread_self"] = asm["_pthread_self"];
+var __GLOBAL__sub_I_Random_cpp_4065 = Module["__GLOBAL__sub_I_Random_cpp_4065"] = asm["__GLOBAL__sub_I_Random_cpp_4065"];
 var _SizeProperty_setNodeValue = Module["_SizeProperty_setNodeValue"] = asm["_SizeProperty_setNodeValue"];
 var _DoubleProperty_setAllEdgeValue = Module["_DoubleProperty_setAllEdgeValue"] = asm["_DoubleProperty_setAllEdgeValue"];
 var _getCurrentCanvas = Module["_getCurrentCanvas"] = asm["_getCurrentCanvas"];
@@ -12348,7 +12365,6 @@ var _getSizeAlgorithmPluginsList = Module["_getSizeAlgorithmPluginsList"] = asm[
 var ___getTypeName = Module["___getTypeName"] = asm["___getTypeName"];
 var _booleanAlgorithmExists = Module["_booleanAlgorithmExists"] = asm["_booleanAlgorithmExists"];
 var _Graph_addNode2 = Module["_Graph_addNode2"] = asm["_Graph_addNode2"];
-var __GLOBAL__sub_I_Random_cpp_4072 = Module["__GLOBAL__sub_I_Random_cpp_4072"] = asm["__GLOBAL__sub_I_Random_cpp_4072"];
 var _DoubleVectorProperty_setAllNodeValue = Module["_DoubleVectorProperty_setAllNodeValue"] = asm["_DoubleVectorProperty_setAllNodeValue"];
 var __GLOBAL__sub_I_SpanningTreeSelection_cpp = Module["__GLOBAL__sub_I_SpanningTreeSelection_cpp"] = asm["__GLOBAL__sub_I_SpanningTreeSelection_cpp"];
 var _resizeCanvas = Module["_resizeCanvas"] = asm["_resizeCanvas"];
