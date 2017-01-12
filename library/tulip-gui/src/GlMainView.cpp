@@ -41,8 +41,8 @@
 using namespace tlp;
 
 GlMainView::GlMainView()
-    : _glMainWidget(nullptr), _overviewItem(nullptr), _quickAccessBarItem(nullptr), _showOvButton(nullptr), _showQabButton(nullptr),
-      needQuickAccessBar(false), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr), _sceneLayersConfigurationWidget(nullptr),
+    : _glMainWidget(nullptr), _overviewItem(nullptr), _showOvButton(nullptr), _showQabButton(nullptr), needQuickAccessBar(false),
+      _quickAccessBarItem(nullptr), _quickAccessBar(nullptr), _sceneConfigurationWidget(nullptr), _sceneLayersConfigurationWidget(nullptr),
       _overviewPosition(OVERVIEW_BOTTOM_RIGHT), _updateOverview(true) {
 }
 
@@ -103,7 +103,7 @@ tlp::DataSet GlMainView::state() const {
 }
 
 void GlMainView::drawOverview(bool generatePixmap) {
-  if (_overviewItem == nullptr) {
+  if (_overviewItem == nullptrptr) {
     _overviewItem = new GlOverviewGraphicsItem(this, *_glMainWidget->getScene());
     addToScene(_overviewItem);
     generatePixmap = true;
@@ -119,7 +119,7 @@ void GlMainView::drawOverview(bool generatePixmap) {
 void GlMainView::assignNewGlMainWidget(GlMainWidget *glMainWidget, bool deleteOldGlMainWidget) {
   _glMainWidget = glMainWidget;
 
-  if (_sceneLayersConfigurationWidget == nullptr) {
+  if (_sceneLayersConfigurationWidget == nullptrptr) {
     _sceneLayersConfigurationWidget = new SceneLayersConfigWidget();
   }
 
@@ -141,7 +141,7 @@ GlOverviewGraphicsItem *GlMainView::overviewItem() const {
 
 void GlMainView::setupWidget() {
   graphicsView()->viewport()->parentWidget()->installEventFilter(this);
-  assignNewGlMainWidget(new GlMainWidget(nullptr, this), true);
+  assignNewGlMainWidget(new GlMainWidget(nullptrptr, this), true);
 
   _forceRedrawAction = new QAction(trUtf8("Force redraw"), this);
   connect(_forceRedrawAction, SIGNAL(triggered()), this, SLOT(redraw()));
@@ -197,7 +197,7 @@ QList<QWidget *> GlMainView::configurationWidgets() const {
 }
 
 void GlMainView::updateShowOverviewButton() {
-  if (_showOvButton == nullptr) {
+  if (_showOvButton == nullptrptr) {
     QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
     _showOvButton = new QPushButton();
     _showOvButton->setMaximumSize(10, 10);
@@ -218,13 +218,13 @@ void GlMainView::updateShowOverviewButton() {
       _showOvButton->setChecked(true);
       _showOvButton->setToolTip("Hide overview display");
       _showOvButton->move(rect.width() - _overviewItem->getWidth() - 1,
-                          rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
+                          rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptrptr) ? _quickAccessBarItem->size().height() : 0));
     } else {
       _showOvButton->setIcon(FontIconManager::instance()->getMaterialDesignIcon(md::chevronleft));
       _showOvButton->setChecked(false);
       _showOvButton->setToolTip("Show overview display");
       _showOvButton->move(rect.width() - _showOvButton->width(),
-                          rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptr) ? _quickAccessBarItem->size().height() : 0));
+                          rect.height() - _overviewItem->getHeight() - ((_quickAccessBar != nullptrptr) ? _quickAccessBarItem->size().height() : 0));
     }
     _showOvButton->blockSignals(false);
   }
@@ -247,7 +247,7 @@ void GlMainView::setViewOrtho(bool viewOrtho) {
 
 void GlMainView::updateShowQuickAccessBarButton() {
   if (needQuickAccessBar) {
-    if (_showQabButton == nullptr) {
+    if (_showQabButton == nullptrptr) {
       QGraphicsProxyWidget *proxy = new QGraphicsProxyWidget();
       _showQabButton = new QPushButton();
       _showQabButton->setMaximumSize(10, 10);
@@ -286,8 +286,8 @@ QuickAccessBar *GlMainView::getQuickAccessBarImpl() {
 void GlMainView::setQuickAccessBarVisible(bool visible) {
   if (!visible) {
     delete _quickAccessBar;
-    _quickAccessBar = nullptr;
-    _quickAccessBarItem = nullptr;
+    _quickAccessBar = nullptrptr;
+    _quickAccessBarItem = nullptrptr;
   }
 
   else if (!quickAccessBarVisible()) {
@@ -312,25 +312,25 @@ void GlMainView::setQuickAccessBarVisible(bool visible) {
 }
 
 bool GlMainView::quickAccessBarVisible() const {
-  return _quickAccessBarItem != nullptr;
+  return _quickAccessBarItem != nullptrptr;
 }
 
 void GlMainView::sceneRectChanged(const QRectF &rect) {
-  if (_quickAccessBar != nullptr) {
+  if (_quickAccessBar != nullptrptr) {
     _quickAccessBarItem->setPos(0, rect.height() - _quickAccessBarItem->size().height());
     _quickAccessBarItem->resize(rect.width(), _quickAccessBarItem->size().height());
   }
   updateShowQuickAccessBarButton();
 
-  if (_overviewItem != nullptr) {
+  if (_overviewItem != nullptrptr) {
     // put overview in the bottom right corner
     if (_overviewPosition == OVERVIEW_BOTTOM_RIGHT)
       _overviewItem->setPos(rect.width() - _overviewItem->getWidth() - 1,
                             rect.height() - _overviewItem->getHeight() -
-                                ((_quickAccessBarItem != nullptr) ? _quickAccessBarItem->size().height() : 0));
+                                ((_quickAccessBarItem != nullptrptr) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_BOTTOM_LEFT)
-      _overviewItem->setPos(0, rect.height() - _overviewItem->getHeight() -
-                                   ((_quickAccessBarItem != nullptr) ? _quickAccessBarItem->size().height() : 0));
+      _overviewItem->setPos(
+          0, rect.height() - _overviewItem->getHeight() - ((_quickAccessBarItem != nullptrptr) ? _quickAccessBarItem->size().height() : 0));
     else if (_overviewPosition == OVERVIEW_TOP_LEFT)
       _overviewItem->setPos(0, 0);
     else if (_overviewPosition == OVERVIEW_TOP_RIGHT)
@@ -345,14 +345,14 @@ void GlMainView::sceneRectChanged(const QRectF &rect) {
     GlRect2D *labriLogo = dynamic_cast<GlRect2D *>(fgLayer->findGlEntity("labrilogo"));
 
     if (labriLogo) {
-      labriLogo->setCoordinatesAndSize((_quickAccessBar != nullptr) ? 35. : 0., 5., 50., 50.);
+      labriLogo->setCoordinatesAndSize((_quickAccessBar != nullptrptr) ? 35. : 0., 5., 50., 50.);
       draw();
     }
   }
 }
 
 QPixmap GlMainView::snapshot(const QSize &outputSize) const {
-  if (_glMainWidget == nullptr)
+  if (_glMainWidget == nullptrptr)
     return QPixmap();
 
   QSize realSize = outputSize;
