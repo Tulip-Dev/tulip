@@ -57,6 +57,7 @@ public:
   bool run();
 
 private:
+  void computeCurrentGraphLayout();
   void computeOrdering();
   void firstNodesPlacement();
   void placement();

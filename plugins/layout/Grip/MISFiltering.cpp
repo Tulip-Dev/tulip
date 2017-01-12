@@ -39,9 +39,6 @@ MISFiltering::~MISFiltering() {
 }
 //========================================
 void MISFiltering::computeFiltering() {
-  DoubleProperty *metric = g_copy->getProperty<DoubleProperty>("misf");
-  metric->setAllNodeValue(0);
-
   node firstNode = g_copy->getOneNode();
 
   inLastVi.setAll(true);
@@ -83,7 +80,6 @@ void MISFiltering::computeFiltering() {
       node n = node(itn->next());
       levelToNodes[level].insert(n);
       inLastVi.set(n.id, true);
-      metric->setNodeValue(n, level);
       ++nb;
     }
 
