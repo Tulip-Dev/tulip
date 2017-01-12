@@ -58,6 +58,7 @@ public:
   bool run();
 
 private :
+  void computeCurrentGraphLayout();
   void computeOrdering();
   void firstNodesPlacement();
   void placement();
@@ -88,7 +89,7 @@ private :
   TLP_HASH_MAP<tlp::node, double> heat;
   TLP_HASH_MAP<tlp::node, double> oldCos;
 
-  tlp::Graph * currentGraph;
+  tlp::Graph *currentGraph;
   int _dim;
 };
 /*@}*/
