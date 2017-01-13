@@ -425,7 +425,7 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType,
     TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
                                         prop, _mainView->graph(),
                                         delegate,
-					_mainView->graphicsView()->window());
+                                        _mainView->graphicsView()->window());
 
   // Check if edition has been cancelled
   if (!val.isValid())
