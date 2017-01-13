@@ -205,12 +205,12 @@ void QuickAccessBar::setGlMainView(GlMainView* v) {
 void QuickAccessBarImpl::reset() {
   _resetting = true;
 
-  _ui->backgroundColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->nodeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->edgeColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->nodeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->edgeBorderColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
-  _ui->labelColorButton->setDialogParent(tlp::Perspective::instance() ? tlp::Perspective::instance()->mainWindow() : NULL);
+  _ui->backgroundColorButton->setDialogParent(_mainView->graphicsView()->window());
+  _ui->nodeColorButton->setDialogParent(_mainView->graphicsView()->window());
+  _ui->edgeColorButton->setDialogParent(_mainView->graphicsView()->window());
+  _ui->nodeBorderColorButton->setDialogParent(_mainView->graphicsView()->window());
+  _ui->edgeBorderColorButton->setDialogParent(_mainView->graphicsView()->window());
+  _ui->labelColorButton->setDialogParent(_mainView->graphicsView()->window());
 
   _ui->backgroundColorButton->setTulipColor(scene()->getBackgroundColor());
   _ui->colorInterpolationToggle->setChecked(renderingParameters()->isEdgeColorInterpolate());
@@ -424,8 +424,8 @@ void QuickAccessBarImpl::setAllValues(unsigned int eltType,
   QVariant val =
     TulipItemDelegate::showEditorDialog((tlp::ElementType) eltType,
                                         prop, _mainView->graph(),
-                                        delegate, Perspective::instance() ? static_cast<QWidget*>(Perspective::instance()->mainWindow()) :
-                                        static_cast<QWidget*>(_mainView->graphicsView()));
+                                        delegate,
+					_mainView->graphicsView()->window());
 
   // Check if edition has been cancelled
   if (!val.isValid())
@@ -523,7 +523,7 @@ GlScene* QuickAccessBar::scene() const {
 }
 
 void QuickAccessBarImpl::selectFont() {
-  TulipFontDialog dlg;
+  TulipFontDialog dlg(_mainView->graphicsView()->window());
   dlg.selectFont(TulipFont::fromFile(inputData()->getElementFont()->getNodeDefaultValue().c_str()));
 
   if (dlg.exec() != QDialog::Accepted || !dlg.font().exists())

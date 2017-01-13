@@ -377,7 +377,7 @@ QPixmap GlMainView::snapshot(const QSize &outputSize) const {
 }
 
 void GlMainView::openSnapshotDialog() {
-  SnapshotDialog dlg(this, getGlMainWidget()->parentWidget());
+  SnapshotDialog dlg(this, graphicsView()->window());
   dlg.exec();
 }
 
