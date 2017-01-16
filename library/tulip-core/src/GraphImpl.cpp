@@ -231,8 +231,12 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges,
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges) {
-  std::vector<edge> addedEdges;
-  addEdges(edges, addedEdges);
+  if (hasOnlookers()) {
+    std::vector<edge> addedEdges;
+    addEdges(edges, addedEdges);
+  }
+  else
+    storage.addEdges(edges);
 }
 //----------------------------------------------------------------
 void GraphImpl::restoreEdges(const std::vector<edge>& edges,
