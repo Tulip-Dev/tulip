@@ -55,7 +55,7 @@ void MatrixView::setState(const DataSet &ds) {
   setOverviewVisible(true);
 
   if (!_configurationWidget) {
-    _configurationWidget = new MatrixViewConfigurationWidget(getGlMainWidget()->parentWidget());
+    _configurationWidget = new MatrixViewConfigurationWidget();
     connect(_configurationWidget, SIGNAL(changeBackgroundColor(QColor)), this, SLOT(setBackgroundColor(QColor)));
     connect(_configurationWidget, SIGNAL(metricSelected(std::string)), this, SLOT(setOrderingMetric(std::string)));
     connect(_configurationWidget, SIGNAL(setGridDisplayMode()), this, SLOT(setGridDisplayMode()));
