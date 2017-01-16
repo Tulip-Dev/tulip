@@ -89,14 +89,18 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   {
     unsigned int i = 0;
     for (node n : graph->getNodes()) {
+      assert(graph->isElement(n));
       nodeIndex.set(n.id, node(i));
       ++i;
     }
+    assert(i == graph->numberOfNodes());
     i = 0;
     for (edge e : graph->getEdges()) {
+      assert(graph->isElement(e));
       edgeIndex.set(e.id, edge(i));
       ++i;
     }
+    assert(i == graph->numberOfEdges());
   }
   // loop to write edges
   {

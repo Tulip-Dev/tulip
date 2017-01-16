@@ -92,10 +92,12 @@ public:
   tlp::MutableContainer<tlp::edge> edgeIndex;
 
   tlp::node getNode(tlp::node n) {
+    assert(graph->isElement(n));
     return nodeIndex.get(n.id);
   }
 
   tlp::edge getEdge(tlp::edge e) {
+    assert(graph->isElement(e));
     return edgeIndex.get(e.id);
   }
 
