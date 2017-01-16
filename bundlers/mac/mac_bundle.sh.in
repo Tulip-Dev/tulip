@@ -48,6 +48,7 @@ cd "${DEST_DIR}/application"
 mkdir -p Tulip.app/Contents/{MacOS,Resources,Frameworks}
 cd Tulip.app/Contents
 cp "${SRC_DIR}/tulip.icns" Resources/
+cp "${SRC_DIR}/Info.plist" .
 
 echo 'Copying binaries & libraries'
 cd "${DEST_DIR}/application/Tulip.app/Contents/"
@@ -58,8 +59,6 @@ rm lib/python/*.pyc lib/python/*.pyo 2>/dev/null
 rm lib/python/tulip/*.pyc lib/python/tulip/*.pyo 2>/dev/null
 rm lib/python/tulipogl/*.pyc lib/python/tulipogl/*.pyo 2>/dev/null
 rm lib/python/tulipgui/*.pyc lib/python/tulipgui/*.pyo 2>/dev/null
-
-chmod +x MacOS/tulip_launcher
 
 echo 'Copying license'
 cd "${DEST_DIR}/application"
@@ -81,23 +80,36 @@ cp "@QT_QTCLUCENE_LIBRARY@" . 2>/dev/null
 # use macdeployqt to configure exe & libraries
 cd ..
 # configure tulip & tulip_perspective
-cp bin/tulip MacOS
-# tweak Info.plist to ensure tulip will be updated by macdeployqt
-cat "${SRC_DIR}/Info.plist" | sed 's/<string>tulip_launcher<\/string>/<string>tulip<\/string>/' > Info.plist
+mv bin/tulip MacOS/Tulip
 # run macdeployqt with tulip_perspective as an other executable to update
 ${QT_BINARY_DIR}/macdeployqt ${DEST_DIR}/application/Tulip.app -executable=${DEST_DIR}/application/Tulip.app/Contents/bin/tulip_perspective
-mv MacOS/tulip bin/tulip
-# restore original Info.plist
-cp "${SRC_DIR}/Info.plist" .
+mv MacOS/Tulip bin/tulip
 # rename
 mv ${DEST_DIR}/application/Tulip.app ${DEST_DIR}/application/${APP_NAME}-@TulipVersion@.app
 
+# create launcher
+cat > MacOs/Tulip <<EOF
+#!/bin/sh
+
+wd="\${0%/*}"
+cd "\$wd/.."
+
+export DYLD_LIBRARY_PATH="\$(pwd)/Frameworks"
+export DYLD_FRAMEWORK_PATH="\$(pwd)/Frameworks"
+export QT_QPA_PLATFORM_PLUGIN_PATH="\$(pwd)/PlugIns/platforms"
+export QT_PLUGIN_PATH="\$(pwd)/PlugIns"
+"\$(pwd)"/bin/tulip
+
+EOF
+# make it executable
+chmod +x MacOS/Tulip
+
+# generate dmg
 echo 'Generating DMG'
 cd "${DEST_DIR}"
 sh "${SRC_DIR}/make_dmg.sh" ${APP_NAME} "@TulipVersion@" "${DEST_DIR}/application"
 
-rm -rf "${DEST_DIR}/application" 2>/dev/null
-
+# rename dmg if needed
 if [ "$PYTHON_BUILD" = "ON" ]
 then
 echo "${APP_NAME}-@TulipVersion@.dmg has been correctly generated in ${DEST_DIR}"
