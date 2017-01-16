@@ -746,6 +746,8 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
 
     node src = (*it).first;
     node tgt = (*it).second;
+    assert(isElement(src));
+    assert(isElement(tgt));
     EdgeContainer& ctnr = nodes[src.id];
     ctnr.outDegree += 1;
     edge e(first);
