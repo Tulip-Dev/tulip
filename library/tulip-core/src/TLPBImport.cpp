@@ -409,7 +409,8 @@ bool TLPBImport::importGraph() {
 
               // read and set node value
               assert(g->isElement(n));
-	      if (!prop->readNodeValue(vs, n))
+
+              if (!prop->readNodeValue(vs, n))
                 return (delete is, errorTrap(vBuf));
             }
 
@@ -428,7 +429,8 @@ bool TLPBImport::importGraph() {
             if (!bool(is->read((char *) &(n.id), sizeof(unsigned int))))
               return (delete is, errorTrap());
 
-	    assert(g->isElement(n));
+            assert(g->isElement(n));
+
             if (pnViewProp) {
               std::string value;
 
@@ -494,7 +496,8 @@ bool TLPBImport::importGraph() {
                 return (delete is, errorTrap(vBuf));
 
               assert(g->isElement(e));
-	      if (pnViewProp) {
+
+              if (pnViewProp) {
                 std::string value;
 
                 // must ensure ascendant compatibility
@@ -535,7 +538,8 @@ bool TLPBImport::importGraph() {
               return (delete is, errorTrap());
 
             // read and set edge value
-	    assert(g->isElement(e));
+            assert(g->isElement(e));
+
             if (!prop->readEdgeValue(*is, e))
               return (delete is, errorTrap());
           }
