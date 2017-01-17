@@ -276,22 +276,22 @@ struct TLPGraphBuilder:public TLPTrue {
       size_t pos = value.find("TulipBitmapDir/");
 
       if (pos!=std::string::npos)
-	value.replace(pos, 15, TulipBitmapDir);
+        value.replace(pos, 15, TulipBitmapDir);
     }
     else {
       if (isGraphProperty) {
-	GraphProperty* gProp = static_cast<GraphProperty*>(prop);
-	char *endPtr=NULL;
-	const char *startPtr=value.c_str();
-	int result=strtol(startPtr,&endPtr,10);
+        GraphProperty* gProp = static_cast<GraphProperty*>(prop);
+        char *endPtr=NULL;
+        const char *startPtr=value.c_str();
+        int result=strtol(startPtr,&endPtr,10);
 
-	if (endPtr==startPtr) return false;
+        if (endPtr==startPtr) return false;
 
-	if (clusterIndex.find(result)==clusterIndex.end()) return false;
+        if (clusterIndex.find(result)==clusterIndex.end()) return false;
 
-	gProp->setNodeValue(n, result ? clusterIndex[result]: 0);
+        gProp->setNodeValue(n, result ? clusterIndex[result]: 0);
 
-	return true;
+        return true;
       }
     }
 
@@ -314,23 +314,23 @@ struct TLPGraphBuilder:public TLPTrue {
       size_t pos = value.find("TulipBitmapDir/");
 
       if (pos!=std::string::npos)
-	value.replace(pos, 15, TulipBitmapDir);
+        value.replace(pos, 15, TulipBitmapDir);
     }
     else if ((version < 2.2) &&
-	     (propertyName==std::string("viewSrcAnchorShape") ||
-	      propertyName==std::string("viewTgtAnchorShape")))
+             (propertyName==std::string("viewSrcAnchorShape") ||
+              propertyName==std::string("viewTgtAnchorShape")))
       //If we are in the old edge extremities id system we need to convert the ids in the file.
       return prop->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value) );
     else {
       if (isGraphProperty) {
-	GraphProperty* gProp = static_cast<GraphProperty*>(prop);
-	std::set<edge> v;
-	bool result = EdgeSetType::fromString(v, value);
+        GraphProperty* gProp = static_cast<GraphProperty*>(prop);
+        std::set<edge> v;
+        bool result = EdgeSetType::fromString(v, value);
 
-	if (result)
-	  gProp->setEdgeValue(e, v);
+        if (result)
+          gProp->setEdgeValue(e, v);
 
-	return result;
+        return result;
       }
     }
 
