@@ -260,76 +260,72 @@ struct TLPGraphBuilder : public TLPTrue {
   bool setNodeValue(int nodeId, PropertyInterface *prop, std::string &value, bool isGraphProperty, bool isPathViewProperty) {
     node n(nodeId);
 
+    assert(prop->getGraph()->isElement(n));
+
     if (version < 2.1)
       n = nodeIndex[nodeId];
 
-    if (prop->getGraph()->isElement(n)) {
-      if (isPathViewProperty) {
-        // if needed replace symbolic path by real path
-        size_t pos = value.find("TulipBitmapDir/");
+    if (isPathViewProperty) {
+      // if needed replace symbolic path by real path
+      size_t pos = value.find("TulipBitmapDir/");
 
-        if (pos != std::string::npos)
-          value.replace(pos, 15, TulipBitmapDir);
-      } else {
-        if (isGraphProperty) {
-          GraphProperty *gProp = static_cast<GraphProperty *>(prop);
-          char *endPtr = nullptr;
-          const char *startPtr = value.c_str();
-          int result = strtol(startPtr, &endPtr, 10);
+      if (pos != std::string::npos)
+        value.replace(pos, 15, TulipBitmapDir);
+    } else {
+      if (isGraphProperty) {
+        GraphProperty *gProp = static_cast<GraphProperty *>(prop);
+        char *endPtr = NULL;
+        const char *startPtr = value.c_str();
+        int result = strtol(startPtr, &endPtr, 10);
 
-          if (endPtr == startPtr)
-            return false;
+        if (endPtr == startPtr)
+          return false;
 
-          if (clusterIndex.find(result) == clusterIndex.end())
-            return false;
+        if (clusterIndex.find(result) == clusterIndex.end())
+          return false;
 
-          gProp->setNodeValue(n, result ? clusterIndex[result] : 0);
+        gProp->setNodeValue(n, result ? clusterIndex[result] : 0);
 
-          return true;
-        }
+        return true;
       }
-
-      return prop->setNodeStringValue(n, value);
     }
 
-    return false;
+    return prop->setNodeStringValue(n, value);
   }
 
   bool setEdgeValue(int edgeId, PropertyInterface *prop, std::string &value, bool isGraphProperty, bool isPathViewProperty) {
     edge e(edgeId);
 
+    assert(prop->getGraph()->isElement(e));
+
     if (version < 2.1)
       e = edgeIndex[edgeId];
 
-    if (prop->getGraph()->isElement(e)) {
-      const std::string &propertyName = prop->getName();
+    const std::string &propertyName = prop->getName();
 
-      if (isPathViewProperty) {
-        // if needed replace symbolic path by real path
-        size_t pos = value.find("TulipBitmapDir/");
+    if (isPathViewProperty) {
+      // if needed replace symbolic path by real path
+      size_t pos = value.find("TulipBitmapDir/");
 
-        if (pos != std::string::npos)
-          value.replace(pos, 15, TulipBitmapDir);
-      } else if ((version < 2.2) && (propertyName == std::string("viewSrcAnchorShape") || propertyName == std::string("viewTgtAnchorShape")))
-        // If we are in the old edge extremities id system we need to convert the ids in the file.
-        return prop->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value));
-      else {
-        if (isGraphProperty) {
-          GraphProperty *gProp = static_cast<GraphProperty *>(prop);
-          std::set<edge> v;
-          bool result = EdgeSetType::fromString(v, value);
+      if (pos != std::string::npos)
+        value.replace(pos, 15, TulipBitmapDir);
+    } else if ((version < 2.2) && (propertyName == std::string("viewSrcAnchorShape") || propertyName == std::string("viewTgtAnchorShape")))
+      // If we are in the old edge extremities id system we need to convert the ids in the file.
+      return prop->setEdgeStringValue(e, convertOldEdgeExtremitiesValueToNew(value));
+    else {
+      if (isGraphProperty) {
+        GraphProperty *gProp = static_cast<GraphProperty *>(prop);
+        std::set<edge> v;
+        bool result = EdgeSetType::fromString(v, value);
 
-          if (result)
-            gProp->setEdgeValue(e, v);
+        if (result)
+          gProp->setEdgeValue(e, v);
 
-          return result;
-        }
+        return result;
       }
-
-      return prop->setEdgeStringValue(e, value);
     }
 
-    return false;
+    return prop->setEdgeStringValue(e, value);
   }
 
   /**
@@ -951,11 +947,12 @@ public:
         size = getUncompressedSizeOfGzipFile(filename);
         input = tlp::getIgzstream(filename);
       } else
-        input = tlp::getInputFileStream(filename, std::ifstream::in |
-                                                      // consider file has binary
-                                                      // to avoid pb using tellg
-                                                      // on the input stream
-                                                      std::ifstream::binary);
+        input = tlp::getInputFileStream(filename,
+                                        std::ifstream::in |
+                                            // consider file has binary
+                                            // to avoid pb using tellg
+                                            // on the input stream
+                                            std::ifstream::binary);
     } else {
       dataSet->get<std::string>("file::data", data);
       size = data.size();
