@@ -104,6 +104,8 @@ public:
 
 protected:
   void addButtonAtEnd(QAbstractButton *button);
+  void addButtonsAtEnd(const QVector<QAbstractButton *> &buttonvect);
+  void addSeparator();
   void updateFontButtonStyle();
   void setAllValues(unsigned int eltType, PropertyInterface *prop);
   void setAllColorValues(unsigned int eltType, ColorProperty *prop, const Color &color);

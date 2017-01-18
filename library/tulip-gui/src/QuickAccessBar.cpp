@@ -155,6 +155,25 @@ void QuickAccessBarImpl::addButtonAtEnd(QAbstractButton *button) {
   _ui->horizontalLayout->addItem(spacer);
 }
 
+void QuickAccessBarImpl::addButtonsAtEnd(const QVector<QAbstractButton *> &buttonvect) {
+    QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count()-1);
+    _ui->horizontalLayout->removeItem(spacer);
+    foreach(QAbstractButton *b, buttonvect) {
+        _ui->horizontalLayout->addWidget(b);
+    }
+    _ui->horizontalLayout->addItem(spacer);
+}
+
+void QuickAccessBarImpl::addSeparator() {
+    QFrame *sep = new QFrame(this);
+    sep->setFrameShape(QFrame::VLine);
+    sep->setFrameShadow(QFrame::Sunken);
+    QLayoutItem *spacer = _ui->horizontalLayout->itemAt(_ui->horizontalLayout->count()-1);
+    _ui->horizontalLayout->removeItem(spacer);
+    _ui->horizontalLayout->addWidget(sep);
+    _ui->horizontalLayout->addItem(spacer);
+}
+
 QuickAccessBarImpl::~QuickAccessBarImpl() {
   delete _ui;
 }
