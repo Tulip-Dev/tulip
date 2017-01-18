@@ -176,13 +176,13 @@ public:
    * @param a point in screen coordinates
    * @return the converted point in viewport coordinates
    */
-  Coord screenToViewport(Coord point) {
+  Coord screenToViewport(const Coord& point) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
-    point.setX(point.x() * dpr);
-    point.setY(point.y() * dpr);
-#endif
+    return Coord(point.x() * dpr, point.y() * dpr);
+#else
     return point;
+#endif
   }
 
   /**
@@ -203,13 +203,13 @@ public:
    * @param a point in viewport coordinates
    * @return the converted point in screen coordinates
    */
-  Coord viewportToScreen(Coord point) {
+  Coord viewportToScreen(const Coord& point) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
-    point.setX(point.x() / dpr);
-    point.setY(point.y() / dpr);
-#endif
+    return Coord(point.x() / dpr, point.y() / dpr);
+#else
     return point;
+#endif
   }
 
   /**

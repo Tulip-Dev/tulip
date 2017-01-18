@@ -238,13 +238,8 @@ void GlMainWidget::render(RenderingOptions options,bool checkVisibility) {
     makeCurrent();
 
     //Get the content width and height
-    int width  = contentsRect().width();
-    int height = contentsRect().height();
-
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-    width  *= this->windowHandle()->devicePixelRatio();
-    height *= this->windowHandle()->devicePixelRatio();
-#endif
+    int width  = screenToViewport(contentsRect().width());
+    int height = screenToViewport(contentsRect().height());
 
     //If the rendering store is not valid need to regenerate new one force the RenderGraph flag.
     if(widthStored!=width || heightStored!=height) {
