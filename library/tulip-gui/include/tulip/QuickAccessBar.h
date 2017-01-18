@@ -95,6 +95,8 @@ public:
 
 protected:
   void addButtonAtEnd(QAbstractButton* button);
+  void addButtonsAtEnd(const QVector<QAbstractButton*>& buttonvect);
+  void addSeparator();
   void updateFontButtonStyle();
   void showHideCaption(CaptionItem::CaptionType captionType);
   void setAllValues(unsigned int eltType, PropertyInterface* prop);
