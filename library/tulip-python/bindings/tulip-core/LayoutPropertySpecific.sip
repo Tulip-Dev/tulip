@@ -406,14 +406,14 @@ Normalizes the layout, meaning dividing each nodes and edges coordinate by the m
 
 //===========================================================================================
 
-  void perfectAspectRatio();
+  void perfectAspectRatio(const tlp::Graph *subgraph=NULL);
 %Docstring
-tlp.LayoutProperty.perfectAspectRatio()
+tlp.LayoutProperty.perfectAspectRatio([subgraph = None])
 
-Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
+Scales the layout in order to approach an aspect ratio (width / height) of 1.0.
+
+:param subgraph: a sub-graph can be given in parameter, in that case only scales the layout of that sub-graph.
 %End
-
-//===========================================================================================
 
   double edgeLength(const tlp::edge e);
 %Docstring

@@ -484,7 +484,7 @@ void AlgorithmRunnerItem::afterRun(Graph *g, const tlp::DataSet &dataSet) {
       dataSet.get<LayoutProperty *>("result", prop);
 
       if (prop)
-        prop->perfectAspectRatio();
+        prop->perfectAspectRatio(g);
     }
 
     if (TulipSettings::instance().isAutomaticCentering())
