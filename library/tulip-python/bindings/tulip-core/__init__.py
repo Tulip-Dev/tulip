@@ -26,7 +26,7 @@ _tulipNativeLibsPath = os.path.dirname(__file__) + '/native/'
 sys.path.append(_tulipNativeLibsPath)
 
 if platform.system() == 'Windows':
-  os.environ['PATH'] = _tulipNativeLibsPath + ';' + os.environ['PATH']
+  os.environ['PATH'] = _tulipNativeLibsPath + ';' + _tulipNativeLibsPath + '../../../;' + os.environ['PATH']
 
 import _tulip
 
