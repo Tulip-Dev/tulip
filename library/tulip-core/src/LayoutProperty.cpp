@@ -503,7 +503,7 @@ void LayoutProperty::normalize(const Graph *sg) {
   Observable::unholdObservers();
 }
 //=================================================================================
-void LayoutProperty::perfectAspectRatio() {
+void LayoutProperty::perfectAspectRatio(const Graph *subgraph) {
 
   if (graph->numberOfNodes()==0) return;
 
@@ -528,7 +528,7 @@ void LayoutProperty::perfectAspectRatio() {
   scaleX = delta / deltaX;
   scaleY = delta / deltaY;
   scaleZ = delta / deltaZ;
-  scale(Coord(static_cast<float>(scaleX),static_cast<float>(scaleY),static_cast<float>(scaleZ)));
+  scale(Coord(static_cast<float>(scaleX),static_cast<float>(scaleY),static_cast<float>(scaleZ)),subgraph);
   Observable::unholdObservers();
 }
 
