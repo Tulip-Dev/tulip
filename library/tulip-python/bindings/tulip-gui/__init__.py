@@ -40,7 +40,7 @@ _tulipGuiNativeLibsPath = os.path.dirname(__file__) + '/native/'
 sys.path.append(_tulipGuiNativeLibsPath)
 
 if platform.system() == 'Windows':
-  os.environ['PATH'] = _tulipGuiNativeLibsPath + ';' + os.environ['PATH']
+  os.environ['PATH'] = _tulipGuiNativeLibsPath + ';' + _tulipGuiNativeLibsPath + '../../../;' + os.environ['PATH']
 
 import _tulipgui
 
