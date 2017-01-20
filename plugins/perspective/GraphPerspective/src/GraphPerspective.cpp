@@ -816,7 +816,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
 }
 
 void GraphPerspective::deleteSelectedElementsFromRootGraph() {
-    deleteSelectedElements(true);
+  deleteSelectedElements(true);
 }
 
 void GraphPerspective::deleteSelectedElements(bool fromRoot) {
