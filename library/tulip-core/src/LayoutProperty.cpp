@@ -508,7 +508,7 @@ void LayoutProperty::perfectAspectRatio(const Graph *subgraph) {
   if (graph->numberOfNodes()==0) return;
 
   Observable::holdObservers();
-  center();
+  center(subgraph);
   double scaleX,scaleY,scaleZ;
   double deltaX,deltaY,deltaZ;
   deltaX = (double )getMax()[0]-(double )getMin()[0];
