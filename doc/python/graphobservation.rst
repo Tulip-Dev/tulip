@@ -16,7 +16,7 @@ A special type of event is available to keep track of graph modifications : :cla
 Instances of that type of event are sent by instances of :class:`tlp.Graph`. Call :meth:`tlp.Observable.addListener`
 to register an observer to a graph. The sample code below illustrates that observation mechanism::
 
-    from tulip import *
+    from tulip import tlp
 
     class GraphObserver(tlp.Observable):
       def __init__(self):
@@ -190,7 +190,7 @@ Another special type of event is available to keep track of a property modificat
 Instances of that type of event are sent by derived instances of :class:`tlp.PropertyInterface`. Call :meth:`tlp.Observable.addListener`
 to register an observer to a property. The sample code below illustrates that observation mechanism::
 
-    from tulip import *
+    from tulip import tlp
 
     class PropertyObserver(tlp.Observable):
 

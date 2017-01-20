@@ -3,8 +3,8 @@ import sys
 if sys.version_info[0] == 2:
   reload(sys)
   sys.setdefaultencoding('utf8')
-from tulip import *
-from tulipgui import *
+from tulip import tlp
+import tulipgui
 # pip install tabulate
 import tabulate
 
