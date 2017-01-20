@@ -363,6 +363,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionSave_Project_as,SIGNAL(triggered()),this,SLOT(saveAs()));
   connect(_ui->actionOpen_Project,SIGNAL(triggered()),this,SLOT(open()));
   connect(_ui->actionDelete,SIGNAL(triggered()),this,SLOT(deleteSelectedElements()));
+  connect(_ui->actionDelete_from_the_root_graph,SIGNAL(triggered()),this,SLOT(deleteSelectedElementsFromRootGraph()));
   connect(_ui->actionInvert_selection,SIGNAL(triggered()),this,SLOT(invertSelection()));
   connect(_ui->actionCancel_selection,SIGNAL(triggered()),this,SLOT(cancelSelection()));
   connect(_ui->actionMake_selection_a_graph, SIGNAL(triggered()), this, SLOT(make_graph()));
@@ -814,18 +815,22 @@ void GraphPerspective::openProjectFile(const QString &path) {
   }
 }
 
-void GraphPerspective::deleteSelectedElements() {
+void GraphPerspective::deleteSelectedElementsFromRootGraph() {
+    deleteSelectedElements(true);
+}
+
+void GraphPerspective::deleteSelectedElements(bool fromRoot) {
   Observable::holdObservers();
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
 
   graph->push();
   tlp::Iterator<edge>* itEdges = selection->getEdgesEqualTo(true, graph);
-  graph->delEdges(itEdges, false);
+  graph->delEdges(itEdges, fromRoot);
   delete itEdges;
 
   tlp::Iterator<node>* itNodes = selection->getNodesEqualTo(true,graph);
-  graph->delNodes(itNodes, false);
+  graph->delNodes(itNodes, fromRoot);
   delete itNodes;
 
   Observable::unholdObservers();
@@ -1052,6 +1057,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionCopy->setEnabled(enabled);
   _ui->actionPaste->setEnabled(enabled);
   _ui->actionDelete->setEnabled(enabled);
+  _ui->actionDelete_from_the_root_graph->setEnabled(enabled&&(graph!=graph->getRoot()));
   _ui->actionInvert_selection->setEnabled(enabled);
   _ui->actionSelect_All->setEnabled(enabled);
   _ui->actionCancel_selection->setEnabled(enabled);

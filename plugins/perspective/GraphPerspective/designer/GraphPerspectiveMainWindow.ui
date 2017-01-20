@@ -1210,6 +1210,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionCopy"/>
     <addaction name="actionPaste"/>
     <addaction name="actionDelete"/>
+    <addaction name="actionDelete_from_the_root_graph"/>
     <addaction name="separator"/>
     <addaction name="actionSelect_All"/>
     <addaction name="actionInvert_selection"/>
@@ -1428,6 +1429,9 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>&amp;Delete</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected elements from the current graph only</string>
    </property>
    <property name="shortcut">
     <string>Del</string>
@@ -1728,6 +1732,21 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
    </property>
    <property name="text">
     <string>Ma&amp;ke selection a graph</string>
+   </property>
+  </action>
+  <action name="actionDelete_from_the_root_graph">
+   <property name="icon">
+    <iconset resource="../../../../library/tulip-gui/resources/TulipGUIResource.qrc">
+     <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
+   </property>
+   <property name="text">
+    <string>Delete from the root graph</string>
+   </property>
+   <property name="toolTip">
+    <string>Delete selected elements from the whole graph hierarchy (not only from the current graph)</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+Del</string>
    </property>
   </action>
  </widget>
