@@ -34,7 +34,7 @@ Writing a general algorithm in Python
 
 A general algorithm must implement the :class:`tlp.Algorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class GeneralAlgorithmExample(tlp.Algorithm):
@@ -76,7 +76,7 @@ Writing a selection algorithm in Python
 
 A selection algorithm must implement the :class:`tlp.BooleanAlgorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class SelectionAlgorithmExample(tlp.BooleanAlgorithm):
@@ -122,7 +122,7 @@ Writing a color algorithm in Python
 
 A color algorithm must implement the :class:`tlp.ColorAlgorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class ColorAlgorithmExample(tlp.ColorAlgorithm):
@@ -168,7 +168,7 @@ Writing a measure algorithm in Python
 		
 A measure algorithm must implement the :class:`tlp.DoubleAlgorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class MeasureAlgorithmExample(tlp.DoubleAlgorithm):
@@ -214,7 +214,7 @@ Writing an integer algorithm in Python
 
 An integer algorithm must implement the :class:`tlp.IntegerAlgorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class IntegerAlgorithmExample(tlp.IntegerAlgorithm):
@@ -260,7 +260,7 @@ Writing a layout algorithm in Python
 
 A layout algorithm must implement the :class:`tlp.LayoutAlgorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class LayoutAlgorithmExample(tlp.LayoutAlgorithm):
@@ -306,7 +306,7 @@ Writing a size algorithm in Python
 
 A size algorithm must implement the :class:`tlp.SizeAlgorithm` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class SizeAlgorithmExample(tlp.SizeAlgorithm):
@@ -352,7 +352,7 @@ Writing an export module in Python
 
 An export module must implement the :class:`tlp.ExportModule` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class ExportModuleExample(tlp.ExportModule):
@@ -391,7 +391,7 @@ Writing an import module in Python
 
 An import module must implement the :class:`tlp.ImportModule` interface as illustrated below::
 
-  from tulip import *
+  from tulip import tlp
   import tulipplugins
 
   class ImportModuleExample(tlp.ImportModule):

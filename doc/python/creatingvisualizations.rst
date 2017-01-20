@@ -26,8 +26,8 @@ that we already have an opened Node Link Diagram view (plus one Python Script vi
 The script will extract the induced sub-graph of the european nodes, create a new Node Link Diagram view for visualizing
 it and set some rendering parameters::
 
-    from tulip import *
-    from tulipgui import *
+    from tulip import tlp
+    from tulipgui import tlpgui
 
     def main(graph):
 
@@ -63,8 +63,8 @@ The opened views will be updated each time the graph or its properties are modif
 For instance, the following session imports a grid graph, creates a Node Link Diagram view of it
 and then changes the nodes colors. The Node Link Diagram view will be updated automatically.
 
-    >>> from tulip import *
-    >>> from tulipgui import *
+    >>> from tulip import tlp
+    >>> from tulipgui import tlpgui
     >>> grid = tlp.importGraph("Grid")
     >>> view = tlpgui.createNodeLinkDiagramView(grid)
     >>> viewColor = graph.getColorProperty("viewColor")
@@ -89,9 +89,9 @@ The first script imports a grid approximation graph, computes some visual attrib
 and creates a Node Link Diagram visualization (which will remain displayed at the end of
 the script execution). :ref:`Figure 1<fig1a>` introduces a screenshot of the created view.::
 
-    from tulip import *
-    from tulipogl import *
-    from tulipgui import *
+    from tulip import tlp
+    from tulipogl import tlpogl
+    from tulipgui import tlpgui
 
     # Import a grid approximation (with default parameters)
     graph = tlp.importGraph("Grid Approximation")
@@ -166,9 +166,9 @@ visual attributes on graph elements and finally it creates a node link diagram v
 (that will not be displayed) with particular rendering parameters for taking the snapshot.
 :ref:`Figure 2<fig2a>` introduces the resulting snaphot.::
 
-    from tulip import *
-    from tulipogl import *
-    from tulipgui import *
+    from tulip import tlp
+    from tulipogl import tlpogl
+    from tulipgui import tlpgui
 
     # Set the parameters for the "File System Directory" Import module
     fsImportParams = tlp.getDefaultPluginParameters("File System Directory", graph)

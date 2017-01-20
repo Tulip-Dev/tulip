@@ -161,8 +161,7 @@ Using the bindings from the Python Interpreter
 
 The Tulip Python bindings can also be used through the classical Python Interpreter in an interactive shell.
 
-Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_
-for Windows and MacOS users.
+Since Tulip 4.8 release, the bindings modules are available on the `Python Packaging Index <https://pypi.python.org>`_.
 
 The modules are also located within the Tulip software installation, but some setup has to be done before being able to import them.
 
@@ -193,48 +192,32 @@ And you're done, you can now import the modules in your Python session.
 Setting up the environment from the Tulip software installation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-First, the path to the :mod:`tulip` module must be provided to Python.
-In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
-The Tulip Python module is installed in the following directory according to your system :
+In order to be able to import the Tulip-Python modules bundled with the Tulip software installation,
+their path must be provided to Python. In the following, <tulip_install_dir> represents the root directory of a Tulip installation.
+The Tulip-Python modules are installed in the following directory according to your system :
 
-        * Linux : <tulip_install_dir>/lib/python (if you compiled Tulip yourself, <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
+        * Linux : **<tulip_install_dir>/lib/python** (if you compiled Tulip yourself,
+          <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
 
-        * Windows : <tulip_install_dir>/bin/python (if you installed Tulip from a bundle, <tulip_install_dir> should be C:/Program Files (x86)/Tulip/)
+        * Windows : **<tulip_install_dir>/bin/python** (if you installed Tulip from an installer,
+          <tulip_install_dir> should be C:/Program Files (x86)/Tulip-X.Y/ for 32 bits Tulip and C:/Program Files/Tulip-X.Y/ for 64 bits Tulip)
 
-        * Mac OS : <tulip_install_dir>/Contents/Frameworks/python if you installed Tulip from a bundle (<tulip_install_dir> should be /Applications/Tulip-4.X.Y.app/) or
-                   <tulip_install_dir>/lib/python if you compiled and installed Tulip yourself.
+        * Mac OS : **<tulip_install_dir>/Contents/Frameworks/python** if you installed Tulip from a bundle (<tulip_install_dir> should then be /Applications/Tulip-X.Y.Z.app/) or
+                   **<tulip_install_dir>/lib/python** if you compiled and installed Tulip yourself.
 
-This path has to be added to the list of Python module search path. To do so, you can add it in the **PYTHONPATH**
-environment variable or add it to the :data:`sys.path` list.
+This path has to be added to the list of Python module search paths. To do so, you can add it in the **PYTHONPATH**
+environment variable prior executing the Python interpreter or add it to the :data:`sys.path` list once you launched the interpreter.
 
-Since Tulip 4.8, the second step is no longer necessary for MacOS users.
-
-Second, your system must be able to find the Tulip C++ libraries in order to use the bindings.
-These libraries are installed in the following directory according to your system :
-
-        * Linux : <tulip_install_dir>/lib/ (if you compiled Tulip yourself, <tulip_install_dir> corresponds to the value of the CMake variable CMAKE_INSTALL_PREFIX)
-
-        * Windows : <tulip_install_dir>/bin/ (if you installed Tulip from a bundle, <tulip_install_dir> should be C:/Program Files (x86)/Tulip/)
-
-        * Mac OS : <tulip_install_dir>/Contents/Frameworks/ if you installed Tulip from a bundle (<tulip_install_dir> should be /Applications/Tulip-4.X.Y.app/) or
-                   <tulip_install_dir>/lib if you compiled and installed Tulip yourself.
-
-You have to add this path to :
-
-    * the **LD_LIBRARY_PATH** environment variable on Linux
-
-    * the **DYLD_LIBRARY_PATH** environment variable on Mac OS
-
-    * the **PATH** environment variable on Windows.
-
-You should now be able to import the :mod:`tulip` module through the Python shell. Issue the following command
+You should now be able to import the Tulip-Python modules through the classical Python shell. Issue the following commands
 at the shell prompt to perform that task::
 
-    >>> from tulip import *
+    >>> from tulip import tlp
+    >>> from tulipogl import tlpogl
+    >>> from tulipgui import tlpgui
 
 .. note::
-  If you have installed Tulip from a bundle (Windows or Mac OS), the Tulip bindings were built against Python 2.7
-  and you need to use the same Python version to be able to import the :mod:`tulip` module.
+  If you have installed Tulip from a Windows installer or a Mac OS bundle, the Tulip-Python modules were built against Python 2.7
+  and you need to use the same Python version in order to be able to import them.
 
 Customizing the Python environment
 ----------------------------------

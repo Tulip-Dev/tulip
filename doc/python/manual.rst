@@ -6,7 +6,7 @@ Manual
 Before using the bindings, you have to import the tulip module in 
 your current Python session. It is recommended to use the following directive::
 
-	from tulip import *
+    from tulip import tlp
 
 This manual aims to quickly introduce the following features:
 
