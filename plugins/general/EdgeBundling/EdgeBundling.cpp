@@ -233,11 +233,6 @@ void EdgeBundling::computeDistance(node n) {
   SortNodes::dist->setNodeValue(n, maxDist);
 }
 //============================================
-#if (__SIZEOF_LONG__ == 2 * __SIZEOF_FLOAT__)
-#define COORD_KEY unsigned long
-#elif (__SIZEOF_LONG_LONG__ == 2 * __SIZEOF_FLOAT__)
-#define COORD_KEY unsigned long long
-#endif
 
 bool EdgeBundling::run() {
 
@@ -312,33 +307,30 @@ bool EdgeBundling::run() {
       // otherwise the quad tree computation will fail
       // clone graph
       Graph *workGraph = graph->addCloneSubGraph();
-      TLP_HASH_MAP<COORD_KEY, std::pair<node, vector<tlp::node>*> > clusters;
+      TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> > clusters;
 
       // iterate on graph nodes
       node n;
       forEach(n, graph->getNodes()) {
-	// get position
-	const Coord& coord = layout->getNodeValue(n);
-	// compute a key for coord
-	COORD_KEY key;
-	// as coord is an Array of float
-	// the first two ones are the x and y
-	// so copy them to build the key
-	memcpy(&key, &coord, 2 * sizeof(float));
-	TLP_HASH_MAP<COORD_KEY, std::pair<node, vector<tlp::node>*> >::iterator
-	  it = clusters.find(key);
-	if (it == clusters.end())
-	  clusters[key] = std::make_pair<node, std::vector<node>*>(n, NULL);
-	else {
-	  std::pair<node, std::vector<node>*>& infos = it->second;
-	  if (infos.second == NULL) {
-	    std::vector<node> nodes(1, infos.first);
-	    samePositionNodes.push_back(nodes);
-	    infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
-	  }
-	  infos.second->push_back(n);
-	  workGraph->delNode(n);
-	}
+        // get position
+        const Coord& coord = layout->getNodeValue(n);
+        // compute a key for coord (convert point to string representation)
+        std::string key = tlp::PointType::toString(coord);
+
+        TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> >::iterator
+          it = clusters.find(key);
+        if (it == clusters.end())
+          clusters[key] = std::make_pair(n, static_cast<vector<tlp::node>*>(NULL));
+        else {
+          std::pair<node, std::vector<node>*>& infos = it->second;
+          if (infos.second == NULL) {
+            std::vector<node> nodes(1, infos.first);
+            samePositionNodes.push_back(nodes);
+            infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
+          }
+          infos.second->push_back(n);
+          workGraph->delNode(n);
+        }
       }
 
       // Execute the quad tree computation on cleaned subgraph
