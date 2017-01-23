@@ -318,16 +318,19 @@ bool EdgeBundling::run() {
         std::string key = tlp::PointType::toString(coord);
 
         TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> >::iterator
-          it = clusters.find(key);
+        it = clusters.find(key);
+
         if (it == clusters.end())
           clusters[key] = std::make_pair(n, static_cast<vector<tlp::node>*>(NULL));
         else {
           std::pair<node, std::vector<node>*>& infos = it->second;
+
           if (infos.second == NULL) {
             std::vector<node> nodes(1, infos.first);
             samePositionNodes.push_back(nodes);
             infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
           }
+
           infos.second->push_back(n);
           workGraph->delNode(n);
         }
