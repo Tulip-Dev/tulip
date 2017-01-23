@@ -99,7 +99,6 @@ EdgeBundling::EdgeBundling(const PluginContext *context):Algorithm(context) {
   addInParameter<unsigned int>("max_thread", paramHelp[8], "0");
   addInParameter<bool>("edge_node_overlap", paramHelp[9], "false");
   addDependency("Voronoi diagram", "1.0");
-  addDependency("Equal Value", "1.1");
 }
 //============================================
 class SortNodes {
@@ -234,6 +233,12 @@ void EdgeBundling::computeDistance(node n) {
   SortNodes::dist->setNodeValue(n, maxDist);
 }
 //============================================
+#if (__SIZEOF_LONG__ == 2 * __SIZEOF_FLOAT__)
+#define COORD_KEY unsigned long
+#elif (__SIZEOF_LONG_LONG__ == 2 * __SIZEOF_FLOAT__)
+#define COORD_KEY unsigned long long
+#endif
+
 bool EdgeBundling::run() {
 
   optimizationLevel = 3;
@@ -305,37 +310,35 @@ bool EdgeBundling::run() {
     else {
       // Preprocess the graph to ensure that two nodes does not have the same position
       // otherwise the quad tree computation will fail
-
-      // First create a clone subgraph
+      // clone graph
       Graph *workGraph = graph->addCloneSubGraph();
+      TLP_HASH_MAP<COORD_KEY, std::pair<node, vector<tlp::node>*> > clusters;
 
-      // Apply the 'Equal Value' algorithm on the input layout property
-      DataSet equalValueParams;
-      equalValueParams.set("Property", layout);
-      string err;
-      workGraph->applyAlgorithm("Equal Value", err, &equalValueParams);
-
-      // Iterate on the created clusters
-      Graph *sg = NULL;
-      stableForEach(sg, workGraph->getSubGraphs()) {
-        // At least two nodes have the same position
-        if (sg->numberOfNodes() > 1) {
-          std::vector<tlp::node> nodes;
-          tlp::node n;
-          int i = 0;
-          // keep one of the node in the clone subgraph, remove the others from it
-          // but keep a list of those nodes having the same position
-          stableForEach(n, sg->getNodes()) {
-            if (i++ > 0) {
-              workGraph->delNode(n);
-            }
-
-            nodes.push_back(n);
-          }
-          samePositionNodes.push_back(nodes);
-        }
-
-        workGraph->delSubGraph(sg);
+      // iterate on graph nodes
+      node n;
+      forEach(n, graph->getNodes()) {
+	// get position
+	const Coord& coord = layout->getNodeValue(n);
+	// compute a key for coord
+	COORD_KEY key;
+	// as coord is an Array of float
+	// the first two ones are the x and y
+	// so copy them to build the key
+	memcpy(&key, &coord, 2 * sizeof(float));
+	TLP_HASH_MAP<COORD_KEY, std::pair<node, vector<tlp::node>*> >::iterator
+	  it = clusters.find(key);
+	if (it == clusters.end())
+	  clusters[key] = std::make_pair<node, std::vector<node>*>(n, NULL);
+	else {
+	  std::pair<node, std::vector<node>*>& infos = it->second;
+	  if (infos.second == NULL) {
+	    std::vector<node> nodes(1, infos.first);
+	    samePositionNodes.push_back(nodes);
+	    infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
+	  }
+	  infos.second->push_back(n);
+	  workGraph->delNode(n);
+	}
       }
 
       // Execute the quad tree computation on cleaned subgraph
@@ -406,6 +409,8 @@ bool EdgeBundling::run() {
     }
 
     // connect the other nodes to the enclosing voronoi cell vertices
+    // Warning: because no edge is added to the current node
+    // we can use forEach instead of stableForEach
     tlp::node n;
     forEach(n, gridGraph->getOutNodes(rep)) {
       for (size_t j = 0 ; j < samePositionNodes[i].size() ; ++j) {
