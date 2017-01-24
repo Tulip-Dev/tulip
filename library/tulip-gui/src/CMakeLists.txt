@@ -99,6 +99,7 @@ SET(SRCS
   FileDownloader.cpp
   ColorScalesManager.cpp
   AboutTulipPage.cpp
+  ScientificDoubleSpinBox.cpp
 )
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
