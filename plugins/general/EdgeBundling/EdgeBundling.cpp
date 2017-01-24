@@ -106,6 +106,7 @@ public:
   static DoubleProperty *dist;
   bool operator()(const node a, const node b) const { //sort in deceresing order;
     double da, db;
+
     if ((da = dist->getNodeValue(a)) == (db = dist->getNodeValue(b)))
       return a.id > b.id;
 
@@ -153,7 +154,7 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
 
   for (unsigned int j = 0; j<bends.size(); ++j) {
     const Coord& coord = layout->getNodeValue(nBends[i]);
-    
+
     if (!layout3D)
       (bends[j] = coord)[2] = 0;
     else
@@ -181,8 +182,9 @@ void EdgeBundling::fixEdgeType(IntegerProperty* ntype) {
     }
 
     pair<node, node> ends = graph->ends(e);
+
     if (oriGraph->isElement(ends.first) ||
-	oriGraph->isElement(ends.second))
+        oriGraph->isElement(ends.second))
       ntype->setEdgeValue(e, 2);
     else
       ntype->setEdgeValue(e, 0);
@@ -314,31 +316,31 @@ bool EdgeBundling::run() {
         // get position
         const Coord& coord = layout->getNodeValue(n);
         // compute a key for coord (convert point to string representation)
-	// Warning: because of float precision issues, we use a string key
-	// instead of relying on the x, y exact values
+        // Warning: because of float precision issues, we use a string key
+        // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
         TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> >::iterator
         it = clusters.find(key);
 
         if (it == clusters.end())
-	  // register the first node at position represented by key
+          // register the first node at position represented by key
           clusters[key] = std::make_pair(n, static_cast<vector<tlp::node>*>(NULL));
         else {
           std::pair<node, std::vector<node>*>& infos = it->second;
 
           if (infos.second == NULL) {
-	    // we find a second node at the position represented by key
-	    // so it is time to create a vector to registered them
+            // we find a second node at the position represented by key
+            // so it is time to create a vector to registered them
             std::vector<node> nodes(1, infos.first);
             samePositionNodes.push_back(nodes);
             infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
           }
 
           // registered the current node in the vector of the nodes
-	  // having the same position
-	  infos.second->push_back(n);
-	  // delete it from the clone subgraph
+          // having the same position
+          infos.second->push_back(n);
+          // delete it from the clone subgraph
           workGraph->delNode(n);
         }
       }
@@ -576,6 +578,7 @@ bool EdgeBundling::run() {
                 continue;
               }
             }
+
             dijkstra.searchPaths(n2, &depth);
           }
         }
@@ -612,6 +615,7 @@ bool EdgeBundling::run() {
 
               if (stop) continue;
             }
+
             {
               ///bends
               vector<node> tmpV;
