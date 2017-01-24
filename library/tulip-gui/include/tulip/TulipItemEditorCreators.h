@@ -70,6 +70,14 @@ public:
 };
 
 template<typename T>
+class NumberEditorCreator: public StringDisplayEditorCreator<T> {
+public:
+  QWidget* createWidget(QWidget*) const;
+  virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);
+  virtual QVariant editorData(QWidget*,tlp::Graph*);
+};
+
+template<typename T>
 class LineEditEditorCreator: public StringDisplayEditorCreator<T> {
 public:
   QWidget* createWidget(QWidget*) const;

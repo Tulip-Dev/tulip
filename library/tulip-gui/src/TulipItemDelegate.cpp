@@ -37,11 +37,11 @@ using namespace tlp;
 
 TulipItemDelegate::TulipItemDelegate(QObject* parent): QStyledItemDelegate(parent), _currentMonitoredChild(NULL), _currentMonitoredCombo(NULL) {
   registerCreator<bool>(new BooleanEditorCreator);
-  registerCreator<int>(new LineEditEditorCreator<tlp::IntegerType>);
-  registerCreator<unsigned int>(new LineEditEditorCreator<tlp::UnsignedIntegerType>);
-  registerCreator<long>(new LineEditEditorCreator<tlp::LongType>);
-  registerCreator<double>(new LineEditEditorCreator<tlp::DoubleType>);
-  registerCreator<float>(new LineEditEditorCreator<tlp::FloatType>);
+  registerCreator<int>(new NumberEditorCreator<tlp::IntegerType>);
+  registerCreator<unsigned int>(new NumberEditorCreator<tlp::UnsignedIntegerType>);
+  registerCreator<long>(new NumberEditorCreator<tlp::LongType>);
+  registerCreator<double>(new NumberEditorCreator<tlp::DoubleType>);
+  registerCreator<float>(new NumberEditorCreator<tlp::FloatType>);
   registerCreator<std::string>(new StdStringEditorCreator);
   registerCreator<QString>(new MultiLinesEditEditorCreator<tlp::QStringType>);
   registerCreator<QStringList>(new QStringListEditorCreator);
