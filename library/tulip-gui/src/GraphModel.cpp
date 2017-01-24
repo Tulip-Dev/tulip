@@ -795,8 +795,10 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
 void NodesGraphModel::treatEvent(const Event& ev) {
   GraphModel::treatEvent(ev);
 
-  if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
-    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
+  const GraphEvent* graphEv = dynamic_cast<const GraphEvent*>(&ev);
+  const PropertyEvent* propEv = dynamic_cast<const PropertyEvent*>(&ev);
+
+  if (graphEv) {
 
     if (graphEv->getType() == GraphEvent::TLP_ADD_NODE) {
       _nodesAdded = true;
@@ -840,6 +842,26 @@ void NodesGraphModel::treatEvent(const Event& ev) {
         _elementsToModify.remove(wasAdded);
       }
     }
+  } else if (propEv) {
+    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
+      int col = _properties.indexOf(propEv->getProperty());
+      if (col != -1) {
+        // _elements vector is sorted in ascending element ids order, so we can use a binary search to speedup the index lookup
+        QVector<unsigned int>::iterator it = qBinaryFind(_elements.begin(), _elements.end(), propEv->getNode().id);
+        if (it != _elements.end()) {
+          int row = it - _elements.begin();
+          QModelIndex idx = index(row, col);
+          emit dataChanged(idx, idx);
+        }
+      }
+    } else if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
+      int col = _properties.indexOf(propEv->getProperty());
+      if (col != -1) {
+        QModelIndex firstIndex = index(0, col);
+        QModelIndex lastIndex = index(_elements.size()-1, col);
+        emit dataChanged(firstIndex, lastIndex);
+      }
+    }
   }
 }
 
@@ -852,8 +874,10 @@ void NodesGraphModel::treatEvents(const std::vector<tlp::Event> &events) {
 void EdgesGraphModel::treatEvent(const Event& ev) {
   GraphModel::treatEvent(ev);
 
+  const GraphEvent* graphEv = dynamic_cast<const GraphEvent*>(&ev);
+  const PropertyEvent* propEv = dynamic_cast<const PropertyEvent*>(&ev);
+
   if (dynamic_cast<const GraphEvent*>(&ev) != NULL) {
-    const GraphEvent* graphEv = static_cast<const GraphEvent*>(&ev);
 
     if (graphEv->getType() == GraphEvent::TLP_ADD_EDGE) {
       _edgesAdded = true;
@@ -895,6 +919,26 @@ void EdgesGraphModel::treatEvent(const Event& ev) {
       }
       else {
         _elementsToModify.remove(wasAdded);
+      }
+    }
+  } else if (propEv) {
+    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
+      int col = _properties.indexOf(propEv->getProperty());
+      if (col != -1) {
+        // _elements vector is sorted in ascending element ids order, so we can use a binary search to speedup the index lookup
+        QVector<unsigned int>::iterator it = qBinaryFind(_elements.begin(), _elements.end(), propEv->getEdge().id);
+        if (it != _elements.end()) {
+          int row = it - _elements.begin();
+          QModelIndex idx = index(row, col);
+          emit dataChanged(idx, idx);
+        }
+      }
+    } else if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
+      int col = _properties.indexOf(propEv->getProperty());
+      if (col != -1) {
+        QModelIndex firstIndex = index(0, col);
+        QModelIndex lastIndex = index(_elements.size()-1, col);
+        emit dataChanged(firstIndex, lastIndex);
       }
     }
   }
