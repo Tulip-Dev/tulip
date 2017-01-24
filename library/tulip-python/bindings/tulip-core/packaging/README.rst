@@ -77,7 +77,7 @@ enabling to create the OpenGL visualizations available in Tulip from Python.
   import pip
   import re
 
-  from tulip import *
+  from tulip import tlp
 
   # create a new empty graph
   graph = tlp.newGraph()

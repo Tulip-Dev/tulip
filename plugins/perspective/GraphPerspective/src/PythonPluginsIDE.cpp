@@ -78,7 +78,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
   QString pluginSkeleton;
   QTextStream textStream(&pluginSkeleton);
 
-  textStream << "from tulip import *" << endl;
+  textStream << "from tulip import tlp" << endl;
   textStream << "import tulipplugins" << endl << endl;
 
   textStream << "class " << pluginClassName << "(" << pluginClass << "):" << endl;

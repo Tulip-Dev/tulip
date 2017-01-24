@@ -21,8 +21,8 @@ import sys
 import platform
 from datetime import date
 
-from tulip import *
-from tulipogl import *
+from tulip import tlp
+from tulipogl import tlpogl
 
 # fix an ubuntu bug when using the nvidia driver,
 # when the python interpreter dynamically loads the GL library,
