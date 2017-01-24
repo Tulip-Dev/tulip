@@ -56,7 +56,7 @@ public:
 
 protected slots:
 
-  void validateForm();
+  void accept();
 
   void selectPluginSourceFile();
 

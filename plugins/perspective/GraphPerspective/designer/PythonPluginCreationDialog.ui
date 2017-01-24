@@ -2,12 +2,15 @@
 <ui version="4.0">
  <class>PythonPluginCreationDialog</class>
  <widget class="QDialog" name="PythonPluginCreationDialog">
+  <property name="windowModality">
+   <enum>Qt::WindowModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>448</width>
-    <height>404</height>
+    <width>574</width>
+    <height>582</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -46,7 +49,7 @@ skeleton of the Tulip Python plugin to create.</string>
          <string>the path to the file where the plugin source code will be saved</string>
         </property>
         <property name="text">
-         <string>Plugin file : </string>
+         <string>Plugin file: </string>
         </property>
        </widget>
       </item>
@@ -66,7 +69,7 @@ background-color: white;
            <string/>
           </property>
           <property name="icon">
-           <iconset>
+           <iconset resource="../resources/GraphPerspective.qrc">
             <normaloff>:/tulip/graphperspective/icons/16/document-open.png</normaloff>:/tulip/graphperspective/icons/16/document-open.png</iconset>
           </property>
          </widget>
@@ -79,7 +82,7 @@ background-color: white;
          <string>The type of plugin to create</string>
         </property>
         <property name="text">
-         <string>Plugin type : </string>
+         <string>Plugin type: </string>
         </property>
        </widget>
       </item>
@@ -133,7 +136,7 @@ background-color: white;
          <string>The name of the Python plugin class</string>
         </property>
         <property name="text">
-         <string>Plugin class name :</string>
+         <string>Plugin class name:</string>
         </property>
        </widget>
       </item>
@@ -146,7 +149,7 @@ background-color: white;
          <string>The name of the plugin as it will appear in the interface</string>
         </property>
         <property name="text">
-         <string>Plugin name :</string>
+         <string>Plugin name:</string>
         </property>
        </widget>
       </item>
@@ -168,7 +171,7 @@ background-color: white;
          <string>The name of the plugin's author</string>
         </property>
         <property name="text">
-         <string>Author :</string>
+         <string>Author:</string>
         </property>
        </widget>
       </item>
@@ -181,7 +184,7 @@ background-color: white;
          <string>The creation date of the plugin</string>
         </property>
         <property name="text">
-         <string>Date :</string>
+         <string>Date:</string>
         </property>
        </widget>
       </item>
@@ -194,7 +197,7 @@ background-color: white;
          <string>Some information about the plugin</string>
         </property>
         <property name="text">
-         <string>Information :</string>
+         <string>Information:</string>
         </property>
        </widget>
       </item>
@@ -207,7 +210,7 @@ background-color: white;
          <string>The version number of the plugin</string>
         </property>
         <property name="text">
-         <string>Release :</string>
+         <string>Release:</string>
         </property>
        </widget>
       </item>
@@ -224,7 +227,7 @@ background-color: white;
          <string>The plugin can be added to a group (will appear in a sub-menu in the interface)</string>
         </property>
         <property name="text">
-         <string>Group : </string>
+         <string>Group: </string>
         </property>
        </widget>
       </item>
@@ -235,38 +238,49 @@ background-color: white;
     </widget>
    </item>
    <item>
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
-      <widget class="QPushButton" name="okButton">
-       <property name="text">
-        <string>Ok</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
    </item>
   </layout>
  </widget>
- <resources/>
- <connections/>
+ <resources>
+  <include location="../resources/GraphPerspective.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>PythonPluginCreationDialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>PythonPluginCreationDialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>556</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>290</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
