@@ -98,22 +98,21 @@ EdgeBundling::EdgeBundling(const PluginContext *context):Algorithm(context) {
   addInParameter<unsigned int>("iterations", paramHelp[7], "2");
   addInParameter<unsigned int>("max_thread", paramHelp[8], "0");
   addInParameter<bool>("edge_node_overlap", paramHelp[9], "false");
-  addDependency("Voronoi diagram", "1.0");
+  addDependency("Voronoi diagram", "1.1");
 }
 //============================================
 class SortNodes {
 public:
-  static Graph *g;
   static DoubleProperty *dist;
   bool operator()(const node a, const node b) const { //sort in deceresing order;
-    if (dist->getNodeValue(a) == dist->getNodeValue(b))
+    double da, db;
+    if ((da = dist->getNodeValue(a)) == (db = dist->getNodeValue(b)))
       return a.id > b.id;
 
-    return dist->getNodeValue(a) > dist->getNodeValue(b);
+    return da > db;
   }
 };
 DoubleProperty * SortNodes::dist = NULL;
-Graph *SortNodes::g = NULL;
 //============================================
 /*DoubleProperty * EdgeBundling::computeWeights(Graph *graph) {
   DoubleProperty *weights = graph->getProperty<DoubleProperty>("cmpWeights");
@@ -153,12 +152,12 @@ void updateLayout(node src, edge e, Graph *graph, LayoutProperty *layout, const 
   }
 
   for (unsigned int j = 0; j<bends.size(); ++j) {
-    Coord coord = layout->getNodeValue(nBends[i]);
-
+    const Coord& coord = layout->getNodeValue(nBends[i]);
+    
     if (!layout3D)
-      coord[2] = 0;
-
-    bends[j] = coord;
+      (bends[j] = coord)[2] = 0;
+    else
+      bends[j] = coord;
 
     if (sens) ++i;
     else --i;
@@ -181,16 +180,12 @@ void EdgeBundling::fixEdgeType(IntegerProperty* ntype) {
       continue;
     }
 
-    const pair<node, node>& ends = graph->ends(e);
-
-    bool inSrc = oriGraph->isElement(ends.first);
-
-    bool inTgt = oriGraph->isElement(ends.second);
-
-    if(!inSrc && !inTgt)
-      ntype->setEdgeValue(e, 0);
+    pair<node, node> ends = graph->ends(e);
+    if (oriGraph->isElement(ends.first) ||
+	oriGraph->isElement(ends.second))
+      ntype->setEdgeValue(e, 2);
     else
-      ntype->setEdgeValue(e,2);
+      ntype->setEdgeValue(e, 0);
   }
 }
 //============================================
@@ -283,6 +278,8 @@ bool EdgeBundling::run() {
   std::vector<tlp::edge> removedEdges;
   tlp::SimpleTest::makeSimple(oriGraph, removedEdges);
 
+  // we need to registered the graph nodes having the same position
+  // in the same vector
   std::vector<std::vector<tlp::node> > samePositionNodes;
 
   try {
@@ -307,6 +304,8 @@ bool EdgeBundling::run() {
       // otherwise the quad tree computation will fail
       // clone graph
       Graph *workGraph = graph->addCloneSubGraph();
+      // we use a hash map to ease the retrieve of the vector of the nodes
+      // having the same position
       TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> > clusters;
 
       // iterate on graph nodes
@@ -315,29 +314,38 @@ bool EdgeBundling::run() {
         // get position
         const Coord& coord = layout->getNodeValue(n);
         // compute a key for coord (convert point to string representation)
+	// Warning: because of float precision issues, we use a string key
+	// instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
         TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> >::iterator
         it = clusters.find(key);
 
         if (it == clusters.end())
+	  // register the first node at position represented by key
           clusters[key] = std::make_pair(n, static_cast<vector<tlp::node>*>(NULL));
         else {
           std::pair<node, std::vector<node>*>& infos = it->second;
 
           if (infos.second == NULL) {
+	    // we find a second node at the position represented by key
+	    // so it is time to create a vector to registered them
             std::vector<node> nodes(1, infos.first);
             samePositionNodes.push_back(nodes);
             infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
           }
 
-          infos.second->push_back(n);
+          // registered the current node in the vector of the nodes
+	  // having the same position
+	  infos.second->push_back(n);
+	  // delete it from the clone subgraph
           workGraph->delNode(n);
         }
       }
 
-      // Execute the quad tree computation on cleaned subgraph
+      // Execute the quad tree computation on the cleaned subgraph
       QuadTreeBundle::compute(workGraph, splitRatio, layout, size);
+      // workGraph is no longer needed
       graph->delSubGraph(workGraph);
     }
   }
@@ -352,11 +360,8 @@ bool EdgeBundling::run() {
   // computed quad-tree/octree cells
   tlp::DataSet voroDataSet;
   voroDataSet.set("connect", true);
+  voroDataSet.set("original clone", false);
   graph->applyAlgorithm("Voronoi diagram", err, &voroDataSet);
-
-  // Remove the clone sub-graph added by the Voronoi plugin
-  tlp::Graph *cloneVoronoi = graph->getSubGraph("Original graph");
-  graph->delSubGraph(cloneVoronoi);
 
   // If sphere mode, remove the grid nodes inside the sphere
   // as we only want to route on the sphere surface
@@ -461,7 +466,6 @@ bool EdgeBundling::run() {
 
     MutableContainer<bool> edgeTreated;
     edgeTreated.setAll(false);
-    SortNodes::g = vertexCoverGraph;
     DoubleProperty distance(graph);
     SortNodes::dist = &distance;
     set<node, SortNodes> orderedNodes;
@@ -560,7 +564,7 @@ bool EdgeBundling::run() {
 #ifdef _OPENMP
               #pragma omp critical(EDGETREATED)
 #endif
-              //when we are not using colration edge can be treated two times
+              //when we are not using coloration edge can be treated two times
               {
                 if (edgeTreated.get(e.id))
                   stop = true;
@@ -572,10 +576,6 @@ bool EdgeBundling::run() {
                 continue;
               }
             }
-
-            BooleanProperty tmpP(gridGraph);
-            tmpP.setAllNodeValue(false);
-            tmpP.setAllEdgeValue(false);
             dijkstra.searchPaths(n2, &depth);
           }
         }
@@ -612,10 +612,6 @@ bool EdgeBundling::run() {
 
               if (stop) continue;
             }
-
-            BooleanProperty tmpP(gridGraph);
-            tmpP.setAllNodeValue(false);
-            tmpP.setAllEdgeValue(false);
             {
               ///bends
               vector<node> tmpV;
@@ -680,7 +676,7 @@ bool EdgeBundling::run() {
 
   // Reinsert multiple edges if any and update their layout
   for (size_t i = 0 ; i < removedEdges.size() ; ++i) {
-    const std::pair<node, node>& eEnds = graph->ends(removedEdges[i]);
+    std::pair<node, node> eEnds = graph->ends(removedEdges[i]);
 
     if (eEnds.first == eEnds.second)
       oriGraph->addEdge(removedEdges[i]);
