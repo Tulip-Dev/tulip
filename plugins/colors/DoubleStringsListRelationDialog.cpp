@@ -31,8 +31,6 @@ namespace tlp {
 DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vector<std::string> &firstValues,const std::vector<Color> &secondValues,QWidget *parent) : QDialog(parent),_ui(new Ui::DoubleStringsListRelationDialogData) {
   _ui->setupUi(this);
 
-  setWindowTitle("Associate colors to values");
-
   for(vector<string>::const_iterator it=firstValues.begin(); it!=firstValues.end(); ++it) {
     _ui->firstListWidget->addItem((*it).c_str());
   }
@@ -47,8 +45,6 @@ DoubleStringsListRelationDialog::DoubleStringsListRelationDialog(const std::vect
   connect(_ui->downButton,SIGNAL(clicked()),this,SLOT(downButtonClicked()));
   connect(_ui->upButtonColor,SIGNAL(clicked()),this,SLOT(upButtonColorClicked()));
   connect(_ui->downButtonColor,SIGNAL(clicked()),this,SLOT(downButtonColorClicked()));
-  connect(_ui->okButton,SIGNAL(clicked()),this,SLOT(accept()));
-  connect(_ui->cancelButton,SIGNAL(clicked()),this,SLOT(reject()));
   connect(((QAbstractSlider*)(_ui->firstListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
   connect(((QAbstractSlider*)(_ui->secondListWidget->verticalScrollBar())),SIGNAL(valueChanged(int)),this,SLOT(scrollBarValueChanged(int)));
 }
