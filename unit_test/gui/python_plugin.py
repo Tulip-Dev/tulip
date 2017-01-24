@@ -1,4 +1,4 @@
-from tulip import *
+from tulip import tlp
 import tulipplugins
 
 class Test(tlp.Algorithm):

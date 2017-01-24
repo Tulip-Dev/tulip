@@ -49,8 +49,8 @@ A window containing an OpenGL visualization of the graph will be created and dis
 
 .. code:: python
 
-    from tulip import *
-    from tulipgui import *
+    from tulip import tlp
+    from tulipgui import tlpgui
 
     import os
 
