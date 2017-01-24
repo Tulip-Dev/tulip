@@ -25,7 +25,7 @@
 using namespace std;
 
 static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
-			   bool connectNodeToCellBorder, bool originalClone) {
+                           bool connectNodeToCellBorder, bool originalClone) {
   vector<tlp::node> nodes;
   vector<tlp::Coord> sites;
   tlp::node n;
@@ -44,8 +44,10 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
 
   if (ret) {
     tlp::Graph *voronoiSg = graph->addSubGraph("Voronoi");
-    if (originalClone) 
+
+    if (originalClone)
       graph->addCloneSubGraph("Original graph");
+
     TLP_HASH_MAP<unsigned int, tlp::node> voronoiVertexToNode;
 
     for (size_t i = 0 ; i < voronoiDiag.nbVertices() ; ++i) {
@@ -129,7 +131,7 @@ public :
     }
 
     bool ret = voronoiDiagram(graph, voronoiCellSg, connectNodesToVoronoiCell,
-			      originalClone);
+                              originalClone);
 
     tlp::Observable::unholdObservers();
 

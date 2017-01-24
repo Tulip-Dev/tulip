@@ -25,7 +25,7 @@
 using namespace std;
 
 static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
-				  bool originalClone) {
+                                  bool originalClone) {
   vector<tlp::node> nodes;
   nodes.reserve(graph->numberOfNodes());
   vector<tlp::Coord> points;
