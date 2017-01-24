@@ -20,7 +20,7 @@ import sys
 import platform
 from datetime import date
 
-from tulip import *
+from tulip import tlp
 
 _tulipOglNativeLibsPath = os.path.dirname(__file__) + '/native/'
 

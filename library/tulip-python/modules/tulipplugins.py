@@ -7,7 +7,7 @@ import traceback
 if sys.version_info[0] == 3:
   from imp import reload
 
-from tulip import *
+from tulip import tlp
 pluginFactory = {}
 pluginModules = {}
 testMode = False

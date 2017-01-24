@@ -130,7 +130,7 @@ QString getDefaultScriptCode(const QString &pythonVersion, Graph *graph) {
   oss << "#   * Ctrl + R  : replace selected text." << endl;
   oss << "#   * Ctrl + Space  : show auto-completion dialog." << endl << endl;
 
-  oss << "from tulip import *" << endl << endl;
+  oss << "from tulip import tlp" << endl << endl;
   ;
 
   oss << "# the updateVisualization(centerViews = True) function can be called" << endl;

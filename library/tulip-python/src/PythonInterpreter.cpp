@@ -345,9 +345,9 @@ PythonInterpreter::PythonInterpreter()
 #if PY_MAJOR_VERSION == 3 && PY_MINOR_VERSION >= 3
       runString("site.main()");
 #endif
-      runString("from tulip import *");
-      // runString("from tulipogl import *");
-      // runString("from tulipgui import *");
+      runString("from tulip import tlp");
+      runString("from tulipogl import tlpogl");
+      runString("from tulipgui import tlpgui");
 
       // When importing the tulip module, Tulip Python plugins and
       // startup scripts will be possibly loaded and other Python modules can be loaded as a side effect.
