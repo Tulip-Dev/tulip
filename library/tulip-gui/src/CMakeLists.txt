@@ -95,6 +95,7 @@ SET(SRCS
     ColorScalesManager.cpp
     RangeSlider.cpp
     AboutTulipPage.cpp
+    ScientificDoubleSpinBox.cpp
 )
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
