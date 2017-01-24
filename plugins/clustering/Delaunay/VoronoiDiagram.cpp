@@ -95,7 +95,7 @@ static const char *paramHelp[] = {
     "If true, a subgraph will be added for each computed voronoi cell.",
 
     // connect
-    "If true, existing graph nodes will be connected to the vertices of their voronoi cell."
+    "If true, existing graph nodes will be connected to the vertices of their voronoi cell.",
 
     // original clone
     "If true, a clone subgraph named 'Original graph' will be first added."};

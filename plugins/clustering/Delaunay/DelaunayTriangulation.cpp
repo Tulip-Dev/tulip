@@ -81,7 +81,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
 
 static const char *paramHelp[] = {
     // simplices
-    "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d)."
+    "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d).",
     // original clone
     "If true, a clone subgraph named 'Original graph' will be first added."};
 
