@@ -24,7 +24,7 @@
 
 using namespace std;
 
-static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
+static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bool originalClone) {
   vector<tlp::node> nodes;
   nodes.reserve(graph->numberOfNodes());
   vector<tlp::Coord> points;
@@ -41,7 +41,8 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
 
   if (ret) {
 
-    graph->addCloneSubGraph("Original graph");
+    if (originalClone)
+      graph->addCloneSubGraph("Original graph");
 
     tlp::Graph *delaunaySg = graph->addCloneSubGraph("Delaunay");
     delaunaySg->delEdges(graph->getEdges());
@@ -80,29 +81,35 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs) {
 
 static const char *paramHelp[] = {
     // simplices
-    "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d)."};
+    "If true, a subgraph will be added for each computed simplex (a triangle in 2d, a tetrahedron in 3d)."
+    // original clone
+    "If true, a clone subgraph named 'Original graph' will be first added."};
 
 class DelaunayTriangulation : public tlp::Algorithm {
 
 public:
   DelaunayTriangulation(tlp::PluginContext *context) : Algorithm(context) {
     addInParameter<bool>("simplices", paramHelp[0], "false");
+    addInParameter<bool>("original clone", paramHelp[1], "true");
   }
 
   PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "", "Performs a Delaunay triangulation, in considering the positions of the graph "
                                                                      "nodes as a set of points. The building of simplices (triangles in 2D or "
                                                                      "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
-                    "1.0", "Triangulation")
+                    "1.1", "Triangulation")
 
   bool run() {
     tlp::Observable::holdObservers();
 
     bool simplicesSg = false;
+    bool originalClone = true;
 
-    if (dataSet)
+    if (dataSet) {
       dataSet->get("simplices", simplicesSg);
+      dataSet->get("original clone", originalClone);
+    }
 
-    bool ret = delaunayTriangulation(graph, simplicesSg);
+    bool ret = delaunayTriangulation(graph, simplicesSg, originalClone);
 
     tlp::Observable::unholdObservers();
 
