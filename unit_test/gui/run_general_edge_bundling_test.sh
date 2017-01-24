@@ -1,0 +1,1 @@
+sh tulip_run_test.sh general_edge_bundling grid_approximation.tlp
