@@ -30,9 +30,7 @@ using namespace tlp;
 
 PythonPluginCreationDialog::PythonPluginCreationDialog(QWidget *parent) : QDialog(parent), _ui(new Ui::PythonPluginCreationDialog) {
   _ui->setupUi(this);
-  setModal(true);
-  connect(_ui->okButton, SIGNAL(clicked()), this, SLOT(validateForm()));
-  connect(_ui->cancelButton, SIGNAL(clicked()), this, SLOT(reject()));
+
   connect(_ui->browseButton, SIGNAL(clicked()), this, SLOT(selectPluginSourceFile()));
   QDate currentDate = QDate::currentDate();
   _ui->date->setText(currentDate.toString("dd/MM/yyyy"));
@@ -42,7 +40,7 @@ PythonPluginCreationDialog::~PythonPluginCreationDialog() {
   delete _ui;
 }
 
-void PythonPluginCreationDialog::validateForm() {
+void PythonPluginCreationDialog::accept() {
   if (_ui->pluginFileName->text().isEmpty()) {
     QMessageBox::critical(this, "Error", "No file has been selected to save the plugin source code.");
     return;
@@ -57,7 +55,7 @@ void PythonPluginCreationDialog::validateForm() {
   }
 
   if (moduleName.contains(" ")) {
-    QMessageBox::critical(this, "Error", "The Python module name can not contain any whitespace.");
+    QMessageBox::critical(this, "Error", "The Python module name cannot contain any whitespace.");
     return;
   }
 
@@ -81,7 +79,7 @@ void PythonPluginCreationDialog::validateForm() {
   }
 
   if (_ui->pluginClassName->text().contains(" ")) {
-    QMessageBox::critical(this, "Error", "The Python class name can not contain any whitespace.");
+    QMessageBox::critical(this, "Error", "The Python class name cannot contain any whitespace.");
     return;
   }
 
@@ -99,7 +97,7 @@ void PythonPluginCreationDialog::validateForm() {
     return;
   }
 
-  accept();
+  QDialog::accept();
 }
 
 void PythonPluginCreationDialog::selectPluginSourceFile() {
