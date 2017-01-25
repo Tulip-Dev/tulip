@@ -348,7 +348,7 @@ void AlgorithmRunnerItem::run(Graph *g) {
 
         if (prop == NULL) {
           g->pop();
-          Observable::holdObservers();
+          Observable::unholdObservers();
           QString message("Mandatory property parameter '");
           message += tlp::tlpStringToQString(desc.getName());
           message += "'<br/> cannot be null";
