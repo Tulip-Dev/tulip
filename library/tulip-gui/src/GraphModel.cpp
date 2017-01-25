@@ -795,12 +795,14 @@ void GraphModel::treatEvents(const std::vector<tlp::Event>&) {
 
   foreach(PropertyInterface* prop, _propertiesModified) {
     int col = _properties.indexOf(prop);
+
     if (col != -1) {
       QModelIndex firstIndex = index(0, col);
       QModelIndex lastIndex = index(_elements.size()-1, col);
       emit dataChanged(firstIndex, lastIndex);
     }
   }
+
   _propertiesModified.clear();
 
 }

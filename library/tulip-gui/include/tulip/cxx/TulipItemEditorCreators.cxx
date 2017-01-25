@@ -48,25 +48,32 @@ QWidget* NumberEditorCreator<T>::createWidget(QWidget* parent) const {
       typeid(T).name() == typeid(tlp::LongType).name()) {
     dsb = new QDoubleSpinBox(parent);
     dsb->setDecimals(0);
-  // otherwise for floating point number types
-  } else {
+    // otherwise for floating point number types
+  }
+  else {
     // use a dedicated QDoubleSpinBox supporting scientific notation
     dsb = new tlp::ScientificDoubleSpinBox(parent);
     // force the use of dot character for decimal separator
     dsb->setLocale(QLocale(QLocale::C));
   }
+
   // set correct range of values according to type
   if (typeid(T).name() == typeid(tlp::IntegerType).name()) {
     dsb->setRange(-INT_MAX, INT_MAX);
-  } else if (typeid(T).name() == typeid(tlp::UnsignedIntegerType).name()) {
+  }
+  else if (typeid(T).name() == typeid(tlp::UnsignedIntegerType).name()) {
     dsb->setRange(0, UINT_MAX);
-  } else if (typeid(T).name() == typeid(tlp::LongType).name()) {
+  }
+  else if (typeid(T).name() == typeid(tlp::LongType).name()) {
     dsb->setRange(-LONG_MAX, LONG_MAX);
-  } else if (typeid(T).name() == typeid(tlp::FloatType).name()) {
+  }
+  else if (typeid(T).name() == typeid(tlp::FloatType).name()) {
     dsb->setRange(-FLT_MAX, FLT_MAX);
-  } else {
+  }
+  else {
     dsb->setRange(-DBL_MAX, DBL_MAX);
   }
+
   return dsb;
 }
 
