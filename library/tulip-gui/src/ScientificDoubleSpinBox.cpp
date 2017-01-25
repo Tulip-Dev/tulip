@@ -17,9 +17,11 @@ static FloatValidator floatValidator;
 
 bool validFloatString(const QString &s) {
   int pos = floatRe.indexIn(s);
+
   if (pos != - 1) {
     return floatRe.capturedTexts()[1] == s;
-  } else {
+  }
+  else {
     return false;
   }
 }
@@ -28,17 +30,21 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
   if (validFloatString(input)) {
     return QValidator::Acceptable;
   }
+
   if (input == "" || input.mid(pos-1, 1).count(QRegExp("[e.-+]+")) == 1) {
     return QValidator::Intermediate;
   }
+
   return QValidator::Invalid;
 }
 
 void FloatValidator::fixup(QString &text) const {
   int pos = floatRe.indexIn(text);
+
   if (pos != - 1) {
     text = floatRe.capturedTexts()[1];
-  } else {
+  }
+  else {
     text = "";
   }
 }
@@ -75,8 +81,10 @@ void ScientificDoubleSpinBox::stepBy(int steps) {
   tlp::DoubleType::fromString(decimal, QStringToTlpString(groups[2]));
   decimal += steps;
   text = tlpStringToQString(tlp::DoubleType::toString(decimal));
+
   if (groups.count() > 4) {
     text += groups[4];
   }
+
   lineEdit()->setText(text);
 }
