@@ -61,6 +61,7 @@ void GraphModel::setGraph(Graph *g) {
 #endif
       _properties.push_back(pi);
       pi->addListener(this);
+      pi->addObserver(this);
     }
   }
 }
@@ -190,6 +191,7 @@ void GraphModel::treatEvent(const Event &ev) {
       PropertyInterface *prop = _graph->getProperty(propName);
       _properties.insert(pos, prop);
       prop->addListener(this);
+      prop->addObserver(this);
       endInsertColumns();
     } else if (graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_INHERITED_PROPERTY ||
                graphEv->getType() == GraphEvent::TLP_BEFORE_DEL_LOCAL_PROPERTY) {
@@ -775,6 +777,16 @@ void GraphModel::treatEvents(const std::vector<tlp::Event> &) {
   }
 
   _elementsToModify.clear();
+
+  foreach (PropertyInterface *prop, _propertiesModified) {
+    int col = _properties.indexOf(prop);
+    if (col != -1) {
+      QModelIndex firstIndex = index(0, col);
+      QModelIndex lastIndex = index(_elements.size() - 1, col);
+      emit dataChanged(firstIndex, lastIndex);
+    }
+  }
+  _propertiesModified.clear();
 }
 
 void NodesGraphModel::treatEvent(const Event &ev) {
@@ -823,24 +835,8 @@ void NodesGraphModel::treatEvent(const Event &ev) {
       }
     }
   } else if (propEv) {
-    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE) {
-      int col = _properties.indexOf(propEv->getProperty());
-      if (col != -1) {
-        // _elements vector is sorted in ascending element ids order, so we can use a binary search to speedup the index lookup
-        QVector<unsigned int>::iterator it = qBinaryFind(_elements.begin(), _elements.end(), propEv->getNode().id);
-        if (it != _elements.end()) {
-          int row = it - _elements.begin();
-          QModelIndex idx = index(row, col);
-          emit dataChanged(idx, idx);
-        }
-      }
-    } else if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
-      int col = _properties.indexOf(propEv->getProperty());
-      if (col != -1) {
-        QModelIndex firstIndex = index(0, col);
-        QModelIndex lastIndex = index(_elements.size() - 1, col);
-        emit dataChanged(firstIndex, lastIndex);
-      }
+    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_NODE_VALUE || propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_NODE_VALUE) {
+      _propertiesModified.insert(propEv->getProperty());
     }
   }
 }
@@ -897,24 +893,8 @@ void EdgesGraphModel::treatEvent(const Event &ev) {
       }
     }
   } else if (propEv) {
-    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE) {
-      int col = _properties.indexOf(propEv->getProperty());
-      if (col != -1) {
-        // _elements vector is sorted in ascending element ids order, so we can use a binary search to speedup the index lookup
-        QVector<unsigned int>::iterator it = qBinaryFind(_elements.begin(), _elements.end(), propEv->getEdge().id);
-        if (it != _elements.end()) {
-          int row = it - _elements.begin();
-          QModelIndex idx = index(row, col);
-          emit dataChanged(idx, idx);
-        }
-      }
-    } else if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
-      int col = _properties.indexOf(propEv->getProperty());
-      if (col != -1) {
-        QModelIndex firstIndex = index(0, col);
-        QModelIndex lastIndex = index(_elements.size() - 1, col);
-        emit dataChanged(firstIndex, lastIndex);
-      }
+    if (propEv->getType() == PropertyEvent::TLP_AFTER_SET_EDGE_VALUE || propEv->getType() == PropertyEvent::TLP_AFTER_SET_ALL_EDGE_VALUE) {
+      _propertiesModified.insert(propEv->getProperty());
     }
   }
 }

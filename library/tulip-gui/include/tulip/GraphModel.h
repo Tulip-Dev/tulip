@@ -22,6 +22,7 @@
 #define GRAPHMODEL_H
 
 #include <QVector>
+#include <QSet>
 #include <QSortFilterProxyModel>
 
 #include <tulip/Observable.h>
@@ -74,6 +75,7 @@ protected:
   QVector<unsigned int> _elements;
   QVector<QPair<unsigned int, bool>> _elementsToModify;
   QVector<PropertyInterface *> _properties;
+  QSet<PropertyInterface *> _propertiesModified;
 
   virtual bool setValue(unsigned int, tlp::PropertyInterface *, QVariant) const = 0;
   void addRemoveRowsSequence(const QVector<unsigned int> &rowsSequence, bool add);
