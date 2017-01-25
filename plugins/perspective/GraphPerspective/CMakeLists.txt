@@ -4,7 +4,6 @@ SET(LIB_SRCS
 src/AbstractFiltersManagerItem.cpp
 src/AlgorithmRunner.cpp
 src/AlgorithmRunnerItem.cpp
-src/ControlFrame.cpp
 src/ExpandableGroupBox.cpp
 src/ExportWizard.cpp
 src/GraphPerspectiveLogger.cpp
@@ -31,7 +30,6 @@ QTX_WRAP_UI(UI_SRCS
 designer/GraphPerspectiveLogger.ui
 designer/AlgorithmRunner.ui
 designer/AlgorithmRunnerItem.ui
-designer/ControlFrame.ui
 designer/FiltersManager.ui
 designer/FiltersManagerItem.ui
 designer/FiltersManagerCompareItem.ui
