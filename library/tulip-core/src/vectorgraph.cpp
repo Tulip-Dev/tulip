@@ -369,7 +369,9 @@ void VectorGraph::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
     addedNodes->clear();
     addedNodes->reserve(nb);
   }
+
   int nbReserve = nb - _freeNodes.size();
+
   if (nbReserve > 0) {
     nbReserve += _nData.size();
     _nData.reserve(nbReserve);
@@ -378,10 +380,11 @@ void VectorGraph::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
 
   for (unsigned int i = 0; i < nb; ++i) {
     node n = addNode();
+
     if (addedNodes)
       addedNodes->push_back(n);
   }
-}    
+}
 //=======================================================
 void VectorGraph::delNode(const node n) {
   assert(isElement(n));
@@ -451,7 +454,7 @@ edge VectorGraph::addEdge(const node src, const node tgt) {
 }
 //=======================================================
 void VectorGraph::addEdges(const std::vector<std::pair<node, node> >& ends,
-			   std::vector<edge>* addedEdges) {
+                           std::vector<edge>* addedEdges) {
   if (addedEdges)
     addedEdges->clear();
 
@@ -464,16 +467,19 @@ void VectorGraph::addEdges(const std::vector<std::pair<node, node> >& ends,
     addedEdges->reserve(nb);
 
   int nbReserve = nb - _freeEdges.size();
+
   if (nbReserve > 0) {
     nbReserve += _eData.size();
     _eData.reserve(nbReserve);
     _edges.reserve(nbReserve);
   }
+
   std::vector<std::pair<node, node> >::const_iterator it = ends.begin();
   std::vector<std::pair<node, node> >::const_iterator ite = ends.end();
 
   for (; it != ite; ++it) {
     edge e = addEdge(it->first, it->second);
+
     if (addedEdges)
       addedEdges->push_back(e);
   }

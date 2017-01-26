@@ -288,7 +288,7 @@ public:
    * these structures will be devalidated.
    */
   void addEdges(const std::vector<std::pair<node, node> >& edges,
-		std::vector<edge>* addedEdges = NULL);
+                std::vector<edge>* addedEdges = NULL);
   //=======================================================
   /**
         * @brief Delete an edge in the graph
