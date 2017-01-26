@@ -364,6 +364,25 @@ node VectorGraph::addNode() {
   return newNode;
 }
 //=======================================================
+void VectorGraph::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
+  if (addedNodes) {
+    addedNodes->clear();
+    addedNodes->reserve(nb);
+  }
+  int nbReserve = nb - _freeNodes.size();
+  if (nbReserve > 0) {
+    nbReserve += _nData.size();
+    _nData.reserve(nbReserve);
+    _nodes.reserve(nbReserve);
+  }
+
+  for (unsigned int i = 0; i < nb; ++i) {
+    node n = addNode();
+    if (addedNodes)
+      addedNodes->push_back(n);
+  }
+}    
+//=======================================================
 void VectorGraph::delNode(const node n) {
   assert(isElement(n));
   delEdges(n);
@@ -430,6 +449,36 @@ edge VectorGraph::addEdge(const node src, const node tgt) {
   //integrityTest();
   return newEdge;
 }
+//=======================================================
+void VectorGraph::addEdges(const std::vector<std::pair<node, node> >& ends,
+			   std::vector<edge>* addedEdges) {
+  if (addedEdges)
+    addedEdges->clear();
+
+  unsigned int nb = ends.size();
+
+  if (nb == 0)
+    return;
+
+  if (addedEdges)
+    addedEdges->reserve(nb);
+
+  int nbReserve = nb - _freeEdges.size();
+  if (nbReserve > 0) {
+    nbReserve += _eData.size();
+    _eData.reserve(nbReserve);
+    _edges.reserve(nbReserve);
+  }
+  std::vector<std::pair<node, node> >::const_iterator it = ends.begin();
+  std::vector<std::pair<node, node> >::const_iterator ite = ends.end();
+
+  for (; it != ite; ++it) {
+    edge e = addEdge(it->first, it->second);
+    if (addedEdges)
+      addedEdges->push_back(e);
+  }
+}
+
 //=======================================================
 void VectorGraph::delEdge(const edge e) {
   assert(isElement(e));
@@ -553,7 +602,7 @@ void VectorGraph::setTarget(const edge e, const node n) {
   setEnds(e, source(e), n);
 }
 //=======================================================
-std::pair<node, node> VectorGraph::ends(const edge e) const {
+const std::pair<node, node>& VectorGraph::ends(const edge e) const {
   assert(isElement(e));
   return _eData[e]._edgeExtremities;
 }

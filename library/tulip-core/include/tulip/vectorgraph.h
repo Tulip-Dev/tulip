@@ -252,6 +252,16 @@ public:
   node addNode();
   //=======================================================
   /**
+   * @brief Add nb new nodes in the structure and returns them
+   * in the addedNodes vector
+   * @warning: That operation modify the array of nodes
+   * and thus devalidate all iterators on it. The addedNodes vector
+   * is cleared before adding nodes
+   * @complexity: o(1)
+   */
+  void addNodes(unsigned int nb, std::vector<node>* addedNodes = NULL);
+  //=======================================================
+  /**
         * @brief Delete a node and all its adjacent edges in the graph
         * @warning That operation modify the array of nodes and the array of edges
         * and thus devalidate all iterators on it.
@@ -269,6 +279,16 @@ public:
        * @remark o(1)
        */
   edge addEdge(const node src, const node tgt);
+  //=======================================================
+  /**
+   * @brief Add edges in the structure and returns them
+   * in the addedEdges vector
+   * @warning: That operation modify the array of edges and
+   * the adjacency edges of its ends thus any iterators existing for
+   * these structures will be devalidated.
+   */
+  void addEdges(const std::vector<std::pair<node, node> >& edges,
+		std::vector<edge>* addedEdges = NULL);
   //=======================================================
   /**
         * @brief Delete an edge in the graph
@@ -355,7 +375,7 @@ public:
        * @brief Return the extremities of an edge (src, target)
        * @remark o(1)
        */
-  std::pair<node, node> ends(const edge e) const;
+  const std::pair<node, node>& ends(const edge e) const;
   //=======================================================
   /**
        * @brief Reconnect the edeg e to have the new given extremities
