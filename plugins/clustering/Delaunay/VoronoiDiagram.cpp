@@ -118,8 +118,6 @@ public :
                     "Performs a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.1","Triangulation")
 
   bool run() {
-    tlp::Observable::holdObservers();
-
     bool voronoiCellSg = false;
     bool connectNodesToVoronoiCell = false;
     bool originalClone = true;
@@ -132,8 +130,6 @@ public :
 
     bool ret = voronoiDiagram(graph, voronoiCellSg, connectNodesToVoronoiCell,
                               originalClone);
-
-    tlp::Observable::unholdObservers();
 
     return ret;
   }
