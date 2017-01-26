@@ -99,8 +99,6 @@ public:
                     "1.1", "Triangulation")
 
   bool run() {
-    tlp::Observable::holdObservers();
-
     bool simplicesSg = false;
     bool originalClone = true;
 
@@ -110,8 +108,6 @@ public:
     }
 
     bool ret = delaunayTriangulation(graph, simplicesSg, originalClone);
-
-    tlp::Observable::unholdObservers();
 
     return ret;
   }

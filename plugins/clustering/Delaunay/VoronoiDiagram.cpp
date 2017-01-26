@@ -116,8 +116,6 @@ public:
                     "1.1", "Triangulation")
 
   bool run() {
-    tlp::Observable::holdObservers();
-
     bool voronoiCellSg = false;
     bool connectNodesToVoronoiCell = false;
     bool originalClone = true;
@@ -129,8 +127,6 @@ public:
     }
 
     bool ret = voronoiDiagram(graph, voronoiCellSg, connectNodesToVoronoiCell, originalClone);
-
-    tlp::Observable::unholdObservers();
 
     return ret;
   }
