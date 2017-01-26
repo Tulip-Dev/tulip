@@ -63,9 +63,7 @@ static void populateGraph(bool nodesOnly = false) {
   nodes.reserve(NB_NODES);
 
   // create nodes
-  for (unsigned int i = 0; i < NB_NODES; ++i) {
-    nodes.push_back(graph.addNode());
-  }
+  graph.addNodes(NB_NODES, &nodes);
 
   if (nodesOnly)
     return;
@@ -465,9 +463,13 @@ void VectorGraphTest::testAddDelEdges() {
   checkCreatedGraph(true);
 
   // add direct edges to nodes[0]
-  edges.clear();
+  std::vector<std::pair<node, node> > ends;
+  ends.reserve(NB_NODES - 1);
   for(unsigned int i = 1; i < NB_NODES; ++i)
-    edges.push_back(graph.addEdge(nodes[0], nodes[i]));
+    ends.push_back(std::make_pair(nodes[0], nodes[i]));
+
+  edges.clear();
+  graph.addEdges(ends, &edges);
  
   CPPUNIT_ASSERT(graph.numberOfEdges() == NB_NODES - 1);
 
