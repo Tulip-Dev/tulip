@@ -101,20 +101,6 @@ node OctreeBundle::addNode(const tlp::Coord& pos) {
 
   return itn->second;
 }
-//=====================================
-//static int iii = 0;
-void OctreeBundle::cleanNode(const tlp::node) {
-  /*    double dir[6];
-      edge   best[6];
-      edge e;
-      forEach(e, graph->getInOutEdges(n)) {
-          node tgt = graph->opposite(e, n);
-          Coord vecU = layout->getNodeValue(tgt) - layout->getNodeValue(n);
-          vecU /= vecu.norm();
-          if(fabs)
-      }
-      */
-}
 
 void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4], const vector<node> &input) {
 

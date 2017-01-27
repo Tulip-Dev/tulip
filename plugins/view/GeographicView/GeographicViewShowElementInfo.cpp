@@ -105,7 +105,7 @@ GeographicViewShowElementInfo::GeographicViewShowElementInfo(): _editor(NULL) {
 }
 
 void GeographicViewShowElementInfo::clear() {
-  dynamic_cast<GeographicView*>(view())->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
+  dynamic_cast<GeographicView*>(view())->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
   _informationWidgetItem->setVisible(false);
 }
 
@@ -130,10 +130,10 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 
     if(e->type() == QEvent::MouseMove) {
       if (pick(qMouseEv->x(), qMouseEv->y(),selectedEntity)) {
-        geoView->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
+        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(Qt::WhatsThisCursor);
       }
       else {
-        geoView->getGoogleMapGraphicsView()->getGlMainWidget()->setCursor(QCursor());
+        geoView->getGeographicViewGraphicsView()->getGlMainWidget()->setCursor(QCursor());
       }
 
       return false;
@@ -231,12 +231,12 @@ bool GeographicViewShowElementInfo::eventFilter(QObject *widget, QEvent* e) {
 bool GeographicViewShowElementInfo::pick(int x, int y, SelectedEntity &selectedEntity) {
   GeographicView *geoView=dynamic_cast<GeographicView*>(view());
 
-  if(geoView->getGoogleMapGraphicsView()->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity))
+  if(geoView->getGeographicViewGraphicsView()->getGlMainWidget()->pickNodesEdges(x,y,selectedEntity))
     return true;
 
   vector<SelectedEntity> selectedEntities;
 
-  if(geoView->getGoogleMapGraphicsView()->getGlMainWidget()->pickGlEntities(x,y,selectedEntities)) {
+  if(geoView->getGeographicViewGraphicsView()->getGlMainWidget()->pickGlEntities(x,y,selectedEntities)) {
     selectedEntity=selectedEntities[0];
     return true;
   }
@@ -253,5 +253,5 @@ void GeographicViewShowElementInfo::viewChanged(View * view) {
   GeographicView *geoView=dynamic_cast<GeographicView*>(view);
   _view=geoView;
   connect(_view,SIGNAL(graphSet(tlp::Graph*)),_informationWidgetItem,SLOT(close()));
-  _view->getGoogleMapGraphicsView()->scene()->addItem(_informationWidgetItem);
+  _view->getGeographicViewGraphicsView()->scene()->addItem(_informationWidgetItem);
 }

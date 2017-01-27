@@ -1084,7 +1084,8 @@ void GeographicViewGraphicsView::treatEvent(const Event& ev) {
   }
 }
 
-void getAngle(const Coord& coord,float &theta, float &phi) {
+/*
+static void getAngle(const Coord& coord,float &theta, float &phi) {
   Coord tmp(coord[1],coord[0],0);
   float lambda = tmp[1];
 
@@ -1095,6 +1096,7 @@ void getAngle(const Coord& coord,float &theta, float &phi) {
 
   phi = M_PI / 2.0 - tmp[0];
 }
+*/
 
 void GeographicViewGraphicsView::switchViewType() {
   GeographicView::ViewType viewType=_geoView->viewType();

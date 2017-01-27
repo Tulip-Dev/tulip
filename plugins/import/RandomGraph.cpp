@@ -80,26 +80,26 @@ public:
       return false;
     }
 
-    unsigned int ite = nbNodes*nbEdges;
-    unsigned int nbIteration = ite;
+    unsigned int nbIteration = nbNodes*nbEdges;
+    unsigned int ite = 0;
     set<edgeS> myGraph;
 
     if (pluginProgress)
       pluginProgress->showPreview(false);
 
-    while (ite>0) {
-      if (ite%nbNodes==1) if (pluginProgress->progress(nbIteration-ite,nbIteration)!=TLP_CONTINUE)
-          return pluginProgress->state()!=TLP_CANCEL;
+    while (ite < nbIteration) {
+      if (ite % nbNodes==1 && 
+	  (pluginProgress->progress(ite, nbIteration)!=TLP_CONTINUE))
+	return pluginProgress->state()!=TLP_CANCEL;
 
       edgeS tmp;
       tmp.source = randomUnsignedInteger(nbNodes-1);
       tmp.target = randomUnsignedInteger(nbNodes-1);
 
-      if (myGraph.find(tmp)!=myGraph.end())
-        myGraph.erase(tmp);
-      else if (myGraph.size()<nbEdges) myGraph.insert(tmp);
+      if ((myGraph.erase(tmp) == 0) && (myGraph.size()<nbEdges))
+	myGraph.insert(tmp);
 
-      ite--;
+      ++ite;
     }
 
     vector<node> tmpVect(nbNodes);

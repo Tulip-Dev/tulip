@@ -28,7 +28,6 @@
 #include <tulip/Camera.h>
 
 #include <QGraphicsView>
-#include <QGLWidget>
 #include <QComboBox>
 
 namespace tlp {
@@ -73,10 +72,6 @@ public :
   void centerView();
 
   void centerMapOnNode(const node n);
-
-  QGLWidget *getGLWidget() {
-    return glWidget;
-  }
 
   GlMainWidget *getGlMainWidget() {
     return glMainWidget;
@@ -153,7 +148,7 @@ protected :
 private :
 
   GeographicView *_geoView;
-  QGLWidget *glWidget;
+  GlMainWidget *glWidget;
   Graph *graph;
   GoogleMaps *googleMaps;
   std::map<node, std::pair<double, double> > nodeLatLng;
