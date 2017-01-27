@@ -301,19 +301,15 @@ const float outlineVeticesData[8] = {
 
 void RoundedBox::draw(node n, float lod) {
 
-  static string glVendor(((const char*)glGetString(GL_VENDOR)));
-  static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
-
   static GlShaderProgram *roundedBoxShader = NULL;
   static GlShaderProgram *roundedBoxOutlineShader = NULL;
 
   // don't use geometry shader rendering on MacOS as that feature does seem stable on that platform
-  bool apple = false;
-#ifdef __APPLE__
-  apple = true;
-#endif
+#ifndef __APPLE__
+  static string glVendor(((const char*)glGetString(GL_VENDOR)));
+  static bool glVendorOk = (glVendor.find("NVIDIA")!=string::npos) || (glVendor.find("ATI")!=string::npos);
 
-  if (!apple && roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
+  if (roundedBoxShader == NULL && glVendorOk && GlShaderProgram::shaderProgramsSupported() && GlShaderProgram::geometryShaderSupported()) {
     roundedBoxShader = new GlShaderProgram();
     roundedBoxShader->addShaderFromSourceCode(Fragment, roundedBoxFragmentShaderSrc);
     roundedBoxShader->link();
@@ -325,6 +321,7 @@ void RoundedBox::draw(node n, float lod) {
     roundedBoxOutlineShader->link();
     roundedBoxOutlineShader->printInfoLog();
   }
+#endif
 
   const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);
 
