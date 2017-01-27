@@ -321,6 +321,7 @@ void RoundedBox::draw(node n, float lod) {
     roundedBoxOutlineShader->link();
     roundedBoxOutlineShader->printInfoLog();
   }
+
 #endif
 
   const Size &size = glGraphInputData->getElementSize()->getNodeValue(n);

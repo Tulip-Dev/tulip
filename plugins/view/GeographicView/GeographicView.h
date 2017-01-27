@@ -117,7 +117,7 @@ public :
   GeographicViewGraphicsView *getGeographicViewGraphicsView() const {
     return geoViewGraphicsView;
   }
-  
+
 public slots :
 
   void computeGeoLayout();
