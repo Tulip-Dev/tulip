@@ -95,10 +95,6 @@ public:
     return geoViewGraphicsView->getGoogleMapsPage();
   }
 
-  GeographicViewGraphicsView *getGoogleMapGraphicsView() {
-    return geoViewGraphicsView;
-  }
-
   void registerTriggers();
 
   ViewType viewType() {
@@ -111,8 +107,9 @@ public:
     centerView();
   }
 
-  GeographicViewGraphicsView *getGeographicViewGraphicsView() const;
-  void setGoogleMapsGraphicsView(GeographicViewGraphicsView *value);
+  GeographicViewGraphicsView *getGeographicViewGraphicsView() const {
+    return geoViewGraphicsView;
+  }
 
 public slots:
 

@@ -394,14 +394,6 @@ void GeographicView::saveStoredPolyInformation(DataSet &dataset) const {
   dataset.set("polygons", polyConf);
 }
 
-GeographicViewGraphicsView *GeographicView::getGeographicViewGraphicsView() const {
-  return geoViewGraphicsView;
-}
-
-void GeographicView::setGoogleMapsGraphicsView(GeographicViewGraphicsView *value) {
-  geoViewGraphicsView = value;
-}
-
 QGraphicsItem *GeographicView::centralItem() const {
   return geoViewGraphicsView->getPlaceHolderItem();
 }

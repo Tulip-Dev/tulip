@@ -105,7 +105,7 @@ node OctreeBundle::addNode(const tlp::Coord &pos) {
 
   return itn->second;
 }
-//=====================================
+
 void OctreeBundle::recQuad(const Coord fr[4], const Coord ba[4], const vector<node> &input) {
 
   node frN[4];
