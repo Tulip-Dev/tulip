@@ -88,16 +88,16 @@ public:
       pluginProgress->showPreview(false);
 
     while (ite < nbIteration) {
-      if (ite % nbNodes==1 && 
-	  (pluginProgress->progress(ite, nbIteration)!=TLP_CONTINUE))
-	return pluginProgress->state()!=TLP_CANCEL;
+      if (ite % nbNodes==1 &&
+          (pluginProgress->progress(ite, nbIteration)!=TLP_CONTINUE))
+        return pluginProgress->state()!=TLP_CANCEL;
 
       edgeS tmp;
       tmp.source = randomUnsignedInteger(nbNodes-1);
       tmp.target = randomUnsignedInteger(nbNodes-1);
 
       if ((myGraph.erase(tmp) == 0) && (myGraph.size()<nbEdges))
-	myGraph.insert(tmp);
+        myGraph.insert(tmp);
 
       ++ite;
     }
