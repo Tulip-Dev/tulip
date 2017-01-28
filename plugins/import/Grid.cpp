@@ -223,8 +223,6 @@ public:
 
     vector<pair<node, node>> ends;
     ends.reserve(nbEdges);
-    vector<edge> edges;
-    edges.reserve(nbEdges);
     graph->reserveEdges(nbEdges);
 
     buildRow(nodes, ends, 0, width, conn, isTore, spacing);
@@ -237,7 +235,7 @@ public:
     if (isTore) {
       connectRow(nodes, ends, height - 1, 0, width, conn, isTore);
     }
-
+    vector<edge> edges;
     graph->addEdges(ends, edges);
 
     return true;

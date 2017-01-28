@@ -703,8 +703,8 @@ public:
   virtual edge addEdge(const node source, const node target) = 0;
 
   /**
-   * @brief Adds new edges in the graph and returns them the addedEdges vector.
-   * The new edges are also added in all the graph ancestors.
+   * @brief Adds new edges in the graph and returns them in the addedEdges vector.
+   * The new edges are also added in all graph ancestors.
    *
    * @warning If the edges vector contains a node that does not belong to this
    * graph,

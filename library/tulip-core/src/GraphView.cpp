@@ -299,7 +299,6 @@ void GraphView::addEdge(const edge e) {
 }
 //----------------------------------------------------------------
 void GraphView::addEdges(const std::vector<std::pair<node, node>> &ends, std::vector<edge> &addedEdges) {
-  assert(ends.size() == addedEdges.size());
   getSuperGraph()->addEdges(ends, addedEdges);
   restoreEdges(addedEdges, ends);
 }
