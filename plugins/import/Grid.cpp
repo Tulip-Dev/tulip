@@ -258,6 +258,7 @@ public:
     if (isTore) {
       connectRow(nodes, ends, height - 1, 0, width, conn, isTore);
     }
+
     vector<edge> edges;
     graph->addEdges(ends, edges);
 
