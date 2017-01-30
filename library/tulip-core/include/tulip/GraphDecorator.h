@@ -150,8 +150,6 @@ protected:
   // called by GraphUpdatesRecorder
   virtual node restoreNode(node);
   virtual edge restoreEdge(edge, node source, node target);
-  virtual void restoreNodes(const std::vector<node> &);
-  virtual void restoreEdges(const std::vector<edge> &edges, const std::vector<std::pair<node, node>> &ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

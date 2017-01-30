@@ -317,11 +317,6 @@ node GraphDecorator::restoreNode(node n) {
 }
 
 //============================================================
-void GraphDecorator::restoreNodes(const std::vector<node> &) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
-}
-
-//============================================================
 void GraphDecorator::removeNode(const node) {
   tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
 }
@@ -357,10 +352,6 @@ edge GraphDecorator::restoreEdge(edge e, node, node) {
   return e;
 }
 
-//============================================================
-void GraphDecorator::restoreEdges(const std::vector<edge> &, const std::vector<std::pair<node, node>> &) {
-  tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
-}
 //============================================================
 void GraphDecorator::removeEdge(const edge) {
   tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
