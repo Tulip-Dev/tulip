@@ -163,15 +163,6 @@ node GraphImpl::restoreNode(node newNode) {
   return newNode;
 }
 //----------------------------------------------------------------
-void GraphImpl::restoreNodes(const std::vector<node>& nodes) {
-  if (!nodes.empty()) {
-    storage.restoreNodes(nodes);
-
-    if (hasOnlookers())
-      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_NODES, nodes));
-  }
-}
-//----------------------------------------------------------------
 node GraphImpl::addNode() {
   node newNode = storage.addNode();
   notifyAddNode(newNode);
@@ -201,10 +192,6 @@ void GraphImpl::addNodes(Iterator<node>*) {
 //----------------------------------------------------------------
 void GraphImpl::reserveNodes(unsigned int nb) {
   storage.reserveNodes(nb);
-}
-//----------------------------------------------------------------
-void GraphImpl::restoreAdj(node n, vector<edge>& edges) {
-  storage.restoreAdj(n, edges);
 }
 //----------------------------------------------------------------
 edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
@@ -237,16 +224,6 @@ void GraphImpl::addEdges(const std::vector<std::pair<node, node> >& edges) {
   }
   else
     storage.addEdges(edges);
-}
-//----------------------------------------------------------------
-void GraphImpl::restoreEdges(const std::vector<edge>& edges,
-                             const std::vector<std::pair<node, node> >& ends) {
-  if (!edges.empty()) {
-    storage.restoreEdges(edges, ends);
-
-    if (hasOnlookers())
-      sendEvent(GraphEvent(*this, GraphEvent::TLP_ADD_EDGES, edges));
-  }
 }
 //----------------------------------------------------------------
 void GraphImpl::addEdge(const edge e) {

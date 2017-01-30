@@ -91,10 +91,7 @@ protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
   virtual node restoreNode(node);
-  virtual void restoreNodes(const std::vector<node>&);
   virtual edge restoreEdge(edge, node source, node target);
-  virtual void restoreEdges(const std::vector<edge>& edges,
-                            const std::vector<std::pair<node, node> >& ends);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
@@ -113,6 +110,9 @@ private:
   void reverseInternal(const edge, const node src, const node tgt);
   void setEndsInternal(const edge, const node src, const node tgt,
                        const node newSrc, const node newTgt);
+  void addNodesInternal(const std::vector<node>&);
+  void addEdgesInternal(const std::vector<edge>& edges,
+			const std::vector<std::pair<node, node> >& ends);
 };
 
 }

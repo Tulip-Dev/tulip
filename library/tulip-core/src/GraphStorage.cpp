@@ -618,18 +618,6 @@ void GraphStorage::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
 }
 //=======================================================
 /**
- * @brief restore the given nodes in the structure
- */
-void GraphStorage::restoreNodes(const std::vector<node>& addedNodes) {
-  std::vector<node>::const_iterator it = addedNodes.begin();
-  std::vector<node>::const_iterator ite = addedNodes.end();
-
-  for (; it != ite; ++it) {
-    addNode(*it);
-  }
-}
-//=======================================================
-/**
  * @brief remove a node from the nodes structure only
  */
 void GraphStorage::removeFromNodes(const node n) {
@@ -759,26 +747,6 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
   }
 
   nbEdges += nb;
-}
-//=======================================================
-/**
- * @brief restore edges in the structure
- */
-void GraphStorage::restoreEdges(const std::vector<edge>& rEdges,
-                                const std::vector<std::pair<node, node> >& ends) {
-  assert(rEdges.size());
-  assert(rEdges.size() == ends.size());
-  unsigned int i = 0;
-  std::vector<edge>::const_iterator it = rEdges.begin();
-  std::vector<edge>::const_iterator end = rEdges.end();
-
-  for (; it != end; ++it, ++i) {
-    edges[*it] = ends[i];
-    node src = ends[i].first;
-    nodes[src.id].outDegree += 1;
-  }
-
-  nbEdges += i;
 }
 //=======================================================
 /**
