@@ -44,10 +44,10 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
   QString tulipDependenciesInfo = "<p style=\"font-size:12pt\">"
                                   "This open source software is powered by:"
                                   "<ul>"
-                                  "  <li> <b> Qt </b> " + tlpStringToQString(qVersion()) + ": <a href=\"https://wwww.qt.io\">https://wwww.qt.io</a></li>"
-                                  "  <li> <b> OpenGL </b> " + QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) + " (from vendor " + tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) + "): <a href=\"https://wwww.opengl.org\">https://wwww.opengl.org</a> </li>"
+                                  "  <li> <b> Qt </b> " + tlpStringToQString(qVersion()) + ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
+                                  "  <li> <b> OpenGL </b> " + QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) + " (from vendor " + tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) + "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-                                  "  <li> <b> Python </b> " + TLP_PYTHON + ": <a href=\"https://wwww.python.org\">https://wwww.python.org</a> </li>"
+                                  "  <li> <b> Python </b> " + TLP_PYTHON + ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
 #endif
                                   "</ul>"
                                   "</p>"
