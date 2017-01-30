@@ -112,7 +112,7 @@ private:
                        const node newSrc, const node newTgt);
   void addNodesInternal(const std::vector<node>&);
   void addEdgesInternal(const std::vector<edge>& edges,
-			const std::vector<std::pair<node, node> >& ends);
+                        const std::vector<std::pair<node, node> >& ends);
 };
 
 }
