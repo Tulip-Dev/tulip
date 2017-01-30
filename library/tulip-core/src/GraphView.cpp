@@ -267,7 +267,7 @@ edge GraphView::restoreEdge(edge e, const node, const node) {
 }
 //----------------------------------------------------------------
 void GraphView::addEdgesInternal(const std::vector<edge>& edges,
-				 const std::vector<std::pair<node, node> >&ends) {
+                                 const std::vector<std::pair<node, node> >&ends) {
   bool hasEnds = !ends.empty();
   unsigned int i = 0;
   std::vector<edge>::const_iterator it = edges.begin();
