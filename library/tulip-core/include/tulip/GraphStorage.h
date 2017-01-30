@@ -297,14 +297,6 @@ public:
   void addNodes(unsigned int nb, std::vector<node>* addedNodes = NULL);
   //=======================================================
   /**
-   * @brief Add the given nodes in the structure
-   * @warning: That operation modify the array of nodes
-   * and thus devalidate all iterators on it.
-   * @complexity: o(1)
-   */
-  void restoreNodes(const std::vector<node>& addedNodes);
-  //=======================================================
-  /**
    * @brief remove a node from the nodes structure only
    * @warning That operation modify the array of nodes
    * and thus devalidate all iterators on it.
@@ -351,16 +343,6 @@ public:
    */
   void addEdges(const std::vector<std::pair<node, node> >& edges,
                 std::vector<edge>* addedEdges = NULL);
-  //=======================================================
-  /**
-   * @brief restore edges in the structure and returns them
-   * in the addedEdges vector
-   * @warning: That operation modify the array of edges
-   * thus any iterators existing for
-   * these structures will be devalidated.
-   */
-  void restoreEdges(const std::vector<edge>& edgesToRestore,
-                    const std::vector<std::pair<node, node> >& ends);
 //=======================================================
   /**
    * @brief Delete an edge in the graph

@@ -188,7 +188,7 @@ node GraphView::addNode() {
 //----------------------------------------------------------------
 void GraphView::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
   getSuperGraph()->addNodes(nb, addedNodes);
-  restoreNodes(addedNodes);
+  addNodesInternal(addedNodes);
 }
 //----------------------------------------------------------------
 node GraphView::restoreNode(node n) {
@@ -198,7 +198,7 @@ node GraphView::restoreNode(node n) {
   return n;
 }
 //----------------------------------------------------------------
-void GraphView::restoreNodes(const std::vector<node>& nodes) {
+void GraphView::addNodesInternal(const std::vector<node>& nodes) {
   std::vector<node>::const_iterator it = nodes.begin();
   std::vector<node>::const_iterator ite = nodes.end();
 
@@ -247,7 +247,7 @@ void GraphView::addNodes(Iterator<node>* addedNodes) {
   }
 
   if (!nodes.empty())
-    restoreNodes(nodes);
+    addNodesInternal(nodes);
 }
 //----------------------------------------------------------------
 edge GraphView::addEdgeInternal(edge e) {
@@ -266,8 +266,8 @@ edge GraphView::restoreEdge(edge e, const node, const node) {
   return addEdgeInternal(e);
 }
 //----------------------------------------------------------------
-void GraphView::restoreEdges(const std::vector<edge>& edges,
-                             const std::vector<std::pair<node, node> >&ends) {
+void GraphView::addEdgesInternal(const std::vector<edge>& edges,
+				 const std::vector<std::pair<node, node> >&ends) {
   bool hasEnds = !ends.empty();
   unsigned int i = 0;
   std::vector<edge>::const_iterator it = edges.begin();
@@ -312,7 +312,7 @@ void GraphView::addEdge(const edge e) {
 void GraphView::addEdges(const std::vector<std::pair<node, node> >& ends,
                          std::vector<edge>& addedEdges) {
   getSuperGraph()->addEdges(ends, addedEdges);
-  restoreEdges(addedEdges, ends);
+  addEdgesInternal(addedEdges, ends);
 }
 //----------------------------------------------------------------
 void GraphView::addEdges(Iterator<edge>* addedEdges) {
@@ -342,7 +342,7 @@ void GraphView::addEdges(Iterator<edge>* addedEdges) {
   }
 
   if (!edges.empty())
-    restoreEdges(edges, std::vector<pair<node, node> >());
+    addEdgesInternal(edges, std::vector<pair<node, node> >());
 }
 //----------------------------------------------------------------
 void GraphView::removeNode(const node n) {
