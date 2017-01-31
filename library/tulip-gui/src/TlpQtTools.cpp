@@ -121,6 +121,7 @@ static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
 // Property type label to property type conversion map
 static const map<QString, string> propertyTypeLabelToPropertyTypeMap = buildPropertyTypeLabelToPropertyTypeMap();
 
+#if (QT_VERSION < QT_VERSION_CHECK(5, 8, 0))
 // Allow to print a human readable representation of Qt events,
 // for debugging purpose (through the use of qDebug() )
 QDebug operator<<(QDebug str, const QEvent *ev) {
@@ -139,6 +140,7 @@ QDebug operator<<(QDebug str, const QEvent *ev) {
 
   return str.maybeSpace();
 }
+#endif
 
 namespace tlp {
 
