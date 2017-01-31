@@ -168,9 +168,11 @@ edge VectorGraph::existEdge(const node src, const node tgt, bool directed) const
   const _iNodes& tgtData = _nData[tgt];
   unsigned int srcDeg = srcData._adje.size();
   unsigned int tgtDeg = tgtData._adje.size();
+
   if (tgtDeg < srcDeg) {
     const std::vector<bool>& adjt = tgtData._adjt;
     const std::vector<node>& adjn = tgtData._adjn;
+
     for (size_t i = 0; i < tgtDeg; ++i) {
       if (directed && !adjt[i] && adjn[i] == src)
         return tgtData._adje[i];
@@ -182,6 +184,7 @@ edge VectorGraph::existEdge(const node src, const node tgt, bool directed) const
   else {
     const std::vector<bool>& adjt = srcData._adjt;
     const std::vector<node>& adjn = srcData._adjn;
+
     for (size_t i = 0; i < srcDeg; ++i) {
       if (directed && adjt[i] && adjn[i] == tgt)
         return srcData._adje[i];
@@ -376,7 +379,7 @@ edge VectorGraph::addEdge(const node src, const node tgt) {
 
   _iNodes& srcData = _nData[src];
   _iNodes& tgtData = _nData[tgt];
-  
+
   if (_freeEdges.empty()) {
     newEdge = edge(_edges.size());
     _eData.push_back(_iEdges());
@@ -386,15 +389,17 @@ edge VectorGraph::addEdge(const node src, const node tgt) {
     newEdge = _freeEdges.back();
     _freeEdges.pop_back();
   }
+
   _iEdges& eData = _eData[newEdge];
   eData._ends = std::make_pair(src, tgt);
 
   eData._endsPos.first = srcData._adje.size();
+
   if (src != tgt)
     eData._endsPos.second = tgtData._adje.size();
   else
     eData._endsPos.second = srcData._adje.size() + 1;
-  
+
   eData._edgesId  = _edges.size();
   _edges.push_back(newEdge);
 
@@ -463,19 +468,22 @@ void VectorGraph::delEdges(const node n) {
 
   for(unsigned int i = 0; i < adje.size(); ++i) {
     edge e = adje[i];
-    if (isElement(e)) {
-      
-      node opp = adjn[i];
-      if (opp != n) { //not a loop
-	partialDelEdge(opp, e);
 
-	if (adjt[i] == false)
-	  _nData[opp]._outdeg -= 1;
+    if (isElement(e)) {
+
+      node opp = adjn[i];
+
+      if (opp != n) { //not a loop
+        partialDelEdge(opp, e);
+
+        if (adjt[i] == false)
+          _nData[opp]._outdeg -= 1;
       }
-      
+
       removeEdge(e);
     }
   }
+
   ndata.clear();
 }
 //=======================================================
@@ -568,6 +576,7 @@ void VectorGraph::setEnds(const edge e,const  node src, const node tgt) {
   eData._ends = pair<node, node>(src, tgt);
   eData._endsPos.first = srcData._adje.size();
   _iNodes& tgtData = _nData[tgt];
+
   if (src != tgt)
     eData._endsPos.second = tgtData._adje.size();
   else // loop
