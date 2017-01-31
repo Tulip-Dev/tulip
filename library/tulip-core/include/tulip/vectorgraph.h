@@ -84,13 +84,17 @@ public:
         * @brief Return true if n belongs to the graph
         * @remark o(1)
         */
-  bool isElement(const node n) const;
+  bool isElement(const node n) const {
+    return (n.id < _nData.size()) && (_nData[n]._nodesId != UINT_MAX);
+  }
   //=======================================================
   /**
         * @brief Return true if e belongs to the graph
         * @remark o(1)
         */
-  bool isElement(const edge e) const;
+  bool isElement(const edge e) const {
+    return (e.id < _eData.size()) && (_eData[e]._edgesId != UINT_MAX);
+  }
   //=======================================================
   /**
         * \brief Set the ordering of edges around n according to their order in v.
@@ -142,19 +146,28 @@ public:
         * @brief Return the node at position id in the array of nodes
         * @remark o(1)
         */
-  node operator[](const unsigned int id) const;
+  node operator[](const unsigned int id) const {
+    assert(id < _nodes.size());
+    return _nodes[id];
+  }
   //=======================================================
   /**
         * @brief Return the edge at position id in the array of nodes
         * @remark o(1)
         */
-  edge operator()(const unsigned int id) const;
+  edge operator()(const unsigned int id) const {
+    assert(id < _edges.size());
+    return _edges[id];
+  }
   //=======================================================
   /**
         * @brief Return the first node of graph (ie first node in the array of nodes)
         * @remark o(1)
         */
-  node getOneNode() const;
+  node getOneNode() const {
+    assert(numberOfNodes()>0);
+    return _nodes[0];
+  }
   //=======================================================
   /**
         * @brief Return a Tulip Iterator on nodes of the graph
@@ -217,31 +230,43 @@ public:
        * @brief Return the degree of a node
        * @remark o(1)
        */
-  unsigned int deg(const node n) const;
+  unsigned int deg(const node n) const {
+    assert(isElement(n));
+    return _nData[n]._adjn.size();
+  }
   //=======================================================
   /**
        * @brief Return the out degree of a node
        * @remark o(1)
        */
-  unsigned int outdeg(const node n) const;
+  unsigned int outdeg(const node n) const {
+    assert(isElement(n));
+    return _nData[n]._outdeg;
+  }
   //=======================================================
   /**
        * @brief Return the in degree of a node
        * @remark o(1)
        */
-  unsigned int indeg(const node n) const;
+  unsigned int indeg(const node n) const {
+    return deg(n) - _nData[n]._outdeg;
+  }
   //=======================================================
   /**
        * @brief Return the number of edges in the graph
        * @remark: o(1)
        */
-  unsigned int numberOfEdges() const;
+  unsigned int numberOfEdges() const {
+    return _edges.size();
+  }
   //=======================================================
   /**
        * @brief Return the number of nodes in the graph
        * @remark: o(1)
        */
-  unsigned int numberOfNodes() const;
+  unsigned int numberOfNodes() const {
+    return _nodes.size();
+  }
   //=======================================================
   /**
        * @brief Add a new node in the graph and return it
@@ -333,13 +358,19 @@ public:
       * @brief return the first extremity (considered as source if the graph is directed) of an edge
       * @remark o(1)
       */
-  node source(const edge e) const;
+  node source(const edge e) const {
+    assert(isElement(e));
+    return _eData[e]._ends.first;
+  }
   //=======================================================
   /**
       * @brief return the second extremity (considered as target if the graph is directed) of an edge
       * @remark o(1)
       */
-  node target(const edge e) const;
+  node target(const edge e) const {
+    assert(isElement(e));
+    return _eData[e]._ends.second;
+  }
   //=======================================================
   /**
         * @brief return the opposite node of n through edge e
@@ -360,7 +391,11 @@ public:
        * @remark o(1)
        * \see setEnds
        */
-  void setSource(const edge e, const node n);
+  void setSource(const edge e, const node n) {
+    assert(isElement(e));
+    assert(isElement(n));
+    setEnds(e, n, target(e));
+  }
   //=======================================================
   /**
        * @brief change the target of an edge
@@ -369,13 +404,20 @@ public:
        * @remark o(1)
        * \see setEnds
        */
-  void setTarget(const edge e, const node n);
+  void setTarget(const edge e, const node n) {
+    assert(isElement(e));
+    assert(isElement(n));
+    setEnds(e, source(e), n);
+  }
   //=======================================================
   /**
        * @brief Return the extremities of an edge (src, target)
        * @remark o(1)
        */
-  const std::pair<node, node>& ends(const edge e) const;
+  const std::pair<node, node>& ends(const edge e) const {
+    assert(isElement(e));
+    return _eData[e]._ends;
+  }
   //=======================================================
   /**
        * @brief Reconnect the edeg e to have the new given extremities
@@ -454,14 +496,20 @@ public:
        * \warning that function is not compatible with the Tulip Graph API
        * @remark  o(1)
        */
-  unsigned int edgePos(const edge e) const;
+  unsigned int edgePos(const edge e) const {
+    assert(isElement(e));
+    return _eData[e]._edgesId;
+  }
   //=======================================================
   /**
        * @brief return the position of a node in the array of nodes.
        * \warning that function is not compatible with the Tulip Graph API
        * @remark  o(1)
        */
-  unsigned int nodePos(const node n) const;
+  unsigned int nodePos(const node n) const {
+    assert(isElement(n));
+    return _nData[n]._nodesId;
+  }
   //=======================================================
   /**
         * @brief Swap two nodes in the array of graph nodes
@@ -542,7 +590,10 @@ public:
         * \see getInNodes
         * \see getOutNodes
         */
-  const std::vector<node>& adj(const node n) const;
+  const std::vector<node>& adj(const node n) const {
+    assert(isElement(n));
+    return _nData[n]._adjn;
+  }
   //=======================================================
   /**
         * @brief Return a const reference on the vector of adjacent edges of n
@@ -555,7 +606,10 @@ public:
         * \see getInEdges
         * \see getOutEdges
         */
-  const std::vector<edge>& star(const node n) const;
+  const std::vector<edge>& star(const node n) const {
+    assert(isElement(n));
+    return _nData[n]._adje;
+  }
   //=======================================================
   /**
         * @brief Return a const reference on the vector of nodes of the graph
@@ -563,7 +617,9 @@ public:
         * \warning code that use that function won't be compatible with Tulip Graph API
         * @remark o(1)
         */
-  const std::vector<node>& nodes() const;
+  const std::vector<node>& nodes() const {
+    return _nodes;
+  }
   //=======================================================
   /**
         * @brief Return a const reference on the vector of edges of the graph
@@ -571,7 +627,9 @@ public:
         * \warning code that use that function won't be compatible with Tulip Graph API
         * @remark o(1)
         */
-  const std::vector<edge>& edges() const;
+  const std::vector<edge>& edges() const {
+    return _edges;
+  }
   //=======================================================
 #ifndef NDEBUG
   /**
@@ -626,8 +684,8 @@ private:
 
   struct _iEdges {
     unsigned int _edgesId; /** index of a node in the _edges vector*/
-    std::pair<node, node> _edgeExtremities; /** source and target of an edge */
-    std::pair<unsigned int, unsigned int> _edgeExtremitiesPos; /** source and target of an edge */
+    std::pair<node, node> _ends; /** source and target of an edge */
+    std::pair<unsigned int, unsigned int> _endsPos; /** edge pos in the ends adjacencies */
   };
 
   std::vector<_iNodes> _nData; /** internal storage of nodes */
