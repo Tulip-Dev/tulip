@@ -40,13 +40,8 @@ Constraint::~Constraint() {
   right->in.erase(i);
 }
 std::ostream &operator<<(std::ostream &os, const Constraint &c) {
-  if (&c == nullptr) {
-    os << "nullptr";
-  } else {
-    const char *type = c.equality ? "=" : "<=";
-    os << *c.left << "+" << c.gap << type << *c.right << "(" << c.slack() << ")" << (c.active ? "-active" : "");
-  }
-
+  const char *type = c.equality ? "=" : "<=";
+  os << *c.left << "+" << c.gap << type << *c.right << "(" << c.slack() << ")" << (c.active ? "-active" : "");
   return os;
 }
 }
