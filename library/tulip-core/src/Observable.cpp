@@ -242,8 +242,10 @@ Observable::~Observable() {
   {
     assert(_oAlive[_n]);
 
+#if __cplusplus < 201103L
     if (!_oAlive[_n])
       throw ObservableException("Observable object has already been deleted, possible double free!!!");
+#endif
 
     //tlp::debug() << "[Observable node] destructor:" << n.id  << "::" << this << endl;
     _oAlive[_n] = false;
