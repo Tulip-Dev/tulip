@@ -290,10 +290,12 @@ void GraphImpl::delNode(const node n, bool) {
   // loop on inout edges of n
   // for notification and removal from propertyContainer
   unsigned int nbEdges = edges.size();
+
   for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
+
     // if e is a loop it may have been previously deleted
-    if (isElement(e)) 
+    if (isElement(e))
       removeEdge(e);
   }
 
