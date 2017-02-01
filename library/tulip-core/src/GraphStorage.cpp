@@ -284,8 +284,10 @@ Iterator<edge> *GraphStorage::getInOutEdges(const node n) const {
 //=======================================================
 void GraphStorage::getInOutEdges(const node n, std::vector<edge> &edges) const {
   SimpleVector<edge> &nEdges = nodes[n.id].edges;
-  edges.resize(nodes[n.id].edges.size());
-  memcpy(edges.data(), &nEdges[0], nEdges.size() * sizeof(edge));
+  unsigned int nbEdges = nodes[n.id].edges.size();
+  edges.resize(nbEdges);
+  if (nbEdges)
+    memcpy(edges.data(), &nEdges[0], nEdges.size() * sizeof(edge));
 }
 //=======================================================
 bool GraphStorage::getEdges(const node src, const node tgt, bool directed, std::vector<edge> &vEdges, bool onlyFirst) const {
