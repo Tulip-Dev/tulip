@@ -156,7 +156,7 @@ void GraphImpl::freeSubGraphId(unsigned int id) {
 }
 //----------------------------------------------------------------
 node GraphImpl::restoreNode(node newNode) {
-  storage.addNode(newNode);
+  storage.restoreNode(newNode);
   notifyAddNode(newNode);
   return newNode;
 }
@@ -193,7 +193,7 @@ void GraphImpl::reserveNodes(unsigned int nb) {
 }
 //----------------------------------------------------------------
 edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
-  storage.addEdge(src, tgt, newEdge, false);
+  storage.restoreEdge(src, tgt, newEdge, false);
   notifyAddEdge(newEdge);
   return newEdge;
 }
