@@ -276,7 +276,7 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  node addNode(const node n);
+  node restoreNode(const node n);
   //=======================================================
   /**
    * @brief Add a new node in the structure and return it
@@ -316,15 +316,15 @@ public:
   void delNode(const node n);
   //=======================================================
   /**
-   * @brief Add the given edge between src and tgt and return it
+   * @brief restore the given edge between src and tgt and return it
    * the last argument indicates if the edge has to be added
    * in the adjacency edges of its two ends
    * @warning That operation modify the array of edges and
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  edge addEdge(const node src, const node tgt,
-               const edge e, bool updateEndsEdges);
+  edge restoreEdge(const node src, const node tgt,
+		   const edge e, bool updateEndsEdges = true);
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it

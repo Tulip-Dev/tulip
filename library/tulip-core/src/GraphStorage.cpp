@@ -553,9 +553,9 @@ void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
 }
 //=======================================================
 /**
- * @brief Add the given node in the structure and return it
+ * @brief restore the given node in the structure and return it
  */
-node GraphStorage::addNode(const node n) {
+node GraphStorage::restoreNode(const node n) {
   if (nodes.size() <= n.id)
     nodes.resize(n.id + 1);
   else {
@@ -564,7 +564,7 @@ node GraphStorage::addNode(const node n) {
     ctnr.outDegree = 0;
   }
 
-  nbNodes++;
+  ++nbNodes;
 
   return n;
 }
@@ -573,7 +573,7 @@ node GraphStorage::addNode(const node n) {
  * @brief Add a new node in the structure and return it
  */
 node GraphStorage::addNode() {
-  return addNode(node(nodeIds.get()));
+  return restoreNode(node(nodeIds.get()));
 }
 //=======================================================
 /**
@@ -666,24 +666,24 @@ void GraphStorage::delNode(const node n) {
 }
 //=======================================================
 /**
- * @brief Add the given edge between src and tgt and return it
+ * @brief restore the given edge between src and tgt and return it
  */
-edge GraphStorage::addEdge(const node src, const node tgt,
-                           const edge e, bool updateEndsEdges) {
-  std::pair< node , node > tmp(src, tgt);
-  nodes[src.id].outDegree += 1;
-
+edge GraphStorage::restoreEdge(const node src, const node tgt,
+			       const edge e, bool updateEndsEdge) {
   if (edges.size() <= e.id)
     edges.resize(e.id + 1);
 
-  edges[e.id] = tmp;
+  edges[e.id].first = src;
+  edges[e.id].second = tgt;
 
-  if (updateEndsEdges) {
+  nodes[src.id].outDegree += 1;
+
+  if (updateEndsEdge) {
     nodes[src.id].edges.push_back(e);
     nodes[tgt.id].edges.push_back(e);
   }
 
-  nbEdges++;
+  ++nbEdges;
 
   return e;
 }
@@ -692,7 +692,7 @@ edge GraphStorage::addEdge(const node src, const node tgt,
  * @brief Add a new edge between src and tgt and return it
  */
 edge GraphStorage::addEdge(const node src, const node tgt) {
-  return addEdge(src, tgt, edge(edgeIds.get()), true);
+  return restoreEdge(src, tgt, edge(edgeIds.get()));
 }
 //=======================================================
 /**
