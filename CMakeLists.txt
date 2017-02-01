@@ -1,10 +1,4 @@
-IF(WIN32)
-  CMAKE_MINIMUM_REQUIRED(VERSION 2.8.11)
-ELSEIF(APPLE)
-  CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
-ELSE()
-  CMAKE_MINIMUM_REQUIRED(VERSION 2.8.3)
-ENDIF(WIN32)
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8.12)
 
 # Remove CMake warnings related to Qt5
 IF(POLICY CMP0020)
@@ -113,13 +107,7 @@ SET(TulipLibs ${LibTulipCoreName} ${LibTulipOGLName} ${LibTulipGUIName} ${LibTul
 ## ========================================================
 ## Current year (used in documentation config files)
 ## ========================================================
-IF(WIN32)
-  EXECUTE_PROCESS(COMMAND "cmd.exe" "/c" "echo" "%DATE:~6,4%" OUTPUT_VARIABLE CurrentYear OUTPUT_STRIP_TRAILING_WHITESPACE)
-  # CMake variable to check if we run cmake on a 64 bits Windows
-  STRING(COMPARE EQUAL "${CMAKE_SYSTEM_PROCESSOR}" "AMD64" WIN_AMD64)
-ELSEIF(UNIX)
-  EXECUTE_PROCESS(COMMAND "date" "+%Y" OUTPUT_VARIABLE CurrentYear OUTPUT_STRIP_TRAILING_WHITESPACE)
-ENDIF()
+STRING(TIMESTAMP CurrentYear "%Y")
 
 ## ========================================================
 ## Configure file for uninstall target
