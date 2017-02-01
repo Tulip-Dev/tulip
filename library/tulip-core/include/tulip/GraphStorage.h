@@ -323,7 +323,7 @@ public:
    * these structures will be devalidated.
    */
   edge restoreEdge(const node src, const node tgt,
-		   const edge e, bool updateEndsEdges = true);
+                   const edge e, bool updateEndsEdges = true);
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it

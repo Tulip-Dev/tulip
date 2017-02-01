@@ -296,6 +296,7 @@ void GraphStorage::getInOutEdges(const node n, std::vector<edge>& edges) const {
   SimpleVector<edge>& nEdges = nodes[n.id].edges;
   unsigned int nbEdges = nodes[n.id].edges.size();
   edges.resize(nbEdges);
+
   if (nbEdges)
     memcpy(edges.data(), &nEdges[0], nEdges.size() * sizeof(edge));
 }
@@ -659,7 +660,7 @@ void GraphStorage::delNode(const node n) {
  * @brief restore the given edge between src and tgt and return it
  */
 edge GraphStorage::restoreEdge(const node src, const node tgt,
-			       const edge e, bool updateEndsEdge) {
+                               const edge e, bool updateEndsEdge) {
   if (edges.size() <= e.id)
     edges.resize(e.id + 1);
 
