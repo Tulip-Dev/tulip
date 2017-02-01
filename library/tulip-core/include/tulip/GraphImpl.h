@@ -76,21 +76,48 @@ public:
     return storage.getEdges(source, target, directed, edges);
   }
   // to ensure that loops appear only once
-  void getInOutEdges(const node, std::vector<edge> &edges, bool loopsOnlyOnce = false) const;
+  void getInOutEdges(const node n, std::vector<edge> &edges) const {
+    storage.getInOutEdges(n, edges);
+  }
+
   //========================================================================
-  unsigned int deg(const node) const;
-  unsigned int indeg(const node) const;
-  unsigned int outdeg(const node) const;
+  unsigned int deg(const node n) const {
+    assert(isElement(n));
+    return storage.deg(n);
+  }
+  unsigned int indeg(const node n) const {
+    assert(isElement(n));
+    return storage.indeg(n);
+  }
+  unsigned int outdeg(const node n) const {
+    assert(isElement(n));
+    return storage.outdeg(n);
+  }
   //========================================================================
-  virtual node source(const edge) const;
-  virtual node target(const edge) const;
-  virtual node opposite(const edge, const node n) const;
-  virtual const std::pair<node, node> &ends(const edge e) const;
+  virtual node source(const edge e) const {
+    assert(isElement(e));
+    return storage.source(e);
+  }
+  virtual node target(const edge e) const {
+    assert(isElement(e));
+    return storage.target(e);
+  }
+  virtual node opposite(const edge e, const node n) const {
+    assert(isElement(e));
+    return storage.opposite(e, n);
+  }
+  virtual const std::pair<node, node> &ends(const edge e) const {
+    return storage.ends(e);
+  }
   virtual void setEnds(const edge, const node, const node);
   virtual void reverse(const edge);
   //=======================================================================
-  unsigned int numberOfEdges() const;
-  unsigned int numberOfNodes() const;
+  unsigned int numberOfEdges() const {
+    return storage.numberOfEdges();
+  }
+  unsigned int numberOfNodes() const {
+    return storage.numberOfNodes();
+  }
   //=======================================================================
   // updates management
   virtual void push(bool unpopAllowed = true, std::vector<PropertyInterface *> *propertiesToPreserveOnPop = nullptr);

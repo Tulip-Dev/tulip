@@ -353,7 +353,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
 
     // get edges vector with loops appearing only once
     std::vector<edge> edges;
-    ((GraphImpl *)getRoot())->getInOutEdges(n, edges, true);
+    ((GraphImpl *)getRoot())->getInOutEdges(n, edges);
 
     // use a stack for a dfs subgraphs propagation
     std::stack<Graph *> sgq;

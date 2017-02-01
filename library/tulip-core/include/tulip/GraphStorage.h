@@ -140,7 +140,7 @@ public:
   /**
    * @brief get adjacency edges of a given node
    */
-  void getInOutEdges(const node n, std::vector<edge> &edges, bool loopsOnlyOnce = false) const;
+  void getInOutEdges(const node n, std::vector<edge> &edges) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n

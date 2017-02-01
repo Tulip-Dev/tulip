@@ -247,7 +247,7 @@ void GraphImpl::delNode(const node n, bool) {
   assert(isElement(n));
   // get edges vector with loops appearing only once
   std::vector<edge> edges;
-  storage.getInOutEdges(n, edges, true);
+  storage.getInOutEdges(n, edges);
 
   // use a stack for a dfs subgraphs propagation
   std::stack<Graph *> sgq;
@@ -285,11 +285,12 @@ void GraphImpl::delNode(const node n, bool) {
 
   // loop on inout edges of n
   // for notification and removal from propertyContainer
-  std::vector<edge>::const_iterator ite = edges.begin();
-
-  while (ite != edges.end()) {
-    removeEdge(*ite);
-    ++ite;
+  unsigned int nbEdges = edges.size();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
+    edge e = edges[i];
+    // if e is a loop it may have been previously deleted
+    if (isElement(e))
+      removeEdge(e);
   }
 
   notifyDelNode(n);
@@ -363,47 +364,10 @@ Iterator<edge> *GraphImpl::getInOutEdges(const node n) const {
   return new GraphImplEdgeIterator(this, storage.getInOutEdges(n));
 }
 //----------------------------------------------------------------
-void GraphImpl::getInOutEdges(const node n, std::vector<edge> &edges, bool loopsOnlyOnce) const {
-  storage.getInOutEdges(n, edges, loopsOnlyOnce);
-}
-//----------------------------------------------------------------
 std::vector<edge> GraphImpl::getEdges(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
   storage.getEdges(src, tgt, directed, edges);
   return edges;
-}
-//----------------------------------------------------------------
-unsigned int GraphImpl::deg(const node n) const {
-  return storage.deg(n);
-}
-//----------------------------------------------------------------
-unsigned int GraphImpl::indeg(const node n) const {
-  assert(isElement(n));
-  return storage.indeg(n);
-}
-//----------------------------------------------------------------
-unsigned int GraphImpl::outdeg(const node n) const {
-  assert(isElement(n));
-  return storage.outdeg(n);
-}
-//----------------------------------------------------------------
-node GraphImpl::source(const edge e) const {
-  assert(isElement(e));
-  return storage.source(e);
-}
-//----------------------------------------------------------------
-node GraphImpl::target(const edge e) const {
-  assert(isElement(e));
-  return storage.target(e);
-}
-//----------------------------------------------------------------
-const std::pair<node, node> &GraphImpl::ends(const edge e) const {
-  return storage.ends(e);
-}
-//----------------------------------------------------------------
-node GraphImpl::opposite(const edge e, const node n) const {
-  assert(isElement(e));
-  return storage.opposite(e, n);
 }
 //----------------------------------------------------------------
 void GraphImpl::reverse(const edge e) {
@@ -456,14 +420,6 @@ void GraphImpl::setEnds(const edge e, const node newSrc, const node newTgt) {
   for (Graph *sg : getSubGraphs()) {
     ((GraphView *)sg)->setEndsInternal(e, src, tgt, nSrc, nTgt);
   }
-}
-//----------------------------------------------------------------
-unsigned int GraphImpl::numberOfEdges() const {
-  return storage.numberOfEdges();
-}
-//----------------------------------------------------------------
-unsigned int GraphImpl::numberOfNodes() const {
-  return storage.numberOfNodes();
 }
 //----------------------------------------------------------------
 void GraphImpl::removeEdge(const edge e) {
