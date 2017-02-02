@@ -795,6 +795,63 @@ Since the release of Tulip 4.10, the following icons are also available (based o
   * :const:`tlp.TulipFontAwesome.Wpforms` (:faicon:`wpforms`)
   * :const:`tlp.TulipFontAwesome.Yoast` (:faicon:`yoast`)
 
+Since the release of Tulip 4.11, the following icons are also available (based on Font Awesome 4.7):
+
+  * :const:`tlp.TulipFontAwesome.AddressBook` (:faicon:`address-book`)
+  * :const:`tlp.TulipFontAwesome.AddressBookO` (:faicon:`address-book-o`)
+  * :const:`tlp.TulipFontAwesome.AddressCard` (:faicon:`address-card`)
+  * :const:`tlp.TulipFontAwesome.AddressCardO` (:faicon:`address-card-o`)
+  * :const:`tlp.TulipFontAwesome.Bandcamp` (:faicon:`bandcamp`)
+  * :const:`tlp.TulipFontAwesome.Bath` (:faicon:`bath`)
+  * :const:`tlp.TulipFontAwesome.Bathtub` (:faicon:`bathtub`)
+  * :const:`tlp.TulipFontAwesome.DriversLicense` (:faicon:`drivers-license`)
+  * :const:`tlp.TulipFontAwesome.DriversLicenseO` (:faicon:`drivers-license-o`)
+  * :const:`tlp.TulipFontAwesome.Eercast` (:faicon:`eercast`)
+  * :const:`tlp.TulipFontAwesome.EnvelopeOpen` (:faicon:`envelope-open`)
+  * :const:`tlp.TulipFontAwesome.EnvelopeOpenO` (:faicon:`envelope-open-o`)
+  * :const:`tlp.TulipFontAwesome.Etsy` (:faicon:`etsy`)
+  * :const:`tlp.TulipFontAwesome.FreeCodeCamp` (:faicon:`free-code-camp`)
+  * :const:`tlp.TulipFontAwesome.Grav` (:faicon:`grav`)
+  * :const:`tlp.TulipFontAwesome.HandshakeO` (:faicon:`handshake-o`)
+  * :const:`tlp.TulipFontAwesome.IdBadge` (:faicon:`id-badge`)
+  * :const:`tlp.TulipFontAwesome.IdCard` (:faicon:`id-card`)
+  * :const:`tlp.TulipFontAwesome.IdCardO` (:faicon:`id-card-o`)
+  * :const:`tlp.TulipFontAwesome.Imdb` (:faicon:`imdb`)
+  * :const:`tlp.TulipFontAwesome.Linode` (:faicon:`linode`)
+  * :const:`tlp.TulipFontAwesome.Meetup` (:faicon:`meetup`)
+  * :const:`tlp.TulipFontAwesome.Microchip` (:faicon:`microchip`)
+  * :const:`tlp.TulipFontAwesome.Podcast` (:faicon:`podcast`)
+  * :const:`tlp.TulipFontAwesome.Quora` (:faicon:`quora`)
+  * :const:`tlp.TulipFontAwesome.Ravelry` (:faicon:`ravelry`)
+  * :const:`tlp.TulipFontAwesome.S15` (:faicon:`s15`)
+  * :const:`tlp.TulipFontAwesome.Shower` (:faicon:`shower`)
+  * :const:`tlp.TulipFontAwesome.SnowflakeO` (:faicon:`snowflake-o`)
+  * :const:`tlp.TulipFontAwesome.Superpowers` (:faicon:`superpowers`)
+  * :const:`tlp.TulipFontAwesome.Telegram` (:faicon:`telegram`)
+  * :const:`tlp.TulipFontAwesome.Thermometer` (:faicon:`thermometer`)
+  * :const:`tlp.TulipFontAwesome.Thermometer0` (:faicon:`thermometer-0`)
+  * :const:`tlp.TulipFontAwesome.Thermometer1` (:faicon:`thermometer-1`)
+  * :const:`tlp.TulipFontAwesome.Thermometer2` (:faicon:`thermometer-2`)
+  * :const:`tlp.TulipFontAwesome.Thermometer3` (:faicon:`thermometer-3`)
+  * :const:`tlp.TulipFontAwesome.Thermometer4` (:faicon:`thermometer-4`)
+  * :const:`tlp.TulipFontAwesome.ThermometerEmpty` (:faicon:`thermometer-empty`)
+  * :const:`tlp.TulipFontAwesome.ThermometerFull` (:faicon:`thermometer-full`)
+  * :const:`tlp.TulipFontAwesome.ThermometerHalf` (:faicon:`thermometer-half`)
+  * :const:`tlp.TulipFontAwesome.ThermometerQuarter` (:faicon:`thermometer-quarter`)
+  * :const:`tlp.TulipFontAwesome.ThermometerThreeQuarters` (:faicon:`thermometer-three-quarters`)
+  * :const:`tlp.TulipFontAwesome.TimesRectangle` (:faicon:`times-rectangle`)
+  * :const:`tlp.TulipFontAwesome.TimesRectangleO` (:faicon:`times-rectangle-o`)
+  * :const:`tlp.TulipFontAwesome.UserCircle` (:faicon:`user-circle`)
+  * :const:`tlp.TulipFontAwesome.UserCircleO` (:faicon:`user-circle-o`)
+  * :const:`tlp.TulipFontAwesome.UserO` (:faicon:`user-o`)
+  * :const:`tlp.TulipFontAwesome.Vcard` (:faicon:`vcard`)
+  * :const:`tlp.TulipFontAwesome.VcardO` (:faicon:`vcard-o`)
+  * :const:`tlp.TulipFontAwesome.WindowClose` (:faicon:`window-close`)
+  * :const:`tlp.TulipFontAwesome.WindowCloseO` (:faicon:`window-close-o`)
+  * :const:`tlp.TulipFontAwesome.WindowMaximize` (:faicon:`window-maximize`)
+  * :const:`tlp.TulipFontAwesome.WindowMinimize` (:faicon:`window-minimize`)
+  * :const:`tlp.TulipFontAwesome.WindowRestore` (:faicon:`window-restore`)
+  * :const:`tlp.TulipFontAwesome.Wpexplorer` (:faicon:`wpexplorer`)
 
 %End
 
@@ -1559,7 +1616,61 @@ Returns an UTF-8 encoded string of a Font Awesome icon.
   static const std::string Wpforms;
   static const std::string Yoast;
 
-
+  static const std::string AddressBook;
+  static const std::string AddressBookO;
+  static const std::string AddressCard;
+  static const std::string AddressCardO;
+  static const std::string Bandcamp;
+  static const std::string Bath;
+  static const std::string Bathtub;
+  static const std::string DriversLicense;
+  static const std::string DriversLicenseO;
+  static const std::string Eercast;
+  static const std::string EnvelopeOpen;
+  static const std::string EnvelopeOpenO;
+  static const std::string Etsy;
+  static const std::string FreeCodeCamp;
+  static const std::string Grav;
+  static const std::string HandshakeO;
+  static const std::string IdBadge;
+  static const std::string IdCard;
+  static const std::string IdCardO;
+  static const std::string Imdb;
+  static const std::string Linode;
+  static const std::string Meetup;
+  static const std::string Microchip;
+  static const std::string Podcast;
+  static const std::string Quora;
+  static const std::string Ravelry;
+  static const std::string S15;
+  static const std::string Shower;
+  static const std::string SnowflakeO;
+  static const std::string Superpowers;
+  static const std::string Telegram;
+  static const std::string Thermometer;
+  static const std::string Thermometer0;
+  static const std::string Thermometer1;
+  static const std::string Thermometer2;
+  static const std::string Thermometer3;
+  static const std::string Thermometer4;
+  static const std::string ThermometerEmpty;
+  static const std::string ThermometerFull;
+  static const std::string ThermometerHalf;
+  static const std::string ThermometerQuarter;
+  static const std::string ThermometerThreeQuarters;
+  static const std::string TimesRectangle;
+  static const std::string TimesRectangleO;
+  static const std::string UserCircle;
+  static const std::string UserCircleO;
+  static const std::string UserO;
+  static const std::string Vcard;
+  static const std::string VcardO;
+  static const std::string WindowClose;
+  static const std::string WindowCloseO;
+  static const std::string WindowMaximize;
+  static const std::string WindowMinimize;
+  static const std::string WindowRestore;
+  static const std::string Wpexplorer;
 };
 
 };
