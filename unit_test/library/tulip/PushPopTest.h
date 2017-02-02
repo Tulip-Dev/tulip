@@ -70,8 +70,6 @@ public:
   void testObserveDelProps();
   void testAddSubgraphProp();
   void testMetaNode();
-private:
-  void build(unsigned int, unsigned int);
 };
 
 #endif
