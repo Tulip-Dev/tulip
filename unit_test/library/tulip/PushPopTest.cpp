@@ -38,28 +38,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PushPopTest);
 
 //==========================================================
 void PushPopTest::setUp() {
-  graph = // tlp::newGraph();
-      new GraphImpl();
+  graph = tlp::newGraph();
 }
 //==========================================================
 void PushPopTest::tearDown() {
-  // graph->pop();
   delete graph;
-}
-//==========================================================
-void PushPopTest::build(unsigned int nbNodes, unsigned int edgeRatio) {
-  vector<node> nodes;
-  vector<edge> edges;
-  unsigned int NB_ADD = nbNodes;
-  unsigned int EDGE_RATIO = edgeRatio;
-
-  for (unsigned int i = 0; i < NB_ADD; ++i)
-    nodes.push_back(graph->addNode());
-
-  unsigned int NB_EDGES = EDGE_RATIO * NB_ADD;
-
-  for (unsigned int i = 0; i < NB_EDGES; ++i)
-    edges.push_back(graph->addEdge(nodes[randomUnsignedInteger(NB_ADD - 1)], nodes[randomUnsignedInteger(NB_ADD - 1)]));
 }
 //==========================================================
 void PushPopTest::testAddDel() {
