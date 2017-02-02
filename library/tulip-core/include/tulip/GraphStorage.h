@@ -420,7 +420,7 @@ private :
     EdgeVector edges;
     unsigned int outDegree;
 
-  EdgeContainer(): outDegree(0) {}
+    EdgeContainer(): outDegree(0) {}
   };
   typedef std::vector<EdgeContainer> Nodes;
   typedef std::vector<std::pair< node , node > > Edges;
