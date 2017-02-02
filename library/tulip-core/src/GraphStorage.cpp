@@ -38,33 +38,23 @@ GraphStorage::~GraphStorage() {
 }
 //=======================================================
 /**
- * @brief Return true if n belongs to the graph
- */
-bool GraphStorage::isElement(const node n) const {
-  return !nodeIds.is_free(n.id);
-}
-//=======================================================
-/**
- * @brief Return true if e belongs to the graph
- */
-bool GraphStorage::isElement(const edge e) const {
-  return !edgeIds.is_free(e.id);
-}
-//=======================================================
-/**
  * @brief Enables to reserve memory for nbNodes
  */
 void GraphStorage::reserveNodes(const size_t nb) {
-  if (nb > nbNodes)
+  if (nb > nbNodes) {
     nodes.reserve(nb);
+    nodeExist.reserve(nb);
+  }
 }
 //=======================================================
 /**
  * @brief Enables to reserve memory for nbEdges
  */
 void GraphStorage::reserveEdges(const size_t nb) {
-  if (nb > nbEdges)
+  if (nb > nbEdges) {
     edges.reserve(nb);
+    edgeExist.reserve(nb);
+  }
 }
 //=======================================================
 /**
@@ -109,13 +99,6 @@ node GraphStorage::getOneNode() const {
   return node();
 }
 //=======================================================
-/**
- * @brief Return a Tulip Iterator on nodes of the graph
- */
-Iterator<node> *GraphStorage::getNodes() const {
-  return nodeIds.getIds<node>();
-}
-//=======================================================
 // define a simple class to encapsulate the memento of ids
 struct IdsMemento : public GraphStorageIdsMemento {
   IdManagerState nodeIds;
@@ -142,13 +125,6 @@ const GraphStorageIdsMemento *GraphStorage::getIdsMemento() {
 void GraphStorage::restoreIdsMemento(const GraphStorageIdsMemento *memento) {
   nodeIds.restoreState(static_cast<const IdsMemento *>(memento)->nodeIds);
   edgeIds.restoreState(static_cast<const IdsMemento *>(memento)->edgeIds);
-}
-//=======================================================
-/**
- * @brief Return a Tulip Iterator on edges of the graph
- */
-Iterator<edge> *GraphStorage::getEdges() const {
-  return edgeIds.getIds<edge>();
 }
 //=======================================================
 // specific iterator classes used to implement
@@ -340,80 +316,6 @@ Iterator<node> *GraphStorage::getOutNodes(const node n) const {
 }
 //=======================================================
 /**
- * @brief Return the degree of a node
- */
-unsigned int GraphStorage::deg(const node n) const {
-  assert(isElement(n));
-  return nodes[n.id].edges.size();
-}
-
-//=======================================================
-/**
- * @brief Return the out degree of a node
- */
-unsigned int GraphStorage::outdeg(const node n) const {
-  assert(isElement(n));
-  return nodes[n.id].outDegree;
-}
-
-//=======================================================
-/**
- * @brief Return the in degree of a node
- */
-unsigned int GraphStorage::indeg(const node n) const {
-  assert(isElement(n));
-  const EdgeContainer &ctnr = nodes[n.id];
-  return ctnr.edges.size() - ctnr.outDegree;
-}
-//=======================================================
-/**
- * @brief Return the number of edges in the graph
- */
-unsigned int GraphStorage::numberOfEdges() const {
-  return nbEdges;
-}
-//=======================================================
-/**
- * @brief Return the number of nodes in the graph
- */
-unsigned int GraphStorage::numberOfNodes() const {
-  return nbNodes;
-}
-//=======================================================
-/**
- * @brief Return the extremities of an edge (src, target)
- */
-const std::pair<node, node> &GraphStorage::ends(const edge e) const {
-  assert(isElement(e));
-  return edges[e.id];
-}
-//=======================================================
-/**
- * @brief return the first extremity (considered as source if the graph is directed) of an edge
- */
-node GraphStorage::source(const edge e) const {
-  return edges[e.id].first;
-}
-//=======================================================
-/**
- * @brief return the second extremity (considered as target if the graph is directed) of an edge
- * @complexity o(1)
- */
-node GraphStorage::target(const edge e) const {
-  return edges[e.id].second;
-}
-//=======================================================
-/**
- * @brief return the opposite node of n through edge e
- */
-node GraphStorage::opposite(const edge e, const node n) const {
-  const std::pair<node, node> &eEnds = edges[e.id];
-  assert((eEnds.first == n) || (eEnds.second == n));
-  return (eEnds.first == n) ? eEnds.second : eEnds.first;
-}
-
-//=======================================================
-/**
  * @brief Reconnect the edge e to have the new given ends
  */
 void GraphStorage::setEnds(const edge e, const node newSrc, const node newTgt) {
@@ -448,20 +350,6 @@ void GraphStorage::setEnds(const edge e, const node newSrc, const node newTgt) {
     removeFromEdgeContainer(nodes[tgt.id], e);
   } else
     nTgt = tgt;
-}
-//=======================================================
-/**
- * @brief change the source of an edge
- */
-void GraphStorage::setSource(const edge e, const node n) {
-  setEnds(e, n, node());
-}
-//=======================================================
-/**
- * @brief change the target of an edge
- */
-void GraphStorage::setTarget(const edge e, const node n) {
-  setEnds(e, node(), n);
 }
 //=======================================================
 /**
@@ -536,24 +424,20 @@ void GraphStorage::swapEdgeOrder(const node n, const edge e1, const edge e2) {
  * @brief restore the given node in the structure and return it
  */
 node GraphStorage::restoreNode(const node n) {
-  if (nodes.size() <= n.id)
+  if (nodes.size() <= n.id) {
     nodes.resize(n.id + 1);
-  else {
+    nodeExist.resize(n.id + 1);
+    nodeExist[n.id] = true;
+  } else {
     EdgeContainer &ctnr = nodes[n.id];
     ctnr.edges.clear();
     ctnr.outDegree = 0;
+    nodeExist[n.id] = true;
   }
 
   ++nbNodes;
 
   return n;
-}
-//=======================================================
-/**
- * @brief Add a new node in the structure and return it
- */
-node GraphStorage::addNode() {
-  return restoreNode(node(nodeIds.get()));
 }
 //=======================================================
 /**
@@ -573,20 +457,25 @@ void GraphStorage::addNodes(unsigned int nb, std::vector<node> *addedNodes) {
   unsigned int first = nodeIds.getFirstOfRange(nb);
   unsigned int last = first + nb - 1;
   nodes.reserve(last + 1);
+  nodeExist.reserve(last + 1);
 
-  if (nodes.size() <= first)
+  if (nodes.size() <= first) {
     nodes.resize(first);
+    nodeExist.resize(first);
+  }
 
   unsigned int nodesSize = nodes.size();
 
   for (; first <= last; ++first) {
     if (nodesSize <= first) {
       nodes.push_back(EdgeContainer());
+      nodeExist.push_back(true);
       ++nodesSize;
     } else {
       EdgeContainer &ctnr = nodes[first];
       ctnr.edges.clear();
       ctnr.outDegree = 0;
+      nodeExist[first] = true;
     }
 
     if (addedNodes)
@@ -601,6 +490,7 @@ void GraphStorage::addNodes(unsigned int nb, std::vector<node> *addedNodes) {
  */
 void GraphStorage::removeFromNodes(const node n) {
   nodes[n.id].edges.clear();
+  nodeExist[n.id] = false;
   nodeIds.free(n.id);
   nbNodes--;
 }
@@ -646,11 +536,14 @@ void GraphStorage::delNode(const node n) {
  * @brief restore the given edge between src and tgt and return it
  */
 edge GraphStorage::restoreEdge(const node src, const node tgt, const edge e, bool updateEndsEdge) {
-  if (edges.size() <= e.id)
+  if (edges.size() <= e.id) {
     edges.resize(e.id + 1);
+    edgeExist.resize(e.id + 1);
+  }
 
   edges[e.id].first = src;
   edges[e.id].second = tgt;
+  edgeExist[e.id] = true;
 
   nodes[src.id].outDegree += 1;
 
@@ -662,13 +555,6 @@ edge GraphStorage::restoreEdge(const node src, const node tgt, const edge e, boo
   ++nbEdges;
 
   return e;
-}
-//=======================================================
-/**
- * @brief Add a new edge between src and tgt and return it
- */
-edge GraphStorage::addEdge(const node src, const node tgt) {
-  return restoreEdge(src, tgt, edge(edgeIds.get()));
 }
 //=======================================================
 /**
@@ -690,9 +576,11 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node>> &ends, std:
 
   unsigned int first = edgeIds.getFirstOfRange(nb);
   edges.reserve(first + nb);
+  edgeExist.reserve(first + nb);
 
   if (edges.size() < first) {
     edges.resize(first);
+    edgeExist.resize(first);
   }
 
   unsigned int edgesSize = edges.size();
@@ -702,9 +590,12 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node>> &ends, std:
   for (; it != end; ++it, ++first) {
     if (edgesSize == first) {
       edges.push_back(*it);
+      edgeExist.push_back(true);
       ++edgesSize;
-    } else
+    } else {
       edges[first] = *it;
+      edgeExist[first] = true;
+    }
 
     node src = (*it).first;
     node tgt = (*it).second;
@@ -786,6 +677,7 @@ void GraphStorage::removeFromEdgeContainer(EdgeContainer &c, const edge e) {
  * except for the end node in argument if it is valid
  */
 void GraphStorage::removeFromEdges(const edge e, node end) {
+  edgeExist[e.id] = false;
   edgeIds.free(e.id);
   nbEdges--;
   std::pair<node, node> &eEnds = edges[e.id];

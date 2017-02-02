@@ -60,12 +60,16 @@ public:
   /**
    * @brief Return true if n belongs to the graph
    */
-  bool isElement(const node n) const;
+  bool isElement(const node n) const {
+    return (n.id < nodeExist.size()) && nodeExist[n.id];
+  }
   //=======================================================
   /**
    * @brief Return true if e belongs to the graph
    */
-  bool isElement(const edge e) const;
+  bool isElement(const edge e) const {
+    return (e.id < edgeExist.size()) && edgeExist[e.id];
+  }
   //=======================================================
   /**
    * @brief Enables to reserve memory for nbNodes
@@ -110,7 +114,9 @@ public:
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    * @complexity: o(1)
    */
-  Iterator<node> *getNodes() const;
+  Iterator<node> *getNodes() const {
+    return nodeIds.getIds<node>();
+  }
   //=======================================================
   /**
    * @brief Return the current state of the ids management
@@ -128,7 +134,9 @@ public:
    * @brief Return a Tulip Iterator on edges of the graph
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge> *getEdges() const;
+  Iterator<edge> *getEdges() const {
+    return edgeIds.getIds<edge>();
+  }
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on adjacent edges of the node n
@@ -187,47 +195,76 @@ public:
   /**
    * @brief Return the degree of a node
    */
-  unsigned int deg(const node n) const;
+  unsigned int deg(const node n) const {
+    assert(isElement(n));
+    return nodes[n.id].edges.size();
+  }
   //=======================================================
   /**
    * @brief Return the out degree of a node
    */
-  unsigned int outdeg(const node n) const;
+  unsigned int outdeg(const node n) const {
+    assert(isElement(n));
+    return nodes[n.id].outDegree;
+  }
   //=======================================================
   /**
    * @brief Return the in degree of a node
    */
-  unsigned int indeg(const node n) const;
+  unsigned int indeg(const node n) const {
+    assert(isElement(n));
+    const EdgeContainer &ctnr = nodes[n.id];
+    return ctnr.edges.size() - ctnr.outDegree;
+  }
   //=======================================================
   /**
    * @brief Return the number of edges in the graph
    */
-  unsigned int numberOfEdges() const;
+  unsigned int numberOfEdges() const {
+    return nbEdges;
+  }
   //=======================================================
   /**
    * @brief Return the number of nodes in the graph
    */
-  unsigned int numberOfNodes() const;
+  unsigned int numberOfNodes() const {
+    return nbNodes;
+  }
   //=======================================================
   /**
    * @brief Return the extremities of an edge (src, target)
    */
-  const std::pair<node, node> &ends(const edge e) const;
+  const std::pair<node, node> &ends(const edge e) const {
+    assert(isElement(e));
+    return edges[e.id];
+  }
   //=======================================================
   /**
    * @brief return the first extremity (considered as source if the graph is directed) of an edge
    */
-  node source(const edge e) const;
+  node source(const edge e) const {
+    assert(isElement(e));
+    return edges[e.id].first;
+  }
   //=======================================================
   /**
    * @brief return the second extremity (considered as target if the graph is directed) of an edge
    */
-  node target(const edge e) const;
+  node target(const edge e) const {
+    assert(isElement(e));
+    return edges[e.id].second;
+  }
   //=======================================================
   /**
    * @brief return the opposite node of n through edge e
    */
-  node opposite(const edge e, const node n) const;
+  node opposite(const edge e, const node n) const {
+    assert(isElement(e));
+    const std::pair<node, node> &eEnds = edges[e.id];
+    assert((eEnds.first == n) || (eEnds.second == n));
+    return (eEnds.first == n) ? eEnds.second : eEnds.first;
+  }
+
   //=======================================================
   /**
    * @brief Reconnect the edge e to have the new given ends
@@ -242,7 +279,9 @@ public:
    * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
    * \see setEnds
    */
-  void setSource(const edge e, const node n);
+  void setSource(const edge e, const node n) {
+    setEnds(e, n, node());
+  }
   //=======================================================
   /**
    * @brief change the target of an edge
@@ -250,7 +289,9 @@ public:
    * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
    * \see setEnds
    */
-  void setTarget(const edge e, const node n);
+  void setTarget(const edge e, const node n) {
+    setEnds(e, node(), n);
+  }
   //=======================================================
   /**
    * @brief Reverse an edge e, source become target and target become soure
@@ -282,7 +323,9 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  node addNode();
+  node addNode() {
+    return restoreNode(node(nodeIds.get()));
+  }
   //=======================================================
   /**
    * @brief Add nb new nodes in the structure and returns them
@@ -329,7 +372,9 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  edge addEdge(const node src, const node tgt);
+  edge addEdge(const node src, const node tgt) {
+    return restoreEdge(src, tgt, edge(edgeIds.get()));
+  }
   //=======================================================
   /**
    * @brief Add edges in the structure and returns them
@@ -381,6 +426,8 @@ private:
   // data members
   mutable Edges edges;
   mutable Nodes nodes;
+  std::vector<bool> edgeExist;
+  std::vector<bool> nodeExist;
   IdManager nodeIds;
   IdManager edgeIds;
   unsigned int nbNodes;
