@@ -308,7 +308,7 @@ bool EdgeBundling::run() {
       Graph *workGraph = graph->addCloneSubGraph();
       // we use a hash map to ease the retrieve of the vector of the nodes
       // having the same position
-      TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> > clusters;
+      TLP_HASH_MAP<std::string, std::pair<node, unsigned int> > clusters;
 
       // iterate on graph nodes
       node n;
@@ -320,26 +320,26 @@ bool EdgeBundling::run() {
         // instead of relying on the x, y exact values
         std::string key = tlp::PointType::toString(coord);
 
-        TLP_HASH_MAP<std::string, std::pair<node, vector<tlp::node>*> >::iterator
+        TLP_HASH_MAP<std::string, std::pair<node, unsigned int> >::iterator
         it = clusters.find(key);
 
         if (it == clusters.end())
           // register the first node at position represented by key
-          clusters[key] = std::make_pair(n, static_cast<vector<tlp::node>*>(NULL));
+          clusters[key] = std::make_pair(n, UINT_MAX);
         else {
-          std::pair<node, std::vector<node>*>& infos = it->second;
+          std::pair<node, unsigned int>& infos = it->second;
 
-          if (infos.second == NULL) {
+          if (infos.second == UINT_MAX) {
             // we find a second node at the position represented by key
             // so it is time to create a vector to registered them
             std::vector<node> nodes(1, infos.first);
             samePositionNodes.push_back(nodes);
-            infos.second = &(samePositionNodes[samePositionNodes.size() - 1]);
+            infos.second = samePositionNodes.size() - 1;
           }
 
           // registered the current node in the vector of the nodes
           // having the same position
-          infos.second->push_back(n);
+          samePositionNodes[infos.second].push_back(n);
           // delete it from the clone subgraph
           workGraph->delNode(n);
         }
