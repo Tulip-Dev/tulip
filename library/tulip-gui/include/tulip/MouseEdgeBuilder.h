@@ -45,7 +45,7 @@ protected:
    * @param source
    * @param dest
    */
-  virtual void addLink(QObject *, const node source, const node dest);
+  virtual void addLink(QObject *, const node& source, const node& dest);
   /**
    * @brief source gets the source node.
    * @return
