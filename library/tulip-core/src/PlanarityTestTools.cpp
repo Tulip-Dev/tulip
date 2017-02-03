@@ -42,59 +42,54 @@ edge PlanarityTestImpl::edgeReversal( edge e) {
   return reversalEdge[e];
 }
 //=================================================================
-
-static int preCount;
-static int postCount;
-
-void dfsAux(Graph *sG, node n,
-            MutableContainer<int>& dfsPre,
-            MutableContainer<int>& dfsPos,
-            list<edge>& dfsEdges) {
-  dfsPre.set(n.id, preCount++);
-  StableIterator<edge> it(sG->getOutEdges(n));
-
-  while (it.hasNext()) {
-    edge e = it.next();
+static void dfsAux(Graph *sG, node n,
+		   MutableContainer<int>& dfsPre,
+		   MutableContainer<int>& dfsPos,
+		   list<edge>& dfsEdges,
+		   unsigned int& preCount, unsigned int& postCount) {
+  dfsPre.set(n.id, ++preCount);
+  edge e;
+  forEach(e, sG->getOutEdges(n)) {
     node target = sG->target(e);
 
     if (dfsPre.get(target.id) == 0) {
       dfsEdges.push_back(e);
-      dfsAux(sG, target, dfsPre, dfsPos, dfsEdges);
+      dfsAux(sG, target, dfsPre, dfsPos, dfsEdges, preCount, postCount);
     }
   }
 
-  dfsPos.set(n.id, postCount++);
+  dfsPos.set(n.id, ++postCount);
 }
 //=================================================================
 list<edge> posDFS(Graph *sG,
-                  MutableContainer<int> &dfsPos) {
+		  MutableContainer<int> &dfsPos) {
   list<edge> dfsEdges;
   MutableContainer<int> dfsPre;
   dfsPre.setAll(0);
-  preCount = postCount = 1;
-  StableIterator<node> it(sG->getNodes());
-
-  while (it.hasNext()) {
-    node n = it.next();
-
+  unsigned int preCount = 0;
+  unsigned int postCount = 0;
+  node n;
+  forEach(n, sG->getNodes()) {
     if (dfsPre.get(n.id) == 0)
-      dfsAux(sG, n, dfsPre, dfsPos, dfsEdges);
+      dfsAux(sG, n, dfsPre, dfsPos, dfsEdges, preCount, postCount);
   }
 
   return dfsEdges;
 }
 //=================================================================
 void PlanarityTestImpl::makeBidirected(Graph *sG) {
-  StableIterator<edge> stIte(sG->getEdges());
+  unsigned int nbEdges = sG->numberOfEdges();
+  Iterator<edge>* ite = sG->getEdges();
 
-  while(stIte.hasNext()) {
-    edge e = stIte.next();
+  while(nbEdges-- && ite->hasNext()) {
+    edge e = ite->next();
     pair<node, node> eEnds = sG->ends(e);
     edge newEdge = sG->addEdge(eEnds.second, eEnds.first);
     bidirectedEdges[newEdge] = e;
     reversalEdge[newEdge] = e;
     reversalEdge[e] = newEdge;
   }
+  delete ite;
 }
 //=================================================================
 /*
@@ -106,20 +101,18 @@ bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
   edge e1 = T0EdgeIn.get(eEnds.second.id);
 
   //test ą revoir je pense qu'en testant juste e == e1 ēa suffit !
-  if (e1 != NULL_EDGE) {
+  if (e1.isValid()) {
     pair<node, node> e1Ends = g->ends(e1);
 
     if (e1Ends.first == eEnds.first && e1Ends.second == eEnds.second)
       return true;
   }
-
   e1 = T0EdgeIn.get(eEnds.first.id);
-
-  if (e1 == NULL_EDGE)
-    return false;
-
-  pair<node, node> e1Ends = g->ends(e1);
-  return (e1Ends.second == eEnds.first && e1Ends.first == eEnds.second);
+  if (e1.isValid()) {
+    pair<node, node> e1Ends = g->ends(e1);
+    return (e1Ends.second == eEnds.first && e1Ends.first == eEnds.second);
+  }
+  return false;
 }
 //=================================================================
 /*
@@ -127,9 +120,7 @@ bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
  *         false otherwise.
  */
 bool PlanarityTestImpl::isBackEdge(Graph *g, edge e) {
-  if (e == NULL_EDGE) return false;
-
-  return (!isT0Edge(g, e));
+  return (e.isValid() && !isT0Edge(g, e));
 }
 //=================================================================
 /*
@@ -205,8 +196,9 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
   for (list<edge>::iterator it = edgeInT0.begin(); it != edgeInT0.end(); ++it) {
     edge e = *it;
     //    tlp::warning() << e.id << ",";
-    node n = g->source(e);
-    node v = g->target(e);
+    std::pair<node, node> ends = g->ends(e);
+    node n = ends.first;
+    node v = ends.second;
     parent.set(v.id, n);
     T0EdgeIn.set(v.id, e);
   }
@@ -236,7 +228,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
     largestNeighbor.set(n.id, dfsPos);
     labelB.set(n.id, dfsPos);
 
-    if ((parent.get(n.id)) != NULL_NODE) // if u is not the root of T_0;
+    if (parent.get(n.id).isValid()) // if u is not the root of T_0;
       largestNeighbor.set(n.id, dfsPosNum.get((parent.get(n.id)).id));
 
     if (embed)
@@ -278,7 +270,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
 
   //array<node, numberOfNodes+1> sortedNodes;
   vector<node> sortedNodes(numberOfNodes + 1);
-  sortedNodes[0]=NULL_NODE;
+  sortedNodes[0]= node();
   sortNodesIncreasingOrder(g, labelB, sortedNodes);
 
   /*
@@ -292,7 +284,7 @@ void PlanarityTestImpl::preProcessing(Graph *g) {
     node v = parent.get(n.id);
 
     //tlp::warning() << "[" << n.id << "," << v.id << "]" << endl;
-    if (v != NULL_NODE)
+    if (v.isValid())
       childrenInT0[v].push_back(n);
   }
 
@@ -330,9 +322,7 @@ void PlanarityTestImpl::swapNode(node &n1, node &n2) {
 }
 //=================================================================
 bool PlanarityTestImpl::isCNode(node n) {
-  if (n == NULL_NODE) return false;
-
-  return (dfsPosNum.get(n.id) < 0);
+  return (n.isValid() && (dfsPosNum.get(n.id) < 0));
 }
 //=================================================================
 node PlanarityTestImpl::activeCNodeOf(bool calculatingObstruction, node n) {
@@ -342,7 +332,7 @@ node PlanarityTestImpl::activeCNodeOf(bool calculatingObstruction, node n) {
     cNode = parent.get(n.id);
 
   if (!isCNode(cNode))
-    return NULL_NODE; //zero
+    return node(); //zero
 
   //debug
   if (calculatingObstruction)
@@ -371,12 +361,12 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 
   node predNode = predItem->getData();
   node succNode = succItem->getData();
-  node ul = NULL_NODE;
-  node ur = NULL_NODE;
+  node ul;
+  node ur;
 
   // goes to the left;
   while (labelB.get(predNode.id) == dfsPosNum.get(n.id) && predNode != n1 && predNode != n2) {
-    if (ul.id == UINT_MAX)
+    if (!ul.isValid())
       ul = predNode;
 
     BmdLink<node>* tmp = predItem;
@@ -391,7 +381,7 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 
   // goes to right;
   while (labelB.get(succNode.id) == dfsPosNum.get(n.id) && succNode != n1 && succNode != n2) {
-    if (ur.id == UINT_MAX)
+    if (!ur.isValid())
       ur = succNode;
 
     BmdLink<node>* tmp = succItem;
@@ -405,8 +395,8 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
   // endpoint to correctly concatentates with RBC[new_cnode];
   node first = n1;
 
-  if (n1.id == UINT_MAX) {
-    if (ul!= NULL_NODE)
+  if (!n1.isValid()) {
+    if (ul.isValid())
       first = predNode;
     else
       first = succNode;
@@ -417,11 +407,11 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
     RBC[oldCNode].reverse();
 
   // reoves n1 and n2 from RBC[oldCNode];
-  if (n1!= NULL_NODE) {
+  if (n1.isValid()) {
     RBC[oldCNode].delItem(RBC[oldCNode].firstItem());
   }
 
-  if (n2!= NULL_NODE) {
+  if (n2.isValid()) {
     RBC[oldCNode].delItem(RBC[oldCNode].lastItem());
   }
 
@@ -429,7 +419,7 @@ void PlanarityTestImpl::addOldCNodeRBCToNewRBC(node oldCNode,
 }
 //=================================================================
 void PlanarityTestImpl::updateLabelB(node n) {
-  if (n.id == UINT_MAX)
+  if (!n.isValid())
     return;
 
   labelB.set(n.id, largestNeighbor.get(n.id));
@@ -444,16 +434,17 @@ void PlanarityTestImpl::updateLabelB(node n) {
   else
     return;
 
-  while (v!= NULL_NODE) {
+  while (v.isValid()) {
     // or v is not a descendant of n in T,
     // or v is a child of n in T,
     // or v is a child of a c-node whose parent is n;
-    if ((parent.get(v.id))!= NULL_NODE && isCNode(parent.get(v.id)) && parent.get(parent.get(v.id).id) == n) {
-      v = parent.get(v.id); // active c-node;
+    node pv = parent.get(v.id);
+    if (pv.isValid() && isCNode(pv) && parent.get(pv.id) == n) {
+      v = pv; // active c-node;
       break;
     }
 
-    if (parent.get(v.id) == n)
+    if (pv == n)
       break;
 
     // v became sibling of n;
@@ -461,10 +452,11 @@ void PlanarityTestImpl::updateLabelB(node n) {
 
     if (!childrenInT0[n].empty())
       v = childrenInT0[n].front();
-    else v = NULL_NODE;
+    else 
+      v = node();
   }
 
-  if (v!= NULL_NODE && labelB.get(n.id) < labelB.get(v.id)) {
+  if (v.isValid() && labelB.get(n.id) < labelB.get(v.id)) {
     labelB.set(n.id, labelB.get(v.id));
 
     if (embed)
@@ -478,8 +470,8 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
     node n2,
     tlp::BmdList<node>& nodeList) {
   node t = n1;
-  node predT = NULL_NODE;
-  node parentT = NULL_NODE;
+  node predT;
+  node parentT;
 
   while (t != n2) {
     parentT = parent.get(t.id);
@@ -527,22 +519,19 @@ void PlanarityTestImpl::calcNewRBCFromTerminalNode(node newCNode,
 node PlanarityTestImpl::lastPNode(node n1, node n2) {
   //  tlp::warning() << __PRETTY_FUNCTION__ << endl;
   if (n1 == n2) {
-    if (!isCNode(n1))
-      return n1;
-    else
-      return NULL_NODE;
+    return isCNode(n1) ? node() : n1;
   }
 
   list<node> S;
   node n = n1;
 
-  while (n!= NULL_NODE && n != n2) {
+  while (n.isValid() && n != n2) {
     S.push_front(n);
     n = parent.get(n.id);
   }
 
-  if (n == NULL_NODE)
-    return NULL_NODE;
+  if (!n.isValid())
+    return n;
 
   n = n2; //inutile
 
@@ -554,7 +543,7 @@ node PlanarityTestImpl::lastPNode(node n1, node n2) {
     assert(++count<=2);
 
     if (S.empty())
-      return NULL_NODE;
+      return node();
 
     n = S.front();
     S.pop_front();
@@ -586,7 +575,7 @@ node PlanarityTestImpl::lcaBetween(node n1,
     n1 = p.get(n1.id);
   }
 
-  node u = NULL_NODE;
+  node u;
 
   if (!nl.empty()) {
     u = nl.front();
@@ -631,7 +620,7 @@ void PlanarityTestImpl::calculateNewRBC(Graph*,
   break;
 
   case 2: {
-    node m = NULL_NODE;
+    node m;
     node t1 = terminalNodes.front();
     terminalNodes.pop_front();
     node t2 = terminalNodes.front();
@@ -717,7 +706,7 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
 
   p[t] = parent.get(t.id); // saves info;
   nl.push_back(t);
-  parent.set(t.id, NULL_NODE);
+  parent.set(t.id, node());
 
   while (v != n) {
     if (isCNode(v)) {
@@ -761,7 +750,7 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
     parent.set((*it1).id, p[*it1]);
 
 
-  if (result!= NULL_NODE)
+  if (result.isValid())
     return result;
 
   // restores info if result is nil;
@@ -778,9 +767,9 @@ node PlanarityTestImpl::findNodeWithLabelBGreaterThanDfsN(bool saveLastNodeTrave
   if (saveLastNodeTraversed && vPred != t)
     lastNodeInQLinha = vPred; // see sets_info_for_new_cnode;
   else
-    lastNodeInQLinha = NULL_NODE;
+    lastNodeInQLinha = node();
 
-  return NULL_NODE;
+  return node();
 }
 //=================================================================
 void PlanarityTestImpl::setPossibleK33Obstruction(node cNode,
@@ -819,8 +808,8 @@ bool PlanarityTestImpl::testCNodeCounter(Graph*,
 
   jl = it1l->getData();
   jr = it1r->getData();
-  node ul = NULL_NODE;
-  node ur = NULL_NODE;
+  node ul;
+  node ur;
   int count = 0;
 
   // goes to the left;
@@ -862,15 +851,15 @@ bool PlanarityTestImpl::testCNodeCounter(Graph*,
   if (count != counter.get(cNode.id))
     return true;
 
-  node u = NULL_NODE;
+  node u;
 
-  if (ul!= NULL_NODE && ur!= NULL_NODE)
+  if (ul.isValid() && ur.isValid())
     u = jl; // or u = jr;
-  else if (ul!= NULL_NODE && n1!= NULL_NODE && n1 != jl) {
+  else if (ul.isValid() && n1.isValid() && n1 != jl) {
     u = jl;
     ur = n1;
   }
-  else if (ur!= NULL_NODE && n1!= NULL_NODE && n1 != jr) {
+  else if (ur.isValid() && n1.isValid() && n1 != jr) {
     u = jr;
     ul = n1;
   }
