@@ -193,7 +193,7 @@ void MouseEdgeBuilder::clear() {
   glMainView->getGlMainWidget()->setCursor(QCursor());
 }
 
-void MouseEdgeBuilder::addLink(QObject *widget, const node source, const node target) {
+void MouseEdgeBuilder::addLink(QObject *widget, const node &source, const node &target) {
   GlMainWidget *glMainWidget = static_cast<GlMainWidget *>(widget);
   Graph * g = glMainWidget->getScene()->getGlGraphComposite()->getInputData()->getGraph();
 
