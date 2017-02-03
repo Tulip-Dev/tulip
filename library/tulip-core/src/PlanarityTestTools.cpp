@@ -43,10 +43,10 @@ edge PlanarityTestImpl::edgeReversal( edge e) {
 }
 //=================================================================
 static void dfsAux(Graph *sG, node n,
-		   MutableContainer<int>& dfsPre,
-		   MutableContainer<int>& dfsPos,
-		   list<edge>& dfsEdges,
-		   unsigned int& preCount, unsigned int& postCount) {
+                   MutableContainer<int>& dfsPre,
+                   MutableContainer<int>& dfsPos,
+                   list<edge>& dfsEdges,
+                   unsigned int& preCount, unsigned int& postCount) {
   dfsPre.set(n.id, ++preCount);
   edge e;
   forEach(e, sG->getOutEdges(n)) {
@@ -62,7 +62,7 @@ static void dfsAux(Graph *sG, node n,
 }
 //=================================================================
 list<edge> posDFS(Graph *sG,
-		  MutableContainer<int> &dfsPos) {
+                  MutableContainer<int> &dfsPos) {
   list<edge> dfsEdges;
   MutableContainer<int> dfsPre;
   dfsPre.setAll(0);
@@ -89,6 +89,7 @@ void PlanarityTestImpl::makeBidirected(Graph *sG) {
     reversalEdge[newEdge] = e;
     reversalEdge[e] = newEdge;
   }
+
   delete ite;
 }
 //=================================================================
@@ -107,11 +108,14 @@ bool PlanarityTestImpl::isT0Edge(Graph *g, edge e) {
     if (e1Ends.first == eEnds.first && e1Ends.second == eEnds.second)
       return true;
   }
+
   e1 = T0EdgeIn.get(eEnds.first.id);
+
   if (e1.isValid()) {
     pair<node, node> e1Ends = g->ends(e1);
     return (e1Ends.second == eEnds.first && e1Ends.first == eEnds.second);
   }
+
   return false;
 }
 //=================================================================
@@ -439,6 +443,7 @@ void PlanarityTestImpl::updateLabelB(node n) {
     // or v is a child of n in T,
     // or v is a child of a c-node whose parent is n;
     node pv = parent.get(v.id);
+
     if (pv.isValid() && isCNode(pv) && parent.get(pv.id) == n) {
       v = pv; // active c-node;
       break;
@@ -452,7 +457,7 @@ void PlanarityTestImpl::updateLabelB(node n) {
 
     if (!childrenInT0[n].empty())
       v = childrenInT0[n].front();
-    else 
+    else
       v = node();
   }
 
