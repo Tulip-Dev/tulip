@@ -245,7 +245,7 @@ public:
       if(integerVal > 0) {
         _graph = ((GraphAbstract *)_graph)->addSubGraph(NULL, "");
         _dataSet = &const_cast<DataSet&>(_graph->getAttributes());
-	_clusterIndex[integerVal] = _graph;
+        _clusterIndex[integerVal] = _graph;
       }
 
       _waitingForGraphId = false;
