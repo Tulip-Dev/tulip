@@ -141,7 +141,7 @@ bool TLPBImport::importGraph() {
   // read subgraphs
   unsigned int numSubGraphs = 0;
   MutableContainer<Graph*> subgraphs;
-  subgraphs.set(graph->getId(), graph);
+  subgraphs.set(0, graph);
   {
     // read the number of subgraphs
     if (!bool(is->read((char *) &numSubGraphs, sizeof(numSubGraphs))))
@@ -159,9 +159,9 @@ bool TLPBImport::importGraph() {
 
       // add subgraph
       Graph* parent = subgraphs.get(ids.second);
-      Graph* sg = ((GraphAbstract *) parent)->addSubGraph(ids.first);
+      Graph* sg = ((GraphAbstract *) parent)->addSubGraph();
       // record sg
-      subgraphs.set(sg->getId(), sg);
+      subgraphs.set(ids.first, sg);
       // read sg nodes ranges
       {
         unsigned int numRanges = 0;
