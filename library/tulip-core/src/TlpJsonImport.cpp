@@ -82,7 +82,7 @@ public:
         for(TemporaryGraphValue::const_iterator valueIterator = propertyIterator->second.begin();
             valueIterator != propertyIterator->second.end();
             ++valueIterator) {
-          prop->setNodeValue(tlp::node(valueIterator->first), _graph->getDescendantGraph(valueIterator->second));
+          prop->setNodeValue(tlp::node(valueIterator->first), _clusterIndex[valueIterator->second]);
         }
       }
     }
@@ -243,8 +243,9 @@ public:
   virtual void parseInteger(long long integerVal) {
     if(_waitingForGraphId) {
       if(integerVal > 0) {
-        _graph = ((GraphAbstract *)_graph)->addSubGraph(integerVal);
+        _graph = ((GraphAbstract *)_graph)->addSubGraph(NULL, "");
         _dataSet = &const_cast<DataSet&>(_graph->getAttributes());
+	_clusterIndex[integerVal] = _graph;
       }
 
       _waitingForGraphId = false;
@@ -504,6 +505,7 @@ private:
 
   //ugly workaround for GraphProperties as they do not support set*StringValue
   std::map<tlp::Graph*, TemporaryGraphProperty> _graphProperties;
+  std::map<int, tlp::Graph *> _clusterIndex;
 };
 
 /**
