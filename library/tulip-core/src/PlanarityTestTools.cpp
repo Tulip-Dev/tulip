@@ -74,18 +74,16 @@ list<edge> posDFS(Graph *sG, MutableContainer<int> &dfsPos) {
 }
 //=================================================================
 void PlanarityTestImpl::makeBidirected(Graph *sG) {
-  unsigned int nbEdges = sG->numberOfEdges();
-  Iterator<edge> *ite = sG->getEdges();
+  StableIterator<edge> stIte(sG->getEdges());
 
-  while (nbEdges-- && ite->hasNext()) {
-    edge e = ite->next();
+  while (stIte.hasNext()) {
+    edge e = stIte.next();
     pair<node, node> eEnds = sG->ends(e);
     edge newEdge = sG->addEdge(eEnds.second, eEnds.first);
     bidirectedEdges[newEdge] = e;
     reversalEdge[newEdge] = e;
     reversalEdge[e] = newEdge;
   }
-  delete ite;
 }
 //=================================================================
 /*
