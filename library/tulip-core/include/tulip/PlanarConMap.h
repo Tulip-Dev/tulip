@@ -29,7 +29,6 @@
 namespace tlp {
 
 struct Face;
-class IdManager;
 
 /**
  * \brief interface for a topological graph
