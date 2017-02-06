@@ -42,7 +42,7 @@ PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFace
   assert(ConnectedTest::isConnected(s));
   assert(PlanarityTest::isPlanar(s) || s->numberOfNodes()==0);
 
-  faceId = new IdManager();
+  faceId = 0;
 
   if (!TreeTest::isFreeTree(s)) {//all map of trees are valid (do not change the existing order)
     if (!PlanarityTest::isPlanarEmbedding(s)) {
@@ -51,11 +51,6 @@ PlanarConMap::PlanarConMap(Graph* s): GraphDecorator(s), facesEdges(), edgesFace
   }
 
   computeFaces();
-}
-
-//============================================================
-PlanarConMap::~PlanarConMap() {
-  delete faceId;
 }
 
 //============================================================
@@ -80,7 +75,7 @@ edge PlanarConMap::addEdgeMap(const node v, const node w, Face f, const edge e1,
   assert(containEdge(f,succCycleEdge(e1,v)) && containEdge(f,succCycleEdge(e2,w)));
 
   if(new_face == Face())
-    new_face = Face(faceId->get());
+    new_face = Face(faceId++);
 
   edge e_tmp;
   vector<edge> v_edges1, v_edges2;
@@ -551,7 +546,7 @@ void PlanarConMap::computeFaces() {
   unsigned int nbNodes = numberOfNodes();
 
   if(nbNodes < 3) {
-    Face f(faceId->get());
+    Face f(faceId++);
     faces.push_back(f);
     vector<Face> v_faces;
     v_faces.push_back(f);
@@ -598,7 +593,7 @@ void PlanarConMap::computeFaces() {
         edges.clear();
 
         if (considered.get(e.id)<2) {
-          Face lf(faceId->get());
+          Face lf(faceId++);
           faces.push_back(lf);
           edge e1 = e;
           node n_tmp, n;
@@ -788,7 +783,7 @@ Face PlanarConMap::splitFace(Face f, const node v, const node w, node n) {
   if(!w_found && first_was_w)
     e2 = e_tmp;
 
-  Face new_face = Face(faceId->get());
+  Face new_face = Face(faceId++);
 
   // Add the edge and update the map
   addEdgeMap(v,w,f,e1,e2,new_face);

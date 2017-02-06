@@ -67,9 +67,6 @@ protected:
 
 public:
 
-  //Destructor.
-  virtual ~PlanarConMap();
-
   /**
    *  Remove all nodes, edges, faces and subgraphs of the map
    */
@@ -187,7 +184,7 @@ private:
   nodeMap nodesFaces;
   mutable std::vector<Face > faces;
 
-  IdManager *faceId;
+  unsigned int faceId;
 
 };
 
