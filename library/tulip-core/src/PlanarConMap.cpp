@@ -28,7 +28,6 @@
 #include <tulip/Face.h>
 #include <tulip/PlanarConMap.h>
 #include <tulip/ForEach.h>
-#include <tulip/IdManager.h>
 #include <tulip/TreeTest.h>
 
 using namespace std;
