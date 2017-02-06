@@ -429,7 +429,7 @@ struct TLPGraphBuilder : public TLPTrue {
   }
   bool addCluster(int id, const std::string &name, int supergraphId = 0) {
     if (clusterIndex[supergraphId]) {
-      clusterIndex[id] = ((GraphAbstract *)clusterIndex[supergraphId])->addSubGraph(id);
+      clusterIndex[id] = ((GraphAbstract *)clusterIndex[supergraphId])->addSubGraph();
 
       if (name.size())
         clusterIndex[id]->setAttribute("name", name);
