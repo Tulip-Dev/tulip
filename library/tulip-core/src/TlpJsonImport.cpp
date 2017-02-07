@@ -446,13 +446,14 @@ public:
         _currentAttributeTypeName = value;
       }
       else {
-	stringstream data(value);
-	bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
+        stringstream data(value);
+        bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
 
-	if(!result) {
-	  tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
-	}
-	_currentAttributeTypeName = string();
+        if(!result) {
+          tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName << "' and value: " << data.str() << std::endl;
+        }
+
+        _currentAttributeTypeName = string();
       }
     }
   }
