@@ -311,9 +311,8 @@ void GraphDecorator::addNodes(Iterator<node> *) {
 }
 
 //============================================================
-node GraphDecorator::restoreNode(node n) {
+void GraphDecorator::restoreNode(node) {
   tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
-  return n;
 }
 
 //============================================================
@@ -347,9 +346,8 @@ void GraphDecorator::addEdges(Iterator<edge> *) {
 }
 
 //============================================================
-edge GraphDecorator::restoreEdge(edge e, node, node) {
+void GraphDecorator::restoreEdge(edge, node, node) {
   tlp::warning() << "Warning : " << __PRETTY_FUNCTION__ << " ... Impossible operation" << std::endl;
-  return e;
 }
 
 //============================================================

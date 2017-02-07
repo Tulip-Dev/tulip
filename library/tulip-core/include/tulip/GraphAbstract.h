@@ -39,15 +39,12 @@ class TLP_SCOPE GraphAbstract : public Graph {
   friend class PropertyManager;
 
 protected:
-  GraphAbstract(Graph *supergraph, unsigned int id);
+  GraphAbstract(Graph *supergraph);
 
 public:
   virtual ~GraphAbstract();
   virtual void clear();
-  virtual Graph *addSubGraph(BooleanProperty *selection = nullptr, const std::string &name = "unnamed");
-  // used to force the id of the newly created subgraph
-  // when importing (tlp/tlpjson)
-  Graph *addSubGraph(unsigned int id, BooleanProperty *selection = nullptr, const std::string &name = "");
+  virtual Graph *addSubGraph(BooleanProperty *selection = NULL, const std::string &name = "unnamed");
   virtual void delSubGraph(Graph *);
   virtual void delAllSubGraphs(Graph *);
   virtual Graph *getSuperGraph() const;

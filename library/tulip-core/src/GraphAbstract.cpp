@@ -33,12 +33,12 @@ using namespace tlp;
 const string metaGraphPropertyName = "viewMetaGraph";
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
-    : supergraph(supergraph ? supergraph : this), root((supergraph == this) ? this : supergraph->getRoot()), subGraphToKeep(nullptr),
-      metaGraphProperty(nullptr) {
+GraphAbstract::GraphAbstract(Graph *supergraph)
+    : supergraph(supergraph ? supergraph : this), root((supergraph == this) ? this : supergraph->getRoot()), subGraphToKeep(NULL),
+      metaGraphProperty(NULL) {
   // get id
   if (supergraph != this)
-    id = ((GraphImpl *)getRoot())->getSubGraphId(sgId);
+    id = ((GraphImpl *)getRoot())->getSubGraphId();
 
   propertyContainer = new PropertyManager(this);
 }
@@ -88,20 +88,16 @@ void GraphAbstract::setSubGraphToKeep(Graph *sg) {
   subGraphToKeep = sg;
 }
 //=========================================================================
-Graph *GraphAbstract::addSubGraph(unsigned int id, BooleanProperty *selection, const std::string &name) {
-  Graph *tmp = new GraphView(this, selection, id);
+Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, const std::string &name) {
+  Graph *tmp = new GraphView(this, selection);
 
   if (!name.empty())
-    tmp->setAttribute("name", name);
+    tmp->setAttribute("name", std::string(name));
 
   notifyBeforeAddSubGraph(tmp);
   subgraphs.push_back(tmp);
   notifyAfterAddSubGraph(tmp);
   return tmp;
-}
-//=========================================================================
-Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, const std::string &name) {
-  return addSubGraph(0, selection, name);
 }
 //=========================================================================
 Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {

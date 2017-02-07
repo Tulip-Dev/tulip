@@ -26,7 +26,6 @@
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/IdManager.h>
-#include <tulip/SimpleVector.h>
 #include <tulip/MutableContainer.h>
 
 namespace tlp {
@@ -55,19 +54,17 @@ public:
   //=======================================================
   GraphStorage();
   //=======================================================
-  ~GraphStorage();
-  //=======================================================
   /**
    * @brief Return true if n belongs to the graph
    */
-  bool isElement(const node n) const {
+  inline bool isElement(const node n) const {
     return (n.id < nodeExist.size()) && nodeExist[n.id];
   }
   //=======================================================
   /**
    * @brief Return true if e belongs to the graph
    */
-  bool isElement(const edge e) const {
+  inline bool isElement(const edge e) const {
     return (e.id < edgeExist.size()) && edgeExist[e.id];
   }
   //=======================================================
@@ -105,6 +102,14 @@ public:
   void restoreAdj(const node n, const std::vector<edge> &edges);
   //=======================================================
   /**
+   * @brief return the adjacency edges of a given node
+   */
+  inline const std::vector<edge> &adj(const node n) const {
+    assert(isElement(n));
+    return nodes[n.id].edges;
+  }
+  //=======================================================
+  /**
    * @brief Return the first node of graph
    */
   node getOneNode() const;
@@ -114,7 +119,7 @@ public:
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    * @complexity: o(1)
    */
-  Iterator<node> *getNodes() const {
+  inline Iterator<node> *getNodes() const {
     return nodeIds.getIds<node>();
   }
   //=======================================================
@@ -134,7 +139,7 @@ public:
    * @brief Return a Tulip Iterator on edges of the graph
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
-  Iterator<edge> *getEdges() const {
+  inline Iterator<edge> *getEdges() const {
     return edgeIds.getIds<edge>();
   }
   //=======================================================
@@ -144,11 +149,6 @@ public:
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
   Iterator<edge> *getInOutEdges(const node n) const;
-  //=======================================================
-  /**
-   * @brief get adjacency edges of a given node
-   */
-  void getInOutEdges(const node n, std::vector<edge> &edges) const;
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on out edges of the node n
@@ -195,7 +195,7 @@ public:
   /**
    * @brief Return the degree of a node
    */
-  unsigned int deg(const node n) const {
+  inline unsigned int deg(const node n) const {
     assert(isElement(n));
     return nodes[n.id].edges.size();
   }
@@ -203,7 +203,7 @@ public:
   /**
    * @brief Return the out degree of a node
    */
-  unsigned int outdeg(const node n) const {
+  inline unsigned int outdeg(const node n) const {
     assert(isElement(n));
     return nodes[n.id].outDegree;
   }
@@ -211,7 +211,7 @@ public:
   /**
    * @brief Return the in degree of a node
    */
-  unsigned int indeg(const node n) const {
+  inline unsigned int indeg(const node n) const {
     assert(isElement(n));
     const EdgeContainer &ctnr = nodes[n.id];
     return ctnr.edges.size() - ctnr.outDegree;
@@ -220,21 +220,21 @@ public:
   /**
    * @brief Return the number of edges in the graph
    */
-  unsigned int numberOfEdges() const {
+  inline unsigned int numberOfEdges() const {
     return nbEdges;
   }
   //=======================================================
   /**
    * @brief Return the number of nodes in the graph
    */
-  unsigned int numberOfNodes() const {
+  inline unsigned int numberOfNodes() const {
     return nbNodes;
   }
   //=======================================================
   /**
    * @brief Return the extremities of an edge (src, target)
    */
-  const std::pair<node, node> &ends(const edge e) const {
+  inline const std::pair<node, node> &ends(const edge e) const {
     assert(isElement(e));
     return edges[e.id];
   }
@@ -242,7 +242,7 @@ public:
   /**
    * @brief return the first extremity (considered as source if the graph is directed) of an edge
    */
-  node source(const edge e) const {
+  inline node source(const edge e) const {
     assert(isElement(e));
     return edges[e.id].first;
   }
@@ -250,7 +250,7 @@ public:
   /**
    * @brief return the second extremity (considered as target if the graph is directed) of an edge
    */
-  node target(const edge e) const {
+  inline node target(const edge e) const {
     assert(isElement(e));
     return edges[e.id].second;
   }
@@ -258,7 +258,7 @@ public:
   /**
    * @brief return the opposite node of n through edge e
    */
-  node opposite(const edge e, const node n) const {
+  inline node opposite(const edge e, const node n) const {
     assert(isElement(e));
     const std::pair<node, node> &eEnds = edges[e.id];
     assert((eEnds.first == n) || (eEnds.second == n));
@@ -279,7 +279,7 @@ public:
    * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
    * \see setEnds
    */
-  void setSource(const edge e, const node n) {
+  inline void setSource(const edge e, const node n) {
     setEnds(e, n, node());
   }
   //=======================================================
@@ -289,7 +289,7 @@ public:
    * it devalidates iterators on adjacency for the nodes at the extremities of the modified edges and nodes.
    * \see setEnds
    */
-  void setTarget(const edge e, const node n) {
+  inline void setTarget(const edge e, const node n) {
     setEnds(e, node(), n);
   }
   //=======================================================
@@ -323,7 +323,7 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  node addNode() {
+  inline node addNode() {
     return restoreNode(node(nodeIds.get()));
   }
   //=======================================================
@@ -364,7 +364,7 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  edge restoreEdge(const node src, const node tgt, const edge e, bool updateEndsEdges = true);
+  void restoreEdge(const node src, const node tgt, const edge e);
   //=======================================================
   /**
    * @brief Add a new edge between src and tgt and return it
@@ -372,9 +372,7 @@ public:
    * the adjacency edges of its ends thus any iterators existing for
    * these structures will be devalidated.
    */
-  edge addEdge(const node src, const node tgt) {
-    return restoreEdge(src, tgt, edge(edgeIds.get()));
-  }
+  edge addEdge(const node src, const node tgt);
   //=======================================================
   /**
    * @brief Add edges in the structure and returns them
@@ -411,7 +409,7 @@ public:
   //=======================================================
 private:
   // specific types
-  typedef SimpleVector<edge> EdgeVector;
+  typedef std::vector<edge> EdgeVector;
 
   struct EdgeContainer {
     EdgeVector edges;
