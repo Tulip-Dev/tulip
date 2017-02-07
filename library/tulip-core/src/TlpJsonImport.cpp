@@ -203,7 +203,7 @@ public:
   virtual void parseInteger(long long integerVal) {
     if (_waitingForGraphId) {
       if (integerVal > 0) {
-        _graph = ((GraphAbstract *)_graph)->addSubGraph(NULL, "");
+        _graph = _graph->addSubGraph();
         _dataSet = &const_cast<DataSet &>(_graph->getAttributes());
         _clusterIndex[integerVal] = _graph;
       }
@@ -392,21 +392,14 @@ public:
       if (_currentAttributeTypeName.empty()) {
         _currentAttributeTypeName = value;
       } else {
-        string oldValue;
+        stringstream data(value);
+        bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
 
-        if (_dataSet->get(_currentAttributeName, oldValue)) {
-          tlp::error() << "attribute '" << _currentAttributeName << "' already exists" << std::endl;
-        } else {
-          stringstream data(value);
-          bool result = _dataSet->readData(data, _currentAttributeName, _currentAttributeTypeName);
-
-          if (!result) {
-            tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName
-                         << "' and value: " << data.str() << std::endl;
-          }
-
-          _currentAttributeTypeName = string();
+        if (!result) {
+          tlp::error() << "error reading attribute: " << _currentAttributeName << " of type '" << _currentAttributeTypeName
+                       << "' and value: " << data.str() << std::endl;
         }
+        _currentAttributeTypeName = string();
       }
     }
   }
