@@ -35,7 +35,7 @@ class GraphView:public GraphAbstract {
 
   friend class GraphImpl;
 public:
-  GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id = 0);
+  GraphView(Graph *supergraph, BooleanProperty *filter);
   ~GraphView();
   //========================================================================
   node addNode();
@@ -90,8 +90,8 @@ public:
 protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
-  virtual node restoreNode(node);
-  virtual edge restoreEdge(edge, node source, node target);
+  virtual void restoreNode(node);
+  virtual void restoreEdge(edge, node source, node target);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

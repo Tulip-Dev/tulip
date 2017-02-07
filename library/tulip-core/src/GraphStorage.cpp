@@ -31,12 +31,6 @@ GraphStorage::GraphStorage() {
   clear();
 }
 //=======================================================
-GraphStorage::~GraphStorage() {
-  for (Nodes::iterator i=nodes.begin(); i!=nodes.end(); ++i) {
-    i->edges.deallocateAll();
-  }
-}
-//=======================================================
 /**
  * @brief Enables to reserve memory for nbNodes
  */
@@ -81,10 +75,8 @@ void GraphStorage::reserveAdj(const size_t nb) {
  */
 void GraphStorage::restoreAdj(const node n, const std::vector<edge>& edges) {
   EdgeVector& nEdges = nodes[n.id].edges;
-  nEdges.clear();
-
-  for(unsigned int i = 0; i < edges.size(); ++i)
-    nEdges.push_back(edges[i]);
+  nEdges.resize(edges.size());
+  memcpy(nEdges.data(), edges.data(), edges.size() * sizeof(edge));
 }
 //=======================================================
 /**
@@ -132,8 +124,8 @@ void GraphStorage::restoreIdsMemento(const GraphStorageIdsMemento *memento) {
 // define a class to iterate on graph storage edges
 struct EdgeContainerIterator :public Iterator<edge>,
   public MemoryPool<EdgeContainerIterator> {
-  SimpleVector<edge>::iterator it, itEnd;
-  EdgeContainerIterator(SimpleVector<edge>& v)
+  std::vector<edge>::iterator it, itEnd;
+  EdgeContainerIterator(std::vector<edge>& v)
     :it(v.begin()), itEnd(v.end()) {
   }
   ~EdgeContainerIterator() {
@@ -165,7 +157,7 @@ struct IOEdgeContainerIterator :public Iterator<edge>,
   edge curEdge;
   std::set<edge> loop;
   const std::vector<std::pair< node , node > >& edges;
-  SimpleVector<edge>::iterator it, itEnd;
+  std::vector<edge>::iterator it, itEnd;
 
   void prepareNext() {
     for (; it != itEnd; ++it) {
@@ -197,7 +189,7 @@ struct IOEdgeContainerIterator :public Iterator<edge>,
     curEdge = edge();
   }
 
-  IOEdgeContainerIterator(node n, SimpleVector<edge>& v,
+  IOEdgeContainerIterator(node n, std::vector<edge>& v,
                           std::vector<std::pair< node , node > >& edges)
     :n(n),edges(edges),it(v.begin()),itEnd(v.end()) {
     prepareNext();
@@ -228,7 +220,7 @@ struct IONodesIterator :public Iterator<node>,
   const std::vector<std::pair< node , node > >& edges;
   Iterator<edge>* it;
 
-  IONodesIterator(node n, SimpleVector<edge>& nEdges,
+  IONodesIterator(node n, std::vector<edge>& nEdges,
                   std::vector<std::pair< node , node > >& edges):n(n),
     edges(edges) {
     if (io_type == IO_INOUT)
@@ -268,19 +260,10 @@ Iterator<edge>* GraphStorage::getInOutEdges(const node n) const {
   return new EdgeContainerIterator(nodes[n.id].edges);
 }
 //=======================================================
-void GraphStorage::getInOutEdges(const node n, std::vector<edge>& edges) const {
-  SimpleVector<edge>& nEdges = nodes[n.id].edges;
-  unsigned int nbEdges = nodes[n.id].edges.size();
-  edges.resize(nbEdges);
-
-  if (nbEdges)
-    memcpy(edges.data(), &nEdges[0], nEdges.size() * sizeof(edge));
-}
-//=======================================================
 bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
                             std::vector<edge>& vEdges,
                             bool onlyFirst) const {
-  SimpleVector<edge>::const_iterator it = nodes[src.id].edges.begin();
+  std::vector<edge>::const_iterator it = nodes[src.id].edges.begin();
   edge previous;
   bool result = false;
 
@@ -548,10 +531,14 @@ void GraphStorage::delNode(const node n) {
 }
 //=======================================================
 /**
- * @brief restore the given edge between src and tgt and return it
+ * @brief Add a new edge between src and tgt and return it
+ * @warning That operation modify the array of edges and
+ * the adjacency edges of its ends thus any iterators existing for
+ * these structures will be devalidated.
  */
-edge GraphStorage::restoreEdge(const node src, const node tgt,
-                               const edge e, bool updateEndsEdge) {
+edge GraphStorage::addEdge(const node src, const node tgt) {
+  edge e(edgeIds.get());
+
   if (edges.size() <= e.id) {
     edges.resize(e.id + 1);
     edgeExist.resize(e.id + 1);
@@ -562,15 +549,23 @@ edge GraphStorage::restoreEdge(const node src, const node tgt,
   edgeExist[e.id] = true;
 
   nodes[src.id].outDegree += 1;
-
-  if (updateEndsEdge) {
-    nodes[src.id].edges.push_back(e);
-    nodes[tgt.id].edges.push_back(e);
-  }
+  nodes[src.id].edges.push_back(e);
+  nodes[tgt.id].edges.push_back(e);
 
   ++nbEdges;
 
   return e;
+}
+//=======================================================
+/**
+ * @brief restore the given edge between src and tgt and return it
+ */
+void GraphStorage::restoreEdge(const node src, const node tgt, const edge e) {
+  edges[e.id].first = src;
+  edges[e.id].second = tgt;
+  edgeExist[e.id] = true;
+  nodes[src.id].outDegree += 1;
+  ++nbEdges;
 }
 //=======================================================
 /**

@@ -154,8 +154,8 @@ protected:
   Graph* graph_component;
   // designed to reassign an id to a previously deleted elt
   // called by GraphUpdatesRecorder
-  virtual node restoreNode(node);
-  virtual edge restoreEdge(edge, node source, node target);
+  virtual void restoreNode(node);
+  virtual void restoreEdge(edge, node source, node target);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);
