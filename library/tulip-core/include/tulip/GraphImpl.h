@@ -80,11 +80,9 @@ public:
                 std::vector<edge>& edges) const {
     return storage.getEdges(source, target, directed, edges);
   }
-  // to ensure that loops appear only once
-  void getInOutEdges(const node n, std::vector<edge>& edges) const {
-    storage.getInOutEdges(n, edges);
+  const std::vector<edge>& adj(const node n) const {
+    return storage.adj(n);
   }
-
   //========================================================================
   unsigned int deg(const node n) const {
     assert(isElement(n));
@@ -137,7 +135,7 @@ public:
   void treatEvents(const std::vector<Event> &);
 
   // for subgraph id management
-  unsigned int getSubGraphId(unsigned int id);
+  unsigned int getSubGraphId();
   void freeSubGraphId(unsigned int id);
 
   // to improve memory allocation
@@ -148,8 +146,8 @@ public:
 protected:
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
-  virtual node restoreNode(node);
-  virtual edge restoreEdge(edge, node source, node target);
+  virtual void restoreNode(node);
+  virtual void restoreEdge(edge, node source, node target);
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node);

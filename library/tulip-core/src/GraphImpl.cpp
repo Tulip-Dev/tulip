@@ -98,10 +98,9 @@ static bool integrityTest(Graph *graph) {
 }
 */
 //----------------------------------------------------------------
-GraphImpl::GraphImpl():
-  GraphAbstract(this, 0) {
+GraphImpl::GraphImpl(): GraphAbstract(this) {
   // id 0 is for the root
-  graphIds.get();
+  id = graphIds.get();
 }
 //----------------------------------------------------------------
 GraphImpl::~GraphImpl() {
@@ -145,22 +144,17 @@ edge GraphImpl::existEdge(const node src, const node tgt,
   return storage.getEdges(src, tgt, directed, edges, true) ? edges[0] : edge();
 }
 //----------------------------------------------------------------
-unsigned int GraphImpl::getSubGraphId(unsigned int id) {
-  if (id == 0)
-    return graphIds.get();
-
-  graphIds.getFreeId(id);
-  return id;
+unsigned int GraphImpl::getSubGraphId() {
+  return graphIds.get();
 }
 //----------------------------------------------------------------
 void GraphImpl::freeSubGraphId(unsigned int id) {
   graphIds.free(id);
 }
 //----------------------------------------------------------------
-node GraphImpl::restoreNode(node newNode) {
+void GraphImpl::restoreNode(node newNode) {
   storage.restoreNode(newNode);
   notifyAddNode(newNode);
-  return newNode;
 }
 //----------------------------------------------------------------
 node GraphImpl::addNode() {
@@ -194,10 +188,9 @@ void GraphImpl::reserveNodes(unsigned int nb) {
   storage.reserveNodes(nb);
 }
 //----------------------------------------------------------------
-edge GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
-  storage.restoreEdge(src, tgt, newEdge, false);
+void GraphImpl::restoreEdge(edge newEdge, const node src, const node tgt) {
+  storage.restoreEdge(src, tgt, newEdge);
   notifyAddEdge(newEdge);
-  return newEdge;
 }
 //----------------------------------------------------------------
 edge GraphImpl::addEdge(const node src, const node tgt) {
@@ -249,9 +242,7 @@ void GraphImpl::removeNode(const node n) {
 //----------------------------------------------------------------
 void GraphImpl::delNode(const node n, bool) {
   assert (isElement(n));
-  // get edges vector with loops appearing only once
-  std::vector<edge> edges;
-  storage.getInOutEdges(n, edges);
+  std::vector<edge> edges(storage.adj(n));
 
   // use a stack for a dfs subgraphs propagation
   std::stack<Graph*> sgq;
@@ -381,10 +372,10 @@ void GraphImpl::reverse(const edge e) {
   assert(isElement(e));
   std::pair<node, node> eEnds = storage.ends(e);
 
-  storage.reverse(e);
-
   // notification
   notifyReverseEdge(e);
+
+  storage.reverse(e);
 
   // propagate edge reversal on subgraphs
   Graph* sg;

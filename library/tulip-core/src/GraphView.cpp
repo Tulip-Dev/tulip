@@ -29,9 +29,8 @@
 using namespace std;
 namespace tlp {
 //----------------------------------------------------------------
-GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
-                     unsigned int sgId):
-  GraphAbstract(supergraph, sgId),
+GraphView::GraphView(Graph *supergraph, BooleanProperty *filter):
+  GraphAbstract(supergraph),
   nNodes(0),
   nEdges(0) {
   nodeAdaptativeFilter.setAll(false);
@@ -183,7 +182,8 @@ void GraphView::setEndsInternal(const edge e, const node src, const node tgt,
 //----------------------------------------------------------------
 node GraphView::addNode() {
   node tmp = getSuperGraph()->addNode();
-  return restoreNode(tmp);
+  restoreNode(tmp);
+  return tmp;
 }
 //----------------------------------------------------------------
 void GraphView::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
@@ -191,11 +191,10 @@ void GraphView::addNodes(unsigned int nb, std::vector<node>& addedNodes) {
   addNodesInternal(addedNodes);
 }
 //----------------------------------------------------------------
-node GraphView::restoreNode(node n) {
+void GraphView::restoreNode(node n) {
   nodeAdaptativeFilter.set(n.id, true);
   ++nNodes;
   notifyAddNode(n);
-  return n;
 }
 //----------------------------------------------------------------
 void GraphView::addNodesInternal(const std::vector<node>& nodes) {
@@ -262,8 +261,8 @@ edge GraphView::addEdgeInternal(edge e) {
   return e;
 }
 //----------------------------------------------------------------
-edge GraphView::restoreEdge(edge e, const node, const node) {
-  return addEdgeInternal(e);
+void GraphView::restoreEdge(edge e, const node, const node) {
+  addEdgeInternal(e);
 }
 //----------------------------------------------------------------
 void GraphView::addEdgesInternal(const std::vector<edge>& edges,
@@ -365,9 +364,8 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   else {
     assert(isElement(n));
 
-    // get edges vector with loops appearing only once
-    std::vector<edge> edges;
-    ((GraphImpl *)getRoot())->getInOutEdges(n, edges);
+    // get edges vector
+    std::vector<edge> edges(((GraphImpl *)getRoot())->adj(n));
 
     // use a stack for a dfs subgraphs propagation
     std::stack<Graph*> sgq;

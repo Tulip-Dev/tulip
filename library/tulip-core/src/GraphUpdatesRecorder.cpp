@@ -261,9 +261,7 @@ void GraphUpdatesRecorder::deleteDefaultValues(TLP_HASH_MAP<PropertyInterface*,
 
 void GraphUpdatesRecorder::recordEdgeContainer(MutableContainer<vector<edge>*>& containers, GraphImpl* g, node n) {
   if (!containers.get(n)) {
-    vector<edge>* ctnr = new vector<edge>();
-    // record edges of n
-    g->storage.getInOutEdges(n, *ctnr);
+    vector<edge>* ctnr = new vector<edge>(g->storage.adj(n));
     containers.set(n, ctnr);
   }
 }

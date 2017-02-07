@@ -1484,8 +1484,8 @@ protected:
   virtual DataSet &getNonConstAttributes() = 0;
   // designed to reassign an id to a previously deleted elt
   // used by GraphUpdatesRecorder
-  virtual node restoreNode(node)=0;
-  virtual edge restoreEdge(edge, node source, node target)=0;
+  virtual void restoreNode(node)=0;
+  virtual void restoreEdge(edge, node source, node target)=0;
   // designed to only update own structures
   // used by GraphUpdatesRecorder
   virtual void removeNode(const node)=0;
