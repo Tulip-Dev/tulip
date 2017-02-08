@@ -21,6 +21,7 @@
 #ifndef TULIP_PLANARITYIMPL_H
 #define TULIP_PLANARITYIMPL_H
 
+#include <map>
 #include <list>
 #include <vector>
 

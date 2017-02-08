@@ -20,6 +20,7 @@
 #ifndef REACHABLESUBGRAPHVIEW_H_
 #define REACHABLESUBGRAPHVIEW_H_
 
+#include <map>
 #include <tulip/GraphDecorator.h>
 
 namespace tlp {

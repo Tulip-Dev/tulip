@@ -21,6 +21,8 @@
 #ifndef _TLPGRAPHMEASEURE_H
 #define _TLPGRAPHMEASEURE_H
 
+#include <set>
+
 #include <tulip/Node.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/DoubleProperty.h>

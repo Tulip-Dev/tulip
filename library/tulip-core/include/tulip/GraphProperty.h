@@ -20,6 +20,8 @@
 #ifndef TULIP_METAGRAPH_H
 #define TULIP_METAGRAPH_H
 
+#include <set>
+
 #include <tulip/PropertyTypes.h>
 #include <tulip/AbstractProperty.h>
 

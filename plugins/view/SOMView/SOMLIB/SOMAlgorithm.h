@@ -20,6 +20,7 @@
 #ifndef SOMALGORITHM_H_
 #define SOMALGORITHM_H_
 
+#include <map>
 #include <vector>
 #include <tulip/Graph.h>
 
