@@ -21,6 +21,7 @@
 #define Tulip_SUPERGRAPH_H
 
 #include <iostream>
+#include <set>
 #include <string>
 #include <vector>
 

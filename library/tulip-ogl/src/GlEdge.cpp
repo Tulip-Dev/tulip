@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <set>
+
 #include <tulip/GlEdge.h>
 #include <tulip/EdgeExtremityGlyph.h>
 #include <tulip/Coord.h>
