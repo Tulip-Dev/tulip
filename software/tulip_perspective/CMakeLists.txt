@@ -46,11 +46,11 @@ INSTALL(TARGETS tulip_perspective
   ARCHIVE DESTINATION ${TulipLibInstallDir} COMPONENT tulip_app)
 
 IF(WIN32)
-  SET(FIXUP_BUNDLE ON CACHE BOOL "Enable / disable the gathering and copy of Tulip DLL dependencies into the install bin folder")
+  SET(TULIP_FIXUP_BUNDLE ON CACHE BOOL "Enable / disable the gathering and copy of Tulip DLL dependencies into the install bin folder")
   # That simple install command does the magic of gathering all required dll dependencies
   # in order to run Tulip and copy them to the bin install folder (thanks to the CMake module named BundleUtilities)
   # In the case where a dll dependency is not automatically found, you must add its path to the CMAKE_LIBRARY_PATH variable.
-  IF(FIXUP_BUNDLE)
+  IF(TULIP_FIXUP_BUNDLE)
     SET(APP "${CMAKE_INSTALL_PREFIX}/bin/tulip_perspective.exe")
     SET(LIB_DIRS ${QT_BINARY_DIR} ${CMAKE_LIBRARY_PATH})
     STRING(REPLACE ";" "\;" LIB_DIRS "${LIB_DIRS}")
@@ -59,5 +59,5 @@ IF(WIN32)
           "INCLUDE(BundleUtilities)
            FIXUP_BUNDLE(\"${APP}\" \"${FIXUP_BUNDLE_LIBS}\" \"${LIB_DIRS}\")"
       )
-  ENDIF(FIXUP_BUNDLE)
+  ENDIF(TULIP_FIXUP_BUNDLE)
 ENDIF(WIN32)
