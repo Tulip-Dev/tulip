@@ -28,6 +28,7 @@
 #include <QToolButton>
 #include <QSortFilterProxyModel>
 #include <QMessageBox>
+#include <QMainWindow>
 
 #include <tulip/BooleanProperty.h>
 #include <tulip/Perspective.h>
@@ -296,7 +297,10 @@ void GraphHierarchiesEditor::delAllGraph() {
                               QMessageBox::Ok, QMessageBox::Cancel) == QMessageBox::Ok) {
       GraphPerspective::typedInstance<GraphPerspective>()->closePanelsForGraph(_contextGraph);
       delete _contextGraph;
-      _model->setCurrentGraph(nullptr);
+      _model->setCurrentGraph(NULL);
+      if (_model->size() == 0) {
+        GraphPerspective::typedInstance<GraphPerspective>()->mainWindow()->setWindowModified(false);
+      }
     }
   } else {
     _contextGraph->push();
