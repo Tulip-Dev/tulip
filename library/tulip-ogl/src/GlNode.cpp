@@ -18,6 +18,8 @@
  */
 
 #include <climits>
+#include <set>
+
 #include <tulip/GlNode.h>
 
 #include <tulip/Coord.h>

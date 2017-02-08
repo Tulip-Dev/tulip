@@ -21,6 +21,7 @@
 #ifndef _TLPGRAPHTOOLS_H
 #define _TLPGRAPHTOOLS_H
 
+#include <map>
 #include <set>
 #include <list>
 #include <tulip/tuliphash.h>

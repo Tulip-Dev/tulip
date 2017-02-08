@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <set>
+
 #include <tulip/GlQuadTreeLODCalculator.h>
 
 #ifdef _OPENMP

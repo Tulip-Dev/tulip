@@ -16,6 +16,8 @@
  * See the GNU General Public License for more details.
  *
  */
+#include <set>
+
 #include <tulip/Graph.h>
 #include <tulip/PlanarityTest.h>
 #include <tulip/PlanarityTestImpl.h>
