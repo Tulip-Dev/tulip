@@ -846,11 +846,6 @@ void GraphPerspective::openProjectFile(const QString &path) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
     _developFrame->setProject(_project);
 #endif
-
-    for (QMap<QString, tlp::Graph *>::iterator it = rootIds.begin(); it != rootIds.end(); ++it) {
-      it.value()->setAttribute("file", QStringToTlpString(path));
-    }
-
     delete prg;
   } else {
     Perspective::openProjectFile(path);
