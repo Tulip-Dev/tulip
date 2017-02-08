@@ -25,11 +25,17 @@
 #include <algorithm>
 
 extern "C" {
+#ifndef LIBQHULL_OTHER_INCLUDE_PREFIX
 #include <libqhull/libqhull.h>
 #include <libqhull/qset.h>
 #include <libqhull/geom.h>
 #include <libqhull/poly.h>
-#include <libqhull/io.h>
+#else
+#include <qhull/libqhull.h>
+#include <qhull/qset.h>
+#include <qhull/geom.h>
+#include <qhull/poly.h>
+#endif
 }
 
 using namespace std;
