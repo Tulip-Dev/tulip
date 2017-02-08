@@ -854,8 +854,7 @@ void Graph::notifyBeforeSetAttribute(const std::string& attName) {
 
 void Graph::notifyAfterSetAttribute(const std::string& attName) {
   if (hasOnlookers())
-    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ATTRIBUTE, attName,
-                         Event::TLP_INFORMATION));
+    sendEvent(GraphEvent(*this, GraphEvent::TLP_AFTER_SET_ATTRIBUTE, attName));
 }
 
 void Graph::notifyRemoveAttribute(const std::string& attName) {
