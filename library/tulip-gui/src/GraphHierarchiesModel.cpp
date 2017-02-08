@@ -569,31 +569,13 @@ void GraphHierarchiesModel::treatEvent(const Event &e) {
         }
 
       } else if (ge->getType() == GraphEvent::TLP_ADD_NODE || ge->getType() == GraphEvent::TLP_ADD_NODES ||
-                 ge->getType() == GraphEvent::TLP_DEL_NODE) {
-        const Graph *graph = ge->getGraph();
-        // row representing the graph in the associated tree views has to be updated
-        _graphsChanged.insert(graph);
-
-      } else if (ge->getType() == GraphEvent::TLP_ADD_EDGE || ge->getType() == GraphEvent::TLP_ADD_EDGES ||
-                 ge->getType() == GraphEvent::TLP_DEL_EDGE) {
+                 ge->getType() == GraphEvent::TLP_DEL_NODE || ge->getType() == GraphEvent::TLP_ADD_EDGE ||
+                 ge->getType() == GraphEvent::TLP_ADD_EDGES || ge->getType() == GraphEvent::TLP_DEL_EDGE ||
+                 (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE && ge->getAttributeName() == "name")) {
         const Graph *graph = ge->getGraph();
         // row representing the graph in the associated tree views has to be updated
         _graphsChanged.insert(graph);
       }
-    }
-  } else if (e.type() == Event::TLP_INFORMATION) {
-    const GraphEvent *ge = dynamic_cast<const tlp::GraphEvent *>(&e);
-
-    if (!ge)
-      return;
-
-    if (ge->getType() == GraphEvent::TLP_AFTER_SET_ATTRIBUTE && ge->getAttributeName() == "name") {
-      const Graph *graph = ge->getGraph();
-      // TLP_INFORMATION events are only sent to listeners so we are forced to emit the dataChanged signal
-      // here as the treatEvents method will not be called afterwards in that particular case
-      QModelIndex graphIndex = indexOf(graph);
-      QModelIndex graphEdgesIndex = graphIndex.sibling(graphIndex.row(), EDGES_SECTION);
-      emit dataChanged(graphIndex, graphEdgesIndex);
     }
   }
 }
