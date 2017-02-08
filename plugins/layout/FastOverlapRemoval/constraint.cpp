@@ -10,10 +10,6 @@
  * Released under GNU LGPL.  Read the file 'COPYING' for more information.
  */
 
-#ifdef __clang__
-#pragma clang diagnostic ignored "-Wtautological-undefined-compare"
-#endif
-
 #include "constraint.h"
 #include <cassert>
 namespace vpsc {
