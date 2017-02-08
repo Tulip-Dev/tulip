@@ -120,9 +120,6 @@ public slots:
 
 private:
 
-  void writeTextureFilesInProject(tlp::TulipProject *, tlp::PluginProgress *);
-  void restoreTextureFilesFromProjectIfNeeded(tlp::TulipProject *, tlp::PluginProgress *);
-
   QSet<const Graph *> _graphsChanged;
 
 
