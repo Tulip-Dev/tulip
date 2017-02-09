@@ -200,6 +200,10 @@ public:
    */
   virtual void centerPanelsForGraph(tlp::Graph*);
 
+  void resetTitle() {
+      emit resetWindowTitle();
+  }
+
 public slots:
   /**
    * @brief Called when the user wants to close the application.
@@ -208,6 +212,9 @@ public slots:
   virtual bool terminated() {
     return true;
   }
+
+signals:
+  void resetWindowTitle();
 
 protected slots:
   /**
