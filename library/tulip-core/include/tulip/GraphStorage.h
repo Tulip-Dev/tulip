@@ -20,14 +20,13 @@
 
 #ifndef GRAPHSTORAGE_H
 #define GRAPHSTORAGE_H
-#include <cstring>
 #include <cassert>
 #include <vector>
 
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 #include <tulip/IdManager.h>
-#include <tulip/StlIterator.h>
+#include <tulip/MutableContainer.h>
 
 namespace tlp {
 
@@ -46,25 +45,27 @@ public:
 /**
   * @class GraphStorage
   * @brief That class provide a simple implementation
-  * for the storage of graph elts (nodes edges)
+  * for the storage of graph  elts (nodes edges)
   */
 class GraphStorage {
 public:
   //=======================================================
   void clear();
   //=======================================================
+  GraphStorage();
+  //=======================================================
   /**
    * @brief Return true if n belongs to the graph
    */
   inline bool isElement(const node n) const {
-    return nodeIds.isElement(n);
+    return (n.id < nodeExist.size()) && nodeExist[n.id];
   }
   //=======================================================
   /**
    * @brief Return true if e belongs to the graph
    */
   inline bool isElement(const edge e) const {
-    return edgeIds.isElement(e);
+    return (e.id < edgeExist.size()) && edgeExist[e.id];
   }
   //=======================================================
   /**
@@ -105,7 +106,7 @@ public:
    */
   inline const std::vector<edge> &adj(const node n) const {
     assert(isElement(n));
-    return nodeData[n.id].edges;
+    return nodes[n.id].edges;
   }
   //=======================================================
   /**
@@ -119,7 +120,7 @@ public:
    * @complexity: o(1)
    */
   inline Iterator<node> *getNodes() const {
-    return nodeIds.getElts();
+    return nodeIds.getIds<node>();
   }
   //=======================================================
   /**
@@ -139,7 +140,7 @@ public:
    * @warning: The returned iterator should be deleted by the caller to prevent memory leaks
    */
   inline Iterator<edge> *getEdges() const {
-    return edgeIds.getElts();
+    return edgeIds.getIds<edge>();
   }
   //=======================================================
   /**
@@ -196,7 +197,7 @@ public:
    */
   inline unsigned int deg(const node n) const {
     assert(isElement(n));
-    return nodeData[n.id].edges.size();
+    return nodes[n.id].edges.size();
   }
   //=======================================================
   /**
@@ -204,7 +205,7 @@ public:
    */
   inline unsigned int outdeg(const node n) const {
     assert(isElement(n));
-    return nodeData[n.id].outDegree;
+    return nodes[n.id].outDegree;
   }
   //=======================================================
   /**
@@ -212,7 +213,7 @@ public:
    */
   inline unsigned int indeg(const node n) const {
     assert(isElement(n));
-    const NodeData &ctnr = nodeData[n.id];
+    const EdgeContainer &ctnr = nodes[n.id];
     return ctnr.edges.size() - ctnr.outDegree;
   }
   //=======================================================
@@ -220,28 +221,14 @@ public:
    * @brief Return the number of edges in the graph
    */
   inline unsigned int numberOfEdges() const {
-    return edgeIds.size();
-  }
-  //=======================================================
-  /**
-   * @brief Return the edges in the graph
-   */
-  inline const std::vector<edge> &edges() const {
-    return edgeIds;
+    return nbEdges;
   }
   //=======================================================
   /**
    * @brief Return the number of nodes in the graph
    */
   inline unsigned int numberOfNodes() const {
-    return nodeIds.size();
-  }
-  //=======================================================
-  /**
-   * @brief Return the nodes in the graph
-   */
-  inline const std::vector<node> &nodes() const {
-    return nodeIds;
+    return nbNodes;
   }
   //=======================================================
   /**
@@ -249,7 +236,7 @@ public:
    */
   inline const std::pair<node, node> &ends(const edge e) const {
     assert(isElement(e));
-    return edgeEnds[e.id];
+    return edges[e.id];
   }
   //=======================================================
   /**
@@ -257,7 +244,7 @@ public:
    */
   inline node source(const edge e) const {
     assert(isElement(e));
-    return edgeEnds[e.id].first;
+    return edges[e.id].first;
   }
   //=======================================================
   /**
@@ -265,7 +252,7 @@ public:
    */
   inline node target(const edge e) const {
     assert(isElement(e));
-    return edgeEnds[e.id].second;
+    return edges[e.id].second;
   }
   //=======================================================
   /**
@@ -273,7 +260,7 @@ public:
    */
   inline node opposite(const edge e, const node n) const {
     assert(isElement(e));
-    const std::pair<node, node> &eEnds = edgeEnds[e.id];
+    const std::pair<node, node> &eEnds = edges[e.id];
     assert((eEnds.first == n) || (eEnds.second == n));
     return (eEnds.first == n) ? eEnds.second : eEnds.first;
   }
@@ -328,7 +315,7 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  void restoreNode(const node n);
+  node restoreNode(const node n);
   //=======================================================
   /**
    * @brief Add a new node in the structure and return it
@@ -336,7 +323,9 @@ public:
    * and thus devalidate all iterators on it.
    * @complexity: o(1)
    */
-  node addNode();
+  inline node addNode() {
+    return restoreNode(node(nodeIds.get()));
+  }
   //=======================================================
   /**
    * @brief Add nb new nodes in the structure and returns them
@@ -420,34 +409,41 @@ public:
   //=======================================================
 private:
   // specific types
-  struct NodeData {
-    std::vector<edge> edges;
-    unsigned int outDegree;
-    unsigned int pos;
+  typedef std::vector<edge> EdgeVector;
 
-    NodeData(unsigned int pos = UINT_MAX) : outDegree(0), pos(pos) {
+  struct EdgeContainer {
+    EdgeVector edges;
+    unsigned int outDegree;
+
+    EdgeContainer() : outDegree(0) {
     }
   };
+  typedef std::vector<EdgeContainer> Nodes;
+  typedef std::vector<std::pair<node, node>> Edges;
 
   // data members
-  mutable std::vector<std::pair<node, node>> edgeEnds;
-  mutable std::vector<NodeData> nodeData;
-  IdContainer<node> nodeIds;
-  IdContainer<edge> edgeIds;
+  mutable Edges edges;
+  mutable Nodes nodes;
+  std::vector<bool> edgeExist;
+  std::vector<bool> nodeExist;
+  IdManager nodeIds;
+  IdManager edgeIds;
+  unsigned int nbNodes;
+  unsigned int nbEdges;
 
   // member functions below do not belong to the public API
   // they are just needed by the current implementation
   //=======================================================
   /**
-   * @brief remove an edge from an NodeData
-   * @warning That operation modify the NodeData
+   * @brief remove an edge from an EdgeContainer
+   * @warning That operation modify the EdgeContainer
    * and thus devalidate all iterators on it.
    */
-  static void removeFromNodeData(NodeData &c, const edge e);
+  static void removeFromEdgeContainer(EdgeContainer &c, const edge e);
   //=======================================================
   /**
    * @brief remove an edge from the edges structure
-   * and from the NodeData of its ends
+   * and from the EdgeContainer of its ends
    * except for the end node in argument if it is valid
    * @warning That operation modify the array of edges
    * and thus devalidate all iterators on it.
