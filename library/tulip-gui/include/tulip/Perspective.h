@@ -201,7 +201,7 @@ public:
   virtual void centerPanelsForGraph(tlp::Graph*);
 
   void resetTitle() {
-      emit resetWindowTitle();
+    emit resetWindowTitle();
   }
 
 public slots:

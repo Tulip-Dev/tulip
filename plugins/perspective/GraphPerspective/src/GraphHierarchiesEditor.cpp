@@ -289,11 +289,13 @@ void GraphHierarchiesEditor::delAllGraph() {
     return;
 
   if (_contextGraph->getRoot() == _contextGraph) {
-      GraphPerspective* perspective = GraphPerspective::typedInstance<GraphPerspective>();
+    GraphPerspective* perspective = GraphPerspective::typedInstance<GraphPerspective>();
+
     if(QMessageBox::question(parentWidget(), "Delete a whole hierarchy", "You are going to delete a complete graph hierarchy. This operation cannot be undone. Do you really want to continue?",QMessageBox::Ok,QMessageBox::Cancel)==QMessageBox::Ok) {
       perspective->closePanelsForGraph(_contextGraph);
       delete _contextGraph;
       _model->setCurrentGraph(NULL);
+
       if (_model->empty()) {
         perspective->mainWindow()->setWindowModified(false);
         perspective->resetTitle();

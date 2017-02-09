@@ -19,7 +19,7 @@
 #include <tulip/GraphStorage.h>
 #include <tulip/memorypool.h>
 
-using namespace tlp; 
+using namespace tlp;
 
 //=======================================================
 void GraphStorage::clear() {
@@ -27,7 +27,7 @@ void GraphStorage::clear() {
   nbEdges=0;
 }
 //=======================================================
-GraphStorage::GraphStorage() { 
+GraphStorage::GraphStorage() {
   clear();
 }
 //=======================================================

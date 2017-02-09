@@ -29,7 +29,7 @@
 #include <tulip/IdManager.h>
 #include <tulip/MutableContainer.h>
 
-namespace tlp { 
+namespace tlp {
 
 //===========================================
 /**

@@ -29,9 +29,9 @@
 using namespace std;
 namespace tlp {
 //----------------------------------------------------------------
-  GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
-		       unsigned int sgId):
-    GraphAbstract(supergraph, sgId),
+GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
+                     unsigned int sgId):
+  GraphAbstract(supergraph, sgId),
   nNodes(0),
   nEdges(0) {
   nodeAdaptativeFilter.setAll(false);
@@ -158,22 +158,24 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt,
 
       if (src != newSrc) {
         outDegree.add(newSrc.id, 1);
-	if (src.isValid() && isElement(src))
-	  outDegree.add(src.id, -1);
-	else
-	  // as src may no longer exist (pop case)
-	  // set src as invalid for subgraphs loop
-	  src = node();	
+
+        if (src.isValid() && isElement(src))
+          outDegree.add(src.id, -1);
+        else
+          // as src may no longer exist (pop case)
+          // set src as invalid for subgraphs loop
+          src = node();
       }
 
       if (tgt != newTgt) {
         inDegree.add(newTgt.id, 1);
-	if (tgt.isValid() && isElement(tgt))
-	  inDegree.add(tgt.id, -1);
- 	else
-	  // as tgt may no longer exist (pop case)
-	  // set tgt as invalid for subgraphs loop
-	  tgt = node();
+
+        if (tgt.isValid() && isElement(tgt))
+          inDegree.add(tgt.id, -1);
+        else
+          // as tgt may no longer exist (pop case)
+          // set tgt as invalid for subgraphs loop
+          tgt = node();
       }
 
       // notification
@@ -189,7 +191,7 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt,
       // delete e if its new ends do no belong to the graph
       // we cannot use delEdge because the ends of e
       // have been already updated
-      
+
       // propagate edge ends update on subgraphs
       Graph* sg;
       forEach(sg, getSubGraphs()) {

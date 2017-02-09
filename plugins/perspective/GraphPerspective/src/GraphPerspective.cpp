@@ -707,18 +707,19 @@ bool GraphPerspective::save() {
 
 bool GraphPerspective::saveAs(const QString& path) {
   if(_graphs->empty())
-      return false;
+    return false;
+
   if(path.isEmpty()) {
-      QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save project"),QString(),"Tulip Project (*.tlpx)");
+    QString path = QFileDialog::getSaveFileName(_mainWindow,trUtf8("Save project"),QString(),"Tulip Project (*.tlpx)");
 
-      if (!path.isEmpty()) {
-          if (!path.endsWith(".tlpx"))
-              path+=".tlpx";
+    if (!path.isEmpty()) {
+      if (!path.endsWith(".tlpx"))
+        path+=".tlpx";
 
-          return saveAs(path);
-      }
+      return saveAs(path);
+    }
 
-      return false;
+    return false;
   }
 
   SimplePluginProgressDialog progress(_mainWindow);
