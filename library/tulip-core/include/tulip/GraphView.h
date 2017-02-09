@@ -36,7 +36,7 @@ class GraphView : public GraphAbstract {
   friend class GraphImpl;
 
 public:
-  GraphView(Graph *supergraph, BooleanProperty *filter);
+  GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id);
   ~GraphView();
   //========================================================================
   node addNode();

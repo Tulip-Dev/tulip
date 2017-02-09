@@ -129,7 +129,7 @@ public:
   void treatEvents(const std::vector<Event> &);
 
   // for subgraph id management
-  unsigned int getSubGraphId();
+  unsigned int getSubGraphId(unsigned int id);
   void freeSubGraphId(unsigned int id);
 
   // to improve memory allocation

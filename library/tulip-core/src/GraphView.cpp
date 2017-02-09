@@ -29,7 +29,7 @@
 using namespace std;
 namespace tlp {
 //----------------------------------------------------------------
-GraphView::GraphView(Graph *supergraph, BooleanProperty *filter) : GraphAbstract(supergraph), nNodes(0), nEdges(0) {
+GraphView::GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int sgId) : GraphAbstract(supergraph, sgId), nNodes(0), nEdges(0) {
   nodeAdaptativeFilter.setAll(false);
   edgeAdaptativeFilter.setAll(false);
   inDegree.setAll(0);

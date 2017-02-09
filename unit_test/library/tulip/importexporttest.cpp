@@ -428,9 +428,22 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Grap
   LayoutProperty *firstLayout = first->getProperty<LayoutProperty>("viewLayout");
   LayoutProperty *secondLayout = second->getProperty<LayoutProperty>("viewLayout");
 
+  std::set<node> fNodes;
+  std::set<node> sNodes;
+
   Iterator<node> *firstNodeIt = first->getNodes();
   Iterator<node> *secondNodeIt = second->getNodes();
+  while (firstNodeIt->hasNext() && secondNodeIt->hasNext()) {
+    fNodes.insert(firstNodeIt->next());
+    sNodes.insert(secondNodeIt->next());
+  }
+  CPPUNIT_ASSERT_MESSAGE("all nodes of the first graph have not been iterated upon", !firstNodeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all nodes of the second graph have not been iterated upon", !secondNodeIt->hasNext());
+  delete firstNodeIt;
+  delete secondNodeIt;
 
+  firstNodeIt = new StlIterator<node, std::set<node>::iterator>(fNodes.begin(), fNodes.end());
+  secondNodeIt = new StlIterator<node, std::set<node>::iterator>(sNodes.begin(), sNodes.end());
   while (firstNodeIt->hasNext() && secondNodeIt->hasNext()) {
     node firstNode = firstNodeIt->next();
     node secondNode = secondNodeIt->next();
@@ -451,9 +464,22 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Grap
   delete firstNodeIt;
   delete secondNodeIt;
 
+  std::set<edge> fEdges;
+  std::set<edge> sEdges;
+
   Iterator<edge> *firstEdgeIt = first->getEdges();
   Iterator<edge> *secondEdgeIt = second->getEdges();
+  while (firstEdgeIt->hasNext() && secondEdgeIt->hasNext()) {
+    fEdges.insert(firstEdgeIt->next());
+    sEdges.insert(secondEdgeIt->next());
+  }
+  CPPUNIT_ASSERT_MESSAGE("all edges of the first graph have not been iterated upon", !firstEdgeIt->hasNext());
+  CPPUNIT_ASSERT_MESSAGE("all edges of the second graph have not been iterated upon", !secondEdgeIt->hasNext());
 
+  delete firstEdgeIt;
+  delete secondEdgeIt;
+  firstEdgeIt = new StlIterator<edge, std::set<edge>::iterator>(fEdges.begin(), fEdges.end());
+  secondEdgeIt = new StlIterator<edge, std::set<edge>::iterator>(sEdges.begin(), sEdges.end());
   while (firstEdgeIt->hasNext() && secondEdgeIt->hasNext()) {
     edge firstEdge = firstEdgeIt->next();
     edge secondEdge = secondEdgeIt->next();

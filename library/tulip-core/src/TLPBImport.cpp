@@ -153,7 +153,7 @@ bool TLPBImport::importGraph() {
 
       // add subgraph
       Graph *parent = subgraphs.get(ids.second);
-      Graph *sg = ((GraphAbstract *)parent)->addSubGraph();
+      Graph *sg = ((GraphAbstract *)parent)->addSubGraph((unsigned int)ids.first);
       // record sg
       subgraphs.set(ids.first, sg);
       // read sg nodes ranges

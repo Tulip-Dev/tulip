@@ -33,12 +33,12 @@ using namespace tlp;
 const string metaGraphPropertyName = "viewMetaGraph";
 
 //=========================================================================
-GraphAbstract::GraphAbstract(Graph *supergraph)
+GraphAbstract::GraphAbstract(Graph *supergraph, unsigned int sgId)
     : supergraph(supergraph ? supergraph : this), root((supergraph == this) ? this : supergraph->getRoot()), subGraphToKeep(NULL),
       metaGraphProperty(NULL) {
   // get id
   if (supergraph != this)
-    id = ((GraphImpl *)getRoot())->getSubGraphId();
+    id = ((GraphImpl *)getRoot())->getSubGraphId(sgId);
 
   propertyContainer = new PropertyManager(this);
 }
@@ -88,11 +88,11 @@ void GraphAbstract::setSubGraphToKeep(Graph *sg) {
   subGraphToKeep = sg;
 }
 //=========================================================================
-Graph *GraphAbstract::addSubGraph(BooleanProperty *selection, const std::string &name) {
-  Graph *tmp = new GraphView(this, selection);
+Graph *GraphAbstract::addSubGraph(unsigned int id, BooleanProperty *selection, const std::string &name) {
+  Graph *tmp = new GraphView(this, selection, id);
 
   if (!name.empty())
-    tmp->setAttribute("name", std::string(name));
+    tmp->setAttribute("name", name);
 
   notifyBeforeAddSubGraph(tmp);
   subgraphs.push_back(tmp);

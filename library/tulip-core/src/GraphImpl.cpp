@@ -100,7 +100,7 @@ static bool integrityTest(Graph *graph) {
 //----------------------------------------------------------------
 GraphImpl::GraphImpl() : GraphAbstract(this) {
   // id 0 is for the root
-  id = graphIds.get();
+  graphIds.get();
 }
 //----------------------------------------------------------------
 GraphImpl::~GraphImpl() {
@@ -143,8 +143,12 @@ edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
   return storage.getEdges(src, tgt, directed, edges, true) ? edges[0] : edge();
 }
 //----------------------------------------------------------------
-unsigned int GraphImpl::getSubGraphId() {
-  return graphIds.get();
+unsigned int GraphImpl::getSubGraphId(unsigned int id) {
+  if (id == 0)
+    return graphIds.get();
+  
+  graphIds.getFreeId(id);
+  return id;
 }
 //----------------------------------------------------------------
 void GraphImpl::freeSubGraphId(unsigned int id) {
