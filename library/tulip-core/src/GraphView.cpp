@@ -29,8 +29,9 @@
 using namespace std;
 namespace tlp {
 //----------------------------------------------------------------
-GraphView::GraphView(Graph *supergraph, BooleanProperty *filter):
-  GraphAbstract(supergraph),
+  GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
+		       unsigned int sgId):
+    GraphAbstract(supergraph, sgId),
   nNodes(0),
   nEdges(0) {
   nodeAdaptativeFilter.setAll(false);

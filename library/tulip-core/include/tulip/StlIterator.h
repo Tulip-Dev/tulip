@@ -20,7 +20,7 @@
 
 #ifndef TULIP_STLITERATOR_H
 #define TULIP_STLITERATOR_H
-#include <map>
+#include <tulip/tuliphash.h>
 #include <tulip/Iterator.h>
 #include <tulip/memorypool.h>
 
@@ -60,34 +60,34 @@ struct MPStlIterator:public StlIterator< VALUE, ITERATOR >,
 };
 //=================================================
 template<typename KEY, typename VALUE>
-struct StlMapIterator:public Iterator< std::pair<KEY,VALUE> > {
-  StlMapIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
+struct StlHMapIterator:public Iterator< std::pair<KEY,VALUE> > {
+ StlHMapIterator(typename TLP_HASH_MAP<KEY,VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY,VALUE>::const_iterator endIt):
     it(startIt),
     itEnd(endIt) {
   }
   std::pair<KEY,VALUE> next();
   bool hasNext();
 private:
-  typename std::map<KEY,VALUE>::const_iterator it, itEnd;
+  typename TLP_HASH_MAP<KEY,VALUE>::const_iterator it, itEnd;
 };
 //=================================================
-///  StlMapIterator implemetation
+///  StlHMapIterator implemetation
 template<typename KEY, typename VALUE>
-std::pair<KEY,VALUE> StlMapIterator<KEY,VALUE>::next() {
+std::pair<KEY,VALUE> StlHMapIterator<KEY,VALUE>::next() {
   std::pair<KEY,VALUE> tmp=*it;
   ++it;
   return tmp;
 }
 template<typename KEY, typename VALUE>
-bool StlMapIterator<KEY,VALUE>::hasNext() {
+bool StlHMapIterator<KEY,VALUE>::hasNext() {
   return (itEnd!=it);
 }
 //=================================================
 }
 
 template<typename KEY, typename VALUE>
-struct StlMapKeyIterator : public tlp::Iterator<KEY> {
-  StlMapKeyIterator(typename std::map<KEY,VALUE>::const_iterator startIt, typename std::map<KEY,VALUE>::const_iterator endIt):
+struct StlHMapKeyIterator : public tlp::Iterator<KEY> {
+  StlHMapKeyIterator(typename TLP_HASH_MAP<KEY,VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY,VALUE>::const_iterator endIt):
     it(startIt),
     itEnd(endIt) {
   }
@@ -100,7 +100,7 @@ struct StlMapKeyIterator : public tlp::Iterator<KEY> {
     return it != itEnd;
   }
 private:
-  typename std::map<KEY,VALUE>::const_iterator it, itEnd;
+  typename TLP_HASH_MAP<KEY,VALUE>::const_iterator it, itEnd;
 };
 
 #endif

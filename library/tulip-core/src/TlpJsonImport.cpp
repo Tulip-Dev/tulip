@@ -243,7 +243,7 @@ public:
   virtual void parseInteger(long long integerVal) {
     if(_waitingForGraphId) {
       if(integerVal > 0) {
-        _graph = _graph->addSubGraph();
+        _graph = ((GraphAbstract *)_graph)->addSubGraph(integerVal);
         _dataSet = &const_cast<DataSet&>(_graph->getAttributes());
         _clusterIndex[integerVal] = _graph;
       }
