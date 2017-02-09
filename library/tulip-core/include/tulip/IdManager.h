@@ -20,9 +20,12 @@
 
 #ifndef _TULIPIDMANAGER_H
 #define _TULIPIDMANAGER_H
+
+#include <climits>
 #include <set>
+#include <vector>
 #include <iostream>
-#include <tulip/Iterator.h>
+#include <tulip/StlIterator.h>
 
 namespace tlp {
 
@@ -85,7 +88,7 @@ public:
   }
 };
 
-/// class for the management of the identifiers : node, edge
+/// class for the management of the identifiers
 class TLP_SCOPE IdManager {
 
   // the current state
@@ -159,6 +162,145 @@ public:
 };
 
 std::ostream &operator<<(std::ostream &, const IdManager &);
+
+// class for the management of the identifiers: node, edge
+// or any type which can be easily cast in an unsigned int
+template <typename ID_TYPE> class TLP_SCOPE IdContainer : public std::vector<ID_TYPE> {
+  // the number of free ids
+  unsigned int nbFree;
+  // the position of the ids
+  std::vector<unsigned int> pos;
+
+  inline ID_TYPE *&beginPtr() {
+    return ((ID_TYPE **)this)[0];
+  }
+
+  inline ID_TYPE *&sizePtr() {
+    return ((ID_TYPE **)this)[1];
+  }
+
+  inline void setSize(unsigned int size) {
+    sizePtr() = beginPtr() + size;
+  }
+
+public:
+  IdContainer() : std::vector<ID_TYPE>(), nbFree(0) {
+  }
+
+  // reset
+  void clear() {
+    std::vector<ID_TYPE>::clear();
+    pos.clear();
+    nbFree = 0;
+  }
+
+  // reserve enough room to store nb elts
+  void reserve(size_t nb) {
+    std::vector<ID_TYPE>::reserve(nb);
+    pos.reserve(nb);
+  }
+
+  // return whether there is free ids or not
+  inline bool hasFree() const {
+    return nbFree > 0;
+  }
+
+  // return the number of elts in the free storage
+  inline unsigned int numberOfFree() const {
+    return nbFree;
+  }
+
+  // return whether the id exist or not
+  inline bool isElement(ID_TYPE elt) const {
+    unsigned int id = (unsigned int)elt;
+    return id < pos.size() && pos[id] != UINT_MAX;
+  }
+
+  // return an iterator on the existing elts
+  inline Iterator<ID_TYPE> *getElts() const {
+    return new StlIterator<ID_TYPE, typename std::vector<ID_TYPE>::const_iterator>(this->begin(), this->end());
+  }
+
+  // return the position of an existing elt
+  inline unsigned int getPos(ID_TYPE elt) {
+    assert(isElement(elt));
+    return pos[(unsigned int)elt];
+  }
+
+  // return a new elt
+  ID_TYPE get() {
+    unsigned int freePos = this->size();
+    if (nbFree) {
+      setSize(freePos + 1);
+      --nbFree;
+    } else {
+      this->resize(freePos + 1);
+      pos.resize(freePos + 1);
+      (*this)[freePos] = ID_TYPE(freePos);
+    }
+    ID_TYPE elt = (*this)[freePos];
+    pos[(unsigned int)elt] = freePos;
+    return elt;
+  }
+
+  // return the index of the first elt of a range of nb new elts
+  unsigned int getFirstOfRange(unsigned int nb) {
+    unsigned int freePos = this->size();
+    unsigned int i = std::min(nbFree, nb);
+    if (i) {
+      setSize(freePos + i);
+      nbFree -= i;
+    }
+    if (i < nb) {
+      this->resize(freePos + nb);
+      pos.resize(freePos + nb);
+      for (; i < nb; ++i)
+        (*this)[freePos + i] = ID_TYPE(freePos + i);
+    }
+    for (i = 0; i < nb; ++i)
+      pos[(unsigned int)((*this)[freePos + i])] = freePos + i;
+    return freePos;
+  }
+
+  // push the elt in the free storage
+  void free(ID_TYPE elt) {
+    unsigned int curPos = pos[(unsigned int)elt];
+    unsigned int lastPos = this->size() - 1;
+
+    ID_TYPE tmp;
+    if (curPos != lastPos) {
+      // swap the elt with the last one
+      tmp = (*this)[lastPos];
+      (*this)[lastPos] = (*this)[curPos];
+      assert((*this)[curPos] == elt);
+      (*this)[curPos] = tmp;
+      pos[(unsigned int)tmp] = curPos;
+    }
+    pos[(unsigned int)elt] = UINT_MAX;
+    if (lastPos) {
+      // lastPos is now the beginning
+      // of the freed elts
+      ++nbFree;
+      setSize(lastPos);
+    } else {
+      // all elts are freed so forget them
+      nbFree = 0;
+      setSize(0);
+      pos.resize(0);
+    }
+  }
+
+  // copy this into ids
+  void copyTo(IdContainer<ID_TYPE> &ids) const {
+    unsigned int sz = std::vector<ID_TYPE>::size() + nbFree;
+    ids.reserve(sz);
+    memcpy(ids.data(), this->data(), sz * sizeof(ID_TYPE));
+    ids.pos.resize(sz);
+    memcpy(ids.pos.data(), this->pos.data(), sz * sizeof(unsigned int));
+    ids.nbFree = nbFree;
+    ids.setSize(std::vector<ID_TYPE>::size());
+  }
+};
 }
 
 #endif

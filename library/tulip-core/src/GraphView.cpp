@@ -143,19 +143,29 @@ void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
   }
 }
 //----------------------------------------------------------------
-void GraphView::setEndsInternal(const edge e, const node src, const node tgt, const node newSrc, const node newTgt) {
+void GraphView::setEndsInternal(const edge e, node src, node tgt, const node newSrc, const node newTgt) {
   if (isElement(e)) {
     if (isElement(newSrc) && isElement(newTgt)) {
       notifyBeforeSetEnds(e);
 
       if (src != newSrc) {
-        outDegree.add(src.id, -1);
         outDegree.add(newSrc.id, 1);
+        if (src.isValid() && isElement(src))
+          outDegree.add(src.id, -1);
+        else
+          // as src may no longer exist (pop case)
+          // set src as invalid for subgraphs loop
+          src = node();
       }
 
       if (tgt != newTgt) {
-        inDegree.add(tgt.id, -1);
         inDegree.add(newTgt.id, 1);
+        if (tgt.isValid() && isElement(tgt))
+          inDegree.add(tgt.id, -1);
+        else
+          // as tgt may no longer exist (pop case)
+          // set tgt as invalid for subgraphs loop
+          tgt = node();
       }
 
       // notification
@@ -165,9 +175,27 @@ void GraphView::setEndsInternal(const edge e, const node src, const node tgt, co
       for (Graph *sg : getSubGraphs()) {
         ((GraphView *)sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
       }
-    } else
-      // delete edge if new edge ends do no belong to the graph
-      delEdge(e);
+    } else {
+      // delete e if its new ends do no belong to the graph
+      // we cannot use delEdge because the ends of e
+      // have been already updated
+
+      // propagate edge ends update on subgraphs
+      Graph *sg;
+      forEach(sg, getSubGraphs()) {
+        ((GraphView *)sg)->setEndsInternal(e, src, tgt, newSrc, newTgt);
+      }
+      notifyDelEdge(e);
+
+      edgeAdaptativeFilter.set(e.id, false);
+      propertyContainer->erase(e);
+      --nEdges;
+      const std::pair<node, node> &eEnds = ends(e);
+      node src = eEnds.first;
+      node tgt = eEnds.second;
+      outDegree.add(src.id, -1);
+      inDegree.add(tgt.id, -1);
+    }
   }
 }
 //----------------------------------------------------------------
