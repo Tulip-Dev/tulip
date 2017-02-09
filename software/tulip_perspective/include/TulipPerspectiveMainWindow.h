@@ -43,7 +43,7 @@ signals:
 public slots:
   void clearMemoryChecker();
   void printMemoryChecker();
-  void projectFileChanged(const QString &projectFile);
+  void projectFileChanged(const QString &projectFile = QString(""));
 
 protected:
   void closeEvent(QCloseEvent *);

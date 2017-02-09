@@ -470,7 +470,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
     rootIds = _graphs->readProject(_project, progress);
 
     if (rootIds.empty())
-      QMessageBox::critical(_mainWindow, QString("Error while loading project ").append(_project->projectFile()), progress->getError().c_str());
+      QMessageBox::critical(_mainWindow, QString("Error while loading project ").append(_project->projectFile()),
+                            QString("The Tulip project file is probably corrupted.<br>") + tlpStringToQString(progress->getError()));
   }
 
   // these ui initializations are needed here
@@ -750,6 +751,8 @@ bool GraphPerspective::save() {
 }
 
 bool GraphPerspective::saveAs(const QString &path) {
+  if (_graphs->empty())
+    return false;
   if (path.isEmpty()) {
     QString path = QFileDialog::getSaveFileName(_mainWindow, trUtf8("Save project"), QString(), "Tulip Project (*.tlpx)");
 
@@ -1119,6 +1122,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->previousPageButton->setVisible(enabled);
   _ui->pageCountLabel->setVisible(enabled);
   _ui->nextPageButton->setVisible(enabled);
+  _ui->actionSave_Project->setEnabled(enabled);
+  _ui->actionSave_Project_as->setEnabled(enabled);
 
   if (graph == nullptr) {
     _ui->workspace->switchToStartupMode();
@@ -1126,6 +1131,8 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->searchButton->setChecked(false);
     _ui->pythonButton->setChecked(false);
     setSearchOutput(false);
+    _ui->actionSave_Project->setEnabled(false);
+    _ui->actionSave_Project_as->setEnabled(false);
   } else {
     _ui->workspace->setGraphForFocusedPanel(graph);
   }
@@ -1134,7 +1141,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
 void GraphPerspective::CSVImport() {
   bool mustDeleteGraph = false;
 
-  if (_graphs->size() == 0) {
+  if (_graphs->empty()) {
     _graphs->addGraph(tlp::newGraph());
     mustDeleteGraph = true;
   }
