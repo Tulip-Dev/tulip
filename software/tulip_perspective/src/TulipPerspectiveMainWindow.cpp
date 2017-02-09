@@ -64,6 +64,8 @@ void TulipPerspectiveProcessMainWindow::setProject(tlp::TulipProject* project) {
   _project = project;
   connect(project, SIGNAL(projectFileChanged(const QString&)),
           this, SLOT(projectFileChanged(const QString&)));
+  connect(tlp::Perspective::instance(), SIGNAL(resetWindowTitle()),
+          this, SLOT(projectFileChanged()));
 }
 
 void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projectFile) {
