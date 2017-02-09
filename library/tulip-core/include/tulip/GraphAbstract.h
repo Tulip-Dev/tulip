@@ -44,7 +44,7 @@ public:
   virtual void clear();
   // use to enforce subgraph id
   Graph* addSubGraph(unsigned int id, BooleanProperty *selection=NULL,
-		     const std::string& name = "unnamed");
+                     const std::string& name = "unnamed");
   virtual Graph *addSubGraph(BooleanProperty *selection=NULL,
                              const std::string& name = "unnamed") {
     return addSubGraph(0, selection, name);

@@ -24,7 +24,7 @@
 #include <iostream>
 #include <tulip/Iterator.h>
 
-namespace tlp { 
+namespace tlp {
 
 // define a minimal structure to hold the state of an id manager
 struct IdManagerState {

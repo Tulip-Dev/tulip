@@ -61,7 +61,7 @@ struct MPStlIterator:public StlIterator< VALUE, ITERATOR >,
 //=================================================
 template<typename KEY, typename VALUE>
 struct StlHMapIterator:public Iterator< std::pair<KEY,VALUE> > {
- StlHMapIterator(typename TLP_HASH_MAP<KEY,VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY,VALUE>::const_iterator endIt):
+  StlHMapIterator(typename TLP_HASH_MAP<KEY,VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY,VALUE>::const_iterator endIt):
     it(startIt),
     itEnd(endIt) {
   }
