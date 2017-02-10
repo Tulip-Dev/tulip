@@ -141,7 +141,7 @@ bool GraphImpl::isElement(const edge e) const {
 edge GraphImpl::existEdge(const node src, const node tgt,
                           bool directed) const {
   std::vector<edge> edges;
-  return storage.getEdges(src, tgt, directed, edges, true) ? edges[0] : edge();
+  return storage.getEdges(src, tgt, directed, edges, NULL, true) ? edges[0] : edge();
 }
 //----------------------------------------------------------------
 unsigned int GraphImpl::getSubGraphId(unsigned int id) {

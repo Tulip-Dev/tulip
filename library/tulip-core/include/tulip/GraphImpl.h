@@ -77,8 +77,9 @@ public:
   std::vector<edge> getEdges(const node source, const node target,
                              bool directed = true) const;
   bool getEdges(const node source, const node target, bool directed,
-                std::vector<edge>& edges) const {
-    return storage.getEdges(source, target, directed, edges);
+                std::vector<edge>& edges, const Graph* sg = NULL,
+		bool onlyFirst = false) const {
+    return storage.getEdges(source, target, directed, edges, sg, onlyFirst);
   }
   const std::vector<edge>& adj(const node n) const {
     return storage.adj(n);
