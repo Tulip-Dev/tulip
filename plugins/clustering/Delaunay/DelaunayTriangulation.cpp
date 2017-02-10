@@ -99,6 +99,8 @@ public:
                     "1.1", "Triangulation")
 
   bool run() {
+      if(graph->numberOfNodes()==0)
+          return true;
     bool simplicesSg = false;
     bool originalClone = true;
 
