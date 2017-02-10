@@ -30,6 +30,8 @@
 
 namespace tlp {
 
+class Graph;
+
 //===========================================
 /**
   * @class GraphStorageIdsMemento
@@ -164,14 +166,15 @@ public:
   //=======================================================
   /**
    * @brief Returns if edges exist between two nodes
-   * @param source The source of the hypothetical edges.
-   * @param target The target of the hypothetical edges.
+   * @param src The source of the hypothetical edges.
+   * @param tgt The target of the hypothetical edges.
    * @param directed When set to false edges from target to source are also considered
    * @param edges The vector of edges to fill up with the edges found
+   * @param the subgraph owning the edges
    * @param onlyFirst If true only the first edge found will be returned
    * @return true if an edge has been bound
    */
-  bool getEdges(const node source, const node target, bool directed, std::vector<edge> &edges, bool onlyFirst = false) const;
+  bool getEdges(const node src, const node tgt, bool directed, std::vector<edge> &edges, const Graph *sg = NULL, bool onlyFirst = false) const;
 
   //=======================================================
   /**

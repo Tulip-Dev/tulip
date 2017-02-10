@@ -105,14 +105,7 @@ edge GraphView::existEdge(const node src, const node tgt, bool directed) const {
 
   std::vector<edge> edges;
 
-  if (((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges)) {
-    for (std::vector<edge>::iterator ite = edges.begin(); ite != edges.end(); ++ite) {
-      if (edgeAdaptativeFilter.get(ite->id))
-        return *ite;
-    }
-  }
-
-  return edge();
+  return ((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges, this, true) ? edges[0] : edge();
 }
 //----------------------------------------------------------------
 unsigned int GraphView::deg(const node n) const {
@@ -522,15 +515,8 @@ Iterator<edge> *GraphView::getInOutEdges(const node n) const {
 std::vector<edge> GraphView::getEdges(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
 
-  if (nodeAdaptativeFilter.get(src.id) && nodeAdaptativeFilter.get(tgt.id) && ((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges)) {
-    for (std::vector<edge>::iterator ite = edges.begin(); ite != edges.end(); ++ite) {
-      if (!edgeAdaptativeFilter.get(ite->id)) {
-        ite = edges.erase(ite); // erase returns an iterator to the next element in the vector
-        // going back in the vector because the for loop will do a ++ite before testing the end of the vector
-        --ite;
-      }
-    }
-  }
+  if (nodeAdaptativeFilter.get(src.id) && nodeAdaptativeFilter.get(tgt.id))
+    ((GraphImpl *)getRoot())->getEdges(src, tgt, directed, edges, this);
 
   return edges;
 }

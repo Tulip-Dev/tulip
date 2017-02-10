@@ -17,6 +17,7 @@
  *
  */
 #include <tulip/GraphStorage.h>
+#include <tulip/Graph.h>
 #include <tulip/memorypool.h>
 
 using namespace tlp;
@@ -250,33 +251,31 @@ Iterator<edge> *GraphStorage::getInOutEdges(const node n) const {
   return new EdgeContainerIterator(nodes[n.id].edges);
 }
 //=======================================================
-bool GraphStorage::getEdges(const node src, const node tgt, bool directed, std::vector<edge> &vEdges, bool onlyFirst) const {
+bool GraphStorage::getEdges(const node src, const node tgt, bool directed, std::vector<edge> &vEdges, const Graph *sg, bool onlyFirst) const {
   std::vector<edge>::const_iterator it = nodes[src.id].edges.begin();
   edge previous;
-  bool result = false;
 
   while (it != nodes[src.id].edges.end()) {
     edge e = (*it);
 
     // loops appear twice
+    // be aware that we assume that the second instance of the loop
+    // immediatly appears after the first one
     if (e != previous) {
       const std::pair<node, node> &eEnds = edges[e.id];
 
-      if ((eEnds.second == tgt && eEnds.first == src) || (!directed && eEnds.first == tgt && eEnds.second == src)) {
+      if (((eEnds.second == tgt && eEnds.first == src) || (!directed && eEnds.first == tgt && eEnds.second == src)) && (!sg || sg->isElement(e))) {
         vEdges.push_back(e);
 
         if (onlyFirst)
           return true;
-
-        result = true;
       }
+      previous = e;
+      ++it;
     }
-
-    previous = e;
-    ++it;
   }
 
-  return result;
+  return !vEdges.empty();
 }
 //=======================================================
 Iterator<edge> *GraphStorage::getOutEdges(const node n) const {
