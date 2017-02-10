@@ -73,7 +73,7 @@ void OctreeBundle::elmentSplitting(const Coord &a, const Coord &b, const Coord &
                                    vector<node> &in, vector<node> &out
                                   ) {
   if (!((a[0] < b[0]) && (a[1] < b[1])))
-    throw TulipException("2 nodes have the same position.\nTry to apply the \"Fast Overlap Removal\" algorithm before.");
+    throw TulipException("Two nodes have the same position.\nTry to apply the \"Fast Overlap Removal\" algorithm first.");
 
   in.clear();
   out.clear();
