@@ -111,8 +111,8 @@ edge GraphView::existEdge(const node src, const node tgt,
   std::vector<edge> edges;
 
   return ((GraphImpl *)getRoot())->getEdges(src, tgt, directed,
-					    edges, this, true)
-    ? edges[0] : edge();
+         edges, this, true)
+         ? edges[0] : edge();
 }
 //----------------------------------------------------------------
 unsigned int GraphView::deg(const node n) const {

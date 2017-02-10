@@ -277,13 +277,14 @@ bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
       const std::pair<node, node>& eEnds = edges[e.id];
 
       if (((eEnds.second == tgt && eEnds.first == src) ||
-	   (!directed && eEnds.first == tgt && eEnds.second == src)) &&
-	  (!sg || sg->isElement(e))) {
+           (!directed && eEnds.first == tgt && eEnds.second == src)) &&
+          (!sg || sg->isElement(e))) {
         vEdges.push_back(e);
 
         if (onlyFirst)
           return true;
       }
+
       previous = e;
       ++it;
     }

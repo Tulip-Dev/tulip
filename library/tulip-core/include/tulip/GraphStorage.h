@@ -176,7 +176,7 @@ public:
    */
   bool getEdges(const node src, const node tgt, bool directed,
                 std::vector<edge>& edges, const Graph* sg = NULL,
-		bool onlyFirst = false) const;
+                bool onlyFirst = false) const;
 
   //=======================================================
   /**
