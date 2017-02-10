@@ -118,12 +118,13 @@ public :
                     "Performs a Voronoi decomposition, in considering the positions of the graph nodes as a set of points. These points define the seeds (or sites) of the voronoi cells. New nodes and edges are added to build the convex polygons defining the contours of these cells.","1.1","Triangulation")
 
   bool run() {
-      //no nodes. Nothing to do.
-      if(graph->numberOfNodes()==0)
-          return true;
+    //no nodes. Nothing to do.
+    if(graph->numberOfNodes()==0)
+      return true;
+
     bool voronoiCellSg = false;
     bool connectNodesToVoronoiCell = false;
-    bool originalClone = true;    
+    bool originalClone = true;
 
     if (dataSet) {
       dataSet->get("voronoi cells", voronoiCellSg);

@@ -101,8 +101,9 @@ public :
                     "Performs a Delaunay triangulation, in considering the positions of the graph nodes as a set of points. The building of simplices (triangles in 2D or tetrahedrons in 3D) consists in adding edges between adjacent nodes.","1.1","Triangulation")
 
   bool run() {
-      if(graph->numberOfNodes()==0)
-          return true;
+    if(graph->numberOfNodes()==0)
+      return true;
+
     bool simplicesSg = false;
     bool originalClone = true;
 
