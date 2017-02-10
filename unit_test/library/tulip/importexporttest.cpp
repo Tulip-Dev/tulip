@@ -178,11 +178,14 @@ void ImportExportTest::testSubGraphsImportExport() {
   const string sub2name = "sub2";
   const string subsubname = "subsub";
   Graph *sub1 = original->inducedSubGraph(sub1nodes);
+  Graph *sub0 = original->addSubGraph();
   Graph *sub2 = original->inducedSubGraph(sub2nodes);
   Graph *subsub = sub2->inducedSubGraph(subsubnodes);
   sub1->setAttribute("name", sub1name);
   sub2->setAttribute("name", sub2name);
   subsub->setAttribute("name", subsubname);
+  // we delete sub0 to ensure its id will be missing
+  original->delSubGraph(sub0);
 
   i = 0;
   DoubleProperty *sub1id = sub1->getLocalProperty<DoubleProperty>("sub1id");
@@ -505,6 +508,17 @@ void ImportExportTest::testGraphsTopologiesAreEqual(tlp::Graph *first, tlp::Grap
 
   delete firstEdgeIt;
   delete secondEdgeIt;
+
+  // subgraphs test
+  Iterator<Graph *> *subIt = first->getDescendantGraphs();
+  while (subIt->hasNext()) {
+    Graph *firstSub = subIt->next();
+    string name(firstSub->getName());
+    Graph *secondSub = second->getDescendantGraph(name);
+    CPPUNIT_ASSERT_MESSAGE("a subgraph is missing", secondSub != NULL);
+    CPPUNIT_ASSERT_MESSAGE("subgraphs have not the same id", firstSub->getId() == secondSub->getId());
+  }
+  delete subIt;
 }
 
 void TulipSaveLoadGraphFunctionsTest::setUp() {
