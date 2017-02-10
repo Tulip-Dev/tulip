@@ -118,6 +118,7 @@ bool SGraphNodeIterator::hasNext() {
 }
 //===================================================================
 OutNodesIterator::OutNodesIterator(const Graph *sG, const MutableContainer<bool> &filter, node n) : FactorNodeIterator(sG, filter) {
+  _parentGraph = _parentGraph->getRoot();
   it = new OutEdgesIterator(sG, filter, n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
   sg = sG;
@@ -145,6 +146,7 @@ bool OutNodesIterator::hasNext() {
 //===================================================================
 InNodesIterator::InNodesIterator(const Graph *sG, const MutableContainer<bool> &filter, node n)
     : FactorNodeIterator(sG, filter), it(new InEdgesIterator(sG, filter, n)) {
+  _parentGraph = _parentGraph->getRoot();
 #if !defined(NDEBUG) && !defined(_OPENMP)
   sg = sG;
   _parentGraph->addListener(this);
@@ -171,6 +173,7 @@ bool InNodesIterator::hasNext() {
 //===================================================================
 InOutNodesIterator::InOutNodesIterator(const Graph *sG, const MutableContainer<bool> &filter, node n)
     : FactorNodeIterator(sG, filter), it(new InOutEdgesIterator(sG, filter, n)), n(n) {
+  _parentGraph = _parentGraph->getRoot();
 #if !defined(NDEBUG) && !defined(_OPENMP)
   sg = sG;
   _parentGraph->addListener(this);
@@ -236,6 +239,7 @@ bool SGraphEdgeIterator::hasNext() {
 //===================================================================
 OutEdgesIterator::OutEdgesIterator(const Graph *sG, const MutableContainer<bool> &filter, node n) : FactorEdgeIterator(sG, filter) {
   assert(sG->isElement(n));
+  _parentGraph = _parentGraph->getRoot();
   it = _parentGraph->getOutEdges(n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
   _parentGraph->addListener(this);
@@ -274,6 +278,7 @@ bool OutEdgesIterator::hasNext() {
 //===================================================================
 InEdgesIterator::InEdgesIterator(const Graph *sG, const MutableContainer<bool> &filter, node n) : FactorEdgeIterator(sG, filter) {
   assert(sG->isElement(n));
+  _parentGraph = _parentGraph->getRoot();
   it = _parentGraph->getInEdges(n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
   _parentGraph->addListener(this);
@@ -312,6 +317,7 @@ bool InEdgesIterator::hasNext() {
 //===================================================================
 InOutEdgesIterator::InOutEdgesIterator(const Graph *sG, const MutableContainer<bool> &filter, node n) : FactorEdgeIterator(sG, filter) {
   assert(sG->isElement(n));
+  _parentGraph = _parentGraph->getRoot();
   it = _parentGraph->getInOutEdges(n);
 #if !defined(NDEBUG) && !defined(_OPENMP)
   _parentGraph->addListener(this);
