@@ -50,7 +50,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
                                   "  <li> <b> Python </b> " + TLP_PYTHON + ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
-                                  "  <li> <b> SIP </b> " + SIP_VERSION + ": <a href=\"https://www.riverbankcomputing.com/software/sip*/\">https://www.riverbankcomputing.com/software/sip</a> </li>"
+                                  "  <li> <b> SIP </b> " + SIP_VERSION + ": <a href=\"https://www.riverbankcomputing.com/software/sip/\">https://www.riverbankcomputing.com/software/sip</a> </li>"
 #endif
                                   "</ul>"
                                   "</p>"
