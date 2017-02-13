@@ -66,7 +66,7 @@ struct StoredType {
     enum {isPointer=1};           \
                 \
     inline static T get(T val) {       \
-      return val;				   \
+      return val;          \
     }               \
                 \
     inline static bool equal(const T val1, const T val2) { \
