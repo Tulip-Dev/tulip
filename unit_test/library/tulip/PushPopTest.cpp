@@ -70,6 +70,7 @@ void PushPopTest::testAddDel() {
   vector<edge> edges;
 
   graph->addNodes(3, nodes);
+ 
   CPPUNIT_ASSERT_EQUAL(size_t(3), nodes.size());
   ends.push_back(pair<node, node>(nodes[0], nodes[1]));
   ends.push_back(pair<node, node>(nodes[0], nodes[2]));
@@ -81,13 +82,13 @@ void PushPopTest::testAddDel() {
 
   CPPUNIT_ASSERT(!graph->isElement(e1));
   CPPUNIT_ASSERT_EQUAL(e0, graph->existEdge(n0, n1));
-  CPPUNIT_ASSERT(!graph->isElement(nodes[0]));
+  CPPUNIT_ASSERT((n0 == nodes[0]) ^ (!graph->isElement(nodes[0])));
   CPPUNIT_ASSERT(!graph->isElement(nodes[1]));
   CPPUNIT_ASSERT(!graph->isElement(nodes[2]));
 
   graph->unpop();
   CPPUNIT_ASSERT_EQUAL(e1, graph->existEdge(n2, n3));
-  CPPUNIT_ASSERT(!graph->isElement(e0));
+  CPPUNIT_ASSERT((e0 == edges[0]) ^ (!graph->isElement(e0)));
   CPPUNIT_ASSERT(graph->isElement(nodes[0]));
   CPPUNIT_ASSERT(graph->isElement(nodes[1]));
   CPPUNIT_ASSERT(graph->isElement(nodes[2]));
@@ -107,7 +108,7 @@ void PushPopTest::testAddDel() {
   CPPUNIT_ASSERT(!graph->isElement(e1));
   CPPUNIT_ASSERT(!graph->isElement(n2));
   CPPUNIT_ASSERT(!graph->isElement(n3));
-  CPPUNIT_ASSERT(!graph->isElement(nodes[0]));
+  CPPUNIT_ASSERT((n0 == nodes[0]) ^ (!graph->isElement(nodes[0])));
   CPPUNIT_ASSERT(!graph->isElement(nodes[1]));
   CPPUNIT_ASSERT(!graph->isElement(nodes[2]));
 
@@ -724,6 +725,7 @@ void PushPopTest::testSubgraph() {
   CPPUNIT_ASSERT(g2->isElement(e0));
   CPPUNIT_ASSERT(graph->isElement(n[0]));
   CPPUNIT_ASSERT(graph->isElement(e0));
+  CPPUNIT_ASSERT(!graph->isElement(n2));
 
   graph->unpop();
 
