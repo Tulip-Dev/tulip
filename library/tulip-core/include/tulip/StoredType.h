@@ -56,12 +56,39 @@ template <typename TYPE> struct StoredType {
   }
 };
 
+#define DECL_STORED_PTR(T)                                                                                                                           \
+  template <> struct StoredType<T> {                                                                                                                 \
+    typedef T Value;                                                                                                                                 \
+    typedef T ReturnedValue;                                                                                                                         \
+    typedef const T ReturnedConstValue;                                                                                                              \
+                                                                                                                                                     \
+    enum { isPointer = 1 };                                                                                                                          \
+                                                                                                                                                     \
+    inline static T get(T val) {                                                                                                                     \
+      return val;                                                                                                                                    \
+    }                                                                                                                                                \
+                                                                                                                                                     \
+    inline static bool equal(const T val1, const T val2) {                                                                                           \
+      return val2 == val1;                                                                                                                           \
+    }                                                                                                                                                \
+                                                                                                                                                     \
+    inline static T clone(T val) {                                                                                                                   \
+      return val;                                                                                                                                    \
+    }                                                                                                                                                \
+                                                                                                                                                     \
+    inline static void destroy(T val) {                                                                                                              \
+      delete val;                                                                                                                                    \
+    }                                                                                                                                                \
+    inline static T defaultValue() {                                                                                                                 \
+      return NULL;                                                                                                                                   \
+    }                                                                                                                                                \
+  }
+
 // non basic types are returned by reference
 // and stored by pointer
 // This last point enables a better management of the default value
 // which can simply be flagged in storing a null pointer
 // the macro below must be used to enable thies type of management
-
 #ifdef TLP_NO_CONST_STORED_TYPE
 #define DECL_STORED_STRUCT(T)                                                                                                                        \
   template <> struct StoredType<T> {                                                                                                                 \
@@ -94,7 +121,6 @@ template <typename TYPE> struct StoredType {
       return new T();                                                                                                                                \
     }                                                                                                                                                \
   };
-}
 #else
 #define DECL_STORED_STRUCT(T)                                                                                                                        \
   template <> struct StoredType<T> {                                                                                                                 \
@@ -127,7 +153,7 @@ template <typename TYPE> struct StoredType {
       return new T();                                                                                                                                \
     }                                                                                                                                                \
   };
-}
 #endif
+}
 #endif
 ///@endcond

@@ -79,6 +79,16 @@ namespace tlp {
 class GraphImpl;
 class GraphStorageIdsMemento;
 
+// various type declarations to ensure correct deletion
+// of some MutableContainer used as data members
+// see below
+typedef GraphEltsRecord *GraphEltsRecordPtr;
+DECL_STORED_PTR(GraphEltsRecordPtr);
+typedef std::pair<node, node> *NodePairPtr;
+DECL_STORED_PTR(NodePairPtr);
+typedef std::vector<edge> *EdgeVectPtr;
+DECL_STORED_PTR(EdgeVectPtr);
+
 class GraphUpdatesRecorder : public Observable {
   friend class GraphImpl;
 //
@@ -91,19 +101,19 @@ class GraphUpdatesRecorder : public Observable {
   const bool oldIdsStateRecorded;
 
   // one 'set' of added nodes per graph
-  MutableContainer<GraphEltsRecord *> graphAddedNodes;
+  MutableContainer<GraphEltsRecordPtr> graphAddedNodes;
   // the whole 'set' of added nodes
   MutableContainer<bool> addedNodes;
   // one 'set' of deleted nodes per graph
-  MutableContainer<GraphEltsRecord *> graphDeletedNodes;
+  MutableContainer<GraphEltsRecordPtr> graphDeletedNodes;
   // one 'set' of added edges per graph
   MutableContainer<GraphEltsRecord *> graphAddedEdges;
   // ends of all added edges
-  MutableContainer<std::pair<node, node> *> addedEdgesEnds;
+  MutableContainer<NodePairPtr> addedEdgesEnds;
   // one 'set' of deleted edges per graph
   MutableContainer<GraphEltsRecord *> graphDeletedEdges;
   // ends of all deleted edges
-  MutableContainer<std::pair<node, node> *> deletedEdgesEnds;
+  MutableContainer<NodePairPtr> deletedEdgesEnds;
   // one set of reverted edges
   std::set<edge> revertedEdges;
   // source + target per updated edge
@@ -111,9 +121,9 @@ class GraphUpdatesRecorder : public Observable {
   // source + target per updated edge
   TLP_HASH_MAP<edge, std::pair<node, node>> newEdgesEnds;
   // one set for old edge containers
-  MutableContainer<std::vector<edge> *> oldContainers;
+  MutableContainer<EdgeVectPtr> oldContainers;
   // one set for new edge containers
-  MutableContainer<std::vector<edge> *> newContainers;
+  MutableContainer<EdgeVectPtr> newContainers;
 
   // copy of nodes/edges id manager state at start time
   const GraphStorageIdsMemento *oldIdsState;
@@ -174,18 +184,6 @@ class GraphUpdatesRecorder : public Observable {
   void deleteValues(TLP_HASH_MAP<PropertyInterface *, RecordedValues> &values);
   // deletion of DataMem default values
   void deleteDefaultValues(TLP_HASH_MAP<PropertyInterface *, DataMem *> &values);
-  // deletion of various containers
-  template <typename T> void deleteContainerValues(MutableContainer<T> &ctnr) {
-    IteratorValue *it = ctnr.findAllValues(nullptr, false);
-
-    while (it->hasNext()) {
-      TypedValueContainer<T> tvc;
-      it->nextValue(tvc);
-      delete tvc.value;
-    }
-
-    delete it;
-  }
   // record of a node's edges container before/after modification
   void recordEdgeContainer(MutableContainer<std::vector<edge> *> &, GraphImpl *, node);
   // remove an edge from a node's edges container
