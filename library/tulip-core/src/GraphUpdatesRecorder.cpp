@@ -49,30 +49,6 @@ GraphUpdatesRecorder::~GraphUpdatesRecorder() {
 
   if (newIdsState)
     delete newIdsState;
-
-  // delete 'sets' of added nodes
-  deleteContainerValues<GraphEltsRecord*>(graphAddedNodes);
-
-  // delete 'sets' of deleted nodes
-  deleteContainerValues<GraphEltsRecord*>(graphDeletedNodes);
-
-  // delete 'sets' of added edges
-  deleteContainerValues<GraphEltsRecord*>(graphAddedEdges);
-
-  // delete 'sets' of deleted edges
-  deleteContainerValues<GraphEltsRecord*>(graphDeletedEdges);
-
-  // delete ends of added edges
-  deleteContainerValues<std::pair<node, node>*>(addedEdgesEnds);
-
-  // delete ends of deleted edges
-  deleteContainerValues<std::pair<node, node>*>(deletedEdgesEnds);
-
-  // delete old edges containers
-  deleteContainerValues<std::vector<edge>*>(oldContainers);
-
-  // delete new edges containers
-  deleteContainerValues<std::vector<edge>*>(newContainers);
 }
 
 void GraphUpdatesRecorder::treatEvent(const Event& ev) {
