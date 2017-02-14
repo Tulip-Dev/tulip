@@ -130,7 +130,7 @@ protected slots:
   void panelFocused(tlp::View *);
   void focusedPanelGraphSet(tlp::Graph *);
   void focusedPanelSynchronized();
-  void deleteSelectedElements(bool fromRoot=false);
+  void deleteSelectedElements(bool fromRoot = false);
   void deleteSelectedElementsFromRootGraph();
   void invertSelection();
   void cancelSelection();

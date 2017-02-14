@@ -947,12 +947,11 @@ public:
         size = getUncompressedSizeOfGzipFile(filename);
         input = tlp::getIgzstream(filename);
       } else
-        input = tlp::getInputFileStream(filename,
-                                        std::ifstream::in |
-                                            // consider file has binary
-                                            // to avoid pb using tellg
-                                            // on the input stream
-                                            std::ifstream::binary);
+        input = tlp::getInputFileStream(filename, std::ifstream::in |
+                                                      // consider file has binary
+                                                      // to avoid pb using tellg
+                                                      // on the input stream
+                                                      std::ifstream::binary);
     } else {
       dataSet->get<std::string>("file::data", data);
       size = data.size();

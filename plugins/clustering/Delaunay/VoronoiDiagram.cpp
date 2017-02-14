@@ -116,12 +116,12 @@ public:
                     "1.1", "Triangulation")
 
   bool run() {
-      //no nodes. Nothing to do.
-      if(graph->numberOfNodes()==0)
-          return true;
+    // no nodes. Nothing to do.
+    if (graph->numberOfNodes() == 0)
+      return true;
     bool voronoiCellSg = false;
     bool connectNodesToVoronoiCell = false;
-    bool originalClone = true;    
+    bool originalClone = true;
 
     if (dataSet) {
       dataSet->get("voronoi cells", voronoiCellSg);

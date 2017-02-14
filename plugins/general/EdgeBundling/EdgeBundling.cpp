@@ -224,9 +224,9 @@ void EdgeBundling::computeDistance(node n) {
 
 bool EdgeBundling::run() {
 
-    //no edges => do nothing
-    if(graph->numberOfEdges()==0)
-        return true;
+  // no edges => do nothing
+  if (graph->numberOfEdges() == 0)
+    return true;
 
   optimizationLevel = 3;
   maxThread = 0;

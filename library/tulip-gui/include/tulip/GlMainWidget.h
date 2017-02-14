@@ -159,7 +159,7 @@ public:
    * @param a point in screen coordinates
    * @return the converted point in viewport coordinates
    */
-  Coord screenToViewport(const Coord& point) {
+  Coord screenToViewport(const Coord &point) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
     return Coord(point.x() * dpr, point.y() * dpr);
@@ -186,7 +186,7 @@ public:
    * @param a point in viewport coordinates
    * @return the converted point in screen coordinates
    */
-  Coord viewportToScreen(const Coord& point) {
+  Coord viewportToScreen(const Coord &point) {
 #if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
     qreal dpr = windowHandle()->devicePixelRatio();
     return Coord(point.x() / dpr, point.y() / dpr);

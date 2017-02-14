@@ -39,11 +39,9 @@ namespace tlp {
 class TLP_QT_SCOPE FloatValidator : public QValidator {
 
 public:
-
   State validate(QString &input, int &pos) const;
 
   void fixup(QString &text) const;
-
 };
 
 /**
@@ -54,8 +52,7 @@ public:
 class TLP_QT_SCOPE ScientificDoubleSpinBox : public QDoubleSpinBox {
 
 public:
-
-  ScientificDoubleSpinBox(QWidget *parent=0);
+  ScientificDoubleSpinBox(QWidget *parent = 0);
 
   QValidator::State validate(QString &input, int &pos) const;
 
@@ -66,9 +63,7 @@ public:
   QString textFromValue(double value) const;
 
   void stepBy(int steps);
-
 };
-
 }
 
 #endif // SCIENTIFICDOUBLESPINBOX_H

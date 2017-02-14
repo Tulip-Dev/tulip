@@ -146,7 +146,7 @@ edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
 unsigned int GraphImpl::getSubGraphId(unsigned int id) {
   if (id == 0)
     return graphIds.get();
-  
+
   graphIds.getFreeId(id);
   return id;
 }

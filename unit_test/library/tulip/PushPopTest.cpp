@@ -70,7 +70,7 @@ void PushPopTest::testAddDel() {
   vector<edge> edges;
 
   graph->addNodes(3, nodes);
- 
+
   CPPUNIT_ASSERT_EQUAL(size_t(3), nodes.size());
   ends.push_back(pair<node, node>(nodes[0], nodes[1]));
   ends.push_back(pair<node, node>(nodes[0], nodes[2]));

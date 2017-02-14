@@ -17,7 +17,7 @@ static FloatValidator floatValidator;
 
 bool validFloatString(const QString &s) {
   int pos = floatRe.indexIn(s);
-  if (pos != - 1) {
+  if (pos != -1) {
     return floatRe.capturedTexts()[1] == s;
   } else {
     return false;
@@ -28,7 +28,7 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
   if (validFloatString(input)) {
     return QValidator::Acceptable;
   }
-  if (input == "" || input.mid(pos-1, 1).count(QRegExp("[e.-+]+")) == 1) {
+  if (input == "" || input.mid(pos - 1, 1).count(QRegExp("[e.-+]+")) == 1) {
     return QValidator::Intermediate;
   }
   return QValidator::Invalid;
@@ -36,7 +36,7 @@ QValidator::State FloatValidator::validate(QString &input, int &pos) const {
 
 void FloatValidator::fixup(QString &text) const {
   int pos = floatRe.indexIn(text);
-  if (pos != - 1) {
+  if (pos != -1) {
     text = floatRe.capturedTexts()[1];
   } else {
     text = "";

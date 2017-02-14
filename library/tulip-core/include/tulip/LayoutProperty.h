@@ -204,7 +204,7 @@ public:
   * Scales the layout in order to approach an aspect ratio (width / height) of 1.0 .
   * @param subgraph If not null, only scales the layout of that sub-graph
   **/
-  void perfectAspectRatio(const Graph* subgraph=NULL);
+  void perfectAspectRatio(const Graph *subgraph = NULL);
 
   //=======================================================================
   // Set of function in order to measure the quality of the LayoutAlgorithm
