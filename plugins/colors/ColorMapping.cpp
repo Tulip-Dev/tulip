@@ -33,8 +33,8 @@ using namespace tlp;
 
 static const char *paramHelp[] = {
     // type
-    "If linear or logarithmic, the input property must be a <b>numeric</b> property. For the linear case, the minimum value is mapped to one end of "
-    "the color scale, "
+    "If linear, logarithmic or uniform, the input property must be a <b>numeric</b> property. For the linear case, the minimum value is mapped to "
+    "one end of the color scale, "
     "the maximum value is mapped to the other end, and a linear interpolation is used between both to compute the associated color. For the "
     "logarithmic case, graph elements values are first mapped in the [1, +inf[ range. "
     "Then the log of each mapped value is computed and used to compute the associated color of the graph element trough a linear interpolation "
@@ -305,9 +305,8 @@ public:
     if (metric == nullptr)
       metric = graph->getProperty<DoubleProperty>("viewMetric");
 
-#ifndef TULIP_BUILD_CORE_ONLY
-
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
+#ifndef TULIP_BUILD_CORE_ONLY
       if (targetType.getCurrent() == NODES_TARGET) {
 
         node n;
@@ -355,20 +354,17 @@ public:
       }
 
       dialog.getResult(enumeratedMappingResultVector);
-    } else {
-
+#else
+      errorMsg += "enumerated color mapping is not available";
+      return false;
 #endif
-
+    } else {
       // check if input property is a NumericProperty
       if (!dynamic_cast<NumericProperty *>(metric)) {
-        errorMsg += "For a linear or uniform color mapping,\nthe input property must be a Double or Integer property";
+        errorMsg += "For a linear, logarithmic or uniform color mapping,\nthe input property must be a Double or Integer property";
         return false;
       }
-
-#ifndef TULIP_BUILD_CORE_ONLY
     }
-
-#endif
     return true;
   }
 };
