@@ -94,8 +94,6 @@ include/PythonPluginsIDE.h
 
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-SET(QT_USE_QTWEBKIT true)
-
 ADD_LIBRARY(GraphPerspective-${TulipVersion} SHARED ${LIB_SRCS} ${RCC_SRCS} ${UI_SRCS} ${MOC_SRCS})
 
 TARGET_LINK_LIBRARIES(GraphPerspective-${TulipVersion} ${LibTulipCoreName} ${LibTulipOGLESName} ${LibTulipGUIName})
