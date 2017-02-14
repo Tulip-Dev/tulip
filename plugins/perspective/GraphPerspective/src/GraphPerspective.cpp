@@ -528,7 +528,7 @@ void GraphPerspective::exportGraph(Graph* g) {
   std::string filename = QStringToTlpString(exportFile = wizard.outputFile());
   std::string exportPluginName = QStringToTlpString(wizard.algorithm());
 
-  if (filename.rfind(".gz") == (filename.length() - 3)) {
+  if (exportFile.endsWith(".gz")) {
     if (exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
       QMessageBox::critical(_mainWindow,trUtf8("Format error"),trUtf8("GZip compression is only supported for TLP and TLPB formats."));
       return;
