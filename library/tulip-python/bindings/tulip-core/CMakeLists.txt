@@ -1,6 +1,8 @@
 IF(PYTHONLIBS_FOUND)
 IF(SIP_OK)
 
+ADD_CORE_FILES(.)
+
 IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
 ENDIF(WIN32)
@@ -200,13 +202,14 @@ INSTALL(TARGETS ${LibTulipCorePythonBindingsName}
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/__init__.py DESTINATION ${TulipLibInstallDir}/python${PYTHON_VERSION}/dist-packages/tulip COMPONENT tulip_python)
 ENDIF(NOT PYTHON_DIST_PACKAGE)
 
-ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
-                   POST_BUILD
-                   COMMAND ${SIP_EXE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
-                   COMMENT "Generating API file for Tulip Python bindings"
-                   VERBATIM)
-				   
-INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+IF(NOT TULIP_BUILD_CORE_ONLY)
+  ADD_CUSTOM_COMMAND(TARGET ${LibTulipCorePythonBindingsName}
+                     POST_BUILD
+                     COMMAND ${SIP_EXE} -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -a ${CMAKE_CURRENT_BINARY_DIR}/tulip.api ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                     COMMENT "Generating API file for Tulip Python bindings"
+                     VERBATIM)
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/tulip.api DESTINATION ${TulipShareInstallDir}/apiFiles COMPONENT tulip_python)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "tulip.api;sipAPI_tulip.h;tulip_module;BooleanProperty.sip;ColorProperty.sip;DoubleProperty.sip;IntegerProperty.sip;LayoutProperty.sip;SizeProperty.sip;StringProperty.sip")
 
