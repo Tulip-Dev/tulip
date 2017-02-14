@@ -60,6 +60,20 @@ struct MPStlIterator : public StlIterator<VALUE, ITERATOR>, public MemoryPool<MP
   }
 };
 //=================================================
+/**
+* @brief Convenient function for creating a StlIterator from a stl container.
+* @ingroup Iterators
+*
+* Creates a StlIterator from a stl container.
+*
+* @param stlContainer a stl container (e.g. std::vector)
+* @return a StlIterator
+**/
+template <class Container>
+inline StlIterator<typename Container::value_type, typename Container::const_iterator> *stlIterator(const Container &stlContainer) {
+  return new MPStlIterator<typename Container::value_type, typename Container::const_iterator>(stlContainer.begin(), stlContainer.end());
+}
+//=================================================
 template <typename KEY, typename VALUE> struct StlHMapIterator : public Iterator<std::pair<KEY, VALUE>> {
   StlHMapIterator(typename TLP_HASH_MAP<KEY, VALUE>::const_iterator startIt, typename TLP_HASH_MAP<KEY, VALUE>::const_iterator endIt)
       : it(startIt), itEnd(endIt) {
@@ -78,16 +92,6 @@ template <typename KEY, typename VALUE> struct StlHMapIterator : public Iterator
 private:
   typename TLP_HASH_MAP<KEY, VALUE>::const_iterator it, itEnd;
 };
-//=================================================
-///  StlHMapIterator implemetation
-template <typename KEY, typename VALUE> std::pair<KEY, VALUE> StlHMapIterator<KEY, VALUE>::next() {
-  std::pair<KEY, VALUE> tmp = *it;
-  ++it;
-  return tmp;
-}
-template <typename KEY, typename VALUE> bool StlHMapIterator<KEY, VALUE>::hasNext() {
-  return (itEnd != it);
-}
 //=================================================
 }
 
@@ -109,7 +113,6 @@ template <typename KEY, typename VALUE> struct StlHMapKeyIterator : public tlp::
 private:
   typename TLP_HASH_MAP<KEY, VALUE>::const_iterator it, itEnd;
 };
-}
 
 #endif
 ///@endcond

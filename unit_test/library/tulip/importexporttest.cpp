@@ -188,6 +188,9 @@ void ImportExportTest::testSubGraphsImportExport() {
   // we delete sub0 to ensure its id will be missing
   original->delSubGraph(sub0);
 
+
+  node n;
+
   i = 0;
   IntegerProperty *sub1id = sub1->getLocalProperty<IntegerProperty>("sub1id");
   forEach(n, sub1->getNodes()) {

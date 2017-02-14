@@ -34,6 +34,7 @@
 #include <tulip/TulipViewSettings.h>
 
 #include <vector>
+#include <map>
 
 namespace tlp {
 

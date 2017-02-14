@@ -18,6 +18,13 @@ IF(NOT YAJL_FOUND)
   ADD_SUBDIRECTORY(yajl)
 ENDIF(NOT YAJL_FOUND)
 
+IF(NOT TULIP_BUILD_CORE_ONLY OR EMSCRIPTEN)
+  ADD_SUBDIRECTORY(ftgl)
+  ADD_SUBDIRECTORY(libtess2)
+  ADD_SUBDIRECTORY(nanovg)
+  ADD_SUBDIRECTORY(clipper)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY OR EMSCRIPTEN)
+
 IF(NOT TULIP_BUILD_CORE_ONLY)
   IF(NOT QUAZIP_FOUND)
     MESSAGE(STATUS "Quazip library was not found on the system, the version located in thirdparty will be compiled and used instead.")

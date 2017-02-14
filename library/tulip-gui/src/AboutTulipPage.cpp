@@ -48,8 +48,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
       "  <li> <b> Qt </b> " +
       tlpStringToQString(qVersion()) + ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
                                        "  <li> <b> OpenGL </b> " +
-      QString::number(OpenGlConfigManager::getInst().getOpenGLVersion()) + " (from vendor " +
-      tlpStringToQString(OpenGlConfigManager::getInst().getOpenGLVendor()) +
+      QString::number(OpenGlConfigManager::instance().getOpenGLVersion()) + " (from vendor " +
+      tlpStringToQString(OpenGlConfigManager::instance().getOpenGLVendor()) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
       "  <li> <b>OGDF</b> v2015.05 (Baobab) aka the Open Graph Drawing Framework : <a href=\"http://www.ogdf.net\">http://www.ogdf.net</a> </li>"
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
