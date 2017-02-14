@@ -648,23 +648,14 @@ void GraphStorage::delAllNodes() {
  * @brief remove an edge from an EdgeContainer
  */
 void GraphStorage::removeFromEdgeContainer(EdgeContainer &c, const edge e) {
-  bool copy = false;
-  EdgeVector::iterator previous = c.edges.begin();
-
-  for (EdgeVector::iterator i = previous; i != c.edges.end(); ++i) {
-    edge e1 = *i;
-
-    if (copy)
-      *previous = e1;
-
-    previous = i;
-
-    if (e1 == e)
-      copy = true;
-  }
-
-  if (copy)
-    c.edges.pop_back();
+  std::vector<edge> &edges = c.edges;
+  unsigned int nbEdges = edges.size();
+  for (unsigned int i = 0; i < nbEdges; ++i)
+    if ((e == edges[i]) && (i != nbEdges - 1)) {
+      memmove(&edges[i], &edges[i + 1], (nbEdges - i - 1) * sizeof(edge));
+      break;
+    }
+  edges.pop_back();
 }
 //=======================================================
 /**
