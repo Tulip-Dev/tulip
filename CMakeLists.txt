@@ -156,7 +156,7 @@ IF(NOT EXISTS ${PROJECT_SOURCE_DIR}/cmake/FindQtX.cmake OR EMSCRIPTEN)
   SET(TULIP_BUILD_CORE_ONLY ON)
   MESSAGE("You can only configure a core build of Tulip.")
 ELSE()
-  SET(TULIP_BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip ? [ON|OFF]")
+  SET(TULIP_BUILD_CORE_ONLY OFF CACHE BOOL "Do you want a minimal build of Tulip (no OpenGL rendering, no Qt gui, no documentation) ? [ON|OFF]")
 ENDIF()
 
 IF(TULIP_BUILD_CORE_ONLY AND LINUX)
@@ -178,7 +178,7 @@ IF(TULIP_BUILD_CORE_ONLY AND LINUX)
       ENDFOREACH()
     ENDIF()
   ENDMACRO()
-  ADD_CORE_FILES(CMakeLists.txt cmake/cmake_uninstall.cmake.in cmake/TulipUseFile.cmake cmake/FindCppUnit.cmake)
+  ADD_CORE_FILES(CMakeLists.txt cmake/cmake_uninstall.cmake.in cmake/TulipUseFile.cmake cmake/FindCppUnit.cmake cmake/FindTulip.cmake)
 # the macro ADD_CORE_DIRECTORY_EXCEPT will be used
 # to exclude the files not needed to build a minimal Tulip
 # in the directory pointed by CMAKE_CURRENT_SOURCE_DIR
@@ -321,7 +321,6 @@ IF(NOT CLANG AND NOT EMSCRIPTEN)
 ENDIF(NOT CLANG AND NOT EMSCRIPTEN)
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
-
   # OpenGL
   FIND_PACKAGE(OpenGL REQUIRED)
 
@@ -336,239 +335,241 @@ IF(NOT TULIP_BUILD_CORE_ONLY)
 
   # Quazip
   FIND_PACKAGE(QuaZip)
+ENDIF(NOT TULIP_BUILD_CORE_ONLY)
 
-  IF(TULIP_BUILD_PYTHON_COMPONENTS)
+
+IF(TULIP_BUILD_PYTHON_COMPONENTS)
   # Python
   # After finding the Python interpreter, try to find if SIP and its dev tools are installed on the host system.
   # If not, compile the SIP version located in thirdparty.
-    FIND_PACKAGE(PythonInterp REQUIRED)
-    IF(PYTHONINTERP_FOUND)
-      EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
-      STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
-      STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
-      STRING(REGEX MATCH "[0-9]\\.[0-9]+\\.[0-9]+" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
+  FIND_PACKAGE(PythonInterp REQUIRED)
+  IF(PYTHONINTERP_FOUND)
+    EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} --version OUTPUT_VARIABLE PYTHON_VERSION_RAW ERROR_VARIABLE PYTHON_VERSION_RAW)
+    STRING(REPLACE "\n" "" PYTHON_VERSION_RAW "${PYTHON_VERSION_RAW}")
+    STRING(REGEX MATCH "[0-9]\\.[0-9]+" PYTHON_VERSION "${PYTHON_VERSION_RAW}")
+    STRING(REGEX MATCH "[0-9]\\.[0-9]+\\.[0-9]+" PYTHON_VERSION_WITH_PATCH "${PYTHON_VERSION_RAW}")
 
-      # Unset the previous values of the CMake cache variables related to Python libraries
-      # in case the value of PYTHON_EXECUTABLE CMake variable changed
-      UNSET(PYTHONLIBS_FOUND CACHE)
-      UNSET(PYTHON_LIBRARY CACHE)
-      UNSET(PYTHON_INCLUDE_DIR CACHE)
-      UNSET(PYTHON_INCLUDE_PATH CACHE)
+    # Unset the previous values of the CMake cache variables related to Python libraries
+    # in case the value of PYTHON_EXECUTABLE CMake variable changed
+    UNSET(PYTHONLIBS_FOUND CACHE)
+    UNSET(PYTHON_LIBRARY CACHE)
+    UNSET(PYTHON_INCLUDE_DIR CACHE)
+    UNSET(PYTHON_INCLUDE_PATH CACHE)
 
-      # Find the Python library with the same version as the interpreter
-      # Python 3.2 library is suffixed by mu and Python >= 3.3 by m on some systems, also handle these cases
-      SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION}m ${PYTHON_VERSION})
+    # Find the Python library with the same version as the interpreter
+    # Python 3.2 library is suffixed by mu and Python >= 3.3 by m on some systems, also handle these cases
+    SET(Python_ADDITIONAL_VERSIONS ${PYTHON_VERSION}mu ${PYTHON_VERSION}m ${PYTHON_VERSION})
 
-      # Ensure the detection of Python library installed trough a bundle downloaded from Python.org
+    # Ensure the detection of Python library installed trough a bundle downloaded from Python.org
+    IF(APPLE)
+      IF(NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$" AND NOT "${PYTHON_EXECUTABLE}" MATCHES "^/System/Library/Frameworks/Python.framework/.*/python.*$")
+        SET(CMAKE_PREFIX_PATH /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
+      ELSE()
+        SET(CMAKE_PREFIX_PATH /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
+      ENDIF()
+    ENDIF(APPLE)
+
+    GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+
+    # Ensure that correct Python include path is selected by CMake on Windows
+    IF(WIN32)
+      SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/include ${CMAKE_INCLUDE_PATH})
+      # Ensure that correct Python include path and library are selected by CMake on Linux (in case of non standard installation)
+    ELSEIF(LINUX)
+      SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/../include ${CMAKE_INCLUDE_PATH})
+      SET(CMAKE_LIBRARY_PATH ${PYTHON_HOME_PATH}/../lib ${CMAKE_LIBRARY_PATH})
+    ENDIF(WIN32)
+
+    FIND_PACKAGE(PythonLibs REQUIRED)
+
+    IF(PYTHONLIBS_FOUND)
+
+      # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
+      EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
+      STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
+
+      # Python 64bits does not provide a dll import library for MinGW.
+      # Fortunately, we can directly link to the Python dll with that compiler.
+      # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
+      IF(MINGW)
+        STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
+        STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
+
+        IF(MSYS2_PYTHON)
+          IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
+            SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
+          ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
+            SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
+          ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
+        ELSE(MSYS2_PYTHON)
+          # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
+          IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+            SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            #If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
+          ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+            IF(NOT WIN_AMD64 OR X64)
+              SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            ELSE(NOT WIN_AMD64 OR X64)
+              SET(PYTHON_LIBRARY ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
+            ENDIF(NOT WIN_AMD64 OR X64)
+          ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
+        ENDIF(MSYS2_PYTHON)
+
+      ENDIF(MINGW)
+
+      # Ensure headers correspond to the ones associated to the detected Python library on MacOS
       IF(APPLE)
-        IF(NOT "${PYTHON_EXECUTABLE}" MATCHES "^/usr/bin/python.*$" AND NOT "${PYTHON_EXECUTABLE}" MATCHES "^/System/Library/Frameworks/Python.framework/.*/python.*$")
-          SET(CMAKE_PREFIX_PATH /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
-        ELSE()
-          SET(CMAKE_PREFIX_PATH /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION} ${CMAKE_PREFIX_PATH})
+        IF("${PYTHON_LIBRARY}" MATCHES "^/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
+          SET(PYTHON_INCLUDE_DIR /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
+        ENDIF()
+        IF("${PYTHON_LIBRARY}" MATCHES "^/System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
+          SET(PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
         ENDIF()
       ENDIF(APPLE)
 
-      GET_FILENAME_COMPONENT(PYTHON_HOME_PATH ${PYTHON_EXECUTABLE} PATH)
+      SET(SIP_VERSION_THIRDPARTY 4.19)
+      SET(SIP_OK FALSE CACHE INTERNAL "")
+      FIND_PACKAGE(SIP)
+      SET(SIP_OK ${SIP_FOUND})
+      IF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
+        SET(SIP_EXE "${SIP_EXECUTABLE}")
+        SET(SYSTEM_SIP TRUE)
+      ELSE(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
+        IF(SIP_OK)
+          MESSAGE(STATUS "SIP was found on the system but its version is lesser than the required one (${SIP_VERSION_THIRDPARTY}).")
+          SET(SIP_FOUND FALSE)
+        ENDIF(SIP_OK)
+        MESSAGE(STATUS "Using SIP ${SIP_VERSION_THIRDPARTY} located in thirdparty for generating the Python bindings.")
+        SET(SIP_LIB tulipsip)
+        SET(SYSTEM_SIP FALSE)
 
-      # Ensure that correct Python include path is selected by CMake on Windows
-      IF(WIN32)
-        SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/include ${CMAKE_INCLUDE_PATH})
-      # Ensure that correct Python include path and library are selected by CMake on Linux (in case of non standard installation)
-      ELSEIF(LINUX)
-        SET(CMAKE_INCLUDE_PATH ${PYTHON_HOME_PATH}/../include ${CMAKE_INCLUDE_PATH})
-        SET(CMAKE_LIBRARY_PATH ${PYTHON_HOME_PATH}/../lib ${CMAKE_LIBRARY_PATH})
-      ENDIF(WIN32)
-
-      FIND_PACKAGE(PythonLibs REQUIRED)
-
-      IF(PYTHONLIBS_FOUND)
-
-        # Check if Python is provided by MSYS2 (it is compiled with GCC in that case instead of MSVC)
-        EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import sys; print(sys.version)" OUTPUT_VARIABLE PYTHON_VERSION_FULL ERROR_VARIABLE PYTHON_VERSION_FULL)
-        STRING(REGEX MATCH "GCC" MSYS2_PYTHON "${PYTHON_VERSION_FULL}")
-
-        # Python 64bits does not provide a dll import library for MinGW.
-        # Fortunately, we can directly link to the Python dll with that compiler.
-        # So find the location of that dll and overwrite the PYTHON_LIBRARY CMake cache variable with it
-        IF(MINGW)
-          STRING(REPLACE "\\" "/" WINDIR $ENV{WINDIR})
-          STRING(REPLACE "." "" PYTHON_VERSION_NO_DOT ${PYTHON_VERSION})
-
-          IF(MSYS2_PYTHON)
-            IF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-              SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll CACHE FILEPATH "" FORCE)
-            ELSEIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll)
-              SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}m.dll CACHE FILEPATH "" FORCE)
-            ENDIF(EXISTS ${PYTHON_HOME_PATH}/libpython${PYTHON_VERSION}.dll)
-          ELSE(MSYS2_PYTHON)
-            # Check if the Python dll is located in the Python home directory (when Python is installed for current user only)
-            IF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-              SET(PYTHON_LIBRARY ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-            #If not, the Python dll is located in %WINDIR%/System32 (when Python is installed for all users)
-            ELSE(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-              IF(NOT WIN_AMD64 OR X64)
-                SET(PYTHON_LIBRARY ${WINDIR}/System32/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-              ELSE(NOT WIN_AMD64 OR X64)
-                SET(PYTHON_LIBRARY ${WINDIR}/SysWOW64/python${PYTHON_VERSION_NO_DOT}.dll CACHE FILEPATH "" FORCE)
-              ENDIF(NOT WIN_AMD64 OR X64)
-            ENDIF(EXISTS ${PYTHON_HOME_PATH}/python${PYTHON_VERSION_NO_DOT}.dll)
-           ENDIF(MSYS2_PYTHON)
-
-        ENDIF(MINGW)
-
-        # Ensure headers correspond to the ones associated to the detected Python library on MacOS
-        IF(APPLE)
-          IF("${PYTHON_LIBRARY}" MATCHES "^/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
-            SET(PYTHON_INCLUDE_DIR /Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
+        TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen sip
+          CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
+          -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} -DPYTHON_INCLUDE_DIR2=${PYTHON_INCLUDE_DIR2}
+          -DPYTHON_INCLUDE_PATH=${PYTHON_INCLUDE_PATH} -DPYTHON_LIBRARY=${PYTHON_LIBRARY}
+          -DSIP_LIB=${SIP_LIB})
+        IF(SIP_OK)
+          SET(SIP_VERSION_STR "${SIP_VERSION_THIRDPARTY}")
+          IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe")
+            SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe)
+          ELSE()
+            SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/sip)
           ENDIF()
-          IF("${PYTHON_LIBRARY}" MATCHES "^/System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}.*$")
-            SET(PYTHON_INCLUDE_DIR /System/Library/Frameworks/Python.framework/Versions/${PYTHON_VERSION}/Headers CACHE PATH "" FORCE)
-          ENDIF()
-        ENDIF(APPLE)
+          SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
+        ENDIF(SIP_OK)
+      ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
 
-        SET(SIP_VERSION_THIRDPARTY 4.19)
-        SET(SIP_OK FALSE CACHE INTERNAL "")
-        FIND_PACKAGE(SIP)
-        SET(SIP_OK ${SIP_FOUND})
-        IF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-          SET(SIP_EXE "${SIP_EXECUTABLE}")
-          SET(SYSTEM_SIP TRUE)
-        ELSE(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
-          IF(SIP_OK)
-            MESSAGE(STATUS "SIP was found on the system but its version is lesser than the required one (${SIP_VERSION_THIRDPARTY}).")
-            SET(SIP_FOUND FALSE)
-          ENDIF(SIP_OK)
-          MESSAGE(STATUS "Using SIP ${SIP_VERSION_THIRDPARTY} located in thirdparty for generating the Python bindings.")
-          SET(SIP_LIB tulipsip)
-          SET(SYSTEM_SIP FALSE)
+      IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+        IF(NOT LINUX)
+          EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
+          EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
+          IF(NOT WHEEL_OK EQUAL 0)
+            MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
+            MESSAGE("You can install it trough the 'pip' tool ($ pip install wheel)")
+          ENDIF(NOT WHEEL_OK EQUAL 0)
+          IF(NOT TWINE_OK EQUAL 0)
+            MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
+            MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
+          ENDIF(NOT TWINE_OK EQUAL 0)
 
-          TRY_COMPILE(SIP_OK ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen sip
-                      CMAKE_FLAGS -DCMAKE_OSX_ARCHITECTURES=${CMAKE_OSX_ARCHITECTURES} -DPYTHON_EXECUTABLE=${PYTHON_EXECUTABLE}
-                                  -DPYTHON_INCLUDE_DIR=${PYTHON_INCLUDE_DIR} -DPYTHON_INCLUDE_DIR2=${PYTHON_INCLUDE_DIR2}
-                                  -DPYTHON_INCLUDE_PATH=${PYTHON_INCLUDE_PATH} -DPYTHON_LIBRARY=${PYTHON_LIBRARY}
-                                  -DSIP_LIB=${SIP_LIB})
-          IF(SIP_OK)
-            SET(SIP_VERSION_STR "${SIP_VERSION_THIRDPARTY}")
-            IF(WIN32 AND EXISTS "${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe")
-              SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/Debug/sip.exe)
-            ELSE()
-              SET(SIP_EXE ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/sipgen/sip)
-            ENDIF()
-            SET(SIP_INCLUDE_DIR ${CMAKE_CURRENT_BINARY_DIR}/thirdparty/sip-${SIP_VERSION_THIRDPARTY}/siplib/)
-          ENDIF(SIP_OK)
-        ENDIF(SIP_OK AND NOT ${SIP_VERSION_STR} VERSION_LESS ${SIP_VERSION_THIRDPARTY})
+          ADD_CUSTOM_TARGET(tulip-core-wheel
+            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
 
-        IF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
-          IF(NOT LINUX)
-            EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import wheel" RESULT_VARIABLE WHEEL_OK OUTPUT_QUIET ERROR_QUIET)
-            EXECUTE_PROCESS(COMMAND ${PYTHON_EXECUTABLE} -c "import twine" RESULT_VARIABLE TWINE_OK OUTPUT_QUIET ERROR_QUIET)
-            IF(NOT WHEEL_OK EQUAL 0)
-              MESSAGE("The 'wheel' Python module has to be installed to generate wheels for tulip modules.")
-              MESSAGE("You can install it trough the 'pip' tool ($ pip install wheel)")
-            ENDIF(NOT WHEEL_OK EQUAL 0)
-            IF(NOT TWINE_OK EQUAL 0)
-              MESSAGE("The 'twine' Python module has to be installed to upload tulip wheels on PyPi.")
-              MESSAGE("You can install it trough the 'pip' tool ($ pip install twine)")
-            ENDIF(NOT TWINE_OK EQUAL 0)
+          ADD_CUSTOM_TARGET(tulip-gui-wheel
+            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+            DEPENDS tulip-core-wheel)
 
-            ADD_CUSTOM_TARGET(tulip-core-wheel
-                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                              WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+        ELSE(NOT LINUX)
 
-            ADD_CUSTOM_TARGET(tulip-gui-wheel
-                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                              WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
-                              DEPENDS tulip-core-wheel)
+          EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
+          EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade twine)
 
-          ELSE(NOT LINUX)
+          # When building Python binary wheels on Linux, produced binaries have to be patched
+          # in order for the tulip modules to be successfully imported and loaded on every computer.
+          # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
+          # in order to ease that patching task, so install its latest version with pip first.
+          # The tool is only compatible with Python 3.X, so we will use Python 3.5 installed
+          # in the docker image provided by the manylinux project (see https://github.com/pypa/manylinux).
 
-            EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade wheel)
-            EXECUTE_PROCESS(COMMAND ${PYTHON_HOME_PATH}/pip install --upgrade twine)
+          # Use a patched version of the auditwheel tool as the official one does not
+          # repair Tulip-Python wheels correctly
+          EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip uninstall -y auditwheel)
+          EXECUTE_PROCESS(COMMAND git clone -b purelib_fixes https://github.com/anlambert/auditwheel.git ERROR_QUIET)
+          EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip install auditwheel/)
 
-            # When building Python binary wheels on Linux, produced binaries have to be patched
-            # in order for the tulip modules to be successfully imported and loaded on every computer.
-            # The 'auditwheel' tool (see https://github.com/pypa/auditwheel) has been developed
-            # in order to ease that patching task, so install its latest version with pip first.
-            # The tool is only compatible with Python 3.X, so we will use Python 3.5 installed
-            # in the docker image provided by the manylinux project (see https://github.com/pypa/manylinux).
+          ADD_CUSTOM_TARGET(tulip-core-wheel
+            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+            COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
+            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
 
-            # Use a patched version of the auditwheel tool as the official one does not
-            # repair Tulip-Python wheels correctly
-            EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip uninstall -y auditwheel)
-            EXECUTE_PROCESS(COMMAND git clone -b purelib_fixes https://github.com/anlambert/auditwheel.git ERROR_QUIET)
-            EXECUTE_PROCESS(COMMAND /opt/python/cp35-cp35m/bin/pip install auditwheel/)
+          ADD_CUSTOM_TARGET(tulip-gui-wheel
+            COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
+            COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
+            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
+            DEPENDS tulip-core-wheel)
 
-            ADD_CUSTOM_TARGET(tulip-core-wheel
-                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                              COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
-                              WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+        ENDIF(NOT LINUX)
 
-            ADD_CUSTOM_TARGET(tulip-gui-wheel
-                              COMMAND ${PYTHON_EXECUTABLE} setup.py bdist_wheel
-                              COMMAND /opt/python/cp35-cp35m/bin/auditwheel repair -L native -w ./dist ./dist/`ls -t ./dist/ | head -1`
-                              WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../
-                              DEPENDS tulip-core-wheel)
-
-          ENDIF(NOT LINUX)
-
-          # In order to upload the generated wheels, an account must be created on PyPi
-          # and the following configuration must be stored in the ~/.pypirc file
-          ##############################################################
-          # [distutils]
-          # index-servers=
-          #     pypi
-          #     pypitest
-          #
-          # [pypitest]
-          # repository = https://testpypi.python.org/pypi
-          # username = <your user name goes here>
-          # password = <your password goes here>
-          #
-          # [pypi]
-          # repository = https://pypi.python.org/pypi
-          # username = <your user name goes here>
-          # password = <your password goes here>
-          ###############################################################
+        # In order to upload the generated wheels, an account must be created on PyPi
+        # and the following configuration must be stored in the ~/.pypirc file
+        ##############################################################
+        # [distutils]
+        # index-servers=
+        #     pypi
+        #     pypitest
+        #
+        # [pypitest]
+        # repository = https://testpypi.python.org/pypi
+        # username = <your user name goes here>
+        # password = <your password goes here>
+        #
+        # [pypi]
+        # repository = https://pypi.python.org/pypi
+        # username = <your user name goes here>
+        # password = <your password goes here>
+        ###############################################################
 
 
-          SET(TWINE twine)
-          IF(EXISTS ${PYTHON_HOME_PATH}/twine)
-            SET(TWINE ${PYTHON_HOME_PATH}/twine)
-          ENDIF(EXISTS ${PYTHON_HOME_PATH}/twine)
-          IF(WIN32)
-            SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
-          ENDIF(WIN32)
-          SET(WHEEL_FILES_REGEXP "*")
-          IF(LINUX)
-            SET(WHEEL_FILES_REGEXP "*manylinux*")
-          ENDIF(LINUX)
-          ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
-                            COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
-                            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
-          ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
-                            COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
-                            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
-          ADD_CUSTOM_TARGET(tulip-core-wheel-upload
-                            COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-                            WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
-          ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
-                            COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
-                            COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
-                            WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+        SET(TWINE twine)
+        IF(EXISTS ${PYTHON_HOME_PATH}/twine)
+          SET(TWINE ${PYTHON_HOME_PATH}/twine)
+        ENDIF(EXISTS ${PYTHON_HOME_PATH}/twine)
+        IF(WIN32)
+          SET(TWINE ${PYTHON_INCLUDE_DIR}/../Scripts/twine.exe)
+        ENDIF(WIN32)
+        SET(WHEEL_FILES_REGEXP "*")
+        IF(LINUX)
+          SET(WHEEL_FILES_REGEXP "*manylinux*")
+        ENDIF(LINUX)
+        ADD_CUSTOM_TARGET(tulip-core-wheel-upload-test
+          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
+          COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
+          WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+        ADD_CUSTOM_TARGET(tulip-gui-wheel-upload-test
+          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://testpypi.python.org/pypi
+          COMMAND ${TWINE} upload -r pypitest dist/${WHEEL_FILES_REGEXP}
+          WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
+        ADD_CUSTOM_TARGET(tulip-core-wheel-upload
+          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
+          COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
+          WORKING_DIRECTORY ${TULIP_PYTHON_FOLDER}/../)
+        ADD_CUSTOM_TARGET(tulip-gui-wheel-upload
+          COMMAND ${PYTHON_EXECUTABLE} setup.py register -r https://pypi.python.org/pypi
+          COMMAND ${TWINE} upload -r pypi dist/${WHEEL_FILES_REGEXP}
+          WORKING_DIRECTORY ${TULIPGUI_PYTHON_FOLDER}/../)
 
-          ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
-          ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test tulip-gui-wheel-upload-test)
-          ADD_CUSTOM_TARGET(wheels-upload DEPENDS tulip-core-wheel-upload tulip-gui-wheel-upload)
-        ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
+        ADD_CUSTOM_TARGET(wheels DEPENDS tulip-core-wheel tulip-gui-wheel)
+        ADD_CUSTOM_TARGET(wheels-upload-test DEPENDS tulip-core-wheel-upload-test tulip-gui-wheel-upload-test)
+        ADD_CUSTOM_TARGET(wheels-upload DEPENDS tulip-core-wheel-upload tulip-gui-wheel-upload)
+      ENDIF(TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 
-      ENDIF(PYTHONLIBS_FOUND)
-    ENDIF(PYTHONINTERP_FOUND)
-  ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
+    ENDIF(PYTHONLIBS_FOUND)
+  ENDIF(PYTHONINTERP_FOUND)
+ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-ENDIF(NOT TULIP_BUILD_CORE_ONLY)
+
 
 ## ========================================================
 ## Include and library paths
@@ -763,14 +764,17 @@ IF(NOT EMSCRIPTEN)
 INSTALL(FILES AUTHORS
               COPYING.LESSER
               cmake/FindTULIP.cmake
-              cmake/FindGLEW.cmake
-              cmake/FindQtX.cmake
               cmake/TulipUseFile.cmake
-              cmake/FindSphinx.cmake
         DESTINATION ${TulipShareInstallDir})
 ENDIF(NOT EMSCRIPTEN)
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
+  INSTALL(FILES AUTHORS
+                cmake/FindGLEW.cmake
+		cmake/FindQtX.cmake
+		cmake/FindSphinx.cmake
+	  DESTINATION ${TulipShareInstallDir})
+
   ADD_SUBDIRECTORY(bundlers)
 
   ## ========================================================

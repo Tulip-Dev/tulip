@@ -1,3 +1,5 @@
+ADD_CORE_FILES(.)
+
 IF(WIN32)
 INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/tulipplugins.py DESTINATION ${TulipBinInstallDir}/python COMPONENT tulip_python)
 ELSE(WIN32)
