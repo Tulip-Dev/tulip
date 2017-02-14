@@ -307,6 +307,7 @@ public:
 
     if (eltTypes.getCurrent() == ENUMERATED_ELT) {
 #ifndef TULIP_BUILD_CORE_ONLY
+
       if(targetType.getCurrent()==NODES_TARGET) {
 
         node n;
@@ -363,10 +364,11 @@ public:
     else {
       // check if input property is a NumericProperty
       if (!dynamic_cast<NumericProperty*>(metric)) {
-	errorMsg += "For a linear, logarithmic or uniform color mapping,\nthe input property must be a Double or Integer property";
+        errorMsg += "For a linear, logarithmic or uniform color mapping,\nthe input property must be a Double or Integer property";
         return false;
       }
     }
+
     return true;
   }
 };
