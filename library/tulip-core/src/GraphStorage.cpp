@@ -669,11 +669,13 @@ void GraphStorage::delAllNodes() {
 void GraphStorage::removeFromEdgeContainer(EdgeContainer &c, const edge e) {
   std::vector<edge>& edges = c.edges;
   unsigned int nbEdges = edges.size();
+
   for (unsigned int i = 0; i < nbEdges; ++i)
     if ((e == edges[i]) && (i != nbEdges - 1)) {
       memmove(&edges[i], &edges[i + 1], (nbEdges - i - 1) * sizeof(edge));
       break;
     }
+
   edges.pop_back();
 }
 //=======================================================
