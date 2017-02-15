@@ -82,9 +82,9 @@ int getNumIterators() {
 //============================================================
 SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val)
   :FactorNodeIterator(sG,filter), sg(sG), value(val) {
-  it=_parentGraph->getNodes();
+  it=sg->getNodes();
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->addListener(this);
+  sg->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
@@ -99,8 +99,7 @@ void SGraphNodeIterator::prepareNext() {
   while(it->hasNext()) {
     curNode = it->next();
 
-    if (_filter.get(curNode) == value &&
-        sg->isElement(curNode))
+    if (_filter.get(curNode) == value)
       return;
   }
 
@@ -203,16 +202,16 @@ bool InOutNodesIterator::hasNext() {
 }
 //===============================================================
 SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val):FactorEdgeIterator(sG,filter), sg(sG), value(val) {
-  it=_parentGraph->getEdges();
+  it=sg->getEdges();
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->addListener(this);
+  sg->addListener(this);
 #endif
   // anticipate first iteration
   prepareNext();
 }
 SGraphEdgeIterator::~SGraphEdgeIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
-  _parentGraph->removeListener(this);
+  sg->removeListener(this);
 #endif
   delete it;
 }
@@ -220,8 +219,7 @@ void SGraphEdgeIterator::prepareNext() {
   while(it->hasNext()) {
     curEdge=it->next();
 
-    if (_filter.get(curEdge.id) == value &&
-        sg->isElement(curEdge))
+    if (_filter.get(curEdge.id) == value)
       return;
   }
 
