@@ -30,7 +30,7 @@ namespace tlp {
 struct SGraphNodeData {
   unsigned int outDegree;
   unsigned int inDegree;
-SGraphNodeData() :outDegree(0), inDegree(0) {}
+  SGraphNodeData() :outDegree(0), inDegree(0) {}
   inline void outDegreeAdd(int i) {
     outDegree += i;
   }
