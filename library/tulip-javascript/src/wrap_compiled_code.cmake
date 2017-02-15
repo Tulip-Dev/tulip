@@ -74,6 +74,10 @@ FILE(APPEND ${JSFILE} "
     });
   };
 
+  if (workerMode) {
+    tulip.init();
+  }
+
   if (typeof define === 'function' && define.amd) define(tulip); else if (typeof module === 'object' && module.exports) module.exports = tulip;
 
 }();")
