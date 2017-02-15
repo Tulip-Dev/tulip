@@ -29,9 +29,9 @@
 using namespace std;
 namespace tlp {
 //----------------------------------------------------------------
-  GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
-		       unsigned int sgId):
-    GraphAbstract(supergraph, sgId) {
+GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
+                     unsigned int sgId):
+  GraphAbstract(supergraph, sgId) {
   _nodeData.setAll(NULL);
   edgeAdaptativeFilter.setAll(false);
 
@@ -98,8 +98,8 @@ edge GraphView::existEdge(const node src, const node tgt,
   std::vector<edge> ee;
 
   return ((GraphImpl *)getRoot())->getEdges(src, tgt, directed,
-					    ee, this, true)
-     ? ee[0] : edge();
+         ee, this, true)
+         ? ee[0] : edge();
 }
 //----------------------------------------------------------------
 void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
@@ -129,22 +129,24 @@ void GraphView::setEndsInternal(const edge e, node src, node tgt,
 
       if (src != newSrc) {
         _nodeData.get(newSrc.id)->outDegreeAdd(1);
-	if (src.isValid() && isElement(src))
-	  _nodeData.get(src.id)->outDegreeAdd(-1);
-	else
-	  // as src may no longer exist (pop case)
-	  // set src as invalid for subgraphs loop
-	  src = node();
+
+        if (src.isValid() && isElement(src))
+          _nodeData.get(src.id)->outDegreeAdd(-1);
+        else
+          // as src may no longer exist (pop case)
+          // set src as invalid for subgraphs loop
+          src = node();
       }
 
       if (tgt != newTgt) {
         _nodeData.get(newTgt.id)->inDegreeAdd(1);
-	if (tgt.isValid() && isElement(tgt))
-	  _nodeData.get(tgt.id)->inDegreeAdd(-1);
-	else
-	  // as tgt may no longer exist (pop case)
-	  // set tgt as invalid for subgraphs loop
-	  tgt = node();
+
+        if (tgt.isValid() && isElement(tgt))
+          _nodeData.get(tgt.id)->inDegreeAdd(-1);
+        else
+          // as tgt may no longer exist (pop case)
+          // set tgt as invalid for subgraphs loop
+          tgt = node();
       }
 
       // notification
