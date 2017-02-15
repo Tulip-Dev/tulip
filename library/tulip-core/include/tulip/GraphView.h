@@ -26,9 +26,25 @@
 #include <tulip/MutableContainer.h>
 
 namespace tlp {
+// used for node management
+struct SGraphNodeData {
+  unsigned int outDegree;
+  unsigned int inDegree;
+  SGraphNodeData() : outDegree(0), inDegree(0) {
+  }
+  inline void outDegreeAdd(int i) {
+    outDegree += i;
+  }
+  inline void inDegreeAdd(int i) {
+    inDegree += i;
+  }
+};
+
+typedef SGraphNodeData *SGraphNodeDataPtr;
+DECL_STORED_PTR(SGraphNodeDataPtr);
 
 /**
- * This class is one the implementation of the Graph Interface
+ * This class is one of the implementation of the Graph Interface
  * It only filters the elements of its parents.
  */
 class GraphView : public GraphAbstract {
@@ -52,15 +68,33 @@ public:
   void setEdgeOrder(const node, const std::vector<edge> &);
   void swapEdgeOrder(const node, const edge, const edge);
   //=========================================================================
-  bool isElement(const node) const;
-  bool isElement(const edge) const;
+  inline bool isElement(const node n) const {
+    return _nodeData.get(n.id) != NULL;
+  }
+  bool isElement(const edge e) const {
+    return edgeAdaptativeFilter.get(e.id);
+  }
   edge existEdge(const node source, const node target, bool directed) const;
-  unsigned int numberOfNodes() const;
-  unsigned int numberOfEdges() const;
+  unsigned int numberOfNodes() const {
+    return _nodeData.numberOfNonDefaultValues();
+  }
+  unsigned int numberOfEdges() const {
+    return edgeAdaptativeFilter.numberOfNonDefaultValues();
+  }
   //=========================================================================
-  unsigned int deg(const node) const;
-  unsigned int indeg(const node) const;
-  unsigned int outdeg(const node) const;
+  unsigned int deg(const node n) const {
+    assert(isElement(n));
+    SGraphNodeData *nData = _nodeData.get(n.id);
+    return nData->inDegree + nData->outDegree;
+  }
+  unsigned int indeg(const node n) const {
+    assert(isElement(n));
+    return _nodeData.get(n.id)->inDegree;
+  }
+  unsigned int outdeg(const node n) const {
+    assert(isElement(n));
+    return _nodeData.get(n.id)->outDegree;
+  }
   //=========================================================================
   Iterator<node> *getNodes() const;
   Iterator<node> *getInNodes(const node) const;
@@ -97,15 +131,13 @@ protected:
   void removeEdges(const std::vector<edge> &edges);
 
 private:
-  MutableContainer<bool> nodeAdaptativeFilter;
+  MutableContainer<SGraphNodeDataPtr> _nodeData;
   MutableContainer<bool> edgeAdaptativeFilter;
-  MutableContainer<unsigned int> outDegree;
-  MutableContainer<unsigned int> inDegree;
-  mutable int nNodes;
-  mutable int nEdges;
+  void outDegreeAdd(node n, int i);
+  void inDegreeAdd(node n, int i);
   edge addEdgeInternal(edge);
   void reverseInternal(const edge, const node src, const node tgt);
-  void setEndsInternal(const edge, const node src, const node tgt, const node newSrc, const node newTgt);
+  void setEndsInternal(const edge, node src, node tgt, const node newSrc, const node newTgt);
   void addNodesInternal(const std::vector<node> &);
   void addEdgesInternal(const std::vector<edge> &edges, const std::vector<std::pair<node, node>> &ends);
 };
