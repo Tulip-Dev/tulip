@@ -195,6 +195,8 @@ void NodeLinkDiagramComponent::setState(const tlp::DataSet &data) {
   data.get<bool>("keepScenePointOfViewOnSubgraphChanging", keepSPOV);
   getGlMainWidget()->setKeepScenePointOfViewOnSubgraphChanging(keepSPOV);
 
+  data.get("Tooltips", _tooltips);
+
   createScene(graph(), data);
   registerTriggers();
 
@@ -219,6 +221,7 @@ void NodeLinkDiagramComponent::graphChanged(tlp::Graph *graph) {
 tlp::DataSet NodeLinkDiagramComponent::state() const {
   DataSet data = sceneData();
   data.set("keepScenePointOfViewOnSubgraphChanging", getGlMainWidget()->keepScenePointOfViewOnSubgraphChanging());
+  data.set("Tooltips", _tooltips);
   return data;
 }
 
