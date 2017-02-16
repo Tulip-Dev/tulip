@@ -81,7 +81,7 @@ fi
 # check the result graph file (see tlp_diff.sh)
 if [ $(sh tlp_diff.sh $TLP_OUTPUT_FILE test_gui.tlp | wc -l) -gt 0 ]; then
     mv test_gui.tlp failed_${TEST_NAME}.tlp
-    echo "$TEST_NAME test failed: diff failure between ${TLP_OUTPUT_FILE} & failed_${TEST_NAME}.tlp"
+    echo "$TEST_NAME test failed: unexpected diff failed_${TEST_NAME}.tlp ${TLP_OUTPUT_FILE}"
 else
     rm test_gui.tlp
     echo "*** $TEST_NAME test OK ***"
