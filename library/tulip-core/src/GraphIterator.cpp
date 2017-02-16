@@ -365,9 +365,9 @@ bool InOutEdgesIterator::hasNext() {
 //============================================================
 GraphNodeIterator::GraphNodeIterator(const Graph*
 #if !defined(NDEBUG) && !defined(_OPENMP)
-    g
+                                     g
 #endif
-    , Iterator<node>* it):
+                                     , Iterator<node>* it):
   itId(it) {
 #if !defined(NDEBUG) && !defined(_OPENMP)
   graph = g;
@@ -390,9 +390,9 @@ bool GraphNodeIterator::hasNext() {
 //===============================================================
 GraphEdgeIterator::GraphEdgeIterator(const Graph*
 #if !defined(NDEBUG) && !defined(_OPENMP)
-    g
+                                     g
 #endif
-    , Iterator<edge>* it):
+                                     , Iterator<edge>* it):
   itId(it) {
 #if !defined(NDEBUG) && !defined(_OPENMP)
   graph = g;

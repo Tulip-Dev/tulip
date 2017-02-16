@@ -34,7 +34,7 @@ namespace tlp {
 class Graph;
 class GraphImpl;
 class GraphView;
- 
+
 struct node;
 struct edge;
 class NodeIterator :public Iterator<node> {
@@ -95,7 +95,7 @@ private:
   Iterator<node> *it;
   node curNode;
   bool value;
-  const MutableContainer<bool>& _filter;                     
+  const MutableContainer<bool>& _filter;
 
 public:
   SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter,
@@ -162,7 +162,7 @@ private:
 public:
   SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter,
                      bool value = true);
- ~SGraphEdgeIterator();
+  ~SGraphEdgeIterator();
   edge next();
   bool hasNext();
 protected:
@@ -207,7 +207,7 @@ private:
   Iterator<edge> *it;
   edge curEdge;
   const GraphView* sg;
-  
+
 public:
   InOutEdgesIterator(const GraphView *sG, node n);
   ~InOutEdgesIterator();
