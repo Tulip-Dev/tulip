@@ -450,7 +450,7 @@ void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
   Iterator<unsigned int> *it = _nodeData.findAll(NULL, false);
-  return (new UINTIterator<node>(it));
+  return new GraphNodeIterator(this, new UINTIterator<node>(it));
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getInNodes(const node n) const {
@@ -467,7 +467,7 @@ Iterator<node>* GraphView::getInOutNodes(const node n) const {
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getEdges() const {
   Iterator<unsigned int> *it = edgeAdaptativeFilter.findAll(true);
-  return (new UINTIterator<edge>(it));
+  return new GraphEdgeIterator(this, new UINTIterator<edge>(it));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getInEdges(const node n) const {
