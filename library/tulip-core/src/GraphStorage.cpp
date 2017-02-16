@@ -284,10 +284,9 @@ bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
         if (onlyFirst)
           return true;
       }
-
-      previous = e;
-      ++it;
     }
+    previous = e;
+    ++it;
   }
 
   return !vEdges.empty();
