@@ -285,6 +285,7 @@ bool GraphStorage::getEdges(const node src, const node tgt, bool directed,
           return true;
       }
     }
+
     previous = e;
     ++it;
   }
