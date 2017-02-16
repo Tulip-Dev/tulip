@@ -37,8 +37,8 @@ public:
 
 private :
   tlp::Graph *graph;
-  tlp::node n0, n1;
-  tlp::edge e0, e1;
+  tlp::node n0, n1, n2;
+  tlp::edge e0, e1, e2, e3;
 };
 
 #endif /* EXISTEDGETEST_H_ */
