@@ -334,35 +334,35 @@ void GraphImpl::swapEdgeOrder(const node n, const edge e1 , const edge e2) {
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphImpl::getNodes() const {
-  return new GraphImplNodeIterator(this, storage.getNodes());
+  return new GraphNodeIterator(this, storage.getNodes());
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphImpl::getInNodes(const node n) const {
-  return new GraphImplNodeIterator(this, storage.getInNodes(n));
+  return new GraphNodeIterator(this, storage.getInNodes(n));
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphImpl::getOutNodes(const node n) const {
-  return new GraphImplNodeIterator(this, storage.getOutNodes(n));
+  return new GraphNodeIterator(this, storage.getOutNodes(n));
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphImpl::getInOutNodes(const node n) const {
-  return new GraphImplNodeIterator(this, storage.getInOutNodes(n));
+  return new GraphNodeIterator(this, storage.getInOutNodes(n));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphImpl::getEdges() const {
-  return new GraphImplEdgeIterator(this, storage.getEdges());
+  return new GraphEdgeIterator(this, storage.getEdges());
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphImpl::getInEdges(const node n) const {
-  return new GraphImplEdgeIterator(this, storage.getInEdges(n));
+  return new GraphEdgeIterator(this, storage.getInEdges(n));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphImpl::getOutEdges(const node n) const {
-  return new GraphImplEdgeIterator(this, storage.getOutEdges(n));
+  return new GraphEdgeIterator(this, storage.getOutEdges(n));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphImpl::getInOutEdges(const node n) const {
-  return new GraphImplEdgeIterator(this, storage.getInOutEdges(n));
+  return new GraphEdgeIterator(this, storage.getInOutEdges(n));
 }
 //----------------------------------------------------------------
 std::vector<edge> GraphImpl::getEdges(const node src, const node tgt,

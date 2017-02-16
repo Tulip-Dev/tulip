@@ -449,40 +449,37 @@ void GraphView::swapEdgeOrder(const node n,const edge e1 , const edge e2) {
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
-  Iterator<unsigned int> *it=0;
-  it = _nodeData.findAll(NULL, false);
-
+  Iterator<unsigned int> *it = _nodeData.findAll(NULL, false);
   return (new UINTIterator<node>(it));
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getInNodes(const node n) const {
-  return (new InNodesIterator(this, edgeAdaptativeFilter,n));
+  return (new InNodesIterator(this, n));
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getOutNodes(const node n) const {
-  return (new OutNodesIterator(this, edgeAdaptativeFilter,n));
+  return (new OutNodesIterator(this, n));
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getInOutNodes(const node n) const {
-  return (new InOutNodesIterator(this, edgeAdaptativeFilter,n));
+  return (new InOutNodesIterator(this, n));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getEdges() const {
-  Iterator<unsigned int> *it=0;
-  it = edgeAdaptativeFilter.findAll(true);
+  Iterator<unsigned int> *it = edgeAdaptativeFilter.findAll(true);
   return (new UINTIterator<edge>(it));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getInEdges(const node n) const {
-  return (new InEdgesIterator(this, edgeAdaptativeFilter,n));
+  return (new InEdgesIterator(this, n));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getOutEdges(const node n) const {
-  return (new OutEdgesIterator(this, edgeAdaptativeFilter,n));
+  return (new OutEdgesIterator(this, n));
 }
 //----------------------------------------------------------------
 Iterator<edge>* GraphView::getInOutEdges(const node n) const {
-  return (new InOutEdgesIterator(this, edgeAdaptativeFilter,n));
+  return (new InOutEdgesIterator(this, n));
 }
 //----------------------------------------------------------------
 std::vector<edge> GraphView::getEdges(const node src, const node tgt,
