@@ -738,7 +738,6 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
   GreatThanEdge gte(orderingProperty);
   GreatThanNode gtn(orderingProperty);
   GreatThanNodeEntityLODUnit gtnlod(orderingProperty);
-  GreatThanEdgeEntityLODUnit gtelod(orderingProperty);
 
   initLODCalculator();
 
@@ -865,7 +864,7 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     }
   }
 
-  if (_renderingParameters.displayEdges() && _graph->numberOfEdges() > 0 && (lineEdges.size() + quadsEdges.size()) > 0) {
+  if (_renderingParameters.displayEdges() && _graph->numberOfEdges() > 0 && (lineEdges.size() + quadsEdges.size() + selectedQuadsEdges.size()) > 0) {
 
     uploadEdgesData();
 
