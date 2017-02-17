@@ -66,6 +66,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.AccountCheck` (:mdicon:`account-check`)
   * :const:`tlp.TulipMaterialDesignIcons.AccountCircle` (:mdicon:`account-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.AccountConvert` (:mdicon:`account-convert`)
+  * :const:`tlp.TulipMaterialDesignIcons.AccountEdit` (:mdicon:`account-edit`)
   * :const:`tlp.TulipMaterialDesignIcons.AccountKey` (:mdicon:`account-key`)
   * :const:`tlp.TulipMaterialDesignIcons.AccountLocation` (:mdicon:`account-location`)
   * :const:`tlp.TulipMaterialDesignIcons.AccountMinus` (:mdicon:`account-minus`)
@@ -104,7 +105,9 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.AlertCircle` (:mdicon:`alert-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.AlertCircleOutline` (:mdicon:`alert-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.AlertOctagon` (:mdicon:`alert-octagon`)
+  * :const:`tlp.TulipMaterialDesignIcons.AlertOctagram` (:mdicon:`alert-octagram`)
   * :const:`tlp.TulipMaterialDesignIcons.AlertOutline` (:mdicon:`alert-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.AllInclusive` (:mdicon:`all-inclusive`)
   * :const:`tlp.TulipMaterialDesignIcons.Alpha` (:mdicon:`alpha`)
   * :const:`tlp.TulipMaterialDesignIcons.Alphabetical` (:mdicon:`alphabetical`)
   * :const:`tlp.TulipMaterialDesignIcons.Altimeter` (:mdicon:`altimeter`)
@@ -117,6 +120,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.AndroidDebugBridge` (:mdicon:`android-debug-bridge`)
   * :const:`tlp.TulipMaterialDesignIcons.AndroidStudio` (:mdicon:`android-studio`)
   * :const:`tlp.TulipMaterialDesignIcons.Angular` (:mdicon:`angular`)
+  * :const:`tlp.TulipMaterialDesignIcons.Angularjs` (:mdicon:`angularjs`)
   * :const:`tlp.TulipMaterialDesignIcons.Animation` (:mdicon:`animation`)
   * :const:`tlp.TulipMaterialDesignIcons.Apple` (:mdicon:`apple`)
   * :const:`tlp.TulipMaterialDesignIcons.AppleFinder` (:mdicon:`apple-finder`)
@@ -129,7 +133,6 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.AppleMobileme` (:mdicon:`apple-mobileme`)
   * :const:`tlp.TulipMaterialDesignIcons.AppleSafari` (:mdicon:`apple-safari`)
   * :const:`tlp.TulipMaterialDesignIcons.Application` (:mdicon:`application`)
-  * :const:`tlp.TulipMaterialDesignIcons.Appnet` (:mdicon:`appnet`)
   * :const:`tlp.TulipMaterialDesignIcons.Apps` (:mdicon:`apps`)
   * :const:`tlp.TulipMaterialDesignIcons.Archive` (:mdicon:`archive`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrangeBringForward` (:mdicon:`arrange-bring-forward`)
@@ -146,6 +149,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ArrowDownBoldCircle` (:mdicon:`arrow-down-bold-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowDownBoldCircleOutline` (:mdicon:`arrow-down-bold-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowDownBoldHexagonOutline` (:mdicon:`arrow-down-bold-hexagon-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.ArrowDownBox` (:mdicon:`arrow-down-box`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowDownDropCircle` (:mdicon:`arrow-down-drop-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowDownDropCircleOutline` (:mdicon:`arrow-down-drop-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowExpand` (:mdicon:`arrow-expand`)
@@ -155,6 +159,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ArrowLeftBoldCircle` (:mdicon:`arrow-left-bold-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowLeftBoldCircleOutline` (:mdicon:`arrow-left-bold-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowLeftBoldHexagonOutline` (:mdicon:`arrow-left-bold-hexagon-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.ArrowLeftBox` (:mdicon:`arrow-left-box`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowLeftDropCircle` (:mdicon:`arrow-left-drop-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowLeftDropCircleOutline` (:mdicon:`arrow-left-drop-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowRight` (:mdicon:`arrow-right`)
@@ -162,6 +167,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ArrowRightBoldCircle` (:mdicon:`arrow-right-bold-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowRightBoldCircleOutline` (:mdicon:`arrow-right-bold-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowRightBoldHexagonOutline` (:mdicon:`arrow-right-bold-hexagon-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.ArrowRightBox` (:mdicon:`arrow-right-box`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowRightDropCircle` (:mdicon:`arrow-right-drop-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowRightDropCircleOutline` (:mdicon:`arrow-right-drop-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowTopLeft` (:mdicon:`arrow-top-left`)
@@ -171,9 +177,11 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ArrowUpBoldCircle` (:mdicon:`arrow-up-bold-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowUpBoldCircleOutline` (:mdicon:`arrow-up-bold-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowUpBoldHexagonOutline` (:mdicon:`arrow-up-bold-hexagon-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.ArrowUpBox` (:mdicon:`arrow-up-box`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowUpDropCircle` (:mdicon:`arrow-up-drop-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.ArrowUpDropCircleOutline` (:mdicon:`arrow-up-drop-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Assistant` (:mdicon:`assistant`)
+  * :const:`tlp.TulipMaterialDesignIcons.Asterisk` (:mdicon:`asterisk`)
   * :const:`tlp.TulipMaterialDesignIcons.At` (:mdicon:`at`)
   * :const:`tlp.TulipMaterialDesignIcons.Attachment` (:mdicon:`attachment`)
   * :const:`tlp.TulipMaterialDesignIcons.Audiobook` (:mdicon:`audiobook`)
@@ -258,6 +266,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.BlurOff` (:mdicon:`blur-off`)
   * :const:`tlp.TulipMaterialDesignIcons.BlurRadial` (:mdicon:`blur-radial`)
   * :const:`tlp.TulipMaterialDesignIcons.Bomb` (:mdicon:`bomb`)
+  * :const:`tlp.TulipMaterialDesignIcons.BombOff` (:mdicon:`bomb-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Bone` (:mdicon:`bone`)
   * :const:`tlp.TulipMaterialDesignIcons.Book` (:mdicon:`book`)
   * :const:`tlp.TulipMaterialDesignIcons.BookMinus` (:mdicon:`book-minus`)
@@ -276,6 +285,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.BookmarkPlusOutline` (:mdicon:`bookmark-plus-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.BookmarkRemove` (:mdicon:`bookmark-remove`)
   * :const:`tlp.TulipMaterialDesignIcons.Boombox` (:mdicon:`boombox`)
+  * :const:`tlp.TulipMaterialDesignIcons.Bootstrap` (:mdicon:`bootstrap`)
   * :const:`tlp.TulipMaterialDesignIcons.BorderAll` (:mdicon:`border-all`)
   * :const:`tlp.TulipMaterialDesignIcons.BorderBottom` (:mdicon:`border-bottom`)
   * :const:`tlp.TulipMaterialDesignIcons.BorderColor` (:mdicon:`border-color`)
@@ -363,6 +373,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Cards` (:mdicon:`cards`)
   * :const:`tlp.TulipMaterialDesignIcons.CardsOutline` (:mdicon:`cards-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.CardsPlayingOutline` (:mdicon:`cards-playing-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.CardsVariant` (:mdicon:`cards-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Carrot` (:mdicon:`carrot`)
   * :const:`tlp.TulipMaterialDesignIcons.Cart` (:mdicon:`cart`)
   * :const:`tlp.TulipMaterialDesignIcons.CartOff` (:mdicon:`cart-off`)
@@ -437,6 +448,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ClipboardArrowDown` (:mdicon:`clipboard-arrow-down`)
   * :const:`tlp.TulipMaterialDesignIcons.ClipboardArrowLeft` (:mdicon:`clipboard-arrow-left`)
   * :const:`tlp.TulipMaterialDesignIcons.ClipboardCheck` (:mdicon:`clipboard-check`)
+  * :const:`tlp.TulipMaterialDesignIcons.ClipboardFlow` (:mdicon:`clipboard-flow`)
   * :const:`tlp.TulipMaterialDesignIcons.ClipboardOutline` (:mdicon:`clipboard-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ClipboardText` (:mdicon:`clipboard-text`)
   * :const:`tlp.TulipMaterialDesignIcons.Clippy` (:mdicon:`clippy`)
@@ -455,6 +467,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.CloseNetwork` (:mdicon:`close-network`)
   * :const:`tlp.TulipMaterialDesignIcons.CloseOctagon` (:mdicon:`close-octagon`)
   * :const:`tlp.TulipMaterialDesignIcons.CloseOctagonOutline` (:mdicon:`close-octagon-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.CloseOutline` (:mdicon:`close-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.ClosedCaption` (:mdicon:`closed-caption`)
   * :const:`tlp.TulipMaterialDesignIcons.Cloud` (:mdicon:`cloud`)
   * :const:`tlp.TulipMaterialDesignIcons.CloudCheck` (:mdicon:`cloud-check`)
@@ -482,6 +495,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.CodeTagsCheck` (:mdicon:`code-tags-check`)
   * :const:`tlp.TulipMaterialDesignIcons.Codepen` (:mdicon:`codepen`)
   * :const:`tlp.TulipMaterialDesignIcons.Coffee` (:mdicon:`coffee`)
+  * :const:`tlp.TulipMaterialDesignIcons.CoffeeOutline` (:mdicon:`coffee-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.CoffeeToGo` (:mdicon:`coffee-to-go`)
   * :const:`tlp.TulipMaterialDesignIcons.Coin` (:mdicon:`coin`)
   * :const:`tlp.TulipMaterialDesignIcons.Coins` (:mdicon:`coins`)
@@ -508,6 +522,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.CompassOutline` (:mdicon:`compass-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Console` (:mdicon:`console`)
   * :const:`tlp.TulipMaterialDesignIcons.ContactMail` (:mdicon:`contact-mail`)
+  * :const:`tlp.TulipMaterialDesignIcons.Contacts` (:mdicon:`contacts`)
   * :const:`tlp.TulipMaterialDesignIcons.ContentCopy` (:mdicon:`content-copy`)
   * :const:`tlp.TulipMaterialDesignIcons.ContentCut` (:mdicon:`content-cut`)
   * :const:`tlp.TulipMaterialDesignIcons.ContentDuplicate` (:mdicon:`content-duplicate`)
@@ -568,6 +583,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.DecimalIncrease` (:mdicon:`decimal-increase`)
   * :const:`tlp.TulipMaterialDesignIcons.Delete` (:mdicon:`delete`)
   * :const:`tlp.TulipMaterialDesignIcons.DeleteCircle` (:mdicon:`delete-circle`)
+  * :const:`tlp.TulipMaterialDesignIcons.DeleteEmpty` (:mdicon:`delete-empty`)
   * :const:`tlp.TulipMaterialDesignIcons.DeleteForever` (:mdicon:`delete-forever`)
   * :const:`tlp.TulipMaterialDesignIcons.DeleteSweep` (:mdicon:`delete-sweep`)
   * :const:`tlp.TulipMaterialDesignIcons.DeleteVariant` (:mdicon:`delete-variant`)
@@ -623,6 +639,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Duck` (:mdicon:`duck`)
   * :const:`tlp.TulipMaterialDesignIcons.Dumbbell` (:mdicon:`dumbbell`)
   * :const:`tlp.TulipMaterialDesignIcons.Earth` (:mdicon:`earth`)
+  * :const:`tlp.TulipMaterialDesignIcons.EarthBox` (:mdicon:`earth-box`)
+  * :const:`tlp.TulipMaterialDesignIcons.EarthBoxOff` (:mdicon:`earth-box-off`)
   * :const:`tlp.TulipMaterialDesignIcons.EarthOff` (:mdicon:`earth-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Edge` (:mdicon:`edge`)
   * :const:`tlp.TulipMaterialDesignIcons.Eject` (:mdicon:`eject`)
@@ -630,6 +648,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ElevationRise` (:mdicon:`elevation-rise`)
   * :const:`tlp.TulipMaterialDesignIcons.Elevator` (:mdicon:`elevator`)
   * :const:`tlp.TulipMaterialDesignIcons.Email` (:mdicon:`email`)
+  * :const:`tlp.TulipMaterialDesignIcons.EmailAlert` (:mdicon:`email-alert`)
   * :const:`tlp.TulipMaterialDesignIcons.EmailOpen` (:mdicon:`email-open`)
   * :const:`tlp.TulipMaterialDesignIcons.EmailOpenOutline` (:mdicon:`email-open-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.EmailOutline` (:mdicon:`email-outline`)
@@ -664,6 +683,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Export` (:mdicon:`export`)
   * :const:`tlp.TulipMaterialDesignIcons.Eye` (:mdicon:`eye`)
   * :const:`tlp.TulipMaterialDesignIcons.EyeOff` (:mdicon:`eye-off`)
+  * :const:`tlp.TulipMaterialDesignIcons.EyeOutline` (:mdicon:`eye-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.EyeOutlineOff` (:mdicon:`eye-outline-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Eyedropper` (:mdicon:`eyedropper`)
   * :const:`tlp.TulipMaterialDesignIcons.EyedropperVariant` (:mdicon:`eyedropper-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Face` (:mdicon:`face`)
@@ -674,7 +695,9 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Factory` (:mdicon:`factory`)
   * :const:`tlp.TulipMaterialDesignIcons.Fan` (:mdicon:`fan`)
   * :const:`tlp.TulipMaterialDesignIcons.FastForward` (:mdicon:`fast-forward`)
+  * :const:`tlp.TulipMaterialDesignIcons.FastForwardOutline` (:mdicon:`fast-forward-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Fax` (:mdicon:`fax`)
+  * :const:`tlp.TulipMaterialDesignIcons.Feather` (:mdicon:`feather`)
   * :const:`tlp.TulipMaterialDesignIcons.Ferry` (:mdicon:`ferry`)
   * :const:`tlp.TulipMaterialDesignIcons.File` (:mdicon:`file`)
   * :const:`tlp.TulipMaterialDesignIcons.FileChart` (:mdicon:`file-chart`)
@@ -714,6 +737,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.FilterRemove` (:mdicon:`filter-remove`)
   * :const:`tlp.TulipMaterialDesignIcons.FilterRemoveOutline` (:mdicon:`filter-remove-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.FilterVariant` (:mdicon:`filter-variant`)
+  * :const:`tlp.TulipMaterialDesignIcons.FindReplace` (:mdicon:`find-replace`)
   * :const:`tlp.TulipMaterialDesignIcons.Fingerprint` (:mdicon:`fingerprint`)
   * :const:`tlp.TulipMaterialDesignIcons.Fire` (:mdicon:`fire`)
   * :const:`tlp.TulipMaterialDesignIcons.Firefox` (:mdicon:`firefox`)
@@ -727,6 +751,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Flash` (:mdicon:`flash`)
   * :const:`tlp.TulipMaterialDesignIcons.FlashAuto` (:mdicon:`flash-auto`)
   * :const:`tlp.TulipMaterialDesignIcons.FlashOff` (:mdicon:`flash-off`)
+  * :const:`tlp.TulipMaterialDesignIcons.FlashOutline` (:mdicon:`flash-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.FlashRedEye` (:mdicon:`flash-red-eye`)
   * :const:`tlp.TulipMaterialDesignIcons.Flashlight` (:mdicon:`flashlight`)
   * :const:`tlp.TulipMaterialDesignIcons.FlashlightOff` (:mdicon:`flashlight-off`)
@@ -755,6 +780,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.FolderRemove` (:mdicon:`folder-remove`)
   * :const:`tlp.TulipMaterialDesignIcons.FolderStar` (:mdicon:`folder-star`)
   * :const:`tlp.TulipMaterialDesignIcons.FolderUpload` (:mdicon:`folder-upload`)
+  * :const:`tlp.TulipMaterialDesignIcons.FontAwesome` (:mdicon:`font-awesome`)
   * :const:`tlp.TulipMaterialDesignIcons.Food` (:mdicon:`food`)
   * :const:`tlp.TulipMaterialDesignIcons.FoodApple` (:mdicon:`food-apple`)
   * :const:`tlp.TulipMaterialDesignIcons.FoodForkDrink` (:mdicon:`food-fork-drink`)
@@ -776,6 +802,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.FormatFloatLeft` (:mdicon:`format-float-left`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatFloatNone` (:mdicon:`format-float-none`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatFloatRight` (:mdicon:`format-float-right`)
+  * :const:`tlp.TulipMaterialDesignIcons.FormatFont` (:mdicon:`format-font`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatHeader1` (:mdicon:`format-header-1`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatHeader2` (:mdicon:`format-header-2`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatHeader3` (:mdicon:`format-header-3`)
@@ -798,9 +825,12 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.FormatListBulleted` (:mdicon:`format-list-bulleted`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatListBulletedType` (:mdicon:`format-list-bulleted-type`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatListNumbers` (:mdicon:`format-list-numbers`)
+  * :const:`tlp.TulipMaterialDesignIcons.FormatPageBreak` (:mdicon:`format-page-break`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatPaint` (:mdicon:`format-paint`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatParagraph` (:mdicon:`format-paragraph`)
+  * :const:`tlp.TulipMaterialDesignIcons.FormatPilcrow` (:mdicon:`format-pilcrow`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatQuote` (:mdicon:`format-quote`)
+  * :const:`tlp.TulipMaterialDesignIcons.FormatRotate90` (:mdicon:`format-rotate-90`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatSection` (:mdicon:`format-section`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatSize` (:mdicon:`format-size`)
   * :const:`tlp.TulipMaterialDesignIcons.FormatStrikethrough` (:mdicon:`format-strikethrough`)
@@ -831,6 +861,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Function` (:mdicon:`function`)
   * :const:`tlp.TulipMaterialDesignIcons.Gamepad` (:mdicon:`gamepad`)
   * :const:`tlp.TulipMaterialDesignIcons.GamepadVariant` (:mdicon:`gamepad-variant`)
+  * :const:`tlp.TulipMaterialDesignIcons.Garage` (:mdicon:`garage`)
+  * :const:`tlp.TulipMaterialDesignIcons.GarageOpen` (:mdicon:`garage-open`)
   * :const:`tlp.TulipMaterialDesignIcons.GasCylinder` (:mdicon:`gas-cylinder`)
   * :const:`tlp.TulipMaterialDesignIcons.GasStation` (:mdicon:`gas-station`)
   * :const:`tlp.TulipMaterialDesignIcons.Gate` (:mdicon:`gate`)
@@ -845,6 +877,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Git` (:mdicon:`git`)
   * :const:`tlp.TulipMaterialDesignIcons.GithubBox` (:mdicon:`github-box`)
   * :const:`tlp.TulipMaterialDesignIcons.GithubCircle` (:mdicon:`github-circle`)
+  * :const:`tlp.TulipMaterialDesignIcons.GithubFace` (:mdicon:`github-face`)
   * :const:`tlp.TulipMaterialDesignIcons.GlassFlute` (:mdicon:`glass-flute`)
   * :const:`tlp.TulipMaterialDesignIcons.GlassMug` (:mdicon:`glass-mug`)
   * :const:`tlp.TulipMaterialDesignIcons.GlassStange` (:mdicon:`glass-stange`)
@@ -866,9 +899,11 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.GoogleDrive` (:mdicon:`google-drive`)
   * :const:`tlp.TulipMaterialDesignIcons.GoogleEarth` (:mdicon:`google-earth`)
   * :const:`tlp.TulipMaterialDesignIcons.GoogleGlass` (:mdicon:`google-glass`)
+  * :const:`tlp.TulipMaterialDesignIcons.GoogleKeep` (:mdicon:`google-keep`)
   * :const:`tlp.TulipMaterialDesignIcons.GoogleMaps` (:mdicon:`google-maps`)
   * :const:`tlp.TulipMaterialDesignIcons.GoogleNearby` (:mdicon:`google-nearby`)
   * :const:`tlp.TulipMaterialDesignIcons.GooglePages` (:mdicon:`google-pages`)
+  * :const:`tlp.TulipMaterialDesignIcons.GooglePhotos` (:mdicon:`google-photos`)
   * :const:`tlp.TulipMaterialDesignIcons.GooglePhysicalWeb` (:mdicon:`google-physical-web`)
   * :const:`tlp.TulipMaterialDesignIcons.GooglePlay` (:mdicon:`google-play`)
   * :const:`tlp.TulipMaterialDesignIcons.GooglePlus` (:mdicon:`google-plus`)
@@ -899,12 +934,16 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.HeartBox` (:mdicon:`heart-box`)
   * :const:`tlp.TulipMaterialDesignIcons.HeartBoxOutline` (:mdicon:`heart-box-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.HeartBroken` (:mdicon:`heart-broken`)
+  * :const:`tlp.TulipMaterialDesignIcons.HeartHalfOutline` (:mdicon:`heart-half-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.HeartHalfPart` (:mdicon:`heart-half-part`)
+  * :const:`tlp.TulipMaterialDesignIcons.HeartHalfPartOutline` (:mdicon:`heart-half-part-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.HeartOutline` (:mdicon:`heart-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.HeartPulse` (:mdicon:`heart-pulse`)
   * :const:`tlp.TulipMaterialDesignIcons.Help` (:mdicon:`help`)
   * :const:`tlp.TulipMaterialDesignIcons.HelpCircle` (:mdicon:`help-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.HelpCircleOutline` (:mdicon:`help-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Hexagon` (:mdicon:`hexagon`)
+  * :const:`tlp.TulipMaterialDesignIcons.HexagonMultiple` (:mdicon:`hexagon-multiple`)
   * :const:`tlp.TulipMaterialDesignIcons.HexagonOutline` (:mdicon:`hexagon-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Highway` (:mdicon:`highway`)
   * :const:`tlp.TulipMaterialDesignIcons.History` (:mdicon:`history`)
@@ -914,6 +953,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.HomeModern` (:mdicon:`home-modern`)
   * :const:`tlp.TulipMaterialDesignIcons.HomeOutline` (:mdicon:`home-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.HomeVariant` (:mdicon:`home-variant`)
+  * :const:`tlp.TulipMaterialDesignIcons.Hook` (:mdicon:`hook`)
+  * :const:`tlp.TulipMaterialDesignIcons.HookOff` (:mdicon:`hook-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Hops` (:mdicon:`hops`)
   * :const:`tlp.TulipMaterialDesignIcons.Hospital` (:mdicon:`hospital`)
   * :const:`tlp.TulipMaterialDesignIcons.HospitalBuilding` (:mdicon:`hospital-building`)
@@ -952,6 +993,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.InboxArrowDown` (:mdicon:`inbox-arrow-down`)
   * :const:`tlp.TulipMaterialDesignIcons.InboxArrowUp` (:mdicon:`inbox-arrow-up`)
   * :const:`tlp.TulipMaterialDesignIcons.Incognito` (:mdicon:`incognito`)
+  * :const:`tlp.TulipMaterialDesignIcons.Infinity` (:mdicon:`infinity`)
   * :const:`tlp.TulipMaterialDesignIcons.Information` (:mdicon:`information`)
   * :const:`tlp.TulipMaterialDesignIcons.InformationOutline` (:mdicon:`information-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.InformationVariant` (:mdicon:`information-variant`)
@@ -998,9 +1040,12 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.LanguagePhp` (:mdicon:`language-php`)
   * :const:`tlp.TulipMaterialDesignIcons.LanguagePython` (:mdicon:`language-python`)
   * :const:`tlp.TulipMaterialDesignIcons.LanguagePythonText` (:mdicon:`language-python-text`)
+  * :const:`tlp.TulipMaterialDesignIcons.LanguageSwift` (:mdicon:`language-swift`)
+  * :const:`tlp.TulipMaterialDesignIcons.LanguageTypescript` (:mdicon:`language-typescript`)
   * :const:`tlp.TulipMaterialDesignIcons.Laptop` (:mdicon:`laptop`)
   * :const:`tlp.TulipMaterialDesignIcons.LaptopChromebook` (:mdicon:`laptop-chromebook`)
   * :const:`tlp.TulipMaterialDesignIcons.LaptopMac` (:mdicon:`laptop-mac`)
+  * :const:`tlp.TulipMaterialDesignIcons.LaptopOff` (:mdicon:`laptop-off`)
   * :const:`tlp.TulipMaterialDesignIcons.LaptopWindows` (:mdicon:`laptop-windows`)
   * :const:`tlp.TulipMaterialDesignIcons.Lastfm` (:mdicon:`lastfm`)
   * :const:`tlp.TulipMaterialDesignIcons.Launch` (:mdicon:`launch`)
@@ -1019,6 +1064,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.LibraryMusic` (:mdicon:`library-music`)
   * :const:`tlp.TulipMaterialDesignIcons.LibraryPlus` (:mdicon:`library-plus`)
   * :const:`tlp.TulipMaterialDesignIcons.Lightbulb` (:mdicon:`lightbulb`)
+  * :const:`tlp.TulipMaterialDesignIcons.LightbulbOn` (:mdicon:`lightbulb-on`)
+  * :const:`tlp.TulipMaterialDesignIcons.LightbulbOnOutline` (:mdicon:`lightbulb-on-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.LightbulbOutline` (:mdicon:`lightbulb-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Link` (:mdicon:`link`)
   * :const:`tlp.TulipMaterialDesignIcons.LinkOff` (:mdicon:`link-off`)
@@ -1031,20 +1078,25 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.LockOpen` (:mdicon:`lock-open`)
   * :const:`tlp.TulipMaterialDesignIcons.LockOpenOutline` (:mdicon:`lock-open-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.LockOutline` (:mdicon:`lock-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.LockPattern` (:mdicon:`lock-pattern`)
   * :const:`tlp.TulipMaterialDesignIcons.LockPlus` (:mdicon:`lock-plus`)
   * :const:`tlp.TulipMaterialDesignIcons.Login` (:mdicon:`login`)
   * :const:`tlp.TulipMaterialDesignIcons.LoginVariant` (:mdicon:`login-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Logout` (:mdicon:`logout`)
   * :const:`tlp.TulipMaterialDesignIcons.LogoutVariant` (:mdicon:`logout-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Looks` (:mdicon:`looks`)
+  * :const:`tlp.TulipMaterialDesignIcons.Loop` (:mdicon:`loop`)
   * :const:`tlp.TulipMaterialDesignIcons.Loupe` (:mdicon:`loupe`)
   * :const:`tlp.TulipMaterialDesignIcons.Lumx` (:mdicon:`lumx`)
   * :const:`tlp.TulipMaterialDesignIcons.Magnet` (:mdicon:`magnet`)
   * :const:`tlp.TulipMaterialDesignIcons.MagnetOn` (:mdicon:`magnet-on`)
   * :const:`tlp.TulipMaterialDesignIcons.Magnify` (:mdicon:`magnify`)
   * :const:`tlp.TulipMaterialDesignIcons.MagnifyMinus` (:mdicon:`magnify-minus`)
+  * :const:`tlp.TulipMaterialDesignIcons.MagnifyMinusOutline` (:mdicon:`magnify-minus-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.MagnifyPlus` (:mdicon:`magnify-plus`)
+  * :const:`tlp.TulipMaterialDesignIcons.MagnifyPlusOutline` (:mdicon:`magnify-plus-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.MailRu` (:mdicon:`mail-ru`)
+  * :const:`tlp.TulipMaterialDesignIcons.Mailbox` (:mdicon:`mailbox`)
   * :const:`tlp.TulipMaterialDesignIcons.Map` (:mdicon:`map`)
   * :const:`tlp.TulipMaterialDesignIcons.MapMarker` (:mdicon:`map-marker`)
   * :const:`tlp.TulipMaterialDesignIcons.MapMarkerCircle` (:mdicon:`map-marker-circle`)
@@ -1062,6 +1114,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.MathCompass` (:mdicon:`math-compass`)
   * :const:`tlp.TulipMaterialDesignIcons.Matrix` (:mdicon:`matrix`)
   * :const:`tlp.TulipMaterialDesignIcons.Maxcdn` (:mdicon:`maxcdn`)
+  * :const:`tlp.TulipMaterialDesignIcons.MedicalBag` (:mdicon:`medical-bag`)
   * :const:`tlp.TulipMaterialDesignIcons.Medium` (:mdicon:`medium`)
   * :const:`tlp.TulipMaterialDesignIcons.Memory` (:mdicon:`memory`)
   * :const:`tlp.TulipMaterialDesignIcons.Menu` (:mdicon:`menu`)
@@ -1082,6 +1135,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.MessageProcessing` (:mdicon:`message-processing`)
   * :const:`tlp.TulipMaterialDesignIcons.MessageReply` (:mdicon:`message-reply`)
   * :const:`tlp.TulipMaterialDesignIcons.MessageReplyText` (:mdicon:`message-reply-text`)
+  * :const:`tlp.TulipMaterialDesignIcons.MessageSettings` (:mdicon:`message-settings`)
+  * :const:`tlp.TulipMaterialDesignIcons.MessageSettingsVariant` (:mdicon:`message-settings-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.MessageText` (:mdicon:`message-text`)
   * :const:`tlp.TulipMaterialDesignIcons.MessageTextOutline` (:mdicon:`message-text-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.MessageVideo` (:mdicon:`message-video`)
@@ -1097,6 +1152,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Minecraft` (:mdicon:`minecraft`)
   * :const:`tlp.TulipMaterialDesignIcons.Minus` (:mdicon:`minus`)
   * :const:`tlp.TulipMaterialDesignIcons.MinusBox` (:mdicon:`minus-box`)
+  * :const:`tlp.TulipMaterialDesignIcons.MinusBoxOutline` (:mdicon:`minus-box-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.MinusCircle` (:mdicon:`minus-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.MinusCircleOutline` (:mdicon:`minus-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.MinusNetwork` (:mdicon:`minus-network`)
@@ -1133,6 +1189,10 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Needle` (:mdicon:`needle`)
   * :const:`tlp.TulipMaterialDesignIcons.NestProtect` (:mdicon:`nest-protect`)
   * :const:`tlp.TulipMaterialDesignIcons.NestThermostat` (:mdicon:`nest-thermostat`)
+  * :const:`tlp.TulipMaterialDesignIcons.Network` (:mdicon:`network`)
+  * :const:`tlp.TulipMaterialDesignIcons.NetworkDownload` (:mdicon:`network-download`)
+  * :const:`tlp.TulipMaterialDesignIcons.NetworkQuestion` (:mdicon:`network-question`)
+  * :const:`tlp.TulipMaterialDesignIcons.NetworkUpload` (:mdicon:`network-upload`)
   * :const:`tlp.TulipMaterialDesignIcons.NewBox` (:mdicon:`new-box`)
   * :const:`tlp.TulipMaterialDesignIcons.Newspaper` (:mdicon:`newspaper`)
   * :const:`tlp.TulipMaterialDesignIcons.Nfc` (:mdicon:`nfc`)
@@ -1147,6 +1207,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.NotePlusOutline` (:mdicon:`note-plus-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.NoteText` (:mdicon:`note-text`)
   * :const:`tlp.TulipMaterialDesignIcons.NotificationClearAll` (:mdicon:`notification-clear-all`)
+  * :const:`tlp.TulipMaterialDesignIcons.Npm` (:mdicon:`npm`)
   * :const:`tlp.TulipMaterialDesignIcons.Nuke` (:mdicon:`nuke`)
   * :const:`tlp.TulipMaterialDesignIcons.Numeric` (:mdicon:`numeric`)
   * :const:`tlp.TulipMaterialDesignIcons.Numeric0Box` (:mdicon:`numeric-0-box`)
@@ -1182,10 +1243,12 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Numeric9PlusBox` (:mdicon:`numeric-9-plus-box`)
   * :const:`tlp.TulipMaterialDesignIcons.Numeric9PlusBoxMultipleOutline` (:mdicon:`numeric-9-plus-box-multiple-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Numeric9PlusBoxOutline` (:mdicon:`numeric-9-plus-box-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.Nut` (:mdicon:`nut`)
   * :const:`tlp.TulipMaterialDesignIcons.Nutrition` (:mdicon:`nutrition`)
   * :const:`tlp.TulipMaterialDesignIcons.Oar` (:mdicon:`oar`)
   * :const:`tlp.TulipMaterialDesignIcons.Octagon` (:mdicon:`octagon`)
   * :const:`tlp.TulipMaterialDesignIcons.OctagonOutline` (:mdicon:`octagon-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.Octagram` (:mdicon:`octagram`)
   * :const:`tlp.TulipMaterialDesignIcons.Odnoklassniki` (:mdicon:`odnoklassniki`)
   * :const:`tlp.TulipMaterialDesignIcons.Office` (:mdicon:`office`)
   * :const:`tlp.TulipMaterialDesignIcons.Oil` (:mdicon:`oil`)
@@ -1207,6 +1270,11 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.PackageVariantClosed` (:mdicon:`package-variant-closed`)
   * :const:`tlp.TulipMaterialDesignIcons.PageFirst` (:mdicon:`page-first`)
   * :const:`tlp.TulipMaterialDesignIcons.PageLast` (:mdicon:`page-last`)
+  * :const:`tlp.TulipMaterialDesignIcons.PageLayoutBody` (:mdicon:`page-layout-body`)
+  * :const:`tlp.TulipMaterialDesignIcons.PageLayoutFooter` (:mdicon:`page-layout-footer`)
+  * :const:`tlp.TulipMaterialDesignIcons.PageLayoutHeader` (:mdicon:`page-layout-header`)
+  * :const:`tlp.TulipMaterialDesignIcons.PageLayoutSidebarLeft` (:mdicon:`page-layout-sidebar-left`)
+  * :const:`tlp.TulipMaterialDesignIcons.PageLayoutSidebarRight` (:mdicon:`page-layout-sidebar-right`)
   * :const:`tlp.TulipMaterialDesignIcons.Palette` (:mdicon:`palette`)
   * :const:`tlp.TulipMaterialDesignIcons.PaletteAdvanced` (:mdicon:`palette-advanced`)
   * :const:`tlp.TulipMaterialDesignIcons.Panda` (:mdicon:`panda`)
@@ -1230,8 +1298,11 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Pencil` (:mdicon:`pencil`)
   * :const:`tlp.TulipMaterialDesignIcons.PencilBox` (:mdicon:`pencil-box`)
   * :const:`tlp.TulipMaterialDesignIcons.PencilBoxOutline` (:mdicon:`pencil-box-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.PencilCircle` (:mdicon:`pencil-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.PencilLock` (:mdicon:`pencil-lock`)
   * :const:`tlp.TulipMaterialDesignIcons.PencilOff` (:mdicon:`pencil-off`)
+  * :const:`tlp.TulipMaterialDesignIcons.Pentagon` (:mdicon:`pentagon`)
+  * :const:`tlp.TulipMaterialDesignIcons.PentagonOutline` (:mdicon:`pentagon-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Percent` (:mdicon:`percent`)
   * :const:`tlp.TulipMaterialDesignIcons.Pharmacy` (:mdicon:`pharmacy`)
   * :const:`tlp.TulipMaterialDesignIcons.Phone` (:mdicon:`phone`)
@@ -1255,12 +1326,14 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Piano` (:mdicon:`piano`)
   * :const:`tlp.TulipMaterialDesignIcons.Pig` (:mdicon:`pig`)
   * :const:`tlp.TulipMaterialDesignIcons.Pill` (:mdicon:`pill`)
+  * :const:`tlp.TulipMaterialDesignIcons.Pillar` (:mdicon:`pillar`)
   * :const:`tlp.TulipMaterialDesignIcons.Pin` (:mdicon:`pin`)
   * :const:`tlp.TulipMaterialDesignIcons.PinOff` (:mdicon:`pin-off`)
   * :const:`tlp.TulipMaterialDesignIcons.PineTree` (:mdicon:`pine-tree`)
   * :const:`tlp.TulipMaterialDesignIcons.PineTreeBox` (:mdicon:`pine-tree-box`)
   * :const:`tlp.TulipMaterialDesignIcons.Pinterest` (:mdicon:`pinterest`)
   * :const:`tlp.TulipMaterialDesignIcons.PinterestBox` (:mdicon:`pinterest-box`)
+  * :const:`tlp.TulipMaterialDesignIcons.Pistol` (:mdicon:`pistol`)
   * :const:`tlp.TulipMaterialDesignIcons.Pizza` (:mdicon:`pizza`)
   * :const:`tlp.TulipMaterialDesignIcons.PlaneShield` (:mdicon:`plane-shield`)
   * :const:`tlp.TulipMaterialDesignIcons.Play` (:mdicon:`play`)
@@ -1278,11 +1351,13 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Plex` (:mdicon:`plex`)
   * :const:`tlp.TulipMaterialDesignIcons.Plus` (:mdicon:`plus`)
   * :const:`tlp.TulipMaterialDesignIcons.PlusBox` (:mdicon:`plus-box`)
+  * :const:`tlp.TulipMaterialDesignIcons.PlusBoxOutline` (:mdicon:`plus-box-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.PlusCircle` (:mdicon:`plus-circle`)
   * :const:`tlp.TulipMaterialDesignIcons.PlusCircleMultipleOutline` (:mdicon:`plus-circle-multiple-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.PlusCircleOutline` (:mdicon:`plus-circle-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.PlusNetwork` (:mdicon:`plus-network`)
   * :const:`tlp.TulipMaterialDesignIcons.PlusOne` (:mdicon:`plus-one`)
+  * :const:`tlp.TulipMaterialDesignIcons.PlusOutline` (:mdicon:`plus-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Pocket` (:mdicon:`pocket`)
   * :const:`tlp.TulipMaterialDesignIcons.Pokeball` (:mdicon:`pokeball`)
   * :const:`tlp.TulipMaterialDesignIcons.Polaroid` (:mdicon:`polaroid`)
@@ -1300,11 +1375,13 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.PowerPlugOff` (:mdicon:`power-plug-off`)
   * :const:`tlp.TulipMaterialDesignIcons.PowerSettings` (:mdicon:`power-settings`)
   * :const:`tlp.TulipMaterialDesignIcons.PowerSocket` (:mdicon:`power-socket`)
+  * :const:`tlp.TulipMaterialDesignIcons.Prescription` (:mdicon:`prescription`)
   * :const:`tlp.TulipMaterialDesignIcons.Presentation` (:mdicon:`presentation`)
   * :const:`tlp.TulipMaterialDesignIcons.PresentationPlay` (:mdicon:`presentation-play`)
   * :const:`tlp.TulipMaterialDesignIcons.Printer` (:mdicon:`printer`)
   * :const:`tlp.TulipMaterialDesignIcons.Printer3d` (:mdicon:`printer-3d`)
   * :const:`tlp.TulipMaterialDesignIcons.PrinterAlert` (:mdicon:`printer-alert`)
+  * :const:`tlp.TulipMaterialDesignIcons.PrinterSettings` (:mdicon:`printer-settings`)
   * :const:`tlp.TulipMaterialDesignIcons.PriorityHigh` (:mdicon:`priority-high`)
   * :const:`tlp.TulipMaterialDesignIcons.PriorityLow` (:mdicon:`priority-low`)
   * :const:`tlp.TulipMaterialDesignIcons.ProfessionalHexagon` (:mdicon:`professional-hexagon`)
@@ -1335,6 +1412,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.RayStartEnd` (:mdicon:`ray-start-end`)
   * :const:`tlp.TulipMaterialDesignIcons.RayVertex` (:mdicon:`ray-vertex`)
   * :const:`tlp.TulipMaterialDesignIcons.Rdio` (:mdicon:`rdio`)
+  * :const:`tlp.TulipMaterialDesignIcons.React` (:mdicon:`react`)
   * :const:`tlp.TulipMaterialDesignIcons.Read` (:mdicon:`read`)
   * :const:`tlp.TulipMaterialDesignIcons.Readability` (:mdicon:`readability`)
   * :const:`tlp.TulipMaterialDesignIcons.Receipt` (:mdicon:`receipt`)
@@ -1361,15 +1439,19 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Reproduction` (:mdicon:`reproduction`)
   * :const:`tlp.TulipMaterialDesignIcons.ResizeBottomRight` (:mdicon:`resize-bottom-right`)
   * :const:`tlp.TulipMaterialDesignIcons.Responsive` (:mdicon:`responsive`)
+  * :const:`tlp.TulipMaterialDesignIcons.Restart` (:mdicon:`restart`)
   * :const:`tlp.TulipMaterialDesignIcons.Restore` (:mdicon:`restore`)
   * :const:`tlp.TulipMaterialDesignIcons.Rewind` (:mdicon:`rewind`)
+  * :const:`tlp.TulipMaterialDesignIcons.RewindOutline` (:mdicon:`rewind-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.Rhombus` (:mdicon:`rhombus`)
+  * :const:`tlp.TulipMaterialDesignIcons.RhombusOutline` (:mdicon:`rhombus-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Ribbon` (:mdicon:`ribbon`)
   * :const:`tlp.TulipMaterialDesignIcons.Road` (:mdicon:`road`)
   * :const:`tlp.TulipMaterialDesignIcons.RoadVariant` (:mdicon:`road-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Robot` (:mdicon:`robot`)
   * :const:`tlp.TulipMaterialDesignIcons.Rocket` (:mdicon:`rocket`)
+  * :const:`tlp.TulipMaterialDesignIcons.Roomba` (:mdicon:`roomba`)
   * :const:`tlp.TulipMaterialDesignIcons.Rotate3d` (:mdicon:`rotate-3d`)
-  * :const:`tlp.TulipMaterialDesignIcons.Rotate90` (:mdicon:`rotate-90`)
   * :const:`tlp.TulipMaterialDesignIcons.RotateLeft` (:mdicon:`rotate-left`)
   * :const:`tlp.TulipMaterialDesignIcons.RotateLeftVariant` (:mdicon:`rotate-left-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.RotateRight` (:mdicon:`rotate-right`)
@@ -1382,6 +1464,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.RssBox` (:mdicon:`rss-box`)
   * :const:`tlp.TulipMaterialDesignIcons.Ruler` (:mdicon:`ruler`)
   * :const:`tlp.TulipMaterialDesignIcons.Run` (:mdicon:`run`)
+  * :const:`tlp.TulipMaterialDesignIcons.RunFast` (:mdicon:`run-fast`)
   * :const:`tlp.TulipMaterialDesignIcons.Sale` (:mdicon:`sale`)
   * :const:`tlp.TulipMaterialDesignIcons.Satellite` (:mdicon:`satellite`)
   * :const:`tlp.TulipMaterialDesignIcons.SatelliteVariant` (:mdicon:`satellite-variant`)
@@ -1397,6 +1480,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Script` (:mdicon:`script`)
   * :const:`tlp.TulipMaterialDesignIcons.Sd` (:mdicon:`sd`)
   * :const:`tlp.TulipMaterialDesignIcons.Seal` (:mdicon:`seal`)
+  * :const:`tlp.TulipMaterialDesignIcons.SearchWeb` (:mdicon:`search-web`)
   * :const:`tlp.TulipMaterialDesignIcons.SeatFlat` (:mdicon:`seat-flat`)
   * :const:`tlp.TulipMaterialDesignIcons.SeatFlatAngled` (:mdicon:`seat-flat-angled`)
   * :const:`tlp.TulipMaterialDesignIcons.SeatIndividualSuite` (:mdicon:`seat-individual-suite`)
@@ -1436,6 +1520,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ShieldOutline` (:mdicon:`shield-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Shopping` (:mdicon:`shopping`)
   * :const:`tlp.TulipMaterialDesignIcons.ShoppingMusic` (:mdicon:`shopping-music`)
+  * :const:`tlp.TulipMaterialDesignIcons.Shovel` (:mdicon:`shovel`)
+  * :const:`tlp.TulipMaterialDesignIcons.ShovelOff` (:mdicon:`shovel-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Shredder` (:mdicon:`shredder`)
   * :const:`tlp.TulipMaterialDesignIcons.Shuffle` (:mdicon:`shuffle`)
   * :const:`tlp.TulipMaterialDesignIcons.ShuffleDisabled` (:mdicon:`shuffle-disabled`)
@@ -1444,6 +1530,11 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.SigmaLower` (:mdicon:`sigma-lower`)
   * :const:`tlp.TulipMaterialDesignIcons.SignCaution` (:mdicon:`sign-caution`)
   * :const:`tlp.TulipMaterialDesignIcons.Signal` (:mdicon:`signal`)
+  * :const:`tlp.TulipMaterialDesignIcons.Signal2g` (:mdicon:`signal-2g`)
+  * :const:`tlp.TulipMaterialDesignIcons.Signal3g` (:mdicon:`signal-3g`)
+  * :const:`tlp.TulipMaterialDesignIcons.Signal4g` (:mdicon:`signal-4g`)
+  * :const:`tlp.TulipMaterialDesignIcons.SignalHspa` (:mdicon:`signal-hspa`)
+  * :const:`tlp.TulipMaterialDesignIcons.SignalHspaPlus` (:mdicon:`signal-hspa-plus`)
   * :const:`tlp.TulipMaterialDesignIcons.SignalVariant` (:mdicon:`signal-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Silverware` (:mdicon:`silverware`)
   * :const:`tlp.TulipMaterialDesignIcons.SilverwareFork` (:mdicon:`silverware-fork`)
@@ -1470,6 +1561,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Smoking` (:mdicon:`smoking`)
   * :const:`tlp.TulipMaterialDesignIcons.SmokingOff` (:mdicon:`smoking-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Snapchat` (:mdicon:`snapchat`)
+  * :const:`tlp.TulipMaterialDesignIcons.Snowflake` (:mdicon:`snowflake`)
   * :const:`tlp.TulipMaterialDesignIcons.Snowman` (:mdicon:`snowman`)
   * :const:`tlp.TulipMaterialDesignIcons.Soccer` (:mdicon:`soccer`)
   * :const:`tlp.TulipMaterialDesignIcons.Sofa` (:mdicon:`sofa`)
@@ -1482,11 +1574,19 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.SortVariant` (:mdicon:`sort-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Soundcloud` (:mdicon:`soundcloud`)
   * :const:`tlp.TulipMaterialDesignIcons.SourceBranch` (:mdicon:`source-branch`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommit` (:mdicon:`source-commit`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommitEnd` (:mdicon:`source-commit-end`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommitEndLocal` (:mdicon:`source-commit-end-local`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommitLocal` (:mdicon:`source-commit-local`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommitNextLocal` (:mdicon:`source-commit-next-local`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommitStart` (:mdicon:`source-commit-start`)
+  * :const:`tlp.TulipMaterialDesignIcons.SourceCommitStartNextLocal` (:mdicon:`source-commit-start-next-local`)
   * :const:`tlp.TulipMaterialDesignIcons.SourceFork` (:mdicon:`source-fork`)
   * :const:`tlp.TulipMaterialDesignIcons.SourceMerge` (:mdicon:`source-merge`)
   * :const:`tlp.TulipMaterialDesignIcons.SourcePull` (:mdicon:`source-pull`)
   * :const:`tlp.TulipMaterialDesignIcons.Speaker` (:mdicon:`speaker`)
   * :const:`tlp.TulipMaterialDesignIcons.SpeakerOff` (:mdicon:`speaker-off`)
+  * :const:`tlp.TulipMaterialDesignIcons.SpeakerWireless` (:mdicon:`speaker-wireless`)
   * :const:`tlp.TulipMaterialDesignIcons.Speedometer` (:mdicon:`speedometer`)
   * :const:`tlp.TulipMaterialDesignIcons.Spellcheck` (:mdicon:`spellcheck`)
   * :const:`tlp.TulipMaterialDesignIcons.Spotify` (:mdicon:`spotify`)
@@ -1497,6 +1597,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.SquareIncCash` (:mdicon:`square-inc-cash`)
   * :const:`tlp.TulipMaterialDesignIcons.Stackexchange` (:mdicon:`stackexchange`)
   * :const:`tlp.TulipMaterialDesignIcons.Stackoverflow` (:mdicon:`stackoverflow`)
+  * :const:`tlp.TulipMaterialDesignIcons.Stadium` (:mdicon:`stadium`)
   * :const:`tlp.TulipMaterialDesignIcons.Stairs` (:mdicon:`stairs`)
   * :const:`tlp.TulipMaterialDesignIcons.Star` (:mdicon:`star`)
   * :const:`tlp.TulipMaterialDesignIcons.StarCircle` (:mdicon:`star-circle`)
@@ -1524,6 +1625,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.SubwayVariant` (:mdicon:`subway-variant`)
   * :const:`tlp.TulipMaterialDesignIcons.Sunglasses` (:mdicon:`sunglasses`)
   * :const:`tlp.TulipMaterialDesignIcons.SurroundSound` (:mdicon:`surround-sound`)
+  * :const:`tlp.TulipMaterialDesignIcons.Svg` (:mdicon:`svg`)
   * :const:`tlp.TulipMaterialDesignIcons.SwapHorizontal` (:mdicon:`swap-horizontal`)
   * :const:`tlp.TulipMaterialDesignIcons.SwapVertical` (:mdicon:`swap-vertical`)
   * :const:`tlp.TulipMaterialDesignIcons.Swim` (:mdicon:`swim`)
@@ -1553,6 +1655,8 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.TagHeart` (:mdicon:`tag-heart`)
   * :const:`tlp.TulipMaterialDesignIcons.TagMultiple` (:mdicon:`tag-multiple`)
   * :const:`tlp.TulipMaterialDesignIcons.TagOutline` (:mdicon:`tag-outline`)
+  * :const:`tlp.TulipMaterialDesignIcons.TagPlus` (:mdicon:`tag-plus`)
+  * :const:`tlp.TulipMaterialDesignIcons.TagRemove` (:mdicon:`tag-remove`)
   * :const:`tlp.TulipMaterialDesignIcons.TagTextOutline` (:mdicon:`tag-text-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Target` (:mdicon:`target`)
   * :const:`tlp.TulipMaterialDesignIcons.Taxi` (:mdicon:`taxi`)
@@ -1584,7 +1688,9 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Ticket` (:mdicon:`ticket`)
   * :const:`tlp.TulipMaterialDesignIcons.TicketAccount` (:mdicon:`ticket-account`)
   * :const:`tlp.TulipMaterialDesignIcons.TicketConfirmation` (:mdicon:`ticket-confirmation`)
+  * :const:`tlp.TulipMaterialDesignIcons.TicketPercent` (:mdicon:`ticket-percent`)
   * :const:`tlp.TulipMaterialDesignIcons.Tie` (:mdicon:`tie`)
+  * :const:`tlp.TulipMaterialDesignIcons.Tilde` (:mdicon:`tilde`)
   * :const:`tlp.TulipMaterialDesignIcons.Timelapse` (:mdicon:`timelapse`)
   * :const:`tlp.TulipMaterialDesignIcons.Timer` (:mdicon:`timer`)
   * :const:`tlp.TulipMaterialDesignIcons.Timer10` (:mdicon:`timer-10`)
@@ -1613,6 +1719,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Transfer` (:mdicon:`transfer`)
   * :const:`tlp.TulipMaterialDesignIcons.TransitTransfer` (:mdicon:`transit-transfer`)
   * :const:`tlp.TulipMaterialDesignIcons.Translate` (:mdicon:`translate`)
+  * :const:`tlp.TulipMaterialDesignIcons.TreasureChest` (:mdicon:`treasure-chest`)
   * :const:`tlp.TulipMaterialDesignIcons.Tree` (:mdicon:`tree`)
   * :const:`tlp.TulipMaterialDesignIcons.Trello` (:mdicon:`trello`)
   * :const:`tlp.TulipMaterialDesignIcons.TrendingDown` (:mdicon:`trending-down`)
@@ -1627,6 +1734,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.TrophyVariantOutline` (:mdicon:`trophy-variant-outline`)
   * :const:`tlp.TulipMaterialDesignIcons.Truck` (:mdicon:`truck`)
   * :const:`tlp.TulipMaterialDesignIcons.TruckDelivery` (:mdicon:`truck-delivery`)
+  * :const:`tlp.TulipMaterialDesignIcons.TruckTrailer` (:mdicon:`truck-trailer`)
   * :const:`tlp.TulipMaterialDesignIcons.TshirtCrew` (:mdicon:`tshirt-crew`)
   * :const:`tlp.TulipMaterialDesignIcons.TshirtV` (:mdicon:`tshirt-v`)
   * :const:`tlp.TulipMaterialDesignIcons.Tumblr` (:mdicon:`tumblr`)
@@ -1686,7 +1794,9 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.ViewHeadline` (:mdicon:`view-headline`)
   * :const:`tlp.TulipMaterialDesignIcons.ViewList` (:mdicon:`view-list`)
   * :const:`tlp.TulipMaterialDesignIcons.ViewModule` (:mdicon:`view-module`)
+  * :const:`tlp.TulipMaterialDesignIcons.ViewParallel` (:mdicon:`view-parallel`)
   * :const:`tlp.TulipMaterialDesignIcons.ViewQuilt` (:mdicon:`view-quilt`)
+  * :const:`tlp.TulipMaterialDesignIcons.ViewSequential` (:mdicon:`view-sequential`)
   * :const:`tlp.TulipMaterialDesignIcons.ViewStream` (:mdicon:`view-stream`)
   * :const:`tlp.TulipMaterialDesignIcons.ViewWeek` (:mdicon:`view-week`)
   * :const:`tlp.TulipMaterialDesignIcons.Vimeo` (:mdicon:`vimeo`)
@@ -1710,6 +1820,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.WalletMembership` (:mdicon:`wallet-membership`)
   * :const:`tlp.TulipMaterialDesignIcons.WalletTravel` (:mdicon:`wallet-travel`)
   * :const:`tlp.TulipMaterialDesignIcons.Wan` (:mdicon:`wan`)
+  * :const:`tlp.TulipMaterialDesignIcons.WashingMachine` (:mdicon:`washing-machine`)
   * :const:`tlp.TulipMaterialDesignIcons.Watch` (:mdicon:`watch`)
   * :const:`tlp.TulipMaterialDesignIcons.WatchExport` (:mdicon:`watch-export`)
   * :const:`tlp.TulipMaterialDesignIcons.WatchImport` (:mdicon:`watch-import`)
@@ -1739,6 +1850,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.Web` (:mdicon:`web`)
   * :const:`tlp.TulipMaterialDesignIcons.Webcam` (:mdicon:`webcam`)
   * :const:`tlp.TulipMaterialDesignIcons.Webhook` (:mdicon:`webhook`)
+  * :const:`tlp.TulipMaterialDesignIcons.Webpack` (:mdicon:`webpack`)
   * :const:`tlp.TulipMaterialDesignIcons.Wechat` (:mdicon:`wechat`)
   * :const:`tlp.TulipMaterialDesignIcons.Weight` (:mdicon:`weight`)
   * :const:`tlp.TulipMaterialDesignIcons.WeightKilogram` (:mdicon:`weight-kilogram`)
@@ -1748,9 +1860,11 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.WhiteBalanceIncandescent` (:mdicon:`white-balance-incandescent`)
   * :const:`tlp.TulipMaterialDesignIcons.WhiteBalanceIridescent` (:mdicon:`white-balance-iridescent`)
   * :const:`tlp.TulipMaterialDesignIcons.WhiteBalanceSunny` (:mdicon:`white-balance-sunny`)
+  * :const:`tlp.TulipMaterialDesignIcons.Widgets` (:mdicon:`widgets`)
   * :const:`tlp.TulipMaterialDesignIcons.Wifi` (:mdicon:`wifi`)
   * :const:`tlp.TulipMaterialDesignIcons.WifiOff` (:mdicon:`wifi-off`)
   * :const:`tlp.TulipMaterialDesignIcons.Wii` (:mdicon:`wii`)
+  * :const:`tlp.TulipMaterialDesignIcons.Wiiu` (:mdicon:`wiiu`)
   * :const:`tlp.TulipMaterialDesignIcons.Wikipedia` (:mdicon:`wikipedia`)
   * :const:`tlp.TulipMaterialDesignIcons.WindowClose` (:mdicon:`window-close`)
   * :const:`tlp.TulipMaterialDesignIcons.WindowClosed` (:mdicon:`window-closed`)
@@ -1835,1728 +1949,1843 @@ Returns an UTF-8 encoded string of a Material Design icon.
 :rtype: string
 %End
 
-  static const char* AccessPoint;
-  static const char* AccessPointNetwork;
-  static const char* Account;
-  static const char* AccountAlert;
-  static const char* AccountBox;
-  static const char* AccountBoxOutline;
-  static const char* AccountCardDetails;
-  static const char* AccountCheck;
-  static const char* AccountCircle;
-  static const char* AccountConvert;
-  static const char* AccountKey;
-  static const char* AccountLocation;
-  static const char* AccountMinus;
-  static const char* AccountMultiple;
-  static const char* AccountMultipleMinus;
-  static const char* AccountMultipleOutline;
-  static const char* AccountMultiplePlus;
-  static const char* AccountNetwork;
-  static const char* AccountOff;
-  static const char* AccountOutline;
-  static const char* AccountPlus;
-  static const char* AccountRemove;
-  static const char* AccountSearch;
-  static const char* AccountSettings;
-  static const char* AccountSettingsVariant;
-  static const char* AccountStar;
-  static const char* AccountStarVariant;
-  static const char* AccountSwitch;
-  static const char* Adjust;
-  static const char* AirConditioner;
-  static const char* Airballoon;
-  static const char* Airplane;
-  static const char* AirplaneLanding;
-  static const char* AirplaneOff;
-  static const char* AirplaneTakeoff;
-  static const char* Airplay;
-  static const char* Alarm;
-  static const char* AlarmCheck;
-  static const char* AlarmMultiple;
-  static const char* AlarmOff;
-  static const char* AlarmPlus;
-  static const char* AlarmSnooze;
-  static const char* Album;
-  static const char* Alert;
-  static const char* AlertBox;
-  static const char* AlertCircle;
-  static const char* AlertCircleOutline;
-  static const char* AlertOctagon;
-  static const char* AlertOutline;
-  static const char* Alpha;
-  static const char* Alphabetical;
-  static const char* Altimeter;
-  static const char* Amazon;
-  static const char* AmazonClouddrive;
-  static const char* Ambulance;
-  static const char* Amplifier;
-  static const char* Anchor;
-  static const char* Android;
-  static const char* AndroidDebugBridge;
-  static const char* AndroidStudio;
-  static const char* Angular;
-  static const char* Animation;
-  static const char* Apple;
-  static const char* AppleFinder;
-  static const char* AppleIos;
-  static const char* AppleKeyboardCaps;
-  static const char* AppleKeyboardCommand;
-  static const char* AppleKeyboardControl;
-  static const char* AppleKeyboardOption;
-  static const char* AppleKeyboardShift;
-  static const char* AppleMobileme;
-  static const char* AppleSafari;
-  static const char* Application;
-  static const char* Appnet;
-  static const char* Apps;
-  static const char* Archive;
-  static const char* ArrangeBringForward;
-  static const char* ArrangeBringToFront;
-  static const char* ArrangeSendBackward;
-  static const char* ArrangeSendToBack;
-  static const char* ArrowAll;
-  static const char* ArrowBottomLeft;
-  static const char* ArrowBottomRight;
-  static const char* ArrowCompress;
-  static const char* ArrowCompressAll;
-  static const char* ArrowDown;
-  static const char* ArrowDownBold;
-  static const char* ArrowDownBoldCircle;
-  static const char* ArrowDownBoldCircleOutline;
-  static const char* ArrowDownBoldHexagonOutline;
-  static const char* ArrowDownDropCircle;
-  static const char* ArrowDownDropCircleOutline;
-  static const char* ArrowExpand;
-  static const char* ArrowExpandAll;
-  static const char* ArrowLeft;
-  static const char* ArrowLeftBold;
-  static const char* ArrowLeftBoldCircle;
-  static const char* ArrowLeftBoldCircleOutline;
-  static const char* ArrowLeftBoldHexagonOutline;
-  static const char* ArrowLeftDropCircle;
-  static const char* ArrowLeftDropCircleOutline;
-  static const char* ArrowRight;
-  static const char* ArrowRightBold;
-  static const char* ArrowRightBoldCircle;
-  static const char* ArrowRightBoldCircleOutline;
-  static const char* ArrowRightBoldHexagonOutline;
-  static const char* ArrowRightDropCircle;
-  static const char* ArrowRightDropCircleOutline;
-  static const char* ArrowTopLeft;
-  static const char* ArrowTopRight;
-  static const char* ArrowUp;
-  static const char* ArrowUpBold;
-  static const char* ArrowUpBoldCircle;
-  static const char* ArrowUpBoldCircleOutline;
-  static const char* ArrowUpBoldHexagonOutline;
-  static const char* ArrowUpDropCircle;
-  static const char* ArrowUpDropCircleOutline;
-  static const char* Assistant;
-  static const char* At;
-  static const char* Attachment;
-  static const char* Audiobook;
-  static const char* AutoFix;
-  static const char* AutoUpload;
-  static const char* Autorenew;
-  static const char* AvTimer;
-  static const char* Baby;
-  static const char* BabyBuggy;
-  static const char* Backburger;
-  static const char* Backspace;
-  static const char* BackupRestore;
-  static const char* Bandcamp;
-  static const char* Bank;
-  static const char* Barcode;
-  static const char* BarcodeScan;
-  static const char* Barley;
-  static const char* Barrel;
-  static const char* Basecamp;
-  static const char* Basket;
-  static const char* BasketFill;
-  static const char* BasketUnfill;
-  static const char* Battery;
-  static const char* Battery10;
-  static const char* Battery20;
-  static const char* Battery30;
-  static const char* Battery40;
-  static const char* Battery50;
-  static const char* Battery60;
-  static const char* Battery70;
-  static const char* Battery80;
-  static const char* Battery90;
-  static const char* BatteryAlert;
-  static const char* BatteryCharging;
-  static const char* BatteryCharging100;
-  static const char* BatteryCharging20;
-  static const char* BatteryCharging30;
-  static const char* BatteryCharging40;
-  static const char* BatteryCharging60;
-  static const char* BatteryCharging80;
-  static const char* BatteryCharging90;
-  static const char* BatteryMinus;
-  static const char* BatteryNegative;
-  static const char* BatteryOutline;
-  static const char* BatteryPlus;
-  static const char* BatteryPositive;
-  static const char* BatteryUnknown;
-  static const char* Beach;
-  static const char* Beaker;
-  static const char* Beats;
-  static const char* Beer;
-  static const char* Behance;
-  static const char* Bell;
-  static const char* BellOff;
-  static const char* BellOutline;
-  static const char* BellPlus;
-  static const char* BellRing;
-  static const char* BellRingOutline;
-  static const char* BellSleep;
-  static const char* Beta;
-  static const char* Bible;
-  static const char* Bike;
-  static const char* Bing;
-  static const char* Binoculars;
-  static const char* Bio;
-  static const char* Biohazard;
-  static const char* Bitbucket;
-  static const char* BlackMesa;
-  static const char* Blackberry;
-  static const char* Blender;
-  static const char* Blinds;
-  static const char* BlockHelper;
-  static const char* Blogger;
-  static const char* Bluetooth;
-  static const char* BluetoothAudio;
-  static const char* BluetoothConnect;
-  static const char* BluetoothOff;
-  static const char* BluetoothSettings;
-  static const char* BluetoothTransfer;
-  static const char* Blur;
-  static const char* BlurLinear;
-  static const char* BlurOff;
-  static const char* BlurRadial;
-  static const char* Bomb;
-  static const char* Bone;
-  static const char* Book;
-  static const char* BookMinus;
-  static const char* BookMultiple;
-  static const char* BookMultipleVariant;
-  static const char* BookOpen;
-  static const char* BookOpenPageVariant;
-  static const char* BookOpenVariant;
-  static const char* BookPlus;
-  static const char* BookVariant;
-  static const char* Bookmark;
-  static const char* BookmarkCheck;
-  static const char* BookmarkMusic;
-  static const char* BookmarkOutline;
-  static const char* BookmarkPlus;
-  static const char* BookmarkPlusOutline;
-  static const char* BookmarkRemove;
-  static const char* Boombox;
-  static const char* BorderAll;
-  static const char* BorderBottom;
-  static const char* BorderColor;
-  static const char* BorderHorizontal;
-  static const char* BorderInside;
-  static const char* BorderLeft;
-  static const char* BorderNone;
-  static const char* BorderOutside;
-  static const char* BorderRight;
-  static const char* BorderStyle;
-  static const char* BorderTop;
-  static const char* BorderVertical;
-  static const char* BowTie;
-  static const char* Bowl;
-  static const char* Bowling;
-  static const char* Box;
-  static const char* BoxCutter;
-  static const char* BoxShadow;
-  static const char* Bridge;
-  static const char* Briefcase;
-  static const char* BriefcaseCheck;
-  static const char* BriefcaseDownload;
-  static const char* BriefcaseUpload;
-  static const char* Brightness1;
-  static const char* Brightness2;
-  static const char* Brightness3;
-  static const char* Brightness4;
-  static const char* Brightness5;
-  static const char* Brightness6;
-  static const char* Brightness7;
-  static const char* BrightnessAuto;
-  static const char* Broom;
-  static const char* Brush;
-  static const char* Buffer;
-  static const char* Bug;
-  static const char* BulletinBoard;
-  static const char* Bullhorn;
-  static const char* Bullseye;
-  static const char* BurstMode;
-  static const char* Bus;
-  static const char* Cached;
-  static const char* Cake;
-  static const char* CakeLayered;
-  static const char* CakeVariant;
-  static const char* Calculator;
-  static const char* Calendar;
-  static const char* CalendarBlank;
-  static const char* CalendarCheck;
-  static const char* CalendarClock;
-  static const char* CalendarMultiple;
-  static const char* CalendarMultipleCheck;
-  static const char* CalendarPlus;
-  static const char* CalendarQuestion;
-  static const char* CalendarRange;
-  static const char* CalendarRemove;
-  static const char* CalendarText;
-  static const char* CalendarToday;
-  static const char* CallMade;
-  static const char* CallMerge;
-  static const char* CallMissed;
-  static const char* CallReceived;
-  static const char* CallSplit;
-  static const char* Camcorder;
-  static const char* CamcorderBox;
-  static const char* CamcorderBoxOff;
-  static const char* CamcorderOff;
-  static const char* Camera;
-  static const char* CameraBurst;
-  static const char* CameraEnhance;
-  static const char* CameraFront;
-  static const char* CameraFrontVariant;
-  static const char* CameraIris;
-  static const char* CameraOff;
-  static const char* CameraPartyMode;
-  static const char* CameraRear;
-  static const char* CameraRearVariant;
-  static const char* CameraSwitch;
-  static const char* CameraTimer;
-  static const char* Candle;
-  static const char* Candycane;
-  static const char* Car;
-  static const char* CarBattery;
-  static const char* CarConnected;
-  static const char* CarWash;
-  static const char* Cards;
-  static const char* CardsOutline;
-  static const char* CardsPlayingOutline;
-  static const char* Carrot;
-  static const char* Cart;
-  static const char* CartOff;
-  static const char* CartOutline;
-  static const char* CartPlus;
-  static const char* CaseSensitiveAlt;
-  static const char* Cash;
-  static const char* Cash100;
-  static const char* CashMultiple;
-  static const char* CashUsd;
-  static const char* Cast;
-  static const char* CastConnected;
-  static const char* Castle;
-  static const char* Cat;
-  static const char* Cellphone;
-  static const char* CellphoneAndroid;
-  static const char* CellphoneBasic;
-  static const char* CellphoneDock;
-  static const char* CellphoneIphone;
-  static const char* CellphoneLink;
-  static const char* CellphoneLinkOff;
-  static const char* CellphoneSettings;
-  static const char* Certificate;
-  static const char* ChairSchool;
-  static const char* ChartArc;
-  static const char* ChartAreaspline;
-  static const char* ChartBar;
-  static const char* ChartBubble;
-  static const char* ChartGantt;
-  static const char* ChartHistogram;
-  static const char* ChartLine;
-  static const char* ChartPie;
-  static const char* ChartScatterplotHexbin;
-  static const char* ChartTimeline;
-  static const char* Check;
-  static const char* CheckAll;
-  static const char* CheckCircle;
-  static const char* CheckCircleOutline;
-  static const char* CheckboxBlank;
-  static const char* CheckboxBlankCircle;
-  static const char* CheckboxBlankCircleOutline;
-  static const char* CheckboxBlankOutline;
-  static const char* CheckboxMarked;
-  static const char* CheckboxMarkedCircle;
-  static const char* CheckboxMarkedCircleOutline;
-  static const char* CheckboxMarkedOutline;
-  static const char* CheckboxMultipleBlank;
-  static const char* CheckboxMultipleBlankCircle;
-  static const char* CheckboxMultipleBlankCircleOutline;
-  static const char* CheckboxMultipleBlankOutline;
-  static const char* CheckboxMultipleMarked;
-  static const char* CheckboxMultipleMarkedCircle;
-  static const char* CheckboxMultipleMarkedCircleOutline;
-  static const char* CheckboxMultipleMarkedOutline;
-  static const char* Checkerboard;
-  static const char* ChemicalWeapon;
-  static const char* ChevronDoubleDown;
-  static const char* ChevronDoubleLeft;
-  static const char* ChevronDoubleRight;
-  static const char* ChevronDoubleUp;
-  static const char* ChevronDown;
-  static const char* ChevronLeft;
-  static const char* ChevronRight;
-  static const char* ChevronUp;
-  static const char* Chip;
-  static const char* Church;
-  static const char* CiscoWebex;
-  static const char* City;
-  static const char* Clipboard;
-  static const char* ClipboardAccount;
-  static const char* ClipboardAlert;
-  static const char* ClipboardArrowDown;
-  static const char* ClipboardArrowLeft;
-  static const char* ClipboardCheck;
-  static const char* ClipboardOutline;
-  static const char* ClipboardText;
-  static const char* Clippy;
-  static const char* Clock;
-  static const char* ClockAlert;
-  static const char* ClockEnd;
-  static const char* ClockFast;
-  static const char* ClockIn;
-  static const char* ClockOut;
-  static const char* ClockStart;
-  static const char* Close;
-  static const char* CloseBox;
-  static const char* CloseBoxOutline;
-  static const char* CloseCircle;
-  static const char* CloseCircleOutline;
-  static const char* CloseNetwork;
-  static const char* CloseOctagon;
-  static const char* CloseOctagonOutline;
-  static const char* ClosedCaption;
-  static const char* Cloud;
-  static const char* CloudCheck;
-  static const char* CloudCircle;
-  static const char* CloudDownload;
-  static const char* CloudOutline;
-  static const char* CloudOutlineOff;
-  static const char* CloudPrint;
-  static const char* CloudPrintOutline;
-  static const char* CloudSync;
-  static const char* CloudUpload;
-  static const char* CodeArray;
-  static const char* CodeBraces;
-  static const char* CodeBrackets;
-  static const char* CodeEqual;
-  static const char* CodeGreaterThan;
-  static const char* CodeGreaterThanOrEqual;
-  static const char* CodeLessThan;
-  static const char* CodeLessThanOrEqual;
-  static const char* CodeNotEqual;
-  static const char* CodeNotEqualVariant;
-  static const char* CodeParentheses;
-  static const char* CodeString;
-  static const char* CodeTags;
-  static const char* CodeTagsCheck;
-  static const char* Codepen;
-  static const char* Coffee;
-  static const char* CoffeeToGo;
-  static const char* Coin;
-  static const char* Coins;
-  static const char* Collage;
-  static const char* ColorHelper;
-  static const char* Comment;
-  static const char* CommentAccount;
-  static const char* CommentAccountOutline;
-  static const char* CommentAlert;
-  static const char* CommentAlertOutline;
-  static const char* CommentCheck;
-  static const char* CommentCheckOutline;
-  static const char* CommentMultipleOutline;
-  static const char* CommentOutline;
-  static const char* CommentPlusOutline;
-  static const char* CommentProcessing;
-  static const char* CommentProcessingOutline;
-  static const char* CommentQuestionOutline;
-  static const char* CommentRemoveOutline;
-  static const char* CommentText;
-  static const char* CommentTextOutline;
-  static const char* Compare;
-  static const char* Compass;
-  static const char* CompassOutline;
-  static const char* Console;
-  static const char* ContactMail;
-  static const char* ContentCopy;
-  static const char* ContentCut;
-  static const char* ContentDuplicate;
-  static const char* ContentPaste;
-  static const char* ContentSave;
-  static const char* ContentSaveAll;
-  static const char* ContentSaveSettings;
-  static const char* Contrast;
-  static const char* ContrastBox;
-  static const char* ContrastCircle;
-  static const char* Cookie;
-  static const char* Copyright;
-  static const char* Counter;
-  static const char* Cow;
-  static const char* Creation;
-  static const char* CreditCard;
-  static const char* CreditCardMultiple;
-  static const char* CreditCardOff;
-  static const char* CreditCardPlus;
-  static const char* CreditCardScan;
-  static const char* Crop;
-  static const char* CropFree;
-  static const char* CropLandscape;
-  static const char* CropPortrait;
-  static const char* CropRotate;
-  static const char* CropSquare;
-  static const char* Crosshairs;
-  static const char* CrosshairsGps;
-  static const char* Crown;
-  static const char* Cube;
-  static const char* CubeOutline;
-  static const char* CubeSend;
-  static const char* CubeUnfolded;
-  static const char* Cup;
-  static const char* CupOff;
-  static const char* CupWater;
-  static const char* CurrencyBtc;
-  static const char* CurrencyEur;
-  static const char* CurrencyGbp;
-  static const char* CurrencyInr;
-  static const char* CurrencyNgn;
-  static const char* CurrencyRub;
-  static const char* CurrencyTry;
-  static const char* CurrencyUsd;
-  static const char* CurrencyUsdOff;
-  static const char* CursorDefault;
-  static const char* CursorDefaultOutline;
-  static const char* CursorMove;
-  static const char* CursorPointer;
-  static const char* CursorText;
-  static const char* Database;
-  static const char* DatabaseMinus;
-  static const char* DatabasePlus;
-  static const char* DebugStepInto;
-  static const char* DebugStepOut;
-  static const char* DebugStepOver;
-  static const char* DecimalDecrease;
-  static const char* DecimalIncrease;
-  static const char* Delete;
-  static const char* DeleteCircle;
-  static const char* DeleteForever;
-  static const char* DeleteSweep;
-  static const char* DeleteVariant;
-  static const char* Delta;
-  static const char* Deskphone;
-  static const char* DesktopMac;
-  static const char* DesktopTower;
-  static const char* Details;
-  static const char* DeveloperBoard;
-  static const char* Deviantart;
-  static const char* Dialpad;
-  static const char* Diamond;
-  static const char* Dice1;
-  static const char* Dice2;
-  static const char* Dice3;
-  static const char* Dice4;
-  static const char* Dice5;
-  static const char* Dice6;
-  static const char* DiceD20;
-  static const char* DiceD4;
-  static const char* DiceD6;
-  static const char* DiceD8;
-  static const char* Dictionary;
-  static const char* Directions;
-  static const char* DirectionsFork;
-  static const char* Discord;
-  static const char* Disk;
-  static const char* DiskAlert;
-  static const char* Disqus;
-  static const char* DisqusOutline;
-  static const char* Division;
-  static const char* DivisionBox;
-  static const char* Dna;
-  static const char* Dns;
-  static const char* DoNotDisturb;
-  static const char* DoNotDisturbOff;
-  static const char* Dolby;
-  static const char* Domain;
-  static const char* DotsHorizontal;
-  static const char* DotsVertical;
-  static const char* Douban;
-  static const char* Download;
-  static const char* Drag;
-  static const char* DragHorizontal;
-  static const char* DragVertical;
-  static const char* Drawing;
-  static const char* DrawingBox;
-  static const char* Dribbble;
-  static const char* DribbbleBox;
-  static const char* Drone;
-  static const char* Dropbox;
-  static const char* Drupal;
-  static const char* Duck;
-  static const char* Dumbbell;
-  static const char* Earth;
-  static const char* EarthOff;
-  static const char* Edge;
-  static const char* Eject;
-  static const char* ElevationDecline;
-  static const char* ElevationRise;
-  static const char* Elevator;
-  static const char* Email;
-  static const char* EmailOpen;
-  static const char* EmailOpenOutline;
-  static const char* EmailOutline;
-  static const char* EmailSecure;
-  static const char* EmailVariant;
-  static const char* Emby;
-  static const char* Emoticon;
-  static const char* EmoticonCool;
-  static const char* EmoticonDead;
-  static const char* EmoticonDevil;
-  static const char* EmoticonExcited;
-  static const char* EmoticonHappy;
-  static const char* EmoticonNeutral;
-  static const char* EmoticonPoop;
-  static const char* EmoticonSad;
-  static const char* EmoticonTongue;
-  static const char* Engine;
-  static const char* EngineOutline;
-  static const char* Equal;
-  static const char* EqualBox;
-  static const char* Eraser;
-  static const char* EraserVariant;
-  static const char* Escalator;
-  static const char* Ethernet;
-  static const char* EthernetCable;
-  static const char* EthernetCableOff;
-  static const char* Etsy;
-  static const char* EvStation;
-  static const char* Evernote;
-  static const char* Exclamation;
-  static const char* ExitToApp;
-  static const char* Export;
-  static const char* Eye;
-  static const char* EyeOff;
-  static const char* Eyedropper;
-  static const char* EyedropperVariant;
-  static const char* Face;
-  static const char* FaceProfile;
-  static const char* Facebook;
-  static const char* FacebookBox;
-  static const char* FacebookMessenger;
-  static const char* Factory;
-  static const char* Fan;
-  static const char* FastForward;
-  static const char* Fax;
-  static const char* Ferry;
-  static const char* File;
-  static const char* FileChart;
-  static const char* FileCheck;
-  static const char* FileCloud;
-  static const char* FileDelimited;
-  static const char* FileDocument;
-  static const char* FileDocumentBox;
-  static const char* FileExcel;
-  static const char* FileExcelBox;
-  static const char* FileExport;
-  static const char* FileFind;
-  static const char* FileHidden;
-  static const char* FileImage;
-  static const char* FileImport;
-  static const char* FileLock;
-  static const char* FileMultiple;
-  static const char* FileMusic;
-  static const char* FileOutline;
-  static const char* FilePdf;
-  static const char* FilePdfBox;
-  static const char* FilePowerpoint;
-  static const char* FilePowerpointBox;
-  static const char* FilePresentationBox;
-  static const char* FileRestore;
-  static const char* FileSend;
-  static const char* FileTree;
-  static const char* FileVideo;
-  static const char* FileWord;
-  static const char* FileWordBox;
-  static const char* FileXml;
-  static const char* Film;
-  static const char* Filmstrip;
-  static const char* FilmstripOff;
-  static const char* Filter;
-  static const char* FilterOutline;
-  static const char* FilterRemove;
-  static const char* FilterRemoveOutline;
-  static const char* FilterVariant;
-  static const char* Fingerprint;
-  static const char* Fire;
-  static const char* Firefox;
-  static const char* Fish;
-  static const char* Flag;
-  static const char* FlagCheckered;
-  static const char* FlagOutline;
-  static const char* FlagOutlineVariant;
-  static const char* FlagTriangle;
-  static const char* FlagVariant;
-  static const char* Flash;
-  static const char* FlashAuto;
-  static const char* FlashOff;
-  static const char* FlashRedEye;
-  static const char* Flashlight;
-  static const char* FlashlightOff;
-  static const char* Flask;
-  static const char* FlaskEmpty;
-  static const char* FlaskEmptyOutline;
-  static const char* FlaskOutline;
-  static const char* Flattr;
-  static const char* FlipToBack;
-  static const char* FlipToFront;
-  static const char* Floppy;
-  static const char* Flower;
-  static const char* Folder;
-  static const char* FolderAccount;
-  static const char* FolderDownload;
-  static const char* FolderGoogleDrive;
-  static const char* FolderImage;
-  static const char* FolderLock;
-  static const char* FolderLockOpen;
-  static const char* FolderMove;
-  static const char* FolderMultiple;
-  static const char* FolderMultipleImage;
-  static const char* FolderMultipleOutline;
-  static const char* FolderOutline;
-  static const char* FolderPlus;
-  static const char* FolderRemove;
-  static const char* FolderStar;
-  static const char* FolderUpload;
-  static const char* Food;
-  static const char* FoodApple;
-  static const char* FoodForkDrink;
-  static const char* FoodOff;
-  static const char* FoodVariant;
-  static const char* Football;
-  static const char* FootballAustralian;
-  static const char* FootballHelmet;
-  static const char* FormatAlignCenter;
-  static const char* FormatAlignJustify;
-  static const char* FormatAlignLeft;
-  static const char* FormatAlignRight;
-  static const char* FormatAnnotationPlus;
-  static const char* FormatBold;
-  static const char* FormatClear;
-  static const char* FormatColorFill;
-  static const char* FormatColorText;
-  static const char* FormatFloatCenter;
-  static const char* FormatFloatLeft;
-  static const char* FormatFloatNone;
-  static const char* FormatFloatRight;
-  static const char* FormatHeader1;
-  static const char* FormatHeader2;
-  static const char* FormatHeader3;
-  static const char* FormatHeader4;
-  static const char* FormatHeader5;
-  static const char* FormatHeader6;
-  static const char* FormatHeaderDecrease;
-  static const char* FormatHeaderEqual;
-  static const char* FormatHeaderIncrease;
-  static const char* FormatHeaderPound;
-  static const char* FormatHorizontalAlignCenter;
-  static const char* FormatHorizontalAlignLeft;
-  static const char* FormatHorizontalAlignRight;
-  static const char* FormatIndentDecrease;
-  static const char* FormatIndentIncrease;
-  static const char* FormatItalic;
-  static const char* FormatLineSpacing;
-  static const char* FormatLineStyle;
-  static const char* FormatLineWeight;
-  static const char* FormatListBulleted;
-  static const char* FormatListBulletedType;
-  static const char* FormatListNumbers;
-  static const char* FormatPaint;
-  static const char* FormatParagraph;
-  static const char* FormatQuote;
-  static const char* FormatSection;
-  static const char* FormatSize;
-  static const char* FormatStrikethrough;
-  static const char* FormatStrikethroughVariant;
-  static const char* FormatSubscript;
-  static const char* FormatSuperscript;
-  static const char* FormatText;
-  static const char* FormatTextdirectionLToR;
-  static const char* FormatTextdirectionRToL;
-  static const char* FormatTitle;
-  static const char* FormatUnderline;
-  static const char* FormatVerticalAlignBottom;
-  static const char* FormatVerticalAlignCenter;
-  static const char* FormatVerticalAlignTop;
-  static const char* FormatWrapInline;
-  static const char* FormatWrapSquare;
-  static const char* FormatWrapTight;
-  static const char* FormatWrapTopBottom;
-  static const char* Forum;
-  static const char* Forward;
-  static const char* Foursquare;
-  static const char* Fridge;
-  static const char* FridgeFilled;
-  static const char* FridgeFilledBottom;
-  static const char* FridgeFilledTop;
-  static const char* Fullscreen;
-  static const char* FullscreenExit;
-  static const char* Function;
-  static const char* Gamepad;
-  static const char* GamepadVariant;
-  static const char* GasCylinder;
-  static const char* GasStation;
-  static const char* Gate;
-  static const char* Gauge;
-  static const char* Gavel;
-  static const char* GenderFemale;
-  static const char* GenderMale;
-  static const char* GenderMaleFemale;
-  static const char* GenderTransgender;
-  static const char* Ghost;
-  static const char* Gift;
-  static const char* Git;
-  static const char* GithubBox;
-  static const char* GithubCircle;
-  static const char* GlassFlute;
-  static const char* GlassMug;
-  static const char* GlassStange;
-  static const char* GlassTulip;
-  static const char* Glassdoor;
-  static const char* Glasses;
-  static const char* Gmail;
-  static const char* Gnome;
-  static const char* Gondola;
-  static const char* Google;
-  static const char* GoogleCardboard;
-  static const char* GoogleChrome;
-  static const char* GoogleCircles;
-  static const char* GoogleCirclesCommunities;
-  static const char* GoogleCirclesExtended;
-  static const char* GoogleCirclesGroup;
-  static const char* GoogleController;
-  static const char* GoogleControllerOff;
-  static const char* GoogleDrive;
-  static const char* GoogleEarth;
-  static const char* GoogleGlass;
-  static const char* GoogleMaps;
-  static const char* GoogleNearby;
-  static const char* GooglePages;
-  static const char* GooglePhysicalWeb;
-  static const char* GooglePlay;
-  static const char* GooglePlus;
-  static const char* GooglePlusBox;
-  static const char* GoogleTranslate;
-  static const char* GoogleWallet;
-  static const char* Gradient;
-  static const char* GreasePencil;
-  static const char* Grid;
-  static const char* GridOff;
-  static const char* Group;
-  static const char* GuitarElectric;
-  static const char* GuitarPick;
-  static const char* GuitarPickOutline;
-  static const char* Hackernews;
-  static const char* Hamburger;
-  static const char* HandPointingRight;
-  static const char* Hanger;
-  static const char* Hangouts;
-  static const char* Harddisk;
-  static const char* Headphones;
-  static const char* HeadphonesBox;
-  static const char* HeadphonesSettings;
-  static const char* Headset;
-  static const char* HeadsetDock;
-  static const char* HeadsetOff;
-  static const char* Heart;
-  static const char* HeartBox;
-  static const char* HeartBoxOutline;
-  static const char* HeartBroken;
-  static const char* HeartOutline;
-  static const char* HeartPulse;
-  static const char* Help;
-  static const char* HelpCircle;
-  static const char* HelpCircleOutline;
-  static const char* Hexagon;
-  static const char* HexagonOutline;
-  static const char* Highway;
-  static const char* History;
-  static const char* Hololens;
-  static const char* Home;
-  static const char* HomeMapMarker;
-  static const char* HomeModern;
-  static const char* HomeOutline;
-  static const char* HomeVariant;
-  static const char* Hops;
-  static const char* Hospital;
-  static const char* HospitalBuilding;
-  static const char* HospitalMarker;
-  static const char* Hotel;
-  static const char* Houzz;
-  static const char* HouzzBox;
-  static const char* Human;
-  static const char* HumanChild;
-  static const char* HumanFemale;
-  static const char* HumanGreeting;
-  static const char* HumanHandsdown;
-  static const char* HumanHandsup;
-  static const char* HumanMale;
-  static const char* HumanMaleFemale;
-  static const char* HumanPregnant;
-  static const char* Image;
-  static const char* ImageAlbum;
-  static const char* ImageArea;
-  static const char* ImageAreaClose;
-  static const char* ImageBroken;
-  static const char* ImageBrokenVariant;
-  static const char* ImageFilter;
-  static const char* ImageFilterBlackWhite;
-  static const char* ImageFilterCenterFocus;
-  static const char* ImageFilterCenterFocusWeak;
-  static const char* ImageFilterDrama;
-  static const char* ImageFilterFrames;
-  static const char* ImageFilterHdr;
-  static const char* ImageFilterNone;
-  static const char* ImageFilterTiltShift;
-  static const char* ImageFilterVintage;
-  static const char* ImageMultiple;
-  static const char* Import;
-  static const char* Inbox;
-  static const char* InboxArrowDown;
-  static const char* InboxArrowUp;
-  static const char* Incognito;
-  static const char* Information;
-  static const char* InformationOutline;
-  static const char* InformationVariant;
-  static const char* Instagram;
-  static const char* Instapaper;
-  static const char* InternetExplorer;
-  static const char* InvertColors;
-  static const char* Itunes;
-  static const char* Jeepney;
-  static const char* Jira;
-  static const char* Jsfiddle;
-  static const char* Json;
-  static const char* Keg;
-  static const char* Kettle;
-  static const char* Key;
-  static const char* KeyChange;
-  static const char* KeyMinus;
-  static const char* KeyPlus;
-  static const char* KeyRemove;
-  static const char* KeyVariant;
-  static const char* Keyboard;
-  static const char* KeyboardBackspace;
-  static const char* KeyboardCaps;
-  static const char* KeyboardClose;
-  static const char* KeyboardOff;
-  static const char* KeyboardReturn;
-  static const char* KeyboardTab;
-  static const char* KeyboardVariant;
-  static const char* Kodi;
-  static const char* Label;
-  static const char* LabelOutline;
-  static const char* Lambda;
-  static const char* Lamp;
-  static const char* Lan;
-  static const char* LanConnect;
-  static const char* LanDisconnect;
-  static const char* LanPending;
-  static const char* LanguageC;
-  static const char* LanguageCpp;
-  static const char* LanguageCsharp;
-  static const char* LanguageCss3;
-  static const char* LanguageHtml5;
-  static const char* LanguageJavascript;
-  static const char* LanguagePhp;
-  static const char* LanguagePython;
-  static const char* LanguagePythonText;
-  static const char* Laptop;
-  static const char* LaptopChromebook;
-  static const char* LaptopMac;
-  static const char* LaptopWindows;
-  static const char* Lastfm;
-  static const char* Launch;
-  static const char* Layers;
-  static const char* LayersOff;
-  static const char* LeadPencil;
-  static const char* Leaf;
-  static const char* LedOff;
-  static const char* LedOn;
-  static const char* LedOutline;
-  static const char* LedVariantOff;
-  static const char* LedVariantOn;
-  static const char* LedVariantOutline;
-  static const char* Library;
-  static const char* LibraryBooks;
-  static const char* LibraryMusic;
-  static const char* LibraryPlus;
-  static const char* Lightbulb;
-  static const char* LightbulbOutline;
-  static const char* Link;
-  static const char* LinkOff;
-  static const char* LinkVariant;
-  static const char* LinkVariantOff;
-  static const char* Linkedin;
-  static const char* LinkedinBox;
-  static const char* Linux;
-  static const char* Lock;
-  static const char* LockOpen;
-  static const char* LockOpenOutline;
-  static const char* LockOutline;
-  static const char* LockPlus;
-  static const char* Login;
-  static const char* LoginVariant;
-  static const char* Logout;
-  static const char* LogoutVariant;
-  static const char* Looks;
-  static const char* Loupe;
-  static const char* Lumx;
-  static const char* Magnet;
-  static const char* MagnetOn;
-  static const char* Magnify;
-  static const char* MagnifyMinus;
-  static const char* MagnifyPlus;
-  static const char* MailRu;
-  static const char* Map;
-  static const char* MapMarker;
-  static const char* MapMarkerCircle;
-  static const char* MapMarkerMinus;
-  static const char* MapMarkerMultiple;
-  static const char* MapMarkerOff;
-  static const char* MapMarkerPlus;
-  static const char* MapMarkerRadius;
-  static const char* Margin;
-  static const char* Markdown;
-  static const char* Marker;
-  static const char* MarkerCheck;
-  static const char* Martini;
-  static const char* MaterialUi;
-  static const char* MathCompass;
-  static const char* Matrix;
-  static const char* Maxcdn;
-  static const char* Medium;
-  static const char* Memory;
-  static const char* Menu;
-  static const char* MenuDown;
-  static const char* MenuDownOutline;
-  static const char* MenuLeft;
-  static const char* MenuRight;
-  static const char* MenuUp;
-  static const char* MenuUpOutline;
-  static const char* Message;
-  static const char* MessageAlert;
-  static const char* MessageBulleted;
-  static const char* MessageBulletedOff;
-  static const char* MessageDraw;
-  static const char* MessageImage;
-  static const char* MessageOutline;
-  static const char* MessagePlus;
-  static const char* MessageProcessing;
-  static const char* MessageReply;
-  static const char* MessageReplyText;
-  static const char* MessageText;
-  static const char* MessageTextOutline;
-  static const char* MessageVideo;
-  static const char* Meteor;
-  static const char* Microphone;
-  static const char* MicrophoneOff;
-  static const char* MicrophoneOutline;
-  static const char* MicrophoneSettings;
-  static const char* MicrophoneVariant;
-  static const char* MicrophoneVariantOff;
-  static const char* Microscope;
-  static const char* Microsoft;
-  static const char* Minecraft;
-  static const char* Minus;
-  static const char* MinusBox;
-  static const char* MinusCircle;
-  static const char* MinusCircleOutline;
-  static const char* MinusNetwork;
-  static const char* Mixcloud;
-  static const char* Monitor;
-  static const char* MonitorMultiple;
-  static const char* More;
-  static const char* Motorbike;
-  static const char* Mouse;
-  static const char* MouseOff;
-  static const char* MouseVariant;
-  static const char* MouseVariantOff;
-  static const char* MoveResize;
-  static const char* MoveResizeVariant;
-  static const char* Movie;
-  static const char* Multiplication;
-  static const char* MultiplicationBox;
-  static const char* MusicBox;
-  static const char* MusicBoxOutline;
-  static const char* MusicCircle;
-  static const char* MusicNote;
-  static const char* MusicNoteBluetooth;
-  static const char* MusicNoteBluetoothOff;
-  static const char* MusicNoteEighth;
-  static const char* MusicNoteHalf;
-  static const char* MusicNoteOff;
-  static const char* MusicNoteQuarter;
-  static const char* MusicNoteSixteenth;
-  static const char* MusicNoteWhole;
-  static const char* Nature;
-  static const char* NaturePeople;
-  static const char* Navigation;
-  static const char* NearMe;
-  static const char* Needle;
-  static const char* NestProtect;
-  static const char* NestThermostat;
-  static const char* NewBox;
-  static const char* Newspaper;
-  static const char* Nfc;
-  static const char* NfcTap;
-  static const char* NfcVariant;
-  static const char* Nodejs;
-  static const char* Note;
-  static const char* NoteMultiple;
-  static const char* NoteMultipleOutline;
-  static const char* NoteOutline;
-  static const char* NotePlus;
-  static const char* NotePlusOutline;
-  static const char* NoteText;
-  static const char* NotificationClearAll;
-  static const char* Nuke;
-  static const char* Numeric;
-  static const char* Numeric0Box;
-  static const char* Numeric0BoxMultipleOutline;
-  static const char* Numeric0BoxOutline;
-  static const char* Numeric1Box;
-  static const char* Numeric1BoxMultipleOutline;
-  static const char* Numeric1BoxOutline;
-  static const char* Numeric2Box;
-  static const char* Numeric2BoxMultipleOutline;
-  static const char* Numeric2BoxOutline;
-  static const char* Numeric3Box;
-  static const char* Numeric3BoxMultipleOutline;
-  static const char* Numeric3BoxOutline;
-  static const char* Numeric4Box;
-  static const char* Numeric4BoxMultipleOutline;
-  static const char* Numeric4BoxOutline;
-  static const char* Numeric5Box;
-  static const char* Numeric5BoxMultipleOutline;
-  static const char* Numeric5BoxOutline;
-  static const char* Numeric6Box;
-  static const char* Numeric6BoxMultipleOutline;
-  static const char* Numeric6BoxOutline;
-  static const char* Numeric7Box;
-  static const char* Numeric7BoxMultipleOutline;
-  static const char* Numeric7BoxOutline;
-  static const char* Numeric8Box;
-  static const char* Numeric8BoxMultipleOutline;
-  static const char* Numeric8BoxOutline;
-  static const char* Numeric9Box;
-  static const char* Numeric9BoxMultipleOutline;
-  static const char* Numeric9BoxOutline;
-  static const char* Numeric9PlusBox;
-  static const char* Numeric9PlusBoxMultipleOutline;
-  static const char* Numeric9PlusBoxOutline;
-  static const char* Nutrition;
-  static const char* Oar;
-  static const char* Octagon;
-  static const char* OctagonOutline;
-  static const char* Odnoklassniki;
-  static const char* Office;
-  static const char* Oil;
-  static const char* OilTemperature;
-  static const char* Omega;
-  static const char* Onedrive;
-  static const char* Opacity;
-  static const char* OpenInApp;
-  static const char* OpenInNew;
-  static const char* Openid;
-  static const char* Opera;
-  static const char* Ornament;
-  static const char* OrnamentVariant;
-  static const char* Owl;
-  static const char* Package;
-  static const char* PackageDown;
-  static const char* PackageUp;
-  static const char* PackageVariant;
-  static const char* PackageVariantClosed;
-  static const char* PageFirst;
-  static const char* PageLast;
-  static const char* Palette;
-  static const char* PaletteAdvanced;
-  static const char* Panda;
-  static const char* Pandora;
-  static const char* Panorama;
-  static const char* PanoramaFisheye;
-  static const char* PanoramaHorizontal;
-  static const char* PanoramaVertical;
-  static const char* PanoramaWideAngle;
-  static const char* PaperCutVertical;
-  static const char* Paperclip;
-  static const char* Parking;
-  static const char* Pause;
-  static const char* PauseCircle;
-  static const char* PauseCircleOutline;
-  static const char* PauseOctagon;
-  static const char* PauseOctagonOutline;
-  static const char* Paw;
-  static const char* PawOff;
-  static const char* Pen;
-  static const char* Pencil;
-  static const char* PencilBox;
-  static const char* PencilBoxOutline;
-  static const char* PencilLock;
-  static const char* PencilOff;
-  static const char* Percent;
-  static const char* Pharmacy;
-  static const char* Phone;
-  static const char* PhoneBluetooth;
-  static const char* PhoneClassic;
-  static const char* PhoneForward;
-  static const char* PhoneHangup;
-  static const char* PhoneInTalk;
-  static const char* PhoneIncoming;
-  static const char* PhoneLocked;
-  static const char* PhoneLog;
-  static const char* PhoneMinus;
-  static const char* PhoneMissed;
-  static const char* PhoneOutgoing;
-  static const char* PhonePaused;
-  static const char* PhonePlus;
-  static const char* PhoneSettings;
-  static const char* PhoneVoip;
-  static const char* Pi;
-  static const char* PiBox;
-  static const char* Piano;
-  static const char* Pig;
-  static const char* Pill;
-  static const char* Pin;
-  static const char* PinOff;
-  static const char* PineTree;
-  static const char* PineTreeBox;
-  static const char* Pinterest;
-  static const char* PinterestBox;
-  static const char* Pizza;
-  static const char* PlaneShield;
-  static const char* Play;
-  static const char* PlayBoxOutline;
-  static const char* PlayCircle;
-  static const char* PlayCircleOutline;
-  static const char* PlayPause;
-  static const char* PlayProtectedContent;
-  static const char* PlaylistCheck;
-  static const char* PlaylistMinus;
-  static const char* PlaylistPlay;
-  static const char* PlaylistPlus;
-  static const char* PlaylistRemove;
-  static const char* Playstation;
-  static const char* Plex;
-  static const char* Plus;
-  static const char* PlusBox;
-  static const char* PlusCircle;
-  static const char* PlusCircleMultipleOutline;
-  static const char* PlusCircleOutline;
-  static const char* PlusNetwork;
-  static const char* PlusOne;
-  static const char* Pocket;
-  static const char* Pokeball;
-  static const char* Polaroid;
-  static const char* Poll;
-  static const char* PollBox;
-  static const char* Polymer;
-  static const char* Pool;
-  static const char* Popcorn;
-  static const char* Pot;
-  static const char* PotMix;
-  static const char* Pound;
-  static const char* PoundBox;
-  static const char* Power;
-  static const char* PowerPlug;
-  static const char* PowerPlugOff;
-  static const char* PowerSettings;
-  static const char* PowerSocket;
-  static const char* Presentation;
-  static const char* PresentationPlay;
-  static const char* Printer;
-  static const char* Printer3d;
-  static const char* PrinterAlert;
-  static const char* PriorityHigh;
-  static const char* PriorityLow;
-  static const char* ProfessionalHexagon;
-  static const char* Projector;
-  static const char* ProjectorScreen;
-  static const char* Publish;
-  static const char* Pulse;
-  static const char* Puzzle;
-  static const char* Qqchat;
-  static const char* Qrcode;
-  static const char* QrcodeScan;
-  static const char* Quadcopter;
-  static const char* QualityHigh;
-  static const char* Quicktime;
-  static const char* Radar;
-  static const char* Radiator;
-  static const char* Radio;
-  static const char* RadioHandheld;
-  static const char* RadioTower;
-  static const char* Radioactive;
-  static const char* RadioboxBlank;
-  static const char* RadioboxMarked;
-  static const char* Raspberrypi;
-  static const char* RayEnd;
-  static const char* RayEndArrow;
-  static const char* RayStart;
-  static const char* RayStartArrow;
-  static const char* RayStartEnd;
-  static const char* RayVertex;
-  static const char* Rdio;
-  static const char* Read;
-  static const char* Readability;
-  static const char* Receipt;
-  static const char* Record;
-  static const char* RecordRec;
-  static const char* Recycle;
-  static const char* Reddit;
-  static const char* Redo;
-  static const char* RedoVariant;
-  static const char* Refresh;
-  static const char* Regex;
-  static const char* RelativeScale;
-  static const char* Reload;
-  static const char* Remote;
-  static const char* RenameBox;
-  static const char* ReorderHorizontal;
-  static const char* ReorderVertical;
-  static const char* Repeat;
-  static const char* RepeatOff;
-  static const char* RepeatOnce;
-  static const char* Replay;
-  static const char* Reply;
-  static const char* ReplyAll;
-  static const char* Reproduction;
-  static const char* ResizeBottomRight;
-  static const char* Responsive;
-  static const char* Restore;
-  static const char* Rewind;
-  static const char* Ribbon;
-  static const char* Road;
-  static const char* RoadVariant;
-  static const char* Robot;
-  static const char* Rocket;
-  static const char* Rotate3d;
-  static const char* Rotate90;
-  static const char* RotateLeft;
-  static const char* RotateLeftVariant;
-  static const char* RotateRight;
-  static const char* RotateRightVariant;
-  static const char* RoundedCorner;
-  static const char* RouterWireless;
-  static const char* Routes;
-  static const char* Rowing;
-  static const char* Rss;
-  static const char* RssBox;
-  static const char* Ruler;
-  static const char* Run;
-  static const char* Sale;
-  static const char* Satellite;
-  static const char* SatelliteVariant;
-  static const char* Saxophone;
-  static const char* Scale;
-  static const char* ScaleBalance;
-  static const char* ScaleBathroom;
-  static const char* Scanner;
-  static const char* School;
-  static const char* ScreenRotation;
-  static const char* ScreenRotationLock;
-  static const char* Screwdriver;
-  static const char* Script;
-  static const char* Sd;
-  static const char* Seal;
-  static const char* SeatFlat;
-  static const char* SeatFlatAngled;
-  static const char* SeatIndividualSuite;
-  static const char* SeatLegroomExtra;
-  static const char* SeatLegroomNormal;
-  static const char* SeatLegroomReduced;
-  static const char* SeatReclineExtra;
-  static const char* SeatReclineNormal;
-  static const char* Security;
-  static const char* SecurityHome;
-  static const char* SecurityNetwork;
-  static const char* Select;
-  static const char* SelectAll;
-  static const char* SelectInverse;
-  static const char* SelectOff;
-  static const char* Selection;
-  static const char* Send;
-  static const char* SerialPort;
-  static const char* Server;
-  static const char* ServerMinus;
-  static const char* ServerNetwork;
-  static const char* ServerNetworkOff;
-  static const char* ServerOff;
-  static const char* ServerPlus;
-  static const char* ServerRemove;
-  static const char* ServerSecurity;
-  static const char* Settings;
-  static const char* SettingsBox;
-  static const char* ShapeCirclePlus;
-  static const char* ShapePlus;
-  static const char* ShapePolygonPlus;
-  static const char* ShapeRectanglePlus;
-  static const char* ShapeSquarePlus;
-  static const char* Share;
-  static const char* ShareVariant;
-  static const char* Shield;
-  static const char* ShieldOutline;
-  static const char* Shopping;
-  static const char* ShoppingMusic;
-  static const char* Shredder;
-  static const char* Shuffle;
-  static const char* ShuffleDisabled;
-  static const char* ShuffleVariant;
-  static const char* Sigma;
-  static const char* SigmaLower;
-  static const char* SignCaution;
-  static const char* Signal;
-  static const char* SignalVariant;
-  static const char* Silverware;
-  static const char* SilverwareFork;
-  static const char* SilverwareSpoon;
-  static const char* SilverwareVariant;
-  static const char* Sim;
-  static const char* SimAlert;
-  static const char* SimOff;
-  static const char* Sitemap;
-  static const char* SkipBackward;
-  static const char* SkipForward;
-  static const char* SkipNext;
-  static const char* SkipNextCircle;
-  static const char* SkipNextCircleOutline;
-  static const char* SkipPrevious;
-  static const char* SkipPreviousCircle;
-  static const char* SkipPreviousCircleOutline;
-  static const char* Skull;
-  static const char* Skype;
-  static const char* SkypeBusiness;
-  static const char* Slack;
-  static const char* Sleep;
-  static const char* SleepOff;
-  static const char* Smoking;
-  static const char* SmokingOff;
-  static const char* Snapchat;
-  static const char* Snowman;
-  static const char* Soccer;
-  static const char* Sofa;
-  static const char* Solid;
-  static const char* Sort;
-  static const char* SortAlphabetical;
-  static const char* SortAscending;
-  static const char* SortDescending;
-  static const char* SortNumeric;
-  static const char* SortVariant;
-  static const char* Soundcloud;
-  static const char* SourceBranch;
-  static const char* SourceFork;
-  static const char* SourceMerge;
-  static const char* SourcePull;
-  static const char* Speaker;
-  static const char* SpeakerOff;
-  static const char* Speedometer;
-  static const char* Spellcheck;
-  static const char* Spotify;
-  static const char* Spotlight;
-  static const char* SpotlightBeam;
-  static const char* Spray;
-  static const char* SquareInc;
-  static const char* SquareIncCash;
-  static const char* Stackexchange;
-  static const char* Stackoverflow;
-  static const char* Stairs;
-  static const char* Star;
-  static const char* StarCircle;
-  static const char* StarHalf;
-  static const char* StarOff;
-  static const char* StarOutline;
-  static const char* Steam;
-  static const char* Steering;
-  static const char* StepBackward;
-  static const char* StepBackward2;
-  static const char* StepForward;
-  static const char* StepForward2;
-  static const char* Stethoscope;
-  static const char* Sticker;
-  static const char* Stocking;
-  static const char* Stop;
-  static const char* StopCircle;
-  static const char* StopCircleOutline;
-  static const char* Store;
-  static const char* Store24Hour;
-  static const char* Stove;
-  static const char* SubdirectoryArrowLeft;
-  static const char* SubdirectoryArrowRight;
-  static const char* Subway;
-  static const char* SubwayVariant;
-  static const char* Sunglasses;
-  static const char* SurroundSound;
-  static const char* SwapHorizontal;
-  static const char* SwapVertical;
-  static const char* Swim;
-  static const char* Switch;
-  static const char* Sword;
-  static const char* Sync;
-  static const char* SyncAlert;
-  static const char* SyncOff;
-  static const char* Tab;
-  static const char* TabUnselected;
-  static const char* Table;
-  static const char* TableColumnPlusAfter;
-  static const char* TableColumnPlusBefore;
-  static const char* TableColumnRemove;
-  static const char* TableColumnWidth;
-  static const char* TableEdit;
-  static const char* TableLarge;
-  static const char* TableRowHeight;
-  static const char* TableRowPlusAfter;
-  static const char* TableRowPlusBefore;
-  static const char* TableRowRemove;
-  static const char* Tablet;
-  static const char* TabletAndroid;
-  static const char* TabletIpad;
-  static const char* Tag;
-  static const char* TagFaces;
-  static const char* TagHeart;
-  static const char* TagMultiple;
-  static const char* TagOutline;
-  static const char* TagTextOutline;
-  static const char* Target;
-  static const char* Taxi;
-  static const char* Teamviewer;
-  static const char* Telegram;
-  static const char* Television;
-  static const char* TelevisionGuide;
-  static const char* TemperatureCelsius;
-  static const char* TemperatureFahrenheit;
-  static const char* TemperatureKelvin;
-  static const char* Tennis;
-  static const char* Tent;
-  static const char* Terrain;
-  static const char* TestTube;
-  static const char* TextShadow;
-  static const char* TextToSpeech;
-  static const char* TextToSpeechOff;
-  static const char* Textbox;
-  static const char* Texture;
-  static const char* Theater;
-  static const char* ThemeLightDark;
-  static const char* Thermometer;
-  static const char* ThermometerLines;
-  static const char* ThumbDown;
-  static const char* ThumbDownOutline;
-  static const char* ThumbUp;
-  static const char* ThumbUpOutline;
-  static const char* ThumbsUpDown;
-  static const char* Ticket;
-  static const char* TicketAccount;
-  static const char* TicketConfirmation;
-  static const char* Tie;
-  static const char* Timelapse;
-  static const char* Timer;
-  static const char* Timer10;
-  static const char* Timer3;
-  static const char* TimerOff;
-  static const char* TimerSand;
-  static const char* TimerSandEmpty;
-  static const char* Timetable;
-  static const char* ToggleSwitch;
-  static const char* ToggleSwitchOff;
-  static const char* Tooltip;
-  static const char* TooltipEdit;
-  static const char* TooltipImage;
-  static const char* TooltipOutline;
-  static const char* TooltipOutlinePlus;
-  static const char* TooltipText;
-  static const char* Tooth;
-  static const char* Tor;
-  static const char* TowerBeach;
-  static const char* TowerFire;
-  static const char* TrafficLight;
-  static const char* Train;
-  static const char* Tram;
-  static const char* Transcribe;
-  static const char* TranscribeClose;
-  static const char* Transfer;
-  static const char* TransitTransfer;
-  static const char* Translate;
-  static const char* Tree;
-  static const char* Trello;
-  static const char* TrendingDown;
-  static const char* TrendingNeutral;
-  static const char* TrendingUp;
-  static const char* Triangle;
-  static const char* TriangleOutline;
-  static const char* Trophy;
-  static const char* TrophyAward;
-  static const char* TrophyOutline;
-  static const char* TrophyVariant;
-  static const char* TrophyVariantOutline;
-  static const char* Truck;
-  static const char* TruckDelivery;
-  static const char* TshirtCrew;
-  static const char* TshirtV;
-  static const char* Tumblr;
-  static const char* TumblrReblog;
-  static const char* Tune;
-  static const char* TuneVertical;
-  static const char* Twitch;
-  static const char* Twitter;
-  static const char* TwitterBox;
-  static const char* TwitterCircle;
-  static const char* TwitterRetweet;
-  static const char* Ubuntu;
-  static const char* Umbraco;
-  static const char* Umbrella;
-  static const char* UmbrellaOutline;
-  static const char* Undo;
-  static const char* UndoVariant;
-  static const char* UnfoldLess;
-  static const char* UnfoldMore;
-  static const char* Ungroup;
-  static const char* Unity;
-  static const char* Untappd;
-  static const char* Update;
-  static const char* Upload;
-  static const char* Usb;
-  static const char* VectorArrangeAbove;
-  static const char* VectorArrangeBelow;
-  static const char* VectorCircle;
-  static const char* VectorCircleVariant;
-  static const char* VectorCombine;
-  static const char* VectorCurve;
-  static const char* VectorDifference;
-  static const char* VectorDifferenceAb;
-  static const char* VectorDifferenceBa;
-  static const char* VectorIntersection;
-  static const char* VectorLine;
-  static const char* VectorPoint;
-  static const char* VectorPolygon;
-  static const char* VectorPolyline;
-  static const char* VectorRectangle;
-  static const char* VectorSelection;
-  static const char* VectorSquare;
-  static const char* VectorTriangle;
-  static const char* VectorUnion;
-  static const char* Verified;
-  static const char* Vibrate;
-  static const char* Video;
-  static const char* VideoOff;
-  static const char* VideoSwitch;
-  static const char* ViewAgenda;
-  static const char* ViewArray;
-  static const char* ViewCarousel;
-  static const char* ViewColumn;
-  static const char* ViewDashboard;
-  static const char* ViewDay;
-  static const char* ViewGrid;
-  static const char* ViewHeadline;
-  static const char* ViewList;
-  static const char* ViewModule;
-  static const char* ViewQuilt;
-  static const char* ViewStream;
-  static const char* ViewWeek;
-  static const char* Vimeo;
-  static const char* Vine;
-  static const char* Violin;
-  static const char* Visualstudio;
-  static const char* Vk;
-  static const char* VkBox;
-  static const char* VkCircle;
-  static const char* Vlc;
-  static const char* Voice;
-  static const char* Voicemail;
-  static const char* VolumeHigh;
-  static const char* VolumeLow;
-  static const char* VolumeMedium;
-  static const char* VolumeOff;
-  static const char* Vpn;
-  static const char* Walk;
-  static const char* Wallet;
-  static const char* WalletGiftcard;
-  static const char* WalletMembership;
-  static const char* WalletTravel;
-  static const char* Wan;
-  static const char* Watch;
-  static const char* WatchExport;
-  static const char* WatchImport;
-  static const char* WatchVibrate;
-  static const char* Water;
-  static const char* WaterOff;
-  static const char* WaterPercent;
-  static const char* WaterPump;
-  static const char* Watermark;
-  static const char* WeatherCloudy;
-  static const char* WeatherFog;
-  static const char* WeatherHail;
-  static const char* WeatherLightning;
-  static const char* WeatherLightningRainy;
-  static const char* WeatherNight;
-  static const char* WeatherPartlycloudy;
-  static const char* WeatherPouring;
-  static const char* WeatherRainy;
-  static const char* WeatherSnowy;
-  static const char* WeatherSnowyRainy;
-  static const char* WeatherSunny;
-  static const char* WeatherSunset;
-  static const char* WeatherSunsetDown;
-  static const char* WeatherSunsetUp;
-  static const char* WeatherWindy;
-  static const char* WeatherWindyVariant;
-  static const char* Web;
-  static const char* Webcam;
-  static const char* Webhook;
-  static const char* Wechat;
-  static const char* Weight;
-  static const char* WeightKilogram;
-  static const char* Whatsapp;
-  static const char* WheelchairAccessibility;
-  static const char* WhiteBalanceAuto;
-  static const char* WhiteBalanceIncandescent;
-  static const char* WhiteBalanceIridescent;
-  static const char* WhiteBalanceSunny;
-  static const char* Wifi;
-  static const char* WifiOff;
-  static const char* Wii;
-  static const char* Wikipedia;
-  static const char* WindowClose;
-  static const char* WindowClosed;
-  static const char* WindowMaximize;
-  static const char* WindowMinimize;
-  static const char* WindowOpen;
-  static const char* WindowRestore;
-  static const char* Windows;
-  static const char* Wordpress;
-  static const char* Worker;
-  static const char* Wrap;
-  static const char* Wrench;
-  static const char* Wunderlist;
-  static const char* Xaml;
-  static const char* Xbox;
-  static const char* XboxController;
-  static const char* XboxControllerOff;
-  static const char* Xda;
-  static const char* Xing;
-  static const char* XingBox;
-  static const char* XingCircle;
-  static const char* Xml;
-  static const char* Yeast;
-  static const char* Yelp;
-  static const char* YinYang;
-  static const char* YoutubePlay;
-  static const char* ZipBox;
+  static const std::string AccessPoint;
+  static const std::string AccessPointNetwork;
+  static const std::string Account;
+  static const std::string AccountAlert;
+  static const std::string AccountBox;
+  static const std::string AccountBoxOutline;
+  static const std::string AccountCardDetails;
+  static const std::string AccountCheck;
+  static const std::string AccountCircle;
+  static const std::string AccountConvert;
+  static const std::string AccountEdit;
+  static const std::string AccountKey;
+  static const std::string AccountLocation;
+  static const std::string AccountMinus;
+  static const std::string AccountMultiple;
+  static const std::string AccountMultipleMinus;
+  static const std::string AccountMultipleOutline;
+  static const std::string AccountMultiplePlus;
+  static const std::string AccountNetwork;
+  static const std::string AccountOff;
+  static const std::string AccountOutline;
+  static const std::string AccountPlus;
+  static const std::string AccountRemove;
+  static const std::string AccountSearch;
+  static const std::string AccountSettings;
+  static const std::string AccountSettingsVariant;
+  static const std::string AccountStar;
+  static const std::string AccountStarVariant;
+  static const std::string AccountSwitch;
+  static const std::string Adjust;
+  static const std::string AirConditioner;
+  static const std::string Airballoon;
+  static const std::string Airplane;
+  static const std::string AirplaneLanding;
+  static const std::string AirplaneOff;
+  static const std::string AirplaneTakeoff;
+  static const std::string Airplay;
+  static const std::string Alarm;
+  static const std::string AlarmCheck;
+  static const std::string AlarmMultiple;
+  static const std::string AlarmOff;
+  static const std::string AlarmPlus;
+  static const std::string AlarmSnooze;
+  static const std::string Album;
+  static const std::string Alert;
+  static const std::string AlertBox;
+  static const std::string AlertCircle;
+  static const std::string AlertCircleOutline;
+  static const std::string AlertOctagon;
+  static const std::string AlertOctagram;
+  static const std::string AlertOutline;
+  static const std::string AllInclusive;
+  static const std::string Alpha;
+  static const std::string Alphabetical;
+  static const std::string Altimeter;
+  static const std::string Amazon;
+  static const std::string AmazonClouddrive;
+  static const std::string Ambulance;
+  static const std::string Amplifier;
+  static const std::string Anchor;
+  static const std::string Android;
+  static const std::string AndroidDebugBridge;
+  static const std::string AndroidStudio;
+  static const std::string Angular;
+  static const std::string Angularjs;
+  static const std::string Animation;
+  static const std::string Apple;
+  static const std::string AppleFinder;
+  static const std::string AppleIos;
+  static const std::string AppleKeyboardCaps;
+  static const std::string AppleKeyboardCommand;
+  static const std::string AppleKeyboardControl;
+  static const std::string AppleKeyboardOption;
+  static const std::string AppleKeyboardShift;
+  static const std::string AppleMobileme;
+  static const std::string AppleSafari;
+  static const std::string Application;
+  static const std::string Apps;
+  static const std::string Archive;
+  static const std::string ArrangeBringForward;
+  static const std::string ArrangeBringToFront;
+  static const std::string ArrangeSendBackward;
+  static const std::string ArrangeSendToBack;
+  static const std::string ArrowAll;
+  static const std::string ArrowBottomLeft;
+  static const std::string ArrowBottomRight;
+  static const std::string ArrowCompress;
+  static const std::string ArrowCompressAll;
+  static const std::string ArrowDown;
+  static const std::string ArrowDownBold;
+  static const std::string ArrowDownBoldCircle;
+  static const std::string ArrowDownBoldCircleOutline;
+  static const std::string ArrowDownBoldHexagonOutline;
+  static const std::string ArrowDownBox;
+  static const std::string ArrowDownDropCircle;
+  static const std::string ArrowDownDropCircleOutline;
+  static const std::string ArrowExpand;
+  static const std::string ArrowExpandAll;
+  static const std::string ArrowLeft;
+  static const std::string ArrowLeftBold;
+  static const std::string ArrowLeftBoldCircle;
+  static const std::string ArrowLeftBoldCircleOutline;
+  static const std::string ArrowLeftBoldHexagonOutline;
+  static const std::string ArrowLeftBox;
+  static const std::string ArrowLeftDropCircle;
+  static const std::string ArrowLeftDropCircleOutline;
+  static const std::string ArrowRight;
+  static const std::string ArrowRightBold;
+  static const std::string ArrowRightBoldCircle;
+  static const std::string ArrowRightBoldCircleOutline;
+  static const std::string ArrowRightBoldHexagonOutline;
+  static const std::string ArrowRightBox;
+  static const std::string ArrowRightDropCircle;
+  static const std::string ArrowRightDropCircleOutline;
+  static const std::string ArrowTopLeft;
+  static const std::string ArrowTopRight;
+  static const std::string ArrowUp;
+  static const std::string ArrowUpBold;
+  static const std::string ArrowUpBoldCircle;
+  static const std::string ArrowUpBoldCircleOutline;
+  static const std::string ArrowUpBoldHexagonOutline;
+  static const std::string ArrowUpBox;
+  static const std::string ArrowUpDropCircle;
+  static const std::string ArrowUpDropCircleOutline;
+  static const std::string Assistant;
+  static const std::string Asterisk;
+  static const std::string At;
+  static const std::string Attachment;
+  static const std::string Audiobook;
+  static const std::string AutoFix;
+  static const std::string AutoUpload;
+  static const std::string Autorenew;
+  static const std::string AvTimer;
+  static const std::string Baby;
+  static const std::string BabyBuggy;
+  static const std::string Backburger;
+  static const std::string Backspace;
+  static const std::string BackupRestore;
+  static const std::string Bandcamp;
+  static const std::string Bank;
+  static const std::string Barcode;
+  static const std::string BarcodeScan;
+  static const std::string Barley;
+  static const std::string Barrel;
+  static const std::string Basecamp;
+  static const std::string Basket;
+  static const std::string BasketFill;
+  static const std::string BasketUnfill;
+  static const std::string Battery;
+  static const std::string Battery10;
+  static const std::string Battery20;
+  static const std::string Battery30;
+  static const std::string Battery40;
+  static const std::string Battery50;
+  static const std::string Battery60;
+  static const std::string Battery70;
+  static const std::string Battery80;
+  static const std::string Battery90;
+  static const std::string BatteryAlert;
+  static const std::string BatteryCharging;
+  static const std::string BatteryCharging100;
+  static const std::string BatteryCharging20;
+  static const std::string BatteryCharging30;
+  static const std::string BatteryCharging40;
+  static const std::string BatteryCharging60;
+  static const std::string BatteryCharging80;
+  static const std::string BatteryCharging90;
+  static const std::string BatteryMinus;
+  static const std::string BatteryNegative;
+  static const std::string BatteryOutline;
+  static const std::string BatteryPlus;
+  static const std::string BatteryPositive;
+  static const std::string BatteryUnknown;
+  static const std::string Beach;
+  static const std::string Beaker;
+  static const std::string Beats;
+  static const std::string Beer;
+  static const std::string Behance;
+  static const std::string Bell;
+  static const std::string BellOff;
+  static const std::string BellOutline;
+  static const std::string BellPlus;
+  static const std::string BellRing;
+  static const std::string BellRingOutline;
+  static const std::string BellSleep;
+  static const std::string Beta;
+  static const std::string Bible;
+  static const std::string Bike;
+  static const std::string Bing;
+  static const std::string Binoculars;
+  static const std::string Bio;
+  static const std::string Biohazard;
+  static const std::string Bitbucket;
+  static const std::string BlackMesa;
+  static const std::string Blackberry;
+  static const std::string Blender;
+  static const std::string Blinds;
+  static const std::string BlockHelper;
+  static const std::string Blogger;
+  static const std::string Bluetooth;
+  static const std::string BluetoothAudio;
+  static const std::string BluetoothConnect;
+  static const std::string BluetoothOff;
+  static const std::string BluetoothSettings;
+  static const std::string BluetoothTransfer;
+  static const std::string Blur;
+  static const std::string BlurLinear;
+  static const std::string BlurOff;
+  static const std::string BlurRadial;
+  static const std::string Bomb;
+  static const std::string BombOff;
+  static const std::string Bone;
+  static const std::string Book;
+  static const std::string BookMinus;
+  static const std::string BookMultiple;
+  static const std::string BookMultipleVariant;
+  static const std::string BookOpen;
+  static const std::string BookOpenPageVariant;
+  static const std::string BookOpenVariant;
+  static const std::string BookPlus;
+  static const std::string BookVariant;
+  static const std::string Bookmark;
+  static const std::string BookmarkCheck;
+  static const std::string BookmarkMusic;
+  static const std::string BookmarkOutline;
+  static const std::string BookmarkPlus;
+  static const std::string BookmarkPlusOutline;
+  static const std::string BookmarkRemove;
+  static const std::string Boombox;
+  static const std::string Bootstrap;
+  static const std::string BorderAll;
+  static const std::string BorderBottom;
+  static const std::string BorderColor;
+  static const std::string BorderHorizontal;
+  static const std::string BorderInside;
+  static const std::string BorderLeft;
+  static const std::string BorderNone;
+  static const std::string BorderOutside;
+  static const std::string BorderRight;
+  static const std::string BorderStyle;
+  static const std::string BorderTop;
+  static const std::string BorderVertical;
+  static const std::string BowTie;
+  static const std::string Bowl;
+  static const std::string Bowling;
+  static const std::string Box;
+  static const std::string BoxCutter;
+  static const std::string BoxShadow;
+  static const std::string Bridge;
+  static const std::string Briefcase;
+  static const std::string BriefcaseCheck;
+  static const std::string BriefcaseDownload;
+  static const std::string BriefcaseUpload;
+  static const std::string Brightness1;
+  static const std::string Brightness2;
+  static const std::string Brightness3;
+  static const std::string Brightness4;
+  static const std::string Brightness5;
+  static const std::string Brightness6;
+  static const std::string Brightness7;
+  static const std::string BrightnessAuto;
+  static const std::string Broom;
+  static const std::string Brush;
+  static const std::string Buffer;
+  static const std::string Bug;
+  static const std::string BulletinBoard;
+  static const std::string Bullhorn;
+  static const std::string Bullseye;
+  static const std::string BurstMode;
+  static const std::string Bus;
+  static const std::string Cached;
+  static const std::string Cake;
+  static const std::string CakeLayered;
+  static const std::string CakeVariant;
+  static const std::string Calculator;
+  static const std::string Calendar;
+  static const std::string CalendarBlank;
+  static const std::string CalendarCheck;
+  static const std::string CalendarClock;
+  static const std::string CalendarMultiple;
+  static const std::string CalendarMultipleCheck;
+  static const std::string CalendarPlus;
+  static const std::string CalendarQuestion;
+  static const std::string CalendarRange;
+  static const std::string CalendarRemove;
+  static const std::string CalendarText;
+  static const std::string CalendarToday;
+  static const std::string CallMade;
+  static const std::string CallMerge;
+  static const std::string CallMissed;
+  static const std::string CallReceived;
+  static const std::string CallSplit;
+  static const std::string Camcorder;
+  static const std::string CamcorderBox;
+  static const std::string CamcorderBoxOff;
+  static const std::string CamcorderOff;
+  static const std::string Camera;
+  static const std::string CameraBurst;
+  static const std::string CameraEnhance;
+  static const std::string CameraFront;
+  static const std::string CameraFrontVariant;
+  static const std::string CameraIris;
+  static const std::string CameraOff;
+  static const std::string CameraPartyMode;
+  static const std::string CameraRear;
+  static const std::string CameraRearVariant;
+  static const std::string CameraSwitch;
+  static const std::string CameraTimer;
+  static const std::string Candle;
+  static const std::string Candycane;
+  static const std::string Car;
+  static const std::string CarBattery;
+  static const std::string CarConnected;
+  static const std::string CarWash;
+  static const std::string Cards;
+  static const std::string CardsOutline;
+  static const std::string CardsPlayingOutline;
+  static const std::string CardsVariant;
+  static const std::string Carrot;
+  static const std::string Cart;
+  static const std::string CartOff;
+  static const std::string CartOutline;
+  static const std::string CartPlus;
+  static const std::string CaseSensitiveAlt;
+  static const std::string Cash;
+  static const std::string Cash100;
+  static const std::string CashMultiple;
+  static const std::string CashUsd;
+  static const std::string Cast;
+  static const std::string CastConnected;
+  static const std::string Castle;
+  static const std::string Cat;
+  static const std::string Cellphone;
+  static const std::string CellphoneAndroid;
+  static const std::string CellphoneBasic;
+  static const std::string CellphoneDock;
+  static const std::string CellphoneIphone;
+  static const std::string CellphoneLink;
+  static const std::string CellphoneLinkOff;
+  static const std::string CellphoneSettings;
+  static const std::string Certificate;
+  static const std::string ChairSchool;
+  static const std::string ChartArc;
+  static const std::string ChartAreaspline;
+  static const std::string ChartBar;
+  static const std::string ChartBubble;
+  static const std::string ChartGantt;
+  static const std::string ChartHistogram;
+  static const std::string ChartLine;
+  static const std::string ChartPie;
+  static const std::string ChartScatterplotHexbin;
+  static const std::string ChartTimeline;
+  static const std::string Check;
+  static const std::string CheckAll;
+  static const std::string CheckCircle;
+  static const std::string CheckCircleOutline;
+  static const std::string CheckboxBlank;
+  static const std::string CheckboxBlankCircle;
+  static const std::string CheckboxBlankCircleOutline;
+  static const std::string CheckboxBlankOutline;
+  static const std::string CheckboxMarked;
+  static const std::string CheckboxMarkedCircle;
+  static const std::string CheckboxMarkedCircleOutline;
+  static const std::string CheckboxMarkedOutline;
+  static const std::string CheckboxMultipleBlank;
+  static const std::string CheckboxMultipleBlankCircle;
+  static const std::string CheckboxMultipleBlankCircleOutline;
+  static const std::string CheckboxMultipleBlankOutline;
+  static const std::string CheckboxMultipleMarked;
+  static const std::string CheckboxMultipleMarkedCircle;
+  static const std::string CheckboxMultipleMarkedCircleOutline;
+  static const std::string CheckboxMultipleMarkedOutline;
+  static const std::string Checkerboard;
+  static const std::string ChemicalWeapon;
+  static const std::string ChevronDoubleDown;
+  static const std::string ChevronDoubleLeft;
+  static const std::string ChevronDoubleRight;
+  static const std::string ChevronDoubleUp;
+  static const std::string ChevronDown;
+  static const std::string ChevronLeft;
+  static const std::string ChevronRight;
+  static const std::string ChevronUp;
+  static const std::string Chip;
+  static const std::string Church;
+  static const std::string CiscoWebex;
+  static const std::string City;
+  static const std::string Clipboard;
+  static const std::string ClipboardAccount;
+  static const std::string ClipboardAlert;
+  static const std::string ClipboardArrowDown;
+  static const std::string ClipboardArrowLeft;
+  static const std::string ClipboardCheck;
+  static const std::string ClipboardFlow;
+  static const std::string ClipboardOutline;
+  static const std::string ClipboardText;
+  static const std::string Clippy;
+  static const std::string Clock;
+  static const std::string ClockAlert;
+  static const std::string ClockEnd;
+  static const std::string ClockFast;
+  static const std::string ClockIn;
+  static const std::string ClockOut;
+  static const std::string ClockStart;
+  static const std::string Close;
+  static const std::string CloseBox;
+  static const std::string CloseBoxOutline;
+  static const std::string CloseCircle;
+  static const std::string CloseCircleOutline;
+  static const std::string CloseNetwork;
+  static const std::string CloseOctagon;
+  static const std::string CloseOctagonOutline;
+  static const std::string CloseOutline;
+  static const std::string ClosedCaption;
+  static const std::string Cloud;
+  static const std::string CloudCheck;
+  static const std::string CloudCircle;
+  static const std::string CloudDownload;
+  static const std::string CloudOutline;
+  static const std::string CloudOutlineOff;
+  static const std::string CloudPrint;
+  static const std::string CloudPrintOutline;
+  static const std::string CloudSync;
+  static const std::string CloudUpload;
+  static const std::string CodeArray;
+  static const std::string CodeBraces;
+  static const std::string CodeBrackets;
+  static const std::string CodeEqual;
+  static const std::string CodeGreaterThan;
+  static const std::string CodeGreaterThanOrEqual;
+  static const std::string CodeLessThan;
+  static const std::string CodeLessThanOrEqual;
+  static const std::string CodeNotEqual;
+  static const std::string CodeNotEqualVariant;
+  static const std::string CodeParentheses;
+  static const std::string CodeString;
+  static const std::string CodeTags;
+  static const std::string CodeTagsCheck;
+  static const std::string Codepen;
+  static const std::string Coffee;
+  static const std::string CoffeeOutline;
+  static const std::string CoffeeToGo;
+  static const std::string Coin;
+  static const std::string Coins;
+  static const std::string Collage;
+  static const std::string ColorHelper;
+  static const std::string Comment;
+  static const std::string CommentAccount;
+  static const std::string CommentAccountOutline;
+  static const std::string CommentAlert;
+  static const std::string CommentAlertOutline;
+  static const std::string CommentCheck;
+  static const std::string CommentCheckOutline;
+  static const std::string CommentMultipleOutline;
+  static const std::string CommentOutline;
+  static const std::string CommentPlusOutline;
+  static const std::string CommentProcessing;
+  static const std::string CommentProcessingOutline;
+  static const std::string CommentQuestionOutline;
+  static const std::string CommentRemoveOutline;
+  static const std::string CommentText;
+  static const std::string CommentTextOutline;
+  static const std::string Compare;
+  static const std::string Compass;
+  static const std::string CompassOutline;
+  static const std::string Console;
+  static const std::string ContactMail;
+  static const std::string Contacts;
+  static const std::string ContentCopy;
+  static const std::string ContentCut;
+  static const std::string ContentDuplicate;
+  static const std::string ContentPaste;
+  static const std::string ContentSave;
+  static const std::string ContentSaveAll;
+  static const std::string ContentSaveSettings;
+  static const std::string Contrast;
+  static const std::string ContrastBox;
+  static const std::string ContrastCircle;
+  static const std::string Cookie;
+  static const std::string Copyright;
+  static const std::string Counter;
+  static const std::string Cow;
+  static const std::string Creation;
+  static const std::string CreditCard;
+  static const std::string CreditCardMultiple;
+  static const std::string CreditCardOff;
+  static const std::string CreditCardPlus;
+  static const std::string CreditCardScan;
+  static const std::string Crop;
+  static const std::string CropFree;
+  static const std::string CropLandscape;
+  static const std::string CropPortrait;
+  static const std::string CropRotate;
+  static const std::string CropSquare;
+  static const std::string Crosshairs;
+  static const std::string CrosshairsGps;
+  static const std::string Crown;
+  static const std::string Cube;
+  static const std::string CubeOutline;
+  static const std::string CubeSend;
+  static const std::string CubeUnfolded;
+  static const std::string Cup;
+  static const std::string CupOff;
+  static const std::string CupWater;
+  static const std::string CurrencyBtc;
+  static const std::string CurrencyEur;
+  static const std::string CurrencyGbp;
+  static const std::string CurrencyInr;
+  static const std::string CurrencyNgn;
+  static const std::string CurrencyRub;
+  static const std::string CurrencyTry;
+  static const std::string CurrencyUsd;
+  static const std::string CurrencyUsdOff;
+  static const std::string CursorDefault;
+  static const std::string CursorDefaultOutline;
+  static const std::string CursorMove;
+  static const std::string CursorPointer;
+  static const std::string CursorText;
+  static const std::string Database;
+  static const std::string DatabaseMinus;
+  static const std::string DatabasePlus;
+  static const std::string DebugStepInto;
+  static const std::string DebugStepOut;
+  static const std::string DebugStepOver;
+  static const std::string DecimalDecrease;
+  static const std::string DecimalIncrease;
+  static const std::string Delete;
+  static const std::string DeleteCircle;
+  static const std::string DeleteEmpty;
+  static const std::string DeleteForever;
+  static const std::string DeleteSweep;
+  static const std::string DeleteVariant;
+  static const std::string Delta;
+  static const std::string Deskphone;
+  static const std::string DesktopMac;
+  static const std::string DesktopTower;
+  static const std::string Details;
+  static const std::string DeveloperBoard;
+  static const std::string Deviantart;
+  static const std::string Dialpad;
+  static const std::string Diamond;
+  static const std::string Dice1;
+  static const std::string Dice2;
+  static const std::string Dice3;
+  static const std::string Dice4;
+  static const std::string Dice5;
+  static const std::string Dice6;
+  static const std::string DiceD20;
+  static const std::string DiceD4;
+  static const std::string DiceD6;
+  static const std::string DiceD8;
+  static const std::string Dictionary;
+  static const std::string Directions;
+  static const std::string DirectionsFork;
+  static const std::string Discord;
+  static const std::string Disk;
+  static const std::string DiskAlert;
+  static const std::string Disqus;
+  static const std::string DisqusOutline;
+  static const std::string Division;
+  static const std::string DivisionBox;
+  static const std::string Dna;
+  static const std::string Dns;
+  static const std::string DoNotDisturb;
+  static const std::string DoNotDisturbOff;
+  static const std::string Dolby;
+  static const std::string Domain;
+  static const std::string DotsHorizontal;
+  static const std::string DotsVertical;
+  static const std::string Douban;
+  static const std::string Download;
+  static const std::string Drag;
+  static const std::string DragHorizontal;
+  static const std::string DragVertical;
+  static const std::string Drawing;
+  static const std::string DrawingBox;
+  static const std::string Dribbble;
+  static const std::string DribbbleBox;
+  static const std::string Drone;
+  static const std::string Dropbox;
+  static const std::string Drupal;
+  static const std::string Duck;
+  static const std::string Dumbbell;
+  static const std::string Earth;
+  static const std::string EarthBox;
+  static const std::string EarthBoxOff;
+  static const std::string EarthOff;
+  static const std::string Edge;
+  static const std::string Eject;
+  static const std::string ElevationDecline;
+  static const std::string ElevationRise;
+  static const std::string Elevator;
+  static const std::string Email;
+  static const std::string EmailAlert;
+  static const std::string EmailOpen;
+  static const std::string EmailOpenOutline;
+  static const std::string EmailOutline;
+  static const std::string EmailSecure;
+  static const std::string EmailVariant;
+  static const std::string Emby;
+  static const std::string Emoticon;
+  static const std::string EmoticonCool;
+  static const std::string EmoticonDead;
+  static const std::string EmoticonDevil;
+  static const std::string EmoticonExcited;
+  static const std::string EmoticonHappy;
+  static const std::string EmoticonNeutral;
+  static const std::string EmoticonPoop;
+  static const std::string EmoticonSad;
+  static const std::string EmoticonTongue;
+  static const std::string Engine;
+  static const std::string EngineOutline;
+  static const std::string Equal;
+  static const std::string EqualBox;
+  static const std::string Eraser;
+  static const std::string EraserVariant;
+  static const std::string Escalator;
+  static const std::string Ethernet;
+  static const std::string EthernetCable;
+  static const std::string EthernetCableOff;
+  static const std::string Etsy;
+  static const std::string EvStation;
+  static const std::string Evernote;
+  static const std::string Exclamation;
+  static const std::string ExitToApp;
+  static const std::string Export;
+  static const std::string Eye;
+  static const std::string EyeOff;
+  static const std::string EyeOutline;
+  static const std::string EyeOutlineOff;
+  static const std::string Eyedropper;
+  static const std::string EyedropperVariant;
+  static const std::string Face;
+  static const std::string FaceProfile;
+  static const std::string Facebook;
+  static const std::string FacebookBox;
+  static const std::string FacebookMessenger;
+  static const std::string Factory;
+  static const std::string Fan;
+  static const std::string FastForward;
+  static const std::string FastForwardOutline;
+  static const std::string Fax;
+  static const std::string Feather;
+  static const std::string Ferry;
+  static const std::string File;
+  static const std::string FileChart;
+  static const std::string FileCheck;
+  static const std::string FileCloud;
+  static const std::string FileDelimited;
+  static const std::string FileDocument;
+  static const std::string FileDocumentBox;
+  static const std::string FileExcel;
+  static const std::string FileExcelBox;
+  static const std::string FileExport;
+  static const std::string FileFind;
+  static const std::string FileHidden;
+  static const std::string FileImage;
+  static const std::string FileImport;
+  static const std::string FileLock;
+  static const std::string FileMultiple;
+  static const std::string FileMusic;
+  static const std::string FileOutline;
+  static const std::string FilePdf;
+  static const std::string FilePdfBox;
+  static const std::string FilePowerpoint;
+  static const std::string FilePowerpointBox;
+  static const std::string FilePresentationBox;
+  static const std::string FileRestore;
+  static const std::string FileSend;
+  static const std::string FileTree;
+  static const std::string FileVideo;
+  static const std::string FileWord;
+  static const std::string FileWordBox;
+  static const std::string FileXml;
+  static const std::string Film;
+  static const std::string Filmstrip;
+  static const std::string FilmstripOff;
+  static const std::string Filter;
+  static const std::string FilterOutline;
+  static const std::string FilterRemove;
+  static const std::string FilterRemoveOutline;
+  static const std::string FilterVariant;
+  static const std::string FindReplace;
+  static const std::string Fingerprint;
+  static const std::string Fire;
+  static const std::string Firefox;
+  static const std::string Fish;
+  static const std::string Flag;
+  static const std::string FlagCheckered;
+  static const std::string FlagOutline;
+  static const std::string FlagOutlineVariant;
+  static const std::string FlagTriangle;
+  static const std::string FlagVariant;
+  static const std::string Flash;
+  static const std::string FlashAuto;
+  static const std::string FlashOff;
+  static const std::string FlashOutline;
+  static const std::string FlashRedEye;
+  static const std::string Flashlight;
+  static const std::string FlashlightOff;
+  static const std::string Flask;
+  static const std::string FlaskEmpty;
+  static const std::string FlaskEmptyOutline;
+  static const std::string FlaskOutline;
+  static const std::string Flattr;
+  static const std::string FlipToBack;
+  static const std::string FlipToFront;
+  static const std::string Floppy;
+  static const std::string Flower;
+  static const std::string Folder;
+  static const std::string FolderAccount;
+  static const std::string FolderDownload;
+  static const std::string FolderGoogleDrive;
+  static const std::string FolderImage;
+  static const std::string FolderLock;
+  static const std::string FolderLockOpen;
+  static const std::string FolderMove;
+  static const std::string FolderMultiple;
+  static const std::string FolderMultipleImage;
+  static const std::string FolderMultipleOutline;
+  static const std::string FolderOutline;
+  static const std::string FolderPlus;
+  static const std::string FolderRemove;
+  static const std::string FolderStar;
+  static const std::string FolderUpload;
+  static const std::string FontAwesome;
+  static const std::string Food;
+  static const std::string FoodApple;
+  static const std::string FoodForkDrink;
+  static const std::string FoodOff;
+  static const std::string FoodVariant;
+  static const std::string Football;
+  static const std::string FootballAustralian;
+  static const std::string FootballHelmet;
+  static const std::string FormatAlignCenter;
+  static const std::string FormatAlignJustify;
+  static const std::string FormatAlignLeft;
+  static const std::string FormatAlignRight;
+  static const std::string FormatAnnotationPlus;
+  static const std::string FormatBold;
+  static const std::string FormatClear;
+  static const std::string FormatColorFill;
+  static const std::string FormatColorText;
+  static const std::string FormatFloatCenter;
+  static const std::string FormatFloatLeft;
+  static const std::string FormatFloatNone;
+  static const std::string FormatFloatRight;
+  static const std::string FormatFont;
+  static const std::string FormatHeader1;
+  static const std::string FormatHeader2;
+  static const std::string FormatHeader3;
+  static const std::string FormatHeader4;
+  static const std::string FormatHeader5;
+  static const std::string FormatHeader6;
+  static const std::string FormatHeaderDecrease;
+  static const std::string FormatHeaderEqual;
+  static const std::string FormatHeaderIncrease;
+  static const std::string FormatHeaderPound;
+  static const std::string FormatHorizontalAlignCenter;
+  static const std::string FormatHorizontalAlignLeft;
+  static const std::string FormatHorizontalAlignRight;
+  static const std::string FormatIndentDecrease;
+  static const std::string FormatIndentIncrease;
+  static const std::string FormatItalic;
+  static const std::string FormatLineSpacing;
+  static const std::string FormatLineStyle;
+  static const std::string FormatLineWeight;
+  static const std::string FormatListBulleted;
+  static const std::string FormatListBulletedType;
+  static const std::string FormatListNumbers;
+  static const std::string FormatPageBreak;
+  static const std::string FormatPaint;
+  static const std::string FormatParagraph;
+  static const std::string FormatPilcrow;
+  static const std::string FormatQuote;
+  static const std::string FormatRotate90;
+  static const std::string FormatSection;
+  static const std::string FormatSize;
+  static const std::string FormatStrikethrough;
+  static const std::string FormatStrikethroughVariant;
+  static const std::string FormatSubscript;
+  static const std::string FormatSuperscript;
+  static const std::string FormatText;
+  static const std::string FormatTextdirectionLToR;
+  static const std::string FormatTextdirectionRToL;
+  static const std::string FormatTitle;
+  static const std::string FormatUnderline;
+  static const std::string FormatVerticalAlignBottom;
+  static const std::string FormatVerticalAlignCenter;
+  static const std::string FormatVerticalAlignTop;
+  static const std::string FormatWrapInline;
+  static const std::string FormatWrapSquare;
+  static const std::string FormatWrapTight;
+  static const std::string FormatWrapTopBottom;
+  static const std::string Forum;
+  static const std::string Forward;
+  static const std::string Foursquare;
+  static const std::string Fridge;
+  static const std::string FridgeFilled;
+  static const std::string FridgeFilledBottom;
+  static const std::string FridgeFilledTop;
+  static const std::string Fullscreen;
+  static const std::string FullscreenExit;
+  static const std::string Function;
+  static const std::string Gamepad;
+  static const std::string GamepadVariant;
+  static const std::string Garage;
+  static const std::string GarageOpen;
+  static const std::string GasCylinder;
+  static const std::string GasStation;
+  static const std::string Gate;
+  static const std::string Gauge;
+  static const std::string Gavel;
+  static const std::string GenderFemale;
+  static const std::string GenderMale;
+  static const std::string GenderMaleFemale;
+  static const std::string GenderTransgender;
+  static const std::string Ghost;
+  static const std::string Gift;
+  static const std::string Git;
+  static const std::string GithubBox;
+  static const std::string GithubCircle;
+  static const std::string GithubFace;
+  static const std::string GlassFlute;
+  static const std::string GlassMug;
+  static const std::string GlassStange;
+  static const std::string GlassTulip;
+  static const std::string Glassdoor;
+  static const std::string Glasses;
+  static const std::string Gmail;
+  static const std::string Gnome;
+  static const std::string Gondola;
+  static const std::string Google;
+  static const std::string GoogleCardboard;
+  static const std::string GoogleChrome;
+  static const std::string GoogleCircles;
+  static const std::string GoogleCirclesCommunities;
+  static const std::string GoogleCirclesExtended;
+  static const std::string GoogleCirclesGroup;
+  static const std::string GoogleController;
+  static const std::string GoogleControllerOff;
+  static const std::string GoogleDrive;
+  static const std::string GoogleEarth;
+  static const std::string GoogleGlass;
+  static const std::string GoogleKeep;
+  static const std::string GoogleMaps;
+  static const std::string GoogleNearby;
+  static const std::string GooglePages;
+  static const std::string GooglePhotos;
+  static const std::string GooglePhysicalWeb;
+  static const std::string GooglePlay;
+  static const std::string GooglePlus;
+  static const std::string GooglePlusBox;
+  static const std::string GoogleTranslate;
+  static const std::string GoogleWallet;
+  static const std::string Gradient;
+  static const std::string GreasePencil;
+  static const std::string Grid;
+  static const std::string GridOff;
+  static const std::string Group;
+  static const std::string GuitarElectric;
+  static const std::string GuitarPick;
+  static const std::string GuitarPickOutline;
+  static const std::string Hackernews;
+  static const std::string Hamburger;
+  static const std::string HandPointingRight;
+  static const std::string Hanger;
+  static const std::string Hangouts;
+  static const std::string Harddisk;
+  static const std::string Headphones;
+  static const std::string HeadphonesBox;
+  static const std::string HeadphonesSettings;
+  static const std::string Headset;
+  static const std::string HeadsetDock;
+  static const std::string HeadsetOff;
+  static const std::string Heart;
+  static const std::string HeartBox;
+  static const std::string HeartBoxOutline;
+  static const std::string HeartBroken;
+  static const std::string HeartHalfOutline;
+  static const std::string HeartHalfPart;
+  static const std::string HeartHalfPartOutline;
+  static const std::string HeartOutline;
+  static const std::string HeartPulse;
+  static const std::string Help;
+  static const std::string HelpCircle;
+  static const std::string HelpCircleOutline;
+  static const std::string Hexagon;
+  static const std::string HexagonMultiple;
+  static const std::string HexagonOutline;
+  static const std::string Highway;
+  static const std::string History;
+  static const std::string Hololens;
+  static const std::string Home;
+  static const std::string HomeMapMarker;
+  static const std::string HomeModern;
+  static const std::string HomeOutline;
+  static const std::string HomeVariant;
+  static const std::string Hook;
+  static const std::string HookOff;
+  static const std::string Hops;
+  static const std::string Hospital;
+  static const std::string HospitalBuilding;
+  static const std::string HospitalMarker;
+  static const std::string Hotel;
+  static const std::string Houzz;
+  static const std::string HouzzBox;
+  static const std::string Human;
+  static const std::string HumanChild;
+  static const std::string HumanFemale;
+  static const std::string HumanGreeting;
+  static const std::string HumanHandsdown;
+  static const std::string HumanHandsup;
+  static const std::string HumanMale;
+  static const std::string HumanMaleFemale;
+  static const std::string HumanPregnant;
+  static const std::string Image;
+  static const std::string ImageAlbum;
+  static const std::string ImageArea;
+  static const std::string ImageAreaClose;
+  static const std::string ImageBroken;
+  static const std::string ImageBrokenVariant;
+  static const std::string ImageFilter;
+  static const std::string ImageFilterBlackWhite;
+  static const std::string ImageFilterCenterFocus;
+  static const std::string ImageFilterCenterFocusWeak;
+  static const std::string ImageFilterDrama;
+  static const std::string ImageFilterFrames;
+  static const std::string ImageFilterHdr;
+  static const std::string ImageFilterNone;
+  static const std::string ImageFilterTiltShift;
+  static const std::string ImageFilterVintage;
+  static const std::string ImageMultiple;
+  static const std::string Import;
+  static const std::string Inbox;
+  static const std::string InboxArrowDown;
+  static const std::string InboxArrowUp;
+  static const std::string Incognito;
+  static const std::string Infinity;
+  static const std::string Information;
+  static const std::string InformationOutline;
+  static const std::string InformationVariant;
+  static const std::string Instagram;
+  static const std::string Instapaper;
+  static const std::string InternetExplorer;
+  static const std::string InvertColors;
+  static const std::string Itunes;
+  static const std::string Jeepney;
+  static const std::string Jira;
+  static const std::string Jsfiddle;
+  static const std::string Json;
+  static const std::string Keg;
+  static const std::string Kettle;
+  static const std::string Key;
+  static const std::string KeyChange;
+  static const std::string KeyMinus;
+  static const std::string KeyPlus;
+  static const std::string KeyRemove;
+  static const std::string KeyVariant;
+  static const std::string Keyboard;
+  static const std::string KeyboardBackspace;
+  static const std::string KeyboardCaps;
+  static const std::string KeyboardClose;
+  static const std::string KeyboardOff;
+  static const std::string KeyboardReturn;
+  static const std::string KeyboardTab;
+  static const std::string KeyboardVariant;
+  static const std::string Kodi;
+  static const std::string Label;
+  static const std::string LabelOutline;
+  static const std::string Lambda;
+  static const std::string Lamp;
+  static const std::string Lan;
+  static const std::string LanConnect;
+  static const std::string LanDisconnect;
+  static const std::string LanPending;
+  static const std::string LanguageC;
+  static const std::string LanguageCpp;
+  static const std::string LanguageCsharp;
+  static const std::string LanguageCss3;
+  static const std::string LanguageHtml5;
+  static const std::string LanguageJavascript;
+  static const std::string LanguagePhp;
+  static const std::string LanguagePython;
+  static const std::string LanguagePythonText;
+  static const std::string LanguageSwift;
+  static const std::string LanguageTypescript;
+  static const std::string Laptop;
+  static const std::string LaptopChromebook;
+  static const std::string LaptopMac;
+  static const std::string LaptopOff;
+  static const std::string LaptopWindows;
+  static const std::string Lastfm;
+  static const std::string Launch;
+  static const std::string Layers;
+  static const std::string LayersOff;
+  static const std::string LeadPencil;
+  static const std::string Leaf;
+  static const std::string LedOff;
+  static const std::string LedOn;
+  static const std::string LedOutline;
+  static const std::string LedVariantOff;
+  static const std::string LedVariantOn;
+  static const std::string LedVariantOutline;
+  static const std::string Library;
+  static const std::string LibraryBooks;
+  static const std::string LibraryMusic;
+  static const std::string LibraryPlus;
+  static const std::string Lightbulb;
+  static const std::string LightbulbOn;
+  static const std::string LightbulbOnOutline;
+  static const std::string LightbulbOutline;
+  static const std::string Link;
+  static const std::string LinkOff;
+  static const std::string LinkVariant;
+  static const std::string LinkVariantOff;
+  static const std::string Linkedin;
+  static const std::string LinkedinBox;
+  static const std::string Linux;
+  static const std::string Lock;
+  static const std::string LockOpen;
+  static const std::string LockOpenOutline;
+  static const std::string LockOutline;
+  static const std::string LockPattern;
+  static const std::string LockPlus;
+  static const std::string Login;
+  static const std::string LoginVariant;
+  static const std::string Logout;
+  static const std::string LogoutVariant;
+  static const std::string Looks;
+  static const std::string Loop;
+  static const std::string Loupe;
+  static const std::string Lumx;
+  static const std::string Magnet;
+  static const std::string MagnetOn;
+  static const std::string Magnify;
+  static const std::string MagnifyMinus;
+  static const std::string MagnifyMinusOutline;
+  static const std::string MagnifyPlus;
+  static const std::string MagnifyPlusOutline;
+  static const std::string MailRu;
+  static const std::string Mailbox;
+  static const std::string Map;
+  static const std::string MapMarker;
+  static const std::string MapMarkerCircle;
+  static const std::string MapMarkerMinus;
+  static const std::string MapMarkerMultiple;
+  static const std::string MapMarkerOff;
+  static const std::string MapMarkerPlus;
+  static const std::string MapMarkerRadius;
+  static const std::string Margin;
+  static const std::string Markdown;
+  static const std::string Marker;
+  static const std::string MarkerCheck;
+  static const std::string Martini;
+  static const std::string MaterialUi;
+  static const std::string MathCompass;
+  static const std::string Matrix;
+  static const std::string Maxcdn;
+  static const std::string MedicalBag;
+  static const std::string Medium;
+  static const std::string Memory;
+  static const std::string Menu;
+  static const std::string MenuDown;
+  static const std::string MenuDownOutline;
+  static const std::string MenuLeft;
+  static const std::string MenuRight;
+  static const std::string MenuUp;
+  static const std::string MenuUpOutline;
+  static const std::string Message;
+  static const std::string MessageAlert;
+  static const std::string MessageBulleted;
+  static const std::string MessageBulletedOff;
+  static const std::string MessageDraw;
+  static const std::string MessageImage;
+  static const std::string MessageOutline;
+  static const std::string MessagePlus;
+  static const std::string MessageProcessing;
+  static const std::string MessageReply;
+  static const std::string MessageReplyText;
+  static const std::string MessageSettings;
+  static const std::string MessageSettingsVariant;
+  static const std::string MessageText;
+  static const std::string MessageTextOutline;
+  static const std::string MessageVideo;
+  static const std::string Meteor;
+  static const std::string Microphone;
+  static const std::string MicrophoneOff;
+  static const std::string MicrophoneOutline;
+  static const std::string MicrophoneSettings;
+  static const std::string MicrophoneVariant;
+  static const std::string MicrophoneVariantOff;
+  static const std::string Microscope;
+  static const std::string Microsoft;
+  static const std::string Minecraft;
+  static const std::string Minus;
+  static const std::string MinusBox;
+  static const std::string MinusBoxOutline;
+  static const std::string MinusCircle;
+  static const std::string MinusCircleOutline;
+  static const std::string MinusNetwork;
+  static const std::string Mixcloud;
+  static const std::string Monitor;
+  static const std::string MonitorMultiple;
+  static const std::string More;
+  static const std::string Motorbike;
+  static const std::string Mouse;
+  static const std::string MouseOff;
+  static const std::string MouseVariant;
+  static const std::string MouseVariantOff;
+  static const std::string MoveResize;
+  static const std::string MoveResizeVariant;
+  static const std::string Movie;
+  static const std::string Multiplication;
+  static const std::string MultiplicationBox;
+  static const std::string MusicBox;
+  static const std::string MusicBoxOutline;
+  static const std::string MusicCircle;
+  static const std::string MusicNote;
+  static const std::string MusicNoteBluetooth;
+  static const std::string MusicNoteBluetoothOff;
+  static const std::string MusicNoteEighth;
+  static const std::string MusicNoteHalf;
+  static const std::string MusicNoteOff;
+  static const std::string MusicNoteQuarter;
+  static const std::string MusicNoteSixteenth;
+  static const std::string MusicNoteWhole;
+  static const std::string Nature;
+  static const std::string NaturePeople;
+  static const std::string Navigation;
+  static const std::string NearMe;
+  static const std::string Needle;
+  static const std::string NestProtect;
+  static const std::string NestThermostat;
+  static const std::string Network;
+  static const std::string NetworkDownload;
+  static const std::string NetworkQuestion;
+  static const std::string NetworkUpload;
+  static const std::string NewBox;
+  static const std::string Newspaper;
+  static const std::string Nfc;
+  static const std::string NfcTap;
+  static const std::string NfcVariant;
+  static const std::string Nodejs;
+  static const std::string Note;
+  static const std::string NoteMultiple;
+  static const std::string NoteMultipleOutline;
+  static const std::string NoteOutline;
+  static const std::string NotePlus;
+  static const std::string NotePlusOutline;
+  static const std::string NoteText;
+  static const std::string NotificationClearAll;
+  static const std::string Npm;
+  static const std::string Nuke;
+  static const std::string Numeric;
+  static const std::string Numeric0Box;
+  static const std::string Numeric0BoxMultipleOutline;
+  static const std::string Numeric0BoxOutline;
+  static const std::string Numeric1Box;
+  static const std::string Numeric1BoxMultipleOutline;
+  static const std::string Numeric1BoxOutline;
+  static const std::string Numeric2Box;
+  static const std::string Numeric2BoxMultipleOutline;
+  static const std::string Numeric2BoxOutline;
+  static const std::string Numeric3Box;
+  static const std::string Numeric3BoxMultipleOutline;
+  static const std::string Numeric3BoxOutline;
+  static const std::string Numeric4Box;
+  static const std::string Numeric4BoxMultipleOutline;
+  static const std::string Numeric4BoxOutline;
+  static const std::string Numeric5Box;
+  static const std::string Numeric5BoxMultipleOutline;
+  static const std::string Numeric5BoxOutline;
+  static const std::string Numeric6Box;
+  static const std::string Numeric6BoxMultipleOutline;
+  static const std::string Numeric6BoxOutline;
+  static const std::string Numeric7Box;
+  static const std::string Numeric7BoxMultipleOutline;
+  static const std::string Numeric7BoxOutline;
+  static const std::string Numeric8Box;
+  static const std::string Numeric8BoxMultipleOutline;
+  static const std::string Numeric8BoxOutline;
+  static const std::string Numeric9Box;
+  static const std::string Numeric9BoxMultipleOutline;
+  static const std::string Numeric9BoxOutline;
+  static const std::string Numeric9PlusBox;
+  static const std::string Numeric9PlusBoxMultipleOutline;
+  static const std::string Numeric9PlusBoxOutline;
+  static const std::string Nut;
+  static const std::string Nutrition;
+  static const std::string Oar;
+  static const std::string Octagon;
+  static const std::string OctagonOutline;
+  static const std::string Octagram;
+  static const std::string Odnoklassniki;
+  static const std::string Office;
+  static const std::string Oil;
+  static const std::string OilTemperature;
+  static const std::string Omega;
+  static const std::string Onedrive;
+  static const std::string Opacity;
+  static const std::string OpenInApp;
+  static const std::string OpenInNew;
+  static const std::string Openid;
+  static const std::string Opera;
+  static const std::string Ornament;
+  static const std::string OrnamentVariant;
+  static const std::string Owl;
+  static const std::string Package;
+  static const std::string PackageDown;
+  static const std::string PackageUp;
+  static const std::string PackageVariant;
+  static const std::string PackageVariantClosed;
+  static const std::string PageFirst;
+  static const std::string PageLast;
+  static const std::string PageLayoutBody;
+  static const std::string PageLayoutFooter;
+  static const std::string PageLayoutHeader;
+  static const std::string PageLayoutSidebarLeft;
+  static const std::string PageLayoutSidebarRight;
+  static const std::string Palette;
+  static const std::string PaletteAdvanced;
+  static const std::string Panda;
+  static const std::string Pandora;
+  static const std::string Panorama;
+  static const std::string PanoramaFisheye;
+  static const std::string PanoramaHorizontal;
+  static const std::string PanoramaVertical;
+  static const std::string PanoramaWideAngle;
+  static const std::string PaperCutVertical;
+  static const std::string Paperclip;
+  static const std::string Parking;
+  static const std::string Pause;
+  static const std::string PauseCircle;
+  static const std::string PauseCircleOutline;
+  static const std::string PauseOctagon;
+  static const std::string PauseOctagonOutline;
+  static const std::string Paw;
+  static const std::string PawOff;
+  static const std::string Pen;
+  static const std::string Pencil;
+  static const std::string PencilBox;
+  static const std::string PencilBoxOutline;
+  static const std::string PencilCircle;
+  static const std::string PencilLock;
+  static const std::string PencilOff;
+  static const std::string Pentagon;
+  static const std::string PentagonOutline;
+  static const std::string Percent;
+  static const std::string Pharmacy;
+  static const std::string Phone;
+  static const std::string PhoneBluetooth;
+  static const std::string PhoneClassic;
+  static const std::string PhoneForward;
+  static const std::string PhoneHangup;
+  static const std::string PhoneInTalk;
+  static const std::string PhoneIncoming;
+  static const std::string PhoneLocked;
+  static const std::string PhoneLog;
+  static const std::string PhoneMinus;
+  static const std::string PhoneMissed;
+  static const std::string PhoneOutgoing;
+  static const std::string PhonePaused;
+  static const std::string PhonePlus;
+  static const std::string PhoneSettings;
+  static const std::string PhoneVoip;
+  static const std::string Pi;
+  static const std::string PiBox;
+  static const std::string Piano;
+  static const std::string Pig;
+  static const std::string Pill;
+  static const std::string Pillar;
+  static const std::string Pin;
+  static const std::string PinOff;
+  static const std::string PineTree;
+  static const std::string PineTreeBox;
+  static const std::string Pinterest;
+  static const std::string PinterestBox;
+  static const std::string Pistol;
+  static const std::string Pizza;
+  static const std::string PlaneShield;
+  static const std::string Play;
+  static const std::string PlayBoxOutline;
+  static const std::string PlayCircle;
+  static const std::string PlayCircleOutline;
+  static const std::string PlayPause;
+  static const std::string PlayProtectedContent;
+  static const std::string PlaylistCheck;
+  static const std::string PlaylistMinus;
+  static const std::string PlaylistPlay;
+  static const std::string PlaylistPlus;
+  static const std::string PlaylistRemove;
+  static const std::string Playstation;
+  static const std::string Plex;
+  static const std::string Plus;
+  static const std::string PlusBox;
+  static const std::string PlusBoxOutline;
+  static const std::string PlusCircle;
+  static const std::string PlusCircleMultipleOutline;
+  static const std::string PlusCircleOutline;
+  static const std::string PlusNetwork;
+  static const std::string PlusOne;
+  static const std::string PlusOutline;
+  static const std::string Pocket;
+  static const std::string Pokeball;
+  static const std::string Polaroid;
+  static const std::string Poll;
+  static const std::string PollBox;
+  static const std::string Polymer;
+  static const std::string Pool;
+  static const std::string Popcorn;
+  static const std::string Pot;
+  static const std::string PotMix;
+  static const std::string Pound;
+  static const std::string PoundBox;
+  static const std::string Power;
+  static const std::string PowerPlug;
+  static const std::string PowerPlugOff;
+  static const std::string PowerSettings;
+  static const std::string PowerSocket;
+  static const std::string Prescription;
+  static const std::string Presentation;
+  static const std::string PresentationPlay;
+  static const std::string Printer;
+  static const std::string Printer3d;
+  static const std::string PrinterAlert;
+  static const std::string PrinterSettings;
+  static const std::string PriorityHigh;
+  static const std::string PriorityLow;
+  static const std::string ProfessionalHexagon;
+  static const std::string Projector;
+  static const std::string ProjectorScreen;
+  static const std::string Publish;
+  static const std::string Pulse;
+  static const std::string Puzzle;
+  static const std::string Qqchat;
+  static const std::string Qrcode;
+  static const std::string QrcodeScan;
+  static const std::string Quadcopter;
+  static const std::string QualityHigh;
+  static const std::string Quicktime;
+  static const std::string Radar;
+  static const std::string Radiator;
+  static const std::string Radio;
+  static const std::string RadioHandheld;
+  static const std::string RadioTower;
+  static const std::string Radioactive;
+  static const std::string RadioboxBlank;
+  static const std::string RadioboxMarked;
+  static const std::string Raspberrypi;
+  static const std::string RayEnd;
+  static const std::string RayEndArrow;
+  static const std::string RayStart;
+  static const std::string RayStartArrow;
+  static const std::string RayStartEnd;
+  static const std::string RayVertex;
+  static const std::string Rdio;
+  static const std::string React;
+  static const std::string Read;
+  static const std::string Readability;
+  static const std::string Receipt;
+  static const std::string Record;
+  static const std::string RecordRec;
+  static const std::string Recycle;
+  static const std::string Reddit;
+  static const std::string Redo;
+  static const std::string RedoVariant;
+  static const std::string Refresh;
+  static const std::string Regex;
+  static const std::string RelativeScale;
+  static const std::string Reload;
+  static const std::string Remote;
+  static const std::string RenameBox;
+  static const std::string ReorderHorizontal;
+  static const std::string ReorderVertical;
+  static const std::string Repeat;
+  static const std::string RepeatOff;
+  static const std::string RepeatOnce;
+  static const std::string Replay;
+  static const std::string Reply;
+  static const std::string ReplyAll;
+  static const std::string Reproduction;
+  static const std::string ResizeBottomRight;
+  static const std::string Responsive;
+  static const std::string Restart;
+  static const std::string Restore;
+  static const std::string Rewind;
+  static const std::string RewindOutline;
+  static const std::string Rhombus;
+  static const std::string RhombusOutline;
+  static const std::string Ribbon;
+  static const std::string Road;
+  static const std::string RoadVariant;
+  static const std::string Robot;
+  static const std::string Rocket;
+  static const std::string Roomba;
+  static const std::string Rotate3d;
+  static const std::string RotateLeft;
+  static const std::string RotateLeftVariant;
+  static const std::string RotateRight;
+  static const std::string RotateRightVariant;
+  static const std::string RoundedCorner;
+  static const std::string RouterWireless;
+  static const std::string Routes;
+  static const std::string Rowing;
+  static const std::string Rss;
+  static const std::string RssBox;
+  static const std::string Ruler;
+  static const std::string Run;
+  static const std::string RunFast;
+  static const std::string Sale;
+  static const std::string Satellite;
+  static const std::string SatelliteVariant;
+  static const std::string Saxophone;
+  static const std::string Scale;
+  static const std::string ScaleBalance;
+  static const std::string ScaleBathroom;
+  static const std::string Scanner;
+  static const std::string School;
+  static const std::string ScreenRotation;
+  static const std::string ScreenRotationLock;
+  static const std::string Screwdriver;
+  static const std::string Script;
+  static const std::string Sd;
+  static const std::string Seal;
+  static const std::string SearchWeb;
+  static const std::string SeatFlat;
+  static const std::string SeatFlatAngled;
+  static const std::string SeatIndividualSuite;
+  static const std::string SeatLegroomExtra;
+  static const std::string SeatLegroomNormal;
+  static const std::string SeatLegroomReduced;
+  static const std::string SeatReclineExtra;
+  static const std::string SeatReclineNormal;
+  static const std::string Security;
+  static const std::string SecurityHome;
+  static const std::string SecurityNetwork;
+  static const std::string Select;
+  static const std::string SelectAll;
+  static const std::string SelectInverse;
+  static const std::string SelectOff;
+  static const std::string Selection;
+  static const std::string Send;
+  static const std::string SerialPort;
+  static const std::string Server;
+  static const std::string ServerMinus;
+  static const std::string ServerNetwork;
+  static const std::string ServerNetworkOff;
+  static const std::string ServerOff;
+  static const std::string ServerPlus;
+  static const std::string ServerRemove;
+  static const std::string ServerSecurity;
+  static const std::string Settings;
+  static const std::string SettingsBox;
+  static const std::string ShapeCirclePlus;
+  static const std::string ShapePlus;
+  static const std::string ShapePolygonPlus;
+  static const std::string ShapeRectanglePlus;
+  static const std::string ShapeSquarePlus;
+  static const std::string Share;
+  static const std::string ShareVariant;
+  static const std::string Shield;
+  static const std::string ShieldOutline;
+  static const std::string Shopping;
+  static const std::string ShoppingMusic;
+  static const std::string Shovel;
+  static const std::string ShovelOff;
+  static const std::string Shredder;
+  static const std::string Shuffle;
+  static const std::string ShuffleDisabled;
+  static const std::string ShuffleVariant;
+  static const std::string Sigma;
+  static const std::string SigmaLower;
+  static const std::string SignCaution;
+  static const std::string Signal;
+  static const std::string Signal2g;
+  static const std::string Signal3g;
+  static const std::string Signal4g;
+  static const std::string SignalHspa;
+  static const std::string SignalHspaPlus;
+  static const std::string SignalVariant;
+  static const std::string Silverware;
+  static const std::string SilverwareFork;
+  static const std::string SilverwareSpoon;
+  static const std::string SilverwareVariant;
+  static const std::string Sim;
+  static const std::string SimAlert;
+  static const std::string SimOff;
+  static const std::string Sitemap;
+  static const std::string SkipBackward;
+  static const std::string SkipForward;
+  static const std::string SkipNext;
+  static const std::string SkipNextCircle;
+  static const std::string SkipNextCircleOutline;
+  static const std::string SkipPrevious;
+  static const std::string SkipPreviousCircle;
+  static const std::string SkipPreviousCircleOutline;
+  static const std::string Skull;
+  static const std::string Skype;
+  static const std::string SkypeBusiness;
+  static const std::string Slack;
+  static const std::string Sleep;
+  static const std::string SleepOff;
+  static const std::string Smoking;
+  static const std::string SmokingOff;
+  static const std::string Snapchat;
+  static const std::string Snowflake;
+  static const std::string Snowman;
+  static const std::string Soccer;
+  static const std::string Sofa;
+  static const std::string Solid;
+  static const std::string Sort;
+  static const std::string SortAlphabetical;
+  static const std::string SortAscending;
+  static const std::string SortDescending;
+  static const std::string SortNumeric;
+  static const std::string SortVariant;
+  static const std::string Soundcloud;
+  static const std::string SourceBranch;
+  static const std::string SourceCommit;
+  static const std::string SourceCommitEnd;
+  static const std::string SourceCommitEndLocal;
+  static const std::string SourceCommitLocal;
+  static const std::string SourceCommitNextLocal;
+  static const std::string SourceCommitStart;
+  static const std::string SourceCommitStartNextLocal;
+  static const std::string SourceFork;
+  static const std::string SourceMerge;
+  static const std::string SourcePull;
+  static const std::string Speaker;
+  static const std::string SpeakerOff;
+  static const std::string SpeakerWireless;
+  static const std::string Speedometer;
+  static const std::string Spellcheck;
+  static const std::string Spotify;
+  static const std::string Spotlight;
+  static const std::string SpotlightBeam;
+  static const std::string Spray;
+  static const std::string SquareInc;
+  static const std::string SquareIncCash;
+  static const std::string Stackexchange;
+  static const std::string Stackoverflow;
+  static const std::string Stadium;
+  static const std::string Stairs;
+  static const std::string Star;
+  static const std::string StarCircle;
+  static const std::string StarHalf;
+  static const std::string StarOff;
+  static const std::string StarOutline;
+  static const std::string Steam;
+  static const std::string Steering;
+  static const std::string StepBackward;
+  static const std::string StepBackward2;
+  static const std::string StepForward;
+  static const std::string StepForward2;
+  static const std::string Stethoscope;
+  static const std::string Sticker;
+  static const std::string Stocking;
+  static const std::string Stop;
+  static const std::string StopCircle;
+  static const std::string StopCircleOutline;
+  static const std::string Store;
+  static const std::string Store24Hour;
+  static const std::string Stove;
+  static const std::string SubdirectoryArrowLeft;
+  static const std::string SubdirectoryArrowRight;
+  static const std::string Subway;
+  static const std::string SubwayVariant;
+  static const std::string Sunglasses;
+  static const std::string SurroundSound;
+  static const std::string Svg;
+  static const std::string SwapHorizontal;
+  static const std::string SwapVertical;
+  static const std::string Swim;
+  static const std::string Switch;
+  static const std::string Sword;
+  static const std::string Sync;
+  static const std::string SyncAlert;
+  static const std::string SyncOff;
+  static const std::string Tab;
+  static const std::string TabUnselected;
+  static const std::string Table;
+  static const std::string TableColumnPlusAfter;
+  static const std::string TableColumnPlusBefore;
+  static const std::string TableColumnRemove;
+  static const std::string TableColumnWidth;
+  static const std::string TableEdit;
+  static const std::string TableLarge;
+  static const std::string TableRowHeight;
+  static const std::string TableRowPlusAfter;
+  static const std::string TableRowPlusBefore;
+  static const std::string TableRowRemove;
+  static const std::string Tablet;
+  static const std::string TabletAndroid;
+  static const std::string TabletIpad;
+  static const std::string Tag;
+  static const std::string TagFaces;
+  static const std::string TagHeart;
+  static const std::string TagMultiple;
+  static const std::string TagOutline;
+  static const std::string TagPlus;
+  static const std::string TagRemove;
+  static const std::string TagTextOutline;
+  static const std::string Target;
+  static const std::string Taxi;
+  static const std::string Teamviewer;
+  static const std::string Telegram;
+  static const std::string Television;
+  static const std::string TelevisionGuide;
+  static const std::string TemperatureCelsius;
+  static const std::string TemperatureFahrenheit;
+  static const std::string TemperatureKelvin;
+  static const std::string Tennis;
+  static const std::string Tent;
+  static const std::string Terrain;
+  static const std::string TestTube;
+  static const std::string TextShadow;
+  static const std::string TextToSpeech;
+  static const std::string TextToSpeechOff;
+  static const std::string Textbox;
+  static const std::string Texture;
+  static const std::string Theater;
+  static const std::string ThemeLightDark;
+  static const std::string Thermometer;
+  static const std::string ThermometerLines;
+  static const std::string ThumbDown;
+  static const std::string ThumbDownOutline;
+  static const std::string ThumbUp;
+  static const std::string ThumbUpOutline;
+  static const std::string ThumbsUpDown;
+  static const std::string Ticket;
+  static const std::string TicketAccount;
+  static const std::string TicketConfirmation;
+  static const std::string TicketPercent;
+  static const std::string Tie;
+  static const std::string Tilde;
+  static const std::string Timelapse;
+  static const std::string Timer;
+  static const std::string Timer10;
+  static const std::string Timer3;
+  static const std::string TimerOff;
+  static const std::string TimerSand;
+  static const std::string TimerSandEmpty;
+  static const std::string Timetable;
+  static const std::string ToggleSwitch;
+  static const std::string ToggleSwitchOff;
+  static const std::string Tooltip;
+  static const std::string TooltipEdit;
+  static const std::string TooltipImage;
+  static const std::string TooltipOutline;
+  static const std::string TooltipOutlinePlus;
+  static const std::string TooltipText;
+  static const std::string Tooth;
+  static const std::string Tor;
+  static const std::string TowerBeach;
+  static const std::string TowerFire;
+  static const std::string TrafficLight;
+  static const std::string Train;
+  static const std::string Tram;
+  static const std::string Transcribe;
+  static const std::string TranscribeClose;
+  static const std::string Transfer;
+  static const std::string TransitTransfer;
+  static const std::string Translate;
+  static const std::string TreasureChest;
+  static const std::string Tree;
+  static const std::string Trello;
+  static const std::string TrendingDown;
+  static const std::string TrendingNeutral;
+  static const std::string TrendingUp;
+  static const std::string Triangle;
+  static const std::string TriangleOutline;
+  static const std::string Trophy;
+  static const std::string TrophyAward;
+  static const std::string TrophyOutline;
+  static const std::string TrophyVariant;
+  static const std::string TrophyVariantOutline;
+  static const std::string Truck;
+  static const std::string TruckDelivery;
+  static const std::string TruckTrailer;
+  static const std::string TshirtCrew;
+  static const std::string TshirtV;
+  static const std::string Tumblr;
+  static const std::string TumblrReblog;
+  static const std::string Tune;
+  static const std::string TuneVertical;
+  static const std::string Twitch;
+  static const std::string Twitter;
+  static const std::string TwitterBox;
+  static const std::string TwitterCircle;
+  static const std::string TwitterRetweet;
+  static const std::string Ubuntu;
+  static const std::string Umbraco;
+  static const std::string Umbrella;
+  static const std::string UmbrellaOutline;
+  static const std::string Undo;
+  static const std::string UndoVariant;
+  static const std::string UnfoldLess;
+  static const std::string UnfoldMore;
+  static const std::string Ungroup;
+  static const std::string Unity;
+  static const std::string Untappd;
+  static const std::string Update;
+  static const std::string Upload;
+  static const std::string Usb;
+  static const std::string VectorArrangeAbove;
+  static const std::string VectorArrangeBelow;
+  static const std::string VectorCircle;
+  static const std::string VectorCircleVariant;
+  static const std::string VectorCombine;
+  static const std::string VectorCurve;
+  static const std::string VectorDifference;
+  static const std::string VectorDifferenceAb;
+  static const std::string VectorDifferenceBa;
+  static const std::string VectorIntersection;
+  static const std::string VectorLine;
+  static const std::string VectorPoint;
+  static const std::string VectorPolygon;
+  static const std::string VectorPolyline;
+  static const std::string VectorRectangle;
+  static const std::string VectorSelection;
+  static const std::string VectorSquare;
+  static const std::string VectorTriangle;
+  static const std::string VectorUnion;
+  static const std::string Verified;
+  static const std::string Vibrate;
+  static const std::string Video;
+  static const std::string VideoOff;
+  static const std::string VideoSwitch;
+  static const std::string ViewAgenda;
+  static const std::string ViewArray;
+  static const std::string ViewCarousel;
+  static const std::string ViewColumn;
+  static const std::string ViewDashboard;
+  static const std::string ViewDay;
+  static const std::string ViewGrid;
+  static const std::string ViewHeadline;
+  static const std::string ViewList;
+  static const std::string ViewModule;
+  static const std::string ViewParallel;
+  static const std::string ViewQuilt;
+  static const std::string ViewSequential;
+  static const std::string ViewStream;
+  static const std::string ViewWeek;
+  static const std::string Vimeo;
+  static const std::string Vine;
+  static const std::string Violin;
+  static const std::string Visualstudio;
+  static const std::string Vk;
+  static const std::string VkBox;
+  static const std::string VkCircle;
+  static const std::string Vlc;
+  static const std::string Voice;
+  static const std::string Voicemail;
+  static const std::string VolumeHigh;
+  static const std::string VolumeLow;
+  static const std::string VolumeMedium;
+  static const std::string VolumeOff;
+  static const std::string Vpn;
+  static const std::string Walk;
+  static const std::string Wallet;
+  static const std::string WalletGiftcard;
+  static const std::string WalletMembership;
+  static const std::string WalletTravel;
+  static const std::string Wan;
+  static const std::string WashingMachine;
+  static const std::string Watch;
+  static const std::string WatchExport;
+  static const std::string WatchImport;
+  static const std::string WatchVibrate;
+  static const std::string Water;
+  static const std::string WaterOff;
+  static const std::string WaterPercent;
+  static const std::string WaterPump;
+  static const std::string Watermark;
+  static const std::string WeatherCloudy;
+  static const std::string WeatherFog;
+  static const std::string WeatherHail;
+  static const std::string WeatherLightning;
+  static const std::string WeatherLightningRainy;
+  static const std::string WeatherNight;
+  static const std::string WeatherPartlycloudy;
+  static const std::string WeatherPouring;
+  static const std::string WeatherRainy;
+  static const std::string WeatherSnowy;
+  static const std::string WeatherSnowyRainy;
+  static const std::string WeatherSunny;
+  static const std::string WeatherSunset;
+  static const std::string WeatherSunsetDown;
+  static const std::string WeatherSunsetUp;
+  static const std::string WeatherWindy;
+  static const std::string WeatherWindyVariant;
+  static const std::string Web;
+  static const std::string Webcam;
+  static const std::string Webhook;
+  static const std::string Webpack;
+  static const std::string Wechat;
+  static const std::string Weight;
+  static const std::string WeightKilogram;
+  static const std::string Whatsapp;
+  static const std::string WheelchairAccessibility;
+  static const std::string WhiteBalanceAuto;
+  static const std::string WhiteBalanceIncandescent;
+  static const std::string WhiteBalanceIridescent;
+  static const std::string WhiteBalanceSunny;
+  static const std::string Widgets;
+  static const std::string Wifi;
+  static const std::string WifiOff;
+  static const std::string Wii;
+  static const std::string Wiiu;
+  static const std::string Wikipedia;
+  static const std::string WindowClose;
+  static const std::string WindowClosed;
+  static const std::string WindowMaximize;
+  static const std::string WindowMinimize;
+  static const std::string WindowOpen;
+  static const std::string WindowRestore;
+  static const std::string Windows;
+  static const std::string Wordpress;
+  static const std::string Worker;
+  static const std::string Wrap;
+  static const std::string Wrench;
+  static const std::string Wunderlist;
+  static const std::string Xaml;
+  static const std::string Xbox;
+  static const std::string XboxController;
+  static const std::string XboxControllerOff;
+  static const std::string Xda;
+  static const std::string Xing;
+  static const std::string XingBox;
+  static const std::string XingCircle;
+  static const std::string Xml;
+  static const std::string Yeast;
+  static const std::string Yelp;
+  static const std::string YinYang;
+  static const std::string YoutubePlay;
+  static const std::string ZipBox;
+
 
 };
 

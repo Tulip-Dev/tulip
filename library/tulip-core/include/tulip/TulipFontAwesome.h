@@ -818,6 +818,64 @@ public:
   static const char *Wpbeginner;
   static const char *Wpforms;
   static const char *Yoast;
+
+  // static constants for the new icons added in Font Awesome 4.7
+  static const char *AddressBook;
+  static const char *AddressBookO;
+  static const char *AddressCard;
+  static const char *AddressCardO;
+  static const char *Bandcamp;
+  static const char *Bath;
+  static const char *Bathtub;
+  static const char *DriversLicense;
+  static const char *DriversLicenseO;
+  static const char *Eercast;
+  static const char *EnvelopeOpen;
+  static const char *EnvelopeOpenO;
+  static const char *Etsy;
+  static const char *FreeCodeCamp;
+  static const char *Grav;
+  static const char *HandshakeO;
+  static const char *IdBadge;
+  static const char *IdCard;
+  static const char *IdCardO;
+  static const char *Imdb;
+  static const char *Linode;
+  static const char *Meetup;
+  static const char *Microchip;
+  static const char *Podcast;
+  static const char *Quora;
+  static const char *Ravelry;
+  static const char *S15;
+  static const char *Shower;
+  static const char *SnowflakeO;
+  static const char *Superpowers;
+  static const char *Telegram;
+  static const char *Thermometer;
+  static const char *Thermometer0;
+  static const char *Thermometer1;
+  static const char *Thermometer2;
+  static const char *Thermometer3;
+  static const char *Thermometer4;
+  static const char *ThermometerEmpty;
+  static const char *ThermometerFull;
+  static const char *ThermometerHalf;
+  static const char *ThermometerQuarter;
+  static const char *ThermometerThreeQuarters;
+  static const char *TimesRectangle;
+  static const char *TimesRectangleO;
+  static const char *UserCircle;
+  static const char *UserCircleO;
+  static const char *UserO;
+  static const char *Vcard;
+  static const char *VcardO;
+  static const char *WindowClose;
+  static const char *WindowCloseO;
+  static const char *WindowMaximize;
+  static const char *WindowMinimize;
+  static const char *WindowRestore;
+  static const char *Wpexplorer;
+
 };
 
 /// A list of all icon-names with the codepoint (unicode-value) on the right
@@ -1535,7 +1593,63 @@ public:
     googlepluscircle = 0xf29b,
     googleplusofficial = 0xf297,
     fa_ = 0xf298,
-    fontawesome = 0xf2b1
+    fontawesome = 0xf2b1,
+
+    addressbook = 0xf2b9,
+    addressbooko = 0xf2ba,
+    addresscard = 0xf2bb,
+    addresscardo = 0xf2bc,
+    bandcamp = 0xf2d5,
+    bath = 0xf2cd,
+    bathtub = 0xf2cd,
+    driverslicense = 0xf2c2,
+    driverslicenseo = 0xf2c3,
+    eercast = 0xf2da,
+    envelopeopen = 0xf2b6,
+    envelopeopeno = 0xf2b7,
+    etsy = 0xf2d7,
+    freecodecamp = 0xf2c5,
+    grav = 0xf2d6,
+    handshakeo = 0xf2b5,
+    idbadge = 0xf2c1,
+    idcard = 0xf2c2,
+    idcardo = 0xf2c3,
+    imdb = 0xf2d8,
+    linode = 0xf2b8,
+    meetup = 0xf2e0,
+    microchip = 0xf2db,
+    podcast = 0xf2ce,
+    quora = 0xf2c4,
+    ravelry = 0xf2d9,
+    s15 = 0xf2cd,
+    shower = 0xf2cc,
+    snowflakeo = 0xf2dc,
+    superpowers = 0xf2dd,
+    telegram = 0xf2c6,
+    thermometer = 0xf2c7,
+    thermometer0 = 0xf2cb,
+    thermometer1 = 0xf2ca,
+    thermometer2 = 0xf2c9,
+    thermometer3 = 0xf2c8,
+    thermometer4 = 0xf2c7,
+    thermometerempty = 0xf2cb,
+    thermometerfull = 0xf2c7,
+    thermometerhalf = 0xf2c9,
+    thermometerquarter = 0xf2ca,
+    thermometerthreequarters = 0xf2c8,
+    timesrectangle = 0xf2d3,
+    timesrectangleo = 0xf2d4,
+    usercircle = 0xf2bd,
+    usercircleo = 0xf2be,
+    usero = 0xf2c0,
+    vcard = 0xf2bb,
+    vcardo = 0xf2bc,
+    windowclose = 0xf2d3,
+    windowcloseo = 0xf2d4,
+    windowmaximize = 0xf2d0,
+    windowminimize = 0xf2d1,
+    windowrestore = 0xf2d2,
+    wpexplorer = 0xf2de
   };
 };
 }

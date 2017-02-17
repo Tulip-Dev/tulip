@@ -37,6 +37,14 @@ class TLP_GLES_SCOPE FontIconGlyph : public Glyph {
 
 public:
   FontIconGlyph(PluginContext *context, const std::string &fontFile, unsigned int iconCodePoint);
+
+  void getIncludeBoundingBox(tlp::BoundingBox &boundingBox) {
+    std::cout << _boundingBox << std::endl;
+    boundingBox = _boundingBox;
+  }
+
+private:
+  tlp::BoundingBox _boundingBox;
 };
 
 class TLP_GLES_SCOPE FontAwesomeGlyph : public FontIconGlyph {
