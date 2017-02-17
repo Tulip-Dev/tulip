@@ -137,6 +137,7 @@ FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile
       _vertices[i][0] = ((_vertices[i][0] - minC[0]) / (maxC[0] - minC[0])) - 0.5;
       _vertices[i][1] = (((_vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) * (meshBB.height() / float(meshBB.width()));
     }
+    _boundingBox.expand(_vertices[i]);
   }
 }
 
