@@ -367,7 +367,10 @@ bool EdgeBundling::run() {
   tlp::DataSet voroDataSet;
   voroDataSet.set("connect", true);
   voroDataSet.set("original clone", false);
-  graph->applyAlgorithm("Voronoi diagram", err, &voroDataSet);
+  if (!graph->applyAlgorithm("Voronoi diagram", err, &voroDataSet)) {
+    pluginProgress->setError("'Voronoi diagram' failed");
+    return false;
+  }
 
   // If sphere mode, remove the grid nodes inside the sphere
   // as we only want to route on the sphere surface
