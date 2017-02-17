@@ -39,7 +39,7 @@ public:
   FontIconGlyph(PluginContext *context, const std::string &fontFile, unsigned int iconCodePoint);
 
   void getIncludeBoundingBox(tlp::BoundingBox &boundingBox) {
-    std::cout << _boundingBox << std::endl;
+
     boundingBox = _boundingBox;
   }
 
