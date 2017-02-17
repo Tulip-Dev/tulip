@@ -367,6 +367,7 @@ bool EdgeBundling::run() {
   tlp::DataSet voroDataSet;
   voroDataSet.set("connect", true);
   voroDataSet.set("original clone", false);
+
   if (!graph->applyAlgorithm("Voronoi diagram", err, &voroDataSet)) {
     pluginProgress->setError("'Voronoi diagram' failed");
     return false;
