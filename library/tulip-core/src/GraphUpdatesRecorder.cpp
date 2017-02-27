@@ -267,9 +267,12 @@ void GraphUpdatesRecorder::recordNewValues(GraphImpl *g) {
 
     while (itae->hasNext()) {
       TypedValueContainer<std::pair<node, node> *> ends;
-      itae->nextValue(ends);
-      recordEdgeContainer(newContainers, root, ends.value->first);
-      recordEdgeContainer(newContainers, root, ends.value->second);
+      edge e(itae->nextValue(ends));
+      // e may have been deleted (see delEdge)
+      if (root->isElement(e)) {
+        recordEdgeContainer(newContainers, root, ends.value->first);
+        recordEdgeContainer(newContainers, root, ends.value->second);
+      }
     }
 
     delete itae;
