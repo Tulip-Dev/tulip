@@ -86,6 +86,7 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
         int i = 0;
         FOREACHvertex_ (facet->vertices) {
 #ifdef HAVE_REENTRANT_QHULL
+
           if (i == 0) {
             pointId0 = qh_pointid(qh, vertex->point);
           }
@@ -98,7 +99,9 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
           else {
             pointId3 = qh_pointid(qh, vertex->point);
           }
+
 #else
+
           if (i == 0) {
             pointId0 = qh_pointid(vertex->point);
           }
@@ -111,6 +114,7 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
           else {
             pointId3 = qh_pointid(vertex->point);
           }
+
 #endif
           ++i;
         }
