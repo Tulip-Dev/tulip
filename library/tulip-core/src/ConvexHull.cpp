@@ -25,16 +25,10 @@
 #include <algorithm>
 
 extern "C" {
-#ifndef LIBQHULL_OTHER_INCLUDE_PREFIX
-#include <libqhull/libqhull.h>
-#include <libqhull/qset.h>
-#include <libqhull/geom.h>
-#include <libqhull/poly.h>
+#ifdef HAVE_REENTRANT_QHULL
+#include <qhull_ra.h>
 #else
-#include <qhull/libqhull.h>
-#include <qhull/qset.h>
-#include <qhull/geom.h>
-#include <qhull/poly.h>
+#include <qhull_a.h>
 #endif
 }
 
@@ -54,8 +48,16 @@ static bool runQHull(int dim, vector<double> &points,
   string qhullCommand = "qhull ";
   qhullCommand += qhullOptions;
 
-  // run qhull convex hull computation
+// run qhull convex hull computation
+#ifdef HAVE_REENTRANT_QHULL
+  qhT qh_qh;
+  qhT *qh= &qh_qh;
+  QHULL_LIB_CHECK
+  qh_zero(qh, stderr);
+  int qhullKo = qh_new_qhull(qh, dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+#else
   int qhullKo = qh_new_qhull(dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+#endif
 
   if (!qhullKo) {
     facetT *facet;
@@ -66,7 +68,11 @@ static bool runQHull(int dim, vector<double> &points,
       std::vector<unsigned int> facetV;
       std::vector<unsigned int> neighborsV;
       FOREACHvertex_ (facet->vertices) {
+#ifdef HAVE_REENTRANT_QHULL
+        facetV.push_back(qh_pointid(qh, vertex->point));
+#else
         facetV.push_back(qh_pointid(vertex->point));
+#endif
       }
       faceIds[getid_(facet)] = facets.size();
       facets.push_back(facetV);
@@ -84,10 +90,15 @@ static bool runQHull(int dim, vector<double> &points,
     }
   }
 
-  // free memory allocated by qhull
-  qh_freeqhull(!qh_ALL);
   int curlong, totlong;
+  // free memory allocated by qhull
+#ifdef HAVE_REENTRANT_QHULL
+  qh_freeqhull(qh, !qh_ALL);
+  qh_memfreeshort(qh, &curlong, &totlong);
+#else
+  qh_freeqhull(!qh_ALL);
   qh_memfreeshort(&curlong, &totlong);
+#endif
 
   return !qhullKo;
 }
