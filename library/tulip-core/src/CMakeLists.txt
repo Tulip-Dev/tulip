@@ -96,10 +96,9 @@ SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
 ENDIF(EMSCRIPTEN)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_TULIP_LIB_DIR=\"\\\"${CMAKE_INSTALL_PREFIX}/lib/\\\"\"")
-# MSYS2 special when using the qhull package it provides as qhull headers are located in a 'qhull' directory instead of a 'libqhull' one
-IF(LIBQHULL_OTHER_INCLUDE_PREFIX)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DLIBQHULL_OTHER_INCLUDE_PREFIX")
-ENDIF(LIBQHULL_OTHER_INCLUDE_PREFIX)
+IF(HAVE_REENTRANT_QHULL)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DHAVE_REENTRANT_QHULL")
+ENDIF(HAVE_REENTRANT_QHULL)
 INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${PROJECT_SOURCE_DIR} ${ZLIB_INCLUDE_DIR} ${YajlInclude} ${QhullInclude} ${GZStreamInclude} ${UTF8CppInclude})
 
 ADD_LIBRARY(${LibTulipCoreName} SHARED ${tulip_LIB_SRCS} ../include/tulip/TulipRelease.h)

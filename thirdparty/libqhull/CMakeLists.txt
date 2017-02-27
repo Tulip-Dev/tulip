@@ -1,34 +1,23 @@
 ADD_CORE_FILES(.)
 
 SET(QHULL_LIB_SRCS
-    libqhull.h
-    geom.h
-    io.h
-    mem.h
-    merge.h
-    poly.h
-    qhull_a.h
-    qset.h
-    random.h
-    stat.h
-    user.h
-    global.c
-    stat.c
-    geom2.c
-    poly2.c
-    merge.c
-    libqhull.c
-    geom.c
-    poly.c
-    qset.c
-    mem.c
-    random.c
-    usermem.c
-    userprintf.c
-    io.c
-    user.c
-    rboxlib.c
-    userprintf_rbox.c
+    global_r.c
+    stat_r.c
+    geom2_r.c
+    poly2_r.c
+    merge_r.c
+    libqhull_r.c
+    geom_r.c
+    poly_r.c
+    qset_r.c
+    mem_r.c
+    random_r.c
+    usermem_r.c
+    userprintf_r.c
+    io_r.c
+    user_r.c
+    rboxlib_r.c
+    userprintf_rbox_r.c
 )
 
 IF(UNIX)

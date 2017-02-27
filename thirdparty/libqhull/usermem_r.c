@@ -1,7 +1,7 @@
-/*<html><pre>  -<a                             href="qh-user.htm"
+/*<html><pre>  -<a                             href="qh-user_r.htm"
   >-------------------------------</a><a name="TOP">-</a>
 
-   usermem.c
+   usermem_r.c
    qh_exit(), qh_free(), and qh_malloc()
 
    See README.txt.
@@ -10,20 +10,20 @@
    If you recompile and load this file, then usermem.o will not be loaded
    from qhull.a or qhull.lib
 
-   See libqhull.h for data structures, macros, and user-callable functions.
-   See user.c for qhull-related, redefinable functions
-   see user.h for user-definable constants
-   See userprintf.c for qh_fprintf and userprintf_rbox.c for qh_fprintf_rbox
+   See libqhull_r.h for data structures, macros, and user-callable functions.
+   See user_r.c for qhull-related, redefinable functions
+   see user_r.h for user-definable constants
+   See userprintf_r.c for qh_fprintf and userprintf_rbox_r.c for qh_fprintf_rbox
 
    Please report any errors that you fix to qhull@qhull.org
 */
 
-#include "libqhull.h"
+#include "libqhull_r.h"
 
 #include <stdarg.h>
 #include <stdlib.h>
 
-/*-<a                             href="qh-user.htm#TOC"
+/*-<a                             href="qh-user_r.htm#TOC"
   >-------------------------------</a><a name="qh_exit">-</a>
 
   qh_exit( exitcode )
@@ -39,20 +39,20 @@ void qh_exit(int exitcode) {
     exit(exitcode);
 } /* exit */
 
-/*-<a                             href="qh-user.htm#TOC"
+/*-<a                             href="qh-user_r.htm#TOC"
   >-------------------------------</a><a name="qh_fprintf_stderr">-</a>
 
   qh_fprintf_stderr( msgcode, format, list of args )
     fprintf to stderr with msgcode (non-zero)
 
   notes:
-    qh_fprintf_stderr() is called when qh.ferr is not defined, usually due to an initialization error
+    qh_fprintf_stderr() is called when qh->ferr is not defined, usually due to an initialization error
     
     It is typically followed by qh_errexit().
 
     Redefine this function to avoid using stderr
 
-    Use qh_fprintf [userprintf.c] for normal printing
+    Use qh_fprintf [userprintf_r.c] for normal printing
 */
 void qh_fprintf_stderr(int msgcode, const char *fmt, ... ) {
     va_list args;
@@ -64,10 +64,10 @@ void qh_fprintf_stderr(int msgcode, const char *fmt, ... ) {
     va_end(args);
 } /* fprintf_stderr */
 
-/*-<a                             href="qh-user.htm#TOC"
+/*-<a                             href="qh-user_r.htm#TOC"
 >-------------------------------</a><a name="qh_free">-</a>
 
-  qh_free( mem )
+  qh_free(qhT *qh, mem )
     free memory
 
   notes:
@@ -78,7 +78,7 @@ void qh_free(void *mem) {
     free(mem);
 } /* free */
 
-/*-<a                             href="qh-user.htm#TOC"
+/*-<a                             href="qh-user_r.htm#TOC"
     >-------------------------------</a><a name="qh_malloc">-</a>
 
     qh_malloc( mem )
