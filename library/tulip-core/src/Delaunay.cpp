@@ -28,16 +28,10 @@
 #include <iostream>
 
 extern "C" {
-#ifndef LIBQHULL_OTHER_INCLUDE_PREFIX
-#include <libqhull/libqhull.h>
-#include <libqhull/qset.h>
-#include <libqhull/geom.h>
-#include <libqhull/poly.h>
+#ifdef HAVE_REENTRANT_QHULL
+#include <qhull_ra.h>
 #else
-#include <qhull/libqhull.h>
-#include <qhull/qset.h>
-#include <qhull/geom.h>
-#include <qhull/poly.h>
+#include <qhull_a.h>
 #endif
 }
 
@@ -60,14 +54,26 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
   string qhullCommand = string("qhull d ") + qhullOptions;
 
   // initialize qhull
+#ifdef HAVE_REENTRANT_QHULL
+  qhT qh_qh;
+  qhT *qh= &qh_qh;
+  QHULL_LIB_CHECK
+  qh_zero(qh, stderr);
+  int qhullKo = qh_new_qhull(qh, dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+#else
   int qhullKo = qh_new_qhull(dim, points.size()/dim, &points[0], false, const_cast<char *>(qhullCommand.c_str()), NULL, stderr);
+#endif
 
   if (!qhullKo) {
 
     set<pair<unsigned int, unsigned int> > placedEdges;
 
     // call qhull delaunay triangulation
+#ifdef HAVE_REENTRANT_QHULL
+    qh_triangulate(qh);
+#else
     qh_triangulate();
+#endif
 
     facetT *facet;
     vertexT *vertex, **vertexp;
@@ -79,6 +85,20 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
         int pointId0=0, pointId1=0, pointId2=0, pointId3 = -1;
         int i = 0;
         FOREACHvertex_ (facet->vertices) {
+#ifdef HAVE_REENTRANT_QHULL
+          if (i == 0) {
+            pointId0 = qh_pointid(qh, vertex->point);
+          }
+          else if (i == 1) {
+            pointId1 = qh_pointid(qh, vertex->point);
+          }
+          else if (i == 2) {
+            pointId2 = qh_pointid(qh, vertex->point);
+          }
+          else {
+            pointId3 = qh_pointid(qh, vertex->point);
+          }
+#else
           if (i == 0) {
             pointId0 = qh_pointid(vertex->point);
           }
@@ -91,7 +111,7 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
           else {
             pointId3 = qh_pointid(vertex->point);
           }
-
+#endif
           ++i;
         }
 
@@ -148,9 +168,14 @@ static bool runQHull(int dim, vector<double> &points, vector<pair<unsigned int, 
   }
 
   // free memory allocated by qhull
-  qh_freeqhull(!qh_ALL);
   int curlong, totlong;
+#ifdef HAVE_REENTRANT_QHULL
+  qh_freeqhull(qh, !qh_ALL);
+  qh_memfreeshort(qh, &curlong, &totlong);
+#else
+  qh_freeqhull(!qh_ALL);
   qh_memfreeshort(&curlong, &totlong);
+#endif
 
   return !qhullKo;
 }

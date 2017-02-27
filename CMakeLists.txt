@@ -253,7 +253,13 @@ IF(NOT EMSCRIPTEN)
 ENDIF(NOT EMSCRIPTEN)
 
 # Qhull
-FIND_PACKAGE(Qhull)
+SET(TULIP_USE_THIRDPARTY_QHULL OFF CACHE BOOL "If activated, force the use of reentrant qhull library located in thirdparty instead of trying to find it on the system.")
+IF(NOT TULIP_USE_THIRDPARTY_QHULL)
+  FIND_PACKAGE(Qhull)
+ELSE(NOT TULIP_USE_THIRDPARTY_QHULL)
+  UNSET(QHULL_FOUND CACHE)
+ENDIF(NOT TULIP_USE_THIRDPARTY_QHULL)
+
 
 #Yajl
 FIND_PACKAGE(Yajl)
@@ -596,7 +602,8 @@ IF(QHULL_FOUND)
   SET(QhullInclude ${QHULL_INCLUDE_DIRS})
   SET(QhullLibrary ${QHULL_LIBRARIES})
 ELSE(QHULL_FOUND)
-  SET(QhullInclude ${PROJECT_SOURCE_DIR}/thirdparty)
+  SET(HAVE_REENTRANT_QHULL TRUE)
+  SET(QhullInclude ${PROJECT_SOURCE_DIR}/thirdparty/libqhull)
   SET(QhullLibrary qhullstatic)
 ENDIF(QHULL_FOUND)
 
