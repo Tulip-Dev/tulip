@@ -279,6 +279,7 @@ void tlp::dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, Pl
     node current = fifo.front();
     fifo.pop_front();
     unsigned int curLevel = level.get(current.id) + 1;
+    node child;
     forEach(child, graph->getOutNodes(current)) {
       unsigned int childLevel = totreat.get(child.id);
       if (childLevel > 0)
