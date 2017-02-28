@@ -102,7 +102,7 @@ TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNo
  * DIRECTED use directed graph
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  */
- TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance, EDGE_TYPE direction = UNDIRECTED);
 }
 #endif
 ///@endcond
