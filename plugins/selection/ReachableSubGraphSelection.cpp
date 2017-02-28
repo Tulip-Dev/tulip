@@ -112,11 +112,12 @@ bool ReachableSubGraphSelection::run() {
     // if needed, use a stable iterator to keep a copy of the input selected nodes as all values
     // of the result property are reseted to false below
     //delete done by the forEach macro
-    Iterator<node>* itN = (result == startNodes) ?
-                          new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true)) :
-                          startNodes->getNodesEqualTo(true);
+    Iterator<node>* itN =
+      (result == startNodes) ?
+      new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true)) :
+      startNodes->getNodesEqualTo(true);
 
-    std::set<node> reachables;
+    TLP_HASH_MAP<node, bool> reachables;
 
     result->setAllEdgeValue(false);
     result->setAllNodeValue(false);
@@ -124,17 +125,17 @@ bool ReachableSubGraphSelection::run() {
     // iterate on startNodes add them and their reachables
     node current;
     forEach(current, itN) {
-      reachables.insert(current);
-      reachableNodes(graph, current, reachables, maxDistance,
-                     edgeDirection);
+      reachables[current] = true;
+      markReachableNodes(graph, current, reachables, maxDistance,
+			edgeDirection);
     }
 
-    std::set<node>::const_iterator itr = reachables.begin();
-    std::set<node>::const_iterator ite = reachables.end();
+    TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
+    TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
 
     // select nodes
     while (itr != ite) {
-      result->setNodeValue((*itr), true);
+      result->setNodeValue(itr->first, true);
       ++itr;
       ++num_nodes;
     }
@@ -144,7 +145,8 @@ bool ReachableSubGraphSelection::run() {
     forEach(e, graph->getEdges()) {
       const std::pair<node, node>& ends = graph->ends(e);
 
-      if (result->getNodeValue(ends.first) && result->getNodeValue(ends.second)) {
+      if ((reachables.find(ends.first) != ite) &&
+	  (reachables.find(ends.second) != ite)) {
         result->setEdgeValue(e, true);
         ++num_edges;
       }
