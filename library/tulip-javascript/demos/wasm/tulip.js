@@ -267,7 +267,7 @@ Module['FS_createPath']('/', 'resources', true, true);
       var byteArray = new Uint8Array(arrayBuffer);
       var curr;
       
-          var compressedData = {"data":null,"cachedOffset":887901,"cachedIndexes":[-1,-1],"cachedChunks":[null,null],"offsets":[0,1602,2667,4371,5970,7640,8924,10398,11653,13141,14950,16655,18397,20166,22075,23746,25524,27311,28965,30549,32313,34109,35022,36332,37882,39251,40939,42629,44269,45909,47381,49008,50829,52724,54651,56670,58334,60174,62144,63342,65178,66897,68355,70263,72099,73790,75601,77537,79245,81000,82874,84678,86320,87838,89552,91374,92887,94500,96201,97929,99928,101814,103252,105176,106836,108737,110292,112246,114049,115572,116984,119022,120739,122455,124108,125838,127885,129933,131981,134029,136077,138125,139919,141171,142784,143949,144895,146588,147716,148871,150103,151447,152864,154472,156167,157394,159100,160065,160653,161118,161549,162795,164555,165999,167743,169235,170774,172718,174709,176642,178602,180547,182402,184371,186297,188167,190045,191994,193774,195592,197401,199223,200884,202730,204409,206331,208299,210294,212233,214139,215811,217577,219315,221306,223124,224895,226683,228398,230242,232201,233957,235612,237297,239069,240850,242686,244460,246442,248387,250376,252292,254122,255982,257784,259706,261603,263457,265171,266890,268595,270419,272093,273749,275341,277176,278991,280827,282654,284473,286294,288150,290018,291839,293590,295169,296852,298722,300483,302408,304208,306061,307861,309726,311568,313522,315471,317420,319163,320597,321976,323494,324949,326439,328133,329729,331406,332528,334346,336173,337969,339826,341623,343448,344878,346451,347665,348733,349847,351274,352854,354660,356453,358395,360298,362097,364020,365985,367918,369899,371285,372664,374328,375911,377525,379113,380957,382769,383991,385298,386967,388543,390195,391258,392649,394435,396041,397597,399410,400596,402168,403415,404681,405996,407121,408606,409761,411239,412658,414042,415431,417068,418915,420852,422822,424820,426589,428523,430459,432264,434181,436168,436976,438466,439465,441413,443375,444973,446535,448205,450000,451937,453474,454878,456624,458175,459905,461470,463206,464969,466468,467805,468981,470448,472200,473958,475153,475669,476106,476579,477016,477378,478946,480301,481628,482808,484016,485597,487554,489459,491281,493059,494958,496630,498312,499471,501337,502899,504568,506386,508281,510001,510629,512516,514459,515952,517148,518696,520113,521535,523078,524511,526190,528013,529811,530545,531806,533722,535528,537323,538938,540387,541181,541997,542949,543519,544421,545038,545619,546233,546855,547502,548453,549180,549970,550755,551458,552170,552959,553687,554473,555086,556008,556997,557993,558996,560112,561149,562058,563655,565466,566605,567763,568712,569682,571022,572491,573993,575318,577005,578640,580272,581926,583262,584668,586104,587454,588679,589980,591431,592775,594412,595831,597527,599197,600459,601637,603217,604161,605395,606123,607448,608616,609632,611190,612774,614376,615860,617397,618958,620551,622116,624164,626212,628260,630308,632365,634304,636352,638400,640448,642496,644482,646530,647837,649026,650411,651643,652962,654442,656042,657794,659842,661890,663938,665986,668034,670064,671239,672318,673487,674538,675586,676750,677800,678860,679926,680982,682142,683331,684460,685575,686661,687713,688795,689960,691075,692131,693410,694706,695672,696484,697995,698023,698051,698079,699199,701247,703295,705343,706984,708653,710487,712268,713275,714981,716141,717315,719111,720769,722274,723589,725139,726835,728425,730152,731848,733400,734780,736134,737627,738811,740405,742101,743716,744973,746468,748293,749765,751645,753044,754728,756603,758100,759631,761144,762805,764508,766315,768148,769868,771627,773280,775056,776535,778131,779717,781278,783094,784583,786257,787950,789310,790351,791994,793680,795402,796885,798642,800240,801963,803694,805398,807231,809060,810897,812307,814042,815836,817581,819373,821182,822692,824451,826113,827748,829310,831115,832678,834282,836013,837602,839052,840805,842648,844456,846261,847968,849867,851657,853357,855052,856795,858504,860083,861789,863529,865290,867079,868826,870823,872767,874007,875283,876660,878009,879414,880695,882109,883664,885138,886683],"sizes":[1602,1065,1704,1599,1670,1284,1474,1255,1488,1809,1705,1742,1769,1909,1671,1778,1787,1654,1584,1764,1796,913,1310,1550,1369,1688,1690,1640,1640,1472,1627,1821,1895,1927,2019,1664,1840,1970,1198,1836,1719,1458,1908,1836,1691,1811,1936,1708,1755,1874,1804,1642,1518,1714,1822,1513,1613,1701,1728,1999,1886,1438,1924,1660,1901,1555,1954,1803,1523,1412,2038,1717,1716,1653,1730,2047,2048,2048,2048,2048,2048,1794,1252,1613,1165,946,1693,1128,1155,1232,1344,1417,1608,1695,1227,1706,965,588,465,431,1246,1760,1444,1744,1492,1539,1944,1991,1933,1960,1945,1855,1969,1926,1870,1878,1949,1780,1818,1809,1822,1661,1846,1679,1922,1968,1995,1939,1906,1672,1766,1738,1991,1818,1771,1788,1715,1844,1959,1756,1655,1685,1772,1781,1836,1774,1982,1945,1989,1916,1830,1860,1802,1922,1897,1854,1714,1719,1705,1824,1674,1656,1592,1835,1815,1836,1827,1819,1821,1856,1868,1821,1751,1579,1683,1870,1761,1925,1800,1853,1800,1865,1842,1954,1949,1949,1743,1434,1379,1518,1455,1490,1694,1596,1677,1122,1818,1827,1796,1857,1797,1825,1430,1573,1214,1068,1114,1427,1580,1806,1793,1942,1903,1799,1923,1965,1933,1981,1386,1379,1664,1583,1614,1588,1844,1812,1222,1307,1669,1576,1652,1063,1391,1786,1606,1556,1813,1186,1572,1247,1266,1315,1125,1485,1155,1478,1419,1384,1389,1637,1847,1937,1970,1998,1769,1934,1936,1805,1917,1987,808,1490,999,1948,1962,1598,1562,1670,1795,1937,1537,1404,1746,1551,1730,1565,1736,1763,1499,1337,1176,1467,1752,1758,1195,516,437,473,437,362,1568,1355,1327,1180,1208,1581,1957,1905,1822,1778,1899,1672,1682,1159,1866,1562,1669,1818,1895,1720,628,1887,1943,1493,1196,1548,1417,1422,1543,1433,1679,1823,1798,734,1261,1916,1806,1795,1615,1449,794,816,952,570,902,617,581,614,622,647,951,727,790,785,703,712,789,728,786,613,922,989,996,1003,1116,1037,909,1597,1811,1139,1158,949,970,1340,1469,1502,1325,1687,1635,1632,1654,1336,1406,1436,1350,1225,1301,1451,1344,1637,1419,1696,1670,1262,1178,1580,944,1234,728,1325,1168,1016,1558,1584,1602,1484,1537,1561,1593,1565,2048,2048,2048,2048,2057,1939,2048,2048,2048,2048,1986,2048,1307,1189,1385,1232,1319,1480,1600,1752,2048,2048,2048,2048,2048,2030,1175,1079,1169,1051,1048,1164,1050,1060,1066,1056,1160,1189,1129,1115,1086,1052,1082,1165,1115,1056,1279,1296,966,812,1511,28,28,28,1120,2048,2048,2048,1641,1669,1834,1781,1007,1706,1160,1174,1796,1658,1505,1315,1550,1696,1590,1727,1696,1552,1380,1354,1493,1184,1594,1696,1615,1257,1495,1825,1472,1880,1399,1684,1875,1497,1531,1513,1661,1703,1807,1833,1720,1759,1653,1776,1479,1596,1586,1561,1816,1489,1674,1693,1360,1041,1643,1686,1722,1483,1757,1598,1723,1731,1704,1833,1829,1837,1410,1735,1794,1745,1792,1809,1510,1759,1662,1635,1562,1805,1563,1604,1731,1589,1450,1753,1843,1808,1805,1707,1899,1790,1700,1695,1743,1709,1579,1706,1740,1761,1789,1747,1997,1944,1240,1276,1377,1349,1405,1281,1414,1555,1474,1545,1218],"successes":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,0,0,0,0,1,0,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}
+          var compressedData = {"data":null,"cachedOffset":910691,"cachedIndexes":[-1,-1],"cachedChunks":[null,null],"offsets":[0,1366,2560,4616,6324,7345,8988,10569,12294,13295,14914,16212,17760,19583,21304,23059,24899,26836,28241,30241,32089,33520,35232,37037,38800,39720,41008,42388,43927,45570,47228,48753,50437,51755,53621,55425,57397,59246,61159,62972,64789,66687,67969,69807,71320,72957,74923,76699,78412,80227,82088,83826,85597,87478,89260,90911,92353,94043,95899,97397,98912,100714,102450,104505,106287,107878,109829,111495,113410,114965,116927,118764,120750,122200,123518,124978,126993,128675,130374,132140,133784,135309,137362,139410,141458,143506,145554,147602,149555,150906,152259,153719,154621,156150,157516,158555,160098,160982,162600,164032,165832,167086,168602,169868,170504,171043,171464,172488,174322,175955,177554,179056,180901,182479,184444,186399,188379,190307,192200,194117,196060,197895,199821,201754,203559,205388,207217,209018,210691,212462,214153,216027,218013,220024,221976,223897,225671,227425,229165,231153,233001,234848,236551,238363,240046,241993,243886,245573,247292,248974,250679,252451,254261,256195,258111,260096,262030,263878,265676,267525,269459,271346,273245,274939,276574,278414,280249,281987,283653,285332,287108,288841,290726,292629,294461,296177,298039,299964,301747,303501,305220,306820,308710,310588,312423,314255,315972,317796,319682,321544,323475,325423,327366,329118,330688,332145,333606,335025,336501,338191,339807,341346,342594,344375,346265,348028,349865,351725,353523,355019,356480,357795,358951,360020,361338,362978,364785,366567,368393,370405,372108,374000,375968,377881,379856,381378,382798,384464,386089,387728,389369,391145,393009,394281,395739,397209,398880,400525,401725,402957,404646,406390,407938,409751,410939,412666,413786,414997,416440,417469,418949,420196,421635,423004,424476,425833,427408,429227,431162,433088,435085,436955,438691,440622,442547,444471,446469,447565,449259,449987,451846,453828,455573,457170,458825,460481,462428,464095,465439,467143,468432,470110,471796,473417,475200,476758,478297,479373,480726,482353,484155,485617,486141,486589,487055,487480,487858,489157,490540,492010,493223,494383,495936,497858,499801,501590,503437,505264,506992,508766,509737,511568,513164,514931,516665,518503,520275,520895,522708,524636,526352,527337,528881,530508,531806,533321,534857,536401,538185,540001,540902,541901,543833,545564,547337,549097,550704,551531,552350,553200,553860,554715,555227,555909,556529,557302,557911,558947,559749,560559,561286,561875,562716,563520,564221,564896,565434,566307,567291,568317,569306,570479,571579,572520,573908,575880,577158,578264,579271,580216,581416,582961,584561,585936,587327,588886,590564,592268,593666,595059,596513,597826,599028,600358,601820,603176,604727,606157,607902,609486,610839,612091,613614,614729,615925,616540,617939,619122,619989,621472,623051,624654,626142,627688,629220,630817,632390,634353,636401,638449,640497,642545,644476,646524,648572,650620,652668,654660,656708,658338,659541,660889,662171,663462,664952,666556,668172,670214,672262,674310,676358,678406,680454,681778,682861,684057,685109,686159,687294,688339,689399,690465,691519,692686,693869,694996,696115,697217,698270,699332,700459,701584,702648,703849,705163,706267,707026,708396,708763,708791,708819,709019,711067,713115,715163,717037,718624,720348,722258,723789,724912,726663,727437,729013,730879,732340,733872,735241,736899,738375,740003,741708,743494,744970,746304,747743,749191,750327,752057,753742,755262,756537,758076,759767,761403,763173,764649,766350,768175,769573,770961,772525,774274,776094,777774,779677,781320,783104,784734,786356,787787,789614,791171,792697,794378,796066,797701,799416,800556,801616,803522,805307,807007,808311,810110,811707,813436,815061,816917,818749,820584,822226,823857,825585,827412,829175,830942,832621,834159,835855,837565,839147,840724,842490,844125,845796,847652,849257,850676,852479,854312,856159,857805,859635,861500,863288,864916,866684,868235,869959,871382,873216,874965,876685,878580,880262,882140,883895,885396,887096,888632,890239,892181,894218,895406,896790,898073,899515,900846,902272,903513,905111,906595,908163,909742],"sizes":[1366,1194,2056,1708,1021,1643,1581,1725,1001,1619,1298,1548,1823,1721,1755,1840,1937,1405,2000,1848,1431,1712,1805,1763,920,1288,1380,1539,1643,1658,1525,1684,1318,1866,1804,1972,1849,1913,1813,1817,1898,1282,1838,1513,1637,1966,1776,1713,1815,1861,1738,1771,1881,1782,1651,1442,1690,1856,1498,1515,1802,1736,2055,1782,1591,1951,1666,1915,1555,1962,1837,1986,1450,1318,1460,2015,1682,1699,1766,1644,1525,2053,2048,2048,2048,2048,2048,1953,1351,1353,1460,902,1529,1366,1039,1543,884,1618,1432,1800,1254,1516,1266,636,539,421,1024,1834,1633,1599,1502,1845,1578,1965,1955,1980,1928,1893,1917,1943,1835,1926,1933,1805,1829,1829,1801,1673,1771,1691,1874,1986,2011,1952,1921,1774,1754,1740,1988,1848,1847,1703,1812,1683,1947,1893,1687,1719,1682,1705,1772,1810,1934,1916,1985,1934,1848,1798,1849,1934,1887,1899,1694,1635,1840,1835,1738,1666,1679,1776,1733,1885,1903,1832,1716,1862,1925,1783,1754,1719,1600,1890,1878,1835,1832,1717,1824,1886,1862,1931,1948,1943,1752,1570,1457,1461,1419,1476,1690,1616,1539,1248,1781,1890,1763,1837,1860,1798,1496,1461,1315,1156,1069,1318,1640,1807,1782,1826,2012,1703,1892,1968,1913,1975,1522,1420,1666,1625,1639,1641,1776,1864,1272,1458,1470,1671,1645,1200,1232,1689,1744,1548,1813,1188,1727,1120,1211,1443,1029,1480,1247,1439,1369,1472,1357,1575,1819,1935,1926,1997,1870,1736,1931,1925,1924,1998,1096,1694,728,1859,1982,1745,1597,1655,1656,1947,1667,1344,1704,1289,1678,1686,1621,1783,1558,1539,1076,1353,1627,1802,1462,524,448,466,425,378,1299,1383,1470,1213,1160,1553,1922,1943,1789,1847,1827,1728,1774,971,1831,1596,1767,1734,1838,1772,620,1813,1928,1716,985,1544,1627,1298,1515,1536,1544,1784,1816,901,999,1932,1731,1773,1760,1607,827,819,850,660,855,512,682,620,773,609,1036,802,810,727,589,841,804,701,675,538,873,984,1026,989,1173,1100,941,1388,1972,1278,1106,1007,945,1200,1545,1600,1375,1391,1559,1678,1704,1398,1393,1454,1313,1202,1330,1462,1356,1551,1430,1745,1584,1353,1252,1523,1115,1196,615,1399,1183,867,1483,1579,1603,1488,1546,1532,1597,1573,1963,2048,2048,2048,2048,1931,2048,2048,2048,2048,1992,2048,1630,1203,1348,1282,1291,1490,1604,1616,2042,2048,2048,2048,2048,2048,1324,1083,1196,1052,1050,1135,1045,1060,1066,1054,1167,1183,1127,1119,1102,1053,1062,1127,1125,1064,1201,1314,1104,759,1370,367,28,28,200,2048,2048,2048,1874,1587,1724,1910,1531,1123,1751,774,1576,1866,1461,1532,1369,1658,1476,1628,1705,1786,1476,1334,1439,1448,1136,1730,1685,1520,1275,1539,1691,1636,1770,1476,1701,1825,1398,1388,1564,1749,1820,1680,1903,1643,1784,1630,1622,1431,1827,1557,1526,1681,1688,1635,1715,1140,1060,1906,1785,1700,1304,1799,1597,1729,1625,1856,1832,1835,1642,1631,1728,1827,1763,1767,1679,1538,1696,1710,1582,1577,1766,1635,1671,1856,1605,1419,1803,1833,1847,1646,1830,1865,1788,1628,1768,1551,1724,1423,1834,1749,1720,1895,1682,1878,1755,1501,1700,1536,1607,1942,2037,1188,1384,1283,1442,1331,1426,1241,1598,1484,1568,1579,949],"successes":[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,0,1,0,0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]}
 ;
           compressedData.data = byteArray;
           assert(typeof LZ4 === 'object', 'LZ4 not present - was your app build with  -s LZ4=1  ?');
@@ -296,7 +296,7 @@ Module['FS_createPath']('/', 'resources', true, true);
   }
 
  }
- loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 152796, "filename": "/resources/fontawesome-webfont.ttf"}, {"audio": 0, "start": 152796, "crunched": 0, "end": 153594, "filename": "/resources/cylinderTexture.png"}, {"audio": 0, "start": 153594, "crunched": 0, "end": 166107, "filename": "/resources/radialGradientTexture.png"}, {"audio": 0, "start": 166107, "crunched": 0, "end": 923183, "filename": "/resources/font.ttf"}, {"audio": 0, "start": 923183, "crunched": 0, "end": 1168859, "filename": "/resources/materialdesignicons-webfont.ttf"}], "remote_package_size": 891997, "package_uuid": "b0ca8d65-e946-44ba-8b27-9ae032454e56"});
+ loadPackage({"files": [{"audio": 0, "start": 0, "crunched": 0, "end": 165548, "filename": "/resources/fontawesome-webfont.ttf"}, {"audio": 0, "start": 165548, "crunched": 0, "end": 166346, "filename": "/resources/cylinderTexture.png"}, {"audio": 0, "start": 166346, "crunched": 0, "end": 178859, "filename": "/resources/radialGradientTexture.png"}, {"audio": 0, "start": 178859, "crunched": 0, "end": 935935, "filename": "/resources/font.ttf"}, {"audio": 0, "start": 935935, "crunched": 0, "end": 1197323, "filename": "/resources/materialdesignicons-webfont.ttf"}], "remote_package_size": 914787, "package_uuid": "f3e996ff-3423-4758-bde7-c86a80e7eab9"});
 
 })();
 
@@ -1454,11 +1454,14 @@ Module["stackTrace"] = stackTrace;
 
 // Memory management
 
-var PAGE_SIZE = 4096;
+var PAGE_SIZE = 16384;
+var WASM_PAGE_SIZE = 65536;
+var ASMJS_PAGE_SIZE = 16777216;
+var MIN_TOTAL_MEMORY = 16777216;
 
-function alignMemoryPage(x) {
-  if (x % 4096 > 0) {
-    x += (4096 - (x % 4096));
+function alignUp(x, multiple) {
+  if (x % multiple > 0) {
+    x += multiple - (x % multiple);
   }
   return x;
 }
@@ -1517,37 +1520,37 @@ if (!Module['reallocBuffer']) Module['reallocBuffer'] = function(size) {
 function enlargeMemory() {
   // TOTAL_MEMORY is the current size of the actual array, and DYNAMICTOP is the new top.
 
+
+  var PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE; // In wasm, heap size must be a multiple of 64KB. In asm.js, they need to be multiples of 16MB.
+  var LIMIT = 2147483648 - PAGE_MULTIPLE; // We can do one page short of 2GB as theoretical maximum.
+
+  if (HEAP32[DYNAMICTOP_PTR>>2] > LIMIT) {
+    return false;
+  }
+
   var OLD_TOTAL_MEMORY = TOTAL_MEMORY;
-
-
-  var LIMIT = Math.pow(2, 31); // 2GB is a practical maximum, as we use signed ints as pointers
-                               // and JS engines seem unhappy to give us 2GB arrays currently
-  if (HEAP32[DYNAMICTOP_PTR>>2] >= LIMIT) return false;
+  TOTAL_MEMORY = Math.max(TOTAL_MEMORY, MIN_TOTAL_MEMORY); // So the loop below will not be infinite, and minimum asm.js memory size is 16MB.
 
   while (TOTAL_MEMORY < HEAP32[DYNAMICTOP_PTR>>2]) { // Keep incrementing the heap size as long as it's less than what is requested.
-    if (TOTAL_MEMORY < LIMIT/2) {
-      TOTAL_MEMORY = alignMemoryPage(2*TOTAL_MEMORY); // // Simple heuristic: double until 1GB...
+    if (TOTAL_MEMORY <= 536870912) {
+      TOTAL_MEMORY = alignUp(2 * TOTAL_MEMORY, PAGE_MULTIPLE); // Simple heuristic: double until 1GB...
     } else {
-      var last = TOTAL_MEMORY;
-      TOTAL_MEMORY = alignMemoryPage((3*TOTAL_MEMORY + LIMIT)/4); // ..., but after that, add smaller increments towards 2GB, which we cannot reach
-      if (TOTAL_MEMORY <= last) return false;
+      TOTAL_MEMORY = Math.min(alignUp((3 * TOTAL_MEMORY + 2147483648) / 4, PAGE_MULTIPLE), LIMIT); // ..., but after that, add smaller increments towards 2GB, which we cannot reach
     }
   }
 
-  TOTAL_MEMORY = Math.max(TOTAL_MEMORY, 16*1024*1024);
-
-  if (TOTAL_MEMORY >= LIMIT) return false;
-
-
-
 
   var replacement = Module['reallocBuffer'](TOTAL_MEMORY);
-  if (!replacement) return false;
+  if (!replacement || replacement.byteLength != TOTAL_MEMORY) {
+    return false;
+  }
 
   // everything worked
 
   updateGlobalBuffer(replacement);
   updateGlobalBufferViews();
+
+
 
 
   return true;
@@ -1563,21 +1566,7 @@ try {
 
 var TOTAL_STACK = Module['TOTAL_STACK'] || 5242880;
 var TOTAL_MEMORY = Module['TOTAL_MEMORY'] || 16777216;
-
-var WASM_PAGE_SIZE = 64 * 1024;
-
-var totalMemory = WASM_PAGE_SIZE;
-while (totalMemory < TOTAL_MEMORY || totalMemory < 2*TOTAL_STACK) {
-  if (totalMemory < 16*1024*1024) {
-    totalMemory *= 2;
-  } else {
-    totalMemory += 16*1024*1024;
-  }
-}
-totalMemory = Math.max(totalMemory, 16*1024*1024);
-if (totalMemory !== TOTAL_MEMORY) {
-  TOTAL_MEMORY = totalMemory;
-}
+if (TOTAL_MEMORY < TOTAL_STACK) Module.printErr('TOTAL_MEMORY should be larger than TOTAL_STACK, was ' + TOTAL_MEMORY + '! (TOTAL_STACK=' + TOTAL_STACK + ')');
 
 // Initialize the runtime's memory
 
@@ -2156,17 +2145,24 @@ function integrateWasmJS(Module) {
 
   // Memory growth integration code
   Module['reallocBuffer'] = function(size) {
-    size = Math.ceil(size / wasmPageSize) * wasmPageSize; // round up to wasm page size
+    var PAGE_MULTIPLE = Module["usingWasm"] ? WASM_PAGE_SIZE : ASMJS_PAGE_SIZE; // In wasm, heap size must be a multiple of 64KB. In asm.js, they need to be multiples of 16MB.
+    size = alignUp(size, PAGE_MULTIPLE); // round up to wasm page size
     var old = Module['buffer'];
-    var result = exports['__growWasmMemory'](size / wasmPageSize); // tiny wasm method that just does grow_memory
+    var oldSize = old.byteLength;
     if (Module["usingWasm"]) {
-      if (result !== (-1 | 0)) {
-        // success in native wasm memory growth, get the buffer from the memory
-        return Module['buffer'] = Module['wasmMemory'].buffer;
-      } else {
+      try {
+        var result = Module['wasmMemory'].grow((size - oldSize) / wasmPageSize); // .grow() takes a delta compared to the previous size
+        if (result !== (-1 | 0)) {
+          // success in native wasm memory growth, get the buffer from the memory
+          return Module['buffer'] = Module['wasmMemory'].buffer;
+        } else {
+          return null;
+        }
+      } catch(e) {
         return null;
       }
     } else {
+      exports['__growWasmMemory']((size - oldSize) / wasmPageSize); // tiny wasm method that just does grow_memory
       // in interpreter, we replace Module.buffer if we allocate
       return Module['buffer'] !== old ? Module['buffer'] : null; // if it was reallocated, it changed
     }
@@ -2246,8 +2242,8 @@ var ASM_CONSTS = [];
 
 STATIC_BASE = 1024;
 
-STATICTOP = STATIC_BASE + 593616;
-  /* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__I_000101() } }, { func: function() { __Z7my_loadv() } }, { func: function() { __GLOBAL__sub_I_ShaderManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlTextureManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Glyph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_CircleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TriangleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_FontIconGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_ConcaveHullBuilder_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipToOGDF_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFLayoutPluginBase_cpp() } }, { func: function() { __GLOBAL__sub_I_CoinParamUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_unitTest_cpp() } }, { func: function() { __GLOBAL__sub_I_OsiNames_cpp() } }, { func: function() { __GLOBAL__sub_I_CglLandPValidator_cpp() } }, { func: function() { __GLOBAL__sub_I_LabelsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_Logger_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutStandards_cpp() } }, { func: function() { __GLOBAL__sub_I_config_cpp() } }, { func: function() { __GLOBAL__sub_I_Ogml_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphIO_svg_cpp() } }, { func: function() { __GLOBAL__sub_I_Bfs_cpp() } }, { func: function() { ___cxx_global_var_init_21() } }, { func: function() { ___cxx_global_var_init_22() } }, { func: function() { __GLOBAL__sub_I_BooleanProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_DataSet_cpp() } }, { func: function() { __GLOBAL__sub_I_Delaunay_cpp() } }, { func: function() { __GLOBAL__sub_I_DoubleProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_Triconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningDagSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_ReachableSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningTreeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_InducedSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_LoopSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_MultipleEdgeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_Kruskal_cpp() } }, { func: function() { __GLOBAL__sub_I_MetricMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_AutoSize_cpp() } }, { func: function() { __GLOBAL__sub_I_Planarity_cpp() } }, { func: function() { __GLOBAL__sub_I_Simple_cpp() } }, { func: function() { __GLOBAL__sub_I_Tree_cpp() } }, { func: function() { __GLOBAL__sub_I_Connected_cpp() } }, { func: function() { __GLOBAL__sub_I_Biconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_NanoVGManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Outerplanar_cpp() } }, { func: function() { __GLOBAL__sub_I_Acyclic_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_ToLabels_cpp() } }, { func: function() { __GLOBAL__sub_I_GlBuffer_cpp() } }, { func: function() { __GLOBAL__sub_I_GlCPULODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlEntity_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphInputData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphStaticData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlQuadTreeLODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlScene_cpp() } }, { func: function() { __GLOBAL__sub_I_GlUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_DrawingTools_cpp() } }, { func: function() { __GLOBAL__sub_I_WithParameter_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyTypes_cpp() } }, { func: function() { __GLOBAL__sub_I_SizeProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_StlFunctions_cpp() } }, { func: function() { __GLOBAL__sub_I_StringProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpTools_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeTest_cpp() } }, { func: function() { ___cxx_global_var_init_1342() } }, { func: function() { ___cxx_global_var_init_27_1343() } }, { func: function() { ___cxx_global_var_init_29() } }, { func: function() { ___cxx_global_var_init_31() } }, { func: function() { ___cxx_global_var_init_33() } }, { func: function() { ___cxx_global_var_init_35() } }, { func: function() { __GLOBAL__sub_I_PropertyManager_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipFontAwesome_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipMaterialDesignIcons_cpp() } }, { func: function() { __GLOBAL__sub_I_DatasetTools_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableCoord_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSize_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSizeProxy_cpp() } }, { func: function() { __GLOBAL__sub_I_Orientation_cpp() } }, { func: function() { __GLOBAL__sub_I_bind_cpp() } }, { func: function() { __GLOBAL__sub_I_iostream_cpp() } }, { func: function() { ___cxx_global_var_init_3_328() } }, { func: function() { __GLOBAL__sub_I_GraphAbstract_cpp() } }, { func: function() { __GLOBAL__sub_I_Graph_cpp() } }, { func: function() { ___cxx_global_var_init() } }, { func: function() { ___cxx_global_var_init_8() } }, { func: function() { ___cxx_global_var_init_1() } }, { func: function() { ___cxx_global_var_init_3() } }, { func: function() { ___cxx_global_var_init_5() } }, { func: function() { ___cxx_global_var_init_7() } }, { func: function() { ___cxx_global_var_init_9() } }, { func: function() { ___cxx_global_var_init_11() } }, { func: function() { __GLOBAL__sub_I_GraphMeasure_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphProperty_cpp() } }, { func: function() { ___cxx_global_var_init_326() } }, { func: function() { ___cxx_global_var_init_1_327() } }, { func: function() { __GLOBAL__sub_I_WelshPowell_cpp() } }, { func: function() { ___cxx_global_var_init_5_329() } }, { func: function() { ___cxx_global_var_init_7_330() } }, { func: function() { ___cxx_global_var_init_9_331() } }, { func: function() { ___cxx_global_var_init_11_332() } }, { func: function() { __GLOBAL__sub_I_GraphTools_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphView_cpp() } }, { func: function() { __GLOBAL__sub_I_IntegerProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutProperty_cpp() } }, { func: function() { ___cxx_global_var_init_27() } }, { func: function() { ___cxx_global_var_init_28() } }, { func: function() { __GLOBAL__sub_I_Observable_cpp() } }, { func: function() { __GLOBAL__sub_I_ParametricCurves_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTree_cpp() } }, { func: function() { __GLOBAL__sub_I_BendsTools_cpp() } }, { func: function() { __GLOBAL__sub_I_Dijkstra_cpp() } }, { func: function() { __GLOBAL__sub_I_EdgeBundling_cpp() } }, { func: function() { __GLOBAL__sub_I_OctreeBundle_cpp() } }, { func: function() { __GLOBAL__sub_I_QuadTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_PlanarGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_dotImport_cpp() } }, { func: function() { __GLOBAL__sub_I_Grid_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLImport_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomSimpleGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_AdjacencyMatrixImport_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ReverseEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTreeGeneral_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SmallWorldGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportPajek_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportUCINET_cpp() } }, { func: function() { __GLOBAL__sub_I_EmptyGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFm3_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFUpwardPlanarization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFrutchermanReingold_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleMultilevelEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFVisibility_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFKamadaKawai_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFCircular_cpp() } }, { func: function() { __GLOBAL__sub_I_HexagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipBindings_cpp() } }, { func: function() { __GLOBAL__sub_I_main_cpp() } }, { func: function() { __GLOBAL__sub_I_FisheyeInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_LassoSelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_NeighborhoodInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_RectangleZoomInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionModifierInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ZoomAndPanInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CrossGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CubeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CylinderGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DiamondGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBalloon_cpp() } }, { func: function() { __GLOBAL__sub_I_PentagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RingGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RoundedBoxGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SquareGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_StarGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DelaunayTriangulation_cpp() } }, { func: function() { __GLOBAL__sub_I_VoronoiDiagram_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_EqualValueClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_QuotientClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLExport_cpp() } }, { func: function() { __GLOBAL__sub_I_CurveEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_StrongComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_Circular_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_Tutte_cpp() } }, { func: function() { __GLOBAL__sub_I_Dendrogram_cpp() } }, { func: function() { __GLOBAL__sub_I_ImprovedWalker_cpp() } }, { func: function() { __GLOBAL__sub_I_SquarifiedTreeMap_cpp() } }, { func: function() { __GLOBAL__sub_I_PerfectLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_PolyominoPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Eccentricity_cpp() } }, { func: function() { __GLOBAL__sub_I_DegreeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_ClusterMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_BiconnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_BubbleTree_cpp() } }, { func: function() { __GLOBAL__sub_I_DagLevelMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_IdMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_LeafMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_NodeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_DepthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_PathLengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrahlerMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp_4068() } }, { func: function() { __GLOBAL__sub_I_BetweennessCentrality_cpp() } }, { func: function() { __GLOBAL__sub_I_KCores_cpp() } }, { func: function() { __GLOBAL__sub_I_LouvainClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_LinkCommunities_cpp() } }, { func: function() { __GLOBAL__sub_I_MCLClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_PageRank_cpp() } }, { func: function() { __GLOBAL__sub_I_FastOverlapRemoval_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDavidsonHarel_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNoTwistLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTree_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleFastLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFGemFrick_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFStressMajorization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFSugiyama_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDominance_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNiceLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationGrid_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBertaultLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPivotMDS_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTileToRowsPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipHtml5_cpp() } }, { func: function() { __GLOBAL__sub_I_Grip_cpp() } }, { func: function() { __GLOBAL__sub_I_MISFiltering_cpp() } }, { func: function() { __GLOBAL__sub_I_Distances_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OctTree_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_MixedModel_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponentPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp() } }, { func: function() { __GLOBAL__sub_I_GEMLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeReingoldAndTilfordExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeTreeExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeRadial_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeLeaf_cpp() } });
+STATICTOP = STATIC_BASE + 590896;
+  /* global initializers */  __ATINIT__.push({ func: function() { __GLOBAL__I_000101() } }, { func: function() { __Z7my_loadv() } }, { func: function() { __GLOBAL__sub_I_ShaderManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlTextureManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Glyph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsManager_cpp() } }, { func: function() { __GLOBAL__sub_I_GlyphsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_CircleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TriangleGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_FontIconGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_ConcaveHullBuilder_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipToOGDF_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFLayoutPluginBase_cpp() } }, { func: function() { __GLOBAL__sub_I_CoinParamUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_unitTest_cpp() } }, { func: function() { __GLOBAL__sub_I_OsiNames_cpp() } }, { func: function() { __GLOBAL__sub_I_CglLandPValidator_cpp() } }, { func: function() { __GLOBAL__sub_I_LabelsRenderer_cpp() } }, { func: function() { __GLOBAL__sub_I_Logger_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutStandards_cpp() } }, { func: function() { __GLOBAL__sub_I_config_cpp() } }, { func: function() { __GLOBAL__sub_I_Ogml_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphIO_svg_cpp() } }, { func: function() { __GLOBAL__sub_I_Bfs_cpp() } }, { func: function() { ___cxx_global_var_init_21() } }, { func: function() { ___cxx_global_var_init_22() } }, { func: function() { __GLOBAL__sub_I_BooleanProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_DataSet_cpp() } }, { func: function() { __GLOBAL__sub_I_Delaunay_cpp() } }, { func: function() { __GLOBAL__sub_I_DoubleProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_Triconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningDagSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_ReachableSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_SpanningTreeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_InducedSubGraphSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_LoopSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_MultipleEdgeSelection_cpp() } }, { func: function() { __GLOBAL__sub_I_Kruskal_cpp() } }, { func: function() { __GLOBAL__sub_I_MetricMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_AutoSize_cpp() } }, { func: function() { __GLOBAL__sub_I_Planarity_cpp() } }, { func: function() { __GLOBAL__sub_I_Simple_cpp() } }, { func: function() { __GLOBAL__sub_I_Tree_cpp() } }, { func: function() { __GLOBAL__sub_I_Connected_cpp() } }, { func: function() { __GLOBAL__sub_I_Biconnected_cpp() } }, { func: function() { __GLOBAL__sub_I_NanoVGManager_cpp() } }, { func: function() { __GLOBAL__sub_I_Outerplanar_cpp() } }, { func: function() { __GLOBAL__sub_I_Acyclic_cpp() } }, { func: function() { __GLOBAL__sub_I_ColorMapping_cpp() } }, { func: function() { __GLOBAL__sub_I_ToLabels_cpp() } }, { func: function() { __GLOBAL__sub_I_GlBuffer_cpp() } }, { func: function() { __GLOBAL__sub_I_GlCPULODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlEntity_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphInputData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlGraphStaticData_cpp() } }, { func: function() { __GLOBAL__sub_I_GlQuadTreeLODCalculator_cpp() } }, { func: function() { __GLOBAL__sub_I_GlScene_cpp() } }, { func: function() { __GLOBAL__sub_I_GlUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_DrawingTools_cpp() } }, { func: function() { __GLOBAL__sub_I_WithParameter_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyTypes_cpp() } }, { func: function() { __GLOBAL__sub_I_SizeProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_StlFunctions_cpp() } }, { func: function() { __GLOBAL__sub_I_StringProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpTools_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeTest_cpp() } }, { func: function() { ___cxx_global_var_init_1342() } }, { func: function() { ___cxx_global_var_init_27_1343() } }, { func: function() { ___cxx_global_var_init_29() } }, { func: function() { ___cxx_global_var_init_31() } }, { func: function() { ___cxx_global_var_init_33() } }, { func: function() { ___cxx_global_var_init_35() } }, { func: function() { __GLOBAL__sub_I_PropertyManager_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TlpJsonImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBExport_cpp() } }, { func: function() { __GLOBAL__sub_I_TLPBImport_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipFontAwesome_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipMaterialDesignIcons_cpp() } }, { func: function() { __GLOBAL__sub_I_DatasetTools_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableCoord_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSize_cpp() } }, { func: function() { __GLOBAL__sub_I_OrientableSizeProxy_cpp() } }, { func: function() { __GLOBAL__sub_I_Orientation_cpp() } }, { func: function() { __GLOBAL__sub_I_bind_cpp() } }, { func: function() { __GLOBAL__sub_I_iostream_cpp() } }, { func: function() { ___cxx_global_var_init_3_328() } }, { func: function() { __GLOBAL__sub_I_GraphAbstract_cpp() } }, { func: function() { __GLOBAL__sub_I_Graph_cpp() } }, { func: function() { ___cxx_global_var_init() } }, { func: function() { ___cxx_global_var_init_8() } }, { func: function() { ___cxx_global_var_init_1() } }, { func: function() { ___cxx_global_var_init_3() } }, { func: function() { ___cxx_global_var_init_5() } }, { func: function() { ___cxx_global_var_init_7() } }, { func: function() { ___cxx_global_var_init_9() } }, { func: function() { ___cxx_global_var_init_11() } }, { func: function() { __GLOBAL__sub_I_GraphMeasure_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphProperty_cpp() } }, { func: function() { ___cxx_global_var_init_326() } }, { func: function() { ___cxx_global_var_init_1_327() } }, { func: function() { __GLOBAL__sub_I_WelshPowell_cpp() } }, { func: function() { ___cxx_global_var_init_5_329() } }, { func: function() { ___cxx_global_var_init_7_330() } }, { func: function() { ___cxx_global_var_init_9_331() } }, { func: function() { ___cxx_global_var_init_11_332() } }, { func: function() { __GLOBAL__sub_I_GraphTools_cpp() } }, { func: function() { __GLOBAL__sub_I_GraphView_cpp() } }, { func: function() { __GLOBAL__sub_I_IntegerProperty_cpp() } }, { func: function() { __GLOBAL__sub_I_LayoutProperty_cpp() } }, { func: function() { ___cxx_global_var_init_27() } }, { func: function() { ___cxx_global_var_init_28() } }, { func: function() { __GLOBAL__sub_I_Observable_cpp() } }, { func: function() { __GLOBAL__sub_I_ParametricCurves_cpp() } }, { func: function() { __GLOBAL__sub_I_PropertyAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTree_cpp() } }, { func: function() { __GLOBAL__sub_I_BendsTools_cpp() } }, { func: function() { __GLOBAL__sub_I_Dijkstra_cpp() } }, { func: function() { __GLOBAL__sub_I_EdgeBundling_cpp() } }, { func: function() { __GLOBAL__sub_I_OctreeBundle_cpp() } }, { func: function() { __GLOBAL__sub_I_QuadTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereUtils_cpp() } }, { func: function() { __GLOBAL__sub_I_PlanarGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_dotImport_cpp() } }, { func: function() { __GLOBAL__sub_I_Grid_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLImport_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomSimpleGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_AdjacencyMatrixImport_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ReverseEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_RandomTreeGeneral_cpp() } }, { func: function() { __GLOBAL__sub_I_CompleteTree_cpp() } }, { func: function() { __GLOBAL__sub_I_SmallWorldGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportPajek_cpp() } }, { func: function() { __GLOBAL__sub_I_ImportUCINET_cpp() } }, { func: function() { __GLOBAL__sub_I_EmptyGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFm3_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFUpwardPlanarization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFrutchermanReingold_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleMultilevelEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFFastMultipoleEmbedder_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFVisibility_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFKamadaKawai_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFCircular_cpp() } }, { func: function() { __GLOBAL__sub_I_HexagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipBindings_cpp() } }, { func: function() { __GLOBAL__sub_I_main_cpp() } }, { func: function() { __GLOBAL__sub_I_FisheyeInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_LassoSelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_NeighborhoodInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_RectangleZoomInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_SelectionModifierInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ZoomAndPanInteractor_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CrossGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CubeGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_CylinderGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DiamondGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBalloon_cpp() } }, { func: function() { __GLOBAL__sub_I_PentagonGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RingGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_RoundedBoxGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SphereGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_SquareGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_StarGlyph_cpp() } }, { func: function() { __GLOBAL__sub_I_DelaunayTriangulation_cpp() } }, { func: function() { __GLOBAL__sub_I_VoronoiDiagram_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_EqualValueClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_QuotientClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_GMLExport_cpp() } }, { func: function() { __GLOBAL__sub_I_CurveEdges_cpp() } }, { func: function() { __GLOBAL__sub_I_StrongComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_Circular_cpp() } }, { func: function() { __GLOBAL__sub_I_HierarchicalGraph_cpp() } }, { func: function() { __GLOBAL__sub_I_Tutte_cpp() } }, { func: function() { __GLOBAL__sub_I_Dendrogram_cpp() } }, { func: function() { __GLOBAL__sub_I_ImprovedWalker_cpp() } }, { func: function() { __GLOBAL__sub_I_SquarifiedTreeMap_cpp() } }, { func: function() { __GLOBAL__sub_I_PerfectLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_PolyominoPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Eccentricity_cpp() } }, { func: function() { __GLOBAL__sub_I_DegreeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_ClusterMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_BiconnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponent_cpp() } }, { func: function() { __GLOBAL__sub_I_BubbleTree_cpp() } }, { func: function() { __GLOBAL__sub_I_DagLevelMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_IdMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_LeafMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_NodeMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_DepthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_PathLengthMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_StrahlerMetric_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp_4069() } }, { func: function() { __GLOBAL__sub_I_BetweennessCentrality_cpp() } }, { func: function() { __GLOBAL__sub_I_KCores_cpp() } }, { func: function() { __GLOBAL__sub_I_LouvainClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_LinkCommunities_cpp() } }, { func: function() { __GLOBAL__sub_I_MCLClustering_cpp() } }, { func: function() { __GLOBAL__sub_I_PageRank_cpp() } }, { func: function() { __GLOBAL__sub_I_FastOverlapRemoval_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDavidsonHarel_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNoTwistLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTree_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleFastLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFGemFrick_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFStressMajorization_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFSugiyama_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFDominance_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFMMMExampleNiceLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationGrid_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFBertaultLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPivotMDS_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFTileToRowsPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_OGDFPlanarizationLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TulipHtml5_cpp() } }, { func: function() { __GLOBAL__sub_I_Grip_cpp() } }, { func: function() { __GLOBAL__sub_I_MISFiltering_cpp() } }, { func: function() { __GLOBAL__sub_I_Distances_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_OctTree_cpp() } }, { func: function() { __GLOBAL__sub_I_LinLogAlgorithm_cpp() } }, { func: function() { __GLOBAL__sub_I_MixedModel_cpp() } }, { func: function() { __GLOBAL__sub_I_ConnectedComponentPacking_cpp() } }, { func: function() { __GLOBAL__sub_I_Random_cpp() } }, { func: function() { __GLOBAL__sub_I_GEMLayout_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeReingoldAndTilfordExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_ConeTreeExtended_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeRadial_cpp() } }, { func: function() { __GLOBAL__sub_I_TreeLeaf_cpp() } });
   
 
 memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasmJSMethod"].indexOf("interpret-asm2wasm") >= 0 ? "tulip.js.mem" : null;
@@ -2255,7 +2251,7 @@ memoryInitializer = Module["wasmJSMethod"].indexOf("asmjs") >= 0 || Module["wasm
 
 
 
-var STATIC_BUMP = 593616;
+var STATIC_BUMP = 590896;
 Module["STATIC_BASE"] = STATIC_BASE;
 Module["STATIC_BUMP"] = STATIC_BUMP;
 
@@ -2500,16 +2496,19 @@ function copyTempDouble(ptr) {
           // only store the string 'colors' in utable, and 'colors[0]', 'colors[1]' and 'colors[2]' will be parsed as 'colors'+i.
           // Note that for the GL.uniforms table, we still need to fetch the all WebGLUniformLocations for all the indices.
           var loc = GLctx.getUniformLocation(p, name);
-          var id = GL.getNewId(GL.uniforms);
-          utable[name] = [u.size, id];
-          GL.uniforms[id] = loc;
-  
-          for (var j = 1; j < u.size; ++j) {
-            var n = name + '['+j+']';
-            loc = GLctx.getUniformLocation(p, n);
-            id = GL.getNewId(GL.uniforms);
-  
+          if (loc != null)
+          {
+            var id = GL.getNewId(GL.uniforms);
+            utable[name] = [u.size, id];
             GL.uniforms[id] = loc;
+  
+            for (var j = 1; j < u.size; ++j) {
+              var n = name + '['+j+']';
+              loc = GLctx.getUniformLocation(p, n);
+              id = GL.getNewId(GL.uniforms);
+  
+              GL.uniforms[id] = loc;
+            }
           }
         }
       }};function _glGetString(name_) {
@@ -6611,7 +6610,12 @@ function copyTempDouble(ptr) {
   function _emscripten_get_now() { abort() }
 
   
-  var JSEvents={keyEvent:0,mouseEvent:0,wheelEvent:0,uiEvent:0,focusEvent:0,deviceOrientationEvent:0,deviceMotionEvent:0,fullscreenChangeEvent:0,pointerlockChangeEvent:0,visibilityChangeEvent:0,touchEvent:0,lastGamepadState:null,lastGamepadStateFrame:null,previousFullscreenElement:null,previousScreenX:null,previousScreenY:null,removeEventListenersRegistered:false,registerRemoveEventListeners:function () {
+  var JSEvents={keyEvent:0,mouseEvent:0,wheelEvent:0,uiEvent:0,focusEvent:0,deviceOrientationEvent:0,deviceMotionEvent:0,fullscreenChangeEvent:0,pointerlockChangeEvent:0,visibilityChangeEvent:0,touchEvent:0,lastGamepadState:null,lastGamepadStateFrame:null,numGamepadsConnected:0,previousFullscreenElement:null,previousScreenX:null,previousScreenY:null,removeEventListenersRegistered:false,staticInit:function () {
+        if (typeof window !== 'undefined') {
+          window.addEventListener("gamepadconnected", function() { ++JSEvents.numGamepadsConnected; });
+          window.addEventListener("gamepaddisconnected", function() { --JSEvents.numGamepadsConnected; });
+        }
+      },registerRemoveEventListeners:function () {
         if (!JSEvents.removeEventListenersRegistered) {
         __ATEXIT__.push(function() {
             for(var i = JSEvents.eventHandlers.length-1; i >= 0; --i) {
@@ -8026,7 +8030,7 @@ function copyTempDouble(ptr) {
           ptable.maxUniformBlockNameLength = 0;
           for (var i = 0; i < numBlocks; ++i) {
             var activeBlockName = GLctx.getActiveUniformBlockName(program, i);
-            ptable.maxUniformBlockNameLength = Math.max(ptable.maxAttributeLength, activeBlockName.length+1);
+            ptable.maxUniformBlockNameLength = Math.max(ptable.maxUniformBlockNameLength, activeBlockName.length+1);
           }
         }
         HEAP32[((p)>>2)]=ptable.maxUniformBlockNameLength;
@@ -8082,13 +8086,13 @@ function copyTempDouble(ptr) {
       var thrown = EXCEPTIONS.last;
       if (!thrown) {
         // just pass through the null ptr
-        return ((asm["setTempRet0"](0),0)|0);
+        return ((Runtime.setTempRet0(0),0)|0);
       }
       var info = EXCEPTIONS.infos[thrown];
       var throwntype = info.type;
       if (!throwntype) {
         // just pass through the thrown ptr
-        return ((asm["setTempRet0"](0),thrown)|0);
+        return ((Runtime.setTempRet0(0),thrown)|0);
       }
       var typeArray = Array.prototype.slice.call(arguments);
   
@@ -8105,14 +8109,14 @@ function copyTempDouble(ptr) {
         if (typeArray[i] && Module['___cxa_can_catch'](typeArray[i], throwntype, thrown)) {
           thrown = HEAP32[((thrown)>>2)]; // undo indirection
           info.adjusted = thrown;
-          return ((asm["setTempRet0"](typeArray[i]),thrown)|0);
+          return ((Runtime.setTempRet0(typeArray[i]),thrown)|0);
         }
       }
       // Shouldn't happen unless we have bogus data in typeArray
       // or encounter a type for which emscripten doesn't have suitable
       // typeinfo defined. Best-efforts match just in case.
       thrown = HEAP32[((thrown)>>2)]; // undo indirection
-      return ((asm["setTempRet0"](throwntype),thrown)|0);
+      return ((Runtime.setTempRet0(throwntype),thrown)|0);
     }function ___gxx_personality_v0() {
     }
 
@@ -9095,7 +9099,9 @@ function copyTempDouble(ptr) {
       // http://pubs.opengroup.org/onlinepubs/009695399/functions/sysconf.html
       switch(name) {
         case 30: return PAGE_SIZE;
-        case 85: return totalMemory / PAGE_SIZE;
+        case 85:
+          var maxHeapSize = 2*1024*1024*1024 - 65536;
+          return maxHeapSize / PAGE_SIZE;
         case 132:
         case 133:
         case 12:
@@ -9359,7 +9365,7 @@ function copyTempDouble(ptr) {
   
    
   Module["_testSetjmp"] = _testSetjmp;function _longjmp(env, value) {
-      asm['setThrew'](env, value || 1);
+      Module['setThrew'](env, value || 1);
       throw 'longjmp';
     }function _emscripten_longjmp(env, value) {
       _longjmp(env, value);
@@ -10928,6 +10934,7 @@ if (ENVIRONMENT_IS_NODE) {
   } else {
     _emscripten_get_now = Date.now;
   };
+JSEvents.staticInit();;
 ___buildEnvironment(ENV);;
 Module["requestFullScreen"] = function Module_requestFullScreen(lockPointer, resizeCanvas, vrDevice) { Module.printErr("Module.requestFullScreen is deprecated. Please call Module.requestFullscreen instead."); Module["requestFullScreen"] = Module["requestFullscreen"]; Browser.requestFullScreen(lockPointer, resizeCanvas, vrDevice) };
   Module["requestFullscreen"] = function Module_requestFullscreen(lockPointer, resizeCanvas, vrDevice) { Browser.requestFullscreen(lockPointer, resizeCanvas, vrDevice) };
@@ -10960,7 +10967,7 @@ function invoke_iiiiiiii(index,a1,a2,a3,a4,a5,a6,a7) {
     return Module["dynCall_iiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -10969,7 +10976,7 @@ function invoke_iiiiiid(index,a1,a2,a3,a4,a5,a6) {
     return Module["dynCall_iiiiiid"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -10978,7 +10985,7 @@ function invoke_iiiddi(index,a1,a2,a3,a4,a5) {
     return Module["dynCall_iiiddi"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -10987,7 +10994,7 @@ function invoke_vif(index,a1,a2) {
     Module["dynCall_vif"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -10996,7 +11003,7 @@ function invoke_vid(index,a1,a2) {
     Module["dynCall_vid"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11005,7 +11012,7 @@ function invoke_viiiii(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viiiii"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11014,7 +11021,7 @@ function invoke_vij(index,a1,a2,a3) {
     Module["dynCall_vij"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11023,7 +11030,7 @@ function invoke_iiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9) {
     return Module["dynCall_iiiiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11032,7 +11039,7 @@ function invoke_iiidd(index,a1,a2,a3,a4) {
     return Module["dynCall_iiidd"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11041,7 +11048,7 @@ function invoke_vii(index,a1,a2) {
     Module["dynCall_vii"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11050,7 +11057,7 @@ function invoke_iiiiiii(index,a1,a2,a3,a4,a5,a6) {
     return Module["dynCall_iiiiiii"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11059,7 +11066,7 @@ function invoke_iiiiiiid(index,a1,a2,a3,a4,a5,a6,a7) {
     return Module["dynCall_iiiiiiid"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11068,7 +11075,7 @@ function invoke_viijii(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viijii"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11077,7 +11084,7 @@ function invoke_ii(index,a1) {
     return Module["dynCall_ii"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11086,7 +11093,7 @@ function invoke_viidddi(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viidddi"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11095,7 +11102,7 @@ function invoke_viidiii(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viidiii"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11104,7 +11111,7 @@ function invoke_viidd(index,a1,a2,a3,a4) {
     Module["dynCall_viidd"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11113,7 +11120,7 @@ function invoke_viiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9) {
     Module["dynCall_viiiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11122,7 +11129,7 @@ function invoke_viidi(index,a1,a2,a3,a4) {
     Module["dynCall_viidi"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11131,7 +11138,7 @@ function invoke_fff(index,a1,a2) {
     return Module["dynCall_fff"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11140,7 +11147,7 @@ function invoke_iidi(index,a1,a2,a3) {
     return Module["dynCall_iidi"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11149,7 +11156,7 @@ function invoke_viiidd(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viiidd"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11158,7 +11165,7 @@ function invoke_vidii(index,a1,a2,a3,a4) {
     Module["dynCall_vidii"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11167,7 +11174,7 @@ function invoke_iiiidid(index,a1,a2,a3,a4,a5,a6) {
     return Module["dynCall_iiiidid"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11176,7 +11183,7 @@ function invoke_iiiiii(index,a1,a2,a3,a4,a5) {
     return Module["dynCall_iiiiii"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11185,7 +11192,7 @@ function invoke_vidiiiii(index,a1,a2,a3,a4,a5,a6,a7) {
     Module["dynCall_vidiiiii"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11194,7 +11201,7 @@ function invoke_vidiiii(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_vidiiii"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11203,7 +11210,7 @@ function invoke_viiddii(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viiddii"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11212,7 +11219,7 @@ function invoke_viiidiidi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
     Module["dynCall_viiidiidi"](index,a1,a2,a3,a4,a5,a6,a7,a8);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11221,7 +11228,7 @@ function invoke_viiiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12) {
     Module["dynCall_viiiiiiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11,a12);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11230,7 +11237,7 @@ function invoke_diiiii(index,a1,a2,a3,a4,a5) {
     return Module["dynCall_diiiii"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11239,7 +11246,7 @@ function invoke_viiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) {
     Module["dynCall_viiiiiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11248,7 +11255,7 @@ function invoke_viiid(index,a1,a2,a3,a4) {
     Module["dynCall_viiid"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11257,7 +11264,7 @@ function invoke_iiii(index,a1,a2,a3) {
     return Module["dynCall_iiii"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11266,7 +11273,7 @@ function invoke_viiiiiddiid(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10) {
     Module["dynCall_viiiiiddiid"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11275,7 +11282,7 @@ function invoke_viiiiddd(index,a1,a2,a3,a4,a5,a6,a7) {
     Module["dynCall_viiiiddd"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11284,7 +11291,7 @@ function invoke_viifff(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viifff"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11293,7 +11300,7 @@ function invoke_viiiiid(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viiiiid"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11302,7 +11309,7 @@ function invoke_vi(index,a1) {
     Module["dynCall_vi"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11311,7 +11318,7 @@ function invoke_vifi(index,a1,a2,a3) {
     Module["dynCall_vifi"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11320,7 +11327,7 @@ function invoke_iij(index,a1,a2,a3) {
     return Module["dynCall_iij"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11329,7 +11336,7 @@ function invoke_diiii(index,a1,a2,a3,a4) {
     return Module["dynCall_diiii"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11338,7 +11345,7 @@ function invoke_viid(index,a1,a2,a3) {
     Module["dynCall_viid"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11347,7 +11354,7 @@ function invoke_viiiiiii(index,a1,a2,a3,a4,a5,a6,a7) {
     Module["dynCall_viiiiiii"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11356,7 +11363,7 @@ function invoke_di(index,a1) {
     return Module["dynCall_di"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11365,7 +11372,7 @@ function invoke_viiidi(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viiidi"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11374,7 +11381,7 @@ function invoke_viiiid(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viiiid"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11383,7 +11390,7 @@ function invoke_diiiidiii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
     return Module["dynCall_diiiidiii"](index,a1,a2,a3,a4,a5,a6,a7,a8);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11392,7 +11399,7 @@ function invoke_viiiidd(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viiiidd"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11401,7 +11408,7 @@ function invoke_iiidiiii(index,a1,a2,a3,a4,a5,a6,a7) {
     return Module["dynCall_iiidiiii"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11410,7 +11417,7 @@ function invoke_iid(index,a1,a2) {
     return Module["dynCall_iid"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11419,7 +11426,7 @@ function invoke_viiddd(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viiddd"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11428,7 +11435,7 @@ function invoke_dd(index,a1) {
     return Module["dynCall_dd"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11437,7 +11444,7 @@ function invoke_viiiiii(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viiiiii"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11446,7 +11453,7 @@ function invoke_ff(index,a1) {
     return Module["dynCall_ff"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11455,7 +11462,7 @@ function invoke_iiiiiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) {
     return Module["dynCall_iiiiiiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11464,7 +11471,7 @@ function invoke_fi(index,a1) {
     return Module["dynCall_fi"](index,a1);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11473,7 +11480,7 @@ function invoke_iii(index,a1,a2) {
     return Module["dynCall_iii"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11482,7 +11489,7 @@ function invoke_diii(index,a1,a2,a3) {
     return Module["dynCall_diii"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11491,7 +11498,7 @@ function invoke_viidiidi(index,a1,a2,a3,a4,a5,a6,a7) {
     Module["dynCall_viidiidi"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11500,7 +11507,7 @@ function invoke_dii(index,a1,a2) {
     return Module["dynCall_dii"](index,a1,a2);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11509,7 +11516,7 @@ function invoke_viiifiii(index,a1,a2,a3,a4,a5,a6,a7) {
     Module["dynCall_viiifiii"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11518,7 +11525,7 @@ function invoke_viiiiiiddiid(index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11) {
     Module["dynCall_viiiiiiddiid"](index,a1,a2,a3,a4,a5,a6,a7,a8,a9,a10,a11);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11527,7 +11534,7 @@ function invoke_viiiffii(index,a1,a2,a3,a4,a5,a6,a7) {
     Module["dynCall_viiiffii"](index,a1,a2,a3,a4,a5,a6,a7);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11536,7 +11543,7 @@ function invoke_viiiddi(index,a1,a2,a3,a4,a5,a6) {
     Module["dynCall_viiiddi"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11545,7 +11552,7 @@ function invoke_iiid(index,a1,a2,a3) {
     return Module["dynCall_iiid"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11554,7 +11561,7 @@ function invoke_iiiii(index,a1,a2,a3,a4) {
     return Module["dynCall_iiiii"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11563,7 +11570,7 @@ function invoke_viiddi(index,a1,a2,a3,a4,a5) {
     Module["dynCall_viiddi"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11572,7 +11579,7 @@ function invoke_iiiiij(index,a1,a2,a3,a4,a5,a6) {
     return Module["dynCall_iiiiij"](index,a1,a2,a3,a4,a5,a6);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11581,7 +11588,7 @@ function invoke_viii(index,a1,a2,a3) {
     Module["dynCall_viii"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11590,7 +11597,7 @@ function invoke_v(index) {
     Module["dynCall_v"](index);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11599,7 +11606,7 @@ function invoke_iiiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
     return Module["dynCall_iiiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11608,7 +11615,7 @@ function invoke_viif(index,a1,a2,a3) {
     Module["dynCall_viif"](index,a1,a2,a3);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11617,7 +11624,7 @@ function invoke_viiiiiiii(index,a1,a2,a3,a4,a5,a6,a7,a8) {
     Module["dynCall_viiiiiiii"](index,a1,a2,a3,a4,a5,a6,a7,a8);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11626,7 +11633,7 @@ function invoke_iiiiid(index,a1,a2,a3,a4,a5) {
     return Module["dynCall_iiiiid"](index,a1,a2,a3,a4,a5);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11635,7 +11642,7 @@ function invoke_viiiidddi(index,a1,a2,a3,a4,a5,a6,a7,a8) {
     Module["dynCall_viiiidddi"](index,a1,a2,a3,a4,a5,a6,a7,a8);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11644,7 +11651,7 @@ function invoke_viiii(index,a1,a2,a3,a4) {
     Module["dynCall_viiii"](index,a1,a2,a3,a4);
   } catch(e) {
     if (typeof e !== 'number' && e !== 'longjmp') throw e;
-    asm["setThrew"](1, 0);
+    Module["setThrew"](1, 0);
   }
 }
 
@@ -11695,6 +11702,7 @@ var __GLOBAL__sub_I_NodeMetric_cpp = Module["__GLOBAL__sub_I_NodeMetric_cpp"] = 
 var _GlGraphInputData_getElementFontSize = Module["_GlGraphInputData_getElementFontSize"] = asm["_GlGraphInputData_getElementFontSize"];
 var __GLOBAL__sub_I_BooleanProperty_cpp = Module["__GLOBAL__sub_I_BooleanProperty_cpp"] = asm["__GLOBAL__sub_I_BooleanProperty_cpp"];
 var _ColorVectorProperty_getNodeVectorSize = Module["_ColorVectorProperty_getNodeVectorSize"] = asm["_ColorVectorProperty_getNodeVectorSize"];
+var stackSave = Module["stackSave"] = asm["stackSave"];
 var _BooleanVectorProperty_getEdgeVectorSize = Module["_BooleanVectorProperty_getEdgeVectorSize"] = asm["_BooleanVectorProperty_getEdgeVectorSize"];
 var _Graph_getEdges2 = Module["_Graph_getEdges2"] = asm["_Graph_getEdges2"];
 var _Graph_delNode = Module["_Graph_delNode"] = asm["_Graph_delNode"];
@@ -11721,6 +11729,7 @@ var _getStringAlgorithmPluginsList = Module["_getStringAlgorithmPluginsList"] = 
 var _GlGraphInputData_setElementGlow = Module["_GlGraphInputData_setElementGlow"] = asm["_GlGraphInputData_setElementGlow"];
 var _StringVectorProperty_setEdgeValue = Module["_StringVectorProperty_setEdgeValue"] = asm["_StringVectorProperty_setEdgeValue"];
 var __GLOBAL__sub_I_Eccentricity_cpp = Module["__GLOBAL__sub_I_Eccentricity_cpp"] = asm["__GLOBAL__sub_I_Eccentricity_cpp"];
+var stackAlloc = Module["stackAlloc"] = asm["stackAlloc"];
 var ___cxx_global_var_init_35 = Module["___cxx_global_var_init_35"] = asm["___cxx_global_var_init_35"];
 var _Graph_getLocalIntegerProperty = Module["_Graph_getLocalIntegerProperty"] = asm["_Graph_getLocalIntegerProperty"];
 var _createIntegerVectorProperty = Module["_createIntegerVectorProperty"] = asm["_createIntegerVectorProperty"];
@@ -11798,6 +11807,7 @@ var _loadGraph = Module["_loadGraph"] = asm["_loadGraph"];
 var _Graph_opposite = Module["_Graph_opposite"] = asm["_Graph_opposite"];
 var _activateInteractor = Module["_activateInteractor"] = asm["_activateInteractor"];
 var __GLOBAL__sub_I_bind_cpp = Module["__GLOBAL__sub_I_bind_cpp"] = asm["__GLOBAL__sub_I_bind_cpp"];
+var setTempRet0 = Module["setTempRet0"] = asm["setTempRet0"];
 var _BooleanVectorProperty_getEdgeDefaultValue = Module["_BooleanVectorProperty_getEdgeDefaultValue"] = asm["_BooleanVectorProperty_getEdgeDefaultValue"];
 var __GLOBAL__sub_I_LinLogLayout_cpp = Module["__GLOBAL__sub_I_LinLogLayout_cpp"] = asm["__GLOBAL__sub_I_LinLogLayout_cpp"];
 var _updateGlScene = Module["_updateGlScene"] = asm["_updateGlScene"];
@@ -11823,6 +11833,7 @@ var __GLOBAL__sub_I_CircleGlyph_cpp = Module["__GLOBAL__sub_I_CircleGlyph_cpp"] 
 var __GLOBAL__sub_I_GlEntity_cpp = Module["__GLOBAL__sub_I_GlEntity_cpp"] = asm["__GLOBAL__sub_I_GlEntity_cpp"];
 var _saveGraph = Module["_saveGraph"] = asm["_saveGraph"];
 var _pthread_self = Module["_pthread_self"] = asm["_pthread_self"];
+var stackRestore = Module["stackRestore"] = asm["stackRestore"];
 var _SizeProperty_setNodeValue = Module["_SizeProperty_setNodeValue"] = asm["_SizeProperty_setNodeValue"];
 var _DoubleProperty_setAllEdgeValue = Module["_DoubleProperty_setAllEdgeValue"] = asm["_DoubleProperty_setAllEdgeValue"];
 var _getCurrentCanvas = Module["_getCurrentCanvas"] = asm["_getCurrentCanvas"];
@@ -11963,6 +11974,7 @@ var _testSetjmp = Module["_testSetjmp"] = asm["_testSetjmp"];
 var _Graph_isConnected = Module["_Graph_isConnected"] = asm["_Graph_isConnected"];
 var __GLOBAL__sub_I_GlyphsManager_cpp = Module["__GLOBAL__sub_I_GlyphsManager_cpp"] = asm["__GLOBAL__sub_I_GlyphsManager_cpp"];
 var __GLOBAL__sub_I_Dendrogram_cpp = Module["__GLOBAL__sub_I_Dendrogram_cpp"] = asm["__GLOBAL__sub_I_Dendrogram_cpp"];
+var setThrew = Module["setThrew"] = asm["setThrew"];
 var _integerAlgorithmsNamesLengths = Module["_integerAlgorithmsNamesLengths"] = asm["_integerAlgorithmsNamesLengths"];
 var _Graph_pop = Module["_Graph_pop"] = asm["_Graph_pop"];
 var _Graph_setEnds = Module["_Graph_setEnds"] = asm["_Graph_setEnds"];
@@ -12086,6 +12098,7 @@ var __GLOBAL__sub_I_StrahlerMetric_cpp = Module["__GLOBAL__sub_I_StrahlerMetric_
 var _ColorVectorProperty_getEdgeDefaultValue = Module["_ColorVectorProperty_getEdgeDefaultValue"] = asm["_ColorVectorProperty_getEdgeDefaultValue"];
 var _createSizeProperty = Module["_createSizeProperty"] = asm["_createSizeProperty"];
 var _Graph_setEventsActivated = Module["_Graph_setEventsActivated"] = asm["_Graph_setEventsActivated"];
+var getTempRet0 = Module["getTempRet0"] = asm["getTempRet0"];
 var __GLOBAL__sub_I_ShaderManager_cpp = Module["__GLOBAL__sub_I_ShaderManager_cpp"] = asm["__GLOBAL__sub_I_ShaderManager_cpp"];
 var _DoubleProperty_getEdgeDefaultValue = Module["_DoubleProperty_getEdgeDefaultValue"] = asm["_DoubleProperty_getEdgeDefaultValue"];
 var __GLOBAL__sub_I_SelectionModifierInteractor_cpp = Module["__GLOBAL__sub_I_SelectionModifierInteractor_cpp"] = asm["__GLOBAL__sub_I_SelectionModifierInteractor_cpp"];
@@ -12168,7 +12181,7 @@ var _Graph_push = Module["_Graph_push"] = asm["_Graph_push"];
 var __GLOBAL__sub_I_GraphView_cpp = Module["__GLOBAL__sub_I_GraphView_cpp"] = asm["__GLOBAL__sub_I_GraphView_cpp"];
 var _GlGraphInputData_setElementTexture = Module["_GlGraphInputData_setElementTexture"] = asm["_GlGraphInputData_setElementTexture"];
 var _pthread_mutex_lock = Module["_pthread_mutex_lock"] = asm["_pthread_mutex_lock"];
-var __GLOBAL__sub_I_Random_cpp_4068 = Module["__GLOBAL__sub_I_Random_cpp_4068"] = asm["__GLOBAL__sub_I_Random_cpp_4068"];
+var __GLOBAL__sub_I_Random_cpp_4069 = Module["__GLOBAL__sub_I_Random_cpp_4069"] = asm["__GLOBAL__sub_I_Random_cpp_4069"];
 var __GLOBAL__sub_I_BendsTools_cpp = Module["__GLOBAL__sub_I_BendsTools_cpp"] = asm["__GLOBAL__sub_I_BendsTools_cpp"];
 var __GLOBAL__sub_I_Grid_cpp = Module["__GLOBAL__sub_I_Grid_cpp"] = asm["__GLOBAL__sub_I_Grid_cpp"];
 var __GLOBAL__sub_I_OsiNames_cpp = Module["__GLOBAL__sub_I_OsiNames_cpp"] = asm["__GLOBAL__sub_I_OsiNames_cpp"];
@@ -12255,6 +12268,7 @@ var _GlGraphInputData_getElementBorderWidth = Module["_GlGraphInputData_getEleme
 var __GLOBAL__sub_I_BetweennessCentrality_cpp = Module["__GLOBAL__sub_I_BetweennessCentrality_cpp"] = asm["__GLOBAL__sub_I_BetweennessCentrality_cpp"];
 var _Graph_delete = Module["_Graph_delete"] = asm["_Graph_delete"];
 var _LayoutProperty_getMax = Module["_LayoutProperty_getMax"] = asm["_LayoutProperty_getMax"];
+var establishStackSpace = Module["establishStackSpace"] = asm["establishStackSpace"];
 var __GLOBAL__sub_I_RoundedBoxGlyph_cpp = Module["__GLOBAL__sub_I_RoundedBoxGlyph_cpp"] = asm["__GLOBAL__sub_I_RoundedBoxGlyph_cpp"];
 var _DoubleVectorProperty_getEdgeDefaultVectorSize = Module["_DoubleVectorProperty_getEdgeDefaultVectorSize"] = asm["_DoubleVectorProperty_getEdgeDefaultVectorSize"];
 var __Z7my_loadv = Module["__Z7my_loadv"] = asm["__Z7my_loadv"];
@@ -12432,13 +12446,13 @@ var dynCall_viiiidddi = Module["dynCall_viiiidddi"] = asm["dynCall_viiiidddi"];
 var dynCall_viiii = Module["dynCall_viiii"] = asm["dynCall_viiii"];
 ;
 
-Runtime.stackAlloc = asm['stackAlloc'];
-Runtime.stackSave = asm['stackSave'];
-Runtime.stackRestore = asm['stackRestore'];
-Runtime.establishStackSpace = asm['establishStackSpace'];
+Runtime.stackAlloc = Module['stackAlloc'];
+Runtime.stackSave = Module['stackSave'];
+Runtime.stackRestore = Module['stackRestore'];
+Runtime.establishStackSpace = Module['establishStackSpace'];
 
-Runtime.setTempRet0 = asm['setTempRet0'];
-Runtime.getTempRet0 = asm['getTempRet0'];
+Runtime.setTempRet0 = Module['setTempRet0'];
+Runtime.getTempRet0 = Module['getTempRet0'];
 
 
 
@@ -16271,6 +16285,11 @@ tulip.EdgeExtremityShape = {
 };
 
 tulip.FontAwesomeIcon = {
+
+  AddressBook : 'address-book',
+  AddressBookO : 'address-book-o',
+  AddressCard : 'address-card',
+  AddressCardO : 'address-card-o',
   Adjust : 'adjust',
   Adn : 'adn',
   AlignCenter : 'align-center',
@@ -16279,6 +16298,7 @@ tulip.FontAwesomeIcon = {
   AlignRight : 'align-right',
   Amazon : 'amazon',
   Ambulance : 'ambulance',
+  AmericanSignLanguageInterpreting : 'american-sign-language-interpreting',
   Anchor : 'anchor',
   Android : 'android',
   Angellist : 'angellist',
@@ -16309,17 +16329,24 @@ tulip.FontAwesomeIcon = {
   ArrowsAlt : 'arrows-alt',
   ArrowsH : 'arrows-h',
   ArrowsV : 'arrows-v',
+  AslInterpreting : 'asl-interpreting',
+  AssistiveListeningSystems : 'assistive-listening-systems',
   Asterisk : 'asterisk',
   At : 'at',
+  AudioDescription : 'audio-description',
   Automobile : 'automobile',
   Backward : 'backward',
   BalanceScale : 'balance-scale',
   Ban : 'ban',
+  Bandcamp : 'bandcamp',
   Bank : 'bank',
   BarChart : 'bar-chart',
   BarChartO : 'bar-chart-o',
   Barcode : 'barcode',
   Bars : 'bars',
+  Bath : 'bath',
+  Bathtub : 'bathtub',
+  Battery : 'battery',
   Battery0 : 'battery-0',
   Battery1 : 'battery-1',
   Battery2 : 'battery-2',
@@ -16345,6 +16372,7 @@ tulip.FontAwesomeIcon = {
   BitbucketSquare : 'bitbucket-square',
   Bitcoin : 'bitcoin',
   BlackTie : 'black-tie',
+  Blind : 'blind',
   Bluetooth : 'bluetooth',
   BluetoothB : 'bluetooth-b',
   Bold : 'bold',
@@ -16353,6 +16381,7 @@ tulip.FontAwesomeIcon = {
   Book : 'book',
   Bookmark : 'bookmark',
   BookmarkO : 'bookmark-o',
+  Braille : 'braille',
   Briefcase : 'briefcase',
   Btc : 'btc',
   Bug : 'bug',
@@ -16455,6 +16484,8 @@ tulip.FontAwesomeIcon = {
   Dashboard : 'dashboard',
   Dashcube : 'dashcube',
   Database : 'database',
+  Deaf : 'deaf',
+  Deafness : 'deafness',
   Dedent : 'dedent',
   Delicious : 'delicious',
   Desktop : 'desktop',
@@ -16465,18 +16496,25 @@ tulip.FontAwesomeIcon = {
   DotCircleO : 'dot-circle-o',
   Download : 'download',
   Dribbble : 'dribbble',
+  DriversLicense : 'drivers-license',
+  DriversLicenseO : 'drivers-license-o',
   Dropbox : 'dropbox',
   Drupal : 'drupal',
   Edge : 'edge',
   Edit : 'edit',
+  Eercast : 'eercast',
   Eject : 'eject',
   EllipsisH : 'ellipsis-h',
   EllipsisV : 'ellipsis-v',
   Empire : 'empire',
   Envelope : 'envelope',
   EnvelopeO : 'envelope-o',
+  EnvelopeOpen : 'envelope-open',
+  EnvelopeOpenO : 'envelope-open-o',
   EnvelopeSquare : 'envelope-square',
+  Envira : 'envira',
   Eraser : 'eraser',
+  Etsy : 'etsy',
   Eur : 'eur',
   Euro : 'euro',
   Exchange : 'exchange',
@@ -16490,6 +16528,7 @@ tulip.FontAwesomeIcon = {
   Eye : 'eye',
   EyeSlash : 'eye-slash',
   Eyedropper : 'eyedropper',
+  Fa : 'fa',
   Facebook : 'facebook',
   FacebookF : 'facebook-f',
   FacebookOfficial : 'facebook-official',
@@ -16524,6 +16563,7 @@ tulip.FontAwesomeIcon = {
   Fire : 'fire',
   FireExtinguisher : 'fire-extinguisher',
   Firefox : 'firefox',
+  FirstOrder : 'first-order',
   Flag : 'flag',
   FlagCheckered : 'flag-checkered',
   FlagO : 'flag-o',
@@ -16536,11 +16576,13 @@ tulip.FontAwesomeIcon = {
   FolderOpen : 'folder-open',
   FolderOpenO : 'folder-open-o',
   Font : 'font',
+  FontAwesome : 'font-awesome',
   Fonticons : 'fonticons',
   FortAwesome : 'fort-awesome',
   Forumbee : 'forumbee',
   Forward : 'forward',
   Foursquare : 'foursquare',
+  FreeCodeCamp : 'free-code-camp',
   FrownO : 'frown-o',
   FutbolO : 'futbol-o',
   Gamepad : 'gamepad',
@@ -16559,15 +16601,21 @@ tulip.FontAwesomeIcon = {
   Github : 'github',
   GithubAlt : 'github-alt',
   GithubSquare : 'github-square',
+  Gitlab : 'gitlab',
   Gittip : 'gittip',
   Glass : 'glass',
+  Glide : 'glide',
+  GlideG : 'glide-g',
   Globe : 'globe',
   Google : 'google',
   GooglePlus : 'google-plus',
+  GooglePlusCircle : 'google-plus-circle',
+  GooglePlusOfficial : 'google-plus-official',
   GooglePlusSquare : 'google-plus-square',
   GoogleWallet : 'google-wallet',
   GraduationCap : 'graduation-cap',
   Gratipay : 'gratipay',
+  Grav : 'grav',
   Group : 'group',
   HSquare : 'h-square',
   HackerNews : 'hacker-news',
@@ -16584,6 +16632,8 @@ tulip.FontAwesomeIcon = {
   HandScissorsO : 'hand-scissors-o',
   HandSpockO : 'hand-spock-o',
   HandStopO : 'hand-stop-o',
+  HandshakeO : 'handshake-o',
+  HardOfHearing : 'hard-of-hearing',
   Hashtag : 'hashtag',
   HddO : 'hdd-o',
   Header : 'header',
@@ -16606,8 +16656,12 @@ tulip.FontAwesomeIcon = {
   Houzz : 'houzz',
   Html5 : 'html5',
   ICursor : 'i-cursor',
+  IdBadge : 'id-badge',
+  IdCard : 'id-card',
+  IdCardO : 'id-card-o',
   Ils : 'ils',
   Image : 'image',
+  Imdb : 'imdb',
   Inbox : 'inbox',
   Indent : 'indent',
   Industry : 'industry',
@@ -16645,6 +16699,7 @@ tulip.FontAwesomeIcon = {
   Link : 'link',
   Linkedin : 'linkedin',
   LinkedinSquare : 'linkedin-square',
+  Linode : 'linode',
   Linux : 'linux',
   List : 'list',
   ListAlt : 'list-alt',
@@ -16656,6 +16711,7 @@ tulip.FontAwesomeIcon = {
   LongArrowLeft : 'long-arrow-left',
   LongArrowRight : 'long-arrow-right',
   LongArrowUp : 'long-arrow-up',
+  LowVision : 'low-vision',
   Magic : 'magic',
   Magnet : 'magnet',
   MailForward : 'mail-forward',
@@ -16676,8 +16732,10 @@ tulip.FontAwesomeIcon = {
   Meanpath : 'meanpath',
   Medium : 'medium',
   Medkit : 'medkit',
+  Meetup : 'meetup',
   MehO : 'meh-o',
   Mercury : 'mercury',
+  Microchip : 'microchip',
   Microphone : 'microphone',
   MicrophoneSlash : 'microphone-slash',
   Minus : 'minus',
@@ -16704,7 +16762,7 @@ tulip.FontAwesomeIcon = {
   Opencart : 'opencart',
   Openid : 'openid',
   Opera : 'opera',
-//  OptinMonster : "optin-monster",
+  // OptinMonster : 'optin-monster',
   Outdent : 'outdent',
   Pagelines : 'pagelines',
   PaintBrush : 'paint-brush',
@@ -16729,6 +16787,7 @@ tulip.FontAwesomeIcon = {
   PieChart : 'pie-chart',
   PiedPiper : 'pied-piper',
   PiedPiperAlt : 'pied-piper-alt',
+  PiedPiperPp : 'pied-piper-pp',
   Pinterest : 'pinterest',
   PinterestP : 'pinterest-p',
   PinterestSquare : 'pinterest-square',
@@ -16741,19 +16800,22 @@ tulip.FontAwesomeIcon = {
   PlusCircle : 'plus-circle',
   PlusSquare : 'plus-square',
   PlusSquareO : 'plus-square-o',
+  Podcast : 'podcast',
   PowerOff : 'power-off',
   Print : 'print',
   ProductHunt : 'product-hunt',
   PuzzlePiece : 'puzzle-piece',
-  Px500 : '500px',
   Qq : 'qq',
   Qrcode : 'qrcode',
   Question : 'question',
   QuestionCircle : 'question-circle',
+  QuestionCircleO : 'question-circle-o',
+  Quora : 'quora',
   QuoteLeft : 'quote-left',
   QuoteRight : 'quote-right',
   Ra : 'ra',
   Random : 'random',
+  Ravelry : 'ravelry',
   Rebel : 'rebel',
   Recycle : 'recycle',
   Reddit : 'reddit',
@@ -16767,6 +16829,7 @@ tulip.FontAwesomeIcon = {
   Repeat : 'repeat',
   Reply : 'reply',
   ReplyAll : 'reply-all',
+  Resistance : 'resistance',
   Retweet : 'retweet',
   Rmb : 'rmb',
   Road : 'road',
@@ -16779,6 +16842,7 @@ tulip.FontAwesomeIcon = {
   Rub : 'rub',
   Ruble : 'ruble',
   Rupee : 'rupee',
+  S15 : 's15',
   Safari : 'safari',
   Save : 'save',
   Scissors : 'scissors',
@@ -16803,9 +16867,12 @@ tulip.FontAwesomeIcon = {
   ShoppingBag : 'shopping-bag',
   ShoppingBasket : 'shopping-basket',
   ShoppingCart : 'shopping-cart',
+  Shower : 'shower',
   SignIn : 'sign-in',
+  SignLanguage : 'sign-language',
   SignOut : 'sign-out',
   Signal : 'signal',
+  Signing : 'signing',
   Simplybuilt : 'simplybuilt',
   Sitemap : 'sitemap',
   Skyatlas : 'skyatlas',
@@ -16814,6 +16881,10 @@ tulip.FontAwesomeIcon = {
   Sliders : 'sliders',
   Slideshare : 'slideshare',
   SmileO : 'smile-o',
+  Snapchat : 'snapchat',
+  SnapchatGhost : 'snapchat-ghost',
+  SnapchatSquare : 'snapchat-square',
+  SnowflakeO : 'snowflake-o',
   SoccerBallO : 'soccer-ball-o',
   Sort : 'sort',
   SortAlphaAsc : 'sort-alpha-asc',
@@ -16859,6 +16930,7 @@ tulip.FontAwesomeIcon = {
   Subway : 'subway',
   Suitcase : 'suitcase',
   SunO : 'sun-o',
+  Superpowers : 'superpowers',
   Superscript : 'superscript',
   Support : 'support',
   Table : 'table',
@@ -16868,6 +16940,7 @@ tulip.FontAwesomeIcon = {
   Tags : 'tags',
   Tasks : 'tasks',
   Taxi : 'taxi',
+  Telegram : 'telegram',
   Television : 'television',
   TencentWeibo : 'tencent-weibo',
   Terminal : 'terminal',
@@ -16876,6 +16949,18 @@ tulip.FontAwesomeIcon = {
   Th : 'th',
   ThLarge : 'th-large',
   ThList : 'th-list',
+  Themeisle : 'themeisle',
+  Thermometer : 'thermometer',
+  Thermometer0 : 'thermometer-0',
+  Thermometer1 : 'thermometer-1',
+  Thermometer2 : 'thermometer-2',
+  Thermometer3 : 'thermometer-3',
+  Thermometer4 : 'thermometer-4',
+  ThermometerEmpty : 'thermometer-empty',
+  ThermometerFull : 'thermometer-full',
+  ThermometerHalf : 'thermometer-half',
+  ThermometerQuarter : 'thermometer-quarter',
+  ThermometerThreeQuarters : 'thermometer-three-quarters',
   ThumbTack : 'thumb-tack',
   ThumbsDown : 'thumbs-down',
   ThumbsODown : 'thumbs-o-down',
@@ -16885,6 +16970,8 @@ tulip.FontAwesomeIcon = {
   Times : 'times',
   TimesCircle : 'times-circle',
   TimesCircleO : 'times-circle-o',
+  TimesRectangle : 'times-rectangle',
+  TimesRectangleO : 'times-rectangle-o',
   Tint : 'tint',
   ToggleDown : 'toggle-down',
   ToggleLeft : 'toggle-left',
@@ -16915,6 +17002,7 @@ tulip.FontAwesomeIcon = {
   Umbrella : 'umbrella',
   Underline : 'underline',
   Undo : 'undo',
+  UniversalAccess : 'universal-access',
   University : 'university',
   Unlink : 'unlink',
   Unlock : 'unlock',
@@ -16924,20 +17012,28 @@ tulip.FontAwesomeIcon = {
   Usb : 'usb',
   Usd : 'usd',
   User : 'user',
+  UserCircle : 'user-circle',
+  UserCircleO : 'user-circle-o',
   UserMd : 'user-md',
+  UserO : 'user-o',
   UserPlus : 'user-plus',
   UserSecret : 'user-secret',
   UserTimes : 'user-times',
   Users : 'users',
+  Vcard : 'vcard',
+  VcardO : 'vcard-o',
   Venus : 'venus',
   VenusDouble : 'venus-double',
   VenusMars : 'venus-mars',
   Viacoin : 'viacoin',
+  Viadeo : 'viadeo',
+  ViadeoSquare : 'viadeo-square',
   VideoCamera : 'video-camera',
   Vimeo : 'vimeo',
   VimeoSquare : 'vimeo-square',
   Vine : 'vine',
   Vk : 'vk',
+  VolumeControlPhone : 'volume-control-phone',
   VolumeDown : 'volume-down',
   VolumeOff : 'volume-off',
   VolumeUp : 'volume-up',
@@ -16947,11 +17043,20 @@ tulip.FontAwesomeIcon = {
   Weixin : 'weixin',
   Whatsapp : 'whatsapp',
   Wheelchair : 'wheelchair',
+  WheelchairAlt : 'wheelchair-alt',
   Wifi : 'wifi',
   WikipediaW : 'wikipedia-w',
+  WindowClose : 'window-close',
+  WindowCloseO : 'window-close-o',
+  WindowMaximize : 'window-maximize',
+  WindowMinimize : 'window-minimize',
+  WindowRestore : 'window-restore',
   Windows : 'windows',
   Won : 'won',
   Wordpress : 'wordpress',
+  Wpbeginner : 'wpbeginner',
+  Wpexplorer : 'wpexplorer',
+  Wpforms : 'wpforms',
   Wrench : 'wrench',
   Xing : 'xing',
   XingSquare : 'xing-square',
@@ -16962,10 +17067,10 @@ tulip.FontAwesomeIcon = {
   YcSquare : 'yc-square',
   Yelp : 'yelp',
   Yen : 'yen',
+  Yoast : 'yoast',
   Youtube : 'youtube',
   YoutubePlay : 'youtube-play',
   YoutubeSquare : 'youtube-square'
-
 };
 
 tulip.MaterialDesignIcons = {
@@ -16979,6 +17084,7 @@ tulip.MaterialDesignIcons = {
   AccountCheck : 'account-check',
   AccountCircle : 'account-circle',
   AccountConvert : 'account-convert',
+  AccountEdit : 'account-edit',
   AccountKey : 'account-key',
   AccountLocation : 'account-location',
   AccountMinus : 'account-minus',
@@ -17017,7 +17123,9 @@ tulip.MaterialDesignIcons = {
   AlertCircle : 'alert-circle',
   AlertCircleOutline : 'alert-circle-outline',
   AlertOctagon : 'alert-octagon',
+  AlertOctagram : 'alert-octagram',
   AlertOutline : 'alert-outline',
+  AllInclusive : 'all-inclusive',
   Alpha : 'alpha',
   Alphabetical : 'alphabetical',
   Altimeter : 'altimeter',
@@ -17030,6 +17138,7 @@ tulip.MaterialDesignIcons = {
   AndroidDebugBridge : 'android-debug-bridge',
   AndroidStudio : 'android-studio',
   Angular : 'angular',
+  Angularjs : 'angularjs',
   Animation : 'animation',
   Apple : 'apple',
   AppleFinder : 'apple-finder',
@@ -17042,7 +17151,6 @@ tulip.MaterialDesignIcons = {
   AppleMobileme : 'apple-mobileme',
   AppleSafari : 'apple-safari',
   Application : 'application',
-  Appnet : 'appnet',
   Apps : 'apps',
   Archive : 'archive',
   ArrangeBringForward : 'arrange-bring-forward',
@@ -17059,6 +17167,7 @@ tulip.MaterialDesignIcons = {
   ArrowDownBoldCircle : 'arrow-down-bold-circle',
   ArrowDownBoldCircleOutline : 'arrow-down-bold-circle-outline',
   ArrowDownBoldHexagonOutline : 'arrow-down-bold-hexagon-outline',
+  ArrowDownBox : 'arrow-down-box',
   ArrowDownDropCircle : 'arrow-down-drop-circle',
   ArrowDownDropCircleOutline : 'arrow-down-drop-circle-outline',
   ArrowExpand : 'arrow-expand',
@@ -17068,6 +17177,7 @@ tulip.MaterialDesignIcons = {
   ArrowLeftBoldCircle : 'arrow-left-bold-circle',
   ArrowLeftBoldCircleOutline : 'arrow-left-bold-circle-outline',
   ArrowLeftBoldHexagonOutline : 'arrow-left-bold-hexagon-outline',
+  ArrowLeftBox : 'arrow-left-box',
   ArrowLeftDropCircle : 'arrow-left-drop-circle',
   ArrowLeftDropCircleOutline : 'arrow-left-drop-circle-outline',
   ArrowRight : 'arrow-right',
@@ -17075,6 +17185,7 @@ tulip.MaterialDesignIcons = {
   ArrowRightBoldCircle : 'arrow-right-bold-circle',
   ArrowRightBoldCircleOutline : 'arrow-right-bold-circle-outline',
   ArrowRightBoldHexagonOutline : 'arrow-right-bold-hexagon-outline',
+  ArrowRightBox : 'arrow-right-box',
   ArrowRightDropCircle : 'arrow-right-drop-circle',
   ArrowRightDropCircleOutline : 'arrow-right-drop-circle-outline',
   ArrowTopLeft : 'arrow-top-left',
@@ -17084,9 +17195,11 @@ tulip.MaterialDesignIcons = {
   ArrowUpBoldCircle : 'arrow-up-bold-circle',
   ArrowUpBoldCircleOutline : 'arrow-up-bold-circle-outline',
   ArrowUpBoldHexagonOutline : 'arrow-up-bold-hexagon-outline',
+  ArrowUpBox : 'arrow-up-box',
   ArrowUpDropCircle : 'arrow-up-drop-circle',
   ArrowUpDropCircleOutline : 'arrow-up-drop-circle-outline',
   Assistant : 'assistant',
+  Asterisk : 'asterisk',
   At : 'at',
   Attachment : 'attachment',
   Audiobook : 'audiobook',
@@ -17171,6 +17284,7 @@ tulip.MaterialDesignIcons = {
   BlurOff : 'blur-off',
   BlurRadial : 'blur-radial',
   Bomb : 'bomb',
+  BombOff : 'bomb-off',
   Bone : 'bone',
   Book : 'book',
   BookMinus : 'book-minus',
@@ -17189,6 +17303,7 @@ tulip.MaterialDesignIcons = {
   BookmarkPlusOutline : 'bookmark-plus-outline',
   BookmarkRemove : 'bookmark-remove',
   Boombox : 'boombox',
+  Bootstrap : 'bootstrap',
   BorderAll : 'border-all',
   BorderBottom : 'border-bottom',
   BorderColor : 'border-color',
@@ -17276,6 +17391,7 @@ tulip.MaterialDesignIcons = {
   Cards : 'cards',
   CardsOutline : 'cards-outline',
   CardsPlayingOutline : 'cards-playing-outline',
+  CardsVariant : 'cards-variant',
   Carrot : 'carrot',
   Cart : 'cart',
   CartOff : 'cart-off',
@@ -17350,6 +17466,7 @@ tulip.MaterialDesignIcons = {
   ClipboardArrowDown : 'clipboard-arrow-down',
   ClipboardArrowLeft : 'clipboard-arrow-left',
   ClipboardCheck : 'clipboard-check',
+  ClipboardFlow : 'clipboard-flow',
   ClipboardOutline : 'clipboard-outline',
   ClipboardText : 'clipboard-text',
   Clippy : 'clippy',
@@ -17368,6 +17485,7 @@ tulip.MaterialDesignIcons = {
   CloseNetwork : 'close-network',
   CloseOctagon : 'close-octagon',
   CloseOctagonOutline : 'close-octagon-outline',
+  CloseOutline : 'close-outline',
   ClosedCaption : 'closed-caption',
   Cloud : 'cloud',
   CloudCheck : 'cloud-check',
@@ -17395,6 +17513,7 @@ tulip.MaterialDesignIcons = {
   CodeTagsCheck : 'code-tags-check',
   Codepen : 'codepen',
   Coffee : 'coffee',
+  CoffeeOutline : 'coffee-outline',
   CoffeeToGo : 'coffee-to-go',
   Coin : 'coin',
   Coins : 'coins',
@@ -17421,6 +17540,7 @@ tulip.MaterialDesignIcons = {
   CompassOutline : 'compass-outline',
   Console : 'console',
   ContactMail : 'contact-mail',
+  Contacts : 'contacts',
   ContentCopy : 'content-copy',
   ContentCut : 'content-cut',
   ContentDuplicate : 'content-duplicate',
@@ -17481,6 +17601,7 @@ tulip.MaterialDesignIcons = {
   DecimalIncrease : 'decimal-increase',
   Delete : 'delete',
   DeleteCircle : 'delete-circle',
+  DeleteEmpty : 'delete-empty',
   DeleteForever : 'delete-forever',
   DeleteSweep : 'delete-sweep',
   DeleteVariant : 'delete-variant',
@@ -17536,6 +17657,8 @@ tulip.MaterialDesignIcons = {
   Duck : 'duck',
   Dumbbell : 'dumbbell',
   Earth : 'earth',
+  EarthBox : 'earth-box',
+  EarthBoxOff : 'earth-box-off',
   EarthOff : 'earth-off',
   Edge : 'edge',
   Eject : 'eject',
@@ -17543,6 +17666,7 @@ tulip.MaterialDesignIcons = {
   ElevationRise : 'elevation-rise',
   Elevator : 'elevator',
   Email : 'email',
+  EmailAlert : 'email-alert',
   EmailOpen : 'email-open',
   EmailOpenOutline : 'email-open-outline',
   EmailOutline : 'email-outline',
@@ -17577,6 +17701,8 @@ tulip.MaterialDesignIcons = {
   Export : 'export',
   Eye : 'eye',
   EyeOff : 'eye-off',
+  EyeOutline : 'eye-outline',
+  EyeOutlineOff : 'eye-outline-off',
   Eyedropper : 'eyedropper',
   EyedropperVariant : 'eyedropper-variant',
   Face : 'face',
@@ -17587,7 +17713,9 @@ tulip.MaterialDesignIcons = {
   Factory : 'factory',
   Fan : 'fan',
   FastForward : 'fast-forward',
+  FastForwardOutline : 'fast-forward-outline',
   Fax : 'fax',
+  Feather : 'feather',
   Ferry : 'ferry',
   File : 'file',
   FileChart : 'file-chart',
@@ -17627,6 +17755,7 @@ tulip.MaterialDesignIcons = {
   FilterRemove : 'filter-remove',
   FilterRemoveOutline : 'filter-remove-outline',
   FilterVariant : 'filter-variant',
+  FindReplace : 'find-replace',
   Fingerprint : 'fingerprint',
   Fire : 'fire',
   Firefox : 'firefox',
@@ -17640,6 +17769,7 @@ tulip.MaterialDesignIcons = {
   Flash : 'flash',
   FlashAuto : 'flash-auto',
   FlashOff : 'flash-off',
+  FlashOutline : 'flash-outline',
   FlashRedEye : 'flash-red-eye',
   Flashlight : 'flashlight',
   FlashlightOff : 'flashlight-off',
@@ -17668,6 +17798,7 @@ tulip.MaterialDesignIcons = {
   FolderRemove : 'folder-remove',
   FolderStar : 'folder-star',
   FolderUpload : 'folder-upload',
+  FontAwesome : 'font-awesome',
   Food : 'food',
   FoodApple : 'food-apple',
   FoodForkDrink : 'food-fork-drink',
@@ -17689,6 +17820,7 @@ tulip.MaterialDesignIcons = {
   FormatFloatLeft : 'format-float-left',
   FormatFloatNone : 'format-float-none',
   FormatFloatRight : 'format-float-right',
+  FormatFont : 'format-font',
   FormatHeader1 : 'format-header-1',
   FormatHeader2 : 'format-header-2',
   FormatHeader3 : 'format-header-3',
@@ -17711,9 +17843,12 @@ tulip.MaterialDesignIcons = {
   FormatListBulleted : 'format-list-bulleted',
   FormatListBulletedType : 'format-list-bulleted-type',
   FormatListNumbers : 'format-list-numbers',
+  FormatPageBreak : 'format-page-break',
   FormatPaint : 'format-paint',
   FormatParagraph : 'format-paragraph',
+  FormatPilcrow : 'format-pilcrow',
   FormatQuote : 'format-quote',
+  FormatRotate90 : 'format-rotate-90',
   FormatSection : 'format-section',
   FormatSize : 'format-size',
   FormatStrikethrough : 'format-strikethrough',
@@ -17744,6 +17879,8 @@ tulip.MaterialDesignIcons = {
   Function : 'function',
   Gamepad : 'gamepad',
   GamepadVariant : 'gamepad-variant',
+  Garage : 'garage',
+  GarageOpen : 'garage-open',
   GasCylinder : 'gas-cylinder',
   GasStation : 'gas-station',
   Gate : 'gate',
@@ -17758,6 +17895,7 @@ tulip.MaterialDesignIcons = {
   Git : 'git',
   GithubBox : 'github-box',
   GithubCircle : 'github-circle',
+  GithubFace : 'github-face',
   GlassFlute : 'glass-flute',
   GlassMug : 'glass-mug',
   GlassStange : 'glass-stange',
@@ -17779,9 +17917,11 @@ tulip.MaterialDesignIcons = {
   GoogleDrive : 'google-drive',
   GoogleEarth : 'google-earth',
   GoogleGlass : 'google-glass',
+  GoogleKeep : 'google-keep',
   GoogleMaps : 'google-maps',
   GoogleNearby : 'google-nearby',
   GooglePages : 'google-pages',
+  GooglePhotos : 'google-photos',
   GooglePhysicalWeb : 'google-physical-web',
   GooglePlay : 'google-play',
   GooglePlus : 'google-plus',
@@ -17812,12 +17952,16 @@ tulip.MaterialDesignIcons = {
   HeartBox : 'heart-box',
   HeartBoxOutline : 'heart-box-outline',
   HeartBroken : 'heart-broken',
+  HeartHalfOutline : 'heart-half-outline',
+  HeartHalfPart : 'heart-half-part',
+  HeartHalfPartOutline : 'heart-half-part-outline',
   HeartOutline : 'heart-outline',
   HeartPulse : 'heart-pulse',
   Help : 'help',
   HelpCircle : 'help-circle',
   HelpCircleOutline : 'help-circle-outline',
   Hexagon : 'hexagon',
+  HexagonMultiple : 'hexagon-multiple',
   HexagonOutline : 'hexagon-outline',
   Highway : 'highway',
   History : 'history',
@@ -17827,6 +17971,8 @@ tulip.MaterialDesignIcons = {
   HomeModern : 'home-modern',
   HomeOutline : 'home-outline',
   HomeVariant : 'home-variant',
+  Hook : 'hook',
+  HookOff : 'hook-off',
   Hops : 'hops',
   Hospital : 'hospital',
   HospitalBuilding : 'hospital-building',
@@ -17865,6 +18011,7 @@ tulip.MaterialDesignIcons = {
   InboxArrowDown : 'inbox-arrow-down',
   InboxArrowUp : 'inbox-arrow-up',
   Incognito : 'incognito',
+  Infinity : 'infinity',
   Information : 'information',
   InformationOutline : 'information-outline',
   InformationVariant : 'information-variant',
@@ -17911,9 +18058,12 @@ tulip.MaterialDesignIcons = {
   LanguagePhp : 'language-php',
   LanguagePython : 'language-python',
   LanguagePythonText : 'language-python-text',
+  LanguageSwift : 'language-swift',
+  LanguageTypescript : 'language-typescript',
   Laptop : 'laptop',
   LaptopChromebook : 'laptop-chromebook',
   LaptopMac : 'laptop-mac',
+  LaptopOff : 'laptop-off',
   LaptopWindows : 'laptop-windows',
   Lastfm : 'lastfm',
   Launch : 'launch',
@@ -17932,6 +18082,8 @@ tulip.MaterialDesignIcons = {
   LibraryMusic : 'library-music',
   LibraryPlus : 'library-plus',
   Lightbulb : 'lightbulb',
+  LightbulbOn : 'lightbulb-on',
+  LightbulbOnOutline : 'lightbulb-on-outline',
   LightbulbOutline : 'lightbulb-outline',
   Link : 'link',
   LinkOff : 'link-off',
@@ -17944,20 +18096,25 @@ tulip.MaterialDesignIcons = {
   LockOpen : 'lock-open',
   LockOpenOutline : 'lock-open-outline',
   LockOutline : 'lock-outline',
+  LockPattern : 'lock-pattern',
   LockPlus : 'lock-plus',
   Login : 'login',
   LoginVariant : 'login-variant',
   Logout : 'logout',
   LogoutVariant : 'logout-variant',
   Looks : 'looks',
+  Loop : 'loop',
   Loupe : 'loupe',
   Lumx : 'lumx',
   Magnet : 'magnet',
   MagnetOn : 'magnet-on',
   Magnify : 'magnify',
   MagnifyMinus : 'magnify-minus',
+  MagnifyMinusOutline : 'magnify-minus-outline',
   MagnifyPlus : 'magnify-plus',
+  MagnifyPlusOutline : 'magnify-plus-outline',
   MailRu : 'mail-ru',
+  Mailbox : 'mailbox',
   Map : 'map',
   MapMarker : 'map-marker',
   MapMarkerCircle : 'map-marker-circle',
@@ -17975,6 +18132,7 @@ tulip.MaterialDesignIcons = {
   MathCompass : 'math-compass',
   Matrix : 'matrix',
   Maxcdn : 'maxcdn',
+  MedicalBag : 'medical-bag',
   Medium : 'medium',
   Memory : 'memory',
   Menu : 'menu',
@@ -17995,6 +18153,8 @@ tulip.MaterialDesignIcons = {
   MessageProcessing : 'message-processing',
   MessageReply : 'message-reply',
   MessageReplyText : 'message-reply-text',
+  MessageSettings : 'message-settings',
+  MessageSettingsVariant : 'message-settings-variant',
   MessageText : 'message-text',
   MessageTextOutline : 'message-text-outline',
   MessageVideo : 'message-video',
@@ -18010,6 +18170,7 @@ tulip.MaterialDesignIcons = {
   Minecraft : 'minecraft',
   Minus : 'minus',
   MinusBox : 'minus-box',
+  MinusBoxOutline : 'minus-box-outline',
   MinusCircle : 'minus-circle',
   MinusCircleOutline : 'minus-circle-outline',
   MinusNetwork : 'minus-network',
@@ -18046,6 +18207,10 @@ tulip.MaterialDesignIcons = {
   Needle : 'needle',
   NestProtect : 'nest-protect',
   NestThermostat : 'nest-thermostat',
+  Network : 'network',
+  NetworkDownload : 'network-download',
+  NetworkQuestion : 'network-question',
+  NetworkUpload : 'network-upload',
   NewBox : 'new-box',
   Newspaper : 'newspaper',
   Nfc : 'nfc',
@@ -18060,6 +18225,7 @@ tulip.MaterialDesignIcons = {
   NotePlusOutline : 'note-plus-outline',
   NoteText : 'note-text',
   NotificationClearAll : 'notification-clear-all',
+  Npm : 'npm',
   Nuke : 'nuke',
   Numeric : 'numeric',
   Numeric0Box : 'numeric-0-box',
@@ -18095,10 +18261,12 @@ tulip.MaterialDesignIcons = {
   Numeric9PlusBox : 'numeric-9-plus-box',
   Numeric9PlusBoxMultipleOutline : 'numeric-9-plus-box-multiple-outline',
   Numeric9PlusBoxOutline : 'numeric-9-plus-box-outline',
+  Nut : 'nut',
   Nutrition : 'nutrition',
   Oar : 'oar',
   Octagon : 'octagon',
   OctagonOutline : 'octagon-outline',
+  Octagram : 'octagram',
   Odnoklassniki : 'odnoklassniki',
   Office : 'office',
   Oil : 'oil',
@@ -18120,6 +18288,11 @@ tulip.MaterialDesignIcons = {
   PackageVariantClosed : 'package-variant-closed',
   PageFirst : 'page-first',
   PageLast : 'page-last',
+  PageLayoutBody : 'page-layout-body',
+  PageLayoutFooter : 'page-layout-footer',
+  PageLayoutHeader : 'page-layout-header',
+  PageLayoutSidebarLeft : 'page-layout-sidebar-left',
+  PageLayoutSidebarRight : 'page-layout-sidebar-right',
   Palette : 'palette',
   PaletteAdvanced : 'palette-advanced',
   Panda : 'panda',
@@ -18143,8 +18316,11 @@ tulip.MaterialDesignIcons = {
   Pencil : 'pencil',
   PencilBox : 'pencil-box',
   PencilBoxOutline : 'pencil-box-outline',
+  PencilCircle : 'pencil-circle',
   PencilLock : 'pencil-lock',
   PencilOff : 'pencil-off',
+  Pentagon : 'pentagon',
+  PentagonOutline : 'pentagon-outline',
   Percent : 'percent',
   Pharmacy : 'pharmacy',
   Phone : 'phone',
@@ -18168,12 +18344,14 @@ tulip.MaterialDesignIcons = {
   Piano : 'piano',
   Pig : 'pig',
   Pill : 'pill',
+  Pillar : 'pillar',
   Pin : 'pin',
   PinOff : 'pin-off',
   PineTree : 'pine-tree',
   PineTreeBox : 'pine-tree-box',
   Pinterest : 'pinterest',
   PinterestBox : 'pinterest-box',
+  Pistol : 'pistol',
   Pizza : 'pizza',
   PlaneShield : 'plane-shield',
   Play : 'play',
@@ -18191,11 +18369,13 @@ tulip.MaterialDesignIcons = {
   Plex : 'plex',
   Plus : 'plus',
   PlusBox : 'plus-box',
+  PlusBoxOutline : 'plus-box-outline',
   PlusCircle : 'plus-circle',
   PlusCircleMultipleOutline : 'plus-circle-multiple-outline',
   PlusCircleOutline : 'plus-circle-outline',
   PlusNetwork : 'plus-network',
   PlusOne : 'plus-one',
+  PlusOutline : 'plus-outline',
   Pocket : 'pocket',
   Pokeball : 'pokeball',
   Polaroid : 'polaroid',
@@ -18213,11 +18393,13 @@ tulip.MaterialDesignIcons = {
   PowerPlugOff : 'power-plug-off',
   PowerSettings : 'power-settings',
   PowerSocket : 'power-socket',
+  Prescription : 'prescription',
   Presentation : 'presentation',
   PresentationPlay : 'presentation-play',
   Printer : 'printer',
   Printer3d : 'printer-3d',
   PrinterAlert : 'printer-alert',
+  PrinterSettings : 'printer-settings',
   PriorityHigh : 'priority-high',
   PriorityLow : 'priority-low',
   ProfessionalHexagon : 'professional-hexagon',
@@ -18248,6 +18430,7 @@ tulip.MaterialDesignIcons = {
   RayStartEnd : 'ray-start-end',
   RayVertex : 'ray-vertex',
   Rdio : 'rdio',
+  React : 'react',
   Read : 'read',
   Readability : 'readability',
   Receipt : 'receipt',
@@ -18274,15 +18457,19 @@ tulip.MaterialDesignIcons = {
   Reproduction : 'reproduction',
   ResizeBottomRight : 'resize-bottom-right',
   Responsive : 'responsive',
+  Restart : 'restart',
   Restore : 'restore',
   Rewind : 'rewind',
+  RewindOutline : 'rewind-outline',
+  Rhombus : 'rhombus',
+  RhombusOutline : 'rhombus-outline',
   Ribbon : 'ribbon',
   Road : 'road',
   RoadVariant : 'road-variant',
   Robot : 'robot',
   Rocket : 'rocket',
+  Roomba : 'roomba',
   Rotate3d : 'rotate-3d',
-  Rotate90 : 'rotate-90',
   RotateLeft : 'rotate-left',
   RotateLeftVariant : 'rotate-left-variant',
   RotateRight : 'rotate-right',
@@ -18295,6 +18482,7 @@ tulip.MaterialDesignIcons = {
   RssBox : 'rss-box',
   Ruler : 'ruler',
   Run : 'run',
+  RunFast : 'run-fast',
   Sale : 'sale',
   Satellite : 'satellite',
   SatelliteVariant : 'satellite-variant',
@@ -18310,6 +18498,7 @@ tulip.MaterialDesignIcons = {
   Script : 'script',
   Sd : 'sd',
   Seal : 'seal',
+  SearchWeb : 'search-web',
   SeatFlat : 'seat-flat',
   SeatFlatAngled : 'seat-flat-angled',
   SeatIndividualSuite : 'seat-individual-suite',
@@ -18349,6 +18538,8 @@ tulip.MaterialDesignIcons = {
   ShieldOutline : 'shield-outline',
   Shopping : 'shopping',
   ShoppingMusic : 'shopping-music',
+  Shovel : 'shovel',
+  ShovelOff : 'shovel-off',
   Shredder : 'shredder',
   Shuffle : 'shuffle',
   ShuffleDisabled : 'shuffle-disabled',
@@ -18357,6 +18548,11 @@ tulip.MaterialDesignIcons = {
   SigmaLower : 'sigma-lower',
   SignCaution : 'sign-caution',
   Signal : 'signal',
+  Signal2g : 'signal-2g',
+  Signal3g : 'signal-3g',
+  Signal4g : 'signal-4g',
+  SignalHspa : 'signal-hspa',
+  SignalHspaPlus : 'signal-hspa-plus',
   SignalVariant : 'signal-variant',
   Silverware : 'silverware',
   SilverwareFork : 'silverware-fork',
@@ -18383,6 +18579,7 @@ tulip.MaterialDesignIcons = {
   Smoking : 'smoking',
   SmokingOff : 'smoking-off',
   Snapchat : 'snapchat',
+  Snowflake : 'snowflake',
   Snowman : 'snowman',
   Soccer : 'soccer',
   Sofa : 'sofa',
@@ -18395,11 +18592,19 @@ tulip.MaterialDesignIcons = {
   SortVariant : 'sort-variant',
   Soundcloud : 'soundcloud',
   SourceBranch : 'source-branch',
+  SourceCommit : 'source-commit',
+  SourceCommitEnd : 'source-commit-end',
+  SourceCommitEndLocal : 'source-commit-end-local',
+  SourceCommitLocal : 'source-commit-local',
+  SourceCommitNextLocal : 'source-commit-next-local',
+  SourceCommitStart : 'source-commit-start',
+  SourceCommitStartNextLocal : 'source-commit-start-next-local',
   SourceFork : 'source-fork',
   SourceMerge : 'source-merge',
   SourcePull : 'source-pull',
   Speaker : 'speaker',
   SpeakerOff : 'speaker-off',
+  SpeakerWireless : 'speaker-wireless',
   Speedometer : 'speedometer',
   Spellcheck : 'spellcheck',
   Spotify : 'spotify',
@@ -18410,6 +18615,7 @@ tulip.MaterialDesignIcons = {
   SquareIncCash : 'square-inc-cash',
   Stackexchange : 'stackexchange',
   Stackoverflow : 'stackoverflow',
+  Stadium : 'stadium',
   Stairs : 'stairs',
   Star : 'star',
   StarCircle : 'star-circle',
@@ -18437,6 +18643,7 @@ tulip.MaterialDesignIcons = {
   SubwayVariant : 'subway-variant',
   Sunglasses : 'sunglasses',
   SurroundSound : 'surround-sound',
+  Svg : 'svg',
   SwapHorizontal : 'swap-horizontal',
   SwapVertical : 'swap-vertical',
   Swim : 'swim',
@@ -18466,6 +18673,8 @@ tulip.MaterialDesignIcons = {
   TagHeart : 'tag-heart',
   TagMultiple : 'tag-multiple',
   TagOutline : 'tag-outline',
+  TagPlus : 'tag-plus',
+  TagRemove : 'tag-remove',
   TagTextOutline : 'tag-text-outline',
   Target : 'target',
   Taxi : 'taxi',
@@ -18497,7 +18706,9 @@ tulip.MaterialDesignIcons = {
   Ticket : 'ticket',
   TicketAccount : 'ticket-account',
   TicketConfirmation : 'ticket-confirmation',
+  TicketPercent : 'ticket-percent',
   Tie : 'tie',
+  Tilde : 'tilde',
   Timelapse : 'timelapse',
   Timer : 'timer',
   Timer10 : 'timer-10',
@@ -18526,6 +18737,7 @@ tulip.MaterialDesignIcons = {
   Transfer : 'transfer',
   TransitTransfer : 'transit-transfer',
   Translate : 'translate',
+  TreasureChest : 'treasure-chest',
   Tree : 'tree',
   Trello : 'trello',
   TrendingDown : 'trending-down',
@@ -18540,6 +18752,7 @@ tulip.MaterialDesignIcons = {
   TrophyVariantOutline : 'trophy-variant-outline',
   Truck : 'truck',
   TruckDelivery : 'truck-delivery',
+  TruckTrailer : 'truck-trailer',
   TshirtCrew : 'tshirt-crew',
   TshirtV : 'tshirt-v',
   Tumblr : 'tumblr',
@@ -18599,7 +18812,9 @@ tulip.MaterialDesignIcons = {
   ViewHeadline : 'view-headline',
   ViewList : 'view-list',
   ViewModule : 'view-module',
+  ViewParallel : 'view-parallel',
   ViewQuilt : 'view-quilt',
+  ViewSequential : 'view-sequential',
   ViewStream : 'view-stream',
   ViewWeek : 'view-week',
   Vimeo : 'vimeo',
@@ -18623,6 +18838,7 @@ tulip.MaterialDesignIcons = {
   WalletMembership : 'wallet-membership',
   WalletTravel : 'wallet-travel',
   Wan : 'wan',
+  WashingMachine : 'washing-machine',
   Watch : 'watch',
   WatchExport : 'watch-export',
   WatchImport : 'watch-import',
@@ -18652,6 +18868,7 @@ tulip.MaterialDesignIcons = {
   Web : 'web',
   Webcam : 'webcam',
   Webhook : 'webhook',
+  Webpack : 'webpack',
   Wechat : 'wechat',
   Weight : 'weight',
   WeightKilogram : 'weight-kilogram',
@@ -18661,9 +18878,11 @@ tulip.MaterialDesignIcons = {
   WhiteBalanceIncandescent : 'white-balance-incandescent',
   WhiteBalanceIridescent : 'white-balance-iridescent',
   WhiteBalanceSunny : 'white-balance-sunny',
+  Widgets : 'widgets',
   Wifi : 'wifi',
   WifiOff : 'wifi-off',
   Wii : 'wii',
+  Wiiu : 'wiiu',
   Wikipedia : 'wikipedia',
   WindowClose : 'window-close',
   WindowClosed : 'window-closed',
@@ -18690,42 +18909,7 @@ tulip.MaterialDesignIcons = {
   Yelp : 'yelp',
   YinYang : 'yin-yang',
   YoutubePlay : 'youtube-play',
-  ZipBox : 'zip-box',
-
-  AmericanSignLanguageInterpreting : 'american-sign-language-interpreting',
-  AslInterpreting : 'asl-interpreting',
-  AssistiveListeningSystems : 'assistive-listening-systems',
-  AudioDescription : 'audio-description',
-  Blind : 'blind',
-  Braille : 'braille',
-  Deaf : 'deaf',
-  Deafness : 'deafness',
-  Envira : 'envira',
-  Fa : 'fa',
-  FirstOrder : 'first-order',
-  FontAwesome : 'font-awesome',
-  Gitlab : 'gitlab',
-  Glide : 'glide',
-  GlideG : 'glide-g',
-  GooglePlusCircle : 'google-plus-circle',
-  GooglePlusOfficial : 'google-plus-official',
-  HardOfHearing : 'hard-of-hearing',
-  LowVision : 'low-vision',
-  QuestionCircleO : 'question-circle-o',
-  SignLanguage : 'sign-language',
-  Signing : 'signing',
-  Snapchat : 'snapchat',
-  SnapchatGhost : 'snapchat-ghost',
-  SnapchatSquare : 'snapchat-square',
-  Themeisle : 'themeisle',
-  UniversalAccess : 'universal-access',
-  Viadeo : 'viadeo',
-  ViadeoSquare : 'viadeo-square',
-  VolumeControlPhone : 'volume-control-phone',
-  WheelchairAlt : 'wheelchair-alt',
-  Wpbeginner : 'wpbeginner',
-  Wpforms : 'wpforms',
-  Yoast : 'yoast'
+  ZipBox : 'zip-box'
 
 };
 
