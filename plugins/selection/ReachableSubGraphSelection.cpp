@@ -106,23 +106,24 @@ bool ReachableSubGraphSelection::run() {
     Iterator<node> *itN =
         (result == startNodes) ? new StableIterator<tlp::node>(startNodes->getNodesEqualTo(true)) : startNodes->getNodesEqualTo(true);
 
-    std::set<node> reachables;
+    TLP_HASH_MAP<node, bool> reachables;
 
     result->setAllEdgeValue(false);
     result->setAllNodeValue(false);
 
     // iterate on startNodes add them and their reachables
-    for (node current : itN) {
-      reachables.insert(current);
-      reachableNodes(graph, current, reachables, maxDistance, edgeDirection);
+    node current;
+    forEach(current, itN) {
+      reachables[current] = true;
+      markReachableNodes(graph, current, reachables, maxDistance, edgeDirection);
     }
 
-    std::set<node>::const_iterator itr = reachables.begin();
-    std::set<node>::const_iterator ite = reachables.end();
+    TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
+    TLP_HASH_MAP<node, bool>::const_iterator ite = reachables.end();
 
     // select nodes
     while (itr != ite) {
-      result->setNodeValue((*itr), true);
+      result->setNodeValue(itr->first, true);
       ++itr;
       ++num_nodes;
     }
@@ -131,7 +132,7 @@ bool ReachableSubGraphSelection::run() {
     for (edge e : graph->getEdges()) {
       const std::pair<node, node> &ends = graph->ends(e);
 
-      if (result->getNodeValue(ends.first) && result->getNodeValue(ends.second)) {
+      if ((reachables.find(ends.first) != ite) && (reachables.find(ends.second) != ite)) {
         result->setEdgeValue(e, true);
         ++num_edges;
       }

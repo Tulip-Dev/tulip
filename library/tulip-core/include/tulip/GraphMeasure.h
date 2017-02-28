@@ -91,9 +91,20 @@ TLP_SCOPE unsigned int maxDistance(const Graph *graph, const node n, MutableCont
  * at distance less or equal to maxDistance of startNode.
  * If direction is set to UNDIRECTED use undirected graph, DIRECTED use directed graph
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
+ * WARNING: this function is deprecated use markReachableNodes instead
  */
-TLP_SCOPE void reachableNodes(const Graph *graph, const node startNode, std::set<node> &result, unsigned int maxDistance,
-                              EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNode, std::set<node> &result, unsigned int maxDistance,
+                                          EDGE_TYPE direction = UNDIRECTED);
+/*
+ * mark as reachable (set value in "reachables" hash map to true),
+ * all the nodes, according to direction,
+ * at distance less or equal to maxDistance of startNode.
+ * If direction is set to UNDIRECTED use undirected graph,
+ * DIRECTED use directed graph
+ * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
+ */
+TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
+                                  EDGE_TYPE direction = UNDIRECTED);
 }
 #endif
 ///@endcond
