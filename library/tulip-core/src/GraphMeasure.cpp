@@ -169,7 +169,7 @@ unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
   node n;
   forEach(n, graph->getNodes())
-    maxdeg = std::max(maxdeg, graph->deg(n));
+  maxdeg = std::max(maxdeg, graph->deg(n));
 
   return maxdeg;
 }
@@ -178,7 +178,7 @@ unsigned int tlp::minDegree(const Graph *graph) {
   unsigned int mindeg = graph->numberOfNodes();
   node n;
   forEach(n, graph->getNodes())
-    mindeg = std::min(mindeg, graph->deg(n));
+  mindeg = std::min(mindeg, graph->deg(n));
 
   return mindeg;
 }
@@ -198,9 +198,9 @@ void tlp::reachableNodes(const Graph *graph, const node startNode,
 }
 //================================================================
 void tlp::markReachableNodes(const Graph *graph, const node startNode,
-			     TLP_HASH_MAP<node, bool> &result,
-			     unsigned int maxDistance,
-			     EDGE_TYPE direction) {
+                             TLP_HASH_MAP<node, bool> &result,
+                             unsigned int maxDistance,
+                             EDGE_TYPE direction) {
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
@@ -215,7 +215,7 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode,
     node current = fifo.front();
     unsigned int curDist = distance.get(current.id);
     fifo.pop_front();
-    
+
     if (curDist < maxDistance) {
       Iterator<node> *itN = getIt(graph, current, direction);
 
@@ -259,6 +259,7 @@ void tlp::clusteringCoefficient(const Graph *graph,
           ++nbEdge;
         }
       }
+
       delete itE;
       ++itr;
     }
@@ -298,7 +299,8 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
     node child;
     unsigned int curLevel = level.get(current.id) + 1;
     forEach(child, graph->getOutNodes(current)) {
-      unsigned int childLevel = totreat.get(child.id); 
+      unsigned int childLevel = totreat.get(child.id);
+
       if (childLevel > 0)
         totreat.set(child.id, childLevel - 1);
       else {

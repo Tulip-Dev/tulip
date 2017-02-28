@@ -127,7 +127,7 @@ bool ReachableSubGraphSelection::run() {
     forEach(current, itN) {
       reachables[current] = true;
       markReachableNodes(graph, current, reachables, maxDistance,
-			edgeDirection);
+                         edgeDirection);
     }
 
     TLP_HASH_MAP<node, bool>::const_iterator itr = reachables.begin();
@@ -146,7 +146,7 @@ bool ReachableSubGraphSelection::run() {
       const std::pair<node, node>& ends = graph->ends(e);
 
       if ((reachables.find(ends.first) != ite) &&
-	  (reachables.find(ends.second) != ite)) {
+          (reachables.find(ends.second) != ite)) {
         result->setEdgeValue(e, true);
         ++num_edges;
       }
