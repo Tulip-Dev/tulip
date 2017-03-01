@@ -39,24 +39,14 @@ enum EDGE_TYPE { DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2 };
  * the shorted distance is set to 0.
  * see http://en.wikipedia.org/wiki/Average_path_length for more details
  */
-TLP_SCOPE double averagePathLength(const Graph *g, PluginProgress * = nullptr);
-// obsolete version for compatibility purpose
-inline bool averagePathLength(Graph *g, double &result, PluginProgress *pp = nullptr) {
-  result = averagePathLength(g, pp);
-  return true;
-}
+TLP_SCOPE double averagePathLength(const Graph *g, PluginProgress * = NULL);
 /*
  * return the clustering coefficient of a graph
  * as the average of the local clustering coefficients
  * (see clusteringCoefficient function) of all the nodes.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details.
  */
-TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = nullptr);
-// obsolete version for compatibility purpose
-inline bool averageCluster(Graph *g, double &result, PluginProgress *pp = nullptr) {
-  result = averageClusteringCoefficient(g, pp);
-  return true;
-}
+TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = NULL);
 /*
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
@@ -105,6 +95,6 @@ TLP_SCOPE _DEPRECATED void reachableNodes(const Graph *graph, const node startNo
  */
 TLP_SCOPE void markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_MAP<node, bool> &reachables, unsigned int maxDistance,
                                   EDGE_TYPE direction = UNDIRECTED);
-}
+} // namespace tlp
 #endif
 ///@endcond
