@@ -69,6 +69,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   node n;
   forEach(n, sg->getNodes()) {
     unsigned int level = levels.get(n.id);
+
     while (level>=grid.size()) grid.push_back(vector<node>());
 
     embedding->setNodeValue(n, grid[level].size());
@@ -95,7 +96,7 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg,unsigned int freeL
     double sum = embedding->getNodeValue(n);
     node it;
     forEach(it, sg->getInOutNodes(n))
-      sum += embedding->getNodeValue(it);
+    sum += embedding->getNodeValue(it);
     embedding->setNodeValue(n, sum / (double(sg->deg(n)) + 1.0 ) );
   }
 
