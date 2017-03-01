@@ -45,7 +45,6 @@ HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext *context) : Layout
   addNodeSizePropertyParameter(this);
   addInParameter<StringCollection>("orientation", paramHelp[0], ORIENTATION, true, "horizontal <br> vertical");
   addSpacingParameters(this);
-  addDependency("Dag Level", "1.0");
   addDependency("Hierarchical Tree (R-T Extended)", "1.1");
 }
 //================================================================================
@@ -62,17 +61,13 @@ public:
 };
 //================================================================================
 void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
-  string erreurMsg;
-  DoubleProperty dagLevel(sg);
+  //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
+  MutableContainer<unsigned int> levels;
+  dagLevel(graph, levels, pluginProgress);
 
-  if (!sg->applyPropertyAlgorithm("Dag Level", &dagLevel, erreurMsg)) {
-    tlp::warning() << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
-    return;
-  }
-
-  for (node n : sg->getNodes()) {
-    unsigned int level = (unsigned int)dagLevel.getNodeValue(n);
-
+  node n;
+  forEach(n, sg->getNodes()) {
+    unsigned int level = levels.get(n.id);
     while (level >= grid.size())
       grid.push_back(vector<node>());
 
@@ -97,9 +92,17 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg, unsigned int free
   for (it = grid[freeLayer].begin(); it != grid[freeLayer].end(); ++it) {
     node n = *it;
     double sum = embedding->getNodeValue(n);
-    for (node it : sg->getInOutNodes(n))
-      sum += embedding->getNodeValue(it);
+    node it;
+    forEach(it, sg->getInOutNodes(n)) sum += embedding->getNodeValue(it);
     embedding->setNodeValue(n, sum / (double(sg->deg(n)) + 1.0));
+  }
+
+  /*
+  stable_sort(grid[freeLayer].begin(), grid[freeLayer].end(), lessNode);
+  unsigned int j = 0;
+  for (it=grid[freeLayer].begin();it!=grid[freeLayer].end();++it) {
+    embedding->setNodeValue(*it,j);
+    j++;
   }
 }
 
