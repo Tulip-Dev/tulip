@@ -47,7 +47,6 @@ HierarchicalGraph::HierarchicalGraph(const tlp::PluginContext* context):LayoutAl
   addNodeSizePropertyParameter(this);
   addInParameter<StringCollection> ("orientation", paramHelp[0], ORIENTATION, true, "horizontal <br> vertical");
   addSpacingParameters(this);
-  addDependency("Dag Level", "1.0");
   addDependency("Hierarchical Tree (R-T Extended)", "1.1");
 }
 //================================================================================
@@ -64,18 +63,12 @@ public:
 //================================================================================
 void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
-  string erreurMsg;
-  DoubleProperty dagLevel(sg);
-
-  if(!sg->applyPropertyAlgorithm("Dag Level", &dagLevel,erreurMsg)) {
-    tlp::warning() << "[ERROR] : " << erreurMsg << __PRETTY_FUNCTION__ << endl;
-    return;
-  }
+  MutableContainer<unsigned int> levels;
+  dagLevel(graph, levels, pluginProgress);
 
   node n;
   forEach(n, sg->getNodes()) {
-    unsigned int level=(unsigned int)dagLevel.getNodeValue(n);
-
+    unsigned int level = levels.get(n.id);
     while (level>=grid.size()) grid.push_back(vector<node>());
 
     embedding->setNodeValue(n, grid[level].size());
@@ -102,7 +95,7 @@ void HierarchicalGraph::twoLayerCrossReduction(tlp::Graph *sg,unsigned int freeL
     double sum = embedding->getNodeValue(n);
     node it;
     forEach(it, sg->getInOutNodes(n))
-    sum += embedding->getNodeValue(it);
+      sum += embedding->getNodeValue(it);
     embedding->setNodeValue(n, sum / (double(sg->deg(n)) + 1.0 ) );
   }
 
