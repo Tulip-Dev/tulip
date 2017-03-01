@@ -40,11 +40,6 @@ enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
  * see http://en.wikipedia.org/wiki/Average_path_length for more details
  */
 TLP_SCOPE double averagePathLength(const Graph* g, PluginProgress* = NULL);
-// obsolete version for compatibility purpose
-inline bool averagePathLength(Graph *g, double& result, PluginProgress *pp = NULL) {
-  result = averagePathLength(g, pp);
-  return true;
-}
 /*
  * return the clustering coefficient of a graph
  * as the average of the local clustering coefficients
@@ -52,11 +47,6 @@ inline bool averagePathLength(Graph *g, double& result, PluginProgress *pp = NUL
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details.
  */
 TLP_SCOPE double averageClusteringCoefficient(const Graph *, PluginProgress * = NULL);
-// obsolete version for compatibility purpose
-inline bool averageCluster(Graph* g, double& result, PluginProgress* pp = NULL) {
-  result = averageClusteringCoefficient(g, pp);
-  return true;
-}
 /*
  * assign to each node its local clustering coefficient
  * that is the proportion of edges between the nodes within its neighbourhood
