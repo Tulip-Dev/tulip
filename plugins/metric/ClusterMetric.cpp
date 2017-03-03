@@ -36,8 +36,8 @@ static double clusterGetEdgeValue(Graph *graph,
                                   MutableContainer<double>& clusters,
                                   const edge e ) {
   pair<node, node> eEnds = graph->ends(e);
-  const double& v1 = clusters.get(eEnds.first.id);
-  const double& v2 = clusters.get(eEnds.second.id);
+  const double v1 = clusters.get(eEnds.first.id);
+  const double v2 = clusters.get(eEnds.second.id);
 
   if (v1*v1 + v2*v2 > 0)
     return 1.- fabs(v1 - v2)/sqrt(v1*v1 + v2*v2);
@@ -55,10 +55,10 @@ bool ClusterMetric::run() {
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
   node n;
   forEach(n, graph->getNodes())
-  result->setNodeValue(n, clusters.get(n.id));
+    result->setNodeValue(n, clusters.get(n.id));
   edge e;
   forEach(e, graph->getEdges())
-  result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+    result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   return true;
 }
 
