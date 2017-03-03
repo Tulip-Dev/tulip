@@ -55,10 +55,10 @@ bool ClusterMetric::run() {
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
   node n;
   forEach(n, graph->getNodes())
-    result->setNodeValue(n, clusters.get(n.id));
+  result->setNodeValue(n, clusters.get(n.id));
   edge e;
   forEach(e, graph->getEdges())
-    result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+  result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   return true;
 }
 

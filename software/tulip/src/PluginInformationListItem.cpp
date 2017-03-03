@@ -70,7 +70,7 @@ PluginInformationListItem::~PluginInformationListItem() {
 }
 
 QWidget* PluginInformationListItem::description()  {
-    return _ui->desc;
+  return _ui->desc;
 }
 
 void PluginInformationListItem::focusOut() {
