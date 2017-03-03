@@ -36,6 +36,7 @@ class PluginInformationListItem: public QWidget {
 public:
   explicit PluginInformationListItem(tlp::PluginInformation, QWidget *parent = NULL);
   virtual ~PluginInformationListItem();
+  QWidget* description();
 
 public slots:
   void focusOut();
@@ -50,7 +51,7 @@ protected slots:
   void downloadProgress(qint64,qint64);
 
 protected:
-  void focusInEvent(QFocusEvent *);
+  void enterEvent(QEvent *);
 };
 
 #endif // PLUGININFORMATIONLISTITEM_H
