@@ -70,6 +70,10 @@ PluginInformationListItem::~PluginInformationListItem() {
   delete _ui;
 }
 
+QWidget* PluginInformationListItem::description()  {
+    return _ui->desc;
+}
+
 void PluginInformationListItem::focusOut() {
   _ui->installationControls->hide();
   _ui->contentsFrame->setProperty("highlighted", false);
@@ -95,7 +99,7 @@ void PluginInformationListItem::remove() {
   _ui->rebootFrame->show();
 }
 
-void PluginInformationListItem::focusInEvent(QFocusEvent *) {
+void PluginInformationListItem::enterEvent(QEvent *) {
   emit focused();
 }
 
