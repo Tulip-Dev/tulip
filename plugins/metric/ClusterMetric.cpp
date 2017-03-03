@@ -33,8 +33,8 @@ ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorith
 //=================================================
 static double clusterGetEdgeValue(Graph *graph, MutableContainer<double> &clusters, const edge e) {
   pair<node, node> eEnds = graph->ends(e);
-  const double &v1 = clusters.get(eEnds.first.id);
-  const double &v2 = clusters.get(eEnds.second.id);
+  const double v1 = clusters.get(eEnds.first.id);
+  const double v2 = clusters.get(eEnds.second.id);
 
   if (v1 * v1 + v2 * v2 > 0)
     return 1. - fabs(v1 - v2) / sqrt(v1 * v1 + v2 * v2);
@@ -51,11 +51,17 @@ bool ClusterMetric::run() {
 
   MutableContainer<double> clusters;
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
-
-  for (node n : graph->getNodes())
-    result->setNodeValue(n, clusters.get(n.id));
-
-  for (edge e : graph->getEdges())
-    result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+  node n;
+  forEach(n, graph->getNodes()) result->setNodeValue(n, clusters.get(n.id));
+  edge e;
+  forEach(e, graph->getEdges()) result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   return true;
+}
+
+for (node n : graph->getNodes())
+  result->setNodeValue(n, clusters.get(n.id));
+
+for (edge e : graph->getEdges())
+  result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+return true;
 }
