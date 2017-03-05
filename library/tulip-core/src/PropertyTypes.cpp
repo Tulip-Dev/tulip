@@ -1131,19 +1131,8 @@ struct StringCollectionSerializer :public TypedDataSerializer<StringCollection> 
   }
 
   bool setData(tlp::DataSet& dts, const string& prop, const string& val) {
-    StringCollection col;
-
-    string::size_type lastPos = val.find_first_not_of(";");
-    string::size_type pos = val.find_first_of(";", lastPos);
-
-    while (string::npos != pos || string::npos != lastPos) {
-      col.push_back(val.substr(lastPos, pos - lastPos));
-      lastPos = val.find_first_not_of(";", pos);
-      pos = val.find_first_of(";", lastPos);
-    }
-
+    StringCollection col(val);
     dts.set(prop, col);
-
     return true;
   }
 };
