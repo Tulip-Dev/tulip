@@ -312,7 +312,7 @@ void StringCollectionEditorCreator::setEditorData(QWidget* widget, const QVarian
   QComboBox* combo = static_cast<QComboBox*>(widget);
 
   for(unsigned int i=0; i<col.size(); ++i)
-    combo->addItem(col[i].c_str());
+    combo->addItem(tlp::tlpStringToQString(col[i]));
 
   combo->setCurrentIndex(col.getCurrent());
 }
@@ -330,7 +330,7 @@ QVariant StringCollectionEditorCreator::editorData(QWidget* widget, tlp::Graph*)
 
 QString StringCollectionEditorCreator::displayText(const QVariant &var) const {
   StringCollection col = var.value<StringCollection>();
-  return col[col.getCurrent()].c_str();
+  return tlpStringToQString(col[col.getCurrent()]);
 }
 
 // this class is defined to properly catch the return status
