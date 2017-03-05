@@ -128,6 +128,12 @@ public:
   inline bool empty() const {
     return _data.empty();
   }
+  /**
+   * @brief clear the content of the collection.
+   */
+  void clear() {
+      _data.clear();
+  }
 
   /**
    * Returns the string element at a certain index in the collection.

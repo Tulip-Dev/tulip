@@ -35,8 +35,7 @@ StringCollection::StringCollection(const std::string &param) : current(0) {
 
   while (itChar != param.end()) {
     if (escapeChar) {
-      // when it escaped
-      // semi colon can be added to the string
+      // when escaped semi colon can be added to the string
       if (*itChar == ';') {
         temp += *itChar;
         escapeChar = false;
@@ -52,7 +51,7 @@ StringCollection::StringCollection(const std::string &param) : current(0) {
     if (*itChar == ';') {
       escapeChar = false;
       _data.push_back(temp);
-      temp = "";
+      temp.clear();
       ++itChar;
       continue;
     }
@@ -66,7 +65,7 @@ StringCollection::StringCollection(const std::string &param) : current(0) {
     ++itChar;
   }
 
-  if (temp.size())
+  if (!temp.empty())
     _data.push_back(temp);
 }
 
