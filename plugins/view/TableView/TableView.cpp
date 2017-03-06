@@ -41,7 +41,8 @@
 using namespace tlp;
 
 TableView::TableView(tlp::PluginContext *)
-    : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(nullptr), _model(nullptr), isNewGraph(false), filteringColumns(false) {
+    : ViewWidget(), _ui(new Ui::TableViewWidget), propertiesEditor(NULL), _model(NULL), isNewGraph(false), filteringColumns(false),
+      previousGraph(NULL) {
 }
 
 TableView::~TableView() {
@@ -185,12 +186,16 @@ void TableView::graphChanged(tlp::Graph *g) {
   if (_model != nullptr) {
     for (int i = 0; i < _model->columnCount(); ++i) {
       QString propName = _model->headerData(i, Qt::Horizontal, Qt::DisplayRole).toString();
+      // a property is visible only if it was previously visible
       bool checked = !visibleProperties.isEmpty() ? visibleProperties.contains(propName) : true;
+      // unless the property did not exist in the previous graph
+      if (previousGraph && !previousGraph->existProperty(QStringToTlpString(propName)))
+        checked = true;
 
       propertiesEditor->setPropertyChecked(propName, checked);
     }
   }
-
+  previousGraph = g;
   isNewGraph = false;
 }
 
