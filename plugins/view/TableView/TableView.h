@@ -43,6 +43,7 @@ class TableView : public tlp::ViewWidget {
   tlp::GraphModel* _model;
   bool isNewGraph;
   bool filteringColumns;
+  tlp::Graph* previousGraph;
 
 public:
   PLUGININFORMATION("Spreadsheet view","Tulip Team","04/17/2012","Spreadsheet view for raw data","4.0","")
