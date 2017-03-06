@@ -191,14 +191,16 @@ void TableView::graphChanged(tlp::Graph* g) {
       // a property is visible only if it was previously visible
       bool checked = !visibleProperties.isEmpty() ?
                      visibleProperties.contains(propName) : true;
+
       // unless the property did not exist in the previous graph
       if (previousGraph &&
-	  !previousGraph->existProperty(QStringToTlpString(propName)))
-	checked = true;
+          !previousGraph->existProperty(QStringToTlpString(propName)))
+        checked = true;
 
       propertiesEditor->setPropertyChecked(propName, checked);
     }
   }
+
   previousGraph = g;
   isNewGraph = false;
 }
