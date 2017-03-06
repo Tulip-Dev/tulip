@@ -71,10 +71,10 @@ Workspace::Workspace(QWidget *parent)
   _modeToSlots[_ui->split3Page] = QVector<PlaceHolderWidget *>() << _ui->split3PagePanel1 << _ui->split3PagePanel2 << _ui->split3PagePanel3;
   _modeToSlots[_ui->split32Page] = QVector<PlaceHolderWidget *>() << _ui->split32Panel1 << _ui->split32Panel2 << _ui->split32Panel3;
   _modeToSlots[_ui->split33Page] = QVector<PlaceHolderWidget *>() << _ui->split33Panel1 << _ui->split33Panel2 << _ui->split33Panel3;
-  _modeToSlots[_ui->gridPage] = QVector<PlaceHolderWidget *>() << _ui->gridPagePanel1 << _ui->gridPagePanel2 << _ui->gridPagePanel3
-                                                               << _ui->gridPagePanel4;
-  _modeToSlots[_ui->sixPage] = QVector<PlaceHolderWidget *>() << _ui->sixMode1 << _ui->sixMode2 << _ui->sixMode3 << _ui->sixMode4 << _ui->sixMode5
-                                                              << _ui->sixMode6;
+  _modeToSlots[_ui->gridPage] = QVector<PlaceHolderWidget *>()
+                                << _ui->gridPagePanel1 << _ui->gridPagePanel2 << _ui->gridPagePanel3 << _ui->gridPagePanel4;
+  _modeToSlots[_ui->sixPage] = QVector<PlaceHolderWidget *>()
+                               << _ui->sixMode1 << _ui->sixMode2 << _ui->sixMode3 << _ui->sixMode4 << _ui->sixMode5 << _ui->sixMode6;
 
   // This map allows us to know which widget can toggle a mode
   _modeSwitches[_ui->singlePage] = _ui->singleModeButton;
@@ -561,6 +561,10 @@ void Workspace::writeProject(TulipProject *project, QMap<Graph *, QString> rootI
     progress->progress(i, panels().size());
     QString path = "views/" + QString::number(i);
     project->mkpath(path);
+    // get view state. Do this before the rest in case state() changes some parameters inside the view
+    std::stringstream dataStr;
+    DataSet::write(dataStr, v->state());
+
     Graph *g = v->graph();
     QIODevice *viewDescFile = project->fileStream(path + "/view.xml");
     QXmlStreamWriter doc(viewDescFile);
@@ -569,8 +573,6 @@ void Workspace::writeProject(TulipProject *project, QMap<Graph *, QString> rootI
     doc.writeAttribute("name", tlpStringToQString(v->name()));
     doc.writeAttribute("root", rootIds[g->getRoot()]);
     doc.writeAttribute("id", QString::number(g->getId()));
-    std::stringstream dataStr;
-    DataSet::write(dataStr, v->state());
     doc.writeTextElement("data", tlpStringToQString(dataStr.str()));
     doc.writeEndDocument();
     viewDescFile->close();
