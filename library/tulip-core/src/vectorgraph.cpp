@@ -324,12 +324,14 @@ void VectorGraph::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
   }
 
   unsigned int first = _nodes.getFirstOfRange(nb);
+
   if (addedNodes) {
     addedNodes->resize(nb);
     memcpy(addedNodes->data(), &_nodes[first], nb * sizeof(node));
   }
-  
+
   unsigned int sz = _nData.size();
+
   if (sz < _nodes.size()) {
     _nData.resize(_nodes.size());
     addNodeToArray(node(_nodes.size() - 1));
@@ -347,19 +349,22 @@ void VectorGraph::delNode(const node n) {
   delEdges(n);
   _nData[n].clear();
   _nodes.free(n);
+
   if (_nodes.empty())
     _nData.resize(0);
+
   //integrityTest();
 }
 //=======================================================
 void VectorGraph::addEdgeInternal(const edge newEdge, const node src,
-				  const node tgt) {
+                                  const node tgt) {
   _iEdges& eData = _eData[newEdge];
   eData._ends = std::make_pair(src, tgt);
   _iNodes& srcData = _nData[src];
   eData._endsPos.first = srcData._adje.size();
 
   _iNodes& tgtData = _nData[tgt];
+
   if (src != tgt)
     eData._endsPos.second = tgtData._adje.size();
   else
@@ -400,12 +405,14 @@ void VectorGraph::addEdges(const std::vector<std::pair<node, node> >& ends,
   }
 
   unsigned int first = _edges.getFirstOfRange(nb);
+
   if (addedEdges) {
     addedEdges->resize(nb);
     memcpy(addedEdges->data(), &_edges[first], nb * sizeof(edge));
   }
 
   unsigned int sz = _eData.size();
+
   if (sz < _edges.size()) {
     _eData.resize(_edges.size());
     addEdgeToArray(edge(_edges.size() - 1));
@@ -462,7 +469,7 @@ void VectorGraph::delEdges(const node n) {
 void VectorGraph::delAllEdges() {
   _edges.clear();
   _eData.clear();
-  
+
   for(size_t i=0; i<_nodes.size(); ++i) {
     _nData[_nodes[i]].clear();
   }
@@ -675,6 +682,7 @@ void VectorGraph::addEdgeToArray(edge e) {
 void VectorGraph::removeEdge(edge e) {
   if (_edges.isElement(e)) {
     _edges.free(e);
+
     if (_edges.empty())
       _eData.resize(0);
   }
