@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
+#include <QDesktopServices>
 
 using namespace tlp;
 
@@ -36,6 +37,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 
   QString title("Tulip ");
   title += TULIP_VERSION;
+#ifdef TULIP_SVN_REVISION
+  title += "<br/>(SVN rev. " + QString(TULIP_SVN_REVISION) + ")";
+#endif
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" + title +
                            "</span></p></body></html>");
@@ -46,8 +50,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
       "This open source software is powered by:"
       "<ul>"
       "  <li> <b> Qt </b> " +
-      tlpStringToQString(qVersion()) + ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
-                                       "  <li> <b> OpenGL </b> " +
+      tlpStringToQString(qVersion()) +
+      ": <a href=\"https://www.qt.io\">https://www.qt.io</a></li>"
+      "  <li> <b> OpenGL </b> " +
       QString::number(OpenGlConfigManager::instance().getOpenGLVersion()) + " (from vendor " +
       tlpStringToQString(OpenGlConfigManager::instance().getOpenGLVendor()) +
       "): <a href=\"https://www.opengl.org\">https://www.opengl.org</a> </li>"
@@ -55,15 +60,19 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
       "  <li> <b> Python </b> " +
-      TLP_PYTHON + ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
-                   "  <li> <b> SIP </b> " +
-      SIP_VERSION + ": <a href=\"https://www.riverbankcomputing.com/software/sip\">https://www.riverbankcomputing.com/software/sip</a> </li>"
+      TLP_PYTHON +
+      ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
+      "  <li> <b> SIP </b> " +
+      SIP_VERSION +
+      ": <a href=\"https://www.riverbankcomputing.com/software/sip\">https://www.riverbankcomputing.com/software/sip</a> </li>"
 #endif
-                    "</ul>"
-                    "</p>";
+      "</ul>"
+      "</p>";
   GlMainWidget::getFirstQGLWidget()->doneCurrent();
 
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);
+
+  connect(_ui->dependenciesInfo, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
   _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -89,4 +98,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 
 AboutTulipPage::~AboutTulipPage() {
   delete _ui;
+}
+
+void AboutTulipPage::openUrlInBrowser(const QString &url) {
+  QDesktopServices::openUrl(QUrl(url));
 }

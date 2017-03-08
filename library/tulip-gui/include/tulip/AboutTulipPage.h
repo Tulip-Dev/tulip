@@ -36,9 +36,14 @@ namespace tlp {
   and provide basic offline support.
   */
 class TLP_QT_SCOPE AboutTulipPage : public QWidget {
+  Q_OBJECT
 public:
   explicit AboutTulipPage(QWidget *parent = 0);
   ~AboutTulipPage();
+
+private slots:
+
+  void openUrlInBrowser(const QString &url);
 
 private:
   Ui::AboutTulipPageData *_ui;

@@ -95,8 +95,12 @@ IF(TulipReleaseVersion MATCHES "^[0-9]+$")
   SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionClean}${TulipReleaseVersion}")
 ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
   # just a hack to force the display of the full Tulip version in window title bar
-  # when it contains non digit characters (like alpha, beta, ...)
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionClean}1")
+  # when it contains non digit characters (like alpha, beta, dev, ...)
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
+  # get current Tulip SVN revision for a dev build
+  INCLUDE(FindSubversion)
+  Subversion_WC_INFO(${PROJECT_SOURCE_DIR} TULIP)
+  SET(TULIP_SVN_REVISION ${TULIP_WC_REVISION})
 ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================
