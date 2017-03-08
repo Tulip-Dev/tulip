@@ -357,7 +357,7 @@ public:
 
 //===========================================================================================
 
-  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL) /TypeHint="Tuple[boolean, str]"/;
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyAlgorithm(algoName[, params])
 
@@ -3083,7 +3083,7 @@ Returns an iterator over the inherited properties attached to the graph.
 
 //===========================================================================================
 
-  bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyIntegerAlgorithm(algoName, result[, params = None])
 
@@ -3131,7 +3131,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName, result[, params = None])
 
@@ -3179,7 +3179,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName[, params = None])
 
@@ -3199,7 +3199,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName, result[, params = None])
 
@@ -3247,7 +3247,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName[, params = None])
 
@@ -3267,7 +3267,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName, result[, params = None])
 
@@ -3315,7 +3315,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName[, params = None])
 
@@ -3335,7 +3335,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName, result[, params = None])
 
@@ -3383,7 +3383,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName[, params = None])
 
@@ -3403,7 +3403,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName, result[, params = None])
 
@@ -3451,7 +3451,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName[, params = None])
 
@@ -3471,7 +3471,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName, result[, params = None])
 
@@ -3518,7 +3518,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
+  bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[bool, str]"/;
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName[, params = None])
 
