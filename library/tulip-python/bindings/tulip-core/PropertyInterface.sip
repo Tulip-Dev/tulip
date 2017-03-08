@@ -67,7 +67,7 @@ class PropertyInterface : tlp::Observable /Abstract/ {
 %End
 
 public:
- 
+
   tlp::Graph * getGraph();
 %Docstring
 tlp.PropertyInterface.getGraph()
@@ -78,7 +78,7 @@ Returns the graph on which the property has been defined.
 
 .. warning:: If the property is inherited the graph could be different
              that the one used to get that property.
-%End  
+%End
 
  //===========================================================================================
 
@@ -98,12 +98,12 @@ Returns the graph on which the property has been defined.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= nullptr) const = 0;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0 /TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedNodes([subgraph = None])
 
 Returns an iterator on all nodes whose value is different
-from the default value. 
+from the default value.
 
 :param subgraph: a sub-graph can be given in parameter. In that case, only the nodes owned by this sub-graph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
@@ -128,12 +128,12 @@ from the default value.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= nullptr) const = 0;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0 /TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedEdges([subgraph = None])
 
 Returns an iterator on all edges whose value is different
-from the default value. 
+from the default value.
 
 :param subgraph: a sub-graph can be given in parameter. In that case, only the edges owned by this sub-graph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
@@ -427,8 +427,8 @@ Returns :const:`True` if the given string representation has been successfully c
   } else {
     sipIsErr = throwInvalidEdgeException(sipCpp->getGraph(), *a0);
   }
-%End 
-  
+%End
+
 };
 
 };

@@ -60,7 +60,7 @@ Returns a list of removed edges.
  
 //===========================================================================================  
  
-  static bool simpleTest(tlp::Graph *graph, std::vector<tlp::edge> *multipleEdges /Out/, std::vector<tlp::edge> *loops /Out/);
+  static bool simpleTest(tlp::Graph *graph, std::vector<tlp::edge> *multipleEdges /Out/, std::vector<tlp::edge> *loops /Out/) /TypeHint="Tuple[bool, List[tlp.edge], List[tlp.edge]]"/;
 %Docstring
 tlp.SimpleTest.simpleTest(graph)
 

@@ -75,7 +75,7 @@ to indicate if the algorithm was successful.
 :rtype: boolean
 %End
 
-  virtual bool check(std::string & /Out/);
+  virtual bool check(std::string & /Out/) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Algorithm.check()
 

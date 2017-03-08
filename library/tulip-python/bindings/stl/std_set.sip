@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 template<TYPE>
-%MappedType std::set<TYPE> /TypeHint="set-of-TYPE"/{
+%MappedType std::set<TYPE> /TypeHint="Set[TYPE]"/{
 %TypeHeaderCode
 #include <set>
 %End
@@ -123,7 +123,7 @@ template<TYPE>
 };
 
 template<TYPE*>
-%MappedType std::set<TYPE*> /TypeHint="set-of-TYPE"/{
+%MappedType std::set<TYPE*> /TypeHint="Set[TYPE]"/{
 %TypeHeaderCode
 #include <set>
 %End
@@ -222,7 +222,7 @@ template<TYPE*>
 
 };
 
-%MappedType std::set<double> /TypeHint="set-of-double"/ {
+%MappedType std::set<double> /TypeHint="Set[float]"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -286,7 +286,7 @@ template<TYPE*>
 
 };
 
-%MappedType std::set<float> /TypeHint="set-of-float"/ {
+%MappedType std::set<float> /TypeHint="Set[float]"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -350,7 +350,7 @@ template<TYPE*>
 
 };
 
-%MappedType std::set<int> /TypeHint="set-of-int"/ {
+%MappedType std::set<int> /TypeHint="Set[int]"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -424,7 +424,7 @@ template<TYPE*>
 
 };
 
-%MappedType std::set<long> /TypeHint="set-of-long"/ {
+%MappedType std::set<long> /TypeHint="Set[int]"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -498,7 +498,7 @@ template<TYPE*>
 
 };
 
-%MappedType std::set<unsigned int> /TypeHint="set-of-uint"/ {
+%MappedType std::set<unsigned int> /TypeHint="Set[int]"/ {
 %TypeHeaderCode
 #include <set>
 %End
@@ -571,7 +571,7 @@ template<TYPE*>
 
 };
 
-%MappedType std::set<unsigned long> /TypeHint="set-of-ulong"/ {
+%MappedType std::set<unsigned long> /TypeHint="Set[int]"/ {
 %TypeHeaderCode
 #include <set>
 %End

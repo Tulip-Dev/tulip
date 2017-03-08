@@ -47,13 +47,13 @@ The list will appear as a combo box in the Plugin Parameter Dialog from the Tuli
 
   StringCollection();
   
-  StringCollection(const std::vector<std::string> &vectorParam);
+  StringCollection(const std::vector<std::string> &vectorParam /TypeHint="List[str]"/);
 
   StringCollection(const std::string param);   
   
-  StringCollection(const std::vector<std::string>&  vectorParam, int currentParam);
+  StringCollection(const std::vector<std::string>& vectorParam /TypeHint="List[str]"/, int currentParam);
 
-  StringCollection(const std::vector<std::string>& vectorParam, std::string currentString);
+  StringCollection(const std::vector<std::string>& vectorParam /TypeHint="List[str]"/, std::string currentString);
 
 // ===========================================================================
 

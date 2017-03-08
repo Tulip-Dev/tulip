@@ -23,7 +23,7 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-%MappedType std::string
+%MappedType std::string /TypeHint="str"/
 {
 %TypeHeaderCode
 // Include the library interface to the type being mapped.

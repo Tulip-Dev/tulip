@@ -291,7 +291,7 @@ Returns a list of :class:`tlp.Coord` containing the vertices of the graph convex
 
 bool computeLinesIntersection(const std::pair<tlp::Coord, tlp::Coord> &line1,
                               const std::pair<tlp::Coord, tlp::Coord> &line2,
-                              tlp::Coord &intersectionPoint /Out/);
+                              tlp::Coord &intersectionPoint /Out/) /TypeHint="Tuple[bool, tlp.Vec3f]"/;
 
 %Docstring
 tlp.computeLinesIntersection(line1, line2)

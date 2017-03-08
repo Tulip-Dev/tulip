@@ -392,7 +392,7 @@ Convenient method. Returns the third component of the vector.
 :rtype: float
 %End
 
-  void get(float & /Out/, float & /Out/, float & /Out/) const;
+  void get(float & /Out/, float & /Out/, float & /Out/) const /TypeHint="Tuple[float, float, float]"/;
 %Docstring
 tlp.Vec3f.get()
 
@@ -624,7 +624,7 @@ Convenient method. Returns the fourth component of the vector.
 
   float depth() const;
 
-  void get(float & /Out/, float & /Out/, float & /Out/, float & /Out/) const;
+  void get(float & /Out/, float & /Out/, float & /Out/, float & /Out/) const /TypeHint="Tuple[float, float, float, float]"/;
 
   tlp::Vec4f & fill(const float &obj);
   

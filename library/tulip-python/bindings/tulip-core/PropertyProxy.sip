@@ -574,7 +574,7 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   }
 %End
 
-  void __setitem__(const tlp::node n, const std::vector<std::string> &val);
+  void __setitem__(const tlp::node n, const std::vector<std::string> &val /TypeHint="List[str]"/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
     sipCpp->setNodeValue(*a0, *a1);
@@ -583,7 +583,7 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   }
 %End
 
-  void __setitem__(const tlp::node n, const std::vector<tlp::PySize> &val);
+  void __setitem__(const tlp::node n, const std::vector<tlp::PySize> &val /TypeHint="List[tlp.Size]"/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
     sipCpp->setNodeValue(*a0, *a1);
@@ -708,7 +708,7 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   }
 %End
 
-  void __setitem__(const tlp::edge e, const std::vector<std::string> &val);
+  void __setitem__(const tlp::edge e, const std::vector<std::string> &val /TypeHint="List[str]"/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
     sipCpp->setEdgeValue(*a0, *a1);
@@ -717,7 +717,7 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   }
 %End
 
-  void __setitem__(const tlp::edge e, const std::vector<tlp::PySize> &val);
+  void __setitem__(const tlp::edge e, const std::vector<tlp::PySize> &val /TypeHint="List[tlp.Size]"/);
 %MethodCode
   if (sipCpp->getGraph()->isElement(*a0)) {
     sipCpp->setEdgeValue(*a0, *a1);
@@ -793,12 +793,12 @@ void __setitem__(const tlp::node n, const std::vector<int> &val /Constrained/);
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const std::vector<std::string> &val);
+  void setAllNodeValue(const std::vector<std::string> &val /TypeHint="List[str]"/);
 %MethodCode
   sipCpp->setAllNodeValue(*a0);
 %End
 
-  void setAllNodeValue(const std::vector<tlp::PySize> &val);
+  void setAllNodeValue(const std::vector<tlp::PySize> &val /TypeHint="List[tlp.Size]"/);
 %MethodCode
   sipCpp->setAllNodeValue(*a0);
 %End
@@ -871,12 +871,12 @@ void setAllNodeValue(SIP_PYOBJECT val);
   sipCpp->setAllEdgeValue(*a0);
 %End
 
-  void setAllEdgeValue(const std::vector<std::string> &val);
+  void setAllEdgeValue(const std::vector<std::string> &val /TypeHint="List[str]"/);
 %MethodCode
   sipCpp->setAllEdgeValue(*a0);
 %End
 
-  void setAllEdgeValue(const std::vector<tlp::PySize> &val);
+  void setAllEdgeValue(const std::vector<tlp::PySize> &val /TypeHint="List[tlp.Size]"/);
 %MethodCode
   sipCpp->setAllEdgeValue(*a0);
 %End

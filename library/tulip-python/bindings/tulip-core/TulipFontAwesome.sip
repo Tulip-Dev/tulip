@@ -867,7 +867,7 @@ Returns the location of the Font Awesome TrueType font file bundled with Tulip.
 :rtype: string
 %End
 
-  static const std::vector<std::string> &getSupportedFontAwesomeIcons();
+  static const std::vector<std::string> &getSupportedFontAwesomeIcons() /TypeHint="List[str]"/;
 %Docstring
 tlp.TulipFontAwesome.getSupportedFontAwesomeIcons()
 

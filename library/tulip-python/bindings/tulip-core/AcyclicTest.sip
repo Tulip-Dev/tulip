@@ -77,7 +77,7 @@ The result is cached (ie. the next call with the same graph is done in O(1) time
 
 //===========================================================================================
 
-   static void makeAcyclic(tlp::Graph* graph, std::vector<tlp::edge> &reversed /Out/, std::vector<tlp::SelfLoops> &selfLoops /Out/);
+   static void makeAcyclic(tlp::Graph* graph, std::vector<tlp::edge> &reversed /Out/, std::vector<tlp::SelfLoops> &selfLoops /Out/) /TypeHint="Tuple[List[tlp.edge], List[tlp.SelfLoops]]"/;
 %Docstring
 tlp.AcyclicTest.makeAcyclic(graph)
 
@@ -93,7 +93,7 @@ of transformed self loops.
 
 //=========================================================================================== 
  
-   static bool acyclicTest(const tlp::Graph *graph, std::vector<tlp::edge> *obstructionEdges /Out/);
+   static bool acyclicTest(const tlp::Graph *graph, std::vector<tlp::edge> *obstructionEdges /Out/) /TypeHint="Tuple[bool, List[tlp.edge]]"/;
 %Docstring
 tlp.AcyclicTest.acyclicTest(graph)
 

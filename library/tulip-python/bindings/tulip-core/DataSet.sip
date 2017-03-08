@@ -134,7 +134,7 @@ bool setDataSetEntryFromPyObject(tlp::DataSet *dataSet, const std::string &key, 
 
 namespace tlp {
 
-struct DataSet {
+struct DataSet /TypeHint="Dict[str, Any]", TypeHintValue="{}"/ {
 
 %TypeCode
 #include <tulip/PythonCppTypesConverter.h>
@@ -260,7 +260,7 @@ Returns the number of values stored in the data set.
 :rtype: integer
 %End
 
-  std::vector<std::string> getKeys() const;
+  std::vector<std::string> getKeys() const /TypeHint="List[str]"/;
 %Docstring
 tlp.DataSet.getKeys()
 

@@ -84,7 +84,7 @@ typedef tlp::Iterator<tlp::ParameterDescription> IteratorParameter;
 
 struct ParameterDescriptionList {
 
-  tlp::IteratorParameter* getParameters() const;
+  tlp::IteratorParameter* getParameters() const /TypeHint="Iterable[tlp.ParameterDescription]"/;
 
   unsigned int size() const;
 
