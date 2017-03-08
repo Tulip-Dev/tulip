@@ -362,7 +362,7 @@ public:
 
 //===========================================================================================
 
-  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL);
+  bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyAlgorithm(algoName[, params])
 
@@ -628,7 +628,7 @@ Sets the parent of the graph (use very carefully). Standard users should never u
 
 //===========================================================================================
 
-  tlp::IteratorGraph *getSubGraphs() const /TransferBack/;
+  tlp::IteratorGraph *getSubGraphs() const /TransferBack, TypeHint="Iterable[tlp.Graph]"/;
 %Docstring
 tlp.Graph.getSubGraphs()
 
@@ -773,7 +773,7 @@ Returns the number of descendant graphs.
 
 //===========================================================================================
 
-  tlp::IteratorGraph *getDescendantGraphs() const /TransferBack/;
+  tlp::IteratorGraph *getDescendantGraphs() const /TransferBack, TypeHint="Iterable[tlp.Graph]"/;
 %Docstring
 tlp.Graph.getDescendantGraphs()
 
@@ -846,7 +846,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer/);
+  void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer, TypeHint="Iterable[tlp.node]"/);
 %Docstring
 tlp.Graph.addNodes(itNodes)
 
@@ -940,7 +940,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void delNodes(tlp::Iterator<tlp::node>* itN /Transfer/, bool deleteInAllGraphs = false);
+  void delNodes(tlp::Iterator<tlp::node>* itN /Transfer, TypeHint="Iterable[tlp.node]"/, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
 
@@ -1114,7 +1114,7 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer/);
+  void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer, TypeHint="Iterable[tlp.edge]"/);
 %Docstring
 tlp.Graph.addEdges(itEdges)
 
@@ -1241,7 +1241,7 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
 //===========================================================================================
 
-  void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer/, bool deleteInAllGraphs = false)=0;
+  void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer, TypeHint="Iterable[tlp.edge]"/, bool deleteInAllGraphs = false)=0;
 %Docstring
 tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
 
@@ -1517,7 +1517,7 @@ Returns the found node (invalid if there is no source);
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getNodes() const /TransferBack/;
+  tlp::Iterator<tlp::node>* getNodes() const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.getNodes()
 
@@ -1569,7 +1569,7 @@ Returns the ith predecessor of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.getInNodes(node)
 
@@ -1628,7 +1628,7 @@ Returns the ith successor of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.getOutNodes(node)
 
@@ -1650,7 +1650,7 @@ Returns an iterator on the successors of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.getInOutNodes(node)
 
@@ -1672,7 +1672,7 @@ Returns an iterator on the neighbours of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack/;
+  tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.bfs([root])
 
@@ -1697,7 +1697,7 @@ Returns an iterator performing a breadth-first search on the graph.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack/;
+  tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.dfs([root])
 
@@ -1744,7 +1744,7 @@ Returns the underlying graph of a meta node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getEdges() const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getEdges() const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.Graph.getEdges()
 
@@ -1783,7 +1783,7 @@ Returns a random edge in the graph.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.Graph.getOutEdges(node)
 
@@ -1805,7 +1805,7 @@ Returns a Tulip iterator on the outgoing edges of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.Graph.getInOutEdges(node)
 
@@ -1827,7 +1827,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.Graph.getInEdges(node)
 
@@ -1849,7 +1849,7 @@ Returns an iterator on the incoming edges of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack/;
+  tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.Graph.getEdgeMetaInfo(edge)
 
@@ -2991,7 +2991,7 @@ Removes and deletes the property associated to name in the graph properties pool
 
 //===========================================================================================
 
-  tlp::Iterator<std::string>* getLocalProperties() /TransferBack/;
+  tlp::Iterator<std::string>* getLocalProperties() /TransferBack, TypeHint="Iterable[str]"/;
 %Docstring
 tlp.Graph.getLocalProperties()
 
@@ -3006,7 +3006,7 @@ Returns an iterator on the names of the properties local to the graph.
 
 //===========================================================================================
 
-  tlp::Iterator<std::string>* getInheritedProperties() /TransferBack/;
+  tlp::Iterator<std::string>* getInheritedProperties() /TransferBack, TypeHint="Iterable[str]"/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -3021,7 +3021,7 @@ Returns an iterator on the names of the properties inherited from the graph's an
 
 //===========================================================================================
 
-  tlp::Iterator<std::string>* getProperties() /TransferBack/;
+  tlp::Iterator<std::string>* getProperties() /TransferBack, TypeHint="Iterable[str]"/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -3036,7 +3036,7 @@ Returns an iterator on the names of all the properties attached to the graph.
 
 //===========================================================================================
 
-  tlp::IteratorProperty* getObjectProperties() /TransferBack/;
+  tlp::IteratorProperty* getObjectProperties() /TransferBack, TypeHint="Iterable[tlp.PropertyInterface]"/;
 %Docstring
 tlp.Graph.getObjectProperties()
 
@@ -3054,7 +3054,7 @@ whether they are local or inherited.
 
 //===========================================================================================
 
-  tlp::IteratorProperty* getLocalObjectProperties() /TransferBack/;
+  tlp::IteratorProperty* getLocalObjectProperties() /TransferBack, TypeHint="Iterable[tlp.PropertyInterface]"/;
 %Docstring
 tlp.Graph.getLocalObjectProperties()
 
@@ -3071,7 +3071,7 @@ Returns an iterator over the local properties attached to the graph.
 
 //===========================================================================================
 
-  tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack/;
+  tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack, TypeHint="Iterable[tlp.PropertyInterface]"/;
 %Docstring
 tlp.Graph.getInheritedObjectProperties()
 
@@ -3088,7 +3088,7 @@ Returns an iterator over the inherited properties attached to the graph.
 
 //===========================================================================================
 
-  bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyIntegerAlgorithm(const std::string &algoName, tlp::IntegerProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyIntegerAlgorithm(algoName, result[, params = None])
 
@@ -3136,7 +3136,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyDoubleAlgorithm(const std::string &algoName, tlp::DoubleProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName, result[, params = None])
 
@@ -3184,7 +3184,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyDoubleAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyDoubleAlgorithm(algoName[, params = None])
 
@@ -3204,7 +3204,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyLayoutAlgorithm(const std::string &algoName, tlp::LayoutProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName, result[, params = None])
 
@@ -3252,7 +3252,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyLayoutAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyLayoutAlgorithm(algoName[, params = None])
 
@@ -3272,7 +3272,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyBooleanAlgorithm(const std::string &algoName, tlp::BooleanProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName, result[, params = None])
 
@@ -3320,7 +3320,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyBooleanAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyBooleanAlgorithm(algoName[, params = None])
 
@@ -3340,7 +3340,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applySizeAlgorithm(const std::string &algoName, tlp::SizeProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName, result[, params = None])
 
@@ -3388,7 +3388,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applySizeAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applySizeAlgorithm(algoName[, params = None])
 
@@ -3408,7 +3408,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyColorAlgorithm(const std::string &algoName, tlp::ColorProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName, result[, params = None])
 
@@ -3456,7 +3456,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyColorAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyColorAlgorithm(algoName[, params = None])
 
@@ -3476,7 +3476,7 @@ This is equivalent to call::
 
 //===========================================================================================
 
-  bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyStringAlgorithm(const std::string &algoName, tlp::StringProperty* result, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName, result[, params = None])
 
@@ -3523,7 +3523,7 @@ which can contain an error message.
 
 //===========================================================================================
 
-  bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0);
+  bool applyStringAlgorithm(const std::string &algoName, std::string &msg /Out/, tlp::DataSet *data /GetWrapper/ =0) /TypeHint="Tuple[boolean, str]"/;
 %Docstring
 tlp.Graph.applyStringAlgorithm(algoName[, params = None])
 
@@ -3726,7 +3726,7 @@ point to an empty sub-graph.
 
 //===========================================================================================;
 
-  void createMetaNodes(tlp::IteratorGraph *itGraph, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
+  void createMetaNodes(tlp::IteratorGraph *itGraph /TypeHint="Iterable[tlp.Graph]"/, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
 %Docstring
 tlp.Graph.createMetaNodes(itGraph, quotientGraph)
 
@@ -4361,7 +4361,7 @@ If no selection is done, the whole graph is reseted to default value.
 %End
 
 //===========================================================================================
-tlp::IteratorGraph *getRootGraphs();
+tlp::IteratorGraph *getRootGraphs() /TypeHint="Iterable[tlp.Graph]"/;
 %Docstring
 tlp.getRootGraphs()
 

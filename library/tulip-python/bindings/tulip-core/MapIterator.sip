@@ -31,8 +31,6 @@ typedef tlp::Iterator<tlp::edge> IteratorEdge;
 }
 %End
 
-%Include Iterator.sip
-
 namespace tlp {
 
 typedef tlp::Iterator<tlp::node> IteratorNode;
