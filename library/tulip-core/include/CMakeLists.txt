@@ -38,6 +38,7 @@ INSTALL(FILES
   tulip/ImportModule.h
   tulip/IntegerProperty.h
   tulip/Iterator.h
+  tulip/IdManager.h
   tulip/LayoutProperty.h
   tulip/MapIterator.h
   tulip/Matrix.h
