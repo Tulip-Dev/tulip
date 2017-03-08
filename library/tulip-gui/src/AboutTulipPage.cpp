@@ -28,6 +28,7 @@
 #include <QFile>
 #include <QDir>
 #include <QTextStream>
+#include <QDesktopServices>
 
 using namespace tlp;
 
@@ -37,6 +38,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 
   QString title("Tulip ");
   title += TULIP_VERSION;
+#ifdef TULIP_SVN_REVISION
+  title += "<br/>(SVN rev. " + QString(TULIP_SVN_REVISION) + ")";
+#endif
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir+"/logo.bmp")));
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p></body></html>");
 
@@ -58,6 +62,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
   GlMainWidget::getFirstQGLWidget()->doneCurrent();
 
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);
+
+  connect(_ui->dependenciesInfo, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
   _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
@@ -84,4 +90,8 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 
 AboutTulipPage::~AboutTulipPage() {
   delete _ui;
+}
+
+void AboutTulipPage::openUrlInBrowser(const QString &url) {
+  QDesktopServices::openUrl(QUrl(url));
 }

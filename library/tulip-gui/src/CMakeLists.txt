@@ -120,6 +120,10 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
   ENDIF(UNIX)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
+IF(TULIP_SVN_REVISION)
+  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTULIP_SVN_REVISION=\\\"${TULIP_SVN_REVISION}\\\"")
+ENDIF(TULIP_SVN_REVISION)
+
 QTX_WRAP_UI(UI_HEADERS
   ../designer/ColorScaleConfigDialog.ui
   ../designer/CopyPropertyDialog.ui
@@ -150,6 +154,7 @@ QTX_WRAP_UI(UI_HEADERS
 )
 
 QTX_WRAP_CPP(MOC_SRCS
+  ../include/tulip/AboutTulipPage.h
   ../include/tulip/Animation.h
   ../include/tulip/CaptionGraphicsItem.h
   ../include/tulip/CaptionGraphicsSubItems.h
