@@ -266,7 +266,7 @@ Returns a Python dictionnary with string keys filled with default parameters (if
 
 //=====================================================================
 
-std::list<std::string> getAlgorithmPluginsList();
+std::list<std::string> getAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getAlgorithmPluginsList()
 
@@ -291,7 +291,7 @@ in C++ or the :class:`tlp.Algorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getImportPluginsList();
+std::list<std::string> getImportPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getImportPluginsList()
 
@@ -308,7 +308,7 @@ in C++ or the :class:`tlp.ImportModule` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getExportPluginsList();
+std::list<std::string> getExportPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getExportPluginsList()
 
@@ -325,7 +325,7 @@ in C++ or the :class:`tlp.ExportModule` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getBooleanAlgorithmPluginsList();
+std::list<std::string> getBooleanAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getBooleanAlgorithmPluginsList()
 
@@ -342,7 +342,7 @@ the :class:`tlp.BooleanAlgorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getIntegerAlgorithmPluginsList();
+std::list<std::string> getIntegerAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getIntegerAlgorithmPluginsList()
 
@@ -359,7 +359,7 @@ the :class:`tlp.IntegerAlgorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getDoubleAlgorithmPluginsList();
+std::list<std::string> getDoubleAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getDoubleAlgorithmPluginsList()
 
@@ -376,7 +376,7 @@ the :class:`tlp.DoubleAlgorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getColorAlgorithmPluginsList();
+std::list<std::string> getColorAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getColorAlgorithmPluginsList()
 
@@ -393,7 +393,7 @@ the :class:`tlp.ColorAlgorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getLayoutAlgorithmPluginsList();
+std::list<std::string> getLayoutAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getLayoutAlgorithmPluginsList()
 
@@ -410,7 +410,7 @@ the :class:`tlp.LayoutAlgorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getSizeAlgorithmPluginsList();
+std::list<std::string> getSizeAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getSizeAlgorithmPluginsList()
 
@@ -427,7 +427,7 @@ the :class:`tlp.SizeAlgorithm` interface in Python.
 
 //=====================================================================
 
-std::list<std::string> getStringAlgorithmPluginsList();
+std::list<std::string> getStringAlgorithmPluginsList() /TypeHint="List[str]"/;
 %Docstring
 tlp.getStringAlgorithmPluginsList()
 

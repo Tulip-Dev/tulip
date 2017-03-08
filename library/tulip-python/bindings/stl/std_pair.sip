@@ -24,7 +24,7 @@
 // +-------------------------------------------------------------------------+
 
 template<T1, T2>
-%MappedType std::pair<T1, T2> /TypeHint="(T1, T2)"/{
+%MappedType std::pair<T1, T2> /TypeHint="Tuple[T1, T2]"/{
 %TypeHeaderCode
 #include <utility>
 %End
@@ -486,7 +486,7 @@ template<T1, T2*>
 %End
 };
 
-%MappedType std::pair<unsigned int, unsigned int> /TypeHint="(uint, uint)"/{
+%MappedType std::pair<unsigned int, unsigned int> /TypeHint="Tuple[int, int]"/{
 %TypeHeaderCode
 #include <utility>
 %End

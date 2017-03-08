@@ -47,7 +47,7 @@ public:
 
   Mat4f(const tlp::Mat4f&a);
 
-  Mat4f(const std::vector<vectorFloat> &covarianceMatrix);
+  Mat4f(const std::vector<vectorFloat> &covarianceMatrix /TypeHint="List[List[float]]"/);
 
   tlp::Mat4f& fill(float obj);
 

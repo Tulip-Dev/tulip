@@ -38,7 +38,7 @@ typedef std::vector<vectorUint> vector_vectorUint;
 
 namespace tlp {
 
-std::pair<vector_pairUintUint, vector_vectorUint> delaunayTriangulation(std::vector<tlp::Coord> &points);
+std::pair<vector_pairUintUint, vector_vectorUint> delaunayTriangulation(std::vector<tlp::Coord> &points) /TypeHint="Tuple[List[Tuple[int, int]], List[List[int]]]"/;
 %Docstring
 tlp.delaunayTriangulation(points)
 
@@ -125,7 +125,7 @@ Returns the ith voronoi vertex.
 :rtype: :class:`tlp.Coord`
 %End
 
-  const pairUintUint &edge(const unsigned int edgeIdx);
+  const pairUintUint &edge(const unsigned int edgeIdx) /TypeHint="Tuple[int, int]"/;
 %Docstring
 tlp.VoronoiDiagram.edge(edgeIdx)
 
@@ -158,7 +158,7 @@ Returns the degree (number of incident edges) of the ith voronoi vertex
 :rtype: integer
 %End
 
-  std::vector<pairUintUint> voronoiEdgesForSite(const unsigned int siteIdx);
+  std::vector<pairUintUint> voronoiEdgesForSite(const unsigned int siteIdx) /TypeHint="List[Tuple[int, int]]"/;
 %Docstring
 tlp.VoronoiDiagram.voronoiEdgesForSite(siteIdx)
 

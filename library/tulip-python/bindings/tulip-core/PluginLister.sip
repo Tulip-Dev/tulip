@@ -29,7 +29,7 @@ class PluginLister {
 
 public:
 
-  static std::list<std::string> availablePlugins();
+  static std::list<std::string> availablePlugins() /TypeHint="List[str]"/;
 
   static const tlp::Plugin& pluginInformation(const std::string& name);
 

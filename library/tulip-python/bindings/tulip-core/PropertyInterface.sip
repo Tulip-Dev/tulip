@@ -98,7 +98,7 @@ Returns the graph on which the property has been defined.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0 /TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedNodes([subgraph = None])
 
@@ -128,7 +128,7 @@ from the default value.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0 /TypeHint="Iterable[tlp.edge]"/;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedEdges([subgraph = None])
 

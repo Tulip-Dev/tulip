@@ -25,7 +25,7 @@
 
 // std::list
 template<TYPE *>
-%MappedType std::list<TYPE *> /TypeHint="list-of-TYPE"/ {
+%MappedType std::list<TYPE *> /TypeHint="List[TYPE]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -114,7 +114,7 @@ template<TYPE *>
 };
 
 template<TYPE>
-%MappedType std::list<TYPE> /TypeHint="list-of-TYPE"/ {
+%MappedType std::list<TYPE> /TypeHint="List[TYPE]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -203,7 +203,7 @@ template<TYPE>
 // Specialization for std::list<double>
 // ****************************************************
 
-%MappedType std::list<double> /TypeHint="list-of-double"/ {
+%MappedType std::list<double> /TypeHint="List[float]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -261,7 +261,7 @@ template<TYPE>
 // Specialization for std::list<float>
 // ****************************************************
 
-%MappedType std::list<float> /TypeHint="list-of-float"/ {
+%MappedType std::list<float> /TypeHint="List[float]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -320,7 +320,7 @@ template<TYPE>
 // Specialization for std::list<int>
 // ****************************************************
 
-%MappedType std::list<int> /TypeHint="list-of-int"/ {
+%MappedType std::list<int> /TypeHint="List[int]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -390,7 +390,7 @@ template<TYPE>
 // Specialization for std::list<unsigned int>
 // ****************************************************
 
-%MappedType std::list<unsigned int> /TypeHint="list-of-uint"/ {
+%MappedType std::list<unsigned int> /TypeHint="List[int]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -460,7 +460,7 @@ template<TYPE>
 // Specialization for std::list<long>
 // ****************************************************
 
-%MappedType std::list<long> /TypeHint="list-of-long"/ {
+%MappedType std::list<long> /TypeHint="List[int]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -530,7 +530,7 @@ template<TYPE>
 // Specialization for std::list<unsigned long>
 // ****************************************************
 
-%MappedType std::list<unsigned long> /TypeHint="list-of-ulong"/ {
+%MappedType std::list<unsigned long> /TypeHint="List[int]"/ {
 %TypeHeaderCode
 #include <list>
 %End
@@ -600,7 +600,7 @@ template<TYPE>
 // Specialization for std::list<bool>
 // ****************************************************
 
-%MappedType std::list<bool> /TypeHint="list-of-bool"/{
+%MappedType std::list<bool> /TypeHint="List[int]"/{
 %TypeHeaderCode
 #include <list>
 %End

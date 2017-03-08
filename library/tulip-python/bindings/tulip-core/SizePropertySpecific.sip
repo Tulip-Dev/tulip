@@ -64,7 +64,7 @@ Scales the sizes of the nodes and edges according to a scale factors vector (sx,
 
 //===========================================================================================
 
-  void scale(const tlp::Size&, tlp::Iterator<tlp::node> *, tlp::Iterator<tlp::edge> *);
+  void scale(const tlp::Size&, tlp::Iterator<tlp::node> * /TypeHint="Iterable[tlp.node]"/, tlp::Iterator<tlp::edge> * /TypeHint="Iterable[tlp.edge]"/);
 %Docstring
 tlp.SizeProperty.scale(scaleFactors, itNodes, itEdges)
 

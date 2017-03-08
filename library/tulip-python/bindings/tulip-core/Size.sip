@@ -72,7 +72,7 @@ class PySize : public tlp::Vec3f {
 
 namespace tlp {
 
-class PySize : tlp::Vec3f /PyName=Size/ {
+class PySize : tlp::Vec3f /PyName=Size, TypeHint="tlp.Size"/ {
 
 %ConvertToTypeCode
 
