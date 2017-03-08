@@ -278,8 +278,10 @@ static int apiArgument(sipSpec *pt, argDef *ad, int out, int need_comma,
      */
     if (defaults && ad->defval && !out)
     {
+        /*
         if (names && ad->name != NULL)
             fprintf(fp, " %s", ad->name->text);
+        */
 
         fprintf(fp, "=");
         prDefaultValue(ad, in_str, fp);
@@ -828,6 +830,14 @@ static const char *pyType(sipSpec *pt, argDef *ad, int sec, classDef **scope)
 
     *scope = NULL;
 
+    if (ad->typehint_in != NULL) {
+        return ad->typehint_in->raw_hint;
+    }
+
+    if (ad->typehint_out != NULL) {
+        return ad->typehint_out->raw_hint;
+    }
+
     /* Use any explicit documented type. */
     if (ad->doctype != NULL)
         return ad->doctype;
@@ -910,7 +920,11 @@ static const char *pyType(sipSpec *pt, argDef *ad, int sec, classDef **scope)
 
             if (def_mtd != NULL)
             {
-                if (def_mtd->doctype != NULL)
+                if (def_mtd->typehint_in != NULL)
+                    type_name = def_mtd->typehint_in->raw_hint;
+                else if (def_mtd->typehint_out != NULL)
+                    type_name = def_mtd->typehint_out->raw_hint;
+                else if (def_mtd->doctype != NULL)
                     type_name = def_mtd->doctype;
                 else if (def_mtd->pyname != NULL)
                     type_name = def_mtd->pyname->text;
@@ -1108,27 +1122,34 @@ static int exportPythonSignature(sipSpec *pt, FILE *fp, signatureDef *sd,
     {
         fprintf(fp, " -> ");
 
-        if ((is_res && nr_out > 0) || nr_out > 1)
-            fprintf(fp, "(");
+        if (sd->result.typehint_in != NULL) {
+            fprintf(fp, "%s", sd->result.typehint_in->raw_hint);
+        } else if (sd->result.typehint_out != NULL) {
+            fprintf(fp, "%s", sd->result.typehint_out->raw_hint);
+        } else {
 
-        if (is_res)
-            need_comma = apiArgument(pt, &sd->result, TRUE, FALSE, sec, FALSE,
-                    FALSE, in_str, fp);
-        else
-            need_comma = FALSE;
+            if ((is_res && nr_out > 0) || nr_out > 1)
+                fprintf(fp, "(");
 
-        for (a = 0; a < sd->nrArgs; ++a)
-        {
-            argDef *ad = &sd->args[a];
-
-            if (isOutArg(ad))
-                /* We don't want the name in the result tuple. */
-                need_comma = apiArgument(pt, ad, TRUE, need_comma, sec, FALSE,
+            if (is_res)
+                need_comma = apiArgument(pt, &sd->result, TRUE, FALSE, sec, FALSE,
                         FALSE, in_str, fp);
-        }
+            else
+                need_comma = FALSE;
 
-        if ((is_res && nr_out > 0) || nr_out > 1)
-            fprintf(fp, ")");
+            for (a = 0; a < sd->nrArgs; ++a)
+            {
+                argDef *ad = &sd->args[a];
+
+                if (isOutArg(ad))
+                    /* We don't want the name in the result tuple. */
+                    need_comma = apiArgument(pt, ad, TRUE, need_comma, sec, FALSE,
+                            FALSE, in_str, fp);
+            }
+
+            if ((is_res && nr_out > 0) || nr_out > 1)
+                fprintf(fp, ")");
+        }
     }
 
     return need_sec;
