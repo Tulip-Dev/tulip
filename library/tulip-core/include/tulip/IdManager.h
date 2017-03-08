@@ -172,7 +172,7 @@ std::ostream& operator<<(std::ostream &,const IdManager &);
 // class for the management of the identifiers: node, edge
 // or any type which can be easily cast in an unsigned int
 template<typename ID_TYPE>
-  class TLP_SCOPE IdContainer :public std::vector<ID_TYPE> {
+class TLP_SCOPE IdContainer :public std::vector<ID_TYPE> {
   // the number of free ids
   unsigned int nbFree;
   // the position of the ids
@@ -190,8 +190,8 @@ template<typename ID_TYPE>
     sizePtr() = beginPtr() + size;
   }
 
- public:
- IdContainer() : std::vector<ID_TYPE>(), nbFree(0) {}
+public:
+  IdContainer() : std::vector<ID_TYPE>(), nbFree(0) {}
 
   // reset
   void clear() {
@@ -236,15 +236,17 @@ template<typename ID_TYPE>
   // return a new elt
   ID_TYPE get() {
     unsigned int freePos = this->size();
+
     if (nbFree) {
       setSize(freePos + 1);
       --nbFree;
     }
-    else {	
+    else {
       this->resize(freePos + 1);
       pos.resize(freePos + 1);
       (*this)[freePos] = ID_TYPE(freePos);
     }
+
     ID_TYPE elt = (*this)[freePos];
     pos[(unsigned int) elt] = freePos;
     return elt;
@@ -254,18 +256,23 @@ template<typename ID_TYPE>
   unsigned int getFirstOfRange(unsigned int nb) {
     unsigned int freePos = this->size();
     unsigned int i = std::min(nbFree, nb);
+
     if (i) {
       setSize(freePos + i);
       nbFree -= i;
     }
+
     if (i < nb) {
       this->resize(freePos + nb);
       pos.resize(freePos + nb);
+
       for (; i < nb; ++i)
-	(*this)[freePos + i] = ID_TYPE(freePos + i);
+        (*this)[freePos + i] = ID_TYPE(freePos + i);
     }
+
     for (i = 0; i < nb; ++i)
       pos[(unsigned int)((*this)[freePos + i])] = freePos + i;
+
     return freePos;
   }
 
@@ -273,8 +280,9 @@ template<typename ID_TYPE>
   void free(ID_TYPE elt) {
     unsigned int curPos = pos[(unsigned int) elt];
     unsigned int lastPos = this->size() - 1;
-      
+
     ID_TYPE tmp;
+
     if (curPos != lastPos) {
       // swap the elt with the last one
       tmp = (*this)[lastPos];
@@ -283,7 +291,9 @@ template<typename ID_TYPE>
       (*this)[curPos] = tmp;
       pos[(unsigned int) tmp] = curPos;
     }
+
     pos[(unsigned int) elt] = UINT_MAX;
+
     if (lastPos) {
       // lastPos is now the beginning
       // of the freed elts
@@ -325,12 +335,13 @@ template<typename ID_TYPE>
   void reIndex() {
     unsigned int nbElts = this->size();
 #ifdef _OPENMP
-#pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for(unsigned int i = 0; i < nbElts; ++i)
       pos[(unsigned int) (*this)[i]] = i;
   }
- };
+};
 }
 
 #endif

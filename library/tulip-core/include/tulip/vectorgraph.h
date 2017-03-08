@@ -86,7 +86,7 @@ public:
         * @remark o(1)
         */
   bool isElement(const node n) const {
-    assert(n.id < _nData.size());   
+    assert(n.id < _nData.size());
     return _nodes.isElement(n);
   }
   //=======================================================
@@ -95,7 +95,7 @@ public:
         * @remark o(1)
         */
   bool isElement(const edge e) const {
-    assert(e.id < _eData.size());   
+    assert(e.id < _eData.size());
     return _edges.isElement(e);
   }
   //=======================================================
