@@ -305,22 +305,15 @@ Iterator<node> * VectorGraph::getOutNodes(const node n) const {
 }
 //=======================================================
 node VectorGraph::addNode() {
-  node newNode;
+  node newNode(_nodes.get());
 
-  if (_freeNodes.empty()) {
-    newNode = node(_nodes.size());
-    _nData.push_back(_iNodes(_nodes.size()));
+  if (newNode.id == _nData.size()) {
+    _nData.push_back(_iNodes());
     addNodeToArray(newNode);
   }
-  else {
-    newNode = _freeNodes.back();
-    _freeNodes.pop_back();
+  else
     _nData[newNode].clear();
-    _nData[newNode]._nodesId  = _nodes.size();
-    //nodesVal[newNode] = NodeData();//If needed could be done by adding a reset function on ValArray
-  }
 
-  _nodes.push_back(newNode);
   return newNode;
 }
 //=======================================================
@@ -330,117 +323,96 @@ void VectorGraph::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
     addedNodes->reserve(nb);
   }
 
-  int nbReserve = nb - _freeNodes.size();
-
-  if (nbReserve > 0) {
-    nbReserve += _nData.size();
-    _nData.reserve(nbReserve);
-    _nodes.reserve(nbReserve);
+  unsigned int first = _nodes.getFirstOfRange(nb);
+  if (addedNodes) {
+    addedNodes->resize(nb);
+    memcpy(addedNodes->data(), &_nodes[first], nb * sizeof(node));
+  }
+  
+  unsigned int sz = _nData.size();
+  if (sz < _nodes.size()) {
+    _nData.resize(_nodes.size());
+    addNodeToArray(node(_nodes.size() - 1));
+    // get the number of recycled nodes
+    // that need to be cleared
+    nb -= _nodes.size() - sz;
   }
 
-  for (unsigned int i = 0; i < nb; ++i) {
-    node n = addNode();
-
-    if (addedNodes)
-      addedNodes->push_back(n);
-  }
+  for (unsigned int i = 0; i < nb; ++i)
+    _nData[_nodes[first + i]].clear();
 }
 //=======================================================
 void VectorGraph::delNode(const node n) {
   assert(isElement(n));
   delEdges(n);
-  //remove the nodes in the node vector
-  unsigned int nb_nodes = _nodes.size();
-  unsigned int npos = _nData[n]._nodesId;
-
-  if (npos != --nb_nodes) {
-    _nodes[npos] = _nodes[nb_nodes];
-    _nData[_nodes[npos]]._nodesId = npos;
-  }
-
-  _nodes.resize(nb_nodes);
-
-  if (nb_nodes) {
-    _freeNodes.push_back(n);
-    _nData[n]._nodesId = UINT_MAX;
-  }
-  else {
+  _nData[n].clear();
+  _nodes.free(n);
+  if (_nodes.empty())
     _nData.resize(0);
-    _freeNodes.resize(0);
-  }
-
   //integrityTest();
 }
 //=======================================================
-edge VectorGraph::addEdge(const node src, const node tgt) {
-  assert(isElement(src));
-  assert(isElement(tgt));
-  edge newEdge;
-
-  _iNodes& srcData = _nData[src];
-  _iNodes& tgtData = _nData[tgt];
-
-  if (_freeEdges.empty()) {
-    newEdge = edge(_edges.size());
-    _eData.push_back(_iEdges());
-    addEdgeToArray(newEdge);
-  }
-  else {
-    newEdge = _freeEdges.back();
-    _freeEdges.pop_back();
-  }
-
+void VectorGraph::addEdgeInternal(const edge newEdge, const node src,
+				  const node tgt) {
   _iEdges& eData = _eData[newEdge];
   eData._ends = std::make_pair(src, tgt);
-
+  _iNodes& srcData = _nData[src];
   eData._endsPos.first = srcData._adje.size();
 
+  _iNodes& tgtData = _nData[tgt];
   if (src != tgt)
     eData._endsPos.second = tgtData._adje.size();
   else
     eData._endsPos.second = srcData._adje.size() + 1;
 
-  eData._edgesId  = _edges.size();
-  _edges.push_back(newEdge);
-
   srcData.addEdge(true, tgt, newEdge);
   tgtData.addEdge(false, src, newEdge);
 
   srcData._outdeg += 1;
+}
+//=======================================================
+edge VectorGraph::addEdge(const node src, const node tgt) {
+  assert(isElement(src));
+  assert(isElement(tgt));
+  edge newEdge(_edges.get());
+
+  if (newEdge.id == _eData.size()) {
+    _eData.resize(newEdge.id + 1);
+    addEdgeToArray(newEdge);
+  }
+
+  addEdgeInternal(newEdge, src, tgt);
+
   //integrityTest();
   return newEdge;
 }
 //=======================================================
 void VectorGraph::addEdges(const std::vector<std::pair<node, node> >& ends,
                            std::vector<edge>* addedEdges) {
-  if (addedEdges)
-    addedEdges->clear();
-
   unsigned int nb = ends.size();
 
   if (nb == 0)
     return;
 
-  if (addedEdges)
+  if (addedEdges) {
+    addedEdges->clear();
     addedEdges->reserve(nb);
-
-  int nbReserve = nb - _freeEdges.size();
-
-  if (nbReserve > 0) {
-    nbReserve += _eData.size();
-    _eData.reserve(nbReserve);
-    _edges.reserve(nbReserve);
   }
 
-  std::vector<std::pair<node, node> >::const_iterator it = ends.begin();
-  std::vector<std::pair<node, node> >::const_iterator ite = ends.end();
-
-  for (; it != ite; ++it) {
-    edge e = addEdge(it->first, it->second);
-
-    if (addedEdges)
-      addedEdges->push_back(e);
+  unsigned int first = _edges.getFirstOfRange(nb);
+  if (addedEdges) {
+    addedEdges->resize(nb);
+    memcpy(addedEdges->data(), &_edges[first], nb * sizeof(edge));
   }
+
+  unsigned int sz = _eData.size();
+  if (sz < _edges.size()) {
+    _eData.resize(_edges.size());
+    addEdgeToArray(edge(_edges.size() - 1));
+  }
+
+  for(unsigned int i = 0; i < nb; ++i)
+    addEdgeInternal(_edges[first + i], ends[i].first, ends[i].second);
 }
 
 //=======================================================
@@ -488,35 +460,19 @@ void VectorGraph::delEdges(const node n) {
 }
 //=======================================================
 void VectorGraph::delAllEdges() {
-  _freeEdges.insert(_freeEdges.end(), _edges.rbegin(), _edges.rend());
-
-  for(size_t i=0; i<_edges.size(); ++i) {
-    _eData[_edges[i]]._edgesId = UINT_MAX;
-  }
-
-  _edges.resize(0);
-
+  _edges.clear();
+  _eData.clear();
+  
   for(size_t i=0; i<_nodes.size(); ++i) {
     _nData[_nodes[i]].clear();
   }
 }
 //=======================================================
 void VectorGraph::delAllNodes() {
-  _freeEdges.insert(_freeEdges.end(),_edges.rbegin(), _edges.rend());
-
-  for(size_t i=0; i<_edges.size(); ++i) {
-    _eData[_edges[i]]._edgesId = UINT_MAX;
-  }
-
-  _edges.resize(0);
-
-  _freeNodes.insert(_freeNodes.end(),_nodes.rbegin(), _nodes.rend());
-
-  for(size_t i=0; i<_nodes.size(); ++i) {
-    _nData[_nodes[i]]._nodesId = UINT_MAX;
-  }
-
-  _nodes.resize(0);
+  _edges.clear();
+  _eData.clear();
+  _nodes.clear();
+  _nData.clear();
 }
 //=======================================================
 node VectorGraph::opposite(const edge e, const node n) const {
@@ -592,42 +548,22 @@ void VectorGraph::shuffleNodes() {
   random_shuffle(_nodes.begin(), _nodes.end());
 
   //recompute indices of nodes
-  for (size_t i = 0; i < _nodes.size(); ++i) {
-    _nData[_nodes[i]]._nodesId = i;
-  }
+  _nodes.reIndex();
 }
 //=======================================================
 void VectorGraph::shuffleEdges() {
   random_shuffle(_edges.begin(), _edges.end());
 
   //recompute indices of edges
-  for (size_t i = 0; i < _edges.size(); ++i) {
-    _eData[_edges[i]]._edgesId = i;
-  }
+  _edges.reIndex();
 }
 //=======================================================
 void VectorGraph::swap(const node a, const node b) {
-  assert(isElement(a));
-  assert(isElement(b));
-  unsigned int pa = _nData[a]._nodesId;
-  unsigned int pb = _nData[b]._nodesId;
-  node tmp = _nodes[pa];
-  _nodes[pa] = _nodes[pb];
-  _nodes[pb] = tmp;
-  _nData[a]._nodesId = pb;
-  _nData[b]._nodesId = pa;
+  _nodes.swap(a, b);
 }
 //=======================================================
 void VectorGraph::swap(const edge a, const edge b) {
-  assert(isElement(a));
-  assert(isElement(b));
-  unsigned int pa  = _eData[a]._edgesId;
-  unsigned int pb  = _eData[b]._edgesId;
-  edge tmp   = _edges[pa];
-  _edges[pa]  = _edges[pb];
-  _edges[pb]  = tmp;
-  _eData[a]._edgesId = pb;
-  _eData[b]._edgesId = pa;
+  _edges.swap(a, b);
 }
 //=======================================================
 void VectorGraph::dump() const {
@@ -657,10 +593,10 @@ void VectorGraph::integrityTest() {
   double sumDeg = 0;
 
   for (unsigned int i=0; i < numberOfNodes(); ++i)
-    testCond("nodesId in array :" , _nData[_nodes[i]]._nodesId == i);
+    testCond("nodesId in array :" , _nodes.getPos(_nodes[i]) == i);
 
   for (unsigned int i=0; i < numberOfEdges(); ++i)
-    testCond("edgesId in array :" , _eData[_edges[i]]._edgesId == i);
+    testCond("edgesId in array :" , _edges.getPos(_edges[i]) == i);
 
   set<edge> edgeFound;
   set<node> nodeFound;
@@ -737,25 +673,10 @@ void VectorGraph::addEdgeToArray(edge e) {
 }
 //=======================================================
 void VectorGraph::removeEdge(edge e) {
-  if (_eData[e]._edgesId == UINT_MAX) return;
-
-  unsigned int nb_edges = _edges.size();
-  unsigned int epos = _eData[e]._edgesId;
-
-  if (epos != --nb_edges) {
-    _edges[epos] = _edges[nb_edges];
-    _eData[_edges[epos]]._edgesId = epos;
-  }
-
-  _edges.resize(nb_edges);
-
-  if (nb_edges) {
-    _freeEdges.push_back(e);
-    _eData[e]._edgesId = UINT_MAX;
-  }
-  else {
-    _eData.resize(0);
-    _freeEdges.resize(0);
+  if (_edges.isElement(e)) {
+    _edges.free(e);
+    if (_edges.empty())
+      _eData.resize(0);
   }
 }
 //=======================================================

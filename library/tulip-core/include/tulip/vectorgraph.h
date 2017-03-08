@@ -30,6 +30,7 @@
 #include <tulip/tulipconf.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
+#include <tulip/IdManager.h>
 #include <tulip/vectorgraphproperty.h>
 
 namespace tlp {
@@ -85,7 +86,8 @@ public:
         * @remark o(1)
         */
   bool isElement(const node n) const {
-    return (n.id < _nData.size()) && (_nData[n]._nodesId != UINT_MAX);
+    assert(n.id < _nData.size());   
+    return _nodes.isElement(n);
   }
   //=======================================================
   /**
@@ -93,7 +95,8 @@ public:
         * @remark o(1)
         */
   bool isElement(const edge e) const {
-    return (e.id < _eData.size()) && (_eData[e]._edgesId != UINT_MAX);
+    assert(e.id < _eData.size());   
+    return _edges.isElement(e);
   }
   //=======================================================
   /**
@@ -460,9 +463,7 @@ public:
       sort(_edges.begin(), _edges.end(), cmp);
 
     //recompute indices of edges
-    for (unsigned int i = 0; i < _edges.size(); ++i) {
-      _eData[_edges[i]]._edgesId = i;
-    }
+    _edges.reIndex();
   }
   //=======================================================
   /**
@@ -485,10 +486,8 @@ public:
     else
       sort(_nodes.begin(), _nodes.end(), cmp);
 
-    //recompute indices of edges
-    for (unsigned int i = 0; i < _nodes.size(); ++i) {
-      _nData[_nodes[i]]._nodesId = i;
-    }
+    //recompute indices of nodes
+    _nodes.reIndex();
   }
   //=======================================================
   /**
@@ -498,7 +497,7 @@ public:
        */
   unsigned int edgePos(const edge e) const {
     assert(isElement(e));
-    return _eData[e]._edgesId;
+    return _edges.getPos(e);
   }
   //=======================================================
   /**
@@ -508,7 +507,7 @@ public:
        */
   unsigned int nodePos(const node n) const {
     assert(isElement(n));
-    return _nData[n]._nodesId;
+    return _nodes.getPos(n);
   }
   //=======================================================
   /**
@@ -534,7 +533,7 @@ public:
         */
   template<typename TYPE>
   void alloc(NodeProperty<TYPE> &prop) {
-    ValArray<TYPE> *array = new ValArray<TYPE>(_nodes.size() + _freeNodes.size(), _nodes.capacity());
+    ValArray<TYPE> *array = new ValArray<TYPE>(_nodes.size() + _nodes.numberOfFree(), _nodes.capacity());
     _nodeArrays.insert(array);
     prop = NodeProperty<TYPE>(array, this);
   }
@@ -561,7 +560,7 @@ public:
       */
   template<typename TYPE>
   void alloc(EdgeProperty<TYPE> &prop) {
-    ValArray<TYPE> *array = new ValArray<TYPE>(_edges.size() + _freeEdges.size(), _edges.capacity());
+    ValArray<TYPE> *array = new ValArray<TYPE>(_edges.size() + _edges.numberOfFree(), _edges.capacity());
     _edgeArrays.insert(array);
     prop = EdgeProperty<TYPE>(array, this);
   }
@@ -659,14 +658,14 @@ public:
 private:
 
   struct _iNodes {
-    _iNodes(unsigned int id = UINT_MAX): _nodesId(id), _outdeg(0) {
+    _iNodes(): _outdeg(0) {
     }
 
     void clear() {
       _outdeg = 0;
-      _adjt.resize(0);
-      _adjn.resize(0);
-      _adje.resize(0);
+      _adjt.clear();
+      _adjn.clear();
+      _adje.clear();
     }
 
     void addEdge(bool t, node n, edge e) {
@@ -675,7 +674,6 @@ private:
       _adje.push_back(e);
     }
 
-    unsigned int _nodesId; /** index of a node in the _nodes vector*/
     unsigned int _outdeg;  /** out degree of nodes */
     std::vector<bool> _adjt; /** orientation of the edge, used to separate in and out edges/nodes */
     std::vector<node> _adjn; /** inout nodes*/
@@ -683,7 +681,6 @@ private:
   };
 
   struct _iEdges {
-    unsigned int _edgesId; /** index of a node in the _edges vector*/
     std::pair<node, node> _ends; /** source and target of an edge */
     std::pair<unsigned int, unsigned int> _endsPos; /** edge pos in the ends adjacencies */
   };
@@ -691,11 +688,8 @@ private:
   std::vector<_iNodes> _nData; /** internal storage of nodes */
   std::vector<_iEdges> _eData; /** internal storage of edges */
 
-  std::vector< node > _nodes; /** vector of nodes element of the graph */
-  std::vector< edge > _edges; /** vector of edges element of the graph */
-
-  std::vector<node> _freeNodes; /** vector of nodes that has been deleted and that can be reused */
-  std::vector<edge> _freeEdges; /** vector of edges that has been deleted and that can be reused */
+  IdContainer<node> _nodes; /** vector of nodes element of the graph */
+  IdContainer<edge> _edges; /** vector of edges element of the graph */
 
   std::set<ValArrayInterface *> _nodeArrays; /** set of all node properties allocated on that graph */
   std::set<ValArrayInterface *> _edgeArrays; /** set of all edge properties allocated on that graph */
@@ -717,6 +711,11 @@ private:
         * internal function to adjust size of edge properties when graph is modified
         */
   void addEdgeToArray(edge e);
+  //=======================================================
+  /**
+        * internal function to configure a new edge and its ends
+        */
+  void addEdgeInternal(edge e, node src, node tgt);
   //=======================================================
   /**
         * internal function to remove an edge
