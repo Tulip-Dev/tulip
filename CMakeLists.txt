@@ -70,6 +70,11 @@ IF(APPLE)
 ENDIF(APPLE)
 
 ## ========================================================
+## Tulip CMake macros
+## ========================================================
+INCLUDE(cmake/TulipUseFile.cmake)
+
+## ========================================================
 ## Tulip version variables
 ## ========================================================
 SET(TulipMajorVersion 4)
@@ -94,7 +99,11 @@ ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
     # find svn to get the source revision
     INCLUDE(FindSubversion)
     IF(Subversion_FOUND)
-      Subversion_WC_INFO(${PROJECT_SOURCE_DIR} TULIP)
+      SET(TULIP_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+      IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*" OR "${CMAKE_GENERATOR}" MATCHES ".*MinGW.*")
+        WINDOWS_TO_MSYS_PATH(${PROJECT_SOURCE_DIR} TULIP_SOURCE_DIR)
+      ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*"  OR "${CMAKE_GENERATOR}" MATCHES ".*MinGW.*")
+      Subversion_WC_INFO(${TULIP_SOURCE_DIR} TULIP)
       SET(TULIP_SVN_REVISION ${TULIP_WC_REVISION})
     ENDIF(Subversion_FOUND)
   ELSE()
@@ -127,11 +136,6 @@ STRING(TIMESTAMP CurrentYear "%Y")
 ## ========================================================
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in" "${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake" IMMEDIATE @ONLY)
 ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
-
-## ========================================================
-## Additional macros
-## ========================================================
-INCLUDE(cmake/TulipUseFile.cmake)
 
 ## ========================================================
 ## Profiling
