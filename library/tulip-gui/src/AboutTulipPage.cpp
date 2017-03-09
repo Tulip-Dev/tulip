@@ -29,6 +29,7 @@
 #include <QDir>
 #include <QTextStream>
 #include <QDesktopServices>
+#include <QUrl>
 
 using namespace tlp;
 
