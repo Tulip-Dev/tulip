@@ -118,21 +118,26 @@ void APIDataBase::addApiEntry(const QString &apiEnt) {
 
       bool dictListSetTupleTypeHint = false;
       QString typeHintParam = "";
+
       foreach(const QString& param, paramsList) {
         QString paramClean = param.trimmed();
+
         if (dictListSetTupleTypeHint) {
           typeHintParam += param;
+
           if (paramClean.endsWith("]") || paramClean.contains("=")) {
             params.append(typeHintParam.trimmed());
             dictListSetTupleTypeHint = false;
             continue;
           }
         }
+
         if ((paramClean.startsWith("List") || paramClean.startsWith("Set") || paramClean.startsWith("Tuple") ||
              paramClean.startsWith("Dict") || paramClean.startsWith("Iterable")) && !paramClean.endsWith("]") && !paramClean.contains("=")) {
           typeHintParam = param;
           dictListSetTupleTypeHint = true;
         }
+
         if (!dictListSetTupleTypeHint) {
           params.append(param.trimmed());
         }
