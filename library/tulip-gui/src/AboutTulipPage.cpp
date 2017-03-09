@@ -39,7 +39,9 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
   QString title("Tulip ");
   title += TULIP_VERSION;
 #ifdef TULIP_SVN_REVISION
-  title += "<br/>(SVN rev. " + QString(TULIP_SVN_REVISION) + ")";
+  QString svn_rev(TULIP_SVN_REVISION);
+  if (!svn_rev.isEmpty())
+    title += "<br/>(SVN rev. " + svn_rev + ")";
 #endif
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" + title +
