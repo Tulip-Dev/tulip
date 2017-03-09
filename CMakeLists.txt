@@ -89,8 +89,7 @@ ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
   # when it contains non digit characters (like alpha, beta, dev, ...)
   SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
   # get current Tulip SVN revision for a dev build
-  SET(JENKINS_URL $ENV{JENKINS_URL})
-  IF(JENKINS_URL MATCHES "")
+  IF("$ENV{JENKINS_URL}" STREQUAL "")
     # not invoked thru jenkins integration server
     # find svn to get the source revision
     INCLUDE(FindSubversion)
@@ -98,10 +97,10 @@ ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
       Subversion_WC_INFO(${PROJECT_SOURCE_DIR} TULIP)
       SET(TULIP_SVN_REVISION ${TULIP_WC_REVISION})
     ENDIF(Subversion_FOUND)
-  ELSE(JENKINS_URL MATCHES "")
+  ELSE()
     # in jenkins so get from the dedicated env variable
     SET(TULIP_SVN_REVISION $ENV{SVN_REVISION})
-  ENDIF(JENKINS_URL MATCHES "")
+  ENDIF()
 ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================
