@@ -48,7 +48,7 @@ public slots:
   void setDetailedView(bool);
   void toggleDetailedView();
   void sendReport();
-  void saveData();
+//  void saveData();
   void setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version, const QString &stackTrace);
   void setPerspectiveData(const PerspectiveProcessInfo &info);
 };

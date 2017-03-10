@@ -109,23 +109,23 @@ void TulipPerspectiveCrashHandler::reportPosted() {
   _poster->deleteLater();
 }
 
-void TulipPerspectiveCrashHandler::saveData() {
-  tlp::TulipProject *project = tlp::TulipProject::restoreProject(_perspectiveInfo.projectPath);
+// void TulipPerspectiveCrashHandler::saveData() {
+//  tlp::TulipProject* project = tlp::TulipProject::restoreProject(_perspectiveInfo.projectPath);
 
-  if (!project->isValid())
-    QMessageBox::critical(this, trUtf8("Error while saving data"), trUtf8("The perspective data could not be retrieved."));
-  else {
-    QString outputPath = QFileDialog::getSaveFileName(this, trUtf8("Save project"), QDir::homePath(), trUtf8("Tulip project (*.tlpx)"));
+//  if (!project->isValid())
+//    QMessageBox::critical(this,trUtf8("Error while saving data"),trUtf8("The perspective data could not be retrieved."));
+//  else {
+//    QString outputPath = QFileDialog::getSaveFileName(this,trUtf8("Save project"),QDir::homePath(),trUtf8("Tulip project (*.tlpx)"));
 
-    if (!outputPath.isNull()) {
-      project->write(outputPath);
-    }
-  }
+//    if (!outputPath.isEmpty()) {
+//      project->write(outputPath);
+//    }
+//  }
 
-  delete project;
-  _ui->saveButton->setText(trUtf8("Data saved"));
-  _ui->saveButton->setEnabled(false);
-}
+//  delete project;
+//  _ui->saveButton->setText(trUtf8("Data saved"));
+//  _ui->saveButton->setEnabled(false);
+//}
 
 void TulipPerspectiveCrashHandler::setEnvData(const QString &plateform, const QString &arch, const QString &compiler, const QString &version,
                                               const QString &stackTrace) {

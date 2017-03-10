@@ -650,7 +650,7 @@ void PythonScriptView::saveScript(int tabIdx, bool clear) {
     } else
       fileName = mainScriptFileName;
 
-    if (fileName != "") {
+    if (!fileName.isEmpty()) {
       if (!fileName.endsWith(".py"))
         fileName += ".py";
 
