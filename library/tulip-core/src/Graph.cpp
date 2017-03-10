@@ -1054,12 +1054,12 @@ Graph *Graph::addCloneSubGraph(const std::string &name, bool addSibling, bool ad
   return clone;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(const std::set<node> &nodes, Graph *parentSubGraph) {
-  if (parentSubGraph == nullptr)
+Graph *Graph::inducedSubGraph(const std::set<node> &nodes, Graph *parentSubGraph, const string &name) {
+  if (parentSubGraph == NULL)
     parentSubGraph = this;
 
   // create subgraph and add nodes
-  Graph *result = parentSubGraph->addSubGraph();
+  Graph *result = parentSubGraph->addSubGraph(name);
   StlIterator<node, std::set<node>::const_iterator> it(nodes.begin(), nodes.end());
   result->addNodes(&it);
 
@@ -1075,7 +1075,7 @@ Graph *Graph::inducedSubGraph(const std::set<node> &nodes, Graph *parentSubGraph
   return result;
 }
 //=========================================================
-Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph) {
+Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph, const string &name) {
   set<node> nodesSet;
   node n;
   forEach(n, selection->getNodesEqualTo(true)) {
@@ -1086,7 +1086,7 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph)
     nodesSet.insert(source(e));
     nodesSet.insert(target(e));
   }
-  return inducedSubGraph(nodesSet, parentSubGraph);
+  return inducedSubGraph(nodesSet, parentSubGraph, name);
 }
 //====================================================================================
 node Graph::createMetaNode(const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
@@ -1485,7 +1485,7 @@ template <> struct less<MetaEdge> {
     return (c.source > d.source) || ((c.source == d.source) && (c.target < d.target));
   }
 };
-}
+} // namespace std
 //====================================================================================
 void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector<node> &metaNodes) {
   GraphProperty *metaInfo = ((GraphAbstract *)getRoot())->getMetaGraphProperty();

@@ -150,14 +150,10 @@ TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::
  *this case, the Pluginprogress should have an error that can be displayed.
  *
  * @param format The format to use to import the graph.
- * @param dataSet The parameters to pass to the import plugin (file to read,
- *...)
- * @param progress A PluginProgress to report the progress of the operation, as
- *well as final state. Defaults to nullptr.
- * @param newGraph The graph to import the data into. This can be usefull to
- *import data into a subgraph. Defaults to nullptr.
- * @return :Graph* The graph containing the imported data, or nullptr in case of
- *failure.
+ * @param dataSet The parameters to pass to the import plugin (file to read, ...)
+ * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
+ * @param newGraph The graph to import the data into. This can be useful to import data into a subgraph. Defaults to NULL.
+ * @return :Graph* The graph containing the imported data, or NULL in case of failure.
  **/
 TLP_SCOPE Graph *importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress = nullptr, Graph *newGraph = nullptr);
 
@@ -316,21 +312,21 @@ public:
   virtual void clear() = 0;
 
   /**
-    * @brief Creates and returns a new sub-graph of this graph.
-    *
-    * If a BooleanProperty is provided, all the nodes and edges for which it is
-    *true will be added to the subgraph.
-    * If none is provided, then the subgraph will be empty.
-    *
-    * The id parameter should only be provided if you know exactly what you are
-    *doing; as Tulip will manage the subgraphs IDs when left to 0.
-    * It is only used by the Graph loading as subgraphs ids are preserved when
-    *saving/loading a Graph.
-    *
-    * @param selection The elements to add to the new subgraph. Defaults to 0.
-    * @param name The name of the newly created subgraph. Defaults to "unnamed".
-    * @return :Graph* The newly created subgraph.
-    **/
+   * @brief Creates and returns a new sub-graph of this graph.
+   *
+   * If a BooleanProperty is provided, all the nodes and edges for which it is
+   *true will be added to the subgraph.
+   * If none is provided, then the subgraph will be empty.
+   *
+   * The id parameter should only be provided if you know exactly what you are
+   *doing; as Tulip will manage the subgraphs IDs when left to 0.
+   * It is only used by the Graph loading as subgraphs ids are preserved when
+   *saving/loading a Graph.
+   *
+   * @param selection The elements to add to the new subgraph. Defaults to 0.
+   * @param name The name of the newly created subgraph. Defaults to "unnamed".
+   * @return :Graph* The newly created subgraph.
+   **/
   virtual Graph *addSubGraph(BooleanProperty *selection = nullptr, const std::string &name = "unnamed") = 0;
 
   /**
@@ -360,15 +356,13 @@ public:
    * @brief Creates and returns a new sub-graph of the graph induced by a set of
    * nodes.
    * Every node contained in the given set of nodes is added to the subgraph.
-   * Every edge connecting any two nodes in the set of given nodes is also
-   * added.
-   * @param nodeSet The nodes to add to the subgraph. All the edges between
-   * these nodes are added too.
-   * @param parentSubGraph If provided, is used as parent graph for the newly
-   * created subgraph instead of the graph this method is called on.
+   * Every edge connecting any two nodes in the set of given nodes is also added.
+   * @param nodeSet The nodes to add to the subgraph. All the edges between these nodes are added too.
+   * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = nullptr);
+  Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.
@@ -378,9 +372,10 @@ public:
    * Every edge connecting any two nodes in the resulting set of nodes is also added.
    * @param selection a selection of nodes and edges.
    * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
    */
-  Graph *inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph = nullptr);
+  Graph *inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 
   /**
    * @brief Deletes a sub-graph of this graph.
@@ -2242,7 +2237,7 @@ protected:
     std::pair<PropertyInterface *, std::string> *renamedProp;
   } info;
 };
-}
+} // namespace tlp
 
 /// Print the graph (only nodes and edges) in ostream, in the tulip format
 TLP_SCOPE std::ostream &operator<<(std::ostream &, const tlp::Graph *);
