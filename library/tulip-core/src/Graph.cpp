@@ -1114,12 +1114,12 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling,
 }
 //=========================================================
 Graph* Graph::inducedSubGraph(const std::set<node> &nodes,
-                              Graph* parentSubGraph) {
+                              Graph* parentSubGraph, const string &name) {
   if (parentSubGraph == NULL)
     parentSubGraph = this;
 
   // create subgraph and add nodes
-  Graph *result = parentSubGraph->addSubGraph();
+  Graph *result = parentSubGraph->addSubGraph(name);
   StlIterator<node, std::set<node>::const_iterator> it(nodes.begin(), nodes.end());
   result->addNodes(&it);
 
@@ -1136,7 +1136,7 @@ Graph* Graph::inducedSubGraph(const std::set<node> &nodes,
 }
 //=========================================================
 Graph* Graph::inducedSubGraph(BooleanProperty *selection,
-                              Graph* parentSubGraph) {
+                              Graph* parentSubGraph, const string& name) {
   set<node> nodesSet;
   node n;
   forEach(n, selection->getNodesEqualTo(true)) {
@@ -1147,7 +1147,7 @@ Graph* Graph::inducedSubGraph(BooleanProperty *selection,
     nodesSet.insert(source(e));
     nodesSet.insert(target(e));
   }
-  return inducedSubGraph(nodesSet, parentSubGraph);
+  return inducedSubGraph(nodesSet, parentSubGraph, name);
 }
 //====================================================================================
 node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {

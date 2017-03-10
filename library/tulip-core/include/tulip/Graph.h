@@ -118,7 +118,7 @@ TLP_SCOPE bool exportGraph(Graph *graph, std::ostream &outputStream, const std::
  * @param format The format to use to import the graph.
  * @param dataSet The parameters to pass to the import plugin (file to read, ...)
  * @param progress A PluginProgress to report the progress of the operation, as well as final state. Defaults to NULL.
- * @param newGraph The graph to import the data into. This can be usefull to import data into a subgraph. Defaults to NULL.
+ * @param newGraph The graph to import the data into. This can be useful to import data into a subgraph. Defaults to NULL.
  * @return :Graph* The graph containing the imported data, or NULL in case of failure.
  **/
 TLP_SCOPE Graph* importGraph(const std::string &format, DataSet &dataSet, PluginProgress *progress=NULL,Graph *newGraph=NULL);
@@ -294,10 +294,11 @@ public:
    * Every edge connecting any two nodes in the set of given nodes is also added.
    * @param nodeSet The nodes to add to the subgraph. All the edges between these nodes are added too.
    * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
    */
   Graph *inducedSubGraph(const std::set<node>& nodeSet,
-                         Graph* parentSubGraph = NULL);
+                         Graph* parentSubGraph = NULL, const std::string& name = "unnamed");
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.
@@ -307,10 +308,11 @@ public:
    * Every edge connecting any two nodes in the resulting set of nodes is also added.
    * @param selection a selection of nodes and edges.
    * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
+   * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
    */
   Graph *inducedSubGraph(BooleanProperty *selection,
-                         Graph* parentSubGraph = NULL);
+                         Graph* parentSubGraph = NULL, const std::string& name = "unnamed");
 
   /**
    * @brief Deletes a sub-graph of this graph.
