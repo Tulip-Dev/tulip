@@ -197,12 +197,12 @@ void ScatterPlot2DView::setState(const DataSet &dataSet) {
 
     if (lastGraph) {
       lastGraph->removeListener(this);
-      lastGraph->getProperty<ColorProperty>("viewColor")->removeListener(this);
-      lastGraph->getProperty<ColorProperty>("viewLabel")->removeListener(this);
-      lastGraph->getProperty<ColorProperty>("viewSelection")->removeListener(this);
-      lastGraph->getProperty<ColorProperty>("viewSize")->removeListener(this);
-      lastGraph->getProperty<ColorProperty>("viewShape")->removeListener(this);
-      lastGraph->getProperty<ColorProperty>("viewTexture")->removeListener(this);
+      lastGraph->getProperty("viewColor")->removeListener(this);
+      lastGraph->getProperty("viewLabel")->removeListener(this);
+      lastGraph->getProperty("viewSelection")->removeListener(this);
+      lastGraph->getProperty("viewSize")->removeListener(this);
+      lastGraph->getProperty("viewShape")->removeListener(this);
+      lastGraph->getProperty("viewTexture")->removeListener(this);
     }
 
     delete edgeAsNodeGraph;
