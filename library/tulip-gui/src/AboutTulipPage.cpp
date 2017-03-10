@@ -22,6 +22,7 @@
 #include <tulip/GlMainWidget.h>
 #include <tulip/TulipRelease.h>
 #include <tulip/OpenGlConfigManager.h>
+#include <tulip/PythonVersionChecker.h>
 
 #include "ui_AboutTulipPage.h"
 
@@ -31,6 +32,13 @@
 #include <QDesktopServices>
 #include <QUrl>
 
+namespace tlp {
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+extern QString getSipVersion();
+#endif
+extern QString getTulipSvnRevision();
+}
+
 using namespace tlp;
 
 AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::AboutTulipPageData()) {
@@ -38,11 +46,11 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 
   QString title("Tulip ");
   title += TULIP_VERSION;
-#ifdef TULIP_SVN_REVISION
-  QString svn_rev(TULIP_SVN_REVISION);
+  QString svn_rev(getTulipSvnRevision());
+
   if (!svn_rev.isEmpty())
     title += "<br/>(SVN rev. " + svn_rev + ")";
-#endif
+
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" + title +
                            "</span></p></body></html>");
@@ -63,11 +71,11 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 
       "  <li> <b> Python </b> " +
-      TLP_PYTHON +
+      PythonVersionChecker::compiledVersion() +
       ": <a href=\"https://www.python.org\">https://www.python.org</a> </li>"
       "  <li> <b> SIP </b> " +
-      SIP_VERSION +
-      ": <a href=\"https://www.riverbankcomputing.com/software/sip\">https://www.riverbankcomputing.com/software/sip</a> </li>"
+      getSipVersion() +
+      ": <a href=\"https://www.riverbankcomputing.com/software/sip/\">https://www.riverbankcomputing.com/software/sip</a> </li>"
 #endif
       "</ul>"
       "</p>";

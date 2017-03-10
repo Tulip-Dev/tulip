@@ -98,6 +98,9 @@ SET(SRCS
     ScientificDoubleSpinBox.cpp
 )
 
+ADD_DEFINITIONS(-DQT_DLL)
+ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
+
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
   SET(PYTHON_PART_SRCS PythonVersionChecker.cpp)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTULIP_BUILD_PYTHON_COMPONENTS")
@@ -106,7 +109,6 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
     SET(TLPGUI_PYTHON_COMPILE_DEFINITIONS ${TLPGUI_PYTHON_COMPILE_DEFINITIONS} MSYS2_PYTHON=1 PYTHON_HOME_PATH="${PYTHON_HOME_PATH}/../")
   ENDIF(MSYS2_PYTHON)
   SET_SOURCE_FILES_PROPERTIES(PythonVersionChecker.cpp
-                              AboutTulipPage.cpp
                               PROPERTIES COMPILE_DEFINITIONS "${TLPGUI_PYTHON_COMPILE_DEFINITIONS}")
   ADD_LIBRARY(tulip-gui-python STATIC ${PYTHON_PART_SRCS})
   TARGET_LINK_LIBRARIES(tulip-gui-python ${QT_LIBRARIES})
@@ -116,11 +118,18 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
   ENDIF(UNIX)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
-IF(TULIP_SVN_REVISION)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DTULIP_SVN_REVISION=\\\"${TULIP_SVN_REVISION}\\\"")
-ENDIF(TULIP_SVN_REVISION)
+SET(ABOUT_PAGE_COMPILE_DEFINITIONS ${TLPGUI_PYTHON_COMPILE_DEFINITIONS} TULIP_SVN_REVISION="${TULIP_SVN_REVISION}")
+SET_SOURCE_FILES_PROPERTIES(AboutTulipPageUtils.cpp
+                            PROPERTIES COMPILE_DEFINITIONS "${ABOUT_PAGE_COMPILE_DEFINITIONS}")
+ADD_LIBRARY(tulip-about-page-utils STATIC AboutTulipPageUtils.cpp)
+TARGET_LINK_LIBRARIES(tulip-about-page-utils ${QT_LIBRARIES})
+IF(UNIX)
+  SET_TARGET_PROPERTIES(tulip-about-page-utils
+                        PROPERTIES COMPILE_OPTIONS "-fPIC")
+ENDIF(UNIX)
 
 QTX_WRAP_UI(UI_HEADERS
+  ../designer/AboutTulipPage.ui
   ../designer/ColorScaleConfigDialog.ui
   ../designer/CopyPropertyDialog.ui
   ../designer/CSVGraphMappingConfigurationWidget.ui
@@ -146,7 +155,6 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/ElementInformationWidget.ui
   ../designer/SnapshotDialog.ui
   ../designer/SceneLayersConfigWidget.ui
-  ../designer/AboutTulipPage.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
@@ -234,16 +242,15 @@ QTX_WRAP_CPP(MOC_SRCS
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
 
-ADD_DEFINITIONS(-DQT_DLL)
-ADD_DEFINITIONS(-DQT_THREAD_SUPPORT)
-
-INCLUDE_DIRECTORIES(${TulipGUIBuildInclude} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLESInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QtAwesomeInclude})
+INCLUDE_DIRECTORIES(${TulipGUIBuildInclude} ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${TulipGUIInclude} ${CMAKE_CURRENT_BINARY_DIR} ${ZLIB_INCLUDE_DIR} ${GLEW_INCLUDE_DIR} ${QuazipInclude} ${QtAwesomeInclude})
 ADD_LIBRARY(${LibTulipGUIName} SHARED ${SRCS} ${MOC_SRCS} ${RCC_SRCS} ${UI_HEADERS})
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} ${QT_LIBRARIES} ${LibTulipCoreName} ${LibTulipOGLESName} ${QuazipLibrary} ${QtAwesomeLibrary})
 
 IF(TULIP_BUILD_PYTHON_COMPONENTS)
 TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-gui-python)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
+
+TARGET_LINK_LIBRARIES(${LibTulipGUIName} tulip-about-page-utils)
 
 INSTALL(TARGETS ${LibTulipGUIName}
   RUNTIME DESTINATION ${TulipBinInstallDir} COMPONENT tulip_gui
