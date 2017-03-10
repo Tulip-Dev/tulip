@@ -485,11 +485,11 @@ Creates and returns a sub-graph of this graph (or the parent of this graph) that
 
 //=========================================================================================== 
 
-  tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL);
+  tlp::Graph *inducedSubGraph(const std::set<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 %Docstring
-tlp.Graph.inducedSubGraph(nodeSet[, parentSubGraph])
+tlp.Graph.inducedSubGraph(nodeSet[, parentSubGraph, name])
 
-Creates and returns a new sub-graph of the graph induced by a set of nodes. 
+Creates and returns a new sub-graph of the graph induced by a set of nodes.
 The sub-graph contains all the nodes from the set and all the existing edges
 between two nodes in the set including self-loops.
 
@@ -497,20 +497,22 @@ between two nodes in the set including self-loops.
 :type nodeSet: list or set of :class:`tlp.node`
 :param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
+:param name: The name of the newly created subgraph
+:type name: string
 :rtype: :class:`tlp.Graph` 
 %End
 
 // Allow to use a Python list of tlp.node instead of a Python set of tlp.node
-  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL);
+  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 %MethodCode
   sipRes = sipCpp->inducedSubGraph(std::set<tlp::node>(a0->begin(), a0->end()));
 %End
 
 //===========================================================================================
 
-  tlp::Graph *inducedSubGraph(tlp::BooleanProperty *selection, tlp::Graph *parentSubGraph = NULL);
+  tlp::Graph *inducedSubGraph(tlp::BooleanProperty *selection, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 %Docstring
-tlp.Graph.inducedSubGraph(selection[, parentSubGraph])
+tlp.Graph.inducedSubGraph(selection[, parentSubGraph, name])
 
 .. versionadded:: 4.10
 
@@ -522,6 +524,8 @@ the selected edges and all the existing edges between two nodes in the set inclu
 :type selection: :class:`tlp.BooleanProperty`
 :param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
+:param name: The name of the newly created subgraph
+:type name: string
 :rtype: :class:`tlp.Graph`
 %End
 
