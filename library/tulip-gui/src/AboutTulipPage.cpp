@@ -34,9 +34,9 @@
 
 namespace tlp {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  extern QString getSipVersion();
+extern QString getSipVersion();
 #endif
-  extern QString getTulipSvnRevision();
+extern QString getTulipSvnRevision();
 }
 
 
