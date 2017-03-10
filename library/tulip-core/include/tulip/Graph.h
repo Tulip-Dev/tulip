@@ -257,13 +257,10 @@ public:
   /**
     * @brief Creates and returns a new sub-graph of this graph.
     *
-    * If a BooleanProperty is provided, all the nodes and edges for which it is true will be added to the subgraph.
+    * If a BooleanProperty is provided, only nodes and edges for which it is true will be added to the subgraph.
     * If none is provided, then the subgraph will be empty.
     *
-    * The id parameter should only be provided if you know exactly what you are doing; as Tulip will manage the subgraphs IDs when left to 0.
-    * It is only used by the Graph loading as subgraphs ids are preserved when saving/loading a Graph.
-    *
-    * @param selection The elements to add to the new subgraph. Defaults to 0.
+    * @param selection The elements to add to the new subgraph. Defaults to NULL.
     * @param name The name of the newly created subgraph. Defaults to "unnamed".
     * @return :Graph* The newly created subgraph.
     **/

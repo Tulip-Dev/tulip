@@ -1139,13 +1139,14 @@ Graph* Graph::inducedSubGraph(BooleanProperty *selection,
                               Graph* parentSubGraph, const string& name) {
   set<node> nodesSet;
   node n;
-  forEach(n, selection->getNodesEqualTo(true)) {
+  forEach(n, selection->getNodesEqualTo(true, parentSubGraph)) {
     nodesSet.insert(n);
   }
   edge e;
-  forEach(e, selection->getEdgesEqualTo(true)) {
-    nodesSet.insert(source(e));
-    nodesSet.insert(target(e));
+  forEach(e, selection->getEdgesEqualTo(true, parentSubGraph)) {
+    const pair<node, node>&ext = ends(e);
+    nodesSet.insert(ext.first);
+    nodesSet.insert(ext.second);
   }
   return inducedSubGraph(nodesSet, parentSubGraph, name);
 }
