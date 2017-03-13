@@ -21,9 +21,11 @@
 #ifndef Tulip_SUPERGRAPHVIEW_H
 #define Tulip_SUPERGRAPHVIEW_H
 
+#include <vector>
 #include <tulip/GraphAbstract.h>
 #include <tulip/GraphImpl.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/IdManager.h>
 
 namespace tlp {
 // used for node management
@@ -71,15 +73,15 @@ public:
     return _nodeData.get(n.id) != NULL;
   }
   bool isElement(const edge e) const {
-    return edgeAdaptativeFilter.get(e.id);
+    return _edges.isElement(e);
   }
   edge existEdge(const node source, const node target,
                  bool directed) const;
   unsigned int numberOfNodes() const {
-    return _nodeData.numberOfNonDefaultValues();
+    return _nodes.size();
   }
   unsigned int numberOfEdges() const {
-    return edgeAdaptativeFilter.numberOfNonDefaultValues();
+    return _edges.size();
   }
   //=========================================================================
   unsigned int deg(const node n) const {
@@ -96,10 +98,22 @@ public:
     return _nodeData.get(n.id)->outDegree;
   }
   //=========================================================================
+  inline const std::vector<node>& nodes() const {
+    return _nodes;
+  }
+  inline unsigned int nodePos(const node n) const {
+    return _nodes.getPos(n);
+  }
   Iterator<node>* getNodes() const;
   Iterator<node>* getInNodes(const node) const;
   Iterator<node>* getOutNodes(const node) const;
   Iterator<node>* getInOutNodes(const node) const;
+  inline const std::vector<edge>& edges() const {
+    return _edges;
+  }
+  inline unsigned int edgePos(const edge e) const {
+    return _edges.getPos(e);
+  }
   Iterator<edge>* getEdges() const;
   Iterator<edge>* getInEdges(const node) const;
   Iterator<edge>* getOutEdges(const node) const;
@@ -134,7 +148,8 @@ protected:
 
 private:
   MutableContainer<SGraphNodeDataPtr> _nodeData;
-  MutableContainer<bool> edgeAdaptativeFilter;
+  SGraphIdContainer<node> _nodes;
+  SGraphIdContainer<edge> _edges;
   void outDegreeAdd(node n, int i);
   void inDegreeAdd(node n, int i);
   edge addEdgeInternal(edge);
