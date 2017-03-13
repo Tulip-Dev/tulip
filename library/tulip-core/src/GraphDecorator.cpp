@@ -162,7 +162,7 @@ void GraphDecorator::setTarget(const edge e, const node n) {
 }
 
 //============================================================
-node GraphDecorator::opposite(const edge e, const node n)const {
+node GraphDecorator::opposite(const edge e, const node n) const {
   return graph_component->opposite(e,n);
 }
 
@@ -174,7 +174,7 @@ bool GraphDecorator::hasEdge(const node n, const node m,
 
 //============================================================
 std::vector<edge> GraphDecorator::getEdges(const node n, const node m,
-    bool directed) const {
+					   bool directed) const {
   return graph_component->getEdges(n, m, directed);
 }
 
@@ -396,10 +396,19 @@ void GraphDecorator::setEdgeOrder(const node n,const std::vector<edge> & s) {
   graph_component->setEdgeOrder(n,s);
 }
 
+//============================================================
 void GraphDecorator::swapEdgeOrder(const node n ,const edge e1, const edge e2) {
   graph_component->swapEdgeOrder(n, e1, e2);
 }
 
+//============================================================
+const std::vector<node>& GraphDecorator::nodes() const {
+  return graph_component->nodes();
+}
+//============================================================
+unsigned int GraphDecorator::nodePos(const node n) const {
+  return graph_component->nodePos(n);
+}
 //============================================================
 Iterator<node>* GraphDecorator::getNodes() const {
   return graph_component->getNodes();
@@ -426,6 +435,14 @@ Iterator<node>* GraphDecorator::bfs(const node root) const {
 //============================================================
 Iterator<node>* GraphDecorator::dfs(const node root) const {
   return graph_component->dfs(root);
+}
+//============================================================
+const std::vector<edge>& GraphDecorator::edges() const {
+  return graph_component->edges();
+}
+//============================================================
+unsigned int GraphDecorator::edgePos(const edge e) const {
+  return graph_component->edgePos(e);
 }
 //============================================================
 Iterator<edge>* GraphDecorator::getEdges() const {

@@ -342,6 +342,47 @@ public:
       pos[(unsigned int) (*this)[i]] = i;
   }
 };
+
+// used as nodes/edges container in GraphView
+template<typename ID_TYPE>
+  class SGraphIdContainer :public std::vector<ID_TYPE> {
+  // used to store the elts positions in the vector
+  MutableContainer<unsigned int> pos;
+ public:
+  SGraphIdContainer() {
+    pos.setAll(UINT_MAX);
+  }
+  inline bool isElement(ID_TYPE elt) const {
+    return (pos.get((unsigned int) elt) != UINT_MAX);
+  }
+
+  inline unsigned int getPos(ID_TYPE elt) const {
+    assert(isElement(elt));
+    return pos.get((unsigned int) elt);
+  }
+
+  void add(ID_TYPE elt) {
+    assert(!isElement(elt));
+    // put the elt at the end
+    pos.set((unsigned int) elt, this->size());
+    this->push_back(elt);
+  }
+    
+  void remove(ID_TYPE elt) {
+    assert(isElement(elt));
+    // get the position of the elt to remove
+    unsigned int i = pos.get((unsigned int) elt);
+    assert(i < this->size());
+    // put the last elt at the freed position
+    unsigned int last = this->size() - 1;
+    if (i < last)
+      pos.set((unsigned int) ((*this)[i] = (*this)[last]), i);
+    // resize the container
+    this->resize(last);
+    // the elt no loger exist in the container
+    pos.set((unsigned int) elt, UINT_MAX);
+  }
+ };
 }
 
 #endif

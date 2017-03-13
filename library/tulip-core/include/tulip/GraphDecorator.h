@@ -111,12 +111,16 @@ public:
   virtual void setEdgeOrder(const node n,const std::vector<edge> & s);
   virtual void swapEdgeOrder(const node n ,const edge e1, const edge e2);
 
+  virtual const std::vector<node>& nodes() const;
+  virtual unsigned int nodePos(const node) const;
   virtual Iterator<node>* getNodes() const;
   virtual Iterator<node>* getInNodes(const node n) const;
   virtual Iterator<node>* getOutNodes(const node n) const;
   virtual Iterator<node>* getInOutNodes(const node n) const;
   virtual Iterator<node>* bfs(const node root = node()) const;
   virtual Iterator<node>* dfs(const node root = node()) const;
+  virtual const std::vector<edge>& edges() const;
+  virtual unsigned int edgePos(const edge) const;
   virtual Iterator<edge>* getEdges() const;
   virtual Iterator<edge>* getOutEdges(const node n) const;
   virtual Iterator<edge>* getInOutEdges(const node n) const;

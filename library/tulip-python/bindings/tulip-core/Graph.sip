@@ -1521,6 +1521,37 @@ Returns the found node (invalid if there is no source);
 
 //===========================================================================================
 
+  const std::vector<tlp::node>& nodes() const;
+%Docstring
+tlp.Graph.nodes()
+
+.. versionadded:: 4.11
+
+Returns a const reference on the vector storing the nodes of the graph.
+
+%End
+//===========================================================================================
+
+  unsigned int nodePos(const tlp::node node) const;
+%Docstring
+tlp.Graph.nodePos(node)
+
+.. versionadded:: 4.11
+
+Returns the position of an node in the vector of nodes of the graph.
+
+:param node: an existing node of the graph
+%End
+
+%MethodCode
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->nodePos(*a0);
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
+//===========================================================================================
+
   tlp::Iterator<tlp::node>* getNodes() const /TransferBack, TypeHint="Iterable[tlp.node]"/;
 %Docstring
 tlp.Graph.getNodes()
@@ -1746,6 +1777,37 @@ Returns the underlying graph of a meta node.
   }
 %End
 
+//===========================================================================================
+
+  const std::vector<tlp::edge>& edges() const;
+%Docstring
+tlp.Graph.edges()
+
+.. versionadded:: 4.11
+
+Returns a const reference on the vector storing the edges of the graph.
+
+%End
+//===========================================================================================
+
+  unsigned int edgePos(const tlp::edge edge) const;
+%Docstring
+tlp.Graph.edgePos(edge)
+
+.. versionadded:: 4.11
+
+Returns the position of an edge in the vector of edges of the graph.
+
+:param edge: an existing edge of the graph
+%End
+
+%MethodCode
+  if (sipCpp->isElement(*a0)) {
+    sipRes = sipCpp->edgePos(*a0);
+  } else {
+    sipIsErr = throwInvalidEdgeException(sipCpp, *a0);
+  }
+%End
 //===========================================================================================
 
   tlp::Iterator<tlp::edge>* getEdges() const /TransferBack, TypeHint="Iterable[tlp.edge]"/;

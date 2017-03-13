@@ -160,7 +160,6 @@ TLP_SCOPE void removeFromGraph(Graph * ioG, BooleanProperty* inSelection=NULL);
  */
 TLP_SCOPE Iterator<Graph*>* getRootGraphs();
 
-
 /**
  * @ingroup Graph
  * The class Graph is the interface of a Graph in the Tulip Library.
@@ -757,6 +756,19 @@ public:
   virtual node getRandomNode() const =0;
 
   /**
+   * @brief Return a const reference on the vector of nodes of the graph
+   * It is the fastest way to access to nodes, Iterators are 25% slower.
+   * @remark o(1)
+   */
+  virtual const std::vector<node>& nodes() const =0;
+  
+  /**
+   * @brief Return the position of a node in the vector of nodes of the graph
+   * @param n The node for which the position is requested
+   */
+  virtual unsigned int nodePos(const node n) const =0;
+  
+  /**
    * @brief Gets an iterator over this graph's nodes.
    * @return An iterator over all the nodes of this graph.
    * @see getInNodes()
@@ -865,6 +877,19 @@ public:
    */
   virtual Graph* getNodeMetaInfo(const node metaNode) const = 0;
 
+  /**
+   * @brief Return a const reference on the vector of edges of the graph
+   * It is the fastest way to access to edges, Iterators are 25% slower.
+   * @remark o(1)
+   */
+  virtual const std::vector<edge>& edges() const =0;
+  
+  /**
+   * @brief Return the position of an edge in the vector of edges of the graph
+   * @param e The edge for which the position is requested
+   */
+  virtual unsigned int edgePos(const edge e) const =0;
+  
   /**
    * @brief Get an iterator over all the graph's edges.
    * @return An iterator over all the graph's edges.
