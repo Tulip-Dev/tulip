@@ -63,10 +63,22 @@ public:
   void setEdgeOrder(const node, const std::vector<edge> &);
   void swapEdgeOrder(const node, const edge, const edge);
   //=========================================================================
+  inline const std::vector<node> &nodes() const {
+    return storage.nodes();
+  }
+  inline unsigned int nodePos(const node n) const {
+    return storage.nodePos(n);
+  }
   Iterator<node> *getNodes() const;
   Iterator<node> *getInNodes(const node) const;
   Iterator<node> *getOutNodes(const node) const;
   Iterator<node> *getInOutNodes(const node) const;
+  inline const std::vector<edge> &edges() const {
+    return storage.edges();
+  }
+  inline unsigned int edgePos(const edge e) const {
+    return storage.edgePos(e);
+  }
   Iterator<edge> *getEdges() const;
   Iterator<edge> *getInEdges(const node) const;
   Iterator<edge> *getOutEdges(const node) const;
@@ -161,7 +173,7 @@ private:
   void unobserveUpdates();
   void delPreviousRecorders();
 };
-}
+} // namespace tlp
 #endif
 
 ///@endcond
