@@ -53,23 +53,27 @@ void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visit
     const std::vector<node>& nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
     visitor->reserveMemoryForNodes(nbNodes);
-    
+
 #ifdef HAVE_OMP
+
     if(visitor->isThreadSafe()) {
-#pragma omp parallel for
+      #pragma omp parallel for
 #endif
+
       for(unsigned int i = 0; i < nbNodes; ++i) {
-	GlNode glNode(nodes[i].id);
-	glNode.acceptVisitor(visitor);
+        GlNode glNode(nodes[i].id);
+        glNode.acceptVisitor(visitor);
       }
+
 #ifdef HAVE_OMP
     }
     else {
-       for(unsigned int i = 0; i < nbNodes; ++i) {
-         GlNode glNode(nodes[i].id);
-	 glNode.acceptVisitor(visitor);
-       }
+      for(unsigned int i = 0; i < nbNodes; ++i) {
+        GlNode glNode(nodes[i].id);
+        glNode.acceptVisitor(visitor);
+      }
     }
+
 #endif
   }
 }
@@ -81,21 +85,25 @@ void GlGraphRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visit
     visitor->reserveMemoryForEdges(nbEdges);
 
 #ifdef HAVE_OMP
+
     if(visitor->isThreadSafe()) {
-#pragma omp parallel for
+      #pragma omp parallel for
 #endif
+
       for(unsigned int i = 0; i < nbEdges; ++i) {
         GlEdge glEdge(edges[i].id);
-	glEdge.acceptVisitor(visitor);
+        glEdge.acceptVisitor(visitor);
       }
+
 #ifdef HAVE_OMP
     }
     else {
-       for(unsigned int i = 0; i < nbEdges; ++i) {
-         GlEdge glEdge(edges[i].id);
-	 glEdge.acceptVisitor(visitor);
+      for(unsigned int i = 0; i < nbEdges; ++i) {
+        GlEdge glEdge(edges[i].id);
+        glEdge.acceptVisitor(visitor);
       }
     }
+
 #endif
   }
 }

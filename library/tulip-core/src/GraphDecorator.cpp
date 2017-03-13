@@ -174,7 +174,7 @@ bool GraphDecorator::hasEdge(const node n, const node m,
 
 //============================================================
 std::vector<edge> GraphDecorator::getEdges(const node n, const node m,
-					   bool directed) const {
+    bool directed) const {
   return graph_component->getEdges(n, m, directed);
 }
 
