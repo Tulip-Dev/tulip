@@ -44,61 +44,59 @@ void GlGraphRenderer::visitGraph(GlSceneVisitor *visitor, bool visitHiddenEntiti
   if(!graph)
     return;
 
-  if(visitor->isThreadSafe()) {
-#ifdef HAVE_OMP
-    #pragma omp parallel
-#endif
-    {
-#ifdef HAVE_OMP
-      #pragma omp sections nowait
-#endif
-      {
-        visitNodes(graph,visitor,visitHiddenEntities);
-      }
-#ifdef HAVE_OMP
-      #pragma omp sections nowait
-#endif
-      {
-        visitEdges(graph,visitor,visitHiddenEntities);
-      }
-    }
-  }
-  else {
-    visitNodes(graph,visitor,visitHiddenEntities);
-    visitEdges(graph,visitor,visitHiddenEntities);
-  }
+  visitNodes(graph,visitor,visitHiddenEntities);
+  visitEdges(graph,visitor,visitHiddenEntities);
 }
 
 void GlGraphRenderer::visitNodes(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
   if(inputData->parameters->isDisplayNodes()|| inputData->parameters->isViewNodeLabel() || inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    visitor->reserveMemoryForNodes(graph->numberOfNodes());
-    GlNode glNode(0);
-
-    Iterator<node>* nodesIterator = graph->getNodes();
-
-    while (nodesIterator->hasNext()) {
-      node n=nodesIterator->next();
-      glNode.id=n.id;
-      glNode.acceptVisitor(visitor);
+    const std::vector<node>& nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
+    visitor->reserveMemoryForNodes(nbNodes);
+    
+#ifdef HAVE_OMP
+    if(visitor->isThreadSafe()) {
+#pragma omp parallel for
+#endif
+      for(unsigned int i = 0; i < nbNodes; ++i) {
+	GlNode glNode(nodes[i].id);
+	glNode.acceptVisitor(visitor);
+      }
+#ifdef HAVE_OMP
     }
-
-    delete nodesIterator;
+    else {
+       for(unsigned int i = 0; i < nbNodes; ++i) {
+         GlNode glNode(nodes[i].id);
+	 glNode.acceptVisitor(visitor);
+       }
+    }
+#endif
   }
 }
 
 void GlGraphRenderer::visitEdges(Graph *graph,GlSceneVisitor *visitor,bool visitHiddenEntities) {
   if(inputData->parameters->isDisplayEdges() || inputData->parameters->isViewEdgeLabel() || inputData->parameters->isViewMetaLabel() || visitHiddenEntities) {
-    visitor->reserveMemoryForEdges(graph->numberOfEdges());
+    const std::vector<edge>& edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+    visitor->reserveMemoryForEdges(nbEdges);
 
-    GlEdge glEdge(0);
-    Iterator<edge>* edgesIterator = graph->getEdges();
-
-    while (edgesIterator->hasNext()) {
-      glEdge.id=edgesIterator->next().id;
-      glEdge.acceptVisitor(visitor);
+#ifdef HAVE_OMP
+    if(visitor->isThreadSafe()) {
+#pragma omp parallel for
+#endif
+      for(unsigned int i = 0; i < nbEdges; ++i) {
+        GlEdge glEdge(edges[i].id);
+	glEdge.acceptVisitor(visitor);
+      }
+#ifdef HAVE_OMP
     }
-
-    delete edgesIterator;
+    else {
+       for(unsigned int i = 0; i < nbEdges; ++i) {
+         GlEdge glEdge(edges[i].id);
+	 glEdge.acceptVisitor(visitor);
+      }
+    }
+#endif
   }
 }
 }
