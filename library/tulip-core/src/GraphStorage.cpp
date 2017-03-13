@@ -424,10 +424,12 @@ void GraphStorage::restoreNode(const node n) {
  */
 node GraphStorage::addNode() {
   node n(nodeIds.get());
+
   if (n.id == nodeData.size())
     nodeData.resize(n.id + 1);
   else
     restoreNode(n);
+
   return n;
 }
 //=======================================================
@@ -445,17 +447,21 @@ void GraphStorage::addNodes(unsigned int nb, std::vector<node>* addedNodes) {
   }
 
   unsigned int first = nodeIds.getFirstOfRange(nb);
+
   if (addedNodes) {
     VECT_INC_SIZE(addedNodes, node, nb);
     memcpy(addedNodes->data(), &nodeIds[first], nb * sizeof(node));
   }
+
   unsigned int sz = nodeData.size();
+
   if (sz < nodeIds.size()) {
     nodeData.resize(nodeIds.size());
     // get the number of recycled nodes
     // that need to be restored
     nb -= nodeIds.size() - sz;
   }
+
   for(unsigned int i = 0; i < nb; ++i)
     restoreNode(nodeIds[first + i]);
 }
@@ -470,6 +476,7 @@ void GraphStorage::removeFromNodes(const node n) {
   nData.outDegree = 0;
   // push in free pool
   nodeIds.free(n);
+
   if (nodeIds.empty())
     nodeData.resize(0);
 }
@@ -537,6 +544,7 @@ edge GraphStorage::addEdge(const node src, const node tgt) {
 
   if (e.id == edgeEnds.size())
     edgeEnds.resize(e.id + 1);
+
   std::pair<node, node>& ends = edgeEnds[e.id];
   ends.first = src;
   ends.second = tgt;
@@ -544,7 +552,7 @@ edge GraphStorage::addEdge(const node src, const node tgt) {
   srcData.outDegree += 1;
   srcData.edges.push_back(e);
   nodeData[tgt.id].edges.push_back(e);
-  
+
   return e;
 }
 //=======================================================
@@ -565,12 +573,14 @@ void GraphStorage::addEdges(const std::vector<std::pair<node, node> >& ends,
   }
 
   unsigned int first = edgeIds.getFirstOfRange(nb);
+
   if (addedEdges) {
     VECT_INC_SIZE(addedEdges, edge, nb);
     memcpy(addedEdges->data(), &edgeIds[first], nb * sizeof(edge));
   }
 
   unsigned int sz = edgeEnds.size();
+
   if (sz < edgeIds.size())
     edgeEnds.resize(edgeIds.size());
 
@@ -603,7 +613,7 @@ void GraphStorage::delEdge(const edge e) {
 void GraphStorage::delAllEdges() {
   edgeEnds.clear();
   edgeIds.clear();
-  
+
   // loop on nodes to clear adjacency edges
   for (std::vector<NodeData>::iterator it = nodeData.begin();
        it != nodeData.end(); ++it) {

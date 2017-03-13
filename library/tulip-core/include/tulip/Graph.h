@@ -761,13 +761,13 @@ public:
    * @remark o(1)
    */
   virtual const std::vector<node>& nodes() const =0;
-  
+
   /**
    * @brief Return the position of a node in the vector of nodes of the graph
    * @param n The node for which the position is requested
    */
   virtual unsigned int nodePos(const node n) const =0;
-  
+
   /**
    * @brief Gets an iterator over this graph's nodes.
    * @return An iterator over all the nodes of this graph.
@@ -883,13 +883,13 @@ public:
    * @remark o(1)
    */
   virtual const std::vector<edge>& edges() const =0;
-  
+
   /**
    * @brief Return the position of an edge in the vector of edges of the graph
    * @param e The edge for which the position is requested
    */
   virtual unsigned int edgePos(const edge e) const =0;
-  
+
   /**
    * @brief Get an iterator over all the graph's edges.
    * @return An iterator over all the graph's edges.

@@ -49,7 +49,7 @@ public:
   * for the storage of graph elts (nodes edges)
   */
 class GraphStorage {
- public:
+public:
 
   //=======================================================
   void clear();
@@ -128,7 +128,7 @@ class GraphStorage {
    */
   inline node getOneNode() const {
     return numberOfNodes() ? nodeIds[0] : node();
-  } 
+  }
   //=======================================================
   /**
    * @brief Return a Tulip Iterator on nodes of the graph
@@ -446,7 +446,7 @@ private :
     unsigned int outDegree;
     unsigned int pos;
 
-  NodeData(unsigned int pos = UINT_MAX): outDegree(0), pos(pos) {}
+    NodeData(unsigned int pos = UINT_MAX): outDegree(0), pos(pos) {}
   };
 
   // data members
