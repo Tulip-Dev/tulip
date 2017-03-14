@@ -155,6 +155,12 @@ TLP_SCOPE std::istream *getInputFileStream(const std::string &filename, std::ios
  */
 TLP_SCOPE std::ostream *getOutputFileStream(const std::string &filename, std::ios_base::openmode open_mode = std::ios::out);
 
-}
+///@cond DOXYGEN_HIDDEN
+// Gui test mode
+TLP_SCOPE bool inGuiTestingMode();
 
+TLP_SCOPE void setGuiTestingMode(bool);
+///@endcond
+
+}
 #endif
