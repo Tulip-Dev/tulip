@@ -110,8 +110,10 @@ public:
 
     if (g->getSuperGraph() != g) {
       os << "(cluster " << g->getId() << endl;
+
       if (inGuiTestingMode())
-	g->sortElts();
+        g->sortElts();
+
       const std::vector<node>& nodes = g->nodes();
       unsigned int nbNodes = nodes.size();
       const std::vector<edge>& edges = g->edges();
@@ -122,7 +124,7 @@ public:
       if (nbNodes) {
         os << "(nodes";
 
-	for(unsigned int i = 0; i < nbNodes; ++i) {
+        for(unsigned int i = 0; i < nbNodes; ++i) {
           if (progress % progupdate == 0)
             pluginProgress->progress(progress, nbNodes + nbEdges);
 
@@ -153,8 +155,9 @@ public:
 
         os << ")" << endl;
       }
-      
+
       edge beginEdge, previousEdge;
+
       if (nbEdges) {
         os << "(edges";
 
@@ -220,6 +223,7 @@ public:
       os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
       unsigned int progupdate = 1 + nbElts/100;
       const std::vector<edge>& edges = g->edges();
+
       for (unsigned i = 0; i < nbElts; ++i) {
         if (progress % progupdate == 0)
           pluginProgress->progress(progress, nbElts);

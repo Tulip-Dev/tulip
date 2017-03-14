@@ -396,6 +396,7 @@ public:
   void sort() {
     std::sort(this->begin(), this->end());
     unsigned int nbElts = this->size();
+
     for(unsigned int i = 0; i < nbElts; ++i)
       pos.set((unsigned int) (*this)[i], i);
   }
