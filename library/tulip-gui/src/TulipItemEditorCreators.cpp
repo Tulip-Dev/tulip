@@ -29,7 +29,7 @@
 
 #include <QtAwesome.h>
 
-#include <tulip/TlpQtTools.h>
+#include <tulip/TlpTools.h>
 #include <tulip/ColorScaleButton.h>
 #include <tulip/TulipMetaTypes.h>
 #include <tulip/CoordEditor.h>
