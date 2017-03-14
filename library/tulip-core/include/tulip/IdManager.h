@@ -24,6 +24,7 @@
 #ifdef _OPENMP
 #include <omp.h>
 #endif
+#include <algorithm>
 #include <climits>
 #include <set>
 #include <vector>
@@ -326,6 +327,12 @@ public:
     for (unsigned int i = 0; i < nbElts; ++i)
       pos[(unsigned int)(*this)[i]] = i;
   }
+
+  // ascending sort
+  void sort() {
+    std::sort(this->begin(), this->end());
+    reIndex();
+  }
 };
 
 // used as nodes/edges container in GraphView
@@ -366,6 +373,14 @@ public:
     this->resize(last);
     // the elt no loger exist in the container
     pos.set((unsigned int)elt, UINT_MAX);
+  }
+
+  // ascending sort
+  void sort() {
+    std::sort(this->begin(), this->end());
+    unsigned int nbElts = this->size();
+    for(unsigned int i = 0; i < nbElts; ++i)
+      pos.set((unsigned int) (*this)[i], i);
   }
 };
 } // namespace tlp

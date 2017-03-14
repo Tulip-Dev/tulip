@@ -122,6 +122,7 @@ public:
   virtual Iterator<edge> *getInOutEdges(const node n) const;
   virtual Iterator<edge> *getInEdges(const node n) const;
   virtual Iterator<edge> *getEdgeMetaInfo(const edge) const;
+  virtual void sortElts();
   //============================================================
   template <typename PropertyType> PropertyType *getProperty(const std::string &name);
   virtual PropertyInterface *getProperty(const std::string &name) const;

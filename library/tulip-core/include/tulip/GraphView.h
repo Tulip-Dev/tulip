@@ -73,7 +73,7 @@ public:
   inline bool isElement(const node n) const {
     return _nodeData.get(n.id) != NULL;
   }
-  bool isElement(const edge e) const {
+  inline bool isElement(const edge e) const {
     return _edges.isElement(e);
   }
   edge existEdge(const node source, const node target, bool directed) const;
@@ -119,6 +119,10 @@ public:
   Iterator<edge> *getOutEdges(const node) const;
   Iterator<edge> *getInOutEdges(const node) const;
   std::vector<edge> getEdges(const node source, const node target, bool directed = true) const;
+  inline void sortElts() {
+    _nodes.sort();
+    _edges.sort();
+  }
   //=========================================================================
   // only implemented on a root graph
   virtual void reserveNodes(unsigned int nbNodes);

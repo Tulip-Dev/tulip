@@ -459,6 +459,10 @@ Iterator<edge> *GraphDecorator::getEdgeMetaInfo(const edge e) const {
   return graph_component->getEdgeMetaInfo(e);
 }
 //============================================================
+void GraphDecorator::sortElts() {
+  return graph_component->sortElts();
+}
+//============================================================
 DataSet &GraphDecorator::getNonConstAttributes() {
   return graph_component->getNonConstAttributes();
 }
