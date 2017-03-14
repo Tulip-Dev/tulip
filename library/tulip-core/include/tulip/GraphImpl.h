@@ -128,11 +128,14 @@ public:
   virtual void setEnds(const edge, const node, const node);
   virtual void reverse(const edge);
   //=======================================================================
-  unsigned int numberOfEdges() const {
+  inline unsigned int numberOfEdges() const {
     return storage.numberOfEdges();
   }
-  unsigned int numberOfNodes() const {
+  inline unsigned int numberOfNodes() const {
     return storage.numberOfNodes();
+  }
+  inline void sortElts() {
+    storage.sortElts();
   }
   //=======================================================================
   // updates management

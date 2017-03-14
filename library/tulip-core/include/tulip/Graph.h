@@ -951,6 +951,13 @@ public:
    */
   virtual Iterator<edge>* getEdgeMetaInfo(const edge metaEdge) const =0;
 
+  /**
+   * @brief sort the graph elements in ascending order
+   * @warning: That operation modify the vector of nodes and the vector of edges
+   * and thus devalidate all iterators.
+   */
+  virtual void sortElts()=0;
+
   //================================================================================
   // Graph, nodes and edges information about the graph stucture
   //================================================================================
