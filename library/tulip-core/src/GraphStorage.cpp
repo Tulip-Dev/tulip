@@ -16,7 +16,6 @@
  * See the GNU General Public License for more details.
  *
  */
-#include <set>
 #include <tulip/GraphStorage.h>
 #include <tulip/Graph.h>
 #include <tulip/memorypool.h>
@@ -146,7 +145,7 @@ enum IO_TYPE { IO_IN = 0, IO_OUT = 1, IO_INOUT = 2 };
 template <IO_TYPE io_type> struct IOEdgeContainerIterator : public Iterator<edge>, public MemoryPool<IOEdgeContainerIterator<io_type>> {
   node n;
   edge curEdge;
-  std::set<edge> loop;
+  MutableContainer<bool> loops;
   const std::vector<std::pair<node, node>> &edges;
   std::vector<edge>::iterator it, itEnd;
 
@@ -163,8 +162,8 @@ template <IO_TYPE io_type> struct IOEdgeContainerIterator : public Iterator<edge
       curNode = io_type ? edges[curEdge.id].second : edges[curEdge.id].first;
 
       if (curNode == n) {
-        if (loop.find(curEdge) == loop.end()) {
-          loop.insert(curEdge);
+        if (!loops.get(curEdge.id)) {
+          loops.set(curEdge.id, true);
           ++it;
           return;
         }
@@ -180,6 +179,7 @@ template <IO_TYPE io_type> struct IOEdgeContainerIterator : public Iterator<edge
 
   IOEdgeContainerIterator(node n, std::vector<edge> &v, const std::vector<std::pair<node, node>> &edges)
       : n(n), edges(edges), it(v.begin()), itEnd(v.end()) {
+    loops.setAll(false);
     prepareNext();
   }
 
@@ -469,8 +469,7 @@ void GraphStorage::removeFromNodes(const node n) {
  */
 void GraphStorage::delNode(const node n) {
   assert(isElement(n));
-  std::set<edge> loops;
-  bool haveLoops = false;
+  std::vector<edge> loops;
 
   const std::vector<edge> &edges = nodeData[n.id].edges;
 
@@ -484,19 +483,12 @@ void GraphStorage::delNode(const node n) {
         nodeData[src.id].outDegree -= 1;
 
       removeFromEdges(*i, n);
-    } else {
-      loops.insert(*i);
-      haveLoops = true;
-    }
+    } else
+      loops.push_back(*i);
   }
 
-  if (haveLoops) {
-    std::set<edge>::const_iterator it;
-
-    for (it = loops.begin(); it != loops.end(); ++it) {
-      removeFromEdges(*it, n);
-    }
-  }
+  for (std::vector<edge>::const_iterator it = loops.begin(); it != loops.end(); ++it)
+    removeFromEdges(*it, n);
 
   removeFromNodes(n);
 }
