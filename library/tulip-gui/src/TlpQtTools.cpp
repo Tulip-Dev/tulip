@@ -73,8 +73,8 @@ using namespace std;
 using namespace tlp;
 
 /**
-  * Init property type to property label conversion map
-  **/
+ * Init property type to property label conversion map
+ **/
 static map<string, QString> buildPropertyTypeToPropertyTypeLabelMap() {
   map<string, QString> propertyTypeToPropertyTypeLabel;
   propertyTypeToPropertyTypeLabel[BooleanProperty::propertyTypename] = QString("Boolean");
@@ -97,8 +97,8 @@ static map<string, QString> buildPropertyTypeToPropertyTypeLabelMap() {
 // Property type to property label conversion map
 static const map<string, QString> propertyTypeToPropertyTypeLabelMap = buildPropertyTypeToPropertyTypeLabelMap();
 /**
-  * Init property type label to property type conversion map
-  **/
+ * Init property type label to property type conversion map
+ **/
 static map<QString, string> buildPropertyTypeLabelToPropertyTypeMap() {
   map<QString, string> propertyTypeLabelToPropertyType;
   propertyTypeLabelToPropertyType[QString("Boolean")] = BooleanProperty::propertyTypename;
@@ -438,17 +438,6 @@ void redirectErrorOutputToQCritical() {
     qErrorStream = new QErrorOStream();
 
   tlp::setErrorOutput(*qErrorStream);
-}
-
-// Gui Test mode
-bool GuiTestingMode = false;
-
-bool inGuiTestingMode() {
-  return GuiTestingMode;
-}
-
-void setGuiTestingMode(bool enabled) {
-  GuiTestingMode = enabled;
 }
 
 class NoQtUserInputFilter : public QObject {

@@ -27,6 +27,9 @@
 #include <QPaintEvent>
 #include <QStylePainter>
 
+#include <QtAwesome.h>
+
+#include <tulip/TlpTools.h>
 #include <tulip/ColorScaleButton.h>
 #include <tulip/CoordEditor.h>
 #include <tulip/CoordEditor.h>
