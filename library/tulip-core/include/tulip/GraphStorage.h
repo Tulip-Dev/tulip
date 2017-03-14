@@ -439,6 +439,16 @@ public:
    */
   void delAllNodes();
   //=======================================================
+  /**
+   * @brief sort the graph elements in ascending order
+   * @warning: That operation modify the vector of nodes and the vector of edges
+   * and thus devalidate all iterators.
+   */
+  inline void sortElts() {
+    nodeIds.sort();
+    edgeIds.sort();
+  }
+  //=======================================================
 private :
   // specific types
   struct NodeData {

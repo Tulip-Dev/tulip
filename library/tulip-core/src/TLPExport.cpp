@@ -81,8 +81,6 @@ public:
   }
 
   DataSet controller;
-  MutableContainer<node> nodeIndex;
-  MutableContainer<edge> edgeIndex;
   int progress;
 
   TLPExport(tlp::PluginContext* context): ExportModule(context), progress(0) {
@@ -98,12 +96,12 @@ public:
     return ":/tulip/gui/icons/logo32x32.png";
   }
   //====================================================
-  node getNode(node n) {
-    return nodeIndex.get(n.id);
+  inline node getNode(node n) {
+    return node(graph->nodePos(n));
   }
   //====================================================
-  edge getEdge(edge e) {
-    return edgeIndex.get(e.id);
+  inline edge getEdge(edge e) {
+    return edge(graph->edgePos(e));
   }
   //=====================================================
   void saveGraphElements(ostream &os, Graph *g) {
@@ -112,19 +110,24 @@ public:
 
     if (g->getSuperGraph() != g) {
       os << "(cluster " << g->getId() << endl;
-      Iterator<node> *itN = g->getNodes();
+      if (inGuiTestingMode())
+	g->sortElts();
+      const std::vector<node>& nodes = g->nodes();
+      unsigned int nbNodes = nodes.size();
+      const std::vector<edge>& edges = g->edges();
+      unsigned int nbEdges = edges.size();
       node beginNode, previousNode;
-      unsigned int progupdate = 1 + (g->numberOfEdges() + g->numberOfNodes()) / 100;
+      unsigned int progupdate = 1 + (nbNodes + nbEdges) / 100;
 
-      if (itN->hasNext()) {
+      if (nbNodes) {
         os << "(nodes";
 
-        while (itN->hasNext()) {
+	for(unsigned int i = 0; i < nbNodes; ++i) {
           if (progress % progupdate == 0)
-            pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
+            pluginProgress->progress(progress, nbNodes + nbEdges);
 
           ++progress;
-          node current = getNode(itN->next());
+          node current = getNode(nodes[i]);
 
           if (!beginNode.isValid()) {
             beginNode = previousNode = current;
@@ -134,7 +137,7 @@ public:
             if (current.id == previousNode.id + 1) {
               previousNode = current;
 
-              if (!itN->hasNext())
+              if (i == nbNodes - 1)
                 os << ".." << current.id;
             }
             else {
@@ -150,20 +153,17 @@ public:
 
         os << ")" << endl;
       }
-
-      delete itN;
-      Iterator<edge> *itE = g->getEdges();
+      
       edge beginEdge, previousEdge;
-
-      if (itE->hasNext()) {
+      if (nbEdges) {
         os << "(edges";
 
-        while (itE->hasNext()) {
+        for(unsigned int i = 0; i < nbEdges; ++i) {
           if (progress % progupdate == 0)
-            pluginProgress->progress(progress, g->numberOfEdges() + g->numberOfNodes());
+            pluginProgress->progress(progress, nbNodes + nbEdges);
 
           ++progress;
-          edge current = getEdge(itE->next());
+          edge current = getEdge(edges[i]);
 
           if (!beginEdge.isValid()) {
             beginEdge = previousEdge = current;
@@ -173,7 +173,7 @@ public:
             if (current.id == previousEdge.id + 1) {
               previousEdge = current;
 
-              if (!itE->hasNext())
+              if (i == nbEdges - 1)
                 os << ".." << current.id;
             }
             else {
@@ -189,8 +189,6 @@ public:
 
         os << ")" << endl;
       }
-
-      delete itE;
     }
     else {
       unsigned int nbElts = g->numberOfNodes();
@@ -220,25 +218,20 @@ public:
       os << "(nb_edges " << nbElts << ")" << endl;
 
       os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
-      unsigned int progupdate = 1 + g->numberOfEdges() /100;
-      Iterator<edge> *ite = g->getEdges();
-      unsigned int id = 0;
-
-      for (; ite->hasNext();) {
+      unsigned int progupdate = 1 + nbElts/100;
+      const std::vector<edge>& edges = g->edges();
+      for (unsigned i = 0; i < nbElts; ++i) {
         if (progress % progupdate == 0)
-          pluginProgress->progress(progress, g->numberOfEdges());
+          pluginProgress->progress(progress, nbElts);
 
         ++progress;
-        edge e = ite->next();
+        edge e = edges[i];
         const pair<node, node>& ends = g->ends(e);
-        os << "(edge " << id << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
+        os << "(edge " << i << " " << getNode(ends.first).id << " " << getNode(ends.second).id << ")";
 
-        if (ite->hasNext()) os << endl;
-
-        id++;
+        if (i != nbElts - 1) os << endl;
       }
 
-      delete ite;
       os << endl;
     }
 
@@ -499,20 +492,6 @@ public:
     graph->setSuperGraph(graph);
 
     string format(TLP_FILE_VERSION);
-
-    // reindex nodes/edges
-    unsigned int i = 0;
-    node n;
-    forEach(n, graph->getNodes()) {
-      nodeIndex.set(n.id, node(i));
-      ++i;
-    }
-    i = 0;
-    edge e;
-    forEach(e, graph->getEdges()) {
-      edgeIndex.set(e.id, edge(i));
-      ++i;
-    }
 
     string name;
     string author;
