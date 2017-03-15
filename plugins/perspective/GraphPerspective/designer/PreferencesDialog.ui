@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>727</width>
-    <height>347</height>
+    <height>418</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -198,7 +198,7 @@ background-color: #F4F4F4;
          <item>
           <widget class="QCheckBox" name="usetlpbformat">
            <property name="toolTip">
-            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will loose compatibility with older verstion of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Use the Tulip binary graph file format (tlpb) instead of the tlp plain text file format. The use of the tlpb format makes loading/saving of Tulip project file much faster but you will lose compatibility with older verstion of Tulip.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
            <property name="text">
             <string>Use Tulip binary graph file format when saving a Tulip project</string>
