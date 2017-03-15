@@ -85,23 +85,6 @@ bool TLPBExport::exportGraph(std::ostream &os) {
   TLPBHeader header(graph->numberOfNodes(), graph->numberOfEdges());
   // write header
   os.write((char *)&header, sizeof(header));
-  // reindex nodes/edges
-  {
-    unsigned int i = 0;
-    for (node n : graph->getNodes()) {
-      assert(graph->isElement(n));
-      nodeIndex.set(n.id, node(i));
-      ++i;
-    }
-    assert(i == graph->numberOfNodes());
-    i = 0;
-    for (edge e : graph->getEdges()) {
-      assert(graph->isElement(e));
-      edgeIndex.set(e.id, edge(i));
-      ++i;
-    }
-    assert(i == graph->numberOfEdges());
-  }
   // loop to write edges
   {
     pluginProgress->setComment("writing edges...");
@@ -152,10 +135,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // loop to write sg nodes ranges
       {
         // first sort sg nodes
-        std::set<node> sgNodes;
-        for (node current : sg->getNodes()) {
-          sgNodes.insert(getNode(current));
-        }
+        const std::vector<node> &nodes = sg->nodes();
+        unsigned int nbNodes = nodes.size();
+        std::vector<node> sgNodes(nbNodes);
+        for (unsigned int j = 0; j < nbNodes; ++j)
+          sgNodes[j] = getNode(nodes[j]);
+        std::sort(sgNodes.begin(), sgNodes.end());
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<node, node>>> vRangesVec;
@@ -166,10 +151,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         unsigned int numRanges = 0;
 
         bool pendingWrite = false;
-        node beginNode, lastNode, current;
-        std::set<node>::const_iterator ite = sgNodes.end();
-        for (std::set<node>::const_iterator it = sgNodes.begin(); it != ite; ++it) {
-          current = *it;
+        node beginNode, lastNode;
+
+        for (unsigned int j = 0; j < nbNodes; ++j) {
+          node current = sgNodes[j];
           pendingWrite = true;
 
           if (!beginNode.isValid())
@@ -213,10 +198,12 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // loop to write sg edges ranges
       {
         // first sort sg edges
-        std::set<edge> sgEdges;
-        for (edge current : sg->getEdges()) {
-          sgEdges.insert(getEdge(current));
-        }
+        const std::vector<edge> &edges = sg->edges();
+        unsigned int nbEdges = edges.size();
+        std::vector<edge> sgEdges(nbEdges);
+        for (unsigned int j = 0; j < nbEdges; ++j)
+          sgEdges[j] = getEdge(edges[j]);
+        std::sort(sgEdges.begin(), sgEdges.end());
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<edge, edge>>> vRangesVec;
@@ -227,10 +214,10 @@ bool TLPBExport::exportGraph(std::ostream &os) {
         unsigned int numRanges = 0;
 
         bool pendingWrite = false;
-        edge beginEdge, lastEdge, current;
-        std::set<edge>::const_iterator ite = sgEdges.end();
-        for (std::set<edge>::const_iterator it = sgEdges.begin(); it != ite; ++it) {
-          current = *it;
+        edge beginEdge, lastEdge;
+
+        for (unsigned int j = 0; j < nbEdges; ++j) {
+          edge current = sgEdges[j];
           pendingWrite = true;
 
           if (!beginEdge.isValid())
