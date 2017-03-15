@@ -160,13 +160,15 @@ public:
       //saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
+
       for(unsigned int i = 0; i < nbEdges; ++i) {
-	std::pair<node, node> ends = g->ends(edges[i]);
+        std::pair<node, node> ends = g->ends(edges[i]);
         _writer.writeArrayOpen();
-	_writer.writeInteger(graph->nodePos(ends.first));
-	_writer.writeInteger(graph->nodePos(ends.second));
+        _writer.writeInteger(graph->nodePos(ends.first));
+        _writer.writeInteger(graph->nodePos(ends.second));
         _writer.writeArrayClose();
       }
+
       _writer.writeArrayClose();
     }
     else {
@@ -174,15 +176,19 @@ public:
       const std::vector<node>& nodes = g->nodes();
       unsigned int nbElts = nodes.size();
       std::vector<unsigned int> pos(nbElts);
+
       for (unsigned int i = 0; i < nbElts; ++i)
-	pos[i] = graph->nodePos(nodes[i]);
+        pos[i] = graph->nodePos(nodes[i]);
+
       std::sort(pos.begin(), pos.end());
       writeInterval(NodesIDsToken, pos);
-      
+
       const std::vector<edge>& edges = g->edges();
       pos.resize(nbElts = edges.size());
+
       for (unsigned int i = 0; i < nbElts; ++i)
-	pos[i] = graph->edgePos(edges[i]);
+        pos[i] = graph->edgePos(edges[i]);
+
       std::sort(pos.begin(), pos.end());
       writeInterval(EdgesIDsToken, pos);
     }
@@ -347,7 +353,7 @@ public:
    * @return void
    **/
   void writeInterval(const std::string& intervalName,
-		     std::vector<unsigned int>& pos) {
+                     std::vector<unsigned int>& pos) {
     _writer.writeString(intervalName);
     _writer.writeArrayOpen();
     unsigned int intervalBegin = UINT_MAX;
@@ -355,8 +361,10 @@ public:
     unsigned int previousId = UINT_MAX;
     unsigned int currentId = UINT_MAX;
     unsigned int nbElts = pos.size();
+
     for (unsigned int i = 0; i < nbElts; ++i) {
       currentId = pos[i];
+
       //we don't need/want to do all this on the first time we loop
       if (previousId != UINT_MAX) {
 

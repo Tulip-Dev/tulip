@@ -147,12 +147,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // loop to write sg nodes ranges
       {
         // first sort sg nodes
-	const std::vector<node>& nodes = sg->nodes();
-	unsigned int nbNodes = nodes.size();
-	std::vector<node> sgNodes(nbNodes);
-	for (unsigned int j = 0; j < nbNodes; ++j)
-	  sgNodes[j] = getNode(nodes[j]);
-	std::sort(sgNodes.begin(), sgNodes.end());
+        const std::vector<node>& nodes = sg->nodes();
+        unsigned int nbNodes = nodes.size();
+        std::vector<node> sgNodes(nbNodes);
+
+        for (unsigned int j = 0; j < nbNodes; ++j)
+          sgNodes[j] = getNode(nodes[j]);
+
+        std::sort(sgNodes.begin(), sgNodes.end());
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<node, node> > > vRangesVec;
@@ -213,12 +215,14 @@ bool TLPBExport::exportGraph(std::ostream &os) {
       // loop to write sg edges ranges
       {
         // first sort sg edges
-	const std::vector<edge>& edges = sg->edges();
-	unsigned int nbEdges = edges.size();
-	std::vector<edge> sgEdges(nbEdges);
-	for (unsigned int j = 0; j < nbEdges; ++j)
-	  sgEdges[j] = getEdge(edges[j]);
-	std::sort(sgEdges.begin(), sgEdges.end());
+        const std::vector<edge>& edges = sg->edges();
+        unsigned int nbEdges = edges.size();
+        std::vector<edge> sgEdges(nbEdges);
+
+        for (unsigned int j = 0; j < nbEdges; ++j)
+          sgEdges[j] = getEdge(edges[j]);
+
+        std::sort(sgEdges.begin(), sgEdges.end());
 
         // use a vector as buffer
         std::vector<std::vector<std::pair<edge, edge> > > vRangesVec;

@@ -98,7 +98,7 @@ public:
   inline const std::pair<node, node>& ends(const edge e) const {
     return root->ends(e);
   }
-  inline void setEnds(const edge e, const node newSrc, const node newTgt){
+  inline void setEnds(const edge e, const node newSrc, const node newTgt) {
     assert(isElement(e));
     root->setEnds(e, newSrc, newTgt);
   }
