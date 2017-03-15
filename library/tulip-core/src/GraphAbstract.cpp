@@ -110,10 +110,6 @@ Graph *GraphAbstract::getNthSubGraph(unsigned int n) const {
   return subgraphs[n];
 }
 //=========================================================================
-unsigned int GraphAbstract::numberOfSubGraphs() const {
-  return subgraphs.size();
-}
-//=========================================================================
 unsigned int GraphAbstract::numberOfDescendantGraphs() const {
   GRAPH_SEQ::const_iterator it = subgraphs.begin();
   int result = numberOfSubGraphs();
@@ -190,14 +186,6 @@ void GraphAbstract::delAllSubGraphs(Graph * toRemove) {
 //=========================================================================
 void GraphAbstract::clearSubGraphs() {
   subgraphs.clear();
-}
-//=========================================================================
-Graph* GraphAbstract::getSuperGraph()const {
-  return supergraph;
-}
-//=========================================================================
-Graph* GraphAbstract::getRoot() const {
-  return root;
 }
 //=========================================================================
 void GraphAbstract::setSuperGraph(Graph *sg) {
@@ -291,52 +279,30 @@ Graph* GraphAbstract::getDescendantGraph(const string &name) const {
 }
 //=========================================================================
 node GraphAbstract::getOneNode() const {
-  node result;
-  Iterator<node> *it = getNodes();
-
-  if (it->hasNext())
-    result = it->next();
-
-  delete it;
-  return result;
+  const std::vector<node>& vNodes = nodes();
+  return (vNodes.size() > 0) ? vNodes[0] : node();
 }
 //=========================================================================
 node GraphAbstract::getRandomNode() const {
-  unsigned int nodeIdx = randomUnsignedInteger(numberOfNodes()-1);
-  unsigned int i = 0;
-  node n;
-  forEach(n, getNodes()) {
-    if (i++ == nodeIdx) {
-      break;
-    }
-  }
-  return n;
+  const std::vector<node>& vNodes = nodes();
+  if(!vNodes.empty())
+    return vNodes[randomUnsignedInteger(vNodes.size()-1)];
+  return node();
 }
 //=========================================================================
 edge GraphAbstract::getOneEdge() const {
-  edge result;
-  Iterator<edge> *it=getEdges();
-
-  if (it->hasNext())
-    result = it->next();
-
-  delete it;
-  return result;
+  const std::vector<edge>& vEdges = edges();
+  return (vEdges.size() > 0) ? vEdges[0] : edge();
 }
 //=========================================================================
 edge GraphAbstract::getRandomEdge() const {
-  unsigned int edgeIdx = randomUnsignedInteger(numberOfEdges()-1);
-  unsigned int i = 0;
-  edge e;
-  forEach(e, getEdges()) {
-    if (i++ == edgeIdx) {
-      break;
-    }
-  }
-  return e;
+  const std::vector<edge>& vEdges = edges();
+  if(!vEdges.empty())
+    return vEdges[randomUnsignedInteger(vEdges.size()-1)];
+  return edge();
 }
 //=========================================================================
-node GraphAbstract::getInNode(const node n,unsigned int i)const {
+node GraphAbstract::getInNode(const node n, unsigned int i) const {
   assert(i<=indeg(n) && i>0);
   Iterator<node>*itN=getInNodes(n);
   node result;
@@ -349,7 +315,7 @@ node GraphAbstract::getInNode(const node n,unsigned int i)const {
   return result;
 }
 //=========================================================================
-node GraphAbstract::getOutNode(const node n,unsigned int i)const {
+node GraphAbstract::getOutNode(const node n, unsigned int i) const {
   assert(i<=outdeg(n) && i>0);
   Iterator<node>*itN=getOutNodes(n);
   node result;
@@ -362,87 +328,12 @@ node GraphAbstract::getOutNode(const node n,unsigned int i)const {
   return result;
 }
 //=========================================================================
-unsigned int GraphAbstract::deg(const node n) const {
-  unsigned int deg=0;
-  Iterator<edge> *it=getInOutEdges(n);
-
-  while (it->hasNext()) {
-    it->next();
-    ++deg;
-  }
-
-  delete it;
-  return deg;
-}
-//=========================================================================
-unsigned int GraphAbstract::indeg(const node n) const {
-  unsigned int deg=0;
-  Iterator<edge> *it=getInEdges(n);
-
-  while (it->hasNext()) {
-    it->next();
-    ++deg;
-  }
-
-  delete it;
-  return deg;
-}
-//=========================================================================
-unsigned int GraphAbstract::outdeg(const node n) const {
-  unsigned int deg=0;
-  Iterator<edge> *it=getOutEdges(n);
-
-  while(it->hasNext()) {
-    it->next();
-    ++deg;
-  }
-
-  delete it;
-  return deg;
-}
-//=========================================================================
 void GraphAbstract::delNodes(Iterator<node>* itN, bool deleteInAllGraphs) {
   assert(itN != NULL);
 
   while(itN->hasNext()) {
     delNode(itN->next(), deleteInAllGraphs);
   }
-}
-//=========================================================================
-node GraphAbstract::source(const edge e) const {
-  return root->source(e);
-}
-//=========================================================================
-void GraphAbstract::setSource(const edge e, const node newSrc) {
-  assert(isElement(e));
-  root->setEnds(e, newSrc, node());
-}
-//=========================================================================
-node GraphAbstract::target(const edge e) const {
-  return root->target(e);
-}
-//=========================================================================
-void GraphAbstract::setTarget(const edge e, const node newTgt) {
-  assert(isElement(e));
-  root->setEnds(e, node(), newTgt);
-}
-//=========================================================================
-const std::pair<node, node>& GraphAbstract::ends(const edge e) const {
-  return root->ends(e);
-}
-//=========================================================================
-void GraphAbstract::setEnds(const edge e, const node newSrc, const node newTgt) {
-  assert(isElement(e));
-  root->setEnds(e, newSrc, newTgt);
-}
-//=========================================================================
-node GraphAbstract::opposite(const edge e, const node n) const {
-  return root->opposite(e, n);
-}
-//=========================================================================
-void GraphAbstract::reverse(const edge e) {
-  assert(isElement(e));
-  root->reverse(e);
 }
 //=========================================================================
 void GraphAbstract::delEdges(Iterator<edge>* itE, bool deleteInAllGraphs) {
@@ -546,36 +437,6 @@ Iterator<PropertyInterface*>* GraphAbstract::getObjectProperties() const {
   return new ConcatIterator<PropertyInterface*> (propertyContainer->getLocalObjectProperties(),propertyContainer->getInheritedObjectProperties());
 }
 //=========================================================================
-unsigned int GraphAbstract::numberOfNodes() const {
-  unsigned int result=0;
-  Iterator<node> *it=getNodes();
-
-  while(it->hasNext()) {
-    it->next();
-    ++result;
-  }
-
-  delete it;
-  return result;
-}
-//=========================================================================
-unsigned int GraphAbstract::numberOfEdges() const {
-  unsigned int result=0;
-  Iterator<edge> *it=getEdges();
-
-  while (it->hasNext()) {
-    it->next();
-    ++result;
-  }
-
-  delete it;
-  return result;
-}
-//=========================================================================
-DataSet& GraphAbstract::getNonConstAttributes() {
-  return attributes;
-}
-//----------------------------------------------------------------
 bool GraphAbstract::isMetaNode(const node n) const {
   assert(isElement(n));
   return metaGraphProperty && metaGraphProperty->hasNonDefaultValue(n);
