@@ -36,35 +36,6 @@ using namespace std;
 using namespace tlp;
 
 /**
- * @brief Helper class to iterate over the new IDs of nodes and edges from the old IDs.
- *
- * This class takes an iterator over the nodes or edges of a graph, and the MutableContainer used to map from old ID to new ID.
- * It iterates over the nodes/edges and returns the new IDs.
- **/
-template<typename TYPE>
-class NewValueIterator : public tlp::Iterator<unsigned int> {
-public:
-  NewValueIterator(Iterator<TYPE>* iterator, const MutableContainer<unsigned int>& newValues) : _iterator(iterator), _newValues(&newValues) {
-  }
-
-  ~NewValueIterator() {
-    delete _iterator;
-  }
-
-  virtual unsigned int next() {
-    return _newValues->get(_iterator->next().id);
-  }
-
-  virtual bool hasNext() {
-    return _iterator->hasNext();
-  }
-
-private:
-  tlp::Iterator<TYPE>* _iterator;
-  const MutableContainer<unsigned int>* _newValues;
-};
-
-/**
  * @brief Exports a Tulip Graph to a JSON format.
  *
  * In order to maintain full capabilities of exporting to older format versions, the export of the data is decomposed in two parts:
@@ -108,15 +79,9 @@ public:
       _writer.beautifyString(beautify);
     }
 
-    //initialization of the maps from old ID to new ID here, before entering saveGraph (as it is recursive).
-    node n;
-    int i = 0;
     // the export only works for the root graph
     Graph *superGraph = graph->getSuperGraph();
     graph->setSuperGraph(graph);
-    forEach(n, graph->getNodes()) {
-      _newNodeId.set(n.id, i++);
-    }
 
     _writer.writeMapOpen(); //top-level map
 
@@ -167,50 +132,59 @@ public:
    * @param graph The graph to save.
    * @return void
    **/
-  void saveGraph_V4(Graph* graph) {
+  void saveGraph_V4(Graph* g) {
     node n;
     edge e;
 
     _writer.writeString(GraphIDToken);
 
-    if (graph->getSuperGraph() == graph) {
+    if (g->getSuperGraph() == g) {
       _writer.writeInteger(0);
     }
     else {
-      _writer.writeInteger(graph->getId());
+      _writer.writeInteger(g->getId());
     }
 
     //we need to save all nodes and edges on the root graph
-    if(graph->getSuperGraph() == graph) {
+    if(g->getSuperGraph() == g) {
       //saving nodes only requires knowing how many of them there are
       _writer.writeString(NodesNumberToken);
-      _writer.writeInteger(graph->numberOfNodes());
+      _writer.writeInteger(g->numberOfNodes());
       //saving the number of edges will speed up the import phase
       //because the space needed to store the edges will be
       //allocated in one call
       _writer.writeString(EdgesNumberToken);
-      _writer.writeInteger(graph->numberOfEdges());
+      const std::vector<edge>& edges = g->edges();
+      unsigned int nbEdges = edges.size();
+      _writer.writeInteger(nbEdges);
       //saving edges requires writing source and target for every edge
       _writer.writeString(EdgesToken);
       _writer.writeArrayOpen();
-      unsigned int i = 0;
-      forEach(e, graph->getEdges()) {
-        _newEdgeId.set(e.id, i++);
-
-        unsigned int source = _newNodeId.get(graph->source(e).id);
-        unsigned int target = _newNodeId.get(graph->target(e).id);
-
+      for(unsigned int i = 0; i < nbEdges; ++i) {
+	std::pair<node, node> ends = g->ends(edges[i]);
         _writer.writeArrayOpen();
-        _writer.writeInteger(source);
-        _writer.writeInteger(target);
+	_writer.writeInteger(graph->nodePos(ends.first));
+	_writer.writeInteger(graph->nodePos(ends.second));
         _writer.writeArrayClose();
       }
       _writer.writeArrayClose();
     }
     else {
       //only saving relevant nodes and edges
-      writeInterval(NodesIDsToken, new NewValueIterator<tlp::node>(graph->getNodes(), _newNodeId));
-      writeInterval(EdgesIDsToken, new NewValueIterator<tlp::edge>(graph->getEdges(), _newEdgeId));
+      const std::vector<node>& nodes = g->nodes();
+      unsigned int nbElts = nodes.size();
+      std::vector<unsigned int> pos(nbElts);
+      for (unsigned int i = 0; i < nbElts; ++i)
+	pos[i] = graph->nodePos(nodes[i]);
+      std::sort(pos.begin(), pos.end());
+      writeInterval(NodesIDsToken, pos);
+      
+      const std::vector<edge>& edges = g->edges();
+      pos.resize(nbElts = edges.size());
+      for (unsigned int i = 0; i < nbElts; ++i)
+	pos[i] = graph->edgePos(edges[i]);
+      std::sort(pos.begin(), pos.end());
+      writeInterval(EdgesIDsToken, pos);
     }
 
     _writer.writeString(PropertiesToken);
@@ -218,11 +192,11 @@ public:
     //saving properties
     Iterator<PropertyInterface*> *itP = NULL;
 
-    if (graph->getSuperGraph() == graph) {
-      itP = graph->getObjectProperties();
+    if (g->getSuperGraph() == g) {
+      itP = g->getObjectProperties();
     }
     else {
-      itP = graph->getLocalObjectProperties();
+      itP = g->getLocalObjectProperties();
     }
 
     PropertyInterface* property;
@@ -264,9 +238,9 @@ public:
       if(property->numberOfNonDefaultValuatedNodes() > 0) {
         _writer.writeString(NodesValuesToken);
         _writer.writeMapOpen();
-        forEach(n, property->getNonDefaultValuatedNodes(graph)) {
+        forEach(n, property->getNonDefaultValuatedNodes(g)) {
           stringstream temp;
-          temp << _newNodeId.get(n.id);
+          temp << graph->nodePos(n);
           _writer.writeString(temp.str());
           string sValue = property->getNodeStringValue(n);
 
@@ -285,9 +259,9 @@ public:
       if(property->numberOfNonDefaultValuatedEdges() > 0) {
         _writer.writeString(EdgesValuesToken);
         _writer.writeMapOpen();
-        forEach(e, property->getNonDefaultValuatedEdges(graph)) {
+        forEach(e, property->getNonDefaultValuatedEdges(g)) {
           stringstream temp;
-          temp << _newEdgeId.get(e.id);
+          temp << graph->edgePos(e);
           _writer.writeString(temp.str());
           string sValue = property->getEdgeStringValue(e);
 
@@ -310,7 +284,7 @@ public:
     _writer.writeString(AttributesToken);
     _writer.writeMapOpen();
     //saving attributes
-    DataSet attributes = graph->getAttributes();
+    DataSet attributes = g->getAttributes();
     pair<string, DataType*> attribute;
     forEach(attribute, attributes.getValues()) {
       // If nodes and edges are stored as graph attributes
@@ -318,24 +292,24 @@ public:
       // as nodes and edges have been reindexed
       if (attribute.second->getTypeName() == string(typeid(node).name())) {
         node *n = reinterpret_cast<node*>(attribute.second->value);
-        n->id = _newNodeId.get(n->id);
+        n->id = graph->nodePos(*n);
       }
       else if (attribute.second->getTypeName() == string(typeid(edge).name())) {
         edge *e = reinterpret_cast<edge*>(attribute.second->value);
-        e->id = _newEdgeId.get(e->id);
+        e->id = g->edgePos(*e);
       }
       else if (attribute.second->getTypeName() == string(typeid(vector<node>).name())) {
         vector<node> *vn = reinterpret_cast<vector<node>*>(attribute.second->value);
 
         for (size_t i = 0 ; i < vn->size() ; ++i) {
-          (*vn)[i].id = _newNodeId.get((*vn)[i].id);
+          (*vn)[i].id = graph->nodePos((*vn)[i]);
         }
       }
       else if (attribute.second->getTypeName() == string(typeid(vector<edge>).name())) {
         vector<edge> *ve = reinterpret_cast<vector<edge>*>(attribute.second->value);
 
         for (size_t i = 0 ; i < ve->size() ; ++i) {
-          (*ve)[i].id = _newEdgeId.get((*ve)[i].id);
+          (*ve)[i].id = graph->edgePos((*ve)[i]);
         }
       }
 
@@ -355,7 +329,7 @@ public:
     _writer.writeString(SubgraphsToken);
     _writer.writeArrayOpen();
     Graph* sub;
-    forEach(sub, graph->getSubGraphs()) {
+    forEach(sub, g->getSubGraphs()) {
       _writer.writeMapOpen();
       saveGraph_V4(sub);
       _writer.writeMapClose();
@@ -372,17 +346,19 @@ public:
    * @param iterator An iterator over the values to save.
    * @return void
    **/
-  void writeInterval(const std::string& intervalName, Iterator<unsigned int>* iterator) {
+  void writeInterval(const std::string& intervalName,
+		     std::vector<unsigned int>& pos) {
     _writer.writeString(intervalName);
     _writer.writeArrayOpen();
     unsigned int intervalBegin = UINT_MAX;
     unsigned int intervalEnd = UINT_MAX;
     unsigned int previousId = UINT_MAX;
     unsigned int currentId = UINT_MAX;
-    unsigned int nbIdsIterated = 0;
-    forEach(currentId, iterator) {
+    unsigned int nbElts = pos.size();
+    for (unsigned int i = 0; i < nbElts; ++i) {
+      currentId = pos[i];
       //we don't need/want to do all this on the first time we loop
-      if(previousId != UINT_MAX) {
+      if (previousId != UINT_MAX) {
 
         //if the ID are continuous, define an interval, otherwise write the IDs (either intervals or single)
         if(currentId == previousId + 1) {
@@ -409,7 +385,7 @@ public:
           }
         }
 
-        if(!_it_foreach._it->hasNext()) {
+        if(i == (nbElts - 1)) {
           if(intervalBegin != UINT_MAX) {
             _writer.writeArrayOpen();
             _writer.writeInteger(intervalBegin);
@@ -423,11 +399,10 @@ public:
       }
 
       previousId = currentId;
-      ++nbIdsIterated;
     }
 
     // handle the case where there is only one id to write
-    if (nbIdsIterated == 1) {
+    if (nbElts == 1) {
       _writer.writeInteger(currentId);
     }
 
@@ -436,8 +411,6 @@ public:
 
 protected:
   YajlWriteFacade _writer;
-  MutableContainer<unsigned int> _newNodeId;
-  MutableContainer<unsigned int> _newEdgeId;
 };
 
 PLUGIN(TlpJsonExport)

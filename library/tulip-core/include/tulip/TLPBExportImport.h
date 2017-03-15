@@ -88,17 +88,14 @@ public:
     return ":/tulip/gui/icons/tlpb32x32.png";
   }
 
-  tlp::MutableContainer<tlp::node> nodeIndex;
-  tlp::MutableContainer<tlp::edge> edgeIndex;
-
-  tlp::node getNode(tlp::node n) {
+  inline tlp::node getNode(tlp::node n) {
     assert(graph->isElement(n));
-    return nodeIndex.get(n.id);
+    return tlp::node(graph->nodePos(n));
   }
 
-  tlp::edge getEdge(tlp::edge e) {
+  inline tlp::edge getEdge(tlp::edge e) {
     assert(graph->isElement(e));
-    return edgeIndex.get(e.id);
+    return tlp::edge(graph->edgePos(e));
   }
 
   void getSubGraphs(tlp::Graph*, std::vector<tlp::Graph*>&);
