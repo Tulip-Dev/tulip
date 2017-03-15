@@ -37,6 +37,13 @@ class GraphProperty;
 /// Abstract class for default graph operations.
 class TLP_SCOPE GraphAbstract : public Graph {
   friend class PropertyManager;
+  DataSet attributes;
+  Graph *supergraph;
+  Graph *const root;
+  GRAPH_SEQ subgraphs;
+  Graph *subGraphToKeep;
+  // pointer to root viewMetaGraph property
+  GraphProperty *metaGraphProperty;
 
 protected:
   GraphAbstract(Graph *supergraph, unsigned int id = 0);
@@ -51,8 +58,12 @@ public:
   }
   virtual void delSubGraph(Graph *);
   virtual void delAllSubGraphs(Graph *);
-  virtual Graph *getSuperGraph() const;
-  virtual Graph *getRoot() const;
+  inline Graph *getSuperGraph() const {
+    return supergraph;
+  }
+  inline Graph *getRoot() const {
+    return root;
+  }
   virtual Iterator<Graph *> *getSubGraphs() const;
   virtual bool isSubGraph(const Graph *sg) const;
   virtual bool isDescendantGraph(const Graph *sg) const;
@@ -61,24 +72,43 @@ public:
   virtual Graph *getDescendantGraph(unsigned int id) const;
   virtual Graph *getDescendantGraph(const std::string &name) const;
   virtual Graph *getNthSubGraph(unsigned int n) const;
-  virtual unsigned int numberOfSubGraphs() const;
+  inline unsigned int numberOfSubGraphs() const {
+    return subgraphs.size();
+  }
   virtual unsigned int numberOfDescendantGraphs() const;
 
   //=======================================
-  virtual unsigned int deg(const node) const;
-  virtual unsigned int indeg(const node) const;
-  virtual unsigned int outdeg(const node) const;
   virtual bool isMetaNode(const node) const;
   virtual Graph *getNodeMetaInfo(const node) const;
   virtual void delNodes(Iterator<node> *itN, bool deleteInAllGraphs);
-  virtual node source(const edge) const;
-  virtual void setSource(const edge, const node);
-  virtual node target(const edge) const;
-  virtual void setTarget(const edge, const node);
-  virtual const std::pair<node, node> &ends(const edge) const;
-  virtual void setEnds(const edge, const node, const node);
-  virtual node opposite(const edge, const node) const;
-  virtual void reverse(const edge);
+  inline node source(const edge e) const {
+    return root->source(e);
+  }
+  inline void setSource(const edge e, const node newSrc) {
+    assert(isElement(e));
+    root->setEnds(e, newSrc, node());
+  }
+  inline node target(const edge e) const {
+    return root->target(e);
+  }
+  inline void setTarget(const edge e, const node newTgt) {
+    assert(isElement(e));
+    root->setEnds(e, node(), newTgt);
+  }
+  inline const std::pair<node, node> &ends(const edge e) const {
+    return root->ends(e);
+  }
+  inline void setEnds(const edge e, const node newSrc, const node newTgt) {
+    assert(isElement(e));
+    root->setEnds(e, newSrc, newTgt);
+  }
+  inline node opposite(const edge e, const node n) const {
+    return root->opposite(e, n);
+  }
+  inline void reverse(const edge e) {
+    assert(isElement(e));
+    root->reverse(e);
+  }
   virtual bool isMetaEdge(const edge) const;
   virtual Iterator<edge> *getEdgeMetaInfo(const edge) const;
   virtual void delEdges(Iterator<edge> *itE, bool deleteInAllGraphs = false);
@@ -89,8 +119,6 @@ public:
   virtual node getOutNode(const node, unsigned int) const;
   virtual edge getOneEdge() const;
   virtual edge getRandomEdge() const;
-  virtual unsigned int numberOfNodes() const;
-  virtual unsigned int numberOfEdges() const;
   //========================================
   bool existProperty(const std::string &) const;
   bool existLocalProperty(const std::string &) const;
@@ -114,7 +142,9 @@ public:
   virtual Iterator<node> *dfs(const node root = node()) const;
 
 protected:
-  DataSet &getNonConstAttributes();
+  DataSet &getNonConstAttributes() {
+    return attributes;
+  }
   void setSuperGraph(Graph *);
   PropertyManager *propertyContainer;
   const std::set<edge> &getReferencedEdges(const edge) const;
@@ -128,13 +158,6 @@ protected:
   virtual void setSubGraphToKeep(Graph *);
 
 private:
-  DataSet attributes;
-  Graph *supergraph;
-  Graph *const root;
-  GRAPH_SEQ subgraphs;
-  Graph *subGraphToKeep;
-  // pointer to root viewMetaGraph property
-  GraphProperty *metaGraphProperty;
   // notification of addition/deletion of inherited properties
   void notifyBeforeAddInheritedProperty(const std::string &prop);
   void notifyAddInheritedProperty(const std::string &prop);
