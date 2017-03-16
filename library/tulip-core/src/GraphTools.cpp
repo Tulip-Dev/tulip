@@ -223,23 +223,27 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty, Plug
 
   BooleanProperty nodeFlag(graph);
 
-  unsigned int nbSelectedNodes = 0;
-  unsigned int nbNodes = 0;
+  unsigned int nbNodes = graph->numberOfNodes();
+  unsigned int nbSelectedNodes = selectionProperty->numberOfNonDefaultValuatedNodes();
   // get previously selected nodes
-  Iterator<node> *itN = graph->getNodes();
+  if (nbSelectedNodes) {
+    Iterator<node> *itN = graph->getNodes();
 
-  for (; itN->hasNext();) {
-    ++nbNodes;
-    node itn = itN->next();
+    for (; itN->hasNext();) {
+      node itn = itN->next();
 
-    if (selectionProperty->getNodeValue(itn) == true) {
-      fifo.push_back(itn);
-      nodeFlag.setNodeValue(itn, true);
-      ++nbSelectedNodes;
+      if (selectionProperty->getNodeValue(itn) == true) {
+        fifo.push_back(itn);
+        nodeFlag.setNodeValue(itn, true);
+      }
     }
+    delete itN;
+  } else {
+    node n = graph->getOneNode();
+    fifo.push_back(n);
+    nodeFlag.setNodeValue(n, true);
+    nbSelectedNodes = 1;
   }
-
-  delete itN;
 
   selectionProperty->setAllEdgeValue(true);
   selectionProperty->setAllNodeValue(true);
@@ -644,4 +648,4 @@ unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool
     *test = true;
   return added;
 }
-}
+} // namespace tlp
