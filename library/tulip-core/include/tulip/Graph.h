@@ -944,6 +944,15 @@ public:
   virtual Iterator<edge>* getInEdges(const node n) const =0;
 
   /**
+   * @brief Gets all input/output edges of a node existing in the root graph
+   * @warning If the current graph is not the root, the existence of the edge
+   * can be tested with isElement(edge) function.
+   * @param n The node to get the input/ouput edges from.
+   * @return a const reference to the vector of all edges of a node
+   */
+  virtual const std::vector<edge>& allEdges(const node n) const =0;
+
+  /**
    * @brief Gets an iterator over the edges composing a meta edge.
    * @param metaEdge The metaEdge to get the real edges of.
    * @return An Iterator over the edges composing the metaEdge.

@@ -93,7 +93,7 @@ public:
                 bool onlyFirst = false) const {
     return storage.getEdges(source, target, directed, edges, sg, onlyFirst);
   }
-  const std::vector<edge>& adj(const node n) const {
+  inline const std::vector<edge>& allEdges(const node n) const {
     return storage.adj(n);
   }
   //========================================================================
