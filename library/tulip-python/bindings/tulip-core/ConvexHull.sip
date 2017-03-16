@@ -49,8 +49,8 @@ Returns a list of indexes in the list of points defining the hull polygon in cou
 
 
 void convexHull(const std::vector<tlp::Coord> &points,
-                std::vector<vectorUint> &convexHullFacets /Out/,
-                std::vector<vectorUint> &facetNeighbors /Out/) /TypeHint="Tuple[List[List[int]], List[List[int]]]"/;
+                std::vector<vectorUint> &convexHullFacets /Out, TypeHint="List[List[int]]"/,
+                std::vector<vectorUint> &facetNeighbors /Out, TypeHint="List[List[int]]"/) /TypeHint="Tuple[List[List[int]], List[List[int]]]"/;
 %Docstring
 tlp.convexHull(points)
 
