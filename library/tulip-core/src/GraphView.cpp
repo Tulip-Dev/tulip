@@ -356,7 +356,7 @@ void GraphView::delNode(const node n, bool deleteInAllGraphs) {
     assert(isElement(n));
 
     // get edges vector
-    std::vector<edge> ee(((GraphImpl *)getRoot())->adj(n));
+    std::vector<edge> ee(this->allEdges(n));
 
     // use a stack for a dfs subgraphs propagation
     std::stack<Graph*> sgq;

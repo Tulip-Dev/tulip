@@ -1937,6 +1937,31 @@ Returns an iterator on the underlying edges of a meta edge.
 
 //===========================================================================================
 
+  const std::vector<tlp::edge>& allEdges(const tlp::node node) const;
+%Docstring
+tlp.Graph.allEdges(node)
+
+.. versionadded:: 4.11
+
+Returns a const reference on the vector storing all the edges of a node
+
+:param node: an existing node of the graph
+:type node: :class:`tlp.node`
+:rtype: list of :class:`tlp.edge`
+:throws: an exception if the node does not belong to the graph
+
+%End
+
+%MethodCode
+  if (sipCpp->isElement(*a0)) {
+    sipRes = new std::vector<tlp::edge>(sipCpp->allEdges(*a0));
+  } else {
+    sipIsErr = throwInvalidNodeException(sipCpp, *a0);
+  }
+%End
+
+//===========================================================================================
+
   unsigned int getId() const;
 %Docstring
 tlp.Graph.getId()
