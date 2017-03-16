@@ -31,10 +31,10 @@ typedef std::vector<pairUintUint> vector_pairUintUint;
 typedef std::vector<vectorUint> vector_vectorUint;
 %End
 
-typedef std::pair<unsigned int, unsigned int> pairUintUint;
-typedef std::vector<unsigned int> vectorUint;
-typedef std::vector<pairUintUint> vector_pairUintUint;
-typedef std::vector<vectorUint> vector_vectorUint;
+typedef std::pair<unsigned int, unsigned int> pairUintUint /TypeHint="Tuple[int, int]"/;
+typedef std::vector<unsigned int> vectorUint /TypeHint="List[int]"/;
+typedef std::vector<pairUintUint> vector_pairUintUint /TypeHint="List[Tuple[int, int]]"/;
+typedef std::vector<vectorUint> vector_vectorUint /TypeHint="List[List[int]]"/;
 
 namespace tlp {
 
