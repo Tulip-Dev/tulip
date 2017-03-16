@@ -455,6 +455,10 @@ Iterator<edge> *GraphDecorator::getInEdges(const node n) const {
   return graph_component->getInEdges(n);
 }
 //============================================================
+const std::vector<edge> &GraphDecorator::allEdges(const node n) const {
+  return graph_component->allEdges(n);
+}
+//============================================================
 Iterator<edge> *GraphDecorator::getEdgeMetaInfo(const edge e) const {
   return graph_component->getEdgeMetaInfo(e);
 }

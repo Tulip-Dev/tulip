@@ -121,6 +121,7 @@ public:
   virtual Iterator<edge> *getOutEdges(const node n) const;
   virtual Iterator<edge> *getInOutEdges(const node n) const;
   virtual Iterator<edge> *getInEdges(const node n) const;
+  virtual const std::vector<edge> &allEdges(const node n) const;
   virtual Iterator<edge> *getEdgeMetaInfo(const edge) const;
   virtual void sortElts();
   //============================================================

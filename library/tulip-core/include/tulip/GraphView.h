@@ -119,6 +119,9 @@ public:
   Iterator<edge> *getOutEdges(const node) const;
   Iterator<edge> *getInOutEdges(const node) const;
   std::vector<edge> getEdges(const node source, const node target, bool directed = true) const;
+  inline const std::vector<edge> &allEdges(const node n) const {
+    return getRoot()->allEdges(n);
+  }
   inline void sortElts() {
     _nodes.sort();
     _edges.sort();
