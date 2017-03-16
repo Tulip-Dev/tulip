@@ -232,6 +232,7 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
   unsigned int nbNodes = graph->numberOfNodes();
   unsigned int nbSelectedNodes =
     selectionProperty->numberOfNonDefaultValuatedNodes();
+
   // get previously selected nodes
   if (nbSelectedNodes) {
     Iterator<node> *itN=graph->getNodes();
@@ -240,10 +241,11 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
       node itn=itN->next();
 
       if (selectionProperty->getNodeValue(itn)==true) {
-	fifo.push_back(itn);
-	nodeFlag.setNodeValue(itn,true);
+        fifo.push_back(itn);
+        nodeFlag.setNodeValue(itn,true);
       }
     }
+
     delete itN;
   }
   else {
