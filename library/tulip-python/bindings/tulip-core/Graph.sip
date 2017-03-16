@@ -123,8 +123,8 @@ void releaseGraphHierarchyWrappers(tlp::Graph *graph) {
 
 tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph, tlp::DataSet *inputParams, PyObject *inputParamsWrapper) {
   tlp::DataSet algoParams = ::getDefaultPluginParameters(algoName, graph);
-  tlp::DataSet *params = nullptr;
-  if (inputParams && PyDict_Check(inputParamsWrapper)) {
+  tlp::DataSet *params = NULL;
+  if (inputParamsWrapper && PyDict_Check(inputParamsWrapper)) {
     params = convertPyDictToTlpDataSet(inputParamsWrapper, &algoParams, algoName);
   } else {
     params = new tlp::DataSet(algoParams);
@@ -162,9 +162,9 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
 }
 
 void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, tlp::DataSet *inputDataSet, PyObject *inputDataSetWrapper) {
-  if (inputDataSet && PyDict_Check(inputDataSetWrapper)) {
+  if (inputDataSetWrapper && PyDict_Check(inputDataSetWrapper)) {
     convertTlpDataSetToPyDict(*algorithmOutputDataset, inputDataSetWrapper);
-  } else if (inputDataSet) {
+  } else if (inputDataSetWrapper) {
     tlp::DataSet *wrappedDs = reinterpret_cast<tlp::DataSet*>(sipGetAddress(reinterpret_cast<sipSimpleWrapper *>(inputDataSetWrapper)));
     for(const std::pair<std::string, tlp::DataType*> &entry : algorithmOutputDataset->getValues()) {
       wrappedDs->setData(entry.first, entry.second);
