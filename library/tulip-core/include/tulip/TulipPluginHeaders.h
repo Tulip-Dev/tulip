@@ -42,5 +42,6 @@
 #include <tulip/ForEach.h>
 #include <tulip/StringCollection.h>
 #include <tulip/TlpTools.h>
+#include <tulip/StaticProperty.h>
 #endif
 ///@endcond
