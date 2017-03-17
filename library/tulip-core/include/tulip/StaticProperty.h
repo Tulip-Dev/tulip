@@ -28,15 +28,15 @@ namespace tlp {
 template <typename TYPE>
 class NodeStaticProperty :public std::vector<TYPE> {
   const Graph* graph;
- public:
-  
+public:
+
   // constructor
- NodeStaticProperty(const Graph *g) :graph(g) {
+  NodeStaticProperty(const Graph *g) :graph(g) {
     assert(g);
     // set the vector size to the number of graph nodes
     this->resize(graph->numberOfNodes());
   }
-  
+
   // get the stored value of a node
   inline typename std::vector<TYPE>::const_reference getNodeValue(node n) const {
     return (*this)[graph->nodePos(n)];
@@ -44,15 +44,16 @@ class NodeStaticProperty :public std::vector<TYPE> {
 
   // set the stored value of a node
   inline typename std::vector<TYPE>::const_reference setNodeValue(node n,
-								  TYPE val) {
+      TYPE val) {
     return (*this)[graph->nodePos(n)] = val;
   }
 
   // set all to same values
   void setAll(const TYPE &val) {
 #ifdef _OPENMP
-  #pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for (unsigned int i = 0; i < this->size(); ++i)
       (*this)[i] = val;
   }
@@ -60,8 +61,10 @@ class NodeStaticProperty :public std::vector<TYPE> {
   // add a value for a non existing node
   void addNodeValue(node n, TYPE val) {
     unsigned int nPos = graph->nodePos(n);
+
     if (nPos + 1 > this->size())
       this->resize(nPos + 1);
+
     setNodeValue(n, val);
   }
 };
@@ -69,15 +72,15 @@ class NodeStaticProperty :public std::vector<TYPE> {
 template <typename TYPE>
 class EdgeStaticProperty :public std::vector<TYPE> {
   Graph* graph;
- public:
-  
+public:
+
   // constructor
- EdgeStaticProperty(const Graph *g) :graph(g) {
+  EdgeStaticProperty(const Graph *g) :graph(g) {
     assert(g);
     // set the vector size to the number of graph edges
     this->resize(graph->numberOfEdges());
   }
-  
+
   // get the stored value of a edge
   inline typename std::vector<TYPE>::const_reference getEdgeValue(edge n) const {
     return (*this)[graph->edgePos(n)];
@@ -85,22 +88,25 @@ class EdgeStaticProperty :public std::vector<TYPE> {
 
   // set the stored value of a edge
   inline typename std::vector<TYPE>::const_reference setEdgeValue(edge n,
-								  TYPE val) {
+      TYPE val) {
     return (*this)[graph->edgePos(n)] = val;
   }
 
   void setAll(const TYPE &val) {
 #ifdef _OPENMP
-  #pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for (unsigned int i = 0; i < this->size(); ++i)
       (*this)[i] = val;
-  }  
+  }
 
   void addEdgeValue(edge n, TYPE val) {
     unsigned int nPos = graph->edgePos(n);
+
     if (nPos + 1 > this->size())
       this->resize(nPos + 1);
+
     setEdgeValue(n, val);
   }
 };
