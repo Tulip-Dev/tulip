@@ -59,8 +59,10 @@ unsigned int tlp::maxDistance(const Graph *graph, const node n,
   unsigned int result =
     tlp::maxDistance(graph, graph->nodePos(n), dist, direction);
   const std::vector<node>& nodes = graph->nodes();
+
   for (unsigned int i = 0; i < nbNodes; ++i)
     distance.set(nodes[i], dist[i]);
+
   return result;
 }
 //================================================================
@@ -78,11 +80,13 @@ unsigned int tlp::maxDistance(const Graph *graph, unsigned int nPos,
     unsigned int current = fifo.front();
     fifo.pop_front();
     unsigned int nDist = distance[current] + 1;
-    
+
     Iterator<node>* itn;
     itn = getIt(graph, nodes[current], direction);
+
     while (itn->hasNext()) {
       unsigned int n = graph->nodePos(itn->next());
+
       if (distance[n] == UINT_MAX) {
         fifo.push_back(n);
         distance[n] = nDist;
@@ -111,6 +115,7 @@ double tlp::averagePathLength(const Graph *graph,
 #ifdef _OPENMP
   #pragma omp parallel for private(i) schedule(dynamic, 1)
 #endif
+
   for (i = 0; i < static_cast<int>(nbNodes); ++i) {
     if (stopfor) continue;
 
@@ -141,9 +146,10 @@ double tlp::averagePathLength(const Graph *graph,
 
     for (int j = 0; j < (int) nbNodes; ++j) {
       if (j == i)
-	continue;
-      
+        continue;
+
       unsigned int d =  distance[i];
+
       if (d != UINT_MAX) {
 #ifdef _OPENMP
         #pragma omp critical(SUMPATH)
@@ -162,13 +168,15 @@ double tlp::averagePathLength(const Graph *graph,
 }
 //================================================================
 double tlp::averageClusteringCoefficient(const Graph *graph,
-					 PluginProgress * pluginProgress) {
+    PluginProgress * pluginProgress) {
   tlp::NodeStaticProperty<double> clusters(graph);
   unsigned int nbNodes = graph->numberOfNodes();
   tlp::clusteringCoefficient(graph, clusters, UINT_MAX, pluginProgress);
   double sum=0;
+
   for(unsigned int i = 0; i < clusters.size(); ++i)
     sum += clusters[i];
+
   return sum / nbNodes;
 }
 //================================================================
@@ -176,6 +184,7 @@ unsigned int tlp::maxDegree(const Graph *graph) {
   unsigned int maxdeg = 0;
   unsigned int nbNodes = graph->numberOfNodes();
   const std::vector<node>& nodes = graph->nodes();
+
   for(unsigned int i = 0; i < nbNodes; ++i)
     maxdeg = std::max(maxdeg, graph->deg(nodes[i]));
 
@@ -186,6 +195,7 @@ unsigned int tlp::minDegree(const Graph *graph) {
   unsigned int nbNodes = graph->numberOfNodes();
   unsigned int mindeg = nbNodes;
   const std::vector<node>& nodes = graph->nodes();
+
   for(unsigned int i = 0; i < nbNodes; ++i)
     mindeg = std::min(mindeg, graph->deg(nodes[i]));
 
@@ -250,6 +260,7 @@ void tlp::clusteringCoefficient(const Graph *graph,
   tlp::NodeStaticProperty<double> vClusters(graph);
   tlp::clusteringCoefficient(graph, vClusters, maxDepth, pp);
   const std::vector<node>& nodes = graph->nodes();
+
   for(unsigned int i = 0; i < nodes.size(); ++i)
     clusters.set(nodes[i].id, vClusters[i]);
 }
@@ -260,6 +271,7 @@ void tlp::clusteringCoefficient(const Graph *graph,
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
   clusters.resize(nbNodes);
+
   for (unsigned int i = 0; i > nbNodes; i++) {
     TLP_HASH_MAP<node, bool> reachables;
     markReachableNodes(graph, nodes[i], reachables, maxDepth);
@@ -276,7 +288,7 @@ void tlp::clusteringCoefficient(const Graph *graph,
         pair<node, node> eEnds = graph->ends(itE->next());
 
         if ((reachables.find(eEnds.first)!=ite) &&
-             (reachables.find(eEnds.second)!=ite)) {
+            (reachables.find(eEnds.second)!=ite)) {
           ++nbEdge;
         }
       }
@@ -302,18 +314,20 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
   dagLevel(graph, tmp, pp);
   unsigned int nbNodes = graph->numberOfNodes();
   const std::vector<node> nodes = graph->nodes();
+
   for(unsigned int i = 0; i < nbNodes; ++i)
     level.set(nodes[i].id, tmp[i]);
 }
 
 //==================================================
 void tlp::dagLevel (const Graph *graph,
-		    tlp::NodeStaticProperty<unsigned int>& level,
+                    tlp::NodeStaticProperty<unsigned int>& level,
                     PluginProgress*) {
   unsigned int nbNodes = graph->numberOfNodes();
   const vector<node>& nodes = graph->nodes();
   tlp::NodeStaticProperty<unsigned int> totreat(graph);
   deque<node> fifo;
+
   //===============================================
   for(unsigned int i = 0; i < nbNodes; ++i) {
     node n = nodes[i];

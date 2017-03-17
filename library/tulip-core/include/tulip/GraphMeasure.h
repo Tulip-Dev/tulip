@@ -64,7 +64,7 @@ TLP_SCOPE _DEPRECATED void clusteringCoefficient(const Graph *g, MutableContaine
  * This quantifies how close its neighbors are to being a clique.
  * see http://en.wikipedia.org/wiki/Clustering_coefficient for more details
  */
- TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result, unsigned int maxDepth = 1, PluginProgress* = NULL);
+TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<double> &result, unsigned int maxDepth = 1, PluginProgress* = NULL);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
@@ -79,7 +79,7 @@ TLP_SCOPE void _DEPRECATED dagLevel(const Graph *graph, MutableContainer<unsigne
  *
  * Warning: the graph must be acyclic (no self loops).
  */
- TLP_SCOPE void dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level, PluginProgress* = NULL);
+TLP_SCOPE void dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &level, PluginProgress* = NULL);
 // return the maximum value of the degree of the graph's nodes
 TLP_SCOPE unsigned int maxDegree(const Graph *);
 // return the minimum value of the degree of the graph's nodes
@@ -99,7 +99,7 @@ TLP_SCOPE _DEPRECATED unsigned int maxDistance(const Graph *graph, const node n,
  * and INV_DIRECTED use reverse directed graph (ie. all edges are reversed)
  * all the edge's weight is set to 1. (it uses a bfs thus the complexity is o(m), m = |E|).
  */
- TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos, tlp::NodeStaticProperty<unsigned int> &distance, EDGE_TYPE direction = UNDIRECTED);
+TLP_SCOPE unsigned int maxDistance(const Graph *graph, const unsigned int nPos, tlp::NodeStaticProperty<unsigned int> &distance, EDGE_TYPE direction = UNDIRECTED);
 /*
  * add to a result set, all the nodes, according to direction,
  * at distance less or equal to maxDistance of startNode.
