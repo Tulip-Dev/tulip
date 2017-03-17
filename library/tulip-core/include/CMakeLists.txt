@@ -71,6 +71,7 @@ INSTALL(FILES
   tulip/SizeProperty.h
   tulip/SortIterator.h
   tulip/StableIterator.h
+  tulip/StaticProperty.h
   tulip/StlFunctions.h
   tulip/StlIterator.h
   tulip/StoredType.h
