@@ -71,7 +71,7 @@ public:
 
 template <typename TYPE>
 class EdgeStaticProperty :public std::vector<TYPE> {
-  Graph* graph;
+  const Graph* graph;
 public:
 
   // constructor
