@@ -270,9 +270,8 @@ void tlp::clusteringCoefficient(const Graph *graph,
                                 unsigned int maxDepth, PluginProgress *) {
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
-  clusters.resize(nbNodes);
 
-  for (unsigned int i = 0; i > nbNodes; i++) {
+  for (unsigned int i = 0; i < nbNodes; i++) {
     TLP_HASH_MAP<node, bool> reachables;
     markReachableNodes(graph, nodes[i], reachables, maxDepth);
     double nbEdge=0; //e(N_v)*2$
