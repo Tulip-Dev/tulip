@@ -190,7 +190,7 @@ public:
       else {
         //==============================================================*
         const std::vector<node>& nodes = Tprop::graph->nodes();
-	unsigned int nbElts = nodes.size();
+        unsigned int nbElts = nodes.size();
 
         for(unsigned int i = 0; i < nbElts; ++i) {
           node n = nodes[i];
@@ -199,8 +199,8 @@ public:
             setNodeValue(n, prop.getNodeValue(n));
         }
 
-	const std::vector<edge>& edges = Tprop::graph->edges();
-	nbElts = edges.size();
+        const std::vector<edge>& edges = Tprop::graph->edges();
+        nbElts = edges.size();
 
         for(unsigned int i = 0; i < nbElts; ++i) {
           edge e = edges[i];

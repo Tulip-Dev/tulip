@@ -72,6 +72,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(const typename Tn
   if (graph && this->getGraph()->isDescendantGraph(graph)) {
     const std::vector<node>& nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
+
     for(unsigned int i = 0; i < nbNodes; ++i) {
       setNodeValue(nodes[i], v);
     }
@@ -89,6 +90,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(const typename Te
   if (graph && this->getGraph()->isDescendantGraph(graph)) {
     const std::vector<edge>& edges = graph->edges();
     unsigned int nbEdges = edges.size();
+
     for(unsigned int i = 0; i < nbEdges; ++i) {
       setEdgeValue(edges[i], v);
     }
