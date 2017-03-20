@@ -160,7 +160,7 @@ public:
    * IntegerProperty* backup = graph->getProperty<IntegerProperty>("shapeBackup");
    * *backup = *shape; // all the values from 'shape' will be copied into 'backup'.
    * @endcode
-   * @param prop The property nto copy the values from.
+   * @param prop The property to copy the values from.
    * @return This property with the values copied.
    */
   virtual AbstractProperty<Tnode,Tedge,Tprop>& operator =(AbstractProperty<Tnode,Tedge,Tprop> &prop) {
@@ -189,26 +189,25 @@ public:
       }
       else {
         //==============================================================*
-        Iterator<node>* itN = Tprop::graph->getNodes();
+        const std::vector<node>& nodes = Tprop::graph->nodes();
+	unsigned int nbElts = nodes.size();
 
-        while (itN->hasNext()) {
-          node itn=itN->next();
+        for(unsigned int i = 0; i < nbElts; ++i) {
+          node n = nodes[i];
 
-          if (prop.Tprop::graph->isElement(itn))
-            setNodeValue(itn, prop.getNodeValue(itn));
+          if (prop.Tprop::graph->isElement(n))
+            setNodeValue(n, prop.getNodeValue(n));
         }
 
-        delete itN;
-        Iterator<edge>*itE = Tprop::graph->getEdges();
+	const std::vector<edge>& edges = Tprop::graph->edges();
+	nbElts = edges.size();
 
-        while (itE->hasNext()) {
-          edge ite=itE->next();
+        for(unsigned int i = 0; i < nbElts; ++i) {
+          edge e = edges[i];
 
-          if (prop.Tprop::graph->isElement(ite))
-            setEdgeValue(ite, prop.getEdgeValue(ite));
+          if (prop.Tprop::graph->isElement(e))
+            setEdgeValue(e, prop.getEdgeValue(e));
         }
-
-        delete itE;
       }
 
       clone_handler(prop);
