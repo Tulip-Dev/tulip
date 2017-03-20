@@ -52,14 +52,16 @@ ostream & operator << (ostream &os,const Graph *sp) {
   os << "(nodes ";
   const std::vector<node>& nodes = sp->nodes();
   unsigned int nbElts = nodes.size();
-  
+
   if (nbElts) {
     node beginNode, previousNode;
     beginNode = previousNode = nodes[0];
     os << beginNode.id;
     unsigned int i = 0;
+
     for (unsigned int j = 1; j < nbElts; ++j) {
       node current = nodes[j];
+
       if (current.id == previousNode.id + 1) {
         previousNode = current;
 
@@ -82,6 +84,7 @@ ostream & operator << (ostream &os,const Graph *sp) {
 
   const std::vector<edge>& edges = sp->edges();
   nbElts = edges.size();
+
   for(unsigned int i = 0; i < nbElts; ++i) {
     edge e = edges[i];
     std::pair<node, node> ends = sp->ends(e);
@@ -386,10 +389,10 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
 }
 //=========================================================
 static void removeFromGraph(Graph* g, const vector<node>& nodes,
-			    const std::vector<edge>& edges) {
+                            const std::vector<edge>& edges) {
   unsigned int nbNodes = nodes.size();
   unsigned int nbEdges = edges.size();
-  
+
   // Clean properties
   std::string prop;
   forEach(prop, g->getProperties()) {
@@ -419,13 +422,15 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
     ::removeFromGraph(ioG, ioG->nodes(), ioG->edges());
     return;
   }
-  
+
   vector<edge>  edgeA;
   // get edges
   const std::vector<edge>& edges = ioG->edges();
   unsigned int nbElts = edges.size();
+
   for (unsigned int i = 0; i < nbElts; ++i) {
     edge e = edges[i];
+
     if(inSel->getEdgeValue(e)) {
       // selected edge -> remove it !
       edgeA.push_back(e);
@@ -442,13 +447,16 @@ void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   // get nodes
   const std::vector<node>& nodes = ioG->nodes();
   nbElts = nodes.size();
+
   for (unsigned int i = 0; i < nbElts; ++i) {
     node n = nodes[i];
+
     if(inSel->getNodeValue(n)) {
       // selected node -> remove it !
       nodeA.push_back(n);
     }
   }
+
   ::removeFromGraph(ioG, nodeA, edgeA);
 }
 
@@ -721,11 +729,14 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm,
 tlp::node Graph::getSource() const {
   const std::vector<node>& nodes = this->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node source = nodes[i];
+
     if (indeg(source) == 0)
       return source;
   }
+
   return node();
 }
 
@@ -1062,6 +1073,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 
   const std::vector<node>& nodes = cluster->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = nodes[i];
     graphLayout->setNodeValue(n, clusterLayout->getNodeValue(n));
@@ -1071,6 +1083,7 @@ void updatePropertiesUngroup(Graph *graph, node metanode,
 
   const std::vector<edge>& edges = cluster->edges();
   unsigned int nbEdges = edges.size();
+
   for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
     graphLayout->setEdgeValue(e, clusterLayout->getEdgeValue(e));

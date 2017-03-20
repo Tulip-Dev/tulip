@@ -68,6 +68,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
 
   unsigned int nbNodes = graph->numberOfNodes();
   const std::vector<node> nodes = graph->nodes();
+
   for (unsigned int i = 0; i < nbNodes; i++) {
     unsigned int level = levels[i];
 
@@ -77,6 +78,7 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
     embedding->setNodeValue(nodes[i], grid[level].size());
     grid[level].push_back(nodes[i]);
   }
+
   //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
 }
 //================================================================================

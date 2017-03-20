@@ -40,6 +40,7 @@ static double clusterGetEdgeValue(Graph *graph,
   const double v2 = clusters.getNodeValue(eEnds.second);
 
   double sum = v1*v1 + v2*v2;
+
   if (sum)
     return 1.- fabs(v1 - v2)/sqrt(sum);
 
@@ -55,13 +56,16 @@ bool ClusterMetric::run() {
   tlp::NodeStaticProperty<double> clusters(graph);
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
   const std::vector<node>& nodes = graph->nodes();
+
   for (unsigned int i = 0; i < nodes.size(); ++i)
     result->setNodeValue(nodes[i], clusters[i]);
 
   const std::vector<edge>& edges = graph->edges();
+
   for (unsigned int i = 0; i < edges.size(); ++i) {
     edge e = edges[i];
     result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   }
+
   return true;
 }
