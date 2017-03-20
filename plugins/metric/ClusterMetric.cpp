@@ -31,13 +31,14 @@ ClusterMetric::ClusterMetric(const tlp::PluginContext *context) : DoubleAlgorith
   addInParameter<unsigned int>("depth", paramHelp[0], "1");
 }
 //=================================================
-static double clusterGetEdgeValue(Graph *graph, MutableContainer<double> &clusters, const edge e) {
+static double clusterGetEdgeValue(Graph *graph, tlp::NodeStaticProperty<double> &clusters, const edge e) {
   pair<node, node> eEnds = graph->ends(e);
-  const double v1 = clusters.get(eEnds.first.id);
-  const double v2 = clusters.get(eEnds.second.id);
+  const double v1 = clusters.getNodeValue(eEnds.first);
+  const double v2 = clusters.getNodeValue(eEnds.second);
 
-  if (v1 * v1 + v2 * v2 > 0)
-    return 1. - fabs(v1 - v2) / sqrt(v1 * v1 + v2 * v2);
+  double sum = v1 * v1 + v2 * v2;
+  if (sum)
+    return 1. - fabs(v1 - v2) / sqrt(sum);
 
   return 0.;
 }
@@ -49,19 +50,16 @@ bool ClusterMetric::run() {
   if (dataSet != nullptr)
     dataSet->get("depth", maxDepth);
 
-  MutableContainer<double> clusters;
+  tlp::NodeStaticProperty<double> clusters(graph);
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
-  node n;
-  forEach(n, graph->getNodes()) result->setNodeValue(n, clusters.get(n.id));
-  edge e;
-  forEach(e, graph->getEdges()) result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+  const std::vector<node> &nodes = graph->nodes();
+  for (unsigned int i = 0; i < nodes.size(); ++i)
+    result->setNodeValue(nodes[i], clusters[i]);
+
+  const std::vector<edge> &edges = graph->edges();
+  for (unsigned int i = 0; i < edges.size(); ++i) {
+    edge e = edges[i];
+    result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
+  }
   return true;
-}
-
-for (node n : graph->getNodes())
-  result->setNodeValue(n, clusters.get(n.id));
-
-for (edge e : graph->getEdges())
-  result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
-return true;
 }

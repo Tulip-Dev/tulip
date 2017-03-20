@@ -30,10 +30,12 @@ DagLevelMetric::~DagLevelMetric() {
 }
 //======================================================
 bool DagLevelMetric::run() {
-  MutableContainer<unsigned int> level;
+  NodeStaticProperty<unsigned int> level(graph);
   dagLevel(graph, level, pluginProgress);
-  for (node n : graph->getNodes())
-    result->setNodeValue(n, level.get(n.id));
+  const std::vector<node> &nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    result->setNodeValue(nodes[i], level[i]);
   return true;
 }
 //======================================================
