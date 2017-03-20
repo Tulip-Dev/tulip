@@ -63,17 +63,19 @@ public:
 //================================================================================
 void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
-  MutableContainer<unsigned int> levels;
+  tlp::NodeStaticProperty<unsigned int> levels(sg);
   dagLevel(graph, levels, pluginProgress);
 
-  node n;
-  forEach(n, sg->getNodes()) {
-    unsigned int level = levels.get(n.id);
+  unsigned int nbNodes = graph->numberOfNodes();
+  const std::vector<node> nodes = graph->nodes();
+  for (unsigned int i = 0; i < nbNodes; i++) {
+    unsigned int level = levels[i];
 
-    while (level>=grid.size()) grid.push_back(vector<node>());
+    if (level >= grid.size())
+      grid.resize(level + 1);
 
-    embedding->setNodeValue(n, grid[level].size());
-    grid[level].push_back(n);
+    embedding->setNodeValue(nodes[i], grid[level].size());
+    grid[level].push_back(nodes[i]);
   }
   //  tlp::warning() << __PRETTY_FUNCTION__  << endl;
 }

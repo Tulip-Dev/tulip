@@ -52,7 +52,7 @@ EccentricityMetric::~EccentricityMetric() {
 //====================================================================
 double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
 
-  MutableContainer<unsigned int> distance;
+  NodeStaticProperty<unsigned int> distance(graph);
   distance.setAll(0);
   double val = directed ?
                tlp::maxDistance(graph, n, distance, DIRECTED) :
@@ -67,7 +67,7 @@ double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n2 = nodes[i];
-    unsigned int d = distance.get(n2.id);
+    unsigned int d = distance[i];
 
     if (d < nbNodes) {
       nbAcc += 1.;
@@ -96,17 +96,11 @@ bool EccentricityMetric::run() {
     dataSet->get("directed", directed);
   }
 
-  node n;
-  size_t i = 0;
-  vector<node> vecNodes(graph->numberOfNodes());
-  vector<double> res(graph->numberOfNodes());
-  forEach(n, graph->getNodes()) {
-    vecNodes[i] = n;
-    ++i;
-  }
+  const std::vector<node>& nodes = graph->nodes();
+  NodeStaticProperty<double> res(graph);
 //  omp_set_num_threads(4);
 
-  size_t nbNodes = vecNodes.size();
+  size_t nbNodes = nodes.size();
 #ifdef _OPENMP
   int nbThreads = omp_get_num_procs();
 #else
@@ -139,7 +133,7 @@ bool EccentricityMetric::run() {
     }
 
 #endif
-    res[ni] = compute(vecNodes[ni], vecNodes);
+    res[ni] = compute(nodes[ni], nodes);
 
     if(!allPaths && norm)
 #ifdef _OPENMP
@@ -153,9 +147,9 @@ bool EccentricityMetric::run() {
 
   for (size_t ni = 0; ni < nbNodes; ++ni) {
     if(!allPaths && norm)
-      result->setNodeValue(vecNodes[ni], res[ni]/diameter);
+      result->setNodeValue(nodes[ni], res[ni]/diameter);
     else
-      result->setNodeValue(vecNodes[ni], res[ni]);
+      result->setNodeValue(nodes[ni], res[ni]);
   }
 
   return pluginProgress->state()!=TLP_CANCEL;
