@@ -51,15 +51,16 @@ using namespace tlp;
 ostream &operator<<(ostream &os, const Graph *sp) {
   os << ";(nodes <node_id> <node_id> ...)" << endl;
   os << "(nodes ";
-  node beginNode, previousNode;
+  const std::vector<node> &nodes = sp->nodes();
+  unsigned int nbElts = nodes.size();
 
-  node current;
-  unsigned int i = 0;
-  forEach(current, sp->getNodes()) {
-    if (!beginNode.isValid()) {
-      beginNode = previousNode = current;
-      os << beginNode.id;
-    } else {
+  if (nbElts) {
+    node beginNode, previousNode;
+    beginNode = previousNode = nodes[0];
+    os << beginNode.id;
+    unsigned int i = 0;
+    for (unsigned int j = 1; j < nbElts; ++j) {
+      node current = nodes[j];
       if (current.id == previousNode.id + 1) {
         previousNode = current;
 
@@ -79,9 +80,12 @@ ostream &operator<<(ostream &os, const Graph *sp) {
   os << ")" << endl;
   os << ";(edge <edge_id> <source_id> <target_id>)" << endl;
 
-  edge e;
-  forEach(e, sp->getEdges()) {
-    os << "(edge " << e.id << " " << sp->source(e).id << " " << sp->target(e).id << ")" << endl;
+  const std::vector<edge> &edges = sp->edges();
+  nbElts = edges.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    edge e = edges[i];
+    std::pair<node, node> ends = sp->ends(e);
+    os << "(edge " << e.id << " " << ends.first.id << " " << ends.second.id << ")" << endl;
   }
 
   return os;
@@ -384,54 +388,69 @@ bool tlp::exportGraph(Graph *graph, std::ostream &outputStream, const std::strin
   return result;
 }
 //=========================================================
+static void removeFromGraph(Graph *g, const vector<node> &nodes, const std::vector<edge> &edges) {
+  unsigned int nbNodes = nodes.size();
+  unsigned int nbEdges = edges.size();
+
+  // Clean properties
+  std::string prop;
+  forEach(prop, g->getProperties()) {
+    PropertyInterface *p = g->getProperty(prop);
+
+    for (unsigned int i = 0; i < nbNodes; i++)
+      p->erase(nodes[i]);
+
+    for (unsigned int i = 0; i < nbEdges; i++)
+      p->erase(edges[i]);
+  }
+
+  // Remove edges
+  for (unsigned int i = 0; i < nbEdges; i++)
+    g->delEdge(edges[i]);
+
+  // Remove nodes
+  for (unsigned int i = 0; i < nbNodes; i++)
+    g->delNode(nodes[i]);
+}
+
 void tlp::removeFromGraph(Graph *ioG, BooleanProperty *inSel) {
   if (!ioG)
     return;
 
-  vector<node> nodeA;
-  vector<edge> edgeA;
+  if (!inSel) {
+    ::removeFromGraph(ioG, ioG->nodes(), ioG->edges());
+    return;
+  }
 
-  // Get edges
-  edge e;
-  forEach(e, ioG->getEdges()) {
-    if (!inSel || inSel->getEdgeValue(e)) {
+  vector<edge> edgeA;
+  // get edges
+  const std::vector<edge> &edges = ioG->edges();
+  unsigned int nbElts = edges.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    edge e = edges[i];
+    if (inSel->getEdgeValue(e)) {
       // selected edge -> remove it !
       edgeA.push_back(e);
     } else {
       // unselected edge -> don't remove node ends !
-      node n0 = ioG->source(e);
-      node n1 = ioG->target(e);
-      assert(inSel);
-      inSel->setNodeValue(n0, false);
-      inSel->setNodeValue(n1, false);
+      std::pair<node, node> ends = ioG->ends(e);
+      inSel->setNodeValue(ends.first, false);
+      inSel->setNodeValue(ends.second, false);
     }
   }
 
-  node n;
-  forEach(n, ioG->getNodes()) {
-    if (!inSel || inSel->getNodeValue(n))
+  vector<node> nodeA;
+  // get nodes
+  const std::vector<node> &nodes = ioG->nodes();
+  nbElts = nodes.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    node n = nodes[i];
+    if (inSel->getNodeValue(n)) {
+      // selected node -> remove it !
       nodeA.push_back(n);
+    }
   }
-
-  // Clean properties
-  std::string prop;
-  forEach(prop, ioG->getProperties()) {
-    PropertyInterface *p = ioG->getProperty(prop);
-
-    for (unsigned int in = 0; in < nodeA.size(); in++)
-      p->erase(nodeA[in]);
-
-    for (unsigned int ie = 0; ie < edgeA.size(); ie++)
-      p->erase(edgeA[ie]);
-  }
-
-  // Remove edges
-  for (unsigned int ie = 0; ie < edgeA.size(); ie++)
-    ioG->delEdge(edgeA[ie]);
-
-  // Remove nodes
-  for (unsigned int in = 0; in < nodeA.size(); in++)
-    ioG->delNode(nodeA[in]);
+  ::removeFromGraph(ioG, nodeA, edgeA);
 }
 
 void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel, BooleanProperty *outSel) {
@@ -447,7 +466,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel, Boo
   if (inSel) {
     edge e;
     forEach(e, inSel->getNonDefaultValuatedEdges(inG)) {
-      const pair<node, node> &eEnds = inG->ends(e);
+      const pair<node, node> eEnds = inG->ends(e);
       inSel->setNodeValue(eEnds.first, true);
       inSel->setNodeValue(eEnds.second, true);
     }
@@ -681,7 +700,10 @@ bool tlp::Graph::applyPropertyAlgorithm(const std::string &algorithm, PropertyIn
 }
 
 tlp::node Graph::getSource() const {
-  for (node source : getNodes()) {
+  const std::vector<node> &nodes = this->nodes();
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node source = nodes[i];
     if (indeg(source) == 0)
       return source;
   }
@@ -988,17 +1010,21 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
   clusterLayout->translate(pos, cluster);
   clusterSize->scale(Size(scale, scale, size[2] / depth), cluster);
 
-  node itn;
-  forEach(itn, cluster->getNodes()) {
-    graphLayout->setNodeValue(itn, clusterLayout->getNodeValue(itn));
-    graphSize->setNodeValue(itn, clusterSize->getNodeValue(itn));
-    graphRot->setNodeValue(itn, clusterRot->getNodeValue(itn) + rot);
+  const std::vector<node> &nodes = cluster->nodes();
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n = nodes[i];
+    graphLayout->setNodeValue(n, clusterLayout->getNodeValue(n));
+    graphSize->setNodeValue(n, clusterSize->getNodeValue(n));
+    graphRot->setNodeValue(n, clusterRot->getNodeValue(n) + rot);
   }
 
-  edge ite;
-  forEach(ite, cluster->getEdges()) {
-    graphLayout->setEdgeValue(ite, clusterLayout->getEdgeValue(ite));
-    graphSize->setEdgeValue(ite, clusterSize->getEdgeValue(ite));
+  const std::vector<edge> &edges = cluster->edges();
+  unsigned int nbEdges = edges.size();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
+    edge e = edges[i];
+    graphLayout->setEdgeValue(e, clusterLayout->getEdgeValue(e));
+    graphSize->setEdgeValue(e, clusterSize->getEdgeValue(e));
   }
 
   // propagate all cluster local properties
@@ -1013,12 +1039,14 @@ void updatePropertiesUngroup(Graph *graph, node metanode, GraphProperty *cluster
     else
       graphProp = property->clonePrototype(graph, property->getName());
 
-    forEach(itn, cluster->getNodes()) {
-      graphProp->setNodeStringValue(itn, property->getNodeStringValue(itn));
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = nodes[i];
+      graphProp->setNodeStringValue(n, property->getNodeStringValue(n));
     }
 
-    forEach(ite, cluster->getEdges()) {
-      graphProp->setEdgeStringValue(ite, property->getEdgeStringValue(ite));
+    for (unsigned int i = 0; i < nbEdges; ++i) {
+      edge e = edges[i];
+      graphProp->setEdgeStringValue(e, property->getEdgeStringValue(e));
     }
   }
 }
@@ -1083,7 +1111,7 @@ Graph *Graph::inducedSubGraph(BooleanProperty *selection, Graph *parentSubGraph,
   }
   edge e;
   forEach(e, selection->getEdgesEqualTo(true, parentSubGraph)) {
-    const pair<node, node>&ext = ends(e);
+    const pair<node, node> &ext = ends(e);
     nodesSet.insert(ext.first);
     nodesSet.insert(ext.second);
   }
