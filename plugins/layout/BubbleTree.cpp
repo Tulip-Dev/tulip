@@ -47,21 +47,21 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
   if (tree->indeg(n) == 0) sizeVirtualNode = 0.;
 
   /*
-   * Iniatilize node position
+   * Initialize node position
    */
   (*relativePosition)[n][0] = 0.;
-  (*relativePosition)[n][1] = 0.;
+  tlp::Vector<double, 5 >& rPos = (*relativePosition)[n];
+  rPos[1] = 0.;
 
   /*
    * Special case if the node is a leaf.
    */
   if (tree->outdeg(n)==0) {
-    (*relativePosition)[n][2] = 0.;
-    (*relativePosition)[n][3] = 0.;
+    rPos[2] = 0.;
+    rPos[3] = 0.;
     Size tmpSizeNode = nodeSize->getNodeValue(n);
     tmpSizeNode[2] = 0.;
-    (*relativePosition)[n][4] = tmpSizeNode.norm() / 2.;
-    return (*relativePosition)[n][4];
+    return (rPos[4] = tmpSizeNode.norm() / 2.);
   }
 
   /*
@@ -181,9 +181,9 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
   }
 
   Circled circleH = tlp::enclosingCircle(circles);
-  (*relativePosition)[n][2] = -circleH[0];
-  (*relativePosition)[n][3] = -circleH[1];
-  (*relativePosition)[n][4] = sqrt(circleH.radius*circleH.radius - circleH[1]*circleH[1])-fabs(circleH[0]);
+  rPos[2] = -circleH[0];
+  rPos[3] = -circleH[1];
+  rPos[4] = sqrt(circleH.radius*circleH.radius - circleH[1]*circleH[1])-fabs(circleH[0]);
   /*
    * Set relative position of all children
    * according to the center of the enclosing circle
@@ -200,7 +200,8 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
   return circleH.radius;
 }
 
-void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
+void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5 >&nrPos, 
+			     TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
                              const tlp::Vector<double,3> &enclosingCircleCenter,
                              const tlp::Vector<double,3> &originNodePosition) {
   /*
@@ -209,10 +210,10 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
    */
   Vector<double,3> bend,zeta,zetaOriginal;
   bend.fill(0.);
-  bend[0] = (*relativePosition)[n][4];
+  bend[0] = nrPos[4];
 
-  zeta[0] = (*relativePosition)[n][2];
-  zeta[1] = (*relativePosition)[n][3];
+  zeta[0] = nrPos[2];
+  zeta[1] = nrPos[3];
   zeta[2] = 0.;
   zetaOriginal = zeta;
 
@@ -268,13 +269,14 @@ void BubbleTree::calcLayout2(tlp::node n, TLP_HASH_MAP<tlp::node,tlp::Vector<dou
 
   while (it->hasNext()) {
     node itn = it->next();
+    tlp::Vector<double, 5>& rPos = (*relativePosition)[itn];
     Vector<double,3> newpos;
-    newpos[0] = (*relativePosition)[itn][0];
-    newpos[1] = (*relativePosition)[itn][1];
+    newpos[0] = rPos[0];
+    newpos[1] = rPos[1];
     newpos[2] = 0.;
     newpos = rot1*newpos[0] + rot2*newpos[1];
     newpos += enclosingCircleCenter;
-    calcLayout2(itn, relativePosition, newpos, enclosingCircleCenter+zeta);
+    calcLayout2(itn, rPos, relativePosition, newpos, enclosingCircleCenter+zeta);
   }
 
   delete it;
@@ -286,19 +288,21 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
    */
   result->setNodeValue(n,Coord(0., 0., 0.));
   Iterator<node> *it = tree->getOutNodes(n);
-
-  while (it->hasNext()) {
-    node itn=it->next();
-    Coord newpos(static_cast<float>((*relativePosition)[itn][0]-(*relativePosition)[n][2]),
-                 static_cast<float>((*relativePosition)[itn][1]-(*relativePosition)[n][3]), 0.f);
-    Vector<double,3> origin,tmp;
-    origin[0] = (*relativePosition)[itn][0]-(*relativePosition)[n][2];
-    origin[1] = (*relativePosition)[itn][1]-(*relativePosition)[n][3];
-    origin[2] = 0.;
-    tmp.fill(0.);
-    calcLayout2(itn, relativePosition, origin, tmp);
+  if (it->hasNext()) {
+    tlp::Vector<double, 5>& nPos = (*relativePosition)[n];
+    double nPos2 = nPos[2];
+    double nPos3 = nPos[3];
+    while (it->hasNext()) {
+      node itn=it->next();
+      Vector<double,3> origin,tmp;
+      tlp::Vector<double, 5>& rPos = (*relativePosition)[itn];
+      origin[0] = rPos[0]- nPos2;
+      origin[1] = rPos[1]- nPos3;
+      origin[2] = 0.;
+      tmp.fill(0.);
+      calcLayout2(itn, rPos, relativePosition, origin, tmp);
+    }
   }
-
   delete it;
 }
 
