@@ -845,6 +845,13 @@ public:
   virtual tlp::node getSource() const;
 
   /**
+   * @brief Finds the first node whose output degree equals 0.
+   *
+   * @return tlp::node The first encountered node with output degree of 0, or an invalid node if none was found.
+   **/
+  virtual tlp::node getSink() const;
+
+  /**
    * @brief Returns the first node in the graph.
    *
    */

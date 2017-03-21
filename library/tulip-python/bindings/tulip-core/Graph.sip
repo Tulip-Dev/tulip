@@ -1509,10 +1509,25 @@ tlp.Graph.getSource()
 .. versionadded:: 3.7
 
 Finds the first node whose input degree equals 0.
-Returns the found node (invalid if there is no source);
+Returns the found node or an invalid one if there is no source;
 
 :rtype: :class:`tlp.node`
 %End
+
+//===========================================================================================
+
+tlp::node getSink() const;
+%Docstring
+tlp.Graph.getSink()
+
+.. versionadded:: 4.11
+
+Finds the first node whose output degree equals 0.
+Returns the found node or an invalid one if there is no sink;
+
+:rtype: :class:`tlp.node`
+%End
+
 
 //===========================================================================================
 

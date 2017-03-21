@@ -338,6 +338,8 @@ Information about the graph stucture
 
 .. automethod:: tulip::tlp.Graph.getSource
 
+.. automethod:: tulip::tlp.Graph.getSink
+
 .. _graph-class.properties:
 
 Create/Access graph properties
