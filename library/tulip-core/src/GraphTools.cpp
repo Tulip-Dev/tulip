@@ -49,6 +49,7 @@ void makeProperDag(Graph* graph, list<node> &addedNodes,
   //We compute the dag level metric on resulting sg.
   NodeStaticProperty<unsigned int> dLevel(graph);
   dagLevel(graph, dLevel);
+
   if (edgeLength)
     edgeLength->setAllEdgeValue(1);
 
@@ -95,6 +96,7 @@ node makeSimpleSource(Graph* graph) {
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
   node startNode=graph->addNode();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = nodes[i];
 
@@ -108,8 +110,8 @@ node makeSimpleSource(Graph* graph) {
 }
 //======================================================================
 vector<vector<node> > computeCanonicalOrdering(PlanarConMap* carte,
-					       std::vector<edge>* dummyEdges,
-					       PluginProgress* pluginProgress) {
+    std::vector<edge>* dummyEdges,
+    PluginProgress* pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
   if (dummyEdges!=NULL)
@@ -131,6 +133,7 @@ std::vector<node> computeGraphCenters(Graph* graph) {
   unsigned int minD = UINT_MAX;
   unsigned int nbNodes = graph->numberOfNodes();
   const std::vector<node>& nodes = graph->nodes();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
     unsigned int maxD = maxDistance(graph, nodes[i], tmp, UNDIRECTED);
@@ -139,6 +142,7 @@ std::vector<node> computeGraphCenters(Graph* graph) {
   }
 
   vector<node> result;
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     if (dist[i] == minD)
       result.push_back(nodes[i]);
@@ -151,8 +155,10 @@ node graphCenterHeuristic(Graph * graph,
                           PluginProgress *pluginProgress) {
   assert(ConnectedTest::isConnected(graph));
   unsigned int nbNodes = graph->numberOfNodes();
+
   if (nbNodes == 0)
     return node();
+
   const vector<node>& nodes = graph->nodes();
   tlp::NodeStaticProperty<bool> toTreat(graph);
   toTreat.setAll(true);
@@ -185,29 +191,31 @@ node graphCenterHeuristic(Graph * graph,
       }
       else {
         unsigned int delta = di - cDist;
+
         for (unsigned int v = 0; v < nbNodes; v++)
           if (dist[v] < delta)
-	    //all the nodes at distance less than delta can't be center
+            //all the nodes at distance less than delta can't be center
             toTreat[v] = false;
       }
 
       unsigned int nextMax = 0;
       node v;
+
       for (unsigned int v = 0; v < nbNodes; v++) {
-	if (dist[v] > (di/2 + di%2) )
-	  toTreat[v] = false;
-	else {
-	  if (toTreat[v]) {
-	    if (dist[v] > nextMax) {
-	      n = v;
-	      nextMax = dist[v];
-	    }
-	  }
-	}
+        if (dist[v] > (di/2 + di%2) )
+          toTreat[v] = false;
+        else {
+          if (toTreat[v]) {
+            if (dist[v] > nextMax) {
+              n = v;
+              nextMax = dist[v];
+            }
+          }
+        }
       }
 
       if (nextMax == 0)
-	break;
+        break;
     }
   }
 
@@ -224,19 +232,20 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
   list<node> fifo;
 
   NodeStaticProperty<bool> nodeFlag(graph);
-  
+
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
-  unsigned int nbSelectedNodes = 
+  unsigned int nbSelectedNodes =
     selectionProperty->numberOfNonDefaultValuatedNodes();
 
   // get previously selected nodes
   if (nbSelectedNodes) {
     for (unsigned int i = 0;  i < nbNodes; ++i) {
       node n = nodes[i];
+
       if (selectionProperty->getNodeValue(n)) {
-	fifo.push_back(n);
-	nodeFlag[i] = true;
+        fifo.push_back(n);
+        nodeFlag[i] = true;
       }
     }
   }
@@ -246,6 +255,7 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
     nodeFlag.setNodeValue(n,true);
     nbSelectedNodes = 1;
   }
+
   selectionProperty->setAllEdgeValue(true);
   selectionProperty->setAllNodeValue(true);
 
@@ -260,7 +270,8 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
 
       for(; itE->hasNext();) {
         edge adjit=itE->next();
-	node tgt = graph->target(adjit);
+        node tgt = graph->target(adjit);
+
         if (!nodeFlag.getNodeValue(tgt)) {
           nodeFlag.setNodeValue(tgt, true);
           ++nbSelectedNodes;
@@ -289,6 +300,7 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
     ok=false;
     bool degZ=false;
     node goodNode;
+
     for (unsigned int i = 0;  i < nbNodes; ++i) {
       node n = nodes[i];
 
@@ -420,11 +432,13 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
     edge cur;
     pair<node, node> curEnds;
     unsigned int srcClass = 0, tgtClass = 0;
+
     for (; iE < nbEdges; ++iE) {
       curEnds = graph->ends(cur = sortedEdges[iE]);
-      if ((srcClass = classes.getNodeValue(curEnds.first)) != 
-	  (tgtClass = classes.getNodeValue(curEnds.second)))
-	break;
+
+      if ((srcClass = classes.getNodeValue(curEnds.first)) !=
+          (tgtClass = classes.getNodeValue(curEnds.second)))
+        break;
     }
 
     selection->setEdgeValue(cur, true);
@@ -445,6 +459,7 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
       if (classes[i] == tgtClass)
         classes[i] = srcClass;
     }
+
     --numClasses;
   }
 }
@@ -452,27 +467,27 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
 struct visitedElt {
   tlp::node n;
   visitedElt* next;
-  
+
   visitedElt(tlp::node _n): n(_n), next(NULL) {}
 };
 
 static void bfs(const Graph *graph, node root, std::vector<tlp::node>& nodes,
-		MutableContainer<bool>& visited) {
+                MutableContainer<bool>& visited) {
   if (visited.get(root.id))
     return;
-    
+
   visited.set(root, true);
   visitedElt* first = new visitedElt(root);
   visitedElt* current = first;
   unsigned nbNodes = 1;
-    
+
   while (current) {
     node neigh;
     forEach(neigh, graph->getInOutNodes(current->n)) {
       if (!visited.get(neigh)) {
-	visited.set(neigh, true);
-	current = current->next = new visitedElt(neigh);
-	++nbNodes;
+        visited.set(neigh, true);
+        current = current->next = new visitedElt(neigh);
+        ++nbNodes;
       }
     }
     current = current->next;
@@ -482,12 +497,13 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node>& nodes,
   nodes.reserve(nbNodes + nodes.size());
 
   current = first;
+
   while(current) {
     nodes.push_back(current->n);
     visitedElt* tmp = current->next;
     delete current;
     current = tmp;
-  }      
+  }
 }
 
 // bfs from a root node
@@ -513,14 +529,15 @@ void bfs(const Graph *graph, std::vector<tlp::node>& visitedNodes) {
   visited.setAll(false);
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     bfs(graph, nodes[i], visitedNodes, visited);
   }
 }
 //======================================================================
 static void dfsVisitNode(const Graph *g, node n, visitedElt*& current,
-			 MutableContainer<bool> &visited,
-			 std::list<node> &toVisit) {
+                         MutableContainer<bool> &visited,
+                         std::list<node> &toVisit) {
   visited.set(n.id, true);
   current = current->next = new visitedElt(n);
   node neighbour;
@@ -531,7 +548,7 @@ static void dfsVisitNode(const Graph *g, node n, visitedElt*& current,
 }
 
 static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
-		MutableContainer<bool> &visited) {
+                MutableContainer<bool> &visited) {
   if (!visited.get(n.id)) {
     std::list<node> toVisit;
     visitedElt* first;
@@ -540,23 +557,28 @@ static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
     // toVisit loop
     std::list<node>::iterator itl = toVisit.begin();
     visitedElt* last = first;
+
     while(itl != toVisit.end()) {
       node current = *itl;
+
       if (!visited.get(current.id)) {
-	dfsVisitNode(graph, current, last, visited, toVisit);
-	++nbNodes;
+        dfsVisitNode(graph, current, last, visited, toVisit);
+        ++nbNodes;
       }
+
       ++itl;
     }
+
     // add nodes
     nodes.reserve(nbNodes + nodes.size());
     last = first;
+
     while(last) {
       nodes.push_back(last->n);
       visitedElt* tmp = last->next;
       delete last;
       last = tmp;
-    }      
+    }
   }
 }
 
@@ -585,6 +607,7 @@ void dfs(const Graph *graph, std::vector<node>& visitedNodes) {
   visited.setAll(false);
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     dfs(graph, nodes[i], visitedNodes, visited);
   }
@@ -598,6 +621,7 @@ void buildNodesUniformQuantification(const Graph* graph,
   map<double,int> histogram;
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     double nodeValue=prop->getNodeDoubleValue(nodes[i]);
 
@@ -629,6 +653,7 @@ void buildEdgesUniformQuantification(const Graph* graph,
   map<double,int> histogram;
   const std::vector<edge> edges = graph->edges();
   unsigned int nbEdges = edges.size();
+
   for (unsigned int i = 0; i < nbEdges; ++i) {
     double value=prop->getEdgeDoubleValue(edges[i]);
 

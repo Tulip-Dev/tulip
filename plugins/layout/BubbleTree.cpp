@@ -200,8 +200,8 @@ double BubbleTree::computeRelativePosition(tlp::node n, TLP_HASH_MAP<tlp::node, 
   return circleH.radius;
 }
 
-void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5 >&nrPos, 
-			     TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
+void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5 >&nrPos,
+                             TLP_HASH_MAP<tlp::node,tlp::Vector<double, 5 > > *relativePosition,
                              const tlp::Vector<double,3> &enclosingCircleCenter,
                              const tlp::Vector<double,3> &originNodePosition) {
   /*
@@ -288,10 +288,12 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
    */
   result->setNodeValue(n,Coord(0., 0., 0.));
   Iterator<node> *it = tree->getOutNodes(n);
+
   if (it->hasNext()) {
     tlp::Vector<double, 5>& nPos = (*relativePosition)[n];
     double nPos2 = nPos[2];
     double nPos3 = nPos[3];
+
     while (it->hasNext()) {
       node itn=it->next();
       Vector<double,3> origin,tmp;
@@ -303,6 +305,7 @@ void BubbleTree::calcLayout(tlp::node n, TLP_HASH_MAP< tlp::node, tlp::Vector< d
       calcLayout2(itn, rPos, relativePosition, origin, tmp);
     }
   }
+
   delete it;
 }
 
