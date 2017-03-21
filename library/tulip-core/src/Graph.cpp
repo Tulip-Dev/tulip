@@ -740,6 +740,20 @@ tlp::node Graph::getSource() const {
   return node();
 }
 
+tlp::node Graph::getSink() const {
+  const std::vector<node>& nodes = this->nodes();
+  unsigned int nbNodes = nodes.size();
+
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node sink = nodes[i];
+
+    if (outdeg(sink) == 0)
+      return sink;
+  }
+
+  return node();
+}
+
 DataType* Graph::getAttribute(const std::string& name) const {
   return getAttributes().getData(name);
 }
