@@ -54,6 +54,15 @@ public :
   Iterator<edge>* getInOutEdges(const node n) const;
   Iterator<edge>* getInEdges(const node n) const;
 
+  const std::vector<node>& nodes() const {
+    return graphViewNodes;
+  }
+
+  const std::vector<edge>& edges() const {
+    return graphViewEdges;
+  }
+
+
   Graph *getRoot() const {
     return const_cast<NodeNeighborhoodView*>(this);
   }
