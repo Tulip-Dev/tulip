@@ -312,7 +312,7 @@ void tlp::dagLevel (const Graph *graph, MutableContainer<unsigned int>& level,
   tlp::NodeStaticProperty<unsigned int> tmp(graph);
   dagLevel(graph, tmp, pp);
   unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node> nodes = graph->nodes();
+  const std::vector<node>& nodes = graph->nodes();
 
   for(unsigned int i = 0; i < nbNodes; ++i)
     level.set(nodes[i].id, tmp[i]);
