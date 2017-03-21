@@ -498,7 +498,7 @@ void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes) {
 void bfs(const Graph *graph, std::vector<tlp::node> &visitedNodes) {
   MutableContainer<bool> visited;
   visited.setAll(false);
-  const std::vector<node> nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
   for (unsigned int i = 0; i < nbNodes; ++i) {
     bfs(graph, nodes[i], visitedNodes, visited);
@@ -567,7 +567,7 @@ void dfs(const Graph *graph, node root, std::vector<node> &visitedNodes) {
 void dfs(const Graph *graph, std::vector<node> &visitedNodes) {
   MutableContainer<bool> visited;
   visited.setAll(false);
-  const std::vector<node> nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
   for (unsigned int i = 0; i < nbNodes; ++i) {
     dfs(graph, nodes[i], visitedNodes, visited);
@@ -577,7 +577,7 @@ void dfs(const Graph *graph, std::vector<node> &visitedNodes) {
 void buildNodesUniformQuantification(const Graph *graph, const NumericProperty *prop, unsigned int k, std::map<double, int> &nodeMapping) {
   // build the histogram of node values
   map<double, int> histogram;
-  const std::vector<node> nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
   for (unsigned int i = 0; i < nbNodes; ++i) {
     double nodeValue = prop->getNodeDoubleValue(nodes[i]);

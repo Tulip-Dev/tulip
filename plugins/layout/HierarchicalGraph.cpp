@@ -66,7 +66,8 @@ void HierarchicalGraph::buildGrid(tlp::Graph *sg) {
   dagLevel(graph, levels, pluginProgress);
 
   unsigned int nbNodes = graph->numberOfNodes();
-  const std::vector<node> nodes = graph->nodes();
+  const std::vector<node> &nodes = graph->nodes();
+
   for (unsigned int i = 0; i < nbNodes; i++) {
     unsigned int level = levels[i];
 
