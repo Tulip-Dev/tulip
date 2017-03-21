@@ -106,26 +106,26 @@ TLP_SCOPE void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selectio
  * node will be assigned to a source node in the graph (node with input degree equals to 0).
  * If there is no source node in the graph, a random node will be picked.
  */
- TLP_SCOPE void bfs(const Graph *graph, node root, std::vector<node>& nodes);
+TLP_SCOPE void bfs(const Graph *graph, node root, std::vector<node>& nodes);
 
 /**
  * @brief Performs a cumulative breadth-first search on every node of a graph.
  * @param graph The graph to traverse with a BFS.
  * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by the BFS.
  */
- TLP_SCOPE void bfs(const Graph *graph, std::vector<node>& nodes);
+TLP_SCOPE void bfs(const Graph *graph, std::vector<node>& nodes);
 
- /**
- * @brief deprecated function, 
- * use bfs(const Graph*, node, std::vector<node>&) instead
- */
+/**
+* @brief deprecated function,
+* use bfs(const Graph*, node, std::vector<node>&) instead
+*/
 inline TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph,
-						   node root = node()) {
+    node root = node()) {
   std::vector<node> ret;
   bfs(graph, root, ret);
   return ret;
 }
- 
+
 /**
  * @brief Performs a depth-first search on a graph.
  * @param graph The graph to traverse with a DFS.
@@ -135,21 +135,21 @@ inline TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph,
  * If there is no source node in the graph, a random node will be picked.
  * @return A vector containing the nodes of the graph in the order they have been visited by the DFS.
  */
- TLP_SCOPE void dfs(const Graph *graph, node root, std::vector<node>& nodes);
+TLP_SCOPE void dfs(const Graph *graph, node root, std::vector<node>& nodes);
 
 /**
  * @brief Performs a cumulative depth-first search on every node of a graph.
  * @param graph The graph to traverse with a DFS.
  * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by the DFS.
  */
- TLP_SCOPE void dfs(const Graph *graph, std::vector<node>& nodes);
+TLP_SCOPE void dfs(const Graph *graph, std::vector<node>& nodes);
 
 /**
- * @brief deprecated function, 
+ * @brief deprecated function,
  * use dfs(const Graph*, node, std::vector<node>&) instead
  */
 inline TLP_SCOPE _DEPRECATED std::vector<node> dfs(const Graph *graph,
-						   node root = node()) {
+    node root = node()) {
   std::vector<node> ret;
   dfs(graph, root, ret);
   return ret;
