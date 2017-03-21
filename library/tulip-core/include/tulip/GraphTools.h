@@ -68,11 +68,11 @@ TLP_SCOPE void makeProperDag(Graph *graph, std::list<node> &addedNodes, TLP_HASH
                              IntegerProperty *edgeLength = nullptr);
 
 /**
-   * Select a spanning forest of the graph,
-   * i.e for all graph elements (nodes or edges) belonging to that forest
-   * the selectionProperty associated value is true. The value is false
-   * for the other elements
-   */
+ * Select a spanning forest of the graph,
+ * i.e for all graph elements (nodes or edges) belonging to that forest
+ * the selectionProperty associated value is true. The value is false
+ * for the other elements
+ */
 TLP_SCOPE void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty, PluginProgress *pluginProgress = nullptr);
 
 /**
@@ -89,28 +89,63 @@ TLP_SCOPE void selectSpanningTree(Graph *graph, BooleanProperty *selection, Plug
  * the selectionProperty associated value is true. The value is false
  * for the other elements
  */
-TLP_SCOPE void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selectionProperty, NumericProperty *weight = nullptr,
-                                         PluginProgress *pluginProgress = nullptr);
+TLP_SCOPE void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selectionProperty, NumericProperty *weight = NULL,
+                                         PluginProgress *pluginProgress = NULL);
 
 /**
  * @brief Performs a breadth-first search on a graph.
  * @param graph The graph to traverse with a BFS.
+ * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by the BFS.
  * @param root The node from whom to start the BFS. If not provided, the root
  * node will be assigned to a source node in the graph (node with input degree equals to 0).
  * If there is no source node in the graph, a random node will be picked.
- * @return A vector containing the nodes of the graph in the order they have been visited by the BFS.
  */
-TLP_SCOPE std::vector<node> bfs(const Graph *graph, node root = node());
+TLP_SCOPE void bfs(const Graph *graph, node root, std::vector<node> &nodes);
+
+/**
+ * @brief Performs a cumulative breadth-first search on every node of a graph.
+ * @param graph The graph to traverse with a BFS.
+ * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by the BFS.
+ */
+TLP_SCOPE void bfs(const Graph *graph, std::vector<node> &nodes);
+
+/**
+ * @brief deprecated function,
+ * use bfs(const Graph*, node, std::vector<node>&) instead
+ */
+inline TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph, node root = node()) {
+  std::vector<node> ret;
+  bfs(graph, root, ret);
+  return ret;
+}
 
 /**
  * @brief Performs a depth-first search on a graph.
  * @param graph The graph to traverse with a DFS.
+ * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by the DFS.
  * @param root The node from whom to start the DFS. If not provided, the root
  * node will be assigned to a source node in the graph (node with input degree equals to 0).
  * If there is no source node in the graph, a random node will be picked.
  * @return A vector containing the nodes of the graph in the order they have been visited by the DFS.
  */
-TLP_SCOPE std::vector<node> dfs(const Graph *graph, node root = node());
+TLP_SCOPE void dfs(const Graph *graph, node root, std::vector<node> &nodes);
+
+/**
+ * @brief Performs a cumulative depth-first search on every node of a graph.
+ * @param graph The graph to traverse with a DFS.
+ * @param nodes a vector to fill with the nodes of the graph in the order they have been visited by the DFS.
+ */
+TLP_SCOPE void dfs(const Graph *graph, std::vector<node> &nodes);
+
+/**
+ * @brief deprecated function,
+ * use dfs(const Graph*, node, std::vector<node>&) instead
+ */
+inline TLP_SCOPE _DEPRECATED std::vector<node> dfs(const Graph *graph, node root = node()) {
+  std::vector<node> ret;
+  dfs(graph, root, ret);
+  return ret;
+}
 
 /*
  * builds a uniform quantification with the NumericProperty associated values
@@ -131,6 +166,6 @@ TLP_SCOPE void buildEdgesUniformQuantification(const Graph *graph, const Numeric
  * @return The number of element added to the selection property.
  */
 TLP_SCOPE unsigned makeSelectionGraph(const Graph *graph, BooleanProperty *selection, bool *test = nullptr);
-}
+} // namespace tlp
 #endif
 ///@endcond

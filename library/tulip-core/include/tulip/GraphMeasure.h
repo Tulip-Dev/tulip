@@ -72,7 +72,7 @@ TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<dou
  * the number of level used is minimal.
  * WARNING: this function is deprecated
  */
-TLP_SCOPE void _DEPRECATED dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress * = NULL);
+TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress * = NULL);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
