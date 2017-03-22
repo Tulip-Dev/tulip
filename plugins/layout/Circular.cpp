@@ -35,39 +35,6 @@ Circular::Circular(const tlp::PluginContext *context) : LayoutAlgorithm(context)
 }
 
 namespace {
-//============================================================================
-void visitNode(Graph *sg, node n, vector<node> &vec, MutableContainer<bool> &nodeVisited, std::list<node> &toVisit) {
-  nodeVisited.set(n.id, true);
-  vec.push_back(n);
-  for (node neighbour : sg->getInOutNodes(n)) {
-    if (!nodeVisited.get(neighbour.id))
-      toVisit.push_back(neighbour);
-  }
-}
-
-//============================================================================
-void buildDfsOrdering(Graph *sg, vector<node> &vec) {
-  MutableContainer<bool> nodeVisited;
-  nodeVisited.setAll(false);
-  for (node n : sg->getNodes()) {
-    std::list<node> toVisit;
-
-    if (!nodeVisited.get(n.id)) {
-      visitNode(sg, n, vec, nodeVisited, toVisit);
-      // toVisit loop
-      std::list<node>::iterator itl = toVisit.begin();
-
-      while (itl != toVisit.end()) {
-        node current = *itl;
-
-        if (!nodeVisited.get(current.id))
-          visitNode(sg, current, vec, nodeVisited, toVisit);
-
-        ++itl;
-      }
-    }
-  }
-}
 //===============================================================================
 vector<node> extractCycle(node n, deque<node> &st) {
   vector<node> result;
@@ -148,7 +115,7 @@ vector<node> findMaxCycle(Graph *sg, PluginProgress *pluginProgress) {
   sg->delAllSubGraphs(g);
   return max;
 }
-}
+} // namespace
 
 // this inline function computes the radius size given a size
 inline double computeRadius(const Size &s) {
@@ -212,7 +179,7 @@ bool Circular::run() {
       cycleOrdering = findMaxCycle(graph, pluginProgress);
 
     vector<node> dfsOrdering;
-    buildDfsOrdering(graph, dfsOrdering);
+    tlp::dfs(graph, dfsOrdering);
 
     MutableContainer<bool> inCir;
     inCir.setAll(false);
