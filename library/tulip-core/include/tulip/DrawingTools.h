@@ -76,7 +76,7 @@ TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
  * nodes z-rotations and sizes of elements.
  *
  */
- TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node>& nodes,
+TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node>& nodes,
     const std::vector<edge>& edges,
     const LayoutProperty *layout,
     const SizeProperty *size,
