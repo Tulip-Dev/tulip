@@ -48,7 +48,7 @@ typedef Matrix<float, 3> Mat3f;
   * nodes z-rotations and sizes of elements.
   *
   */
-TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
+TLP_SCOPE BoundingBox computeBoundingBox(const Graph *graph,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
@@ -64,6 +64,20 @@ TLP_SCOPE   BoundingBox computeBoundingBox(const Graph *graph,
  */
 TLP_SCOPE BoundingBox computeBoundingBox(Iterator<node> *itN,
     Iterator<edge> *itE,
+    const LayoutProperty *layout,
+    const SizeProperty *size,
+    const DoubleProperty *rotation,
+    const BooleanProperty *selection = NULL);
+
+//======================================================================================================
+
+/**
+ * Compute the bounding box of graph elements in corresponding vectors according to node positions, edges bends,
+ * nodes z-rotations and sizes of elements.
+ *
+ */
+ TLP_SCOPE BoundingBox computeBoundingBox(const std::vector<node>& nodes,
+    const std::vector<edge>& edges,
     const LayoutProperty *layout,
     const SizeProperty *size,
     const DoubleProperty *rotation,
