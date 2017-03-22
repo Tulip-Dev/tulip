@@ -29,9 +29,8 @@
 
 using namespace std;
 using namespace tlp;
-namespace {
 
-void rotate(Coord &vec, double alpha) {
+static void rotate(Coord &vec, double alpha) {
   Coord backupVec(vec);
   double zRot = -2.0 * M_PI * alpha / 360.0;
   float cosz = cos(zRot);
@@ -40,25 +39,18 @@ void rotate(Coord &vec, double alpha) {
   vec[1] = backupVec[0] * sinz + backupVec[1] * cosz;
 }
 
-class HullBuilder {
-public:
-  virtual ~HullBuilder() {
-  }
-  virtual void addPoint(const Coord &) = 0;
-};
-
 /**
  * Compute all points of a Tulip layout (with size, rotation, edge bends, and node position)
  * @todo take edge size into account
- * @todo create unit test to automatically chack that function
+ * @todo create unit test to automatically check that function
  */
-void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size,
-                        const DoubleProperty *rotation, const BooleanProperty *selection, HullBuilder &builder) {
-
-  if (itN != nullptr) {
-
-    for (node itn : itN) {
-      if (!selection || selection->getNodeValue(itn)) {
+template <typename BUILDER>
+static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size,
+                               const DoubleProperty *rotation, const BooleanProperty *selection, BUILDER &builder) {
+  if (itN != NULL) {
+    node itn;
+    forEach(itn, itN) {
+      if ((selection == NULL) || selection->getNodeValue(itn)) {
         Vec3f nSize(size->getNodeValue(itn));
         Vec3f point(layout->getNodeValue(itn));
         double rot(rotation->getNodeValue(itn));
@@ -69,7 +61,8 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
         points[3].set(-nSize[0] / 2., +nSize[1] / 2., +nSize[2] / 2.);
 
         for (unsigned int i = 0; i < 4; ++i) {
-          rotate(points[i], rot);
+          if (rot)
+            rotate(points[i], rot);
           points[i] += point;
           builder.addPoint(points[i]);
         }
@@ -77,10 +70,10 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
     }
   }
 
-  if (itE != nullptr) {
-
-    for (edge ite : itE) {
-      if (!selection || selection->getEdgeValue(ite)) {
+  if ((itE != NULL) && layout->numberOfNonDefaultValuatedEdges()) {
+    edge ite;
+    forEach(ite, itE) {
+      if ((selection == NULL) || selection->getEdgeValue(ite)) {
         LineType::RealType::const_iterator itCoord;
         const LineType::RealType &bends = layout->getEdgeValue(ite);
 
@@ -90,14 +83,14 @@ void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE, const LayoutPr
     }
   }
 }
-}
+
 //===========================================================================
-class BoundingBoxCalculator : public HullBuilder {
+class BoundingBoxCalculator {
 public:
-  inline virtual void addPoint(const Coord &point) {
+  inline void addPoint(const Coord &point) {
     result.expand(point);
   }
-  BoundingBox getResult() {
+  inline BoundingBox getResult() {
     return result;
   }
 
@@ -107,9 +100,7 @@ private:
 //===========================================================================
 BoundingBox tlp::computeBoundingBox(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size, const DoubleProperty *rotation,
                                     const BooleanProperty *selection) {
-  BoundingBoxCalculator calc;
-  computeGraphPoints(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection, calc);
-  return calc.getResult();
+  return computeBoundingBox(graph->getNodes(), graph->getEdges(), layout, size, rotation, selection);
 }
 //===========================================================================
 BoundingBox tlp::computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE, const LayoutProperty *layout, const SizeProperty *size,
@@ -117,6 +108,14 @@ BoundingBox tlp::computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE, co
   BoundingBoxCalculator calc;
   computeGraphPoints(itN, itE, layout, size, rotation, selection, calc);
   return calc.getResult();
+}
+//===========================================================================
+BoundingBox tlp::computeBoundingBox(const std::vector<node> &nodes, const std::vector<edge> &edges, const LayoutProperty *layout,
+                                    const SizeProperty *size, const DoubleProperty *rotation, const BooleanProperty *selection) {
+  Iterator<node> *itN = new StlIterator<node, typename std::vector<node>::const_iterator>(nodes.begin(), nodes.end());
+  Iterator<edge> *itE = new StlIterator<edge, typename std::vector<edge>::const_iterator>(edges.begin(), edges.end());
+  BoundingBox bbox = computeBoundingBox(itN, itE, layout, size, rotation, selection);
+  return bbox;
 }
 //===========================================================================
 pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutProperty *layout, const SizeProperty *size,
@@ -156,28 +155,31 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
     } // end if
   }
 
-  for (edge ite : graph->getEdges()) {
-    if (selection == 0 || selection->getEdgeValue(ite)) {
-      LineType::RealType::const_iterator itCoord;
-      const LineType::RealType &bends = layout->getEdgeValue(ite);
+  if (layout->numberOfNonDefaultValuatedEdges()) {
+    edge ite;
+    forEach(ite, graph->getEdges()) {
+      if (selection == NULL || selection->getEdgeValue(ite)) {
+        LineType::RealType::const_iterator itCoord;
+        const LineType::RealType &bends = layout->getEdgeValue(ite);
 
-      for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord) {
-        double curRad = (*itCoord - centre).norm();
+        for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord) {
+          double curRad = (*itCoord - centre).norm();
 
-        if (curRad > maxRad) {
-          maxRad = curRad;
-          result.second = *itCoord;
-        } // end if
-      }   // end for
-    }     // end if
+          if (curRad > maxRad) {
+            maxRad = curRad;
+            result.second = *itCoord;
+          } // end if
+        }   // end for
+      }     // end if
+    }
   }
 
   return result;
 }
 //======================================================================================
-class ConvexHullCalculator : public HullBuilder {
+class ConvexHullCalculator {
 public:
-  inline virtual void addPoint(const Coord &point) {
+  inline void addPoint(const Coord &point) {
     allPoints.push_back(point);
   }
 
@@ -278,7 +280,7 @@ Coord tlp::computePolygonCentroid(const vector<Coord> &points) {
 
 //======================================================================================================
 
-static void normalize(Vec3f &v) {
+static inline void normalize(Vec3f &v) {
   if (v.norm() != 0)
     v /= v.norm();
 }
