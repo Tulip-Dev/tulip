@@ -44,13 +44,13 @@ static void rotate(Coord &vec, double alpha) {
  * @todo take edge size into account
  * @todo create unit test to automatically check that function
  */
-template<typename BUILDER> 
+template<typename BUILDER>
 static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
-			       const LayoutProperty *layout,
-			       const SizeProperty *size,
-			       const DoubleProperty *rotation,
-			       const BooleanProperty *selection,
-			       BUILDER &builder) {
+                               const LayoutProperty *layout,
+                               const SizeProperty *size,
+                               const DoubleProperty *rotation,
+                               const BooleanProperty *selection,
+                               BUILDER &builder) {
   if (itN != NULL) {
     node itn;
     forEach(itn, itN) {
@@ -65,8 +65,9 @@ static void computeGraphPoints(Iterator<node> *itN, Iterator<edge> *itE,
         points[3].set(-nSize[0]/2., +nSize[1]/2., +nSize[2]/2.);
 
         for (unsigned int i = 0; i < 4; ++i) {
-	  if (rot)
-	    rotate(points[i], rot);
+          if (rot)
+            rotate(points[i], rot);
+
           points[i] += point;
           builder.addPoint(points[i]);
         }
@@ -113,19 +114,19 @@ BoundingBox tlp::computeBoundingBox(Iterator<node> *itN, Iterator<edge> *itE, co
 }
 //===========================================================================
 BoundingBox tlp::computeBoundingBox(const std::vector<node>& nodes,
-				    const std::vector<edge>& edges,
-				    const LayoutProperty *layout,
-				    const SizeProperty *size,
-				    const DoubleProperty *rotation,
-				    const BooleanProperty *selection) {
+                                    const std::vector<edge>& edges,
+                                    const LayoutProperty *layout,
+                                    const SizeProperty *size,
+                                    const DoubleProperty *rotation,
+                                    const BooleanProperty *selection) {
   Iterator<node>* itN =
     new StlIterator<node, typename std::vector<node>::const_iterator>(nodes.begin(),
-								      nodes.end());
+        nodes.end());
   Iterator<edge>* itE =
     new StlIterator<edge, typename std::vector<edge>::const_iterator>(edges.begin(),
-								      edges.end());
+        edges.end());
   BoundingBox bbox = computeBoundingBox(itN, itE, layout, size,
-					rotation, selection);
+                                        rotation, selection);
   return bbox;
 }
 //===========================================================================
@@ -171,17 +172,17 @@ pair<Coord, Coord> tlp::computeBoundingRadius(const Graph *graph, const LayoutPr
     edge ite;
     forEach(ite, graph->getEdges()) {
       if (selection == NULL || selection->getEdgeValue(ite)) {
-	LineType::RealType::const_iterator itCoord;
-	const LineType::RealType &bends = layout->getEdgeValue(ite);
+        LineType::RealType::const_iterator itCoord;
+        const LineType::RealType &bends = layout->getEdgeValue(ite);
 
-	for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord) {
-	  double curRad = (*itCoord - centre).norm();
+        for (itCoord = bends.begin(); itCoord != bends.end(); ++itCoord) {
+          double curRad = (*itCoord - centre).norm();
 
-	  if (curRad > maxRad) {
-	    maxRad = curRad;
-	    result.second = *itCoord;
-	  }//end if
-	}//end for
+          if (curRad > maxRad) {
+            maxRad = curRad;
+            result.second = *itCoord;
+          }//end if
+        }//end for
       }//end if
     }
   }
@@ -221,7 +222,7 @@ std::vector<Coord> tlp::computeConvexHull(const Graph *graph, const LayoutProper
 
   ConvexHullCalculator calc;
   computeGraphPoints(graph->getNodes(), graph->getEdges(),
-		     layout, size, rotation, selection, calc);
+                     layout, size, rotation, selection, calc);
   return calc.getResult();
 }
 
