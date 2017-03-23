@@ -95,9 +95,9 @@ TLP_SCOPE void selectSpanningTree(Graph* graph, BooleanProperty *selection,
  * for the other elements
  */
 TLP_SCOPE void selectMinimumSpanningTree(Graph* graph,
-					 BooleanProperty *selectionProperty,
-					 NumericProperty *weight = NULL,
-					 PluginProgress *pluginProgress = NULL);
+    BooleanProperty *selectionProperty,
+    NumericProperty *weight = NULL,
+    PluginProgress *pluginProgress = NULL);
 
 /**
  * @brief Performs a breadth-first search on a graph.
@@ -121,7 +121,7 @@ TLP_SCOPE void bfs(const Graph *graph, std::vector<node>& nodes);
 * use bfs(const Graph*, node, std::vector<node>&) instead
 */
 TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph,
-					    node root = node());
+    node root = node());
 
 /**
  * @brief Performs a depth-first search on a graph.
@@ -146,7 +146,7 @@ TLP_SCOPE void dfs(const Graph *graph, std::vector<node>& nodes);
  * use dfs(const Graph*, node, std::vector<node>&) instead
  */
 TLP_SCOPE _DEPRECATED std::vector<node> dfs(const Graph *graph,
-					    node root = node());
+    node root = node());
 
 /*
  * builds a uniform quantification with the NumericProperty associated values
