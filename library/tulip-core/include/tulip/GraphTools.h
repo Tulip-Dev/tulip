@@ -113,11 +113,7 @@ TLP_SCOPE void bfs(const Graph *graph, std::vector<node> &nodes);
  * @brief deprecated function,
  * use bfs(const Graph*, node, std::vector<node>&) instead
  */
-inline TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph, node root = node()) {
-  std::vector<node> ret;
-  bfs(graph, root, ret);
-  return ret;
-}
+TLP_SCOPE _DEPRECATED std::vector<node> bfs(const Graph *graph, node root = node());
 
 /**
  * @brief Performs a depth-first search on a graph.
@@ -141,11 +137,7 @@ TLP_SCOPE void dfs(const Graph *graph, std::vector<node> &nodes);
  * @brief deprecated function,
  * use dfs(const Graph*, node, std::vector<node>&) instead
  */
-inline TLP_SCOPE _DEPRECATED std::vector<node> dfs(const Graph *graph, node root = node()) {
-  std::vector<node> ret;
-  dfs(graph, root, ret);
-  return ret;
-}
+TLP_SCOPE _DEPRECATED std::vector<node> dfs(const Graph *graph, node root = node());
 
 /*
  * builds a uniform quantification with the NumericProperty associated values
