@@ -450,7 +450,8 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes, Mu
 
   visited.set(root, true);
   visitedElt *first = new visitedElt(root);
-  visitedElt *current = first;
+  visitedElt *current, *last;
+  last = current = first;
   unsigned nbNodes = 1;
 
   while (current) {
@@ -458,7 +459,7 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node> &nodes, Mu
     forEach(neigh, graph->getInOutNodes(current->n)) {
       if (!visited.get(neigh)) {
         visited.set(neigh, true);
-        current = current->next = new visitedElt(neigh);
+        last = last->next = new visitedElt(neigh);
         ++nbNodes;
       }
     }
@@ -505,41 +506,30 @@ void bfs(const Graph *graph, std::vector<tlp::node> &visitedNodes) {
   }
 }
 //======================================================================
-static void dfsVisitNode(const Graph *g, node n, visitedElt *&current, MutableContainer<bool> &visited, std::list<node> &toVisit) {
-  visited.set(n.id, true);
-  current = current->next = new visitedElt(n);
-  node neighbour;
-  forEach(neighbour, g->getInOutNodes(n)) {
-    if (!visited.get(neighbour.id))
-      toVisit.push_back(neighbour);
-  }
-}
-
 static void dfs(const Graph *graph, node n, std::vector<node> &nodes, MutableContainer<bool> &visited) {
   if (!visited.get(n.id)) {
-    std::list<node> toVisit;
-    visitedElt *first;
-    dfsVisitNode(graph, n, first, visited, toVisit);
-    unsigned int nbNodes = 1;
-    // toVisit loop
-    std::list<node>::iterator itl = toVisit.begin();
-    visitedElt *last = first;
-    while (itl != toVisit.end()) {
-      node current = *itl;
-      if (!visited.get(current.id)) {
-        dfsVisitNode(graph, current, last, visited, toVisit);
-        ++nbNodes;
+    visited.set(n.id, true);
+    bool edgeOK = (graph == graph->getRoot());
+    std::stack<tlp::node> toVisit;
+    toVisit.push(n);
+
+    while (!toVisit.empty()) {
+      node current = toVisit.top();
+      toVisit.pop();
+      nodes.push_back(current);
+      const std::vector<edge> &edges = graph->allEdges(current);
+      unsigned int nbEdges = edges.size();
+      unsigned int i = nbEdges;
+      while (i) {
+        edge e = edges[--i];
+        if (edgeOK || graph->isElement(e)) {
+          node neigh = graph->opposite(e, current);
+          if (!visited.get(neigh.id)) {
+            visited.set(neigh.id, true);
+            toVisit.push(neigh);
+          }
+        }
       }
-      ++itl;
-    }
-    // add nodes
-    nodes.reserve(nbNodes + nodes.size());
-    last = first;
-    while (last) {
-      nodes.push_back(last->n);
-      visitedElt *tmp = last->next;
-      delete last;
-      last = tmp;
     }
   }
 }
