@@ -481,7 +481,7 @@ static void bfs(const Graph *graph, node root, std::vector<tlp::node>& nodes,
   visitedElt* current, *last;
   last = current = first;
   unsigned nbNodes = 1;
-  
+
   while (current) {
     node neigh;
     forEach(neigh, graph->getInOutNodes(current->n)) {
@@ -550,7 +550,7 @@ static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
     bool edgeOK = (graph == graph->getRoot());
     std::stack<tlp::node> toVisit;
     toVisit.push(n);
-    
+
     while (!toVisit.empty()) {
       node current = toVisit.top();
       toVisit.pop();
@@ -558,15 +558,18 @@ static void dfs(const Graph *graph, node n, std::vector<node>& nodes,
       const std::vector<edge>& edges = graph->allEdges(current);
       unsigned int nbEdges = edges.size();
       unsigned int i = nbEdges;
+
       while(i) {
-	edge e = edges[--i];
-	if (edgeOK || graph->isElement(e)) {
-	  node neigh = graph->opposite(e, current);
-	  if (!visited.get(neigh.id)) {
-	    visited.set(neigh.id, true);
-	    toVisit.push(neigh);
-	  }
-	}
+        edge e = edges[--i];
+
+        if (edgeOK || graph->isElement(e)) {
+          node neigh = graph->opposite(e, current);
+
+          if (!visited.get(neigh.id)) {
+            visited.set(neigh.id, true);
+            toVisit.push(neigh);
+          }
+        }
       }
     }
   }
