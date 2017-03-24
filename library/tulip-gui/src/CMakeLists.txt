@@ -62,7 +62,6 @@ SET(SRCS
   ViewWidget.cpp
   InteractorComposite.cpp
   GLInteractor.cpp
-  TulipWorkspace.cpp
   WorkspacePanel.cpp
   Interactor.cpp
   ProcessingAnimationItem.cpp
@@ -218,7 +217,6 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipModel.h
   ../include/tulip/TulipProject.h
   ../include/tulip/TulipSettings.h
-  ../include/tulip/TulipWorkspace.h
   ../include/tulip/VectorEditor.h
   ../include/tulip/View.h
   ../include/tulip/ViewWidget.h
