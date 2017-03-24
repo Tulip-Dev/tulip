@@ -182,8 +182,9 @@ private:
     vector<int> renumber(nb_qnodes, -1);
 
 #if defined(_OPENMP)
-#pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for (unsigned int n=0 ; n<nb_qnodes ; n++) {
       renumber[n2c[n]]=0;
     }
@@ -196,8 +197,9 @@ private:
 
     // update clustering
 #ifdef _OPENMP
-  #pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for (unsigned int i = 0; i < nb_nodes; ++i)
       (*clusters)[i] = renumber[n2c[(*clusters)[i]]];
 
@@ -206,8 +208,9 @@ private:
 
     total_weight = 0;
     const std::vector<edge>& edges = quotient->edges();
+
     for(std::vector<edge>::const_iterator it=edges.begin();
-	it!=edges.end(); ++it) {
+        it!=edges.end(); ++it) {
       edge e = *it;
       std::pair<node, node> ends = quotient->ends(e);
       node src = ends.first;
@@ -331,8 +334,9 @@ private:
     tot.resize(nb_qnodes);
 
 #ifdef _OPENMP
-  #pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for (unsigned int i=0 ; i < nb_qnodes ; i++) {
       n2c[i] = i;
       double wdg, nsl;
@@ -384,6 +388,7 @@ bool LouvainClustering::run() {
 #ifdef _OPENMP
   #pragma omp parallel for
 #endif
+
   for(unsigned i = 0; i < nb_nodes; ++i) {
     (*clusters)[i] = i;
   }
@@ -462,8 +467,9 @@ bool LouvainClustering::run() {
       vector<int> renumber(nb_qnodes, -1);
 
 #if defined(_OPENMP)
-#pragma omp parallel for
+      #pragma omp parallel for
 #endif
+
       for (unsigned int n=0 ; n<nb_qnodes ; n++) {
         renumber[n2c[n]]=0;
       }
@@ -478,6 +484,7 @@ bool LouvainClustering::run() {
       for(unsigned int i = 0; i < nb_nodes; ++i) {
         result->setNodeValue(nodes[i], renumber[n2c[(*clusters)[i]]]);
       }
+
       delete quotient;
       delete weights;
       delete clusters;
