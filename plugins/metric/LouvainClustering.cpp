@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 
@@ -67,7 +70,7 @@ private:
 
   // the mapping between the nodes of the original graph
   // and the quotient nodes
-  MutableContainer<unsigned int> clusters;
+  NodeStaticProperty<int>* clusters;
 
   // quotient graph edge weights
   EdgeProperty<double>* weights;
@@ -178,8 +181,11 @@ private:
     // Renumber communities
     vector<int> renumber(nb_qnodes, -1);
 
+#if defined(_OPENMP)
+#pragma omp parallel for
+#endif
     for (unsigned int n=0 ; n<nb_qnodes ; n++) {
-      renumber[n2c[n]]++;
+      renumber[n2c[n]]=0;
     }
 
     int final=0;
@@ -189,22 +195,19 @@ private:
         renumber[i]=final++;
 
     // update clustering
-    node n;
-    forEach(n, graph->getNodes()) {
-      clusters.set(n.id, renumber[n2c[clusters.get(n.id)]]);
-    }
-    // Compute weighted graph
-    new_quotient->reserveNodes(final);
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nb_nodes; ++i)
+      (*clusters)[i] = renumber[n2c[(*clusters)[i]]];
 
-    for (int i = 0; i < final; ++i)
-      new_quotient->addNode();
+    // Compute weighted graph
+    new_quotient->addNodes(final);
 
     total_weight = 0;
     const std::vector<edge>& edges = quotient->edges();
-    // unsigned int nb_edges = edges.size();
-
-    for(std::vector<edge>::const_iterator it=edges.begin(); it!=edges.end(); ++it) {
-//    for(unsigned int i = 0; i < nb_edges; ++i) {
+    for(std::vector<edge>::const_iterator it=edges.begin();
+	it!=edges.end(); ++it) {
       edge e = *it;
       std::pair<node, node> ends = quotient->ends(e);
       node src = ends.first;
@@ -327,6 +330,9 @@ private:
     in.resize(nb_qnodes);
     tot.resize(nb_qnodes);
 
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
     for (unsigned int i=0 ; i < nb_qnodes ; i++) {
       n2c[i] = i;
       double wdg, nsl;
@@ -368,16 +374,18 @@ bool LouvainClustering::run() {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
-  nb_nodes = graph->numberOfNodes();
+  const std::vector<node>& nodes = graph->nodes();
+  nb_nodes = nodes.size();
 
   quotient = new VectorGraph();
-  quotient->reserveNodes(nb_nodes);
+  quotient->addNodes(nb_nodes);
 
-  tlp::node n;
-  unsigned int i = 0;
-  forEach(n, graph->getNodes()) {
-    clusters.set(n.id, i++);
-    quotient->addNode();
+  clusters = new NodeStaticProperty<int>(graph);
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
+  for(unsigned i = 0; i < nb_nodes; ++i) {
+    (*clusters)[i] = i;
   }
 
   weights = new EdgeProperty<double>();
@@ -387,8 +395,8 @@ bool LouvainClustering::run() {
   forEach(e, graph->getEdges()) {
     double weight = metric ? metric->getEdgeDoubleValue(e) : 1;
     const std::pair<node, node> &ends = graph->ends(e);
-    node q_src(clusters.get(ends.first.id));
-    node q_tgt(clusters.get(ends.second.id));
+    node q_src(clusters->getNodeValue(ends.first));
+    node q_tgt(clusters->getNodeValue(ends.second));
     // self loops are counted only once
     total_weight += q_src != q_tgt ? 2 * weight : weight;
     // create corresponding edge if needed
@@ -453,8 +461,11 @@ bool LouvainClustering::run() {
       // Renumber communities
       vector<int> renumber(nb_qnodes, -1);
 
+#if defined(_OPENMP)
+#pragma omp parallel for
+#endif
       for (unsigned int n=0 ; n<nb_qnodes ; n++) {
-        renumber[n2c[n]]++;
+        renumber[n2c[n]]=0;
       }
 
       int final=0;
@@ -464,12 +475,12 @@ bool LouvainClustering::run() {
           renumber[i]=final++;
 
       // then set measure values
-      node n;
-      forEach(n, graph->getNodes()) {
-        result->setNodeValue(n, renumber[n2c[clusters.get(n.id)]]);
+      for(unsigned int i = 0; i < nb_nodes; ++i) {
+        result->setNodeValue(nodes[i], renumber[n2c[(*clusters)[i]]]);
       }
       delete quotient;
       delete weights;
+      delete clusters;
     }
   }
 
