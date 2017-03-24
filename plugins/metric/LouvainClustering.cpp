@@ -16,6 +16,10 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+#include <tulip/tuliphash.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/tuliphash.h>
 
@@ -25,41 +29,42 @@ using namespace tlp;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
-* \brief  An implementation of the Louvain clustering algorithm
-*
-* This plugin is an implementation of the Louvain clustering algorithm
-* first published as:
-*
-* Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and Lefebvre, E., \n
-* "Fast unfolding of communities in large networks", \n
-* "Journal of Statistical Mechanics: Theory and Experiment, P10008",\n
-* 2008. \n
-*
-* <b> HISTORY</b>
-*
-* - 25/02/2011 Version 1.0: Initial release (François Queyroi)
-* - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General
-*Algorithm to DoubleAlgorithm, code cleaning and fix some memory leaks.
-* - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated
-*version of the original source code available at
-*https://sites.google.com/site/findcommunities/
-*
-* \note A threshold for modularity improvement is used here, its value is
-*0.000001
-*
-* \author Patrick Mary, Labri
-*
-*
-**/
+ * \brief  An implementation of the Louvain clustering algorithm
+ *
+ * This plugin is an implementation of the Louvain clustering algorithm
+ * first published as:
+ *
+ * Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and Lefebvre, E., \n
+ * "Fast unfolding of communities in large networks", \n
+ * "Journal of Statistical Mechanics: Theory and Experiment, P10008",\n
+ * 2008. \n
+ *
+ * <b> HISTORY</b>
+ *
+ * - 25/02/2011 Version 1.0: Initial release (François Queyroi)
+ * - 13/05/2011 Version 2.0 (Bruno Pinaud): Change plugin type from General
+ *Algorithm to DoubleAlgorithm, code cleaning and fix some memory leaks.
+ * - 09/06/2015 Version 2.1 (Patrick Mary) full rewrite according the updated
+ *version of the original source code available at
+ *https://sites.google.com/site/findcommunities/
+ *
+ * \note A threshold for modularity improvement is used here, its value is
+ *0.000001
+ *
+ * \author Patrick Mary, Labri
+ *
+ *
+ **/
 class LouvainClustering : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("Louvain", "Patrick Mary", "09/06/15", "Nodes partitioning measure used for community detection."
-                                                           "This is an implementation of the Louvain clustering "
-                                                           "algorithm first published as:<br/>"
-                                                           "<b>Fast unfolding of communities in large networks</b>, "
-                                                           "Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and "
-                                                           "Lefebvre, E., Journal of Statistical Mechanics: Theory "
-                                                           "and Experiment, P10008 (2008).",
+  PLUGININFORMATION("Louvain", "Patrick Mary", "09/06/15",
+                    "Nodes partitioning measure used for community detection."
+                    "This is an implementation of the Louvain clustering "
+                    "algorithm first published as:<br/>"
+                    "<b>Fast unfolding of communities in large networks</b>, "
+                    "Blondel, V.D. and Guillaume, J.L. and Lambiotte, R. and "
+                    "Lefebvre, E., Journal of Statistical Mechanics: Theory "
+                    "and Experiment, P10008 (2008).",
                     "2.1", "Clustering")
   LouvainClustering(const tlp::PluginContext *);
   bool run();
@@ -75,7 +80,7 @@ private:
 
   // the mapping between the nodes of the original graph
   // and the quotient nodes
-  MutableContainer<unsigned int> clusters;
+  NodeStaticProperty<int> *clusters;
 
   // quotient graph edge weights
   EdgeProperty<double> *weights;
@@ -194,10 +199,13 @@ private:
       if (renumber[i] != -1)
         renumber[i] = final++;
 
-    // update clustering
-    for (node n : graph->getNodes()) {
-      clusters.set(n.id, renumber[n2c[clusters.get(n.id)]]);
-    }
+// update clustering
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nb_nodes; ++i)
+      (*clusters)[i] = renumber[n2c[(*clusters)[i]]];
+
     // Compute weighted graph
     new_quotient->reserveNodes(final);
     for (int i = 0; i < final; ++i)
@@ -364,15 +372,19 @@ bool LouvainClustering::run() {
   // initialize a random sequence according the given seed
   tlp::initRandomSequence();
 
-  nb_nodes = graph->numberOfNodes();
+  const std::vector<node> &nodes = graph->nodes();
+  nb_nodes = nodes.size();
 
   quotient = new VectorGraph();
   quotient->reserveNodes(nb_nodes);
+  quotient->addNodes(nb_nodes);
 
-  unsigned int i = 0;
-  for (node n : graph->getNodes()) {
-    clusters.set(n.id, i++);
-    quotient->addNode();
+  clusters = new NodeStaticProperty<int>(graph);
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+  for (unsigned i = 0; i < nb_nodes; ++i) {
+    (*clusters)[i] = i;
   }
 
   weights = new EdgeProperty<double>();
@@ -382,8 +394,8 @@ bool LouvainClustering::run() {
   for (edge e : graph->getEdges()) {
     double weight = metric ? metric->getEdgeDoubleValue(e) : 1;
     const std::pair<node, node> &ends = graph->ends(e);
-    node q_src(clusters.get(ends.first.id));
-    node q_tgt(clusters.get(ends.second.id));
+    node q_src(clusters->getNodeValue(ends.first));
+    node q_tgt(clusters->getNodeValue(ends.second));
     // self loops are counted only once
     total_weight += q_src != q_tgt ? 2 * weight : weight;
     // create corresponding edge if needed
@@ -457,11 +469,12 @@ bool LouvainClustering::run() {
           renumber[i] = final++;
 
       // then set measure values
-      for (node n : graph->getNodes()) {
-        result->setNodeValue(n, renumber[n2c[clusters.get(n.id)]]);
+      for (unsigned int i = 0; i < nb_nodes; ++i) {
+        result->setNodeValue(nodes[i], renumber[n2c[(*clusters)[i]]]);
       }
       delete quotient;
       delete weights;
+      delete clusters;
     }
   }
 

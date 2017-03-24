@@ -65,16 +65,17 @@ using namespace tlp;
  */
 class KCores : public tlp::DoubleAlgorithm {
 public:
-  PLUGININFORMATION("K-Cores", "David Auber", "28/05/2006", "Node partitioning measure based on the K-core "
-                                                            "decomposition of a graph.<br/>"
-                                                            "K-cores were first introduced in:<br/><b>Network "
-                                                            "structure and minimum degree</b>, S. B. Seidman, Social "
-                                                            "Networks 5:269-287 (1983).<br/>"
-                                                            "This is a method for simplifying a graph topology which "
-                                                            "helps in analysis and visualization of social "
-                                                            "networks.<br>"
-                                                            "<b>Note</b>: use the default parameters to compute simple "
-                                                            "K-Cores (undirected and unweighted).",
+  PLUGININFORMATION("K-Cores", "David Auber", "28/05/2006",
+                    "Node partitioning measure based on the K-core "
+                    "decomposition of a graph.<br/>"
+                    "K-cores were first introduced in:<br/><b>Network "
+                    "structure and minimum degree</b>, S. B. Seidman, Social "
+                    "Networks 5:269-287 (1983).<br/>"
+                    "This is a method for simplifying a graph topology which "
+                    "helps in analysis and visualization of social "
+                    "networks.<br>"
+                    "<b>Note</b>: use the default parameters to compute simple "
+                    "K-Cores (undirected and unweighted).",
                     "2.0", "Graph")
 
   KCores(const tlp::PluginContext *context);
@@ -107,7 +108,6 @@ KCores::~KCores() {
 // to maximize the locality of reference we will use a vector
 // holding the all the nodes needed info in the structure below
 struct nodeInfo {
-  node n;
   double k;
   bool deleted;
 };
@@ -127,10 +127,6 @@ bool KCores::run() {
   string errMsg = "";
   graph->applyPropertyAlgorithm("Degree", result, errMsg, pluginProgress, dataSet);
 
-  // the number of non deleted nodes
-  unsigned int nbNodes = graph->numberOfNodes();
-
-  node n;
 #ifdef _MSC_VER
   int i = 0;
 #else
@@ -141,19 +137,21 @@ bool KCores::run() {
   // record nodes info in a vector to improve
   // the locality of reference during the multiple
   // needed nodes loop
-  std::vector<nodeInfo> nodesInfo(nbNodes);
-  MutableContainer<unsigned int> toNodesInfo;
-  forEach(n, graph->getNodes()) {
+  NodeStaticProperty<nodeInfo> nodesInfo(graph);
+  const std::vector<node> &nodes = graph->nodes();
+  // the number of non deleted nodes
+  unsigned int nbNodes = nodes.size();
+
+  for (unsigned int i = 0; i < nbNodes; ++i) {
     nodeInfo &nInfo = nodesInfo[i];
-    nInfo.n = n;
-    nInfo.k = result->getNodeValue(n);
+    nInfo.k = result->getNodeValue(nodes[i]);
     k = std::min(k, nInfo.k);
     nInfo.deleted = false;
-    toNodesInfo.set(n.id, i++);
   }
 
+  bool noEdgeCheck = (graph == graph->getRoot());
   // loop on remaining nodes
-  while (nbNodes > 0) {
+  while (nbNodes) {
     bool modify = true;
     double next_k = DBL_MAX;
 
@@ -168,44 +166,42 @@ bool KCores::run() {
         if (nInfo.deleted)
           continue;
 
-        node n = nInfo.n;
+        node n = nodes[i];
 
         unsigned int current_k = nInfo.k;
 
         if (current_k <= k) {
           nInfo.k = k;
-          Iterator<edge> *ite;
-
-          switch (degree_type) {
-          case INOUT:
-            ite = graph->getInOutEdges(n);
-            break;
-
-          case IN:
-            ite = graph->getOutEdges(n);
-            break;
-
-          case OUT:
-          default:
-            ite = graph->getInEdges(n);
-          }
-
           // decrease neighbours weighted degree
-          while (ite->hasNext()) {
-            edge ee = ite->next();
-            node m = graph->opposite(ee, n);
+          const std::vector<edge> &edges = graph->allEdges(n);
+          unsigned int nbEdges = edges.size();
+          for (unsigned int i = 0; i < nbEdges; ++i) {
+            edge ee = edges[i];
+            if (noEdgeCheck || graph->isElement(ee)) {
+              std::pair<node, node> ends = graph->ends(ee);
+              node m;
+              switch (degree_type) {
+              case IN:
+                if ((m = ends.second) == n)
+                  continue;
+                break;
 
-            nodeInfo &mInfo = nodesInfo[toNodesInfo.get(m.id)];
+              case OUT:
+                if ((m = ends.first) == n)
+                  continue;
+                break;
 
-            if (mInfo.deleted)
-              continue;
-            if (metric)
-              mInfo.k -= metric->getEdgeDoubleValue(ee);
-            else
-              mInfo.k -= 1;
+              default:
+                m = (ends.first == n) ? ends.second : ends.first;
+              }
+              nodeInfo &mInfo = nodesInfo[graph->nodePos(m)];
+
+              if (mInfo.deleted)
+                continue;
+
+              mInfo.k -= metric ? metric->getEdgeDoubleValue(ee) : 1;
+            }
           }
-          delete ite;
-
           // mark node as deleted
           nInfo.deleted = true;
           --nbNodes;
@@ -222,10 +218,9 @@ bool KCores::run() {
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
-
   for (i = 0; i < nodesInfo.size(); ++i) {
     nodeInfo &nInfo = nodesInfo[i];
-    result->setNodeValue(nInfo.n, nInfo.k);
+    result->setNodeValue(nodes[i], nInfo.k);
   }
 
   return true;
