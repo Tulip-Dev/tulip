@@ -143,8 +143,9 @@ bool KCores::run() {
     k = std::min(k, nInfo.k);
     nInfo.deleted = false;
   }
-  
+
   bool noEdgeCheck = (graph == graph->getRoot());
+
   // loop on remaining nodes
   while (nbNodes) {
     bool modify = true;
@@ -169,40 +170,47 @@ bool KCores::run() {
         if (current_k <= k) {
           nInfo.k = k;
           // decrease neighbours weighted degree
-	  const std::vector<edge>& edges = graph->allEdges(n);
-	  unsigned int nbEdges = edges.size();
-	  for (unsigned int i = 0; i < nbEdges; ++i) {
-	    edge ee = edges[i];
-	    if (noEdgeCheck || graph->isElement(ee)) {
-	      std::pair<node, node> ends = graph->ends(ee);
-	      node m;
-	      switch(degree_type) {
-	      case IN:
-		if ((m = ends.second) == n)
-		  continue;
-		break;
-		
-	      case OUT:
-		if ((m = ends.first) == n)
-		  continue;
-		break;
-		
-	      default:
-		m = (ends.first == n) ? ends.second : ends.first;
-	      }
-	      nodeInfo& mInfo = nodesInfo[graph->nodePos(m)];
+          const std::vector<edge>& edges = graph->allEdges(n);
+          unsigned int nbEdges = edges.size();
 
-	      if (mInfo.deleted)
-		continue;
+          for (unsigned int i = 0; i < nbEdges; ++i) {
+            edge ee = edges[i];
 
-		mInfo.k -= metric ? metric->getEdgeDoubleValue(ee) : 1;
-	    }
-	  }
-	  // mark node as deleted
-	  nInfo.deleted = true;
-	  --nbNodes;
-	  modify = true;
-	}
+            if (noEdgeCheck || graph->isElement(ee)) {
+              std::pair<node, node> ends = graph->ends(ee);
+              node m;
+
+              switch(degree_type) {
+              case IN:
+                if ((m = ends.second) == n)
+                  continue;
+
+                break;
+
+              case OUT:
+                if ((m = ends.first) == n)
+                  continue;
+
+                break;
+
+              default:
+                m = (ends.first == n) ? ends.second : ends.first;
+              }
+
+              nodeInfo& mInfo = nodesInfo[graph->nodePos(m)];
+
+              if (mInfo.deleted)
+                continue;
+
+              mInfo.k -= metric ? metric->getEdgeDoubleValue(ee) : 1;
+            }
+          }
+
+          // mark node as deleted
+          nInfo.deleted = true;
+          --nbNodes;
+          modify = true;
+        }
         else if (current_k < next_k)
           // update next k value
           next_k = current_k;
@@ -216,6 +224,7 @@ bool KCores::run() {
 #ifdef _OPENMP
   #pragma omp parallel for
 #endif
+
   for (i = 0; i < nodesInfo.size(); ++i) {
     nodeInfo& nInfo = nodesInfo[i];
     result->setNodeValue(nodes[i], nInfo.k);
