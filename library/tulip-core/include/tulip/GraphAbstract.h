@@ -38,7 +38,7 @@ class GraphProperty;
 class TLP_SCOPE GraphAbstract:public Graph {
   friend class PropertyManager;
   DataSet attributes;
-  Graph *supergraph;
+  Graph* supergraph;
   Graph* const root;
   GRAPH_SEQ subgraphs;
   Graph* subGraphToKeep;
@@ -81,34 +81,6 @@ public:
   virtual bool isMetaNode(const node) const;
   virtual Graph* getNodeMetaInfo(const node) const;
   virtual void delNodes(Iterator<node>* itN, bool deleteInAllGraphs);
-  inline node source(const edge e) const {
-    return root->source(e);
-  }
-  inline void setSource(const edge e, const node newSrc) {
-    assert(isElement(e));
-    root->setEnds(e, newSrc, node());
-  }
-  inline node target(const edge e) const {
-    return root->target(e);
-  }
-  inline void setTarget(const edge e, const node newTgt) {
-    assert(isElement(e));
-    root->setEnds(e, node(), newTgt);
-  }
-  inline const std::pair<node, node>& ends(const edge e) const {
-    return root->ends(e);
-  }
-  inline void setEnds(const edge e, const node newSrc, const node newTgt) {
-    assert(isElement(e));
-    root->setEnds(e, newSrc, newTgt);
-  }
-  inline node opposite(const edge e, const node n)const {
-    return root->opposite(e, n);
-  }
-  inline void reverse(const edge e) {
-    assert(isElement(e));
-    root->reverse(e);
-  }
   virtual bool isMetaEdge(const edge) const;
   virtual Iterator<edge>* getEdgeMetaInfo(const edge) const;
   virtual void delEdges(Iterator<edge>* itE, bool deleteInAllGraphs = false);

@@ -96,9 +96,8 @@ edge GraphView::existEdge(const node src, const node tgt,
 
   std::vector<edge> ee;
 
-  return ((GraphImpl *)getRoot())->getEdges(src, tgt, directed,
-         ee, this, true)
-         ? ee[0] : edge();
+  return getRootImpl()->getEdges(src, tgt, directed, ee, this, true)
+    ? ee[0] : edge();
 }
 //----------------------------------------------------------------
 void GraphView::reverseInternal(const edge e, const node src, const node tgt) {
@@ -197,7 +196,7 @@ void GraphView::addNodesInternal(const std::vector<node>& nodes) {
 
   for (; it != ite; ++it) {
     node n(*it);
-    assert(getRoot()->isElement(n));
+    assert(getRootImpl()->isElement(n));
     _nodeData.set(n, new SGraphNodeData());
     _nodes.add(n);
   }
@@ -267,7 +266,7 @@ void GraphView::addEdgesInternal(const std::vector<edge>& ee,
 
   for (; it != ite; ++it, ++i) {
     edge e = *it;
-    assert(getRoot()->isElement(e));
+    assert(getRootImpl()->isElement(e));
     _edges.add(e);
     std::pair<node, node> eEnds(hasEnds ? ends[i] : this->ends(e));
     node src = eEnds.first;
@@ -287,7 +286,7 @@ edge GraphView::addEdge(const node n1, const node n2) {
 }
 //----------------------------------------------------------------
 void GraphView::addEdge(const edge e) {
-  assert(getRoot()->isElement(e));
+  assert(getRootImpl()->isElement(e));
   assert(isElement(source(e)));
   assert(isElement(target(e)));
 
@@ -313,7 +312,7 @@ void GraphView::addEdges(Iterator<edge>* addedEdges) {
 
   while(addedEdges->hasNext()) {
     edge e = addedEdges->next();
-    assert(getRoot()->isElement(e));
+    assert(getRootImpl()->isElement(e));
     assert(isElement(source(e)));
     assert(isElement(target(e)));
 
@@ -350,7 +349,7 @@ void GraphView::removeNode(const node n, const std::vector<edge>& ee) {
 //----------------------------------------------------------------
 void GraphView::delNode(const node n, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {
-    getRoot()->delNode(n, true);
+    getRootImpl()->delNode(n, true);
   }
   else {
     assert(isElement(n));
@@ -424,7 +423,7 @@ void GraphView::removeEdges(const std::vector<edge>& ee) {
 //----------------------------------------------------------------
 void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
   if(deleteInAllGraphs) {
-    getRoot()->delEdge(e, true);
+    getRootImpl()->delEdge(e, true);
   }
   else {
     assert(isElement(e));
@@ -441,14 +440,6 @@ void GraphView::delEdge(const edge e, bool deleteInAllGraphs) {
     delete itS;
     removeEdge(e);
   }
-}
-//----------------------------------------------------------------
-void GraphView::setEdgeOrder(const node n, const std::vector<edge> &v ) {
-  getRoot()->setEdgeOrder(n,v);
-}
-//----------------------------------------------------------------
-void GraphView::swapEdgeOrder(const node n, const edge e1 , const edge e2) {
-  getRoot()->swapEdgeOrder(n,e1,e2);
 }
 //----------------------------------------------------------------
 Iterator<node>* GraphView::getNodes() const {
@@ -488,7 +479,7 @@ std::vector<edge> GraphView::getEdges(const node src, const node tgt,
   std::vector<edge> ee;
 
   if (isElement(src) && isElement(tgt))
-    ((GraphImpl *)getRoot())->getEdges(src, tgt, directed, ee, this);
+    getRootImpl()->getEdges(src, tgt, directed, ee, this);
 
   return ee;
 }
@@ -502,27 +493,27 @@ void GraphView::reserveEdges(unsigned int) {
 }
 //----------------------------------------------------------------
 bool GraphView::canPop() {
-  return getRoot()->canPop();
+  return getRootImpl()->canPop();
 }
 //----------------------------------------------------------------
 bool GraphView::canUnpop() {
-  return getRoot()->canUnpop();
+  return getRootImpl()->canUnpop();
 }
 //----------------------------------------------------------------
 bool GraphView::canPopThenUnpop() {
-  return getRoot()->canPopThenUnpop();
+  return getRootImpl()->canPopThenUnpop();
 }
 //----------------------------------------------------------------
 void GraphView::push(bool unpopAllowed,
                      std::vector<PropertyInterface*>* propertiesToPreserveOnPop) {
-  getRoot()->push(unpopAllowed, propertiesToPreserveOnPop);
+  getRootImpl()->push(unpopAllowed, propertiesToPreserveOnPop);
 }
 //----------------------------------------------------------------
 void GraphView::pop(bool unpopAllowed) {
-  getRoot()->pop(unpopAllowed);
+  getRootImpl()->pop(unpopAllowed);
 }
 //----------------------------------------------------------------
 void GraphView::unpop() {
-  getRoot()->unpop();
+  getRootImpl()->unpop();
 }
 }
