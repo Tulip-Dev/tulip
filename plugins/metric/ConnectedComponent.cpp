@@ -30,15 +30,15 @@ ConnectedComponent::~ConnectedComponent() {
 }
 //======================================================
 bool ConnectedComponent::run() {
-  std::vector<std::set<node>> components;
+  std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(graph, components);
 
   // assign the index of each component as value for its nodes
   // unsigned int curComponent = 0;
   for (unsigned int curComponent = 0; curComponent < components.size(); ++curComponent) {
-    std::set<node> &component = components[curComponent];
+    std::vector<node> &component = components[curComponent];
 
-    for (std::set<node>::const_iterator itNode = component.begin(); itNode != component.end(); ++itNode) {
+    for (std::vector<node>::const_iterator itNode = component.begin(); itNode != component.end(); ++itNode) {
       result->setNodeValue(*itNode, curComponent);
     }
   }
