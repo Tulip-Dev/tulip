@@ -89,7 +89,7 @@ static const char *paramHelp[] = {
     "This parameter indicates the direction used to compute K-Cores values.",
 
     // metric
-    "An existing edge metric property."};
+    "An existing edge metric property, used to specify the weights of edges."};
 #define DEGREE_TYPE "type"
 #define DEGREE_TYPES "InOut;In;Out;"
 #define INOUT 0
@@ -168,7 +168,7 @@ bool KCores::run() {
 
         node n = nodes[i];
 
-        unsigned int current_k = nInfo.k;
+        double current_k = nInfo.k;
 
         if (current_k <= k) {
           nInfo.k = k;
