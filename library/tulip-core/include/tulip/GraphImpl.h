@@ -45,8 +45,12 @@ public:
   ~GraphImpl();
   void clear();
   //=========================================================================
-  bool isElement(const node) const;
-  bool isElement(const edge) const;
+  inline bool isElement(const node n) const {
+    return storage.isElement(n);
+  }
+  bool isElement(const edge e) const {
+    return storage.isElement(e);
+  }
   edge existEdge(const node source, const node target, bool directed = true) const;
   node addNode();
   void addNodes(unsigned int nb);
@@ -60,8 +64,12 @@ public:
   void addEdges(Iterator<edge> *edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
-  void setEdgeOrder(const node, const std::vector<edge> &);
-  void swapEdgeOrder(const node, const edge, const edge);
+  inline void setEdgeOrder(const node n, const std::vector<edge> &v) {
+    storage.setEdgeOrder(n, v);
+  }
+  inline void swapEdgeOrder(const node n, const edge e1, const edge e2) {
+    storage.swapEdgeOrder(n, e1, e2);
+  }
   //=========================================================================
   inline const std::vector<node> &nodes() const {
     return storage.nodes();
@@ -91,36 +99,44 @@ public:
     return storage.adj(n);
   }
   //========================================================================
-  unsigned int deg(const node n) const {
+  inline unsigned int deg(const node n) const {
     assert(isElement(n));
     return storage.deg(n);
   }
-  unsigned int indeg(const node n) const {
+  inline unsigned int indeg(const node n) const {
     assert(isElement(n));
     return storage.indeg(n);
   }
-  unsigned int outdeg(const node n) const {
+  inline unsigned int outdeg(const node n) const {
     assert(isElement(n));
     return storage.outdeg(n);
   }
   //========================================================================
-  virtual node source(const edge e) const {
+  inline node source(const edge e) const {
     assert(isElement(e));
     return storage.source(e);
   }
-  virtual node target(const edge e) const {
+  inline node target(const edge e) const {
     assert(isElement(e));
     return storage.target(e);
   }
-  virtual node opposite(const edge e, const node n) const {
+  inline node opposite(const edge e, const node n) const {
     assert(isElement(e));
     return storage.opposite(e, n);
   }
-  virtual const std::pair<node, node> &ends(const edge e) const {
+  inline const std::pair<node, node> &ends(const edge e) const {
     return storage.ends(e);
   }
-  virtual void setEnds(const edge, const node, const node);
-  virtual void reverse(const edge);
+  inline void setSource(const edge e, const node newSrc) {
+    assert(isElement(e));
+    this->setEnds(e, newSrc, node());
+  }
+  inline void setTarget(const edge e, const node newTgt) {
+    assert(isElement(e));
+    this->setEnds(e, node(), newTgt);
+  }
+  void setEnds(const edge, const node, const node);
+  void reverse(const edge);
   //=======================================================================
   inline unsigned int numberOfEdges() const {
     return storage.numberOfEdges();

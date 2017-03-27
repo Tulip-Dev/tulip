@@ -130,14 +130,6 @@ void GraphImpl::clear() {
   storage.clear();
 }
 //----------------------------------------------------------------
-bool GraphImpl::isElement(const node n) const {
-  return storage.isElement(n);
-}
-//----------------------------------------------------------------
-bool GraphImpl::isElement(const edge e) const {
-  return storage.isElement(e);
-}
-//----------------------------------------------------------------
 edge GraphImpl::existEdge(const node src, const node tgt, bool directed) const {
   std::vector<edge> edges;
   return storage.getEdges(src, tgt, directed, edges, NULL, true) ? edges[0] : edge();
@@ -318,14 +310,6 @@ void GraphImpl::delEdge(const edge e, bool) {
   delete itS;
 
   removeEdge(e);
-}
-//----------------------------------------------------------------
-void GraphImpl::setEdgeOrder(const node n, const vector<edge> &v) {
-  storage.setEdgeOrder(n, v);
-}
-//----------------------------------------------------------------
-void GraphImpl::swapEdgeOrder(const node n, const edge e1, const edge e2) {
-  storage.swapEdgeOrder(n, e1, e2);
 }
 //----------------------------------------------------------------
 Iterator<node> *GraphImpl::getNodes() const {
