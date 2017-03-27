@@ -90,22 +90,25 @@ bool ConnectedComponentPacking::run() {
   rectangles.resize(ccNodes.size());
   std::vector<std::vector<edge> > ccEdges;
   ccEdges.resize(ccNodes.size());
+
   for (unsigned int i = 0; i < ccNodes.size(); ++i) {
     std::vector<edge>& edges = ccEdges[i];
     MutableContainer<bool> visited;
     visited.setAll(false);
     const std::vector<node>& nodes = ccNodes[i];
     unsigned int nbNodes = nodes.size();
+
     for (unsigned int j = 0; j < nbNodes; ++j) {
       edge e;
       forEach(e, graph->getInOutEdges(nodes[j])) {
-	if (!visited.get(e.id)) {
-	  visited.set(e.id, false);
-	  edges.push_back(e);
-	}
+        if (!visited.get(e.id)) {
+          visited.set(e.id, false);
+          edges.push_back(e);
+        }
       }
     }
-    BoundingBox tmp = 
+
+    BoundingBox tmp =
       tlp::computeBoundingBox(nodes, edges, layout, size, rotation);
     Rectangle<float>& tmpRec = rectangles[i];
     tmpRec[1][0] = tmp[1][0] + spacing;
@@ -147,29 +150,33 @@ bool ConnectedComponentPacking::run() {
   vector<Rectangle<float> > rectanglesBackup(rectangles);
   RectanglePackingLimitRectangles(rectangles, complexity.c_str(), pluginProgress);
   Iterator<node> *itN = graph->getNodes();
+
   while(itN->hasNext()) {
     node n = itN->next();
     result->setNodeValue(n, layout->getNodeValue(n));
   }
+
   delete itN;
-  
+
   Iterator<edge> *itE = graph->getEdges();
+
   while(itE->hasNext()) {
     edge e = itE->next();
     result->setEdgeValue(e, layout->getEdgeValue(e));
   }
+
   delete itE;
-  
+
   for (unsigned int i = 0; i < ccNodes.size(); ++i) {
     Coord move(rectangles[i][0][0]-rectanglesBackup[i][0][0], rectangles[i][0][1]-rectanglesBackup[i][0][1], 0);
     const std::vector<node>& nodes = ccNodes[i];
-    Iterator<node>* itN = 
+    Iterator<node>* itN =
       new StlIterator<node, std::vector<node>::const_iterator>(nodes.begin(),
-							       nodes.end());
+          nodes.end());
     const std::vector<edge>& edges = ccEdges[i];
-    Iterator<edge>* itE = 
+    Iterator<edge>* itE =
       new StlIterator<edge, std::vector<edge>::const_iterator>(edges.begin(),
-							       edges.end());
+          edges.end());
     result->translate(move, itN, itE);
     delete itN;
     delete itE;

@@ -53,7 +53,7 @@ class GraphView:public GraphAbstract {
   inline GraphImpl* getRootImpl() const {
     return (GraphImpl *) getRoot();
   }
-  
+
   friend class GraphImpl;
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id);

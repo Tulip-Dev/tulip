@@ -62,14 +62,14 @@ public:
    **/
   static unsigned int numberOfConnectedComponents(const Graph* const graph);
 
-    /**
-   * @brief Computes the sets of connected components and stores the result in the components vector.
-   *
-   * @param graph The graph on which to compute connected components.
-   * @param components The components that were found. It is passed as a reference to avoid copying the data when returning.
-   * @return void
-   * @note The components parameter can be returned with c++11 thanks to move constructors without performance loss, change this function once c++11 compilers are used.
-   **/
+  /**
+  * @brief Computes the sets of connected components and stores the result in the components vector.
+  *
+  * @param graph The graph on which to compute connected components.
+  * @param components The components that were found. It is passed as a reference to avoid copying the data when returning.
+  * @return void
+  * @note The components parameter can be returned with c++11 thanks to move constructors without performance loss, change this function once c++11 compilers are used.
+  **/
   static void computeConnectedComponents(const Graph *graph, std::vector< std::vector<node> >& components);
 
   /**
