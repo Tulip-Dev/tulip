@@ -50,6 +50,10 @@ DECL_STORED_PTR(SGraphNodeDataPtr);
  */
 class GraphView:public GraphAbstract {
 
+  inline GraphImpl* getRootImpl() const {
+    return (GraphImpl *) getRoot();
+  }
+  
   friend class GraphImpl;
 public:
   GraphView(Graph *supergraph, BooleanProperty *filter, unsigned int id);
@@ -66,8 +70,12 @@ public:
   void addEdges(Iterator<edge>* edges);
   void delNode(const tlp::node n, bool deleteInAllGraphs = false);
   void delEdge(const tlp::edge e, bool deleteInAllGraphs = false);
-  void setEdgeOrder(const node,const std::vector<edge> & );
-  void swapEdgeOrder(const node,const edge , const edge );
+  void setEdgeOrder(const node n, const std::vector<edge> &v) {
+    getRootImpl()->setEdgeOrder(n,v);
+  }
+  void swapEdgeOrder(const node n, const edge e1, const edge e2) {
+    getRootImpl()->swapEdgeOrder(n, e1, e2);
+  }
   //=========================================================================
   inline bool isElement(const node n) const {
     return _nodeData.get(n.id) != NULL;
@@ -77,25 +85,54 @@ public:
   }
   edge existEdge(const node source, const node target,
                  bool directed) const;
-  unsigned int numberOfNodes() const {
+  inline unsigned int numberOfNodes() const {
     return _nodes.size();
   }
-  unsigned int numberOfEdges() const {
+  inline unsigned int numberOfEdges() const {
     return _edges.size();
   }
   //=========================================================================
-  unsigned int deg(const node n) const {
+  inline unsigned int deg(const node n) const {
     assert(isElement(n));
     SGraphNodeData* nData = _nodeData.get(n.id);
     return nData->inDegree + nData->outDegree;
   }
-  unsigned int indeg(const node n) const {
+  inline unsigned int indeg(const node n) const {
     assert(isElement(n));
     return _nodeData.get(n.id)->inDegree;
   }
-  unsigned int outdeg(const node n) const {
+  inline unsigned int outdeg(const node n) const {
     assert(isElement(n));
     return _nodeData.get(n.id)->outDegree;
+  }
+  //=========================================================================
+  inline node source(const edge e) const {
+    return getRootImpl()->source(e);
+  }
+  inline void setSource(const edge e, const node newSrc) {
+    assert(isElement(e));
+    getRootImpl()->setEnds(e, newSrc, node());
+  }
+  inline node target(const edge e) const {
+    return getRootImpl()->target(e);
+  }
+  inline void setTarget(const edge e, const node newTgt) {
+    assert(isElement(e));
+    getRootImpl()->setEnds(e, node(), newTgt);
+  }
+  inline const std::pair<node, node>& ends(const edge e) const {
+    return getRootImpl()->ends(e);
+  }
+  inline void setEnds(const edge e, const node newSrc, const node newTgt) {
+    assert(isElement(e));
+    getRootImpl()->setEnds(e, newSrc, newTgt);
+  }
+  inline node opposite(const edge e, const node n)const {
+    return getRootImpl()->opposite(e, n);
+  }
+  inline void reverse(const edge e) {
+    assert(isElement(e));
+    getRootImpl()->reverse(e);
   }
   //=========================================================================
   inline const std::vector<node>& nodes() const {
@@ -121,7 +158,7 @@ public:
   std::vector<edge> getEdges(const node source, const node target,
                              bool directed = true) const;
   inline const std::vector<edge>& allEdges(const node n) const {
-    return getRoot()->allEdges(n);
+    return getRootImpl()->allEdges(n);
   }
   inline void sortElts() {
     _nodes.sort();
