@@ -77,8 +77,10 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
   // do a bfs traversal for each node
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node curNode = nodes[i];
+
     // check if curNode has been already visited
     if (!visited[i]) {
       // add a new component
@@ -123,11 +125,13 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
   computeConnectedComponents(graph, vComponents);
   unsigned int nbComp = vComponents.size();
   components.resize(nbComp);
+
   for(unsigned int i = 0; i < nbComp; ++i) {
     const std::vector<node>& vNodes = vComponents[i];
     std::set<node>& sNodes = components[i];
     sNodes.clear();
     unsigned int nbNodes = vNodes.size();
+
     for(unsigned int j = 0; j < nbNodes; ++j)
       sNodes.insert(vNodes[j]);
   }
@@ -135,7 +139,7 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
 
 //=================================================================
 static unsigned int connectedTest(const Graph * const graph, node n,
-				  NodeStaticProperty<bool> &visited) {
+                                  NodeStaticProperty<bool> &visited) {
   list<node> nodesToVisit;
   visited.setNodeValue(n, true);
   nodesToVisit.push_front(n);
@@ -159,8 +163,10 @@ static unsigned int connectedTest(const Graph * const graph, node n,
         ++count;
       }
     }
+
     delete itn;
   }
+
   return count;
 }
 //=================================================================
@@ -182,7 +188,7 @@ bool ConnectedTest::compute(const tlp::Graph* const graph) {
 }
 //=================================================================
 void ConnectedTest::connect(const tlp::Graph* const graph,
-			    vector<node>& toLink) {
+                            vector<node>& toLink) {
   if (resultsBuffer.find(graph)!=resultsBuffer.end()) {
     if (resultsBuffer[graph])
       return;
@@ -190,6 +196,7 @@ void ConnectedTest::connect(const tlp::Graph* const graph,
 
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+
   if (nbNodes == 0) return;
 
   NodeStaticProperty<bool> visited(graph);
