@@ -21,6 +21,7 @@
 #include <tulip/ConnectedTest.h>
 #include <tulip/MutableContainer.h>
 #include <tulip/ForEach.h>
+#include <tulip/StaticProperty.h>
 
 using namespace std;
 using namespace tlp;
@@ -70,22 +71,24 @@ unsigned int ConnectedTest::numberOfConnectedComponents(const tlp::Graph* const 
   return result;
 }
 //======================================================================
-void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< set< node > >& components) {
-  MutableContainer<bool> visited;
+void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< vector< node > >& components) {
+  NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
   // do a bfs traversal for each node
-  node curNode;
-  forEach(curNode, graph->getNodes()) {
+  const std::vector<node>& nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node curNode = nodes[i];
     // check if curNode has been already visited
-    if (!visited.get(curNode.id)) {
+    if (!visited[i]) {
       // add a new component
-      components.push_back(std::set<node>());
-      std::set<node>& component = components.back();
+      components.push_back(std::vector<node>());
+      std::vector<node>& component = components.back();
       // and initialize it with current node
-      component.insert(curNode);
+      component.push_back(curNode);
       // do a bfs traversal this node
       list<node> nodesToVisit;
-      visited.set(curNode.id, true);
+      visited[i] = true;
       nodesToVisit.push_front(curNode);
 
       while(!nodesToVisit.empty()) {
@@ -98,11 +101,11 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
           node neighbour = itn->next();
 
           // check if neighbour has been visited
-          if (!visited.get(neighbour.id)) {
+          if (!visited.getNodeValue(neighbour)) {
             // mark neighbour as already visited
-            visited.set(neighbour.id, true);
+            visited.setNodeValue(neighbour, true);
             // insert it in current component
-            component.insert(neighbour);
+            component.push_back(neighbour);
             // push it for further deeper exploration
             nodesToVisit.push_back(neighbour);
           }
@@ -114,14 +117,29 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
   }
 }
 
+//======================================================================
+void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< set<node> >& components) {
+  std::vector<std::vector<node> > vComponents;
+  computeConnectedComponents(graph, vComponents);
+  unsigned int nbComp = vComponents.size();
+  components.resize(nbComp);
+  for(unsigned int i = 0; i < nbComp; ++i) {
+    const std::vector<node>& vNodes = vComponents[i];
+    std::set<node>& sNodes = components[i];
+    sNodes.clear();
+    unsigned int nbNodes = vNodes.size();
+    for(unsigned int j = 0; j < nbNodes; ++j)
+      sNodes.insert(vNodes[j]);
+  }
+}
+
 //=================================================================
-void connectedTest(const Graph * const graph, node n,
-                   MutableContainer<bool> &visited,
-                   unsigned int &count) {
+static unsigned int connectedTest(const Graph * const graph, node n,
+				  NodeStaticProperty<bool> &visited) {
   list<node> nodesToVisit;
-  visited.set(n.id,true);
+  visited.setNodeValue(n, true);
   nodesToVisit.push_front(n);
-  ++count;
+  unsigned int count = 1;
 
   while(!nodesToVisit.empty()) {
     node r = nodesToVisit.front();
@@ -133,17 +151,17 @@ void connectedTest(const Graph * const graph, node n,
       n = itn->next();
 
       // check if neighbour has been visited
-      if(!visited.get(n.id)) {
+      if(!visited.getNodeValue(n)) {
         // mark neighbour as already visited
-        visited.set(n.id,true);
+        visited.setNodeValue(n, true);
         // push it for further deeper exploration
         nodesToVisit.push_back(n);
         ++count;
       }
     }
-
     delete itn;
   }
+  return count;
 }
 //=================================================================
 ConnectedTest::ConnectedTest() {}
@@ -154,39 +172,37 @@ bool ConnectedTest::compute(const tlp::Graph* const graph) {
 
   if (graph->numberOfNodes()==0) return true;
 
-  MutableContainer<bool> visited;
+  NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
-  unsigned int count = 0;
-  connectedTest(graph, graph->getOneNode(), visited, count);
+  unsigned int count = connectedTest(graph, graph->getOneNode(), visited);
   bool result = (count == graph->numberOfNodes());
   resultsBuffer[graph]=result;
   graph->addListener(this);
   return result;
 }
 //=================================================================
-void ConnectedTest::connect(const tlp::Graph* const graph, vector< node >& toLink) {
+void ConnectedTest::connect(const tlp::Graph* const graph,
+			    vector<node>& toLink) {
   if (resultsBuffer.find(graph)!=resultsBuffer.end()) {
     if (resultsBuffer[graph])
       return;
   }
 
-  if (graph->numberOfNodes()==0) return;
+  const std::vector<node>& nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  if (nbNodes == 0) return;
 
-  MutableContainer<bool> visited;
+  NodeStaticProperty<bool> visited(graph);
   visited.setAll(false);
-  unsigned int count = 0;
-  Iterator<node> *itN = graph->getNodes();
 
-  while(itN->hasNext()) {
-    node n = itN->next();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n = nodes[i];
 
-    if (!visited.get(n.id)) {
+    if (!visited[i]) {
       toLink.push_back(n);
-      connectedTest(graph, n, visited, count);
+      connectedTest(graph, n, visited);
     }
   }
-
-  delete itN;
 }
 //=================================================================
 void ConnectedTest::treatEvent(const Event& evt) {
