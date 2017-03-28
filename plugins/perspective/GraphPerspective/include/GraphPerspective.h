@@ -26,6 +26,7 @@
 
 class QAction;
 class QHeaderView;
+class QDialog;
 
 class GraphHierarchiesEditor;
 class GraphPerspectiveLogger;
@@ -43,7 +44,9 @@ class GraphPerspectiveMainWindowData;
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 class PythonPanel;
-class PythonPluginsIDE;
+namespace tlp {
+  class PythonIDE;
+}
 #endif
 
 class GraphPerspective : public tlp::Perspective, tlp::Observable {
@@ -115,8 +118,7 @@ public slots:
 
   void pluginsListChanged();
 
-  void setWorkspaceMode();
-  void setDevelopMode();
+  void showPythonIDE();
 
   void displayColorScalesDialog();
 
@@ -160,7 +162,8 @@ protected:
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   PythonPanel *_pythonPanel;
-  PythonPluginsIDE *_developFrame;
+  tlp::PythonIDE *_pythonIDE;
+  QDialog *_pythonIDEDialog;
 #endif
 
 };

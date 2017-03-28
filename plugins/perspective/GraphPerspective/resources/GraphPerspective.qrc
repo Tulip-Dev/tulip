@@ -55,10 +55,6 @@
         <file>icons/32/undo.png</file>
         <file>icons/32/view-open.png</file>
         <file>icons/48/desktop.png</file>
-        <file>icons/48/doc_new.png</file>
-        <file>icons/48/doc_export.png</file>
-        <file>icons/48/doc_plus.png</file>
-        <file>icons/48/doc_import.png</file>
         <file>icons/48/document-import.png</file>
         <file>icons/48/python.png</file>
         <file>ui/panel_button.png</file>
