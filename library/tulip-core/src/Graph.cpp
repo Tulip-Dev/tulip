@@ -1167,20 +1167,19 @@ Graph* Graph::addCloneSubGraph(const std::string& name, bool addSibling,
   return clone;
 }
 //=========================================================
-Graph* Graph::inducedSubGraph(const std::set<node> &nodes,
+Graph* Graph::inducedSubGraph(const std::vector<node> &nodes,
                               Graph* parentSubGraph, const string &name) {
   if (parentSubGraph == NULL)
     parentSubGraph = this;
 
   // create subgraph and add nodes
   Graph *result = parentSubGraph->addSubGraph(name);
-  StlIterator<node, std::set<node>::const_iterator> it(nodes.begin(), nodes.end());
-  result->addNodes(&it);
+  result->addNodes(nodes);
 
-  node itn;
-  forEach(itn, result->getNodes()) {
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
     edge ite;
-    forEach(ite, getOutEdges(itn)) {
+    forEach(ite, getOutEdges(nodes[i])) {
       if (result->isElement(target(ite)))
         result->addEdge(ite);
     }
@@ -1189,20 +1188,30 @@ Graph* Graph::inducedSubGraph(const std::set<node> &nodes,
   return result;
 }
 //=========================================================
+Graph* Graph::inducedSubGraph(const std::set<node> &nodeSet,
+                              Graph* parentSubGraph, const string &name) {
+  std::vector<node> nodes(nodeSet.size());
+  unsigned int i = 0;
+  for(std::set<node>::iterator itn = nodeSet.begin(); itn != nodeSet.end(); ++itn, ++i)
+    nodes[i] = *itn;
+
+  return inducedSubGraph(nodes, parentSubGraph, name);
+}
+//=========================================================
 Graph* Graph::inducedSubGraph(BooleanProperty *selection,
                               Graph* parentSubGraph, const string& name) {
-  set<node> nodesSet;
+  vector<node> nodes;
   node n;
   forEach(n, selection->getNodesEqualTo(true, parentSubGraph)) {
-    nodesSet.insert(n);
+    nodes.push_back(n);
   }
   edge e;
   forEach(e, selection->getEdgesEqualTo(true, parentSubGraph)) {
     const pair<node, node>&ext = ends(e);
-    nodesSet.insert(ext.first);
-    nodesSet.insert(ext.second);
+    nodes.push_back(ext.first);
+    nodes.push_back(ext.second);
   }
-  return inducedSubGraph(nodesSet, parentSubGraph, name);
+  return inducedSubGraph(nodes, parentSubGraph, name);
 }
 //====================================================================================
 node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
