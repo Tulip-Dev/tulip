@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#This file is auto-generated when compiling Tulip.
 thisdir=$(dirname "$0")
 if test "$thisdir" = "." ; then
   thisdir=$PWD
@@ -53,7 +53,7 @@ fi
 
 # check QuazipLibrary
 if [ "@QUAZIP_FOUND@" == "FALSE" ]; then
-   quaziplib=${libdir}/lib${quaziplib}.${libextension}
+   quaziplib=${libdir}lib${quaziplib}.${libextension}
 fi
    
 usage()
@@ -105,13 +105,13 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}libtulip-core-${libversion}.${libextension} ${libdir}lib@GZStreamLibrary@.${libextension} ${libdir}libtulip-ogl-${libversion}.${libextension} ${libdir}lib@FTGLLibrary@.${libextension} ${libdir}libtulip-gui-${libversion}.${libextension} ${quaziplib} @OPENMP_CXXFLAGS@`
       ;;
     --lib_tulip)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}libtulip-core-${libversion}.${libextension} ${libdir}lib@GZStreamLibrary@.${libextension} @OPENMP_CXXFLAGS@`
       ;;
     --lib_ogl)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-ogl-${libversion}.${libextension}  ${libdir}/lib@FTGLLibrary@.${libextension}`
+      OUTPUT=`echo ${OUTPUT} ${libdir}libtulip-ogl-${libversion}.${libextension}  ${libdir}lib@FTGLLibrary@.${libextension}`
       ;;
     --plugincxxflags)
       OUTPUT=`echo ${OUTPUT} ${plugincxxflags}`
