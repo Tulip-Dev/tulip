@@ -14,6 +14,7 @@ libextension=so
 plugincxxflags="-fPIC -DPIC"
 pluginldflags=-shared
 pluginpath=${prefix}/lib/tulip
+quaziplib=@QuazipLibrary@
 
 WINNT=$(sh -c 'uname -s | grep -q MINGW32_NT; echo $?')
 MACOSX=$(sh -c 'uname -s | grep -q Darwin; echo $?')
@@ -50,6 +51,11 @@ if [ $WINNT -eq 0 ] ; then
   fi
 fi
 
+# check QuazipLibrary
+if [ "@QUAZIP_FOUND@" == "FALSE" ]; then
+   quaziplib=${libdir}/lib${quaziplib}.${libextension}
+fi
+   
 usage()
 {
     cat <<EOF
@@ -99,7 +105,7 @@ while test $# -gt 0; do
       OUTPUT=`echo ${OUTPUT} @GL_LDFLAGS@ @LIB_GL@`
       ;;
     --libs)
-      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${libdir}/lib@QuazipLibrary@.${libextension} @OPENMP_CXXFLAGS@`
+      OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} ${libdir}/libtulip-ogl-${libversion}.${libextension} ${libdir}/lib@FTGLLibrary@.${libextension} ${libdir}/libtulip-gui-${libversion}.${libextension} ${quaziplib} @OPENMP_CXXFLAGS@`
       ;;
     --lib_tulip)
       OUTPUT=`echo ${OUTPUT} ${libdir}/libtulip-core-${libversion}.${libextension} ${libdir}/lib@GZStreamLibrary@.${libextension} @OPENMP_CXXFLAGS@`
