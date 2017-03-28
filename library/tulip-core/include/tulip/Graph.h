@@ -347,14 +347,19 @@ public:
   virtual Graph *addCloneSubGraph(const std::string &name = "unnamed", bool addSibling = false, bool addSiblingProperties = false);
 
   /**
-   * @brief Creates and returns a new sub-graph of the graph induced by a set of
-   * nodes.
-   * Every node contained in the given set of nodes is added to the subgraph.
+   * @brief Creates and returns a new sub-graph of the graph induced by a vector of nodes.
+   * @since Tulip 4.11
+   * Every node contained in the given vector is added to the subgraph.
    * Every edge connecting any two nodes in the set of given nodes is also added.
-   * @param nodeSet The nodes to add to the subgraph. All the edges between these nodes are added too.
+   * @param nodes The nodes to add to the subgraph. All the edges between these nodes are added too.
    * @param parentSubGraph If provided, is used as parent graph for the newly created subgraph instead of the graph this method is called on.
    * @param name The name of the newly created subgraph.
    * @return The newly created subgraph.
+   */
+  Graph *inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
+
+  /**
+   * @brief deprecated, use inducedSubGraph(const std::set<node>&, Graph* = NULL, const std::string& = "unamed") instead
    */
   Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 
@@ -1062,7 +1067,7 @@ public:
    * @param n The node to get the input/ouput edges from.
    * @return a const reference to the vector of all edges of a node
    */
-  virtual const std::vector<edge>& allEdges(const node n) const =0;
+  virtual const std::vector<edge> &allEdges(const node n) const = 0;
 
   /**
    * @brief Gets an iterator over the edges composing a meta edge.
@@ -1077,7 +1082,7 @@ public:
    * @warning: That operation modify the vector of nodes and the vector of edges
    * and thus devalidate all iterators.
    */
-  virtual void sortElts()=0;
+  virtual void sortElts() = 0;
 
   //================================================================================
   // Graph, nodes and edges information about the graph stucture
