@@ -83,10 +83,10 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
 
   // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
   Coord srcAnchor, tgtAnchor, tmpAnchor;
-
+  bool hasBends(!bends.empty());
   int srcGlyphId = data->getElementShape()->getNodeValue(source);
   Glyph *sourceGlyph = data->glyphs.get(srcGlyphId);
-  tmpAnchor = (bends.size() > 0) ? bends.front() : tgtCoord;
+  tmpAnchor = (hasBends) ? bends.front() : tgtCoord;
   srcAnchor = sourceGlyph->getAnchor(srcCoord, tmpAnchor, srcSize, srcRot);
 
   int tgtGlyphId = 1; //cube outlined
@@ -96,7 +96,7 @@ BoundingBox GlEdge::getBoundingBox(const GlGraphInputData* data) {
 
   Glyph *targetGlyph = data->glyphs.get(tgtGlyphId);
   //this time we don't take srcCoord but srcAnchor to be oriented to where the line comes from
-  tmpAnchor = (bends.size() > 0) ? bends.back() : srcAnchor;
+  tmpAnchor = (hasBends) ? bends.back() : srcAnchor;
   tgtAnchor = targetGlyph->getAnchor(tgtCoord, tmpAnchor, tgtSize, tgtRot);
 
   vector<Coord> tmp;
@@ -195,7 +195,6 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   std::string edgeTexture = data->getElementTexture()->getEdgeValue(e);
 
   const LineType::RealType &bends = data->getElementLayout()->getEdgeValue(e);
-  unsigned nbBends = bends.size();
 
   bool vertexArrayRendering = false;
 
@@ -206,7 +205,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
       data->getGlVertexArrayManager()->activateLineEdgeDisplay(this,selected);
       return;
     }
-    else if (!data->parameters->isEdge3D() && edgeTexture == "") {
+    else if (!data->parameters->isEdge3D() && edgeTexture.empty()) {
       vertexArrayRendering = true;
       data->getGlVertexArrayManager()->activateQuadEdgeDisplay(this,selected);
     }
@@ -248,14 +247,14 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
   Color srcCol, tgtCol;
   getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
-
-  if (nbBends == 0 && (source == target)) { //a loop without bends
+  bool hasBends(!bends.empty());
+  if (!hasBends && (source == target)) { //a loop without bends
     //TODO : draw a nice loop!!
     return;
   }
 
-  if (bends.size() == 0 && (srcCoord - tgtCoord).norm() < 1E-4)
-    return; //two nodes very closed
+  if (!hasBends && (srcCoord - tgtCoord).norm() < 1E-4)
+    return; //two very close nodes
 
   // set srcAnchor, tgtAnchor. tmpAnchor will be on the point just before tgtAnchor
   Coord srcAnchor, tgtAnchor, beginLineAnchor, endLineAnchor;
@@ -288,7 +287,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
     if (startEdgeGlyph != NULL) {
       displayArrowAndAdjustAnchor(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),srcCol,maxSrcSize,selected,selectionOutlineSize, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
-                                  bends.size(),(nbBends > 0) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor, startEdgeGlyph, camera);
+                                  hasBends,(hasBends) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor, startEdgeGlyph, camera);
     }
     else {
       beginLineAnchor = srcAnchor;
@@ -296,7 +295,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
 
     if (endEdgeGlyph != NULL) {
       displayArrowAndAdjustAnchor(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),tgtCol,maxTgtSize,selected,selectionOutlineSize,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
-                                  bends.size(),(nbBends > 0) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor, endEdgeGlyph, camera);
+                                  hasBends,(hasBends) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor, endEdgeGlyph, camera);
     }
     else {
       endLineAnchor = tgtAnchor;
@@ -652,7 +651,7 @@ void GlEdge::getVertices(const GlGraphInputData *data,
 
   if (data->parameters->isViewArrow() && startEdgeGlyph != NULL) {
     displayArrowAndAdjustAnchor(data,e,source,data->getElementSrcAnchorSize()->getEdgeValue(e),std::min(srcSize[0], srcSize[1]),Color(),maxSrcSize,selected,0, endEdgeGlyph ? endEdgeGlyph->id() : UINT_MAX,
-                                bends.size(),(hasBends) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
+                                hasBends,(hasBends) ? bends.front() : tgtCoord,tgtCoord,srcAnchor,tgtAnchor,beginLineAnchor);
   }
   else {
     beginLineAnchor = srcAnchor;
@@ -662,7 +661,7 @@ void GlEdge::getVertices(const GlGraphInputData *data,
 
   if (data->parameters->isViewArrow() && endEdgeGlyph != NULL) {
     displayArrowAndAdjustAnchor(data,e,target,data->getElementTgtAnchorSize()->getEdgeValue(e),std::min(tgtSize[0], tgtSize[1]),Color(),maxTgtSize,selected,0,startEdgeGlyph ? startEdgeGlyph->id() : UINT_MAX,
-                                bends.size(),(hasBends) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
+                                hasBends,(hasBends) ? bends.back() : srcAnchor,srcCoord,tgtAnchor,srcAnchor,endLineAnchor);
   }
   else {
     endLineAnchor = tgtAnchor;
@@ -821,7 +820,7 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
     bool selected,
     float selectionOutlineSize,
     int tgtEdgeGlyph,
-    size_t numberOfBends,
+    bool hasBends,
     const Coord &anchor,
     const Coord &tgtCoord,
     const Coord &srcAnchor,
@@ -841,7 +840,7 @@ void GlEdge::displayArrowAndAdjustAnchor(const GlGraphInputData *data,
   float nrm = lineAnchor.norm();
   float maxGlyphSize;
 
-  if (tgtEdgeGlyph != 0 && numberOfBends == 0)
+  if (tgtEdgeGlyph != 0 && !hasBends)
     maxGlyphSize = nrm * .5f;
   else
     maxGlyphSize = nrm;

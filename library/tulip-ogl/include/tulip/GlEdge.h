@@ -143,7 +143,7 @@ private :
    * Thgis function is used to render edge arrows
    */
   void displayArrowAndAdjustAnchor(const GlGraphInputData *data,const edge &e,const node &source,const Size &sizeRatio,float edgeSize,const Color &color,float maxSize,bool selected,float selectionOutlineSize,
-                                   int tgtEdgeGlyph,size_t numberOfBends,const Coord &anchor,const Coord &tgtCoord,
+                                   int tgtEdgeGlyph,bool hasBends,const Coord &anchor,const Coord &tgtCoord,
                                    const Coord &srcAnchor,const Coord &tgtAnchor,Coord &lineAnchor, EdgeExtremityGlyph* srcEdgeGlyph = NULL, Camera *camera = NULL);
 
 };
