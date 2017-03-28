@@ -123,6 +123,21 @@ public:
   static TulipProject *restoreProject(const QString &path);
 
   /**
+   * @brief Removes all files in the project and unset project file if any
+   *
+   * @since Tulip 4.11
+   */
+  void clearProject();
+
+  /**
+   * @brief Sets the file where to save the project
+   * @param projectFile absolute path to a .tlpx file
+   *
+   * @since Tulip 4.11
+   */
+  void setProjectFile(const QString &projectFile);
+
+  /**
     @brief Writes files in the TulipProject into a packed archive.
 
     This method packs every file in the project into a single archive.

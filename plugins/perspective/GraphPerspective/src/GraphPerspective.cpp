@@ -764,6 +764,7 @@ bool GraphPerspective::saveAs(const QString &path) {
       if (!path.endsWith(".tlpx"))
         path += ".tlpx";
 
+      _project->setProjectFile(path);
       return saveAs(path);
     }
 
@@ -1142,6 +1143,10 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
     _ui->actionSave_Project_as->setEnabled(false);
   } else {
     _ui->workspace->setGraphForFocusedPanel(graph);
+  }
+
+  if (_graphs->empty()) {
+    _project->clearProject();
   }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
