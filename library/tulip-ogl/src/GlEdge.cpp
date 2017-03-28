@@ -248,6 +248,7 @@ void GlEdge::draw(float lod, const GlGraphInputData* data, Camera* camera) {
   Color srcCol, tgtCol;
   getEdgeColor(data,e,source,target,selected,srcCol,tgtCol);
   bool hasBends(!bends.empty());
+
   if (!hasBends && (source == target)) { //a loop without bends
     //TODO : draw a nice loop!!
     return;
