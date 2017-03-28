@@ -76,20 +76,14 @@ INCLUDE_DIRECTORIES(${TulipPythonInclude})
 SET(LIB_SRCS
 ${LIB_SRCS}
 src/PythonPanel.cpp
-src/PythonPluginCreationDialog.cpp
-src/PythonPluginsIDE.cpp
 )
 
 QTX_WRAP_UI(UI_SRCS
 designer/PythonPanel.ui
-designer/PythonPluginCreationDialog.ui
-designer/PythonPluginsIDE.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
 include/PythonPanel.h
-include/PythonPluginCreationDialog.h
-include/PythonPluginsIDE.h
 )
 
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)

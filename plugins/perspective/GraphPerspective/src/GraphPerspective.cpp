@@ -21,8 +21,8 @@
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 #include <tulip/PythonInterpreter.h>
 #include <tulip/APIDataBase.h>
+#include <tulip/PythonIDE.h>
 #include "PythonPanel.h"
-#include "PythonPluginsIDE.h"
 #endif
 
 #include "GraphPerspective.h"
@@ -37,6 +37,7 @@
 #include <QMimeData>
 #include <QTimer>
 #include <QVBoxLayout>
+#include <QDialog>
 
 #include <tulip/TlpTools.h>
 #include <tulip/ImportModule.h>
@@ -85,6 +86,7 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext* c): Perspective(c),
     // from any relative unit_test/gui directory
     _lastOpenLocation = QDir::currentPath();
   }
+
 }
 
 void GraphPerspective::reserveDefaultProperties() {
@@ -287,11 +289,14 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   layout->addWidget(_pythonPanel);
   layout->setContentsMargins(0,0,0,0);
   _ui->pythonPanel->setLayout(layout);
-  _developFrame = new PythonPluginsIDE();
-  layout = new QVBoxLayout();
-  layout->addWidget(_developFrame);
-  layout->setContentsMargins(0,0,0,0);
-  _ui->developFrame->setLayout(layout);
+  _pythonIDE = new PythonIDE();
+  QVBoxLayout *dialogLayout = new QVBoxLayout();
+  dialogLayout->addWidget(_pythonIDE);
+  dialogLayout->setContentsMargins(0,0,0,0);
+  _pythonIDEDialog = new QDialog(mainWindow(), Qt::Window);
+  _pythonIDEDialog->setLayout(dialogLayout);
+  _pythonIDEDialog->resize(800, 600);
+  _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
 #else
   _ui->pythonButton->setVisible(false);
   _ui->developButton->setVisible(false);
@@ -384,7 +389,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionPreferences,SIGNAL(triggered()),this,SLOT(openPreferences()));
   connect(_ui->searchButton,SIGNAL(clicked(bool)),this,SLOT(setSearchOutput(bool)));
   connect(_ui->workspace,SIGNAL(importGraphRequest()),this,SLOT(importGraph()));
-  connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(setWorkspaceMode()));
   connect(_ui->action_Close_All, SIGNAL(triggered()), _ui->workspace, SLOT(closeAll()));
   connect(_ui->addPanelButton, SIGNAL(clicked()), this, SLOT(createPanel()));
   connect(_ui->actionColor_scales_management, SIGNAL(triggered()), this, SLOT(displayColorScalesDialog()));
@@ -434,10 +438,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   connect(_ui->pythonButton,SIGNAL(clicked(bool)),this,SLOT(setPythonPanel(bool)));
-  connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(setDevelopMode()));
+  connect(_ui->developButton, SIGNAL(clicked()), this, SLOT(showPythonIDE()));
   _pythonPanel->setModel(_graphs);
+  _pythonIDE->setGraphsModel(_graphs);
   tlp::PluginLister::instance()->addListener(this);
-  _developFrame->setProject(_project);
+  _pythonIDE->setProject(_project);
 
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
@@ -727,7 +732,10 @@ bool GraphPerspective::saveAs(const QString& path) {
   progress.show();
   QMap<Graph*,QString> rootIds = _graphs->writeProject(_project,&progress);
   _ui->workspace->writeProject(_project,rootIds,&progress);
-  _project->write(path,&progress);
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  _pythonIDE->savePythonFilesAndWriteToProject();
+#endif
+   _project->write(path,&progress);
   TulipSettings::instance().addToRecentDocuments(path);
 
   return true;
@@ -804,7 +812,7 @@ void GraphPerspective::openProjectFile(const QString &path) {
     QMap<QString,tlp::Graph*> rootIds = _graphs->readProject(_project,prg);
     _ui->workspace->readProject(_project,rootIds,prg);
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    _developFrame->setProject(_project);
+    _pythonIDE->setProject(_project);
 #endif
     delete prg;
   }
@@ -1094,6 +1102,16 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   else {
     _ui->workspace->setGraphForFocusedPanel(graph);
   }
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  if (_graphs->empty()) {
+    _pythonIDE->clearPythonCodeEditors();
+    _pythonIDEDialog->hide();
+    _ui->developButton->setEnabled(false);
+  } else {
+    _ui->developButton->setEnabled(true);
+  }
+#endif
 }
 
 void GraphPerspective::CSVImport() {
@@ -1309,18 +1327,11 @@ void GraphPerspective::treatEvent(const tlp::Event &ev) {
   }
 }
 
-void GraphPerspective::setWorkspaceMode() {
-  _ui->workspaceButton->setChecked(true);
-  _ui->developButton->setChecked(false);
-  _ui->centralWidget->widget(1)->setVisible(false);
-  _ui->centralWidget->setCurrentIndex(0);
-}
-
-void GraphPerspective::setDevelopMode() {
-  _ui->workspaceButton->setChecked(false);
-  _ui->developButton->setChecked(true);
-  _ui->centralWidget->widget(1)->setVisible(true);
-  _ui->centralWidget->setCurrentIndex(1);
+void GraphPerspective::showPythonIDE() {
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  _pythonIDEDialog->show();
+  _pythonIDEDialog->raise();
+#endif
 }
 
 void GraphPerspective::showUserDocumentation() {

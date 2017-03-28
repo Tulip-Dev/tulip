@@ -137,8 +137,8 @@ void tlp::decrefPyObject(PyObject *obj) {
 int tracefunc(PyObject *, PyFrameObject *, int what, PyObject *) {
 
   if (what == PyTrace_LINE) {
-    if (!scriptPaused && timer.elapsed() >= 50) {
-      if (processQtEvents && QApplication::hasPendingEvents())  {
+    if (processQtEvents && !scriptPaused && timer.elapsed() >= 50) {
+      if (QApplication::hasPendingEvents())  {
         QApplication::processEvents();
       }
 

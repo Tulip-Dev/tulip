@@ -381,6 +381,9 @@ QToolButton:pressed {
        </item>
        <item>
         <widget class="QToolButton" name="developButton">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
          <property name="minimumSize">
           <size>
            <width>75</width>
@@ -394,7 +397,7 @@ QToolButton:pressed {
           </size>
          </property>
          <property name="toolTip">
-          <string>Display the Python plugin development framework</string>
+          <string>Display the Tulip-Python IDE for developping scripts and plugins to execute on the imported graphs</string>
          </property>
          <property name="text">
           <string>Develop</string>
@@ -410,7 +413,7 @@ QToolButton:pressed {
           </size>
          </property>
          <property name="checkable">
-          <bool>true</bool>
+          <bool>false</bool>
          </property>
          <property name="toolButtonStyle">
           <enum>Qt::ToolButtonTextUnderIcon</enum>
@@ -1196,7 +1199,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <x>0</x>
      <y>0</y>
      <width>1200</width>
-     <height>35</height>
+     <height>19</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuEdit">
