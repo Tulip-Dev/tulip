@@ -1177,6 +1177,7 @@ Graph* Graph::inducedSubGraph(const std::vector<node> &nodes,
   result->addNodes(nodes);
 
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     edge ite;
     forEach(ite, getOutEdges(nodes[i])) {
@@ -1192,6 +1193,7 @@ Graph* Graph::inducedSubGraph(const std::set<node> &nodeSet,
                               Graph* parentSubGraph, const string &name) {
   std::vector<node> nodes(nodeSet.size());
   unsigned int i = 0;
+
   for(std::set<node>::iterator itn = nodeSet.begin(); itn != nodeSet.end(); ++itn, ++i)
     nodes[i] = *itn;
 

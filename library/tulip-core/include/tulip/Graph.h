@@ -296,14 +296,14 @@ public:
    */
   Graph *inducedSubGraph(const std::vector<node>& nodes,
                          Graph* parentSubGraph = NULL,
-			 const std::string& name = "unnamed");
-  
+                         const std::string& name = "unnamed");
+
   /**
    * @brief deprecated, use inducedSubGraph(const std::vector<node>&, Graph* = NULL, const std::string& = "unamed") instead
    */
   _DEPRECATED Graph *inducedSubGraph(const std::set<node>& nodeSet,
-				     Graph* parentSubGraph = NULL,
-				     const std::string& name = "unnamed");
+                                     Graph* parentSubGraph = NULL,
+                                     const std::string& name = "unnamed");
 
   /**
    * @brief Creates and returns a new sub-graph of the graph induced by a selection of nodes and edges.

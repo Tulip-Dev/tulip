@@ -736,7 +736,7 @@ bool GraphPerspective::saveAs(const QString& path) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE->savePythonFilesAndWriteToProject();
 #endif
-   _project->write(path,&progress);
+  _project->write(path,&progress);
   TulipSettings::instance().addToRecentDocuments(path);
 
   return true;
@@ -1109,13 +1109,16 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
+
   if (_graphs->empty()) {
     _pythonIDE->clearPythonCodeEditors();
     _pythonIDEDialog->hide();
     _ui->developButton->setEnabled(false);
-  } else {
+  }
+  else {
     _ui->developButton->setEnabled(true);
   }
+
 #endif
 }
 
