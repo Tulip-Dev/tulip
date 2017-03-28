@@ -149,27 +149,27 @@ void ImportExportTest::testSubGraphsImportExport() {
   const string originalName = "rootGraph";
   original->setAttribute("name", originalName);
 
-  std::set<node> sub1nodes;
+  std::vector<node> sub1nodes;
   int sub1lowerBound = 5;
   int sub1higherBound = 25;
-  std::set<node> sub2nodes;
+  std::vector<node> sub2nodes;
   int sub2lowerBound = 50;
   int sub2higherBound = 150;
-  std::set<node> subsubnodes;
+  std::vector<node> subsubnodes;
   int subsublowerBound = 75;
   int subsubhigherBound = 125;
   int i = 0;
-
-  for (node n : original->getNodes()) {
+  node n;
+  forEach(n, original->getNodes()) {
     if (i >= sub1lowerBound && i <= sub1higherBound) {
-      sub1nodes.insert(n);
+      sub1nodes.push_back(n);
     }
 
     if (i >= sub2lowerBound && i <= sub2higherBound) {
-      sub2nodes.insert(n);
+      sub2nodes.push_back(n);
 
       if (i >= subsublowerBound && i <= subsubhigherBound) {
-        subsubnodes.insert(n);
+        subsubnodes.push_back(n);
       }
     }
 
