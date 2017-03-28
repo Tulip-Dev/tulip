@@ -23,7 +23,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 
-#include "PythonPluginCreationDialog.h"
+#include <tulip/PythonPluginCreationDialog.h>
 #include "ui_PythonPluginCreationDialog.h"
 
 using namespace tlp;

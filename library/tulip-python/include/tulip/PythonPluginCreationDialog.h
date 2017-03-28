@@ -22,11 +22,15 @@
 
 #include <QDialog>
 
+#include <tulip/tulipconf.h>
+
 namespace Ui {
 class PythonPluginCreationDialog;
 }
 
-class PythonPluginCreationDialog : public QDialog {
+namespace tlp {
+
+class TLP_PYTHON_SCOPE PythonPluginCreationDialog : public QDialog {
 
   Q_OBJECT
   Ui::PythonPluginCreationDialog *_ui;
@@ -58,5 +62,7 @@ protected slots:
 
   void selectPluginSourceFile();
 };
+
+} // namespace tlp
 
 #endif /* PLUGINCREATIONDIALOG_H_ */

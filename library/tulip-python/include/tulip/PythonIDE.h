@@ -25,25 +25,33 @@
 #include <QMap>
 #include <QUrl>
 
+#include <tulip/tulipconf.h>
+
 class QTabWidget;
 
 namespace Ui {
-class PythonPluginsIDE;
+class PythonIDE;
 }
 
 namespace tlp {
+
+class GraphHierarchiesModel;
 class TulipProject;
 class PythonCodeEditor;
 class PythonInterpreter;
-}
+class PythonEditorsTabWidget;
+class DataSet;
 
-class PythonPluginsIDE : public QWidget {
+class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
 
   Q_OBJECT
-  Ui::PythonPluginsIDE *_ui;
+  Ui::PythonIDE *_ui;
   tlp::PythonInterpreter *_pythonInterpreter;
   bool _dontTreatFocusIn;
   tlp::TulipProject *_project;
+  tlp::GraphHierarchiesModel *_graphsModel;
+  bool _scriptStopped;
+  bool _runningScript;
 
   QMap<QString, QString> _editedPluginsClassName;
   QMap<QString, QString> _editedPluginsType;
@@ -54,31 +62,56 @@ class PythonPluginsIDE : public QWidget {
   void savePythonPlugin(int tabIdx);
   bool indicateErrors() const;
   void clearErrorIndicators() const;
-  bool loadModule(const QString &fileName, bool clear = true);
-  void saveModule(int tabIdx, const bool reload = false);
+  bool loadModule(const QString &fileName);
+  void saveModule(int tabIdx);
+  void saveAllModules();
   bool reloadAllModules() const;
+  void writeScriptsFilesList(int deleted = -1);
   void writePluginsFilesList(int deleted = -1);
   void writeModulesFilesList(int deleted = -1);
   QString readProjectFile(const QString &filePath);
-  void writePluginFileToProject(const QString &fileName, const QString &fileContent);
-  void writeModuleFileToProject(const QString &fileName, const QString &fileContent);
+  void writeScriptFileToProject(int idx, const QString &scriptFileName, const QString &scriptContent);
+  void writeFileToProject(const QString &projectFile, const QString &fileContent);
 
 public:
-  explicit PythonPluginsIDE(QWidget *parent = 0);
-  ~PythonPluginsIDE();
+  explicit PythonIDE(QWidget *parent = 0);
+  ~PythonIDE();
 
   void setProject(tlp::TulipProject *project);
+  void savePythonFilesAndWriteToProject();
+  void setGraphsModel(tlp::GraphHierarchiesModel *model);
+  void clearPythonCodeEditors();
+
+  bool isRunningScript() const {
+    return _runningScript;
+  }
 
 protected:
+  void dragEnterEvent(QDragEnterEvent *);
+  void dropEvent(QDropEvent *);
+  bool eventFilter(QObject *obj, QEvent *event);
+
+private:
+  int addMainScriptEditor(const QString &fileName = "");
   int addModuleEditor(const QString &fileName = "");
   int addPluginEditor(const QString &fileName = "");
 
+  bool loadScript(const QString &fileName, bool clear = true);
+  void saveScript(int tabIdx, bool clear = true, bool showFileDialog = false);
+
+  tlp::PythonCodeEditor *getCurrentMainScriptEditor() const;
+  tlp::PythonCodeEditor *getMainScriptEditor(int idx) const;
   tlp::PythonCodeEditor *getModuleEditor(int idx) const;
   tlp::PythonCodeEditor *getCurrentModuleEditor() const;
   tlp::PythonCodeEditor *getPluginEditor(int idx) const;
   tlp::PythonCodeEditor *getCurrentPluginEditor() const;
 
-protected slots:
+  bool closeEditorTabRequested(PythonEditorsTabWidget *tabWidget, int idx, bool mayCancel = false);
+  bool loadModuleFromSrcCode(const QString &moduleName, const QString &moduleSrcCode);
+
+  void loadScriptsAndModulesFromPythonScriptViewDataSet(const DataSet &dataSet);
+
+private slots:
 
   void newPythonPlugin();
   void currentTabChanged(int index);
@@ -87,15 +120,31 @@ protected slots:
   void registerPythonPlugin(bool clear = true);
   void removePythonPlugin();
   void newFileModule();
+  void newStringModule();
   void loadModule();
   void saveModule();
-  void closeModuleTabRequested(int tab);
-  void closePluginTabRequested(int tab);
   void scrollToEditorLine(const QUrl &);
   void increaseFontSize();
   void decreaseFontSize();
+  void scriptSaved(int);
   void pluginSaved(int);
   void moduleSaved(int);
+  void graphComboBoxIndexChanged();
+
+  void newScript();
+  void loadScript();
+  void saveScript();
+  void saveImportAllScripts();
+  void executeCurrentScript();
+  void stopCurrentScript();
+  void pauseCurrentScript();
+  void currentScriptPaused();
+
+  void closeModuleTabRequested(int index);
+  void closeScriptTabRequested(int index);
+  void closePluginTabRequested(int index);
 };
+
+} // namespace tlp
 
 #endif // PYTHONPLUGINSIDE_H

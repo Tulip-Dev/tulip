@@ -75,6 +75,9 @@ void PythonEditorsTabWidget::scriptTextChanged() {
 
   QString curTabText = tabText(currentIndex());
 
+  // workaround a Qt5 bug on linux
+  curTabText = curTabText.replace("&", "");
+
   if (curTabText == "")
     return;
 
@@ -118,6 +121,9 @@ bool PythonEditorsTabWidget::eventFilter(QObject *obj, QEvent *event) {
     if (keyEvt->modifiers() == modifier && keyEvt->key() == Qt::Key_S) {
       if (obj == getCurrentEditor()) {
         QString moduleFile = tabText(currentIndex());
+
+        // workaround a Qt5 bug on linux
+        moduleFile = moduleFile.replace("&", "");
 
         if (!moduleFile.contains("no file")) {
           saveCurrentEditorContentToFile();
@@ -187,6 +193,9 @@ void PythonEditorsTabWidget::saveEditorContentToFile(int editorIdx) {
         moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 4);
       else
         moduleName = moduleNameExt.mid(0, moduleNameExt.size() - 3);
+
+      // workaround a Qt5 bug on linux
+      moduleName = moduleName.replace("&", "");
 
       setTabText(editorIdx, moduleName + ".py");
       QFile file(getEditor(editorIdx)->getFileName());

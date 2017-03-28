@@ -23,10 +23,14 @@ SET(${LibTulipPythonName}_LIB_SRCS
     ConsoleHandlers.h
     PythonEditorsTabWidget.cpp
     PythonCppTypesConverter.cpp
+    PythonIDE.cpp
+    PythonPluginCreationDialog.cpp
 )
 
 SET(${LibTulipPythonName}_UI
     ../designer/FindReplaceDialog.ui
+    ../designer/PythonPluginCreationDialog.ui
+    ../designer/PythonIDE.ui
 )
 
 SET(${LibTulipPythonName}_MOC
@@ -35,6 +39,8 @@ SET(${LibTulipPythonName}_MOC
     ../include/tulip/PythonCodeEditor.h
     ../include/tulip/PythonEditorsTabWidget.h
     ../include/tulip/PythonInterpreter.h
+    ../include/tulip/PythonIDE.h
+    ../include/tulip/PythonPluginCreationDialog.h
 )
 
 QTX_WRAP_UI(${LibTulipPythonName}_UI_SRCS ${${LibTulipPythonName}_UI})
