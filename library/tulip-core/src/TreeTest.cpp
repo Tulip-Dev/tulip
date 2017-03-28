@@ -256,7 +256,7 @@ static Graph* computeTreeInternal(Graph *graph, Graph *rGraph, bool isConnected,
 
   // graph is not connected
   // compute the connected components's subgraphs
-  std::vector<std::set<node> > components;
+  std::vector<std::vector<node> > components;
   ConnectedTest::computeConnectedComponents(rGraph, components);
 
   for (unsigned int i = 0; i < components.size(); ++i) {
