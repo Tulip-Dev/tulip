@@ -26,18 +26,17 @@ using namespace std;
 
 static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
                            bool connectNodeToCellBorder, bool originalClone) {
-  vector<tlp::node> nodes;
   vector<tlp::Coord> sites;
   tlp::node n;
   tlp::VoronoiDiagram voronoiDiag;
 
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
 
-  nodes.reserve(graph->numberOfNodes());
   sites.reserve(graph->numberOfNodes());
-  forEach(n, graph->getNodes()) {
-    nodes.push_back(n);
-    sites.push_back(layout->getNodeValue(n));
+  const std::vector<tlp::node>& nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    sites.push_back(layout->getNodeValue(nodes[i]));
   }
 
   bool ret = tlp::voronoiDiagram(sites, voronoiDiag);
@@ -48,16 +47,14 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
     if (originalClone)
       graph->addCloneSubGraph("Original graph");
 
-    TLP_HASH_MAP<unsigned int, tlp::node> voronoiVertexToNode;
-
     for (size_t i = 0 ; i < voronoiDiag.nbVertices() ; ++i) {
       tlp::node n = voronoiSg->addNode();
       layout->setNodeValue(n, voronoiDiag.vertex(i));
-      voronoiVertexToNode[i] = n;
     }
 
+    const std::vector<tlp::node>& sgNodes = voronoiSg->nodes();
     for (size_t i = 0 ; i < voronoiDiag.nbEdges() ; ++i) {
-      voronoiSg->addEdge(voronoiVertexToNode[voronoiDiag.edge(i).first], voronoiVertexToNode[voronoiDiag.edge(i).second]);
+      voronoiSg->addEdge(sgNodes[voronoiDiag.edge(i).first], sgNodes[voronoiDiag.edge(i).second]);
     }
 
     if (voronoiCellsSubGraphs) {
@@ -67,13 +64,17 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
       for (unsigned int i = 0 ; i < voronoiDiag.nbSites() ; ++i) {
         oss.str("");
         oss << "voronoi cell " << cellCpt++;
-        set<tlp::node> nodesSet;
+	const tlp::VoronoiDiagram::Cell& cell =
+	  voronoiDiag.voronoiCellForSite(i);
+        vector<tlp::node> cellSgNodes;
+	cellSgNodes.reserve(cell.size());
 
-        for (set<unsigned int>::iterator it2 = voronoiDiag.voronoiCellForSite(i).begin() ; it2 != voronoiDiag.voronoiCellForSite(i).end() ; ++it2) {
-          nodesSet.insert(voronoiVertexToNode[*it2]);
+        for (set<unsigned int>::iterator it2 = cell.begin();
+	     it2 != cell.end() ; ++it2) {
+          cellSgNodes.push_back(sgNodes[*it2]);
         }
 
-        tlp::Graph *cellSg = voronoiSg->inducedSubGraph(nodesSet);
+        tlp::Graph *cellSg = voronoiSg->inducedSubGraph(cellSgNodes);
         cellSg->setName(oss.str());
       }
     }
@@ -82,8 +83,11 @@ static bool voronoiDiagram(tlp::Graph *graph, bool voronoiCellsSubGraphs,
       for (unsigned int i = 0 ; i < voronoiDiag.nbSites() ; ++i) {
         voronoiSg->addNode(nodes[i]);
 
-        for (set<unsigned int>::iterator it2 = voronoiDiag.voronoiCellForSite(i).begin() ; it2 != voronoiDiag.voronoiCellForSite(i).end() ; ++it2) {
-          voronoiSg->addEdge(nodes[i], voronoiVertexToNode[*it2]);
+        const tlp::VoronoiDiagram::Cell& cell =
+	  voronoiDiag.voronoiCellForSite(i);
+	for (set<unsigned int>::iterator it2 = cell.begin();
+	     it2 != cell.end() ; ++it2) {
+          voronoiSg->addEdge(nodes[i], sgNodes[*it2]);
         }
       }
     }

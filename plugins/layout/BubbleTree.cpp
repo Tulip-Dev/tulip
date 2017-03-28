@@ -241,7 +241,7 @@ void BubbleTree::calcLayout2(tlp::node n, tlp::Vector<double, 5 >&nrPos,
                                 0.) );
 
   /*
-   * Place bend on edge to prevent overlaping
+   * Place bend on edge to prevent overlapping
    */
   if(tree->outdeg(n)>0) {
     bend += zetaOriginal;
@@ -327,7 +327,7 @@ bool BubbleTree::run() {
 
   if (!ConnectedTest::isConnected(graph)) {
     // for each component draw
-    std::vector<std::set<node> > components;
+    std::vector<std::vector<node> > components;
     string err;
     // push a temporary graph state (not redoable)
     graph->push(false);
@@ -338,7 +338,7 @@ bool BubbleTree::run() {
       tmp->applyPropertyAlgorithm("Bubble Tree", result, err, pluginProgress, dataSet);
     }
 
-    // call connected componnent packing
+    // call connected component packing
     LayoutProperty tmpLayout(graph);
     DataSet tmpdataSet;
     tmpdataSet.set("coordinates", result);

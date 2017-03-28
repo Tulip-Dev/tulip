@@ -57,10 +57,10 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
       unsigned int simCpt = 0;
 
       for (size_t i = 0 ; i < simplices.size() ; ++i) {
-        set<tlp::node> nodesSet;
+        vector<tlp::node> nodes(simplices[i].size());
 
         for (size_t j = 0 ; j < simplices[i].size() ; ++j) {
-          nodesSet.insert(nodes[simplices[i][j]]);
+          nodes[j] = nodes[simplices[i][j]];
         }
 
         oss.str("");
@@ -72,7 +72,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
           oss << "tetrahedron " << simCpt++;
         }
 
-        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodesSet);
+        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodes);
         simplexSg->setName(oss.str());
       }
     }

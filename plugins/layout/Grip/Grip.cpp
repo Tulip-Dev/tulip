@@ -125,7 +125,7 @@ bool Grip::run() {
   if(is3D) _dim = 3;
   else _dim = 2;
 
-  std::vector<std::set<node> > components;
+  std::vector<std::vector<node> > components;
   ConnectedTest::computeConnectedComponents(graph, components);
 
   if (components.size() > 1) {
