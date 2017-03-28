@@ -87,7 +87,7 @@ vector<node> findMaxCycle(Graph *sg, PluginProgress *pluginProgress) {
   Graph *g = sg->addCloneSubGraph();
 
   // compute the connected components's subgraphs
-  std::vector<std::set<node>> components;
+  std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(g, components);
 
   for (unsigned int i = 0; i < components.size(); ++i) {

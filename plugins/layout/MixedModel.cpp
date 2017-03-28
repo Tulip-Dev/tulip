@@ -106,7 +106,7 @@ bool MixedModel::run() {
 
   Pere = graph->addCloneSubGraph("Father");
   // compute the connected components's subgraphs
-  std::vector<std::set<node>> components;
+  std::vector<std::vector<node>> components;
   ConnectedTest::computeConnectedComponents(Pere, components);
 
   for (unsigned int i = 0; i < components.size(); ++i) {
@@ -444,7 +444,7 @@ void MixedModel::placeNodesEdges() {
         result->setEdgeValue(e, bends);
     }
 
-    // rs == rt, mÃªme partition donc pas de points intermÃ©diaire Ã  calculer
+    // rs == rt, mÃªme partition donc pas de points intermÃ©diaire ï¿½  calculer
     // en cas de post-processing, il faudra pe y changer
   }
 
@@ -864,7 +864,7 @@ void MixedModel::assignInOutPoints() { // on considÃ¨re qu'il n'y a pas d'arc do
         EdgesOUT[v][s - (i + 1)] = listOfEdgesOUT[i];
     }
 
-    // mise Ã  jour du contour
+    // mise ï¿½  jour du contour
     if (k == 0)
       C = V[0];
     else {
@@ -922,7 +922,7 @@ void MixedModel::computeCoords() {
   for (unsigned int k = 1; k < size_V; ++k) { // parcours de chaque partition
 
     unsigned int p = V[k].size();       // taille de la partition Vk
-    node cl = leftV(k), cr = rightV(k); // recherche du left et right de Vk, qui lÃ  est cherchÃ© Ã  l'aide de EdgesIN
+    node cl = leftV(k), cr = rightV(k); // recherche du left et right de Vk, qui lï¿½  est cherchÃ© ï¿½  l'aide de EdgesIN
 
     vector<node>::iterator il = find(C.begin(), C.end(), cl);
     assert(il != C.end());

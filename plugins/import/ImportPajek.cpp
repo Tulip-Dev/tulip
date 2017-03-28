@@ -39,7 +39,7 @@
  *  \author Patrick Mary of Tulip Team http://tulip-software.org/
  *
  *
-*/
+ */
 using namespace std;
 using namespace tlp;
 
@@ -103,16 +103,17 @@ bool tokenize(const string &str, vector<string> &tokens, const string &delimiter
 
   return true;
 }
-}
+} // namespace
 
 class ImportPajek : public ImportModule {
 
 public:
-  PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011", "Imports a new graph from a file (.net) in Pajek input format<br/>as it is described in "
-                                                           "the Pajek manual "
-                                                           "(<b>http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf</b>)<br/>from the "
-                                                           "Pajek wiki page <b>http://pajek.imfm.si/doku.php?id=download</b>.<br/>Warning: the "
-                                                           "description of the edges with Matrix (adjacency lists)<br/>is not yet supported.",
+  PLUGININFORMATION("Pajek", "Patrick Mary", "09/05/2011",
+                    "Imports a new graph from a file (.net) in Pajek input format<br/>as it is described in "
+                    "the Pajek manual "
+                    "(<b>http://pajek.imfm.si/lib/exe/fetch.php?media=dl:pajekman203.pdf</b>)<br/>from the "
+                    "Pajek wiki page <b>http://pajek.imfm.si/doku.php?id=download</b>.<br/>Warning: the "
+                    "description of the edges with Matrix (adjacency lists)<br/>is not yet supported.",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
@@ -144,7 +145,7 @@ public:
   TypeOfLine expectedLine;
   Graph *partition;
   unsigned int curNodeId;
-  map<string, set<node>> parts;
+  map<string, vector<node>> parts;
   DoubleProperty *vectorProp;
 
   bool getUnsignedInt(unsigned int &i, const string &str) {
@@ -297,10 +298,10 @@ public:
     }
 
     if (expectedLine == NET_PARTITION) {
-      parts[tokens[0]].insert(nodes[curNodeId++]);
+      parts[tokens[0]].push_back(nodes[curNodeId++]);
 
       if (curNodeId == graph->numberOfNodes()) {
-        map<string, set<node>>::iterator it = parts.begin();
+        map<string, vector<node>>::iterator it = parts.begin();
 
         for (; it != parts.end(); ++it) {
           Graph *part = partition->inducedSubGraph(it->second);

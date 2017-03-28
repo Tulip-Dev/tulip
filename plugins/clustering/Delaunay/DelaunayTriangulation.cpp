@@ -56,10 +56,10 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
       unsigned int simCpt = 0;
 
       for (size_t i = 0; i < simplices.size(); ++i) {
-        set<tlp::node> nodesSet;
+        vector<tlp::node> nodes(simplices[i].size());
 
         for (size_t j = 0; j < simplices[i].size(); ++j) {
-          nodesSet.insert(nodes[simplices[i][j]]);
+          nodes[j] = nodes[simplices[i][j]];
         }
 
         oss.str("");
@@ -70,7 +70,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs, bo
           oss << "tetrahedron " << simCpt++;
         }
 
-        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodesSet);
+        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodes);
         simplexSg->setName(oss.str());
       }
     }
@@ -93,9 +93,10 @@ public:
     addInParameter<bool>("original clone", paramHelp[1], "true");
   }
 
-  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "", "Performs a Delaunay triangulation, in considering the positions of the graph "
-                                                                     "nodes as a set of points. The building of simplices (triangles in 2D or "
-                                                                     "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
+  PLUGININFORMATION("Delaunay triangulation", "Antoine Lambert", "",
+                    "Performs a Delaunay triangulation, in considering the positions of the graph "
+                    "nodes as a set of points. The building of simplices (triangles in 2D or "
+                    "tetrahedrons in 3D) consists in adding edges between adjacent nodes.",
                     "1.1", "Triangulation")
 
   bool run() {
