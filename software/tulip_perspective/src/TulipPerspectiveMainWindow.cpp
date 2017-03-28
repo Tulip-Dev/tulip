@@ -77,8 +77,10 @@ void TulipPerspectiveProcessMainWindow::projectFileChanged(const QString& projec
     wTitle += QString(" - ") + _project->name();
   else if (!projectFile.isEmpty())
     wTitle += QString(" - ") + projectFile;
+  else
+    wTitle += QString(" - unsaved project");
 
-  wTitle +=  + "[*]"; //placeholder for window modification
+  wTitle += "[*]"; //placeholder for window modification
 #ifndef NDEBUG
   wTitle += " - [ Debug mode ]";
 #endif

@@ -382,4 +382,14 @@ bool TulipProject::removeAllDirPrivate(const QString &path) {
   return true;
 }
 
+void TulipProject::clearProject() {
+  removeAllDirPrivate(_rootDir.absolutePath());
+  _projectFile = "";
+}
+
+void TulipProject::setProjectFile(const QString &projectFile) {
+  _projectFile = projectFile;
+  emit projectFileChanged(projectFile);
+}
+
 }
