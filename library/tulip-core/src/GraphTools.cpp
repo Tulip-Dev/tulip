@@ -28,8 +28,9 @@
 #include <tulip/NumericProperty.h>
 #include <tulip/ForEach.h>
 #include <tulip/ConnectedTest.h>
-#include <tulip/Ordering.h>
 #include <tulip/MutableContainer.h>
+#include <tulip/Ordering.h>
+#include <tulip/PlanarConMap.h>
 
 #include <queue>
 #include <stack>

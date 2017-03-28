@@ -24,18 +24,20 @@
 #include <map>
 #include <set>
 #include <list>
+#include <vector>
+#include <tulip/tulipconf.h>
 #include <tulip/tuliphash.h>
 #include <tulip/Node.h>
 #include <tulip/Edge.h>
 
-#include <tulip/PlanarConMap.h>
-
 namespace tlp {
-
 class BooleanProperty;
 class DoubleProperty;
+class Graph;
 class IntegerProperty;
 class NumericProperty;
+class PlanarConMap;
+class PluginProgress;
 
 /**
  *  This ordering was first introduced by C. Gutwenger and P. Mutzel in \n
