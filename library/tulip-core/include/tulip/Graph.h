@@ -1501,14 +1501,14 @@ public:
    * @return The newly created meta node.
    */
   node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true,
-		      bool delAllEdge = true);
+                      bool delAllEdge = true);
 
   /**
    * @brief deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool delAllEdge = true) instead
    */
   _DEPRECATED node createMetaNode(const std::set<node> &nodeSet,
-				  bool multiEdges = true,
-				  bool delAllEdge = true);
+                                  bool multiEdges = true,
+                                  bool delAllEdge = true);
 
   /**
    *  @brief Populates a quotient graph with one meta node

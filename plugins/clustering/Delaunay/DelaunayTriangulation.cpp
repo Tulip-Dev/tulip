@@ -37,6 +37,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
 #ifdef _OPENMP
   #pragma omp parallel for
 #endif
+
   for (unsigned int i = 0; i < nbNodes; ++i)
     points[i] = layout->getNodeValue(nodes[i]);
 
@@ -64,8 +65,9 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
         vector<tlp::node> sNodes(simplices[i].size());
 
 #ifdef _OPENMP
-  #pragma omp parallel for
+        #pragma omp parallel for
 #endif
+
         for (size_t j = 0 ; j < simplices[i].size() ; ++j) {
           sNodes[j] = nodes[simplices[i][j]];
         }
