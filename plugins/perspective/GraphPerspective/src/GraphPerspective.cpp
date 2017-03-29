@@ -131,7 +131,8 @@ void GraphPerspective::buildRecentDocumentsMenu() {
     if (!QFileInfo(s).exists())
       continue;
 
-    _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
+    QAction* action = _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"),s,this,SLOT(openRecentFile()));
+    action->setData(s);
   }
 }
 
