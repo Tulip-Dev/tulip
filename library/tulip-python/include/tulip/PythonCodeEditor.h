@@ -189,7 +189,7 @@ public:
     _pythonFileName = fileName;
   }
 
-  QString getFileName() const {
+  const QString &getFileName() const {
     return _pythonFileName;
   }
 
