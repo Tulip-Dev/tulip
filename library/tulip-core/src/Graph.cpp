@@ -1216,30 +1216,31 @@ Graph* Graph::inducedSubGraph(BooleanProperty *selection,
   return inducedSubGraph(nodes, parentSubGraph, name);
 }
 //====================================================================================
-node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
+node Graph::createMetaNode (const std::vector<node> &nodes, bool multiEdges,
+			    bool delAllEdge) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << "\t Error: Could not group a set of nodes in the root graph" << std::endl;
     return node();
   }
 
-  if (nodeSet.empty()) {
+  if (nodes.empty()) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
     tlp::warning() << '\t' << "Warning: Creation of an empty metagraph" << std::endl;
   }
 
   // create an induced brother sub graph
-  Graph *subGraph = inducedSubGraph(nodeSet, getSuperGraph());
+  Graph *subGraph = inducedSubGraph(nodes, getSuperGraph());
   // all local properties
   // must be cloned in subgraph
   PropertyInterface *prop;
   forEach(prop, getLocalObjectProperties()) {
     PropertyInterface* sgProp =
       prop->clonePrototype(subGraph, prop->getName());
-    set<node>::const_iterator itNodeSet = nodeSet.begin();
+    vector<node>::const_iterator itNode = nodes.begin();
 
-    for(; itNodeSet!=nodeSet.end(); ++itNodeSet) {
-      node n = *itNodeSet;
+    for(; itNode!=nodes.end(); ++itNode) {
+      node n = *itNode;
       DataMem* val =  prop->getNodeDataMemValue(n);
       sgProp->setNodeDataMemValue(n, val);
       delete val;
@@ -1251,7 +1252,16 @@ node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges, bool
   subGraph->setAttribute("name", st.str());
   return createMetaNode(subGraph, multiEdges, delAllEdge);
 }
-
+//====================================================================================
+node Graph::createMetaNode (const std::set<node> &nodeSet, bool multiEdges,
+			    bool delAllEdge) {
+  std::vector<node> nodes(nodeSet.size());
+  unsigned int i = 0;
+  for (std::set<node>::iterator itn = nodeSet.begin(); itn != nodeSet.end();
+      ++itn, ++i)
+    nodes[i] = *itn;
+  return createMetaNode(nodes, multiEdges, delAllEdge);
+}
 //====================================================================================
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   if (getRoot() == this) {
