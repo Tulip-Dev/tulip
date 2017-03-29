@@ -145,8 +145,10 @@ void GraphPerspective::buildRecentDocumentsMenu() {
   foreach (const QString &s, TulipSettings::instance().value(_recentDocumentsSettingsKey).toStringList()) {
     if (!QFileInfo(s).exists())
       continue;
-    _ui->menuOpen_recent_file->addAction(FontIconManager::instance()->getMaterialDesignIcon(md::file, menuIconColor), s, this,
-                                         SLOT(openRecentFile()));
+
+    QAction *action =
+        _ui->menuOpen_recent_file->addAction(QIcon(":/tulip/graphperspective/icons/16/empty-file.png"), s, this, SLOT(openRecentFile()));
+    action->setData(s);
   }
 }
 
