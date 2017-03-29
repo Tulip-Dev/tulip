@@ -1262,8 +1262,8 @@ void PushPopTest::testMetaNode() {
   Coord coord0(-1, -1, -1);
   layout->setNodeValue(n0, coord0);
 
-  set<node> tmp;
-  tmp.insert(n0);
+  vector<node> tmp;
+  tmp.push_back(n0);
 
   graph->push();
 

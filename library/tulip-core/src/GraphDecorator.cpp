@@ -90,8 +90,8 @@ Graph* GraphDecorator::getSuperGraph()const {
 }
 
 //============================================================
-node GraphDecorator::createMetaNode(const std::set<node> &nodeSet, bool multiEdges, bool delAllEdge) {
-  return graph_component->createMetaNode(nodeSet, multiEdges, delAllEdge);
+node GraphDecorator::createMetaNode(const std::vector<node> &nodes, bool multiEdges, bool delAllEdge) {
+  return graph_component->createMetaNode(nodes, multiEdges, delAllEdge);
 }
 
 void GraphDecorator::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node>& metaNodes) {

@@ -54,8 +54,8 @@ void ExtendedClusterOperationTest::setUp() {
 
   quotient = graph->addCloneSubGraph();
 
-  group.insert(nodes[0]);
-  group.insert(nodes[1]);
+  group.push_back(nodes[0]);
+  group.push_back(nodes[1]);
 }
 //==========================================================
 void ExtendedClusterOperationTest::tearDown() {
@@ -213,8 +213,8 @@ void ExtendedClusterOperationTest::testOpenMetaNodes() {
 
   meta = quotient->createMetaNode(group);
   group.clear();
-  group.insert(nodes[3]);
-  group.insert(nodes[4]);
+  group.push_back(nodes[3]);
+  group.push_back(nodes[4]);
   node meta2 = quotient->createMetaNode(group);
   quotient->openMetaNode(meta);
   quotient->openMetaNode(meta2);

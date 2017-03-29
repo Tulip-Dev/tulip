@@ -70,7 +70,7 @@ public:
   virtual Graph* getNodeMetaInfo(const node n)const;
 
   //============================================================
-  virtual node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  virtual node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true, bool delAllEdge = true);
   virtual void createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, std::vector<node>& metaNodes);
   virtual node createMetaNode(Graph* subGraph, bool multiEdges = true, bool delAllEdge = true);
 
