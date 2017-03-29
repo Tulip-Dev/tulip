@@ -359,7 +359,7 @@ public:
   Graph *inducedSubGraph(const std::vector<node> &nodes, Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 
   /**
-   * @brief deprecated, use inducedSubGraph(const std::vector<node>&, Graph* = NULL, const std::string& = "unamed") instead
+   * @brief deprecated, use inducedSubGraph(const std::set<node>&, Graph* = NULL, const std::string& = "unamed") instead
    */
   _DEPRECATED Graph *inducedSubGraph(const std::set<node> &nodeSet, Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
 
@@ -1974,20 +1974,22 @@ public:
 
   // meta nodes management
   /**
-   * @brief Creates a meta-node from a set of nodes.
-   * Every edges from any node in the set to another node of the graph will be
-   * replaced with meta edges
+   * @brief Creates a meta-node from a vector of nodes.
+   * Every edges from any node in the vector to another node of the graph will be replaced with meta edges
    * from the meta node to the other nodes.
    * @warning This method will fail when called on the root graph.
    *
-   * @param nodeSet The nodes to put into the meta node.
-   * @param multiEdges Whether a meta edge should be created for each underlying
-   * edge.
-   * @param delAllEdge Whether the underlying edges will be removed from the
-   * whole hierarchy.
+   * @param nodes The vector of nodes to put into the meta node.
+   * @param multiEdges Whether a meta edge should be created for each underlying edge.
+   * @param delAllEdge Whether the underlying edges will be removed from the whole hierarchy.
    * @return The newly created meta node.
    */
-  node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+  node createMetaNode(const std::vector<node> &nodes, bool multiEdges = true, bool delAllEdge = true);
+
+  /**
+   * @brief deprecated, use createMetaNode(const std::vector<node>&, bool multiEdges = true, bool delAllEdge = true) instead
+   */
+  _DEPRECATED node createMetaNode(const std::set<node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
 
   /**
    *  @brief Populates a quotient graph with one meta node

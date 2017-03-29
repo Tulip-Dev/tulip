@@ -1014,11 +1014,11 @@ void GraphPerspective::group() {
   Observable::holdObservers();
   tlp::Graph *graph = _graphs->currentGraph();
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
-  std::set<node> groupedNodes;
-
-  for (node n : selection->getNodesEqualTo(true)) {
+  std::vector<node> groupedNodes;
+  node n;
+  forEach(n, selection->getNodesEqualTo(true)) {
     if (graph->isElement(n))
-      groupedNodes.insert(n);
+      groupedNodes.push_back(n);
   }
 
   if (groupedNodes.empty()) {

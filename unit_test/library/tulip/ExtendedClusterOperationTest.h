@@ -39,7 +39,7 @@ private:
   tlp::node meta;
   std::vector<tlp::node> nodes;
   std::vector<tlp::edge> edges;
-  std::set<tlp::node> group;
+  std::vector<tlp::node> group;
 
 public:
   void setUp();
