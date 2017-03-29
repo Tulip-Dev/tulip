@@ -16,26 +16,30 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 
 #include <tulip/Algorithm.h>
 #include <tulip/TulipPluginHeaders.h>
 #include <tulip/Delaunay.h>
 #include <tulip/LayoutProperty.h>
+#include <tulip/StaticProperty.h>
 
 using namespace std;
 
 static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
                                   bool originalClone) {
-  vector<tlp::node> nodes;
-  nodes.reserve(graph->numberOfNodes());
-  vector<tlp::Coord> points;
-  points.reserve(graph->numberOfNodes());
-  tlp::node n;
+  const std::vector<tlp::node>& nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  tlp::NodeStaticProperty<tlp::Coord> points(graph);
   tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-  forEach(n, graph->getNodes()) {
-    nodes.push_back(n);
-    points.push_back(layout->getNodeValue(n));
-  }
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    points[i] = layout->getNodeValue(nodes[i]);
+
   vector<pair<unsigned int, unsigned int> > edges;
   vector<vector<unsigned int> > simplices;
   bool ret = tlp::delaunayTriangulation(points, edges, simplices);
@@ -57,10 +61,13 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
       unsigned int simCpt = 0;
 
       for (size_t i = 0 ; i < simplices.size() ; ++i) {
-        vector<tlp::node> nodes(simplices[i].size());
+        vector<tlp::node> sNodes(simplices[i].size());
 
+#ifdef _OPENMP
+  #pragma omp parallel for
+#endif
         for (size_t j = 0 ; j < simplices[i].size() ; ++j) {
-          nodes[j] = nodes[simplices[i][j]];
+          sNodes[j] = nodes[simplices[i][j]];
         }
 
         oss.str("");
@@ -72,7 +79,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
           oss << "tetrahedron " << simCpt++;
         }
 
-        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(nodes);
+        tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(sNodes);
         simplexSg->setName(oss.str());
       }
     }
