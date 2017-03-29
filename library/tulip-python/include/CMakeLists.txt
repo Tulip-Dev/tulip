@@ -7,6 +7,7 @@ INSTALL(FILES
   tulip/AutoCompletionDataBase.h
   tulip/PythonEditorsTabWidget.h
   tulip/PythonCppTypesConverter.h
+  tulip/PythonIDE.h
 DESTINATION ${TulipIncludeInstallDir}/tulip/
 COMPONENT tulip_python
 )
