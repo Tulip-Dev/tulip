@@ -235,10 +235,14 @@ GraphPerspective::~GraphPerspective() {
 #endif
 
   delete _ui;
+}
 
-#ifdef TULIP_BUILD_PYTHON_COMPONENTS
-  delete _pythonIDEDialog;
-#endif
+bool GraphPerspective::terminated() {
+  #ifdef TULIP_BUILD_PYTHON_COMPONENTS
+    _pythonIDE->clearPythonCodeEditors();
+    delete _pythonIDEDialog;
+  #endif
+  return true;
 }
 
 void GraphPerspective::logCleared() {
