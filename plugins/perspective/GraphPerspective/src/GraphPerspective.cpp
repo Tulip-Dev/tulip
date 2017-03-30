@@ -233,8 +233,8 @@ GraphPerspective::~GraphPerspective() {
 }
 
 void GraphPerspective::logCleared() {
-  _ui->loggerMessage->setText("");
-  _ui->loggerIcon->setPixmap(QPixmap());
+  _ui->loggerMessage->clear();
+  _ui->loggerIcon->clear();
 }
 
 void GraphPerspective::findPlugins() {
