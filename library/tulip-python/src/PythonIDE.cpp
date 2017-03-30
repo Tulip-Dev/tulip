@@ -1377,7 +1377,9 @@ int PythonIDE::addMainScriptEditor(const QString &fileName) {
   int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
   getMainScriptEditor(idx)->installEventFilter(this);
   getMainScriptEditor(idx)->getAutoCompletionDb()->setGraph(_graphsModel->currentGraph());
-  _ui->runScriptButton->setEnabled(true);
+  if (_ui->mainScriptsTabWidget->count() == 1) {
+    _ui->runScriptButton->setEnabled(true);
+  }
   return idx;
 }
 
