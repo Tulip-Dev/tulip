@@ -108,15 +108,16 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
     // pop the current dfsParams
     node to = dfsParams.from;
     from = supergraph.get(to.id);
+
     if (from.isValid()) {
       u = dfsParams.u;
 
       if (low.get(to.id) == depth.get(from.id)) {
-	if (to == u && supergraph.get(from.id).isValid())
-	  addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
+        if (to == u && supergraph.get(from.id).isValid())
+          addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
 
-	if (to != u)
-	  addedEdges.push_back(graph->addEdge(u, to));
+        if (to != u)
+          addedEdges.push_back(graph->addEdge(u, to));
       }
 
       low.set(from.id, std::min(low.get(from.id), low.get(to.id)));

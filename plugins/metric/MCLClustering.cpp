@@ -318,10 +318,11 @@ bool MCLClustering::run() {
   const std::vector<node>& tlpNodes = graph->nodes();
   unsigned int nbNodes = tlpNodes.size();
   g.reserveNodes(nbNodes);
+
   // add nodes to g
   for (unsigned int i = 0; i < nbNodes; ++i)
     g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(tlpNodes[i]) + 1);
-    
+
   edge e;
   forEach(e, graph->getEdges()) {
     std::pair<node, node> eEnds = graph->ends(e);
@@ -348,11 +349,11 @@ bool MCLClustering::run() {
     if(weights!=0) {
       double tmpVal = inW[tmp]=0.;
       forEach(e, g.getOutEdges(n)) {
-	double eVal = inW[e];
-	sum += eVal;
+        double eVal = inW[e];
+        sum += eVal;
 
-	if (eVal > tmpVal)
-	  tmpVal = eVal;
+        if (eVal > tmpVal)
+          tmpVal = eVal;
       }
       sum += (inW[tmp] = tmpVal);
     }
@@ -363,7 +364,7 @@ bool MCLClustering::run() {
 
     double oos = 1./sum;
     forEach(e, g.getOutEdges(n))
-      inW[e] *= oos;
+    inW[e] *= oos;
   }
 
   //output for mcl
