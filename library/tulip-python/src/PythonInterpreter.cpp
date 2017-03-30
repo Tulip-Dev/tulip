@@ -655,6 +655,9 @@ bool PythonInterpreter::runGraphScript(const QString &module, const QString &fun
 
   clearTracebacks();
 
+  // ensure to reset the trace function in order to be able to pause a script (need that call for that feature to work on windows platform)
+  PyEval_SetTrace(tracefunc, NULL);
+
   bool ret = true;
   scriptPaused = false;
 
