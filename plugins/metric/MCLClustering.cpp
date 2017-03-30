@@ -36,24 +36,24 @@ using namespace std;
 /** \addtogroup clustering */
 /*@{*/
 /** \file
-* \brief  An implementation of the MCL clustering algorithm
-*
-* This plugin is an implementation of the MCL algorithm
-* first published as:
-*
-* Stijn van Dongen \n
-* PhD Thesis "Graph Clustering by Flow Simulation", \n
-* University of Utrecht,\n
-* 2000. \n
-*
-* <b> HISTORY</b>
-*
-* - 16/09/2011 Version 1.0: Initial release
-*
-* \author David Auber, Labri, Email : auber@labri.fr
-*
-*
-**/
+ * \brief  An implementation of the MCL clustering algorithm
+ *
+ * This plugin is an implementation of the MCL algorithm
+ * first published as:
+ *
+ * Stijn van Dongen \n
+ * PhD Thesis "Graph Clustering by Flow Simulation", \n
+ * University of Utrecht,\n
+ * 2000. \n
+ *
+ * <b> HISTORY</b>
+ *
+ * - 16/09/2011 Version 1.0: Initial release
+ *
+ * \author David Auber, Labri, Email : auber@labri.fr
+ *
+ *
+ **/
 class MCLClustering : public tlp::DoubleAlgorithm {
 public:
   PLUGININFORMATION("MCL Clustering", "D. Auber & R. Bourqui", "10/10/2005",
@@ -75,9 +75,6 @@ public:
 
   VectorGraph g;
   EdgeProperty<double> inW, outW;
-  std::vector<node> tlpNodes;
-  MutableContainer<node> nodeMapping;
-  MutableContainer<edge> edgeMapping;
   NumericProperty *weights;
   double _r;
   unsigned int _k;
@@ -283,27 +280,49 @@ MCLClustering::MCLClustering(const tlp::PluginContext *context) : DoubleAlgorith
 MCLClustering::~MCLClustering() {
 }
 //================================================================================
-void MCLClustering::init() {
-  unsigned int nbNodes = graph->numberOfNodes();
-  g.reserveNodes(nbNodes);
-  g.reserveEdges(nbNodes + 2 * graph->numberOfEdges());
-  tlpNodes.resize(nbNodes);
-  node n;
-  node newNode;
-  forEach(n, graph->getNodes()) {
-    newNode = g.addNode();
-    nodeMapping.set(n.id, newNode);
-    tlpNodes[newNode] = n;
-    g.reserveAdj(newNode, 2 * graph->deg(n) + 1);
+struct DegreeSort {
+  DegreeSort(VectorGraph &g) : g(g) {
   }
+  bool operator()(node a, node b) {
+    unsigned int da = g.deg(a), db = g.deg(b);
+
+    if (da == db)
+      return a.id > b.id;
+
+    return da > db;
+  }
+  VectorGraph &g;
+};
+//==============================================================================
+bool MCLClustering::run() {
+
+  g.alloc(inW);
+  g.alloc(outW);
+
+  weights = NULL;
+  _r = 2.;
+  _k = 5;
+
+  if (dataSet != 0) {
+    dataSet->get("weights", weights);
+    dataSet->get("inflate", _r);
+    dataSet->get("pruning", _k);
+  }
+
+  NodeStaticProperty<node> nodeMapping(graph);
+  const std::vector<node> &tlpNodes = graph->nodes();
+  unsigned int nbNodes = tlpNodes.size();
+  g.reserveNodes(nbNodes);
+  // add nodes to g
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    g.reserveAdj(nodeMapping[i] = g.addNode(), 2 * graph->deg(tlpNodes[i]) + 1);
 
   edge e;
   forEach(e, graph->getEdges()) {
     std::pair<node, node> eEnds = graph->ends(e);
-    node src = eEnds.first = nodeMapping.get(eEnds.first.id);
-    node tgt = eEnds.second = nodeMapping.get(eEnds.second.id);
+    node src = nodeMapping.getNodeValue(eEnds.first);
+    node tgt = nodeMapping.getNodeValue(eEnds.second);
     edge tmp = g.addEdge(src, tgt);
-    edgeMapping.set(e.id, tmp);
 
     double weight = (weights != nullptr) ? weights->getEdgeDoubleValue(e) : 1.0;
     inW[tmp] = weight;
@@ -316,9 +335,8 @@ void MCLClustering::init() {
 
   // add loops (Set the maximum of out-edges weights to self-loops weight)
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    n = g[i];
+    node n = g[i];
     edge tmp = g.addEdge(n, n);
-    edge e;
     double sum = 0.;
     outW[tmp] = 0.;
 
@@ -340,46 +358,12 @@ void MCLClustering::init() {
     double oos = 1. / sum;
     forEach(e, g.getOutEdges(n)) inW[e] *= oos;
   }
-}
-//================================================================================
-struct DegreeSort {
-  DegreeSort(VectorGraph &g) : g(g) {
-  }
-  bool operator()(node a, node b) {
-    unsigned int da = g.deg(a), db = g.deg(b);
 
-    if (da == db)
-      return a.id > b.id;
-
-    return da > db;
-  }
-  VectorGraph &g;
-};
-//==============================================================================
-bool MCLClustering::run() {
-
-  g.alloc(inW);
-  g.alloc(outW);
-
-  weights = nullptr;
-  _r = 2.;
-  _k = 5;
-
-  if (dataSet != 0) {
-    dataSet->get("weights", weights);
-    dataSet->get("inflate", _r);
-    dataSet->get("pruning", _k);
-  }
-
-  init();
-  unsigned int nbNodes = g.numberOfNodes();
-
-  edge e;
   // output for mcl
   /*
-  forEach(e, graph->getEdges()) {
-      cout << graph->source(e).id << "\t" << graph->target(e).id << endl;
-  }
+    forEach(e, graph->getEdges()) {
+    cout << graph->source(e).id << "\t" << graph->target(e).id << endl;
+    }
   */
 
   int iteration = 15. * log1p(g.numberOfNodes());
@@ -397,10 +381,10 @@ bool MCLClustering::run() {
     }
 
     /* exact MCL should inflate after because we share the same graphs tructure,
-    * or we should only remove edges created during the power and delay the
-    * deletion of edge that does exist in the previous graph
-    * however that impletenation doesn't change the result too much.
-    */
+     * or we should only remove edges created during the power and delay the
+     * deletion of edge that does exist in the previous graph
+     * however that impletenation doesn't change the result too much.
+     */
     // uncomment that block to have correct MCL
 
     //        forEach(n, g.getNodes()) {
@@ -448,7 +432,7 @@ bool MCLClustering::run() {
 
       while (!fifo.empty()) {
         node n = fifo.front();
-        result->setNodeValue(tlpNodes[n], curVal);
+        result->setNodeValue(tlpNodes[n.id], curVal);
         fifo.pop();
         const std::vector<node> &neighbours = g.adj(n);
         unsigned int nbNeighbours = neighbours.size();
