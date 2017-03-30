@@ -28,7 +28,7 @@
 #include <tulip/TlpQtTools.h>
 
 GraphPerspectiveLogger::GraphPerspectiveLogger(QWidget* parent):
-  QFrame(parent), _logSeverity(QtDebugMsg), _logCount(0), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
+  QFrame(parent), _logSeverity(QtDebugMsg), _ui(new Ui::GraphPerspectiveLogger), _pythonOutput(false) {
   _ui->setupUi(this);
   // we want to be able to select multiple rows in the logger list for copy/paste operations
   _ui->listWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
@@ -69,8 +69,8 @@ static QString iconForType(QtMsgType type) {
   return pxUrl;
 }
 
-unsigned int GraphPerspectiveLogger::count() const {
-  return _logCount;
+int GraphPerspectiveLogger::count() const {
+  return _ui->listWidget->count();
 }
 
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
@@ -82,8 +82,6 @@ void GraphPerspectiveLogger::log(QtMsgType type, const QMessageLogContext &, con
 
   if (type > _logSeverity)
     _logSeverity = type;
-
-  _logCount++;
 
   if (msg.startsWith("[Python")) {
     // remove quotes around message added by Qt
@@ -115,8 +113,6 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
   if (type > _logSeverity)
     _logSeverity = type;
 
-  _logCount++;
-
   if (qmsg.startsWith("[Python")) {
     // remove quotes around message added by Qt
     QString msgClean = qmsg.mid(14).mid(2, qmsg.length()-18);
@@ -141,7 +137,6 @@ QPixmap GraphPerspectiveLogger::icon() {
 
 void GraphPerspectiveLogger::clear() {
   _ui->listWidget->clear();
-  _logCount = 0;
   _logSeverity = QtDebugMsg;
   emit cleared();
   close();
