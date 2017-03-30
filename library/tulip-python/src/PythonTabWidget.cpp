@@ -50,7 +50,7 @@ void PythonTabWidget::paintEvent(QPaintEvent * event) {
 #else
   painter.setFont(QFont("Arial", static_cast<int>(18 * tabBar()->height() / 27.0)));
 #endif
-  int firstLabelWidth = static_cast<int>(80 * tabBar()->height() / 27.0);
+  int firstLabelWidth = static_cast<int>(90 * tabBar()->height() / 27.0);
   int imageWidth = static_cast<int>(25 * tabBar()->height() / 27.0);
   int secondLabelWidth = static_cast<int>(80 * tabBar()->height() / 27.0);
   int offset = tabBar()->height() - imageWidth;
