@@ -103,6 +103,11 @@ GraphPerspective::GraphPerspective(const tlp::PluginContext *c)
     // from any relative unit_test/gui directory
     _lastOpenLocation = QDir::currentPath();
   }
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  _pythonIDE = NULL;
+  _pythonIDEDialog = NULL;
+#endif
 }
 
 void GraphPerspective::reserveDefaultProperties() {
@@ -230,6 +235,10 @@ GraphPerspective::~GraphPerspective() {
 #endif
 
   delete _ui;
+
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  delete _pythonIDEDialog;
+#endif
 }
 
 void GraphPerspective::logCleared() {
@@ -348,7 +357,8 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   QVBoxLayout *dialogLayout = new QVBoxLayout();
   dialogLayout->addWidget(_pythonIDE);
   dialogLayout->setContentsMargins(0, 0, 0, 0);
-  _pythonIDEDialog = new QDialog(mainWindow(), Qt::Window);
+  _pythonIDEDialog = new QDialog(NULL, Qt::Window);
+  _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
   _pythonIDEDialog->setLayout(dialogLayout);
   _pythonIDEDialog->resize(800, 600);
   _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
