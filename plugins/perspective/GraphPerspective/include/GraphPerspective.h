@@ -88,6 +88,8 @@ public:
   void log(QtMsgType,const char*);
 #endif
 
+  virtual bool terminated();
+
 public slots:
   void importGraph();
   void exportGraph(tlp::Graph*g = NULL);
