@@ -108,47 +108,8 @@ static void makeBiconnectedDFS(Graph *graph, vector<edge> &addedEdges) {
     // pop the current dfsParams
     node to = dfsParams.from;
     from = supergraph.get(to.id);
-    u = dfsParams.u;
-
-    if (low.get(to.id) == depth.get(from.id)) {
-      if (to == u && supergraph.get(from.id).isValid())
-        addedEdges.push_back(graph->addEdge(to, supergraph.get(from.id)));
-
-      if (to != u)
-        addedEdges.push_back(graph->addEdge(u, to));
-    }
-
-    low.set(from.id, std::min(low.get(from.id), low.get(to.id)));
-
-    dfsLevels.pop();
-  }
-}
-
-void makeBiconnectedDFS(Graph *graph, node from, MutableContainer<int> &low, MutableContainer<int> &depth, MutableContainer<node> &supergraph,
-                        unsigned int &currentDepth, vector<edge> &addedEdges) {
-  node u;
-  depth.set(from.id, currentDepth++);
-  low.set(from.id, depth.get(from.id));
-
-  // for every node connected to this one, call this function so it runs on every node.
-  StableIterator<node> itN(graph->getInOutNodes(from));
-
-  while (itN.hasNext()) {
-    node to = itN.next();
-
-    // if there is a loop, ignore it
-    if (from == to) {
-      continue;
-    }
-
-    if (!u.isValid()) {
-      u = to;
-    }
-
-    // if the destination node has not been visited, visit it
-    if (depth.get(to.id) == -1) {
-      supergraph.set(to.id, from);
-      makeBiconnectedDFS(graph, to, low, depth, supergraph, currentDepth, addedEdges);
+    if (from.isValid()) {
+      u = dfsParams.u;
 
       if (low.get(to.id) == depth.get(from.id)) {
         if (to == u && supergraph.get(from.id).isValid())
@@ -159,25 +120,25 @@ void makeBiconnectedDFS(Graph *graph, node from, MutableContainer<int> &low, Mut
       }
 
       low.set(from.id, std::min(low.get(from.id), low.get(to.id)));
-    } else {
-      low.set(from.id, std::min(low.get(from.id), depth.get(to.id)));
     }
+
+    dfsLevels.pop();
   }
 }
+
 //=================================================================
-bool biconnectedTest(const Graph *graph, node v, MutableContainer<bool> &mark, MutableContainer<unsigned int> &low,
-                     MutableContainer<unsigned int> &dfsNumber, MutableContainer<node> &supergraph, unsigned int &count) {
-  mark.set(v.id, true);
-  dfsNumber.set(v.id, count);
-  low.set(v.id, count);
-  ++count;
+bool biconnectedTest(const Graph *graph, node v, MutableContainer<unsigned int> &low, MutableContainer<unsigned int> &dfsNumber,
+                     MutableContainer<node> &supergraph, unsigned int &count) {
+  unsigned int vDfs = count++;
+  dfsNumber.set(v.id, vDfs);
+  low.set(v.id, vDfs);
   Iterator<node> *it = graph->getInOutNodes(v);
 
   while (it->hasNext()) {
     node w = it->next();
 
-    if (!mark.get(w.id)) {
-      if (dfsNumber.get(v.id) == 1) {
+    if (dfsNumber.get(w.id) == UINT_MAX) {
+      if (vDfs == 1) {
         if (count != 2) {
           delete it;
           return false;
@@ -186,12 +147,12 @@ bool biconnectedTest(const Graph *graph, node v, MutableContainer<bool> &mark, M
 
       supergraph.set(w.id, v);
 
-      if (!biconnectedTest(graph, w, mark, low, dfsNumber, supergraph, count)) {
+      if (!biconnectedTest(graph, w, low, dfsNumber, supergraph, count)) {
         delete it;
         return false;
       }
 
-      if (dfsNumber.get(v.id) != 1) {
+      if (vDfs != 1) {
         if (low.get(w.id) >= dfsNumber.get(v.id)) {
           delete it;
           return false;
@@ -242,17 +203,16 @@ bool BiconnectedTest::compute(const tlp::Graph *graph) {
   if (resultsBuffer.find(graph) != resultsBuffer.end())
     return resultsBuffer[graph];
 
-  MutableContainer<bool> mark;
-  mark.setAll(false);
   MutableContainer<unsigned int> low;
   MutableContainer<unsigned int> dfsNumber;
+  dfsNumber.setAll(UINT_MAX);
   MutableContainer<node> supergraph;
   unsigned int count = 1;
   bool result = false;
   Iterator<node> *it = graph->getNodes();
 
   if (it->hasNext())
-    result = (biconnectedTest(graph, it->next(), mark, low, dfsNumber, supergraph, count));
+    result = (biconnectedTest(graph, it->next(), low, dfsNumber, supergraph, count));
 
   delete it;
 
