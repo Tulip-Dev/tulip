@@ -359,6 +359,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   dialogLayout->setContentsMargins(0, 0, 0, 0);
   _pythonIDEDialog = new QDialog(NULL, Qt::Window);
   _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
+  _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
   _pythonIDEDialog->setLayout(dialogLayout);
   _pythonIDEDialog->resize(800, 600);
   _pythonIDEDialog->setWindowTitle("Tulip Python IDE");
