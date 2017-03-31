@@ -751,7 +751,6 @@ IF(NOT TULIP_BUILD_CORE_ONLY)
     ADD_CUSTOM_TARGET(copyTulipColorScales ALL ${CMAKE_COMMAND} -E copy_directory ${CMAKE_CURRENT_SOURCE_DIR}/software/bitmaps/colorscales ${TULIPOGL_PYTHON_FOLDER}/share/bitmaps/colorscales)
   ENDIF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS)
 ENDIF(NOT TULIP_BUILD_CORE_ONLY)
-ADD_SUBDIRECTORY(tlpscripten)
 
 IF(TULIP_BUILD_TESTS)
   INCLUDE(CTest)
@@ -802,8 +801,6 @@ IF(NOT TULIP_BUILD_CORE_ONLY)
   CONFIGURE_FILE("tulip-config.in" "tulip-config" @ONLY)
 
   INSTALL(PROGRAMS ${PROJECT_BINARY_DIR}/tulip-config DESTINATION ${TulipBinInstallDir})
-  INSTALL(DIRECTORY wizards DESTINATION ${TulipShareInstallDir}
-          PATTERN ".svn" EXCLUDE)
 
   IF(MSVC)
     INCLUDE(InstallRequiredSystemLibraries)
