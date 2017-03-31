@@ -239,16 +239,6 @@ IF(TULIP_BUILD_PYTHON_COMPONENTS)
 ENDIF(TULIP_BUILD_PYTHON_COMPONENTS)
 
 ## ========================================================
-## Enable memory checks (disable openmp)
-## ========================================================
-IF(LINUX)
-  OPTION(TULIP_CHECK_MEMORY "Overload new and delete operators to check for memory leaks (Warning: enabling this automatically disables the use of OpenMP)" OFF)
-  IF(TULIP_CHECK_MEMORY)
-    SET(TULIP_CHECK_MEMORY_FLAGS "-include ${CMAKE_SOURCE_DIR}/library/tulip-core/include/tulip/MemoryChecker.h")
-  ENDIF(TULIP_CHECK_MEMORY)
-ENDIF(LINUX)
-
-## ========================================================
 ## Required packages
 ## ========================================================
 IF(MINGW)
@@ -287,7 +277,7 @@ FIND_PACKAGE(Yajl)
 IF(NOT CLANG)
 
   FIND_PACKAGE(Threads)
-  IF (NOT TULIP_CHECK_MEMORY AND NOT CMAKE_BUILD_TYPE STREQUAL "")
+  IF (NOT CMAKE_BUILD_TYPE STREQUAL "")
     IF(CMAKE_DEBUG_MODE)
       OPTION(TULIP_ENABLE_OPENMP "Do you want to enable OpenMP (debug mode)?" OFF)
     ELSE()
@@ -334,7 +324,7 @@ IF(NOT CLANG)
         ENDIF(WIN32)
       ENDIF(OPENMP_FOUND)
     ENDIF(TULIP_ENABLE_OPENMP)
-  ENDIF(NOT TULIP_CHECK_MEMORY AND NOT CMAKE_BUILD_TYPE STREQUAL "")
+  ENDIF(NOT CMAKE_BUILD_TYPE STREQUAL "")
 ENDIF(NOT CLANG)
 
 IF(NOT TULIP_BUILD_CORE_ONLY)
