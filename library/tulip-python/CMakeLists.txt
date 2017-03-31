@@ -18,6 +18,7 @@ ADD_CORE_FILES(CMakeLists.txt)
 
 ADD_SUBDIRECTORY(modules)
 ADD_SUBDIRECTORY(bindings)
+ADD_SUBDIRECTORY(plugins)
 
 # libtulip-python is not needed when building Python wheels
 IF(NOT TULIP_ACTIVATE_PYTHON_WHEELS_TARGETS AND NOT TULIP_BUILD_CORE_ONLY)
