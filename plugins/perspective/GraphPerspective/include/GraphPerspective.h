@@ -137,6 +137,7 @@ protected slots:
   void deleteSelectedElements(bool fromRoot = false);
   void deleteSelectedElementsFromRootGraph();
   void invertSelection();
+  void reverseSelectedEdges();
   void cancelSelection();
   void make_graph();
   void selectAll();

@@ -58,52 +58,45 @@ Iterator<edge> *BooleanProperty::getEdgesEqualTo(const bool val, const Graph *sg
   return (new UINTIterator<edge>(it));
 }
 //=================================================================================
-// Fonctionnalite supplementaire ajoute au selection
-void BooleanProperty::reverse() {
-  Observable::holdObservers();
-  Iterator<node> *itN = graph->getNodes();
+void BooleanProperty::reverse(const Graph *sg) {
+  if (sg == NULL)
+    sg = graph;
 
-  while (itN->hasNext()) {
-    node itn = itN->next();
+  const vector<node> &nodes = sg->nodes();
+  const vector<edge> &edges = sg->edges();
+  unsigned nbNodes = nodes.size();
+  unsigned nbEdges = edges.size();
 
-    if (getNodeValue(itn) == true)
-      setNodeValue(itn, false);
-    else
-      setNodeValue(itn, true);
+  for (unsigned i = 0; i < nbNodes; ++i) {
+    node n(nodes[i]);
+    setNodeValue(n, !getNodeValue(n));
   }
 
-  delete itN;
-  Iterator<edge> *itE = graph->getEdges();
-
-  while (itE->hasNext()) {
-    edge ite = itE->next();
-
-    if (getEdgeValue(ite) == true)
-      setEdgeValue(ite, false);
-    else
-      setEdgeValue(ite, true);
+  for (unsigned i = 0; i < nbEdges; ++i) {
+    edge e(edges[i]);
+    setEdgeValue(e, !getEdgeValue(e));
   }
-
-  delete itE;
-  Observable::unholdObservers();
 }
+
 //=================================================================================
-void BooleanProperty::reverseEdgeDirection() {
-  Iterator<edge> *itE = graph->getEdges();
+void BooleanProperty::reverseEdgeDirection(Graph *sg) {
+  if (sg == NULL)
+    sg = graph;
 
-  while (itE->hasNext()) {
-    edge ite = itE->next();
+  const vector<edge> &edges = sg->edges();
+  unsigned nbEdges = edges.size();
 
-    if (getEdgeValue(ite))
-      graph->reverse(ite);
+  for (unsigned i = 0; i < nbEdges; ++i) {
+    edge e(edges[i]);
+    if (getEdgeValue(e))
+      sg->reverse(e);
   }
-
-  delete itE;
 }
+
 //=================================================================================
 PropertyInterface *BooleanProperty::clonePrototype(Graph *g, const std::string &n) const {
-  if (!g)
-    return 0;
+  if (g == NULL)
+    return NULL;
 
   // allow to get an unregistered property (empty name)
   BooleanProperty *p = n.empty() ? new BooleanProperty(g) : g->getLocalProperty<BooleanProperty>(n);

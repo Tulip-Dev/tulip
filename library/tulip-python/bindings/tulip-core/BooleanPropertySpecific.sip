@@ -23,22 +23,29 @@
 // | (https://sourceforge.net/projects/booggie/)                             |
 // +-------------------------------------------------------------------------+
 
-  void reverse();
+  void reverse(const tlp::Graph* graph = NULL);
 %Docstring
-tlp.BooleanProperty.reverse()
+tlp.BooleanProperty.reverse([graph = None])
 
 Reverses all values associated to graph elements,
-i.e :const:`True` => :const:`False`, :const:`False` => :const:`True` .
+i.e :const:`True` => :const:`False`, :const:`False` => :const:`True`.
+
+:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:type graph: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
 
-  void reverseEdgeDirection();
+  void reverseEdgeDirection(tlp::Graph* graph = NULL);
 %Docstring
-tlp.BooleanProperty.reverseEdgeDirection()
+tlp.BooleanProperty.reverseEdgeDirection([graph = None])
 
 Reverses all the direction of edges in the attached graph
 which are set to :const:`True` in this boolean property.
+
+:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:type graph: :class:`tlp.Graph`
+
 %End
 
 //===========================================================================================

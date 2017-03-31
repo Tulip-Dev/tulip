@@ -1249,6 +1249,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
     <addaction name="actionInvert_selection"/>
     <addaction name="actionCancel_selection"/>
     <addaction name="actionMake_selection_a_graph"/>
+    <addaction name="actionReverse_selected_edges"/>
     <addaction name="separator"/>
     <addaction name="actionGroup_elements"/>
     <addaction name="separator"/>
@@ -1757,13 +1758,21 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
      <normaloff>:/tulip/gui/icons/i_del.png</normaloff>:/tulip/gui/icons/i_del.png</iconset>
    </property>
    <property name="text">
-    <string>Delete from the root graph</string>
+    <string>Delete from t&amp;he root graph</string>
    </property>
    <property name="toolTip">
     <string>Delete selected elements from the whole graph hierarchy (not only from the current graph)</string>
    </property>
    <property name="shortcut">
     <string>Shift+Del</string>
+   </property>
+  </action>
+  <action name="actionReverse_selected_edges">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Reverse selected edges</string>
    </property>
   </action>
  </widget>

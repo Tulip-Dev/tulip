@@ -46,14 +46,16 @@ public:
   /**
    * Reverses all values associated to graph elements,
    * i.e true => false, false => true.
+   * If sg is NULL, the graph given when creating the property is considered.
    */
-  void reverse();
+  void reverse(const Graph *sg=NULL);
 
   /**
    * Reverses all the direction of edges of the visible graph
    * which are true in this BooleanProperty.
+   * * If sg is NULL, the graph given when creating the property is considered.
    */
-  void reverseEdgeDirection();
+  void reverseEdgeDirection(Graph *sg=NULL);
 
   /**
    * Returns an iterator through all nodes belonging to g
