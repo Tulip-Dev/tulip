@@ -59,36 +59,37 @@ Iterator<edge>* BooleanProperty::getEdgesEqualTo(const bool val,
 }
 //=================================================================================
 void BooleanProperty::reverse(const Graph *sg) {
-    if (sg == NULL) sg = graph;
+  if (sg == NULL) sg = graph;
 
-    const vector<node>& nodes = sg->nodes();
-    const vector<edge>& edges = sg->edges();
-    unsigned nbNodes = nodes.size();
-    unsigned nbEdges = edges.size();
+  const vector<node>& nodes = sg->nodes();
+  const vector<edge>& edges = sg->edges();
+  unsigned nbNodes = nodes.size();
+  unsigned nbEdges = edges.size();
 
-    for(unsigned i=0;i<nbNodes;++i) {
-        node n(nodes[i]);
-        setNodeValue(n,!getNodeValue(n));
-    }
+  for(unsigned i=0; i<nbNodes; ++i) {
+    node n(nodes[i]);
+    setNodeValue(n,!getNodeValue(n));
+  }
 
-    for(unsigned i=0;i<nbEdges;++i) {
-        edge e(edges[i]);
-        setEdgeValue(e,!getEdgeValue(e));
-    }
+  for(unsigned i=0; i<nbEdges; ++i) {
+    edge e(edges[i]);
+    setEdgeValue(e,!getEdgeValue(e));
+  }
 }
 
 //=================================================================================
 void BooleanProperty::reverseEdgeDirection(Graph *sg) {
-    if (sg == NULL) sg = graph;
+  if (sg == NULL) sg = graph;
 
-    const vector<edge>&edges = sg->edges();
-    unsigned nbEdges = edges.size();
+  const vector<edge>&edges = sg->edges();
+  unsigned nbEdges = edges.size();
 
-    for(unsigned i=0;i<nbEdges;++i) {
-        edge e(edges[i]);
-        if(getEdgeValue(e))
-            sg->reverse(e);
-    }
+  for(unsigned i=0; i<nbEdges; ++i) {
+    edge e(edges[i]);
+
+    if(getEdgeValue(e))
+      sg->reverse(e);
+  }
 }
 
 //=================================================================================

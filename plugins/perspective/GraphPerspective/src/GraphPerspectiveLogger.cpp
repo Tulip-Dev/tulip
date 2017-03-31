@@ -127,7 +127,7 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char* msg) {
 #endif
 
 QPixmap GraphPerspectiveLogger::icon() const {
-    return QPixmap(_pythonOutput?":/tulip/graphperspective/icons/16/python.png":iconForType(_logSeverity));
+  return QPixmap(_pythonOutput?":/tulip/graphperspective/icons/16/python.png":iconForType(_logSeverity));
 }
 
 void GraphPerspectiveLogger::clear() {

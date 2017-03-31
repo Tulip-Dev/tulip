@@ -96,11 +96,13 @@ public:
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
+
     for(unsigned int i = 0; i < nbNodes; ++i) {
       node n = nodes[i];
       nodeInfo& nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
     }
+
     // sort the nodes in descending order of their degrees
     sort(nodesInfo.begin(), nodesInfo.end(), nodesInfoCmp());
     // build a map
@@ -108,6 +110,7 @@ public:
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
+
     for (unsigned int i = 0; i < nbNodes; ++i) {
       nodeInfo& nInfo = nodesInfo[i];
       // initialize the value
