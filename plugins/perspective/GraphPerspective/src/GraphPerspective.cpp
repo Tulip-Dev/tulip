@@ -308,6 +308,35 @@ void GraphPerspective::redrawPanels(bool center) {
   _ui->workspace->redrawPanels(center);
 }
 
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+class PythonIDEDialog : public QDialog {
+
+  bool _firstShow;
+  QSize _size;
+  QPoint _pos;
+
+public:
+  PythonIDEDialog(QWidget *parent, Qt::WindowFlags flags) : QDialog(parent, flags), _firstShow(true) {
+  }
+
+protected:
+  virtual void showEvent(QShowEvent *e) {
+    QDialog::showEvent(e);
+    if (!_firstShow) {
+      move(_pos);
+      resize(_size);
+    }
+    _firstShow = false;
+  }
+
+  virtual void closeEvent(QCloseEvent *e) {
+    _size = size();
+    _pos = pos();
+    QDialog::closeEvent(e);
+  }
+};
+#endif
+
 void GraphPerspective::start(tlp::PluginProgress *progress) {
   reserveDefaultProperties();
   _ui = new Ui::GraphPerspectiveMainWindowData;
@@ -361,7 +390,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   QVBoxLayout *dialogLayout = new QVBoxLayout();
   dialogLayout->addWidget(_pythonIDE);
   dialogLayout->setContentsMargins(0, 0, 0, 0);
-  _pythonIDEDialog = new QDialog(NULL, Qt::Window);
+  _pythonIDEDialog = new PythonIDEDialog(NULL, Qt::Window);
   _pythonIDEDialog->setStyleSheet(_mainWindow->styleSheet());
   _pythonIDEDialog->setWindowIcon(_mainWindow->windowIcon());
   _pythonIDEDialog->setLayout(dialogLayout);
