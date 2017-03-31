@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include <algorithm>
 #include <tulip/TulipPluginHeaders.h>
 
@@ -56,7 +59,7 @@ public:
  *  by David Auber, LaBRI, University Bordeaux I, France
  *
  *
-*/
+ */
 class WelshPowell : public DoubleAlgorithm {
   // to maximize the locality of reference we will use a vector
   // holding the all the nodes needed info in the structure below
@@ -76,32 +79,40 @@ class WelshPowell : public DoubleAlgorithm {
   };
 
 public:
-  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005", "Nodes coloring measure,<br/>values assigned to adjacent "
-                                                                   "nodes are always different.",
+  PLUGININFORMATION("Welsh & Powell", "David Auber", "03/01/2005",
+                    "Nodes coloring measure,<br/>values assigned to adjacent "
+                    "nodes are always different.",
                     "1.0", "Graph")
 
   WelshPowell(const tlp::PluginContext *context) : DoubleAlgorithm(context) {
   }
 
   bool run() {
-    unsigned int nbNodes = graph->numberOfNodes();
-    vector<nodeInfo> nodesInfo(nbNodes);
+    const std::vector<node> nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
+    NodeStaticProperty<nodeInfo> nodesInfo(graph);
     node n;
     unsigned int i = 0;
-    forEach(n, graph->getNodes()) {
-      nodeInfo &nInfo = nodesInfo[i++];
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = nodes[i];
+      nodeInfo &nInfo = nodesInfo[i];
       nInfo.n = n, nInfo.val = graph->deg(n);
     }
     // sort the nodes in descending order of their degrees
     sort(nodesInfo.begin(), nodesInfo.end(), nodesInfoCmp());
     // build a map
-    MutableContainer<unsigned int> toNodesInfo;
-
-    for (i = 0; i < nbNodes; ++i) {
+    NodeStaticProperty<unsigned int> toNodesInfo(graph);
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nbNodes; ++i) {
       nodeInfo &nInfo = nodesInfo[i];
       // initialize the value
       nInfo.val = -1;
-      toNodesInfo.set(nInfo.n.id, i);
+      toNodesInfo.setNodeValue(nInfo.n, i);
     }
 
     int currentColor = 0;
@@ -125,7 +136,7 @@ public:
           bool sameColor = false;
           node u;
           forEach(u, graph->getInOutNodes(nInfo.n)) {
-            if (nodesInfo[toNodesInfo.get(u.id)].val == currentColor) {
+            if (nodesInfo[toNodesInfo.getNodeValue(u)].val == currentColor) {
               sameColor = true;
               break;
             }
