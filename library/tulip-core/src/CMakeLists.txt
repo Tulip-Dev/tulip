@@ -81,10 +81,6 @@ SET_SOURCE_FILES_PROPERTIES(TulipFontAwesome.cpp COMPILE_FLAGS -fno-var-tracking
 SET_SOURCE_FILES_PROPERTIES(TulipMaterialDesignIcons.cpp COMPILE_FLAGS -fno-var-tracking)
 ENDIF(CMAKE_COMPILER_IS_GNUCXX)
 
-IF(TULIP_CHECK_MEMORY)
-SET(tulip_LIB_SRCS ${tulip_LIB_SRCS} MemoryChecker.cpp)
-ENDIF(TULIP_CHECK_MEMORY)
-
 IF(EMSCRIPTEN)
 SET(tulip_LIB_SRCS ${tulip_LIB_SRCS}
                     ../../../plugins/layout/DatasetTools.cpp
