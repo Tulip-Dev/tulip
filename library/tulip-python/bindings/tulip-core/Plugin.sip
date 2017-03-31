@@ -111,6 +111,17 @@ Returns the Tulip release number.
 :rtype: string
 %End
 
+  virtual std::string icon() const;
+%Docstring
+tlp.Plugin.icon()
+
+.. versionadded:: 4.11
+
+Returns the icon file path associated to the plugin.
+
+:rtype: string
+%End
+
   virtual std::string major() const;
 
   virtual std::string minor() const;
