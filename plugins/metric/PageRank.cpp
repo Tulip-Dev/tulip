@@ -52,7 +52,7 @@ static const char *paramHelp[] = {
  *  by François Queyroi, LaBRI, University Bordeaux I, France
  *
  *
-*/
+ */
 /*@}*/
 struct PageRank : public DoubleAlgorithm {
 
@@ -79,31 +79,19 @@ struct PageRank : public DoubleAlgorithm {
     if (d <= 0 || d >= 1)
       return false;
 
-    unsigned int nbNodes = graph->numberOfNodes();
+    const std::vector<node> &nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
 
     // Initialize the PageRank
-    MutableContainer<unsigned int> nodeMap;
-    std::vector<double> pr(nbNodes);
-    std::vector<double> next_pr(nbNodes);
+    NodeStaticProperty<double> pr(graph);
+    NodeStaticProperty<double> next_pr(graph);
 
-    std::vector<node> nodes(nbNodes);
-    node n;
-#ifdef _MSC_VER
-    int i = 0;
-#else
-    unsigned int i = 0;
-#endif
-    forEach(n, graph->getNodes()) {
-      nodeMap.set(n, i);
-      nodes[i] = n;
-      ++i;
-    }
     double oon = 1. / nbNodes;
 #ifdef _OPENMP
 #pragma omp parallel for
 #endif
 
-    for (i = 0; i < nbNodes; ++i)
+    for (unsigned int i = 0; i < nbNodes; ++i)
       pr[i] = oon;
 
     const double one_minus_d = (1 - d) / nbNodes;
@@ -115,10 +103,10 @@ struct PageRank : public DoubleAlgorithm {
 #pragma omp parallel for
 #endif
 
-        for (i = 0; i < nbNodes; ++i) {
+        for (unsigned int i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
-          forEach(n, graph->getInNodes(nodes[i])) n_sum += pr[nodeMap.get(n)] / graph->outdeg(n);
+          forEach(n, graph->getInNodes(nodes[i])) n_sum += pr.getNodeValue(n) / graph->outdeg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       } else {
@@ -126,10 +114,10 @@ struct PageRank : public DoubleAlgorithm {
 #pragma omp parallel for
 #endif
 
-        for (i = 0; i < nbNodes; ++i) {
+        for (unsigned int i = 0; i < nbNodes; ++i) {
           double n_sum = 0;
           node n;
-          forEach(n, graph->getInOutNodes(nodes[i])) n_sum += pr[nodeMap.get(n)] / graph->deg(n);
+          forEach(n, graph->getInOutNodes(nodes[i])) n_sum += pr.getNodeValue(n) / graph->deg(n);
           next_pr[i] = one_minus_d + d * n_sum;
         }
       }
@@ -138,8 +126,8 @@ struct PageRank : public DoubleAlgorithm {
       pr.swap(next_pr);
     }
 
-    for (i = 0; i < nbNodes; ++i)
-      result->setNodeValue(nodes[i], pr[i]);
+    // store the pr values
+    pr.copyToProperty(result);
 
     return true;
   }
