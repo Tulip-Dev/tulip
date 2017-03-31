@@ -85,12 +85,18 @@ IF(MSVC) #specific options for Visual Studio
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
+SET(TulipMinorVersionClean "${TulipMinorVersion}")
+# Use two digits for the minor version when generating the Tulip integer version number
+STRING(LENGTH "${TulipMinorVersion}" TulipMinorVersionNbDigits)
+IF(TulipMinorVersionNbDigits LESS 2)
+  SET(TulipMinorVersionClean "0${TulipMinorVersion}")
+ENDIF(TulipMinorVersionNbDigits LESS 2)
 IF(TulipReleaseVersion MATCHES "^[0-9]+$")
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionClean}${TulipReleaseVersion}")
 ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
   # just a hack to force the display of the full Tulip version in window title bar
   # when it contains non digit characters (like alpha, beta, ...)
-  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
+  SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersionClean}1")
 ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================
