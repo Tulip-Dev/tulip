@@ -64,7 +64,6 @@ By default CMake executable path is assumed to be in your PATH environment varia
 
   def importGraph(self):
 
-    print(self.dataSet)
     # get the CMake project source directory path
     cmakeProjectSourceDir = self.dataSet[cmakeProjectSourceDirParamName]
 
