@@ -3,10 +3,14 @@
 ## -----------------------------------------------------------------------------------------------
 MACRO(SET_COMPILER_OPTIONS)
 
-  # Force the use of C++11 standard
-  SET(CMAKE_CXX_STANDARD 11)
-  # Set C++11 standard support as a requirement for the compiler
-  SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+  # don't force C++11 if a standard has already been defined in the CMAKE_CXX_FLAGS variable
+  STRING(FIND "${CMAKE_CXX_FLAGS}" "-std=" STD_POS)
+  IF (${STD_POS} EQUAL -1)
+    # Force the use of C++11 standard
+    SET(CMAKE_CXX_STANDARD 11)
+    # Set C++11 standard support as a requirement for the compiler
+    SET(CMAKE_CXX_STANDARD_REQUIRED ON)
+  ENDIF (${STD_POS} EQUAL -1)
 
   STRING(COMPARE EQUAL "${CMAKE_SIZEOF_VOID_P}" "8" X64)
 
