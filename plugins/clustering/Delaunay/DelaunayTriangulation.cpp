@@ -30,17 +30,9 @@ using namespace std;
 
 static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
                                   bool originalClone) {
-  const std::vector<tlp::node>& nodes = graph->nodes();
-  unsigned int nbNodes = nodes.size();
   tlp::NodeStaticProperty<tlp::Coord> points(graph);
-  tlp::LayoutProperty *layout = graph->getProperty<tlp::LayoutProperty>("viewLayout");
-#ifdef _OPENMP
-  #pragma omp parallel for
-#endif
-
-  for (unsigned int i = 0; i < nbNodes; ++i)
-    points[i] = layout->getNodeValue(nodes[i]);
-
+  points.copyFromProperty(graph->getProperty<tlp::LayoutProperty>("viewLayout"));
+ 
   vector<pair<unsigned int, unsigned int> > edges;
   vector<vector<unsigned int> > simplices;
   bool ret = tlp::delaunayTriangulation(points, edges, simplices);
@@ -50,20 +42,17 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
     if (originalClone)
       graph->addCloneSubGraph("Original graph");
 
-    tlp::Graph *delaunaySg = graph->addCloneSubGraph("Delaunay");
-    delaunaySg->delEdges(graph->getEdges());
+    tlp::Graph *delaunaySg = graph->addSubGraph("Delaunay");
+    const std::vector<tlp::node>& nodes = graph->nodes();
+    delaunaySg->addNodes(nodes);
 
     for (size_t i = 0 ; i < edges.size() ; ++i) {
       delaunaySg->addEdge(nodes[edges[i].first], nodes[edges[i].second]);
     }
 
     if (simplicesSubGraphs) {
-      ostringstream oss;
-      unsigned int simCpt = 0;
-
       for (size_t i = 0 ; i < simplices.size() ; ++i) {
         vector<tlp::node> sNodes(simplices[i].size());
-
 #ifdef _OPENMP
         #pragma omp parallel for
 #endif
@@ -72,15 +61,8 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
           sNodes[j] = nodes[simplices[i][j]];
         }
 
-        oss.str("");
-
-        if (simplices[i].size() == 3) {
-          oss << "triangle " << simCpt++;
-        }
-        else {
-          oss << "tetrahedron " << simCpt++;
-        }
-
+        ostringstream oss;
+	oss << (simplices[i].size() == 3 ? "triangle " : "tetrahedron ") << i;
         tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(sNodes);
         simplexSg->setName(oss.str());
       }
