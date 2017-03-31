@@ -388,6 +388,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   connect(_ui->actionDelete_from_the_root_graph,SIGNAL(triggered()),this,SLOT(deleteSelectedElementsFromRootGraph()));
   connect(_ui->actionInvert_selection,SIGNAL(triggered()),this,SLOT(invertSelection()));
   connect(_ui->actionCancel_selection,SIGNAL(triggered()),this,SLOT(cancelSelection()));
+  connect(_ui->actionReverse_selected_edges, SIGNAL(triggered()), this, SLOT(reverseSelectedEdges()));
   connect(_ui->actionMake_selection_a_graph, SIGNAL(triggered()), this, SLOT(make_graph()));
   connect(_ui->actionSelect_All,SIGNAL(triggered()),this,SLOT(selectAll()));
   connect(_ui->actionUndo,SIGNAL(triggered()),this,SLOT(undo()));
@@ -865,9 +866,19 @@ void GraphPerspective::invertSelection() {
   tlp::Graph* graph = _graphs->currentGraph();
   tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
   graph->push();
-  selection->reverse();
+  selection->reverse(graph);
   Observable::unholdObservers();
 }
+
+void GraphPerspective::reverseSelectedEdges() {
+  Observable::holdObservers();
+  tlp::Graph* graph = _graphs->currentGraph();
+  tlp::BooleanProperty* selection = graph->getProperty<BooleanProperty>("viewSelection");
+  graph->push();
+  selection->reverseEdgeDirection(graph);
+  Observable::unholdObservers();
+}
+
 
 void GraphPerspective::cancelSelection() {
   Observable::holdObservers();
@@ -1083,6 +1094,7 @@ void GraphPerspective::currentGraphChanged(Graph *graph) {
   _ui->actionDelete->setEnabled(enabled);
   _ui->actionDelete_from_the_root_graph->setEnabled(enabled&&(graph!=graph->getRoot()));
   _ui->actionInvert_selection->setEnabled(enabled);
+  _ui->actionReverse_selected_edges->setEnabled(enabled);
   _ui->actionSelect_All->setEnabled(enabled);
   _ui->actionCancel_selection->setEnabled(enabled);
   _ui->actionMake_selection_a_graph->setEnabled(enabled);
