@@ -34,7 +34,8 @@
 using namespace tlp;
 
 static ExpandableGroupBox *createGroupBox(QString name, bool root = false) {
-  ExpandableGroupBox *groupBox = new ExpandableGroupBox(nullptr, name);
+  ExpandableGroupBox *groupBox = new ExpandableGroupBox(NULL, name);
+  groupBox->setObjectName(name);
   groupBox->setProperty("root", root);
   QWidget *groupWidget = new QWidget();
   groupWidget->setLayout(new QVBoxLayout);
@@ -67,12 +68,10 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
   QString category = plugin.category().c_str();
   QString group = plugin.group().c_str();
 
-  ExpandableGroupBox *categoryBox = nullptr, *groupBox = nullptr;
+  ExpandableGroupBox *categoryBox = NULL, *groupBox = NULL;
+
   foreach (ExpandableGroupBox *box, w->findChildren<ExpandableGroupBox *>()) {
-    // workaround a Qt5 bug (seems only Linux related):
-    // the box title got a '&' character added to it when algorithms are filtered
-    // resulting in the new algorithm not being inserted in the GUI
-    if (box->title().replace("&", "") == category) {
+    if (box->objectName() == category) {
       categoryBox = box;
       break;
     }
@@ -83,7 +82,7 @@ void AlgorithmRunner::insertItem(QWidget *w, const QString &name) {
 
   if (!group.isEmpty()) {
     foreach (ExpandableGroupBox *box, categoryBox->findChildren<ExpandableGroupBox *>()) {
-      if (box->title() == group) {
+      if (box->objectName() == group) {
         groupBox = box;
         break;
       }

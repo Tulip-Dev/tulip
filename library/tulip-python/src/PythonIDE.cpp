@@ -411,6 +411,7 @@ PythonIDE::PythonIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonIDE),
   _ui->setupUi(this);
   _ui->tabWidget->setDrawTabBarBgGradient(true);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
+
   _ui->mainScriptsTabWidget->clear();
   _ui->modulesTabWidget->clear();
   _ui->pluginsTabWidget->clear();
@@ -1494,7 +1495,7 @@ void PythonIDE::saveImportAllScripts() {
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     PythonCodeEditor *codeEditor = getMainScriptEditor(i);
 
-    if (codeEditor->getFileName() != "") {
+    if (!codeEditor->getFileName().isEmpty()) {
       saveScript(i, false);
     }
     else {

@@ -38,7 +38,7 @@ class GraphPerspectiveLogger : public QFrame {
 public:
   GraphPerspectiveLogger(QWidget *parent = nullptr);
   ~GraphPerspectiveLogger();
-  QPixmap icon();
+  QPixmap icon() const;
   int count() const;
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   void log(QtMsgType, const QMessageLogContext &, const QString &);
