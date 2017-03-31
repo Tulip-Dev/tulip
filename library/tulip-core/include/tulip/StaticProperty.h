@@ -53,12 +53,11 @@ public:
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
     for (unsigned int i = 0; i < this->size(); ++i)
       (*this)[i] = val;
   }
 
-  // add a value for a non existing node
+  // add a value for a newly created node
   void addNodeValue(node n, TYPE val) {
     unsigned int nPos = graph->nodePos(n);
 
@@ -66,6 +65,27 @@ public:
       this->resize(nPos + 1);
 
     setNodeValue(n, val);
+  }
+
+  // get values from a typed instance of PropertyInterface
+template<typename PROP_PTR>
+  void copyFromProperty(PROP_PTR prop) {
+    const std::vector<node>& nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
+#ifdef _OPENMP
+    #pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nbNodes; ++i)
+      (*this)[i] = prop->getNodeValue(nodes[i]);
+  }
+  
+  // copy values into a typed typed instance of PropertyInterface
+template<typename PROP_PTR>
+  void copyToProperty(PROP_PTR prop) {
+    const std::vector<node>& nodes = graph->nodes();
+    unsigned int nbNodes = nodes.size();
+    for (unsigned int i = 0; i < nbNodes; ++i)
+      prop->setNodeValue(nodes[i], (*this)[i]);
   }
 };
 
@@ -96,11 +116,11 @@ public:
 #ifdef _OPENMP
     #pragma omp parallel for
 #endif
-
     for (unsigned int i = 0; i < this->size(); ++i)
       (*this)[i] = val;
   }
 
+  // add a value for a newly created edge
   void addEdgeValue(edge n, TYPE val) {
     unsigned int nPos = graph->edgePos(n);
 
@@ -108,6 +128,27 @@ public:
       this->resize(nPos + 1);
 
     setEdgeValue(n, val);
+  }
+  
+  // get values from a typed instance of PropertyInterface
+template<typename PROP_PTR>
+  void copyFromProperty(PROP_PTR prop) {
+    const std::vector<edge>& edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+#ifdef _OPENMP
+    #pragma omp parallel for
+#endif
+    for (unsigned int i = 0; i < nbEdges; ++i)
+      (*this)[i] = prop->getEdgeValue(edges[i]);
+  }
+  
+  // copy values into a typed typed instance of PropertyInterface
+template<typename PROP_PTR>
+  void copyToProperty(PROP_PTR prop) {
+    const std::vector<edge>& edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+    for (unsigned int i = 0; i < nbEdges; ++i)
+      prop->setEdgeValue(edges[i], (*this)[i]);
   }
 };
 

@@ -55,14 +55,11 @@ bool ClusterMetric::run() {
 
   tlp::NodeStaticProperty<double> clusters(graph);
   clusteringCoefficient(graph, clusters, maxDepth, pluginProgress);
-  const std::vector<node>& nodes = graph->nodes();
-
-  for (unsigned int i = 0; i < nodes.size(); ++i)
-    result->setNodeValue(nodes[i], clusters[i]);
+  clusters.copyToProperty(result);
 
   const std::vector<edge>& edges = graph->edges();
-
-  for (unsigned int i = 0; i < edges.size(); ++i) {
+  unsigned int nbEdges = edges.size();
+  for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
     result->setEdgeValue(e, clusterGetEdgeValue(graph, clusters, e));
   }
