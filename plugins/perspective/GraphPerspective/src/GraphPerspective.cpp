@@ -227,10 +227,10 @@ GraphPerspective::~GraphPerspective() {
 }
 
 bool GraphPerspective::terminated() {
-  #ifdef TULIP_BUILD_PYTHON_COMPONENTS
-    _pythonIDE->clearPythonCodeEditors();
-    delete _pythonIDEDialog;
-  #endif
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
+  _pythonIDE->clearPythonCodeEditors();
+  delete _pythonIDEDialog;
+#endif
   return true;
 }
 
@@ -309,10 +309,12 @@ protected:
 
   virtual void showEvent(QShowEvent *e) {
     QDialog::showEvent(e);
+
     if (!_firstShow) {
       move(_pos);
       resize(_size);
     }
+
     _firstShow = false;
   }
 

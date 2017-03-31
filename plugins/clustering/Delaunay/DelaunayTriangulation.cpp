@@ -32,7 +32,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
                                   bool originalClone) {
   tlp::NodeStaticProperty<tlp::Coord> points(graph);
   points.copyFromProperty(graph->getProperty<tlp::LayoutProperty>("viewLayout"));
- 
+
   vector<pair<unsigned int, unsigned int> > edges;
   vector<vector<unsigned int> > simplices;
   bool ret = tlp::delaunayTriangulation(points, edges, simplices);
@@ -62,7 +62,7 @@ static bool delaunayTriangulation(tlp::Graph *graph, bool simplicesSubGraphs,
         }
 
         ostringstream oss;
-	oss << (simplices[i].size() == 3 ? "triangle " : "tetrahedron ") << i;
+        oss << (simplices[i].size() == 3 ? "triangle " : "tetrahedron ") << i;
         tlp::Graph *simplexSg = delaunaySg->inducedSubGraph(sNodes);
         simplexSg->setName(oss.str());
       }
