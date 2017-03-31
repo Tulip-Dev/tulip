@@ -80,8 +80,30 @@ to indicate if the import was successful.
 %End  
     
   tlp::Graph *graph;
-  tlp::DataSet *dataSet;
   tlp::PluginProgress *pluginProgress;
+  tlp::DataSet *dataSet
+  {
+%GetCode
+  // add file parameters to the dataset without the special prefix used internally by Tulip
+  std::vector<std::string> filesPrefixes;
+  filesPrefixes.push_back("file::");
+  filesPrefixes.push_back("anyfile::");
+  filesPrefixes.push_back("dir::");
+  std::pair<std::string, tlp::DataType*> entry;
+  stableForEach(entry, sipCpp->dataSet->getValues()) {
+    for (size_t i = 0 ; i < filesPrefixes.size() ; ++i) {
+      if (entry.first.length() > filesPrefixes[i].length() && entry.first.substr(0, filesPrefixes[i].length()) == filesPrefixes[i]) {
+        std::string paramName = entry.first.substr(filesPrefixes[i].length());
+        if (!sipCpp->dataSet->exist(paramName)) {
+          sipCpp->dataSet->set(paramName, *(reinterpret_cast<std::string*>(entry.second->value)));
+        }
+      }
+    }
+  }
+  sipPy = sipConvertFromType(sipCpp->dataSet, sipFindType("tlp::DataSet"), NULL);
+%End
+  };
+
 };
 
 };
