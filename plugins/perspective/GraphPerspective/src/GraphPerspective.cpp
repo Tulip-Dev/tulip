@@ -66,7 +66,7 @@
 #include <tulip/ColorScaleConfigDialog.h>
 #include <tulip/AboutTulipPage.h>
 #include <tulip/ColorScalesManager.h>
-#include <tulip/TulipSettings.h>
+#include <tulip/StableIterator.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
@@ -892,11 +892,11 @@ void GraphPerspective::deleteSelectedElements(bool fromRoot) {
   tlp::BooleanProperty *selection = graph->getProperty<BooleanProperty>("viewSelection");
 
   graph->push();
-  tlp::Iterator<edge> *itEdges = selection->getEdgesEqualTo(true, graph);
+  tlp::Iterator<edge> *itEdges = new StableIterator<edge>(selection->getEdgesEqualTo(true, graph));
   graph->delEdges(itEdges, fromRoot);
   delete itEdges;
 
-  tlp::Iterator<node> *itNodes = selection->getNodesEqualTo(true, graph);
+  tlp::Iterator<node> *itNodes = new StableIterator<node>(selection->getNodesEqualTo(true, graph));
   graph->delNodes(itNodes, fromRoot);
   delete itNodes;
 
