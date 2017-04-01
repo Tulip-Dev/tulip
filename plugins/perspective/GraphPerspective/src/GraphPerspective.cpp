@@ -238,10 +238,21 @@ GraphPerspective::~GraphPerspective() {
 }
 
 bool GraphPerspective::terminated() {
+  if (_graphs->needsSaving()) {
+    QMessageBox::StandardButton answer =
+        QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you want to save your changes?"),
+                              QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+
+    if ((answer == QMessageBox::Yes && !save()) || (answer == QMessageBox::Cancel)) {
+      return false;
+    }
+  }
+
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE->clearPythonCodeEditors();
   delete _pythonIDEDialog;
 #endif
+
   return true;
 }
 
@@ -270,20 +281,6 @@ bool GraphPerspective::eventFilter(QObject *obj, QEvent *ev) {
 
   if (obj == _ui->loggerFrame && ev->type() == QEvent::MouseButtonPress)
     showLogger();
-
-  if (obj == _mainWindow && ev->type() == QEvent::Close) {
-    if (_graphs->needsSaving()) {
-      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"),
-                                                                 trUtf8("The project has been modified. Do you "
-                                                                        "want to save your changes?"),
-                                                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
-
-      if ((answer == QMessageBox::Yes && !save()) || (answer == QMessageBox::Cancel)) {
-        ev->ignore();
-        return true;
-      }
-    }
-  }
 
   return false;
 }
@@ -827,10 +824,11 @@ bool GraphPerspective::saveAs(const QString &path) {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE->savePythonFilesAndWriteToProject();
 #endif
-  _project->write(path, &progress);
-  TulipSettings::instance().addToRecentDocuments(path);
+  bool ret = _project->write(path, &progress);
+  if (ret)
+    TulipSettings::instance().addToRecentDocuments(path);
 
-  return true;
+  return ret;
 }
 
 void GraphPerspective::open(QString fileName) {
