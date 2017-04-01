@@ -227,14 +227,14 @@ GraphPerspective::~GraphPerspective() {
 }
 
 bool GraphPerspective::terminated() {
-    if(_graphs->needsSaving()) {
-      QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you want to save your changes?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
+  if(_graphs->needsSaving()) {
+    QMessageBox::StandardButton answer = QMessageBox::question(_mainWindow, trUtf8("Save"), trUtf8("The project has been modified. Do you want to save your changes?"),QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel | QMessageBox::Escape);
 
-      if ((answer == QMessageBox::Yes && !save()) ||
-          (answer == QMessageBox::Cancel)) {
-        return false;
-      }
+    if ((answer == QMessageBox::Yes && !save()) ||
+        (answer == QMessageBox::Cancel)) {
+      return false;
     }
+  }
 
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
   _pythonIDE->clearPythonCodeEditors();
@@ -785,8 +785,9 @@ bool GraphPerspective::saveAs(const QString& path) {
   _pythonIDE->savePythonFilesAndWriteToProject();
 #endif
   bool ret = _project->write(path,&progress);
+
   if(ret)
-      TulipSettings::instance().addToRecentDocuments(path);
+    TulipSettings::instance().addToRecentDocuments(path);
 
   return ret;
 }
