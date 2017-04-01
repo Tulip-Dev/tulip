@@ -334,9 +334,5 @@ int main(int argc,char **argv) {
   QGlBufferManager::clearBuffers();
   GlMainWidget::clearFirstQGLWidget();
 
-
-#ifdef MEMORYCHECKER_ON
-  memory_checker_print_report();
-#endif // MEMORYCHECKER_ON
   return result;
 }
