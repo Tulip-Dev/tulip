@@ -189,10 +189,6 @@ int main(int argc, char **argv) {
 
   int result = tulip_agent.exec();
 
-#ifdef MEMORYCHECKER_ON
-  memory_checker_print_report();
-#endif // MEMORYCHECKER_ON
-
 #if (QT_VERSION >= QT_VERSION_CHECK(5, 0, 0))
   QFile f(QDir(QStandardPaths::standardLocations(QStandardPaths::TempLocation).at(0)).filePath("tulip.lck"));
 #else

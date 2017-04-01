@@ -25,32 +25,7 @@
 #include <tulip/TulipProject.h>
 
 TulipPerspectiveProcessMainWindow::TulipPerspectiveProcessMainWindow(QString title, QWidget *parent)
-    : QMainWindow(parent), _project(nullptr), _title(title) {
-#ifdef MEMORYCHECKER_ON
-  QAction *a1 = new QAction(this);
-  a1->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_C));
-  a1->setShortcutContext(Qt::ApplicationShortcut);
-  connect(a1, SIGNAL(triggered()), this, SLOT(clearMemoryChecker()));
-  addAction(a1);
-
-  QAction *a2 = new QAction(this);
-  a2->setShortcut(QKeySequence(Qt::CTRL + Qt::ALT + Qt::Key_P));
-  a2->setShortcutContext(Qt::ApplicationShortcut);
-  connect(a2, SIGNAL(triggered()), this, SLOT(printMemoryChecker()));
-  addAction(a2);
-#endif // MEMORYCHECKER_ON
-}
-
-void TulipPerspectiveProcessMainWindow::printMemoryChecker() {
-#ifdef MEMORYCHECKER_ON
-  memory_checker_print_report();
-#endif // MEMORYCHECKER_ON
-}
-
-void TulipPerspectiveProcessMainWindow::clearMemoryChecker() {
-#ifdef MEMORYCHECKER_ON
-  memory_checker_clear_report();
-#endif // MEMORYCHECKER_ON
+    : QMainWindow(parent), _project(NULL), _title(title) {
 }
 
 void TulipPerspectiveProcessMainWindow::closeEvent(QCloseEvent *event) {

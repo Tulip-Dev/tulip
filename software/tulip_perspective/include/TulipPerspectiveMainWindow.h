@@ -41,8 +41,6 @@ public:
 signals:
 
 public slots:
-  void clearMemoryChecker();
-  void printMemoryChecker();
   void projectFileChanged(const QString &projectFile = QString(""));
 
 protected:
