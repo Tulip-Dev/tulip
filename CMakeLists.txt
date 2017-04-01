@@ -155,22 +155,10 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/cmake/cmake_uninstall.cmake.in" "${C
 ADD_CUSTOM_TARGET(uninstall COMMAND ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake VERBATIM)
 
 ## ========================================================
-## Profiling
-## ========================================================
-SET(TULIP_BUILD_CODE_COVERAGE OFF CACHE BOOL "Do you want to build for code coverage ? [OFF|ON]")
-
-## ========================================================
 ## Compiler-specific options
 ## ========================================================
 
 SET_COMPILER_OPTIONS()
-
-IF(TULIP_BUILD_CODE_COVERAGE)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")
-  SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-  SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fprofile-arcs -ftest-coverage")
-ENDIF()
 
 ## ========================================================
 ## CORE ONLY
