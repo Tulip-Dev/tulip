@@ -51,11 +51,15 @@ class TLP_PYTHON_SCOPE PythonIDE : public QWidget {
   tlp::TulipProject *_project;
   tlp::GraphHierarchiesModel *_graphsModel;
   bool _scriptStopped;
-  bool _runningScript;
 
   QMap<QString, QString> _editedPluginsClassName;
   QMap<QString, QString> _editedPluginsType;
   QMap<QString, QString> _editedPluginsName;
+
+  QWidget *_scriptEditorsWidget, *_scriptControlWidget;
+  QWidget *_pluginEditorsWidget, *_pluginControlWidget;
+  QWidget *_moduleEditorsWidget, *_moduleControlWidget;
+
 
   bool loadPythonPlugin(const QString &fileName, bool clear=true);
   bool loadPythonPluginFromSrcCode(const QString &moduleName, const QString &pluginSrcCode, bool clear=true);
@@ -83,9 +87,9 @@ public :
   void setGraphsModel(tlp::GraphHierarchiesModel* model);
   void clearPythonCodeEditors();
 
-  bool isRunningScript() const {
-    return _runningScript;
-  }
+  void setScriptEditorsVisible(bool visible);
+  void setPluginEditorsVisible(bool visible);
+  void setModuleEditorsVisible(bool visible);
 
 protected:
 
