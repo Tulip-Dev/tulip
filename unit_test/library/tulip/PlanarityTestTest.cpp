@@ -133,12 +133,12 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
   tlp::warning() << "===========MetaGraphsEmbedding=======================" << endl;
   graph = tlp_loadGraph(GRAPHPATH + "planar/grid1010.tlp");
   Graph * g = graph->addCloneSubGraph();
-  set<node> toGroup;
+  vector<node> toGroup;
   Iterator<node> * itn = g->getNodes();
 
   for(unsigned int i = 0; i < 10; ++i) {
     assert(itn->hasNext());
-    toGroup.insert(itn->next());
+    toGroup.push_back(itn->next());
   }
 
   g->createMetaNode(toGroup);
@@ -146,16 +146,16 @@ void PlanarityTestTest::planarMetaGraphsEmbedding() {
 
   for(unsigned int i = 0; i < 10; ++i) {
     assert(itn->hasNext());
-    toGroup.insert(itn->next());
+    toGroup.push_back(itn->next());
   }
 
   node meta2 = g->createMetaNode(toGroup);
   toGroup.clear();
-  toGroup.insert(meta2);
+  toGroup.push_back(meta2);
 
   for(unsigned int i = 0; i < 10; ++i) {
     assert(itn->hasNext());
-    toGroup.insert(itn->next());
+    toGroup.push_back(itn->next());
   }
 
   g->createMetaNode(toGroup, false);
