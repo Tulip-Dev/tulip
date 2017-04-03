@@ -1937,7 +1937,8 @@ void PythonIDE::setScriptEditorsVisible(bool visible) {
   if (!visible && _ui->tabWidget->indexOf(_scriptEditorsWidget) != -1) {
     _ui->tabWidget->removeTab(0);
     _ui->stackedWidget->removeWidget(_scriptControlWidget);
-  } else if (visible && _ui->tabWidget->indexOf(_scriptEditorsWidget) == -1) {
+  }
+  else if (visible && _ui->tabWidget->indexOf(_scriptEditorsWidget) == -1) {
     _ui->tabWidget->insertTab(0, _scriptEditorsWidget, "Scripts editor");
     _ui->stackedWidget->insertWidget(0, _scriptControlWidget);
   }
@@ -1947,15 +1948,19 @@ void PythonIDE::setPluginEditorsVisible(bool visible) {
   if (!visible && _ui->tabWidget->indexOf(_pluginEditorsWidget) != -1) {
     if (_ui->tabWidget->indexOf(_scriptEditorsWidget) != - 1) {
       _ui->tabWidget->removeTab(1);
-    } else {
+    }
+    else {
       _ui->tabWidget->removeTab(0);
     }
+
     _ui->stackedWidget->removeWidget(_pluginControlWidget);
-  } else if (visible && _ui->tabWidget->indexOf(_pluginEditorsWidget) == -1) {
+  }
+  else if (visible && _ui->tabWidget->indexOf(_pluginEditorsWidget) == -1) {
     if (_ui->tabWidget->indexOf(_scriptEditorsWidget) != -1) {
       _ui->tabWidget->insertTab(1, _pluginEditorsWidget, "Plugins editor");
       _ui->stackedWidget->insertWidget(1, _pluginControlWidget);
-    } else {
+    }
+    else {
       _ui->tabWidget->insertTab(0, _pluginEditorsWidget, "Plugins editor");
       _ui->stackedWidget->insertWidget(0, _pluginControlWidget);
     }
@@ -1966,7 +1971,8 @@ void PythonIDE::setModuleEditorsVisible(bool visible) {
   if (!visible && _ui->tabWidget->indexOf(_moduleEditorsWidget) != -1) {
     _ui->tabWidget->removeTab(_ui->tabWidget->count()-1);
     _ui->stackedWidget->removeWidget(_moduleControlWidget);
-  } else if (visible && _ui->tabWidget->indexOf(_moduleEditorsWidget) == -1) {
+  }
+  else if (visible && _ui->tabWidget->indexOf(_moduleEditorsWidget) == -1) {
     _ui->tabWidget->insertTab(_ui->tabWidget->count(), _moduleEditorsWidget, "Modules editor");
     _ui->stackedWidget->insertWidget(_ui->stackedWidget->count(), _moduleControlWidget);
   }

@@ -151,23 +151,27 @@ bool LinkCommunities::run() {
 
   const std::vector<node>& nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = nodes[i];
     std::set<double> around;
     edge e;
     forEach(e,graph->getInOutEdges(n)) {
       double val = result->getEdgeValue(e);
+
       if (val)
         around.insert(val);
     }
     result->setNodeValue(n,around.size());
   }
+
   return true;
 }
 //==============================================================================================================
 void LinkCommunities::createDualGraph(const std::vector<edge>& edges) {
   unsigned int nbEdges = edges.size();
   dual.reserveNodes(nbEdges);
+
   for (unsigned int i = 0; i < nbEdges; ++i) {
     node dn = dual.addNode();
     const std::pair<node, node> eEnds = graph->ends(edges[i]);
@@ -176,20 +180,22 @@ void LinkCommunities::createDualGraph(const std::vector<edge>& edges) {
     edge ee;
     forEach(ee, graph->getInOutEdges(src)) {
       unsigned int eePos = graph->edgePos(ee);
+
       if (eePos < i) {
-	if(!dual.existEdge(dn, dual[eePos], false).isValid()) {
-	  edge de = dual.addEdge(dn, dual[eePos]);
-	  mapKeystone.set(de.id, src);
-	}
+        if(!dual.existEdge(dn, dual[eePos], false).isValid()) {
+          edge de = dual.addEdge(dn, dual[eePos]);
+          mapKeystone.set(de.id, src);
+        }
       }
     }
     forEach(ee, graph->getInOutEdges(tgt)) {
       unsigned int eePos = graph->edgePos(ee);
+
       if (eePos < i) {
-	if(!dual.existEdge(dn, dual[eePos], false).isValid()) {
-	  edge de = dual.addEdge(dn, dual[eePos]);
-	  mapKeystone.set(de.id,tgt);
-	}
+        if(!dual.existEdge(dn, dual[eePos], false).isValid()) {
+          edge de = dual.addEdge(dn, dual[eePos]);
+          mapKeystone.set(de.id,tgt);
+        }
       }
     }
   }
@@ -252,7 +258,7 @@ double LinkCommunities::getSimilarity(edge ee, const std::vector<edge>& edges) {
 }
 //==============================================================================================================
 double LinkCommunities::getWeightedSimilarity(tlp::edge ee,
-					      const std::vector<edge>& edges) {
+    const std::vector<edge>& edges) {
   node key = mapKeystone.get(ee.id);
   const std::pair<node, node> eeEnds = dual.ends(ee);
   edge e1=edges[eeEnds.first.id];
@@ -330,11 +336,11 @@ double LinkCommunities::getWeightedSimilarity(tlp::edge ee,
 }
 //==============================================================================================================
 double LinkCommunities::computeAverageDensity(double threshold,
-					      const std::vector<edge>& edges) {
+    const std::vector<edge>& edges) {
   double d = 0.0;
   NodeProperty<bool> dn_visited;
 #ifdef _OPENMP
-#pragma omp critical(DN_VISITED)
+  #pragma omp critical(DN_VISITED)
 #endif
   dual.alloc(dn_visited);
   dn_visited.setAll(false);
@@ -402,8 +408,9 @@ double LinkCommunities::computeAverageDensity(double threshold,
       }
     }
   }
+
 #ifdef _OPENMP
-#pragma omp critical(DN_VISITED)
+  #pragma omp critical(DN_VISITED)
 #endif
   dual.free(dn_visited);
 
@@ -462,11 +469,12 @@ void LinkCommunities::setEdgeValues(double threshold, bool group_isthmus, const 
       val += 1;
     }
   }
+
   dual.free(dn_visited);
 }
 //==============================================================================================================
 double LinkCommunities::findBestThreshold(unsigned int numberOfSteps,
-					  const std::vector<edge>& edges) {
+    const std::vector<edge>& edges) {
   double maxD=-2;
   double threshold = 0.0;
 
@@ -474,12 +482,14 @@ double LinkCommunities::findBestThreshold(unsigned int numberOfSteps,
   double max = -1.0;
 
   unsigned int sz = dual.numberOfEdges();
+
   for(unsigned int i = 0; i < sz; ++i) {
     double value = similarity[dual(i)];
-      if (value < min)
-        min = value;
-      else if (value > max)
-        max = value;
+
+    if (value < min)
+      min = value;
+    else if (value > max)
+      max = value;
   }
 
   double deltaThreshold = (max-min)/double(numberOfSteps);
