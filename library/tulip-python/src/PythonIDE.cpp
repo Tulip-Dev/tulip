@@ -407,7 +407,7 @@ static QString getTulipPythonPluginSkeleton(const QString &pluginClassName, cons
 PythonIDE::PythonIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonIDE),
   _pythonInterpreter(PythonInterpreter::getInstance()),
   _dontTreatFocusIn(false), _project(NULL), _graphsModel(NULL),
-  _scriptStopped(false), _runningScript(false) {
+  _scriptStopped(false) {
   _ui->setupUi(this);
   _ui->tabWidget->setDrawTabBarBgGradient(true);
   _ui->tabWidget->setTextColor(QColor(200, 200, 200));
@@ -420,6 +420,15 @@ PythonIDE::PythonIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonIDE),
   sizes.push_back(550);
   sizes.push_back(150);
   _ui->splitter->setSizes(sizes);
+
+  _scriptEditorsWidget = _ui->tabWidget->widget(0);
+  _scriptControlWidget = _ui->stackedWidget->widget(0);
+
+  _pluginEditorsWidget = _ui->tabWidget->widget(1);
+  _pluginControlWidget = _ui->stackedWidget->widget(1);
+
+  _moduleEditorsWidget = _ui->tabWidget->widget(2);
+  _moduleControlWidget = _ui->stackedWidget->widget(2);
 
   connect(_pythonInterpreter, SIGNAL(scriptExecutionPaused()), this, SLOT(currentScriptPaused()));
   _pythonInterpreter->runString(updateVisualizationFunc);
@@ -472,6 +481,7 @@ PythonIDE::PythonIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonIDE),
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
   APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
+
 }
 
 PythonIDE::~PythonIDE() {
@@ -1567,8 +1577,6 @@ void PythonIDE::executeCurrentScript() {
     return;
   }
 
-  _runningScript = true;
-
   _ui->consoleWidget->clear();
   _pythonInterpreter->clearOutputBuffers();
   clearErrorIndicators();
@@ -1640,7 +1648,6 @@ void PythonIDE::executeCurrentScript() {
   _pythonInterpreter->setDefaultSIGINTHandler();
 
   _scriptStopped = false;
-  _runningScript = false;
 
 }
 
@@ -1898,4 +1905,43 @@ void PythonIDE::clearPythonCodeEditors() {
     _ui->modulesTabWidget->removeTab(i);
   }
   _ui->consoleWidget->clear();
+}
+
+void PythonIDE::setScriptEditorsVisible(bool visible) {
+  if (!visible && _ui->tabWidget->indexOf(_scriptEditorsWidget) != -1) {
+    _ui->tabWidget->removeTab(0);
+    _ui->stackedWidget->removeWidget(_scriptControlWidget);
+  } else if (visible && _ui->tabWidget->indexOf(_scriptEditorsWidget) == -1) {
+    _ui->tabWidget->insertTab(0, _scriptEditorsWidget, "Scripts editor");
+    _ui->stackedWidget->insertWidget(0, _scriptControlWidget);
+  }
+}
+
+void PythonIDE::setPluginEditorsVisible(bool visible) {
+  if (!visible && _ui->tabWidget->indexOf(_pluginEditorsWidget) != -1) {
+    if (_ui->tabWidget->indexOf(_scriptEditorsWidget) != - 1) {
+      _ui->tabWidget->removeTab(1);
+    } else {
+      _ui->tabWidget->removeTab(0);
+    }
+    _ui->stackedWidget->removeWidget(_pluginControlWidget);
+  } else if (visible && _ui->tabWidget->indexOf(_pluginEditorsWidget) == -1) {
+    if (_ui->tabWidget->indexOf(_scriptEditorsWidget) != -1) {
+      _ui->tabWidget->insertTab(1, _pluginEditorsWidget, "Plugins editor");
+      _ui->stackedWidget->insertWidget(1, _pluginControlWidget);
+    } else {
+      _ui->tabWidget->insertTab(0, _pluginEditorsWidget, "Plugins editor");
+      _ui->stackedWidget->insertWidget(0, _pluginControlWidget);
+    }
+  }
+}
+
+void PythonIDE::setModuleEditorsVisible(bool visible) {
+  if (!visible && _ui->tabWidget->indexOf(_moduleEditorsWidget) != -1) {
+    _ui->tabWidget->removeTab(_ui->tabWidget->count()-1);
+    _ui->stackedWidget->removeWidget(_moduleControlWidget);
+  } else if (visible && _ui->tabWidget->indexOf(_moduleEditorsWidget) == -1) {
+    _ui->tabWidget->insertTab(_ui->tabWidget->count(), _moduleEditorsWidget, "Modules editor");
+    _ui->stackedWidget->insertWidget(_ui->stackedWidget->count(), _moduleControlWidget);
+  }
 }
