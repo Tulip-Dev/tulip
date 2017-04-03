@@ -539,24 +539,6 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   _pythonIDE->setGraphsModel(_graphs);
   tlp::PluginLister::instance()->addListener(this);
   _pythonIDE->setProject(_project);
-
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" +
-                                          PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
-  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
-
-  PythonInterpreter::getInstance()->setErrorOutputEnabled(false);
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 0, 0))
-
-  if (PythonInterpreter::getInstance()->runString("import PyQt4")) {
-    APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/PyQt4.api");
-  }
-
-#endif
-
-  PythonInterpreter::getInstance()->setErrorOutputEnabled(true);
 #endif
 
   if (!_externalFile.isEmpty() && QFileInfo(_externalFile).exists()) {
