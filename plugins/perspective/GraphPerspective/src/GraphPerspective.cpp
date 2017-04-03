@@ -398,6 +398,7 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   qInstallMsgHandler(graphPerspectiveLogger);
 #endif
 
+  connect(_ui->workspaceButton, SIGNAL(clicked()), this, SLOT(workspaceButtonClicked()));
   connect(_ui->workspace,SIGNAL(addPanelRequest(tlp::Graph*)),this,SLOT(createPanel(tlp::Graph*)));
   connect(_ui->workspace,SIGNAL(focusedPanelSynchronized()),this,SLOT(focusedPanelSynchronized()));
   connect(_graphs,SIGNAL(currentGraphChanged(tlp::Graph*)),this,SLOT(currentGraphChanged(tlp::Graph*)));
@@ -1424,6 +1425,10 @@ void GraphPerspective::showAboutTulipPage() {
     aboutDialog.resize(800, 600);
     aboutDialog.exec();
   }
+}
+
+void GraphPerspective::workspaceButtonClicked() {
+  _ui->workspaceButton->setChecked(true);
 }
 
 PLUGIN(GraphPerspective)

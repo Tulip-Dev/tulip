@@ -157,6 +157,7 @@ protected slots:
   void changeSynchronization(bool);
   void openExternalFile();
   void showHideSideBar();
+  void workspaceButtonClicked();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
