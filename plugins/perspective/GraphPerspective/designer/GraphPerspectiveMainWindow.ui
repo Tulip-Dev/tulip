@@ -397,7 +397,7 @@ QToolButton:pressed {
           </size>
          </property>
          <property name="toolTip">
-          <string>Display the Tulip-Python IDE for developping scripts and plugins to execute on the imported graphs</string>
+          <string>Display the Tulip-Python IDE for developing scripts and plugins to execute on the imported graphs</string>
          </property>
          <property name="text">
           <string>Develop</string>
