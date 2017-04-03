@@ -468,6 +468,11 @@ PythonIDE::PythonIDE(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonIDE),
   connect(_ui->modulesTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeModuleTabRequested(int)));
   connect(_ui->mainScriptsTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closeScriptTabRequested(int)));
   connect(_ui->pluginsTabWidget, SIGNAL(tabAboutToBeDeleted(int)), this, SLOT(closePluginTabRequested(int)));
+
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulip.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/Python-" + PythonInterpreter::getInstance()->getPythonVersionStr() + ".api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipogl.api");
+  APIDataBase::getInstance()->loadApiFile(tlpStringToQString(tlp::TulipShareDir) + "/apiFiles/tulipgui.api");
 }
 
 PythonIDE::~PythonIDE() {
