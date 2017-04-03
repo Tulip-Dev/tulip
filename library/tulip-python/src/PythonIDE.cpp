@@ -590,7 +590,7 @@ void PythonIDE::newFileModule() {
 
 void PythonIDE::newStringModule() {
   bool ok;
-  QString moduleName = QInputDialog::getText(NULL, "New string module  ", "module name :", QLineEdit::Normal,"", &ok);
+  QString moduleName = QInputDialog::getText(this, "New string module  ", "module name :", QLineEdit::Normal,"", &ok);
 
   if (ok && !moduleName.isEmpty()) {
     if (!moduleName.endsWith(".py"))
@@ -1548,7 +1548,7 @@ void PythonIDE::executeCurrentScript() {
   Graph *graph = _graphsModel->currentGraph();
 
   if (!graph) {
-    QMessageBox::information(getCurrentMainScriptEditor(), "Script execution not allowed", "A graph to process must first be selected before running the script.");
+    QMessageBox::information(this, "Script execution not allowed", "A graph to process must first be selected before running the script.");
     return;
   }
 
