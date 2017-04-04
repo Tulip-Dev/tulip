@@ -55,20 +55,6 @@ public :
    * * If sg is NULL, the graph given when creating the property is considered.
    */
   void reverseEdgeDirection(Graph *sg=NULL);
-
-  /**
-   * Returns an iterator through all nodes belonging to g
-   * whose associated value is equal to val.
-   * If g is NULL, the graph given when creating the property is considered.
-   */
-  Iterator<node> *getNodesEqualTo(const bool val, const Graph *g = NULL);
-
-  /**
-   * Returns an iterator through all edges belonging to g
-   * whose associated value is equal to val.
-   * If g is NULL, the graph given when creating the property is considered.
-   */
-  Iterator<edge> *getEdgesEqualTo(const bool val, const Graph *g = NULL);
 };
 
 /**
