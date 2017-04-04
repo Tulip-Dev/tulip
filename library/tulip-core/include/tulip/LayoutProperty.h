@@ -285,10 +285,12 @@ public:
   //unsigned int crossingNumber() const;
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node, const Coord &v);
-  virtual void setEdgeValue(const edge, const std::vector<Coord> &v);
-  virtual void setAllNodeValue(const Coord &v, const Graph *graph = NULL);
-  virtual void setAllEdgeValue(const std::vector<Coord> &v, const Graph *graph = NULL);
+  virtual void setNodeValue(const node,
+			    tlp::StoredType<Coord>::ReturnedConstValue v);
+  virtual void setEdgeValue(const edge, tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v);
+  virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
+			       const Graph *graph = NULL);
+  virtual void setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph = NULL);
 
 protected:
   virtual void clone_handler(AbstractProperty<tlp::PointType, tlp::LineType> &);

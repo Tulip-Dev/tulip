@@ -169,7 +169,7 @@ void SizeProperty::resetMinMax() {
   max.clear();
 }
 //=================================================================================
-void SizeProperty::setNodeValue(const node n, const Size &v) {
+void SizeProperty::setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v) {
   TLP_HASH_MAP<unsigned int, bool>::const_iterator it = minMaxOk.begin();
 
   if (it != minMaxOk.end()) {
@@ -194,7 +194,7 @@ void SizeProperty::setNodeValue(const node n, const Size &v) {
   AbstractSizeProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void SizeProperty::setAllNodeValue(const Size &v, const Graph *graph) {
+void SizeProperty::setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v, const Graph *graph) {
   resetMinMax();
   AbstractSizeProperty::setAllNodeValue(v, graph);
 }

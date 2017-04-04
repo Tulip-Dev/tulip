@@ -49,10 +49,14 @@ public :
   const std::string& getTypename() const {
     return propertyTypename;
   }
-  virtual void setNodeValue(const node n, const int &v);
-  virtual void setEdgeValue(const edge e, const int &v);
-  virtual void setAllNodeValue(const int &v, const Graph *graph = NULL);
-  virtual void setAllEdgeValue(const int &v, const Graph *graph = NULL);
+  virtual void setNodeValue(const node n,
+			    tlp::StoredType<int>::ReturnedConstValue v);
+  virtual void setEdgeValue(const edge e,
+			    tlp::StoredType<int>::ReturnedConstValue v);
+  virtual void setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v,
+			       const Graph *graph = NULL);
+  virtual void setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v,
+			       const Graph *graph = NULL);
 
   int compare(const node n1, const node n2) const;
   int compare(const edge e1, const edge e2) const;

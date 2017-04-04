@@ -52,22 +52,24 @@ PropertyInterface* IntegerProperty::clonePrototype(Graph * g, const std::string&
   return p;
 }
 //=================================================================================
-void IntegerProperty::setNodeValue(const node n, const int &v) {
+void IntegerProperty::setNodeValue(const node n,
+				   tlp::StoredType<int>::ReturnedConstValue v) {
   IntegerMinMaxProperty::updateNodeValue(n, v);
   IntegerMinMaxProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void IntegerProperty::setEdgeValue(const edge e, const int &v) {
+void IntegerProperty::setEdgeValue(const edge e,
+				   tlp::StoredType<int>::ReturnedConstValue v) {
   IntegerMinMaxProperty::updateEdgeValue(e, v);
   IntegerMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void IntegerProperty::setAllNodeValue(const int &v, const Graph *graph) {
+void IntegerProperty::setAllNodeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
   IntegerMinMaxProperty::updateAllNodesValues(v);
   IntegerMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void IntegerProperty::setAllEdgeValue(const int &v, const Graph *graph) {
+void IntegerProperty::setAllEdgeValue(tlp::StoredType<int>::ReturnedConstValue v, const Graph *graph) {
   IntegerMinMaxProperty::updateAllEdgesValues(v);
   IntegerMinMaxProperty::setAllEdgeValue(v, graph);
 }

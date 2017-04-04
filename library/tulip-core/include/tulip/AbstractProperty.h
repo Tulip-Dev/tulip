@@ -62,13 +62,13 @@ public:
    * @brief Gets the default node value of the property.
    * @return The default value of nodes.
    */
-  virtual typename Tnode::RealType getNodeDefaultValue() const;
+  typename Tnode::RealType getNodeDefaultValue() const;
 
   /**
    * @brief Gets the default edge value of the property.
    * @return The default value of edges.
    **/
-  virtual typename Tedge::RealType getEdgeDefaultValue() const;
+  typename Tedge::RealType getEdgeDefaultValue() const;
 
   /**
    * @brief Returns the value associated with the node n in this property.
@@ -77,7 +77,7 @@ public:
    * @param n The node for which we want to get the value of the property.
    * @return :StoredType< Tnode::RealType >::ReturnedConstValue The value of the property for this node.
    **/
-  virtual typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue getNodeValue(const node n ) const;
+  typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue getNodeValue(const node n ) const;
 
   /**
    * @brief Returns the value associated to the edge e in this property.
@@ -86,7 +86,7 @@ public:
    * @param e The edge for which we want to get the value of the property.
    * @return :StoredType< Tedge::RealType >::ReturnedConstValue The value of the property for this edge.
    **/
-  virtual typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue getEdgeValue(const edge e) const;
+  typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue getEdgeValue(const edge e) const;
 
   /**
    * @brief Sets the value of a node and notify the observers of a modification.
@@ -94,7 +94,7 @@ public:
    * @param n The node to set the value of.
    * @param v The value to affect for this node.
    **/
-  virtual void setNodeValue(const node n, const typename Tnode::RealType &v);
+  virtual void setNodeValue(const node n, typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v);
 
   /**
    * @brief Set the value of an edge and notify the observers of a modification.
@@ -102,7 +102,7 @@ public:
    * @param e The edge to set the value of.
    * @param v The value to affect for this edge.
    **/
-  virtual void setEdgeValue(const edge e, const typename Tedge::RealType &v);
+  virtual void setEdgeValue(const edge e, typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v);
 
   /**
    * @brief Sets the value of all nodes and notify the observers.
@@ -115,7 +115,7 @@ public:
    * @warning If the provided graph is not a descendant of the one associated to that property, no node value will be modified in it.
    *
    **/
-  virtual void setAllNodeValue(const typename Tnode::RealType &v, const Graph *graph = NULL);
+  virtual void setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph = NULL);
 
   /**
    * @brief Sets the value of all edges and notify the observers.
@@ -128,7 +128,7 @@ public:
    * @param v The value to set to all edges.
    *
    **/
-  virtual void setAllEdgeValue(const typename Tedge::RealType &v, const Graph *graph = NULL);
+  virtual void setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph = NULL);
   //=================================================================================
 
   /**
@@ -137,7 +137,7 @@ public:
    * @param n The node to reset the value of.
    *
    **/
-  virtual void erase(const node n) {
+  inline void erase(const node n) {
     setNodeValue(n, nodeDefaultValue);
   }
   //=================================================================================
@@ -148,7 +148,7 @@ public:
    * @param e The edge to reset the value of.
    *
    **/
-  virtual void erase(const edge e) {
+  inline void erase(const edge e) {
     setEdgeValue(e, edgeDefaultValue);
   }
   //=================================================================================
@@ -163,7 +163,7 @@ public:
    * @param prop The property to copy the values from.
    * @return This property with the values copied.
    */
-  virtual AbstractProperty<Tnode,Tedge,Tprop>& operator =(AbstractProperty<Tnode,Tedge,Tprop> &prop) {
+  virtual AbstractProperty<Tnode,Tedge,Tprop>& operator=(AbstractProperty<Tnode,Tedge,Tprop> &prop) {
     if (this!= &prop) {
       if (Tprop::graph == NULL) Tprop::graph = prop.Tprop::graph;
 
