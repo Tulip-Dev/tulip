@@ -62,7 +62,7 @@ public:
    * set the value associated to i
    */
   void set(const unsigned int i,
-	   typename StoredType<TYPE>::ReturnedConstValue value);
+           typename StoredType<TYPE>::ReturnedConstValue value);
   /**
    * add val to the value associated to i
    */

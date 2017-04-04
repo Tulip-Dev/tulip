@@ -286,10 +286,10 @@ public:
 
   // redefinition of some AbstractProperty methods
   virtual void setNodeValue(const node,
-			    tlp::StoredType<Coord>::ReturnedConstValue v);
+                            tlp::StoredType<Coord>::ReturnedConstValue v);
   virtual void setEdgeValue(const edge, tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v);
   virtual void setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v,
-			       const Graph *graph = NULL);
+                               const Graph *graph = NULL);
   virtual void setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph = NULL);
 
 protected:

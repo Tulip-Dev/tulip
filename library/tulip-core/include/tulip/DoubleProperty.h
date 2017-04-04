@@ -50,13 +50,13 @@ public :
   }
 
   virtual void setNodeValue(const node n,
-			    tlp::StoredType<double>::ReturnedConstValue v);
+                            tlp::StoredType<double>::ReturnedConstValue v);
   virtual void setEdgeValue(const edge e,
-			    tlp::StoredType<double>::ReturnedConstValue v);
+                            tlp::StoredType<double>::ReturnedConstValue v);
   virtual void setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v,
-			       const Graph* graph = NULL);
+                               const Graph* graph = NULL);
   virtual void setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v,
-			       const Graph *graph = NULL);
+                               const Graph *graph = NULL);
 
   enum PredefinedMetaValueCalculator {NO_CALC = 0, AVG_CALC = 1, SUM_CALC = 2,
                                       MAX_CALC = 3, MIN_CALC = 4
