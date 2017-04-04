@@ -79,45 +79,6 @@ int getNumIterators() {
 
 #endif
 
-
-//============================================================
-SGraphNodeIterator::SGraphNodeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val)
-  :FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
-  it=sg->getNodes();
-#if !defined(NDEBUG) && !defined(_OPENMP)
-  sg->addListener(this);
-#endif
-  // anticipate first iteration
-  prepareNext();
-}
-SGraphNodeIterator::~SGraphNodeIterator() {
-#if !defined(NDEBUG) && !defined(_OPENMP)
-  sg->removeListener(this);
-#endif
-  delete it;
-}
-void SGraphNodeIterator::prepareNext() {
-  while(it->hasNext()) {
-    curNode = it->next();
-
-    if (_filter.get(curNode) == value)
-      return;
-  }
-
-  // set curNode as invalid
-  curNode = node();
-}
-node SGraphNodeIterator::next() {
-  assert(curNode.isValid());
-  // we are already pointing to the next
-  node tmp = curNode;
-  // anticipate next iteration
-  prepareNext();
-  return tmp;
-}
-bool SGraphNodeIterator::hasNext() {
-  return (curNode.isValid());
-}
 //===================================================================
 OutNodesIterator::OutNodesIterator(const GraphView *sG, node n)
   : FactorNodeIterator(sG) {
@@ -200,44 +161,6 @@ node InOutNodesIterator::next() {
 }
 bool InOutNodesIterator::hasNext() {
   return (it->hasNext());
-}
-//===============================================================
-SGraphEdgeIterator::SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool>& filter, bool val)
-  : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
-  it=sg->getEdges();
-#if !defined(NDEBUG) && !defined(_OPENMP)
-  sg->addListener(this);
-#endif
-  // anticipate first iteration
-  prepareNext();
-}
-SGraphEdgeIterator::~SGraphEdgeIterator() {
-#if !defined(NDEBUG) && !defined(_OPENMP)
-  sg->removeListener(this);
-#endif
-  delete it;
-}
-void SGraphEdgeIterator::prepareNext() {
-  while(it->hasNext()) {
-    curEdge=it->next();
-
-    if (_filter.get(curEdge.id) == value)
-      return;
-  }
-
-  // set curEdge as invalid
-  curEdge = edge();
-}
-edge SGraphEdgeIterator::next() {
-  assert(curEdge.isValid());
-  // we are already pointing to the next
-  edge tmp=curEdge;
-  // anticipating the next iteration
-  prepareNext();
-  return tmp;
-}
-bool SGraphEdgeIterator::hasNext() {
-  return (curEdge.isValid());
 }
 //===================================================================
 OutEdgesIterator::OutEdgesIterator(const GraphView *sG, node n)
