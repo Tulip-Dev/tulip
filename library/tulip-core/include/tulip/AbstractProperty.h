@@ -94,7 +94,7 @@ public:
    * If g is NULL, the graph given when creating the property is considered.
    */
   tlp::Iterator<node> *getNodesEqualTo(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *g = NULL) const;
-  
+
   /**
    * Returns an iterator through all edges belonging to g
    * whose associated value is equal to val.

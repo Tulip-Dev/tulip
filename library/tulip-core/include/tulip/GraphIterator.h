@@ -92,30 +92,30 @@ public:
 ///Node iterator for GraphView
 template<typename VALUE_TYPE>
 class SGraphNodeIterator:public FactorNodeIterator, public MemoryPool<SGraphNodeIterator<VALUE_TYPE> > {
- private:
+private:
   const Graph* sg;
   Iterator<node> *it;
   node curNode;
   VALUE_TYPE value;
   const MutableContainer<VALUE_TYPE>& _filter;
 
- protected:
+protected:
   void prepareNext() {
     while(it->hasNext()) {
       curNode = it->next();
 
       if (_filter.get(curNode) == value)
-	return;
+        return;
     }
 
     // set curNode as invalid
     curNode = node();
   }
 
- public:
- SGraphNodeIterator(const Graph *sG,
-		    const MutableContainer<VALUE_TYPE>& filter,
-		    typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val) :FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
+public:
+  SGraphNodeIterator(const Graph *sG,
+                     const MutableContainer<VALUE_TYPE>& filter,
+                     typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val) :FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
     it=sg->getNodes();
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->addListener(this);
@@ -137,7 +137,7 @@ class SGraphNodeIterator:public FactorNodeIterator, public MemoryPool<SGraphNode
     prepareNext();
     return tmp;
   }
-  
+
   bool hasNext() {
     return (curNode.isValid());
   }
@@ -196,14 +196,14 @@ private:
   edge curEdge;
   VALUE_TYPE value;
   const MutableContainer<VALUE_TYPE>& _filter;
-  
+
 protected:
   void prepareNext() {
     while(it->hasNext()) {
       curEdge=it->next();
 
       if (_filter.get(curEdge.id) == value)
-	return;
+        return;
     }
 
     // set curEdge as invalid
@@ -212,9 +212,9 @@ protected:
 
 public:
   SGraphEdgeIterator(const Graph *sG,
-		     const MutableContainer<VALUE_TYPE>& filter,
+                     const MutableContainer<VALUE_TYPE>& filter,
                      typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
-  : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
+    : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
     it=sg->getEdges();
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->addListener(this);
@@ -222,14 +222,14 @@ public:
     // anticipate first iteration
     prepareNext();
   }
-  
+
   ~SGraphEdgeIterator() {
 #if !defined(NDEBUG) && !defined(_OPENMP)
     sg->removeListener(this);
 #endif
     delete it;
   }
-  
+
   edge next() {
     assert(curEdge.isValid());
     // we are already pointing to the next
@@ -238,7 +238,7 @@ public:
     prepareNext();
     return tmp;
   }
-  
+
   bool hasNext() {
     return (curEdge.isValid());
   }
