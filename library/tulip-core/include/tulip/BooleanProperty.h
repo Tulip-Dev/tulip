@@ -48,28 +48,14 @@ public:
    * i.e true => false, false => true.
    * If sg is NULL, the graph given when creating the property is considered.
    */
-  void reverse(const Graph *sg=NULL);
+  void reverse(const Graph *sg = NULL);
 
   /**
    * Reverses all the direction of edges of the visible graph
    * which are true in this BooleanProperty.
    * * If sg is NULL, the graph given when creating the property is considered.
    */
-  void reverseEdgeDirection(Graph *sg=NULL);
-
-  /**
-   * Returns an iterator through all nodes belonging to g
-   * whose associated value is equal to val.
-   * If g is nullptr, the graph given when creating the property is considered.
-   */
-  Iterator<node> *getNodesEqualTo(const bool val, const Graph *g = nullptr);
-
-  /**
-   * Returns an iterator through all edges belonging to g
-   * whose associated value is equal to val.
-   * If g is nullptr, the graph given when creating the property is considered.
-   */
-  Iterator<edge> *getEdgesEqualTo(const bool val, const Graph *g = nullptr);
+  void reverseEdgeDirection(Graph *sg = NULL);
 };
 
 /**
@@ -87,6 +73,6 @@ public:
     return propertyTypename;
   }
 };
-}
+} // namespace tlp
 
 #endif

@@ -17,6 +17,7 @@
  *
  */
 #include <cstdlib>
+#include <tulip/GraphIterator.h>
 
 template <class Tnode, class Tedge, class Tprop>
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::AbstractProperty(tlp::Graph *sg, const std::string &n) : nodeValueSetter(this), edgeValueSetter(this) {
@@ -51,6 +52,36 @@ inline typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue
 tlp::AbstractProperty<Tnode, Tedge, Tprop>::getEdgeValue(const tlp::edge e) const {
   assert(e.isValid());
   return edgeProperties.get(e.id);
+}
+//=================================================================================
+template <class Tnode, class Tedge, class Tprop>
+tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodesEqualTo(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue val, const Graph *sg) const {
+  if (sg == NULL) sg = this->graph;
+
+  tlp::Iterator<unsigned int> *it = NULL;
+
+  if (sg == this->graph)
+    it = nodeProperties.findAll(val);
+
+  if (it == NULL)
+    return new tlp::SGraphNodeIterator(sg, nodeProperties, val);
+
+  return (new tlp::UINTIterator<node>(it));
+}
+//=================================================================================
+template <class Tnode, class Tedge, class Tprop>
+tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgesEqualTo(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue val, const Graph *sg) const {
+  if (sg == NULL) sg = this->graph;
+
+  tlp::Iterator<unsigned int> *it = NULL;
+
+  if (sg == this->graph)
+    it = edgeProperties.findAll(val);
+
+  if (it == NULL)
+    return new tlp::SGraphEdgeIterator(sg, edgeProperties, val);
+
+  return (new tlp::UINTIterator<edge>(it));
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
