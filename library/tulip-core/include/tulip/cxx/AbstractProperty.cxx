@@ -64,7 +64,7 @@ tlp::Iterator<tlp::node>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodesEqua
     it = nodeProperties.findAll(val);
 
   if (it == NULL)
-    return new tlp::SGraphNodeIterator(sg, nodeProperties, val);
+    return new tlp::SGraphNodeIterator<typename Tnode::RealType>(sg, nodeProperties, val);
 
   return (new tlp::UINTIterator<node>(it));
 }
@@ -79,7 +79,7 @@ tlp::Iterator<tlp::edge>* tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgesEqua
     it = edgeProperties.findAll(val);
 
   if (it == NULL)
-    return new tlp::SGraphEdgeIterator(sg, edgeProperties, val);
+    return new tlp::SGraphEdgeIterator<typename Tedge::RealType>(sg, edgeProperties, val);
 
   return (new tlp::UINTIterator<edge>(it));
 }

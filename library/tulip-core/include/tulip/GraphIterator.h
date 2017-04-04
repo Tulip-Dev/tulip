@@ -27,6 +27,7 @@
 #include <tulip/MutableContainer.h>
 #include <tulip/Observable.h>
 #include <tulip/tulipconf.h>
+#include <tulip/StoredType.h>
 #include <iostream>
 
 namespace tlp {
@@ -87,23 +88,57 @@ public:
 };
 //============================================================
 /// Node iterator for GraphView
-class SGraphNodeIterator : public FactorNodeIterator, public MemoryPool<SGraphNodeIterator> {
+template <typename VALUE_TYPE> class SGraphNodeIterator : public FactorNodeIterator, public MemoryPool<SGraphNodeIterator<VALUE_TYPE>> {
 private:
   const Graph *sg;
   Iterator<node> *it;
   node curNode;
-  bool value;
-  const MutableContainer<bool> &_filter;
-
-public:
-  SGraphNodeIterator(const Graph *sG, const MutableContainer<bool> &filter, bool value = true);
-  ~SGraphNodeIterator();
-  node next();
-  bool hasNext();
+  VALUE_TYPE value;
+  const MutableContainer<VALUE_TYPE> &_filter;
 
 protected:
-  void prepareNext();
+  void prepareNext() {
+    while (it->hasNext()) {
+      curNode = it->next();
+
+      if (_filter.get(curNode) == value)
+        return;
+    }
+
+    // set curNode as invalid
+    curNode = node();
+  }
+
+public:
+  SGraphNodeIterator(const Graph *sG, const MutableContainer<VALUE_TYPE> &filter, typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
+      : FactorNodeIterator(sG), sg(sG), value(val), _filter(filter) {
+    it = sg->getNodes();
+#if !defined(NDEBUG) && !defined(_OPENMP)
+    sg->addListener(this);
+#endif
+    // anticipate first iteration
+    prepareNext();
+  }
+  ~SGraphNodeIterator() {
+#if !defined(NDEBUG) && !defined(_OPENMP)
+    sg->removeListener(this);
+#endif
+    delete it;
+  }
+  node next() {
+    assert(curNode.isValid());
+    // we are already pointing to the next
+    node tmp = curNode;
+    // anticipate next iteration
+    prepareNext();
+    return tmp;
+  }
+
+  bool hasNext() {
+    return (curNode.isValid());
+  }
 };
+
 //============================================================
 /// Out node iterator for GraphView
 class OutNodesIterator : public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
@@ -149,22 +184,57 @@ public:
 };
 //=============================================================
 /// Edge iterator for GraphView
-class SGraphEdgeIterator : public FactorEdgeIterator, public MemoryPool<SGraphEdgeIterator> {
+template <typename VALUE_TYPE> class SGraphEdgeIterator : public FactorEdgeIterator, public MemoryPool<SGraphEdgeIterator<VALUE_TYPE>> {
 private:
   const Graph *sg;
   Iterator<edge> *it;
   edge curEdge;
-  bool value;
-  const MutableContainer<bool> &_filter;
-
-public:
-  SGraphEdgeIterator(const Graph *sG, const MutableContainer<bool> &filter, bool value = true);
-  ~SGraphEdgeIterator();
-  edge next();
-  bool hasNext();
+  VALUE_TYPE value;
+  const MutableContainer<VALUE_TYPE> &_filter;
 
 protected:
-  void prepareNext();
+  void prepareNext() {
+    while (it->hasNext()) {
+      curEdge = it->next();
+
+      if (_filter.get(curEdge.id) == value)
+        return;
+    }
+
+    // set curEdge as invalid
+    curEdge = edge();
+  }
+
+public:
+  SGraphEdgeIterator(const Graph *sG, const MutableContainer<VALUE_TYPE> &filter, typename tlp::StoredType<VALUE_TYPE>::ReturnedConstValue val)
+      : FactorEdgeIterator(sG), sg(sG), value(val), _filter(filter) {
+    it = sg->getEdges();
+#if !defined(NDEBUG) && !defined(_OPENMP)
+    sg->addListener(this);
+#endif
+    // anticipate first iteration
+    prepareNext();
+  }
+
+  ~SGraphEdgeIterator() {
+#if !defined(NDEBUG) && !defined(_OPENMP)
+    sg->removeListener(this);
+#endif
+    delete it;
+  }
+
+  edge next() {
+    assert(curEdge.isValid());
+    // we are already pointing to the next
+    edge tmp = curEdge;
+    // anticipating the next iteration
+    prepareNext();
+    return tmp;
+  }
+
+  bool hasNext() {
+    return (curEdge.isValid());
+  }
 };
 //============================================================
 /// Out edge iterator for GraphView
@@ -264,7 +334,7 @@ public:
   bool hasNext();
 };
 //============================================================
-}
+} // namespace tlp
 #endif
 
 ///@endcond
