@@ -59,11 +59,11 @@ public:
   /**
    * set the default value
    */
-  void setAll(const TYPE &value);
+  void setAll(typename StoredType<TYPE>::ReturnedConstValue value);
   /**
    * set the value associated to i
    */
-  void set(const unsigned int i, const TYPE &value);
+  void set(const unsigned int i, typename StoredType<TYPE>::ReturnedConstValue value);
   /**
    * add val to the value associated to i
    */
@@ -90,7 +90,7 @@ public:
    * A null pointer is returned in case of an iteration on all the elements
    * whose value is equal to the default value.
    */
-  Iterator<unsigned int> *findAll(const TYPE &value, bool equal = true) const;
+  Iterator<unsigned int> *findAll(typename StoredType<TYPE>::ReturnedConstValue value, bool equal = true) const;
   /**
    * return the number of non default values
    */
@@ -106,7 +106,7 @@ private:
   void hashtovect();
   void compress(unsigned int min, unsigned int max, unsigned int nbElements);
   inline void vectset(const unsigned int i, typename StoredType<TYPE>::Value value);
-  IteratorValue *findAllValues(const TYPE &value, bool equal = true) const;
+  IteratorValue *findAllValues(typename StoredType<TYPE>::ReturnedConstValue value, bool equal = true) const;
 
 private:
   std::deque<typename StoredType<TYPE>::Value> *vData;
@@ -207,7 +207,7 @@ private:
   typename TLP_HASH_MAP<unsigned int, typename StoredType<TYPE>::Value>::const_iterator it;
 };
 ///@endcond
-}
+} // namespace tlp
 
 ///@cond DOXYGEN_HIDDEN
 #include "cxx/MutableContainer.cxx"

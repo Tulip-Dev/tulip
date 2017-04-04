@@ -60,8 +60,8 @@ public:
   }
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node n, const GraphType::RealType &g);
-  virtual void setAllNodeValue(const GraphType::RealType &g, const Graph *graph = nullptr);
+  virtual void setNodeValue(const node n, tlp::StoredType<GraphType::RealType>::ReturnedConstValue g);
+  virtual void setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g, const Graph *graph = NULL);
   virtual bool readNodeDefaultValue(std::istream &iss);
   virtual bool readNodeValue(std::istream &iss, node n);
   // tlp::GraphType encapsulates a tlp::Graph pointer but that is the graph id
@@ -85,5 +85,5 @@ private:
   MutableContainer<std::set<node>> referencedGraph;
   const std::set<edge> &getReferencedEdges(const edge) const;
 };
-}
+} // namespace tlp
 #endif

@@ -53,8 +53,8 @@ public:
   }
 
   // redefinition of some AbstractProperty methods
-  virtual void setNodeValue(const node n, const Size &v);
-  virtual void setAllNodeValue(const Size &v, const Graph *graph = nullptr);
+  virtual void setNodeValue(const node n, tlp::StoredType<Size>::ReturnedConstValue v);
+  virtual void setAllNodeValue(tlp::StoredType<Size>::ReturnedConstValue v, const Graph *graph = NULL);
 
   int compare(const node n1, const node n2) const;
 
@@ -83,5 +83,5 @@ public:
     return propertyTypename;
   }
 };
-}
+} // namespace tlp
 #endif

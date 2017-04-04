@@ -71,7 +71,7 @@ template <typename TYPE> tlp::MutableContainer<TYPE>::~MutableContainer() {
   StoredType<TYPE>::destroy(defaultValue);
 }
 //===================================================================
-template <typename TYPE> void tlp::MutableContainer<TYPE>::setAll(const TYPE &value) {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::setAll(typename StoredType<TYPE>::ReturnedConstValue value) {
   switch (state) {
   case VECT:
 
@@ -123,7 +123,8 @@ template <typename TYPE> void tlp::MutableContainer<TYPE>::setAll(const TYPE &va
 //===================================================================
 // this method is private and used as is by GraphUpdatesRecorder class
 // it is also used to implement findAll
-template <typename TYPE> tlp::IteratorValue *tlp::MutableContainer<TYPE>::findAllValues(const TYPE &value, bool equal) const {
+template <typename TYPE>
+tlp::IteratorValue *tlp::MutableContainer<TYPE>::findAllValues(typename StoredType<TYPE>::ReturnedConstValue value, bool equal) const {
   if (equal && StoredType<TYPE>::equal(defaultValue, value))
     // error
     return nullptr;
@@ -146,7 +147,8 @@ template <typename TYPE> tlp::IteratorValue *tlp::MutableContainer<TYPE>::findAl
 }
 //===================================================================
 // this method is visible for any class
-template <typename TYPE> tlp::Iterator<unsigned int> *tlp::MutableContainer<TYPE>::findAll(const TYPE &value, bool equal) const {
+template <typename TYPE>
+tlp::Iterator<unsigned int> *tlp::MutableContainer<TYPE>::findAll(typename StoredType<TYPE>::ReturnedConstValue value, bool equal) const {
   return findAllValues(value, equal);
 }
 //===================================================================
@@ -189,7 +191,7 @@ template <typename TYPE> void tlp::MutableContainer<TYPE>::vectset(const unsigne
   }
 }
 //===================================================================
-template <typename TYPE> void tlp::MutableContainer<TYPE>::set(const unsigned int i, const TYPE &value) {
+template <typename TYPE> void tlp::MutableContainer<TYPE>::set(const unsigned int i, typename StoredType<TYPE>::ReturnedConstValue value) {
   // Test if after insertion we need to resize
   if (!compressing && !StoredType<TYPE>::equal(defaultValue, value)) {
     compressing = true;

@@ -258,22 +258,22 @@ void DoubleProperty::clone_handler(AbstractProperty<DoubleType, DoubleType, tlp:
   minMaxEdge = proxy->minMaxEdge;
 }
 //=================================================================================
-void DoubleProperty::setNodeValue(const node n, const double &v) {
+void DoubleProperty::setNodeValue(const node n, tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateNodeValue(n, v);
   DoubleMinMaxProperty::setNodeValue(n, v);
 }
 //=================================================================================
-void DoubleProperty::setEdgeValue(const edge e, const double &v) {
+void DoubleProperty::setEdgeValue(const edge e, tlp::StoredType<double>::ReturnedConstValue v) {
   DoubleMinMaxProperty::updateEdgeValue(e, v);
   DoubleMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void DoubleProperty::setAllNodeValue(const double &v, const Graph *graph) {
+void DoubleProperty::setAllNodeValue(tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph) {
   DoubleMinMaxProperty::updateAllNodesValues(v);
   DoubleMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void DoubleProperty::setAllEdgeValue(const double &v, const Graph *graph) {
+void DoubleProperty::setAllEdgeValue(tlp::StoredType<double>::ReturnedConstValue v, const Graph *graph) {
   DoubleMinMaxProperty::updateAllEdgesValues(v);
   DoubleMinMaxProperty::setAllEdgeValue(v, graph);
 }
