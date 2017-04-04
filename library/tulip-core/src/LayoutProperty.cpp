@@ -545,22 +545,22 @@ void LayoutProperty::resetBoundingBox() {
   minMaxEdge.clear();
 }
 //================================================================================
-void LayoutProperty::setNodeValue(const node n, const Coord& v) {
+void LayoutProperty::setNodeValue(const node n, tlp::StoredType<Coord>::ReturnedConstValue v) {
   LayoutMinMaxProperty::updateNodeValue(n, v);
   LayoutMinMaxProperty::setNodeValue(n, v);
 }
 //================================================================================
-void LayoutProperty::setEdgeValue(const edge e, const std::vector<Coord>& v) {
+void LayoutProperty::setEdgeValue(const edge e, tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v) {
   LayoutMinMaxProperty::updateEdgeValue(e, v);
   LayoutMinMaxProperty::setEdgeValue(e, v);
 }
 //=================================================================================
-void LayoutProperty::setAllNodeValue(const Coord &v, const Graph *graph) {
+void LayoutProperty::setAllNodeValue(tlp::StoredType<Coord>::ReturnedConstValue v, const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllNodeValue(v, graph);
 }
 //=================================================================================
-void LayoutProperty::setAllEdgeValue(const std::vector<Coord> &v, const Graph *graph) {
+void LayoutProperty::setAllEdgeValue(tlp::StoredType<std::vector<Coord> >::ReturnedConstValue v, const Graph *graph) {
   resetBoundingBox();
   LayoutMinMaxProperty::setAllEdgeValue(v, graph);
 }

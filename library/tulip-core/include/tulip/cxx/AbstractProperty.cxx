@@ -30,29 +30,29 @@ tlp::AbstractProperty<Tnode,Tedge,Tprop>::AbstractProperty(tlp::Graph *sg, const
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodeDefaultValue() const {
+inline typename Tnode::RealType tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodeDefaultValue() const {
   return nodeDefaultValue;
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgeDefaultValue() const {
+inline typename Tedge::RealType tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgeDefaultValue() const {
   return edgeDefaultValue;
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodeValue(const tlp::node n ) const {
+inline typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::getNodeValue(const tlp::node n ) const {
   assert(n.isValid());
   return nodeProperties.get(n.id);
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgeValue(const tlp::edge e) const {
+inline typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue tlp::AbstractProperty<Tnode,Tedge,Tprop>::getEdgeValue(const tlp::edge e) const {
   assert(e.isValid());
   return edgeProperties.get(e.id);
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setNodeValue(const tlp::node n,const typename Tnode::RealType &v) {
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setNodeValue(const tlp::node n, typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v) {
   assert(n.isValid());
   Tprop::notifyBeforeSetNodeValue(n);
   nodeProperties.set(n.id,v);
@@ -60,7 +60,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setNodeValue(const tlp::node n,co
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setEdgeValue(const tlp::edge e,const typename Tedge::RealType &v) {
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setEdgeValue(const tlp::edge e, typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v) {
   assert(e.isValid());
   Tprop::notifyBeforeSetEdgeValue(e);
   edgeProperties.set(e.id,v);
@@ -68,7 +68,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setEdgeValue(const tlp::edge e,co
 }
 //=============================================================
 template <class Tnode, class Tedge, class Tprop>
-void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(const typename Tnode::RealType &v, const Graph *graph) {
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(typename tlp::StoredType<typename Tnode::RealType>::ReturnedConstValue v, const Graph *graph) {
   if (graph && this->getGraph()->isDescendantGraph(graph)) {
     const std::vector<node>& nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
@@ -86,7 +86,7 @@ void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllNodeValue(const typename Tn
 }
 //============================================================
 template <class Tnode, class Tedge, class Tprop>
-void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(const typename Tedge::RealType &v, const Graph *graph) {
+void tlp::AbstractProperty<Tnode,Tedge,Tprop>::setAllEdgeValue(typename tlp::StoredType<typename Tedge::RealType>::ReturnedConstValue v, const Graph *graph) {
   if (graph && this->getGraph()->isDescendantGraph(graph)) {
     const std::vector<edge>& edges = graph->edges();
     unsigned int nbEdges = edges.size();

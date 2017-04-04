@@ -53,7 +53,7 @@ GraphProperty::~GraphProperty() {
   }
 }
 //==============================
-void GraphProperty::setAllNodeValue(const GraphType::RealType& g, const Graph *graph) {
+void GraphProperty::setAllNodeValue(tlp::StoredType<GraphType::RealType>::ReturnedConstValue g, const Graph *graph) {
   //remove all observed graphs if any
   Iterator<node> *it = getNonDefaultValuatedNodes(graph);
 
@@ -76,7 +76,7 @@ void GraphProperty::setAllNodeValue(const GraphType::RealType& g, const Graph *g
     g->addListener(this);
 }
 //==============================
-void GraphProperty::setNodeValue(const node n, const GraphType::RealType& sg) {
+void GraphProperty::setNodeValue(const node n, tlp::StoredType<GraphType::RealType>::ReturnedConstValue sg) {
   //gestion désabonnement
   Graph * oldGraph = getNodeValue(n);
 
