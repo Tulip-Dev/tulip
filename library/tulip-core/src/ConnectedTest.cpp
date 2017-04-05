@@ -101,11 +101,11 @@ void ConnectedTest::computeConnectedComponents(const tlp::Graph* graph, vector< 
 
         while(itn->hasNext()) {
           node neighbour = itn->next();
-
+	  unsigned int nPos = graph->nodePos(neighbour);
           // check if neighbour has been visited
-          if (!visited.getNodeValue(neighbour)) {
+          if (!visited[nPos]) {
             // mark neighbour as already visited
-            visited.setNodeValue(neighbour, true);
+            visited[nPos] = true;
             // insert it in current component
             component.push_back(neighbour);
             // push it for further deeper exploration
@@ -153,11 +153,11 @@ static unsigned int connectedTest(const Graph * const graph, node n,
 
     while(itn->hasNext()) {
       n = itn->next();
-
+      unsigned int nPos = graph->nodePos(n);
       // check if neighbour has been visited
-      if(!visited.getNodeValue(n)) {
+      if(!visited[nPos]) {
         // mark neighbour as already visited
-        visited.setNodeValue(n, true);
+        visited[nPos] = true;
         // push it for further deeper exploration
         nodesToVisit.push_back(n);
         ++count;
