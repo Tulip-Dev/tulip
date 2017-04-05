@@ -48,7 +48,7 @@ typedef std::pair<tlp::node, tlp::node> pairNodeNode;
 extern void releaseGraphWrapper(tlp::Graph *graph);
 extern void releaseGraphHierarchyWrappers(tlp::Graph *graph);
 extern tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph *graph=NULL, tlp::DataSet *inputParams=NULL, PyObject *inputParamsWrapper=NULL);
-extern void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, tlp::DataSet *inputDataSet, PyObject *inputDataSetWrapper);
+extern void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, PyObject *inputDataSetWrapper);
 
 template<class AlgorithmType, class PropertyType>
 bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, PropertyType *result,
@@ -62,7 +62,7 @@ bool callGraphPropertyAlgorithm(tlp::Graph *graph, const std::string &algoName, 
       tmp = *result;
       ret = graph->applyPropertyAlgorithm(algoName, &tmp, errMsg, NULL, params);
       *result = tmp;
-      updateWrappedDataSetAfterAlgorithmCall(params, inputDataSet, inputDataSetWrapper);
+      updateWrappedDataSetAfterAlgorithmCall(params, inputDataSetWrapper);
       delete params;
     } else {
       sipIsErr = 1;
@@ -163,7 +163,7 @@ tlp::DataSet *prepareAlgorithmParameters(const std::string &algoName, tlp::Graph
   return params;
 }
 
-void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, tlp::DataSet *inputDataSet, PyObject *inputDataSetWrapper) {
+void updateWrappedDataSetAfterAlgorithmCall(tlp::DataSet *algorithmOutputDataset, PyObject *inputDataSetWrapper) {
   if (inputDataSetWrapper && PyDict_Check(inputDataSetWrapper)) {
     convertTlpDataSetToPyDict(*algorithmOutputDataset, inputDataSetWrapper);
   } else if (inputDataSetWrapper) {
@@ -397,7 +397,7 @@ which can contain an error message.
     tlp::DataSet *params = prepareAlgorithmParameters(*a0, sipCpp, a2, a2Wrapper);
     if (params) {
       sipRes = sipCpp->applyAlgorithm(*a0, *a1, params);
-      updateWrappedDataSetAfterAlgorithmCall(params, a2, a2Wrapper);
+      updateWrappedDataSetAfterAlgorithmCall(params, a2Wrapper);
       delete params;
     } else {
       sipIsErr = 1;
@@ -489,12 +489,14 @@ Creates and returns a sub-graph of this graph (or the parent of this graph) that
 %Docstring
 tlp.Graph.inducedSubGraph(nodeSet[, parentSubGraph, name])
 
+.. deprecated:: 4.11
+
 Creates and returns a new sub-graph of the graph induced by a set of nodes.
 The sub-graph contains all the nodes from the set and all the existing edges
 between two nodes in the set including self-loops.
 
 :param nodeSet: the set of nodes from which to build the induced sub-graph
-:type nodeSet: list or set of :class:`tlp.node`
+:type nodeSet: set of :class:`tlp.node`
 :param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
 :type parentSubGraph: :class:`tlp.Graph`
 :param name: The name of the newly created subgraph
@@ -502,10 +504,25 @@ between two nodes in the set including self-loops.
 :rtype: :class:`tlp.Graph` 
 %End
 
-// Allow to use a Python list of tlp.node instead of a Python set of tlp.node
-  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodeSet, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
-%MethodCode
-  sipRes = sipCpp->inducedSubGraph(std::set<tlp::node>(a0->begin(), a0->end()));
+//===========================================================================================
+
+  tlp::Graph *inducedSubGraph(const std::vector<tlp::node>& nodes, tlp::Graph *parentSubGraph = NULL, const std::string &name = "unnamed");
+%Docstring
+tlp.Graph.inducedSubGraph(nodes[, parentSubGraph, name])
+
+.. versionadded:: 4.11
+
+Creates and returns a new sub-graph of the graph induced by a set of nodes.
+The sub-graph contains all the nodes from the set and all the existing edges
+between two nodes in the set including self-loops.
+
+:param nodes: the set of nodes from which to build the induced sub-graph
+:type nodes: list of :class:`tlp.node`
+:param parentSubGraph: If provided, is used as parent graph for the newly created sub-graph instead of the graph this method is called on.
+:type parentSubGraph: :class:`tlp.Graph`
+:param name: The name of the newly created subgraph
+:type name: string
+:rtype: :class:`tlp.Graph`
 %End
 
 //===========================================================================================
@@ -632,7 +649,7 @@ Sets the parent of the graph (use very carefully). Standard users should never u
 
 //===========================================================================================
 
-  tlp::IteratorGraph *getSubGraphs() const /TransferBack, TypeHint="Iterable[tlp.Graph]"/;
+  tlp::IteratorGraph *getSubGraphs() const /TransferBack, TypeHint="Iterator[tlp.Graph]"/;
 %Docstring
 tlp.Graph.getSubGraphs()
 
@@ -777,7 +794,7 @@ Returns the number of descendant graphs.
 
 //===========================================================================================
 
-  tlp::IteratorGraph *getDescendantGraphs() const /TransferBack, TypeHint="Iterable[tlp.Graph]"/;
+  tlp::IteratorGraph *getDescendantGraphs() const /TransferBack, TypeHint="Iterator[tlp.Graph]"/;
 %Docstring
 tlp.Graph.getDescendantGraphs()
 
@@ -850,7 +867,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer, TypeHint="Iterable[tlp.node]"/);
+  void addNodes(tlp::Iterator<tlp::node>* nodes /Transfer, TypeHint="Iterator[tlp.node]"/);
 %Docstring
 tlp.Graph.addNodes(itNodes)
 
@@ -944,7 +961,7 @@ to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void delNodes(tlp::Iterator<tlp::node>* itN /Transfer, TypeHint="Iterable[tlp.node]"/, bool deleteInAllGraphs = false);
+  void delNodes(tlp::Iterator<tlp::node>* itN /Transfer, TypeHint="Iterator[tlp.node]"/, bool deleteInAllGraphs = false);
 %Docstring
 tlp.Graph.delNodes(itNodes[, deleteInAllGraphs=False])
 
@@ -1118,7 +1135,7 @@ the graph's ancestors to maintain the sub-graph relation between graphs.
 
 //===========================================================================================
 
-  void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer, TypeHint="Iterable[tlp.edge]"/);
+  void addEdges(tlp::Iterator<tlp::edge>* edges /Transfer, TypeHint="Iterator[tlp.edge]"/);
 %Docstring
 tlp.Graph.addEdges(itEdges)
 
@@ -1245,7 +1262,7 @@ of the graph to maintain the sub-graph relation between graphs. The ordering of 
 
 //===========================================================================================
 
-  void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer, TypeHint="Iterable[tlp.edge]"/, bool deleteInAllGraphs = false)=0;
+  void delEdges(tlp::Iterator<tlp::edge>* itE /Transfer, TypeHint="Iterator[tlp.edge]"/, bool deleteInAllGraphs = false)=0;
 %Docstring
 tlp.Graph.delEdges(itEdges[, deleteInAllGraphs=False])
 
@@ -1514,7 +1531,7 @@ tlp.Graph.getSource()
 .. versionadded:: 3.7
 
 Finds the first node whose input degree equals 0.
-Returns the found node or an invalid one if there is no source;
+Returns the found node or an invalid one if there is no source.
 
 :rtype: :class:`tlp.node`
 %End
@@ -1528,7 +1545,7 @@ tlp.Graph.getSink()
 .. versionadded:: 4.11
 
 Finds the first node whose output degree equals 0.
-Returns the found node or an invalid one if there is no sink;
+Returns the found node or an invalid one if there is no sink.
 
 :rtype: :class:`tlp.node`
 %End
@@ -1536,14 +1553,15 @@ Returns the found node or an invalid one if there is no sink;
 
 //===========================================================================================
 
-  const std::vector<tlp::node>& nodes() const;
+  const std::vector<tlp::node>& nodes() const /NoCopy/;
 %Docstring
 tlp.Graph.nodes()
 
 .. versionadded:: 4.11
 
-Returns a const reference on the vector storing the nodes of the graph.
+Returns the list of nodes belonging to the graph.
 
+:rtype: list of :class:`tlp.node`
 %End
 //===========================================================================================
 
@@ -1553,9 +1571,13 @@ tlp.Graph.nodePos(node)
 
 .. versionadded:: 4.11
 
-Returns the position of an node in the vector of nodes of the graph.
+Returns the position of a node in the list of nodes belonging to the graph
+that can be accessed through the :meth:`tlp.Graph.nodes` method.
 
 :param node: an existing node of the graph
+:type node: :class:`tlp.node`
+:rtype: integer
+:throws: an exception if the node does not belong to the graph
 %End
 
 %MethodCode
@@ -1567,7 +1589,7 @@ Returns the position of an node in the vector of nodes of the graph.
 %End
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getNodes() const /TransferBack, TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* getNodes() const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.Graph.getNodes()
 
@@ -1619,7 +1641,7 @@ Returns the ith predecessor of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* getInNodes(const tlp::node node) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.Graph.getInNodes(node)
 
@@ -1678,7 +1700,7 @@ Returns the ith successor of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* getOutNodes(const tlp::node node) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.Graph.getOutNodes(node)
 
@@ -1700,7 +1722,7 @@ Returns an iterator on the successors of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* getInOutNodes(const tlp::node node) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.Graph.getInOutNodes(node)
 
@@ -1722,7 +1744,7 @@ Returns an iterator on the neighbours of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* bfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.Graph.bfs([root])
 
@@ -1747,7 +1769,7 @@ Returns an iterator performing a breadth-first search on the graph.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* dfs(const tlp::node root = tlp::node()) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.Graph.dfs([root])
 
@@ -1794,13 +1816,15 @@ Returns the underlying graph of a meta node.
 
 //===========================================================================================
 
-  const std::vector<tlp::edge>& edges() const;
+  const std::vector<tlp::edge>& edges() const /NoCopy/;
 %Docstring
 tlp.Graph.edges()
 
 .. versionadded:: 4.11
 
-Returns a const reference on the vector storing the edges of the graph.
+Returns the list of edges belonging to the graph.
+
+:rtype: list of :class:`tlp.node`
 
 %End
 //===========================================================================================
@@ -1811,9 +1835,13 @@ tlp.Graph.edgePos(edge)
 
 .. versionadded:: 4.11
 
-Returns the position of an edge in the vector of edges of the graph.
+Returns the position of an edge in the list of edges belonging to the graph
+that can be accessed through the :meth:`tlp.Graph.edges` method.
 
 :param edge: an existing edge of the graph
+:type node: :class:`tlp.edge`
+:rtype: integer
+:throws: an exception if the edge does not belong to the graph
 %End
 
 %MethodCode
@@ -1825,7 +1853,7 @@ Returns the position of an edge in the vector of edges of the graph.
 %End
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getEdges() const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
+  tlp::Iterator<tlp::edge>* getEdges() const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
 tlp.Graph.getEdges()
 
@@ -1864,7 +1892,7 @@ Returns a random edge in the graph.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
+  tlp::Iterator<tlp::edge>* getOutEdges(const tlp::node node) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
 tlp.Graph.getOutEdges(node)
 
@@ -1886,7 +1914,7 @@ Returns a Tulip iterator on the outgoing edges of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
+  tlp::Iterator<tlp::edge>* getInOutEdges(const tlp::node node) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
 tlp.Graph.getInOutEdges(node)
 
@@ -1908,7 +1936,7 @@ Returns an iterator on the incoming and outgoing edges of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
+  tlp::Iterator<tlp::edge>* getInEdges(const tlp::node node) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
 tlp.Graph.getInEdges(node)
 
@@ -1930,7 +1958,7 @@ Returns an iterator on the incoming edges of a node.
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack, TypeHint="Iterable[tlp.edge]"/;
+  tlp::Iterator<tlp::edge>* getEdgeMetaInfo(const tlp::edge edge) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
 tlp.Graph.getEdgeMetaInfo(edge)
 
@@ -1952,19 +1980,18 @@ Returns an iterator on the underlying edges of a meta edge.
 
 //===========================================================================================
 
-  const std::vector<tlp::edge>& allEdges(const tlp::node node) const;
+  const std::vector<tlp::edge>& allEdges(const tlp::node node) const /NoCopy/;
 %Docstring
 tlp.Graph.allEdges(node)
 
 .. versionadded:: 4.11
 
-Returns a const reference on the vector storing all the edges of a node
+Returns the list of all edges adjacent to a given node.
 
 :param node: an existing node of the graph
 :type node: :class:`tlp.node`
 :rtype: list of :class:`tlp.edge`
 :throws: an exception if the node does not belong to the graph
-
 %End
 
 %MethodCode
@@ -3097,7 +3124,7 @@ Removes and deletes the property associated to name in the graph properties pool
 
 //===========================================================================================
 
-  tlp::Iterator<std::string>* getLocalProperties() /TransferBack, TypeHint="Iterable[str]"/;
+  tlp::Iterator<std::string>* getLocalProperties() /TransferBack, TypeHint="Iterator[str]"/;
 %Docstring
 tlp.Graph.getLocalProperties()
 
@@ -3112,7 +3139,7 @@ Returns an iterator on the names of the properties local to the graph.
 
 //===========================================================================================
 
-  tlp::Iterator<std::string>* getInheritedProperties() /TransferBack, TypeHint="Iterable[str]"/;
+  tlp::Iterator<std::string>* getInheritedProperties() /TransferBack, TypeHint="Iterator[str]"/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -3127,7 +3154,7 @@ Returns an iterator on the names of the properties inherited from the graph's an
 
 //===========================================================================================
 
-  tlp::Iterator<std::string>* getProperties() /TransferBack, TypeHint="Iterable[str]"/;
+  tlp::Iterator<std::string>* getProperties() /TransferBack, TypeHint="Iterator[str]"/;
 %Docstring
 tlp.Graph.getInheritedProperties()
 
@@ -3142,7 +3169,7 @@ Returns an iterator on the names of all the properties attached to the graph.
 
 //===========================================================================================
 
-  tlp::IteratorProperty* getObjectProperties() /TransferBack, TypeHint="Iterable[tlp.PropertyInterface]"/;
+  tlp::IteratorProperty* getObjectProperties() /TransferBack, TypeHint="Iterator[tlp.PropertyInterface]"/;
 %Docstring
 tlp.Graph.getObjectProperties()
 
@@ -3160,7 +3187,7 @@ whether they are local or inherited.
 
 //===========================================================================================
 
-  tlp::IteratorProperty* getLocalObjectProperties() /TransferBack, TypeHint="Iterable[tlp.PropertyInterface]"/;
+  tlp::IteratorProperty* getLocalObjectProperties() /TransferBack, TypeHint="Iterator[tlp.PropertyInterface]"/;
 %Docstring
 tlp.Graph.getLocalObjectProperties()
 
@@ -3177,7 +3204,7 @@ Returns an iterator over the local properties attached to the graph.
 
 //===========================================================================================
 
-  tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack, TypeHint="Iterable[tlp.PropertyInterface]"/;
+  tlp::IteratorProperty* getInheritedObjectProperties() /TransferBack, TypeHint="Iterator[tlp.PropertyInterface]"/;
 %Docstring
 tlp.Graph.getInheritedObjectProperties()
 
@@ -3723,11 +3750,13 @@ Returns :const:`True` if the current state updates can be undone then replayed.
 %Docstring
 tlp.Graph.createMetaNode(nodeSet[, multiEdges=True, delAllEdge=True])
 
+.. deprecated:: 4.11
+
 Closes a set of existing nodes into a metanode and returns it.
 Edges from nodes in the set to other nodes are replaced with
 edges from the metanode to the other nodes.
 
-:param nodeSet: a list or set of existing nodes
+:param nodeSet: a set of existing nodes
 :type nodeSet: set of :class:`tlp.node`
 :param multiEdges: indicates if a meta edge will be created for each underlying edge
 :type multiEdges: boolean
@@ -3741,7 +3770,7 @@ edges from the metanode to the other nodes.
 %End
 
 %MethodCode
-  std::set<tlp::node>::iterator it = a0->begin();
+  std::set<tlp::node>::const_iterator it = a0->begin();
   for (; it != a0->end() ; ++it) {
     if (!sipCpp->isElement(*it)) {
       sipIsErr = throwInvalidNodeException(sipCpp, *it);
@@ -3753,19 +3782,42 @@ edges from the metanode to the other nodes.
   }
 %End
 
-// For code-compatibility with Tulip 3.X
-  tlp::node createMetaNode(const std::vector<tlp::node> &nodeSet, bool multiEdges = true, bool delAllEdge = true);
+//===========================================================================================
+
+  tlp::node createMetaNode(const std::vector<tlp::node> &nodes, bool multiEdges = true, bool delAllEdge = true);
+%Docstring
+tlp.Graph.createMetaNode(nodes[, multiEdges=True, delAllEdge=True])
+
+.. versionadded:: 4.11
+
+Closes a set of existing nodes into a metanode and returns it.
+Edges from nodes in the set to other nodes are replaced with
+edges from the metanode to the other nodes.
+
+:param nodes: a list of existing nodes
+:type nodes: list of :class:`tlp.node`
+:param multiEdges: indicates if a meta edge will be created for each underlying edge
+:type multiEdges: boolean
+:param delAllEdge: indicates if the underlying edges will be removed from the entire hierarchy
+:type delAllEdge: boolean
+:rtype: :class:`tlp.node`
+:throws: an exception if one of the provided nodes does not belong to the graph.
+
+ .. warning:: This method will fail when called on the root graph.
+
+%End
+
 %MethodCode
-  std::vector<tlp::node>::const_iterator it = a0->begin();
-  for (; it != a0->end() ; ++it) {
-    if (!sipCpp->isElement(*it)) {
-      sipIsErr = throwInvalidNodeException(sipCpp, *it);
-      break;
-    }
-  }
-  if (sipIsErr != -1) {
-    sipRes = new tlp::node(sipCpp->createMetaNode(std::set<tlp::node>(a0->begin(), a0->end()), a1, a2));
-  }
+ std::vector<tlp::node>::const_iterator it = a0->begin();
+ for (; it != a0->end() ; ++it) {
+   if (!sipCpp->isElement(*it)) {
+     sipIsErr = throwInvalidNodeException(sipCpp, *it);
+     break;
+   }
+ }
+ if (sipIsErr != -1) {
+   sipRes = new tlp::node(sipCpp->createMetaNode(*a0, a1, a2));
+ }
 %End
 
 //===========================================================================================
@@ -3832,7 +3884,7 @@ point to an empty sub-graph.
 
 //===========================================================================================;
 
-  void createMetaNodes(tlp::IteratorGraph *itGraph /TypeHint="Iterable[tlp.Graph]"/, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
+  void createMetaNodes(tlp::IteratorGraph *itGraph /TypeHint="Iterator[tlp.Graph]"/, tlp::Graph *quotientGraph, std::vector<tlp::node>& metaNodes /Out/);
 %Docstring
 tlp.Graph.createMetaNodes(itGraph, quotientGraph)
 
@@ -4318,7 +4370,7 @@ Returns a new graph or None if the import fails.
     tlp::DataSet *params = prepareAlgorithmParameters(*a0, NULL, a1, a1Wrapper);
     if (params) {
       sipRes = tlp::importGraph(*a0, *params, NULL);
-      updateWrappedDataSetAfterAlgorithmCall(params, a1, a1Wrapper);
+      updateWrappedDataSetAfterAlgorithmCall(params, a1Wrapper);
       delete params;
     } else {
       sipIsErr = -1;
@@ -4361,7 +4413,7 @@ Returns a new graph or None if the import fails.
     tlp::DataSet *params = prepareAlgorithmParameters(*a0, a2, a1, a1Wrapper);
     if (params) {
       sipRes = tlp::importGraph(*a0, *params, 0, a2);
-      updateWrappedDataSetAfterAlgorithmCall(params, a1, a1Wrapper);
+      updateWrappedDataSetAfterAlgorithmCall(params, a1Wrapper);
       delete params;
     } else {
       sipIsErr = 1;
@@ -4403,7 +4455,7 @@ Exports a graph to a file using a Tulip :ref:`export plugin <exportpluginsdoc>`.
       tlp::DataSet *params = prepareAlgorithmParameters(*a0, a1, a3, a3Wrapper);
       if (params) {
         sipRes = tlp::exportGraph(a1, *ofs, *a0, *params);
-        updateWrappedDataSetAfterAlgorithmCall(params, a3, a3Wrapper);
+        updateWrappedDataSetAfterAlgorithmCall(params, a3Wrapper);
         delete params;
       } else {
         sipIsErr = -1;
@@ -4467,7 +4519,7 @@ If no selection is done, the whole graph is reseted to default value.
 %End
 
 //===========================================================================================
-tlp::IteratorGraph *getRootGraphs() /TypeHint="Iterable[tlp.Graph]"/;
+tlp::IteratorGraph *getRootGraphs() /TypeHint="Iterator[tlp.Graph]"/;
 %Docstring
 tlp.getRootGraphs()
 

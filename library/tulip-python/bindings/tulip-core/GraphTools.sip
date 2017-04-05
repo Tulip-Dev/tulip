@@ -29,9 +29,25 @@
 
 namespace tlp {
 
-std::vector<tlp::node> bfs(tlp::Graph *graph, tlp::node root = tlp::node());
+void bfs(tlp::Graph *graph, std::vector<tlp::node> &nodes /Out/);
 %Docstring
-tlp.bfs(graph[, root])
+tlp.bfs(graph)
+
+.. versionadded:: 4.11
+
+Performs a breadth-first search on a graph and returns a list
+containing the nodes of the graph in the order they have been visited.
+
+:param graph: The graph to traverse with a BFS.
+:type graph: :class:`tlp.Graph`
+:rtype: list of :class:`tlp.node`
+%End
+
+ //========================================================================================
+
+void bfs(tlp::Graph *graph, tlp::node root, std::vector<tlp::node> &nodes /Out/);
+%Docstring
+tlp.bfs(graph, root)
 
 .. versionadded:: 4.2
 
@@ -40,15 +56,15 @@ containing the nodes of the graph in the order they have been visited.
 
 :param graph: The graph to traverse with a BFS.
 :type graph: :class:`tlp.Graph`
-:param root: The node from whom to start the BFS. If not provided, the root node will be assigned to a source node in the graph (node with input degree equals to 0). If there is no source node in the graph, a random node will be picked.
+:param root: The node from whom to start the BFS.
 :type root: :class:`tlp.node`
 :rtype: list of :class:`tlp.node`
 :throws: an exception if the provided root node does not belong to the graph.
 %End
 
 %MethodCode
-  if (!a1->isValid() || a0->isElement(*a1)) {
-    sipRes = new std::vector<tlp::node>(tlp::bfs(a0, *a1));
+  if (a0->isElement(*a1)) {
+    tlp::bfs(a0, *a1, *a2);
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }
@@ -56,9 +72,25 @@ containing the nodes of the graph in the order they have been visited.
 
 //========================================================================================
 
-  std::vector<tlp::node> dfs(tlp::Graph *graph, tlp::node root = tlp::node());
+  void dfs(tlp::Graph *graph, std::vector<tlp::node> &nodes /Out/);
 %Docstring
-tlp.dfs(graph[, root])
+tlp.dfs(graph)
+
+.. versionadded:: 4.11
+
+Performs a depth-first search on a graph and returns a list
+containing the nodes of the graph in the order they have been visited.
+
+:param graph: The graph to traverse with a DFS.
+:type graph: :class:`tlp.Graph`
+:rtype: list of :class:`tlp.node`
+%End
+
+//========================================================================================
+
+  void dfs(tlp::Graph *graph, tlp::node root, std::vector<tlp::node> &nodes /Out/);
+%Docstring
+tlp.dfs(graph, root)
 
 .. versionadded:: 4.2
 
@@ -67,15 +99,15 @@ containing the nodes of the graph in the order they have been visited.
 
 :param graph: The graph to traverse with a DFS.
 :type graph: :class:`tlp.Graph`
-:param root: The node from whom to start the DFS. If not provided, the root node will be assigned to a source node in the graph (node with input degree equals to 0). If there is no source node in the graph, a random node will be picked.
+:param root: The node from whom to start the DFS.
 :type root: :class:`tlp.node`
 :rtype: list of :class:`tlp.node`
 :throws: an exception if the provided root node does not belong to the graph.
 %End
 
 %MethodCode
-  if (!a1->isValid() || a0->isElement(*a1)) {
-    sipRes = new std::vector<tlp::node>(tlp::dfs(a0, *a1));
+  if (a0->isElement(*a1)) {
+    tlp::dfs(a0, *a1, *a2);
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }
