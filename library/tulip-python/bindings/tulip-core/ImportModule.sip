@@ -26,7 +26,7 @@
 
 %ModuleHeaderCode
 #include <tulip/ImportModule.h>
-#include <tulip/PluginContext.h>.h>
+#include <tulip/PluginContext.h>
 %End
 
 namespace tlp {

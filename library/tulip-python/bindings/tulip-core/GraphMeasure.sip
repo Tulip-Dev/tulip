@@ -25,6 +25,7 @@
 
 %ModuleHeaderCode
 #include <tulip/GraphMeasure.h>
+#include <tulip/StaticProperty.h>
 %End
 
 namespace tlp {
@@ -82,12 +83,9 @@ This quantifies how close its neighbors are to being a clique.
 %End 
 
 %MethodCode
-  tlp::MutableContainer<double> result;
+  tlp::NodeStaticProperty<double> result(a0);
   tlp::clusteringCoefficient(a0, result, a2, a3);
-  tlp::node n;
-  forEach(n, a0->getNodes()) {
-    a1->setNodeValue(n, result.get(n));
-  }
+  result.copyToProperty(a1);
 %End
  
 //===========================================================================================
@@ -110,12 +108,9 @@ The algorithm ensures that the number of level used is minimal.
 %End
 
 %MethodCode
-  tlp::MutableContainer<unsigned int> result;
+  tlp::NodeStaticProperty<unsigned int> result(a0);
   tlp::dagLevel(a0, result, a2);
-  tlp::node n;
-  forEach(n, a0->getNodes()) {
-    a1->setNodeValue(n, static_cast<int>(result.get(n)));
-  }
+  result.copyToProperty(a1);
 %End  
   
 //===========================================================================================
@@ -166,12 +161,9 @@ Computes the distances from a node to all the other nodes of a graph and return 
 
 %MethodCode
   if (a0->isElement(*a1)) {
-    tlp::MutableContainer<unsigned int> result;
+    tlp::NodeStaticProperty<unsigned int> result(a0);
     sipRes = tlp::maxDistance(a0, *a1, result, a3);
-    tlp::node n;
-    forEach(n, a0->getNodes()) {
-      a2->setNodeValue(n, static_cast<int>(result.get(n)));
-    }
+    result.copyToProperty(a2);
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }
@@ -200,7 +192,14 @@ at distance less or equal to a maximum one.
 
 %MethodCode
   if (a0->isElement(*a1)) {
-    tlp::reachableNodes(a0, *a1, *a2, a3, a4);
+    TLP_HASH_MAP<tlp::node, bool> hResult;
+    markReachableNodes(a0, *a1, hResult, a3, a4);
+    TLP_HASH_MAP<tlp::node, bool>::const_iterator itr = hResult.begin();
+    TLP_HASH_MAP<tlp::node, bool>::const_iterator ite = hResult.end();
+    while (itr != ite) {
+      a2->insert(itr->first);
+      ++itr;
+    }
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }

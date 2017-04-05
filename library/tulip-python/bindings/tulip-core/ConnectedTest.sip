@@ -24,10 +24,10 @@
 // +-------------------------------------------------------------------------+
 
 %ModuleHeaderCode
-typedef std::set<tlp::node> setNodes;
+typedef std::vector<tlp::node> vectorNodes;
 %End
 
-typedef std::set<tlp::node> setNodes;
+typedef std::vector<tlp::node> vectorNodes;
 
 namespace tlp {
 
@@ -80,7 +80,7 @@ Returns the number of connected components in the graph.
   
 //===========================================================================================   
   
-  static void computeConnectedComponents(tlp::Graph *graph, std::vector<setNodes>& components /Out, TypeHint="List[Set[tlp.node]]"/) ;
+  static void computeConnectedComponents(tlp::Graph *graph, std::vector<vectorNodes>& components /Out, TypeHint="List[List[tlp.node]]"/) ;
 %Docstring
 tlp.ConnectedTest.computeConnectedComponents(graph)
 
