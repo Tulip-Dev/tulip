@@ -272,7 +272,8 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
       for(; itE->hasNext();) {
         edge adjit=itE->next();
         node tgt = graph->target(adjit);
-	unsigned int tgtPos = graph->nodePos(tgt);
+        unsigned int tgtPos = graph->nodePos(tgt);
+
         if (!nodeFlag[tgtPos]) {
           nodeFlag[tgtPos] = true;
           ++nbSelectedNodes;
