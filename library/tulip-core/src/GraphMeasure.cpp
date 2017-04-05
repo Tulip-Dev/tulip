@@ -347,12 +347,13 @@ void tlp::dagLevel (const Graph *graph,
     node child;
     unsigned int curLevel = level.getNodeValue(current) + 1;
     forEach(child, graph->getOutNodes(current)) {
-      unsigned int childLevel = totreat.getNodeValue(child);
+      unsigned int childPos = graph->nodePos(child);
+      unsigned int childLevel = totreat[childPos];
 
       if (childLevel > 0)
-        totreat.setNodeValue(child, childLevel - 1);
+        totreat[childPos]= childLevel - 1;
       else {
-        level.setNodeValue(child, curLevel);
+        level[childPos] = curLevel;
         fifo.push_back(child);
       }
     }
