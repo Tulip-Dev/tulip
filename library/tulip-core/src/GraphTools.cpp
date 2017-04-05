@@ -254,8 +254,9 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty, Plug
       for (; itE->hasNext();) {
         edge adjit = itE->next();
         node tgt = graph->target(adjit);
-        if (!nodeFlag.getNodeValue(tgt)) {
-          nodeFlag.setNodeValue(tgt, true);
+        unsigned int tgtPos = graph->nodePos(tgt);
+        if (!nodeFlag[tgtPos]) {
+          nodeFlag[tgtPos] = true;
           ++nbSelectedNodes;
           fifo.push_back(tgt);
         } else
