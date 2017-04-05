@@ -30,6 +30,7 @@ INSTALL(FILES
   tulip/GraphAbstract.h
   tulip/GraphDecorator.h
   tulip/Graph.h
+  tulip/GraphIterator.h
   tulip/GraphTest.h
   tulip/GraphMeasure.h
   tulip/GraphProperty.h
