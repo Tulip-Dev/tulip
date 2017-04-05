@@ -297,23 +297,58 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.node]"/;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterator[tlp.node]"/;
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::node>* getNodesEqualTo(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.node]"/;
+  tlp::Iterator<tlp::node>* getNodesEqualTo(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
+%Docstring
+tlp.@PROPERTY_TYPE@Property.getNodesEqualTo(val[, graph = None])
 
+.. versionadded:: 4.11
+
+Returns an iterator through all nodes belonging to the attached graph
+whose associated value is equal to the one given in parameter.
+
+:param val: a value
+:type val: @PYTHON_NODE_TYPE@
+:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:type graph: :class:`tlp.Graph`
+:rtype: a Tulip iterator on :class:`tlp.node` objects
+%End
+
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNodesEqualTo(getValue(a0), a1));
+%End
 //===========================================================================================
 
   virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.edge]"/;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterator[tlp.edge]"/;
 
 //===========================================================================================
 
-  tlp::Iterator<tlp::edge>* getEdgesEqualTo(const @PROPERTY_EDGE_TYPE@ &val /TypeHint="@PYTHON_EDGE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.edge]"/;
+  tlp::Iterator<tlp::edge>* getEdgesEqualTo(const @PROPERTY_EDGE_TYPE@ &val /TypeHint="@PYTHON_EDGE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
+%Docstring
+tlp.@PROPERTY_TYPE@Property.getEdgesEqualTo(val[, graph = None])
+
+.. versionadded:: 4.11
+
+Returns an iterator through all edges belonging to the attached graph
+whose associated value is equal to the one given in parameter.
+
+:param val: a value
+:type val: @PYTHON_EDGE_TYPE@
+:param graph: a sub-graph can be given in parameter, in that case returns an iterator on edges only belonging to that sub-graph
+:type graph: :class:`tlp.Graph`
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
+%End
+
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdgesEqualTo(getValue(a0), a1));
+%End
 
 //===========================================================================================
 
@@ -965,11 +1000,11 @@ Resizes the list attached to a particular edge. The value given in paramater wil
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const /TypeHint="Iterable[tlp.node]"/;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const /TypeHint="Iterator[tlp.node]"/;
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const /TypeHint="Iterable[tlp.edge]"/;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const /TypeHint="Iterator[tlp.edge]"/;
 
 //===========================================================================================
 
@@ -1030,6 +1065,48 @@ Copies the values hold by a property in this property.
 %End
 
 //===========================================================================================
+
+ tlp::Iterator<tlp::node>* getNodesEqualTo(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.node]"/;
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getNodesEqualTo(val[, graph = None])
+
+.. versionadded:: 4.11
+
+Returns an iterator through all nodes belonging to the attached graph
+whose associated value is equal to the one given in parameter.
+
+:param val: a value
+:type val: list of @PYTHON_TYPE@
+:param graph: a sub-graph can be given in parameter, in that case returns an iterator on nodes only belonging to that sub-graph
+:type graph: :class:`tlp.Graph`
+:rtype: a Tulip iterator on :class:`tlp.node` objects
+%End
+
+%MethodCode
+ sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNodesEqualTo(*a0, a1));
+%End
+
+//===========================================================================================
+
+tlp::Iterator<tlp::edge>* getEdgesEqualTo(const std::vector<@CPP_TYPE@> &val /TypeHint="List[@PYTHON_NODE_TYPEHINT@]"/, const tlp::Graph* subgraph = NULL) const /TransferBack, TypeHint="Iterator[tlp.edge]"/;
+%Docstring
+tlp.@VEC_PROPERTY_TYPE@VectorProperty.getEdgesEqualTo(val[, graph = None])
+
+.. versionadded:: 4.11
+
+Returns an iterator through all edges belonging to the attached graph
+whose associated value is equal to the one given in parameter.
+
+:param val: a value
+:type val: list of @PYTHON_TYPE@
+:param graph: a sub-graph can be given in parameter, in that case returns an iterator on edges only belonging to that sub-graph
+:type graph: :class:`tlp.Graph`
+:rtype: a Tulip iterator on :class:`tlp.edge` objects
+%End
+
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getEdgesEqualTo(*a0, a1));
+%End
 
 };
 

@@ -98,7 +98,7 @@ Returns the graph on which the property has been defined.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0 /TypeHint="Iterable[tlp.node]"/;
+  virtual tlp::Iterator<tlp::node>* getNonDefaultValuatedNodes(const tlp::Graph* subgraph= NULL) const = 0 /TransferBack, TypeHint="Iterator[tlp.node]"/;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedNodes([subgraph = None])
 
@@ -108,6 +108,10 @@ from the default value.
 :param subgraph: a sub-graph can be given in parameter. In that case, only the nodes owned by this sub-graph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorNode`
+%End
+
+%MethodCode
+  sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getNonDefaultValuatedNodes(a0));
 %End
 
  //===========================================================================================
@@ -128,7 +132,7 @@ from the default value.
 
 //===========================================================================================
 
-  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0 /TypeHint="Iterable[tlp.edge]"/;
+  virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const = 0 /TransferBack, TypeHint="Iterator[tlp.edge]"/;
 %Docstring
 tlp.PropertyInterface.getNonDefaultValuatedEdges([subgraph = None])
 
@@ -138,6 +142,10 @@ from the default value.
 :param subgraph: a sub-graph can be given in parameter. In that case, only the edges owned by this sub-graph are returned by the iterator.
 :type subgraph: :class:`tlp.Graph`
 :rtype: :class:`tlp.IteratorEdge`
+%End
+
+%MethodCode
+ sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getNonDefaultValuatedEdges(a0));
 %End
 
 //===========================================================================================

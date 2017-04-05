@@ -25,6 +25,7 @@
 
 %ModuleHeaderCode
 #include <tulip/GraphMeasure.h>
+#include <tulip/StaticProperty.h>
 %End
 
 namespace tlp {
@@ -66,7 +67,7 @@ as the average of the local clustering coefficients
 
   void clusteringCoefficient(const tlp::Graph *g, tlp::DoubleProperty *result, unsigned int maxDepth = 1, tlp::PluginProgress* = nullptr);
 
-%Docstring 
+%Docstring
 tlp.clusteringCoefficient(graph, result[, maxDepth = 1])
 
 Assigns to each node its local clustering coefficient
@@ -80,16 +81,14 @@ This quantifies how close its neighbors are to being a clique.
 :type result: :class:`tlp.DoubleProperty`
 :param maxDepth: the maximum distance between each node and its neighbours.
 :type maxDepth: integer
-%End 
+%End
 
 %MethodCode
-  tlp::MutableContainer<double> result;
+  tlp::NodeStaticProperty<double> result(a0);
   tlp::clusteringCoefficient(a0, result, a2, a3);
-  for(tlp::node n : a0->getNodes()) {
-    a1->setNodeValue(n, result.get(n));
-  }
+  result.copyToProperty(a1);
 %End
- 
+
 //===========================================================================================
 
   void dagLevel(const tlp::Graph *graph, tlp::IntegerProperty* result, tlp::PluginProgress* = 0);
@@ -97,7 +96,7 @@ This quantifies how close its neighbors are to being a clique.
 tlp.dagLevel(graph, result)
 
 Assigns to each node of a Directed Acyclic Graph a level such that
-if the edge e(u,v) exists level(u) < level(v). 
+if the edge e(u,v) exists level(u) < level(v).
 The algorithm ensures that the number of level used is minimal.
 
 :param graph: the graph on which to compute the dag level
@@ -110,13 +109,11 @@ The algorithm ensures that the number of level used is minimal.
 %End
 
 %MethodCode
-  tlp::MutableContainer<unsigned int> result;
+  tlp::NodeStaticProperty<unsigned int> result(a0);
   tlp::dagLevel(a0, result, a2);
-  for(tlp::node n : a0->getNodes()) {
-    a1->setNodeValue(n, static_cast<int>(result.get(n)));
-  }
-%End  
-  
+  result.copyToProperty(a1);
+%End
+
 //===========================================================================================
 
   unsigned int maxDegree(const tlp::Graph *graph);
@@ -128,8 +125,8 @@ Returns the maximum degree of the graph's nodes.
 :param graph: the graph on which to compute the maximum degree
 :type graph: :class:`tlp.Graph`
 :rtype: integer
-%End  
-  
+%End
+
 //===========================================================================================
 
   unsigned int minDegree(const tlp::Graph *graph);
@@ -142,13 +139,13 @@ Returns the minimum degree of the graph's nodes.
 :type graph: :class:`tlp.Graph`
 :rtype: integer
 %End
-  
+
 //===========================================================================================
 
   unsigned int maxDistance(const tlp::Graph *graph, const tlp::node node, tlp::IntegerProperty *result, tlp::EDGE_TYPE direction = tlp::UNDIRECTED);
 %Docstring
 tlp.maxDistance(graph, node, result, direction)
-  
+
 Computes the distances from a node to all the other nodes of a graph and return the maximum one.
 
 :param graph: the graph on which to compute the maximum distance
@@ -165,12 +162,9 @@ Computes the distances from a node to all the other nodes of a graph and return 
 
 %MethodCode
   if (a0->isElement(*a1)) {
-    tlp::MutableContainer<unsigned int> result;
+    tlp::NodeStaticProperty<unsigned int> result(a0);
     sipRes = tlp::maxDistance(a0, *a1, result, a3);
-    tlp::node n;
-    forEach(n, a0->getNodes()) {
-      a2->setNodeValue(n, static_cast<int>(result.get(n)));
-    }
+    result.copyToProperty(a2);
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }
@@ -192,14 +186,21 @@ at distance less or equal to a maximum one.
 :param maxDistance: the maximum distance to reach nodes
 :type maxDistance: integer
 :param direction: specify if the graph must be directed or not
-:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED  
+:type direction: tlp.DIRECTED, tlp.INV_DIRECTED, tlp.UNDIRECTED
 :rtype: set of :class:`tlp.node`
 :throws: an exception if the node does not belong to the graph
-%End 
+%End
 
 %MethodCode
   if (a0->isElement(*a1)) {
-    tlp::reachableNodes(a0, *a1, *a2, a3, a4);
+    TLP_HASH_MAP<tlp::node, bool> hResult;
+    markReachableNodes(a0, *a1, hResult, a3, a4);
+    TLP_HASH_MAP<tlp::node, bool>::const_iterator itr = hResult.begin();
+    TLP_HASH_MAP<tlp::node, bool>::const_iterator ite = hResult.end();
+    while (itr != ite) {
+      a2->insert(itr->first);
+      ++itr;
+    }
   } else {
     sipIsErr = throwInvalidNodeException(a0, *a1);
   }

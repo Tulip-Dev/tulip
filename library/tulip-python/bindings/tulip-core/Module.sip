@@ -56,41 +56,77 @@
 #include <sstream>
 #include <iostream>
 
-tlp::PropertyInterface* copyValue(tlp::PropertyInterface* value);
+inline tlp::PropertyInterface* copyValue(tlp::PropertyInterface* value) {
+  return value;
+}
 
-tlp::Graph* copyValue(tlp::Graph* value);
+inline tlp::Graph* copyValue(tlp::Graph* value) {
+  return value;
+}
 
-std::string* copyValue(const std::string &value);
+inline std::string* copyValue(const std::string &value) {
+  return new std::string(value);
+}
 
-std::string getValue(const std::string *value);
+inline const std::string &getValue(const std::string *value) {
+  return *value;
+}
 
-tlp::node* copyValue(const tlp::node &value);
+inline tlp::node* copyValue(const tlp::node &value) {
+  return new tlp::node(value);
+}
 
-tlp::edge* copyValue(const tlp::edge &value);
+inline tlp::edge* copyValue(const tlp::edge &value) {
+  return new tlp::edge(value);
+}
 
-int copyValue(const int &value);
+inline int copyValue(const int &value) {
+  return value;
+}
 
-int getValue(const int &value);
+inline int getValue(const int &value) {
+  return value;
+}
 
-double copyValue(const double &value);
+inline double copyValue(const double &value) {
+  return value;
+}
 
-double getValue(const double &value);
+inline double getValue(const double &value) {
+  return value;
+}
 
-tlp::Vec3f *copyValue(const tlp::Vec3f &value);
+inline tlp::Vec3f *copyValue(const tlp::Vec3f &value) {
+  return new tlp::Vec3f(value);
+}
 
-tlp::Vec3f getValue(const tlp::Vec3f *value);
+inline const tlp::Vec3f& getValue(const tlp::Vec3f *value) {
+  return *value;
+}
 
-tlp::Color *copyValue(const tlp::Color &value);
+inline tlp::Color *copyValue(const tlp::Color &value) {
+  return new tlp::Color(value);
+}
 
-tlp::Color getValue(const tlp::Color *value);
+inline const tlp::Color& getValue(const tlp::Color *value) {
+  return *value;
+}
 
-std::vector<tlp::Vec3f> *copyValue(const std::vector<tlp::Vec3f> &value);
+inline tlp::ParameterDescription *copyValue(const tlp::ParameterDescription &value) {
+  return new tlp::ParameterDescription(value);
+}
 
-std::vector<tlp::Vec3f> getValue(const std::vector<tlp::Vec3f> *value);
+inline const tlp::ParameterDescription &getValue(const tlp::ParameterDescription *value) {
+  return *value;
+}
 
-tlp::ParameterDescription *copyValue(const tlp::ParameterDescription &value);
+inline std::vector<tlp::Vec3f> *copyValue(const std::vector<tlp::Vec3f> &value) {
+  return new std::vector<tlp::Vec3f>(value);
+}
 
-tlp::ParameterDescription getValue(const tlp::ParameterDescription *value);
+inline const std::vector<tlp::Vec3f>& getValue(const std::vector<tlp::Vec3f> *value) {
+  return *value;
+}
 
 template <typename T>
 bool pluginExists(std::string pluginName) {
@@ -144,78 +180,6 @@ extern std::string convertPythonUnicodeObjectToStdString(PyObject *pyUnicodeObj)
 
 %ModuleCode
 
-tlp::PropertyInterface* copyValue(tlp::PropertyInterface* value) {
-  return value;
-}
-
-tlp::Graph* copyValue(tlp::Graph* value) {
-  return value;
-}
-
-std::string* copyValue(const std::string &value) {
-  return new std::string(value);
-}
-
-std::string getValue(const std::string *value) {
-  return *value;
-}
-
-tlp::node* copyValue(const tlp::node &value) {
-  return new tlp::node(value);
-}
-
-tlp::edge* copyValue(const tlp::edge &value) {
-  return new tlp::edge(value);
-}
-
-int copyValue(const int &value) {
-  return value;
-}
-
-int getValue(const int &value) {
-  return value;
-}
-
-double copyValue(const double &value) {
-  return value;
-}
-
-double getValue(const double &value) {
-  return value;
-}
-
-tlp::Vec3f *copyValue(const tlp::Vec3f &value) {
-  return new tlp::Vec3f(value);
-}
-
-tlp::Vec3f getValue(const tlp::Vec3f *value) {
-  return *value;
-}
-
-tlp::Color *copyValue(const tlp::Color &value) {
-  return new tlp::Color(value);
-}
-
-tlp::Color getValue(const tlp::Color *value) {
-  return *value;
-}
-
-tlp::ParameterDescription *copyValue(const tlp::ParameterDescription &value) {
-  return new tlp::ParameterDescription(value);
-}
-
-tlp::ParameterDescription getValue(const tlp::ParameterDescription *value) {
-  return *value;
-}
-
-std::vector<tlp::Vec3f> *copyValue(const std::vector<tlp::Vec3f> &value) {
-  return new std::vector<tlp::Vec3f>(value);
-}
-
-std::vector<tlp::Vec3f> getValue(const std::vector<tlp::Vec3f> *value) {
-  return *value;
-}
-
 int throwInvalidNodeException(const tlp::Graph *graph, tlp::node n) {
   std::ostringstream oss;
   oss << "Node with id " << n.id << " does not belong to graph \"" << graph->getName() <<"\" (id " << graph->getId() <<")";
@@ -264,7 +228,7 @@ void releaseSIPWrapper(void *wrappedCppObject, const sipTypeDef *td) {
 
 void replaceAll(std::string &s, const std::string& replaceWhat, const std::string& replaceWithWhat) {
   while(1) {
-    const int pos = s.find(replaceWhat);
+    const size_t pos = s.find(replaceWhat);
     if (pos==std::string::npos) break;
     s.replace(pos,replaceWhat.size(),replaceWithWhat);
   }
