@@ -245,11 +245,11 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
-  virtual void erase(const tlp::node node);
+  void erase(const tlp::node node);
 
 //===========================================================================================
 
-  virtual void erase(const tlp::edge edge);
+  void erase(const tlp::edge edge);
 
 //===========================================================================================
 
@@ -301,11 +301,19 @@ Sets the value of a particular edge.
 
 //===========================================================================================
 
+  tlp::Iterator<tlp::node>* getNodesEqualTo(const @PROPERTY_NODE_TYPE@ &val /TypeHint="@PYTHON_NODE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.node]"/;
+
+//===========================================================================================
+
   virtual unsigned int numberOfNonDefaultValuatedEdges(const tlp::Graph* subgraph= NULL) const;
 
 //===========================================================================================
 
   virtual tlp::Iterator<tlp::edge>* getNonDefaultValuatedEdges(const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.edge]"/;
+
+//===========================================================================================
+
+  tlp::Iterator<tlp::edge>* getEdgesEqualTo(const @PROPERTY_EDGE_TYPE@ &val /TypeHint="@PYTHON_EDGE_TYPEHINT@"/, const tlp::Graph* subgraph = NULL) const /TypeHint="Iterable[tlp.edge]"/;
 
 //===========================================================================================
 
