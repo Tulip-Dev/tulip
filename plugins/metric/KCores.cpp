@@ -99,19 +99,11 @@ static const char *paramHelp[] = {
 KCores::KCores(const PluginContext *context) : DoubleAlgorithm(context) {
   addInParameter<StringCollection>(DEGREE_TYPE, paramHelp[0], DEGREE_TYPES, true, "InOut <br> In <br> Out");
   addInParameter<NumericProperty *>("metric", paramHelp[1], "", false);
-  addDependency("Degree", "1.0");
 }
 //========================================================================================
 KCores::~KCores() {
 }
 //========================================================================================
-// to maximize the locality of reference we will use a vector
-// holding the all the nodes needed info in the structure below
-struct nodeInfo {
-  double k;
-  bool deleted;
-};
-
 bool KCores::run() {
   NumericProperty *metric = nullptr;
   StringCollection degreeTypes(DEGREE_TYPES);
@@ -122,31 +114,22 @@ bool KCores::run() {
     dataSet->get("metric", metric);
   }
 
-  unsigned int degree_type = degreeTypes.getCurrent();
+  EDGE_TYPE degree_type = (EDGE_TYPE)degreeTypes.getCurrent();
 
-  string errMsg = "";
-  graph->applyPropertyAlgorithm("Degree", result, errMsg, pluginProgress, dataSet);
-
-#ifdef _MSC_VER
-  int i = 0;
-#else
-  unsigned int i = 0;
-#endif
   // the famous k
   double k = DBL_MAX;
-  // record nodes info in a vector to improve
-  // the locality of reference during the multiple
-  // needed nodes loop
-  NodeStaticProperty<nodeInfo> nodesInfo(graph);
+  // use two NodeStaticProperty to hold the nodes infos
+  // because the more k increase the more nodes are "deleted"
+  NodeStaticProperty<bool> nodeDeleted(graph);
+  NodeStaticProperty<double> nodeK(graph);
+  degree(graph, nodeK, degree_type, metric, false);
   const std::vector<node> &nodes = graph->nodes();
   // the number of non deleted nodes
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    nodeInfo &nInfo = nodesInfo[i];
-    nInfo.k = result->getNodeValue(nodes[i]);
-    k = std::min(k, nInfo.k);
-    nInfo.deleted = false;
+    k = std::min(k, nodeK[i]);
+    nodeDeleted[i] = false;
   }
 
   bool noEdgeCheck = (graph == graph->getRoot());
@@ -158,52 +141,50 @@ bool KCores::run() {
     while (modify) {
       modify = false;
       // finally set the values
-      for (i = 0; i < nodesInfo.size(); ++i) {
-        nodeInfo &nInfo = nodesInfo[i];
-
+      for (unsigned int i = 0; i < nodes.size(); ++i) {
         // nothing to do if the node
         // is already deleted
-        if (nInfo.deleted)
+        if (nodeDeleted[i])
           continue;
 
         node n = nodes[i];
-
-        double current_k = nInfo.k;
+        double &nK = nodeK[i];
+        double current_k = nK;
 
         if (current_k <= k) {
-          nInfo.k = k;
+          nK = k;
           // decrease neighbours weighted degree
           const std::vector<edge> &edges = graph->allEdges(n);
           unsigned int nbEdges = edges.size();
-          for (unsigned int i = 0; i < nbEdges; ++i) {
-            edge ee = edges[i];
+
+          for (unsigned int j = 0; j < nbEdges; ++j) {
+            edge ee = edges[j];
+
             if (noEdgeCheck || graph->isElement(ee)) {
               std::pair<node, node> ends = graph->ends(ee);
               node m;
+
               switch (degree_type) {
-              case IN:
+              case IN_EDGE:
                 if ((m = ends.second) == n)
                   continue;
                 break;
-
-              case OUT:
+              case OUT_EDGE:
                 if ((m = ends.first) == n)
                   continue;
                 break;
-
               default:
                 m = (ends.first == n) ? ends.second : ends.first;
               }
-              nodeInfo &mInfo = nodesInfo[graph->nodePos(m)];
 
-              if (mInfo.deleted)
+              unsigned int mPos = graph->nodePos(m);
+              if (nodeDeleted[mPos])
                 continue;
-
-              mInfo.k -= metric ? metric->getEdgeDoubleValue(ee) : 1;
+              nodeK[mPos] -= metric ? metric->getEdgeDoubleValue(ee) : 1;
             }
           }
           // mark node as deleted
-          nInfo.deleted = true;
+          nodeDeleted[i] = true;
           --nbNodes;
           modify = true;
         } else if (current_k < next_k)
@@ -214,14 +195,9 @@ bool KCores::run() {
 
     k = next_k;
   }
-// finally set the values
-#ifdef _OPENMP
-#pragma omp parallel for
-#endif
-  for (i = 0; i < nodesInfo.size(); ++i) {
-    nodeInfo &nInfo = nodesInfo[i];
-    result->setNodeValue(nodes[i], nInfo.k);
-  }
+
+  // finally set the result values
+  nodeK.copyToProperty(result);
 
   return true;
 }

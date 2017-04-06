@@ -319,10 +319,171 @@ void tlp::dagLevel(const Graph *graph, tlp::NodeStaticProperty<unsigned int> &le
       unsigned int childLevel = totreat[childPos];
 
       if (childLevel > 0)
-        totreat[childPos]= childLevel - 1;
+        totreat[childPos] = childLevel - 1;
       else {
         level[childPos] = curLevel;
         fifo.push_back(child);
+      }
+    }
+  }
+}
+
+//==================================================
+void tlp::degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg, EDGE_TYPE direction, NumericProperty *weights, bool norm) {
+  const std::vector<node> &nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+  if (!weights) {
+    if (!norm) {
+      switch (direction) {
+      case UNDIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i)
+          deg[i] = graph->deg(nodes[i]);
+        break;
+      case INV_DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i)
+          deg[i] = graph->indeg(nodes[i]);
+        break;
+      case DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i)
+          deg[i] = graph->outdeg(nodes[i]);
+        break;
+      }
+    } else {
+      double normalization = 1.0;
+      if (nbNodes > 1 && graph->numberOfEdges())
+        normalization = 1. / (double)(nbNodes - 1);
+      switch (direction) {
+      case UNDIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i)
+          deg[i] = normalization * graph->deg(nodes[i]);
+        break;
+      case INV_DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i)
+          deg[i] = normalization * graph->indeg(nodes[i]);
+        break;
+      case DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i)
+          deg[i] = normalization * graph->outdeg(nodes[i]);
+        break;
+      }
+    }
+  } else {
+    if (!norm) {
+      switch (direction) {
+      case UNDIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i) {
+          edge e;
+          double nWeight = 0.0;
+          forEach(e, graph->getInOutEdges(nodes[i])) {
+            nWeight += weights->getEdgeDoubleValue(e);
+          }
+          deg[i] = nWeight;
+        }
+        break;
+      case INV_DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i) {
+          edge e;
+          double nWeight = 0.0;
+          forEach(e, graph->getInEdges(nodes[i])) {
+            nWeight += weights->getEdgeDoubleValue(e);
+          }
+          deg[i] = nWeight;
+        }
+        break;
+      case DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i) {
+          edge e;
+          double nWeight = 0.0;
+          forEach(e, graph->getInEdges(nodes[i])) {
+            nWeight += weights->getEdgeDoubleValue(e);
+          }
+          deg[i] = nWeight;
+        }
+        break;
+      }
+    } else {
+      double normalization = 1.0;
+      unsigned int nbEdges = graph->numberOfEdges();
+
+      if (nbNodes > 1 && nbEdges > 0) {
+        double sum = 0;
+        const std::vector<edge> &edges = graph->edges();
+        for (unsigned int i = 0; i < nbEdges; ++i)
+          sum += fabs(weights->getEdgeDoubleValue(edges[i]));
+        normalization = (sum / nbEdges) * (nbNodes - 1);
+
+        if (fabs(normalization) < 1E-9)
+          normalization = 1.0;
+        else
+          normalization = 1.0 / normalization;
+      }
+      switch (direction) {
+      case UNDIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i) {
+          edge e;
+          double nWeight = 0.0;
+          forEach(e, graph->getInOutEdges(nodes[i])) {
+            nWeight += weights->getEdgeDoubleValue(e);
+          }
+          deg[i] = nWeight * normalization;
+        }
+        break;
+      case INV_DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i) {
+          edge e;
+          double nWeight = 0.0;
+          forEach(e, graph->getInEdges(nodes[i])) {
+            nWeight += weights->getEdgeDoubleValue(e);
+          }
+          deg[i] = nWeight * normalization;
+        }
+        break;
+      case DIRECTED:
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
+        for (unsigned int i = 0; i < nbNodes; ++i) {
+          edge e;
+          double nWeight = 0.0;
+          forEach(e, graph->getInEdges(nodes[i])) {
+            nWeight += weights->getEdgeDoubleValue(e);
+          }
+          deg[i] = nWeight * normalization;
+        }
+        break;
       }
     }
   }
