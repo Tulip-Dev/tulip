@@ -38,20 +38,20 @@ class GraphView;
 
 struct node;
 struct edge;
-class NodeIterator :public Iterator<node> {
+class TLP_SCOPE NodeIterator :public Iterator<node> {
 };
 
-class EdgeIterator :public Iterator<edge> {
+class TLP_SCOPE EdgeIterator :public Iterator<edge> {
 };
 
 #if !defined(NDEBUG) && !defined(_OPENMP)
-class NodeIteratorObserver :public NodeIterator, public Observable {
+class TLP_SCOPE NodeIteratorObserver :public NodeIterator, public Observable {
 private:
   // Observable interface
   void treatEvent(const Event&);
 };
 
-class EdgeIteratorObserver :public EdgeIterator, public Observable {
+class TLP_SCOPE EdgeIteratorObserver :public EdgeIterator, public Observable {
 private:
   // Observable interface
   void treatEvent(const Event&);
@@ -59,7 +59,7 @@ private:
 #endif
 //===========================================================
 ///Factorization of code for iterators
-class FactorNodeIterator
+class TLP_SCOPE FactorNodeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
   :public NodeIterator
 #else
@@ -74,7 +74,7 @@ public:
   }
 };
 
-class FactorEdgeIterator
+class TLP_SCOPE FactorEdgeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
   :public EdgeIterator
 #else
@@ -145,7 +145,7 @@ public:
 
 //============================================================
 ///Out node iterator for GraphView
-class OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
+class TLP_SCOPE OutNodesIterator:public FactorNodeIterator, public MemoryPool<OutNodesIterator> {
 private:
   Iterator<edge> *it;
 #if !defined(NDEBUG) && !defined(_OPENMP)
@@ -173,7 +173,7 @@ public:
 };
 //============================================================
 ///In Out node iterator for GraphView
-class InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodesIterator> {
+class TLP_SCOPE InOutNodesIterator:public FactorNodeIterator, public MemoryPool<InOutNodesIterator> {
 private:
   Iterator<edge> *it;
   node n;
@@ -245,7 +245,7 @@ public:
 };
 //============================================================
 ///Out edge iterator for GraphView
-class OutEdgesIterator:public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
+class TLP_SCOPE OutEdgesIterator:public FactorEdgeIterator, public MemoryPool<OutEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
@@ -261,7 +261,7 @@ protected:
 };
 //============================================================
 ///In edge iterator for GraphView
-class InEdgesIterator:public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
+class TLP_SCOPE InEdgesIterator:public FactorEdgeIterator, public MemoryPool<InEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
@@ -277,7 +277,7 @@ protected:
 };
 //============================================================
 ///In Out edge iterator for GraphView
-class InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdgesIterator> {
+class TLP_SCOPE InOutEdgesIterator:public FactorEdgeIterator, public MemoryPool<InOutEdgesIterator> {
 private:
   Iterator<edge> *it;
   edge curEdge;
@@ -295,7 +295,7 @@ protected:
 //============================================================
 //Iterator for the Graph
 //============================================================
-class GraphNodeIterator
+class TLP_SCOPE GraphNodeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
   :public NodeIterator, public MemoryPool<GraphNodeIterator>
 #else
@@ -315,7 +315,7 @@ public:
 };
 //=============================================================
 ///Edge iterator for data sg
-class GraphEdgeIterator
+class TLP_SCOPE GraphEdgeIterator
 #if defined(NDEBUG) || defined(_OPENMP)
   :public EdgeIterator, public MemoryPool<GraphEdgeIterator>
 #else
