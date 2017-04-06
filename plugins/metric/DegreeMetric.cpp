@@ -65,7 +65,7 @@ bool DegreeMetric::run() {
   NodeStaticProperty<double> deg(graph);
   degree(graph, deg, (EDGE_TYPE) degreeTypes.getCurrent(), weights, norm);
   deg.copyToProperty(result);
-  
+
   return true;
 }
 //==================================================================
@@ -88,6 +88,7 @@ bool DegreeMetric::check(std::string& errorMsg) {
       delete itE;
     }
   }
+
   return true;
 }
 
