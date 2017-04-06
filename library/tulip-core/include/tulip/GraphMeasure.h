@@ -32,7 +32,10 @@ namespace tlp {
 
 class Graph;
 class PluginProgress;
-enum EDGE_TYPE {DIRECTED = 0, INV_DIRECTED = 1, UNDIRECTED = 2};
+enum EDGE_TYPE {UNDIRECTED = 0, INV_DIRECTED = 1, DIRECTED = 2};
+#define IN_EDGE INV_DIRECTED
+#define OUT_EDGE DIRECTED
+#define INOUT_EDGE UNDIRECTED
 /**
  * returns the average path lengh of a graph, that is the sum
  * of the shortest distances for all pair of distinct nodes in that graph
@@ -72,6 +75,19 @@ TLP_SCOPE void clusteringCoefficient(const Graph *g, tlp::NodeStaticProperty<dou
  * WARNING: this function is deprecated
  */
 TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigned int> &level, PluginProgress* = NULL);
+/*
+ * assign to each node of a graph its (in/ou/inout) degree.
+ * The weighted degree of a node is the sum of weights of
+ * all its in/out/inout edges."
+ * If no metric is specified, using a uniform metric value of 1 for all edges
+ * it assigns the usual degree of nodes (number of neighbors).",
+ * If norm is true, the measure is normalized in the following way:
+ * unweighted case => m(n) = deg(n) / (#V - 1)
+ * weighted case => m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)]
+ */
+TLP_SCOPE void degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
+		      EDGE_TYPE direction = UNDIRECTED,
+		      NumericProperty* weights = NULL, bool norm = false);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
