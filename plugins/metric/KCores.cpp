@@ -163,18 +163,24 @@ bool KCores::run() {
               case IN_EDGE:
                 if ((m = ends.second) == n)
                   continue;
+
                 break;
+
               case OUT_EDGE:
                 if ((m = ends.first) == n)
                   continue;
+
                 break;
+
               default:
                 m = (ends.first == n) ? ends.second : ends.first;
               }
-	      
-	      unsigned int mPos = graph->nodePos(m);
-	      if (nodeDeleted[mPos])
-		continue;
+
+              unsigned int mPos = graph->nodePos(m);
+
+              if (nodeDeleted[mPos])
+                continue;
+
               nodeK[mPos] -= metric ? metric->getEdgeDoubleValue(ee) : 1;
             }
           }

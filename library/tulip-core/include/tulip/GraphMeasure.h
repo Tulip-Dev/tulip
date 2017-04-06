@@ -86,8 +86,8 @@ TLP_SCOPE _DEPRECATED void dagLevel(const Graph *graph, MutableContainer<unsigne
  * weighted case => m(n) = deg_w(n) / [(sum(e_w)/#E)(#V - 1)]
  */
 TLP_SCOPE void degree(const Graph *graph, tlp::NodeStaticProperty<double> &deg,
-		      EDGE_TYPE direction = UNDIRECTED,
-		      NumericProperty* weights = NULL, bool norm = false);
+                      EDGE_TYPE direction = UNDIRECTED,
+                      NumericProperty* weights = NULL, bool norm = false);
 /*
  * assign to each node of a Directed Acyclic Graph a level such that
  * if the edge e(u,v) exists level(u) < level(v) the algorithm ensure that
