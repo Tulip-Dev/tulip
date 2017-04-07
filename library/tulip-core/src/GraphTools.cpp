@@ -16,6 +16,9 @@
  * See the GNU General Public License for more details.
  *
  */
+#ifdef _OPENMP
+#include <omp.h>
+#endif
 #include <tulip/tuliphash.h>
 #include <tulip/GraphTools.h>
 #include <tulip/GraphMeasure.h>
@@ -60,13 +63,15 @@ void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge
   for (unsigned int i = 0; i < nbEdges; ++i) {
     edge e = edges[i];
     pair<node, node> eEnds = graph->ends(e);
-    int delta = dLevel.getNodeValue(eEnds.second) - dLevel.getNodeValue(eEnds.first);
+    unsigned int fLevel = dLevel.getNodeValue(eEnds.first);
+    unsigned int sLevel = dLevel.getNodeValue(eEnds.second);
+    int delta = sLevel - fLevel;
 
     if (delta > 1) {
       node n1 = graph->addNode();
       replacedEdges[e] = graph->addEdge(eEnds.first, n1);
       addedNodes.push_back(n1);
-      dLevel.addNodeValue(n1, dLevel.getNodeValue(eEnds.first) + 1);
+      dLevel.addNodeValue(n1, fLevel + 1);
 
       if (delta > 2) {
         node n2 = graph->addNode();
@@ -76,7 +81,7 @@ void makeProperDag(Graph *graph, list<node> &addedNodes, TLP_HASH_MAP<edge, edge
         if (edgeLength)
           edgeLength->setEdgeValue(e, delta - 2);
 
-        dLevel.addNodeValue(n2, dLevel.getNodeValue(eEnds.second) - 1);
+        dLevel.addNodeValue(n2, sLevel - 1);
         n1 = n2;
       }
 
@@ -114,12 +119,13 @@ vector<vector<node>> computeCanonicalOrdering(PlanarConMap *carte, std::vector<e
     *dummyEdges = o.getDummyEdges();
 
   vector<vector<node>> res;
-  int nbMax = o.size() - 1;
-
-  for (int i = nbMax; i >= 0; i--) {
-    res.push_back(o[i]);
+  unsigned int nbMax = o.size();
+  if (nbMax) {
+    res.reserve(nbMax);
+    while (nbMax) {
+      res.push_back(o[--nbMax]);
+    }
   }
-
   return res;
 }
 //======================================================================
@@ -281,13 +287,14 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty, Plug
 
     ok = false;
     bool degZ = false;
-    node goodNode;
+    unsigned int goodNodePos = 0;
+
     for (unsigned int i = 0; i < nbNodes; ++i) {
       node n = nodes[i];
 
       if (!nodeFlag[i]) {
         if (!ok) {
-          goodNode = n;
+          goodNodePos = i;
           ok = true;
         }
 
@@ -299,20 +306,20 @@ void selectSpanningForest(Graph *graph, BooleanProperty *selectionProperty, Plug
         }
 
         if (!degZ) {
+          node goodNode = nodes[goodNodePos];
           if (graph->indeg(n) < graph->indeg(goodNode))
-            goodNode = n;
+            goodNodePos = i;
           else {
-            if (graph->indeg(n) == graph->indeg(goodNode))
-              if (graph->outdeg(n) > graph->outdeg(goodNode))
-                goodNode = n;
+            if ((graph->indeg(n) == graph->indeg(goodNode)) && (graph->outdeg(n) > graph->outdeg(goodNode)))
+              goodNodePos = i;
           }
         }
       }
     }
 
     if (ok && (!degZ)) {
-      fifo.push_back(goodNode);
-      nodeFlag.setNodeValue(goodNode, true);
+      fifo.push_back(nodes[goodNodePos]);
+      nodeFlag[goodNodePos] = true;
       ++nbSelectedNodes;
     }
   }
@@ -394,6 +401,9 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection, Numeric
   unsigned int nbNodes = nodes.size();
   unsigned int numClasses = nbNodes;
 
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
   for (unsigned int i = 0; i < nbNodes; ++i) {
     classes[i] = i;
   }
@@ -430,6 +440,9 @@ void selectMinimumSpanningTree(Graph *graph, BooleanProperty *selection, Numeric
       }
     }
 
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
     for (unsigned int i = 0; i < nbNodes; ++i) {
       if (classes[i] == tgtClass)
         classes[i] = srcClass;
@@ -586,26 +599,25 @@ void buildNodesUniformQuantification(const Graph *graph, const NumericProperty *
   const std::vector<node> &nodes = graph->nodes();
   unsigned int nbNodes = nodes.size();
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    double nodeValue = prop->getNodeDoubleValue(nodes[i]);
+    double value = prop->getNodeDoubleValue(nodes[i]);
+    map<double, int>::iterator it = histogram.find(value);
 
-    if (histogram.find(nodeValue) == histogram.end())
-      histogram[nodeValue] = 1;
+    if (it == histogram.end())
+      it->second = 1;
     else
-      histogram[nodeValue] += 1;
+      ++(it->second);
   }
 
   // Build the color map
-  map<double, int>::iterator it;
   double sum = 0;
   double cK = double(nbNodes) / double(k);
   int k2 = 0;
-
-  for (it = histogram.begin(); it != histogram.end(); ++it) {
-    sum += (*it).second;
-    nodeMapping[(*it).first] = k2;
-
-    while (sum > cK * double(k2 + 1))
-      ++k2;
+  map<double, int>::iterator it = histogram.begin(), ite = histogram.end();
+  for (; it != ite; ++it) {
+    sum += it->second;
+    nodeMapping[it->first] = k2;
+    if (sum > cK * (k2 + 1))
+      k2 = ceil(sum / cK) - 1;
   }
 }
 //==================================================
@@ -616,25 +628,24 @@ void buildEdgesUniformQuantification(const Graph *graph, const NumericProperty *
   unsigned int nbEdges = edges.size();
   for (unsigned int i = 0; i < nbEdges; ++i) {
     double value = prop->getEdgeDoubleValue(edges[i]);
+    map<double, int>::iterator it = histogram.find(value);
 
-    if (histogram.find(value) == histogram.end())
-      histogram[value] = 1;
+    if (it == histogram.end())
+      it->second = 1;
     else
-      histogram[value] += 1;
+      ++(it->second);
   }
 
   // Build the color map
-  map<double, int>::iterator it;
   double sum = 0;
   double cK = double(nbEdges) / double(k);
   int k2 = 0;
-
-  for (it = histogram.begin(); it != histogram.end(); ++it) {
-    sum += (*it).second;
-    edgeMapping[(*it).first] = k2;
-
-    while (sum > cK * double(k2 + 1))
-      ++k2;
+  map<double, int>::iterator it = histogram.begin(), ite = histogram.end();
+  for (; it != ite; ++it) {
+    sum += it->second;
+    edgeMapping[it->first] = k2;
+    if (sum > cK * (k2 + 1))
+      k2 = ceil(sum / cK) - 1;
   }
 }
 
