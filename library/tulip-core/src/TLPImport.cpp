@@ -96,7 +96,7 @@ struct TLPGraphBuilder:public TLPTrue {
   double version;
 
   TLPGraphBuilder(Graph *graph, DataSet *dataSet): _graph((GraphImpl *) graph),
-						   _cluster(NULL), dataSet(dataSet) {
+    _cluster(NULL), dataSet(dataSet) {
     clusterIndex[0]=graph;
     inTLP = false;
     version = 0.0;
@@ -452,7 +452,7 @@ struct TLPGraphBuilder:public TLPTrue {
   bool addCluster(int id, const std::string& name, int supergraphId=0) {
     if (clusterIndex[supergraphId]) {
       _cluster = clusterIndex[id] =
-        ((GraphAbstract *) clusterIndex[supergraphId])->addSubGraph((unsigned int) id);
+                   ((GraphAbstract *) clusterIndex[supergraphId])->addSubGraph((unsigned int) id);
 
       if (name.size())
         _cluster->setAttribute("name", name);

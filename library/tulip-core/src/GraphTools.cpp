@@ -116,8 +116,8 @@ node makeSimpleSource(Graph* graph) {
 }
 //======================================================================
 vector<vector<node> > computeCanonicalOrdering(PlanarConMap* carte,
-					       std::vector<edge>* dummyEdges,
-					       PluginProgress* pluginProgress) {
+    std::vector<edge>* dummyEdges,
+    PluginProgress* pluginProgress) {
   Ordering o(carte, pluginProgress, 0, 100, 100); // feedback (0% -> 100%)
 
   if (dummyEdges!=NULL)
@@ -125,12 +125,15 @@ vector<vector<node> > computeCanonicalOrdering(PlanarConMap* carte,
 
   vector<vector<node> > res;
   unsigned int nbMax = o.size();
+
   if (nbMax) {
     res.reserve(nbMax);
+
     while(nbMax) {
       res.push_back(o[--nbMax]);
     }
   }
+
   return res;
 }
 //======================================================================
@@ -326,13 +329,14 @@ void selectSpanningForest(Graph* graph, BooleanProperty *selectionProperty,
         }
 
         if (!degZ) {
-	  node goodNode = nodes[goodNodePos];
+          node goodNode = nodes[goodNodePos];
+
           if (graph->indeg(n)<graph->indeg(goodNode))
             goodNodePos = i;
           else {
             if ((graph->indeg(n) == graph->indeg(goodNode)) &&
-		(graph->outdeg(n)>graph->outdeg(goodNode)))
-	      goodNodePos = i;
+                (graph->outdeg(n)>graph->outdeg(goodNode)))
+              goodNodePos = i;
           }
         }
       }
@@ -426,8 +430,9 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
   unsigned int numClasses = nbNodes;
 
 #ifdef _OPENMP
-#pragma omp parallel for
+  #pragma omp parallel for
 #endif
+
   for(unsigned int i = 0; i < nbNodes; ++i) {
     classes[i] = i;
   }
@@ -468,8 +473,9 @@ void selectMinimumSpanningTree(Graph* graph, BooleanProperty *selection,
     }
 
 #ifdef _OPENMP
-#pragma omp parallel for
+    #pragma omp parallel for
 #endif
+
     for (unsigned int i = 0; i < nbNodes; ++i) {
       if (classes[i] == tgtClass)
         classes[i] = srcClass;
@@ -640,7 +646,7 @@ void buildNodesUniformQuantification(const Graph* graph,
   for (unsigned int i = 0; i < nbNodes; ++i) {
     double value=prop->getNodeDoubleValue(nodes[i]);
     map<double,int>::iterator it = histogram.find(value);
-    
+
     if (it==histogram.end())
       it->second=1;
     else
@@ -652,9 +658,11 @@ void buildNodesUniformQuantification(const Graph* graph,
   double cK=double(nbNodes)/double(k);
   int k2=0;
   map<double,int>::iterator it=histogram.begin(), ite = histogram.end();
+
   for (; it!=ite; ++it) {
     sum+=it->second;
     nodeMapping[it->first]=k2;
+
     if (sum > cK * (k2 + 1))
       k2 = ceil(sum/cK) - 1;
   }
@@ -672,7 +680,7 @@ void buildEdgesUniformQuantification(const Graph* graph,
   for (unsigned int i = 0; i < nbEdges; ++i) {
     double value=prop->getEdgeDoubleValue(edges[i]);
     map<double,int>::iterator it = histogram.find(value);
-    
+
     if (it==histogram.end())
       it->second=1;
     else
@@ -684,9 +692,11 @@ void buildEdgesUniformQuantification(const Graph* graph,
   double cK=double(nbEdges)/double(k);
   int k2=0;
   map<double,int>::iterator it=histogram.begin(), ite = histogram.end();
+
   for (; it!=ite; ++it) {
     sum+=it->second;
     edgeMapping[it->first]=k2;
+
     if (sum > cK * (k2 + 1))
       k2 = ceil(sum/cK) - 1;
   }
