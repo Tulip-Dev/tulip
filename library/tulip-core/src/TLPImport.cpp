@@ -21,7 +21,7 @@
 #include <vector>
 #include <errno.h>
 
-#include <tulip/GraphAbstract.h>
+#include <tulip/GraphImpl.h>
 #include <tulip/BooleanProperty.h>
 #include <tulip/ColorProperty.h>
 #include <tulip/DoubleProperty.h>
@@ -86,7 +86,8 @@ using namespace tlp;
 namespace tlp {
 //=================================================================================
 struct TLPGraphBuilder : public TLPTrue {
-  Graph *_graph;
+  GraphImpl *_graph;
+  Graph *_cluster;
   std::map<int, node> nodeIndex;
   std::map<int, edge> edgeIndex;
   std::map<int, Graph *> clusterIndex;
@@ -94,7 +95,7 @@ struct TLPGraphBuilder : public TLPTrue {
   bool inTLP;
   double version;
 
-  TLPGraphBuilder(Graph *graph, DataSet *dataSet) : _graph(graph), dataSet(dataSet) {
+  TLPGraphBuilder(Graph *graph, DataSet *dataSet) : _graph((GraphImpl *)graph), _cluster(NULL), dataSet(dataSet) {
     clusterIndex[0] = graph;
     inTLP = false;
     version = 0.0;
@@ -135,11 +136,10 @@ struct TLPGraphBuilder : public TLPTrue {
     return true;
   }
   bool addNodes(int first, int last) {
-    std::vector<node> nodes;
-    _graph->addNodes(last - first + 1, nodes);
+    _graph->addNodes(last - first + 1);
 
     if (version < 2.1) {
-      std::vector<node>::iterator it = nodes.begin();
+      std::vector<node>::const_iterator it = _graph->nodes().begin();
 
       while (first <= last) {
         nodeIndex[first] = (*it);
@@ -157,27 +157,27 @@ struct TLPGraphBuilder : public TLPTrue {
     _graph->reserveEdges(nbEdges);
     return true;
   }
-  bool addClusterNode(int id, int nodeId) {
+  bool addClusterNode(int nodeId) {
     node n(nodeId);
 
     if (version < 2.1)
       n = nodeIndex[nodeId];
 
-    if (_graph->isElement(n) && clusterIndex[id]) {
-      clusterIndex[id]->addNode(n);
+    if (_graph->isElement(n) && _cluster) {
+      _cluster->addNode(n);
       return true;
     }
 
     return false;
   }
-  bool addClusterEdge(int id, int edgeId) {
+  bool addClusterEdge(int edgeId) {
     edge e(edgeId);
 
     if (version < 2.1)
       e = edgeIndex[edgeId];
 
-    if (_graph->isElement(e) && clusterIndex[id]) {
-      clusterIndex[id]->addEdge(e);
+    if (_graph->isElement(e) && _cluster) {
+      _cluster->addEdge(e);
     }
 
     return true;
@@ -429,10 +429,10 @@ struct TLPGraphBuilder : public TLPTrue {
   }
   bool addCluster(int id, const std::string &name, int supergraphId = 0) {
     if (clusterIndex[supergraphId]) {
-      clusterIndex[id] = ((GraphAbstract *)clusterIndex[supergraphId])->addSubGraph((unsigned int)id);
+      _cluster = clusterIndex[id] = ((GraphAbstract *)clusterIndex[supergraphId])->addSubGraph((unsigned int)id);
 
       if (name.size())
-        clusterIndex[id]->setAttribute("name", name);
+        _cluster->setAttribute("name", name);
 
       return true;
     }
@@ -523,11 +523,11 @@ struct TLPClusterBuilder : public TLPFalse {
     return true;
   }
   bool addStruct(const std::string &structName, TLPBuilder *&newBuilder);
-  bool addNode(int nodeId) {
-    return graphBuilder->addClusterNode(clusterId, nodeId);
+  inline bool addNode(int nodeId) {
+    return graphBuilder->addClusterNode(nodeId);
   }
-  bool addEdge(int edgeId) {
-    return graphBuilder->addClusterEdge(clusterId, edgeId);
+  inline bool addEdge(int edgeId) {
+    return graphBuilder->addClusterEdge(edgeId);
   }
   bool close() {
     return true;
@@ -897,10 +897,11 @@ namespace tlp {
  */
 class TLPImport : public ImportModule {
 public:
-  PLUGININFORMATION("TLP Import", "Auber", "16/02/2001", "Imports a graph recorded in a file using the TLP format (Tulip Software Graph "
-                                                         "Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for "
-                                                         "description.<br/>Note: When using the Tulip graphical user interface,<br/>choosing "
-                                                         "<b>File->Import->TLP</b> menu item is the same as using <b>File->Open</b> menu item.",
+  PLUGININFORMATION("TLP Import", "Auber", "16/02/2001",
+                    "Imports a graph recorded in a file using the TLP format (Tulip Software Graph "
+                    "Format).<br/>See <b>tulip-software.org->Framework->TLP File Format</b> for "
+                    "description.<br/>Note: When using the Tulip graphical user interface,<br/>choosing "
+                    "<b>File->Import->TLP</b> menu item is the same as using <b>File->Open</b> menu item.",
                     "1.0", "File")
   std::list<std::string> fileExtensions() const {
     std::list<std::string> l;
@@ -978,4 +979,4 @@ public:
   }
 };
 PLUGIN(TLPImport)
-}
+} // namespace tlp
