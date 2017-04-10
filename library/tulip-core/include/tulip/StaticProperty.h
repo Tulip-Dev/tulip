@@ -178,7 +178,7 @@ void EdgeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
 
   for (unsigned int i = 0; i < nbEdges; ++i)
     (*this)[i] = prop->getEdgeValue(edges[i]);
- }
+}
 }
 
 #endif
