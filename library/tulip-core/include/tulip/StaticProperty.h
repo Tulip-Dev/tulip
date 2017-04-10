@@ -92,6 +92,17 @@ public:
   }
 };
 
+// vector<bool> does not support // update
+// so do an iterative specialization
+template<> template<typename PROP_PTR>
+void NodeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
+  const std::vector<node>& nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    (*this)[i] = prop->getNodeValue(nodes[i]);
+}
+
 template <typename TYPE>
 class EdgeStaticProperty :public std::vector<TYPE> {
   const Graph* graph;
@@ -158,6 +169,16 @@ public:
   }
 };
 
+// vector<bool> does not support // update
+// so do an iterative specialization
+template<> template<typename PROP_PTR>
+void EdgeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
+  const std::vector<edge>& edges = graph->edges();
+  unsigned int nbEdges = edges.size();
+
+  for (unsigned int i = 0; i < nbEdges; ++i)
+    (*this)[i] = prop->getEdgeValue(edges[i]);
+ }
 }
 
 #endif
