@@ -64,30 +64,39 @@ public:
   }
 
   // get values from a typed instance of PropertyInterface
-template<typename PROP_PTR>
-  void copyFromProperty(PROP_PTR prop) {
-    const std::vector<node>& nodes = graph->nodes();
+  template <typename PROP_PTR> void copyFromProperty(PROP_PTR prop) {
+    const std::vector<node> &nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (unsigned int i = 0; i < nbNodes; ++i)
       (*this)[i] = prop->getNodeValue(nodes[i]);
   }
-  
+
   // copy values into a typed typed instance of PropertyInterface
-template<typename PROP_PTR>
-  void copyToProperty(PROP_PTR prop) {
-    const std::vector<node>& nodes = graph->nodes();
+  template <typename PROP_PTR> void copyToProperty(PROP_PTR prop) {
+    const std::vector<node> &nodes = graph->nodes();
     unsigned int nbNodes = nodes.size();
     for (unsigned int i = 0; i < nbNodes; ++i)
       prop->setNodeValue(nodes[i], (*this)[i]);
   }
 };
 
+// vector<bool> does not support // update
+// so do an iterative specialization
+template <> template <typename PROP_PTR> void NodeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
+  const std::vector<node> &nodes = graph->nodes();
+  unsigned int nbNodes = nodes.size();
+
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    (*this)[i] = prop->getNodeValue(nodes[i]);
+}
+
 template <typename TYPE> class EdgeStaticProperty : public std::vector<TYPE> {
   const Graph *graph;
 
+public:
 public:
   // constructor
   EdgeStaticProperty(const Graph *g) : graph(g) {
@@ -121,29 +130,36 @@ public:
       this->resize(nPos + 1);
     setEdgeValue(n, val);
   }
-  
+
   // get values from a typed instance of PropertyInterface
-template<typename PROP_PTR>
-  void copyFromProperty(PROP_PTR prop) {
-    const std::vector<edge>& edges = graph->edges();
+  template <typename PROP_PTR> void copyFromProperty(PROP_PTR prop) {
+    const std::vector<edge> &edges = graph->edges();
     unsigned int nbEdges = edges.size();
 #ifdef _OPENMP
-    #pragma omp parallel for
+#pragma omp parallel for
 #endif
     for (unsigned int i = 0; i < nbEdges; ++i)
       (*this)[i] = prop->getEdgeValue(edges[i]);
   }
-  
+
   // copy values into a typed typed instance of PropertyInterface
-template<typename PROP_PTR>
-  void copyToProperty(PROP_PTR prop) {
-    const std::vector<edge>& edges = graph->edges();
+  template <typename PROP_PTR> void copyToProperty(PROP_PTR prop) {
+    const std::vector<edge> &edges = graph->edges();
     unsigned int nbEdges = edges.size();
     for (unsigned int i = 0; i < nbEdges; ++i)
       prop->setEdgeValue(edges[i], (*this)[i]);
   }
 };
 
+// vector<bool> does not support // update
+// so do an iterative specialization
+template <> template <typename PROP_PTR> void EdgeStaticProperty<bool>::copyFromProperty(PROP_PTR prop) {
+  const std::vector<edge> &edges = graph->edges();
+  unsigned int nbEdges = edges.size();
+
+  for (unsigned int i = 0; i < nbEdges; ++i)
+    (*this)[i] = prop->getEdgeValue(edges[i]);
+}
 } // namespace tlp
 
 #endif
