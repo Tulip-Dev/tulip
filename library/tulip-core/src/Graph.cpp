@@ -265,14 +265,17 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
 
   string ext;
   size_t dotPos = filenameCp.rfind('.');
+
   if (dotPos != std::string::npos)
     ext = filenameCp.substr(dotPos + 1);
+
   if (!ext.empty()) {
     for (list<string>::iterator it = exportPlugins.begin() ; it != exportPlugins.end() ; ++it) {
       const ExportModule &exportPlugin = static_cast<const ExportModule &>(PluginLister::instance()->pluginInformation(*it));
+
       if (ext == exportPlugin.fileExtension()) {
-	exportPluginName = exportPlugin.name();
-	break;
+        exportPluginName = exportPlugin.name();
+        break;
       }
     }
   }
@@ -280,8 +283,10 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   if (exportPluginName.empty()) {
     std::stringstream str;
     str << "No export plugin found for file extension '" << ext.c_str() << "', export in TLP format will be used.";
+
     if (progress)
       progress->setError(str.str());
+
     tlp::warning() << str.str() << std::endl;
     exportPluginName = "TLP Export";
   }
@@ -289,8 +294,10 @@ bool tlp::saveGraph(Graph* graph, const std::string& filename, PluginProgress *p
   if (gzip && exportPluginName != "TLP Export" && exportPluginName != "TLPB Export") {
     std::stringstream str;
     str << "GZip compression is only supported for TLP and TLPB formats.";
+
     if (progress)
       progress->setError(str.str());
+
     tlp::error() << str.str() << endl;
     return false;
   }
