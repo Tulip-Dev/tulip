@@ -248,11 +248,11 @@ void TulipItemDelegate::comboDataChanged() {
 
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
-					     tlp::PropertyInterface* pi,
-					     tlp::Graph* g,
-					     TulipItemDelegate* delegate,
-					     QWidget* dialogParent,
-					     unsigned int id) {
+    tlp::PropertyInterface* pi,
+    tlp::Graph* g,
+    TulipItemDelegate* delegate,
+    QWidget* dialogParent,
+    unsigned int id) {
   QVariant value;
 
   if (elType == tlp::NODE) {
