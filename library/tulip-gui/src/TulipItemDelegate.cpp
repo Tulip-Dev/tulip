@@ -265,7 +265,8 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType, tlp::Prope
 
   TulipItemEditorCreator *creator = delegate->creator(value.userType());
 
-  if (dialogParent == nullptr && Perspective::instance())
+  // Display the dialog on the same screen as the perspective
+  if (Perspective::instance())
     dialogParent = Perspective::instance()->mainWindow();
 
   creator->setPropertyToEdit(pi);
