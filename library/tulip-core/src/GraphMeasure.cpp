@@ -204,7 +204,6 @@ void tlp::markReachableNodes(const Graph *graph, const node startNode, TLP_HASH_
   deque<node> fifo;
   MutableContainer<bool> visited;
   MutableContainer<unsigned int> distance;
-  result.clear();
   visited.setAll(false);
   distance.setAll(graph->numberOfNodes());
   fifo.push_back(startNode);
