@@ -50,13 +50,14 @@ EccentricityMetric::EccentricityMetric(const tlp::PluginContext* context):Double
 EccentricityMetric::~EccentricityMetric() {
 }
 //====================================================================
-double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
+double EccentricityMetric::compute(unsigned int nPos,
+				   const std::vector<node> &nodes) {
 
   NodeStaticProperty<unsigned int> distance(graph);
   distance.setAll(0);
   double val = directed ?
-               tlp::maxDistance(graph, n, distance, DIRECTED) :
-               tlp::maxDistance(graph, n, distance, UNDIRECTED);
+               tlp::maxDistance(graph, nPos, distance, DIRECTED) :
+               tlp::maxDistance(graph, nPos, distance, UNDIRECTED);
 
   if(!allPaths)
     return val;
@@ -66,13 +67,12 @@ double EccentricityMetric::compute(node n, const std::vector<node> &nodes) {
   unsigned int nbNodes = nodes.size();
 
   for (unsigned int i = 0; i < nbNodes; ++i) {
-    node n2 = nodes[i];
     unsigned int d = distance[i];
 
     if (d < nbNodes) {
       nbAcc += 1.;
 
-      if (n2!=n)
+      if (i!=nPos)
         val += d;
     }
   }
@@ -133,7 +133,7 @@ bool EccentricityMetric::run() {
     }
 
 #endif
-    res[ni] = compute(nodes[ni], nodes);
+    res[ni] = compute(ni, nodes);
 
     if(!allPaths && norm)
 #ifdef _OPENMP
