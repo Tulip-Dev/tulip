@@ -248,11 +248,11 @@ void TulipItemDelegate::comboDataChanged() {
 
 
 QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
-    tlp::PropertyInterface* pi,
-    tlp::Graph* g,
-    TulipItemDelegate* delegate,
-    QWidget* dialogParent,
-    unsigned int id) {
+					     tlp::PropertyInterface* pi,
+					     tlp::Graph* g,
+					     TulipItemDelegate* delegate,
+					     QWidget* dialogParent,
+					     unsigned int id) {
   QVariant value;
 
   if (elType == tlp::NODE) {
@@ -274,7 +274,8 @@ QVariant TulipItemDelegate::showEditorDialog(tlp::ElementType elType,
 
   TulipItemEditorCreator* creator = delegate->creator(value.userType());
 
-  if (dialogParent == NULL && Perspective::instance())
+  // Display the dialog on the same screen as the perspective
+  if (Perspective::instance())
     dialogParent = Perspective::instance()->mainWindow();
 
   creator->setPropertyToEdit(pi);
