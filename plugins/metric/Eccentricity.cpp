@@ -51,7 +51,7 @@ EccentricityMetric::~EccentricityMetric() {
 }
 //====================================================================
 double EccentricityMetric::compute(unsigned int nPos,
-				   const std::vector<node> &nodes) {
+                                   const std::vector<node> &nodes) {
 
   NodeStaticProperty<unsigned int> distance(graph);
   distance.setAll(0);
