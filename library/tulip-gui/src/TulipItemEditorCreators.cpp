@@ -27,8 +27,6 @@
 #include <QPaintEvent>
 #include <QStylePainter>
 
-#include <QtAwesome.h>
-
 #include <tulip/TlpTools.h>
 #include <tulip/ColorScaleButton.h>
 #include <tulip/CoordEditor.h>
@@ -40,10 +38,7 @@
 #include <tulip/Perspective.h>
 #include <tulip/StringEditor.h>
 #include <tulip/TextureFileDialog.h>
-#include <tulip/TlpQtTools.h>
-#include <tulip/TulipFontDialog.h>
-#include <tulip/TulipItemEditorCreators.h>
-#include <tulip/TulipMetaTypes.h>
+#include <tulip/TulipFontIconDialog.h>
 
 using namespace tlp;
 
@@ -425,16 +420,6 @@ public:
     return nullIcon;
   }
 
-  QIcon getFontAwesomeIcon(const QString &iconName) {
-    fa::iconCodePoint icon = static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName.toStdString()));
-    return FontIconManager::instance()->getFontAwesomeIcon(icon);
-  }
-
-  QIcon getMaterialDesignIcon(const QString &iconName) {
-    md::iconCodePoint icon = static_cast<md::iconCodePoint>(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName.toStdString()));
-    return FontIconManager::instance()->getMaterialDesignIcon(icon);
-  }
-
   QMap<QString, QIcon> iconPool;
 
 private:
@@ -586,68 +571,6 @@ QSize TextureFileEditorCreator::sizeHint(const QStyleOptionViewItem &option, con
   return QSize(pixmapWidth + fontMetrics.boundingRect(text).width() + 20, pixmapWidth);
 }
 
-class FontGlyphsDialog : public QDialog {
-
-public:
-  FontGlyphsDialog(bool fontAwesome = true, QWidget *parent = 0) : QDialog(parent) {
-    setWindowTitle("Select a Font Awesome icon");
-    setModal(true);
-
-    fontGlyphCB = new CustomComboBox();
-    std::vector<std::string> iconNames;
-    if (fontAwesome) {
-      iconNames = TulipFontAwesome::getSupportedFontAwesomeIcons();
-    } else {
-      iconNames = TulipMaterialDesignIcons::getSupportedMaterialDesignIcons();
-    }
-
-    for (std::vector<std::string>::const_iterator it = iconNames.begin(); it != iconNames.end(); ++it) {
-      QString iconName = tlpStringToQString(*it);
-      QIcon icon;
-      if (fontAwesome) {
-        icon = imageIconPool.getFontAwesomeIcon(iconName);
-      } else {
-        icon = imageIconPool.getMaterialDesignIcon(iconName);
-      }
-      fontGlyphCB->addItem(icon.pixmap(16, 16), iconName);
-    }
-
-    QPushButton *okButton = new QPushButton("Ok");
-    QPushButton *cancelButton = new QPushButton("Cancel");
-
-    connect(okButton, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(cancelButton, SIGNAL(clicked()), SLOT(reject()));
-
-    QHBoxLayout *buttonsLayout = new QHBoxLayout;
-    buttonsLayout->addStretch();
-    buttonsLayout->addWidget(okButton);
-    buttonsLayout->addWidget(cancelButton);
-    buttonsLayout->addStretch();
-
-    QVBoxLayout *layout = new QVBoxLayout;
-    layout->addWidget(fontGlyphCB);
-    layout->addLayout(buttonsLayout);
-    setLayout(layout);
-  }
-
-  void accept() {
-    selectedIconText = fontGlyphCB->currentText();
-    QDialog::accept();
-  }
-
-  void showEvent(QShowEvent *ev) {
-    QDialog::showEvent(ev);
-
-    selectedIconText = fontGlyphCB->currentText();
-
-    if (parentWidget())
-      move(parentWidget()->window()->frameGeometry().topLeft() + parentWidget()->window()->rect().center() - rect().center());
-  }
-
-  CustomComboBox *fontGlyphCB;
-  QString selectedIconText;
-};
-
 /*
   TulipFontGlyphIconCreator
   */
@@ -660,24 +583,16 @@ QWidget *TulipFontGlyphIconCreator::createWidget(QWidget *parent) const {
   // of items in a QGraphicsScene (popup has a too large height,
   // making the scrollbars unreachable ...), we use a native
   // dialog with the combo box inside
-  return new FontGlyphsDialog(_fontAwesome, Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
+  return new TulipFontIconDialog(Perspective::instance() ? Perspective::instance()->mainWindow() : parent);
 }
 
-void TulipFontGlyphIconCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
-  QComboBox *combobox = static_cast<FontGlyphsDialog *>(w)->fontGlyphCB;
-  if (_fontAwesome) {
-    combobox->setCurrentIndex(combobox->findText(v.value<TulipFontAwesomeIcon>().iconName));
-  } else {
-    combobox->setCurrentIndex(combobox->findText(v.value<TulipMaterialDesignIcon>().iconName));
-  }
+void TulipFontAwesomeIconCreator::setEditorData(QWidget *w, const QVariant &v, bool, tlp::Graph *) {
+  TulipFontIconDialog *tfid = static_cast<TulipFontIconDialog *>(w);
+  tfid->setSelectedIconName(v.value<TulipFontAwesomeIcon>().iconName);
 }
 
-QVariant TulipFontGlyphIconCreator::editorData(QWidget *w, tlp::Graph *) {
-  if (_fontAwesome) {
-    return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(static_cast<FontGlyphsDialog *>(w)->selectedIconText));
-  } else {
-    return QVariant::fromValue<TulipMaterialDesignIcon>(TulipMaterialDesignIcon(static_cast<FontGlyphsDialog *>(w)->selectedIconText));
-  }
+QVariant TulipFontAwesomeIconCreator::editorData(QWidget *w, tlp::Graph *) {
+  return QVariant::fromValue<TulipFontAwesomeIcon>(TulipFontAwesomeIcon(static_cast<TulipFontIconDialog *>(w)->getSelectedIconName()));
 }
 
 QString TulipFontGlyphIconCreator::displayText(const QVariant &data) const {
@@ -712,11 +627,7 @@ bool TulipFontGlyphIconCreator::paint(QPainter *painter, const QStyleOptionViewI
   opt.features |= QStyleOptionViewItem::HasDisplay;
 #endif
 
-  if (_fontAwesome) {
-    opt.icon = imageIconPool.getFontAwesomeIcon(iconName);
-  } else {
-    opt.icon = imageIconPool.getMaterialDesignIcon(iconName);
-  }
+  opt.icon = TulipFontIconDialog::getFontAwesomeIcon(iconName);
   opt.decorationSize = opt.icon.actualSize(QSize(16, 16));
 
   opt.text = displayText(v);

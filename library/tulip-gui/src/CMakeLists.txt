@@ -95,6 +95,7 @@ SET(SRCS
     RangeSlider.cpp
     AboutTulipPage.cpp
     ScientificDoubleSpinBox.cpp
+    TulipFontIconDialog.cpp
 )
 
 ADD_DEFINITIONS(-DQT_DLL)
@@ -154,6 +155,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/ElementInformationWidget.ui
   ../designer/SnapshotDialog.ui
   ../designer/SceneLayersConfigWidget.ui
+  ../designer/TulipFontIconDialog.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
@@ -236,6 +238,7 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/TulipItemDelegate.h
   ../include/tulip/GlEntityItemModel.h
   ../include/tulip/FileDownloader.h
+  ../include/tulip/TulipFontIconDialog.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
