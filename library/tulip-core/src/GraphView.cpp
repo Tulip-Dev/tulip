@@ -42,6 +42,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
     // clone all supergraph nodes
     _nodes.clone(supergraph->nodes());
     unsigned int nbNodes = _nodes.size();
+
     for (unsigned int i = 0; i < nbNodes; ++i)
       _nodeData.set(_nodes[i], new SGraphNodeData());
   }
@@ -55,7 +56,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
       Graph *graphToFilter = filter->getGraph();
 
       if (graphToFilter == NULL)
-	graphToFilter = supergraph;
+        graphToFilter = supergraph;
 
       iteN =graphToFilter->getNodes();
     }
@@ -66,7 +67,9 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
       node n=iteN->next();
 
       if (filter->getNodeValue(n)) addNode(n);
-    } delete iteN;
+    }
+
+    delete iteN;
   }
 
   if ((filter->getGraph() == supergraph) &&
@@ -76,6 +79,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
     _edges.clone(supergraph->edges());
     // and degrees of nodes
     unsigned int nbNodes = _nodes.size();
+
     for (unsigned int i = 0; i < nbNodes; ++i) {
       node n = _nodes[i];
       SGraphNodeData* nData = _nodeData.get(n.id);
@@ -93,7 +97,7 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
       Graph *graphToFilter = filter->getGraph();
 
       if (graphToFilter == NULL)
-	graphToFilter = supergraph;
+        graphToFilter = supergraph;
 
       iteE = graphToFilter->getEdges();
     }
@@ -104,7 +108,9 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
       edge e = iteE->next();
 
       if (filter->getEdgeValue(e)) addEdge(e);
-    } delete iteE;
+    }
+
+    delete iteE;
   }
 }
 //----------------------------------------------------------------
@@ -216,7 +222,7 @@ void GraphView::restoreNode(node n) {
 //----------------------------------------------------------------
 void GraphView::addNodesInternal(const std::vector<node>& nodes) {
   _nodes.reserve(_nodes.size() + nodes.size());
-  
+
   std::vector<node>::const_iterator it = nodes.begin();
   std::vector<node>::const_iterator ite = nodes.end();
 

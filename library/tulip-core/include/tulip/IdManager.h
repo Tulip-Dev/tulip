@@ -378,9 +378,10 @@ public:
   void clone(const std::vector<ID_TYPE>& elts) {
     ((std::vector<ID_TYPE>&)(*this)) = elts;
     unsigned int nb = elts.size();
+
     for (unsigned int i = 0; i < nb; ++i)
       pos.set((unsigned int) elts[i], i);
-  }    
+  }
 
   void remove(ID_TYPE elt) {
     assert(isElement(elt));

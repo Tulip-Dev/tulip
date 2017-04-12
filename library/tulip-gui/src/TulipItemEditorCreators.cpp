@@ -601,8 +601,8 @@ QWidget* TulipFontAwesomeIconCreator::createWidget(QWidget* parent) const {
   // making the scrollbars unreachable ...), we use a native
   // dialog with the combo box inside
   return new TulipFontIconDialog(Perspective::instance() ?
-                               Perspective::instance()->mainWindow()
-                               : parent);
+                                 Perspective::instance()->mainWindow()
+                                 : parent);
 }
 
 void TulipFontAwesomeIconCreator::setEditorData(QWidget* w, const QVariant& v, bool, tlp::Graph*) {
