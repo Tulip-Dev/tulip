@@ -50,8 +50,8 @@ using namespace tlp;
 class CustomComboBox : public QComboBox {
 
 public:
-  CustomComboBox(QWidget *parent = nullptr) : QComboBox(parent), _popupWidth(0) {
-  }
+
+  CustomComboBox(QWidget *parent = NULL) : QComboBox(parent), _popupWidth(0) {}
 
   void addItem(const QPixmap &icon, const QString &text, const QVariant &userData = QVariant(), const int extraWidth = 20) {
     QFontMetrics fm = fontMetrics();
