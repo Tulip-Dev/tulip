@@ -254,7 +254,8 @@ void SearchWidget::selectionModeChanged(int index) {
 }
 
 void SearchWidget::search() {
-  tlp::Graph *g = _ui->graphCombo->model()->data(_ui->graphCombo->selectedIndex(), TulipModel::GraphRole).value<tlp::Graph *>();
+  GraphHierarchiesModel *graphsModel = static_cast<GraphHierarchiesModel *>(_ui->graphCombo->model());
+  tlp::Graph *g = graphsModel->currentGraph();
   g->push();
   Observable::holdObservers();
   SearchOperator *op = searchOperator();
