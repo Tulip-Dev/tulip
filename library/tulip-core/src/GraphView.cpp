@@ -36,52 +36,76 @@ GraphView::GraphView(Graph *supergraph, BooleanProperty *filter,
 
   if (filter == NULL) return;
 
-  Iterator<unsigned int> *it = NULL;
-  it = filter->nodeProperties.findAll(true);
-
-  Iterator<node> *iteN;
-
-  if (it == NULL) {
-    Graph *graphToFilter = filter->getGraph();
-
-    if (graphToFilter == NULL)
-      graphToFilter = supergraph;
-
-    iteN =graphToFilter->getNodes();
+  if ((filter->getGraph() == supergraph) &&
+      (filter->getNodeDefaultValue() == true) &&
+      (filter->numberOfNonDefaultValuatedNodes() == 0)) {
+    // clone all supergraph nodes
+    _nodes.clone(supergraph->nodes());
+    unsigned int nbNodes = _nodes.size();
+    for (unsigned int i = 0; i < nbNodes; ++i)
+      _nodeData.set(_nodes[i], new SGraphNodeData());
   }
-  else
-    iteN = new UINTIterator<node>(it);
+  else {
+    Iterator<unsigned int> *it = NULL;
+    it = filter->nodeProperties.findAll(true);
 
-  while (iteN->hasNext()) {
-    node n=iteN->next();
+    Iterator<node> *iteN;
 
-    if (filter->getNodeValue(n)) addNode(n);
-  }
+    if (it == NULL) {
+      Graph *graphToFilter = filter->getGraph();
 
-  delete iteN;
+      if (graphToFilter == NULL)
+	graphToFilter = supergraph;
 
-  it = filter->edgeProperties.findAll(true);
+      iteN =graphToFilter->getNodes();
+    }
+    else
+      iteN = new UINTIterator<node>(it);
 
-  Iterator<edge> *iteE;
+    while (iteN->hasNext()) {
+      node n=iteN->next();
 
-  if (it == NULL) {
-    Graph *graphToFilter = filter->getGraph();
-
-    if (graphToFilter == NULL)
-      graphToFilter = supergraph;
-
-    iteE = graphToFilter->getEdges();
-  }
-  else
-    iteE = new UINTIterator<edge>(it);
-
-  while (iteE->hasNext()) {
-    edge e = iteE->next();
-
-    if (filter->getEdgeValue(e)) addEdge(e);
+      if (filter->getNodeValue(n)) addNode(n);
+    } delete iteN;
   }
 
-  delete iteE;
+  if ((filter->getGraph() == supergraph) &&
+      (filter->getEdgeDefaultValue() == true) &&
+      (filter->numberOfNonDefaultValuatedEdges() == 0)) {
+    // clone all supergraph edges
+    _edges.clone(supergraph->edges());
+    // and degrees of nodes
+    unsigned int nbNodes = _nodes.size();
+    for (unsigned int i = 0; i < nbNodes; ++i) {
+      node n = _nodes[i];
+      SGraphNodeData* nData = _nodeData.get(n.id);
+      nData->outDegree = supergraph->outdeg(n);
+      nData->inDegree = supergraph->indeg(n);
+    }
+  }
+  else {
+    Iterator<unsigned int> *it = NULL;
+    it = filter->edgeProperties.findAll(true);
+
+    Iterator<edge> *iteE;
+
+    if (it == NULL) {
+      Graph *graphToFilter = filter->getGraph();
+
+      if (graphToFilter == NULL)
+	graphToFilter = supergraph;
+
+      iteE = graphToFilter->getEdges();
+    }
+    else
+      iteE = new UINTIterator<edge>(it);
+
+    while (iteE->hasNext()) {
+      edge e = iteE->next();
+
+      if (filter->getEdgeValue(e)) addEdge(e);
+    } delete iteE;
+  }
 }
 //----------------------------------------------------------------
 GraphView::~GraphView() {
@@ -191,13 +215,15 @@ void GraphView::restoreNode(node n) {
 }
 //----------------------------------------------------------------
 void GraphView::addNodesInternal(const std::vector<node>& nodes) {
+  _nodes.reserve(_nodes.size() + nodes.size());
+  
   std::vector<node>::const_iterator it = nodes.begin();
   std::vector<node>::const_iterator ite = nodes.end();
 
   for (; it != ite; ++it) {
     node n(*it);
     assert(getRootImpl()->isElement(n));
-    _nodeData.set(n, new SGraphNodeData());
+    _nodeData.set(n.id, new SGraphNodeData());
     _nodes.add(n);
   }
 
@@ -259,6 +285,8 @@ void GraphView::restoreEdge(edge e, const node, const node) {
 //----------------------------------------------------------------
 void GraphView::addEdgesInternal(const std::vector<edge>& ee,
                                  const std::vector<std::pair<node, node> >&ends) {
+  _edges.reserve(_edges.size() + ee.size());
+
   bool hasEnds = !ends.empty();
   unsigned int i = 0;
   std::vector<edge>::const_iterator it = ee.begin();
