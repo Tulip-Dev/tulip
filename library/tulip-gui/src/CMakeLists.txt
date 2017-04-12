@@ -99,6 +99,7 @@ SET(SRCS
   ColorScalesManager.cpp
   ScientificDoubleSpinBox.cpp
   AboutTulipPage.cpp
+  TulipFontIconDialog.cpp
 )
 
 ADD_DEFINITIONS(-DQT_DLL)
@@ -158,6 +159,7 @@ QTX_WRAP_UI(UI_HEADERS
   ../designer/ElementInformationWidget.ui
   ../designer/SnapshotDialog.ui
   ../designer/SceneLayersConfigWidget.ui
+  ../designer/TulipFontIconDialog.ui
 )
 
 QTX_WRAP_CPP(MOC_SRCS
@@ -222,7 +224,8 @@ QTX_WRAP_CPP(MOC_SRCS
   ../include/tulip/ViewWidget.h
   ../include/tulip/WorkspacePanel.h
   ../include/tulip/Workspace.h
-  ../include/tulip/WorkspaceExposeWidget.h  
+  ../include/tulip/WorkspaceExposeWidget.h
+  ../include/tulip/TulipFontIconDialog.h
 )
 
 QTX_ADD_RESOURCES(RCC_SRCS ../resources/TulipGUIResource.qrc)
