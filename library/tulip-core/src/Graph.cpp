@@ -1323,9 +1323,10 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   //we can now remove nodes from graph
   const std::vector<node>& sgNodes = subGraph->nodes();
   unsigned int nbNodes = sgNodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i)
     delNode(sgNodes[i]);
-  
+
   //create new meta edges from nodes to metanode
   Graph* super = getSuperGraph();
   TLP_HASH_MAP<node, TLP_HASH_SET<node> > edges;
@@ -1333,6 +1334,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   TLP_HASH_MAP<edge, set<edge> > subEdges;
 
   node n;
+
   for(unsigned int i = 0; i < nbNodes; ++i) {
     node n = sgNodes[i];
     edge e;
@@ -1367,9 +1369,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
         edges[src].insert(tgt);
 
         if (((metaInfo->getNodeValue(src)!=NULL) ||
-	     (metaInfo->getNodeValue(tgt)!=NULL)) &&
-	    existEdge(src, tgt).isValid()) {
-	  toDelete = NEED_TODEL;
+             (metaInfo->getNodeValue(tgt)!=NULL)) &&
+            existEdge(src, tgt).isValid()) {
+          toDelete = NEED_TODEL;
           delEdge(e, edgeDelAll);
         }
       }
@@ -1397,11 +1399,13 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
           subEdges[metaEdges[tgt]].insert(e);
 
         edges[tgt].insert(src);
-	if (toDelete == CHECK_TODEL)
-	  toDelete = 
-	    ((metaInfo->getNodeValue(src)!=NULL) ||
-	     (metaInfo->getNodeValue(tgt)!=NULL)) &&
-	    existEdge(src, tgt).isValid();
+
+        if (toDelete == CHECK_TODEL)
+          toDelete =
+            ((metaInfo->getNodeValue(src)!=NULL) ||
+             (metaInfo->getNodeValue(tgt)!=NULL)) &&
+            existEdge(src, tgt).isValid();
+
         if (toDelete) {
           delEdge(e, edgeDelAll);
         }
@@ -1726,8 +1730,9 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph,
       // and register the edge as associated to this meta edge
       const std::vector<edge>& edges = this->edges();
       unsigned int nbEdges = edges.size();
+
       for (unsigned int i = 0; i < nbEdges; ++i) {
-	edge e = edges[i];
+        edge e = edges[i];
         pair<node, node> eEnds = ends(e);
         set<node>& metaSources = nMapping[eEnds.first];
         set<node>& metaTargets = nMapping[eEnds.second];
