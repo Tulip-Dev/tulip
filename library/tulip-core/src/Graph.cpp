@@ -1201,6 +1201,9 @@ node Graph::createMetaNode(const std::set<node> &nodeSet, bool multiEdges, bool 
   return createMetaNode(nodes, multiEdges, delAllEdge);
 }
 //====================================================================================
+#define NEED_TODEL 2
+#define NO_NEED_TODEL 0
+#define CHECK_TODEL 1
 node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   if (getRoot() == this) {
     tlp::warning() << __PRETTY_FUNCTION__ << std::endl;
@@ -1271,7 +1274,7 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
         edges[src].insert(tgt);
 
         if (((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) && existEdge(src, tgt).isValid()) {
-          toDelete = 2;
+          toDelete = NEED_TODEL;
           delEdge(e, edgeDelAll);
         }
       }
@@ -1298,9 +1301,9 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
           subEdges[metaEdges[tgt]].insert(e);
 
         edges[tgt].insert(src);
-
-        if (toDelete != 0 &&
-            (toDelete == 2 || ((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) && existEdge(src, tgt).isValid())) {
+        if (toDelete == CHECK_TODEL)
+          toDelete = ((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) && existEdge(src, tgt).isValid();
+        if (toDelete) {
           delEdge(e, edgeDelAll);
         }
       }
