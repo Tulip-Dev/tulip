@@ -522,7 +522,7 @@ void tlp::copyToGraph(Graph *outG, const Graph *inG, BooleanProperty *inSel, Boo
 
   edge eIn;
   forEach(eIn, edgeIt) {
-    const pair<node, node> &eEnds = inG->ends(eIn);
+    const pair<node, node> eEnds = inG->ends(eIn);
     // add outG correponding edge
     edge eOut = outG->addEdge(nodeTrl.get(eEnds.first.id), nodeTrl.get(eEnds.second.id));
 
@@ -901,6 +901,7 @@ void Graph::notifyDestroy() {
     sendEvent(evt);
   }
 }
+
 PropertyInterface *Graph::getLocalProperty(const std::string &propertyName, const std::string &propertyType) {
   if (propertyType.compare(DoubleProperty::propertyTypename) == 0) {
     return getLocalProperty<DoubleProperty>(propertyName);
@@ -1224,28 +1225,29 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
   edge e;
   forEach(e, getEdges()) graphEdges.set(e.id, true);
 
-  // we can now Remove nodes from graph
-  StableIterator<node> itN(subGraph->getNodes());
-  delNodes(&itN);
+  // we can now remove nodes from graph
+  const std::vector<node> &sgNodes = subGraph->nodes();
+  unsigned int nbNodes = sgNodes.size();
+  for (unsigned int i = 0; i < nbNodes; ++i)
+    delNode(sgNodes[i]);
 
   // create new meta edges from nodes to metanode
   Graph *super = getSuperGraph();
-  // colors = super->getProperty<ColorProperty> (colorProperty);
   TLP_HASH_MAP<node, TLP_HASH_SET<node>> edges;
   TLP_HASH_MAP<node, edge> metaEdges;
   TLP_HASH_MAP<edge, set<edge>> subEdges;
 
   node n;
-  forEach(n, subGraph->getNodes()) {
+  for (unsigned int i = 0; i < nbNodes; ++i) {
+    node n = sgNodes[i];
     edge e;
-    stableForEach(e, getSuperGraph()->getInOutEdges(n)) {
+    forEach(e, getSuperGraph()->getInOutEdges(n)) {
       pair<node, node> eEnds = ends(e);
       node src = eEnds.first;
       node tgt = eEnds.second;
-      bool toDelete = ((metaInfo->getNodeValue(src) != nullptr) || (metaInfo->getNodeValue(tgt) != nullptr)) && isElement(src) && isElement(tgt) &&
-                      existEdge(src, tgt).isValid();
+      unsigned int toDelete = isElement(src);
 
-      if (isElement(src) && subGraph->isElement(tgt)) {
+      if (toDelete && subGraph->isElement(tgt)) {
         if (multiEdges || edges[src].empty()) {
           // add new meta edge
           edge metaEdge = addEdge(src, metaNode);
@@ -1268,7 +1270,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
         edges[src].insert(tgt);
 
-        if (toDelete) {
+        if (((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) && existEdge(src, tgt).isValid()) {
+          toDelete = 2;
           delEdge(e, edgeDelAll);
         }
       }
@@ -1296,7 +1299,8 @@ node Graph::createMetaNode(Graph *subGraph, bool multiEdges, bool edgeDelAll) {
 
         edges[tgt].insert(src);
 
-        if (toDelete) {
+        if (toDelete != 0 &&
+            (toDelete == 2 || ((metaInfo->getNodeValue(src) != NULL) || (metaInfo->getNodeValue(tgt) != NULL)) && existEdge(src, tgt).isValid())) {
           delEdge(e, edgeDelAll);
         }
       }
@@ -1558,7 +1562,7 @@ template <> struct less<MetaEdge> {
     if (c.target<d.target) return true;
     if (c.target>d.target) return false;
     return false;*/
-    return (c.source > d.source) || ((c.source == d.source) && (c.target < d.target));
+    return (c.source < d.source) || ((c.source == d.source) && (c.target < d.target));
   }
 };
 } // namespace std
@@ -1585,9 +1589,6 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
         for (node n : its->getNodes()) {
           // map each subgraph's node to a set of meta nodes
           // in order to deal consistently with overlapping clusters
-          if (nMapping.find(n) == nMapping.end())
-            nMapping[n] = set<node>();
-
           nMapping[n].insert(metaN);
         }
       }
@@ -1599,7 +1600,10 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
       // add a meta edge for the corresponding couple
       // (meta source, meta target) if it does not already exists
       // and register the edge as associated to this meta edge
-      for (edge e : stableIterator(getEdges())) {
+      const std::vector<edge> &edges = this->edges();
+      unsigned int nbEdges = edges.size();
+      for (unsigned int i = 0; i < nbEdges; ++i) {
+        edge e = edges[i];
         pair<node, node> eEnds = ends(e);
         set<node> &metaSources = nMapping[eEnds.first];
         set<node> &metaTargets = nMapping[eEnds.second];
@@ -1622,7 +1626,7 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
                 eMapping[mE].insert(e);
               } else {
                 // add edge
-                eMapping[(*itm).mE].insert(e);
+                eMapping[itm->mE].insert(e);
               }
             }
           }
@@ -1634,8 +1638,8 @@ void Graph::createMetaNodes(Iterator<Graph *> *itS, Graph *quotientGraph, vector
   map<edge, set<edge>>::const_iterator itm = eMapping.begin();
 
   while (itm != eMapping.end()) {
-    edge mE = (*itm).first;
-    metaInfo->setEdgeValue(mE, (*itm).second);
+    edge mE = itm->first;
+    metaInfo->setEdgeValue(mE, itm->second);
     // compute meta edge values
     for (const string &pName : quotientGraph->getProperties()) {
       Iterator<edge> *itE = getRoot()->getEdgeMetaInfo(mE);
