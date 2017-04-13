@@ -135,10 +135,17 @@ std::vector<node> computeGraphCenters(Graph *graph) {
   unsigned int minD = UINT_MAX;
   unsigned int nbNodes = graph->numberOfNodes();
   const std::vector<node> &nodes = graph->nodes();
+
+#ifdef _OPENMP
+#pragma omp parallel for
+#endif
   for (unsigned int i = 0; i < nbNodes; ++i) {
     tlp::NodeStaticProperty<unsigned int> tmp(graph);
-    unsigned int maxD = maxDistance(graph, nodes[i], tmp, UNDIRECTED);
+    unsigned int maxD = maxDistance(graph, i, tmp, UNDIRECTED);
     dist[i] = maxD;
+#ifdef _OPENMP
+#pragma omp critical(COMPUTE_MIN)
+#endif
     minD = std::min(minD, maxD);
   }
 
