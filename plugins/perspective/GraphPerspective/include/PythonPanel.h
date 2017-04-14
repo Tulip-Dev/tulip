@@ -31,17 +31,13 @@ namespace tlp {
 class GraphHierarchiesModel;
 }
 
-class QPropertyAnimation;
 class QPlainTextEdit;
-class OutputPanelButton;
 
 class PythonPanel : public QWidget {
 
 
   Q_OBJECT
   Ui::PythonPanel *_ui;
-  OutputPanelButton *_button;
-  QPropertyAnimation *_animation;
 
 public :
 

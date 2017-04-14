@@ -21,13 +21,10 @@
 
 #include "PythonPanel.h"
 #include "ui_PythonPanel.h"
-#include "OutputPanelButton.h"
 
 #include <tulip/GraphHierarchiesModel.h>
 #include <tulip/TulipMimes.h>
 #include <tulip/TulipMetaTypes.h>
-
-#include <QPropertyAnimation>
 
 static const QString setCurrentGraphFunction =
   "graph = None\n"
@@ -36,7 +33,7 @@ static const QString setCurrentGraphFunction =
   "	graph = g\n"
   ;
 
-PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPanel), _button(NULL), _animation(NULL) {
+PythonPanel::PythonPanel(QWidget *parent) : QWidget(parent), _ui(new Ui::PythonPanel) {
   _ui->setupUi(this);
   connect(_ui->graphCombo,SIGNAL(currentItemChanged()),this,SLOT(graphComboIndexChanged()));
   tlp::PythonInterpreter::getInstance()->runString(setCurrentGraphFunction);
