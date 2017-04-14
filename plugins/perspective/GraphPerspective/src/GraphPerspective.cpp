@@ -501,7 +501,11 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   if (QFile(tlpStringToQString(tlp::TulipShareDir) + "doc/tulip-user/html/index.html").exists()) {
     connect(_ui->actionShowUserDocumentation, SIGNAL(triggered()), this, SLOT(showUserDocumentation()));
     connect(_ui->actionShowDevelDocumentation, SIGNAL(triggered()), this, SLOT(showDevelDocumentation()));
+#ifdef TULIP_BUILD_PYTHON_COMPONENTS
     connect(_ui->actionShowPythonDocumentation, SIGNAL(triggered()), this, SLOT(showPythonDocumentation()));
+#else
+    _ui->actionShowPythonDocumentation->setVisible(false);
+#endif
   } else {
     _ui->actionShowUserDocumentation->setVisible(false);
     _ui->actionShowDevelDocumentation->setVisible(false);
