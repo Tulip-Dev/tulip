@@ -3,6 +3,7 @@
 #   define TULIP_VERSION "@TulipVersion@"
 #   define TULIP_MM_VERSION "@TulipMMVersion@"
 #   define TULIP_INT_VERSION @TulipIntVersion@
+#   define TULIP_INT_MM_VERSION @TulipIntMMVersion@
 
 // for compatibility with versions older than Tulip 4.5
 #   define TULIP_RELEASE "@TulipVersion@"

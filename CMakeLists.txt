@@ -86,7 +86,7 @@ IF(MSVC) #specific options for Visual Studio
 ENDIF()
 SET(TulipVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}${TulipVersionSeparator}${TulipReleaseVersion}")
 SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
-SET(TulipMMVersion "${TulipMajorVersion}${TulipVersionSeparator}${TulipMinorVersion}")
+SET(TulipIntMMVersion "${TulipMajorVersion}${TulipMinorVersion}")
 IF(TulipReleaseVersion MATCHES "^[0-9]+$")
   SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}${TulipReleaseVersion}")
 ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
