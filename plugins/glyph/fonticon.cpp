@@ -169,17 +169,21 @@ private:
     map<Coord, unsigned int> vertexIdx;
 
     unsigned int idx = 0;
+
     for (unsigned int t = 0; t < mesh->TesselationCount(); ++t) {
       const FTTesselation *subMesh = mesh->Tesselation(t);
+
       for (unsigned int i = 0; i < subMesh->PointCount(); ++i) {
         FTPoint point = subMesh->Point(i);
         tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
+
         if (vertexIdx.find(p) == vertexIdx.end()) {
           meshBB.expand(p);
           vertices.push_back(p);
           indices.push_back(idx++);
           vertexIdx[vertices.back()] = indices.back();
-        } else {
+        }
+        else {
           indices.push_back(vertexIdx[p]);
         }
       }
@@ -187,6 +191,7 @@ private:
 
     for (unsigned int t = 0; t < vectoriser.ContourCount(); ++t) {
       const FTContour *contour = vectoriser.Contour(t);
+
       for (unsigned int i = 0; i < contour->PointCount() - 1 ; ++i) {
         FTPoint point = contour->Point(i);
         tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
@@ -195,6 +200,7 @@ private:
         p = Coord(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
         outlineIndices.push_back(ushort_cast(vertexIdx[p]));
       }
+
       FTPoint point = contour->Point(contour->PointCount() - 1);
       tlp::Coord p(point.Xf() / HRESf, point.Yf() / HRESf, 0.0f);
       outlineIndices.push_back(ushort_cast(vertexIdx[p]));
@@ -210,10 +216,12 @@ private:
       if (meshBB.height() > meshBB.width()) {
         vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0]) - 0.5) * (meshBB.width() / float(meshBB.height()));
         vertices[i][1] = ((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5;
-      } else {
+      }
+      else {
         vertices[i][0] = ((vertices[i][0] - minC[0]) / (maxC[0] - minC[0])) - 0.5;
         vertices[i][1] = (((vertices[i][1] - minC[1]) / (maxC[1] - minC[1])) - 0.5) * (meshBB.height() / float(meshBB.width()));
       }
+
       const tlp::Coord &v = vertices[i];
       texCoords.push_back(Vec2f(v[0]+0.5, v[1]+0.5));
     }
@@ -247,8 +255,8 @@ private:
 static map<string, FontIcon> fontIcons;
 
 static void drawIcon(const string &iconName, const string &fontFile, const unsigned int iconCodePoint,
-              const Color &color, const Color &outlineColor,
-              const float outlineSize, const string &texture) {
+                     const Color &color, const Color &outlineColor,
+                     const float outlineSize, const string &texture) {
   if (fontIcons.find(iconName) == fontIcons.end()) {
     fontIcons[iconName] = FontIcon(fontFile, iconCodePoint);
   }
@@ -285,7 +293,8 @@ public:
       drawIcon(iconName, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(),
                TulipFontAwesome::getFontAwesomeIconCodePoint(iconName),
                nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
-    } else {
+    }
+    else {
       drawIcon(iconName, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(),
                TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName),
                nodeColor, nodeBorderColor, nodeBorderWidth, nodeTexture);
@@ -294,6 +303,7 @@ public:
 
   void getIncludeBoundingBox(BoundingBox &boundingBox, node n) {
     string iconName = getNodeIcon(n);
+
     if (fontIcons.find(iconName) != fontIcons.end()) {
       boundingBox = fontIcons[iconName].getBoundingBox();
     }
@@ -319,18 +329,18 @@ PLUGIN(FontIconGlyph)
 
 class EEFontIconGlyph : public EdgeExtremityGlyph {
 
- public:
+public:
 
- GLYPHINFORMATION("2D - Font Awesome Icon extremity", "David Auber", "02/03/2015", "Font Awesome Icon for edge extremities", "1.1", EdgeExtremityShape::Icon)
+  GLYPHINFORMATION("2D - Font Awesome Icon extremity", "David Auber", "02/03/2015", "Font Awesome Icon for edge extremities", "1.1", EdgeExtremityShape::Icon)
 
- EEFontIconGlyph(const tlp::PluginContext* context) : EdgeExtremityGlyph(context) {}
+  EEFontIconGlyph(const tlp::PluginContext* context) : EdgeExtremityGlyph(context) {}
 
   void draw(edge e, node, const Color& glyphColor,const Color &borderColor, float) {
     StringProperty *viewIcon = edgeExtGlGraphInputData->getElementIcon();
     string iconName = viewIcon->getEdgeValue(e);
 
     if (iconName.empty() || (!TulipFontAwesome::isFontAwesomeIconSupported(iconName) &&
-        !TulipMaterialDesignIcons::isMaterialDesignIconSupported(iconName))) {
+                             !TulipMaterialDesignIcons::isMaterialDesignIconSupported(iconName))) {
       iconName = defaultIcon;
     }
 
@@ -338,11 +348,13 @@ class EEFontIconGlyph : public EdgeExtremityGlyph {
     float borderWidth = edgeExtGlGraphInputData->getElementBorderWidth()->getEdgeValue(e);
 
     glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+
     if (iconName.substr(0, 2) == "fa") {
       drawIcon(iconName, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(),
-              TulipFontAwesome::getFontAwesomeIconCodePoint(iconName),
+               TulipFontAwesome::getFontAwesomeIconCodePoint(iconName),
                glyphColor, borderColor, borderWidth, edgeTexture);
-    } else {
+    }
+    else {
       drawIcon(iconName, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(),
                TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName),
                glyphColor, borderColor, borderWidth, edgeTexture);

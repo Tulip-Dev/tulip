@@ -639,9 +639,11 @@ bool TulipFontIconCreator::paint(QPainter* painter, const QStyleOptionViewItem& 
 
   if (iconName.startsWith("fa")) {
     opt.icon = TulipFontIconDialog::getFontAwesomeIcon(iconName);
-  } else {
+  }
+  else {
     opt.icon = TulipFontIconDialog::getMaterialDesignIcon(iconName);
   }
+
   opt.decorationSize = opt.icon.actualSize(QSize(16, 16));
 
   opt.text = displayText(v);

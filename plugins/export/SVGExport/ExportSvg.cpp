@@ -265,7 +265,8 @@ void ExportSvg::addBase64font(const QString &fontName) {
 void ExportSvg::addWebFontFromIconName(const string &iconName) {
   if (iconName.substr(0, 3) == "fa-") {
     addBase64font("fontawesome");
-  } else {
+  }
+  else {
     addBase64font("materialdesignicons");
   }
 }
@@ -536,11 +537,14 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
     _res.writeStartElement("text");
     _res.writeAttribute("x", QString::number(x));
     _res.writeAttribute("y", QString::number(-y));
+
     if (faIcon) {
       _res.writeAttribute("font-family","fontawesome");
-    } else {
+    }
+    else {
       _res.writeAttribute("font-family","materialdesignicons");
     }
+
     _res.writeAttribute("transform", "scale(1,-1) translate(0,"+QString::number(h*0.72)+")");
     _res.writeAttribute("font-size", QString::number(w*2));
     _res.writeAttribute("text-anchor","middle");
@@ -551,9 +555,11 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
     _res.writeCharacters("");
     _res.device()->write("&"); //do not escape the character
+
     if (faIcon) {
       _res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
-    } else {
+    }
+    else {
       _res.writeCharacters("#x"+QString::number(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), 16)+";");
     }
   }

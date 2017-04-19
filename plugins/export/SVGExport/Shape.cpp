@@ -208,11 +208,14 @@ void ExtremityShape::Sphere(QXmlStreamWriter& res, const tlp::Color& color, bool
 void ExtremityShape::Icon(QXmlStreamWriter& res, const QString& color, const string &iconName, bool tgt ) {
   bool faIcon = iconName.substr(0, 3) == "fa-";
   res.writeStartElement("text");
+
   if (faIcon) {
     res.writeAttribute("font-family", "fontawesome");
-  } else {
+  }
+  else {
     res.writeAttribute("font-family", "materialdesignicons");
   }
+
   res.writeAttribute("transform", "scale(1,-1)");
   res.writeAttribute("font-size", "2");
   res.writeAttribute("text-anchor", "middle");
@@ -222,9 +225,11 @@ void ExtremityShape::Icon(QXmlStreamWriter& res, const QString& color, const str
   //res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
   res.writeCharacters("");
   res.device()->write("&"); //do not escape the character
+
   if (faIcon) {
     res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
-  } else {
+  }
+  else {
     res.writeCharacters("#x"+QString::number(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), 16)+";");
   }
 }
