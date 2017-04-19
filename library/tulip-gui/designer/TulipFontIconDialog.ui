@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
+    <width>400</width>
     <height>300</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>320</width>
+    <width>400</width>
     <height>300</height>
    </size>
   </property>
@@ -43,6 +43,21 @@
    </item>
    <item>
     <widget class="QListWidget" name="iconListWidget"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="iconsCreditLabel">
+     <property name="text">
+      <string>&lt;p&gt;
+Icons credit goes to &lt;b&gt;Font Awesome&lt;/b&gt;: &lt;a href=&quot;http://fontawesome.io&quot;&gt;http://fontawesome.io&lt;/a&gt;&lt;br/&gt; and &lt;b&gt;Material Design Icons&lt;/b&gt;: &lt;a href=&quot;https://materialdesignicons.com&quot;&gt;https://materialdesignicons.com&lt;/a&gt; 
+&lt;/p&gt;</string>
+     </property>
+     <property name="textFormat">
+      <enum>Qt::AutoText</enum>
+     </property>
+     <property name="openExternalLinks">
+      <bool>false</bool>
+     </property>
+    </widget>
    </item>
    <item>
     <widget class="QDialogButtonBox" name="buttonBox">

@@ -69,11 +69,11 @@ struct TextureFile {
   TextureFile(const QString &texturePath) : texturePath(texturePath) {}
 };
 
-struct TulipFontAwesomeIcon {
+struct TulipFontIcon {
 
-  TulipFontAwesomeIcon() {}
+  TulipFontIcon() {}
 
-  TulipFontAwesomeIcon(const QString &iconName) : iconName(iconName) {}
+  TulipFontIcon(const QString &iconName) : iconName(iconName) {}
 
   QString iconName;
 
@@ -132,7 +132,7 @@ Q_DECLARE_METATYPE(tlp::StringCollection)
 
 Q_DECLARE_METATYPE(TextureFile)
 Q_DECLARE_METATYPE(TulipFileDescriptor)
-Q_DECLARE_METATYPE(TulipFontAwesomeIcon)
+Q_DECLARE_METATYPE(TulipFontIcon)
 
 Q_DECLARE_METATYPE(tlp::NodeShape::NodeShapes)
 Q_DECLARE_METATYPE(tlp::EdgeShape::EdgeShapes)

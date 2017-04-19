@@ -22,6 +22,7 @@
 #include <tulip/TlpQtTools.h>
 #include <tulip/BoundingBox.h>
 #include <tulip/TulipFontAwesome.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpTools.h>
 
 #include <QFile>
@@ -50,7 +51,7 @@ QString tlpAlphaColor2Opacity(const Color &color) {
 }
 }
 
-ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2):ExportInterface(pp, os),_res(&_out), _base64fontAdded(false),_woff2(woff2),_gloweffectAdded(false) {
+ExportSvg::ExportSvg(PluginProgress *pp, ostream &os, const bool autoformatting, const bool woff2):ExportInterface(pp, os),_res(&_out),_woff2(woff2),_gloweffectAdded(false) {
   _res.setAutoFormatting(autoformatting);
   _res.setCodec("UTF-8");
 }
@@ -237,27 +238,35 @@ void ExportSvg::addGlowEffect() {
   }
 }
 
-void ExportSvg::addBase64font() {
-  if(!_base64fontAdded) {
-    _base64fontAdded=true;
+void ExportSvg::addBase64font(const QString &fontName) {
+  if(!_base64fontAdded.contains(fontName)) {
+    _base64fontAdded[fontName]=true;
     QString extension("woff");
 
     if(_woff2)
       extension = "woff2";
 
-    QFile file(tlp::tlpStringToQString(tlp::TulipBitmapDir).append("fontawesome-webfont."+extension));
+    QFile file(tlp::tlpStringToQString(tlp::TulipBitmapDir).append(fontName).append("-webfont."+extension));
 
     if (!file.open(QIODevice::ReadOnly))
-      tlp::warning() << "Cannot open " << tlp::TulipBitmapDir << "fontawesome-webfont."<<tlp::QStringToTlpString(extension) << endl;
+      tlp::warning() << "Cannot open " << tlp::TulipBitmapDir << QStringToTlpString(fontName) << "-webfont."<<tlp::QStringToTlpString(extension) << endl;
 
     QByteArray byteArray(file.readAll());
     file.close();
     _res.writeStartElement("style");
     _res.writeAttribute("style","text/css");
     QString base64code(QString::fromUtf8(byteArray.toBase64().data()));
-    QString header("@font-face {font-family: \"fontawesome\";src: url(\"data:application/x-font-"+extension+";base64,");
+    QString header("@font-face {font-family: \""+fontName+"\";src: url(\"data:application/x-font-"+extension+";base64,");
     _res.writeCDATA(header+base64code+"\");}");
     _res.writeEndElement();
+  }
+}
+
+void ExportSvg::addWebFontFromIconName(const string &iconName) {
+  if (iconName.substr(0, 3) == "fa-") {
+    addBase64font("fontawesome");
+  } else {
+    addBase64font("materialdesignicons");
   }
 }
 
@@ -519,14 +528,20 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
   case NodeShape::ChristmasTree:
     iconName=TulipFontAwesome::Tree;
 
-  case NodeShape::FontAwesomeIcon: {
-    addBase64font();
+  case NodeShape::Icon: {
+    addWebFontFromIconName(iconName);
+
+    bool faIcon = iconName.substr(0, 3) == "fa-";
 
     _res.writeStartElement("text");
     _res.writeAttribute("x", QString::number(x));
     _res.writeAttribute("y", QString::number(-y));
-    _res.writeAttribute("font-family","fontawesome");
-    _res.writeAttribute("transform", "scale(1,-1) translate(0,"+QString::number(h)+")");
+    if (faIcon) {
+      _res.writeAttribute("font-family","fontawesome");
+    } else {
+      _res.writeAttribute("font-family","materialdesignicons");
+    }
+    _res.writeAttribute("transform", "scale(1,-1) translate(0,"+QString::number(h*0.72)+")");
     _res.writeAttribute("font-size", QString::number(w*2));
     _res.writeAttribute("text-anchor","middle");
     addColor(color);
@@ -536,7 +551,11 @@ bool ExportSvg::addShape(const tlp::NodeShape::NodeShapes &type, const Coord &co
 
     _res.writeCharacters("");
     _res.device()->write("&"); //do not escape the character
-    _res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
+    if (faIcon) {
+      _res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
+    } else {
+      _res.writeCharacters("#x"+QString::number(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), 16)+";");
+    }
   }
   break;
 
@@ -696,9 +715,9 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
     case EdgeExtremityShape::None:
       break;
 
-    case EdgeExtremityShape::FontAwesomeIcon:
-      addBase64font();
-      ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, false);
+    case EdgeExtremityShape::Icon:
+      addWebFontFromIconName(iconName);
+      ExtremityShape::Icon(_res, tlpColor2SvgColor(color), iconName, false);
       break;
 
     case EdgeExtremityShape::Arrow:
@@ -792,9 +811,9 @@ bool ExportSvg::exportEdgeExtremity(const unsigned id_src_shape, const unsigned 
       ExtremityShape::Arrow(_res, tlpColor2SvgColor(color), true);
       break;
 
-    case EdgeExtremityShape::FontAwesomeIcon:
-      addBase64font();
-      ExtremityShape::FontAwesomeIcon(_res, tlpColor2SvgColor(color), iconName, true);
+    case EdgeExtremityShape::Icon:
+      addWebFontFromIconName(iconName);
+      ExtremityShape::Icon(_res, tlpColor2SvgColor(color), iconName, true);
       break;
 
     case EdgeExtremityShape::Circle:

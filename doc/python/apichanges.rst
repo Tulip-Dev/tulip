@@ -245,7 +245,7 @@ For instance, the sample code below sets multiple graph view properties values f
     values = {'viewShape': tlp.NodeShape.FontAwesomeIcon,
               'viewColor' : getRandomColor(),
               'viewSize' : getRandomSize(tlp.Size(0.1), tlp.Size(1)),
-              'viewFontAwesomeIcon' : getRandomFontAwesomeIcon()}
+              'viewIcon' : getRandomFontAwesomeIcon()}
     graph.setNodePropertiesValues(n, values)
 
 Tulip-Python 4.8

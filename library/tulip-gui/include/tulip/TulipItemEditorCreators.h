@@ -172,7 +172,7 @@ public:
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
 };
 
-class TLP_QT_SCOPE TulipFontAwesomeIconCreator: public tlp::TulipItemEditorCreator {
+class TLP_QT_SCOPE TulipFontIconCreator: public tlp::TulipItemEditorCreator {
 public:
   QWidget* createWidget(QWidget*) const;
   virtual void setEditorData(QWidget*, const QVariant&,bool,tlp::Graph*);

@@ -924,3 +924,9 @@ tlp.TulipFontAwesome
 
 .. autoclass:: tulip::tlp.TulipFontAwesome
     :members:
+
+tlp.TulipMaterialDesignIcons
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: tulip::tlp.TulipMaterialDesignIcons
+    :members:

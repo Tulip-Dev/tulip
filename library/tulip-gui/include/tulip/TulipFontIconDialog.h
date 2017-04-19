@@ -34,9 +34,13 @@ public:
 
   static QIcon getFontAwesomeIcon(const QString &iconName);
 
+  static QIcon getMaterialDesignIcon(const QString &iconName);
+
 protected slots:
 
   void updateIconList();
+
+  void openUrlInBrowser(const QString &url);
 
 };
 
