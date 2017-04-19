@@ -235,7 +235,7 @@ Below is the exhaustive list of the constants for nodes shapes:
     * :const:`tlp.NodeShape.Star`
     * :const:`tlp.NodeShape.Triangle`
     * :const:`tlp.NodeShape.Window`
-    * :const:`tlp.NodeShape.FontAwesomeIcon` (see :class:`tlp.TulipFontAwesome`)
+    * :const:`tlp.NodeShape.Icon` (see :class:`tlp.TulipFontAwesome` and :class:`tlp.TulipMaterialDesignIcons`)
 
 Below is the exhaustive list of the constants for edges shapes:
 

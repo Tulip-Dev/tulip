@@ -158,7 +158,7 @@ bool QtAwesome::initFontAwesome(const QString &fontAwesomeFile)
     static int fontAwesomeFontId = -1;
 
     // only load font-awesome once
-    if( fontAwesomeFontId < 0 ) {
+    // if( fontAwesomeFontId < 0 ) {
 
         // The macro below internally calls "qInitResources_QtAwesome()". this initializes
         // the resource system. For a .pri project this isn't required, but when building and using a
@@ -179,7 +179,7 @@ bool QtAwesome::initFontAwesome(const QString &fontAwesomeFile)
 
         // fetch the given font
         fontAwesomeFontId = QFontDatabase::addApplicationFontFromData(fontData);
-    }
+    // }
 
     QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(fontAwesomeFontId);
     if( !loadedFontFamilies.empty() ) {
@@ -909,7 +909,7 @@ static QVariantMap mergeOptions( const QVariantMap& defaults, const QVariantMap&
 /// <code>
 ///     awesome->icon( icon_group )
 /// </code>
-QIcon QtAwesome::icon(fa::iconCodePoint character, const QVariantMap &options)
+QIcon QtAwesome::icon(unsigned int character, const QVariantMap &options)
 {
     // create a merged QVariantMap to have default options and icon-specific options
     QVariantMap optionMap = mergeOptions( defaultOptions_, options );

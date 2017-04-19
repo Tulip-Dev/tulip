@@ -1,4 +1,4 @@
-INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${GLEW_INCLUDE_DIR})
+INCLUDE_DIRECTORIES(${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipOGLInclude} ${GLEW_INCLUDE_DIR} ${FTGLInclude} ${FREETYPE_INCLUDE_DIRS})
 
 MACRO(GLYPH name source)
   ADD_LIBRARY(${name}-${TulipVersion} SHARED ${source})
@@ -28,7 +28,7 @@ GLYPH(Diamond diamond.cpp)
 GLYPH(Cross cross.cpp)
 GLYPH(GlowSphere glowsphere.cpp)
 GLYPH(Star star.cpp)
-GLYPH(FontAwesomeIcon fontawesomeicon.cpp)
+GLYPH(FontIcon fonticon.cpp)
 
 ## radialGradientTexture.png is used in glowsphere.cpp
 INSTALL(FILES

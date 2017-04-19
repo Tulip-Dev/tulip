@@ -24,16 +24,19 @@
 
 #include <QXmlStreamWriter>
 #include <QByteArray>
+#include <QMap>
+#include <QString>
 
 class ExportSvg : public ExportInterface {
 
   QXmlStreamWriter _res;
   QByteArray _out;
-  bool _base64fontAdded;
+  QMap<QString, bool> _base64fontAdded;
   bool _woff2;
   bool _gloweffectAdded;
   bool createEdge(const tlp::EdgeShape::EdgeShapes &type, const std::vector<tlp::Coord> &bends, const QString &color, const QString &qcolorA, const double width, const tlp::EdgeExtremityShape::EdgeExtremityShapes src_anchor_shape_type, const unsigned id_src_shape, const tlp::EdgeExtremityShape::EdgeExtremityShapes tgt_anchor_shape_type, const unsigned id_tgt_shape, const std::vector<tlp::Coord>& edgeVertice);
-  void addBase64font();
+  void addBase64font(const QString &fontName);
+  void addWebFontFromIconName(const std::string &iconName);
   void addGlowEffect();
   bool checkError() const;
 public:

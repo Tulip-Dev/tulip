@@ -45,20 +45,20 @@ as nodes and edges extremities shapes.
 
 That class offers utility functions and supported icons names constants.
 
-To set a node glyph as a Font Awesome icon, the Font Awesome glyph must be associated
+To set a node glyph as a Font Awesome icon, the Icon glyph must be associated
 to the node through the modification of the "viewShape" integer property attached to the graph.
-The name of the icon to use must then be set in the "viewFontAwesomeIcon" string property.
+The name of the icon to use must then be set in the "viewIcon" string property.
 As an example, the following code snippet activates the Font Awesome glyph for all nodes
 and sets the "user" icon (:faicon:`user`)::
 
   # graph is a pointer to a tlp.Graph object
   viewShape = graph.getIntegerProperty("viewShape")
-  viewFontAwesomeIcon = graph.getStringProperty("viewFontAwesomeIcon")
+  viewIcon = graph.getStringProperty("viewIcon")
 
-  # sets the Font Awesome glyph on all nodes
-  viewShape.setAllNodeValue(tlp.NodeShape.FontAwesomeIcon)
+  # sets the Icon glyph on all nodes
+  viewShape.setAllNodeValue(tlp.NodeShape.Icon)
   # sets the "user" glyph for all nodes
-  viewFontAwesomeIcon.setAllNodeValue(tlp.TulipFontAwesome.User)
+  viewIcon.setAllNodeValue(tlp.TulipFontAwesome.User)
 
 The following string constants representing the supported icons are available from Tulip 4.8.0 (based on Font Awesome 4.4):
 

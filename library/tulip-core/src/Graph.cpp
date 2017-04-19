@@ -97,7 +97,7 @@ ostream & operator << (ostream &os,const Graph *sp) {
 static void setViewPropertiesDefaults(Graph *g) {
 
   const std::string shapes = "viewShape", colors = "viewColor", sizes = "viewSize", metrics = "viewMetric", fonts = "viewFont", fontAwesomeIcon = "viewFontAwesomeIcon", fontSizes = "viewFontSize",
-                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape",
+                    borderWidth = "viewBorderWidth", borderColor = "viewBorderColor", tgtShape = "viewTgtAnchorShape", srcShape = "viewSrcAnchorShape", icon = "viewIcon",
                     labelColor = "viewLabelColor", labelBorderColor = "viewLabelBorderColor", labelBorderWidth = "viewLabelBorderWidth", labelPosition = "viewLabelPosition", label="viewLabel",
                     layout = "viewLayout", rotation = "viewRotation", srcAnchorSize = "viewSrcAnchorSize", selection = "viewSelection", texture = "viewTexture", tgtAnchorSize = "viewTgtAnchorSize";
 
@@ -202,9 +202,36 @@ static void setViewPropertiesDefaults(Graph *g) {
     g->getProperty<BooleanProperty>(selection)->setAllEdgeValue(false);
   }
 
-  if (!g->existProperty(fontAwesomeIcon)) {
-    g->getProperty<StringProperty>(fontAwesomeIcon)->setAllNodeValue(TulipFontAwesome::QuestionCircle);
-    g->getProperty<StringProperty>(fontAwesomeIcon)->setAllEdgeValue(TulipFontAwesome::QuestionCircle);
+  if (!g->existProperty(icon)) {
+    g->getProperty<StringProperty>(icon)->setAllNodeValue(TulipFontAwesome::QuestionCircle);
+    g->getProperty<StringProperty>(icon)->setAllEdgeValue(TulipFontAwesome::QuestionCircle);
+  }
+
+  // for backward compatibility with Tulip < 4.11
+  if (g->existProperty(fontAwesomeIcon)) {
+
+    Iterator<node> *itIcons = g->getProperty<StringProperty>(icon)->getNonDefaultValuatedNodes();
+
+    // transform old font awesome icon names to new ones and store them in the viewIcon
+    // property only if the content of that property is default valuated
+    if (!itIcons->hasNext()) {
+      node n;
+      forEach(n, g->getNodes()) {
+        const string &faIconName = g->getProperty<StringProperty>(fontAwesomeIcon)->getNodeValue(n);
+        if (!faIconName.empty()) {
+          g->getProperty<StringProperty>(icon)->setNodeValue(n, "fa-" + faIconName);
+        }
+      }
+      edge e;
+      forEach(e, g->getEdges()) {
+        const string &faIconName = g->getProperty<StringProperty>(fontAwesomeIcon)->getEdgeValue(e);
+        if (!faIconName.empty()) {
+          g->getProperty<StringProperty>(icon)->setEdgeValue(e, "fa-" + faIconName);
+        }
+      }
+    }
+
+    delete itIcons;
   }
 
 }
@@ -373,6 +400,8 @@ Graph * tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProg
 
   delete newImportModule;
   dataSet = *tmp->dataSet;
+
+  setViewPropertiesDefaults(graph);
 
   return graph;
 }

@@ -1,6 +1,7 @@
 #include "Shape.h"
 
 #include <tulip/TulipFontAwesome.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 
 using namespace std;
 using namespace tlp;
@@ -204,19 +205,28 @@ void ExtremityShape::Sphere(QXmlStreamWriter& res, const tlp::Color& color, bool
   res.writeEndElement();
 }
 
-void ExtremityShape::FontAwesomeIcon(QXmlStreamWriter& res, const QString& color, const string &iconName, bool tgt ) {
+void ExtremityShape::Icon(QXmlStreamWriter& res, const QString& color, const string &iconName, bool tgt ) {
+  bool faIcon = iconName.substr(0, 3) == "fa-";
   res.writeStartElement("text");
-  res.writeAttribute("font-family","fontawesome");
+  if (faIcon) {
+    res.writeAttribute("font-family", "fontawesome");
+  } else {
+    res.writeAttribute("font-family", "materialdesignicons");
+  }
   res.writeAttribute("transform", "scale(1,-1)");
   res.writeAttribute("font-size", "2");
-  res.writeAttribute("text-anchor","middle");
-  res.writeAttribute("refX",(tgt?"10.5":"1.5"));
-  res.writeAttribute("refY","6");
+  res.writeAttribute("text-anchor", "middle");
+  res.writeAttribute("refX", (tgt?"10.5":"1.5"));
+  res.writeAttribute("refY", "6");
   res.writeAttribute("fill", color);
   //res.writeAttribute("fill-opacity", tlpAlphaColor2Opacity(color));
   res.writeCharacters("");
   res.device()->write("&"); //do not escape the character
-  res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
+  if (faIcon) {
+    res.writeCharacters("#x"+QString::number(TulipFontAwesome::getFontAwesomeIconCodePoint(iconName), 16)+";");
+  } else {
+    res.writeCharacters("#x"+QString::number(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(iconName), 16)+";");
+  }
 }
 
 void ExtremityShape::GlowSphere(QXmlStreamWriter& res, const tlp::Color& color, bool tgt, const unsigned id_gradient) {

@@ -820,9 +820,9 @@ public:
     void setDefaultOption( const QString& name, const QVariant& value  );
     QVariant defaultOption( const QString& name );
 
-    QIcon icon( fa::iconCodePoint character, const QVariantMap& options = QVariantMap() );
+    QIcon icon( unsigned int character, const QVariantMap& options = QVariantMap() );
     QIcon icon( const QString& name, const QVariantMap& options = QVariantMap() );
-    QIcon icon(QtAwesomeIconPainter* painter, const QVariantMap& optionMap = QVariantMap() );
+    QIcon icon( QtAwesomeIconPainter* painter, const QVariantMap& optionMap = QVariantMap() );
 
     void give( const QString& name, QtAwesomeIconPainter* painter );
 

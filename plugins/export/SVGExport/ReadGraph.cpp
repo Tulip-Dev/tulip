@@ -337,7 +337,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
   DoubleProperty *borderwidth = graph->getProperty<DoubleProperty>("viewBorderWidth");
   DoubleProperty *rotation =  graph->getProperty<DoubleProperty>("viewRotation");
   IntegerProperty *fontsize =  graph->getProperty<IntegerProperty>("viewFontSize");
-  StringProperty *fontAwesomeIconName = graph->getProperty<StringProperty>("viewFontAwesomeIcon");
+  StringProperty *fontIconName = graph->getProperty<StringProperty>("viewIcon");
   bool edge_color_interpolation = false;
   bool edge_extremities = false;
   bool edge_size_interpolation = true;
@@ -381,7 +381,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
   unsigned i=0;
 
   // Analysing edges
-  ret = treatEdges(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities, edge_labels, fontsize, fontAwesomeIconName);
+  ret = treatEdges(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities, edge_labels, fontsize, fontIconName);
 
   if(!ret) {
     if(pp->getError().empty())
@@ -392,7 +392,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
 
   // Analysing nodes
   std::vector<tlp::node> metanodeVertices;
-  ret =  treatNodes(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices, node_labels, fontsize, fontAwesomeIconName);
+  ret =  treatNodes(graph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, metanodeVertices, node_labels, fontsize, fontIconName);
 
   if(!ret) {
     if(pp->getError().empty())
@@ -440,7 +440,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
       indice_Transform +=2;
 
       // Analysing edges in the metanode
-      ret = treatEdges(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities, metanode_labels,fontsize,fontAwesomeIconName);
+      ret = treatEdges(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, srcanchorshape, tgtanchorshape, label, labelcolor, edge_color_interpolation, edge_size_interpolation, edge_extremities, metanode_labels,fontsize,fontIconName);
 
       if(!ret) {
         stringstream str;
@@ -450,7 +450,7 @@ bool ReadGraph::readGraph(Graph *graph, tlp::DataSet *ds, tlp::PluginProgress *p
       }
 
       // Analysing nodes in the metanode
-      ret = treatNodes(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices, metanode_labels,fontsize, fontAwesomeIconName);
+      ret = treatNodes(metagraph, pp, exportint, i,  nb_elements, sizes, colors, layout, shape, rotation, borderwidth, label, labelcolor, bordercolor, subMetanodeVertices, metanode_labels,fontsize, fontIconName);
 
       if(!ret) {
         stringstream str;

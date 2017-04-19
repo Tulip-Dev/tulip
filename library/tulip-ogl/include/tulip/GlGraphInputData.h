@@ -75,6 +75,7 @@ public:
     VIEW_TGTANCHORSIZE, /**< size of target arrow edge extremity */
     VIEW_ANIMATIONFRAME, /**< animation frame */
     VIEW_FONTAWESOMEICON, /**< font awesome icon name for the font awesome icon glyph*/
+    VIEW_ICON, /**< icon name for the icon glyph*/
     NB_PROPS /** must be the last, give the number of enum props */
   };
 
@@ -423,15 +424,37 @@ public:
 
   /**
    * Return a pointer on the property used to elementFontAwesomeIcon
+   *
+   * @deprecated use getElementIcon() instead
    */
-  StringProperty *getElementFontAwesomeIcon() const {
+  _DEPRECATED StringProperty *getElementFontAwesomeIcon() const {
     return getProperty<StringProperty>(VIEW_FONTAWESOMEICON);
   }
   /**
    * Set the pointer on the property used to elementFontAwesomeIcon
+   *
+   * @deprecated use setElementIcon(StringProperty *property) instead
    */
-  void setElementFontAwesomeIcon(StringProperty *property) {
+  _DEPRECATED void setElementFontAwesomeIcon(StringProperty *property) {
     setProperty(VIEW_FONTAWESOMEICON,property);
+  }
+
+  /**
+   * Return a pointer on the property used to elementIcon
+   *
+   * @since Tulip 4.11
+   */
+  StringProperty *getElementIcon() const {
+    return getProperty<StringProperty>(VIEW_ICON);
+  }
+
+  /**
+   * Set the pointer on the property used to elementIcon
+   *
+   * @since Tulip 4.11
+   */
+  void setElementIcon(StringProperty *property) {
+    setProperty(VIEW_ICON,property);
   }
 
   std::set<tlp::PropertyInterface*> properties() const {

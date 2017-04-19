@@ -1,8 +1,11 @@
 #include <tulip/TulipFontIconDialog.h>
 #include <tulip/TulipFontAwesome.h>
+#include <tulip/TulipMaterialDesignIcons.h>
 #include <tulip/TlpQtTools.h>
 
 #include <QRegExp>
+#include <QDesktopServices>
+#include <QUrl>
 
 #include <QtAwesome.h>
 
@@ -10,13 +13,22 @@
 
 using namespace tlp;
 
-static QtAwesome qtAwesome;
+static QtAwesome qtAwesomeFa;
+
+static QtAwesome qtAwesomeMd;
 
 QIcon TulipFontIconDialog::getFontAwesomeIcon(const QString &iconName) {
-  if (qtAwesome.fontName().isEmpty())
-    qtAwesome.initFontAwesome(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
+  if (qtAwesomeFa.fontName().isEmpty())
+    qtAwesomeFa.initFontAwesome(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
 
-  return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(QStringToTlpString(iconName))));
+  return qtAwesomeFa.icon(TulipFontAwesome::getFontAwesomeIconCodePoint(QStringToTlpString(iconName)));
+}
+
+QIcon TulipFontIconDialog::getMaterialDesignIcon(const QString &iconName) {
+  if (qtAwesomeMd.fontName().isEmpty())
+    qtAwesomeMd.initFontAwesome(tlpStringToQString(TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation()));
+
+  return qtAwesomeMd.icon(TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(QStringToTlpString(iconName)));
 }
 
 TulipFontIconDialog::TulipFontIconDialog(QWidget *parent) : QDialog(parent), _ui(new Ui::TulipFontIconDialog) {
@@ -24,6 +36,7 @@ TulipFontIconDialog::TulipFontIconDialog(QWidget *parent) : QDialog(parent), _ui
   _ui->setupUi(this);
 
   connect(_ui->iconNameFilterLineEdit, SIGNAL(textChanged(const QString &)), this, SLOT(updateIconList()));
+  connect(_ui->iconsCreditLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
 
   updateIconList();
 
@@ -42,6 +55,17 @@ void TulipFontIconDialog::updateIconList() {
     if (regexp.indexIn(iconName) != -1) {
       QIcon faIcon = getFontAwesomeIcon(iconName);
       _ui->iconListWidget->addItem(new QListWidgetItem(faIcon.pixmap(16, 16), iconName));
+    }
+  }
+
+  iconNames = TulipMaterialDesignIcons::getSupportedMaterialDesignIcons();
+
+  for(std::vector<std::string>::const_iterator it = iconNames.begin(); it != iconNames.end(); ++it) {
+    QString iconName = tlpStringToQString(*it);
+
+    if (regexp.indexIn(iconName) != -1) {
+      QIcon mdIcon = getMaterialDesignIcon(iconName);
+      _ui->iconListWidget->addItem(new QListWidgetItem(mdIcon.pixmap(16, 16), iconName));
     }
   }
 
@@ -81,4 +105,8 @@ void TulipFontIconDialog::showEvent(QShowEvent *ev) {
     move(parentWidget()->window()->frameGeometry().topLeft() +
          parentWidget()->window()->rect().center() -
          rect().center());
+}
+
+void TulipFontIconDialog::openUrlInBrowser(const QString &url) {
+  QDesktopServices::openUrl(QUrl(url));
 }
