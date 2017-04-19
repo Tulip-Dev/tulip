@@ -53,8 +53,8 @@ static const char *paramHelp[] = {
     "If true, follow symlinks on Unix (including Mac OS X) or .lnk file on Windows."};
 
 static const char *commonTextFilesExtArray[] = {"log", "msg", "odt", "pages", "rtf", "json", "tex", "txt", "wpd", "wps", "srt", "nfo"};
-static const std::vector<std::string>
-    commonTextFilesExt(commonTextFilesExtArray, commonTextFilesExtArray + sizeof(commonTextFilesExtArray) / sizeof(commonTextFilesExtArray[0]));
+static const std::vector<std::string> commonTextFilesExt(commonTextFilesExtArray, commonTextFilesExtArray + sizeof(commonTextFilesExtArray) /
+                                                                                                                sizeof(commonTextFilesExtArray[0]));
 
 static const char *commonAudioFilesExtArray[] = {"aif", "iff", "m3u", "m4a", "mid", "mp3", "mpa", "ogg", "ra", "wav", "wma", "flac"};
 static const std::vector<std::string>
@@ -98,10 +98,9 @@ class FileSystem : public tlp::ImportModule {
 public:
   PLUGININFORMATION("File System Directory", "Auber", "16/12/2002", "Imports a tree representation of a file system directory.", "2.2", "Misc")
   FileSystem(tlp::PluginContext *context)
-      : ImportModule(context), _absolutePaths(nullptr), _baseNames(nullptr), _createdDates(nullptr), _fileNames(nullptr), _isDir(nullptr),
-        _isExecutable(nullptr), _isReadable(nullptr), _isSymlink(nullptr), _isWritable(nullptr), _lastModifiedDates(nullptr), _lastReadDates(nullptr),
-        _owners(nullptr), _permissions(nullptr), _suffixes(nullptr), _sizes(nullptr), _fontAwesomeIcon(nullptr), _useIcons(true), _treeLayout(true),
-        dirColor(255, 255, 127, 128) {
+      : ImportModule(context), _absolutePaths(NULL), _baseNames(NULL), _createdDates(NULL), _fileNames(NULL), _isDir(NULL), _isExecutable(NULL),
+        _isReadable(NULL), _isSymlink(NULL), _isWritable(NULL), _lastModifiedDates(NULL), _lastReadDates(NULL), _owners(NULL), _permissions(NULL),
+        _suffixes(NULL), _sizes(NULL), _fontIcon(NULL), _useIcons(true), _treeLayout(true), dirColor(255, 255, 127, 128) {
     addInParameter<std::string>("dir::directory", paramHelp[0], "");
     addInParameter<bool>("include hidden files", paramHelp[5], "true");
     addInParameter<bool>("follow symlinks", paramHelp[6], "true");
@@ -151,12 +150,12 @@ public:
     _permissions = graph->getProperty<tlp::IntegerProperty>("Permission ID");
     _suffixes = graph->getProperty<tlp::StringProperty>("Suffix");
     _sizes = graph->getProperty<tlp::DoubleProperty>("Size");
-    _fontAwesomeIcon = graph->getProperty<tlp::StringProperty>("viewFontAwesomeIcon");
+    _fontIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
 
     if (_useIcons) {
       tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
-      viewShape->setAllNodeValue(tlp::NodeShape::FontAwesomeIcon);
-      _fontAwesomeIcon->setAllNodeValue(tlp::TulipFontAwesome::FileO);
+      viewShape->setAllNodeValue(tlp::NodeShape::Icon);
+      _fontIcon->setAllNodeValue(tlp::TulipFontAwesome::FileO);
     }
 
     tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
@@ -245,29 +244,29 @@ private:
       std::string extension = QStringToTlpString(info.suffix());
 
       if (info.isDir()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FolderO);
         tlp::ColorProperty *viewColor = graph->getProperty<tlp::ColorProperty>("viewColor");
         viewColor->setNodeValue(n, dirColor);
       } else if (std::find(commonTextFilesExt.begin(), commonTextFilesExt.end(), extension) != commonTextFilesExt.end()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileTextO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileTextO);
       } else if (std::find(commonArchiveFilesExt.begin(), commonArchiveFilesExt.end(), extension) != commonArchiveFilesExt.end()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileArchiveO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileArchiveO);
       } else if (std::find(commonAudioFilesExt.begin(), commonAudioFilesExt.end(), extension) != commonAudioFilesExt.end()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileAudioO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileAudioO);
       } else if (std::find(commonImageFilesExt.begin(), commonImageFilesExt.end(), extension) != commonImageFilesExt.end()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileImageO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileImageO);
       } else if (std::find(commonVideoFilesExt.begin(), commonVideoFilesExt.end(), extension) != commonVideoFilesExt.end()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileVideoO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileVideoO);
       } else if (std::find(commonDevFilesExt.begin(), commonDevFilesExt.end(), extension) != commonDevFilesExt.end()) {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileCodeO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileCodeO);
       } else if (extension == "pdf") {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePdfO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePdfO);
       } else if (extension == "doc" || extension == "docx") {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileWordO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileWordO);
       } else if (extension == "xls" || extension == "xlsx") {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FileExcelO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FileExcelO);
       } else if (extension == "ppt" || extension == "pptx") {
-        _fontAwesomeIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePowerpointO);
+        _fontIcon->setNodeValue(n, tlp::TulipFontAwesome::FilePowerpointO);
       }
     }
 
@@ -289,7 +288,7 @@ private:
   tlp::IntegerProperty *_permissions;
   tlp::StringProperty *_suffixes;
   tlp::DoubleProperty *_sizes;
-  tlp::StringProperty *_fontAwesomeIcon;
+  tlp::StringProperty *_fontIcon;
   bool _useIcons;
   bool _treeLayout;
   tlp::Color dirColor;

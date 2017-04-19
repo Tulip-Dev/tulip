@@ -31,6 +31,8 @@ namespace tlp {
 /**
  * @brief Helper class for the configuration of a Material Design Icon glyph.
  *
+ * @since Tulip 4.11
+ *
  * Material Design Icons (https://materialdesignicons.com/) : a growing icon collection allows designers and developers
  * targeting various platforms to download icons in the format, color and size they need for any project.
  *
@@ -39,21 +41,21 @@ namespace tlp {
  *
  * That class offers utility functions and supported icons names constants.
  *
- * To set a node glyph as a Material Design icon, the Material Design Icon glyph must be associated
+ * To set a node glyph as a Material Design icon, the Icon glyph must be associated
  * to the node through the modification of the "viewShape" integer property attached to the graph.
- * The name of the icon to use must then be set in the "viewMaterialDesignIcon" string property.
+ * The name of the icon to use must then be set in the "viewIcon" string property.
  * As an example, the following code snippet activates the Material Design glyph for all nodes
  * and sets the "user" icon.
  *
  * @code
  *    // graph is a pointer to a tlp::Graph object
  *    tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
- *    tlp::StringProperty *viewMaterialDesignIcon = graph->getProperty<tlp::StringProperty>("viewMaterialDesignIcon");
+ *    tlp::StringProperty *viewIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
  *
- *    // sets the Material Design glyph on all nodes
- *    viewShape->setAllNodeValue(tlp::NodeShape::MaterialDesignIcon);
+ *    // sets the Icon glyph on all nodes
+ *    viewShape->setAllNodeValue(tlp::NodeShape::Icon);
  *    // sets the "user" glyph for all nodes
- *    viewMaterialDesignIconsIcon->setAllNodeValue(tlp::TulipMaterialDesignIcons::User);
+ *    viewIcon->setAllNodeValue(tlp::TulipMaterialDesignIcons::User);
  * @endcode
  **/
 
@@ -89,6 +91,7 @@ public:
    */
   static std::string getMaterialDesignIconUtf8String(const std::string &iconName);
 
+  // Based on Material Design Icons 1.9.32
   static const char *AccessPoint;
   static const char *AccessPointNetwork;
   static const char *Account;
@@ -116,7 +119,6 @@ public:
   static const char *AccountSettings;
   static const char *AccountSettingsVariant;
   static const char *AccountStar;
-  static const char *AccountStarVariant;
   static const char *AccountSwitch;
   static const char *Adjust;
   static const char *AirConditioner;
@@ -137,6 +139,7 @@ public:
   static const char *AlertBox;
   static const char *AlertCircle;
   static const char *AlertCircleOutline;
+  static const char *AlertDecagram;
   static const char *AlertOctagon;
   static const char *AlertOctagram;
   static const char *AlertOutline;
@@ -179,43 +182,56 @@ public:
   static const char *ArrowCompressAll;
   static const char *ArrowDown;
   static const char *ArrowDownBold;
+  static const char *ArrowDownBoldBox;
+  static const char *ArrowDownBoldBoxOutline;
   static const char *ArrowDownBoldCircle;
   static const char *ArrowDownBoldCircleOutline;
   static const char *ArrowDownBoldHexagonOutline;
   static const char *ArrowDownBox;
   static const char *ArrowDownDropCircle;
   static const char *ArrowDownDropCircleOutline;
+  static const char *ArrowDownThick;
   static const char *ArrowExpand;
   static const char *ArrowExpandAll;
   static const char *ArrowLeft;
   static const char *ArrowLeftBold;
+  static const char *ArrowLeftBoldBox;
+  static const char *ArrowLeftBoldBoxOutline;
   static const char *ArrowLeftBoldCircle;
   static const char *ArrowLeftBoldCircleOutline;
   static const char *ArrowLeftBoldHexagonOutline;
   static const char *ArrowLeftBox;
   static const char *ArrowLeftDropCircle;
   static const char *ArrowLeftDropCircleOutline;
+  static const char *ArrowLeftThick;
   static const char *ArrowRight;
   static const char *ArrowRightBold;
+  static const char *ArrowRightBoldBox;
+  static const char *ArrowRightBoldBoxOutline;
   static const char *ArrowRightBoldCircle;
   static const char *ArrowRightBoldCircleOutline;
   static const char *ArrowRightBoldHexagonOutline;
   static const char *ArrowRightBox;
   static const char *ArrowRightDropCircle;
   static const char *ArrowRightDropCircleOutline;
+  static const char *ArrowRightThick;
   static const char *ArrowTopLeft;
   static const char *ArrowTopRight;
   static const char *ArrowUp;
   static const char *ArrowUpBold;
+  static const char *ArrowUpBoldBox;
+  static const char *ArrowUpBoldBoxOutline;
   static const char *ArrowUpBoldCircle;
   static const char *ArrowUpBoldCircleOutline;
   static const char *ArrowUpBoldHexagonOutline;
   static const char *ArrowUpBox;
   static const char *ArrowUpDropCircle;
   static const char *ArrowUpDropCircleOutline;
+  static const char *ArrowUpThick;
   static const char *Assistant;
   static const char *Asterisk;
   static const char *At;
+  static const char *Atom;
   static const char *Attachment;
   static const char *Audiobook;
   static const char *AutoFix;
@@ -397,6 +413,7 @@ public:
   static const char *CameraRearVariant;
   static const char *CameraSwitch;
   static const char *CameraTimer;
+  static const char *Cancel;
   static const char *Candle;
   static const char *Candycane;
   static const char *Car;
@@ -419,8 +436,10 @@ public:
   static const char *CashUsd;
   static const char *Cast;
   static const char *CastConnected;
+  static const char *CastOff;
   static const char *Castle;
   static const char *Cat;
+  static const char *CeilingLight;
   static const char *Cellphone;
   static const char *CellphoneAndroid;
   static const char *CellphoneBasic;
@@ -434,10 +453,12 @@ public:
   static const char *ChartArc;
   static const char *ChartAreaspline;
   static const char *ChartBar;
+  static const char *ChartBarStacked;
   static const char *ChartBubble;
   static const char *ChartGantt;
   static const char *ChartHistogram;
   static const char *ChartLine;
+  static const char *ChartLineStacked;
   static const char *ChartPie;
   static const char *ChartScatterplotHexbin;
   static const char *ChartTimeline;
@@ -473,6 +494,8 @@ public:
   static const char *ChevronUp;
   static const char *Chip;
   static const char *Church;
+  static const char *Circle;
+  static const char *CircleOutline;
   static const char *CiscoWebex;
   static const char *City;
   static const char *Clipboard;
@@ -483,6 +506,7 @@ public:
   static const char *ClipboardCheck;
   static const char *ClipboardFlow;
   static const char *ClipboardOutline;
+  static const char *ClipboardPlus;
   static const char *ClipboardText;
   static const char *Clippy;
   static const char *Clock;
@@ -506,8 +530,8 @@ public:
   static const char *CloudCheck;
   static const char *CloudCircle;
   static const char *CloudDownload;
+  static const char *CloudOffOutline;
   static const char *CloudOutline;
-  static const char *CloudOutlineOff;
   static const char *CloudPrint;
   static const char *CloudPrintOutline;
   static const char *CloudSync;
@@ -612,6 +636,8 @@ public:
   static const char *DebugStepInto;
   static const char *DebugStepOut;
   static const char *DebugStepOver;
+  static const char *Decagram;
+  static const char *DecagramOutline;
   static const char *DecimalDecrease;
   static const char *DecimalIncrease;
   static const char *Delete;
@@ -635,10 +661,12 @@ public:
   static const char *Dice4;
   static const char *Dice5;
   static const char *Dice6;
+  static const char *DiceD10;
   static const char *DiceD20;
   static const char *DiceD4;
   static const char *DiceD6;
   static const char *DiceD8;
+  static const char *DiceMultiple;
   static const char *Dictionary;
   static const char *Directions;
   static const char *DirectionsFork;
@@ -659,6 +687,7 @@ public:
   static const char *DotsVertical;
   static const char *Douban;
   static const char *Download;
+  static const char *DownloadNetwork;
   static const char *Drag;
   static const char *DragHorizontal;
   static const char *DragVertical;
@@ -716,8 +745,8 @@ public:
   static const char *Export;
   static const char *Eye;
   static const char *EyeOff;
+  static const char *EyeOffOutline;
   static const char *EyeOutline;
-  static const char *EyeOutlineOff;
   static const char *Eyedropper;
   static const char *EyedropperVariant;
   static const char *Face;
@@ -733,6 +762,7 @@ public:
   static const char *Feather;
   static const char *Ferry;
   static const char *File;
+  static const char *FileAccount;
   static const char *FileChart;
   static const char *FileCheck;
   static const char *FileCloud;
@@ -752,6 +782,7 @@ public:
   static const char *FileOutline;
   static const char *FilePdf;
   static const char *FilePdfBox;
+  static const char *FilePlus;
   static const char *FilePowerpoint;
   static const char *FilePowerpointBox;
   static const char *FilePresentationBox;
@@ -808,6 +839,7 @@ public:
   static const char *FolderMultiple;
   static const char *FolderMultipleImage;
   static const char *FolderMultipleOutline;
+  static const char *FolderOpen;
   static const char *FolderOutline;
   static const char *FolderPlus;
   static const char *FolderRemove;
@@ -822,10 +854,13 @@ public:
   static const char *Football;
   static const char *FootballAustralian;
   static const char *FootballHelmet;
+  static const char *FormatAlignBottom;
   static const char *FormatAlignCenter;
   static const char *FormatAlignJustify;
   static const char *FormatAlignLeft;
+  static const char *FormatAlignMiddle;
   static const char *FormatAlignRight;
+  static const char *FormatAlignTop;
   static const char *FormatAnnotationPlus;
   static const char *FormatBold;
   static const char *FormatClear;
@@ -857,12 +892,14 @@ public:
   static const char *FormatLineWeight;
   static const char *FormatListBulleted;
   static const char *FormatListBulletedType;
+  static const char *FormatListChecks;
   static const char *FormatListNumbers;
   static const char *FormatPageBreak;
   static const char *FormatPaint;
   static const char *FormatParagraph;
   static const char *FormatPilcrow;
-  static const char *FormatQuote;
+  static const char *FormatQuoteClose;
+  static const char *FormatQuoteOpen;
   static const char *FormatRotate90;
   static const char *FormatSection;
   static const char *FormatSize;
@@ -905,6 +942,14 @@ public:
   static const char *GenderMale;
   static const char *GenderMaleFemale;
   static const char *GenderTransgender;
+  static const char *GestureDoubleTap;
+  static const char *GestureSwipeDown;
+  static const char *GestureSwipeLeft;
+  static const char *GestureSwipeRight;
+  static const char *GestureSwipeUp;
+  static const char *GestureTap;
+  static const char *GestureTwoDoubleTap;
+  static const char *GestureTwoTap;
   static const char *Ghost;
   static const char *Gift;
   static const char *Git;
@@ -946,8 +991,10 @@ public:
   static const char *Gradient;
   static const char *GreasePencil;
   static const char *Grid;
+  static const char *GridLarge;
   static const char *GridOff;
   static const char *Group;
+  static const char *GuitarAcoustic;
   static const char *GuitarElectric;
   static const char *GuitarPick;
   static const char *GuitarPickOutline;
@@ -967,14 +1014,17 @@ public:
   static const char *HeartBox;
   static const char *HeartBoxOutline;
   static const char *HeartBroken;
+  static const char *HeartHalf;
+  static const char *HeartHalfFull;
   static const char *HeartHalfOutline;
-  static const char *HeartHalfPart;
-  static const char *HeartHalfPartOutline;
+  static const char *HeartOff;
   static const char *HeartOutline;
   static const char *HeartPulse;
   static const char *Help;
+  static const char *HelpBox;
   static const char *HelpCircle;
   static const char *HelpCircleOutline;
+  static const char *HelpNetwork;
   static const char *Hexagon;
   static const char *HexagonMultiple;
   static const char *HexagonOutline;
@@ -1004,6 +1054,7 @@ public:
   static const char *HumanMale;
   static const char *HumanMaleFemale;
   static const char *HumanPregnant;
+  static const char *HumbleBundle;
   static const char *Image;
   static const char *ImageAlbum;
   static const char *ImageArea;
@@ -1055,6 +1106,7 @@ public:
   static const char *KeyboardReturn;
   static const char *KeyboardTab;
   static const char *KeyboardVariant;
+  static const char *Kickstarter;
   static const char *Kodi;
   static const char *Label;
   static const char *LabelOutline;
@@ -1107,12 +1159,14 @@ public:
   static const char *Linkedin;
   static const char *LinkedinBox;
   static const char *Linux;
+  static const char *Loading;
   static const char *Lock;
   static const char *LockOpen;
   static const char *LockOpenOutline;
   static const char *LockOutline;
   static const char *LockPattern;
   static const char *LockPlus;
+  static const char *LockReset;
   static const char *Login;
   static const char *LoginVariant;
   static const char *Logout;
@@ -1203,6 +1257,7 @@ public:
   static const char *Movie;
   static const char *Multiplication;
   static const char *MultiplicationBox;
+  static const char *Music;
   static const char *MusicBox;
   static const char *MusicBoxOutline;
   static const char *MusicCircle;
@@ -1215,6 +1270,7 @@ public:
   static const char *MusicNoteQuarter;
   static const char *MusicNoteSixteenth;
   static const char *MusicNoteWhole;
+  static const char *MusicOff;
   static const char *Nature;
   static const char *NaturePeople;
   static const char *Navigation;
@@ -1222,15 +1278,14 @@ public:
   static const char *Needle;
   static const char *NestProtect;
   static const char *NestThermostat;
+  static const char *Netflix;
   static const char *Network;
-  static const char *NetworkDownload;
-  static const char *NetworkQuestion;
-  static const char *NetworkUpload;
   static const char *NewBox;
   static const char *Newspaper;
   static const char *Nfc;
   static const char *NfcTap;
   static const char *NfcVariant;
+  static const char *Ninja;
   static const char *Nodejs;
   static const char *Note;
   static const char *NoteMultiple;
@@ -1282,17 +1337,20 @@ public:
   static const char *Octagon;
   static const char *OctagonOutline;
   static const char *Octagram;
+  static const char *OctagramOutline;
   static const char *Odnoklassniki;
   static const char *Office;
   static const char *Oil;
   static const char *OilTemperature;
   static const char *Omega;
   static const char *Onedrive;
+  static const char *Onenote;
   static const char *Opacity;
   static const char *OpenInApp;
   static const char *OpenInNew;
   static const char *Openid;
   static const char *Opera;
+  static const char *Orbit;
   static const char *Ornament;
   static const char *OrnamentVariant;
   static const char *Owl;
@@ -1332,11 +1390,13 @@ public:
   static const char *PencilBox;
   static const char *PencilBoxOutline;
   static const char *PencilCircle;
+  static const char *PencilCircleOutline;
   static const char *PencilLock;
   static const char *PencilOff;
   static const char *Pentagon;
   static const char *PentagonOutline;
   static const char *Percent;
+  static const char *Periscope;
   static const char *Pharmacy;
   static const char *Phone;
   static const char *PhoneBluetooth;
@@ -1530,6 +1590,7 @@ public:
   static const char *SelectInverse;
   static const char *SelectOff;
   static const char *Selection;
+  static const char *SelectionOff;
   static const char *Send;
   static const char *SerialPort;
   static const char *Server;
@@ -1540,6 +1601,14 @@ public:
   static const char *ServerPlus;
   static const char *ServerRemove;
   static const char *ServerSecurity;
+  static const char *SetAll;
+  static const char *SetCenter;
+  static const char *SetCenterRight;
+  static const char *SetLeft;
+  static const char *SetLeftCenter;
+  static const char *SetLeftRight;
+  static const char *SetNone;
+  static const char *SetRight;
   static const char *Settings;
   static const char *SettingsBox;
   static const char *ShapeCirclePlus;
@@ -1550,6 +1619,7 @@ public:
   static const char *Share;
   static const char *ShareVariant;
   static const char *Shield;
+  static const char *ShieldHalfFull;
   static const char *ShieldOutline;
   static const char *Shopping;
   static const char *ShoppingMusic;
@@ -1562,12 +1632,15 @@ public:
   static const char *Sigma;
   static const char *SigmaLower;
   static const char *SignCaution;
+  static const char *SignDirection;
+  static const char *SignText;
   static const char *Signal;
   static const char *Signal2g;
   static const char *Signal3g;
   static const char *Signal4g;
   static const char *SignalHspa;
   static const char *SignalHspaPlus;
+  static const char *SignalOff;
   static const char *SignalVariant;
   static const char *Silverware;
   static const char *SilverwareFork;
@@ -1626,8 +1699,11 @@ public:
   static const char *Spotlight;
   static const char *SpotlightBeam;
   static const char *Spray;
+  static const char *Square;
   static const char *SquareInc;
   static const char *SquareIncCash;
+  static const char *SquareOutline;
+  static const char *SquareRoot;
   static const char *Stackexchange;
   static const char *Stackoverflow;
   static const char *Stadium;
@@ -1645,6 +1721,7 @@ public:
   static const char *StepForward2;
   static const char *Stethoscope;
   static const char *Sticker;
+  static const char *StickerEmoji;
   static const char *Stocking;
   static const char *Stop;
   static const char *StopCircle;
@@ -1656,6 +1733,7 @@ public:
   static const char *SubdirectoryArrowRight;
   static const char *Subway;
   static const char *SubwayVariant;
+  static const char *Summit;
   static const char *Sunglasses;
   static const char *SurroundSound;
   static const char *Svg;
@@ -1664,10 +1742,12 @@ public:
   static const char *Swim;
   static const char *Switch;
   static const char *Sword;
+  static const char *SwordCross;
   static const char *Sync;
   static const char *SyncAlert;
   static const char *SyncOff;
   static const char *Tab;
+  static const char *TabPlus;
   static const char *TabUnselected;
   static const char *Table;
   static const char *TableColumnPlusAfter;
@@ -1683,6 +1763,7 @@ public:
   static const char *Tablet;
   static const char *TabletAndroid;
   static const char *TabletIpad;
+  static const char *Taco;
   static const char *Tag;
   static const char *TagFaces;
   static const char *TagHeart;
@@ -1731,6 +1812,7 @@ public:
   static const char *TimerOff;
   static const char *TimerSand;
   static const char *TimerSandEmpty;
+  static const char *TimerSandFull;
   static const char *Timetable;
   static const char *ToggleSwitch;
   static const char *ToggleSwitchOff;
@@ -1767,6 +1849,7 @@ public:
   static const char *TrophyVariantOutline;
   static const char *Truck;
   static const char *TruckDelivery;
+  static const char *TruckFast;
   static const char *TruckTrailer;
   static const char *TshirtCrew;
   static const char *TshirtV;
@@ -1779,19 +1862,23 @@ public:
   static const char *TwitterBox;
   static const char *TwitterCircle;
   static const char *TwitterRetweet;
+  static const char *Uber;
   static const char *Ubuntu;
   static const char *Umbraco;
   static const char *Umbrella;
   static const char *UmbrellaOutline;
   static const char *Undo;
   static const char *UndoVariant;
-  static const char *UnfoldLess;
-  static const char *UnfoldMore;
+  static const char *UnfoldLessHorizontal;
+  static const char *UnfoldLessVertical;
+  static const char *UnfoldMoreHorizontal;
+  static const char *UnfoldMoreVertical;
   static const char *Ungroup;
   static const char *Unity;
   static const char *Untappd;
   static const char *Update;
   static const char *Upload;
+  static const char *UploadNetwork;
   static const char *Usb;
   static const char *VectorArrangeAbove;
   static const char *VectorArrangeBelow;
@@ -1807,6 +1894,7 @@ public:
   static const char *VectorPoint;
   static const char *VectorPolygon;
   static const char *VectorPolyline;
+  static const char *VectorRadius;
   static const char *VectorRectangle;
   static const char *VectorSelection;
   static const char *VectorSquare;
@@ -1845,7 +1933,10 @@ public:
   static const char *VolumeHigh;
   static const char *VolumeLow;
   static const char *VolumeMedium;
+  static const char *VolumeMinus;
+  static const char *VolumeMute;
   static const char *VolumeOff;
+  static const char *VolumePlus;
   static const char *Vpn;
   static const char *Walk;
   static const char *Wallet;
@@ -1863,6 +1954,7 @@ public:
   static const char *WaterPercent;
   static const char *WaterPump;
   static const char *Watermark;
+  static const char *Waves;
   static const char *WeatherCloudy;
   static const char *WeatherFog;
   static const char *WeatherHail;
@@ -1914,12 +2006,19 @@ public:
   static const char *Xaml;
   static const char *Xbox;
   static const char *XboxController;
+  static const char *XboxControllerBatteryAlert;
+  static const char *XboxControllerBatteryEmpty;
+  static const char *XboxControllerBatteryFull;
+  static const char *XboxControllerBatteryLow;
+  static const char *XboxControllerBatteryMedium;
+  static const char *XboxControllerBatteryUnknown;
   static const char *XboxControllerOff;
   static const char *Xda;
   static const char *Xing;
   static const char *XingBox;
   static const char *XingCircle;
   static const char *Xml;
+  static const char *Yammer;
   static const char *Yeast;
   static const char *Yelp;
   static const char *YinYang;
@@ -1959,7 +2058,6 @@ public:
     accountsettings = 0xf630,
     accountsettingsvariant = 0xf631,
     accountstar = 0xf017,
-    accountstarvariant = 0xf018,
     accountswitch = 0xf019,
     adjust = 0xf01A,
     airconditioner = 0xf01B,
@@ -1980,8 +2078,9 @@ public:
     alertbox = 0xf027,
     alertcircle = 0xf028,
     alertcircleoutline = 0xf5D6,
+    alertdecagram = 0xf6BC,
     alertoctagon = 0xf029,
-    alertoctagram = 0xf6BC,
+    alertoctagram = 0xf766,
     alertoutline = 0xf02A,
     allinclusive = 0xf6BD,
     alpha = 0xf02B,
@@ -2021,44 +2120,57 @@ public:
     arrowcompress = 0xf615,
     arrowcompressall = 0xf044,
     arrowdown = 0xf045,
-    arrowdownbold = 0xf046,
+    arrowdownbold = 0xf72D,
+    arrowdownboldbox = 0xf72E,
+    arrowdownboldboxoutline = 0xf72F,
     arrowdownboldcircle = 0xf047,
     arrowdownboldcircleoutline = 0xf048,
     arrowdownboldhexagonoutline = 0xf049,
     arrowdownbox = 0xf6BF,
     arrowdowndropcircle = 0xf04A,
     arrowdowndropcircleoutline = 0xf04B,
+    arrowdownthick = 0xf046,
     arrowexpand = 0xf616,
     arrowexpandall = 0xf04C,
     arrowleft = 0xf04D,
-    arrowleftbold = 0xf04E,
+    arrowleftbold = 0xf730,
+    arrowleftboldbox = 0xf731,
+    arrowleftboldboxoutline = 0xf732,
     arrowleftboldcircle = 0xf04F,
     arrowleftboldcircleoutline = 0xf050,
     arrowleftboldhexagonoutline = 0xf051,
     arrowleftbox = 0xf6C0,
     arrowleftdropcircle = 0xf052,
     arrowleftdropcircleoutline = 0xf053,
+    arrowleftthick = 0xf04E,
     arrowright = 0xf054,
-    arrowrightbold = 0xf055,
+    arrowrightbold = 0xf733,
+    arrowrightboldbox = 0xf734,
+    arrowrightboldboxoutline = 0xf735,
     arrowrightboldcircle = 0xf056,
     arrowrightboldcircleoutline = 0xf057,
     arrowrightboldhexagonoutline = 0xf058,
     arrowrightbox = 0xf6C1,
     arrowrightdropcircle = 0xf059,
     arrowrightdropcircleoutline = 0xf05A,
+    arrowrightthick = 0xf055,
     arrowtopleft = 0xf05B,
     arrowtopright = 0xf05C,
     arrowup = 0xf05D,
-    arrowupbold = 0xf05E,
+    arrowupbold = 0xf736,
+    arrowupboldbox = 0xf737,
+    arrowupboldboxoutline = 0xf738,
     arrowupboldcircle = 0xf05F,
     arrowupboldcircleoutline = 0xf060,
     arrowupboldhexagonoutline = 0xf061,
     arrowupbox = 0xf6C2,
     arrowupdropcircle = 0xf062,
     arrowupdropcircleoutline = 0xf063,
+    arrowupthick = 0xf05E,
     assistant = 0xf064,
     asterisk = 0xf6C3,
     at = 0xf065,
+    atom = 0xf767,
     attachment = 0xf066,
     audiobook = 0xf067,
     autofix = 0xf068,
@@ -2240,6 +2352,7 @@ public:
     camerarearvariant = 0xf107,
     cameraswitch = 0xf108,
     cameratimer = 0xf109,
+    cancel = 0xf739,
     candle = 0xf5E2,
     candycane = 0xf10A,
     car = 0xf10B,
@@ -2262,8 +2375,10 @@ public:
     cashusd = 0xf117,
     cast = 0xf118,
     castconnected = 0xf119,
+    castoff = 0xf789,
     castle = 0xf11A,
     cat = 0xf11B,
+    ceilinglight = 0xf768,
     cellphone = 0xf11C,
     cellphoneandroid = 0xf11D,
     cellphonebasic = 0xf11E,
@@ -2277,10 +2392,12 @@ public:
     chartarc = 0xf126,
     chartareaspline = 0xf127,
     chartbar = 0xf128,
+    chartbarstacked = 0xf769,
     chartbubble = 0xf5E3,
     chartgantt = 0xf66C,
     charthistogram = 0xf129,
     chartline = 0xf12A,
+    chartlinestacked = 0xf76A,
     chartpie = 0xf12B,
     chartscatterplothexbin = 0xf66D,
     charttimeline = 0xf66E,
@@ -2316,6 +2433,8 @@ public:
     chevronup = 0xf143,
     chip = 0xf61A,
     church = 0xf144,
+    circle = 0xf764,
+    circleoutline = 0xf765,
     ciscowebex = 0xf145,
     city = 0xf146,
     clipboard = 0xf147,
@@ -2326,6 +2445,7 @@ public:
     clipboardcheck = 0xf14C,
     clipboardflow = 0xf6C7,
     clipboardoutline = 0xf14D,
+    clipboardplus = 0xf750,
     clipboardtext = 0xf14E,
     clippy = 0xf14F,
     clock = 0xf150,
@@ -2349,8 +2469,8 @@ public:
     cloudcheck = 0xf160,
     cloudcircle = 0xf161,
     clouddownload = 0xf162,
+    cloudoffoutline = 0xf164,
     cloudoutline = 0xf163,
-    cloudoutlineoff = 0xf164,
     cloudprint = 0xf165,
     cloudprintoutline = 0xf166,
     cloudsync = 0xf63F,
@@ -2455,6 +2575,8 @@ public:
     debugstepinto = 0xf1BB,
     debugstepout = 0xf1BC,
     debugstepover = 0xf1BD,
+    decagram = 0xf76B,
+    decagramoutline = 0xf76C,
     decimaldecrease = 0xf1BE,
     decimalincrease = 0xf1BF,
     delete_ = 0xf1C0,
@@ -2478,10 +2600,12 @@ public:
     dice4 = 0xf1CD,
     dice5 = 0xf1CE,
     dice6 = 0xf1CF,
+    diced10 = 0xf76E,
     diced20 = 0xf5EA,
     diced4 = 0xf5EB,
     diced6 = 0xf5EC,
     diced8 = 0xf5ED,
+    dicemultiple = 0xf76D,
     dictionary = 0xf61D,
     directions = 0xf1D0,
     directionsfork = 0xf641,
@@ -2502,6 +2626,7 @@ public:
     dotsvertical = 0xf1D9,
     douban = 0xf699,
     download = 0xf1DA,
+    downloadnetwork = 0xf6F3,
     drag = 0xf1DB,
     draghorizontal = 0xf1DC,
     dragvertical = 0xf1DD,
@@ -2559,8 +2684,8 @@ public:
     export_ = 0xf207,
     eye = 0xf208,
     eyeoff = 0xf209,
+    eyeoffoutline = 0xf6D0,
     eyeoutline = 0xf6CF,
-    eyeoutlineoff = 0xf6D0,
     eyedropper = 0xf20A,
     eyedroppervariant = 0xf20B,
     face = 0xf643,
@@ -2576,6 +2701,7 @@ public:
     feather = 0xf6D2,
     ferry = 0xf213,
     file = 0xf214,
+    fileaccount = 0xf73A,
     filechart = 0xf215,
     filecheck = 0xf216,
     filecloud = 0xf217,
@@ -2595,6 +2721,7 @@ public:
     fileoutline = 0xf224,
     filepdf = 0xf225,
     filepdfbox = 0xf226,
+    fileplus = 0xf751,
     filepowerpoint = 0xf227,
     filepowerpointbox = 0xf228,
     filepresentationbox = 0xf229,
@@ -2651,6 +2778,7 @@ public:
     foldermultiple = 0xf253,
     foldermultipleimage = 0xf254,
     foldermultipleoutline = 0xf255,
+    folderopen = 0xf76F,
     folderoutline = 0xf256,
     folderplus = 0xf257,
     folderremove = 0xf258,
@@ -2665,10 +2793,13 @@ public:
     football = 0xf25D,
     footballaustralian = 0xf25E,
     footballhelmet = 0xf25F,
+    formatalignbottom = 0xf752,
     formataligncenter = 0xf260,
     formatalignjustify = 0xf261,
     formatalignleft = 0xf262,
+    formatalignmiddle = 0xf753,
     formatalignright = 0xf263,
+    formataligntop = 0xf754,
     formatannotationplus = 0xf646,
     formatbold = 0xf264,
     formatclear = 0xf265,
@@ -2700,12 +2831,14 @@ public:
     formatlineweight = 0xf5C9,
     formatlistbulleted = 0xf279,
     formatlistbulletedtype = 0xf27A,
+    formatlistchecks = 0xf755,
     formatlistnumbers = 0xf27B,
     formatpagebreak = 0xf6D6,
     formatpaint = 0xf27C,
     formatparagraph = 0xf27D,
     formatpilcrow = 0xf6D7,
-    formatquote = 0xf27E,
+    formatquoteclose = 0xf27E,
+    formatquoteopen = 0xf756,
     formatrotate90 = 0xf6A9,
     formatsection = 0xf69E,
     formatsize = 0xf27F,
@@ -2748,6 +2881,14 @@ public:
     gendermale = 0xf29D,
     gendermalefemale = 0xf29E,
     gendertransgender = 0xf29F,
+    gesturedoubletap = 0xf73B,
+    gestureswipedown = 0xf73C,
+    gestureswipeleft = 0xf73D,
+    gestureswiperight = 0xf73E,
+    gestureswipeup = 0xf73F,
+    gesturetap = 0xf740,
+    gesturetwodoubletap = 0xf741,
+    gesturetwotap = 0xf742,
     ghost = 0xf2A0,
     gift = 0xf2A1,
     git = 0xf2A2,
@@ -2789,8 +2930,10 @@ public:
     gradient = 0xf69F,
     greasepencil = 0xf648,
     grid = 0xf2C1,
+    gridlarge = 0xf757,
     gridoff = 0xf2C2,
     group = 0xf2C3,
+    guitaracoustic = 0xf770,
     guitarelectric = 0xf2C4,
     guitarpick = 0xf2C5,
     guitarpickoutline = 0xf2C6,
@@ -2810,14 +2953,17 @@ public:
     heartbox = 0xf2D2,
     heartboxoutline = 0xf2D3,
     heartbroken = 0xf2D4,
-    hearthalfoutline = 0xf6DD,
-    hearthalfpart = 0xf6DE,
-    hearthalfpartoutline = 0xf6DF,
+    hearthalf = 0xf6DE,
+    hearthalffull = 0xf6DD,
+    hearthalfoutline = 0xf6DF,
+    heartoff = 0xf758,
     heartoutline = 0xf2D5,
     heartpulse = 0xf5F6,
     help = 0xf2D6,
+    helpbox = 0xf78A,
     helpcircle = 0xf2D7,
     helpcircleoutline = 0xf625,
+    helpnetwork = 0xf6F4,
     hexagon = 0xf2D8,
     hexagonmultiple = 0xf6E0,
     hexagonoutline = 0xf2D9,
@@ -2847,6 +2993,7 @@ public:
     humanmale = 0xf64D,
     humanmalefemale = 0xf2E8,
     humanpregnant = 0xf5CF,
+    humblebundle = 0xf743,
     image = 0xf2E9,
     imagealbum = 0xf2EA,
     imagearea = 0xf2EB,
@@ -2898,6 +3045,7 @@ public:
     keyboardreturn = 0xf311,
     keyboardtab = 0xf312,
     keyboardvariant = 0xf313,
+    kickstarter = 0xf744,
     kodi = 0xf314,
     label = 0xf315,
     labeloutline = 0xf316,
@@ -2950,12 +3098,14 @@ public:
     linkedin = 0xf33B,
     linkedinbox = 0xf33C,
     linux = 0xf33D,
+    loading = 0xf771,
     lock = 0xf33E,
     lockopen = 0xf33F,
     lockopenoutline = 0xf340,
     lockoutline = 0xf341,
     lockpattern = 0xf6E9,
     lockplus = 0xf5FB,
+    lockreset = 0xf772,
     login = 0xf342,
     loginvariant = 0xf5FC,
     logout = 0xf343,
@@ -3046,6 +3196,7 @@ public:
     movie = 0xf381,
     multiplication = 0xf382,
     multiplicationbox = 0xf383,
+    music = 0xf759,
     musicbox = 0xf384,
     musicboxoutline = 0xf385,
     musiccircle = 0xf386,
@@ -3058,6 +3209,7 @@ public:
     musicnotequarter = 0xf38B,
     musicnotesixteenth = 0xf38C,
     musicnotewhole = 0xf38D,
+    musicoff = 0xf75A,
     nature = 0xf38E,
     naturepeople = 0xf38F,
     navigation = 0xf390,
@@ -3065,15 +3217,14 @@ public:
     needle = 0xf391,
     nestprotect = 0xf392,
     nestthermostat = 0xf393,
+    netflix = 0xf745,
     network = 0xf6F2,
-    networkdownload = 0xf6F3,
-    networkquestion = 0xf6F4,
-    networkupload = 0xf6F5,
     newbox = 0xf394,
     newspaper = 0xf395,
     nfc = 0xf396,
     nfctap = 0xf397,
     nfcvariant = 0xf398,
+    ninja = 0xf773,
     nodejs = 0xf399,
     note = 0xf39A,
     notemultiple = 0xf6B7,
@@ -3125,17 +3276,20 @@ public:
     octagon = 0xf3C3,
     octagonoutline = 0xf3C4,
     octagram = 0xf6F8,
+    octagramoutline = 0xf774,
     odnoklassniki = 0xf3C5,
     office = 0xf3C6,
     oil = 0xf3C7,
     oiltemperature = 0xf3C8,
     omega = 0xf3C9,
     onedrive = 0xf3CA,
+    onenote = 0xf746,
     opacity = 0xf5CC,
     openinapp = 0xf3CB,
     openinnew = 0xf3CC,
     openid = 0xf3CD,
     opera = 0xf3CE,
+    orbit = 0xf018,
     ornament = 0xf3CF,
     ornamentvariant = 0xf3D0,
     owl = 0xf3D2,
@@ -3175,11 +3329,13 @@ public:
     pencilbox = 0xf3EC,
     pencilboxoutline = 0xf3ED,
     pencilcircle = 0xf6FE,
+    pencilcircleoutline = 0xf775,
     pencillock = 0xf3EE,
     penciloff = 0xf3EF,
     pentagon = 0xf6FF,
     pentagonoutline = 0xf700,
     percent = 0xf3F0,
+    periscope = 0xf747,
     pharmacy = 0xf3F1,
     phone = 0xf3F2,
     phonebluetooth = 0xf3F3,
@@ -3373,6 +3529,7 @@ public:
     selectinverse = 0xf487,
     selectoff = 0xf488,
     selection = 0xf489,
+    selectionoff = 0xf776,
     send = 0xf48A,
     serialport = 0xf65C,
     server = 0xf48B,
@@ -3383,6 +3540,14 @@ public:
     serverplus = 0xf490,
     serverremove = 0xf491,
     serversecurity = 0xf492,
+    setall = 0xf777,
+    setcenter = 0xf778,
+    setcenterright = 0xf779,
+    setleft = 0xf77A,
+    setleftcenter = 0xf77B,
+    setleftright = 0xf77C,
+    setnone = 0xf77D,
+    setright = 0xf77E,
     settings = 0xf493,
     settingsbox = 0xf494,
     shapecircleplus = 0xf65D,
@@ -3393,6 +3558,7 @@ public:
     share = 0xf496,
     sharevariant = 0xf497,
     shield = 0xf498,
+    shieldhalffull = 0xf77F,
     shieldoutline = 0xf499,
     shopping = 0xf49A,
     shoppingmusic = 0xf49B,
@@ -3405,12 +3571,15 @@ public:
     sigma = 0xf4A0,
     sigmalower = 0xf62B,
     signcaution = 0xf4A1,
+    signdirection = 0xf780,
+    signtext = 0xf781,
     signal = 0xf4A2,
     signal2g = 0xf711,
     signal3g = 0xf712,
     signal4g = 0xf713,
     signalhspa = 0xf714,
     signalhspaplus = 0xf715,
+    signaloff = 0xf782,
     signalvariant = 0xf60A,
     silverware = 0xf4A3,
     silverwarefork = 0xf4A4,
@@ -3469,8 +3638,11 @@ public:
     spotlight = 0xf4C8,
     spotlightbeam = 0xf4C9,
     spray = 0xf665,
+    square = 0xf763,
     squareinc = 0xf4CA,
     squareinccash = 0xf4CB,
+    squareoutline = 0xf762,
+    squareroot = 0xf783,
     stackexchange = 0xf60B,
     stackoverflow = 0xf4CC,
     stadium = 0xf71F,
@@ -3488,6 +3660,7 @@ public:
     stepforward2 = 0xf4D8,
     stethoscope = 0xf4D9,
     sticker = 0xf5D0,
+    stickeremoji = 0xf784,
     stocking = 0xf4DA,
     stop = 0xf4DB,
     stopcircle = 0xf666,
@@ -3499,6 +3672,7 @@ public:
     subdirectoryarrowright = 0xf60D,
     subway = 0xf6AB,
     subwayvariant = 0xf4DF,
+    summit = 0xf785,
     sunglasses = 0xf4E0,
     surroundsound = 0xf5C5,
     svg = 0xf720,
@@ -3507,10 +3681,12 @@ public:
     swim = 0xf4E3,
     switch_ = 0xf4E4,
     sword = 0xf4E5,
+    swordcross = 0xf786,
     sync = 0xf4E6,
     syncalert = 0xf4E7,
     syncoff = 0xf4E8,
     tab = 0xf4E9,
+    tabplus = 0xf75B,
     tabunselected = 0xf4EA,
     table = 0xf4EB,
     tablecolumnplusafter = 0xf4EC,
@@ -3526,6 +3702,7 @@ public:
     tablet = 0xf4F6,
     tabletandroid = 0xf4F7,
     tabletipad = 0xf4F8,
+    taco = 0xf761,
     tag = 0xf4F9,
     tagfaces = 0xf4FA,
     tagheart = 0xf68A,
@@ -3574,6 +3751,7 @@ public:
     timeroff = 0xf51E,
     timersand = 0xf51F,
     timersandempty = 0xf6AC,
+    timersandfull = 0xf78B,
     timetable = 0xf520,
     toggleswitch = 0xf521,
     toggleswitchoff = 0xf522,
@@ -3610,6 +3788,7 @@ public:
     trophyvariantoutline = 0xf53C,
     truck = 0xf53D,
     truckdelivery = 0xf53E,
+    truckfast = 0xf787,
     trucktrailer = 0xf726,
     tshirtcrew = 0xf53F,
     tshirtv = 0xf540,
@@ -3622,19 +3801,23 @@ public:
     twitterbox = 0xf545,
     twittercircle = 0xf546,
     twitterretweet = 0xf547,
+    uber = 0xf748,
     ubuntu = 0xf548,
     umbraco = 0xf549,
     umbrella = 0xf54A,
     umbrellaoutline = 0xf54B,
     undo = 0xf54C,
     undovariant = 0xf54D,
-    unfoldless = 0xf54E,
-    unfoldmore = 0xf54F,
+    unfoldlesshorizontal = 0xf54E,
+    unfoldlessvertical = 0xf75F,
+    unfoldmorehorizontal = 0xf54F,
+    unfoldmorevertical = 0xf760,
     ungroup = 0xf550,
     unity = 0xf6AE,
     untappd = 0xf551,
     update = 0xf6AF,
     upload = 0xf552,
+    uploadnetwork = 0xf6F5,
     usb = 0xf553,
     vectorarrangeabove = 0xf554,
     vectorarrangebelow = 0xf555,
@@ -3650,6 +3833,7 @@ public:
     vectorpoint = 0xf55F,
     vectorpolygon = 0xf560,
     vectorpolyline = 0xf561,
+    vectorradius = 0xf749,
     vectorrectangle = 0xf5C6,
     vectorselection = 0xf562,
     vectorsquare = 0xf001,
@@ -3688,7 +3872,10 @@ public:
     volumehigh = 0xf57E,
     volumelow = 0xf57F,
     volumemedium = 0xf580,
+    volumeminus = 0xf75D,
+    volumemute = 0xf75E,
     volumeoff = 0xf581,
+    volumeplus = 0xf75C,
     vpn = 0xf582,
     walk = 0xf583,
     wallet = 0xf584,
@@ -3706,6 +3893,7 @@ public:
     waterpercent = 0xf58E,
     waterpump = 0xf58F,
     watermark = 0xf612,
+    waves = 0xf78C,
     weathercloudy = 0xf590,
     weatherfog = 0xf591,
     weatherhail = 0xf592,
@@ -3757,12 +3945,19 @@ public:
     xaml = 0xf673,
     xbox = 0xf5B9,
     xboxcontroller = 0xf5BA,
+    xboxcontrollerbatteryalert = 0xf74A,
+    xboxcontrollerbatteryempty = 0xf74B,
+    xboxcontrollerbatteryfull = 0xf74C,
+    xboxcontrollerbatterylow = 0xf74D,
+    xboxcontrollerbatterymedium = 0xf74E,
+    xboxcontrollerbatteryunknown = 0xf74F,
     xboxcontrolleroff = 0xf5BB,
     xda = 0xf5BC,
     xing = 0xf5BD,
     xingbox = 0xf5BE,
     xingcircle = 0xf5BF,
     xml = 0xf5C0,
+    yammer = 0xf788,
     yeast = 0xf5C1,
     yelp = 0xf5C2,
     yinyang = 0xf67F,
@@ -3770,7 +3965,9 @@ public:
     zipbox = 0xf5C4
 
   };
+
 };
+
 }
 
 #endif // TULIPMATERIALDESIGNICONS_H

@@ -20,6 +20,8 @@
 #ifndef TULIPFONTAWESOME_H
 #define TULIPFONTAWESOME_H
 
+#undef linux
+
 #include <tulip/tulipconf.h>
 
 #include <vector>
@@ -37,21 +39,21 @@ namespace tlp {
  *
  * That class offers utility functions and supported icons names constants.
  *
- * To set a node glyph as a Font Awesome icon, the Font Awesome glyph must be associated
+ * To set a node glyph as a Font Awesome icon, the Icon glyph must be associated
  * to the node through the modification of the "viewShape" integer property attached to the graph.
- * The name of the icon to use must then be set in the "viewFontAwesomeIcon" string property.
+ * The name of the icon to use must then be set in the "viewIcon" string property.
  * As an example, the following code snippet activates the Font Awesome glyph for all nodes
  * and sets the "user" icon.
  *
  * @code
  *    // graph is a pointer to a tlp::Graph object
  *    tlp::IntegerProperty *viewShape = graph->getProperty<tlp::IntegerProperty>("viewShape");
- *    tlp::StringProperty *viewFontAwesomeIcon = graph->getProperty<tlp::StringProperty>("viewFontAwesomeIcon");
+ *    tlp::StringProperty *viewIcon = graph->getProperty<tlp::StringProperty>("viewIcon");
  *
- *    // sets the Font Awesome glyph on all nodes
- *    viewShape->setAllNodeValue(tlp::NodeShape::FontAwesomeIcon);
+ *    // sets the Icon glyph on all nodes
+ *    viewShape->setAllNodeValue(tlp::NodeShape::Icon);
  *    // sets the "user" glyph for all nodes
- *    viewFontAwesomeIcon->setAllNodeValue(tlp::TulipFontAwesome::User);
+ *    viewIcon->setAllNodeValue(tlp::TulipFontAwesome::User);
  * @endcode
  **/
 
@@ -87,14 +89,21 @@ public:
    */
   static std::string getFontAwesomeIconUtf8String(const std::string &iconName);
 
-  // static constants for the Font Awesome 4.3 icons names
+  // static constants for the Font Awesome 4.7 icons names
+  static const char *Px500;
+  static const char *AddressBook;
+  static const char *AddressBookO;
+  static const char *AddressCard;
+  static const char *AddressCardO;
   static const char *Adjust;
   static const char *Adn;
   static const char *AlignCenter;
   static const char *AlignJustify;
   static const char *AlignLeft;
   static const char *AlignRight;
+  static const char *Amazon;
   static const char *Ambulance;
+  static const char *AmericanSignLanguageInterpreting;
   static const char *Anchor;
   static const char *Android;
   static const char *Angellist;
@@ -125,16 +134,34 @@ public:
   static const char *ArrowsAlt;
   static const char *ArrowsH;
   static const char *ArrowsV;
+  static const char *AslInterpreting;
+  static const char *AssistiveListeningSystems;
   static const char *Asterisk;
   static const char *At;
+  static const char *AudioDescription;
   static const char *Automobile;
   static const char *Backward;
+  static const char *BalanceScale;
   static const char *Ban;
+  static const char *Bandcamp;
   static const char *Bank;
   static const char *BarChart;
   static const char *BarChartO;
   static const char *Barcode;
   static const char *Bars;
+  static const char *Bath;
+  static const char *Bathtub;
+  static const char *Battery;
+  static const char *Battery0;
+  static const char *Battery1;
+  static const char *Battery2;
+  static const char *Battery3;
+  static const char *Battery4;
+  static const char *BatteryEmpty;
+  static const char *BatteryFull;
+  static const char *BatteryHalf;
+  static const char *BatteryQuarter;
+  static const char *BatteryThreeQuarters;
   static const char *Bed;
   static const char *Beer;
   static const char *Behance;
@@ -149,12 +176,17 @@ public:
   static const char *Bitbucket;
   static const char *BitbucketSquare;
   static const char *Bitcoin;
+  static const char *BlackTie;
+  static const char *Blind;
+  static const char *Bluetooth;
+  static const char *BluetoothB;
   static const char *Bold;
   static const char *Bolt;
   static const char *Bomb;
   static const char *Book;
   static const char *Bookmark;
   static const char *BookmarkO;
+  static const char *Braille;
   static const char *Briefcase;
   static const char *Btc;
   static const char *Bug;
@@ -167,7 +199,11 @@ public:
   static const char *Cab;
   static const char *Calculator;
   static const char *Calendar;
+  static const char *CalendarCheckO;
+  static const char *CalendarMinusO;
   static const char *CalendarO;
+  static const char *CalendarPlusO;
+  static const char *CalendarTimesO;
   static const char *Camera;
   static const char *CameraRetro;
   static const char *Car;
@@ -183,7 +219,9 @@ public:
   static const char *CartPlus;
   static const char *Cc;
   static const char *CcAmex;
+  static const char *CcDinersClub;
   static const char *CcDiscover;
+  static const char *CcJcb;
   static const char *CcMastercard;
   static const char *CcPaypal;
   static const char *CcStripe;
@@ -205,12 +243,14 @@ public:
   static const char *ChevronRight;
   static const char *ChevronUp;
   static const char *Child;
+  static const char *Chrome;
   static const char *Circle;
   static const char *CircleO;
   static const char *CircleONotch;
   static const char *CircleThin;
   static const char *Clipboard;
   static const char *ClockO;
+  static const char *Clone;
   static const char *Close;
   static const char *Cloud;
   static const char *CloudDownload;
@@ -219,20 +259,26 @@ public:
   static const char *Code;
   static const char *CodeFork;
   static const char *Codepen;
+  static const char *Codiepie;
   static const char *Coffee;
   static const char *Cog;
   static const char *Cogs;
   static const char *Columns;
   static const char *Comment;
   static const char *CommentO;
+  static const char *Commenting;
+  static const char *CommentingO;
   static const char *Comments;
   static const char *CommentsO;
   static const char *Compass;
   static const char *Compress;
   static const char *Connectdevelop;
+  static const char *Contao;
   static const char *Copy;
   static const char *Copyright;
+  static const char *CreativeCommons;
   static const char *CreditCard;
+  static const char *CreditCardAlt;
   static const char *Crop;
   static const char *Crosshairs;
   static const char *Css3;
@@ -243,6 +289,8 @@ public:
   static const char *Dashboard;
   static const char *Dashcube;
   static const char *Database;
+  static const char *Deaf;
+  static const char *Deafness;
   static const char *Dedent;
   static const char *Delicious;
   static const char *Desktop;
@@ -253,17 +301,25 @@ public:
   static const char *DotCircleO;
   static const char *Download;
   static const char *Dribbble;
+  static const char *DriversLicense;
+  static const char *DriversLicenseO;
   static const char *Dropbox;
   static const char *Drupal;
+  static const char *Edge;
   static const char *Edit;
+  static const char *Eercast;
   static const char *Eject;
   static const char *EllipsisH;
   static const char *EllipsisV;
   static const char *Empire;
   static const char *Envelope;
   static const char *EnvelopeO;
+  static const char *EnvelopeOpen;
+  static const char *EnvelopeOpenO;
   static const char *EnvelopeSquare;
+  static const char *Envira;
   static const char *Eraser;
+  static const char *Etsy;
   static const char *Eur;
   static const char *Euro;
   static const char *Exchange;
@@ -271,11 +327,13 @@ public:
   static const char *ExclamationCircle;
   static const char *ExclamationTriangle;
   static const char *Expand;
+  static const char *Expeditedssl;
   static const char *ExternalLink;
   static const char *ExternalLinkSquare;
   static const char *Eye;
   static const char *EyeSlash;
   static const char *Eyedropper;
+  static const char *Fa;
   static const char *Facebook;
   static const char *FacebookF;
   static const char *FacebookOfficial;
@@ -283,6 +341,7 @@ public:
   static const char *FastBackward;
   static const char *FastForward;
   static const char *Fax;
+  static const char *Feed;
   static const char *Female;
   static const char *FighterJet;
   static const char *File;
@@ -308,6 +367,8 @@ public:
   static const char *Filter;
   static const char *Fire;
   static const char *FireExtinguisher;
+  static const char *Firefox;
+  static const char *FirstOrder;
   static const char *Flag;
   static const char *FlagCheckered;
   static const char *FlagO;
@@ -320,9 +381,13 @@ public:
   static const char *FolderOpen;
   static const char *FolderOpenO;
   static const char *Font;
+  static const char *FontAwesome;
+  static const char *Fonticons;
+  static const char *FortAwesome;
   static const char *Forumbee;
   static const char *Forward;
   static const char *Foursquare;
+  static const char *FreeCodeCamp;
   static const char *FrownO;
   static const char *FutbolO;
   static const char *Gamepad;
@@ -332,28 +397,49 @@ public:
   static const char *Gear;
   static const char *Gears;
   static const char *Genderless;
+  static const char *GetPocket;
+  static const char *Gg;
+  static const char *GgCircle;
   static const char *Gift;
   static const char *Git;
   static const char *GitSquare;
   static const char *Github;
   static const char *GithubAlt;
   static const char *GithubSquare;
+  static const char *Gitlab;
   static const char *Gittip;
   static const char *Glass;
+  static const char *Glide;
+  static const char *GlideG;
   static const char *Globe;
   static const char *Google;
   static const char *GooglePlus;
+  static const char *GooglePlusCircle;
+  static const char *GooglePlusOfficial;
   static const char *GooglePlusSquare;
   static const char *GoogleWallet;
   static const char *GraduationCap;
   static const char *Gratipay;
+  static const char *Grav;
   static const char *Group;
   static const char *HSquare;
   static const char *HackerNews;
+  static const char *HandGrabO;
+  static const char *HandLizardO;
   static const char *HandODown;
   static const char *HandOLeft;
   static const char *HandORight;
   static const char *HandOUp;
+  static const char *HandPaperO;
+  static const char *HandPeaceO;
+  static const char *HandPointerO;
+  static const char *HandRockO;
+  static const char *HandScissorsO;
+  static const char *HandSpockO;
+  static const char *HandStopO;
+  static const char *HandshakeO;
+  static const char *HardOfHearing;
+  static const char *Hashtag;
   static const char *HddO;
   static const char *Header;
   static const char *Headphones;
@@ -364,16 +450,33 @@ public:
   static const char *Home;
   static const char *HospitalO;
   static const char *Hotel;
+  static const char *Hourglass;
+  static const char *Hourglass1;
+  static const char *Hourglass2;
+  static const char *Hourglass3;
+  static const char *HourglassEnd;
+  static const char *HourglassHalf;
+  static const char *HourglassO;
+  static const char *HourglassStart;
+  static const char *Houzz;
   static const char *Html5;
+  static const char *ICursor;
+  static const char *IdBadge;
+  static const char *IdCard;
+  static const char *IdCardO;
   static const char *Ils;
   static const char *Image;
+  static const char *Imdb;
   static const char *Inbox;
   static const char *Indent;
+  static const char *Industry;
   static const char *Info;
   static const char *InfoCircle;
   static const char *Inr;
   static const char *Instagram;
   static const char *Institution;
+  static const char *InternetExplorer;
+  static const char *Intersex;
   static const char *Ioxhost;
   static const char *Italic;
   static const char *Joomla;
@@ -401,6 +504,7 @@ public:
   static const char *Link;
   static const char *Linkedin;
   static const char *LinkedinSquare;
+  static const char *Linode;
   static const char *Linux;
   static const char *List;
   static const char *ListAlt;
@@ -412,13 +516,18 @@ public:
   static const char *LongArrowLeft;
   static const char *LongArrowRight;
   static const char *LongArrowUp;
+  static const char *LowVision;
   static const char *Magic;
   static const char *Magnet;
   static const char *MailForward;
   static const char *MailReply;
   static const char *MailReplyAll;
   static const char *Male;
+  static const char *Map;
   static const char *MapMarker;
+  static const char *MapO;
+  static const char *MapPin;
+  static const char *MapSigns;
   static const char *Mars;
   static const char *MarsDouble;
   static const char *MarsStroke;
@@ -428,25 +537,37 @@ public:
   static const char *Meanpath;
   static const char *Medium;
   static const char *Medkit;
+  static const char *Meetup;
   static const char *MehO;
   static const char *Mercury;
+  static const char *Microchip;
   static const char *Microphone;
   static const char *MicrophoneSlash;
   static const char *Minus;
   static const char *MinusCircle;
   static const char *MinusSquare;
   static const char *MinusSquareO;
+  static const char *Mixcloud;
   static const char *Mobile;
   static const char *MobilePhone;
+  static const char *Modx;
   static const char *Money;
   static const char *MoonO;
   static const char *MortarBoard;
   static const char *Motorcycle;
+  static const char *MousePointer;
   static const char *Music;
   static const char *Navicon;
   static const char *Neuter;
   static const char *NewspaperO;
+  static const char *ObjectGroup;
+  static const char *ObjectUngroup;
+  static const char *Odnoklassniki;
+  static const char *OdnoklassnikiSquare;
+  static const char *Opencart;
   static const char *Openid;
+  static const char *Opera;
+  static const char *OptinMonster;
   static const char *Outdent;
   static const char *Pagelines;
   static const char *PaintBrush;
@@ -456,11 +577,14 @@ public:
   static const char *Paragraph;
   static const char *Paste;
   static const char *Pause;
+  static const char *PauseCircle;
+  static const char *PauseCircleO;
   static const char *Paw;
   static const char *Paypal;
   static const char *Pencil;
   static const char *PencilSquare;
   static const char *PencilSquareO;
+  static const char *Percent;
   static const char *Phone;
   static const char *PhoneSquare;
   static const char *Photo;
@@ -468,6 +592,7 @@ public:
   static const char *PieChart;
   static const char *PiedPiper;
   static const char *PiedPiperAlt;
+  static const char *PiedPiperPp;
   static const char *Pinterest;
   static const char *PinterestP;
   static const char *PinterestSquare;
@@ -480,28 +605,36 @@ public:
   static const char *PlusCircle;
   static const char *PlusSquare;
   static const char *PlusSquareO;
+  static const char *Podcast;
   static const char *PowerOff;
   static const char *Print;
+  static const char *ProductHunt;
   static const char *PuzzlePiece;
   static const char *Qq;
   static const char *Qrcode;
   static const char *Question;
   static const char *QuestionCircle;
+  static const char *QuestionCircleO;
+  static const char *Quora;
   static const char *QuoteLeft;
   static const char *QuoteRight;
   static const char *Ra;
   static const char *Random;
+  static const char *Ravelry;
   static const char *Rebel;
   static const char *Recycle;
   static const char *Reddit;
+  static const char *RedditAlien;
   static const char *RedditSquare;
   static const char *Refresh;
+  static const char *Registered;
   static const char *Remove;
   static const char *Renren;
   static const char *Reorder;
   static const char *Repeat;
   static const char *Reply;
   static const char *ReplyAll;
+  static const char *Resistance;
   static const char *Retweet;
   static const char *Rmb;
   static const char *Road;
@@ -514,8 +647,11 @@ public:
   static const char *Rub;
   static const char *Ruble;
   static const char *Rupee;
+  static const char *S15;
+  static const char *Safari;
   static const char *Save;
   static const char *Scissors;
+  static const char *Scribd;
   static const char *Search;
   static const char *SearchMinus;
   static const char *SearchPlus;
@@ -533,10 +669,15 @@ public:
   static const char *Shield;
   static const char *Ship;
   static const char *Shirtsinbulk;
+  static const char *ShoppingBag;
+  static const char *ShoppingBasket;
   static const char *ShoppingCart;
+  static const char *Shower;
   static const char *SignIn;
+  static const char *SignLanguage;
   static const char *SignOut;
   static const char *Signal;
+  static const char *Signing;
   static const char *Simplybuilt;
   static const char *Sitemap;
   static const char *Skyatlas;
@@ -545,6 +686,10 @@ public:
   static const char *Sliders;
   static const char *Slideshare;
   static const char *SmileO;
+  static const char *Snapchat;
+  static const char *SnapchatGhost;
+  static const char *SnapchatSquare;
+  static const char *SnowflakeO;
   static const char *SoccerBallO;
   static const char *Sort;
   static const char *SortAlphaAsc;
@@ -577,7 +722,11 @@ public:
   static const char *StepBackward;
   static const char *StepForward;
   static const char *Stethoscope;
+  static const char *StickyNote;
+  static const char *StickyNoteO;
   static const char *Stop;
+  static const char *StopCircle;
+  static const char *StopCircleO;
   static const char *StreetView;
   static const char *Strikethrough;
   static const char *Stumbleupon;
@@ -586,6 +735,7 @@ public:
   static const char *Subway;
   static const char *Suitcase;
   static const char *SunO;
+  static const char *Superpowers;
   static const char *Superscript;
   static const char *Support;
   static const char *Table;
@@ -595,6 +745,8 @@ public:
   static const char *Tags;
   static const char *Tasks;
   static const char *Taxi;
+  static const char *Telegram;
+  static const char *Television;
   static const char *TencentWeibo;
   static const char *Terminal;
   static const char *TextHeight;
@@ -602,255 +754,7 @@ public:
   static const char *Th;
   static const char *ThLarge;
   static const char *ThList;
-  static const char *ThumbTack;
-  static const char *ThumbsDown;
-  static const char *ThumbsODown;
-  static const char *ThumbsOUp;
-  static const char *ThumbsUp;
-  static const char *Ticket;
-  static const char *Times;
-  static const char *TimesCircle;
-  static const char *TimesCircleO;
-  static const char *Tint;
-  static const char *ToggleDown;
-  static const char *ToggleLeft;
-  static const char *ToggleOff;
-  static const char *ToggleOn;
-  static const char *ToggleRight;
-  static const char *ToggleUp;
-  static const char *Train;
-  static const char *Transgender;
-  static const char *TransgenderAlt;
-  static const char *Trash;
-  static const char *TrashO;
-  static const char *Tree;
-  static const char *Trello;
-  static const char *Trophy;
-  static const char *Truck;
-  static const char *Try;
-  static const char *Tty;
-  static const char *Tumblr;
-  static const char *TumblrSquare;
-  static const char *TurkishLira;
-  static const char *Twitch;
-  static const char *Twitter;
-  static const char *TwitterSquare;
-  static const char *Umbrella;
-  static const char *Underline;
-  static const char *Undo;
-  static const char *University;
-  static const char *Unlink;
-  static const char *Unlock;
-  static const char *UnlockAlt;
-  static const char *Unsorted;
-  static const char *Upload;
-  static const char *Usd;
-  static const char *User;
-  static const char *UserMd;
-  static const char *UserPlus;
-  static const char *UserSecret;
-  static const char *UserTimes;
-  static const char *Users;
-  static const char *Venus;
-  static const char *VenusDouble;
-  static const char *VenusMars;
-  static const char *Viacoin;
-  static const char *VideoCamera;
-  static const char *VimeoSquare;
-  static const char *Vine;
-  static const char *Vk;
-  static const char *VolumeDown;
-  static const char *VolumeOff;
-  static const char *VolumeUp;
-  static const char *Warning;
-  static const char *Wechat;
-  static const char *Weibo;
-  static const char *Weixin;
-  static const char *Whatsapp;
-  static const char *Wheelchair;
-  static const char *Wifi;
-  static const char *Windows;
-  static const char *Won;
-  static const char *Wordpress;
-  static const char *Wrench;
-  static const char *Xing;
-  static const char *XingSquare;
-  static const char *Yahoo;
-  static const char *Yelp;
-  static const char *Yen;
-  static const char *Youtube;
-  static const char *YoutubePlay;
-  static const char *YoutubeSquare;
-
-  // static constants for the new icons added in Font Awesome 4.4
-  static const char *Yc;
-  static const char *YCombinator;
-  static const char *OptinMonster;
-  static const char *Opencart;
-  static const char *Expeditedssl;
-  static const char *Battery4;
-  static const char *BatteryFull;
-  static const char *Battery3;
-  static const char *BatteryThreeQuarters;
-  static const char *Battery2;
-  static const char *BatteryHalf;
-  static const char *Battery1;
-  static const char *BatteryQuarter;
-  static const char *Battery0;
-  static const char *BatteryEmpty;
-  static const char *MousePointer;
-  static const char *ICursor;
-  static const char *ObjectGroup;
-  static const char *ObjectUngroup;
-  static const char *StickyNote;
-  static const char *StickyNoteO;
-  static const char *CcJcb;
-  static const char *CcDinersClub;
-  static const char *Clone;
-  static const char *BalanceScale;
-  static const char *HourglassO;
-  static const char *Hourglass1;
-  static const char *HourglassStart;
-  static const char *Hourglass2;
-  static const char *HourglassHalf;
-  static const char *Hourglass3;
-  static const char *HourglassEnd;
-  static const char *Hourglass;
-  static const char *HandGrabO;
-  static const char *HandRockO;
-  static const char *HandStopO;
-  static const char *HandPaperO;
-  static const char *HandScissorsO;
-  static const char *HandLizardO;
-  static const char *HandSpockO;
-  static const char *HandPointerO;
-  static const char *HandPeaceO;
-  static const char *Trademark;
-  static const char *Registered;
-  static const char *CreativeCommons;
-  static const char *Gg;
-  static const char *GgCircle;
-  static const char *Tripadvisor;
-  static const char *Odnoklassniki;
-  static const char *OdnoklassnikiSquare;
-  static const char *GetPocket;
-  static const char *WikipediaW;
-  static const char *Safari;
-  static const char *Chrome;
-  static const char *Firefox;
-  static const char *Opera;
-  static const char *InternetExplorer;
-  static const char *Tv;
-  static const char *Television;
-  static const char *Contao;
-  static const char *Px500;
-  static const char *Amazon;
-  static const char *CalendarPlusO;
-  static const char *CalendarMinusO;
-  static const char *CalendarTimesO;
-  static const char *CalendarCheckO;
-  static const char *Industry;
-  static const char *MapPin;
-  static const char *MapSigns;
-  static const char *MapO;
-  static const char *Map;
-  static const char *Commenting;
-  static const char *CommentingO;
-  static const char *Houzz;
-  static const char *Vimeo;
-  static const char *BlackTie;
-  static const char *Fonticons;
-
-  // static constants for the new icons added in Font Awesome 4.5
-  static const char *Bluetooth;
-  static const char *BluetoothB;
-  static const char *Codiepie;
-  static const char *CreditCardAlt;
-  static const char *Edge;
-  static const char *FortAwesome;
-  static const char *Hashtag;
-  static const char *Mixcloud;
-  static const char *Modx;
-  static const char *PauseCircle;
-  static const char *PauseCircleO;
-  static const char *Percent;
-  static const char *ProductHunt;
-  static const char *RedditAlien;
-  static const char *Scribd;
-  static const char *ShoppingBag;
-  static const char *ShoppingBasket;
-  static const char *StopCircle;
-  static const char *StopCircleO;
-  static const char *Usb;
-
-  // static constants for the new icons added in Font Awesome 4.6
-  static const char *AmericanSignLanguageInterpreting;
-  static const char *AslInterpreting;
-  static const char *AssistiveListeningSystems;
-  static const char *AudioDescription;
-  static const char *Blind;
-  static const char *Braille;
-  static const char *Deaf;
-  static const char *Deafness;
-  static const char *Envira;
-  static const char *Fa;
-  static const char *FirstOrder;
-  static const char *FontAwesome;
-  static const char *Gitlab;
-  static const char *Glide;
-  static const char *GlideG;
-  static const char *GooglePlusCircle;
-  static const char *GooglePlusOfficial;
-  static const char *HardOfHearing;
-  static const char *LowVision;
-  static const char *QuestionCircleO;
-  static const char *SignLanguage;
-  static const char *Signing;
-  static const char *Snapchat;
-  static const char *SnapchatGhost;
-  static const char *SnapchatSquare;
   static const char *Themeisle;
-  static const char *UniversalAccess;
-  static const char *Viadeo;
-  static const char *ViadeoSquare;
-  static const char *VolumeControlPhone;
-  static const char *WheelchairAlt;
-  static const char *Wpbeginner;
-  static const char *Wpforms;
-  static const char *Yoast;
-
-  // static constants for the new icons added in Font Awesome 4.7
-  static const char *AddressBook;
-  static const char *AddressBookO;
-  static const char *AddressCard;
-  static const char *AddressCardO;
-  static const char *Bandcamp;
-  static const char *Bath;
-  static const char *Bathtub;
-  static const char *DriversLicense;
-  static const char *DriversLicenseO;
-  static const char *Eercast;
-  static const char *EnvelopeOpen;
-  static const char *EnvelopeOpenO;
-  static const char *Etsy;
-  static const char *FreeCodeCamp;
-  static const char *Grav;
-  static const char *HandshakeO;
-  static const char *IdBadge;
-  static const char *IdCard;
-  static const char *IdCardO;
-  static const char *Imdb;
-  static const char *Linode;
-  static const char *Meetup;
-  static const char *Microchip;
-  static const char *Podcast;
-  static const char *Quora;
-  static const char *Ravelry;
-  static const char *S15;
-  static const char *Shower;
-  static const char *SnowflakeO;
-  static const char *Superpowers;
-  static const char *Telegram;
   static const char *Thermometer;
   static const char *Thermometer0;
   static const char *Thermometer1;
@@ -862,20 +766,116 @@ public:
   static const char *ThermometerHalf;
   static const char *ThermometerQuarter;
   static const char *ThermometerThreeQuarters;
+  static const char *ThumbTack;
+  static const char *ThumbsDown;
+  static const char *ThumbsODown;
+  static const char *ThumbsOUp;
+  static const char *ThumbsUp;
+  static const char *Ticket;
+  static const char *Times;
+  static const char *TimesCircle;
+  static const char *TimesCircleO;
   static const char *TimesRectangle;
   static const char *TimesRectangleO;
+  static const char *Tint;
+  static const char *ToggleDown;
+  static const char *ToggleLeft;
+  static const char *ToggleOff;
+  static const char *ToggleOn;
+  static const char *ToggleRight;
+  static const char *ToggleUp;
+  static const char *Trademark;
+  static const char *Train;
+  static const char *Transgender;
+  static const char *TransgenderAlt;
+  static const char *Trash;
+  static const char *TrashO;
+  static const char *Tree;
+  static const char *Trello;
+  static const char *Tripadvisor;
+  static const char *Trophy;
+  static const char *Truck;
+  static const char *Try;
+  static const char *Tty;
+  static const char *Tumblr;
+  static const char *TumblrSquare;
+  static const char *TurkishLira;
+  static const char *Tv;
+  static const char *Twitch;
+  static const char *Twitter;
+  static const char *TwitterSquare;
+  static const char *Umbrella;
+  static const char *Underline;
+  static const char *Undo;
+  static const char *UniversalAccess;
+  static const char *University;
+  static const char *Unlink;
+  static const char *Unlock;
+  static const char *UnlockAlt;
+  static const char *Unsorted;
+  static const char *Upload;
+  static const char *Usb;
+  static const char *Usd;
+  static const char *User;
   static const char *UserCircle;
   static const char *UserCircleO;
+  static const char *UserMd;
   static const char *UserO;
+  static const char *UserPlus;
+  static const char *UserSecret;
+  static const char *UserTimes;
+  static const char *Users;
   static const char *Vcard;
   static const char *VcardO;
+  static const char *Venus;
+  static const char *VenusDouble;
+  static const char *VenusMars;
+  static const char *Viacoin;
+  static const char *Viadeo;
+  static const char *ViadeoSquare;
+  static const char *VideoCamera;
+  static const char *Vimeo;
+  static const char *VimeoSquare;
+  static const char *Vine;
+  static const char *Vk;
+  static const char *VolumeControlPhone;
+  static const char *VolumeDown;
+  static const char *VolumeOff;
+  static const char *VolumeUp;
+  static const char *Warning;
+  static const char *Wechat;
+  static const char *Weibo;
+  static const char *Weixin;
+  static const char *Whatsapp;
+  static const char *Wheelchair;
+  static const char *WheelchairAlt;
+  static const char *Wifi;
+  static const char *WikipediaW;
   static const char *WindowClose;
   static const char *WindowCloseO;
   static const char *WindowMaximize;
   static const char *WindowMinimize;
   static const char *WindowRestore;
+  static const char *Windows;
+  static const char *Won;
+  static const char *Wordpress;
+  static const char *Wpbeginner;
   static const char *Wpexplorer;
-
+  static const char *Wpforms;
+  static const char *Wrench;
+  static const char *Xing;
+  static const char *XingSquare;
+  static const char *YCombinator;
+  static const char *YCombinatorSquare;
+  static const char *Yahoo;
+  static const char *Yc;
+  static const char *YcSquare;
+  static const char *Yelp;
+  static const char *Yen;
+  static const char *Yoast;
+  static const char *Youtube;
+  static const char *YoutubePlay;
+  static const char *YoutubeSquare;
 };
 
 /// A list of all icon-names with the codepoint (unicode-value) on the right
@@ -886,6 +886,10 @@ public:
   enum iconCodePoint {
 
     fa_500px = 0xf26e,
+    addressbook = 0xf2b9,
+    addressbooko = 0xf2ba,
+    addresscard = 0xf2bb,
+    addresscardo = 0xf2bc,
     adjust = 0xf042,
     adn = 0xf170,
     aligncenter = 0xf037,
@@ -894,6 +898,7 @@ public:
     alignright = 0xf038,
     amazon = 0xf270,
     ambulance = 0xf0f9,
+    americansignlanguageinterpreting = 0xf2a3,
     anchor = 0xf13d,
     android = 0xf17b,
     angellist = 0xf209,
@@ -924,17 +929,24 @@ public:
     arrowsalt = 0xf0b2,
     arrowsh = 0xf07e,
     arrowsv = 0xf07d,
+    aslinterpreting = 0xf2a3,
+    assistivelisteningsystems = 0xf2a2,
     asterisk = 0xf069,
     at = 0xf1fa,
+    audiodescription = 0xf29e,
     automobile = 0xf1b9,
     backward = 0xf04a,
     balancescale = 0xf24e,
     ban = 0xf05e,
+    bandcamp = 0xf2d5,
     bank = 0xf19c,
     barchart = 0xf080,
     barcharto = 0xf080,
     barcode = 0xf02a,
     bars = 0xf0c9,
+    bath = 0xf2cd,
+    bathtub = 0xf2cd,
+    battery = 0xf240,
     battery0 = 0xf244,
     battery1 = 0xf243,
     battery2 = 0xf242,
@@ -960,12 +972,16 @@ public:
     bitbucketsquare = 0xf172,
     bitcoin = 0xf15a,
     blacktie = 0xf27e,
+    blind = 0xf29d,
+    bluetooth = 0xf293,
+    bluetoothb = 0xf294,
     bold = 0xf032,
     bolt = 0xf0e7,
     bomb = 0xf1e2,
     book = 0xf02d,
     bookmark = 0xf02e,
     bookmarko = 0xf097,
+    braille = 0xf2a1,
     briefcase = 0xf0b1,
     btc = 0xf15a,
     bug = 0xf188,
@@ -1038,6 +1054,7 @@ public:
     code = 0xf121,
     codefork = 0xf126,
     codepen = 0xf1cb,
+    codiepie = 0xf284,
     coffee = 0xf0f4,
     cog = 0xf013,
     cogs = 0xf085,
@@ -1056,6 +1073,7 @@ public:
     copyright = 0xf1f9,
     creativecommons = 0xf25e,
     creditcard = 0xf09d,
+    creditcardalt = 0xf283,
     crop = 0xf125,
     crosshairs = 0xf05b,
     css3 = 0xf13c,
@@ -1066,6 +1084,8 @@ public:
     dashboard = 0xf0e4,
     dashcube = 0xf210,
     database = 0xf1c0,
+    deaf = 0xf2a4,
+    deafness = 0xf2a4,
     dedent = 0xf03b,
     delicious = 0xf1a5,
     desktop = 0xf108,
@@ -1076,17 +1096,25 @@ public:
     dotcircleo = 0xf192,
     download = 0xf019,
     dribbble = 0xf17d,
+    driverslicense = 0xf2c2,
+    driverslicenseo = 0xf2c3,
     dropbox = 0xf16b,
     drupal = 0xf1a9,
+    edge = 0xf282,
     edit = 0xf044,
+    eercast = 0xf2da,
     eject = 0xf052,
     ellipsish = 0xf141,
     ellipsisv = 0xf142,
     empire = 0xf1d1,
     envelope = 0xf0e0,
     envelopeo = 0xf003,
+    envelopeopen = 0xf2b6,
+    envelopeopeno = 0xf2b7,
     envelopesquare = 0xf199,
+    envira = 0xf299,
     eraser = 0xf12d,
+    etsy = 0xf2d7,
     eur = 0xf153,
     euro = 0xf153,
     exchange = 0xf0ec,
@@ -1100,6 +1128,7 @@ public:
     eye = 0xf06e,
     eyeslash = 0xf070,
     eyedropper = 0xf1fb,
+    fa_ = 0xf2b4,
     facebook = 0xf09a,
     facebookf = 0xf09a,
     facebookofficial = 0xf230,
@@ -1134,6 +1163,7 @@ public:
     fire = 0xf06d,
     fireextinguisher = 0xf134,
     firefox = 0xf269,
+    firstorder = 0xf2b0,
     flag = 0xf024,
     flagcheckered = 0xf11e,
     flago = 0xf11d,
@@ -1146,10 +1176,13 @@ public:
     folderopen = 0xf07c,
     folderopeno = 0xf115,
     font = 0xf031,
+    fontawesome = 0xf2b4,
     fonticons = 0xf280,
+    fortawesome = 0xf286,
     forumbee = 0xf211,
     forward = 0xf04e,
     foursquare = 0xf180,
+    freecodecamp = 0xf2c5,
     frowno = 0xf119,
     futbolo = 0xf1e3,
     gamepad = 0xf11b,
@@ -1168,15 +1201,21 @@ public:
     github = 0xf09b,
     githubalt = 0xf113,
     githubsquare = 0xf092,
+    gitlab = 0xf296,
     gittip = 0xf184,
     glass = 0xf000,
+    glide = 0xf2a5,
+    glideg = 0xf2a6,
     globe = 0xf0ac,
     google = 0xf1a0,
     googleplus = 0xf0d5,
+    googlepluscircle = 0xf2b3,
+    googleplusofficial = 0xf2b3,
     googleplussquare = 0xf0d4,
     googlewallet = 0xf1ee,
     graduationcap = 0xf19d,
     gratipay = 0xf184,
+    grav = 0xf2d6,
     group = 0xf0c0,
     hsquare = 0xf0fd,
     hackernews = 0xf1d4,
@@ -1193,6 +1232,9 @@ public:
     handscissorso = 0xf257,
     handspocko = 0xf259,
     handstopo = 0xf256,
+    handshakeo = 0xf2b5,
+    hardofhearing = 0xf2a4,
+    hashtag = 0xf292,
     hddo = 0xf0a0,
     header = 0xf1dc,
     headphones = 0xf025,
@@ -1214,8 +1256,12 @@ public:
     houzz = 0xf27c,
     html5 = 0xf13b,
     icursor = 0xf246,
+    idbadge = 0xf2c1,
+    idcard = 0xf2c2,
+    idcardo = 0xf2c3,
     ils = 0xf20b,
     image = 0xf03e,
+    imdb = 0xf2d8,
     inbox = 0xf01c,
     indent = 0xf03c,
     industry = 0xf275,
@@ -1253,7 +1299,8 @@ public:
     link = 0xf0c1,
     linkedin = 0xf0e1,
     linkedinsquare = 0xf08c,
-    linux_ = 0xf17c,
+    linode = 0xf2b8,
+    linux = 0xf17c,
     list = 0xf03a,
     listalt = 0xf022,
     listol = 0xf0cb,
@@ -1264,6 +1311,7 @@ public:
     longarrowleft = 0xf177,
     longarrowright = 0xf178,
     longarrowup = 0xf176,
+    lowvision = 0xf2a8,
     magic = 0xf0d0,
     magnet = 0xf076,
     mailforward = 0xf064,
@@ -1284,16 +1332,20 @@ public:
     meanpath = 0xf20c,
     medium = 0xf23a,
     medkit = 0xf0fa,
+    meetup = 0xf2e0,
     meho = 0xf11a,
     mercury = 0xf223,
+    microchip = 0xf2db,
     microphone = 0xf130,
     microphoneslash = 0xf131,
     minus = 0xf068,
     minuscircle = 0xf056,
     minussquare = 0xf146,
     minussquareo = 0xf147,
+    mixcloud = 0xf289,
     mobile = 0xf10b,
     mobilephone = 0xf10b,
+    modx = 0xf285,
     money = 0xf0d6,
     moono = 0xf186,
     mortarboard = 0xf19d,
@@ -1320,18 +1372,22 @@ public:
     paragraph = 0xf1dd,
     paste = 0xf0ea,
     pause = 0xf04c,
+    pausecircle = 0xf28b,
+    pausecircleo = 0xf28c,
     paw = 0xf1b0,
     paypal = 0xf1ed,
     pencil = 0xf040,
     pencilsquare = 0xf14b,
     pencilsquareo = 0xf044,
+    percent = 0xf295,
     phone = 0xf095,
     phonesquare = 0xf098,
     photo = 0xf03e,
     pictureo = 0xf03e,
     piechart = 0xf200,
-    piedpiper = 0xf1a7,
+    piedpiper = 0xf2ae,
     piedpiperalt = 0xf1a8,
+    piedpiperpp = 0xf1a7,
     pinterest = 0xf0d2,
     pinterestp = 0xf231,
     pinterestsquare = 0xf0d3,
@@ -1344,20 +1400,26 @@ public:
     pluscircle = 0xf055,
     plussquare = 0xf0fe,
     plussquareo = 0xf196,
+    podcast = 0xf2ce,
     poweroff = 0xf011,
     print = 0xf02f,
+    producthunt = 0xf288,
     puzzlepiece = 0xf12e,
     qq = 0xf1d6,
     qrcode = 0xf029,
     question = 0xf128,
     questioncircle = 0xf059,
+    questioncircleo = 0xf29c,
+    quora = 0xf2c4,
     quoteleft = 0xf10d,
     quoteright = 0xf10e,
     ra = 0xf1d0,
     random = 0xf074,
+    ravelry = 0xf2d9,
     rebel = 0xf1d0,
     recycle = 0xf1b8,
     reddit = 0xf1a1,
+    redditalien = 0xf281,
     redditsquare = 0xf1a2,
     refresh = 0xf021,
     registered = 0xf25d,
@@ -1367,6 +1429,7 @@ public:
     repeat = 0xf01e,
     reply = 0xf112,
     replyall = 0xf122,
+    resistance = 0xf1d0,
     retweet = 0xf079,
     rmb = 0xf157,
     road = 0xf018,
@@ -1379,9 +1442,11 @@ public:
     rub = 0xf158,
     ruble = 0xf158,
     rupee = 0xf156,
+    s15 = 0xf2cd,
     safari = 0xf267,
     save = 0xf0c7,
     scissors = 0xf0c4,
+    scribd = 0xf28a,
     search = 0xf002,
     searchminus = 0xf010,
     searchplus = 0xf00e,
@@ -1399,10 +1464,15 @@ public:
     shield = 0xf132,
     ship = 0xf21a,
     shirtsinbulk = 0xf214,
+    shoppingbag = 0xf290,
+    shoppingbasket = 0xf291,
     shoppingcart = 0xf07a,
+    shower = 0xf2cc,
     signin = 0xf090,
+    signlanguage = 0xf2a7,
     signout = 0xf08b,
     signal = 0xf012,
+    signing = 0xf2a7,
     simplybuilt = 0xf215,
     sitemap = 0xf0e8,
     skyatlas = 0xf216,
@@ -1411,6 +1481,10 @@ public:
     sliders = 0xf1de,
     slideshare = 0xf1e7,
     smileo = 0xf118,
+    snapchat = 0xf2ab,
+    snapchatghost = 0xf2ac,
+    snapchatsquare = 0xf2ad,
+    snowflakeo = 0xf2dc,
     soccerballo = 0xf1e3,
     sort = 0xf0dc,
     sortalphaasc = 0xf15d,
@@ -1446,6 +1520,8 @@ public:
     stickynote = 0xf249,
     stickynoteo = 0xf24a,
     stop = 0xf04d,
+    stopcircle = 0xf28d,
+    stopcircleo = 0xf28e,
     streetview = 0xf21d,
     strikethrough = 0xf0cc,
     stumbleupon = 0xf1a4,
@@ -1454,6 +1530,7 @@ public:
     subway = 0xf239,
     suitcase = 0xf0f2,
     suno = 0xf185,
+    superpowers = 0xf2dd,
     superscript = 0xf12b,
     support = 0xf1cd,
     table = 0xf0ce,
@@ -1463,6 +1540,7 @@ public:
     tags = 0xf02c,
     tasks = 0xf0ae,
     taxi = 0xf1ba,
+    telegram = 0xf2c6,
     television = 0xf26c,
     tencentweibo = 0xf1d5,
     terminal = 0xf120,
@@ -1471,6 +1549,18 @@ public:
     th = 0xf00a,
     thlarge = 0xf009,
     thlist = 0xf00b,
+    themeisle = 0xf2b2,
+    thermometer = 0xf2c7,
+    thermometer0 = 0xf2cb,
+    thermometer1 = 0xf2ca,
+    thermometer2 = 0xf2c9,
+    thermometer3 = 0xf2c8,
+    thermometer4 = 0xf2c7,
+    thermometerempty = 0xf2cb,
+    thermometerfull = 0xf2c7,
+    thermometerhalf = 0xf2c9,
+    thermometerquarter = 0xf2ca,
+    thermometerthreequarters = 0xf2c8,
     thumbtack = 0xf08d,
     thumbsdown = 0xf165,
     thumbsodown = 0xf088,
@@ -1480,6 +1570,8 @@ public:
     times = 0xf00d,
     timescircle = 0xf057,
     timescircleo = 0xf05c,
+    timesrectangle = 0xf2d3,
+    timesrectangleo = 0xf2d4,
     tint = 0xf043,
     toggledown = 0xf150,
     toggleleft = 0xf191,
@@ -1498,7 +1590,7 @@ public:
     tripadvisor = 0xf262,
     trophy = 0xf091,
     truck = 0xf0d1,
-    fa_try = 0xf195,
+    try_ = 0xf195,
     tty = 0xf1e4,
     tumblr = 0xf173,
     tumblrsquare = 0xf174,
@@ -1510,28 +1602,38 @@ public:
     umbrella = 0xf0e9,
     underline = 0xf0cd,
     undo = 0xf0e2,
+    universalaccess = 0xf29a,
     university = 0xf19c,
     unlink = 0xf127,
     unlock = 0xf09c,
     unlockalt = 0xf13e,
     unsorted = 0xf0dc,
     upload = 0xf093,
+    usb = 0xf287,
     usd = 0xf155,
     user = 0xf007,
+    usercircle = 0xf2bd,
+    usercircleo = 0xf2be,
     usermd = 0xf0f0,
+    usero = 0xf2c0,
     userplus = 0xf234,
     usersecret = 0xf21b,
     usertimes = 0xf235,
     users = 0xf0c0,
+    vcard = 0xf2bb,
+    vcardo = 0xf2bc,
     venus = 0xf221,
     venusdouble = 0xf226,
     venusmars = 0xf228,
     viacoin = 0xf237,
+    viadeo = 0xf2a9,
+    viadeosquare = 0xf2aa,
     videocamera = 0xf03d,
     vimeo = 0xf27d,
     vimeosquare = 0xf194,
     vine = 0xf1ca,
     vk = 0xf189,
+    volumecontrolphone = 0xf2a0,
     volumedown = 0xf027,
     volumeoff = 0xf026,
     volumeup = 0xf028,
@@ -1541,11 +1643,20 @@ public:
     weixin = 0xf1d7,
     whatsapp = 0xf232,
     wheelchair = 0xf193,
+    wheelchairalt = 0xf29b,
     wifi = 0xf1eb,
     wikipediaw = 0xf266,
+    windowclose = 0xf2d3,
+    windowcloseo = 0xf2d4,
+    windowmaximize = 0xf2d0,
+    windowminimize = 0xf2d1,
+    windowrestore = 0xf2d2,
     windows = 0xf17a,
     won = 0xf159,
     wordpress = 0xf19a,
+    wpbeginner = 0xf297,
+    wpexplorer = 0xf2de,
+    wpforms = 0xf298,
     wrench = 0xf0ad,
     xing = 0xf168,
     xingsquare = 0xf169,
@@ -1556,102 +1667,13 @@ public:
     ycsquare = 0xf1d4,
     yelp = 0xf1e9,
     yen = 0xf157,
+    yoast = 0xf2b1,
     youtube = 0xf167,
     youtubeplay = 0xf16a,
     youtubesquare = 0xf166,
 
-    gitlab = 0xf2a3,
-    wpbeginner = 0xf2a3,
-    wpforms = 0xf2a2,
-    envira = 0xf29e,
-    universalaccess = 0xf29d,
-    wheelchairalt = 0xf2a1,
-    questioncircleo = 0xf2a4,
-    blind = 0xf2a4,
-    audiodescription = 0xf299,
-    volumecontrolphone = 0xf2b4,
-    braille = 0xf2b0,
-    assistivelisteningsystems = 0xf2b4,
-    aslinterpreting = 0xf296,
-    americansignlanguageinterpreting = 0xf2a5,
-    deafness = 0xf2a6,
-    hardofhearing = 0xf2b3,
-    deaf = 0xf2b3,
-    glide = 0xf2a4,
-    glideg = 0xf2a8,
-    signing = 0xf2ae,
-    signlanguage = 0xf29c,
-    lowvision = 0xf2a7,
-    viadeo = 0xf2a7,
-    viadeosquare = 0xf2ab,
-    snapchat = 0xf2ac,
-    snapchatghost = 0xf2ad,
-    snapchatsquare = 0xf2b2,
-    firstorder = 0xf2a9,
-    yoast = 0xf2aa,
-    themeisle = 0xf2a0,
-    googlepluscircle = 0xf29b,
-    googleplusofficial = 0xf297,
-    fa_ = 0xf298,
-    fontawesome = 0xf2b1,
-
-    addressbook = 0xf2b9,
-    addressbooko = 0xf2ba,
-    addresscard = 0xf2bb,
-    addresscardo = 0xf2bc,
-    bandcamp = 0xf2d5,
-    bath = 0xf2cd,
-    bathtub = 0xf2cd,
-    driverslicense = 0xf2c2,
-    driverslicenseo = 0xf2c3,
-    eercast = 0xf2da,
-    envelopeopen = 0xf2b6,
-    envelopeopeno = 0xf2b7,
-    etsy = 0xf2d7,
-    freecodecamp = 0xf2c5,
-    grav = 0xf2d6,
-    handshakeo = 0xf2b5,
-    idbadge = 0xf2c1,
-    idcard = 0xf2c2,
-    idcardo = 0xf2c3,
-    imdb = 0xf2d8,
-    linode = 0xf2b8,
-    meetup = 0xf2e0,
-    microchip = 0xf2db,
-    podcast = 0xf2ce,
-    quora = 0xf2c4,
-    ravelry = 0xf2d9,
-    s15 = 0xf2cd,
-    shower = 0xf2cc,
-    snowflakeo = 0xf2dc,
-    superpowers = 0xf2dd,
-    telegram = 0xf2c6,
-    thermometer = 0xf2c7,
-    thermometer0 = 0xf2cb,
-    thermometer1 = 0xf2ca,
-    thermometer2 = 0xf2c9,
-    thermometer3 = 0xf2c8,
-    thermometer4 = 0xf2c7,
-    thermometerempty = 0xf2cb,
-    thermometerfull = 0xf2c7,
-    thermometerhalf = 0xf2c9,
-    thermometerquarter = 0xf2ca,
-    thermometerthreequarters = 0xf2c8,
-    timesrectangle = 0xf2d3,
-    timesrectangleo = 0xf2d4,
-    usercircle = 0xf2bd,
-    usercircleo = 0xf2be,
-    usero = 0xf2c0,
-    vcard = 0xf2bb,
-    vcardo = 0xf2bc,
-    windowclose = 0xf2d3,
-    windowcloseo = 0xf2d4,
-    windowmaximize = 0xf2d0,
-    windowminimize = 0xf2d1,
-    windowrestore = 0xf2d2,
-    wpexplorer = 0xf2de
   };
 };
-}
+} // namespace tlp
 
 #endif // TULIPFONTAWESOME_H

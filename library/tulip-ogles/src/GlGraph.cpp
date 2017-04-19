@@ -781,12 +781,13 @@ void GlGraph::draw(const Camera &camera, const Light &light, bool pickingMode) {
     }
     glyphsNodes.push_back(nodesLodResult[i].n);
     int glyphId = _inputData.getElementShape()->getNodeValue(nodesLodResult[i].n);
-    if (glyphId == tlp::NodeShape::FontAwesomeIcon) {
-      std::string icon = _inputData.getElementFontAwesomeIcon()->getNodeValue(nodesLodResult[i].n);
-      glyphId = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
-    } else if (glyphId == tlp::NodeShape::MaterialDesignIcon) {
-      std::string icon = _inputData.getElementMaterialDesignIcon()->getNodeValue(nodesLodResult[i].n);
-      glyphId = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
+    if (glyphId == tlp::NodeShape::Icon) {
+      std::string icon = _inputData.getElementIcon()->getNodeValue(nodesLodResult[i].n);
+      if (icon.substr(0, 3) == "fa-") {
+        glyphId = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
+      } else {
+        glyphId = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
+      }
     }
 
     if (currentGlyphId != -1 && currentGlyphId != glyphId && !currentGlyphNodes.empty()) {
@@ -1291,20 +1292,22 @@ void GlGraph::renderEdgeExtremities(const Camera &camera, const Light &light, co
   int srcShape = _inputData.getElementSrcAnchorShape()->getEdgeValue(e);
   int tgtShape = _inputData.getElementTgtAnchorShape()->getEdgeValue(e);
 
-  if (srcShape == tlp::EdgeExtremityShape::FontAwesomeIcon) {
-    std::string icon = _inputData.getElementFontAwesomeIcon()->getEdgeValue(e);
-    srcShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
-  } else if (srcShape == tlp::EdgeExtremityShape::MaterialDesignIcon) {
-    std::string icon = _inputData.getElementMaterialDesignIcon()->getEdgeValue(e);
-    srcShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
+  if (srcShape == tlp::EdgeExtremityShape::Icon) {
+    std::string icon = _inputData.getElementIcon()->getEdgeValue(e);
+    if (icon.substr(0, 3) == "fa-") {
+      srcShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
+    } else {
+      srcShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
+    }
   }
 
-  if (tgtShape == tlp::EdgeExtremityShape::FontAwesomeIcon) {
-    std::string icon = _inputData.getElementFontAwesomeIcon()->getEdgeValue(e);
-    tgtShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
-  } else if (tgtShape == tlp::EdgeExtremityShape::MaterialDesignIcon) {
-    std::string icon = _inputData.getElementMaterialDesignIcon()->getEdgeValue(e);
-    tgtShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
+  if (tgtShape == tlp::EdgeExtremityShape::Icon) {
+    std::string icon = _inputData.getElementIcon()->getEdgeValue(e);
+    if (icon.substr(0, 3) == "fa-") {
+      tgtShape = tlp::TulipFontAwesome::getFontAwesomeIconCodePoint(icon);
+    } else {
+      tgtShape = tlp::TulipMaterialDesignIcons::getMaterialDesignIconCodePoint(icon) + 0xf000;
+    }
   }
 
   if (srcShape != EdgeExtremityShape::None) {

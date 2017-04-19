@@ -35,6 +35,7 @@ class TLP_SCOPE NodeShape {
 public:
   enum NodeShapes {
     Billboard = 7,
+    ChristmasTree = 28,
     Circle = 14,
     Cone = 3,
     Cross = 8,
@@ -54,8 +55,7 @@ public:
     Triangle = 11,
     Window = 17,
     Star = 19,
-    FontAwesomeIcon = 20,
-    MaterialDesignIcon = 21
+    Icon = 20
   };
 };
 
@@ -70,7 +70,7 @@ class TLP_SCOPE EdgeExtremityShape {
 public:
   enum EdgeExtremityShapes {
     None = -1,
-    Arrow = 11,
+    Arrow = 50,
     Circle = 14,
     Cone = 3,
     Cross = 8,
@@ -85,8 +85,7 @@ public:
     Sphere = 2,
     Square = 4,
     Star = 19,
-    FontAwesomeIcon = 20,
-    MaterialDesignIcon = 21
+    Icon = 20
   };
 };
 
@@ -227,6 +226,6 @@ private:
   Size _size;
   int _shape;
 };
-}
+} // namespace tlp
 
 #endif // TULIPVIEWSETTINGS_H

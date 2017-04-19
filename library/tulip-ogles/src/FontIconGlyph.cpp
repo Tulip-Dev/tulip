@@ -49,6 +49,8 @@ using namespace tlp;
 
 FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile, unsigned int iconCodePoint) : Glyph(context) {
 
+  if (fontFile.empty()) return;
+
   const FT_Library *library = FTLibrary::Instance().GetLibrary();
 
   FT_Face face;
@@ -141,13 +143,4 @@ FontIconGlyph::FontIconGlyph(PluginContext *context, const std::string &fontFile
   }
 }
 
-FontAwesomeGlyph::FontAwesomeGlyph(PluginContext *context, unsigned int iconCodePoint)
-    : FontIconGlyph(context, TulipFontAwesome::getFontAwesomeTrueTypeFileLocation(), iconCodePoint) {
-}
-
-MaterialDesignIconGlyph::MaterialDesignIconGlyph(PluginContext *context, unsigned int iconCodePoint)
-    : FontIconGlyph(context, TulipMaterialDesignIcons::getMaterialDesignIconsTrueTypeFileLocation(), iconCodePoint) {
-}
-
-PLUGIN(FontAwesomeGlyph)
-PLUGIN(MaterialDesignIconGlyph)
+PLUGIN(FontIconGlyph)

@@ -128,8 +128,8 @@ tlp::DataType *TulipMetaTypes::qVariantToDataType(const QVariant &v) {
     return new TypedData<std::string>(new std::string(QStringToTlpString(desc.absolutePath)));
   }
 
-  if (v.userType() == qMetaTypeId<TulipFontAwesomeIcon>())
-    return new TypedData<std::string>(new std::string(QStringToTlpString(v.value<TulipFontAwesomeIcon>().iconName)));
+  if (v.userType() == qMetaTypeId<TulipFontIcon>())
+    return new TypedData<std::string>(new std::string(QStringToTlpString(v.value<TulipFontIcon>().iconName)));
 
   return nullptr;
 }

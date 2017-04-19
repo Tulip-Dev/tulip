@@ -75,8 +75,7 @@ void GlGraphInputData::reloadGraphProperties(bool resetDefaulProperties) {
     _propertiesNameMap["viewSrcAnchorSize"] = VIEW_SRCANCHORSIZE;
     _propertiesNameMap["viewTgtAnchorShape"] = VIEW_TGTANCHORSHAPE;
     _propertiesNameMap["viewTgtAnchorSize"] = VIEW_TGTANCHORSIZE;
-    _propertiesNameMap["viewFontAwesomeIcon"] = VIEW_FONTAWESOMEICON;
-    _propertiesNameMap["viewMaterialDesignIcon"] = VIEW_MATERIALDESIGNICON;
+    _propertiesNameMap["viewIcon"] = VIEW_ICON;
     _propertiesNameMap["viewGlow"] = VIEW_GLOW;
     _propertiesNameMap["viewGlowColor"] = VIEW_GLOWCOLOR;
   }
@@ -119,10 +118,8 @@ void GlGraphInputData::reloadGraphProperties(bool resetDefaulProperties) {
     _properties.insert(_propertiesMap[VIEW_TGTANCHORSHAPE]);
     _propertiesMap[VIEW_TGTANCHORSIZE] = _graph->getProperty<SizeProperty>(getViewPropertyName(VIEW_TGTANCHORSIZE));
     _properties.insert(_propertiesMap[VIEW_TGTANCHORSIZE]);
-    _propertiesMap[VIEW_FONTAWESOMEICON] = _graph->getProperty<StringProperty>(getViewPropertyName(VIEW_FONTAWESOMEICON));
-    _properties.insert(_propertiesMap[VIEW_FONTAWESOMEICON]);
-    _propertiesMap[VIEW_MATERIALDESIGNICON] = _graph->getProperty<StringProperty>(getViewPropertyName(VIEW_MATERIALDESIGNICON));
-    _properties.insert(_propertiesMap[VIEW_MATERIALDESIGNICON]);
+    _propertiesMap[VIEW_ICON] = _graph->getProperty<StringProperty>(getViewPropertyName(VIEW_ICON));
+    _properties.insert(_propertiesMap[VIEW_ICON]);
     _propertiesMap[VIEW_GLOW] = _graph->getProperty<BooleanProperty>(getViewPropertyName(VIEW_GLOW));
     _properties.insert(_propertiesMap[VIEW_GLOW]);
     _propertiesMap[VIEW_GLOWCOLOR] = _graph->getProperty<ColorProperty>(getViewPropertyName(VIEW_GLOWCOLOR));

@@ -57,10 +57,9 @@ public:
     Triangle=11,
     Window=17,
     Star=19,
-    FontAwesomeIcon=20,
-    MaterialDesignIcon=21
+    Icon=20
   };
-  
+
 };
 
 class EdgeShape /NoDefaultCtors/ {
@@ -76,7 +75,7 @@ public:
     CatmullRomCurve=8,
     CubicBSplineCurve=16
   };
-  
+
 };
 
 class EdgeExtremityShape /NoDefaultCtors/ {
@@ -103,10 +102,9 @@ public:
     Sphere=2 ,
     Square=4,
     Star=19,
-    FontAwesomeIcon=20,
-    MaterialDesignIcon=21
+    Icon=20
   };
-  
+
 };
 
 class LabelPosition /NoDefaultCtors/ {
@@ -123,7 +121,7 @@ public:
     Left,
     Right
   };
-  
+
 };
 
 class TulipViewSettings : tlp::Observable {
@@ -198,7 +196,7 @@ public:
 private:
 
   TulipViewSettings();
-  
+
 };
 
 class ViewSettingsEvent : public tlp::Event /NoDefaultCtors/ {

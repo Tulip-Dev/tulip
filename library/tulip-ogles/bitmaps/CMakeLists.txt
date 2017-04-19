@@ -5,10 +5,12 @@ INSTALL(FILES
   fontawesome-webfont.ttf
   fontawesome-webfont.woff
   fontawesome-webfont.woff2
+  materialdesignicons-webfont.ttf
+  materialdesignicons-webfont.woff
+  materialdesignicons-webfont.woff2
   halfCylinderTexture.png
   cylinderTexture.png
   roundTexture.png
-  materialdesignicons-webfont.ttf
 DESTINATION ${TulipBitmapInstallDir}
 COMPONENT tulip_ogl)
 

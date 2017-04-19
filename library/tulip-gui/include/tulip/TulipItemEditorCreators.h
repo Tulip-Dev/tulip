@@ -173,16 +173,12 @@ public:
 
 class TLP_QT_SCOPE TulipFontIconCreator : public tlp::TulipItemEditorCreator {
 public:
-  TulipFontIconCreator(bool fontAwesome);
   QWidget *createWidget(QWidget *) const;
   virtual void setEditorData(QWidget *, const QVariant &, bool, tlp::Graph *);
   virtual QVariant editorData(QWidget *, tlp::Graph *);
   virtual bool paint(QPainter *, const QStyleOptionViewItem &, const QVariant &) const;
   QSize sizeHint(const QStyleOptionViewItem &, const QModelIndex &) const;
   virtual QString displayText(const QVariant &) const;
-
-private:
-  bool _fontAwesome;
 };
 
 class TLP_QT_SCOPE NodeShapeEditorCreator : public tlp::TulipItemEditorCreator {
@@ -291,7 +287,7 @@ public:
 };
 
 TLP_QT_SCOPE void addIconToPool(const QString &iconName, const QIcon &icon);
-}
+} // namespace tlp
 
 #if defined(__clang__)
 template class tlp::StringDisplayEditorCreator<tlp::PointType>;

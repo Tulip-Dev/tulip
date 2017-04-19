@@ -69,10 +69,9 @@ public:
     VIEW_SRCANCHORSIZE,      /**< size of source arrow edge extremity */
     VIEW_TGTANCHORSHAPE,     /**< shape of target arrow edge extremity */
     VIEW_TGTANCHORSIZE,      /**< size of target arrow edge extremity */
-    VIEW_FONTAWESOMEICON,    /**< font awesome icon name for the font awesome icon glyph*/
+    VIEW_ICON,    /**< font awesome icon name for the font awesome icon glyph*/
     VIEW_GLOW,               /**< draw a glow around graph elements ?*/
     VIEW_GLOWCOLOR,          /**< color of glow effect */
-    VIEW_MATERIALDESIGNICON, /**< material design icon name for the material design icon glyph*/
     NB_PROPS                 /** must be the last, give the number of enum props */
   };
 
@@ -334,27 +333,14 @@ public:
   /**
    * Return a pointer on the property used to elementFontAwesomeIcon
    */
-  tlp::StringProperty *getElementFontAwesomeIcon() const {
-    return getProperty<tlp::StringProperty>(VIEW_FONTAWESOMEICON);
+  tlp::StringProperty *getElementIcon() const {
+    return getProperty<tlp::StringProperty>(VIEW_ICON);
   }
   /**
    * Set the pointer on the property used to elementFontAwesomeIcon
    */
-  void setElementFontAwesomeIcon(tlp::StringProperty *property) {
-    setProperty(VIEW_FONTAWESOMEICON, property);
-  }
-
-  /**
-   * Return a pointer on the property used to elementMaterialDesignIcon
-   */
-  tlp::StringProperty *getElementMaterialDesignIcon() const {
-    return getProperty<tlp::StringProperty>(VIEW_MATERIALDESIGNICON);
-  }
-  /**
-   * Set the pointer on the property used to elementMaterialDesignIcon
-   */
-  void setElementMaterialDesignIcon(tlp::StringProperty *property) {
-    setProperty(VIEW_MATERIALDESIGNICON, property);
+  void setElementIcon(tlp::StringProperty *property) {
+    setProperty(VIEW_ICON, property);
   }
 
   /**

@@ -1,13 +1,13 @@
 {% extends "!layout.html" %}
 
-{%- block extrahead %} 
+{%- block extrahead %}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/1.8.36/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="https://cdn.materialdesignicons.com/1.9.32/css/materialdesignicons.min.css">
     <script>
         // from the sphinx-trap theme (https://github.com/jfardello/Sphinxtrap)
         $(document).ready(function(){
-            // The faicon role produces <em> elements, <i> are strictly graphical. 
-            $("em.icon-holder").each(function(){ 
+            // The faicon role produces <em> elements, <i> are strictly graphical.
+            $("em.icon-holder").each(function(){
                 var newtag = $("<i></i>")
                 newtag.attr('class', $(this).attr('class'))
                 $(this).replaceWith(newtag)
@@ -15,4 +15,3 @@
         })
     </script>
 {% endblock %}
-
