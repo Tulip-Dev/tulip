@@ -218,6 +218,7 @@ static void setViewPropertiesDefaults(Graph *g) {
       node n;
       forEach(n, g->getNodes()) {
         const string &faIconName = g->getProperty<StringProperty>(fontAwesomeIcon)->getNodeValue(n);
+
         if (!faIconName.empty()) {
           g->getProperty<StringProperty>(icon)->setNodeValue(n, "fa-" + faIconName);
         }
@@ -225,6 +226,7 @@ static void setViewPropertiesDefaults(Graph *g) {
       edge e;
       forEach(e, g->getEdges()) {
         const string &faIconName = g->getProperty<StringProperty>(fontAwesomeIcon)->getEdgeValue(e);
+
         if (!faIconName.empty()) {
           g->getProperty<StringProperty>(icon)->setEdgeValue(e, "fa-" + faIconName);
         }
