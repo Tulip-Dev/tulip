@@ -17,12 +17,16 @@ IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
   WINDOWS_TO_MSYS_PATH(${CMAKE_LIBRARY_PATH_STR} CMAKE_LIBRARY_PATH_STR)
 ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*")
 
-ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}
-                                                         -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR} -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
-                                                         -DSYSTEM_SIP=${SYSTEM_SIP} -DSIP_VERSION=${SIP_VERSION_STR} -DQT_BIN_DIR=${QT_BINARY_DIR}
-                                                         -DMSVC=${MSVC} -DAPPLE=${APPLE} -DCMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH_STR}
+ADD_CUSTOM_TARGET(pythonBindingsDoc ALL ${CMAKE_COMMAND} -DSPHINX_EXECUTABLE=${SPHINX_EXECUTABLE}
+                                                         -DSRC_DIR=${CMAKE_CURRENT_SOURCE_DIR}
+                                                         -DBIN_DIR=${CMAKE_CURRENT_BINARY_DIR}
+                                                         -DSYSTEM_SIP=${SYSTEM_SIP} -DSIP_VERSION=${SIP_VERSION_STR}
+                                                         -DQT_BIN_DIR=${QT_BINARY_DIR}
+                                                         -DAPPLE=${APPLE} -DWIN32=${WIN32}
+                                                         -DCMAKE_LIBRARY_PATH=${CMAKE_LIBRARY_PATH_STR}
                                                          -P ${CMAKE_CURRENT_SOURCE_DIR}/genSphinxDoc.cmake
-                                    DEPENDS ${LibTulipCorePythonBindingsName} ${LibTulipOGLPythonBindingsName} ${LibTulipGUIPythonBindingsName} ${LibStlPythonBindingsName} VERBATIM)
+                                    DEPENDS ${LibTulipCorePythonBindingsName} ${LibTulipOGLPythonBindingsName} ${LibTulipGUIPythonBindingsName} ${LibStlPythonBindingsName}
+                                    VERBATIM)
 
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "doc;doctrees") 
 
