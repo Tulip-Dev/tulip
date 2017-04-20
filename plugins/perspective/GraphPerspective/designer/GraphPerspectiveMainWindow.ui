@@ -395,7 +395,7 @@ QToolButton:pressed {
           <string>Display the Tulip-Python IDE for developing scripts and plugins to execute on the imported graphs</string>
          </property>
          <property name="text">
-          <string>Develop</string>
+          <string>Python IDE</string>
          </property>
          <property name="icon">
           <iconset resource="../resources/GraphPerspective.qrc">
@@ -920,12 +920,12 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                 <widget class="OutputPanelButton" name="pythonButton">
                  <property name="minimumSize">
                   <size>
-                   <width>85</width>
+                   <width>105</width>
                    <height>20</height>
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>Show/hide Python interpreter panel (Ctrl+P)</string>
+                  <string>Show/hide Python REPL panel (Ctrl+P)</string>
                  </property>
                  <property name="shortcut">
                   <string>Ctrl+P</string>
@@ -940,7 +940,7 @@ border-image: url(:/tulip/graphperspective/ui/panel_button_hover.png) 2 2 2 19
                   <number>3</number>
                  </property>
                  <property name="title" stdset="0">
-                  <string>Python</string>
+                  <string>Python REPL</string>
                  </property>
                 </widget>
                </item>
