@@ -205,6 +205,42 @@ Adds an integer parameter to the plug-in.
 
 // ==================================================================================
 
+ void addUnsignedIntegerParameter(const std::string & str,
+                                  const std::string & inHelp = "",
+                                  const std::string & inDefValue = "",
+                                  bool isMandatory = true,
+                                  bool inParam = true, bool outParam = false,
+                                  const std::string &valuesDescription = "");
+
+%Docstring
+tlp.WithParameter.addUnsignedIntegerParameter(name[, help = "", defaultValue = "", isMandatory = True, inParam = True, outParam = False, valuesDescription = ""])
+
+.. versionadded:: 4.11
+
+Adds an unsigned integer parameter to the plug-in.
+
+:param name: the name of the unsigned integer parameter to add
+:type name: string
+:param help: a description of the parameter, that will be displayed to the user
+:type help: string
+:param defaultValue: the default value (in the form "[0-9]+") the parameter should take, to be the initial value in the GUI
+:type defaultValue: string
+:param isMandatory: specify whether this parameter requires a value or not
+:type isMandatory: boolean
+:param inParam: defines if the parameter is an input one (can be read by the plugin)
+:type inParam: boolean
+:param outParam: defines if the parameter is an output one (can be written by the plugin and retrieved after its execution)
+:type outParam: boolean
+:param valuesDescription: An optional description of the values the parameter can take.
+:type valuesDescription: string
+%End
+
+%MethodCode
+ addParameter<unsigned int>(sipCpp, *a0, *a1, *a2, a3, a4, a5, *a6);
+%End
+
+// ==================================================================================
+
   void addFloatParameter(const std::string & str,
                          const std::string & inHelp = "",
                          const std::string & inDefValue = "",
