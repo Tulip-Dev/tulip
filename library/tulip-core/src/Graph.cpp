@@ -372,16 +372,18 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
 
   // If the import failed and we created the graph then delete the graph
   if (!newImportModule->importGraph()) {
-    graph = nullptr;
-
     if (newGraphP)
       delete graph;
+
+    graph = NULL;
   } else {
     std::string filename;
 
     if (dataSet.get("file::filename", filename)) {
       graph->setAttribute("file", filename);
     }
+
+    setViewPropertiesDefaults(graph);
   }
 
   if (deletePluginProgress)
@@ -389,8 +391,6 @@ Graph *tlp::importGraph(const std::string &format, DataSet &dataSet, PluginProgr
 
   delete newImportModule;
   dataSet = *tmp->dataSet;
-
-  setViewPropertiesDefaults(graph);
 
   return graph;
 }
