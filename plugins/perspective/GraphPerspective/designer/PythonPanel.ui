@@ -74,7 +74,7 @@ QTabBar::tab:selected {
       <bool>false</bool>
      </property>
      <property name="title" stdset="0">
-      <string>Python</string>
+      <string>Python REPL</string>
      </property>
     </widget>
    </item>
