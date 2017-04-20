@@ -30,6 +30,10 @@ class StringCollection {
 #include <tulip/StringCollection.h>
 %End
 
+%ConvertFromTypeCode
+  return sipConvertFromNewType(new std::string(sipCpp->getCurrentString()), sipFindType("std::string"), NULL);
+%End
+
 public:
 
 %Docstring
