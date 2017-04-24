@@ -259,8 +259,7 @@ void initTulipSoftware(tlp::PluginLoader *loader, bool removeDiscardedPlugins) {
   TulipSettings::instance().applyProxySettings();
   TulipSettings::instance().initSeedOfRandomSequence();
 
-  if (TulipSettings::instance().isFirstRun()) {
-    TulipSettings::instance().setFirstRun(false);
+  if (TulipSettings::instance().isFirstTulipMMRun()) {
     TulipSettings::instance().addRemoteLocation(PluginManager::STABLE_LOCATION);
     TulipSettings::instance().addRemoteLocation(PluginManager::TESTING_LOCATION);
   }

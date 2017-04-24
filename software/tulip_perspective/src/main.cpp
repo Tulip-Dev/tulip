@@ -319,7 +319,9 @@ int main(int argc, char **argv) {
     mainWindow->move(0, 0);
 
 #endif
-
+  
+  TulipSettings::instance().setFirstRun(false);
+  TulipSettings::instance().setFirstTulipMMRun(false);
   int result = tulip_perspective.exec();
   delete perspective;
   delete mainWindow;
