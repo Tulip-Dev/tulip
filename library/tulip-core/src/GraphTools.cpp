@@ -655,7 +655,7 @@ void buildNodesUniformQuantification(const Graph* graph,
     map<double,int>::iterator it = histogram.find(value);
 
     if (it==histogram.end())
-      it->second=1;
+      histogram[value]=1;
     else
       ++(it->second);
   }
@@ -689,7 +689,7 @@ void buildEdgesUniformQuantification(const Graph* graph,
     map<double,int>::iterator it = histogram.find(value);
 
     if (it==histogram.end())
-      it->second=1;
+      histogram[value]=1;
     else
       ++(it->second);
   }
