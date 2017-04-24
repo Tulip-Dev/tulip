@@ -530,10 +530,12 @@ void GraphPerspective::start(tlp::PluginProgress *progress) {
   // for 4.11 show message to indicate that
   // Python Script view no longer exist
   unsigned int mm_version = TULIP_INT_MM_VERSION;
+
   if ((mm_version == 411) &&
       TulipSettings::instance().isFirstTulipMMRun()) {
     QTimer::singleShot(100, this, SLOT(showStartMessage()));
   }
+
 #endif
 }
 
