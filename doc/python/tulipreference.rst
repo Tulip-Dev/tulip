@@ -658,7 +658,7 @@ tlp.NumericProperty
 
 .. autoclass:: tulip::tlp.NumericProperty
         :members:
-                  uniformQuantification, nodesUniformQuantification, edgesUniformQuantification,
+                  copyProperty, uniformQuantification, nodesUniformQuantification, edgesUniformQuantification,
                   getEdgeDoubleMin, getEdgeDoubleMax, getNodeDoubleMin, getNodeDoubleMax,
                   getEdgeDoubleDefaultValue, getEdgeDoubleValue, getNodeDoubleDefaultValue, getNodeDoubleValue,
                   getSortedNodes, getSortedEdges, getSortedEdgesBySourceValue, getSortedEdgesByTargetValue, getSortedEdgesByExtremitiesValues
