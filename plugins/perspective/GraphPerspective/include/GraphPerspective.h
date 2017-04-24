@@ -158,6 +158,7 @@ protected slots:
   void openExternalFile();
   void showHideSideBar();
   void workspaceButtonClicked();
+  void showStartMessage();
 
 protected:
   bool eventFilter(QObject *, QEvent *);
