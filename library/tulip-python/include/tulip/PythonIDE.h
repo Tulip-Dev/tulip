@@ -35,6 +35,7 @@ class PythonIDE;
 
 namespace tlp {
 
+class Graph;
 class GraphHierarchiesModel;
 class TulipProject;
 class PythonCodeEditor;
@@ -150,6 +151,8 @@ private slots:
   void closeModuleTabRequested(int index);
   void closeScriptTabRequested(int index);
   void closePluginTabRequested(int index);
+
+  tlp::Graph *getSelectedGraph() const;
 
 };
 

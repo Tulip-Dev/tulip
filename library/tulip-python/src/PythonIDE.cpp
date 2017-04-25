@@ -491,13 +491,13 @@ PythonIDE::~PythonIDE() {
 
 int PythonIDE::addModuleEditor(const QString &fileName) {
   int idx = _ui->modulesTabWidget->addEditor(fileName);
-  getModuleEditor(idx)->getAutoCompletionDb()->setGraph(_graphsModel->currentGraph());
+  getModuleEditor(idx)->getAutoCompletionDb()->setGraph(getSelectedGraph());
   return idx;
 }
 
 int PythonIDE::addPluginEditor(const QString &fileName) {
   int idx = _ui->pluginsTabWidget->addEditor(fileName);
-  getPluginEditor(idx)->getAutoCompletionDb()->setGraph(_graphsModel->currentGraph());
+  getPluginEditor(idx)->getAutoCompletionDb()->setGraph(getSelectedGraph());
   _ui->registerPluginButton->setEnabled(true);
   _ui->removePluginButton->setEnabled(true);
   return idx;
@@ -1392,7 +1392,7 @@ void PythonIDE::moduleSaved(int idx) {
 int PythonIDE::addMainScriptEditor(const QString &fileName) {
   int idx = _ui->mainScriptsTabWidget->addEditor(fileName);
   getMainScriptEditor(idx)->installEventFilter(this);
-  getMainScriptEditor(idx)->getAutoCompletionDb()->setGraph(_graphsModel->currentGraph());
+  getMainScriptEditor(idx)->getAutoCompletionDb()->setGraph(getSelectedGraph());
 
   if (_ui->mainScriptsTabWidget->count() == 1) {
     _ui->runScriptButton->setEnabled(true);
@@ -1416,7 +1416,7 @@ void PythonIDE::currentScriptPaused() {
 
 void PythonIDE::newScript() {
   int editorId = addMainScriptEditor();
-  QString defaultScriptCode = getDefaultScriptCode(_pythonInterpreter->getPythonVersionStr(), _graphsModel->currentGraph());
+  QString defaultScriptCode = getDefaultScriptCode(_pythonInterpreter->getPythonVersionStr(), getSelectedGraph());
   getMainScriptEditor(editorId)->setPlainText(defaultScriptCode);
   _ui->mainScriptsTabWidget->setTabText(editorId, "[no file]");
   _ui->mainScriptsTabWidget->setTabToolTip(editorId, "string main script, do not forget to save the current Tulip project or\n save the script to a file to not lose your source code modifications.");
@@ -1573,7 +1573,7 @@ void PythonIDE::dropEvent(QDropEvent* dropEv) {
 
 void PythonIDE::executeCurrentScript() {
 
-  Graph *graph = _graphsModel->currentGraph();
+  Graph *graph = getSelectedGraph();
 
   if (!graph) {
     QMessageBox::information(this, "Script execution not allowed", "A graph to process must first be selected before running the script.");
@@ -1717,7 +1717,7 @@ bool PythonIDE::closeEditorTabRequested(PythonEditorsTabWidget* tabWidget, int i
 }
 
 void PythonIDE::graphComboBoxIndexChanged() {
-  tlp::Graph* graph = _graphsModel->currentGraph();
+  tlp::Graph* graph = getSelectedGraph();
 
   for (int i = 0 ; i < _ui->mainScriptsTabWidget->count() ; ++i) {
     getMainScriptEditor(i)->getAutoCompletionDb()->setGraph(graph);
@@ -1976,4 +1976,8 @@ void PythonIDE::setModuleEditorsVisible(bool visible) {
     _ui->tabWidget->insertTab(_ui->tabWidget->count(), _moduleEditorsWidget, "Modules editor");
     _ui->stackedWidget->insertWidget(_ui->stackedWidget->count(), _moduleControlWidget);
   }
+}
+
+Graph *PythonIDE::getSelectedGraph() const {
+  return _graphsModel->data(_ui->graphComboBox->selectedIndex(), TulipModel::GraphRole).value<Graph*>();
 }
