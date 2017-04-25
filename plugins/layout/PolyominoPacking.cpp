@@ -170,16 +170,17 @@ bool PolyominoPacking::run() {
     std::vector<node>& ccNodes = connectedComponents[i];
     unsigned int nbNodes = ccNodes.size();
     std::vector<edge> ccEdges;
-    // get edges of current connected component 
+
+    // get edges of current connected component
     for (unsigned int j = 0; j < nbNodes; ++j) {
       edge e;
       forEach(e, graph->getOutEdges(ccNodes[j])) {
-	ccEdges.push_back(e);
+        ccEdges.push_back(e);
       }
     }
 
     BoundingBox ccBB = tlp::computeBoundingBox(ccNodes, ccEdges, layout,
-					       size, rotation);
+                       size, rotation);
     Polyomino info;
     info.ccNodes = ccNodes;
     info.ccBB = ccBB;
@@ -224,25 +225,29 @@ bool PolyominoPacking::run() {
   }
 
   for (size_t i = 0 ; i < polyominos.size() ; ++i) {
-    Polyomino& poly = polyominos[i]; 
+    Polyomino& poly = polyominos[i];
     Coord move = Coord(poly.newPlace[0], poly.newPlace[1]);
     const std::vector<node>& ccNodes = poly.ccNodes;
     unsigned int nbNodes = ccNodes.size();
+
     for (unsigned int j = 0; j < nbNodes; ++j) {
       node n = ccNodes[j];
       result->setNodeValue(n, layout->getNodeValue(n) + move);
       edge e;
       forEach(e, graph->getOutEdges(n)) {
         vector<Coord> bends = layout->getEdgeValue(e);
-	if (bends.size()) {
+
+        if (bends.size()) {
           for (size_t k = 0 ; k < bends.size() ; ++k) {
             bends[j] += move;
           }
+
           result->setEdgeValue(e, bends);
         }
       }
     }
   }
+
   return true;
 }
 
@@ -301,7 +306,7 @@ static Vec2i vec3fToVec2i(const Vec3f &c) {
 }
 
 void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty* layout,
-				    SizeProperty* size) {
+                                    SizeProperty* size) {
 
   const BoundingBox &ccBB = poly.ccBB;
   const std::vector<node>& ccNodes = poly.ccNodes;
@@ -310,6 +315,7 @@ void PolyominoPacking::genPolyomino(Polyomino &poly, LayoutProperty* layout,
   int dy = - rint(ccBB[0][1]);
 
   unsigned int nbNodes = ccNodes.size();
+
   for (unsigned int i = 0; i < nbNodes; ++i) {
     node n = ccNodes[i];
     const Coord &nodeCoord = layout->getNodeValue(n);
