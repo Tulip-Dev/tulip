@@ -360,6 +360,11 @@ public:
 
   Graph();
 
+  ~Graph();
+%MethodCode
+  releaseGraphHierarchyWrappers(sipCpp);
+%End
+
 //===========================================================================================
 
   bool applyAlgorithm(const std::string &algorithm, std::string &errorMessage /Out/, tlp::DataSet *dataSet /GetWrapper/ = NULL) /TypeHint="Tuple[bool, str]"/;
