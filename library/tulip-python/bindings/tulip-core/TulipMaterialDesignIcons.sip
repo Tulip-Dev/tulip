@@ -42,8 +42,8 @@ That class offers utility functions and supported icons names constants.
 To set a node glyph as a Material Design icon, the Icon glyph must be associated
 to the node through the modification of the "viewShape" integer property attached to the graph.
 The name of the icon to use must then be set in the "viewIcon" string property.
-As an example, the following code snippet activates the Font Awesome glyph for all nodes
-and sets the "user" icon::
+As an example, the following code snippet activates the Icon glyph for all nodes
+and sets the "account" icon (:mdicon:`account`)::
 
   # graph is an instance of a tlp.Graph object
   viewShape = graph.getIntegerProperty("viewShape")
@@ -51,9 +51,12 @@ and sets the "user" icon::
 
   # sets the Icon glyph on all nodes
   viewShape.setAllNodeValue(tlp.NodeShape.Icon)
-  # sets the "user" glyph for all nodes
-  viewIcon.setAllNodeValue(tlp.TulipMaterialDesignIcons.User);
+  # sets the "account" glyph for all nodes
+  viewIcon.setAllNodeValue(tlp.TulipMaterialDesignIcons.Account);
+%End
 
+%If (NO_LIMIT_DOC)
+%Docstring
 The following string constants representing the supported icons are available:
 
   * :const:`tlp.TulipMaterialDesignIcons.AccessPoint` (:mdicon:`access-point`)
@@ -1988,7 +1991,7 @@ The following string constants representing the supported icons are available:
   * :const:`tlp.TulipMaterialDesignIcons.YinYang` (:mdicon:`yin-yang`)
   * :const:`tlp.TulipMaterialDesignIcons.YoutubePlay` (:mdicon:`youtube-play`)
   * :const:`tlp.TulipMaterialDesignIcons.ZipBox` (:mdicon:`zip-box`)
-
+%End
 %End
 
 public:

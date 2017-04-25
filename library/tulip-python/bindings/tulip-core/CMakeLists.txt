@@ -7,6 +7,13 @@ IF(WIN32)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DDLL_TULIP_PYTHON")
 ENDIF(WIN32)
 
+# Visual Studio has a limit for string constants length
+# so we define the sip feature NO_LIMIT_DOC in Module.sip
+# to avoid the compiler error (fatal error C1091)
+IF(MSVC AND MSVC_VERSION LESS 1900)
+  SET(SIP_FLAGS -x NO_LIMIT_DOC)
+ENDIF()
+
 SET(TULIP_SIP_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/AcyclicTest.sip
     ${CMAKE_CURRENT_SOURCE_DIR}/AbstractProperty.sip.in
@@ -79,7 +86,7 @@ SET(TULIP_PYTHON_BINDINGS_SRC
 
 ADD_CUSTOM_COMMAND(OUTPUT ${TULIP_PYTHON_BINDINGS_SRC}
                    COMMAND ${CMAKE_COMMAND} -DSOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR} -DBINARY_DIR=${CMAKE_CURRENT_BINARY_DIR} -P ${CMAKE_CURRENT_SOURCE_DIR}/generatePropertiesBindings.cmake
-                   COMMAND ${SIP_EXE} -y ${CMAKE_CURRENT_BINARY_DIR}/tulip.pyi -o -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j8 ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
+                   COMMAND ${SIP_EXE} -y ${CMAKE_CURRENT_BINARY_DIR}/tulip.pyi -o -I ${CMAKE_CURRENT_BINARY_DIR} -I ${CMAKE_CURRENT_SOURCE_DIR} -c ${CMAKE_CURRENT_BINARY_DIR} -j8 ${SIP_FLAGS} ${CMAKE_CURRENT_SOURCE_DIR}/Module.sip
                    COMMENT "Generating Python Bindings for libtulip"
                    DEPENDS ${TULIP_SIP_FILES} ${STL_SIP_FILES} ${CMAKE_CURRENT_SOURCE_DIR}/../../include/tulip/PythonCppTypesConverter.h VERBATIM)
            

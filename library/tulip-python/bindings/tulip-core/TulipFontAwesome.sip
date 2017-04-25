@@ -48,7 +48,7 @@ That class offers utility functions and supported icons names constants.
 To set a node glyph as a Font Awesome icon, the Icon glyph must be associated
 to the node through the modification of the "viewShape" integer property attached to the graph.
 The name of the icon to use must then be set in the "viewIcon" string property.
-As an example, the following code snippet activates the Font Awesome glyph for all nodes
+As an example, the following code snippet activates the Icon glyph for all nodes
 and sets the "user" icon (:faicon:`user`)::
 
   # graph is a pointer to a tlp.Graph object
@@ -60,7 +60,12 @@ and sets the "user" icon (:faicon:`user`)::
   # sets the "user" glyph for all nodes
   viewIcon.setAllNodeValue(tlp.TulipFontAwesome.User)
 
-The following string constants representing the supported icons are available from Tulip 4.8.0 (based on Font Awesome 4.4):
+%End
+
+%If (NO_LIMIT_DOC)
+%Docstring
+
+The following string constants representing the supported icons (based on Font Awesome 4.4) are defined since Tulip 4.8.0:
 
   * :const:`tlp.TulipFontAwesome.Px500` (:faicon:`500px`)
   * :const:`tlp.TulipFontAwesome.Adjust` (:faicon:`adjust`)
@@ -735,7 +740,7 @@ The following string constants representing the supported icons are available fr
   * :const:`tlp.TulipFontAwesome.YoutubePlay` (:faicon:`youtube-play`)
   * :const:`tlp.TulipFontAwesome.YoutubeSquare` (:faicon:`youtube-square`)
 
-Since the release of Tulip 4.8.1, the following icons are also available (based on Font Awesome 4.5):
+Since Tulip 4.8.1, the following icons (based on Font Awesome 4.5) are also defined:
 
   * :const:`tlp.TulipFontAwesome.Bluetooth` (:faicon:`bluetooth`)
   * :const:`tlp.TulipFontAwesome.BluetoothB` (:faicon:`bluetooth-b`)
@@ -758,7 +763,7 @@ Since the release of Tulip 4.8.1, the following icons are also available (based 
   * :const:`tlp.TulipFontAwesome.StopCircleO` (:faicon:`stop-circle-o`)
   * :const:`tlp.TulipFontAwesome.Usb` (:faicon:`usb`)
 
-Since the release of Tulip 4.10, the following icons are also available (based on Font Awesome 4.6):
+Since Tulip 4.10, the following icons (based on Font Awesome 4.6) are also defined:
 
   * :const:`tlp.TulipFontAwesome.AmericanSignLanguageInterpreting` (:faicon:`american-sign-language-interpreting`)
   * :const:`tlp.TulipFontAwesome.AslInterpreting` (:faicon:`asl-interpreting`)
@@ -795,7 +800,7 @@ Since the release of Tulip 4.10, the following icons are also available (based o
   * :const:`tlp.TulipFontAwesome.Wpforms` (:faicon:`wpforms`)
   * :const:`tlp.TulipFontAwesome.Yoast` (:faicon:`yoast`)
 
-Since the release of Tulip 4.11, the following icons are also available (based on Font Awesome 4.7):
+Since Tulip 4.11, the following icons (based on Font Awesome 4.7) are also defined:
 
   * :const:`tlp.TulipFontAwesome.AddressBook` (:faicon:`address-book`)
   * :const:`tlp.TulipFontAwesome.AddressBookO` (:faicon:`address-book-o`)
@@ -853,6 +858,7 @@ Since the release of Tulip 4.11, the following icons are also available (based o
   * :const:`tlp.TulipFontAwesome.WindowRestore` (:faicon:`window-restore`)
   * :const:`tlp.TulipFontAwesome.Wpexplorer` (:faicon:`wpexplorer`)
 
+%End
 %End
 
 public:
