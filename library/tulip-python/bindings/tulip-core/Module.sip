@@ -25,6 +25,11 @@
 
 %Module _tulip
 
+// we define the NO_LIMIT_DOC feature
+// to deal with the limit for string constants length of Visual Studio
+// and avoid the compiler error (fatal error C1091)
+%Feature NO_LIMIT_DOC
+
 // Plus set up type aliases for tlp.Coord and tlp.Size
 %PreInitialisationCode
   // Try to load plugins when importing the module from the Python shell
