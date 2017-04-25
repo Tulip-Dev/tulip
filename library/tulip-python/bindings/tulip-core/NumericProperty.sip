@@ -228,10 +228,6 @@ Gets an iterator sorting nodes according to their values in that numeric propert
 :rtype: a Tulip iterator on :class:`tlp.node` objects
  %End
 
-%MethodCode
-  sipRes = new tlp::StableIterator<tlp::node>(sipCpp->getSortedNodes(a0, a1));
-%End
-
 //===========================================================================================
 
   tlp::Iterator<tlp::edge>* getSortedEdges(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.edge]"/;
@@ -247,10 +243,6 @@ Gets an iterator sorting edges according to their values in that numeric propert
 :param ascendingOrder: defines the sort ordering (ascending or descending)
 :type ascendingOrder: boolean
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
-%End
-
-%MethodCode
-  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getSortedEdges(a0, a1));
 %End
 
 //===========================================================================================
@@ -270,10 +262,6 @@ Gets an iterator sorting edges according to the values of their source nodes in 
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
 %End
 
-%MethodCode
-  sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getSortedEdgesBySourceValue(a0, a1));
-%End
-
 //===========================================================================================
 
   tlp::Iterator<tlp::edge>* getSortedEdgesByTargetValue(const tlp::Graph *sg = NULL, bool ascendingOrder = true) /TransferBack, TypeHint="Iterator[tlp.edge]"/;
@@ -289,10 +277,6 @@ Gets an iterator sorting edges according to the values of their target nodes in 
 :param ascendingOrder: defines the sort ordering (ascending or descending)
 :type ascendingOrder: boolean
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
-%End
-
-%MethodCode
- sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getSortedEdgesByTargetValue(a0, a1));
 %End
 
 //===========================================================================================
@@ -311,10 +295,6 @@ Vectors of two numbers (first element being the source node value, second one th
 :param ascendingOrder: defines the sort ordering (ascending or descending)
 :type ascendingOrder: boolean
 :rtype: a Tulip iterator on :class:`tlp.edge` objects
-%End
-
-%MethodCode
- sipRes = new tlp::StableIterator<tlp::edge>(sipCpp->getSortedEdgesByExtremitiesValues(a0, a1));
 %End
 
 //===========================================================================================
