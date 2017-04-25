@@ -120,10 +120,10 @@ BoundingBox tlp::computeBoundingBox(const std::vector<node>& nodes,
                                     const DoubleProperty *rotation,
                                     const BooleanProperty *selection) {
   Iterator<node>* itN =
-    new StlIterator<node, typename std::vector<node>::const_iterator>(nodes.begin(),
+    new StlIterator<node, std::vector<node>::const_iterator>(nodes.begin(),
         nodes.end());
   Iterator<edge>* itE =
-    new StlIterator<edge, typename std::vector<edge>::const_iterator>(edges.begin(),
+    new StlIterator<edge, std::vector<edge>::const_iterator>(edges.begin(),
         edges.end());
   BoundingBox bbox = computeBoundingBox(itN, itE, layout, size,
                                         rotation, selection);
