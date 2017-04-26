@@ -152,15 +152,15 @@ QVector<SearchOperator *> SearchWidget::NUMERIC_OPERATORS =
                                 << new ContainsOperator << new MatchesOperator;
 
 QVector<SearchOperator *> SearchWidget::STRING_OPERATORS =
-    QVector<SearchOperator *>() << new StringEqualsOperator << new StringDifferentOperator << nullptr << nullptr << nullptr << nullptr
-                                << new StartsWithOperator << new EndsWithOperator << new ContainsOperator << new MatchesOperator;
+    QVector<SearchOperator *>() << new StringEqualsOperator << new StringDifferentOperator << NULL << NULL << NULL << NULL << new StartsWithOperator
+                                << new EndsWithOperator << new ContainsOperator << new MatchesOperator;
 
 QVector<SearchOperator *> SearchWidget::NOCASE_STRING_OPERATORS =
-    QVector<SearchOperator *>() << new NoCaseStringEqualsOperator << new NoCaseStringDifferentOperator << nullptr << nullptr << nullptr << nullptr
+    QVector<SearchOperator *>() << new NoCaseStringEqualsOperator << new NoCaseStringDifferentOperator << NULL << NULL << NULL << NULL
                                 << new NoCaseStartsWithOperator << new NoCaseEndsWithOperator << new NoCaseContainsOperator
                                 << new NoCaseMatchesOperator;
 
-SearchWidget::SearchWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::SearchWidget) {
+SearchWidget::SearchWidget(QWidget *parent) : QWidget(parent), _ui(new Ui::SearchWidget), _graph(NULL) {
   _ui->setupUi(this);
   _ui->tableWidget->hide();
   _ui->tableWidget->setItemDelegate(new TulipItemDelegate(_ui->tableWidget));
@@ -213,6 +213,8 @@ void SearchWidget::setGraph(Graph *g) {
     _ui->resultsCountLabel->setText("");
   }
 
+  _graph = g;
+
   QString oldStorageName = QString::null;
   QString oldTermAName = QString::null;
   QString oldTermBName = QString::null;
@@ -254,9 +256,9 @@ void SearchWidget::selectionModeChanged(int index) {
 }
 
 void SearchWidget::search() {
-  GraphHierarchiesModel *graphsModel = static_cast<GraphHierarchiesModel *>(_ui->graphCombo->model());
-  tlp::Graph *g = graphsModel->currentGraph();
-  g->push();
+  if (_graph == NULL)
+    return;
+  _graph->push();
   Observable::holdObservers();
   SearchOperator *op = searchOperator();
 
@@ -268,12 +270,12 @@ void SearchWidget::search() {
     deleteTermB = true;
 
     if (isNumericComparison()) {
-      DoubleProperty *doubleProp = new DoubleProperty(g);
+      DoubleProperty *doubleProp = new DoubleProperty(_graph);
       doubleProp->setAllNodeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
       doubleProp->setAllEdgeValue(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole).toDouble());
       b = doubleProp;
     } else {
-      StringProperty *stringProp = new StringProperty(g);
+      StringProperty *stringProp = new StringProperty(_graph);
       DataType *tulipData = TulipMetaTypes::qVariantToDataType(_ui->tableWidget->item(0, 0)->data(Qt::DisplayRole));
 
       if (tulipData == nullptr) {
@@ -316,7 +318,7 @@ void SearchWidget::search() {
   int scopeIndex = _ui->scopeCombo->currentIndex();
   bool onNodes = scopeIndex == 0 || scopeIndex == 1;
   bool onEdges = scopeIndex == 0 || scopeIndex == 2;
-  BooleanProperty *result = op->run(g, onNodes, onEdges);
+  BooleanProperty *result = op->run(_graph, onNodes, onEdges);
 
   PropertyInterface *outputInterface =
       _ui->resultsStorageCombo->model()

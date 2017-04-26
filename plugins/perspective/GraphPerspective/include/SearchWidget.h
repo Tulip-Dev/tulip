@@ -33,7 +33,7 @@ namespace tlp {
 class GraphHierarchiesModel;
 class Graph;
 class PropertyInterface;
-}
+} // namespace tlp
 
 class SearchWidget : public QWidget {
   Q_OBJECT
@@ -43,6 +43,8 @@ class SearchWidget : public QWidget {
   static QVector<SearchOperator *> NOCASE_STRING_OPERATORS;
 
   Ui::SearchWidget *_ui;
+  tlp::Graph *_graph;
+
   tlp::PropertyInterface *term(QComboBox *combo);
 
   SearchOperator *searchOperator();
