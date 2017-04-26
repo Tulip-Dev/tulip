@@ -274,6 +274,7 @@ void SearchWidget::selectionModeChanged(int index) {
 void SearchWidget::search() {
   if (_graph == NULL)
     return;
+
   _graph->push();
   Observable::holdObservers();
   SearchOperator* op = searchOperator();
