@@ -30,6 +30,7 @@
 #include <tulip/TlpTools.h>
 #include <tulip/StringProperty.h>
 #include <tulip/NumericProperty.h>
+#include <tulip/StaticProperty.h>
 #include <tulip/ForEach.h>
 
 #include <exception>
@@ -73,9 +74,8 @@ private:
   tlp::Graph *tulipGraph;
   ogdf::Graph ogdfGraph;
   ogdf::GraphAttributes ogdfAttributes;
-
-  MutableContainer<ogdf::node> ogdfNodes;
-  MutableContainer<ogdf::edge> ogdfEdges;
+  tlp::NodeStaticProperty<ogdf::node>* ogdfNodes;
+  std::vector<ogdf::edge> ogdfEdges;
 };
 
 #endif      /* !TULIPTOOGDF_H_ */
