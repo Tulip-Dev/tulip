@@ -43,6 +43,8 @@ class SearchWidget : public QWidget {
   static QVector<SearchOperator*> NOCASE_STRING_OPERATORS;
 
   Ui::SearchWidget* _ui;
+  tlp::Graph* _graph;
+
   tlp::PropertyInterface* term(QComboBox* combo);
 
   SearchOperator* searchOperator();
