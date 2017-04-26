@@ -152,16 +152,20 @@ bool OGDFLayoutPluginBase::run() {
   }
 
   // retrieve nodes coordinates computed by the OGDF Layout Algorithm
-  // and store it in the Tulip Layout Property
-  for (tlp::node nodeTlp : graph->getNodes()) {
-    tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(nodeTlp.id);
-    result->setNodeValue(nodeTlp, nodeCoord);
+  // and store them in the Tulip Layout Property
+  const std::vector<tlp::node> &nodes = graph->nodes();
+  unsigned int nbElts = nodes.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(i);
+    result->setNodeValue(nodes[i], nodeCoord);
   }
 
   // same operation as above but with edges
-  for (tlp::edge tlpEdge : graph->getEdges()) {
-    vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(tlpEdge.id);
-    result->setEdgeValue(tlpEdge, edgeCoord);
+  const std::vector<tlp::edge> &edges = graph->edges();
+  nbElts = edges.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    vector<tlp::Coord> edgeCoord = tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(i);
+    result->setEdgeValue(edges[i], edgeCoord);
   }
 
   afterCall();
@@ -174,21 +178,26 @@ void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttri
 }
 
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
+  const std::vector<tlp::node> &nodes = graph->nodes();
+  const std::vector<tlp::edge> &edges = graph->edges();
   tlp::BoundingBox graphBB =
-      tlp::computeBoundingBox(graph, result, graph->getProperty<SizeProperty>("viewSize"), graph->getProperty<DoubleProperty>("viewRotation"));
+      tlp::computeBoundingBox(nodes, edges, result, graph->getProperty<SizeProperty>("viewSize"), graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
-  for (tlp::node n : graph->getNodes()) {
-    tlp::Coord nodeCoord = result->getNodeValue(n);
+  unsigned int nbElts = nodes.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    tlp::Coord nodeCoord = result->getNodeValue(nodes[i]);
     nodeCoord[1] = midY - (nodeCoord[1] - midY);
-    result->setNodeValue(n, nodeCoord);
+    result->setNodeValue(nodes[i], nodeCoord);
   }
-  for (tlp::edge e : graph->getEdges()) {
-    std::vector<tlp::Coord> bends = result->getEdgeValue(e);
 
-    for (size_t i = 0; i < bends.size(); ++i) {
-      bends[i][1] = midY - (bends[i][1] - midY);
+  nbElts = edges.size();
+  for (unsigned int i = 0; i < nbElts; ++i) {
+    std::vector<tlp::Coord> bends = result->getEdgeValue(edges[i]);
+    if (bends.size()) {
+      for (size_t i = 0; i < bends.size(); ++i) {
+        bends[i][1] = midY - (bends[i][1] - midY);
+      }
+      result->setEdgeValue(edges[i], bends);
     }
-
-    result->setEdgeValue(e, bends);
   }
 }
