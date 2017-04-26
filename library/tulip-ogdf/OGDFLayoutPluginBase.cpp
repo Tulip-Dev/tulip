@@ -157,6 +157,7 @@ bool OGDFLayoutPluginBase::run() {
   // and store them in the Tulip Layout Property
   const std::vector<tlp::node>& nodes = graph->nodes();
   unsigned int nbElts = nodes.size();
+
   for (unsigned int i = 0; i < nbElts; ++i) {
     tlp::Coord nodeCoord = tlpToOGDF->getNodeCoordFromOGDFGraphAttr(i);
     result->setNodeValue(nodes[i], nodeCoord);
@@ -165,6 +166,7 @@ bool OGDFLayoutPluginBase::run() {
   // same operation as above but with edges
   const std::vector<tlp::edge>& edges = graph->edges();
   nbElts = edges.size();
+
   for (unsigned int i = 0; i < nbElts; ++i) {
     vector<tlp::Coord> edgeCoord =
       tlpToOGDF->getEdgeCoordFromOGDFGraphAttr(i);
@@ -183,25 +185,29 @@ void OGDFLayoutPluginBase::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttri
 void OGDFLayoutPluginBase::transposeLayoutVertically() {
   const std::vector<tlp::node>& nodes = graph->nodes();
   const std::vector<tlp::edge>& edges = graph->edges();
-  tlp::BoundingBox graphBB = 
+  tlp::BoundingBox graphBB =
     tlp::computeBoundingBox(nodes, edges, result,
-			    graph->getProperty<SizeProperty>("viewSize"),
-			    graph->getProperty<DoubleProperty>("viewRotation"));
+                            graph->getProperty<SizeProperty>("viewSize"),
+                            graph->getProperty<DoubleProperty>("viewRotation"));
   float midY = (graphBB[0][1] + graphBB[1][1]) / 2.f;
   unsigned int nbElts = nodes.size();
+
   for (unsigned int i = 0; i < nbElts; ++i) {
     tlp::Coord nodeCoord = result->getNodeValue(nodes[i]);
     nodeCoord[1] = midY - (nodeCoord[1] - midY);
     result->setNodeValue(nodes[i], nodeCoord);
   }
-  
+
   nbElts = edges.size();
+
   for (unsigned int i = 0; i < nbElts; ++i) {
     std::vector<tlp::Coord> bends = result->getEdgeValue(edges[i]);
+
     if (bends.size()) {
       for (size_t i = 0 ; i < bends.size() ; ++i) {
-	bends[i][1] = midY - (bends[i][1] - midY);
+        bends[i][1] = midY - (bends[i][1] - midY);
       }
+
       result->setEdgeValue(edges[i], bends);
     }
   }
