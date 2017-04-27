@@ -19,28 +19,26 @@ namespace antlr {
 const char* const CommonAST::TYPE_NAME = "CommonAST";
 
 #ifdef ANTLR_SUPPORT_XML
-void CommonAST::initialize( ANTLR_USE_NAMESPACE(std)istream& in )
-{
-	ANTLR_USE_NAMESPACE(std)string t1, t2, text;
+void CommonAST::initialize( ANTLR_USE_NAMESPACE(std)istream& in ) {
+  ANTLR_USE_NAMESPACE(std)string t1, t2, text;
 
-	// text
-	read_AttributeNValue( in, t1, text );
+  // text
+  read_AttributeNValue( in, t1, text );
 
-	read_AttributeNValue( in, t1, t2 );
+  read_AttributeNValue( in, t1, t2 );
 #ifdef ANTLR_ATOI_IN_STD
-	int type = ANTLR_USE_NAMESPACE(std)atoi(t2.c_str());
+  int type = ANTLR_USE_NAMESPACE(std)atoi(t2.c_str());
 #else
-	int type = atoi(t2.c_str());
+  int type = atoi(t2.c_str());
 #endif
 
-	// initialize first part of AST.
-	this->initialize( type, text );
+  // initialize first part of AST.
+  this->initialize( type, text );
 }
 #endif
 
-RefAST CommonAST::factory()
-{
-	return RefAST(new CommonAST);
+RefAST CommonAST::factory() {
+  return RefAST(new CommonAST);
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

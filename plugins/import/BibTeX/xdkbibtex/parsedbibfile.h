@@ -1,9 +1,9 @@
 // Copyright (C) 2004 Xavier Décoret <Xavier.Decoret@imag.fr>
 
-// This program is free software; you can redistribute it and/or 
-// modify it under the terms of the GNU General Public License 
-// as published by the Free Software Foundation; either 
-// version 2 of the License, or (at your option) any later 
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later
 // version.
 
 // This program is distributed in the hope that it will be useful,
@@ -38,27 +38,26 @@ typedef enum { Strict=0, Warning=1, Accept=4 } Compliance;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Interface of ParsedBibFile
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-class ParsedBibFile
-{
+class ParsedBibFile {
 public:
   ParsedBibFile(xdkbib::File* file,
-		antlr::TokenStreamSelector* selector_,		
-		Compliance quote);
+                antlr::TokenStreamSelector* selector_,
+                Compliance quote);
   virtual ~ParsedBibFile();
-  
+
   virtual void issueWarning(const std::string&,
-			    const std::string&,unsigned int);
+                            const std::string&,unsigned int);
 
   xdkbib::File* file() const;
 
   inline antlr::TokenStreamSelector* selector() const;
-  
+
   inline Compliance quoteCompliance() const;
   void setQuoteCompliance(Compliance c);
 
   const std::string&  currentComment() const;
-  void addToCurrentComment(const std::string&);  
-  void clearCurrentComment();  
+  void addToCurrentComment(const std::string&);
+  void clearCurrentComment();
 private:
   xdkbib::File*               file_;
   antlr::TokenStreamSelector* selector_;
@@ -69,18 +68,15 @@ private:
 //Implementation of ParsedBibFile
 //************************************************************
 inline xdkbib::File*
-ParsedBibFile::file() const
-{
+ParsedBibFile::file() const {
   return file_;
 }
 inline antlr::TokenStreamSelector*
-ParsedBibFile::selector() const
-{
+ParsedBibFile::selector() const {
   return selector_;
 }
 inline Compliance
-ParsedBibFile::quoteCompliance() const
-{
+ParsedBibFile::quoteCompliance() const {
   return quoteCompliance_;
 }
 

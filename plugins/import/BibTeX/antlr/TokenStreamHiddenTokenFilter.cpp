@@ -20,88 +20,81 @@ namespace antlr {
  */
 
 TokenStreamHiddenTokenFilter::TokenStreamHiddenTokenFilter(TokenStream& input)
-: TokenStreamBasicFilter(input)
-{
+  : TokenStreamBasicFilter(input) {
 }
 
-void TokenStreamHiddenTokenFilter::consume()
-{
-	nextMonitoredToken = input->nextToken();
+void TokenStreamHiddenTokenFilter::consume() {
+  nextMonitoredToken = input->nextToken();
 }
 
-void TokenStreamHiddenTokenFilter::consumeFirst()
-{
-	consume();
+void TokenStreamHiddenTokenFilter::consumeFirst() {
+  consume();
 
-	// Handle situation where hidden or discarded tokens
-	// appear first in input stream
-	RefToken p;
-	// while hidden or discarded scarf tokens
-	while ( hideMask.member(LA(1)->getType()) || discardMask.member(LA(1)->getType()) ) {
-		if ( hideMask.member(LA(1)->getType()) ) {
-			if ( !p ) {
-				p = LA(1);
-			}
-			else {
-				static_cast<CommonHiddenStreamToken*>(p.get())->setHiddenAfter(LA(1));
-				static_cast<CommonHiddenStreamToken*>(LA(1).get())->setHiddenBefore(p); // double-link
-				p = LA(1);
-			}
-			lastHiddenToken = p;
-			if (!firstHidden)
-				firstHidden = p; // record hidden token if first
-		}
-		consume();
-	}
+  // Handle situation where hidden or discarded tokens
+  // appear first in input stream
+  RefToken p;
+
+  // while hidden or discarded scarf tokens
+  while ( hideMask.member(LA(1)->getType()) || discardMask.member(LA(1)->getType()) ) {
+    if ( hideMask.member(LA(1)->getType()) ) {
+      if ( !p ) {
+        p = LA(1);
+      }
+      else {
+        static_cast<CommonHiddenStreamToken*>(p.get())->setHiddenAfter(LA(1));
+        static_cast<CommonHiddenStreamToken*>(LA(1).get())->setHiddenBefore(p); // double-link
+        p = LA(1);
+      }
+
+      lastHiddenToken = p;
+
+      if (!firstHidden)
+        firstHidden = p; // record hidden token if first
+    }
+
+    consume();
+  }
 }
 
-BitSet TokenStreamHiddenTokenFilter::getDiscardMask() const
-{
-	return discardMask;
+BitSet TokenStreamHiddenTokenFilter::getDiscardMask() const {
+  return discardMask;
 }
 
 /** Return a ptr to the hidden token appearing immediately after
  *  token t in the input stream.
  */
-RefToken TokenStreamHiddenTokenFilter::getHiddenAfter(RefToken t)
-{
-	return static_cast<CommonHiddenStreamToken*>(t.get())->getHiddenAfter();
+RefToken TokenStreamHiddenTokenFilter::getHiddenAfter(RefToken t) {
+  return static_cast<CommonHiddenStreamToken*>(t.get())->getHiddenAfter();
 }
 
 /** Return a ptr to the hidden token appearing immediately before
  *  token t in the input stream.
  */
-RefToken TokenStreamHiddenTokenFilter::getHiddenBefore(RefToken t)
-{
-	return static_cast<CommonHiddenStreamToken*>(t.get())->getHiddenBefore();
+RefToken TokenStreamHiddenTokenFilter::getHiddenBefore(RefToken t) {
+  return static_cast<CommonHiddenStreamToken*>(t.get())->getHiddenBefore();
 }
 
-BitSet TokenStreamHiddenTokenFilter::getHideMask() const
-{
-	return hideMask;
+BitSet TokenStreamHiddenTokenFilter::getHideMask() const {
+  return hideMask;
 }
 
 /** Return the first hidden token if one appears
  *  before any monitored token.
  */
-RefToken TokenStreamHiddenTokenFilter::getInitialHiddenToken()
-{
-	return firstHidden;
+RefToken TokenStreamHiddenTokenFilter::getInitialHiddenToken() {
+  return firstHidden;
 }
 
-void TokenStreamHiddenTokenFilter::hide(int m)
-{
-	hideMask.add(m);
+void TokenStreamHiddenTokenFilter::hide(int m) {
+  hideMask.add(m);
 }
 
-void TokenStreamHiddenTokenFilter::hide(const BitSet& mask)
-{
-	hideMask = mask;
+void TokenStreamHiddenTokenFilter::hide(const BitSet& mask) {
+  hideMask = mask;
 }
 
-RefToken TokenStreamHiddenTokenFilter::LA(int)
-{
-	return nextMonitoredToken;
+RefToken TokenStreamHiddenTokenFilter::LA(int) {
+  return nextMonitoredToken;
 }
 
 /** Return the next monitored token.
@@ -114,40 +107,44 @@ RefToken TokenStreamHiddenTokenFilter::LA(int)
 *
 *  Note: EOF must be a monitored Token.
 */
-RefToken TokenStreamHiddenTokenFilter::nextToken()
-{
-	// handle an initial condition; don't want to get lookahead
-	// token of this splitter until first call to nextToken
-	if ( !LA(1) ) {
-		consumeFirst();
-	}
+RefToken TokenStreamHiddenTokenFilter::nextToken() {
+  // handle an initial condition; don't want to get lookahead
+  // token of this splitter until first call to nextToken
+  if ( !LA(1) ) {
+    consumeFirst();
+  }
 
-	// we always consume hidden tokens after monitored, thus,
-	// upon entry LA(1) is a monitored token.
-	RefToken monitored = LA(1);
-	// point to hidden tokens found during last invocation
-	static_cast<CommonHiddenStreamToken*>(monitored.get())->setHiddenBefore(lastHiddenToken);
-	lastHiddenToken = nullToken;
+  // we always consume hidden tokens after monitored, thus,
+  // upon entry LA(1) is a monitored token.
+  RefToken monitored = LA(1);
+  // point to hidden tokens found during last invocation
+  static_cast<CommonHiddenStreamToken*>(monitored.get())->setHiddenBefore(lastHiddenToken);
+  lastHiddenToken = nullToken;
 
-	// Look for hidden tokens, hook them into list emanating
-	// from the monitored tokens.
-	consume();
-	RefToken p = monitored;
-	// while hidden or discarded scarf tokens
-	while ( hideMask.member(LA(1)->getType()) || discardMask.member(LA(1)->getType()) ) {
-		if ( hideMask.member(LA(1)->getType()) ) {
-			// attach the hidden token to the monitored in a chain
-			// link forwards
-			static_cast<CommonHiddenStreamToken*>(p.get())->setHiddenAfter(LA(1));
-			// link backwards
-			if (p != monitored) { //hidden cannot point to monitored tokens
-				static_cast<CommonHiddenStreamToken*>(LA(1).get())->setHiddenBefore(p);
-			}
-			p = lastHiddenToken = LA(1);
-		}
-		consume();
-	}
-	return monitored;
+  // Look for hidden tokens, hook them into list emanating
+  // from the monitored tokens.
+  consume();
+  RefToken p = monitored;
+
+  // while hidden or discarded scarf tokens
+  while ( hideMask.member(LA(1)->getType()) || discardMask.member(LA(1)->getType()) ) {
+    if ( hideMask.member(LA(1)->getType()) ) {
+      // attach the hidden token to the monitored in a chain
+      // link forwards
+      static_cast<CommonHiddenStreamToken*>(p.get())->setHiddenAfter(LA(1));
+
+      // link backwards
+      if (p != monitored) { //hidden cannot point to monitored tokens
+        static_cast<CommonHiddenStreamToken*>(LA(1).get())->setHiddenBefore(p);
+      }
+
+      p = lastHiddenToken = LA(1);
+    }
+
+    consume();
+  }
+
+  return monitored;
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

@@ -78,45 +78,56 @@ public:
 
     vector<vector<node> > nodes(types_of_nodes);
     graph->reserveNodes(nb_nodes);
+
     //In the paper, there are 3 types starting from a triangle without telling if the whole graph or a cycle has to be taken into account.
-    for (unsigned int i=0; i<types_of_nodes;++i) {
+    for (unsigned int i=0; i<types_of_nodes; ++i) {
       nodes[i].push_back(graph->addNode());
-      for (unsigned j=0; j<i;++j) {
-	graph->addEdge(nodes[j][0],nodes[i][0]);
+
+      for (unsigned j=0; j<i; ++j) {
+        graph->addEdge(nodes[j][0],nodes[i][0]);
       }
     }
+
     graph->addEdge(nodes[types_of_nodes-1][0],nodes[0][0]);
 
     unsigned int random_type, random_node;
     double pr, k_sum, pr_sum;
+
     for (unsigned int i=0; i<nb_nodes-types_of_nodes; ++i) {
       nodes[i%types_of_nodes].push_back(graph->addNode());
 
-      for (unsigned int j=0; j<m;++j) {
+      for (unsigned int j=0; j<m; ++j) {
 
-	// Random type
-	do {
-	  random_type = tlp::randomUnsignedInteger(types_of_nodes-1);
-	} while(random_type==i%types_of_nodes);
+        // Random type
+        do {
+          random_type = tlp::randomUnsignedInteger(types_of_nodes-1);
+        }
+        while(random_type==i%types_of_nodes);
 
-	// Random node
-	k_sum = 0;
-	pr_sum = 0;
-	for(random_node=0; random_node<nodes[random_type].size() ; random_node++)
-	  k_sum += (double)graph->deg(nodes[random_type][random_node]);
-	pr = tlp::randomDouble();
-	random_node = 0;
-	while (pr_sum<pr && nodes[random_type].size()>(random_node+1)) {
-	  pr_sum += (double)graph->deg(nodes[random_type][random_node])/k_sum;
-	  random_node++;
-	}
-	graph->addEdge(nodes[i%types_of_nodes].back(), nodes[random_type][random_node]);
+        // Random node
+        k_sum = 0;
+        pr_sum = 0;
+
+        for(random_node=0; random_node<nodes[random_type].size() ; random_node++)
+          k_sum += (double)graph->deg(nodes[random_type][random_node]);
+
+        pr = tlp::randomDouble();
+        random_node = 0;
+
+        while (pr_sum<pr && nodes[random_type].size()>(random_node+1)) {
+          pr_sum += (double)graph->deg(nodes[random_type][random_node])/k_sum;
+          random_node++;
+        }
+
+        graph->addEdge(nodes[i%types_of_nodes].back(), nodes[random_type][random_node]);
       }
+
       if (i % 100 == 0) {
-	if (pluginProgress->progress(i, nb_nodes-types_of_nodes) != TLP_CONTINUE)
-	  return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, nb_nodes-types_of_nodes) != TLP_CONTINUE)
+          return pluginProgress->state()!=TLP_CANCEL;
       }
     }
+
     return  true;
   }
 };

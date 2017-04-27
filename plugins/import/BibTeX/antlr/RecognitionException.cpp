@@ -13,57 +13,51 @@ namespace antlr {
 #endif
 
 RecognitionException::RecognitionException()
-: ANTLRException("parsing error")
-, line(-1)
-, column(-1)
-{
+  : ANTLRException("parsing error")
+  , line(-1)
+  , column(-1) {
 }
 
 RecognitionException::RecognitionException(const ANTLR_USE_NAMESPACE(std)string& s)
-: ANTLRException(s)
-, line(-1)
-, column(-1)
-{
+  : ANTLRException(s)
+  , line(-1)
+  , column(-1) {
 }
 
 RecognitionException::RecognitionException(const ANTLR_USE_NAMESPACE(std)string& s,
-                                           const ANTLR_USE_NAMESPACE(std)string& fileName_,
-                                           int line_,int column_)
-: ANTLRException(s)
-, fileName(fileName_)
-, line(line_)
-, column(column_)
-{
+    const ANTLR_USE_NAMESPACE(std)string& fileName_,
+    int line_,int column_)
+  : ANTLRException(s)
+  , fileName(fileName_)
+  , line(line_)
+  , column(column_) {
 }
 
-ANTLR_USE_NAMESPACE(std)string RecognitionException::getFileLineColumnString() const
-{
-	ANTLR_USE_NAMESPACE(std)string fileLineColumnString;
+ANTLR_USE_NAMESPACE(std)string RecognitionException::getFileLineColumnString() const {
+  ANTLR_USE_NAMESPACE(std)string fileLineColumnString;
 
-	if ( fileName.length() > 0 )
-		fileLineColumnString = fileName + ":";
+  if ( fileName.length() > 0 )
+    fileLineColumnString = fileName + ":";
 
-	if ( line != -1 )
-	{
-		if ( fileName.length() == 0 )
-			fileLineColumnString = fileLineColumnString + "line ";
+  if ( line != -1 ) {
+    if ( fileName.length() == 0 )
+      fileLineColumnString = fileLineColumnString + "line ";
 
-		fileLineColumnString = fileLineColumnString + line;
+    fileLineColumnString = fileLineColumnString + line;
 
-		if ( column != -1 )
-			fileLineColumnString = fileLineColumnString + ":" + column;
+    if ( column != -1 )
+      fileLineColumnString = fileLineColumnString + ":" + column;
 
-		fileLineColumnString = fileLineColumnString + ":";
-	}
+    fileLineColumnString = fileLineColumnString + ":";
+  }
 
-	fileLineColumnString = fileLineColumnString + " ";
+  fileLineColumnString = fileLineColumnString + " ";
 
-	return fileLineColumnString;
+  return fileLineColumnString;
 }
 
-ANTLR_USE_NAMESPACE(std)string RecognitionException::toString() const
-{
-	return getFileLineColumnString()+getMessage();
+ANTLR_USE_NAMESPACE(std)string RecognitionException::toString() const {
+  return getFileLineColumnString()+getMessage();
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

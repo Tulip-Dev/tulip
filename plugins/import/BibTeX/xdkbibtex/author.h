@@ -1,9 +1,9 @@
 // Copyright (C) 2004 Xavier Décoret <Xavier.Decoret@imag.fr>
 
-// This program is free software; you can redistribute it and/or 
-// modify it under the terms of the GNU General Public License 
-// as published by the Free Software Foundation; either 
-// version 2 of the License, or (at your option) any later 
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later
 // version.
 
 // This program is distributed in the hope that it will be useful,
@@ -27,43 +27,40 @@
 #include <string>
 #include <vector>
 
-namespace xdkbib
-{
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  // Interface of Author
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  class Author
-  {
-  public:
-    Author();
-    const std::vector<std::string>& first() const;
-    const std::vector<std::string>& von() const;
-    const std::vector<std::string>& jr() const;
-    const std::vector<std::string>& last() const;
+namespace xdkbib {
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Interface of Author
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class Author {
+public:
+  Author();
+  const std::vector<std::string>& first() const;
+  const std::vector<std::string>& von() const;
+  const std::vector<std::string>& jr() const;
+  const std::vector<std::string>& last() const;
 
-    std::string firstJoin(const char* sep=" ") const;
-    std::string vonJoin(const char* sep=" ") const;
-    std::string jrJoin(const char* sep=" ") const;
-    std::string lastJoin(const char* sep=" ") const;
+  std::string firstJoin(const char* sep=" ") const;
+  std::string vonJoin(const char* sep=" ") const;
+  std::string jrJoin(const char* sep=" ") const;
+  std::string lastJoin(const char* sep=" ") const;
 
-    void pushFirst(const std::string&);
-    void pushVon(const std::string&);
-    void pushJr(const std::string&);
-    void pushLast(const std::string&);
-  private:
-    std::vector<std::string> first_;
-    std::vector<std::string> von_;
-    std::vector<std::string> jr_;
-    std::vector<std::string> last_;
-  };
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  // Interface of AuthorList
-  //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  class AuthorList : public std::vector<Author>
-  {
-  public:
-    void readFrom(const char* nameList) throw(xdkbib::parsing_error);
-  };
+  void pushFirst(const std::string&);
+  void pushVon(const std::string&);
+  void pushJr(const std::string&);
+  void pushLast(const std::string&);
+private:
+  std::vector<std::string> first_;
+  std::vector<std::string> von_;
+  std::vector<std::string> jr_;
+  std::vector<std::string> last_;
+};
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// Interface of AuthorList
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+class AuthorList : public std::vector<Author> {
+public:
+  void readFrom(const char* nameList) throw(xdkbib::parsing_error);
+};
 }
 
 #endif // XDKBIB_AUTHOR_H
