@@ -50,62 +50,56 @@ namespace antlr {
 bool DEBUG_PARSER = false;
 
 /** Parser error-reporting function can be overridden in subclass */
-void Parser::reportError(const RecognitionException& ex)
-{
-	ANTLR_USE_NAMESPACE(std)cerr << ex.toString().c_str() << ANTLR_USE_NAMESPACE(std)endl;
+void Parser::reportError(const RecognitionException& ex) {
+  ANTLR_USE_NAMESPACE(std)cerr << ex.toString().c_str() << ANTLR_USE_NAMESPACE(std)endl;
 }
 
 /** Parser error-reporting function can be overridden in subclass */
-void Parser::reportError(const ANTLR_USE_NAMESPACE(std)string& s)
-{
-	if ( getFilename()=="" )
-		ANTLR_USE_NAMESPACE(std)cerr << "error: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
-	else
-		ANTLR_USE_NAMESPACE(std)cerr << getFilename().c_str() << ": error: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
+void Parser::reportError(const ANTLR_USE_NAMESPACE(std)string& s) {
+  if ( getFilename()=="" )
+    ANTLR_USE_NAMESPACE(std)cerr << "error: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
+  else
+    ANTLR_USE_NAMESPACE(std)cerr << getFilename().c_str() << ": error: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
 }
 
 /** Parser warning-reporting function can be overridden in subclass */
-void Parser::reportWarning(const ANTLR_USE_NAMESPACE(std)string& s)
-{
-	if ( getFilename()=="" )
-		ANTLR_USE_NAMESPACE(std)cerr << "warning: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
-	else
-		ANTLR_USE_NAMESPACE(std)cerr << getFilename().c_str() << ": warning: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
+void Parser::reportWarning(const ANTLR_USE_NAMESPACE(std)string& s) {
+  if ( getFilename()=="" )
+    ANTLR_USE_NAMESPACE(std)cerr << "warning: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
+  else
+    ANTLR_USE_NAMESPACE(std)cerr << getFilename().c_str() << ": warning: " << s.c_str() << ANTLR_USE_NAMESPACE(std)endl;
 }
 
 /** Set or change the input token buffer */
-//	void setTokenBuffer(TokenBuffer<Token>* t);
+//  void setTokenBuffer(TokenBuffer<Token>* t);
 
-void Parser::traceIndent()
-{
-	for( int i = 0; i < traceDepth; i++ )
-		ANTLR_USE_NAMESPACE(std)cout << " ";
+void Parser::traceIndent() {
+  for( int i = 0; i < traceDepth; i++ )
+    ANTLR_USE_NAMESPACE(std)cout << " ";
 }
 
-void Parser::traceIn(const char* rname)
-{
-	traceDepth++;
+void Parser::traceIn(const char* rname) {
+  traceDepth++;
 
-	for( int i = 0; i < traceDepth; i++ )
-		ANTLR_USE_NAMESPACE(std)cout << " ";
+  for( int i = 0; i < traceDepth; i++ )
+    ANTLR_USE_NAMESPACE(std)cout << " ";
 
-	ANTLR_USE_NAMESPACE(std)cout << "> " << rname
-		<< "; LA(1)==" << LT(1)->getText().c_str()
-		<<	((inputState->guessing>0)?" [guessing]":"")
-		<< ANTLR_USE_NAMESPACE(std)endl;
+  ANTLR_USE_NAMESPACE(std)cout << "> " << rname
+                               << "; LA(1)==" << LT(1)->getText().c_str()
+                               <<  ((inputState->guessing>0)?" [guessing]":"")
+                               << ANTLR_USE_NAMESPACE(std)endl;
 }
 
-void Parser::traceOut(const char* rname)
-{
-	for( int i = 0; i < traceDepth; i++ )
-		ANTLR_USE_NAMESPACE(std)cout << " ";
+void Parser::traceOut(const char* rname) {
+  for( int i = 0; i < traceDepth; i++ )
+    ANTLR_USE_NAMESPACE(std)cout << " ";
 
-	ANTLR_USE_NAMESPACE(std)cout << "< " << rname
-		<< "; LA(1)==" << LT(1)->getText().c_str()
-		<<	((inputState->guessing>0)?" [guessing]":"")
-		<< ANTLR_USE_NAMESPACE(std)endl;
+  ANTLR_USE_NAMESPACE(std)cout << "< " << rname
+                               << "; LA(1)==" << LT(1)->getText().c_str()
+                               <<  ((inputState->guessing>0)?" [guessing]":"")
+                               << ANTLR_USE_NAMESPACE(std)endl;
 
-	traceDepth--;
+  traceDepth--;
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

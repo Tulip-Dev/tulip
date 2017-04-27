@@ -15,23 +15,20 @@ namespace antlr {
 NoViableAltForCharException::NoViableAltForCharException(int c, CharScanner* scanner)
   : RecognitionException("NoViableAlt",
                          scanner->getFilename(),
-								 scanner->getLine(),scanner->getColumn()),
-    foundChar(c)
-{
+                         scanner->getLine(),scanner->getColumn()),
+    foundChar(c) {
 }
 
 NoViableAltForCharException::NoViableAltForCharException(
-					int c,
-               const ANTLR_USE_NAMESPACE(std)string& fileName_,
-					int line_, int column_)
+  int c,
+  const ANTLR_USE_NAMESPACE(std)string& fileName_,
+  int line_, int column_)
   : RecognitionException("NoViableAlt",fileName_,line_,column_),
-    foundChar(c)
-{
+    foundChar(c) {
 }
 
-ANTLR_USE_NAMESPACE(std)string NoViableAltForCharException::getMessage() const
-{
-	return ANTLR_USE_NAMESPACE(std)string("unexpected char: ")+charName(foundChar);
+ANTLR_USE_NAMESPACE(std)string NoViableAltForCharException::getMessage() const {
+  return ANTLR_USE_NAMESPACE(std)string("unexpected char: ")+charName(foundChar);
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

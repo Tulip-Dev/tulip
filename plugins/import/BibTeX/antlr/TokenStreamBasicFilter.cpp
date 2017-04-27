@@ -15,27 +15,25 @@ namespace antlr {
  *  There is no buffering of the tokens.
  */
 TokenStreamBasicFilter::TokenStreamBasicFilter(TokenStream& input_)
-: input(&input_)
-{
+  : input(&input_) {
 }
 
-void TokenStreamBasicFilter::discard(int ttype)
-{
-	discardMask.add(ttype);
+void TokenStreamBasicFilter::discard(int ttype) {
+  discardMask.add(ttype);
 }
 
-void TokenStreamBasicFilter::discard(const BitSet& mask)
-{
-	discardMask = mask;
+void TokenStreamBasicFilter::discard(const BitSet& mask) {
+  discardMask = mask;
 }
 
-RefToken TokenStreamBasicFilter::nextToken()
-{
-	RefToken tok = input->nextToken();
-	while ( tok && discardMask.member(tok->getType()) ) {
-		tok = input->nextToken();
-	}
-	return tok;
+RefToken TokenStreamBasicFilter::nextToken() {
+  RefToken tok = input->nextToken();
+
+  while ( tok && discardMask.member(tok->getType()) ) {
+    tok = input->nextToken();
+  }
+
+  return tok;
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

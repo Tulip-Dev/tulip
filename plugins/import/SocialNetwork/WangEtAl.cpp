@@ -67,9 +67,10 @@ struct WangEtAl:public ImportModule {
 
     for (unsigned i=2; i<n ; ++i) {
       if (i % 100 == 0) {
-	if (pluginProgress->progress(i, n) != TLP_CONTINUE)
-	  return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, n) != TLP_CONTINUE)
+          return pluginProgress->state()!=TLP_CANCEL;
       }
+
       int id = tlp::randomInteger(nbe-1);
       const pair<node, node> ends = graph->ends(e[id]);
       e[nbe] = graph->addEdge(ends.first,v[i]);

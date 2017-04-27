@@ -132,7 +132,6 @@ template class ANTLR_API CircularQueue< RefToken >;
 }
 #endif
 
-BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved )
-{
-	return TRUE;
+BOOL APIENTRY DllMain( HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved ) {
+  return TRUE;
 }

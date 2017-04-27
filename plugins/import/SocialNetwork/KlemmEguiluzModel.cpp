@@ -55,17 +55,17 @@ struct KlemmEguiluzModel:public ImportModule {
   }
 
   bool importGraph() {
-	
+
     unsigned int n = 200;
     unsigned int m  = 10;
     double mu = 0.5;
-		
+
     if (dataSet!=NULL) {
       dataSet->get("nodes", n);
       dataSet->get("m", m);
       dataSet->get("mu",mu);
     }
-		
+
     // check arguments
     if (m > n) {
       pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
@@ -79,71 +79,82 @@ struct KlemmEguiluzModel:public ImportModule {
 
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
-    
+
     double a, pr, pr_sum, proba;
 
     vector<node> sg(n);
     vector<bool> activated(n, false);
-		
+
     graph->addNodes(n, sg);
 
     // fully connect and activate the m first nodes
     for (unsigned int i = 0; i < m; ++i) {
       activated[i] = true;
+
       for(unsigned int j = i + 1; j < m; ++j)
-	graph->addEdge(sg[i],sg[j]);
+        graph->addEdge(sg[i],sg[j]);
     }
-		
+
     for (unsigned i=m; i<n; ++i) {
       if (i % 100 == 0) {
-	if (pluginProgress->progress(i, n) != TLP_CONTINUE)
-	  return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(i, n) != TLP_CONTINUE)
+          return pluginProgress->state()!=TLP_CANCEL;
       }
-      a = 0;		
+
+      a = 0;
+
       for(unsigned int j=0; j<i; ++j)
-	a += 1/double(graph->deg(sg[j]));
-	
+        a += 1/double(graph->deg(sg[j]));
+
       // the new node is connected to m nodes
-      for (unsigned int j=0; j<i; ++j){
-	if (activated[j]){
-	  proba = tlp::randomDouble();
-	  if (proba < mu){ // rewire the edge to a random node chosen with preferential attachment
-	    pr = tlp::randomDouble();
-	    pr_sum = 0;
-	    unsigned int sn = 0;
-	    while (pr_sum < pr && sn <= i) {
-	      pr_sum += (1/double(graph->deg(sg[sn])))*a;
-	      ++sn;
-	    }
-	    graph->addEdge(sg[i],sg[--sn]);
-	  }
-	  else { // keep the edge 
-	    graph->addEdge(sg[i],sg[j]);
-	  }
-	}
+      for (unsigned int j=0; j<i; ++j) {
+        if (activated[j]) {
+          proba = tlp::randomDouble();
+
+          if (proba < mu) { // rewire the edge to a random node chosen with preferential attachment
+            pr = tlp::randomDouble();
+            pr_sum = 0;
+            unsigned int sn = 0;
+
+            while (pr_sum < pr && sn <= i) {
+              pr_sum += (1/double(graph->deg(sg[sn])))*a;
+              ++sn;
+            }
+
+            graph->addEdge(sg[i],sg[--sn]);
+          }
+          else { // keep the edge
+            graph->addEdge(sg[i],sg[j]);
+          }
+        }
       }
-      // the new node becomes active	
+
+      // the new node becomes active
       activated[i] = true;
 
       // deactivate one of the previously m activated nodes
       a = 0;
+
       for(unsigned int j=0; j<i; ++j)
-	if (activated[j])
-	  a += 1/double(graph->deg(sg[j]));
-						
+        if (activated[j])
+          a += 1/double(graph->deg(sg[j]));
+
       pr = tlp::randomDouble();
       pr_sum = 0;
       unsigned int sn = 0;
+
       while (pr_sum < pr && sn < i) {
-	if (activated[sn])
-	  pr_sum += a*(1/double(graph->deg(sg[sn])));
-	++sn;
+        if (activated[sn])
+          pr_sum += a*(1/double(graph->deg(sg[sn])));
+
+        ++sn;
       }
+
       activated[--sn] = false;
     }
-		
+
     return true;
   }
 };
 
-  PLUGIN(KlemmEguiluzModel)
+PLUGIN(KlemmEguiluzModel)

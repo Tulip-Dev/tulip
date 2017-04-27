@@ -72,7 +72,8 @@ struct WangRong:public ImportModule {
     if (m > n) {
       pluginProgress->setError("The m parameter cannot be greater than the number of nodes.");
       return false;
-    } else if (m0 > n) {
+    }
+    else if (m0 > n) {
       pluginProgress->setError("The m0 parameter cannot be greater than the number of nodes.");
       return false;
     }
@@ -87,43 +88,51 @@ struct WangRong:public ImportModule {
      */
     vector<node> sg(n);
     graph->addNodes(n, sg);
+
     for (i=1; i<m0 ; ++i) {
       graph->addEdge(sg[i-1],sg[i]);
     }
+
     graph->addEdge(sg[m0-1],sg[0]);
 
     /*
      * Main loop
      */
     unsigned int nbNodes = m0;
+
     while(nbNodes<n) {
       if (nbNodes % 100 == 0) {
-	if (pluginProgress->progress(nbNodes, n) != TLP_CONTINUE)
-	  return pluginProgress->state()!=TLP_CANCEL;
+        if (pluginProgress->progress(nbNodes, n) != TLP_CONTINUE)
+          return pluginProgress->state()!=TLP_CANCEL;
       }
+
       /*
        * Add clique
        */
       for (i=nbNodes; i<(nbNodes+m) ; ++i) {
-	for (j=nbNodes; j<i ; ++j) {
-	  graph->addEdge(sg[j],sg[i]);
-	}
+        for (j=nbNodes; j<i ; ++j) {
+          graph->addEdge(sg[j],sg[i]);
+        }
       }
 
       /*
        * Preferencial attachment
        */
       double k_sum = 2 * graph->numberOfEdges();
-      for(i=nbNodes; i<(nbNodes+m) ;++i) {
-	double pr = tlp::randomDouble();
-	double pr_sum = 0;
-	unsigned int rn = 0;
-	while (pr_sum<pr && rn<(nbNodes-1)) {
-	  pr_sum += (double)graph->deg(sg[rn])/k_sum;
-	  ++rn;
-	}
-	graph->addEdge(sg[i],sg[rn]);
+
+      for(i=nbNodes; i<(nbNodes+m) ; ++i) {
+        double pr = tlp::randomDouble();
+        double pr_sum = 0;
+        unsigned int rn = 0;
+
+        while (pr_sum<pr && rn<(nbNodes-1)) {
+          pr_sum += (double)graph->deg(sg[rn])/k_sum;
+          ++rn;
+        }
+
+        graph->addEdge(sg[i],sg[rn]);
       }
+
       nbNodes+=m;
     }
 

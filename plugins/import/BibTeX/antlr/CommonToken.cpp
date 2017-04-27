@@ -12,31 +12,29 @@
 namespace antlr {
 #endif
 
-CommonToken::CommonToken() : Token(), line(1), col(1), text("")
-{}
-
-CommonToken::CommonToken(int t, const ANTLR_USE_NAMESPACE(std)string& txt)
-: Token(t)
-, line(1)
-, col(1)
-, text(txt)
-{}
-
-CommonToken::CommonToken(const ANTLR_USE_NAMESPACE(std)string& s)
-: Token()
-, line(1)
-, col(1)
-, text(s)
-{}
-
-ANTLR_USE_NAMESPACE(std)string CommonToken::toString() const
-{
-	return "[\""+getText()+"\",<"+getType()+">,line="+getLine()+",column="+getColumn()+"]";
+CommonToken::CommonToken() : Token(), line(1), col(1), text("") {
 }
 
-RefToken CommonToken::factory()
-{
-	return RefToken(new CommonToken);
+CommonToken::CommonToken(int t, const ANTLR_USE_NAMESPACE(std)string& txt)
+  : Token(t)
+  , line(1)
+  , col(1)
+  , text(txt) {
+}
+
+CommonToken::CommonToken(const ANTLR_USE_NAMESPACE(std)string& s)
+  : Token()
+  , line(1)
+  , col(1)
+  , text(s) {
+}
+
+ANTLR_USE_NAMESPACE(std)string CommonToken::toString() const {
+  return "[\""+getText()+"\",<"+getType()+">,line="+getLine()+",column="+getColumn()+"]";
+}
+
+RefToken CommonToken::factory() {
+  return RefToken(new CommonToken);
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE

@@ -51,8 +51,8 @@ static const char * paramHelp[] = {
  */
 struct WattsStrotgatzModel:public ImportModule {
   PLUGININFORMATION("Watts Strotgatz Model","Arnaud Sallaberry","21/02/2011",
-		    "Randomly generates a small world graph using the model described in<br/>D. J. Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world networks.</b><br/>Nature 393, 440 (1998).","1.0","Social network")
-	
+                    "Randomly generates a small world graph using the model described in<br/>D. J. Watts and S. H. Strogatz.<br/><b>Collective dynamics of small-world networks.</b><br/>Nature 393, 440 (1998).","1.0","Social network")
+
   WattsStrotgatzModel(PluginContext* context):ImportModule(context) {
     addInParameter<unsigned int>("nodes",paramHelp[0],"200");
     addInParameter<unsigned int>("k",paramHelp[1],"3");
@@ -78,18 +78,20 @@ struct WattsStrotgatzModel:public ImportModule {
       pluginProgress->setError("p is not a probability,\nit does not belong to [0, 1]");
       return false;
     }
+
     if (original_model) {
       if (k%2 == 1) {
-	stringstream sstr("k must be pair when used in the original model; rounding k down to ");
-	sstr << k-1 << '.';
+        stringstream sstr("k must be pair when used in the original model; rounding k down to ");
+        sstr << k-1 << '.';
         pluginProgress->setComment(sstr.str());
         k--;
       }
+
       if (k > 0) {
         k = (k-2)/2;
       }
     }
-	   
+
     pluginProgress->showPreview(false);
     tlp::initRandomSequence();
 
@@ -98,52 +100,63 @@ struct WattsStrotgatzModel:public ImportModule {
 
     if (original_model) {
       graph->reserveEdges(nbNodes * k/2);
-    } else {
+    }
+    else {
       graph->reserveEdges(nbNodes * (k + 1));
     }
+
     for (unsigned int i=1; i<nbNodes ; ++i) {
       graph->addEdge(sg[i-1],sg[i]);
     }
+
     graph->addEdge(sg[nbNodes-1],sg[0]);
-    
+
     for (unsigned int i=0; i<nbNodes ; ++i) {
       for (unsigned int j=0; j<k ; ++j) {
-	int d = i - j - 2;
-	if (d < 0) {
-	  graph->addEdge(sg[nbNodes+ d],sg[i]);
-	}
-	else {
-	  graph->addEdge(sg[d],sg[i]);
-	}
+        int d = i - j - 2;
+
+        if (d < 0) {
+          graph->addEdge(sg[nbNodes+ d],sg[i]);
+        }
+        else {
+          graph->addEdge(sg[d],sg[i]);
+        }
       }
     }
 
     edge e;
     node n1, n2;
+
     if (original_model) {
       forEach(e, graph->getEdges()) {
-	if(tlp::randomDouble() < p) {
-	  n1 = graph->source(e);
-	  do {
-	    n2 = sg[tlp::randomInteger(nbNodes-1)];
-	  } while(graph->hasEdge(n1, n2, false));
-	  // only reroute target; ensure to keep the graph connected
-	  graph->setTarget(e, n2);
-	}
-      }
-    } else {
-      forEach(e, graph->getEdges()) {
-	if(tlp::randomDouble() < p) {
-	  do {
-	    n1 = sg[tlp::randomInteger(nbNodes-1)];
-	    n2 = sg[tlp::randomInteger(nbNodes-1)];
-	  } while(graph->hasEdge(n1, n2, false));
-	  graph->setSource(e, n1);
-	  graph->setTarget(e, n2);
-	}
+        if(tlp::randomDouble() < p) {
+          n1 = graph->source(e);
+
+          do {
+            n2 = sg[tlp::randomInteger(nbNodes-1)];
+          }
+          while(graph->hasEdge(n1, n2, false));
+
+          // only reroute target; ensure to keep the graph connected
+          graph->setTarget(e, n2);
+        }
       }
     }
-		
+    else {
+      forEach(e, graph->getEdges()) {
+        if(tlp::randomDouble() < p) {
+          do {
+            n1 = sg[tlp::randomInteger(nbNodes-1)];
+            n2 = sg[tlp::randomInteger(nbNodes-1)];
+          }
+          while(graph->hasEdge(n1, n2, false));
+
+          graph->setSource(e, n1);
+          graph->setTarget(e, n2);
+        }
+      }
+    }
+
     return true;
   }
 };

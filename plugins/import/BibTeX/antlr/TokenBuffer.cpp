@@ -28,69 +28,61 @@ namespace antlr {
 
 /** Create a token buffer */
 TokenBuffer::TokenBuffer( TokenStream& inp )
-: input(inp)
-, nMarkers(0)
-, markerOffset(0)
-, numToConsume(0)
-{
+  : input(inp)
+  , nMarkers(0)
+  , markerOffset(0)
+  , numToConsume(0) {
 }
 
-TokenBuffer::~TokenBuffer( void )
-{
+TokenBuffer::~TokenBuffer( void ) {
 }
 
 /** Ensure that the token buffer is sufficiently full */
-void TokenBuffer::fill(unsigned int amount)
-{
-	syncConsume();
-	// Fill the buffer sufficiently to hold needed tokens
-	while (queue.entries() < (amount + markerOffset))
-	{
-		// Append the next token
-		queue.append(input.nextToken());
-	}
+void TokenBuffer::fill(unsigned int amount) {
+  syncConsume();
+
+  // Fill the buffer sufficiently to hold needed tokens
+  while (queue.entries() < (amount + markerOffset)) {
+    // Append the next token
+    queue.append(input.nextToken());
+  }
 }
 
 /** Get a lookahead token value */
-int TokenBuffer::LA(unsigned int i)
-{
-	fill(i);
-	return queue.elementAt(markerOffset+i-1)->getType();
+int TokenBuffer::LA(unsigned int i) {
+  fill(i);
+  return queue.elementAt(markerOffset+i-1)->getType();
 }
 
 /** Get a lookahead token */
-RefToken TokenBuffer::LT(unsigned int i)
-{
-	fill(i);
-	return queue.elementAt(markerOffset+i-1);
+RefToken TokenBuffer::LT(unsigned int i) {
+  fill(i);
+  return queue.elementAt(markerOffset+i-1);
 }
 
 /** Return an integer marker that can be used to rewind the buffer to
  * its current state.
  */
-unsigned int TokenBuffer::mark()
-{
-	syncConsume();
-	nMarkers++;
-	return markerOffset;
+unsigned int TokenBuffer::mark() {
+  syncConsume();
+  nMarkers++;
+  return markerOffset;
 }
 
 /**Rewind the token buffer to a marker.
  * @param mark Marker returned previously from mark()
  */
-void TokenBuffer::rewind(unsigned int mark)
-{
-	syncConsume();
-	markerOffset=mark;
-	nMarkers--;
+void TokenBuffer::rewind(unsigned int mark) {
+  syncConsume();
+  markerOffset=mark;
+  nMarkers--;
 }
 
 /// Get number of non-consumed tokens
-unsigned int TokenBuffer::entries() const
-{
-	return queue.entries() - markerOffset;
+unsigned int TokenBuffer::entries() const {
+  return queue.entries() - markerOffset;
 }
 
 #ifdef ANTLR_CXX_SUPPORTS_NAMESPACE
-	}
+}
 #endif
