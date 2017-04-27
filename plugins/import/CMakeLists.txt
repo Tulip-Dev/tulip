@@ -1,3 +1,6 @@
+ADD_SUBDIRECTORY(SocialNetwork)
+ADD_SUBDIRECTORY(BibTeX)
+
 ADD_CORE_FILES(CMakeLists.txt *Tree*.cpp *Graph.cpp AdjacencyMatrixImport.cpp dotImport*.* EmptyGraph.cpp GML*.* Grid.cpp GEXFImport.cpp Import*.cpp)
 
 INCLUDE_DIRECTORIES(./ ${TulipCoreBuildInclude} ${TulipCoreInclude} ${TulipGUIInclude} ${UTF8CppInclude})
