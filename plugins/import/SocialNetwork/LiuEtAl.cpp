@@ -106,17 +106,17 @@ struct LiuEtAl:public ImportModule {
 	 * Preferential attachement with a neighbour of the fisrt node selected
 	 */
 	double k2_sum = 0;
-	Iterator<node>* it = graph->getInOutNodes(sg[rn]);
-	while(it->hasNext()) {
-	  k2_sum += (double)graph->deg(it->next());
-	}
+    node n;
+    forEach(n, graph->getInOutNodes(sg[rn])) {
+        k2_sum += (double)graph->deg(n);
+    }
 	pr = tlp::randomDouble();
 	pr_sum = 0;
-	node v;
-	it = graph->getInOutNodes(sg[rn]);
+    node v;
+    Iterator<node>* it = graph->getInOutNodes(sg[rn]);
 	while(it->hasNext() && pr_sum<pr) {
-	  v = it->next();
-	  pr_sum += (double)graph->deg(v)/(k2_sum);
+      v = it->next();
+      pr_sum += (double)graph->deg(v)/(k2_sum);
 	}
 	delete it;
 				
