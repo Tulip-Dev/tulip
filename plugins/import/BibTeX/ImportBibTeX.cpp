@@ -30,6 +30,9 @@
 #include <xdkbibtex/formatter.h>
 #include <xdkbibtex/author.h>
 
+#if defined(_MSC_VER) && !defined(strtok_r)
+#define strtok_r strtok_s
+#endif
 #if defined(strtok_r) && defined(_WIN32) && defined(__GNUC__) && ((__GNUC__*100 + __GNUC__MINOR) < 409)
 // in MINGW environment
 // strtok_r is declared in pthread.h instead of string.h
