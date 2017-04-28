@@ -14,7 +14,7 @@ static QtAwesome qtAwesome;
 
 QIcon TulipFontIconDialog::getFontAwesomeIcon(const QString &iconName) {
   if (qtAwesome.fontName().isEmpty())
-    qtAwesome.initFontAwesome(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
+    qtAwesome.initIconicFont(tlpStringToQString(TulipFontAwesome::getFontAwesomeTrueTypeFileLocation()));
 
   return qtAwesome.icon(static_cast<fa::iconCodePoint>(TulipFontAwesome::getFontAwesomeIconCodePoint(QStringToTlpString(iconName))));
 }

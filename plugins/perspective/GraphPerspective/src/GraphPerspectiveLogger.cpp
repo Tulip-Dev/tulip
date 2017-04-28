@@ -125,7 +125,11 @@ void GraphPerspectiveLogger::log(QtMsgType type, const char *msg) {
 #endif
 
 QPixmap GraphPerspectiveLogger::icon() const {
-  return QPixmap(_pythonOutput ? ":/tulip/graphperspective/icons/16/python.png" : iconForType(_logSeverity));
+  if (!_pythonOutput) {
+    return QPixmap(iconForType(_logSeverity).pixmap(QSize(16, 16)));
+  } else {
+    return tlp::FontIconManager::instance()->getMaterialDesignIcon(tlp::md::languagepython, Qt::gray).pixmap(QSize(16, 16));
+  }
 }
 
 void GraphPerspectiveLogger::clear() {

@@ -41,6 +41,7 @@
 #include <QUrl>
 #include <QVBoxLayout>
 #include <QDialog>
+#include <QMessageBox>
 
 #include <tulip/AboutTulipPage.h>
 #include <tulip/CSVImportWizard.h>
@@ -67,6 +68,7 @@
 #include <tulip/AboutTulipPage.h>
 #include <tulip/ColorScalesManager.h>
 #include <tulip/StableIterator.h>
+#include <tulip/TulipSettings.h>
 
 #include "ui_GraphPerspectiveMainWindow.h"
 
