@@ -187,7 +187,7 @@ public:
       QFont f;
       f.setBold(true);
       return f;
-    } else if (role == Qt::DecorationRole && tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
+    } else if (role == Qt::DecorationRole && item->children.isEmpty() && tlp::PluginLister::pluginExists(tlp::QStringToTlpString(item->name))) {
       const tlp::Plugin &p = tlp::PluginLister::pluginInformation(tlp::QStringToTlpString(item->name));
       QIcon icon(tlp::tlpStringToQString(p.icon()));
       if (TulipMaterialDesignIcons::isMaterialDesignIconSupported(p.icon())) {
@@ -213,7 +213,7 @@ public:
     return result;
   }
 };
-}
+} // namespace tlp
 
 #endif // PLUGINMODEL_H
 ///@endcond
