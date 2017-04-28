@@ -20,3 +20,4 @@ SET(XDKBIBTEX_SRCS
   valueparser.cpp)
 
 ADD_LIBRARY(xdkbibtex STATIC ${XDKBIBTEX_SRCS})
+TARGET_LINK_LIBRARIES(xdkbibtex antlr)
