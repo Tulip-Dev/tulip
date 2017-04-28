@@ -512,10 +512,12 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
     const std::vector<tlp::edge>& edges = graph->edges();
     unsigned int nbEdges = edges.size();
+
     for(unsigned int i = 0; i < nbEdges; ++i) {
       edgeLength[tlpToOGDF->getOGDFGraphEdge(i)] =
         length->getEdgeDoubleValue(edges[i]);
     }
+
     fmmm->call(gAttributes, edgeLength);
   }
   else {

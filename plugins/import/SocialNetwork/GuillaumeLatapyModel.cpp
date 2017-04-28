@@ -102,7 +102,7 @@ struct GuillaumeLatapyModel:public ImportModule {
 
       if (i<nbNodesScaleFree)
         vec_bottom_nodes[i].degree =
-	  (unsigned int) ceil((((((double)nbNodes)/2-10)/nbNodesScaleFree/2)*(i+1)));
+          (unsigned int) ceil((((((double)nbNodes)/2-10)/nbNodesScaleFree/2)*(i+1)));
       else
         vec_bottom_nodes[i].degree = maxDegreeSmallWorldNodes;
 

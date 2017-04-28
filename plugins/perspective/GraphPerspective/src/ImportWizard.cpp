@@ -82,18 +82,21 @@ void ImportWizard::algorithmSelected(const QModelIndex& index) {
 
   QString categoryText("<b>Category</b>");
   QString parametersText("<b>Parameters</b>");
+
   if (!isGroup && PluginLister::pluginExists(alg)) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(alg));
     parametersText +=
       "&nbsp;<font size=-2>[" + tlpStringToQString(alg) + "]</font>";
     std::string group = PluginLister::pluginInformation(alg).group();
+
     if (!group.empty())
-    categoryText +=
-      "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
+      categoryText +=
+        "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
   }
   else
     categoryText +=
       "&nbsp;<font size=-2>[" + tlpStringToQString(alg) + "]</font>";
+
   _ui->categoryLabel->setText(categoryText);
   _ui->parametersLabel->setText(parametersText);
 
