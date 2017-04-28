@@ -194,6 +194,10 @@ NEW-WINDOW:461,197:52428839,52428839,15869294,0,0,0:0x0+879+458:0,0:Import
 6,2,0,0,0,116,0,280771448,3,Virtual core keyboard
 7,3,0,0,0,116,0,280771592,8,Logitech Logitech USB Keyboard
 6,3,0,0,0,116,0,280771592,3,Virtual core keyboard
+7,2,0,0,0,116,0,280771648,8,Logitech Logitech USB Keyboard
+6,2,0,0,0,116,0,280771648,3,Virtual core keyboard
+7,3,0,0,0,116,0,280771792,8,Logitech Logitech USB Keyboard
+6,3,0,0,0,116,0,280771792,3,Virtual core keyboard
 7,6,266,705,0,0,0,280773098,9,'Logitech USB-PS/2 Optical Mouse'
 7,6,266,704,0,0,0,280773104,9,'Logitech USB-PS/2 Optical Mouse'
 7,6,268,703,0,0,0,280773112,9,'Logitech USB-PS/2 Optical Mouse'
