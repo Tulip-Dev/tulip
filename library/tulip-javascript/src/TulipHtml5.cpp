@@ -970,12 +970,12 @@ void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementTgtAnchorSize(GlGraphInputD
   inputData->setElementTgtAnchorSize(property);
 }
 
-tlp::StringProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementFontAwesomeIcon(GlGraphInputData *inputData) {
-  return inputData->getElementFontAwesomeIcon();
+tlp::StringProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementIcon(GlGraphInputData *inputData) {
+  return inputData->getElementIcon();
 }
 
-void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementFontAwesomeIcon(GlGraphInputData *inputData, tlp::StringProperty *property) {
-  inputData->setElementFontAwesomeIcon(property);
+void EMSCRIPTEN_KEEPALIVE GlGraphInputData_setElementIcon(GlGraphInputData *inputData, tlp::StringProperty *property) {
+  inputData->setElementIcon(property);
 }
 
 tlp::BooleanProperty *EMSCRIPTEN_KEEPALIVE GlGraphInputData_getElementGlow(GlGraphInputData *inputData) {

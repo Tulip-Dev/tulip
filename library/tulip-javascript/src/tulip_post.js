@@ -3539,7 +3539,7 @@ tulip.NodeShape = {
   Square : 4,
   Triangle : 11,
   Star : 19,
-  FontAwesomeIcon : 20,
+  Icon : 20,
   MaterialDesignIcon : 21
 };
 
@@ -3567,7 +3567,7 @@ tulip.EdgeExtremityShape = {
   Sphere : 2 ,
   Square : 4,
   Star : 19,
-  FontAwesomeIcon : 20,
+  Icon : 20,
   MaterialDesignIcon : 21
 };
 
@@ -7441,8 +7441,8 @@ if (workerMode) {
     var _GlGraphInputData_setElementTgtAnchorShape = Module.cwrap('GlGraphInputData_setElementTgtAnchorShape', null, ['number', 'number']);
     var _GlGraphInputData_getElementTgtAnchorSize = Module.cwrap('GlGraphInputData_getElementTgtAnchorSize', 'number', ['number']);
     var _GlGraphInputData_setElementTgtAnchorSize = Module.cwrap('GlGraphInputData_setElementTgtAnchorSize', null, ['number', 'number']);
-    var _GlGraphInputData_getElementFontAwesomeIcon = Module.cwrap('GlGraphInputData_getElementFontAwesomeIcon', 'number', ['number']);
-    var _GlGraphInputData_setElementFontAwesomeIcon = Module.cwrap('GlGraphInputData_setElementFontAwesomeIcon', null, ['number', 'number']);
+    var _GlGraphInputData_getElementIcon = Module.cwrap('GlGraphInputData_getElementIcon', 'number', ['number']);
+    var _GlGraphInputData_setElementIcon = Module.cwrap('GlGraphInputData_setElementIcon', null, ['number', 'number']);
     var _GlGraphInputData_getElementGlow = Module.cwrap('GlGraphInputData_getElementGlow', 'number', ['number']);
     var _GlGraphInputData_setElementGlow = Module.cwrap('GlGraphInputData_setElementGlow', null, ['number', 'number']);
     var _GlGraphInputData_getElementGlowColor = Module.cwrap('GlGraphInputData_getElementGlowColor', 'number', ['number']);
@@ -7618,13 +7618,13 @@ if (workerMode) {
       _GlGraphInputData_setElementTgtAnchorSize(this.cppPointer, prop.cppPointer);
     };
 
-    tulip.GlGraphInputData.prototype.getElementFontAwesomeIcon = function tulip_GlGraphInputData_prototype_getElementFontAwesomeIcon() {
-      return tulip.StringProperty(_GlGraphInputData_getElementFontAwesomeIcon(this.cppPointer));
+    tulip.GlGraphInputData.prototype.getElementIcon = function tulip_GlGraphInputData_prototype_getElementIcon() {
+      return tulip.StringProperty(_GlGraphInputData_getElementIcon(this.cppPointer));
     };
 
-    tulip.GlGraphInputData.prototype.setElementFontAwesomeIcon = function tulip_GlGraphInputData_prototype_setElementFontAwesomeIcon(prop) {
+    tulip.GlGraphInputData.prototype.setElementIcon = function tulip_GlGraphInputData_prototype_setElementIcon(prop) {
       checkArgumentsTypes(arguments, [tulip.StringProperty], 1);
-      _GlGraphInputData_setElementFontAwesomeIcon(this.cppPointer, prop.cppPointer);
+      _GlGraphInputData_setElementIcon(this.cppPointer, prop.cppPointer);
     };
 
     tulip.GlGraphInputData.prototype.getElementGlow = function tulip_GlGraphInputData_prototype_getElementGlow() {
