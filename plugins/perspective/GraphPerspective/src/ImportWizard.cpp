@@ -73,15 +73,24 @@ ImportWizard::~ImportWizard() {
 }
 
 void ImportWizard::algorithmSelected(const QModelIndex &index) {
-  QString alg(index.data().toString());
-  _ui->parametersFrame->setVisible(!alg.isEmpty());
+  std::string alg(tlp::QStringToTlpString(index.data().toString()));
+  _ui->parametersFrame->setVisible(!alg.empty());
   QAbstractItemModel *oldModel = _ui->parametersList->model();
   QAbstractItemModel *newModel = NULL;
   bool isGroup = index.child(0, index.column()).isValid();
 
-  if (!isGroup && PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
-    newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)));
-  }
+  QString categoryText("<b>Category</b>");
+  QString parametersText("<b>Parameters</b>");
+  if (!isGroup && PluginLister::pluginExists(alg)) {
+    newModel = new ParameterListModel(PluginLister::getPluginParameters(alg));
+    parametersText += "&nbsp;<font size=-2>[" + tlpStringToQString(alg) + "]</font>";
+    std::string group = PluginLister::pluginInformation(alg).group();
+    if (!group.empty())
+      categoryText += "&nbsp;<font size=-2>[" + tlpStringToQString(group) + "]</font>";
+  } else
+    categoryText += "&nbsp;<font size=-2>[" + tlpStringToQString(alg) + "]</font>";
+  _ui->categoryLabel->setText(categoryText);
+  _ui->parametersLabel->setText(parametersText);
 
   _ui->parametersList->setModel(newModel);
 
