@@ -254,8 +254,9 @@ class OGDFFm3 : public OGDFLayoutPluginBase {
   tlp::StringCollection stringCollection;
 
 public:
-  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007", "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
-                                                                   "force-directed layout algorithm that can be applied to very large graphs.",
+  PLUGININFORMATION("FM^3 (OGDF)", "Stephan Hachul", "09/11/2007",
+                    "Implements the FM³ layout algorithm by Hachul and Jünger. It is a multilevel, "
+                    "force-directed layout algorithm that can be applied to very large graphs.",
                     "1.2", "Force Directed")
   OGDFFm3(const tlp::PluginContext *context);
   ~OGDFFm3();
@@ -473,9 +474,10 @@ void OGDFFm3::callOGDFLayoutAlgorithm(ogdf::GraphAttributes &gAttributes) {
 
   if (dataSet->get("Edge Length Property", length) && length) {
     EdgeArray<double> edgeLength(tlpToOGDF->getOGDFGraph());
-    tlp::edge e;
-    forEach(e, graph->getEdges()) {
-      edgeLength[tlpToOGDF->getOGDFGraphEdge(e.id)] = length->getEdgeDoubleValue(e);
+    const std::vector<tlp::edge> &edges = graph->edges();
+    unsigned int nbEdges = edges.size();
+    for (unsigned int i = 0; i < nbEdges; ++i) {
+      edgeLength[tlpToOGDF->getOGDFGraphEdge(i)] = length->getEdgeDoubleValue(edges[i]);
     }
     fmmm->call(gAttributes, edgeLength);
   } else {
