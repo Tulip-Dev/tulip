@@ -78,8 +78,9 @@ void ImportWizard::algorithmSelected(const QModelIndex& index) {
   _ui->parametersFrame->setVisible(!alg.isEmpty());
   QAbstractItemModel* oldModel = _ui->parametersList->model();
   QAbstractItemModel* newModel = NULL;
+  bool isGroup = index.child(0, index.column()).isValid();
 
-  if (PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
+  if (!isGroup && PluginLister::pluginExists(tlp::QStringToTlpString(alg))) {
     newModel = new ParameterListModel(PluginLister::getPluginParameters(tlp::QStringToTlpString(alg)));
   }
 
