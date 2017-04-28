@@ -85,7 +85,7 @@ struct GuillaumeLatapyModel:public ImportModule {
     vector<BottomNode>  vec_bottom_nodes(nbNodes);
     vector<TopNode>   vec_top_nodes(nbNodes);
 
-    unsigned int nbNodesSmallWorld = (int) ceil(nbNodes*0.8);
+    unsigned int nbNodesSmallWorld = (unsigned int) ceil(0.8 * nbNodes);
     unsigned int nbNodesScaleFree = nbNodes - nbNodesSmallWorld;
     unsigned int maxDegreeSmallWorldNodes = 2;
     unsigned int numberOfEdges = 0;
@@ -101,7 +101,8 @@ struct GuillaumeLatapyModel:public ImportModule {
       }
 
       if (i<nbNodesScaleFree)
-        vec_bottom_nodes[i].degree = (int) ceil((((nbNodes/2-10)/nbNodesScaleFree/2)*(i+1)));
+        vec_bottom_nodes[i].degree =
+	  (unsigned int) ceil((((((double)nbNodes)/2-10)/nbNodesScaleFree/2)*(i+1)));
       else
         vec_bottom_nodes[i].degree = maxDegreeSmallWorldNodes;
 
@@ -109,8 +110,10 @@ struct GuillaumeLatapyModel:public ImportModule {
       vec_bottom_nodes[i].n = graph->addNode();
     }
 
-    unsigned int degreeTop = (int) ceil(numberOfEdges/nbNodes);
-    unsigned int dixieme = (int) ceil((10*numberOfEdges/nbNodes)%10);
+    unsigned int degreeTop =
+      (unsigned int) ceil(((double)numberOfEdges)/nbNodes);
+    unsigned int dixieme =
+      ((unsigned int) ceil((10.0 * numberOfEdges)/nbNodes))%10;
 
     for (i=0; i<nbNodes-1; ++i) {
       if(i%10 >= dixieme)
