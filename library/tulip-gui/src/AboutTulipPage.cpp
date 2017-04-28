@@ -36,9 +36,10 @@ namespace tlp {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 extern QString getSipVersion();
 #endif
-extern QString getTulipSvnRevision();
+extern QString getTulipGitRevision();
 }
 
+const QString TulipRepoUrl = "https://github.com/Tulip-Dev/tulip";
 
 using namespace tlp;
 
@@ -48,13 +49,19 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
 
   QString title("Tulip ");
   title += TULIP_VERSION;
-  QString svn_rev(getTulipSvnRevision());
+  QString git_rev(getTulipGitRevision());
 
-  if (!svn_rev.isEmpty())
-    title += "<br/>(SVN rev. " + svn_rev + ")";
+  if (!git_rev.isEmpty())
+    title += "<br/>(Git rev. " + git_rev.mid(0, 7) + ")";
 
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir+"/logo.bmp")));
-  _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p></body></html>");
+  _ui->TulipLabel->setText("<html>"
+                           "  <head/>"
+                           "  <body>"
+                           "    <p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">"+title+"</span></p>"
+                           "    <p align=\"center\"><a href=\"" + TulipRepoUrl + "\">" + TulipRepoUrl + "</a></p>"
+                           "  </body>"
+                           "</html>");
 
   bool openGL_OK = GlMainWidget::getFirstQGLWidget()->isValid();
 
@@ -82,6 +89,7 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) :
   _ui->dependenciesInfo->setText(tulipDependenciesInfo);
   connect(_ui->aboutQt, SIGNAL(clicked()), qApp, SLOT(aboutQt()));
   connect(_ui->dependenciesInfo, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
+  connect(_ui->TulipLabel, SIGNAL(linkActivated(const QString &)), this, SLOT(openUrlInBrowser(const QString &)));
 
   QPixmap qp(QString((TulipBitmapDir + "/samplePictures/1221.png").c_str()));
   _ui->sample_1221->setPixmap(qp.scaled(230, 128, Qt::KeepAspectRatio, Qt::SmoothTransformation));
