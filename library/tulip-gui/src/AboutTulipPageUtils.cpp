@@ -8,8 +8,8 @@ namespace tlp {
   }
 #endif
 
-  QString getTulipSvnRevision() {
-    return TULIP_SVN_REVISION;
+  QString getTulipGitRevision() {
+    return TULIP_GIT_REVISION;
   }
 
 }

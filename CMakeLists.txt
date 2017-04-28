@@ -103,25 +103,11 @@ ELSE(TulipReleaseVersion MATCHES "^[0-9]+$")
   # just a hack to force the display of the full Tulip version in window title bar
   # when it contains non digit characters (like alpha, beta, dev, ...)
   SET(TulipIntVersion "${TulipMajorVersion}${TulipMinorVersion}1")
-  # get current Tulip SVN revision for a dev build
-  IF("$ENV{JENKINS_URL}" STREQUAL "")
-    # not invoked thru jenkins integration server
-    # find svn to get the source revision
-    INCLUDE(FindSubversion)
-    IF(Subversion_FOUND AND EXISTS ${PROJECT_SOURCE_DIR}/.svn)
-      SET(TULIP_SOURCE_DIR ${PROJECT_SOURCE_DIR})
-      IF(WIN32)
-        IF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*" OR "${CMAKE_GENERATOR}" MATCHES ".*MinGW.*" OR "${CMAKE_GENERATOR}" MATCHES "Ninja")
-          WINDOWS_TO_MSYS_PATH(${PROJECT_SOURCE_DIR} TULIP_SOURCE_DIR)
-        ENDIF("${CMAKE_GENERATOR}" MATCHES ".*MSYS.*"  OR "${CMAKE_GENERATOR}" MATCHES ".*MinGW.*" OR "${CMAKE_GENERATOR}" MATCHES "Ninja")
-      ENDIF(WIN32)
-      Subversion_WC_INFO(${TULIP_SOURCE_DIR} TULIP)
-      SET(TULIP_SVN_REVISION ${TULIP_WC_REVISION})
-    ENDIF(Subversion_FOUND AND EXISTS ${PROJECT_SOURCE_DIR}/.svn)
-  ELSE()
-    # in jenkins so get from the dedicated env variable
-    SET(TULIP_SVN_REVISION $ENV{SVN_REVISION})
-  ENDIF()
+  INCLUDE(cmake/GetGitRevisionDescription.cmake)
+  IF(EXISTS ${PROJECT_SOURCE_DIR}/.git)
+    SET(TULIP_SOURCE_DIR ${PROJECT_SOURCE_DIR})
+    GET_GIT_HEAD_REVISION(TULIP_REFSPEC TULIP_GIT_REVISION)
+  ENDIF(EXISTS ${PROJECT_SOURCE_DIR}/.git)
 ENDIF(TulipReleaseVersion MATCHES "^[0-9]+$")
 
 ## ========================================================

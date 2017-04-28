@@ -36,7 +36,7 @@ namespace tlp {
 #ifdef TULIP_BUILD_PYTHON_COMPONENTS
 extern QString getSipVersion();
 #endif
-extern QString getTulipSvnRevision();
+extern QString getTulipGitRevision();
 }
 
 using namespace tlp;
@@ -46,10 +46,10 @@ AboutTulipPage::AboutTulipPage(QWidget *parent) : QWidget(parent), _ui(new Ui::A
 
   QString title("Tulip ");
   title += TULIP_VERSION;
-  QString svn_rev(getTulipSvnRevision());
+  QString git_rev(getTulipGitRevision());
 
-  if (!svn_rev.isEmpty())
-    title += "<br/>(SVN rev. " + svn_rev + ")";
+  if (!git_rev.isEmpty())
+    title += "<br/>(Git rev. " + git_rev.mid(0, 7) + ")";
 
   _ui->logolabel->setPixmap(QPixmap(tlpStringToQString(TulipBitmapDir + "/logo.bmp")));
   _ui->TulipLabel->setText("<html><head/><body><p align=\"center\"><span style=\" font-size:24pt; font-weight:600;\">" + title +
